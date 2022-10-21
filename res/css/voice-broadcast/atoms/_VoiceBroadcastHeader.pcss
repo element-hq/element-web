@@ -20,6 +20,11 @@ limitations under the License.
     width: 266px;
 }
 
+.mx_VoiceBroadcastHeader_content {
+    flex-grow: 1;
+    min-width: 0;
+}
+
 .mx_VoiceBroadcastHeader_room {
     font-size: $font-12px;
     font-weight: $font-semi-bold;
@@ -34,4 +39,14 @@ limitations under the License.
     font-size: $font-12px;
     display: flex;
     gap: $spacing-4;
+
+    i {
+        flex-shrink: 0;
+    }
+
+    span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
 }

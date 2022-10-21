@@ -67,6 +67,7 @@ import IconizedContextMenu, {
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { CallDurationFromEvent } from "../voip/CallDuration";
 import { Alignment } from "../elements/Tooltip";
+import RoomCallBanner from '../beacon/RoomCallBanner';
 
 class DisabledWithReason {
     constructor(public readonly reason: string) { }
@@ -733,6 +734,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
                     { betaPill }
                     { buttons }
                 </div>
+                { !isVideoRoom && <RoomCallBanner roomId={this.props.room.roomId} /> }
                 <RoomLiveShareWarning roomId={this.props.room.roomId} />
             </header>
         );

@@ -141,6 +141,7 @@ const RoomLiveShareWarning: React.FC<Props> = ({ roomId }) => {
     );
 
     if (!isMonitoringLiveLocation || !liveBeaconIds.length) {
+        // This logic is entangled with the RoomCallBanner-test's. The tests need updating if this logic changes.
         return null;
     }
 

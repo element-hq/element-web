@@ -91,7 +91,7 @@ Cypress.Commands.add("loginUser", (synapse: SynapseInstance, username: string, p
 Cypress.Commands.add("initTestUser", (synapse: SynapseInstance, displayName: string, prelaunchFn?: () => void): Chainable<UserCredentials> => {
     // XXX: work around Cypress not clearing IDB between tests
     cy.window({ log: false }).then(win => {
-        win.indexedDB.databases().then(databases => {
+        win.indexedDB.databases()?.then(databases => {
             databases.forEach(database => {
                 win.indexedDB.deleteDatabase(database.name);
             });

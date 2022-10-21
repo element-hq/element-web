@@ -272,12 +272,12 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { MatrixClientPeg } from './MatrixClientPeg';
 import dis from './dispatcher/dispatcher';
 import WidgetUtils from './utils/WidgetUtils';
-import { RoomViewStore } from './stores/RoomViewStore';
 import { _t } from './languageHandler';
 import { IntegrationManagers } from "./integrations/IntegrationManagers";
 import { WidgetType } from "./widgets/WidgetType";
 import { objectClone } from "./utils/objects";
 import { EffectiveMembership, getEffectiveMembership } from './utils/membership';
+import { SdkContextClass } from './contexts/SDKContext';
 
 enum Action {
     CloseScalar = "close_scalar",
@@ -721,7 +721,7 @@ const onMessage = function(event: MessageEvent<any>): void {
         }
     }
 
-    if (roomId !== RoomViewStore.instance.getRoomId()) {
+    if (roomId !== SdkContextClass.instance.roomViewStore.getRoomId()) {
         sendError(event, _t('Room %(roomId)s not visible', { roomId: roomId }));
         return;
     }

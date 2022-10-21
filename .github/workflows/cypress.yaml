@@ -155,17 +155,6 @@ jobs:
             cypress/videos
             cypress/synapselogs
 
-      - run: mv cypress/performance/*.json cypress/performance/measurements-${{ strategy.job-index }}.json
-        continue-on-error: true
-
-      - name: Upload Benchmark
-        uses: actions/upload-artifact@v2
-        with:
-          name: cypress-benchmark
-          path: cypress/performance/*
-          if-no-files-found: ignore
-          retention-days: 1
-
   report:
     name: Report results
     needs: tests
@@ -181,36 +170,3 @@ jobs:
           context: ${{ github.workflow }} / cypress (${{ github.event.workflow_run.event }} => ${{ github.event_name }})
           sha: ${{ github.event.workflow_run.head_sha }}
           target_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
-
-  store-benchmark:
-    needs: tests
-    runs-on: ubuntu-latest
-    if: |
-      github.event.workflow_run.event != 'pull_request' &&
-      github.event.workflow_run.head_branch == 'develop' &&
-      github.event.workflow_run.head_repository.full_name == github.repository
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Download benchmark result
-        uses: actions/download-artifact@v3
-        with:
-          name: cypress-benchmark
-
-      - name: Merge measurements
-        run: jq -s add measurements-*.json > measurements.json
-
-      - name: Store benchmark result
-        uses: matrix-org/github-action-benchmark@jsperfentry-6
-        with:
-          name: Cypress measurements
-          tool: 'jsperformanceentry'
-          output-file-path: measurements.json
-          # The dashboard is available at https://matrix-org.github.io/matrix-react-sdk/cypress/bench/
-          benchmark-data-dir-path: cypress/bench
-          fail-on-alert: false
-          comment-on-alert: false
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          auto-push: ${{ github.event.workflow_run.event != 'pull_request' }}

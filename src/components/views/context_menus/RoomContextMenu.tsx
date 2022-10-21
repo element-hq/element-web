@@ -37,7 +37,6 @@ import Modal from "../../../Modal";
 import ExportDialog from "../dialogs/ExportDialog";
 import { useFeatureEnabled } from "../../../hooks/useSettings";
 import { usePinnedEvents } from "../right_panel/PinnedMessagesCard";
-import { RoomViewStore } from "../../../stores/RoomViewStore";
 import { RightPanelPhases } from '../../../stores/right-panel/RightPanelStorePhases';
 import { ROOM_NOTIFICATIONS_TAB } from "../dialogs/RoomSettingsDialog";
 import { useEventEmitterState } from "../../../hooks/useEventEmitter";
@@ -50,6 +49,7 @@ import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import SettingsStore from "../../../settings/SettingsStore";
 import DevtoolsDialog from "../dialogs/DevtoolsDialog";
+import { SdkContextClass } from "../../../contexts/SDKContext";
 
 interface IProps extends IContextMenuProps {
     room: Room;
@@ -332,7 +332,7 @@ const RoomContextMenu = ({ room, onFinished, ...props }: IProps) => {
     };
 
     const ensureViewingRoom = (ev: ButtonEvent) => {
-        if (RoomViewStore.instance.getRoomId() === room.roomId) return;
+        if (SdkContextClass.instance.roomViewStore.getRoomId() === room.roomId) return;
         dis.dispatch<ViewRoomPayload>({
             action: Action.ViewRoom,
             room_id: room.roomId,
@@ -377,7 +377,7 @@ const RoomContextMenu = ({ room, onFinished, ...props }: IProps) => {
                     ev.stopPropagation();
 
                     Modal.createDialog(DevtoolsDialog, {
-                        roomId: RoomViewStore.instance.getRoomId(),
+                        roomId: SdkContextClass.instance.roomViewStore.getRoomId(),
                     }, "mx_DevtoolsDialog_wrapper");
                     onFinished();
                 }}

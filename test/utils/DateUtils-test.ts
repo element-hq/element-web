@@ -14,7 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { formatSeconds, formatRelativeTime, formatDuration } from "../../src/DateUtils";
+import { formatSeconds, formatRelativeTime, formatDuration, formatFullDateNoDayISO } from "../../src/DateUtils";
+import { REPEATABLE_DATE } from "../test-utils";
 
 describe("formatSeconds", () => {
     it("correctly formats time with hours", () => {
@@ -90,5 +91,11 @@ describe('formatDuration()', () => {
         ['rounds to 0 seconds when less than a second - 123ms', '0s', 123],
     ])('%s formats to %s', (_description, expectedResult, input) => {
         expect(formatDuration(input)).toEqual(expectedResult);
+    });
+});
+
+describe("formatFullDateNoDayISO", () => {
+    it("should return ISO format", () => {
+        expect(formatFullDateNoDayISO(REPEATABLE_DATE)).toEqual("2022-11-17T16:58:32.517Z");
     });
 });

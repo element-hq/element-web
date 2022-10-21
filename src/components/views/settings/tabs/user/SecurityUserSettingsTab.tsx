@@ -38,6 +38,9 @@ import InlineSpinner from "../../../elements/InlineSpinner";
 import { PosthogAnalytics } from "../../../../../PosthogAnalytics";
 import { showDialog as showAnalyticsLearnMoreDialog } from "../../../dialogs/AnalyticsLearnMoreDialog";
 import { privateShouldBeEncrypted } from "../../../../../utils/rooms";
+import LoginWithQR, { Mode } from '../../../auth/LoginWithQR';
+import LoginWithQRSection from '../../devices/LoginWithQRSection';
+import type { IServerVersions } from 'matrix-js-sdk/src/matrix';
 
 interface IIgnoredUserProps {
     userId: string;
@@ -72,6 +75,8 @@ interface IState {
     waitingUnignored: string[];
     managingInvites: boolean;
     invitedRoomIds: Set<string>;
+    showLoginWithQR: Mode | null;
+    versions?: IServerVersions;
 }
 
 export default class SecurityUserSettingsTab extends React.Component<IProps, IState> {
@@ -88,6 +93,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
             waitingUnignored: [],
             managingInvites: false,
             invitedRoomIds,
+            showLoginWithQR: null,
         };
     }
 
@@ -102,6 +108,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
     public componentDidMount(): void {
         this.dispatcherRef = dis.register(this.onAction);
         MatrixClientPeg.get().on(RoomEvent.MyMembership, this.onMyMembership);
+        MatrixClientPeg.get().getVersions().then(versions => this.setState({ versions }));
     }
 
     public componentWillUnmount(): void {
@@ -251,6 +258,14 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
         );
     }
 
+    private onShowQRClicked = (): void => {
+        this.setState({ showLoginWithQR: Mode.Show });
+    };
+
+    private onLoginWithQRFinished = (): void => {
+        this.setState({ showLoginWithQR: null });
+    };
+
     public render(): JSX.Element {
         const secureBackup = (
             <div className='mx_SettingsTab_section'>
@@ -347,6 +362,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
         }
 
         const useNewSessionManager = SettingsStore.getValue("feature_new_device_manager");
+        const showQrCodeEnabled = SettingsStore.getValue("feature_qr_signin_reciprocate_show");
         const devicesSection = useNewSessionManager
             ? null
             : <>
@@ -363,7 +379,19 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
                     </span>
                     <DevicesPanel />
                 </div>
+                { showQrCodeEnabled ?
+                    <LoginWithQRSection onShowQr={this.onShowQRClicked} versions={this.state.versions} />
+                    : null
+                }
             </>;
+
+        const client = MatrixClientPeg.get();
+
+        if (showQrCodeEnabled && this.state.showLoginWithQR) {
+            return <div className="mx_SettingsTab mx_SecurityUserSettingsTab">
+                <LoginWithQR onFinished={this.onLoginWithQRFinished} mode={this.state.showLoginWithQR} client={client} />
+            </div>;
+        }
 
         return (
             <div className="mx_SettingsTab mx_SecurityUserSettingsTab">

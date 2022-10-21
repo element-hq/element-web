@@ -21,6 +21,7 @@ import { Relations } from "matrix-js-sdk/src/models/relations";
 import { Playback, PlaybackState } from "../../../src/audio/Playback";
 import { PlaybackManager } from "../../../src/audio/PlaybackManager";
 import { getReferenceRelationsForEvent } from "../../../src/events";
+import { RelationsHelperEvent } from "../../../src/events/RelationsHelper";
 import { MediaEventHelper } from "../../../src/utils/MediaEventHelper";
 import {
     VoiceBroadcastChunkEventType,
@@ -51,15 +52,19 @@ describe("VoiceBroadcastPlayback", () => {
     let chunk0Event: MatrixEvent;
     let chunk1Event: MatrixEvent;
     let chunk2Event: MatrixEvent;
+    let chunk3Event: MatrixEvent;
     const chunk0Data = new ArrayBuffer(1);
     const chunk1Data = new ArrayBuffer(2);
     const chunk2Data = new ArrayBuffer(3);
+    const chunk3Data = new ArrayBuffer(3);
     let chunk0Helper: MediaEventHelper;
     let chunk1Helper: MediaEventHelper;
     let chunk2Helper: MediaEventHelper;
+    let chunk3Helper: MediaEventHelper;
     let chunk0Playback: Playback;
     let chunk1Playback: Playback;
     let chunk2Playback: Playback;
+    let chunk3Playback: Playback;
 
     const itShouldSetTheStateTo = (state: VoiceBroadcastPlaybackState) => {
         it(`should set the state to ${state}`, () => {
@@ -133,20 +138,24 @@ describe("VoiceBroadcastPlayback", () => {
         chunk0Event = mkChunkEvent(0);
         chunk1Event = mkChunkEvent(1);
         chunk2Event = mkChunkEvent(2);
+        chunk3Event = mkChunkEvent(3);
 
         chunk0Helper = mkChunkHelper(chunk0Data);
         chunk1Helper = mkChunkHelper(chunk1Data);
         chunk2Helper = mkChunkHelper(chunk2Data);
+        chunk3Helper = mkChunkHelper(chunk3Data);
 
         chunk0Playback = createTestPlayback();
         chunk1Playback = createTestPlayback();
         chunk2Playback = createTestPlayback();
+        chunk3Playback = createTestPlayback();
 
         jest.spyOn(PlaybackManager.instance, "createPlaybackInstance").mockImplementation(
             (buffer: ArrayBuffer, _waveForm?: number[]) => {
                 if (buffer === chunk0Data) return chunk0Playback;
                 if (buffer === chunk1Data) return chunk1Playback;
                 if (buffer === chunk2Data) return chunk2Playback;
+                if (buffer === chunk3Data) return chunk3Playback;
             },
         );
 
@@ -154,12 +163,45 @@ describe("VoiceBroadcastPlayback", () => {
             if (event === chunk0Event) return chunk0Helper;
             if (event === chunk1Event) return chunk1Helper;
             if (event === chunk2Event) return chunk2Helper;
+            if (event === chunk3Event) return chunk3Helper;
         });
     });
 
     beforeEach(() => {
         jest.clearAllMocks();
         onStateChanged = jest.fn();
+    });
+
+    describe("when there is a running broadcast without chunks yet", () => {
+        beforeEach(() => {
+            infoEvent = mkInfoEvent(VoiceBroadcastInfoState.Running);
+            playback = mkPlayback();
+            setUpChunkEvents([]);
+        });
+
+        describe("and calling start", () => {
+            beforeEach(async () => {
+                await playback.start();
+            });
+
+            it("should be in buffering state", () => {
+                expect(playback.getState()).toBe(VoiceBroadcastPlaybackState.Buffering);
+            });
+
+            describe("and receiving the first chunk", () => {
+                beforeEach(() => {
+                    // TODO Michael W: Use RelationsHelper
+                    // @ts-ignore
+                    playback.chunkRelationHelper.emit(RelationsHelperEvent.Add, chunk1Event);
+                });
+
+                itShouldSetTheStateTo(VoiceBroadcastPlaybackState.Playing);
+
+                it("should play the first chunk", () => {
+                    expect(chunk1Playback.play).toHaveBeenCalled();
+                });
+            });
+        });
     });
 
     describe("when there is a running voice broadcast with some chunks", () => {
@@ -175,9 +217,31 @@ describe("VoiceBroadcastPlayback", () => {
             });
 
             it("should play the last chunk", () => {
-                // assert that the first chunk is being played
+                // assert that the last chunk is played first
                 expect(chunk2Playback.play).toHaveBeenCalled();
                 expect(chunk1Playback.play).not.toHaveBeenCalled();
+            });
+
+            describe("and the playback of the last chunk ended", () => {
+                beforeEach(() => {
+                    chunk2Playback.emit(PlaybackState.Stopped);
+                });
+
+                itShouldSetTheStateTo(VoiceBroadcastPlaybackState.Buffering);
+
+                describe("and the next chunk arrived", () => {
+                    beforeEach(() => {
+                        // TODO Michael W: Use RelationsHelper
+                        // @ts-ignore
+                        playback.chunkRelationHelper.emit(RelationsHelperEvent.Add, chunk3Event);
+                    });
+
+                    itShouldSetTheStateTo(VoiceBroadcastPlaybackState.Playing);
+
+                    it("should play the next chunk", () => {
+                        expect(chunk3Playback.play).toHaveBeenCalled();
+                    });
+                });
             });
         });
     });
@@ -198,7 +262,7 @@ describe("VoiceBroadcastPlayback", () => {
                     await playback.start();
                 });
 
-                itShouldSetTheStateTo(VoiceBroadcastPlaybackState.Stopped);
+                itShouldSetTheStateTo(VoiceBroadcastPlaybackState.Buffering);
             });
         });
 
@@ -211,9 +275,7 @@ describe("VoiceBroadcastPlayback", () => {
                 expect(playback.infoEvent).toBe(infoEvent);
             });
 
-            it("should be in state Stopped", () => {
-                expect(playback.getState()).toBe(VoiceBroadcastPlaybackState.Stopped);
-            });
+            itShouldSetTheStateTo(VoiceBroadcastPlaybackState.Stopped);
 
             describe("and calling start", () => {
                 beforeEach(async () => {

@@ -25,7 +25,7 @@ import { MatrixClientPeg } from "../MatrixClientPeg";
 import { arrayFastClone } from "../utils/arrays";
 import { PlaybackManager } from "./PlaybackManager";
 import { isVoiceMessage } from "../utils/EventUtils";
-import { RoomViewStore } from "../stores/RoomViewStore";
+import { SdkContextClass } from "../contexts/SDKContext";
 
 /**
  * Audio playback queue management for a given room. This keeps track of where the user
@@ -51,7 +51,7 @@ export class PlaybackQueue {
     constructor(private room: Room) {
         this.loadClocks();
 
-        RoomViewStore.instance.addRoomListener(this.room.roomId, (isActive) => {
+        SdkContextClass.instance.roomViewStore.addRoomListener(this.room.roomId, (isActive) => {
             if (!isActive) return;
 
             // Reset the state of the playbacks before they start mounting and enqueuing updates.

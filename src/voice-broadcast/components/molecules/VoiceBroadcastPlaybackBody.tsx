@@ -17,11 +17,16 @@ limitations under the License.
 import React from "react";
 
 import {
-    PlaybackControlButton,
+    VoiceBroadcastControl,
     VoiceBroadcastHeader,
     VoiceBroadcastPlayback,
+    VoiceBroadcastPlaybackState,
 } from "../..";
+import Spinner from "../../../components/views/elements/Spinner";
 import { useVoiceBroadcastPlayback } from "../../hooks/useVoiceBroadcastPlayback";
+import { Icon as PlayIcon } from "../../../../res/img/element-icons/play.svg";
+import { Icon as PauseIcon } from "../../../../res/img/element-icons/pause.svg";
+import { _t } from "../../../languageHandler";
 
 interface VoiceBroadcastPlaybackBodyProps {
     playback: VoiceBroadcastPlayback;
@@ -38,6 +43,36 @@ export const VoiceBroadcastPlaybackBody: React.FC<VoiceBroadcastPlaybackBodyProp
         playbackState,
     } = useVoiceBroadcastPlayback(playback);
 
+    let control: React.ReactNode;
+
+    if (playbackState === VoiceBroadcastPlaybackState.Buffering) {
+        control = <Spinner />;
+    } else {
+        let controlIcon: React.FC<React.SVGProps<SVGSVGElement>>;
+        let controlLabel: string;
+
+        switch (playbackState) {
+            case VoiceBroadcastPlaybackState.Stopped:
+                controlIcon = PlayIcon;
+                controlLabel = _t("play voice broadcast");
+                break;
+            case VoiceBroadcastPlaybackState.Paused:
+                controlIcon = PlayIcon;
+                controlLabel = _t("resume voice broadcast");
+                break;
+            case VoiceBroadcastPlaybackState.Playing:
+                controlIcon = PauseIcon;
+                controlLabel = _t("pause voice broadcast");
+                break;
+        }
+
+        control = <VoiceBroadcastControl
+            label={controlLabel}
+            icon={controlIcon}
+            onClick={toggle}
+        />;
+    }
+
     return (
         <div className="mx_VoiceBroadcastPlaybackBody">
             <VoiceBroadcastHeader
@@ -47,10 +82,7 @@ export const VoiceBroadcastPlaybackBody: React.FC<VoiceBroadcastPlaybackBodyProp
                 showBroadcast={true}
             />
             <div className="mx_VoiceBroadcastPlaybackBody_controls">
-                <PlaybackControlButton
-                    onClick={toggle}
-                    state={playbackState}
-                />
+                { control }
             </div>
         </div>
     );

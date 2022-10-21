@@ -20,6 +20,7 @@ import { MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import {
     VoiceBroadcastInfoEventType,
+    VoiceBroadcastInfoState,
     VoiceBroadcastRecording,
     VoiceBroadcastRecordingBody,
 } from "../../../../src/voice-broadcast";
@@ -49,7 +50,7 @@ describe("VoiceBroadcastRecordingBody", () => {
             room: roomId,
             user: userId,
         });
-        recording = new VoiceBroadcastRecording(infoEvent, client);
+        recording = new VoiceBroadcastRecording(infoEvent, client, VoiceBroadcastInfoState.Running);
     });
 
     describe("when rendering a live broadcast", () => {

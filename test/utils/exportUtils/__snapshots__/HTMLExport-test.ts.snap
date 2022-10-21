@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`HTMLExport should have an SDK-branded destination file name 1`] = `"Element - My  Test  Room Welcome - Chat Export - 2022-11-17T16-58-32.517Z.zip"`;
+
+exports[`HTMLExport should have an SDK-branded destination file name 2`] = `"BrandedChatWithSlashesForFun - My  Test  Room Welcome - Chat Export - 2022-11-17T16-58-32.517Z.zip"`;

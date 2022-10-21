@@ -38,7 +38,7 @@ interface IDialogAesthetics {
     };
 }
 
-interface IProps extends IDialogProps {
+export interface InteractiveAuthDialogProps extends IDialogProps {
     // matrix client to use for UI auth requests
     matrixClient: MatrixClient;
 
@@ -82,8 +82,8 @@ interface IState {
     uiaStagePhase: number | string;
 }
 
-export default class InteractiveAuthDialog extends React.Component<IProps, IState> {
-    constructor(props: IProps) {
+export default class InteractiveAuthDialog extends React.Component<InteractiveAuthDialogProps, IState> {
+    constructor(props: InteractiveAuthDialogProps) {
         super(props);
 
         this.state = {

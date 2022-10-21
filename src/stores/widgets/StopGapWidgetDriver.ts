@@ -47,15 +47,15 @@ import Modal from "../../Modal";
 import WidgetOpenIDPermissionsDialog from "../../components/views/dialogs/WidgetOpenIDPermissionsDialog";
 import WidgetCapabilitiesPromptDialog from "../../components/views/dialogs/WidgetCapabilitiesPromptDialog";
 import { WidgetPermissionCustomisations } from "../../customisations/WidgetPermissions";
-import { OIDCState, WidgetPermissionStore } from "./WidgetPermissionStore";
+import { OIDCState } from "./WidgetPermissionStore";
 import { WidgetType } from "../../widgets/WidgetType";
 import { CHAT_EFFECTS } from "../../effects";
 import { containsEmoji } from "../../effects/utils";
 import dis from "../../dispatcher/dispatcher";
 import SettingsStore from "../../settings/SettingsStore";
-import { RoomViewStore } from "../RoomViewStore";
 import { ElementWidgetCapabilities } from "./ElementWidgetCapabilities";
 import { navigateToPermalink } from "../../utils/permalinks/navigator";
+import { SdkContextClass } from "../../contexts/SDKContext";
 
 // TODO: Purge this from the universe
 
@@ -210,7 +210,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
         targetRoomId: string = null,
     ): Promise<ISendEventDetails> {
         const client = MatrixClientPeg.get();
-        const roomId = targetRoomId || RoomViewStore.instance.getRoomId();
+        const roomId = targetRoomId || SdkContextClass.instance.roomViewStore.getRoomId();
 
         if (!client || !roomId) throw new Error("Not in a room or not attached to a client");
 
@@ -291,7 +291,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
 
         const targetRooms = roomIds
             ? (roomIds.includes(Symbols.AnyRoom) ? client.getVisibleRooms() : roomIds.map(r => client.getRoom(r)))
-            : [client.getRoom(RoomViewStore.instance.getRoomId())];
+            : [client.getRoom(SdkContextClass.instance.roomViewStore.getRoomId())];
         return targetRooms.filter(r => !!r);
     }
 
@@ -350,7 +350,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
     }
 
     public async askOpenID(observer: SimpleObservable<IOpenIDUpdate>) {
-        const oidcState = WidgetPermissionStore.instance.getOIDCState(
+        const oidcState = SdkContextClass.instance.widgetPermissionStore.getOIDCState(
             this.forWidget, this.forWidgetKind, this.inRoomId,
         );
 
@@ -430,7 +430,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
     ): Promise<IReadEventRelationsResult> {
         const client = MatrixClientPeg.get();
         const dir = direction as Direction;
-        roomId = roomId ?? RoomViewStore.instance.getRoomId() ?? undefined;
+        roomId = roomId ?? SdkContextClass.instance.roomViewStore.getRoomId() ?? undefined;
 
         if (typeof roomId !== "string") {
             throw new Error('Error while reading the current room');

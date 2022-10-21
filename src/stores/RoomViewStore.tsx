@@ -17,6 +17,7 @@ limitations under the License.
 */
 
 import React, { ReactNode } from "react";
+import * as utils from 'matrix-js-sdk/src/utils';
 import { MatrixError } from "matrix-js-sdk/src/http-api";
 import { logger } from "matrix-js-sdk/src/logger";
 import { ViewRoom as ViewRoomEvent } from "@matrix-org/analytics-events/types/typescript/ViewRoom";
@@ -27,7 +28,7 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Optional } from "matrix-events-sdk";
 import EventEmitter from "events";
 
-import { defaultDispatcher, MatrixDispatcher } from '../dispatcher/dispatcher';
+import { MatrixDispatcher } from '../dispatcher/dispatcher';
 import { MatrixClientPeg } from '../MatrixClientPeg';
 import Modal from '../Modal';
 import { _t } from '../languageHandler';
@@ -35,10 +36,8 @@ import { getCachedRoomIDForAlias, storeRoomAliasInCache } from '../RoomAliasCach
 import { Action } from "../dispatcher/actions";
 import { retry } from "../utils/promise";
 import { TimelineRenderingType } from "../contexts/RoomContext";
-import { PosthogAnalytics } from "../PosthogAnalytics";
 import { ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";
 import DMRoomMap from "../utils/DMRoomMap";
-import SpaceStore from "./spaces/SpaceStore";
 import { isMetaSpace, MetaSpace } from "./spaces";
 import { JoinRoomPayload } from "../dispatcher/payloads/JoinRoomPayload";
 import { JoinRoomReadyPayload } from "../dispatcher/payloads/JoinRoomReadyPayload";
@@ -47,9 +46,9 @@ import { ViewRoomErrorPayload } from "../dispatcher/payloads/ViewRoomErrorPayloa
 import ErrorDialog from "../components/views/dialogs/ErrorDialog";
 import { ActiveRoomChangedPayload } from "../dispatcher/payloads/ActiveRoomChangedPayload";
 import SettingsStore from "../settings/SettingsStore";
-import { SlidingSyncManager } from "../SlidingSyncManager";
 import { awaitRoomDownSync } from "../utils/RoomUpgrade";
 import { UPDATE_EVENT } from "./AsyncStore";
+import { SdkContextClass } from "../contexts/SDKContext";
 import { CallStore } from "./CallStore";
 
 const NUM_JOIN_RETRY = 5;
@@ -131,17 +130,16 @@ type Listener = (isActive: boolean) => void;
  * A class for storing application state for RoomView.
  */
 export class RoomViewStore extends EventEmitter {
-    // Important: This cannot be a dynamic getter (lazily-constructed instance) because
-    // otherwise we'll miss view_room dispatches during startup, breaking relaunches of
-    // the app. We need to eagerly create the instance.
-    public static readonly instance = new RoomViewStore(defaultDispatcher);
-
-    private state: State = INITIAL_STATE; // initialize state
+    // initialize state as a copy of the initial state. We need to copy else one RVS can talk to
+    // another RVS via INITIAL_STATE as they share the same underlying object. Mostly relevant for tests.
+    private state = utils.deepCopy(INITIAL_STATE);
 
     private dis: MatrixDispatcher;
     private dispatchToken: string;
 
-    public constructor(dis: MatrixDispatcher) {
+    public constructor(
+        dis: MatrixDispatcher, private readonly stores: SdkContextClass,
+    ) {
         super();
         this.resetDispatcher(dis);
     }
@@ -248,7 +246,7 @@ export class RoomViewStore extends EventEmitter {
                                     : numMembers > 1 ? "Two"
                                         : "One";
 
-                    PosthogAnalytics.instance.trackEvent<JoinedRoomEvent>({
+                    this.stores.posthogAnalytics.trackEvent<JoinedRoomEvent>({
                         eventName: "JoinedRoom",
                         trigger: payload.metricsTrigger,
                         roomSize,
@@ -291,17 +289,17 @@ export class RoomViewStore extends EventEmitter {
 
             if (payload.metricsTrigger !== null && payload.room_id !== this.state.roomId) {
                 let activeSpace: ViewRoomEvent["activeSpace"];
-                if (SpaceStore.instance.activeSpace === MetaSpace.Home) {
+                if (this.stores.spaceStore.activeSpace === MetaSpace.Home) {
                     activeSpace = "Home";
-                } else if (isMetaSpace(SpaceStore.instance.activeSpace)) {
+                } else if (isMetaSpace(this.stores.spaceStore.activeSpace)) {
                     activeSpace = "Meta";
                 } else {
-                    activeSpace = SpaceStore.instance.activeSpaceRoom.getJoinRule() === JoinRule.Public
+                    activeSpace = this.stores.spaceStore.activeSpaceRoom?.getJoinRule() === JoinRule.Public
                         ? "Public"
                         : "Private";
                 }
 
-                PosthogAnalytics.instance.trackEvent<ViewRoomEvent>({
+                this.stores.posthogAnalytics.trackEvent<ViewRoomEvent>({
                     eventName: "ViewRoom",
                     trigger: payload.metricsTrigger,
                     viaKeyboard: payload.metricsViaKeyboard,
@@ -314,7 +312,7 @@ export class RoomViewStore extends EventEmitter {
             if (SettingsStore.getValue("feature_sliding_sync") && this.state.roomId !== payload.room_id) {
                 if (this.state.subscribingRoomId && this.state.subscribingRoomId !== payload.room_id) {
                     // unsubscribe from this room, but don't await it as we don't care when this gets done.
-                    SlidingSyncManager.instance.setRoomVisible(this.state.subscribingRoomId, false);
+                    this.stores.slidingSyncManager.setRoomVisible(this.state.subscribingRoomId, false);
                 }
                 this.setState({
                     subscribingRoomId: payload.room_id,
@@ -332,11 +330,11 @@ export class RoomViewStore extends EventEmitter {
                 });
                 // set this room as the room subscription. We need to await for it as this will fetch
                 // all room state for this room, which is required before we get the state below.
-                await SlidingSyncManager.instance.setRoomVisible(payload.room_id, true);
+                await this.stores.slidingSyncManager.setRoomVisible(payload.room_id, true);
                 // Whilst we were subscribing another room was viewed, so stop what we're doing and
                 // unsubscribe
                 if (this.state.subscribingRoomId !== payload.room_id) {
-                    SlidingSyncManager.instance.setRoomVisible(payload.room_id, false);
+                    this.stores.slidingSyncManager.setRoomVisible(payload.room_id, false);
                     return;
                 }
                 // Re-fire the payload: we won't re-process it because the prev room ID == payload room ID now
@@ -599,7 +597,7 @@ export class RoomViewStore extends EventEmitter {
     //         // Not joined
     //     }
     // } else {
-    //     if (RoomViewStore.instance.isJoining()) {
+    //     if (this.stores.roomViewStore.isJoining()) {
     //         // show spinner
     //     } else {
     //         // show join prompt

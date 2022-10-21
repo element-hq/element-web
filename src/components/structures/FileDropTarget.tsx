@@ -19,7 +19,7 @@ import React, { useEffect, useState } from "react";
 import { _t } from "../../languageHandler";
 
 interface IProps {
-    parent: HTMLElement;
+    parent: HTMLElement | null;
     onFileDrop(dataTransfer: DataTransfer): void;
 }
 
@@ -90,20 +90,20 @@ const FileDropTarget: React.FC<IProps> = ({ parent, onFileDrop }) => {
             }));
         };
 
-        parent.addEventListener("drop", onDrop);
-        parent.addEventListener("dragover", onDragOver);
-        parent.addEventListener("dragenter", onDragEnter);
-        parent.addEventListener("dragleave", onDragLeave);
+        parent?.addEventListener("drop", onDrop);
+        parent?.addEventListener("dragover", onDragOver);
+        parent?.addEventListener("dragenter", onDragEnter);
+        parent?.addEventListener("dragleave", onDragLeave);
 
         return () => {
             // disconnect the D&D event listeners from the room view. This
             // is really just for hygiene - we're going to be
             // deleted anyway, so it doesn't matter if the event listeners
             // don't get cleaned up.
-            parent.removeEventListener("drop", onDrop);
-            parent.removeEventListener("dragover", onDragOver);
-            parent.removeEventListener("dragenter", onDragEnter);
-            parent.removeEventListener("dragleave", onDragLeave);
+            parent?.removeEventListener("drop", onDrop);
+            parent?.removeEventListener("dragover", onDragOver);
+            parent?.removeEventListener("dragenter", onDragEnter);
+            parent?.removeEventListener("dragleave", onDragLeave);
         };
     }, [parent, onFileDrop]);
 

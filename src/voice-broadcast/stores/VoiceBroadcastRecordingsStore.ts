@@ -17,7 +17,7 @@ limitations under the License.
 import { MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { TypedEventEmitter } from "matrix-js-sdk/src/models/typed-event-emitter";
 
-import { VoiceBroadcastRecording } from "..";
+import { VoiceBroadcastInfoState, VoiceBroadcastRecording, VoiceBroadcastRecordingEvent } from "..";
 
 export enum VoiceBroadcastRecordingsStoreEvent {
     CurrentChanged = "current_changed",
@@ -41,7 +41,12 @@ export class VoiceBroadcastRecordingsStore extends TypedEventEmitter<VoiceBroadc
     public setCurrent(current: VoiceBroadcastRecording): void {
         if (this.current === current) return;
 
+        if (this.current) {
+            this.current.off(VoiceBroadcastRecordingEvent.StateChanged, this.onCurrentStateChanged);
+        }
+
         this.current = current;
+        this.current.on(VoiceBroadcastRecordingEvent.StateChanged, this.onCurrentStateChanged);
         this.recordings.set(current.infoEvent.getId(), current);
         this.emit(VoiceBroadcastRecordingsStoreEvent.CurrentChanged, current);
     }
@@ -51,8 +56,9 @@ export class VoiceBroadcastRecordingsStore extends TypedEventEmitter<VoiceBroadc
     }
 
     public clearCurrent(): void {
-        if (this.current === null) return;
+        if (!this.current) return;
 
+        this.current.off(VoiceBroadcastRecordingEvent.StateChanged, this.onCurrentStateChanged);
         this.current = null;
         this.emit(VoiceBroadcastRecordingsStoreEvent.CurrentChanged, null);
     }
@@ -66,6 +72,12 @@ export class VoiceBroadcastRecordingsStore extends TypedEventEmitter<VoiceBroadc
 
         return this.recordings.get(infoEventId);
     }
+
+    private onCurrentStateChanged = (state: VoiceBroadcastInfoState) => {
+        if (state === VoiceBroadcastInfoState.Stopped) {
+            this.clearCurrent();
+        }
+    };
 
     private static readonly cachedInstance = new VoiceBroadcastRecordingsStore();
 

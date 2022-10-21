@@ -27,7 +27,6 @@ import { ActionPayload } from "../../dispatcher/payloads";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { readReceiptChangeIsFor } from "../../utils/read-receipts";
 import { FILTER_CHANGED, IFilterCondition } from "./filters/IFilterCondition";
-import { RoomViewStore } from "../RoomViewStore";
 import { Algorithm, LIST_UPDATED_EVENT } from "./algorithms/Algorithm";
 import { EffectiveMembership, getEffectiveMembership } from "../../utils/membership";
 import RoomListLayoutStore from "./RoomListLayoutStore";
@@ -40,6 +39,7 @@ import { IRoomTimelineActionPayload } from "../../actions/MatrixActionCreators";
 import { RoomListStore as Interface, RoomListStoreEvent } from "./Interface";
 import { SlidingRoomListStoreClass } from "./SlidingRoomListStore";
 import { UPDATE_EVENT } from "../AsyncStore";
+import { SdkContextClass } from "../../contexts/SDKContext";
 
 interface IState {
     // state is tracked in underlying classes
@@ -105,7 +105,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> implements 
             this.readyStore.useUnitTestClient(forcedClient);
         }
 
-        RoomViewStore.instance.addListener(UPDATE_EVENT, () => this.handleRVSUpdate({}));
+        SdkContextClass.instance.roomViewStore.addListener(UPDATE_EVENT, () => this.handleRVSUpdate({}));
         this.algorithm.on(LIST_UPDATED_EVENT, this.onAlgorithmListUpdated);
         this.algorithm.on(FILTER_CHANGED, this.onAlgorithmFilterUpdated);
         this.setupWatchers();
@@ -128,7 +128,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> implements 
     private handleRVSUpdate({ trigger = true }) {
         if (!this.matrixClient) return; // We assume there won't be RVS updates without a client
 
-        const activeRoomId = RoomViewStore.instance.getRoomId();
+        const activeRoomId = SdkContextClass.instance.roomViewStore.getRoomId();
         if (!activeRoomId && this.algorithm.stickyRoom) {
             this.algorithm.setStickyRoom(null);
         } else if (activeRoomId) {

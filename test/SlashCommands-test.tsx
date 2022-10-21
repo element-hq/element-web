@@ -21,9 +21,9 @@ import { Command, Commands, getCommand } from '../src/SlashCommands';
 import { createTestClient } from './test-utils';
 import { MatrixClientPeg } from '../src/MatrixClientPeg';
 import { LocalRoom, LOCAL_ROOM_ID_PREFIX } from '../src/models/LocalRoom';
-import { RoomViewStore } from '../src/stores/RoomViewStore';
 import SettingsStore from '../src/settings/SettingsStore';
 import LegacyCallHandler from '../src/LegacyCallHandler';
+import { SdkContextClass } from '../src/contexts/SDKContext';
 
 describe('SlashCommands', () => {
     let client: MatrixClient;
@@ -38,14 +38,14 @@ describe('SlashCommands', () => {
     };
 
     const setCurrentRoom = (): void => {
-        mocked(RoomViewStore.instance.getRoomId).mockReturnValue(roomId);
+        mocked(SdkContextClass.instance.roomViewStore.getRoomId).mockReturnValue(roomId);
         mocked(client.getRoom).mockImplementation((rId: string): Room => {
             if (rId === roomId) return room;
         });
     };
 
     const setCurrentLocalRoon = (): void => {
-        mocked(RoomViewStore.instance.getRoomId).mockReturnValue(localRoomId);
+        mocked(SdkContextClass.instance.roomViewStore.getRoomId).mockReturnValue(localRoomId);
         mocked(client.getRoom).mockImplementation((rId: string): Room => {
             if (rId === localRoomId) return localRoom;
         });
@@ -60,7 +60,7 @@ describe('SlashCommands', () => {
         room = new Room(roomId, client, client.getUserId());
         localRoom = new LocalRoom(localRoomId, client, client.getUserId());
 
-        jest.spyOn(RoomViewStore.instance, "getRoomId");
+        jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId");
     });
 
     describe('/topic', () => {

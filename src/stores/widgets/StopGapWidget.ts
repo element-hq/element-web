@@ -41,7 +41,6 @@ import { ClientEvent } from "matrix-js-sdk/src/client";
 import { _t } from "../../languageHandler";
 import { StopGapWidgetDriver } from "./StopGapWidgetDriver";
 import { WidgetMessagingStore } from "./WidgetMessagingStore";
-import { RoomViewStore } from "../RoomViewStore";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { OwnProfileStore } from "../OwnProfileStore";
 import WidgetUtils from '../../utils/WidgetUtils';
@@ -65,6 +64,7 @@ import { arrayFastClone } from "../../utils/arrays";
 import { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import Modal from "../../Modal";
 import ErrorDialog from "../../components/views/dialogs/ErrorDialog";
+import { SdkContextClass } from "../../contexts/SDKContext";
 import { VoiceBroadcastRecordingsStore } from "../../voice-broadcast";
 
 // TODO: Destroy all of this code
@@ -185,7 +185,7 @@ export class StopGapWidget extends EventEmitter {
 
         if (this.roomId) return this.roomId;
 
-        return RoomViewStore.instance.getRoomId();
+        return SdkContextClass.instance.roomViewStore.getRoomId();
     }
 
     public get widgetApi(): ClientWidgetApi {
@@ -381,7 +381,7 @@ export class StopGapWidget extends EventEmitter {
 
                     // noinspection JSIgnoredPromiseFromCall
                     IntegrationManagers.sharedInstance().getPrimaryManager().open(
-                        this.client.getRoom(RoomViewStore.instance.getRoomId()),
+                        this.client.getRoom(SdkContextClass.instance.roomViewStore.getRoomId()),
                         `type_${integType}`,
                         integId,
                     );

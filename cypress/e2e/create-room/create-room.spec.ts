@@ -54,13 +54,11 @@ describe("Create Room", () => {
             // Fill room address
             cy.get('[label="Room address"]').type("test-room-1");
             // Submit
-            cy.startMeasuring("from-submit-to-room");
             cy.get(".mx_Dialog_primary").click();
         });
 
         cy.url().should("contain", "/#/room/#test-room-1:localhost");
-        cy.stopMeasuring("from-submit-to-room");
-        cy.get(".mx_RoomHeader_nametext").contains(name);
-        cy.get(".mx_RoomHeader_topic").contains(topic);
+        cy.contains(".mx_RoomHeader_nametext", name);
+        cy.contains(".mx_RoomHeader_topic", topic);
     });
 });

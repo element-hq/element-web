@@ -21,10 +21,11 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../languageHandler";
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
-import { OIDCState, WidgetPermissionStore } from "../../../stores/widgets/WidgetPermissionStore";
+import { OIDCState } from "../../../stores/widgets/WidgetPermissionStore";
 import { IDialogProps } from "./IDialogProps";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
+import { SdkContextClass } from '../../../contexts/SDKContext';
 
 interface IProps extends IDialogProps {
     widget: Widget;
@@ -57,7 +58,7 @@ export default class WidgetOpenIDPermissionsDialog extends React.PureComponent<I
         if (this.state.rememberSelection) {
             logger.log(`Remembering ${this.props.widget.id} as allowed=${allowed} for OpenID`);
 
-            WidgetPermissionStore.instance.setOIDCState(
+            SdkContextClass.instance.widgetPermissionStore.setOIDCState(
                 this.props.widget, this.props.widgetKind, this.props.inRoomId,
                 allowed ? OIDCState.Allowed : OIDCState.Denied,
             );

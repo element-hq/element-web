@@ -43,6 +43,8 @@ import { WidgetMessagingStore, WidgetMessagingStoreEvent } from "../stores/widge
 import ActiveWidgetStore, { ActiveWidgetStoreEvent } from "../stores/ActiveWidgetStore";
 import PlatformPeg from "../PlatformPeg";
 import { getCurrentLanguage } from "../languageHandler";
+import DesktopCapturerSourcePicker from "../components/views/elements/DesktopCapturerSourcePicker";
+import Modal from "../Modal";
 
 const TIMEOUT_MS = 16000;
 
@@ -639,10 +641,6 @@ export class ElementCall extends Call {
             baseUrl: client.baseUrl,
             lang: getCurrentLanguage().replace("_", "-"),
         });
-        // Currently, the screen-sharing support is the same is it is for Jitsi
-        if (!PlatformPeg.get().supportsJitsiScreensharing()) {
-            params.append("hideScreensharing", "");
-        }
         url.hash = `#?${params.toString()}`;
 
         // To use Element Call without touching room state, we create a virtual
@@ -818,6 +816,7 @@ export class ElementCall extends Call {
         this.messaging!.on(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
         this.messaging!.on(`action:${ElementWidgetActions.TileLayout}`, this.onTileLayout);
         this.messaging!.on(`action:${ElementWidgetActions.SpotlightLayout}`, this.onSpotlightLayout);
+        this.messaging!.on(`action:${ElementWidgetActions.Screenshare}`, this.onScreenshare);
     }
 
     protected async performDisconnection(): Promise<void> {
@@ -831,8 +830,9 @@ export class ElementCall extends Call {
     public setDisconnected() {
         this.client.off(ClientEvent.ToDeviceEvent, this.onToDeviceEvent);
         this.messaging!.off(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
-        this.messaging!.on(`action:${ElementWidgetActions.TileLayout}`, this.onTileLayout);
-        this.messaging!.on(`action:${ElementWidgetActions.SpotlightLayout}`, this.onSpotlightLayout);
+        this.messaging!.off(`action:${ElementWidgetActions.TileLayout}`, this.onTileLayout);
+        this.messaging!.off(`action:${ElementWidgetActions.SpotlightLayout}`, this.onSpotlightLayout);
+        this.messaging!.off(`action:${ElementWidgetActions.Screenshare}`, this.onSpotlightLayout);
         super.setDisconnected();
     }
 
@@ -950,5 +950,21 @@ export class ElementCall extends Call {
         ev.preventDefault();
         this.layout = Layout.Spotlight;
         await this.messaging!.transport.reply(ev.detail, {}); // ack
+    };
+
+    private onScreenshare = async (ev: CustomEvent<IWidgetApiRequest>) => {
+        ev.preventDefault();
+
+        if (PlatformPeg.get().supportsDesktopCapturer()) {
+            const { finished } = Modal.createDialog(DesktopCapturerSourcePicker);
+            const [source] = await finished;
+
+            await this.messaging!.transport.reply(ev.detail, {
+                failed: !source,
+                desktopCapturerSourceId: source,
+            });
+        } else {
+            await this.messaging!.transport.reply(ev.detail, {});
+        }
     };
 }

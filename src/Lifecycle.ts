@@ -39,7 +39,6 @@ import PlatformPeg from "./PlatformPeg";
 import { sendLoginRequest } from "./Login";
 import * as StorageManager from './utils/StorageManager';
 import SettingsStore from "./settings/SettingsStore";
-import TypingStore from "./stores/TypingStore";
 import ToastStore from "./stores/ToastStore";
 import { IntegrationManagers } from "./integrations/IntegrationManagers";
 import { Mjolnir } from "./mjolnir/Mjolnir";
@@ -62,6 +61,7 @@ import { DialogOpener } from "./utils/DialogOpener";
 import { Action } from "./dispatcher/actions";
 import AbstractLocalStorageSettingsHandler from "./settings/handlers/AbstractLocalStorageSettingsHandler";
 import { OverwriteLoginPayload } from "./dispatcher/payloads/OverwriteLoginPayload";
+import { SdkContextClass } from './contexts/SDKContext';
 
 const HOMESERVER_URL_KEY = "mx_hs_url";
 const ID_SERVER_URL_KEY = "mx_is_url";
@@ -426,7 +426,7 @@ export async function restoreFromLocalStorage(opts?: { ignoreGuest?: boolean }):
     const { hsUrl, isUrl, hasAccessToken, accessToken, userId, deviceId, isGuest } = await getStoredSessionVars();
 
     if (hasAccessToken && !accessToken) {
-        abortLogin();
+        await abortLogin();
     }
 
     if (accessToken && userId && hsUrl) {
@@ -797,7 +797,7 @@ async function startMatrixClient(startSyncing = true): Promise<void> {
     dis.dispatch({ action: 'will_start_client' }, true);
 
     // reset things first just in case
-    TypingStore.sharedInstance().reset();
+    SdkContextClass.instance.typingStore.reset();
     ToastStore.sharedInstance().reset();
 
     DialogOpener.instance.prepare();
@@ -927,7 +927,7 @@ export function stopMatrixClient(unsetClient = true): void {
     Notifier.stop();
     LegacyCallHandler.instance.stop();
     UserActivity.sharedInstance().stop();
-    TypingStore.sharedInstance().reset();
+    SdkContextClass.instance.typingStore.reset();
     Presence.stop();
     ActiveWidgetStore.instance.stop();
     IntegrationManagers.sharedInstance().stopWatching();

@@ -17,13 +17,14 @@ limitations under the License.
 import { mocked } from "jest-mock";
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
-import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import TypingStore from "../../src/stores/TypingStore";
 import { LOCAL_ROOM_ID_PREFIX } from "../../src/models/LocalRoom";
 import SettingsStore from "../../src/settings/SettingsStore";
+import { TestSdkContext } from "../TestSdkContext";
 
 jest.mock("../../src/settings/SettingsStore", () => ({
     getValue: jest.fn(),
+    monitorSetting: jest.fn(),
 }));
 
 describe("TypingStore", () => {
@@ -37,11 +38,12 @@ describe("TypingStore", () => {
     const localRoomId = LOCAL_ROOM_ID_PREFIX + "test";
 
     beforeEach(() => {
-        typingStore = new TypingStore();
         mockClient = {
             sendTyping: jest.fn(),
         } as unknown as MatrixClient;
-        MatrixClientPeg.get = () => mockClient;
+        const context = new TestSdkContext();
+        context.client = mockClient;
+        typingStore = new TypingStore(context);
         mocked(SettingsStore.getValue).mockImplementation((setting: string) => {
             return settings[setting];
         });

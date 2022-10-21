@@ -32,17 +32,16 @@ import { defaultDispatcher } from "../../../src/dispatcher/dispatcher";
 import { ViewRoomPayload } from "../../../src/dispatcher/payloads/ViewRoomPayload";
 import { RoomView as _RoomView } from "../../../src/components/structures/RoomView";
 import ResizeNotifier from "../../../src/utils/ResizeNotifier";
-import { RoomViewStore } from "../../../src/stores/RoomViewStore";
 import SettingsStore from "../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
 import DMRoomMap from "../../../src/utils/DMRoomMap";
 import { NotificationState } from "../../../src/stores/notifications/NotificationState";
-import RightPanelStore from "../../../src/stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../../src/stores/right-panel/RightPanelStorePhases";
 import { LocalRoom, LocalRoomState } from "../../../src/models/LocalRoom";
 import { DirectoryMember } from "../../../src/utils/direct-messages";
 import { createDmLocalRoom } from "../../../src/utils/dm/createDmLocalRoom";
 import { UPDATE_EVENT } from "../../../src/stores/AsyncStore";
+import { SdkContextClass, SDKContext } from "../../../src/contexts/SDKContext";
 
 const RoomView = wrapInMatrixClientContext(_RoomView);
 
@@ -50,6 +49,7 @@ describe("RoomView", () => {
     let cli: MockedObject<MatrixClient>;
     let room: Room;
     let roomCount = 0;
+    let stores: SdkContextClass;
 
     beforeEach(async () => {
         mockPlatformPeg({ reload: () => {} });
@@ -64,7 +64,9 @@ describe("RoomView", () => {
         room.on(RoomEvent.TimelineReset, (...args) => cli.emit(RoomEvent.TimelineReset, ...args));
 
         DMRoomMap.makeShared();
-        RightPanelStore.instance.useUnitTestClient(cli);
+        stores = new SdkContextClass();
+        stores.client = cli;
+        stores.rightPanelStore.useUnitTestClient(cli);
     });
 
     afterEach(async () => {
@@ -73,15 +75,15 @@ describe("RoomView", () => {
     });
 
     const mountRoomView = async (): Promise<ReactWrapper> => {
-        if (RoomViewStore.instance.getRoomId() !== room.roomId) {
+        if (stores.roomViewStore.getRoomId() !== room.roomId) {
             const switchedRoom = new Promise<void>(resolve => {
                 const subFn = () => {
-                    if (RoomViewStore.instance.getRoomId()) {
-                        RoomViewStore.instance.off(UPDATE_EVENT, subFn);
+                    if (stores.roomViewStore.getRoomId()) {
+                        stores.roomViewStore.off(UPDATE_EVENT, subFn);
                         resolve();
                     }
                 };
-                RoomViewStore.instance.on(UPDATE_EVENT, subFn);
+                stores.roomViewStore.on(UPDATE_EVENT, subFn);
             });
 
             defaultDispatcher.dispatch<ViewRoomPayload>({
@@ -94,15 +96,16 @@ describe("RoomView", () => {
         }
 
         const roomView = mount(
-            <RoomView
-                mxClient={cli}
-                threepidInvite={null}
-                oobData={null}
-                resizeNotifier={new ResizeNotifier()}
-                justCreatedOpts={null}
-                forceTimeline={false}
-                onRegistered={null}
-            />,
+            <SDKContext.Provider value={stores}>
+                <RoomView
+                    threepidInvite={null}
+                    oobData={null}
+                    resizeNotifier={new ResizeNotifier()}
+                    justCreatedOpts={null}
+                    forceTimeline={false}
+                    onRegistered={null}
+                />
+            </SDKContext.Provider>,
         );
         await act(() => Promise.resolve()); // Allow state to settle
         return roomView;
@@ -162,14 +165,14 @@ describe("RoomView", () => {
         it("normally doesn't open the chat panel", async () => {
             jest.spyOn(NotificationState.prototype, "isUnread", "get").mockReturnValue(false);
             await mountRoomView();
-            expect(RightPanelStore.instance.isOpen).toEqual(false);
+            expect(stores.rightPanelStore.isOpen).toEqual(false);
         });
 
         it("opens the chat panel if there are unread messages", async () => {
             jest.spyOn(NotificationState.prototype, "isUnread", "get").mockReturnValue(true);
             await mountRoomView();
-            expect(RightPanelStore.instance.isOpen).toEqual(true);
-            expect(RightPanelStore.instance.currentCard.phase).toEqual(RightPanelPhases.Timeline);
+            expect(stores.rightPanelStore.isOpen).toEqual(true);
+            expect(stores.rightPanelStore.currentCard.phase).toEqual(RightPanelPhases.Timeline);
         });
     });
 

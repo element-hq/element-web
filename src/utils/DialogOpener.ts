@@ -20,7 +20,6 @@ import defaultDispatcher from "../dispatcher/dispatcher";
 import { ActionPayload } from "../dispatcher/payloads";
 import Modal from "../Modal";
 import RoomSettingsDialog from "../components/views/dialogs/RoomSettingsDialog";
-import { RoomViewStore } from "../stores/RoomViewStore";
 import ForwardDialog from "../components/views/dialogs/ForwardDialog";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { Action } from "../dispatcher/actions";
@@ -32,6 +31,7 @@ import AddExistingToSpaceDialog from "../components/views/dialogs/AddExistingToS
 import { ButtonEvent } from "../components/views/elements/AccessibleButton";
 import PosthogTrackers from "../PosthogTrackers";
 import { showAddExistingSubspace, showCreateNewRoom } from "./space";
+import { SdkContextClass } from "../contexts/SDKContext";
 
 /**
  * Auxiliary class to listen for dialog opening over the dispatcher and
@@ -58,7 +58,7 @@ export class DialogOpener {
         switch (payload.action) {
             case 'open_room_settings':
                 Modal.createDialog(RoomSettingsDialog, {
-                    roomId: payload.room_id || RoomViewStore.instance.getRoomId(),
+                    roomId: payload.room_id || SdkContextClass.instance.roomViewStore.getRoomId(),
                     initialTabId: payload.initial_tab_id,
                 }, /*className=*/null, /*isPriority=*/false, /*isStatic=*/true);
                 break;
@@ -108,7 +108,7 @@ export class DialogOpener {
                         onAddSubspaceClick: () => showAddExistingSubspace(space),
                         space,
                         onFinished: (added: boolean) => {
-                            if (added && RoomViewStore.instance.getRoomId() === space.roomId) {
+                            if (added && SdkContextClass.instance.roomViewStore.getRoomId() === space.roomId) {
                                 defaultDispatcher.fire(Action.UpdateSpaceHierarchy);
                             }
                         },
