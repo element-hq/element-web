@@ -22,6 +22,7 @@ import classNames from 'classnames';
 import { ISyncStateData, SyncState } from 'matrix-js-sdk/src/sync';
 import { IUsageLimit } from 'matrix-js-sdk/src/@types/partials';
 import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
+import { MatrixError } from 'matrix-js-sdk/src/matrix';
 
 import { isOnlyCtrlOrCmdKeyEvent, Key } from '../../Keyboard';
 import PageTypes from '../../PageTypes';
@@ -288,8 +289,8 @@ class LoggedInView extends React.Component<IProps, IState> {
     };
 
     private onSync = (syncState: SyncState, oldSyncState?: SyncState, data?: ISyncStateData): void => {
-        const oldErrCode = this.state.syncErrorData?.error?.errcode;
-        const newErrCode = data && data.error && data.error.errcode;
+        const oldErrCode = (this.state.syncErrorData?.error as MatrixError)?.errcode;
+        const newErrCode = (data?.error as MatrixError)?.errcode;
         if (syncState === oldSyncState && oldErrCode === newErrCode) return;
 
         this.setState({
@@ -317,9 +318,9 @@ class LoggedInView extends React.Component<IProps, IState> {
     };
 
     private calculateServerLimitToast(syncError: IState["syncErrorData"], usageLimitEventContent?: IUsageLimit) {
-        const error = syncError && syncError.error && syncError.error.errcode === "M_RESOURCE_LIMIT_EXCEEDED";
+        const error = (syncError?.error as MatrixError)?.errcode === "M_RESOURCE_LIMIT_EXCEEDED";
         if (error) {
-            usageLimitEventContent = syncError.error.data as IUsageLimit;
+            usageLimitEventContent = (syncError?.error as MatrixError).data as IUsageLimit;
         }
 
         // usageLimitDismissed is true when the user has explicitly hidden the toast
