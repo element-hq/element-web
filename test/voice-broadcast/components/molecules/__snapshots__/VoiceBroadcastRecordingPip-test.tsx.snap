@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`VoiceBroadcastRecordingPip when rendering should create the expected result 1`] = `
+exports[`VoiceBroadcastRecordingPip when rendering a paused recording should render as expected 1`] = `
 <div>
   <div
     class="mx_VoiceBroadcastRecordingPip"
@@ -25,25 +25,19 @@ exports[`VoiceBroadcastRecordingPip when rendering should create the expected re
         <div
           class="mx_VoiceBroadcastHeader_line"
         >
-          <i
-            aria-hidden="true"
-            class="mx_Icon mx_Icon_16 mx_Icon_compound-secondary-content"
-            role="presentation"
-            style="mask-image: url(\\"image-file-stub\\");"
+          <div
+            class="mx_Icon mx_Icon_16"
           />
           <span>
-            @user:example.com
+            @userId:matrix.org
           </span>
         </div>
       </div>
       <div
         class="mx_LiveBadge"
       >
-        <i
-          aria-hidden="true"
-          class="mx_Icon mx_Icon_16 mx_Icon_live-badge"
-          role="presentation"
-          style="mask-image: url(\\"image-file-stub\\");"
+        <div
+          class="mx_Icon mx_Icon_16"
         />
         Live
       </div>
@@ -55,16 +49,96 @@ exports[`VoiceBroadcastRecordingPip when rendering should create the expected re
       class="mx_VoiceBroadcastRecordingPip_controls"
     >
       <div
-        aria-label="stop voice broadcast"
-        class="mx_AccessibleButton mx_BroadcastPlaybackControlButton"
+        aria-label="resume voice broadcast"
+        class="mx_AccessibleButton mx_VoiceBroadcastControl mx_VoiceBroadcastControl-recording"
         role="button"
         tabindex="0"
       >
-        <i
-          aria-hidden="true"
-          class="mx_Icon mx_Icon_16 mx_Icon_compound-secondary-content"
-          role="presentation"
-          style="mask-image: url(\\"image-file-stub\\");"
+        <div
+          class="mx_Icon mx_Icon_16"
+        />
+      </div>
+      <div
+        aria-label="Stop Recording"
+        class="mx_AccessibleButton mx_VoiceBroadcastControl"
+        role="button"
+        tabindex="0"
+      >
+        <div
+          class="mx_Icon mx_Icon_16"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`VoiceBroadcastRecordingPip when rendering a started recording should render as expected 1`] = `
+<div>
+  <div
+    class="mx_VoiceBroadcastRecordingPip"
+  >
+    <div
+      class="mx_VoiceBroadcastHeader"
+    >
+      <div
+        data-testid="room-avatar"
+      >
+        room avatar: 
+        My room
+      </div>
+      <div
+        class="mx_VoiceBroadcastHeader_content"
+      >
+        <div
+          class="mx_VoiceBroadcastHeader_room"
+        >
+          My room
+        </div>
+        <div
+          class="mx_VoiceBroadcastHeader_line"
+        >
+          <div
+            class="mx_Icon mx_Icon_16"
+          />
+          <span>
+            @userId:matrix.org
+          </span>
+        </div>
+      </div>
+      <div
+        class="mx_LiveBadge"
+      >
+        <div
+          class="mx_Icon mx_Icon_16"
+        />
+        Live
+      </div>
+    </div>
+    <hr
+      class="mx_VoiceBroadcastRecordingPip_divider"
+    />
+    <div
+      class="mx_VoiceBroadcastRecordingPip_controls"
+    >
+      <div
+        aria-label="pause voice broadcast"
+        class="mx_AccessibleButton mx_VoiceBroadcastControl"
+        role="button"
+        tabindex="0"
+      >
+        <div
+          class="mx_Icon mx_Icon_16"
+        />
+      </div>
+      <div
+        aria-label="Stop Recording"
+        class="mx_AccessibleButton mx_VoiceBroadcastControl"
+        role="button"
+        tabindex="0"
+      >
+        <div
+          class="mx_Icon mx_Icon_16"
         />
       </div>
     </div>

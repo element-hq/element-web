@@ -22,6 +22,9 @@ import {
     Room,
 } from "matrix-js-sdk/src/matrix";
 
+import { IRoomState } from "../../src/components/structures/RoomView";
+import { TimelineRenderingType } from "../../src/contexts/RoomContext";
+import { Layout } from "../../src/settings/enums/Layout";
 import { mkEvent } from "./test-utils";
 
 export const makeMembershipEvent = (
@@ -50,3 +53,45 @@ export const makeRoomWithStateEvents = (
     mockClient.getRoom.mockReturnValue(room1);
     return room1;
 };
+
+export function getRoomContext(room: Room, override: Partial<IRoomState>): IRoomState {
+    return {
+        room,
+        roomLoading: true,
+        peekLoading: false,
+        shouldPeek: true,
+        membersLoaded: false,
+        numUnreadMessages: 0,
+        canPeek: false,
+        showApps: false,
+        isPeeking: false,
+        showRightPanel: true,
+        joining: false,
+        atEndOfLiveTimeline: true,
+        showTopUnreadMessagesBar: false,
+        statusBarVisible: false,
+        canReact: false,
+        canSendMessages: false,
+        layout: Layout.Group,
+        lowBandwidth: false,
+        alwaysShowTimestamps: false,
+        showTwelveHourTimestamps: false,
+        readMarkerInViewThresholdMs: 3000,
+        readMarkerOutOfViewThresholdMs: 30000,
+        showHiddenEvents: false,
+        showReadReceipts: true,
+        showRedactions: true,
+        showJoinLeaves: true,
+        showAvatarChanges: true,
+        showDisplaynameChanges: true,
+        matrixClientIsReady: false,
+        timelineRenderingType: TimelineRenderingType.Room,
+        liveTimeline: undefined,
+        canSelfRedact: false,
+        resizing: false,
+        narrow: false,
+        activeCall: null,
+
+        ...override,
+    };
+}

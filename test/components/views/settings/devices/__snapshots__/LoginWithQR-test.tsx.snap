@@ -4,6 +4,7 @@ exports[`<LoginWithQR /> approves login and waits for new device 1`] = `
 <div>
   <div
     class="mx_LoginWithQR"
+    data-testid="login-with-qr"
   >
     <div
       class=""
@@ -32,6 +33,7 @@ exports[`<LoginWithQR /> approves login and waits for new device 1`] = `
             <div
               aria-label="Loading..."
               class="mx_Spinner_icon"
+              data-testid="spinner"
               role="progressbar"
               style="width: 32px; height: 32px;"
             />
@@ -61,6 +63,7 @@ exports[`<LoginWithQR /> displays confirmation digits after connected to rendezv
 <div>
   <div
     class="mx_LoginWithQR"
+    data-testid="login-with-qr"
   >
     <div
       class=""
@@ -122,6 +125,7 @@ exports[`<LoginWithQR /> displays error when approving login fails 1`] = `
 <div>
   <div
     class="mx_LoginWithQR"
+    data-testid="login-with-qr"
   >
     <div
       class="mx_LoginWithQR_centreTitle"
@@ -168,6 +172,7 @@ exports[`<LoginWithQR /> displays qr code after it is created 1`] = `
 <div>
   <div
     class="mx_LoginWithQR"
+    data-testid="login-with-qr"
   >
     <div
       class=""
@@ -214,6 +219,7 @@ exports[`<LoginWithQR /> displays qr code after it is created 1`] = `
             <div
               aria-label="Loading..."
               class="mx_Spinner_icon"
+              data-testid="spinner"
               role="progressbar"
               style="width: 32px; height: 32px;"
             />
@@ -232,6 +238,7 @@ exports[`<LoginWithQR /> displays unknown error if connection to rendezvous fail
 <div>
   <div
     class="mx_LoginWithQR"
+    data-testid="login-with-qr"
   >
     <div
       class="mx_LoginWithQR_centreTitle"
@@ -278,6 +285,7 @@ exports[`<LoginWithQR /> no content in case of no support 1`] = `
 <div>
   <div
     class="mx_LoginWithQR"
+    data-testid="login-with-qr"
   >
     <div
       class="mx_LoginWithQR_centreTitle"
@@ -324,6 +332,7 @@ exports[`<LoginWithQR /> renders spinner while generating code 1`] = `
 <div>
   <div
     class="mx_LoginWithQR"
+    data-testid="login-with-qr"
   >
     <div
       class=""
@@ -352,6 +361,7 @@ exports[`<LoginWithQR /> renders spinner while generating code 1`] = `
             <div
               aria-label="Loading..."
               class="mx_Spinner_icon"
+              data-testid="spinner"
               role="progressbar"
               style="width: 32px; height: 32px;"
             />

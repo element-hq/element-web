@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixClientPeg } from "../MatrixClientPeg";
+import { SdkContextClass } from "../contexts/SDKContext";
 import SettingsStore from "../settings/SettingsStore";
 import { isLocalRoom } from "../utils/localRoom/isLocalRoom";
 import Timer from "../utils/Timer";
@@ -34,15 +34,8 @@ export default class TypingStore {
         };
     };
 
-    constructor() {
+    constructor(private readonly context: SdkContextClass) {
         this.reset();
-    }
-
-    public static sharedInstance(): TypingStore {
-        if (window.mxTypingStore === undefined) {
-            window.mxTypingStore = new TypingStore();
-        }
-        return window.mxTypingStore;
     }
 
     /**
@@ -108,6 +101,6 @@ export default class TypingStore {
             } else currentTyping.userTimer.restart();
         }
 
-        MatrixClientPeg.get().sendTyping(roomId, isTyping, TYPING_SERVER_TIMEOUT);
+        this.context.client?.sendTyping(roomId, isTyping, TYPING_SERVER_TIMEOUT);
     }
 }

@@ -29,6 +29,7 @@ export enum ElementWidgetActions {
     // Actions for switching layouts
     TileLayout = "io.element.tile_layout",
     SpotlightLayout = "io.element.spotlight_layout",
+    Screenshare = "io.element.screenshare",
 
     OpenIntegrationManager = "integration_manager_open",
 

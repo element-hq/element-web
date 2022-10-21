@@ -23,7 +23,30 @@ exports[`startNewVoiceBroadcastRecording when the current user is allowed to sen
 }
 `;
 
-exports[`startNewVoiceBroadcastRecording when the current user is allowed to send voice broadcast info state events when there already is a live broadcast of the current user should show an info dialog 1`] = `
+exports[`startNewVoiceBroadcastRecording when the current user is allowed to send voice broadcast info state events when there already is a live broadcast of the current user in the room should show an info dialog 1`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      [Function],
+      Object {
+        "description": <p>
+          You are already recording a voice broadcast. Please end your current voice broadcast to start a new one.
+        </p>,
+        "hasCloseButton": true,
+        "title": "Can't start a new voice broadcast",
+      },
+    ],
+  ],
+  "results": Array [
+    Object {
+      "type": "return",
+      "value": undefined,
+    },
+  ],
+}
+`;
+
+exports[`startNewVoiceBroadcastRecording when the current user is allowed to send voice broadcast info state events when there is already a current voice broadcast should show an info dialog 1`] = `
 [MockFunction] {
   "calls": Array [
     Array [

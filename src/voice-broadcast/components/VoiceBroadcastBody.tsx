@@ -49,6 +49,7 @@ export const VoiceBroadcastBody: React.FC<IBodyProps> = ({ mxEvent }) => {
             client,
         );
         relationsHelper.on(RelationsHelperEvent.Add, onInfoEvent);
+        relationsHelper.emitCurrent();
 
         return () => {
             relationsHelper.destroy();

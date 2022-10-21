@@ -22,12 +22,12 @@ import { MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { sleep } from "matrix-js-sdk/src/utils";
 
 import {
-    VoiceBroadcastInfoEventType,
     VoiceBroadcastInfoState,
     VoiceBroadcastRecording,
     VoiceBroadcastRecordingPip,
 } from "../../../../src/voice-broadcast";
-import { mkEvent, stubClient } from "../../../test-utils";
+import { stubClient } from "../../../test-utils";
+import { mkVoiceBroadcastInfoStateEvent } from "../../utils/test-utils";
 
 // mock RoomAvatar, because it is doing too much fancy stuff
 jest.mock("../../../../src/components/views/avatars/RoomAvatar", () => ({
@@ -37,39 +37,52 @@ jest.mock("../../../../src/components/views/avatars/RoomAvatar", () => ({
     }),
 }));
 
+jest.mock("../../../../src/audio/VoiceRecording");
+
 describe("VoiceBroadcastRecordingPip", () => {
-    const userId = "@user:example.com";
     const roomId = "!room:example.com";
     let client: MatrixClient;
     let infoEvent: MatrixEvent;
     let recording: VoiceBroadcastRecording;
+    let renderResult: RenderResult;
+
+    const renderPip = (state: VoiceBroadcastInfoState) => {
+        infoEvent = mkVoiceBroadcastInfoStateEvent(
+            roomId,
+            state,
+            client.getUserId(),
+            client.getDeviceId(),
+        );
+        recording = new VoiceBroadcastRecording(infoEvent, client, state);
+        renderResult = render(<VoiceBroadcastRecordingPip recording={recording} />);
+    };
 
     beforeAll(() => {
         client = stubClient();
-        infoEvent = mkEvent({
-            event: true,
-            type: VoiceBroadcastInfoEventType,
-            content: {},
-            room: roomId,
-            user: userId,
-        });
-        recording = new VoiceBroadcastRecording(infoEvent, client);
     });
 
-    describe("when rendering", () => {
-        let renderResult: RenderResult;
-
+    describe("when rendering a started recording", () => {
         beforeEach(() => {
-            renderResult = render(<VoiceBroadcastRecordingPip recording={recording} />);
+            renderPip(VoiceBroadcastInfoState.Started);
         });
 
-        it("should create the expected result", () => {
+        it("should render as expected", () => {
             expect(renderResult.container).toMatchSnapshot();
+        });
+
+        describe("and clicking the pause button", () => {
+            beforeEach(async () => {
+                await userEvent.click(screen.getByLabelText("pause voice broadcast"));
+            });
+
+            it("should pause the recording", () => {
+                expect(recording.getState()).toBe(VoiceBroadcastInfoState.Paused);
+            });
         });
 
         describe("and clicking the stop button", () => {
             beforeEach(async () => {
-                await userEvent.click(screen.getByLabelText("stop voice broadcast"));
+                await userEvent.click(screen.getByLabelText("Stop Recording"));
                 // modal rendering has some weird sleeps
                 await sleep(100);
             });
@@ -86,6 +99,26 @@ describe("VoiceBroadcastRecordingPip", () => {
                 it("should end the recording", () => {
                     expect(recording.getState()).toBe(VoiceBroadcastInfoState.Stopped);
                 });
+            });
+        });
+    });
+
+    describe("when rendering a paused recording", () => {
+        beforeEach(() => {
+            renderPip(VoiceBroadcastInfoState.Paused);
+        });
+
+        it("should render as expected", () => {
+            expect(renderResult.container).toMatchSnapshot();
+        });
+
+        describe("and clicking the resume button", () => {
+            beforeEach(async () => {
+                await userEvent.click(screen.getByLabelText("resume voice broadcast"));
+            });
+
+            it("should resume the recording", () => {
+                expect(recording.getState()).toBe(VoiceBroadcastInfoState.Running);
             });
         });
     });

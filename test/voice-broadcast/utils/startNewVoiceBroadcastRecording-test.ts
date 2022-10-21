@@ -67,9 +67,15 @@ describe("startNewVoiceBroadcastRecording", () => {
 
         recordingsStore = {
             setCurrent: jest.fn(),
+            getCurrent: jest.fn(),
         } as unknown as VoiceBroadcastRecordingsStore;
 
-        infoEvent = mkVoiceBroadcastInfoStateEvent(roomId, VoiceBroadcastInfoState.Started, client.getUserId());
+        infoEvent = mkVoiceBroadcastInfoStateEvent(
+            roomId,
+            VoiceBroadcastInfoState.Started,
+            client.getUserId(),
+            client.getDeviceId(),
+        );
         otherEvent = mkEvent({
             event: true,
             type: EventType.RoomMember,
@@ -121,7 +127,7 @@ describe("startNewVoiceBroadcastRecording", () => {
                     roomId,
                     VoiceBroadcastInfoEventType,
                     {
-                        chunk_length: 300,
+                        chunk_length: 120,
                         device_id: client.getDeviceId(),
                         state: VoiceBroadcastInfoState.Started,
                     },
@@ -132,10 +138,33 @@ describe("startNewVoiceBroadcastRecording", () => {
             });
         });
 
-        describe("when there already is a live broadcast of the current user", () => {
+        describe("when there is already a current voice broadcast", () => {
+            beforeEach(async () => {
+                mocked(recordingsStore.getCurrent).mockReturnValue(
+                    new VoiceBroadcastRecording(infoEvent, client),
+                );
+
+                result = await startNewVoiceBroadcastRecording(room, client, recordingsStore);
+            });
+
+            it("should not start a voice broadcast", () => {
+                expect(result).toBeNull();
+            });
+
+            it("should show an info dialog", () => {
+                expect(Modal.createDialog).toMatchSnapshot();
+            });
+        });
+
+        describe("when there already is a live broadcast of the current user in the room", () => {
             beforeEach(async () => {
                 room.currentState.setStateEvents([
-                    mkVoiceBroadcastInfoStateEvent(roomId, VoiceBroadcastInfoState.Running, client.getUserId()),
+                    mkVoiceBroadcastInfoStateEvent(
+                        roomId,
+                        VoiceBroadcastInfoState.Running,
+                        client.getUserId(),
+                        client.getDeviceId(),
+                    ),
                 ]);
 
                 result = await startNewVoiceBroadcastRecording(room, client, recordingsStore);
@@ -153,7 +182,12 @@ describe("startNewVoiceBroadcastRecording", () => {
         describe("when there already is a live broadcast of another user", () => {
             beforeEach(async () => {
                 room.currentState.setStateEvents([
-                    mkVoiceBroadcastInfoStateEvent(roomId, VoiceBroadcastInfoState.Running, otherUserId),
+                    mkVoiceBroadcastInfoStateEvent(
+                        roomId,
+                        VoiceBroadcastInfoState.Running,
+                        otherUserId,
+                        "ASD123",
+                    ),
                 ]);
 
                 result = await startNewVoiceBroadcastRecording(room, client, recordingsStore);

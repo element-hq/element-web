@@ -25,7 +25,9 @@ import { RoomNotificationStateStore } from "../stores/notifications/RoomNotifica
 import RightPanelStore from "../stores/right-panel/RightPanelStore";
 import { RoomViewStore } from "../stores/RoomViewStore";
 import SpaceStore, { SpaceStoreClass } from "../stores/spaces/SpaceStore";
+import TypingStore from "../stores/TypingStore";
 import { WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
+import { WidgetPermissionStore } from "../stores/widgets/WidgetPermissionStore";
 import WidgetStore from "../stores/WidgetStore";
 
 export const SDKContext = createContext<SdkContextClass>(undefined);
@@ -50,6 +52,7 @@ export class SdkContextClass {
     public client?: MatrixClient;
 
     // All protected fields to make it easier to derive test stores
+    protected _WidgetPermissionStore?: WidgetPermissionStore;
     protected _RightPanelStore?: RightPanelStore;
     protected _RoomNotificationStateStore?: RoomNotificationStateStore;
     protected _RoomViewStore?: RoomViewStore;
@@ -59,6 +62,7 @@ export class SdkContextClass {
     protected _SlidingSyncManager?: SlidingSyncManager;
     protected _SpaceStore?: SpaceStoreClass;
     protected _LegacyCallHandler?: LegacyCallHandler;
+    protected _TypingStore?: TypingStore;
 
     /**
      * Automatically construct stores which need to be created eagerly so they can register with
@@ -100,6 +104,12 @@ export class SdkContextClass {
         }
         return this._WidgetLayoutStore;
     }
+    public get widgetPermissionStore(): WidgetPermissionStore {
+        if (!this._WidgetPermissionStore) {
+            this._WidgetPermissionStore = new WidgetPermissionStore(this);
+        }
+        return this._WidgetPermissionStore;
+    }
     public get widgetStore(): WidgetStore {
         if (!this._WidgetStore) {
             this._WidgetStore = WidgetStore.instance;
@@ -123,5 +133,12 @@ export class SdkContextClass {
             this._SpaceStore = SpaceStore.instance;
         }
         return this._SpaceStore;
+    }
+    public get typingStore(): TypingStore {
+        if (!this._TypingStore) {
+            this._TypingStore = new TypingStore(this);
+            window.mxTypingStore = this._TypingStore;
+        }
+        return this._TypingStore;
     }
 }

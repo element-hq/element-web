@@ -16,12 +16,12 @@ limitations under the License.
 
 import React from "react";
 
-import { Icon, IconColour, IconType } from "../../../components/atoms/Icon";
+import { Icon as LiveIcon } from "../../../../res/img/element-icons/live.svg";
 import { _t } from "../../../languageHandler";
 
 export const LiveBadge: React.FC = () => {
     return <div className="mx_LiveBadge">
-        <Icon type={IconType.Live} colour={IconColour.LiveBadge} />
+        <LiveIcon className="mx_Icon mx_Icon_16" />
         { _t("Live") }
     </div>;
 };

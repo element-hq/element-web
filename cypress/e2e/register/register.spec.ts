@@ -55,7 +55,6 @@ describe("Registration", () => {
         cy.get("#mx_RegistrationForm_username").type("alice");
         cy.get("#mx_RegistrationForm_password").type("totally a great password");
         cy.get("#mx_RegistrationForm_passwordConfirm").type("totally a great password");
-        cy.startMeasuring("create-account");
         cy.get(".mx_Login_submit").click();
 
         cy.get(".mx_RegistrationEmailPromptDialog").should("be.visible");
@@ -63,13 +62,11 @@ describe("Registration", () => {
         cy.checkA11y();
         cy.get(".mx_RegistrationEmailPromptDialog button.mx_Dialog_primary").click();
 
-        cy.stopMeasuring("create-account");
         cy.get(".mx_InteractiveAuthEntryComponents_termsPolicy").should("be.visible");
         cy.percySnapshot("Registration terms prompt", { percyCSS });
         cy.checkA11y();
 
         cy.get(".mx_InteractiveAuthEntryComponents_termsPolicy input").click();
-        cy.startMeasuring("from-submit-to-home");
         cy.get(".mx_InteractiveAuthEntryComponents_termsSubmit").click();
 
         cy.get(".mx_UseCaseSelection_skip", { timeout: 30000 }).should("exist");
@@ -78,7 +75,6 @@ describe("Registration", () => {
         cy.get(".mx_UseCaseSelection_skip .mx_AccessibleButton").click();
 
         cy.url().should('contain', '/#/home');
-        cy.stopMeasuring("from-submit-to-home");
 
         cy.get('[aria-label="User menu"]').click();
         cy.get('[aria-label="Security & Privacy"]').click();

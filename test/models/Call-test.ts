@@ -38,6 +38,8 @@ import { WidgetMessagingStore } from "../../src/stores/widgets/WidgetMessagingSt
 import ActiveWidgetStore, { ActiveWidgetStoreEvent } from "../../src/stores/ActiveWidgetStore";
 import { ElementWidgetActions } from "../../src/stores/widgets/ElementWidgetActions";
 import SettingsStore from "../../src/settings/SettingsStore";
+import Modal, { IHandle } from "../../src/Modal";
+import PlatformPeg from "../../src/PlatformPeg";
 
 jest.spyOn(MediaDeviceHandler, "getDevices").mockResolvedValue({
     [MediaDeviceKindEnum.AudioInput]: [
@@ -805,6 +807,69 @@ describe("ElementCall", () => {
             expect(onLayout.mock.calls).toEqual([[Layout.Spotlight], [Layout.Tile]]);
 
             call.off(CallEvent.Layout, onLayout);
+        });
+
+        describe("screensharing", () => {
+            it("passes source id if we can get it", async () => {
+                const sourceId = "source_id";
+                jest.spyOn(Modal, "createDialog").mockReturnValue(
+                    { finished: new Promise((r) => r([sourceId])) } as IHandle<any[]>,
+                );
+                jest.spyOn(PlatformPeg.get(), "supportsDesktopCapturer").mockReturnValue(true);
+
+                await call.connect();
+
+                messaging.emit(
+                    `action:${ElementWidgetActions.Screenshare}`,
+                    new CustomEvent("widgetapirequest", { detail: {} }),
+                );
+
+                waitFor(() => {
+                    expect(messaging!.transport.reply).toHaveBeenCalledWith(
+                        expect.objectContaining({}),
+                        expect.objectContaining({ desktopCapturerSourceId: sourceId }),
+                    );
+                });
+            });
+
+            it("passes failed if we couldn't get a source id", async () => {
+                jest.spyOn(Modal, "createDialog").mockReturnValue(
+                    { finished: new Promise((r) => r([null])) } as IHandle<any[]>,
+                );
+                jest.spyOn(PlatformPeg.get(), "supportsDesktopCapturer").mockReturnValue(true);
+
+                await call.connect();
+
+                messaging.emit(
+                    `action:${ElementWidgetActions.Screenshare}`,
+                    new CustomEvent("widgetapirequest", { detail: {} }),
+                );
+
+                waitFor(() => {
+                    expect(messaging!.transport.reply).toHaveBeenCalledWith(
+                        expect.objectContaining({}),
+                        expect.objectContaining({ failed: true }),
+                    );
+                });
+            });
+
+            it("passes an empty object if we don't support desktop capturer", async () => {
+                jest.spyOn(PlatformPeg.get(), "supportsDesktopCapturer").mockReturnValue(false);
+
+                await call.connect();
+
+                messaging.emit(
+                    `action:${ElementWidgetActions.Screenshare}`,
+                    new CustomEvent("widgetapirequest", { detail: {} }),
+                );
+
+                waitFor(() => {
+                    expect(messaging!.transport.reply).toHaveBeenCalledWith(
+                        expect.objectContaining({}),
+                        expect.objectContaining({}),
+                    );
+                });
+            });
         });
 
         it("ends the call immediately if we're the last participant to leave", async () => {

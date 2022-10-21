@@ -370,7 +370,7 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
         }
 
         return (
-            <div className="mx_LoginWithQR">
+            <div data-testid="login-with-qr" className="mx_LoginWithQR">
                 <div className={centreTitle ? "mx_LoginWithQR_centreTitle" : ""}>
                     { backButton ?
                         <AccessibleButton

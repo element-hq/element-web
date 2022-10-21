@@ -17,11 +17,16 @@ limitations under the License.
 import React from "react";
 
 import {
-    StopButton,
+    VoiceBroadcastControl,
+    VoiceBroadcastInfoState,
     VoiceBroadcastRecording,
 } from "../..";
 import { useVoiceBroadcastRecording } from "../../hooks/useVoiceBroadcastRecording";
 import { VoiceBroadcastHeader } from "../atoms/VoiceBroadcastHeader";
+import { Icon as StopIcon } from "../../../../res/img/element-icons/Stop.svg";
+import { Icon as PauseIcon } from "../../../../res/img/element-icons/pause.svg";
+import { Icon as RecordIcon } from "../../../../res/img/element-icons/Record.svg";
+import { _t } from "../../../languageHandler";
 
 interface VoiceBroadcastRecordingPipProps {
     recording: VoiceBroadcastRecording;
@@ -30,10 +35,21 @@ interface VoiceBroadcastRecordingPipProps {
 export const VoiceBroadcastRecordingPip: React.FC<VoiceBroadcastRecordingPipProps> = ({ recording }) => {
     const {
         live,
-        sender,
+        recordingState,
         room,
+        sender,
         stopRecording,
+        toggleRecording,
     } = useVoiceBroadcastRecording(recording);
+
+    const toggleControl = recordingState === VoiceBroadcastInfoState.Paused
+        ? <VoiceBroadcastControl
+            className="mx_VoiceBroadcastControl-recording"
+            onClick={toggleRecording}
+            icon={RecordIcon}
+            label={_t("resume voice broadcast")}
+        />
+        : <VoiceBroadcastControl onClick={toggleRecording} icon={PauseIcon} label={_t("pause voice broadcast")} />;
 
     return <div
         className="mx_VoiceBroadcastRecordingPip"
@@ -45,7 +61,12 @@ export const VoiceBroadcastRecordingPip: React.FC<VoiceBroadcastRecordingPipProp
         />
         <hr className="mx_VoiceBroadcastRecordingPip_divider" />
         <div className="mx_VoiceBroadcastRecordingPip_controls">
-            <StopButton onClick={stopRecording} />
+            { toggleControl }
+            <VoiceBroadcastControl
+                icon={StopIcon}
+                label="Stop Recording"
+                onClick={stopRecording}
+            />
         </div>
     </div>;
 };

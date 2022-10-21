@@ -22,16 +22,29 @@ import { mkEvent } from "../../test-utils";
 export const mkVoiceBroadcastInfoStateEvent = (
     roomId: string,
     state: VoiceBroadcastInfoState,
-    sender: string,
+    senderId: string,
+    senderDeviceId: string,
+    startedInfoEvent?: MatrixEvent,
 ): MatrixEvent => {
+    const relationContent = {};
+
+    if (startedInfoEvent) {
+        relationContent["m.relates_to"] = {
+            event_id: startedInfoEvent.getId(),
+            rel_type: "m.reference",
+        };
+    }
+
     return mkEvent({
         event: true,
         room: roomId,
-        user: sender,
+        user: senderId,
         type: VoiceBroadcastInfoEventType,
-        skey: sender,
+        skey: senderId,
         content: {
             state,
+            device_id: senderDeviceId,
+            ...relationContent,
         },
     });
 };

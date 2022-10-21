@@ -231,6 +231,9 @@ describe("Polls", () => {
             // Bot votes 'Maybe' in the poll
             botVoteForOption(bot, roomId, pollId, pollParams.options[2]);
 
+            // wait for bot's vote to arrive
+            cy.get('.mx_MPollBody_totalVotes').should('contain', '1 vote cast');
+
             // Open context menu
             getPollTile(pollId).rightclick();
 

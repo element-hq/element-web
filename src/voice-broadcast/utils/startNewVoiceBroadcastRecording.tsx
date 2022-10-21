@@ -28,6 +28,7 @@ import {
     VoiceBroadcastRecordingsStore,
     VoiceBroadcastRecording,
     hasRoomLiveVoiceBroadcast,
+    getChunkLength,
 } from "..";
 
 const startBroadcast = async (
@@ -67,7 +68,7 @@ const startBroadcast = async (
         {
             device_id: client.getDeviceId(),
             state: VoiceBroadcastInfoState.Started,
-            chunk_length: 300,
+            chunk_length: getChunkLength(),
         } as VoiceBroadcastInfoEventContent,
         client.getUserId(),
     );
@@ -113,6 +114,11 @@ export const startNewVoiceBroadcastRecording = async (
     client: MatrixClient,
     recordingsStore: VoiceBroadcastRecordingsStore,
 ): Promise<VoiceBroadcastRecording | null> => {
+    if (recordingsStore.getCurrent()) {
+        showAlreadyRecordingDialog();
+        return null;
+    }
+
     const currentUserId = client.getUserId();
 
     if (!room.currentState.maySendStateEvent(VoiceBroadcastInfoEventType, currentUserId)) {
