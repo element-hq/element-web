@@ -23,7 +23,7 @@ import { WysiwygComposer } from './components/WysiwygComposer';
 interface SendWysiwygComposerProps {
     disabled?: boolean;
     onChange: (content: string) => void;
-    onSend(): () => void;
+    onSend: () => void;
 }
 interface ContentProps {
     disabled: boolean;

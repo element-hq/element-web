@@ -415,7 +415,7 @@ class MessageComposer extends React.Component<IProps, IState> {
                     <SendWysiwygComposer key="controls_input"
                         disabled={this.state.haveRecording}
                         onChange={this.onWysiwygChange}
-                        onSend={() => this.sendMessage}
+                        onSend={this.sendMessage}
                     />,
                 );
             } else {
