@@ -33,7 +33,7 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import AppTile from "../elements/AppTile";
 import { _t } from "../../../languageHandler";
 import { useAsyncMemo } from "../../../hooks/useAsyncMemo";
-import MediaDeviceHandler, { MediaDeviceKindEnum } from "../../../MediaDeviceHandler";
+import MediaDeviceHandler from "../../../MediaDeviceHandler";
 import { CallStore } from "../../../stores/CallStore";
 import IconizedContextMenu, {
     IconizedContextMenuOption,
@@ -141,36 +141,38 @@ export const Lobby: FC<LobbyProps> = ({ room, joinCallButtonDisabled, joinCallBu
     }, [videoMuted, setVideoMuted]);
 
     const [videoStream, audioInputs, videoInputs] = useAsyncMemo(async () => {
-        let previewStream: MediaStream;
+        let devices = await MediaDeviceHandler.getDevices();
+
+        // We get the preview stream before requesting devices: this is because
+        // we need (in some browsers) an active media stream in order to get
+        // non-blank labels for the devices.
+        let stream: MediaStream | null = null;
         try {
-            // We get the preview stream before requesting devices: this is because
-            // we need (in some browsers) an active media stream in order to get
-            // non-blank labels for the devices. According to the docs, we
-            // need a stream of each type (audio + video) if we want to enumerate
-            // audio & video devices, although this didn't seem to be the case
-            // in practice for me. We request both anyway.
-            // For similar reasons, we also request a stream even if video is muted,
-            // which could be a bit strange but allows us to get the device list
-            // reliably. One option could be to try & get devices without a stream,
-            // then try again with a stream if we get blank deviceids, but... ew.
-            previewStream = await navigator.mediaDevices.getUserMedia({
-                video: { deviceId: videoInputId },
-                audio: { deviceId: MediaDeviceHandler.getAudioInput() },
-            });
+            if (devices.audioinput.length > 0) {
+                // Holding just an audio stream will be enough to get us all device labels, so
+                // if video is muted, don't bother requesting video.
+                stream = await navigator.mediaDevices.getUserMedia({
+                    audio: true,
+                    video: !videoMuted && devices.videoinput.length > 0 && { deviceId: videoInputId },
+                });
+            } else if (devices.videoinput.length > 0) {
+                // We have to resort to a video stream, even if video is supposed to be muted.
+                stream = await navigator.mediaDevices.getUserMedia({ video: { deviceId: videoInputId } });
+            }
         } catch (e) {
             logger.error(`Failed to get stream for device ${videoInputId}`, e);
         }
 
-        const devices = await MediaDeviceHandler.getDevices();
+        // Refresh the devices now that we hold a stream
+        if (stream !== null) devices = await MediaDeviceHandler.getDevices();
 
-        // If video is muted, we don't actually want the stream, so we can get rid of
-        // it now.
+        // If video is muted, we don't actually want the stream, so we can get rid of it now.
         if (videoMuted) {
-            previewStream.getTracks().forEach(t => t.stop());
-            previewStream = undefined;
+            stream?.getTracks().forEach(t => t.stop());
+            stream = null;
         }
 
-        return [previewStream, devices[MediaDeviceKindEnum.AudioInput], devices[MediaDeviceKindEnum.VideoInput]];
+        return [stream, devices.audioinput, devices.videoinput];
     }, [videoInputId, videoMuted], [null, [], []]);
 
     const setAudioInput = useCallback((device: MediaDeviceInfo) => {
@@ -188,7 +190,7 @@ export const Lobby: FC<LobbyProps> = ({ room, joinCallButtonDisabled, joinCallBu
             videoElement.play();
 
             return () => {
-                videoStream?.getTracks().forEach(track => track.stop());
+                videoStream.getTracks().forEach(track => track.stop());
                 videoElement.srcObject = null;
             };
         }
@@ -358,7 +360,7 @@ const JoinCallView: FC<JoinCallViewProps> = ({ room, resizing, call }) => {
         lobby = <Lobby
             room={room}
             connect={connect}
-            joinCallButtonTooltip={joinCallButtonTooltip}
+            joinCallButtonTooltip={joinCallButtonTooltip ?? undefined}
             joinCallButtonDisabled={joinCallButtonDisabled}
         >
             { facePile }
