@@ -1,3 +1,9 @@
+Changes in [3.59.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.59.0-rc.2) (2022-10-24)
+===============================================================================================================
+
+## 🐛 Bug Fixes
+ * Send Content-Type: application/json header for integration manager /register API ([\#9490](https://github.com/matrix-org/matrix-react-sdk/pull/9490)). Fixes vector-im/element-web#23580.
+
 Changes in [3.59.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.59.0-rc.1) (2022-10-18)
 ===============================================================================================================
 
