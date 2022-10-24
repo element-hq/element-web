@@ -2062,6 +2062,11 @@
   resolved "https://registry.yarnpkg.com/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
   integrity sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==
 
+"@types/jsrsasign@^10.5.4":
+  version "10.5.4"
+  resolved "https://registry.yarnpkg.com/@types/jsrsasign/-/jsrsasign-10.5.4.tgz#e8a147c70e017198fd161600e24c938af7b5ae2f"
+  integrity sha512-05S2f4lGaWgCwFHsa3OEirc4VJf/sJRfhofzxUbuFbmm6NbffPXZrnJqquQAtS3g4C8Z0L9NHgW0znmtDxNoTQ==
+
 "@types/minimatch@*":
   version "3.0.5"
   resolved "https://registry.yarnpkg.com/@types/minimatch/-/minimatch-3.0.5.tgz#1001cc5e6a3704b83c236027e77f2f58ea010f40"
@@ -8172,6 +8177,7 @@ matrix-js-sdk@21.0.0:
   dependencies:
     "@babel/runtime" "^7.12.5"
     another-json "^0.2.0"
+    browser-request "^0.3.3"
     bs58 "^5.0.0"
     content-type "^1.0.4"
     loglevel "^1.7.1"
@@ -8202,6 +8208,7 @@ matrix-react-sdk@3.59.0:
     "@types/ua-parser-js" "^0.7.36"
     await-lock "^2.1.0"
     blurhash "^1.1.3"
+    browser-request "^0.3.3"
     cheerio "^1.0.0-rc.9"
     classnames "^2.2.6"
     commonmark "^0.29.3"
