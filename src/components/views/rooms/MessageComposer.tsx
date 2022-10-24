@@ -102,7 +102,7 @@ interface IState {
     showVoiceBroadcastButton: boolean;
 }
 
-class MessageComposer extends React.Component<IProps, IState> {
+export class MessageComposer extends React.Component<IProps, IState> {
     private dispatcherRef?: string;
     private messageComposerInput = createRef<SendMessageComposerClass>();
     private voiceRecordingButton = createRef<VoiceRecordComposerTile>();
