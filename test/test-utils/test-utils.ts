@@ -31,6 +31,7 @@ import {
     IEventRelation,
     IUnsigned,
     IPusher,
+    RoomType,
 } from 'matrix-js-sdk/src/matrix';
 import { normalize } from "matrix-js-sdk/src/utils";
 import { ReEmitter } from "matrix-js-sdk/src/ReEmitter";
@@ -447,6 +448,7 @@ export function mkStubRoom(roomId: string = null, name: string, client: MatrixCl
         getAvatarUrl: () => 'mxc://avatar.url/room.png',
         getMxcAvatarUrl: () => 'mxc://avatar.url/room.png',
         isSpaceRoom: jest.fn().mockReturnValue(false),
+        getType: jest.fn().mockReturnValue(undefined),
         isElementVideoRoom: jest.fn().mockReturnValue(false),
         getUnreadNotificationCount: jest.fn(() => 0),
         getEventReadUpTo: jest.fn(() => null),
@@ -544,6 +546,7 @@ export const mkSpace = (
 ): MockedObject<Room> => {
     const space = mocked(mkRoom(client, spaceId, rooms));
     space.isSpaceRoom.mockReturnValue(true);
+    space.getType.mockReturnValue(RoomType.Space);
     mocked(space.currentState).getStateEvents.mockImplementation(mockStateEventImplementation(children.map(roomId =>
         mkEvent({
             event: true,

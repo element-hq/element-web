@@ -263,9 +263,9 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
             params: {
                 email: this.props.invitedEmail,
                 signurl: this.props.signUrl,
-                room_name: this.props.oobData ? this.props.oobData.room_name : null,
-                room_avatar_url: this.props.oobData ? this.props.oobData.avatarUrl : null,
-                inviter_name: this.props.oobData ? this.props.oobData.inviterName : null,
+                room_name: this.props.oobData?.name ?? null,
+                room_avatar_url: this.props.oobData?.avatarUrl ?? null,
+                inviter_name: this.props.oobData?.inviterName ?? null,
             },
         };
     }

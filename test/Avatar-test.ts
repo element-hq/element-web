@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { mocked } from "jest-mock";
-import { Room, RoomMember } from "matrix-js-sdk/src/matrix";
+import { Room, RoomMember, RoomType } from "matrix-js-sdk/src/matrix";
 
 import { avatarUrlForRoom } from "../src/Avatar";
 import { Media, mediaFromMxc } from "../src/customisations/Media";
@@ -46,6 +46,7 @@ describe("avatarUrlForRoom", () => {
             roomId,
             getMxcAvatarUrl: jest.fn(),
             isSpaceRoom: jest.fn(),
+            getType: jest.fn(),
             getAvatarFallbackMember: jest.fn(),
         } as unknown as Room;
         dmRoomMap = {
@@ -70,6 +71,7 @@ describe("avatarUrlForRoom", () => {
 
     it("should return null for a space room", () => {
         mocked(room.isSpaceRoom).mockReturnValue(true);
+        mocked(room.getType).mockReturnValue(RoomType.Space);
         expect(avatarUrlForRoom(room, 128, 128)).toBeNull();
     });
 

@@ -140,6 +140,7 @@ describe('<UserInfo />', () => {
     describe('with a room', () => {
         const room = {
             roomId: '!fkfk',
+            getType: jest.fn().mockReturnValue(undefined),
             isSpaceRoom: jest.fn().mockReturnValue(false),
             getMember: jest.fn().mockReturnValue(undefined),
             getMxcAvatarUrl: jest.fn().mockReturnValue('mock-avatar-url'),
