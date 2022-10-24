@@ -26,6 +26,8 @@ import {
     VoiceBroadcastRecorderEvent,
 } from "../../../src/voice-broadcast";
 
+jest.mock("../../../src/audio/VoiceRecording");
+
 describe("VoiceBroadcastRecorder", () => {
     describe("createVoiceBroadcastRecorder", () => {
         beforeEach(() => {
@@ -44,6 +46,7 @@ describe("VoiceBroadcastRecorder", () => {
 
         it("should return a VoiceBroadcastRecorder instance with targetChunkLength from config", () => {
             const voiceBroadcastRecorder = createVoiceBroadcastRecorder();
+            expect(mocked(VoiceRecording).mock.instances[0].disableMaxLength).toHaveBeenCalled();
             expect(voiceBroadcastRecorder).toBeInstanceOf(VoiceBroadcastRecorder);
             expect(voiceBroadcastRecorder.targetChunkLength).toBe(1337);
         });
@@ -72,16 +75,12 @@ describe("VoiceBroadcastRecorder", () => {
         };
 
         beforeEach(() => {
-            voiceRecording = {
-                contentType,
-                start: jest.fn().mockResolvedValue(undefined),
-                stop: jest.fn().mockResolvedValue(undefined),
-                on: jest.fn(),
-                off: jest.fn(),
-                emit: jest.fn(),
-                destroy: jest.fn(),
-                recorderSeconds: 23,
-            } as unknown as VoiceRecording;
+            voiceRecording = new VoiceRecording();
+            // @ts-ignore
+            voiceRecording.recorderSeconds = 23;
+            // @ts-ignore
+            voiceRecording.contentType = contentType;
+
             voiceBroadcastRecorder = new VoiceBroadcastRecorder(voiceRecording, chunkLength);
             jest.spyOn(voiceBroadcastRecorder, "removeAllListeners");
             onChunkRecorded = jest.fn();

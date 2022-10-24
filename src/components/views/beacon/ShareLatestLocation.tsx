@@ -47,7 +47,7 @@ const ShareLatestLocation: React.FC<Props> = ({ latestLocationState }) => {
     return <>
         <TooltipTarget label={_t('Open in OpenStreetMap')}>
             <a
-                data-test-id='open-location-in-osm'
+                data-testid='open-location-in-osm'
                 href={mapLink}
                 target='_blank'
                 rel='noreferrer noopener'

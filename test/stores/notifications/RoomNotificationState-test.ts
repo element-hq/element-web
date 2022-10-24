@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { Room } from "matrix-js-sdk/src/models/room";
-import { MatrixEventEvent, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { MatrixEventEvent, MatrixEvent, MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { stubClient } from "../../test-utils";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
@@ -24,12 +24,16 @@ import * as testUtils from "../../test-utils";
 import { NotificationStateEvents } from "../../../src/stores/notifications/NotificationState";
 
 describe("RoomNotificationState", () => {
-    stubClient();
-    const client = MatrixClientPeg.get();
+    let testRoom: Room;
+    let client: MatrixClient;
+
+    beforeEach(() => {
+        stubClient();
+        client = MatrixClientPeg.get();
+        testRoom = testUtils.mkStubRoom("$aroomid", "Test room", client);
+    });
 
     it("Updates on event decryption", () => {
-        const testRoom = testUtils.mkStubRoom("$aroomid", "Test room", client);
-
         const roomNotifState = new RoomNotificationState(testRoom as any as Room);
         const listener = jest.fn();
         roomNotifState.addListener(NotificationStateEvents.Update, listener);
@@ -39,5 +43,10 @@ describe("RoomNotificationState", () => {
         testRoom.getUnreadNotificationCount = jest.fn().mockReturnValue(1);
         client.emit(MatrixEventEvent.Decrypted, testEvent);
         expect(listener).toHaveBeenCalled();
+    });
+
+    it("removes listeners", () => {
+        const roomNotifState = new RoomNotificationState(testRoom as any as Room);
+        expect(() => roomNotifState.destroy()).not.toThrow();
     });
 });

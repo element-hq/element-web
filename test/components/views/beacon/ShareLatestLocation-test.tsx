@@ -15,9 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
-// eslint-disable-next-line deprecate/import
-import { mount } from 'enzyme';
-import { act } from 'react-dom/test-utils';
+import { fireEvent, render } from "@testing-library/react";
 
 import ShareLatestLocation from '../../../../src/components/views/beacon/ShareLatestLocation';
 import { copyPlaintext } from '../../../../src/utils/strings';
@@ -34,26 +32,23 @@ describe('<ShareLatestLocation />', () => {
             timestamp: 123,
         },
     };
-    const getComponent = (props = {}) =>
-        mount(<ShareLatestLocation {...defaultProps} {...props} />);
+    const getComponent = (props = {}) => render(<ShareLatestLocation {...defaultProps} {...props} />);
 
     beforeEach(() => {
         jest.clearAllMocks();
     });
 
     it('renders null when no location', () => {
-        const component = getComponent({ latestLocationState: undefined });
-        expect(component.html()).toBeNull();
+        const { container } = getComponent({ latestLocationState: undefined });
+        expect(container.innerHTML).toBeFalsy();
     });
 
     it('renders share buttons when there is a location', async () => {
-        const component = getComponent();
-        expect(component).toMatchSnapshot();
+        const { container, asFragment } = getComponent();
+        expect(asFragment()).toMatchSnapshot();
 
-        await act(async () => {
-            component.find('.mx_CopyableText_copyButton').at(0).simulate('click');
-            await flushPromises();
-        });
+        fireEvent.click(container.querySelector('.mx_CopyableText_copyButton'));
+        await flushPromises();
 
         expect(copyPlaintext).toHaveBeenCalledWith('51,42');
     });

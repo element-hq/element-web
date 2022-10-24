@@ -235,7 +235,7 @@ describe("Sliding Sync", () => {
             "Test Room", "Dummy",
         ]);
 
-        cy.contains(".mx_RoomTile", "Test Room").get(".mx_NotificationBadge").should("not.exist");
+        cy.contains(".mx_RoomTile", "Test Room").get(".mx_NotificationBadge").should("not.be.visible");
     });
 
     it("should update user settings promptly", () => {

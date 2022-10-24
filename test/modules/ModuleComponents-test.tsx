@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-// eslint-disable-next-line deprecate/import
-import { mount } from "enzyme";
+import { render } from "@testing-library/react";
 import { TextInputField } from "@matrix-org/react-sdk-module-api/lib/components/TextInputField";
 import { Spinner as ModuleSpinner } from "@matrix-org/react-sdk-module-api/lib/components/Spinner";
 
@@ -31,12 +30,12 @@ describe("Module Components", () => {
     // ModuleRunner import to do its job (as per documentation in ModuleComponents).
 
     it("should override the factory for a TextInputField", () => {
-        const component = mount(<TextInputField label="My Label" value="My Value" onChange={() => {}} />);
-        expect(component).toMatchSnapshot();
+        const { asFragment } = render(<TextInputField label="My Label" value="My Value" onChange={() => {}} />);
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("should override the factory for a ModuleSpinner", () => {
-        const component = mount(<ModuleSpinner />);
-        expect(component).toMatchSnapshot();
+        const { asFragment } = render(<ModuleSpinner />);
+        expect(asFragment()).toMatchSnapshot();
     });
 });

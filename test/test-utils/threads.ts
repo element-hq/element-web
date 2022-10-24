@@ -106,7 +106,7 @@ export const mkThread = ({
     participantUserIds,
     length = 2,
     ts = 1,
-}: MakeThreadProps): { thread: Thread, rootEvent: MatrixEvent } => {
+}: MakeThreadProps): { thread: Thread, rootEvent: MatrixEvent, events: MatrixEvent[] } => {
     const { rootEvent, events } = makeThreadEvents({
         roomId: room.roomId,
         authorId,
@@ -120,5 +120,5 @@ export const mkThread = ({
     // So that we do not have to mock the thread loading
     thread.initialEventsFetched = true;
 
-    return { thread, rootEvent };
+    return { thread, rootEvent, events };
 };

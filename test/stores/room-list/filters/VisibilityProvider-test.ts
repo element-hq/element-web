@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { mocked } from "jest-mock";
-import { Room } from "matrix-js-sdk/src/matrix";
+import { Room, RoomType } from "matrix-js-sdk/src/matrix";
 
 import { VisibilityProvider } from "../../../../src/stores/room-list/filters/VisibilityProvider";
 import LegacyCallHandler from "../../../../src/LegacyCallHandler";
@@ -43,6 +43,7 @@ jest.mock("../../../../src/customisations/RoomList", () => ({
 const createRoom = (isSpaceRoom = false): Room => {
     return {
         isSpaceRoom: () => isSpaceRoom,
+        getType: () => isSpaceRoom ? RoomType.Space : undefined,
     } as unknown as Room;
 };
 

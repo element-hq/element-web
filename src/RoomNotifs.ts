@@ -78,15 +78,23 @@ export function setRoomNotifsState(roomId: string, newState: RoomNotifState): Pr
     }
 }
 
-export function getUnreadNotificationCount(room: Room, type: NotificationCountType = null): number {
-    let notificationCount = room.getUnreadNotificationCount(type);
+export function getUnreadNotificationCount(
+    room: Room,
+    type: NotificationCountType,
+    threadId?: string,
+): number {
+    let notificationCount = (!!threadId
+        ? room.getThreadUnreadNotificationCount(threadId, type)
+        : room.getUnreadNotificationCount(type));
 
     // Check notification counts in the old room just in case there's some lost
     // there. We only go one level down to avoid performance issues, and theory
     // is that 1st generation rooms will have already been read by the 3rd generation.
     const createEvent = room.currentState.getStateEvents(EventType.RoomCreate, "");
-    if (createEvent && createEvent.getContent()['predecessor']) {
-        const oldRoomId = createEvent.getContent()['predecessor']['room_id'];
+    const predecessor = createEvent?.getContent().predecessor;
+    // Exclude threadId, as the same thread can't continue over a room upgrade
+    if (!threadId && predecessor) {
+        const oldRoomId = predecessor.room_id;
         const oldRoom = MatrixClientPeg.get().getRoom(oldRoomId);
         if (oldRoom) {
             // We only ever care if there's highlights in the old room. No point in

@@ -17,6 +17,7 @@ limitations under the License.
 import { Room } from "matrix-js-sdk/src/models/room";
 import { ISyncStateData, SyncState } from "matrix-js-sdk/src/sync";
 import { ClientEvent } from "matrix-js-sdk/src/client";
+import { Feature, ServerSupport } from "matrix-js-sdk/src/feature";
 
 import { ActionPayload } from "../../dispatcher/payloads";
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
@@ -39,9 +40,9 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<IState> {
         instance.start();
         return instance;
     })();
-
     private roomMap = new Map<Room, RoomNotificationState>();
-    private roomThreadsMap = new Map<Room, ThreadsRoomNotificationState>();
+
+    private roomThreadsMap: Map<Room, ThreadsRoomNotificationState> = new Map<Room, ThreadsRoomNotificationState>();
     private listMap = new Map<TagID, ListNotificationState>();
     private _globalState = new SummarizedNotificationState();
 
@@ -86,18 +87,25 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<IState> {
      */
     public getRoomState(room: Room): RoomNotificationState {
         if (!this.roomMap.has(room)) {
-            // Not very elegant, but that way we ensure that we start tracking
-            // threads notification at the same time at rooms.
-            // There are multiple entry points, and it's unclear which one gets
-            // called first
-            const threadState = new ThreadsRoomNotificationState(room);
-            this.roomThreadsMap.set(room, threadState);
+            let threadState;
+            if (room.client.canSupport.get(Feature.ThreadUnreadNotifications) === ServerSupport.Unsupported) {
+                // Not very elegant, but that way we ensure that we start tracking
+                // threads notification at the same time at rooms.
+                // There are multiple entry points, and it's unclear which one gets
+                // called first
+                const threadState = new ThreadsRoomNotificationState(room);
+                this.roomThreadsMap.set(room, threadState);
+            }
             this.roomMap.set(room, new RoomNotificationState(room, threadState));
         }
         return this.roomMap.get(room);
     }
 
-    public getThreadsRoomState(room: Room): ThreadsRoomNotificationState {
+    public getThreadsRoomState(room: Room): ThreadsRoomNotificationState | null {
+        if (room.client.canSupport.get(Feature.ThreadUnreadNotifications) !== ServerSupport.Unsupported) {
+            return null;
+        }
+
         if (!this.roomThreadsMap.has(room)) {
             this.roomThreadsMap.set(room, new ThreadsRoomNotificationState(room));
         }

@@ -75,7 +75,7 @@ exports[`<DialogSidebar /> renders sidebar correctly with beacons 1`] = `
                 tabindex="0"
               >
                 <a
-                  data-test-id="open-location-in-osm"
+                  data-testid="open-location-in-osm"
                   href="https://www.openstreetmap.org/?mlat=51&mlon=41#map=16/51/41"
                   rel="noreferrer noopener"
                   target="_blank"

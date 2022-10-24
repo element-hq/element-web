@@ -14,17 +14,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import { render } from "@testing-library/react";
+import { Room } from "matrix-js-sdk/src/models/room";
+import React from "react";
 
-import StyledLiveBeaconIcon from '../../../../src/components/views/beacon/StyledLiveBeaconIcon';
+import { useUnreadNotifications } from "../../../../hooks/useUnreadNotifications";
+import { StatelessNotificationBadge } from "./StatelessNotificationBadge";
 
-describe('<StyledLiveBeaconIcon />', () => {
-    const defaultProps = {};
-    const getComponent = (props = {}) => render(<StyledLiveBeaconIcon {...defaultProps} {...props} />);
+interface Props {
+    room: Room;
+    threadId?: string;
+}
 
-    it('renders', () => {
-        const { asFragment } = getComponent();
-        expect(asFragment()).toMatchSnapshot();
-    });
-});
+export function UnreadNotificationBadge({ room, threadId }: Props) {
+    const { symbol, count, color } = useUnreadNotifications(room, threadId);
+
+    return <StatelessNotificationBadge
+        symbol={symbol}
+        count={count}
+        color={color}
+    />;
+}
