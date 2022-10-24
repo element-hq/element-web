@@ -8180,6 +8180,21 @@ matrix-js-sdk@21.0.0-rc.1:
     qs "^6.9.6"
     unhomoglyph "^1.0.6"
 
+matrix-js-sdk@21.0.0-rc.2:
+  version "21.0.0-rc.2"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-21.0.0-rc.2.tgz#5f7ebcecd623a49533e6d599e7149d6d52003fb3"
+  integrity sha512-9vra2tBncpWoAijwX2thtDrP8yuanb1FhUoehsVevvIufxuePRvZtPBheYatesTB2AocADBL18SN3U+P1IRgVA==
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+    another-json "^0.2.0"
+    bs58 "^5.0.0"
+    content-type "^1.0.4"
+    loglevel "^1.7.1"
+    matrix-events-sdk "^0.0.1-beta.7"
+    p-retry "4"
+    qs "^6.9.6"
+    unhomoglyph "^1.0.6"
+
 matrix-mock-request@^2.5.0:
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/matrix-mock-request/-/matrix-mock-request-2.5.0.tgz#78da2590e82be2e31edcf9814833af5e5f8d2f1a"
