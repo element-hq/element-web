@@ -426,7 +426,7 @@ $left-gutter: 64px;
             }
 
             &.mx_EventTile_selected .mx_EventTile_line {
-                // TODO: check if this would be necessary
+                /* TODO: check if this would be necessary; */
                 padding-inline-start: calc(var(--EventTile_group_line-spacing-inline-start) + 20px);
             }
         }
@@ -894,13 +894,20 @@ $left-gutter: 64px;
     }
 
     /* Display notification dot */
-    &[data-notification]::before {
+    &[data-notification]::before,
+    .mx_NotificationBadge {
+        position: absolute;
         $notification-inset-block-start: 14px; /* 14px: align the dot with the timestamp row */
 
-        width: $notification-dot-size;
-        height: $notification-dot-size;
+        /* !important to fix overly specific CSS selector applied on mx_NotificationBadge */
+        width: $notification-dot-size !important;
+        height: $notification-dot-size !important;
         border-radius: 50%;
         inset: $notification-inset-block-start $spacing-8 auto auto;
+    }
+
+    .mx_NotificationBadge_count {
+        display: none;
     }
 
     &[data-notification="total"]::before {
@@ -1301,7 +1308,8 @@ $left-gutter: 64px;
             }
         }
 
-        &[data-shape="ThreadsList"][data-notification]::before {
+        &[data-shape="ThreadsList"][data-notification]::before,
+        .mx_NotificationBadge {
             /* stylelint-disable-next-line declaration-colon-space-after */
             inset-block-start:
                 calc($notification-inset-block-start - var(--MatrixChat_useCompactLayout_group-padding-top));

@@ -34,10 +34,12 @@ const STATUS_BAR_HIDDEN = 0;
 const STATUS_BAR_EXPANDED = 1;
 const STATUS_BAR_EXPANDED_LARGE = 2;
 
-export function getUnsentMessages(room: Room): MatrixEvent[] {
+export function getUnsentMessages(room: Room, threadId?: string): MatrixEvent[] {
     if (!room) { return []; }
     return room.getPendingEvents().filter(function(ev) {
-        return ev.status === EventStatus.NOT_SENT;
+        const isNotSent = ev.status === EventStatus.NOT_SENT;
+        const belongsToTheThread = threadId === ev.threadRootId;
+        return isNotSent && (!threadId || belongsToTheThread);
     });
 }
 
