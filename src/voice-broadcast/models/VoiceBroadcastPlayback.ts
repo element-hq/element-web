@@ -47,7 +47,10 @@ export enum VoiceBroadcastPlaybackEvent {
 
 interface EventMap {
     [VoiceBroadcastPlaybackEvent.LengthChanged]: (length: number) => void;
-    [VoiceBroadcastPlaybackEvent.StateChanged]: (state: VoiceBroadcastPlaybackState) => void;
+    [VoiceBroadcastPlaybackEvent.StateChanged]: (
+        state: VoiceBroadcastPlaybackState,
+        playback: VoiceBroadcastPlayback
+    ) => void;
     [VoiceBroadcastPlaybackEvent.InfoStateChanged]: (state: VoiceBroadcastInfoState) => void;
 }
 
@@ -217,14 +220,20 @@ export class VoiceBroadcastPlayback
     }
 
     public pause(): void {
-        if (!this.currentlyPlaying) return;
+        // stopped voice broadcasts cannot be paused
+        if (this.getState() === VoiceBroadcastPlaybackState.Stopped) return;
 
         this.setState(VoiceBroadcastPlaybackState.Paused);
+        if (!this.currentlyPlaying) return;
         this.currentlyPlaying.pause();
     }
 
     public resume(): void {
-        if (!this.currentlyPlaying) return;
+        if (!this.currentlyPlaying) {
+            // no playback to resume, start from the beginning
+            this.start();
+            return;
+        }
 
         this.setState(VoiceBroadcastPlaybackState.Playing);
         this.currentlyPlaying.play();
@@ -260,7 +269,7 @@ export class VoiceBroadcastPlayback
         }
 
         this.state = state;
-        this.emit(VoiceBroadcastPlaybackEvent.StateChanged, state);
+        this.emit(VoiceBroadcastPlaybackEvent.StateChanged, state, this);
     }
 
     public getInfoState(): VoiceBroadcastInfoState {
