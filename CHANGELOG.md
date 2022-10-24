@@ -1,3 +1,9 @@
+Changes in [1.11.11-rc.2](https://github.com/vector-im/element-web/releases/tag/v1.11.11-rc.2) (2022-10-24)
+===========================================================================================================
+
+## 🐛 Bug Fixes
+ * Send Content-Type: application/json header for integration manager /register API ([\#9490](https://github.com/matrix-org/matrix-react-sdk/pull/9490)). Fixes #23580.
+
 Changes in [1.11.11-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.11.11-rc.1) (2022-10-18)
 ===========================================================================================================
 
