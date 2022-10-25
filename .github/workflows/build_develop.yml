@@ -80,7 +80,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.CF_R2_TOKEN }}
           R2_BUCKET: 'element-web-develop'
           R2_URL: ${{ secrets.CF_R2_S3_API }}
-          R2_PUBLIC_URL: 'https://pub-842f08e362de4d678ba672fb09bfdfd6.r2.dev'
+          R2_PUBLIC_URL: 'https://element-web-develop.element.io'
 
       # We keep the latest develop.tar.gz as the artifact uploaded later expires after 24 and requires auth to download
       # Element Desktop's fetch script uses this tarball to fetch latest develop to build Nightlies.
@@ -96,6 +96,7 @@ jobs:
           HASH: ${{ steps.package.outputs.bundlehash }}
           
       - name: Deploy to develop.element.io
+        id: cfp
         uses: cloudflare/pages-action@1
         with:
           apiToken: ${{ secrets.CF_PAGES_TOKEN }}
@@ -103,5 +104,7 @@ jobs:
           projectName: element-web-develop
           directory: webapp
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          branch: production
+          
+      - run: |
+          echo "Deployed to ${{ steps.cfp.outputs.url }}" >> $GITHUB_STEP_SUMMARY
     
