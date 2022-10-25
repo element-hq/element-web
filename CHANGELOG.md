@@ -1,3 +1,57 @@
+Changes in [1.11.11](https://github.com/vector-im/element-web/releases/tag/v1.11.11) (2022-10-25)
+=================================================================================================
+
+## ✨ Features
+ * Device manager - tweak string formatting of default device name ([\#23457](https://github.com/vector-im/element-web/pull/23457)).
+ * Add Element Call participant limit ([\#23431](https://github.com/vector-im/element-web/pull/23431)).
+ * Add Element Call `brand` ([\#23443](https://github.com/vector-im/element-web/pull/23443)).
+ * Include a file-safe room name and ISO date in chat exports ([\#9440](https://github.com/matrix-org/matrix-react-sdk/pull/9440)). Fixes #21812 and #19724.
+ * Room call banner ([\#9378](https://github.com/matrix-org/matrix-react-sdk/pull/9378)). Fixes #23453. Contributed by @toger5.
+ * Device manager - spinners while devices are signing out ([\#9433](https://github.com/matrix-org/matrix-react-sdk/pull/9433)). Fixes #15865.
+ * Device manager - silence call ringers when local notifications are silenced ([\#9420](https://github.com/matrix-org/matrix-react-sdk/pull/9420)).
+ * Pass the current language to Element Call ([\#9427](https://github.com/matrix-org/matrix-react-sdk/pull/9427)).
+ * Hide screen-sharing button in Element Call on desktop ([\#9423](https://github.com/matrix-org/matrix-react-sdk/pull/9423)).
+ * Add reply support to WysiwygComposer ([\#9422](https://github.com/matrix-org/matrix-react-sdk/pull/9422)). Contributed by @florianduros.
+ * Disconnect other connected devices (of the same user) when joining an Element call ([\#9379](https://github.com/matrix-org/matrix-react-sdk/pull/9379)).
+ * Device manager - device tile main click target ([\#9409](https://github.com/matrix-org/matrix-react-sdk/pull/9409)).
+ * Add formatting buttons to the rich text editor ([\#9410](https://github.com/matrix-org/matrix-react-sdk/pull/9410)). Contributed by @florianduros.
+ * Device manager - current session context menu ([\#9386](https://github.com/matrix-org/matrix-react-sdk/pull/9386)).
+ * Remove piwik config fallback for privacy policy URL ([\#9390](https://github.com/matrix-org/matrix-react-sdk/pull/9390)).
+ * Add the first step to integrate the matrix wysiwyg composer ([\#9374](https://github.com/matrix-org/matrix-react-sdk/pull/9374)). Contributed by @florianduros.
+ * Device manager - UA parsing tweaks ([\#9382](https://github.com/matrix-org/matrix-react-sdk/pull/9382)).
+ * Device manager - remove client information events when disabling setting ([\#9384](https://github.com/matrix-org/matrix-react-sdk/pull/9384)).
+ * Add Element Call participant limit ([\#9358](https://github.com/matrix-org/matrix-react-sdk/pull/9358)).
+ * Add Element Call room settings ([\#9347](https://github.com/matrix-org/matrix-react-sdk/pull/9347)).
+ * Device manager - render extended device information ([\#9360](https://github.com/matrix-org/matrix-react-sdk/pull/9360)).
+ * New group call experience: Room header and PiP designs ([\#9351](https://github.com/matrix-org/matrix-react-sdk/pull/9351)).
+ * Pass language to Jitsi Widget ([\#9346](https://github.com/matrix-org/matrix-react-sdk/pull/9346)). Contributed by @Fox32.
+ * Add notifications and toasts for Element Call calls ([\#9337](https://github.com/matrix-org/matrix-react-sdk/pull/9337)).
+ * Device manager - device type icon ([\#9355](https://github.com/matrix-org/matrix-react-sdk/pull/9355)).
+ * Delete the remainder of groups ([\#9357](https://github.com/matrix-org/matrix-react-sdk/pull/9357)). Fixes #22770.
+ * Device manager - display client information in device details ([\#9315](https://github.com/matrix-org/matrix-react-sdk/pull/9315)).
+
+## 🐛 Bug Fixes
+ * Send Content-Type: application/json header for integration manager /register API ([\#9490](https://github.com/matrix-org/matrix-react-sdk/pull/9490)). Fixes #23580.
+ * Make ErrorView & CompatibilityView scrollable ([\#23468](https://github.com/vector-im/element-web/pull/23468)). Fixes #23376.
+ * Device manager - put client/browser device metadata in correct section ([\#9447](https://github.com/matrix-org/matrix-react-sdk/pull/9447)).
+ * update the room unread notification counter when the server changes the value without any related read receipt ([\#9438](https://github.com/matrix-org/matrix-react-sdk/pull/9438)).
+ * Don't show call banners in video rooms ([\#9441](https://github.com/matrix-org/matrix-react-sdk/pull/9441)).
+ * Prevent useContextMenu isOpen from being true if the button ref goes away ([\#9418](https://github.com/matrix-org/matrix-react-sdk/pull/9418)). Fixes matrix-org/element-web-rageshakes#15637.
+ * Automatically focus the WYSIWYG composer when you enter a room ([\#9412](https://github.com/matrix-org/matrix-react-sdk/pull/9412)).
+ * Improve the tooltips on the call lobby join button ([\#9428](https://github.com/matrix-org/matrix-react-sdk/pull/9428)).
+ * Pass the homeserver's base URL to Element Call ([\#9429](https://github.com/matrix-org/matrix-react-sdk/pull/9429)). Fixes #23301.
+ * Better accommodate long room names in call toasts ([\#9426](https://github.com/matrix-org/matrix-react-sdk/pull/9426)).
+ * Hide virtual widgets from the room info panel ([\#9424](https://github.com/matrix-org/matrix-react-sdk/pull/9424)). Fixes #23494.
+ * Inhibit clicking on sender avatar in threads list ([\#9417](https://github.com/matrix-org/matrix-react-sdk/pull/9417)). Fixes #23482.
+ * Correct the dir parameter of MSC3715 ([\#9391](https://github.com/matrix-org/matrix-react-sdk/pull/9391)). Contributed by @dhenneke.
+ * Use a more correct subset of users in `/remakeolm` developer command ([\#9402](https://github.com/matrix-org/matrix-react-sdk/pull/9402)).
+ * use correct default for notification silencing ([\#9388](https://github.com/matrix-org/matrix-react-sdk/pull/9388)). Fixes #23456.
+ * Device manager - eagerly create `m.local_notification_settings` events ([\#9353](https://github.com/matrix-org/matrix-react-sdk/pull/9353)).
+ * Close incoming Element call toast when viewing the call lobby ([\#9375](https://github.com/matrix-org/matrix-react-sdk/pull/9375)).
+ * Always allow enabling sending read receipts ([\#9367](https://github.com/matrix-org/matrix-react-sdk/pull/9367)). Fixes #23433.
+ * Fixes (vector-im/element-web/issues/22609) where the white theme is not applied when `white -> dark -> white` sequence is done. ([\#9320](https://github.com/matrix-org/matrix-react-sdk/pull/9320)). Contributed by @florianduros.
+ * Fix applying programmatically set height for "top" room layout ([\#9339](https://github.com/matrix-org/matrix-react-sdk/pull/9339)). Contributed by @Fox32.
+
 Changes in [1.11.10](https://github.com/vector-im/element-web/releases/tag/v1.11.10) (2022-10-11)
 =================================================================================================
 
