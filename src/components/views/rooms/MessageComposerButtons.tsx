@@ -17,7 +17,7 @@ limitations under the License.
 import classNames from 'classnames';
 import { IEventRelation } from "matrix-js-sdk/src/models/event";
 import { M_POLL_START } from "matrix-events-sdk";
-import React, { createContext, ReactElement, useContext, useRef } from 'react';
+import React, { createContext, MouseEventHandler, ReactElement, useContext, useRef } from 'react';
 import { Room } from 'matrix-js-sdk/src/models/room';
 import { MatrixClient } from 'matrix-js-sdk/src/client';
 import { THREAD_RELATION_TYPE } from 'matrix-js-sdk/src/models/thread';
@@ -55,6 +55,9 @@ interface IProps {
     toggleButtonMenu: () => void;
     showVoiceBroadcastButton: boolean;
     onStartVoiceBroadcastClick: () => void;
+    isComposerModeToggled: boolean;
+    showComposerModeButton: boolean;
+    onComposerModeClick: () => void;
 }
 
 type OverflowMenuCloser = () => void;
@@ -85,6 +88,8 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
     } else {
         mainButtons = [
             emojiButton(props),
+            props.showComposerModeButton &&
+                <ComposerModeButton key="composerModeButton" isToggled={props.isComposerModeToggled} onClick={props.onComposerModeClick} />,
             uploadButton(), // props passed via UploadButtonContext
         ];
         moreButtons = [
@@ -395,6 +400,23 @@ function showLocationButton(
             />
             : null
     );
+}
+
+interface WysiwygToggleButtonProps {
+    isToggled: boolean;
+    onClick: MouseEventHandler<HTMLDivElement>;
+}
+
+function ComposerModeButton({ isToggled, onClick }: WysiwygToggleButtonProps) {
+    return <CollapsibleButton
+        className="mx_MessageComposer_button"
+        iconClassName={classNames({
+            "mx_MessageComposer_plain_text": !isToggled,
+            "mx_MessageComposer_rich_text": isToggled,
+        })}
+        onClick={onClick}
+        title={_t("Switch to plain text mode")}
+    />;
 }
 
 export default MessageComposerButtons;

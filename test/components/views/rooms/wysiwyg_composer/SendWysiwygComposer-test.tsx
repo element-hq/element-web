@@ -72,7 +72,7 @@ describe('SendWysiwygComposer', () => {
         return render(
             <MatrixClientContext.Provider value={mockClient}>
                 <RoomContext.Provider value={defaultRoomContext}>
-                    <SendWysiwygComposer onChange={onChange} onSend={onSend} disabled={disabled} />
+                    <SendWysiwygComposer onChange={onChange} onSend={onSend} disabled={disabled} isRichTextEnabled={true} />
                 </RoomContext.Provider>
             </MatrixClientContext.Provider>,
         );

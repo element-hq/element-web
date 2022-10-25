@@ -163,7 +163,7 @@ describe('EditWysiwygComposer', () => {
 
             // Then
             const expectedContent = {
-                "body": mockContent,
+                "body": ` * ${mockContent}`,
                 "format": "org.matrix.custom.html",
                 "formatted_body": ` * ${mockContent}`,
                 "m.new_content": {

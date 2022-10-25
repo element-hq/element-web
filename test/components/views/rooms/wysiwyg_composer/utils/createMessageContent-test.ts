@@ -40,11 +40,11 @@ describe('createMessageContent', () => {
 
     it("Should create html message", () => {
         // When
-        const content = createMessageContent(message, { permalinkCreator });
+        const content = createMessageContent(message, true, { permalinkCreator });
 
         // Then
         expect(content).toEqual({
-            "body": message,
+            "body": "hello world",
             "format": "org.matrix.custom.html",
             "formatted_body": message,
             "msgtype": "m.text",
@@ -53,11 +53,11 @@ describe('createMessageContent', () => {
 
     it('Should add reply to message content', () => {
         // When
-        const content = createMessageContent(message, { permalinkCreator, replyToEvent: mockEvent });
+        const content = createMessageContent(message, true, { permalinkCreator, replyToEvent: mockEvent });
 
         // Then
         expect(content).toEqual({
-            "body": "> <myfakeuser> Replying to this\n\n<i><b>hello</b> world</i>",
+            "body": "> <myfakeuser> Replying to this\n\nhello world",
             "format": "org.matrix.custom.html",
             "formatted_body": "<mx-reply><blockquote><a href=\"$$permalink$$\">In reply to</a>" +
                                     " <a href=\"https://matrix.to/#/myfakeuser\">myfakeuser</a>"+
@@ -77,11 +77,11 @@ describe('createMessageContent', () => {
             rel_type: "m.thread",
             event_id: "myFakeThreadId",
         };
-        const content = createMessageContent(message, { permalinkCreator, relation });
+        const content = createMessageContent(message, true, { permalinkCreator, relation });
 
         // Then
         expect(content).toEqual({
-            "body": message,
+            "body": "hello world",
             "format": "org.matrix.custom.html",
             "formatted_body": message,
             "msgtype": "m.text",
@@ -110,16 +110,16 @@ describe('createMessageContent', () => {
             event: true,
         });
         const content =
-                createMessageContent(message, { permalinkCreator, editedEvent });
+                createMessageContent(message, true, { permalinkCreator, editedEvent });
 
         // Then
         expect(content).toEqual({
-            "body": message,
+            "body": " * hello world",
             "format": "org.matrix.custom.html",
             "formatted_body": ` * ${message}`,
             "msgtype": "m.text",
             "m.new_content": {
-                "body": message,
+                "body": "hello world",
                 "format": "org.matrix.custom.html",
                 "formatted_body": message,
                 "msgtype": "m.text",
