@@ -65,19 +65,19 @@ jobs:
 #          wait-interval: 10
 #          check-regexp: ^((?!SonarQube|issues|board).)*$
 
-      - name: Prepare deployment
+      - name: Populate _redirects
         run: |
-          mkdir cfp_dist
-          echo "/develop.tar.gz https://pub-e63db452ab5c4047b1d0357cb18528e4.r2.dev/develop.tar.gz 301" >> cfp_dist/_redirects
-          echo "Testing" >> cfp_dist/index.html
-
-      - name: List files
-        run: aws s3 ls s3://$R2_BUCKET/bundles/ --endpoint-url $R2_URL --region=auto
+          echo "/develop.tar.gz https://${R2_PUBLIC_URL}/develop.tar.gz 301" >> webapp/_redirects
+          for bundle in $(aws s3 ls s3://$R2_BUCKET/bundles/ --endpoint-url $R2_URL --region=auto | awk '{print $2}'); do
+            echo "/bundles/${bundle}/* https://${R2_PUBLIC_URL}/bundles/${bundle}/:splat 301" >> webapp/_redirects
+          done
+          cat webapp/_redirects
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.CF_R2_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.CF_R2_TOKEN }}
-          R2_BUCKET: 'dev-ew-cf'
+          R2_BUCKET: 'element-web-develop'
           R2_URL: ${{ secrets.CF_R2_S3_API }}
+          R2_PUBLIC_URL: 'https://pub-842f08e362de4d678ba672fb09bfdfd6.r2.dev'
 
       - name: Deploy to R2
         run: |
@@ -86,7 +86,7 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.CF_R2_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.CF_R2_TOKEN }}
-          R2_BUCKET: 'dev-ew-cf'
+          R2_BUCKET: 'element-web-develop'
           R2_URL: ${{ secrets.CF_R2_S3_API }}
           HASH: ${{ steps.package.outputs.bundlehash }}
           
@@ -96,6 +96,6 @@ jobs:
           apiToken: ${{ secrets.CF_PAGES_TOKEN }}
           accountId: ${{ secrets.CF_PAGES_ACCOUNT_ID }}
           projectName: element-web-develop
-          directory: cfp_dist
+          directory: webapp
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
     
