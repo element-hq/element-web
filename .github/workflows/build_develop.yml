@@ -103,5 +103,5 @@ jobs:
           projectName: element-web-develop
           directory: webapp
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          branch: develop
+          branch: production
     
