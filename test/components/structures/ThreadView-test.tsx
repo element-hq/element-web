@@ -28,6 +28,7 @@ import { act } from "react-dom/test-utils";
 import ThreadView from "../../../src/components/structures/ThreadView";
 import MatrixClientContext from "../../../src/contexts/MatrixClientContext";
 import RoomContext from "../../../src/contexts/RoomContext";
+import { SdkContextClass } from "../../../src/contexts/SDKContext";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 import DMRoomMap from "../../../src/utils/DMRoomMap";
 import ResizeNotifier from "../../../src/utils/ResizeNotifier";
@@ -154,5 +155,14 @@ describe("ThreadView", () => {
         expect(mockClient.sendMessage).toHaveBeenCalledWith(
             ROOM_ID, rootEvent2.getId(), expectedMessageBody(rootEvent2, "yolo"),
         );
+    });
+
+    it("sets the correct thread in the room view store", async () => {
+        // expect(SdkContextClass.instance.roomViewStore.getThreadId()).toBeNull();
+        const { unmount } = await getComponent();
+        expect(SdkContextClass.instance.roomViewStore.getThreadId()).toBe(rootEvent.getId());
+
+        unmount();
+        await waitFor(() => expect(SdkContextClass.instance.roomViewStore.getThreadId()).toBeNull());
     });
 });

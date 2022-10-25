@@ -50,6 +50,7 @@ import { awaitRoomDownSync } from "../utils/RoomUpgrade";
 import { UPDATE_EVENT } from "./AsyncStore";
 import { SdkContextClass } from "../contexts/SDKContext";
 import { CallStore } from "./CallStore";
+import { ThreadPayload } from "../dispatcher/payloads/ThreadPayload";
 
 const NUM_JOIN_RETRY = 5;
 
@@ -66,6 +67,10 @@ interface State {
      * The ID of the room currently being viewed
      */
     roomId: string | null;
+    /**
+     * The ID of the thread currently being viewed
+     */
+    threadId: string | null;
     /**
      * The ID of the room being subscribed to (in Sliding Sync)
      */
@@ -109,6 +114,7 @@ const INITIAL_STATE: State = {
     joining: false,
     joinError: null,
     roomId: null,
+    threadId: null,
     subscribingRoomId: null,
     initialEventId: null,
     initialEventPixelOffset: null,
@@ -199,6 +205,9 @@ export class RoomViewStore extends EventEmitter {
             //      - highlighted:  true
             case Action.ViewRoom:
                 this.viewRoom(payload);
+                break;
+            case Action.ViewThread:
+                this.viewThread(payload);
                 break;
             // for these events blank out the roomId as we are no longer in the RoomView
             case 'view_welcome_page':
@@ -430,6 +439,12 @@ export class RoomViewStore extends EventEmitter {
         }
     }
 
+    private viewThread(payload: ThreadPayload): void {
+        this.setState({
+            threadId: payload.thread_id,
+        });
+    }
+
     private viewRoomError(payload: ViewRoomErrorPayload): void {
         this.setState({
             roomId: payload.room_id,
@@ -548,6 +563,10 @@ export class RoomViewStore extends EventEmitter {
     // The room ID of the room currently being viewed
     public getRoomId(): Optional<string> {
         return this.state.roomId;
+    }
+
+    public getThreadId(): Optional<string> {
+        return this.state.threadId;
     }
 
     // The event to scroll to when the room is first viewed

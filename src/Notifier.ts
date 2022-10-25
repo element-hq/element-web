@@ -435,7 +435,16 @@ export const Notifier = {
         if (actions?.notify) {
             this._performCustomEventHandling(ev);
 
-            if (SdkContextClass.instance.roomViewStore.getRoomId() === room.roomId &&
+            const store = SdkContextClass.instance.roomViewStore;
+            const isViewingRoom = store.getRoomId() === room.roomId;
+            const threadId: string | undefined = ev.getId() !== ev.threadRootId
+                ? ev.threadRootId
+                : undefined;
+            const isViewingThread = store.getThreadId() === threadId;
+
+            const isViewingEventTimeline = isViewingRoom && (!threadId || isViewingThread);
+
+            if (isViewingEventTimeline &&
                 UserActivity.sharedInstance().userActiveRecently() &&
                 !Modal.hasDialogs()
             ) {
