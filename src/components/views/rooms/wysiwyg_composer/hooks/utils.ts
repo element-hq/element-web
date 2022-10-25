@@ -14,40 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { useRef } from "react";
+import { TimelineRenderingType } from "../../../../../contexts/RoomContext";
+import { IRoomState } from "../../../../structures/RoomView";
 
-import defaultDispatcher from "../../../../dispatcher/dispatcher";
-import { Action } from "../../../../dispatcher/actions";
-import { ActionPayload } from "../../../../dispatcher/payloads";
-import { IRoomState } from "../../../structures/RoomView";
-import { TimelineRenderingType, useRoomContext } from "../../../../contexts/RoomContext";
-import { useDispatcher } from "../../../../hooks/useDispatcher";
-
-export function useWysiwygActionHandler(
-    disabled: boolean,
-    composerElement: React.MutableRefObject<HTMLElement>,
-) {
-    const roomContext = useRoomContext();
-    const timeoutId = useRef<number>();
-
-    useDispatcher(defaultDispatcher, (payload: ActionPayload) => {
-        // don't let the user into the composer if it is disabled - all of these branches lead
-        // to the cursor being in the composer
-        if (disabled) return;
-
-        const context = payload.context ?? TimelineRenderingType.Room;
-
-        switch (payload.action) {
-            case "reply_to_event":
-            case Action.FocusSendMessageComposer:
-                focusComposer(composerElement, context, roomContext, timeoutId);
-                break;
-            // TODO: case Action.ComposerInsert: - see SendMessageComposer
-        }
-    });
-}
-
-function focusComposer(
+export function focusComposer(
     composerElement: React.MutableRefObject<HTMLElement>,
     renderingType: TimelineRenderingType,
     roomContext: IRoomState,

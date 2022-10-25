@@ -179,6 +179,7 @@ export function createTestClient(): MatrixClient {
         sendToDevice: jest.fn().mockResolvedValue(undefined),
         queueToDevice: jest.fn().mockResolvedValue(undefined),
         encryptAndSendToDevices: jest.fn().mockResolvedValue(undefined),
+        cancelPendingEvent: jest.fn(),
 
         getMediaHandler: jest.fn().mockReturnValue({
             setVideoInput: jest.fn(),
