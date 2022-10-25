@@ -90,14 +90,6 @@ jobs:
           R2_URL: ${{ secrets.CF_R2_S3_API }}
           HASH: ${{ steps.package.outputs.bundlehash }}
           
-      - name: Update CORS
-        run: aws s3api put-bucket-cors --bucket $R2_BUCKET --endpoint-url $R2_URL --region=auto --cors-configuration file://.github/r2_cors.yaml
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.CF_R2_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.CF_R2_TOKEN }}
-          R2_BUCKET: 'dev-ew-cf'
-          R2_URL: ${{ secrets.CF_R2_S3_API }}
-          
       - name: Deploy to develop.element.io
         uses: cloudflare/pages-action@1
         with:
