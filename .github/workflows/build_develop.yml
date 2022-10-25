@@ -68,6 +68,7 @@ jobs:
       - name: Prepare deployment
         run: |
           echo "404 Not Found" > webapp/404.html
+          cp element.io/develop/config.json webapp/config.json
 
       - name: Populate _redirects
         run: |
