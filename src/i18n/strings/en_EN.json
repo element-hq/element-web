@@ -1788,6 +1788,7 @@
     "Consider signing out from old sessions (%(inactiveAgeDays)s days or older) you don't use anymore.": "Consider signing out from old sessions (%(inactiveAgeDays)s days or older) you don't use anymore.",
     "Inactive sessions are sessions you have not used in some time, but they continue to receive encryption keys.": "Inactive sessions are sessions you have not used in some time, but they continue to receive encryption keys.",
     "Removing inactive sessions improves security and performance, and makes it easier for you to identify if a new session is suspicious.": "Removing inactive sessions improves security and performance, and makes it easier for you to identify if a new session is suspicious.",
+    "Consider signing out from old sessions (%(inactiveAgeDays)s days or older) you don't use anymore": "Consider signing out from old sessions (%(inactiveAgeDays)s days or older) you don't use anymore",
     "No verified sessions found.": "No verified sessions found.",
     "No unverified sessions found.": "No unverified sessions found.",
     "No inactive sessions found.": "No inactive sessions found.",
