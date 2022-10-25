@@ -36,6 +36,25 @@ import LoginWithQRSection from '../../devices/LoginWithQRSection';
 import LoginWithQR, { Mode } from '../../../auth/LoginWithQR';
 import SettingsStore from '../../../../../settings/SettingsStore';
 import { useAsyncMemo } from '../../../../../hooks/useAsyncMemo';
+import QuestionDialog from '../../../dialogs/QuestionDialog';
+
+const confirmSignOut = async (sessionsToSignOutCount: number): Promise<boolean> => {
+    const { finished } = Modal.createDialog(QuestionDialog, {
+        title: _t("Sign out"),
+        description: (
+            <div>
+                <p>{ _t("Are you sure you want to sign out of %(count)s sessions?", {
+                    count: sessionsToSignOutCount,
+                }) }</p>
+            </div>
+        ),
+        cancelButton: _t('Cancel'),
+        button: _t("Sign out"),
+    });
+    const [confirmed] = await finished;
+
+    return confirmed;
+};
 
 const useSignOut = (
     matrixClient: MatrixClient,
@@ -61,6 +80,11 @@ const useSignOut = (
         if (!deviceIds.length) {
             return;
         }
+        const userConfirmedSignout = await confirmSignOut(deviceIds.length);
+        if (!userConfirmedSignout) {
+            return;
+        }
+
         try {
             setSigningOutDeviceIds([...signingOutDeviceIds, ...deviceIds]);
             await deleteDevicesWithInteractiveAuth(
