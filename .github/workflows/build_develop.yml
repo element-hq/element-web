@@ -67,7 +67,7 @@ jobs:
 
       - name: Prepare deployment
         run: |
-          echo "404 Not Found > webapp/404.html"
+          echo "404 Not Found" > webapp/404.html
 
       - name: Populate _redirects
         run: |
