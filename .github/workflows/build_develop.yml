@@ -65,6 +65,10 @@ jobs:
 #          wait-interval: 10
 #          check-regexp: ^((?!SonarQube|issues|board).)*$
 
+      - name: Prepare deployment
+        run: |
+          echo "404 Not Found > webapp/404.html"
+
       - name: Populate _redirects
         run: |
           echo "/develop.tar.gz https://${R2_PUBLIC_URL}/develop.tar.gz 301" >> webapp/_redirects
