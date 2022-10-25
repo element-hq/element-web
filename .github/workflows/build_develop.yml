@@ -66,15 +66,7 @@ jobs:
       - name: Prepare deployment
         run: |
           echo "404 Not Found" > webapp/404.html
-          echo "/*" > webapp/_headers
-          echo "  Access-Control-Allow-Origin: *" >> webapp/_headers
-          echo "  X-XSS-Protection: 1; mode=block" >> webapp/_headers
-          echo "  X-Content-Type-Options: nosniff" >> webapp/_headers
-          echo "  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload" >> webapp/_headers
-          echo "  X-Frame-Options: sameorigin" >> webapp/_headers
-          echo "" >> webapp/_headers
-          echo "/apple-app-site-association" >> webapp/_headers
-          echo "  Content-Type: application/json" >> webapp/_headers
+          cp .github/cfp_headers webapp/_headers
           cp element.io/develop/config.json webapp/config.json
 
       - name: Populate _redirects
