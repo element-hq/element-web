@@ -73,9 +73,9 @@ jobs:
 
       - name: Deploy to R2
         run: |
-          aws s3 ls s3://$R2_BUCKET/bundles/
+          aws s3 ls s3://$R2_BUCKET/bundles/ --endpoint-url $R2_URL
           aws s3 cp dist/develop.tar.gz s3://$R2_BUCKET/develop.tar.gz --endpoint-url $R2_URL
-          aws s3 cp webapp/bundles/$HASH s3://$R2_BUCKET/bundles/$HASH --recursive  --endpoint-url $R2_URL
+          aws s3 cp webapp/bundles/$HASH s3://$R2_BUCKET/bundles/$HASH --recursive --endpoint-url $R2_URL
           aws s3api put-bucket-cors --bucket $R2_BUCKET --endpoint-url $R2_URL --cors-configuration file://.github/r2_cors.yaml
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.CF_R2_ACCESS_KEY_ID }}
