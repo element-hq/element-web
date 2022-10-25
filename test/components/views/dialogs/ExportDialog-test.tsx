@@ -65,8 +65,8 @@ describe('<ExportDialog />', () => {
     const getAttachmentsCheckbox = (component) => component.find('input[id="include-attachments"]');
     const getMessageCountInput = (component) => component.find('input[id="message-count"]');
     const getExportFormatInput = (component, format) => component.find(`input[id="exportFormat-${format}"]`);
-    const getPrimaryButton = (component) => component.find('[data-test-id="dialog-primary-button"]');
-    const getSecondaryButton = (component) => component.find('[data-test-id="dialog-cancel-button"]');
+    const getPrimaryButton = (component) => component.find('[data-testid="dialog-primary-button"]');
+    const getSecondaryButton = (component) => component.find('[data-testid="dialog-cancel-button"]');
 
     const submitForm = async (component) => act(async () => {
         getPrimaryButton(component).simulate('click');

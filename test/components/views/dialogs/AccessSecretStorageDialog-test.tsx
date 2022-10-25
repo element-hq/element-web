@@ -20,7 +20,7 @@ import { mount, ReactWrapper } from 'enzyme';
 import { act } from 'react-dom/test-utils';
 import { IPassphraseInfo } from 'matrix-js-sdk/src/crypto/api';
 
-import { findByTestId, getMockClientWithEventEmitter, unmockClientPeg } from '../../../test-utils';
+import { findByAttr, getMockClientWithEventEmitter, unmockClientPeg } from '../../../test-utils';
 import { findById, flushPromises } from '../../../test-utils';
 import AccessSecretStorageDialog from "../../../../src/components/views/dialogs/security/AccessSecretStorageDialog";
 
@@ -91,7 +91,7 @@ describe("AccessSecretStorageDialog", () => {
             wrapper.setProps({});
         });
 
-        const submitButton = findByTestId(wrapper, 'dialog-primary-button').at(0);
+        const submitButton = findByAttr('data-testid')(wrapper, 'dialog-primary-button').at(0);
         // submit button is enabled when key is valid
         expect(submitButton.props().disabled).toBeFalsy();
         expect(wrapper.find('.mx_AccessSecretStorageDialog_recoveryKeyFeedback').text()).toEqual('Looks good!');
@@ -112,7 +112,7 @@ describe("AccessSecretStorageDialog", () => {
         // @ts-ignore private
         await wrapper.instance().validateRecoveryKey();
 
-        const submitButton = findByTestId(wrapper, 'dialog-primary-button').at(0);
+        const submitButton = findByAttr('data-testid')(wrapper, 'dialog-primary-button').at(0);
         // submit button is disabled when recovery key is invalid
         expect(submitButton.props().disabled).toBeTruthy();
         expect(

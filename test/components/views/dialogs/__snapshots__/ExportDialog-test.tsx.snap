@@ -249,14 +249,14 @@ Array [
                   class="mx_Dialog_buttons_row"
                 >
                   <button
-                    data-test-id="dialog-cancel-button"
+                    data-testid="dialog-cancel-button"
                     type="button"
                   >
                     Cancel
                   </button>
                   <button
                     class="mx_Dialog_primary"
-                    data-test-id="dialog-primary-button"
+                    data-testid="dialog-primary-button"
                     type="button"
                   >
                     Export
@@ -474,14 +474,14 @@ Array [
                     class="mx_Dialog_buttons_row"
                   >
                     <button
-                      data-test-id="dialog-cancel-button"
+                      data-testid="dialog-cancel-button"
                       type="button"
                     >
                       Cancel
                     </button>
                     <button
                       class="mx_Dialog_primary"
-                      data-test-id="dialog-primary-button"
+                      data-testid="dialog-primary-button"
                       type="button"
                     >
                       Export
@@ -827,7 +827,7 @@ Array [
                 className="mx_Dialog_buttons_row"
               >
                 <button
-                  data-test-id="dialog-cancel-button"
+                  data-testid="dialog-cancel-button"
                   disabled={false}
                   onClick={[Function]}
                   type="button"
@@ -836,7 +836,7 @@ Array [
                 </button>
                 <button
                   className="mx_Dialog_primary"
-                  data-test-id="dialog-primary-button"
+                  data-testid="dialog-primary-button"
                   onClick={[Function]}
                   type="button"
                 >
@@ -1102,14 +1102,14 @@ Array [
                 class="mx_Dialog_buttons_row"
               >
                 <button
-                  data-test-id="dialog-cancel-button"
+                  data-testid="dialog-cancel-button"
                   type="button"
                 >
                   Cancel
                 </button>
                 <button
                   class="mx_Dialog_primary"
-                  data-test-id="dialog-primary-button"
+                  data-testid="dialog-primary-button"
                   type="button"
                 >
                   Export
@@ -1327,14 +1327,14 @@ Array [
                   class="mx_Dialog_buttons_row"
                 >
                   <button
-                    data-test-id="dialog-cancel-button"
+                    data-testid="dialog-cancel-button"
                     type="button"
                   >
                     Cancel
                   </button>
                   <button
                     class="mx_Dialog_primary"
-                    data-test-id="dialog-primary-button"
+                    data-testid="dialog-primary-button"
                     type="button"
                   >
                     Export
@@ -1680,7 +1680,7 @@ Array [
               className="mx_Dialog_buttons_row"
             >
               <button
-                data-test-id="dialog-cancel-button"
+                data-testid="dialog-cancel-button"
                 disabled={false}
                 onClick={[Function]}
                 type="button"
@@ -1689,7 +1689,7 @@ Array [
               </button>
               <button
                 className="mx_Dialog_primary"
-                data-test-id="dialog-primary-button"
+                data-testid="dialog-primary-button"
                 onClick={[Function]}
                 type="button"
               >
@@ -1942,14 +1942,14 @@ Array [
               class="mx_Dialog_buttons_row"
             >
               <button
-                data-test-id="dialog-cancel-button"
+                data-testid="dialog-cancel-button"
                 type="button"
               >
                 Cancel
               </button>
               <button
                 class="mx_Dialog_primary"
-                data-test-id="dialog-primary-button"
+                data-testid="dialog-primary-button"
                 type="button"
               >
                 Export
@@ -2167,14 +2167,14 @@ Array [
                 class="mx_Dialog_buttons_row"
               >
                 <button
-                  data-test-id="dialog-cancel-button"
+                  data-testid="dialog-cancel-button"
                   type="button"
                 >
                   Cancel
                 </button>
                 <button
                   class="mx_Dialog_primary"
-                  data-test-id="dialog-primary-button"
+                  data-testid="dialog-primary-button"
                   type="button"
                 >
                   Export
@@ -2520,7 +2520,7 @@ Array [
             className="mx_Dialog_buttons_row"
           >
             <button
-              data-test-id="dialog-cancel-button"
+              data-testid="dialog-cancel-button"
               disabled={false}
               onClick={[Function]}
               type="button"
@@ -2529,7 +2529,7 @@ Array [
             </button>
             <button
               className="mx_Dialog_primary"
-              data-test-id="dialog-primary-button"
+              data-testid="dialog-primary-button"
               onClick={[Function]}
               type="button"
             >
@@ -2873,7 +2873,7 @@ Array [
           className="mx_Dialog_buttons_row"
         >
           <button
-            data-test-id="dialog-cancel-button"
+            data-testid="dialog-cancel-button"
             disabled={false}
             onClick={[Function]}
             type="button"
@@ -2882,7 +2882,7 @@ Array [
           </button>
           <button
             className="mx_Dialog_primary"
-            data-test-id="dialog-primary-button"
+            data-testid="dialog-primary-button"
             onClick={[Function]}
             type="button"
           >
