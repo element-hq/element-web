@@ -12,8 +12,7 @@ then
     exit
 fi
 
-set -e
-set -x
+set -ex
 
 tmpdir=`mktemp -d 2>/dev/null || mktemp -d -t 'icontmp'`
 

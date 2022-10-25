@@ -1,3 +1,38 @@
+Changes in [1.11.10](https://github.com/vector-im/element-web/releases/tag/v1.11.10) (2022-10-11)
+=================================================================================================
+
+## 🐛 Bug Fixes
+ * Use correct default for notification silencing ([\#9388](https://github.com/matrix-org/matrix-react-sdk/pull/9388)). Fixes vector-im/element-web#23456.
+
+Changes in [1.11.9](https://github.com/vector-im/element-web/releases/tag/v1.11.9) (2022-10-11)
+===============================================================================================
+
+##   Deprecations
+ * Legacy Piwik config.json option `piwik.policy_url` is deprecated in favour of `privacy_policy_url`. Support will be removed in the next release.
+
+## ✨ Features
+ * Device manager - select all devices ([\#9330](https://github.com/matrix-org/matrix-react-sdk/pull/9330)). Contributed by @kerryarchibald.
+ * New group call experience: Call tiles ([\#9332](https://github.com/matrix-org/matrix-react-sdk/pull/9332)).
+ * Add Shift key to FormatQuote keyboard shortcut ([\#9298](https://github.com/matrix-org/matrix-react-sdk/pull/9298)). Contributed by @owi92.
+ * Device manager - sign out of multiple sessions ([\#9325](https://github.com/matrix-org/matrix-react-sdk/pull/9325)). Contributed by @kerryarchibald.
+ * Display push toggle for web sessions (MSC3890) ([\#9327](https://github.com/matrix-org/matrix-react-sdk/pull/9327)).
+ * Add device notifications enabled switch ([\#9324](https://github.com/matrix-org/matrix-react-sdk/pull/9324)).
+ * Implement push notification toggle in device detail ([\#9308](https://github.com/matrix-org/matrix-react-sdk/pull/9308)).
+ * New group call experience: Starting and ending calls ([\#9318](https://github.com/matrix-org/matrix-react-sdk/pull/9318)).
+ * New group call experience: Room header call buttons ([\#9311](https://github.com/matrix-org/matrix-react-sdk/pull/9311)).
+ * Make device ID copyable in device list ([\#9297](https://github.com/matrix-org/matrix-react-sdk/pull/9297)). Contributed by @duxovni.
+ * Use display name instead of user ID when rendering power events ([\#9295](https://github.com/matrix-org/matrix-react-sdk/pull/9295)).
+ * Read receipts for threads ([\#9239](https://github.com/matrix-org/matrix-react-sdk/pull/9239)). Fixes #23191.
+
+## 🐛 Bug Fixes
+ * Use the correct sender key when checking shared secret ([\#2730](https://github.com/matrix-org/matrix-js-sdk/pull/2730)). Fixes vector-im/element-web#23374.
+ * Fix device selection in pre-join screen for Element Call video rooms ([\#9321](https://github.com/matrix-org/matrix-react-sdk/pull/9321)). Fixes #23331.
+ * Don't render a 1px high room topic if the room topic is empty ([\#9317](https://github.com/matrix-org/matrix-react-sdk/pull/9317)). Contributed by @Arnei.
+ * Don't show feedback prompts when that UIFeature is disabled ([\#9305](https://github.com/matrix-org/matrix-react-sdk/pull/9305)). Fixes #23327.
+ * Fix soft crash around unknown room pills ([\#9301](https://github.com/matrix-org/matrix-react-sdk/pull/9301)). Fixes matrix-org/element-web-rageshakes#15465.
+ * Fix spaces feedback prompt wrongly showing when feedback is disabled ([\#9302](https://github.com/matrix-org/matrix-react-sdk/pull/9302)). Fixes #23314.
+ * Fix tile soft crash in ReplyInThreadButton ([\#9300](https://github.com/matrix-org/matrix-react-sdk/pull/9300)). Fixes matrix-org/element-web-rageshakes#15493.
+
 Changes in [1.11.8](https://github.com/vector-im/element-web/releases/tag/v1.11.8) (2022-09-28)
 ===============================================================================================
 

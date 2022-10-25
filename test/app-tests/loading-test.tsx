@@ -17,33 +17,26 @@ limitations under the License.
 
 /* loading.js: test the myriad paths we have for loading the application */
 
-import PlatformPeg from 'matrix-react-sdk/src/PlatformPeg';
-import WebPlatform from '../../src/vector/platform/WebPlatform';
-import "../jest-mocks";
-import React from 'react';
-import ReactDOM from 'react-dom';
-import ReactTestUtils from 'react-dom/test-utils';
-import MatrixReactTestUtils from 'matrix-react-test-utils';
-import * as jssdk from 'matrix-js-sdk/src/matrix';
-import {MatrixClientPeg} from 'matrix-react-sdk/src/MatrixClientPeg';
-import MatrixChat, {Views} from 'matrix-react-sdk/src/components/structures/MatrixChat';
-import dis from 'matrix-react-sdk/src/dispatcher/dispatcher';
-import * as test_utils from '../test-utils';
-import MockHttpBackend from 'matrix-mock-request';
-import {parseQs, parseQsFromFragment} from '../../src/vector/url_utils';
-import {makeType} from "matrix-react-sdk/src/utils/TypeUtils";
-import { ValidatedServerConfig } from 'matrix-react-sdk/src/utils/ValidatedServerConfig';
-import {sleep} from "../test-utils";
 import "fake-indexeddb/auto";
-import {cleanLocalstorage} from "../test-utils";
-import {IndexedDBCryptoStore} from "matrix-js-sdk/src/crypto/store/indexeddb-crypto-store";
-import { RoomView as RoomViewClass } from 'matrix-react-sdk/src/components/structures/RoomView';
-import LoginComponent from 'matrix-react-sdk/src/components/structures/auth/Login';
-import WelcomeComponent from "matrix-react-sdk/src/components/views/auth/Welcome";
-import EmbeddedPage from "matrix-react-sdk/src/components/structures/EmbeddedPage";
+import React from 'react';
+import { render, screen, fireEvent, waitFor, RenderResult, waitForElementToBeRemoved } from "@testing-library/react";
+import PlatformPeg from 'matrix-react-sdk/src/PlatformPeg';
+import { MatrixClientPeg } from 'matrix-react-sdk/src/MatrixClientPeg';
+import MatrixChat from 'matrix-react-sdk/src/components/structures/MatrixChat';
+import dis from 'matrix-react-sdk/src/dispatcher/dispatcher';
+import MockHttpBackend from 'matrix-mock-request';
+import { makeType } from "matrix-react-sdk/src/utils/TypeUtils";
+import { ValidatedServerConfig } from 'matrix-react-sdk/src/utils/ValidatedServerConfig';
+import { IndexedDBCryptoStore } from "matrix-js-sdk/src/crypto/store/indexeddb-crypto-store";
+import { sleep } from "matrix-js-sdk/src/utils";
 
-const DEFAULT_HS_URL='http://my_server';
-const DEFAULT_IS_URL='http://my_is';
+import "../jest-mocks";
+import WebPlatform from '../../src/vector/platform/WebPlatform';
+import { parseQs, parseQsFromFragment } from '../../src/vector/url_utils';
+import { cleanLocalstorage, deleteIndexedDB } from "../test-utils";
+
+const DEFAULT_HS_URL = 'http://my_server';
+const DEFAULT_IS_URL = 'http://my_is';
 
 describe('loading:', function() {
     let parentDiv;
@@ -53,14 +46,14 @@ describe('loading:', function() {
     let windowLocation;
 
     // the mounted MatrixChat
-    let matrixChat;
+    let matrixChat: RenderResult;
 
     // a promise which resolves when the MatrixChat calls onTokenLoginCompleted
     let tokenLoginCompletePromise;
 
     beforeEach(function() {
         httpBackend = new MockHttpBackend();
-        jssdk.request(httpBackend.requestFn);
+        window.fetch = httpBackend.fetchFn;
         parentDiv = document.createElement('div');
 
         // uncomment this to actually add the div to the UI, to help with
@@ -73,19 +66,14 @@ describe('loading:', function() {
 
     afterEach(async function() {
         console.log(`${Date.now()}: loading: afterEach`);
-        if (parentDiv) {
-            ReactDOM.unmountComponentAtNode(parentDiv);
-            parentDiv.remove();
-            parentDiv = null;
-        }
-
+        matrixChat?.unmount();
         // unmounting should have cleared the MatrixClientPeg
         expect(MatrixClientPeg.get()).toBe(null);
 
         // clear the indexeddbs so we can start from a clean slate next time.
         await Promise.all([
-            test_utils.deleteIndexedDB('matrix-js-sdk:crypto'),
-            test_utils.deleteIndexedDB('matrix-js-sdk:riot-web-sync'),
+            deleteIndexedDB('matrix-js-sdk:crypto'),
+            deleteIndexedDB('matrix-js-sdk:riot-web-sync'),
         ]);
         cleanLocalstorage();
         console.log(`${Date.now()}: loading: afterEach complete`);
@@ -144,8 +132,8 @@ describe('loading:', function() {
 
         const params = parseQs(windowLocation);
 
-        tokenLoginCompletePromise = new Promise(resolve => {
-            matrixChat = ReactDOM.render(
+        tokenLoginCompletePromise = new Promise<void>(resolve => {
+            matrixChat = render(
                 <MatrixChat
                     onNewScreen={onNewScreen}
                     config={config}
@@ -171,13 +159,14 @@ describe('loading:', function() {
             .respond(200, {
                 "versions": ["r0.3.0"],
                 "unstable_features": {
-                    "m.lazy_load_members": true
-                }
+                    "m.lazy_load_members": true,
+                },
             });
         const isGuest = opts && opts.isGuest;
         if (!isGuest) {
             // the call to create the LL filter
             httpBackend.when('POST', '/filter').respond(200, { filter_id: 'llfid' });
+            httpBackend.when('GET', '/pushrules').respond(200, {});
         }
         httpBackend.when('GET', '/sync')
             .check((r) => {syncRequest = r;})
@@ -197,10 +186,10 @@ describe('loading:', function() {
         it('gives a welcome page by default', function() {
             loadApp();
 
-            return sleep(1).then(() => {
+            return sleep(1).then(async () => {
                 // at this point, we're trying to do a guest registration;
                 // we expect a spinner
-                assertAtLoadingSpinner(matrixChat);
+                await assertAtLoadingSpinner();
 
                 httpBackend.when('POST', '/register').check(function(req) {
                     expect(req.queryParams.kind).toEqual('guest');
@@ -211,7 +200,7 @@ describe('loading:', function() {
                 // Wait for another trip around the event loop for the UI to update
                 return awaitWelcomeComponent(matrixChat);
             }).then(() => {
-                expect(windowLocation.hash).toEqual("#/welcome");
+                return waitFor(() => expect(windowLocation.hash).toEqual("#/welcome"));
             });
         });
 
@@ -221,13 +210,13 @@ describe('loading:', function() {
             });
 
             // Pass the liveliness checks
-            httpBackend.when("GET", "/versions").respond(200, {versions: ["r0.4.0"]});
+            httpBackend.when("GET", "/versions").respond(200, { versions: ["r0.4.0"] });
             httpBackend.when("GET", "/api/v1").respond(200, {});
 
-            return sleep(1).then(() => {
+            return sleep(1).then(async () => {
                 // at this point, we're trying to do a guest registration;
                 // we expect a spinner
-                assertAtLoadingSpinner(matrixChat);
+                await assertAtLoadingSpinner();
 
                 httpBackend.when('POST', '/register').check(function(req) {
                     expect(req.queryParams.kind).toEqual('guest');
@@ -256,19 +245,20 @@ describe('loading:', function() {
             });
         });
 
-        it('should not register as a guest when using a #/login link', function() {
+        it.skip('should not register as a guest when using a #/login link', function() {
             loadApp({
                 uriFragment: "#/login",
             });
 
             // Pass the liveliness checks
-            httpBackend.when("GET", "/versions").respond(200, {versions: ["r0.4.0"]});
+            httpBackend.when("GET", "/versions").respond(200, { versions: ["r0.4.0"] });
             httpBackend.when("GET", "/api/v1").respond(200, {});
 
-            return awaitLoginComponent(matrixChat).then(() => {
+            return awaitLoginComponent(matrixChat).then(async () => {
+                await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading..."));
                 // we expect a single <Login> component
-                ReactTestUtils.findRenderedComponentWithType(
-                    matrixChat, LoginComponent);
+                await screen.findByRole("main");
+                screen.getAllByText("Sign in");
 
                 // the only outstanding request should be a GET /login
                 // (in particular there should be no /register request for
@@ -287,9 +277,7 @@ describe('loading:', function() {
                 }
                 return completeLogin(matrixChat);
             }).then(() => {
-                // once the sync completes, we should have a room view
-                ReactTestUtils.findRenderedComponentWithType(
-                    matrixChat, EmbeddedPage);
+                expect(matrixChat.container.querySelector(".mx_HomePage")).toBeTruthy();
                 expect(windowLocation.hash).toEqual("#/home");
             });
         });
@@ -297,8 +285,8 @@ describe('loading:', function() {
 
     describe("MatrixClient rehydrated from stored credentials:", function() {
         beforeEach(async function() {
-            localStorage.setItem("mx_hs_url", "http://localhost" );
-            localStorage.setItem("mx_is_url", "http://localhost" );
+            localStorage.setItem("mx_hs_url", "http://localhost");
+            localStorage.setItem("mx_is_url", "http://localhost");
             localStorage.setItem("mx_access_token", "access_token");
             localStorage.setItem("mx_user_id", "@me:localhost");
             localStorage.setItem("mx_last_room_id", "!last_room:id");
@@ -312,8 +300,6 @@ describe('loading:', function() {
         });
 
         it('shows the last known room by default', function() {
-            httpBackend.when('GET', '/pushrules').respond(200, {});
-
             loadApp();
 
             return awaitLoggedIn(matrixChat).then(() => {
@@ -331,8 +317,6 @@ describe('loading:', function() {
         it('shows a home page by default if we have no joined rooms', function() {
             localStorage.removeItem("mx_last_room_id");
 
-            httpBackend.when('GET', '/pushrules').respond(200, {});
-
             loadApp();
 
             return awaitLoggedIn(matrixChat).then(() => {
@@ -341,15 +325,12 @@ describe('loading:', function() {
             }).then(() => {
                 // once the sync completes, we should have a home page
                 httpBackend.verifyNoOutstandingExpectation();
-                ReactTestUtils.findRenderedComponentWithType(
-                    matrixChat, EmbeddedPage);
+                expect(matrixChat.container.querySelector(".mx_HomePage")).toBeTruthy();
                 expect(windowLocation.hash).toEqual("#/home");
             });
         });
 
         it('shows a room view if we followed a room link', function() {
-            httpBackend.when('GET', '/pushrules').respond(200, {});
-
             loadApp({
                 uriFragment: "#/room/!room:id",
             });
@@ -373,61 +354,26 @@ describe('loading:', function() {
                 });
 
                 // give the UI a chance to display
-                return awaitLoginComponent(matrixChat);
+                return expectAndAwaitSync();
             });
 
-            it('shows a login view', function() {
-                // Pass the liveliness checks
-                httpBackend.when("GET", "/versions").respond(200, {versions: ["r0.4.0"]});
-                httpBackend.when("GET", "/api/v1").respond(200, {});
+            it('does not show a login view', async function() {
+                await awaitRoomView(matrixChat);
 
-                // we expect a single <Login> component
-                ReactTestUtils.findRenderedComponentWithType(
-                    matrixChat, LoginComponent,
-                );
-
-                // the only outstanding request should be a GET /login
-                // (in particular there should be no /register request for
-                // guest registration, nor /sync, etc).
-                const allowedRequests = [
-                    "/_matrix/client/r0/login",
-                    "/versions",
-                    "/api/v1",
-                ];
-                for (const req of httpBackend.requests) {
-                    if (req.method === 'GET' && allowedRequests.find(p => req.path.endsWith(p))) {
-                        continue;
-                    }
-
-                    throw new Error(`Unexpected HTTP request to ${req}`);
-                }
-            });
-
-            it('shows the homepage after login', function() {
-                // Pass the liveliness checks
-                httpBackend.when("GET", "/versions").respond(200, {versions: ["r0.4.0"]});
-                httpBackend.when("GET", "/api/v1").respond(200, {});
-
-                return completeLogin(matrixChat).then(() => {
-                    // we should see a home page, even though we previously had
-                    // a stored mx_last_room_id
-                    ReactTestUtils.findRenderedComponentWithType(
-                        matrixChat, EmbeddedPage);
-                    expect(windowLocation.hash).toEqual("#/home");
-                });
+                await screen.findByLabelText("Spaces");
+                expect(screen.queryAllByText("Sign in")).toHaveLength(0);
             });
         });
     });
 
     describe('Guest auto-registration:', function() {
         it('shows a welcome page by default', function() {
-
             loadApp();
 
-            return sleep(1).then(() => {
+            return sleep(1).then(async () => {
                 // at this point, we're trying to do a guest registration;
                 // we expect a spinner
-                assertAtLoadingSpinner(matrixChat);
+                await assertAtLoadingSpinner();
 
                 httpBackend.when('POST', '/register').check(function(req) {
                     expect(req.queryParams.kind).toEqual('guest');
@@ -441,24 +387,22 @@ describe('loading:', function() {
                 return awaitLoggedIn(matrixChat);
             }).then(() => {
                 // we are logged in - let the sync complete
-                return expectAndAwaitSync({isGuest: true});
+                return expectAndAwaitSync({ isGuest: true });
             }).then(() => {
                 // once the sync completes, we should have a welcome page
                 httpBackend.verifyNoOutstandingExpectation();
-                ReactTestUtils.findRenderedComponentWithType(
-                    matrixChat, WelcomeComponent);
+                expect(matrixChat.container.querySelector(".mx_Welcome")).toBeTruthy();
                 expect(windowLocation.hash).toEqual("#/welcome");
             });
         });
 
         it('uses the default homeserver to register with', function() {
-
             loadApp();
 
-            return sleep(1).then(() => {
+            return sleep(1).then(async () => {
                 // at this point, we're trying to do a guest registration;
                 // we expect a spinner
-                assertAtLoadingSpinner(matrixChat);
+                await assertAtLoadingSpinner();
 
                 httpBackend.when('POST', '/register').check(function(req) {
                     expect(req.path.startsWith(DEFAULT_HS_URL)).toBe(true);
@@ -472,14 +416,13 @@ describe('loading:', function() {
             }).then(() => {
                 return awaitLoggedIn(matrixChat);
             }).then(() => {
-                return expectAndAwaitSync({isGuest: true});
+                return expectAndAwaitSync({ isGuest: true });
             }).then((req) => {
                 expect(req.path.startsWith(DEFAULT_HS_URL)).toBe(true);
 
                 // once the sync completes, we should have a welcome page
                 httpBackend.verifyNoOutstandingExpectation();
-                ReactTestUtils.findRenderedComponentWithType(
-                    matrixChat, WelcomeComponent);
+                expect(matrixChat.container.querySelector(".mx_Welcome")).toBeTruthy();
                 expect(windowLocation.hash).toEqual("#/welcome");
                 expect(MatrixClientPeg.get().baseUrl).toEqual(DEFAULT_HS_URL);
                 expect(MatrixClientPeg.get().idBaseUrl).toEqual(DEFAULT_IS_URL);
@@ -487,14 +430,13 @@ describe('loading:', function() {
         });
 
         it('shows a room view if we followed a room link', function() {
-
             loadApp({
                 uriFragment: "#/room/!room:id",
             });
-            return sleep(1).then(() => {
+            return sleep(1).then(async () => {
                 // at this point, we're trying to do a guest registration;
                 // we expect a spinner
-                assertAtLoadingSpinner(matrixChat);
+                await assertAtLoadingSpinner();
 
                 httpBackend.when('POST', '/register').check(function(req) {
                     expect(req.queryParams.kind).toEqual('guest');
@@ -507,7 +449,7 @@ describe('loading:', function() {
             }).then(() => {
                 return awaitLoggedIn(matrixChat);
             }).then(() => {
-                return expectAndAwaitSync({isGuest: true});
+                return expectAndAwaitSync({ isGuest: true });
             }).then(() => {
                 // once the sync completes, we should have a room view
                 return awaitRoomView(matrixChat);
@@ -519,7 +461,6 @@ describe('loading:', function() {
 
         describe('Login as user', function() {
             beforeEach(function() {
-
                 // first we have to load the homepage
                 loadApp();
 
@@ -535,10 +476,9 @@ describe('loading:', function() {
                 }).then(() => {
                     // we got a sync spinner - let the sync complete
                     return expectAndAwaitSync();
-                }).then(() => {
+                }).then(async () => {
                     // once the sync completes, we should have a home page
-                    ReactTestUtils.findRenderedComponentWithType(
-                        matrixChat, EmbeddedPage);
+                    await waitFor(() => matrixChat.container.querySelector(".mx_HomePage"));
 
                     // we simulate a click on the 'login' button by firing off
                     // the relevant dispatch.
@@ -555,40 +495,13 @@ describe('loading:', function() {
                 });
             });
 
-            it('should give us a login page', function() {
-                expect(windowLocation.hash).toEqual("#/login");
-
+            it('should give us a login page', async function() {
                 // we expect a single <Login> component
-                ReactTestUtils.findRenderedComponentWithType(
-                    matrixChat, LoginComponent,
-                );
+                await screen.findByRole("main");
+                screen.getAllByText("Sign in");
+
+                expect(windowLocation.hash).toEqual("#/login");
             });
-
-            /*
-            // ILAG renders this obsolete. I think.
-            it('should allow us to return to the app', function() {
-                const login = ReactTestUtils.findRenderedComponentWithType(
-                    matrixChat, LoginComponent
-                );
-
-                const linkText = 'Return to app';
-
-                const returnToApp = ReactTestUtils.scryRenderedDOMComponentsWithTag(
-                    login, 'a').find((e) => e.innerText === linkText);
-
-                if (!returnToApp) {
-                    throw new Error(`Couldn't find '${linkText}' link`);
-                }
-
-                ReactTestUtils.Simulate.click(returnToApp);
-
-                return sleep(1).then(() => {
-                    // we should be straight back into the home page
-                    ReactTestUtils.findRenderedComponentWithType(
-                        matrixChat, EmbeddedPage);
-                });
-            });
-            */
         });
     });
 
@@ -600,9 +513,9 @@ describe('loading:', function() {
                 queryString: "?loginToken=secretToken",
             });
 
-            return sleep(1).then(() => {
+            return sleep(1).then(async () => {
                 // we expect a spinner while we're logging in
-                assertAtLoadingSpinner(matrixChat);
+                await assertAtLoadingSpinner();
 
                 httpBackend.when('POST', '/login').check(function(req) {
                     expect(req.path).toMatch(new RegExp("^https://homeserver/"));
@@ -635,15 +548,11 @@ describe('loading:', function() {
 
     // check that we have a Login component, send a 'user:pass' login,
     // and await the HTTP requests.
-    async function completeLogin(matrixChat) {
-        // we expect a single <Login> component
-        const login = ReactTestUtils.findRenderedComponentWithType(
-            matrixChat, LoginComponent);
-
+    async function completeLogin(matrixChat: RenderResult) {
         // When we switch to the login component, it'll hit the login endpoint
         // for proof of life and to get flows. We'll only give it one option.
         httpBackend.when('GET', '/login')
-            .respond(200, {"flows": [{"type": "m.login.password"}]});
+            .respond(200, { flows: [{ type: "m.login.password" }] });
         httpBackend.flush(); // We already would have tried the GET /login request
 
         // Give the component some time to finish processing the login flows before
@@ -660,13 +569,14 @@ describe('loading:', function() {
             device_id: 'DEVICE_ID',
             access_token: 'access_token',
         });
-        login.onPasswordLogin("user", undefined, undefined, "pass");
+        fireEvent.change(matrixChat.container.querySelector("#mx_LoginForm_username"), { target: { value: "user" } });
+        fireEvent.change(matrixChat.container.querySelector("#mx_LoginForm_password"), { target: { value: "pass" } });
+        fireEvent.click(screen.getByText("Sign in", { selector: ".mx_Login_submit" }));
 
         return httpBackend.flush().then(() => {
             // Wait for another trip around the event loop for the UI to update
             return sleep(1);
         }).then(() => {
-            httpBackend.when('GET', '/pushrules').respond(200, {});
             return expectAndAwaitSync().catch((e) => {
                 throw new Error("Never got /sync after login: did the client start?");
             });
@@ -677,18 +587,13 @@ describe('loading:', function() {
 });
 
 // assert that we are on the loading page
-function assertAtLoadingSpinner(matrixChat) {
-    const domComponent = ReactDOM.findDOMNode(matrixChat) as Element;
-    expect(domComponent.className).toEqual("mx_MatrixChat_splash");
-
-    // just the spinner
-    expect(domComponent.children.length).toEqual(1);
+async function assertAtLoadingSpinner() {
+    await screen.findByRole("progressbar");
 }
 
-function awaitLoggedIn(matrixChat) {
-    if (matrixChat.state.view === Views.LOGGED_IN) {
-        return Promise.resolve();
-    }
+async function awaitLoggedIn(matrixChat: RenderResult) {
+    if (matrixChat.container.querySelector(".mx_MatrixChat_wrapper")) return; // already logged in
+
     return new Promise(resolve => {
         const onAction = ({ action }) => {
             if (action !== "on_logged_in") {
@@ -696,55 +601,26 @@ function awaitLoggedIn(matrixChat) {
             }
             console.log(Date.now() + ": Received on_logged_in action");
             dis.unregister(dispatcherRef);
-            resolve(undefined);
+            resolve(sleep(1));
         };
         const dispatcherRef = dis.register(onAction);
         console.log(Date.now() + ": Waiting for on_logged_in action");
     });
 }
 
-function awaitRoomView(matrixChat, retryLimit?, retryCount?) {
-    if (retryLimit === undefined) {
-        retryLimit = 5;
-    }
-    if (retryCount === undefined) {
-        retryCount = 0;
-    }
-
-    if (matrixChat.state.view !== Views.LOGGED_IN || !matrixChat.state.ready) {
-        console.log(Date.now() + " Awaiting room view: not ready yet.");
-        if (retryCount >= retryLimit) {
-            throw new Error("MatrixChat still not ready after " +
-                            retryCount + " tries");
-        }
-        return sleep(0).then(() => {
-            return awaitRoomView(matrixChat, retryLimit, retryCount + 1);
-        });
-    }
-
-    console.log(Date.now() + " Awaiting room view: now ready.");
-
-    // state looks good, check the rendered output
-    ReactTestUtils.findRenderedComponentWithType(
-        matrixChat, RoomViewClass);
-    return Promise.resolve();
+async function awaitRoomView(matrixChat: RenderResult) {
+    await waitFor(() => matrixChat.container.querySelector(".mx_RoomView"));
 }
 
-function awaitLoginComponent(matrixChat, attempts?) {
-    return MatrixReactTestUtils.waitForRenderedComponentWithType(
-        matrixChat, LoginComponent, attempts,
-    );
+async function awaitLoginComponent(matrixChat: RenderResult) {
+    await waitFor(() => matrixChat.container.querySelector(".mx_AuthPage"));
 }
 
-function awaitWelcomeComponent(matrixChat, attempts?) {
-    return MatrixReactTestUtils.waitForRenderedComponentWithType(
-        matrixChat, WelcomeComponent, attempts,
-    );
+async function awaitWelcomeComponent(matrixChat: RenderResult) {
+    await waitFor(() => matrixChat.container.querySelector(".mx_Welcome"));
 }
 
-function moveFromWelcomeToLogin(matrixChat) {
-    ReactTestUtils.findRenderedComponentWithType(
-        matrixChat, WelcomeComponent);
+function moveFromWelcomeToLogin(matrixChat: RenderResult) {
     dis.dispatch({ action: 'start_login' });
     return awaitLoginComponent(matrixChat);
 }

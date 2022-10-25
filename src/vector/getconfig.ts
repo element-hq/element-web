@@ -14,8 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import request from 'browser-request';
-
 import type { IConfigOptions } from "matrix-react-sdk/src/IConfigOptions";
 
 // Load the config file. First try to load up a domain-specific config of the
@@ -32,44 +30,28 @@ export async function getVectorConfig(relativeLocation=''): Promise<IConfigOptio
         if (Object.keys(configJson).length === 0) {
             throw new Error(); // throw to enter the catch
         }
-        return configJson as IConfigOptions;
+        return configJson;
     } catch (e) {
-        return await generalConfigPromise as IConfigOptions;
+        return generalConfigPromise;
     }
 }
 
-function getConfig(configJsonFilename: string): Promise<{}> {
-    return new Promise(function(resolve, reject) {
-        request(
-            { method: "GET", url: configJsonFilename, qs: { cachebuster: Date.now() } },
-            (err, response, body) => {
-                try {
-                    if (err || response.status < 200 || response.status >= 300) {
-                        // Lack of a config isn't an error, we should
-                        // just use the defaults.
-                        // Also treat a blank config as no config, assuming
-                        // the status code is 0, because we don't get 404s
-                        // from file: URIs so this is the only way we can
-                        // not fail if the file doesn't exist when loading
-                        // from a file:// URI.
-                        if (response) {
-                            if (response.status == 404 || (response.status == 0 && body == '')) {
-                                resolve({});
-                            }
-                        }
-                        reject({ err: err, response: response });
-                        return;
-                    }
-
-                    // We parse the JSON ourselves rather than use the JSON
-                    // parameter, since this throws a parse error on empty
-                    // which breaks if there's no config.json and we're
-                    // loading from the filesystem (see above).
-                    resolve(JSON.parse(body));
-                } catch (e) {
-                    reject({ err: e });
-                }
-            },
-        );
+async function getConfig(configJsonFilename: string): Promise<IConfigOptions> {
+    const url = new URL(configJsonFilename, window.location.href);
+    url.searchParams.set("cachebuster", Date.now().toString());
+    const res = await fetch(url, {
+        cache: "no-cache",
+        method: "GET",
     });
+
+    if (res.status === 404 || res.status === 0) {
+        // Lack of a config isn't an error, we should just use the defaults.
+        // Also treat a blank config as no config, assuming the status code is 0, because we don't get 404s from file:
+        // URIs so this is the only way we can not fail if the file doesn't exist when loading from a file:// URI.
+        return {} as IConfigOptions;
+    }
+
+    if (res.ok) {
+        return res.json();
+    }
 }

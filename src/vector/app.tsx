@@ -18,8 +18,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// To ensure we load the browser-request version
-import "matrix-js-sdk"; // eslint-disable-line no-restricted-imports
+// To ensure we load the browser-matrix version first
+import "matrix-js-sdk/src/browser-index";
 
 import React from 'react';
 import PlatformPeg from 'matrix-react-sdk/src/PlatformPeg';

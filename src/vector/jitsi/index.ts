@@ -65,7 +65,7 @@ const setupCompleted = (async () => {
     try {
         // Queue a config.json lookup asap, so we can use it later on. We want this to be concurrent with
         // other setup work and therefore do not block.
-        const configPromise = getVectorConfig('..');
+        const configPromise = getVectorConfig();
 
         // The widget's options are encoded into the fragment to avoid leaking info to the server.
         const widgetQuery = new URLSearchParams(window.location.hash.substring(1));

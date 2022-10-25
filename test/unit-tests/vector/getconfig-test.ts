@@ -14,23 +14,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import request from 'browser-request';
+import fetchMock from "fetch-mock-jest";
 
 import { getVectorConfig } from "../../../src/vector/getconfig";
 
-describe('getVectorConfig()', () => {
-    const setRequestMockImplementationOnce = (err?: unknown, response?: { status: number }, body?: string) =>
-            request.mockImplementationOnce((_opts, callback) => callback(err, response, body));
+fetchMock.config.overwriteRoutes = true;
 
+describe('getVectorConfig()', () => {
     const prevDocumentDomain = document.domain;
     const elementDomain = 'app.element.io';
     const now = 1234567890;
     const specificConfig = {
         brand: 'specific',
-    }
+    };
     const generalConfig = {
         brand: 'general',
-    }
+    };
 
     beforeEach(() => {
         document.domain = elementDomain;
@@ -38,6 +37,7 @@ describe('getVectorConfig()', () => {
         // stable value for cachebuster
         jest.spyOn(Date, 'now').mockReturnValue(now);
         jest.clearAllMocks();
+        fetchMock.mockClear();
     });
 
     afterAll(() => {
@@ -46,85 +46,67 @@ describe('getVectorConfig()', () => {
     });
 
     it('requests specific config for document domain', async () => {
-        setRequestMockImplementationOnce(undefined, { status: 200 }, JSON.stringify(specificConfig))
-        setRequestMockImplementationOnce(undefined, { status: 200 }, JSON.stringify(generalConfig))
+        fetchMock.getOnce("express:/config.app.element.io.json", specificConfig);
+        fetchMock.getOnce("express:/config.json", generalConfig);
 
-        await getVectorConfig();
-
-        expect(request.mock.calls[0][0]).toEqual({ method: "GET", url: 'config.app.element.io.json', qs: { cachebuster: now } })
+        await expect(getVectorConfig()).resolves.toEqual(specificConfig);
     });
 
     it('adds trailing slash to relativeLocation when not an empty string', async () => {
-        setRequestMockImplementationOnce(undefined, { status: 200 }, JSON.stringify(specificConfig))
-        setRequestMockImplementationOnce(undefined, { status: 200 }, JSON.stringify(generalConfig))
+        fetchMock.getOnce("express:../config.app.element.io.json", specificConfig);
+        fetchMock.getOnce("express:../config.json", generalConfig);
 
-        await getVectorConfig('..');
-
-        expect(request.mock.calls[0][0]).toEqual(expect.objectContaining({ url: '../config.app.element.io.json' }))
-        expect(request.mock.calls[1][0]).toEqual(expect.objectContaining({ url: '../config.json' }))
-    });
-
-    it('returns parsed specific config when it is non-empty', async () => {
-        setRequestMockImplementationOnce(undefined, { status: 200 }, JSON.stringify(specificConfig))
-        setRequestMockImplementationOnce(undefined, { status: 200 }, JSON.stringify(generalConfig))
-
-        const result = await getVectorConfig();
-        expect(result).toEqual(specificConfig);
+        await expect(getVectorConfig("..")).resolves.toEqual(specificConfig);
     });
 
     it('returns general config when specific config succeeds but is empty', async () => {
-        setRequestMockImplementationOnce(undefined, { status: 200 }, JSON.stringify({}))
-        setRequestMockImplementationOnce(undefined, { status: 200 }, JSON.stringify(generalConfig))
+        fetchMock.getOnce("express:/config.app.element.io.json", {});
+        fetchMock.getOnce("express:/config.json", generalConfig);
 
-        const result = await getVectorConfig();
-        expect(result).toEqual(generalConfig);
+        await expect(getVectorConfig()).resolves.toEqual(generalConfig);
     });
 
     it('returns general config when specific config 404s', async () => {
-        setRequestMockImplementationOnce(undefined, { status: 404 })
-        setRequestMockImplementationOnce(undefined, { status: 200 }, JSON.stringify(generalConfig))
+        fetchMock.getOnce("express:/config.app.element.io.json", { status: 404 });
+        fetchMock.getOnce("express:/config.json", generalConfig);
 
-        const result = await getVectorConfig();
-        expect(result).toEqual(generalConfig);
+        await expect(getVectorConfig()).resolves.toEqual(generalConfig);
     });
 
     it('returns general config when specific config is fetched from a file and is empty', async () => {
-        setRequestMockImplementationOnce(undefined, { status: 0 }, '')
-        setRequestMockImplementationOnce(undefined, { status: 200 }, JSON.stringify(generalConfig))
+        fetchMock.getOnce("express:/config.app.element.io.json", 0);
+        fetchMock.getOnce("express:/config.json", generalConfig);
 
-        const result = await getVectorConfig();
-        expect(result).toEqual(generalConfig);
+        await expect(getVectorConfig()).resolves.toEqual(generalConfig);
     });
 
     it('returns general config when specific config returns a non-200 status', async () => {
-        setRequestMockImplementationOnce(undefined, { status: 401 })
-        setRequestMockImplementationOnce(undefined, { status: 200 }, JSON.stringify(generalConfig))
+        fetchMock.getOnce("express:/config.app.element.io.json", { status: 401 });
+        fetchMock.getOnce("express:/config.json", generalConfig);
 
-        const result = await getVectorConfig();
-        expect(result).toEqual(generalConfig);
+        await expect(getVectorConfig()).resolves.toEqual(generalConfig);
     });
 
     it('returns general config when specific config returns an error', async () => {
-        setRequestMockImplementationOnce('err1')
-        setRequestMockImplementationOnce(undefined, { status: 200 }, JSON.stringify(generalConfig))
+        fetchMock.getOnce("express:/config.app.element.io.json", { throws: "err1" });
+        fetchMock.getOnce("express:/config.json", generalConfig);
 
-        const result = await getVectorConfig();
-        expect(result).toEqual(generalConfig);
+        await expect(getVectorConfig()).resolves.toEqual(generalConfig);
     });
 
     it('rejects with an error when general config rejects', async () => {
-        setRequestMockImplementationOnce('err-specific');
-        setRequestMockImplementationOnce('err-general');
+        fetchMock.getOnce("express:/config.app.element.io.json", { throws: "err-specific" });
+        fetchMock.getOnce("express:/config.json", { throws: "err-general" });
 
-        await expect(() => getVectorConfig()).rejects.toEqual({"err": "err-general", "response": undefined});
+        await expect(getVectorConfig()).rejects.toBe("err-general");
     });
 
     it('rejects with an error when config is invalid JSON', async () => {
-        setRequestMockImplementationOnce('err-specific');
-        setRequestMockImplementationOnce(undefined, { status: 200 }, '{"invalid": "json",}');
+        fetchMock.getOnce("express:/config.app.element.io.json", { throws: "err-specific" });
+        fetchMock.getOnce("express:/config.json", '{"invalid": "json",}');
 
-        await expect(() => getVectorConfig()).rejects.toEqual({
-            err: new SyntaxError("Unexpected token } in JSON at position 19"),
-        });
+        // We can't assert it'll be a SyntaxError as node-fetch behaves differently
+        // https://github.com/wheresrhys/fetch-mock/issues/270
+        await expect(getVectorConfig()).rejects.toThrow("Unexpected token } in JSON at position 19");
     });
 });
