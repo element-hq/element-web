@@ -41,8 +41,6 @@ jobs:
           files=$(ls webapp/bundles/)
           echo "::set-output name=bundlehash::${files[0]}"
 
-      # We keep the latest develop.tar.gz as the artifact uploaded later expires after 24 and requires auth to download
-      # Element Desktop's fetch script uses this tarball to fetch latest develop to build Nightlies.
       # TODO: remove this once the element-desktop fetch script is updated to grab develop.element.io/develop.tar.gz
 #      - name: Deploy develop.tar.gz to Github Pages
 #        uses: JamesIves/github-pages-deploy-action@v4
@@ -50,20 +48,20 @@ jobs:
 #          folder: dist
 #          single-commit: true
 
-#      - uses: actions/upload-artifact@v3
-#        with:
-#          name: webapp
-#          path: dist/develop.tar.gz
-#          retention-days: 1
+      - uses: actions/upload-artifact@v3
+        with:
+          name: webapp
+          path: dist/develop.tar.gz
+          retention-days: 1
 
-#      - name: Wait for other steps to succeed
-#        uses: lewagon/wait-on-check-action@v1.1.2
-#        with:
-#          ref: ${{ github.ref }}
-#          running-workflow-name: 'Build & Deploy'
-#          repo-token: ${{ secrets.GITHUB_TOKEN }}
-#          wait-interval: 10
-#          check-regexp: ^((?!SonarQube|issues|board).)*$
+      - name: Wait for other steps to succeed
+        uses: lewagon/wait-on-check-action@v1.1.2
+        with:
+          ref: ${{ github.ref }}
+          running-workflow-name: 'Build & Deploy'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          wait-interval: 10
+          check-regexp: ^((?!SonarQube|issues|board).)*$
 
       - name: Prepare deployment
         run: |
@@ -84,6 +82,8 @@ jobs:
           R2_URL: ${{ secrets.CF_R2_S3_API }}
           R2_PUBLIC_URL: 'https://pub-842f08e362de4d678ba672fb09bfdfd6.r2.dev'
 
+      # We keep the latest develop.tar.gz as the artifact uploaded later expires after 24 and requires auth to download
+      # Element Desktop's fetch script uses this tarball to fetch latest develop to build Nightlies.
       - name: Deploy to R2
         run: |
           aws s3 cp dist/develop.tar.gz s3://$R2_BUCKET/develop.tar.gz --endpoint-url $R2_URL --region=auto
@@ -103,4 +103,5 @@ jobs:
           projectName: element-web-develop
           directory: webapp
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          branch: develop
     
