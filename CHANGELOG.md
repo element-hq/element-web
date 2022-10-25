@@ -1,11 +1,5 @@
-Changes in [3.59.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.59.0-rc.2) (2022-10-24)
-===============================================================================================================
-
-## 🐛 Bug Fixes
- * Send Content-Type: application/json header for integration manager /register API ([\#9490](https://github.com/matrix-org/matrix-react-sdk/pull/9490)). Fixes vector-im/element-web#23580.
-
-Changes in [3.59.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.59.0-rc.1) (2022-10-18)
-===============================================================================================================
+Changes in [3.59.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.59.0) (2022-10-25)
+=====================================================================================================
 
 ## ✨ Features
  * Include a file-safe room name and ISO date in chat exports ([\#9440](https://github.com/matrix-org/matrix-react-sdk/pull/9440)). Fixes vector-im/element-web#21812 and vector-im/element-web#19724.
@@ -34,6 +28,7 @@ Changes in [3.59.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases
  * Device manager - display client information in device details ([\#9315](https://github.com/matrix-org/matrix-react-sdk/pull/9315)).
 
 ## 🐛 Bug Fixes
+ * Send Content-Type: application/json header for integration manager /register API ([\#9490](https://github.com/matrix-org/matrix-react-sdk/pull/9490)). Fixes vector-im/element-web#23580.
  * Device manager - put client/browser device metadata in correct section ([\#9447](https://github.com/matrix-org/matrix-react-sdk/pull/9447)).
  * update the room unread notification counter when the server changes the value without any related read receipt ([\#9438](https://github.com/matrix-org/matrix-react-sdk/pull/9438)).
  * Don't show call banners in video rooms ([\#9441](https://github.com/matrix-org/matrix-react-sdk/pull/9441)).
