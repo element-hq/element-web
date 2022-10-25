@@ -114,6 +114,12 @@ export class StopGapWidgetDriver extends WidgetDriver {
             this.allowedCapabilities.add(`org.matrix.msc2762.timeline:${inRoomId}`);
 
             this.allowedCapabilities.add(
+                WidgetEventCapability.forRoomEvent(EventDirection.Send, "org.matrix.rageshake_request").raw,
+            );
+            this.allowedCapabilities.add(
+                WidgetEventCapability.forRoomEvent(EventDirection.Receive, "org.matrix.rageshake_request").raw,
+            );
+            this.allowedCapabilities.add(
                 WidgetEventCapability.forStateEvent(EventDirection.Receive, EventType.RoomMember).raw,
             );
             this.allowedCapabilities.add(

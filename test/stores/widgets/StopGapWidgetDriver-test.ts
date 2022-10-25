@@ -66,6 +66,8 @@ describe("StopGapWidgetDriver", () => {
             "m.always_on_screen",
             "town.robin.msc3846.turn_servers",
             "org.matrix.msc2762.timeline:!1:example.org",
+            "org.matrix.msc2762.send.event:org.matrix.rageshake_request",
+            "org.matrix.msc2762.receive.event:org.matrix.rageshake_request",
             "org.matrix.msc2762.receive.state_event:m.room.member",
             "org.matrix.msc2762.send.state_event:org.matrix.msc3401.call",
             "org.matrix.msc2762.receive.state_event:org.matrix.msc3401.call",

@@ -190,6 +190,9 @@ export default class ScalarAuthClient {
         const res = await fetch(scalarRestUrl, {
             method: "POST",
             body: JSON.stringify(openidTokenObject),
+            headers: {
+                "Content-Type": "application/json",
+            },
         });
 
         if (!res.ok) {
