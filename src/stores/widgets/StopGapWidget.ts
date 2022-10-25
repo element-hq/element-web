@@ -18,6 +18,7 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import {
     ClientWidgetApi,
     IModalWidgetOpenRequest,
+    IRoomEvent,
     IStickerActionRequest,
     IStickyActionRequest,
     ITemplateParams,
@@ -465,7 +466,7 @@ export class StopGapWidget extends EventEmitter {
     private onToDeviceEvent = async (ev: MatrixEvent) => {
         await this.client.decryptEventIfNeeded(ev);
         if (ev.isDecryptionFailure()) return;
-        await this.messaging.feedToDevice(ev.getEffectiveEvent(), ev.isEncrypted());
+        await this.messaging.feedToDevice(ev.getEffectiveEvent() as IRoomEvent, ev.isEncrypted());
     };
 
     private feedEvent(ev: MatrixEvent) {
@@ -509,7 +510,7 @@ export class StopGapWidget extends EventEmitter {
         this.readUpToMap[ev.getRoomId()] = ev.getId();
 
         const raw = ev.getEffectiveEvent();
-        this.messaging.feedEvent(raw, this.eventListenerRoomId).catch(e => {
+        this.messaging.feedEvent(raw as IRoomEvent, this.eventListenerRoomId).catch(e => {
             logger.error("Error sending event to widget: ", e);
         });
     }

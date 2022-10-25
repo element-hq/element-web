@@ -28,7 +28,7 @@ import { isSelfLocation } from "../../../src/utils/location";
 
 describe("isSelfLocation", () => {
     it("Returns true for a full m.asset event", () => {
-        const content = makeLocationContent("", '0');
+        const content = makeLocationContent("", '0', Date.now());
         expect(isSelfLocation(content)).toBe(true);
     });
 
