@@ -14,11 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { MutableRefObject, ReactNode } from 'react';
+import React, { MutableRefObject, ReactNode, useEffect } from 'react';
+
 import { useComposerFunctions } from '../hooks/useComposerFunctions';
 import { usePlainTextListeners } from '../hooks/usePlainTextListeners';
 import { ComposerFunctions } from '../types';
-
 import { Editor } from "./Editor";
 
 interface PlainTextComposerProps {
@@ -33,12 +33,20 @@ interface PlainTextComposerProps {
     ) => ReactNode;
 }
 
-export function PlainTextComposer({ className, disabled, onSend, onChange, children }: PlainTextComposerProps) {
-   const {ref, onInput, onPaste, onKeyDown} = usePlainTextListeners(onChange, onSend)
-   const composerFunctions = useComposerFunctions(ref)
+export function PlainTextComposer({
+    className, disabled, onSend, onChange, children, initialContent }: PlainTextComposerProps,
+) {
+    const { ref, onInput, onPaste, onKeyDown } = usePlainTextListeners(onChange, onSend);
+    const composerFunctions = useComposerFunctions(ref);
+
+    useEffect(() => {
+        if (ref.current) {
+            ref.current.innerText = initialContent;
+        }
+    }, [ref, initialContent]);
 
     return <div className={className} onInput={onInput} onPaste={onPaste} onKeyDown={onKeyDown}>
         <Editor ref={ref} disabled={disabled} />
-        {children?.(ref, composerFunctions)}
+        { children?.(ref, composerFunctions) }
     </div>;
 }

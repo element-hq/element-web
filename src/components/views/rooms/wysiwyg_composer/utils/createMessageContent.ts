@@ -20,6 +20,7 @@ import { htmlSerializeFromMdIfNeeded } from "../../../../../editor/serialize";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import { RoomPermalinkCreator } from "../../../../../utils/permalinks/Permalinks";
 import { addReplyToMessageContent } from "../../../../../utils/Reply";
+import { htmlToPlainText } from "../../../../../utils/room/htmlToPlaintext";
 
 // Merges favouring the given relation
 function attachRelation(content: IContent, relation?: IEventRelation): void {
@@ -48,10 +49,6 @@ function getTextReplyFallback(mxEvent: MatrixEvent): string {
         return `${lines[0]}\n\n`;
     }
     return "";
-}
-
-function htmlToPlainText(html: string) {
-    return new DOMParser().parseFromString(html, 'text/html').documentElement.textContent;
 }
 
 interface CreateMessageContentParams {

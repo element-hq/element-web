@@ -60,6 +60,7 @@ import {
 } from '../../../voice-broadcast';
 import { SendWysiwygComposer, sendMessage } from './wysiwyg_composer/';
 import { MatrixClientProps, withMatrixClientHOC } from '../../../contexts/MatrixClientContext';
+import { htmlToPlainText } from '../../../utils/room/htmlToPlaintext';
 
 let instanceCount = 0;
 
@@ -102,6 +103,7 @@ interface IState {
     showVoiceBroadcastButton: boolean;
     isWysiwygLabEnabled: boolean;
     isRichTextEnabled: boolean;
+    initialComposerContent: string;
 }
 
 export class MessageComposer extends React.Component<IProps, IState> {
@@ -138,6 +140,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
             showVoiceBroadcastButton: SettingsStore.getValue(Features.VoiceBroadcast),
             isWysiwygLabEnabled: SettingsStore.getValue<boolean>("feature_wysiwyg_composer"),
             isRichTextEnabled: true,
+            initialComposerContent: '',
         };
 
         this.instanceId = instanceCount++;
@@ -355,6 +358,10 @@ export class MessageComposer extends React.Component<IProps, IState> {
     private onRichTextToggle = () => {
         this.setState(state => ({
             isRichTextEnabled: !state.isRichTextEnabled,
+            initialComposerContent: !state.isRichTextEnabled ?
+                state.composerContent :
+                // TODO when available use rust model plain text
+                htmlToPlainText(state.composerContent),
         }));
     };
 
@@ -434,6 +441,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
                         onChange={this.onWysiwygChange}
                         onSend={this.sendMessage}
                         isRichTextEnabled={this.state.isRichTextEnabled}
+                        initialContent={this.state.initialComposerContent}
                     />,
                 );
             } else {
