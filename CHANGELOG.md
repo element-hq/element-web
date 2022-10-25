@@ -1,11 +1,5 @@
-Changes in [1.11.11-rc.2](https://github.com/vector-im/element-web/releases/tag/v1.11.11-rc.2) (2022-10-24)
-===========================================================================================================
-
-## 🐛 Bug Fixes
- * Send Content-Type: application/json header for integration manager /register API ([\#9490](https://github.com/matrix-org/matrix-react-sdk/pull/9490)). Fixes #23580.
-
-Changes in [1.11.11-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.11.11-rc.1) (2022-10-18)
-===========================================================================================================
+Changes in [1.11.11](https://github.com/vector-im/element-web/releases/tag/v1.11.11) (2022-10-25)
+=================================================================================================
 
 ## ✨ Features
  * Device manager - tweak string formatting of default device name ([\#23457](https://github.com/vector-im/element-web/pull/23457)).
@@ -37,6 +31,7 @@ Changes in [1.11.11-rc.1](https://github.com/vector-im/element-web/releases/tag/
  * Device manager - display client information in device details ([\#9315](https://github.com/matrix-org/matrix-react-sdk/pull/9315)).
 
 ## 🐛 Bug Fixes
+ * Send Content-Type: application/json header for integration manager /register API ([\#9490](https://github.com/matrix-org/matrix-react-sdk/pull/9490)). Fixes #23580.
  * Make ErrorView & CompatibilityView scrollable ([\#23468](https://github.com/vector-im/element-web/pull/23468)). Fixes #23376.
  * Device manager - put client/browser device metadata in correct section ([\#9447](https://github.com/matrix-org/matrix-react-sdk/pull/9447)).
  * update the room unread notification counter when the server changes the value without any related read receipt ([\#9438](https://github.com/matrix-org/matrix-react-sdk/pull/9438)).
