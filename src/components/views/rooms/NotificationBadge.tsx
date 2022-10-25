@@ -111,7 +111,12 @@ export default class NotificationBadge extends React.PureComponent<XOR<IProps, I
 
     public render(): React.ReactElement {
         /* eslint @typescript-eslint/no-unused-vars: ["error", { "ignoreRestSiblings": true }] */
-        const { notification, showUnsentTooltip, onClick } = this.props;
+        const { notification, showUnsentTooltip, forceCount, onClick } = this.props;
+
+        if (notification.isIdle) return null;
+        if (forceCount) {
+            if (!notification.hasUnreadCount) return null; // Can't render a badge
+        }
 
         let label: string;
         let tooltip: JSX.Element;
