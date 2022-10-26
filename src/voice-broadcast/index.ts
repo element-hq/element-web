@@ -37,7 +37,6 @@ export * from "./stores/VoiceBroadcastRecordingsStore";
 export * from "./utils/getChunkLength";
 export * from "./utils/hasRoomLiveVoiceBroadcast";
 export * from "./utils/findRoomLiveVoiceBroadcastFromUserAndDevice";
-export * from "./utils/resumeVoiceBroadcastInRoom";
 export * from "./utils/shouldDisplayAsVoiceBroadcastRecordingTile";
 export * from "./utils/shouldDisplayAsVoiceBroadcastTile";
 export * from "./utils/startNewVoiceBroadcastRecording";
