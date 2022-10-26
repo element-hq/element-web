@@ -40,7 +40,7 @@ const testCases = [
     [
         "@user1:example.com",
         "@user1:example.com",
-        VoiceBroadcastInfoState.Running,
+        VoiceBroadcastInfoState.Resumed,
         true,
     ],
     [

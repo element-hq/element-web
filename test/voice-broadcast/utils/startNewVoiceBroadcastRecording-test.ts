@@ -161,7 +161,7 @@ describe("startNewVoiceBroadcastRecording", () => {
                 room.currentState.setStateEvents([
                     mkVoiceBroadcastInfoStateEvent(
                         roomId,
-                        VoiceBroadcastInfoState.Running,
+                        VoiceBroadcastInfoState.Resumed,
                         client.getUserId(),
                         client.getDeviceId(),
                     ),
@@ -184,7 +184,7 @@ describe("startNewVoiceBroadcastRecording", () => {
                 room.currentState.setStateEvents([
                     mkVoiceBroadcastInfoStateEvent(
                         roomId,
-                        VoiceBroadcastInfoState.Running,
+                        VoiceBroadcastInfoState.Resumed,
                         otherUserId,
                         "ASD123",
                     ),

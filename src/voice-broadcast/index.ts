@@ -49,7 +49,7 @@ export const VoiceBroadcastChunkEventType = "io.element.voice_broadcast_chunk";
 export enum VoiceBroadcastInfoState {
     Started = "started",
     Paused = "paused",
-    Running = "running",
+    Resumed = "resumed",
     Stopped = "stopped",
 }
 
