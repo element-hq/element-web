@@ -3146,6 +3146,11 @@ brorand@^1.0.1, brorand@^1.1.0:
   resolved "https://registry.yarnpkg.com/brorand/-/brorand-1.1.0.tgz#12c25efe40a45e3c323eb8675a0a0ce57b22371f"
   integrity sha512-cKV8tMCEpQs4hK/ik71d6LrPOnpkpGBR0wzxqr68g2m/LB2GxVYQroAjMJZRVM1Y4BCjCKc3vAamxSzOY2RP+w==
 
+browser-request@^0.3.3:
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/browser-request/-/browser-request-0.3.3.tgz#9ece5b5aca89a29932242e18bf933def9876cc17"
+  integrity sha512-YyNI4qJJ+piQG6MMEuo7J3Bzaqssufx04zpEKYfSrl/1Op59HWali9zMtBpXnkmqMcOuWJPZvudrm9wISmnCbg==
+
 browserify-aes@^1.0.0, browserify-aes@^1.0.4:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/browserify-aes/-/browserify-aes-1.2.0.tgz#326734642f403dabc3003209853bb70ad428ef48"
@@ -8173,11 +8178,10 @@ matrix-events-sdk@^0.0.1-beta.7:
 
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
   version "21.0.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/4b3e6939d6dbfb72c9637d18d6346796bc6f997f"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/dddc0aeccb32c8efc1cbb7e7bd033c6bd251e375"
   dependencies:
     "@babel/runtime" "^7.12.5"
     another-json "^0.2.0"
-    browser-request "^0.3.3"
     bs58 "^5.0.0"
     content-type "^1.0.4"
     loglevel "^1.7.1"
@@ -8207,7 +8211,6 @@ matrix-mock-request@^2.5.0:
     "@types/ua-parser-js" "^0.7.36"
     await-lock "^2.1.0"
     blurhash "^1.1.3"
-    browser-request "^0.3.3"
     cheerio "^1.0.0-rc.9"
     classnames "^2.2.6"
     commonmark "^0.29.3"
