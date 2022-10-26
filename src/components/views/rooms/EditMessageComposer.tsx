@@ -60,9 +60,6 @@ function getHtmlReplyFallback(mxEvent: MatrixEvent): string {
 
 function getTextReplyFallback(mxEvent: MatrixEvent): string {
     const body = mxEvent.getContent().body;
-    if (!body || typeof body !== 'string') {
-        return "";
-    }
     const lines = body.split("\n").map(l => l.trim());
     if (lines.length > 2 && lines[0].startsWith("> ") && lines[1].length === 0) {
         return `${lines[0]}\n\n`;
