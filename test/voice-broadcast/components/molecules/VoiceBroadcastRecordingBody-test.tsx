@@ -50,7 +50,7 @@ describe("VoiceBroadcastRecordingBody", () => {
             room: roomId,
             user: userId,
         });
-        recording = new VoiceBroadcastRecording(infoEvent, client, VoiceBroadcastInfoState.Running);
+        recording = new VoiceBroadcastRecording(infoEvent, client, VoiceBroadcastInfoState.Resumed);
     });
 
     describe("when rendering a live broadcast", () => {

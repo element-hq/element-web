@@ -37,6 +37,9 @@ export class RoomNotificationState extends NotificationState implements IDestroy
         this.room.on(RoomEvent.Receipt, this.handleReadReceipt);
         this.room.on(RoomEvent.MyMembership, this.handleMembershipUpdate);
         this.room.on(RoomEvent.LocalEchoUpdated, this.handleLocalEchoUpdated);
+        this.room.on(RoomEvent.Timeline, this.handleRoomEventUpdate);
+        this.room.on(RoomEvent.Redaction, this.handleRoomEventUpdate);
+
         this.room.on(RoomEvent.UnreadNotifications, this.handleNotificationCountUpdate); // for server-sent counts
         if (cli.canSupport.get(Feature.ThreadUnreadNotifications) === ServerSupport.Unsupported) {
             this.threadsState?.on(NotificationStateEvents.Update, this.handleThreadsUpdate);
@@ -56,6 +59,8 @@ export class RoomNotificationState extends NotificationState implements IDestroy
         this.room.removeListener(RoomEvent.Receipt, this.handleReadReceipt);
         this.room.removeListener(RoomEvent.MyMembership, this.handleMembershipUpdate);
         this.room.removeListener(RoomEvent.LocalEchoUpdated, this.handleLocalEchoUpdated);
+        this.room.removeListener(RoomEvent.Timeline, this.handleRoomEventUpdate);
+        this.room.removeListener(RoomEvent.Redaction, this.handleRoomEventUpdate);
         if (cli.canSupport.get(Feature.ThreadUnreadNotifications) === ServerSupport.Unsupported) {
             this.room.removeListener(RoomEvent.UnreadNotifications, this.handleNotificationCountUpdate);
         } else if (this.threadsState) {
@@ -90,6 +95,11 @@ export class RoomNotificationState extends NotificationState implements IDestroy
     private onEventDecrypted = (event: MatrixEvent) => {
         if (event.getRoomId() !== this.room.roomId) return; // ignore - not for us or notifications timeline
 
+        this.updateNotificationState();
+    };
+
+    private handleRoomEventUpdate = (event: MatrixEvent, room: Room | null) => {
+        if (room?.roomId !== this.room.roomId) return; // ignore - not for us or notifications timeline
         this.updateNotificationState();
     };
 

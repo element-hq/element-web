@@ -570,8 +570,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                 const slidingList = SlidingSyncManager.instance.slidingSync.getList(slidingSyncIndex);
                 isAlphabetical = slidingList.sort[0] === "by_name";
                 isUnreadFirst = (
-                    slidingList.sort[0] === "by_highlight_count" ||
-                    slidingList.sort[0] === "by_notification_count"
+                    slidingList.sort[0] === "by_notification_level"
                 );
             }
 

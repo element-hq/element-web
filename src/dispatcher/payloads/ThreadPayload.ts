@@ -14,14 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_VoiceBroadcastPlaybackBody {
-    background-color: $quinary-content;
-    border-radius: 8px;
-    display: inline-block;
-    padding: 12px;
-}
+import { ActionPayload } from "../payloads";
+import { Action } from "../actions";
 
-.mx_VoiceBroadcastPlaybackBody_controls {
-    display: flex;
-    justify-content: center;
+/* eslint-disable camelcase */
+export interface ThreadPayload extends Pick<ActionPayload, "action"> {
+    action: Action.ViewThread;
+
+    thread_id: string | null;
 }
+/* eslint-enable camelcase */

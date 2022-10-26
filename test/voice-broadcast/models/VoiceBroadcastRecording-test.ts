@@ -423,15 +423,15 @@ describe("VoiceBroadcastRecording", () => {
                     await action();
                 });
 
-                itShouldBeInState(VoiceBroadcastInfoState.Running);
-                itShouldSendAnInfoEvent(VoiceBroadcastInfoState.Running);
+                itShouldBeInState(VoiceBroadcastInfoState.Resumed);
+                itShouldSendAnInfoEvent(VoiceBroadcastInfoState.Resumed);
 
                 it("should start the recorder", () => {
                     expect(mocked(voiceBroadcastRecorder.start)).toHaveBeenCalled();
                 });
 
-                it("should emit a running state changed event", () => {
-                    expect(onStateChanged).toHaveBeenCalledWith(VoiceBroadcastInfoState.Running);
+                it(`should emit a ${VoiceBroadcastInfoState.Resumed} state changed event`, () => {
+                    expect(onStateChanged).toHaveBeenCalledWith(VoiceBroadcastInfoState.Resumed);
                 });
             });
         });

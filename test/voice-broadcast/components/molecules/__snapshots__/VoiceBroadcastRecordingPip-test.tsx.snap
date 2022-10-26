@@ -3,7 +3,7 @@
 exports[`VoiceBroadcastRecordingPip when rendering a paused recording should render as expected 1`] = `
 <div>
   <div
-    class="mx_VoiceBroadcastRecordingPip"
+    class="mx_VoiceBroadcastBody mx_VoiceBroadcastBody--pip"
   >
     <div
       class="mx_VoiceBroadcastHeader"
@@ -43,10 +43,10 @@ exports[`VoiceBroadcastRecordingPip when rendering a paused recording should ren
       </div>
     </div>
     <hr
-      class="mx_VoiceBroadcastRecordingPip_divider"
+      class="mx_VoiceBroadcastBody_divider"
     />
     <div
-      class="mx_VoiceBroadcastRecordingPip_controls"
+      class="mx_VoiceBroadcastBody_controls"
     >
       <div
         aria-label="resume voice broadcast"
@@ -76,7 +76,7 @@ exports[`VoiceBroadcastRecordingPip when rendering a paused recording should ren
 exports[`VoiceBroadcastRecordingPip when rendering a started recording should render as expected 1`] = `
 <div>
   <div
-    class="mx_VoiceBroadcastRecordingPip"
+    class="mx_VoiceBroadcastBody mx_VoiceBroadcastBody--pip"
   >
     <div
       class="mx_VoiceBroadcastHeader"
@@ -116,10 +116,10 @@ exports[`VoiceBroadcastRecordingPip when rendering a started recording should re
       </div>
     </div>
     <hr
-      class="mx_VoiceBroadcastRecordingPip_divider"
+      class="mx_VoiceBroadcastBody_divider"
     />
     <div
-      class="mx_VoiceBroadcastRecordingPip_controls"
+      class="mx_VoiceBroadcastBody_controls"
     >
       <div
         aria-label="pause voice broadcast"

@@ -75,7 +75,7 @@ type IProps<T extends keyof JSX.IntrinsicElements> = DynamicHtmlElementProps<T> 
     onClick: ((e: ButtonEvent) => void | Promise<void>) | null;
 };
 
-interface IAccessibleButtonProps extends React.InputHTMLAttributes<Element> {
+export interface IAccessibleButtonProps extends React.InputHTMLAttributes<Element> {
     ref?: React.Ref<Element>;
 }
 

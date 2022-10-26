@@ -18,9 +18,10 @@ import React, { ReactNode } from 'react';
 import { ConnectionError, MatrixError } from "matrix-js-sdk/src/http-api";
 import classNames from "classnames";
 import { logger } from "matrix-js-sdk/src/logger";
+import { ISSOFlow, LoginFlow } from "matrix-js-sdk/src/@types/auth";
 
 import { _t, _td } from '../../../languageHandler';
-import Login, { ISSOFlow, LoginFlow } from '../../../Login';
+import Login from '../../../Login';
 import SdkConfig from '../../../SdkConfig';
 import { messageForResourceLimitError } from '../../../utils/ErrorUtils';
 import AutoDiscoveryUtils from "../../../utils/AutoDiscoveryUtils";

@@ -55,6 +55,7 @@ import Spinner from "../views/elements/Spinner";
 import { ComposerInsertPayload, ComposerType } from "../../dispatcher/payloads/ComposerInsertPayload";
 import Heading from '../views/typography/Heading';
 import { SdkContextClass } from '../../contexts/SDKContext';
+import { ThreadPayload } from '../../dispatcher/payloads/ThreadPayload';
 
 interface IProps {
     room: Room;
@@ -132,6 +133,11 @@ export default class ThreadView extends React.Component<IProps, IState> {
                 metricsTrigger: undefined, // room doesn't change
             });
         }
+
+        dis.dispatch<ThreadPayload>({
+            action: Action.ViewThread,
+            thread_id: null,
+        });
     }
 
     public componentDidUpdate(prevProps) {
@@ -225,6 +231,10 @@ export default class ThreadView extends React.Component<IProps, IState> {
     };
 
     private async postThreadUpdate(thread: Thread): Promise<void> {
+        dis.dispatch<ThreadPayload>({
+            action: Action.ViewThread,
+            thread_id: thread.id,
+        });
         thread.emit(ThreadEvent.ViewThread);
         await thread.fetchInitialEvents();
         this.updateThreadRelation();

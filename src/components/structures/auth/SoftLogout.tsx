@@ -17,13 +17,14 @@ limitations under the License.
 import React from 'react';
 import { logger } from "matrix-js-sdk/src/logger";
 import { Optional } from "matrix-events-sdk";
+import { ISSOFlow, LoginFlow } from "matrix-js-sdk/src/@types/auth";
 
 import { _t } from '../../../languageHandler';
 import dis from '../../../dispatcher/dispatcher';
 import * as Lifecycle from '../../../Lifecycle';
 import Modal from '../../../Modal';
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import { ISSOFlow, LoginFlow, sendLoginRequest } from "../../../Login";
+import { sendLoginRequest } from "../../../Login";
 import AuthPage from "../../views/auth/AuthPage";
 import { SSO_HOMESERVER_URL_KEY, SSO_ID_SERVER_URL_KEY } from "../../../BasePlatform";
 import SSOButtons from "../../views/elements/SSOButtons";

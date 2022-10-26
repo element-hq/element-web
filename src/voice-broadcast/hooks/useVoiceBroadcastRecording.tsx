@@ -68,7 +68,7 @@ export const useVoiceBroadcastRecording = (recording: VoiceBroadcastRecording) =
     const live = [
         VoiceBroadcastInfoState.Started,
         VoiceBroadcastInfoState.Paused,
-        VoiceBroadcastInfoState.Running,
+        VoiceBroadcastInfoState.Resumed,
     ].includes(recordingState);
 
     return {

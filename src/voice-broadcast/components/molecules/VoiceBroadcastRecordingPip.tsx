@@ -52,15 +52,15 @@ export const VoiceBroadcastRecordingPip: React.FC<VoiceBroadcastRecordingPipProp
         : <VoiceBroadcastControl onClick={toggleRecording} icon={PauseIcon} label={_t("pause voice broadcast")} />;
 
     return <div
-        className="mx_VoiceBroadcastRecordingPip"
+        className="mx_VoiceBroadcastBody mx_VoiceBroadcastBody--pip"
     >
         <VoiceBroadcastHeader
             live={live}
             sender={sender}
             room={room}
         />
-        <hr className="mx_VoiceBroadcastRecordingPip_divider" />
-        <div className="mx_VoiceBroadcastRecordingPip_controls">
+        <hr className="mx_VoiceBroadcastBody_divider" />
+        <div className="mx_VoiceBroadcastBody_controls">
             { toggleControl }
             <VoiceBroadcastControl
                 icon={StopIcon}

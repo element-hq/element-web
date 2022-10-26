@@ -117,6 +117,11 @@ export enum Action {
     ViewRoom = "view_room",
 
     /**
+     * Changes thread based on payload parameters. Should be used with ThreadPayload.
+     */
+    ViewThread = "view_thread",
+
+    /**
      * Changes room based on room list order and payload parameters. Should be used with ViewRoomDeltaPayload.
      */
     ViewRoomDelta = "view_room_delta",

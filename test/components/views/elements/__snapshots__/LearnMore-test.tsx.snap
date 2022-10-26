@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<LearnMore /> renders button 1`] = `
+<div>
+  <div
+    class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+    data-testid="testid"
+    role="button"
+    tabindex="0"
+  >
+    Learn more
+  </div>
+</div>
+`;

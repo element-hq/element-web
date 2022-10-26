@@ -6,7 +6,7 @@ Array [
     Array [
       Object {
         "deviceInfo": DeviceInfo {
-          "algorithms": undefined,
+          "algorithms": Array [],
           "deviceId": "aliceWeb",
           "keys": Object {},
           "known": false,
@@ -18,7 +18,7 @@ Array [
       },
       Object {
         "deviceInfo": DeviceInfo {
-          "algorithms": undefined,
+          "algorithms": Array [],
           "deviceId": "aliceMobile",
           "keys": Object {},
           "known": false,
@@ -37,7 +37,7 @@ Array [
     Array [
       Object {
         "deviceInfo": DeviceInfo {
-          "algorithms": undefined,
+          "algorithms": Array [],
           "deviceId": "bobDesktop",
           "keys": Object {},
           "known": false,
