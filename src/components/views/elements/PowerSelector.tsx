@@ -44,14 +44,13 @@ interface IProps {
 }
 
 interface IState {
-    levelRoleMap: {};
+    levelRoleMap: Partial<Record<number | "undefined", string>>;
     // List of power levels to show in the drop-down
     options: number[];
 
     customValue: number;
     selectValue: number | string;
     custom?: boolean;
-    customLevel?: number;
 }
 
 export default class PowerSelector extends React.Component<IProps, IState> {
@@ -101,7 +100,7 @@ export default class PowerSelector extends React.Component<IProps, IState> {
             levelRoleMap,
             options,
             custom: isCustom,
-            customLevel: newProps.value,
+            customValue: newProps.value,
             selectValue: isCustom ? CUSTOM_VALUE : newProps.value,
         });
     }
@@ -125,7 +124,11 @@ export default class PowerSelector extends React.Component<IProps, IState> {
         event.preventDefault();
         event.stopPropagation();
 
-        this.props.onChange(this.state.customValue, this.props.powerLevelKey);
+        if (Number.isFinite(this.state.customValue)) {
+            this.props.onChange(this.state.customValue, this.props.powerLevelKey);
+        } else {
+            this.initStateFromProps(this.props); // reset, invalid input
+        }
     };
 
     private onCustomKeyDown = (event: React.KeyboardEvent<HTMLInputElement>): void => {
