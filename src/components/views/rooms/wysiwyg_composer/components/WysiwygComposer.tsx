@@ -20,6 +20,7 @@ import { useWysiwyg, FormattingFunctions } from "@matrix-org/matrix-wysiwyg";
 import { FormattingButtons } from './FormattingButtons';
 import { Editor } from './Editor';
 import { useInputEventProcessor } from '../hooks/useInputEventProcessor';
+import { useSetCursorPosition } from '../hooks/useSetCursorPosition';
 
 interface WysiwygComposerProps {
     disabled?: boolean;
@@ -46,6 +47,8 @@ export const WysiwygComposer = memo(function WysiwygComposer(
             onChange?.(content);
         }
     }, [onChange, content, disabled]);
+
+    useSetCursorPosition(isWysiwygReady, ref);
 
     return (
         <div className={className}>

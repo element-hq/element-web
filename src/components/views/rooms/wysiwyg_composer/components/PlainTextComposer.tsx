@@ -14,9 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { MutableRefObject, ReactNode, useEffect } from 'react';
+import React, { MutableRefObject, ReactNode } from 'react';
 
 import { useComposerFunctions } from '../hooks/useComposerFunctions';
+import { usePlainTextInitialization } from '../hooks/usePlainTextInitialization';
 import { usePlainTextListeners } from '../hooks/usePlainTextListeners';
 import { ComposerFunctions } from '../types';
 import { Editor } from "./Editor";
@@ -38,12 +39,7 @@ export function PlainTextComposer({
 ) {
     const { ref, onInput, onPaste, onKeyDown } = usePlainTextListeners(onChange, onSend);
     const composerFunctions = useComposerFunctions(ref);
-
-    useEffect(() => {
-        if (ref.current) {
-            ref.current.innerText = initialContent;
-        }
-    }, [ref, initialContent]);
+    usePlainTextInitialization(initialContent, ref);
 
     return <div className={className} onInput={onInput} onPaste={onPaste} onKeyDown={onKeyDown}>
         <Editor ref={ref} disabled={disabled} />

@@ -41,3 +41,14 @@ export function focusComposer(
         );
     }
 }
+
+export function setCursorPositionAtTheEnd(element: HTMLElement) {
+    const range = document.createRange();
+    range.selectNodeContents(element);
+    range.collapse(false);
+    const sel = document.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+
+    element.focus();
+}
