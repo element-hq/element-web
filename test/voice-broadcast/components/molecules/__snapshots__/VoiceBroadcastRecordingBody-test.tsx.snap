@@ -3,7 +3,7 @@
 exports[`VoiceBroadcastRecordingBody when rendering a live broadcast should render the expected HTML 1`] = `
 <div>
   <div
-    class="mx_VoiceBroadcastRecordingBody"
+    class="mx_VoiceBroadcastBody"
   >
     <div
       class="mx_VoiceBroadcastHeader"
