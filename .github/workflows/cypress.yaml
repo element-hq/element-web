@@ -79,8 +79,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # Run 3 instances in Parallel
-        runner: [1, 2, 3]
+        # Run 4 instances in Parallel
+        runner: [1, 2, 3, 4]
     steps:
       - uses: actions/checkout@v2
         with:
