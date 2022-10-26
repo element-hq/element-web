@@ -19,6 +19,7 @@ import React, { MutableRefObject, ReactNode } from 'react';
 import { useComposerFunctions } from '../hooks/useComposerFunctions';
 import { usePlainTextInitialization } from '../hooks/usePlainTextInitialization';
 import { usePlainTextListeners } from '../hooks/usePlainTextListeners';
+import { useSetCursorPosition } from '../hooks/useSetCursorPosition';
 import { ComposerFunctions } from '../types';
 import { Editor } from "./Editor";
 
@@ -40,6 +41,7 @@ export function PlainTextComposer({
     const { ref, onInput, onPaste, onKeyDown } = usePlainTextListeners(onChange, onSend);
     const composerFunctions = useComposerFunctions(ref);
     usePlainTextInitialization(initialContent, ref);
+    useSetCursorPosition(disabled, ref);
 
     return <div className={className} onInput={onInput} onPaste={onPaste} onKeyDown={onKeyDown}>
         <Editor ref={ref} disabled={disabled} />

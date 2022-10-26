@@ -18,10 +18,10 @@ import { RefObject, useEffect } from "react";
 
 import { setCursorPositionAtTheEnd } from "./utils";
 
-export function useSetCursorPosition(isComposerReady: boolean, ref: RefObject<HTMLElement>) {
+export function useSetCursorPosition(disabled: boolean, ref: RefObject<HTMLElement>) {
     useEffect(() => {
-        if (ref.current && isComposerReady) {
+        if (ref.current && !disabled) {
             setCursorPositionAtTheEnd(ref.current);
         }
-    }, [ref, isComposerReady]);
+    }, [ref, disabled]);
 }

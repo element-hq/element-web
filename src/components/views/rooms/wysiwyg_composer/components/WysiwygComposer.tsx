@@ -48,12 +48,13 @@ export const WysiwygComposer = memo(function WysiwygComposer(
         }
     }, [onChange, content, disabled]);
 
-    useSetCursorPosition(isWysiwygReady, ref);
+    const isReady = isWysiwygReady && !disabled;
+    useSetCursorPosition(!isReady, ref);
 
     return (
         <div className={className}>
             <FormattingButtons composer={wysiwyg} formattingStates={formattingStates} />
-            <Editor ref={ref} disabled={!isWysiwygReady || disabled} />
+            <Editor ref={ref} disabled={!isReady} />
             { children?.(ref, wysiwyg) }
         </div>
     );

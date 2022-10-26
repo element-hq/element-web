@@ -81,6 +81,7 @@ describe('SendWysiwygComposer', () => {
     it('Should focus when receiving an Action.FocusSendMessageComposer action', async () => {
         // Given we don't have focus
         customRender(jest.fn(), jest.fn());
+        screen.getByLabelText('Bold').focus();
         expect(screen.getByRole('textbox')).not.toHaveFocus();
 
         // When we send the right action
@@ -96,6 +97,7 @@ describe('SendWysiwygComposer', () => {
     it('Should focus and clear when receiving an Action.ClearAndFocusSendMessageComposer', async () => {
         // Given we don't have focus
         customRender(jest.fn(), jest.fn());
+        screen.getByLabelText('Bold').focus();
         expect(screen.getByRole('textbox')).not.toHaveFocus();
 
         // When we send the right action
@@ -112,6 +114,7 @@ describe('SendWysiwygComposer', () => {
     it('Should focus when receiving a reply_to_event action', async () => {
         // Given we don't have focus
         customRender(jest.fn(), jest.fn());
+        screen.getByLabelText('Bold').focus();
         expect(screen.getByRole('textbox')).not.toHaveFocus();
 
         // When we send the right action

@@ -73,11 +73,15 @@ describe('WysiwygComposer', () => {
 
     const defaultRoomContext: IRoomState = getRoomContext(mockRoom, {});
 
-    const customRender = (onChange = (_content: string) => void 0, onSend = () => void 0, disabled = false) => {
+    const customRender = (
+        onChange = (_content: string) => void 0,
+        onSend = () => void 0,
+        disabled = false,
+        initialContent?: string) => {
         return render(
             <MatrixClientContext.Provider value={mockClient}>
                 <RoomContext.Provider value={defaultRoomContext}>
-                    <WysiwygComposer onChange={onChange} onSend={onSend} disabled={disabled} />
+                    <WysiwygComposer onChange={onChange} onSend={onSend} disabled={disabled} initialContent={initialContent} />
                 </RoomContext.Provider>
             </MatrixClientContext.Provider>,
         );
@@ -89,6 +93,14 @@ describe('WysiwygComposer', () => {
 
         // Then
         expect(screen.getByRole('textbox')).toHaveAttribute('contentEditable', "false");
+    });
+
+    it('Should have focus', () => {
+        // When
+        customRender(jest.fn(), jest.fn(), false);
+
+        // Then
+        expect(screen.getByRole('textbox')).toHaveFocus();
     });
 
     it('Should call onChange handler', (done) => {
@@ -104,7 +116,7 @@ describe('WysiwygComposer', () => {
         const onSend = jest.fn();
         customRender(jest.fn(), onSend);
 
-        // When we tell its inputEventProcesser that the user pressed Enter
+        // When we tell its inputEventProcessor that the user pressed Enter
         const event = new InputEvent("insertParagraph", { inputType: "insertParagraph" });
         const wysiwyg = { actions: { clear: () => {} } } as Wysiwyg;
         inputEventProcessor(event, wysiwyg);

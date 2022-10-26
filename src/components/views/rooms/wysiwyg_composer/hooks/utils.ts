@@ -46,9 +46,9 @@ export function setCursorPositionAtTheEnd(element: HTMLElement) {
     const range = document.createRange();
     range.selectNodeContents(element);
     range.collapse(false);
-    const sel = document.getSelection();
-    sel.removeAllRanges();
-    sel.addRange(range);
+    const selection = document.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
 
     element.focus();
 }
