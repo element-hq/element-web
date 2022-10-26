@@ -82,7 +82,8 @@ export function createMessageContent(
 
     // const body = textSerialize(model);
 
-    const body = isHTML && htmlToPlainText(message) || message;
+    // TODO remove this ugly hack for replace br tag
+    const body = isHTML && htmlToPlainText(message) || message.replace(/<br>/g, '\n');
     const bodyPrefix = isReplyAndEditing && getTextReplyFallback(editedEvent) || '';
     const formattedBodyPrefix = isReplyAndEditing && getHtmlReplyFallback(editedEvent) || '';
 

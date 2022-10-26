@@ -339,6 +339,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
                 this.state.isRichTextEnabled,
                 { mxClient: this.props.mxClient, roomContext: this.context, permalinkCreator, relation, replyToEvent });
             dis.dispatch({ action: Action.ClearAndFocusSendMessageComposer });
+            this.setState({ composerContent: '', initialComposerContent: '' });
         }
     };
 
