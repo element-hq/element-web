@@ -24,7 +24,7 @@ import RoomContext from "../../../../../src/contexts/RoomContext";
 import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../src/dispatcher/actions";
 import { IRoomState } from "../../../../../src/components/structures/RoomView";
-import { createTestClient, getRoomContext, mkEvent, mkStubRoom } from "../../../../test-utils";
+import { createTestClient, flushPromises, getRoomContext, mkEvent, mkStubRoom } from "../../../../test-utils";
 import { SendWysiwygComposer } from "../../../../../src/components/views/rooms/wysiwyg_composer";
 import * as useComposerFunctions
     from "../../../../../src/components/views/rooms/wysiwyg_composer/hooks/useComposerFunctions";
@@ -110,9 +110,6 @@ describe('SendWysiwygComposer', () => {
             it('Should focus when receiving an Action.FocusSendMessageComposer action', async () => {
             // Given we don't have focus
                 customRender(jest.fn(), jest.fn(), false, isRichTextEnabled);
-                document.head.focus();
-                //    screen.getByLabelText('Bold').focus();
-                // expect(screen.getByRole('textbox')).not.toHaveFocus();
 
                 // When we send the right action
                 defaultDispatcher.dispatch({
@@ -129,8 +126,6 @@ describe('SendWysiwygComposer', () => {
                 const mock = jest.spyOn(useComposerFunctions, 'useComposerFunctions');
                 mock.mockReturnValue({ clear: mockClear });
                 customRender(jest.fn(), jest.fn(), false, isRichTextEnabled);
-                //   screen.getByLabelText('Bold').focus();
-                //    expect(screen.getByRole('textbox')).not.toHaveFocus();
 
                 // When we send the right action
                 defaultDispatcher.dispatch({
@@ -148,8 +143,6 @@ describe('SendWysiwygComposer', () => {
             it('Should focus when receiving a reply_to_event action', async () => {
             // Given we don't have focus
                 customRender(jest.fn(), jest.fn(), false, isRichTextEnabled);
-                //   screen.getByLabelText('Bold').focus();
-                //   expect(screen.getByRole('textbox')).not.toHaveFocus();
 
                 // When we send the right action
                 defaultDispatcher.dispatch({
@@ -178,7 +171,7 @@ describe('SendWysiwygComposer', () => {
                 });
 
                 // Wait for event dispatch to happen
-                await new Promise((r) => setTimeout(r, 200));
+                await flushPromises();
 
                 // Then we don't get it because we are disabled
                 expect(screen.getByRole('textbox')).not.toHaveFocus();
