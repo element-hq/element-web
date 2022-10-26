@@ -38,7 +38,6 @@ import {
 import { DevicesState } from './useOwnDevices';
 import FilteredDeviceListHeader from './FilteredDeviceListHeader';
 import Spinner from '../../elements/Spinner';
-import LearnMore from '../../elements/LearnMore';
 import { DeviceSecurityLearnMore } from './DeviceSecurityLearnMore';
 
 interface Props {
