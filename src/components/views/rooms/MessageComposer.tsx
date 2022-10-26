@@ -559,7 +559,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
                             showPollsButton={this.state.showPollsButton}
                             showStickersButton={this.showStickersButton}
                             showComposerModeButton={this.state.isWysiwygLabEnabled}
-                            isComposerModeToggled={this.state.isRichTextEnabled}
+                            isRichTextEnabled={this.state.isRichTextEnabled}
                             onComposerModeClick={this.onRichTextToggle}
                             toggleButtonMenu={this.toggleButtonMenu}
                             showVoiceBroadcastButton={this.state.showVoiceBroadcastButton}

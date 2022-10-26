@@ -55,7 +55,7 @@ interface IProps {
     toggleButtonMenu: () => void;
     showVoiceBroadcastButton: boolean;
     onStartVoiceBroadcastClick: () => void;
-    isComposerModeToggled: boolean;
+    isRichTextEnabled: boolean;
     showComposerModeButton: boolean;
     onComposerModeClick: () => void;
 }
@@ -89,7 +89,7 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
         mainButtons = [
             emojiButton(props),
             props.showComposerModeButton &&
-                <ComposerModeButton key="composerModeButton" isToggled={props.isComposerModeToggled} onClick={props.onComposerModeClick} />,
+                <ComposerModeButton key="composerModeButton" isRichTextEnabled={props.isRichTextEnabled} onClick={props.onComposerModeClick} />,
             uploadButton(), // props passed via UploadButtonContext
         ];
         moreButtons = [
@@ -403,19 +403,21 @@ function showLocationButton(
 }
 
 interface WysiwygToggleButtonProps {
-    isToggled: boolean;
+    isRichTextEnabled: boolean;
     onClick: MouseEventHandler<HTMLDivElement>;
 }
 
-function ComposerModeButton({ isToggled, onClick }: WysiwygToggleButtonProps) {
+function ComposerModeButton({ isRichTextEnabled, onClick }: WysiwygToggleButtonProps) {
+    const title = isRichTextEnabled ? _t("Show plain text") : _t("Show formatting");
+
     return <CollapsibleButton
         className="mx_MessageComposer_button"
         iconClassName={classNames({
-            "mx_MessageComposer_plain_text": !isToggled,
-            "mx_MessageComposer_rich_text": isToggled,
+            "mx_MessageComposer_plain_text": isRichTextEnabled,
+            "mx_MessageComposer_rich_text": !isRichTextEnabled,
         })}
         onClick={onClick}
-        title={_t("Switch to plain text mode")}
+        title={title}
     />;
 }
 
