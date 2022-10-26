@@ -16,7 +16,7 @@ limitations under the License.
 
 import { KeyboardEvent, SyntheticEvent, useCallback, useRef } from "react";
 
-import { useInputEventProcessor } from "./useInputEventProcessor";
+import { useSettingValue } from "../../../../../hooks/useSettings";
 
 function isDivElement(target: EventTarget): target is HTMLDivElement {
     return target instanceof HTMLDivElement;
@@ -26,25 +26,25 @@ export function usePlainTextListeners(onChange: (content: string) => void, onSen
     const ref = useRef<HTMLDivElement>();
     const send = useCallback((() => {
         if (ref.current) {
-            ref.current.innerText = '';
+            ref.current.innerHTML = '';
         }
         onSend();
     }), [ref, onSend]);
 
-    const inputEventProcessor = useInputEventProcessor(send);
-
     const onInput = useCallback((event: SyntheticEvent<HTMLDivElement, InputEvent | ClipboardEvent>) => {
         if (isDivElement(event.target)) {
-            onChange(event.target.innerText);
+            onChange(event.target.innerHTML);
         }
-        inputEventProcessor(event.nativeEvent);
-    }, [onChange, inputEventProcessor]);
+    }, [onChange]);
 
+    const isCtrlEnter = useSettingValue<boolean>("MessageComposerInput.ctrlEnterToSend");
     const onKeyDown = useCallback((event: KeyboardEvent<HTMLDivElement>) => {
-        if (event.key === 'Enter') {
+        if (event.key === 'Enter' && !event.shiftKey && (!isCtrlEnter || (isCtrlEnter && event.ctrlKey))) {
+            event.preventDefault();
+            event.stopPropagation();
             send();
         }
-    }, [send]);
+    }, [isCtrlEnter, send]);
 
     return { ref, onInput, onPaste: onInput, onKeyDown };
 }

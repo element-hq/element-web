@@ -52,7 +52,7 @@ export const WysiwygComposer = memo(function WysiwygComposer(
     useSetCursorPosition(!isReady, ref);
 
     return (
-        <div className={className}>
+        <div data-testid="WysiwygComposer" className={className}>
             <FormattingButtons composer={wysiwyg} formattingStates={formattingStates} />
             <Editor ref={ref} disabled={!isReady} />
             { children?.(ref, wysiwyg) }

@@ -16,13 +16,10 @@ limitations under the License.
 
 import { RefObject, useEffect } from "react";
 
-import { setCursorPositionAtTheEnd } from "./utils";
-
 export function usePlainTextInitialization(initialContent: string, ref: RefObject<HTMLElement>) {
     useEffect(() => {
         if (ref.current) {
             ref.current.innerText = initialContent;
-            setCursorPositionAtTheEnd(ref.current);
         }
     }, [ref, initialContent]);
 }

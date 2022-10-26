@@ -43,7 +43,13 @@ export function PlainTextComposer({
     usePlainTextInitialization(initialContent, ref);
     useSetCursorPosition(disabled, ref);
 
-    return <div className={className} onInput={onInput} onPaste={onPaste} onKeyDown={onKeyDown}>
+    return <div
+        data-testid="PlainTextComposer"
+        className={className}
+        onInput={onInput}
+        onPaste={onPaste}
+        onKeyDown={onKeyDown}
+    >
         <Editor ref={ref} disabled={disabled} />
         { children?.(ref, composerFunctions) }
     </div>;
