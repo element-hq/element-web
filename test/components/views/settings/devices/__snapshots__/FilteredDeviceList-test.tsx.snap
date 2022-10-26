@@ -19,7 +19,7 @@ HTMLCollection [
       class="mx_DeviceSecurityCard"
     >
       <div
-        class="mx_DeviceSecurityCard_icon Verified"
+        class="mx_DeviceSecurityCard_icon Inactive"
       >
         <div
           height="16"
@@ -63,7 +63,7 @@ HTMLCollection [
       class="mx_DeviceSecurityCard"
     >
       <div
-        class="mx_DeviceSecurityCard_icon Verified"
+        class="mx_DeviceSecurityCard_icon Unverified"
       >
         <div
           height="16"
