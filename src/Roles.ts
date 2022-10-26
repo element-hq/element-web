@@ -16,7 +16,7 @@ limitations under the License.
 
 import { _t } from './languageHandler';
 
-export function levelRoleMap(usersDefault: number) {
+export function levelRoleMap(usersDefault: number): Record<number | "undefined", string> {
     return {
         undefined: _t('Default'),
         0: _t('Restricted'),
