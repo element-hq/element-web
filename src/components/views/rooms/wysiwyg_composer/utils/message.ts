@@ -44,7 +44,8 @@ interface SendMessageParams {
 }
 
 export function sendMessage(
-    html: string,
+    message: string,
+    isHTML: boolean,
     { roomContext, mxClient, ...params }: SendMessageParams,
 ) {
     const { relation, replyToEvent } = params;
@@ -76,7 +77,8 @@ export function sendMessage(
 
     if (!content) {
         content = createMessageContent(
-            html,
+            message,
+            isHTML,
             params,
         );
     }
@@ -167,7 +169,7 @@ export function editMessage(
         const position = this.model.positionForOffset(caret.offset, caret.atNodeEnd);
         this.editorRef.current?.replaceEmoticon(position, REGEX_EMOTICON);
     }*/
-    const editContent = createMessageContent(html, { editedEvent });
+    const editContent = createMessageContent(html, true, { editedEvent });
     const newContent = editContent["m.new_content"];
 
     const shouldSend = true;

@@ -15,32 +15,38 @@ limitations under the License.
 */
 
 import React, { forwardRef, RefObject } from 'react';
-import { FormattingFunctions } from '@matrix-org/matrix-wysiwyg';
 
 import { useWysiwygSendActionHandler } from './hooks/useWysiwygSendActionHandler';
 import { WysiwygComposer } from './components/WysiwygComposer';
+import { PlainTextComposer } from './components/PlainTextComposer';
+import { ComposerFunctions } from './types';
 
-interface SendWysiwygComposerProps {
-    disabled?: boolean;
-    onChange: (content: string) => void;
-    onSend: () => void;
-}
 interface ContentProps {
     disabled: boolean;
-    formattingFunctions: FormattingFunctions;
+    composerFunctions: ComposerFunctions;
 }
 
 const Content = forwardRef<HTMLElement, ContentProps>(
-    function Content({ disabled, formattingFunctions: wysiwyg }: ContentProps, forwardRef: RefObject<HTMLElement>) {
-        useWysiwygSendActionHandler(disabled, forwardRef, wysiwyg);
+    function Content({ disabled, composerFunctions }: ContentProps, forwardRef: RefObject<HTMLElement>) {
+        useWysiwygSendActionHandler(disabled, forwardRef, composerFunctions);
         return null;
     },
 );
 
-export function SendWysiwygComposer(props: SendWysiwygComposerProps) {
-    return (
-        <WysiwygComposer className="mx_SendWysiwygComposer" {...props}>{ (ref, wysiwyg) => (
-            <Content disabled={props.disabled} ref={ref} formattingFunctions={wysiwyg} />
+interface SendWysiwygComposerProps {
+    initialContent?: string;
+    isRichTextEnabled: boolean;
+    disabled?: boolean;
+    onChange: (content: string) => void;
+    onSend: () => void;
+}
+
+export function SendWysiwygComposer({ isRichTextEnabled, ...props }: SendWysiwygComposerProps) {
+    const Composer = isRichTextEnabled ? WysiwygComposer : PlainTextComposer;
+
+    return <Composer className="mx_SendWysiwygComposer" {...props}>
+        { (ref, composerFunctions) => (
+            <Content disabled={props.disabled} ref={ref} composerFunctions={composerFunctions} />
         ) }
-        </WysiwygComposer>);
+    </Composer>;
 }

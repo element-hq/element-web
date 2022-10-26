@@ -24,8 +24,10 @@ import RoomContext from "../../../../../src/contexts/RoomContext";
 import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../src/dispatcher/actions";
 import { IRoomState } from "../../../../../src/components/structures/RoomView";
-import { createTestClient, getRoomContext, mkEvent, mkStubRoom } from "../../../../test-utils";
+import { createTestClient, flushPromises, getRoomContext, mkEvent, mkStubRoom } from "../../../../test-utils";
 import { SendWysiwygComposer } from "../../../../../src/components/views/rooms/wysiwyg_composer";
+import * as useComposerFunctions
+    from "../../../../../src/components/views/rooms/wysiwyg_composer/hooks/useComposerFunctions";
 
 const mockClear = jest.fn();
 
@@ -68,83 +70,112 @@ describe('SendWysiwygComposer', () => {
 
     const defaultRoomContext: IRoomState = getRoomContext(mockRoom, {});
 
-    const customRender = (onChange = (_content: string) => void 0, onSend = () => void 0, disabled = false) => {
+    const customRender = (
+        onChange = (_content: string) => void 0,
+        onSend = () => void 0,
+        disabled = false,
+        isRichTextEnabled = true) => {
         return render(
             <MatrixClientContext.Provider value={mockClient}>
                 <RoomContext.Provider value={defaultRoomContext}>
-                    <SendWysiwygComposer onChange={onChange} onSend={onSend} disabled={disabled} />
+                    <SendWysiwygComposer onChange={onChange} onSend={onSend} disabled={disabled} isRichTextEnabled={isRichTextEnabled} />
                 </RoomContext.Provider>
             </MatrixClientContext.Provider>,
         );
     };
 
-    it('Should focus when receiving an Action.FocusSendMessageComposer action', async () => {
-        // Given we don't have focus
-        customRender(jest.fn(), jest.fn());
-        expect(screen.getByRole('textbox')).not.toHaveFocus();
+    it('Should render WysiwygComposer when isRichTextEnabled is at true', () => {
+        // When
+        customRender(jest.fn(), jest.fn(), false, true);
 
-        // When we send the right action
-        defaultDispatcher.dispatch({
-            action: Action.FocusSendMessageComposer,
-            context: null,
-        });
-
-        // Then the component gets the focus
-        await waitFor(() => expect(screen.getByRole('textbox')).toHaveFocus());
+        // Then
+        expect(screen.getByTestId('WysiwygComposer')).toBeTruthy();
     });
 
-    it('Should focus and clear when receiving an Action.ClearAndFocusSendMessageComposer', async () => {
-        // Given we don't have focus
-        customRender(jest.fn(), jest.fn());
-        expect(screen.getByRole('textbox')).not.toHaveFocus();
+    it('Should render PlainTextComposer when isRichTextEnabled is at false', () => {
+        // When
+        customRender(jest.fn(), jest.fn(), false, false);
 
-        // When we send the right action
-        defaultDispatcher.dispatch({
-            action: Action.ClearAndFocusSendMessageComposer,
-            context: null,
-        });
-
-        // Then the component gets the focus
-        await waitFor(() => expect(screen.getByRole('textbox')).toHaveFocus());
-        expect(mockClear).toBeCalledTimes(1);
+        // Then
+        expect(screen.getByTestId('PlainTextComposer')).toBeTruthy();
     });
 
-    it('Should focus when receiving a reply_to_event action', async () => {
-        // Given we don't have focus
-        customRender(jest.fn(), jest.fn());
-        expect(screen.getByRole('textbox')).not.toHaveFocus();
+    describe.each([{ isRichTextEnabled: true }, { isRichTextEnabled: false }])(
+        'Should focus when receiving an Action.FocusSendMessageComposer action',
+        ({ isRichTextEnabled }) => {
+            afterEach(() => {
+                jest.resetAllMocks();
+            });
 
-        // When we send the right action
-        defaultDispatcher.dispatch({
-            action: "reply_to_event",
-            context: null,
+            it('Should focus when receiving an Action.FocusSendMessageComposer action', async () => {
+            // Given we don't have focus
+                customRender(jest.fn(), jest.fn(), false, isRichTextEnabled);
+
+                // When we send the right action
+                defaultDispatcher.dispatch({
+                    action: Action.FocusSendMessageComposer,
+                    context: null,
+                });
+
+                // Then the component gets the focus
+                await waitFor(() => expect(screen.getByRole('textbox')).toHaveFocus());
+            });
+
+            it('Should focus and clear when receiving an Action.ClearAndFocusSendMessageComposer', async () => {
+            // Given we don't have focus
+                const mock = jest.spyOn(useComposerFunctions, 'useComposerFunctions');
+                mock.mockReturnValue({ clear: mockClear });
+                customRender(jest.fn(), jest.fn(), false, isRichTextEnabled);
+
+                // When we send the right action
+                defaultDispatcher.dispatch({
+                    action: Action.ClearAndFocusSendMessageComposer,
+                    context: null,
+                });
+
+                // Then the component gets the focus
+                await waitFor(() => expect(screen.getByRole('textbox')).toHaveFocus());
+                expect(mockClear).toBeCalledTimes(1);
+
+                mock.mockRestore();
+            });
+
+            it('Should focus when receiving a reply_to_event action', async () => {
+            // Given we don't have focus
+                customRender(jest.fn(), jest.fn(), false, isRichTextEnabled);
+
+                // When we send the right action
+                defaultDispatcher.dispatch({
+                    action: "reply_to_event",
+                    context: null,
+                });
+
+                // Then the component gets the focus
+                await waitFor(() => expect(screen.getByRole('textbox')).toHaveFocus());
+            });
+
+            it('Should not focus when disabled', async () => {
+            // Given we don't have focus and we are disabled
+                customRender(jest.fn(), jest.fn(), true, isRichTextEnabled);
+                expect(screen.getByRole('textbox')).not.toHaveFocus();
+
+                // When we send an action that would cause us to get focus
+                defaultDispatcher.dispatch({
+                    action: Action.FocusSendMessageComposer,
+                    context: null,
+                });
+                // (Send a second event to exercise the clearTimeout logic)
+                defaultDispatcher.dispatch({
+                    action: Action.FocusSendMessageComposer,
+                    context: null,
+                });
+
+                // Wait for event dispatch to happen
+                await flushPromises();
+
+                // Then we don't get it because we are disabled
+                expect(screen.getByRole('textbox')).not.toHaveFocus();
+            });
         });
-
-        // Then the component gets the focus
-        await waitFor(() => expect(screen.getByRole('textbox')).toHaveFocus());
-    });
-
-    it('Should not focus when disabled', async () => {
-        // Given we don't have focus and we are disabled
-        customRender(jest.fn(), jest.fn(), true);
-        expect(screen.getByRole('textbox')).not.toHaveFocus();
-
-        // When we send an action that would cause us to get focus
-        defaultDispatcher.dispatch({
-            action: Action.FocusSendMessageComposer,
-            context: null,
-        });
-        // (Send a second event to exercise the clearTimeout logic)
-        defaultDispatcher.dispatch({
-            action: Action.FocusSendMessageComposer,
-            context: null,
-        });
-
-        // Wait for event dispatch to happen
-        await new Promise((r) => setTimeout(r, 200));
-
-        // Then we don't get it because we are disabled
-        expect(screen.getByRole('textbox')).not.toHaveFocus();
-    });
 });
 

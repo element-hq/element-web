@@ -16,8 +16,11 @@ limitations under the License.
 
 import { IContent, IEventRelation, MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
 
+import { htmlSerializeFromMdIfNeeded } from "../../../../../editor/serialize";
+import SettingsStore from "../../../../../settings/SettingsStore";
 import { RoomPermalinkCreator } from "../../../../../utils/permalinks/Permalinks";
 import { addReplyToMessageContent } from "../../../../../utils/Reply";
+import { htmlToPlainText } from "../../../../../utils/room/htmlToPlaintext";
 
 // Merges favouring the given relation
 function attachRelation(content: IContent, relation?: IEventRelation): void {
@@ -39,6 +42,18 @@ function getHtmlReplyFallback(mxEvent: MatrixEvent): string {
     return (mxReply && mxReply.outerHTML) || "";
 }
 
+function getTextReplyFallback(mxEvent: MatrixEvent): string {
+    const body = mxEvent.getContent().body;
+    if (typeof body !== 'string') {
+        return "";
+    }
+    const lines = body.split("\n").map(l => l.trim());
+    if (lines.length > 2 && lines[0].startsWith("> ") && lines[1].length === 0) {
+        return `${lines[0]}\n\n`;
+    }
+    return "";
+}
+
 interface CreateMessageContentParams {
     relation?: IEventRelation;
     replyToEvent?: MatrixEvent;
@@ -49,6 +64,7 @@ interface CreateMessageContentParams {
 
 export function createMessageContent(
     message: string,
+    isHTML: boolean,
     { relation, replyToEvent, permalinkCreator, includeReplyLegacyFallback = true, editedEvent }:
     CreateMessageContentParams,
 ): IContent {
@@ -56,6 +72,7 @@ export function createMessageContent(
 
     const isEditing = Boolean(editedEvent);
     const isReply = isEditing ? Boolean(editedEvent?.replyEventId) : Boolean(replyToEvent);
+    const isReplyAndEditing = isEditing && isReply;
 
     /*const isEmote = containsEmote(model);
     if (isEmote) {
@@ -67,37 +84,44 @@ export function createMessageContent(
     model = unescapeMessage(model);*/
 
     // const body = textSerialize(model);
-    const body = message;
+
+    // TODO remove this ugly hack for replace br tag
+    const body = isHTML && htmlToPlainText(message) || message.replace(/<br>/g, '\n');
+    const bodyPrefix = isReplyAndEditing && getTextReplyFallback(editedEvent) || '';
+    const formattedBodyPrefix = isReplyAndEditing && getHtmlReplyFallback(editedEvent) || '';
 
     const content: IContent = {
         // TODO emote
-    //    msgtype: isEmote ? "m.emote" : "m.text",
         msgtype: MsgType.Text,
-        body: body,
+        // TODO when available, use HTML --> Plain text conversion from wysiwyg rust model
+        body: isEditing ? `${bodyPrefix} * ${body}` : body,
     };
 
     // TODO markdown support
 
-    /*const formattedBody = htmlSerializeIfNeeded(model, {
-        forceHTML: !!replyToEvent,
-        useMarkdown: SettingsStore.getValue("MessageComposerInput.useMarkdown"),
-    });*/
-    const formattedBody = message;
+    const isMarkdownEnabled = SettingsStore.getValue<boolean>("MessageComposerInput.useMarkdown");
+    const formattedBody =
+        isHTML ?
+            message :
+            isMarkdownEnabled ?
+                htmlSerializeFromMdIfNeeded(message, { forceHTML: isReply }) :
+                null;
 
     if (formattedBody) {
         content.format = "org.matrix.custom.html";
-
-        const htmlPrefix = isReply && isEditing ? getHtmlReplyFallback(editedEvent) : '';
-        content.formatted_body = isEditing ? `${htmlPrefix} * ${formattedBody}` : formattedBody;
+        content.formatted_body = isEditing ? `${formattedBodyPrefix} * ${formattedBody}` : formattedBody;
     }
 
     if (isEditing) {
         content['m.new_content'] = {
             "msgtype": content.msgtype,
             "body": body,
-            "format": "org.matrix.custom.html",
-            'formatted_body': formattedBody,
         };
+
+        if (formattedBody) {
+            content['m.new_content'].format = "org.matrix.custom.html";
+            content['m.new_content']['formatted_body'] = formattedBody;
+        }
     }
 
     const newRelation = isEditing ?

@@ -60,6 +60,7 @@ import {
 } from '../../../voice-broadcast';
 import { SendWysiwygComposer, sendMessage } from './wysiwyg_composer/';
 import { MatrixClientProps, withMatrixClientHOC } from '../../../contexts/MatrixClientContext';
+import { htmlToPlainText } from '../../../utils/room/htmlToPlaintext';
 
 let instanceCount = 0;
 
@@ -100,6 +101,9 @@ interface IState {
     showStickersButton: boolean;
     showPollsButton: boolean;
     showVoiceBroadcastButton: boolean;
+    isWysiwygLabEnabled: boolean;
+    isRichTextEnabled: boolean;
+    initialComposerContent: string;
 }
 
 export class MessageComposer extends React.Component<IProps, IState> {
@@ -117,6 +121,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
     public static defaultProps = {
         compact: false,
         showVoiceBroadcastButton: false,
+        isRichTextEnabled: true,
     };
 
     public constructor(props: IProps) {
@@ -133,6 +138,9 @@ export class MessageComposer extends React.Component<IProps, IState> {
             showStickersButton: SettingsStore.getValue("MessageComposerInput.showStickersButton"),
             showPollsButton: SettingsStore.getValue("MessageComposerInput.showPollsButton"),
             showVoiceBroadcastButton: SettingsStore.getValue(Features.VoiceBroadcast),
+            isWysiwygLabEnabled: SettingsStore.getValue<boolean>("feature_wysiwyg_composer"),
+            isRichTextEnabled: true,
+            initialComposerContent: '',
         };
 
         this.instanceId = instanceCount++;
@@ -140,6 +148,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
         SettingsStore.monitorSetting("MessageComposerInput.showStickersButton", null);
         SettingsStore.monitorSetting("MessageComposerInput.showPollsButton", null);
         SettingsStore.monitorSetting(Features.VoiceBroadcast, null);
+        SettingsStore.monitorSetting("feature_wysiwyg_composer", null);
     }
 
     private get voiceRecording(): Optional<VoiceMessageRecording> {
@@ -217,6 +226,12 @@ export class MessageComposer extends React.Component<IProps, IState> {
                     case Features.VoiceBroadcast: {
                         if (this.state.showVoiceBroadcastButton !== settingUpdatedPayload.newValue) {
                             this.setState({ showVoiceBroadcastButton: !!settingUpdatedPayload.newValue });
+                        }
+                        break;
+                    }
+                    case "feature_wysiwyg_composer": {
+                        if (this.state.isWysiwygLabEnabled !== settingUpdatedPayload.newValue) {
+                            this.setState({ isWysiwygLabEnabled: Boolean(settingUpdatedPayload.newValue) });
                         }
                         break;
                     }
@@ -318,12 +333,13 @@ export class MessageComposer extends React.Component<IProps, IState> {
 
         this.messageComposerInput.current?.sendMessage();
 
-        const isWysiwygComposerEnabled = SettingsStore.getValue("feature_wysiwyg_composer");
-        if (isWysiwygComposerEnabled) {
+        if (this.state.isWysiwygLabEnabled) {
             const { permalinkCreator, relation, replyToEvent } = this.props;
             sendMessage(this.state.composerContent,
+                this.state.isRichTextEnabled,
                 { mxClient: this.props.mxClient, roomContext: this.context, permalinkCreator, relation, replyToEvent });
             dis.dispatch({ action: Action.ClearAndFocusSendMessageComposer });
+            this.setState({ composerContent: '', initialComposerContent: '' });
         }
     };
 
@@ -338,6 +354,16 @@ export class MessageComposer extends React.Component<IProps, IState> {
             composerContent: content,
             isComposerEmpty: content?.length === 0,
         });
+    };
+
+    private onRichTextToggle = () => {
+        this.setState(state => ({
+            isRichTextEnabled: !state.isRichTextEnabled,
+            initialComposerContent: !state.isRichTextEnabled ?
+                state.composerContent :
+                // TODO when available use rust model plain text
+                htmlToPlainText(state.composerContent),
+        }));
     };
 
     private onVoiceStoreUpdate = () => {
@@ -395,7 +421,6 @@ export class MessageComposer extends React.Component<IProps, IState> {
     }
 
     public render() {
-        const isWysiwygComposerEnabled = SettingsStore.getValue("feature_wysiwyg_composer");
         const controls = [
             this.props.e2eStatus ?
                 <E2EIcon key="e2eIcon" status={this.props.e2eStatus} className="mx_MessageComposer_e2eIcon" /> :
@@ -410,12 +435,14 @@ export class MessageComposer extends React.Component<IProps, IState> {
 
         const canSendMessages = this.context.canSendMessages && !this.context.tombstone;
         if (canSendMessages) {
-            if (isWysiwygComposerEnabled) {
+            if (this.state.isWysiwygLabEnabled) {
                 controls.push(
                     <SendWysiwygComposer key="controls_input"
                         disabled={this.state.haveRecording}
                         onChange={this.onWysiwygChange}
                         onSend={this.sendMessage}
+                        isRichTextEnabled={this.state.isRichTextEnabled}
+                        initialContent={this.state.initialComposerContent}
                     />,
                 );
             } else {
@@ -503,7 +530,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
             "mx_MessageComposer": true,
             "mx_MessageComposer--compact": this.props.compact,
             "mx_MessageComposer_e2eStatus": this.props.e2eStatus != undefined,
-            "mx_MessageComposer_wysiwyg": isWysiwygComposerEnabled,
+            "mx_MessageComposer_wysiwyg": this.state.isWysiwygLabEnabled && this.state.isRichTextEnabled,
         });
 
         return (
@@ -532,6 +559,9 @@ export class MessageComposer extends React.Component<IProps, IState> {
                             showLocationButton={!window.electron}
                             showPollsButton={this.state.showPollsButton}
                             showStickersButton={this.showStickersButton}
+                            showComposerModeButton={this.state.isWysiwygLabEnabled}
+                            isRichTextEnabled={this.state.isRichTextEnabled}
+                            onComposerModeClick={this.onRichTextToggle}
                             toggleButtonMenu={this.toggleButtonMenu}
                             showVoiceBroadcastButton={this.state.showVoiceBroadcastButton}
                             onStartVoiceBroadcastClick={() => {

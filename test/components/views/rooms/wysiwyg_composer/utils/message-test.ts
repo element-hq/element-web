@@ -65,7 +65,7 @@ describe('message', () => {
     describe('sendMessage', () => {
         it('Should not send empty html message', async () => {
             // When
-            await sendMessage('', { roomContext: defaultRoomContext, mxClient: mockClient, permalinkCreator });
+            await sendMessage('', true, { roomContext: defaultRoomContext, mxClient: mockClient, permalinkCreator });
 
             // Then
             expect(mockClient.sendMessage).toBeCalledTimes(0);
@@ -74,11 +74,15 @@ describe('message', () => {
 
         it('Should send html message', async () => {
             // When
-            await sendMessage(message, { roomContext: defaultRoomContext, mxClient: mockClient, permalinkCreator });
+            await sendMessage(
+                message,
+                true,
+                { roomContext: defaultRoomContext, mxClient: mockClient, permalinkCreator },
+            );
 
             // Then
             const expectedContent = {
-                "body": "<i><b>hello</b> world</i>",
+                "body": "hello world",
                 "format": "org.matrix.custom.html",
                 "formatted_body": "<i><b>hello</b> world</i>",
                 "msgtype": "m.text",
@@ -97,7 +101,7 @@ describe('message', () => {
             });
 
             // When
-            await sendMessage(message, {
+            await sendMessage(message, true, {
                 roomContext: defaultRoomContext,
                 mxClient: mockClient,
                 permalinkCreator,
@@ -112,7 +116,7 @@ describe('message', () => {
             });
 
             const expectedContent = {
-                "body": "> <myfakeuser2> My reply\n\n<i><b>hello</b> world</i>",
+                "body": "> <myfakeuser2> My reply\n\nhello world",
                 "format": "org.matrix.custom.html",
                 "formatted_body": "<mx-reply><blockquote><a href=\"$$permalink$$\">In reply to</a>" +
                                     " <a href=\"https://matrix.to/#/myfakeuser2\">myfakeuser2</a>" +
@@ -130,7 +134,11 @@ describe('message', () => {
         it('Should scroll to bottom after sending a html message', async () => {
             // When
             SettingsStore.setValue("scrollToBottomOnMessageSent", null, SettingLevel.DEVICE, true);
-            await sendMessage(message, { roomContext: defaultRoomContext, mxClient: mockClient, permalinkCreator });
+            await sendMessage(
+                message,
+                true,
+                { roomContext: defaultRoomContext, mxClient: mockClient, permalinkCreator },
+            );
 
             // Then
             expect(spyDispatcher).toBeCalledWith(
@@ -140,7 +148,11 @@ describe('message', () => {
 
         it('Should handle emojis', async () => {
             // When
-            await sendMessage('🎉', { roomContext: defaultRoomContext, mxClient: mockClient, permalinkCreator });
+            await sendMessage(
+                '🎉',
+                false,
+                { roomContext: defaultRoomContext, mxClient: mockClient, permalinkCreator },
+            );
 
             // Then
             expect(spyDispatcher).toBeCalledWith(
@@ -203,7 +215,7 @@ describe('message', () => {
             // Then
             const { msgtype, format } = mockEvent.getContent();
             const expectedContent = {
-                "body": newMessage,
+                "body": ` * ${newMessage}`,
                 "formatted_body": ` * ${newMessage}`,
                 "m.new_content": {
                     "body": "Replying to this new content",

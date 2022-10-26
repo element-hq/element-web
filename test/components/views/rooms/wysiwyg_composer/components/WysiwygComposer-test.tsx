@@ -19,10 +19,6 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { InputEventProcessor, Wysiwyg, WysiwygProps } from "@matrix-org/matrix-wysiwyg";
 
-import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
-import { IRoomState } from "../../../../../../src/components/structures/RoomView";
-import { createTestClient, getRoomContext, mkEvent, mkStubRoom } from "../../../../../test-utils";
-import RoomContext from "../../../../../../src/contexts/RoomContext";
 import { WysiwygComposer }
     from "../../../../../../src/components/views/rooms/wysiwyg_composer/components/WysiwygComposer";
 import SettingsStore from "../../../../../../src/settings/SettingsStore";
@@ -54,32 +50,14 @@ jest.mock("@matrix-org/matrix-wysiwyg", () => ({
 }));
 
 describe('WysiwygComposer', () => {
-    afterEach(() => {
-        jest.resetAllMocks();
-    });
-
-    const mockClient = createTestClient();
-    const mockEvent = mkEvent({
-        type: "m.room.message",
-        room: 'myfakeroom',
-        user: 'myfakeuser',
-        content: { "msgtype": "m.text", "body": "Replying to this" },
-        event: true,
-    });
-    const mockRoom = mkStubRoom('myfakeroom', 'myfakeroom', mockClient) as any;
-    mockRoom.findEventById = jest.fn(eventId => {
-        return eventId === mockEvent.getId() ? mockEvent : null;
-    });
-
-    const defaultRoomContext: IRoomState = getRoomContext(mockRoom, {});
-
-    const customRender = (onChange = (_content: string) => void 0, onSend = () => void 0, disabled = false) => {
+    const customRender = (
+        onChange = (_content: string) => void 0,
+        onSend = () => void 0,
+        disabled = false,
+        initialContent?: string) => {
         return render(
-            <MatrixClientContext.Provider value={mockClient}>
-                <RoomContext.Provider value={defaultRoomContext}>
-                    <WysiwygComposer onChange={onChange} onSend={onSend} disabled={disabled} />
-                </RoomContext.Provider>
-            </MatrixClientContext.Provider>,
+            <WysiwygComposer onChange={onChange} onSend={onSend} disabled={disabled} initialContent={initialContent} />,
+
         );
     };
 
@@ -89,6 +67,14 @@ describe('WysiwygComposer', () => {
 
         // Then
         expect(screen.getByRole('textbox')).toHaveAttribute('contentEditable', "false");
+    });
+
+    it('Should have focus', () => {
+        // When
+        customRender(jest.fn(), jest.fn(), false);
+
+        // Then
+        expect(screen.getByRole('textbox')).toHaveFocus();
     });
 
     it('Should call onChange handler', (done) => {
@@ -104,7 +90,7 @@ describe('WysiwygComposer', () => {
         const onSend = jest.fn();
         customRender(jest.fn(), onSend);
 
-        // When we tell its inputEventProcesser that the user pressed Enter
+        // When we tell its inputEventProcessor that the user pressed Enter
         const event = new InputEvent("insertParagraph", { inputType: "insertParagraph" });
         const wysiwyg = { actions: { clear: () => {} } } as Wysiwyg;
         inputEventProcessor(event, wysiwyg);

@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import { RefObject, useCallback, useRef } from "react";
-import { FormattingFunctions } from "@matrix-org/matrix-wysiwyg";
 
 import defaultDispatcher from "../../../../../dispatcher/dispatcher";
 import { Action } from "../../../../../dispatcher/actions";
@@ -23,11 +22,12 @@ import { ActionPayload } from "../../../../../dispatcher/payloads";
 import { TimelineRenderingType, useRoomContext } from "../../../../../contexts/RoomContext";
 import { useDispatcher } from "../../../../../hooks/useDispatcher";
 import { focusComposer } from "./utils";
+import { ComposerFunctions } from "../types";
 
 export function useWysiwygSendActionHandler(
     disabled: boolean,
     composerElement: RefObject<HTMLElement>,
-    wysiwyg: FormattingFunctions,
+    composerFunctions: ComposerFunctions,
 ) {
     const roomContext = useRoomContext();
     const timeoutId = useRef<number>();
@@ -45,12 +45,12 @@ export function useWysiwygSendActionHandler(
                 focusComposer(composerElement, context, roomContext, timeoutId);
                 break;
             case Action.ClearAndFocusSendMessageComposer:
-                wysiwyg.clear();
+                composerFunctions.clear();
                 focusComposer(composerElement, context, roomContext, timeoutId);
                 break;
             // TODO: case Action.ComposerInsert: - see SendMessageComposer
         }
-    }, [disabled, composerElement, wysiwyg, timeoutId, roomContext]);
+    }, [disabled, composerElement, composerFunctions, timeoutId, roomContext]);
 
     useDispatcher(defaultDispatcher, handler);
 }
