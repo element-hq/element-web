@@ -190,9 +190,9 @@ describe("VoiceBroadcastPlayback", () => {
         onStateChanged = jest.fn();
     });
 
-    describe("when there is a running broadcast without chunks yet", () => {
+    describe(`when there is a ${VoiceBroadcastInfoState.Resumed} broadcast without chunks yet`, () => {
         beforeEach(() => {
-            infoEvent = mkInfoEvent(VoiceBroadcastInfoState.Running);
+            infoEvent = mkInfoEvent(VoiceBroadcastInfoState.Resumed);
             playback = mkPlayback();
             setUpChunkEvents([]);
         });
@@ -236,9 +236,9 @@ describe("VoiceBroadcastPlayback", () => {
         });
     });
 
-    describe("when there is a running voice broadcast with some chunks", () => {
+    describe(`when there is a ${VoiceBroadcastInfoState.Resumed} voice broadcast with some chunks`, () => {
         beforeEach(() => {
-            infoEvent = mkInfoEvent(VoiceBroadcastInfoState.Running);
+            infoEvent = mkInfoEvent(VoiceBroadcastInfoState.Resumed);
             playback = mkPlayback();
             setUpChunkEvents([chunk2Event, chunk0Event, chunk1Event]);
         });

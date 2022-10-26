@@ -121,7 +121,7 @@ describe("hasRoomLiveVoiceBroadcast", () => {
         // all there are kind of live states
         VoiceBroadcastInfoState.Started,
         VoiceBroadcastInfoState.Paused,
-        VoiceBroadcastInfoState.Running,
+        VoiceBroadcastInfoState.Resumed,
     ])("when there is a live broadcast (%s) from the current user", (state: VoiceBroadcastInfoState) => {
         beforeEach(() => {
             addVoiceBroadcastInfoEvent(state, client.getUserId());
@@ -132,7 +132,7 @@ describe("hasRoomLiveVoiceBroadcast", () => {
 
     describe("when there was a live broadcast, that has been stopped", () => {
         beforeEach(() => {
-            addVoiceBroadcastInfoEvent(VoiceBroadcastInfoState.Running, client.getUserId());
+            addVoiceBroadcastInfoEvent(VoiceBroadcastInfoState.Resumed, client.getUserId());
             addVoiceBroadcastInfoEvent(VoiceBroadcastInfoState.Stopped, client.getUserId());
         });
 
@@ -141,7 +141,7 @@ describe("hasRoomLiveVoiceBroadcast", () => {
 
     describe("when there is a live broadcast from another user", () => {
         beforeEach(() => {
-            addVoiceBroadcastInfoEvent(VoiceBroadcastInfoState.Running, otherUserId);
+            addVoiceBroadcastInfoEvent(VoiceBroadcastInfoState.Resumed, otherUserId);
         });
 
         itShouldReturnTrueFalse();

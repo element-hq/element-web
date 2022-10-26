@@ -3,7 +3,7 @@
 exports[`VoiceBroadcastPlaybackBody when rendering a 0 broadcast should render as expected 1`] = `
 <div>
   <div
-    class="mx_VoiceBroadcastPlaybackBody"
+    class="mx_VoiceBroadcastBody"
   >
     <div
       class="mx_VoiceBroadcastHeader"
@@ -51,7 +51,7 @@ exports[`VoiceBroadcastPlaybackBody when rendering a 0 broadcast should render a
       </div>
     </div>
     <div
-      class="mx_VoiceBroadcastPlaybackBody_controls"
+      class="mx_VoiceBroadcastBody_controls"
     >
       <div
         aria-label="resume voice broadcast"
@@ -71,7 +71,7 @@ exports[`VoiceBroadcastPlaybackBody when rendering a 0 broadcast should render a
 exports[`VoiceBroadcastPlaybackBody when rendering a 1 broadcast should render as expected 1`] = `
 <div>
   <div
-    class="mx_VoiceBroadcastPlaybackBody"
+    class="mx_VoiceBroadcastBody"
   >
     <div
       class="mx_VoiceBroadcastHeader"
@@ -119,7 +119,7 @@ exports[`VoiceBroadcastPlaybackBody when rendering a 1 broadcast should render a
       </div>
     </div>
     <div
-      class="mx_VoiceBroadcastPlaybackBody_controls"
+      class="mx_VoiceBroadcastBody_controls"
     >
       <div
         aria-label="pause voice broadcast"
@@ -139,7 +139,7 @@ exports[`VoiceBroadcastPlaybackBody when rendering a 1 broadcast should render a
 exports[`VoiceBroadcastPlaybackBody when rendering a buffering voice broadcast should render as expected 1`] = `
 <div>
   <div
-    class="mx_VoiceBroadcastPlaybackBody"
+    class="mx_VoiceBroadcastBody"
   >
     <div
       class="mx_VoiceBroadcastHeader"
@@ -187,7 +187,7 @@ exports[`VoiceBroadcastPlaybackBody when rendering a buffering voice broadcast s
       </div>
     </div>
     <div
-      class="mx_VoiceBroadcastPlaybackBody_controls"
+      class="mx_VoiceBroadcastBody_controls"
     >
       <div
         class="mx_Spinner"

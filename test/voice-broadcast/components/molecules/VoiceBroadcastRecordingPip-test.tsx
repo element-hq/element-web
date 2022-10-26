@@ -118,7 +118,7 @@ describe("VoiceBroadcastRecordingPip", () => {
             });
 
             it("should resume the recording", () => {
-                expect(recording.getState()).toBe(VoiceBroadcastInfoState.Running);
+                expect(recording.getState()).toBe(VoiceBroadcastInfoState.Resumed);
             });
         });
     });

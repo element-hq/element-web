@@ -63,6 +63,15 @@ const DEFAULT_ROOM_SUBSCRIPTION_INFO = {
     required_state: [
         ["*", "*"], // all events
     ],
+    include_old_rooms: {
+        timeline_limit: 0,
+        required_state: [ // state needed to handle space navigation and tombstone chains
+            [EventType.RoomCreate, ""],
+            [EventType.RoomTombstone, ""],
+            [EventType.SpaceChild, "*"],
+            [EventType.SpaceParent, "*"],
+        ],
+    },
 };
 
 export type PartialSlidingSyncRequest = {
@@ -121,6 +130,16 @@ export class SlidingSyncManager {
                 [EventType.SpaceParent, "*"], // all space parents
                 [EventType.RoomMember, this.client.getUserId()!], // lets the client calculate that we are in fact in the room
             ],
+            include_old_rooms: {
+                timeline_limit: 0,
+                required_state: [
+                    [EventType.RoomCreate, ""],
+                    [EventType.RoomTombstone, ""], // lets JS SDK hide rooms which are dead
+                    [EventType.SpaceChild, "*"], // all space children
+                    [EventType.SpaceParent, "*"], // all space parents
+                    [EventType.RoomMember, this.client.getUserId()!], // lets the client calculate that we are in fact in the room
+                ],
+            },
             filters: {
                 room_types: ["m.space"],
             },
@@ -176,7 +195,7 @@ export class SlidingSyncManager {
             list = {
                 ranges: [[0, 20]],
                 sort: [
-                    "by_highlight_count", "by_notification_count", "by_recency",
+                    "by_notification_level", "by_recency",
                 ],
                 timeline_limit: 1, // most recent message display: though this seems to only be needed for favourites?
                 required_state: [
@@ -187,6 +206,16 @@ export class SlidingSyncManager {
                     [EventType.RoomCreate, ""], // for isSpaceRoom checks
                     [EventType.RoomMember, this.client.getUserId()], // lets the client calculate that we are in fact in the room
                 ],
+                include_old_rooms: {
+                    timeline_limit: 0,
+                    required_state: [
+                        [EventType.RoomCreate, ""],
+                        [EventType.RoomTombstone, ""], // lets JS SDK hide rooms which are dead
+                        [EventType.SpaceChild, "*"], // all space children
+                        [EventType.SpaceParent, "*"], // all space parents
+                        [EventType.RoomMember, this.client.getUserId()!], // lets the client calculate that we are in fact in the room
+                    ],
+                },
             };
             list = Object.assign(list, updateArgs);
         } else {
