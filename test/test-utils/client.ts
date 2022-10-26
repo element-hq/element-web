@@ -22,6 +22,26 @@ import { MatrixClient, User } from "matrix-js-sdk/src/matrix";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 
 /**
+ * Mocked generic class with a real EventEmitter.
+ * Useful for mocks which need event emitters.
+ */
+export class MockEventEmitter<T> extends EventEmitter {
+    /**
+     * Construct a new event emitter with additional properties/functions. The event emitter functions
+     * like .emit and .on will be real.
+     * @param mockProperties An object with the mock property or function implementations. 'getters'
+     * are correctly cloned to this event emitter.
+     */
+    constructor(mockProperties: Partial<Record<MethodKeysOf<T>|PropertyKeysOf<T>, unknown>> = {}) {
+        super();
+        // We must use defineProperties and not assign as the former clones getters correctly,
+        // whereas the latter invokes the getter and sets the return value permanently on the
+        // destination object.
+        Object.defineProperties(this, Object.getOwnPropertyDescriptors(mockProperties));
+    }
+}
+
+/**
  * Mock client with real event emitter
  * useful for testing code that listens
  * to MatrixClient events
