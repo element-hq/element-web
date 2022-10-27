@@ -38,7 +38,7 @@ import {
 import { DevicesState } from './useOwnDevices';
 import FilteredDeviceListHeader from './FilteredDeviceListHeader';
 import Spinner from '../../elements/Spinner';
-import LearnMore from '../../elements/LearnMore';
+import { DeviceSecurityLearnMore } from './DeviceSecurityLearnMore';
 
 interface Props {
     devices: DevicesDictionary;
@@ -77,22 +77,10 @@ type DeviceFilterKey = DeviceSecurityVariation | typeof ALL_FILTER_ID;
 const securityCardContent: Record<DeviceSecurityVariation, {
     title: string;
     description: string;
-    learnMoreDescription: React.ReactNode | string;
  }> = {
      [DeviceSecurityVariation.Verified]: {
          title: _t('Verified sessions'),
          description: _t('For best security, sign out from any session that you don\'t recognize or use anymore.'),
-         learnMoreDescription: <>
-             <p>{ _t('Verified sessions have logged in with your credentials and then been verified, either using your secure passphrase or by cross-verifying.') }
-             </p>
-             <p>
-                 { _t(
-                     `This means they hold encryption keys for your previous messages, ` +
-                        `and confirm to other users you are communicating with that these sessions are really you.`,
-                 )
-                 }
-             </p>
-         </>,
      },
      [DeviceSecurityVariation.Unverified]: {
          title: _t('Unverified sessions'),
@@ -100,17 +88,6 @@ const securityCardContent: Record<DeviceSecurityVariation, {
              `Verify your sessions for enhanced secure messaging or ` +
             `sign out from those you don't recognize or use anymore.`,
          ),
-         learnMoreDescription: <>
-             <p>{ _t('Unverified sessions are sessions that have logged in with your credentials but have not been cross-verified.') }
-             </p>
-             <p>
-                 { _t(
-                     `You should make especially certain that you recognise these sessions ` +
-                    `as they could represent an unauthorised use of your account.`,
-                 )
-                 }
-             </p>
-         </>,
      },
      [DeviceSecurityVariation.Inactive]: {
          title: _t('Inactive sessions'),
@@ -119,17 +96,6 @@ const securityCardContent: Record<DeviceSecurityVariation, {
         `(%(inactiveAgeDays)s days or older) you don't use anymore.`,
              { inactiveAgeDays: INACTIVE_DEVICE_AGE_DAYS },
          ),
-         learnMoreDescription: <>
-             <p>{ _t('Inactive sessions are sessions you have not used in some time, but they continue to receive encryption keys.') }
-             </p>
-             <p>
-                 { _t(
-                     `Removing inactive sessions improves security and performance, ` +
-                    `and makes it easier for you to identify if a new session is suspicious.`,
-                 )
-                 }
-             </p>
-         </>,
      },
  };
 
@@ -138,16 +104,15 @@ const isSecurityVariation = (filter?: DeviceFilterKey): filter is DeviceSecurity
 
 const FilterSecurityCard: React.FC<{ filter?: DeviceFilterKey }> = ({ filter }) => {
     if (isSecurityVariation(filter)) {
-        const { title, description, learnMoreDescription } = securityCardContent[filter];
+        const { title, description } = securityCardContent[filter];
         return <div className='mx_FilteredDeviceList_securityCard'>
             <DeviceSecurityCard
                 variation={filter}
                 heading={title}
                 description={<span>
                     { description }
-                    <LearnMore
-                        title={title}
-                        description={learnMoreDescription}
+                    <DeviceSecurityLearnMore
+                        variation={filter}
                     />
                 </span>}
             />

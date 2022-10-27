@@ -19,6 +19,7 @@ import React, { FormEvent, useEffect, useState } from 'react';
 import { _t } from '../../../../languageHandler';
 import AccessibleButton from '../../elements/AccessibleButton';
 import Field from '../../elements/Field';
+import LearnMore from '../../elements/LearnMore';
 import Spinner from '../../elements/Spinner';
 import { Caption } from '../../typography/Caption';
 import Heading from '../../typography/Heading';
@@ -88,7 +89,22 @@ const DeviceNameEditor: React.FC<Props & { stopEditing: () => void }> = ({
             <Caption
                 id={descriptionId}
             >
-                { _t('Please be aware that session names are also visible to people you communicate with') }
+                { _t('Please be aware that session names are also visible to people you communicate with.') }
+                <LearnMore
+                    title={_t('Renaming sessions')}
+                    description={<>
+                        <p>
+                            { _t(`Other users in direct messages and rooms that you join ` +
+                        `are able to view a full list of your sessions.`,
+                            ) }
+                        </p>
+                        <p>
+                            { _t(`This provides them with confidence that they are really speaking to you, ` +
+                        `but it also means they can see the session name you enter here.`,
+                            ) }
+                        </p>
+                    </>}
+                />
                 { !!error &&
                     <span
                         data-testid="device-rename-error"

@@ -19,6 +19,7 @@ import React from 'react';
 import { _t } from '../../../../languageHandler';
 import AccessibleButton from '../../elements/AccessibleButton';
 import DeviceSecurityCard from './DeviceSecurityCard';
+import { DeviceSecurityLearnMore } from './DeviceSecurityLearnMore';
 import {
     DeviceSecurityVariation,
     ExtendedDevice,
@@ -36,11 +37,17 @@ export const DeviceVerificationStatusCard: React.FC<Props> = ({
     const securityCardProps = device.isVerified ? {
         variation: DeviceSecurityVariation.Verified,
         heading: _t('Verified session'),
-        description: _t('This session is ready for secure messaging.'),
+        description: <>
+            { _t('This session is ready for secure messaging.') }
+            <DeviceSecurityLearnMore variation={DeviceSecurityVariation.Verified} />
+        </>,
     } : {
         variation: DeviceSecurityVariation.Unverified,
         heading: _t('Unverified session'),
-        description: _t('Verify or sign out from this session for best security and reliability.'),
+        description: <>
+            { _t('Verify or sign out from this session for best security and reliability.') }
+            <DeviceSecurityLearnMore variation={DeviceSecurityVariation.Unverified} />
+        </>,
     };
     return <DeviceSecurityCard
         {...securityCardProps}

@@ -21,12 +21,12 @@ import Modal from '../../../Modal';
 import InfoDialog from '../dialogs/InfoDialog';
 import AccessibleButton, { IAccessibleButtonProps } from './AccessibleButton';
 
-interface Props extends IAccessibleButtonProps {
+export interface LearnMoreProps extends IAccessibleButtonProps {
     title: string;
     description: string | React.ReactNode;
 }
 
-const LearnMore: React.FC<Props> = ({
+const LearnMore: React.FC<LearnMoreProps> = ({
     title,
     description,
     ...rest
