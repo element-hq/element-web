@@ -369,7 +369,7 @@ module.exports = (env, argv) => {
                     ],
                 },
                 {
-                    // the olm library wants to load its own wasm, rather than have/ webpack do it.
+                    // the olm library wants to load its own wasm, rather than have webpack do it.
                     // We therefore use the `file-loader` to tell webpack to dump the contents to
                     // a separate file and return the name, and override the default `type` for `.wasm` files
                     // (which is `webassembly/experimental` under webpack 4) to stop webpack trying to interpret
