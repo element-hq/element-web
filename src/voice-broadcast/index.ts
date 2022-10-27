@@ -56,6 +56,7 @@ export interface VoiceBroadcastInfoEventContent {
     device_id: string;
     state: VoiceBroadcastInfoState;
     chunk_length?: number;
+    last_chunk_sequence?: number;
     ["m.relates_to"]?: {
         rel_type: RelationType;
         event_id: string;

@@ -21,6 +21,7 @@ import { TypedEventEmitter } from "matrix-js-sdk/src/models/typed-event-emitter"
 import {
     ChunkRecordedPayload,
     createVoiceBroadcastRecorder,
+    VoiceBroadcastInfoEventContent,
     VoiceBroadcastInfoEventType,
     VoiceBroadcastInfoState,
     VoiceBroadcastRecorder,
@@ -207,11 +208,12 @@ export class VoiceBroadcastRecording
             {
                 device_id: this.client.getDeviceId(),
                 state,
+                last_chunk_sequence: this.sequence,
                 ["m.relates_to"]: {
                     rel_type: RelationType.Reference,
                     event_id: this.infoEvent.getId(),
                 },
-            },
+            } as VoiceBroadcastInfoEventContent,
             this.client.getUserId(),
         );
     }
