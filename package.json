@@ -1,6 +1,6 @@
 {
   "name": "element-web",
-  "version": "1.11.10",
+  "version": "1.11.12",
   "description": "A feature-rich client for Matrix.org",
   "author": "New Vector Ltd.",
   "repository": {
@@ -92,6 +92,7 @@
     "@testing-library/react": "^12.1.5",
     "@types/flux": "^3.1.9",
     "@types/jest": "^29.0.0",
+    "@types/jsrsasign": "^10.5.4",
     "@types/modernizr": "^3.5.3",
     "@types/node": "^14.18.28",
     "@types/react": "^17.0.49",

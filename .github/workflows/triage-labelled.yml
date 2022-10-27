@@ -17,7 +17,8 @@ jobs:
       contains(github.event.issue.labels.*.name, 'A-E2EE-Dehydration') ||
       contains(github.event.issue.labels.*.name, 'A-Tags') ||
       contains(github.event.issue.labels.*.name, 'A-Video-Rooms') ||
-      contains(github.event.issue.labels.*.name, 'A-Message-Starring')
+      contains(github.event.issue.labels.*.name, 'A-Message-Starring') ||
+      contains(github.event.issue.labels.*.name, 'A-Rich-Text-Editor')
     steps:
       - uses: actions/github-script@v5
         with:
@@ -44,7 +45,13 @@ jobs:
     name: P1 X-Needs-Design to Design project board
     runs-on: ubuntu-latest
     if: >
-      contains(github.event.issue.labels.*.name, 'X-Needs-Design')
+      contains(github.event.issue.labels.*.name, 'X-Needs-Design') &&
+      (contains(github.event.issue.labels.*.name, 'S-Critical') &&
+       (contains(github.event.issue.labels.*.name, 'O-Frequent') ||
+        contains(github.event.issue.labels.*.name, 'O-Occasional')) ||
+       contains(github.event.issue.labels.*.name, 'S-Major') &&
+       contains(github.event.issue.labels.*.name, 'O-Frequent') ||
+       contains(github.event.issue.labels.*.name, 'A11y'))
     steps:
       - uses: octokit/graphql-action@v2.x
         id: add_to_project
@@ -161,6 +168,7 @@ jobs:
         env:
           PROJECT_ID: "PN_kwDOAM0swc2KCw"
           GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
   move_message_bubbles_issues:
     name: A-Message-Bubbles to Message bubbles board
     runs-on: ubuntu-latest
@@ -288,7 +296,7 @@ jobs:
     name: Add labelled issues to PS features team 3
     runs-on: ubuntu-latest
     if: >
-      contains(github.event.issue.labels.*.name, 'A-Composer-WYSIWYG')
+      contains(github.event.issue.labels.*.name, 'A-Rich-Text-Editor')
     steps:
       - uses: octokit/graphql-action@v2.x
         id: add_to_project
@@ -306,4 +314,28 @@ jobs:
           contentid: ${{ github.event.issue.node_id }}
         env:
           PROJECT_ID: "PVT_kwDOAM0swc4AHJKW"
+          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+  voip:
+    name: Add labelled issues to VoIP project board
+    runs-on: ubuntu-latest
+    if: >
+      contains(github.event.issue.labels.*.name, 'Team: VoIP')
+    steps:
+      - uses: octokit/graphql-action@v2.x
+        id: add_to_project
+        with:
+          headers: '{"GraphQL-Features": "projects_next_graphql"}'
+          query: |
+              mutation add_to_project($projectid:ID!,$contentid:ID!) {
+                addProjectV2ItemById(input: {projectId: $projectid contentId: $contentid}) {
+                item {
+                  id
+                  }
+                }
+              }
+          projectid: ${{ env.PROJECT_ID }}
+          contentid: ${{ github.event.issue.node_id }}
+        env:
+          PROJECT_ID: "PVT_kwDOAM0swc4ABMIk"
           GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
