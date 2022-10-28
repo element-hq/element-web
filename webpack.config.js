@@ -369,9 +369,14 @@ module.exports = (env, argv) => {
                     ],
                 },
                 {
-                    test: /\.wasm$/,
+                    // the olm library wants to load its own wasm, rather than have webpack do it.
+                    // We therefore use the `file-loader` to tell webpack to dump the contents to
+                    // a separate file and return the name, and override the default `type` for `.wasm` files
+                    // (which is `webassembly/experimental` under webpack 4) to stop webpack trying to interpret
+                    // the filename as webassembly. (see also https://github.com/webpack/webpack/issues/6725)
+                    test: /olm\.wasm$/,
                     loader: "file-loader",
-                    type: "javascript/auto", // https://github.com/webpack/webpack/issues/6725
+                    type: "javascript/auto",
                     options: {
                         name: '[name].[hash:7].[ext]',
                         outputPath: '.',
@@ -382,7 +387,7 @@ module.exports = (env, argv) => {
                     // We more or less just want it to be clear it's for opus and not something else.
                     test: /encoderWorker\.min\.js$/,
                     loader: "file-loader",
-                    type: "javascript/auto", // https://github.com/webpack/webpack/issues/6725
+                    type: "javascript/auto",
                     options: {
                         // We deliberately override the name so it makes sense in debugging
                         name: 'opus-encoderWorker.min.[hash:7].[ext]',
@@ -422,11 +427,11 @@ module.exports = (env, argv) => {
                     },
                 },
                 {
-                    // This is from the same place as the encoderWorker above, but only needed
-                    // for Safari support.
+                    // Same deal as olm.wasm: the decoderWorker wants to load the wasm artifact
+                    // itself.
                     test: /decoderWorker\.min\.wasm$/,
                     loader: "file-loader",
-                    type: "javascript/auto", // https://github.com/webpack/webpack/issues/6725
+                    type: "javascript/auto",
                     options: {
                         // We deliberately don't change the name because the decoderWorker has this
                         // hardcoded. This is here to avoid the default wasm rule from adding a hash.
@@ -652,6 +657,7 @@ module.exports = (env, argv) => {
             // chunks even after the app is redeployed.
             filename: "bundles/[hash]/[name].js",
             chunkFilename: "bundles/[hash]/[name].js",
+            webassemblyModuleFilename: "bundles/[hash]/[modulehash].wasm",
         },
 
         // configuration for the webpack-dev-server
