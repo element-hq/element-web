@@ -14,16 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { act, render } from "@testing-library/react";
+import React from "react";
+import { act, render, screen, waitFor } from "@testing-library/react";
+import { EventType } from "matrix-js-sdk/src/@types/event";
 import { MatrixClient, PendingEventOrdering } from "matrix-js-sdk/src/client";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { NotificationCountType, Room } from "matrix-js-sdk/src/models/room";
-import React from "react";
 
 import EventTile, { EventTileProps } from "../../../../src/components/views/rooms/EventTile";
+import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import RoomContext, { TimelineRenderingType } from "../../../../src/contexts/RoomContext";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
-import { getRoomContext, mkMessage, stubClient } from "../../../test-utils";
+import SettingsStore from "../../../../src/settings/SettingsStore";
+import { getRoomContext, mkEvent, mkMessage, stubClient } from "../../../test-utils";
 import { mkThread } from "../../../test-utils/threads";
 
 describe("EventTile", () => {
@@ -52,9 +55,11 @@ describe("EventTile", () => {
             timelineRenderingType: renderingType,
         });
         return render(
-            <RoomContext.Provider value={context}>
-                <TestEventTile {...overrides} />
-            </RoomContext.Provider>,
+            <MatrixClientContext.Provider value={client}>
+                <RoomContext.Provider value={context}>
+                    <TestEventTile {...overrides} />
+                </RoomContext.Provider>,
+            </MatrixClientContext.Provider>,
         );
     }
 
@@ -69,12 +74,48 @@ describe("EventTile", () => {
         });
 
         jest.spyOn(client, "getRoom").mockReturnValue(room);
+        jest.spyOn(client, "decryptEventIfNeeded").mockResolvedValue();
+        jest.spyOn(SettingsStore, "getValue").mockImplementation(name => name === "feature_thread");
 
         mxEvent = mkMessage({
             room: room.roomId,
             user: "@alice:example.org",
             msg: "Hello world!",
             event: true,
+        });
+    });
+
+    describe("EventTile thread summary", () => {
+        beforeEach(() => {
+            jest.spyOn(client, "supportsExperimentalThreads").mockReturnValue(true);
+        });
+
+        it("removes the thread summary when thread is deleted", async () => {
+            const { rootEvent, events: [, reply] } = mkThread({
+                room,
+                client,
+                authorId: "@alice:example.org",
+                participantUserIds: ["@alice:example.org"],
+                length: 2, // root + 1 answer
+            });
+            getComponent({
+                mxEvent: rootEvent,
+            }, TimelineRenderingType.Room);
+
+            await waitFor(() => expect(screen.queryByTestId("thread-summary")).not.toBeNull());
+
+            const redaction = mkEvent({
+                event: true,
+                type: EventType.RoomRedaction,
+                user: "@alice:example.org",
+                room: room.roomId,
+                redacts: reply.getId(),
+                content: {},
+            });
+
+            act(() => room.processThreadedEvents([redaction], false));
+
+            await waitFor(() => expect(screen.queryByTestId("thread-summary")).toBeNull());
         });
     });
 

@@ -18,21 +18,27 @@ import { M_LOCATION } from "matrix-js-sdk/src/@types/location";
 import {
     EventStatus,
     EventType,
+    IEvent,
+    MatrixClient,
     MatrixEvent,
     MsgType,
+    PendingEventOrdering,
     RelationType,
+    Room,
 } from "matrix-js-sdk/src/matrix";
+import { Thread } from "matrix-js-sdk/src/models/thread";
 
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import {
     canCancel,
     canEditContent,
     canEditOwnEvent,
+    fetchInitialEvent,
     isContentActionable,
     isLocationEvent,
     isVoiceMessage,
 } from "../../src/utils/EventUtils";
-import { getMockClientWithEventEmitter, makeBeaconInfoEvent, makePollStartEvent } from "../test-utils";
+import { getMockClientWithEventEmitter, makeBeaconInfoEvent, makePollStartEvent, stubClient } from "../test-utils";
 
 describe('EventUtils', () => {
     const userId = '@user:server';
@@ -334,6 +340,94 @@ describe('EventUtils', () => {
             ['invalid-status' as unknown as EventStatus],
         ])('return false for status %s', (status) => {
             expect(canCancel(status)).toBe(false);
+        });
+    });
+
+    describe("fetchInitialEvent", () => {
+        const ROOM_ID = "!roomId:example.org";
+        let room: Room;
+        let client: MatrixClient;
+
+        const NORMAL_EVENT = "$normalEvent";
+        const THREAD_ROOT = "$threadRoot";
+        const THREAD_REPLY = "$threadReply";
+
+        const events: Record<string, Partial<IEvent>> = {
+            [NORMAL_EVENT]: {
+                event_id: NORMAL_EVENT,
+                type: EventType.RoomMessage,
+                content: {
+                    "body": "Classic event",
+                    "msgtype": MsgType.Text,
+                },
+            },
+            [THREAD_ROOT]: {
+                event_id: THREAD_ROOT,
+                type: EventType.RoomMessage,
+                content: {
+                    "body": "Thread root",
+                    "msgtype": "m.text",
+                },
+                unsigned: {
+                    "m.relations": {
+                        [RelationType.Thread]: {
+                            latest_event: {
+                                event_id: THREAD_REPLY,
+                                type: EventType.RoomMessage,
+                                content: {
+                                    "body": "Thread reply",
+                                    "msgtype": MsgType.Text,
+                                    "m.relates_to": {
+                                        event_id: "$threadRoot",
+                                        rel_type: RelationType.Thread,
+                                    },
+                                },
+                            },
+                            count: 1,
+                            current_user_participated: false,
+                        },
+                    },
+                },
+            },
+            [THREAD_REPLY]: {
+                event_id: THREAD_REPLY,
+                type: EventType.RoomMessage,
+                content: {
+                    "body": "Thread reply",
+                    "msgtype": MsgType.Text,
+                    "m.relates_to": {
+                        event_id: THREAD_ROOT,
+                        rel_type: RelationType.Thread,
+                    },
+                },
+            },
+        };
+
+        beforeEach(() => {
+            jest.clearAllMocks();
+
+            stubClient();
+            client = MatrixClientPeg.get();
+
+            room = new Room(ROOM_ID, client, client.getUserId(), {
+                pendingEventOrdering: PendingEventOrdering.Detached,
+            });
+
+            jest.spyOn(client, "supportsExperimentalThreads").mockReturnValue(true);
+            jest.spyOn(client, "getRoom").mockReturnValue(room);
+            jest.spyOn(client, "fetchRoomEvent").mockImplementation(async (roomId, eventId) => {
+                return events[eventId] ?? Promise.reject();
+            });
+        });
+
+        it("returns null for unknown events", async () => {
+            expect(await fetchInitialEvent(client, room.roomId, "$UNKNOWN")).toBeNull();
+            expect(await fetchInitialEvent(client, room.roomId, NORMAL_EVENT)).toBeInstanceOf(MatrixEvent);
+        });
+
+        it("creates a thread when needed", async () => {
+            await fetchInitialEvent(client, room.roomId, THREAD_REPLY);
+            expect(room.getThread(THREAD_ROOT)).toBeInstanceOf(Thread);
         });
     });
 });

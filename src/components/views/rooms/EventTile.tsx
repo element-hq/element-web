@@ -540,7 +540,11 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
     private renderThreadInfo(): React.ReactNode {
         if (this.state.thread?.id === this.props.mxEvent.getId()) {
-            return <ThreadSummary mxEvent={this.props.mxEvent} thread={this.state.thread} />;
+            return <ThreadSummary
+                mxEvent={this.props.mxEvent}
+                thread={this.state.thread}
+                data-testid="thread-summary"
+            />;
         }
 
         if (this.context.timelineRenderingType === TimelineRenderingType.Search && this.props.mxEvent.threadRootId) {
@@ -1528,9 +1532,11 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
 // Wrap all event tiles with the tile error boundary so that any throws even during construction are captured
 const SafeEventTile = forwardRef((props: EventTileProps, ref: RefObject<UnwrappedEventTile>) => {
-    return <TileErrorBoundary mxEvent={props.mxEvent} layout={props.layout}>
-        <UnwrappedEventTile ref={ref} {...props} />
-    </TileErrorBoundary>;
+    return <>
+        <TileErrorBoundary mxEvent={props.mxEvent} layout={props.layout}>
+            <UnwrappedEventTile ref={ref} {...props} />
+        </TileErrorBoundary>
+    </>;
 });
 export default SafeEventTile;
 
