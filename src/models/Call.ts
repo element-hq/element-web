@@ -816,7 +816,7 @@ export class ElementCall extends Call {
         this.messaging!.on(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
         this.messaging!.on(`action:${ElementWidgetActions.TileLayout}`, this.onTileLayout);
         this.messaging!.on(`action:${ElementWidgetActions.SpotlightLayout}`, this.onSpotlightLayout);
-        this.messaging!.on(`action:${ElementWidgetActions.Screenshare}`, this.onScreenshare);
+        this.messaging!.on(`action:${ElementWidgetActions.ScreenshareRequest}`, this.onScreenshareRequest);
     }
 
     protected async performDisconnection(): Promise<void> {
@@ -832,7 +832,7 @@ export class ElementCall extends Call {
         this.messaging!.off(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
         this.messaging!.off(`action:${ElementWidgetActions.TileLayout}`, this.onTileLayout);
         this.messaging!.off(`action:${ElementWidgetActions.SpotlightLayout}`, this.onSpotlightLayout);
-        this.messaging!.off(`action:${ElementWidgetActions.Screenshare}`, this.onSpotlightLayout);
+        this.messaging!.off(`action:${ElementWidgetActions.ScreenshareRequest}`, this.onScreenshareRequest);
         super.setDisconnected();
     }
 
@@ -952,19 +952,24 @@ export class ElementCall extends Call {
         await this.messaging!.transport.reply(ev.detail, {}); // ack
     };
 
-    private onScreenshare = async (ev: CustomEvent<IWidgetApiRequest>) => {
+    private onScreenshareRequest = async (ev: CustomEvent<IWidgetApiRequest>) => {
         ev.preventDefault();
 
         if (PlatformPeg.get().supportsDesktopCapturer()) {
+            await this.messaging!.transport.reply(ev.detail, { pending: true });
+
             const { finished } = Modal.createDialog(DesktopCapturerSourcePicker);
             const [source] = await finished;
 
-            await this.messaging!.transport.reply(ev.detail, {
-                failed: !source,
-                desktopCapturerSourceId: source,
-            });
+            if (source) {
+                await this.messaging!.transport.send(ElementWidgetActions.ScreenshareStart, {
+                    desktopCapturerSourceId: source,
+                });
+            } else {
+                await this.messaging!.transport.send(ElementWidgetActions.ScreenshareStop, {});
+            }
         } else {
-            await this.messaging!.transport.reply(ev.detail, {});
+            await this.messaging!.transport.reply(ev.detail, { pending: false });
         }
     };
 }

@@ -74,7 +74,25 @@ describe("VoiceBroadcastPlayback", () => {
 
     const itShouldEmitAStateChangedEvent = (state: VoiceBroadcastPlaybackState) => {
         it(`should emit a ${state} state changed event`, () => {
-            expect(mocked(onStateChanged)).toHaveBeenCalledWith(state);
+            expect(mocked(onStateChanged)).toHaveBeenCalledWith(state, playback);
+        });
+    };
+
+    const startPlayback = () => {
+        beforeEach(async () => {
+            await playback.start();
+        });
+    };
+
+    const pausePlayback = () => {
+        beforeEach(() => {
+            playback.pause();
+        });
+    };
+
+    const stopPlayback = () => {
+        beforeEach(() => {
+            playback.stop();
         });
     };
 
@@ -172,20 +190,34 @@ describe("VoiceBroadcastPlayback", () => {
         onStateChanged = jest.fn();
     });
 
-    describe("when there is a running broadcast without chunks yet", () => {
+    describe(`when there is a ${VoiceBroadcastInfoState.Resumed} broadcast without chunks yet`, () => {
         beforeEach(() => {
-            infoEvent = mkInfoEvent(VoiceBroadcastInfoState.Running);
+            infoEvent = mkInfoEvent(VoiceBroadcastInfoState.Resumed);
             playback = mkPlayback();
             setUpChunkEvents([]);
         });
 
         describe("and calling start", () => {
-            beforeEach(async () => {
-                await playback.start();
-            });
+            startPlayback();
 
             it("should be in buffering state", () => {
                 expect(playback.getState()).toBe(VoiceBroadcastPlaybackState.Buffering);
+            });
+
+            describe("and calling stop", () => {
+                stopPlayback();
+                itShouldSetTheStateTo(VoiceBroadcastPlaybackState.Stopped);
+
+                describe("and calling pause", () => {
+                    pausePlayback();
+                    // stopped voice broadcasts cannot be paused
+                    itShouldSetTheStateTo(VoiceBroadcastPlaybackState.Stopped);
+                });
+            });
+
+            describe("and calling pause", () => {
+                pausePlayback();
+                itShouldSetTheStateTo(VoiceBroadcastPlaybackState.Paused);
             });
 
             describe("and receiving the first chunk", () => {
@@ -204,17 +236,15 @@ describe("VoiceBroadcastPlayback", () => {
         });
     });
 
-    describe("when there is a running voice broadcast with some chunks", () => {
+    describe(`when there is a ${VoiceBroadcastInfoState.Resumed} voice broadcast with some chunks`, () => {
         beforeEach(() => {
-            infoEvent = mkInfoEvent(VoiceBroadcastInfoState.Running);
+            infoEvent = mkInfoEvent(VoiceBroadcastInfoState.Resumed);
             playback = mkPlayback();
             setUpChunkEvents([chunk2Event, chunk0Event, chunk1Event]);
         });
 
         describe("and calling start", () => {
-            beforeEach(async () => {
-                await playback.start();
-            });
+            startPlayback();
 
             it("should play the last chunk", () => {
                 // assert that the last chunk is played first
@@ -258,10 +288,7 @@ describe("VoiceBroadcastPlayback", () => {
             });
 
             describe("and calling start", () => {
-                beforeEach(async () => {
-                    await playback.start();
-                });
-
+                startPlayback();
                 itShouldSetTheStateTo(VoiceBroadcastPlaybackState.Buffering);
             });
         });
@@ -278,9 +305,7 @@ describe("VoiceBroadcastPlayback", () => {
             itShouldSetTheStateTo(VoiceBroadcastPlaybackState.Stopped);
 
             describe("and calling start", () => {
-                beforeEach(async () => {
-                    await playback.start();
-                });
+                startPlayback();
 
                 itShouldSetTheStateTo(VoiceBroadcastPlaybackState.Playing);
 
@@ -303,12 +328,14 @@ describe("VoiceBroadcastPlayback", () => {
                 });
 
                 describe("and calling pause", () => {
-                    beforeEach(() => {
-                        playback.pause();
-                    });
-
+                    pausePlayback();
                     itShouldSetTheStateTo(VoiceBroadcastPlaybackState.Paused);
                     itShouldEmitAStateChangedEvent(VoiceBroadcastPlaybackState.Paused);
+                });
+
+                describe("and calling stop", () => {
+                    stopPlayback();
+                    itShouldSetTheStateTo(VoiceBroadcastPlaybackState.Stopped);
                 });
             });
 
@@ -337,9 +364,7 @@ describe("VoiceBroadcastPlayback", () => {
             });
 
             describe("and calling stop", () => {
-                beforeEach(() => {
-                    playback.stop();
-                });
+                stopPlayback();
 
                 itShouldSetTheStateTo(VoiceBroadcastPlaybackState.Stopped);
 

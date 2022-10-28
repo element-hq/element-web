@@ -16,11 +16,10 @@ limitations under the License.
 
 import React, { ComponentProps } from 'react';
 import { Room } from 'matrix-js-sdk/src/models/room';
-import { ResizeMethod } from 'matrix-js-sdk/src/@types/partials';
 import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 import classNames from "classnames";
-import { EventType } from "matrix-js-sdk/src/@types/event";
+import { EventType, RoomType } from "matrix-js-sdk/src/@types/event";
 
 import BaseAvatar from './BaseAvatar';
 import ImageView from '../elements/ImageView';
@@ -39,11 +38,7 @@ interface IProps extends Omit<ComponentProps<typeof BaseAvatar>, "name" | "idNam
     oobData?: IOOBData & {
         roomId?: string;
     };
-    width?: number;
-    height?: number;
-    resizeMethod?: ResizeMethod;
     viewAvatarOnClick?: boolean;
-    className?: string;
     onClick?(): void;
 }
 
@@ -72,10 +67,7 @@ export default class RoomAvatar extends React.Component<IProps, IState> {
     }
 
     public componentWillUnmount() {
-        const cli = MatrixClientPeg.get();
-        if (cli) {
-            cli.removeListener(RoomStateEvent.Events, this.onRoomStateEvents);
-        }
+        MatrixClientPeg.get()?.removeListener(RoomStateEvent.Events, this.onRoomStateEvents);
     }
 
     public static getDerivedStateFromProps(nextProps: IProps): IState {
@@ -133,7 +125,7 @@ export default class RoomAvatar extends React.Component<IProps, IState> {
     public render() {
         const { room, oobData, viewAvatarOnClick, onClick, className, ...otherProps } = this.props;
 
-        const roomName = room ? room.name : oobData.name;
+        const roomName = room?.name ?? oobData.name;
         // If the room is a DM, we use the other user's ID for the color hash
         // in order to match the room avatar with their avatar
         const idName = room ? (DMRoomMap.shared().getUserIdForRoomId(room.roomId) ?? room.roomId) : oobData.roomId;
@@ -142,7 +134,7 @@ export default class RoomAvatar extends React.Component<IProps, IState> {
             <BaseAvatar
                 {...otherProps}
                 className={classNames(className, {
-                    mx_RoomAvatar_isSpaceRoom: room?.isSpaceRoom(),
+                    mx_RoomAvatar_isSpaceRoom: (room?.getType() ?? this.props.oobData?.roomType) === RoomType.Space,
                 })}
                 name={roomName}
                 idName={idName}

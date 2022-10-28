@@ -4,7 +4,6 @@
 @import "./_font-sizes.pcss";
 @import "./_font-weights.pcss";
 @import "./_spacing.pcss";
-@import "./compound/_Icon.pcss";
 @import "./components/views/beacon/_BeaconListItem.pcss";
 @import "./components/views/beacon/_BeaconStatus.pcss";
 @import "./components/views/beacon/_BeaconStatusTooltip.pcss";
@@ -19,6 +18,7 @@
 @import "./components/views/beacon/_StyledLiveBeaconIcon.pcss";
 @import "./components/views/context_menus/_KebabContextMenu.pcss";
 @import "./components/views/elements/_FilterDropdown.pcss";
+@import "./components/views/elements/_LearnMore.pcss";
 @import "./components/views/location/_EnableLiveShare.pcss";
 @import "./components/views/location/_LiveDurationDropdown.pcss";
 @import "./components/views/location/_LocationShareMenu.pcss";
@@ -44,6 +44,7 @@
 @import "./components/views/settings/shared/_SettingsSubsectionHeading.pcss";
 @import "./components/views/spaces/_QuickThemeSwitcher.pcss";
 @import "./components/views/typography/_Caption.pcss";
+@import "./compound/_Icon.pcss";
 @import "./structures/_AutoHideScrollbar.pcss";
 @import "./structures/_BackdropPanel.pcss";
 @import "./structures/_CompatibilityPage.pcss";
@@ -299,8 +300,10 @@
 @import "./views/rooms/_TopUnreadMessagesBar.pcss";
 @import "./views/rooms/_VoiceRecordComposerTile.pcss";
 @import "./views/rooms/_WhoIsTypingTile.pcss";
-@import "./views/rooms/wysiwyg_composer/_FormattingButtons.pcss";
-@import "./views/rooms/wysiwyg_composer/_WysiwygComposer.pcss";
+@import "./views/rooms/wysiwyg_composer/_EditWysiwygComposer.pcss";
+@import "./views/rooms/wysiwyg_composer/_SendWysiwygComposer.pcss";
+@import "./views/rooms/wysiwyg_composer/components/_Editor.pcss";
+@import "./views/rooms/wysiwyg_composer/components/_FormattingButtons.pcss";
 @import "./views/settings/_AvatarSetting.pcss";
 @import "./views/settings/_CrossSigningPanel.pcss";
 @import "./views/settings/_CryptographyPanel.pcss";
@@ -371,6 +374,4 @@
 @import "./voice-broadcast/atoms/_PlaybackControlButton.pcss";
 @import "./voice-broadcast/atoms/_VoiceBroadcastControl.pcss";
 @import "./voice-broadcast/atoms/_VoiceBroadcastHeader.pcss";
-@import "./voice-broadcast/molecules/_VoiceBroadcastPlaybackBody.pcss";
-@import "./voice-broadcast/molecules/_VoiceBroadcastRecordingBody.pcss";
-@import "./voice-broadcast/molecules/_VoiceBroadcastRecordingPip.pcss";
+@import "./voice-broadcast/molecules/_VoiceBroadcastBody.pcss";

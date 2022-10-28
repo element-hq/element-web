@@ -820,19 +820,25 @@ describe("ElementCall", () => {
                 await call.connect();
 
                 messaging.emit(
-                    `action:${ElementWidgetActions.Screenshare}`,
+                    `action:${ElementWidgetActions.ScreenshareRequest}`,
                     new CustomEvent("widgetapirequest", { detail: {} }),
                 );
 
-                waitFor(() => {
+                await waitFor(() => {
                     expect(messaging!.transport.reply).toHaveBeenCalledWith(
                         expect.objectContaining({}),
-                        expect.objectContaining({ desktopCapturerSourceId: sourceId }),
+                        expect.objectContaining({ pending: true }),
+                    );
+                });
+
+                await waitFor(() => {
+                    expect(messaging!.transport.send).toHaveBeenCalledWith(
+                        "io.element.screenshare_start", expect.objectContaining({ desktopCapturerSourceId: sourceId }),
                     );
                 });
             });
 
-            it("passes failed if we couldn't get a source id", async () => {
+            it("sends ScreenshareStop if we couldn't get a source id", async () => {
                 jest.spyOn(Modal, "createDialog").mockReturnValue(
                     { finished: new Promise((r) => r([null])) } as IHandle<any[]>,
                 );
@@ -841,32 +847,38 @@ describe("ElementCall", () => {
                 await call.connect();
 
                 messaging.emit(
-                    `action:${ElementWidgetActions.Screenshare}`,
+                    `action:${ElementWidgetActions.ScreenshareRequest}`,
                     new CustomEvent("widgetapirequest", { detail: {} }),
                 );
 
-                waitFor(() => {
+                await waitFor(() => {
                     expect(messaging!.transport.reply).toHaveBeenCalledWith(
                         expect.objectContaining({}),
-                        expect.objectContaining({ failed: true }),
+                        expect.objectContaining({ pending: true }),
+                    );
+                });
+
+                await waitFor(() => {
+                    expect(messaging!.transport.send).toHaveBeenCalledWith(
+                        "io.element.screenshare_stop", expect.objectContaining({ }),
                     );
                 });
             });
 
-            it("passes an empty object if we don't support desktop capturer", async () => {
+            it("replies with pending: false if we don't support desktop capturer", async () => {
                 jest.spyOn(PlatformPeg.get(), "supportsDesktopCapturer").mockReturnValue(false);
 
                 await call.connect();
 
                 messaging.emit(
-                    `action:${ElementWidgetActions.Screenshare}`,
+                    `action:${ElementWidgetActions.ScreenshareRequest}`,
                     new CustomEvent("widgetapirequest", { detail: {} }),
                 );
 
-                waitFor(() => {
+                await waitFor(() => {
                     expect(messaging!.transport.reply).toHaveBeenCalledWith(
                         expect.objectContaining({}),
-                        expect.objectContaining({}),
+                        expect.objectContaining({ pending: false }),
                     );
                 });
             });

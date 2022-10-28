@@ -37,7 +37,7 @@ interface IProps {
     thread: Thread;
 }
 
-const ThreadSummary = ({ mxEvent, thread }: IProps) => {
+const ThreadSummary = ({ mxEvent, thread, ...props }: IProps) => {
     const roomContext = useContext(RoomContext);
     const cardContext = useContext(CardContext);
     const count = useTypedEventEmitterState(thread, ThreadEvent.Update, () => thread.length);
@@ -50,6 +50,7 @@ const ThreadSummary = ({ mxEvent, thread }: IProps) => {
 
     return (
         <AccessibleButton
+            {...props}
             className="mx_ThreadSummary"
             onClick={(ev: ButtonEvent) => {
                 defaultDispatcher.dispatch<ShowThreadPayload>({
@@ -94,7 +95,9 @@ export const ThreadMessagePreview = ({ thread, showDisplayname = false }: IPrevi
         await cli.decryptEventIfNeeded(lastReply);
         return MessagePreviewStore.instance.generatePreviewForEvent(lastReply);
     }, [lastReply, content]);
-    if (!preview) return null;
+    if (!preview || !lastReply) {
+        return null;
+    }
 
     return <>
         <MemberAvatar

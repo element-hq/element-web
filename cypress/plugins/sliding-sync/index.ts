@@ -77,7 +77,7 @@ async function proxyStart(synapse: SynapseInstance): Promise<ProxyInstance> {
     const port = await getFreePort();
     console.log(new Date(), "starting proxy container...");
     const containerId = await dockerRun({
-        image: "ghcr.io/matrix-org/sliding-sync-proxy:v0.4.0",
+        image: "ghcr.io/matrix-org/sliding-sync-proxy:v0.6.0",
         containerName: "react-sdk-cypress-sliding-sync-proxy",
         params: [
             "--rm",

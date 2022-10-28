@@ -14,16 +14,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_VoiceBroadcastRecordingBody {
-    align-items: flex-start;
-    background-color: $quinary-content;
-    border-radius: 8px;
-    display: inline-flex;
-    gap: $spacing-8;
-    padding: 12px;
-}
+.mx_WysiwygComposer_container {
+    position: relative;
 
-.mx_VoiceBroadcastRecordingBody_title {
-    font-size: $font-12px;
-    font-weight: $font-semi-bold;
+    @keyframes visualbell {
+        from { background-color: $visual-bell-bg-color; }
+        to { background-color: $background; }
+    }
+
+    .mx_WysiwygComposer_content {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        outline: none;
+        overflow-x: hidden;
+
+        /* Force caret nodes to be selected in full so that they can be */
+        /* navigated through in a single keypress */
+        .caretNode {
+            user-select: all;
+        }
+    }
 }

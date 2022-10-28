@@ -64,6 +64,21 @@ describe("Composer", () => {
             cy.contains('.mx_EventTile_body strong', 'bold message');
         });
 
+        it("should allow user to input emoji via graphical picker", () => {
+            cy.getComposer(false).within(() => {
+                cy.get('[aria-label="Emoji"]').click();
+            });
+
+            cy.get('[data-testid="mx_EmojiPicker"]').within(() => {
+                cy.contains(".mx_EmojiPicker_item", "😇").click();
+            });
+
+            cy.get(".mx_ContextualMenu_background").click(); // Close emoji picker
+            cy.get('div[contenteditable=true]').type("{enter}"); // Send message
+
+            cy.contains(".mx_EventTile_body", "😇");
+        });
+
         describe("when Ctrl+Enter is required to send", () => {
             beforeEach(() => {
                 cy.setSettingValue("MessageComposerInput.ctrlEnterToSend", null, SettingLevel.ACCOUNT, true);

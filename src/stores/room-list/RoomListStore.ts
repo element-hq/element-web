@@ -24,7 +24,7 @@ import SettingsStore from "../../settings/SettingsStore";
 import { DefaultTagID, OrderedDefaultTagIDs, RoomUpdateCause, TagID } from "./models";
 import { IListOrderingMap, ITagMap, ITagSortingMap, ListAlgorithm, SortAlgorithm } from "./algorithms/models";
 import { ActionPayload } from "../../dispatcher/payloads";
-import defaultDispatcher from "../../dispatcher/dispatcher";
+import defaultDispatcher, { MatrixDispatcher } from "../../dispatcher/dispatcher";
 import { readReceiptChangeIsFor } from "../../utils/read-receipts";
 import { FILTER_CHANGED, IFilterCondition } from "./filters/IFilterCondition";
 import { Algorithm, LIST_UPDATED_EVENT } from "./algorithms/Algorithm";
@@ -65,8 +65,8 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> implements 
         this.emit(LISTS_UPDATE_EVENT);
     });
 
-    constructor() {
-        super(defaultDispatcher);
+    constructor(dis: MatrixDispatcher) {
+        super(dis);
         this.setMaxListeners(20); // RoomList + LeftPanel + 8xRoomSubList + spares
         this.algorithm.start();
     }
@@ -613,11 +613,11 @@ export default class RoomListStore {
         if (!RoomListStore.internalInstance) {
             if (SettingsStore.getValue("feature_sliding_sync")) {
                 logger.info("using SlidingRoomListStoreClass");
-                const instance = new SlidingRoomListStoreClass();
+                const instance = new SlidingRoomListStoreClass(defaultDispatcher, SdkContextClass.instance);
                 instance.start();
                 RoomListStore.internalInstance = instance;
             } else {
-                const instance = new RoomListStoreClass();
+                const instance = new RoomListStoreClass(defaultDispatcher);
                 instance.start();
                 RoomListStore.internalInstance = instance;
             }

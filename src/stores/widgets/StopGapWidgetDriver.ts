@@ -34,7 +34,7 @@ import {
 } from "matrix-widget-api";
 import { ClientEvent, ITurnServer as IClientTurnServer } from "matrix-js-sdk/src/client";
 import { EventType } from "matrix-js-sdk/src/@types/event";
-import { IContent, IEvent, MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { IContent, MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { logger } from "matrix-js-sdk/src/logger";
 import { THREAD_RELATION_TYPE } from "matrix-js-sdk/src/models/thread";
@@ -113,6 +113,12 @@ export class StopGapWidgetDriver extends WidgetDriver {
             this.allowedCapabilities.add(MatrixCapabilities.MSC3846TurnServers);
             this.allowedCapabilities.add(`org.matrix.msc2762.timeline:${inRoomId}`);
 
+            this.allowedCapabilities.add(
+                WidgetEventCapability.forRoomEvent(EventDirection.Send, "org.matrix.rageshake_request").raw,
+            );
+            this.allowedCapabilities.add(
+                WidgetEventCapability.forRoomEvent(EventDirection.Receive, "org.matrix.rageshake_request").raw,
+            );
             this.allowedCapabilities.add(
                 WidgetEventCapability.forStateEvent(EventDirection.Receive, EventType.RoomMember).raw,
             );
@@ -304,7 +310,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
         limitPerRoom = limitPerRoom > 0 ? Math.min(limitPerRoom, Number.MAX_SAFE_INTEGER) : Number.MAX_SAFE_INTEGER; // relatively arbitrary
 
         const rooms = this.pickRooms(roomIds);
-        const allResults: IEvent[] = [];
+        const allResults: IRoomEvent[] = [];
         for (const room of rooms) {
             const results: MatrixEvent[] = [];
             const events = room.getLiveTimeline().getEvents(); // timelines are most recent last
@@ -317,7 +323,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
                 results.push(ev);
             }
 
-            results.forEach(e => allResults.push(e.getEffectiveEvent()));
+            results.forEach(e => allResults.push(e.getEffectiveEvent() as IRoomEvent));
         }
         return allResults;
     }
@@ -331,7 +337,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
         limitPerRoom = limitPerRoom > 0 ? Math.min(limitPerRoom, Number.MAX_SAFE_INTEGER) : Number.MAX_SAFE_INTEGER; // relatively arbitrary
 
         const rooms = this.pickRooms(roomIds);
-        const allResults: IEvent[] = [];
+        const allResults: IRoomEvent[] = [];
         for (const room of rooms) {
             const results: MatrixEvent[] = [];
             const state: Map<string, MatrixEvent> = room.currentState.events.get(eventType);
@@ -344,7 +350,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
                 }
             }
 
-            results.slice(0, limitPerRoom).forEach(e => allResults.push(e.getEffectiveEvent()));
+            results.slice(0, limitPerRoom).forEach(e => allResults.push(e.getEffectiveEvent() as IRoomEvent));
         }
         return allResults;
     }
@@ -445,15 +451,11 @@ export class StopGapWidgetDriver extends WidgetDriver {
             eventId,
             relationType ?? null,
             eventType ?? null,
-            {
-                from,
-                to,
-                limit,
-                dir,
-            });
+            { from, to, limit, dir },
+        );
 
         return {
-            chunk: events.map(e => e.getEffectiveEvent()),
+            chunk: events.map(e => e.getEffectiveEvent() as IRoomEvent),
             nextBatch,
             prevBatch,
         };

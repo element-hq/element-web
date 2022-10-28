@@ -835,6 +835,13 @@ export default class MessagePanel extends React.Component<IProps, IState> {
             : room;
 
         const receipts: IReadReceiptProps[] = [];
+
+        if (!receiptDestination) {
+            logger.debug("Discarding request, could not find the receiptDestination for event: "
+                + this.context.threadId);
+            return receipts;
+        }
+
         receiptDestination.getReceiptsForEvent(event).forEach((r) => {
             if (
                 !r.userId ||

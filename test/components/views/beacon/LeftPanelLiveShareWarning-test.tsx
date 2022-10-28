@@ -16,8 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import { mocked } from 'jest-mock';
-// eslint-disable-next-line deprecate/import
-import { mount } from 'enzyme';
+import { fireEvent, render } from "@testing-library/react";
 import { act } from 'react-dom/test-utils';
 import { Beacon, BeaconIdentifier } from 'matrix-js-sdk/src/matrix';
 
@@ -48,9 +47,7 @@ jest.mock('../../../../src/stores/OwnBeaconStore', () => {
 );
 
 describe('<LeftPanelLiveShareWarning />', () => {
-    const defaultProps = {};
-    const getComponent = (props = {}) =>
-        mount(<LeftPanelLiveShareWarning {...defaultProps} {...props} />);
+    const getComponent = (props = {}) => render(<LeftPanelLiveShareWarning {...props} />);
 
     const roomId1 = '!room1:server';
     const roomId2 = '!room2:server';
@@ -85,8 +82,8 @@ describe('<LeftPanelLiveShareWarning />', () => {
     ));
 
     it('renders nothing when user has no live beacons', () => {
-        const component = getComponent();
-        expect(component.html()).toBe(null);
+        const { container } = getComponent();
+        expect(container.innerHTML).toBeFalsy();
     });
 
     describe('when user has live location monitor', () => {
@@ -110,17 +107,15 @@ describe('<LeftPanelLiveShareWarning />', () => {
         });
 
         it('renders correctly when not minimized', () => {
-            const component = getComponent();
-            expect(component).toMatchSnapshot();
+            const { asFragment } = getComponent();
+            expect(asFragment()).toMatchSnapshot();
         });
 
         it('goes to room of latest beacon when clicked', () => {
-            const component = getComponent();
+            const { container } = getComponent();
             const dispatchSpy = jest.spyOn(dispatcher, 'dispatch');
 
-            act(() => {
-                component.simulate('click');
-            });
+            fireEvent.click(container.querySelector("[role=button]"));
 
             expect(dispatchSpy).toHaveBeenCalledWith({
                 action: Action.ViewRoom,
@@ -134,28 +129,26 @@ describe('<LeftPanelLiveShareWarning />', () => {
         });
 
         it('renders correctly when minimized', () => {
-            const component = getComponent({ isMinimized: true });
-            expect(component).toMatchSnapshot();
+            const { asFragment } = getComponent({ isMinimized: true });
+            expect(asFragment()).toMatchSnapshot();
         });
 
         it('renders location publish error', () => {
             mocked(OwnBeaconStore.instance).getLiveBeaconIdsWithLocationPublishError.mockReturnValue(
                 [beacon1.identifier],
             );
-            const component = getComponent();
-            expect(component).toMatchSnapshot();
+            const { asFragment } = getComponent();
+            expect(asFragment()).toMatchSnapshot();
         });
 
         it('goes to room of latest beacon with location publish error when clicked', () => {
             mocked(OwnBeaconStore.instance).getLiveBeaconIdsWithLocationPublishError.mockReturnValue(
                 [beacon1.identifier],
             );
-            const component = getComponent();
+            const { container } = getComponent();
             const dispatchSpy = jest.spyOn(dispatcher, 'dispatch');
 
-            act(() => {
-                component.simulate('click');
-            });
+            fireEvent.click(container.querySelector("[role=button]"));
 
             expect(dispatchSpy).toHaveBeenCalledWith({
                 action: Action.ViewRoom,
@@ -172,9 +165,9 @@ describe('<LeftPanelLiveShareWarning />', () => {
             mocked(OwnBeaconStore.instance).getLiveBeaconIdsWithLocationPublishError.mockReturnValue(
                 [beacon1.identifier],
             );
-            const component = getComponent();
+            const { container, rerender } = getComponent();
             // error mode
-            expect(component.find('.mx_LeftPanelLiveShareWarning').at(0).text()).toEqual(
+            expect(container.querySelector('.mx_LeftPanelLiveShareWarning').textContent).toEqual(
                 'An error occurred whilst sharing your live location',
             );
 
@@ -183,18 +176,18 @@ describe('<LeftPanelLiveShareWarning />', () => {
                 OwnBeaconStore.instance.emit(OwnBeaconStoreEvent.LocationPublishError, 'abc');
             });
 
-            component.setProps({});
+            rerender(<LeftPanelLiveShareWarning />);
 
             // default mode
-            expect(component.find('.mx_LeftPanelLiveShareWarning').at(0).text()).toEqual(
+            expect(container.querySelector('.mx_LeftPanelLiveShareWarning').textContent).toEqual(
                 'You are sharing your live location',
             );
         });
 
         it('removes itself when user stops having live beacons', async () => {
-            const component = getComponent({ isMinimized: true });
+            const { container, rerender } = getComponent({ isMinimized: true });
             // started out rendered
-            expect(component.html()).toBeTruthy();
+            expect(container.innerHTML).toBeTruthy();
 
             act(() => {
                 mocked(OwnBeaconStore.instance).isMonitoringLiveLocation = false;
@@ -202,9 +195,9 @@ describe('<LeftPanelLiveShareWarning />', () => {
             });
 
             await flushPromises();
-            component.setProps({});
+            rerender(<LeftPanelLiveShareWarning />);
 
-            expect(component.html()).toBe(null);
+            expect(container.innerHTML).toBeFalsy();
         });
 
         it('refreshes beacon liveness monitors when pagevisibilty changes to visible', () => {
@@ -228,21 +221,21 @@ describe('<LeftPanelLiveShareWarning />', () => {
         describe('stopping errors', () => {
             it('renders stopping error', () => {
                 OwnBeaconStore.instance.beaconUpdateErrors.set(beacon2.identifier, new Error('error'));
-                const component = getComponent();
-                expect(component.text()).toEqual('An error occurred while stopping your live location');
+                const { container } = getComponent();
+                expect(container.textContent).toEqual('An error occurred while stopping your live location');
             });
 
             it('starts rendering stopping error on beaconUpdateError emit', () => {
-                const component = getComponent();
+                const { container } = getComponent();
                 // no error
-                expect(component.text()).toEqual('You are sharing your live location');
+                expect(container.textContent).toEqual('You are sharing your live location');
 
                 act(() => {
                     OwnBeaconStore.instance.beaconUpdateErrors.set(beacon2.identifier, new Error('error'));
                     OwnBeaconStore.instance.emit(OwnBeaconStoreEvent.BeaconUpdateError, beacon2.identifier, true);
                 });
 
-                expect(component.text()).toEqual('An error occurred while stopping your live location');
+                expect(container.textContent).toEqual('An error occurred while stopping your live location');
             });
 
             it('renders stopping error when beacons have stopping and location errors', () => {
@@ -250,8 +243,8 @@ describe('<LeftPanelLiveShareWarning />', () => {
                     [beacon1.identifier],
                 );
                 OwnBeaconStore.instance.beaconUpdateErrors.set(beacon2.identifier, new Error('error'));
-                const component = getComponent();
-                expect(component.text()).toEqual('An error occurred while stopping your live location');
+                const { container } = getComponent();
+                expect(container.textContent).toEqual('An error occurred while stopping your live location');
             });
 
             it('goes to room of latest beacon with stopping error when clicked', () => {
@@ -259,12 +252,10 @@ describe('<LeftPanelLiveShareWarning />', () => {
                     [beacon1.identifier],
                 );
                 OwnBeaconStore.instance.beaconUpdateErrors.set(beacon2.identifier, new Error('error'));
-                const component = getComponent();
+                const { container } = getComponent();
                 const dispatchSpy = jest.spyOn(dispatcher, 'dispatch');
 
-                act(() => {
-                    component.simulate('click');
-                });
+                fireEvent.click(container.querySelector("[role=button]"));
 
                 expect(dispatchSpy).toHaveBeenCalledWith({
                     action: Action.ViewRoom,

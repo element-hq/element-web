@@ -139,5 +139,7 @@ export class VoiceBroadcastRecorder
 }
 
 export const createVoiceBroadcastRecorder = (): VoiceBroadcastRecorder => {
-    return new VoiceBroadcastRecorder(new VoiceRecording(), getChunkLength());
+    const voiceRecording = new VoiceRecording();
+    voiceRecording.disableMaxLength();
+    return new VoiceBroadcastRecorder(voiceRecording, getChunkLength());
 };

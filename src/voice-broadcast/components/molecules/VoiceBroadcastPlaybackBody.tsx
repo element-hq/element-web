@@ -74,14 +74,14 @@ export const VoiceBroadcastPlaybackBody: React.FC<VoiceBroadcastPlaybackBodyProp
     }
 
     return (
-        <div className="mx_VoiceBroadcastPlaybackBody">
+        <div className="mx_VoiceBroadcastBody">
             <VoiceBroadcastHeader
                 live={live}
                 sender={sender}
                 room={room}
                 showBroadcast={true}
             />
-            <div className="mx_VoiceBroadcastPlaybackBody_controls">
+            <div className="mx_VoiceBroadcastBody_controls">
                 { control }
             </div>
         </div>

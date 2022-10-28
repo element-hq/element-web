@@ -240,7 +240,7 @@ limitations under the License.
 */
 .mx_MessageComposer_wysiwyg {
     .mx_MessageComposer_e2eIcon.mx_E2EIcon,.mx_MessageComposer_button, .mx_MessageComposer_sendMessage {
-        margin-top: 22px;
+        margin-top: 28px;
     }
 }
 
@@ -262,6 +262,14 @@ limitations under the License.
 
 .mx_MessageComposer_emoji::before {
     mask-image: url('$(res)/img/element-icons/room/composer/emoji.svg');
+}
+
+.mx_MessageComposer_plain_text::before {
+    mask-image: url('$(res)/img/element-icons/room/composer/plain_text.svg');
+}
+
+.mx_MessageComposer_rich_text::before {
+    mask-image: url('$(res)/img/element-icons/room/composer/rich_text.svg');
 }
 
 .mx_MessageComposer_location::before {

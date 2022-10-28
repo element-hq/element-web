@@ -15,18 +15,14 @@ limitations under the License.
 */
 
 import React from 'react';
-import {
-    renderIntoDocument,
-    Simulate,
-    findRenderedDOMComponentWithClass,
-    act,
-} from 'react-dom/test-utils';
+import { render, fireEvent, RenderResult, waitFor } from "@testing-library/react";
 import { Room, RoomMember, MatrixError, IContent } from 'matrix-js-sdk/src/matrix';
 
 import { stubClient } from '../../../test-utils';
 import { MatrixClientPeg } from '../../../../src/MatrixClientPeg';
 import DMRoomMap from '../../../../src/utils/DMRoomMap';
 import RoomPreviewBar from '../../../../src/components/views/rooms/RoomPreviewBar';
+import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
 
 jest.mock('../../../../src/IdentityAuthClient', () => {
     return jest.fn().mockImplementation(() => {
@@ -79,19 +75,18 @@ describe('<RoomPreviewBar />', () => {
         const defaultProps = {
             room: createRoom(roomId, userId),
         };
-        const wrapper = renderIntoDocument<React.Component>(
-            <RoomPreviewBar {...defaultProps} {...props} />,
-        ) as React.Component;
-        return findRenderedDOMComponentWithClass(wrapper, 'mx_RoomPreviewBar') as HTMLDivElement;
+        return render(<RoomPreviewBar {...defaultProps} {...props} />);
     };
 
-    const isSpinnerRendered = (element: Element) => !!element.querySelector('.mx_Spinner');
-    const getMessage = (element: Element) => element.querySelector<HTMLDivElement>('.mx_RoomPreviewBar_message');
-    const getActions = (element: Element) => element.querySelector<HTMLDivElement>('.mx_RoomPreviewBar_actions');
-    const getPrimaryActionButton = (element: Element) =>
-        getActions(element).querySelector('.mx_AccessibleButton_kind_primary');
-    const getSecondaryActionButton = (element: Element) =>
-        getActions(element).querySelector('.mx_AccessibleButton_kind_secondary');
+    const isSpinnerRendered = (wrapper: RenderResult) => !!wrapper.container.querySelector('.mx_Spinner');
+    const getMessage = (wrapper: RenderResult) =>
+        wrapper.container.querySelector<HTMLDivElement>('.mx_RoomPreviewBar_message');
+    const getActions = (wrapper: RenderResult) =>
+        wrapper.container.querySelector<HTMLDivElement>('.mx_RoomPreviewBar_actions');
+    const getPrimaryActionButton = (wrapper: RenderResult) =>
+        getActions(wrapper).querySelector('.mx_AccessibleButton_kind_primary');
+    const getSecondaryActionButton = (wrapper: RenderResult) =>
+        getActions(wrapper).querySelector('.mx_AccessibleButton_kind_secondary');
 
     beforeEach(() => {
         stubClient();
@@ -126,6 +121,36 @@ describe('<RoomPreviewBar />', () => {
 
         expect(isSpinnerRendered(component)).toBeFalsy();
         expect(getMessage(component).textContent).toEqual('Join the conversation with an account');
+    });
+
+    it("should send room oob data to start login", async () => {
+        MatrixClientPeg.get().isGuest = jest.fn().mockReturnValue(true);
+        const component = getComponent({
+            oobData: {
+                name: "Room Name",
+                avatarUrl: "mxc://foo/bar",
+                inviterName: "Charlie",
+            },
+        });
+
+        const dispatcherSpy = jest.fn();
+        const dispatcherRef = defaultDispatcher.register(dispatcherSpy);
+
+        expect(getMessage(component).textContent).toEqual('Join the conversation with an account');
+        fireEvent.click(getPrimaryActionButton(component));
+
+        await waitFor(() => expect(dispatcherSpy).toHaveBeenCalledWith(expect.objectContaining({
+            screenAfterLogin: {
+                screen: 'room',
+                params: expect.objectContaining({
+                    room_name: "Room Name",
+                    room_avatar_url: "mxc://foo/bar",
+                    inviter_name: "Charlie",
+                }),
+            },
+        })));
+
+        defaultDispatcher.unregister(dispatcherRef);
     });
 
     it('renders kicked message', () => {
@@ -233,18 +258,14 @@ describe('<RoomPreviewBar />', () => {
 
                 it('joins room on primary button click', () => {
                     const component = getComponent({ inviterName, room, onJoinClick, onRejectClick });
-                    act(() => {
-                        Simulate.click(getPrimaryActionButton(component));
-                    });
+                    fireEvent.click(getPrimaryActionButton(component));
 
                     expect(onJoinClick).toHaveBeenCalled();
                 });
 
                 it('rejects invite on secondary button click', () => {
                     const component = getComponent({ inviterName, room, onJoinClick, onRejectClick });
-                    act(() => {
-                        Simulate.click(getSecondaryActionButton(component));
-                    });
+                    fireEvent.click(getSecondaryActionButton(component));
 
                     expect(onRejectClick).toHaveBeenCalled();
                 });
@@ -296,9 +317,7 @@ describe('<RoomPreviewBar />', () => {
                 await new Promise(setImmediate);
                 expect(getPrimaryActionButton(component)).toBeTruthy();
                 expect(getSecondaryActionButton(component)).toBeFalsy();
-                act(() => {
-                    Simulate.click(getPrimaryActionButton(component));
-                });
+                fireEvent.click(getPrimaryActionButton(component));
                 expect(onJoinClick).toHaveBeenCalled();
             };
 

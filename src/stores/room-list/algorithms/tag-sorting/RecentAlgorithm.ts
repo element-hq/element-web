@@ -73,7 +73,7 @@ export const sortRooms = (rooms: Room[]): Room[] => {
 };
 
 const getLastTs = (r: Room, userId: string) => {
-    const ts = (() => {
+    const mainTimelineLastTs = (() => {
         // Apparently we can have rooms without timelines, at least under testing
         // environments. Just return MAX_INT when this happens.
         if (!r?.timeline) {
@@ -108,7 +108,13 @@ const getLastTs = (r: Room, userId: string) => {
         // This is better than just assuming the last event was forever ago.
         return r.timeline[0]?.getTs() ?? Number.MAX_SAFE_INTEGER;
     })();
-    return ts;
+
+    const threadLastEventTimestamps = r.getThreads().map(thread => {
+        const event = thread.replyToEvent ?? thread.rootEvent;
+        return event?.getTs() ?? 0;
+    });
+
+    return Math.max(mainTimelineLastTs, ...threadLastEventTimestamps);
 };
 
 /**

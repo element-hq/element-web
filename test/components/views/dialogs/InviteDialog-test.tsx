@@ -16,6 +16,7 @@ limitations under the License.
 
 import React from "react";
 import { render, screen } from "@testing-library/react";
+import { RoomType } from "matrix-js-sdk/src/@types/event";
 
 import InviteDialog from "../../../../src/components/views/dialogs/InviteDialog";
 import { KIND_INVITE } from "../../../../src/components/views/dialogs/InviteDialogTypes";
@@ -74,6 +75,7 @@ describe("InviteDialog", () => {
 
     it("should label with space name", () => {
         mockClient.getRoom(roomId).isSpaceRoom = jest.fn().mockReturnValue(true);
+        mockClient.getRoom(roomId).getType = jest.fn().mockReturnValue(RoomType.Space);
         mockClient.getRoom(roomId).name = "Space";
         render((
             <InviteDialog

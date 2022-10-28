@@ -16,93 +16,36 @@ limitations under the License.
 
 import { Composer as ComposerEvent } from "@matrix-org/analytics-events/types/typescript/Composer";
 import { IContent, IEventRelation, MatrixEvent } from 'matrix-js-sdk/src/models/event';
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { ISendEventResponse, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { THREAD_RELATION_TYPE } from "matrix-js-sdk/src/models/thread";
 
-import { PosthogAnalytics } from "../../../../PosthogAnalytics";
-import SettingsStore from "../../../../settings/SettingsStore";
-import { decorateStartSendingTime, sendRoundTripMetric } from "../../../../sendTimePerformanceMetrics";
-import { RoomPermalinkCreator } from "../../../../utils/permalinks/Permalinks";
-import { doMaybeLocalRoomAction } from "../../../../utils/local-room";
-import { CHAT_EFFECTS } from "../../../../effects";
-import { containsEmoji } from "../../../../effects/utils";
-import { IRoomState } from "../../../structures/RoomView";
-import dis from '../../../../dispatcher/dispatcher';
-import { addReplyToMessageContent } from "../../../../utils/Reply";
-
-// Merges favouring the given relation
-function attachRelation(content: IContent, relation?: IEventRelation): void {
-    if (relation) {
-        content['m.relates_to'] = {
-            ...(content['m.relates_to'] || {}),
-            ...relation,
-        };
-    }
-}
+import { PosthogAnalytics } from "../../../../../PosthogAnalytics";
+import SettingsStore from "../../../../../settings/SettingsStore";
+import { decorateStartSendingTime, sendRoundTripMetric } from "../../../../../sendTimePerformanceMetrics";
+import { RoomPermalinkCreator } from "../../../../../utils/permalinks/Permalinks";
+import { doMaybeLocalRoomAction } from "../../../../../utils/local-room";
+import { CHAT_EFFECTS } from "../../../../../effects";
+import { containsEmoji } from "../../../../../effects/utils";
+import { IRoomState } from "../../../../structures/RoomView";
+import dis from '../../../../../dispatcher/dispatcher';
+import { createRedactEventDialog } from "../../../dialogs/ConfirmRedactDialog";
+import { endEditing, cancelPreviousPendingEdit } from "./editing";
+import EditorStateTransfer from "../../../../../utils/EditorStateTransfer";
+import { createMessageContent } from "./createMessageContent";
+import { isContentModified } from "./isContentModified";
 
 interface SendMessageParams {
     mxClient: MatrixClient;
     relation?: IEventRelation;
     replyToEvent?: MatrixEvent;
     roomContext: IRoomState;
-    permalinkCreator: RoomPermalinkCreator;
+    permalinkCreator?: RoomPermalinkCreator;
     includeReplyLegacyFallback?: boolean;
-}
-
-// exported for tests
-export function createMessageContent(
-    message: string,
-    { relation, replyToEvent, permalinkCreator, includeReplyLegacyFallback = true }:
-    Omit<SendMessageParams, 'roomContext' | 'mxClient'>,
-): IContent {
-    // TODO emote ?
-
-    /*const isEmote = containsEmote(model);
-    if (isEmote) {
-        model = stripEmoteCommand(model);
-    }
-    if (startsWith(model, "//")) {
-        model = stripPrefix(model, "/");
-    }
-    model = unescapeMessage(model);*/
-
-    // const body = textSerialize(model);
-    const body = message;
-
-    const content: IContent = {
-        // TODO emote
-    //    msgtype: isEmote ? "m.emote" : "m.text",
-        msgtype: "m.text",
-        body: body,
-    };
-
-    // TODO markdown support
-
-    /*const formattedBody = htmlSerializeIfNeeded(model, {
-        forceHTML: !!replyToEvent,
-        useMarkdown: SettingsStore.getValue("MessageComposerInput.useMarkdown"),
-    });*/
-    const formattedBody = message;
-
-    if (formattedBody) {
-        content.format = "org.matrix.custom.html";
-        content.formatted_body = formattedBody;
-    }
-
-    attachRelation(content, relation);
-
-    if (replyToEvent) {
-        addReplyToMessageContent(content, replyToEvent, {
-            permalinkCreator,
-            includeLegacyFallback: includeReplyLegacyFallback,
-        });
-    }
-
-    return content;
 }
 
 export function sendMessage(
     message: string,
+    isHTML: boolean,
     { roomContext, mxClient, ...params }: SendMessageParams,
 ) {
     const { relation, replyToEvent } = params;
@@ -113,6 +56,7 @@ export function sendMessage(
         eventName: "Composer",
         isEditing: false,
         isReply: Boolean(replyToEvent),
+        // TODO thread
         inThread: relation?.rel_type === THREAD_RELATION_TYPE.name,
     };
 
@@ -134,6 +78,7 @@ export function sendMessage(
     if (!content) {
         content = createMessageContent(
             message,
+            isHTML,
             params,
         );
     }
@@ -196,4 +141,69 @@ export function sendMessage(
     }
 
     return prom;
+}
+
+interface EditMessageParams {
+    mxClient: MatrixClient;
+    roomContext: IRoomState;
+    editorStateTransfer: EditorStateTransfer;
+}
+
+export function editMessage(
+    html: string,
+    { roomContext, mxClient, editorStateTransfer }: EditMessageParams,
+) {
+    const editedEvent = editorStateTransfer.getEvent();
+
+    PosthogAnalytics.instance.trackEvent<ComposerEvent>({
+        eventName: "Composer",
+        isEditing: true,
+        inThread: Boolean(editedEvent?.getThread()),
+        isReply: Boolean(editedEvent.replyEventId),
+    });
+
+    // TODO emoji
+    // Replace emoticon at the end of the message
+    /*    if (SettingsStore.getValue('MessageComposerInput.autoReplaceEmoji')) {
+        const caret = this.editorRef.current?.getCaret();
+        const position = this.model.positionForOffset(caret.offset, caret.atNodeEnd);
+        this.editorRef.current?.replaceEmoticon(position, REGEX_EMOTICON);
+    }*/
+    const editContent = createMessageContent(html, true, { editedEvent });
+    const newContent = editContent["m.new_content"];
+
+    const shouldSend = true;
+
+    if (newContent?.body === '') {
+        cancelPreviousPendingEdit(mxClient, editorStateTransfer);
+        createRedactEventDialog({
+            mxEvent: editedEvent,
+            onCloseDialog: () => {
+                endEditing(roomContext);
+            },
+        });
+        return;
+    }
+
+    let response: Promise<ISendEventResponse> | undefined;
+
+    // If content is modified then send an updated event into the room
+    if (isContentModified(newContent, editorStateTransfer)) {
+        const roomId = editedEvent.getRoomId();
+
+        // TODO Slash Commands
+
+        if (shouldSend) {
+            cancelPreviousPendingEdit(mxClient, editorStateTransfer);
+
+            const event = editorStateTransfer.getEvent();
+            const threadId = event.threadRootId || null;
+
+            response = mxClient.sendMessage(roomId, threadId, editContent);
+            dis.dispatch({ action: "message_sent" });
+        }
+    }
+
+    endEditing(roomContext);
+    return response;
 }

@@ -23,7 +23,6 @@ import { MatrixClientPeg } from "./MatrixClientPeg";
 import shouldHideEvent from './shouldHideEvent';
 import { haveRendererForEvent } from "./events/EventTileFactory";
 import SettingsStore from "./settings/SettingsStore";
-import { RoomNotificationStateStore } from "./stores/notifications/RoomNotificationStateStore";
 
 /**
  * Returns true if this event arriving in a room should affect the room's
@@ -76,11 +75,6 @@ export function doesRoomHaveUnreadMessages(room: Room): boolean {
         //             https://github.com/vector-im/element-web/issues/3363
         if (room.timeline.length && room.timeline[room.timeline.length - 1].getSender() === myUserId) {
             return false;
-        }
-    } else {
-        const threadState = RoomNotificationStateStore.instance.getThreadsRoomState(room);
-        if (threadState.color > 0) {
-            return true;
         }
     }
 

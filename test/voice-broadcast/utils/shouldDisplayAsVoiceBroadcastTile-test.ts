@@ -128,7 +128,7 @@ describe("shouldDisplayAsVoiceBroadcastTile", () => {
     describe.each(
         [
             VoiceBroadcastInfoState.Paused,
-            VoiceBroadcastInfoState.Running,
+            VoiceBroadcastInfoState.Resumed,
             VoiceBroadcastInfoState.Stopped,
         ],
     )("when a voice broadcast info event in state %s occurs", (state: VoiceBroadcastInfoState) => {

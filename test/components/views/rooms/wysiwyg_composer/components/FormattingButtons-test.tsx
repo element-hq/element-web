@@ -18,7 +18,8 @@ import React from 'react';
 import { render, screen } from "@testing-library/react";
 import userEvent from '@testing-library/user-event';
 
-import { FormattingButtons } from "../../../../../src/components/views/rooms/wysiwyg_composer/FormattingButtons";
+import { FormattingButtons }
+    from "../../../../../../src/components/views/rooms/wysiwyg_composer/components/FormattingButtons";
 
 describe('FormattingButtons', () => {
     const wysiwyg = {

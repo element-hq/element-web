@@ -82,7 +82,7 @@ export default class DialogButtons extends React.Component<IProps> {
             cancelButton = <button
                 // important: the default type is 'submit' and this button comes before the
                 // primary in the DOM so will get form submissions unless we make it not a submit.
-                data-test-id="dialog-cancel-button"
+                data-testid="dialog-cancel-button"
                 type="button"
                 onClick={this.onCancelClick}
                 className={this.props.cancelButtonClass}
@@ -104,7 +104,7 @@ export default class DialogButtons extends React.Component<IProps> {
                     { cancelButton }
                     { this.props.children }
                     <button type={this.props.primaryIsSubmit ? 'submit' : 'button'}
-                        data-test-id="dialog-primary-button"
+                        data-testid="dialog-primary-button"
                         className={primaryButtonClassName}
                         onClick={this.props.onPrimaryButtonClick}
                         autoFocus={this.props.focus}

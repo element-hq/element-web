@@ -21,6 +21,7 @@ import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import "../../../../src/stores/room-list/RoomListStore";
 import { RecentAlgorithm } from "../../../../src/stores/room-list/algorithms/tag-sorting/RecentAlgorithm";
 import { EffectiveMembership } from "../../../../src/utils/membership";
+import { makeThreadEvent, mkThread } from "../../../test-utils/threads";
 
 describe("RecentAlgorithm", () => {
     let algorithm;
@@ -122,6 +123,60 @@ describe("RecentAlgorithm", () => {
             room1.addLiveEvents([evt]);
 
             expect(algorithm.sortRooms([room2, room1])).toEqual([room2, room1]);
+
+            const { events } = mkThread({
+                room: room1,
+                client: cli,
+                authorId: "@bob:matrix.org",
+                participantUserIds: ["@bob:matrix.org"],
+                ts: 12,
+            });
+
+            room1.addLiveEvents(events);
+        });
+
+        it("orders rooms based on thread replies too", () => {
+            const room1 = new Room("room1", cli, "@bob:matrix.org");
+            const room2 = new Room("room2", cli, "@bob:matrix.org");
+
+            room1.getMyMembership = () => "join";
+            room2.getMyMembership = () => "join";
+
+            const { rootEvent, events: events1 } = mkThread({
+                room: room1,
+                client: cli,
+                authorId: "@bob:matrix.org",
+                participantUserIds: ["@bob:matrix.org"],
+                ts: 12,
+                length: 5,
+            });
+            room1.addLiveEvents(events1);
+
+            const { events: events2 } = mkThread({
+                room: room2,
+                client: cli,
+                authorId: "@bob:matrix.org",
+                participantUserIds: ["@bob:matrix.org"],
+                ts: 14,
+                length: 10,
+            });
+            room2.addLiveEvents(events2);
+
+            expect(algorithm.sortRooms([room1, room2])).toEqual([room2, room1]);
+
+            const threadReply = makeThreadEvent({
+                user: "@bob:matrix.org",
+                room: room1.roomId,
+                event: true,
+                msg: `hello world`,
+                rootEventId: rootEvent.getId(),
+                replyToEventId: rootEvent.getId(),
+                // replies are 1ms after each other
+                ts: 50,
+            });
+            room1.addLiveEvents([threadReply]);
+
+            expect(algorithm.sortRooms([room1, room2])).toEqual([room1, room2]);
         });
     });
 });

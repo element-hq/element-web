@@ -20,10 +20,6 @@ import * as languageHandler from "../../src/languageHandler";
 import en from "../../src/i18n/strings/en_EN.json";
 import de from "../../src/i18n/strings/de_DE.json";
 
-fetchMock.config.overwriteRoutes = false;
-fetchMock.catch("");
-window.fetch = fetchMock.sandbox();
-
 const lv = {
     "Save": "Saglabāt",
     "Uploading %(filename)s and %(count)s others|one": "Качване на %(filename)s и %(count)s друг",
