@@ -3,7 +3,7 @@
     "Dismiss": "Închide",
     "Welcome to Element": "Bun venit pe Element",
     "Sign In": "Autentificare",
-    "Create Account": "Crează un cont",
+    "Create Account": "Creează un cont",
     "Explore rooms": "Explorează camerele",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Configuratie invalida: se poate specifica doar una dintre default_server_config, default_server_name, or default_hs_url.",
     "Invalid JSON": "JSON invalid",
@@ -27,5 +27,8 @@
     "Unable to load config file: please refresh the page to try again.": "Nu se poate încărca fișierul de configurație: vă rugăm sa reîncărcați pagina și să încercați din nou.",
     "The message from the parser is: %(message)s": "Mesajul de la parser este: %(message)s",
     "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Configurația ta Element conține JSON invalid. Vă rugăm sa corectați problema și să reîncărcați pagina.",
-    "Invalid configuration: no default server specified.": "Configurație invalidă: niciun server implicit specificat."
+    "Invalid configuration: no default server specified.": "Configurație invalidă: niciun server implicit specificat.",
+    "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s: %(browserName)s pe %(osName)s",
+    "%(brand)s Desktop: %(platformName)s": "%(brand)s Desktop: %(platformName)s",
+    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Chat &amp; colaborare descentralizate și criptate prin intermediul $matrixLogo"
 }
