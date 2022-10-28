@@ -111,7 +111,7 @@ const getLastTs = (r: Room, userId: string) => {
 
     const threadLastEventTimestamps = r.getThreads().map(thread => {
         const event = thread.replyToEvent ?? thread.rootEvent;
-        return event!.getTs();
+        return event?.getTs() ?? 0;
     });
 
     return Math.max(mainTimelineLastTs, ...threadLastEventTimestamps);
