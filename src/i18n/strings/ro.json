@@ -2,7 +2,7 @@
     "Unknown device": "Device necunoscut",
     "Dismiss": "Închide",
     "Welcome to Element": "Bun venit pe Element",
-    "Sign In": "Autentificare",
+    "Sign In": "Conectare",
     "Create Account": "Creează un cont",
     "Explore rooms": "Explorează camerele",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Configuratie invalida: se poate specifica doar una dintre default_server_config, default_server_name, or default_hs_url.",
