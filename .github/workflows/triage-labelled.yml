@@ -30,6 +30,23 @@ jobs:
               labels: ['Z-Labs']
             })
 
+  apply_Help-Wanted_label:
+    name: Add "Help Wanted" label to all "good first issue" and Hacktoberfest
+    runs-on: ubuntu-latest
+    if: >
+      contains(github.event.issue.labels.*.name, 'good first issue') ||
+      contains(github.event.issue.labels.*.name, 'Hacktoberfest')
+    steps:
+      - uses: actions/github-script@v5
+        with:
+          script: |
+            github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['Help Wanted']
+            })
+
   move_needs_info_issues:
     name: X-Needs-Info issues to Need info column on triage board
     runs-on: ubuntu-latest
