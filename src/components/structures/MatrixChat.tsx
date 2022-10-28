@@ -1136,7 +1136,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         const client = MatrixClientPeg.get();
         const plEvent = roomToLeave.currentState.getStateEvents(EventType.RoomPowerLevels, '');
-        const plContent = plEvent ? (plEvent.getContent() || {}) : {};
+        const plContent = plEvent ? plEvent.getContent() : {};
         const userLevels = plContent.users || {};
         const currentUserLevel = userLevels[client.getUserId()];
         const userLevelValues = Object.values(userLevels);
