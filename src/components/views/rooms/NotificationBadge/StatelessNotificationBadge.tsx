@@ -51,7 +51,7 @@ export function StatelessNotificationBadge({
     const classes = classNames({
         'mx_NotificationBadge': true,
         'mx_NotificationBadge_visible': isEmptyBadge ? true : hasUnreadCount,
-        'mx_NotificationBadge_highlighted': color === NotificationColor.Red,
+        'mx_NotificationBadge_highlighted': color >= NotificationColor.Red,
         'mx_NotificationBadge_dot': isEmptyBadge,
         'mx_NotificationBadge_2char': symbol?.length > 0 && symbol?.length < 3,
         'mx_NotificationBadge_3char': symbol?.length > 2,
