@@ -16,17 +16,19 @@ limitations under the License.
 
 import React from "react";
 import { MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { render, RenderResult } from "@testing-library/react";
+import { act, render, RenderResult } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mocked } from "jest-mock";
 
 import {
-    VoiceBroadcastInfoEventType,
+    VoiceBroadcastInfoState,
     VoiceBroadcastPlayback,
     VoiceBroadcastPlaybackBody,
+    VoiceBroadcastPlaybackEvent,
     VoiceBroadcastPlaybackState,
 } from "../../../../src/voice-broadcast";
-import { mkEvent, stubClient } from "../../../test-utils";
+import { stubClient } from "../../../test-utils";
+import { mkVoiceBroadcastInfoStateEvent } from "../../utils/test-utils";
 
 // mock RoomAvatar, because it is doing too much fancy stuff
 jest.mock("../../../../src/components/views/avatars/RoomAvatar", () => ({
@@ -46,19 +48,19 @@ describe("VoiceBroadcastPlaybackBody", () => {
 
     beforeAll(() => {
         client = stubClient();
-        infoEvent = mkEvent({
-            event: true,
-            type: VoiceBroadcastInfoEventType,
-            content: {},
-            room: roomId,
-            user: userId,
-        });
+        infoEvent = mkVoiceBroadcastInfoStateEvent(
+            roomId,
+            VoiceBroadcastInfoState.Started,
+            userId,
+            client.getDeviceId(),
+        );
     });
 
     beforeEach(() => {
         playback = new VoiceBroadcastPlayback(infoEvent, client);
-        jest.spyOn(playback, "toggle");
+        jest.spyOn(playback, "toggle").mockImplementation(() => Promise.resolve());
         jest.spyOn(playback, "getState");
+        jest.spyOn(playback, "getLength").mockReturnValue((23 * 60 + 42) * 1000); // 23:42
     });
 
     describe("when rendering a buffering voice broadcast", () => {
@@ -72,7 +74,7 @@ describe("VoiceBroadcastPlaybackBody", () => {
         });
     });
 
-    describe(`when rendering a ${VoiceBroadcastPlaybackState.Stopped} broadcast`, () => {
+    describe(`when rendering a stopped broadcast`, () => {
         beforeEach(() => {
             mocked(playback.getState).mockReturnValue(VoiceBroadcastPlaybackState.Stopped);
             renderResult = render(<VoiceBroadcastPlaybackBody playback={playback} />);
@@ -85,6 +87,18 @@ describe("VoiceBroadcastPlaybackBody", () => {
 
             it("should toggle the recording", () => {
                 expect(playback.toggle).toHaveBeenCalled();
+            });
+        });
+
+        describe("and the length updated", () => {
+            beforeEach(() => {
+                act(() => {
+                    playback.emit(VoiceBroadcastPlaybackEvent.LengthChanged, 42000); // 00:42
+                });
+            });
+
+            it("should render as expected", () => {
+                expect(renderResult.container).toMatchSnapshot();
             });
         });
     });

@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { mocked } from "jest-mock";
-import { EventType, MatrixClient, MatrixEvent, MsgType, RelationType } from "matrix-js-sdk/src/matrix";
+import { EventType, MatrixClient, MatrixEvent, RelationType } from "matrix-js-sdk/src/matrix";
 import { Relations } from "matrix-js-sdk/src/models/relations";
 
 import { Playback, PlaybackState } from "../../../src/audio/Playback";
@@ -24,7 +24,6 @@ import { getReferenceRelationsForEvent } from "../../../src/events";
 import { RelationsHelperEvent } from "../../../src/events/RelationsHelper";
 import { MediaEventHelper } from "../../../src/utils/MediaEventHelper";
 import {
-    VoiceBroadcastChunkEventType,
     VoiceBroadcastInfoEventType,
     VoiceBroadcastInfoState,
     VoiceBroadcastPlayback,
@@ -33,6 +32,7 @@ import {
 } from "../../../src/voice-broadcast";
 import { mkEvent, stubClient } from "../../test-utils";
 import { createTestPlayback } from "../../test-utils/audio";
+import { mkVoiceBroadcastChunkEvent } from "../utils/test-utils";
 
 jest.mock("../../../src/events/getReferenceRelationsForEvent", () => ({
     getReferenceRelationsForEvent: jest.fn(),
@@ -49,19 +49,15 @@ describe("VoiceBroadcastPlayback", () => {
     let infoEvent: MatrixEvent;
     let playback: VoiceBroadcastPlayback;
     let onStateChanged: (state: VoiceBroadcastPlaybackState) => void;
-    let chunk0Event: MatrixEvent;
     let chunk1Event: MatrixEvent;
     let chunk2Event: MatrixEvent;
     let chunk3Event: MatrixEvent;
-    const chunk0Data = new ArrayBuffer(1);
     const chunk1Data = new ArrayBuffer(2);
     const chunk2Data = new ArrayBuffer(3);
     const chunk3Data = new ArrayBuffer(3);
-    let chunk0Helper: MediaEventHelper;
     let chunk1Helper: MediaEventHelper;
     let chunk2Helper: MediaEventHelper;
     let chunk3Helper: MediaEventHelper;
-    let chunk0Playback: Playback;
     let chunk1Playback: Playback;
     let chunk2Playback: Playback;
     let chunk3Playback: Playback;
@@ -93,21 +89,6 @@ describe("VoiceBroadcastPlayback", () => {
     const stopPlayback = () => {
         beforeEach(() => {
             playback.stop();
-        });
-    };
-
-    const mkChunkEvent = (sequence: number) => {
-        return mkEvent({
-            event: true,
-            user: client.getUserId(),
-            room: roomId,
-            type: EventType.RoomMessage,
-            content: {
-                msgtype: MsgType.Audio,
-                [VoiceBroadcastChunkEventType]: {
-                    sequence,
-                },
-            },
         });
     };
 
@@ -152,25 +133,20 @@ describe("VoiceBroadcastPlayback", () => {
     beforeAll(() => {
         client = stubClient();
 
-        // crap event to test 0 as first sequence number
-        chunk0Event = mkChunkEvent(0);
-        chunk1Event = mkChunkEvent(1);
-        chunk2Event = mkChunkEvent(2);
-        chunk3Event = mkChunkEvent(3);
+        chunk1Event = mkVoiceBroadcastChunkEvent(userId, roomId, 23, 1);
+        chunk2Event = mkVoiceBroadcastChunkEvent(userId, roomId, 23, 2);
+        chunk3Event = mkVoiceBroadcastChunkEvent(userId, roomId, 23, 3);
 
-        chunk0Helper = mkChunkHelper(chunk0Data);
         chunk1Helper = mkChunkHelper(chunk1Data);
         chunk2Helper = mkChunkHelper(chunk2Data);
         chunk3Helper = mkChunkHelper(chunk3Data);
 
-        chunk0Playback = createTestPlayback();
         chunk1Playback = createTestPlayback();
         chunk2Playback = createTestPlayback();
         chunk3Playback = createTestPlayback();
 
         jest.spyOn(PlaybackManager.instance, "createPlaybackInstance").mockImplementation(
             (buffer: ArrayBuffer, _waveForm?: number[]) => {
-                if (buffer === chunk0Data) return chunk0Playback;
                 if (buffer === chunk1Data) return chunk1Playback;
                 if (buffer === chunk2Data) return chunk2Playback;
                 if (buffer === chunk3Data) return chunk3Playback;
@@ -178,7 +154,6 @@ describe("VoiceBroadcastPlayback", () => {
         );
 
         mocked(MediaEventHelper).mockImplementation((event: MatrixEvent) => {
-            if (event === chunk0Event) return chunk0Helper;
             if (event === chunk1Event) return chunk1Helper;
             if (event === chunk2Event) return chunk2Helper;
             if (event === chunk3Event) return chunk3Helper;
@@ -240,7 +215,7 @@ describe("VoiceBroadcastPlayback", () => {
         beforeEach(() => {
             infoEvent = mkInfoEvent(VoiceBroadcastInfoState.Resumed);
             playback = mkPlayback();
-            setUpChunkEvents([chunk2Event, chunk0Event, chunk1Event]);
+            setUpChunkEvents([chunk2Event, chunk1Event]);
         });
 
         describe("and calling start", () => {
@@ -282,20 +257,9 @@ describe("VoiceBroadcastPlayback", () => {
             playback = mkPlayback();
         });
 
-        describe("and there is only a 0 sequence event", () => {
-            beforeEach(() => {
-                setUpChunkEvents([chunk0Event]);
-            });
-
-            describe("and calling start", () => {
-                startPlayback();
-                itShouldSetTheStateTo(VoiceBroadcastPlaybackState.Buffering);
-            });
-        });
-
         describe("and there are some chunks", () => {
             beforeEach(() => {
-                setUpChunkEvents([chunk2Event, chunk0Event, chunk1Event]);
+                setUpChunkEvents([chunk2Event, chunk1Event]);
             });
 
             it("should expose the info event", () => {
@@ -337,6 +301,21 @@ describe("VoiceBroadcastPlayback", () => {
                     stopPlayback();
                     itShouldSetTheStateTo(VoiceBroadcastPlaybackState.Stopped);
                 });
+
+                describe("and calling destroy", () => {
+                    beforeEach(() => {
+                        playback.destroy();
+                    });
+
+                    it("should call removeAllListeners", () => {
+                        expect(playback.removeAllListeners).toHaveBeenCalled();
+                    });
+
+                    it("should call destroy on the playbacks", () => {
+                        expect(chunk1Playback.destroy).toHaveBeenCalled();
+                        expect(chunk2Playback.destroy).toHaveBeenCalled();
+                    });
+                });
             });
 
             describe("and calling toggle for the first time", () => {
@@ -376,16 +355,6 @@ describe("VoiceBroadcastPlayback", () => {
 
                     itShouldSetTheStateTo(VoiceBroadcastPlaybackState.Playing);
                     itShouldEmitAStateChangedEvent(VoiceBroadcastPlaybackState.Playing);
-                });
-            });
-
-            describe("and calling destroy", () => {
-                beforeEach(() => {
-                    playback.destroy();
-                });
-
-                it("should call removeAllListeners", () => {
-                    expect(playback.removeAllListeners).toHaveBeenCalled();
                 });
             });
         });

@@ -31,6 +31,7 @@ import { IDestroyable } from "../../utils/IDestroyable";
 import { VoiceBroadcastChunkEventType, VoiceBroadcastInfoEventType, VoiceBroadcastInfoState } from "..";
 import { RelationsHelper, RelationsHelperEvent } from "../../events/RelationsHelper";
 import { getReferenceRelationsForEvent } from "../../events";
+import { VoiceBroadcastChunkEvents } from "../utils/VoiceBroadcastChunkEvents";
 
 export enum VoiceBroadcastPlaybackState {
     Paused,
@@ -59,9 +60,9 @@ export class VoiceBroadcastPlayback
     implements IDestroyable {
     private state = VoiceBroadcastPlaybackState.Stopped;
     private infoState: VoiceBroadcastInfoState;
-    private chunkEvents = new Map<string, MatrixEvent>();
-    private queue: Playback[] = [];
-    private currentlyPlaying: Playback;
+    private chunkEvents = new VoiceBroadcastChunkEvents();
+    private playbacks = new Map<string, Playback>();
+    private currentlyPlaying: MatrixEvent;
     private lastInfoEvent: MatrixEvent;
     private chunkRelationHelper: RelationsHelper;
     private infoRelationHelper: RelationsHelper;
@@ -101,11 +102,12 @@ export class VoiceBroadcastPlayback
         if (!eventId
             || eventId.startsWith("~!") // don't add local events
             || event.getContent()?.msgtype !== MsgType.Audio // don't add non-audio event
-            || this.chunkEvents.has(eventId)) {
+        ) {
             return false;
         }
 
-        this.chunkEvents.set(eventId, event);
+        this.chunkEvents.addEvent(event);
+        this.emit(VoiceBroadcastPlaybackEvent.LengthChanged, this.chunkEvents.getLength());
 
         if (this.getState() !== VoiceBroadcastPlaybackState.Stopped) {
             await this.enqueueChunk(event);
@@ -143,6 +145,8 @@ export class VoiceBroadcastPlayback
             return;
         }
 
+        this.chunkEvents.addEvents(chunkEvents);
+
         for (const chunkEvent of chunkEvents) {
             await this.enqueueChunk(chunkEvent);
         }
@@ -158,7 +162,7 @@ export class VoiceBroadcastPlayback
         const playback = PlaybackManager.instance.createPlaybackInstance(buffer);
         await playback.prepare();
         playback.clockInfo.populatePlaceholdersFrom(chunkEvent);
-        this.queue[sequenceNumber - 1] = playback; // -1 because the sequence number starts at 1
+        this.playbacks.set(chunkEvent.getId(), playback);
         playback.on(UPDATE_EVENT, (state) => this.onPlaybackStateChange(playback, state));
     }
 
@@ -167,16 +171,18 @@ export class VoiceBroadcastPlayback
             return;
         }
 
-        await this.playNext(playback);
+        await this.playNext();
     }
 
-    private async playNext(current: Playback): Promise<void> {
-        const next = this.queue[this.queue.indexOf(current) + 1];
+    private async playNext(): Promise<void> {
+        if (!this.currentlyPlaying) return;
+
+        const next = this.chunkEvents.getNext(this.currentlyPlaying);
 
         if (next) {
             this.setState(VoiceBroadcastPlaybackState.Playing);
             this.currentlyPlaying = next;
-            await next.play();
+            await this.playbacks.get(next.getId())?.play();
             return;
         }
 
@@ -188,19 +194,25 @@ export class VoiceBroadcastPlayback
         }
     }
 
+    public getLength(): number {
+        return this.chunkEvents.getLength();
+    }
+
     public async start(): Promise<void> {
-        if (this.queue.length === 0) {
+        if (this.playbacks.size === 0) {
             await this.loadChunks();
         }
 
-        const toPlayIndex = this.getInfoState() === VoiceBroadcastInfoState.Stopped
-            ? 0 // start at the beginning for an ended voice broadcast
-            : this.queue.length - 1; // start at the current chunk for an ongoing voice broadcast
+        const chunkEvents = this.chunkEvents.getEvents();
 
-        if (this.queue[toPlayIndex]) {
+        const toPlay = this.getInfoState() === VoiceBroadcastInfoState.Stopped
+            ? chunkEvents[0] // start at the beginning for an ended voice broadcast
+            : chunkEvents[chunkEvents.length - 1]; // start at the current chunk for an ongoing voice broadcast
+
+        if (this.playbacks.has(toPlay?.getId())) {
             this.setState(VoiceBroadcastPlaybackState.Playing);
-            this.currentlyPlaying = this.queue[toPlayIndex];
-            await this.currentlyPlaying.play();
+            this.currentlyPlaying = toPlay;
+            await this.playbacks.get(toPlay.getId()).play();
             return;
         }
 
@@ -208,14 +220,14 @@ export class VoiceBroadcastPlayback
     }
 
     public get length(): number {
-        return this.chunkEvents.size;
+        return this.chunkEvents.getLength();
     }
 
     public stop(): void {
         this.setState(VoiceBroadcastPlaybackState.Stopped);
 
         if (this.currentlyPlaying) {
-            this.currentlyPlaying.stop();
+            this.playbacks.get(this.currentlyPlaying.getId()).stop();
         }
     }
 
@@ -225,7 +237,7 @@ export class VoiceBroadcastPlayback
 
         this.setState(VoiceBroadcastPlaybackState.Paused);
         if (!this.currentlyPlaying) return;
-        this.currentlyPlaying.pause();
+        this.playbacks.get(this.currentlyPlaying.getId()).pause();
     }
 
     public resume(): void {
@@ -236,7 +248,7 @@ export class VoiceBroadcastPlayback
         }
 
         this.setState(VoiceBroadcastPlaybackState.Playing);
-        this.currentlyPlaying.play();
+        this.playbacks.get(this.currentlyPlaying.getId()).play();
     }
 
     /**
@@ -285,15 +297,13 @@ export class VoiceBroadcastPlayback
         this.emit(VoiceBroadcastPlaybackEvent.InfoStateChanged, state);
     }
 
-    private destroyQueue(): void {
-        this.queue.forEach(p => p.destroy());
-        this.queue = [];
-    }
-
     public destroy(): void {
         this.chunkRelationHelper.destroy();
         this.infoRelationHelper.destroy();
         this.removeAllListeners();
-        this.destroyQueue();
+
+        this.chunkEvents = new VoiceBroadcastChunkEvents();
+        this.playbacks.forEach(p => p.destroy());
+        this.playbacks = new Map<string, Playback>();
     }
 }

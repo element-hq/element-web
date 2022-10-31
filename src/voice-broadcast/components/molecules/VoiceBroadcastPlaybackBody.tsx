@@ -27,6 +27,7 @@ import { useVoiceBroadcastPlayback } from "../../hooks/useVoiceBroadcastPlayback
 import { Icon as PlayIcon } from "../../../../res/img/element-icons/play.svg";
 import { Icon as PauseIcon } from "../../../../res/img/element-icons/pause.svg";
 import { _t } from "../../../languageHandler";
+import Clock from "../../../components/views/audio_messages/Clock";
 
 interface VoiceBroadcastPlaybackBodyProps {
     playback: VoiceBroadcastPlayback;
@@ -36,6 +37,7 @@ export const VoiceBroadcastPlaybackBody: React.FC<VoiceBroadcastPlaybackBodyProp
     playback,
 }) => {
     const {
+        length,
         live,
         room,
         sender,
@@ -73,6 +75,8 @@ export const VoiceBroadcastPlaybackBody: React.FC<VoiceBroadcastPlaybackBodyProp
         />;
     }
 
+    const lengthSeconds = Math.round(length / 1000);
+
     return (
         <div className="mx_VoiceBroadcastBody">
             <VoiceBroadcastHeader
@@ -83,6 +87,9 @@ export const VoiceBroadcastPlaybackBody: React.FC<VoiceBroadcastPlaybackBodyProp
             />
             <div className="mx_VoiceBroadcastBody_controls">
                 { control }
+            </div>
+            <div className="mx_VoiceBroadcastBody_timerow">
+                <Clock seconds={lengthSeconds} />
             </div>
         </div>
     );

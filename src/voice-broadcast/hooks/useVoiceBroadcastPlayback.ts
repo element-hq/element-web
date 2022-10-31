@@ -50,7 +50,15 @@ export const useVoiceBroadcastPlayback = (playback: VoiceBroadcastPlayback) => {
         },
     );
 
+    const [length, setLength] = useState(playback.getLength());
+    useTypedEventEmitter(
+        playback,
+        VoiceBroadcastPlaybackEvent.LengthChanged,
+        length => setLength(length),
+    );
+
     return {
+        length,
         live: playbackInfoState !== VoiceBroadcastInfoState.Stopped,
         room: room,
         sender: playback.infoEvent.sender,
