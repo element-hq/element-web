@@ -103,7 +103,7 @@ jobs:
           FILES=$(ls webapp/bundles/)
           HASH="${FILES[0]}"
 
-          aws s3 cp dist/develop.tar.gz s3://$R2_BUCKET/develop.tar.gz --endpoint-url $R2_URL --region=auto
+          aws s3 cp develop.tar.gz s3://$R2_BUCKET/develop.tar.gz --endpoint-url $R2_URL --region=auto
           aws s3 cp webapp/bundles/$HASH s3://$R2_BUCKET/bundles/$HASH --recursive --endpoint-url $R2_URL --region=auto
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.CF_R2_ACCESS_KEY_ID }}
