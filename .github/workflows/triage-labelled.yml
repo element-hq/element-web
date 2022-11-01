@@ -17,7 +17,8 @@ jobs:
       contains(github.event.issue.labels.*.name, 'A-E2EE-Dehydration') ||
       contains(github.event.issue.labels.*.name, 'A-Tags') ||
       contains(github.event.issue.labels.*.name, 'A-Video-Rooms') ||
-      contains(github.event.issue.labels.*.name, 'A-Message-Starring')
+      contains(github.event.issue.labels.*.name, 'A-Message-Starring') ||
+      contains(github.event.issue.labels.*.name, 'A-Rich-Text-Editor')
     steps:
       - uses: actions/github-script@v5
         with:
@@ -27,6 +28,23 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               labels: ['Z-Labs']
+            })
+
+  apply_Help-Wanted_label:
+    name: Add "Help Wanted" label to all "good first issue" and Hacktoberfest
+    runs-on: ubuntu-latest
+    if: >
+      contains(github.event.issue.labels.*.name, 'good first issue') ||
+      contains(github.event.issue.labels.*.name, 'Hacktoberfest')
+    steps:
+      - uses: actions/github-script@v5
+        with:
+          script: |
+            github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['Help Wanted']
             })
 
   move_needs_info_issues:
@@ -295,7 +313,7 @@ jobs:
     name: Add labelled issues to PS features team 3
     runs-on: ubuntu-latest
     if: >
-      contains(github.event.issue.labels.*.name, 'A-Composer-WYSIWYG')
+      contains(github.event.issue.labels.*.name, 'A-Rich-Text-Editor')
     steps:
       - uses: octokit/graphql-action@v2.x
         id: add_to_project
