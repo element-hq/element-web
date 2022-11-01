@@ -11,7 +11,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   build:
-    name: "Build & Deploy"
+    name: "Build & Upload source maps to Sentry"
     # Only respect triggers from our develop branch, ignore that of forks
     if: github.repository == 'vector-im/element-web'
     runs-on: ubuntu-latest
@@ -35,11 +35,7 @@ jobs:
           SENTRY_ORG: element
           SENTRY_PROJECT: riot-web
 
-      - id: package
-        run: |
-          mv dist/element-*.tar.gz dist/develop.tar.gz
-          files=$(ls webapp/bundles/)
-          echo "::set-output name=bundlehash::${files[0]}"
+      - run: mv dist/element-*.tar.gz dist/develop.tar.gz
 
       # TODO: remove this once the element-desktop fetch script is updated to grab develop.element.io/develop.tar.gz
 #      - name: Deploy develop.tar.gz to Github Pages
@@ -54,20 +50,25 @@ jobs:
           path: dist/develop.tar.gz
           retention-days: 1
 
-      - name: Wait for other steps to succeed
-        uses: lewagon/wait-on-check-action@v1.1.2
+  deploy:
+    name: "Deploy develop.element.io"
+    needs: build
+    runs-on: ubuntu-latest
+    environment: develop
+    steps:
+      - uses: actions/download-artifact@v3
         with:
-          ref: ${{ github.ref }}
-          running-workflow-name: 'Build & Deploy'
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          wait-interval: 10
-          check-regexp: ^((?!SonarQube|issues|board).)*$
+          name: webapp
+          
+      - name: Extract webapp
+        run: tar xf develop.tar.gz -C webapp --strip-components=1
 
       - name: Prepare deployment
         run: |
           echo "404 Not Found" > webapp/404.html
           cp .github/cfp_headers webapp/_headers
           cp element.io/develop/config.json webapp/config.json
+          ./scripts/get-version-from-git.sh > webapp/version
 
       - name: Populate _redirects
         run: |
@@ -83,10 +84,22 @@ jobs:
           R2_URL: ${{ secrets.CF_R2_S3_API }}
           R2_PUBLIC_URL: 'https://element-web-develop.element.io'
 
+      - name: Wait for other steps to succeed
+        uses: lewagon/wait-on-check-action@v1.1.2
+        with:
+          ref: ${{ github.ref }}
+          running-workflow-name: 'Build & Deploy'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          wait-interval: 10
+          check-regexp: ^((?!SonarQube|issues|board).)*$
+
       # We keep the latest develop.tar.gz as the artifact uploaded later expires after 24 and requires auth to download
       # Element Desktop's fetch script uses this tarball to fetch latest develop to build Nightlies.
       - name: Deploy to R2
         run: |
+          FILES=$(ls webapp/bundles/)
+          HASH="${FILES[0]}"
+
           aws s3 cp dist/develop.tar.gz s3://$R2_BUCKET/develop.tar.gz --endpoint-url $R2_URL --region=auto
           aws s3 cp webapp/bundles/$HASH s3://$R2_BUCKET/bundles/$HASH --recursive --endpoint-url $R2_URL --region=auto
         env:
@@ -94,7 +107,6 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.CF_R2_TOKEN }}
           R2_BUCKET: 'element-web-develop'
           R2_URL: ${{ secrets.CF_R2_S3_API }}
-          HASH: ${{ steps.package.outputs.bundlehash }}
           
       - name: Deploy to develop.element.io
         id: cfp
