@@ -61,7 +61,9 @@ jobs:
           name: webapp
           
       - name: Extract webapp
-        run: tar xf develop.tar.gz -C webapp --strip-components=1
+        run: |
+          mkdir webapp
+          tar xf develop.tar.gz -C webapp --strip-components=1
 
       - name: Prepare deployment
         run: |
