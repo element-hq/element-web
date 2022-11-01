@@ -52,7 +52,7 @@ import {
     SlidingSync,
 } from 'matrix-js-sdk/src/sliding-sync';
 import { logger } from "matrix-js-sdk/src/logger";
-import { IDeferred, defer } from 'matrix-js-sdk/src/utils';
+import { IDeferred, defer, sleep } from 'matrix-js-sdk/src/utils';
 
 // how long to long poll for
 const SLIDING_SYNC_TIMEOUT_MS = 20 * 1000;
@@ -109,6 +109,9 @@ export class SlidingSyncManager {
     public configure(client: MatrixClient, proxyUrl: string): SlidingSync {
         this.client = client;
         this.listIdToIndex = {};
+        DEFAULT_ROOM_SUBSCRIPTION_INFO.include_old_rooms.required_state.push(
+            [EventType.RoomMember, client.getUserId()],
+        );
         this.slidingSync = new SlidingSync(
             proxyUrl, [], DEFAULT_ROOM_SUBSCRIPTION_INFO, client, SLIDING_SYNC_TIMEOUT_MS,
         );
@@ -261,5 +264,61 @@ export class SlidingSyncManager {
             logger.warn("SlidingSync setRoomVisible:", roomId, visible, "failed to confirm transaction");
         }
         return roomId;
+    }
+
+    /**
+     * Retrieve all rooms on the user's account. Used for pre-populating the local search cache.
+     * Retrieval is gradual over time.
+     * @param batchSize The number of rooms to return in each request.
+     * @param gapBetweenRequestsMs The number of milliseconds to wait between requests.
+     */
+    public async startSpidering(batchSize: number, gapBetweenRequestsMs: number) {
+        await sleep(gapBetweenRequestsMs); // wait a bit as this is called on first render so let's let things load
+        const listIndex = this.getOrAllocateListIndex(SlidingSyncManager.ListSearch);
+        let startIndex = batchSize;
+        let hasMore = true;
+        let firstTime = true;
+        while (hasMore) {
+            const endIndex = startIndex + batchSize-1;
+            try {
+                const ranges = [[0, batchSize-1], [startIndex, endIndex]];
+                if (firstTime) {
+                    await this.slidingSync.setList(listIndex, {
+                        // e.g [0,19] [20,39] then [0,19] [40,59]. We keep [0,20] constantly to ensure
+                        // any changes to the list whilst spidering are caught.
+                        ranges: ranges,
+                        sort: [
+                            "by_recency", // this list isn't shown on the UI so just sorting by timestamp is enough
+                        ],
+                        timeline_limit: 0, // we only care about the room details, not messages in the room
+                        required_state: [
+                            [EventType.RoomJoinRules, ""], // the public icon on the room list
+                            [EventType.RoomAvatar, ""], // any room avatar
+                            [EventType.RoomTombstone, ""], // lets JS SDK hide rooms which are dead
+                            [EventType.RoomEncryption, ""], // lets rooms be configured for E2EE correctly
+                            [EventType.RoomCreate, ""], // for isSpaceRoom checks
+                            [EventType.RoomMember, this.client.getUserId()!], // lets the client calculate that we are in fact in the room
+                        ],
+                        // we don't include_old_rooms here in an effort to reduce the impact of spidering all rooms
+                        // on the user's account. This means some data in the search dialog results may be inaccurate
+                        // e.g membership of space, but this will be corrected when the user clicks on the room
+                        // as the direct room subscription does include old room iterations.
+                        filters: { // we get spaces via a different list, so filter them out
+                            not_room_types: ["m.space"],
+                        },
+                    });
+                } else {
+                    await this.slidingSync.setListRanges(listIndex, ranges);
+                }
+                // gradually request more over time
+                await sleep(gapBetweenRequestsMs);
+            } catch (err) {
+                // do nothing, as we reject only when we get interrupted but that's fine as the next
+                // request will include our data
+            }
+            hasMore = (endIndex+1) < this.slidingSync.getListData(listIndex)?.joinedCount;
+            startIndex += batchSize;
+            firstTime = false;
+        }
     }
 }

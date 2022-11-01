@@ -249,6 +249,7 @@ class MatrixClientPegClass implements IMatrixClientPeg {
                 this.matrixClient,
                 proxyUrl || this.matrixClient.baseUrl,
             );
+            SlidingSyncManager.instance.startSpidering(100, 50); // 100 rooms at a time, 50ms apart
         }
 
         // Connect the matrix client to the dispatcher and setting handlers
