@@ -2909,5 +2909,18 @@
     "Exported %(count)s events in %(seconds)s seconds|other": "%(count)s eventos exportados em %(seconds)s segundos",
     "Creating output...": "Criando resultado...",
     "Fetching events...": "Buscando eventos...",
-    "Starting export process...": "Iniciando processo de exportação..."
+    "Starting export process...": "Iniciando processo de exportação...",
+    "Yes, stop broadcast": "Sim, interromper a transmissão",
+    "Are you sure you want to stop your live broadcast?This will end the broadcast and the full recording will be available in the room.": "Tem certeza de que deseja interromper sua transmissão ao vivo? Isso encerrará a transmissão e a gravação completa estará disponível na sala.",
+    "Stop live broadcasting?": "Parar a transmissão ao vivo?",
+    "Someone else is already recording a voice broadcast. Wait for their voice broadcast to end to start a new one.": "Outra pessoa já está gravando uma transmissão de voz. Aguarde o término da transmissão de voz para iniciar uma nova.",
+    "You don't have the required permissions to start a voice broadcast in this room. Contact a room administrator to upgrade your permissions.": "Você não tem as permissões necessárias para iniciar uma transmissão de voz nesta sala. Entre em contato com um administrador de sala para atualizar suas permissões.",
+    "You are already recording a voice broadcast. Please end your current voice broadcast to start a new one.": "Você já está gravando uma transmissão de voz. Encerre sua transmissão de voz atual para iniciar uma nova.",
+    "Can't start a new voice broadcast": "Não é possível iniciar uma nova transmissão de voz",
+    "Remove, ban, or invite people to your active room, and make you leave": "Remover, banir ou convidar pessoas para sua sala ativa e fazer você sair",
+    "Remove, ban, or invite people to this room, and make you leave": "Remover, banir ou convidar pessoas para esta sala e fazer você sair",
+    "No virtual room for this room": "Nenhuma sala virtual para esta sala",
+    "Switches to this room's virtual room, if it has one": "Muda para a sala virtual desta sala, se houver uma",
+    "Developer command: Discards the current outbound group session and sets up new Olm sessions": "Comando do desenvolvedor: descarta a sessão de grupo de saída atual e configura novas sessões do Olm",
+    "Jump to the given date in the timeline": "Ir para a data especificada na linha do tempo"
 }

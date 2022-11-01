@@ -3664,5 +3664,21 @@
     "You can use this device to sign in a new device with a QR code. You will need to scan the QR code shown on this device with your device that's signed out.": "Toto zařízení můžete použít k přihlášení nového zařízení pomocí QR kódu. QR kód zobrazený na tomto zařízení musíte naskenovat pomocí odhlášeného zařízení.",
     "Sign in with QR code": "Přihlásit se pomocí QR kódu",
     "Browser": "Prohlížeč",
-    "Allow a QR code to be shown in session manager to sign in another device (requires compatible homeserver)": "Povolit zobrazení QR kódu ve správci relací pro přihlášení do jiného zařízení (vyžaduje kompatibilní domovský server)"
+    "Allow a QR code to be shown in session manager to sign in another device (requires compatible homeserver)": "Povolit zobrazení QR kódu ve správci relací pro přihlášení do jiného zařízení (vyžaduje kompatibilní domovský server)",
+    "play voice broadcast": "přehrát hlasové vysílání",
+    "Are you sure you want to sign out of %(count)s sessions?|other": "Opravdu se chcete odhlásit z %(count)s relací?",
+    "Are you sure you want to sign out of %(count)s sessions?|one": "Opravdu se chcete odhlásit z %(count)s relace?",
+    "Renaming sessions": "Přejmenování relací",
+    "Show formatting": "Zobrazit formátování",
+    "Show plain text": "Zobrazit prostý text",
+    "Consider signing out from old sessions (%(inactiveAgeDays)s days or older) you don't use anymore.": "Zvažte odhlášení ze starých relací (%(inactiveAgeDays)s dní nebo starších), které již nepoužíváte.",
+    "Removing inactive sessions improves security and performance, and makes it easier for you to identify if a new session is suspicious.": "Odstranění neaktivních relací zvyšuje zabezpečení a výkon a usnadňuje identifikaci nové podezřelé relace.",
+    "Inactive sessions are sessions you have not used in some time, but they continue to receive encryption keys.": "Neaktivní relace jsou relace, které jste po určitou dobu nepoužili, ale nadále dostávají šifrovací klíče.",
+    "You should make especially certain that you recognise these sessions as they could represent an unauthorised use of your account.": "Měli byste si být jisti, že tyto relace rozpoznáte, protože by mohly představovat neoprávněné použití vašeho účtu.",
+    "Unverified sessions are sessions that have logged in with your credentials but have not been cross-verified.": "Neověřené relace jsou relace, které se přihlásily pomocí vašich přihlašovacích údajů, ale nebyly křížově ověřeny.",
+    "This means they hold encryption keys for your previous messages, and confirm to other users you are communicating with that these sessions are really you.": "To znamená, že uchovávají šifrovací klíče vašich předchozích zpráv a potvrzují ostatním uživatelům, se kterými komunikujete, že tyto relace jste skutečně vy.",
+    "Verified sessions have logged in with your credentials and then been verified, either using your secure passphrase or by cross-verifying.": "Ověřené relace se přihlásily pomocí vašich přihlašovacích údajů a poté byly ověřeny buď pomocí vaší zabezpečené přístupové fráze, nebo křížovým ověřením.",
+    "This provides them with confidence that they are really speaking to you, but it also means they can see the session name you enter here.": "To jim dává jistotu, že skutečně mluví s vámi, ale také to znamená, že vidí název relace, který zde zadáte.",
+    "Other users in direct messages and rooms that you join are able to view a full list of your sessions.": "Ostatní uživatelé v přímých zprávách a místnostech, ke kterým se připojíte, si mohou prohlédnout úplný seznam vašich relací.",
+    "Please be aware that session names are also visible to people you communicate with.": "Uvědomte si, že jména relací jsou viditelná i pro osoby, se kterými komunikujete."
 }

@@ -3664,5 +3664,21 @@
     "Someone else is already recording a voice broadcast. Wait for their voice broadcast to end to start a new one.": "Niekto iný už nahráva hlasové vysielanie. Počkajte, kým sa skončí jeho hlasové vysielanie, a potom spustite nové.",
     "You don't have the required permissions to start a voice broadcast in this room. Contact a room administrator to upgrade your permissions.": "Nemáte požadované oprávnenia na spustenie hlasového vysielania v tejto miestnosti. Obráťte sa na správcu miestnosti, aby vám rozšíril oprávnenia.",
     "You are already recording a voice broadcast. Please end your current voice broadcast to start a new one.": "Už nahrávate hlasové vysielanie. Ukončite aktuálne hlasové vysielanie a spustite nové.",
-    "Can't start a new voice broadcast": "Nemôžete spustiť nové hlasové vysielanie"
+    "Can't start a new voice broadcast": "Nemôžete spustiť nové hlasové vysielanie",
+    "play voice broadcast": "spustiť hlasové vysielanie",
+    "Are you sure you want to sign out of %(count)s sessions?|one": "Ste si istí, že sa chcete odhlásiť z %(count)s relácie?",
+    "Are you sure you want to sign out of %(count)s sessions?|other": "Ste si istí, že sa chcete odhlásiť z %(count)s relácií?",
+    "Show formatting": "Zobraziť formátovanie",
+    "Show plain text": "Zobraziť obyčajný text",
+    "Consider signing out from old sessions (%(inactiveAgeDays)s days or older) you don't use anymore.": "Zvážte odhlásenie zo starých relácií (%(inactiveAgeDays)s dní alebo starších), ktoré už nepoužívate.",
+    "Removing inactive sessions improves security and performance, and makes it easier for you to identify if a new session is suspicious.": "Odstránenie neaktívnych relácií zvyšuje bezpečnosť a výkon a uľahčuje identifikáciu podozrivých nových relácií.",
+    "Inactive sessions are sessions you have not used in some time, but they continue to receive encryption keys.": "Neaktívne relácie sú relácie, ktoré ste určitý čas nepoužívali, ale naďalej dostávajú šifrovacie kľúče.",
+    "You should make especially certain that you recognise these sessions as they could represent an unauthorised use of your account.": "Mali by ste si byť obzvlášť istí, že tieto relácie rozpoznávate, pretože by mohli predstavovať neoprávnené používanie vášho účtu.",
+    "Unverified sessions are sessions that have logged in with your credentials but have not been cross-verified.": "Neoverené relácie sú relácie, ktoré sa prihlásili pomocou vašich poverení, ale neboli krížovo overené.",
+    "This means they hold encryption keys for your previous messages, and confirm to other users you are communicating with that these sessions are really you.": "To znamená, že uchovávajú šifrovacie kľúče pre vaše predchádzajúce správy a potvrdzujú ostatným používateľom, s ktorými komunikujete, že tieto relácie ste skutočne vy.",
+    "Verified sessions have logged in with your credentials and then been verified, either using your secure passphrase or by cross-verifying.": "Overené relácie, ktoré sú prihlásené pomocou vašich poverovacích údajov a následne overené buď pomocou vašej zabezpečenej prístupovej frázy, alebo krížovým overením.",
+    "This provides them with confidence that they are really speaking to you, but it also means they can see the session name you enter here.": "To im poskytuje istotu, že skutočne komunikujú s vami, ale zároveň to znamená, že vidia názov relácie, ktorý tu zadáte.",
+    "Other users in direct messages and rooms that you join are able to view a full list of your sessions.": "Ostatní používatelia v priamych správach a miestnostiach, ku ktorým sa pripojíte, môžu vidieť úplný zoznam vašich relácií.",
+    "Renaming sessions": "Premenovanie relácií",
+    "Please be aware that session names are also visible to people you communicate with.": "Uvedomte si, že názvy relácií sú viditeľné aj pre ľudí, s ktorými komunikujete."
 }

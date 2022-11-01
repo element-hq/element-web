@@ -2509,5 +2509,11 @@
     "No virtual room for this room": "اتاق مجازی برای این اتاق وجود ندارد",
     "Switches to this room's virtual room, if it has one": "جابجایی به اتاق مجازی این اتاق، اگر یکی وجود داشت",
     "You need to be able to kick users to do that.": "برای انجام این کار نیاز دارید که بتوانید کاربران را حذف کنید.",
-    "Empty room (was %(oldName)s)": "اتاق خالی (نام قبلی: %(oldName)s)"
+    "Empty room (was %(oldName)s)": "اتاق خالی (نام قبلی: %(oldName)s)",
+    "%(user)s and %(count)s others|other": "%(user)s  و %(count)s دیگران",
+    "%(user1)s and %(user2)s": "%(user1)s و %(user2)s",
+    "%(value)ss": "%(value)sس",
+    "%(value)sm": "%(value)sم",
+    "%(value)sh": "%(value)sه",
+    "%(value)sd": "%(value)sد"
 }
