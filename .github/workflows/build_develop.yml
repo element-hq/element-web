@@ -72,7 +72,6 @@ jobs:
           echo "404 Not Found" > webapp/404.html
           cp .github/cfp_headers webapp/_headers
           cp element.io/develop/config.json webapp/config.json
-          ./scripts/get-version-from-git.sh > webapp/version
 
       - name: Populate _redirects
         run: |
