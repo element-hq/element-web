@@ -1,3 +1,11 @@
+Changes in [3.59.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.59.1) (2022-11-01)
+=====================================================================================================
+
+## 🐛 Bug Fixes
+ * Fix default behavior of Room.getBlacklistUnverifiedDevices ([\#2830](https://github.com/matrix-org/matrix-js-sdk/pull/2830)). Contributed by @duxovni.
+ * Catch server versions API call exception when starting the client ([\#2828](https://github.com/matrix-org/matrix-js-sdk/pull/2828)). Fixes vector-im/element-web#23634.
+ * Fix authedRequest including `Authorization: Bearer undefined` for password resets ([\#2822](https://github.com/matrix-org/matrix-js-sdk/pull/2822)). Fixes vector-im/element-web#23655.
+
 Changes in [3.59.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.59.0) (2022-10-25)
 =====================================================================================================
 
