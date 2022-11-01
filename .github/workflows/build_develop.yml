@@ -75,9 +75,9 @@ jobs:
 
       - name: Populate _redirects
         run: |
-          echo "/develop.tar.gz https://${R2_PUBLIC_URL}/develop.tar.gz 301" >> webapp/_redirects
+          echo "/develop.tar.gz ${R2_PUBLIC_URL}/develop.tar.gz 301" >> webapp/_redirects
           for bundle in $(aws s3 ls s3://$R2_BUCKET/bundles/ --endpoint-url $R2_URL --region=auto | awk '{print $2}'); do
-            echo "/bundles/${bundle}* https://${R2_PUBLIC_URL}/bundles/${bundle}:splat 301" >> webapp/_redirects
+            echo "/bundles/${bundle}* ${R2_PUBLIC_URL}/bundles/${bundle}:splat 301" >> webapp/_redirects
           done
           cat webapp/_redirects
         env:
@@ -96,7 +96,7 @@ jobs:
           wait-interval: 10
           check-regexp: ^((?!SonarQube|issues|board).)*$
 
-      # We keep the latest develop.tar.gz as the artifact uploaded later expires after 24 and requires auth to download
+      # We keep the latest develop.tar.gz as the artifact uploaded expires after 24h and requires auth to download
       # Element Desktop's fetch script uses this tarball to fetch latest develop to build Nightlies.
       - name: Deploy to R2
         run: |
