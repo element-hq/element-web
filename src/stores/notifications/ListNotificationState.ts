@@ -45,7 +45,7 @@ export class ListNotificationState extends NotificationState {
 
         const oldRooms = this.rooms;
         const diff = arrayDiff(oldRooms, rooms);
-        this.rooms = rooms;
+        this.rooms = [...rooms];
         for (const oldRoom of diff.removed) {
             const state = this.states[oldRoom.roomId];
             if (!state) continue; // We likely just didn't have a badge (race condition)
