@@ -1517,10 +1517,10 @@
   resolved "https://registry.yarnpkg.com/@matrix-org/analytics-events/-/analytics-events-0.2.0.tgz#453925c939ecdd5ca6c797d293deb8cf0933f1b8"
   integrity sha512-+0/Sydm4MNOcqd8iySJmojVPB74Axba4BXlwTsiKmL5fgYqdUkwmqkO39K7Pn8i+a+8pg11oNvBPkpWs3O5Qww==
 
-"@matrix-org/matrix-wysiwyg@^0.3.2":
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-wysiwyg/-/matrix-wysiwyg-0.3.2.tgz#586f3ad2f4a7bf39d8e2063630c52294c877bcd6"
-  integrity sha512-Q6Ntj2q1/7rVUlro94snn9eZy/3EbrGqaq5nqNMbttXcnFzYtgligDV1avViB4Um6ZRdDOxnQEPkMca/SqYSmw==
+"@matrix-org/matrix-wysiwyg@^0.2.0":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-wysiwyg/-/matrix-wysiwyg-0.2.1.tgz#f6236fa5fd9fd6aa99e4355d026cbb379d69986b"
+  integrity sha512-XhYbr6bGPPV1ZP0RXFMcmQ4MQUz+YkeEUM2uP7x+6D8F5wB683a27lWyvdpSC6LAzN/dXmfWiQedUZQI7SbSuA==
 
 "@matrix-org/olm@https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.12.tgz":
   version "3.2.12"
@@ -5115,10 +5115,10 @@ eslint-plugin-import@^2.25.4:
     resolve "^1.22.0"
     tsconfig-paths "^3.14.1"
 
-eslint-plugin-matrix-org@^0.6.1:
-  version "0.6.1"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-matrix-org/-/eslint-plugin-matrix-org-0.6.1.tgz#deab0636a1fe999d9c2a42929c2b486334ec8ead"
-  integrity sha512-kq7fCbOdj6OvPF50gJtTVSgg6TbQCOxwwZktyIGQJfZyGNWhew77ptTnmaxgxq+RIQ+rzNcWrcMGO5eQC9fZAg==
+eslint-plugin-matrix-org@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-matrix-org/-/eslint-plugin-matrix-org-0.7.0.tgz#4b7456b31e30e7575b62c2aada91915478829f88"
+  integrity sha512-FLmwE4/cRalB7J+J1BBuTccaXvKtRgAoHlbqSCbdsRqhh27xpxEWXe08KlNiET7drEnnz+xMHXdmvW469gch7g==
 
 eslint-plugin-react-hooks@^4.3.0:
   version "4.6.0"
