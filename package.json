@@ -117,6 +117,7 @@
     "eslint-plugin-matrix-org": "^0.6.1",
     "eslint-plugin-react": "^7.28.0",
     "eslint-plugin-react-hooks": "^4.3.0",
+    "eslint-plugin-unicorn": "^44.0.2",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "fake-indexeddb": "^3.1.2",
     "fetch-mock-jest": "^1.5.1",
