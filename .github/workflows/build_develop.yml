@@ -91,7 +91,7 @@ jobs:
         uses: lewagon/wait-on-check-action@v1.1.2
         with:
           ref: ${{ github.ref }}
-          running-workflow-name: 'Build & Deploy'
+          running-workflow-name: 'Deploy develop.element.io'
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 10
           check-regexp: ^((?!SonarQube|issues|board).)*$
