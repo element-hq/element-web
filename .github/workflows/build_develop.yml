@@ -56,6 +56,8 @@ jobs:
     runs-on: ubuntu-latest
     environment: develop
     steps:
+      - uses: actions/checkout@v2
+
       - uses: actions/download-artifact@v3
         with:
           name: webapp
