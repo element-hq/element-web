@@ -70,22 +70,25 @@ jobs:
         run: |
           mkdir webapp
           tar xf develop.tar.gz -C webapp --strip-components=1
-
-      - name: Prepare deployment
-        run: |
-          echo "404 Not Found" > webapp/404.html
-          cp .github/cfp_headers webapp/_headers
-          cp element.io/develop/config.json webapp/config.json
+          
+      - name: Copy config
+        run: cp element.io/develop/config.json webapp/config.json
 
       # We have to update the CSP until Cloudflare Pages supports proxying redirects
-      - name: Update CSP
+      - name: Update Content Security Policy to allow redirect to R2
         run: sed -ri "s|script-src (.*);|script-src \1 $R2_PUBLIC_URL;|g" webapp/index.html
+
+      - name: Populate 404.html
+        run: echo "404 Not Found" > webapp/404.html
+
+      - name: Populate _headers
+        run: cp .github/cfp_headers webapp/_headers
 
       - name: Populate _redirects
         run: |
           echo "/develop.tar.gz $R2_PUBLIC_URL/develop.tar.gz 301" >> webapp/_redirects
           for bundle in $(aws s3 ls s3://$R2_BUCKET/bundles/ --endpoint-url $R2_URL --region=auto | awk '{print $2}'); do
-            echo "/bundles/${bundle}* $R2_PUBLIC_URL/bundles/${bundle}:splat 200" >> webapp/_redirects
+            echo "/bundles/${bundle}* $R2_PUBLIC_URL/bundles/${bundle}:splat 301" >> webapp/_redirects
           done
           cat webapp/_redirects
         env:
