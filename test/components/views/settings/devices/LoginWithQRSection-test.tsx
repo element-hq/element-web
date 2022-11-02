@@ -56,7 +56,7 @@ describe('<LoginWithQRSection />', () => {
 
     const defaultProps = {
         onShowQr: () => {},
-        versions: undefined,
+        versions: makeVersions({}),
     };
 
     const getComponent = (props = {}) =>

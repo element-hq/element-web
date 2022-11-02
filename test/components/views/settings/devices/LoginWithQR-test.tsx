@@ -14,21 +14,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { cleanup, render, waitFor } from '@testing-library/react';
 import { mocked } from 'jest-mock';
 import React from 'react';
-import { MSC3886SimpleHttpRendezvousTransport } from 'matrix-js-sdk/src/rendezvous/transports';
 import { MSC3906Rendezvous, RendezvousFailureReason } from 'matrix-js-sdk/src/rendezvous';
 
-import LoginWithQR, { Mode } from '../../../../../src/components/views/auth/LoginWithQR';
+import LoginWithQR, { Click, Mode, Phase } from '../../../../../src/components/views/auth/LoginWithQR';
 import type { MatrixClient } from 'matrix-js-sdk/src/matrix';
-import { flushPromisesWithFakeTimers } from '../../../../test-utils';
-
-jest.useFakeTimers();
 
 jest.mock('matrix-js-sdk/src/rendezvous');
 jest.mock('matrix-js-sdk/src/rendezvous/transports');
 jest.mock('matrix-js-sdk/src/rendezvous/channels');
+
+const mockedFlow = jest.fn();
+
+jest.mock('../../../../../src/components/views/auth/LoginWithQRFlow', () => (props) => {
+    mockedFlow(props);
+    return <div />;
+});
 
 function makeClient() {
     return mocked({
@@ -50,248 +53,252 @@ function makeClient() {
     } as unknown as MatrixClient);
 }
 
+function unresolvedPromise<T>(): Promise<T> {
+    return new Promise(() => {});
+}
+
 describe('<LoginWithQR />', () => {
-    const client = makeClient();
+    let client = makeClient();
     const defaultProps = {
         mode: Mode.Show,
         onFinished: jest.fn(),
     };
     const mockConfirmationDigits = 'mock-confirmation-digits';
+    const mockRendezvousCode = 'mock-rendezvous-code';
     const newDeviceId = 'new-device-id';
 
     const getComponent = (props: { client: MatrixClient, onFinished?: () => void }) =>
-        (<LoginWithQR {...defaultProps} {...props} />);
+        (<React.StrictMode><LoginWithQR {...defaultProps} {...props} /></React.StrictMode>);
 
     beforeEach(() => {
-        jest.clearAllMocks();
-        jest.spyOn(MSC3906Rendezvous.prototype, 'generateCode').mockRestore();
+        mockedFlow.mockReset();
+        jest.resetAllMocks();
+        jest.spyOn(MSC3906Rendezvous.prototype, 'generateCode').mockResolvedValue();
+        // @ts-ignore
+        // workaround for https://github.com/facebook/jest/issues/9675
+        MSC3906Rendezvous.prototype.code = mockRendezvousCode;
         jest.spyOn(MSC3906Rendezvous.prototype, 'cancel').mockResolvedValue();
-        jest.spyOn(MSC3906Rendezvous.prototype, 'declineLoginOnExistingDevice').mockResolvedValue();
         jest.spyOn(MSC3906Rendezvous.prototype, 'startAfterShowingCode').mockResolvedValue(mockConfirmationDigits);
+        jest.spyOn(MSC3906Rendezvous.prototype, 'declineLoginOnExistingDevice').mockResolvedValue();
         jest.spyOn(MSC3906Rendezvous.prototype, 'approveLoginOnExistingDevice').mockResolvedValue(newDeviceId);
+        jest.spyOn(MSC3906Rendezvous.prototype, 'verifyNewDeviceOnExistingDevice').mockResolvedValue(undefined);
         client.requestLoginToken.mockResolvedValue({
             login_token: 'token',
             expires_in: 1000,
         });
-        // @ts-ignore
-        client.crypto = undefined;
     });
 
-    it('no content in case of no support', async () => {
+    afterEach(() => {
+        client = makeClient();
+        jest.clearAllMocks();
+        jest.useRealTimers();
+        cleanup();
+    });
+
+    test('no homeserver support', async () => {
         // simulate no support
         jest.spyOn(MSC3906Rendezvous.prototype, 'generateCode').mockRejectedValue('');
-        const { container } = render(getComponent({ client }));
-        await waitFor(() => screen.getAllByTestId('cancellation-message').length === 1);
-        expect(container).toMatchSnapshot();
-    });
-
-    it('renders spinner while generating code', async () => {
-        const { container } = render(getComponent({ client }));
-        expect(container).toMatchSnapshot();
-    });
-
-    it('cancels rendezvous after user goes back', async () => {
-        const { getByTestId } = render(getComponent({ client }));
+        render(getComponent({ client }));
+        await waitFor(() =>
+            expect(mockedFlow).toHaveBeenLastCalledWith({
+                phase: Phase.Error,
+                failureReason: RendezvousFailureReason.HomeserverLacksSupport,
+                onClick: expect.any(Function),
+            }),
+        );
         const rendezvous = mocked(MSC3906Rendezvous).mock.instances[0];
-        // @ts-ignore assign to private prop
-        rendezvous.code = 'rendezvous-code';
+        expect(rendezvous.generateCode).toHaveBeenCalled();
+    });
 
-        // flush generate code promise
-        await flushPromisesWithFakeTimers();
+    test('failed to connect', async () => {
+        jest.spyOn(MSC3906Rendezvous.prototype, 'startAfterShowingCode').mockRejectedValue('');
+        render(getComponent({ client }));
+        await waitFor(() =>
+            expect(mockedFlow).toHaveBeenLastCalledWith({
+                phase: Phase.Error,
+                failureReason: RendezvousFailureReason.Unknown,
+                onClick: expect.any(Function),
+            }),
+        );
+        const rendezvous = mocked(MSC3906Rendezvous).mock.instances[0];
+        expect(rendezvous.generateCode).toHaveBeenCalled();
+        expect(rendezvous.startAfterShowingCode).toHaveBeenCalled();
+    });
 
-        fireEvent.click(getByTestId('back-button'));
+    test('render QR then cancel and try again', async () => {
+        const onFinished = jest.fn();
+        jest.spyOn(MSC3906Rendezvous.prototype, 'startAfterShowingCode').mockImplementation(() => unresolvedPromise());
+        render(getComponent({ client, onFinished }));
+        const rendezvous = mocked(MSC3906Rendezvous).mock.instances[0];
 
-        // wait for cancel
-        await flushPromisesWithFakeTimers();
+        await waitFor(() => expect(mockedFlow).toHaveBeenLastCalledWith(expect.objectContaining({
+            phase: Phase.ShowingQR,
+        })));
+        // display QR code
+        expect(mockedFlow).toHaveBeenLastCalledWith({
+            phase: Phase.ShowingQR,
+            code: mockRendezvousCode,
+            onClick: expect.any(Function),
+        });
+        expect(rendezvous.generateCode).toHaveBeenCalled();
+        expect(rendezvous.startAfterShowingCode).toHaveBeenCalled();
 
+        // cancel
+        const onClick = mockedFlow.mock.calls[0][0].onClick;
+        await onClick(Click.Cancel);
+        expect(onFinished).toHaveBeenCalledWith(false);
+        expect(rendezvous.cancel).toHaveBeenCalledWith(RendezvousFailureReason.UserCancelled);
+
+        // try again
+        onClick(Click.TryAgain);
+        await waitFor(() => expect(mockedFlow).toHaveBeenLastCalledWith(expect.objectContaining({
+            phase: Phase.ShowingQR,
+        })));
+        // display QR code
+        expect(mockedFlow).toHaveBeenLastCalledWith({
+            phase: Phase.ShowingQR,
+            code: mockRendezvousCode,
+            onClick: expect.any(Function),
+        });
+    });
+
+    test('render QR then back', async () => {
+        const onFinished = jest.fn();
+        jest.spyOn(MSC3906Rendezvous.prototype, 'startAfterShowingCode').mockReturnValue(unresolvedPromise());
+        render(getComponent({ client, onFinished }));
+        const rendezvous = mocked(MSC3906Rendezvous).mock.instances[0];
+
+        await waitFor(() => expect(mockedFlow).toHaveBeenLastCalledWith(expect.objectContaining({
+            phase: Phase.ShowingQR,
+        })));
+        // display QR code
+        expect(mockedFlow).toHaveBeenLastCalledWith({
+            phase: Phase.ShowingQR,
+            code: mockRendezvousCode,
+            onClick: expect.any(Function),
+        });
+        expect(rendezvous.generateCode).toHaveBeenCalled();
+        expect(rendezvous.startAfterShowingCode).toHaveBeenCalled();
+
+        // back
+        const onClick = mockedFlow.mock.calls[0][0].onClick;
+        await onClick(Click.Back);
+        expect(onFinished).toHaveBeenCalledWith(false);
         expect(rendezvous.cancel).toHaveBeenCalledWith(RendezvousFailureReason.UserCancelled);
     });
 
-    it('displays qr code after it is created', async () => {
-        const { container, getByText } = render(getComponent({ client }));
+    test('render QR then decline', async () => {
+        const onFinished = jest.fn();
+        render(getComponent({ client, onFinished }));
         const rendezvous = mocked(MSC3906Rendezvous).mock.instances[0];
-        // @ts-ignore assign to private prop
-        rendezvous.code = 'rendezvous-code';
 
-        await flushPromisesWithFakeTimers();
+        await waitFor(() => expect(mockedFlow).toHaveBeenLastCalledWith(expect.objectContaining({
+            phase: Phase.Connected,
+        })));
+        expect(mockedFlow).toHaveBeenLastCalledWith({
+            phase: Phase.Connected,
+            confirmationDigits: mockConfirmationDigits,
+            onClick: expect.any(Function),
+        });
+
+        // decline
+        const onClick = mockedFlow.mock.calls[0][0].onClick;
+        await onClick(Click.Decline);
+        expect(onFinished).toHaveBeenCalledWith(false);
 
         expect(rendezvous.generateCode).toHaveBeenCalled();
-        expect(getByText('Sign in with QR code')).toBeTruthy();
-        expect(container).toMatchSnapshot();
-    });
-
-    it('displays confirmation digits after connected to rendezvous', async () => {
-        const { container, getByText } = render(getComponent({ client }));
-        const rendezvous = mocked(MSC3906Rendezvous).mock.instances[0];
-        // @ts-ignore assign to private prop
-        rendezvous.code = 'rendezvous-code';
-
-        // flush generate code promise
-        await flushPromisesWithFakeTimers();
-        // flush waiting for connection promise
-        await flushPromisesWithFakeTimers();
-
-        expect(container).toMatchSnapshot();
-        expect(getByText(mockConfirmationDigits)).toBeTruthy();
-    });
-
-    it('displays unknown error if connection to rendezvous fails', async () => {
-        const { container } = render(getComponent({ client }));
-        expect(MSC3886SimpleHttpRendezvousTransport).toHaveBeenCalledWith({
-            onFailure: expect.any(Function),
-            client,
-        });
-        const rendezvous = mocked(MSC3906Rendezvous).mock.instances[0];
-        // @ts-ignore assign to private prop
-        rendezvous.code = 'rendezvous-code';
-        mocked(rendezvous).startAfterShowingCode.mockRejectedValue('oups');
-
-        // flush generate code promise
-        await flushPromisesWithFakeTimers();
-        // flush waiting for connection promise
-        await flushPromisesWithFakeTimers();
-
-        expect(container).toMatchSnapshot();
-    });
-
-    it('declines login', async () => {
-        const { getByTestId } = render(getComponent({ client }));
-        const rendezvous = mocked(MSC3906Rendezvous).mock.instances[0];
-        // @ts-ignore assign to private prop
-        rendezvous.code = 'rendezvous-code';
-
-        // flush generate code promise
-        await flushPromisesWithFakeTimers();
-        // flush waiting for connection promise
-        await flushPromisesWithFakeTimers();
-
-        fireEvent.click(getByTestId('decline-login-button'));
-
+        expect(rendezvous.startAfterShowingCode).toHaveBeenCalled();
         expect(rendezvous.declineLoginOnExistingDevice).toHaveBeenCalled();
     });
 
-    it('displays error when approving login fails', async () => {
-        const { container, getByTestId } = render(getComponent({ client }));
-        const rendezvous = mocked(MSC3906Rendezvous).mock.instances[0];
-        // @ts-ignore assign to private prop
-        rendezvous.code = 'rendezvous-code';
-        client.requestLoginToken.mockRejectedValue('oups');
-
-        // flush generate code promise
-        await flushPromisesWithFakeTimers();
-        // flush waiting for connection promise
-        await flushPromisesWithFakeTimers();
-
-        fireEvent.click(getByTestId('approve-login-button'));
-
-        expect(client.requestLoginToken).toHaveBeenCalled();
-        // flush token request promise
-        await flushPromisesWithFakeTimers();
-        await flushPromisesWithFakeTimers();
-
-        expect(container).toMatchSnapshot();
-    });
-
-    it('approves login and waits for new device', async () => {
-        const { container, getByTestId, getByText } = render(getComponent({ client }));
-        const rendezvous = mocked(MSC3906Rendezvous).mock.instances[0];
-        // @ts-ignore assign to private prop
-        rendezvous.code = 'rendezvous-code';
-
-        // flush generate code promise
-        await flushPromisesWithFakeTimers();
-        // flush waiting for connection promise
-        await flushPromisesWithFakeTimers();
-
-        fireEvent.click(getByTestId('approve-login-button'));
-
-        expect(client.requestLoginToken).toHaveBeenCalled();
-        // flush token request promise
-        await flushPromisesWithFakeTimers();
-        await flushPromisesWithFakeTimers();
-
-        expect(getByText('Waiting for device to sign in')).toBeTruthy();
-        expect(container).toMatchSnapshot();
-    });
-
-    it('does not continue with verification when user denies login', async () => {
+    test('approve - no crypto', async () => {
+        // @ts-ignore
+        client.crypto = undefined;
         const onFinished = jest.fn();
-        const { getByTestId } = render(getComponent({ client, onFinished }));
+        // jest.spyOn(MSC3906Rendezvous.prototype, 'approveLoginOnExistingDevice').mockReturnValue(unresolvedPromise());
+        render(getComponent({ client, onFinished }));
         const rendezvous = mocked(MSC3906Rendezvous).mock.instances[0];
-        // @ts-ignore assign to private prop
-        rendezvous.code = 'rendezvous-code';
-        // no device id returned => user denied
-        mocked(rendezvous).approveLoginOnExistingDevice.mockReturnValue(undefined);
 
-        // flush generate code promise
-        await flushPromisesWithFakeTimers();
-        // flush waiting for connection promise
-        await flushPromisesWithFakeTimers();
+        await waitFor(() => expect(mockedFlow).toHaveBeenLastCalledWith(expect.objectContaining({
+            phase: Phase.Connected,
+        })));
+        expect(mockedFlow).toHaveBeenLastCalledWith({
+            phase: Phase.Connected,
+            confirmationDigits: mockConfirmationDigits,
+            onClick: expect.any(Function),
+        });
+        expect(rendezvous.generateCode).toHaveBeenCalled();
+        expect(rendezvous.startAfterShowingCode).toHaveBeenCalled();
 
-        fireEvent.click(getByTestId('approve-login-button'));
+        // approve
+        const onClick = mockedFlow.mock.calls[0][0].onClick;
+        await onClick(Click.Approve);
 
-        // flush token request promise
-        await flushPromisesWithFakeTimers();
-        await flushPromisesWithFakeTimers();
+        await waitFor(() => expect(mockedFlow).toHaveBeenLastCalledWith(expect.objectContaining({
+            phase: Phase.WaitingForDevice,
+        })));
 
-        expect(rendezvous.approveLoginOnExistingDevice).toHaveBeenCalled();
+        expect(rendezvous.approveLoginOnExistingDevice).toHaveBeenCalledWith('token');
 
-        await flushPromisesWithFakeTimers();
-        expect(onFinished).not.toHaveBeenCalled();
-        expect(rendezvous.verifyNewDeviceOnExistingDevice).not.toHaveBeenCalled();
+        expect(onFinished).toHaveBeenCalledWith(true);
     });
 
-    it('waits for device approval on existing device and finishes when crypto is not setup', async () => {
-        const { getByTestId } = render(getComponent({ client }));
-        const rendezvous = mocked(MSC3906Rendezvous).mock.instances[0];
-        // @ts-ignore assign to private prop
-        rendezvous.code = 'rendezvous-code';
-
-        // flush generate code promise
-        await flushPromisesWithFakeTimers();
-        // flush waiting for connection promise
-        await flushPromisesWithFakeTimers();
-
-        fireEvent.click(getByTestId('approve-login-button'));
-
-        // flush token request promise
-        await flushPromisesWithFakeTimers();
-        await flushPromisesWithFakeTimers();
-
-        expect(rendezvous.approveLoginOnExistingDevice).toHaveBeenCalled();
-        await flushPromisesWithFakeTimers();
-        expect(defaultProps.onFinished).toHaveBeenCalledWith(true);
-        // didnt attempt verification
-        expect(rendezvous.verifyNewDeviceOnExistingDevice).not.toHaveBeenCalled();
-    });
-
-    it('waits for device approval on existing device and verifies device', async () => {
-        const { getByTestId } = render(getComponent({ client }));
-        const rendezvous = mocked(MSC3906Rendezvous).mock.instances[0];
-        // @ts-ignore assign to private prop
-        rendezvous.code = 'rendezvous-code';
-        // we just check for presence of crypto
-        // pretend it is set up
+    test('approve + verifying', async () => {
+        const onFinished = jest.fn();
         // @ts-ignore
         client.crypto = {};
+        jest.spyOn(MSC3906Rendezvous.prototype, 'verifyNewDeviceOnExistingDevice')
+            .mockImplementation(() => unresolvedPromise());
+        render(getComponent({ client, onFinished }));
+        const rendezvous = mocked(MSC3906Rendezvous).mock.instances[0];
 
-        // flush generate code promise
-        await flushPromisesWithFakeTimers();
-        // flush waiting for connection promise
-        await flushPromisesWithFakeTimers();
+        await waitFor(() => expect(mockedFlow).toHaveBeenLastCalledWith(expect.objectContaining({
+            phase: Phase.Connected,
+        })));
+        expect(mockedFlow).toHaveBeenLastCalledWith({
+            phase: Phase.Connected,
+            confirmationDigits: mockConfirmationDigits,
+            onClick: expect.any(Function),
+        });
+        expect(rendezvous.generateCode).toHaveBeenCalled();
+        expect(rendezvous.startAfterShowingCode).toHaveBeenCalled();
 
-        fireEvent.click(getByTestId('approve-login-button'));
+        // approve
+        const onClick = mockedFlow.mock.calls[0][0].onClick;
+        onClick(Click.Approve);
 
-        // flush token request promise
-        await flushPromisesWithFakeTimers();
-        await flushPromisesWithFakeTimers();
+        await waitFor(() => expect(mockedFlow).toHaveBeenLastCalledWith(expect.objectContaining({
+            phase: Phase.Verifying,
+        })));
 
-        expect(rendezvous.approveLoginOnExistingDevice).toHaveBeenCalled();
-        // flush login approval
-        await flushPromisesWithFakeTimers();
+        expect(rendezvous.approveLoginOnExistingDevice).toHaveBeenCalledWith('token');
         expect(rendezvous.verifyNewDeviceOnExistingDevice).toHaveBeenCalled();
-        // flush verification
-        await flushPromisesWithFakeTimers();
-        expect(defaultProps.onFinished).toHaveBeenCalledWith(true);
+        // expect(onFinished).toHaveBeenCalledWith(true);
+    });
+
+    test('approve + verify', async () => {
+        const onFinished = jest.fn();
+        // @ts-ignore
+        client.crypto = {};
+        render(getComponent({ client, onFinished }));
+        const rendezvous = mocked(MSC3906Rendezvous).mock.instances[0];
+
+        await waitFor(() => expect(mockedFlow).toHaveBeenLastCalledWith(expect.objectContaining({
+            phase: Phase.Connected,
+        })));
+        expect(mockedFlow).toHaveBeenLastCalledWith({
+            phase: Phase.Connected,
+            confirmationDigits: mockConfirmationDigits,
+            onClick: expect.any(Function),
+        });
+        expect(rendezvous.generateCode).toHaveBeenCalled();
+        expect(rendezvous.startAfterShowingCode).toHaveBeenCalled();
+
+        // approve
+        const onClick = mockedFlow.mock.calls[0][0].onClick;
+        await onClick(Click.Approve);
+        expect(rendezvous.approveLoginOnExistingDevice).toHaveBeenCalledWith('token');
+        expect(rendezvous.verifyNewDeviceOnExistingDevice).toHaveBeenCalled();
+        expect(onFinished).toHaveBeenCalledWith(true);
     });
 });

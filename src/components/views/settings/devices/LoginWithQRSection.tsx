@@ -32,7 +32,7 @@ export default class LoginWithQRSection extends React.Component<IProps> {
         super(props);
     }
 
-    public render(): JSX.Element {
+    public render(): JSX.Element | null {
         const msc3882Supported = !!this.props.versions?.unstable_features?.['org.matrix.msc3882'];
         const msc3886Supported = !!this.props.versions?.unstable_features?.['org.matrix.msc3886'];
 
