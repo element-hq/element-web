@@ -23,6 +23,7 @@ import { _t } from "../../../languageHandler";
 import SeekBar from "./SeekBar";
 import PlaybackClock from "./PlaybackClock";
 import AudioPlayerBase from "./AudioPlayerBase";
+import { PlaybackState } from "../../../audio/Playback";
 
 export default class AudioPlayer extends AudioPlayerBase {
     protected renderFileSize(): string {
@@ -61,7 +62,7 @@ export default class AudioPlayer extends AudioPlayerBase {
                     <SeekBar
                         playback={this.props.playback}
                         tabIndex={-1} // prevent tabbing into the bar
-                        playbackPhase={this.state.playbackPhase}
+                        disabled={this.state.playbackPhase === PlaybackState.Decoding}
                         ref={this.seekRef}
                     />
                     <PlaybackClock playback={this.props.playback} defaultDisplaySeconds={0} />

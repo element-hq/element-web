@@ -63,6 +63,9 @@ export const createTestPlayback = (): Playback => {
         eventNames: eventEmitter.eventNames.bind(eventEmitter),
         prependListener: eventEmitter.prependListener.bind(eventEmitter),
         prependOnceListener: eventEmitter.prependOnceListener.bind(eventEmitter),
+        liveData: new SimpleObservable<number[]>(),
+        durationSeconds: 31415,
+        timeSeconds: 3141,
     } as PublicInterface<Playback> as Playback;
 };
 

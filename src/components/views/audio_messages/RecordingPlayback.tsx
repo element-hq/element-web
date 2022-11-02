@@ -21,6 +21,7 @@ import PlaybackClock from "./PlaybackClock";
 import AudioPlayerBase, { IProps as IAudioPlayerBaseProps } from "./AudioPlayerBase";
 import SeekBar from "./SeekBar";
 import PlaybackWaveform from "./PlaybackWaveform";
+import { PlaybackState } from "../../../audio/Playback";
 
 export enum PlaybackLayout {
     /**
@@ -56,7 +57,7 @@ export default class RecordingPlayback extends AudioPlayerBase<IProps> {
                 <SeekBar
                     playback={this.props.playback}
                     tabIndex={0} // allow keyboard users to fall into the seek bar
-                    playbackPhase={this.state.playbackPhase}
+                    disabled={this.state.playbackPhase === PlaybackState.Decoding}
                     ref={this.seekRef}
                 />
             </div>

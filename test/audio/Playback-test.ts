@@ -36,6 +36,7 @@ describe('Playback', () => {
         suspend: jest.fn(),
         resume: jest.fn(),
         createBufferSource: jest.fn().mockReturnValue(mockAudioBufferSourceNode),
+        currentTime: 1337,
     };
 
     const mockAudioBuffer = {
@@ -61,9 +62,12 @@ describe('Playback', () => {
         const buffer = new ArrayBuffer(8);
 
         const playback = new Playback(buffer);
+        playback.clockInfo.durationSeconds = mockAudioBuffer.duration;
 
         expect(playback.sizeBytes).toEqual(8);
         expect(playback.clockInfo).toBeTruthy();
+        expect(playback.liveData).toBe(playback.clockInfo.liveData);
+        expect(playback.timeSeconds).toBe(1337 % 99);
         expect(playback.currentState).toEqual(PlaybackState.Decoding);
     });
 
@@ -118,6 +122,7 @@ describe('Playback', () => {
 
             // clock was updated
             expect(playback.clockInfo.durationSeconds).toEqual(mockAudioBuffer.duration);
+            expect(playback.durationSeconds).toEqual(mockAudioBuffer.duration);
 
             expect(playback.currentState).toEqual(PlaybackState.Stopped);
         });
@@ -144,6 +149,7 @@ describe('Playback', () => {
 
             // clock was updated
             expect(playback.clockInfo.durationSeconds).toEqual(mockAudioBuffer.duration);
+            expect(playback.durationSeconds).toEqual(mockAudioBuffer.duration);
 
             expect(playback.currentState).toEqual(PlaybackState.Stopped);
         });

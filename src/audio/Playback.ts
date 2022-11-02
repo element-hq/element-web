@@ -32,6 +32,13 @@ export enum PlaybackState {
     Playing = "playing", // active progress through timeline
 }
 
+export interface PlaybackInterface {
+    readonly liveData: SimpleObservable<number[]>;
+    readonly timeSeconds: number;
+    readonly durationSeconds: number;
+    skipTo(timeSeconds: number): Promise<void>;
+}
+
 export const PLAYBACK_WAVEFORM_SAMPLES = 39;
 const THUMBNAIL_WAVEFORM_SAMPLES = 100; // arbitrary: [30,120]
 export const DEFAULT_WAVEFORM = arraySeed(0, PLAYBACK_WAVEFORM_SAMPLES);
@@ -45,7 +52,7 @@ function makePlaybackWaveform(input: number[]): number[] {
     return arrayRescale(arraySmoothingResample(noiseWaveform, PLAYBACK_WAVEFORM_SAMPLES), 0, 1);
 }
 
-export class Playback extends EventEmitter implements IDestroyable {
+export class Playback extends EventEmitter implements IDestroyable, PlaybackInterface {
     /**
      * Stable waveform for representing a thumbnail of the media. Values are
      * guaranteed to be between zero and one, inclusive.
@@ -109,6 +116,18 @@ export class Playback extends EventEmitter implements IDestroyable {
 
     public get isPlaying(): boolean {
         return this.currentState === PlaybackState.Playing;
+    }
+
+    public get liveData(): SimpleObservable<number[]> {
+        return this.clock.liveData;
+    }
+
+    public get timeSeconds(): number {
+        return this.clock.timeSeconds;
+    }
+
+    public get durationSeconds(): number {
+        return this.clock.durationSeconds;
     }
 
     public emit(event: PlaybackState, ...args: any[]): boolean {
