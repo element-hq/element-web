@@ -11,11 +11,15 @@ concurrency:
   cancel-in-progress: true
 jobs:
   build:
-    name: "Build & Upload source maps to Sentry"
+    name: "Build & Deploy develop.element.io"
     # Only respect triggers from our develop branch, ignore that of forks
     if: github.repository == 'vector-im/element-web'
     runs-on: ubuntu-latest
     environment: develop
+    env:
+      R2_BUCKET: 'element-web-develop'
+      R2_URL: ${{ secrets.CF_R2_S3_API }}
+      R2_PUBLIC_URL: 'https://element-web-develop.element.io'
     steps:
       - uses: actions/checkout@v2
 
@@ -34,6 +38,8 @@ jobs:
           SENTRY_URL: ${{ secrets.SENTRY_URL }}
           SENTRY_ORG: element
           SENTRY_PROJECT: riot-web
+          # We have to update the CSP until Cloudflare Pages supports proxying redirects
+          CSP_EXTRA_SOURCE: ${{ env.R2_PUBLIC_URL }}
 
       - run: mv dist/element-*.tar.gz dist/develop.tar.gz
 
@@ -49,48 +55,28 @@ jobs:
           name: webapp
           path: dist/develop.tar.gz
           retention-days: 1
-
-  deploy:
-    name: "Deploy develop.element.io"
-    needs: build
-    runs-on: ubuntu-latest
-    environment: develop
-    env:
-      R2_BUCKET: 'element-web-develop'
-      R2_URL: ${{ secrets.CF_R2_S3_API }}
-      R2_PUBLIC_URL: 'https://element-web-develop.element.io'
-    steps:
-      - uses: actions/checkout@v2
-
-      - uses: actions/download-artifact@v3
-        with:
-          name: webapp
           
       - name: Extract webapp
         run: |
-          mkdir webapp
-          tar xf develop.tar.gz -C webapp --strip-components=1
+          mkdir _deploy
+          tar xf dist/develop.tar.gz -C _deploy --strip-components=1
           
       - name: Copy config
-        run: cp element.io/develop/config.json webapp/config.json
-
-      # We have to update the CSP until Cloudflare Pages supports proxying redirects
-      - name: Update Content Security Policy to allow redirect to R2
-        run: sed -ri "s|script-src (.*);|script-src \1 $R2_PUBLIC_URL;|g" webapp/index.html
+        run: cp element.io/develop/config.json _deploy/config.json
 
       - name: Populate 404.html
-        run: echo "404 Not Found" > webapp/404.html
+        run: echo "404 Not Found" > _deploy/404.html
 
       - name: Populate _headers
-        run: cp .github/cfp_headers webapp/_headers
+        run: cp .github/cfp_headers _deploy/_headers
 
       - name: Populate _redirects
         run: |
-          echo "/develop.tar.gz $R2_PUBLIC_URL/develop.tar.gz 301" >> webapp/_redirects
+          echo "/develop.tar.gz $R2_PUBLIC_URL/develop.tar.gz 301" >> _deploy/_redirects
           for bundle in $(aws s3 ls s3://$R2_BUCKET/bundles/ --endpoint-url $R2_URL --region=auto | awk '{print $2}'); do
-            echo "/bundles/${bundle}* $R2_PUBLIC_URL/bundles/${bundle}:splat 301" >> webapp/_redirects
+            echo "/bundles/${bundle}* $R2_PUBLIC_URL/bundles/${bundle}:splat 301" >> _deploy/_redirects
           done
-          cat webapp/_redirects
+          cat _deploy/_redirects
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.CF_R2_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.CF_R2_TOKEN }}
@@ -99,7 +85,7 @@ jobs:
         uses: lewagon/wait-on-check-action@v1.1.2
         with:
           ref: ${{ github.ref }}
-          running-workflow-name: 'Deploy develop.element.io'
+          running-workflow-name: 'Build & Deploy develop.element.io'
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 10
           check-regexp: ^((?!SonarQube|issues|board).)*$
@@ -108,11 +94,11 @@ jobs:
       # Element Desktop's fetch script uses this tarball to fetch latest develop to build Nightlies.
       - name: Deploy to R2
         run: |
-          FILES=$(ls webapp/bundles/)
+          FILES=$(ls _deploy/bundles/)
           HASH="${FILES[0]}"
 
-          aws s3 cp develop.tar.gz s3://$R2_BUCKET/develop.tar.gz --endpoint-url $R2_URL --region=auto
-          aws s3 cp webapp/bundles/$HASH s3://$R2_BUCKET/bundles/$HASH --recursive --endpoint-url $R2_URL --region=auto
+          aws s3 cp dist/develop.tar.gz s3://$R2_BUCKET/develop.tar.gz --endpoint-url $R2_URL --region=auto
+          aws s3 cp _deploy/bundles/$HASH s3://$R2_BUCKET/bundles/$HASH --recursive --endpoint-url $R2_URL --region=auto
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.CF_R2_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.CF_R2_TOKEN }}
@@ -124,7 +110,7 @@ jobs:
           apiToken: ${{ secrets.CF_PAGES_TOKEN }}
           accountId: ${{ secrets.CF_PAGES_ACCOUNT_ID }}
           projectName: element-web-develop
-          directory: webapp
+          directory: _deploy
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
           
       - run: |
