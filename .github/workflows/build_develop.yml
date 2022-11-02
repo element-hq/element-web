@@ -55,6 +55,10 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     environment: develop
+    env:
+      R2_BUCKET: 'element-web-develop'
+      R2_URL: ${{ secrets.CF_R2_S3_API }}
+      R2_PUBLIC_URL: 'https://element-web-develop.element.io'
     steps:
       - uses: actions/checkout@v2
 
@@ -73,19 +77,20 @@ jobs:
           cp .github/cfp_headers webapp/_headers
           cp element.io/develop/config.json webapp/config.json
 
+      # We have to update the CSP until Cloudflare Pages supports proxying redirects
+      - name: Update CSP
+        run: sed -ri "s|script-src (.*);|script-src \1 $R2_PUBLIC_URL;|g" webapp/index.html
+
       - name: Populate _redirects
         run: |
-          echo "/develop.tar.gz ${R2_PUBLIC_URL}/develop.tar.gz 301" >> webapp/_redirects
+          echo "/develop.tar.gz $R2_PUBLIC_URL/develop.tar.gz 301" >> webapp/_redirects
           for bundle in $(aws s3 ls s3://$R2_BUCKET/bundles/ --endpoint-url $R2_URL --region=auto | awk '{print $2}'); do
-            echo "/bundles/${bundle}* ${R2_PUBLIC_URL}/bundles/${bundle}:splat 200" >> webapp/_redirects
+            echo "/bundles/${bundle}* $R2_PUBLIC_URL/bundles/${bundle}:splat 200" >> webapp/_redirects
           done
           cat webapp/_redirects
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.CF_R2_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.CF_R2_TOKEN }}
-          R2_BUCKET: 'element-web-develop'
-          R2_URL: ${{ secrets.CF_R2_S3_API }}
-          R2_PUBLIC_URL: 'https://element-web-develop.element.io'
 
       - name: Wait for other steps to succeed
         uses: lewagon/wait-on-check-action@v1.1.2
@@ -108,8 +113,6 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.CF_R2_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.CF_R2_TOKEN }}
-          R2_BUCKET: 'element-web-develop'
-          R2_URL: ${{ secrets.CF_R2_S3_API }}
           
       - name: Deploy to develop.element.io
         id: cfp
