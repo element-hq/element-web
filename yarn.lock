@@ -1564,10 +1564,10 @@
   resolved "https://registry.yarnpkg.com/@matrix-org/analytics-events/-/analytics-events-0.2.0.tgz#453925c939ecdd5ca6c797d293deb8cf0933f1b8"
   integrity sha512-+0/Sydm4MNOcqd8iySJmojVPB74Axba4BXlwTsiKmL5fgYqdUkwmqkO39K7Pn8i+a+8pg11oNvBPkpWs3O5Qww==
 
-"@matrix-org/matrix-wysiwyg@^0.3.2":
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-wysiwyg/-/matrix-wysiwyg-0.3.2.tgz#586f3ad2f4a7bf39d8e2063630c52294c877bcd6"
-  integrity sha512-Q6Ntj2q1/7rVUlro94snn9eZy/3EbrGqaq5nqNMbttXcnFzYtgligDV1avViB4Um6ZRdDOxnQEPkMca/SqYSmw==
+"@matrix-org/matrix-wysiwyg@^0.2.0":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-wysiwyg/-/matrix-wysiwyg-0.2.1.tgz#f6236fa5fd9fd6aa99e4355d026cbb379d69986b"
+  integrity sha512-XhYbr6bGPPV1ZP0RXFMcmQ4MQUz+YkeEUM2uP7x+6D8F5wB683a27lWyvdpSC6LAzN/dXmfWiQedUZQI7SbSuA==
 
 "@matrix-org/olm@https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.12.tgz":
   version "3.2.12"
@@ -3339,6 +3339,11 @@ buffer@^5.4.3:
     base64-js "^1.3.1"
     ieee754 "^1.1.13"
 
+builtin-modules@^3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/builtin-modules/-/builtin-modules-3.3.0.tgz#cae62812b89801e9656336e46223e030386be7b6"
+  integrity sha512-zhaCDicdLuWN5UbN5IMnFqNMhNfo919sH85y2/ea+5Yg9TsTkeZxpL+JLbp6cgYFS4sRLp3YV4S6yDuqVWHYOw==
+
 builtin-status-codes@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/builtin-status-codes/-/builtin-status-codes-3.0.0.tgz#85982878e21b98e1c66425e03d0174788f569ee8"
@@ -3625,7 +3630,7 @@ chrome-trace-event@^1.0.2:
   resolved "https://registry.yarnpkg.com/chrome-trace-event/-/chrome-trace-event-1.0.3.tgz#1015eced4741e15d06664a957dbbf50d041e26ac"
   integrity sha512-p3KULyQg4S7NIHixdwbGX+nFHkoBiA4YQmyWtjb8XngSKV124nJmRysgAeujbUVb15vh+RvFUfCPqU7rXk+hZg==
 
-ci-info@^3.2.0:
+ci-info@^3.2.0, ci-info@^3.4.0:
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/ci-info/-/ci-info-3.5.0.tgz#bfac2a29263de4c829d806b1ab478e35091e171f"
   integrity sha512-yH4RezKOGlOhxkmhbeNuC4eYZKAUsEaGtBuBzDDP1eFUKiccDWzBABxBfOx31IDwDIXMTxWuwAxUGModvkbuVw==
@@ -3664,6 +3669,13 @@ clean-css@^4.2.3:
   integrity sha512-EJUDT7nDVFDvaQgAo2G/PJvxmp1o/c6iXLbswsBbUFXi1Nr+AjA2cKmfbKDMjMvzEe75g3P6JkaDDAKk96A85A==
   dependencies:
     source-map "~0.6.0"
+
+clean-regexp@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/clean-regexp/-/clean-regexp-1.0.0.tgz#8df7c7aae51fd36874e8f8d05b9180bc11a3fed7"
+  integrity sha512-GfisEZEJvzKrmGWkvfhgzcz/BllN1USeqD2V6tg14OAOgaCD2Z/PUEuxnAZ/nPvmaHRG7a8y77p1T/IRQ4D1Hw==
+  dependencies:
+    escape-string-regexp "^1.0.5"
 
 clean-stack@^2.0.0:
   version "2.2.0"
@@ -5151,10 +5163,10 @@ eslint-plugin-import@^2.25.4:
     resolve "^1.22.0"
     tsconfig-paths "^3.14.1"
 
-eslint-plugin-matrix-org@^0.6.1:
-  version "0.6.1"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-matrix-org/-/eslint-plugin-matrix-org-0.6.1.tgz#deab0636a1fe999d9c2a42929c2b486334ec8ead"
-  integrity sha512-kq7fCbOdj6OvPF50gJtTVSgg6TbQCOxwwZktyIGQJfZyGNWhew77ptTnmaxgxq+RIQ+rzNcWrcMGO5eQC9fZAg==
+eslint-plugin-matrix-org@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-matrix-org/-/eslint-plugin-matrix-org-0.7.0.tgz#4b7456b31e30e7575b62c2aada91915478829f88"
+  integrity sha512-FLmwE4/cRalB7J+J1BBuTccaXvKtRgAoHlbqSCbdsRqhh27xpxEWXe08KlNiET7drEnnz+xMHXdmvW469gch7g==
 
 eslint-plugin-react-hooks@^4.3.0:
   version "4.6.0"
@@ -5180,6 +5192,26 @@ eslint-plugin-react@^7.28.0:
     resolve "^2.0.0-next.3"
     semver "^6.3.0"
     string.prototype.matchall "^4.0.7"
+
+eslint-plugin-unicorn@^44.0.2:
+  version "44.0.2"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-unicorn/-/eslint-plugin-unicorn-44.0.2.tgz#6324a001c0a5e2ac00fb51b30db27d14c6c36ab3"
+  integrity sha512-GLIDX1wmeEqpGaKcnMcqRvMVsoabeF0Ton0EX4Th5u6Kmf7RM9WBl705AXFEsns56ESkEs0uyelLuUTvz9Tr0w==
+  dependencies:
+    "@babel/helper-validator-identifier" "^7.19.1"
+    ci-info "^3.4.0"
+    clean-regexp "^1.0.0"
+    eslint-utils "^3.0.0"
+    esquery "^1.4.0"
+    indent-string "^4.0.0"
+    is-builtin-module "^3.2.0"
+    lodash "^4.17.21"
+    pluralize "^8.0.0"
+    read-pkg-up "^7.0.1"
+    regexp-tree "^0.1.24"
+    safe-regex "^2.1.1"
+    semver "^7.3.7"
+    strip-indent "^3.0.0"
 
 eslint-rule-composer@^0.3.0:
   version "0.3.0"
@@ -6856,6 +6888,13 @@ is-buffer@^1.1.5:
   resolved "https://registry.yarnpkg.com/is-buffer/-/is-buffer-1.1.6.tgz#efaa2ea9daa0d7ab2ea13a97b2b8ad51fefbe8be"
   integrity sha512-NcdALwpXkTm5Zvvbk7owOUSvVvBKDgKP5/ewfXEznmQFfs4ZRmanOeKBTjRVjka3QFoN6XJ+9F3USqfHqTaU5w==
 
+is-builtin-module@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/is-builtin-module/-/is-builtin-module-3.2.0.tgz#bb0310dfe881f144ca83f30100ceb10cf58835e0"
+  integrity sha512-phDA4oSGt7vl1n5tJvTWooWWAsXLY+2xCnxNqvKhGEzujg+A43wPlPOyDg3C8XQHN+6k/JTQWJ/j0dQh/qr+Hw==
+  dependencies:
+    builtin-modules "^3.3.0"
+
 is-callable@^1.1.4, is-callable@^1.2.4:
   version "1.2.6"
   resolved "https://registry.yarnpkg.com/is-callable/-/is-callable-1.2.6.tgz#fd6170b0b8c7e2cc73de342ef8284a2202023c44"
@@ -8246,7 +8285,7 @@ matrix-mock-request@^2.5.0:
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/analytics-events" "^0.2.0"
-    "@matrix-org/matrix-wysiwyg" "^0.3.2"
+    "@matrix-org/matrix-wysiwyg" "^0.2.0"
     "@matrix-org/react-sdk-module-api" "^0.0.3"
     "@sentry/browser" "^6.11.0"
     "@sentry/tracing" "^6.11.0"
@@ -9460,6 +9499,11 @@ pkg-dir@^4.1.0, pkg-dir@^4.2.0:
   integrity sha512-HRDzbaKjC+AOWVXxAU/x54COGeIv9eb+6CkDSQoNTt4XyWoIJvuPsXizxu/Fr23EiekbtZwmh1IcIG/l/a10GQ==
   dependencies:
     find-up "^4.0.0"
+
+pluralize@^8.0.0:
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/pluralize/-/pluralize-8.0.0.tgz#1a6fa16a38d12a1901e0320fa017051c539ce3b1"
+  integrity sha512-Nc3IT5yHzflTfbjgqWcCPpo7DaKy4FnpB0l/zCAW0Tc7jxAiuqSxHasntB3D7887LSrA93kDJ9IXovxJYxyLCA==
 
 pluralizers@^0.1.7:
   version "0.1.7"
@@ -10741,6 +10785,11 @@ regex-not@^1.0.0, regex-not@^1.0.2:
     extend-shallow "^3.0.2"
     safe-regex "^1.1.0"
 
+regexp-tree@^0.1.24, regexp-tree@~0.1.1:
+  version "0.1.24"
+  resolved "https://registry.yarnpkg.com/regexp-tree/-/regexp-tree-0.1.24.tgz#3d6fa238450a4d66e5bc9c4c14bb720e2196829d"
+  integrity sha512-s2aEVuLhvnVJW6s/iPgEGK6R+/xngd2jNQ+xy4bXNDKxZKJH6jpPHY6kVeVv1IeLCHgswRj+Kl3ELaDjG6V1iw==
+
 regexp.prototype.flags@^1.2.0, regexp.prototype.flags@^1.4.1, regexp.prototype.flags@^1.4.3:
   version "1.4.3"
   resolved "https://registry.yarnpkg.com/regexp.prototype.flags/-/regexp.prototype.flags-1.4.3.tgz#87cab30f80f66660181a3bb7bf5981a872b367ac"
@@ -11006,6 +11055,13 @@ safe-regex@^1.1.0:
   integrity sha512-aJXcif4xnaNUzvUuC5gcb46oTS7zvg4jpMTnuqtrEPlR3vFr4pxtdTwaF1Qs3Enjn9HK+ZlwQui+a7z0SywIzg==
   dependencies:
     ret "~0.1.10"
+
+safe-regex@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/safe-regex/-/safe-regex-2.1.1.tgz#f7128f00d056e2fe5c11e81a1324dd974aadced2"
+  integrity sha512-rx+x8AMzKb5Q5lQ95Zoi6ZbJqwCLkqi3XuJXp5P3rT8OEc6sZCJG5AE5dU3lsgRr/F4Bs31jSlVN+j5KrsGu9A==
+  dependencies:
+    regexp-tree "~0.1.1"
 
 "safer-buffer@>= 2.1.2 < 3", "safer-buffer@>= 2.1.2 < 3.0.0", safer-buffer@^2.1.0:
   version "2.1.2"
