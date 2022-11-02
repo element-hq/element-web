@@ -261,9 +261,9 @@ const SpaceContextMenu = ({ space, hideHeader, onFinished, ...props }: IProps) =
                 label={_t("Preferences")}
                 onClick={onPreferencesClick}
             />
+            { devtoolsOption }
             { settingsOption }
             { leaveOption }
-            { devtoolsOption }
             { newRoomSection }
         </IconizedContextMenuOptionList>
     </IconizedContextMenu>;
