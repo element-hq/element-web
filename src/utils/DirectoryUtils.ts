@@ -26,7 +26,7 @@ export type Protocols = Record<string, IProtocol>;
 export function instanceForInstanceId(protocols: Protocols, instanceId: string | null | undefined): IInstance | null {
     if (!instanceId) return null;
     for (const proto of Object.keys(protocols)) {
-        if (!protocols[proto].instances && protocols[proto].instances instanceof Array) continue;
+        if (!Array.isArray(protocols[proto].instances)) continue;
         for (const instance of protocols[proto].instances) {
             if (instance.instance_id == instanceId) return instance;
         }
@@ -39,7 +39,7 @@ export function instanceForInstanceId(protocols: Protocols, instanceId: string |
 export function protocolNameForInstanceId(protocols: Protocols, instanceId: string | null | undefined): string | null {
     if (!instanceId) return null;
     for (const proto of Object.keys(protocols)) {
-        if (!protocols[proto].instances && protocols[proto].instances instanceof Array) continue;
+        if (!Array.isArray(protocols[proto].instances)) continue;
         for (const instance of protocols[proto].instances) {
             if (instance.instance_id == instanceId) return proto;
         }
