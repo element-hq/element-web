@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { AuthType, createClient } from 'matrix-js-sdk/src/matrix';
+import { AuthType, createClient, IAuthData } from 'matrix-js-sdk/src/matrix';
 import React, { Fragment, ReactNode } from 'react';
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import classNames from "classnames";
@@ -443,7 +443,7 @@ export default class Registration extends React.Component<IProps, IState> {
         });
     };
 
-    private makeRegisterRequest = auth => {
+    private makeRegisterRequest = (auth: IAuthData | null) => {
         const registerParams = {
             username: this.state.formVals.username,
             password: this.state.formVals.password,
