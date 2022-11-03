@@ -135,6 +135,7 @@
     "@babel/preset-typescript": "^7.12.7",
     "@babel/register": "^7.12.10",
     "@babel/traverse": "^7.12.12",
+    "@casualbot/jest-sonar-reporter": "^2.2.5",
     "@matrix-org/olm": "https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.8.tgz",
     "@peculiar/webcrypto": "^1.1.4",
     "@percy/cli": "^1.11.0",
@@ -199,7 +200,6 @@
     "jest-environment-jsdom": "^27.0.6",
     "jest-mock": "^27.5.1",
     "jest-raw-loader": "^1.0.1",
-    "jest-sonar-reporter": "^2.0.0",
     "matrix-mock-request": "^2.5.0",
     "matrix-web-i18n": "^1.3.0",
     "postcss-scss": "^4.0.4",
@@ -249,10 +249,11 @@
       "text-summary",
       "lcov"
     ],
-    "testResultsProcessor": "jest-sonar-reporter"
+    "testResultsProcessor": "@casualbot/jest-sonar-reporter"
   },
-  "jestSonar": {
-    "reportPath": "coverage",
-    "sonar56x": true
+  "@casualbot/jest-sonar-reporter": {
+    "outputDirectory": "coverage",
+    "outputName": "jest-sonar-report.xml",
+    "relativePaths": true
   }
 }
