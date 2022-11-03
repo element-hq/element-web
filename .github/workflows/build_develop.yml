@@ -39,16 +39,20 @@ jobs:
           SENTRY_ORG: element
           SENTRY_PROJECT: riot-web
           # We have to update the CSP until Cloudflare Pages supports proxying redirects
+          # We only deploy the latest bundles to Cloudflare Pages and use _redirects to fallback to R2 for
+          # older ones, this redirect means that 'self' is insufficient in the CSP.
+          # Once Cloudflare redirects support proxying mode we will be able to ditch this.
+          # https://developers.cloudflare.com/pages/platform/redirects/#:~:text=the%20incoming%20request-,Proxying,-No
           CSP_EXTRA_SOURCE: ${{ env.R2_PUBLIC_URL }}
 
       - run: mv dist/element-*.tar.gz dist/develop.tar.gz
 
       # TODO: remove this once the element-desktop fetch script is updated to grab develop.element.io/develop.tar.gz
-#      - name: Deploy develop.tar.gz to Github Pages
-#        uses: JamesIves/github-pages-deploy-action@v4
-#        with:
-#          folder: dist
-#          single-commit: true
+      - name: Deploy develop.tar.gz to Github Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: dist
+          single-commit: true
 
       - uses: actions/upload-artifact@v3
         with:
@@ -90,20 +94,18 @@ jobs:
           wait-interval: 10
           check-regexp: ^((?!SonarQube|issues|board).)*$
 
-      # We keep the latest develop.tar.gz as the artifact uploaded expires after 24h and requires auth to download
+      # We keep the latest develop.tar.gz on R2 instead of relying on the github artifact uploaded earlier
+      # as the expires after 24h and requires auth to download.
       # Element Desktop's fetch script uses this tarball to fetch latest develop to build Nightlies.
       - name: Deploy to R2
         run: |
-          FILES=$(ls _deploy/bundles/)
-          HASH="${FILES[0]}"
-
           aws s3 cp dist/develop.tar.gz s3://$R2_BUCKET/develop.tar.gz --endpoint-url $R2_URL --region=auto
-          aws s3 cp _deploy/bundles/$HASH s3://$R2_BUCKET/bundles/$HASH --recursive --endpoint-url $R2_URL --region=auto
+          aws s3 cp _deploy/bundles s3://$R2_BUCKET/bundles --recursive --endpoint-url $R2_URL --region=auto
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.CF_R2_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.CF_R2_TOKEN }}
           
-      - name: Deploy to develop.element.io
+      - name: Deploy to Cloudflare Pages
         id: cfp
         uses: cloudflare/pages-action@1
         with:
