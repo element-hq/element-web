@@ -76,7 +76,7 @@ interface HTMLInputEvent extends Event {
     target: HTMLInputElement & EventTarget;
 }
 
-const singleMxcUpload = async (): Promise<any> => {
+const singleMxcUpload = async (): Promise<string | null> => {
     return new Promise((resolve) => {
         const fileSelector = document.createElement('input');
         fileSelector.setAttribute('type', 'file');
@@ -85,8 +85,13 @@ const singleMxcUpload = async (): Promise<any> => {
 
             Modal.createDialog(UploadConfirmDialog, {
                 file,
-                onFinished: (shouldContinue) => {
-                    resolve(shouldContinue ? MatrixClientPeg.get().uploadContent(file) : null);
+                onFinished: async (shouldContinue) => {
+                    if (shouldContinue) {
+                        const { content_uri: uri } = await MatrixClientPeg.get().uploadContent(file);
+                        resolve(uri);
+                    } else {
+                        resolve(null);
+                    }
                 },
             });
         };
