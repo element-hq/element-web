@@ -64,7 +64,7 @@ interface IProps {
     continueText?: string;
     continueKind?: string;
     // callback
-    makeRequest(auth: IAuthData): Promise<IAuthData>;
+    makeRequest(auth: IAuthData | null): Promise<IAuthData>;
     // callback called when the auth process has finished,
     // successfully or unsuccessfully.
     // @param {boolean} status True if the operation requiring
@@ -199,7 +199,7 @@ export default class InteractiveAuthComponent extends React.Component<IProps, IS
         });
     };
 
-    private requestCallback = (auth: IAuthData, background: boolean): Promise<IAuthData> => {
+    private requestCallback = (auth: IAuthData | null, background: boolean): Promise<IAuthData> => {
         // This wrapper just exists because the js-sdk passes a second
         // 'busy' param for backwards compat. This throws the tests off
         // so discard it here.

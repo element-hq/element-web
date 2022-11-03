@@ -115,7 +115,7 @@ export default class DeactivateAccountDialog extends React.Component<IProps, ISt
         this.setState({ errStr: _t("There was a problem communicating with the server. Please try again.") });
     };
 
-    private onUIAuthComplete = (auth: IAuthData): void => {
+    private onUIAuthComplete = (auth: IAuthData | null): void => {
         // XXX: this should be returning a promise to maintain the state inside the state machine correct
         // but given that a deactivation is followed by a local logout and all object instances being thrown away
         // this isn't done.
