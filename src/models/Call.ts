@@ -23,10 +23,10 @@ import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
 import { NamespacedValue } from "matrix-js-sdk/src/NamespacedValue";
 import { IWidgetApiRequest, MatrixWidgetType } from "matrix-widget-api";
+import { MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/models/event";
 
 import type EventEmitter from "events";
 import type { IMyDevice } from "matrix-js-sdk/src/client";
-import type { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import type { Room } from "matrix-js-sdk/src/models/room";
 import type { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import type { ClientWidgetApi } from "matrix-widget-api";
@@ -656,6 +656,7 @@ export class ElementCall extends Call {
             client,
         );
 
+        this.groupCall.on(MatrixEventEvent.BeforeRedaction, this.onBeforeRedaction);
         this.room.on(RoomStateEvent.Update, this.onRoomState);
         this.on(CallEvent.ConnectionState, this.onConnectionState);
         this.on(CallEvent.Participants, this.onParticipants);
@@ -837,6 +838,7 @@ export class ElementCall extends Call {
     }
 
     public destroy() {
+        this.groupCall.off(MatrixEventEvent.BeforeRedaction, this.onBeforeRedaction);
         WidgetStore.instance.removeVirtualWidget(this.widget.id, this.groupCall.getRoomId()!);
         this.room.off(RoomStateEvent.Update, this.onRoomState);
         this.off(CallEvent.ConnectionState, this.onConnectionState);
@@ -884,6 +886,10 @@ export class ElementCall extends Call {
             this.groupCall.getStateKey(),
         );
     }
+
+    private onBeforeRedaction = (): void => {
+        this.disconnect();
+    };
 
     private onRoomState = () => {
         this.updateParticipants();
