@@ -479,7 +479,5 @@ describe('<LocationShareMenu />', () => {
 
 function enableSettings(settings: string[]) {
     mocked(SettingsStore).getValue.mockReturnValue(false);
-    mocked(SettingsStore).getValue.mockImplementation(
-        (settingName: string) => settings.includes(settingName),
-    );
+    mocked(SettingsStore).getValue.mockImplementation((settingName: string): any => settings.includes(settingName));
 }

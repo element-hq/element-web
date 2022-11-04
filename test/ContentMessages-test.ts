@@ -63,9 +63,9 @@ describe("ContentMessages", () => {
     describe("sendStickerContentToRoom", () => {
         beforeEach(() => {
             mocked(client.sendStickerMessage).mockReturnValue(prom);
-            mocked(doMaybeLocalRoomAction).mockImplementation((
+            mocked(doMaybeLocalRoomAction).mockImplementation(<T>(
                 roomId: string,
-                fn: (actualRoomId: string) => Promise<ISendEventResponse>,
+                fn: (actualRoomId: string) => Promise<T>,
                 client?: MatrixClient,
             ) => {
                 return fn(roomId);
@@ -100,9 +100,9 @@ describe("ContentMessages", () => {
             Object.defineProperty(global.Image.prototype, 'width', {
                 get() { return 800; },
             });
-            mocked(doMaybeLocalRoomAction).mockImplementation((
+            mocked(doMaybeLocalRoomAction).mockImplementation(<T>(
                 roomId: string,
-                fn: (actualRoomId: string) => Promise<ISendEventResponse>,
+                fn: (actualRoomId: string) => Promise<T>,
             ) => fn(roomId));
             mocked(BlurhashEncoder.instance.getBlurhash).mockResolvedValue(undefined);
         });
@@ -196,9 +196,9 @@ describe("ContentMessages", () => {
         const roomId = "!roomId:server";
 
         beforeEach(() => {
-            mocked(doMaybeLocalRoomAction).mockImplementation((
+            mocked(doMaybeLocalRoomAction).mockImplementation(<T>(
                 roomId: string,
-                fn: (actualRoomId: string) => Promise<ISendEventResponse>,
+                fn: (actualRoomId: string) => Promise<T>,
             ) => fn(roomId));
         });
 

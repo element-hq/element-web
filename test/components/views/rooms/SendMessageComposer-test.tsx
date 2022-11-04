@@ -17,7 +17,7 @@ limitations under the License.
 import React from "react";
 import { act } from "react-dom/test-utils";
 import { sleep } from "matrix-js-sdk/src/utils";
-import { ISendEventResponse, MatrixClient, MsgType, RelationType } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, MsgType, RelationType } from "matrix-js-sdk/src/matrix";
 // eslint-disable-next-line deprecate/import
 import { mount } from 'enzyme';
 import { mocked } from "jest-mock";
@@ -303,9 +303,9 @@ describe('<SendMessageComposer/>', () => {
         });
 
         it("correctly sends a message", () => {
-            mocked(doMaybeLocalRoomAction).mockImplementation((
+            mocked(doMaybeLocalRoomAction).mockImplementation(<T extends {}>(
                 roomId: string,
-                fn: (actualRoomId: string) => Promise<ISendEventResponse>,
+                fn: (actualRoomId: string) => Promise<T>,
                 _client?: MatrixClient,
             ) => {
                 return fn(roomId);

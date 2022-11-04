@@ -25,8 +25,12 @@ jobs:
       - name: Install Deps
         run: "./scripts/ci/install-deps.sh --ignore-scripts"
 
+      - name: Get number of CPU cores
+        id: cpu-cores
+        uses: SimenB/github-actions-cpu-cores@v1
+
       - name: Run tests with coverage
-        run: "yarn coverage --ci"
+        run: "yarn coverage --ci --reporters github-actions --max-workers ${{ steps.cpu-cores.outputs.count }}"
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v2

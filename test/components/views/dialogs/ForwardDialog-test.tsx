@@ -133,7 +133,7 @@ describe("ForwardDialog", () => {
         // Make sendEvent require manual resolution so we can see the sending state
         let finishSend;
         let cancelSend;
-        mockClient.sendEvent.mockImplementation(() => new Promise((resolve, reject) => {
+        mockClient.sendEvent.mockImplementation(<T extends {}>() => new Promise<T>((resolve, reject) => {
             finishSend = resolve;
             cancelSend = reject;
         }));

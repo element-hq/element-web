@@ -4,43 +4,43 @@ exports[`<SpaceContextMenu /> renders menu correctly 1`] = `
 <SpaceContextMenu
   onFinished={[MockFunction]}
   space={
-    Object {
+    {
       "canInvite": [MockFunction] {
-        "calls": Array [
-          Array [
+        "calls": [
+          [
             "@test:server",
           ],
         ],
-        "results": Array [
-          Object {
+        "results": [
+          {
             "type": "return",
             "value": undefined,
           },
         ],
       },
-      "client": Object {
+      "client": {
         "getUserId": [MockFunction] {
-          "calls": Array [
-            Array [],
+          "calls": [
+            [],
           ],
-          "results": Array [
-            Object {
+          "results": [
+            {
               "type": "return",
               "value": "@test:server",
             },
           ],
         },
       },
-      "currentState": Object {
+      "currentState": {
         "maySendStateEvent": [MockFunction] {
-          "calls": Array [
-            Array [
+          "calls": [
+            [
               "m.space.child",
               "@test:server",
             ],
           ],
-          "results": Array [
-            Object {
+          "results": [
+            {
               "type": "return",
               "value": undefined,
             },
@@ -48,11 +48,11 @@ exports[`<SpaceContextMenu /> renders menu correctly 1`] = `
         },
       },
       "getJoinRule": [MockFunction] {
-        "calls": Array [
-          Array [],
+        "calls": [
+          [],
         ],
-        "results": Array [
-          Object {
+        "results": [
+          {
             "type": "return",
             "value": undefined,
           },
@@ -180,7 +180,7 @@ exports[`<SpaceContextMenu /> renders menu correctly 1`] = `
             onContextMenu={[Function]}
             onKeyDown={[Function]}
             style={
-              Object {
+              {
                 "bottom": undefined,
                 "right": undefined,
               }
@@ -190,12 +190,12 @@ exports[`<SpaceContextMenu /> renders menu correctly 1`] = `
               className="mx_ContextualMenu_background"
               onClick={[Function]}
               onContextMenu={[Function]}
-              style={Object {}}
+              style={{}}
             />
             <div
               className="mx_ContextualMenu"
               role="menu"
-              style={Object {}}
+              style={{}}
             >
               <div
                 className="mx_IconizedContextMenu mx_SpacePanel_contextMenu mx_IconizedContextMenu_compact"
@@ -232,7 +232,7 @@ exports[`<SpaceContextMenu /> renders menu correctly 1`] = `
                             className="mx_IconizedContextMenu_item"
                             element="div"
                             inputRef={
-                              Object {
+                              {
                                 "current": <div
                                   aria-label="Space home"
                                   class="mx_AccessibleButton mx_IconizedContextMenu_item focus-visible"
@@ -300,7 +300,7 @@ exports[`<SpaceContextMenu /> renders menu correctly 1`] = `
                             className="mx_IconizedContextMenu_item"
                             element="div"
                             inputRef={
-                              Object {
+                              {
                                 "current": <div
                                   aria-label="Explore rooms"
                                   class="mx_AccessibleButton mx_IconizedContextMenu_item"
@@ -367,7 +367,7 @@ exports[`<SpaceContextMenu /> renders menu correctly 1`] = `
                             className="mx_IconizedContextMenu_item"
                             element="div"
                             inputRef={
-                              Object {
+                              {
                                 "current": <div
                                   aria-label="Preferences"
                                   class="mx_AccessibleButton mx_IconizedContextMenu_item"
@@ -439,7 +439,7 @@ exports[`<SpaceContextMenu /> renders menu correctly 1`] = `
                             data-test-id="leave-option"
                             element="div"
                             inputRef={
-                              Object {
+                              {
                                 "current": <div
                                   aria-label="Leave space"
                                   class="mx_AccessibleButton mx_IconizedContextMenu_option_red mx_IconizedContextMenu_item"

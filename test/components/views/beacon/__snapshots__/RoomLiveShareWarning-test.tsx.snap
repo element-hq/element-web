@@ -1,10 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<RoomLiveShareWarning /> when user has live beacons and geolocation is available renders correctly with one live beacon in room 1`] = `"<div class=\\"mx_RoomLiveShareWarning\\"><div class=\\"mx_StyledLiveBeaconIcon mx_RoomLiveShareWarning_icon\\"></div><span class=\\"mx_RoomLiveShareWarning_label\\">You are sharing your live location</span><span data-test-id=\\"room-live-share-expiry\\" class=\\"mx_LiveTimeRemaining\\">1h left</span><button data-test-id=\\"room-live-share-primary-button\\" role=\\"button\\" tabindex=\\"0\\" class=\\"mx_AccessibleButton mx_RoomLiveShareWarning_stopButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger\\">Stop</button></div>"`;
+exports[`<RoomLiveShareWarning /> when user has live beacons and geolocation is available renders correctly with one live beacon in room 1`] = `"<div class="mx_RoomLiveShareWarning"><div class="mx_StyledLiveBeaconIcon mx_RoomLiveShareWarning_icon"></div><span class="mx_RoomLiveShareWarning_label">You are sharing your live location</span><span data-test-id="room-live-share-expiry" class="mx_LiveTimeRemaining">1h left</span><button data-test-id="room-live-share-primary-button" role="button" tabindex="0" class="mx_AccessibleButton mx_RoomLiveShareWarning_stopButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger">Stop</button></div>"`;
 
-exports[`<RoomLiveShareWarning /> when user has live beacons and geolocation is available renders correctly with two live beacons in room 1`] = `"<div class=\\"mx_RoomLiveShareWarning\\"><div class=\\"mx_StyledLiveBeaconIcon mx_RoomLiveShareWarning_icon\\"></div><span class=\\"mx_RoomLiveShareWarning_label\\">You are sharing your live location</span><span data-test-id=\\"room-live-share-expiry\\" class=\\"mx_LiveTimeRemaining\\">12h left</span><button data-test-id=\\"room-live-share-primary-button\\" role=\\"button\\" tabindex=\\"0\\" class=\\"mx_AccessibleButton mx_RoomLiveShareWarning_stopButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger\\">Stop</button></div>"`;
+exports[`<RoomLiveShareWarning /> when user has live beacons and geolocation is available renders correctly with two live beacons in room 1`] = `"<div class="mx_RoomLiveShareWarning"><div class="mx_StyledLiveBeaconIcon mx_RoomLiveShareWarning_icon"></div><span class="mx_RoomLiveShareWarning_label">You are sharing your live location</span><span data-test-id="room-live-share-expiry" class="mx_LiveTimeRemaining">12h left</span><button data-test-id="room-live-share-primary-button" role="button" tabindex="0" class="mx_AccessibleButton mx_RoomLiveShareWarning_stopButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger">Stop</button></div>"`;
 
-exports[`<RoomLiveShareWarning /> when user has live beacons and geolocation is available stopping beacons displays error when stop sharing fails 1`] = `"<div class=\\"mx_RoomLiveShareWarning\\"><div class=\\"mx_StyledLiveBeaconIcon mx_RoomLiveShareWarning_icon mx_StyledLiveBeaconIcon_error\\"></div><span class=\\"mx_RoomLiveShareWarning_label\\">An error occurred while stopping your live location, please try again</span><button data-test-id=\\"room-live-share-primary-button\\" role=\\"button\\" tabindex=\\"0\\" class=\\"mx_AccessibleButton mx_RoomLiveShareWarning_stopButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger\\">Retry</button></div>"`;
+exports[`<RoomLiveShareWarning /> when user has live beacons and geolocation is available stopping beacons displays error when stop sharing fails 1`] = `"<div class="mx_RoomLiveShareWarning"><div class="mx_StyledLiveBeaconIcon mx_RoomLiveShareWarning_icon mx_StyledLiveBeaconIcon_error"></div><span class="mx_RoomLiveShareWarning_label">An error occurred while stopping your live location, please try again</span><button data-test-id="room-live-share-primary-button" role="button" tabindex="0" class="mx_AccessibleButton mx_RoomLiveShareWarning_stopButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger">Retry</button></div>"`;
 
 exports[`<RoomLiveShareWarning /> when user has live beacons and geolocation is available with location publish errors displays location publish error when mounted with location publish errors 1`] = `
 <RoomLiveShareWarning
@@ -12,7 +12,7 @@ exports[`<RoomLiveShareWarning /> when user has live beacons and geolocation is 
 >
   <RoomLiveShareWarningInner
     liveBeaconIds={
-      Array [
+      [
         "$room2:server.org_@alice:server.org",
       ]
     }

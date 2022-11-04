@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<BeaconViewDialog /> renders a fallback when there are no locations 1`] = `
-Array [
+[
   <MapFallback
     className="mx_BeaconViewDialog_map"
     data-test-id="beacon-view-dialog-map-fallback"

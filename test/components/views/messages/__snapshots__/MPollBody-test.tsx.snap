@@ -4,37 +4,37 @@ exports[`MPollBody renders a finished poll 1`] = `
 <MPollBody
   getRelationsForEvent={[Function]}
   highlightLink="unused"
-  highlights={Array []}
+  highlights={[]}
   mediaEventHelper={null}
   mxEvent={
-    Object {
-      "content": Object {
+    {
+      "content": {
         "org.matrix.msc1767.text": "What should we order for the party?
 1. Pizza
 2. Poutine
 3. Italian
 4. Wings",
-        "org.matrix.msc3381.poll.start": Object {
-          "answers": Array [
-            Object {
+        "org.matrix.msc3381.poll.start": {
+          "answers": [
+            {
               "id": "pizza",
               "org.matrix.msc1767.text": "Pizza",
             },
-            Object {
+            {
               "id": "poutine",
               "org.matrix.msc1767.text": "Poutine",
             },
-            Object {
+            {
               "id": "italian",
               "org.matrix.msc1767.text": "Italian",
             },
-            Object {
+            {
               "id": "wings",
               "org.matrix.msc1767.text": "Wings",
             },
           ],
           "kind": "org.matrix.msc3381.poll.disclosed",
-          "question": Object {
+          "question": {
             "org.matrix.msc1767.text": "What should we order for the party?",
           },
         },
@@ -67,15 +67,15 @@ exports[`MPollBody renders a finished poll 1`] = `
             PollAnswerSubevent {
               "html": undefined,
               "id": "pizza",
-              "renderings": Array [
-                Object {
+              "renderings": [
+                {
                   "body": "Pizza",
                   "mimetype": "text/plain",
                 },
               ],
               "text": "Pizza",
-              "wireFormat": Object {
-                "content": Object {
+              "wireFormat": {
+                "content": {
                   "id": "pizza",
                   "org.matrix.msc1767.text": "Pizza",
                 },
@@ -112,7 +112,7 @@ exports[`MPollBody renders a finished poll 1`] = `
           <div
             className="mx_MPollBody_popularityAmount"
             style={
-              Object {
+              {
                 "width": "0%",
               }
             }
@@ -129,15 +129,15 @@ exports[`MPollBody renders a finished poll 1`] = `
             PollAnswerSubevent {
               "html": undefined,
               "id": "poutine",
-              "renderings": Array [
-                Object {
+              "renderings": [
+                {
                   "body": "Poutine",
                   "mimetype": "text/plain",
                 },
               ],
               "text": "Poutine",
-              "wireFormat": Object {
-                "content": Object {
+              "wireFormat": {
+                "content": {
                   "id": "poutine",
                   "org.matrix.msc1767.text": "Poutine",
                 },
@@ -174,7 +174,7 @@ exports[`MPollBody renders a finished poll 1`] = `
           <div
             className="mx_MPollBody_popularityAmount"
             style={
-              Object {
+              {
                 "width": "0%",
               }
             }
@@ -191,15 +191,15 @@ exports[`MPollBody renders a finished poll 1`] = `
             PollAnswerSubevent {
               "html": undefined,
               "id": "italian",
-              "renderings": Array [
-                Object {
+              "renderings": [
+                {
                   "body": "Italian",
                   "mimetype": "text/plain",
                 },
               ],
               "text": "Italian",
-              "wireFormat": Object {
-                "content": Object {
+              "wireFormat": {
+                "content": {
                   "id": "italian",
                   "org.matrix.msc1767.text": "Italian",
                 },
@@ -236,7 +236,7 @@ exports[`MPollBody renders a finished poll 1`] = `
           <div
             className="mx_MPollBody_popularityAmount"
             style={
-              Object {
+              {
                 "width": "67%",
               }
             }
@@ -253,15 +253,15 @@ exports[`MPollBody renders a finished poll 1`] = `
             PollAnswerSubevent {
               "html": undefined,
               "id": "wings",
-              "renderings": Array [
-                Object {
+              "renderings": [
+                {
                   "body": "Wings",
                   "mimetype": "text/plain",
                 },
               ],
               "text": "Wings",
-              "wireFormat": Object {
-                "content": Object {
+              "wireFormat": {
+                "content": {
                   "id": "wings",
                   "org.matrix.msc1767.text": "Wings",
                 },
@@ -298,7 +298,7 @@ exports[`MPollBody renders a finished poll 1`] = `
           <div
             className="mx_MPollBody_popularityAmount"
             style={
-              Object {
+              {
                 "width": "33%",
               }
             }
@@ -319,37 +319,37 @@ exports[`MPollBody renders a finished poll with multiple winners 1`] = `
 <MPollBody
   getRelationsForEvent={[Function]}
   highlightLink="unused"
-  highlights={Array []}
+  highlights={[]}
   mediaEventHelper={null}
   mxEvent={
-    Object {
-      "content": Object {
+    {
+      "content": {
         "org.matrix.msc1767.text": "What should we order for the party?
 1. Pizza
 2. Poutine
 3. Italian
 4. Wings",
-        "org.matrix.msc3381.poll.start": Object {
-          "answers": Array [
-            Object {
+        "org.matrix.msc3381.poll.start": {
+          "answers": [
+            {
               "id": "pizza",
               "org.matrix.msc1767.text": "Pizza",
             },
-            Object {
+            {
               "id": "poutine",
               "org.matrix.msc1767.text": "Poutine",
             },
-            Object {
+            {
               "id": "italian",
               "org.matrix.msc1767.text": "Italian",
             },
-            Object {
+            {
               "id": "wings",
               "org.matrix.msc1767.text": "Wings",
             },
           ],
           "kind": "org.matrix.msc3381.poll.disclosed",
-          "question": Object {
+          "question": {
             "org.matrix.msc1767.text": "What should we order for the party?",
           },
         },
@@ -382,15 +382,15 @@ exports[`MPollBody renders a finished poll with multiple winners 1`] = `
             PollAnswerSubevent {
               "html": undefined,
               "id": "pizza",
-              "renderings": Array [
-                Object {
+              "renderings": [
+                {
                   "body": "Pizza",
                   "mimetype": "text/plain",
                 },
               ],
               "text": "Pizza",
-              "wireFormat": Object {
-                "content": Object {
+              "wireFormat": {
+                "content": {
                   "id": "pizza",
                   "org.matrix.msc1767.text": "Pizza",
                 },
@@ -427,7 +427,7 @@ exports[`MPollBody renders a finished poll with multiple winners 1`] = `
           <div
             className="mx_MPollBody_popularityAmount"
             style={
-              Object {
+              {
                 "width": "50%",
               }
             }
@@ -444,15 +444,15 @@ exports[`MPollBody renders a finished poll with multiple winners 1`] = `
             PollAnswerSubevent {
               "html": undefined,
               "id": "poutine",
-              "renderings": Array [
-                Object {
+              "renderings": [
+                {
                   "body": "Poutine",
                   "mimetype": "text/plain",
                 },
               ],
               "text": "Poutine",
-              "wireFormat": Object {
-                "content": Object {
+              "wireFormat": {
+                "content": {
                   "id": "poutine",
                   "org.matrix.msc1767.text": "Poutine",
                 },
@@ -489,7 +489,7 @@ exports[`MPollBody renders a finished poll with multiple winners 1`] = `
           <div
             className="mx_MPollBody_popularityAmount"
             style={
-              Object {
+              {
                 "width": "0%",
               }
             }
@@ -506,15 +506,15 @@ exports[`MPollBody renders a finished poll with multiple winners 1`] = `
             PollAnswerSubevent {
               "html": undefined,
               "id": "italian",
-              "renderings": Array [
-                Object {
+              "renderings": [
+                {
                   "body": "Italian",
                   "mimetype": "text/plain",
                 },
               ],
               "text": "Italian",
-              "wireFormat": Object {
-                "content": Object {
+              "wireFormat": {
+                "content": {
                   "id": "italian",
                   "org.matrix.msc1767.text": "Italian",
                 },
@@ -551,7 +551,7 @@ exports[`MPollBody renders a finished poll with multiple winners 1`] = `
           <div
             className="mx_MPollBody_popularityAmount"
             style={
-              Object {
+              {
                 "width": "0%",
               }
             }
@@ -568,15 +568,15 @@ exports[`MPollBody renders a finished poll with multiple winners 1`] = `
             PollAnswerSubevent {
               "html": undefined,
               "id": "wings",
-              "renderings": Array [
-                Object {
+              "renderings": [
+                {
                   "body": "Wings",
                   "mimetype": "text/plain",
                 },
               ],
               "text": "Wings",
-              "wireFormat": Object {
-                "content": Object {
+              "wireFormat": {
+                "content": {
                   "id": "wings",
                   "org.matrix.msc1767.text": "Wings",
                 },
@@ -613,7 +613,7 @@ exports[`MPollBody renders a finished poll with multiple winners 1`] = `
           <div
             className="mx_MPollBody_popularityAmount"
             style={
-              Object {
+              {
                 "width": "50%",
               }
             }
@@ -634,37 +634,37 @@ exports[`MPollBody renders a finished poll with no votes 1`] = `
 <MPollBody
   getRelationsForEvent={[Function]}
   highlightLink="unused"
-  highlights={Array []}
+  highlights={[]}
   mediaEventHelper={null}
   mxEvent={
-    Object {
-      "content": Object {
+    {
+      "content": {
         "org.matrix.msc1767.text": "What should we order for the party?
 1. Pizza
 2. Poutine
 3. Italian
 4. Wings",
-        "org.matrix.msc3381.poll.start": Object {
-          "answers": Array [
-            Object {
+        "org.matrix.msc3381.poll.start": {
+          "answers": [
+            {
               "id": "pizza",
               "org.matrix.msc1767.text": "Pizza",
             },
-            Object {
+            {
               "id": "poutine",
               "org.matrix.msc1767.text": "Poutine",
             },
-            Object {
+            {
               "id": "italian",
               "org.matrix.msc1767.text": "Italian",
             },
-            Object {
+            {
               "id": "wings",
               "org.matrix.msc1767.text": "Wings",
             },
           ],
           "kind": "org.matrix.msc3381.poll.disclosed",
-          "question": Object {
+          "question": {
             "org.matrix.msc1767.text": "What should we order for the party?",
           },
         },
@@ -697,15 +697,15 @@ exports[`MPollBody renders a finished poll with no votes 1`] = `
             PollAnswerSubevent {
               "html": undefined,
               "id": "pizza",
-              "renderings": Array [
-                Object {
+              "renderings": [
+                {
                   "body": "Pizza",
                   "mimetype": "text/plain",
                 },
               ],
               "text": "Pizza",
-              "wireFormat": Object {
-                "content": Object {
+              "wireFormat": {
+                "content": {
                   "id": "pizza",
                   "org.matrix.msc1767.text": "Pizza",
                 },
@@ -742,7 +742,7 @@ exports[`MPollBody renders a finished poll with no votes 1`] = `
           <div
             className="mx_MPollBody_popularityAmount"
             style={
-              Object {
+              {
                 "width": "0%",
               }
             }
@@ -759,15 +759,15 @@ exports[`MPollBody renders a finished poll with no votes 1`] = `
             PollAnswerSubevent {
               "html": undefined,
               "id": "poutine",
-              "renderings": Array [
-                Object {
+              "renderings": [
+                {
                   "body": "Poutine",
                   "mimetype": "text/plain",
                 },
               ],
               "text": "Poutine",
-              "wireFormat": Object {
-                "content": Object {
+              "wireFormat": {
+                "content": {
                   "id": "poutine",
                   "org.matrix.msc1767.text": "Poutine",
                 },
@@ -804,7 +804,7 @@ exports[`MPollBody renders a finished poll with no votes 1`] = `
           <div
             className="mx_MPollBody_popularityAmount"
             style={
-              Object {
+              {
                 "width": "0%",
               }
             }
@@ -821,15 +821,15 @@ exports[`MPollBody renders a finished poll with no votes 1`] = `
             PollAnswerSubevent {
               "html": undefined,
               "id": "italian",
-              "renderings": Array [
-                Object {
+              "renderings": [
+                {
                   "body": "Italian",
                   "mimetype": "text/plain",
                 },
               ],
               "text": "Italian",
-              "wireFormat": Object {
-                "content": Object {
+              "wireFormat": {
+                "content": {
                   "id": "italian",
                   "org.matrix.msc1767.text": "Italian",
                 },
@@ -866,7 +866,7 @@ exports[`MPollBody renders a finished poll with no votes 1`] = `
           <div
             className="mx_MPollBody_popularityAmount"
             style={
-              Object {
+              {
                 "width": "0%",
               }
             }
@@ -883,15 +883,15 @@ exports[`MPollBody renders a finished poll with no votes 1`] = `
             PollAnswerSubevent {
               "html": undefined,
               "id": "wings",
-              "renderings": Array [
-                Object {
+              "renderings": [
+                {
                   "body": "Wings",
                   "mimetype": "text/plain",
                 },
               ],
               "text": "Wings",
-              "wireFormat": Object {
-                "content": Object {
+              "wireFormat": {
+                "content": {
                   "id": "wings",
                   "org.matrix.msc1767.text": "Wings",
                 },
@@ -928,7 +928,7 @@ exports[`MPollBody renders a finished poll with no votes 1`] = `
           <div
             className="mx_MPollBody_popularityAmount"
             style={
-              Object {
+              {
                 "width": "0%",
               }
             }
@@ -949,37 +949,37 @@ exports[`MPollBody renders a poll that I have not voted in 1`] = `
 <MPollBody
   getRelationsForEvent={[Function]}
   highlightLink="unused"
-  highlights={Array []}
+  highlights={[]}
   mediaEventHelper={null}
   mxEvent={
-    Object {
-      "content": Object {
+    {
+      "content": {
         "org.matrix.msc1767.text": "What should we order for the party?
 1. Pizza
 2. Poutine
 3. Italian
 4. Wings",
-        "org.matrix.msc3381.poll.start": Object {
-          "answers": Array [
-            Object {
+        "org.matrix.msc3381.poll.start": {
+          "answers": [
+            {
               "id": "pizza",
               "org.matrix.msc1767.text": "Pizza",
             },
-            Object {
+            {
               "id": "poutine",
               "org.matrix.msc1767.text": "Poutine",
             },
-            Object {
+            {
               "id": "italian",
               "org.matrix.msc1767.text": "Italian",
             },
-            Object {
+            {
               "id": "wings",
               "org.matrix.msc1767.text": "Wings",
             },
           ],
           "kind": "org.matrix.msc3381.poll.disclosed",
-          "question": Object {
+          "question": {
             "org.matrix.msc1767.text": "What should we order for the party?",
           },
         },
@@ -1012,15 +1012,15 @@ exports[`MPollBody renders a poll that I have not voted in 1`] = `
             PollAnswerSubevent {
               "html": undefined,
               "id": "pizza",
-              "renderings": Array [
-                Object {
+              "renderings": [
+                {
                   "body": "Pizza",
                   "mimetype": "text/plain",
                 },
               ],
               "text": "Pizza",
-              "wireFormat": Object {
-                "content": Object {
+              "wireFormat": {
+                "content": {
                   "id": "pizza",
                   "org.matrix.msc1767.text": "Pizza",
                 },
@@ -1082,7 +1082,7 @@ exports[`MPollBody renders a poll that I have not voted in 1`] = `
           <div
             className="mx_MPollBody_popularityAmount"
             style={
-              Object {
+              {
                 "width": "0%",
               }
             }
@@ -1099,15 +1099,15 @@ exports[`MPollBody renders a poll that I have not voted in 1`] = `
             PollAnswerSubevent {
               "html": undefined,
               "id": "poutine",
-              "renderings": Array [
-                Object {
+              "renderings": [
+                {
                   "body": "Poutine",
                   "mimetype": "text/plain",
                 },
               ],
               "text": "Poutine",
-              "wireFormat": Object {
-                "content": Object {
+              "wireFormat": {
+                "content": {
                   "id": "poutine",
                   "org.matrix.msc1767.text": "Poutine",
                 },
@@ -1169,7 +1169,7 @@ exports[`MPollBody renders a poll that I have not voted in 1`] = `
           <div
             className="mx_MPollBody_popularityAmount"
             style={
-              Object {
+              {
                 "width": "0%",
               }
             }
@@ -1186,15 +1186,15 @@ exports[`MPollBody renders a poll that I have not voted in 1`] = `
             PollAnswerSubevent {
               "html": undefined,
               "id": "italian",
-              "renderings": Array [
-                Object {
+              "renderings": [
+                {
                   "body": "Italian",
                   "mimetype": "text/plain",
                 },
               ],
               "text": "Italian",
-              "wireFormat": Object {
-                "content": Object {
+              "wireFormat": {
+                "content": {
                   "id": "italian",
                   "org.matrix.msc1767.text": "Italian",
                 },
@@ -1256,7 +1256,7 @@ exports[`MPollBody renders a poll that I have not voted in 1`] = `
           <div
             className="mx_MPollBody_popularityAmount"
             style={
-              Object {
+              {
                 "width": "0%",
               }
             }
@@ -1273,15 +1273,15 @@ exports[`MPollBody renders a poll that I have not voted in 1`] = `
             PollAnswerSubevent {
               "html": undefined,
               "id": "wings",
-              "renderings": Array [
-                Object {
+              "renderings": [
+                {
                   "body": "Wings",
                   "mimetype": "text/plain",
                 },
               ],
               "text": "Wings",
-              "wireFormat": Object {
-                "content": Object {
+              "wireFormat": {
+                "content": {
                   "id": "wings",
                   "org.matrix.msc1767.text": "Wings",
                 },
@@ -1343,7 +1343,7 @@ exports[`MPollBody renders a poll that I have not voted in 1`] = `
           <div
             className="mx_MPollBody_popularityAmount"
             style={
-              Object {
+              {
                 "width": "0%",
               }
             }
@@ -1364,37 +1364,37 @@ exports[`MPollBody renders a poll with local, non-local and invalid votes 1`] = 
 <MPollBody
   getRelationsForEvent={[Function]}
   highlightLink="unused"
-  highlights={Array []}
+  highlights={[]}
   mediaEventHelper={null}
   mxEvent={
-    Object {
-      "content": Object {
+    {
+      "content": {
         "org.matrix.msc1767.text": "What should we order for the party?
 1. Pizza
 2. Poutine
 3. Italian
 4. Wings",
-        "org.matrix.msc3381.poll.start": Object {
-          "answers": Array [
-            Object {
+        "org.matrix.msc3381.poll.start": {
+          "answers": [
+            {
               "id": "pizza",
               "org.matrix.msc1767.text": "Pizza",
             },
-            Object {
+            {
               "id": "poutine",
               "org.matrix.msc1767.text": "Poutine",
             },
-            Object {
+            {
               "id": "italian",
               "org.matrix.msc1767.text": "Italian",
             },
-            Object {
+            {
               "id": "wings",
               "org.matrix.msc1767.text": "Wings",
             },
           ],
           "kind": "org.matrix.msc3381.poll.disclosed",
-          "question": Object {
+          "question": {
             "org.matrix.msc1767.text": "What should we order for the party?",
           },
         },
@@ -1427,15 +1427,15 @@ exports[`MPollBody renders a poll with local, non-local and invalid votes 1`] = 
             PollAnswerSubevent {
               "html": undefined,
               "id": "pizza",
-              "renderings": Array [
-                Object {
+              "renderings": [
+                {
                   "body": "Pizza",
                   "mimetype": "text/plain",
                 },
               ],
               "text": "Pizza",
-              "wireFormat": Object {
-                "content": Object {
+              "wireFormat": {
+                "content": {
                   "id": "pizza",
                   "org.matrix.msc1767.text": "Pizza",
                 },
@@ -1499,7 +1499,7 @@ exports[`MPollBody renders a poll with local, non-local and invalid votes 1`] = 
           <div
             className="mx_MPollBody_popularityAmount"
             style={
-              Object {
+              {
                 "width": "20%",
               }
             }
@@ -1516,15 +1516,15 @@ exports[`MPollBody renders a poll with local, non-local and invalid votes 1`] = 
             PollAnswerSubevent {
               "html": undefined,
               "id": "poutine",
-              "renderings": Array [
-                Object {
+              "renderings": [
+                {
                   "body": "Poutine",
                   "mimetype": "text/plain",
                 },
               ],
               "text": "Poutine",
-              "wireFormat": Object {
-                "content": Object {
+              "wireFormat": {
+                "content": {
                   "id": "poutine",
                   "org.matrix.msc1767.text": "Poutine",
                 },
@@ -1588,7 +1588,7 @@ exports[`MPollBody renders a poll with local, non-local and invalid votes 1`] = 
           <div
             className="mx_MPollBody_popularityAmount"
             style={
-              Object {
+              {
                 "width": "0%",
               }
             }
@@ -1605,15 +1605,15 @@ exports[`MPollBody renders a poll with local, non-local and invalid votes 1`] = 
             PollAnswerSubevent {
               "html": undefined,
               "id": "italian",
-              "renderings": Array [
-                Object {
+              "renderings": [
+                {
                   "body": "Italian",
                   "mimetype": "text/plain",
                 },
               ],
               "text": "Italian",
-              "wireFormat": Object {
-                "content": Object {
+              "wireFormat": {
+                "content": {
                   "id": "italian",
                   "org.matrix.msc1767.text": "Italian",
                 },
@@ -1677,7 +1677,7 @@ exports[`MPollBody renders a poll with local, non-local and invalid votes 1`] = 
           <div
             className="mx_MPollBody_popularityAmount"
             style={
-              Object {
+              {
                 "width": "60%",
               }
             }
@@ -1694,15 +1694,15 @@ exports[`MPollBody renders a poll with local, non-local and invalid votes 1`] = 
             PollAnswerSubevent {
               "html": undefined,
               "id": "wings",
-              "renderings": Array [
-                Object {
+              "renderings": [
+                {
                   "body": "Wings",
                   "mimetype": "text/plain",
                 },
               ],
               "text": "Wings",
-              "wireFormat": Object {
-                "content": Object {
+              "wireFormat": {
+                "content": {
                   "id": "wings",
                   "org.matrix.msc1767.text": "Wings",
                 },
@@ -1766,7 +1766,7 @@ exports[`MPollBody renders a poll with local, non-local and invalid votes 1`] = 
           <div
             className="mx_MPollBody_popularityAmount"
             style={
-              Object {
+              {
                 "width": "20%",
               }
             }
@@ -1787,37 +1787,37 @@ exports[`MPollBody renders a poll with no votes 1`] = `
 <MPollBody
   getRelationsForEvent={[Function]}
   highlightLink="unused"
-  highlights={Array []}
+  highlights={[]}
   mediaEventHelper={null}
   mxEvent={
-    Object {
-      "content": Object {
+    {
+      "content": {
         "org.matrix.msc1767.text": "What should we order for the party?
 1. Pizza
 2. Poutine
 3. Italian
 4. Wings",
-        "org.matrix.msc3381.poll.start": Object {
-          "answers": Array [
-            Object {
+        "org.matrix.msc3381.poll.start": {
+          "answers": [
+            {
               "id": "pizza",
               "org.matrix.msc1767.text": "Pizza",
             },
-            Object {
+            {
               "id": "poutine",
               "org.matrix.msc1767.text": "Poutine",
             },
-            Object {
+            {
               "id": "italian",
               "org.matrix.msc1767.text": "Italian",
             },
-            Object {
+            {
               "id": "wings",
               "org.matrix.msc1767.text": "Wings",
             },
           ],
           "kind": "org.matrix.msc3381.poll.disclosed",
-          "question": Object {
+          "question": {
             "org.matrix.msc1767.text": "What should we order for the party?",
           },
         },
@@ -1850,15 +1850,15 @@ exports[`MPollBody renders a poll with no votes 1`] = `
             PollAnswerSubevent {
               "html": undefined,
               "id": "pizza",
-              "renderings": Array [
-                Object {
+              "renderings": [
+                {
                   "body": "Pizza",
                   "mimetype": "text/plain",
                 },
               ],
               "text": "Pizza",
-              "wireFormat": Object {
-                "content": Object {
+              "wireFormat": {
+                "content": {
                   "id": "pizza",
                   "org.matrix.msc1767.text": "Pizza",
                 },
@@ -1920,7 +1920,7 @@ exports[`MPollBody renders a poll with no votes 1`] = `
           <div
             className="mx_MPollBody_popularityAmount"
             style={
-              Object {
+              {
                 "width": "0%",
               }
             }
@@ -1937,15 +1937,15 @@ exports[`MPollBody renders a poll with no votes 1`] = `
             PollAnswerSubevent {
               "html": undefined,
               "id": "poutine",
-              "renderings": Array [
-                Object {
+              "renderings": [
+                {
                   "body": "Poutine",
                   "mimetype": "text/plain",
                 },
               ],
               "text": "Poutine",
-              "wireFormat": Object {
-                "content": Object {
+              "wireFormat": {
+                "content": {
                   "id": "poutine",
                   "org.matrix.msc1767.text": "Poutine",
                 },
@@ -2007,7 +2007,7 @@ exports[`MPollBody renders a poll with no votes 1`] = `
           <div
             className="mx_MPollBody_popularityAmount"
             style={
-              Object {
+              {
                 "width": "0%",
               }
             }
@@ -2024,15 +2024,15 @@ exports[`MPollBody renders a poll with no votes 1`] = `
             PollAnswerSubevent {
               "html": undefined,
               "id": "italian",
-              "renderings": Array [
-                Object {
+              "renderings": [
+                {
                   "body": "Italian",
                   "mimetype": "text/plain",
                 },
               ],
               "text": "Italian",
-              "wireFormat": Object {
-                "content": Object {
+              "wireFormat": {
+                "content": {
                   "id": "italian",
                   "org.matrix.msc1767.text": "Italian",
                 },
@@ -2094,7 +2094,7 @@ exports[`MPollBody renders a poll with no votes 1`] = `
           <div
             className="mx_MPollBody_popularityAmount"
             style={
-              Object {
+              {
                 "width": "0%",
               }
             }
@@ -2111,15 +2111,15 @@ exports[`MPollBody renders a poll with no votes 1`] = `
             PollAnswerSubevent {
               "html": undefined,
               "id": "wings",
-              "renderings": Array [
-                Object {
+              "renderings": [
+                {
                   "body": "Wings",
                   "mimetype": "text/plain",
                 },
               ],
               "text": "Wings",
-              "wireFormat": Object {
-                "content": Object {
+              "wireFormat": {
+                "content": {
                   "id": "wings",
                   "org.matrix.msc1767.text": "Wings",
                 },
@@ -2181,7 +2181,7 @@ exports[`MPollBody renders a poll with no votes 1`] = `
           <div
             className="mx_MPollBody_popularityAmount"
             style={
-              Object {
+              {
                 "width": "0%",
               }
             }
@@ -2202,37 +2202,37 @@ exports[`MPollBody renders a poll with only non-local votes 1`] = `
 <MPollBody
   getRelationsForEvent={[Function]}
   highlightLink="unused"
-  highlights={Array []}
+  highlights={[]}
   mediaEventHelper={null}
   mxEvent={
-    Object {
-      "content": Object {
+    {
+      "content": {
         "org.matrix.msc1767.text": "What should we order for the party?
 1. Pizza
 2. Poutine
 3. Italian
 4. Wings",
-        "org.matrix.msc3381.poll.start": Object {
-          "answers": Array [
-            Object {
+        "org.matrix.msc3381.poll.start": {
+          "answers": [
+            {
               "id": "pizza",
               "org.matrix.msc1767.text": "Pizza",
             },
-            Object {
+            {
               "id": "poutine",
               "org.matrix.msc1767.text": "Poutine",
             },
-            Object {
+            {
               "id": "italian",
               "org.matrix.msc1767.text": "Italian",
             },
-            Object {
+            {
               "id": "wings",
               "org.matrix.msc1767.text": "Wings",
             },
           ],
           "kind": "org.matrix.msc3381.poll.disclosed",
-          "question": Object {
+          "question": {
             "org.matrix.msc1767.text": "What should we order for the party?",
           },
         },
@@ -2265,15 +2265,15 @@ exports[`MPollBody renders a poll with only non-local votes 1`] = `
             PollAnswerSubevent {
               "html": undefined,
               "id": "pizza",
-              "renderings": Array [
-                Object {
+              "renderings": [
+                {
                   "body": "Pizza",
                   "mimetype": "text/plain",
                 },
               ],
               "text": "Pizza",
-              "wireFormat": Object {
-                "content": Object {
+              "wireFormat": {
+                "content": {
                   "id": "pizza",
                   "org.matrix.msc1767.text": "Pizza",
                 },
@@ -2337,7 +2337,7 @@ exports[`MPollBody renders a poll with only non-local votes 1`] = `
           <div
             className="mx_MPollBody_popularityAmount"
             style={
-              Object {
+              {
                 "width": "0%",
               }
             }
@@ -2354,15 +2354,15 @@ exports[`MPollBody renders a poll with only non-local votes 1`] = `
             PollAnswerSubevent {
               "html": undefined,
               "id": "poutine",
-              "renderings": Array [
-                Object {
+              "renderings": [
+                {
                   "body": "Poutine",
                   "mimetype": "text/plain",
                 },
               ],
               "text": "Poutine",
-              "wireFormat": Object {
-                "content": Object {
+              "wireFormat": {
+                "content": {
                   "id": "poutine",
                   "org.matrix.msc1767.text": "Poutine",
                 },
@@ -2426,7 +2426,7 @@ exports[`MPollBody renders a poll with only non-local votes 1`] = `
           <div
             className="mx_MPollBody_popularityAmount"
             style={
-              Object {
+              {
                 "width": "0%",
               }
             }
@@ -2443,15 +2443,15 @@ exports[`MPollBody renders a poll with only non-local votes 1`] = `
             PollAnswerSubevent {
               "html": undefined,
               "id": "italian",
-              "renderings": Array [
-                Object {
+              "renderings": [
+                {
                   "body": "Italian",
                   "mimetype": "text/plain",
                 },
               ],
               "text": "Italian",
-              "wireFormat": Object {
-                "content": Object {
+              "wireFormat": {
+                "content": {
                   "id": "italian",
                   "org.matrix.msc1767.text": "Italian",
                 },
@@ -2515,7 +2515,7 @@ exports[`MPollBody renders a poll with only non-local votes 1`] = `
           <div
             className="mx_MPollBody_popularityAmount"
             style={
-              Object {
+              {
                 "width": "67%",
               }
             }
@@ -2532,15 +2532,15 @@ exports[`MPollBody renders a poll with only non-local votes 1`] = `
             PollAnswerSubevent {
               "html": undefined,
               "id": "wings",
-              "renderings": Array [
-                Object {
+              "renderings": [
+                {
                   "body": "Wings",
                   "mimetype": "text/plain",
                 },
               ],
               "text": "Wings",
-              "wireFormat": Object {
-                "content": Object {
+              "wireFormat": {
+                "content": {
                   "id": "wings",
                   "org.matrix.msc1767.text": "Wings",
                 },
@@ -2604,7 +2604,7 @@ exports[`MPollBody renders a poll with only non-local votes 1`] = `
           <div
             className="mx_MPollBody_popularityAmount"
             style={
-              Object {
+              {
                 "width": "33%",
               }
             }
@@ -2621,6 +2621,6 @@ exports[`MPollBody renders a poll with only non-local votes 1`] = `
 </MPollBody>
 `;
 
-exports[`MPollBody renders an undisclosed, finished poll 1`] = `"<div class=\\"mx_MPollBody\\"><h2>What should we order for the party?</h2><div class=\\"mx_MPollBody_allOptions\\"><div class=\\"mx_MPollBody_option mx_MPollBody_option_checked mx_MPollBody_option_ended\\"><div class=\\"mx_MPollBody_endedOption mx_MPollBody_endedOptionWinner\\" data-value=\\"pizza\\"><div class=\\"mx_MPollBody_optionDescription\\"><div class=\\"mx_MPollBody_optionText\\">Pizza</div><div class=\\"mx_MPollBody_optionVoteCount\\">2 votes</div></div></div><div class=\\"mx_MPollBody_popularityBackground\\"><div class=\\"mx_MPollBody_popularityAmount\\" style=\\"width: 50%;\\"></div></div></div><div class=\\"mx_MPollBody_option mx_MPollBody_option_ended\\"><div class=\\"mx_MPollBody_endedOption\\" data-value=\\"poutine\\"><div class=\\"mx_MPollBody_optionDescription\\"><div class=\\"mx_MPollBody_optionText\\">Poutine</div><div class=\\"mx_MPollBody_optionVoteCount\\">0 votes</div></div></div><div class=\\"mx_MPollBody_popularityBackground\\"><div class=\\"mx_MPollBody_popularityAmount\\" style=\\"width: 0%;\\"></div></div></div><div class=\\"mx_MPollBody_option mx_MPollBody_option_ended\\"><div class=\\"mx_MPollBody_endedOption\\" data-value=\\"italian\\"><div class=\\"mx_MPollBody_optionDescription\\"><div class=\\"mx_MPollBody_optionText\\">Italian</div><div class=\\"mx_MPollBody_optionVoteCount\\">0 votes</div></div></div><div class=\\"mx_MPollBody_popularityBackground\\"><div class=\\"mx_MPollBody_popularityAmount\\" style=\\"width: 0%;\\"></div></div></div><div class=\\"mx_MPollBody_option mx_MPollBody_option_checked mx_MPollBody_option_ended\\"><div class=\\"mx_MPollBody_endedOption mx_MPollBody_endedOptionWinner\\" data-value=\\"wings\\"><div class=\\"mx_MPollBody_optionDescription\\"><div class=\\"mx_MPollBody_optionText\\">Wings</div><div class=\\"mx_MPollBody_optionVoteCount\\">2 votes</div></div></div><div class=\\"mx_MPollBody_popularityBackground\\"><div class=\\"mx_MPollBody_popularityAmount\\" style=\\"width: 50%;\\"></div></div></div></div><div class=\\"mx_MPollBody_totalVotes\\">Final result based on 4 votes</div></div>"`;
+exports[`MPollBody renders an undisclosed, finished poll 1`] = `"<div class="mx_MPollBody"><h2>What should we order for the party?</h2><div class="mx_MPollBody_allOptions"><div class="mx_MPollBody_option mx_MPollBody_option_checked mx_MPollBody_option_ended"><div class="mx_MPollBody_endedOption mx_MPollBody_endedOptionWinner" data-value="pizza"><div class="mx_MPollBody_optionDescription"><div class="mx_MPollBody_optionText">Pizza</div><div class="mx_MPollBody_optionVoteCount">2 votes</div></div></div><div class="mx_MPollBody_popularityBackground"><div class="mx_MPollBody_popularityAmount" style="width: 50%;"></div></div></div><div class="mx_MPollBody_option mx_MPollBody_option_ended"><div class="mx_MPollBody_endedOption" data-value="poutine"><div class="mx_MPollBody_optionDescription"><div class="mx_MPollBody_optionText">Poutine</div><div class="mx_MPollBody_optionVoteCount">0 votes</div></div></div><div class="mx_MPollBody_popularityBackground"><div class="mx_MPollBody_popularityAmount" style="width: 0%;"></div></div></div><div class="mx_MPollBody_option mx_MPollBody_option_ended"><div class="mx_MPollBody_endedOption" data-value="italian"><div class="mx_MPollBody_optionDescription"><div class="mx_MPollBody_optionText">Italian</div><div class="mx_MPollBody_optionVoteCount">0 votes</div></div></div><div class="mx_MPollBody_popularityBackground"><div class="mx_MPollBody_popularityAmount" style="width: 0%;"></div></div></div><div class="mx_MPollBody_option mx_MPollBody_option_checked mx_MPollBody_option_ended"><div class="mx_MPollBody_endedOption mx_MPollBody_endedOptionWinner" data-value="wings"><div class="mx_MPollBody_optionDescription"><div class="mx_MPollBody_optionText">Wings</div><div class="mx_MPollBody_optionVoteCount">2 votes</div></div></div><div class="mx_MPollBody_popularityBackground"><div class="mx_MPollBody_popularityAmount" style="width: 50%;"></div></div></div></div><div class="mx_MPollBody_totalVotes">Final result based on 4 votes</div></div>"`;
 
-exports[`MPollBody renders an undisclosed, unfinished poll 1`] = `"<div class=\\"mx_MPollBody\\"><h2>What should we order for the party?</h2><div class=\\"mx_MPollBody_allOptions\\"><div class=\\"mx_MPollBody_option\\"><label class=\\"mx_StyledRadioButton mx_MPollBody_live-option mx_StyledRadioButton_enabled\\"><input type=\\"radio\\" name=\\"poll_answer_select-$mypoll\\" value=\\"pizza\\"><div><div></div></div><div class=\\"mx_StyledRadioButton_content\\"><div class=\\"mx_MPollBody_optionDescription\\"><div class=\\"mx_MPollBody_optionText\\">Pizza</div><div class=\\"mx_MPollBody_optionVoteCount\\"></div></div></div><div class=\\"mx_StyledRadioButton_spacer\\"></div></label><div class=\\"mx_MPollBody_popularityBackground\\"><div class=\\"mx_MPollBody_popularityAmount\\" style=\\"width: 0%;\\"></div></div></div><div class=\\"mx_MPollBody_option\\"><label class=\\"mx_StyledRadioButton mx_MPollBody_live-option mx_StyledRadioButton_enabled\\"><input type=\\"radio\\" name=\\"poll_answer_select-$mypoll\\" value=\\"poutine\\"><div><div></div></div><div class=\\"mx_StyledRadioButton_content\\"><div class=\\"mx_MPollBody_optionDescription\\"><div class=\\"mx_MPollBody_optionText\\">Poutine</div><div class=\\"mx_MPollBody_optionVoteCount\\"></div></div></div><div class=\\"mx_StyledRadioButton_spacer\\"></div></label><div class=\\"mx_MPollBody_popularityBackground\\"><div class=\\"mx_MPollBody_popularityAmount\\" style=\\"width: 0%;\\"></div></div></div><div class=\\"mx_MPollBody_option\\"><label class=\\"mx_StyledRadioButton mx_MPollBody_live-option mx_StyledRadioButton_enabled\\"><input type=\\"radio\\" name=\\"poll_answer_select-$mypoll\\" value=\\"italian\\"><div><div></div></div><div class=\\"mx_StyledRadioButton_content\\"><div class=\\"mx_MPollBody_optionDescription\\"><div class=\\"mx_MPollBody_optionText\\">Italian</div><div class=\\"mx_MPollBody_optionVoteCount\\"></div></div></div><div class=\\"mx_StyledRadioButton_spacer\\"></div></label><div class=\\"mx_MPollBody_popularityBackground\\"><div class=\\"mx_MPollBody_popularityAmount\\" style=\\"width: 0%;\\"></div></div></div><div class=\\"mx_MPollBody_option\\"><label class=\\"mx_StyledRadioButton mx_MPollBody_live-option mx_StyledRadioButton_enabled\\"><input type=\\"radio\\" name=\\"poll_answer_select-$mypoll\\" value=\\"wings\\"><div><div></div></div><div class=\\"mx_StyledRadioButton_content\\"><div class=\\"mx_MPollBody_optionDescription\\"><div class=\\"mx_MPollBody_optionText\\">Wings</div><div class=\\"mx_MPollBody_optionVoteCount\\"></div></div></div><div class=\\"mx_StyledRadioButton_spacer\\"></div></label><div class=\\"mx_MPollBody_popularityBackground\\"><div class=\\"mx_MPollBody_popularityAmount\\" style=\\"width: 0%;\\"></div></div></div></div><div class=\\"mx_MPollBody_totalVotes\\">Results will be visible when the poll is ended</div></div>"`;
+exports[`MPollBody renders an undisclosed, unfinished poll 1`] = `"<div class="mx_MPollBody"><h2>What should we order for the party?</h2><div class="mx_MPollBody_allOptions"><div class="mx_MPollBody_option"><label class="mx_StyledRadioButton mx_MPollBody_live-option mx_StyledRadioButton_enabled"><input type="radio" name="poll_answer_select-$mypoll" value="pizza"><div><div></div></div><div class="mx_StyledRadioButton_content"><div class="mx_MPollBody_optionDescription"><div class="mx_MPollBody_optionText">Pizza</div><div class="mx_MPollBody_optionVoteCount"></div></div></div><div class="mx_StyledRadioButton_spacer"></div></label><div class="mx_MPollBody_popularityBackground"><div class="mx_MPollBody_popularityAmount" style="width: 0%;"></div></div></div><div class="mx_MPollBody_option"><label class="mx_StyledRadioButton mx_MPollBody_live-option mx_StyledRadioButton_enabled"><input type="radio" name="poll_answer_select-$mypoll" value="poutine"><div><div></div></div><div class="mx_StyledRadioButton_content"><div class="mx_MPollBody_optionDescription"><div class="mx_MPollBody_optionText">Poutine</div><div class="mx_MPollBody_optionVoteCount"></div></div></div><div class="mx_StyledRadioButton_spacer"></div></label><div class="mx_MPollBody_popularityBackground"><div class="mx_MPollBody_popularityAmount" style="width: 0%;"></div></div></div><div class="mx_MPollBody_option"><label class="mx_StyledRadioButton mx_MPollBody_live-option mx_StyledRadioButton_enabled"><input type="radio" name="poll_answer_select-$mypoll" value="italian"><div><div></div></div><div class="mx_StyledRadioButton_content"><div class="mx_MPollBody_optionDescription"><div class="mx_MPollBody_optionText">Italian</div><div class="mx_MPollBody_optionVoteCount"></div></div></div><div class="mx_StyledRadioButton_spacer"></div></label><div class="mx_MPollBody_popularityBackground"><div class="mx_MPollBody_popularityAmount" style="width: 0%;"></div></div></div><div class="mx_MPollBody_option"><label class="mx_StyledRadioButton mx_MPollBody_live-option mx_StyledRadioButton_enabled"><input type="radio" name="poll_answer_select-$mypoll" value="wings"><div><div></div></div><div class="mx_StyledRadioButton_content"><div class="mx_MPollBody_optionDescription"><div class="mx_MPollBody_optionText">Wings</div><div class="mx_MPollBody_optionVoteCount"></div></div></div><div class="mx_StyledRadioButton_spacer"></div></label><div class="mx_MPollBody_popularityBackground"><div class="mx_MPollBody_popularityAmount" style="width: 0%;"></div></div></div></div><div class="mx_MPollBody_totalVotes">Results will be visible when the poll is ended</div></div>"`;

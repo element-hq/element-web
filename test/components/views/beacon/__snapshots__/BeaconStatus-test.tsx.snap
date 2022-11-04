@@ -6,14 +6,14 @@ exports[`<BeaconStatus /> active state renders without children 1`] = `
 <BeaconStatus
   beacon={
     Beacon {
-      "_beaconInfo": Object {
+      "_beaconInfo": {
         "assetType": "m.self",
         "description": undefined,
         "live": false,
         "timeout": 3600000,
         "timestamp": 123456789,
       },
-      "_events": Object {},
+      "_events": {},
       "_eventsCount": 0,
       "_isLive": false,
       "_latestLocationEvent": undefined,
@@ -21,11 +21,11 @@ exports[`<BeaconStatus /> active state renders without children 1`] = `
       "clearLatestLocation": [Function],
       "livenessWatchTimeout": undefined,
       "roomId": "!room:server",
-      "rootEvent": Object {
-        "content": Object {
+      "rootEvent": {
+        "content": {
           "description": undefined,
           "live": false,
-          "org.matrix.msc3488.asset": Object {
+          "org.matrix.msc3488.asset": {
             "type": "m.self",
           },
           "org.matrix.msc3488.ts": 123456789,
@@ -68,14 +68,14 @@ exports[`<BeaconStatus /> active state renders without children 1`] = `
       <BeaconExpiryTime
         beacon={
           Beacon {
-            "_beaconInfo": Object {
+            "_beaconInfo": {
               "assetType": "m.self",
               "description": undefined,
               "live": false,
               "timeout": 3600000,
               "timestamp": 123456789,
             },
-            "_events": Object {},
+            "_events": {},
             "_eventsCount": 0,
             "_isLive": false,
             "_latestLocationEvent": undefined,
@@ -83,11 +83,11 @@ exports[`<BeaconStatus /> active state renders without children 1`] = `
             "clearLatestLocation": [Function],
             "livenessWatchTimeout": undefined,
             "roomId": "!room:server",
-            "rootEvent": Object {
-              "content": Object {
+            "rootEvent": {
+              "content": {
                 "description": undefined,
                 "live": false,
-                "org.matrix.msc3488.asset": Object {
+                "org.matrix.msc3488.asset": {
                   "type": "m.self",
                 },
                 "org.matrix.msc3488.ts": 123456789,

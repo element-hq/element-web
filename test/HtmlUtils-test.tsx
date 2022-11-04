@@ -25,7 +25,7 @@ import SettingsStore from '../src/settings/SettingsStore';
 jest.mock("../src/settings/SettingsStore");
 
 const enableHtmlTopicFeature = () => {
-    mocked(SettingsStore).getValue.mockImplementation((arg) => {
+    mocked(SettingsStore).getValue.mockImplementation((arg): any => {
         return arg === "feature_html_topic";
     });
 };

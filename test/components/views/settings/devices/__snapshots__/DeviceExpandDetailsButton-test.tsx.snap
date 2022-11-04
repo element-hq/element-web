@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<DeviceExpandDetailsButton /> renders when expanded 1`] = `
-Object {
+{
   "container": <div>
     <div
       aria-label="Toggle device details"
@@ -18,7 +18,7 @@ Object {
 `;
 
 exports[`<DeviceExpandDetailsButton /> renders when not expanded 1`] = `
-Object {
+{
   "container": <div>
     <div
       aria-label="Toggle device details"

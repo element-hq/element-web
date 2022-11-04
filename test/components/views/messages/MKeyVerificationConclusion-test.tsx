@@ -122,11 +122,19 @@ describe("MKeyVerificationConclusion", () => {
         mockClient.checkUserTrust.mockReturnValue(trustworthy);
 
         /* Ensure we don't rerender for every trust status change of any user */
-        mockClient.emit(CryptoEvent.UserTrustStatusChanged, "@anotheruser:domain");
+        mockClient.emit(
+            CryptoEvent.UserTrustStatusChanged,
+            "@anotheruser:domain",
+            new UserTrustLevel(true, true, true),
+        );
         expect(renderer.toJSON()).toBeNull();
 
         /* But when our user changes, we do rerender */
-        mockClient.emit(CryptoEvent.UserTrustStatusChanged, event.verificationRequest.otherUserId);
+        mockClient.emit(
+            CryptoEvent.UserTrustStatusChanged,
+            event.verificationRequest.otherUserId,
+            new UserTrustLevel(true, true, true),
+        );
         expect(renderer.toJSON()).not.toBeNull();
     });
 });

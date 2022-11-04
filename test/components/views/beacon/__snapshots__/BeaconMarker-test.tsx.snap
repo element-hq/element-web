@@ -4,19 +4,19 @@ exports[`<BeaconMarker /> renders marker when beacon has location 1`] = `
 <BeaconMarker
   beacon={
     Beacon {
-      "_beaconInfo": Object {
+      "_beaconInfo": {
         "assetType": "m.self",
         "description": undefined,
         "live": true,
         "timeout": 3600000,
         "timestamp": 1647270879403,
       },
-      "_events": Object {
-        "Beacon.Destroy": Array [
+      "_events": {
+        "Beacon.Destroy": [
           [Function],
           [Function],
         ],
-        "Beacon.LivenessChange": Array [
+        "Beacon.LivenessChange": [
           [Function],
           [Function],
         ],
@@ -26,13 +26,13 @@ exports[`<BeaconMarker /> renders marker when beacon has location 1`] = `
       },
       "_eventsCount": 5,
       "_isLive": true,
-      "_latestLocationEvent": Object {
-        "content": Object {
-          "m.relates_to": Object {
+      "_latestLocationEvent": {
+        "content": {
+          "m.relates_to": {
             "event_id": "$alice-room1-1",
             "rel_type": "m.reference",
           },
-          "org.matrix.msc3488.location": Object {
+          "org.matrix.msc3488.location": {
             "description": undefined,
             "uri": "geo:51,41",
           },
@@ -46,11 +46,11 @@ exports[`<BeaconMarker /> renders marker when beacon has location 1`] = `
       "clearLatestLocation": [Function],
       "livenessWatchTimeout": undefined,
       "roomId": "!room:server",
-      "rootEvent": Object {
-        "content": Object {
+      "rootEvent": {
+        "content": {
           "description": undefined,
           "live": true,
-          "org.matrix.msc3488.asset": Object {
+          "org.matrix.msc3488.asset": {
             "type": "m.self",
           },
           "org.matrix.msc3488.ts": 1647270879403,
@@ -68,7 +68,7 @@ exports[`<BeaconMarker /> renders marker when beacon has location 1`] = `
   }
   map={
     MockMap {
-      "_events": Object {},
+      "_events": {},
       "_eventsCount": 0,
       "_maxListeners": undefined,
       "addControl": [MockFunction],
@@ -87,7 +87,7 @@ exports[`<BeaconMarker /> renders marker when beacon has location 1`] = `
     id="!room:server_@alice:server"
     map={
       MockMap {
-        "_events": Object {},
+        "_events": {},
         "_eventsCount": 0,
         "_maxListeners": undefined,
         "addControl": [MockFunction],
@@ -102,12 +102,12 @@ exports[`<BeaconMarker /> renders marker when beacon has location 1`] = `
     }
     roomMember={
       RoomMember {
-        "_events": Object {},
+        "_events": {},
         "_eventsCount": 0,
         "_isOutOfBand": false,
         "_maxListeners": undefined,
         "disambiguate": false,
-        "events": Object {},
+        "events": {},
         "membership": undefined,
         "modified": 1647270879403,
         "name": "@alice:server",
@@ -129,12 +129,12 @@ exports[`<BeaconMarker /> renders marker when beacon has location 1`] = `
         id="!room:server_@alice:server"
         roomMember={
           RoomMember {
-            "_events": Object {},
+            "_events": {},
             "_eventsCount": 0,
             "_isOutOfBand": false,
             "_maxListeners": undefined,
             "disambiguate": false,
-            "events": Object {},
+            "events": {},
             "membership": undefined,
             "modified": 1647270879403,
             "name": "@alice:server",
@@ -164,12 +164,12 @@ exports[`<BeaconMarker /> renders marker when beacon has location 1`] = `
                 hideTitle={false}
                 member={
                   RoomMember {
-                    "_events": Object {},
+                    "_events": {},
                     "_eventsCount": 0,
                     "_isOutOfBand": false,
                     "_maxListeners": undefined,
                     "disambiguate": false,
-                    "events": Object {},
+                    "events": {},
                     "membership": undefined,
                     "modified": 1647270879403,
                     "name": "@alice:server",
@@ -205,7 +205,7 @@ exports[`<BeaconMarker /> renders marker when beacon has location 1`] = `
                       aria-hidden="true"
                       className="mx_BaseAvatar_initial"
                       style={
-                        Object {
+                        {
                           "fontSize": "23.400000000000002px",
                           "lineHeight": "36px",
                           "width": "36px",
@@ -221,7 +221,7 @@ exports[`<BeaconMarker /> renders marker when beacon has location 1`] = `
                       onError={[Function]}
                       src="data:image/png;base64,00"
                       style={
-                        Object {
+                        {
                           "height": "36px",
                           "width": "36px",
                         }

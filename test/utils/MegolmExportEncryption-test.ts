@@ -72,12 +72,14 @@ function stringToArray(s: string): ArrayBufferLike {
 describe('MegolmExportEncryption', function() {
     let MegolmExportEncryption;
 
-    beforeAll(() => {
+    beforeEach(() => {
         window.crypto = {
-            subtle: webCrypto.subtle,
             getRandomValues,
             randomUUID: jest.fn().mockReturnValue("not-random-uuid"),
+            subtle: webCrypto.subtle,
         };
+        // @ts-ignore for some reason including it in the object above gets ignored
+        window.crypto.subtle = webCrypto.subtle;
         MegolmExportEncryption = require("../../src/utils/MegolmExportEncryption");
     });
 
@@ -142,8 +144,7 @@ cissyYBxjsfsAn
 
     describe('encrypt', function() {
         it('should round-trip', function() {
-            const input =
-                  'words words many words in plain text here'.repeat(100);
+            const input = 'words words many words in plain text here'.repeat(100);
 
             const password = 'my super secret passphrase';
 

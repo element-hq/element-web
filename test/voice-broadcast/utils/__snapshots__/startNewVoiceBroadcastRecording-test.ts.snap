@@ -2,10 +2,10 @@
 
 exports[`startNewVoiceBroadcastRecording when the current user is allowed to send voice broadcast info state events when there already is a live broadcast of another user should show an info dialog 1`] = `
 [MockFunction] {
-  "calls": Array [
-    Array [
+  "calls": [
+    [
       [Function],
-      Object {
+      {
         "description": <p>
           Someone else is already recording a voice broadcast. Wait for their voice broadcast to end to start a new one.
         </p>,
@@ -14,8 +14,8 @@ exports[`startNewVoiceBroadcastRecording when the current user is allowed to sen
       },
     ],
   ],
-  "results": Array [
-    Object {
+  "results": [
+    {
       "type": "return",
       "value": undefined,
     },
@@ -25,10 +25,10 @@ exports[`startNewVoiceBroadcastRecording when the current user is allowed to sen
 
 exports[`startNewVoiceBroadcastRecording when the current user is allowed to send voice broadcast info state events when there already is a live broadcast of the current user in the room should show an info dialog 1`] = `
 [MockFunction] {
-  "calls": Array [
-    Array [
+  "calls": [
+    [
       [Function],
-      Object {
+      {
         "description": <p>
           You are already recording a voice broadcast. Please end your current voice broadcast to start a new one.
         </p>,
@@ -37,8 +37,8 @@ exports[`startNewVoiceBroadcastRecording when the current user is allowed to sen
       },
     ],
   ],
-  "results": Array [
-    Object {
+  "results": [
+    {
       "type": "return",
       "value": undefined,
     },
@@ -48,10 +48,10 @@ exports[`startNewVoiceBroadcastRecording when the current user is allowed to sen
 
 exports[`startNewVoiceBroadcastRecording when the current user is allowed to send voice broadcast info state events when there is already a current voice broadcast should show an info dialog 1`] = `
 [MockFunction] {
-  "calls": Array [
-    Array [
+  "calls": [
+    [
       [Function],
-      Object {
+      {
         "description": <p>
           You are already recording a voice broadcast. Please end your current voice broadcast to start a new one.
         </p>,
@@ -60,8 +60,8 @@ exports[`startNewVoiceBroadcastRecording when the current user is allowed to sen
       },
     ],
   ],
-  "results": Array [
-    Object {
+  "results": [
+    {
       "type": "return",
       "value": undefined,
     },
@@ -71,10 +71,10 @@ exports[`startNewVoiceBroadcastRecording when the current user is allowed to sen
 
 exports[`startNewVoiceBroadcastRecording when the current user is not allowed to send voice broadcast info state events should show an info dialog 1`] = `
 [MockFunction] {
-  "calls": Array [
-    Array [
+  "calls": [
+    [
       [Function],
-      Object {
+      {
         "description": <p>
           You don't have the required permissions to start a voice broadcast in this room. Contact a room administrator to upgrade your permissions.
         </p>,
@@ -83,8 +83,8 @@ exports[`startNewVoiceBroadcastRecording when the current user is not allowed to
       },
     ],
   ],
-  "results": Array [
-    Object {
+  "results": [
+    {
       "type": "return",
       "value": undefined,
     },

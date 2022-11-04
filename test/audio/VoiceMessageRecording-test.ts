@@ -199,7 +199,7 @@ describe("VoiceMessageRecording", () => {
 
         describe("getPlayback", () => {
             beforeEach(() => {
-                mocked(Playback).mockImplementation((buf: ArrayBuffer, seedWaveform) => {
+                mocked(Playback).mockImplementation((buf: ArrayBuffer, seedWaveform): any => {
                     expect(new Uint8Array(buf)).toEqual(testBuf);
                     expect(seedWaveform).toEqual(testAmplitudes);
                     return {} as Playback;

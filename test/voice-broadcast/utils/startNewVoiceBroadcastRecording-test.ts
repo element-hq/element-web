@@ -88,7 +88,7 @@ describe("startNewVoiceBroadcastRecording", () => {
         mocked(VoiceBroadcastRecording).mockImplementation((
             infoEvent: MatrixEvent,
             client: MatrixClient,
-        ) => {
+        ): any => {
             return {
                 infoEvent,
                 client,

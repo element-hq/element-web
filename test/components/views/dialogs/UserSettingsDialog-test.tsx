@@ -104,24 +104,27 @@ describe('<UserSettingsDialog />', () => {
     });
 
     it('renders ignored users tab when feature_mjolnir is enabled', () => {
-        mockSettingsStore.getValue.mockImplementation((settingName) => settingName === "feature_mjolnir");
+        mockSettingsStore.getValue.mockImplementation((settingName): any => settingName === "feature_mjolnir");
         const { getByTestId } = render(getComponent());
         expect(getByTestId(`settings-tab-${UserTab.Mjolnir}`)).toBeTruthy();
     });
 
     it('renders voip tab when voip is enabled', () => {
-        mockSettingsStore.getValue.mockImplementation((settingName) => settingName === UIFeature.Voip);
+        mockSettingsStore.getValue.mockImplementation((settingName): any => settingName === UIFeature.Voip);
         const { getByTestId } = render(getComponent());
         expect(getByTestId(`settings-tab-${UserTab.Voice}`)).toBeTruthy();
     });
 
     it('renders session manager tab when enabled', () => {
-        mockSettingsStore.getValue.mockImplementation((settingName) => settingName === "feature_new_device_manager");
+        mockSettingsStore.getValue.mockImplementation((settingName): any => {
+            return settingName === "feature_new_device_manager";
+        });
         const { getByTestId } = render(getComponent());
         expect(getByTestId(`settings-tab-${UserTab.SessionManager}`)).toBeTruthy();
     });
 
     it('renders labs tab when show_labs_settings is enabled in config', () => {
+        // @ts-ignore simplified test stub
         mockSdkConfig.get.mockImplementation((configName) => configName === "show_labs_settings");
         const { getByTestId } = render(getComponent());
         expect(getByTestId(`settings-tab-${UserTab.Labs}`)).toBeTruthy();

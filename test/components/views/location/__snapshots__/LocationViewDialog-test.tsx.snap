@@ -18,20 +18,20 @@ exports[`<LocationViewDialog /> renders map correctly 1`] = `
       id="mx_LocationViewDialog_$2-marker"
       map={
         MockMap {
-          "_events": Object {
+          "_events": {
             "error": [Function],
           },
           "_eventsCount": 1,
           "_maxListeners": undefined,
           "addControl": [MockFunction] {
-            "calls": Array [
-              Array [
+            "calls": [
+              [
                 mockConstructor {},
                 "top-right",
               ],
             ],
-            "results": Array [
-              Object {
+            "results": [
+              {
                 "type": "return",
                 "value": undefined,
               },
@@ -40,16 +40,16 @@ exports[`<LocationViewDialog /> renders map correctly 1`] = `
           "fitBounds": [MockFunction],
           "removeControl": [MockFunction],
           "setCenter": [MockFunction] {
-            "calls": Array [
-              Array [
-                Object {
+            "calls": [
+              [
+                {
                   "lat": 51.5076,
                   "lon": -0.1276,
                 },
               ],
             ],
-            "results": Array [
-              Object {
+            "results": [
+              {
                 "type": "return",
                 "value": undefined,
               },
@@ -86,20 +86,20 @@ exports[`<LocationViewDialog /> renders map correctly 1`] = `
     <ZoomButtons
       map={
         MockMap {
-          "_events": Object {
+          "_events": {
             "error": [Function],
           },
           "_eventsCount": 1,
           "_maxListeners": undefined,
           "addControl": [MockFunction] {
-            "calls": Array [
-              Array [
+            "calls": [
+              [
                 mockConstructor {},
                 "top-right",
               ],
             ],
-            "results": Array [
-              Object {
+            "results": [
+              {
                 "type": "return",
                 "value": undefined,
               },
@@ -108,16 +108,16 @@ exports[`<LocationViewDialog /> renders map correctly 1`] = `
           "fitBounds": [MockFunction],
           "removeControl": [MockFunction],
           "setCenter": [MockFunction] {
-            "calls": Array [
-              Array [
-                Object {
+            "calls": [
+              [
+                {
                   "lat": 51.5076,
                   "lon": -0.1276,
                 },
               ],
             ],
-            "results": Array [
-              Object {
+            "results": [
+              {
                 "type": "return",
                 "value": undefined,
               },

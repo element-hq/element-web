@@ -97,6 +97,7 @@ describe('<LeftPanelLiveShareWarning />', () => {
         });
 
         beforeEach(() => {
+            // @ts-ignore writing to readonly variable
             mocked(OwnBeaconStore.instance).isMonitoringLiveLocation = true;
             mocked(OwnBeaconStore.instance).getLiveBeaconIdsWithLocationPublishError.mockReturnValue([]);
             mocked(OwnBeaconStore.instance).getLiveBeaconIds.mockReturnValue([beacon2.identifier, beacon1.identifier]);
@@ -190,6 +191,7 @@ describe('<LeftPanelLiveShareWarning />', () => {
             expect(container.innerHTML).toBeTruthy();
 
             act(() => {
+                // @ts-ignore writing to readonly variable
                 mocked(OwnBeaconStore.instance).isMonitoringLiveLocation = false;
                 OwnBeaconStore.instance.emit(OwnBeaconStoreEvent.MonitoringLivePosition);
             });

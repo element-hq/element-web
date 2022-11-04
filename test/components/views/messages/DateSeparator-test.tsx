@@ -113,7 +113,7 @@ describe("DateSeparator", () => {
 
     describe('when feature_jump_to_date is enabled', () => {
         beforeEach(() => {
-            mocked(SettingsStore).getValue.mockImplementation((arg) => {
+            mocked(SettingsStore).getValue.mockImplementation((arg): any => {
                 if (arg === "feature_jump_to_date") {
                     return true;
                 }

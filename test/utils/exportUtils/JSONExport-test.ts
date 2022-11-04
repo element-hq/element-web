@@ -20,7 +20,7 @@ import { ExportType, IExportOptions } from "../../../src/utils/exportUtils/expor
 
 describe("JSONExport", () => {
     beforeEach(() => {
-        jest.useFakeTimers('modern');
+        jest.useFakeTimers();
         jest.setSystemTime(REPEATABLE_DATE);
     });
 

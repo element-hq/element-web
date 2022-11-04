@@ -5,7 +5,7 @@ exports[`<SmartMarker /> creates a marker on mount 1`] = `
   geoUri="geo:43.2,54.6"
   map={
     MockMap {
-      "_events": Object {},
+      "_events": {},
       "_eventsCount": 0,
       "_maxListeners": undefined,
       "addControl": [MockFunction],
@@ -44,7 +44,7 @@ exports[`<SmartMarker /> removes marker on unmount 1`] = `
   geoUri="geo:43.2,54.6"
   map={
     MockMap {
-      "_events": Object {},
+      "_events": {},
       "_eventsCount": 0,
       "_maxListeners": undefined,
       "addControl": [MockFunction],

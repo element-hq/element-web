@@ -15,14 +15,14 @@ exports[`ThemeChoicePanel renders the theme choice UI 1`] = `
     >
       <StyledRadioGroup
         definitions={
-          Array [
-            Object {
+          [
+            {
               "className": "mx_ThemeSelector_light",
               "disabled": true,
               "label": "Light",
               "value": "light",
             },
-            Object {
+            {
               "className": "mx_ThemeSelector_dark",
               "disabled": true,
               "label": "Dark",

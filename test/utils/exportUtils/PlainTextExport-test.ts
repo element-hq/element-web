@@ -20,7 +20,7 @@ import PlainTextExporter from "../../../src/utils/exportUtils/PlainTextExport";
 
 describe("PlainTextExport", () => {
     beforeEach(() => {
-        jest.useFakeTimers('modern');
+        jest.useFakeTimers();
         jest.setSystemTime(REPEATABLE_DATE);
     });
 

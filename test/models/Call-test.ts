@@ -213,7 +213,7 @@ describe("JitsiCall", () => {
 
             ({ widget, messaging, audioMutedSpy, videoMutedSpy } = setUpWidget(call));
 
-            mocked(messaging.transport).send.mockImplementation(async (action: string) => {
+            mocked(messaging.transport).send.mockImplementation(async (action: string): Promise<any> => {
                 if (action === ElementWidgetActions.JoinCall) {
                     messaging.emit(
                         `action:${ElementWidgetActions.JoinCall}`,
@@ -296,7 +296,7 @@ describe("JitsiCall", () => {
         });
 
         it("handles instant remote disconnection when connecting", async () => {
-            mocked(messaging.transport).send.mockImplementation(async action => {
+            mocked(messaging.transport).send.mockImplementation(async (action): Promise<any> => {
                 if (action === ElementWidgetActions.JoinCall) {
                     // Emit the hangup event *before* the join event to fully
                     // exercise the race condition

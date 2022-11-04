@@ -153,7 +153,7 @@ describe("VoiceBroadcastPlayback", () => {
             },
         );
 
-        mocked(MediaEventHelper).mockImplementation((event: MatrixEvent) => {
+        mocked(MediaEventHelper).mockImplementation((event: MatrixEvent): any => {
             if (event === chunk1Event) return chunk1Helper;
             if (event === chunk2Event) return chunk2Helper;
             if (event === chunk3Event) return chunk3Helper;

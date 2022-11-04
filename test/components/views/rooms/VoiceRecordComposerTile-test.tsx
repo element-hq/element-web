@@ -17,7 +17,7 @@ limitations under the License.
 import React from "react";
 // eslint-disable-next-line deprecate/import
 import { mount, ReactWrapper } from "enzyme";
-import { ISendEventResponse, MatrixClient, MsgType, Room } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, MsgType, Room } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
 
 import VoiceRecordComposerTile from "../../../../src/components/views/rooms/VoiceRecordComposerTile";
@@ -65,9 +65,9 @@ describe("<VoiceRecordComposerTile/>", () => {
             recorder: mockRecorder,
         });
 
-        mocked(doMaybeLocalRoomAction).mockImplementation((
+        mocked(doMaybeLocalRoomAction).mockImplementation(<T extends {}>(
             roomId: string,
-            fn: (actualRoomId: string) => Promise<ISendEventResponse>,
+            fn: (actualRoomId: string) => Promise<T>,
             _client?: MatrixClient,
         ) => {
             return fn(roomId);

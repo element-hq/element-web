@@ -4,7 +4,7 @@ exports[`<ZoomButtons /> renders buttons 1`] = `
 <ZoomButtons
   map={
     MockMap {
-      "_events": Object {},
+      "_events": {},
       "_eventsCount": 0,
       "_maxListeners": undefined,
       "addControl": [MockFunction],

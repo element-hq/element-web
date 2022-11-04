@@ -67,11 +67,9 @@ describe('notifications', () => {
         it.each(deviceNotificationSettingsKeys)(
             'unsilenced for existing sessions when %s setting is truthy',
             async (settingKey) => {
-                mocked(SettingsStore)
-                    .getValue
-                    .mockImplementation((key) => {
-                        return key === settingKey;
-                    });
+                mocked(SettingsStore).getValue.mockImplementation((key): any => {
+                    return key === settingKey;
+                });
 
                 await createLocalNotificationSettingsIfNeeded(mockClient);
                 const event = mockClient.getAccountData(accountDataEventKey);

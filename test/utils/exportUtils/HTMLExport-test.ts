@@ -23,7 +23,7 @@ import HTMLExporter from "../../../src/utils/exportUtils/HtmlExport";
 
 describe("HTMLExport", () => {
     beforeEach(() => {
-        jest.useFakeTimers('modern');
+        jest.useFakeTimers();
         jest.setSystemTime(REPEATABLE_DATE);
     });
 

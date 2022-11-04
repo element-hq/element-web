@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { mocked } from "jest-mock";
-import { ISendEventResponse, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { makeLocationContent } from "matrix-js-sdk/src/content-helpers";
 import { LegacyLocationEventContent, MLocationEventContent } from "matrix-js-sdk/src/@types/location";
 
@@ -47,9 +47,9 @@ describe("shareLocation", () => {
         } as unknown as MatrixClient;
 
         mocked(makeLocationContent).mockReturnValue(content);
-        mocked(doMaybeLocalRoomAction).mockImplementation((
+        mocked(doMaybeLocalRoomAction).mockImplementation(<T>(
             roomId: string,
-            fn: (actualRoomId: string) => Promise<ISendEventResponse>,
+            fn: (actualRoomId: string) => Promise<T>,
             client?: MatrixClient,
         ) => {
             return fn(roomId);

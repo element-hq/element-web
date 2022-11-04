@@ -130,15 +130,13 @@ describe("VoiceBroadcastRecording", () => {
         mocked(createVoiceBroadcastRecorder).mockReturnValue(voiceBroadcastRecorder);
         onChunkRecorded = jest.fn();
 
-        mocked(voiceBroadcastRecorder.on).mockImplementation(
-            (event: VoiceBroadcastRecorderEvent, listener: any): VoiceBroadcastRecorder => {
-                if (event === VoiceBroadcastRecorderEvent.ChunkRecorded) {
-                    onChunkRecorded = listener;
-                }
+        mocked(voiceBroadcastRecorder.on).mockImplementation((event: any, listener: any): VoiceBroadcastRecorder => {
+            if (event === VoiceBroadcastRecorderEvent.ChunkRecorded) {
+                onChunkRecorded = listener;
+            }
 
-                return voiceBroadcastRecorder;
-            },
-        );
+            return voiceBroadcastRecorder;
+        });
 
         mocked(uploadFile).mockResolvedValue({
             url: uploadedUrl,

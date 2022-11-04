@@ -31,19 +31,19 @@ exports[`MLocationBody <MLocationBody> with error displays correct fallback cont
 exports[`MLocationBody <MLocationBody> without error renders map correctly 1`] = `
 <MLocationBody
   highlightLink=""
-  highlights={Array []}
-  mediaEventHelper={Object {}}
+  highlights={[]}
+  mediaEventHelper={{}}
   mxEvent={
-    Object {
-      "content": Object {
+    {
+      "content": {
         "body": "Found at geo:51.5076,-0.1276 at 2021-12-21T12:22+0000",
         "geo_uri": "geo:51.5076,-0.1276",
         "msgtype": "m.location",
         "org.matrix.msc1767.text": "Found at geo:51.5076,-0.1276 at 2021-12-21T12:22+0000",
-        "org.matrix.msc3488.asset": Object {
+        "org.matrix.msc3488.asset": {
           "type": "m.pin",
         },
-        "org.matrix.msc3488.location": Object {
+        "org.matrix.msc3488.location": {
           "description": "Human-readable label",
           "uri": "geo:51.5076,-0.1276",
         },
@@ -55,21 +55,21 @@ exports[`MLocationBody <MLocationBody> without error renders map correctly 1`] =
   }
   onHeightChanged={[MockFunction]}
   onMessageAllowed={[MockFunction]}
-  permalinkCreator={Object {}}
+  permalinkCreator={{}}
 >
   <LocationBodyContent
     mapId="mx_MLocationBody_$2_HHHHHHHH"
     mxEvent={
-      Object {
-        "content": Object {
+      {
+        "content": {
           "body": "Found at geo:51.5076,-0.1276 at 2021-12-21T12:22+0000",
           "geo_uri": "geo:51.5076,-0.1276",
           "msgtype": "m.location",
           "org.matrix.msc1767.text": "Found at geo:51.5076,-0.1276 at 2021-12-21T12:22+0000",
-          "org.matrix.msc3488.asset": Object {
+          "org.matrix.msc3488.asset": {
             "type": "m.pin",
           },
-          "org.matrix.msc3488.location": Object {
+          "org.matrix.msc3488.location": {
             "description": "Human-readable label",
             "uri": "geo:51.5076,-0.1276",
           },
@@ -116,8 +116,8 @@ exports[`MLocationBody <MLocationBody> without error renders map correctly 1`] =
                 id="mx_MLocationBody_$2_HHHHHHHH-marker"
                 map={
                   MockMap {
-                    "_events": Object {
-                      "error": Array [
+                    "_events": {
+                      "error": [
                         [Function],
                         [Function],
                         [Function],
@@ -129,22 +129,22 @@ exports[`MLocationBody <MLocationBody> without error renders map correctly 1`] =
                     "_eventsCount": 1,
                     "_maxListeners": undefined,
                     "addControl": [MockFunction] {
-                      "calls": Array [
-                        Array [
+                      "calls": [
+                        [
                           mockConstructor {},
                           "top-right",
                         ],
-                        Array [
+                        [
                           mockConstructor {},
                           "top-right",
                         ],
                       ],
-                      "results": Array [
-                        Object {
+                      "results": [
+                        {
                           "type": "return",
                           "value": undefined,
                         },
-                        Object {
+                        {
                           "type": "return",
                           "value": undefined,
                         },
@@ -153,26 +153,26 @@ exports[`MLocationBody <MLocationBody> without error renders map correctly 1`] =
                     "fitBounds": [MockFunction],
                     "removeControl": [MockFunction],
                     "setCenter": [MockFunction] {
-                      "calls": Array [
-                        Array [
-                          Object {
+                      "calls": [
+                        [
+                          {
                             "lat": 51.5076,
                             "lon": -0.1276,
                           },
                         ],
-                        Array [
-                          Object {
+                        [
+                          {
                             "lat": 51.5076,
                             "lon": -0.1276,
                           },
                         ],
                       ],
-                      "results": Array [
-                        Object {
+                      "results": [
+                        {
                           "type": "return",
                           "value": undefined,
                         },
-                        Object {
+                        {
                           "type": "return",
                           "value": undefined,
                         },

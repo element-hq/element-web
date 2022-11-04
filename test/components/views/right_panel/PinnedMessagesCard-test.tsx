@@ -58,7 +58,7 @@ describe("<PinnedMessagesCard />", () => {
         const pins = () => [...localPins, ...nonLocalPins];
 
         // Insert pin IDs into room state
-        mocked(room.currentState).getStateEvents.mockImplementation(() => mkEvent({
+        mocked(room.currentState).getStateEvents.mockImplementation((): any => mkEvent({
             event: true,
             type: EventType.RoomPinnedEvents,
             content: {
