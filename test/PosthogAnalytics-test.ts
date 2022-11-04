@@ -17,15 +17,14 @@ limitations under the License.
 import { mocked } from 'jest-mock';
 import { PostHog } from 'posthog-js';
 
-import {
-    Anonymity,
-
-    getRedactedCurrentLocation,
-    IPosthogEvent,
-    PosthogAnalytics,
-} from '../src/PosthogAnalytics';
+import { Anonymity, getRedactedCurrentLocation, IPosthogEvent, PosthogAnalytics } from '../src/PosthogAnalytics';
 import SdkConfig from '../src/SdkConfig';
 import { getMockClientWithEventEmitter } from './test-utils';
+import SettingsStore from "../src/settings/SettingsStore";
+import { Layout } from "../src/settings/enums/Layout";
+import defaultDispatcher from "../src/dispatcher/dispatcher";
+import { Action } from "../src/dispatcher/actions";
+import { SettingLevel } from "../src/settings/SettingLevel";
 
 const getFakePosthog = (): PostHog => ({
     capture: jest.fn(),
@@ -37,7 +36,7 @@ const getFakePosthog = (): PostHog => ({
 
 export interface ITestEvent extends IPosthogEvent {
     eventName: "JestTestEvents";
-    foo: string;
+    foo?: string;
 }
 
 describe("PosthogAnalytics", () => {
@@ -178,6 +177,80 @@ describe("PosthogAnalytics", () => {
             });
             await analytics.identifyUser(client, () => "new_analytics_id");
             expect(mocked(fakePosthog).identify.mock.calls[0][0]).toBe("existing_analytics_id");
+        });
+    });
+
+    describe("WebLayout", () => {
+        let analytics: PosthogAnalytics;
+
+        beforeEach(() => {
+            SdkConfig.put({
+                brand: "Testing",
+                posthog: {
+                    project_api_key: "foo",
+                    api_host: "bar",
+                },
+            });
+
+            analytics = new PosthogAnalytics(fakePosthog);
+            analytics.setAnonymity(Anonymity.Pseudonymous);
+        });
+
+        it("should send layout IRC correctly", async () => {
+            await SettingsStore.setValue("layout", null, SettingLevel.DEVICE, Layout.IRC);
+            defaultDispatcher.dispatch({
+                action: Action.SettingUpdated,
+                settingName: "layout",
+            }, true);
+            analytics.trackEvent<ITestEvent>({
+                eventName: "JestTestEvents",
+            });
+            expect(mocked(fakePosthog).capture.mock.calls[0][1]["$set"]).toStrictEqual({
+                "WebLayout": "IRC",
+            });
+        });
+
+        it("should send layout Bubble correctly", async () => {
+            await SettingsStore.setValue("layout", null, SettingLevel.DEVICE, Layout.Bubble);
+            defaultDispatcher.dispatch({
+                action: Action.SettingUpdated,
+                settingName: "layout",
+            }, true);
+            analytics.trackEvent<ITestEvent>({
+                eventName: "JestTestEvents",
+            });
+            expect(mocked(fakePosthog).capture.mock.calls[0][1]["$set"]).toStrictEqual({
+                "WebLayout": "Bubble",
+            });
+        });
+
+        it("should send layout Group correctly", async () => {
+            await SettingsStore.setValue("layout", null, SettingLevel.DEVICE, Layout.Group);
+            defaultDispatcher.dispatch({
+                action: Action.SettingUpdated,
+                settingName: "layout",
+            }, true);
+            analytics.trackEvent<ITestEvent>({
+                eventName: "JestTestEvents",
+            });
+            expect(mocked(fakePosthog).capture.mock.calls[0][1]["$set"]).toStrictEqual({
+                "WebLayout": "Group",
+            });
+        });
+
+        it("should send layout Compact correctly", async () => {
+            await SettingsStore.setValue("layout", null, SettingLevel.DEVICE, Layout.Group);
+            await SettingsStore.setValue("useCompactLayout", null, SettingLevel.DEVICE, true);
+            defaultDispatcher.dispatch({
+                action: Action.SettingUpdated,
+                settingName: "useCompactLayout",
+            }, true);
+            analytics.trackEvent<ITestEvent>({
+                eventName: "JestTestEvents",
+            });
+            expect(mocked(fakePosthog).capture.mock.calls[0][1]["$set"]).toStrictEqual({
+                "WebLayout": "Compact",
+            });
         });
     });
 });

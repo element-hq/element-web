@@ -25,6 +25,11 @@ import SdkConfig from './SdkConfig';
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import SettingsStore from "./settings/SettingsStore";
 import { ScreenName } from "./PosthogTrackers";
+import { ActionPayload } from "./dispatcher/payloads";
+import { Action } from "./dispatcher/actions";
+import { SettingUpdatedPayload } from "./dispatcher/payloads/SettingUpdatedPayload";
+import dis from "./dispatcher/dispatcher";
+import { Layout } from "./settings/enums/Layout";
 
 /* Posthog analytics tracking.
  *
@@ -153,7 +158,40 @@ export class PosthogAnalytics {
         } else {
             this.enabled = false;
         }
+
+        dis.register(this.onAction);
+        SettingsStore.monitorSetting("layout", null);
+        SettingsStore.monitorSetting("useCompactLayout", null);
+        this.onLayoutUpdated();
     }
+
+    private onLayoutUpdated = () => {
+        let layout: UserProperties["WebLayout"];
+
+        switch (SettingsStore.getValue("layout")) {
+            case Layout.IRC:
+                layout = "IRC";
+                break;
+            case Layout.Bubble:
+                layout = "Bubble";
+                break;
+            case Layout.Group:
+                layout = SettingsStore.getValue("useCompactLayout") ? "Compact" : "Group";
+                break;
+        }
+
+        // This is known to clobber other devices but is a good enough solution
+        // to get an idea of how much use each layout gets.
+        this.setProperty("WebLayout", layout);
+    };
+
+    private onAction = (payload: ActionPayload) => {
+        if (payload.action !== Action.SettingUpdated) return;
+        const settingsPayload = payload as SettingUpdatedPayload;
+        if (["layout", "useCompactLayout"].includes(settingsPayload.settingName)) {
+            this.onLayoutUpdated();
+        }
+    };
 
     // we persist the last `$screen_name` and send it for all events until it is replaced
     private lastScreen: ScreenName = "Loading";
@@ -192,7 +230,7 @@ export class PosthogAnalytics {
 
     private static async getPlatformProperties(): Promise<PlatformProperties> {
         const platform = PlatformPeg.get();
-        let appVersion;
+        let appVersion: string;
         try {
             appVersion = await platform.getAppVersion();
         } catch (e) {
