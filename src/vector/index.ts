@@ -77,16 +77,16 @@ function checkBrowserFeatures() {
     const featureList = Object.keys(window.Modernizr);
 
     let featureComplete = true;
-    for (let i = 0; i < featureList.length; i++) {
-        if (window.Modernizr[featureList[i]] === undefined) {
+    for (const feature of featureList) {
+        if (window.Modernizr[feature] === undefined) {
             logger.error(
                 "Looked for feature '%s' but Modernizr has no results for this. " +
-                "Has it been configured correctly?", featureList[i],
+                "Has it been configured correctly?", feature,
             );
             return false;
         }
-        if (window.Modernizr[featureList[i]] === false) {
-            logger.error("Browser missing feature: '%s'", featureList[i]);
+        if (window.Modernizr[feature] === false) {
+            logger.error("Browser missing feature: '%s'", feature);
             // toggle flag rather than return early so we log all missing features rather than just the first.
             featureComplete = false;
         }
