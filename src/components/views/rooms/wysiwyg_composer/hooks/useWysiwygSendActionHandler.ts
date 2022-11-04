@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { RefObject, useCallback, useRef } from "react";
+import { MutableRefObject, useCallback, useRef } from "react";
 
 import defaultDispatcher from "../../../../../dispatcher/dispatcher";
 import { Action } from "../../../../../dispatcher/actions";
@@ -26,16 +26,16 @@ import { ComposerFunctions } from "../types";
 
 export function useWysiwygSendActionHandler(
     disabled: boolean,
-    composerElement: RefObject<HTMLElement>,
+    composerElement: MutableRefObject<HTMLElement>,
     composerFunctions: ComposerFunctions,
 ) {
     const roomContext = useRoomContext();
-    const timeoutId = useRef<number>();
+    const timeoutId = useRef<number | null>(null);
 
     const handler = useCallback((payload: ActionPayload) => {
         // don't let the user into the composer if it is disabled - all of these branches lead
         // to the cursor being in the composer
-        if (disabled || !composerElement.current) return;
+        if (disabled || !composerElement?.current) return;
 
         const context = payload.context ?? TimelineRenderingType.Room;
 

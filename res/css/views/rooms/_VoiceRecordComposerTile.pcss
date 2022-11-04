@@ -20,7 +20,7 @@ limitations under the License.
     height: 28px;
     border: 2px solid $voice-record-stop-border-color;
     border-radius: 32px;
-    margin-right: 8px; /* between us and the waveform component */
+    margin-right: 2px; /* between us and the waveform component */
     position: relative;
 
     &::after {
@@ -39,7 +39,7 @@ limitations under the License.
     width: 24px;
     height: 24px;
     vertical-align: middle;
-    margin-right: 8px; /* distance from left edge of waveform container (container has some margin too) */
+    margin-right: 2px; /* distance from left edge of waveform container (container has some margin too) */
     background-color: $voice-record-icon-color;
     mask-repeat: no-repeat;
     mask-size: contain;
@@ -69,7 +69,7 @@ limitations under the License.
     height: 32px;
 
     margin: 6px; /* force the composer area to put a gutter around us */
-    margin-right: 12px; /* isolate from stop/send button */
+    margin-right: 6px; /* isolate from stop/send button */
 
     position: relative; /* important for the live circle */
 
@@ -89,6 +89,14 @@ limitations under the License.
             left: 12px; /* 12px from the left edge for container padding */
             top: 17px; /* vertically center (middle align with clock) */
             border-radius: 10px;
+        }
+    }
+}
+
+.mx_MessageComposer_wysiwyg .mx_VoiceMessagePrimaryContainer {
+    &.mx_VoiceRecordComposerTile_recording {
+        &::before {
+            top: 15px; /* vertically center (middle align with clock) */
         }
     }
 }

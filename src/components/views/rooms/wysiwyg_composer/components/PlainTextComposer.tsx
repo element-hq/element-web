@@ -14,9 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import classNames from 'classnames';
 import React, { MutableRefObject, ReactNode } from 'react';
 
 import { useComposerFunctions } from '../hooks/useComposerFunctions';
+import { useIsFocused } from '../hooks/useIsFocused';
 import { usePlainTextInitialization } from '../hooks/usePlainTextInitialization';
 import { usePlainTextListeners } from '../hooks/usePlainTextListeners';
 import { useSetCursorPosition } from '../hooks/useSetCursorPosition';
@@ -26,9 +28,11 @@ import { Editor } from "./Editor";
 interface PlainTextComposerProps {
     disabled?: boolean;
     onChange?: (content: string) => void;
-    onSend: () => void;
+    onSend?: () => void;
     initialContent?: string;
     className?: string;
+    leftComponent?: ReactNode;
+    rightComponent?: ReactNode;
     children?: (
         ref: MutableRefObject<HTMLDivElement | null>,
         composerFunctions: ComposerFunctions,
@@ -36,21 +40,32 @@ interface PlainTextComposerProps {
 }
 
 export function PlainTextComposer({
-    className, disabled, onSend, onChange, children, initialContent }: PlainTextComposerProps,
+    className,
+    disabled = false,
+    onSend,
+    onChange,
+    children,
+    initialContent,
+    leftComponent,
+    rightComponent,
+}: PlainTextComposerProps,
 ) {
     const { ref, onInput, onPaste, onKeyDown } = usePlainTextListeners(onChange, onSend);
     const composerFunctions = useComposerFunctions(ref);
     usePlainTextInitialization(initialContent, ref);
     useSetCursorPosition(disabled, ref);
+    const { isFocused, onFocus } = useIsFocused();
 
     return <div
         data-testid="PlainTextComposer"
-        className={className}
+        className={classNames(className, { [`${className}-focused`]: isFocused })}
+        onFocus={onFocus}
+        onBlur={onFocus}
         onInput={onInput}
         onPaste={onPaste}
         onKeyDown={onKeyDown}
     >
-        <Editor ref={ref} disabled={disabled} />
+        <Editor ref={ref} disabled={disabled} leftComponent={leftComponent} rightComponent={rightComponent} />
         { children?.(ref, composerFunctions) }
     </div>;
 }

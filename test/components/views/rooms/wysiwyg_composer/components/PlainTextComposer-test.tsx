@@ -21,10 +21,6 @@ import userEvent from "@testing-library/user-event";
 import { PlainTextComposer }
     from "../../../../../../src/components/views/rooms/wysiwyg_composer/components/PlainTextComposer";
 
-// Work around missing ClipboardEvent type
-class MyClipboardEvent {}
-window.ClipboardEvent = MyClipboardEvent as any;
-
 describe('PlainTextComposer', () => {
     const customRender = (
         onChange = (_content: string) => void 0,
@@ -90,5 +86,47 @@ describe('PlainTextComposer', () => {
 
         // Then
         expect(screen.getByRole('textbox').innerHTML).toBeFalsy();
+    });
+
+    it('Should have data-is-expanded when it has two lines', async () => {
+        let resizeHandler: ResizeObserverCallback = jest.fn();
+        let editor: Element | null = null;
+        jest.spyOn(global, 'ResizeObserver').mockImplementation((handler) => {
+            resizeHandler = handler;
+            return {
+                observe: (element) => {
+                    editor = element;
+                },
+                unobserve: jest.fn(),
+                disconnect: jest.fn(),
+            };
+        },
+        );
+        jest.spyOn(global, 'requestAnimationFrame').mockImplementation(cb => {
+            cb(0);
+            return 0;
+        });
+
+        //When
+        render(
+            <PlainTextComposer onChange={jest.fn()} onSend={jest.fn()} />,
+        );
+
+        // Then
+        expect(screen.getByTestId('WysiwygComposerEditor').attributes['data-is-expanded'].value).toBe('false');
+        expect(editor).toBe(screen.getByRole('textbox'));
+
+        // When
+        resizeHandler(
+            [{ contentBoxSize: [{ blockSize: 100 }] } as unknown as ResizeObserverEntry],
+            {} as ResizeObserver,
+        );
+        jest.runAllTimers();
+
+        // Then
+        expect(screen.getByTestId('WysiwygComposerEditor').attributes['data-is-expanded'].value).toBe('true');
+
+        (global.ResizeObserver as jest.Mock).mockRestore();
+        (global.requestAnimationFrame as jest.Mock).mockRestore();
     });
 });

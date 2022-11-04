@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { createRef } from 'react';
+import React, { createRef, ReactNode } from 'react';
 import classNames from 'classnames';
 import { IEventRelation, MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/models/room";
@@ -31,7 +31,7 @@ import Stickerpicker from './Stickerpicker';
 import { makeRoomPermalink, RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
 import E2EIcon from './E2EIcon';
 import SettingsStore from "../../../settings/SettingsStore";
-import { aboveLeftOf, AboveLeftOf } from "../../structures/ContextMenu";
+import { aboveLeftOf } from "../../structures/ContextMenu";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import ReplyPreview from "./ReplyPreview";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
@@ -420,33 +420,48 @@ export class MessageComposer extends React.Component<IProps, IState> {
         return this.state.showStickersButton && !isLocalRoom(this.props.room);
     }
 
-    public render() {
-        const controls = [
-            this.props.e2eStatus ?
-                <E2EIcon key="e2eIcon" status={this.props.e2eStatus} className="mx_MessageComposer_e2eIcon" /> :
-                null,
-        ];
-
-        let menuPosition: AboveLeftOf | undefined;
+    private getMenuPosition() {
         if (this.ref.current) {
+            const hasFormattingButtons = this.state.isWysiwygLabEnabled && this.state.isRichTextEnabled;
             const contentRect = this.ref.current.getBoundingClientRect();
-            menuPosition = aboveLeftOf(contentRect);
+            // Here we need to remove the all the extra space above the editor
+            // Instead of doing a querySelector or pass a ref to find the compute the height formatting buttons
+            // We are using an arbitrary value, the formatting buttons height doesn't change during the lifecycle of the component
+            // It's easier to just use a constant here instead of an over-engineering way to find the height
+            const heightToRemove = hasFormattingButtons ? 36 : 0;
+            const fixedRect = new DOMRect(
+                contentRect.x,
+                contentRect.y + heightToRemove,
+                contentRect.width,
+                contentRect.height - heightToRemove);
+            return aboveLeftOf(fixedRect);
         }
+    }
+
+    public render() {
+        const hasE2EIcon = Boolean(!this.state.isWysiwygLabEnabled && this.props.e2eStatus);
+        const e2eIcon = hasE2EIcon &&
+                <E2EIcon key="e2eIcon" status={this.props.e2eStatus} className="mx_MessageComposer_e2eIcon" />;
+
+        const controls: ReactNode[] = [];
+        const menuPosition = this.getMenuPosition();
 
         const canSendMessages = this.context.canSendMessages && !this.context.tombstone;
+        let composer: ReactNode;
         if (canSendMessages) {
-            if (this.state.isWysiwygLabEnabled) {
-                controls.push(
+            if (this.state.isWysiwygLabEnabled && menuPosition) {
+                composer =
                     <SendWysiwygComposer key="controls_input"
                         disabled={this.state.haveRecording}
                         onChange={this.onWysiwygChange}
                         onSend={this.sendMessage}
                         isRichTextEnabled={this.state.isRichTextEnabled}
                         initialContent={this.state.initialComposerContent}
-                    />,
-                );
+                        e2eStatus={this.props.e2eStatus}
+                        menuPosition={menuPosition}
+                    />;
             } else {
-                controls.push(
+                composer =
                     <SendMessageComposer
                         ref={this.messageComposerInput}
                         key="controls_input"
@@ -458,8 +473,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
                         onChange={this.onChange}
                         disabled={this.state.haveRecording}
                         toggleStickerPickerOpen={this.toggleStickerPickerOpen}
-                    />,
-                );
+                    />;
             }
 
             controls.push(<VoiceRecordComposerTile
@@ -529,8 +543,8 @@ export class MessageComposer extends React.Component<IProps, IState> {
         const classes = classNames({
             "mx_MessageComposer": true,
             "mx_MessageComposer--compact": this.props.compact,
-            "mx_MessageComposer_e2eStatus": this.props.e2eStatus != undefined,
-            "mx_MessageComposer_wysiwyg": this.state.isWysiwygLabEnabled && this.state.isRichTextEnabled,
+            "mx_MessageComposer_e2eStatus": hasE2EIcon,
+            "mx_MessageComposer_wysiwyg": this.state.isWysiwygLabEnabled,
         });
 
         return (
@@ -541,45 +555,48 @@ export class MessageComposer extends React.Component<IProps, IState> {
                         replyToEvent={this.props.replyToEvent}
                         permalinkCreator={this.props.permalinkCreator} />
                     <div className="mx_MessageComposer_row">
-                        { controls }
-                        { canSendMessages && <MessageComposerButtons
-                            addEmoji={this.addEmoji}
-                            haveRecording={this.state.haveRecording}
-                            isMenuOpen={this.state.isMenuOpen}
-                            isStickerPickerOpen={this.state.isStickerPickerOpen}
-                            menuPosition={menuPosition}
-                            relation={this.props.relation}
-                            onRecordStartEndClick={() => {
-                                this.voiceRecordingButton.current?.onRecordStartEndClick();
-                                if (this.context.narrow) {
+                        { e2eIcon }
+                        { composer }
+                        <div className="mx_MessageComposer_actions">
+                            { controls }
+                            { canSendMessages && <MessageComposerButtons
+                                addEmoji={this.addEmoji}
+                                haveRecording={this.state.haveRecording}
+                                isMenuOpen={this.state.isMenuOpen}
+                                isStickerPickerOpen={this.state.isStickerPickerOpen}
+                                menuPosition={menuPosition}
+                                relation={this.props.relation}
+                                onRecordStartEndClick={() => {
+                                    this.voiceRecordingButton.current?.onRecordStartEndClick();
+                                    if (this.context.narrow) {
+                                        this.toggleButtonMenu();
+                                    }
+                                }}
+                                setStickerPickerOpen={this.setStickerPickerOpen}
+                                showLocationButton={!window.electron}
+                                showPollsButton={this.state.showPollsButton}
+                                showStickersButton={this.showStickersButton}
+                                isRichTextEnabled={this.state.isRichTextEnabled}
+                                onComposerModeClick={this.onRichTextToggle}
+                                toggleButtonMenu={this.toggleButtonMenu}
+                                showVoiceBroadcastButton={this.state.showVoiceBroadcastButton}
+                                onStartVoiceBroadcastClick={() => {
+                                    startNewVoiceBroadcastRecording(
+                                        this.props.room,
+                                        MatrixClientPeg.get(),
+                                        VoiceBroadcastRecordingsStore.instance(),
+                                    );
                                     this.toggleButtonMenu();
-                                }
-                            }}
-                            setStickerPickerOpen={this.setStickerPickerOpen}
-                            showLocationButton={!window.electron}
-                            showPollsButton={this.state.showPollsButton}
-                            showStickersButton={this.showStickersButton}
-                            showComposerModeButton={this.state.isWysiwygLabEnabled}
-                            isRichTextEnabled={this.state.isRichTextEnabled}
-                            onComposerModeClick={this.onRichTextToggle}
-                            toggleButtonMenu={this.toggleButtonMenu}
-                            showVoiceBroadcastButton={this.state.showVoiceBroadcastButton}
-                            onStartVoiceBroadcastClick={() => {
-                                startNewVoiceBroadcastRecording(
-                                    this.props.room,
-                                    MatrixClientPeg.get(),
-                                    VoiceBroadcastRecordingsStore.instance(),
-                                );
-                                this.toggleButtonMenu();
-                            }}
-                        /> }
-                        { showSendButton && (
-                            <SendButton
-                                key="controls_send"
-                                onClick={this.sendMessage}
-                                title={this.state.haveRecording ? _t("Send voice message") : undefined}
-                            />
-                        ) }
+                                }}
+                            /> }
+                            { showSendButton && (
+                                <SendButton
+                                    key="controls_send"
+                                    onClick={this.sendMessage}
+                                    title={this.state.haveRecording ? _t("Send voice message") : undefined}
+                                />
+                            ) }
+                        </div>
                     </div>
                 </div>
             </div>

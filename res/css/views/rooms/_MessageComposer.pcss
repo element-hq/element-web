@@ -15,6 +15,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+@import "./_MessageComposerButton.pcss";
+
 .mx_MessageComposer_wrapper {
     vertical-align: middle;
     margin: auto;
@@ -57,6 +59,12 @@ limitations under the License.
     flex-direction: row;
     align-items: center;
     width: 100%;
+}
+
+.mx_MessageComposer_actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
 .mx_MessageComposer .mx_MessageComposer_avatar {
@@ -171,53 +179,16 @@ limitations under the License.
 }
 
 .mx_MessageComposer_button_highlight {
-    background: rgba($accent, 0.25);
-    /* make the icon the accent color too */
-    &::before {
-        background-color: $accent !important;
-    }
+    @mixin composerButtonHighLight;
 }
 
 .mx_MessageComposer_button {
-    --size: 26px;
-    position: relative;
-    cursor: pointer;
-    height: var(--size);
-    line-height: var(--size);
-    width: auto;
-    padding-left: var(--size);
-    border-radius: 50%;
-    margin-right: 6px;
+    @mixin composerButton 50%,$accent;
 
     &:last-child {
         margin-right: auto;
     }
 
-    &::before {
-        content: '';
-        position: absolute;
-        top: 3px;
-        left: 3px;
-        height: 20px;
-        width: 20px;
-        background-color: $icon-button-color;
-        mask-repeat: no-repeat;
-        mask-size: contain;
-        mask-position: center;
-    }
-
-    &::after {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 0;
-        z-index: 0;
-        width: var(--size);
-        height: var(--size);
-        border-radius: 50%;
-    }
-
-    &:hover,
     &.mx_MessageComposer_closeButtonMenu {
         &::after {
             background: rgba($accent, 0.1);
@@ -232,15 +203,43 @@ limitations under the License.
         background-color: $alert;
     }
 }
-
-/*
-    The wysisyg composer increase the size of the MessageComposer. We temporary move the buttons
-    Soon the dom structure of the MessageComposer will change with the next evolution of the wysiwyg composer
-    and this workaround will disappear
-*/
 .mx_MessageComposer_wysiwyg {
-    .mx_MessageComposer_e2eIcon.mx_E2EIcon,.mx_MessageComposer_button, .mx_MessageComposer_sendMessage {
-        margin-top: 28px;
+    .mx_MessageComposer_wrapper {
+        padding-left: 16px;
+        margin-top: 6px;
+        margin-bottom: 12px;
+    }
+
+    .mx_MessageComposer_row {
+        align-items: flex-end;
+    }
+
+    .mx_MessageComposer_actions {
+        /* Height of the composer editor */
+        height: 40px;
+    }
+
+    .mx_MediaBody {
+        padding-top: 4px;
+        padding-bottom: 4px;
+    }
+
+    .mx_MessageComposer_button {
+        @mixin composerButton 5px,$tertiary-content;
+
+        &.mx_MessageComposer_closeButtonMenu {
+            &::after {
+                background: rgba($accent, 0.1);
+            }
+
+            &::before {
+                background-color: $accent;
+            }
+        }
+
+        &.mx_MessageComposer_hangup:not(.mx_AccessibleButton_disabled)::before {
+            background-color: $alert;
+        }
     }
 }
 
@@ -258,10 +257,6 @@ limitations under the License.
 
 .mx_MessageComposer_voiceBroadcast::before {
     mask-image: url('$(res)/img/element-icons/live.svg');
-}
-
-.mx_MessageComposer_emoji::before {
-    mask-image: url('$(res)/img/element-icons/room/composer/emoji.svg');
 }
 
 .mx_MessageComposer_plain_text::before {

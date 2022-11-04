@@ -22,18 +22,18 @@ function isDivElement(target: EventTarget): target is HTMLDivElement {
     return target instanceof HTMLDivElement;
 }
 
-export function usePlainTextListeners(onChange: (content: string) => void, onSend: () => void) {
-    const ref = useRef<HTMLDivElement>();
+export function usePlainTextListeners(onChange?: (content: string) => void, onSend?: () => void) {
+    const ref = useRef<HTMLDivElement | null>(null);
     const send = useCallback((() => {
         if (ref.current) {
             ref.current.innerHTML = '';
         }
-        onSend();
+        onSend?.();
     }), [ref, onSend]);
 
     const onInput = useCallback((event: SyntheticEvent<HTMLDivElement, InputEvent | ClipboardEvent>) => {
         if (isDivElement(event.target)) {
-            onChange(event.target.innerHTML);
+            onChange?.(event.target.innerHTML);
         }
     }, [onChange]);
 

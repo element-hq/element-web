@@ -28,6 +28,7 @@ import { createTestClient, flushPromises, getRoomContext, mkEvent, mkStubRoom } 
 import { SendWysiwygComposer } from "../../../../../src/components/views/rooms/wysiwyg_composer";
 import * as useComposerFunctions
     from "../../../../../src/components/views/rooms/wysiwyg_composer/hooks/useComposerFunctions";
+import { aboveLeftOf } from "../../../../../src/components/structures/ContextMenu";
 
 const mockClear = jest.fn();
 
@@ -78,7 +79,7 @@ describe('SendWysiwygComposer', () => {
         return render(
             <MatrixClientContext.Provider value={mockClient}>
                 <RoomContext.Provider value={defaultRoomContext}>
-                    <SendWysiwygComposer onChange={onChange} onSend={onSend} disabled={disabled} isRichTextEnabled={isRichTextEnabled} />
+                    <SendWysiwygComposer onChange={onChange} onSend={onSend} disabled={disabled} isRichTextEnabled={isRichTextEnabled} menuPosition={aboveLeftOf({ top: 0, bottom: 0, right: 0 })} />
                 </RoomContext.Provider>
             </MatrixClientContext.Provider>,
         );

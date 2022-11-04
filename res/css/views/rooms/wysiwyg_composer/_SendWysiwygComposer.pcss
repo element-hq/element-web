@@ -22,32 +22,65 @@ limitations under the License.
     /* fixed line height to prevent emoji from being taller than text */
     line-height: $font-18px;
     justify-content: center;
-    margin-right: 6px;
-    /* don't grow wider than available space */
-    min-width: 0;
+    margin-right: 13px;
+    gap: 8px;
 
-    .mx_WysiwygComposer_container {
-        flex: 1;
+    .mx_FormattingButtons {
+        margin-left: 12px;
+    }
+
+    .mx_WysiwygComposer_Editor {
+        border: 1px solid;
+        border-color: $quinary-content;
+        padding: 6px 11px 6px 12px;
         display: flex;
-        flex-direction: column;
-        /* min-height at this level so the mx_BasicMessageComposer_input */
-        /* still stays vertically centered when less than 55px. */
-        /* We also set this to ensure the voice message recording widget */
-        /* doesn't cause a jump. */
-        min-height: 55px;
+        align-items: flex-end;
+        gap: 10px;
 
-        .mx_WysiwygComposer_content {
-            border: 1px solid;
-            border-radius: 20px;
-            padding: 8px 10px;
-            /* this will center the contenteditable */
-            /* in it's parent vertically */
-            /* while keeping the autocomplete at the top */
-            /* of the composer. The parent needs to be a flex container for this to work. */
-            margin: auto 0;
-            /* max-height at this level so autocomplete doesn't get scrolled too */
-            max-height: 140px;
-            overflow-y: auto;
+        .mx_E2EIcon {
+            margin: 0 0 7px 0;
+            width: 12px;
+            height: 12px;
         }
+
+        &[data-is-expanded="true"] {
+            border-radius: 14px;
+
+            .mx_WysiwygComposer_Editor_container {
+                margin-top: 3px;
+                margin-bottom: 3px;
+            }
+        }
+
+        &[data-is-expanded="false"] {
+            border-radius: 40px;
+        }
+
+        .mx_WysiwygComposer_Editor_container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 22px;
+            margin-bottom: 2px;
+            /* don't grow wider than available space */
+            width: 0;
+
+            .mx_WysiwygComposer_Editor_content {
+                /* this will center the contenteditable */
+                /* in it's parent vertically */
+                /* while keeping the autocomplete at the top */
+                /* of the composer. The parent needs to be a flex container for this to work. */
+                margin: auto 0;
+                /* max-height at this level so autocomplete doesn't get scrolled too */
+                max-height: 140px;
+                overflow-y: auto;
+            }
+        }
+    }
+}
+
+.mx_SendWysiwygComposer-focused {
+    .mx_WysiwygComposer_Editor {
+        border-color: $quaternary-content;
     }
 }

@@ -17,6 +17,7 @@ limitations under the License.
 .mx_FormattingButtons {
     display: flex;
     justify-content: flex-start;
+    gap: 8px;
 
     .mx_FormattingButtons_Button {
         --size: 28px;
@@ -26,17 +27,8 @@ limitations under the License.
         line-height: var(--size);
         width: auto;
         padding-left: 22px;
-        margin-right: 8px;
         background-color: transparent;
         border: none;
-
-        &:first-child {
-            margin-left: 12px;
-        }
-
-        &:last-child {
-            margin-right: auto;
-        }
 
         &::before {
             content: '';

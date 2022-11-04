@@ -14,27 +14,43 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { forwardRef, memo } from 'react';
+import React, { forwardRef, memo, MutableRefObject, ReactNode } from 'react';
+
+import { useIsExpanded } from '../hooks/useIsExpanded';
+
+const HEIGHT_BREAKING_POINT = 20;
 
 interface EditorProps {
     disabled: boolean;
+    leftComponent?: ReactNode;
+    rightComponent?: ReactNode;
 }
 
 export const Editor = memo(
     forwardRef<HTMLDivElement, EditorProps>(
-        function Editor({ disabled }: EditorProps, ref,
+        function Editor({ disabled, leftComponent, rightComponent }: EditorProps, ref,
         ) {
-            return <div className="mx_WysiwygComposer_container">
-                <div className="mx_WysiwygComposer_content"
-                    ref={ref!}
-                    contentEditable={!disabled}
-                    role="textbox"
-                    aria-multiline="true"
-                    aria-autocomplete="list"
-                    aria-haspopup="listbox"
-                    dir="auto"
-                    aria-disabled={disabled}
-                />
+            const isExpanded = useIsExpanded(ref as MutableRefObject<HTMLDivElement | null>, HEIGHT_BREAKING_POINT);
+
+            return <div
+                data-testid="WysiwygComposerEditor"
+                className="mx_WysiwygComposer_Editor"
+                data-is-expanded={isExpanded}
+            >
+                { leftComponent }
+                <div className="mx_WysiwygComposer_Editor_container">
+                    <div className="mx_WysiwygComposer_Editor_content"
+                        ref={ref}
+                        contentEditable={!disabled}
+                        role="textbox"
+                        aria-multiline="true"
+                        aria-autocomplete="list"
+                        aria-haspopup="listbox"
+                        dir="auto"
+                        aria-disabled={disabled}
+                    />
+                </div>
+                { rightComponent }
             </div>;
         },
     ),

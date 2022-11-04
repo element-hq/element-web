@@ -28,7 +28,7 @@ export function useWysiwygEditActionHandler(
     composerElement: RefObject<HTMLElement>,
 ) {
     const roomContext = useRoomContext();
-    const timeoutId = useRef<number>();
+    const timeoutId = useRef<number | null>(null);
 
     const handler = useCallback((payload: ActionPayload) => {
         // don't let the user into the composer if it is disabled - all of these branches lead

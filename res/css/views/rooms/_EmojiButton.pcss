@@ -14,22 +14,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_WysiwygComposer_Editor_container {
-    @keyframes visualbell {
-        from { background-color: $visual-bell-bg-color; }
-        to { background-color: $background; }
-    }
+@import "./_MessageComposerButton.pcss";
 
-    .mx_WysiwygComposer_Editor_content {
-        white-space: pre-wrap;
-        word-wrap: break-word;
-        outline: none;
-        overflow-x: hidden;
+.mx_EmojiButton {
+    @mixin composerButton 50%,$accent;
+}
 
-        /* Force caret nodes to be selected in full so that they can be */
-        /* navigated through in a single keypress */
-        .caretNode {
-            user-select: all;
-        }
+.mx_EmojiButton_highlight {
+    @mixin composerButtonHighLight;
+}
+
+.mx_EmojiButton_icon::before {
+    mask-image: url('$(res)/img/element-icons/room/composer/emoji.svg');
+}
+
+.mx_MessageComposer_wysiwyg {
+    .mx_EmojiButton {
+        @mixin composerButton 5px,$tertiary-content;
     }
 }

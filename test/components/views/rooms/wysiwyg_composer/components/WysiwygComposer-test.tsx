@@ -23,10 +23,6 @@ import { WysiwygComposer }
     from "../../../../../../src/components/views/rooms/wysiwyg_composer/components/WysiwygComposer";
 import SettingsStore from "../../../../../../src/settings/SettingsStore";
 
-// Work around missing ClipboardEvent type
-class MyClipboardEvent {}
-window.ClipboardEvent = MyClipboardEvent as any;
-
 let inputEventProcessor: InputEventProcessor | null = null;
 
 // The wysiwyg fetch wasm bytes and a specific workaround is needed to make it works in a node (jest) environnement

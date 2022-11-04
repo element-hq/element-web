@@ -16,11 +16,13 @@ limitations under the License.
 
 import React, { memo, MutableRefObject, ReactNode, useEffect } from 'react';
 import { useWysiwyg, FormattingFunctions } from "@matrix-org/matrix-wysiwyg";
+import classNames from 'classnames';
 
 import { FormattingButtons } from './FormattingButtons';
 import { Editor } from './Editor';
 import { useInputEventProcessor } from '../hooks/useInputEventProcessor';
 import { useSetCursorPosition } from '../hooks/useSetCursorPosition';
+import { useIsFocused } from '../hooks/useIsFocused';
 
 interface WysiwygComposerProps {
     disabled?: boolean;
@@ -28,6 +30,8 @@ interface WysiwygComposerProps {
     onSend: () => void;
     initialContent?: string;
     className?: string;
+    leftComponent?: ReactNode;
+    rightComponent?: ReactNode;
     children?: (
         ref: MutableRefObject<HTMLDivElement | null>,
         wysiwyg: FormattingFunctions,
@@ -35,7 +39,16 @@ interface WysiwygComposerProps {
 }
 
 export const WysiwygComposer = memo(function WysiwygComposer(
-    { disabled = false, onChange, onSend, initialContent, className, children }: WysiwygComposerProps,
+    {
+        disabled = false,
+        onChange,
+        onSend,
+        initialContent,
+        className,
+        leftComponent,
+        rightComponent,
+        children,
+    }: WysiwygComposerProps,
 ) {
     const inputEventProcessor = useInputEventProcessor(onSend);
 
@@ -51,10 +64,12 @@ export const WysiwygComposer = memo(function WysiwygComposer(
     const isReady = isWysiwygReady && !disabled;
     useSetCursorPosition(!isReady, ref);
 
+    const { isFocused, onFocus } = useIsFocused();
+
     return (
-        <div data-testid="WysiwygComposer" className={className}>
+        <div data-testid="WysiwygComposer" className={classNames(className, { [`${className}-focused`]: isFocused })} onFocus={onFocus} onBlur={onFocus}>
             <FormattingButtons composer={wysiwyg} formattingStates={formattingStates} />
-            <Editor ref={ref} disabled={!isReady} />
+            <Editor ref={ref} disabled={!isReady} leftComponent={leftComponent} rightComponent={rightComponent} />
             { children?.(ref, wysiwyg) }
         </div>
     );
