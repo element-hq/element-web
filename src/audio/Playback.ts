@@ -52,6 +52,14 @@ function makePlaybackWaveform(input: number[]): number[] {
     return arrayRescale(arraySmoothingResample(noiseWaveform, PLAYBACK_WAVEFORM_SAMPLES), 0, 1);
 }
 
+export interface PlaybackInterface {
+    readonly currentState: PlaybackState;
+    readonly liveData: SimpleObservable<number[]>;
+    readonly timeSeconds: number;
+    readonly durationSeconds: number;
+    skipTo(timeSeconds: number): Promise<void>;
+}
+
 export class Playback extends EventEmitter implements IDestroyable, PlaybackInterface {
     /**
      * Stable waveform for representing a thumbnail of the media. Values are
@@ -110,14 +118,6 @@ export class Playback extends EventEmitter implements IDestroyable, PlaybackInte
         return this.clock;
     }
 
-    public get currentState(): PlaybackState {
-        return this.state;
-    }
-
-    public get isPlaying(): boolean {
-        return this.currentState === PlaybackState.Playing;
-    }
-
     public get liveData(): SimpleObservable<number[]> {
         return this.clock.liveData;
     }
@@ -128,6 +128,14 @@ export class Playback extends EventEmitter implements IDestroyable, PlaybackInte
 
     public get durationSeconds(): number {
         return this.clock.durationSeconds;
+    }
+
+    public get currentState(): PlaybackState {
+        return this.state;
+    }
+
+    public get isPlaying(): boolean {
+        return this.currentState === PlaybackState.Playing;
     }
 
     public emit(event: PlaybackState, ...args: any[]): boolean {

@@ -59,6 +59,33 @@ export class VoiceBroadcastChunkEvents {
         }, 0);
     }
 
+    /**
+     * Returns the accumulated length to (excl.) a chunk event.
+     */
+    public getLengthTo(event: MatrixEvent): number {
+        let length = 0;
+
+        for (let i = 0; i < this.events.indexOf(event); i++) {
+            length += this.calculateChunkLength(this.events[i]);
+        }
+
+        return length;
+    }
+
+    public findByTime(time: number): MatrixEvent | null {
+        let lengthSoFar = 0;
+
+        for (let i = 0; i < this.events.length; i++) {
+            lengthSoFar += this.calculateChunkLength(this.events[i]);
+
+            if (lengthSoFar >= time) {
+                return this.events[i];
+            }
+        }
+
+        return null;
+    }
+
     private calculateChunkLength(event: MatrixEvent): number {
         return event.getContent()?.["org.matrix.msc1767.audio"]?.duration
             || event.getContent()?.info?.duration

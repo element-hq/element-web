@@ -45,20 +45,18 @@ export const useVoiceBroadcastPlayback = (playback: VoiceBroadcastPlayback) => {
     useTypedEventEmitter(
         playback,
         VoiceBroadcastPlaybackEvent.InfoStateChanged,
-        (state: VoiceBroadcastInfoState) => {
-            setPlaybackInfoState(state);
-        },
+        setPlaybackInfoState,
     );
 
-    const [length, setLength] = useState(playback.getLength());
+    const [duration, setDuration] = useState(playback.durationSeconds);
     useTypedEventEmitter(
         playback,
         VoiceBroadcastPlaybackEvent.LengthChanged,
-        length => setLength(length),
+        d => setDuration(d / 1000),
     );
 
     return {
-        length,
+        duration,
         live: playbackInfoState !== VoiceBroadcastInfoState.Stopped,
         room: room,
         sender: playback.infoEvent.sender,
