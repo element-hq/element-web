@@ -86,6 +86,7 @@
     "@babel/preset-typescript": "^7.12.7",
     "@babel/register": "^7.12.10",
     "@babel/runtime": "^7.12.5",
+    "@casualbot/jest-sonar-reporter": "^2.2.5",
     "@principalstudio/html-webpack-inject-preload": "^1.2.7",
     "@sentry/webpack-plugin": "^1.18.1",
     "@svgr/webpack": "^5.5.0",
@@ -129,7 +130,6 @@
     "jest-environment-jsdom": "^29.0.0",
     "jest-mock": "^29.0.0",
     "jest-raw-loader": "^1.0.1",
-    "jest-sonar-reporter": "^2.0.0",
     "json-loader": "^0.5.7",
     "loader-utils": "^1.4.0",
     "matrix-mock-request": "^2.5.0",
@@ -210,10 +210,11 @@
       "text-summary",
       "lcov"
     ],
-    "testResultsProcessor": "jest-sonar-reporter"
+    "testResultsProcessor": "@casualbot/jest-sonar-reporter"
   },
-  "jestSonar": {
-    "reportPath": "coverage",
-    "sonar56x": true
+  "@casualbot/jest-sonar-reporter": {
+    "outputDirectory": "coverage",
+    "outputName": "jest-sonar-report.xml",
+    "relativePaths": true
   }
 }
