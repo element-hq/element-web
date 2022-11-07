@@ -161,8 +161,8 @@ export const Notifier = {
             return null;
         }
 
-        if (!content.url) {
-            logger.warn(`${roomId} has custom notification sound event, but no url key`);
+        if (typeof content.url !== "string") {
+            logger.warn(`${roomId} has custom notification sound event, but no url string`);
             return null;
         }
 

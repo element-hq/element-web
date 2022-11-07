@@ -61,13 +61,14 @@ const SpaceSettingsGeneralTab = ({ matrixClient: cli, space, onFinished }: IProp
 
     const onSave = async () => {
         setBusy(true);
-        const promises = [];
+        const promises: Promise<unknown>[] = [];
 
         if (avatarChanged) {
             if (newAvatar) {
-                promises.push(cli.sendStateEvent(space.roomId, EventType.RoomAvatar, {
-                    url: await cli.uploadContent(newAvatar),
-                }, ""));
+                promises.push((async () => {
+                    const { content_uri: url } = await cli.uploadContent(newAvatar);
+                    await cli.sendStateEvent(space.roomId, EventType.RoomAvatar, { url }, "");
+                })());
             } else {
                 promises.push(cli.sendStateEvent(space.roomId, EventType.RoomAvatar, {}, ""));
             }
