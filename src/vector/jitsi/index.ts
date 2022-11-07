@@ -102,7 +102,7 @@ const setupCompleted = (async () => {
 
             const handleAction = (
                 action: WidgetApiAction,
-                handler: (request: IWidgetApiRequestData) => void,
+                handler: (request: IWidgetApiRequestData) => Promise<void>,
             ): void => {
                 widgetApi.on(`action:${action}`, async (ev: CustomEvent<IWidgetApiRequest>) => {
                     ev.preventDefault();
