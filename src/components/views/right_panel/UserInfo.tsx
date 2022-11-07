@@ -146,7 +146,7 @@ function useHasCrossSigningKeys(cli: MatrixClient, member: User, canVerify: bool
         } finally {
             setUpdating(false);
         }
-    }, [cli, member, canVerify], undefined);
+    }, [cli, member, canVerify]);
 }
 
 function DeviceItem({ userId, device }: { userId: string, device: IDevice }) {

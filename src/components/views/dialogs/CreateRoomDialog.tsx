@@ -128,9 +128,6 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
         this.nameField.current.focus();
     }
 
-    componentWillUnmount() {
-    }
-
     private onKeyDown = (event: KeyboardEvent) => {
         const action = getKeyBindingsManager().getAccessibilityAction(event);
         switch (action) {

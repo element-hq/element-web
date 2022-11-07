@@ -645,8 +645,6 @@ class TimelinePanel extends React.Component<IProps, IState> {
         if (data.timeline.getTimelineSet() !== this.props.timelineSet) return;
 
         if (!Thread.hasServerSideSupport && this.context.timelineRenderingType === TimelineRenderingType.Thread) {
-            // const direction = toStartOfTimeline ? Direction.Backward : Direction.Forward;
-            // this.timelineWindow.extend(direction, 1);
             if (toStartOfTimeline && !this.state.canBackPaginate) {
                 this.setState({
                     canBackPaginate: true,

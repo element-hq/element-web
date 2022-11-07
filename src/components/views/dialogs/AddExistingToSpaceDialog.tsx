@@ -181,7 +181,7 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
         setError(null);
         setProgress(0);
 
-        let error;
+        let error: Error | undefined;
 
         for (const room of selectedToAdd) {
             const via = calculateRoomVia(room);
@@ -197,13 +197,15 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
                 setProgress(i => i + 1);
             } catch (e) {
                 logger.error("Failed to add rooms to space", e);
-                setError(error = e);
+                error = e;
                 break;
             }
         }
 
         if (!error) {
             onFinished(true);
+        } else {
+            setError(error);
         }
     };
 

@@ -92,12 +92,13 @@ const KeySignatureUploadFailedDialog: React.FC<IProps> = ({
             />
         </div>);
     } else {
+        let text = _t("Upload completed");
+        if (!success) {
+            text = cancelled ? _t("Cancelled signature upload") : _t("Unable to upload");
+        }
+
         body = (<div>
-            { success ?
-                <span>{ _t("Upload completed") }</span> :
-                cancelled ?
-                    <span>{ _t("Cancelled signature upload") }</span> :
-                    <span>{ _t("Unable to upload") }</span> }
+            <span>{ text }</span>
             <DialogButtons
                 primaryButton={_t("OK")}
                 hasCancel={false}

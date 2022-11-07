@@ -224,14 +224,8 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
     /**
      * @returns {boolean} true if all fields were valid last time they were validated.
      */
-    private allFieldsValid() {
-        const keys = Object.keys(this.state.fieldValid);
-        for (let i = 0; i < keys.length; ++i) {
-            if (!this.state.fieldValid[keys[i]]) {
-                return false;
-            }
-        }
-        return true;
+    private allFieldsValid(): boolean {
+        return Object.values(this.state.fieldValid).every(Boolean);
     }
 
     private findFirstInvalidField(fieldIDs: RegistrationField[]) {

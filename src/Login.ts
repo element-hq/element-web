@@ -75,11 +75,13 @@ export default class Login {
      * @returns {MatrixClient}
      */
     public createTemporaryClient(): MatrixClient {
-        if (this.tempClient) return this.tempClient; // use memoization
-        return this.tempClient = createClient({
-            baseUrl: this.hsUrl,
-            idBaseUrl: this.isUrl,
-        });
+        if (!this.tempClient) {
+            this.tempClient = createClient({
+                baseUrl: this.hsUrl,
+                idBaseUrl: this.isUrl,
+            });
+        }
+        return this.tempClient;
     }
 
     public async getFlows(): Promise<Array<LoginFlow>> {

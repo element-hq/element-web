@@ -477,8 +477,7 @@ const SpaceSetupPrivateInvite = ({ space, onFinished }) => {
         ev.preventDefault();
         if (busy) return;
         setError("");
-        for (let i = 0; i < fieldRefs.length; i++) {
-            const fieldRef = fieldRefs[i];
+        for (const fieldRef of fieldRefs) {
             const valid = await fieldRef.current.validate({ allowEmpty: true });
 
             if (valid === false) { // true/null are allowed

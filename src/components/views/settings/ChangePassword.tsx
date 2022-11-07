@@ -353,13 +353,7 @@ export default class ChangePassword extends React.Component<IProps, IState> {
     }
 
     private allFieldsValid(): boolean {
-        const keys = Object.keys(this.state.fieldValid);
-        for (let i = 0; i < keys.length; ++i) {
-            if (!this.state.fieldValid[keys[i]]) {
-                return false;
-            }
-        }
-        return true;
+        return Object.values(this.state.fieldValid).every(Boolean);
     }
 
     private findFirstInvalidField(fieldIDs: string[]): Field {

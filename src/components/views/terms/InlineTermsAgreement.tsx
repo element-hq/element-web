@@ -50,7 +50,7 @@ export default class InlineTermsAgreement extends React.Component<IProps, IState
 
     public componentDidMount(): void {
         // Build all the terms the user needs to accept
-        const policies = []; // { checked, url, name }
+        const policies: Policy[] = [];
         for (const servicePolicies of this.props.policiesAndServicePairs) {
             const availablePolicies = Object.values(servicePolicies.policies);
             for (const policy of availablePolicies) {

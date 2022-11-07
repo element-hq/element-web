@@ -119,7 +119,6 @@ export default class MemberList extends React.Component<IProps, IState> {
         cli.on(UserEvent.LastPresenceTs, this.onUserPresenceChange);
         cli.on(UserEvent.Presence, this.onUserPresenceChange);
         cli.on(UserEvent.CurrentlyActive, this.onUserPresenceChange);
-        // cli.on("Room.timeline", this.onRoomTimeline);
     }
 
     componentWillUnmount() {
@@ -199,7 +198,6 @@ export default class MemberList extends React.Component<IProps, IState> {
         // member tile and re-render it. This is more efficient than every tile
         // ever attaching their own listener.
         const tile = this.refs[user.userId];
-        // console.log(`Got presence update for ${user.userId}. hasTile=${!!tile}`);
         if (tile) {
             this.updateList(); // reorder the membership list
         }
@@ -370,13 +368,8 @@ export default class MemberList extends React.Component<IProps, IState> {
         // ...and then alphabetically.
         // We could tiebreak instead by "last recently spoken in this room" if we wanted to.
 
-        // console.log(`Comparing userA=${this.memberString(memberA)} userB=${this.memberString(memberB)}`);
-
         const userA = memberA.user;
         const userB = memberB.user;
-
-        // if (!userA) console.log("!! MISSING USER FOR A-SIDE: " + memberA.name + " !!");
-        // if (!userB) console.log("!! MISSING USER FOR B-SIDE: " + memberB.name + " !!");
 
         if (!userA && !userB) return 0;
         if (userA && !userB) return -1;
@@ -393,22 +386,18 @@ export default class MemberList extends React.Component<IProps, IState> {
 
             const idxA = presenceIndex(userA.currentlyActive ? 'active' : userA.presence);
             const idxB = presenceIndex(userB.currentlyActive ? 'active' : userB.presence);
-            // console.log(`userA_presenceGroup=${idxA} userB_presenceGroup=${idxB}`);
             if (idxA !== idxB) {
-                // console.log("Comparing on presence group - returning");
                 return idxA - idxB;
             }
         }
 
         // Second by power level
         if (memberA.powerLevel !== memberB.powerLevel) {
-            // console.log("Comparing on power level - returning");
             return memberB.powerLevel - memberA.powerLevel;
         }
 
         // Third by last active
         if (this.showPresence && userA.getLastActiveTs() !== userB.getLastActiveTs()) {
-            // console.log("Comparing on last active timestamp - returning");
             return userB.getLastActiveTs() - userA.getLastActiveTs();
         }
 

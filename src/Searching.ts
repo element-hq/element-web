@@ -497,11 +497,10 @@ interface IEncryptedSeshatEvent {
 }
 
 function restoreEncryptionInfo(searchResultSlice: SearchResult[] = []): void {
-    for (let i = 0; i < searchResultSlice.length; i++) {
-        const timeline = searchResultSlice[i].context.getTimeline();
+    for (const result of searchResultSlice) {
+        const timeline = result.context.getTimeline();
 
-        for (let j = 0; j < timeline.length; j++) {
-            const mxEv = timeline[j];
+        for (const mxEv of timeline) {
             const ev = mxEv.event as IEncryptedSeshatEvent;
 
             if (ev.curve25519Key) {

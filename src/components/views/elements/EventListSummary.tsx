@@ -215,12 +215,12 @@ export default class EventListSummary extends React.Component<IProps> {
             repeats: number;
         }[] = [];
 
-        for (let i = 0; i < transitions.length; i++) {
-            if (res.length > 0 && res[res.length - 1].transitionType === transitions[i]) {
+        for (const transition of transitions) {
+            if (res.length > 0 && res[res.length - 1].transitionType === transition) {
                 res[res.length - 1].repeats += 1;
             } else {
                 res.push({
-                    transitionType: transitions[i],
+                    transitionType: transition,
                     repeats: 1,
                 });
             }
@@ -399,7 +399,6 @@ export default class EventListSummary extends React.Component<IProps> {
                             } else if (e.mxEvent.getContent().avatar_url !== e.mxEvent.getPrevContent().avatar_url) {
                                 return TransitionType.ChangedAvatar;
                             }
-                            // console.log("MELS ignoring duplicate membership join event");
                             return TransitionType.NoChange;
                         } else {
                             return TransitionType.Joined;

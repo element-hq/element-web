@@ -61,7 +61,7 @@ type DynamicElementProps<T extends keyof JSX.IntrinsicElements> =
 type IProps<T extends keyof JSX.IntrinsicElements> = DynamicHtmlElementProps<T> & {
     inputRef?: React.Ref<Element>;
     element?: T;
-    children?: ReactNode | undefined;
+    children?: ReactNode;
     // The kind of button, similar to how Bootstrap works.
     // See available classes for AccessibleButton for options.
     kind?: AccessibleButtonKind | string;

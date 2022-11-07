@@ -171,48 +171,52 @@ const MBeaconBody: React.FC<IBodyProps> = React.forwardRef(({ mxEvent, getRelati
         );
     };
 
+    let map: JSX.Element;
+    if (displayStatus === BeaconDisplayStatus.Active && !isMapDisplayError) {
+        map = <Map
+            id={mapId}
+            centerGeoUri={latestLocationState.uri}
+            onError={setError}
+            onClick={onClick}
+            className="mx_MBeaconBody_map"
+        >
+            {
+                ({ map }) =>
+                    <SmartMarker
+                        map={map}
+                        id={`${mapId}-marker`}
+                        geoUri={latestLocationState.uri}
+                        roomMember={markerRoomMember}
+                        useMemberColor
+                    />
+            }
+        </Map>;
+    } else if (isMapDisplayError) {
+        map = <MapError
+            error={error.message as LocationShareError}
+            onClick={onClick}
+            className={classNames(
+                'mx_MBeaconBody_mapError',
+                // set interactive class when maximised map can be opened
+                { 'mx_MBeaconBody_mapErrorInteractive':
+                        displayStatus === BeaconDisplayStatus.Active,
+                },
+            )}
+            isMinimised
+        />;
+    } else {
+        map = <MapFallback
+            isLoading={displayStatus === BeaconDisplayStatus.Loading}
+            className='mx_MBeaconBody_map mx_MBeaconBody_mapFallback'
+        />;
+    }
+
     return (
         <div
             className='mx_MBeaconBody'
             ref={ref}
         >
-            { (displayStatus === BeaconDisplayStatus.Active && !isMapDisplayError) ?
-                <Map
-                    id={mapId}
-                    centerGeoUri={latestLocationState.uri}
-                    onError={setError}
-                    onClick={onClick}
-                    className="mx_MBeaconBody_map"
-                >
-                    {
-                        ({ map }) =>
-                            <SmartMarker
-                                map={map}
-                                id={`${mapId}-marker`}
-                                geoUri={latestLocationState.uri}
-                                roomMember={markerRoomMember}
-                                useMemberColor
-                            />
-                    }
-                </Map>
-                : isMapDisplayError ?
-                    <MapError
-                        error={error.message as LocationShareError}
-                        onClick={onClick}
-                        className={classNames(
-                            'mx_MBeaconBody_mapError',
-                            // set interactive class when maximised map can be opened
-                            { 'mx_MBeaconBody_mapErrorInteractive':
-                                displayStatus === BeaconDisplayStatus.Active,
-                            },
-                        )}
-                        isMinimised
-                    /> :
-                    <MapFallback
-                        isLoading={displayStatus === BeaconDisplayStatus.Loading}
-                        className='mx_MBeaconBody_map mx_MBeaconBody_mapFallback'
-                    />
-            }
+            { map }
             { isOwnBeacon ?
                 <OwnBeaconStatus
                     className='mx_MBeaconBody_chin'

@@ -39,9 +39,7 @@ export function usersTyping(room: Room, exclude: string[] = []): RoomMember[] {
     const whoIsTyping = [];
 
     const memberKeys = Object.keys(room.currentState.members);
-    for (let i = 0; i < memberKeys.length; ++i) {
-        const userId = memberKeys[i];
-
+    for (const userId of memberKeys) {
         if (room.currentState.members[userId].typing) {
             if (exclude.indexOf(userId) === -1) {
                 whoIsTyping.push(room.currentState.members[userId]);

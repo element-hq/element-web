@@ -608,6 +608,11 @@ const ManageButtons = ({ hierarchy, selected, setSelected, setError }: IManageBu
         };
     }
 
+    let buttonText = _t("Saving...");
+    if (!saving) {
+        buttonText = selectionAllSuggested ? _t("Mark as not suggested") : _t("Mark as suggested");
+    }
+
     return <>
         <Button
             {...props}
@@ -669,10 +674,7 @@ const ManageButtons = ({ hierarchy, selected, setSelected, setError }: IManageBu
             kind="primary_outline"
             disabled={disabled}
         >
-            { saving
-                ? _t("Saving...")
-                : (selectionAllSuggested ? _t("Mark as not suggested") : _t("Mark as suggested"))
-            }
+            { buttonText }
         </Button>
     </>;
 };

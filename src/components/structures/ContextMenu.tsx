@@ -524,16 +524,11 @@ export const alwaysAboveLeftOf = (
     const menuOptions: IPosition & { chevronFace: ChevronFace } = { chevronFace };
 
     const buttonRight = elementRect.right + window.scrollX;
-    const buttonBottom = elementRect.bottom + window.scrollY;
     const buttonTop = elementRect.top + window.scrollY;
     // Align the right edge of the menu to the right edge of the button
     menuOptions.right = UIStore.instance.windowWidth - buttonRight;
-    // Align the menu vertically on whichever side of the button has more space available.
-    if (buttonBottom < UIStore.instance.windowHeight / 2) {
-        menuOptions.top = buttonBottom + vPadding;
-    } else {
-        menuOptions.bottom = (UIStore.instance.windowHeight - buttonTop) + vPadding;
-    }
+    // Align the menu vertically above the menu
+    menuOptions.bottom = (UIStore.instance.windowHeight - buttonTop) + vPadding;
 
     return menuOptions;
 };
