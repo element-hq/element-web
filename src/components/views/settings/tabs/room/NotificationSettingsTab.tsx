@@ -119,7 +119,7 @@ export default class NotificationsSettingsTab extends React.Component<IProps, IS
             type = "audio/ogg";
         }
 
-        const url = await MatrixClientPeg.get().uploadContent(
+        const { content_uri: url } = await MatrixClientPeg.get().uploadContent(
             this.state.uploadedFile, {
                 type,
             },

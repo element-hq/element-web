@@ -1283,8 +1283,6 @@
     "This bridge is managed by <user />.": "This bridge is managed by <user />.",
     "Workspace: <networkLink/>": "Workspace: <networkLink/>",
     "Channel: <channelLink/>": "Channel: <channelLink/>",
-    "Failed to upload profile picture!": "Failed to upload profile picture!",
-    "Upload new:": "Upload new:",
     "No display name": "No display name",
     "Warning!": "Warning!",
     "Changing your password on this homeserver will cause all of your other devices to be signed out. This will delete the message encryption keys stored on them, and may make encrypted chat history unreadable.": "Changing your password on this homeserver will cause all of your other devices to be signed out. This will delete the message encryption keys stored on them, and may make encrypted chat history unreadable.",
