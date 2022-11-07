@@ -35,6 +35,8 @@ import { mkVoiceBroadcastInfoStateEvent } from "../utils/test-utils";
 describe("VoiceBroadcastPlaybacksStore", () => {
     const roomId = "!room:example.com";
     let client: MatrixClient;
+    let userId: string;
+    let deviceId: string;
     let room: Room;
     let infoEvent1: MatrixEvent;
     let infoEvent2: MatrixEvent;
@@ -45,24 +47,31 @@ describe("VoiceBroadcastPlaybacksStore", () => {
 
     beforeEach(() => {
         client = stubClient();
+        userId = client.getUserId() || "";
+        deviceId = client.getDeviceId() || "";
+        mocked(client.relations).mockClear();
+        mocked(client.relations).mockResolvedValue({ events: [] });
+
         room = mkStubRoom(roomId, "test room", client);
-        mocked(client.getRoom).mockImplementation((roomId: string) => {
+        mocked(client.getRoom).mockImplementation((roomId: string): Room | null => {
             if (roomId === room.roomId) {
                 return room;
             }
+
+            return null;
         });
 
         infoEvent1 = mkVoiceBroadcastInfoStateEvent(
             roomId,
             VoiceBroadcastInfoState.Started,
-            client.getUserId(),
-            client.getDeviceId(),
+            userId,
+            deviceId,
         );
         infoEvent2 = mkVoiceBroadcastInfoStateEvent(
             roomId,
             VoiceBroadcastInfoState.Started,
-            client.getUserId(),
-            client.getDeviceId(),
+            userId,
+            deviceId,
         );
         playback1 = new VoiceBroadcastPlayback(infoEvent1, client);
         jest.spyOn(playback1, "off");

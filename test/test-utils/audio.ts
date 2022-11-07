@@ -20,10 +20,7 @@ import { SimpleObservable } from "matrix-widget-api";
 import { Playback, PlaybackState } from "../../src/audio/Playback";
 import { PlaybackClock } from "../../src/audio/PlaybackClock";
 import { UPDATE_EVENT } from "../../src/stores/AsyncStore";
-
-type PublicInterface<T> = {
-    [P in keyof T]: T[P];
-};
+import { PublicInterface } from "../@types/common";
 
 export const createTestPlayback = (): Playback => {
     const eventEmitter = new EventEmitter();

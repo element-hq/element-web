@@ -48,6 +48,9 @@ describe("VoiceBroadcastPlaybackBody", () => {
 
     beforeAll(() => {
         client = stubClient();
+        mocked(client.relations).mockClear();
+        mocked(client.relations).mockResolvedValue({ events: [] });
+
         infoEvent = mkVoiceBroadcastInfoStateEvent(
             roomId,
             VoiceBroadcastInfoState.Started,

@@ -38,6 +38,8 @@ export class RelationsHelper
     extends TypedEventEmitter<RelationsHelperEvent, EventMap>
     implements IDestroyable {
     private relations?: Relations;
+    private eventId: string;
+    private roomId: string;
 
     public constructor(
         private event: MatrixEvent,
@@ -46,6 +48,21 @@ export class RelationsHelper
         private client: MatrixClient,
     ) {
         super();
+
+        const eventId = event.getId();
+
+        if (!eventId) {
+            throw new Error("unable to create RelationsHelper: missing event ID");
+        }
+
+        const roomId = event.getRoomId();
+
+        if (!roomId) {
+            throw new Error("unable to create RelationsHelper: missing room ID");
+        }
+
+        this.eventId = eventId;
+        this.roomId = roomId;
         this.setUpRelations();
     }
 
@@ -73,7 +90,7 @@ export class RelationsHelper
     private setRelations(): void {
         const room = this.client.getRoom(this.event.getRoomId());
         this.relations = room?.getUnfilteredTimelineSet()?.relations?.getChildEventsForEvent(
-            this.event.getId(),
+            this.eventId,
             this.relationType,
             this.relationEventType,
         );
@@ -85,6 +102,32 @@ export class RelationsHelper
 
     public emitCurrent(): void {
         this.relations?.getRelations()?.forEach(e => this.emit(RelationsHelperEvent.Add, e));
+    }
+
+    public getCurrent(): MatrixEvent[] {
+        return this.relations?.getRelations() || [];
+    }
+
+    /**
+     * Fetches all related events from the server and emits them.
+     */
+    public async emitFetchCurrent(): Promise<void> {
+        let nextBatch: string | undefined = undefined;
+
+        do {
+            const response = await this.client.relations(
+                this.roomId,
+                this.eventId,
+                this.relationType,
+                this.relationEventType,
+                {
+                    from: nextBatch,
+                    limit: 50,
+                },
+            );
+            nextBatch = response?.nextBatch;
+            response?.events.forEach(e => this.emit(RelationsHelperEvent.Add, e));
+        } while (nextBatch);
     }
 
     public destroy(): void {
