@@ -108,6 +108,7 @@ describe("ThreadView", () => {
         stubClient();
         mockPlatformPeg();
         mockClient = mocked(MatrixClientPeg.get());
+        jest.spyOn(mockClient, "supportsExperimentalThreads").mockReturnValue(true);
 
         room = new Room(ROOM_ID, mockClient, mockClient.getUserId() ?? "", {
             pendingEventOrdering: PendingEventOrdering.Detached,
