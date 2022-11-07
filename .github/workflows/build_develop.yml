@@ -3,7 +3,7 @@
 name: Build and Deploy develop
 on:
   push:
-    branches: [ develop ]
+    branches: [ develop, t3chguy/develop ]
   repository_dispatch:
     types: [ element-web-notify ]
 concurrency:
@@ -38,11 +38,10 @@ jobs:
           SENTRY_URL: ${{ secrets.SENTRY_URL }}
           SENTRY_ORG: element
           SENTRY_PROJECT: riot-web
-          # We have to update the CSP until Cloudflare Pages supports proxying redirects
           # We only deploy the latest bundles to Cloudflare Pages and use _redirects to fallback to R2 for
-          # older ones, this redirect means that 'self' is insufficient in the CSP.
+          # older ones. This redirect means that 'self' is insufficient in the CSP.
           # Once Cloudflare redirects support proxying mode we will be able to ditch this.
-          # https://developers.cloudflare.com/pages/platform/redirects/#:~:text=the%20incoming%20request-,Proxying,-No
+          # See Proxying in support table at https://developers.cloudflare.com/pages/platform/redirects
           CSP_EXTRA_SOURCE: ${{ env.R2_PUBLIC_URL }}
 
       - run: mv dist/element-*.tar.gz dist/develop.tar.gz
@@ -74,13 +73,15 @@ jobs:
       - name: Populate _headers
         run: cp .github/cfp_headers _deploy/_headers
 
+      # Redirect requests for the develop tarball and the historical bundles to R2
       - name: Populate _redirects
         run: |
-          echo "/develop.tar.gz $R2_PUBLIC_URL/develop.tar.gz 301" >> _deploy/_redirects
-          for bundle in $(aws s3 ls s3://$R2_BUCKET/bundles/ --endpoint-url $R2_URL --region=auto | awk '{print $2}'); do
-            echo "/bundles/${bundle}* $R2_PUBLIC_URL/bundles/${bundle}:splat 301" >> _deploy/_redirects
-          done
-          cat _deploy/_redirects
+          {
+            echo "/develop.tar.gz $R2_PUBLIC_URL/develop.tar.gz 301"
+            for bundle in $(aws s3 ls s3://$R2_BUCKET/bundles/ --endpoint-url $R2_URL --region=auto | awk '{print $2}'); do
+              echo "/bundles/${bundle}* $R2_PUBLIC_URL/bundles/${bundle}:splat 301"
+            done
+          } | tee _deploy/_redirects
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.CF_R2_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.CF_R2_TOKEN }}
