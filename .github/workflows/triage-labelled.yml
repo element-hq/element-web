@@ -77,12 +77,12 @@ jobs:
           headers: '{"GraphQL-Features": "projects_next_graphql"}'
           query: |
             mutation add_to_project($projectid:ID!,$contentid:ID!) {
-              addProjectNextItem(input:{projectId:$projectid contentId:$contentid}) {
-                projectNextItem {
+              addProjectV2ItemById(input: {projectId: $projectid contentId: $contentid}) {
+                item {
                   id
+                  }
                 }
               }
-            }
           projectid: ${{ env.PROJECT_ID }}
           contentid: ${{ github.event.issue.node_id }}
         env:
@@ -101,12 +101,12 @@ jobs:
           headers: '{"GraphQL-Features": "projects_next_graphql"}'
           query: |
             mutation add_to_project($projectid:ID!,$contentid:ID!) {
-              addProjectNextItem(input:{projectId:$projectid contentId:$contentid}) {
-                projectNextItem {
+              addProjectV2ItemById(input: {projectId: $projectid contentId: $contentid}) {
+                item {
                   id
+                  }
                 }
               }
-            }
           projectid: ${{ env.PROJECT_ID }}
           contentid: ${{ github.event.issue.node_id }}
         env:
@@ -129,12 +129,12 @@ jobs:
           headers: '{"GraphQL-Features": "projects_next_graphql"}'
           query: |
             mutation add_to_project($projectid:ID!,$contentid:ID!) {
-              addProjectNextItem(input:{projectId:$projectid contentId:$contentid}) {
-                projectNextItem {
+              addProjectV2ItemById(input: {projectId: $projectid contentId: $contentid}) {
+                item {
                   id
+                  }
                 }
               }
-            }
           projectid: ${{ env.PROJECT_ID }}
           contentid: ${{ github.event.issue.node_id }}
         env:
@@ -152,12 +152,12 @@ jobs:
           headers: '{"GraphQL-Features": "projects_next_graphql"}'
           query: |
             mutation add_to_project($projectid:ID!,$contentid:ID!) {
-              addProjectNextItem(input:{projectId:$projectid contentId:$contentid}) {
-                projectNextItem {
+              addProjectV2ItemById(input: {projectId: $projectid contentId: $contentid}) {
+                item {
                   id
+                  }
                 }
               }
-            }
           projectid: ${{ env.PROJECT_ID }}
           contentid: ${{ github.event.issue.node_id }}
         env:
@@ -175,12 +175,12 @@ jobs:
           headers: '{"GraphQL-Features": "projects_next_graphql"}'
           query: |
             mutation add_to_project($projectid:ID!,$contentid:ID!) {
-              addProjectNextItem(input:{projectId:$projectid contentId:$contentid}) {
-                projectNextItem {
+              addProjectV2ItemById(input: {projectId: $projectid contentId: $contentid}) {
+                item {
                   id
+                  }
                 }
               }
-            }
           projectid: ${{ env.PROJECT_ID }}
           contentid: ${{ github.event.issue.node_id }}
         env:
@@ -198,12 +198,12 @@ jobs:
           headers: '{"GraphQL-Features": "projects_next_graphql"}'
           query: |
             mutation add_to_project($projectid:ID!,$contentid:ID!) {
-              addProjectNextItem(input:{projectId:$projectid contentId:$contentid}) {
-                projectNextItem {
+              addProjectV2ItemById(input: {projectId: $projectid contentId: $contentid}) {
+                item {
                   id
+                  }
                 }
               }
-            }
           projectid: ${{ env.PROJECT_ID }}
           contentid: ${{ github.event.issue.node_id }}
         env:
@@ -221,12 +221,12 @@ jobs:
           headers: '{"GraphQL-Features": "projects_next_graphql"}'
           query: |
             mutation add_to_project($projectid:ID!,$contentid:ID!) {
-              addProjectNextItem(input:{projectId:$projectid contentId:$contentid}) {
-                projectNextItem {
+              addProjectV2ItemById(input: {projectId: $projectid contentId: $contentid}) {
+                item {
                   id
+                  }
                 }
               }
-            }
           projectid: ${{ env.PROJECT_ID }}
           contentid: ${{ github.event.issue.node_id }}
         env:
@@ -244,12 +244,12 @@ jobs:
           headers: '{"GraphQL-Features": "projects_next_graphql"}'
           query: |
             mutation add_to_project($projectid:ID!,$contentid:ID!) {
-              addProjectNextItem(input:{projectId:$projectid contentId:$contentid}) {
-                projectNextItem {
+              addProjectV2ItemById(input: {projectId: $projectid contentId: $contentid}) {
+                item {
                   id
+                  }
                 }
               }
-            }
           projectid: ${{ env.PROJECT_ID }}
           contentid: ${{ github.event.issue.node_id }}
         env:
