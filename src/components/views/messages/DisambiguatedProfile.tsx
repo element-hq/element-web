@@ -23,7 +23,7 @@ import { getUserNameColorClass } from '../../../utils/FormattingUtils';
 import UserIdentifier from "../../../customisations/UserIdentifier";
 
 interface IProps {
-    member?: RoomMember;
+    member?: RoomMember | null;
     fallbackName: string;
     onClick?(): void;
     colored?: boolean;

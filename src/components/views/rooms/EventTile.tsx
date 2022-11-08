@@ -1311,7 +1311,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                 ]);
             }
             case TimelineRenderingType.Thread: {
-                const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
                 return React.createElement(this.props.as || "li", {
                     "ref": this.ref,
                     "className": classes,
@@ -1325,12 +1324,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                     "onMouseEnter": () => this.setState({ hover: true }),
                     "onMouseLeave": () => this.setState({ hover: false }),
                 }, [
-                    <div className="mx_EventTile_roomName" key="mx_EventTile_roomName">
-                        <RoomAvatar room={room} width={28} height={28} />
-                        <a href={permalink} onClick={this.onPermalinkClicked}>
-                            { room ? room.name : '' }
-                        </a>
-                    </div>,
                     <div className="mx_EventTile_senderDetails" key="mx_EventTile_senderDetails">
                         { avatar }
                         { sender }
