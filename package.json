@@ -92,7 +92,7 @@
     "lodash": "^4.17.20",
     "maplibre-gl": "^1.15.2",
     "matrix-encrypt-attachment": "^1.0.3",
-    "matrix-events-sdk": "^0.0.1-beta.7",
+    "matrix-events-sdk": "0.0.1",
     "matrix-js-sdk": "github:matrix-org/matrix-js-sdk#develop",
     "matrix-widget-api": "^1.1.1",
     "minimist": "^1.2.5",
