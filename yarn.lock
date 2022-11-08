@@ -8265,11 +8265,6 @@ matrix-events-sdk@0.0.1:
   resolved "https://registry.yarnpkg.com/matrix-events-sdk/-/matrix-events-sdk-0.0.1.tgz#c8c38911e2cb29023b0bbac8d6f32e0de2c957dd"
   integrity sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==
 
-matrix-events-sdk@^0.0.1-beta.7:
-  version "0.0.1-beta.7"
-  resolved "https://registry.yarnpkg.com/matrix-events-sdk/-/matrix-events-sdk-0.0.1-beta.7.tgz#5ffe45eba1f67cc8d7c2377736c728b322524934"
-  integrity sha512-9jl4wtWanUFSy2sr2lCjErN/oC8KTAtaeaozJtrgot1JiQcEI4Rda9OLgQ7nLKaqb4Z/QUx/fR3XpDzm5Jy1JA==
-
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
   version "21.1.0"
   resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/c6ee258789c9e01d328b5d9158b5b372e3a0da82"
@@ -8335,7 +8330,7 @@ matrix-mock-request@^2.5.0:
     lodash "^4.17.20"
     maplibre-gl "^1.15.2"
     matrix-encrypt-attachment "^1.0.3"
-    matrix-events-sdk "^0.0.1-beta.7"
+    matrix-events-sdk "0.0.1"
     matrix-js-sdk "github:matrix-org/matrix-js-sdk#develop"
     matrix-widget-api "^1.1.1"
     minimist "^1.2.5"
