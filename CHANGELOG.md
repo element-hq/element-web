@@ -1,3 +1,10 @@
+Changes in [3.60.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.60.0-rc.2) (2022-11-08)
+===============================================================================================================
+
+## 🐛 Bug Fixes
+ * Fix regressions around media uploads failing and causing soft crashes ([\#9549](https://github.com/matrix-org/matrix-react-sdk/pull/9549)). Fixes matrix-org/element-web-rageshakes#16831, matrix-org/element-web-rageshakes#16824 matrix-org/element-web-rageshakes#16810 and vector-im/element-web#23641.
+ * Fix /myroomavatar slash command ([\#9536](https://github.com/matrix-org/matrix-react-sdk/pull/9536)). Fixes matrix-org/synapse#14321.
+
 Changes in [3.60.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.60.0-rc.1) (2022-11-01)
 ===============================================================================================================
 
