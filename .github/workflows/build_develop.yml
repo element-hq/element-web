@@ -39,7 +39,8 @@ jobs:
           SENTRY_ORG: element
           SENTRY_PROJECT: riot-web
           # We only deploy the latest bundles to Cloudflare Pages and use _redirects to fallback to R2 for
-          # older ones. This redirect means that 'self' is insufficient in the CSP.
+          # older ones. This redirect means that 'self' is insufficient in the CSP,
+          # and we have to add the R2 URL.
           # Once Cloudflare redirects support proxying mode we will be able to ditch this.
           # See Proxying in support table at https://developers.cloudflare.com/pages/platform/redirects
           CSP_EXTRA_SOURCE: ${{ env.R2_PUBLIC_URL }}
