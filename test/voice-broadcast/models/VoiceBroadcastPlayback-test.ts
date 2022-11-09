@@ -49,6 +49,7 @@ describe("VoiceBroadcastPlayback", () => {
     let onStateChanged: (state: VoiceBroadcastPlaybackState) => void;
     let chunk1Event: MatrixEvent;
     let chunk2Event: MatrixEvent;
+    let chunk2BEvent: MatrixEvent;
     let chunk3Event: MatrixEvent;
     const chunk1Length = 2300;
     const chunk2Length = 4200;
@@ -135,6 +136,9 @@ describe("VoiceBroadcastPlayback", () => {
 
         chunk1Event = mkVoiceBroadcastChunkEvent(userId, roomId, chunk1Length, 1);
         chunk2Event = mkVoiceBroadcastChunkEvent(userId, roomId, chunk2Length, 2);
+        chunk2Event.setTxnId("tx-id-1");
+        chunk2BEvent = mkVoiceBroadcastChunkEvent(userId, roomId, chunk2Length, 2);
+        chunk2BEvent.setTxnId("tx-id-1");
         chunk3Event = mkVoiceBroadcastChunkEvent(userId, roomId, chunk3Length, 3);
 
         chunk1Helper = mkChunkHelper(chunk1Data);
@@ -238,6 +242,21 @@ describe("VoiceBroadcastPlayback", () => {
             setUpChunkEvents([chunk2Event, chunk1Event]);
             infoEvent = mkInfoEvent(VoiceBroadcastInfoState.Resumed);
             playback = await mkPlayback();
+        });
+
+        it("durationSeconds should have the length of the known chunks", () => {
+            expect(playback.durationSeconds).toEqual(6.5);
+        });
+
+        describe("and an event with the same transaction Id occurs", () => {
+            beforeEach(() => {
+                // @ts-ignore
+                playback.chunkRelationHelper.emit(RelationsHelperEvent.Add, chunk2BEvent);
+            });
+
+            it("durationSeconds should not change", () => {
+                expect(playback.durationSeconds).toEqual(6.5);
+            });
         });
 
         describe("and calling start", () => {
