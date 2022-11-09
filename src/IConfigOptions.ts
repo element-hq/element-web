@@ -183,6 +183,12 @@ export interface IConfigOptions {
         // length per voice chunk in seconds
         chunk_length?: number;
     };
+
+    user_notice?: {
+        title: string;
+        description: string;
+        show_once?: boolean;
+    };
 }
 
 export interface ISsoRedirectOptions {
