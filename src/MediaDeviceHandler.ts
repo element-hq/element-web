@@ -88,6 +88,16 @@ export default class MediaDeviceHandler extends EventEmitter {
 
         await MatrixClientPeg.get().getMediaHandler().setAudioInput(audioDeviceId);
         await MatrixClientPeg.get().getMediaHandler().setVideoInput(videoDeviceId);
+
+        await MediaDeviceHandler.updateAudioSettings();
+    }
+
+    private static async updateAudioSettings(): Promise<void> {
+        await MatrixClientPeg.get().getMediaHandler().setAudioSettings({
+            autoGainControl: MediaDeviceHandler.getAudioAutoGainControl(),
+            echoCancellation: MediaDeviceHandler.getAudioEchoCancellation(),
+            noiseSuppression: MediaDeviceHandler.getAudioNoiseSuppression(),
+        });
     }
 
     public setAudioOutput(deviceId: string): void {
@@ -123,6 +133,21 @@ export default class MediaDeviceHandler extends EventEmitter {
         }
     }
 
+    public static async setAudioAutoGainControl(value: boolean): Promise<void> {
+        await SettingsStore.setValue("webrtc_audio_autoGainControl", null, SettingLevel.DEVICE, value);
+        await MediaDeviceHandler.updateAudioSettings();
+    }
+
+    public static async setAudioEchoCancellation(value: boolean): Promise<void> {
+        await SettingsStore.setValue("webrtc_audio_echoCancellation", null, SettingLevel.DEVICE, value);
+        await MediaDeviceHandler.updateAudioSettings();
+    }
+
+    public static async setAudioNoiseSuppression(value: boolean): Promise<void> {
+        await SettingsStore.setValue("webrtc_audio_noiseSuppression", null, SettingLevel.DEVICE, value);
+        await MediaDeviceHandler.updateAudioSettings();
+    }
+
     public static getAudioOutput(): string {
         return SettingsStore.getValueAt(SettingLevel.DEVICE, "webrtc_audiooutput");
     }
@@ -133,6 +158,18 @@ export default class MediaDeviceHandler extends EventEmitter {
 
     public static getVideoInput(): string {
         return SettingsStore.getValueAt(SettingLevel.DEVICE, "webrtc_videoinput");
+    }
+
+    public static getAudioAutoGainControl(): boolean {
+        return SettingsStore.getValue("webrtc_audio_autoGainControl");
+    }
+
+    public static getAudioEchoCancellation(): boolean {
+        return SettingsStore.getValue("webrtc_audio_echoCancellation");
+    }
+
+    public static getAudioNoiseSuppression(): boolean {
+        return SettingsStore.getValue("webrtc_audio_noiseSuppression");
     }
 
     /**

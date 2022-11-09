@@ -185,6 +185,7 @@ export function createTestClient(): MatrixClient {
         getMediaHandler: jest.fn().mockReturnValue({
             setVideoInput: jest.fn(),
             setAudioInput: jest.fn(),
+            setAudioSettings: jest.fn(),
         } as unknown as MediaHandler),
         uploadContent: jest.fn(),
         getEventMapper: () => (opts) => new MatrixEvent(opts),
