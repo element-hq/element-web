@@ -20,6 +20,8 @@ import { mount } from "enzyme";
 
 import ContextMenu, { ChevronFace } from "../../../../src/components/structures/ContextMenu";
 import UIStore from "../../../../src/stores/UIStore";
+import Modal from "../../../../src/Modal";
+import BaseDialog from "../../../../src/components/views/dialogs/BaseDialog";
 
 describe("<ContextMenu />", () => {
     // Hardcode window and menu dimensions
@@ -140,5 +142,46 @@ describe("<ContextMenu />", () => {
         it("positions the chevron correctly", () => {
             expect(actualChevronOffset).toEqual(targetChevronOffset + targetX - actualX);
         });
+    });
+
+    it("should automatically close when a modal is opened", () => {
+        const targetX = -50;
+        const onFinished = jest.fn();
+
+        mount(
+            <ContextMenu
+                top={0}
+                right={windowSize - targetX - menuSize}
+                chevronFace={ChevronFace.Bottom}
+                onFinished={onFinished}
+                chevronOffset={targetChevronOffset}
+            />,
+        );
+
+        expect(onFinished).not.toHaveBeenCalled();
+        Modal.createDialog(BaseDialog);
+        expect(onFinished).toHaveBeenCalled();
+    });
+
+    it("should not automatically close when a modal is opened under the existing one", () => {
+        const targetX = -50;
+        const onFinished = jest.fn();
+
+        Modal.createDialog(BaseDialog);
+        mount(
+            <ContextMenu
+                top={0}
+                right={windowSize - targetX - menuSize}
+                chevronFace={ChevronFace.Bottom}
+                onFinished={onFinished}
+                chevronOffset={targetChevronOffset}
+            />,
+        );
+
+        expect(onFinished).not.toHaveBeenCalled();
+        Modal.createDialog(BaseDialog, {}, "", false, true);
+        expect(onFinished).not.toHaveBeenCalled();
+        Modal.appendDialog(BaseDialog);
+        expect(onFinished).not.toHaveBeenCalled();
     });
 });

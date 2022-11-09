@@ -19,6 +19,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 import { defer, sleep } from "matrix-js-sdk/src/utils";
+import { TypedEventEmitter } from 'matrix-js-sdk/src/models/typed-event-emitter';
 
 import dis from './dispatcher/dispatcher';
 import AsyncWrapper from './AsyncWrapper';
@@ -54,7 +55,15 @@ interface IOptions<T extends any[]> {
 
 type ParametersWithoutFirst<T extends (...args: any) => any> = T extends (a: any, ...args: infer P) => any ? P : never;
 
-export class ModalManager {
+export enum ModalManagerEvent {
+    Opened = "opened",
+}
+
+type HandlerMap = {
+    [ModalManagerEvent.Opened]: () => void;
+};
+
+export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMap> {
     private counter = 0;
     // The modal to prioritise over all others. If this is set, only show
     // this modal. Remove all other modals from the stack when this modal
@@ -244,6 +253,7 @@ export class ModalManager {
         isStaticModal = false,
         options: IOptions<T> = {},
     ): IHandle<T> {
+        const beforeModal = this.getCurrentModal();
         const { modal, closeDialog, onFinishedProm } = this.buildModal<T>(prom, props, className, options);
         if (isPriorityModal) {
             // XXX: This is destructive
@@ -256,6 +266,8 @@ export class ModalManager {
         }
 
         this.reRender();
+        this.emitIfChanged(beforeModal);
+
         return {
             close: closeDialog,
             finished: onFinishedProm,
@@ -267,14 +279,24 @@ export class ModalManager {
         props?: IProps<T>,
         className?: string,
     ): IHandle<T> {
+        const beforeModal = this.getCurrentModal();
         const { modal, closeDialog, onFinishedProm } = this.buildModal<T>(prom, props, className, {});
 
         this.modals.push(modal);
+
         this.reRender();
+        this.emitIfChanged(beforeModal);
+
         return {
             close: closeDialog,
             finished: onFinishedProm,
         };
+    }
+
+    private emitIfChanged(beforeModal?: IModal<any>): void {
+        if (beforeModal !== this.getCurrentModal()) {
+            this.emit(ModalManagerEvent.Opened);
+        }
     }
 
     private onBackgroundClick = () => {

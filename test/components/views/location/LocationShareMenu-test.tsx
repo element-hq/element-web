@@ -69,6 +69,9 @@ jest.mock('../../../../src/stores/OwnProfileStore', () => ({
 
 jest.mock('../../../../src/Modal', () => ({
     createDialog: jest.fn(),
+    on: jest.fn(),
+    off: jest.fn(),
+    ModalManagerEvent: { Opened: "opened" },
 }));
 
 describe('<LocationShareMenu />', () => {
