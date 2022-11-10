@@ -48,12 +48,10 @@ export class LazyValue<T> {
         if (this.prom) return this.prom;
         this.prom = this.getFn();
 
-        // Fork the promise chain to avoid accidentally making it return undefined always.
-        this.prom.then(v => {
+        return this.prom.then(v => {
             this.val = v;
             this.done = true;
+            return v;
         });
-
-        return this.prom;
     }
 }

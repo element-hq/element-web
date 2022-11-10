@@ -16,10 +16,27 @@ limitations under the License.
 
 // Pull in the encryption lib so that we can decrypt attachments.
 import encrypt from 'matrix-encrypt-attachment';
+import { parseErrorResponse } from 'matrix-js-sdk/src/http-api';
 
 import { mediaFromContent } from "../customisations/Media";
 import { IEncryptedFile, IMediaEventInfo } from "../customisations/models/IMediaEventContent";
 import { getBlobSafeMimeType } from "./blobs";
+
+export class DownloadError extends Error {
+    constructor(e) {
+        super(e.message);
+        this.name = "DownloadError";
+        this.stack = e.stack;
+    }
+}
+
+export class DecryptError extends Error {
+    constructor(e) {
+        super(e.message);
+        this.name = "DecryptError";
+        this.stack = e.stack;
+    }
+}
 
 /**
  * Decrypt a file attached to a matrix event.
@@ -30,19 +47,27 @@ import { getBlobSafeMimeType } from "./blobs";
  * @param {IMediaEventInfo} info The info parameter taken from the matrix event.
  * @returns {Promise<Blob>} Resolves to a Blob of the file.
  */
-export function decryptFile(
+export async function decryptFile(
     file: IEncryptedFile,
     info?: IMediaEventInfo,
 ): Promise<Blob> {
     const media = mediaFromContent({ file });
-    // Download the encrypted file as an array buffer.
-    return media.downloadSource().then((response) => {
-        return response.arrayBuffer();
-    }).then((responseData) => {
-        // Decrypt the array buffer using the information taken from
-        // the event content.
-        return encrypt.decryptAttachment(responseData, file);
-    }).then((dataArray) => {
+
+    let responseData: ArrayBuffer;
+    try {
+        // Download the encrypted file as an array buffer.
+        const response = await media.downloadSource();
+        if (!response.ok) {
+            throw parseErrorResponse(response, await response.text());
+        }
+        responseData = await response.arrayBuffer();
+    } catch (e) {
+        throw new DownloadError(e);
+    }
+
+    try {
+        // Decrypt the array buffer using the information taken from the event content.
+        const dataArray = await encrypt.decryptAttachment(responseData, file);
         // Turn the array into a Blob and give it the correct MIME-type.
 
         // IMPORTANT: we must not allow scriptable mime-types into Blobs otherwise
@@ -53,5 +78,7 @@ export function decryptFile(
         mimetype = getBlobSafeMimeType(mimetype);
 
         return new Blob([dataArray], { type: mimetype });
-    });
+    } catch (e) {
+        throw new DecryptError(e);
+    }
 }

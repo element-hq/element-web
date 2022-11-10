@@ -39,6 +39,7 @@ import { blobIsAnimated, mayBeAnimated } from '../../../utils/Image';
 import { presentableTextForFile } from "../../../utils/FileUtils";
 import { createReconnectedListener } from '../../../utils/connection';
 import MediaProcessingError from './shared/MediaProcessingError';
+import { DecryptError, DownloadError } from "../../../utils/DecryptFile";
 
 enum Placeholder {
     NoImage,
@@ -258,7 +259,15 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
                 ]));
             } catch (error) {
                 if (this.unmounted) return;
-                logger.warn("Unable to decrypt attachment: ", error);
+
+                if (error instanceof DecryptError) {
+                    logger.error("Unable to decrypt attachment: ", error);
+                } else if (error instanceof DownloadError) {
+                    logger.error("Unable to download attachment to decrypt it: ", error);
+                } else {
+                    logger.error("Error encountered when downloading encrypted attachment: ", error);
+                }
+
                 // Set a placeholder image when we can't decrypt the image.
                 this.setState({ error });
             }
@@ -557,9 +566,16 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         const content = this.props.mxEvent.getContent<IMediaEventContent>();
 
         if (this.state.error) {
+            let errorText = _t("Unable to show image due to error");
+            if (this.state.error instanceof DecryptError) {
+                errorText = _t("Error decrypting image");
+            } else if (this.state.error instanceof DownloadError) {
+                errorText = _t("Error downloading image");
+            }
+
             return (
                 <MediaProcessingError className="mx_MImageBody">
-                    { _t("Error decrypting image") }
+                    { errorText }
                 </MediaProcessingError>
             );
         }
