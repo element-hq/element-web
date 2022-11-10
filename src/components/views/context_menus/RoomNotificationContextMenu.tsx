@@ -75,7 +75,7 @@ export const RoomNotificationContextMenu = ({ room, onFinished, ...props }: IPro
     />;
 
     const muteOption: JSX.Element = <IconizedContextMenuRadio
-        label={_t("None")}
+        label={_t("Off")}
         active={notificationState === RoomNotifState.Mute}
         iconClassName="mx_RoomNotificationContextMenu_iconBellCrossed"
         onClick={wrapHandler(() => setNotificationState(RoomNotifState.Mute))}
