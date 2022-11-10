@@ -128,17 +128,32 @@ export async function leaveRoomBehaviour(roomId: string, retry = true, spinner =
         return;
     }
 
-    if (!isMetaSpace(SpaceStore.instance.activeSpace) &&
-        SpaceStore.instance.activeSpace !== roomId &&
-        SdkContextClass.instance.roomViewStore.getRoomId() === roomId
-    ) {
-        dis.dispatch<ViewRoomPayload>({
-            action: Action.ViewRoom,
-            room_id: SpaceStore.instance.activeSpace,
-            metricsTrigger: undefined, // other
-        });
-    } else {
-        dis.dispatch<ViewHomePagePayload>({ action: Action.ViewHomePage });
+    if (SdkContextClass.instance.roomViewStore.getRoomId() === roomId) {
+        // We were viewing the room that was just left. In order to avoid
+        // accidentally viewing the next room in the list and clearing its
+        // notifications, switch to a neutral ground such as the home page or
+        // space landing page.
+        if (isMetaSpace(SpaceStore.instance.activeSpace)) {
+            dis.dispatch<ViewHomePagePayload>({ action: Action.ViewHomePage });
+        } else if (SpaceStore.instance.activeSpace === roomId) {
+            // View the parent space, if there is one
+            const parent = SpaceStore.instance.getCanonicalParent(roomId);
+            if (parent !== null) {
+                dis.dispatch<ViewRoomPayload>({
+                    action: Action.ViewRoom,
+                    room_id: parent.roomId,
+                    metricsTrigger: undefined, // other
+                });
+            } else {
+                dis.dispatch<ViewHomePagePayload>({ action: Action.ViewHomePage });
+            }
+        } else {
+            dis.dispatch<ViewRoomPayload>({
+                action: Action.ViewRoom,
+                room_id: SpaceStore.instance.activeSpace,
+                metricsTrigger: undefined, // other
+            });
+        }
     }
 }
 
