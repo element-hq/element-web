@@ -35,6 +35,7 @@ interface VoiceBroadcastRecordingPipProps {
 export const VoiceBroadcastRecordingPip: React.FC<VoiceBroadcastRecordingPipProps> = ({ recording }) => {
     const {
         live,
+        timeLeft,
         recordingState,
         room,
         sender,
@@ -58,6 +59,7 @@ export const VoiceBroadcastRecordingPip: React.FC<VoiceBroadcastRecordingPipProp
             live={live}
             sender={sender}
             room={room}
+            timeLeft={timeLeft}
         />
         <hr className="mx_VoiceBroadcastBody_divider" />
         <div className="mx_VoiceBroadcastBody_controls">

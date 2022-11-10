@@ -65,6 +65,13 @@ export const useVoiceBroadcastRecording = (recording: VoiceBroadcastRecording) =
         },
     );
 
+    const [timeLeft, setTimeLeft] = useState(recording.getTimeLeft());
+    useTypedEventEmitter(
+        recording,
+        VoiceBroadcastRecordingEvent.TimeLeftChanged,
+        setTimeLeft,
+    );
+
     const live = [
         VoiceBroadcastInfoState.Started,
         VoiceBroadcastInfoState.Paused,
@@ -73,6 +80,7 @@ export const useVoiceBroadcastRecording = (recording: VoiceBroadcastRecording) =
 
     return {
         live,
+        timeLeft,
         recordingState,
         room,
         sender: recording.infoEvent.sender,

@@ -18,20 +18,26 @@ import React, { HTMLProps } from "react";
 
 import { formatSeconds } from "../../../DateUtils";
 
-interface IProps extends Pick<HTMLProps<HTMLSpanElement>, "aria-live" | "role"> {
+interface Props extends Pick<HTMLProps<HTMLSpanElement>, "aria-live" | "role"> {
     seconds: number;
+    formatFn?: (seconds: number) => string;
 }
 
 /**
- * Simply converts seconds into minutes and seconds. Note that hours will not be
- * displayed, making it possible to see "82:29".
+ * Simply converts seconds using formatFn.
+ * Defaulting to formatSeconds().
+ * Note that in this case hours will not be displayed, making it possible to see "82:29".
  */
-export default class Clock extends React.Component<IProps> {
-    public constructor(props) {
+export default class Clock extends React.Component<Props> {
+    public static defaultProps = {
+        formatFn: formatSeconds,
+    };
+
+    public constructor(props: Props) {
         super(props);
     }
 
-    public shouldComponentUpdate(nextProps: Readonly<IProps>): boolean {
+    public shouldComponentUpdate(nextProps: Readonly<Props>): boolean {
         const currentFloor = Math.floor(this.props.seconds);
         const nextFloor = Math.floor(nextProps.seconds);
         return currentFloor !== nextFloor;
@@ -39,7 +45,7 @@ export default class Clock extends React.Component<IProps> {
 
     public render() {
         return <span aria-live={this.props["aria-live"]} role={this.props.role} className='mx_Clock'>
-            { formatSeconds(this.props.seconds) }
+            { this.props.formatFn(this.props.seconds) }
         </span>;
     }
 }

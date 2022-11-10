@@ -171,7 +171,9 @@ export function createTestClient(): MatrixClient {
         setPusher: jest.fn().mockResolvedValue(undefined),
         setPushRuleEnabled: jest.fn().mockResolvedValue(undefined),
         setPushRuleActions: jest.fn().mockResolvedValue(undefined),
-        relations: jest.fn().mockRejectedValue(undefined),
+        relations: jest.fn().mockResolvedValue({
+            events: [],
+        }),
         isCryptoEnabled: jest.fn().mockReturnValue(false),
         hasLazyLoadMembersEnabled: jest.fn().mockReturnValue(false),
         isInitialSyncComplete: jest.fn().mockReturnValue(true),

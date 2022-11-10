@@ -62,6 +62,10 @@ export class VoiceBroadcastChunkEvents {
         }, 0);
     }
 
+    public getLengthSeconds(): number {
+        return this.getLength() / 1000;
+    }
+
     /**
      * Returns the accumulated length to (excl.) a chunk event.
      */

@@ -182,6 +182,8 @@ export interface IConfigOptions {
     voice_broadcast?: {
         // length per voice chunk in seconds
         chunk_length?: number;
+        // max voice broadcast length in seconds
+        max_length?: number;
     };
 
     user_notice?: {

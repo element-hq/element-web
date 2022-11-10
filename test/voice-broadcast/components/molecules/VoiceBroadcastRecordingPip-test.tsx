@@ -37,7 +37,16 @@ jest.mock("../../../../src/components/views/avatars/RoomAvatar", () => ({
     }),
 }));
 
-jest.mock("../../../../src/audio/VoiceRecording");
+// mock VoiceRecording because it contains all the audio APIs
+jest.mock("../../../../src/audio/VoiceRecording", () => ({
+    VoiceRecording: jest.fn().mockReturnValue({
+        disableMaxLength: jest.fn(),
+        liveData: {
+            onUpdate: jest.fn(),
+        },
+        start: jest.fn(),
+    }),
+}));
 
 describe("VoiceBroadcastRecordingPip", () => {
     const roomId = "!room:example.com";

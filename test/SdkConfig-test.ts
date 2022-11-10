@@ -27,14 +27,16 @@ describe("SdkConfig", () => {
         beforeEach(() => {
             SdkConfig.put({
                 voice_broadcast: {
-                    chunk_length: 1337,
+                    chunk_length: 42,
+                    max_length: 1337,
                 },
             });
         });
 
         it("should return the custom config", () => {
             const customConfig = JSON.parse(JSON.stringify(DEFAULTS));
-            customConfig.voice_broadcast.chunk_length = 1337;
+            customConfig.voice_broadcast.chunk_length = 42;
+            customConfig.voice_broadcast.max_length = 1337;
             expect(SdkConfig.get()).toEqual(customConfig);
         });
     });

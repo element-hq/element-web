@@ -32,6 +32,18 @@ exports[`VoiceBroadcastRecordingPip when rendering a paused recording should ren
             @userId:matrix.org
           </span>
         </div>
+        <div
+          class="mx_VoiceBroadcastHeader_line"
+        >
+          <div
+            class="mx_Icon mx_Icon_16"
+          />
+          <span
+            class="mx_Clock"
+          >
+            4h 0m 0s left
+          </span>
+        </div>
       </div>
       <div
         class="mx_LiveBadge"
@@ -103,6 +115,18 @@ exports[`VoiceBroadcastRecordingPip when rendering a started recording should re
           />
           <span>
             @userId:matrix.org
+          </span>
+        </div>
+        <div
+          class="mx_VoiceBroadcastHeader_line"
+        >
+          <div
+            class="mx_Icon mx_Icon_16"
+          />
+          <span
+            class="mx_Clock"
+          >
+            4h 0m 0s left
           </span>
         </div>
       </div>

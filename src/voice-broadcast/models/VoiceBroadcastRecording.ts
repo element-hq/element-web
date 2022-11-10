@@ -15,12 +15,20 @@ limitations under the License.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
-import { MatrixClient, MatrixEvent, MatrixEventEvent, RelationType } from "matrix-js-sdk/src/matrix";
+import {
+    EventType,
+    MatrixClient,
+    MatrixEvent,
+    MatrixEventEvent,
+    MsgType,
+    RelationType,
+} from "matrix-js-sdk/src/matrix";
 import { TypedEventEmitter } from "matrix-js-sdk/src/models/typed-event-emitter";
 
 import {
     ChunkRecordedPayload,
     createVoiceBroadcastRecorder,
+    getMaxBroadcastLength,
     VoiceBroadcastInfoEventContent,
     VoiceBroadcastInfoEventType,
     VoiceBroadcastInfoState,
@@ -33,13 +41,17 @@ import { createVoiceMessageContent } from "../../utils/createVoiceMessageContent
 import { IDestroyable } from "../../utils/IDestroyable";
 import dis from "../../dispatcher/dispatcher";
 import { ActionPayload } from "../../dispatcher/payloads";
+import { VoiceBroadcastChunkEvents } from "../utils/VoiceBroadcastChunkEvents";
+import { RelationsHelper, RelationsHelperEvent } from "../../events/RelationsHelper";
 
 export enum VoiceBroadcastRecordingEvent {
     StateChanged = "liveness_changed",
+    TimeLeftChanged = "time_left_changed",
 }
 
 interface EventMap {
     [VoiceBroadcastRecordingEvent.StateChanged]: (state: VoiceBroadcastInfoState) => void;
+    [VoiceBroadcastRecordingEvent.TimeLeftChanged]: (timeLeft: number) => void;
 }
 
 export class VoiceBroadcastRecording
@@ -49,6 +61,10 @@ export class VoiceBroadcastRecording
     private recorder: VoiceBroadcastRecorder;
     private sequence = 1;
     private dispatcherRef: string;
+    private chunkEvents = new VoiceBroadcastChunkEvents();
+    private chunkRelationHelper: RelationsHelper;
+    private maxLength: number;
+    private timeLeft: number;
 
     public constructor(
         public readonly infoEvent: MatrixEvent,
@@ -56,6 +72,8 @@ export class VoiceBroadcastRecording
         initialState?: VoiceBroadcastInfoState,
     ) {
         super();
+        this.maxLength = getMaxBroadcastLength();
+        this.timeLeft = this.maxLength;
 
         if (initialState) {
             this.state = initialState;
@@ -64,10 +82,40 @@ export class VoiceBroadcastRecording
         }
 
         // TODO Michael W: listen for state updates
-        //
+
         this.infoEvent.on(MatrixEventEvent.BeforeRedaction, this.onBeforeRedaction);
         this.dispatcherRef = dis.register(this.onAction);
+        this.chunkRelationHelper = this.initialiseChunkEventRelation();
     }
+
+    private initialiseChunkEventRelation(): RelationsHelper {
+        const relationsHelper = new RelationsHelper(
+            this.infoEvent,
+            RelationType.Reference,
+            EventType.RoomMessage,
+            this.client,
+        );
+        relationsHelper.on(RelationsHelperEvent.Add, this.onChunkEvent);
+
+        relationsHelper.emitFetchCurrent().catch((err) => {
+            logger.warn("error fetching server side relation for voice broadcast chunks", err);
+            // fall back to local events
+            relationsHelper.emitCurrent();
+        });
+
+        return relationsHelper;
+    }
+
+    private onChunkEvent = (event: MatrixEvent): void => {
+        if (
+            (!event.getId() && !event.getTxnId())
+            || event.getContent()?.msgtype !== MsgType.Audio // don't add non-audio event
+        ) {
+            return;
+        }
+
+        this.chunkEvents.addEvent(event);
+    };
 
     private setInitialStateFromInfoEvent(): void {
         const room = this.client.getRoom(this.infoEvent.getRoomId());
@@ -80,6 +128,23 @@ export class VoiceBroadcastRecording
         this.state = !relatedEvents?.find((event: MatrixEvent) => {
             return event.getContent()?.state === VoiceBroadcastInfoState.Stopped;
         }) ? VoiceBroadcastInfoState.Started : VoiceBroadcastInfoState.Stopped;
+    }
+
+    public getTimeLeft(): number {
+        return this.timeLeft;
+    }
+
+    private async setTimeLeft(timeLeft: number): Promise<void> {
+        if (timeLeft <= 0) {
+            // time is up - stop the recording
+            return await this.stop();
+        }
+
+        // do never increase time left; no action if equals
+        if (timeLeft >= this.timeLeft) return;
+
+        this.timeLeft = timeLeft;
+        this.emit(VoiceBroadcastRecordingEvent.TimeLeftChanged, timeLeft);
     }
 
     public async start(): Promise<void> {
@@ -127,20 +192,23 @@ export class VoiceBroadcastRecording
         if (!this.recorder) {
             this.recorder = createVoiceBroadcastRecorder();
             this.recorder.on(VoiceBroadcastRecorderEvent.ChunkRecorded, this.onChunkRecorded);
+            this.recorder.on(VoiceBroadcastRecorderEvent.CurrentChunkLengthUpdated, this.onCurrentChunkLengthUpdated);
         }
 
         return this.recorder;
     }
 
-    public destroy(): void {
+    public async destroy(): Promise<void> {
         if (this.recorder) {
-            this.recorder.off(VoiceBroadcastRecorderEvent.ChunkRecorded, this.onChunkRecorded);
             this.recorder.stop();
+            this.recorder.destroy();
         }
 
         this.infoEvent.off(MatrixEventEvent.BeforeRedaction, this.onBeforeRedaction);
         this.removeAllListeners();
         dis.unregister(this.dispatcherRef);
+        this.chunkEvents = new VoiceBroadcastChunkEvents();
+        this.chunkRelationHelper.destroy();
     }
 
     private onBeforeRedaction = () => {
@@ -162,6 +230,10 @@ export class VoiceBroadcastRecording
         this.state = state;
         this.emit(VoiceBroadcastRecordingEvent.StateChanged, this.state);
     }
+
+    private onCurrentChunkLengthUpdated = (currentChunkLength: number) => {
+        this.setTimeLeft(this.maxLength - this.chunkEvents.getLengthSeconds() - currentChunkLength);
+    };
 
     private onChunkRecorded = async (chunk: ChunkRecordedPayload): Promise<void> => {
         const { url, file } = await this.uploadFile(chunk);

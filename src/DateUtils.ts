@@ -149,6 +149,31 @@ export function formatSeconds(inSeconds: number): string {
     return output;
 }
 
+export function formatTimeLeft(inSeconds: number): string {
+    const hours = Math.floor(inSeconds / (60 * 60)).toFixed(0);
+    const minutes = Math.floor((inSeconds % (60 * 60)) / 60).toFixed(0);
+    const seconds = Math.floor(((inSeconds % (60 * 60)) % 60)).toFixed(0);
+
+    if (hours !== "0") {
+        return _t("%(hours)sh %(minutes)sm %(seconds)ss left", {
+            hours,
+            minutes,
+            seconds,
+        });
+    }
+
+    if (minutes !== "0") {
+        return _t("%(minutes)sm %(seconds)ss left", {
+            minutes,
+            seconds,
+        });
+    }
+
+    return _t("%(seconds)ss left", {
+        seconds,
+    });
+}
+
 const MILLIS_IN_DAY = 86400000;
 function withinPast24Hours(prevDate: Date, nextDate: Date): boolean {
     return Math.abs(prevDate.getTime() - nextDate.getTime()) <= MILLIS_IN_DAY;

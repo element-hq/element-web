@@ -47,7 +47,8 @@ export const DEFAULTS: IConfigOptions = {
         url: "https://element.io/get-started",
     },
     voice_broadcast: {
-        chunk_length: 120, // two minutes
+        chunk_length: 2 * 60, // two minutes
+        max_length: 4 * 60 * 60, // four hours
     },
 };
 

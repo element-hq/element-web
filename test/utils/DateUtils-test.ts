@@ -14,7 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { formatSeconds, formatRelativeTime, formatDuration, formatFullDateNoDayISO } from "../../src/DateUtils";
+import {
+    formatSeconds,
+    formatRelativeTime,
+    formatDuration,
+    formatFullDateNoDayISO,
+    formatTimeLeft,
+} from "../../src/DateUtils";
 import { REPEATABLE_DATE } from "../test-utils";
 
 describe("formatSeconds", () => {
@@ -97,5 +103,19 @@ describe('formatDuration()', () => {
 describe("formatFullDateNoDayISO", () => {
     it("should return ISO format", () => {
         expect(formatFullDateNoDayISO(REPEATABLE_DATE)).toEqual("2022-11-17T16:58:32.517Z");
+    });
+});
+
+describe("formatTimeLeft", () => {
+    it.each([
+        [null, "0s left"],
+        [0, "0s left"],
+        [23, "23s left"],
+        [60 + 23, "1m 23s left"],
+        [60 * 60, "1h 0m 0s left"],
+        [60 * 60 + 23, "1h 0m 23s left"],
+        [5 * 60 * 60 + 7 * 60 + 23, "5h 7m 23s left"],
+    ])("should format %s to %s", (seconds: number, expected: string) => {
+        expect(formatTimeLeft(seconds)).toBe(expected);
     });
 });
