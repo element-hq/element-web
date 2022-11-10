@@ -31,6 +31,8 @@ import {
     setupAsyncStoreWithClient,
     resetAsyncStoreWithClient,
     wrapInMatrixClientContext,
+    wrapInSdkContext,
+    mkRoomCreateEvent,
 } from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import { CallStore } from "../../../../src/stores/CallStore";
@@ -41,17 +43,27 @@ import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../src/dispatcher/actions";
 import { ViewRoomPayload } from "../../../../src/dispatcher/payloads/ViewRoomPayload";
-
-const PipView = wrapInMatrixClientContext(UnwrappedPipView);
+import { TestSdkContext } from "../../../TestSdkContext";
+import {
+    VoiceBroadcastInfoState,
+    VoiceBroadcastPreRecording,
+    VoiceBroadcastPreRecordingStore,
+    VoiceBroadcastRecording,
+    VoiceBroadcastRecordingsStore,
+} from "../../../../src/voice-broadcast";
+import { mkVoiceBroadcastInfoStateEvent } from "../../../voice-broadcast/utils/test-utils";
 
 describe("PipView", () => {
     useMockedCalls();
     Object.defineProperty(navigator, "mediaDevices", { value: { enumerateDevices: () => [] } });
     jest.spyOn(HTMLMediaElement.prototype, "play").mockImplementation(async () => {});
 
+    let sdkContext: TestSdkContext;
     let client: Mocked<MatrixClient>;
     let room: Room;
     let alice: RoomMember;
+    let voiceBroadcastRecordingsStore: VoiceBroadcastRecordingsStore;
+    let voiceBroadcastPreRecordingStore: VoiceBroadcastPreRecordingStore;
 
     beforeEach(async () => {
         stubClient();
@@ -64,6 +76,9 @@ describe("PipView", () => {
         client.getRoom.mockImplementation(roomId => roomId === room.roomId ? room : null);
         client.getRooms.mockReturnValue([room]);
         alice = mkRoomMember(room.roomId, "@alice:example.org");
+        room.currentState.setStateEvents([
+            mkRoomCreateEvent(alice.userId, room.roomId),
+        ]);
         jest.spyOn(room, "getMember").mockImplementation(userId => userId === alice.userId ? alice : null);
 
         client.getRoom.mockImplementation(roomId => roomId === room.roomId ? room : null);
@@ -73,6 +88,13 @@ describe("PipView", () => {
         await Promise.all([CallStore.instance, WidgetMessagingStore.instance].map(
             store => setupAsyncStoreWithClient(store, client),
         ));
+
+        sdkContext = new TestSdkContext();
+        voiceBroadcastRecordingsStore = new VoiceBroadcastRecordingsStore();
+        voiceBroadcastPreRecordingStore = new VoiceBroadcastPreRecordingStore();
+        sdkContext.client = client;
+        sdkContext._VoiceBroadcastRecordingsStore = voiceBroadcastRecordingsStore;
+        sdkContext._VoiceBroadcastPreRecordingStore = voiceBroadcastPreRecordingStore;
     });
 
     afterEach(async () => {
@@ -82,7 +104,12 @@ describe("PipView", () => {
         jest.restoreAllMocks();
     });
 
-    const renderPip = () => { render(<PipView />); };
+    const renderPip = () => {
+        const PipView = wrapInMatrixClientContext(
+            wrapInSdkContext(UnwrappedPipView, sdkContext),
+        );
+        render(<PipView />);
+    };
 
     const viewRoom = (roomId: string) =>
         defaultDispatcher.dispatch<ViewRoomPayload>({
@@ -170,6 +197,46 @@ describe("PipView", () => {
             expect(screen.queryByRole("button", { name: "Pin" })).toBeNull();
             expect(screen.queryByRole("button", { name: "Fill screen" })).toBeNull();
             screen.getByRole("button", { name: /return/i });
+        });
+    });
+
+    describe("when there is a voice broadcast recording", () => {
+        beforeEach(() => {
+            const voiceBroadcastInfoEvent = mkVoiceBroadcastInfoStateEvent(
+                room.roomId,
+                VoiceBroadcastInfoState.Started,
+                alice.userId,
+                client.getDeviceId() || "",
+            );
+
+            const voiceBroadcastRecording = new VoiceBroadcastRecording(voiceBroadcastInfoEvent, client);
+            voiceBroadcastRecordingsStore.setCurrent(voiceBroadcastRecording);
+
+            renderPip();
+        });
+
+        it("should render the voice broadcast recording PiP", () => {
+            // check for the „Live“ badge
+            screen.getByText("Live");
+        });
+    });
+
+    describe("when there is a voice broadcast pre-recording", () => {
+        beforeEach(() => {
+            const voiceBroadcastPreRecording = new VoiceBroadcastPreRecording(
+                room,
+                alice,
+                client,
+                voiceBroadcastRecordingsStore,
+            );
+            voiceBroadcastPreRecordingStore.setCurrent(voiceBroadcastPreRecording);
+
+            renderPip();
+        });
+
+        it("should render the voice broadcast pre-recording PiP", () => {
+            // check for the „Go live“ button
+            screen.getByText("Go live");
         });
     });
 });

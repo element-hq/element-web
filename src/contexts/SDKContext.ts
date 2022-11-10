@@ -29,6 +29,7 @@ import TypingStore from "../stores/TypingStore";
 import { WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
 import { WidgetPermissionStore } from "../stores/widgets/WidgetPermissionStore";
 import WidgetStore from "../stores/WidgetStore";
+import { VoiceBroadcastPreRecordingStore, VoiceBroadcastRecordingsStore } from "../voice-broadcast";
 
 export const SDKContext = createContext<SdkContextClass>(undefined);
 SDKContext.displayName = "SDKContext";
@@ -63,6 +64,8 @@ export class SdkContextClass {
     protected _SpaceStore?: SpaceStoreClass;
     protected _LegacyCallHandler?: LegacyCallHandler;
     protected _TypingStore?: TypingStore;
+    protected _VoiceBroadcastRecordingsStore?: VoiceBroadcastRecordingsStore;
+    protected _VoiceBroadcastPreRecordingStore?: VoiceBroadcastPreRecordingStore;
 
     /**
      * Automatically construct stores which need to be created eagerly so they can register with
@@ -140,5 +143,19 @@ export class SdkContextClass {
             window.mxTypingStore = this._TypingStore;
         }
         return this._TypingStore;
+    }
+
+    public get voiceBroadcastRecordingsStore(): VoiceBroadcastRecordingsStore {
+        if (!this._VoiceBroadcastRecordingsStore) {
+            this._VoiceBroadcastRecordingsStore = VoiceBroadcastRecordingsStore.instance();
+        }
+        return this._VoiceBroadcastRecordingsStore;
+    }
+
+    public get voiceBroadcastPreRecordingStore(): VoiceBroadcastPreRecordingStore {
+        if (!this._VoiceBroadcastPreRecordingStore) {
+            this._VoiceBroadcastPreRecordingStore = new VoiceBroadcastPreRecordingStore();
+        }
+        return this._VoiceBroadcastPreRecordingStore;
     }
 }

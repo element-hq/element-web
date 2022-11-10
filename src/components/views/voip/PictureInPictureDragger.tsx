@@ -68,6 +68,8 @@ export default class PictureInPictureDragger extends React.Component<IProps> {
         document.addEventListener("mousemove", this.onMoving);
         document.addEventListener("mouseup", this.onEndMoving);
         UIStore.instance.on(UI_EVENTS.Resize, this.onResize);
+        // correctly position the PiP
+        this.snap();
     }
 
     public componentWillUnmount() {

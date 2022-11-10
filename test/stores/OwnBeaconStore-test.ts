@@ -45,6 +45,7 @@ import { getMockClientWithEventEmitter } from "../test-utils/client";
 // modern fake timers and lodash.debounce are a faff
 // short circuit it
 jest.mock("lodash", () => ({
+    ...jest.requireActual("lodash") as object,
     debounce: jest.fn().mockImplementation(callback => callback),
 }));
 

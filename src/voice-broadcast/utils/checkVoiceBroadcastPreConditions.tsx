@@ -15,66 +15,12 @@ limitations under the License.
 */
 
 import React from "react";
-import { ISendEventResponse, MatrixClient, Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
-import { defer } from "matrix-js-sdk/src/utils";
+import { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 
-import { _t } from "../../languageHandler";
+import { hasRoomLiveVoiceBroadcast, VoiceBroadcastInfoEventType, VoiceBroadcastRecordingsStore } from "..";
 import InfoDialog from "../../components/views/dialogs/InfoDialog";
+import { _t } from "../../languageHandler";
 import Modal from "../../Modal";
-import {
-    VoiceBroadcastInfoEventContent,
-    VoiceBroadcastInfoEventType,
-    VoiceBroadcastInfoState,
-    VoiceBroadcastRecordingsStore,
-    VoiceBroadcastRecording,
-    hasRoomLiveVoiceBroadcast,
-    getChunkLength,
-} from "..";
-
-const startBroadcast = async (
-    room: Room,
-    client: MatrixClient,
-    recordingsStore: VoiceBroadcastRecordingsStore,
-): Promise<VoiceBroadcastRecording> => {
-    const { promise, resolve } = defer<VoiceBroadcastRecording>();
-    let result: ISendEventResponse = null;
-
-    const onRoomStateEvents = () => {
-        if (!result) return;
-
-        const voiceBroadcastEvent = room.currentState.getStateEvents(
-            VoiceBroadcastInfoEventType,
-            client.getUserId(),
-        );
-
-        if (voiceBroadcastEvent?.getId() === result.event_id) {
-            room.off(RoomStateEvent.Events, onRoomStateEvents);
-            const recording = new VoiceBroadcastRecording(
-                voiceBroadcastEvent,
-                client,
-            );
-            recordingsStore.setCurrent(recording);
-            recording.start();
-            resolve(recording);
-        }
-    };
-
-    room.on(RoomStateEvent.Events, onRoomStateEvents);
-
-    // XXX Michael W: refactor to live event
-    result = await client.sendStateEvent(
-        room.roomId,
-        VoiceBroadcastInfoEventType,
-        {
-            device_id: client.getDeviceId(),
-            state: VoiceBroadcastInfoState.Started,
-            chunk_length: getChunkLength(),
-        } as VoiceBroadcastInfoEventContent,
-        client.getUserId(),
-    );
-
-    return promise;
-};
 
 const showAlreadyRecordingDialog = () => {
     Modal.createDialog(InfoDialog, {
@@ -103,40 +49,36 @@ const showOthersAlreadyRecordingDialog = () => {
     });
 };
 
-/**
- * Starts a new Voice Broadcast Recording, if
- * - the user has the permissions to do so in the room
- * - there is no other broadcast being recorded in the room, yet
- * Sends a voice_broadcast_info state event and waits for the event to actually appear in the room state.
- */
-export const startNewVoiceBroadcastRecording = async (
+export const checkVoiceBroadcastPreConditions = (
     room: Room,
     client: MatrixClient,
     recordingsStore: VoiceBroadcastRecordingsStore,
-): Promise<VoiceBroadcastRecording | null> => {
+): boolean => {
     if (recordingsStore.getCurrent()) {
         showAlreadyRecordingDialog();
-        return null;
+        return false;
     }
 
     const currentUserId = client.getUserId();
 
+    if (!currentUserId) return false;
+
     if (!room.currentState.maySendStateEvent(VoiceBroadcastInfoEventType, currentUserId)) {
         showInsufficientPermissionsDialog();
-        return null;
+        return false;
     }
 
     const { hasBroadcast, startedByUser } = hasRoomLiveVoiceBroadcast(room, currentUserId);
 
     if (hasBroadcast && startedByUser) {
         showAlreadyRecordingDialog();
-        return null;
+        return false;
     }
 
     if (hasBroadcast) {
         showOthersAlreadyRecordingDialog();
-        return null;
+        return false;
     }
 
-    return startBroadcast(room, client, recordingsStore);
+    return true;
 };

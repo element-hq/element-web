@@ -41,6 +41,7 @@ jest.mock('../../src/Modal', () => ({
 
 jest.mock('../../src/settings/SettingsStore', () => ({
     getValue: jest.fn(),
+    monitorSetting: jest.fn(),
 }));
 
 const mockPromptBeforeInviteUnknownUsers = (value: boolean) => {
