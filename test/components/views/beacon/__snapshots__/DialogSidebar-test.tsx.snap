@@ -31,23 +31,12 @@ exports[`<DialogSidebar /> renders sidebar correctly with beacons 1`] = `
       <li
         class="mx_BeaconListItem"
       >
-        <span
-          class="mx_BaseAvatar mx_BeaconListItem_avatar"
-          role="presentation"
-        >
-          <span
-            aria-hidden="true"
-            class="mx_BaseAvatar_initial"
-            style="font-size: 20.8px; width: 32px; line-height: 32px;"
-          />
-          <img
-            alt=""
-            aria-hidden="true"
-            class="mx_BaseAvatar_image"
-            src=""
-            style="width: 32px; height: 32px;"
-          />
-        </span>
+        <img
+          alt=""
+          class="mx_BaseAvatar mx_BaseAvatar_image mx_BeaconListItem_avatar"
+          data-testid="avatar-img"
+          style="width: 32px; height: 32px;"
+        />
         <div
           class="mx_BeaconListItem_info"
         >

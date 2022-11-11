@@ -262,6 +262,7 @@ exports[`<BeaconMarker /> renders marker when beacon has location 1`] = `
                       alt=""
                       aria-hidden="true"
                       className="mx_BaseAvatar_image"
+                      data-testid="avatar-img"
                       onError={[Function]}
                       src="data:image/png;base64,00"
                       style={

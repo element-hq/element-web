@@ -173,6 +173,7 @@ exports[`<RoomPreviewBar /> with an invite without an invited email for a dm roo
         alt=""
         aria-hidden="true"
         class="mx_BaseAvatar_image"
+        data-testid="avatar-img"
         src="data:image/png;base64,00"
         style="width: 36px; height: 36px;"
       />
@@ -247,6 +248,7 @@ exports[`<RoomPreviewBar /> with an invite without an invited email for a non-dm
         alt=""
         aria-hidden="true"
         class="mx_BaseAvatar_image"
+        data-testid="avatar-img"
         src="data:image/png;base64,00"
         style="width: 36px; height: 36px;"
       />

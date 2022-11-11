@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useMemo } from "react";
 
 import RoomContext, { TimelineRenderingType } from "../../contexts/RoomContext";
 import { useSettingValue } from "../useSettings";
@@ -29,18 +29,19 @@ export function useRoomMemberProfile({
     member?: RoomMember | null;
     forceHistorical?: boolean;
 }): RoomMember | undefined | null {
-    const [member, setMember] = useState<RoomMember | undefined | null>(propMember);
-
     const context = useContext(RoomContext);
     const useOnlyCurrentProfiles = useSettingValue("useOnlyCurrentProfiles");
 
-    useEffect(() => {
+    const member = useMemo(() => {
         const threadContexts = [TimelineRenderingType.ThreadsList, TimelineRenderingType.Thread];
-        if ((propMember && !forceHistorical && useOnlyCurrentProfiles)
-            || threadContexts.includes(context?.timelineRenderingType)) {
-            setMember(context?.room?.getMember(userId));
+        if ((!forceHistorical && useOnlyCurrentProfiles)
+            || threadContexts.includes(context.timelineRenderingType)) {
+            const currentMember = context.room?.getMember(userId);
+            if (currentMember) return currentMember;
         }
-    }, [forceHistorical, propMember, context.room, context?.timelineRenderingType, useOnlyCurrentProfiles, userId]);
+
+        return propMember;
+    }, [forceHistorical, propMember, context.room, context.timelineRenderingType, useOnlyCurrentProfiles, userId]);
 
     return member;
 }

@@ -48,11 +48,11 @@ interface IProps {
     tabIndex?: number;
 }
 
-const calculateUrls = (url, urls, lowBandwidth) => {
+const calculateUrls = (url: string, urls: string[], lowBandwidth: boolean): string[] => {
     // work out the full set of urls to try to load. This is formed like so:
     // imageUrls: [ props.url, ...props.urls ]
 
-    let _urls = [];
+    let _urls: string[] = [];
     if (!lowBandwidth) {
         _urls = urls || [];
 
@@ -119,7 +119,7 @@ const BaseAvatar = (props: IProps) => {
 
     const [imageUrl, onError] = useImageUrl({ url, urls });
 
-    if (!imageUrl && defaultToInitialLetter) {
+    if (!imageUrl && defaultToInitialLetter && name) {
         const initialLetter = AvatarLogic.getInitialLetter(name);
         const textNode = (
             <span
@@ -145,7 +145,8 @@ const BaseAvatar = (props: IProps) => {
                     width: toPx(width),
                     height: toPx(height),
                 }}
-                aria-hidden="true" />
+                aria-hidden="true"
+                data-testid="avatar-img" />
         );
 
         if (onClick) {
@@ -193,6 +194,7 @@ const BaseAvatar = (props: IProps) => {
                 title={title}
                 alt={_t("Avatar")}
                 inputRef={inputRef}
+                data-testid="avatar-img"
                 {...otherProps} />
         );
     } else {
@@ -208,6 +210,7 @@ const BaseAvatar = (props: IProps) => {
                 title={title}
                 alt=""
                 ref={inputRef}
+                data-testid="avatar-img"
                 {...otherProps} />
         );
     }
