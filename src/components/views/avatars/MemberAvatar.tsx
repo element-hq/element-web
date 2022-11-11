@@ -99,3 +99,11 @@ export default function MemberAvatar({
         />
     );
 }
+
+export class LegacyMemberAvatar extends React.Component<IProps> {
+    public render(): JSX.Element {
+        return <MemberAvatar {...this.props}>
+            { this.props.children }
+        </MemberAvatar>;
+    }
+}

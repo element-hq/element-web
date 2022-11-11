@@ -21,7 +21,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import NodeAnimator from "../../../NodeAnimator";
 import { toPx } from "../../../utils/units";
-import MemberAvatar from '../avatars/MemberAvatar';
+import { LegacyMemberAvatar as MemberAvatar } from '../avatars/MemberAvatar';
 import { READ_AVATAR_SIZE } from "./ReadReceiptGroup";
 
 export interface IReadReceiptInfo {
