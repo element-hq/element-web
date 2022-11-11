@@ -86,3 +86,11 @@ fetchMock.catch("");
 fetchMock.get("/image-file-stub", "image file stub");
 // @ts-ignore
 window.fetch = fetchMock.sandbox();
+
+// set up mediaDevices mock
+Object.defineProperty(navigator, "mediaDevices", {
+    value: {
+        enumerateDevices: jest.fn().mockResolvedValue([]),
+        getUserMedia: jest.fn(),
+    },
+});

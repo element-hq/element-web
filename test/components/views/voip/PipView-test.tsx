@@ -55,7 +55,6 @@ import { mkVoiceBroadcastInfoStateEvent } from "../../../voice-broadcast/utils/t
 
 describe("PipView", () => {
     useMockedCalls();
-    Object.defineProperty(navigator, "mediaDevices", { value: { enumerateDevices: () => [] } });
     jest.spyOn(HTMLMediaElement.prototype, "play").mockImplementation(async () => {});
 
     let sdkContext: TestSdkContext;

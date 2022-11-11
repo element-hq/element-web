@@ -44,7 +44,6 @@ const CallEvent = wrapInMatrixClientContext(UnwrappedCallEvent);
 
 describe("CallEvent", () => {
     useMockedCalls();
-    Object.defineProperty(navigator, "mediaDevices", { value: { enumerateDevices: () => [] } });
     jest.spyOn(HTMLMediaElement.prototype, "play").mockImplementation(async () => {});
 
     let client: Mocked<MatrixClient>;

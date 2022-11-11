@@ -44,12 +44,6 @@ const CallView = wrapInMatrixClientContext(_CallView);
 
 describe("CallLobby", () => {
     useMockedCalls();
-    Object.defineProperty(navigator, "mediaDevices", {
-        value: {
-            enumerateDevices: jest.fn(),
-            getUserMedia: () => null,
-        },
-    });
     jest.spyOn(HTMLMediaElement.prototype, "play").mockImplementation(async () => {});
 
     let client: Mocked<MatrixClient>;

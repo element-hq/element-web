@@ -89,10 +89,6 @@ describe("Algorithm", () => {
             stop: () => {},
         } as unknown as ClientWidgetApi);
 
-        Object.defineProperty(navigator, "mediaDevices", {
-            value: { enumerateDevices: async () => [] },
-        });
-
         // End of setup
 
         expect(algorithm.getOrderedRooms()[DefaultTagID.Untagged]).toEqual([room, roomWithCall]);

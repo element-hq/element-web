@@ -42,7 +42,6 @@ import { getIncomingCallToastKey, IncomingCallToast } from "../../src/toasts/Inc
 
 describe("IncomingCallEvent", () => {
     useMockedCalls();
-    Object.defineProperty(navigator, "mediaDevices", { value: { enumerateDevices: () => [] } });
     jest.spyOn(HTMLMediaElement.prototype, "play").mockImplementation(async () => { });
 
     let client: Mocked<MatrixClient>;

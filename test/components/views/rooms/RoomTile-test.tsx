@@ -43,9 +43,6 @@ describe("RoomTile", () => {
     jest.spyOn(PlatformPeg, "get")
         .mockReturnValue({ overrideBrowserShortcuts: () => false } as unknown as BasePlatform);
     useMockedCalls();
-    Object.defineProperty(navigator, "mediaDevices", {
-        value: { enumerateDevices: async () => [] },
-    });
 
     let client: Mocked<MatrixClient>;
 
