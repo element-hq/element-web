@@ -28,5 +28,6 @@
     "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Geriausiam veikimui suinstaliuokite <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, arba <safariLink>Safari</safariLink>.",
     "Powered by Matrix": "Veikia su Matrix",
     "Use %(brand)s on mobile": "Naudoti %(brand)s mobiliajame telefone",
-    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Decentralizuotas, užšifruotų pokalbių &amp; bendradarbiavimas, paremtas $matrixLogo"
+    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Decentralizuotas, užšifruotų pokalbių &amp; bendradarbiavimas, paremtas $matrixLogo",
+    "%(brand)s Desktop: %(platformName)s": "%(brand)s Kompiuteryje: %(platformName)s"
 }
