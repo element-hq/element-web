@@ -1,5 +1,5 @@
 # Builder
-FROM node:16-buster as builder
+FROM --platform=$BUILDPLATFORM node:16-buster as builder
 
 # Support custom branches of the react-sdk and js-sdk. This also helps us build
 # images of element-web develop.

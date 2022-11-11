@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Fetches the js-sdk and matrix-react-sdk dependencies for development
 # or testing purposes

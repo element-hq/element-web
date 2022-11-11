@@ -139,6 +139,11 @@ complete re-branding/private labeling, a more personalised experience can be ach
     to hide this dropdown.
 16. `disable_guests`: When `false` (default), **enable** guest-related functionality (peeking/previewing rooms, etc) for unregistered
     users. Set to `true` to disable this functionality.
+17. `user_notice`: Optional notice to show to the user, e.g. for sunsetting a deployment and pushing users to move in their own time.
+    Takes a configuration object as below:
+    1. `title`: Required. Title to show at the top of the notice.
+    2. `description`: Required. The description to use for the notice.
+    3. `show_once`: Optional. If true then the notice will only be shown once per device.
 
 ### `desktop_builds` and `mobile_builds`
 
@@ -550,3 +555,4 @@ The following are undocumented or intended for developer use only.
 2. `sync_timeline_limit`
 3. `dangerously_allow_unsafe_and_insecure_passwords`
 4. `latex_maths_delims`: An optional setting to override the default delimiters used for maths parsing. See https://github.com/matrix-org/matrix-react-sdk/pull/5939 for details. Only used when `feature_latex_maths` is enabled.
+5. `voice_broadcast.chunk_length`: Target chunk length in seconds for the Voice Broadcast feature currently under development.
