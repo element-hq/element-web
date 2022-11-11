@@ -47,13 +47,6 @@ jobs:
 
       - run: mv dist/element-*.tar.gz dist/develop.tar.gz
 
-      # TODO: remove this once the element-desktop fetch script is updated to grab develop.element.io/develop.tar.gz
-      - name: Deploy develop.tar.gz to Github Pages
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          folder: dist
-          single-commit: true
-
       - uses: actions/upload-artifact@v3
         with:
           name: webapp
