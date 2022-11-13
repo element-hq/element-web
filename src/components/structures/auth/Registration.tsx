@@ -333,7 +333,7 @@ export default class Registration extends React.Component<IProps, IState> {
             } else if (response.errcode === "M_USER_IN_USE") {
                 errorText = _t("Someone already has that username, please try another.");
             } else if (response.errcode === "M_THREEPID_IN_USE") {
-                errorText = _t("That e-mail address is already in use.");
+                errorText = _t("That e-mail address or phone number is already in use.");
             }
 
             this.setState({

@@ -3465,7 +3465,7 @@
     "Unable to query for supported registration methods.": "Unable to query for supported registration methods.",
     "This server does not support authentication with a phone number.": "This server does not support authentication with a phone number.",
     "Someone already has that username, please try another.": "Someone already has that username, please try another.",
-    "That e-mail address is already in use.": "That e-mail address is already in use.",
+    "That e-mail address or phone number is already in use.": "That e-mail address or phone number is already in use.",
     "Continue with %(ssoButtons)s": "Continue with %(ssoButtons)s",
     "%(ssoButtons)s Or %(usernamePassword)s": "%(ssoButtons)s Or %(usernamePassword)s",
     "Already have an account? <a>Sign in here</a>": "Already have an account? <a>Sign in here</a>",
