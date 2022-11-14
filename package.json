@@ -57,7 +57,7 @@
   "dependencies": {
     "@babel/runtime": "^7.12.5",
     "@matrix-org/analytics-events": "^0.3.0",
-    "@matrix-org/matrix-wysiwyg": "^0.3.2",
+    "@matrix-org/matrix-wysiwyg": "^0.6.0",
     "@matrix-org/react-sdk-module-api": "^0.0.3",
     "@sentry/browser": "^6.11.0",
     "@sentry/tracing": "^6.11.0",

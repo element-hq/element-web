@@ -52,7 +52,7 @@ export const WysiwygComposer = memo(function WysiwygComposer(
 ) {
     const inputEventProcessor = useInputEventProcessor(onSend);
 
-    const { ref, isWysiwygReady, content, formattingStates, wysiwyg } =
+    const { ref, isWysiwygReady, content, actionStates, wysiwyg } =
         useWysiwyg({ initialContent, inputEventProcessor });
 
     useEffect(() => {
@@ -68,7 +68,7 @@ export const WysiwygComposer = memo(function WysiwygComposer(
 
     return (
         <div data-testid="WysiwygComposer" className={classNames(className, { [`${className}-focused`]: isFocused })} onFocus={onFocus} onBlur={onFocus}>
-            <FormattingButtons composer={wysiwyg} formattingStates={formattingStates} />
+            <FormattingButtons composer={wysiwyg} actionStates={actionStates} />
             <Editor ref={ref} disabled={!isReady} leftComponent={leftComponent} rightComponent={rightComponent} />
             { children?.(ref, wysiwyg) }
         </div>

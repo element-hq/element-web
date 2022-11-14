@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { MouseEventHandler } from "react";
-import { FormattingFunctions, FormattingStates } from "@matrix-org/matrix-wysiwyg";
+import { FormattingFunctions, AllActionStates } from "@matrix-org/matrix-wysiwyg";
 import classNames from "classnames";
 
 import AccessibleTooltipButton from "../../../elements/AccessibleTooltipButton";
@@ -56,14 +56,14 @@ function Button({ label, keyCombo, onClick, isActive, className }: ButtonProps) 
 
 interface FormattingButtonsProps {
     composer: FormattingFunctions;
-    formattingStates: FormattingStates;
+    actionStates: AllActionStates;
 }
 
-export function FormattingButtons({ composer, formattingStates }: FormattingButtonsProps) {
+export function FormattingButtons({ composer, actionStates }: FormattingButtonsProps) {
     return <div className="mx_FormattingButtons">
-        <Button isActive={formattingStates.bold === 'reversed'} label={_td("Bold")} keyCombo={{ ctrlOrCmdKey: true, key: 'b' }} onClick={() => composer.bold()} className="mx_FormattingButtons_Button_bold" />
-        <Button isActive={formattingStates.italic === 'reversed'} label={_td('Italic')} keyCombo={{ ctrlOrCmdKey: true, key: 'i' }} onClick={() => composer.italic()} className="mx_FormattingButtons_Button_italic" />
-        <Button isActive={formattingStates.underline === 'reversed'} label={_td('Underline')} keyCombo={{ ctrlOrCmdKey: true, key: 'u' }} onClick={() => composer.underline()} className="mx_FormattingButtons_Button_underline" />
-        <Button isActive={formattingStates.strikeThrough === 'reversed'} label={_td('Strikethrough')} onClick={() => composer.strikeThrough()} className="mx_FormattingButtons_Button_strikethrough" />
+        <Button isActive={actionStates.bold === 'reversed'} label={_td("Bold")} keyCombo={{ ctrlOrCmdKey: true, key: 'b' }} onClick={() => composer.bold()} className="mx_FormattingButtons_Button_bold" />
+        <Button isActive={actionStates.italic === 'reversed'} label={_td('Italic')} keyCombo={{ ctrlOrCmdKey: true, key: 'i' }} onClick={() => composer.italic()} className="mx_FormattingButtons_Button_italic" />
+        <Button isActive={actionStates.underline === 'reversed'} label={_td('Underline')} keyCombo={{ ctrlOrCmdKey: true, key: 'u' }} onClick={() => composer.underline()} className="mx_FormattingButtons_Button_underline" />
+        <Button isActive={actionStates.strikeThrough === 'reversed'} label={_td('Strikethrough')} onClick={() => composer.strikeThrough()} className="mx_FormattingButtons_Button_strikethrough" />
     </div>;
 }

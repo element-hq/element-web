@@ -47,7 +47,7 @@ import { SendWysiwygComposer } from "../../../../src/components/views/rooms/wysi
 jest.mock("@matrix-org/matrix-wysiwyg", () => ({
     useWysiwyg: () => {
         return { ref: { current: null }, isWysiwygReady: true, wysiwyg: { clear: () => void 0 },
-            formattingStates: { bold: 'enabled', italic: 'enabled', underline: 'enabled', strikeThrough: 'enabled' } };
+            actionStates: { bold: 'enabled', italic: 'enabled', underline: 'enabled', strikeThrough: 'enabled' } };
     },
 }));
 
