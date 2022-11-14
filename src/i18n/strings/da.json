@@ -1,6 +1,5 @@
 {
     "Dismiss": "Afvis",
-    "powered by Matrix": "Drevet af Matrix",
     "Unknown device": "Ukendt enhed",
     "Welcome to Element": "Velkommen til Element",
     "The message from the parser is: %(message)s": "Beskeden fra parseren er: %(message)s",
@@ -22,9 +21,7 @@
     "Your Element is misconfigured": "Din Element er konfigureret forkert",
     "Your browser can't run %(brand)s": "Din browser kan ikke køre %(brand)s",
     "Powered by Matrix": "Drevet af Matrix",
-    "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "Failed to start": "Opstart mislykkedes",
-    "%(brand)s Desktop (%(platformName)s)": "%(brand)s Desktop %(platformName)s",
     "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Du kan fortsætte med at bruge din nuværende browser, men du kan opleve at visse eller alle funktioner ikke vil fungere korrekt.",
     "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Venligst installer <chromeLink>Chrome</chromeLink>,<firefoxLink>Firefox</firefoxLink> eller <safariLink>Safari</safariLink> for den bedste oplevelse.",
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s bruger avanceret browser funktioner som ikke er understøttet af din nuværende browser.",

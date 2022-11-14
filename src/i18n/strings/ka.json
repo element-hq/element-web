@@ -5,7 +5,6 @@
     "Explore rooms": "ოთახების დათავლიერება",
     "Failed to start": "ჩართვა ვერ მოხერხდა",
     "Use %(brand)s on mobile": "გამოიყენე %(brand)s-ი მობილურზე",
-    "%(brand)s Desktop (%(platformName)s)": "%(brand)s დესკტოპი (%(platformName)s)",
     "Unexpected error preparing the app. See console for details.": "მოულოდნელი ერორი აპლიკაციის შემზადებისას. იხილეთ კონსოლი დეტალებისთვის.",
     "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "თქვენი Element-ის კონფიგურაცია შეიცავს მიუღებელ JSON-ს. გთხოვთ გადაჭრათ პრობლემა და დაარაფრეშოთ გვერდი.",
     "Sign In": "შესვლა",
@@ -20,7 +19,6 @@
     "Your Element is misconfigured": "შენი Element-ი არასწორადაა კონფიგურირებული",
     "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "გთხოვთ დააინსტალოთ <chromeLink>Chrome-ი</chromeLink>, <firefoxLink>Firefox-ი</firefoxLink>, ან <safariLink>Safari</safariLink> საუკეთესო გამოცდილებისთვის.",
     "Powered by Matrix": "მუშაობს Matrix-ის მეშვეობით",
-    "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "Go to your browser to complete Sign In": "გახსენი ბრაუზერი Sign In-ის დასასრულებლად",
     "Open": "გახსნა",
     "Download Completed": "გადმოწერა დასრულებულია"

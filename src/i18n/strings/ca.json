@@ -16,7 +16,6 @@
     "Unexpected error preparing the app. See console for details.": "Error inesperat durant la preparació de l'aplicació. Consulta la consola pels a més detalls.",
     "Download Completed": "Baixada completada",
     "Open": "Obre",
-    "%(brand)s Desktop (%(platformName)s)": "%(brand)s d'escriptori (%(platformName)s)",
     "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "Powered by Matrix": "Amb tecnologia de Matrix",
     "Unsupported browser": "Navegador no compatible",

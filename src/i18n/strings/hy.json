@@ -2,7 +2,6 @@
     "Explore rooms": "Փնտրել սենյակներ",
     "Failed to start": "Չի ստացվում սկսել",
     "Use %(brand)s on mobile": "Օգտագործում է %(brand)s հեռախոսի վրա",
-    "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s%(browserName)s%(osName)s",
     "Unknown device": "Անծանոթ սարք",
     "Welcome to Element": "Բարի գալուստ Element",
     "Your browser can't run %(brand)s": "Ձեր բրաուզերը չի թողարկում %(brand)s",
