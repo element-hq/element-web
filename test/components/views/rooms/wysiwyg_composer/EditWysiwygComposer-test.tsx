@@ -45,7 +45,7 @@ jest.mock("@matrix-org/matrix-wysiwyg", () => ({
             content: mockContent,
             isWysiwygReady: true,
             wysiwyg: { clear: mockClear },
-            formattingStates: {
+            actionStates: {
                 bold: 'enabled',
                 italic: 'enabled',
                 underline: 'enabled',

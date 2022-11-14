@@ -29,7 +29,7 @@ describe('FormattingButtons', () => {
         strikeThrough: jest.fn(),
     } as any;
 
-    const formattingStates = {
+    const actionStates = {
         bold: 'reversed',
         italic: 'reversed',
         underline: 'enabled',
@@ -42,7 +42,7 @@ describe('FormattingButtons', () => {
 
     it('Should have the correspond CSS classes', () => {
         // When
-        render(<FormattingButtons composer={wysiwyg} formattingStates={formattingStates} />);
+        render(<FormattingButtons composer={wysiwyg} actionStates={actionStates} />);
 
         // Then
         expect(screen.getByLabelText('Bold')).toHaveClass('mx_FormattingButtons_active');
@@ -53,7 +53,7 @@ describe('FormattingButtons', () => {
 
     it('Should call wysiwyg function on button click', () => {
         // When
-        render(<FormattingButtons composer={wysiwyg} formattingStates={formattingStates} />);
+        render(<FormattingButtons composer={wysiwyg} actionStates={actionStates} />);
         screen.getByLabelText('Bold').click();
         screen.getByLabelText('Italic').click();
         screen.getByLabelText('Underline').click();
@@ -69,7 +69,7 @@ describe('FormattingButtons', () => {
     it('Should display the tooltip on mouse over', async () => {
         // When
         const user = userEvent.setup();
-        render(<FormattingButtons composer={wysiwyg} formattingStates={formattingStates} />);
+        render(<FormattingButtons composer={wysiwyg} actionStates={actionStates} />);
         await user.hover(screen.getByLabelText('Bold'));
 
         // Then
