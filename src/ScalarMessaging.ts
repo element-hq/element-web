@@ -376,7 +376,7 @@ function kickUser(event: MessageEvent<any>, roomId: string, userId: string): voi
     });
 }
 
-function setWidget(event: MessageEvent<any>, roomId: string): void {
+function setWidget(event: MessageEvent<any>, roomId: string | null): void {
     const widgetId = event.data.widget_id;
     let widgetType = event.data.type;
     const widgetUrl = event.data.url;
@@ -435,6 +435,7 @@ function setWidget(event: MessageEvent<any>, roomId: string): void {
     } else { // Room widget
         if (!roomId) {
             sendError(event, _t('Missing roomId.'), null);
+            return;
         }
         WidgetUtils.setRoomWidget(roomId, widgetId, widgetType, widgetUrl, widgetName, widgetData, widgetAvatarUrl)
             .then(() => {
@@ -651,7 +652,7 @@ function returnStateEvent(event: MessageEvent<any>, roomId: string, eventType: s
 
 async function getOpenIdToken(event: MessageEvent<any>) {
     try {
-        const tokenObject = MatrixClientPeg.get().getOpenIdToken();
+        const tokenObject = await MatrixClientPeg.get().getOpenIdToken();
         sendResponse(event, tokenObject);
     } catch (ex) {
         logger.warn("Unable to fetch openId token.", ex);
@@ -706,14 +707,14 @@ const onMessage = function(event: MessageEvent<any>): void {
 
     if (!roomId) {
         // These APIs don't require roomId
-        // Get and set user widgets (not associated with a specific room)
-        // If roomId is specified, it must be validated, so room-based widgets agreed
-        // handled further down.
         if (event.data.action === Action.GetWidgets) {
             getWidgets(event, null);
             return;
         } else if (event.data.action === Action.SetWidget) {
             setWidget(event, null);
+            return;
+        } else if (event.data.action === Action.GetOpenIdToken) {
+            getOpenIdToken(event);
             return;
         } else {
             sendError(event, _t('Missing room_id in request'));
@@ -775,9 +776,6 @@ const onMessage = function(event: MessageEvent<any>): void {
             break;
         case Action.SetBotPower:
             setBotPower(event, roomId, userId, event.data.level, event.data.ignoreIfGreater);
-            break;
-        case Action.GetOpenIdToken:
-            getOpenIdToken(event);
             break;
         default:
             logger.warn("Unhandled postMessage event with action '" + event.data.action +"'");
