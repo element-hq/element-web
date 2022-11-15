@@ -16,9 +16,8 @@ limitations under the License.
 
 import React from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
-// eslint-disable-next-line deprecate/import
-import { mount } from "enzyme";
 import { act } from "react-dom/test-utils";
+import { render, screen } from "@testing-library/react";
 
 import { useTopic } from "../src/hooks/room/useTopic";
 import { mkEvent, stubClient } from "./test-utils";
@@ -46,9 +45,9 @@ describe("useTopic", () => {
             return <p>{ topic.text }</p>;
         }
 
-        const wrapper = mount(<RoomTopic />);
+        render(<RoomTopic />);
 
-        expect(wrapper.text()).toBe("Test topic");
+        expect(screen.queryByText("Test topic")).toBeInTheDocument();
 
         const updatedTopic = mkEvent({
             type: 'm.room.topic',
@@ -65,6 +64,6 @@ describe("useTopic", () => {
             room.addLiveEvents([updatedTopic]);
         });
 
-        expect(wrapper.text()).toBe("New topic");
+        expect(screen.queryByText("New topic")).toBeInTheDocument();
     });
 });
