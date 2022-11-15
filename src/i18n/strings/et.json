@@ -12,7 +12,6 @@
     "Welcome to Element": "Tere tulemast kasutama suhtlusrakendust Element",
     "Sign In": "Logi sisse",
     "Create Account": "Loo konto",
-    "%(brand)s Desktop (%(platformName)s)": "%(brand)s'i töölauaversioon (%(platformName)s)",
     "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "Unsupported browser": "Sellele brauserile puudub tugi",
     "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Parima kasutuskogemuse jaoks palun paigalda <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink> või <safariLink>Safari</safariLink>.",

@@ -12,7 +12,6 @@
     "Invalid JSON": "Ongeldige JSON",
     "Go to your browser to complete Sign In": "Ga naar je browser om de aanmelding te voltooien",
     "Unable to load config file: please refresh the page to try again.": "Kan het configuratiebestand niet laden. Herlaad de pagina.",
-    "%(brand)s Desktop (%(platformName)s)": "%(brand)s Desktop (%(platformName)s)",
     "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "Unsupported browser": "Niet-ondersteunde browser",
     "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Installeer <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, of <safariLink>Safari</safariLink> voor de beste gebruikservaring.",

@@ -16,9 +16,7 @@
     "Unable to load config file: please refresh the page to try again.": "設定ファイルの読み込みに失敗しました：ページを再読み込みして、もう一度やり直してください。",
     "Download Completed": "ダウンロードが完了しました",
     "Open": "開く",
-    "%(brand)s Desktop (%(platformName)s)": "%(brand)sデスクトップ版（%(platformName)s）",
     "Go to your browser to complete Sign In": "ブラウザーに移動してサインインを完了してください",
-    "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s（%(browserName)s、%(osName)s）",
     "Unsupported browser": "サポートされていないブラウザー",
     "Go to element.io": "element.ioへ移動",
     "Failed to start": "起動に失敗しました",
@@ -27,5 +25,8 @@
     "Your browser can't run %(brand)s": "このブラウザーでは%(brand)sが動きません",
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)sはブラウザーの高度な機能を使う必要がありますが、このブラウザーではその機能がサポートされていないようです。",
     "Powered by Matrix": "Powered by Matrix",
-    "Use %(brand)s on mobile": "携帯端末で%(brand)sを使用できます"
+    "Use %(brand)s on mobile": "携帯端末で%(brand)sを使用できます",
+    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "$matrixLogo による、分散型で暗号化された会話とコラボレーション",
+    "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s： %(osName)sの%(browserName)s",
+    "%(brand)s Desktop: %(platformName)s": "%(brand)sデスクトップ：%(platformName)s"
 }

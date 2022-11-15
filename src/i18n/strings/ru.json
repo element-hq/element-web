@@ -12,7 +12,6 @@
     "Invalid JSON": "Неверный JSON",
     "Go to your browser to complete Sign In": "Перейдите в браузер для завершения входа",
     "Unable to load config file: please refresh the page to try again.": "Не удалось загрузить файл конфигурации. Попробуйте обновить страницу.",
-    "%(brand)s Desktop (%(platformName)s)": "%(brand)s десктоп (%(platformName)s)",
     "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "Unsupported browser": "Неподдерживаемый браузер",
     "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Пожалуйста поставьте <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, или <safariLink>Safari</safariLink> для лучшей совместимости.",

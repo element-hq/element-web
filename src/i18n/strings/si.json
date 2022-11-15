@@ -1,6 +1,5 @@
 {
     "Unknown device": "නොදන්නා උපාංගයකි",
-    "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "Welcome to Element": "ඉලමන්ට් වෙත සාදරයෙන් පිළිගනිමු",
     "Open": "විවෘත කරන්න",
     "Powered by Matrix": "මැට්‍රික්ස් මඟින් බලගන්වා ඇත",
@@ -27,6 +26,5 @@
     "I understand the risks and wish to continue": "අවදානම වැටහේ, ඉදිරියට යාමට කැමැත්තෙමි",
     "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "විමධ්‍යගත, සංකේතිත කතාබහ සහ amp; $matrixLogo මගින් බලගැන්වූ සහයෝගිත්වය",
     "Use %(brand)s on mobile": "දුරකථනය සඳහා %(brand)s",
-    "%(brand)s Desktop (%(platformName)s)": "%(brand)s වැඩතලය (%(platformName)s)",
     "Invalid JSON": "JSON වලංගු නොවේ"
 }

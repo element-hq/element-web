@@ -20,6 +20,5 @@
     "I understand the risks and wish to continue": "ฉันเข้าใจความเสี่ยง และดำเนินการต่อ",
     "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "กรุณาติดตั้ง <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, หรือ <safariLink>Safari</safariLink> เพื่อประสิทธิภาพการใช้งานที่ดีที่สุด.",
     "Your browser can't run %(brand)s": "เบราว์เซอร์ของคุณไม่สามารถใช้งาน %(brand)s ได้",
-    "Unsupported browser": "เบราว์เซอร์ไม่รองรับ",
-    "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)"
+    "Unsupported browser": "เบราว์เซอร์ไม่รองรับ"
 }

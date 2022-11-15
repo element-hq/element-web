@@ -24,7 +24,6 @@
     "Go to element.io": "element.io adresine git",
     "Failed to start": "Başlatılamadı",
     "Powered by Matrix": "Gücünü Matrix'ten alır",
-    "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "%(brand)s Desktop (%(platformName)s)": "%(brand)s Masaüstü (%(platformName)s)",
     "Open": "Aç",
     "Use %(brand)s on mobile": "Mobilde %(brand)s kullan",

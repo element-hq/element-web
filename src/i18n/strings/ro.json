@@ -7,7 +7,6 @@
     "Explore rooms": "Explorează camerele",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Configurație invalidă: se poate specifica doar una dintre default_server_config, default_server_name, sau default_hs_url.",
     "Invalid JSON": "JSON invalid",
-    "%(brand)s Desktop (%(platformName)s)": "%(brand)s Desktop (%(platformName)s)",
     "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "Unsupported browser": "Acest browser nu este suportat",
     "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Instalați vă rog <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, sau <safariLink>Safari</safariLink> pentru cea mai bună experiență.",

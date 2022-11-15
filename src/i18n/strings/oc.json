@@ -20,7 +20,6 @@
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s utiliza de foncions avançadas que lo vòstre navigator non suporta pas.",
     "Unsupported browser": "Navigator incompatible",
     "Powered by Matrix": "Fonciona ambé Matrix",
-    "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "%(brand)s Desktop (%(platformName)s)": "%(brand)s de burèu (%(platformName)s)",
     "Open": "Dobrir",
     "Download Completed": "Descargament acabat",
