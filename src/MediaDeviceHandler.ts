@@ -21,6 +21,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import SettingsStore from "./settings/SettingsStore";
 import { SettingLevel } from "./settings/SettingLevel";
 import { MatrixClientPeg } from "./MatrixClientPeg";
+import { _t } from './languageHandler';
 
 // XXX: MediaDeviceKind is a union type, so we make our own enum
 export enum MediaDeviceKindEnum {
@@ -78,6 +79,18 @@ export default class MediaDeviceHandler extends EventEmitter {
             logger.warn('Unable to refresh WebRTC Devices: ', error);
         }
     }
+
+    public static getDefaultDevice = (devices: Array<Partial<MediaDeviceInfo>>): string => {
+        // Note we're looking for a device with deviceId 'default' but adding a device
+        // with deviceId == the empty string: this is because Chrome gives us a device
+        // with deviceId 'default', so we're looking for this, not the one we are adding.
+        if (!devices.some((i) => i.deviceId === 'default')) {
+            devices.unshift({ deviceId: '', label: _t('Default Device') });
+            return '';
+        } else {
+            return 'default';
+        }
+    };
 
     /**
      * Retrieves devices from the SettingsStore and tells the js-sdk to use them

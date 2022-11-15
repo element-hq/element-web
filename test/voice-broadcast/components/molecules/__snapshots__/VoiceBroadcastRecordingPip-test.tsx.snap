@@ -28,16 +28,6 @@ exports[`VoiceBroadcastRecordingPip when rendering a paused recording should ren
           <div
             class="mx_Icon mx_Icon_16"
           />
-          <span>
-            @userId:matrix.org
-          </span>
-        </div>
-        <div
-          class="mx_VoiceBroadcastHeader_line"
-        >
-          <div
-            class="mx_Icon mx_Icon_16"
-          />
           <span
             class="mx_Clock"
           >
@@ -106,16 +96,6 @@ exports[`VoiceBroadcastRecordingPip when rendering a started recording should re
           class="mx_VoiceBroadcastHeader_room"
         >
           My room
-        </div>
-        <div
-          class="mx_VoiceBroadcastHeader_line"
-        >
-          <div
-            class="mx_Icon mx_Icon_16"
-          />
-          <span>
-            @userId:matrix.org
-          </span>
         </div>
         <div
           class="mx_VoiceBroadcastHeader_line"

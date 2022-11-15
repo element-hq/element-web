@@ -12,7 +12,8 @@ limitations under the License.
 */
 
 import React from "react";
-import { Room, RoomMember } from "matrix-js-sdk/src/matrix";
+import { Room } from "matrix-js-sdk/src/matrix";
+import classNames from "classnames";
 
 import { LiveBadge } from "../..";
 import { Icon as LiveIcon } from "../../../../res/img/element-icons/live.svg";
@@ -28,8 +29,9 @@ import { formatTimeLeft } from "../../../DateUtils";
 interface VoiceBroadcastHeaderProps {
     live?: boolean;
     onCloseClick?: () => void;
+    onMicrophoneLineClick?: () => void;
     room: Room;
-    sender: RoomMember;
+    microphoneLabel?: string;
     showBroadcast?: boolean;
     timeLeft?: number;
     showClose?: boolean;
@@ -38,8 +40,9 @@ interface VoiceBroadcastHeaderProps {
 export const VoiceBroadcastHeader: React.FC<VoiceBroadcastHeaderProps> = ({
     live = false,
     onCloseClick = () => {},
+    onMicrophoneLineClick,
     room,
-    sender,
+    microphoneLabel,
     showBroadcast = false,
     showClose = false,
     timeLeft,
@@ -66,16 +69,28 @@ export const VoiceBroadcastHeader: React.FC<VoiceBroadcastHeaderProps> = ({
         </div>
         : null;
 
+    const microphoneLineClasses = classNames({
+        mx_VoiceBroadcastHeader_line: true,
+        ["mx_VoiceBroadcastHeader_mic--clickable"]: onMicrophoneLineClick,
+    });
+
+    const microphoneLine = microphoneLabel
+        ? <div
+            className={microphoneLineClasses}
+            onClick={onMicrophoneLineClick}
+        >
+            <MicrophoneIcon className="mx_Icon mx_Icon_16" />
+            <span>{ microphoneLabel }</span>
+        </div>
+        : null;
+
     return <div className="mx_VoiceBroadcastHeader">
         <RoomAvatar room={room} width={32} height={32} />
         <div className="mx_VoiceBroadcastHeader_content">
             <div className="mx_VoiceBroadcastHeader_room">
                 { room.name }
             </div>
-            <div className="mx_VoiceBroadcastHeader_line">
-                <MicrophoneIcon className="mx_Icon mx_Icon_16" />
-                <span>{ sender.name }</span>
-            </div>
+            { microphoneLine }
             { timeLeftLine }
             { broadcast }
         </div>

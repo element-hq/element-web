@@ -27,18 +27,6 @@ import SettingsFlag from '../../../elements/SettingsFlag';
 import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
 import { requestMediaPermissions } from '../../../../../utils/media/requestMediaPermissions';
 
-const getDefaultDevice = (devices: Array<Partial<MediaDeviceInfo>>) => {
-    // Note we're looking for a device with deviceId 'default' but adding a device
-    // with deviceId == the empty string: this is because Chrome gives us a device
-    // with deviceId 'default', so we're looking for this, not the one we are adding.
-    if (!devices.some((i) => i.deviceId === 'default')) {
-        devices.unshift({ deviceId: '', label: _t('Default Device') });
-        return '';
-    } else {
-        return 'default';
-    }
-};
-
 interface IState {
     mediaDevices: IMediaDevices;
     [MediaDeviceKindEnum.AudioOutput]: string;
@@ -116,7 +104,7 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
         const devices = this.state.mediaDevices[kind].slice(0);
         if (devices.length === 0) return null;
 
-        const defaultDevice = getDefaultDevice(devices);
+        const defaultDevice = MediaDeviceHandler.getDefaultDevice(devices);
         return (
             <Field
                 element="select"

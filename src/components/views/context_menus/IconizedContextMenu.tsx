@@ -48,7 +48,7 @@ interface ICheckboxProps extends React.ComponentProps<typeof MenuItemCheckbox> {
 }
 
 interface IRadioProps extends React.ComponentProps<typeof MenuItemRadio> {
-    iconClassName: string;
+    iconClassName?: string;
 }
 
 export const IconizedContextMenuRadio: React.FC<IRadioProps> = ({
@@ -67,7 +67,7 @@ export const IconizedContextMenuRadio: React.FC<IRadioProps> = ({
         active={active}
         label={label}
     >
-        <span className={classNames("mx_IconizedContextMenu_icon", iconClassName)} />
+        { iconClassName && <span className={classNames("mx_IconizedContextMenu_icon", iconClassName)} /> }
         <span className="mx_IconizedContextMenu_label">{ label }</span>
         { active && <span className="mx_IconizedContextMenu_icon mx_IconizedContextMenu_checked" /> }
     </MenuItemRadio>;

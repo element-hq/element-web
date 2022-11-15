@@ -38,7 +38,7 @@ describe("VoiceBroadcastHeader", () => {
     const renderHeader = (live: boolean, showBroadcast: boolean = undefined): RenderResult => {
         return render(<VoiceBroadcastHeader
             live={live}
-            sender={sender}
+            microphoneLabel={sender.name}
             room={room}
             showBroadcast={showBroadcast}
         />);

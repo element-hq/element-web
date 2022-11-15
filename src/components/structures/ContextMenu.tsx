@@ -472,6 +472,35 @@ export const toRightOf = (elementRect: Pick<DOMRect, "right" | "top" | "height">
     return { left, top, chevronOffset };
 };
 
+export type ToLeftOf = {
+    chevronOffset: number;
+    right: number;
+    top: number;
+};
+
+// Placement method for <ContextMenu /> to position context menu to left of elementRect with chevronOffset
+export const toLeftOf = (elementRect: DOMRect, chevronOffset = 12): ToLeftOf => {
+    const right = UIStore.instance.windowWidth - elementRect.left + window.scrollX - 3;
+    let top = elementRect.top + (elementRect.height / 2) + window.scrollY;
+    top -= chevronOffset + 8; // where 8 is half the height of the chevron
+    return { right, top, chevronOffset };
+};
+
+/**
+ * Placement method for <ContextMenu /> to position context menu of or right of elementRect
+ * depending on which side has more space.
+ */
+export const toLeftOrRightOf = (elementRect: DOMRect, chevronOffset = 12): ToRightOf | ToLeftOf => {
+    const spaceToTheLeft = elementRect.left;
+    const spaceToTheRight = UIStore.instance.windowWidth - elementRect.right;
+
+    if (spaceToTheLeft > spaceToTheRight) {
+        return toLeftOf(elementRect, chevronOffset);
+    }
+
+    return toRightOf(elementRect, chevronOffset);
+};
+
 export type AboveLeftOf = IPosition & {
     chevronFace: ChevronFace;
 };
