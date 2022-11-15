@@ -7148,9 +7148,10 @@ matrix-events-sdk@0.0.1:
   resolved "https://registry.yarnpkg.com/matrix-events-sdk/-/matrix-events-sdk-0.0.1.tgz#c8c38911e2cb29023b0bbac8d6f32e0de2c957dd"
   integrity sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==
 
-"matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "21.1.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/c6ee258789c9e01d328b5d9158b5b372e3a0da82"
+matrix-js-sdk@21.2.0-rc.1:
+  version "21.2.0-rc.1"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-21.2.0-rc.1.tgz#8fe43ab89962d62ae7a35eba3d5689bad8b60fce"
+  integrity sha512-PQfTY1FC8pa8FtkrSJdLQ1yTWLZ+ZeAavhk+S8Og5MKc8g618zJelOVA/7XQJgCdGNEOb29L9yKSfsl1qHFrtQ==
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@types/sdp-transform" "^2.4.5"
