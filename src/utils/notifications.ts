@@ -17,6 +17,8 @@ limitations under the License.
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { LOCAL_NOTIFICATION_SETTINGS_PREFIX } from "matrix-js-sdk/src/@types/event";
 import { LocalNotificationSettings } from "matrix-js-sdk/src/@types/local_notifications";
+import { ReceiptType } from "matrix-js-sdk/src/@types/read_receipts";
+import { Room } from "matrix-js-sdk/src/models/room";
 
 import SettingsStore from "../settings/SettingsStore";
 
@@ -55,4 +57,32 @@ export function localNotificationsAreSilenced(cli: MatrixClient): boolean {
     const eventType = getLocalNotificationAccountDataEventType(cli.deviceId);
     const event = cli.getAccountData(eventType);
     return event?.getContent<LocalNotificationSettings>()?.is_silenced ?? false;
+}
+
+export function clearAllNotifications(client: MatrixClient): Promise<Array<{}>> {
+    const receiptPromises = client.getRooms().reduce((promises, room: Room) => {
+        if (room.getUnreadNotificationCount() > 0) {
+            const roomEvents = room.getLiveTimeline().getEvents();
+            const lastThreadEvents = room.lastThread?.events;
+
+            const lastRoomEvent = roomEvents?.[roomEvents?.length - 1];
+            const lastThreadLastEvent = lastThreadEvents?.[lastThreadEvents?.length - 1];
+
+            const lastEvent = (lastRoomEvent?.getTs() ?? 0) > (lastThreadLastEvent?.getTs() ?? 0)
+                ? lastRoomEvent
+                : lastThreadLastEvent;
+
+            if (lastEvent) {
+                const receiptType = SettingsStore.getValue("sendReadReceipts", room.roomId)
+                    ? ReceiptType.Read
+                    : ReceiptType.ReadPrivate;
+                const promise = client.sendReadReceipt(lastEvent, receiptType, true);
+                promises.push(promise);
+            }
+        }
+
+        return promises;
+    }, []);
+
+    return Promise.all(receiptPromises);
 }

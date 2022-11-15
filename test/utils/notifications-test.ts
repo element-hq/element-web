@@ -16,15 +16,21 @@ limitations under the License.
 
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { mocked } from "jest-mock";
+import { MatrixClient } from "matrix-js-sdk/src/client";
+import { NotificationCountType, Room } from "matrix-js-sdk/src/models/room";
+import { ReceiptType } from "matrix-js-sdk/src/@types/read_receipts";
 
 import {
     localNotificationsAreSilenced,
     getLocalNotificationAccountDataEventType,
     createLocalNotificationSettingsIfNeeded,
     deviceNotificationSettingsKeys,
+    clearAllNotifications,
 } from "../../src/utils/notifications";
 import SettingsStore from "../../src/settings/SettingsStore";
 import { getMockClientWithEventEmitter } from "../test-utils/client";
+import { mkMessage, stubClient } from "../test-utils/test-utils";
+import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 
 jest.mock("../../src/settings/SettingsStore");
 
@@ -97,6 +103,63 @@ describe('notifications', () => {
 
             mockClient.setAccountData(accountDataEventKey, { is_silenced: false });
             expect(localNotificationsAreSilenced(mockClient)).toBeFalsy();
+        });
+    });
+
+    describe("clearAllNotifications", () => {
+        let client: MatrixClient;
+        let room: Room;
+        let sendReadReceiptSpy;
+
+        const ROOM_ID = "123";
+        const USER_ID = "@bob:example.org";
+
+        beforeEach(() => {
+            stubClient();
+            client = mocked(MatrixClientPeg.get());
+            room = new Room(ROOM_ID, client, USER_ID);
+            sendReadReceiptSpy = jest.spyOn(client, "sendReadReceipt").mockResolvedValue({});
+            jest.spyOn(client, "getRooms").mockReturnValue([room]);
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((name) => {
+                return name === "sendReadReceipts";
+            });
+        });
+
+        it("does not send any requests if everything has been read", () => {
+            clearAllNotifications(client);
+            expect(sendReadReceiptSpy).not.toBeCalled();
+        });
+
+        it("sends unthreaded receipt requests", () => {
+            const message = mkMessage({
+                event: true,
+                room: ROOM_ID,
+                user: USER_ID,
+                ts: 1,
+            });
+            room.addLiveEvents([message]);
+            room.setUnreadNotificationCount(NotificationCountType.Total, 1);
+
+            clearAllNotifications(client);
+
+            expect(sendReadReceiptSpy).toBeCalledWith(message, ReceiptType.Read, true);
+        });
+
+        it("sends private read receipts", () => {
+            const message = mkMessage({
+                event: true,
+                room: ROOM_ID,
+                user: USER_ID,
+                ts: 1,
+            });
+            room.addLiveEvents([message]);
+            room.setUnreadNotificationCount(NotificationCountType.Total, 1);
+
+            jest.spyOn(SettingsStore, "getValue").mockReset().mockReturnValue(false);
+
+            clearAllNotifications(client);
+
+            expect(sendReadReceiptSpy).toBeCalledWith(message, ReceiptType.ReadPrivate, true);
         });
     });
 });

@@ -1,157 +1,38 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<Notifications /> main notification switches email switches renders email switches correctly when email 3pids exist 1`] = `
-<LabelledToggleSwitch
-  data-test-id="notif-email-switch"
-  disabled={false}
-  key="tester@test.com"
-  label="Enable email notifications for tester@test.com"
-  onChange={[Function]}
-  value={false}
->
-  <div
-    className="mx_SettingsFlag"
-  >
-    <span
-      className="mx_SettingsFlag_label"
-    >
-      Enable email notifications for tester@test.com
-    </span>
-    <_default
-      checked={false}
-      disabled={false}
-      onChange={[Function]}
-      title="Enable email notifications for tester@test.com"
-    >
-      <AccessibleTooltipButton
-        aria-checked={false}
-        aria-disabled={false}
-        className="mx_ToggleSwitch mx_ToggleSwitch_enabled"
-        onClick={[Function]}
-        role="switch"
-        title="Enable email notifications for tester@test.com"
-      >
-        <AccessibleButton
-          aria-checked={false}
-          aria-disabled={false}
-          aria-label="Enable email notifications for tester@test.com"
-          className="mx_ToggleSwitch mx_ToggleSwitch_enabled"
-          element="div"
-          onBlur={[Function]}
-          onClick={[Function]}
-          onFocus={[Function]}
-          onMouseLeave={[Function]}
-          onMouseOver={[Function]}
-          role="switch"
-          tabIndex={0}
-        >
-          <div
-            aria-checked={false}
-            aria-disabled={false}
-            aria-label="Enable email notifications for tester@test.com"
-            className="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
-            onBlur={[Function]}
-            onClick={[Function]}
-            onFocus={[Function]}
-            onKeyDown={[Function]}
-            onKeyUp={[Function]}
-            onMouseLeave={[Function]}
-            onMouseOver={[Function]}
-            role="switch"
-            tabIndex={0}
-          >
-            <div
-              className="mx_ToggleSwitch_ball"
-            />
-          </div>
-        </AccessibleButton>
-      </AccessibleTooltipButton>
-    </_default>
-  </div>
-</LabelledToggleSwitch>
-`;
-
 exports[`<Notifications /> main notification switches renders only enable notifications switch when notifications are disabled 1`] = `
-<Notifications>
+<div>
   <div
-    className="mx_UserNotifSettings"
+    class="mx_UserNotifSettings"
   >
-    <LabelledToggleSwitch
-      caption="Turn off to disable notifications on all your devices and sessions"
-      data-test-id="notif-master-switch"
-      disabled={false}
-      label="Enable notifications for this account"
-      onChange={[Function]}
-      value={false}
+    <div
+      class="mx_SettingsFlag"
+      data-testid="notif-master-switch"
     >
-      <div
-        className="mx_SettingsFlag"
+      <span
+        class="mx_SettingsFlag_label"
       >
+        Enable notifications for this account
+        <br />
         <span
-          className="mx_SettingsFlag_label"
+          class="mx_Caption"
         >
-          Enable notifications for this account
-          <br />
-          <Caption>
-            <span
-              className="mx_Caption"
-            >
-              Turn off to disable notifications on all your devices and sessions
-            </span>
-          </Caption>
+          Turn off to disable notifications on all your devices and sessions
         </span>
-        <_default
-          checked={false}
-          disabled={false}
-          onChange={[Function]}
-          title="Enable notifications for this account"
-        >
-          <AccessibleTooltipButton
-            aria-checked={false}
-            aria-disabled={false}
-            className="mx_ToggleSwitch mx_ToggleSwitch_enabled"
-            onClick={[Function]}
-            role="switch"
-            title="Enable notifications for this account"
-          >
-            <AccessibleButton
-              aria-checked={false}
-              aria-disabled={false}
-              aria-label="Enable notifications for this account"
-              className="mx_ToggleSwitch mx_ToggleSwitch_enabled"
-              element="div"
-              onBlur={[Function]}
-              onClick={[Function]}
-              onFocus={[Function]}
-              onMouseLeave={[Function]}
-              onMouseOver={[Function]}
-              role="switch"
-              tabIndex={0}
-            >
-              <div
-                aria-checked={false}
-                aria-disabled={false}
-                aria-label="Enable notifications for this account"
-                className="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
-                onBlur={[Function]}
-                onClick={[Function]}
-                onFocus={[Function]}
-                onKeyDown={[Function]}
-                onKeyUp={[Function]}
-                onMouseLeave={[Function]}
-                onMouseOver={[Function]}
-                role="switch"
-                tabIndex={0}
-              >
-                <div
-                  className="mx_ToggleSwitch_ball"
-                />
-              </div>
-            </AccessibleButton>
-          </AccessibleTooltipButton>
-        </_default>
+      </span>
+      <div
+        aria-checked="false"
+        aria-disabled="false"
+        aria-label="Enable notifications for this account"
+        class="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
+        role="switch"
+        tabindex="0"
+      >
+        <div
+          class="mx_ToggleSwitch_ball"
+        />
       </div>
-    </LabelledToggleSwitch>
+    </div>
   </div>
-</Notifications>
+</div>
 `;
