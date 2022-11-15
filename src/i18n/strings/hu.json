@@ -12,7 +12,6 @@
     "Invalid JSON": "Érvénytelen JSON",
     "Go to your browser to complete Sign In": "A böngészőben fejezze be a bejelentkezést",
     "Unable to load config file: please refresh the page to try again.": "A konfigurációs fájlt nem sikerült betölteni: frissítse az oldalt és próbálja meg újra.",
-    "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "Unsupported browser": "Nem támogatott böngésző",
     "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "A legjobb élmény érdékében telepítsen <chromeLink>Chrome-ot</chromeLink>, <firefoxLink>Firefoxot</firefoxLink> vagy <safariLink>Safarit</safariLink>.",
     "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Folytathatja a jelenlegi böngészőjével, de néhány vagy az összes funkció használhatatlan lehet, vagy hibák lehetnek az alkalmazás kinézetében és viselkedésében.",

@@ -24,7 +24,6 @@
     "Your Element is misconfigured": "Ditt Element er feilkonfigurert",
     "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Vennligst installer <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, eller <safariLink>Safari</safariLink> for den beste opplevelsen.",
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s bruker avanserte nettleserfunksjoner som ikke støttes av din nåværende nettleser.",
-    "%(brand)s Desktop (%(platformName)s)": "%(brand)s Skrivebord (%(platformName)s)",
     "Open": "Åpne",
     "Use %(brand)s on mobile": "Bruk %(brand)s på mobil"
 }

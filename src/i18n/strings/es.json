@@ -12,7 +12,6 @@
     "Invalid JSON": "JSON inválido",
     "Go to your browser to complete Sign In": "Abre tu navegador web para completar el registro",
     "Unable to load config file: please refresh the page to try again.": "No se ha podido cargar el archivo de configuración. Recarga la página para intentarlo otra vez.",
-    "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "Unsupported browser": "Navegador no compatible",
     "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Por favor, instale <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, o <safariLink>Safari</safariLink> para la mejor experiencia.",
     "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Puedes seguir utilizando tu navegador actual, pero puede que algunas funcionalidades no estén disponibles o que algunas partes de la aplicación se muestren de forma incorrecta.",

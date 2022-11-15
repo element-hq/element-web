@@ -12,7 +12,6 @@
     "Invalid JSON": "無效的 JSON",
     "Go to your browser to complete Sign In": "到您的瀏覽器完成登入",
     "Unable to load config file: please refresh the page to try again.": "無法載入設定檔：請重新整理頁面以再試一次。",
-    "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "Unsupported browser": "不支援的瀏覽器",
     "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "請安裝 <chromeLink>Chrome</chromeLink>、<firefoxLink>Firefox</firefoxLink> 或 <safariLink>Safari</safariLink> 以取得最佳體驗。",
     "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "您可以繼續使用您目前的瀏覽器，但部份或全部的功能可能會無法運作，而應用程式的外觀與感覺可能也會不正確。",
