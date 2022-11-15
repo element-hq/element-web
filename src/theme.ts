@@ -15,10 +15,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { compare } from "matrix-js-sdk/src/utils";
+
 import { _t } from "./languageHandler";
 import SettingsStore from "./settings/SettingsStore";
 import ThemeWatcher from "./settings/watchers/ThemeWatcher";
-import { compare } from "./utils/strings";
 
 export const DEFAULT_THEME = "light";
 const HIGH_CONTRAST_THEMES = {

@@ -19,12 +19,12 @@ import React from 'react';
 import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
 import { RoomMember, RoomMemberEvent } from "matrix-js-sdk/src/models/room-member";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { compare } from "matrix-js-sdk/src/utils";
 
 import * as WhoIsTyping from '../../../WhoIsTyping';
 import Timer from '../../../utils/Timer';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import MemberAvatar from '../avatars/MemberAvatar';
-import { compare } from "../../../utils/strings";
 
 interface IProps {
     // the room this statusbar is representing.

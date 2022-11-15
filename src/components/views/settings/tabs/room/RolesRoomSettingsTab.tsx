@@ -20,12 +20,12 @@ import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { RoomState, RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 import { logger } from "matrix-js-sdk/src/logger";
 import { throttle } from "lodash";
+import { compare } from "matrix-js-sdk/src/utils";
 
 import { _t, _td } from "../../../../../languageHandler";
 import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import Modal from "../../../../../Modal";
-import { compare } from "../../../../../utils/strings";
 import ErrorDialog from '../../../dialogs/ErrorDialog';
 import PowerSelector from "../../../elements/PowerSelector";
 import SettingsFieldset from '../../SettingsFieldset';

@@ -75,16 +75,6 @@ export function copyNode(ref: Element): boolean {
     return document.execCommand('copy');
 }
 
-const collator = new Intl.Collator();
-/**
- * Performant language-sensitive string comparison
- * @param a the first string to compare
- * @param b the second string to compare
- */
-export function compare(a: string, b: string): number {
-    return collator.compare(a, b);
-}
-
 /**
  * Returns text which has been selected by the user
  * @returns the selected text

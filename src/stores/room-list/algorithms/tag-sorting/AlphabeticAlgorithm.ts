@@ -15,10 +15,10 @@ limitations under the License.
 */
 
 import { Room } from "matrix-js-sdk/src/models/room";
+import { compare } from "matrix-js-sdk/src/utils";
 
 import { TagID } from "../../models";
 import { IAlgorithm } from "./IAlgorithm";
-import { compare } from "../../../../utils/strings";
 
 /**
  * Sorts rooms according to the browser's determination of alphabetic.

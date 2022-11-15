@@ -17,6 +17,7 @@ limitations under the License.
 import url from 'url';
 import { logger } from "matrix-js-sdk/src/logger";
 import { ClientEvent, MatrixClient } from "matrix-js-sdk/src/client";
+import { compare } from "matrix-js-sdk/src/utils";
 
 import type { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import SdkConfig from '../SdkConfig';
@@ -26,7 +27,6 @@ import IntegrationsImpossibleDialog from "../components/views/dialogs/Integratio
 import IntegrationsDisabledDialog from "../components/views/dialogs/IntegrationsDisabledDialog";
 import WidgetUtils from "../utils/WidgetUtils";
 import { MatrixClientPeg } from "../MatrixClientPeg";
-import { compare } from "../utils/strings";
 
 const KIND_PREFERENCE = [
     // Ordered: first is most preferred, last is least preferred.
