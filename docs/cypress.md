@@ -70,7 +70,9 @@ at the start of each test run.
 ## Writing Tests
 Mostly this is the same advice as for writing any other Cypress test: the Cypress
 docs are well worth a read if you're not already familiar with Cypress testing, eg.
-https://docs.cypress.io/guides/references/best-practices .
+https://docs.cypress.io/guides/references/best-practices. To avoid your tests being
+flaky it is also recommended to give https://docs.cypress.io/guides/core-concepts/retry-ability
+a read.
 
 ### Getting a Synapse
 The key difference is in starting Synapse instances.  Tests use this plugin via
