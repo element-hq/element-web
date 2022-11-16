@@ -55,7 +55,7 @@ export const VoiceBroadcastRecordingPip: React.FC<VoiceBroadcastRecordingPipProp
         className="mx_VoiceBroadcastBody mx_VoiceBroadcastBody--pip"
     >
         <VoiceBroadcastHeader
-            live={live}
+            live={live ? "live" : "grey"}
             room={room}
             timeLeft={timeLeft}
         />

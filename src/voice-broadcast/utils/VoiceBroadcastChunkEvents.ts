@@ -93,6 +93,10 @@ export class VoiceBroadcastChunkEvents {
         return null;
     }
 
+    public isLast(event: MatrixEvent): boolean {
+        return this.events.indexOf(event) >= this.events.length - 1;
+    }
+
     private calculateChunkLength(event: MatrixEvent): number {
         return event.getContent()?.["org.matrix.msc1767.audio"]?.duration
             || event.getContent()?.info?.duration

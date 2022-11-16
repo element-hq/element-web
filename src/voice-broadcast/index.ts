@@ -52,6 +52,8 @@ export * from "./utils/VoiceBroadcastResumer";
 export const VoiceBroadcastInfoEventType = "io.element.voice_broadcast_info";
 export const VoiceBroadcastChunkEventType = "io.element.voice_broadcast_chunk";
 
+export type VoiceBroadcastLiveness = "live" | "not-live" | "grey";
+
 export enum VoiceBroadcastInfoState {
     Started = "started",
     Paused = "paused",

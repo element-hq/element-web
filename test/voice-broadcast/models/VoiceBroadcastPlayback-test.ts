@@ -23,6 +23,7 @@ import { RelationsHelperEvent } from "../../../src/events/RelationsHelper";
 import { MediaEventHelper } from "../../../src/utils/MediaEventHelper";
 import {
     VoiceBroadcastInfoState,
+    VoiceBroadcastLiveness,
     VoiceBroadcastPlayback,
     VoiceBroadcastPlaybackEvent,
     VoiceBroadcastPlaybackState,
@@ -73,6 +74,12 @@ describe("VoiceBroadcastPlayback", () => {
     const itShouldEmitAStateChangedEvent = (state: VoiceBroadcastPlaybackState) => {
         it(`should emit a ${state} state changed event`, () => {
             expect(mocked(onStateChanged)).toHaveBeenCalledWith(state, playback);
+        });
+    };
+
+    const itShouldHaveLiveness = (liveness: VoiceBroadcastLiveness): void => {
+        it(`should have liveness ${liveness}`, () => {
+            expect(playback.getLiveness()).toBe(liveness);
         });
     };
 
@@ -187,6 +194,8 @@ describe("VoiceBroadcastPlayback", () => {
         describe("and calling start", () => {
             startPlayback();
 
+            itShouldHaveLiveness("grey");
+
             it("should be in buffering state", () => {
                 expect(playback.getState()).toBe(VoiceBroadcastPlaybackState.Buffering);
             });
@@ -223,6 +232,7 @@ describe("VoiceBroadcastPlayback", () => {
                 });
 
                 itShouldSetTheStateTo(VoiceBroadcastPlaybackState.Playing);
+                itShouldHaveLiveness("live");
 
                 it("should update the duration", () => {
                     expect(playback.durationSeconds).toBe(2.3);

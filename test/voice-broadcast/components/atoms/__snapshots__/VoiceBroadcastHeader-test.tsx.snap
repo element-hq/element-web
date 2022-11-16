@@ -1,6 +1,56 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`VoiceBroadcastHeader when rendering a live broadcast header with broadcast info should render the header with a live badge 1`] = `
+exports[`VoiceBroadcastHeader when rendering a live (grey) broadcast header with broadcast info should render the header with a grey live badge 1`] = `
+<div>
+  <div
+    class="mx_VoiceBroadcastHeader"
+  >
+    <div
+      data-testid="room-avatar"
+    >
+      room avatar: 
+      !room:example.com
+    </div>
+    <div
+      class="mx_VoiceBroadcastHeader_content"
+    >
+      <div
+        class="mx_VoiceBroadcastHeader_room"
+      >
+        !room:example.com
+      </div>
+      <div
+        class="mx_VoiceBroadcastHeader_line"
+      >
+        <div
+          class="mx_Icon mx_Icon_16"
+        />
+        <span>
+          test user
+        </span>
+      </div>
+      <div
+        class="mx_VoiceBroadcastHeader_line"
+      >
+        <div
+          class="mx_Icon mx_Icon_16"
+        />
+        Voice broadcast
+      </div>
+    </div>
+    <div
+      class="mx_LiveBadge mx_LiveBadge--grey"
+    >
+      <div
+        class="mx_Icon mx_Icon_16"
+      />
+      Live
+    </div>
+  </div>
+</div>
+`;
+
+exports[`VoiceBroadcastHeader when rendering a live broadcast header with broadcast info should render the header with a red live badge 1`] = `
 <div>
   <div
     class="mx_VoiceBroadcastHeader"

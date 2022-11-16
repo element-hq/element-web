@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`VoiceBroadcastPlaybackBody when rendering a 0 broadcast should render as expected 1`] = `
+exports[`VoiceBroadcastPlaybackBody when rendering a 0/not-live broadcast should render as expected 1`] = `
 <div>
   <div
     class="mx_VoiceBroadcastBody"
@@ -41,14 +41,6 @@ exports[`VoiceBroadcastPlaybackBody when rendering a 0 broadcast should render a
           Voice broadcast
         </div>
       </div>
-      <div
-        class="mx_LiveBadge"
-      >
-        <div
-          class="mx_Icon mx_Icon_16"
-        />
-        Live
-      </div>
     </div>
     <div
       class="mx_VoiceBroadcastBody_controls"
@@ -87,7 +79,7 @@ exports[`VoiceBroadcastPlaybackBody when rendering a 0 broadcast should render a
 </div>
 `;
 
-exports[`VoiceBroadcastPlaybackBody when rendering a 1 broadcast should render as expected 1`] = `
+exports[`VoiceBroadcastPlaybackBody when rendering a 1/live broadcast should render as expected 1`] = `
 <div>
   <div
     class="mx_VoiceBroadcastBody"
@@ -302,14 +294,6 @@ exports[`VoiceBroadcastPlaybackBody when rendering a stopped broadcast and the l
           />
           Voice broadcast
         </div>
-      </div>
-      <div
-        class="mx_LiveBadge"
-      >
-        <div
-          class="mx_Icon mx_Icon_16"
-        />
-        Live
       </div>
     </div>
     <div

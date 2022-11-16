@@ -15,7 +15,7 @@ import React from "react";
 import { Room } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 
-import { LiveBadge } from "../..";
+import { LiveBadge, VoiceBroadcastLiveness } from "../..";
 import { Icon as LiveIcon } from "../../../../res/img/element-icons/live.svg";
 import { Icon as MicrophoneIcon } from "../../../../res/img/voip/call-view/mic-on.svg";
 import { Icon as TimerIcon } from "../../../../res/img/element-icons/Timer.svg";
@@ -27,7 +27,7 @@ import Clock from "../../../components/views/audio_messages/Clock";
 import { formatTimeLeft } from "../../../DateUtils";
 
 interface VoiceBroadcastHeaderProps {
-    live?: boolean;
+    live?: VoiceBroadcastLiveness;
     onCloseClick?: () => void;
     onMicrophoneLineClick?: () => void;
     room: Room;
@@ -38,7 +38,7 @@ interface VoiceBroadcastHeaderProps {
 }
 
 export const VoiceBroadcastHeader: React.FC<VoiceBroadcastHeaderProps> = ({
-    live = false,
+    live = "not-live",
     onCloseClick = () => {},
     onMicrophoneLineClick,
     room,
@@ -54,7 +54,9 @@ export const VoiceBroadcastHeader: React.FC<VoiceBroadcastHeaderProps> = ({
         </div>
         : null;
 
-    const liveBadge = live ? <LiveBadge /> : null;
+    const liveBadge = live === "not-live"
+        ? null
+        : <LiveBadge grey={live === "grey"} />;
 
     const closeButton = showClose
         ? <AccessibleButton onClick={onCloseClick}>

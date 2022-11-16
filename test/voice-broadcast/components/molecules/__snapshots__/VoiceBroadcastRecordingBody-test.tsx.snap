@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`VoiceBroadcastRecordingBody when rendering a live broadcast should render the expected HTML 1`] = `
+exports[`VoiceBroadcastRecordingBody when rendering a live broadcast should render with a red live badge 1`] = `
 <div>
   <div
     class="mx_VoiceBroadcastBody"
@@ -35,6 +35,52 @@ exports[`VoiceBroadcastRecordingBody when rendering a live broadcast should rend
       </div>
       <div
         class="mx_LiveBadge"
+      >
+        <div
+          class="mx_Icon mx_Icon_16"
+        />
+        Live
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`VoiceBroadcastRecordingBody when rendering a paused broadcast should render with a grey live badge 1`] = `
+<div>
+  <div
+    class="mx_VoiceBroadcastBody"
+  >
+    <div
+      class="mx_VoiceBroadcastHeader"
+    >
+      <div
+        data-testid="room-avatar"
+      >
+        room avatar: 
+        My room
+      </div>
+      <div
+        class="mx_VoiceBroadcastHeader_content"
+      >
+        <div
+          class="mx_VoiceBroadcastHeader_room"
+        >
+          My room
+        </div>
+        <div
+          class="mx_VoiceBroadcastHeader_line"
+        >
+          <div
+            class="mx_Icon mx_Icon_16"
+          />
+          <span>
+            @user:example.com
+          </span>
+        </div>
+      </div>
+      <div
+        class="mx_LiveBadge mx_LiveBadge--grey"
       >
         <div
           class="mx_Icon mx_Icon_16"
