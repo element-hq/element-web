@@ -25,7 +25,6 @@
     "Download Completed": "Lejuplāde pabeigta",
     "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Jūsu Element konfigurācija satur kļūdainu JSON. Lūdzu, izlabojiet un pārlādējiet lapu.",
     "Your Element is misconfigured": "Jūsu Element ir nokonfigurēts kļūdaini",
-    "%(brand)s Desktop (%(platformName)s)": "%(brand)s Galdvirsmas (%(platformName)s)",
     "Use %(brand)s on mobile": "Mobilajā tālrunī izmanojiet %(brand)s",
     "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Decentralizēta, šifrēta saziņa &amp; sadarbība, ko nodrošina $matrixLogo"
 }

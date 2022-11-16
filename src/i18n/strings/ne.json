@@ -1,7 +1,6 @@
 {
     "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "सर्वोत्तम अनुभव के लिए कृपया <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, या <safariLink>Safari</safariLink> इंस्टॉल करें।",
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s उन्नत ब्राउज़र सुविधाओं का उपयोग करते हैं जो आपके वर्तमान ब्राउज़र द्वारा समर्थित नहीं हैं।",
-    "%(brand)s Desktop (%(platformName)s)": "%(brand)s का डेस्कटॉप (%(platformName)s)",
     "Sign In": "साइन करना",
     "Explore rooms": "रूम का अन्वेषण करें",
     "Create Account": "खाता बनाएं",

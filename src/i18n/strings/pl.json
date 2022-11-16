@@ -12,7 +12,6 @@
     "Invalid configuration: no default server specified.": "Błędna konfiguracja: nie wybrano domyślnego serwera.",
     "Go to your browser to complete Sign In": "Aby dokończyć proces rejestracji, przejdź do swojej przeglądarki",
     "Unable to load config file: please refresh the page to try again.": "Nie udało się załadować pliku konfiguracyjnego: odśwież stronę aby spróbować ponownie.",
-    "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "Unsupported browser": "Niewspierana przeglądarka",
     "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Zainstaluj <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, lub <safariLink>Safari</safariLink> w celu zapewnienia najlepszego działania.",
     "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Możesz kontynuować używając obecnej przeglądarki, lecz niektóre lub wszystkie funkcje mogą nie działać oraz wygląd aplikacji może być niepoprawny.",
@@ -27,6 +26,5 @@
     "Your Element is misconfigured": "Twój Element jest nieprawidłowo skonfigurowany",
     "Powered by Matrix": "Zasilane przez Matrix",
     "Use %(brand)s on mobile": "Użyj %(brand)s w telefonie",
-    "Next recently visited room or community": "Następne ostatnio odwiedzone pokoje i społeczności",
     "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Zdecentralizowany, szyfrowany czat i współpraca oparte na $matrixLogo"
 }

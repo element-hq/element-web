@@ -25,7 +25,6 @@
     "I understand the risks and wish to continue": "Κατανοώ τους κινδύνους και επιθυμώ να συνεχίσω",
     "Go to element.io": "Πήγαινε στο element.io",
     "Failed to start": "Αποτυχία έναρξης",
-    "%(brand)s Desktop (%(platformName)s)": "%(brand)s Desktop (%(platformName)s)",
     "Use %(brand)s on mobile": "Χρήση %(brand)s σε κινητό",
     "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Αποκεντρωμένη, κρυπτογραφημένη συνομιλία και συνεργασία χρησιμοποιώντας το $matrixLogo"
 }

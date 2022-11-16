@@ -24,9 +24,7 @@
     "Your browser can't run %(brand)s": "הדפדפן שלך לא יכול להריץ %(brand)s",
     "Unsupported browser": "דפדפן לא נתמך",
     "Powered by Matrix": "מופעל על ידי מטריקס",
-    "%(brand)s Desktop (%(platformName)s)": "%(brand)s שולחן עבודה %(platformName)s",
     "The message from the parser is: %(message)s": "ההודעה מהמנתח היא: %(message)s",
-    "Switch to space by number": "עבור 'למרחב' על פי המספר שלו",
     "Use %(brand)s on mobile": "השתמש ב-%(brand)s במכשיר הנייד",
     "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "צ'אט מבוזר ומוצפן &amp; מופעל בשיתוף פעולה ע\"י $matrixLogo"
 }

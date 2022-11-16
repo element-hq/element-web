@@ -16,7 +16,6 @@
     "Unexpected error preparing the app. See console for details.": "خطای غیر منتظره در آماده سازی برنامه. کنسول را برای جزئیات مشاهده کنید.",
     "Download Completed": "بارگیری کامل شد",
     "Open": "باز",
-    "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "Unsupported browser": "مرورگر پش‬تبانی نمی شود",
     "Your browser can't run %(brand)s": "مرورگر شما نمی تواند %(brand)s را اجرا کند",
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s از ویژگی های پیشرفته مرورگر استفاده می کند که در مرورگر فعلی شما پشتیبانی نمی شوند.",

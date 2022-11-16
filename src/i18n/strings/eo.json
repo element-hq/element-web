@@ -12,7 +12,6 @@
     "Invalid JSON": "Nevalida JSON",
     "Go to your browser to complete Sign In": "Iru al via retumilo por finpretigi la ensaluton",
     "Unable to load config file: please refresh the page to try again.": "Ne povas enlegi agordan dosieron: bonvolu reprovi per aktualigo de la paĝo.",
-    "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "Unsupported browser": "Nesubtenata retumilo",
     "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Bonvolu instali retumilon <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, aŭ <safariLink>Safari</safariLink>, por la plej bona sperto.",
     "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Vi povas daŭre uzi vian nunan foliumilon, sed iuj (eĉ ĉiuj) funkcioj eble ne funkciu, kaj la aspekto de la aplikaĵo eble ne estu ĝusta.",
