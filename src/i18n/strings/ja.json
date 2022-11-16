@@ -3332,5 +3332,11 @@
     "Enable hardware acceleration": "ハードウェアアクセラレーションを有効にする",
     "Allow Peer-to-Peer for 1:1 calls": "1対1通話でP2Pを使用する",
     "Voice broadcast (under active development)": "音声ブロードキャスト（活発に開発中）",
-    "Enter fullscreen": "フルスクリーンにする"
+    "Enter fullscreen": "フルスクリーンにする",
+    "Error downloading image": "画像をダウンロードする際のエラー",
+    "Unable to show image due to error": "エラーにより画像を表示できません",
+    "Share your activity and status with others.": "アクティビティやステータスを他の人と共有します。",
+    "Presence": "プレゼンス（ステータス表示）",
+    "Reset event store?": "イベントストアをリセットしますか？",
+    "Your firewall or anti-virus is blocking the request.": "ファイアーウォールまたはアンチウイルスソフトがリクエストをブロックしています。"
 }
