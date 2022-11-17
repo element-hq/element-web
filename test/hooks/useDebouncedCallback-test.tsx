@@ -14,70 +14,85 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// eslint-disable-next-line deprecate/import
-import { mount } from "enzyme";
-import { sleep } from "matrix-js-sdk/src/utils";
-import React from "react";
-import { act } from "react-dom/test-utils";
+import { renderHook } from "@testing-library/react-hooks";
 
 import { useDebouncedCallback } from "../../src/hooks/spotlight/useDebouncedCallback";
 
-function DebouncedCallbackComponent({ enabled, params, callback }) {
-    useDebouncedCallback(enabled, callback, params);
-    return <div>
-        { JSON.stringify(params) }
-    </div>;
-}
-
 describe("useDebouncedCallback", () => {
+    beforeAll(() => jest.useFakeTimers());
+    afterAll(() => jest.useRealTimers());
+
+    function render(enabled: boolean, callback: (...params: any) => void, params: any) {
+        return renderHook(
+            ({ enabled, callback, params }) => useDebouncedCallback(enabled, callback, params),
+            { initialProps: {
+                enabled,
+                callback,
+                params,
+            } });
+    }
+
     it("should be able to handle empty parameters", async () => {
+        // When
         const params = [];
         const callback = jest.fn();
+        render(true, callback, params);
+        jest.advanceTimersByTime(1);
 
-        const wrapper = mount(<DebouncedCallbackComponent callback={callback} enabled={true} params={[]} />);
-        await act(async () => {
-            await sleep(1);
-            wrapper.setProps({ enabled: true, params, callback });
-            return act(() => sleep(500));
-        });
+        // Then
+        expect(callback).toHaveBeenCalledTimes(0);
 
-        expect(wrapper.text()).toContain(JSON.stringify(params));
+        // When
+        jest.advanceTimersByTime(500);
+
+        // Then
         expect(callback).toHaveBeenCalledTimes(1);
     });
 
     it("should call the callback with the parameters", async () => {
+        // When
         const params = ["USER NAME"];
         const callback = jest.fn();
+        render(true, callback, params);
+        jest.advanceTimersByTime(500);
 
-        const wrapper = mount(<DebouncedCallbackComponent callback={callback} enabled={true} params={[]} />);
-        await act(async () => {
-            await sleep(1);
-            wrapper.setProps({ enabled: true, params, callback });
-            return act(() => sleep(500));
-        });
+        // Then
+        expect(callback).toHaveBeenCalledTimes(1);
+        expect(callback).toHaveBeenCalledWith(...params);
+    });
 
-        expect(wrapper.text()).toContain(JSON.stringify(params));
+    it("should call the callback with the parameters when parameters change during the timeout", async () => {
+        // When
+        const params = ["USER NAME"];
+        const callback = jest.fn();
+        const { rerender } = render(true, callback, []);
+
+        jest.advanceTimersByTime(1);
+        rerender({ enabled: true, callback, params });
+        jest.advanceTimersByTime(500);
+
+        // Then
         expect(callback).toHaveBeenCalledTimes(1);
         expect(callback).toHaveBeenCalledWith(...params);
     });
 
     it("should handle multiple parameters", async () => {
+        // When
         const params = [4, 8, 15, 16, 23, 42];
         const callback = jest.fn();
+        const { rerender } = render(true, callback, []);
 
-        const wrapper = mount(<DebouncedCallbackComponent callback={callback} enabled={true} params={[]} />);
-        await act(async () => {
-            await sleep(1);
-            wrapper.setProps({ enabled: true, params, callback });
-            return act(() => sleep(500));
-        });
+        jest.advanceTimersByTime(1);
+        rerender({ enabled: true, callback, params });
+        jest.advanceTimersByTime(500);
 
-        expect(wrapper.text()).toContain(JSON.stringify(params));
+        // Then
         expect(callback).toHaveBeenCalledTimes(1);
         expect(callback).toHaveBeenCalledWith(...params);
     });
 
     it("should debounce quick changes", async () => {
+        // When
         const queries = [
             "U",
             "US",
@@ -95,23 +110,24 @@ describe("useDebouncedCallback", () => {
         ];
         const callback = jest.fn();
 
-        const wrapper = mount(<DebouncedCallbackComponent callback={callback} enabled={true} params={[]} />);
-        await act(async () => {
-            await sleep(1);
-            for (const query of queries) {
-                wrapper.setProps({ enabled: true, params: [query], callback });
-                await sleep(50);
-            }
-            return act(() => sleep(500));
-        });
+        const { rerender } = render(true, callback, []);
+        jest.advanceTimersByTime(1);
 
+        for (const query of queries) {
+            rerender({ enabled: true, callback, params: [query] });
+            jest.advanceTimersByTime(50);
+        }
+
+        jest.advanceTimersByTime(500);
+
+        // Then
         const query = queries[queries.length - 1];
-        expect(wrapper.text()).toContain(JSON.stringify(query));
         expect(callback).toHaveBeenCalledTimes(1);
         expect(callback).toHaveBeenCalledWith(query);
     });
 
     it("should not debounce slow changes", async () => {
+        // When
         const queries = [
             "U",
             "US",
@@ -129,23 +145,23 @@ describe("useDebouncedCallback", () => {
         ];
         const callback = jest.fn();
 
-        const wrapper = mount(<DebouncedCallbackComponent callback={callback} enabled={true} params={[]} />);
-        await act(async () => {
-            await sleep(1);
-            for (const query of queries) {
-                wrapper.setProps({ enabled: true, params: [query], callback });
-                await sleep(200);
-            }
-            return act(() => sleep(500));
-        });
+        const { rerender } = render(true, callback, []);
+        jest.advanceTimersByTime(1);
+        for (const query of queries) {
+            rerender({ enabled: true, callback, params: [query] });
+            jest.advanceTimersByTime(200);
+        }
 
+        jest.advanceTimersByTime(500);
+
+        // Then
         const query = queries[queries.length - 1];
-        expect(wrapper.text()).toContain(JSON.stringify(query));
         expect(callback).toHaveBeenCalledTimes(queries.length);
         expect(callback).toHaveBeenCalledWith(query);
     });
 
     it("should not call the callback if it’s disabled", async () => {
+        // When
         const queries = [
             "U",
             "US",
@@ -163,18 +179,16 @@ describe("useDebouncedCallback", () => {
         ];
         const callback = jest.fn();
 
-        const wrapper = mount(<DebouncedCallbackComponent callback={callback} enabled={false} params={[]} />);
-        await act(async () => {
-            await sleep(1);
-            for (const query of queries) {
-                wrapper.setProps({ enabled: false, params: [query], callback });
-                await sleep(200);
-            }
-            return act(() => sleep(500));
-        });
+        const { rerender } = render(false, callback, []);
+        jest.advanceTimersByTime(1);
+        for (const query of queries) {
+            rerender({ enabled: false, callback, params: [query] });
+            jest.advanceTimersByTime(200);
+        }
 
-        const query = queries[queries.length - 1];
-        expect(wrapper.text()).toContain(JSON.stringify(query));
+        jest.advanceTimersByTime(500);
+
+        // Then
         expect(callback).toHaveBeenCalledTimes(0);
     });
 });

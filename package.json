@@ -61,6 +61,7 @@
     "@matrix-org/react-sdk-module-api": "^0.0.3",
     "@sentry/browser": "^6.11.0",
     "@sentry/tracing": "^6.11.0",
+    "@testing-library/react-hooks": "^8.0.1",
     "@types/geojson": "^7946.0.8",
     "@types/ua-parser-js": "^0.7.36",
     "await-lock": "^2.1.0",
