@@ -31,12 +31,12 @@ const securityCardContent: Record<DeviceSecurityVariation, {
      [DeviceSecurityVariation.Verified]: {
          title: _t('Verified sessions'),
          description: <>
-             <p>{ _t('Verified sessions have logged in with your credentials and then been verified, either using your secure passphrase or by cross-verifying.') }
+             <p>{ _t('Verified sessions are anywhere you are using this account after entering your passphrase or confirming your identity with another verified session.') }
              </p>
              <p>
                  { _t(
-                     `This means they hold encryption keys for your previous messages, ` +
-                        `and confirm to other users you are communicating with that these sessions are really you.`,
+                     `This means that you have all the keys needed to unlock your encrypted messages ` +
+                     `and confirm to other users that you trust this session.`,
                  )
                  }
              </p>
