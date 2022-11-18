@@ -36,6 +36,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Install Deps
+        run: "scripts/layered.sh"
+
       - name: Get diff lines
         id: diff
         uses: Equip-Collaboration/diff-line-numbers@v1.0.0
