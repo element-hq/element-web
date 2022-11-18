@@ -31,7 +31,7 @@ interface EventMap {
  * This store provides access to the current and specific Voice Broadcast recordings.
  */
 export class VoiceBroadcastRecordingsStore extends TypedEventEmitter<VoiceBroadcastRecordingsStoreEvent, EventMap> {
-    private current: VoiceBroadcastRecording | null;
+    private current: VoiceBroadcastRecording | null = null;
     private recordings = new Map<string, VoiceBroadcastRecording>();
 
     public constructor() {
@@ -53,6 +53,10 @@ export class VoiceBroadcastRecordingsStore extends TypedEventEmitter<VoiceBroadc
 
     public getCurrent(): VoiceBroadcastRecording {
         return this.current;
+    }
+
+    public hasCurrent(): boolean {
+        return this.current !== null;
     }
 
     public clearCurrent(): void {

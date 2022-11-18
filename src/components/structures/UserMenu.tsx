@@ -51,6 +51,12 @@ import { UPDATE_SELECTED_SPACE } from "../../stores/spaces";
 import UserIdentifierCustomisations from "../../customisations/UserIdentifier";
 import PosthogTrackers from "../../PosthogTrackers";
 import { ViewHomePagePayload } from "../../dispatcher/payloads/ViewHomePagePayload";
+import { Icon as LiveIcon } from "../../../res/img/element-icons/live.svg";
+import {
+    VoiceBroadcastRecording,
+    VoiceBroadcastRecordingsStore,
+    VoiceBroadcastRecordingsStoreEvent,
+} from "../../voice-broadcast";
 
 interface IProps {
     isPanelCollapsed: boolean;
@@ -59,10 +65,11 @@ interface IProps {
 type PartialDOMRect = Pick<DOMRect, "width" | "left" | "top" | "height">;
 
 interface IState {
-    contextMenuPosition: PartialDOMRect;
+    contextMenuPosition: PartialDOMRect | null;
     isDarkTheme: boolean;
     isHighContrast: boolean;
-    selectedSpace?: Room;
+    selectedSpace?: Room | null;
+    showLiveAvatarAddon: boolean;
 }
 
 const toRightOf = (rect: PartialDOMRect) => {
@@ -86,6 +93,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
     private themeWatcherRef: string;
     private readonly dndWatcherRef: string;
     private buttonRef: React.RefObject<HTMLButtonElement> = createRef();
+    private voiceBroadcastRecordingStore = VoiceBroadcastRecordingsStore.instance();
 
     constructor(props: IProps) {
         super(props);
@@ -95,6 +103,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
             isDarkTheme: this.isUserOnDarkTheme(),
             isHighContrast: this.isUserOnHighContrastTheme(),
             selectedSpace: SpaceStore.instance.activeSpaceRoom,
+            showLiveAvatarAddon: this.voiceBroadcastRecordingStore.hasCurrent(),
         };
 
         OwnProfileStore.instance.on(UPDATE_EVENT, this.onProfileUpdate);
@@ -105,7 +114,17 @@ export default class UserMenu extends React.Component<IProps, IState> {
         return !!getHomePageUrl(SdkConfig.get());
     }
 
+    private onCurrentVoiceBroadcastRecordingChanged = (recording: VoiceBroadcastRecording): void => {
+        this.setState({
+            showLiveAvatarAddon: recording !== null,
+        });
+    };
+
     public componentDidMount() {
+        this.voiceBroadcastRecordingStore.on(
+            VoiceBroadcastRecordingsStoreEvent.CurrentChanged,
+            this.onCurrentVoiceBroadcastRecordingChanged,
+        );
         this.dispatcherRef = defaultDispatcher.register(this.onAction);
         this.themeWatcherRef = SettingsStore.watchSetting("theme", null, this.onThemeChanged);
     }
@@ -116,6 +135,10 @@ export default class UserMenu extends React.Component<IProps, IState> {
         if (this.dispatcherRef) defaultDispatcher.unregister(this.dispatcherRef);
         OwnProfileStore.instance.off(UPDATE_EVENT, this.onProfileUpdate);
         SpaceStore.instance.off(UPDATE_SELECTED_SPACE, this.onSelectedSpaceUpdate);
+        this.voiceBroadcastRecordingStore.off(
+            VoiceBroadcastRecordingsStoreEvent.CurrentChanged,
+            this.onCurrentVoiceBroadcastRecordingChanged,
+        );
     }
 
     private isUserOnDarkTheme(): boolean {
@@ -414,6 +437,12 @@ export default class UserMenu extends React.Component<IProps, IState> {
             </div>;
         }
 
+        const liveAvatarAddon = this.state.showLiveAvatarAddon
+            ? <div className="mx_UserMenu_userAvatarLive" data-testid="user-menu-live-vb">
+                <LiveIcon className="mx_Icon_8" />
+            </div>
+            : null;
+
         return <div className="mx_UserMenu">
             <ContextMenuButton
                 onClick={this.onOpenMenuClick}
@@ -432,9 +461,9 @@ export default class UserMenu extends React.Component<IProps, IState> {
                         resizeMethod="crop"
                         className="mx_UserMenu_userAvatar_BaseAvatar"
                     />
+                    { liveAvatarAddon }
                 </div>
                 { name }
-
                 { this.renderContextMenu() }
             </ContextMenuButton>
 

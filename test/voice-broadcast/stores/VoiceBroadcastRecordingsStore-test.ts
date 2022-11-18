@@ -75,6 +75,7 @@ describe("VoiceBroadcastRecordingsStore", () => {
         });
 
         it("should return it as current", () => {
+            expect(recordings.hasCurrent()).toBe(true);
             expect(recordings.getCurrent()).toBe(recording);
         });
 
@@ -103,6 +104,7 @@ describe("VoiceBroadcastRecordingsStore", () => {
             });
 
             it("should clear the current recording", () => {
+                expect(recordings.hasCurrent()).toBe(false);
                 expect(recordings.getCurrent()).toBeNull();
             });
 
