@@ -46,6 +46,9 @@ jobs:
       checks: write
     steps:
       - uses: actions/checkout@v3
+      
+      - name: Install Deps
+        run: "scripts/ci/layered.sh"
 
       - name: Get diff lines
         id: diff
