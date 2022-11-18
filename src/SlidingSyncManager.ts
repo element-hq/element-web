@@ -49,6 +49,9 @@ import { EventType } from 'matrix-js-sdk/src/@types/event';
 import {
     MSC3575Filter,
     MSC3575List,
+    MSC3575_STATE_KEY_LAZY,
+    MSC3575_STATE_KEY_ME,
+    MSC3575_WILDCARD,
     SlidingSync,
 } from 'matrix-js-sdk/src/sliding-sync';
 import { logger } from "matrix-js-sdk/src/logger";
@@ -60,19 +63,35 @@ const SLIDING_SYNC_TIMEOUT_MS = 20 * 1000;
 // the things to fetch when a user clicks on a room
 const DEFAULT_ROOM_SUBSCRIPTION_INFO = {
     timeline_limit: 50,
-    required_state: [
-        ["*", "*"], // all events
-    ],
+    // missing required_state which will change depending on the kind of room
     include_old_rooms: {
         timeline_limit: 0,
         required_state: [ // state needed to handle space navigation and tombstone chains
             [EventType.RoomCreate, ""],
             [EventType.RoomTombstone, ""],
-            [EventType.SpaceChild, "*"],
-            [EventType.SpaceParent, "*"],
+            [EventType.SpaceChild, MSC3575_WILDCARD],
+            [EventType.SpaceParent, MSC3575_WILDCARD],
+            [EventType.RoomMember, MSC3575_STATE_KEY_ME],
         ],
     },
 };
+// lazy load room members so rooms like Matrix HQ don't take forever to load
+const UNENCRYPTED_SUBSCRIPTION_NAME = "unencrypted";
+const UNENCRYPTED_SUBSCRIPTION = Object.assign({
+    required_state: [
+        [MSC3575_WILDCARD, MSC3575_WILDCARD], // all events
+        [EventType.RoomMember, MSC3575_STATE_KEY_ME], // except for m.room.members, get our own membership
+        [EventType.RoomMember, MSC3575_STATE_KEY_LAZY], // ...and lazy load the rest.
+    ],
+}, DEFAULT_ROOM_SUBSCRIPTION_INFO);
+
+// we need all the room members in encrypted rooms because we need to know which users to encrypt
+// messages for.
+const ENCRYPTED_SUBSCRIPTION = Object.assign({
+    required_state: [
+        [MSC3575_WILDCARD, MSC3575_WILDCARD], // all events
+    ],
+}, DEFAULT_ROOM_SUBSCRIPTION_INFO);
 
 export type PartialSlidingSyncRequest = {
     filters?: MSC3575Filter;
@@ -109,12 +128,12 @@ export class SlidingSyncManager {
     public configure(client: MatrixClient, proxyUrl: string): SlidingSync {
         this.client = client;
         this.listIdToIndex = {};
-        DEFAULT_ROOM_SUBSCRIPTION_INFO.include_old_rooms.required_state.push(
-            [EventType.RoomMember, client.getUserId()],
-        );
+        // by default use the encrypted subscription as that gets everything, which is a safer
+        // default than potentially missing member events.
         this.slidingSync = new SlidingSync(
-            proxyUrl, [], DEFAULT_ROOM_SUBSCRIPTION_INFO, client, SLIDING_SYNC_TIMEOUT_MS,
+            proxyUrl, [], ENCRYPTED_SUBSCRIPTION, client, SLIDING_SYNC_TIMEOUT_MS,
         );
+        this.slidingSync.addCustomSubscription(UNENCRYPTED_SUBSCRIPTION_NAME, UNENCRYPTED_SUBSCRIPTION);
         // set the space list
         this.slidingSync.setList(this.getOrAllocateListIndex(SlidingSyncManager.ListSpaces), {
             ranges: [[0, 20]],
@@ -129,18 +148,18 @@ export class SlidingSyncManager {
                 [EventType.RoomTombstone, ""], // lets JS SDK hide rooms which are dead
                 [EventType.RoomEncryption, ""], // lets rooms be configured for E2EE correctly
                 [EventType.RoomCreate, ""], // for isSpaceRoom checks
-                [EventType.SpaceChild, "*"], // all space children
-                [EventType.SpaceParent, "*"], // all space parents
-                [EventType.RoomMember, this.client.getUserId()!], // lets the client calculate that we are in fact in the room
+                [EventType.SpaceChild, MSC3575_WILDCARD], // all space children
+                [EventType.SpaceParent, MSC3575_WILDCARD], // all space parents
+                [EventType.RoomMember, MSC3575_STATE_KEY_ME], // lets the client calculate that we are in fact in the room
             ],
             include_old_rooms: {
                 timeline_limit: 0,
                 required_state: [
                     [EventType.RoomCreate, ""],
                     [EventType.RoomTombstone, ""], // lets JS SDK hide rooms which are dead
-                    [EventType.SpaceChild, "*"], // all space children
-                    [EventType.SpaceParent, "*"], // all space parents
-                    [EventType.RoomMember, this.client.getUserId()!], // lets the client calculate that we are in fact in the room
+                    [EventType.SpaceChild, MSC3575_WILDCARD], // all space children
+                    [EventType.SpaceParent, MSC3575_WILDCARD], // all space parents
+                    [EventType.RoomMember, MSC3575_STATE_KEY_ME], // lets the client calculate that we are in fact in the room
                 ],
             },
             filters: {
@@ -207,16 +226,16 @@ export class SlidingSyncManager {
                     [EventType.RoomTombstone, ""], // lets JS SDK hide rooms which are dead
                     [EventType.RoomEncryption, ""], // lets rooms be configured for E2EE correctly
                     [EventType.RoomCreate, ""], // for isSpaceRoom checks
-                    [EventType.RoomMember, this.client.getUserId()], // lets the client calculate that we are in fact in the room
+                    [EventType.RoomMember, MSC3575_STATE_KEY_ME], // lets the client calculate that we are in fact in the room
                 ],
                 include_old_rooms: {
                     timeline_limit: 0,
                     required_state: [
                         [EventType.RoomCreate, ""],
                         [EventType.RoomTombstone, ""], // lets JS SDK hide rooms which are dead
-                        [EventType.SpaceChild, "*"], // all space children
-                        [EventType.SpaceParent, "*"], // all space parents
-                        [EventType.RoomMember, this.client.getUserId()!], // lets the client calculate that we are in fact in the room
+                        [EventType.SpaceChild, MSC3575_WILDCARD], // all space children
+                        [EventType.SpaceParent, MSC3575_WILDCARD], // all space parents
+                        [EventType.RoomMember, MSC3575_STATE_KEY_ME], // lets the client calculate that we are in fact in the room
                     ],
                 },
             };
@@ -252,9 +271,21 @@ export class SlidingSyncManager {
         } else {
             subscriptions.delete(roomId);
         }
-        logger.log("SlidingSync setRoomVisible:", roomId, visible);
+        const room = this.client.getRoom(roomId);
+        let shouldLazyLoad = !this.client.isRoomEncrypted(roomId);
+        if (!room) {
+            // default to safety: request all state if we can't work it out. This can happen if you
+            // refresh the app whilst viewing a room: we call setRoomVisible before we know anything
+            // about the room.
+            shouldLazyLoad = false;
+        }
+        logger.log("SlidingSync setRoomVisible:", roomId, visible, "shouldLazyLoad:", shouldLazyLoad);
+        if (shouldLazyLoad) {
+            // lazy load this room
+            this.slidingSync.useCustomSubscription(roomId, UNENCRYPTED_SUBSCRIPTION_NAME);
+        }
         const p = this.slidingSync.modifyRoomSubscriptions(subscriptions);
-        if (this.client.getRoom(roomId)) {
+        if (room) {
             return roomId; // we have data already for this room, show immediately e.g it's in a list
         }
         try {
@@ -297,7 +328,7 @@ export class SlidingSyncManager {
                             [EventType.RoomTombstone, ""], // lets JS SDK hide rooms which are dead
                             [EventType.RoomEncryption, ""], // lets rooms be configured for E2EE correctly
                             [EventType.RoomCreate, ""], // for isSpaceRoom checks
-                            [EventType.RoomMember, this.client.getUserId()!], // lets the client calculate that we are in fact in the room
+                            [EventType.RoomMember, MSC3575_STATE_KEY_ME], // lets the client calculate that we are in fact in the room
                         ],
                         // we don't include_old_rooms here in an effort to reduce the impact of spidering all rooms
                         // on the user's account. This means some data in the search dialog results may be inaccurate

@@ -1,5 +1,6 @@
 /*
 Copyright 2021 Šimon Brandner <simon.bra.ag@gmail.com>
+Copyright 2022 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -26,7 +27,8 @@ import { MatrixClientPeg } from '../../../../src/MatrixClientPeg';
 import * as TestUtils from '../../../test-utils';
 import MemberList from "../../../../src/components/views/rooms/MemberList";
 import MemberTile from '../../../../src/components/views/rooms/MemberTile';
-import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
+import { SDKContext } from '../../../../src/contexts/SDKContext';
+import { TestSdkContext } from '../../../TestSdkContext';
 
 function generateRoomId() {
     return '!' + Math.random().toString().slice(2, 10) + ':domain';
@@ -116,9 +118,11 @@ describe('MemberList', () => {
         const gatherWrappedRef = (r) => {
             memberList = r;
         };
+        const context = new TestSdkContext();
+        context.client = client;
         root = ReactDOM.render(
             (
-                <MatrixClientContext.Provider value={client}>
+                <SDKContext.Provider value={context}>
                     <MemberList
                         searchQuery=""
                         onClose={jest.fn()}
@@ -126,7 +130,7 @@ describe('MemberList', () => {
                         roomId={memberListRoom.roomId}
                         ref={gatherWrappedRef}
                     />
-                </MatrixClientContext.Provider>
+                </SDKContext.Provider>
             ),
             parentDiv,
         );

@@ -24,7 +24,7 @@ import { MatrixClient } from "matrix-js-sdk/src/client";
 import _RightPanel from "../../../src/components/structures/RightPanel";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 import ResizeNotifier from "../../../src/utils/ResizeNotifier";
-import { stubClient, wrapInMatrixClientContext, mkRoom } from "../../test-utils";
+import { stubClient, wrapInMatrixClientContext, mkRoom, wrapInSdkContext } from "../../test-utils";
 import { Action } from "../../../src/dispatcher/actions";
 import dis from "../../../src/dispatcher/dispatcher";
 import DMRoomMap from "../../../src/utils/DMRoomMap";
@@ -35,17 +35,23 @@ import { UPDATE_EVENT } from "../../../src/stores/AsyncStore";
 import { WidgetLayoutStore } from "../../../src/stores/widgets/WidgetLayoutStore";
 import RoomSummaryCard from "../../../src/components/views/right_panel/RoomSummaryCard";
 import MemberList from "../../../src/components/views/rooms/MemberList";
+import { SdkContextClass } from "../../../src/contexts/SDKContext";
 
-const RightPanel = wrapInMatrixClientContext(_RightPanel);
+const RightPanelBase = wrapInMatrixClientContext(_RightPanel);
 
 describe("RightPanel", () => {
     const resizeNotifier = new ResizeNotifier();
 
     let cli: MockedObject<MatrixClient>;
+    let context: SdkContextClass;
+    let RightPanel: React.ComponentType<React.ComponentProps<typeof RightPanelBase>>;
     beforeEach(() => {
         stubClient();
         cli = mocked(MatrixClientPeg.get());
         DMRoomMap.makeShared();
+        context = new SdkContextClass();
+        context.client = cli;
+        RightPanel = wrapInSdkContext(RightPanelBase, context);
     });
 
     afterEach(async () => {

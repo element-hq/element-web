@@ -16,6 +16,7 @@ limitations under the License.
 
 import { SlidingSync } from 'matrix-js-sdk/src/sliding-sync';
 import { mocked } from 'jest-mock';
+import { MatrixClient, MatrixEvent, Room } from 'matrix-js-sdk/src/matrix';
 
 import { SlidingSyncManager } from '../src/SlidingSyncManager';
 import { stubClient } from './test-utils';
@@ -26,12 +27,55 @@ const MockSlidingSync = <jest.Mock<SlidingSync>><unknown>SlidingSync;
 describe('SlidingSyncManager', () => {
     let manager: SlidingSyncManager;
     let slidingSync: SlidingSync;
+    let client: MatrixClient;
 
     beforeEach(() => {
         slidingSync = new MockSlidingSync();
         manager = new SlidingSyncManager();
-        manager.configure(stubClient(), "invalid");
+        client = stubClient();
+        // by default the client has no rooms: stubClient magically makes rooms annoyingly.
+        mocked(client.getRoom).mockReturnValue(null);
+        manager.configure(client, "invalid");
         manager.slidingSync = slidingSync;
+    });
+
+    describe("setRoomVisible", () => {
+        it("adds a subscription for the room", async () => {
+            const roomId = "!room:id";
+            const subs = new Set<string>();
+            mocked(slidingSync.getRoomSubscriptions).mockReturnValue(subs);
+            mocked(slidingSync.modifyRoomSubscriptions).mockResolvedValue("yep");
+            await manager.setRoomVisible(roomId, true);
+            expect(slidingSync.modifyRoomSubscriptions).toBeCalledWith(new Set<string>([roomId]));
+        });
+        it("adds a custom subscription for a lazy-loadable room", async () => {
+            const roomId = "!lazy:id";
+            const room = new Room(roomId, client, client.getUserId());
+            room.getLiveTimeline().initialiseState([
+                new MatrixEvent({
+                    type: "m.room.create",
+                    state_key: "",
+                    event_id: "$abc123",
+                    sender: client.getUserId(),
+                    content: {
+                        creator: client.getUserId(),
+                    },
+                }),
+            ]);
+            mocked(client.getRoom).mockImplementation((r: string): Room => {
+                if (roomId === r) {
+                    return room;
+                }
+                return null;
+            });
+            const subs = new Set<string>();
+            mocked(slidingSync.getRoomSubscriptions).mockReturnValue(subs);
+            mocked(slidingSync.modifyRoomSubscriptions).mockResolvedValue("yep");
+            await manager.setRoomVisible(roomId, true);
+            expect(slidingSync.modifyRoomSubscriptions).toBeCalledWith(new Set<string>([roomId]));
+            // we aren't prescriptive about what the sub name is.
+            expect(slidingSync.useCustomSubscription).toBeCalledWith(roomId, expect.anything());
+        });
     });
 
     describe("startSpidering", () => {

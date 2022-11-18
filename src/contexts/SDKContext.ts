@@ -21,6 +21,7 @@ import defaultDispatcher from "../dispatcher/dispatcher";
 import LegacyCallHandler from "../LegacyCallHandler";
 import { PosthogAnalytics } from "../PosthogAnalytics";
 import { SlidingSyncManager } from "../SlidingSyncManager";
+import { MemberListStore } from "../stores/MemberListStore";
 import { RoomNotificationStateStore } from "../stores/notifications/RoomNotificationStateStore";
 import RightPanelStore from "../stores/right-panel/RightPanelStore";
 import { RoomViewStore } from "../stores/RoomViewStore";
@@ -54,6 +55,7 @@ export class SdkContextClass {
 
     // All protected fields to make it easier to derive test stores
     protected _WidgetPermissionStore?: WidgetPermissionStore;
+    protected _MemberListStore?: MemberListStore;
     protected _RightPanelStore?: RightPanelStore;
     protected _RoomNotificationStateStore?: RoomNotificationStateStore;
     protected _RoomViewStore?: RoomViewStore;
@@ -124,6 +126,12 @@ export class SdkContextClass {
             this._PosthogAnalytics = PosthogAnalytics.instance;
         }
         return this._PosthogAnalytics;
+    }
+    public get memberListStore(): MemberListStore {
+        if (!this._MemberListStore) {
+            this._MemberListStore = new MemberListStore(this);
+        }
+        return this._MemberListStore;
     }
     public get slidingSyncManager(): SlidingSyncManager {
         if (!this._SlidingSyncManager) {

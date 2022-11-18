@@ -29,14 +29,12 @@ import { ClientEvent } from "matrix-js-sdk/src/client";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 
 import { _t } from '../../../languageHandler';
-import SdkConfig from '../../../SdkConfig';
 import dis from '../../../dispatcher/dispatcher';
 import { isValid3pidInvite } from "../../../RoomInvite";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import BaseCard from "../right_panel/BaseCard";
 import RoomAvatar from "../avatars/RoomAvatar";
 import RoomName from "../elements/RoomName";
-import SettingsStore from "../../../settings/SettingsStore";
 import TruncatedList from '../elements/TruncatedList';
 import Spinner from "../elements/Spinner";
 import SearchBox from "../../structures/SearchBox";
@@ -47,14 +45,11 @@ import BaseAvatar from '../avatars/BaseAvatar';
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../../settings/UIFeature";
 import PosthogTrackers from "../../../PosthogTrackers";
+import { SDKContext } from '../../../contexts/SDKContext';
 
 const INITIAL_LOAD_NUM_MEMBERS = 30;
 const INITIAL_LOAD_NUM_INVITED = 5;
 const SHOW_MORE_INCREMENT = 100;
-
-// Regex applied to filter our punctuation in member names before applying sort, to fuzzy it a little
-// matches all ASCII punctuation: !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
-const SORT_REGEX = /[\x21-\x2F\x3A-\x40\x5B-\x60\x7B-\x7E]+/g;
 
 interface IProps {
     roomId: string;
@@ -65,7 +60,6 @@ interface IProps {
 
 interface IState {
     loading: boolean;
-    members: Array<RoomMember>;
     filteredJoinedMembers: Array<RoomMember>;
     filteredInvitedMembers: Array<RoomMember | MatrixEvent>;
     canInvite: boolean;
@@ -76,35 +70,16 @@ interface IState {
 export default class MemberList extends React.Component<IProps, IState> {
     private showPresence = true;
     private mounted = false;
-    private collator: Intl.Collator;
-    private sortNames = new Map<RoomMember, string>(); // RoomMember -> sortName
 
-    constructor(props) {
+    static contextType = SDKContext;
+    public context!: React.ContextType<typeof SDKContext>;
+
+    constructor(props: IProps, context: React.ContextType<typeof SDKContext>) {
         super(props);
-
-        const cli = MatrixClientPeg.get();
-        if (cli.hasLazyLoadMembersEnabled()) {
-            // show an empty list
-            this.state = this.getMembersState([]);
-        } else {
-            this.state = this.getMembersState(this.roomMembers());
-        }
-
-        cli.on(ClientEvent.Room, this.onRoom); // invites & joining after peek
-        const enablePresenceByHsUrl = SdkConfig.get("enable_presence_by_hs_url");
-        const hsUrl = MatrixClientPeg.get().baseUrl;
-        this.showPresence = enablePresenceByHsUrl?.[hsUrl] ?? true;
-    }
-
-    public componentDidMount() {
-        const cli = MatrixClientPeg.get();
+        this.state = this.getMembersState([], []);
+        this.showPresence = context.memberListStore.isPresenceEnabled();
         this.mounted = true;
-        if (cli.hasLazyLoadMembersEnabled()) {
-            this.showMembersAccordingToMembershipWithLL();
-            cli.on(RoomEvent.MyMembership, this.onMyMembership);
-        } else {
-            this.listenForMembersChanges();
-        }
+        this.listenForMembersChanges();
     }
 
     private listenForMembersChanges(): void {
@@ -118,6 +93,12 @@ export default class MemberList extends React.Component<IProps, IState> {
         cli.on(UserEvent.LastPresenceTs, this.onUserPresenceChange);
         cli.on(UserEvent.Presence, this.onUserPresenceChange);
         cli.on(UserEvent.CurrentlyActive, this.onUserPresenceChange);
+        cli.on(ClientEvent.Room, this.onRoom); // invites & joining after peek
+        cli.on(RoomEvent.MyMembership, this.onMyMembership);
+    }
+
+    componentDidMount(): void {
+        this.updateListNow(true);
     }
 
     public componentWillUnmount() {
@@ -138,33 +119,6 @@ export default class MemberList extends React.Component<IProps, IState> {
         this.updateList.cancel();
     }
 
-    /**
-     * If lazy loading is enabled, either:
-     * show a spinner and load the members if the user is joined,
-     * or show the members available so far if the user is invited
-     */
-    private async showMembersAccordingToMembershipWithLL(): Promise<void> {
-        const cli = MatrixClientPeg.get();
-        if (cli.hasLazyLoadMembersEnabled()) {
-            const cli = MatrixClientPeg.get();
-            const room = cli.getRoom(this.props.roomId);
-            const membership = room && room.getMyMembership();
-            if (membership === "join") {
-                this.setState({ loading: true });
-                try {
-                    await room.loadMembersIfNeeded();
-                } catch (ex) {/* already logged in RoomView */}
-                if (this.mounted) {
-                    this.setState(this.getMembersState(this.roomMembers()));
-                    this.listenForMembersChanges();
-                }
-            } else {
-                // show the members we already have loaded
-                this.setState(this.getMembersState(this.roomMembers()));
-            }
-        }
-    }
-
     private get canInvite(): boolean {
         const cli = MatrixClientPeg.get();
         const room = cli.getRoom(this.props.roomId);
@@ -175,14 +129,11 @@ export default class MemberList extends React.Component<IProps, IState> {
         );
     }
 
-    private getMembersState(members: Array<RoomMember>): IState {
-        // set the state after determining showPresence to make sure it's
-        // taken into account while rendering
+    private getMembersState(invitedMembers: Array<RoomMember>, joinedMembers: Array<RoomMember>): IState {
         return {
             loading: false,
-            members: members,
-            filteredJoinedMembers: this.filterMembers(members, 'join', this.props.searchQuery),
-            filteredInvitedMembers: this.filterMembers(members, 'invite', this.props.searchQuery),
+            filteredJoinedMembers: joinedMembers,
+            filteredInvitedMembers: invitedMembers,
             canInvite: this.canInvite,
 
             // ideally we'd size this to the page height, but
@@ -209,12 +160,13 @@ export default class MemberList extends React.Component<IProps, IState> {
         // We listen for room events because when we accept an invite
         // we need to wait till the room is fully populated with state
         // before refreshing the member list else we get a stale list.
-        this.showMembersAccordingToMembershipWithLL();
+        this.updateListNow(true);
     };
 
     private onMyMembership = (room: Room, membership: string, oldMembership: string): void => {
-        if (room.roomId === this.props.roomId && membership === "join") {
-            this.showMembersAccordingToMembershipWithLL();
+        if (room.roomId === this.props.roomId && membership === "join" && oldMembership !== "join") {
+            // we just joined the room, load the member list
+            this.updateListNow(true);
         }
     };
 
@@ -239,59 +191,27 @@ export default class MemberList extends React.Component<IProps, IState> {
     };
 
     private updateList = throttle(() => {
-        this.updateListNow();
+        this.updateListNow(false);
     }, 500, { leading: true, trailing: true });
 
-    private updateListNow(): void {
-        const members = this.roomMembers();
-
+    private async updateListNow(showLoadingSpinner: boolean): Promise<void> {
+        if (!this.mounted) {
+            return;
+        }
+        if (showLoadingSpinner) {
+            this.setState({ loading: true });
+        }
+        const { joined, invited } = await this.context.memberListStore.loadMemberList(
+            this.props.roomId, this.props.searchQuery,
+        );
+        if (!this.mounted) {
+            return;
+        }
         this.setState({
             loading: false,
-            members: members,
-            filteredJoinedMembers: this.filterMembers(members, 'join', this.props.searchQuery),
-            filteredInvitedMembers: this.filterMembers(members, 'invite', this.props.searchQuery),
+            filteredJoinedMembers: joined,
+            filteredInvitedMembers: invited,
         });
-    }
-
-    private getMembersWithUser(): Array<RoomMember> {
-        if (!this.props.roomId) return [];
-        const cli = MatrixClientPeg.get();
-        const room = cli.getRoom(this.props.roomId);
-        if (!room) return [];
-
-        const allMembers = Object.values(room.currentState.members);
-
-        allMembers.forEach((member) => {
-            // work around a race where you might have a room member object
-            // before the user object exists. This may or may not cause
-            // https://github.com/vector-im/vector-web/issues/186
-            if (!member.user) {
-                member.user = cli.getUser(member.userId);
-            }
-
-            this.sortNames.set(
-                member,
-                (member.name[0] === '@' ? member.name.slice(1) : member.name).replace(SORT_REGEX, ""),
-            );
-
-            // XXX: this user may have no lastPresenceTs value!
-            // the right solution here is to fix the race rather than leave it as 0
-        });
-
-        return allMembers;
-    }
-
-    private roomMembers(): Array<RoomMember> {
-        const allMembers = this.getMembersWithUser();
-        const filteredAndSortedMembers = allMembers.filter((m) => {
-            return (
-                m.membership === 'join' || m.membership === 'invite'
-            );
-        });
-        const language = SettingsStore.getValue("language");
-        this.collator = new Intl.Collator(language, { sensitivity: 'base', ignorePunctuation: false });
-        filteredAndSortedMembers.sort(this.memberSort);
-        return filteredAndSortedMembers;
     }
 
     private createOverflowTileJoined = (overflowCount: number, totalCount: number): JSX.Element => {
@@ -357,59 +277,14 @@ export default class MemberList extends React.Component<IProps, IState> {
         }
     }
 
-    // returns negative if a comes before b,
-    // returns 0 if a and b are equivalent in ordering
-    // returns positive if a comes after b.
-    private memberSort = (memberA: RoomMember, memberB: RoomMember): number => {
-        // order by presence, with "active now" first.
-        // ...and then by power level
-        // ...and then by last active
-        // ...and then alphabetically.
-        // We could tiebreak instead by "last recently spoken in this room" if we wanted to.
-
-        const userA = memberA.user;
-        const userB = memberB.user;
-
-        if (!userA && !userB) return 0;
-        if (userA && !userB) return -1;
-        if (!userA && userB) return 1;
-
-        // First by presence
-        if (this.showPresence) {
-            const convertPresence = (p) => p === 'unavailable' ? 'online' : p;
-            const presenceIndex = p => {
-                const order = ['active', 'online', 'offline'];
-                const idx = order.indexOf(convertPresence(p));
-                return idx === -1 ? order.length : idx; // unknown states at the end
-            };
-
-            const idxA = presenceIndex(userA.currentlyActive ? 'active' : userA.presence);
-            const idxB = presenceIndex(userB.currentlyActive ? 'active' : userB.presence);
-            if (idxA !== idxB) {
-                return idxA - idxB;
-            }
+    public componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>, snapshot?: any): void {
+        if (prevProps.searchQuery !== this.props.searchQuery) {
+            this.updateListNow(false);
         }
-
-        // Second by power level
-        if (memberA.powerLevel !== memberB.powerLevel) {
-            return memberB.powerLevel - memberA.powerLevel;
-        }
-
-        // Third by last active
-        if (this.showPresence && userA.getLastActiveTs() !== userB.getLastActiveTs()) {
-            return userB.getLastActiveTs() - userA.getLastActiveTs();
-        }
-
-        // Fourth by name (alphabetical)
-        return this.collator.compare(this.sortNames.get(memberA), this.sortNames.get(memberB));
-    };
+    }
 
     private onSearchQueryChanged = (searchQuery: string): void => {
         this.props.onSearchQueryChanged(searchQuery);
-        this.setState({
-            filteredJoinedMembers: this.filterMembers(this.state.members, 'join', searchQuery),
-            filteredInvitedMembers: this.filterMembers(this.state.members, 'invite', searchQuery),
-        });
     };
 
     private onPending3pidInviteClick = (inviteEvent: MatrixEvent): void => {
@@ -418,22 +293,6 @@ export default class MemberList extends React.Component<IProps, IState> {
             event: inviteEvent,
         });
     };
-
-    private filterMembers(members: Array<RoomMember>, membership: string, query?: string): Array<RoomMember> {
-        return members.filter((m) => {
-            if (query) {
-                query = query.toLowerCase();
-                const matchesName = m.name.toLowerCase().indexOf(query) !== -1;
-                const matchesId = m.userId.toLowerCase().indexOf(query) !== -1;
-
-                if (!matchesName && !matchesId) {
-                    return false;
-                }
-            }
-
-            return m.membership === membership;
-        });
-    }
 
     private getPending3PidInvites(): Array<MatrixEvent> {
         // include 3pid invites (m.room.third_party_invite) state events.
