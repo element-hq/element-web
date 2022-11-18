@@ -457,9 +457,13 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
     componentWillUnmount() {
         const client = MatrixClientPeg.get();
-        client.removeListener(CryptoEvent.DeviceVerificationChanged, this.onDeviceVerificationChanged);
-        client.removeListener(CryptoEvent.UserTrustStatusChanged, this.onUserVerificationChanged);
-        client.removeListener(RoomEvent.Receipt, this.onRoomReceipt);
+        if (client) {
+            client.removeListener(CryptoEvent.DeviceVerificationChanged, this.onDeviceVerificationChanged);
+            client.removeListener(CryptoEvent.UserTrustStatusChanged, this.onUserVerificationChanged);
+            client.removeListener(RoomEvent.Receipt, this.onRoomReceipt);
+            const room = client.getRoom(this.props.mxEvent.getRoomId());
+            room?.off(ThreadEvent.New, this.onNewThread);
+        }
         this.isListeningForReceipts = false;
         this.props.mxEvent.removeListener(MatrixEventEvent.Decrypted, this.onDecrypted);
         if (this.props.showReactions) {
@@ -468,12 +472,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         if (SettingsStore.getValue("feature_thread")) {
             this.props.mxEvent.off(ThreadEvent.Update, this.updateThread);
         }
-
-        const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
-        room?.off(ThreadEvent.New, this.onNewThread);
-        if (this.threadState) {
-            this.threadState.off(NotificationStateEvents.Update, this.onThreadStateUpdate);
-        }
+        this.threadState?.off(NotificationStateEvents.Update, this.onThreadStateUpdate);
     }
 
     componentDidUpdate(prevProps: Readonly<EventTileProps>) {

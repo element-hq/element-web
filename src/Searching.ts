@@ -35,6 +35,7 @@ const SEARCH_LIMIT = 10;
 async function serverSideSearch(
     term: string,
     roomId: string = undefined,
+    abortSignal?: AbortSignal,
 ): Promise<{ response: ISearchResponse, query: ISearchRequestBody }> {
     const client = MatrixClientPeg.get();
 
@@ -59,19 +60,24 @@ async function serverSideSearch(
         },
     };
 
-    const response = await client.search({ body: body });
+    const response = await client.search({ body: body }, abortSignal);
 
     return { response, query: body };
 }
 
-async function serverSideSearchProcess(term: string, roomId: string = undefined): Promise<ISearchResults> {
+async function serverSideSearchProcess(
+    term: string,
+    roomId: string = undefined,
+    abortSignal?: AbortSignal,
+): Promise<ISearchResults> {
     const client = MatrixClientPeg.get();
-    const result = await serverSideSearch(term, roomId);
+    const result = await serverSideSearch(term, roomId, abortSignal);
 
     // The js-sdk method backPaginateRoomEventsSearch() uses _query internally
     // so we're reusing the concept here since we want to delegate the
     // pagination back to backPaginateRoomEventsSearch() in some cases.
     const searchResults: ISearchResults = {
+        abortSignal,
         _query: result.query,
         results: [],
         highlights: [],
@@ -90,12 +96,12 @@ function compareEvents(a: ISearchResult, b: ISearchResult): number {
     return 0;
 }
 
-async function combinedSearch(searchTerm: string): Promise<ISearchResults> {
+async function combinedSearch(searchTerm: string, abortSignal?: AbortSignal): Promise<ISearchResults> {
     const client = MatrixClientPeg.get();
 
     // Create two promises, one for the local search, one for the
     // server-side search.
-    const serverSidePromise = serverSideSearch(searchTerm);
+    const serverSidePromise = serverSideSearch(searchTerm, undefined, abortSignal);
     const localPromise = localSearch(searchTerm);
 
     // Wait for both promises to resolve.
@@ -575,7 +581,11 @@ async function combinedPagination(searchResult: ISeshatSearchResults): Promise<I
     return result;
 }
 
-function eventIndexSearch(term: string, roomId: string = undefined): Promise<ISearchResults> {
+function eventIndexSearch(
+    term: string,
+    roomId: string = undefined,
+    abortSignal?: AbortSignal,
+): Promise<ISearchResults> {
     let searchPromise: Promise<ISearchResults>;
 
     if (roomId !== undefined) {
@@ -586,12 +596,12 @@ function eventIndexSearch(term: string, roomId: string = undefined): Promise<ISe
         } else {
             // The search is for a single non-encrypted room, use the
             // server-side search.
-            searchPromise = serverSideSearchProcess(term, roomId);
+            searchPromise = serverSideSearchProcess(term, roomId, abortSignal);
         }
     } else {
         // Search across all rooms, combine a server side search and a
         // local search.
-        searchPromise = combinedSearch(term);
+        searchPromise = combinedSearch(term, abortSignal);
     }
 
     return searchPromise;
@@ -633,9 +643,16 @@ export function searchPagination(searchResult: ISearchResults): Promise<ISearchR
     else return eventIndexSearchPagination(searchResult);
 }
 
-export default function eventSearch(term: string, roomId: string = undefined): Promise<ISearchResults> {
+export default function eventSearch(
+    term: string,
+    roomId: string = undefined,
+    abortSignal?: AbortSignal,
+): Promise<ISearchResults> {
     const eventIndex = EventIndexPeg.get();
 
-    if (eventIndex === null) return serverSideSearchProcess(term, roomId);
-    else return eventIndexSearch(term, roomId);
+    if (eventIndex === null) {
+        return serverSideSearchProcess(term, roomId, abortSignal);
+    } else {
+        return eventIndexSearch(term, roomId, abortSignal);
+    }
 }

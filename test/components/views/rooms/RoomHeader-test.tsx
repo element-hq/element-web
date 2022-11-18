@@ -26,6 +26,7 @@ import { PendingEventOrdering } from "matrix-js-sdk/src/client";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
 import { ClientWidgetApi, Widget } from "matrix-widget-api";
 import EventEmitter from "events";
+import { ISearchResults } from 'matrix-js-sdk/src/@types/search';
 
 import type { MatrixClient } from "matrix-js-sdk/src/client";
 import type { MatrixEvent } from "matrix-js-sdk/src/models/event";
@@ -253,9 +254,11 @@ function mountHeader(room: Room, propsOverride = {}, roomContext?: Partial<IRoom
         e2eStatus: E2EStatus.Normal,
         appsShown: true,
         searchInfo: {
-            searchTerm: "",
-            searchScope: SearchScope.Room,
-            searchCount: 0,
+            searchId: Math.random(),
+            promise: new Promise<ISearchResults>(() => {}),
+            term: "",
+            scope: SearchScope.Room,
+            count: 0,
         },
         viewingCall: false,
         activeCall: null,
@@ -472,9 +475,11 @@ describe("RoomHeader (React Testing Library)", () => {
                     e2eStatus={E2EStatus.Normal}
                     appsShown={true}
                     searchInfo={{
-                        searchTerm: "",
-                        searchScope: SearchScope.Room,
-                        searchCount: 0,
+                        searchId: Math.random(),
+                        promise: new Promise<ISearchResults>(() => {}),
+                        term: "",
+                        scope: SearchScope.Room,
+                        count: 0,
                     }}
                     viewingCall={false}
                     activeCall={null}

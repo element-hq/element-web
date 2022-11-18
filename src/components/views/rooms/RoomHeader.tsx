@@ -20,6 +20,7 @@ import classNames from 'classnames';
 import { throttle } from 'lodash';
 import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
+import { ISearchResults } from 'matrix-js-sdk/src/@types/search';
 
 import type { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import type { Room } from "matrix-js-sdk/src/models/room";
@@ -393,9 +394,15 @@ const CallLayoutSelector: FC<CallLayoutSelectorProps> = ({ call }) => {
 };
 
 export interface ISearchInfo {
-    searchTerm: string;
-    searchScope: SearchScope;
-    searchCount: number;
+    searchId: number;
+    roomId?: string;
+    term: string;
+    scope: SearchScope;
+    promise: Promise<ISearchResults>;
+    abortController?: AbortController;
+
+    inProgress?: boolean;
+    count?: number;
 }
 
 export interface IProps {
@@ -408,7 +415,7 @@ export interface IProps {
     onAppsClick: (() => void) | null;
     e2eStatus: E2EStatus;
     appsShown: boolean;
-    searchInfo: ISearchInfo;
+    searchInfo?: ISearchInfo;
     excludedRightPanelPhaseButtons?: Array<RightPanelPhases>;
     showButtons?: boolean;
     enableRoomOptionsMenu?: boolean;
@@ -692,11 +699,9 @@ export default class RoomHeader extends React.Component<IProps, IState> {
 
         // don't display the search count until the search completes and
         // gives us a valid (possibly zero) searchCount.
-        if (this.props.searchInfo &&
-            this.props.searchInfo.searchCount !== undefined &&
-            this.props.searchInfo.searchCount !== null) {
+        if (typeof this.props.searchInfo?.count === "number") {
             searchStatus = <div className="mx_RoomHeader_searchStatus">&nbsp;
-                { _t("(~%(count)s results)", { count: this.props.searchInfo.searchCount }) }
+                { _t("(~%(count)s results)", { count: this.props.searchInfo.count }) }
             </div>;
         }
 

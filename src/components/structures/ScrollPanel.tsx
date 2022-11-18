@@ -376,7 +376,7 @@ export default class ScrollPanel extends React.Component<IProps> {
         const itemlist = this.itemlist.current;
         const firstTile = itemlist && itemlist.firstElementChild as HTMLElement;
         const contentTop = firstTile && firstTile.offsetTop;
-        const fillPromises = [];
+        const fillPromises: Promise<void>[] = [];
 
         // if scrollTop gets to 1 screen from the top of the first tile,
         // try backward filling

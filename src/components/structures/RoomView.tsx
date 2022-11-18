@@ -17,14 +17,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// TODO: This component is enormous! There's several things which could stand-alone:
-//  - Search results component
-
 import React, { createRef, ReactElement, ReactNode, RefObject, useContext } from 'react';
 import classNames from 'classnames';
 import { IRecommendedVersion, NotificationCountType, Room, RoomEvent } from "matrix-js-sdk/src/models/room";
-import { IThreadBundledRelationship, MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/models/event";
-import { ISearchResults } from 'matrix-js-sdk/src/@types/search';
+import { MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/models/event";
 import { logger } from "matrix-js-sdk/src/logger";
 import { EventTimeline } from 'matrix-js-sdk/src/models/event-timeline';
 import { EventType } from 'matrix-js-sdk/src/@types/event';
@@ -37,6 +33,7 @@ import { ClientEvent } from "matrix-js-sdk/src/client";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
 import { THREAD_RELATION_TYPE } from 'matrix-js-sdk/src/models/thread';
 import { HistoryVisibility } from 'matrix-js-sdk/src/@types/partials';
+import { ISearchResults } from 'matrix-js-sdk/src/@types/search';
 
 import shouldHideEvent from '../../shouldHideEvent';
 import { _t } from '../../languageHandler';
@@ -47,7 +44,6 @@ import Modal from '../../Modal';
 import { LegacyCallHandlerEvent } from '../../LegacyCallHandler';
 import dis, { defaultDispatcher } from '../../dispatcher/dispatcher';
 import * as Rooms from '../../Rooms';
-import eventSearch, { searchPagination } from '../../Searching';
 import MainSplit from './MainSplit';
 import RightPanel from './RightPanel';
 import RoomScrollStateStore, { ScrollState } from '../../stores/RoomScrollStateStore';
@@ -67,8 +63,7 @@ import RoomPreviewCard from "../views/rooms/RoomPreviewCard";
 import SearchBar, { SearchScope } from "../views/rooms/SearchBar";
 import RoomUpgradeWarningBar from "../views/rooms/RoomUpgradeWarningBar";
 import AuxPanel from "../views/rooms/AuxPanel";
-import RoomHeader from "../views/rooms/RoomHeader";
-import { XOR } from "../../@types/common";
+import RoomHeader, { ISearchInfo } from "../views/rooms/RoomHeader";
 import { IOOBData, IThreepidInvite } from "../../stores/ThreepidInviteStore";
 import EffectsOverlay from "../views/elements/EffectsOverlay";
 import { containsEmoji } from '../../effects/utils';
@@ -84,8 +79,6 @@ import SpaceRoomView from "./SpaceRoomView";
 import { IOpts } from "../../createRoom";
 import EditorStateTransfer from "../../utils/EditorStateTransfer";
 import ErrorDialog from '../views/dialogs/ErrorDialog';
-import SearchResultTile from '../views/rooms/SearchResultTile';
-import Spinner from "../views/elements/Spinner";
 import UploadBar from './UploadBar';
 import RoomStatusBar from "./RoomStatusBar";
 import MessageComposer from '../views/rooms/MessageComposer';
@@ -103,7 +96,6 @@ import { DoAfterSyncPreparedPayload } from '../../dispatcher/payloads/DoAfterSyn
 import FileDropTarget from './FileDropTarget';
 import Measured from '../views/elements/Measured';
 import { FocusComposerPayload } from '../../dispatcher/payloads/FocusComposerPayload';
-import { haveRendererForEvent } from "../../events/EventTileFactory";
 import { LocalRoom, LocalRoomState } from '../../models/LocalRoom';
 import { createRoomFromLocalRoom } from '../../utils/direct-messages';
 import NewRoomIntro from '../views/rooms/NewRoomIntro';
@@ -117,12 +109,15 @@ import { isVideoRoom } from '../../utils/video-rooms';
 import { SDKContext } from '../../contexts/SDKContext';
 import { CallStore, CallStoreEvent } from "../../stores/CallStore";
 import { Call } from "../../models/Call";
+import { RoomSearchView } from './RoomSearchView';
+import eventSearch from "../../Searching";
 
 const DEBUG = false;
 let debuglog = function(msg: string) {};
 
 const BROWSER_SUPPORTS_SANDBOX = 'sandbox' in document.createElement('iframe');
 
+/* istanbul ignore next */
 if (DEBUG) {
     // using bind means that we get to keep useful line numbers in the console
     debuglog = logger.log.bind(console);
@@ -168,11 +163,7 @@ export interface IRoomState {
     initialEventScrollIntoView?: boolean;
     replyToEvent?: MatrixEvent;
     numUnreadMessages: number;
-    searchTerm?: string;
-    searchScope?: SearchScope;
-    searchResults?: XOR<{}, ISearchResults>;
-    searchHighlights?: string[];
-    searchInProgress?: boolean;
+    search?: ISearchInfo;
     callState?: CallState;
     activeCall: Call | null;
     canPeek: boolean;
@@ -368,7 +359,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
     private unmounted = false;
     private permalinkCreators: Record<string, RoomPermalinkCreator> = {};
-    private searchId: number;
 
     private roomView = createRef<HTMLElement>();
     private searchResultsPanel = createRef<ScrollPanel>();
@@ -389,7 +379,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             shouldPeek: true,
             membersLoaded: !llMembers,
             numUnreadMessages: 0,
-            searchResults: null,
             callState: null,
             activeCall: null,
             canPeek: false,
@@ -1025,7 +1014,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 break;
             case 'reply_to_event':
                 if (!this.unmounted &&
-                    this.state.searchResults &&
+                    this.state.search &&
                     payload.event?.getRoomId() === this.state.roomId &&
                     payload.context === TimelineRenderingType.Search
                 ) {
@@ -1140,10 +1129,10 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
         if (ev.getSender() !== this.context.client.credentials.userId) {
             // update unread count when scrolled up
-            if (!this.state.searchResults && this.state.atEndOfLiveTimeline) {
+            if (!this.state.search && this.state.atEndOfLiveTimeline) {
                 // no change
             } else if (!shouldHideEvent(ev, this.state)) {
-                this.setState((state, props) => {
+                this.setState((state) => {
                     return { numUnreadMessages: state.numUnreadMessages + 1 };
                 });
             }
@@ -1408,21 +1397,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         }
     }
 
-    private onSearchResultsFillRequest = (backwards: boolean): Promise<boolean> => {
-        if (!backwards) {
-            return Promise.resolve(false);
-        }
-
-        if (this.state.searchResults.next_batch) {
-            debuglog("requesting more search results");
-            const searchPromise = searchPagination(this.state.searchResults as ISearchResults);
-            return this.handleSearchResult(searchPromise);
-        } else {
-            debuglog("no more search results");
-            return Promise.resolve(false);
-        }
-    };
-
     private onInviteClick = () => {
         // open the room inviter
         dis.dispatch({
@@ -1506,187 +1480,34 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     }
 
     private onSearch = (term: string, scope: SearchScope) => {
-        this.setState({
-            searchTerm: term,
-            searchScope: scope,
-            searchResults: {},
-            searchHighlights: [],
-        });
-
-        // if we already have a search panel, we need to tell it to forget
-        // about its scroll state.
-        if (this.searchResultsPanel.current) {
-            this.searchResultsPanel.current.resetScrollState();
-        }
-
-        // make sure that we don't end up showing results from
-        // an aborted search by keeping a unique id.
-        //
-        // todo: should cancel any previous search requests.
-        this.searchId = new Date().getTime();
-
-        let roomId;
-        if (scope === SearchScope.Room) roomId = this.state.room.roomId;
-
+        const roomId = scope === SearchScope.Room ? this.state.room.roomId : undefined;
         debuglog("sending search request");
-        const searchPromise = eventSearch(term, roomId);
-        this.handleSearchResult(searchPromise);
+        const abortController = new AbortController();
+        const promise = eventSearch(term, roomId, abortController.signal);
+
+        this.setState({
+            search: {
+                // make sure that we don't end up showing results from
+                // an aborted search by keeping a unique id.
+                searchId: new Date().getTime(),
+                roomId,
+                term,
+                scope,
+                promise,
+                abortController,
+            },
+        });
     };
 
-    private handleSearchResult(searchPromise: Promise<ISearchResults>): Promise<boolean> {
-        // keep a record of the current search id, so that if the search terms
-        // change before we get a response, we can ignore the results.
-        const localSearchId = this.searchId;
-
+    private onSearchUpdate = (inProgress: boolean, searchResults: ISearchResults | null): void => {
         this.setState({
-            searchInProgress: true,
+            search: {
+                ...this.state.search,
+                count: searchResults?.count,
+                inProgress,
+            },
         });
-
-        return searchPromise.then(async (results) => {
-            debuglog("search complete");
-            if (this.unmounted ||
-                this.state.timelineRenderingType !== TimelineRenderingType.Search ||
-                this.searchId != localSearchId
-            ) {
-                logger.error("Discarding stale search results");
-                return false;
-            }
-
-            // postgres on synapse returns us precise details of the strings
-            // which actually got matched for highlighting.
-            //
-            // In either case, we want to highlight the literal search term
-            // whether it was used by the search engine or not.
-
-            let highlights = results.highlights;
-            if (highlights.indexOf(this.state.searchTerm) < 0) {
-                highlights = highlights.concat(this.state.searchTerm);
-            }
-
-            // For overlapping highlights,
-            // favour longer (more specific) terms first
-            highlights = highlights.sort(function(a, b) {
-                return b.length - a.length;
-            });
-
-            if (this.context.client.supportsExperimentalThreads()) {
-                // Process all thread roots returned in this batch of search results
-                // XXX: This won't work for results coming from Seshat which won't include the bundled relationship
-                for (const result of results.results) {
-                    for (const event of result.context.getTimeline()) {
-                        const bundledRelationship = event
-                            .getServerAggregatedRelation<IThreadBundledRelationship>(THREAD_RELATION_TYPE.name);
-                        if (!bundledRelationship || event.getThread()) continue;
-                        const room = this.context.client.getRoom(event.getRoomId());
-                        const thread = room.findThreadForEvent(event);
-                        if (thread) {
-                            event.setThread(thread);
-                        } else {
-                            room.createThread(event.getId(), event, [], true);
-                        }
-                    }
-                }
-            }
-
-            this.setState({
-                searchHighlights: highlights,
-                searchResults: results,
-            });
-        }, (error) => {
-            logger.error("Search failed", error);
-            Modal.createDialog(ErrorDialog, {
-                title: _t("Search failed"),
-                description: ((error && error.message) ? error.message :
-                    _t("Server may be unavailable, overloaded, or search timed out :(")),
-            });
-            return false;
-        }).finally(() => {
-            this.setState({
-                searchInProgress: false,
-            });
-        });
-    }
-
-    private getSearchResultTiles() {
-        // XXX: todo: merge overlapping results somehow?
-        // XXX: why doesn't searching on name work?
-
-        const ret = [];
-
-        if (this.state.searchInProgress) {
-            ret.push(<li key="search-spinner">
-                <Spinner />
-            </li>);
-        }
-
-        if (!this.state.searchResults.next_batch) {
-            if (!this.state.searchResults?.results?.length) {
-                ret.push(<li key="search-top-marker">
-                    <h2 className="mx_RoomView_topMarker">{ _t("No results") }</h2>
-                </li>,
-                );
-            } else {
-                ret.push(<li key="search-top-marker">
-                    <h2 className="mx_RoomView_topMarker">{ _t("No more results") }</h2>
-                </li>,
-                );
-            }
-        }
-
-        // once dynamic content in the search results load, make the scrollPanel check
-        // the scroll offsets.
-        const onHeightChanged = () => {
-            const scrollPanel = this.searchResultsPanel.current;
-            if (scrollPanel) {
-                scrollPanel.checkScroll();
-            }
-        };
-
-        let lastRoomId;
-
-        for (let i = (this.state.searchResults?.results?.length || 0) - 1; i >= 0; i--) {
-            const result = this.state.searchResults.results[i];
-
-            const mxEv = result.context.getEvent();
-            const roomId = mxEv.getRoomId();
-            const room = this.context.client.getRoom(roomId);
-            if (!room) {
-                // if we do not have the room in js-sdk stores then hide it as we cannot easily show it
-                // As per the spec, an all rooms search can create this condition,
-                // it happens with Seshat but not Synapse.
-                // It will make the result count not match the displayed count.
-                logger.log("Hiding search result from an unknown room", roomId);
-                continue;
-            }
-
-            if (!haveRendererForEvent(mxEv, this.state.showHiddenEvents)) {
-                // XXX: can this ever happen? It will make the result count
-                // not match the displayed count.
-                continue;
-            }
-
-            if (this.state.searchScope === 'All') {
-                if (roomId !== lastRoomId) {
-                    ret.push(<li key={mxEv.getId() + "-room"}>
-                        <h2>{ _t("Room") }: { room.name }</h2>
-                    </li>);
-                    lastRoomId = roomId;
-                }
-            }
-
-            const resultLink = "#/room/"+roomId+"/"+mxEv.getId();
-
-            ret.push(<SearchResultTile
-                key={mxEv.getId()}
-                searchResult={result}
-                searchHighlights={this.state.searchHighlights}
-                resultLink={resultLink}
-                permalinkCreator={this.permalinkCreator}
-                onHeightChanged={onHeightChanged}
-            />);
-        }
-        return ret;
-    }
+    };
 
     private onAppsClick = () => {
         dis.dispatch({
@@ -1780,7 +1601,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         return new Promise<void>(resolve => {
             this.setState({
                 timelineRenderingType: TimelineRenderingType.Room,
-                searchResults: null,
+                search: null,
             }, resolve);
         });
     };
@@ -1890,9 +1711,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             panel = this.messagePanel;
         }
 
-        if (panel) {
-            panel.handleScrollKey(ev);
-        }
+        panel?.handleScrollKey(ev);
     };
 
     /**
@@ -2116,16 +1935,12 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             }
         }
 
-        const scrollheaderClasses = classNames({
-            mx_RoomView_scrollheader: true,
-        });
-
         let statusBar;
         let isStatusAreaExpanded = true;
 
         if (ContentMessages.sharedInstance().getCurrentUploads().length > 0) {
             statusBar = <UploadBar room={this.state.room} />;
-        } else if (!this.state.searchResults) {
+        } else if (!this.state.search) {
             isStatusAreaExpanded = this.state.statusBarVisible;
             statusBar = <RoomStatusBar
                 room={this.state.room}
@@ -2162,7 +1977,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         let previewBar;
         if (this.state.timelineRenderingType === TimelineRenderingType.Search) {
             aux = <SearchBar
-                searchInProgress={this.state.searchInProgress}
+                searchInProgress={this.state.search?.inProgress}
                 onCancelClick={this.onCancelSearchClick}
                 onSearch={this.onSearch}
                 isRoomEncrypted={this.context.client.isRoomEncrypted(this.state.room.roomId)}
@@ -2235,10 +2050,10 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             </AuxPanel>
         );
 
-        let messageComposer; let searchInfo;
+        let messageComposer;
         const showComposer = (
             // joined and not showing search results
-            myMembership === 'join' && !this.state.searchResults
+            myMembership === 'join' && !this.state.search
         );
         if (showComposer) {
             messageComposer =
@@ -2251,40 +2066,24 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 />;
         }
 
-        // TODO: Why aren't we storing the term/scope/count in this format
-        // in this.state if this is what RoomHeader desires?
-        if (this.state.searchResults) {
-            searchInfo = {
-                searchTerm: this.state.searchTerm,
-                searchScope: this.state.searchScope,
-                searchCount: this.state.searchResults.count,
-            };
-        }
-
         // if we have search results, we keep the messagepanel (so that it preserves its
         // scroll state), but hide it.
         let searchResultsPanel;
         let hideMessagePanel = false;
 
-        if (this.state.searchResults) {
-            // show searching spinner
-            if (this.state.searchResults.count === undefined) {
-                searchResultsPanel = (
-                    <div className="mx_RoomView_messagePanel mx_RoomView_messagePanelSearchSpinner" />
-                );
-            } else {
-                searchResultsPanel = (
-                    <ScrollPanel
-                        ref={this.searchResultsPanel}
-                        className={"mx_RoomView_searchResultsPanel " + this.messagePanelClassNames}
-                        onFillRequest={this.onSearchResultsFillRequest}
-                        resizeNotifier={this.props.resizeNotifier}
-                    >
-                        <li className={scrollheaderClasses} />
-                        { this.getSearchResultTiles() }
-                    </ScrollPanel>
-                );
-            }
+        if (this.state.search) {
+            searchResultsPanel = <RoomSearchView
+                key={this.state.search.searchId}
+                ref={this.searchResultsPanel}
+                term={this.state.search.term}
+                scope={this.state.search.scope}
+                promise={this.state.search.promise}
+                abortController={this.state.search.abortController}
+                resizeNotifier={this.props.resizeNotifier}
+                permalinkCreator={this.permalinkCreator}
+                className={this.messagePanelClassNames}
+                onUpdate={this.onSearchUpdate}
+            />;
             hideMessagePanel = true;
         }
 
@@ -2321,14 +2120,14 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
         let topUnreadMessagesBar = null;
         // Do not show TopUnreadMessagesBar if we have search results showing, it makes no sense
-        if (this.state.showTopUnreadMessagesBar && !this.state.searchResults) {
+        if (this.state.showTopUnreadMessagesBar && !this.state.search) {
             topUnreadMessagesBar = (
                 <TopUnreadMessagesBar onScrollUpClick={this.jumpToReadMarker} onCloseClick={this.forgetReadMarker} />
             );
         }
         let jumpToBottom;
         // Do not show JumpToBottomButton if we have search results showing, it makes no sense
-        if (this.state.atEndOfLiveTimeline === false && !this.state.searchResults) {
+        if (this.state.atEndOfLiveTimeline === false && !this.state.search) {
             jumpToBottom = (<JumpToBottomButton
                 highlight={this.state.room.getUnreadNotificationCount(NotificationCountType.Highlight) > 0}
                 numUnreadMessages={this.state.numUnreadMessages}
@@ -2455,7 +2254,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                     <ErrorBoundary>
                         <RoomHeader
                             room={this.state.room}
-                            searchInfo={searchInfo}
+                            searchInfo={this.state.search}
                             oobData={this.props.oobData}
                             inRoom={myMembership === 'join'}
                             onSearchClick={onSearchClick}
