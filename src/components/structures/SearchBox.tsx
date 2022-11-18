@@ -136,6 +136,7 @@ export default class SearchBox extends React.Component<IProps, IState> {
                     placeholder={this.state.blurred ? (blurredPlaceholder || placeholder) : placeholder}
                     autoComplete="off"
                     autoFocus={this.props.autoFocus}
+                    data-testid="searchbox-input"
                 />
                 { clearButton }
             </div>

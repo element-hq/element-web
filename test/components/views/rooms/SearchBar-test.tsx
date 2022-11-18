@@ -15,17 +15,12 @@ limitations under the License.
 */
 
 import React from 'react';
-// eslint-disable-next-line deprecate/import
-import { mount } from "enzyme";
+import { fireEvent, render } from '@testing-library/react';
 
-import SearchWarning from "../../../../src/components/views/elements/SearchWarning";
-import { PosthogScreenTracker } from "../../../../src/PosthogTrackers";
 import SearchBar, { SearchScope } from "../../../../src/components/views/rooms/SearchBar";
 import { KeyBindingAction } from "../../../../src/accessibility/KeyboardShortcuts";
 
 let mockCurrentEvent = KeyBindingAction.Enter;
-const mockWarningKind = true;
-let wrapper: any = null;
 
 const searchProps = {
     onCancelClick: jest.fn(),
@@ -40,95 +35,63 @@ jest.mock("../../../../src/KeyBindingsManager", () => ({
         { getAccessibilityAction: jest.fn(() => mockCurrentEvent) })),
 }));
 
-/** mock out SearchWarning component so it doesn't affect the result of our test */
-jest.mock('../../../../src/components/views/elements/SearchWarning', () => ({
-    __esModule: true,
-    WarningKind: {
-        get Search() { // eslint-disable-line @typescript-eslint/naming-convention
-            return mockWarningKind;
-        },
-    },
-    default: jest.fn(({ children }) => (
-        <div>{ children }</div>
-    )),
-}));
-
-/** mock out PosthogTrackers component so it doesn't affect the result of our test */
-jest.mock('../../../../src/PosthogTrackers', () => ({
-    __esModule: true,
-    PosthogScreenTracker: jest.fn(({ children }) => (
-        <div>{ children }</div>
-    )),
-}));
-
 describe("SearchBar", () => {
-    beforeEach(() => {
-        wrapper = mount(<SearchBar {...searchProps} />);
-    });
-
     afterEach(() => {
-        wrapper.unmount();
         searchProps.onCancelClick.mockClear();
         searchProps.onSearch.mockClear();
     });
 
-    it("must render child components and pass necessary props", () => {
-        const postHogScreenTracker = wrapper.find(PosthogScreenTracker);
-        const searchWarning = wrapper.find(SearchWarning);
-
-        expect(postHogScreenTracker.length).toBe(1);
-        expect(searchWarning.length).toBe(1);
-        expect(postHogScreenTracker.props().screenName).toEqual("RoomSearch");
-        expect(searchWarning.props().isRoomEncrypted).toEqual(searchProps.isRoomEncrypted);
-        expect(searchWarning.props().kind).toEqual(mockWarningKind);
-    });
-
     it("must not search when input value is empty", () => {
-        const roomButtons = wrapper.find(".mx_SearchBar_button");
-        const searchButton = wrapper.find(".mx_SearchBar_searchButton");
+        const { container } = render(<SearchBar {...searchProps} />);
+        const roomButtons = container.querySelectorAll(".mx_SearchBar_button");
+        const searchButton = container.querySelectorAll(".mx_SearchBar_searchButton");
 
-        expect(roomButtons.length).toEqual(4);
+        expect(roomButtons.length).toEqual(2);
 
-        searchButton.at(0).simulate("click");
-        roomButtons.at(0).simulate("click");
-        roomButtons.at(2).simulate("click");
+        fireEvent.click(searchButton[0]);
+        fireEvent.click(roomButtons[0]);
+        fireEvent.click(roomButtons[1]);
 
         expect(searchProps.onSearch).not.toHaveBeenCalled();
     });
 
     it("must trigger onSearch when value is not empty", () => {
+        const { container } = render(<SearchBar {...searchProps} />);
         const searchValue = "abcd";
 
-        const roomButtons = wrapper.find(".mx_SearchBar_button");
-        const searchButton = wrapper.find(".mx_SearchBar_searchButton");
-        const input = wrapper.find(".mx_SearchBar_input input");
-        input.instance().value = searchValue;
+        const roomButtons = container.querySelectorAll(".mx_SearchBar_button");
+        const searchButton = container.querySelectorAll(".mx_SearchBar_searchButton");
+        const input = container.querySelector<HTMLInputElement>(".mx_SearchBar_input input");
+        input!.value = searchValue;
 
-        expect(roomButtons.length).toEqual(4);
+        expect(roomButtons.length).toEqual(2);
 
-        searchButton.at(0).simulate("click");
+        fireEvent.click(searchButton[0]);
 
         expect(searchProps.onSearch).toHaveBeenCalledTimes(1);
         expect(searchProps.onSearch).toHaveBeenNthCalledWith(1, searchValue, SearchScope.Room);
 
-        roomButtons.at(0).simulate("click");
+        fireEvent.click(roomButtons[0]);
 
         expect(searchProps.onSearch).toHaveBeenCalledTimes(2);
         expect(searchProps.onSearch).toHaveBeenNthCalledWith(2, searchValue, SearchScope.Room);
 
-        roomButtons.at(2).simulate("click");
+        fireEvent.click(roomButtons[1]);
 
         expect(searchProps.onSearch).toHaveBeenCalledTimes(3);
         expect(searchProps.onSearch).toHaveBeenNthCalledWith(3, searchValue, SearchScope.All);
     });
 
-    it("cancel button and esc key should trigger onCancelClick", () => {
+    it("cancel button and esc key should trigger onCancelClick", async () => {
         mockCurrentEvent = KeyBindingAction.Escape;
-        const cancelButton = wrapper.find(".mx_SearchBar_cancel");
-        const input = wrapper.find(".mx_SearchBar_input input");
-        input.simulate("focus");
-        input.simulate("keydown", { key: "ESC" });
-        cancelButton.at(0).simulate("click");
+        const { container } = render(<SearchBar {...searchProps} />);
+        const cancelButton = container.querySelector(".mx_SearchBar_cancel");
+        const input = container.querySelector(".mx_SearchBar_input input");
+        fireEvent.click(cancelButton!);
+        expect(searchProps.onCancelClick).toHaveBeenCalledTimes(1);
+
+        fireEvent.focus(input!);
+        fireEvent.keyDown(input!, { key: 'Escape', code: 'Escape', charCode: 27 });
 
         expect(searchProps.onCancelClick).toHaveBeenCalledTimes(2);
     });

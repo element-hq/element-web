@@ -1,113 +1,63 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ThemeChoicePanel renders the theme choice UI 1`] = `
-<ThemeChoicePanel>
+<DocumentFragment>
   <div
-    className="mx_SettingsTab_section mx_ThemeChoicePanel"
+    class="mx_SettingsTab_section mx_ThemeChoicePanel"
   >
     <span
-      className="mx_SettingsTab_subheading"
+      class="mx_SettingsTab_subheading"
     >
       Theme
     </span>
     <div
-      className="mx_ThemeSelectors"
+      class="mx_ThemeSelectors"
     >
-      <StyledRadioGroup
-        definitions={
-          [
-            {
-              "className": "mx_ThemeSelector_light",
-              "disabled": true,
-              "label": "Light",
-              "value": "light",
-            },
-            {
-              "className": "mx_ThemeSelector_dark",
-              "disabled": true,
-              "label": "Dark",
-              "value": "dark",
-            },
-          ]
-        }
-        name="theme"
-        onChange={[Function]}
-        outlined={true}
+      <label
+        class="mx_StyledRadioButton mx_ThemeSelector_light mx_StyledRadioButton_disabled mx_StyledRadioButton_outlined"
       >
-        <StyledRadioButton
-          checked={false}
-          childrenInLabel={true}
-          className="mx_ThemeSelector_light"
-          disabled={true}
+        <input
+          disabled=""
           id="theme-light"
           name="theme"
-          onChange={[Function]}
-          outlined={true}
+          type="radio"
           value="light"
+        />
+        <div>
+          <div />
+        </div>
+        <div
+          class="mx_StyledRadioButton_content"
         >
-          <label
-            className="mx_StyledRadioButton mx_ThemeSelector_light mx_StyledRadioButton_disabled mx_StyledRadioButton_outlined"
-          >
-            <input
-              checked={false}
-              disabled={true}
-              id="theme-light"
-              name="theme"
-              onChange={[Function]}
-              type="radio"
-              value="light"
-            />
-            <div>
-              <div />
-            </div>
-            <div
-              className="mx_StyledRadioButton_content"
-            >
-              Light
-            </div>
-            <div
-              className="mx_StyledRadioButton_spacer"
-            />
-          </label>
-        </StyledRadioButton>
-        <StyledRadioButton
-          checked={false}
-          childrenInLabel={true}
-          className="mx_ThemeSelector_dark"
-          disabled={true}
+          Light
+        </div>
+        <div
+          class="mx_StyledRadioButton_spacer"
+        />
+      </label>
+      <label
+        class="mx_StyledRadioButton mx_ThemeSelector_dark mx_StyledRadioButton_disabled mx_StyledRadioButton_outlined"
+      >
+        <input
+          disabled=""
           id="theme-dark"
           name="theme"
-          onChange={[Function]}
-          outlined={true}
+          type="radio"
           value="dark"
+        />
+        <div>
+          <div />
+        </div>
+        <div
+          class="mx_StyledRadioButton_content"
         >
-          <label
-            className="mx_StyledRadioButton mx_ThemeSelector_dark mx_StyledRadioButton_disabled mx_StyledRadioButton_outlined"
-          >
-            <input
-              checked={false}
-              disabled={true}
-              id="theme-dark"
-              name="theme"
-              onChange={[Function]}
-              type="radio"
-              value="dark"
-            />
-            <div>
-              <div />
-            </div>
-            <div
-              className="mx_StyledRadioButton_content"
-            >
-              Dark
-            </div>
-            <div
-              className="mx_StyledRadioButton_spacer"
-            />
-          </label>
-        </StyledRadioButton>
-      </StyledRadioGroup>
+          Dark
+        </div>
+        <div
+          class="mx_StyledRadioButton_spacer"
+        />
+      </label>
     </div>
   </div>
-</ThemeChoicePanel>
+</DocumentFragment>
 `;

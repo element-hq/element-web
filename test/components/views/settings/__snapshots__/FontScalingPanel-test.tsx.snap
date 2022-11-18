@@ -1,313 +1,186 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`FontScalingPanel renders the font scaling UI 1`] = `
-<FontScalingPanel>
+<DocumentFragment>
   <div
-    className="mx_SettingsTab_section mx_FontScalingPanel"
+    class="mx_SettingsTab_section mx_FontScalingPanel"
   >
     <span
-      className="mx_SettingsTab_subheading"
+      class="mx_SettingsTab_subheading"
     >
       Font size
     </span>
-    <EventTilePreview
-      avatarUrl={null}
-      className="mx_FontScalingPanel_preview"
-      displayName={null}
-      layout="group"
-      message="Hey you. You're the best!"
-      userId={null}
-    >
-      <div
-        className="mx_FontScalingPanel_preview mx_EventTilePreview_loader"
-      >
-        <Spinner
-          h={32}
-          w={32}
-        >
-          <div
-            className="mx_Spinner"
-          >
-            <div
-              aria-label="Loading..."
-              className="mx_Spinner_icon"
-              data-testid="spinner"
-              role="progressbar"
-              style={
-                {
-                  "height": 32,
-                  "width": 32,
-                }
-              }
-            />
-          </div>
-        </Spinner>
-      </div>
-    </EventTilePreview>
     <div
-      className="mx_FontScalingPanel_fontSlider"
+      class="mx_FontScalingPanel_preview mx_EventTilePreview_loader"
     >
       <div
-        className="mx_FontScalingPanel_fontSlider_smallText"
+        class="mx_Spinner"
+      >
+        <div
+          aria-label="Loading..."
+          class="mx_Spinner_icon"
+          data-testid="spinner"
+          role="progressbar"
+          style="width: 32px; height: 32px;"
+        />
+      </div>
+    </div>
+    <div
+      class="mx_FontScalingPanel_fontSlider"
+    >
+      <div
+        class="mx_FontScalingPanel_fontSlider_smallText"
       >
         Aa
       </div>
-      <Slider
-        disabled={false}
-        displayFunc={[Function]}
-        onSelectionChange={[Function]}
-        value={15}
-        values={
-          [
-            13,
-            14,
-            15,
-            16,
-            18,
-          ]
-        }
+      <div
+        class="mx_Slider"
       >
-        <div
-          className="mx_Slider"
-        >
-          <div>
+        <div>
+          <div
+            class="mx_Slider_bar"
+          >
+            <hr />
             <div
-              className="mx_Slider_bar"
+              class="mx_Slider_selection"
             >
-              <hr
-                onClick={[Function]}
-              />
               <div
-                className="mx_Slider_selection"
+                class="mx_Slider_selectionDot"
+                style="left: calc(-1.195em + 50%);"
               >
                 <div
-                  className="mx_Slider_selectionDot"
-                  style={
-                    {
-                      "left": "calc(-1.195em + 50%)",
-                    }
-                  }
+                  class="mx_Slider_selectionText"
                 >
-                  <div
-                    className="mx_Slider_selectionText"
-                  >
-                    15
-                  </div>
+                  15
                 </div>
-                <hr
-                  style={
-                    {
-                      "width": "50%",
-                    }
-                  }
-                />
               </div>
-            </div>
-            <div
-              className="mx_Slider_dotContainer"
-            >
-              <Dot
-                active={true}
-                disabled={false}
-                key="13"
-                label=""
-                onClick={[Function]}
-              >
-                <span
-                  className="mx_Slider_dotValue"
-                  onClick={[Function]}
-                >
-                  <div
-                    className="mx_Slider_dot mx_Slider_dotActive"
-                  />
-                  <div
-                    className="mx_Slider_labelContainer"
-                  >
-                    <div
-                      className="mx_Slider_label"
-                    />
-                  </div>
-                </span>
-              </Dot>
-              <Dot
-                active={true}
-                disabled={false}
-                key="14"
-                label=""
-                onClick={[Function]}
-              >
-                <span
-                  className="mx_Slider_dotValue"
-                  onClick={[Function]}
-                >
-                  <div
-                    className="mx_Slider_dot mx_Slider_dotActive"
-                  />
-                  <div
-                    className="mx_Slider_labelContainer"
-                  >
-                    <div
-                      className="mx_Slider_label"
-                    />
-                  </div>
-                </span>
-              </Dot>
-              <Dot
-                active={true}
-                disabled={false}
-                key="15"
-                label=""
-                onClick={[Function]}
-              >
-                <span
-                  className="mx_Slider_dotValue"
-                  onClick={[Function]}
-                >
-                  <div
-                    className="mx_Slider_dot mx_Slider_dotActive"
-                  />
-                  <div
-                    className="mx_Slider_labelContainer"
-                  >
-                    <div
-                      className="mx_Slider_label"
-                    />
-                  </div>
-                </span>
-              </Dot>
-              <Dot
-                active={false}
-                disabled={false}
-                key="16"
-                label=""
-                onClick={[Function]}
-              >
-                <span
-                  className="mx_Slider_dotValue"
-                  onClick={[Function]}
-                >
-                  <div
-                    className="mx_Slider_dot"
-                  />
-                  <div
-                    className="mx_Slider_labelContainer"
-                  >
-                    <div
-                      className="mx_Slider_label"
-                    />
-                  </div>
-                </span>
-              </Dot>
-              <Dot
-                active={false}
-                disabled={false}
-                key="18"
-                label=""
-                onClick={[Function]}
-              >
-                <span
-                  className="mx_Slider_dotValue"
-                  onClick={[Function]}
-                >
-                  <div
-                    className="mx_Slider_dot"
-                  />
-                  <div
-                    className="mx_Slider_labelContainer"
-                  >
-                    <div
-                      className="mx_Slider_label"
-                    />
-                  </div>
-                </span>
-              </Dot>
+              <hr
+                style="width: 50%;"
+              />
             </div>
           </div>
+          <div
+            class="mx_Slider_dotContainer"
+          >
+            <span
+              class="mx_Slider_dotValue"
+            >
+              <div
+                class="mx_Slider_dot mx_Slider_dotActive"
+              />
+              <div
+                class="mx_Slider_labelContainer"
+              >
+                <div
+                  class="mx_Slider_label"
+                />
+              </div>
+            </span>
+            <span
+              class="mx_Slider_dotValue"
+            >
+              <div
+                class="mx_Slider_dot mx_Slider_dotActive"
+              />
+              <div
+                class="mx_Slider_labelContainer"
+              >
+                <div
+                  class="mx_Slider_label"
+                />
+              </div>
+            </span>
+            <span
+              class="mx_Slider_dotValue"
+            >
+              <div
+                class="mx_Slider_dot mx_Slider_dotActive"
+              />
+              <div
+                class="mx_Slider_labelContainer"
+              >
+                <div
+                  class="mx_Slider_label"
+                />
+              </div>
+            </span>
+            <span
+              class="mx_Slider_dotValue"
+            >
+              <div
+                class="mx_Slider_dot"
+              />
+              <div
+                class="mx_Slider_labelContainer"
+              >
+                <div
+                  class="mx_Slider_label"
+                />
+              </div>
+            </span>
+            <span
+              class="mx_Slider_dotValue"
+            >
+              <div
+                class="mx_Slider_dot"
+              />
+              <div
+                class="mx_Slider_labelContainer"
+              >
+                <div
+                  class="mx_Slider_label"
+                />
+              </div>
+            </span>
+          </div>
         </div>
-      </Slider>
+      </div>
       <div
-        className="mx_FontScalingPanel_fontSlider_largeText"
+        class="mx_FontScalingPanel_fontSlider_largeText"
       >
         Aa
       </div>
     </div>
-    <SettingsFlag
-      level="account"
-      name="useCustomFontSize"
-      onChange={[Function]}
-      useCheckbox={true}
+    <span
+      class="mx_Checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
     >
-      <StyledCheckbox
-        checked={false}
-        className=""
-        disabled={false}
-        onChange={[Function]}
+      <input
+        id="checkbox_abdefghi"
+        type="checkbox"
+      />
+      <label
+        for="checkbox_abdefghi"
       >
-        <span
-          className="mx_Checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+        <div
+          class="mx_Checkbox_background"
         >
-          <input
-            checked={false}
-            disabled={false}
-            id="checkbox_abdefghi"
-            onChange={[Function]}
-            type="checkbox"
+          <div
+            class="mx_Checkbox_checkmark"
           />
-          <label
-            htmlFor="checkbox_abdefghi"
-          >
-            <div
-              className="mx_Checkbox_background"
-            >
-              <div
-                className="mx_Checkbox_checkmark"
-              />
-            </div>
-            <div>
-              Use custom size
-            </div>
-          </label>
-        </span>
-      </StyledCheckbox>
-    </SettingsFlag>
-    <Field
-      autoComplete="off"
-      className="mx_FontScalingPanel_customFontSizeField"
-      disabled={true}
-      element="input"
-      id="font_size_field"
-      label="Font size"
-      onChange={[Function]}
-      onValidate={[Function]}
-      placeholder="15"
-      type="number"
-      validateOnBlur={true}
-      validateOnChange={true}
-      validateOnFocus={true}
-      value="15"
+        </div>
+        <div>
+          Use custom size
+        </div>
+      </label>
+    </span>
+    <div
+      class="mx_Field mx_Field_input mx_FontScalingPanel_customFontSizeField"
     >
-      <div
-        className="mx_Field mx_Field_input mx_FontScalingPanel_customFontSizeField"
+      <input
+        autocomplete="off"
+        disabled=""
+        id="font_size_field"
+        label="Font size"
+        placeholder="15"
+        type="number"
+        value="15"
+      />
+      <label
+        for="font_size_field"
       >
-        <input
-          autoComplete="off"
-          disabled={true}
-          id="font_size_field"
-          label="Font size"
-          onBlur={[Function]}
-          onChange={[Function]}
-          onFocus={[Function]}
-          placeholder="15"
-          type="number"
-          value="15"
-        />
-        <label
-          htmlFor="font_size_field"
-        >
-          Font size
-        </label>
-      </div>
-    </Field>
+        Font size
+      </label>
+    </div>
   </div>
-</FontScalingPanel>
+</DocumentFragment>
 `;

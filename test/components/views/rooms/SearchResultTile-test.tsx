@@ -15,14 +15,12 @@ limitations under the License.
 */
 
 import * as React from "react";
-// eslint-disable-next-line deprecate/import
-import { mount } from "enzyme";
 import { SearchResult } from "matrix-js-sdk/src/models/search-result";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { EventType } from "matrix-js-sdk/src/@types/event";
+import { render } from "@testing-library/react";
 
 import { createTestClient } from "../../../test-utils";
-import EventTile from "../../../../src/components/views/rooms/EventTile";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import SearchResultTile from "../../../../src/components/views/rooms/SearchResultTile";
 
@@ -32,7 +30,7 @@ describe("SearchResultTile", () => {
     });
 
     it("Sets up appropriate callEventGrouper for m.call. events", () => {
-        const wrapper = mount(
+        const { container } = render(
             <SearchResultTile
                 searchResult={SearchResult.fromJson({
                     rank: 0.00424866,
@@ -77,11 +75,9 @@ describe("SearchResultTile", () => {
             />,
         );
 
-        const tiles = wrapper.find(EventTile);
+        const tiles = container.querySelectorAll<HTMLElement>(".mx_EventTile");
         expect(tiles.length).toEqual(2);
-        expect(tiles.at(0).prop("mxEvent").getId()).toBe("$1:server");
-        // @ts-ignore accessing private property
-        expect(tiles.at(0).prop("callEventGrouper").events.size).toBe(2);
-        expect(tiles.at(1).prop("mxEvent").getId()).toBe("$144429830826TWwbB:localhost");
+        expect(tiles[0].dataset.eventId).toBe("$1:server");
+        expect(tiles[1].dataset.eventId).toBe("$144429830826TWwbB:localhost");
     });
 });

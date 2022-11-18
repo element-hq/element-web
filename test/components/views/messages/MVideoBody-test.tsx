@@ -15,9 +15,8 @@ limitations under the License.
 */
 
 import React from 'react';
-// eslint-disable-next-line deprecate/import
-import { mount, ReactWrapper } from "enzyme";
 import { MatrixEvent } from 'matrix-js-sdk/src/matrix';
+import { render, RenderResult } from '@testing-library/react';
 
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalinks";
@@ -36,12 +35,13 @@ describe("MVideoBody", () => {
     it('does not crash when given a portrait image', () => {
         // Check for an unreliable crash caused by a fractional-sized
         // image dimension being used for a CanvasImageData.
-        expect(makeMVideoBody(720, 1280).html()).toMatchSnapshot();
+        const { asFragment } = makeMVideoBody(720, 1280);
+        expect(asFragment()).toMatchSnapshot();
         // If we get here, we did not crash.
     });
 });
 
-function makeMVideoBody(w: number, h: number): ReactWrapper<any, Readonly<{}>, MVideoBody> {
+function makeMVideoBody(w: number, h: number): RenderResult {
     const content = {
         info: {
             "w": w,
@@ -79,8 +79,9 @@ function makeMVideoBody(w: number, h: number): ReactWrapper<any, Readonly<{}>, M
         mxcUrlToHttp: jest.fn(),
     });
 
-    return mount(<MVideoBody {...defaultProps} />, {
-        wrappingComponent: MatrixClientContext.Provider,
-        wrappingComponentProps: { value: mockClient },
-    });
+    return render(
+        <MatrixClientContext.Provider value={mockClient}>
+            <MVideoBody {...defaultProps} />
+        </MatrixClientContext.Provider>,
+    );
 }

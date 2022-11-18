@@ -1,11 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<UiFeatureSettingWrapper> renders children when setting is truthy 1`] = `
-<UiFeatureSettingWrapper
-  uiFeature="UIFeature.feedback"
->
+<DocumentFragment>
   <div>
     test
   </div>
-</UiFeatureSettingWrapper>
+</DocumentFragment>
 `;
+
+exports[`<UiFeatureSettingWrapper> returns null when setting is falsy 1`] = `<DocumentFragment />`;
+
+exports[`<UiFeatureSettingWrapper> returns null when setting is truthy but children are undefined 1`] = `<DocumentFragment />`;
