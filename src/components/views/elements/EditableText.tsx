@@ -70,11 +70,9 @@ export default class EditableText extends React.Component<IProps, IState> {
         };
     }
 
-    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    // eslint-disable-next-line @typescript-eslint/naming-convention, camelcase
-    public UNSAFE_componentWillReceiveProps(nextProps: IProps): void {
-        if (nextProps.initialValue !== this.props.initialValue) {
-            this.value = nextProps.initialValue;
+    public componentDidUpdate(prevProps: Readonly<IProps>): void {
+        if (prevProps.initialValue !== this.props.initialValue) {
+            this.value = this.props.initialValue;
             if (this.editableDiv.current) {
                 this.showPlaceholder(!this.value);
             }

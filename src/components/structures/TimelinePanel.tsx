@@ -299,22 +299,17 @@ class TimelinePanel extends React.Component<IProps, IState> {
         cli.on(ClientEvent.Sync, this.onSync);
     }
 
-    // TODO: [REACT-WARNING] Move into constructor
-    // eslint-disable-next-line
-    UNSAFE_componentWillMount() {
+    public componentDidMount() {
         if (this.props.manageReadReceipts) {
             this.updateReadReceiptOnUserActivity();
         }
         if (this.props.manageReadMarkers) {
             this.updateReadMarkerOnUserActivity();
         }
-
         this.initTimeline(this.props);
     }
 
-    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    // eslint-disable-next-line
-    UNSAFE_componentWillReceiveProps(newProps) {
+    public componentDidUpdate(newProps) {
         if (newProps.timelineSet !== this.props.timelineSet) {
             // throw new Error("changing timelineSet on a TimelinePanel is not supported");
 
@@ -334,10 +329,9 @@ class TimelinePanel extends React.Component<IProps, IState> {
         const differentHighlightedEventId = newProps.highlightedEventId != this.props.highlightedEventId;
         const differentAvoidJump = newProps.eventScrollIntoView && !this.props.eventScrollIntoView;
         if (differentEventId || differentHighlightedEventId || differentAvoidJump) {
-            logger.log("TimelinePanel switching to " +
-                "eventId " + newProps.eventId + " (was " + this.props.eventId + "), " +
-                "scrollIntoView: " + newProps.eventScrollIntoView + " (was " + this.props.eventScrollIntoView + ")");
-            return this.initTimeline(newProps);
+            logger.log(`TimelinePanel switching to eventId ${newProps.eventId} (was ${this.props.eventId}), ` +
+                `scrollIntoView: ${newProps.eventScrollIntoView} (was ${this.props.eventScrollIntoView})`);
+            this.initTimeline(newProps);
         }
     }
 

@@ -63,11 +63,11 @@ export class PhoneNumber extends React.Component<IPhoneNumberProps, IPhoneNumber
         };
     }
 
-    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    // eslint-disable-next-line @typescript-eslint/naming-convention, camelcase
-    public UNSAFE_componentWillReceiveProps(nextProps: IPhoneNumberProps): void {
-        const { bound } = nextProps.msisdn;
-        this.setState({ bound });
+    public componentDidUpdate(prevProps: Readonly<IPhoneNumberProps>) {
+        if (this.props.msisdn !== prevProps.msisdn) {
+            const { bound } = this.props.msisdn;
+            this.setState({ bound });
+        }
     }
 
     private async changeBinding({ bind, label, errorTitle }): Promise<void> {

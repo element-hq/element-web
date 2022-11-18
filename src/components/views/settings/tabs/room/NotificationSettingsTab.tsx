@@ -55,20 +55,16 @@ export default class NotificationsSettingsTab extends React.Component<IProps, IS
 
         this.roomProps = EchoChamber.forRoom(context.getRoom(this.props.roomId));
 
+        let currentSound = "default";
+        const soundData = Notifier.getSoundForRoom(this.props.roomId);
+        if (soundData) {
+            currentSound = soundData.name || soundData.url;
+        }
+
         this.state = {
-            currentSound: "default",
+            currentSound,
             uploadedFile: null,
         };
-    }
-
-    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
-    // eslint-disable-next-line @typescript-eslint/naming-convention, camelcase
-    public UNSAFE_componentWillMount(): void {
-        const soundData = Notifier.getSoundForRoom(this.props.roomId);
-        if (!soundData) {
-            return;
-        }
-        this.setState({ currentSound: soundData.name || soundData.url });
     }
 
     private triggerUploader = async (e: React.MouseEvent): Promise<void> => {

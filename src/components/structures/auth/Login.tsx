@@ -144,9 +144,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
         };
     }
 
-    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    // eslint-disable-next-line
-    UNSAFE_componentWillMount() {
+    public componentDidMount() {
         this.initLoginLogic(this.props.serverConfig);
     }
 
@@ -154,14 +152,13 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
         this.unmounted = true;
     }
 
-    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    // eslint-disable-next-line
-    UNSAFE_componentWillReceiveProps(newProps) {
-        if (newProps.serverConfig.hsUrl === this.props.serverConfig.hsUrl &&
-            newProps.serverConfig.isUrl === this.props.serverConfig.isUrl) return;
-
-        // Ensure that we end up actually logging in to the right place
-        this.initLoginLogic(newProps.serverConfig);
+    public componentDidUpdate(prevProps) {
+        if (prevProps.serverConfig.hsUrl !== this.props.serverConfig.hsUrl ||
+            prevProps.serverConfig.isUrl !== this.props.serverConfig.isUrl
+        ) {
+            // Ensure that we end up actually logging in to the right place
+            this.initLoginLogic(this.props.serverConfig);
+        }
     }
 
     isBusy = () => this.state.busy || this.props.busy;
@@ -369,7 +366,8 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
         let isDefaultServer = false;
         if (this.props.serverConfig.isDefault
             && hsUrl === this.props.serverConfig.hsUrl
-            && isUrl === this.props.serverConfig.isUrl) {
+            && isUrl === this.props.serverConfig.isUrl
+        ) {
             isDefaultServer = true;
         }
 

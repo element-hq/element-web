@@ -38,7 +38,7 @@ import dis from "../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../src/dispatcher/actions";
 import { SendMessageComposer } from "../../../../src/components/views/rooms/SendMessageComposer";
 import { E2EStatus } from "../../../../src/utils/ShieldUtils";
-import { addTextToComposer } from "../../../test-utils/composer";
+import { addTextToComposerEnzyme } from "../../../test-utils/composer";
 import UIStore, { UI_EVENTS } from "../../../../src/stores/UIStore";
 import { SendWysiwygComposer } from "../../../../src/components/views/rooms/wysiwyg_composer";
 
@@ -176,7 +176,7 @@ describe("MessageComposer", () => {
 
             beforeEach(() => {
                 wrapper = wrapAndRender({ room });
-                addTextToComposer(wrapper, "Hello");
+                addTextToComposerEnzyme(wrapper, "Hello");
                 wrapper.update();
             });
 

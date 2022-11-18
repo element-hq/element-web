@@ -49,17 +49,21 @@ export default function MemberAvatar({
     height,
     resizeMethod = 'crop',
     viewUserOnClick,
+    forceHistorical,
+    fallbackUserId,
+    hideTitle,
+    member: propsMember,
     ...props
 }: IProps) {
     const card = useContext(CardContext);
 
     const member = useRoomMemberProfile({
-        userId: props.member?.userId,
-        member: props.member,
-        forceHistorical: props.forceHistorical,
+        userId: propsMember?.userId,
+        member: propsMember,
+        forceHistorical: forceHistorical,
     });
 
-    const name = member?.name ?? props.fallbackUserId;
+    const name = member?.name ?? fallbackUserId;
     let title: string | undefined = props.title;
     let imageUrl: string | undefined;
     if (member?.name) {
@@ -74,7 +78,7 @@ export default function MemberAvatar({
         if (!title) {
             title = UserIdentifierCustomisations.getDisplayUserIdentifier(
                 member?.userId ?? "", { roomId: member?.roomId ?? "" },
-            ) ?? props.fallbackUserId;
+            ) ?? fallbackUserId;
         }
     }
 
@@ -84,13 +88,13 @@ export default function MemberAvatar({
         height={height}
         resizeMethod={resizeMethod}
         name={name ?? ""}
-        title={props.hideTitle ? undefined : title}
-        idName={member?.userId ?? props.fallbackUserId}
+        title={hideTitle ? undefined : title}
+        idName={member?.userId ?? fallbackUserId}
         url={imageUrl}
         onClick={viewUserOnClick ? () => {
             dis.dispatch({
                 action: Action.ViewUser,
-                member: props.member,
+                member: propsMember,
                 push: card.isCard,
             });
         } : props.onClick}

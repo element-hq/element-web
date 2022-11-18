@@ -17,8 +17,22 @@ limitations under the License.
 // eslint-disable-next-line deprecate/import
 import { ReactWrapper } from "enzyme";
 import { act } from "react-dom/test-utils";
+import { fireEvent } from "@testing-library/react";
 
-export const addTextToComposer = (wrapper: ReactWrapper, text: string) => act(() => {
+export const addTextToComposer = (container: HTMLElement, text: string) => act(() => {
+    // couldn't get input event on contenteditable to work
+    // paste works without illegal private method access
+    const pasteEvent = {
+        clipboardData: {
+            types: [],
+            files: [],
+            getData: type => type === "text/plain" ? text : undefined,
+        },
+    };
+    fireEvent.paste(container.querySelector('[role="textbox"]'), pasteEvent);
+});
+
+export const addTextToComposerEnzyme = (wrapper: ReactWrapper, text: string) => act(() => {
     // couldn't get input event on contenteditable to work
     // paste works without illegal private method access
     const pasteEvent = {

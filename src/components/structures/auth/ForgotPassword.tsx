@@ -113,17 +113,16 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
         this.checkServerCapabilities(this.props.serverConfig);
     }
 
-    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    // eslint-disable-next-line
-    public UNSAFE_componentWillReceiveProps(newProps: IProps): void {
-        if (newProps.serverConfig.hsUrl === this.props.serverConfig.hsUrl &&
-            newProps.serverConfig.isUrl === this.props.serverConfig.isUrl) return;
+    public componentDidUpdate(prevProps: Readonly<IProps>) {
+        if (prevProps.serverConfig.hsUrl !== this.props.serverConfig.hsUrl ||
+            prevProps.serverConfig.isUrl !== this.props.serverConfig.isUrl
+        ) {
+            // Do a liveliness check on the new URLs
+            this.checkServerLiveliness(this.props.serverConfig);
 
-        // Do a liveliness check on the new URLs
-        this.checkServerLiveliness(newProps.serverConfig);
-
-        // Do capabilities check on new URLs
-        this.checkServerCapabilities(newProps.serverConfig);
+            // Do capabilities check on new URLs
+            this.checkServerCapabilities(this.props.serverConfig);
+        }
     }
 
     private async checkServerLiveliness(serverConfig): Promise<void> {

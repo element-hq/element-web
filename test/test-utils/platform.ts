@@ -30,7 +30,7 @@ class MockPlatform extends BasePlatform {
 /**
  * Mock Platform Peg
  * Creates a mock BasePlatform class
- * spys on PlatformPeg.get and returns mock platform
+ * spies on PlatformPeg.get and returns mock platform
  * @returns MockPlatform instance
  */
 export const mockPlatformPeg = (

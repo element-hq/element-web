@@ -369,12 +369,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         return true;
     }
 
-    // TODO: [REACT-WARNING] Move into constructor
-    // eslint-disable-next-line
-    UNSAFE_componentWillMount() {
-        this.verifyEvent(this.props.mxEvent);
-    }
-
     componentDidMount() {
         this.suppressReadReceiptAnimation = false;
         const client = MatrixClientPeg.get();
@@ -405,6 +399,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         const room = client.getRoom(this.props.mxEvent.getRoomId());
         room?.on(ThreadEvent.New, this.onNewThread);
+
+        this.verifyEvent(this.props.mxEvent);
     }
 
     private get supportsThreadNotifications(): boolean {
@@ -451,16 +447,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         this.setState({ thread });
     };
 
-    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    // eslint-disable-next-line
-    UNSAFE_componentWillReceiveProps(nextProps: EventTileProps) {
-        // re-check the sender verification as outgoing events progress through
-        // the send process.
-        if (nextProps.eventSendStatus !== this.props.eventSendStatus) {
-            this.verifyEvent(nextProps.mxEvent);
-        }
-    }
-
     shouldComponentUpdate(nextProps: EventTileProps, nextState: IState): boolean {
         if (objectHasDiff(this.state, nextState)) {
             return true;
@@ -490,11 +476,15 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         }
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps: Readonly<EventTileProps>) {
         // If we're not listening for receipts and expect to be, register a listener.
         if (!this.isListeningForReceipts && (this.shouldShowSentReceipt || this.shouldShowSendingReceipt)) {
             MatrixClientPeg.get().on(RoomEvent.Receipt, this.onRoomReceipt);
             this.isListeningForReceipts = true;
+        }
+        // re-check the sender verification as outgoing events progress through the send process.
+        if (prevProps.eventSendStatus !== this.props.eventSendStatus) {
+            this.verifyEvent(this.props.mxEvent);
         }
     }
 

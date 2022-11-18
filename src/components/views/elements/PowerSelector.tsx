@@ -21,6 +21,7 @@ import { _t } from '../../../languageHandler';
 import Field from "./Field";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
+import { objectHasDiff } from "../../../utils/objects";
 
 const CUSTOM_VALUE = "SELECT_VALUE_CUSTOM";
 
@@ -72,36 +73,35 @@ export default class PowerSelector extends React.Component<IProps, IState> {
         };
     }
 
-    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    // eslint-disable-next-line camelcase, @typescript-eslint/naming-convention
-    public UNSAFE_componentWillMount(): void {
-        this.initStateFromProps(this.props);
+    public componentDidMount() {
+        this.initStateFromProps();
     }
 
-    // eslint-disable-next-line camelcase, @typescript-eslint/naming-convention
-    public UNSAFE_componentWillReceiveProps(newProps: IProps): void {
-        this.initStateFromProps(newProps);
+    public componentDidUpdate(prevProps: Readonly<IProps>) {
+        if (objectHasDiff(this.props, prevProps)) {
+            this.initStateFromProps();
+        }
     }
 
-    private initStateFromProps(newProps: IProps): void {
+    private initStateFromProps(): void {
         // This needs to be done now because levelRoleMap has translated strings
-        const levelRoleMap = Roles.levelRoleMap(newProps.usersDefault);
+        const levelRoleMap = Roles.levelRoleMap(this.props.usersDefault);
         const options = Object.keys(levelRoleMap).filter(level => {
             return (
                 level === undefined ||
-                parseInt(level) <= newProps.maxValue ||
-                parseInt(level) == newProps.value
+                parseInt(level) <= this.props.maxValue ||
+                parseInt(level) == this.props.value
             );
         }).map(level => parseInt(level));
 
-        const isCustom = levelRoleMap[newProps.value] === undefined;
+        const isCustom = levelRoleMap[this.props.value] === undefined;
 
         this.setState({
             levelRoleMap,
             options,
             custom: isCustom,
-            customValue: newProps.value,
-            selectValue: isCustom ? CUSTOM_VALUE : newProps.value,
+            customValue: this.props.value,
+            selectValue: isCustom ? CUSTOM_VALUE : this.props.value,
         });
     }
 
@@ -127,7 +127,7 @@ export default class PowerSelector extends React.Component<IProps, IState> {
         if (Number.isFinite(this.state.customValue)) {
             this.props.onChange(this.state.customValue, this.props.powerLevelKey);
         } else {
-            this.initStateFromProps(this.props); // reset, invalid input
+            this.initStateFromProps(); // reset, invalid input
         }
     };
 

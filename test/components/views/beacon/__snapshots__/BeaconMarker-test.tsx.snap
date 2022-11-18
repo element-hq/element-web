@@ -189,30 +189,7 @@ exports[`<BeaconMarker /> renders marker when beacon has location 1`] = `
               >
                 <BaseAvatar
                   height={36}
-                  hideTitle={false}
                   idName="@alice:server"
-                  member={
-                    RoomMember {
-                      "_events": {},
-                      "_eventsCount": 0,
-                      "_isOutOfBand": false,
-                      "_maxListeners": undefined,
-                      "disambiguate": false,
-                      "events": {},
-                      "membership": undefined,
-                      "modified": 1647270879403,
-                      "name": "@alice:server",
-                      "powerLevel": 0,
-                      "powerLevelNorm": 0,
-                      "rawDisplayName": "@alice:server",
-                      "requestedProfileInfo": false,
-                      "roomId": "!room:server",
-                      "typing": false,
-                      "user": undefined,
-                      "userId": "@alice:server",
-                      Symbol(kCapture): false,
-                    }
-                  }
                   name="@alice:server"
                   resizeMethod="crop"
                   title="@alice:server"
@@ -220,29 +197,6 @@ exports[`<BeaconMarker /> renders marker when beacon has location 1`] = `
                 >
                   <span
                     className="mx_BaseAvatar"
-                    hideTitle={false}
-                    member={
-                      RoomMember {
-                        "_events": {},
-                        "_eventsCount": 0,
-                        "_isOutOfBand": false,
-                        "_maxListeners": undefined,
-                        "disambiguate": false,
-                        "events": {},
-                        "membership": undefined,
-                        "modified": 1647270879403,
-                        "name": "@alice:server",
-                        "powerLevel": 0,
-                        "powerLevelNorm": 0,
-                        "rawDisplayName": "@alice:server",
-                        "requestedProfileInfo": false,
-                        "roomId": "!room:server",
-                        "typing": false,
-                        "user": undefined,
-                        "userId": "@alice:server",
-                        Symbol(kCapture): false,
-                      }
-                    }
                     role="presentation"
                   >
                     <span

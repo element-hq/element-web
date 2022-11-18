@@ -67,11 +67,11 @@ export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddr
         };
     }
 
-    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    // eslint-disable-next-line @typescript-eslint/naming-convention, camelcase
-    public UNSAFE_componentWillReceiveProps(nextProps: IEmailAddressProps): void {
-        const { bound } = nextProps.email;
-        this.setState({ bound });
+    public componentDidUpdate(prevProps: Readonly<IEmailAddressProps>) {
+        if (this.props.email !== prevProps.email) {
+            const { bound } = this.props.email;
+            this.setState({ bound });
+        }
     }
 
     private async changeBinding({ bind, label, errorTitle }): Promise<void> {

@@ -29,6 +29,7 @@ import { Action } from "../../../dispatcher/actions";
 import Tooltip, { Alignment } from './Tooltip';
 import RoomAvatar from '../avatars/RoomAvatar';
 import MemberAvatar from '../avatars/MemberAvatar';
+import { objectHasDiff } from "../../../utils/objects";
 
 export enum PillType {
     UserMention = 'TYPE_USER_MENTION',
@@ -86,19 +87,17 @@ export default class Pill extends React.Component<IProps, IState> {
         };
     }
 
-    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    // eslint-disable-next-line camelcase, @typescript-eslint/naming-convention
-    public async UNSAFE_componentWillReceiveProps(nextProps: IProps): Promise<void> {
-        let resourceId;
-        let prefix;
+    private load(): void {
+        let resourceId: string;
+        let prefix: string;
 
-        if (nextProps.url) {
-            if (nextProps.inMessage) {
-                const parts = parsePermalink(nextProps.url);
+        if (this.props.url) {
+            if (this.props.inMessage) {
+                const parts = parsePermalink(this.props.url);
                 resourceId = parts.primaryEntityId; // The room/user ID
                 prefix = parts.sigil; // The first character of prefix
             } else {
-                resourceId = getPrimaryPermalinkEntity(nextProps.url);
+                resourceId = getPrimaryPermalinkEntity(this.props.url);
                 prefix = resourceId ? resourceId[0] : undefined;
             }
         }
@@ -109,15 +108,15 @@ export default class Pill extends React.Component<IProps, IState> {
             '!': PillType.RoomMention,
         }[prefix];
 
-        let member;
-        let room;
+        let member: RoomMember;
+        let room: Room;
         switch (pillType) {
             case PillType.AtRoomMention: {
-                room = nextProps.room;
+                room = this.props.room;
             }
                 break;
             case PillType.UserMention: {
-                const localMember = nextProps.room ? nextProps.room.getMember(resourceId) : undefined;
+                const localMember = this.props.room?.getMember(resourceId);
                 member = localMember;
                 if (!localMember) {
                     member = new RoomMember(null, resourceId);
@@ -146,9 +145,13 @@ export default class Pill extends React.Component<IProps, IState> {
     public componentDidMount(): void {
         this.unmounted = false;
         this.matrixClient = MatrixClientPeg.get();
+        this.load();
+    }
 
-        // eslint-disable-next-line new-cap
-        this.UNSAFE_componentWillReceiveProps(this.props); // HACK: We shouldn't be calling lifecycle functions ourselves.
+    public componentDidUpdate(prevProps: Readonly<IProps>) {
+        if (objectHasDiff(this.props, prevProps)) {
+            this.load();
+        }
     }
 
     public componentWillUnmount(): void {

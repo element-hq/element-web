@@ -59,4 +59,20 @@ describe('<PowerSelector />', () => {
         await screen.findByDisplayValue(40);
         expect(fn).toHaveBeenCalledWith(40, "key");
     });
+
+    it("should reset when props get changed", async () => {
+        const fn = jest.fn();
+        const { rerender } = render(<PowerSelector value={50} maxValue={100} usersDefault={0} onChange={fn} />);
+
+        const select = screen.getByLabelText("Power level");
+        fireEvent.change(select, { target: { value: "SELECT_VALUE_CUSTOM" } });
+
+        rerender(<PowerSelector value={51} maxValue={100} usersDefault={0} onChange={fn} />);
+        await screen.findByDisplayValue(51);
+
+        rerender(<PowerSelector value={50} maxValue={100} usersDefault={0} onChange={fn} />);
+        const option = await screen.findByText<HTMLOptionElement>("Moderator");
+        expect(option.selected).toBeTruthy();
+        expect(fn).not.toHaveBeenCalled();
+    });
 });

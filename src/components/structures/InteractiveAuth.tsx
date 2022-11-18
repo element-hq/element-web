@@ -133,8 +133,7 @@ export default class InteractiveAuthComponent extends React.Component<IProps, IS
         }
     }
 
-    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
-    UNSAFE_componentWillMount() { // eslint-disable-line @typescript-eslint/naming-convention, camelcase
+    public componentDidMount() {
         this.authLogic.attemptAuth().then((result) => {
             const extra = {
                 emailSid: this.authLogic.getEmailSid(),

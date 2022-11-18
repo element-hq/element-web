@@ -403,12 +403,17 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.setState({ pendingInitialSync: false });
     }
 
-    // TODO: [REACT-WARNING] Replace with appropriate lifecycle stage
-    // eslint-disable-next-line
-    UNSAFE_componentWillUpdate(props, state) {
-        if (this.shouldTrackPageChange(this.state, state)) {
+    public setState<K extends keyof IState>(
+        state: ((
+            prevState: Readonly<IState>,
+            props: Readonly<IProps>,
+        ) => (Pick<IState, K> | IState | null)) | (Pick<IState, K> | IState | null),
+        callback?: () => void,
+    ): void {
+        if (this.shouldTrackPageChange(this.state, { ...this.state, ...state })) {
             this.startPageChangeTimer();
         }
+        super.setState<K>(state, callback);
     }
 
     public componentDidMount(): void {

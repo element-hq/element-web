@@ -96,8 +96,7 @@ export default class MemberList extends React.Component<IProps, IState> {
         this.showPresence = enablePresenceByHsUrl?.[hsUrl] ?? true;
     }
 
-    // eslint-disable-next-line
-    UNSAFE_componentWillMount() {
+    public componentDidMount() {
         const cli = MatrixClientPeg.get();
         this.mounted = true;
         if (cli.hasLazyLoadMembersEnabled()) {
@@ -121,7 +120,7 @@ export default class MemberList extends React.Component<IProps, IState> {
         cli.on(UserEvent.CurrentlyActive, this.onUserPresenceChange);
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         this.mounted = false;
         const cli = MatrixClientPeg.get();
         if (cli) {

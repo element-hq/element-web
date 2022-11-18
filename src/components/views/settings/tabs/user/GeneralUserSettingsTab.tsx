@@ -107,25 +107,8 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
         };
 
         this.dispatcherRef = dis.register(this.onAction);
-    }
 
-    // TODO: [REACT-WARNING] Move this to constructor
-    // eslint-disable-next-line @typescript-eslint/naming-convention, camelcase
-    public async UNSAFE_componentWillMount(): Promise<void> {
-        const cli = MatrixClientPeg.get();
-
-        const serverSupportsSeparateAddAndBind = await cli.doesServerSupportSeparateAddAndBind();
-
-        const capabilities = await cli.getCapabilities(); // this is cached
-        const changePasswordCap = capabilities['m.change_password'];
-
-        // You can change your password so long as the capability isn't explicitly disabled. The implicit
-        // behaviour is you can change your password when the capability is missing or has not-false as
-        // the enabled flag value.
-        const canChangePassword = !changePasswordCap || changePasswordCap['enabled'] !== false;
-
-        this.setState({ serverSupportsSeparateAddAndBind, canChangePassword });
-
+        this.getCapabilities();
         this.getThreepidState();
     }
 
@@ -163,6 +146,22 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
         this.setState({ msisdns });
     };
 
+    private async getCapabilities(): Promise<void> {
+        const cli = MatrixClientPeg.get();
+
+        const serverSupportsSeparateAddAndBind = await cli.doesServerSupportSeparateAddAndBind();
+
+        const capabilities = await cli.getCapabilities(); // this is cached
+        const changePasswordCap = capabilities['m.change_password'];
+
+        // You can change your password so long as the capability isn't explicitly disabled. The implicit
+        // behaviour is you can change your password when the capability is missing or has not-false as
+        // the enabled flag value.
+        const canChangePassword = !changePasswordCap || changePasswordCap['enabled'] !== false;
+
+        this.setState({ serverSupportsSeparateAddAndBind, canChangePassword });
+    }
+
     private async getThreepidState(): Promise<void> {
         const cli = MatrixClientPeg.get();
 
@@ -171,7 +170,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
 
         // Need to get 3PIDs generally for Account section and possibly also for
         // Discovery (assuming we have an IS and terms are agreed).
-        let threepids = [];
+        let threepids: IThreepid[] = [];
         try {
             threepids = await getThreepidsWithBindStatus(cli);
         } catch (e) {
