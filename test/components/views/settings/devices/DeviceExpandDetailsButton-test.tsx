@@ -17,7 +17,9 @@ limitations under the License.
 import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
 
-import DeviceExpandDetailsButton from '../../../../../src/components/views/settings/devices/DeviceExpandDetailsButton';
+import {
+    DeviceExpandDetailsButton,
+} from '../../../../../src/components/views/settings/devices/DeviceExpandDetailsButton';
 
 describe('<DeviceExpandDetailsButton />', () => {
     const defaultProps = {

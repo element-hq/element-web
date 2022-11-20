@@ -108,10 +108,12 @@ describe('<SessionManagerTab />', () => {
     const toggleDeviceDetails = (
         getByTestId: ReturnType<typeof render>['getByTestId'],
         deviceId: ExtendedDevice['device_id'],
+        isOpen?: boolean,
     ): void => {
         // open device detail
         const tile = getByTestId(`device-tile-${deviceId}`);
-        const toggle = tile.querySelector('[aria-label="Toggle device details"]') as Element;
+        const label = isOpen ? 'Hide details' : 'Show details';
+        const toggle = tile.querySelector(`[aria-label="${label}"]`) as Element;
         fireEvent.click(toggle);
     };
 
@@ -449,7 +451,8 @@ describe('<SessionManagerTab />', () => {
             expect(getByTestId(`device-detail-${alicesOlderMobileDevice.device_id}`)).toBeTruthy();
             expect(getByTestId(`device-detail-${alicesMobileDevice.device_id}`)).toBeTruthy();
 
-            toggleDeviceDetails(getByTestId, alicesMobileDevice.device_id);
+            // toggle closed
+            toggleDeviceDetails(getByTestId, alicesMobileDevice.device_id, true);
 
             // alicesMobileDevice was toggled off
             expect(queryByTestId(`device-detail-${alicesMobileDevice.device_id}`)).toBeFalsy();

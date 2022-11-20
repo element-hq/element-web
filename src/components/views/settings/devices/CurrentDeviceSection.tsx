@@ -22,7 +22,7 @@ import Spinner from '../../elements/Spinner';
 import SettingsSubsection from '../shared/SettingsSubsection';
 import { SettingsSubsectionHeading } from '../shared/SettingsSubsectionHeading';
 import DeviceDetails from './DeviceDetails';
-import DeviceExpandDetailsButton from './DeviceExpandDetailsButton';
+import { DeviceExpandDetailsButton } from './DeviceExpandDetailsButton';
 import DeviceTile from './DeviceTile';
 import { DeviceVerificationStatusCard } from './DeviceVerificationStatusCard';
 import { ExtendedDevice } from './types';

@@ -94,7 +94,7 @@ exports[`<SessionManagerTab /> current session section renders current session s
         class="mx_DeviceTile_actions"
       >
         <div
-          aria-label="Toggle device details"
+          aria-label="Show details"
           class="mx_AccessibleButton mx_DeviceExpandDetailsButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_icon"
           data-testid="current-session-toggle-details"
           role="button"
@@ -223,7 +223,7 @@ exports[`<SessionManagerTab /> current session section renders current session s
         class="mx_DeviceTile_actions"
       >
         <div
-          aria-label="Toggle device details"
+          aria-label="Show details"
           class="mx_AccessibleButton mx_DeviceExpandDetailsButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_icon"
           data-testid="current-session-toggle-details"
           role="button"
@@ -397,7 +397,7 @@ exports[`<SessionManagerTab /> sets device verification status correctly 1`] = `
     class="mx_DeviceTile_actions"
   >
     <div
-      aria-label="Toggle device details"
+      aria-label="Show details"
       class="mx_AccessibleButton mx_DeviceExpandDetailsButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_icon"
       data-testid="current-session-toggle-details"
       role="button"

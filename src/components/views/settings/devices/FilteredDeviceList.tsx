@@ -23,7 +23,7 @@ import { _t } from '../../../../languageHandler';
 import AccessibleButton from '../../elements/AccessibleButton';
 import { FilterDropdown, FilterDropdownOption } from '../../elements/FilterDropdown';
 import DeviceDetails from './DeviceDetails';
-import DeviceExpandDetailsButton from './DeviceExpandDetailsButton';
+import { DeviceExpandDetailsButton } from './DeviceExpandDetailsButton';
 import DeviceSecurityCard from './DeviceSecurityCard';
 import {
     filterDevicesBySecurityRecommendation,

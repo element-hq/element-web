@@ -221,7 +221,7 @@ describe('<FilteredDeviceList />', () => {
 
             act(() => {
                 const tile = getByTestId(`device-tile-${hundredDaysOld.device_id}`);
-                const toggle = tile.querySelector('[aria-label="Toggle device details"]');
+                const toggle = tile.querySelector('[aria-label="Show details"]');
                 fireEvent.click(toggle as Element);
             });
 

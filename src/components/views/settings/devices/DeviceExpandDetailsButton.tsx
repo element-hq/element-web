@@ -19,17 +19,19 @@ import React from 'react';
 
 import { Icon as CaretIcon } from '../../../../../res/img/feather-customised/dropdown-arrow.svg';
 import { _t } from '../../../../languageHandler';
-import AccessibleButton from '../../elements/AccessibleButton';
+import AccessibleTooltipButton from '../../elements/AccessibleTooltipButton';
 
-interface Props {
+interface Props extends React.ComponentProps<typeof AccessibleTooltipButton> {
     isExpanded: boolean;
     onClick: () => void;
 }
 
-const DeviceExpandDetailsButton: React.FC<Props> = ({ isExpanded, onClick, ...rest }) => {
-    return <AccessibleButton
+export const DeviceExpandDetailsButton: React.FC<Props> = ({ isExpanded, onClick, ...rest }) => {
+    const label = isExpanded ? _t('Hide details') : _t('Show details');
+    return <AccessibleTooltipButton
         {...rest}
-        aria-label={_t('Toggle device details')}
+        aria-label={label}
+        title={label}
         kind='icon'
         className={classNames('mx_DeviceExpandDetailsButton', {
             mx_DeviceExpandDetailsButton_expanded: isExpanded,
@@ -37,7 +39,5 @@ const DeviceExpandDetailsButton: React.FC<Props> = ({ isExpanded, onClick, ...re
         onClick={onClick}
     >
         <CaretIcon className='mx_DeviceExpandDetailsButton_icon' />
-    </AccessibleButton>;
+    </AccessibleTooltipButton>;
 };
-
-export default DeviceExpandDetailsButton;

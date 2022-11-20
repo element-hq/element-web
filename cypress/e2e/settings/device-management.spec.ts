@@ -87,7 +87,7 @@ describe("Device manager", () => {
         const sessionName = `Alice's device`;
         // open the first session
         cy.get('.mx_FilteredDeviceList_list .mx_FilteredDeviceList_listItem').first().within(() => {
-            cy.get('[aria-label="Toggle device details"]').click();
+            cy.get('[aria-label="Show details"]').click();
 
             cy.contains('Session details').should('exist');
 
