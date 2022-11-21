@@ -651,6 +651,8 @@
     "play voice broadcast": "play voice broadcast",
     "resume voice broadcast": "resume voice broadcast",
     "pause voice broadcast": "pause voice broadcast",
+    "30s backward": "30s backward",
+    "30s forward": "30s forward",
     "Go live": "Go live",
     "Live": "Live",
     "Voice broadcast": "Voice broadcast",

@@ -14,31 +14,26 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-/*
- * Compound icon
+import React from "react";
 
- * {@link https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed}
- */
+import AccessibleButton from "../../../components/views/elements/AccessibleButton";
 
-.mx_Icon {
-    box-sizing: border-box;
-    padding: 1px;
+interface Props {
+    icon: React.FC<React.SVGProps<SVGSVGElement>>;
+    label: string;
+    onClick: () => void;
 }
 
-.mx_Icon_8 {
-    height: 8px;
-    flex: 0 0 8px;
-    width: 8px;
-}
-
-.mx_Icon_16 {
-    height: 16px;
-    flex: 0 0 16px;
-    width: 16px;
-}
-
-.mx_Icon_24 {
-    height: 24px;
-    flex: 0 0 24px;
-    width: 24px;
-}
+export const SeekButton: React.FC<Props> = ({
+    onClick,
+    icon: Icon,
+    label,
+}) => {
+    return <AccessibleButton
+        kind="secondary_content"
+        onClick={onClick}
+        aria-label={label}
+    >
+        <Icon className="mx_Icon mx_Icon_24" />
+    </AccessibleButton>;
+};

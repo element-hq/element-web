@@ -47,6 +47,13 @@ export const useVoiceBroadcastPlayback = (playback: VoiceBroadcastPlayback) => {
         d => setDuration(d / 1000),
     );
 
+    const [position, setPosition] = useState(playback.timeSeconds);
+    useTypedEventEmitter(
+        playback,
+        VoiceBroadcastPlaybackEvent.PositionChanged,
+        p => setPosition(p / 1000),
+    );
+
     const [liveness, setLiveness] = useState(playback.getLiveness());
     useTypedEventEmitter(
         playback,
@@ -57,9 +64,10 @@ export const useVoiceBroadcastPlayback = (playback: VoiceBroadcastPlayback) => {
     return {
         duration,
         liveness: liveness,
+        playbackState,
+        position,
         room: room,
         sender: playback.infoEvent.sender,
         toggle: playbackToggle,
-        playbackState,
     };
 };
