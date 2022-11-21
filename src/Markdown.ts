@@ -15,6 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import "./@types/commonmark"; // import better types than @types/commonmark
 import * as commonmark from 'commonmark';
 import { escape } from "lodash";
 import { logger } from 'matrix-js-sdk/src/logger';
@@ -25,17 +26,6 @@ const ALLOWED_HTML_TAGS = ['sub', 'sup', 'del', 'u'];
 
 // These types of node are definitely text
 const TEXT_NODES = ['text', 'softbreak', 'linebreak', 'paragraph', 'document'];
-
-// As far as @types/commonmark is concerned, these are not public, so add them
-interface CommonmarkHtmlRendererInternal extends commonmark.HtmlRenderer {
-    paragraph: (node: commonmark.Node, entering: boolean) => void;
-    link: (node: commonmark.Node, entering: boolean) => void;
-    html_inline: (node: commonmark.Node) => void; // eslint-disable-line camelcase
-    html_block: (node: commonmark.Node) => void; // eslint-disable-line camelcase
-    text: (node: commonmark.Node) => void;
-    out: (text: string) => void;
-    emph: (node: commonmark.Node) => void;
-}
 
 function isAllowedHtmlTag(node: commonmark.Node): boolean {
     if (node.literal != null &&
@@ -248,7 +238,7 @@ export default class Markdown {
     isPlainText(): boolean {
         const walker = this.parsed.walker();
 
-        let ev;
+        let ev: commonmark.NodeWalkingStep;
         while (ev = walker.next()) {
             const node = ev.node;
             if (TEXT_NODES.indexOf(node.type) > -1) {
@@ -278,7 +268,7 @@ export default class Markdown {
             // block quote ends up all on one line
             // (https://github.com/vector-im/element-web/issues/3154)
             softbreak: '<br />',
-        }) as CommonmarkHtmlRendererInternal;
+        });
 
         // Trying to strip out the wrapping <p/> causes a lot more complication
         // than it's worth, i think.  For instance, this code will go and strip
@@ -356,7 +346,7 @@ export default class Markdown {
      * which has no formatting.  Otherwise it emits HTML(!).
      */
     toPlaintext(): string {
-        const renderer = new commonmark.HtmlRenderer({ safe: false }) as CommonmarkHtmlRendererInternal;
+        const renderer = new commonmark.HtmlRenderer({ safe: false });
 
         renderer.paragraph = function(node: commonmark.Node, entering: boolean) {
             // as with toHTML, only append lines to paragraphs if there are

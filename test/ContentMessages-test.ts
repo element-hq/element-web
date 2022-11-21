@@ -131,9 +131,9 @@ describe("ContentMessages", () => {
             jest.spyOn(document, "createElement").mockImplementation(tagName => {
                 const element = createElement(tagName);
                 if (tagName === "video") {
-                    element.load = jest.fn();
-                    element.play = () => element.onloadeddata(new Event("loadeddata"));
-                    element.pause = jest.fn();
+                    (<HTMLVideoElement>element).load = jest.fn();
+                    (<HTMLVideoElement>element).play = () => element.onloadeddata(new Event("loadeddata"));
+                    (<HTMLVideoElement>element).pause = jest.fn();
                     Object.defineProperty(element, 'videoHeight', {
                         get() { return 600; },
                     });

@@ -48,7 +48,7 @@ export default class IRCTimelineProfileResizer extends React.Component<IProps, I
         }, () => this.updateCSSWidth(this.state.width));
     }
 
-    private dragFunc = (location: ILocationState, event: React.MouseEvent<Element, MouseEvent>): ILocationState => {
+    private dragFunc = (location: ILocationState, event: MouseEvent): ILocationState => {
         const offset = event.clientX - location.currentX;
         const newWidth = this.state.width + offset;
 
@@ -77,7 +77,7 @@ export default class IRCTimelineProfileResizer extends React.Component<IProps, I
         this.state.IRCLayoutRoot.style.setProperty("--name-width", newWidth + "px");
     }
 
-    private onMoueUp(event: MouseEvent) {
+    private onMoueUp = () => {
         if (this.props.roomId) {
             SettingsStore.setValue(
                 "ircDisplayNameWidth",
@@ -86,13 +86,13 @@ export default class IRCTimelineProfileResizer extends React.Component<IProps, I
                 this.state.width,
             );
         }
-    }
+    };
 
     render() {
         return <Draggable
             className="mx_ProfileResizer"
-            dragFunc={this.dragFunc.bind(this)}
-            onMouseUp={this.onMoueUp.bind(this)}
+            dragFunc={this.dragFunc}
+            onMouseUp={this.onMoueUp}
         />;
     }
 }

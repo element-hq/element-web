@@ -356,7 +356,7 @@ function packMegolmKeyFile(data: Uint8Array): ArrayBuffer {
 function encodeBase64(uint8Array: Uint8Array): string {
     // Misinterpt the Uint8Array as Latin-1.
     // window.btoa expects a unicode string with codepoints in the range 0-255.
-    const latin1String = String.fromCharCode.apply(null, uint8Array);
+    const latin1String = String.fromCharCode.apply(null, Array.from(uint8Array));
     // Use the builtin base64 encoder.
     return window.btoa(latin1String);
 }

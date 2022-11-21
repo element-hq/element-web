@@ -225,4 +225,19 @@ describe('SlashCommands', () => {
             expect(client.leaveRoomChain).toHaveBeenCalledWith("room-id", expect.anything());
         });
     });
+
+    describe.each([
+        "rainbow",
+        "rainbowme",
+    ])("/%s", (commandName: string) => {
+        const command = findCommand(commandName);
+
+        it("should return usage if no args", () => {
+            expect(command.run(roomId, null, null).error).toBe(command.getUsage());
+        });
+
+        it("should make things rainbowy", () => {
+            return expect(command.run(roomId, null, "this is a test message").promise).resolves.toMatchSnapshot();
+        });
+    });
 });

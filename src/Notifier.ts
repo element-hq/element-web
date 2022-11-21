@@ -210,7 +210,7 @@ export const Notifier = {
         }
     },
 
-    start: function() {
+    start: function(this: typeof Notifier) {
         // do not re-bind in the case of repeated call
         this.boundOnEvent = this.boundOnEvent || this.onEvent.bind(this);
         this.boundOnSyncStateChange = this.boundOnSyncStateChange || this.onSyncStateChange.bind(this);
@@ -225,7 +225,7 @@ export const Notifier = {
         this.isSyncing = false;
     },
 
-    stop: function() {
+    stop: function(this: typeof Notifier) {
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener(ClientEvent.Event, this.boundOnEvent);
             MatrixClientPeg.get().removeListener(RoomEvent.Receipt, this.boundOnRoomReceipt);
@@ -322,7 +322,7 @@ export const Notifier = {
         return SettingsStore.getValue("audioNotificationsEnabled");
     },
 
-    setPromptHidden: function(hidden: boolean, persistent = true) {
+    setPromptHidden: function(this: typeof Notifier, hidden: boolean, persistent = true) {
         this.toolbarHidden = hidden;
 
         hideNotificationsToast();
@@ -343,7 +343,7 @@ export const Notifier = {
                !this.isEnabled() && !this._isPromptHidden();
     },
 
-    _isPromptHidden: function() {
+    _isPromptHidden: function(this: typeof Notifier) {
         // Check localStorage for any such meta data
         if (global.localStorage) {
             return global.localStorage.getItem("notifications_hidden") === "true";
@@ -352,7 +352,7 @@ export const Notifier = {
         return this.toolbarHidden;
     },
 
-    onSyncStateChange: function(state: SyncState, prevState?: SyncState, data?: ISyncStateData) {
+    onSyncStateChange: function(this: typeof Notifier, state: SyncState, prevState?: SyncState, data?: ISyncStateData) {
         if (state === SyncState.Syncing) {
             this.isSyncing = true;
         } else if (state === SyncState.Stopped || state === SyncState.Error) {
@@ -368,7 +368,7 @@ export const Notifier = {
         }
     },
 
-    onEvent: function(ev: MatrixEvent) {
+    onEvent: function(this: typeof Notifier, ev: MatrixEvent) {
         if (!this.isSyncing) return; // don't alert for any messages initially
         if (ev.getSender() === MatrixClientPeg.get().getUserId()) return;
 

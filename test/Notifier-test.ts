@@ -433,4 +433,11 @@ describe("Notifier", () => {
             expect(Notifier._displayPopupNotification).toHaveBeenCalledTimes(1);
         });
     });
+
+    describe("setPromptHidden", () => {
+        it("should persist by default", () => {
+            Notifier.setPromptHidden(true);
+            expect(localStorage.getItem("notifications_hidden")).toBeTruthy();
+        });
+    });
 });

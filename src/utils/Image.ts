@@ -31,7 +31,7 @@ function arrayBufferReadInt(arr: ArrayBuffer, start: number): number {
 }
 
 function arrayBufferReadStr(arr: ArrayBuffer, start: number, len: number): string {
-    return String.fromCharCode.apply(null, arrayBufferRead(arr, start, len));
+    return String.fromCharCode.apply(null, Array.from(arrayBufferRead(arr, start, len)));
 }
 
 export async function blobIsAnimated(mimeType: string | undefined, blob: Blob): Promise<boolean> {

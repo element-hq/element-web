@@ -111,7 +111,7 @@ export const CommandCategories = {
 
 export type RunResult = XOR<{ error: Error | ITranslatableError }, { promise: Promise<IContent | undefined> }>;
 
-type RunFn = ((roomId: string, args: string, cmd: string) => RunResult);
+type RunFn = ((this: Command, roomId: string, args: string) => RunResult);
 
 interface ICommandOpts {
     command: string;
@@ -129,9 +129,9 @@ interface ICommandOpts {
 export class Command {
     public readonly command: string;
     public readonly aliases: string[];
-    public readonly args: undefined | string;
+    public readonly args?: string;
     public readonly description: string;
-    public readonly runFn: undefined | RunFn;
+    public readonly runFn?: RunFn;
     public readonly category: string;
     public readonly hideCompletionAfterSpace: boolean;
     public readonly renderingTypes?: TimelineRenderingType[];
@@ -143,7 +143,7 @@ export class Command {
         this.aliases = opts.aliases || [];
         this.args = opts.args || "";
         this.description = opts.description;
-        this.runFn = opts.runFn;
+        this.runFn = opts.runFn?.bind(this);
         this.category = opts.category || CommandCategories.other;
         this.hideCompletionAfterSpace = opts.hideCompletionAfterSpace || false;
         this._isEnabled = opts.isEnabled;
@@ -188,7 +188,7 @@ export class Command {
             });
         }
 
-        return this.runFn.bind(this)(roomId, args);
+        return this.runFn(roomId, args);
     }
 
     public getUsage() {
@@ -1114,7 +1114,7 @@ export const Commands = [
         description: _td("Sends the given message coloured as a rainbow"),
         args: '<message>',
         runFn: function(roomId, args) {
-            if (!args) return reject(this.getUserId());
+            if (!args) return reject(this.getUsage());
             return successSync(ContentHelpers.makeHtmlMessage(args, textToHtmlRainbow(args)));
         },
         category: CommandCategories.messages,
@@ -1124,7 +1124,7 @@ export const Commands = [
         description: _td("Sends the given emote coloured as a rainbow"),
         args: '<message>',
         runFn: function(roomId, args) {
-            if (!args) return reject(this.getUserId());
+            if (!args) return reject(this.getUsage());
             return successSync(ContentHelpers.makeHtmlEmote(args, textToHtmlRainbow(args)));
         },
         category: CommandCategories.messages,
@@ -1207,7 +1207,7 @@ export const Commands = [
 
             return success((async () => {
                 if (isPhoneNumber) {
-                    const results = await LegacyCallHandler.instance.pstnLookup(this.state.value);
+                    const results = await LegacyCallHandler.instance.pstnLookup(userId);
                     if (!results || results.length === 0 || !results[0].userid) {
                         throw newTranslatableError("Unable to find Matrix ID for phone number");
                     }

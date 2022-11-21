@@ -45,7 +45,7 @@ interface IOptions<T extends {}> {
  * @param {function[]} options.funcs List of functions that when called with the
  *     object as an arg will return a string to use as an index
  */
-export default class QueryMatcher<T extends Object> {
+export default class QueryMatcher<T extends {}> {
     private _options: IOptions<T>;
     private _items: Map<string, {object: T, keyWeight: number}[]>;
 
