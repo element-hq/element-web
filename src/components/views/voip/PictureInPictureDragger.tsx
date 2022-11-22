@@ -33,14 +33,21 @@ const PADDING = {
     right: 8,
 };
 
+/**
+ * The type of a callback which will create the pip content children.
+ */
+export type CreatePipChildren = (options: IChildrenOptions) => JSX.Element;
+
 interface IChildrenOptions {
+    // a callback which is called when a mouse event (most likely mouse down) occurs at start of moving the pip around
     onStartMoving: (event: React.MouseEvent<Element, MouseEvent>) => void;
+    // a callback which is called when the content fo the pip changes in a way that is likely to cause a resize
     onResize: (event: Event) => void;
 }
 
 interface IProps {
     className?: string;
-    children: ({ onStartMoving, onResize }: IChildrenOptions) => React.ReactNode;
+    children: CreatePipChildren;
     draggable: boolean;
     onDoubleClick?: () => void;
     onMove?: () => void;

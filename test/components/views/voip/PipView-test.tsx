@@ -146,6 +146,28 @@ describe("PipView", () => {
         ActiveWidgetStore.instance.destroyPersistentWidget("1", room.roomId);
     };
 
+    const setUpVoiceBroadcastRecording = () => {
+        const voiceBroadcastInfoEvent = mkVoiceBroadcastInfoStateEvent(
+            room.roomId,
+            VoiceBroadcastInfoState.Started,
+            alice.userId,
+            client.getDeviceId() || "",
+        );
+
+        const voiceBroadcastRecording = new VoiceBroadcastRecording(voiceBroadcastInfoEvent, client);
+        voiceBroadcastRecordingsStore.setCurrent(voiceBroadcastRecording);
+    };
+
+    const setUpVoiceBroadcastPreRecording = () => {
+        const voiceBroadcastPreRecording = new VoiceBroadcastPreRecording(
+            room,
+            alice,
+            client,
+            voiceBroadcastRecordingsStore,
+        );
+        voiceBroadcastPreRecordingStore.setCurrent(voiceBroadcastPreRecording);
+    };
+
     it("hides if there's no content", () => {
         renderPip();
         expect(screen.queryByRole("complementary")).toBeNull();
@@ -199,18 +221,10 @@ describe("PipView", () => {
         });
     });
 
-    describe("when there is a voice broadcast recording", () => {
+    describe("when there is a voice broadcast recording and pre-recording", () => {
         beforeEach(() => {
-            const voiceBroadcastInfoEvent = mkVoiceBroadcastInfoStateEvent(
-                room.roomId,
-                VoiceBroadcastInfoState.Started,
-                alice.userId,
-                client.getDeviceId() || "",
-            );
-
-            const voiceBroadcastRecording = new VoiceBroadcastRecording(voiceBroadcastInfoEvent, client);
-            voiceBroadcastRecordingsStore.setCurrent(voiceBroadcastRecording);
-
+            setUpVoiceBroadcastPreRecording();
+            setUpVoiceBroadcastRecording();
             renderPip();
         });
 
@@ -222,14 +236,7 @@ describe("PipView", () => {
 
     describe("when there is a voice broadcast pre-recording", () => {
         beforeEach(() => {
-            const voiceBroadcastPreRecording = new VoiceBroadcastPreRecording(
-                room,
-                alice,
-                client,
-                voiceBroadcastRecordingsStore,
-            );
-            voiceBroadcastPreRecordingStore.setCurrent(voiceBroadcastPreRecording);
-
+            setUpVoiceBroadcastPreRecording();
             renderPip();
         });
 
