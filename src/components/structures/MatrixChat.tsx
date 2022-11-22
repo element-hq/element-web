@@ -2086,7 +2086,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 <ForgotPassword
                     onComplete={this.onLoginClick}
                     onLoginClick={this.onLoginClick}
-                    onServerConfigChange={this.onServerConfigChange}
                     {...this.getServerProperties()}
                 />
             );

@@ -19,6 +19,8 @@ import { createClient, IRequestTokenResponse, MatrixClient } from 'matrix-js-sdk
 
 import { _t } from './languageHandler';
 
+const CHECK_EMAIL_VERIFIED_POLL_INTERVAL = 2000;
+
 /**
  * Allows a user to reset their password on a homeserver.
  *
@@ -29,9 +31,10 @@ import { _t } from './languageHandler';
 export default class PasswordReset {
     private client: MatrixClient;
     private clientSecret: string;
-    private password: string;
-    private sessionId: string;
-    private logoutDevices: boolean;
+    private password = "";
+    private sessionId = "";
+    private logoutDevices = false;
+    private sendAttempt = 0;
 
     /**
      * Configure the endpoints for password resetting.
@@ -54,14 +57,40 @@ export default class PasswordReset {
      * @param {boolean} logoutDevices Should all devices be signed out after the reset? Defaults to `true`.
      * @return {Promise} Resolves when the email has been sent. Then call checkEmailLinkClicked().
      */
-    public resetPassword(
+    public async resetPassword(
         emailAddress: string,
         newPassword: string,
         logoutDevices = true,
     ): Promise<IRequestTokenResponse> {
         this.password = newPassword;
         this.logoutDevices = logoutDevices;
-        return this.client.requestPasswordEmailToken(emailAddress, this.clientSecret, 1).then((res) => {
+        this.sendAttempt++;
+
+        try {
+            const result = await this.client.requestPasswordEmailToken(
+                emailAddress,
+                this.clientSecret,
+                this.sendAttempt,
+            );
+            this.sessionId = result.sid;
+            return result;
+        } catch (err: any) {
+            if (err.errcode === 'M_THREEPID_NOT_FOUND') {
+                err.message = _t('This email address was not found');
+            } else if (err.httpStatus) {
+                err.message = err.message + ` (Status ${err.httpStatus})`;
+            }
+            throw err;
+        }
+    }
+
+    /**
+     * Request a password reset token.
+     * This will trigger a side-effect of sending an email to the provided email address.
+     */
+    public requestResetToken(emailAddress: string): Promise<IRequestTokenResponse> {
+        this.sendAttempt++;
+        return this.client.requestPasswordEmailToken(emailAddress, this.clientSecret, this.sendAttempt).then((res) => {
             this.sessionId = res.sid;
             return res;
         }, function(err) {
@@ -72,6 +101,29 @@ export default class PasswordReset {
             }
             throw err;
         });
+    }
+
+    public async setNewPassword(password: string): Promise<void> {
+        this.password = password;
+        await this.checkEmailLinkClicked();
+    }
+
+    public async retrySetNewPassword(password: string): Promise<void> {
+        this.password = password;
+        return new Promise((resolve) => {
+            this.tryCheckEmailLinkClicked(resolve);
+        });
+    }
+
+    private tryCheckEmailLinkClicked(resolve: Function): void {
+        this.checkEmailLinkClicked()
+            .then(() => resolve())
+            .catch(() => {
+                setTimeout(
+                    () => this.tryCheckEmailLinkClicked(resolve),
+                    CHECK_EMAIL_VERIFIED_POLL_INTERVAL,
+                );
+            });
     }
 
     /**
@@ -98,7 +150,7 @@ export default class PasswordReset {
                 threepid_creds: creds,
                 threepidCreds: creds,
             }, this.password, this.logoutDevices);
-        } catch (err) {
+        } catch (err: any) {
             if (err.httpStatus === 401) {
                 err.message = _t('Failed to verify email address: make sure you clicked the link in the email');
             } else if (err.httpStatus === 404) {

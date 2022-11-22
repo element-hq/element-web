@@ -290,7 +290,7 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
         let fieldTooltip;
         if (tooltipContent || this.state.feedback) {
             fieldTooltip = <Tooltip
-                tooltipClassName={classNames("mx_Field_tooltip", tooltipClassName)}
+                tooltipClassName={classNames("mx_Field_tooltip", "mx_Tooltip_noMargin", tooltipClassName)}
                 visible={(this.state.focused && forceTooltipVisible) || this.state.feedbackVisible}
                 label={tooltipContent || this.state.feedback}
                 alignment={Tooltip.Alignment.Right}

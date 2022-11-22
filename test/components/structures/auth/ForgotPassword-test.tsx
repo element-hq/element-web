@@ -14,89 +14,287 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import { fireEvent, render, screen, waitFor, waitForElementToBeRemoved } from "@testing-library/react";
-import { createClient, MatrixClient } from 'matrix-js-sdk/src/matrix';
-import { mocked } from 'jest-mock';
-import fetchMock from "fetch-mock-jest";
+import React from "react";
+import { mocked } from "jest-mock";
+import { act, render, RenderResult, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { MatrixClient, createClient } from "matrix-js-sdk/src/matrix";
 
-import SdkConfig, { DEFAULTS } from '../../../../src/SdkConfig';
-import { mkServerConfig, mockPlatformPeg, unmockPlatformPeg } from "../../../test-utils";
 import ForgotPassword from "../../../../src/components/structures/auth/ForgotPassword";
-import PasswordReset from "../../../../src/PasswordReset";
+import { ValidatedServerConfig } from "../../../../src/utils/ValidatedServerConfig";
+import { flushPromisesWithFakeTimers, stubClient } from "../../../test-utils";
+import Modal from "../../../../src/Modal";
+import AutoDiscoveryUtils from "../../../../src/utils/AutoDiscoveryUtils";
 
-jest.mock('matrix-js-sdk/src/matrix');
-jest.mock("../../../../src/PasswordReset", () => (jest.fn().mockReturnValue({
-    resetPassword: jest.fn().mockReturnValue(new Promise(() => {})),
-})));
-jest.useFakeTimers();
+jest.mock("matrix-js-sdk/src/matrix", () => ({
+    ...jest.requireActual("matrix-js-sdk/src/matrix"),
+    createClient: jest.fn(),
+}));
 
-describe('<ForgotPassword/>', () => {
-    const mockClient = mocked({
-        doesServerSupportLogoutDevices: jest.fn().mockResolvedValue(true),
-    } as unknown as MatrixClient);
+describe("<ForgotPassword>", () => {
+    const testEmail = "user@example.com";
+    const testSid = "sid42";
+    const testPassword = "cRaZyP4ssw0rd!";
+    let client: MatrixClient;
+    let serverConfig: ValidatedServerConfig;
+    let onComplete: () => void;
+    let renderResult: RenderResult;
 
-    beforeEach(function() {
-        SdkConfig.put({
-            ...DEFAULTS,
-            disable_custom_urls: true,
+    const typeIntoField = async (label: string, value: string): Promise<void> => {
+        await act(async () => {
+            await userEvent.type(screen.getByLabelText(label), value, { delay: null });
+            // the message is shown after some time
+            jest.advanceTimersByTime(500);
         });
-        mocked(createClient).mockImplementation(opts => {
-            mockClient.idBaseUrl = opts.idBaseUrl;
-            mockClient.baseUrl = opts.baseUrl;
-            return mockClient;
-        });
-        fetchMock.get("https://matrix.org/_matrix/client/versions", {
-            unstable_features: {},
-            versions: [],
-        });
-        mockPlatformPeg({
-            startSingleSignOn: jest.fn(),
-        });
-    });
-
-    afterEach(function() {
-        fetchMock.restore();
-        SdkConfig.unset(); // we touch the config, so clean up
-        unmockPlatformPeg();
-    });
-
-    const defaultProps = {
-        defaultDeviceDisplayName: 'test-device-display-name',
-        onServerConfigChange: jest.fn(),
-        onLoginClick: jest.fn(),
-        onComplete: jest.fn(),
     };
 
-    function getRawComponent(hsUrl = "https://matrix.org", isUrl = "https://vector.im") {
-        return <ForgotPassword
-            {...defaultProps}
-            serverConfig={mkServerConfig(hsUrl, isUrl)}
-        />;
-    }
-
-    it("should handle serverConfig updates correctly", async () => {
-        const { container, rerender } = render(getRawComponent());
-        await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading..."));
-
-        fetchMock.get("https://server2/_matrix/client/versions", {
-            unstable_features: {},
-            versions: [],
+    const submitForm = async (submitLabel: string): Promise<void> => {
+        await act(async () => {
+            await userEvent.click(screen.getByText(submitLabel), { delay: null });
         });
-        fetchMock.get("https://vector.im/_matrix/identity/api/v1", {});
-        rerender(getRawComponent("https://server2"));
+    };
 
-        const email = "email@addy.com";
-        const pass = "thisIsAT0tallySecurePassword";
+    beforeEach(() => {
+        client = stubClient();
+        mocked(createClient).mockReturnValue(client);
 
-        fireEvent.change(container.querySelector('[label=Email]'), { target: { value: email } });
-        fireEvent.change(container.querySelector('[label="New Password"]'), { target: { value: pass } });
-        fireEvent.change(container.querySelector('[label=Confirm]'), { target: { value: pass } });
-        fireEvent.change(container.querySelector('[type=checkbox]')); // this allows us to bypass the modal
-        fireEvent.submit(container.querySelector("form"));
+        serverConfig = new ValidatedServerConfig();
+        serverConfig.hsName = "example.com";
 
-        await waitFor(() => {
-            return expect(PasswordReset).toHaveBeenCalledWith("https://server2", expect.anything());
-        }, { timeout: 5000 });
+        onComplete = jest.fn();
+
+        jest.spyOn(AutoDiscoveryUtils, "validateServerConfigWithStaticUrls").mockResolvedValue(serverConfig);
+        jest.spyOn(AutoDiscoveryUtils, "authComponentStateForError");
+    });
+
+    afterEach(() => {
+        // clean up modals
+        Modal.closeCurrentModal("force");
+    });
+
+    beforeAll(() => {
+        jest.useFakeTimers();
+    });
+
+    afterAll(() => {
+        jest.useRealTimers();
+    });
+
+    describe("when starting a password reset flow", () => {
+        beforeEach(() => {
+            renderResult = render(<ForgotPassword
+                serverConfig={serverConfig}
+                onComplete={onComplete}
+            />);
+        });
+
+        it("should show the email input and mention the homeserver", () => {
+            expect(screen.queryByLabelText("Email address")).toBeInTheDocument();
+            expect(screen.queryByText("example.com")).toBeInTheDocument();
+        });
+
+        describe("and updating the server config", () => {
+            beforeEach(() => {
+                serverConfig.hsName = "example2.com";
+                renderResult.rerender(<ForgotPassword
+                    serverConfig={serverConfig}
+                    onComplete={onComplete}
+                />);
+            });
+
+            it("should show the new homeserver server name", () => {
+                expect(screen.queryByText("example2.com")).toBeInTheDocument();
+            });
+        });
+
+        describe("when entering a non-email value", () => {
+            beforeEach(async () => {
+                await typeIntoField("Email address", "not en email");
+            });
+
+            it("should show a message about the wrong format", () => {
+                expect(screen.getByText("The email address doesn't appear to be valid.")).toBeInTheDocument();
+            });
+        });
+
+        describe("when submitting an unknown email", () => {
+            beforeEach(async () => {
+                await typeIntoField("Email address", testEmail);
+                mocked(client).requestPasswordEmailToken.mockRejectedValue({
+                    errcode: "M_THREEPID_NOT_FOUND",
+                });
+                await submitForm("Send email");
+            });
+
+            it("should show an email not found message", () => {
+                expect(screen.getByText("This email address was not found")).toBeInTheDocument();
+            });
+        });
+
+        describe("when a connection error occurs", () => {
+            beforeEach(async () => {
+                await typeIntoField("Email address", testEmail);
+                mocked(client).requestPasswordEmailToken.mockRejectedValue({
+                    name: "ConnectionError",
+                });
+                await submitForm("Send email");
+            });
+
+            it("should show an info about that", () => {
+                expect(screen.getByText(
+                    "Cannot reach homeserver: "
+                    + "Ensure you have a stable internet connection, or get in touch with the server admin",
+                )).toBeInTheDocument();
+            });
+        });
+
+        describe("when the server liveness check fails", () => {
+            beforeEach(async () => {
+                await typeIntoField("Email address", testEmail);
+                mocked(AutoDiscoveryUtils.validateServerConfigWithStaticUrls).mockRejectedValue({});
+                mocked(AutoDiscoveryUtils.authComponentStateForError).mockReturnValue({
+                    serverErrorIsFatal: true,
+                    serverIsAlive: false,
+                    serverDeadError: "server down",
+                });
+                await submitForm("Send email");
+            });
+
+            it("should show the server error", () => {
+                expect(screen.queryByText("server down")).toBeInTheDocument();
+            });
+        });
+
+        describe("when submitting an known email", () => {
+            beforeEach(async () => {
+                await typeIntoField("Email address", testEmail);
+                mocked(client).requestPasswordEmailToken.mockResolvedValue({
+                    sid: testSid,
+                });
+                await submitForm("Send email");
+            });
+
+            it("should send the mail and show the check email view", () => {
+                expect(client.requestPasswordEmailToken).toHaveBeenCalledWith(
+                    testEmail,
+                    expect.any(String),
+                    1, // second send attempt
+                );
+                expect(screen.getByText("Check your email to continue")).toBeInTheDocument();
+                expect(screen.getByText(testEmail)).toBeInTheDocument();
+            });
+
+            describe("when clicking resend email", () => {
+                beforeEach(async () => {
+                    await userEvent.click(screen.getByText("Resend"), { delay: null });
+                    // the message is shown after some time
+                    jest.advanceTimersByTime(500);
+                });
+
+                it("should should resend the mail and show the tooltip", () => {
+                    expect(client.requestPasswordEmailToken).toHaveBeenCalledWith(
+                        testEmail,
+                        expect.any(String),
+                        2, // second send attempt
+                    );
+                    expect(screen.getByText("Verification link email resent!")).toBeInTheDocument();
+                });
+            });
+
+            describe("when clicking next", () => {
+                beforeEach(async () => {
+                    await submitForm("Next");
+                });
+
+                it("should show the password input view", () => {
+                    expect(screen.getByText("Reset your password")).toBeInTheDocument();
+                });
+
+                describe("when entering different passwords", () => {
+                    beforeEach(async () => {
+                        await typeIntoField("New Password", testPassword);
+                        await typeIntoField("Confirm new password", testPassword + "asd");
+                    });
+
+                    it("should show an info about that", () => {
+                        expect(screen.getByText("New passwords must match each other.")).toBeInTheDocument();
+                    });
+                });
+
+                describe("when entering a new password", () => {
+                    beforeEach(async () => {
+                        mocked(client.setPassword).mockRejectedValue({ httpStatus: 401 });
+                        await typeIntoField("New Password", testPassword);
+                        await typeIntoField("Confirm new password", testPassword);
+                    });
+
+                    describe("and submitting it running into rate limiting", () => {
+                        beforeEach(async () => {
+                            mocked(client.setPassword).mockRejectedValue({
+                                message: "rate limit reached",
+                                httpStatus: 429,
+                                data: {
+                                    retry_after_ms: (13 * 60 + 37) * 1000,
+                                },
+                            });
+                            await submitForm("Reset password");
+                        });
+
+                        it("should show the rate limit error message", () => {
+                            expect(
+                                screen.getByText("Too many attempts in a short time. Retry after 13:37."),
+                            ).toBeInTheDocument();
+                        });
+                    });
+
+                    describe("and submitting it", () => {
+                        beforeEach(async () => {
+                            await submitForm("Reset password");
+                            // double flush promises for the modal to appear
+                            await flushPromisesWithFakeTimers();
+                            await flushPromisesWithFakeTimers();
+                        });
+
+                        it("should send the new password and show the click validation link dialog", () => {
+                            expect(client.setPassword).toHaveBeenCalledWith(
+                                {
+                                    type: "m.login.email.identity",
+                                    threepid_creds: {
+                                        client_secret: expect.any(String),
+                                        sid: testSid,
+                                    },
+                                    threepidCreds: {
+                                        client_secret: expect.any(String),
+                                        sid: testSid,
+                                    },
+                                },
+                                testPassword,
+                                false,
+                            );
+                            expect(screen.getByText("Verify your email to continue")).toBeInTheDocument();
+                            expect(screen.getByText(testEmail)).toBeInTheDocument();
+                        });
+
+                        describe("when validating the link from the mail", () => {
+                            beforeEach(async () => {
+                                mocked(client.setPassword).mockResolvedValue({});
+                                // be sure the next set password attempt was sent
+                                jest.advanceTimersByTime(3000);
+                                // quad flush promises for the modal to disappear
+                                await flushPromisesWithFakeTimers();
+                                await flushPromisesWithFakeTimers();
+                                await flushPromisesWithFakeTimers();
+                                await flushPromisesWithFakeTimers();
+                            });
+
+                            it("should display the confirm reset view and now show the dialog", () => {
+                                expect(screen.queryByText("Your password has been reset.")).toBeInTheDocument();
+                                expect(screen.queryByText("Verify your email to continue")).not.toBeInTheDocument();
+                            });
+                        });
+                    });
+                });
+            });
+        });
     });
 });

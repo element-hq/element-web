@@ -17,12 +17,17 @@ limitations under the License.
 
 .mx_AuthBody {
     width: 500px;
-    font-size: $font-12px;
-    color: $authpage-secondary-color;
+    font-size: $font-14px;
+    color: $primary-content;
     background-color: $background;
     border-radius: 0 4px 4px 0;
-    padding: 25px 60px;
+    padding: 50px 32px;
     box-sizing: border-box;
+    min-height: 600px;
+
+    b {
+        font-weight: 600;
+    }
 
     &.mx_AuthBody_flex {
         display: flex;
@@ -32,7 +37,8 @@ limitations under the License.
     h1 {
         font-size: $font-24px;
         font-weight: $font-semi-bold;
-        margin-top: 8px;
+        margin-bottom: $spacing-20;
+        margin-top: $spacing-24;
         color: $authpage-primary-color;
     }
 
@@ -50,6 +56,23 @@ limitations under the License.
     a:hover,
     a:visited {
         @mixin mx_Dialog_link;
+    }
+
+    fieldset {
+        display: block;
+    }
+
+    .mx_AuthBody_icon {
+        width: 40px;
+    }
+
+    .mx_AuthBody_lockIcon {
+        height: 29px;
+    }
+
+    .mx_AuthBody_text {
+        margin-bottom: $spacing-48;
+        margin-top: 0;
     }
 
     input[type="text"],
@@ -76,6 +99,16 @@ limitations under the License.
         color: $alert;
     }
 
+    .mx_Login_submit {
+        height: 33px;
+        margin-top: $spacing-16;
+    }
+
+    .mx_ErrorMessage {
+        margin-bottom: 12px;
+        margin-top: 2px;
+    }
+
     .mx_Field input {
         box-sizing: border-box;
     }
@@ -99,6 +132,43 @@ limitations under the License.
             background-color: $authpage-focus-bg-color;
         }
     }
+}
+
+.mx_AuthBody_did-not-receive {
+    align-items: center;
+    color: $secondary-content;
+    display: flex;
+    gap: $spacing-8;
+    margin-bottom: 10px;
+    margin-top: $spacing-24;
+}
+
+.mx_AuthBody_did-not-receive--centered {
+    justify-content: center;
+}
+
+.mx_AuthBody_resend-button {
+    align-items: center;
+    border-radius: 8px;
+    color: $accent;
+    display: flex;
+    gap: $spacing-4;
+    padding: 4px;
+
+    &:hover {
+        background-color: $system;
+    }
+}
+
+.mx_AuthBody_emailPromptIcon {
+    width: 57px;
+}
+
+.mx_AuthBody_emailPromptIcon--shifted {
+    margin-bottom: -17px; // Prevent layout jump by relative positioning.
+    position: relative;
+    top: -17px; // This icon is higher than the other icons. Shift up to prevent icon jumping.
+    width: 57px;
 }
 
 .mx_AuthBody_fieldRow {

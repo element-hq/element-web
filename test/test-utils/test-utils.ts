@@ -85,6 +85,7 @@ export function createTestClient(): MatrixClient {
         getIdentityServerUrl: jest.fn(),
         getDomain: jest.fn().mockReturnValue("matrix.org"),
         getUserId: jest.fn().mockReturnValue("@userId:matrix.org"),
+        getUserIdLocalpart: jest.fn().mockResolvedValue("userId"),
         getUser: jest.fn().mockReturnValue({ on: jest.fn() }),
         getDeviceId: jest.fn().mockReturnValue("ABCDEFGHI"),
         deviceId: "ABCDEFGHI",
@@ -193,6 +194,9 @@ export function createTestClient(): MatrixClient {
         uploadContent: jest.fn(),
         getEventMapper: () => (opts) => new MatrixEvent(opts),
         leaveRoomChain: jest.fn(roomId => ({ [roomId]: null })),
+        doesServerSupportLogoutDevices: jest.fn().mockReturnValue(true),
+        requestPasswordEmailToken: jest.fn().mockRejectedValue({}),
+        setPassword: jest.fn().mockRejectedValue({}),
     } as unknown as MatrixClient;
 
     client.reEmitter = new ReEmitter(client);
