@@ -29,7 +29,7 @@ import { FocusComposerPayload } from '../../../dispatcher/payloads/FocusComposer
 
 interface IProps {
     mxEvent: MatrixEvent;
-    reactions?: Relations;
+    reactions?: Relations | null | undefined;
     onFinished(): void;
 }
 

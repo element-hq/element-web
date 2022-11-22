@@ -20,7 +20,6 @@ import classNames from 'classnames';
 import { Room } from 'matrix-js-sdk/src/models/room';
 import { EventType } from 'matrix-js-sdk/src/@types/event';
 import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
-import { Relations } from "matrix-js-sdk/src/models/relations";
 import { logger } from 'matrix-js-sdk/src/logger';
 import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 import { M_BEACON_INFO } from 'matrix-js-sdk/src/@types/beacon';
@@ -35,7 +34,7 @@ import SettingsStore from '../../settings/SettingsStore';
 import RoomContext, { TimelineRenderingType } from "../../contexts/RoomContext";
 import { Layout } from "../../settings/enums/Layout";
 import { _t } from "../../languageHandler";
-import EventTile, { UnwrappedEventTile, IReadReceiptProps } from "../views/rooms/EventTile";
+import EventTile, { UnwrappedEventTile, GetRelationsForEvent, IReadReceiptProps } from "../views/rooms/EventTile";
 import { hasText } from "../../TextForEvent";
 import IRCTimelineProfileResizer from "../views/elements/IRCTimelineProfileResizer";
 import DMRoomMap from "../../utils/DMRoomMap";
@@ -186,7 +185,7 @@ interface IProps {
     // helper function to access relations for an event
     onUnfillRequest?(backwards: boolean, scrollToken: string): void;
 
-    getRelationsForEvent?(eventId: string, relationType: string, eventType: string): Relations;
+    getRelationsForEvent?: GetRelationsForEvent;
 
     hideThreadedMessages?: boolean;
     disableGrouping?: boolean;

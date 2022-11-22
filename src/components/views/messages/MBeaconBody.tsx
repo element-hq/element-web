@@ -101,8 +101,8 @@ const useUniqueId = (eventId: string): string => {
 // remove related beacon locations on beacon redaction
 const useHandleBeaconRedaction = (
     event: MatrixEvent,
-    getRelationsForEvent: GetRelationsForEvent,
-    cli: MatrixClient,
+    matrixClient: MatrixClient,
+    getRelationsForEvent?: GetRelationsForEvent,
 ): void => {
     const onBeforeBeaconInfoRedaction = useCallback((_event: MatrixEvent, redactionEvent: MatrixEvent) => {
         const relations = getRelationsForEvent ?
@@ -110,14 +110,14 @@ const useHandleBeaconRedaction = (
             undefined;
 
         relations?.getRelations()?.forEach(locationEvent => {
-            cli.redactEvent(
+            matrixClient.redactEvent(
                 locationEvent.getRoomId(),
                 locationEvent.getId(),
                 undefined,
                 redactionEvent.getContent(),
             );
         });
-    }, [event, getRelationsForEvent, cli]);
+    }, [event, matrixClient, getRelationsForEvent]);
 
     useEffect(() => {
         event.addListener(MatrixEventEvent.BeforeRedaction, onBeforeBeaconInfoRedaction);
@@ -151,7 +151,7 @@ const MBeaconBody: React.FC<IBodyProps> = React.forwardRef(({ mxEvent, getRelati
     const markerRoomMember = isSelfLocation(mxEvent.getContent()) ? mxEvent.sender : undefined;
     const isOwnBeacon = beacon?.beaconInfoOwner === matrixClient.getUserId();
 
-    useHandleBeaconRedaction(mxEvent, getRelationsForEvent, matrixClient);
+    useHandleBeaconRedaction(mxEvent, matrixClient, getRelationsForEvent);
 
     const onClick = () => {
         if (displayStatus !== BeaconDisplayStatus.Active) {

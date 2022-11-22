@@ -16,7 +16,6 @@ limitations under the License.
 
 import React, { createRef } from 'react';
 import { EventType, MsgType } from "matrix-js-sdk/src/@types/event";
-import { Relations } from 'matrix-js-sdk/src/models/relations';
 import { M_BEACON_INFO } from 'matrix-js-sdk/src/@types/beacon';
 import { M_LOCATION } from 'matrix-js-sdk/src/@types/location';
 import { M_POLL_START } from "matrix-events-sdk";
@@ -41,7 +40,7 @@ import MPollBody from "./MPollBody";
 import MLocationBody from "./MLocationBody";
 import MjolnirBody from "./MjolnirBody";
 import MBeaconBody from "./MBeaconBody";
-import { IEventTileOps } from "../rooms/EventTile";
+import { GetRelationsForEvent, IEventTileOps } from "../rooms/EventTile";
 import { VoiceBroadcastBody, VoiceBroadcastInfoEventType, VoiceBroadcastInfoState } from '../../../voice-broadcast';
 
 // onMessageAllowed is handled internally
@@ -51,7 +50,7 @@ interface IProps extends Omit<IBodyProps, "onMessageAllowed" | "mediaEventHelper
     overrideEventTypes?: Record<string, typeof React.Component>;
 
     // helper function to access relations for this event
-    getRelationsForEvent?: (eventId: string, relationType: string, eventType: string) => Relations;
+    getRelationsForEvent?: GetRelationsForEvent;
 
     isSeeingThroughMessageHiddenForModeration?: boolean;
 }

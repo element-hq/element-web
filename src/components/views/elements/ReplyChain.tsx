@@ -19,7 +19,6 @@ import React from 'react';
 import classNames from 'classnames';
 import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import { Room } from 'matrix-js-sdk/src/models/room';
-import { Relations } from 'matrix-js-sdk/src/models/relations';
 import { MatrixClient } from 'matrix-js-sdk/src/client';
 
 import { _t } from '../../../languageHandler';
@@ -36,6 +35,7 @@ import AccessibleButton, { ButtonEvent } from './AccessibleButton';
 import { getParentEventId, shouldDisplayReply } from '../../../utils/Reply';
 import RoomContext from "../../../contexts/RoomContext";
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
+import { GetRelationsForEvent } from "../rooms/EventTile";
 
 /**
  * This number is based on the previous behavior - if we have message of height
@@ -56,9 +56,7 @@ interface IProps {
     forExport?: boolean;
     isQuoteExpanded?: boolean;
     setQuoteExpanded: (isExpanded: boolean) => void;
-    getRelationsForEvent?: (
-        (eventId: string, relationType: string, eventType: string) => Relations
-    );
+    getRelationsForEvent?: GetRelationsForEvent;
 }
 
 interface IState {

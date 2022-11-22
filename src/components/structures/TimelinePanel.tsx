@@ -1714,7 +1714,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
 
     private getRelationsForEvent = (
         eventId: string,
-        relationType: RelationType,
+        relationType: RelationType | string,
         eventType: EventType | string,
     ) => this.props.timelineSet.relations?.getChildEventsForEvent(eventId, relationType, eventType);
 

@@ -19,7 +19,6 @@ import classNames from 'classnames';
 import { MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/models/event";
 import { EventType, MsgType } from 'matrix-js-sdk/src/@types/event';
 import { logger } from "matrix-js-sdk/src/logger";
-import { Relations } from 'matrix-js-sdk/src/models/relations';
 
 import { _t } from '../../../languageHandler';
 import dis from '../../../dispatcher/dispatcher';
@@ -33,6 +32,7 @@ import MFileBody from "../messages/MFileBody";
 import MVoiceMessageBody from "../messages/MVoiceMessageBody";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { renderReplyTile } from "../../../events/EventTileFactory";
+import { GetRelationsForEvent } from "../rooms/EventTile";
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -41,9 +41,7 @@ interface IProps {
     highlightLink?: string;
     onHeightChanged?(): void;
     toggleExpandedQuote?: () => void;
-    getRelationsForEvent?: (
-        (eventId: string, relationType: string, eventType: string) => Relations
-    );
+    getRelationsForEvent?: GetRelationsForEvent;
 }
 
 export default class ReplyTile extends React.PureComponent<IProps> {

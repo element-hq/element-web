@@ -17,7 +17,7 @@ limitations under the License.
 
 import React, { createRef, forwardRef, MouseEvent, RefObject } from 'react';
 import classNames from "classnames";
-import { EventType, MsgType } from "matrix-js-sdk/src/@types/event";
+import { EventType, MsgType, RelationType } from "matrix-js-sdk/src/@types/event";
 import { EventStatus, MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/models/event";
 import { Relations } from "matrix-js-sdk/src/models/relations";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
@@ -87,7 +87,11 @@ import { isLocalRoom } from '../../../utils/localRoom/isLocalRoom';
 import { ElementCall } from "../../../models/Call";
 import { UnreadNotificationBadge } from './NotificationBadge/UnreadNotificationBadge';
 
-export type GetRelationsForEvent = (eventId: string, relationType: string, eventType: string) => Relations;
+export type GetRelationsForEvent = (
+    eventId: string,
+    relationType: RelationType | string,
+    eventType: EventType | string,
+) => Relations | null | undefined;
 
 // Our component structure for EventTiles on the timeline is:
 //
@@ -233,7 +237,7 @@ interface IState {
     // Whether onRequestKeysClick has been called since mounting.
     previouslyRequestedKeys: boolean;
     // The Relations model from the JS SDK for reactions to `mxEvent`
-    reactions: Relations;
+    reactions?: Relations | null | undefined;
 
     hover: boolean;
 

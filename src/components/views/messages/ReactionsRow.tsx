@@ -65,7 +65,7 @@ interface IProps {
     // The event we're displaying reactions for
     mxEvent: MatrixEvent;
     // The Relations model from the JS SDK for reactions to `mxEvent`
-    reactions?: Relations;
+    reactions?: Relations | null | undefined;
 }
 
 interface IState {
@@ -114,7 +114,7 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
     }
 
     componentDidUpdate(prevProps: IProps) {
-        if (prevProps.reactions !== this.props.reactions) {
+        if (this.props.reactions && prevProps.reactions !== this.props.reactions) {
             this.props.reactions.on(RelationsEvent.Add, this.onReactionsChange);
             this.props.reactions.on(RelationsEvent.Remove, this.onReactionsChange);
             this.props.reactions.on(RelationsEvent.Redaction, this.onReactionsChange);

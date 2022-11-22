@@ -130,7 +130,7 @@ interface IProps extends IPosition {
     // True if the menu is being used as a right click menu
     rightClick?: boolean;
     // The Relations model from the JS SDK for reactions to `mxEvent`
-    reactions?: Relations;
+    reactions?: Relations | null | undefined;
     // A permalink to this event or an href of an anchor element the user has clicked
     link?: string;
 

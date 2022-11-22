@@ -17,7 +17,6 @@ limitations under the License.
 import React from "react";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { MatrixClient } from "matrix-js-sdk/src/client";
-import { Relations } from "matrix-js-sdk/src/models/relations";
 import { PollEndEvent } from "matrix-events-sdk";
 
 import { _t } from "../../../languageHandler";
@@ -26,16 +25,13 @@ import QuestionDialog from "./QuestionDialog";
 import { findTopAnswer } from "../messages/MPollBody";
 import Modal from "../../../Modal";
 import ErrorDialog from "./ErrorDialog";
+import { GetRelationsForEvent } from "../rooms/EventTile";
 
 interface IProps extends IDialogProps {
     matrixClient: MatrixClient;
     event: MatrixEvent;
     onFinished: (success: boolean) => void;
-    getRelationsForEvent?: (
-        eventId: string,
-        relationType: string,
-        eventType: string
-    ) => Relations;
+    getRelationsForEvent?: GetRelationsForEvent;
 }
 
 export default class EndPollDialog extends React.Component<IProps> {
