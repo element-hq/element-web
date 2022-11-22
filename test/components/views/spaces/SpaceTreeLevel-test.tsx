@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-// eslint-disable-next-line deprecate/import
-import { mount } from "enzyme";
+import { fireEvent, getByTestId, render } from "@testing-library/react";
 
 import { stubClient, mkRoom } from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
@@ -49,35 +48,51 @@ describe("SpaceButton", () => {
 
     describe("real space", () => {
         it("activates the space on click", () => {
-            const button = mount(<SpaceButton space={space} selected={false} label="My space" />);
+            const { container } = render(<SpaceButton
+                space={space}
+                selected={false}
+                label="My space"
+                data-testid='create-space-button' />);
 
             expect(SpaceStore.instance.setActiveSpace).not.toHaveBeenCalled();
-            button.simulate("click");
+            fireEvent.click(getByTestId(container, "create-space-button"));
             expect(SpaceStore.instance.setActiveSpace).toHaveBeenCalledWith("!1:example.org");
         });
 
         it("navigates to the space home on click if already active", () => {
-            const button = mount(<SpaceButton space={space} selected={true} label="My space" />);
+            const { container } = render(<SpaceButton
+                space={space}
+                selected={true}
+                label="My space"
+                data-testid='create-space-button' />);
 
             expect(dispatchSpy).not.toHaveBeenCalled();
-            button.simulate("click");
+            fireEvent.click(getByTestId(container, "create-space-button"));
             expect(dispatchSpy).toHaveBeenCalledWith({ action: Action.ViewRoom, room_id: "!1:example.org" });
         });
     });
 
     describe("metaspace", () => {
         it("activates the metaspace on click", () => {
-            const button = mount(<SpaceButton spaceKey={MetaSpace.People} selected={false} label="People" />);
+            const { container } = render(<SpaceButton
+                spaceKey={MetaSpace.People}
+                selected={false}
+                label="People"
+                data-testid='create-space-button' />);
 
             expect(SpaceStore.instance.setActiveSpace).not.toHaveBeenCalled();
-            button.simulate("click");
+            fireEvent.click(getByTestId(container, "create-space-button"));
             expect(SpaceStore.instance.setActiveSpace).toHaveBeenCalledWith(MetaSpace.People);
         });
 
         it("does nothing on click if already active", () => {
-            const button = mount(<SpaceButton spaceKey={MetaSpace.People} selected={true} label="People" />);
+            const { container } = render(<SpaceButton
+                spaceKey={MetaSpace.People}
+                selected={true}
+                label="People"
+                data-testid='create-space-button' />);
 
-            button.simulate("click");
+            fireEvent.click(getByTestId(container, "create-space-button"));
             expect(dispatchSpy).not.toHaveBeenCalled();
             // Re-activating the metaspace is a no-op
             expect(SpaceStore.instance.setActiveSpace).toHaveBeenCalledWith(MetaSpace.People);
