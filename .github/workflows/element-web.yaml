@@ -40,7 +40,9 @@ jobs:
         env:
           CI_PACKAGE: true
           VERSION: "${{ steps.layered_build.outputs.VERSION }}"
-        run: yarn build
+        run: |
+          yarn build
+          echo $VERSION > webapp/version
         working-directory: ./element-web
 
       - name: Upload Artifact
