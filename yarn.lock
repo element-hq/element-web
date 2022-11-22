@@ -1915,6 +1915,14 @@
     lz-string "^1.4.4"
     pretty-format "^27.0.2"
 
+"@testing-library/react-hooks@^8.0.1":
+  version "8.0.1"
+  resolved "https://registry.yarnpkg.com/@testing-library/react-hooks/-/react-hooks-8.0.1.tgz#0924bbd5b55e0c0c0502d1754657ada66947ca12"
+  integrity sha512-Aqhl2IVmLt8IovEVarNDFuJDVWVvhnr9/GCU6UUnrYXwgDFF9h2L2o2P9KBni1AST5sT6riAyoukFLyjQUgD/g==
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+    react-error-boundary "^3.1.0"
+
 "@testing-library/react@^12.1.5":
   version "12.1.5"
   resolved "https://registry.yarnpkg.com/@testing-library/react/-/react-12.1.5.tgz#bb248f72f02a5ac9d949dea07279095fa577963b"
@@ -8235,24 +8243,6 @@ matrix-events-sdk@0.0.1:
   resolved "https://registry.yarnpkg.com/matrix-events-sdk/-/matrix-events-sdk-0.0.1.tgz#c8c38911e2cb29023b0bbac8d6f32e0de2c957dd"
   integrity sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==
 
-matrix-js-sdk@21.2.0:
-  version "21.2.0"
-  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-21.2.0.tgz#380d50510b08cede504db720fe4b9597bb72dc60"
-  integrity sha512-5aHWkWve+/5dmRJGIAzwe2hFNHX/2LBFWVqHh6YOTSViWlAbBxQsylBIhsNppgmHUN1YjBhvBlW206UnYCk6zg==
-  dependencies:
-    "@babel/runtime" "^7.12.5"
-    "@types/sdp-transform" "^2.4.5"
-    another-json "^0.2.0"
-    bs58 "^5.0.0"
-    content-type "^1.0.4"
-    loglevel "^1.7.1"
-    matrix-events-sdk "0.0.1"
-    matrix-widget-api "^1.0.0"
-    p-retry "4"
-    qs "^6.9.6"
-    sdp-transform "^2.14.1"
-    unhomoglyph "^1.0.6"
-
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
   version "21.2.0"
   resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/b318a77ecef179a6fd288cdf32d3ff9c5e8ea989"
@@ -8277,10 +8267,9 @@ matrix-mock-request@^2.5.0:
   dependencies:
     expect "^28.1.0"
 
-matrix-react-sdk@3.61.0:
+"matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
   version "3.61.0"
-  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.61.0.tgz#8f8349b9e3ef402cadb716bd1bab16f1246b9f38"
-  integrity sha512-FMoIuVaKuOCx69P3I8EY0ixARYHpiF0BcLFKYQFmsHtmA5lv5J8LOJKLGjFoJU+X0zAIkLiwQ5OzEGFnRoHEMg==
+  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/6ea483324eb0bd28757b2c9f964b548d423234df"
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/analytics-events" "^0.3.0"
@@ -8288,6 +8277,7 @@ matrix-react-sdk@3.61.0:
     "@matrix-org/react-sdk-module-api" "^0.0.3"
     "@sentry/browser" "^6.11.0"
     "@sentry/tracing" "^6.11.0"
+    "@testing-library/react-hooks" "^8.0.1"
     "@types/geojson" "^7946.0.8"
     "@types/ua-parser-js" "^0.7.36"
     await-lock "^2.1.0"
@@ -8320,7 +8310,7 @@ matrix-react-sdk@3.61.0:
     maplibre-gl "^1.15.2"
     matrix-encrypt-attachment "^1.0.3"
     matrix-events-sdk "0.0.1"
-    matrix-js-sdk "21.2.0"
+    matrix-js-sdk "github:matrix-org/matrix-js-sdk#develop"
     matrix-widget-api "^1.1.1"
     minimist "^1.2.5"
     opus-recorder "^8.0.3"
@@ -10584,6 +10574,13 @@ react-dom@17.0.2:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
     scheduler "^0.20.2"
+
+react-error-boundary@^3.1.0:
+  version "3.1.4"
+  resolved "https://registry.yarnpkg.com/react-error-boundary/-/react-error-boundary-3.1.4.tgz#255db92b23197108757a888b01e5b729919abde0"
+  integrity sha512-uM9uPzZJTF6wRQORmSrvOIgt4lJ9MC1sNgEOj2XGsDTRE4kmpWxg7ENK9EWNKJRMAOY9z0MuF4yIfl6gp4sotA==
+  dependencies:
+    "@babel/runtime" "^7.12.5"
 
 react-focus-lock@^2.5.1:
   version "2.9.1"
