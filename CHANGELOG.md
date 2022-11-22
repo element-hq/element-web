@@ -1,5 +1,5 @@
-Changes in [3.61.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.61.0-rc.1) (2022-11-15)
-===============================================================================================================
+Changes in [3.61.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.61.0) (2022-11-22)
+=====================================================================================================
 
 ## ✨ Features
  * Make clear notifications work with threads ([\#9575](https://github.com/matrix-org/matrix-react-sdk/pull/9575)). Fixes vector-im/element-web#23751.
