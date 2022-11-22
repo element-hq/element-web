@@ -1,5 +1,5 @@
-Changes in [1.11.15-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.11.15-rc.1) (2022-11-15)
-===========================================================================================================
+Changes in [1.11.15](https://github.com/vector-im/element-web/releases/tag/v1.11.15) (2022-11-22)
+=================================================================================================
 
 ## ✨ Features
  * Make clear notifications work with threads ([\#9575](https://github.com/matrix-org/matrix-react-sdk/pull/9575)). Fixes #23751.
