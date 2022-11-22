@@ -95,7 +95,6 @@ import Spinner from "../views/elements/Spinner";
 import QuestionDialog from "../views/dialogs/QuestionDialog";
 import UserSettingsDialog from '../views/dialogs/UserSettingsDialog';
 import CreateRoomDialog from '../views/dialogs/CreateRoomDialog';
-import RoomDirectory from './RoomDirectory';
 import KeySignatureUploadFailedDialog from "../views/dialogs/KeySignatureUploadFailedDialog";
 import IncomingSasDialog from "../views/dialogs/IncomingSasDialog";
 import CompleteSecurity from "./auth/CompleteSecurity";
@@ -141,6 +140,7 @@ import { viewUserDeviceSettings } from '../../actions/handlers/viewUserDeviceSet
 import { VoiceBroadcastResumer } from '../../voice-broadcast';
 import GenericToast from "../views/toasts/GenericToast";
 import { Linkify } from "../views/elements/Linkify";
+import RovingSpotlightDialog, { Filter } from '../views/dialogs/spotlight/SpotlightDialog';
 
 // legacy export
 export { default as Views } from "../../Views";
@@ -716,9 +716,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 this.viewSomethingBehindModal();
                 break;
             case Action.ViewRoomDirectory: {
-                Modal.createDialog(RoomDirectory, {
+                Modal.createDialog(RovingSpotlightDialog, {
                     initialText: payload.initialText,
-                }, 'mx_RoomDirectory_dialogWrapper', false, true);
+                    initialFilter: Filter.PublicRooms,
+                }, 'mx_SpotlightDialog_wrapper', false, true);
 
                 // View the welcome or home page if we need something to look at
                 this.viewSomethingBehindModal();

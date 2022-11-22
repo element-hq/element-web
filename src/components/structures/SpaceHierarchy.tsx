@@ -55,7 +55,6 @@ import { linkifyElement, topicToHtml } from "../../HtmlUtils";
 import { useDispatcher } from "../../hooks/useDispatcher";
 import { Action } from "../../dispatcher/actions";
 import { IState, RovingTabIndexProvider, useRovingTabIndex } from "../../accessibility/RovingTabIndex";
-import { getDisplayAliasForRoom } from "./RoomDirectory";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import { useTypedEventEmitterState } from "../../hooks/useEventEmitter";
 import { IOOBData } from "../../stores/ThreepidInviteStore";
@@ -67,6 +66,7 @@ import { getKeyBindingsManager } from "../../KeyBindingsManager";
 import { Alignment } from "../views/elements/Tooltip";
 import { getTopic } from "../../hooks/room/useTopic";
 import { SdkContextClass } from "../../contexts/SDKContext";
+import { getDisplayAliasForAliasSet } from "../../Rooms";
 
 interface IProps {
     space: Room;
@@ -342,7 +342,8 @@ export const showRoom = (cli: MatrixClient, hierarchy: RoomHierarchy, roomId: st
         }
     }
 
-    const roomAlias = getDisplayAliasForRoom(room) || undefined;
+    const roomAlias = getDisplayAliasForAliasSet(room?.canonical_alias ?? "", room?.aliases ?? []) || undefined;
+
     defaultDispatcher.dispatch<ViewRoomPayload>({
         action: Action.ViewRoom,
         should_peek: true,

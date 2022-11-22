@@ -29,7 +29,7 @@ import AliasCustomisations from './customisations/Alias';
  * @param {Object} room The room object
  * @returns {string} A display alias for the given room
  */
-export function getDisplayAliasForRoom(room: Room): string {
+export function getDisplayAliasForRoom(room: Room): string | undefined {
     return getDisplayAliasForAliasSet(
         room.getCanonicalAlias(), room.getAltAliases(),
     );
@@ -41,7 +41,7 @@ export function getDisplayAliasForAliasSet(canonicalAlias: string, altAliases: s
     if (AliasCustomisations.getDisplayAliasForAliasSet) {
         return AliasCustomisations.getDisplayAliasForAliasSet(canonicalAlias, altAliases);
     }
-    return canonicalAlias || altAliases?.[0];
+    return (canonicalAlias || altAliases?.[0]) ?? "";
 }
 
 export function guessAndSetDMRoom(room: Room, isDirect: boolean): Promise<void> {

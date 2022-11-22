@@ -14,35 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { IInstance, IProtocol } from "matrix-js-sdk/src/client";
-
-// XXX: We would ideally use a symbol here but we can't since we save this value to localStorage
-export const ALL_ROOMS = "ALL_ROOMS";
+import { IProtocol } from "matrix-js-sdk/src/client";
 
 export type Protocols = Record<string, IProtocol>;
-
-// Find a protocol 'instance' with a given instance_id
-// in the supplied protocols dict
-export function instanceForInstanceId(protocols: Protocols, instanceId: string | null | undefined): IInstance | null {
-    if (!instanceId) return null;
-    for (const proto of Object.keys(protocols)) {
-        if (!Array.isArray(protocols[proto].instances)) continue;
-        for (const instance of protocols[proto].instances) {
-            if (instance.instance_id == instanceId) return instance;
-        }
-    }
-    return null;
-}
-
-// given an instance_id, return the name of the protocol for
-// that instance ID in the supplied protocols dict
-export function protocolNameForInstanceId(protocols: Protocols, instanceId: string | null | undefined): string | null {
-    if (!instanceId) return null;
-    for (const proto of Object.keys(protocols)) {
-        if (!Array.isArray(protocols[proto].instances)) continue;
-        for (const instance of protocols[proto].instances) {
-            if (instance.instance_id == instanceId) return proto;
-        }
-    }
-    return null;
-}

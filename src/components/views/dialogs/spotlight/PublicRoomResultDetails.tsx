@@ -19,7 +19,7 @@ import { IPublicRoomsChunkRoom } from "matrix-js-sdk/src/matrix";
 
 import { linkifyAndSanitizeHtml } from "../../../../HtmlUtils";
 import { _t } from "../../../../languageHandler";
-import { getDisplayAliasForRoom } from "../../../structures/RoomDirectory";
+import { getDisplayAliasForAliasSet } from "../../../../Rooms";
 
 const MAX_NAME_LENGTH = 80;
 const MAX_TOPIC_LENGTH = 800;
@@ -32,7 +32,9 @@ interface Props {
 }
 
 export function PublicRoomResultDetails({ room, labelId, descriptionId, detailsId }: Props): JSX.Element {
-    let name = room.name || getDisplayAliasForRoom(room) || _t('Unnamed room');
+    let name = room.name
+        || getDisplayAliasForAliasSet(room.canonical_alias ?? "", room.aliases ?? [])
+        || _t('Unnamed room');
     if (name.length > MAX_NAME_LENGTH) {
         name = `${name.substring(0, MAX_NAME_LENGTH)}...`;
     }

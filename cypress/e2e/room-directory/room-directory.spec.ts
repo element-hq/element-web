@@ -88,15 +88,16 @@ describe("Room Directory", () => {
 
         cy.get('[role="button"][aria-label="Explore rooms"]').click();
 
-        cy.get('.mx_RoomDirectory_dialogWrapper [name="dirsearch"]').type("Unknown Room");
-        cy.get(".mx_RoomDirectory_dialogWrapper h5").should("contain", 'No results for "Unknown Room"');
-        cy.get(".mx_RoomDirectory_dialogWrapper").percySnapshotElement("Room Directory - filtered no results");
+        cy.get('.mx_SpotlightDialog [aria-label="Search"]').type("Unknown Room");
+        cy.get(".mx_SpotlightDialog .mx_SpotlightDialog_otherSearches_messageSearchText")
+            .should("contain", "can't find the room you're looking for");
+        cy.get(".mx_SpotlightDialog_wrapper").percySnapshotElement("Room Directory - filtered no results");
 
-        cy.get('.mx_RoomDirectory_dialogWrapper [name="dirsearch"]').type("{selectAll}{backspace}test1234");
-        cy.contains(".mx_RoomDirectory_dialogWrapper .mx_RoomDirectory_listItem", name)
-            .should("exist").as("resultRow");
-        cy.get(".mx_RoomDirectory_dialogWrapper").percySnapshotElement("Room Directory - filtered one result");
-        cy.get("@resultRow").find(".mx_AccessibleButton").contains("Join").click();
+        cy.get('.mx_SpotlightDialog [aria-label="Search"]').type("{selectAll}{backspace}test1234");
+        cy.contains(".mx_SpotlightDialog .mx_SpotlightDialog_result_publicRoomName", name)
+            .should("exist");
+        cy.get(".mx_SpotlightDialog_wrapper").percySnapshotElement("Room Directory - filtered one result");
+        cy.get(".mx_SpotlightDialog .mx_SpotlightDialog_option").find(".mx_AccessibleButton").contains("Join").click();
 
         cy.url().should('contain', `/#/room/#test1234:localhost`);
     });
