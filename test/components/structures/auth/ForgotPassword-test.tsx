@@ -22,7 +22,7 @@ import { MatrixClient, createClient } from "matrix-js-sdk/src/matrix";
 
 import ForgotPassword from "../../../../src/components/structures/auth/ForgotPassword";
 import { ValidatedServerConfig } from "../../../../src/utils/ValidatedServerConfig";
-import { flushPromisesWithFakeTimers, stubClient } from "../../../test-utils";
+import { filterConsole, flushPromisesWithFakeTimers, stubClient } from "../../../test-utils";
 import Modal from "../../../../src/Modal";
 import AutoDiscoveryUtils from "../../../../src/utils/AutoDiscoveryUtils";
 
@@ -39,6 +39,7 @@ describe("<ForgotPassword>", () => {
     let serverConfig: ValidatedServerConfig;
     let onComplete: () => void;
     let renderResult: RenderResult;
+    let restoreConsole: () => void;
 
     const typeIntoField = async (label: string, value: string): Promise<void> => {
         await act(async () => {
@@ -55,6 +56,13 @@ describe("<ForgotPassword>", () => {
     };
 
     beforeEach(() => {
+        restoreConsole = filterConsole(
+            // not implemented by js-dom https://github.com/jsdom/jsdom/issues/1937
+            "Not implemented: HTMLFormElement.prototype.requestSubmit",
+            // not of interested for this test
+            "Starting load of AsyncWrapper for modal",
+        );
+
         client = stubClient();
         mocked(createClient).mockReturnValue(client);
 
@@ -70,6 +78,7 @@ describe("<ForgotPassword>", () => {
     afterEach(() => {
         // clean up modals
         Modal.closeCurrentModal("force");
+        restoreConsole?.();
     });
 
     beforeAll(() => {

@@ -26,3 +26,4 @@ export * from './wrappers';
 export * from './utilities';
 export * from './date';
 export * from './relations';
+export * from './console';
