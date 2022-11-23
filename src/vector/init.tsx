@@ -41,7 +41,7 @@ import { INSTALLED_MODULES } from "../modules";
 
 export const rageshakePromise = initRageshake();
 
-export function preparePlatform() {
+export function preparePlatform(): void {
     if (window.electron) {
         logger.log("Using Electron platform");
         PlatformPeg.set(new ElectronPlatform());
@@ -54,7 +54,7 @@ export function preparePlatform() {
     }
 }
 
-export function setupLogStorage() {
+export function setupLogStorage(): Promise<void> {
     if (SdkConfig.get().bug_report_endpoint_url) {
         return initRageshakeStore();
     }
@@ -62,7 +62,7 @@ export function setupLogStorage() {
     return Promise.resolve();
 }
 
-export async function loadConfig() {
+export async function loadConfig(): Promise<void> {
     // XXX: We call this twice, once here and once in MatrixChat as a prop. We call it here to ensure
     // granular settings are loaded correctly and to avoid duplicating the override logic for the theme.
     //
@@ -112,7 +112,7 @@ export function loadOlm(): Promise<void> {
     });
 }
 
-export async function loadLanguage() {
+export async function loadLanguage(): Promise<void> {
     const prefLang = SettingsStore.getValue("language", null, /*excludeDefault=*/true);
     let langs = [];
 
@@ -131,11 +131,11 @@ export async function loadLanguage() {
     }
 }
 
-export async function loadTheme() {
+export async function loadTheme(): Promise<void> {
     setTheme();
 }
 
-export async function loadApp(fragParams: {}) {
+export async function loadApp(fragParams: {}): Promise<void> {
     // load app.js async so that its code is not executed immediately and we can catch any exceptions
     const module = await import(
         /* webpackChunkName: "element-web-app" */
@@ -145,7 +145,7 @@ export async function loadApp(fragParams: {}) {
         document.getElementById('matrixchat'));
 }
 
-export async function showError(title: string, messages?: string[]) {
+export async function showError(title: string, messages?: string[]): Promise<void> {
     const ErrorView = (await import(
         /* webpackChunkName: "error-view" */
         "../async-components/structures/ErrorView")).default;
@@ -153,7 +153,7 @@ export async function showError(title: string, messages?: string[]) {
         document.getElementById('matrixchat'));
 }
 
-export async function showIncompatibleBrowser(onAccept) {
+export async function showIncompatibleBrowser(onAccept): Promise<void> {
     const CompatibilityView = (await import(
         /* webpackChunkName: "compatibility-view" */
         "../async-components/structures/CompatibilityView")).default;
@@ -161,7 +161,7 @@ export async function showIncompatibleBrowser(onAccept) {
         document.getElementById('matrixchat'));
 }
 
-export async function loadModules() {
+export async function loadModules(): Promise<void> {
     for (const InstalledModule of INSTALLED_MODULES) {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore - we know the constructor exists even if TypeScript can't be convinced of that

@@ -31,7 +31,7 @@ import SdkConfig from "matrix-react-sdk/src/SdkConfig";
 import sendBugReport from "matrix-react-sdk/src/rageshake/submit-rageshake";
 import { logger } from "matrix-js-sdk/src/logger";
 
-export function initRageshake() {
+export function initRageshake(): Promise<void> {
     // we manually check persistence for rageshakes ourselves
     const prom = rageshake.init(/*setUpPersistence=*/false);
     prom.then(() => {
@@ -52,11 +52,11 @@ export function initRageshake() {
     return prom;
 }
 
-export function initRageshakeStore() {
+export function initRageshakeStore(): Promise<void> {
     return rageshake.tryInitStorage();
 }
 
-window.mxSendRageshake = function(text: string, withLogs?: boolean) {
+window.mxSendRageshake = function(text: string, withLogs?: boolean): void {
     const url = SdkConfig.get().bug_report_endpoint_url;
     if (!url) {
         logger.error("Cannot send a rageshake - no bug_report_endpoint_url configured");

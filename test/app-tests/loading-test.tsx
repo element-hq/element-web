@@ -28,7 +28,7 @@ import MockHttpBackend from 'matrix-mock-request';
 import { makeType } from "matrix-react-sdk/src/utils/TypeUtils";
 import { ValidatedServerConfig } from 'matrix-react-sdk/src/utils/ValidatedServerConfig';
 import { IndexedDBCryptoStore } from "matrix-js-sdk/src/crypto/store/indexeddb-crypto-store";
-import { sleep } from "matrix-js-sdk/src/utils";
+import { QueryDict, sleep } from "matrix-js-sdk/src/utils";
 
 import "../jest-mocks";
 import WebPlatform from '../../src/vector/platform/WebPlatform';
@@ -84,7 +84,7 @@ describe('loading:', function() {
      * TODO: it would be nice to factor some of this stuff out of index.js so
      * that we can test it rather than our own implementation of it.
      */
-    function loadApp(opts?) {
+    function loadApp(opts?): void {
         opts = opts || {};
         const queryString = opts.queryString || "";
         const uriFragment = opts.uriFragment || "";
@@ -92,10 +92,10 @@ describe('loading:', function() {
         windowLocation = {
             search: queryString,
             hash: uriFragment,
-            toString: function() { return this.search + this.hash; },
+            toString: function(): string { return this.search + this.hash; },
         };
 
-        function onNewScreen(screen) {
+        function onNewScreen(screen): void {
             console.log(Date.now() + " newscreen "+screen);
             const hash = '#/' + screen;
             windowLocation.hash = hash;
@@ -104,7 +104,7 @@ describe('loading:', function() {
 
         // Parse the given window.location and return parameters that can be used when calling
         // MatrixChat.showScreen(screen, params)
-        function getScreenFromLocation(location) {
+        function getScreenFromLocation(location): { screen: string, params: QueryDict } {
             const fragparts = parseQsFromFragment(location);
             return {
                 screen: fragparts.location.substring(1),
@@ -143,7 +143,7 @@ describe('loading:', function() {
                     enableGuest={true}
                     onTokenLoginCompleted={resolve}
                     initialScreenAfterLogin={getScreenFromLocation(windowLocation)}
-                    makeRegistrationUrl={() => {throw new Error('Not implemented');}}
+                    makeRegistrationUrl={(): string => {throw new Error('Not implemented');}}
                 />, parentDiv,
             );
         });
@@ -153,7 +153,7 @@ describe('loading:', function() {
     // http requests until we do.
     //
     // returns a promise resolving to the received request
-    async function expectAndAwaitSync(opts?) {
+    async function expectAndAwaitSync(opts?): Promise<any> {
         let syncRequest = null;
         httpBackend.when('GET', '/_matrix/client/versions')
             .respond(200, {
@@ -548,7 +548,7 @@ describe('loading:', function() {
 
     // check that we have a Login component, send a 'user:pass' login,
     // and await the HTTP requests.
-    async function completeLogin(matrixChat: RenderResult) {
+    async function completeLogin(matrixChat: RenderResult): Promise<void> {
         // When we switch to the login component, it'll hit the login endpoint
         // for proof of life and to get flows. We'll only give it one option.
         httpBackend.when('GET', '/login')
@@ -587,15 +587,15 @@ describe('loading:', function() {
 });
 
 // assert that we are on the loading page
-async function assertAtLoadingSpinner() {
+async function assertAtLoadingSpinner(): Promise<void> {
     await screen.findByRole("progressbar");
 }
 
-async function awaitLoggedIn(matrixChat: RenderResult) {
+async function awaitLoggedIn(matrixChat: RenderResult): Promise<void> {
     if (matrixChat.container.querySelector(".mx_MatrixChat_wrapper")) return; // already logged in
 
     return new Promise(resolve => {
-        const onAction = ({ action }) => {
+        const onAction = ({ action }): void => {
             if (action !== "on_logged_in") {
                 return;
             }
@@ -608,19 +608,19 @@ async function awaitLoggedIn(matrixChat: RenderResult) {
     });
 }
 
-async function awaitRoomView(matrixChat: RenderResult) {
+async function awaitRoomView(matrixChat: RenderResult): Promise<void> {
     await waitFor(() => matrixChat.container.querySelector(".mx_RoomView"));
 }
 
-async function awaitLoginComponent(matrixChat: RenderResult) {
+async function awaitLoginComponent(matrixChat: RenderResult): Promise<void> {
     await waitFor(() => matrixChat.container.querySelector(".mx_AuthPage"));
 }
 
-async function awaitWelcomeComponent(matrixChat: RenderResult) {
+async function awaitWelcomeComponent(matrixChat: RenderResult): Promise<void> {
     await waitFor(() => matrixChat.container.querySelector(".mx_Welcome"));
 }
 
-function moveFromWelcomeToLogin(matrixChat: RenderResult) {
+function moveFromWelcomeToLogin(matrixChat: RenderResult): Promise<void> {
     dis.dispatch({ action: 'start_login' });
     return awaitLoginComponent(matrixChat);
 }

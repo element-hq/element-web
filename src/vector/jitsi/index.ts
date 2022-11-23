@@ -61,7 +61,7 @@ let widgetApi: WidgetApi;
 let meetApi: any; // JitsiMeetExternalAPI
 let skipOurWelcomeScreen = false;
 
-const setupCompleted = (async () => {
+const setupCompleted = (async (): Promise<string | void> => {
     try {
         // Queue a config.json lookup asap, so we can use it later on. We want this to be concurrent with
         // other setup work and therefore do not block.
@@ -223,11 +223,11 @@ const setupCompleted = (async () => {
     }
 })();
 
-function enableJoinButton() {
-    document.getElementById("joinButton").onclick = () => joinConference();
+function enableJoinButton(): void {
+    document.getElementById("joinButton").onclick = (): void => joinConference();
 }
 
-function switchVisibleContainers() {
+function switchVisibleContainers(): void {
     inConference = !inConference;
 
     // Our welcome screen is managed by other code, so just don't switch to it ever
@@ -237,14 +237,14 @@ function switchVisibleContainers() {
     }
 }
 
-function toggleConferenceVisibility(inConference: boolean) {
+function toggleConferenceVisibility(inConference: boolean): void {
     document.getElementById("jitsiContainer").style.visibility = inConference ? 'unset' : 'hidden';
     // Video rooms have a separate UI for joining, so they should never show our join button
     document.getElementById("joinButtonContainer").style.visibility =
         (inConference || isVideoChannel) ? 'hidden' : 'unset';
 }
 
-function skipToJitsiSplashScreen() {
+function skipToJitsiSplashScreen(): void {
     // really just a function alias for self-documenting code
     joinConference();
 }
@@ -254,7 +254,7 @@ function skipToJitsiSplashScreen() {
  *
  * See https://github.com/matrix-org/prosody-mod-auth-matrix-user-verification
  */
-function createJWTToken() {
+function createJWTToken(): string {
     // Header
     const header = { alg: 'HS256', typ: 'JWT' };
     // Payload
@@ -289,7 +289,7 @@ function createJWTToken() {
     );
 }
 
-async function notifyHangup(errorMessage?: string) {
+async function notifyHangup(errorMessage?: string): Promise<void> {
     if (widgetApi) {
         // We send the hangup event before setAlwaysOnScreen, because the latter
         // can cause the receiving side to instantly stop listening.
@@ -301,7 +301,7 @@ async function notifyHangup(errorMessage?: string) {
     }
 }
 
-function closeConference() {
+function closeConference(): void {
     switchVisibleContainers();
     document.getElementById("jitsiContainer").innerHTML = "";
 
@@ -315,7 +315,7 @@ function closeConference() {
 // audio input it can find, while an input of null instructs it to start muted,
 // and a non-nullish input specifies the label of a specific device to use.
 // Same for video inputs.
-function joinConference(audioInput?: string | null, videoInput?: string | null) {
+function joinConference(audioInput?: string | null, videoInput?: string | null): void {
     let jwt;
     if (jitsiAuth === JITSI_OPENIDTOKEN_JWT_AUTH) {
         if (!openIdToken?.access_token) { // eslint-disable-line camelcase
@@ -408,7 +408,7 @@ function joinConference(audioInput?: string | null, videoInput?: string | null) 
     meetApi.on("log", onLog);
 }
 
-const onVideoConferenceJoined = () => {
+const onVideoConferenceJoined = (): void => {
     // Although we set our displayName with the userInfo option above, that
     // option has a bug where it causes the name to be the HTML encoding of
     // what was actually intended. So, we use the displayName command to at
@@ -432,12 +432,12 @@ const onVideoConferenceJoined = () => {
     if (isVideoChannel) meetApi.executeCommand("setTileView", true);
 };
 
-const onVideoConferenceLeft = () => {
+const onVideoConferenceLeft = (): void => {
     notifyHangup();
     meetApi = null;
 };
 
-const onErrorOccurred = ({ error }) => {
+const onErrorOccurred = ({ error }): void => {
     if (error.isFatal) {
         // We got disconnected. Since Jitsi Meet might send us back to the
         // prejoin screen, we're forced to act as if we hung up entirely.
@@ -447,12 +447,12 @@ const onErrorOccurred = ({ error }) => {
     }
 };
 
-const onAudioMuteStatusChanged = ({ muted }) => {
+const onAudioMuteStatusChanged = ({ muted }): void => {
     const action = muted ? ElementWidgetActions.MuteAudio : ElementWidgetActions.UnmuteAudio;
     widgetApi?.transport.send(action, {});
 };
 
-const onVideoMuteStatusChanged = ({ muted }) => {
+const onVideoMuteStatusChanged = ({ muted }): void => {
     if (muted) {
         // Jitsi Meet always sends a "video muted" event directly before
         // hanging up, which we need to ignore by padding the timeout here,
@@ -466,11 +466,11 @@ const onVideoMuteStatusChanged = ({ muted }) => {
     }
 };
 
-const updateParticipants = () => {
+const updateParticipants = (): void => {
     widgetApi?.transport.send(ElementWidgetActions.CallParticipants, {
         participants: meetApi.getParticipantsInfo(),
     });
 };
 
-const onLog = ({ logLevel, args }) =>
+const onLog = ({ logLevel, args }): void =>
     (parent as unknown as typeof global).mx_rage_logger?.log(logLevel, ...args);

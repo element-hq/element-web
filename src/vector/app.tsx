@@ -21,7 +21,7 @@ limitations under the License.
 // To ensure we load the browser-matrix version first
 import "matrix-js-sdk/src/browser-index";
 
-import React from 'react';
+import React, { ReactElement } from 'react';
 import PlatformPeg from 'matrix-react-sdk/src/PlatformPeg';
 import { _td, newTranslatableError } from 'matrix-react-sdk/src/languageHandler';
 import AutoDiscoveryUtils from 'matrix-react-sdk/src/utils/AutoDiscoveryUtils';
@@ -55,7 +55,7 @@ window.matrixLogger = logger;
 // If we're in electron, we should never pass through a file:// URL otherwise
 // the identity server will try to 302 the browser to it, which breaks horribly.
 // so in that instance, hardcode to use app.element.io for now instead.
-function makeRegistrationUrl(params: object) {
+function makeRegistrationUrl(params: object): string {
     let url;
     if (window.location.protocol === "vector:") {
         url = 'https://app.element.io/#/register';
@@ -81,7 +81,7 @@ function makeRegistrationUrl(params: object) {
     return url;
 }
 
-function onTokenLoginCompleted() {
+function onTokenLoginCompleted(): void {
     // if we did a token login, we're now left with the token, hs and is
     // url as query params in the url; a little nasty but let's redirect to
     // clear them.
@@ -93,7 +93,7 @@ function onTokenLoginCompleted() {
     window.history.replaceState(null, "", url.href);
 }
 
-export async function loadApp(fragParams: {}) {
+export async function loadApp(fragParams: {}): Promise<ReactElement> {
     initRouting();
     const platform = PlatformPeg.get();
 

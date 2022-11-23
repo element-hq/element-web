@@ -15,11 +15,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, { ReactElement } from 'react';
 import SdkConfig from 'matrix-react-sdk/src/SdkConfig';
 import { _t } from 'matrix-react-sdk/src/languageHandler';
 
-const VectorAuthFooter = () => {
+const VectorAuthFooter = (): ReactElement => {
     const brandingConfig = SdkConfig.getObject("branding");
     const links = brandingConfig?.get("auth_footer_links") ?? [
         { "text": "Blog", "url": "https://element.io/blog" },

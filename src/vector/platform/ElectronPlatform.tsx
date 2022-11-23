@@ -92,7 +92,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
     // this is the opaque token we pass to the HS which when we get it in our callback we can resolve to a profile
     private readonly ssoID: string = randomString(32);
 
-    constructor() {
+    public constructor() {
         super();
 
         dis.register(onAction);
@@ -124,12 +124,12 @@ export default class ElectronPlatform extends VectorBasePlatform {
         window.electron.on('userDownloadCompleted', (ev, { id, name }) => {
             const key = `DOWNLOAD_TOAST_${id}`;
 
-            const onAccept = () => {
+            const onAccept = (): void => {
                 window.electron.send('userDownloadAction', { id, open: true });
                 ToastStore.sharedInstance().dismissToast(key);
             };
 
-            const onDismiss = () => {
+            const onDismiss = (): void => {
                 window.electron.send('userDownloadAction', { id });
             };
 
@@ -156,7 +156,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return this.ipc.call('getConfig');
     }
 
-    private onUpdateDownloaded = async (ev, { releaseNotes, releaseName }) => {
+    private onUpdateDownloaded = async (ev, { releaseNotes, releaseName }): Promise<void> => {
         dis.dispatch<CheckUpdatesPayload>({
             action: Action.CheckUpdates,
             status: UpdateCheckStatus.Ready,
@@ -223,7 +223,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         );
 
         const handler = notification.onclick as Function;
-        notification.onclick = () => {
+        notification.onclick = (): void => {
             handler?.();
             this.ipc.call('focusWindow');
         };
@@ -231,7 +231,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return notification;
     }
 
-    public loudNotification(ev: MatrixEvent, room: Room) {
+    public loudNotification(ev: MatrixEvent, room: Room): void {
         window.electron.send('loudNotification');
     }
 
@@ -261,17 +261,17 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return this.ipc.call("setSettingValue", settingName, value);
     }
 
-    async canSelfUpdate(): Promise<boolean> {
+    public async canSelfUpdate(): Promise<boolean> {
         const feedUrl = await this.ipc.call('getUpdateFeedUrl');
         return Boolean(feedUrl);
     }
 
-    public startUpdateCheck() {
+    public startUpdateCheck(): void {
         super.startUpdateCheck();
         window.electron.send('check_updates');
     }
 
-    public installUpdate() {
+    public installUpdate(): void {
         // IPC to the main process to install the update, since quitAndInstall
         // doesn't fire the before-quit event so the main process needs to know
         // it should exit.
@@ -290,7 +290,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return Promise.resolve('granted');
     }
 
-    public reload() {
+    public reload(): void {
         window.location.reload();
     }
 
@@ -298,7 +298,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return this.eventIndexManager;
     }
 
-    public async setLanguage(preferredLangs: string[]) {
+    public async setLanguage(preferredLangs: string[]): Promise<any> {
         return this.ipc.call('setLanguage', preferredLangs);
     }
 
@@ -353,7 +353,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         loginType: "sso" | "cas",
         fragmentAfterLogin: string,
         idpId?: string,
-    ) {
+    ): void {
         // this will get intercepted by electron-main will-navigate
         super.startSingleSignOn(mxClient, loginType, fragmentAfterLogin, idpId);
         Modal.createDialog(InfoDialog, {

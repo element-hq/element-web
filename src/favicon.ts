@@ -56,7 +56,7 @@ export default class Favicon {
     // callback to run once isReady is asserted, allows for a badge to be queued for when it can be shown
     private readyCb?: () => void;
 
-    constructor(params: Partial<IParams> = {}) {
+    public constructor(params: Partial<IParams> = {}) {
         this.params = { ...defaults, ...params };
 
         this.icons = Favicon.getIcons();
@@ -68,7 +68,7 @@ export default class Favicon {
         const lastIcon = this.icons[this.icons.length - 1];
         if (lastIcon.hasAttribute("href")) {
             this.baseImage.setAttribute("crossOrigin", "anonymous");
-            this.baseImage.onload = () => {
+            this.baseImage.onload = (): void => {
                 // get height and width of the favicon
                 this.canvas.height = (this.baseImage.height > 0) ? this.baseImage.height : 32;
                 this.canvas.width = (this.baseImage.width > 0) ? this.baseImage.width : 32;
@@ -217,7 +217,7 @@ export default class Favicon {
 
     public badge(content: number | string, opts?: Partial<IParams>): void {
         if (!this.isReady) {
-            this.readyCb = () => {
+            this.readyCb = (): void => {
                 this.badge(content, opts);
             };
             return;
