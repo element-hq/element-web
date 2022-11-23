@@ -74,7 +74,7 @@ module.exports = {
         },
     }, {
         files: [
-            "spec/**/*.ts",
+            "test/**/*.{ts,tsx}",
         ],
         rules: {
             // We don't need super strict typing in test utilities
