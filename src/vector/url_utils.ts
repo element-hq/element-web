@@ -19,8 +19,7 @@ import { QueryDict, decodeParams } from "matrix-js-sdk/src/utils";
 // We want to support some name / value pairs in the fragment
 // so we're re-using query string like format
 //
-// returns {location, params}
-export function parseQsFromFragment(location: Location) {
+export function parseQsFromFragment(location: Location): { location: string, params: QueryDict } {
     // if we have a fragment, it will start with '#', which we need to drop.
     // (if we don't, this will return '').
     const fragment = location.hash.substring(1);

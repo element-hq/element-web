@@ -123,12 +123,12 @@ function readCurrentPackageDetails(): RawDependencies {
     };
 }
 
-function writePackageDetails(deps: RawDependencies) {
+function writePackageDetails(deps: RawDependencies): void {
     fs.writeFileSync("./yarn.lock", deps.lockfile, "utf-8");
     fs.writeFileSync("./package.json", deps.packageJson, "utf-8");
 }
 
-function callYarnAdd(dep: string) {
+function callYarnAdd(dep: string): void {
     // Add the module to the optional dependencies section just in case something
     // goes wrong in restoring the original package details.
     childProcess.execSync(`yarn add -O ${dep}`, {
@@ -186,6 +186,6 @@ function isModuleVersionCompatible(ourApiVersion: string, moduleApiVersion: stri
     return semver.satisfies(ourApiVersion, moduleApiVersion);
 }
 
-function writeModulesTs(content: string) {
+function writeModulesTs(content: string): void {
     fs.writeFileSync("./src/modules.ts", content, "utf-8");
 }

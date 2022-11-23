@@ -40,7 +40,7 @@ function getNormalizedAppVersion(version: string): string {
 }
 
 export default class WebPlatform extends VectorBasePlatform {
-    constructor() {
+    public constructor() {
         super();
         // Register service worker if available on this platform
         if ('serviceWorker' in navigator) {

@@ -29,17 +29,17 @@ export function deleteIndexedDB(dbName: string): Promise<void> {
         console.log(`${startTime}: Removing indexeddb instance: ${dbName}`);
         const req = window.indexedDB.deleteDatabase(dbName);
 
-        req.onblocked = () => {
+        req.onblocked = (): void => {
             console.log(`${Date.now()}: can't yet delete indexeddb ${dbName} because it is open elsewhere`);
         };
 
-        req.onerror = (ev) => {
+        req.onerror = (ev): void => {
             reject(new Error(
                 `${Date.now()}: unable to delete indexeddb ${dbName}: ${req.error}`,
             ));
         };
 
-        req.onsuccess = () => {
+        req.onsuccess = (): void => {
             const now = Date.now();
             console.log(`${now}: Removed indexeddb instance: ${dbName} in ${now-startTime} ms`);
             resolve();

@@ -43,7 +43,7 @@ export default abstract class VectorBasePlatform extends BasePlatform {
      * it uses canvas, which can trigger a permission prompt in Firefox's resist fingerprinting mode.
      * See https://github.com/vector-im/element-web/issues/9605.
      */
-    public get favicon() {
+    public get favicon(): Favicon {
         if (this._favicon) {
             return this._favicon;
         }
@@ -51,7 +51,7 @@ export default abstract class VectorBasePlatform extends BasePlatform {
         return this._favicon;
     }
 
-    private updateFavicon() {
+    private updateFavicon(): void {
         let bgColor = "#d00";
         let notif: string | number = this.notificationCount;
 
@@ -63,13 +63,13 @@ export default abstract class VectorBasePlatform extends BasePlatform {
         this.favicon.badge(notif, { bgColor });
     }
 
-    public setNotificationCount(count: number) {
+    public setNotificationCount(count: number): void {
         if (this.notificationCount === count) return;
         super.setNotificationCount(count);
         this.updateFavicon();
     }
 
-    public setErrorStatus(errorDidOccur: boolean) {
+    public setErrorStatus(errorDidOccur: boolean): void {
         if (this.errorDidOccur === errorDidOccur) return;
         super.setErrorStatus(errorDidOccur);
         this.updateFavicon();
@@ -78,7 +78,7 @@ export default abstract class VectorBasePlatform extends BasePlatform {
     /**
      * Begin update polling, if applicable
      */
-    public startUpdater() {
+    public startUpdater(): void {
     }
 
     /**
