@@ -51,11 +51,12 @@ describe('SendWysiwygComposer', () => {
         onChange = (_content: string) => void 0,
         onSend = () => void 0,
         disabled = false,
-        isRichTextEnabled = true) => {
+        isRichTextEnabled = true,
+        placeholder?: string) => {
         return render(
             <MatrixClientContext.Provider value={mockClient}>
                 <RoomContext.Provider value={defaultRoomContext}>
-                    <SendWysiwygComposer onChange={onChange} onSend={onSend} disabled={disabled} isRichTextEnabled={isRichTextEnabled} menuPosition={aboveLeftOf({ top: 0, bottom: 0, right: 0 })} />
+                    <SendWysiwygComposer onChange={onChange} onSend={onSend} disabled={disabled} isRichTextEnabled={isRichTextEnabled} menuPosition={aboveLeftOf({ top: 0, bottom: 0, right: 0 })} placeholder={placeholder} />
                 </RoomContext.Provider>
             </MatrixClientContext.Provider>,
         );
@@ -162,6 +163,63 @@ describe('SendWysiwygComposer', () => {
 
                 // Then we don't get it because we are disabled
                 expect(screen.getByRole('textbox')).not.toHaveFocus();
+            });
+        });
+
+    describe.each([
+        { isRichTextEnabled: true },
+        { isRichTextEnabled: false },
+    ])('Placeholder when %s',
+        ({ isRichTextEnabled }) => {
+            afterEach(() => {
+                jest.resetAllMocks();
+            });
+
+            it('Should not has placeholder', async () => {
+                // When
+                console.log('here');
+                customRender(jest.fn(), jest.fn(), false, isRichTextEnabled);
+                await waitFor(() => expect(screen.getByRole('textbox')).toHaveAttribute('contentEditable', "true"));
+
+                // Then
+                expect(screen.getByRole('textbox')).not.toHaveClass("mx_WysiwygComposer_Editor_content_placeholder");
+            });
+
+            it('Should has placeholder', async () => {
+                // When
+                customRender(jest.fn(), jest.fn(), false, isRichTextEnabled, 'my placeholder');
+                await waitFor(() => expect(screen.getByRole('textbox')).toHaveAttribute('contentEditable', "true"));
+
+                // Then
+                expect(screen.getByRole('textbox')).toHaveClass("mx_WysiwygComposer_Editor_content_placeholder");
+            });
+
+            it('Should display or not placeholder when editor content change', async () => {
+                // When
+                customRender(jest.fn(), jest.fn(), false, isRichTextEnabled, 'my placeholder');
+                await waitFor(() => expect(screen.getByRole('textbox')).toHaveAttribute('contentEditable', "true"));
+                screen.getByRole('textbox').innerHTML = 'f';
+                fireEvent.input(screen.getByRole('textbox'), {
+                    data: 'f',
+                    inputType: 'insertText',
+                });
+
+                // Then
+                await waitFor(() =>
+                    expect(screen.getByRole('textbox'))
+                        .not.toHaveClass("mx_WysiwygComposer_Editor_content_placeholder"),
+                );
+
+                // When
+                screen.getByRole('textbox').innerHTML = '';
+                fireEvent.input(screen.getByRole('textbox'), {
+                    inputType: 'deleteContentBackward',
+                });
+
+                // Then
+                await waitFor(() =>
+                    expect(screen.getByRole('textbox')).toHaveClass("mx_WysiwygComposer_Editor_content_placeholder"),
+                );
             });
         });
 });

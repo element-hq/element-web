@@ -43,6 +43,7 @@ const Content = forwardRef<HTMLElement, ContentProps>(
 interface SendWysiwygComposerProps {
     initialContent?: string;
     isRichTextEnabled: boolean;
+    placeholder?: string;
     disabled?: boolean;
     e2eStatus?: E2EStatus;
     onChange: (content: string) => void;

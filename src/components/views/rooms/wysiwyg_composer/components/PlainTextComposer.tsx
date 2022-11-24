@@ -29,6 +29,7 @@ interface PlainTextComposerProps {
     disabled?: boolean;
     onChange?: (content: string) => void;
     onSend?: () => void;
+    placeholder?: string;
     initialContent?: string;
     className?: string;
     leftComponent?: ReactNode;
@@ -45,16 +46,18 @@ export function PlainTextComposer({
     onSend,
     onChange,
     children,
+    placeholder,
     initialContent,
     leftComponent,
     rightComponent,
 }: PlainTextComposerProps,
 ) {
-    const { ref, onInput, onPaste, onKeyDown } = usePlainTextListeners(onChange, onSend);
+    const { ref, onInput, onPaste, onKeyDown, content } = usePlainTextListeners(initialContent, onChange, onSend);
     const composerFunctions = useComposerFunctions(ref);
     usePlainTextInitialization(initialContent, ref);
     useSetCursorPosition(disabled, ref);
     const { isFocused, onFocus } = useIsFocused();
+    const computedPlaceholder = !content && placeholder || undefined;
 
     return <div
         data-testid="PlainTextComposer"
@@ -65,7 +68,7 @@ export function PlainTextComposer({
         onPaste={onPaste}
         onKeyDown={onKeyDown}
     >
-        <Editor ref={ref} disabled={disabled} leftComponent={leftComponent} rightComponent={rightComponent} />
+        <Editor ref={ref} disabled={disabled} leftComponent={leftComponent} rightComponent={rightComponent} placeholder={computedPlaceholder} />
         { children?.(ref, composerFunctions) }
     </div>;
 }
