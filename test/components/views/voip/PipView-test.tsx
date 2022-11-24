@@ -21,6 +21,7 @@ import { MatrixClient, PendingEventOrdering } from "matrix-js-sdk/src/client";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 import { Widget, ClientWidgetApi } from "matrix-widget-api";
+import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import type { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import {
@@ -46,12 +47,15 @@ import { ViewRoomPayload } from "../../../../src/dispatcher/payloads/ViewRoomPay
 import { TestSdkContext } from "../../../TestSdkContext";
 import {
     VoiceBroadcastInfoState,
+    VoiceBroadcastPlaybacksStore,
     VoiceBroadcastPreRecording,
     VoiceBroadcastPreRecordingStore,
     VoiceBroadcastRecording,
     VoiceBroadcastRecordingsStore,
 } from "../../../../src/voice-broadcast";
 import { mkVoiceBroadcastInfoStateEvent } from "../../../voice-broadcast/utils/test-utils";
+import { RoomViewStore } from "../../../../src/stores/RoomViewStore";
+import { IRoomStateEventsActionPayload } from "../../../../src/actions/MatrixActionCreators";
 
 describe("PipView", () => {
     useMockedCalls();
@@ -60,9 +64,11 @@ describe("PipView", () => {
     let sdkContext: TestSdkContext;
     let client: Mocked<MatrixClient>;
     let room: Room;
+    let room2: Room;
     let alice: RoomMember;
     let voiceBroadcastRecordingsStore: VoiceBroadcastRecordingsStore;
     let voiceBroadcastPreRecordingStore: VoiceBroadcastPreRecordingStore;
+    let voiceBroadcastPlaybacksStore: VoiceBroadcastPlaybacksStore;
 
     beforeEach(async () => {
         stubClient();
@@ -72,17 +78,27 @@ describe("PipView", () => {
         room = new Room("!1:example.org", client, "@alice:example.org", {
             pendingEventOrdering: PendingEventOrdering.Detached,
         });
-        client.getRoom.mockImplementation(roomId => roomId === room.roomId ? room : null);
-        client.getRooms.mockReturnValue([room]);
         alice = mkRoomMember(room.roomId, "@alice:example.org");
+
+        room2 = new Room("!2:example.com", client, "@alice:example.org", {
+            pendingEventOrdering: PendingEventOrdering.Detached,
+        });
+        client.getRoom.mockImplementation((roomId: string) => {
+            if (roomId === room.roomId) return room;
+            if (roomId === room2.roomId) return room2;
+            return null;
+        });
+        client.getRooms.mockReturnValue([room, room2]);
+        client.reEmitter.reEmit(room, [RoomStateEvent.Events]);
+
         room.currentState.setStateEvents([
             mkRoomCreateEvent(alice.userId, room.roomId),
         ]);
         jest.spyOn(room, "getMember").mockImplementation(userId => userId === alice.userId ? alice : null);
 
-        client.getRoom.mockImplementation(roomId => roomId === room.roomId ? room : null);
-        client.getRooms.mockReturnValue([room]);
-        client.reEmitter.reEmit(room, [RoomStateEvent.Events]);
+        room2.currentState.setStateEvents([
+            mkRoomCreateEvent(alice.userId, room2.roomId),
+        ]);
 
         await Promise.all([CallStore.instance, WidgetMessagingStore.instance].map(
             store => setupAsyncStoreWithClient(store, client),
@@ -91,9 +107,11 @@ describe("PipView", () => {
         sdkContext = new TestSdkContext();
         voiceBroadcastRecordingsStore = new VoiceBroadcastRecordingsStore();
         voiceBroadcastPreRecordingStore = new VoiceBroadcastPreRecordingStore();
+        voiceBroadcastPlaybacksStore = new VoiceBroadcastPlaybacksStore();
         sdkContext.client = client;
         sdkContext._VoiceBroadcastRecordingsStore = voiceBroadcastRecordingsStore;
         sdkContext._VoiceBroadcastPreRecordingStore = voiceBroadcastPreRecordingStore;
+        sdkContext._VoiceBroadcastPlaybacksStore = voiceBroadcastPlaybacksStore;
     });
 
     afterEach(async () => {
@@ -146,15 +164,18 @@ describe("PipView", () => {
         ActiveWidgetStore.instance.destroyPersistentWidget("1", room.roomId);
     };
 
-    const setUpVoiceBroadcastRecording = () => {
-        const voiceBroadcastInfoEvent = mkVoiceBroadcastInfoStateEvent(
+    const makeVoiceBroadcastInfoStateEvent = (): MatrixEvent => {
+        return mkVoiceBroadcastInfoStateEvent(
             room.roomId,
             VoiceBroadcastInfoState.Started,
             alice.userId,
             client.getDeviceId() || "",
         );
+    };
 
-        const voiceBroadcastRecording = new VoiceBroadcastRecording(voiceBroadcastInfoEvent, client);
+    const setUpVoiceBroadcastRecording = () => {
+        const infoEvent = makeVoiceBroadcastInfoStateEvent();
+        const voiceBroadcastRecording = new VoiceBroadcastRecording(infoEvent, client);
         voiceBroadcastRecordingsStore.setCurrent(voiceBroadcastRecording);
     };
 
@@ -166,6 +187,22 @@ describe("PipView", () => {
             voiceBroadcastRecordingsStore,
         );
         voiceBroadcastPreRecordingStore.setCurrent(voiceBroadcastPreRecording);
+    };
+
+    const setUpRoomViewStore = () => {
+        new RoomViewStore(defaultDispatcher, sdkContext);
+    };
+
+    const startVoiceBroadcastPlayback = (room: Room): MatrixEvent => {
+        const infoEvent = makeVoiceBroadcastInfoStateEvent();
+        room.currentState.setStateEvents([infoEvent]);
+        defaultDispatcher.dispatch<IRoomStateEventsActionPayload>({
+            action: "MatrixActions.RoomState.events",
+            event: infoEvent,
+            state: room.currentState,
+            lastStateEvent: null,
+        }, true);
+        return infoEvent;
     };
 
     it("hides if there's no content", () => {
@@ -209,7 +246,7 @@ describe("PipView", () => {
     });
 
     it("shows a persistent widget with a return button when not viewing the room", () => {
-        viewRoom("!2:example.org");
+        viewRoom(room2.roomId);
         renderPip();
 
         withWidget(() => {
@@ -230,7 +267,7 @@ describe("PipView", () => {
 
         it("should render the voice broadcast recording PiP", () => {
             // check for the „Live“ badge
-            screen.getByText("Live");
+            expect(screen.queryByText("Live")).toBeInTheDocument();
         });
     });
 
@@ -242,7 +279,62 @@ describe("PipView", () => {
 
         it("should render the voice broadcast pre-recording PiP", () => {
             // check for the „Go live“ button
-            screen.getByText("Go live");
+            expect(screen.queryByText("Go live")).toBeInTheDocument();
+        });
+    });
+
+    describe("when viewing a room with a live voice broadcast", () => {
+        let startEvent: MatrixEvent | null = null;
+
+        beforeEach(() => {
+            setUpRoomViewStore();
+            viewRoom(room.roomId);
+            startEvent = startVoiceBroadcastPlayback(room);
+            renderPip();
+        });
+
+        it("should render the voice broadcast playback pip", () => {
+            // check for the „resume voice broadcast“ button
+            expect(screen.queryByLabelText("play voice broadcast")).toBeInTheDocument();
+        });
+
+        describe("and the broadcast stops", () => {
+            beforeEach(() => {
+                act(() => {
+                    const stopEvent = mkVoiceBroadcastInfoStateEvent(
+                        room.roomId,
+                        VoiceBroadcastInfoState.Stopped,
+                        alice.userId,
+                        client.getDeviceId() || "",
+                        startEvent,
+                    );
+                    room.currentState.setStateEvents([stopEvent]);
+                    defaultDispatcher.dispatch<IRoomStateEventsActionPayload>({
+                        action: "MatrixActions.RoomState.events",
+                        event: stopEvent,
+                        state: room.currentState,
+                        lastStateEvent: stopEvent,
+                    }, true);
+                });
+            });
+
+            it("should not render the voice broadcast playback pip", () => {
+                // check for the „resume voice broadcast“ button
+                expect(screen.queryByLabelText("play voice broadcast")).not.toBeInTheDocument();
+            });
+        });
+
+        describe("and leaving the room", () => {
+            beforeEach(() => {
+                act(() => {
+                    viewRoom(room2.roomId);
+                });
+            });
+
+            it("should not render the voice broadcast playback pip", () => {
+                // check for the „resume voice broadcast“ button
+                expect(screen.queryByLabelText("play voice broadcast")).not.toBeInTheDocument();
+            });
         });
     });
 });

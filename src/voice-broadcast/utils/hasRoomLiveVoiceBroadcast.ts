@@ -19,36 +19,42 @@ import { MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import { VoiceBroadcastInfoEventType, VoiceBroadcastInfoState } from "..";
 
 interface Result {
+    // whether there is a live broadcast in the room
     hasBroadcast: boolean;
+    // info event of any live broadcast in the room
+    infoEvent: MatrixEvent | null;
+    // whether the broadcast was started by the user
     startedByUser: boolean;
 }
 
-/**
- * Finds out whether there is a live broadcast in a room.
- * Also returns if the user started the broadcast (if any).
- */
-export const hasRoomLiveVoiceBroadcast = (room: Room, userId: string): Result => {
+export const hasRoomLiveVoiceBroadcast = (room: Room, userId?: string): Result => {
     let hasBroadcast = false;
     let startedByUser = false;
+    let infoEvent: MatrixEvent | null = null;
 
     const stateEvents = room.currentState.getStateEvents(VoiceBroadcastInfoEventType);
-    stateEvents.forEach((event: MatrixEvent) => {
+    stateEvents.every((event: MatrixEvent) => {
         const state = event.getContent()?.state;
 
         if (state && state !== VoiceBroadcastInfoState.Stopped) {
             hasBroadcast = true;
+            infoEvent = event;
 
             // state key = sender's MXID
             if (event.getStateKey() === userId) {
+                infoEvent = event;
                 startedByUser = true;
                 // break here, because more than true / true is not possible
                 return false;
             }
         }
+
+        return true;
     });
 
     return {
         hasBroadcast,
+        infoEvent,
         startedByUser,
     };
 };

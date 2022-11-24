@@ -51,6 +51,11 @@ import { UPDATE_EVENT } from "./AsyncStore";
 import { SdkContextClass } from "../contexts/SDKContext";
 import { CallStore } from "./CallStore";
 import { ThreadPayload } from "../dispatcher/payloads/ThreadPayload";
+import {
+    doClearCurrentVoiceBroadcastPlaybackIfStopped,
+    doMaybeSetCurrentVoiceBroadcastPlayback,
+} from "../voice-broadcast";
+import { IRoomStateEventsActionPayload } from "../actions/MatrixActionCreators";
 
 const NUM_JOIN_RETRY = 5;
 
@@ -195,6 +200,28 @@ export class RoomViewStore extends EventEmitter {
         this.emit(UPDATE_EVENT);
     }
 
+    private doMaybeSetCurrentVoiceBroadcastPlayback(room: Room): void {
+        doMaybeSetCurrentVoiceBroadcastPlayback(
+            room,
+            this.stores.client,
+            this.stores.voiceBroadcastPlaybacksStore,
+            this.stores.voiceBroadcastRecordingsStore,
+        );
+    }
+
+    private onRoomStateEvents(event: MatrixEvent): void {
+        const roomId = event.getRoomId?.();
+
+        // no room or not current room
+        if (!roomId || roomId !== this.state.roomId) return;
+
+        const room = this.stores.client?.getRoom(roomId);
+
+        if (room) {
+            this.doMaybeSetCurrentVoiceBroadcastPlayback(room);
+        }
+    }
+
     private onDispatch(payload): void { // eslint-disable-line @typescript-eslint/naming-convention
         switch (payload.action) {
             // view_room:
@@ -219,6 +246,10 @@ export class RoomViewStore extends EventEmitter {
                     wasContextSwitch: false,
                     viewingCall: false,
                 });
+                doClearCurrentVoiceBroadcastPlaybackIfStopped(this.stores.voiceBroadcastPlaybacksStore);
+                break;
+            case "MatrixActions.RoomState.events":
+                this.onRoomStateEvents((payload as IRoomStateEventsActionPayload).event);
                 break;
             case Action.ViewRoomError:
                 this.viewRoomError(payload);
@@ -394,6 +425,10 @@ export class RoomViewStore extends EventEmitter {
                     roomId: payload.room_id,
                     metricsTrigger: payload.metricsTrigger as JoinRoomPayload["metricsTrigger"],
                 });
+            }
+
+            if (room) {
+                this.doMaybeSetCurrentVoiceBroadcastPlayback(room);
             }
         } else if (payload.room_alias) {
             // Try the room alias to room ID navigation cache first to avoid

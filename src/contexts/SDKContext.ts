@@ -30,7 +30,11 @@ import TypingStore from "../stores/TypingStore";
 import { WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
 import { WidgetPermissionStore } from "../stores/widgets/WidgetPermissionStore";
 import WidgetStore from "../stores/WidgetStore";
-import { VoiceBroadcastPreRecordingStore, VoiceBroadcastRecordingsStore } from "../voice-broadcast";
+import {
+    VoiceBroadcastPlaybacksStore,
+    VoiceBroadcastPreRecordingStore,
+    VoiceBroadcastRecordingsStore,
+} from "../voice-broadcast";
 
 export const SDKContext = createContext<SdkContextClass>(undefined);
 SDKContext.displayName = "SDKContext";
@@ -68,6 +72,7 @@ export class SdkContextClass {
     protected _TypingStore?: TypingStore;
     protected _VoiceBroadcastRecordingsStore?: VoiceBroadcastRecordingsStore;
     protected _VoiceBroadcastPreRecordingStore?: VoiceBroadcastPreRecordingStore;
+    protected _VoiceBroadcastPlaybacksStore?: VoiceBroadcastPlaybacksStore;
 
     /**
      * Automatically construct stores which need to be created eagerly so they can register with
@@ -165,5 +170,12 @@ export class SdkContextClass {
             this._VoiceBroadcastPreRecordingStore = new VoiceBroadcastPreRecordingStore();
         }
         return this._VoiceBroadcastPreRecordingStore;
+    }
+
+    public get voiceBroadcastPlaybacksStore(): VoiceBroadcastPlaybacksStore {
+        if (!this._VoiceBroadcastPlaybacksStore) {
+            this._VoiceBroadcastPlaybacksStore = VoiceBroadcastPlaybacksStore.instance();
+        }
+        return this._VoiceBroadcastPlaybacksStore;
     }
 }

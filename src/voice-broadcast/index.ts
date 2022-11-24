@@ -40,6 +40,8 @@ export * from "./stores/VoiceBroadcastPlaybacksStore";
 export * from "./stores/VoiceBroadcastPreRecordingStore";
 export * from "./stores/VoiceBroadcastRecordingsStore";
 export * from "./utils/checkVoiceBroadcastPreConditions";
+export * from "./utils/doClearCurrentVoiceBroadcastPlaybackIfStopped";
+export * from "./utils/doMaybeSetCurrentVoiceBroadcastPlayback";
 export * from "./utils/getChunkLength";
 export * from "./utils/getMaxBroadcastLength";
 export * from "./utils/hasRoomLiveVoiceBroadcast";

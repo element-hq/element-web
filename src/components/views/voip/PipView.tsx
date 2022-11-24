@@ -39,11 +39,14 @@ import { CallStore } from "../../../stores/CallStore";
 import {
     useCurrentVoiceBroadcastPreRecording,
     useCurrentVoiceBroadcastRecording,
+    VoiceBroadcastPlayback,
+    VoiceBroadcastPlaybackBody,
     VoiceBroadcastPreRecording,
     VoiceBroadcastPreRecordingPip,
     VoiceBroadcastRecording,
     VoiceBroadcastRecordingPip,
 } from '../../../voice-broadcast';
+import { useCurrentVoiceBroadcastPlayback } from '../../../voice-broadcast/hooks/useCurrentVoiceBroadcastPlayback';
 
 const SHOW_CALL_IN_STATES = [
     CallState.Connected,
@@ -57,6 +60,7 @@ const SHOW_CALL_IN_STATES = [
 interface IProps {
     voiceBroadcastRecording?: Optional<VoiceBroadcastRecording>;
     voiceBroadcastPreRecording?: Optional<VoiceBroadcastPreRecording>;
+    voiceBroadcastPlayback?: Optional<VoiceBroadcastPlayback>;
 }
 
 interface IState {
@@ -330,6 +334,15 @@ class PipView extends React.Component<IProps, IState> {
         this.setState({ showWidgetInPip, persistentWidgetId, persistentRoomId });
     }
 
+    private createVoiceBroadcastPlaybackPipContent(voiceBroadcastPlayback: VoiceBroadcastPlayback): CreatePipChildren {
+        return ({ onStartMoving }) => <div onMouseDown={onStartMoving}>
+            <VoiceBroadcastPlaybackBody
+                playback={voiceBroadcastPlayback}
+                pip={true}
+            />
+        </div>;
+    }
+
     private createVoiceBroadcastPreRecordingPipContent(
         voiceBroadcastPreRecording: VoiceBroadcastPreRecording,
     ): CreatePipChildren {
@@ -356,6 +369,10 @@ class PipView extends React.Component<IProps, IState> {
 
         if (this.props.voiceBroadcastPreRecording) {
             pipContent = this.createVoiceBroadcastPreRecordingPipContent(this.props.voiceBroadcastPreRecording);
+        }
+
+        if (this.props.voiceBroadcastPlayback) {
+            pipContent = this.createVoiceBroadcastPlaybackPipContent(this.props.voiceBroadcastPlayback);
         }
 
         if (this.props.voiceBroadcastRecording) {
@@ -430,9 +447,13 @@ const PipViewHOC: React.FC<IProps> = (props) => {
     const voiceBroadcastRecordingsStore = sdkContext.voiceBroadcastRecordingsStore;
     const { currentVoiceBroadcastRecording } = useCurrentVoiceBroadcastRecording(voiceBroadcastRecordingsStore);
 
+    const voiceBroadcastPlaybacksStore = sdkContext.voiceBroadcastPlaybacksStore;
+    const { currentVoiceBroadcastPlayback } = useCurrentVoiceBroadcastPlayback(voiceBroadcastPlaybacksStore);
+
     return <PipView
-        voiceBroadcastRecording={currentVoiceBroadcastRecording}
+        voiceBroadcastPlayback={currentVoiceBroadcastPlayback}
         voiceBroadcastPreRecording={currentVoiceBroadcastPreRecording}
+        voiceBroadcastRecording={currentVoiceBroadcastRecording}
         {...props}
     />;
 };

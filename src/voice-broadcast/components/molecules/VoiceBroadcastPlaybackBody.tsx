@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React, { ReactElement } from "react";
+import classNames from "classnames";
 
 import {
     VoiceBroadcastControl,
@@ -36,10 +37,12 @@ import { SeekButton } from "../atoms/SeekButton";
 const SEEK_TIME = 30;
 
 interface VoiceBroadcastPlaybackBodyProps {
+    pip?: boolean;
     playback: VoiceBroadcastPlayback;
 }
 
 export const VoiceBroadcastPlaybackBody: React.FC<VoiceBroadcastPlaybackBodyProps> = ({
+    pip = false,
     playback,
 }) => {
     const {
@@ -107,8 +110,13 @@ export const VoiceBroadcastPlaybackBody: React.FC<VoiceBroadcastPlaybackBodyProp
         />;
     }
 
+    const classes = classNames({
+        mx_VoiceBroadcastBody: true,
+        ["mx_VoiceBroadcastBody--pip"]: pip,
+    });
+
     return (
-        <div className="mx_VoiceBroadcastBody">
+        <div className={classes}>
             <VoiceBroadcastHeader
                 live={liveness}
                 microphoneLabel={sender?.name}

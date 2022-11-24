@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 
 import {
     hasRoomLiveVoiceBroadcast,
@@ -29,25 +29,27 @@ describe("hasRoomLiveVoiceBroadcast", () => {
     const roomId = "!room:example.com";
     let client: MatrixClient;
     let room: Room;
+    let expectedEvent: MatrixEvent | null = null;
 
     const addVoiceBroadcastInfoEvent = (
         state: VoiceBroadcastInfoState,
         sender: string,
-    ) => {
-        room.currentState.setStateEvents([
-            mkVoiceBroadcastInfoStateEvent(
-                room.roomId,
-                state,
-                sender,
-                "ASD123",
-            ),
-        ]);
+    ): MatrixEvent => {
+        const infoEvent = mkVoiceBroadcastInfoStateEvent(
+            room.roomId,
+            state,
+            sender,
+            "ASD123",
+        );
+        room.currentState.setStateEvents([infoEvent]);
+        return infoEvent;
     };
 
     const itShouldReturnTrueTrue = () => {
         it("should return true/true", () => {
             expect(hasRoomLiveVoiceBroadcast(room, client.getUserId())).toEqual({
                 hasBroadcast: true,
+                infoEvent: expectedEvent,
                 startedByUser: true,
             });
         });
@@ -57,6 +59,7 @@ describe("hasRoomLiveVoiceBroadcast", () => {
         it("should return true/false", () => {
             expect(hasRoomLiveVoiceBroadcast(room, client.getUserId())).toEqual({
                 hasBroadcast: true,
+                infoEvent: expectedEvent,
                 startedByUser: false,
             });
         });
@@ -66,6 +69,7 @@ describe("hasRoomLiveVoiceBroadcast", () => {
         it("should return false/false", () => {
             expect(hasRoomLiveVoiceBroadcast(room, client.getUserId())).toEqual({
                 hasBroadcast: false,
+                infoEvent: null,
                 startedByUser: false,
             });
         });
@@ -76,6 +80,7 @@ describe("hasRoomLiveVoiceBroadcast", () => {
     });
 
     beforeEach(() => {
+        expectedEvent = null;
         room = new Room(roomId, client, client.getUserId());
     });
 
@@ -101,7 +106,7 @@ describe("hasRoomLiveVoiceBroadcast", () => {
 
     describe("when there is a live broadcast from the current and another user", () => {
         beforeEach(() => {
-            addVoiceBroadcastInfoEvent(VoiceBroadcastInfoState.Started, client.getUserId());
+            expectedEvent = addVoiceBroadcastInfoEvent(VoiceBroadcastInfoState.Started, client.getUserId());
             addVoiceBroadcastInfoEvent(VoiceBroadcastInfoState.Started, otherUserId);
         });
 
@@ -124,7 +129,7 @@ describe("hasRoomLiveVoiceBroadcast", () => {
         VoiceBroadcastInfoState.Resumed,
     ])("when there is a live broadcast (%s) from the current user", (state: VoiceBroadcastInfoState) => {
         beforeEach(() => {
-            addVoiceBroadcastInfoEvent(state, client.getUserId());
+            expectedEvent = addVoiceBroadcastInfoEvent(state, client.getUserId());
         });
 
         itShouldReturnTrueTrue();
@@ -141,7 +146,7 @@ describe("hasRoomLiveVoiceBroadcast", () => {
 
     describe("when there is a live broadcast from another user", () => {
         beforeEach(() => {
-            addVoiceBroadcastInfoEvent(VoiceBroadcastInfoState.Resumed, otherUserId);
+            expectedEvent = addVoiceBroadcastInfoEvent(VoiceBroadcastInfoState.Resumed, otherUserId);
         });
 
         itShouldReturnTrueFalse();
