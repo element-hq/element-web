@@ -29,7 +29,12 @@ jobs:
         id: cpu-cores
         uses: SimenB/github-actions-cpu-cores@v1
 
+      - name: Run tests with coverage and metrics
+        if: github.ref == 'refs/heads/develop'
+        run: "yarn coverage --ci --reporters github-actions '--reporters=<rootDir>/test/slowReporter.js' --max-workers ${{ steps.cpu-cores.outputs.count }}"
+
       - name: Run tests with coverage
+        if: github.ref != 'refs/heads/develop'
         run: "yarn coverage --ci --reporters github-actions --max-workers ${{ steps.cpu-cores.outputs.count }}"
 
       - name: Upload Artifact
