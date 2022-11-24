@@ -309,8 +309,8 @@ class TimelinePanel extends React.Component<IProps, IState> {
         this.initTimeline(this.props);
     }
 
-    public componentDidUpdate(newProps) {
-        if (newProps.timelineSet !== this.props.timelineSet) {
+    public componentDidUpdate(prevProps) {
+        if (prevProps.timelineSet !== this.props.timelineSet) {
             // throw new Error("changing timelineSet on a TimelinePanel is not supported");
 
             // regrettably, this does happen; in particular, when joining a
@@ -325,13 +325,13 @@ class TimelinePanel extends React.Component<IProps, IState> {
             logger.warn("Replacing timelineSet on a TimelinePanel - confusion may ensue");
         }
 
-        const differentEventId = newProps.eventId != this.props.eventId;
-        const differentHighlightedEventId = newProps.highlightedEventId != this.props.highlightedEventId;
-        const differentAvoidJump = newProps.eventScrollIntoView && !this.props.eventScrollIntoView;
+        const differentEventId = prevProps.eventId != this.props.eventId;
+        const differentHighlightedEventId = prevProps.highlightedEventId != this.props.highlightedEventId;
+        const differentAvoidJump = prevProps.eventScrollIntoView && !this.props.eventScrollIntoView;
         if (differentEventId || differentHighlightedEventId || differentAvoidJump) {
-            logger.log(`TimelinePanel switching to eventId ${newProps.eventId} (was ${this.props.eventId}), ` +
-                `scrollIntoView: ${newProps.eventScrollIntoView} (was ${this.props.eventScrollIntoView})`);
-            this.initTimeline(newProps);
+            logger.log(`TimelinePanel switching to eventId ${this.props.eventId} (was ${prevProps.eventId}), ` +
+                `scrollIntoView: ${this.props.eventScrollIntoView} (was ${prevProps.eventScrollIntoView})`);
+            this.initTimeline(this.props);
         }
     }
 

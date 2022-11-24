@@ -45,7 +45,7 @@ const newReceipt = (eventId: string, userId: string, readTs: number, fullyReadTs
     return new MatrixEvent({ content: receiptContent, type: EventType.Receipt });
 };
 
-const renderPanel = (room: Room, events: MatrixEvent[]): RenderResult => {
+const getProps = (room: Room, events: MatrixEvent[]): TimelinePanel["props"] => {
     const timelineSet = { room: room as Room } as EventTimelineSet;
     const timeline = new EventTimeline(timelineSet);
     events.forEach((event) => timeline.addEvent(event, true));
@@ -54,13 +54,16 @@ const renderPanel = (room: Room, events: MatrixEvent[]): RenderResult => {
     timelineSet.getPendingEvents = () => events;
     timelineSet.room.getEventReadUpTo = () => events[1].getId();
 
-    return render(
-        <TimelinePanel
-            timelineSet={timelineSet}
-            manageReadReceipts
-            sendReadReceiptOnLoad
-        />,
-    );
+    return {
+        timelineSet,
+        manageReadReceipts: true,
+        sendReadReceiptOnLoad: true,
+    };
+};
+
+const renderPanel = (room: Room, events: MatrixEvent[]): RenderResult => {
+    const props = getProps(room, events);
+    return render(<TimelinePanel {...props} />);
 };
 
 const mockEvents = (room: Room, count = 2): MatrixEvent[] => {
@@ -171,5 +174,22 @@ describe('TimelinePanel', () => {
             renderPanel(room, events);
             expect(client.setRoomReadMarkers).toHaveBeenCalledWith(room.roomId, "", undefined, events[0]);
         });
+    });
+
+    it("should scroll event into view when props.eventId changes", () => {
+        const client = MatrixClientPeg.get();
+        const room = mkRoom(client, "roomId");
+        const events = mockEvents(room);
+
+        const props = {
+            ...getProps(room, events),
+            onEventScrolledIntoView: jest.fn(),
+        };
+
+        const { rerender } = render(<TimelinePanel {...props} />);
+        expect(props.onEventScrolledIntoView).toHaveBeenCalledWith(undefined);
+        props.eventId = events[1].getId();
+        rerender(<TimelinePanel {...props} />);
+        expect(props.onEventScrolledIntoView).toHaveBeenCalledWith(events[1].getId());
     });
 });
