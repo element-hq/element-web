@@ -16,7 +16,7 @@ limitations under the License.
 
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { EventTimelineSet } from 'matrix-js-sdk/src/models/event-timeline-set';
-import { Thread, ThreadEvent } from 'matrix-js-sdk/src/models/thread';
+import { Thread } from 'matrix-js-sdk/src/models/thread';
 import { Room } from 'matrix-js-sdk/src/models/room';
 
 import BaseCard from "../views/right_panel/BaseCard";
@@ -205,18 +205,6 @@ const ThreadPanel: React.FC<IProps> = ({
             setRoom(room);
         });
     }, [mxClient, roomId]);
-
-    useEffect(() => {
-        function refreshTimeline() {
-            timelinePanel?.current.refreshTimeline();
-        }
-
-        room?.on(ThreadEvent.Update, refreshTimeline);
-
-        return () => {
-            room?.removeListener(ThreadEvent.Update, refreshTimeline);
-        };
-    }, [room, mxClient, timelineSet]);
 
     useEffect(() => {
         if (room) {

@@ -27,7 +27,7 @@ import { RoomMember, RoomMemberEvent } from 'matrix-js-sdk/src/models/room-membe
 import { debounce, throttle } from 'lodash';
 import { logger } from "matrix-js-sdk/src/logger";
 import { ClientEvent } from "matrix-js-sdk/src/client";
-import { Thread } from 'matrix-js-sdk/src/models/thread';
+import { Thread, ThreadEvent } from 'matrix-js-sdk/src/models/thread';
 import { ReceiptType } from "matrix-js-sdk/src/@types/read_receipts";
 import { MatrixError } from 'matrix-js-sdk/src/http-api';
 import { ReadReceipt } from 'matrix-js-sdk/src/models/read-receipt';
@@ -297,6 +297,8 @@ class TimelinePanel extends React.Component<IProps, IState> {
         cli.on(MatrixEventEvent.Decrypted, this.onEventDecrypted);
         cli.on(MatrixEventEvent.Replaced, this.onEventReplaced);
         cli.on(ClientEvent.Sync, this.onSync);
+
+        this.props.timelineSet.room?.on(ThreadEvent.Update, this.onThreadUpdate);
     }
 
     public componentDidMount() {
@@ -324,6 +326,9 @@ class TimelinePanel extends React.Component<IProps, IState> {
             // both rooms separately, and it's all bad.
             logger.warn("Replacing timelineSet on a TimelinePanel - confusion may ensue");
         }
+
+        this.props.timelineSet.room?.off(ThreadEvent.Update, this.onThreadUpdate);
+        this.props.timelineSet.room?.on(ThreadEvent.Update, this.onThreadUpdate);
 
         const differentEventId = prevProps.eventId != this.props.eventId;
         const differentHighlightedEventId = prevProps.highlightedEventId != this.props.highlightedEventId;
@@ -366,6 +371,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
             client.removeListener(MatrixEventEvent.Replaced, this.onEventReplaced);
             client.removeListener(MatrixEventEvent.VisibilityChange, this.onEventVisibilityChange);
             client.removeListener(ClientEvent.Sync, this.onSync);
+            this.props.timelineSet.room?.removeListener(ThreadEvent.Update, this.onThreadUpdate);
         }
     }
 
@@ -740,6 +746,25 @@ class TimelinePanel extends React.Component<IProps, IState> {
         // we could skip an update if the event isn't in our timeline,
         // but that's probably an early optimisation.
         this.forceUpdate();
+    };
+
+    private onThreadUpdate = (thread: Thread): void => {
+        if (this.unmounted) {
+            return;
+        }
+
+        // ignore events for other rooms
+        const roomId = thread.roomId;
+        if (roomId !== this.props.timelineSet.room?.roomId) {
+            return;
+        }
+
+        // we could skip an update if the event isn't in our timeline,
+        // but that's probably an early optimisation.
+        const tile = this.messagePanel.current?.getTileForEventId(thread.id);
+        if (tile) {
+            tile.forceUpdate();
+        }
     };
 
     // Called whenever the visibility of an event changes, as per
