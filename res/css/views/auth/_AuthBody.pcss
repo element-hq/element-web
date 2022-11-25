@@ -17,13 +17,12 @@ limitations under the License.
 
 .mx_AuthBody {
     width: 500px;
-    font-size: $font-14px;
-    color: $primary-content;
+    font-size: $font-12px;
+    color: $authpage-secondary-color;
     background-color: $background;
     border-radius: 0 4px 4px 0;
-    padding: 50px 32px;
+    padding: 25px 60px;
     box-sizing: border-box;
-    min-height: 600px;
 
     b {
         font-weight: 600;
@@ -37,8 +36,7 @@ limitations under the License.
     h1 {
         font-size: $font-24px;
         font-weight: $font-semi-bold;
-        margin-bottom: $spacing-20;
-        margin-top: $spacing-24;
+        margin-top: $spacing-8;
         color: $authpage-primary-color;
     }
 
@@ -80,6 +78,10 @@ limitations under the License.
         color: $authpage-primary-color;
     }
 
+    .mx_Field label {
+        color: $authpage-secondary-color;
+    }
+
     .mx_Field input,
     .mx_Field select {
         color: $authpage-primary-color;
@@ -100,7 +102,7 @@ limitations under the License.
     }
 
     .mx_Login_submit {
-        height: 33px;
+        height: 32px;
         margin-top: $spacing-16;
     }
 
@@ -131,6 +133,19 @@ limitations under the License.
         .mx_Dropdown_option_highlight {
             background-color: $authpage-focus-bg-color;
         }
+    }
+}
+
+/* specialisation for password reset views */
+.mx_AuthBody_forgot-password {
+    font-size: $font-14px;
+    color: $primary-content;
+    padding: 50px 32px;
+    min-height: 600px;
+
+    h1 {
+        margin-bottom: $spacing-20;
+        margin-top: $spacing-24;
     }
 }
 
