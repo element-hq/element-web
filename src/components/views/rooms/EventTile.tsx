@@ -372,6 +372,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             client.on(CryptoEvent.DeviceVerificationChanged, this.onDeviceVerificationChanged);
             client.on(CryptoEvent.UserTrustStatusChanged, this.onUserVerificationChanged);
             this.props.mxEvent.on(MatrixEventEvent.Decrypted, this.onDecrypted);
+            this.props.mxEvent.on(MatrixEventEvent.Replaced, this.onReplaced);
             DecryptionFailureTracker.instance.addVisibleEvent(this.props.mxEvent);
             if (this.props.showReactions) {
                 this.props.mxEvent.on(MatrixEventEvent.RelationsCreated, this.onReactionsCreated);
@@ -462,6 +463,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         }
         this.isListeningForReceipts = false;
         this.props.mxEvent.removeListener(MatrixEventEvent.Decrypted, this.onDecrypted);
+        this.props.mxEvent.removeListener(MatrixEventEvent.Replaced, this.onReplaced);
         if (this.props.showReactions) {
             this.props.mxEvent.removeListener(MatrixEventEvent.RelationsCreated, this.onReactionsCreated);
         }
@@ -608,10 +610,19 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         }
     };
 
+    /** called when the event is edited after we show it. */
+    private onReplaced = () => {
+        // re-verify the event if it is replaced (the edit may not be verified)
+        this.verifyEvent();
+    };
+
     private verifyEvent(): void {
-        const mxEvent = this.props.mxEvent;
+        // if the event was edited, show the verification info for the edit, not
+        // the original
+        const mxEvent = this.props.mxEvent.replacingEvent() ?? this.props.mxEvent;
 
         if (!mxEvent.isEncrypted() || mxEvent.isRedacted()) {
+            this.setState({ verified: null });
             return;
         }
 
@@ -744,7 +755,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     };
 
     private renderE2EPadlock() {
-        const ev = this.props.mxEvent;
+        // if the event was edited, show the verification info for the edit, not
+        // the original
+        const ev = this.props.mxEvent.replacingEvent() ?? this.props.mxEvent;
 
         // no icon for local rooms
         if (isLocalRoom(ev.getRoomId()!)) return;
