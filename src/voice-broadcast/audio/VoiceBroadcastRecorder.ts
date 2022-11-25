@@ -80,6 +80,7 @@ export class VoiceBroadcastRecorder
         const chunk = this.extractChunk();
         this.currentChunkLength = 0;
         this.previousChunkEndTimePosition = 0;
+        this.headers = new Uint8Array(0);
         return chunk;
     }
 

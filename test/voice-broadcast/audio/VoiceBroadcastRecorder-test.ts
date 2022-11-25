@@ -76,8 +76,27 @@ describe("VoiceBroadcastRecorder", () => {
         let voiceBroadcastRecorder: VoiceBroadcastRecorder;
         let onChunkRecorded: (chunk: ChunkRecordedPayload) => void;
 
-        const itShouldNotEmitAChunkRecordedEvent = () => {
-            it("should not emit a ChunkRecorded event", () => {
+        const simulateFirstChunk = (): void => {
+            voiceRecording.onDataAvailable(headers1);
+            voiceRecording.onDataAvailable(headers2);
+            // set recorder seconds to something greater than the test chunk length of 30
+            // @ts-ignore
+            voiceRecording.recorderSeconds = 42;
+            voiceRecording.onDataAvailable(chunk1);
+        };
+
+        const expectOnFirstChunkRecorded = (): void => {
+            expect(onChunkRecorded).toHaveBeenNthCalledWith(
+                1,
+                {
+                    buffer: concat(headers1, headers2, chunk1),
+                    length: 42,
+                },
+            );
+        };
+
+        const itShouldNotEmitAChunkRecordedEvent = (): void => {
+            it("should not emit a ChunkRecorded event", (): void => {
                 expect(voiceRecording.emit).not.toHaveBeenCalledWith(
                     VoiceBroadcastRecorderEvent.ChunkRecorded,
                     expect.anything(),
@@ -163,7 +182,7 @@ describe("VoiceBroadcastRecorder", () => {
 
             itShouldNotEmitAChunkRecordedEvent();
 
-            describe("stop", () => {
+            describe("and calling stop", () => {
                 let stopPayload: ChunkRecordedPayload;
 
                 beforeEach(async () => {
@@ -176,18 +195,22 @@ describe("VoiceBroadcastRecorder", () => {
                         length: 23,
                     });
                 });
+
+                describe("and calling start again and receiving some data", () => {
+                    beforeEach(() => {
+                        simulateFirstChunk();
+                    });
+
+                    it("should emit the ChunkRecorded event for the first chunk", () => {
+                        expectOnFirstChunkRecorded();
+                    });
+                });
             });
         });
 
         describe("when some chunks have been received", () => {
             beforeEach(() => {
-                // simulate first chunk
-                voiceRecording.onDataAvailable(headers1);
-                voiceRecording.onDataAvailable(headers2);
-                // set recorder seconds to something greater than the test chunk length of 30
-                // @ts-ignore
-                voiceRecording.recorderSeconds = 42;
-                voiceRecording.onDataAvailable(chunk1);
+                simulateFirstChunk();
 
                 // simulate a second chunk
                 voiceRecording.onDataAvailable(chunk2a);
@@ -198,13 +221,7 @@ describe("VoiceBroadcastRecorder", () => {
             });
 
             it("should emit ChunkRecorded events", () => {
-                expect(onChunkRecorded).toHaveBeenNthCalledWith(
-                    1,
-                    {
-                        buffer: concat(headers1, headers2, chunk1),
-                        length: 42,
-                    },
-                );
+                expectOnFirstChunkRecorded();
 
                 expect(onChunkRecorded).toHaveBeenNthCalledWith(
                     2,
