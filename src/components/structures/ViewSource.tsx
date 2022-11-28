@@ -167,6 +167,13 @@ export default class ViewSource extends React.Component<IProps, IState> {
                     <CopyableText getTextToCopy={() => eventId} border={false}>
                         { _t("Event ID: %(eventId)s", { eventId }) }
                     </CopyableText>
+                    { mxEvent.threadRootId && (
+                        <CopyableText getTextToCopy={() => mxEvent.threadRootId!} border={false}>
+                            { _t("Thread root ID: %(threadRootId)s", {
+                                threadRootId: mxEvent.threadRootId,
+                            }) }
+                        </CopyableText>
+                    ) }
                 </div>
                 { isEditing ? this.editSourceContent() : this.viewSourceContent() }
                 { !isEditing && canEdit && (

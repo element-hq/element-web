@@ -3399,6 +3399,7 @@
     "Decrypted event source": "Decrypted event source",
     "Original event source": "Original event source",
     "Event ID: %(eventId)s": "Event ID: %(eventId)s",
+    "Thread root ID: %(threadRootId)s": "Thread root ID: %(threadRootId)s",
     "Unable to verify this device": "Unable to verify this device",
     "Verify this device": "Verify this device",
     "Device verified": "Device verified",
