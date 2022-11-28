@@ -47,7 +47,13 @@ const showStopBroadcastingDialog = async (): Promise<boolean> => {
 
 export const useVoiceBroadcastRecording = (recording: VoiceBroadcastRecording) => {
     const client = MatrixClientPeg.get();
-    const room = client.getRoom(recording.infoEvent.getRoomId());
+    const roomId = recording.infoEvent.getRoomId();
+    const room = client.getRoom(roomId);
+
+    if (!room) {
+        throw new Error("Unable to find voice broadcast room with Id: " + roomId);
+    }
+
     const stopRecording = async () => {
         const confirmed = await showStopBroadcastingDialog();
 

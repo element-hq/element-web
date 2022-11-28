@@ -16,18 +16,23 @@ limitations under the License.
 //
 
 import React from "react";
-import { render, RenderResult, screen } from "@testing-library/react";
+import { act, render, RenderResult, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { sleep } from "matrix-js-sdk/src/utils";
+import { mocked } from "jest-mock";
 
 import {
     VoiceBroadcastInfoState,
     VoiceBroadcastRecording,
     VoiceBroadcastRecordingPip,
 } from "../../../../src/voice-broadcast";
-import { stubClient } from "../../../test-utils";
+import { filterConsole, flushPromises, stubClient } from "../../../test-utils";
 import { mkVoiceBroadcastInfoStateEvent } from "../../utils/test-utils";
+import { requestMediaPermissions } from "../../../../src/utils/media/requestMediaPermissions";
+import MediaDeviceHandler, { MediaDeviceKindEnum } from "../../../../src/MediaDeviceHandler";
+
+jest.mock("../../../../src/utils/media/requestMediaPermissions");
 
 // mock RoomAvatar, because it is doing too much fancy stuff
 jest.mock("../../../../src/components/views/avatars/RoomAvatar", () => ({
@@ -54,29 +59,78 @@ describe("VoiceBroadcastRecordingPip", () => {
     let infoEvent: MatrixEvent;
     let recording: VoiceBroadcastRecording;
     let renderResult: RenderResult;
+    let restoreConsole: () => void;
 
-    const renderPip = (state: VoiceBroadcastInfoState) => {
+    const renderPip = async (state: VoiceBroadcastInfoState) => {
         infoEvent = mkVoiceBroadcastInfoStateEvent(
             roomId,
             state,
-            client.getUserId(),
-            client.getDeviceId(),
+            client.getUserId() || "",
+            client.getDeviceId() || "",
         );
         recording = new VoiceBroadcastRecording(infoEvent, client, state);
+        jest.spyOn(recording, "pause");
+        jest.spyOn(recording, "resume");
         renderResult = render(<VoiceBroadcastRecordingPip recording={recording} />);
+        await act(async () => {
+            flushPromises();
+        });
     };
 
     beforeAll(() => {
         client = stubClient();
+        mocked(requestMediaPermissions).mockReturnValue(new Promise<MediaStream>((r) => {
+            r({
+                getTracks: () => [],
+            } as unknown as MediaStream);
+        }));
+        jest.spyOn(MediaDeviceHandler, "getDevices").mockResolvedValue({
+            [MediaDeviceKindEnum.AudioInput]: [
+                {
+                    deviceId: "d1",
+                    label: "Device 1",
+                } as MediaDeviceInfo,
+                {
+                    deviceId: "d2",
+                    label: "Device 2",
+                } as MediaDeviceInfo,
+            ],
+            [MediaDeviceKindEnum.AudioOutput]: [],
+            [MediaDeviceKindEnum.VideoInput]: [],
+        });
+        jest.spyOn(MediaDeviceHandler.instance, "setDevice").mockImplementation();
+        restoreConsole = filterConsole("Starting load of AsyncWrapper for modal");
+    });
+
+    afterAll(() => {
+        restoreConsole();
     });
 
     describe("when rendering a started recording", () => {
-        beforeEach(() => {
-            renderPip(VoiceBroadcastInfoState.Started);
+        beforeEach(async () => {
+            await renderPip(VoiceBroadcastInfoState.Started);
         });
 
         it("should render as expected", () => {
             expect(renderResult.container).toMatchSnapshot();
+        });
+
+        describe("and selecting another input device", () => {
+            beforeEach(async () => {
+                await act(async () => {
+                    await userEvent.click(screen.getByLabelText("Change input device"));
+                    await userEvent.click(screen.getByText("Device 1"));
+                });
+            });
+
+            it("should select the device and pause and resume the broadcast", () => {
+                expect(MediaDeviceHandler.instance.setDevice).toHaveBeenCalledWith(
+                    "d1",
+                    MediaDeviceKindEnum.AudioInput,
+                );
+                expect(recording.pause).toHaveBeenCalled();
+                expect(recording.resume).toHaveBeenCalled();
+            });
         });
 
         describe("and clicking the pause button", () => {
@@ -113,8 +167,8 @@ describe("VoiceBroadcastRecordingPip", () => {
     });
 
     describe("when rendering a paused recording", () => {
-        beforeEach(() => {
-            renderPip(VoiceBroadcastInfoState.Paused);
+        beforeEach(async () => {
+            await renderPip(VoiceBroadcastInfoState.Paused);
         });
 
         it("should render as expected", () => {
