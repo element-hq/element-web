@@ -283,8 +283,8 @@ export class StopGapWidget extends EventEmitter {
         this.messaging.on("capabilitiesNotified", () => this.emit("capabilitiesNotified"));
         this.messaging.on(`action:${WidgetApiFromWidgetAction.OpenModalWidget}`, this.onOpenModal);
         this.messaging.on(`action:${ElementWidgetActions.JoinCall}`, () => {
-            // stop voice broadcast recording when any widget sends a "join"
-            VoiceBroadcastRecordingsStore.instance().getCurrent()?.stop();
+            // pause voice broadcast recording when any widget sends a "join"
+            VoiceBroadcastRecordingsStore.instance().getCurrent()?.pause();
         });
 
         // Always attach a handler for ViewRoom, but permission check it internally

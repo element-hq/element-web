@@ -296,7 +296,7 @@ describe("VoiceBroadcastRecording", () => {
                     }, true);
                 });
 
-                itShouldBeInState(VoiceBroadcastInfoState.Stopped);
+                itShouldBeInState(VoiceBroadcastInfoState.Paused);
             });
 
             describe("and a chunk time update occurs", () => {

@@ -222,8 +222,8 @@ export class VoiceBroadcastRecording
     private onAction = (payload: ActionPayload) => {
         if (payload.action !== "call_state") return;
 
-        // stop on any call action
-        this.stop();
+        // pause on any call action
+        this.pause();
     };
 
     private setState(state: VoiceBroadcastInfoState): void {

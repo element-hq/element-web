@@ -89,7 +89,7 @@ describe("StopGapWidget", () => {
                 content: {},
             });
             voiceBroadcastRecording = new VoiceBroadcastRecording(voiceBroadcastInfoEvent, client);
-            jest.spyOn(voiceBroadcastRecording, "stop");
+            jest.spyOn(voiceBroadcastRecording, "pause");
             jest.spyOn(VoiceBroadcastRecordingsStore.instance(), "getCurrent").mockReturnValue(voiceBroadcastRecording);
         });
 
@@ -105,8 +105,8 @@ describe("StopGapWidget", () => {
                 );
             });
 
-            it("should stop the current voice broadcast recording", () => {
-                expect(voiceBroadcastRecording.stop).toHaveBeenCalled();
+            it("should pause the current voice broadcast recording", () => {
+                expect(voiceBroadcastRecording.pause).toHaveBeenCalled();
             });
         });
     });
