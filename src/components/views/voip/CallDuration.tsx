@@ -14,9 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { FC, useState, useEffect } from "react";
+import React, { FC, useState, useEffect, memo } from "react";
+import { GroupCall } from "matrix-js-sdk/src/webrtc/groupCall";
 
-import type { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { formatCallTime } from "../../../DateUtils";
 
 interface CallDurationProps {
@@ -26,26 +26,28 @@ interface CallDurationProps {
 /**
  * A call duration counter.
  */
-export const CallDuration: FC<CallDurationProps> = ({ delta }) => {
+export const CallDuration: FC<CallDurationProps> = memo(({ delta }) => {
     // Clock desync could lead to a negative duration, so just hide it if that happens
     if (delta <= 0) return null;
     return <div className="mx_CallDuration">{ formatCallTime(new Date(delta)) }</div>;
-};
+});
 
-interface CallDurationFromEventProps {
-    mxEvent: MatrixEvent;
+interface GroupCallDurationProps {
+    groupCall: GroupCall;
 }
 
 /**
- * A call duration counter that automatically counts up, given the event that
- * started the call.
+ * A call duration counter that automatically counts up, given a live GroupCall
+ * object.
  */
-export const CallDurationFromEvent: FC<CallDurationFromEventProps> = ({ mxEvent }) => {
+export const GroupCallDuration: FC<GroupCallDurationProps> = ({ groupCall }) => {
     const [now, setNow] = useState(() => Date.now());
     useEffect(() => {
         const timer = setInterval(() => setNow(Date.now()), 1000);
         return () => clearInterval(timer);
     }, []);
 
-    return <CallDuration delta={now - mxEvent.getTs()} />;
+    return groupCall.creationTs === null
+        ? null
+        : <CallDuration delta={now - groupCall.creationTs} />;
 };

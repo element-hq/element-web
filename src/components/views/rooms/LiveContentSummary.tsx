@@ -19,7 +19,7 @@ import classNames from "classnames";
 
 import { _t } from "../../../languageHandler";
 import { Call } from "../../../models/Call";
-import { useParticipants } from "../../../hooks/useCall";
+import { useParticipantCount } from "../../../hooks/useCall";
 
 export enum LiveContentType {
     Video,
@@ -62,13 +62,10 @@ interface LiveContentSummaryWithCallProps {
     call: Call;
 }
 
-export function LiveContentSummaryWithCall({ call }: LiveContentSummaryWithCallProps) {
-    const participants = useParticipants(call);
-
-    return <LiveContentSummary
+export const LiveContentSummaryWithCall: FC<LiveContentSummaryWithCallProps> = ({ call }) =>
+    <LiveContentSummary
         type={LiveContentType.Video}
         text={_t("Video")}
         active={false}
-        participantCount={participants.size}
+        participantCount={useParticipantCount(call)}
     />;
-}

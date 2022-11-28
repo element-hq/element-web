@@ -25,9 +25,8 @@ import { Call, CallEvent, ElementCall, isConnected } from "../../../models/Call"
 import {
     useCall,
     useConnectionState,
-    useJoinCallButtonDisabled,
-    useJoinCallButtonTooltip,
-    useParticipants,
+    useJoinCallButtonDisabledTooltip,
+    useParticipatingMembers,
 } from "../../../hooks/useCall";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import AppTile from "../elements/AppTile";
@@ -116,12 +115,11 @@ const MAX_FACES = 8;
 interface LobbyProps {
     room: Room;
     connect: () => Promise<void>;
-    joinCallButtonTooltip?: string;
-    joinCallButtonDisabled?: boolean;
+    joinCallButtonDisabledTooltip?: string;
     children?: ReactNode;
 }
 
-export const Lobby: FC<LobbyProps> = ({ room, joinCallButtonDisabled, joinCallButtonTooltip, connect, children }) => {
+export const Lobby: FC<LobbyProps> = ({ room, joinCallButtonDisabledTooltip, connect, children }) => {
     const [connecting, setConnecting] = useState(false);
     const me = useMemo(() => room.getMember(room.myUserId)!, [room]);
     const videoRef = useRef<HTMLVideoElement>(null);
@@ -246,10 +244,10 @@ export const Lobby: FC<LobbyProps> = ({ room, joinCallButtonDisabled, joinCallBu
         <AccessibleTooltipButton
             className="mx_CallView_connectButton"
             kind="primary"
-            disabled={connecting || joinCallButtonDisabled}
+            disabled={connecting || joinCallButtonDisabledTooltip !== undefined}
             onClick={onConnectClick}
             label={_t("Join")}
-            tooltip={connecting ? _t("Connecting") : joinCallButtonTooltip}
+            tooltip={connecting ? _t("Connecting") : joinCallButtonDisabledTooltip}
             alignment={Alignment.Bottom}
         />
     </div>;
@@ -331,9 +329,8 @@ interface JoinCallViewProps {
 const JoinCallView: FC<JoinCallViewProps> = ({ room, resizing, call }) => {
     const cli = useContext(MatrixClientContext);
     const connected = isConnected(useConnectionState(call));
-    const participants = useParticipants(call);
-    const joinCallButtonTooltip = useJoinCallButtonTooltip(call);
-    const joinCallButtonDisabled = useJoinCallButtonDisabled(call);
+    const members = useParticipatingMembers(call);
+    const joinCallButtonDisabledTooltip = useJoinCallButtonDisabledTooltip(call);
 
     const connect = useCallback(async () => {
         // Disconnect from any other active calls first, since we don't yet support holding
@@ -347,12 +344,12 @@ const JoinCallView: FC<JoinCallViewProps> = ({ room, resizing, call }) => {
     let lobby: JSX.Element | null = null;
     if (!connected) {
         let facePile: JSX.Element | null = null;
-        if (participants.size) {
-            const shownMembers = [...participants].slice(0, MAX_FACES);
-            const overflow = participants.size > shownMembers.length;
+        if (members.length) {
+            const shownMembers = members.slice(0, MAX_FACES);
+            const overflow = members.length > shownMembers.length;
 
             facePile = <div className="mx_CallView_participants">
-                { _t("%(count)s people joined", { count: participants.size }) }
+                { _t("%(count)s people joined", { count: members.length }) }
                 <FacePile members={shownMembers} faceSize={24} overflow={overflow} />
             </div>;
         }
@@ -360,8 +357,7 @@ const JoinCallView: FC<JoinCallViewProps> = ({ room, resizing, call }) => {
         lobby = <Lobby
             room={room}
             connect={connect}
-            joinCallButtonTooltip={joinCallButtonTooltip ?? undefined}
-            joinCallButtonDisabled={joinCallButtonDisabled}
+            joinCallButtonDisabledTooltip={joinCallButtonDisabledTooltip ?? undefined}
         >
             { facePile }
         </Lobby>;

@@ -68,7 +68,7 @@ describe("createRoom", () => {
         // widget should be immutable for admins
         expect(widgetPower).toBeGreaterThan(100);
         // and we should have been reset back to admin
-        expect(client.setPowerLevel).toHaveBeenCalledWith(roomId, userId, 100, undefined);
+        expect(client.setPowerLevel).toHaveBeenCalledWith(roomId, userId, 100, null);
     });
 
     it("sets up Element video rooms correctly", async () => {
@@ -98,7 +98,7 @@ describe("createRoom", () => {
         // call should be immutable for admins
         expect(callPower).toBeGreaterThan(100);
         // and we should have been reset back to admin
-        expect(client.setPowerLevel).toHaveBeenCalledWith(roomId, userId, 100, undefined);
+        expect(client.setPowerLevel).toHaveBeenCalledWith(roomId, userId, 100, null);
     });
 
     it("doesn't create calls in non-video-rooms", async () => {

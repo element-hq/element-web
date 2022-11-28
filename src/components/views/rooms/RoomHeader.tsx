@@ -66,7 +66,7 @@ import IconizedContextMenu, {
     IconizedContextMenuRadio,
 } from "../context_menus/IconizedContextMenu";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
-import { CallDurationFromEvent } from "../voip/CallDuration";
+import { GroupCallDuration } from "../voip/CallDuration";
 import { Alignment } from "../elements/Tooltip";
 import RoomCallBanner from '../beacon/RoomCallBanner';
 
@@ -512,7 +512,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
         }
 
         if (this.props.viewingCall && this.props.activeCall instanceof ElementCall) {
-            startButtons.push(<CallLayoutSelector call={this.props.activeCall} />);
+            startButtons.push(<CallLayoutSelector key="layout" call={this.props.activeCall} />);
         }
 
         if (!this.props.viewingCall && this.props.onForgetClick) {
@@ -685,7 +685,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
                             { _t("Video call") }
                         </div>
                         { this.props.activeCall instanceof ElementCall && (
-                            <CallDurationFromEvent mxEvent={this.props.activeCall.groupCall} />
+                            <GroupCallDuration groupCall={this.props.activeCall.groupCall} />
                         ) }
                         { /* Empty topic element to fill out space */ }
                         <div className="mx_RoomHeader_topic" />

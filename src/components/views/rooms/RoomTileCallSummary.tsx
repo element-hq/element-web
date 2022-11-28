@@ -18,7 +18,7 @@ import React, { FC } from "react";
 
 import type { Call } from "../../../models/Call";
 import { _t } from "../../../languageHandler";
-import { useConnectionState, useParticipants } from "../../../hooks/useCall";
+import { useConnectionState, useParticipantCount } from "../../../hooks/useCall";
 import { ConnectionState } from "../../../models/Call";
 import { LiveContentSummary, LiveContentType } from "./LiveContentSummary";
 
@@ -27,13 +27,10 @@ interface Props {
 }
 
 export const RoomTileCallSummary: FC<Props> = ({ call }) => {
-    const connectionState = useConnectionState(call);
-    const participants = useParticipants(call);
-
     let text: string;
     let active: boolean;
 
-    switch (connectionState) {
+    switch (useConnectionState(call)) {
         case ConnectionState.Disconnected:
             text = _t("Video");
             active = false;
@@ -53,6 +50,6 @@ export const RoomTileCallSummary: FC<Props> = ({ call }) => {
         type={LiveContentType.Video}
         text={text}
         active={active}
-        participantCount={participants.size}
+        participantCount={useParticipantCount(call)}
     />;
 };

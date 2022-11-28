@@ -99,12 +99,15 @@ describe("IncomingCallEvent", () => {
     const renderToast = () => { render(<IncomingCallToast callEvent={call.event} />); };
 
     it("correctly shows all the information", () => {
-        call.participants = new Set([alice, bob]);
+        call.participants = new Map([
+            [alice, new Set("a")],
+            [bob, new Set(["b1", "b2"])],
+        ]);
         renderToast();
 
         screen.getByText("Video call started");
         screen.getByText("Video");
-        screen.getByLabelText("2 participants");
+        screen.getByLabelText("3 participants");
 
         screen.getByRole("button", { name: "Join" });
         screen.getByRole("button", { name: "Close" });

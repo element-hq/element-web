@@ -39,6 +39,7 @@ import { ReEmitter } from "matrix-js-sdk/src/ReEmitter";
 import { MediaHandler } from "matrix-js-sdk/src/webrtc/mediaHandler";
 import { Feature, ServerSupport } from "matrix-js-sdk/src/feature";
 
+import type { GroupCall } from "matrix-js-sdk/src/webrtc/groupCall";
 import { MatrixClientPeg as peg } from '../../src/MatrixClientPeg';
 import { makeType } from "../../src/utils/TypeUtils";
 import { ValidatedServerConfig } from "../../src/utils/ValidatedServerConfig";
@@ -190,6 +191,7 @@ export function createTestClient(): MatrixClient {
             setVideoInput: jest.fn(),
             setAudioInput: jest.fn(),
             setAudioSettings: jest.fn(),
+            stopAllStreams: jest.fn(),
         } as unknown as MediaHandler),
         uploadContent: jest.fn(),
         getEventMapper: () => (opts) => new MatrixEvent(opts),
@@ -197,6 +199,7 @@ export function createTestClient(): MatrixClient {
         doesServerSupportLogoutDevices: jest.fn().mockReturnValue(true),
         requestPasswordEmailToken: jest.fn().mockRejectedValue({}),
         setPassword: jest.fn().mockRejectedValue({}),
+        groupCallEventHandler: { groupCalls: new Map<string, GroupCall>() },
     } as unknown as MatrixClient;
 
     client.reEmitter = new ReEmitter(client);
@@ -453,7 +456,7 @@ export function mkStubRoom(roomId: string = null, name: string, client: MatrixCl
         getMyMembership: jest.fn().mockReturnValue("join"),
         maySendMessage: jest.fn().mockReturnValue(true),
         currentState: {
-            getStateEvents: jest.fn(),
+            getStateEvents: jest.fn((_type, key) => key === undefined ? [] : null),
             getMember: jest.fn(),
             mayClientSendStateEvent: jest.fn().mockReturnValue(true),
             maySendStateEvent: jest.fn().mockReturnValue(true),

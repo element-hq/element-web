@@ -18,14 +18,13 @@ import React, { forwardRef, useCallback, useContext, useMemo } from "react";
 
 import type { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import type { RoomMember } from "matrix-js-sdk/src/models/room-member";
-import { Call, ConnectionState } from "../../../models/Call";
+import { ConnectionState, ElementCall } from "../../../models/Call";
 import { _t } from "../../../languageHandler";
 import {
     useCall,
     useConnectionState,
-    useJoinCallButtonDisabled,
-    useJoinCallButtonTooltip,
-    useParticipants,
+    useJoinCallButtonDisabledTooltip,
+    useParticipatingMembers,
 } from "../../../hooks/useCall";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import type { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
@@ -35,18 +34,18 @@ import MemberAvatar from "../avatars/MemberAvatar";
 import { LiveContentSummary, LiveContentType } from "../rooms/LiveContentSummary";
 import FacePile from "../elements/FacePile";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import { CallDuration, CallDurationFromEvent } from "../voip/CallDuration";
+import { CallDuration, GroupCallDuration } from "../voip/CallDuration";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 
 const MAX_FACES = 8;
 
 interface ActiveCallEventProps {
     mxEvent: MatrixEvent;
-    participants: Set<RoomMember>;
+    call: ElementCall | null;
+    participatingMembers: RoomMember[];
     buttonText: string;
     buttonKind: string;
-    buttonTooltip?: string;
-    buttonDisabled?: boolean;
+    buttonDisabledTooltip?: string;
     onButtonClick: ((ev: ButtonEvent) => void) | null;
 }
 
@@ -54,19 +53,19 @@ const ActiveCallEvent = forwardRef<any, ActiveCallEventProps>(
     (
         {
             mxEvent,
-            participants,
+            call,
+            participatingMembers,
             buttonText,
             buttonKind,
-            buttonDisabled,
-            buttonTooltip,
+            buttonDisabledTooltip,
             onButtonClick,
         },
         ref,
     ) => {
         const senderName = useMemo(() => mxEvent.sender?.name ?? mxEvent.getSender(), [mxEvent]);
 
-        const facePileMembers = useMemo(() => [...participants].slice(0, MAX_FACES), [participants]);
-        const facePileOverflow = participants.size > facePileMembers.length;
+        const facePileMembers = useMemo(() => participatingMembers.slice(0, MAX_FACES), [participatingMembers]);
+        const facePileOverflow = participatingMembers.length > facePileMembers.length;
 
         return <div className="mx_CallEvent_wrapper" ref={ref}>
             <div className="mx_CallEvent mx_CallEvent_active">
@@ -85,17 +84,17 @@ const ActiveCallEvent = forwardRef<any, ActiveCallEventProps>(
                         type={LiveContentType.Video}
                         text={_t("Video call")}
                         active={false}
-                        participantCount={participants.size}
+                        participantCount={participatingMembers.length}
                     />
                     <FacePile members={facePileMembers} faceSize={24} overflow={facePileOverflow} />
                 </div>
-                <CallDurationFromEvent mxEvent={mxEvent} />
+                { call && <GroupCallDuration groupCall={call.groupCall} /> }
                 <AccessibleTooltipButton
                     className="mx_CallEvent_button"
                     kind={buttonKind}
-                    disabled={onButtonClick === null || buttonDisabled}
+                    disabled={onButtonClick === null || buttonDisabledTooltip !== undefined}
                     onClick={onButtonClick}
-                    tooltip={buttonTooltip}
+                    tooltip={buttonDisabledTooltip}
                 >
                     { buttonText }
                 </AccessibleTooltipButton>
@@ -106,14 +105,13 @@ const ActiveCallEvent = forwardRef<any, ActiveCallEventProps>(
 
 interface ActiveLoadedCallEventProps {
     mxEvent: MatrixEvent;
-    call: Call;
+    call: ElementCall;
 }
 
 const ActiveLoadedCallEvent = forwardRef<any, ActiveLoadedCallEventProps>(({ mxEvent, call }, ref) => {
     const connectionState = useConnectionState(call);
-    const participants = useParticipants(call);
-    const joinCallButtonTooltip = useJoinCallButtonTooltip(call);
-    const joinCallButtonDisabled = useJoinCallButtonDisabled(call);
+    const participatingMembers = useParticipatingMembers(call);
+    const joinCallButtonDisabledTooltip = useJoinCallButtonDisabledTooltip(call);
 
     const connect = useCallback((ev: ButtonEvent) => {
         ev.preventDefault();
@@ -142,11 +140,11 @@ const ActiveLoadedCallEvent = forwardRef<any, ActiveLoadedCallEventProps>(({ mxE
     return <ActiveCallEvent
         ref={ref}
         mxEvent={mxEvent}
-        participants={participants}
+        call={call}
+        participatingMembers={participatingMembers}
         buttonText={buttonText}
         buttonKind={buttonKind}
-        buttonDisabled={joinCallButtonDisabled}
-        buttonTooltip={joinCallButtonTooltip}
+        buttonDisabledTooltip={joinCallButtonDisabledTooltip ?? undefined}
         onButtonClick={onButtonClick}
     />;
 });
@@ -159,7 +157,6 @@ interface CallEventProps {
  * An event tile representing an active or historical Element call.
  */
 export const CallEvent = forwardRef<any, CallEventProps>(({ mxEvent }, ref) => {
-    const noParticipants = useMemo(() => new Set<RoomMember>(), []);
     const client = useContext(MatrixClientContext);
     const call = useCall(mxEvent.getRoomId()!);
     const latestEvent = client.getRoom(mxEvent.getRoomId())!.currentState
@@ -180,12 +177,13 @@ export const CallEvent = forwardRef<any, CallEventProps>(({ mxEvent }, ref) => {
         return <ActiveCallEvent
             ref={ref}
             mxEvent={mxEvent}
-            participants={noParticipants}
+            call={null}
+            participatingMembers={[]}
             buttonText={_t("Join")}
             buttonKind="primary"
             onButtonClick={null}
         />;
     }
 
-    return <ActiveLoadedCallEvent mxEvent={mxEvent} call={call} ref={ref} />;
+    return <ActiveLoadedCallEvent mxEvent={mxEvent} call={call as ElementCall} ref={ref} />;
 });

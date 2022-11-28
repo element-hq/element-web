@@ -22,6 +22,7 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 import { Widget } from "matrix-widget-api";
 
+import type { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import type { ClientWidgetApi } from "matrix-widget-api";
 import {
     stubClient,
@@ -74,7 +75,9 @@ describe("RoomTile", () => {
             setupAsyncStoreWithClient(WidgetMessagingStore.instance, client);
 
             MockedCall.create(room, "1");
-            call = CallStore.instance.getCall(room.roomId) as MockedCall;
+            const maybeCall = CallStore.instance.getCall(room.roomId);
+            if (!(maybeCall instanceof MockedCall)) throw new Error("Failed to create call");
+            call = maybeCall;
 
             widget = new Widget(call.widget);
             WidgetMessagingStore.instance.storeMessaging(widget, room.roomId, {
@@ -123,19 +126,25 @@ describe("RoomTile", () => {
         });
 
         it("tracks participants", () => {
-            const alice = mkRoomMember(room.roomId, "@alice:example.org");
-            const bob = mkRoomMember(room.roomId, "@bob:example.org");
-            const carol = mkRoomMember(room.roomId, "@carol:example.org");
+            const alice: [RoomMember, Set<string>] = [
+                mkRoomMember(room.roomId, "@alice:example.org"), new Set(["a"]),
+            ];
+            const bob: [RoomMember, Set<string>] = [
+                mkRoomMember(room.roomId, "@bob:example.org"), new Set(["b1", "b2"]),
+            ];
+            const carol: [RoomMember, Set<string>] = [
+                mkRoomMember(room.roomId, "@carol:example.org"), new Set(["c"]),
+            ];
 
             expect(screen.queryByLabelText(/participant/)).toBe(null);
 
-            act(() => { call.participants = new Set([alice]); });
+            act(() => { call.participants = new Map([alice]); });
             expect(screen.getByLabelText("1 participant").textContent).toBe("1");
 
-            act(() => { call.participants = new Set([alice, bob, carol]); });
-            expect(screen.getByLabelText("3 participants").textContent).toBe("3");
+            act(() => { call.participants = new Map([alice, bob, carol]); });
+            expect(screen.getByLabelText("4 participants").textContent).toBe("4");
 
-            act(() => { call.participants = new Set(); });
+            act(() => { call.participants = new Map(); });
             expect(screen.queryByLabelText(/participant/)).toBe(null);
         });
     });

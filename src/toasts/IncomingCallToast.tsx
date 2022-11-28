@@ -30,7 +30,7 @@ import {
     LiveContentSummaryWithCall,
     LiveContentType,
 } from "../components/views/rooms/LiveContentSummary";
-import { useCall, useJoinCallButtonDisabled, useJoinCallButtonTooltip } from "../hooks/useCall";
+import { useCall, useJoinCallButtonDisabledTooltip } from "../hooks/useCall";
 import { useRoomState } from "../hooks/useRoomState";
 import { ButtonEvent } from "../components/views/elements/AccessibleButton";
 import { useDispatcher } from "../hooks/useDispatcher";
@@ -45,14 +45,13 @@ interface JoinCallButtonWithCallProps {
 }
 
 function JoinCallButtonWithCall({ onClick, call }: JoinCallButtonWithCallProps) {
-    const tooltip = useJoinCallButtonTooltip(call);
-    const disabled = useJoinCallButtonDisabled(call);
+    const disabledTooltip = useJoinCallButtonDisabledTooltip(call);
 
     return <AccessibleTooltipButton
         className="mx_IncomingCallToast_joinButton"
         onClick={onClick}
-        disabled={disabled}
-        tooltip={tooltip}
+        disabled={disabledTooltip !== null}
+        tooltip={disabledTooltip}
         kind="primary"
     >
         { _t("Join") }

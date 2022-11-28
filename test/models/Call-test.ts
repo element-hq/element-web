@@ -18,17 +18,17 @@ import EventEmitter from "events";
 import { mocked } from "jest-mock";
 import { waitFor } from "@testing-library/react";
 import { RoomType } from "matrix-js-sdk/src/@types/event";
-import { ClientEvent, PendingEventOrdering } from "matrix-js-sdk/src/client";
+import { PendingEventOrdering } from "matrix-js-sdk/src/client";
 import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
 import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 import { Widget } from "matrix-widget-api";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { GroupCallIntent } from "matrix-js-sdk/src/webrtc/groupCall";
 
 import type { Mocked } from "jest-mock";
 import type { MatrixClient, IMyDevice } from "matrix-js-sdk/src/client";
 import type { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import type { ClientWidgetApi } from "matrix-widget-api";
-import { JitsiCallMemberContent, ElementCallMemberContent, Layout } from "../../src/models/Call";
+import { JitsiCallMemberContent, Layout } from "../../src/models/Call";
 import { stubClient, mkEvent, mkRoomMember, setupAsyncStoreWithClient, mockPlatformPeg } from "../test-utils";
 import MediaDeviceHandler, { MediaDeviceKindEnum } from "../../src/MediaDeviceHandler";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
@@ -341,7 +341,7 @@ describe("JitsiCall", () => {
         });
 
         it("tracks participants in room state", async () => {
-            expect([...call.participants]).toEqual([]);
+            expect(call.participants).toEqual(new Map());
 
             // A participant with multiple devices (should only show up once)
             await client.sendStateEvent(
@@ -361,10 +361,13 @@ describe("JitsiCall", () => {
             // Now, stub out client.sendStateEvent so we can test our local echo
             client.sendStateEvent.mockReset();
             await call.connect();
-            expect([...call.participants]).toEqual([bob, alice]);
+            expect(call.participants).toEqual(new Map([
+                [alice, new Set(["alices_device"])],
+                [bob, new Set(["bobweb", "bobdesktop"])],
+            ]));
 
             await call.disconnect();
-            expect([...call.participants]).toEqual([bob]);
+            expect(call.participants).toEqual(new Map([[bob, new Set(["bobweb", "bobdesktop"])]]));
         });
 
         it("updates room state when connecting and disconnecting", async () => {
@@ -429,10 +432,10 @@ describe("JitsiCall", () => {
             await call.connect();
             await call.disconnect();
             expect(onParticipants.mock.calls).toEqual([
-                [new Set([alice]), new Set()],
-                [new Set([alice]), new Set([alice])],
-                [new Set(), new Set([alice])],
-                [new Set(), new Set()],
+                [new Map([[alice, new Set(["alices_device"])]]), new Map()],
+                [new Map([[alice, new Set(["alices_device"])]]), new Map([[alice, new Set(["alices_device"])]])],
+                [new Map(), new Map([[alice, new Set(["alices_device"])]])],
+                [new Map(), new Map()],
             ]);
 
             call.off(CallEvent.Participants, onParticipants);
@@ -568,11 +571,11 @@ describe("ElementCall", () => {
 
         it("ignores terminated calls", async () => {
             await ElementCall.create(room);
+            const call = Call.get(room);
+            if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
 
             // Terminate the call
-            const [event] = room.currentState.getStateEvents(ElementCall.CALL_EVENT_TYPE.name);
-            const content = { ...event.getContent(), "m.terminated": "Call ended" };
-            await client.sendStateEvent(room.roomId, ElementCall.CALL_EVENT_TYPE.name, content, event.getStateKey()!);
+            await call.groupCall.terminate();
 
             expect(Call.get(room)).toBeNull();
         });
@@ -599,8 +602,8 @@ describe("ElementCall", () => {
 
         afterEach(() => cleanUpCallAndWidget(call, widget, audioMutedSpy, videoMutedSpy));
 
-        it("has intent m.prompt", () => {
-            expect(call.groupCall.getContent()["m.intent"]).toBe("m.prompt");
+        it("has prompt intent", () => {
+            expect(call.groupCall.intent).toBe(GroupCallIntent.Prompt);
         });
 
         it("connects muted", async () => {
@@ -690,19 +693,18 @@ describe("ElementCall", () => {
         });
 
         it("tracks participants in room state", async () => {
-            expect([...call.participants]).toEqual([]);
+            expect(call.participants).toEqual(new Map());
 
             // A participant with multiple devices (should only show up once)
             await client.sendStateEvent(
                 room.roomId,
                 ElementCall.MEMBER_EVENT_TYPE.name,
                 {
-                    "m.expires_ts": 1000 * 60 * 10,
                     "m.calls": [{
-                        "m.call_id": call.groupCall.getStateKey()!,
+                        "m.call_id": call.groupCall.groupCallId,
                         "m.devices": [
-                            { device_id: "bobweb", session_id: "1", feeds: [] },
-                            { device_id: "bobdesktop", session_id: "1", feeds: [] },
+                            { device_id: "bobweb", session_id: "1", feeds: [], expires_ts: 1000 * 60 * 10 },
+                            { device_id: "bobdesktop", session_id: "1", feeds: [], expires_ts: 1000 * 60 * 10 },
                         ],
                     }],
                 },
@@ -713,11 +715,10 @@ describe("ElementCall", () => {
                 room.roomId,
                 ElementCall.MEMBER_EVENT_TYPE.name,
                 {
-                    "m.expires_ts": -1000 * 60,
                     "m.calls": [{
-                        "m.call_id": call.groupCall.getStateKey()!,
+                        "m.call_id": call.groupCall.groupCallId,
                         "m.devices": [
-                            { device_id: "carolandroid", session_id: "1", feeds: [] },
+                            { device_id: "carolandroid", session_id: "1", feeds: [], expires_ts: -1000 * 60 },
                         ],
                     }],
                 },
@@ -727,10 +728,13 @@ describe("ElementCall", () => {
             // Now, stub out client.sendStateEvent so we can test our local echo
             client.sendStateEvent.mockReset();
             await call.connect();
-            expect([...call.participants]).toEqual([bob, alice]);
+            expect(call.participants).toEqual(new Map([
+                [alice, new Set(["alices_device"])],
+                [bob, new Set(["bobweb", "bobdesktop"])],
+            ]));
 
             await call.disconnect();
-            expect([...call.participants]).toEqual([bob]);
+            expect(call.participants).toEqual(new Map([[bob, new Set(["bobweb", "bobdesktop"])]]));
         });
 
         it("tracks layout", async () => {
@@ -783,9 +787,8 @@ describe("ElementCall", () => {
             await call.connect();
             await call.disconnect();
             expect(onParticipants.mock.calls).toEqual([
-                [new Set([alice]), new Set()],
-                [new Set(), new Set()],
-                [new Set(), new Set([alice])],
+                [new Map([[alice, new Set(["alices_device"])]]), new Map()],
+                [new Map(), new Map([[alice, new Set(["alices_device"])]])],
             ]);
 
             call.off(CallEvent.Participants, onParticipants);
@@ -893,87 +896,17 @@ describe("ElementCall", () => {
             call.off(CallEvent.Destroy, onDestroy);
         });
 
-        describe("being kicked out by another device", () => {
-            const onDestroy = jest.fn();
-
-            beforeEach(async () => {
-                await call.connect();
-                call.on(CallEvent.Destroy, onDestroy);
-
-                jest.advanceTimersByTime(100);
-                jest.clearAllMocks();
-            });
-
-            afterEach(() => {
-                call.off(CallEvent.Destroy, onDestroy);
-            });
-
-            it("does not terminate the call if we are the last", async () => {
-                client.emit(ClientEvent.ToDeviceEvent, {
-                    getType: () => (ElementCall.DUPLICATE_CALL_DEVICE_EVENT_TYPE),
-                    getContent: () => ({ device_id: "random_device_id", timestamp: Date.now() }),
-                    getSender: () => (client.getUserId()),
-                } as MatrixEvent);
-
-                expect(client.sendStateEvent).not.toHaveBeenCalled();
-                expect(
-                    [ConnectionState.Disconnecting, ConnectionState.Disconnected].includes(call.connectionState),
-                ).toBeTruthy();
-            });
-
-            it("ignores messages from our device", async () => {
-                client.emit(ClientEvent.ToDeviceEvent, {
-                    getSender: () => (client.getUserId()),
-                    getType: () => (ElementCall.DUPLICATE_CALL_DEVICE_EVENT_TYPE),
-                    getContent: () => ({ device_id: client.getDeviceId(), timestamp: Date.now() }),
-                } as MatrixEvent);
-
-                expect(client.sendStateEvent).not.toHaveBeenCalled();
-                expect(
-                    [ConnectionState.Disconnecting, ConnectionState.Disconnected].includes(call.connectionState),
-                ).toBeFalsy();
-                expect(onDestroy).not.toHaveBeenCalled();
-            });
-
-            it("ignores messages from other users", async () => {
-                client.emit(ClientEvent.ToDeviceEvent, {
-                    getSender: () => (bob.userId),
-                    getType: () => (ElementCall.DUPLICATE_CALL_DEVICE_EVENT_TYPE),
-                    getContent: () => ({ device_id: "random_device_id", timestamp: Date.now() }),
-                } as MatrixEvent);
-
-                expect(client.sendStateEvent).not.toHaveBeenCalled();
-                expect(
-                    [ConnectionState.Disconnecting, ConnectionState.Disconnected].includes(call.connectionState),
-                ).toBeFalsy();
-                expect(onDestroy).not.toHaveBeenCalled();
-            });
-
-            it("ignores messages from the past", async () => {
-                client.emit(ClientEvent.ToDeviceEvent, {
-                    getSender: () => (client.getUserId()),
-                    getType: () => (ElementCall.DUPLICATE_CALL_DEVICE_EVENT_TYPE),
-                    getContent: () => ({ device_id: "random_device_id", timestamp: 0 }),
-                } as MatrixEvent);
-
-                expect(client.sendStateEvent).not.toHaveBeenCalled();
-                expect(
-                    [ConnectionState.Disconnecting, ConnectionState.Disconnected].includes(call.connectionState),
-                ).toBeFalsy();
-                expect(onDestroy).not.toHaveBeenCalled();
-            });
-        });
-
         it("ends the call after a random delay if the last participant leaves without ending it", async () => {
             // Bob connects
             await client.sendStateEvent(
                 room.roomId,
                 ElementCall.MEMBER_EVENT_TYPE.name,
                 {
-                    "m.expires_ts": 1000 * 60 * 10,
                     "m.calls": [{
-                        "m.call_id": call.groupCall.getStateKey()!,
-                        "m.devices": [{ device_id: "bobweb", session_id: "1", feeds: [] }],
+                        "m.call_id": call.groupCall.groupCallId,
+                        "m.devices": [
+                            { device_id: "bobweb", session_id: "1", feeds: [], expires_ts: 1000 * 60 * 10 },
+                        ],
                     }],
                 },
                 bob.userId,
@@ -987,9 +920,8 @@ describe("ElementCall", () => {
                 room.roomId,
                 ElementCall.MEMBER_EVENT_TYPE.name,
                 {
-                    "m.expires_ts": 1000 * 60 * 10,
                     "m.calls": [{
-                        "m.call_id": call.groupCall.getStateKey()!,
+                        "m.call_id": call.groupCall.groupCallId,
                         "m.devices": [],
                     }],
                 },
@@ -1025,20 +957,22 @@ describe("ElementCall", () => {
                 device_id: "alicedesktopneveronline",
             };
 
-            const mkContent = (devices: IMyDevice[]): ElementCallMemberContent => ({
-                "m.expires_ts": 1000 * 60 * 10,
+            const mkContent = (devices: IMyDevice[]) => ({
                 "m.calls": [{
-                    "m.call_id": call.groupCall.getStateKey()!,
-                    "m.devices": devices.map(d => ({ device_id: d.device_id, session_id: "1", feeds: [] })),
+                    "m.call_id": call.groupCall.groupCallId,
+                    "m.devices": devices.map(d => ({
+                        device_id: d.device_id, session_id: "1", feeds: [], expires_ts: 1000 * 60 * 10,
+                    })),
                 }],
             });
             const expectDevices = (devices: IMyDevice[]) => expect(
-                room.currentState.getStateEvents(ElementCall.MEMBER_EVENT_TYPE.name, alice.userId).getContent(),
+                room.currentState.getStateEvents(ElementCall.MEMBER_EVENT_TYPE.name, alice.userId)?.getContent(),
             ).toEqual({
-                "m.expires_ts": expect.any(Number),
                 "m.calls": [{
-                    "m.call_id": call.groupCall.getStateKey()!,
-                    "m.devices": devices.map(d => ({ device_id: d.device_id, session_id: "1", feeds: [] })),
+                    "m.call_id": call.groupCall.groupCallId,
+                    "m.devices": devices.map(d => ({
+                        device_id: d.device_id, session_id: "1", feeds: [], expires_ts: expect.any(Number),
+                    })),
                 }],
             });
 
@@ -1055,23 +989,10 @@ describe("ElementCall", () => {
             });
 
             it("doesn't clean up valid devices", async () => {
-                await call.connect();
                 await client.sendStateEvent(
                     room.roomId,
                     ElementCall.MEMBER_EVENT_TYPE.name,
-                    mkContent([aliceWeb, aliceDesktop]),
-                    alice.userId,
-                );
-
-                await call.clean();
-                expectDevices([aliceWeb, aliceDesktop]);
-            });
-
-            it("cleans up our own device if we're disconnected", async () => {
-                await client.sendStateEvent(
-                    room.roomId,
-                    ElementCall.MEMBER_EVENT_TYPE.name,
-                    mkContent([aliceWeb, aliceDesktop]),
+                    mkContent([aliceDesktop]),
                     alice.userId,
                 );
 
@@ -1079,11 +1000,11 @@ describe("ElementCall", () => {
                 expectDevices([aliceDesktop]);
             });
 
-            it("cleans up devices that have been offline for too long", async () => {
+            it("cleans up our own device if we're disconnected", async () => {
                 await client.sendStateEvent(
                     room.roomId,
                     ElementCall.MEMBER_EVENT_TYPE.name,
-                    mkContent([aliceDesktop, aliceDesktopOffline]),
+                    mkContent([aliceWeb, aliceDesktop]),
                     alice.userId,
                 );
 
@@ -1132,8 +1053,8 @@ describe("ElementCall", () => {
 
         afterEach(() => cleanUpCallAndWidget(call, widget, audioMutedSpy, videoMutedSpy));
 
-        it("has intent m.room", () => {
-            expect(call.groupCall.getContent()["m.intent"]).toBe("m.room");
+        it("has room intent", () => {
+            expect(call.groupCall.intent).toBe(GroupCallIntent.Room);
         });
 
         it("doesn't end the call when the last participant leaves", async () => {

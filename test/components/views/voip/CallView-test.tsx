@@ -131,7 +131,7 @@ describe("CallLobby", () => {
 
                 for (const [userId, avatar] of zip(userIds, avatars)) {
                     fireEvent.focus(avatar!);
-                    screen.getByRole("tooltip", { name: userId });
+                    screen.getAllByRole("tooltip", { name: userId });
                 }
             };
 
@@ -139,15 +139,21 @@ describe("CallLobby", () => {
             expect(screen.queryByLabelText(/joined/)).toBe(null);
             expectAvatars([]);
 
-            act(() => { call.participants = new Set([alice]); });
+            act(() => { call.participants = new Map([[alice, new Set(["a"])]]); });
             screen.getByText("1 person joined");
             expectAvatars([alice.userId]);
 
-            act(() => { call.participants = new Set([alice, bob, carol]); });
-            screen.getByText("3 people joined");
-            expectAvatars([alice.userId, bob.userId, carol.userId]);
+            act(() => {
+                call.participants = new Map([
+                    [alice, new Set(["a"])],
+                    [bob, new Set(["b1", "b2"])],
+                    [carol, new Set(["c"])],
+                ]);
+            });
+            screen.getByText("4 people joined");
+            expectAvatars([alice.userId, bob.userId, bob.userId, carol.userId]);
 
-            act(() => { call.participants = new Set(); });
+            act(() => { call.participants = new Map(); });
             expect(screen.queryByLabelText(/joined/)).toBe(null);
             expectAvatars([]);
         });
@@ -166,7 +172,7 @@ describe("CallLobby", () => {
             SdkConfig.put({
                 "element_call": { participant_limit: 2, url: "", use_exclusively: false, brand: "Element Call" },
             });
-            call.participants = new Set([bob, carol]);
+            call.participants = new Map([[bob, new Set("b")], [carol, new Set("c")]]);
 
             await renderView();
             const connectSpy = jest.spyOn(call, "connect");
