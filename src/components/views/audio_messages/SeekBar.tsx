@@ -93,6 +93,11 @@ export default class SeekBar extends React.PureComponent<IProps, IState> {
         this.props.playback.skipTo(Number(ev.target.value) * this.props.playback.durationSeconds);
     };
 
+    private onMouseDown = (event: React.MouseEvent<Element, MouseEvent>) => {
+        // do not propagate mouse down events, because these should be handled by the seekbar
+        event.stopPropagation();
+    };
+
     public render(): ReactNode {
         // We use a range input to avoid having to re-invent accessibility handling on
         // a custom set of divs.
@@ -101,6 +106,7 @@ export default class SeekBar extends React.PureComponent<IProps, IState> {
             className='mx_SeekBar'
             tabIndex={this.props.tabIndex}
             onChange={this.onChange}
+            onMouseDown={this.onMouseDown}
             min={0}
             max={1}
             value={this.state.percentage}
