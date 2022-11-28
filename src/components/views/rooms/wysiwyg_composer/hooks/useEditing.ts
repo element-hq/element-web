@@ -22,7 +22,7 @@ import EditorStateTransfer from "../../../../../utils/EditorStateTransfer";
 import { endEditing } from "../utils/editing";
 import { editMessage } from "../utils/message";
 
-export function useEditing(initialContent: string, editorStateTransfer: EditorStateTransfer) {
+export function useEditing(editorStateTransfer: EditorStateTransfer, initialContent?: string) {
     const roomContext = useRoomContext();
     const mxClient = useMatrixClientContext();
 
@@ -34,7 +34,7 @@ export function useEditing(initialContent: string, editorStateTransfer: EditorSt
     }, [initialContent]);
 
     const editMessageMemoized = useCallback(() =>
-        editMessage(content, { roomContext, mxClient, editorStateTransfer }),
+        content !== undefined && editMessage(content, { roomContext, mxClient, editorStateTransfer }),
     [content, roomContext, mxClient, editorStateTransfer],
     );
 

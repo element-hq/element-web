@@ -16,7 +16,7 @@ limitations under the License.
 
 import "@testing-library/jest-dom";
 import React from "react";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import RoomContext from "../../../../../src/contexts/RoomContext";
@@ -95,6 +95,53 @@ describe('EditWysiwygComposer', () => {
             // Then
             await waitFor(() =>
                 expect(screen.getByRole('textbox')).toContainHTML(mockEvent.getContent()['body']));
+        });
+
+        it('Should ignore when formatted_body is not filled', async () => {
+            // When
+            const mockEvent = mkEvent({
+                type: "m.room.message",
+                room: 'myfakeroom',
+                user: 'myfakeuser',
+                content: {
+                    "msgtype": "m.text",
+                    "body": "Replying to this",
+                    "format": "org.matrix.custom.html",
+                },
+                event: true,
+            });
+
+            const editorStateTransfer = new EditorStateTransfer(mockEvent);
+            customRender(false, editorStateTransfer);
+
+            // Then
+            await waitFor(() => expect(screen.getByRole('textbox')).toHaveAttribute('contentEditable', "true"));
+        });
+
+        it('Should strip <mx-reply> tag from initial content', async () => {
+            // When
+            const mockEvent = mkEvent({
+                type: "m.room.message",
+                room: 'myfakeroom',
+                user: 'myfakeuser',
+                content: {
+                    "msgtype": "m.text",
+                    "body": "Replying to this",
+                    "format": "org.matrix.custom.html",
+                    "formatted_body": '<mx-reply>Reply</mx-reply>My content',
+                },
+                event: true,
+            });
+
+            const editorStateTransfer = new EditorStateTransfer(mockEvent);
+            customRender(false, editorStateTransfer);
+            await waitFor(() => expect(screen.getByRole('textbox')).toHaveAttribute('contentEditable', "true"));
+
+            // Then
+            await waitFor(() => {
+                expect(screen.getByRole('textbox')).not.toContainHTML("<mx-reply>Reply</mx-reply>");
+                expect(screen.getByRole('textbox')).toContainHTML("My content");
+            });
         });
     });
 
@@ -180,14 +227,16 @@ describe('EditWysiwygComposer', () => {
         expect(screen.getByRole('textbox')).not.toHaveFocus();
 
         // When we send an action that would cause us to get focus
-        defaultDispatcher.dispatch({
-            action: Action.FocusEditMessageComposer,
-            context: null,
-        });
-        // (Send a second event to exercise the clearTimeout logic)
-        defaultDispatcher.dispatch({
-            action: Action.FocusEditMessageComposer,
-            context: null,
+        act(() => {
+            defaultDispatcher.dispatch({
+                action: Action.FocusEditMessageComposer,
+                context: null,
+            });
+            // (Send a second event to exercise the clearTimeout logic)
+            defaultDispatcher.dispatch({
+                action: Action.FocusEditMessageComposer,
+                context: null,
+            });
         });
 
         // Wait for event dispatch to happen

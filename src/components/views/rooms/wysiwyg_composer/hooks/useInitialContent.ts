@@ -24,6 +24,10 @@ import { CommandPartCreator, Part } from "../../../../../editor/parts";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import EditorStateTransfer from "../../../../../utils/EditorStateTransfer";
 
+function getFormattedContent(editorStateTransfer: EditorStateTransfer): string {
+    return editorStateTransfer.getEvent().getContent().formatted_body?.replace(/<mx-reply>.*<\/mx-reply>/, '') || '';
+}
+
 function parseEditorStateTransfer(
     editorStateTransfer: EditorStateTransfer,
     room: Room,
@@ -42,7 +46,7 @@ function parseEditorStateTransfer(
         // const restoredParts = this.restoreStoredEditorState(partCreator);
 
         if (editorStateTransfer.getEvent().getContent().format === 'org.matrix.custom.html') {
-            return editorStateTransfer.getEvent().getContent().formatted_body || "";
+            return getFormattedContent(editorStateTransfer);
         }
 
         parts = parseEvent(editorStateTransfer.getEvent(), partCreator, {
@@ -59,7 +63,7 @@ export function useInitialContent(editorStateTransfer: EditorStateTransfer) {
     const roomContext = useRoomContext();
     const mxClient = useMatrixClientContext();
 
-    return useMemo<string>(() => {
+    return useMemo<string | undefined>(() => {
         if (editorStateTransfer && roomContext.room) {
             return parseEditorStateTransfer(editorStateTransfer, roomContext.room, mxClient);
         }
