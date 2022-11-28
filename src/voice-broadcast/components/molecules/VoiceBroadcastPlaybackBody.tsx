@@ -62,14 +62,17 @@ export const VoiceBroadcastPlaybackBody: React.FC<VoiceBroadcastPlaybackBodyProp
     } else {
         let controlIcon: React.FC<React.SVGProps<SVGSVGElement>>;
         let controlLabel: string;
+        let className = "";
 
         switch (playbackState) {
             case VoiceBroadcastPlaybackState.Stopped:
                 controlIcon = PlayIcon;
+                className = "mx_VoiceBroadcastControl-play";
                 controlLabel = _t("play voice broadcast");
                 break;
             case VoiceBroadcastPlaybackState.Paused:
                 controlIcon = PlayIcon;
+                className = "mx_VoiceBroadcastControl-play";
                 controlLabel = _t("resume voice broadcast");
                 break;
             case VoiceBroadcastPlaybackState.Playing:
@@ -79,6 +82,7 @@ export const VoiceBroadcastPlaybackBody: React.FC<VoiceBroadcastPlaybackBodyProp
         }
 
         control = <VoiceBroadcastControl
+            className={className}
             label={controlLabel}
             icon={controlIcon}
             onClick={toggle}
