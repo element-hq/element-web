@@ -18,6 +18,7 @@ import {
     EventType,
     MatrixClient,
     MatrixEvent,
+    MatrixEventEvent,
     MsgType,
     RelationType,
 } from "matrix-js-sdk/src/matrix";
@@ -88,6 +89,7 @@ export class VoiceBroadcastPlayback
     ) {
         super();
         this.addInfoEvent(this.infoEvent);
+        this.infoEvent.on(MatrixEventEvent.BeforeRedaction, this.onBeforeRedaction);
         this.setUpRelationsHelper();
     }
 
@@ -167,6 +169,14 @@ export class VoiceBroadcastPlayback
 
         this.lastInfoEvent = event;
         this.setInfoState(state);
+    };
+
+    private onBeforeRedaction = () => {
+        if (this.getState() !== VoiceBroadcastPlaybackState.Stopped) {
+            this.stop();
+            // destroy cleans up everything
+            this.destroy();
+        }
     };
 
     private async enqueueChunks(): Promise<void> {

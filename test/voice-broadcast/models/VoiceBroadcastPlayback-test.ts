@@ -126,6 +126,7 @@ describe("VoiceBroadcastPlayback", () => {
     const mkPlayback = async () => {
         const playback = new VoiceBroadcastPlayback(infoEvent, client);
         jest.spyOn(playback, "removeAllListeners");
+        jest.spyOn(playback, "destroy");
         playback.on(VoiceBroadcastPlaybackEvent.StateChanged, onStateChanged);
         await flushPromises();
         return playback;
@@ -273,6 +274,7 @@ describe("VoiceBroadcastPlayback", () => {
             startPlayback();
 
             it("should play the last chunk", () => {
+                expect(playback.getState()).toBe(VoiceBroadcastPlaybackState.Playing);
                 // assert that the last chunk is played first
                 expect(chunk2Playback.play).toHaveBeenCalled();
                 expect(chunk1Playback.play).not.toHaveBeenCalled();
@@ -297,6 +299,17 @@ describe("VoiceBroadcastPlayback", () => {
                     it("should play the next chunk", () => {
                         expect(chunk3Playback.play).toHaveBeenCalled();
                     });
+                });
+            });
+
+            describe("and the info event is deleted", () => {
+                beforeEach(() => {
+                    infoEvent.makeRedacted(new MatrixEvent({}));
+                });
+
+                it("should stop and destroy the playback", () => {
+                    expect(playback.getState()).toBe(VoiceBroadcastPlaybackState.Stopped);
+                    expect(playback.destroy).toHaveBeenCalled();
                 });
             });
         });
