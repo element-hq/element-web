@@ -25,5 +25,8 @@
     "I understand the risks and wish to continue": "Razumem riziko in želim vseeno nadaljevati",
     "Go to element.io": "Pojdi na element.io",
     "Failed to start": "Neuspel zagon",
-    "Use %(brand)s on mobile": "Uporabi %(brand)s na mobilni napravi"
+    "Use %(brand)s on mobile": "Uporabi %(brand)s na mobilni napravi",
+    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Decentraliziran, šifriran pogovor in sodelovanje, omogočen z $matrixLogo",
+    "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s: %(browserName)s na %(osName)s",
+    "%(brand)s Desktop: %(platformName)s": "%(brand)s Namizni računalnik: %(platformName)s"
 }
