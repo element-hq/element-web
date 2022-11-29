@@ -34,6 +34,7 @@ import {
     canEditContent,
     canEditOwnEvent,
     fetchInitialEvent,
+    findEditableEvent,
     isContentActionable,
     isLocationEvent,
     isVoiceMessage,
@@ -428,6 +429,15 @@ describe('EventUtils', () => {
         it("creates a thread when needed", async () => {
             await fetchInitialEvent(client, room.roomId, THREAD_REPLY);
             expect(room.getThread(THREAD_ROOT)).toBeInstanceOf(Thread);
+        });
+    });
+
+    describe("findEditableEvent", () => {
+        it("should not explode when given empty events array", () => {
+            expect(findEditableEvent({
+                events: [],
+                isForward: true,
+            })).toBeUndefined();
         });
     });
 });

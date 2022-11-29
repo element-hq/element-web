@@ -110,7 +110,8 @@ export function findEditableEvent({
     events: MatrixEvent[];
     isForward: boolean;
     fromEventId?: string;
-}): MatrixEvent {
+}): MatrixEvent | undefined {
+    if (!events.length) return;
     const maxIdx = events.length - 1;
     const inc = isForward ? 1 : -1;
     const beginIdx = isForward ? 0 : maxIdx;
