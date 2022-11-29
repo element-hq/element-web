@@ -183,7 +183,7 @@ interface IProps {
     onFillRequest?(backwards: boolean): Promise<boolean>;
 
     // helper function to access relations for an event
-    onUnfillRequest?(backwards: boolean, scrollToken: string): void;
+    onUnfillRequest?(backwards: boolean, scrollToken: string | null): void;
 
     getRelationsForEvent?: GetRelationsForEvent;
 
@@ -410,17 +410,6 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     public scrollToBottom(): void {
         if (this.scrollPanel.current) {
             this.scrollPanel.current.scrollToBottom();
-        }
-    }
-
-    /**
-     * Page up/down.
-     *
-     * @param {number} mult: -1 to page up, +1 to page down
-     */
-    public scrollRelative(mult: number): void {
-        if (this.scrollPanel.current) {
-            this.scrollPanel.current.scrollRelative(mult);
         }
     }
 

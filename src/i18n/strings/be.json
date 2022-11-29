@@ -1,23 +1,18 @@
 {
-    "Couldn't find a matching Matrix room": "Не атрымалася знайсці адпаведны пакой Matrix",
     "Reject": "Адхіліць",
     "Failed to forget room %(errCode)s": "Не атрымалася забыць пакой %(errCode)s",
     "All messages": "Усе паведамленні",
-    "Fetching third party location failed": "Не ўдалося атрымаць месцазнаходжанне трэцяга боку",
     "Notification targets": "Мэты апавяшчэння",
     "Favourite": "Улюбёнае",
     "Quote": "Цытата",
     "Dismiss": "Aдхіліць",
-    "Remove from Directory": "Выдалiць з каталога",
     "Failed to add tag %(tagName)s to room": "Не атрымалася дадаць %(tagName)s ў пакоі",
     "Close": "Зачыніць",
     "Notifications": "Апавяшчэнні",
     "Low Priority": "Нізкі прыярытэт",
-    "%(brand)s does not know how to join a room on this network": "%(brand)s не ведае, як увайсці ў пакой у гэтай сетке",
     "Noisy": "Шумна",
     "Resend": "Паўторна",
     "On": "Уключыць",
-    "remove %(name)s from the directory.": "выдаліць %(name)s з каталога.",
     "Off": "Выключыць",
     "Invite to this room": "Запрасіць у гэты пакой",
     "Remove": "Выдалiць",
@@ -27,8 +22,5 @@
     "Operation failed": "Не атрымалася выканаць аперацыю",
     "Mute": "Без гуку",
     "powered by Matrix": "працуе на Matrix",
-    "Remove %(name)s from the directory?": "Выдаліць %(name)s з каталога?",
-    "Source URL": "URL-адрас крыніцы",
-    "Room not found": "Пакой не знойдзены",
-    "The server may be unavailable or overloaded": "Сервер можа быць недаступны ці перагружаны"
+    "Source URL": "URL-адрас крыніцы"
 }
