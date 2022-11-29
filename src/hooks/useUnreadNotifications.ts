@@ -55,7 +55,7 @@ export const useUnreadNotifications = (room: Room, threadId?: string): {
             setSymbol("!");
             setCount(1);
             setColor(NotificationColor.Red);
-        } else if (getRoomNotifsState(room.roomId) === RoomNotifState.Mute) {
+        } else if (getRoomNotifsState(room.client, room.roomId) === RoomNotifState.Mute) {
             setSymbol(null);
             setCount(0);
             setColor(NotificationColor.None);

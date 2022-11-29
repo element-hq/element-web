@@ -25,6 +25,7 @@ import {
     TweakName,
 } from "matrix-js-sdk/src/@types/PushRules";
 import { EventType } from 'matrix-js-sdk/src/@types/event';
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from './MatrixClientPeg';
 
@@ -35,8 +36,8 @@ export enum RoomNotifState {
     Mute = 'mute',
 }
 
-export function getRoomNotifsState(roomId: string): RoomNotifState {
-    if (MatrixClientPeg.get().isGuest()) return RoomNotifState.AllMessages;
+export function getRoomNotifsState(client: MatrixClient, roomId: string): RoomNotifState {
+    if (client.isGuest()) return RoomNotifState.AllMessages;
 
     // look through the override rules for a rule affecting this room:
     // if one exists, it will take precedence.
@@ -48,7 +49,7 @@ export function getRoomNotifsState(roomId: string): RoomNotifState {
     // for everything else, look at the room rule.
     let roomRule = null;
     try {
-        roomRule = MatrixClientPeg.get().getRoomPushRule('global', roomId);
+        roomRule = client.getRoomPushRule('global', roomId);
     } catch (err) {
         // Possible that the client doesn't have pushRules yet. If so, it
         // hasn't started either, so indicate that this room is not notifying.

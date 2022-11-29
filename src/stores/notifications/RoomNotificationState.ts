@@ -117,7 +117,9 @@ export class RoomNotificationState extends NotificationState implements IDestroy
             this._color = NotificationColor.Unsent;
             this._symbol = "!";
             this._count = 1; // not used, technically
-        } else if (RoomNotifs.getRoomNotifsState(this.room.roomId) === RoomNotifs.RoomNotifState.Mute) {
+        } else if (RoomNotifs.getRoomNotifsState(
+            this.room.client, this.room.roomId,
+        ) === RoomNotifs.RoomNotifState.Mute) {
             // When muted we suppress all notification states, even if we have context on them.
             this._color = NotificationColor.None;
             this._symbol = null;
