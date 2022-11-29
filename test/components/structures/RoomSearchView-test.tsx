@@ -38,7 +38,7 @@ jest.mock("../../../src/Searching", () => ({
     searchPagination: jest.fn(),
 }));
 
-describe("<SearchRoomView/>", () => {
+describe("<RoomSearchView/>", () => {
     const eventMapper = (obj: Partial<IEvent>) => new MatrixEvent(obj);
     const resizeNotifier = new ResizeNotifier();
     let client: MatrixClient;

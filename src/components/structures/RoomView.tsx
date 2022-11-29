@@ -534,8 +534,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         const roomId = this.context.roomViewStore.getRoomId();
         const room = this.context.client.getRoom(roomId);
 
-        // This convoluted type signature ensures we get IntelliSense *and* correct typing
-        const newState: Partial<IRoomState> & Pick<IRoomState, any> = {
+        const newState: Partial<IRoomState> = {
             roomId,
             roomAlias: this.context.roomViewStore.getRoomAlias(),
             roomLoading: this.context.roomViewStore.isRoomLoading(),
@@ -679,11 +678,15 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
         // Clear the search results when clicking a search result (which changes the
         // currently scrolled to event, this.state.initialEventId).
-        if (this.state.initialEventId !== newState.initialEventId) {
-            newState.searchResults = null;
+        if (this.state.timelineRenderingType === TimelineRenderingType.Search &&
+            this.state.initialEventId !== newState.initialEventId
+        ) {
+            newState.timelineRenderingType = TimelineRenderingType.Room;
+            this.state.search?.abortController?.abort();
+            newState.search = undefined;
         }
 
-        this.setState(newState);
+        this.setState(newState as IRoomState);
         // At this point, newState.roomId could be null (e.g. the alias might not
         // have been resolved yet) so anything called here must handle this case.
 
