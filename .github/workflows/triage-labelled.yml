@@ -21,7 +21,7 @@ jobs:
       contains(github.event.issue.labels.*.name, 'A-Rich-Text-Editor') ||
       contains(github.event.issue.labels.*.name, 'A-Element-Call')
     steps:
-      - uses: actions/github-script@v5
+      - uses: actions/github-script@v6
         with:
           script: |
             github.rest.issues.addLabels({
@@ -38,7 +38,7 @@ jobs:
       contains(github.event.issue.labels.*.name, 'good first issue') ||
       contains(github.event.issue.labels.*.name, 'Hacktoberfest')
     steps:
-      - uses: actions/github-script@v5
+      - uses: actions/github-script@v6
         with:
           script: |
             github.rest.issues.addLabels({
