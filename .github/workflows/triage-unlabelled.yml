@@ -59,7 +59,7 @@ jobs:
       contains(github.event.issue.labels.*.name, 'A-Element-Call')) &&
       contains(github.event.issue.labels.*.name, 'Z-Labs')
     steps:
-      - uses: actions/github-script@v5
+      - uses: actions/github-script@v6
         with:
           script: |
             github.rest.issues.removeLabel({
