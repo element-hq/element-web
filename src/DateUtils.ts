@@ -124,19 +124,6 @@ export function formatTime(date: Date, showTwelveHour = false): string {
     return pad(date.getHours()) + ':' + pad(date.getMinutes());
 }
 
-export function formatCallTime(delta: Date): string {
-    const hours = delta.getUTCHours();
-    const minutes = delta.getUTCMinutes();
-    const seconds = delta.getUTCSeconds();
-
-    let output = "";
-    if (hours) output += `${hours}h `;
-    if (minutes || output) output += `${minutes}m `;
-    if (seconds || output) output += `${seconds}s`;
-
-    return output;
-}
-
 export function formatSeconds(inSeconds: number): string {
     const hours = Math.floor(inSeconds / (60 * 60)).toFixed(0).padStart(2, '0');
     const minutes = Math.floor((inSeconds % (60 * 60)) / 60).toFixed(0).padStart(2, '0');
@@ -238,15 +225,16 @@ export function formatRelativeTime(date: Date, showTwelveHour = false): string {
     }
 }
 
+const MINUTE_MS = 60000;
+const HOUR_MS = MINUTE_MS * 60;
+const DAY_MS = HOUR_MS * 24;
+
 /**
  * Formats duration in ms to human readable string
  * Returns value in biggest possible unit (day, hour, min, second)
  * Rounds values up until unit threshold
  * ie. 23:13:57 -> 23h, 24:13:57 -> 1d, 44:56:56 -> 2d
  */
-const MINUTE_MS = 60000;
-const HOUR_MS = MINUTE_MS * 60;
-const DAY_MS = HOUR_MS * 24;
 export function formatDuration(durationMs: number): string {
     if (durationMs >= DAY_MS) {
         return _t('%(value)sd', { value: Math.round(durationMs / DAY_MS) });
@@ -258,4 +246,27 @@ export function formatDuration(durationMs: number): string {
         return _t('%(value)sm', { value: Math.round(durationMs / MINUTE_MS) });
     }
     return _t('%(value)ss', { value: Math.round(durationMs / 1000) });
+}
+
+/**
+ * Formats duration in ms to human readable string
+ * Returns precise value down to the nearest second
+ * ie. 23:13:57 -> 23h 13m 57s, 44:56:56 -> 1d 20h 56m 56s
+ */
+export function formatPreciseDuration(durationMs: number): string {
+    const days = Math.floor(durationMs / DAY_MS);
+    const hours = Math.floor((durationMs % DAY_MS) / HOUR_MS);
+    const minutes = Math.floor((durationMs % HOUR_MS) / MINUTE_MS);
+    const seconds = Math.floor((durationMs % MINUTE_MS) / 1000);
+
+    if (days > 0) {
+        return _t('%(days)sd %(hours)sh %(minutes)sm %(seconds)ss', { days, hours, minutes, seconds });
+    }
+    if (hours > 0) {
+        return _t('%(hours)sh %(minutes)sm %(seconds)ss', { hours, minutes, seconds });
+    }
+    if (minutes > 0) {
+        return _t('%(minutes)sm %(seconds)ss', { minutes, seconds });
+    }
+    return _t('%(value)ss', { value: seconds });
 }
