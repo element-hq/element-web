@@ -16,50 +16,51 @@ limitations under the License.
 
 .mx_ReplyChain {
     margin: 0 0 $spacing-8 0;
-    padding: 0 10px; /* TODO: Use a spacing variable */
-    border-left: 2px solid $accent;
-    border-radius: 2px;
+    padding-left: 10px; // TODO: Use a spacing variable
+    border-left: 2px solid var(--username-color); // TODO: Use a spacing variable
+    border-radius: 2px; // TODO: Use a spacing variable
 
     .mx_ReplyChain_show {
         &.mx_AccessibleButton_kind_link_inline {
-            color: unset;
             white-space: nowrap; /* Enforce 'In reply to' to be a single line */
+            color: $secondary-content;
+            transition: color ease 0.15s;
 
             &:hover {
-                color: $links;
+                color: $primary-content;
             }
         }
     }
 
     &.mx_ReplyChain_color1 {
-        border-left-color: $username-variant1-color;
+        --username-color: $username-variant1-color;
     }
 
     &.mx_ReplyChain_color2 {
-        border-left-color: $username-variant2-color;
+        --username-color: $username-variant2-color;
     }
 
     &.mx_ReplyChain_color3 {
-        border-left-color: $username-variant3-color;
+        --username-color: $username-variant3-color;
     }
 
     &.mx_ReplyChain_color4 {
-        border-left-color: $username-variant4-color;
+        --username-color: $username-variant4-color;
     }
 
     &.mx_ReplyChain_color5 {
-        border-left-color: $username-variant5-color;
+        --username-color: $username-variant5-color;
     }
 
     &.mx_ReplyChain_color6 {
-        border-left-color: $username-variant6-color;
+        --username-color: $username-variant6-color;
     }
 
     &.mx_ReplyChain_color7 {
-        border-left-color: $username-variant7-color;
+        --username-color: $username-variant7-color;
     }
 
     &.mx_ReplyChain_color8 {
-        border-left-color: $username-variant8-color;
+        --username-color: $username-variant8-color;
     }
 }

@@ -27,21 +27,21 @@ limitations under the License.
         mask-image: url("$(res)/img/element-icons/call/video-call.svg");
     }
 
-    .mx_MFileBody {
-        .mx_MFileBody_info {
-            margin: 5px 0;
-        }
-
-        .mx_MFileBody_download {
-            display: none;
-        }
-    }
-
     > a {
         display: flex;
         flex-direction: column;
         text-decoration: none;
-        color: $primary-content;
+        color: $secondary-content;
+        transition: color ease 0.15s;
+        gap: 2px;
+
+        &:hover {
+            color: $primary-content;
+        }
+    }
+
+    .mx_RedactedBody {
+        line-height: $font-18px;
     }
 
     .mx_RedactedBody,
@@ -52,13 +52,14 @@ limitations under the License.
         &::before {
             height: 13px;
             width: 13px;
-            top: 5px;
+            top: 3px;
         }
     }
 
     /* We do reply size limiting with CSS to avoid duplicating the TextualBody component. */
     .mx_EventTile_content {
         $reply-lines: 2;
+        $line-height: $font-18px;
 
         text-overflow: ellipsis;
         display: -webkit-box;
@@ -70,8 +71,8 @@ limitations under the License.
             font-size: $font-14px !important; /* Override the big emoji override */
         }
 
-        /* Hide line numbers */
-        .mx_EventTile_lineNumbers {
+        // Hide line numbers and edited indicator
+        .mx_EventTile_lineNumbers, .mx_EventTile_edited {
             display: none;
         }
 
@@ -101,7 +102,26 @@ limitations under the License.
         padding-top: 0;
     }
 
-    .mx_DisambiguatedProfile {
-        line-height: $font-17px;
+    .mx_ReplyTile_sender {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+
+        .mx_DisambiguatedProfile {
+            font-size: $font-14px;
+
+            display: inline-block; // anti-zalgo, with overflow hidden
+            padding: 0;
+            margin: 0;
+
+            // truncate long display names
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .mx_BaseAvatar {
+            line-height: 14px; // To match size
+        }
     }
 }
