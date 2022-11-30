@@ -69,7 +69,6 @@ describe("StopGapWidgetDriver", () => {
             "org.matrix.msc2762.send.event:org.matrix.rageshake_request",
             "org.matrix.msc2762.receive.event:org.matrix.rageshake_request",
             "org.matrix.msc2762.receive.state_event:m.room.member",
-            "org.matrix.msc2762.send.state_event:org.matrix.msc3401.call",
             "org.matrix.msc2762.receive.state_event:org.matrix.msc3401.call",
             "org.matrix.msc2762.send.state_event:org.matrix.msc3401.call.member#@alice:example.org",
             "org.matrix.msc2762.receive.state_event:org.matrix.msc3401.call.member",
