@@ -42,6 +42,7 @@ jest.mock("../../../../src/components/views/avatars/RoomAvatar", () => ({
 describe("VoiceBroadcastPlaybackBody", () => {
     const userId = "@user:example.com";
     const roomId = "!room:example.com";
+    const duration = 23 * 60 + 42; // 23:42
     let client: MatrixClient;
     let infoEvent: MatrixEvent;
     let playback: VoiceBroadcastPlayback;
@@ -66,7 +67,7 @@ describe("VoiceBroadcastPlaybackBody", () => {
         jest.spyOn(playback, "getLiveness");
         jest.spyOn(playback, "getState");
         jest.spyOn(playback, "skipTo");
-        jest.spyOn(playback, "durationSeconds", "get").mockReturnValue(23 * 60 + 42); // 23:42
+        jest.spyOn(playback, "durationSeconds", "get").mockReturnValue(duration);
     });
 
     describe("when rendering a buffering voice broadcast", () => {
@@ -95,7 +96,11 @@ describe("VoiceBroadcastPlaybackBody", () => {
         describe("and being in the middle of the playback", () => {
             beforeEach(() => {
                 act(() => {
-                    playback.emit(VoiceBroadcastPlaybackEvent.PositionChanged, 10 * 60 * 1000); // 10:00
+                    playback.emit(VoiceBroadcastPlaybackEvent.TimesChanged, {
+                        duration,
+                        position: 10 * 60,
+                        timeLeft: duration - 10 * 60,
+                    });
                 });
             });
 
@@ -146,15 +151,20 @@ describe("VoiceBroadcastPlaybackBody", () => {
             });
         });
 
-        describe("and the length updated", () => {
+        describe("and the times update", () => {
             beforeEach(() => {
                 act(() => {
-                    playback.emit(VoiceBroadcastPlaybackEvent.LengthChanged, 42000); // 00:42
+                    playback.emit(VoiceBroadcastPlaybackEvent.TimesChanged, {
+                        duration,
+                        position: 5 * 60 + 13,
+                        timeLeft: 7 * 60 + 5,
+                    });
                 });
             });
 
-            it("should render the new length", async () => {
-                expect(await screen.findByText("00:42")).toBeInTheDocument();
+            it("should render the times", async () => {
+                expect(await screen.findByText("05:13")).toBeInTheDocument();
+                expect(await screen.findByText("-07:05")).toBeInTheDocument();
             });
         });
     });

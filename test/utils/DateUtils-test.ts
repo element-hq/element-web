@@ -20,6 +20,7 @@ import {
     formatDuration,
     formatFullDateNoDayISO,
     formatTimeLeft,
+    formatPreciseDuration,
 } from "../../src/DateUtils";
 import { REPEATABLE_DATE } from "../test-utils";
 
@@ -28,12 +29,14 @@ describe("formatSeconds", () => {
         expect(formatSeconds((60 * 60 * 3) + (60 * 31) + (55))).toBe("03:31:55");
         expect(formatSeconds((60 * 60 * 3) + (60 * 0) + (55))).toBe("03:00:55");
         expect(formatSeconds((60 * 60 * 3) + (60 * 31) + (0))).toBe("03:31:00");
+        expect(formatSeconds(-((60 * 60 * 3) + (60 * 31) + (0)))).toBe("-03:31:00");
     });
 
     it("correctly formats time without hours", () => {
         expect(formatSeconds((60 * 60 * 0) + (60 * 31) + (55))).toBe("31:55");
         expect(formatSeconds((60 * 60 * 0) + (60 * 0) + (55))).toBe("00:55");
         expect(formatSeconds((60 * 60 * 0) + (60 * 31) + (0))).toBe("31:00");
+        expect(formatSeconds(-((60 * 60 * 0) + (60 * 31) + (0)))).toBe("-31:00");
     });
 });
 
@@ -100,6 +103,22 @@ describe('formatDuration()', () => {
     });
 });
 
+describe("formatPreciseDuration", () => {
+    const MINUTE_MS = 1000 * 60;
+    const HOUR_MS = MINUTE_MS * 60;
+    const DAY_MS = HOUR_MS * 24;
+
+    it.each<[string, string, number]>([
+        ['3 days, 6 hours, 48 minutes, 59 seconds', '3d 6h 48m 59s', 3 * DAY_MS + 6 * HOUR_MS + 48 * MINUTE_MS + 59000],
+        ['6 hours, 48 minutes, 59 seconds', '6h 48m 59s', 6 * HOUR_MS + 48 * MINUTE_MS + 59000],
+        ['48 minutes, 59 seconds', '48m 59s', 48 * MINUTE_MS + 59000],
+        ['59 seconds', '59s', 59000],
+        ['0 seconds', '0s', 0],
+    ])('%s formats to %s', (_description, expectedResult, input) => {
+        expect(formatPreciseDuration(input)).toEqual(expectedResult);
+    });
+});
+
 describe("formatFullDateNoDayISO", () => {
     it("should return ISO format", () => {
         expect(formatFullDateNoDayISO(REPEATABLE_DATE)).toEqual("2022-11-17T16:58:32.517Z");
@@ -108,7 +127,6 @@ describe("formatFullDateNoDayISO", () => {
 
 describe("formatTimeLeft", () => {
     it.each([
-        [null, "0s left"],
         [0, "0s left"],
         [23, "23s left"],
         [60 + 23, "1m 23s left"],

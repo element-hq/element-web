@@ -17,7 +17,7 @@ limitations under the License.
 import React, { FC, useState, useEffect, memo } from "react";
 import { GroupCall } from "matrix-js-sdk/src/webrtc/groupCall";
 
-import { formatCallTime } from "../../../DateUtils";
+import { formatPreciseDuration } from "../../../DateUtils";
 
 interface CallDurationProps {
     delta: number;
@@ -29,7 +29,7 @@ interface CallDurationProps {
 export const CallDuration: FC<CallDurationProps> = memo(({ delta }) => {
     // Clock desync could lead to a negative duration, so just hide it if that happens
     if (delta <= 0) return null;
-    return <div className="mx_CallDuration">{ formatCallTime(new Date(delta)) }</div>;
+    return <div className="mx_CallDuration">{ formatPreciseDuration(delta) }</div>;
 });
 
 interface GroupCallDurationProps {

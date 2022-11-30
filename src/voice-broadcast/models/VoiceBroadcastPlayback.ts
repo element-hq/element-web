@@ -43,16 +43,20 @@ export enum VoiceBroadcastPlaybackState {
 }
 
 export enum VoiceBroadcastPlaybackEvent {
-    PositionChanged = "position_changed",
-    LengthChanged = "length_changed",
+    TimesChanged = "times_changed",
     LivenessChanged = "liveness_changed",
     StateChanged = "state_changed",
     InfoStateChanged = "info_state_changed",
 }
 
+type VoiceBroadcastPlaybackTimes = {
+    duration: number;
+    position: number;
+    timeLeft: number;
+};
+
 interface EventMap {
-    [VoiceBroadcastPlaybackEvent.PositionChanged]: (position: number) => void;
-    [VoiceBroadcastPlaybackEvent.LengthChanged]: (length: number) => void;
+    [VoiceBroadcastPlaybackEvent.TimesChanged]: (times: VoiceBroadcastPlaybackTimes) => void;
     [VoiceBroadcastPlaybackEvent.LivenessChanged]: (liveness: VoiceBroadcastLiveness) => void;
     [VoiceBroadcastPlaybackEvent.StateChanged]: (
         state: VoiceBroadcastPlaybackState,
@@ -229,7 +233,7 @@ export class VoiceBroadcastPlayback
         if (this.duration === duration) return;
 
         this.duration = duration;
-        this.emit(VoiceBroadcastPlaybackEvent.LengthChanged, this.duration);
+        this.emitTimesChanged();
         this.liveData.update([this.timeSeconds, this.durationSeconds]);
     }
 
@@ -237,8 +241,19 @@ export class VoiceBroadcastPlayback
         if (this.position === position) return;
 
         this.position = position;
-        this.emit(VoiceBroadcastPlaybackEvent.PositionChanged, this.position);
+        this.emitTimesChanged();
         this.liveData.update([this.timeSeconds, this.durationSeconds]);
+    }
+
+    private emitTimesChanged(): void {
+        this.emit(
+            VoiceBroadcastPlaybackEvent.TimesChanged,
+            {
+                duration: this.durationSeconds,
+                position: this.timeSeconds,
+                timeLeft: this.timeLeftSeconds,
+            },
+        );
     }
 
     private onPlaybackStateChange = async (event: MatrixEvent, newState: PlaybackState): Promise<void> => {
@@ -335,6 +350,10 @@ export class VoiceBroadcastPlayback
 
     public get durationSeconds(): number {
         return this.duration / 1000;
+    }
+
+    public get timeLeftSeconds(): number {
+        return Math.round(this.durationSeconds) - this.timeSeconds;
     }
 
     public async skipTo(timeSeconds: number): Promise<void> {

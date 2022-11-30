@@ -76,23 +76,28 @@ exports[`VoiceBroadcastPlaybackBody when rendering a 0/not-live broadcast should
         />
       </div>
     </div>
+    <input
+      class="mx_SeekBar"
+      max="1"
+      min="0"
+      step="0.001"
+      style="--fillTo: 0;"
+      tabindex="0"
+      type="range"
+      value="0"
+    />
     <div
       class="mx_VoiceBroadcastBody_timerow"
     >
-      <input
-        class="mx_SeekBar"
-        max="1"
-        min="0"
-        step="0.001"
-        style="--fillTo: 0;"
-        tabindex="0"
-        type="range"
-        value="0"
-      />
       <span
         class="mx_Clock"
       >
-        23:42
+        00:00
+      </span>
+      <span
+        class="mx_Clock"
+      >
+        -23:42
       </span>
     </div>
   </div>
@@ -183,23 +188,28 @@ exports[`VoiceBroadcastPlaybackBody when rendering a 1/live broadcast should ren
         />
       </div>
     </div>
+    <input
+      class="mx_SeekBar"
+      max="1"
+      min="0"
+      step="0.001"
+      style="--fillTo: 0;"
+      tabindex="0"
+      type="range"
+      value="0"
+    />
     <div
       class="mx_VoiceBroadcastBody_timerow"
     >
-      <input
-        class="mx_SeekBar"
-        max="1"
-        min="0"
-        step="0.001"
-        style="--fillTo: 0;"
-        tabindex="0"
-        type="range"
-        value="0"
-      />
       <span
         class="mx_Clock"
       >
-        23:42
+        00:00
+      </span>
+      <span
+        class="mx_Clock"
+      >
+        -23:42
       </span>
     </div>
   </div>
@@ -291,23 +301,28 @@ exports[`VoiceBroadcastPlaybackBody when rendering a buffering voice broadcast s
         />
       </div>
     </div>
+    <input
+      class="mx_SeekBar"
+      max="1"
+      min="0"
+      step="0.001"
+      style="--fillTo: 0;"
+      tabindex="0"
+      type="range"
+      value="0"
+    />
     <div
       class="mx_VoiceBroadcastBody_timerow"
     >
-      <input
-        class="mx_SeekBar"
-        max="1"
-        min="0"
-        step="0.001"
-        style="--fillTo: 0;"
-        tabindex="0"
-        type="range"
-        value="0"
-      />
       <span
         class="mx_Clock"
       >
-        23:42
+        00:00
+      </span>
+      <span
+        class="mx_Clock"
+      >
+        -23:42
       </span>
     </div>
   </div>
@@ -390,23 +405,28 @@ exports[`VoiceBroadcastPlaybackBody when rendering a playing broadcast should re
         />
       </div>
     </div>
+    <input
+      class="mx_SeekBar"
+      max="1"
+      min="0"
+      step="0.001"
+      style="--fillTo: 0;"
+      tabindex="0"
+      type="range"
+      value="0"
+    />
     <div
       class="mx_VoiceBroadcastBody_timerow"
     >
-      <input
-        class="mx_SeekBar"
-        max="1"
-        min="0"
-        step="0.001"
-        style="--fillTo: 0;"
-        tabindex="0"
-        type="range"
-        value="0"
-      />
       <span
         class="mx_Clock"
       >
-        23:42
+        00:00
+      </span>
+      <span
+        class="mx_Clock"
+      >
+        -23:42
       </span>
     </div>
   </div>
@@ -469,23 +489,28 @@ exports[`VoiceBroadcastPlaybackBody when rendering a stopped broadcast should re
         />
       </div>
     </div>
+    <input
+      class="mx_SeekBar"
+      max="1"
+      min="0"
+      step="0.001"
+      style="--fillTo: 0;"
+      tabindex="0"
+      type="range"
+      value="0"
+    />
     <div
       class="mx_VoiceBroadcastBody_timerow"
     >
-      <input
-        class="mx_SeekBar"
-        max="1"
-        min="0"
-        step="0.001"
-        style="--fillTo: 0;"
-        tabindex="0"
-        type="range"
-        value="0"
-      />
       <span
         class="mx_Clock"
       >
-        23:42
+        00:00
+      </span>
+      <span
+        class="mx_Clock"
+      >
+        -23:42
       </span>
     </div>
   </div>

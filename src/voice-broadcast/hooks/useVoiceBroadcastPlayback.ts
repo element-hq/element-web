@@ -40,18 +40,15 @@ export const useVoiceBroadcastPlayback = (playback: VoiceBroadcastPlayback) => {
         },
     );
 
-    const [duration, setDuration] = useState(playback.durationSeconds);
+    const [times, setTimes] = useState({
+        duration: playback.durationSeconds,
+        position: playback.timeSeconds,
+        timeLeft: playback.timeLeftSeconds,
+    });
     useTypedEventEmitter(
         playback,
-        VoiceBroadcastPlaybackEvent.LengthChanged,
-        d => setDuration(d / 1000),
-    );
-
-    const [position, setPosition] = useState(playback.timeSeconds);
-    useTypedEventEmitter(
-        playback,
-        VoiceBroadcastPlaybackEvent.PositionChanged,
-        p => setPosition(p / 1000),
+        VoiceBroadcastPlaybackEvent.TimesChanged,
+        t => setTimes(t),
     );
 
     const [liveness, setLiveness] = useState(playback.getLiveness());
@@ -62,10 +59,9 @@ export const useVoiceBroadcastPlayback = (playback: VoiceBroadcastPlayback) => {
     );
 
     return {
-        duration,
+        times,
         liveness: liveness,
         playbackState,
-        position,
         room: room,
         sender: playback.infoEvent.sender,
         toggle: playbackToggle,
