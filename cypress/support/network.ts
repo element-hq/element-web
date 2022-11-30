@@ -20,10 +20,12 @@ declare global {
     // eslint-disable-next-line @typescript-eslint/no-namespace
     namespace Cypress {
         interface Chainable {
-            // Intercept all /_matrix/ networking requests for the logged in user and fail them
+            // Intercept all /_matrix/ networking requests for the logged-in user and fail them
             goOffline(): void;
             // Remove intercept on all /_matrix/ networking requests
             goOnline(): void;
+            // Intercept calls to vector.im/matrix.org so a login page can be shown offline
+            stubDefaultServer(): void;
         }
     }
 }
@@ -55,6 +57,30 @@ Cypress.Commands.add("goOnline", (): void => {
             req.continue();
         });
         win.dispatchEvent(new Event("online"));
+    });
+});
+
+Cypress.Commands.add("stubDefaultServer", (): void => {
+    cy.log("Stubbing vector.im and matrix.org network calls");
+    // We intercept vector.im & matrix.org calls so that tests don't fail when it has issues
+    cy.intercept("GET", "https://vector.im/_matrix/identity/api/v1", {
+        fixture: "vector-im-identity-v1.json",
+    });
+    cy.intercept("GET", "https://matrix.org/.well-known/matrix/client", {
+        fixture: "matrix-org-client-well-known.json",
+    });
+    cy.intercept("GET", "https://matrix-client.matrix.org/_matrix/client/versions", {
+        fixture: "matrix-org-client-versions.json",
+    });
+    cy.intercept("GET", "https://matrix-client.matrix.org/_matrix/client/r0/login", {
+        fixture: "matrix-org-client-login.json",
+    });
+    cy.intercept("POST", "https://matrix-client.matrix.org/_matrix/client/r0/register?kind=guest", {
+        statusCode: 403,
+        body: {
+            errcode: "M_FORBIDDEN",
+            error: "Registration is not enabled on this homeserver.",
+        },
     });
 });
 
