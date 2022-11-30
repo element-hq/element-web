@@ -125,6 +125,9 @@ export function formatTime(date: Date, showTwelveHour = false): string {
 }
 
 export function formatSeconds(inSeconds: number): string {
+    const isNegative = inSeconds < 0;
+    inSeconds = Math.abs(inSeconds);
+
     const hours = Math.floor(inSeconds / (60 * 60)).toFixed(0).padStart(2, '0');
     const minutes = Math.floor((inSeconds % (60 * 60)) / 60).toFixed(0).padStart(2, '0');
     const seconds = Math.floor(((inSeconds % (60 * 60)) % 60)).toFixed(0).padStart(2, '0');
@@ -132,6 +135,10 @@ export function formatSeconds(inSeconds: number): string {
     let output = "";
     if (hours !== "00") output += `${hours}:`;
     output += `${minutes}:${seconds}`;
+
+    if (isNegative) {
+        output = "-" + output;
+    }
 
     return output;
 }

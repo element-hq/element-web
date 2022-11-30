@@ -21,6 +21,10 @@ limitations under the License.
     display: inline-block;
     font-size: $font-12px;
     padding: $spacing-12;
+
+    .mx_Clock {
+        line-height: 1;
+    }
 }
 
 .mx_VoiceBroadcastBody--pip {
@@ -44,9 +48,8 @@ limitations under the License.
 }
 
 .mx_VoiceBroadcastBody_timerow {
-    align-items: center;
     display: flex;
-    gap: $spacing-4;
+    justify-content: space-between;
 }
 
 .mx_AccessibleButton.mx_VoiceBroadcastBody_blockButton {
