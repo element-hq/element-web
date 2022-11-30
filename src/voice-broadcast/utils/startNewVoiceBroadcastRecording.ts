@@ -24,6 +24,7 @@ import {
     VoiceBroadcastRecordingsStore,
     VoiceBroadcastRecording,
     getChunkLength,
+    VoiceBroadcastPlaybacksStore,
 } from "..";
 import { checkVoiceBroadcastPreConditions } from "./checkVoiceBroadcastPreConditions";
 
@@ -80,17 +81,23 @@ const startBroadcast = async (
 /**
  * Starts a new Voice Broadcast Recording, if
  * - the user has the permissions to do so in the room
+ * - the user is not already recording a voice broadcast
  * - there is no other broadcast being recorded in the room, yet
  * Sends a voice_broadcast_info state event and waits for the event to actually appear in the room state.
  */
 export const startNewVoiceBroadcastRecording = async (
     room: Room,
     client: MatrixClient,
+    playbacksStore: VoiceBroadcastPlaybacksStore,
     recordingsStore: VoiceBroadcastRecordingsStore,
 ): Promise<VoiceBroadcastRecording | null> => {
     if (!checkVoiceBroadcastPreConditions(room, client, recordingsStore)) {
         return null;
     }
+
+    // pause and clear current playback (if any)
+    playbacksStore.getCurrent()?.pause();
+    playbacksStore.clearCurrent();
 
     return startBroadcast(room, client, recordingsStore);
 };
