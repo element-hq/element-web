@@ -59,7 +59,14 @@ export function SendWysiwygComposer(
         className="mx_SendWysiwygComposer"
         leftComponent={e2eStatus && <E2EIcon status={e2eStatus} />}
         // TODO add emoji support
-        rightComponent={<EmojiButton menuPosition={menuPosition} addEmoji={() => false} />}
+        rightComponent={(composerFunctions, selectPreviousSelection) =>
+            <EmojiButton menuPosition={menuPosition}
+                addEmoji={(unicode) => {
+                    selectPreviousSelection();
+                    setTimeout(() => composerFunctions.insertText(unicode), 100);
+                    return true;
+                }}
+            />}
         {...props}
     >
         { (ref, composerFunctions) => (

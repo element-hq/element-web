@@ -23,5 +23,8 @@ export function useComposerFunctions(ref: RefObject<HTMLDivElement>) {
                 ref.current.innerHTML = '';
             }
         },
+        insertText: (text: string) => {
+            // TODO
+        },
     }), [ref]);
 }

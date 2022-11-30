@@ -33,7 +33,10 @@ interface PlainTextComposerProps {
     initialContent?: string;
     className?: string;
     leftComponent?: ReactNode;
-    rightComponent?: ReactNode;
+    rightComponent?: (
+        composerFunctions: ComposerFunctions,
+        selectPreviousSelection: () => void
+    ) => ReactNode;
     children?: (
         ref: MutableRefObject<HTMLDivElement | null>,
         composerFunctions: ComposerFunctions,
@@ -58,6 +61,8 @@ export function PlainTextComposer({
     useSetCursorPosition(disabled, ref);
     const { isFocused, onFocus } = useIsFocused();
     const computedPlaceholder = !content && placeholder || undefined;
+    const rightComp =
+        (selectPreviousSelection: () => void) => rightComponent(composerFunctions, selectPreviousSelection);
 
     return <div
         data-testid="PlainTextComposer"
@@ -68,7 +73,7 @@ export function PlainTextComposer({
         onPaste={onPaste}
         onKeyDown={onKeyDown}
     >
-        <Editor ref={ref} disabled={disabled} leftComponent={leftComponent} rightComponent={rightComponent} placeholder={computedPlaceholder} />
+        <Editor ref={ref} disabled={disabled} leftComponent={leftComponent} rightComponent={rightComp} placeholder={computedPlaceholder} />
         { children?.(ref, composerFunctions) }
     </div>;
 }
