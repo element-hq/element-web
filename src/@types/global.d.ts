@@ -149,14 +149,10 @@ declare global {
 
     // https://developer.mozilla.org/en-US/docs/Web/API/OffscreenCanvas
     interface OffscreenCanvas {
-        height: number;
-        width: number;
-        getContext: HTMLCanvasElement["getContext"];
         convertToBlob(opts?: {
             type?: string;
             quality?: number;
         }): Promise<Blob>;
-        transferToImageBitmap(): ImageBitmap;
     }
 
     interface HTMLAudioElement {

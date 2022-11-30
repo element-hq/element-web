@@ -228,7 +228,7 @@ export const useWebSearchMetrics = (numResults: number, queryLength: number, via
         if (!queryLength) return;
 
         // send metrics after a 1s debounce
-        const timeoutId = setTimeout(() => {
+        const timeoutId = window.setTimeout(() => {
             PosthogAnalytics.instance.trackEvent<WebSearchEvent>({
                 eventName: "WebSearch",
                 viaSpotlight,

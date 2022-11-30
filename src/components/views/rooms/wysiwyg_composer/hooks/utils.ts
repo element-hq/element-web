@@ -37,7 +37,7 @@ export function focusComposer(
         if (timeoutId.current) {
             clearTimeout(timeoutId.current);
         }
-        timeoutId.current = setTimeout(
+        timeoutId.current = window.setTimeout(
             () => composerElement.current?.focus(),
             200,
         );

@@ -166,7 +166,7 @@ export default class WidgetUtils {
                     resolve();
                 }
             }
-            const timerId = setTimeout(() => {
+            const timerId = window.setTimeout(() => {
                 MatrixClientPeg.get().removeListener(ClientEvent.AccountData, onAccountData);
                 reject(new Error("Timed out waiting for widget ID " + widgetId + " to appear"));
             }, WIDGET_WAIT_TIME);
@@ -221,7 +221,7 @@ export default class WidgetUtils {
                     resolve();
                 }
             }
-            const timerId = setTimeout(() => {
+            const timerId = window.setTimeout(() => {
                 MatrixClientPeg.get().removeListener(RoomStateEvent.Events, onRoomStateEvents);
                 reject(new Error("Timed out waiting for widget ID " + widgetId + " to appear"));
             }, WIDGET_WAIT_TIME);

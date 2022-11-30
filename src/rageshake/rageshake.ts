@@ -154,7 +154,7 @@ export class IndexedDBLogStore {
                 // @ts-ignore
                 this.db = event.target.result;
                 // Periodically flush logs to local storage / indexeddb
-                setInterval(this.flush.bind(this), FLUSH_RATE_MS);
+                window.setInterval(this.flush.bind(this), FLUSH_RATE_MS);
                 resolve();
             };
 

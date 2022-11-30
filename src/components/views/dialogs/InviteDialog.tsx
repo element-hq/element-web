@@ -697,7 +697,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         if (this.debounceTimer) {
             clearTimeout(this.debounceTimer);
         }
-        this.debounceTimer = setTimeout(() => {
+        this.debounceTimer = window.setTimeout(() => {
             this.updateSuggestions(term);
         }, 150); // 150ms debounce (human reaction time + some)
     };

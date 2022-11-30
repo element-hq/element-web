@@ -459,7 +459,7 @@ export default class ScrollPanel extends React.Component<IProps> {
             if (this.unfillDebouncer) {
                 clearTimeout(this.unfillDebouncer);
             }
-            this.unfillDebouncer = setTimeout(() => {
+            this.unfillDebouncer = window.setTimeout(() => {
                 this.unfillDebouncer = null;
                 debuglog("unfilling now", { backwards, origExcessHeight });
                 this.props.onUnfillRequest?.(backwards, markerScrollToken!);
@@ -485,7 +485,7 @@ export default class ScrollPanel extends React.Component<IProps> {
         // this will block the scroll event handler for +700ms
         // if messages are already cached in memory,
         // This would cause jumping to happen on Chrome/macOS.
-        return new Promise(resolve => setTimeout(resolve, 1)).then(() => {
+        return new Promise(resolve => window.setTimeout(resolve, 1)).then(() => {
             return this.props.onFillRequest(backwards);
         }).finally(() => {
             this.pendingFillRequests[dir] = false;

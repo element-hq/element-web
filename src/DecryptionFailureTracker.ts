@@ -174,12 +174,12 @@ export class DecryptionFailureTracker {
      * Start checking for and tracking failures.
      */
     public start(): void {
-        this.checkInterval = setInterval(
+        this.checkInterval = window.setInterval(
             () => this.checkFailures(Date.now()),
             DecryptionFailureTracker.CHECK_INTERVAL_MS,
         );
 
-        this.trackInterval = setInterval(
+        this.trackInterval = window.setInterval(
             () => this.trackFailures(),
             DecryptionFailureTracker.TRACK_INTERVAL_MS,
         );

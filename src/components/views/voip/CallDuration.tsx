@@ -43,7 +43,7 @@ interface GroupCallDurationProps {
 export const GroupCallDuration: FC<GroupCallDurationProps> = ({ groupCall }) => {
     const [now, setNow] = useState(() => Date.now());
     useEffect(() => {
-        const timer = setInterval(() => setNow(Date.now()), 1000);
+        const timer = window.setInterval(() => setNow(Date.now()), 1000);
         return () => clearInterval(timer);
     }, []);
 

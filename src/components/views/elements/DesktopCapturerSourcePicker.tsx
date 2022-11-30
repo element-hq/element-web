@@ -106,7 +106,7 @@ export default class DesktopCapturerSourcePicker extends React.Component<
     }
 
     async componentDidMount() {
-        // setInterval() first waits and then executes, therefore
+        // window.setInterval() first waits and then executes, therefore
         // we call getDesktopCapturerSources() here without any delay.
         // Otherwise the dialog would be left empty for some time.
         this.setState({
@@ -114,7 +114,7 @@ export default class DesktopCapturerSourcePicker extends React.Component<
         });
 
         // We update the sources every 500ms to get newer thumbnails
-        this.interval = setInterval(async () => {
+        this.interval = window.setInterval(async () => {
             this.setState({
                 sources: await getDesktopCapturerSources(),
             });

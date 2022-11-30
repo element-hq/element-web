@@ -127,7 +127,7 @@ export class PlaybackClock implements IDestroyable {
             // cast to number because the types are wrong
             // 100ms interval to make sure the time is as accurate as possible without
             // being overly insane
-            this.timerId = <number><any>setInterval(this.checkTime, 100);
+            this.timerId = <number><any>window.setInterval(this.checkTime, 100);
         }
     }
 

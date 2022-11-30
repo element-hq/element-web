@@ -352,7 +352,7 @@ describe('<LocationShareMenu />', () => {
             // @ts-ignore
             mocked(SettingsStore.watchSetting).mockImplementation((featureName, roomId, callback) => {
                 callback(featureName, roomId, SettingLevel.DEVICE, '', '');
-                setTimeout(() => {
+                window.setTimeout(() => {
                     callback(featureName, roomId, SettingLevel.DEVICE, '', '');
                 }, 1000);
             });

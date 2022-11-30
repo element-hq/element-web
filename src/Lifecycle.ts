@@ -584,7 +584,7 @@ async function doSetLoggedIn(
     // later than MatrixChat might assume.
     //
     // we fire it *synchronously* to make sure it fires before on_logged_in.
-    // (dis.dispatch uses `setTimeout`, which does not guarantee ordering.)
+    // (dis.dispatch uses `window.setTimeout`, which does not guarantee ordering.)
     dis.dispatch({ action: 'on_logging_in' }, true);
 
     if (clearStorageEnabled) {
@@ -865,7 +865,7 @@ export async function onLoggedOut(): Promise<void> {
     if (SdkConfig.get().logout_redirect_url) {
         logger.log("Redirecting to external provider to finish logout");
         // XXX: Defer this so that it doesn't race with MatrixChat unmounting the world by going to /#/login
-        setTimeout(() => {
+        window.setTimeout(() => {
             window.location.href = SdkConfig.get().logout_redirect_url;
         }, 100);
     }

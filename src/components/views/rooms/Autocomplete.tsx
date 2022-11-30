@@ -127,7 +127,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         }
 
         return new Promise((resolve) => {
-            this.debounceCompletionsRequest = setTimeout(() => {
+            this.debounceCompletionsRequest = window.setTimeout(() => {
                 resolve(this.processQuery(query, selection));
             }, autocompleteDelay);
         });

@@ -127,7 +127,7 @@ export default class InteractiveAuthComponent extends React.Component<IProps, IS
         });
 
         if (this.props.poll) {
-            this.intervalId = setInterval(() => {
+            this.intervalId = window.setInterval(() => {
                 this.authLogic.poll();
             }, 2000);
         }

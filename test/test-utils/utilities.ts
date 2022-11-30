@@ -48,7 +48,7 @@ export function untilDispatch(
         let timeoutId;
         // set a timeout handler if needed
         if (timeout > 0) {
-            timeoutId = setTimeout(() => {
+            timeoutId = window.setTimeout(() => {
                 if (!fulfilled) {
                     reject(new Error(`untilDispatch: timed out at ${callerLine}`));
                     fulfilled = true;
@@ -92,7 +92,7 @@ export function untilEmission(
         let timeoutId;
         // set a timeout handler if needed
         if (timeout > 0) {
-            timeoutId = setTimeout(() => {
+            timeoutId = window.setTimeout(() => {
                 if (!fulfilled) {
                     reject(new Error(`untilEmission: timed out at ${callerLine}`));
                     fulfilled = true;
@@ -134,7 +134,7 @@ const findByTagAndAttr = (attr: string) =>
 
 export const findByTagAndTestId = findByTagAndAttr('data-test-id');
 
-export const flushPromises = async () => await new Promise(resolve => setTimeout(resolve));
+export const flushPromises = async () => await new Promise(resolve => window.setTimeout(resolve));
 
 // with jest's modern fake timers process.nextTick is also mocked,
 // flushing promises in the normal way then waits for some advancement

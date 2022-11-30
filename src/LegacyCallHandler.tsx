@@ -254,7 +254,7 @@ export default class LegacyCallHandler extends EventEmitter {
                 logger.log("Failed to check for protocol support and no retries remain: assuming no support", e);
             } else {
                 logger.log("Failed to check for protocol support: will retry", e);
-                setTimeout(() => {
+                window.setTimeout(() => {
                     this.checkProtocols(maxTries - 1);
                 }, 10000);
             }
