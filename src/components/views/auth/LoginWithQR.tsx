@@ -96,8 +96,9 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
     private async updateMode(mode: Mode) {
         this.setState({ phase: Phase.Loading });
         if (this.state.rendezvous) {
-            this.state.rendezvous.onFailure = undefined;
-            await this.state.rendezvous.cancel(RendezvousFailureReason.UserCancelled);
+            const rendezvous = this.state.rendezvous;
+            rendezvous.onFailure = undefined;
+            await rendezvous.cancel(RendezvousFailureReason.UserCancelled);
             this.setState({ rendezvous: undefined });
         }
         if (mode === Mode.Show) {
