@@ -377,7 +377,7 @@ export class JitsiCall extends Call {
 
         this.participants = participants;
         if (allExpireAt < Infinity) {
-            this.participantsExpirationTimer = setTimeout(() => this.updateParticipants(), allExpireAt - now);
+            this.participantsExpirationTimer = window.setTimeout(() => this.updateParticipants(), allExpireAt - now);
         }
     }
 
@@ -553,7 +553,7 @@ export class JitsiCall extends Call {
             // Tell others that we're connected, by adding our device to room state
             await this.addOurDevice();
             // Re-add this device every so often so our video member event doesn't become stale
-            this.resendDevicesTimer = setInterval(async () => {
+            this.resendDevicesTimer = window.setInterval(async () => {
                 logger.log(`Resending video member event for ${this.roomId}`);
                 await this.addOurDevice();
             }, (this.STUCK_DEVICE_TIMEOUT_MS * 3) / 4);
@@ -814,7 +814,7 @@ export class ElementCall extends Call {
                 // randomly between 2 and 8 seconds before terminating the call, to
                 // probabilistically reduce event spam. If someone else beats us to it,
                 // this timer will be automatically cleared upon the call's destruction.
-                this.terminationTimer = setTimeout(
+                this.terminationTimer = window.setTimeout(
                     () => this.groupCall.terminate(),
                     Math.random() * 6000 + 2000,
                 );

@@ -102,10 +102,10 @@ export async function waitForRoomReadyAndApplyAfterCreateCallbacks(
             finish();
         };
 
-        const checkRoomStateIntervalHandle = setInterval(() => {
+        const checkRoomStateIntervalHandle = window.setInterval(() => {
             if (isRoomReady(client, localRoom)) finish();
         }, 500);
-        const stopgapTimeoutHandle = setTimeout(stopgapFinish, 5000);
+        const stopgapTimeoutHandle = window.setTimeout(stopgapFinish, 5000);
     });
 }
 

@@ -57,7 +57,7 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
     async componentDidMount() {
         const { request } = this.props;
         if (request.timeout && request.timeout > 0) {
-            this.intervalHandle = setInterval(() => {
+            this.intervalHandle = window.setInterval(() => {
                 let { counter } = this.state;
                 counter = Math.max(0, counter - 1);
                 this.setState({ counter });

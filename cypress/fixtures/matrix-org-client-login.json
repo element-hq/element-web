@@ -1,0 +1,48 @@
+{
+    "flows": [
+        {
+            "type": "m.login.sso",
+            "identity_providers": [
+                {
+                    "id": "oidc-github",
+                    "name": "GitHub",
+                    "icon": "mxc://matrix.org/sVesTtrFDTpXRbYfpahuJsKP",
+                    "brand": "github"
+                },
+                {
+                    "id": "oidc-google",
+                    "name": "Google",
+                    "icon": "mxc://matrix.org/ZlnaaZNPxtUuQemvgQzlOlkz",
+                    "brand": "google"
+                },
+                {
+                    "id": "oidc-gitlab",
+                    "name": "GitLab",
+                    "icon": "mxc://matrix.org/MCVOEmFgVieKFshPxmnejWOq",
+                    "brand": "gitlab"
+                },
+                {
+                    "id": "oidc-facebook",
+                    "name": "Facebook",
+                    "icon": "mxc://matrix.org/nsyeLIgzxazZmJadflMAsAWG",
+                    "brand": "facebook"
+                },
+                {
+                    "id": "oidc-apple",
+                    "name": "Apple",
+                    "icon": "mxc://matrix.org/QQKNSOdLiMHtJhzeAObmkFiU",
+                    "brand": "apple"
+                }
+            ]
+        },
+        {
+            "type": "m.login.token"
+        },
+        {
+            "type": "m.login.password"
+        },
+        {
+            "type": "m.login.application_service"
+        }
+    ]
+}

@@ -191,7 +191,7 @@ class EmojiPicker extends React.Component<IProps, IState> {
         this.setState({ filter });
         // Header underlines need to be updated, but updating requires knowing
         // where the categories are, so we wait for a tick.
-        setTimeout(this.updateVisibility, 0);
+        window.setTimeout(this.updateVisibility, 0);
     };
 
     private emojiMatchesFilter = (emoji: IEmoji, filter: string): boolean => {

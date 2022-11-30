@@ -199,7 +199,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
                     // that the ScrollPanel listening to the resizeNotifier can
                     // correctly measure it's new height and scroll down to keep
                     // at the bottom if it already is
-                    setTimeout(() => {
+                    window.setTimeout(() => {
                         this.props.resizeNotifier.notifyTimelineHeightChanged();
                     }, 100);
                 }
@@ -395,7 +395,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
 
     private onRecordingEndingSoon = ({ secondsLeft }) => {
         this.setState({ recordingTimeLeftSeconds: secondsLeft });
-        setTimeout(() => this.setState({ recordingTimeLeftSeconds: null }), 3000);
+        window.setTimeout(() => this.setState({ recordingTimeLeftSeconds: null }), 3000);
     };
 
     private setStickerPickerOpen = (isStickerPickerOpen: boolean) => {
@@ -584,6 +584,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
                                     setUpVoiceBroadcastPreRecording(
                                         this.props.room,
                                         MatrixClientPeg.get(),
+                                        SdkContextClass.instance.voiceBroadcastPlaybacksStore,
                                         VoiceBroadcastRecordingsStore.instance(),
                                         SdkContextClass.instance.voiceBroadcastPreRecordingStore,
                                     );

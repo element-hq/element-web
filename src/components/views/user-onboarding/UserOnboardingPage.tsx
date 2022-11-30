@@ -55,7 +55,7 @@ export function UserOnboardingPage({ justRegistered = false }: Props) {
     const [showList, setShowList] = useState<boolean>(false);
     useEffect(() => {
         if (initialSyncComplete) {
-            let handler: number | null = setTimeout(() => {
+            let handler: number | null = window.setTimeout(() => {
                 handler = null;
                 setShowList(true);
             }, ANIMATION_DURATION);

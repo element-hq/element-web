@@ -298,7 +298,7 @@ export async function setTheme(theme?: string): Promise<void> {
 
             // In case of theme toggling (white => black => white)
             // Chrome doesn't fire the `load` event when the white theme is selected the second times
-            const intervalId = setInterval(() => {
+            const intervalId = window.setInterval(() => {
                 if (isStyleSheetLoaded()) {
                     clearInterval(intervalId);
                     styleSheet.onload = undefined;

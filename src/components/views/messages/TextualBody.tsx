@@ -130,7 +130,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
             if (codes.length > 0) {
                 // Do this asynchronously: parsing code takes time and we don't
                 // need to block the DOM update on it.
-                setTimeout(() => {
+                window.setTimeout(() => {
                     if (this.unmounted) return;
                     for (let i = 0; i < codes.length; i++) {
                         this.highlightCode(codes[i]);

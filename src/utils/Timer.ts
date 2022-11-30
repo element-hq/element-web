@@ -55,7 +55,7 @@ export default class Timer {
             this.setNotStarted();
         } else {
             const delta = this.timeout - elapsed;
-            this.timerHandle = setTimeout(this.onTimeout, delta);
+            this.timerHandle = window.setTimeout(this.onTimeout, delta);
         }
     };
 
@@ -78,7 +78,7 @@ export default class Timer {
     start() {
         if (!this.isRunning()) {
             this.startTs = Date.now();
-            this.timerHandle = setTimeout(this.onTimeout, this.timeout);
+            this.timerHandle = window.setTimeout(this.onTimeout, this.timeout);
         }
         return this;
     }

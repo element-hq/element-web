@@ -97,7 +97,7 @@ export async function waitForMember(client: MatrixClient, roomId: string, userId
 
         /* We don't want to hang if this goes wrong, so we proceed and hope the other
            user is already in the megolm session */
-        setTimeout(resolve, timeout, false);
+        window.setTimeout(resolve, timeout, false);
     }).finally(() => {
         client.removeListener(RoomStateEvent.NewMember, handler);
     });

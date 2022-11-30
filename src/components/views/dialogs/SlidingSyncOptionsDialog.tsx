@@ -48,7 +48,7 @@ async function syncHealthCheck(cli: MatrixClient): Promise<void> {
  */
 async function proxyHealthCheck(endpoint: string, hsUrl?: string): Promise<void> {
     const controller = new AbortController();
-    const id = setTimeout(() => controller.abort(), 10 * 1000); // 10s
+    const id = window.setTimeout(() => controller.abort(), 10 * 1000); // 10s
     const res = await fetch(endpoint + "/client/server.json", {
         signal: controller.signal,
     });

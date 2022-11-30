@@ -21,6 +21,10 @@ import { SynapseInstance } from "../../plugins/synapsedocker";
 describe("Login", () => {
     let synapse: SynapseInstance;
 
+    beforeEach(() => {
+        cy.stubDefaultServer();
+    });
+
     afterEach(() => {
         cy.stopSynapse(synapse);
     });

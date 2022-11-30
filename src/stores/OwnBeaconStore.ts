@@ -437,7 +437,7 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
             return;
         }
 
-        this.locationInterval = setInterval(() => {
+        this.locationInterval = window.setInterval(() => {
             if (!this.lastPublishedPositionTimestamp) {
                 return;
             }

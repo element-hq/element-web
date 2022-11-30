@@ -335,7 +335,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         // Add a 150ms timer for blurhash to first appear.
         if (this.props.mxEvent.getContent().info?.[BLURHASH_FIELD]) {
             this.clearBlurhashTimeout();
-            this.timeout = setTimeout(() => {
+            this.timeout = window.setTimeout(() => {
                 if (!this.state.imgLoaded || !this.state.imgError) {
                     this.setState({
                         placeholder: Placeholder.Blurhash,

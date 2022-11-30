@@ -77,10 +77,10 @@ export async function createThumbnail(
     }
 
     let canvas: HTMLCanvasElement | OffscreenCanvas;
-    let context: CanvasRenderingContext2D;
+    let context: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D;
     try {
         canvas = new window.OffscreenCanvas(targetWidth, targetHeight);
-        context = canvas.getContext("2d");
+        context = canvas.getContext("2d") as OffscreenCanvasRenderingContext2D;
     } catch (e) {
         // Fallback support for other browsers (Safari and Firefox for now)
         canvas = document.createElement("canvas");
@@ -92,7 +92,7 @@ export async function createThumbnail(
     context.drawImage(element, 0, 0, targetWidth, targetHeight);
 
     let thumbnailPromise: Promise<Blob>;
-    if (window.OffscreenCanvas && canvas instanceof window.OffscreenCanvas) {
+    if (window.OffscreenCanvas && canvas instanceof OffscreenCanvas) {
         thumbnailPromise = canvas.convertToBlob({ type: mimeType });
     } else {
         thumbnailPromise = new Promise<Blob>(resolve => (canvas as HTMLCanvasElement).toBlob(resolve, mimeType));

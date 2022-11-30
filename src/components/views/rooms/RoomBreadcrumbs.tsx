@@ -99,7 +99,7 @@ export default class RoomBreadcrumbs extends React.PureComponent<IProps, IState>
         // again and this time we want to show the newest breadcrumb because it'll be hidden
         // off screen for the animation.
         this.setState({ doAnimation: false, skipFirst: true });
-        setTimeout(() => this.setState({ doAnimation: true, skipFirst: false }), 0);
+        window.setTimeout(() => this.setState({ doAnimation: true, skipFirst: false }), 0);
     };
 
     private viewRoom = (room: Room, index: number, viaKeyboard = false) => {

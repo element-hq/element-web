@@ -103,7 +103,7 @@ export default class EmojiProvider extends AutocompleteProvider {
             return []; // don't give any suggestions if the user doesn't want them
         }
 
-        let completions = [];
+        let completions: ISortedEmoji[] = [];
         const { command, range } = this.getCurrentCommand(query, selection);
 
         if (command && command[0].length > 2) {
@@ -132,7 +132,7 @@ export default class EmojiProvider extends AutocompleteProvider {
             }
             // Finally, sort by original ordering
             sorters.push(c => c._orderBy);
-            completions = sortBy(uniq(completions), sorters);
+            completions = sortBy<ISortedEmoji>(uniq(completions), sorters);
 
             completions = completions.slice(0, LIMIT);
 
@@ -141,9 +141,9 @@ export default class EmojiProvider extends AutocompleteProvider {
             this.recentlyUsed.forEach(emoji => {
                 sorters.push(c => score(emoji.shortcodes[0], c.emoji.shortcodes[0]));
             });
-            completions = sortBy(uniq(completions), sorters);
+            completions = sortBy<ISortedEmoji>(uniq(completions), sorters);
 
-            completions = completions.map(c => ({
+            return completions.map(c => ({
                 completion: c.emoji.unicode,
                 component: (
                     <PillCompletion title={`:${c.emoji.shortcodes[0]}:`} aria-label={c.emoji.unicode}>
@@ -153,7 +153,7 @@ export default class EmojiProvider extends AutocompleteProvider {
                 range,
             }));
         }
-        return completions;
+        return [];
     }
 
     getName() {
