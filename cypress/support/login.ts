@@ -103,6 +103,7 @@ Cypress.Commands.add("initTestUser", (synapse: SynapseInstance, displayName: str
     return cy.registerUser(synapse, username, password, displayName).then(() => {
         return cy.loginUser(synapse, username, password);
     }).then(response => {
+        cy.log(`Registered test user ${username} with displayname ${displayName}`);
         cy.window({ log: false }).then(win => {
             // Seed the localStorage with the required credentials
             win.localStorage.setItem("mx_hs_url", synapse.baseUrl);
