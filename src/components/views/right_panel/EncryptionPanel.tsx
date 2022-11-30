@@ -111,8 +111,21 @@ const EncryptionPanel: React.FC<IProps> = (props: IProps) => {
     const onStartVerification = useCallback(async () => {
         setRequesting(true);
         const cli = MatrixClientPeg.get();
-        const roomId = await ensureDMExists(cli, member.userId);
-        const verificationRequest_ = await cli.requestVerificationDM(member.userId, roomId);
+        let verificationRequest_: VerificationRequest;
+        try {
+            const roomId = await ensureDMExists(cli, member.userId);
+            verificationRequest_ = await cli.requestVerificationDM(member.userId, roomId);
+        } catch (e) {
+            console.error("Error starting verification", e);
+            setRequesting(false);
+
+            Modal.createDialog(ErrorDialog, {
+                headerImage: require("../../../../res/img/e2e/warning.svg").default,
+                title: _t("Error starting verification"),
+                description: _t("We were unable to start a chat with the other user."),
+            });
+            return;
+        }
         setRequest(verificationRequest_);
         setPhase(verificationRequest_.phase);
         // Notify the RightPanelStore about this
