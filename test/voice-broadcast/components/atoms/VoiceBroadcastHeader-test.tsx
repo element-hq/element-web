@@ -35,12 +35,17 @@ describe("VoiceBroadcastHeader", () => {
     const sender = new RoomMember(roomId, userId);
     let container: Container;
 
-    const renderHeader = (live: VoiceBroadcastLiveness, showBroadcast: boolean = undefined): RenderResult => {
+    const renderHeader = (
+        live: VoiceBroadcastLiveness,
+        showBroadcast?: boolean,
+        buffering?: boolean,
+    ): RenderResult => {
         return render(<VoiceBroadcastHeader
             live={live}
             microphoneLabel={sender.name}
             room={room}
             showBroadcast={showBroadcast}
+            showBuffering={buffering}
         />);
     };
 
@@ -51,6 +56,16 @@ describe("VoiceBroadcastHeader", () => {
     });
 
     describe("when rendering a live broadcast header with broadcast info", () => {
+        beforeEach(() => {
+            container = renderHeader("live", true, true).container;
+        });
+
+        it("should render the header with a red live badge", () => {
+            expect(container).toMatchSnapshot();
+        });
+    });
+
+    describe("when rendering a buffering live broadcast header with broadcast info", () => {
         beforeEach(() => {
             container = renderHeader("live", true).container;
         });

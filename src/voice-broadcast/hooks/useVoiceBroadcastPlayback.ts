@@ -27,6 +27,13 @@ import {
 export const useVoiceBroadcastPlayback = (playback: VoiceBroadcastPlayback) => {
     const client = MatrixClientPeg.get();
     const room = client.getRoom(playback.infoEvent.getRoomId());
+
+    if (!room) {
+        throw new Error(
+            `Voice Broadcast room not found (event ${playback.infoEvent.getId()})`,
+        );
+    }
+
     const playbackToggle = () => {
         playback.toggle();
     };
