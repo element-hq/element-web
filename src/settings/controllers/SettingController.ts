@@ -39,7 +39,7 @@ export default abstract class SettingController {
      */
     public getValueOverride(
         level: SettingLevel,
-        roomId: string,
+        roomId: string | null,
         calculatedValue: any,
         calculatedAtLevel: SettingLevel,
     ): any {

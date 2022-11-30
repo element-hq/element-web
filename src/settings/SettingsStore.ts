@@ -295,6 +295,16 @@ export default class SettingsStore {
         return SETTINGS[settingName].isFeature;
     }
 
+    /**
+     * Determines if a setting should have a warning sign in the microcopy
+     * @param {string} settingName The setting to look up.
+     * @return {boolean} True if the setting should have a warning sign.
+     */
+    public static shouldHaveWarning(settingName: string): boolean {
+        if (!SETTINGS[settingName]) return false;
+        return SETTINGS[settingName].shouldWarn ?? false;
+    }
+
     public static getBetaInfo(settingName: string): ISetting["betaInfo"] {
         // consider a beta disabled if the config is explicitly set to false, in which case treat as normal Labs flag
         if (SettingsStore.isFeature(settingName)
@@ -355,7 +365,7 @@ export default class SettingsStore {
     public static getValueAt(
         level: SettingLevel,
         settingName: string,
-        roomId: string = null,
+        roomId: string | null = null,
         explicit = false,
         excludeDefault = false,
     ): any {
@@ -420,7 +430,7 @@ export default class SettingsStore {
     private static getFinalValue(
         setting: ISetting,
         level: SettingLevel,
-        roomId: string,
+        roomId: string | null,
         calculatedValue: any,
         calculatedAtLevel: SettingLevel,
     ): any {
