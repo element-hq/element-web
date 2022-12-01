@@ -46,7 +46,7 @@ jobs:
         working-directory: ./element-web
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: previewbuild
           path: element-web/webapp
