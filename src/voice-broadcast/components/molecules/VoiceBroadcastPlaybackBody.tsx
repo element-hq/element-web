@@ -23,7 +23,6 @@ import {
     VoiceBroadcastPlayback,
     VoiceBroadcastPlaybackState,
 } from "../..";
-import Spinner from "../../../components/views/elements/Spinner";
 import { useVoiceBroadcastPlayback } from "../../hooks/useVoiceBroadcastPlayback";
 import { Icon as PlayIcon } from "../../../../res/img/element-icons/play.svg";
 import { Icon as PauseIcon } from "../../../../res/img/element-icons/pause.svg";
@@ -55,39 +54,34 @@ export const VoiceBroadcastPlaybackBody: React.FC<VoiceBroadcastPlaybackBodyProp
         toggle,
     } = useVoiceBroadcastPlayback(playback);
 
-    let control: React.ReactNode;
+    let controlIcon: React.FC<React.SVGProps<SVGSVGElement>>;
+    let controlLabel: string;
+    let className = "";
 
-    if (playbackState === VoiceBroadcastPlaybackState.Buffering) {
-        control = <Spinner />;
-    } else {
-        let controlIcon: React.FC<React.SVGProps<SVGSVGElement>>;
-        let controlLabel: string;
-        let className = "";
-
-        switch (playbackState) {
-            case VoiceBroadcastPlaybackState.Stopped:
-                controlIcon = PlayIcon;
-                className = "mx_VoiceBroadcastControl-play";
-                controlLabel = _t("play voice broadcast");
-                break;
-            case VoiceBroadcastPlaybackState.Paused:
-                controlIcon = PlayIcon;
-                className = "mx_VoiceBroadcastControl-play";
-                controlLabel = _t("resume voice broadcast");
-                break;
-            case VoiceBroadcastPlaybackState.Playing:
-                controlIcon = PauseIcon;
-                controlLabel = _t("pause voice broadcast");
-                break;
-        }
-
-        control = <VoiceBroadcastControl
-            className={className}
-            label={controlLabel}
-            icon={controlIcon}
-            onClick={toggle}
-        />;
+    switch (playbackState) {
+        case VoiceBroadcastPlaybackState.Stopped:
+            controlIcon = PlayIcon;
+            className = "mx_VoiceBroadcastControl-play";
+            controlLabel = _t("play voice broadcast");
+            break;
+        case VoiceBroadcastPlaybackState.Paused:
+            controlIcon = PlayIcon;
+            className = "mx_VoiceBroadcastControl-play";
+            controlLabel = _t("resume voice broadcast");
+            break;
+        case VoiceBroadcastPlaybackState.Buffering:
+        case VoiceBroadcastPlaybackState.Playing:
+            controlIcon = PauseIcon;
+            controlLabel = _t("pause voice broadcast");
+            break;
     }
+
+    const control = <VoiceBroadcastControl
+        className={className}
+        label={controlLabel}
+        icon={controlIcon}
+        onClick={toggle}
+    />;
 
     let seekBackwardButton: ReactElement | null = null;
     let seekForwardButton: ReactElement | null = null;
@@ -125,7 +119,8 @@ export const VoiceBroadcastPlaybackBody: React.FC<VoiceBroadcastPlaybackBodyProp
                 live={liveness}
                 microphoneLabel={sender?.name}
                 room={room}
-                showBroadcast={true}
+                showBroadcast={playbackState !== VoiceBroadcastPlaybackState.Buffering}
+                showBuffering={playbackState === VoiceBroadcastPlaybackState.Buffering}
             />
             <div className="mx_VoiceBroadcastBody_controls">
                 { seekBackwardButton }

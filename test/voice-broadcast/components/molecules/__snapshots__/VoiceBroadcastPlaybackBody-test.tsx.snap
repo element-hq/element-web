@@ -242,9 +242,17 @@ exports[`VoiceBroadcastPlaybackBody when rendering a buffering voice broadcast s
           class="mx_VoiceBroadcastHeader_line"
         >
           <div
-            class="mx_Icon mx_Icon_16"
-          />
-          Voice broadcast
+            class="mx_Spinner"
+          >
+            <div
+              aria-label="Loading..."
+              class="mx_Spinner_icon"
+              data-testid="spinner"
+              role="progressbar"
+              style="width: 14px; height: 14px;"
+            />
+          </div>
+          Buffering…
         </div>
       </div>
       <div
@@ -270,14 +278,13 @@ exports[`VoiceBroadcastPlaybackBody when rendering a buffering voice broadcast s
         />
       </div>
       <div
-        class="mx_Spinner"
+        aria-label="pause voice broadcast"
+        class="mx_AccessibleButton mx_VoiceBroadcastControl"
+        role="button"
+        tabindex="0"
       >
         <div
-          aria-label="Loading..."
-          class="mx_Spinner_icon"
-          data-testid="spinner"
-          role="progressbar"
-          style="width: 32px; height: 32px;"
+          class="mx_Icon mx_Icon_16"
         />
       </div>
       <div

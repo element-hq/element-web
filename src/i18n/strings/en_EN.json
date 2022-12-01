@@ -657,6 +657,7 @@
     "Change input device": "Change input device",
     "Live": "Live",
     "Voice broadcast": "Voice broadcast",
+    "Buffering…": "Buffering…",
     "Cannot reach homeserver": "Cannot reach homeserver",
     "Ensure you have a stable internet connection, or get in touch with the server admin": "Ensure you have a stable internet connection, or get in touch with the server admin",
     "Your %(brand)s is misconfigured": "Your %(brand)s is misconfigured",
