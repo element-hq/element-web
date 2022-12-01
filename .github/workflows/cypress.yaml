@@ -82,7 +82,7 @@ jobs:
         # Run 4 instances in Parallel
         runner: [1, 2, 3, 4]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           # XXX: We're checking out untrusted code in a secure context
           # We need to be careful to not trust anything this code outputs/may do
