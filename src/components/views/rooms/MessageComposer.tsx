@@ -584,6 +584,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
                                     setUpVoiceBroadcastPreRecording(
                                         this.props.room,
                                         MatrixClientPeg.get(),
+                                        SdkContextClass.instance.voiceBroadcastPlaybacksStore,
                                         VoiceBroadcastRecordingsStore.instance(),
                                         SdkContextClass.instance.voiceBroadcastPreRecordingStore,
                                     );
