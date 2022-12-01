@@ -43,7 +43,7 @@ jobs:
       - name: Get commit details
         id: commit
         if: github.event.workflow_run.event == 'pull_request'
-        uses: actions/github-script@v5
+        uses: actions/github-script@v6
         with:
           script: |
             const response = await github.rest.git.getCommit({
