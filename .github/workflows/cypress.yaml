@@ -43,7 +43,7 @@ jobs:
       - name: Get commit details
         id: commit
         if: github.event.workflow_run.event == 'pull_request'
-        uses: actions/github-script@v5
+        uses: actions/github-script@v6
         with:
           script: |
             const response = await github.rest.git.getCommit({
@@ -82,7 +82,7 @@ jobs:
         # Run 4 instances in Parallel
         runner: [1, 2, 3, 4]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           # XXX: We're checking out untrusted code in a secure context
           # We need to be careful to not trust anything this code outputs/may do
@@ -147,7 +147,7 @@ jobs:
 
       - name: Upload Artifact
         if: failure()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: cypress-results
           path: |

@@ -14,7 +14,7 @@ jobs:
     name: "Typescript Syntax Check"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - uses: actions/setup-node@v3
         with:
@@ -89,7 +89,7 @@ jobs:
     name: "Rethemendex Check"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       
       - run: ./res/css/rethemendex.sh
       
@@ -99,7 +99,7 @@ jobs:
     name: "ESLint"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - uses: actions/setup-node@v3
         with:
@@ -116,7 +116,7 @@ jobs:
     name: "Style Lint"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - uses: actions/setup-node@v3
         with:
@@ -133,7 +133,7 @@ jobs:
     name: "Analyse Dead Code"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - uses: actions/setup-node@v3
         with:

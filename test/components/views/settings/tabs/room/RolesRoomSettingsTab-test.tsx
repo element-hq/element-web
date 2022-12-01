@@ -18,6 +18,9 @@ import React from "react";
 import { fireEvent, render, RenderResult } from "@testing-library/react";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { EventType } from "matrix-js-sdk/src/@types/event";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { Room } from "matrix-js-sdk/src/models/room";
+import { mocked } from "jest-mock";
 
 import RolesRoomSettingsTab from "../../../../../../src/components/views/settings/tabs/room/RolesRoomSettingsTab";
 import { mkStubRoom, stubClient } from "../../../../../test-utils";
@@ -29,23 +32,52 @@ import { ElementCall } from "../../../../../../src/models/Call";
 describe("RolesRoomSettingsTab", () => {
     const roomId = "!room:example.com";
     let cli: MatrixClient;
+    let room: Room;
 
     const renderTab = (): RenderResult => {
         return render(<RolesRoomSettingsTab roomId={roomId} />);
     };
 
-    const getVoiceBroadcastsSelect = () => {
+    const getVoiceBroadcastsSelect = (): HTMLElement => {
         return renderTab().container.querySelector("select[label='Voice broadcasts']");
     };
 
-    const getVoiceBroadcastsSelectedOption = () => {
+    const getVoiceBroadcastsSelectedOption = (): HTMLElement => {
         return renderTab().container.querySelector("select[label='Voice broadcasts'] option:checked");
     };
 
     beforeEach(() => {
         stubClient();
         cli = MatrixClientPeg.get();
-        mkStubRoom(roomId, "test room", cli);
+        room = mkStubRoom(roomId, "test room", cli);
+    });
+
+    it("should allow an Admin to demote themselves but not others", () => {
+        mocked(cli.getRoom).mockReturnValue(room);
+        // @ts-ignore - mocked doesn't support overloads properly
+        mocked(room.currentState.getStateEvents).mockImplementation((type, key) => {
+            if (key === undefined) return [] as MatrixEvent[];
+            if (type === "m.room.power_levels") {
+                return new MatrixEvent({
+                    sender: "@sender:server",
+                    room_id: roomId,
+                    type: "m.room.power_levels",
+                    state_key: "",
+                    content: {
+                        users: {
+                            [cli.getUserId()]: 100,
+                            "@admin:server": 100,
+                        },
+                    },
+                });
+            }
+            return null;
+        });
+        mocked(room.currentState.mayClientSendStateEvent).mockReturnValue(true);
+        const { container } = renderTab();
+
+        expect(container.querySelector(`[placeholder="${cli.getUserId()}"]`)).not.toBeDisabled();
+        expect(container.querySelector(`[placeholder="@admin:server"]`)).toBeDisabled();
     });
 
     it("should initially show »Moderator« permission for »Voice broadcasts«", () => {
@@ -79,19 +111,19 @@ describe("RolesRoomSettingsTab", () => {
             });
         };
 
-        const getStartCallSelect = (tab: RenderResult) => {
+        const getStartCallSelect = (tab: RenderResult): HTMLElement => {
             return tab.container.querySelector("select[label='Start Element Call calls']");
         };
 
-        const getStartCallSelectedOption = (tab: RenderResult) => {
+        const getStartCallSelectedOption = (tab: RenderResult): HTMLElement => {
             return tab.container.querySelector("select[label='Start Element Call calls'] option:checked");
         };
 
-        const getJoinCallSelect = (tab: RenderResult) => {
+        const getJoinCallSelect = (tab: RenderResult): HTMLElement => {
             return tab.container.querySelector("select[label='Join Element Call calls']");
         };
 
-        const getJoinCallSelectedOption = (tab: RenderResult) => {
+        const getJoinCallSelectedOption = (tab: RenderResult): HTMLElement => {
             return tab.container.querySelector("select[label='Join Element Call calls'] option:checked");
         };
 

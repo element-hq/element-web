@@ -747,13 +747,12 @@ export default class RoomSublist extends React.Component<IProps, IState> {
 
     public render(): React.ReactElement {
         const visibleTiles = this.renderVisibleTiles();
+        const hidden = !this.state.rooms.length && !this.props.extraTiles?.length && this.props.alwaysVisible !== true;
         const classes = classNames({
             'mx_RoomSublist': true,
             'mx_RoomSublist_hasMenuOpen': !!this.state.contextMenuPosition,
             'mx_RoomSublist_minimized': this.props.isMinimized,
-            'mx_RoomSublist_hidden': (
-                !this.state.rooms.length && !this.props.extraTiles?.length && this.props.alwaysVisible !== true
-            ),
+            'mx_RoomSublist_hidden': hidden,
         });
 
         let content = null;
@@ -898,6 +897,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                 ref={this.sublistRef}
                 className={classes}
                 role="group"
+                aria-hidden={hidden}
                 aria-label={this.props.label}
                 onKeyDown={this.onKeyDown}
             >

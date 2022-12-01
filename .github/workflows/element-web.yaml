@@ -17,7 +17,7 @@ jobs:
     name: "Build Element-Web"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - uses: actions/setup-node@v3
         with:
@@ -46,7 +46,7 @@ jobs:
         working-directory: ./element-web
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: previewbuild
           path: element-web/webapp

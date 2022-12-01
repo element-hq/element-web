@@ -80,12 +80,13 @@ export default class SettingsFlag extends React.Component<IProps, IState> {
 
         if (!canChange && this.props.hideIfCannotSet) return null;
 
-        const label = this.props.label
+        const label = (this.props.label
             ? _t(this.props.label)
-            : SettingsStore.getDisplayName(this.props.name, this.props.level);
+            : SettingsStore.getDisplayName(this.props.name, this.props.level)) ?? undefined;
         const description = SettingsStore.getDescription(this.props.name);
+        const shouldWarn = SettingsStore.shouldHaveWarning(this.props.name);
 
-        let disabledDescription: JSX.Element;
+        let disabledDescription: JSX.Element | null = null;
         if (this.props.disabled && this.props.disabledDescription) {
             disabledDescription = <div className="mx_SettingsFlag_microcopy">
                 { this.props.disabledDescription }
@@ -106,7 +107,20 @@ export default class SettingsFlag extends React.Component<IProps, IState> {
                     <label className="mx_SettingsFlag_label">
                         <span className="mx_SettingsFlag_labelText">{ label }</span>
                         { description && <div className="mx_SettingsFlag_microcopy">
-                            { description }
+                            { shouldWarn
+                                ? _t(
+                                    "<w>WARNING:</w> <description/>", {},
+                                    {
+                                        "w": (sub) => (
+                                            <span className="mx_SettingsTab_microcopy_warning">
+                                                { sub }
+                                            </span>
+                                        ),
+                                        "description": description,
+                                    },
+                                )
+                                : description
+                            }
                         </div> }
                         { disabledDescription }
                     </label>

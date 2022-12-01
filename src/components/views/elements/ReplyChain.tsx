@@ -240,7 +240,7 @@ export default class ReplyChain extends React.Component<IProps, IState> {
                 { _t("In reply to <a>this message</a>",
                     {},
                     { a: (sub) => (
-                        <a className="mx_reply_anchor" href={`#${eventId}`} scroll-to={eventId}> { sub } </a>
+                        <a className="mx_reply_anchor" href={`#${eventId}`} data-scroll-to={eventId}> { sub } </a>
                     ),
                     })
                 }
