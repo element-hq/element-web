@@ -176,7 +176,7 @@
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.1",
     "allchange": "^1.1.0",
     "axe-core": "4.4.3",
-    "babel-jest": "^26.6.3",
+    "babel-jest": "^29.0.0",
     "blob-polyfill": "^6.0.20211015",
     "chokidar": "^3.5.1",
     "cypress": "^10.3.0",
