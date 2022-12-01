@@ -78,7 +78,7 @@
     "escape-html": "^1.0.3",
     "file-saver": "^2.0.5",
     "filesize": "6.1.0",
-    "flux": "2.1.1",
+    "flux": "4.0.3",
     "focus-visible": "^5.2.0",
     "gfm.css": "^1.1.2",
     "glob-to-regexp": "^0.4.1",
