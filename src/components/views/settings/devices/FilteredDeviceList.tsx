@@ -64,12 +64,13 @@ const isDeviceSelected = (
 ) => selectedDeviceIds.includes(deviceId);
 
 // devices without timestamp metadata should be sorted last
-const sortDevicesByLatestActivity = (left: ExtendedDevice, right: ExtendedDevice) =>
-    (right.last_seen_ts || 0) - (left.last_seen_ts || 0);
+const sortDevicesByLatestActivityThenDisplayName = (left: ExtendedDevice, right: ExtendedDevice) =>
+    (right.last_seen_ts || 0) - (left.last_seen_ts || 0)
+    || ((left.display_name || left.device_id).localeCompare(right.display_name || right.device_id));
 
 const getFilteredSortedDevices = (devices: DevicesDictionary, filter?: DeviceSecurityVariation) =>
     filterDevicesBySecurityRecommendation(Object.values(devices), filter ? [filter] : [])
-        .sort(sortDevicesByLatestActivity);
+        .sort(sortDevicesByLatestActivityThenDisplayName);
 
 const ALL_FILTER_ID = 'ALL';
 type DeviceFilterKey = DeviceSecurityVariation | typeof ALL_FILTER_ID;
