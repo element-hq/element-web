@@ -1071,6 +1071,10 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: false,
     },
+    "debug_legacy_call_handler": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        default: false,
+    },
     "audioInputMuted": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: false,

@@ -28,7 +28,7 @@ import { mocked } from 'jest-mock';
 import { CallEventHandlerEvent } from 'matrix-js-sdk/src/webrtc/callEventHandler';
 
 import LegacyCallHandler, {
-    LegacyCallHandlerEvent, PROTOCOL_PSTN, PROTOCOL_PSTN_PREFIXED, PROTOCOL_SIP_NATIVE, PROTOCOL_SIP_VIRTUAL,
+    LegacyCallHandlerEvent, AudioID, PROTOCOL_PSTN, PROTOCOL_PSTN_PREFIXED, PROTOCOL_SIP_NATIVE, PROTOCOL_SIP_VIRTUAL,
 } from '../src/LegacyCallHandler';
 import { stubClient, mkStubRoom, untilDispatch } from './test-utils';
 import { MatrixClientPeg } from '../src/MatrixClientPeg';
@@ -445,6 +445,9 @@ describe('LegacyCallHandler without third party protocols', () => {
         const mockAudioElement = {
             play: jest.fn(),
             pause: jest.fn(),
+            addEventListener: jest.fn(),
+            removeEventListener: jest.fn(),
+            muted: false,
         } as unknown as HTMLMediaElement;
         beforeEach(() => {
             jest.clearAllMocks();
@@ -486,6 +489,19 @@ describe('LegacyCallHandler without third party protocols', () => {
                     });
                 }
             });
+        });
+
+        it('should unmute <audio> before playing', () => {
+            // Test setup: set the audio element as muted
+            mockAudioElement.muted = true;
+            expect(mockAudioElement.muted).toStrictEqual(true);
+
+            callHandler.play(AudioID.Ring);
+
+            // Ensure audio is no longer muted
+            expect(mockAudioElement.muted).toStrictEqual(false);
+            // Ensure the audio was played
+            expect(mockAudioElement.play).toHaveBeenCalled();
         });
 
         it('listens for incoming call events when voip is enabled', () => {
