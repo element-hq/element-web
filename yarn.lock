@@ -8261,6 +8261,24 @@ matrix-js-sdk@22.0.0-rc.1:
     sdp-transform "^2.14.1"
     unhomoglyph "^1.0.6"
 
+matrix-js-sdk@22.0.0-rc.2:
+  version "22.0.0-rc.2"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-22.0.0-rc.2.tgz#101a3bf54b67d8c96b17dbc9bfdbed8457e3b673"
+  integrity sha512-yvfIfrlemxE+fhJHlmZqvwa/NVkV0zH0H+0ktxidd5WiXExMJL07uDZd9WyCOZb3vTkcxBiSDR9UWBfLJvQdjg==
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+    "@types/sdp-transform" "^2.4.5"
+    another-json "^0.2.0"
+    bs58 "^5.0.0"
+    content-type "^1.0.4"
+    loglevel "^1.7.1"
+    matrix-events-sdk "0.0.1"
+    matrix-widget-api "^1.0.0"
+    p-retry "4"
+    qs "^6.9.6"
+    sdp-transform "^2.14.1"
+    unhomoglyph "^1.0.6"
+
 matrix-mock-request@^2.5.0:
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/matrix-mock-request/-/matrix-mock-request-2.5.0.tgz#78da2590e82be2e31edcf9814833af5e5f8d2f1a"
