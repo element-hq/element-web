@@ -414,11 +414,16 @@ describe('DeviceListener', () => {
                     expect(BulkUnverifiedSessionsToast.showToast).not.toHaveBeenCalled();
                 });
 
-                it('hides toast when only unverified device is the current device', async () => {
-                    mockClient!.getStoredDevicesForUser.mockReturnValue([
-                        currentDevice,
-                    ]);
-                    mockClient!.checkDeviceTrust.mockReturnValue(deviceTrustUnverified);
+                it('hides toast when current device is unverified', async () => {
+                    // device2 verified, current and device3 unverified
+                    mockClient!.checkDeviceTrust.mockImplementation((_userId, deviceId) => {
+                        switch (deviceId) {
+                            case device2.deviceId:
+                                return deviceTrustVerified;
+                            default:
+                                return deviceTrustUnverified;
+                        }
+                    });
                     await createAndStart();
                     expect(BulkUnverifiedSessionsToast.hideToast).toHaveBeenCalled();
                     expect(BulkUnverifiedSessionsToast.showToast).not.toHaveBeenCalled();
