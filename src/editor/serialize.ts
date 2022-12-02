@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { AllHtmlEntities } from 'html-entities';
+import { encode } from 'html-entities';
 import cheerio from 'cheerio';
 import escapeHtml from "escape-html";
 
@@ -117,7 +117,7 @@ export function htmlSerializeFromMdIfNeeded(md: string, { forceHTML = false } = 
                     patternDefaults[patternName][patternType];
 
                 md = md.replace(RegExp(pattern, "gms"), function(m, p1, p2) {
-                    const p2e = AllHtmlEntities.encode(p2);
+                    const p2e = encode(p2);
                     switch (patternType) {
                         case "display":
                             return `${p1}<div data-mx-maths="${p2e}">\n\n</div>\n\n`;

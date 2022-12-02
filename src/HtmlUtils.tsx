@@ -24,7 +24,7 @@ import classNames from 'classnames';
 import EMOJIBASE_REGEX from 'emojibase-regex';
 import { split } from 'lodash';
 import katex from 'katex';
-import { AllHtmlEntities } from 'html-entities';
+import { decode } from 'html-entities';
 import { IContent } from 'matrix-js-sdk/src/models/event';
 import { Optional } from 'matrix-events-sdk';
 
@@ -518,7 +518,7 @@ export function bodyToHtml(content: IContent, highlights: Optional<string[]>, op
                 // Cheerio instance to be returned.
                 phtml('div, span[data-mx-maths!=""]').replaceWith(function(i, e) {
                     return katex.renderToString(
-                        AllHtmlEntities.decode(phtml(e).attr('data-mx-maths')),
+                        decode(phtml(e).attr('data-mx-maths')),
                         {
                             throwOnError: false,
                             // @ts-ignore - `e` can be an Element, not just a Node
