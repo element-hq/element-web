@@ -385,7 +385,7 @@ const CallLayoutSelector: FC<CallLayoutSelectorProps> = ({ call }) => {
                 "mx_RoomHeader_layoutButton--spotlight": layout === Layout.Spotlight,
             })}
             onClick={onClick}
-            title={_t("Layout type")}
+            title={_t("Change layout")}
             alignment={Alignment.Bottom}
             key="layout"
         />
