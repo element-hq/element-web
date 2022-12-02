@@ -647,7 +647,6 @@ export class ElementCall extends Call {
             client,
         );
 
-        this.on(CallEvent.ConnectionState, this.onConnectionState);
         this.on(CallEvent.Participants, this.onParticipants);
         groupCall.on(GroupCallEvent.ParticipantsChanged, this.onGroupCallParticipants);
         groupCall.on(GroupCallEvent.GroupCallStateChanged, this.onGroupCallState);
@@ -704,6 +703,7 @@ export class ElementCall extends Call {
             throw new Error(`Failed to join call in room ${this.roomId}: ${e}`);
         }
 
+        this.groupCall.enteredViaAnotherSession = true;
         this.messaging!.on(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
         this.messaging!.on(`action:${ElementWidgetActions.TileLayout}`, this.onTileLayout);
         this.messaging!.on(`action:${ElementWidgetActions.SpotlightLayout}`, this.onSpotlightLayout);
@@ -724,11 +724,11 @@ export class ElementCall extends Call {
         this.messaging!.off(`action:${ElementWidgetActions.SpotlightLayout}`, this.onSpotlightLayout);
         this.messaging!.off(`action:${ElementWidgetActions.ScreenshareRequest}`, this.onScreenshareRequest);
         super.setDisconnected();
+        this.groupCall.enteredViaAnotherSession = false;
     }
 
     public destroy() {
         WidgetStore.instance.removeVirtualWidget(this.widget.id, this.groupCall.room.roomId);
-        this.off(CallEvent.ConnectionState, this.onConnectionState);
         this.off(CallEvent.Participants, this.onParticipants);
         this.groupCall.off(GroupCallEvent.ParticipantsChanged, this.onGroupCallParticipants);
         this.groupCall.off(GroupCallEvent.GroupCallStateChanged, this.onGroupCallState);
@@ -760,20 +760,6 @@ export class ElementCall extends Call {
             participants.set(member, new Set(deviceMap.keys()));
         }
 
-        // We never enter group calls natively, so the GroupCall will think it's
-        // disconnected regardless of what our call member state says. Thus we
-        // have to insert our own device manually when connected via the widget.
-        if (this.connected) {
-            const localMember = this.room.getMember(this.client.getUserId()!)!;
-            let devices = participants.get(localMember);
-            if (devices === undefined) {
-                devices = new Set();
-                participants.set(localMember, devices);
-            }
-
-            devices.add(this.client.getDeviceId()!);
-        }
-
         this.participants = participants;
     }
 
@@ -781,15 +767,6 @@ export class ElementCall extends Call {
         return this.groupCall.intent !== GroupCallIntent.Room
             && this.room.currentState.mayClientSendStateEvent(ElementCall.CALL_EVENT_TYPE.name, this.client);
     }
-
-    private onConnectionState = (state: ConnectionState, prevState: ConnectionState) => {
-        if (
-            (state === ConnectionState.Connected && !isConnected(prevState))
-            || (state === ConnectionState.Disconnected && isConnected(prevState))
-        ) {
-            this.updateParticipants(); // Local echo
-        }
-    };
 
     private onParticipants = async (
         participants: Map<RoomMember, Set<string>>,
