@@ -23,6 +23,7 @@ import { TimelineRenderingType, useRoomContext } from "../../../../../contexts/R
 import { useDispatcher } from "../../../../../hooks/useDispatcher";
 import { focusComposer } from "./utils";
 import { ComposerFunctions } from "../types";
+import { ComposerType } from "../../../../../dispatcher/payloads/ComposerInsertPayload";
 
 export function useWysiwygSendActionHandler(
     disabled: boolean,
@@ -48,7 +49,18 @@ export function useWysiwygSendActionHandler(
                 composerFunctions.clear();
                 focusComposer(composerElement, context, roomContext, timeoutId);
                 break;
-            // TODO: case Action.ComposerInsert: - see SendMessageComposer
+            case Action.ComposerInsert:
+                if (payload.timelineRenderingType !== roomContext.timelineRenderingType) break;
+                if (payload.composerType !== ComposerType.Send) break;
+
+                if (payload.userId) {
+                    // TODO insert mention - see SendMessageComposer
+                } else if (payload.event) {
+                    // TODO insert quote message - see SendMessageComposer
+                } else if (payload.text) {
+                    composerFunctions.insertText(payload.text);
+                }
+                break;
         }
     }, [disabled, composerElement, composerFunctions, timeoutId, roomContext]);
 
