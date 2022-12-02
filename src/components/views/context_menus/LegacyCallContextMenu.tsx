@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 
 import { _t } from '../../../languageHandler';
@@ -27,11 +26,6 @@ interface IProps extends IContextMenuProps {
 }
 
 export default class LegacyCallContextMenu extends React.Component<IProps> {
-    static propTypes = {
-        // js-sdk User object. Not required because it might not exist.
-        user: PropTypes.object,
-    };
-
     constructor(props) {
         super(props);
     }
