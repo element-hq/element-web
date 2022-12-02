@@ -8243,24 +8243,6 @@ matrix-events-sdk@0.0.1:
   resolved "https://registry.yarnpkg.com/matrix-events-sdk/-/matrix-events-sdk-0.0.1.tgz#c8c38911e2cb29023b0bbac8d6f32e0de2c957dd"
   integrity sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==
 
-matrix-js-sdk@22.0.0-rc.1:
-  version "22.0.0-rc.1"
-  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-22.0.0-rc.1.tgz#e590b204b39179cd1c48ea6d577f3ac96989a5b7"
-  integrity sha512-6BLXHle0QIpgccpFE7EQq2IhTnsbhomCx0NZJ9URIY08M2aznvVxM2XfTi+LGjRKhv7yu8TueJaW7sGlsqZ79w==
-  dependencies:
-    "@babel/runtime" "^7.12.5"
-    "@types/sdp-transform" "^2.4.5"
-    another-json "^0.2.0"
-    bs58 "^5.0.0"
-    content-type "^1.0.4"
-    loglevel "^1.7.1"
-    matrix-events-sdk "0.0.1"
-    matrix-widget-api "^1.0.0"
-    p-retry "4"
-    qs "^6.9.6"
-    sdp-transform "^2.14.1"
-    unhomoglyph "^1.0.6"
-
 matrix-js-sdk@22.0.0-rc.2:
   version "22.0.0-rc.2"
   resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-22.0.0-rc.2.tgz#101a3bf54b67d8c96b17dbc9bfdbed8457e3b673"
@@ -8286,10 +8268,10 @@ matrix-mock-request@^2.5.0:
   dependencies:
     expect "^28.1.0"
 
-matrix-react-sdk@3.62.0-rc.1:
-  version "3.62.0-rc.1"
-  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.62.0-rc.1.tgz#b8ca3e961d0967582570a2806fd6ea6c8ba9589a"
-  integrity sha512-er2Hu67yh7x5LQS2lCmhaeeo8DnSp7qr50L1pF+ElZStN8H7/8B97UfkvYycVSppayBBAMyUcP4PqGHMwZBFYw==
+matrix-react-sdk@3.62.0-rc.2:
+  version "3.62.0-rc.2"
+  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.62.0-rc.2.tgz#bca39db7cfaed9d233fd25683a04fde22ea028cd"
+  integrity sha512-xxK6dZFPpoIREb4QXNPxeX30DWW9kJJ2cMVLrTq0hDlxNW2EtBSGUuOrCQeLpkEIGYQraCUKAPpAFETZq/L4CA==
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/analytics-events" "^0.3.0"
@@ -8330,7 +8312,7 @@ matrix-react-sdk@3.62.0-rc.1:
     maplibre-gl "^1.15.2"
     matrix-encrypt-attachment "^1.0.3"
     matrix-events-sdk "0.0.1"
-    matrix-js-sdk "22.0.0-rc.1"
+    matrix-js-sdk "22.0.0-rc.2"
     matrix-widget-api "^1.1.1"
     minimist "^1.2.5"
     opus-recorder "^8.0.3"
