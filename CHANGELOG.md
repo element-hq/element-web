@@ -1,3 +1,9 @@
+Changes in [1.11.16-rc.2](https://github.com/vector-im/element-web/releases/tag/v1.11.16-rc.2) (2022-12-02)
+===========================================================================================================
+
+## 🐛 Bug Fixes
+ * Fix call splitbrains when switching between rooms ([\#9692](https://github.com/matrix-org/matrix-react-sdk/pull/9692)).
+
 Changes in [1.11.16-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.11.16-rc.1) (2022-11-29)
 ===========================================================================================================
 
