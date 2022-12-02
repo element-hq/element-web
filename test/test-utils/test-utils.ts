@@ -91,6 +91,7 @@ export function createTestClient(): MatrixClient {
         getDeviceId: jest.fn().mockReturnValue("ABCDEFGHI"),
         deviceId: "ABCDEFGHI",
         getDevices: jest.fn().mockResolvedValue({ devices: [{ device_id: "ABCDEFGHI" }] }),
+        getSessionId: jest.fn().mockReturnValue("iaszphgvfku"),
         credentials: { userId: "@userId:matrix.org" },
 
         store: {
