@@ -31,6 +31,7 @@ export enum UIFeature {
     AdvancedSettings = "UIFeature.advancedSettings",
     RoomHistorySettings = "UIFeature.roomHistorySettings",
     TimelineEnableRelativeDates = "UIFeature.timelineEnableRelativeDates",
+    BulkUnverifiedSessionsReminder = "UIFeature.BulkUnverifiedSessionsReminder",
 }
 
 export enum UIComponent {

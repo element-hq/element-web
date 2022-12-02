@@ -34,6 +34,7 @@ import { Action } from "../src/dispatcher/actions";
 import SettingsStore from "../src/settings/SettingsStore";
 import { SettingLevel } from "../src/settings/SettingLevel";
 import { getMockClientWithEventEmitter, mockPlatformPeg } from "./test-utils";
+import { UIFeature } from "../src/settings/UIFeature";
 
 // don't litter test console with logs
 jest.mock("matrix-js-sdk/src/logger");
@@ -399,6 +400,9 @@ describe('DeviceListener', () => {
                 // all devices verified by default
                 mockClient!.checkDeviceTrust.mockReturnValue(deviceTrustVerified);
                 mockClient!.deviceId = currentDevice.deviceId;
+                jest.spyOn(SettingsStore, 'getValue').mockImplementation(
+                    settingName => settingName === UIFeature.BulkUnverifiedSessionsReminder,
+                );
             });
             describe('bulk unverified sessions toasts', () => {
                 it('hides toast when cross signing is not ready', async () => {
@@ -412,6 +416,24 @@ describe('DeviceListener', () => {
                     await createAndStart();
                     expect(BulkUnverifiedSessionsToast.hideToast).toHaveBeenCalled();
                     expect(BulkUnverifiedSessionsToast.showToast).not.toHaveBeenCalled();
+                });
+
+                it('hides toast when feature is disabled', async () => {
+                    // BulkUnverifiedSessionsReminder set to false
+                    jest.spyOn(SettingsStore, 'getValue').mockReturnValue(false);
+                    // currentDevice, device2 are verified, device3 is unverified
+                    // ie if reminder was enabled it should be shown
+                    mockClient!.checkDeviceTrust.mockImplementation((_userId, deviceId) => {
+                        switch (deviceId) {
+                            case currentDevice.deviceId:
+                            case device2.deviceId:
+                                return deviceTrustVerified;
+                            default:
+                                return deviceTrustUnverified;
+                        }
+                    });
+                    await createAndStart();
+                    expect(BulkUnverifiedSessionsToast.hideToast).toHaveBeenCalled();
                 });
 
                 it('hides toast when current device is unverified', async () => {

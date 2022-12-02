@@ -47,6 +47,7 @@ import {
     removeClientInformation,
 } from "./utils/device/clientInformation";
 import SettingsStore, { CallbackFn } from "./settings/SettingsStore";
+import { UIFeature } from "./settings/UIFeature";
 
 const KEY_BACKUP_POLL_INTERVAL = 5 * 60 * 1000;
 
@@ -68,6 +69,7 @@ export default class DeviceListener {
     private displayingToastsForDeviceIds = new Set<string>();
     private running = false;
     private shouldRecordClientInformation = false;
+    private enableBulkUnverifiedSessionsReminder = true;
     private deviceClientInformationSettingWatcherRef: string | undefined;
 
     public static sharedInstance() {
@@ -86,6 +88,8 @@ export default class DeviceListener {
         MatrixClientPeg.get().on(ClientEvent.Sync, this.onSync);
         MatrixClientPeg.get().on(RoomStateEvent.Events, this.onRoomStateEvents);
         this.shouldRecordClientInformation = SettingsStore.getValue('deviceClientInformationOptIn');
+        // only configurable in config, so we don't need to watch the value
+        this.enableBulkUnverifiedSessionsReminder = SettingsStore.getValue(UIFeature.BulkUnverifiedSessionsReminder);
         this.deviceClientInformationSettingWatcherRef = SettingsStore.watchSetting(
             'deviceClientInformationOptIn',
             null,
@@ -333,7 +337,11 @@ export default class DeviceListener {
 
         // Display or hide the batch toast for old unverified sessions
         // don't show the toast if the current device is unverified
-        if (oldUnverifiedDeviceIds.size > 0 && isCurrentDeviceTrusted) {
+        if (
+            oldUnverifiedDeviceIds.size > 0
+            && isCurrentDeviceTrusted
+            && this.enableBulkUnverifiedSessionsReminder
+        ) {
             showBulkUnverifiedSessionsToast(oldUnverifiedDeviceIds);
         } else {
             hideBulkUnverifiedSessionsToast();
