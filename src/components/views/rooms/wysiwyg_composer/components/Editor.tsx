@@ -34,8 +34,7 @@ export const Editor = memo(
         function Editor({ disabled, placeholder, leftComponent, rightComponent }: EditorProps, ref,
         ) {
             const isExpanded = useIsExpanded(ref as MutableRefObject<HTMLDivElement | null>, HEIGHT_BREAKING_POINT);
-            const { onFocus, onBlur, selectPreviousSelection } =
-                useSelection(ref as MutableRefObject<HTMLDivElement | null>);
+            const { onFocus, onBlur, selectPreviousSelection } = useSelection();
 
             return <div
                 data-testid="WysiwygComposerEditor"

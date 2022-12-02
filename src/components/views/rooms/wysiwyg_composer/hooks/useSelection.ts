@@ -14,13 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { RefObject, useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 import useFocus from "../../../../../hooks/useFocus";
 
-export function useSelection(ref: RefObject<HTMLDivElement>) {
+export function useSelection() {
     const selectionRef = useRef({
+        anchorNode: null,
         anchorOffset: 0,
+        focusNode: null,
         focusOffset: 0,
     });
     const [isFocused, focusProps] = useFocus();
@@ -28,9 +30,10 @@ export function useSelection(ref: RefObject<HTMLDivElement>) {
     useEffect(() => {
         function onSelectionChange() {
             const selection = document.getSelection();
-            console.log('selection', selection);
             selectionRef.current = {
+                anchorNode: selection.anchorNode,
                 anchorOffset: selection.anchorOffset,
+                focusNode: selection.focusNode,
                 focusOffset: selection.focusOffset,
             };
         }
@@ -44,11 +47,11 @@ export function useSelection(ref: RefObject<HTMLDivElement>) {
 
     const selectPreviousSelection = useCallback(() => {
         const range = new Range();
-        range.setStart(ref.current.firstChild, selectionRef.current.anchorOffset);
-        range.setEnd(ref.current.firstChild, selectionRef.current.focusOffset);
+        range.setStart(selectionRef.current.anchorNode, selectionRef.current.anchorOffset);
+        range.setEnd(selectionRef.current.focusNode, selectionRef.current.focusOffset);
         document.getSelection().removeAllRanges();
         document.getSelection().addRange(range);
-    }, [selectionRef, ref]);
+    }, [selectionRef]);
 
     return { ...focusProps, selectPreviousSelection };
 }
