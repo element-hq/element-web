@@ -19,6 +19,7 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { EventType, MsgType, RelationType } from "matrix-js-sdk/src/@types/event";
 import { M_POLL_START, Optional } from "matrix-events-sdk";
 import { MatrixClient } from "matrix-js-sdk/src/client";
+import { GroupCallIntent } from "matrix-js-sdk/src/webrtc/groupCall";
 
 import EditorStateTransfer from "../utils/EditorStateTransfer";
 import { RoomPermalinkCreator } from "../utils/permalinks/Permalinks";
@@ -412,13 +413,9 @@ export function haveRendererForEvent(mxEvent: MatrixEvent, showHiddenEvents: boo
         return Boolean(mxEvent.getContent()['predecessor']);
     } else if (ElementCall.CALL_EVENT_TYPE.names.some(eventType => handler === STATE_EVENT_TILE_TYPES.get(eventType))) {
         const intent = mxEvent.getContent()['m.intent'];
-        const prevContent = mxEvent.getPrevContent();
-        // If the call became unterminated or previously had invalid contents,
-        // then this event marks the start of the call
-        const newlyStarted = 'm.terminated' in prevContent
-            || !('m.intent' in prevContent) || !('m.type' in prevContent);
+        const newlyStarted = Object.keys(mxEvent.getPrevContent()).length === 0;
         // Only interested in events that mark the start of a non-room call
-        return typeof intent === 'string' && intent !== 'm.room' && newlyStarted;
+        return newlyStarted && typeof intent === 'string' && intent !== GroupCallIntent.Room;
     } else if (handler === JSONEventFactory) {
         return false;
     } else {
