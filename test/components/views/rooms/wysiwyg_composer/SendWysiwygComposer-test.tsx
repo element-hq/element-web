@@ -177,7 +177,6 @@ describe('SendWysiwygComposer', () => {
 
             it('Should not has placeholder', async () => {
                 // When
-                console.log('here');
                 customRender(jest.fn(), jest.fn(), false, isRichTextEnabled);
                 await waitFor(() => expect(screen.getByRole('textbox')).toHaveAttribute('contentEditable', "true"));
 

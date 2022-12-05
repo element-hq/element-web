@@ -18,8 +18,10 @@ import { useCallback, useEffect, useRef } from "react";
 
 import useFocus from "../../../../../hooks/useFocus";
 
+type SubSelection = Pick<Selection, 'anchorNode' | 'anchorOffset' | 'focusNode' | 'focusOffset'>;
+
 export function useSelection() {
-    const selectionRef = useRef({
+    const selectionRef = useRef<SubSelection>({
         anchorNode: null,
         anchorOffset: 0,
         focusNode: null,
@@ -30,12 +32,15 @@ export function useSelection() {
     useEffect(() => {
         function onSelectionChange() {
             const selection = document.getSelection();
-            selectionRef.current = {
-                anchorNode: selection.anchorNode,
-                anchorOffset: selection.anchorOffset,
-                focusNode: selection.focusNode,
-                focusOffset: selection.focusOffset,
-            };
+
+            if (selection) {
+                selectionRef.current = {
+                    anchorNode: selection.anchorNode,
+                    anchorOffset: selection.anchorOffset,
+                    focusNode: selection.focusNode,
+                    focusOffset: selection.focusOffset,
+                };
+            }
         }
 
         if (isFocused) {
@@ -47,10 +52,14 @@ export function useSelection() {
 
     const selectPreviousSelection = useCallback(() => {
         const range = new Range();
-        range.setStart(selectionRef.current.anchorNode, selectionRef.current.anchorOffset);
-        range.setEnd(selectionRef.current.focusNode, selectionRef.current.focusOffset);
-        document.getSelection().removeAllRanges();
-        document.getSelection().addRange(range);
+        const selection = selectionRef.current;
+
+        if (selection.anchorNode && selection.focusNode) {
+            range.setStart(selection.anchorNode, selectionRef.current.anchorOffset);
+            range.setEnd(selection.focusNode, selectionRef.current.focusOffset);
+            document.getSelection()?.removeAllRanges();
+            document.getSelection()?.addRange(range);
+        }
     }, [selectionRef]);
 
     return { ...focusProps, selectPreviousSelection };
