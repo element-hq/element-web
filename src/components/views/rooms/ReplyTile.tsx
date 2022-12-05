@@ -123,6 +123,7 @@ export default class ReplyTile extends React.PureComponent<IProps> {
         }
 
         const classes = classNames("mx_ReplyTile", {
+            mx_ReplyTile_inline: msgType === MsgType.Emote,
             mx_ReplyTile_info: isInfoMessage && !mxEvent.isRedacted(),
             mx_ReplyTile_audio: msgType === MsgType.Audio,
             mx_ReplyTile_video: msgType === MsgType.Video,

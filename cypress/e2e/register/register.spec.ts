@@ -22,6 +22,7 @@ describe("Registration", () => {
     let synapse: SynapseInstance;
 
     beforeEach(() => {
+        cy.stubDefaultServer();
         cy.visit("/#/register");
         cy.startSynapse("consent").then(data => {
             synapse = data;

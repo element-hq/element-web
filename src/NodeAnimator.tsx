@@ -119,7 +119,7 @@ export default class NodeAnimator extends React.Component<IProps> {
             }
 
             // and then we animate to the resting state
-            setTimeout(() => {
+            window.setTimeout(() => {
                 this.applyStyles(domNode as HTMLElement, restingStyle);
             }, 0);
         }

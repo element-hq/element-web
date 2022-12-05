@@ -150,7 +150,7 @@ export default class ThemeChoicePanel extends React.Component<IProps, IState> {
         await SettingsStore.setValue("custom_themes", null, SettingLevel.ACCOUNT, currentThemes);
         this.setState({ customThemeUrl: "", customThemeMessage: { text: _t("Theme added!"), isError: false } });
 
-        this.themeTimer = setTimeout(() => {
+        this.themeTimer = window.setTimeout(() => {
             this.setState({ customThemeMessage: { text: "", isError: false } });
         }, 3000);
     };

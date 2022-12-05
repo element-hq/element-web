@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import React from 'react';
-import filesize from "filesize";
+import { filesize } from "filesize";
 
 import { Icon as FileIcon } from '../../../../res/img/feather-customised/files.svg';
 import { _t } from '../../../languageHandler';

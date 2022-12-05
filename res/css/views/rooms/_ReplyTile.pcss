@@ -28,8 +28,11 @@ limitations under the License.
     }
 
     > a {
-        display: flex;
-        flex-direction: column;
+        display: grid;
+        grid-template:
+            "sender"  auto
+            "message" auto
+            / auto;
         text-decoration: none;
         color: $secondary-content;
         transition: color ease 0.15s;
@@ -58,6 +61,7 @@ limitations under the License.
 
     /* We do reply size limiting with CSS to avoid duplicating the TextualBody component. */
     .mx_EventTile_content {
+        grid-area: message;
         $reply-lines: 2;
         $line-height: $font-18px;
 
@@ -102,7 +106,16 @@ limitations under the License.
         padding-top: 0;
     }
 
+    &.mx_ReplyTile_inline > a {
+        /* Render replies to emotes inline with the sender avatar */
+        grid-template:
+            "sender        message" auto
+            / max-content  auto;
+        gap: 4px; // increase spacing
+    }
+
     .mx_ReplyTile_sender {
+        grid-area: sender;
         display: flex;
         align-items: center;
         gap: 4px;

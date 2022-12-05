@@ -228,7 +228,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> implements 
             if (!room) {
                 logger.warn(`Live timeline event ${eventPayload.event.getId()} received without associated room`);
                 logger.warn(`Queuing failed room update for retry as a result.`);
-                setTimeout(async () => {
+                window.setTimeout(async () => {
                     const updatedRoom = this.matrixClient.getRoom(roomId);
                     await tryUpdate(updatedRoom);
                 }, 100); // 100ms should be enough for the room to show up

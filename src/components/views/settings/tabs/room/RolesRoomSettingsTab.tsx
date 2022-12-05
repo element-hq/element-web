@@ -324,12 +324,13 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
         let privilegedUsersSection = <div>{ _t('No users have specific privileges in this room') }</div>;
         let mutedUsersSection;
         if (Object.keys(userLevels).length) {
-            const privilegedUsers = [];
-            const mutedUsers = [];
+            const privilegedUsers: JSX.Element[] = [];
+            const mutedUsers: JSX.Element[] = [];
 
             Object.keys(userLevels).forEach((user) => {
-                if (!Number.isInteger(userLevels[user])) { return; }
-                const canChange = userLevels[user] < currentUserLevel && canChangeLevels;
+                if (!Number.isInteger(userLevels[user])) return;
+                const isMe = user === client.getUserId();
+                const canChange = canChangeLevels && (userLevels[user] < currentUserLevel || isMe);
                 if (userLevels[user] > defaultUserLevel) { // privileged
                     privilegedUsers.push(
                         <PowerSelector

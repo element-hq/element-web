@@ -28,7 +28,7 @@ export const useTimeoutToggle = (defaultValue: boolean, timeoutMs: number) => {
 
     const toggle = () => {
         setValue(!defaultValue);
-        timeoutId.current = setTimeout(() => setValue(defaultValue), timeoutMs);
+        timeoutId.current = window.setTimeout(() => setValue(defaultValue), timeoutMs);
     };
 
     useEffect(() => {

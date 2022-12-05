@@ -35,7 +35,7 @@ export function UseCaseSelection({ onFinished }: Props) {
     // Call onFinished 1.5s after `selection` becomes truthy, to give time for the animation to run
     useEffect(() => {
         if (selection) {
-            let handler: number | null = setTimeout(() => {
+            let handler: number | null = window.setTimeout(() => {
                 handler = null;
                 onFinished(selection);
             }, TIMEOUT);

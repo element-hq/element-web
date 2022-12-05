@@ -179,7 +179,7 @@ export const watchPositionMockImplementation = (delays: number[], errorCodes: nu
         let totalDelay = 0;
         delays.map((delayMs, index) => {
             totalDelay += delayMs;
-            const timeout = setTimeout(() => {
+            const timeout = window.setTimeout(() => {
                 if (errorCodes[index]) {
                     error(getMockGeolocationPositionError(errorCodes[index], 'error message'));
                 } else {

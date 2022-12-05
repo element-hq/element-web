@@ -462,6 +462,11 @@ $left-gutter: 64px;
         &.mx_EventTile_continuation {
             margin-top: 2px;
         }
+        &.mx_EventTile_lastInSection {
+            /* Other half of the gutter is provided by margin-top on the first
+            tile of the section */
+            margin-bottom: calc(var(--gutterSize) / 2);
+        }
     }
 }
 

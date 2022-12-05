@@ -51,7 +51,7 @@ const VerificationRequestExplorer: React.FC<{
         if (request.timeout == 0) return;
 
         /* Note that request.timeout is a getter, so its value changes */
-        const id = setInterval(() => {
+        const id = window.setInterval(() => {
             setRequestTimeout(request.timeout);
         }, 500);
 

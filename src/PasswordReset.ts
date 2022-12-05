@@ -119,7 +119,7 @@ export default class PasswordReset {
         this.checkEmailLinkClicked()
             .then(() => resolve())
             .catch(() => {
-                setTimeout(
+                window.setTimeout(
                     () => this.tryCheckEmailLinkClicked(resolve),
                     CHECK_EMAIL_VERIFIED_POLL_INTERVAL,
                 );

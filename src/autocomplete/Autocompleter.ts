@@ -35,7 +35,7 @@ export interface ISelectionRange {
 }
 
 export interface ICompletion {
-    type: "at-room" | "command" | "community" | "room" | "user";
+    type?: "at-room" | "command" | "community" | "room" | "user";
     completion: string;
     completionId?: string;
     component?: ReactElement;

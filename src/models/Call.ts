@@ -377,7 +377,7 @@ export class JitsiCall extends Call {
 
         this.participants = participants;
         if (allExpireAt < Infinity) {
-            this.participantsExpirationTimer = setTimeout(() => this.updateParticipants(), allExpireAt - now);
+            this.participantsExpirationTimer = window.setTimeout(() => this.updateParticipants(), allExpireAt - now);
         }
     }
 
@@ -553,7 +553,7 @@ export class JitsiCall extends Call {
             // Tell others that we're connected, by adding our device to room state
             await this.addOurDevice();
             // Re-add this device every so often so our video member event doesn't become stale
-            this.resendDevicesTimer = setInterval(async () => {
+            this.resendDevicesTimer = window.setInterval(async () => {
                 logger.log(`Resending video member event for ${this.roomId}`);
                 await this.addOurDevice();
             }, (this.STUCK_DEVICE_TIMEOUT_MS * 3) / 4);
@@ -647,7 +647,6 @@ export class ElementCall extends Call {
             client,
         );
 
-        this.on(CallEvent.ConnectionState, this.onConnectionState);
         this.on(CallEvent.Participants, this.onParticipants);
         groupCall.on(GroupCallEvent.ParticipantsChanged, this.onGroupCallParticipants);
         groupCall.on(GroupCallEvent.GroupCallStateChanged, this.onGroupCallState);
@@ -704,6 +703,7 @@ export class ElementCall extends Call {
             throw new Error(`Failed to join call in room ${this.roomId}: ${e}`);
         }
 
+        this.groupCall.enteredViaAnotherSession = true;
         this.messaging!.on(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
         this.messaging!.on(`action:${ElementWidgetActions.TileLayout}`, this.onTileLayout);
         this.messaging!.on(`action:${ElementWidgetActions.SpotlightLayout}`, this.onSpotlightLayout);
@@ -724,11 +724,11 @@ export class ElementCall extends Call {
         this.messaging!.off(`action:${ElementWidgetActions.SpotlightLayout}`, this.onSpotlightLayout);
         this.messaging!.off(`action:${ElementWidgetActions.ScreenshareRequest}`, this.onScreenshareRequest);
         super.setDisconnected();
+        this.groupCall.enteredViaAnotherSession = false;
     }
 
     public destroy() {
         WidgetStore.instance.removeVirtualWidget(this.widget.id, this.groupCall.room.roomId);
-        this.off(CallEvent.ConnectionState, this.onConnectionState);
         this.off(CallEvent.Participants, this.onParticipants);
         this.groupCall.off(GroupCallEvent.ParticipantsChanged, this.onGroupCallParticipants);
         this.groupCall.off(GroupCallEvent.GroupCallStateChanged, this.onGroupCallState);
@@ -760,20 +760,6 @@ export class ElementCall extends Call {
             participants.set(member, new Set(deviceMap.keys()));
         }
 
-        // We never enter group calls natively, so the GroupCall will think it's
-        // disconnected regardless of what our call member state says. Thus we
-        // have to insert our own device manually when connected via the widget.
-        if (this.connected) {
-            const localMember = this.room.getMember(this.client.getUserId()!)!;
-            let devices = participants.get(localMember);
-            if (devices === undefined) {
-                devices = new Set();
-                participants.set(localMember, devices);
-            }
-
-            devices.add(this.client.getDeviceId()!);
-        }
-
         this.participants = participants;
     }
 
@@ -781,15 +767,6 @@ export class ElementCall extends Call {
         return this.groupCall.intent !== GroupCallIntent.Room
             && this.room.currentState.mayClientSendStateEvent(ElementCall.CALL_EVENT_TYPE.name, this.client);
     }
-
-    private onConnectionState = (state: ConnectionState, prevState: ConnectionState) => {
-        if (
-            (state === ConnectionState.Connected && !isConnected(prevState))
-            || (state === ConnectionState.Disconnected && isConnected(prevState))
-        ) {
-            this.updateParticipants(); // Local echo
-        }
-    };
 
     private onParticipants = async (
         participants: Map<RoomMember, Set<string>>,
@@ -814,7 +791,7 @@ export class ElementCall extends Call {
                 // randomly between 2 and 8 seconds before terminating the call, to
                 // probabilistically reduce event spam. If someone else beats us to it,
                 // this timer will be automatically cleared upon the call's destruction.
-                this.terminationTimer = setTimeout(
+                this.terminationTimer = window.setTimeout(
                     () => this.groupCall.terminate(),
                     Math.random() * 6000 + 2000,
                 );

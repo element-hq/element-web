@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -66,11 +65,6 @@ interface IBridgeStateEvent {
 }
 
 export default class BridgeTile extends React.PureComponent<IProps> {
-    static propTypes = {
-        ev: PropTypes.object.isRequired,
-        room: PropTypes.object.isRequired,
-    };
-
     render() {
         const content: IBridgeStateEvent = this.props.ev.getContent();
         // Validate

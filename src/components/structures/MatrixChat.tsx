@@ -1965,7 +1965,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.accountPassword = password;
         // self-destruct the password after 5mins
         if (this.accountPasswordTimer !== null) clearTimeout(this.accountPasswordTimer);
-        this.accountPasswordTimer = setTimeout(() => {
+        this.accountPasswordTimer = window.setTimeout(() => {
             this.accountPassword = null;
             this.accountPasswordTimer = null;
         }, 60 * 5 * 1000);

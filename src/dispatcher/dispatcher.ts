@@ -49,7 +49,7 @@ export class MatrixDispatcher extends Dispatcher<ActionPayload> {
             // if you dispatch from within a dispatch, so rather than action
             // handlers having to worry about not calling anything that might
             // then dispatch, we just do dispatches asynchronously.
-            setTimeout(super.dispatch.bind(this, payload), 0);
+            window.setTimeout(super.dispatch.bind(this, payload), 0);
         }
     }
 

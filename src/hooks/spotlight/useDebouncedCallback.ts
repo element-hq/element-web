@@ -30,7 +30,7 @@ export function useDebouncedCallback<T extends any[]>(
             callback(...params);
         };
         if (enabled !== false) {
-            handle = setTimeout(doSearch, DEBOUNCE_TIMEOUT);
+            handle = window.setTimeout(doSearch, DEBOUNCE_TIMEOUT);
             return () => {
                 if (handle) {
                     clearTimeout(handle);

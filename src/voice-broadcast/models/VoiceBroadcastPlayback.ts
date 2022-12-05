@@ -387,7 +387,7 @@ export class VoiceBroadcastPlayback
         const offsetInChunk = time - this.chunkEvents.getLengthTo(event);
         await skipToPlayback.skipTo(offsetInChunk / 1000);
 
-        if (currentPlayback !== skipToPlayback) {
+        if (this.state === VoiceBroadcastPlaybackState.Playing && !skipToPlayback.isPlaying) {
             await skipToPlayback.play();
         }
 

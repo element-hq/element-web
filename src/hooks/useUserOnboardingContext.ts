@@ -68,7 +68,7 @@ function useUserOnboardingContextValue<T>(defaultValue: T, callback: (cli: Matri
             }
             setValue(await handler(cli));
             if (enabled) {
-                handle = setTimeout(repeater, USER_ONBOARDING_CONTEXT_INTERVAL);
+                handle = window.setTimeout(repeater, USER_ONBOARDING_CONTEXT_INTERVAL);
             }
         };
         repeater().catch(err => logger.warn("could not update user onboarding context", err));

@@ -91,7 +91,7 @@ describe("ContentMessages", () => {
             Object.defineProperty(global.Image.prototype, 'src', {
                 // Define the property setter
                 set(src) {
-                    setTimeout(() => this.onload());
+                    window.setTimeout(() => this.onload());
                 },
             });
             Object.defineProperty(global.Image.prototype, 'height', {

@@ -206,7 +206,7 @@ export async function initSentry(sentryConfig: IConfigOptions["sentry"]): Promis
         new Sentry.Integrations.InboundFilters(),
         new Sentry.Integrations.FunctionToString(),
         new Sentry.Integrations.Breadcrumbs(),
-        new Sentry.Integrations.UserAgent(),
+        new Sentry.Integrations.HttpContext(),
         new Sentry.Integrations.Dedupe(),
     ];
 

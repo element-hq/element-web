@@ -91,6 +91,17 @@ const bobJoin = function(this: CryptoTestContext) {
     cy.contains(".mx_TextualEvent", "Bob joined the room").should("exist");
 };
 
+/** configure the given MatrixClient to auto-accept any invites */
+function autoJoin(client: MatrixClient) {
+    cy.window({ log: false }).then(async win => {
+        client.on(win.matrixcs.RoomMemberEvent.Membership, (event, member) => {
+            if (member.membership === "invite" && member.userId === client.getUserId()) {
+                client.joinRoom(member.roomId);
+            }
+        });
+    });
+}
+
 const handleVerificationRequest = (request: VerificationRequest): Chainable<EmojiMapping[]> => {
     return cy.wrap(new Promise<EmojiMapping[]>((resolve) => {
         const onShowSas = (event: ISasEvent) => {
@@ -172,6 +183,24 @@ describe("Cryptography", function() {
         checkDMRoom();
         bobJoin.call(this);
         testMessages.call(this);
+        verify.call(this);
+    });
+
+    it("should allow verification when there is no existing DM", function(this: CryptoTestContext) {
+        cy.bootstrapCrossSigning();
+        autoJoin(this.bob);
+
+        /* we need to have a room with the other user present, so we can open the verification panel */
+        let roomId: string;
+        cy.createRoom({ name: "TestRoom", invite: [this.bob.getUserId()] }).then(_room1Id => {
+            roomId = _room1Id;
+            cy.log(`Created test room ${roomId}`);
+            cy.visit(`/#/room/${roomId}`);
+            // wait for Bob to join the room, otherwise our attempt to open his user details may race
+            // with his join.
+            cy.contains(".mx_TextualEvent", "Bob joined the room").should("exist");
+        });
+
         verify.call(this);
     });
 });

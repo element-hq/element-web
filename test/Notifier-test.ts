@@ -16,8 +16,8 @@ limitations under the License.
 
 import { mocked, MockedObject } from "jest-mock";
 import { ClientEvent, MatrixClient } from "matrix-js-sdk/src/client";
-import { Room } from "matrix-js-sdk/src/models/room";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
+import { IContent, MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { SyncState } from "matrix-js-sdk/src/sync";
 import { waitFor } from "@testing-library/react";
 
@@ -60,11 +60,18 @@ describe("Notifier", () => {
     let mockClient: MockedObject<MatrixClient>;
     let testRoom: Room;
     let accountDataEventKey: string;
-    let accountDataStore = {};
+    let accountDataStore: Record<string, MatrixEvent | undefined> = {};
 
     let mockSettings: Record<string, boolean> = {};
 
     const userId = "@bob:example.org";
+
+    const emitLiveEvent = (event: MatrixEvent): void => {
+        mockClient!.emit(RoomEvent.Timeline, event, testRoom, false, false, {
+            liveEvent: true,
+            timeline: testRoom.getLiveTimeline(),
+        });
+    };
 
     beforeEach(() => {
         accountDataStore = {};
@@ -150,7 +157,7 @@ describe("Notifier", () => {
         });
 
         it('does not create notifications before syncing has started', () => {
-            mockClient!.emit(ClientEvent.Event, event);
+            emitLiveEvent(event);
 
             expect(MockPlatform.displayNotification).not.toHaveBeenCalled();
             expect(MockPlatform.loudNotification).not.toHaveBeenCalled();
@@ -160,7 +167,30 @@ describe("Notifier", () => {
             const ownEvent = new MatrixEvent({ sender: userId });
 
             mockClient!.emit(ClientEvent.Sync, SyncState.Syncing, null);
-            mockClient!.emit(ClientEvent.Event, ownEvent);
+            emitLiveEvent(ownEvent);
+
+            expect(MockPlatform.displayNotification).not.toHaveBeenCalled();
+            expect(MockPlatform.loudNotification).not.toHaveBeenCalled();
+        });
+
+        it('does not create notifications for non-live events (scrollback)', () => {
+            mockClient!.emit(ClientEvent.Sync, SyncState.Syncing, null);
+            mockClient!.emit(RoomEvent.Timeline, event, testRoom, false, false, {
+                liveEvent: false,
+                timeline: testRoom.getLiveTimeline(),
+            });
+
+            expect(MockPlatform.displayNotification).not.toHaveBeenCalled();
+            expect(MockPlatform.loudNotification).not.toHaveBeenCalled();
+        });
+
+        it('does not create notifications for rooms which cannot be obtained via client.getRoom', () => {
+            mockClient!.emit(ClientEvent.Sync, SyncState.Syncing, null);
+            mockClient.getRoom.mockReturnValue(null);
+            mockClient!.emit(RoomEvent.Timeline, event, testRoom, false, false, {
+                liveEvent: true,
+                timeline: testRoom.getLiveTimeline(),
+            });
 
             expect(MockPlatform.displayNotification).not.toHaveBeenCalled();
             expect(MockPlatform.loudNotification).not.toHaveBeenCalled();
@@ -175,7 +205,7 @@ describe("Notifier", () => {
             });
 
             mockClient!.emit(ClientEvent.Sync, SyncState.Syncing, null);
-            mockClient!.emit(ClientEvent.Event, event);
+            emitLiveEvent(event);
 
             expect(MockPlatform.displayNotification).not.toHaveBeenCalled();
             expect(MockPlatform.loudNotification).not.toHaveBeenCalled();
@@ -183,7 +213,7 @@ describe("Notifier", () => {
 
         it('creates desktop notification when enabled', () => {
             mockClient!.emit(ClientEvent.Sync, SyncState.Syncing, null);
-            mockClient!.emit(ClientEvent.Event, event);
+            emitLiveEvent(event);
 
             expect(MockPlatform.displayNotification).toHaveBeenCalledWith(
                 testRoom.name,
@@ -196,7 +226,7 @@ describe("Notifier", () => {
 
         it('creates a loud notification when enabled', () => {
             mockClient!.emit(ClientEvent.Sync, SyncState.Syncing, null);
-            mockClient!.emit(ClientEvent.Event, event);
+            emitLiveEvent(event);
 
             expect(MockPlatform.loudNotification).toHaveBeenCalledWith(
                 event, testRoom,
@@ -212,7 +242,7 @@ describe("Notifier", () => {
             });
 
             mockClient!.emit(ClientEvent.Sync, SyncState.Syncing, null);
-            mockClient!.emit(ClientEvent.Event, event);
+            emitLiveEvent(event);
 
             // desktop notification created
             expect(MockPlatform.displayNotification).toHaveBeenCalled();
@@ -222,12 +252,13 @@ describe("Notifier", () => {
     });
 
     describe("_displayPopupNotification", () => {
-        it.each([
+        const testCases: {event: IContent | undefined, count: number}[] = [
             { event: { is_silenced: true }, count: 0 },
             { event: { is_silenced: false }, count: 1 },
             { event: undefined, count: 1 },
-        ])("does not dispatch when notifications are silenced", ({ event, count }) => {
-            mockClient.setAccountData(accountDataEventKey, event);
+        ];
+        it.each(testCases)("does not dispatch when notifications are silenced", ({ event, count }) => {
+            mockClient.setAccountData(accountDataEventKey, event!);
             Notifier._displayPopupNotification(testEvent, testRoom);
             expect(MockPlatform.displayNotification).toHaveBeenCalledTimes(count);
         });
@@ -243,16 +274,17 @@ describe("Notifier", () => {
     });
 
     describe("_playAudioNotification", () => {
-        it.each([
+        const testCases: {event: IContent | undefined, count: number}[] = [
             { event: { is_silenced: true }, count: 0 },
             { event: { is_silenced: false }, count: 1 },
             { event: undefined, count: 1 },
-        ])("does not dispatch when notifications are silenced", ({ event, count }) => {
+        ];
+        it.each(testCases)("does not dispatch when notifications are silenced", ({ event, count }) => {
             // It's not ideal to only look at whether this function has been called
             // but avoids starting to look into DOM stuff
             Notifier.getSoundForRoom = jest.fn();
 
-            mockClient.setAccountData(accountDataEventKey, event);
+            mockClient.setAccountData(accountDataEventKey, event!);
             Notifier._playAudioNotification(testEvent, testRoom);
             expect(Notifier.getSoundForRoom).toHaveBeenCalledTimes(count);
         });
@@ -267,7 +299,7 @@ describe("Notifier", () => {
                 notify: true,
                 tweaks: {},
             });
-
+            Notifier.start();
             Notifier.onSyncStateChange(SyncState.Syncing);
         });
 
@@ -283,7 +315,7 @@ describe("Notifier", () => {
                 content: {},
                 event: true,
             });
-            Notifier.onEvent(callEvent);
+            emitLiveEvent(callEvent);
             return callEvent;
         };
 

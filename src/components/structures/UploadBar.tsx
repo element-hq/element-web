@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import { Room } from "matrix-js-sdk/src/models/room";
-import filesize from "filesize";
+import { filesize } from "filesize";
 import { IEventRelation } from 'matrix-js-sdk/src/matrix';
 import { Optional } from "matrix-events-sdk";
 

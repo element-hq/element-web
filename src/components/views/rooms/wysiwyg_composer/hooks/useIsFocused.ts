@@ -28,7 +28,7 @@ export function useIsFocused() {
         } else {
             // To avoid a blink when we switch mode between plain text and rich text mode
             // We delay the unfocused action
-            timeoutIDRef.current = setTimeout(() => setIsFocused(false), 100);
+            timeoutIDRef.current = window.setTimeout(() => setIsFocused(false), 100);
         }
     }, [setIsFocused, timeoutIDRef]);
 

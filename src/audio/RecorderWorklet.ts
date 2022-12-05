@@ -85,4 +85,4 @@ class MxVoiceWorklet extends AudioWorkletProcessor {
 
 registerProcessor(WORKLET_NAME, MxVoiceWorklet);
 
-export default null; // to appease module loaders (we never use the export)
+export default ""; // to appease module loaders (we never use the export)

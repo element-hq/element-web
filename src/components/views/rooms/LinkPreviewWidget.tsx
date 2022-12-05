@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { ComponentProps, createRef } from 'react';
-import { AllHtmlEntities } from 'html-entities';
+import { decode } from 'html-entities';
 import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import { IPreviewUrlResponse } from 'matrix-js-sdk/src/client';
 
@@ -124,7 +124,7 @@ export default class LinkPreviewWidget extends React.Component<IProps> {
 
         // The description includes &-encoded HTML entities, we decode those as React treats the thing as an
         // opaque string. This does not allow any HTML to be injected into the DOM.
-        const description = AllHtmlEntities.decode(p["og:description"] || "");
+        const description = decode(p["og:description"] || "");
 
         const title = p["og:title"]?.trim() ?? "";
         const anchor = <a href={this.props.link} target="_blank" rel="noreferrer noopener">{ title }</a>;

@@ -27,6 +27,7 @@ import {
     PermissionChanged as PermissionChangedEvent,
 } from "@matrix-org/analytics-events/types/typescript/PermissionChanged";
 import { ISyncStateData, SyncState } from "matrix-js-sdk/src/sync";
+import { IRoomTimelineData } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from './MatrixClientPeg';
 import { PosthogAnalytics } from "./PosthogAnalytics";
@@ -217,7 +218,7 @@ export const Notifier = {
         this.boundOnRoomReceipt = this.boundOnRoomReceipt || this.onRoomReceipt.bind(this);
         this.boundOnEventDecrypted = this.boundOnEventDecrypted || this.onEventDecrypted.bind(this);
 
-        MatrixClientPeg.get().on(ClientEvent.Event, this.boundOnEvent);
+        MatrixClientPeg.get().on(RoomEvent.Timeline, this.boundOnEvent);
         MatrixClientPeg.get().on(RoomEvent.Receipt, this.boundOnRoomReceipt);
         MatrixClientPeg.get().on(MatrixEventEvent.Decrypted, this.boundOnEventDecrypted);
         MatrixClientPeg.get().on(ClientEvent.Sync, this.boundOnSyncStateChange);
@@ -227,7 +228,7 @@ export const Notifier = {
 
     stop: function(this: typeof Notifier) {
         if (MatrixClientPeg.get()) {
-            MatrixClientPeg.get().removeListener(ClientEvent.Event, this.boundOnEvent);
+            MatrixClientPeg.get().removeListener(RoomEvent.Timeline, this.boundOnEvent);
             MatrixClientPeg.get().removeListener(RoomEvent.Receipt, this.boundOnRoomReceipt);
             MatrixClientPeg.get().removeListener(MatrixEventEvent.Decrypted, this.boundOnEventDecrypted);
             MatrixClientPeg.get().removeListener(ClientEvent.Sync, this.boundOnSyncStateChange);
@@ -368,7 +369,15 @@ export const Notifier = {
         }
     },
 
-    onEvent: function(this: typeof Notifier, ev: MatrixEvent) {
+    onEvent: function(
+        this: typeof Notifier,
+        ev: MatrixEvent,
+        room: Room | undefined,
+        toStartOfTimeline: boolean | undefined,
+        removed: boolean,
+        data: IRoomTimelineData,
+    ) {
+        if (!data.liveEvent) return; // only notify for new things, not old.
         if (!this.isSyncing) return; // don't alert for any messages initially
         if (ev.getSender() === MatrixClientPeg.get().getUserId()) return;
 
@@ -428,6 +437,11 @@ export const Notifier = {
             }
         }
         const room = MatrixClientPeg.get().getRoom(roomId);
+        if (!room) {
+            // e.g we are in the process of joining a room.
+            // Seen in the cypress lazy-loading test.
+            return;
+        }
 
         const actions = MatrixClientPeg.get().getPushActionsForEvent(ev);
 
