@@ -407,6 +407,17 @@ describe("VoiceBroadcastPlayback", () => {
             describe("and calling stop", () => {
                 stopPlayback();
                 itShouldSetTheStateTo(VoiceBroadcastPlaybackState.Stopped);
+
+                describe("and skipping to somewhere in the middle of the first chunk", () => {
+                    beforeEach(async () => {
+                        mocked(chunk1Playback.play).mockClear();
+                        await playback.skipTo(1);
+                    });
+
+                    it("should not start the playback", () => {
+                        expect(chunk1Playback.play).not.toHaveBeenCalled();
+                    });
+                });
             });
 
             describe("and calling destroy", () => {
