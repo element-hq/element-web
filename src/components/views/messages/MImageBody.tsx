@@ -270,6 +270,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
 
                 // Set a placeholder image when we can't decrypt the image.
                 this.setState({ error });
+                return;
             }
         } else {
             thumbUrl = this.getThumbUrl();
@@ -291,16 +292,27 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
                 img.crossOrigin = "Anonymous"; // CORS allow canvas access
                 img.src = contentUrl;
 
-                await loadPromise;
-
-                const blob = await this.props.mediaEventHelper.sourceBlob.value;
-                if (!await blobIsAnimated(content.info.mimetype, blob)) {
-                    isAnimated = false;
+                try {
+                    await loadPromise;
+                } catch (error) {
+                    logger.error("Unable to download attachment: ", error);
+                    this.setState({ error: error as Error });
+                    return;
                 }
 
-                if (isAnimated) {
-                    const thumb = await createThumbnail(img, img.width, img.height, content.info.mimetype, false);
-                    thumbUrl = URL.createObjectURL(thumb.thumbnail);
+                try {
+                    const blob = await this.props.mediaEventHelper.sourceBlob.value;
+                    if (!await blobIsAnimated(content.info?.mimetype, blob)) {
+                        isAnimated = false;
+                    }
+
+                    if (isAnimated) {
+                        const thumb = await createThumbnail(img, img.width, img.height, content.info!.mimetype, false);
+                        thumbUrl = URL.createObjectURL(thumb.thumbnail);
+                    }
+                } catch (error) {
+                    // This is a non-critical failure, do not surface the error or bail the method here
+                    logger.warn("Unable to generate thumbnail for animated image: ", error);
                 }
             }
         }
