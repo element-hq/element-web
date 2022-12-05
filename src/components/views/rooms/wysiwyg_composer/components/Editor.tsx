@@ -61,7 +61,7 @@ export const Editor = memo(
                     onBlur={onBlur}
                     />
                 </div>
-                { rightComponent(selectPreviousSelection) }
+                { rightComponent?.(selectPreviousSelection) }
             </div>;
         },
     ),
