@@ -38,6 +38,7 @@ describe("<ForgotPassword>", () => {
     let client: MatrixClient;
     let serverConfig: ValidatedServerConfig;
     let onComplete: () => void;
+    let onLoginClick: () => void;
     let renderResult: RenderResult;
     let restoreConsole: () => void;
 
@@ -49,9 +50,16 @@ describe("<ForgotPassword>", () => {
         });
     };
 
-    const submitForm = async (submitLabel: string): Promise<void> => {
+    const clickButton = async (label: string): Promise<void> => {
         await act(async () => {
-            await userEvent.click(screen.getByText(submitLabel), { delay: null });
+            await userEvent.click(screen.getByText(label), { delay: null });
+        });
+    };
+
+    const itShouldCloseTheDialogAndShowThePasswordInput = (): void => {
+        it("should close the dialog and show the password input", () => {
+            expect(screen.queryByText("Verify your email to continue")).not.toBeInTheDocument();
+            expect(screen.getByText("Reset your password")).toBeInTheDocument();
         });
     };
 
@@ -70,6 +78,7 @@ describe("<ForgotPassword>", () => {
         serverConfig.hsName = "example.com";
 
         onComplete = jest.fn();
+        onLoginClick = jest.fn();
 
         jest.spyOn(AutoDiscoveryUtils, "validateServerConfigWithStaticUrls").mockResolvedValue(serverConfig);
         jest.spyOn(AutoDiscoveryUtils, "authComponentStateForError");
@@ -94,6 +103,7 @@ describe("<ForgotPassword>", () => {
             renderResult = render(<ForgotPassword
                 serverConfig={serverConfig}
                 onComplete={onComplete}
+                onLoginClick={onLoginClick}
             />);
         });
 
@@ -108,11 +118,22 @@ describe("<ForgotPassword>", () => {
                 renderResult.rerender(<ForgotPassword
                     serverConfig={serverConfig}
                     onComplete={onComplete}
+                    onLoginClick={onLoginClick}
                 />);
             });
 
             it("should show the new homeserver server name", () => {
                 expect(screen.queryByText("example2.com")).toBeInTheDocument();
+            });
+        });
+
+        describe("when clicking »Sign in instead«", () => {
+            beforeEach(async () => {
+                await clickButton("Sign in instead");
+            });
+
+            it("should call onLoginClick()", () => {
+                expect(onLoginClick).toHaveBeenCalled();
             });
         });
 
@@ -132,7 +153,7 @@ describe("<ForgotPassword>", () => {
                 mocked(client).requestPasswordEmailToken.mockRejectedValue({
                     errcode: "M_THREEPID_NOT_FOUND",
                 });
-                await submitForm("Send email");
+                await clickButton("Send email");
             });
 
             it("should show an email not found message", () => {
@@ -146,7 +167,7 @@ describe("<ForgotPassword>", () => {
                 mocked(client).requestPasswordEmailToken.mockRejectedValue({
                     name: "ConnectionError",
                 });
-                await submitForm("Send email");
+                await clickButton("Send email");
             });
 
             it("should show an info about that", () => {
@@ -166,7 +187,7 @@ describe("<ForgotPassword>", () => {
                     serverIsAlive: false,
                     serverDeadError: "server down",
                 });
-                await submitForm("Send email");
+                await clickButton("Send email");
             });
 
             it("should show the server error", () => {
@@ -180,7 +201,7 @@ describe("<ForgotPassword>", () => {
                 mocked(client).requestPasswordEmailToken.mockResolvedValue({
                     sid: testSid,
                 });
-                await submitForm("Send email");
+                await clickButton("Send email");
             });
 
             it("should send the mail and show the check email view", () => {
@@ -191,6 +212,16 @@ describe("<ForgotPassword>", () => {
                 );
                 expect(screen.getByText("Check your email to continue")).toBeInTheDocument();
                 expect(screen.getByText(testEmail)).toBeInTheDocument();
+            });
+
+            describe("when clicking re-enter email", () => {
+                beforeEach(async () => {
+                    await clickButton("Re-enter email address");
+                });
+
+                it("go back to the email input", () => {
+                    expect(screen.queryByText("Enter your email to reset password")).toBeInTheDocument();
+                });
             });
 
             describe("when clicking resend email", () => {
@@ -212,7 +243,7 @@ describe("<ForgotPassword>", () => {
 
             describe("when clicking next", () => {
                 beforeEach(async () => {
-                    await submitForm("Next");
+                    await clickButton("Next");
                 });
 
                 it("should show the password input view", () => {
@@ -246,7 +277,7 @@ describe("<ForgotPassword>", () => {
                                     retry_after_ms: (13 * 60 + 37) * 1000,
                                 },
                             });
-                            await submitForm("Reset password");
+                            await clickButton("Reset password");
                         });
 
                         it("should show the rate limit error message", () => {
@@ -258,7 +289,7 @@ describe("<ForgotPassword>", () => {
 
                     describe("and submitting it", () => {
                         beforeEach(async () => {
-                            await submitForm("Reset password");
+                            await clickButton("Reset password");
                             // double flush promises for the modal to appear
                             await flushPromisesWithFakeTimers();
                             await flushPromisesWithFakeTimers();
@@ -282,6 +313,46 @@ describe("<ForgotPassword>", () => {
                             );
                             expect(screen.getByText("Verify your email to continue")).toBeInTheDocument();
                             expect(screen.getByText(testEmail)).toBeInTheDocument();
+                        });
+
+                        describe("and dismissing the dialog by clicking the background", () => {
+                            beforeEach(async () => {
+                                await act(async () => {
+                                    await userEvent.click(screen.getByTestId("dialog-background"), { delay: null });
+                                });
+                                // double flush promises for the modal to disappear
+                                await flushPromisesWithFakeTimers();
+                                await flushPromisesWithFakeTimers();
+                            });
+
+                            itShouldCloseTheDialogAndShowThePasswordInput();
+                        });
+
+                        describe("and dismissing the dialog", () => {
+                            beforeEach(async () => {
+                                await act(async () => {
+                                    await userEvent.click(screen.getByLabelText("Close dialog"), { delay: null });
+                                });
+                                // double flush promises for the modal to disappear
+                                await flushPromisesWithFakeTimers();
+                                await flushPromisesWithFakeTimers();
+                            });
+
+                            itShouldCloseTheDialogAndShowThePasswordInput();
+                        });
+
+                        describe("when clicking re-enter email", () => {
+                            beforeEach(async () => {
+                                await clickButton("Re-enter email address");
+                                // double flush promises for the modal to disappear
+                                await flushPromisesWithFakeTimers();
+                                await flushPromisesWithFakeTimers();
+                            });
+
+                            it("should close the dialog and go back to the email input", () => {
+                                expect(screen.queryByText("Verify your email to continue")).not.toBeInTheDocument();
+                                expect(screen.queryByText("Enter your email to reset password")).toBeInTheDocument();
+                            });
                         });
 
                         describe("when validating the link from the mail", () => {

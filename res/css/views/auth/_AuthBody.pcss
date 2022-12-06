@@ -137,15 +137,50 @@ limitations under the License.
 }
 
 /* specialisation for password reset views */
-.mx_AuthBody_forgot-password {
+.mx_AuthBody.mx_AuthBody_forgot-password {
     font-size: $font-14px;
     color: $primary-content;
     padding: 50px 32px;
     min-height: 600px;
 
     h1 {
-        margin-bottom: $spacing-20;
-        margin-top: $spacing-24;
+        margin: $spacing-24 0;
+    }
+
+    .mx_AuthBody_button-container {
+        display: flex;
+        justify-content: center;
+    }
+
+    .mx_Login_submit {
+        font-weight: $font-semi-bold;
+        margin: 0 0 $spacing-16;
+    }
+
+    .mx_AuthBody_text {
+        margin-bottom: $spacing-32;
+
+        p {
+            margin: 0 0 $spacing-8;
+        }
+    }
+
+    .mx_AuthBody_sign-in-instead-button {
+        font-weight: $font-semi-bold;
+        padding: $spacing-4;
+    }
+
+    .mx_AuthBody_fieldRow {
+        margin-bottom: $spacing-24;
+    }
+
+    .mx_AccessibleButton.mx_AccessibleButton_hasKind {
+        background: none;
+
+        &:disabled {
+            cursor: default;
+            opacity: .4;
+        }
     }
 }
 
@@ -154,12 +189,6 @@ limitations under the License.
     color: $secondary-content;
     display: flex;
     gap: $spacing-8;
-    margin-bottom: 10px;
-    margin-top: $spacing-24;
-}
-
-.mx_AuthBody_did-not-receive--centered {
-    justify-content: center;
 }
 
 .mx_AuthBody_resend-button {
@@ -168,7 +197,7 @@ limitations under the License.
     color: $accent;
     display: flex;
     gap: $spacing-4;
-    padding: 4px;
+    padding: $spacing-4;
 
     &:hover {
         background-color: $system;
@@ -209,7 +238,7 @@ limitations under the License.
     text-align: center;
 
     .mx_AuthBody_paddedFooter_title {
-        margin-top: 16px;
+        margin-top: $spacing-16;
         font-size: $font-15px;
         line-height: $font-24px;
 
@@ -220,7 +249,7 @@ limitations under the License.
     }
 
     .mx_AuthBody_paddedFooter_subtitle {
-        margin-top: 8px;
+        margin-top: $spacing-8;
         font-size: $font-10px;
         line-height: $font-14px;
     }
@@ -236,7 +265,7 @@ limitations under the License.
 }
 
 .mx_SSOButtons + .mx_AuthBody_changeFlow {
-    margin-top: 24px;
+    margin-top: $spacing-24;
 }
 
 .mx_AuthBody_spinner {

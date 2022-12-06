@@ -347,7 +347,11 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
                     <div className="mx_Dialog">
                         { this.staticModal.elem }
                     </div>
-                    <div className="mx_Dialog_background mx_Dialog_staticBackground" onClick={this.onBackgroundClick} />
+                    <div
+                        data-testid="dialog-background"
+                        className="mx_Dialog_background mx_Dialog_staticBackground"
+                        onClick={this.onBackgroundClick}
+                    />
                 </div>
             );
 
@@ -368,7 +372,11 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
                     <div className="mx_Dialog">
                         { modal.elem }
                     </div>
-                    <div className="mx_Dialog_background" onClick={this.onBackgroundClick} />
+                    <div
+                        data-testid="dialog-background"
+                        className="mx_Dialog_background"
+                        onClick={this.onBackgroundClick}
+                    />
                 </div>
             );
 

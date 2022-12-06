@@ -19,6 +19,7 @@ limitations under the License.
 import React, { ReactNode } from 'react';
 import { logger } from 'matrix-js-sdk/src/logger';
 import { createClient } from "matrix-js-sdk/src/matrix";
+import { sleep } from 'matrix-js-sdk/src/utils';
 
 import { _t, _td } from '../../../languageHandler';
 import Modal from "../../../Modal";
@@ -43,6 +44,8 @@ import Spinner from '../../views/elements/Spinner';
 import { formatSeconds } from '../../../DateUtils';
 import AutoDiscoveryUtils from '../../../utils/AutoDiscoveryUtils';
 
+const emailCheckInterval = 2000;
+
 enum Phase {
     // Show email input
     EnterEmail = 1,
@@ -60,7 +63,7 @@ enum Phase {
 
 interface Props {
     serverConfig: ValidatedServerConfig;
-    onLoginClick?: () => void;
+    onLoginClick: () => void;
     onComplete: () => void;
 }
 
@@ -277,22 +280,43 @@ export default class ForgotPassword extends React.Component<Props, State> {
             {
                 email: this.state.email,
                 errorText: this.state.errorText,
+                onCloseClick: () => {
+                    modal.close();
+                    this.setState({ phase: Phase.PasswordInput });
+                },
+                onReEnterEmailClick: () => {
+                    modal.close();
+                    this.setState({ phase: Phase.EnterEmail });
+                },
                 onResendClick: this.sendVerificationMail,
             },
             "mx_VerifyEMailDialog",
             false,
             false,
             {
-                // this modal cannot be dismissed except reset is done or forced
                 onBeforeClose: async (reason?: string) => {
-                    return this.state.phase === Phase.Done || reason === "force";
+                    if (reason === "backgroundClick") {
+                        // Modal dismissed by clicking the background.
+                        // Go one phase back.
+                        this.setState({ phase: Phase.PasswordInput });
+                    }
+
+                    return true;
                 },
             },
         );
 
-        await this.reset.retrySetNewPassword(this.state.password);
-        this.phase = Phase.Done;
-        modal.close();
+        // Don't retry if the phase changed. For example when going back to email input.
+        while (this.state.phase === Phase.ResettingPassword) {
+            try {
+                await this.reset.setNewPassword(this.state.password);
+                this.setState({ phase: Phase.Done });
+                modal.close();
+            } catch (e) {
+                // Email not confirmed, yet. Retry after a while.
+                await sleep(emailCheckInterval);
+            }
+        }
     }
 
     private onSubmitForm = async (ev: React.FormEvent): Promise<void> => {
@@ -339,6 +363,7 @@ export default class ForgotPassword extends React.Component<Props, State> {
             homeserver={this.props.serverConfig.hsName}
             loading={this.state.phase === Phase.SendingEmail}
             onInputChanged={this.onInputChanged}
+            onLoginClick={this.props.onLoginClick!} // set by default props
             onSubmitForm={this.onSubmitForm}
         />;
     }
@@ -374,6 +399,7 @@ export default class ForgotPassword extends React.Component<Props, State> {
         return <CheckEmail
             email={this.state.email}
             errorText={this.state.errorText}
+            onReEnterEmailClick={() => this.setState({ phase: Phase.EnterEmail })}
             onResendClick={this.sendVerificationMail}
             onSubmitForm={this.onSubmitForm}
         />;

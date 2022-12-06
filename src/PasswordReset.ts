@@ -19,8 +19,6 @@ import { createClient, IRequestTokenResponse, MatrixClient } from 'matrix-js-sdk
 
 import { _t } from './languageHandler';
 
-const CHECK_EMAIL_VERIFIED_POLL_INTERVAL = 2000;
-
 /**
  * Allows a user to reset their password on a homeserver.
  *
@@ -106,24 +104,6 @@ export default class PasswordReset {
     public async setNewPassword(password: string): Promise<void> {
         this.password = password;
         await this.checkEmailLinkClicked();
-    }
-
-    public async retrySetNewPassword(password: string): Promise<void> {
-        this.password = password;
-        return new Promise((resolve) => {
-            this.tryCheckEmailLinkClicked(resolve);
-        });
-    }
-
-    private tryCheckEmailLinkClicked(resolve: Function): void {
-        this.checkEmailLinkClicked()
-            .then(() => resolve())
-            .catch(() => {
-                window.setTimeout(
-                    () => this.tryCheckEmailLinkClicked(resolve),
-                    CHECK_EMAIL_VERIFIED_POLL_INTERVAL,
-                );
-            });
     }
 
     /**
