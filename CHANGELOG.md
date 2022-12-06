@@ -1,11 +1,5 @@
-Changes in [1.11.16-rc.2](https://github.com/vector-im/element-web/releases/tag/v1.11.16-rc.2) (2022-12-02)
-===========================================================================================================
-
-## 🐛 Bug Fixes
- * Fix call splitbrains when switching between rooms ([\#9692](https://github.com/matrix-org/matrix-react-sdk/pull/9692)).
-
-Changes in [1.11.16-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.11.16-rc.1) (2022-11-29)
-===========================================================================================================
+Changes in [1.11.16](https://github.com/vector-im/element-web/releases/tag/v1.11.16) (2022-12-06)
+=================================================================================================
 
 ## ✨ Features
  * Further improve replies ([\#6396](https://github.com/matrix-org/matrix-react-sdk/pull/6396)). Fixes #19074, #18194 #18027 and #19179.
@@ -29,6 +23,8 @@ Changes in [1.11.16-rc.1](https://github.com/vector-im/element-web/releases/tag/
  * Fix regression with TimelinePanel props updates not taking effect ([\#9608](https://github.com/matrix-org/matrix-react-sdk/pull/9608)). Fixes #23794.
  * Fix form tooltip positioning ([\#9598](https://github.com/matrix-org/matrix-react-sdk/pull/9598)). Fixes #22861.
  * Extract Search handling from RoomView into its own Component ([\#9574](https://github.com/matrix-org/matrix-react-sdk/pull/9574)). Fixes #498.
+ * Fix call splitbrains when switching between rooms ([\#9692](https://github.com/matrix-org/matrix-react-sdk/pull/9692)).
+ * [Backport staging] Fix replies to emotes not showing as inline ([\#9708](https://github.com/matrix-org/matrix-react-sdk/pull/9708)).
 
 Changes in [1.11.15](https://github.com/vector-im/element-web/releases/tag/v1.11.15) (2022-11-22)
 =================================================================================================
