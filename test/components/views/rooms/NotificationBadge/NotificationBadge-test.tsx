@@ -20,6 +20,7 @@ import React from "react";
 import {
     StatelessNotificationBadge,
 } from "../../../../../src/components/views/rooms/NotificationBadge/StatelessNotificationBadge";
+import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { NotificationColor } from "../../../../../src/stores/notifications/NotificationColor";
 
 describe("NotificationBadge", () => {
@@ -44,6 +45,20 @@ describe("NotificationBadge", () => {
 
             fireEvent.mouseLeave(container.firstChild);
             expect(cb).toHaveBeenCalledTimes(3);
+        });
+
+        it("hides the bold icon when the settings is set", () => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
+                return name === "feature_hidebold";
+            });
+
+            const { container } = render(<StatelessNotificationBadge
+                symbol=""
+                color={NotificationColor.Bold}
+                count={1}
+            />);
+
+            expect(container.firstChild).toBeNull();
         });
     });
 });

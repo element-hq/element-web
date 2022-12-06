@@ -20,6 +20,7 @@ import DeviceListener from '../DeviceListener';
 import GenericToast from "../components/views/toasts/GenericToast";
 import ToastStore from "../stores/ToastStore";
 import { Action } from "../dispatcher/actions";
+import { snoozeBulkUnverifiedDeviceReminder } from '../utils/device/snoozeBulkUnverifiedDeviceReminder';
 
 const TOAST_KEY = "reviewsessions";
 
@@ -34,6 +35,7 @@ export const showToast = (deviceIds: Set<string>) => {
 
     const onReject = () => {
         DeviceListener.sharedInstance().dismissUnverifiedSessions(deviceIds);
+        snoozeBulkUnverifiedDeviceReminder();
     };
 
     ToastStore.sharedInstance().addOrReplaceToast({

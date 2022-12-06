@@ -20,8 +20,8 @@ limitations under the License.
 
     .mx_Dialog {
         color: $primary-content;
-        font-size: 14px;
-        padding: 16px;
+        font-size: $font-14px;
+        padding: $spacing-24 $spacing-24 $spacing-16;
         text-align: center;
         width: 485px;
 
@@ -33,6 +33,15 @@ limitations under the License.
         .mx_VerifyEMailDialog_text-light {
             color: $secondary-content;
             line-height: 20px;
+        }
+
+        .mx_AuthBody_did-not-receive {
+            justify-content: center;
+            margin-bottom: $spacing-8;
+        }
+
+        .mx_Dialog_cancelButton {
+            right: 10px;
         }
     }
 }

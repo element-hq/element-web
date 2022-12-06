@@ -27,12 +27,16 @@ import { ErrorMessage } from "../../ErrorMessage";
 interface Props {
     email: string;
     errorText: string | null;
+    onCloseClick: () => void;
+    onReEnterEmailClick: () => void;
     onResendClick: () => Promise<boolean>;
 }
 
 export const VerifyEmailModal: React.FC<Props> = ({
     email,
     errorText,
+    onCloseClick,
+    onReEnterEmailClick,
     onResendClick,
 }) => {
     const { toggle: toggleTooltipVisible, value: tooltipVisible } = useTimeoutToggle(false, 2500);
@@ -57,7 +61,8 @@ export const VerifyEmailModal: React.FC<Props> = ({
                 },
             ) }
         </p>
-        <div className="mx_AuthBody_did-not-receive mx_AuthBody_did-not-receive--centered">
+
+        <div className="mx_AuthBody_did-not-receive">
             <span className="mx_VerifyEMailDialog_text-light">{ _t("Did not receive it?") }</span>
             <AccessibleButton
                 className="mx_AuthBody_resend-button"
@@ -74,5 +79,22 @@ export const VerifyEmailModal: React.FC<Props> = ({
             </AccessibleButton>
             { errorText && <ErrorMessage message={errorText} /> }
         </div>
+
+        <div className="mx_AuthBody_did-not-receive">
+            <span className="mx_VerifyEMailDialog_text-light">{ _t("Wrong email address?") }</span>
+            <AccessibleButton
+                className="mx_AuthBody_resend-button"
+                kind="link"
+                onClick={onReEnterEmailClick}
+            >
+                { _t("Re-enter email address") }
+            </AccessibleButton>
+        </div>
+
+        <AccessibleButton
+            onClick={onCloseClick}
+            className="mx_Dialog_cancelButton"
+            aria-label={_t("Close dialog")}
+        />
     </>;
 };

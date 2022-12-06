@@ -22,6 +22,7 @@ import EmailField from "../../../views/auth/EmailField";
 import { ErrorMessage } from "../../ErrorMessage";
 import Spinner from "../../../views/elements/Spinner";
 import Field from "../../../views/elements/Field";
+import AccessibleButton from "../../../views/elements/AccessibleButton";
 
 interface EnterEmailProps {
     email: string;
@@ -29,6 +30,7 @@ interface EnterEmailProps {
     homeserver: string;
     loading: boolean;
     onInputChanged: (stateKey: string, ev: React.FormEvent<HTMLInputElement>) => void;
+    onLoginClick: () => void;
     onSubmitForm: (ev: React.FormEvent) => void;
 }
 
@@ -41,6 +43,7 @@ export const EnterEmail: React.FC<EnterEmailProps> = ({
     homeserver,
     loading,
     onInputChanged,
+    onLoginClick,
     onSubmitForm,
 }) => {
     const submitButtonChild = loading
@@ -92,6 +95,15 @@ export const EnterEmail: React.FC<EnterEmailProps> = ({
                 >
                     { submitButtonChild }
                 </button>
+                <div className="mx_AuthBody_button-container">
+                    <AccessibleButton
+                        className="mx_AuthBody_sign-in-instead-button"
+                        element="button"
+                        kind="link"
+                        onClick={onLoginClick}>
+                        { _t("Sign in instead") }
+                    </AccessibleButton>
+                </div>
             </fieldset>
         </form>
     </>;

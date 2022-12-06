@@ -20,6 +20,7 @@ import classNames from "classnames";
 import { formatCount } from "../../../../utils/FormattingUtils";
 import AccessibleButton from "../../elements/AccessibleButton";
 import { NotificationColor } from "../../../../stores/notifications/NotificationColor";
+import { useSettingValue } from "../../../../hooks/useSettings";
 
 interface Props {
     symbol: string | null;
@@ -37,8 +38,12 @@ export function StatelessNotificationBadge({
     count,
     color,
     ...props }: Props) {
+    const hideBold = useSettingValue("feature_hidebold");
+
     // Don't show a badge if we don't need to
-    if (color === NotificationColor.None) return null;
+    if (color === NotificationColor.None || (hideBold && color == NotificationColor.Bold)) {
+        return null;
+    }
 
     const hasUnreadCount = color >= NotificationColor.Grey && (!!count || !!symbol);
 

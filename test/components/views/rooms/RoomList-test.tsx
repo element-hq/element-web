@@ -32,7 +32,7 @@ import RoomListStore, { RoomListStoreClass } from "../../../../src/stores/room-l
 import RoomListLayoutStore from "../../../../src/stores/room-list/RoomListLayoutStore";
 import RoomList from "../../../../src/components/views/rooms/RoomList";
 import RoomSublist from "../../../../src/components/views/rooms/RoomSublist";
-import RoomTile from "../../../../src/components/views/rooms/RoomTile";
+import { RoomTile } from "../../../../src/components/views/rooms/RoomTile";
 import { getMockClientWithEventEmitter, mockClientMethodsUser } from '../../../test-utils';
 import ResizeNotifier from '../../../../src/utils/ResizeNotifier';
 

@@ -20,7 +20,7 @@ import { NotificationState } from "./NotificationState";
 export class StaticNotificationState extends NotificationState {
     public static readonly RED_EXCLAMATION = StaticNotificationState.forSymbol("!", NotificationColor.Red);
 
-    constructor(symbol: string, count: number, color: NotificationColor) {
+    constructor(symbol: string | null, count: number, color: NotificationColor) {
         super();
         this._symbol = symbol;
         this._count = count;

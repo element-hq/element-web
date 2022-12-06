@@ -48,6 +48,7 @@ import {
 } from "./utils/device/clientInformation";
 import SettingsStore, { CallbackFn } from "./settings/SettingsStore";
 import { UIFeature } from "./settings/UIFeature";
+import { isBulkUnverifiedDeviceReminderSnoozed } from "./utils/device/snoozeBulkUnverifiedDeviceReminder";
 
 const KEY_BACKUP_POLL_INTERVAL = 5 * 60 * 1000;
 
@@ -335,12 +336,15 @@ export default class DeviceListener {
         logger.debug("New unverified sessions: " + Array.from(newUnverifiedDeviceIds).join(','));
         logger.debug("Currently showing toasts for: " + Array.from(this.displayingToastsForDeviceIds).join(','));
 
+        const isBulkUnverifiedSessionsReminderSnoozed = isBulkUnverifiedDeviceReminderSnoozed();
+
         // Display or hide the batch toast for old unverified sessions
         // don't show the toast if the current device is unverified
         if (
             oldUnverifiedDeviceIds.size > 0
             && isCurrentDeviceTrusted
             && this.enableBulkUnverifiedSessionsReminder
+            && !isBulkUnverifiedSessionsReminderSnoozed
         ) {
             showBulkUnverifiedSessionsToast(oldUnverifiedDeviceIds);
         } else {
