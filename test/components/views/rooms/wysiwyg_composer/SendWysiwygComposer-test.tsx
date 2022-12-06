@@ -75,8 +75,8 @@ describe('SendWysiwygComposer', () => {
     });
 
     const customRender = (
-        onChange = (_content: string) => void 0,
-        onSend = () => void 0,
+        onChange = (_content: string): void => void 0,
+        onSend = (): void => void 0,
         disabled = false,
         isRichTextEnabled = true,
         placeholder?: string) => {
