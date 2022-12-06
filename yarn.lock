@@ -2134,11 +2134,6 @@
   resolved "https://registry.yarnpkg.com/@types/scheduler/-/scheduler-0.16.2.tgz#1a62f89525723dde24ba1b01b092bf5df8ad4d39"
   integrity sha512-hppQEBDmlwhFAXKJX2KnWLYu5yMfi91yazPb2l+lbJiwW+wdo1gNeRA+3RgNSO39WYX2euey41KEwnqesU2Jew==
 
-"@types/sdp-transform@^2.4.5":
-  version "2.4.5"
-  resolved "https://registry.yarnpkg.com/@types/sdp-transform/-/sdp-transform-2.4.5.tgz#3167961e0a1a5265545e278627aa37c606003f53"
-  integrity sha512-GVO0gnmbyO3Oxm2HdPsYUNcyihZE3GyCY8ysMYHuQGfLhGZq89Nm4lSzULWTzZoyHtg+VO/IdrnxZHPnPSGnAg==
-
 "@types/semver@^7.3.12":
   version "7.3.13"
   resolved "https://registry.yarnpkg.com/@types/semver/-/semver-7.3.13.tgz#da4bfd73f49bd541d28920ab0e2bf0ee80f71c91"
@@ -8157,24 +8152,6 @@ matrix-events-sdk@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/matrix-events-sdk/-/matrix-events-sdk-0.0.1.tgz#c8c38911e2cb29023b0bbac8d6f32e0de2c957dd"
   integrity sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==
-
-matrix-js-sdk@22.0.0:
-  version "22.0.0"
-  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-22.0.0.tgz#8e396a1798d6d1515a92cf8f544b0010bd0c9e85"
-  integrity sha512-mpKqeD3nCobjGiUiATUyEoP44n+AzDW5cSeBTIBY5fPhj0AkzLJhblHt40vzSOJazj8tT0PhsSzhEIR9hGzYGA==
-  dependencies:
-    "@babel/runtime" "^7.12.5"
-    "@types/sdp-transform" "^2.4.5"
-    another-json "^0.2.0"
-    bs58 "^5.0.0"
-    content-type "^1.0.4"
-    loglevel "^1.7.1"
-    matrix-events-sdk "0.0.1"
-    matrix-widget-api "^1.0.0"
-    p-retry "4"
-    qs "^6.9.6"
-    sdp-transform "^2.14.1"
-    unhomoglyph "^1.0.6"
 
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
   version "22.0.0"
