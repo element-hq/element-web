@@ -960,6 +960,7 @@
     "Show stickers button": "Show stickers button",
     "Show polls button": "Show polls button",
     "Insert a trailing colon after user mentions at the start of a message": "Insert a trailing colon after user mentions at the start of a message",
+    "Hide notification dot (only display counters badges)": "Hide notification dot (only display counters badges)",
     "Use a more compact 'Modern' layout": "Use a more compact 'Modern' layout",
     "Show a placeholder for removed messages": "Show a placeholder for removed messages",
     "Show join/leave messages (invites/removes/bans unaffected)": "Show join/leave messages (invites/removes/bans unaffected)",

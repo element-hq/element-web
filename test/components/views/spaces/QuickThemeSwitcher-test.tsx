@@ -38,6 +38,7 @@ jest.mock('../../../../src/settings/SettingsStore', () => ({
     setValue: jest.fn(),
     getValue: jest.fn(),
     monitorSetting: jest.fn(),
+    watchSetting: jest.fn(),
 }));
 
 jest.mock('../../../../src/dispatcher/dispatcher', () => ({

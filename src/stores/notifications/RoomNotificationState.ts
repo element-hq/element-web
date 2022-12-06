@@ -98,8 +98,8 @@ export class RoomNotificationState extends NotificationState implements IDestroy
         this.updateNotificationState();
     };
 
-    private handleRoomEventUpdate = (event: MatrixEvent, room: Room | null) => {
-        if (room?.roomId !== this.room.roomId) return; // ignore - not for us or notifications timeline
+    private handleRoomEventUpdate = (event: MatrixEvent) => {
+        if (event?.getRoomId() !== this.room.roomId) return; // ignore - not for us or notifications timeline
         this.updateNotificationState();
     };
 
