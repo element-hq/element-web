@@ -1,11 +1,5 @@
-Changes in [3.62.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.62.0-rc.2) (2022-12-02)
-===============================================================================================================
-
-## 🐛 Bug Fixes
- * Fix call splitbrains when switching between rooms ([\#9692](https://github.com/matrix-org/matrix-react-sdk/pull/9692)).
-
-Changes in [3.62.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.62.0-rc.1) (2022-11-29)
-===============================================================================================================
+Changes in [3.62.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.62.0) (2022-12-06)
+=====================================================================================================
 
 ## ✨ Features
  * Further improve replies ([\#6396](https://github.com/matrix-org/matrix-react-sdk/pull/6396)). Fixes vector-im/element-web#19074, vector-im/element-web#18194 vector-im/element-web#18027 and vector-im/element-web#19179.
@@ -29,6 +23,8 @@ Changes in [3.62.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases
  * Fix regression with TimelinePanel props updates not taking effect ([\#9608](https://github.com/matrix-org/matrix-react-sdk/pull/9608)). Fixes vector-im/element-web#23794.
  * Fix form tooltip positioning ([\#9598](https://github.com/matrix-org/matrix-react-sdk/pull/9598)). Fixes vector-im/element-web#22861.
  * Extract Search handling from RoomView into its own Component ([\#9574](https://github.com/matrix-org/matrix-react-sdk/pull/9574)). Fixes vector-im/element-web#498.
+ * Fix call splitbrains when switching between rooms ([\#9692](https://github.com/matrix-org/matrix-react-sdk/pull/9692)).
+ * Fix replies to emotes not showing as inline ([\#9707](https://github.com/matrix-org/matrix-react-sdk/pull/9707)). Fixes vector-im/element-web#23903.
 
 Changes in [3.61.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.61.0) (2022-11-22)
 =====================================================================================================
