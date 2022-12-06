@@ -48,20 +48,25 @@ import { RoomTileCallSummary } from "./RoomTileCallSummary";
 import { RoomGeneralContextMenu } from "../context_menus/RoomGeneralContextMenu";
 import { CallStore, CallStoreEvent } from "../../../stores/CallStore";
 import { SdkContextClass } from "../../../contexts/SDKContext";
+import { useHasRoomLiveVoiceBroadcast, VoiceBroadcastRoomSubtitle } from "../../../voice-broadcast";
 
-interface IProps {
+interface Props {
     room: Room;
     showMessagePreview: boolean;
     isMinimized: boolean;
     tag: TagID;
 }
 
+interface ClassProps extends Props {
+    hasLiveVoiceBroadcast: boolean;
+}
+
 type PartialDOMRect = Pick<DOMRect, "left" | "bottom">;
 
-interface IState {
+interface State {
     selected: boolean;
-    notificationsMenuPosition: PartialDOMRect;
-    generalMenuPosition: PartialDOMRect;
+    notificationsMenuPosition: PartialDOMRect | null;
+    generalMenuPosition: PartialDOMRect | null;
     call: Call | null;
     messagePreview?: string;
 }
@@ -76,13 +81,13 @@ export const contextMenuBelow = (elementRect: PartialDOMRect) => {
     return { left, top, chevronFace };
 };
 
-export default class RoomTile extends React.PureComponent<IProps, IState> {
-    private dispatcherRef: string;
+export class RoomTile extends React.PureComponent<ClassProps, State> {
+    private dispatcherRef?: string;
     private roomTileRef = createRef<HTMLDivElement>();
     private notificationState: NotificationState;
     private roomProps: RoomEchoChamber;
 
-    constructor(props: IProps) {
+    constructor(props: ClassProps) {
         super(props);
 
         this.state = {
@@ -120,7 +125,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         return !this.props.isMinimized && this.props.showMessagePreview;
     }
 
-    public componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>) {
+    public componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<State>) {
         const showMessageChanged = prevProps.showMessagePreview !== this.props.showMessagePreview;
         const minimizedChanged = prevProps.isMinimized !== this.props.isMinimized;
         if (showMessageChanged || minimizedChanged) {
@@ -169,7 +174,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
             this.onRoomPreviewChanged,
         );
         this.props.room.off(RoomEvent.Name, this.onRoomNameUpdate);
-        defaultDispatcher.unregister(this.dispatcherRef);
+        if (this.dispatcherRef) defaultDispatcher.unregister(this.dispatcherRef);
         this.notificationState.off(NotificationStateEvents.Update, this.onNotificationUpdate);
         this.roomProps.off(PROPERTY_UPDATED, this.onRoomPropertyUpdate);
         CallStore.instance.off(CallStoreEvent.Call, this.onCallChanged);
@@ -218,12 +223,14 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         ev.stopPropagation();
 
         const action = getKeyBindingsManager().getAccessibilityAction(ev);
+        const clearSearch = ([KeyBindingAction.Enter, KeyBindingAction.Space] as Array<string | undefined>)
+            .includes(action);
 
         defaultDispatcher.dispatch<ViewRoomPayload>({
             action: Action.ViewRoom,
             show_room_tile: true, // make sure the room is visible in the list
             room_id: this.props.room.roomId,
-            clear_search: [KeyBindingAction.Enter, KeyBindingAction.Space].includes(action),
+            clear_search: clearSearch,
             metricsTrigger: "RoomList",
             metricsViaKeyboard: ev.type !== "click",
         });
@@ -233,7 +240,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         this.setState({ selected: isActive });
     };
 
-    private onNotificationsMenuOpenClick = (ev: React.MouseEvent) => {
+    private onNotificationsMenuOpenClick = (ev: ButtonEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
         const target = ev.target as HTMLButtonElement;
@@ -246,7 +253,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         this.setState({ notificationsMenuPosition: null });
     };
 
-    private onGeneralMenuOpenClick = (ev: React.MouseEvent) => {
+    private onGeneralMenuOpenClick = (ev: ButtonEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
         const target = ev.target as HTMLButtonElement;
@@ -271,7 +278,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         this.setState({ generalMenuPosition: null });
     };
 
-    private renderNotificationsMenu(isActive: boolean): React.ReactElement {
+    private renderNotificationsMenu(isActive: boolean): React.ReactElement | null {
         if (MatrixClientPeg.get().isGuest() || this.props.tag === DefaultTagID.Archived ||
             !this.showContextMenu || this.props.isMinimized
         ) {
@@ -313,7 +320,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         );
     }
 
-    private renderGeneralMenu(): React.ReactElement {
+    private renderGeneralMenu(): React.ReactElement | null {
         if (!this.showContextMenu) return null; // no menu to show
         return (
             <React.Fragment>
@@ -379,6 +386,8 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
                     <RoomTileCallSummary call={this.state.call} />
                 </div>
             );
+        } else if (this.props.hasLiveVoiceBroadcast) {
+            subtitle = <VoiceBroadcastRoomSubtitle />;
         } else if (this.showMessagePreview && this.state.messagePreview) {
             subtitle = (
                 <div
@@ -472,3 +481,10 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         );
     }
 }
+
+const RoomTileHOC: React.FC<Props> = (props: Props) => {
+    const hasLiveVoiceBroadcast = useHasRoomLiveVoiceBroadcast(props.room);
+    return <RoomTile {...props} hasLiveVoiceBroadcast={hasLiveVoiceBroadcast} />;
+};
+
+export default RoomTileHOC;

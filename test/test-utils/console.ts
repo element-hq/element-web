@@ -39,7 +39,7 @@ export const filterConsole = (...ignoreList: string[]): () => void => {
                 return;
             }
 
-            originalFunction(data);
+            originalFunction(...data);
         };
     }
 
