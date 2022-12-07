@@ -387,6 +387,9 @@ describe("VoiceBroadcastPlayback", () => {
                 });
 
                 it("should play until the end", () => {
+                    // assert first chunk was unloaded
+                    expect(chunk1Playback.destroy).toHaveBeenCalled();
+
                     // assert that the second chunk is being played
                     expect(chunk2Playback.play).toHaveBeenCalled();
 
