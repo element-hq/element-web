@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import posthog, { PostHog } from 'posthog-js';
+import posthog, { PostHog, Properties } from 'posthog-js';
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { logger } from "matrix-js-sdk/src/logger";
 import { UserProperties } from "@matrix-org/analytics-events/types/typescript/UserProperties";
@@ -196,7 +196,7 @@ export class PosthogAnalytics {
     // we persist the last `$screen_name` and send it for all events until it is replaced
     private lastScreen: ScreenName = "Loading";
 
-    private sanitizeProperties = (properties: posthog.Properties, eventName: string): posthog.Properties => {
+    private sanitizeProperties = (properties: Properties, eventName: string): Properties => {
         // Callback from posthog to sanitize properties before sending them to the server.
         //
         // Here we sanitize posthog's built in properties which leak PII e.g. url reporting.
@@ -222,7 +222,7 @@ export class PosthogAnalytics {
         return properties;
     };
 
-    private registerSuperProperties(properties: posthog.Properties) {
+    private registerSuperProperties(properties: Properties) {
         if (this.enabled) {
             this.posthog.register(properties);
         }
@@ -245,7 +245,7 @@ export class PosthogAnalytics {
     }
 
     // eslint-disable-nextline no-unused-varsx
-    private capture(eventName: string, properties: posthog.Properties, options?: IPostHogEventOptions) {
+    private capture(eventName: string, properties: Properties, options?: IPostHogEventOptions) {
         if (!this.enabled) {
             return;
         }
