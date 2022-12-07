@@ -75,4 +75,20 @@ describe('FormattingButtons', () => {
         // Then
         expect(await screen.findByText('Bold')).toBeTruthy();
     });
+
+    it('Should not have hover style when active', async () => {
+        // When
+        const user = userEvent.setup();
+        render(<FormattingButtons composer={wysiwyg} actionStates={actionStates} />);
+        await user.hover(screen.getByLabelText('Bold'));
+
+        // Then
+        expect(screen.getByLabelText('Bold')).not.toHaveClass('mx_FormattingButtons_Button_hover');
+
+        // When
+        await user.hover(screen.getByLabelText('Underline'));
+
+        // Then
+        expect(screen.getByLabelText('Underline')).toHaveClass('mx_FormattingButtons_Button_hover');
+    });
 });
