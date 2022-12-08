@@ -48,7 +48,10 @@ function Button({ label, keyCombo, onClick, isActive, className }: ButtonProps) 
         onClick={onClick}
         title={label}
         className={
-            classNames('mx_FormattingButtons_Button', className, { 'mx_FormattingButtons_active': isActive })}
+            classNames('mx_FormattingButtons_Button', className, {
+                'mx_FormattingButtons_active': isActive,
+                'mx_FormattingButtons_Button_hover': !isActive,
+            })}
         tooltip={keyCombo && <Tooltip label={label} keyCombo={keyCombo} />}
         alignment={Alignment.Top}
     />;
