@@ -26,6 +26,14 @@ import { IRoomState } from "../../../../../src/components/structures/RoomView";
 import { createTestClient, flushPromises, getRoomContext, mkEvent, mkStubRoom } from "../../../../test-utils";
 import { SendWysiwygComposer } from "../../../../../src/components/views/rooms/wysiwyg_composer";
 import { aboveLeftOf } from "../../../../../src/components/structures/ContextMenu";
+import { ComposerInsertPayload, ComposerType } from "../../../../../src/dispatcher/payloads/ComposerInsertPayload";
+import { setSelection } from "../../../../../src/components/views/rooms/wysiwyg_composer/utils/selection";
+
+jest.mock("../../../../../src/components/views/rooms/EmojiButton", () => ({
+    EmojiButton: ({ addEmoji }: {addEmoji: (emoji: string) => void}) => {
+        return <button aria-label="Emoji" type="button" onClick={() => addEmoji('🦫')}>Emoji</button>;
+    },
+}));
 
 describe('SendWysiwygComposer', () => {
     afterEach(() => {
@@ -47,9 +55,28 @@ describe('SendWysiwygComposer', () => {
 
     const defaultRoomContext: IRoomState = getRoomContext(mockRoom, {});
 
+    const registerId = defaultDispatcher.register((payload) => {
+        switch (payload.action) {
+            case Action.ComposerInsert: {
+                if (payload.composerType) break;
+
+                // re-dispatch to the correct composer
+                defaultDispatcher.dispatch<ComposerInsertPayload>({
+                    ...(payload as ComposerInsertPayload),
+                    composerType: ComposerType.Send,
+                });
+                break;
+            }
+        }
+    });
+
+    afterAll(() => {
+        defaultDispatcher.unregister(registerId);
+    });
+
     const customRender = (
-        onChange = (_content: string) => void 0,
-        onSend = () => void 0,
+        onChange = (_content: string): void => void 0,
+        onSend = (): void => void 0,
         disabled = false,
         isRichTextEnabled = true,
         placeholder?: string) => {
@@ -177,7 +204,6 @@ describe('SendWysiwygComposer', () => {
 
             it('Should not has placeholder', async () => {
                 // When
-                console.log('here');
                 customRender(jest.fn(), jest.fn(), false, isRichTextEnabled);
                 await waitFor(() => expect(screen.getByRole('textbox')).toHaveAttribute('contentEditable', "true"));
 
@@ -222,5 +248,55 @@ describe('SendWysiwygComposer', () => {
                 );
             });
         });
+
+    describe.each([
+        { isRichTextEnabled: true },
+    // TODO    { isRichTextEnabled: false },
+    ])('Emoji when %s', ({ isRichTextEnabled }) => {
+        let emojiButton: HTMLElement;
+
+        beforeEach(async () => {
+            customRender(jest.fn(), jest.fn(), false, isRichTextEnabled);
+            await waitFor(() => expect(screen.getByRole('textbox')).toHaveAttribute('contentEditable', "true"));
+            emojiButton = screen.getByLabelText('Emoji');
+        });
+
+        afterEach(() => {
+            jest.resetAllMocks();
+        });
+
+        it('Should add an emoji in an empty composer', async () => {
+            // When
+            emojiButton.click();
+
+            // Then
+            await waitFor(() => expect(screen.getByRole('textbox')).toHaveTextContent(/🦫/));
+        });
+
+        it('Should add an emoji in the middle of a word', async () => {
+            // When
+            screen.getByRole('textbox').focus();
+            screen.getByRole('textbox').innerHTML = 'word';
+            fireEvent.input(screen.getByRole('textbox'), {
+                data: 'word',
+                inputType: 'insertText',
+            });
+
+            const textNode = screen.getByRole('textbox').firstChild;
+            setSelection({
+                anchorNode: textNode,
+                anchorOffset: 2,
+                focusNode: textNode,
+                focusOffset: 2,
+            });
+            // the event is not automatically fired by jest
+            document.dispatchEvent(new CustomEvent('selectionchange'));
+
+            emojiButton.click();
+
+            // Then
+            await waitFor(() => expect(screen.getByRole('textbox')).toHaveTextContent(/wo🦫rd/));
+        });
+    });
 });
 

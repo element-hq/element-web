@@ -32,7 +32,9 @@ interface WysiwygComposerProps {
     initialContent?: string;
     className?: string;
     leftComponent?: ReactNode;
-    rightComponent?: ReactNode;
+    rightComponent?: (
+        selectPreviousSelection: () => void
+    ) => ReactNode;
     children?: (
         ref: MutableRefObject<HTMLDivElement | null>,
         wysiwyg: FormattingFunctions,

@@ -14,7 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-export type ComposerFunctions = {
-    clear: () => void;
-    insertText: (text: string) => void;
-};
+export function setSelection(selection:
+    Pick<Selection, 'anchorNode' | 'anchorOffset' | 'focusNode' | 'focusOffset'>,
+) {
+    if (selection.anchorNode && selection.focusNode) {
+        const range = new Range();
+        range.setStart(selection.anchorNode, selection.anchorOffset);
+        range.setEnd(selection.focusNode, selection.focusOffset);
+
+        document.getSelection()?.removeAllRanges();
+        document.getSelection()?.addRange(range);
+    }
+}
+

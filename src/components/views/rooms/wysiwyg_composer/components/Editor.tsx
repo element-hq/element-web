@@ -18,6 +18,7 @@ import classNames from 'classnames';
 import React, { CSSProperties, forwardRef, memo, MutableRefObject, ReactNode } from 'react';
 
 import { useIsExpanded } from '../hooks/useIsExpanded';
+import { useSelection } from '../hooks/useSelection';
 
 const HEIGHT_BREAKING_POINT = 20;
 
@@ -25,7 +26,7 @@ interface EditorProps {
     disabled: boolean;
     placeholder?: string;
     leftComponent?: ReactNode;
-    rightComponent?: ReactNode;
+    rightComponent?: (selectPreviousSelection: () => void) => ReactNode;
 }
 
 export const Editor = memo(
@@ -33,6 +34,7 @@ export const Editor = memo(
         function Editor({ disabled, placeholder, leftComponent, rightComponent }: EditorProps, ref,
         ) {
             const isExpanded = useIsExpanded(ref as MutableRefObject<HTMLDivElement | null>, HEIGHT_BREAKING_POINT);
+            const { onFocus, onBlur, selectPreviousSelection } = useSelection();
 
             return <div
                 data-testid="WysiwygComposerEditor"
@@ -55,9 +57,11 @@ export const Editor = memo(
                     aria-haspopup="listbox"
                     dir="auto"
                     aria-disabled={disabled}
+                    onFocus={onFocus}
+                    onBlur={onBlur}
                     />
                 </div>
-                { rightComponent }
+                { rightComponent?.(selectPreviousSelection) }
             </div>;
         },
     ),

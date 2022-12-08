@@ -22,8 +22,8 @@ import { PlainTextComposer } from './components/PlainTextComposer';
 import { ComposerFunctions } from './types';
 import { E2EStatus } from '../../../../utils/ShieldUtils';
 import E2EIcon from '../E2EIcon';
-import { EmojiButton } from '../EmojiButton';
 import { AboveLeftOf } from '../../../structures/ContextMenu';
+import { Emoji } from './components/Emoji';
 
 interface ContentProps {
     disabled?: boolean;
@@ -58,8 +58,8 @@ export function SendWysiwygComposer(
     return <Composer
         className="mx_SendWysiwygComposer"
         leftComponent={e2eStatus && <E2EIcon status={e2eStatus} />}
-        // TODO add emoji support
-        rightComponent={<EmojiButton menuPosition={menuPosition} addEmoji={() => false} />}
+        rightComponent={(selectPreviousSelection) =>
+            <Emoji menuPosition={menuPosition} selectPreviousSelection={selectPreviousSelection} />}
         {...props}
     >
         { (ref, composerFunctions) => (
