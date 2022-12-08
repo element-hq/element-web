@@ -17,15 +17,21 @@ limitations under the License.
 import React from "react";
 // eslint-disable-next-line deprecate/import
 import { mount, ReactWrapper } from "enzyme";
-import { act } from "react-dom/test-utils";
 import { mocked, MockedObject } from "jest-mock";
-import { MatrixClient } from "matrix-js-sdk/src/client";
+import { ClientEvent, MatrixClient } from "matrix-js-sdk/src/client";
 import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { EventType } from "matrix-js-sdk/src/matrix";
 import { MEGOLM_ALGORITHM } from "matrix-js-sdk/src/crypto/olmlib";
+import { fireEvent, render } from "@testing-library/react";
 
-import { stubClient, mockPlatformPeg, unmockPlatformPeg, wrapInMatrixClientContext } from "../../test-utils";
+import {
+    stubClient,
+    mockPlatformPeg,
+    unmockPlatformPeg,
+    wrapInMatrixClientContext,
+    flushPromises,
+} from "../../test-utils";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 import { Action } from "../../../src/dispatcher/actions";
 import { defaultDispatcher } from "../../../src/dispatcher/dispatcher";
@@ -42,6 +48,7 @@ import { DirectoryMember } from "../../../src/utils/direct-messages";
 import { createDmLocalRoom } from "../../../src/utils/dm/createDmLocalRoom";
 import { UPDATE_EVENT } from "../../../src/stores/AsyncStore";
 import { SdkContextClass, SDKContext } from "../../../src/contexts/SDKContext";
+import VoipUserMapper from "../../../src/VoipUserMapper";
 
 const RoomView = wrapInMatrixClientContext(_RoomView);
 
@@ -67,6 +74,8 @@ describe("RoomView", () => {
         stores = new SdkContextClass();
         stores.client = cli;
         stores.rightPanelStore.useUnitTestClient(cli);
+
+        jest.spyOn(VoipUserMapper.sharedInstance(), 'getVirtualRoomForRoom').mockResolvedValue(null);
     });
 
     afterEach(async () => {
@@ -89,7 +98,7 @@ describe("RoomView", () => {
             defaultDispatcher.dispatch<ViewRoomPayload>({
                 action: Action.ViewRoom,
                 room_id: room.roomId,
-                metricsTrigger: null,
+                metricsTrigger: undefined,
             });
 
             await switchedRoom;
@@ -98,16 +107,52 @@ describe("RoomView", () => {
         const roomView = mount(
             <SDKContext.Provider value={stores}>
                 <RoomView
-                    threepidInvite={null}
-                    oobData={null}
+                    // threepidInvite should be optional on RoomView props
+                    // it is treated as optional in RoomView
+                    threepidInvite={undefined as any}
                     resizeNotifier={new ResizeNotifier()}
-                    justCreatedOpts={null}
                     forceTimeline={false}
-                    onRegistered={null}
                 />
             </SDKContext.Provider>,
         );
-        await act(() => Promise.resolve()); // Allow state to settle
+        await flushPromises();
+        return roomView;
+    };
+
+    const renderRoomView = async (): Promise<ReturnType<typeof render>> => {
+        if (stores.roomViewStore.getRoomId() !== room.roomId) {
+            const switchedRoom = new Promise<void>(resolve => {
+                const subFn = () => {
+                    if (stores.roomViewStore.getRoomId()) {
+                        stores.roomViewStore.off(UPDATE_EVENT, subFn);
+                        resolve();
+                    }
+                };
+                stores.roomViewStore.on(UPDATE_EVENT, subFn);
+            });
+
+            defaultDispatcher.dispatch<ViewRoomPayload>({
+                action: Action.ViewRoom,
+                room_id: room.roomId,
+                metricsTrigger: undefined,
+            });
+
+            await switchedRoom;
+        }
+
+        const roomView = render(
+            <SDKContext.Provider value={stores}>
+                <RoomView
+                    // threepidInvite should be optional on RoomView props
+                    // it is treated as optional in RoomView
+                    threepidInvite={undefined as any}
+                    resizeNotifier={new ResizeNotifier()}
+                    forceTimeline={false}
+                    onRegistered={jest.fn()}
+                />
+            </SDKContext.Provider>,
+        );
+        await flushPromises();
         return roomView;
     };
     const getRoomViewInstance = async (): Promise<_RoomView> =>
@@ -137,7 +182,7 @@ describe("RoomView", () => {
         // and fake an encryption event into the room to prompt it to re-check
         room.addLiveEvents([new MatrixEvent({
             type: "m.room.encryption",
-            sender: cli.getUserId(),
+            sender: cli.getUserId()!,
             content: {},
             event_id: "someid",
             room_id: room.roomId,
@@ -153,6 +198,26 @@ describe("RoomView", () => {
 
         room.getUnfilteredTimelineSet().resetLiveTimeline();
         expect(roomViewInstance.state.liveTimeline).not.toEqual(oldTimeline);
+    });
+
+    describe('with virtual rooms', () => {
+        it("checks for a virtual room on initial load", async () => {
+            const { container } = await renderRoomView();
+            expect(VoipUserMapper.sharedInstance().getVirtualRoomForRoom).toHaveBeenCalledWith(room.roomId);
+
+            // quick check that rendered without error
+            expect(container.querySelector('.mx_ErrorBoundary')).toBeFalsy();
+        });
+
+        it("checks for a virtual room on room event", async () => {
+            await renderRoomView();
+            expect(VoipUserMapper.sharedInstance().getVirtualRoomForRoom).toHaveBeenCalledWith(room.roomId);
+
+            cli.emit(ClientEvent.Room, room);
+
+            // called again after room event
+            expect(VoipUserMapper.sharedInstance().getVirtualRoomForRoom).toHaveBeenCalledTimes(2);
+        });
     });
 
     describe("video rooms", () => {
@@ -178,7 +243,6 @@ describe("RoomView", () => {
 
     describe("for a local room", () => {
         let localRoom: LocalRoom;
-        let roomView: ReactWrapper;
 
         beforeEach(async () => {
             localRoom = room = await createDmLocalRoom(cli, [new DirectoryMember({ user_id: "@user:example.com" })]);
@@ -186,15 +250,15 @@ describe("RoomView", () => {
         });
 
         it("should remove the room from the store on unmount", async () => {
-            roomView = await mountRoomView();
-            roomView.unmount();
+            const { unmount } = await renderRoomView();
+            unmount();
             expect(cli.store.removeRoom).toHaveBeenCalledWith(room.roomId);
         });
 
         describe("in state NEW", () => {
             it("should match the snapshot", async () => {
-                roomView = await mountRoomView();
-                expect(roomView.html()).toMatchSnapshot();
+                const { container } = await renderRoomView();
+                expect(container).toMatchSnapshot();
             });
 
             describe("that is encrypted", () => {
@@ -208,8 +272,8 @@ describe("RoomView", () => {
                             content: {
                                 algorithm: MEGOLM_ALGORITHM,
                             },
-                            user_id: cli.getUserId(),
-                            sender: cli.getUserId(),
+                            user_id: cli.getUserId()!,
+                            sender: cli.getUserId()!,
                             state_key: "",
                             room_id: localRoom.roomId,
                             origin_server_ts: Date.now(),
@@ -218,33 +282,32 @@ describe("RoomView", () => {
                 });
 
                 it("should match the snapshot", async () => {
-                    const roomView = await mountRoomView();
-                    expect(roomView.html()).toMatchSnapshot();
+                    const { container } = await renderRoomView();
+                    expect(container).toMatchSnapshot();
                 });
             });
         });
 
         it("in state CREATING should match the snapshot", async () => {
             localRoom.state = LocalRoomState.CREATING;
-            roomView = await mountRoomView();
-            expect(roomView.html()).toMatchSnapshot();
+            const { container } = await renderRoomView();
+            expect(container).toMatchSnapshot();
         });
 
         describe("in state ERROR", () => {
             beforeEach(async () => {
                 localRoom.state = LocalRoomState.ERROR;
-                roomView = await mountRoomView();
             });
 
             it("should match the snapshot", async () => {
-                expect(roomView.html()).toMatchSnapshot();
+                const { container } = await renderRoomView();
+                expect(container).toMatchSnapshot();
             });
 
-            it("clicking retry should set the room state to new dispatch a local room event", () => {
+            it("clicking retry should set the room state to new dispatch a local room event", async () => {
                 jest.spyOn(defaultDispatcher, "dispatch");
-                roomView.findWhere((w: ReactWrapper) => {
-                    return w.hasClass("mx_RoomStatusBar_unsentRetry") && w.text() === "Retry";
-                }).first().simulate("click");
+                const { getByText } = await renderRoomView();
+                fireEvent.click(getByText('Retry'));
                 expect(localRoom.state).toBe(LocalRoomState.NEW);
                 expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({
                     action: "local_room_event",

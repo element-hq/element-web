@@ -79,7 +79,7 @@ export default class VoipUserMapper {
         return findDMForUser(MatrixClientPeg.get(), virtualUser);
     }
 
-    public nativeRoomForVirtualRoom(roomId: string): string {
+    public nativeRoomForVirtualRoom(roomId: string): string | null {
         const cachedNativeRoomId = this.virtualToNativeRoomIdCache.get(roomId);
         if (cachedNativeRoomId) {
             logger.log(
