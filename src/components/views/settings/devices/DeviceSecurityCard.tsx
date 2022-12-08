@@ -32,6 +32,7 @@ const VariationIcon: Record<DeviceSecurityVariation, React.FC<React.SVGProps<SVG
     [DeviceSecurityVariation.Inactive]: InactiveIcon,
     [DeviceSecurityVariation.Verified]: VerifiedIcon,
     [DeviceSecurityVariation.Unverified]: UnverifiedIcon,
+    [DeviceSecurityVariation.Unverifiable]: UnverifiedIcon,
 };
 
 const DeviceSecurityIcon: React.FC<{ variation: DeviceSecurityVariation }> = ({ variation }) => {

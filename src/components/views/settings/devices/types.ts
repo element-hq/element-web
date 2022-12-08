@@ -32,4 +32,7 @@ export enum DeviceSecurityVariation {
     Verified = 'Verified',
     Unverified = 'Unverified',
     Inactive = 'Inactive',
+    // sessions that do not support encryption
+    // eg a session that logged in via api to get an access token
+    Unverifiable = 'Unverifiable'
 }

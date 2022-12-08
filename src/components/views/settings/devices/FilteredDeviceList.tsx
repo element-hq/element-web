@@ -27,6 +27,7 @@ import { DeviceExpandDetailsButton } from './DeviceExpandDetailsButton';
 import DeviceSecurityCard from './DeviceSecurityCard';
 import {
     filterDevicesBySecurityRecommendation,
+    FilterVariation,
     INACTIVE_DEVICE_AGE_DAYS,
 } from './filter';
 import SelectableDeviceTile from './SelectableDeviceTile';
@@ -47,8 +48,8 @@ interface Props {
     expandedDeviceIds: ExtendedDevice['device_id'][];
     signingOutDeviceIds: ExtendedDevice['device_id'][];
     selectedDeviceIds: ExtendedDevice['device_id'][];
-    filter?: DeviceSecurityVariation;
-    onFilterChange: (filter: DeviceSecurityVariation | undefined) => void;
+    filter?: FilterVariation;
+    onFilterChange: (filter: FilterVariation | undefined) => void;
     onDeviceExpandToggle: (deviceId: ExtendedDevice['device_id']) => void;
     onSignOutDevices: (deviceIds: ExtendedDevice['device_id'][]) => void;
     saveDeviceName: DevicesState['saveDeviceName'];
@@ -68,12 +69,12 @@ const sortDevicesByLatestActivityThenDisplayName = (left: ExtendedDevice, right:
     (right.last_seen_ts || 0) - (left.last_seen_ts || 0)
     || ((left.display_name || left.device_id).localeCompare(right.display_name || right.device_id));
 
-const getFilteredSortedDevices = (devices: DevicesDictionary, filter?: DeviceSecurityVariation) =>
+const getFilteredSortedDevices = (devices: DevicesDictionary, filter?: FilterVariation) =>
     filterDevicesBySecurityRecommendation(Object.values(devices), filter ? [filter] : [])
         .sort(sortDevicesByLatestActivityThenDisplayName);
 
 const ALL_FILTER_ID = 'ALL';
-type DeviceFilterKey = DeviceSecurityVariation | typeof ALL_FILTER_ID;
+type DeviceFilterKey = FilterVariation | typeof ALL_FILTER_ID;
 
 const securityCardContent: Record<DeviceSecurityVariation, {
     title: string;
@@ -90,6 +91,12 @@ const securityCardContent: Record<DeviceSecurityVariation, {
             `sign out from those you don't recognize or use anymore.`,
          ),
      },
+     [DeviceSecurityVariation.Unverifiable]: {
+         title: _t('Unverified session'),
+         description: _t(
+             `This session doesn't support encryption and thus can't be verified.`,
+         ),
+     },
      [DeviceSecurityVariation.Inactive]: {
          title: _t('Inactive sessions'),
          description: _t(
@@ -100,8 +107,12 @@ const securityCardContent: Record<DeviceSecurityVariation, {
      },
  };
 
-const isSecurityVariation = (filter?: DeviceFilterKey): filter is DeviceSecurityVariation =>
-    Object.values<string>(DeviceSecurityVariation).includes(filter);
+const isSecurityVariation = (filter?: DeviceFilterKey): filter is FilterVariation =>
+    !!filter && ([
+        DeviceSecurityVariation.Inactive,
+        DeviceSecurityVariation.Unverified,
+        DeviceSecurityVariation.Verified,
+    ] as string[]).includes(filter);
 
 const FilterSecurityCard: React.FC<{ filter?: DeviceFilterKey }> = ({ filter }) => {
     if (isSecurityVariation(filter)) {
@@ -124,7 +135,7 @@ const FilterSecurityCard: React.FC<{ filter?: DeviceFilterKey }> = ({ filter }) 
     return null;
 };
 
-const getNoResultsMessage = (filter?: DeviceSecurityVariation): string => {
+const getNoResultsMessage = (filter?: FilterVariation): string => {
     switch (filter) {
         case DeviceSecurityVariation.Verified:
             return _t('No verified sessions found.');
@@ -136,7 +147,7 @@ const getNoResultsMessage = (filter?: DeviceSecurityVariation): string => {
             return _t('No sessions found.');
     }
 };
-interface NoResultsProps { filter?: DeviceSecurityVariation, clearFilter: () => void}
+interface NoResultsProps { filter?: FilterVariation, clearFilter: () => void}
 const NoResults: React.FC<NoResultsProps> = ({ filter, clearFilter }) =>
     <div className='mx_FilteredDeviceList_noResults'>
         { getNoResultsMessage(filter) }
@@ -273,7 +284,7 @@ export const FilteredDeviceList =
         ];
 
         const onFilterOptionChange = (filterId: DeviceFilterKey) => {
-            onFilterChange(filterId === ALL_FILTER_ID ? undefined : filterId as DeviceSecurityVariation);
+            onFilterChange(filterId === ALL_FILTER_ID ? undefined : filterId as FilterVariation);
         };
 
         const isAllSelected = selectedDeviceIds.length >= sortedDevices.length;

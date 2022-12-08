@@ -56,6 +56,26 @@ const securityCardContent: Record<DeviceSecurityVariation, {
              </p>
          </>,
      },
+     // unverifiable uses single-session case
+     // because it is only ever displayed on a single session detail
+     [DeviceSecurityVariation.Unverifiable]: {
+         title: _t('Unverified session'),
+         description: <>
+             <p>{ _t(`This session doesn't support encryption, so it can't be verified.`) }
+             </p>
+             <p>
+                 { _t(
+                     `You won't be able to participate in rooms where encryption is enabled when using this session.`,
+                 )
+                 }
+             </p><p>
+                 { _t(
+                     `For best security and privacy, it is recommended to use Matrix clients that support encryption.`,
+                 )
+                 }
+             </p>
+         </>,
+     },
      [DeviceSecurityVariation.Inactive]: {
          title: _t('Inactive sessions'),
          description: <>

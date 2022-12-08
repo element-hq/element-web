@@ -1,5 +1,43 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`<SessionManagerTab /> Device verification does not allow device verification on session that do not support encryption 1`] = `
+HTMLCollection [
+  <div
+    class="mx_DeviceSecurityCard"
+  >
+    <div
+      class="mx_DeviceSecurityCard_icon Unverified"
+    >
+      <div
+        height="16"
+        width="16"
+      />
+    </div>
+    <div
+      class="mx_DeviceSecurityCard_content"
+    >
+      <p
+        class="mx_DeviceSecurityCard_heading"
+      >
+        Unverified session
+      </p>
+      <p
+        class="mx_DeviceSecurityCard_description"
+      >
+        This session doesn't support encryption and thus can't be verified.
+        <div
+          class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+          role="button"
+          tabindex="0"
+        >
+          Learn more
+        </div>
+      </p>
+    </div>
+  </div>,
+]
+`;
+
 exports[`<SessionManagerTab /> Sign out Signs out of current device 1`] = `
 <div
   class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger_inline"
@@ -340,71 +378,6 @@ exports[`<SessionManagerTab /> goes to filtered list from security recommendatio
       </div>
       <span
         class="mx_Dropdown_arrow"
-      />
-    </div>
-  </div>
-</div>
-`;
-
-exports[`<SessionManagerTab /> sets device verification status correctly 1`] = `
-<div
-  class="mx_DeviceTile mx_DeviceTile_interactive"
-  data-testid="device-tile-alices_device"
->
-  <div
-    class="mx_DeviceTypeIcon"
-  >
-    <div
-      class="mx_DeviceTypeIcon_deviceIconWrapper"
-    >
-      <div
-        aria-label="Unknown session type"
-        class="mx_DeviceTypeIcon_deviceIcon"
-        role="img"
-      />
-    </div>
-    <div
-      aria-label="Verified"
-      class="mx_DeviceTypeIcon_verificationIcon verified"
-      role="img"
-    />
-  </div>
-  <div
-    class="mx_DeviceTile_info"
-  >
-    <h4
-      class="mx_Heading_h4"
-    >
-      Alices device
-    </h4>
-    <div
-      class="mx_DeviceTile_metadata"
-    >
-      <span
-        data-testid="device-metadata-isVerified"
-      >
-        Verified
-      </span>
-       · 
-      <span
-        data-testid="device-metadata-deviceId"
-      >
-        alices_device
-      </span>
-    </div>
-  </div>
-  <div
-    class="mx_DeviceTile_actions"
-  >
-    <div
-      aria-label="Show details"
-      class="mx_AccessibleButton mx_DeviceExpandDetailsButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_icon"
-      data-testid="current-session-toggle-details"
-      role="button"
-      tabindex="0"
-    >
-      <div
-        class="mx_DeviceExpandDetailsButton_icon"
       />
     </div>
   </div>

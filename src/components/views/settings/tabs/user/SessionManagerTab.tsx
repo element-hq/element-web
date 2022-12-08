@@ -29,7 +29,7 @@ import { useOwnDevices } from '../../devices/useOwnDevices';
 import { FilteredDeviceList } from '../../devices/FilteredDeviceList';
 import CurrentDeviceSection from '../../devices/CurrentDeviceSection';
 import SecurityRecommendations from '../../devices/SecurityRecommendations';
-import { DeviceSecurityVariation, ExtendedDevice } from '../../devices/types';
+import { ExtendedDevice } from '../../devices/types';
 import { deleteDevicesWithInteractiveAuth } from '../../devices/deleteDevices';
 import SettingsTab from '../SettingsTab';
 import LoginWithQRSection from '../../devices/LoginWithQRSection';
@@ -37,6 +37,7 @@ import LoginWithQR, { Mode } from '../../../auth/LoginWithQR';
 import SettingsStore from '../../../../../settings/SettingsStore';
 import { useAsyncMemo } from '../../../../../hooks/useAsyncMemo';
 import QuestionDialog from '../../../dialogs/QuestionDialog';
+import { FilterVariation } from '../../devices/filter';
 
 const confirmSignOut = async (sessionsToSignOutCount: number): Promise<boolean> => {
     const { finished } = Modal.createDialog(QuestionDialog, {
@@ -123,7 +124,7 @@ const SessionManagerTab: React.FC = () => {
         setPushNotifications,
         supportsMSC3881,
     } = useOwnDevices();
-    const [filter, setFilter] = useState<DeviceSecurityVariation>();
+    const [filter, setFilter] = useState<FilterVariation>();
     const [expandedDeviceIds, setExpandedDeviceIds] = useState<ExtendedDevice['device_id'][]>([]);
     const [selectedDeviceIds, setSelectedDeviceIds] = useState<ExtendedDevice['device_id'][]>([]);
     const filteredDeviceListRef = useRef<HTMLDivElement>(null);
@@ -142,7 +143,7 @@ const SessionManagerTab: React.FC = () => {
         }
     };
 
-    const onGoToFilteredList = (filter: DeviceSecurityVariation) => {
+    const onGoToFilteredList = (filter: FilterVariation) => {
         setFilter(filter);
         clearTimeout(scrollIntoViewTimeoutRef.current);
         // wait a tick for the filtered section to rerender with different height

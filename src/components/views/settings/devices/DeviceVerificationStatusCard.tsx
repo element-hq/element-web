@@ -30,18 +30,33 @@ interface Props {
     onVerifyDevice?: () => void;
 }
 
-export const DeviceVerificationStatusCard: React.FC<Props> = ({
-    device,
-    onVerifyDevice,
-}) => {
-    const securityCardProps = device.isVerified ? {
-        variation: DeviceSecurityVariation.Verified,
-        heading: _t('Verified session'),
-        description: <>
-            { _t('This session is ready for secure messaging.') }
-            <DeviceSecurityLearnMore variation={DeviceSecurityVariation.Verified} />
-        </>,
-    } : {
+const getCardProps = (device: ExtendedDevice): {
+    variation: DeviceSecurityVariation;
+    heading: string;
+    description: React.ReactNode;
+} => {
+    if (device.isVerified) {
+        return {
+            variation: DeviceSecurityVariation.Verified,
+            heading: _t('Verified session'),
+            description: <>
+                { _t('This session is ready for secure messaging.') }
+                <DeviceSecurityLearnMore variation={DeviceSecurityVariation.Verified} />
+            </>,
+        };
+    }
+    if (device.isVerified === null) {
+        return {
+            variation: DeviceSecurityVariation.Unverified,
+            heading: _t('Unverified session'),
+            description: <>
+                { _t(`This session doesn't support encryption and thus can't be verified.`) }
+                <DeviceSecurityLearnMore variation={DeviceSecurityVariation.Unverifiable} />
+            </>,
+        };
+    }
+
+    return {
         variation: DeviceSecurityVariation.Unverified,
         heading: _t('Unverified session'),
         description: <>
@@ -49,10 +64,19 @@ export const DeviceVerificationStatusCard: React.FC<Props> = ({
             <DeviceSecurityLearnMore variation={DeviceSecurityVariation.Unverified} />
         </>,
     };
+};
+
+export const DeviceVerificationStatusCard: React.FC<Props> = ({
+    device,
+    onVerifyDevice,
+}) => {
+    const securityCardProps = getCardProps(device);
+
     return <DeviceSecurityCard
         {...securityCardProps}
     >
-        { !device.isVerified && !!onVerifyDevice &&
+        { /* check for explicit false to exclude unverifiable devices */ }
+        { device.isVerified === false && !!onVerifyDevice &&
             <AccessibleButton
                 kind='primary'
                 onClick={onVerifyDevice}

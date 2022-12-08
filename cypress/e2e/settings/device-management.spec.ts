@@ -49,7 +49,6 @@ describe("Device manager", () => {
 
         cy.get('[data-testid="current-session-section"]').within(() => {
             cy.contains('Unverified session').should('exist');
-            cy.get('.mx_DeviceSecurityCard_actions [role="button"]').should('exist');
         });
 
         // current session details opened

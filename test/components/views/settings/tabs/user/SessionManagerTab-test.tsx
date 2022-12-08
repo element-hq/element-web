@@ -255,12 +255,23 @@ describe('<SessionManagerTab />', () => {
     });
 
     it('sets device verification status correctly', async () => {
-        mockClient.getDevices.mockResolvedValue({ devices: [alicesDevice, alicesMobileDevice] });
+        mockClient.getDevices.mockResolvedValue({ devices:
+            [alicesDevice, alicesMobileDevice, alicesOlderMobileDevice],
+        });
+        mockClient.getStoredDevice.mockImplementation((_userId, deviceId) => new DeviceInfo(deviceId));
         mockCrossSigningInfo.checkDeviceTrust
-            // alices device is trusted
-            .mockReturnValueOnce(new DeviceTrustLevel(true, true, false, false))
-            // alices mobile device is not
-            .mockReturnValueOnce(new DeviceTrustLevel(false, false, false, false));
+            .mockImplementation((_userId, { deviceId }) => {
+                // alices device is trusted
+                if (deviceId === alicesDevice.device_id) {
+                    return new DeviceTrustLevel(true, true, false, false);
+                }
+                // alices mobile device is not
+                if (deviceId === alicesMobileDevice.device_id) {
+                    return new DeviceTrustLevel(false, false, false, false);
+                }
+                // alicesOlderMobileDevice does not support encryption
+                throw new Error('encryption not supported');
+            });
 
         const { getByTestId } = render(getComponent());
 
@@ -268,8 +279,20 @@ describe('<SessionManagerTab />', () => {
             await flushPromises();
         });
 
-        expect(mockCrossSigningInfo.checkDeviceTrust).toHaveBeenCalledTimes(2);
-        expect(getByTestId(`device-tile-${alicesDevice.device_id}`)).toMatchSnapshot();
+        expect(mockCrossSigningInfo.checkDeviceTrust).toHaveBeenCalledTimes(3);
+        expect(
+            getByTestId(`device-tile-${alicesDevice.device_id}`)
+                .querySelector('[aria-label="Verified"]'),
+        ).toBeTruthy();
+        expect(
+            getByTestId(`device-tile-${alicesMobileDevice.device_id}`)
+                .querySelector('[aria-label="Unverified"]'),
+        ).toBeTruthy();
+        // sessions that dont support encryption use unverified badge
+        expect(
+            getByTestId(`device-tile-${alicesOlderMobileDevice.device_id}`)
+                .querySelector('[aria-label="Unverified"]'),
+        ).toBeTruthy();
     });
 
     it('extends device with client information when available', async () => {
@@ -489,7 +512,7 @@ describe('<SessionManagerTab />', () => {
                     if (deviceId === alicesDevice.device_id) {
                         return new DeviceTrustLevel(true, true, false, false);
                     }
-                    throw new Error('everything else unverified');
+                    return new DeviceTrustLevel(false, false, false, false);
                 });
 
             const { getByTestId } = render(getComponent());
@@ -507,6 +530,38 @@ describe('<SessionManagerTab />', () => {
             expect(modalSpy).toHaveBeenCalled();
         });
 
+        it('does not allow device verification on session that do not support encryption', async () => {
+            mockClient.getDevices.mockResolvedValue({ devices: [alicesDevice, alicesMobileDevice] });
+            mockClient.getStoredDevice.mockImplementation((_userId, deviceId) => new DeviceInfo(deviceId));
+            mockCrossSigningInfo.checkDeviceTrust
+                .mockImplementation((_userId, { deviceId }) => {
+                    // current session verified = able to verify other sessions
+                    if (deviceId === alicesDevice.device_id) {
+                        return new DeviceTrustLevel(true, true, false, false);
+                    }
+                    // but alicesMobileDevice doesn't support encryption
+                    throw new Error('encryption not supported');
+                });
+
+            const {
+                getByTestId,
+                queryByTestId,
+            } = render(getComponent());
+
+            await act(async () => {
+                await flushPromises();
+            });
+
+            toggleDeviceDetails(getByTestId, alicesMobileDevice.device_id);
+
+            // no verify button
+            expect(queryByTestId(`verification-status-button-${alicesMobileDevice.device_id}`)).toBeFalsy();
+            expect(
+                getByTestId(`device-detail-${alicesMobileDevice.device_id}`)
+                    .getElementsByClassName('mx_DeviceSecurityCard'),
+            ).toMatchSnapshot();
+        });
+
         it('refreshes devices after verifying other device', async () => {
             const modalSpy = jest.spyOn(Modal, 'createDialog');
 
@@ -518,7 +573,7 @@ describe('<SessionManagerTab />', () => {
                     if (deviceId === alicesDevice.device_id) {
                         return new DeviceTrustLevel(true, true, false, false);
                     }
-                    throw new Error('everything else unverified');
+                    return new DeviceTrustLevel(false, false, false, false);
                 });
 
             const { getByTestId } = render(getComponent());

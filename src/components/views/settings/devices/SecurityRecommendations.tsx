@@ -21,7 +21,7 @@ import AccessibleButton from '../../elements/AccessibleButton';
 import SettingsSubsection from '../shared/SettingsSubsection';
 import DeviceSecurityCard from './DeviceSecurityCard';
 import { DeviceSecurityLearnMore } from './DeviceSecurityLearnMore';
-import { filterDevicesBySecurityRecommendation, INACTIVE_DEVICE_AGE_DAYS } from './filter';
+import { filterDevicesBySecurityRecommendation, FilterVariation, INACTIVE_DEVICE_AGE_DAYS } from './filter';
 import {
     DeviceSecurityVariation,
     ExtendedDevice,
@@ -31,7 +31,7 @@ import {
 interface Props {
     devices: DevicesDictionary;
     currentDeviceId: ExtendedDevice['device_id'];
-    goToFilteredList: (filter: DeviceSecurityVariation) => void;
+    goToFilteredList: (filter: FilterVariation) => void;
 }
 
 const SecurityRecommendations: React.FC<Props> = ({

@@ -22,10 +22,14 @@ const MS_DAY = 24 * 60 * 60 * 1000;
 export const INACTIVE_DEVICE_AGE_MS = 7.776e+9; // 90 days
 export const INACTIVE_DEVICE_AGE_DAYS = INACTIVE_DEVICE_AGE_MS / MS_DAY;
 
+export type FilterVariation = DeviceSecurityVariation.Verified
+    | DeviceSecurityVariation.Inactive
+    | DeviceSecurityVariation.Unverified;
+
 export const isDeviceInactive: DeviceFilterCondition = device =>
     !!device.last_seen_ts && device.last_seen_ts < Date.now() - INACTIVE_DEVICE_AGE_MS;
 
-const filters: Record<DeviceSecurityVariation, DeviceFilterCondition> = {
+const filters: Record<FilterVariation, DeviceFilterCondition> = {
     [DeviceSecurityVariation.Verified]: device => !!device.isVerified,
     [DeviceSecurityVariation.Unverified]: device => !device.isVerified,
     [DeviceSecurityVariation.Inactive]: isDeviceInactive,
@@ -33,7 +37,7 @@ const filters: Record<DeviceSecurityVariation, DeviceFilterCondition> = {
 
 export const filterDevicesBySecurityRecommendation = (
     devices: ExtendedDevice[],
-    securityVariations: DeviceSecurityVariation[],
+    securityVariations: FilterVariation[],
 ) => {
     const activeFilters = securityVariations.map(variation => filters[variation]);
     if (!activeFilters.length) {
