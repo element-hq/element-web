@@ -86,11 +86,11 @@ jobs:
           projectid: ${{ env.PROJECT_ID }}
           contentid: ${{ github.event.issue.node_id }}
         env:
-          PROJECT_ID: "PN_kwDOAM0swc0sUA"
+          PROJECT_ID: "PVT_kwDOAM0swc0sUA"
           GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
   add_product_issues:
-    name: X-Needs-Product to Design project board
+    name: X-Needs-Product to product project board
     runs-on: ubuntu-latest
     if: >
       contains(github.event.issue.labels.*.name, 'X-Needs-Product')
@@ -110,7 +110,7 @@ jobs:
           projectid: ${{ env.PROJECT_ID }}
           contentid: ${{ github.event.issue.node_id }}
         env:
-          PROJECT_ID: "PN_kwDOAM0swc4AAg6N"
+          PROJECT_ID: "PVT_kwDOAM0swc4AAg6N"
           GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
   Delight_issues_to_board:
@@ -138,7 +138,7 @@ jobs:
           projectid: ${{ env.PROJECT_ID }}
           contentid: ${{ github.event.issue.node_id }}
         env:
-          PROJECT_ID: "PN_kwDOAM0swc1HvQ"
+          PROJECT_ID: "PVT_kwDOAM0swc1HvQ"
           GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
   
   Search_issues_to_board:
@@ -161,7 +161,7 @@ jobs:
           projectid: ${{ env.PROJECT_ID }}
           contentid: ${{ github.event.issue.node_id }}
         env:
-          PROJECT_ID: "PN_kwDOAM0swc4ADtaO"
+          PROJECT_ID: "PVT_kwDOAM0swc4ADtaO"
           GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
   move_voice-message_issues:
@@ -184,7 +184,7 @@ jobs:
           projectid: ${{ env.PROJECT_ID }}
           contentid: ${{ github.event.issue.node_id }}
         env:
-          PROJECT_ID: "PN_kwDOAM0swc2KCw"
+          PROJECT_ID: "PVT_kwDOAM0swc2KCw"
           GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
   move_message_bubbles_issues:
@@ -207,7 +207,7 @@ jobs:
           projectid: ${{ env.PROJECT_ID }}
           contentid: ${{ github.event.issue.node_id }}
         env:
-          PROJECT_ID: "PN_kwDOAM0swc3m-g"
+          PROJECT_ID: "PVT_kwDOAM0swc3m-g"
           GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
   move_ftue_issues:
@@ -230,7 +230,7 @@ jobs:
           projectid: ${{ env.PROJECT_ID }}
           contentid: ${{ github.event.issue.node_id }}
         env:
-          PROJECT_ID: "PN_kwDOAM0swc4AAqVx"
+          PROJECT_ID: "PVT_kwDOAM0swc4AAqVx"
           GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
   move_WTF_issues:
@@ -253,7 +253,7 @@ jobs:
           projectid: ${{ env.PROJECT_ID }}
           contentid: ${{ github.event.issue.node_id }}
         env:
-          PROJECT_ID: "PN_kwDOAM0swc4AArk0"
+          PROJECT_ID: "PVT_kwDOAM0swc4AArk0"
           GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
   ps_features1:
