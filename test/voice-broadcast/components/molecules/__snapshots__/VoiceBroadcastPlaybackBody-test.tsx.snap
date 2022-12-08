@@ -23,7 +23,10 @@ exports[`VoiceBroadcastPlaybackBody when rendering a 0/not-live broadcast should
           My room
         </div>
         <div
-          class="mx_VoiceBroadcastHeader_line"
+          aria-label="Change input device"
+          class="mx_AccessibleButton mx_VoiceBroadcastHeader_line"
+          role="button"
+          tabindex="0"
         >
           <div
             class="mx_Icon mx_Icon_16"
@@ -127,7 +130,10 @@ exports[`VoiceBroadcastPlaybackBody when rendering a 1/live broadcast should ren
           My room
         </div>
         <div
-          class="mx_VoiceBroadcastHeader_line"
+          aria-label="Change input device"
+          class="mx_AccessibleButton mx_VoiceBroadcastHeader_line"
+          role="button"
+          tabindex="0"
         >
           <div
             class="mx_Icon mx_Icon_16"
@@ -239,7 +245,10 @@ exports[`VoiceBroadcastPlaybackBody when rendering a buffering voice broadcast s
           My room
         </div>
         <div
-          class="mx_VoiceBroadcastHeader_line"
+          aria-label="Change input device"
+          class="mx_AccessibleButton mx_VoiceBroadcastHeader_line"
+          role="button"
+          tabindex="0"
         >
           <div
             class="mx_Icon mx_Icon_16"
@@ -359,7 +368,10 @@ exports[`VoiceBroadcastPlaybackBody when rendering a playing broadcast should re
           My room
         </div>
         <div
-          class="mx_VoiceBroadcastHeader_line"
+          aria-label="Change input device"
+          class="mx_AccessibleButton mx_VoiceBroadcastHeader_line"
+          role="button"
+          tabindex="0"
         >
           <div
             class="mx_Icon mx_Icon_16"
@@ -463,7 +475,10 @@ exports[`VoiceBroadcastPlaybackBody when rendering a stopped broadcast should re
           My room
         </div>
         <div
-          class="mx_VoiceBroadcastHeader_line"
+          aria-label="Change input device"
+          class="mx_AccessibleButton mx_VoiceBroadcastHeader_line"
+          role="button"
+          tabindex="0"
         >
           <div
             class="mx_Icon mx_Icon_16"

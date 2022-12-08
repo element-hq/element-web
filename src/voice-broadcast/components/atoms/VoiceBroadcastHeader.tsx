@@ -26,6 +26,7 @@ import { Icon as XIcon } from "../../../../res/img/element-icons/cancel-rounded.
 import Clock from "../../../components/views/audio_messages/Clock";
 import { formatTimeLeft } from "../../../DateUtils";
 import Spinner from "../../../components/views/elements/Spinner";
+import AccessibleTooltipButton from "../../../components/views/elements/AccessibleTooltipButton";
 
 interface VoiceBroadcastHeaderProps {
     live?: VoiceBroadcastLiveness;
@@ -87,13 +88,14 @@ export const VoiceBroadcastHeader: React.FC<VoiceBroadcastHeaderProps> = ({
     });
 
     const microphoneLine = microphoneLabel && (
-        <div
+        <AccessibleTooltipButton
             className={microphoneLineClasses}
             onClick={onMicrophoneLineClick}
+            title={_t("Change input device")}
         >
             <MicrophoneIcon className="mx_Icon mx_Icon_16" />
             <span>{ microphoneLabel }</span>
-        </div>
+        </AccessibleTooltipButton>
     );
 
     return <div className="mx_VoiceBroadcastHeader">

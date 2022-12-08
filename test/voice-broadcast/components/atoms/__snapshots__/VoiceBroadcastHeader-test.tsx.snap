@@ -20,7 +20,10 @@ exports[`VoiceBroadcastHeader when rendering a buffering live broadcast header w
         !room:example.com
       </div>
       <div
-        class="mx_VoiceBroadcastHeader_line"
+        aria-label="Change input device"
+        class="mx_AccessibleButton mx_VoiceBroadcastHeader_line"
+        role="button"
+        tabindex="0"
       >
         <div
           class="mx_Icon mx_Icon_16"
@@ -70,7 +73,10 @@ exports[`VoiceBroadcastHeader when rendering a live (grey) broadcast header with
         !room:example.com
       </div>
       <div
-        class="mx_VoiceBroadcastHeader_line"
+        aria-label="Change input device"
+        class="mx_AccessibleButton mx_VoiceBroadcastHeader_line"
+        role="button"
+        tabindex="0"
       >
         <div
           class="mx_Icon mx_Icon_16"
@@ -120,7 +126,10 @@ exports[`VoiceBroadcastHeader when rendering a live broadcast header with broadc
         !room:example.com
       </div>
       <div
-        class="mx_VoiceBroadcastHeader_line"
+        aria-label="Change input device"
+        class="mx_AccessibleButton mx_VoiceBroadcastHeader_line"
+        role="button"
+        tabindex="0"
       >
         <div
           class="mx_Icon mx_Icon_16"
@@ -186,7 +195,10 @@ exports[`VoiceBroadcastHeader when rendering a non-live broadcast header should 
         !room:example.com
       </div>
       <div
-        class="mx_VoiceBroadcastHeader_line"
+        aria-label="Change input device"
+        class="mx_AccessibleButton mx_VoiceBroadcastHeader_line"
+        role="button"
+        tabindex="0"
       >
         <div
           class="mx_Icon mx_Icon_16"

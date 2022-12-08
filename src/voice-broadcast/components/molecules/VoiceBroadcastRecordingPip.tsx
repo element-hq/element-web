@@ -28,9 +28,9 @@ import { Icon as PauseIcon } from "../../../../res/img/element-icons/pause.svg";
 import { Icon as RecordIcon } from "../../../../res/img/element-icons/Record.svg";
 import { Icon as MicrophoneIcon } from "../../../../res/img/element-icons/Mic.svg";
 import { _t } from "../../../languageHandler";
-import AccessibleButton from "../../../components/views/elements/AccessibleButton";
 import { useAudioDeviceSelection } from "../../../hooks/useAudioDeviceSelection";
 import { DevicesContextMenu } from "../../../components/views/audio_messages/DevicesContextMenu";
+import AccessibleTooltipButton from "../../../components/views/elements/AccessibleTooltipButton";
 
 interface VoiceBroadcastRecordingPipProps {
     recording: VoiceBroadcastRecording;
@@ -91,12 +91,12 @@ export const VoiceBroadcastRecordingPip: React.FC<VoiceBroadcastRecordingPipProp
         <hr className="mx_VoiceBroadcastBody_divider" />
         <div className="mx_VoiceBroadcastBody_controls">
             { toggleControl }
-            <AccessibleButton
-                aria-label={_t("Change input device")}
+            <AccessibleTooltipButton
                 onClick={() => setShowDeviceSelect(true)}
+                title={_t("Change input device")}
             >
                 <MicrophoneIcon className="mx_Icon mx_Icon_16 mx_Icon_alert" />
-            </AccessibleButton>
+            </AccessibleTooltipButton>
             <VoiceBroadcastControl
                 icon={StopIcon}
                 label="Stop Recording"

@@ -23,7 +23,10 @@ exports[`VoiceBroadcastRecordingBody when rendering a live broadcast should rend
           My room
         </div>
         <div
-          class="mx_VoiceBroadcastHeader_line"
+          aria-label="Change input device"
+          class="mx_AccessibleButton mx_VoiceBroadcastHeader_line"
+          role="button"
+          tabindex="0"
         >
           <div
             class="mx_Icon mx_Icon_16"
@@ -69,7 +72,10 @@ exports[`VoiceBroadcastRecordingBody when rendering a paused broadcast should re
           My room
         </div>
         <div
-          class="mx_VoiceBroadcastHeader_line"
+          aria-label="Change input device"
+          class="mx_AccessibleButton mx_VoiceBroadcastHeader_line"
+          role="button"
+          tabindex="0"
         >
           <div
             class="mx_Icon mx_Icon_16"
