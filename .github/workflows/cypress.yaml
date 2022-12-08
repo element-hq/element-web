@@ -76,11 +76,11 @@ jobs:
       issues: read
       pull-requests: read
     environment: Cypress
-    strategy:
-      fail-fast: false
-      matrix:
-        # Run 4 instances in Parallel
-        runner: [1, 2, 3, 4]
+      #strategy:
+      #    fail-fast: false
+      #    matrix:
+      #      # Run 4 instances in Parallel
+      #      runner: [1, 2, 3, 4]
     steps:
       - uses: actions/checkout@v3
         with:
@@ -109,8 +109,9 @@ jobs:
           start: npx serve -p 8080 webapp
           wait-on: 'http://localhost:8080'
           record: true
-          parallel: true
-          command-prefix: 'yarn percy exec --parallel --'
+            #parallel: true
+            #command-prefix: 'yarn percy exec --parallel --'
+          command-prefix: 'yarn percy exec --'
           ci-build-id: ${{ needs.prepare.outputs.uuid }}
         env:
           # pass the Dashboard record key as an environment variable
@@ -141,7 +142,7 @@ jobs:
           PERCY_BRANCH: ${{ github.event.workflow_run.head_branch }}
           PERCY_COMMIT: ${{ github.event.workflow_run.head_sha }}
           PERCY_PULL_REQUEST: ${{ needs.prepare.outputs.pr_id }}
-          PERCY_PARALLEL_TOTAL: ${{ strategy.job-total }}
+            #PERCY_PARALLEL_TOTAL: ${{ strategy.job-total }}
           PERCY_PARALLEL_NONCE: ${{ needs.prepare.outputs.uuid }}
 
       - name: Upload Artifact
