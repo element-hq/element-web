@@ -174,7 +174,15 @@ export default class PowerSelector extends React.Component<IProps, IState> {
             });
             options.push({ value: CUSTOM_VALUE, text: _t("Custom level") });
             const optionsElements = options.map((op) => {
-                return <option value={op.value} key={op.value}>{ op.text }</option>;
+                return (
+                    <option
+                        value={op.value}
+                        key={op.value}
+                        data-testid={`power-level-option-${op.value}`}
+                    >
+                        { op.text }
+                    </option>
+                );
             });
 
             picker = (
@@ -184,6 +192,7 @@ export default class PowerSelector extends React.Component<IProps, IState> {
                     onChange={this.onSelectChange}
                     value={String(this.state.selectValue)}
                     disabled={this.props.disabled}
+                    data-testid='power-level-select-element'
                 >
                     { optionsElements }
                 </Field>
