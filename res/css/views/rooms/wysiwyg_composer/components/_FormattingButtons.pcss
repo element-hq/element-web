@@ -21,80 +21,40 @@ limitations under the License.
 
     .mx_FormattingButtons_Button {
         --size: 28px;
-        position: relative;
         cursor: pointer;
         height: var(--size);
-        line-height: var(--size);
-        width: auto;
-        padding-left: 22px;
+        width: var(--size);
         background-color: transparent;
         border: none;
-
-        &::before {
-            content: '';
-            position: absolute;
-            top: 6px;
-            left: 6px;
-            height: 16px;
-            width: 16px;
-            background-color: $tertiary-content;
-            mask-repeat: no-repeat;
-            mask-size: contain;
-            mask-position: center;
-        }
-
-        &::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            z-index: 0;
-            width: var(--size);
-            height: var(--size);
-            border-radius: 5px;
-        }
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 5px;
     }
 
     .mx_FormattingButtons_Button_hover {
         &:hover {
-            &::after {
-                background: rgba($secondary-content, 0.1);
-            }
+            background: rgba($secondary-content, 0.1);
 
-            &::before {
-                background-color: $secondary-content;
+            .mx_FormattingButtons_Icon {
+                color: $secondary-content;
             }
         }
     }
 
     .mx_FormattingButtons_active {
-        &::after {
-            background: rgba($accent, 0.1);
-        }
+        background: rgba($accent, 0.1);
 
-        &::before {
-            background-color: $accent;
+        .mx_FormattingButtons_Icon {
+            color: $accent;
         }
     }
 
-    .mx_FormattingButtons_Button_bold::before {
-        mask-image: url('$(res)/img/element-icons/room/composer/bold.svg');
-    }
-
-    .mx_FormattingButtons_Button_italic::before {
-        mask-image: url('$(res)/img/element-icons/room/composer/italic.svg');
-    }
-
-    .mx_FormattingButtons_Button_underline::before {
-        mask-image: url('$(res)/img/element-icons/room/composer/underline.svg');
-    }
-
-    .mx_FormattingButtons_Button_strikethrough::before {
-        mask-image: url('$(res)/img/element-icons/room/composer/strikethrough.svg');
-    }
-
-    .mx_FormattingButtons_Button_inline_code::before {
-        mask-image: url('$(res)/img/element-icons/room/composer/inline_code.svg');
+    .mx_FormattingButtons_Icon {
+        --size: 16px;
+        height: var(--size);
+        width: var(--size);
+        color: $tertiary-content;
     }
 }
 
