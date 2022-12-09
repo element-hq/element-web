@@ -4105,10 +4105,10 @@ eslint-plugin-jsx-a11y@^6.5.1:
     minimatch "^3.1.2"
     semver "^6.3.0"
 
-eslint-plugin-matrix-org@0.7.0:
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-matrix-org/-/eslint-plugin-matrix-org-0.7.0.tgz#4b7456b31e30e7575b62c2aada91915478829f88"
-  integrity sha512-FLmwE4/cRalB7J+J1BBuTccaXvKtRgAoHlbqSCbdsRqhh27xpxEWXe08KlNiET7drEnnz+xMHXdmvW469gch7g==
+eslint-plugin-matrix-org@0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-matrix-org/-/eslint-plugin-matrix-org-0.8.0.tgz#daa1396900a8cb1c1d88f1a370e45fc32482cd9e"
+  integrity sha512-/Poz/F8lXYDsmQa29iPSt+kO+Jn7ArvRdq10g0CCk8wbRS0sb2zb6fvd9xL1BgR5UDQL771V0l8X32etvY5yKA==
 
 eslint-plugin-react-hooks@^4.3.0:
   version "4.6.0"

@@ -101,6 +101,10 @@ module.exports = {
                 "plugin:matrix-org/react",
             ],
             rules: {
+                // temporary disabled
+                "@typescript-eslint/explicit-function-return-type": "off",
+                "@typescript-eslint/explicit-member-accessibility": "off",
+
                 // Things we do that break the ideal style
                 "prefer-promise-reject-errors": "off",
                 "quotes": "off",
