@@ -15,11 +15,7 @@
     "uisi_autorageshake_app": "element-auto-uisi",
     "showLabsSettings": true,
     "roomDirectory": {
-        "servers": [
-            "matrix.org",
-            "gitter.im",
-            "libera.chat"
-        ]
+        "servers": ["matrix.org", "gitter.im", "libera.chat"]
     },
     "enable_presence_by_hs_url": {
         "https://matrix.org": false,
@@ -36,14 +32,12 @@
         }
     ],
     "hostSignup": {
-      "brand": "Element Home",
-      "cookiePolicyUrl": "https://element.io/cookie-policy",
-      "domains": [
-          "matrix.org"
-      ],
-      "privacyPolicyUrl": "https://element.io/privacy",
-      "termsOfServiceUrl": "https://element.io/terms-of-service",
-      "url": "https://ems.element.io/element-home/in-app-loader"
+        "brand": "Element Home",
+        "cookiePolicyUrl": "https://element.io/cookie-policy",
+        "domains": ["matrix.org"],
+        "privacyPolicyUrl": "https://element.io/privacy",
+        "termsOfServiceUrl": "https://element.io/terms-of-service",
+        "url": "https://ems.element.io/element-home/in-app-loader"
     },
     "sentry": {
         "dsn": "https://029a0eb289f942508ae0fb17935bd8c5@sentry.matrix.org/6",

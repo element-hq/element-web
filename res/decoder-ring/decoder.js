@@ -10,11 +10,11 @@ async function getBundleName(baseUrl) {
         throw new StartupError(`Couldn't fetch index.html to prefill bundle; ${res.status} ${res.statusText}`);
     }
     const index = await res.text();
-    return index.split("\n").map((line) =>
-        line.match(/<script src="bundles\/([^/]+)\/bundle.js"/),
-    )
-    .filter((result) => result)
-    .map((result) => result[1])[0];
+    return index
+        .split("\n")
+        .map((line) => line.match(/<script src="bundles\/([^/]+)\/bundle.js"/))
+        .filter((result) => result)
+        .map((result) => result[1])[0];
 }
 
 function validateBundle(value) {
@@ -69,7 +69,7 @@ function observeReadableStream(readableStream, pendingContext = {}) {
                 return;
             }
             bytesReceived += value.length;
-            pendingSubject.next(Pending.of({...pendingContext, bytesReceived }));
+            pendingSubject.next(Pending.of({ ...pendingContext, bytesReceived }));
             /* string concatenation is apparently the most performant way to do this */
             buffer += utf8Decoder.decode(value);
             readNextChunk();
@@ -120,25 +120,27 @@ const e = React.createElement;
  * Provides user feedback given a FetchStatus object.
  */
 function ProgressBar({ fetchStatus }) {
-    return e('span', { className: "progress "},
+    return e(
+        "span",
+        { className: "progress " },
         fetchStatus.fold({
             pending: ({ bytesReceived, length }) => {
                 if (!bytesReceived) {
-                    return e('span', { className: "spinner" }, "\u29b5");
+                    return e("span", { className: "spinner" }, "\u29b5");
                 }
-                const kB = Math.floor(10 * bytesReceived / 1024) / 10;
+                const kB = Math.floor((10 * bytesReceived) / 1024) / 10;
                 if (!length) {
-                    return e('span', null, `Fetching (${kB}kB)`);
+                    return e("span", null, `Fetching (${kB}kB)`);
                 }
-                const percent = Math.floor(100 * bytesReceived / length);
-                return e('span', null, `Fetching (${kB}kB) ${percent}%`);
+                const percent = Math.floor((100 * bytesReceived) / length);
+                return e("span", null, `Fetching (${kB}kB) ${percent}%`);
             },
-            success: () => e('span', null, "\u2713"),
+            success: () => e("span", null, "\u2713"),
             error: (reason) => {
-                return e('span', { className: 'error'}, `\u2717 ${reason}`);
+                return e("span", { className: "error" }, `\u2717 ${reason}`);
             },
-        },
-    ));
+        }),
+    );
 }
 
 /*
@@ -193,23 +195,24 @@ function BundlePicker() {
         setColumn(value);
     }, []);
 
-
     /* ------------------------------------------------ */
     /* Plumb data-fetching observables through to React */
     /* ------------------------------------------------ */
 
     /* Whenever a valid bundle name is input, go see if it's a real bundle on the server */
-    React.useEffect(() =>
-        validateBundle(bundle).fold({
-            some: (value) => {
-                const subscription = bundleSubject(baseUrl, value)
-                    .pipe(rxjs.operators.map(Some.of))
-                    .subscribe(setBundleFetchStatus);
-                return () => subscription.unsubscribe();
-            },
-            none: () => setBundleFetchStatus(None),
-        }),
-    [baseUrl, bundle]);
+    React.useEffect(
+        () =>
+            validateBundle(bundle).fold({
+                some: (value) => {
+                    const subscription = bundleSubject(baseUrl, value)
+                        .pipe(rxjs.operators.map(Some.of))
+                        .subscribe(setBundleFetchStatus);
+                    return () => subscription.unsubscribe();
+                },
+                none: () => setBundleFetchStatus(None),
+            }),
+        [baseUrl, bundle],
+    );
 
     /* Whenever a valid javascript file is input, see if it corresponds to a sourcemap file and initiate a fetch
      * if so. */
@@ -218,17 +221,18 @@ function BundlePicker() {
             setFileFetchStatus(None);
             return;
         }
-        const observable = fetchAsSubject(new URL(`bundles/${bundle}/${file}.map`, baseUrl).toString())
-            .pipe(
-                rxjs.operators.map((fetchStatus) => fetchStatus.flatMap(value => {
+        const observable = fetchAsSubject(new URL(`bundles/${bundle}/${file}.map`, baseUrl).toString()).pipe(
+            rxjs.operators.map((fetchStatus) =>
+                fetchStatus.flatMap((value) => {
                     try {
                         return Success.of(JSON.parse(value));
                     } catch (e) {
                         return FetchError.of(e);
                     }
-                })),
-                rxjs.operators.map(Some.of),
-            );
+                }),
+            ),
+            rxjs.operators.map(Some.of),
+        );
         const subscription = observable.subscribe(setFileFetchStatus);
         return () => subscription.unsubscribe();
     }, [baseUrl, bundle, file]);
@@ -256,26 +260,33 @@ function BundlePicker() {
         });
     }, [fileFetchStatus, line, column]);
 
-
     /* ------ */
     /* Render */
     /* ------ */
-    return e('div', {},
-        e('div', { className: 'inputs' },
-            e('div', { className: 'baseUrl' },
-                e('label', { htmlFor: 'baseUrl'}, 'Base URL'),
-                e('input', {
-                    name: 'baseUrl',
+    return e(
+        "div",
+        {},
+        e(
+            "div",
+            { className: "inputs" },
+            e(
+                "div",
+                { className: "baseUrl" },
+                e("label", { htmlFor: "baseUrl" }, "Base URL"),
+                e("input", {
+                    name: "baseUrl",
                     required: true,
                     pattern: ".+",
                     onChange: onBaseUrlChange,
                     value: baseUrl,
                 }),
             ),
-            e('div', { className: 'bundle' },
-                e('label', { htmlFor: 'bundle'}, 'Bundle'),
-                e('input', {
-                    name: 'bundle',
+            e(
+                "div",
+                { className: "bundle" },
+                e("label", { htmlFor: "bundle" }, "Bundle"),
+                e("input", {
+                    name: "bundle",
                     required: true,
                     pattern: "[0-9a-f]{20}",
                     onChange: onBundleChange,
@@ -286,10 +297,12 @@ function BundlePicker() {
                     none: () => null,
                 }),
             ),
-            e('div', { className: 'file' },
-                e('label', { htmlFor: 'file' }, 'File'),
-                e('input', {
-                    name: 'file',
+            e(
+                "div",
+                { className: "file" },
+                e("label", { htmlFor: "file" }, "File"),
+                e("input", {
+                    name: "file",
                     required: true,
                     pattern: ".+\\.js",
                     onChange: onFileChange,
@@ -300,20 +313,24 @@ function BundlePicker() {
                     none: () => null,
                 }),
             ),
-            e('div', { className: 'line' },
-                e('label', { htmlFor: 'line' }, 'Line'),
-                e('input', {
-                    name: 'line',
+            e(
+                "div",
+                { className: "line" },
+                e("label", { htmlFor: "line" }, "Line"),
+                e("input", {
+                    name: "line",
                     required: true,
                     pattern: "[0-9]+",
                     onChange: onLineChange,
                     value: line,
                 }),
             ),
-            e('div', { className: 'column' },
-                e('label', { htmlFor: 'column' }, 'Column'),
-                e('input', {
-                    name: 'column',
+            e(
+                "div",
+                { className: "column" },
+                e("label", { htmlFor: "column" }, "Column"),
+                e("input", {
+                    name: "column",
                     required: true,
                     pattern: "[0-9]+",
                     onChange: onColumnChange,
@@ -321,10 +338,12 @@ function BundlePicker() {
                 }),
             ),
         ),
-        e('div', null,
+        e(
+            "div",
+            null,
             result.fold({
                 none: () => "Select a bundle, file and line",
-                some: (value) => e('pre', null, value),
+                some: (value) => e("pre", null, value),
             }),
         ),
     );

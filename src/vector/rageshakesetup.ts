@@ -33,22 +33,26 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 export function initRageshake(): Promise<void> {
     // we manually check persistence for rageshakes ourselves
-    const prom = rageshake.init(/*setUpPersistence=*/false);
-    prom.then(() => {
-        logger.log("Initialised rageshake.");
-        logger.log("To fix line numbers in Chrome: " +
-            "Meatball menu → Settings → Ignore list → Add /rageshake\\.js$");
+    const prom = rageshake.init(/*setUpPersistence=*/ false);
+    prom.then(
+        () => {
+            logger.log("Initialised rageshake.");
+            logger.log(
+                "To fix line numbers in Chrome: " + "Meatball menu → Settings → Ignore list → Add /rageshake\\.js$",
+            );
 
-        window.addEventListener('beforeunload', () => {
-            logger.log('element-web closing');
-            // try to flush the logs to indexeddb
-            rageshake.flush();
-        });
+            window.addEventListener("beforeunload", () => {
+                logger.log("element-web closing");
+                // try to flush the logs to indexeddb
+                rageshake.flush();
+            });
 
-        rageshake.cleanup();
-    }, (err) => {
-        logger.error("Failed to initialise rageshake: " + err);
-    });
+            rageshake.cleanup();
+        },
+        (err) => {
+            logger.error("Failed to initialise rageshake: " + err);
+        },
+    );
     return prom;
 }
 
@@ -56,7 +60,7 @@ export function initRageshakeStore(): Promise<void> {
     return rageshake.tryInitStorage();
 }
 
-window.mxSendRageshake = function(text: string, withLogs?: boolean): void {
+window.mxSendRageshake = function (text: string, withLogs?: boolean): void {
     const url = SdkConfig.get().bug_report_endpoint_url;
     if (!url) {
         logger.error("Cannot send a rageshake - no bug_report_endpoint_url configured");
@@ -72,9 +76,12 @@ window.mxSendRageshake = function(text: string, withLogs?: boolean): void {
         userText: text,
         sendLogs: withLogs,
         progressCallback: logger.log.bind(console),
-    }).then(() => {
-        logger.log("Bug report sent!");
-    }, (err) => {
-        logger.error(err);
-    });
+    }).then(
+        () => {
+            logger.log("Bug report sent!");
+        },
+        (err) => {
+            logger.error(err);
+        },
+    );
 };

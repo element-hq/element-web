@@ -34,6 +34,7 @@ our [ILAG module](https://github.com/vector-im/element-web-ilag-module) which wi
 structure of a module is and how it works.
 
 The following requirements are key for any module:
+
 1. The module must depend on `@matrix-org/react-sdk-module-api` (usually as a dev dependency).
 2. The module's `main` entrypoint must have a `default` export for the `RuntimeModule` instance, supporting a constructor
    which takes a single parameter: a `ModuleApi` instance. This instance is passed to `super()`.

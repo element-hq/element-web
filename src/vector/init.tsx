@@ -20,7 +20,7 @@ limitations under the License.
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import olmWasmPath from "@matrix-org/olm/olm.wasm";
-import Olm from '@matrix-org/olm';
+import Olm from "@matrix-org/olm";
 import * as ReactDOM from "react-dom";
 import * as React from "react";
 import * as languageHandler from "matrix-react-sdk/src/languageHandler";
@@ -45,7 +45,7 @@ export function preparePlatform(): void {
     if (window.electron) {
         logger.log("Using Electron platform");
         PlatformPeg.set(new ElectronPlatform());
-    } else if (window.matchMedia('(display-mode: standalone)').matches) {
+    } else if (window.matchMedia("(display-mode: standalone)").matches) {
         logger.log("Using PWA platform");
         PlatformPeg.set(new PWAPlatform());
     } else {
@@ -90,30 +90,35 @@ export function loadOlm(): Promise<void> {
      */
     return Olm.init({
         locateFile: () => olmWasmPath,
-    }).then(() => {
-        logger.log("Using WebAssembly Olm");
-    }).catch((wasmLoadError) => {
-        logger.log("Failed to load Olm: trying legacy version", wasmLoadError);
-        return new Promise((resolve, reject) => {
-            const s = document.createElement('script');
-            s.src = 'olm_legacy.js'; // XXX: This should be cache-busted too
-            s.onload = resolve;
-            s.onerror = reject;
-            document.body.appendChild(s);
-        }).then(() => {
-            // Init window.Olm, ie. the one just loaded by the script tag,
-            // not 'Olm' which is still the failed wasm version.
-            return window.Olm.init();
-        }).then(() => {
-            logger.log("Using legacy Olm");
-        }).catch((legacyLoadError) => {
-            logger.log("Both WebAssembly and asm.js Olm failed!", legacyLoadError);
+    })
+        .then(() => {
+            logger.log("Using WebAssembly Olm");
+        })
+        .catch((wasmLoadError) => {
+            logger.log("Failed to load Olm: trying legacy version", wasmLoadError);
+            return new Promise((resolve, reject) => {
+                const s = document.createElement("script");
+                s.src = "olm_legacy.js"; // XXX: This should be cache-busted too
+                s.onload = resolve;
+                s.onerror = reject;
+                document.body.appendChild(s);
+            })
+                .then(() => {
+                    // Init window.Olm, ie. the one just loaded by the script tag,
+                    // not 'Olm' which is still the failed wasm version.
+                    return window.Olm.init();
+                })
+                .then(() => {
+                    logger.log("Using legacy Olm");
+                })
+                .catch((legacyLoadError) => {
+                    logger.log("Both WebAssembly and asm.js Olm failed!", legacyLoadError);
+                });
         });
-    });
 }
 
 export async function loadLanguage(): Promise<void> {
-    const prefLang = SettingsStore.getValue("language", null, /*excludeDefault=*/true);
+    const prefLang = SettingsStore.getValue("language", null, /*excludeDefault=*/ true);
     let langs = [];
 
     if (!prefLang) {
@@ -140,25 +145,35 @@ export async function loadApp(fragParams: {}): Promise<void> {
     const module = await import(
         /* webpackChunkName: "element-web-app" */
         /* webpackPreload: true */
-        "./app");
-    window.matrixChat = ReactDOM.render(await module.loadApp(fragParams),
-        document.getElementById('matrixchat'));
+        "./app"
+    );
+    window.matrixChat = ReactDOM.render(await module.loadApp(fragParams), document.getElementById("matrixchat"));
 }
 
 export async function showError(title: string, messages?: string[]): Promise<void> {
-    const ErrorView = (await import(
-        /* webpackChunkName: "error-view" */
-        "../async-components/structures/ErrorView")).default;
-    window.matrixChat = ReactDOM.render(<ErrorView title={title} messages={messages} />,
-        document.getElementById('matrixchat'));
+    const ErrorView = (
+        await import(
+            /* webpackChunkName: "error-view" */
+            "../async-components/structures/ErrorView"
+        )
+    ).default;
+    window.matrixChat = ReactDOM.render(
+        <ErrorView title={title} messages={messages} />,
+        document.getElementById("matrixchat"),
+    );
 }
 
 export async function showIncompatibleBrowser(onAccept): Promise<void> {
-    const CompatibilityView = (await import(
-        /* webpackChunkName: "compatibility-view" */
-        "../async-components/structures/CompatibilityView")).default;
-    window.matrixChat = ReactDOM.render(<CompatibilityView onAccept={onAccept} />,
-        document.getElementById('matrixchat'));
+    const CompatibilityView = (
+        await import(
+            /* webpackChunkName: "compatibility-view" */
+            "../async-components/structures/CompatibilityView"
+        )
+    ).default;
+    window.matrixChat = ReactDOM.render(
+        <CompatibilityView onAccept={onAccept} />,
+        document.getElementById("matrixchat"),
+    );
 }
 
 export async function loadModules(): Promise<void> {

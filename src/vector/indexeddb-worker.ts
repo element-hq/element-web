@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { IndexedDBStoreWorker } from 'matrix-js-sdk/src/indexeddb-worker';
+import { IndexedDBStoreWorker } from "matrix-js-sdk/src/indexeddb-worker";
 
 const remoteWorker = new IndexedDBStoreWorker(postMessage as InstanceType<typeof Worker>["postMessage"]);
 

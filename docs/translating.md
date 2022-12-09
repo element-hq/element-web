@@ -2,15 +2,15 @@
 
 ## Requirements
 
-- Web Browser
-- Be able to understand English
-- Be able to understand the language you want to translate Element into
+-   Web Browser
+-   Be able to understand English
+-   Be able to understand the language you want to translate Element into
 
 ## Step 0: Join #element-translations:matrix.org
 
-1. Come and join https://matrix.to/#/#element-translations:matrix.org for general discussion 
+1. Come and join https://matrix.to/#/#element-translations:matrix.org for general discussion
 2. Join https://matrix.to/#/#element-translators:matrix.org for language-specific rooms
-3. Read scrollback and/or ask if anyone else is working on your language, and co-ordinate if needed.  In general little-or-no coordination is needed though :)
+3. Read scrollback and/or ask if anyone else is working on your language, and co-ordinate if needed. In general little-or-no coordination is needed though :)
 
 ## Step 1: Preparing your Weblate Profile
 
@@ -27,7 +27,7 @@ If your language is listed go to Step 2a and if not go to Step 2b
 ## Step 2a: Helping on existing languages.
 
 1. Head to one of the projects listed https://translate.element.io/projects/element-web/
-2. Click on the ``translate`` button on the right side of your language
+2. Click on the `translate` button on the right side of your language
 3. Fill in the translations in the writeable field. You will see the original English string and the string of your second language above.
 
 Head to the explanations under Steb 2b
@@ -35,7 +35,7 @@ Head to the explanations under Steb 2b
 ## Step 2b: Adding a new language
 
 1. Go to one of the projects listed https://translate.element.io/projects/element-web/
-2. Click the ``Start new translation`` button at the bottom
+2. Click the `Start new translation` button at the bottom
 3. Select a language
 4. Start translating like in 2a.3
 5. Repeat these steps for the other projects which are listed at the link of step 2b.1
@@ -52,12 +52,11 @@ The yellow button has to be used if you are unsure about the translation but you
 
 These things are variables that are expanded when displayed by Element. They can be room names, usernames or similar. If you find one, you can move to the right place for your language, but not delete it as the variable will be missing if you do.
 
-A special case is `%(urlStart)s` and `%(urlEnd)s` which are used to mark the beginning of a hyperlink (i.e. `<a href="/somewhere">` and `</a>`.  You must keep these markers surrounding the equivalent string in your language that needs to be hyperlinked.
+A special case is `%(urlStart)s` and `%(urlEnd)s` which are used to mark the beginning of a hyperlink (i.e. `<a href="/somewhere">` and `</a>`. You must keep these markers surrounding the equivalent string in your language that needs to be hyperlinked.
 
 ### "I want to come back to this string. How?"
 
 You can use inside the translation field "Review needed" checkbox. It will be shown as Strings that need to be reviewed.
-
 
 ### Further reading
 

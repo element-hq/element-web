@@ -17,15 +17,15 @@ limitations under the License.
 */
 
 import { UpdateCheckStatus, UpdateStatus } from "matrix-react-sdk/src/BasePlatform";
-import dis from 'matrix-react-sdk/src/dispatcher/dispatcher';
-import { _t } from 'matrix-react-sdk/src/languageHandler';
+import dis from "matrix-react-sdk/src/dispatcher/dispatcher";
+import { _t } from "matrix-react-sdk/src/languageHandler";
 import { hideToast as hideUpdateToast, showToast as showUpdateToast } from "matrix-react-sdk/src/toasts/UpdateToast";
 import { Action } from "matrix-react-sdk/src/dispatcher/actions";
-import { CheckUpdatesPayload } from 'matrix-react-sdk/src/dispatcher/payloads/CheckUpdatesPayload';
-import UAParser from 'ua-parser-js';
+import { CheckUpdatesPayload } from "matrix-react-sdk/src/dispatcher/payloads/CheckUpdatesPayload";
+import UAParser from "ua-parser-js";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import VectorBasePlatform from './VectorBasePlatform';
+import VectorBasePlatform from "./VectorBasePlatform";
 import { parseQs } from "../url_utils";
 
 const POKE_RATE_MS = 10 * 60 * 1000; // 10 min
@@ -43,13 +43,13 @@ export default class WebPlatform extends VectorBasePlatform {
     public constructor() {
         super();
         // Register service worker if available on this platform
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js');
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("sw.js");
         }
     }
 
     public getHumanReadableName(): string {
-        return 'Web Platform'; // no translation required: only used for analytics
+        return "Web Platform"; // no translation required: only used for analytics
     }
 
     /**
@@ -65,7 +65,7 @@ export default class WebPlatform extends VectorBasePlatform {
      * to display notifications. Otherwise false.
      */
     public maySendNotifications(): boolean {
-        return window.Notification.permission === 'granted';
+        return window.Notification.permission === "granted";
     }
 
     /**
@@ -79,7 +79,7 @@ export default class WebPlatform extends VectorBasePlatform {
         // annoyingly, the latest spec says this returns a
         // promise, but this is only supported in Chrome 46
         // and Firefox 47, so adapt the callback API.
-        return new Promise(function(resolve) {
+        return new Promise(function (resolve) {
             window.Notification.requestPermission((result) => {
                 resolve(result);
             });
@@ -142,30 +142,33 @@ export default class WebPlatform extends VectorBasePlatform {
         showUpdate: (currentVersion: string, mostRecentVersion: string) => void,
         showNoUpdate?: () => void,
     ): Promise<UpdateStatus> => {
-        return this.getMostRecentVersion().then((mostRecentVersion) => {
-            const currentVersion = getNormalizedAppVersion(process.env.VERSION);
+        return this.getMostRecentVersion().then(
+            (mostRecentVersion) => {
+                const currentVersion = getNormalizedAppVersion(process.env.VERSION);
 
-            if (currentVersion !== mostRecentVersion) {
-                if (this.shouldShowUpdate(mostRecentVersion)) {
-                    console.log("Update available to " + mostRecentVersion + ", will notify user");
-                    showUpdate(currentVersion, mostRecentVersion);
+                if (currentVersion !== mostRecentVersion) {
+                    if (this.shouldShowUpdate(mostRecentVersion)) {
+                        console.log("Update available to " + mostRecentVersion + ", will notify user");
+                        showUpdate(currentVersion, mostRecentVersion);
+                    } else {
+                        console.log("Update available to " + mostRecentVersion + " but won't be shown");
+                    }
+                    return { status: UpdateCheckStatus.Ready };
                 } else {
-                    console.log("Update available to " + mostRecentVersion + " but won't be shown");
+                    console.log("No update available, already on " + mostRecentVersion);
+                    showNoUpdate?.();
                 }
-                return { status: UpdateCheckStatus.Ready };
-            } else {
-                console.log("No update available, already on " + mostRecentVersion);
-                showNoUpdate?.();
-            }
 
-            return { status: UpdateCheckStatus.NotAvailable };
-        }, (err) => {
-            logger.error("Failed to poll for update", err);
-            return {
-                status: UpdateCheckStatus.Error,
-                detail: err.message || err.status ? err.status.toString() : 'Unknown Error',
-            };
-        });
+                return { status: UpdateCheckStatus.NotAvailable };
+            },
+            (err) => {
+                logger.error("Failed to poll for update", err);
+                return {
+                    status: UpdateCheckStatus.Error,
+                    detail: err.message || err.status ? err.status.toString() : "Unknown Error",
+                };
+            },
+        );
     };
 
     public startUpdateCheck(): void {
@@ -197,7 +200,7 @@ export default class WebPlatform extends VectorBasePlatform {
         let osName = ua.getOS().name || "unknown OS";
         // Stylise the value from the parser to match Apple's current branding.
         if (osName === "Mac OS") osName = "macOS";
-        return _t('%(appName)s: %(browserName)s on %(osName)s', {
+        return _t("%(appName)s: %(browserName)s on %(osName)s", {
             appName,
             browserName,
             osName,

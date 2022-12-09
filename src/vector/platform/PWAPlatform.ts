@@ -24,7 +24,7 @@ export default class PWAPlatform extends WebPlatform {
         if (this.notificationCount === count) return;
         this.notificationCount = count;
 
-        navigator.setAppBadge(count).catch(e => {
+        navigator.setAppBadge(count).catch((e) => {
             logger.error("Failed to update PWA app badge", e);
         });
     }

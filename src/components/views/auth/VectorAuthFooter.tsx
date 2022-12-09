@@ -15,31 +15,33 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactElement } from 'react';
-import SdkConfig from 'matrix-react-sdk/src/SdkConfig';
-import { _t } from 'matrix-react-sdk/src/languageHandler';
+import React, { ReactElement } from "react";
+import SdkConfig from "matrix-react-sdk/src/SdkConfig";
+import { _t } from "matrix-react-sdk/src/languageHandler";
 
 const VectorAuthFooter = (): ReactElement => {
     const brandingConfig = SdkConfig.getObject("branding");
     const links = brandingConfig?.get("auth_footer_links") ?? [
-        { "text": "Blog", "url": "https://element.io/blog" },
-        { "text": "Twitter", "url": "https://twitter.com/element_hq" },
-        { "text": "GitHub", "url": "https://github.com/vector-im/element-web" },
+        { text: "Blog", url: "https://element.io/blog" },
+        { text: "Twitter", url: "https://twitter.com/element_hq" },
+        { text: "GitHub", url: "https://github.com/vector-im/element-web" },
     ];
 
     const authFooterLinks = [];
     for (const linkEntry of links) {
         authFooterLinks.push(
             <a href={linkEntry.url} key={linkEntry.text} target="_blank" rel="noreferrer noopener">
-                { linkEntry.text }
+                {linkEntry.text}
             </a>,
         );
     }
 
     return (
         <footer className="mx_AuthFooter" role="contentinfo">
-            { authFooterLinks }
-            <a href="https://matrix.org" target="_blank" rel="noreferrer noopener">{ _t('Powered by Matrix') }</a>
+            {authFooterLinks}
+            <a href="https://matrix.org" target="_blank" rel="noreferrer noopener">
+                {_t("Powered by Matrix")}
+            </a>
         </footer>
     );
 };

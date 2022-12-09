@@ -17,8 +17,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import BasePlatform from 'matrix-react-sdk/src/BasePlatform';
-import { _t } from 'matrix-react-sdk/src/languageHandler';
+import BasePlatform from "matrix-react-sdk/src/BasePlatform";
+import { _t } from "matrix-react-sdk/src/languageHandler";
 
 import type { IConfigOptions } from "matrix-react-sdk/src/IConfigOptions";
 import { getVectorConfig } from "../getconfig";
@@ -35,7 +35,7 @@ export default abstract class VectorBasePlatform extends BasePlatform {
     }
 
     public getHumanReadableName(): string {
-        return 'Vector Base Platform'; // no translation required: only used for analytics
+        return "Vector Base Platform"; // no translation required: only used for analytics
     }
 
     /**
@@ -78,8 +78,7 @@ export default abstract class VectorBasePlatform extends BasePlatform {
     /**
      * Begin update polling, if applicable
      */
-    public startUpdater(): void {
-    }
+    public startUpdater(): void {}
 
     /**
      * Get a sensible default display name for the

@@ -3,10 +3,10 @@
 This code style applies to projects which the element-web team directly maintains or is reasonably
 adjacent to. As of writing, these are:
 
-* element-desktop
-* element-web
-* matrix-react-sdk
-* matrix-js-sdk
+-   element-desktop
+-   element-web
+-   matrix-react-sdk
+-   matrix-js-sdk
 
 Other projects might extend this code style for increased strictness. For example, matrix-events-sdk
 has stricter code organization to reduce the maintenance burden. These projects will declare their code
@@ -66,37 +66,24 @@ Unless otherwise specified, the following applies to all code:
 
     ```typescript
     // Function arguments
-    function doThing(
-        arg1: string,
-        arg2: string,
-        arg3: string,
-    ): boolean {
-        return !!arg1 
-            && !!arg2 
-            && !!arg3;
+    function doThing(arg1: string, arg2: string, arg3: string): boolean {
+        return !!arg1 && !!arg2 && !!arg3;
     }
 
     // Calling a function
-    doThing(
-        "String 1",
-        "String 2",
-        "String 3",
-    );
+    doThing("String 1", "String 2", "String 3");
 
     // Reduce line verbosity when possible/reasonable
-    doThing(
-        "String1", "String 2",
-        "A much longer string 3",
-    );
+    doThing("String1", "String 2", "A much longer string 3");
 
     // Chaining function calls
-    something.doThing()
+    something
+        .doThing()
         .doOtherThing()
         .doMore()
-        .somethingElse(it =>
-            useIt(it)
-        );
+        .somethingElse((it) => useIt(it));
     ```
+
 4. Use semicolons for block/line termination.
     1. Except when defining interfaces, classes, and non-arrow functions specifically.
 5. When a statement's body is a single line, it may be written without curly braces, so long as the body is placed on
@@ -105,6 +92,7 @@ Unless otherwise specified, the following applies to all code:
     ```typescript
     if (x) doThing();
     ```
+
 6. Blocks for `if`, `for`, `switch` and so on must have a space surrounding the condition, but not
    within the condition.
 
@@ -113,11 +101,13 @@ Unless otherwise specified, the following applies to all code:
         doThing();
     }
     ```
+
 7. Mixing of logical operands requires brackets to explicitly define boolean logic.
 
     ```typescript
-    if ((a > b && b > c) || (d < e)) return true;
+    if ((a > b && b > c) || d < e) return true;
     ```
+
 8. Ternaries use the same rules as `if` statements, plus the following:
 
     ```typescript
@@ -125,14 +115,13 @@ Unless otherwise specified, the following applies to all code:
     const val = a > b ? doThing() : doOtherThing();
 
     // Multiline is also okay
-    const val = a > b
-        ? doThing()
-        : doOtherThing();
+    const val = a > b ? doThing() : doOtherThing();
 
     // Use brackets when using multiple conditions.
     // Maximum 3 conditions, prefer 2 or less.
-    const val = (a > b && b > c) ? doThing() : doOtherThing();
+    const val = a > b && b > c ? doThing() : doOtherThing();
     ```
+
 9. lowerCamelCase is used for function and variable naming.
 10. UpperCamelCase is used for general naming.
 11. Interface names should not be marked with an uppercase `I`.
@@ -142,6 +131,7 @@ Unless otherwise specified, the following applies to all code:
     ```typescript
     let errorMessage: Optional<string>;
     ```
+
 14. Objects, arrays, enums and so on must have each line terminated with a comma:
 
     ```typescript
@@ -150,21 +140,16 @@ Unless otherwise specified, the following applies to all code:
         else: 2,
     };
 
-    const arr = [
-        "one",
-        "two",
-    ];
+    const arr = ["one", "two"];
 
     enum Thing {
         Foo,
         Bar,
     }
 
-    doThing(
-        "arg1",
-        "arg2",
-    );
+    doThing("arg1", "arg2");
     ```
+
 15. Objects can use shorthand declarations, including mixing of types.
 
     ```typescript
@@ -175,6 +160,7 @@ Unless otherwise specified, the following applies to all code:
     // ... or ...
     { room, prop: this.prop }
     ```
+
 16. Object keys should always be non-strings when possible.
 
     ```typescript
@@ -184,11 +170,13 @@ Unless otherwise specified, the following applies to all code:
         [EventType.RoomMessage]: true,
     }
     ```
+
 17. Explicitly cast to a boolean.
 
     ```typescript
-    !!stringVar || Boolean(stringVar)
+    !!stringVar || Boolean(stringVar);
     ```
+
 18. Use `switch` statements when checking against more than a few enum-like values.
 19. Use `const` for constants, `let` for mutability.
 20. Describe types exhaustively (ensure noImplictAny would pass).
@@ -200,6 +188,7 @@ Unless otherwise specified, the following applies to all code:
     2. "Conflicted" typically refers to a getter which wants the same name as the underlying variable.
 23. Prefer readonly members over getters backed by a variable, unless an internal setter is required.
 24. Prefer Interfaces for object definitions, and types for parameter-value-only declarations.
+
     1. Note that an explicit type is optional if not expected to be used outside of the function call,
        unlike in this example:
 
@@ -214,6 +203,7 @@ Unless otherwise specified, the following applies to all code:
             // ...
         }
         ```
+
 25. Variables/properties which are `public static` should also be `readonly` when possible.
 26. Interface and type properties are terminated with semicolons, not commas.
 27. Prefer arrow formatting when declaring functions for interfaces/types:
@@ -223,6 +213,7 @@ Unless otherwise specified, the following applies to all code:
         myCallback: (arg: string) => Promise<void>;
     }
     ```
+
 28. Prefer a type definition over an inline type. For example, define an interface.
 29. Always prefer to add types or declare a type over the use of `any`. Prefer inferred types
     when they are not `any`.
@@ -231,6 +222,7 @@ Unless otherwise specified, the following applies to all code:
 31. Export only what can be reused.
 32. Prefer a type like `Optional<X>` (`type Optional<T> = T | null | undefined`) instead
     of truly optional parameters.
+
     1. A notable exception is when the likelihood of a bug is minimal, such as when a function
        takes an argument that is more often not required than required. An example where the
        `?` operator is inappropriate is when taking a room ID: typically the caller should
@@ -245,6 +237,7 @@ Unless otherwise specified, the following applies to all code:
             // ...
         }
         ```
+
 33. There should be approximately one interface, class, or enum per file unless the file is named
     "types.ts", "global.d.ts", or ends with "-types.ts".
     1. The file name should match the interface, class, or enum name.
@@ -273,6 +266,7 @@ Unless otherwise specified, the following applies to all code:
     const example1 = "simple string";
     const example2 = 'string containing "double quotes"';
     ```
+
 39. Prefer async-await to promise-chaining
 
     ```typescript
@@ -312,6 +306,7 @@ Inheriting all the rules of TypeScript, the following additionally apply:
         }
     }
     ```
+
 8. Stores must support using an alternative MatrixClient and dispatcher instance.
 9. Utilities which require JSX must be split out from utilities which do not. This is to prevent import
    cycles during runtime where components accidentally include more of the app than they intended.
@@ -323,37 +318,28 @@ Inheriting all the rules of TypeScript, the following additionally apply:
 
     ```typescript
     function render() {
-        return <Component
-            prop1="test"
-            prop2={this.state.variable}
-        />;
+        return <Component prop1="test" prop2={this.state.variable} />;
 
         // or
 
-        return (
-            <Component
-                prop1="test"
-                prop2={this.state.variable}
-            />
-        );
+        return <Component prop1="test" prop2={this.state.variable} />;
 
         // or if children are needed (infer parens usage)
 
-        return <Component
-            prop1="test"
-            prop2={this.state.variable}
-        >{ _t("Short string here") }</Component>;
+        return (
+            <Component prop1="test" prop2={this.state.variable}>
+                {_t("Short string here")}
+            </Component>
+        );
 
-
-
-        return <Component
-            prop1="test"
-            prop2={this.state.variable}
-        >
-            { _t("Longer string here") }
-        </Component>;
+        return (
+            <Component prop1="test" prop2={this.state.variable}>
+                {_t("Longer string here")}
+            </Component>
+        );
     }
     ```
+
 13. Curly braces within JSX should be padded with a space, however properties on those components should not.
     See above code example.
 14. Functions used as properties should either be defined on the class or stored in a variable. They should not
@@ -371,7 +357,7 @@ Inheriting all the rules of TypeScript, the following additionally apply:
 
 Note: We use PostCSS + some plugins to process our styles. It looks like SCSS, but actually it is not.
 
-1. Class names must be prefixed with "mx_".
+1. Class names must be prefixed with "mx\_".
 2. Class names should denote the component which defines them, followed by any context:
     1. mx_MyFoo
     2. mx_MyFoo_avatar
@@ -382,11 +368,13 @@ Note: We use PostCSS + some plugins to process our styles. It looks like SCSS, b
 
     ```scss
     .mx_MyFoo {
-        & .mx_MyFoo_avatar { // instead of &_avatar
+        & .mx_MyFoo_avatar {
+            // instead of &_avatar
             // ...
         }
     }
     ```
+
 6. Break multiple selectors over multiple lines this way:
 
     ```scss
@@ -396,6 +384,7 @@ Note: We use PostCSS + some plugins to process our styles. It looks like SCSS, b
         // ...
     }
     ```
+
 7. Non-shared variables should use $lowerCamelCase. Shared variables use $dashed-naming.
 8. Overrides to Z indexes, adjustments of dimensions/padding with pixels, and so on should all be
    documented for what the values mean:
@@ -407,6 +396,7 @@ Note: We use PostCSS + some plugins to process our styles. It looks like SCSS, b
         z-index: 10; // above user avatar, but below dialogs
     }
     ```
+
 9. Avoid the use of `!important`. If necessary, add a comment.
 
 ## Tests
@@ -431,9 +421,7 @@ Note: We use PostCSS + some plugins to process our styles. It looks like SCSS, b
         // Use "it should..." terminology
         it("should call the correct API", async () => {
             // test-specific variables go here
-
             // function calls/state changes go here
-
             // expectations go here
         });
     });

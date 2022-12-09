@@ -22,13 +22,13 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 // These are things that can run before the skin loads - be careful not to reference the react-sdk though.
 import { parseQsFromFragment } from "./url_utils";
-import './modernizr';
+import "./modernizr";
 
 // Require common CSS here; this will make webpack process it into bundle.css.
 // Our own CSS (which is themed) is imported via separate webpack entry points
 // in webpack.config.js
-require('gfm.css/gfm.css');
-require('katex/dist/katex.css');
+require("gfm.css/gfm.css");
+require("katex/dist/katex.css");
 
 /**
  * This require is necessary only for purposes of CSS hot-reload, as otherwise
@@ -37,8 +37,8 @@ require('katex/dist/katex.css');
  *
  * On production build it's going to be an empty module, so don't worry about that.
  */
-require('./devcss');
-require('./localstorage-fix');
+require("./devcss");
+require("./localstorage-fix");
 
 async function settled(...promises: Array<Promise<any>>): Promise<void> {
     for (const prom of promises) {
@@ -60,19 +60,16 @@ function checkBrowserFeatures(): boolean {
     // in it for some features we depend on.
     // Modernizr requires rules to be lowercase with no punctuation.
     // ES2018: http://262.ecma-international.org/9.0/#sec-promise.prototype.finally
-    window.Modernizr.addTest("promiseprototypefinally", () =>
-        typeof window.Promise?.prototype?.finally === "function");
+    window.Modernizr.addTest("promiseprototypefinally", () => typeof window.Promise?.prototype?.finally === "function");
     // ES2020: http://262.ecma-international.org/#sec-promise.allsettled
-    window.Modernizr.addTest("promiseallsettled", () =>
-        typeof window.Promise?.allSettled === "function");
+    window.Modernizr.addTest("promiseallsettled", () => typeof window.Promise?.allSettled === "function");
     // ES2018: https://262.ecma-international.org/9.0/#sec-get-regexp.prototype.dotAll
-    window.Modernizr.addTest("regexpdotall", () => (
-        window.RegExp?.prototype &&
-        !!Object.getOwnPropertyDescriptor(window.RegExp.prototype, "dotAll")?.get
-    ));
+    window.Modernizr.addTest(
+        "regexpdotall",
+        () => window.RegExp?.prototype && !!Object.getOwnPropertyDescriptor(window.RegExp.prototype, "dotAll")?.get,
+    );
     // ES2019: http://262.ecma-international.org/10.0/#sec-object.fromentries
-    window.Modernizr.addTest("objectfromentries", () =>
-        typeof window.Object?.fromEntries === "function");
+    window.Modernizr.addTest("objectfromentries", () => typeof window.Object?.fromEntries === "function");
 
     const featureList = Object.keys(window.Modernizr);
 
@@ -80,8 +77,8 @@ function checkBrowserFeatures(): boolean {
     for (const feature of featureList) {
         if (window.Modernizr[feature] === undefined) {
             logger.error(
-                "Looked for feature '%s' but Modernizr has no results for this. " +
-                "Has it been configured correctly?", feature,
+                "Looked for feature '%s' but Modernizr has no results for this. " + "Has it been configured correctly?",
+                feature,
             );
             return false;
         }
@@ -120,7 +117,8 @@ async function start(): Promise<void> {
     } = await import(
         /* webpackChunkName: "init" */
         /* webpackPreload: true */
-        "./init");
+        "./init"
+    );
 
     try {
         // give rageshake a chance to load/fail, we don't actually assert rageshake loads, we allow it to fail if no IDB
@@ -178,12 +176,12 @@ async function start(): Promise<void> {
         // error handling begins here
         // ##########################
         if (!acceptBrowser) {
-            await new Promise<void>(resolve => {
+            await new Promise<void>((resolve) => {
                 logger.error("Browser is missing required features.");
                 // take to a different landing page to AWOOOOOGA at the user
                 showIncompatibleBrowser(() => {
                     if (window.localStorage) {
-                        window.localStorage.setItem('mx_accepts_unsupported_browser', String(true));
+                        window.localStorage.setItem("mx_accepts_unsupported_browser", String(true));
                     }
                     logger.log("User accepts the compatibility risks.");
                     resolve();
@@ -199,12 +197,13 @@ async function start(): Promise<void> {
             if (error.err && error.err instanceof SyntaxError) {
                 // This uses the default brand since the app config is unavailable.
                 return showError(_t("Your Element is misconfigured"), [
-                    _t("Your Element configuration contains invalid JSON. " +
-                        "Please correct the problem and reload the page."),
                     _t(
-                        "The message from the parser is: %(message)s",
-                        { message: error.err.message || _t("Invalid JSON") },
+                        "Your Element configuration contains invalid JSON. " +
+                            "Please correct the problem and reload the page.",
                     ),
+                    _t("The message from the parser is: %(message)s", {
+                        message: error.err.message || _t("Invalid JSON"),
+                    }),
                 ]);
             }
             return showError(_t("Unable to load config file: please refresh the page to try again."));
@@ -237,7 +236,7 @@ async function start(): Promise<void> {
     }
 }
 
-start().catch(err => {
+start().catch((err) => {
     logger.error(err);
     // show the static error in an iframe to not lose any context / console data
     // with some basic styling to make the iframe full page
