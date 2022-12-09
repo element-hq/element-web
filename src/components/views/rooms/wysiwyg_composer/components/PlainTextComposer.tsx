@@ -54,8 +54,9 @@ export function PlainTextComposer({
     rightComponent,
 }: PlainTextComposerProps,
 ) {
-    const { ref, onInput, onPaste, onKeyDown, content } = usePlainTextListeners(initialContent, onChange, onSend);
-    const composerFunctions = useComposerFunctions(ref);
+    const { ref, onInput, onPaste, onKeyDown, content, setContent } =
+        usePlainTextListeners(initialContent, onChange, onSend);
+    const composerFunctions = useComposerFunctions(ref, setContent);
     usePlainTextInitialization(initialContent, ref);
     useSetCursorPosition(disabled, ref);
     const { isFocused, onFocus } = useIsFocused();

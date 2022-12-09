@@ -251,7 +251,7 @@ describe('SendWysiwygComposer', () => {
 
     describe.each([
         { isRichTextEnabled: true },
-    // TODO    { isRichTextEnabled: false },
+        { isRichTextEnabled: false },
     ])('Emoji when %s', ({ isRichTextEnabled }) => {
         let emojiButton: HTMLElement;
 

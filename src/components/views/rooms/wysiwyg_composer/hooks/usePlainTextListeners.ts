@@ -36,12 +36,16 @@ export function usePlainTextListeners(
         onSend?.();
     }), [ref, onSend]);
 
+    const setText = useCallback((text: string) => {
+        setContent(text);
+        onChange?.(text);
+    }, [onChange]);
+
     const onInput = useCallback((event: SyntheticEvent<HTMLDivElement, InputEvent | ClipboardEvent>) => {
         if (isDivElement(event.target)) {
-            setContent(event.target.innerHTML);
-            onChange?.(event.target.innerHTML);
+            setText(event.target.innerHTML);
         }
-    }, [onChange]);
+    }, [setText]);
 
     const isCtrlEnter = useSettingValue<boolean>("MessageComposerInput.ctrlEnterToSend");
     const onKeyDown = useCallback((event: KeyboardEvent<HTMLDivElement>) => {
@@ -52,5 +56,5 @@ export function usePlainTextListeners(
         }
     }, [isCtrlEnter, send]);
 
-    return { ref, onInput, onPaste: onInput, onKeyDown, content };
+    return { ref, onInput, onPaste: onInput, onKeyDown, content, setContent: setText };
 }

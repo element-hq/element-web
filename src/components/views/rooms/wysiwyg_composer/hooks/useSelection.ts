@@ -14,12 +14,25 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { useCallback, useEffect, useRef } from "react";
+import { MutableRefObject, useCallback, useEffect, useRef } from "react";
 
 import useFocus from "../../../../../hooks/useFocus";
 import { setSelection } from "../utils/selection";
 
 type SubSelection = Pick<Selection, 'anchorNode' | 'anchorOffset' | 'focusNode' | 'focusOffset'>;
+
+function setSelectionRef(selectionRef: MutableRefObject<SubSelection>) {
+    const selection = document.getSelection();
+
+    if (selection) {
+        selectionRef.current = {
+            anchorNode: selection.anchorNode,
+            anchorOffset: selection.anchorOffset,
+            focusNode: selection.focusNode,
+            focusOffset: selection.focusOffset,
+        };
+    }
+}
 
 export function useSelection() {
     const selectionRef = useRef<SubSelection>({
@@ -32,16 +45,7 @@ export function useSelection() {
 
     useEffect(() => {
         function onSelectionChange() {
-            const selection = document.getSelection();
-
-            if (selection) {
-                selectionRef.current = {
-                    anchorNode: selection.anchorNode,
-                    anchorOffset: selection.anchorOffset,
-                    focusNode: selection.focusNode,
-                    focusOffset: selection.focusOffset,
-                };
-            }
+            setSelectionRef(selectionRef);
         }
 
         if (isFocused) {
@@ -51,9 +55,13 @@ export function useSelection() {
         return () => document.removeEventListener('selectionchange', onSelectionChange);
     }, [isFocused]);
 
+    const onInput = useCallback(() => {
+        setSelectionRef(selectionRef);
+    }, []);
+
     const selectPreviousSelection = useCallback(() => {
         setSelection(selectionRef.current);
-    }, [selectionRef]);
+    }, []);
 
-    return { ...focusProps, selectPreviousSelection };
+    return { ...focusProps, selectPreviousSelection, onInput };
 }
