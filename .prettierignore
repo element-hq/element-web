@@ -21,3 +21,4 @@ electron/pub
 /build_config.yaml
 # Raises an error because it contains a template var breaking the script tag
 src/vector/index.html
+src/vector/modernizr.js
