@@ -11,52 +11,52 @@ const loaderUtils = require("loader-utils");
 // This could readily be automated, but it's nice to explicitly
 // control when new languages are available.
 const INCLUDE_LANGS = [
-    {'value': 'bg', 'label': 'Български'},
-    {'value': 'ca', 'label': 'Català'},
-    {'value': 'cs', 'label': 'čeština'},
-    {'value': 'da', 'label': 'Dansk'},
-    {'value': 'de_DE', 'label': 'Deutsch'},
-    {'value': 'el', 'label': 'Ελληνικά'},
-    {'value': 'en_EN', 'label': 'English'},
-    {'value': 'en_US', 'label': 'English (US)'},
-    {'value': 'eo', 'label': 'Esperanto'},
-    {'value': 'es', 'label': 'Español'},
-    {'value': 'et', 'label': 'Eesti'},
-    {'value': 'eu', 'label': 'Euskara'},
-    {'value': 'fi', 'label': 'Suomi'},
-    {'value': 'fr', 'label': 'Français'},
-    {'value': 'gl', 'label': 'Galego'},
-    {'value': 'he', 'label': 'עברית'},
-    {'value': 'hi', 'label': 'हिन्दी'},
-    {'value': 'hu', 'label': 'Magyar'},
-    {'value': 'id', 'label': 'Bahasa Indonesia'},
-    {'value': 'is', 'label': 'íslenska'},
-    {'value': 'it', 'label': 'Italiano'},
-    {'value': 'ja', 'label': '日本語'},
-    {'value': 'kab', 'label': 'Taqbaylit'},
-    {'value': 'ko', 'label': '한국어'},
-    {'value': 'lo', 'label': 'ລາວ'},
-    {'value': 'lt', 'label': 'Lietuvių'},
-    {'value': 'lv', 'label': 'Latviešu'},
-    {'value': 'nb_NO', 'label': 'Norwegian Bokmål'},
-    {'value': 'nl', 'label': 'Nederlands'},
-    {'value': 'nn', 'label': 'Norsk Nynorsk'},
-    {'value': 'pl', 'label': 'Polski'},
-    {'value': 'pt', 'label': 'Português'},
-    {'value': 'pt_BR', 'label': 'Português do Brasil'},
-    {'value': 'ru', 'label': 'Русский'},
-    {'value': 'sk', 'label': 'Slovenčina'},
-    {'value': 'sq', 'label': 'Shqip'},
-    {'value': 'sr', 'label': 'српски'},
-    {'value': 'sv', 'label': 'Svenska'},
-    {'value': 'te', 'label': 'తెలుగు'},
-    {'value': 'th', 'label': 'ไทย'},
-    {'value': 'tr', 'label': 'Türkçe'},
-    {'value': 'uk', 'label': 'українська мова'},
-    {'value': 'vi', 'label': 'Tiếng Việt'},
-    {'value': 'vls', 'label': 'West-Vlaams'},
-    {'value': 'zh_Hans', 'label': '简体中文'}, // simplified chinese
-    {'value': 'zh_Hant', 'label': '繁體中文'}, // traditional chinese
+    { value: "bg", label: "Български" },
+    { value: "ca", label: "Català" },
+    { value: "cs", label: "čeština" },
+    { value: "da", label: "Dansk" },
+    { value: "de_DE", label: "Deutsch" },
+    { value: "el", label: "Ελληνικά" },
+    { value: "en_EN", label: "English" },
+    { value: "en_US", label: "English (US)" },
+    { value: "eo", label: "Esperanto" },
+    { value: "es", label: "Español" },
+    { value: "et", label: "Eesti" },
+    { value: "eu", label: "Euskara" },
+    { value: "fi", label: "Suomi" },
+    { value: "fr", label: "Français" },
+    { value: "gl", label: "Galego" },
+    { value: "he", label: "עברית" },
+    { value: "hi", label: "हिन्दी" },
+    { value: "hu", label: "Magyar" },
+    { value: "id", label: "Bahasa Indonesia" },
+    { value: "is", label: "íslenska" },
+    { value: "it", label: "Italiano" },
+    { value: "ja", label: "日本語" },
+    { value: "kab", label: "Taqbaylit" },
+    { value: "ko", label: "한국어" },
+    { value: "lo", label: "ລາວ" },
+    { value: "lt", label: "Lietuvių" },
+    { value: "lv", label: "Latviešu" },
+    { value: "nb_NO", label: "Norwegian Bokmål" },
+    { value: "nl", label: "Nederlands" },
+    { value: "nn", label: "Norsk Nynorsk" },
+    { value: "pl", label: "Polski" },
+    { value: "pt", label: "Português" },
+    { value: "pt_BR", label: "Português do Brasil" },
+    { value: "ru", label: "Русский" },
+    { value: "sk", label: "Slovenčina" },
+    { value: "sq", label: "Shqip" },
+    { value: "sr", label: "српски" },
+    { value: "sv", label: "Svenska" },
+    { value: "te", label: "తెలుగు" },
+    { value: "th", label: "ไทย" },
+    { value: "tr", label: "Türkçe" },
+    { value: "uk", label: "українська мова" },
+    { value: "vi", label: "Tiếng Việt" },
+    { value: "vls", label: "West-Vlaams" },
+    { value: "zh_Hans", label: "简体中文" }, // simplified chinese
+    { value: "zh_Hant", label: "繁體中文" }, // traditional chinese
 ];
 
 // cpx includes globbed parts of the filename in the destination, but excludes
@@ -77,15 +77,13 @@ const COPY_LIST = [
     ["contribute.json", "webapp"],
 ];
 
-const parseArgs = require('minimist');
-const Cpx = require('cpx');
-const chokidar = require('chokidar');
-const fs = require('fs');
-const rimraf = require('rimraf');
+const parseArgs = require("minimist");
+const Cpx = require("cpx");
+const chokidar = require("chokidar");
+const fs = require("fs");
+const rimraf = require("rimraf");
 
-const argv = parseArgs(
-    process.argv.slice(2), {}
-);
+const argv = parseArgs(process.argv.slice(2), {});
 
 const watch = argv.w;
 const verbose = argv.v;
@@ -98,12 +96,12 @@ function errCheck(err) {
 }
 
 // Check if webapp exists
-if (!fs.existsSync('webapp')) {
-    fs.mkdirSync('webapp');
+if (!fs.existsSync("webapp")) {
+    fs.mkdirSync("webapp");
 }
 // Check if i18n exists
-if (!fs.existsSync('webapp/i18n/')) {
-    fs.mkdirSync('webapp/i18n/');
+if (!fs.existsSync("webapp/i18n/")) {
+    fs.mkdirSync("webapp/i18n/");
 }
 
 function next(i, err) {
@@ -132,7 +130,9 @@ function next(i, err) {
         });
     }
 
-    const cb = (err) => { next(i + 1, err) };
+    const cb = (err) => {
+        next(i + 1, err);
+    };
 
     if (watch) {
         if (opts.directwatch) {
@@ -140,14 +140,12 @@ function next(i, err) {
             // which in the case of config.json is '.', which inevitably takes
             // ages to crawl. So we create our own watcher on the files
             // instead.
-            const copy = () => { cpx.copy(errCheck) };
-            chokidar.watch(source)
-                .on('add', copy)
-                .on('change', copy)
-                .on('ready', cb)
-                .on('error', errCheck);
+            const copy = () => {
+                cpx.copy(errCheck);
+            };
+            chokidar.watch(source).on("add", copy).on("change", copy).on("ready", cb).on("error", errCheck);
         } else {
-            cpx.on('watch-ready', cb);
+            cpx.on("watch-ready", cb);
             cpx.on("watch-error", cb);
             cpx.watch();
         }
@@ -157,17 +155,14 @@ function next(i, err) {
 }
 
 function genLangFile(lang, dest) {
-    const reactSdkFile = 'node_modules/matrix-react-sdk/src/i18n/strings/' + lang + '.json';
-    const riotWebFile = 'src/i18n/strings/' + lang + '.json';
+    const reactSdkFile = "node_modules/matrix-react-sdk/src/i18n/strings/" + lang + ".json";
+    const riotWebFile = "src/i18n/strings/" + lang + ".json";
 
     let translations = {};
-    [reactSdkFile, riotWebFile].forEach(function(f) {
+    [reactSdkFile, riotWebFile].forEach(function (f) {
         if (fs.existsSync(f)) {
             try {
-                Object.assign(
-                    translations,
-                    JSON.parse(fs.readFileSync(f).toString())
-                );
+                Object.assign(translations, JSON.parse(fs.readFileSync(f).toString()));
             } catch (e) {
                 console.error("Failed: " + f, e);
                 throw e;
@@ -192,16 +187,16 @@ function genLangFile(lang, dest) {
 
 function genLangList(langFileMap) {
     const languages = {};
-    INCLUDE_LANGS.forEach(function(lang) {
+    INCLUDE_LANGS.forEach(function (lang) {
         const normalizedLanguage = lang.value.toLowerCase().replace("_", "-");
-        const languageParts = normalizedLanguage.split('-');
+        const languageParts = normalizedLanguage.split("-");
         if (languageParts.length == 2 && languageParts[0] == languageParts[1]) {
-            languages[languageParts[0]] = {'fileName': langFileMap[lang.value], 'label': lang.label};
+            languages[languageParts[0]] = { fileName: langFileMap[lang.value], label: lang.label };
         } else {
-            languages[normalizedLanguage] = {'fileName': langFileMap[lang.value], 'label': lang.label};
+            languages[normalizedLanguage] = { fileName: langFileMap[lang.value], label: lang.label };
         }
     });
-    fs.writeFile('webapp/i18n/languages.json', JSON.stringify(languages, null, 4), function(err) {
+    fs.writeFile("webapp/i18n/languages.json", JSON.stringify(languages, null, 4), function (err) {
         if (err) {
             console.error("Copy Error occured: " + err);
             throw new Error("Failed to generate languages.json");
@@ -230,7 +225,7 @@ function weblateToCounterpart(inTrs) {
     const outTrs = {};
 
     for (const key of Object.keys(inTrs)) {
-        const keyParts = key.split('|', 2);
+        const keyParts = key.split("|", 2);
         if (keyParts.length === 2) {
             let obj = outTrs[keyParts[0]];
             if (obj === undefined) {
@@ -239,7 +234,7 @@ function weblateToCounterpart(inTrs) {
                 // This is a transitional edge case if a string went from singular to pluralised and both still remain
                 // in the translation json file. Use the singular translation as `other` and merge pluralisation atop.
                 obj = outTrs[keyParts[0]] = {
-                    "other": inTrs[key],
+                    other: inTrs[key],
                 };
                 console.warn("Found entry in i18n file in both singular and pluralised form", keyParts[0]);
             }
@@ -258,8 +253,8 @@ regenerate the file, adding its content-hashed filename to langFileMap
 and regenerating languages.json with the new filename
 */
 function watchLanguage(lang, dest, langFileMap) {
-    const reactSdkFile = 'node_modules/matrix-react-sdk/src/i18n/strings/' + lang + '.json';
-    const riotWebFile = 'src/i18n/strings/' + lang + '.json';
+    const reactSdkFile = "node_modules/matrix-react-sdk/src/i18n/strings/" + lang + ".json";
+    const riotWebFile = "src/i18n/strings/" + lang + ".json";
 
     // XXX: Use a debounce because for some reason if we read the language
     // file immediately after the FS event is received, the file contents
@@ -271,16 +266,13 @@ function watchLanguage(lang, dest, langFileMap) {
         }
         makeLangDebouncer = setTimeout(() => {
             const filename = genLangFile(lang, dest);
-            langFileMap[lang]=filename;
+            langFileMap[lang] = filename;
             genLangList(langFileMap);
         }, 500);
     };
 
-    [reactSdkFile, riotWebFile].forEach(function(f) {
-        chokidar.watch(f)
-            .on('add', makeLang)
-            .on('change', makeLang)
-            .on('error', errCheck);
+    [reactSdkFile, riotWebFile].forEach(function (f) {
+        chokidar.watch(f).on("add", makeLang).on("change", makeLang).on("error", errCheck);
     });
 }
 
@@ -294,7 +286,7 @@ const I18N_FILENAME_MAP = INCLUDE_LANGS.reduce((m, l) => {
 genLangList(I18N_FILENAME_MAP);
 
 if (watch) {
-    INCLUDE_LANGS.forEach(l => watchLanguage(l.value, I18N_DEST, I18N_FILENAME_MAP));
+    INCLUDE_LANGS.forEach((l) => watchLanguage(l.value, I18N_DEST, I18N_FILENAME_MAP));
 }
 
 // non-language resources

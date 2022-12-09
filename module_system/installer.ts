@@ -65,7 +65,7 @@ export function installer(config: BuildConfig): void {
         // else must be a module, we assume.
         const pkgJsonStr = fs.readFileSync("./package.json", "utf-8");
         const optionalDepNames = getOptionalDepNames(pkgJsonStr);
-        const installedModules = optionalDepNames.filter(d => !currentOptDeps.includes(d));
+        const installedModules = optionalDepNames.filter((d) => !currentOptDeps.includes(d));
 
         // Ensure all the modules are compatible. We check them all and report at the end to
         // try and save the user some time debugging this sort of failure.
@@ -80,7 +80,7 @@ export function installer(config: BuildConfig): void {
         if (incompatibleNames.length > 0) {
             console.error(
                 "The following modules are not compatible with this version of element-web. Please update the module " +
-                "references and try again.",
+                    "references and try again.",
                 JSON.stringify(incompatibleNames, null, 4), // stringify to get prettier/complete output
             );
             exitCode = 1;
@@ -133,29 +133,33 @@ function callYarnAdd(dep: string): void {
     // goes wrong in restoring the original package details.
     childProcess.execSync(`yarn add -O ${dep}`, {
         env: process.env,
-        stdio: ['inherit', 'inherit', 'inherit'],
+        stdio: ["inherit", "inherit", "inherit"],
     });
 }
 
 function getOptionalDepNames(pkgJsonStr: string): string[] {
-    return Object.keys(JSON.parse(pkgJsonStr)?.['optionalDependencies'] ?? {});
+    return Object.keys(JSON.parse(pkgJsonStr)?.["optionalDependencies"] ?? {});
 }
 
 function findDepVersionInPackageJson(dep: string, pkgJsonStr: string): string {
     const pkgJson = JSON.parse(pkgJsonStr);
     const packages = {
-        ...(pkgJson['optionalDependencies'] ?? {}),
-        ...(pkgJson['devDependencies'] ?? {}),
-        ...(pkgJson['dependencies'] ?? {}),
+        ...(pkgJson["optionalDependencies"] ?? {}),
+        ...(pkgJson["devDependencies"] ?? {}),
+        ...(pkgJson["dependencies"] ?? {}),
     };
     return packages[dep];
 }
 
 function getTopLevelDependencyVersion(dep: string): string {
-    const dependencyTree = JSON.parse(childProcess.execSync(`npm list ${dep} --depth=0 --json`, {
-        env: process.env,
-        stdio: ['inherit', 'pipe', 'pipe'],
-    }).toString('utf-8'));
+    const dependencyTree = JSON.parse(
+        childProcess
+            .execSync(`npm list ${dep} --depth=0 --json`, {
+                env: process.env,
+                stdio: ["inherit", "pipe", "pipe"],
+            })
+            .toString("utf-8"),
+    );
 
     /*
         What a dependency tree looks like:

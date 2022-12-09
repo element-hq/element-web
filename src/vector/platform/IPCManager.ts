@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { defer, IDeferred } from 'matrix-js-sdk/src/utils';
+import { defer, IDeferred } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { ElectronChannel } from "../../@types/global";

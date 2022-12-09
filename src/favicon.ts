@@ -70,8 +70,8 @@ export default class Favicon {
             this.baseImage.setAttribute("crossOrigin", "anonymous");
             this.baseImage.onload = (): void => {
                 // get height and width of the favicon
-                this.canvas.height = (this.baseImage.height > 0) ? this.baseImage.height : 32;
-                this.canvas.width = (this.baseImage.width > 0) ? this.baseImage.width : 32;
+                this.canvas.height = this.baseImage.height > 0 ? this.baseImage.height : 32;
+                this.canvas.width = this.baseImage.width > 0 ? this.baseImage.width : 32;
                 this.context = this.canvas.getContext("2d");
                 this.ready();
             };
@@ -89,7 +89,10 @@ export default class Favicon {
         this.context.drawImage(this.baseImage, 0, 0, this.canvas.width, this.canvas.height);
     }
 
-    private options(n: number | string, params: IParams): {
+    private options(
+        n: number | string,
+        params: IParams,
+    ): {
         n: string | number;
         len: number;
         x: number;
@@ -98,7 +101,7 @@ export default class Favicon {
         h: number;
     } {
         const opt = {
-            n: ((typeof n) === "number") ? Math.abs(n as number | 0) : n,
+            n: typeof n === "number" ? Math.abs(n as number | 0) : n,
             len: ("" + n).length,
             // badge positioning constants as percentages
             x: 0.4,
@@ -174,8 +177,8 @@ export default class Favicon {
         this.context.stroke();
         this.context.fillStyle = params.textColor;
 
-        if ((typeof opt.n) === "number" && opt.n > 999) {
-            const count = ((opt.n > 9999) ? 9 : Math.floor(opt.n as number / 1000)) + "k+";
+        if (typeof opt.n === "number" && opt.n > 999) {
+            const count = (opt.n > 9999 ? 9 : Math.floor((opt.n as number) / 1000)) + "k+";
             this.context.fillText(count, Math.floor(opt.x + opt.w / 2), Math.floor(opt.y + opt.h - opt.h * 0.2));
         } else {
             this.context.fillText("" + opt.n, Math.floor(opt.x + opt.w / 2), Math.floor(opt.y + opt.h - opt.h * 0.15));
@@ -209,7 +212,7 @@ export default class Favicon {
             newIcon.setAttribute("href", url);
             old.parentNode?.removeChild(old);
         } else {
-            this.icons.forEach(icon => {
+            this.icons.forEach((icon) => {
                 icon.setAttribute("href", url);
             });
         }
@@ -236,7 +239,7 @@ export default class Favicon {
         const icons: HTMLLinkElement[] = [];
         const links = window.document.getElementsByTagName("head")[0].getElementsByTagName("link");
         for (const link of links) {
-            if ((/(^|\s)icon(\s|$)/i).test(link.getAttribute("rel"))) {
+            if (/(^|\s)icon(\s|$)/i.test(link.getAttribute("rel"))) {
                 icons.push(link);
             }
         }
@@ -252,7 +255,7 @@ export default class Favicon {
             window.document.getElementsByTagName("head")[0].appendChild(elms[0]);
         }
 
-        elms.forEach(item => {
+        elms.forEach((item) => {
             item.setAttribute("type", "image/png");
         });
         return elms;

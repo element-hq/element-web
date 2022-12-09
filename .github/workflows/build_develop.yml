@@ -2,114 +2,113 @@
 # environment secrets, largely similar to build.yaml.
 name: Build and Deploy develop
 on:
-  push:
-    branches: [ develop ]
-  repository_dispatch:
-    types: [ element-web-notify ]
+    push:
+        branches: [develop]
+    repository_dispatch:
+        types: [element-web-notify]
 concurrency:
-  group: ${{ github.repository_owner }}-${{ github.workflow }}-${{ github.ref_name }}
-  cancel-in-progress: true
+    group: ${{ github.repository_owner }}-${{ github.workflow }}-${{ github.ref_name }}
+    cancel-in-progress: true
 jobs:
-  build:
-    name: "Build & Deploy develop.element.io"
-    # Only respect triggers from our develop branch, ignore that of forks
-    if: github.repository == 'vector-im/element-web'
-    runs-on: ubuntu-latest
-    environment: develop
-    env:
-      R2_BUCKET: 'element-web-develop'
-      R2_URL: ${{ secrets.CF_R2_S3_API }}
-      R2_PUBLIC_URL: 'https://element-web-develop.element.io'
-    steps:
-      - uses: actions/checkout@v3
-
-      - uses: actions/setup-node@v3
-        with:
-          cache: 'yarn'
-
-      - name: Install Dependencies
-        run: "./scripts/layered.sh"
-
-      - name: Build, Package & Upload sourcemaps
-        run: "./scripts/ci_package.sh"
+    build:
+        name: "Build & Deploy develop.element.io"
+        # Only respect triggers from our develop branch, ignore that of forks
+        if: github.repository == 'vector-im/element-web'
+        runs-on: ubuntu-latest
+        environment: develop
         env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-          SENTRY_URL: ${{ secrets.SENTRY_URL }}
-          SENTRY_ORG: element
-          SENTRY_PROJECT: riot-web
-          # We only deploy the latest bundles to Cloudflare Pages and use _redirects to fallback to R2 for
-          # older ones. This redirect means that 'self' is insufficient in the CSP,
-          # and we have to add the R2 URL.
-          # Once Cloudflare redirects support proxying mode we will be able to ditch this.
-          # See Proxying in support table at https://developers.cloudflare.com/pages/platform/redirects
-          CSP_EXTRA_SOURCE: ${{ env.R2_PUBLIC_URL }}
+            R2_BUCKET: "element-web-develop"
+            R2_URL: ${{ secrets.CF_R2_S3_API }}
+            R2_PUBLIC_URL: "https://element-web-develop.element.io"
+        steps:
+            - uses: actions/checkout@v3
 
-      - run: mv dist/element-*.tar.gz dist/develop.tar.gz
+            - uses: actions/setup-node@v3
+              with:
+                  cache: "yarn"
 
-      - uses: actions/upload-artifact@v3
-        with:
-          name: webapp
-          path: dist/develop.tar.gz
-          retention-days: 1
-          
-      - name: Extract webapp
-        run: |
-          mkdir _deploy
-          tar xf dist/develop.tar.gz -C _deploy --strip-components=1
-          
-      - name: Copy config
-        run: cp element.io/develop/config.json _deploy/config.json
+            - name: Install Dependencies
+              run: "./scripts/layered.sh"
 
-      - name: Populate 404.html
-        run: echo "404 Not Found" > _deploy/404.html
+            - name: Build, Package & Upload sourcemaps
+              run: "./scripts/ci_package.sh"
+              env:
+                  SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+                  SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+                  SENTRY_URL: ${{ secrets.SENTRY_URL }}
+                  SENTRY_ORG: element
+                  SENTRY_PROJECT: riot-web
+                  # We only deploy the latest bundles to Cloudflare Pages and use _redirects to fallback to R2 for
+                  # older ones. This redirect means that 'self' is insufficient in the CSP,
+                  # and we have to add the R2 URL.
+                  # Once Cloudflare redirects support proxying mode we will be able to ditch this.
+                  # See Proxying in support table at https://developers.cloudflare.com/pages/platform/redirects
+                  CSP_EXTRA_SOURCE: ${{ env.R2_PUBLIC_URL }}
 
-      - name: Populate _headers
-        run: cp .github/cfp_headers _deploy/_headers
+            - run: mv dist/element-*.tar.gz dist/develop.tar.gz
 
-      # Redirect requests for the develop tarball and the historical bundles to R2
-      - name: Populate _redirects
-        run: |
-          {
-            echo "/develop.tar.gz $R2_PUBLIC_URL/develop.tar.gz 301"
-            for bundle in $(aws s3 ls s3://$R2_BUCKET/bundles/ --endpoint-url $R2_URL --region=auto | awk '{print $2}'); do
-              echo "/bundles/${bundle}* $R2_PUBLIC_URL/bundles/${bundle}:splat 301"
-            done
-          } | tee _deploy/_redirects
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.CF_R2_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.CF_R2_TOKEN }}
+            - uses: actions/upload-artifact@v3
+              with:
+                  name: webapp
+                  path: dist/develop.tar.gz
+                  retention-days: 1
 
-      - name: Wait for other steps to succeed
-        uses: lewagon/wait-on-check-action@v1.2.0
-        with:
-          ref: ${{ github.ref }}
-          running-workflow-name: 'Build & Deploy develop.element.io'
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          wait-interval: 10
-          check-regexp: ^((?!SonarCloud|SonarQube|issues|board).)*$
+            - name: Extract webapp
+              run: |
+                  mkdir _deploy
+                  tar xf dist/develop.tar.gz -C _deploy --strip-components=1
 
-      # We keep the latest develop.tar.gz on R2 instead of relying on the github artifact uploaded earlier
-      # as the expires after 24h and requires auth to download.
-      # Element Desktop's fetch script uses this tarball to fetch latest develop to build Nightlies.
-      - name: Deploy to R2
-        run: |
-          aws s3 cp dist/develop.tar.gz s3://$R2_BUCKET/develop.tar.gz --endpoint-url $R2_URL --region=auto
-          aws s3 cp _deploy/bundles s3://$R2_BUCKET/bundles --recursive --endpoint-url $R2_URL --region=auto
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.CF_R2_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.CF_R2_TOKEN }}
-          
-      - name: Deploy to Cloudflare Pages
-        id: cfp
-        uses: cloudflare/pages-action@1
-        with:
-          apiToken: ${{ secrets.CF_PAGES_TOKEN }}
-          accountId: ${{ secrets.CF_PAGES_ACCOUNT_ID }}
-          projectName: element-web-develop
-          directory: _deploy
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          
-      - run: |
-          echo "Deployed to ${{ steps.cfp.outputs.url }}" >> $GITHUB_STEP_SUMMARY
-    
+            - name: Copy config
+              run: cp element.io/develop/config.json _deploy/config.json
+
+            - name: Populate 404.html
+              run: echo "404 Not Found" > _deploy/404.html
+
+            - name: Populate _headers
+              run: cp .github/cfp_headers _deploy/_headers
+
+            # Redirect requests for the develop tarball and the historical bundles to R2
+            - name: Populate _redirects
+              run: |
+                  {
+                    echo "/develop.tar.gz $R2_PUBLIC_URL/develop.tar.gz 301"
+                    for bundle in $(aws s3 ls s3://$R2_BUCKET/bundles/ --endpoint-url $R2_URL --region=auto | awk '{print $2}'); do
+                      echo "/bundles/${bundle}* $R2_PUBLIC_URL/bundles/${bundle}:splat 301"
+                    done
+                  } | tee _deploy/_redirects
+              env:
+                  AWS_ACCESS_KEY_ID: ${{ secrets.CF_R2_ACCESS_KEY_ID }}
+                  AWS_SECRET_ACCESS_KEY: ${{ secrets.CF_R2_TOKEN }}
+
+            - name: Wait for other steps to succeed
+              uses: lewagon/wait-on-check-action@v1.2.0
+              with:
+                  ref: ${{ github.ref }}
+                  running-workflow-name: "Build & Deploy develop.element.io"
+                  repo-token: ${{ secrets.GITHUB_TOKEN }}
+                  wait-interval: 10
+                  check-regexp: ^((?!SonarCloud|SonarQube|issues|board).)*$
+
+            # We keep the latest develop.tar.gz on R2 instead of relying on the github artifact uploaded earlier
+            # as the expires after 24h and requires auth to download.
+            # Element Desktop's fetch script uses this tarball to fetch latest develop to build Nightlies.
+            - name: Deploy to R2
+              run: |
+                  aws s3 cp dist/develop.tar.gz s3://$R2_BUCKET/develop.tar.gz --endpoint-url $R2_URL --region=auto
+                  aws s3 cp _deploy/bundles s3://$R2_BUCKET/bundles --recursive --endpoint-url $R2_URL --region=auto
+              env:
+                  AWS_ACCESS_KEY_ID: ${{ secrets.CF_R2_ACCESS_KEY_ID }}
+                  AWS_SECRET_ACCESS_KEY: ${{ secrets.CF_R2_TOKEN }}
+
+            - name: Deploy to Cloudflare Pages
+              id: cfp
+              uses: cloudflare/pages-action@1
+              with:
+                  apiToken: ${{ secrets.CF_PAGES_TOKEN }}
+                  accountId: ${{ secrets.CF_PAGES_ACCOUNT_ID }}
+                  projectName: element-web-develop
+                  directory: _deploy
+                  gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+
+            - run: |
+                  echo "Deployed to ${{ steps.cfp.outputs.url }}" >> $GITHUB_STEP_SUMMARY

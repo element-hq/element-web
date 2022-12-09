@@ -21,10 +21,10 @@ limitations under the License.
 // To ensure we load the browser-matrix version first
 import "matrix-js-sdk/src/browser-index";
 
-import React, { ReactElement } from 'react';
-import PlatformPeg from 'matrix-react-sdk/src/PlatformPeg';
-import { _td, newTranslatableError } from 'matrix-react-sdk/src/languageHandler';
-import AutoDiscoveryUtils from 'matrix-react-sdk/src/utils/AutoDiscoveryUtils';
+import React, { ReactElement } from "react";
+import PlatformPeg from "matrix-react-sdk/src/PlatformPeg";
+import { _td, newTranslatableError } from "matrix-react-sdk/src/languageHandler";
+import AutoDiscoveryUtils from "matrix-react-sdk/src/utils/AutoDiscoveryUtils";
 import { AutoDiscovery } from "matrix-js-sdk/src/autodiscovery";
 import * as Lifecycle from "matrix-react-sdk/src/Lifecycle";
 import SdkConfig, { parseSsoRedirectOptions } from "matrix-react-sdk/src/SdkConfig";
@@ -34,7 +34,7 @@ import { createClient } from "matrix-js-sdk/src/matrix";
 import { SnakedObject } from "matrix-react-sdk/src/utils/SnakedObject";
 import MatrixChat from "matrix-react-sdk/src/components/structures/MatrixChat";
 
-import { parseQs } from './url_utils';
+import { parseQs } from "./url_utils";
 import VectorBasePlatform from "./platform/VectorBasePlatform";
 import { getScreenFromLocation, init as initRouting, onNewScreen } from "./routing";
 
@@ -58,25 +58,20 @@ window.matrixLogger = logger;
 function makeRegistrationUrl(params: object): string {
     let url;
     if (window.location.protocol === "vector:") {
-        url = 'https://app.element.io/#/register';
+        url = "https://app.element.io/#/register";
     } else {
-        url = (
-            window.location.protocol + '//' +
-            window.location.host +
-            window.location.pathname +
-            '#/register'
-        );
+        url = window.location.protocol + "//" + window.location.host + window.location.pathname + "#/register";
     }
 
     const keys = Object.keys(params);
     for (let i = 0; i < keys.length; ++i) {
         if (i === 0) {
-            url += '?';
+            url += "?";
         } else {
-            url += '&';
+            url += "&";
         }
         const k = keys[i];
-        url += k + '=' + encodeURIComponent(params[k]);
+        url += k + "=" + encodeURIComponent(params[k]);
     }
     return url;
 }
@@ -99,7 +94,7 @@ export async function loadApp(fragParams: {}): Promise<ReactElement> {
 
     const params = parseQs(window.location);
 
-    const urlWithoutQuery = window.location.protocol + '//' + window.location.host + window.location.pathname;
+    const urlWithoutQuery = window.location.protocol + "//" + window.location.host + window.location.pathname;
     logger.log("Vector starting at " + urlWithoutQuery);
 
     (platform as VectorBasePlatform).startUpdater();
@@ -115,7 +110,7 @@ export async function loadApp(fragParams: {}): Promise<ReactElement> {
     const ssoRedirects = parseSsoRedirectOptions(config);
     let autoRedirect = ssoRedirects.immediate === true;
     // XXX: This path matching is a bit brittle, but better to do it early instead of in the app code.
-    const isWelcomeOrLanding = window.location.hash === '#/welcome' || window.location.hash === '#';
+    const isWelcomeOrLanding = window.location.hash === "#/welcome" || window.location.hash === "#";
     if (!autoRedirect && ssoRedirects.on_welcome_page && isWelcomeOrLanding) {
         autoRedirect = true;
     }
@@ -133,20 +128,21 @@ export async function loadApp(fragParams: {}): Promise<ReactElement> {
         return;
     }
 
-    const defaultDeviceName = snakedConfig.get("default_device_display_name")
-        ?? platform.getDefaultDeviceDisplayName();
+    const defaultDeviceName = snakedConfig.get("default_device_display_name") ?? platform.getDefaultDeviceDisplayName();
 
-    return <MatrixChat
-        onNewScreen={onNewScreen}
-        makeRegistrationUrl={makeRegistrationUrl}
-        config={config}
-        realQueryParams={params}
-        startingFragmentQueryParams={fragParams}
-        enableGuest={!config.disable_guests}
-        onTokenLoginCompleted={onTokenLoginCompleted}
-        initialScreenAfterLogin={getScreenFromLocation(window.location)}
-        defaultDeviceDisplayName={defaultDeviceName}
-    />;
+    return (
+        <MatrixChat
+            onNewScreen={onNewScreen}
+            makeRegistrationUrl={makeRegistrationUrl}
+            config={config}
+            realQueryParams={params}
+            startingFragmentQueryParams={fragParams}
+            enableGuest={!config.disable_guests}
+            onTokenLoginCompleted={onTokenLoginCompleted}
+            initialScreenAfterLogin={getScreenFromLocation(window.location)}
+            defaultDeviceDisplayName={defaultDeviceName}
+        />
+    );
 }
 
 async function verifyServerConfig(): Promise<IConfigOptions> {
@@ -164,18 +160,20 @@ async function verifyServerConfig(): Promise<IConfigOptions> {
         // validators for that purpose.
 
         const config = SdkConfig.get();
-        let wkConfig = config['default_server_config']; // overwritten later under some conditions
-        const serverName = config['default_server_name'];
-        const hsUrl = config['default_hs_url'];
-        const isUrl = config['default_is_url'];
+        let wkConfig = config["default_server_config"]; // overwritten later under some conditions
+        const serverName = config["default_server_name"];
+        const hsUrl = config["default_hs_url"];
+        const isUrl = config["default_is_url"];
 
-        const incompatibleOptions = [wkConfig, serverName, hsUrl].filter(i => !!i);
+        const incompatibleOptions = [wkConfig, serverName, hsUrl].filter((i) => !!i);
         if (incompatibleOptions.length > 1) {
             // noinspection ExceptionCaughtLocallyJS
-            throw newTranslatableError(_td(
-                "Invalid configuration: can only specify one of default_server_config, default_server_name, " +
-                "or default_hs_url.",
-            ));
+            throw newTranslatableError(
+                _td(
+                    "Invalid configuration: can only specify one of default_server_config, default_server_name, " +
+                        "or default_hs_url.",
+                ),
+            );
         }
         if (incompatibleOptions.length < 1) {
             // noinspection ExceptionCaughtLocallyJS
@@ -186,17 +184,17 @@ async function verifyServerConfig(): Promise<IConfigOptions> {
             logger.log("Config uses a default_hs_url - constructing a default_server_config using this information");
             logger.warn(
                 "DEPRECATED CONFIG OPTION: In the future, default_hs_url will not be accepted. Please use " +
-                "default_server_config instead.",
+                    "default_server_config instead.",
             );
 
             wkConfig = {
                 "m.homeserver": {
-                    "base_url": hsUrl,
+                    base_url: hsUrl,
                 },
             };
             if (isUrl) {
                 wkConfig["m.identity_server"] = {
-                    "base_url": isUrl,
+                    base_url: isUrl,
                 };
             }
         }
@@ -211,7 +209,7 @@ async function verifyServerConfig(): Promise<IConfigOptions> {
             logger.log("Config uses a default_server_name - doing .well-known lookup");
             logger.warn(
                 "DEPRECATED CONFIG OPTION: In the future, default_server_name will not be accepted. Please " +
-                "use default_server_config instead.",
+                    "use default_server_config instead.",
             );
             discoveryResult = await AutoDiscovery.findClientConfig(serverName);
         }
@@ -238,7 +236,7 @@ async function verifyServerConfig(): Promise<IConfigOptions> {
 
     // Add the newly built config to the actual config for use by the app
     logger.log("Updating SdkConfig with validated discovery information");
-    SdkConfig.add({ "validated_server_config": validatedConfig });
+    SdkConfig.add({ validated_server_config: validatedConfig });
 
     return SdkConfig.get();
 }

@@ -34,14 +34,12 @@ export function deleteIndexedDB(dbName: string): Promise<void> {
         };
 
         req.onerror = (ev): void => {
-            reject(new Error(
-                `${Date.now()}: unable to delete indexeddb ${dbName}: ${req.error}`,
-            ));
+            reject(new Error(`${Date.now()}: unable to delete indexeddb ${dbName}: ${req.error}`));
         };
 
         req.onsuccess = (): void => {
             const now = Date.now();
-            console.log(`${now}: Removed indexeddb instance: ${dbName} in ${now-startTime} ms`);
+            console.log(`${now}: Removed indexeddb instance: ${dbName} in ${now - startTime} ms`);
             resolve();
         };
     }).catch((e) => {

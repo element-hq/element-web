@@ -24,13 +24,14 @@ Element will use the Jitsi server that is embedded in the widget, even if it is 
 one you configured. This is because conference calls must be held on a single Jitsi
 server and cannot be split over multiple servers.
 
-However, you can configure Element to *start* a conference with your Jitsi server by adding
+However, you can configure Element to _start_ a conference with your Jitsi server by adding
 to your [config](./config.md) the following:
+
 ```json
 {
-  "jitsi": {
-    "preferredDomain": "your.jitsi.example.org"
-  }
+    "jitsi": {
+        "preferredDomain": "your.jitsi.example.org"
+    }
 }
 ```
 
@@ -46,11 +47,12 @@ domain will appear later in the URL as a configuration parameter.
 **Hint**: If you want everyone on your homeserver to use the same Jitsi server by
 default, and you are using element-web 1.6 or newer, set the following on your homeserver's
 `/.well-known/matrix/client` config:
+
 ```json
 {
-  "im.vector.riot.jitsi": {
-    "preferredDomain": "your.jitsi.example.org"
-  }
+    "im.vector.riot.jitsi": {
+        "preferredDomain": "your.jitsi.example.org"
+    }
 }
 ```
 

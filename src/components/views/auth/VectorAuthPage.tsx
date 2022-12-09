@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import * as React from 'react';
-import SdkConfig from 'matrix-react-sdk/src/SdkConfig';
+import * as React from "react";
+import SdkConfig from "matrix-react-sdk/src/SdkConfig";
 
 import VectorAuthFooter from "./VectorAuthFooter";
 
@@ -48,25 +48,25 @@ export default class VectorAuthPage extends React.PureComponent {
         };
 
         const modalStyle: React.CSSProperties = {
-            position: 'relative',
-            background: 'initial',
+            position: "relative",
+            background: "initial",
         };
 
         const blurStyle: React.CSSProperties = {
-            position: 'absolute',
+            position: "absolute",
             top: 0,
             right: 0,
             bottom: 0,
             left: 0,
-            filter: 'blur(40px)',
+            filter: "blur(40px)",
             background: pageStyle.background,
         };
 
         const modalContentStyle: React.CSSProperties = {
-            display: 'flex',
+            display: "flex",
             zIndex: 1,
-            background: 'rgba(255, 255, 255, 0.59)',
-            borderRadius: '8px',
+            background: "rgba(255, 255, 255, 0.59)",
+            borderRadius: "8px",
         };
 
         return (
@@ -74,7 +74,7 @@ export default class VectorAuthPage extends React.PureComponent {
                 <div className="mx_AuthPage_modal" style={modalStyle}>
                     <div className="mx_AuthPage_modalBlur" style={blurStyle} />
                     <div className="mx_AuthPage_modalContent" style={modalContentStyle}>
-                        { this.props.children }
+                        {this.props.children}
                     </div>
                 </div>
                 <VectorAuthFooter />
