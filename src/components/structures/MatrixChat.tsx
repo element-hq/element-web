@@ -371,10 +371,14 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         }
 
         const promisesList: Promise<any>[] = [this.firstSyncPromise.promise];
+        let crossSigningIsSetUp = false;
         if (cryptoEnabled) {
-            // wait for the client to finish downloading cross-signing keys for us so we
-            // know whether or not we have keys set up on this account
-            promisesList.push(cli.downloadKeys([cli.getUserId()]));
+            // check if the user has previously published public cross-signing keys,
+            // as a proxy to figure out if it's worth prompting the user to verify
+            // from another device.
+            promisesList.push((async () => {
+                crossSigningIsSetUp = await cli.userHasCrossSigningKeys();
+            })());
         }
 
         // Now update the state to say we're waiting for the first sync to complete rather
@@ -388,14 +392,16 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             return;
         }
 
-        const crossSigningIsSetUp = cli.getStoredCrossSigningForUser(cli.getUserId());
         if (crossSigningIsSetUp) {
+            // if the user has previously set up cross-signing, verify this device so we can fetch the
+            // private keys.
             if (SecurityCustomisations.SHOW_ENCRYPTION_SETUP_UI === false) {
                 this.onLoggedIn();
             } else {
                 this.setStateForNewView({ view: Views.COMPLETE_SECURITY });
             }
         } else if (await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing")) {
+            // if cross-signing is not yet set up, do so now if possible.
             this.setStateForNewView({ view: Views.E2E_SETUP });
         } else {
             this.onLoggedIn();
