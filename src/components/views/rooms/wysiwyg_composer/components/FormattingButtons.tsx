@@ -23,6 +23,7 @@ import { Alignment } from "../../../elements/Tooltip";
 import { KeyboardShortcut } from "../../../settings/KeyboardShortcut";
 import { KeyCombo } from "../../../../../KeyBindingsManager";
 import { _td } from "../../../../../languageHandler";
+import { ButtonEvent } from "../../../elements/AccessibleButton";
 
 interface TooltipProps {
     label: string;
@@ -45,7 +46,7 @@ interface ButtonProps extends TooltipProps {
 function Button({ label, keyCombo, onClick, isActive, className }: ButtonProps) {
     return <AccessibleTooltipButton
         element="button"
-        onClick={onClick}
+        onClick={onClick as (e: ButtonEvent) => void}
         title={label}
         className={
             classNames('mx_FormattingButtons_Button', className, {
@@ -68,5 +69,6 @@ export function FormattingButtons({ composer, actionStates }: FormattingButtonsP
         <Button isActive={actionStates.italic === 'reversed'} label={_td('Italic')} keyCombo={{ ctrlOrCmdKey: true, key: 'i' }} onClick={() => composer.italic()} className="mx_FormattingButtons_Button_italic" />
         <Button isActive={actionStates.underline === 'reversed'} label={_td('Underline')} keyCombo={{ ctrlOrCmdKey: true, key: 'u' }} onClick={() => composer.underline()} className="mx_FormattingButtons_Button_underline" />
         <Button isActive={actionStates.strikeThrough === 'reversed'} label={_td('Strikethrough')} onClick={() => composer.strikeThrough()} className="mx_FormattingButtons_Button_strikethrough" />
+        <Button isActive={actionStates.inlineCode === 'reversed'} label={_td('Code')} keyCombo={{ ctrlOrCmdKey: true, key: 'e' }} onClick={() => composer.inlineCode()} className="mx_FormattingButtons_Button_inline_code" />
     </div>;
 }

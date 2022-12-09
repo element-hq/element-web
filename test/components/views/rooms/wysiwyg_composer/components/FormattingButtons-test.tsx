@@ -17,6 +17,7 @@ limitations under the License.
 import React from 'react';
 import { render, screen } from "@testing-library/react";
 import userEvent from '@testing-library/user-event';
+import { AllActionStates, FormattingFunctions } from '@matrix-org/matrix-wysiwyg';
 
 import { FormattingButtons }
     from "../../../../../../src/components/views/rooms/wysiwyg_composer/components/FormattingButtons";
@@ -27,14 +28,16 @@ describe('FormattingButtons', () => {
         italic: jest.fn(),
         underline: jest.fn(),
         strikeThrough: jest.fn(),
-    } as any;
+        inlineCode: jest.fn(),
+    } as unknown as FormattingFunctions;
 
     const actionStates = {
         bold: 'reversed',
         italic: 'reversed',
         underline: 'enabled',
         strikeThrough: 'enabled',
-    } as any;
+        inlineCode: 'enabled',
+    } as AllActionStates;
 
     afterEach(() => {
         jest.resetAllMocks();
@@ -49,6 +52,7 @@ describe('FormattingButtons', () => {
         expect(screen.getByLabelText('Italic')).toHaveClass('mx_FormattingButtons_active');
         expect(screen.getByLabelText('Underline')).not.toHaveClass('mx_FormattingButtons_active');
         expect(screen.getByLabelText('Strikethrough')).not.toHaveClass('mx_FormattingButtons_active');
+        expect(screen.getByLabelText('Code')).not.toHaveClass('mx_FormattingButtons_active');
     });
 
     it('Should call wysiwyg function on button click', () => {
@@ -58,12 +62,14 @@ describe('FormattingButtons', () => {
         screen.getByLabelText('Italic').click();
         screen.getByLabelText('Underline').click();
         screen.getByLabelText('Strikethrough').click();
+        screen.getByLabelText('Code').click();
 
         // Then
         expect(wysiwyg.bold).toHaveBeenCalledTimes(1);
         expect(wysiwyg.italic).toHaveBeenCalledTimes(1);
         expect(wysiwyg.underline).toHaveBeenCalledTimes(1);
         expect(wysiwyg.strikeThrough).toHaveBeenCalledTimes(1);
+        expect(wysiwyg.inlineCode).toHaveBeenCalledTimes(1);
     });
 
     it('Should display the tooltip on mouse over', async () => {
