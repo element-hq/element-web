@@ -67,7 +67,7 @@ jobs:
           projectid: ${{ env.PROJECT_ID }}
           contentid: ${{ github.event.pull_request.node_id }}
         env:
-          PROJECT_ID: "PN_kwDOAM0swc0sUA"
+          PROJECT_ID: "PVT_kwDOAM0swc0sUA"
           TEAM: "design"
           GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
@@ -134,6 +134,6 @@ jobs:
           projectid: ${{ env.PROJECT_ID }}
           contentid: ${{ github.event.pull_request.node_id }}
         env:
-          PROJECT_ID: "PN_kwDOAM0swc4AAg6N"
+          PROJECT_ID: "PVT_kwDOAM0swc4AAg6N"
           TEAM: "product"
           GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
