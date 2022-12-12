@@ -15,24 +15,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ComponentType } from 'react';
+import React, { ComponentType } from "react";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 
 import Field from "../elements/Field";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import AccessibleButton from '../elements/AccessibleButton';
-import Spinner from '../elements/Spinner';
-import withValidation, { IFieldState, IValidationResult } from '../elements/Validation';
-import { _t, _td } from '../../../languageHandler';
+import AccessibleButton from "../elements/AccessibleButton";
+import Spinner from "../elements/Spinner";
+import withValidation, { IFieldState, IValidationResult } from "../elements/Validation";
+import { _t, _td } from "../../../languageHandler";
 import Modal from "../../../Modal";
 import PassphraseField from "../auth/PassphraseField";
-import { PASSWORD_MIN_SCORE } from '../auth/RegistrationForm';
+import { PASSWORD_MIN_SCORE } from "../auth/RegistrationForm";
 import SetEmailDialog from "../dialogs/SetEmailDialog";
 import QuestionDialog from "../dialogs/QuestionDialog";
 
-const FIELD_OLD_PASSWORD = 'field_old_password';
-const FIELD_NEW_PASSWORD = 'field_new_password';
-const FIELD_NEW_PASSWORD_CONFIRM = 'field_new_password_confirm';
+const FIELD_OLD_PASSWORD = "field_old_password";
+const FIELD_NEW_PASSWORD = "field_new_password";
+const FIELD_NEW_PASSWORD_CONFIRM = "field_new_password_confirm";
 
 enum Phase {
     Edit = "edit",
@@ -46,7 +46,7 @@ interface IProps {
         /** Was one or more other devices logged out whilst changing the password */
         didLogoutOutOtherDevices: boolean;
     }) => void;
-    onError?: (error: {error: string}) => void;
+    onError?: (error: { error: string }) => void;
     rowClassName?: string;
     buttonClassName?: string;
     buttonKind?: string;
@@ -97,29 +97,32 @@ export default class ChangePassword extends React.Component<IProps, IState> {
             // warn about logging out all devices
             const { finished } = Modal.createDialog<[boolean]>(QuestionDialog, {
                 title: _t("Warning!"),
-                description:
+                description: (
                     <div>
-                        <p>{ _t(
-                            'Changing your password on this homeserver will cause all of your other devices to be ' +
-                            'signed out. This will delete the message encryption keys stored on them, and may make ' +
-                            'encrypted chat history unreadable.',
-                        ) }</p>
-                        <p>{ _t(
-                            'If you want to retain access to your chat history in encrypted rooms you should first ' +
-                            'export your room keys and re-import them afterwards.',
-                        ) }</p>
-                        <p>{ _t(
-                            'You can also ask your homeserver admin to upgrade the server to change this behaviour.',
-                        ) }</p>
-                    </div>,
+                        <p>
+                            {_t(
+                                "Changing your password on this homeserver will cause all of your other devices to be " +
+                                    "signed out. This will delete the message encryption keys stored on them, and may make " +
+                                    "encrypted chat history unreadable.",
+                            )}
+                        </p>
+                        <p>
+                            {_t(
+                                "If you want to retain access to your chat history in encrypted rooms you should first " +
+                                    "export your room keys and re-import them afterwards.",
+                            )}
+                        </p>
+                        <p>
+                            {_t(
+                                "You can also ask your homeserver admin to upgrade the server to change this behaviour.",
+                            )}
+                        </p>
+                    </div>
+                ),
                 button: _t("Continue"),
                 extraButtons: [
-                    <button
-                        key="exportRoomKeys"
-                        className="mx_Dialog_primary"
-                        onClick={this.onExportE2eKeysClicked}
-                    >
-                        { _t('Export E2E room keys') }
+                    <button key="exportRoomKeys" className="mx_Dialog_primary" onClick={this.onExportE2eKeysClicked}>
+                        {_t("Export E2E room keys")}
                     </button>,
                 ],
             });
@@ -139,9 +142,9 @@ export default class ChangePassword extends React.Component<IProps, IState> {
         userHasOtherDevices: boolean,
     ): void {
         const authDict = {
-            type: 'm.login.password',
+            type: "m.login.password",
             identifier: {
-                type: 'm.id.user',
+                type: "m.id.user",
                 user: cli.credentials.userId,
             },
             // TODO: Remove `user` once servers support proper UIA
@@ -159,30 +162,35 @@ export default class ChangePassword extends React.Component<IProps, IState> {
         // undefined or true mean all devices signed out
         const didLogoutOutOtherDevices = !serverSupportsControlOfDevicesLogout && userHasOtherDevices;
 
-        cli.setPassword(authDict, newPassword, logoutDevices).then(() => {
-            if (this.props.shouldAskForEmail) {
-                return this.optionallySetEmail().then((confirmed) => {
-                    this.props.onFinished({
-                        didSetEmail: confirmed,
-                        didLogoutOutOtherDevices,
-                    });
+        cli.setPassword(authDict, newPassword, logoutDevices)
+            .then(
+                () => {
+                    if (this.props.shouldAskForEmail) {
+                        return this.optionallySetEmail().then((confirmed) => {
+                            this.props.onFinished({
+                                didSetEmail: confirmed,
+                                didLogoutOutOtherDevices,
+                            });
+                        });
+                    } else {
+                        this.props.onFinished({ didLogoutOutOtherDevices });
+                    }
+                },
+                (err) => {
+                    this.props.onError(err);
+                },
+            )
+            .finally(() => {
+                this.setState({
+                    phase: Phase.Edit,
+                    oldPassword: "",
+                    newPassword: "",
+                    newPasswordConfirm: "",
                 });
-            } else {
-                this.props.onFinished({ didLogoutOutOtherDevices });
-            }
-        }, (err) => {
-            this.props.onError(err);
-        }).finally(() => {
-            this.setState({
-                phase: Phase.Edit,
-                oldPassword: "",
-                newPassword: "",
-                newPasswordConfirm: "",
             });
-        });
     }
 
-    private checkPassword(oldPass: string, newPass: string, confirmPass: string): {error: string} {
+    private checkPassword(oldPass: string, newPass: string, confirmPass: string): { error: string } {
         if (newPass !== confirmPass) {
             return {
                 error: _t("New passwords don't match"),
@@ -197,16 +205,16 @@ export default class ChangePassword extends React.Component<IProps, IState> {
     private optionallySetEmail(): Promise<boolean> {
         // Ask for an email otherwise the user has no way to reset their password
         const modal = Modal.createDialog(SetEmailDialog, {
-            title: _t('Do you want to set an email address?'),
+            title: _t("Do you want to set an email address?"),
         });
         return modal.finished.then(([confirmed]) => confirmed);
     }
 
     private onExportE2eKeysClicked = (): void => {
         Modal.createDialogAsync(
-            import(
-                '../../../async-components/views/dialogs/security/ExportE2eKeysDialog'
-            ) as unknown as Promise<ComponentType<{}>>,
+            import("../../../async-components/views/dialogs/security/ExportE2eKeysDialog") as unknown as Promise<
+                ComponentType<{}>
+            >,
             {
                 matrixClient: MatrixClientPeg.get(),
             },
@@ -293,9 +301,7 @@ export default class ChangePassword extends React.Component<IProps, IState> {
         const oldPassword = this.state.oldPassword;
         const newPassword = this.state.newPassword;
         const confirmPassword = this.state.newPasswordConfirm;
-        const err = this.checkPassword(
-            oldPassword, newPassword, confirmPassword,
-        );
+        const err = this.checkPassword(oldPassword, newPassword, confirmPassword);
         if (err) {
             this.props.onError(err);
         } else {
@@ -311,11 +317,7 @@ export default class ChangePassword extends React.Component<IProps, IState> {
             activeElement.blur();
         }
 
-        const fieldIDsInDisplayOrder = [
-            FIELD_OLD_PASSWORD,
-            FIELD_NEW_PASSWORD,
-            FIELD_NEW_PASSWORD_CONFIRM,
-        ];
+        const fieldIDsInDisplayOrder = [FIELD_OLD_PASSWORD, FIELD_NEW_PASSWORD, FIELD_NEW_PASSWORD_CONFIRM];
 
         // Run all fields with stricter validation that no longer allows empty
         // values for required fields.
@@ -375,9 +377,9 @@ export default class ChangePassword extends React.Component<IProps, IState> {
                     <form className={this.props.className} onSubmit={this.onClickChange}>
                         <div className={rowClassName}>
                             <Field
-                                ref={field => this[FIELD_OLD_PASSWORD] = field}
+                                ref={(field) => (this[FIELD_OLD_PASSWORD] = field)}
                                 type="password"
-                                label={_t('Current password')}
+                                label={_t("Current password")}
                                 value={this.state.oldPassword}
                                 onChange={this.onChangeOldPassword}
                                 onValidate={this.onOldPasswordValidate}
@@ -385,7 +387,7 @@ export default class ChangePassword extends React.Component<IProps, IState> {
                         </div>
                         <div className={rowClassName}>
                             <PassphraseField
-                                fieldRef={field => this[FIELD_NEW_PASSWORD] = field}
+                                fieldRef={(field) => (this[FIELD_NEW_PASSWORD] = field)}
                                 type="password"
                                 label={_td("New Password")}
                                 minScore={PASSWORD_MIN_SCORE}
@@ -398,7 +400,7 @@ export default class ChangePassword extends React.Component<IProps, IState> {
                         </div>
                         <div className={rowClassName}>
                             <Field
-                                ref={field => this[FIELD_NEW_PASSWORD_CONFIRM] = field}
+                                ref={(field) => (this[FIELD_NEW_PASSWORD_CONFIRM] = field)}
                                 type="password"
                                 label={_t("Confirm password")}
                                 value={this.state.newPasswordConfirm}
@@ -407,8 +409,12 @@ export default class ChangePassword extends React.Component<IProps, IState> {
                                 autoComplete="new-password"
                             />
                         </div>
-                        <AccessibleButton className={buttonClassName} kind={this.props.buttonKind} onClick={this.onClickChange}>
-                            { this.props.buttonLabel || _t('Change Password') }
+                        <AccessibleButton
+                            className={buttonClassName}
+                            kind={this.props.buttonKind}
+                            onClick={this.onClickChange}
+                        >
+                            {this.props.buttonLabel || _t("Change Password")}
                         </AccessibleButton>
                     </form>
                 );

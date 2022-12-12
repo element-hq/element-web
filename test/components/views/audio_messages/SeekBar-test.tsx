@@ -30,9 +30,10 @@ describe("SeekBar", () => {
 
     beforeEach(() => {
         seekBarRef = createRef();
-        jest.spyOn(window, "requestAnimationFrame").mockImplementation(
-            (callback: FrameRequestCallback) => { frameRequestCallback = callback; return 0; },
-        );
+        jest.spyOn(window, "requestAnimationFrame").mockImplementation((callback: FrameRequestCallback) => {
+            frameRequestCallback = callback;
+            return 0;
+        });
         playback = createTestPlayback();
     });
 

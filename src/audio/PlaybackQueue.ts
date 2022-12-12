@@ -116,8 +116,8 @@ export class PlaybackQueue {
                         const instance = this.playbacks.get(next);
                         if (!instance) {
                             logger.warn(
-                                "Voice message queue desync: Missing playback for next message: "
-                                + `Current=${this.currentPlaybackId} Last=${last} Next=${next}`,
+                                "Voice message queue desync: Missing playback for next message: " +
+                                    `Current=${this.currentPlaybackId} Last=${last} Next=${next}`,
                             );
                         } else {
                             this.playbackIdOrder = orderClone;
@@ -175,8 +175,8 @@ export class PlaybackQueue {
                     }
                 } else {
                     logger.warn(
-                        "Voice message queue desync: Expected playback stop to be last in order. "
-                        + `Current=${this.currentPlaybackId} Last=${last} EventID=${mxEvent.getId()}`,
+                        "Voice message queue desync: Expected playback stop to be last in order. " +
+                            `Current=${this.currentPlaybackId} Last=${last} EventID=${mxEvent.getId()}`,
                     );
                 }
             }
@@ -188,8 +188,8 @@ export class PlaybackQueue {
                 if (order.length === 0 || order[order.length - 1] !== this.currentPlaybackId) {
                     const lastInstance = this.playbacks.get(this.currentPlaybackId);
                     if (
-                        lastInstance.currentState === PlaybackState.Playing
-                        || lastInstance.currentState === PlaybackState.Paused
+                        lastInstance.currentState === PlaybackState.Playing ||
+                        lastInstance.currentState === PlaybackState.Paused
                     ) {
                         order.push(this.currentPlaybackId);
                     }

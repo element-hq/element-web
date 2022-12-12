@@ -24,19 +24,14 @@ import { SynapseInstance } from "../../plugins/synapsedocker";
 import Chainable = Cypress.Chainable;
 
 const sendEvent = (roomId: string): Chainable<ISendEventResponse> => {
-    return cy.sendEvent(
-        roomId,
-        null,
-        "m.room.message" as EventType,
-        MessageEvent.from("Message").serialize().content,
-    );
+    return cy.sendEvent(roomId, null, "m.room.message" as EventType, MessageEvent.from("Message").serialize().content);
 };
 
 describe("Editing", () => {
     let synapse: SynapseInstance;
 
     beforeEach(() => {
-        cy.startSynapse("default").then(data => {
+        cy.startSynapse("default").then((data) => {
             synapse = data;
             cy.initTestUser(synapse, "Edith").then(() => {
                 cy.injectAxe();
@@ -50,7 +45,7 @@ describe("Editing", () => {
     });
 
     it("should close the composer when clicking save after making a change and undoing it", () => {
-        cy.get<string>("@roomId").then(roomId => {
+        cy.get<string>("@roomId").then((roomId) => {
             sendEvent(roomId);
             cy.visit("/#/room/" + roomId);
         });

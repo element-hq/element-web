@@ -44,11 +44,13 @@ describe("pillify", () => {
                     rule_id: ".m.rule.roomnotif",
                     default: true,
                     enabled: true,
-                    conditions: [{
-                        kind: ConditionKind.EventMatch,
-                        key: "content.body",
-                        pattern: "@room",
-                    }],
+                    conditions: [
+                        {
+                            kind: ConditionKind.EventMatch,
+                            key: "content.body",
+                            pattern: "@room",
+                        },
+                    ],
                     actions: [
                         PushRuleActionName.Notify,
                         {

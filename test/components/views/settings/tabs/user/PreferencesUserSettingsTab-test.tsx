@@ -17,8 +17,7 @@ limitations under the License.
 import React from "react";
 import { fireEvent, render, RenderResult, waitFor } from "@testing-library/react";
 
-import PreferencesUserSettingsTab from
-    "../../../../../../src/components/views/settings/tabs/user/PreferencesUserSettingsTab";
+import PreferencesUserSettingsTab from "../../../../../../src/components/views/settings/tabs/user/PreferencesUserSettingsTab";
 import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";
 import { mockPlatformPeg, stubClient } from "../../../../../test-utils";
 import SettingsStore from "../../../../../../src/settings/SettingsStore";
@@ -62,12 +61,8 @@ describe("PreferencesUserSettingsTab", () => {
             };
         };
 
-        const expectSetValueToHaveBeenCalled = (
-            name: string,
-            roomId: string,
-            level: SettingLevel,
-            value: boolean,
-        ) => expect(SettingsStore.setValue).toHaveBeenCalledWith(name, roomId, level, value);
+        const expectSetValueToHaveBeenCalled = (name: string, roomId: string, level: SettingLevel, value: boolean) =>
+            expect(SettingsStore.setValue).toHaveBeenCalledWith(name, roomId, level, value);
 
         describe("with server support", () => {
             beforeEach(() => {

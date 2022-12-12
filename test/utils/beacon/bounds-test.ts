@@ -19,10 +19,10 @@ import { Beacon } from "matrix-js-sdk/src/matrix";
 import { Bounds, getBeaconBounds } from "../../../src/utils/beacon/bounds";
 import { makeBeaconEvent, makeBeaconInfoEvent } from "../../test-utils";
 
-describe('getBeaconBounds()', () => {
-    const userId = '@user:server';
-    const roomId = '!room:server';
-    const makeBeaconWithLocation = (latLon: {lat: number, lon: number}) => {
+describe("getBeaconBounds()", () => {
+    const userId = "@user:server";
+    const roomId = "!room:server";
+    const makeBeaconWithLocation = (latLon: { lat: number; lon: number }) => {
         const geoUri = `geo:${latLon.lat},${latLon.lon}`;
         const beacon = new Beacon(makeBeaconInfoEvent(userId, roomId, { isLive: true }));
         // @ts-ignore private prop, sets internal live property so addLocations works
@@ -57,39 +57,45 @@ describe('getBeaconBounds()', () => {
     const auckland = makeBeaconWithLocation(geo.auckland);
     const lima = makeBeaconWithLocation(geo.lima);
 
-    it('should return undefined when there are no beacons', () => {
+    it("should return undefined when there are no beacons", () => {
         expect(getBeaconBounds([])).toBeUndefined();
     });
 
-    it('should return undefined when no beacons have locations', () => {
+    it("should return undefined when no beacons have locations", () => {
         const beacon = new Beacon(makeBeaconInfoEvent(userId, roomId));
         expect(getBeaconBounds([beacon])).toBeUndefined();
     });
 
     type TestCase = [string, Beacon[], Bounds];
     it.each<TestCase>([
-        ['one beacon', [london],
+        [
+            "one beacon",
+            [london],
             { north: geo.london.lat, south: geo.london.lat, east: geo.london.lon, west: geo.london.lon },
         ],
-        ['beacons in the northern hemisphere, west of meridian',
+        [
+            "beacons in the northern hemisphere, west of meridian",
             [london, reykjavik],
             { north: geo.reykjavik.lat, south: geo.london.lat, east: geo.london.lon, west: geo.reykjavik.lon },
         ],
-        ['beacons in the northern hemisphere, both sides of meridian',
+        [
+            "beacons in the northern hemisphere, both sides of meridian",
             [london, reykjavik, paris],
             // reykjavik northmost and westmost, paris southmost and eastmost
             { north: geo.reykjavik.lat, south: geo.paris.lat, east: geo.paris.lon, west: geo.reykjavik.lon },
         ],
-        ['beacons in the southern hemisphere',
+        [
+            "beacons in the southern hemisphere",
             [auckland, lima],
             // lima northmost and westmost, auckland southmost and eastmost
             { north: geo.lima.lat, south: geo.auckland.lat, east: geo.auckland.lon, west: geo.lima.lon },
         ],
-        ['beacons in both hemispheres',
+        [
+            "beacons in both hemispheres",
             [auckland, lima, paris],
             { north: geo.paris.lat, south: geo.auckland.lat, east: geo.auckland.lon, west: geo.lima.lon },
         ],
-    ])('gets correct bounds for %s', (_description, beacons, expectedBounds) => {
+    ])("gets correct bounds for %s", (_description, beacons, expectedBounds) => {
         expect(getBeaconBounds(beacons)).toEqual(expectedBounds);
     });
 });

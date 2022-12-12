@@ -41,10 +41,7 @@ describe("EventTile", () => {
         // Give a way for a test to update the event prop.
         // changeEvent = setEvent;
 
-        return <EventTile
-            mxEvent={mxEvent}
-            {...props}
-        />;
+        return <EventTile mxEvent={mxEvent} {...props} />;
     }
 
     function getComponent(
@@ -58,7 +55,8 @@ describe("EventTile", () => {
             <MatrixClientContext.Provider value={client}>
                 <RoomContext.Provider value={context}>
                     <TestEventTile {...overrides} />
-                </RoomContext.Provider>,
+                </RoomContext.Provider>
+                ,
             </MatrixClientContext.Provider>,
         );
     }
@@ -75,7 +73,7 @@ describe("EventTile", () => {
 
         jest.spyOn(client, "getRoom").mockReturnValue(room);
         jest.spyOn(client, "decryptEventIfNeeded").mockResolvedValue();
-        jest.spyOn(SettingsStore, "getValue").mockImplementation(name => name === "feature_thread");
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((name) => name === "feature_thread");
 
         mxEvent = mkMessage({
             room: room.roomId,
@@ -91,16 +89,22 @@ describe("EventTile", () => {
         });
 
         it("removes the thread summary when thread is deleted", async () => {
-            const { rootEvent, events: [, reply] } = mkThread({
+            const {
+                rootEvent,
+                events: [, reply],
+            } = mkThread({
                 room,
                 client,
                 authorId: "@alice:example.org",
                 participantUserIds: ["@alice:example.org"],
                 length: 2, // root + 1 answer
             });
-            getComponent({
-                mxEvent: rootEvent,
-            }, TimelineRenderingType.Room);
+            getComponent(
+                {
+                    mxEvent: rootEvent,
+                },
+                TimelineRenderingType.Room,
+            );
 
             await waitFor(() => expect(screen.queryByTestId("thread-summary")).not.toBeNull());
 

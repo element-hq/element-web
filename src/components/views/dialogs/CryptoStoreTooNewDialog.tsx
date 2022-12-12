@@ -15,12 +15,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 
-import dis from '../../../dispatcher/dispatcher';
-import { _t } from '../../../languageHandler';
-import SdkConfig from '../../../SdkConfig';
-import Modal from '../../../Modal';
+import dis from "../../../dispatcher/dispatcher";
+import { _t } from "../../../languageHandler";
+import SdkConfig from "../../../SdkConfig";
+import Modal from "../../../Modal";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
 import QuestionDialog from "./QuestionDialog";
@@ -36,47 +36,48 @@ const CryptoStoreTooNewDialog: React.FC<IProps> = (props: IProps) => {
             title: _t("Sign out"),
             description: _t(
                 "To avoid losing your chat history, you must export your room keys " +
-                "before logging out. You will need to go back to the newer version of " +
-                "%(brand)s to do this",
+                    "before logging out. You will need to go back to the newer version of " +
+                    "%(brand)s to do this",
                 { brand },
             ),
             button: _t("Sign out"),
             focus: false,
             onFinished: (doLogout) => {
                 if (doLogout) {
-                    dis.dispatch({ action: 'logout' });
+                    dis.dispatch({ action: "logout" });
                     props.onFinished(true);
                 }
             },
         });
     };
 
-    const description =
-        _t(
-            "You've previously used a newer version of %(brand)s with this session. " +
+    const description = _t(
+        "You've previously used a newer version of %(brand)s with this session. " +
             "To use this version again with end to end encryption, you will " +
             "need to sign out and back in again.",
-            { brand },
-        );
+        { brand },
+    );
 
-    return (<BaseDialog className="mx_CryptoStoreTooNewDialog"
-        contentId='mx_Dialog_content'
-        title={_t("Incompatible Database")}
-        hasCancel={false}
-        onFinished={props.onFinished}
-    >
-        <div className="mx_Dialog_content" id='mx_Dialog_content'>
-            { description }
-        </div>
-        <DialogButtons primaryButton={_t('Continue With Encryption Disabled')}
+    return (
+        <BaseDialog
+            className="mx_CryptoStoreTooNewDialog"
+            contentId="mx_Dialog_content"
+            title={_t("Incompatible Database")}
             hasCancel={false}
-            onPrimaryButtonClick={props.onFinished}
+            onFinished={props.onFinished}
         >
-            <button onClick={_onLogoutClicked}>
-                { _t('Sign out') }
-            </button>
-        </DialogButtons>
-    </BaseDialog>);
+            <div className="mx_Dialog_content" id="mx_Dialog_content">
+                {description}
+            </div>
+            <DialogButtons
+                primaryButton={_t("Continue With Encryption Disabled")}
+                hasCancel={false}
+                onPrimaryButtonClick={props.onFinished}
+            >
+                <button onClick={_onLogoutClicked}>{_t("Sign out")}</button>
+            </DialogButtons>
+        </BaseDialog>
+    );
 };
 
 export default CryptoStoreTooNewDialog;

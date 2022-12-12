@@ -20,9 +20,7 @@ import { RelationsContainer } from "matrix-js-sdk/src/models/relations-container
 import { PublicInterface } from "../@types/common";
 
 export const mkRelations = (): Relations => {
-    return {
-
-    } as PublicInterface<Relations> as Relations;
+    return {} as PublicInterface<Relations> as Relations;
 };
 
 export const mkRelationsContainer = (): RelationsContainer => {

@@ -27,7 +27,8 @@ interface EventMap {
 
 export class VoiceBroadcastPreRecordingStore
     extends TypedEventEmitter<VoiceBroadcastPreRecordingEvent, EventMap>
-    implements IDestroyable {
+    implements IDestroyable
+{
     private current: VoiceBroadcastPreRecording | null = null;
 
     public setCurrent(current: VoiceBroadcastPreRecording): void {

@@ -17,8 +17,8 @@ limitations under the License.
 import { Room } from "matrix-js-sdk/src/models/room";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 
-import { MatrixClientPeg } from './MatrixClientPeg';
-import AliasCustomisations from './customisations/Alias';
+import { MatrixClientPeg } from "./MatrixClientPeg";
+import AliasCustomisations from "./customisations/Alias";
 
 /**
  * Given a room object, return the alias we should use for it,
@@ -30,9 +30,7 @@ import AliasCustomisations from './customisations/Alias';
  * @returns {string} A display alias for the given room
  */
 export function getDisplayAliasForRoom(room: Room): string | undefined {
-    return getDisplayAliasForAliasSet(
-        room.getCanonicalAlias(), room.getAltAliases(),
-    );
+    return getDisplayAliasForAliasSet(room.getCanonicalAlias(), room.getAltAliases());
 }
 
 // The various display alias getters should all feed through this one path so
@@ -47,9 +45,7 @@ export function getDisplayAliasForAliasSet(canonicalAlias: string, altAliases: s
 export function guessAndSetDMRoom(room: Room, isDirect: boolean): Promise<void> {
     let newTarget;
     if (isDirect) {
-        const guessedUserId = guessDMRoomTargetId(
-            room, MatrixClientPeg.get().getUserId(),
-        );
+        const guessedUserId = guessDMRoomTargetId(room, MatrixClientPeg.get().getUserId());
         newTarget = guessedUserId;
     } else {
         newTarget = null;

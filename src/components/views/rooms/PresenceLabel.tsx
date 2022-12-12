@@ -14,10 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 import { UnstableValue } from "matrix-js-sdk/src/NamespacedValue";
 
-import { _t } from '../../../languageHandler';
+import { _t } from "../../../languageHandler";
 
 const BUSY_PRESENCE_NAME = new UnstableValue("busy", "org.matrix.msc3026.busy");
 
@@ -85,7 +85,7 @@ export default class PresenceLabel extends React.Component<IProps> {
     render() {
         return (
             <div className="mx_PresenceLabel">
-                { this.getPrettyPresence(this.props.presenceState, this.props.activeAgo, this.props.currentlyActive) }
+                {this.getPrettyPresence(this.props.presenceState, this.props.activeAgo, this.props.currentlyActive)}
             </div>
         );
     }

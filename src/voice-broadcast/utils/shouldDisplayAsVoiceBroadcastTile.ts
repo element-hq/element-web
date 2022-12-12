@@ -18,10 +18,6 @@ import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import { VoiceBroadcastInfoEventType, VoiceBroadcastInfoState } from "..";
 
-export const shouldDisplayAsVoiceBroadcastTile = (event: MatrixEvent) => (
-    event.getType?.() === VoiceBroadcastInfoEventType
-    && (
-        event.getContent?.()?.state === VoiceBroadcastInfoState.Started
-        || event.isRedacted()
-    )
-);
+export const shouldDisplayAsVoiceBroadcastTile = (event: MatrixEvent) =>
+    event.getType?.() === VoiceBroadcastInfoEventType &&
+    (event.getContent?.()?.state === VoiceBroadcastInfoState.Started || event.isRedacted());

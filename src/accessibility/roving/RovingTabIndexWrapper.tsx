@@ -21,11 +21,7 @@ import { FocusHandler, Ref } from "./types";
 
 interface IProps {
     inputRef?: Ref;
-    children(renderProps: {
-        onFocus: FocusHandler;
-        isActive: boolean;
-        ref: Ref;
-    });
+    children(renderProps: { onFocus: FocusHandler; isActive: boolean; ref: Ref });
 }
 
 // Wrapper to allow use of useRovingTabIndex outside of React Functional Components.

@@ -45,7 +45,7 @@ export const ContextMenuButton: React.FC<IProps> = ({
             aria-haspopup={true}
             aria-expanded={isExpanded}
         >
-            { children }
+            {children}
         </AccessibleButton>
     );
 };

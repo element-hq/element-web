@@ -53,9 +53,8 @@ export default class HistoryManager {
         // so we can't push the state before something happened.
         // not ideal but changing this would be harder to fit cleanly into
         // the editor model.
-        const isNonBulkInput = inputType === "insertText" ||
-                               inputType === "deleteContentForward" ||
-                               inputType === "deleteContentBackward";
+        const isNonBulkInput =
+            inputType === "insertText" || inputType === "deleteContentForward" || inputType === "deleteContentBackward";
         if (diff && isNonBulkInput) {
             if (diff.added) {
                 this.addedSinceLastPush = true;
@@ -88,7 +87,7 @@ export default class HistoryManager {
 
     private pushState(model: EditorModel, caret: Caret) {
         // remove all steps after current step
-        while (this.currentIndex < (this.stack.length - 1)) {
+        while (this.currentIndex < this.stack.length - 1) {
             this.stack.pop();
         }
         const parts = model.serializeParts();
@@ -132,7 +131,7 @@ export default class HistoryManager {
     }
 
     public canRedo(): boolean {
-        return this.currentIndex < (this.stack.length - 1);
+        return this.currentIndex < this.stack.length - 1;
     }
 
     // returns state that should be applied to model

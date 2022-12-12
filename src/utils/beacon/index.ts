@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-export * from './duration';
-export * from './geolocation';
-export * from './useBeacon';
-export * from './useOwnLiveBeacons';
+export * from "./duration";
+export * from "./geolocation";
+export * from "./useBeacon";
+export * from "./useOwnLiveBeacons";

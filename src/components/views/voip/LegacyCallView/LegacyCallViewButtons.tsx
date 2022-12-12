@@ -30,7 +30,7 @@ import {
     ChevronFace,
     ContextMenuTooltipButton,
     useContextMenu,
-} from '../../../structures/ContextMenu';
+} from "../../../structures/ContextMenu";
 import { _t } from "../../../../languageHandler";
 import DeviceContextMenu from "../../context_menus/DeviceContextMenu";
 import { MediaDeviceKindEnum } from "../../../../MediaDeviceHandler";
@@ -69,7 +69,7 @@ const LegacyCallViewToggleButton: React.FC<IButtonProps> = ({
             alignment={Alignment.Top}
             {...props}
         >
-            { children }
+            {children}
         </AccessibleTooltipButton>
     );
 };
@@ -92,19 +92,25 @@ const LegacyCallViewDropdownButton: React.FC<IDropdownButtonProps> = ({ state, d
     };
 
     return (
-        <LegacyCallViewToggleButton inputRef={buttonRef} forceHide={menuDisplayed || hoveringDropdown} state={state} {...props}>
+        <LegacyCallViewToggleButton
+            inputRef={buttonRef}
+            forceHide={menuDisplayed || hoveringDropdown}
+            state={state}
+            {...props}
+        >
             <LegacyCallViewToggleButton
                 className={classes}
                 onClick={onClick}
                 onHover={(hovering) => setHoveringDropdown(hovering)}
                 state={state}
             />
-            { menuDisplayed && <DeviceContextMenu
-                {...alwaysAboveRightOf(buttonRef.current?.getBoundingClientRect())}
-
-                onFinished={closeMenu}
-                deviceKinds={deviceKinds}
-            /> }
+            {menuDisplayed && (
+                <DeviceContextMenu
+                    {...alwaysAboveRightOf(buttonRef.current?.getBoundingClientRect())}
+                    onFinished={closeMenu}
+                    deviceKinds={deviceKinds}
+                />
+            )}
         </LegacyCallViewToggleButton>
     );
 };
@@ -218,53 +224,55 @@ export default class LegacyCallViewButtons extends React.Component<IProps, IStat
 
         let dialPad;
         if (this.state.showDialpad) {
-            dialPad = <DialpadContextMenu
-                {...alwaysAboveLeftOf(
-                    this.dialpadButton.current.getBoundingClientRect(),
-                    ChevronFace.None,
-                    CONTEXT_MENU_VPADDING,
-                )}
-                // We mount the context menus as a as a child typically in order to include the
-                // context menus when fullscreening the call content.
-                // However, this does not work as well when the call is embedded in a
-                // picture-in-picture frame. Thus, only mount as child when we are *not* in PiP.
-                mountAsChild={!this.props.pipMode}
-                onFinished={this.closeDialpad}
-                call={this.props.call}
-            />;
+            dialPad = (
+                <DialpadContextMenu
+                    {...alwaysAboveLeftOf(
+                        this.dialpadButton.current.getBoundingClientRect(),
+                        ChevronFace.None,
+                        CONTEXT_MENU_VPADDING,
+                    )}
+                    // We mount the context menus as a as a child typically in order to include the
+                    // context menus when fullscreening the call content.
+                    // However, this does not work as well when the call is embedded in a
+                    // picture-in-picture frame. Thus, only mount as child when we are *not* in PiP.
+                    mountAsChild={!this.props.pipMode}
+                    onFinished={this.closeDialpad}
+                    call={this.props.call}
+                />
+            );
         }
 
         let contextMenu;
         if (this.state.showMoreMenu) {
-            contextMenu = <LegacyCallContextMenu
-                {...alwaysAboveLeftOf(
-                    this.contextMenuButton.current.getBoundingClientRect(),
-                    ChevronFace.None,
-                    CONTEXT_MENU_VPADDING,
-                )}
-                mountAsChild={!this.props.pipMode}
-                onFinished={this.closeContextMenu}
-                call={this.props.call}
-            />;
+            contextMenu = (
+                <LegacyCallContextMenu
+                    {...alwaysAboveLeftOf(
+                        this.contextMenuButton.current.getBoundingClientRect(),
+                        ChevronFace.None,
+                        CONTEXT_MENU_VPADDING,
+                    )}
+                    mountAsChild={!this.props.pipMode}
+                    onFinished={this.closeContextMenu}
+                    call={this.props.call}
+                />
+            );
         }
 
         return (
-            <div
-                className={callControlsClasses}
-                onMouseEnter={this.onMouseEnter}
-                onMouseLeave={this.onMouseLeave}
-            >
-                { dialPad }
-                { contextMenu }
+            <div className={callControlsClasses} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+                {dialPad}
+                {contextMenu}
 
-                { this.props.buttonsVisibility.dialpad && <ContextMenuTooltipButton
-                    className="mx_LegacyCallViewButtons_button mx_LegacyCallViewButtons_dialpad"
-                    inputRef={this.dialpadButton}
-                    onClick={this.onDialpadClick}
-                    isExpanded={this.state.showDialpad}
-                    title={_t("Dialpad")}
-                    alignment={Alignment.Top}
-                /> }
+                {this.props.buttonsVisibility.dialpad && (
+                    <ContextMenuTooltipButton
+                        className="mx_LegacyCallViewButtons_button mx_LegacyCallViewButtons_dialpad"
+                        inputRef={this.dialpadButton}
+                        onClick={this.onDialpadClick}
+                        isExpanded={this.state.showDialpad}
+                        title={_t("Dialpad")}
+                        alignment={Alignment.Top}
+                    />
+                )}
                 <LegacyCallViewDropdownButton
                     state={!this.props.buttonsState.micMuted}
                     className="mx_LegacyCallViewButtons_button_mic"
@@ -273,36 +281,44 @@ export default class LegacyCallViewButtons extends React.Component<IProps, IStat
                     onClick={this.props.handlers.onMicMuteClick}
                     deviceKinds={[MediaDeviceKindEnum.AudioInput, MediaDeviceKindEnum.AudioOutput]}
                 />
-                { this.props.buttonsVisibility.vidMute && <LegacyCallViewDropdownButton
-                    state={!this.props.buttonsState.vidMuted}
-                    className="mx_LegacyCallViewButtons_button_vid"
-                    onLabel={_t("Stop the camera")}
-                    offLabel={_t("Start the camera")}
-                    onClick={this.props.handlers.onVidMuteClick}
-                    deviceKinds={[MediaDeviceKindEnum.VideoInput]}
-                /> }
-                { this.props.buttonsVisibility.screensharing && <LegacyCallViewToggleButton
-                    state={this.props.buttonsState.screensharing}
-                    className="mx_LegacyCallViewButtons_button_screensharing"
-                    onLabel={_t("Stop sharing your screen")}
-                    offLabel={_t("Start sharing your screen")}
-                    onClick={this.props.handlers.onScreenshareClick}
-                /> }
-                { this.props.buttonsVisibility.sidebar && <LegacyCallViewToggleButton
-                    state={this.props.buttonsState.sidebarShown}
-                    className="mx_LegacyCallViewButtons_button_sidebar"
-                    onLabel={_t("Hide sidebar")}
-                    offLabel={_t("Show sidebar")}
-                    onClick={this.props.handlers.onToggleSidebarClick}
-                /> }
-                { this.props.buttonsVisibility.contextMenu && <ContextMenuTooltipButton
-                    className="mx_LegacyCallViewButtons_button mx_LegacyCallViewButtons_button_more"
-                    onClick={this.onMoreClick}
-                    inputRef={this.contextMenuButton}
-                    isExpanded={this.state.showMoreMenu}
-                    title={_t("More")}
-                    alignment={Alignment.Top}
-                /> }
+                {this.props.buttonsVisibility.vidMute && (
+                    <LegacyCallViewDropdownButton
+                        state={!this.props.buttonsState.vidMuted}
+                        className="mx_LegacyCallViewButtons_button_vid"
+                        onLabel={_t("Stop the camera")}
+                        offLabel={_t("Start the camera")}
+                        onClick={this.props.handlers.onVidMuteClick}
+                        deviceKinds={[MediaDeviceKindEnum.VideoInput]}
+                    />
+                )}
+                {this.props.buttonsVisibility.screensharing && (
+                    <LegacyCallViewToggleButton
+                        state={this.props.buttonsState.screensharing}
+                        className="mx_LegacyCallViewButtons_button_screensharing"
+                        onLabel={_t("Stop sharing your screen")}
+                        offLabel={_t("Start sharing your screen")}
+                        onClick={this.props.handlers.onScreenshareClick}
+                    />
+                )}
+                {this.props.buttonsVisibility.sidebar && (
+                    <LegacyCallViewToggleButton
+                        state={this.props.buttonsState.sidebarShown}
+                        className="mx_LegacyCallViewButtons_button_sidebar"
+                        onLabel={_t("Hide sidebar")}
+                        offLabel={_t("Show sidebar")}
+                        onClick={this.props.handlers.onToggleSidebarClick}
+                    />
+                )}
+                {this.props.buttonsVisibility.contextMenu && (
+                    <ContextMenuTooltipButton
+                        className="mx_LegacyCallViewButtons_button mx_LegacyCallViewButtons_button_more"
+                        onClick={this.onMoreClick}
+                        inputRef={this.contextMenuButton}
+                        isExpanded={this.state.showMoreMenu}
+                        title={_t("More")}
+                        alignment={Alignment.Top}
+                    />
+                )}
                 <AccessibleTooltipButton
                     className="mx_LegacyCallViewButtons_button mx_LegacyCallViewButtons_button_hangup"
                     onClick={this.props.handlers.onHangupClick}

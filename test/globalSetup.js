@@ -15,5 +15,5 @@ limitations under the License.
 */
 
 module.exports = async () => {
-    process.env.TZ = 'UTC';
+    process.env.TZ = "UTC";
 };

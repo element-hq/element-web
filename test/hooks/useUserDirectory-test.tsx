@@ -27,19 +27,13 @@ import { stubClient } from "../test-utils";
 function UserDirectoryComponent({ onClick }) {
     const userDirectory = useUserDirectory();
 
-    const {
-        ready,
-        loading,
-        users,
-    } = userDirectory;
+    const { ready, loading, users } = userDirectory;
 
-    return <div onClick={() => onClick(userDirectory)}>
-        { users[0]
-            ? (
-                `Name: ${users[0].name}`
-            )
-            : `ready: ${ready}, loading: ${loading}` }
-    </div>;
+    return (
+        <div onClick={() => onClick(userDirectory)}>
+            {users[0] ? `Name: ${users[0].name}` : `ready: ${ready}, loading: ${loading}`}
+        </div>
+    );
 }
 
 describe("useUserDirectory", () => {
@@ -51,23 +45,30 @@ describe("useUserDirectory", () => {
 
         MatrixClientPeg.getHomeserverName = () => "matrix.org";
         cli.getThirdpartyProtocols = () => Promise.resolve({});
-        cli.searchUserDirectory = (({ term: query }) => Promise.resolve({
-            results: [{
-                user_id: "@bob:matrix.org",
-                display_name: query,
-            }] },
-        ));
+        cli.searchUserDirectory = ({ term: query }) =>
+            Promise.resolve({
+                results: [
+                    {
+                        user_id: "@bob:matrix.org",
+                        display_name: query,
+                    },
+                ],
+            });
     });
 
     it("search for users in the identity server", async () => {
         const query = "Bob";
 
-        const wrapper = mount(<UserDirectoryComponent onClick={(hook) => {
-            hook.search({
-                limit: 1,
-                query,
-            });
-        }} />);
+        const wrapper = mount(
+            <UserDirectoryComponent
+                onClick={(hook) => {
+                    hook.search({
+                        limit: 1,
+                        query,
+                    });
+                }}
+            />,
+        );
 
         expect(wrapper.text()).toBe("ready: true, loading: false");
 
@@ -83,12 +84,16 @@ describe("useUserDirectory", () => {
     it("should work with empty queries", async () => {
         const query = "";
 
-        const wrapper = mount(<UserDirectoryComponent onClick={(hook) => {
-            hook.search({
-                limit: 1,
-                query,
-            });
-        }} />);
+        const wrapper = mount(
+            <UserDirectoryComponent
+                onClick={(hook) => {
+                    hook.search({
+                        limit: 1,
+                        query,
+                    });
+                }}
+            />,
+        );
         await act(async () => {
             await sleep(1);
             wrapper.simulate("click");
@@ -98,15 +103,21 @@ describe("useUserDirectory", () => {
     });
 
     it("should recover from a server exception", async () => {
-        cli.searchUserDirectory = () => { throw new Error("Oops"); };
+        cli.searchUserDirectory = () => {
+            throw new Error("Oops");
+        };
         const query = "Bob";
 
-        const wrapper = mount(<UserDirectoryComponent onClick={(hook) => {
-            hook.search({
-                limit: 1,
-                query,
-            });
-        }} />);
+        const wrapper = mount(
+            <UserDirectoryComponent
+                onClick={(hook) => {
+                    hook.search({
+                        limit: 1,
+                        query,
+                    });
+                }}
+            />,
+        );
         await act(async () => {
             await sleep(1);
             wrapper.simulate("click");

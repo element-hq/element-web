@@ -1,17 +1,17 @@
 /* Colors from Figma Compound https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound?node-id=559%3A741 */
 /* ******************** */
 $primary-content: #ffffff;
-$secondary-content: #A9B2BC;
-$tertiary-content: #8E99A4;
-$quaternary-content: #6F7882;
+$secondary-content: #a9b2bc;
+$tertiary-content: #8e99a4;
+$quaternary-content: #6f7882;
 $quinary-content: #394049;
 
-$system: #21262C;
-$system-transparent: rgba($system, 0.0); /* XXX: workaround for Safari 15.3 linear-gradient bug */
-$background: #15191E;
+$system: #21262c;
+$system-transparent: rgba($system, 0); /* XXX: workaround for Safari 15.3 linear-gradient bug */
+$background: #15191e;
 $overlay-background: rgba($background, 0.85);
 
-$panel-base: #8D97A5; /* This color is not intended for use in the app */
+$panel-base: #8d97a5; /* This color is not intended for use in the app */
 $panels: rgba($system, 0.9);
 $panel-selected: rgba($panel-base, 0.3);
 $panel-hover: rgba($panel-base, 0.1);
@@ -22,7 +22,7 @@ $space-nav: rgba($panel-base, 0.1);
 /* Reused Figma non-compound colors */
 /* ******************** */
 $inverted-bg-color: $background;
-$header-panel-bg-color: #20252B;
+$header-panel-bg-color: #20252b;
 /* ******************** */
 
 /* Theme specific colors */
@@ -34,7 +34,7 @@ $icon-button-color: $tertiary-content;
 /* ******************** */
 $header-panel-text-secondary-color: #c8c8cd;
 $room-highlight-color: #343a46;
-$text-secondary-color: #B9BEC6;
+$text-secondary-color: #b9bec6;
 /* ******************** */
 
 /* Colors that aren't in Figma - we need to get rid of these */
@@ -50,7 +50,7 @@ $roomtopic-color: $text-secondary-color;
 $spacePanel-bg-color: rgba(38, 39, 43, 0.82);
 $panel-gradient: rgba(34, 38, 46, 0), rgba(34, 38, 46, 1);
 $h3-color: $primary-content;
-$event-highlight-bg-color: #25271F;
+$event-highlight-bg-color: #25271f;
 $header-panel-text-primary-color: $text-secondary-color;
 /* ******************** */
 
@@ -115,7 +115,7 @@ $dialog-close-external-color: $primary-content;
 
 /* RoomList */
 /* ******************** */
-$roomlist-bg-color: rgba($system, 0.90);
+$roomlist-bg-color: rgba($system, 0.9);
 $roomsublist-skeleton-ui-bg: linear-gradient(180deg, #3e444c 0%, #3e444c00 100%);
 $roomtile-default-badge-bg-color: $input-darker-fg-color;
 /* ******************** */
@@ -166,10 +166,10 @@ $voice-record-icon-color: $quaternary-content;
 
 /* Bubble tiles */
 /* ******************** */
-$eventbubble-self-bg: #133A34;
-$eventbubble-others-bg: #21262C;
-$eventbubble-bg-hover: #1C2026;
-$eventbubble-reply-color: #C1C6CD;
+$eventbubble-self-bg: #133a34;
+$eventbubble-others-bg: #21262c;
+$eventbubble-bg-hover: #1c2026;
+$eventbubble-reply-color: #c1c6cd;
 /* ******************** */
 
 /* Lightbox */
@@ -318,25 +318,12 @@ body {
 
 /* Splash Page Gradient */
 .mx_SplashPage::before {
-    background-image:
-        radial-gradient(
+    background-image: radial-gradient(
             53.85% 66.75% at 87.55% 0%,
             hsla(0, 0%, 11%, 0.15) 0%,
             hsla(250, 100%, 88%, 0) 100%
         ),
-        radial-gradient(
-            41.93% 41.93% at 0% 0%,
-            hsla(0, 0%, 38%, 0.28) 0%,
-            hsla(250, 100%, 88%, 0) 100%
-        ),
-        radial-gradient(
-            100% 100% at 0% 0%,
-            hsla(250, 100%, 88%, 0.3) 0%,
-            hsla(0, 100%, 86%, 0) 100%
-        ),
-        radial-gradient(
-            106.35% 96.26% at 100% 0%,
-            hsla(25, 100%, 88%, 0.4) 0%,
-            hsla(167, 76%, 82%, 0) 100%
-        ) !important;
+        radial-gradient(41.93% 41.93% at 0% 0%, hsla(0, 0%, 38%, 0.28) 0%, hsla(250, 100%, 88%, 0) 100%),
+        radial-gradient(100% 100% at 0% 0%, hsla(250, 100%, 88%, 0.3) 0%, hsla(0, 100%, 86%, 0) 100%),
+        radial-gradient(106.35% 96.26% at 100% 0%, hsla(25, 100%, 88%, 0.4) 0%, hsla(167, 76%, 82%, 0) 100%) !important;
 }

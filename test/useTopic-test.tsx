@@ -28,11 +28,11 @@ describe("useTopic", () => {
         stubClient();
         const room = new Room("!TESTROOM", MatrixClientPeg.get(), "@alice:example.org");
         const topic = mkEvent({
-            type: 'm.room.topic',
-            room: '!TESTROOM',
-            user: '@alice:example.org',
+            type: "m.room.topic",
+            room: "!TESTROOM",
+            user: "@alice:example.org",
             content: {
-                topic: 'Test topic',
+                topic: "Test topic",
             },
             ts: 123,
             event: true,
@@ -42,7 +42,7 @@ describe("useTopic", () => {
 
         function RoomTopic() {
             const topic = useTopic(room);
-            return <p>{ topic.text }</p>;
+            return <p>{topic.text}</p>;
         }
 
         render(<RoomTopic />);
@@ -50,11 +50,11 @@ describe("useTopic", () => {
         expect(screen.queryByText("Test topic")).toBeInTheDocument();
 
         const updatedTopic = mkEvent({
-            type: 'm.room.topic',
-            room: '!TESTROOM',
-            user: '@alice:example.org',
+            type: "m.room.topic",
+            room: "!TESTROOM",
+            user: "@alice:example.org",
             content: {
-                topic: 'New topic',
+                topic: "New topic",
             },
             ts: 666,
             event: true,

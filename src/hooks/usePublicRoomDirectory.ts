@@ -71,46 +71,47 @@ export const usePublicRoomDirectory = () => {
         }
     }
 
-    const search = useCallback(async ({
-        limit = 20,
-        query,
-        roomTypes,
-    }: IPublicRoomsOpts): Promise<boolean> => {
-        const opts: IRoomDirectoryOptions = { limit };
+    const search = useCallback(
+        async ({ limit = 20, query, roomTypes }: IPublicRoomsOpts): Promise<boolean> => {
+            const opts: IRoomDirectoryOptions = { limit };
 
-        if (config?.roomServer != MatrixClientPeg.getHomeserverName()) {
-            opts.server = config?.roomServer;
-        }
+            if (config?.roomServer != MatrixClientPeg.getHomeserverName()) {
+                opts.server = config?.roomServer;
+            }
 
-        if (config?.instanceId === ALL_ROOMS) {
-            opts.include_all_networks = true;
-        } else if (config?.instanceId) {
-            opts.third_party_instance_id = config.instanceId;
-        }
+            if (config?.instanceId === ALL_ROOMS) {
+                opts.include_all_networks = true;
+            } else if (config?.instanceId) {
+                opts.third_party_instance_id = config.instanceId;
+            }
 
-        if (query || roomTypes) {
-            opts.filter = {
-                generic_search_term: query,
-                room_types: await MatrixClientPeg.get().doesServerSupportUnstableFeature(
-                    "org.matrix.msc3827.stable",
-                ) ? Array.from<RoomType | null>(roomTypes) : null,
-            };
-        }
+            if (query || roomTypes) {
+                opts.filter = {
+                    generic_search_term: query,
+                    room_types: (await MatrixClientPeg.get().doesServerSupportUnstableFeature(
+                        "org.matrix.msc3827.stable",
+                    ))
+                        ? Array.from<RoomType | null>(roomTypes)
+                        : null,
+                };
+            }
 
-        updateQuery(opts);
-        try {
-            setLoading(true);
-            const { chunk } = await MatrixClientPeg.get().publicRooms(opts);
-            updateResult(opts, chunk);
-            return true;
-        } catch (e) {
-            console.error("Could not fetch public rooms for params", opts, e);
-            updateResult(opts, []);
-            return false;
-        } finally {
-            setLoading(false);
-        }
-    }, [config, updateQuery, updateResult]);
+            updateQuery(opts);
+            try {
+                setLoading(true);
+                const { chunk } = await MatrixClientPeg.get().publicRooms(opts);
+                updateResult(opts, chunk);
+                return true;
+            } catch (e) {
+                console.error("Could not fetch public rooms for params", opts, e);
+                updateResult(opts, []);
+                return false;
+            } finally {
+                setLoading(false);
+            }
+        },
+        [config, updateQuery, updateResult],
+    );
 
     useEffect(() => {
         initProtocols();
@@ -128,18 +129,19 @@ export const usePublicRoomDirectory = () => {
         let roomServer: string = myHomeserver;
         if (
             SdkConfig.getObject("room_directory")?.get("servers")?.includes(lsRoomServer) ||
-                    SettingsStore.getValue("room_directory_servers")?.includes(lsRoomServer)
+            SettingsStore.getValue("room_directory_servers")?.includes(lsRoomServer)
         ) {
             roomServer = lsRoomServer;
         }
 
         let instanceId: string | undefined = undefined;
-        if (roomServer === myHomeserver && (
-            lsInstanceId === ALL_ROOMS ||
-                    Object.values(protocols).some((p: IProtocol) => {
-                        p.instances.some(i => i.instance_id === lsInstanceId);
-                    })
-        )) {
+        if (
+            roomServer === myHomeserver &&
+            (lsInstanceId === ALL_ROOMS ||
+                Object.values(protocols).some((p: IProtocol) => {
+                    p.instances.some((i) => i.instance_id === lsInstanceId);
+                }))
+        ) {
             instanceId = lsInstanceId;
         }
 

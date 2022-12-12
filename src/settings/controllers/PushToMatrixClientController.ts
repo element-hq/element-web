@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixClientPeg } from '../../MatrixClientPeg';
+import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { SettingLevel } from "../SettingLevel";
 import SettingController from "./SettingController";
 

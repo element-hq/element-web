@@ -40,12 +40,12 @@ export class PlaybackManager {
      */
     public pauseAllExcept(playback?: Playback) {
         this.instances
-            .filter(p => p !== playback && p.currentState === PlaybackState.Playing)
-            .forEach(p => p.pause());
+            .filter((p) => p !== playback && p.currentState === PlaybackState.Playing)
+            .forEach((p) => p.pause());
     }
 
     public destroyPlaybackInstance(playback: ManagedPlayback) {
-        this.instances = this.instances.filter(p => p !== playback);
+        this.instances = this.instances.filter((p) => p !== playback);
     }
 
     public createPlaybackInstance(buf: ArrayBuffer, waveform = DEFAULT_WAVEFORM): Playback {

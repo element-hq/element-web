@@ -23,20 +23,20 @@ import {
     setLanguage,
 } from "../src/languageHandler";
 
-describe('languageHandler', () => {
+describe("languageHandler", () => {
     afterEach(() => {
         SdkConfig.unset();
         CustomTranslationOptions.lookupFn = undefined;
     });
 
-    it('should support overriding translations', async () => {
+    it("should support overriding translations", async () => {
         const str = "This is a test string that does not exist in the app.";
         const enOverride = "This is the English version of a custom string.";
         const deOverride = "This is the German version of a custom string.";
         const overrides: ICustomTranslations = {
             [str]: {
-                "en": enOverride,
-                "de": deOverride,
+                en: enOverride,
+                de: deOverride,
             },
         };
 

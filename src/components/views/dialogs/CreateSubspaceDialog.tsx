@@ -19,7 +19,7 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import { JoinRule } from "matrix-js-sdk/src/@types/partials";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { _t } from '../../../languageHandler';
+import { _t } from "../../../languageHandler";
 import BaseDialog from "./BaseDialog";
 import AccessibleButton from "../elements/AccessibleButton";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
@@ -85,99 +85,106 @@ const CreateSubspaceDialog: React.FC<IProps> = ({ space, onAddExistingSpaceClick
 
     let joinRuleMicrocopy: JSX.Element;
     if (joinRule === JoinRule.Restricted) {
-        joinRuleMicrocopy = <p>
-            { _t(
-                "Anyone in <SpaceName/> will be able to find and join.", {}, {
-                    SpaceName: () => <b>{ parentSpace.name }</b>,
-                },
-            ) }
-        </p>;
+        joinRuleMicrocopy = (
+            <p>
+                {_t(
+                    "Anyone in <SpaceName/> will be able to find and join.",
+                    {},
+                    {
+                        SpaceName: () => <b>{parentSpace.name}</b>,
+                    },
+                )}
+            </p>
+        );
     } else if (joinRule === JoinRule.Public) {
-        joinRuleMicrocopy = <p>
-            { _t(
-                "Anyone will be able to find and join this space, not just members of <SpaceName/>.", {}, {
-                    SpaceName: () => <b>{ parentSpace.name }</b>,
-                },
-            ) }
-        </p>;
+        joinRuleMicrocopy = (
+            <p>
+                {_t(
+                    "Anyone will be able to find and join this space, not just members of <SpaceName/>.",
+                    {},
+                    {
+                        SpaceName: () => <b>{parentSpace.name}</b>,
+                    },
+                )}
+            </p>
+        );
     } else if (joinRule === JoinRule.Invite) {
-        joinRuleMicrocopy = <p>
-            { _t("Only people invited will be able to find and join this space.") }
-        </p>;
+        joinRuleMicrocopy = <p>{_t("Only people invited will be able to find and join this space.")}</p>;
     }
 
-    return <BaseDialog
-        title={(
-            <SubspaceSelector
-                title={_t("Create a space")}
-                space={space}
-                value={parentSpace}
-                onChange={setParentSpace}
-            />
-        )}
-        className="mx_CreateSubspaceDialog"
-        contentId="mx_CreateSubspaceDialog"
-        onFinished={onFinished}
-        fixedWidth={false}
-    >
-        <MatrixClientContext.Provider value={space.client}>
-            <div className="mx_CreateSubspaceDialog_content">
-                <div className="mx_CreateSubspaceDialog_betaNotice">
-                    <BetaPill />
-                    { _t("Add a space to a space you manage.") }
+    return (
+        <BaseDialog
+            title={
+                <SubspaceSelector
+                    title={_t("Create a space")}
+                    space={space}
+                    value={parentSpace}
+                    onChange={setParentSpace}
+                />
+            }
+            className="mx_CreateSubspaceDialog"
+            contentId="mx_CreateSubspaceDialog"
+            onFinished={onFinished}
+            fixedWidth={false}
+        >
+            <MatrixClientContext.Provider value={space.client}>
+                <div className="mx_CreateSubspaceDialog_content">
+                    <div className="mx_CreateSubspaceDialog_betaNotice">
+                        <BetaPill />
+                        {_t("Add a space to a space you manage.")}
+                    </div>
+
+                    <SpaceCreateForm
+                        busy={busy}
+                        onSubmit={onCreateSubspaceClick}
+                        setAvatar={setAvatar}
+                        name={name}
+                        setName={setName}
+                        nameFieldRef={spaceNameField}
+                        topic={topic}
+                        setTopic={setTopic}
+                        alias={alias}
+                        setAlias={setAlias}
+                        showAliasField={joinRule === JoinRule.Public}
+                        aliasFieldRef={spaceAliasField}
+                    >
+                        <JoinRuleDropdown
+                            label={_t("Space visibility")}
+                            labelInvite={_t("Private space (invite only)")}
+                            labelPublic={_t("Public space")}
+                            labelRestricted={_t("Visible to space members")}
+                            width={478}
+                            value={joinRule}
+                            onChange={setJoinRule}
+                        />
+                        {joinRuleMicrocopy}
+                    </SpaceCreateForm>
                 </div>
 
-                <SpaceCreateForm
-                    busy={busy}
-                    onSubmit={onCreateSubspaceClick}
-                    setAvatar={setAvatar}
-                    name={name}
-                    setName={setName}
-                    nameFieldRef={spaceNameField}
-                    topic={topic}
-                    setTopic={setTopic}
-                    alias={alias}
-                    setAlias={setAlias}
-                    showAliasField={joinRule === JoinRule.Public}
-                    aliasFieldRef={spaceAliasField}
-                >
-                    <JoinRuleDropdown
-                        label={_t("Space visibility")}
-                        labelInvite={_t("Private space (invite only)")}
-                        labelPublic={_t("Public space")}
-                        labelRestricted={_t("Visible to space members")}
-                        width={478}
-                        value={joinRule}
-                        onChange={setJoinRule}
-                    />
-                    { joinRuleMicrocopy }
-                </SpaceCreateForm>
-            </div>
+                <div className="mx_CreateSubspaceDialog_footer">
+                    <div className="mx_CreateSubspaceDialog_footer_prompt">
+                        <div>{_t("Want to add an existing space instead?")}</div>
+                        <AccessibleButton
+                            kind="link"
+                            onClick={() => {
+                                onAddExistingSpaceClick();
+                                onFinished();
+                            }}
+                        >
+                            {_t("Add existing space")}
+                        </AccessibleButton>
+                    </div>
 
-            <div className="mx_CreateSubspaceDialog_footer">
-                <div className="mx_CreateSubspaceDialog_footer_prompt">
-                    <div>{ _t("Want to add an existing space instead?") }</div>
-                    <AccessibleButton
-                        kind="link"
-                        onClick={() => {
-                            onAddExistingSpaceClick();
-                            onFinished();
-                        }}
-                    >
-                        { _t("Add existing space") }
+                    <AccessibleButton kind="primary_outline" disabled={busy} onClick={() => onFinished(false)}>
+                        {_t("Cancel")}
+                    </AccessibleButton>
+                    <AccessibleButton kind="primary" disabled={busy} onClick={onCreateSubspaceClick}>
+                        {busy ? _t("Adding...") : _t("Add")}
                     </AccessibleButton>
                 </div>
-
-                <AccessibleButton kind="primary_outline" disabled={busy} onClick={() => onFinished(false)}>
-                    { _t("Cancel") }
-                </AccessibleButton>
-                <AccessibleButton kind="primary" disabled={busy} onClick={onCreateSubspaceClick}>
-                    { busy ? _t("Adding...") : _t("Add") }
-                </AccessibleButton>
-            </div>
-        </MatrixClientContext.Provider>
-    </BaseDialog>;
+            </MatrixClientContext.Provider>
+        </BaseDialog>
+    );
 };
 
 export default CreateSubspaceDialog;
-

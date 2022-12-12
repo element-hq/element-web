@@ -28,7 +28,7 @@ import WidgetContextMenu from "../context_menus/WidgetContextMenu";
 import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
 import UIStore from "../../../stores/UIStore";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
-import Heading from '../typography/Heading';
+import Heading from "../typography/Heading";
 
 interface IProps {
     room: Room;
@@ -40,7 +40,7 @@ const WidgetCard: React.FC<IProps> = ({ room, widgetId, onClose }) => {
     const cli = useContext(MatrixClientContext);
 
     const apps = useWidgets(room);
-    const app = apps.find(a => a.id === widgetId);
+    const app = apps.find((a) => a.id === widgetId);
     const isRight = app && WidgetLayoutStore.instance.isInContainer(room, app, Container.Right);
 
     const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu();
@@ -69,35 +69,36 @@ const WidgetCard: React.FC<IProps> = ({ room, widgetId, onClose }) => {
         );
     }
 
-    const header = <div className="mx_BaseCard_header_title">
-        <Heading size="h4" className="mx_BaseCard_header_title_heading">{ WidgetUtils.getWidgetName(app) }</Heading>
-        <ContextMenuButton
-            className="mx_BaseCard_header_title_button--option"
-            inputRef={handle}
-            onClick={openMenu}
-            isExpanded={menuDisplayed}
-            label={_t("Options")}
-        />
-        { contextMenu }
-    </div>;
+    const header = (
+        <div className="mx_BaseCard_header_title">
+            <Heading size="h4" className="mx_BaseCard_header_title_heading">
+                {WidgetUtils.getWidgetName(app)}
+            </Heading>
+            <ContextMenuButton
+                className="mx_BaseCard_header_title_button--option"
+                inputRef={handle}
+                onClick={openMenu}
+                isExpanded={menuDisplayed}
+                label={_t("Options")}
+            />
+            {contextMenu}
+        </div>
+    );
 
-    return <BaseCard
-        header={header}
-        className="mx_WidgetCard"
-        onClose={onClose}
-        withoutScrollContainer
-    >
-        <AppTile
-            app={app}
-            fullWidth
-            showMenubar={false}
-            room={room}
-            userId={cli.getUserId()}
-            creatorUserId={app.creatorUserId}
-            widgetPageTitle={WidgetUtils.getWidgetDataTitle(app)}
-            waitForIframeLoad={app.waitForIframeLoad}
-        />
-    </BaseCard>;
+    return (
+        <BaseCard header={header} className="mx_WidgetCard" onClose={onClose} withoutScrollContainer>
+            <AppTile
+                app={app}
+                fullWidth
+                showMenubar={false}
+                room={room}
+                userId={cli.getUserId()}
+                creatorUserId={app.creatorUserId}
+                widgetPageTitle={WidgetUtils.getWidgetDataTitle(app)}
+                waitForIframeLoad={app.waitForIframeLoad}
+            />
+        </BaseCard>
+    );
 };
 
 export default WidgetCard;

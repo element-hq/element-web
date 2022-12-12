@@ -14,13 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 import { decode } from "blurhash";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { _t } from '../../../languageHandler';
+import { _t } from "../../../languageHandler";
 import SettingsStore from "../../../settings/SettingsStore";
-import InlineSpinner from '../elements/InlineSpinner';
+import InlineSpinner from "../elements/InlineSpinner";
 import { mediaFromContent } from "../../../customisations/Media";
 import { BLURHASH_FIELD } from "../../../utils/image-media";
 import { IMediaEventContent } from "../../../customisations/models/IMediaEventContent";
@@ -28,7 +28,7 @@ import { IBodyProps } from "./IBodyProps";
 import MFileBody from "./MFileBody";
 import { ImageSize, suggestedSize as suggestedVideoSize } from "../../../settings/enums/ImageSize";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
-import MediaProcessingError from './shared/MediaProcessingError';
+import MediaProcessingError from "./shared/MediaProcessingError";
 
 interface IState {
     decryptedUrl?: string;
@@ -61,7 +61,7 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
         };
     }
 
-    private getContentUrl(): string|null {
+    private getContentUrl(): string | null {
         const content = this.props.mxEvent.getContent<IMediaEventContent>();
         // During export, the content url will point to the MSC, which will later point to a local url
         if (this.props.forExport) return content.file?.url || content.url;
@@ -78,7 +78,7 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
         return url && !url.startsWith("data:");
     }
 
-    private getThumbUrl(): string|null {
+    private getThumbUrl(): string | null {
         // there's no need of thumbnail when the content is local
         if (this.props.forExport) return null;
 
@@ -102,10 +102,10 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
 
         const canvas = document.createElement("canvas");
 
-        const { w: width, h: height } = suggestedVideoSize(
-            SettingsStore.getValue("Images.size") as ImageSize,
-            { w: info.w, h: info.h },
-        );
+        const { w: width, h: height } = suggestedVideoSize(SettingsStore.getValue("Images.size") as ImageSize, {
+            w: info.w,
+            h: info.h,
+        });
 
         canvas.width = width;
         canvas.height = height;
@@ -205,21 +205,26 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
             });
             return;
         }
-        this.setState({
-            decryptedUrl: await this.props.mediaEventHelper.sourceUrl.value,
-            decryptedBlob: await this.props.mediaEventHelper.sourceBlob.value,
-            fetchingData: false,
-        }, () => {
-            if (!this.videoRef.current) return;
-            this.videoRef.current.play();
-        });
+        this.setState(
+            {
+                decryptedUrl: await this.props.mediaEventHelper.sourceUrl.value,
+                decryptedBlob: await this.props.mediaEventHelper.sourceBlob.value,
+                fetchingData: false,
+            },
+            () => {
+                if (!this.videoRef.current) return;
+                this.videoRef.current.play();
+            },
+        );
         this.props.onHeightChanged();
     };
 
     protected get showFileBody(): boolean {
-        return this.context.timelineRenderingType !== TimelineRenderingType.Room &&
+        return (
+            this.context.timelineRenderingType !== TimelineRenderingType.Room &&
             this.context.timelineRenderingType !== TimelineRenderingType.Pinned &&
-            this.context.timelineRenderingType !== TimelineRenderingType.Search;
+            this.context.timelineRenderingType !== TimelineRenderingType.Search
+        );
     }
 
     private getFileBody = () => {
@@ -235,19 +240,17 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
         if (content.info?.w && content.info?.h) {
             aspectRatio = `${content.info.w}/${content.info.h}`;
         }
-        const { w: maxWidth, h: maxHeight } = suggestedVideoSize(
-            SettingsStore.getValue("Images.size") as ImageSize,
-            { w: content.info?.w, h: content.info?.h },
-        );
+        const { w: maxWidth, h: maxHeight } = suggestedVideoSize(SettingsStore.getValue("Images.size") as ImageSize, {
+            w: content.info?.w,
+            h: content.info?.h,
+        });
 
         // HACK: This div fills out space while the video loads, to prevent scroll jumps
         const spaceFiller = <div style={{ width: maxWidth, height: maxHeight }} />;
 
         if (this.state.error !== null) {
             return (
-                <MediaProcessingError className="mx_MVideoBody">
-                    { _t("Error decrypting video") }
-                </MediaProcessingError>
+                <MediaProcessingError className="mx_MVideoBody">{_t("Error decrypting video")}</MediaProcessingError>
             );
         }
 
@@ -261,7 +264,7 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
                     <div className="mx_MVideoBody_container" style={{ maxWidth, maxHeight, aspectRatio }}>
                         <InlineSpinner />
                     </div>
-                    { spaceFiller }
+                    {spaceFiller}
                 </span>
             );
         }
@@ -294,9 +297,9 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
                         poster={poster}
                         onPlay={this.videoOnPlay}
                     />
-                    { spaceFiller }
+                    {spaceFiller}
                 </div>
-                { fileBody }
+                {fileBody}
             </span>
         );
     }

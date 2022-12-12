@@ -14,28 +14,28 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 // eslint-disable-next-line deprecate/import
-import { mount } from 'enzyme';
-import { mocked } from 'jest-mock';
-import { logger } from 'matrix-js-sdk/src/logger';
-import { act } from 'react-dom/test-utils';
+import { mount } from "enzyme";
+import { mocked } from "jest-mock";
+import { logger } from "matrix-js-sdk/src/logger";
+import { act } from "react-dom/test-utils";
 
-import RecordingPlayback, { PlaybackLayout } from '../../../../src/components/views/audio_messages/RecordingPlayback';
-import { Playback } from '../../../../src/audio/Playback';
-import RoomContext, { TimelineRenderingType } from '../../../../src/contexts/RoomContext';
-import { createAudioContext } from '../../../../src/audio/compat';
-import { findByTestId, flushPromises } from '../../../test-utils';
-import PlaybackWaveform from '../../../../src/components/views/audio_messages/PlaybackWaveform';
+import RecordingPlayback, { PlaybackLayout } from "../../../../src/components/views/audio_messages/RecordingPlayback";
+import { Playback } from "../../../../src/audio/Playback";
+import RoomContext, { TimelineRenderingType } from "../../../../src/contexts/RoomContext";
+import { createAudioContext } from "../../../../src/audio/compat";
+import { findByTestId, flushPromises } from "../../../test-utils";
+import PlaybackWaveform from "../../../../src/components/views/audio_messages/PlaybackWaveform";
 import SeekBar from "../../../../src/components/views/audio_messages/SeekBar";
 import PlaybackClock from "../../../../src/components/views/audio_messages/PlaybackClock";
 
-jest.mock('../../../../src/audio/compat', () => ({
+jest.mock("../../../../src/audio/compat", () => ({
     createAudioContext: jest.fn(),
     decodeOgg: jest.fn().mockResolvedValue({}),
 }));
 
-describe('<RecordingPlayback />', () => {
+describe("<RecordingPlayback />", () => {
     const mockAudioBufferSourceNode = {
         addEventListener: jest.fn(),
         connect: jest.fn(),
@@ -57,7 +57,7 @@ describe('<RecordingPlayback />', () => {
 
     const mockChannelData = new Float32Array();
 
-    const defaultRoom = { roomId: '!room:server.org', timelineRenderingType: TimelineRenderingType.File };
+    const defaultRoom = { roomId: "!room:server.org", timelineRenderingType: TimelineRenderingType.File };
     const getComponent = (props: React.ComponentProps<typeof RecordingPlayback>, room = defaultRoom) =>
         mount(<RecordingPlayback {...props} />, {
             wrappingComponent: RoomContext.Provider,
@@ -65,29 +65,27 @@ describe('<RecordingPlayback />', () => {
         });
 
     beforeEach(() => {
-        jest.spyOn(logger, 'error').mockRestore();
+        jest.spyOn(logger, "error").mockRestore();
         mockAudioBuffer.getChannelData.mockClear().mockReturnValue(mockChannelData);
-        mockAudioContext.decodeAudioData.mockReset().mockImplementation(
-            (_b, callback) => callback(mockAudioBuffer),
-        );
+        mockAudioContext.decodeAudioData.mockReset().mockImplementation((_b, callback) => callback(mockAudioBuffer));
         mocked(createAudioContext).mockReturnValue(mockAudioContext as unknown as AudioContext);
     });
 
-    const getPlayButton = component => findByTestId(component, 'play-pause-button').at(0);
+    const getPlayButton = (component) => findByTestId(component, "play-pause-button").at(0);
 
-    it('renders recording playback', () => {
+    it("renders recording playback", () => {
         const playback = new Playback(new ArrayBuffer(8));
         const component = getComponent({ playback });
         expect(component).toBeTruthy();
     });
 
-    it('disables play button while playback is decoding', async () => {
+    it("disables play button while playback is decoding", async () => {
         const playback = new Playback(new ArrayBuffer(8));
         const component = getComponent({ playback });
         expect(getPlayButton(component).props().disabled).toBeTruthy();
     });
 
-    it('enables play button when playback is finished decoding', async () => {
+    it("enables play button when playback is finished decoding", async () => {
         const playback = new Playback(new ArrayBuffer(8));
         const component = getComponent({ playback });
         await flushPromises();
@@ -95,43 +93,41 @@ describe('<RecordingPlayback />', () => {
         expect(getPlayButton(component).props().disabled).toBeFalsy();
     });
 
-    it('displays error when playback decoding fails', async () => {
+    it("displays error when playback decoding fails", async () => {
         // stub logger to keep console clean from expected error
-        jest.spyOn(logger, 'error').mockReturnValue(undefined);
-        jest.spyOn(logger, 'warn').mockReturnValue(undefined);
-        mockAudioContext.decodeAudioData.mockImplementation(
-            (_b, _cb, error) => error(new Error('oh no')),
-        );
+        jest.spyOn(logger, "error").mockReturnValue(undefined);
+        jest.spyOn(logger, "warn").mockReturnValue(undefined);
+        mockAudioContext.decodeAudioData.mockImplementation((_b, _cb, error) => error(new Error("oh no")));
         const playback = new Playback(new ArrayBuffer(8));
         const component = getComponent({ playback });
         await flushPromises();
-        expect(component.find('.text-warning').length).toBeFalsy();
+        expect(component.find(".text-warning").length).toBeFalsy();
     });
 
-    it('displays pre-prepared playback with correct playback phase', async () => {
+    it("displays pre-prepared playback with correct playback phase", async () => {
         const playback = new Playback(new ArrayBuffer(8));
         await playback.prepare();
         const component = getComponent({ playback });
         // playback already decoded, button is not disabled
         expect(getPlayButton(component).props().disabled).toBeFalsy();
-        expect(component.find('.text-warning').length).toBeFalsy();
+        expect(component.find(".text-warning").length).toBeFalsy();
     });
 
-    it('toggles playback on play pause button click', async () => {
+    it("toggles playback on play pause button click", async () => {
         const playback = new Playback(new ArrayBuffer(8));
-        jest.spyOn(playback, 'toggle').mockResolvedValue(undefined);
+        jest.spyOn(playback, "toggle").mockResolvedValue(undefined);
         await playback.prepare();
         const component = getComponent({ playback });
 
         act(() => {
-            getPlayButton(component).simulate('click');
+            getPlayButton(component).simulate("click");
         });
 
         expect(playback.toggle).toHaveBeenCalled();
     });
 
-    describe('Composer Layout', () => {
-        it('should have a waveform, no seek bar, and clock', () => {
+    describe("Composer Layout", () => {
+        it("should have a waveform, no seek bar, and clock", () => {
             const playback = new Playback(new ArrayBuffer(8));
             const component = getComponent({ playback, layout: PlaybackLayout.Composer });
 
@@ -141,8 +137,8 @@ describe('<RecordingPlayback />', () => {
         });
     });
 
-    describe('Timeline Layout', () => {
-        it('should have a waveform, a seek bar, and clock', () => {
+    describe("Timeline Layout", () => {
+        it("should have a waveform, a seek bar, and clock", () => {
             const playback = new Playback(new ArrayBuffer(8));
             const component = getComponent({ playback, layout: PlaybackLayout.Timeline });
 
@@ -151,7 +147,7 @@ describe('<RecordingPlayback />', () => {
             expect(component.find(SeekBar).length).toBeTruthy();
         });
 
-        it('should be the default', () => {
+        it("should be the default", () => {
             const playback = new Playback(new ArrayBuffer(8));
             const component = getComponent({ playback }); // no layout set for test
 

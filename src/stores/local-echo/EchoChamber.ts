@@ -23,8 +23,7 @@ import { EchoStore } from "./EchoStore";
  * Semantic access to local echo
  */
 export class EchoChamber {
-    private constructor() {
-    }
+    private constructor() {}
 
     public static forRoom(room: Room): RoomEchoChamber {
         return EchoStore.instance.getOrCreateChamberForRoom(room);

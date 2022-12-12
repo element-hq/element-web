@@ -24,10 +24,8 @@ export interface SettingsTabProps {
 
 const SettingsTab: React.FC<SettingsTabProps> = ({ heading, children }) => (
     <div className="mx_SettingsTab">
-        <Heading size='h2'>{ heading }</Heading>
-        <div className="mx_SettingsTab_sections">
-            { children }
-        </div>
+        <Heading size="h2">{heading}</Heading>
+        <div className="mx_SettingsTab_sections">{children}</div>
     </div>
 );
 

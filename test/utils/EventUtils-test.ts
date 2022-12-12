@@ -46,9 +46,9 @@ import { Action } from "../../src/dispatcher/actions";
 
 jest.mock("../../src/dispatcher/dispatcher");
 
-describe('EventUtils', () => {
-    const userId = '@user:server';
-    const roomId = '!room:server';
+describe("EventUtils", () => {
+    const userId = "@user:server";
+    const roomId = "!room:server";
     const mockClient = getMockClientWithEventEmitter({
         getUserId: jest.fn().mockReturnValue(userId),
     });
@@ -57,7 +57,7 @@ describe('EventUtils', () => {
         mockClient.getUserId.mockClear().mockReturnValue(userId);
     });
     afterAll(() => {
-        jest.spyOn(MatrixClientPeg, 'get').mockRestore();
+        jest.spyOn(MatrixClientPeg, "get").mockRestore();
     });
 
     // setup events
@@ -75,7 +75,7 @@ describe('EventUtils', () => {
 
     const stateEvent = new MatrixEvent({
         type: EventType.RoomTopic,
-        state_key: '',
+        state_key: "",
     });
     const beaconInfoEvent = makeBeaconInfoEvent(userId, roomId);
 
@@ -89,13 +89,13 @@ describe('EventUtils', () => {
         sender: userId,
     });
 
-    const pollStartEvent = makePollStartEvent('What?', userId);
+    const pollStartEvent = makePollStartEvent("What?", userId);
 
     const notDecryptedEvent = new MatrixEvent({
         type: EventType.RoomMessage,
         sender: userId,
         content: {
-            msgtype: 'm.bad.encrypted',
+            msgtype: "m.bad.encrypted",
         },
     });
 
@@ -120,7 +120,7 @@ describe('EventUtils', () => {
         sender: userId,
         content: {
             msgtype: MsgType.Text,
-            body: '',
+            body: "",
         },
     });
 
@@ -138,54 +138,54 @@ describe('EventUtils', () => {
         sender: userId,
         content: {
             msgtype: MsgType.Text,
-            body: 'Hello',
+            body: "Hello",
         },
     });
 
     const bobsTextMessage = new MatrixEvent({
         type: EventType.RoomMessage,
-        sender: '@bob:server',
+        sender: "@bob:server",
         content: {
             msgtype: MsgType.Text,
-            body: 'Hello from Bob',
+            body: "Hello from Bob",
         },
     });
 
-    describe('isContentActionable()', () => {
+    describe("isContentActionable()", () => {
         type TestCase = [string, MatrixEvent];
         it.each<TestCase>([
-            ['unsent event', unsentEvent],
-            ['redacted event', redactedEvent],
-            ['state event', stateEvent],
-            ['undecrypted event', notDecryptedEvent],
-            ['room member event', roomMemberEvent],
-            ['event without msgtype', noMsgType],
-            ['event without content body property', noContentBody],
-        ])('returns false for %s', (_description, event) => {
+            ["unsent event", unsentEvent],
+            ["redacted event", redactedEvent],
+            ["state event", stateEvent],
+            ["undecrypted event", notDecryptedEvent],
+            ["room member event", roomMemberEvent],
+            ["event without msgtype", noMsgType],
+            ["event without content body property", noContentBody],
+        ])("returns false for %s", (_description, event) => {
             expect(isContentActionable(event)).toBe(false);
         });
 
         it.each<TestCase>([
-            ['sticker event', stickerEvent],
-            ['poll start event', pollStartEvent],
-            ['event with empty content body', emptyContentBody],
-            ['event with a content body', niceTextMessage],
-            ['beacon_info event', beaconInfoEvent],
-        ])('returns true for %s', (_description, event) => {
+            ["sticker event", stickerEvent],
+            ["poll start event", pollStartEvent],
+            ["event with empty content body", emptyContentBody],
+            ["event with a content body", niceTextMessage],
+            ["beacon_info event", beaconInfoEvent],
+        ])("returns true for %s", (_description, event) => {
             expect(isContentActionable(event)).toBe(true);
         });
     });
 
-    describe('editable content helpers', () => {
+    describe("editable content helpers", () => {
         const replaceRelationEvent = new MatrixEvent({
             type: EventType.RoomMessage,
             sender: userId,
             content: {
                 msgtype: MsgType.Text,
-                body: 'Hello',
-                ['m.relates_to']: {
+                body: "Hello",
+                ["m.relates_to"]: {
                     rel_type: RelationType.Replace,
-                    event_id: '1',
+                    event_id: "1",
                 },
             },
         });
@@ -195,10 +195,10 @@ describe('EventUtils', () => {
             sender: userId,
             content: {
                 msgtype: MsgType.Text,
-                body: 'Hello',
-                ['m.relates_to']: {
+                body: "Hello",
+                ["m.relates_to"]: {
                     rel_type: RelationType.Reference,
-                    event_id: '1',
+                    event_id: "1",
                 },
             },
         });
@@ -208,79 +208,79 @@ describe('EventUtils', () => {
             sender: userId,
             content: {
                 msgtype: MsgType.Emote,
-                body: '🧪',
+                body: "🧪",
             },
         });
 
         type TestCase = [string, MatrixEvent];
 
         const uneditableCases: TestCase[] = [
-            ['redacted event', redactedEvent],
-            ['state event', stateEvent],
-            ['event that is not room message', roomMemberEvent],
-            ['event without msgtype', noMsgType],
-            ['event without content body property', noContentBody],
-            ['event with empty content body property', emptyContentBody],
-            ['event with non-string body', objectContentBody],
-            ['event not sent by current user', bobsTextMessage],
-            ['event with a replace relation', replaceRelationEvent],
+            ["redacted event", redactedEvent],
+            ["state event", stateEvent],
+            ["event that is not room message", roomMemberEvent],
+            ["event without msgtype", noMsgType],
+            ["event without content body property", noContentBody],
+            ["event with empty content body property", emptyContentBody],
+            ["event with non-string body", objectContentBody],
+            ["event not sent by current user", bobsTextMessage],
+            ["event with a replace relation", replaceRelationEvent],
         ];
 
         const editableCases: TestCase[] = [
-            ['event with reference relation', referenceRelationEvent],
-            ['emote event', emoteEvent],
-            ['poll start event', pollStartEvent],
-            ['event with a content body', niceTextMessage],
+            ["event with reference relation", referenceRelationEvent],
+            ["emote event", emoteEvent],
+            ["poll start event", pollStartEvent],
+            ["event with a content body", niceTextMessage],
         ];
 
-        describe('canEditContent()', () => {
-            it.each<TestCase>(uneditableCases)('returns false for %s', (_description, event) => {
+        describe("canEditContent()", () => {
+            it.each<TestCase>(uneditableCases)("returns false for %s", (_description, event) => {
                 expect(canEditContent(event)).toBe(false);
             });
 
-            it.each<TestCase>(editableCases)('returns true for %s', (_description, event) => {
+            it.each<TestCase>(editableCases)("returns true for %s", (_description, event) => {
                 expect(canEditContent(event)).toBe(true);
             });
         });
-        describe('canEditOwnContent()', () => {
-            it.each<TestCase>(uneditableCases)('returns false for %s', (_description, event) => {
+        describe("canEditOwnContent()", () => {
+            it.each<TestCase>(uneditableCases)("returns false for %s", (_description, event) => {
                 expect(canEditOwnEvent(event)).toBe(false);
             });
 
-            it.each<TestCase>(editableCases)('returns true for %s', (_description, event) => {
+            it.each<TestCase>(editableCases)("returns true for %s", (_description, event) => {
                 expect(canEditOwnEvent(event)).toBe(true);
             });
         });
     });
 
-    describe('isVoiceMessage()', () => {
-        it('returns true for an event with msc2516.voice content', () => {
+    describe("isVoiceMessage()", () => {
+        it("returns true for an event with msc2516.voice content", () => {
             const event = new MatrixEvent({
                 type: EventType.RoomMessage,
                 content: {
-                    ['org.matrix.msc2516.voice']: {},
+                    ["org.matrix.msc2516.voice"]: {},
                 },
             });
 
             expect(isVoiceMessage(event)).toBe(true);
         });
 
-        it('returns true for an event with msc3245.voice content', () => {
+        it("returns true for an event with msc3245.voice content", () => {
             const event = new MatrixEvent({
                 type: EventType.RoomMessage,
                 content: {
-                    ['org.matrix.msc3245.voice']: {},
+                    ["org.matrix.msc3245.voice"]: {},
                 },
             });
 
             expect(isVoiceMessage(event)).toBe(true);
         });
 
-        it('returns false for an event with voice content', () => {
+        it("returns false for an event with voice content", () => {
             const event = new MatrixEvent({
                 type: EventType.RoomMessage,
                 content: {
-                    body: 'hello',
+                    body: "hello",
                 },
             });
 
@@ -288,20 +288,20 @@ describe('EventUtils', () => {
         });
     });
 
-    describe('isLocationEvent()', () => {
-        it('returns true for an event with m.location stable type', () => {
+    describe("isLocationEvent()", () => {
+        it("returns true for an event with m.location stable type", () => {
             const event = new MatrixEvent({
                 type: M_LOCATION.altName,
             });
             expect(isLocationEvent(event)).toBe(true);
         });
-        it('returns true for an event with m.location unstable prefixed type', () => {
+        it("returns true for an event with m.location unstable prefixed type", () => {
             const event = new MatrixEvent({
                 type: M_LOCATION.name,
             });
             expect(isLocationEvent(event)).toBe(true);
         });
-        it('returns true for a room message with stable m.location msgtype', () => {
+        it("returns true for a room message with stable m.location msgtype", () => {
             const event = new MatrixEvent({
                 type: EventType.RoomMessage,
                 content: {
@@ -310,7 +310,7 @@ describe('EventUtils', () => {
             });
             expect(isLocationEvent(event)).toBe(true);
         });
-        it('returns true for a room message with unstable m.location msgtype', () => {
+        it("returns true for a room message with unstable m.location msgtype", () => {
             const event = new MatrixEvent({
                 type: EventType.RoomMessage,
                 content: {
@@ -319,32 +319,31 @@ describe('EventUtils', () => {
             });
             expect(isLocationEvent(event)).toBe(true);
         });
-        it('returns false for a non location event', () => {
+        it("returns false for a non location event", () => {
             const event = new MatrixEvent({
                 type: EventType.RoomMessage,
                 content: {
-                    body: 'Hello',
+                    body: "Hello",
                 },
             });
             expect(isLocationEvent(event)).toBe(false);
         });
     });
 
-    describe('canCancel()', () => {
-        it.each([
-            [EventStatus.QUEUED],
-            [EventStatus.NOT_SENT],
-            [EventStatus.ENCRYPTING],
-        ])('return true for status %s', (status) => {
-            expect(canCancel(status)).toBe(true);
-        });
+    describe("canCancel()", () => {
+        it.each([[EventStatus.QUEUED], [EventStatus.NOT_SENT], [EventStatus.ENCRYPTING]])(
+            "return true for status %s",
+            (status) => {
+                expect(canCancel(status)).toBe(true);
+            },
+        );
 
         it.each([
             [EventStatus.SENDING],
             [EventStatus.CANCELLED],
             [EventStatus.SENT],
-            ['invalid-status' as unknown as EventStatus],
-        ])('return false for status %s', (status) => {
+            ["invalid-status" as unknown as EventStatus],
+        ])("return false for status %s", (status) => {
             expect(canCancel(status)).toBe(false);
         });
     });
@@ -363,16 +362,16 @@ describe('EventUtils', () => {
                 event_id: NORMAL_EVENT,
                 type: EventType.RoomMessage,
                 content: {
-                    "body": "Classic event",
-                    "msgtype": MsgType.Text,
+                    body: "Classic event",
+                    msgtype: MsgType.Text,
                 },
             },
             [THREAD_ROOT]: {
                 event_id: THREAD_ROOT,
                 type: EventType.RoomMessage,
                 content: {
-                    "body": "Thread root",
-                    "msgtype": "m.text",
+                    body: "Thread root",
+                    msgtype: "m.text",
                 },
                 unsigned: {
                     "m.relations": {
@@ -439,10 +438,12 @@ describe('EventUtils', () => {
 
     describe("findEditableEvent", () => {
         it("should not explode when given empty events array", () => {
-            expect(findEditableEvent({
-                events: [],
-                isForward: true,
-            })).toBeUndefined();
+            expect(
+                findEditableEvent({
+                    events: [],
+                    isForward: true,
+                }),
+            ).toBeUndefined();
         });
     });
 

@@ -14,32 +14,28 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 import { fireEvent, render } from "@testing-library/react";
-import {
-    Beacon,
-    RoomMember,
-    MatrixEvent,
-} from 'matrix-js-sdk/src/matrix';
-import { LocationAssetType } from 'matrix-js-sdk/src/@types/location';
-import { act } from 'react-dom/test-utils';
+import { Beacon, RoomMember, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { LocationAssetType } from "matrix-js-sdk/src/@types/location";
+import { act } from "react-dom/test-utils";
 
-import BeaconListItem from '../../../../src/components/views/beacon/BeaconListItem';
-import MatrixClientContext from '../../../../src/contexts/MatrixClientContext';
+import BeaconListItem from "../../../../src/components/views/beacon/BeaconListItem";
+import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import {
     getMockClientWithEventEmitter,
     makeBeaconEvent,
     makeBeaconInfoEvent,
     makeRoomWithBeacons,
-} from '../../../test-utils';
+} from "../../../test-utils";
 
-describe('<BeaconListItem />', () => {
+describe("<BeaconListItem />", () => {
     // 14.03.2022 16:15
     const now = 1647270879403;
     // go back in time to create beacons and locations in the past
-    jest.spyOn(global.Date, 'now').mockReturnValue(now - 600000);
-    const roomId = '!room:server';
-    const aliceId = '@alice:server';
+    jest.spyOn(global.Date, "now").mockReturnValue(now - 600000);
+    const roomId = "!room:server";
+    const aliceId = "@alice:server";
 
     const mockClient = getMockClientWithEventEmitter({
         getUserId: jest.fn().mockReturnValue(aliceId),
@@ -47,36 +43,41 @@ describe('<BeaconListItem />', () => {
         isGuest: jest.fn().mockReturnValue(false),
     });
 
-    const aliceBeaconEvent = makeBeaconInfoEvent(aliceId,
-        roomId,
-        { isLive: true },
-        '$alice-room1-1',
-    );
-    const alicePinBeaconEvent = makeBeaconInfoEvent(aliceId,
+    const aliceBeaconEvent = makeBeaconInfoEvent(aliceId, roomId, { isLive: true }, "$alice-room1-1");
+    const alicePinBeaconEvent = makeBeaconInfoEvent(
+        aliceId,
         roomId,
         { isLive: true, assetType: LocationAssetType.Pin, description: "Alice's car" },
-        '$alice-room1-1',
+        "$alice-room1-1",
     );
-    const pinBeaconWithoutDescription = makeBeaconInfoEvent(aliceId,
+    const pinBeaconWithoutDescription = makeBeaconInfoEvent(
+        aliceId,
         roomId,
         { isLive: true, assetType: LocationAssetType.Pin },
-        '$alice-room1-1',
+        "$alice-room1-1",
     );
 
-    const aliceLocation1 = makeBeaconEvent(
-        aliceId, { beaconInfoId: aliceBeaconEvent.getId(), geoUri: 'geo:51,41', timestamp: now - 1 },
-    );
-    const aliceLocation2 = makeBeaconEvent(
-        aliceId, { beaconInfoId: aliceBeaconEvent.getId(), geoUri: 'geo:52,42', timestamp: now - 500000 },
-    );
+    const aliceLocation1 = makeBeaconEvent(aliceId, {
+        beaconInfoId: aliceBeaconEvent.getId(),
+        geoUri: "geo:51,41",
+        timestamp: now - 1,
+    });
+    const aliceLocation2 = makeBeaconEvent(aliceId, {
+        beaconInfoId: aliceBeaconEvent.getId(),
+        geoUri: "geo:52,42",
+        timestamp: now - 500000,
+    });
 
     const defaultProps = {
         beacon: new Beacon(aliceBeaconEvent),
     };
 
-    const getComponent = (props = {}) => render(<MatrixClientContext.Provider value={mockClient}>
-        <BeaconListItem {...defaultProps} {...props} />
-    </MatrixClientContext.Provider>);
+    const getComponent = (props = {}) =>
+        render(
+            <MatrixClientContext.Provider value={mockClient}>
+                <BeaconListItem {...defaultProps} {...props} />
+            </MatrixClientContext.Provider>,
+        );
 
     const setupRoomWithBeacons = (beaconInfoEvents: MatrixEvent[], locationEvents?: MatrixEvent[]): Beacon[] => {
         const beacons = makeRoomWithBeacons(roomId, mockClient, beaconInfoEvents, locationEvents);
@@ -84,102 +85,101 @@ describe('<BeaconListItem />', () => {
         const member = new RoomMember(roomId, aliceId);
         member.name = `Alice`;
         const room = mockClient.getRoom(roomId);
-        jest.spyOn(room, 'getMember').mockReturnValue(member);
+        jest.spyOn(room, "getMember").mockReturnValue(member);
 
         return beacons;
     };
 
     beforeEach(() => {
         jest.clearAllMocks();
-        jest.spyOn(Date, 'now').mockReturnValue(now);
+        jest.spyOn(Date, "now").mockReturnValue(now);
     });
 
-    it('renders null when beacon is not live', () => {
-        const notLiveBeacon = makeBeaconInfoEvent(aliceId,
-            roomId,
-            { isLive: false },
-        );
+    it("renders null when beacon is not live", () => {
+        const notLiveBeacon = makeBeaconInfoEvent(aliceId, roomId, { isLive: false });
         const [beacon] = setupRoomWithBeacons([notLiveBeacon]);
         const { container } = getComponent({ beacon });
         expect(container.innerHTML).toBeFalsy();
     });
 
-    it('renders null when beacon has no location', () => {
+    it("renders null when beacon has no location", () => {
         const [beacon] = setupRoomWithBeacons([aliceBeaconEvent]);
         const { container } = getComponent({ beacon });
         expect(container.innerHTML).toBeFalsy();
     });
 
-    describe('when a beacon is live and has locations', () => {
-        it('renders beacon info', () => {
+    describe("when a beacon is live and has locations", () => {
+        it("renders beacon info", () => {
             const [beacon] = setupRoomWithBeacons([alicePinBeaconEvent], [aliceLocation1]);
             const { asFragment } = getComponent({ beacon });
             expect(asFragment()).toMatchSnapshot();
         });
 
-        describe('non-self beacons', () => {
-            it('uses beacon description as beacon name', () => {
+        describe("non-self beacons", () => {
+            it("uses beacon description as beacon name", () => {
                 const [beacon] = setupRoomWithBeacons([alicePinBeaconEvent], [aliceLocation1]);
                 const { container } = getComponent({ beacon });
-                expect(container.querySelector('.mx_BeaconStatus_label')).toHaveTextContent("Alice's car");
+                expect(container.querySelector(".mx_BeaconStatus_label")).toHaveTextContent("Alice's car");
             });
 
-            it('uses beacon owner mxid as beacon name for a beacon without description', () => {
+            it("uses beacon owner mxid as beacon name for a beacon without description", () => {
                 const [beacon] = setupRoomWithBeacons([pinBeaconWithoutDescription], [aliceLocation1]);
                 const { container } = getComponent({ beacon });
-                expect(container.querySelector('.mx_BeaconStatus_label')).toHaveTextContent(aliceId);
+                expect(container.querySelector(".mx_BeaconStatus_label")).toHaveTextContent(aliceId);
             });
 
-            it('renders location icon', () => {
+            it("renders location icon", () => {
                 const [beacon] = setupRoomWithBeacons([alicePinBeaconEvent], [aliceLocation1]);
                 const { container } = getComponent({ beacon });
-                expect(container.querySelector('.mx_StyledLiveBeaconIcon')).toBeTruthy();
+                expect(container.querySelector(".mx_StyledLiveBeaconIcon")).toBeTruthy();
             });
         });
 
-        describe('self locations', () => {
-            it('renders beacon owner avatar', () => {
+        describe("self locations", () => {
+            it("renders beacon owner avatar", () => {
                 const [beacon] = setupRoomWithBeacons([aliceBeaconEvent], [aliceLocation1]);
                 const { container } = getComponent({ beacon });
-                expect(container.querySelector('.mx_BaseAvatar')).toBeTruthy();
+                expect(container.querySelector(".mx_BaseAvatar")).toBeTruthy();
             });
 
-            it('uses beacon owner name as beacon name', () => {
+            it("uses beacon owner name as beacon name", () => {
                 const [beacon] = setupRoomWithBeacons([aliceBeaconEvent], [aliceLocation1]);
                 const { container } = getComponent({ beacon });
-                expect(container.querySelector('.mx_BeaconStatus_label')).toHaveTextContent("Alice");
+                expect(container.querySelector(".mx_BeaconStatus_label")).toHaveTextContent("Alice");
             });
         });
 
-        describe('on location updates', () => {
-            it('updates last updated time on location updated', () => {
+        describe("on location updates", () => {
+            it("updates last updated time on location updated", () => {
                 const [beacon] = setupRoomWithBeacons([aliceBeaconEvent], [aliceLocation2]);
                 const { container } = getComponent({ beacon });
 
-                expect(container.querySelector('.mx_BeaconListItem_lastUpdated'))
-                    .toHaveTextContent('Updated 9 minutes ago');
+                expect(container.querySelector(".mx_BeaconListItem_lastUpdated")).toHaveTextContent(
+                    "Updated 9 minutes ago",
+                );
 
                 // update to a newer location
                 act(() => {
                     beacon.addLocations([aliceLocation1]);
                 });
 
-                expect(container.querySelector('.mx_BeaconListItem_lastUpdated'))
-                    .toHaveTextContent('Updated a few seconds ago');
+                expect(container.querySelector(".mx_BeaconListItem_lastUpdated")).toHaveTextContent(
+                    "Updated a few seconds ago",
+                );
             });
         });
 
-        describe('interactions', () => {
-            it('does not call onClick handler when clicking share button', () => {
+        describe("interactions", () => {
+            it("does not call onClick handler when clicking share button", () => {
                 const [beacon] = setupRoomWithBeacons([alicePinBeaconEvent], [aliceLocation1]);
                 const onClick = jest.fn();
                 const { getByTestId } = getComponent({ beacon, onClick });
 
-                fireEvent.click(getByTestId('open-location-in-osm'));
+                fireEvent.click(getByTestId("open-location-in-osm"));
                 expect(onClick).not.toHaveBeenCalled();
             });
 
-            it('calls onClick handler when clicking outside of share buttons', () => {
+            it("calls onClick handler when clicking outside of share buttons", () => {
                 const [beacon] = setupRoomWithBeacons([alicePinBeaconEvent], [aliceLocation1]);
                 const onClick = jest.fn();
                 const { container } = getComponent({ beacon, onClick });

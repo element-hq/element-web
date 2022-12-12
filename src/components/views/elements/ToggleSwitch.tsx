@@ -45,13 +45,14 @@ export default ({ checked, disabled = false, title, tooltip, onChange, ...props 
     };
 
     const classes = classNames({
-        "mx_ToggleSwitch": true,
-        "mx_ToggleSwitch_on": checked,
-        "mx_ToggleSwitch_enabled": !disabled,
+        mx_ToggleSwitch: true,
+        mx_ToggleSwitch_on: checked,
+        mx_ToggleSwitch_enabled: !disabled,
     });
 
     return (
-        <AccessibleTooltipButton {...props}
+        <AccessibleTooltipButton
+            {...props}
             className={classes}
             onClick={_onClick}
             role="switch"

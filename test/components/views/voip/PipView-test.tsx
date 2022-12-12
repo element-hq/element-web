@@ -91,18 +91,16 @@ describe("PipView", () => {
         client.getRooms.mockReturnValue([room, room2]);
         client.reEmitter.reEmit(room, [RoomStateEvent.Events]);
 
-        room.currentState.setStateEvents([
-            mkRoomCreateEvent(alice.userId, room.roomId),
-        ]);
-        jest.spyOn(room, "getMember").mockImplementation(userId => userId === alice.userId ? alice : null);
+        room.currentState.setStateEvents([mkRoomCreateEvent(alice.userId, room.roomId)]);
+        jest.spyOn(room, "getMember").mockImplementation((userId) => (userId === alice.userId ? alice : null));
 
-        room2.currentState.setStateEvents([
-            mkRoomCreateEvent(alice.userId, room2.roomId),
-        ]);
+        room2.currentState.setStateEvents([mkRoomCreateEvent(alice.userId, room2.roomId)]);
 
-        await Promise.all([CallStore.instance, WidgetMessagingStore.instance].map(
-            store => setupAsyncStoreWithClient(store, client),
-        ));
+        await Promise.all(
+            [CallStore.instance, WidgetMessagingStore.instance].map((store) =>
+                setupAsyncStoreWithClient(store, client),
+            ),
+        );
 
         sdkContext = new TestSdkContext();
         voiceBroadcastRecordingsStore = new VoiceBroadcastRecordingsStore();
@@ -122,18 +120,19 @@ describe("PipView", () => {
     });
 
     const renderPip = () => {
-        const PipView = wrapInMatrixClientContext(
-            wrapInSdkContext(UnwrappedPipView, sdkContext),
-        );
+        const PipView = wrapInMatrixClientContext(wrapInSdkContext(UnwrappedPipView, sdkContext));
         render(<PipView />);
     };
 
     const viewRoom = (roomId: string) =>
-        defaultDispatcher.dispatch<ViewRoomPayload>({
-            action: Action.ViewRoom,
-            room_id: roomId,
-            metricsTrigger: undefined,
-        }, true);
+        defaultDispatcher.dispatch<ViewRoomPayload>(
+            {
+                action: Action.ViewRoom,
+                room_id: roomId,
+                metricsTrigger: undefined,
+            },
+            true,
+        );
 
     const withCall = async (fn: () => Promise<void>): Promise<void> => {
         MockedCall.create(room, "1");
@@ -197,12 +196,15 @@ describe("PipView", () => {
     const startVoiceBroadcastPlayback = (room: Room): MatrixEvent => {
         const infoEvent = makeVoiceBroadcastInfoStateEvent();
         room.currentState.setStateEvents([infoEvent]);
-        defaultDispatcher.dispatch<IRoomStateEventsActionPayload>({
-            action: "MatrixActions.RoomState.events",
-            event: infoEvent,
-            state: room.currentState,
-            lastStateEvent: null,
-        }, true);
+        defaultDispatcher.dispatch<IRoomStateEventsActionPayload>(
+            {
+                action: "MatrixActions.RoomState.events",
+                event: infoEvent,
+                state: room.currentState,
+                lastStateEvent: null,
+            },
+            true,
+        );
         return infoEvent;
     };
 
@@ -224,11 +226,13 @@ describe("PipView", () => {
             const dispatcherSpy = jest.fn();
             const dispatcherRef = defaultDispatcher.register(dispatcherSpy);
             fireEvent.click(screen.getByRole("button", { name: "Fill screen" }));
-            await waitFor(() => expect(dispatcherSpy).toHaveBeenCalledWith({
-                action: Action.ViewRoom,
-                room_id: room.roomId,
-                view_call: true,
-            }));
+            await waitFor(() =>
+                expect(dispatcherSpy).toHaveBeenCalledWith({
+                    action: Action.ViewRoom,
+                    room_id: room.roomId,
+                    view_call: true,
+                }),
+            );
             defaultDispatcher.unregister(dispatcherRef);
         });
     });
@@ -323,12 +327,15 @@ describe("PipView", () => {
                         startEvent,
                     );
                     room.currentState.setStateEvents([stopEvent]);
-                    defaultDispatcher.dispatch<IRoomStateEventsActionPayload>({
-                        action: "MatrixActions.RoomState.events",
-                        event: stopEvent,
-                        state: room.currentState,
-                        lastStateEvent: stopEvent,
-                    }, true);
+                    defaultDispatcher.dispatch<IRoomStateEventsActionPayload>(
+                        {
+                            action: "MatrixActions.RoomState.events",
+                            event: stopEvent,
+                            state: room.currentState,
+                            lastStateEvent: stopEvent,
+                        },
+                        true,
+                    );
                 });
             });
 

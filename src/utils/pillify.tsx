@@ -15,11 +15,11 @@ limitations under the License.
 */
 
 import React from "react";
-import ReactDOM from 'react-dom';
-import { PushProcessor } from 'matrix-js-sdk/src/pushprocessor';
+import ReactDOM from "react-dom";
+import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
-import { MatrixClientPeg } from '../MatrixClientPeg';
+import { MatrixClientPeg } from "../MatrixClientPeg";
 import SettingsStore from "../settings/SettingsStore";
 import Pill, { PillType } from "../components/views/elements/Pill";
 import { parsePermalink } from "./permalinks/Permalinks";
@@ -54,14 +54,11 @@ export function pillifyLinks(nodes: ArrayLike<Element>, mxEvent: MatrixEvent, pi
             // If the link is a (localised) matrix.to link, replace it with a pill
             // We don't want to pill event permalinks, so those are ignored.
             if (parts && !parts.eventId) {
-                const pillContainer = document.createElement('span');
+                const pillContainer = document.createElement("span");
 
-                const pill = <Pill
-                    url={href}
-                    inMessage={true}
-                    room={room}
-                    shouldShowPillAvatar={shouldShowPillAvatar}
-                />;
+                const pill = (
+                    <Pill url={href} inMessage={true} room={room} shouldShowPillAvatar={shouldShowPillAvatar} />
+                );
 
                 ReactDOM.render(pill, pillContainer);
                 node.parentNode.replaceChild(pillContainer, node);
@@ -111,13 +108,15 @@ export function pillifyLinks(nodes: ArrayLike<Element>, mxEvent: MatrixEvent, pi
                         // Note we've checked roomNotifTextNodes.length > 0 so we'll do this at least once
                         node = roomNotifTextNode.nextSibling;
 
-                        const pillContainer = document.createElement('span');
-                        const pill = <Pill
-                            type={PillType.AtRoomMention}
-                            inMessage={true}
-                            room={room}
-                            shouldShowPillAvatar={shouldShowPillAvatar}
-                        />;
+                        const pillContainer = document.createElement("span");
+                        const pill = (
+                            <Pill
+                                type={PillType.AtRoomMention}
+                                inMessage={true}
+                                room={room}
+                                shouldShowPillAvatar={shouldShowPillAvatar}
+                            />
+                        );
 
                         ReactDOM.render(pill, pillContainer);
                         roomNotifTextNode.parentNode.replaceChild(pillContainer, roomNotifTextNode);

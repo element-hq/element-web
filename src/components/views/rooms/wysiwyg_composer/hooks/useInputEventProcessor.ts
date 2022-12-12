@@ -21,20 +21,19 @@ import { useSettingValue } from "../../../../../hooks/useSettings";
 
 export function useInputEventProcessor(onSend: () => void) {
     const isCtrlEnter = useSettingValue<boolean>("MessageComposerInput.ctrlEnterToSend");
-    return useCallback((event: WysiwygInputEvent) => {
-        if (event instanceof ClipboardEvent) {
+    return useCallback(
+        (event: WysiwygInputEvent) => {
+            if (event instanceof ClipboardEvent) {
+                return event;
+            }
+
+            if ((event.inputType === "insertParagraph" && !isCtrlEnter) || event.inputType === "sendMessage") {
+                onSend();
+                return null;
+            }
+
             return event;
-        }
-
-        if (
-            (event.inputType === 'insertParagraph' && !isCtrlEnter) ||
-            event.inputType === 'sendMessage'
-        ) {
-            onSend();
-            return null;
-        }
-
-        return event;
-    }
-    , [isCtrlEnter, onSend]);
+        },
+        [isCtrlEnter, onSend],
+    );
 }

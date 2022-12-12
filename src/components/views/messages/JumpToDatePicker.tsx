@@ -14,9 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useState, FormEvent } from 'react';
+import React, { useState, FormEvent } from "react";
 
-import { _t } from '../../../languageHandler';
+import { _t } from "../../../languageHandler";
 import Field from "../elements/Field";
 import { RovingAccessibleButton, useRovingTabIndex } from "../../../accessibility/RovingTabIndex";
 
@@ -42,11 +42,8 @@ const JumpToDatePicker: React.FC<IProps> = ({ ts, onDatePicked }: IProps) => {
     };
 
     return (
-        <form
-            className="mx_JumpToDatePicker_form"
-            onSubmit={onJumpToDateSubmit}
-        >
-            <span className="mx_JumpToDatePicker_label">{ _t("Jump to date") }</span>
+        <form className="mx_JumpToDatePicker_form" onSubmit={onJumpToDateSubmit}>
+            <span className="mx_JumpToDatePicker_label">{_t("Jump to date")}</span>
             <Field
                 element="input"
                 type="date"
@@ -65,7 +62,7 @@ const JumpToDatePicker: React.FC<IProps> = ({ ts, onDatePicked }: IProps) => {
                 className="mx_JumpToDatePicker_submitButton"
                 onClick={onJumpToDateSubmit}
             >
-                { _t("Go") }
+                {_t("Go")}
             </RovingAccessibleButton>
         </form>
     );

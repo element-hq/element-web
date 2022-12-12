@@ -29,7 +29,7 @@ const LIST_TYPES = ["UL", "OL", "LI"];
 
 // Escapes all markup in the given text
 function escape(text: string): string {
-    return text.replace(/[\\*_[\]`<]|^>/g, match => `\\${match}`);
+    return text.replace(/[\\*_[\]`<]|^>/g, (match) => `\\${match}`);
 }
 
 // Finds the length of the longest backtick sequence in the given text, used for
@@ -77,12 +77,14 @@ function parseLink(n: Node, pc: PartCreator, opts: IParseOptions): Part[] {
     const resourceId = getPrimaryPermalinkEntity(href); // The room/user ID
 
     switch (resourceId?.[0]) {
-        case "@": return [pc.userPill(n.textContent, resourceId)];
-        case "#": return [pc.roomPill(resourceId)];
+        case "@":
+            return [pc.userPill(n.textContent, resourceId)];
+        case "#":
+            return [pc.roomPill(resourceId)];
     }
 
     const children = Array.from(n.childNodes);
-    if (href === n.textContent && children.every(c => c.nodeType === Node.TEXT_NODE)) {
+    if (href === n.textContent && children.every((c) => c.nodeType === Node.TEXT_NODE)) {
         return parseAtRoomMentions(n.textContent, pc, opts);
     } else {
         return [pc.plain("["), ...parseChildren(n, pc, opts), pc.plain(`](${href})`)];
@@ -110,7 +112,7 @@ function parseCodeBlock(n: Node, pc: PartCreator, opts: IParseOptions): Part[] {
     const fence = "`".repeat(Math.max(3, longestBacktickSequence(text) + 1));
     const parts: Part[] = [...pc.plainWithEmoji(fence + language), pc.newline()];
 
-    text.split("\n").forEach(line => {
+    text.split("\n").forEach((line) => {
         parts.push(...pc.plainWithEmoji(line));
         parts.push(pc.newline());
     });
@@ -148,7 +150,7 @@ function prefixLines(parts: Part[], prefix: string, pc: PartCreator) {
 
 function parseChildren(n: Node, pc: PartCreator, opts: IParseOptions, mkListItem?: (li: Node) => Part[]): Part[] {
     let prev;
-    return Array.from(n.childNodes).flatMap(c => {
+    return Array.from(n.childNodes).flatMap((c) => {
         const parsed = parseNode(c, pc, opts, mkListItem);
         if (parsed.length && prev && (checkBlockNode(prev) || checkBlockNode(c))) {
             if (isListChild(c)) {
@@ -213,7 +215,7 @@ function parseNode(n: Node, pc: PartCreator, opts: IParseOptions, mkListItem?: (
                 case "LI":
                     return mkListItem?.(n) ?? parseChildren(n, pc, opts);
                 case "UL": {
-                    const parts = parseChildren(n, pc, opts, li => [pc.plain("- "), ...parseChildren(li, pc, opts)]);
+                    const parts = parseChildren(n, pc, opts, (li) => [pc.plain("- "), ...parseChildren(li, pc, opts)]);
                     if (isListChild(n)) {
                         prefixLines(parts, "    ", pc);
                     }
@@ -221,7 +223,7 @@ function parseNode(n: Node, pc: PartCreator, opts: IParseOptions, mkListItem?: (
                 }
                 case "OL": {
                     let counter = (n as HTMLOListElement).start ?? 1;
-                    const parts = parseChildren(n, pc, opts, li => {
+                    const parts = parseChildren(n, pc, opts, (li) => {
                         const parts = [pc.plain(`${counter}. `), ...parseChildren(li, pc, opts)];
                         counter++;
                         return parts;
@@ -236,12 +238,10 @@ function parseNode(n: Node, pc: PartCreator, opts: IParseOptions, mkListItem?: (
                     // Math nodes are translated back into delimited latex strings
                     if ((n as Element).hasAttribute("data-mx-maths")) {
                         const delims = SdkConfig.get().latex_maths_delims;
-                        const delimLeft = (n.nodeName === "SPAN") ?
-                            delims?.inline?.left ?? "\\(" :
-                            delims?.display?.left ?? "\\[";
-                        const delimRight = (n.nodeName === "SPAN") ?
-                            delims?.inline?.right ?? "\\)" :
-                            delims?.display?.right ?? "\\]";
+                        const delimLeft =
+                            n.nodeName === "SPAN" ? delims?.inline?.left ?? "\\(" : delims?.display?.left ?? "\\[";
+                        const delimRight =
+                            n.nodeName === "SPAN" ? delims?.inline?.right ?? "\\)" : delims?.display?.right ?? "\\]";
                         const tex = (n as Element).getAttribute("data-mx-maths");
 
                         return pc.plainWithEmoji(`${delimLeft}${tex}${delimRight}`);
@@ -268,11 +268,7 @@ function parseHtmlMessage(html: string, pc: PartCreator, opts: IParseOptions): P
     return parts;
 }
 
-export function parsePlainTextMessage(
-    body: string,
-    pc: PartCreator,
-    opts: IParseOptions,
-): Part[] {
+export function parsePlainTextMessage(body: string, pc: PartCreator, opts: IParseOptions): Part[] {
     const lines = body.split(/\r\n|\r|\n/g); // split on any new-line combination not just \n, collapses \r\n
     return lines.reduce((parts, line, i) => {
         if (opts.isQuotedMessage) {

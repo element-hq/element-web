@@ -26,14 +26,15 @@ export interface IEncryptedFile {
         ext: boolean;
     };
     iv: string;
-    hashes: {[alg: string]: string};
+    hashes: { [alg: string]: string };
     v: string;
 }
 
 export interface IMediaEventInfo {
     thumbnail_url?: string; // eslint-disable-line camelcase
     thumbnail_file?: IEncryptedFile; // eslint-disable-line camelcase
-    thumbnail_info?: { // eslint-disable-line camelcase
+    thumbnail_info?: {
+        // eslint-disable-line camelcase
         mimetype: string;
         w?: number;
         h?: number;

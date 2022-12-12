@@ -25,9 +25,7 @@ interface State {
     device: MediaDeviceInfo | null;
 }
 
-export const useAudioDeviceSelection = (
-    onDeviceChanged?: (device: MediaDeviceInfo) => void,
-) => {
+export const useAudioDeviceSelection = (onDeviceChanged?: (device: MediaDeviceInfo) => void) => {
     const shouldRequestPermissionsRef = useRef<boolean>(true);
     const [state, setState] = useState<State>({
         devices: [],
@@ -40,15 +38,16 @@ export const useAudioDeviceSelection = (
             MediaDeviceHandler.getDevices().then(({ audioinput }) => {
                 MediaDeviceHandler.getDefaultDevice(audioinput);
                 const deviceFromSettings = MediaDeviceHandler.getAudioInput();
-                const device = audioinput.find((d) => {
-                    return d.deviceId === deviceFromSettings;
-                }) || audioinput[0];
+                const device =
+                    audioinput.find((d) => {
+                        return d.deviceId === deviceFromSettings;
+                    }) || audioinput[0];
                 setState({
                     ...state,
                     devices: audioinput,
                     device,
                 });
-                stream?.getTracks().forEach(t => t.stop());
+                stream?.getTracks().forEach((t) => t.stop());
             });
         });
     }

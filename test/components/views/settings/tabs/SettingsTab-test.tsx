@@ -14,17 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactElement } from 'react';
-import { render } from '@testing-library/react';
+import React, { ReactElement } from "react";
+import { render } from "@testing-library/react";
 
-import SettingsTab, { SettingsTabProps } from '../../../../../src/components/views/settings/tabs/SettingsTab';
+import SettingsTab, { SettingsTabProps } from "../../../../../src/components/views/settings/tabs/SettingsTab";
 
-describe('<SettingsTab />', () => {
-    const getComponent = (props: SettingsTabProps): ReactElement => (<SettingsTab {...props} />);
-    it('renders tab', () => {
-        const { container } = render(getComponent({ heading: 'Test Tab', children: <div>test</div> }));
+describe("<SettingsTab />", () => {
+    const getComponent = (props: SettingsTabProps): ReactElement => <SettingsTab {...props} />;
+    it("renders tab", () => {
+        const { container } = render(getComponent({ heading: "Test Tab", children: <div>test</div> }));
 
         expect(container).toMatchSnapshot();
     });
 });
-

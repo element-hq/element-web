@@ -23,13 +23,9 @@ import { useTypedEventEmitter } from "../../hooks/useEventEmitter";
 export const useHasRoomLiveVoiceBroadcast = (room: Room) => {
     const [hasLiveVoiceBroadcast, setHasLiveVoiceBroadcast] = useState(hasRoomLiveVoiceBroadcast(room).hasBroadcast);
 
-    useTypedEventEmitter(
-        room.currentState,
-        RoomStateEvent.Update,
-        () => {
-            setHasLiveVoiceBroadcast(hasRoomLiveVoiceBroadcast(room).hasBroadcast);
-        },
-    );
+    useTypedEventEmitter(room.currentState, RoomStateEvent.Update, () => {
+        setHasLiveVoiceBroadcast(hasRoomLiveVoiceBroadcast(room).hasBroadcast);
+    });
 
     return hasLiveVoiceBroadcast;
 };

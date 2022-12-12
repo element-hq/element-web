@@ -28,10 +28,10 @@ export const StateEventEditor = ({ mxEvent, onBack }: IEditorProps) => {
     const context = useContext(DevtoolsContext);
     const cli = useContext(MatrixClientContext);
 
-    const fields = useMemo(() => [
-        eventTypeField(mxEvent?.getType()),
-        stateKeyField(mxEvent?.getStateKey()),
-    ], [mxEvent]);
+    const fields = useMemo(
+        () => [eventTypeField(mxEvent?.getType()), stateKeyField(mxEvent?.getStateKey())],
+        [mxEvent],
+    );
 
     const onSend = ([eventType, stateKey]: string[], content?: IContent) => {
         return cli.sendStateEvent(context.room.roomId, eventType, content, stateKey);
@@ -49,15 +49,17 @@ interface StateEventButtonProps {
 const StateEventButton = ({ label, onClick }: StateEventButtonProps) => {
     const trimmed = label.trim();
 
-    return <button
-        className={classNames("mx_DevTools_button", {
-            mx_DevTools_RoomStateExplorer_button_hasSpaces: trimmed.length !== label.length,
-            mx_DevTools_RoomStateExplorer_button_emptyString: !trimmed,
-        })}
-        onClick={onClick}
-    >
-        { trimmed ? label : _t("<%(count)s spaces>", { count: label.length }) }
-    </button>;
+    return (
+        <button
+            className={classNames("mx_DevTools_button", {
+                mx_DevTools_RoomStateExplorer_button_hasSpaces: trimmed.length !== label.length,
+                mx_DevTools_RoomStateExplorer_button_emptyString: !trimmed,
+            })}
+            onClick={onClick}
+        >
+            {trimmed ? label : _t("<%(count)s spaces>", { count: label.length })}
+        </button>
+    );
 };
 
 interface IEventTypeProps extends Pick<IDevtoolsProps, "onBack"> {
@@ -90,15 +92,15 @@ const RoomStateExplorerEventType = ({ eventType, onBack }: IEventTypeProps) => {
         return <EventViewer mxEvent={event} onBack={_onBack} Editor={StateEventEditor} />;
     }
 
-    return <BaseTool onBack={onBack}>
-        <FilteredList query={query} onChange={setQuery}>
-            {
-                Array.from(events.entries()).map(([stateKey, ev]) => (
+    return (
+        <BaseTool onBack={onBack}>
+            <FilteredList query={query} onChange={setQuery}>
+                {Array.from(events.entries()).map(([stateKey, ev]) => (
                     <StateEventButton key={stateKey} label={stateKey} onClick={() => setEvent(ev)} />
-                ))
-            }
-        </FilteredList>
-    </BaseTool>;
+                ))}
+            </FilteredList>
+        </BaseTool>
+    );
 };
 
 export const RoomStateExplorer = ({ onBack, setTool }: IDevtoolsProps) => {
@@ -119,13 +121,13 @@ export const RoomStateExplorer = ({ onBack, setTool }: IDevtoolsProps) => {
         setTool(_t("Send custom state event"), StateEventEditor);
     };
 
-    return <BaseTool onBack={onBack} actionLabel={_t("Send custom state event")} onAction={onAction}>
-        <FilteredList query={query} onChange={setQuery}>
-            {
-                Array.from(events.keys()).map((eventType) => (
+    return (
+        <BaseTool onBack={onBack} actionLabel={_t("Send custom state event")} onAction={onAction}>
+            <FilteredList query={query} onChange={setQuery}>
+                {Array.from(events.keys()).map((eventType) => (
                     <StateEventButton key={eventType} label={eventType} onClick={() => setEventType(eventType)} />
-                ))
-            }
-        </FilteredList>
-    </BaseTool>;
+                ))}
+            </FilteredList>
+        </BaseTool>
+    );
 };

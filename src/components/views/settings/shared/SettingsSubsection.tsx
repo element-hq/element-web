@@ -26,16 +26,9 @@ export interface SettingsSubsectionProps extends HTMLAttributes<HTMLDivElement> 
 
 const SettingsSubsection: React.FC<SettingsSubsectionProps> = ({ heading, description, children, ...rest }) => (
     <div {...rest} className="mx_SettingsSubsection">
-        { typeof heading === 'string'
-            ? <SettingsSubsectionHeading heading={heading} />
-            : <>
-                { heading }
-            </>
-        }
-        { !!description && <div className="mx_SettingsSubsection_description">{ description }</div> }
-        <div className="mx_SettingsSubsection_content">
-            { children }
-        </div>
+        {typeof heading === "string" ? <SettingsSubsectionHeading heading={heading} /> : <>{heading}</>}
+        {!!description && <div className="mx_SettingsSubsection_description">{description}</div>}
+        <div className="mx_SettingsSubsection_content">{children}</div>
     </div>
 );
 

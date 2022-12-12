@@ -63,29 +63,31 @@ export class ModalWidgetStore extends AsyncStoreWithClient<IState> {
         if (this.modalInstance) return;
         this.openSourceWidgetId = sourceWidget.id;
         this.openSourceWidgetRoomId = widgetRoomId;
-        this.modalInstance = Modal.createDialog(ModalWidgetDialog, {
-            widgetDefinition: { ...requestData },
-            widgetRoomId,
-            sourceWidgetId: sourceWidget.id,
-            onFinished: (success: boolean, data?: IModalWidgetReturnData) => {
-                if (!success) {
-                    this.closeModalWidget(sourceWidget, widgetRoomId, { "m.exited": true });
-                } else {
-                    this.closeModalWidget(sourceWidget, widgetRoomId, data);
-                }
+        this.modalInstance = Modal.createDialog(
+            ModalWidgetDialog,
+            {
+                widgetDefinition: { ...requestData },
+                widgetRoomId,
+                sourceWidgetId: sourceWidget.id,
+                onFinished: (success: boolean, data?: IModalWidgetReturnData) => {
+                    if (!success) {
+                        this.closeModalWidget(sourceWidget, widgetRoomId, { "m.exited": true });
+                    } else {
+                        this.closeModalWidget(sourceWidget, widgetRoomId, data);
+                    }
 
-                this.openSourceWidgetId = null;
-                this.openSourceWidgetRoomId = null;
-                this.modalInstance = null;
+                    this.openSourceWidgetId = null;
+                    this.openSourceWidgetRoomId = null;
+                    this.modalInstance = null;
+                },
             },
-        }, null, /* priority = */ false, /* static = */ true);
+            null,
+            /* priority = */ false,
+            /* static = */ true,
+        );
     };
 
-    public closeModalWidget = (
-        sourceWidget: Widget,
-        widgetRoomId?: string,
-        data?: IModalWidgetReturnData,
-    ) => {
+    public closeModalWidget = (sourceWidget: Widget, widgetRoomId?: string, data?: IModalWidgetReturnData) => {
         if (!this.modalInstance) return;
         if (this.openSourceWidgetId === sourceWidget.id && this.openSourceWidgetRoomId === widgetRoomId) {
             this.openSourceWidgetId = null;

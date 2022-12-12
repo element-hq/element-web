@@ -14,48 +14,47 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 // eslint-disable-next-line deprecate/import
-import { mount } from 'enzyme';
-import maplibregl from 'maplibre-gl';
-import { act } from 'react-dom/test-utils';
+import { mount } from "enzyme";
+import maplibregl from "maplibre-gl";
+import { act } from "react-dom/test-utils";
 
-import ZoomButtons from '../../../../src/components/views/location/ZoomButtons';
-import { findByTestId } from '../../../test-utils';
+import ZoomButtons from "../../../../src/components/views/location/ZoomButtons";
+import { findByTestId } from "../../../test-utils";
 
-describe('<ZoomButtons />', () => {
+describe("<ZoomButtons />", () => {
     const mockMap = new maplibregl.Map();
     const defaultProps = {
         map: mockMap,
     };
-    const getComponent = (props = {}) =>
-        mount(<ZoomButtons {...defaultProps} {...props} />);
+    const getComponent = (props = {}) => mount(<ZoomButtons {...defaultProps} {...props} />);
 
     beforeEach(() => {
         jest.clearAllMocks();
     });
 
-    it('renders buttons', () => {
+    it("renders buttons", () => {
         const component = getComponent();
         expect(component).toMatchSnapshot();
     });
 
-    it('calls map zoom in on zoom in click', () => {
+    it("calls map zoom in on zoom in click", () => {
         const component = getComponent();
 
         act(() => {
-            findByTestId(component, 'map-zoom-in-button').at(0).simulate('click');
+            findByTestId(component, "map-zoom-in-button").at(0).simulate("click");
         });
 
         expect(mockMap.zoomIn).toHaveBeenCalled();
         expect(component).toBeTruthy();
     });
 
-    it('calls map zoom out on zoom out click', () => {
+    it("calls map zoom out on zoom out click", () => {
         const component = getComponent();
 
         act(() => {
-            findByTestId(component, 'map-zoom-out-button').at(0).simulate('click');
+            findByTestId(component, "map-zoom-out-button").at(0).simulate("click");
         });
 
         expect(mockMap.zoomOut).toHaveBeenCalled();

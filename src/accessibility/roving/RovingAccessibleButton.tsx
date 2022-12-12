@@ -27,14 +27,15 @@ interface IProps extends Omit<React.ComponentProps<typeof AccessibleButton>, "in
 // Wrapper to allow use of useRovingTabIndex for simple AccessibleButtons outside of React Functional Components.
 export const RovingAccessibleButton: React.FC<IProps> = ({ inputRef, onFocus, ...props }) => {
     const [onFocusInternal, isActive, ref] = useRovingTabIndex(inputRef);
-    return <AccessibleButton
-        {...props}
-        onFocus={event => {
-            onFocusInternal();
-            onFocus?.(event);
-        }}
-        inputRef={ref}
-        tabIndex={isActive ? 0 : -1}
-    />;
+    return (
+        <AccessibleButton
+            {...props}
+            onFocus={(event) => {
+                onFocusInternal();
+                onFocus?.(event);
+            }}
+            inputRef={ref}
+            tabIndex={isActive ? 0 : -1}
+        />
+    );
 };
-

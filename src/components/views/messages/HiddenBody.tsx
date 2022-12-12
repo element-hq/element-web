@@ -47,7 +47,7 @@ const HiddenBody = React.forwardRef<any, IProps | IBodyProps>(({ mxEvent }, ref)
 
     return (
         <span className="mx_HiddenBody" ref={ref}>
-            { text }
+            {text}
         </span>
     );
 });

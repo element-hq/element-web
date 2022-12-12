@@ -54,7 +54,7 @@ export const sortRooms = (rooms: Room[]): Room[] => {
 
     // TODO: Don't assume we're using the same client as the peg
     // See https://github.com/vector-im/element-web/issues/14458
-    let myUserId = '';
+    let myUserId = "";
     if (MatrixClientPeg.get()) {
         myUserId = MatrixClientPeg.get().getUserId();
     }
@@ -95,10 +95,7 @@ const getLastTs = (r: Room, userId: string) => {
             const ev = r.timeline[i];
             if (!ev.getTs()) continue; // skip events that don't have timestamps (tests only?)
 
-            if (
-                (ev.getSender() === userId && shouldCauseReorder(ev)) ||
-                Unread.eventTriggersUnreadCount(ev)
-            ) {
+            if ((ev.getSender() === userId && shouldCauseReorder(ev)) || Unread.eventTriggersUnreadCount(ev)) {
                 return ev.getTs();
             }
         }
@@ -109,7 +106,7 @@ const getLastTs = (r: Room, userId: string) => {
         return r.timeline[0]?.getTs() ?? Number.MAX_SAFE_INTEGER;
     })();
 
-    const threadLastEventTimestamps = r.getThreads().map(thread => {
+    const threadLastEventTimestamps = r.getThreads().map((thread) => {
         const event = thread.replyToEvent ?? thread.rootEvent;
         return event?.getTs() ?? 0;
     });

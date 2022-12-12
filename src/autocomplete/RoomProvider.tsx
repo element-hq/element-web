@@ -20,14 +20,14 @@ import React from "react";
 import { sortBy, uniqBy } from "lodash";
 import { Room } from "matrix-js-sdk/src/models/room";
 
-import { _t } from '../languageHandler';
-import AutocompleteProvider from './AutocompleteProvider';
-import { MatrixClientPeg } from '../MatrixClientPeg';
-import QueryMatcher from './QueryMatcher';
-import { PillCompletion } from './Components';
+import { _t } from "../languageHandler";
+import AutocompleteProvider from "./AutocompleteProvider";
+import { MatrixClientPeg } from "../MatrixClientPeg";
+import QueryMatcher from "./QueryMatcher";
+import { PillCompletion } from "./Components";
 import { makeRoomPermalink } from "../utils/permalinks/Permalinks";
 import { ICompletion, ISelectionRange } from "./Autocompleter";
-import RoomAvatar from '../components/views/avatars/RoomAvatar';
+import RoomAvatar from "../components/views/avatars/RoomAvatar";
 import { TimelineRenderingType } from "../contexts/RoomContext";
 
 const ROOM_REGEX = /\B#\S*/g;
@@ -51,7 +51,7 @@ export default class RoomProvider extends AutocompleteProvider {
     constructor(room: Room, renderingType?: TimelineRenderingType) {
         super({ commandRegex: ROOM_REGEX, renderingType });
         this.matcher = new QueryMatcher([], {
-            keys: ['displayedAlias', 'matchName'],
+            keys: ["displayedAlias", "matchName"],
         });
     }
 
@@ -59,15 +59,10 @@ export default class RoomProvider extends AutocompleteProvider {
         const cli = MatrixClientPeg.get();
 
         // filter out spaces here as they get their own autocomplete provider
-        return cli.getVisibleRooms().filter(r => !r.isSpaceRoom());
+        return cli.getVisibleRooms().filter((r) => !r.isSpaceRoom());
     }
 
-    async getCompletions(
-        query: string,
-        selection: ISelectionRange,
-        force = false,
-        limit = -1,
-    ): Promise<ICompletion[]> {
+    async getCompletions(query: string, selection: ISelectionRange, force = false, limit = -1): Promise<ICompletion[]> {
         let completions = [];
         const { command, range } = this.getCurrentCommand(query, selection, force);
         if (command) {
@@ -77,7 +72,7 @@ export default class RoomProvider extends AutocompleteProvider {
                     aliases = aliases.concat(matcherObject(room, room.getCanonicalAlias(), room.name));
                 }
                 if (room.getAltAliases().length) {
-                    const altAliases = room.getAltAliases().map(alias => matcherObject(room, alias));
+                    const altAliases = room.getAltAliases().map((alias) => matcherObject(room, alias));
                     aliases = aliases.concat(altAliases);
                 }
                 return aliases;
@@ -85,9 +80,9 @@ export default class RoomProvider extends AutocompleteProvider {
             // Filter out any matches where the user will have also autocompleted new rooms
             matcherObjects = matcherObjects.filter((r) => {
                 const tombstone = r.room.currentState.getStateEvents("m.room.tombstone", "");
-                if (tombstone && tombstone.getContent() && tombstone.getContent()['replacement_room']) {
+                if (tombstone && tombstone.getContent() && tombstone.getContent()["replacement_room"]) {
                     const hasReplacementRoom = matcherObjects.some(
-                        (r2) => r2.room.roomId === tombstone.getContent()['replacement_room'],
+                        (r2) => r2.room.roomId === tombstone.getContent()["replacement_room"],
                     );
                     return !hasReplacementRoom;
                 }
@@ -102,27 +97,29 @@ export default class RoomProvider extends AutocompleteProvider {
                 (c) => c.displayedAlias.length,
             ]);
             completions = uniqBy(completions, (match) => match.room);
-            completions = completions.map((room) => {
-                return {
-                    completion: room.displayedAlias,
-                    completionId: room.room.roomId,
-                    type: "room",
-                    suffix: ' ',
-                    href: makeRoomPermalink(room.displayedAlias),
-                    component: (
-                        <PillCompletion title={room.room.name} description={room.displayedAlias}>
-                            <RoomAvatar width={24} height={24} room={room.room} />
-                        </PillCompletion>
-                    ),
-                    range,
-                };
-            }).filter((completion) => !!completion.completion && completion.completion.length > 0);
+            completions = completions
+                .map((room) => {
+                    return {
+                        completion: room.displayedAlias,
+                        completionId: room.room.roomId,
+                        type: "room",
+                        suffix: " ",
+                        href: makeRoomPermalink(room.displayedAlias),
+                        component: (
+                            <PillCompletion title={room.room.name} description={room.displayedAlias}>
+                                <RoomAvatar width={24} height={24} room={room.room} />
+                            </PillCompletion>
+                        ),
+                        range,
+                    };
+                })
+                .filter((completion) => !!completion.completion && completion.completion.length > 0);
         }
         return completions;
     }
 
     getName() {
-        return _t('Rooms');
+        return _t("Rooms");
     }
 
     renderCompletions(completions: React.ReactNode[]): React.ReactNode {
@@ -132,7 +129,7 @@ export default class RoomProvider extends AutocompleteProvider {
                 role="presentation"
                 aria-label={_t("Room Autocomplete")}
             >
-                { completions }
+                {completions}
             </div>
         );
     }

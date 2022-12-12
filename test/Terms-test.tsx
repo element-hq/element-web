@@ -14,15 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {
-    MatrixEvent,
-    EventType,
-    SERVICE_TYPES,
-} from 'matrix-js-sdk/src/matrix';
+import { MatrixEvent, EventType, SERVICE_TYPES } from "matrix-js-sdk/src/matrix";
 
-import { startTermsFlow, Service } from '../src/Terms';
-import { getMockClientWithEventEmitter } from './test-utils';
-import { MatrixClientPeg } from '../src/MatrixClientPeg';
+import { startTermsFlow, Service } from "../src/Terms";
+import { getMockClientWithEventEmitter } from "./test-utils";
+import { MatrixClientPeg } from "../src/MatrixClientPeg";
 
 const POLICY_ONE = {
     version: "six",
@@ -40,10 +36,10 @@ const POLICY_TWO = {
     },
 };
 
-const IM_SERVICE_ONE = new Service(SERVICE_TYPES.IM, 'https://imone.test', 'a token token');
-const IM_SERVICE_TWO = new Service(SERVICE_TYPES.IM, 'https://imtwo.test', 'a token token');
+const IM_SERVICE_ONE = new Service(SERVICE_TYPES.IM, "https://imone.test", "a token token");
+const IM_SERVICE_TWO = new Service(SERVICE_TYPES.IM, "https://imtwo.test", "a token token");
 
-describe('Terms', function() {
+describe("Terms", function () {
     const mockClient = getMockClientWithEventEmitter({
         getAccountData: jest.fn(),
         getTerms: jest.fn(),
@@ -51,7 +47,7 @@ describe('Terms', function() {
         setAccountData: jest.fn(),
     });
 
-    beforeEach(function() {
+    beforeEach(function () {
         jest.clearAllMocks();
         mockClient.getAccountData.mockReturnValue(null);
         mockClient.getTerms.mockResolvedValue(null);
@@ -59,30 +55,33 @@ describe('Terms', function() {
     });
 
     afterAll(() => {
-        jest.spyOn(MatrixClientPeg, 'get').mockRestore();
+        jest.spyOn(MatrixClientPeg, "get").mockRestore();
     });
 
-    it('should prompt for all terms & services if no account data', async function() {
+    it("should prompt for all terms & services if no account data", async function () {
         mockClient.getAccountData.mockReturnValue(null);
         mockClient.getTerms.mockResolvedValue({
             policies: {
-                "policy_the_first": POLICY_ONE,
+                policy_the_first: POLICY_ONE,
             },
         });
         const interactionCallback = jest.fn().mockResolvedValue([]);
         await startTermsFlow([IM_SERVICE_ONE], interactionCallback);
 
-        expect(interactionCallback).toBeCalledWith([
-            {
-                service: IM_SERVICE_ONE,
-                policies: {
-                    policy_the_first: POLICY_ONE,
+        expect(interactionCallback).toBeCalledWith(
+            [
+                {
+                    service: IM_SERVICE_ONE,
+                    policies: {
+                        policy_the_first: POLICY_ONE,
+                    },
                 },
-            },
-        ], []);
+            ],
+            [],
+        );
     });
 
-    it('should not prompt if all policies are signed in account data', async function() {
+    it("should not prompt if all policies are signed in account data", async function () {
         const directEvent = new MatrixEvent({
             type: EventType.Direct,
             content: {
@@ -92,7 +91,7 @@ describe('Terms', function() {
         mockClient.getAccountData.mockReturnValue(directEvent);
         mockClient.getTerms.mockResolvedValue({
             policies: {
-                "policy_the_first": POLICY_ONE,
+                policy_the_first: POLICY_ONE,
             },
         });
         mockClient.agreeToTerms;
@@ -101,15 +100,12 @@ describe('Terms', function() {
         await startTermsFlow([IM_SERVICE_ONE], interactionCallback);
 
         expect(interactionCallback).not.toHaveBeenCalled();
-        expect(mockClient.agreeToTerms).toBeCalledWith(
-            SERVICE_TYPES.IM,
-            'https://imone.test',
-            'a token token',
-            ["http://example.com/one"],
-        );
+        expect(mockClient.agreeToTerms).toBeCalledWith(SERVICE_TYPES.IM, "https://imone.test", "a token token", [
+            "http://example.com/one",
+        ]);
     });
 
-    it("should prompt for only terms that aren't already signed", async function() {
+    it("should prompt for only terms that aren't already signed", async function () {
         const directEvent = new MatrixEvent({
             type: EventType.Direct,
             content: {
@@ -120,31 +116,32 @@ describe('Terms', function() {
 
         mockClient.getTerms.mockResolvedValue({
             policies: {
-                "policy_the_first": POLICY_ONE,
-                "policy_the_second": POLICY_TWO,
+                policy_the_first: POLICY_ONE,
+                policy_the_second: POLICY_TWO,
             },
         });
 
         const interactionCallback = jest.fn().mockResolvedValue(["http://example.com/one", "http://example.com/two"]);
         await startTermsFlow([IM_SERVICE_ONE], interactionCallback);
 
-        expect(interactionCallback).toBeCalledWith([
-            {
-                service: IM_SERVICE_ONE,
-                policies: {
-                    policy_the_second: POLICY_TWO,
+        expect(interactionCallback).toBeCalledWith(
+            [
+                {
+                    service: IM_SERVICE_ONE,
+                    policies: {
+                        policy_the_second: POLICY_TWO,
+                    },
                 },
-            },
-        ], ["http://example.com/one"]);
-        expect(mockClient.agreeToTerms).toBeCalledWith(
-            SERVICE_TYPES.IM,
-            'https://imone.test',
-            'a token token',
-            ["http://example.com/one", "http://example.com/two"],
+            ],
+            ["http://example.com/one"],
         );
+        expect(mockClient.agreeToTerms).toBeCalledWith(SERVICE_TYPES.IM, "https://imone.test", "a token token", [
+            "http://example.com/one",
+            "http://example.com/two",
+        ]);
     });
 
-    it("should prompt for only services with un-agreed policies", async function() {
+    it("should prompt for only services with un-agreed policies", async function () {
         const directEvent = new MatrixEvent({
             type: EventType.Direct,
             content: {
@@ -155,16 +152,16 @@ describe('Terms', function() {
 
         mockClient.getTerms.mockImplementation(async (_serviceTypes: SERVICE_TYPES, baseUrl: string) => {
             switch (baseUrl) {
-                case 'https://imone.test':
+                case "https://imone.test":
                     return {
                         policies: {
-                            "policy_the_first": POLICY_ONE,
+                            policy_the_first: POLICY_ONE,
                         },
                     };
-                case 'https://imtwo.test':
+                case "https://imtwo.test":
                     return {
                         policies: {
-                            "policy_the_second": POLICY_TWO,
+                            policy_the_second: POLICY_TWO,
                         },
                     };
             }
@@ -173,26 +170,22 @@ describe('Terms', function() {
         const interactionCallback = jest.fn().mockResolvedValue(["http://example.com/one", "http://example.com/two"]);
         await startTermsFlow([IM_SERVICE_ONE, IM_SERVICE_TWO], interactionCallback);
 
-        expect(interactionCallback).toBeCalledWith([
-            {
-                service: IM_SERVICE_TWO,
-                policies: {
-                    policy_the_second: POLICY_TWO,
+        expect(interactionCallback).toBeCalledWith(
+            [
+                {
+                    service: IM_SERVICE_TWO,
+                    policies: {
+                        policy_the_second: POLICY_TWO,
+                    },
                 },
-            },
-        ], ["http://example.com/one"]);
-        expect(mockClient.agreeToTerms).toBeCalledWith(
-            SERVICE_TYPES.IM,
-            'https://imone.test',
-            'a token token',
+            ],
             ["http://example.com/one"],
         );
-        expect(mockClient.agreeToTerms).toBeCalledWith(
-            SERVICE_TYPES.IM,
-            'https://imtwo.test',
-            'a token token',
-            ["http://example.com/two"],
-        );
+        expect(mockClient.agreeToTerms).toBeCalledWith(SERVICE_TYPES.IM, "https://imone.test", "a token token", [
+            "http://example.com/one",
+        ]);
+        expect(mockClient.agreeToTerms).toBeCalledWith(SERVICE_TYPES.IM, "https://imtwo.test", "a token token", [
+            "http://example.com/two",
+        ]);
     });
 });
-

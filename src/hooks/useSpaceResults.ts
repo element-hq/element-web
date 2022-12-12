@@ -55,13 +55,12 @@ export const useSpaceResults = (space?: Room, query?: string): [IHierarchyRoom[]
         const normalizedQuery = normalize(trimmedQuery);
 
         const cli = MatrixClientPeg.get();
-        return rooms?.filter(r => {
-            return r.room_type !== RoomType.Space &&
+        return rooms?.filter((r) => {
+            return (
+                r.room_type !== RoomType.Space &&
                 cli.getRoom(r.room_id)?.getMyMembership() !== "join" &&
-                (
-                    normalize(r.name || "").includes(normalizedQuery) ||
-                    (r.canonical_alias || "").includes(lcQuery)
-                );
+                (normalize(r.name || "").includes(normalizedQuery) || (r.canonical_alias || "").includes(lcQuery))
+            );
         });
     }, [rooms, query]);
 

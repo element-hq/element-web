@@ -39,8 +39,10 @@ export default class MatrixSchemePermalinkConstructor extends PermalinkConstruct
     }
 
     forEvent(roomId: string, eventId: string, serverCandidates: string[]): string {
-        return `matrix:${this.encodeEntity(roomId)}` +
-            `/${this.encodeEntity(eventId)}${this.encodeServerCandidates(serverCandidates)}`;
+        return (
+            `matrix:${this.encodeEntity(roomId)}` +
+            `/${this.encodeEntity(eventId)}${this.encodeServerCandidates(serverCandidates)}`
+        );
     }
 
     forRoom(roomIdOrAlias: string, serverCandidates: string[]): string {
@@ -61,8 +63,8 @@ export default class MatrixSchemePermalinkConstructor extends PermalinkConstruct
     }
 
     encodeServerCandidates(candidates: string[]) {
-        if (!candidates || candidates.length === 0) return '';
-        return `?via=${candidates.map(c => encodeURIComponent(c)).join("&via=")}`;
+        if (!candidates || candidates.length === 0) return "";
+        return `?via=${candidates.map((c) => encodeURIComponent(c)).join("&via=")}`;
     }
 
     parsePermalink(fullUrl: string): PermalinkParts {
@@ -70,26 +72,28 @@ export default class MatrixSchemePermalinkConstructor extends PermalinkConstruct
             throw new Error("Does not appear to be a permalink");
         }
 
-        const parts = fullUrl.substring("matrix:".length).split('/');
+        const parts = fullUrl.substring("matrix:".length).split("/");
 
         const identifier = parts[0];
         const entityNoSigil = parts[1];
-        if (identifier === 'u') {
+        if (identifier === "u") {
             // Probably a user, no further parsing needed.
             return PermalinkParts.forUser(`@${entityNoSigil}`);
-        } else if (identifier === 'r' || identifier === 'roomid') {
-            const sigil = identifier === 'r' ? '#' : '!';
+        } else if (identifier === "r" || identifier === "roomid") {
+            const sigil = identifier === "r" ? "#" : "!";
 
-            if (parts.length === 2) { // room without event permalink
+            if (parts.length === 2) {
+                // room without event permalink
                 const [roomId, query = ""] = entityNoSigil.split("?");
-                const via = query.split(/&?via=/g).filter(p => !!p);
+                const via = query.split(/&?via=/g).filter((p) => !!p);
                 return PermalinkParts.forRoom(`${sigil}${roomId}`, via);
             }
 
-            if (parts[2] === 'e') { // event permalink
-                const eventIdAndQuery = parts.length > 3 ? parts.slice(3).join('/') : "";
+            if (parts[2] === "e") {
+                // event permalink
+                const eventIdAndQuery = parts.length > 3 ? parts.slice(3).join("/") : "";
                 const [eventId, query = ""] = eventIdAndQuery.split("?");
-                const via = query.split(/&?via=/g).filter(p => !!p);
+                const via = query.split(/&?via=/g).filter((p) => !!p);
                 return PermalinkParts.forEvent(`${sigil}${entityNoSigil}`, `$${eventId}`, via);
             }
 

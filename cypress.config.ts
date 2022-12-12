@@ -14,21 +14,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { defineConfig } from 'cypress';
+import { defineConfig } from "cypress";
 
 export default defineConfig({
     videoUploadOnPasses: false,
-    projectId: 'ppvnzg',
+    projectId: "ppvnzg",
     experimentalInteractiveRunEvents: true,
     defaultCommandTimeout: 10000,
     chromeWebSecurity: false,
     e2e: {
         setupNodeEvents(on, config) {
-            return require('./cypress/plugins/index.ts').default(on, config);
+            return require("./cypress/plugins/index.ts").default(on, config);
         },
-        baseUrl: 'http://localhost:8080',
+        baseUrl: "http://localhost:8080",
         experimentalSessionAndOrigin: true,
-        specPattern: 'cypress/e2e/**/*.{js,jsx,ts,tsx}',
+        specPattern: "cypress/e2e/**/*.{js,jsx,ts,tsx}",
     },
     env: {
         // Docker tag to use for `ghcr.io/matrix-org/sliding-sync-proxy` image.

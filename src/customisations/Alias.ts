@@ -14,7 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-function getDisplayAliasForAliasSet(canonicalAlias: string, altAliases: string[]): string {    // E.g. prefer one of the aliases over another
+function getDisplayAliasForAliasSet(canonicalAlias: string, altAliases: string[]): string {
+    // E.g. prefer one of the aliases over another
     return null;
 }
 

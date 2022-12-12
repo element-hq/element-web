@@ -14,18 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { mocked } from 'jest-mock';
+import { mocked } from "jest-mock";
 // @ts-ignore
-import Recorder from 'opus-recorder/dist/recorder.min.js';
+import Recorder from "opus-recorder/dist/recorder.min.js";
 
 import { VoiceRecording, voiceRecorderOptions, highQualityRecorderOptions } from "../../src/audio/VoiceRecording";
-import { createAudioContext } from '../..//src/audio/compat';
+import { createAudioContext } from "../..//src/audio/compat";
 import MediaDeviceHandler from "../../src/MediaDeviceHandler";
 
-jest.mock('opus-recorder/dist/recorder.min.js');
+jest.mock("opus-recorder/dist/recorder.min.js");
 const RecorderMock = mocked(Recorder);
 
-jest.mock('../../src/audio/compat', () => ({
+jest.mock("../../src/audio/compat", () => ({
     createAudioContext: jest.fn(),
 }));
 const createAudioContextMock = mocked(createAudioContext);
@@ -97,26 +97,34 @@ describe("VoiceRecording", () => {
             MediaDeviceHandlerMock.getAudioNoiseSuppression.mockReturnValue(false);
             await recording.start();
 
-            expect(navigator.mediaDevices.getUserMedia).toHaveBeenCalledWith(expect.objectContaining({
-                audio: expect.objectContaining({ noiseSuppression: { ideal: false } }),
-            }));
-            expect(RecorderMock).toHaveBeenCalledWith(expect.objectContaining({
-                encoderBitRate: highQualityRecorderOptions.bitrate,
-                encoderApplication: highQualityRecorderOptions.encoderApplication,
-            }));
+            expect(navigator.mediaDevices.getUserMedia).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    audio: expect.objectContaining({ noiseSuppression: { ideal: false } }),
+                }),
+            );
+            expect(RecorderMock).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    encoderBitRate: highQualityRecorderOptions.bitrate,
+                    encoderApplication: highQualityRecorderOptions.encoderApplication,
+                }),
+            );
         });
 
         it("should record normal-quality voice if voice processing is enabled", async () => {
             MediaDeviceHandlerMock.getAudioNoiseSuppression.mockReturnValue(true);
             await recording.start();
 
-            expect(navigator.mediaDevices.getUserMedia).toHaveBeenCalledWith(expect.objectContaining({
-                audio: expect.objectContaining({ noiseSuppression: { ideal: true } }),
-            }));
-            expect(RecorderMock).toHaveBeenCalledWith(expect.objectContaining({
-                encoderBitRate: voiceRecorderOptions.bitrate,
-                encoderApplication: voiceRecorderOptions.encoderApplication,
-            }));
+            expect(navigator.mediaDevices.getUserMedia).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    audio: expect.objectContaining({ noiseSuppression: { ideal: true } }),
+                }),
+            );
+            expect(RecorderMock).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    encoderBitRate: voiceRecorderOptions.bitrate,
+                    encoderApplication: voiceRecorderOptions.encoderApplication,
+                }),
+            );
         });
     });
 

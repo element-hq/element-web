@@ -22,7 +22,7 @@ limitations under the License.
  */
 function getDisplayUserIdentifier(
     userId: string,
-    { roomId, withDisplayName }: { roomId?: string, withDisplayName?: boolean },
+    { roomId, withDisplayName }: { roomId?: string; withDisplayName?: boolean },
 ): string | null {
     return userId;
 }

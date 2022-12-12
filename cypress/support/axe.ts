@@ -24,10 +24,10 @@ import Chainable = Cypress.Chainable;
 
 function terminalLog(violations: axe.Result[]): void {
     cy.task(
-        'log',
-        `${violations.length} accessibility violation${
-            violations.length === 1 ? '' : 's'
-        } ${violations.length === 1 ? 'was' : 'were'} detected`,
+        "log",
+        `${violations.length} accessibility violation${violations.length === 1 ? "" : "s"} ${
+            violations.length === 1 ? "was" : "were"
+        } detected`,
     );
 
     // pluck specific keys to keep the table readable
@@ -38,24 +38,32 @@ function terminalLog(violations: axe.Result[]): void {
         nodes: nodes.length,
     }));
 
-    cy.task('table', violationData);
+    cy.task("table", violationData);
 }
 
-Cypress.Commands.overwrite("checkA11y", (
-    originalFn: Chainable["checkA11y"],
-    context?: string | Node | axe.ContextObject | undefined,
-    options: Options = {},
-    violationCallback?: ((violations: axe.Result[]) => void) | undefined,
-    skipFailures?: boolean,
-): void => {
-    return originalFn(context, {
-        ...options,
-        rules: {
-            // Disable contrast checking for now as we have too many issues with it
-            'color-contrast': {
-                enabled: false,
+Cypress.Commands.overwrite(
+    "checkA11y",
+    (
+        originalFn: Chainable["checkA11y"],
+        context?: string | Node | axe.ContextObject | undefined,
+        options: Options = {},
+        violationCallback?: ((violations: axe.Result[]) => void) | undefined,
+        skipFailures?: boolean,
+    ): void => {
+        return originalFn(
+            context,
+            {
+                ...options,
+                rules: {
+                    // Disable contrast checking for now as we have too many issues with it
+                    "color-contrast": {
+                        enabled: false,
+                    },
+                    ...options.rules,
+                },
             },
-            ...options.rules,
-        },
-    }, violationCallback ?? terminalLog, skipFailures);
-});
+            violationCallback ?? terminalLog,
+            skipFailures,
+        );
+    },
+);

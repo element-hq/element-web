@@ -53,17 +53,17 @@ describe("SpaceHierarchy", () => {
         it("shows room", () => {
             showRoom(client, hierarchy, "room-id2");
             expect(dispatcher.dispatch).toHaveBeenCalledWith({
-                "action": Action.ViewRoom,
-                "should_peek": true,
-                "room_alias": "canonical-alias",
-                "room_id": "room-id2",
-                "via_servers": [],
-                "oob_data": {
+                action: Action.ViewRoom,
+                should_peek: true,
+                room_alias: "canonical-alias",
+                room_id: "room-id2",
+                via_servers: [],
+                oob_data: {
                     avatarUrl: undefined,
                     name: "canonical-alias",
                 },
-                "roomType": undefined,
-                "metricsTrigger": "RoomDirectory",
+                roomType: undefined,
+                metricsTrigger: "RoomDirectory",
             });
         });
     });

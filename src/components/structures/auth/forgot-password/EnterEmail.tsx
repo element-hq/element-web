@@ -17,7 +17,7 @@ limitations under the License.
 import React, { ReactNode, useRef } from "react";
 
 import { Icon as EmailIcon } from "../../../../../res/img/element-icons/Email-icon.svg";
-import { _t, _td } from '../../../../languageHandler';
+import { _t, _td } from "../../../../languageHandler";
 import EmailField from "../../../views/auth/EmailField";
 import { ErrorMessage } from "../../ErrorMessage";
 import Spinner from "../../../views/elements/Spinner";
@@ -46,9 +46,7 @@ export const EnterEmail: React.FC<EnterEmailProps> = ({
     onLoginClick,
     onSubmitForm,
 }) => {
-    const submitButtonChild = loading
-        ? <Spinner w={16} h={16} />
-        : _t("Send email");
+    const submitButtonChild = loading ? <Spinner w={16} h={16} /> : _t("Send email");
 
     const emailFieldRef = useRef<Field>(null);
 
@@ -62,49 +60,47 @@ export const EnterEmail: React.FC<EnterEmailProps> = ({
         emailFieldRef.current?.validate({ allowEmpty: false, focused: true });
     };
 
-    return <>
-        <EmailIcon className="mx_AuthBody_icon" />
-        <h1>{ _t("Enter your email to reset password") }</h1>
-        <p className="mx_AuthBody_text">
-            {
-                _t(
+    return (
+        <>
+            <EmailIcon className="mx_AuthBody_icon" />
+            <h1>{_t("Enter your email to reset password")}</h1>
+            <p className="mx_AuthBody_text">
+                {_t(
                     "<b>%(homeserver)s</b> will send you a verification link to let you reset your password.",
                     { homeserver },
-                    { b: t => <b>{ t }</b> },
-                )
-            }
-        </p>
-        <form onSubmit={onSubmit}>
-            <fieldset disabled={loading}>
-                <div className="mx_AuthBody_fieldRow">
-                    <EmailField
-                        name="reset_email" // define a name so browser's password autofill gets less confused
-                        label="Email address"
-                        labelRequired={_td("The email address linked to your account must be entered.")}
-                        labelInvalid={_td("The email address doesn't appear to be valid.")}
-                        value={email}
-                        autoFocus={true}
-                        onChange={(event: React.FormEvent<HTMLInputElement>) => onInputChanged("email", event)}
-                        fieldRef={emailFieldRef}
-                    />
-                </div>
-                { errorText && <ErrorMessage message={errorText} /> }
-                <button
-                    type="submit"
-                    className="mx_Login_submit"
-                >
-                    { submitButtonChild }
-                </button>
-                <div className="mx_AuthBody_button-container">
-                    <AccessibleButton
-                        className="mx_AuthBody_sign-in-instead-button"
-                        element="button"
-                        kind="link"
-                        onClick={onLoginClick}>
-                        { _t("Sign in instead") }
-                    </AccessibleButton>
-                </div>
-            </fieldset>
-        </form>
-    </>;
+                    { b: (t) => <b>{t}</b> },
+                )}
+            </p>
+            <form onSubmit={onSubmit}>
+                <fieldset disabled={loading}>
+                    <div className="mx_AuthBody_fieldRow">
+                        <EmailField
+                            name="reset_email" // define a name so browser's password autofill gets less confused
+                            label="Email address"
+                            labelRequired={_td("The email address linked to your account must be entered.")}
+                            labelInvalid={_td("The email address doesn't appear to be valid.")}
+                            value={email}
+                            autoFocus={true}
+                            onChange={(event: React.FormEvent<HTMLInputElement>) => onInputChanged("email", event)}
+                            fieldRef={emailFieldRef}
+                        />
+                    </div>
+                    {errorText && <ErrorMessage message={errorText} />}
+                    <button type="submit" className="mx_Login_submit">
+                        {submitButtonChild}
+                    </button>
+                    <div className="mx_AuthBody_button-container">
+                        <AccessibleButton
+                            className="mx_AuthBody_sign-in-instead-button"
+                            element="button"
+                            kind="link"
+                            onClick={onLoginClick}
+                        >
+                            {_t("Sign in instead")}
+                        </AccessibleButton>
+                    </div>
+                </fieldset>
+            </form>
+        </>
+    );
 };

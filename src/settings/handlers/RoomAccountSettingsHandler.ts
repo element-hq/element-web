@@ -48,8 +48,8 @@ export default class RoomAccountSettingsHandler extends MatrixClientBackedSettin
         const roomId = room.roomId;
 
         if (event.getType() === "org.matrix.room.preview_urls") {
-            let val = event.getContent()['disable'];
-            if (typeof (val) !== "boolean") {
+            let val = event.getContent()["disable"];
+            if (typeof val !== "boolean") {
                 val = null;
             } else {
                 val = !val;
@@ -75,8 +75,8 @@ export default class RoomAccountSettingsHandler extends MatrixClientBackedSettin
             const content = this.getSettings(roomId, "org.matrix.room.preview_urls") || {};
 
             // Check to make sure that we actually got a boolean
-            if (typeof (content['disable']) !== "boolean") return null;
-            return !content['disable'];
+            if (typeof content["disable"] !== "boolean") return null;
+            return !content["disable"];
         }
 
         // Special case allowed widgets
@@ -142,7 +142,8 @@ export default class RoomAccountSettingsHandler extends MatrixClientBackedSettin
         return this.client && !this.client.isGuest();
     }
 
-    private getSettings(roomId: string, eventType = DEFAULT_SETTINGS_EVENT_TYPE): any { // TODO: [TS] Type return
+    private getSettings(roomId: string, eventType = DEFAULT_SETTINGS_EVENT_TYPE): any {
+        // TODO: [TS] Type return
         const event = this.client.getRoom(roomId)?.getAccountData(eventType);
         if (!event || !event.getContent()) return null;
         return objectClone(event.getContent()); // clone to prevent mutation

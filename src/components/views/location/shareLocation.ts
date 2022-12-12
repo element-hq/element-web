@@ -30,9 +30,9 @@ import { OwnBeaconStore } from "../../../stores/OwnBeaconStore";
 import { doMaybeLocalRoomAction } from "../../../utils/local-room";
 
 export enum LocationShareType {
-    Own = 'Own',
-    Pin = 'Pin',
-    Live = 'Live'
+    Own = "Own",
+    Pin = "Pin",
+    Live = "Live",
 }
 
 export type LocationShareProps = {
@@ -46,13 +46,16 @@ const DEFAULT_LIVE_DURATION = 300000;
 
 export type ShareLocationFn = (props: LocationShareProps) => Promise<void>;
 
-const getPermissionsErrorParams = (shareType: LocationShareType): {
+const getPermissionsErrorParams = (
+    shareType: LocationShareType,
+): {
     errorMessage: string;
     modalParams: IQuestionDialogProps;
 } => {
-    const errorMessage = shareType === LocationShareType.Live
-        ? "Insufficient permissions to start sharing your live location"
-        : "Insufficient permissions to send your location";
+    const errorMessage =
+        shareType === LocationShareType.Live
+            ? "Insufficient permissions to start sharing your live location"
+            : "Insufficient permissions to send your location";
 
     const modalParams = {
         title: _t("You don't have permission to share locations"),
@@ -64,20 +67,24 @@ const getPermissionsErrorParams = (shareType: LocationShareType): {
     return { modalParams, errorMessage };
 };
 
-const getDefaultErrorParams = (shareType: LocationShareType, openMenu: () => void): {
+const getDefaultErrorParams = (
+    shareType: LocationShareType,
+    openMenu: () => void,
+): {
     errorMessage: string;
     modalParams: IQuestionDialogProps;
 } => {
-    const errorMessage = shareType === LocationShareType.Live
-        ? "We couldn't start sharing your live location"
-        : "We couldn't send your location";
+    const errorMessage =
+        shareType === LocationShareType.Live
+            ? "We couldn't start sharing your live location"
+            : "We couldn't send your location";
     const modalParams = {
         title: _t("We couldn't send your location"),
         description: _t("%(brand)s could not send your location. Please try again later.", {
             brand: SdkConfig.get().brand,
         }),
-        button: _t('Try again'),
-        cancelButton: _t('Cancel'),
+        button: _t("Try again"),
+        cancelButton: _t("Cancel"),
         onFinished: (tryAgain: boolean) => {
             if (tryAgain) {
                 openMenu();
@@ -88,52 +95,55 @@ const getDefaultErrorParams = (shareType: LocationShareType, openMenu: () => voi
 };
 
 const handleShareError = (error: Error, openMenu: () => void, shareType: LocationShareType): void => {
-    const { modalParams, errorMessage } = (error as MatrixError).errcode === 'M_FORBIDDEN' ?
-        getPermissionsErrorParams(shareType) :
-        getDefaultErrorParams(shareType, openMenu);
+    const { modalParams, errorMessage } =
+        (error as MatrixError).errcode === "M_FORBIDDEN"
+            ? getPermissionsErrorParams(shareType)
+            : getDefaultErrorParams(shareType, openMenu);
 
     logger.error(errorMessage, error);
 
     Modal.createDialog(QuestionDialog, modalParams);
 };
 
-export const shareLiveLocation = (
-    client: MatrixClient, roomId: string, displayName: string, openMenu: () => void,
-): ShareLocationFn => async ({ timeout }) => {
-    const description = _t(`%(displayName)s's live location`, { displayName });
-    try {
-        await OwnBeaconStore.instance.createLiveBeacon(
-            roomId,
-            makeBeaconInfoContent(
-                timeout ?? DEFAULT_LIVE_DURATION,
-                true, /* isLive */
-                description,
-                LocationAssetType.Self,
-            ),
-        );
-    } catch (error) {
-        handleShareError(error, openMenu, LocationShareType.Live);
-    }
-};
+export const shareLiveLocation =
+    (client: MatrixClient, roomId: string, displayName: string, openMenu: () => void): ShareLocationFn =>
+    async ({ timeout }) => {
+        const description = _t(`%(displayName)s's live location`, { displayName });
+        try {
+            await OwnBeaconStore.instance.createLiveBeacon(
+                roomId,
+                makeBeaconInfoContent(
+                    timeout ?? DEFAULT_LIVE_DURATION,
+                    true /* isLive */,
+                    description,
+                    LocationAssetType.Self,
+                ),
+            );
+        } catch (error) {
+            handleShareError(error, openMenu, LocationShareType.Live);
+        }
+    };
 
-export const shareLocation = (
-    client: MatrixClient,
-    roomId: string,
-    shareType: LocationShareType,
-    relation: IEventRelation | undefined,
-    openMenu: () => void,
-): ShareLocationFn => async ({ uri, timestamp }) => {
-    if (!uri) return;
-    try {
-        const threadId = relation?.rel_type === THREAD_RELATION_TYPE.name ? relation.event_id : null;
-        const assetType = shareType === LocationShareType.Pin ? LocationAssetType.Pin : LocationAssetType.Self;
-        const content = makeLocationContent(undefined, uri, timestamp, undefined, assetType);
-        await doMaybeLocalRoomAction(
-            roomId,
-            (actualRoomId: string) => client.sendMessage(actualRoomId, threadId, content),
-            client,
-        );
-    } catch (error) {
-        handleShareError(error, openMenu, shareType);
-    }
-};
+export const shareLocation =
+    (
+        client: MatrixClient,
+        roomId: string,
+        shareType: LocationShareType,
+        relation: IEventRelation | undefined,
+        openMenu: () => void,
+    ): ShareLocationFn =>
+    async ({ uri, timestamp }) => {
+        if (!uri) return;
+        try {
+            const threadId = relation?.rel_type === THREAD_RELATION_TYPE.name ? relation.event_id : null;
+            const assetType = shareType === LocationShareType.Pin ? LocationAssetType.Pin : LocationAssetType.Self;
+            const content = makeLocationContent(undefined, uri, timestamp, undefined, assetType);
+            await doMaybeLocalRoomAction(
+                roomId,
+                (actualRoomId: string) => client.sendMessage(actualRoomId, threadId, content),
+                client,
+            );
+        } catch (error) {
+            handleShareError(error, openMenu, shareType);
+        }
+    };

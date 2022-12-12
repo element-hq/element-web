@@ -15,13 +15,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import EventEmitter from 'events';
+import EventEmitter from "events";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import SettingsStore from "./settings/SettingsStore";
 import { SettingLevel } from "./settings/SettingLevel";
 import { MatrixClientPeg } from "./MatrixClientPeg";
-import { _t } from './languageHandler';
+import { _t } from "./languageHandler";
 
 // XXX: MediaDeviceKind is a union type, so we make our own enum
 export enum MediaDeviceKindEnum {
@@ -48,7 +48,7 @@ export default class MediaDeviceHandler extends EventEmitter {
 
     public static async hasAnyLabeledDevices(): Promise<boolean> {
         const devices = await navigator.mediaDevices.enumerateDevices();
-        return devices.some(d => Boolean(d.label));
+        return devices.some((d) => Boolean(d.label));
     }
 
     /**
@@ -76,7 +76,7 @@ export default class MediaDeviceHandler extends EventEmitter {
             devices.forEach((device) => output[device.kind].push(device));
             return output;
         } catch (error) {
-            logger.warn('Unable to refresh WebRTC Devices: ', error);
+            logger.warn("Unable to refresh WebRTC Devices: ", error);
         }
     }
 
@@ -84,11 +84,11 @@ export default class MediaDeviceHandler extends EventEmitter {
         // Note we're looking for a device with deviceId 'default' but adding a device
         // with deviceId == the empty string: this is because Chrome gives us a device
         // with deviceId 'default', so we're looking for this, not the one we are adding.
-        if (!devices.some((i) => i.deviceId === 'default')) {
-            devices.unshift({ deviceId: '', label: _t('Default Device') });
-            return '';
+        if (!devices.some((i) => i.deviceId === "default")) {
+            devices.unshift({ deviceId: "", label: _t("Default Device") });
+            return "";
         } else {
-            return 'default';
+            return "default";
         }
     };
 
@@ -140,9 +140,15 @@ export default class MediaDeviceHandler extends EventEmitter {
 
     public async setDevice(deviceId: string, kind: MediaDeviceKindEnum): Promise<void> {
         switch (kind) {
-            case MediaDeviceKindEnum.AudioOutput: this.setAudioOutput(deviceId); break;
-            case MediaDeviceKindEnum.AudioInput: await this.setAudioInput(deviceId); break;
-            case MediaDeviceKindEnum.VideoInput: await this.setVideoInput(deviceId); break;
+            case MediaDeviceKindEnum.AudioOutput:
+                this.setAudioOutput(deviceId);
+                break;
+            case MediaDeviceKindEnum.AudioInput:
+                await this.setAudioInput(deviceId);
+                break;
+            case MediaDeviceKindEnum.VideoInput:
+                await this.setVideoInput(deviceId);
+                break;
         }
     }
 
@@ -192,9 +198,12 @@ export default class MediaDeviceHandler extends EventEmitter {
      */
     public static getDevice(kind: MediaDeviceKindEnum): string {
         switch (kind) {
-            case MediaDeviceKindEnum.AudioOutput: return this.getAudioOutput();
-            case MediaDeviceKindEnum.AudioInput: return this.getAudioInput();
-            case MediaDeviceKindEnum.VideoInput: return this.getVideoInput();
+            case MediaDeviceKindEnum.AudioOutput:
+                return this.getAudioOutput();
+            case MediaDeviceKindEnum.AudioInput:
+                return this.getAudioInput();
+            case MediaDeviceKindEnum.VideoInput:
+                return this.getVideoInput();
         }
     }
 

@@ -38,17 +38,19 @@ export interface Message {
 }
 
 Cypress.Commands.add("scrollToTop", (): void => {
-    cy.get(".mx_RoomView_timeline .mx_ScrollPanel").scrollTo("top", { duration: 100 }).then(ref => {
-        if (ref.scrollTop() > 0) {
-            return cy.scrollToTop();
-        }
-    });
+    cy.get(".mx_RoomView_timeline .mx_ScrollPanel")
+        .scrollTo("top", { duration: 100 })
+        .then((ref) => {
+            if (ref.scrollTop() > 0) {
+                return cy.scrollToTop();
+            }
+        });
 });
 
 Cypress.Commands.add("findEventTile", (sender: string, body: string): Chainable<JQuery> => {
     // We can't just use a bunch of `.contains` here due to continuations meaning that the events don't
     // have their own rendered sender displayname so we have to walk the list to keep track of the sender.
-    return cy.get(".mx_RoomView_MessageList .mx_EventTile").then(refs => {
+    return cy.get(".mx_RoomView_MessageList .mx_EventTile").then((refs) => {
         let latestSender: string;
         for (let i = 0; i < refs.length; i++) {
             const ref = refs.eq(i);
@@ -65,4 +67,4 @@ Cypress.Commands.add("findEventTile", (sender: string, body: string): Chainable<
 });
 
 // Needed to make this file a module
-export { };
+export {};

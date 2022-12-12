@@ -121,7 +121,7 @@ limitations under the License.
             }
 
             &::before {
-                content: '';
+                content: "";
                 position: absolute;
                 left: 10px; /* inset for regular button padding */
                 background-color: $muted-fg-color;
@@ -135,14 +135,14 @@ limitations under the License.
             }
 
             &.mx_RoomStatusBar_unsentCancelAllBtn::before {
-                mask-image: url('$(res)/img/element-icons/trashcan.svg');
+                mask-image: url("$(res)/img/element-icons/trashcan.svg");
             }
 
             &.mx_RoomStatusBar_unsentRetry {
                 padding-left: 34px; /* 28px from above, but +6px to account for the wider icon */
 
                 &::before {
-                    mask-image: url('$(res)/img/element-icons/retry.svg');
+                    mask-image: url("$(res)/img/element-icons/retry.svg");
                 }
             }
         }

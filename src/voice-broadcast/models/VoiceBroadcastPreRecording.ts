@@ -25,12 +25,13 @@ import { startNewVoiceBroadcastRecording } from "../utils/startNewVoiceBroadcast
 type VoiceBroadcastPreRecordingEvent = "dismiss";
 
 interface EventMap {
-    "dismiss": (voiceBroadcastPreRecording: VoiceBroadcastPreRecording) => void;
+    dismiss: (voiceBroadcastPreRecording: VoiceBroadcastPreRecording) => void;
 }
 
 export class VoiceBroadcastPreRecording
     extends TypedEventEmitter<VoiceBroadcastPreRecordingEvent, EventMap>
-    implements IDestroyable {
+    implements IDestroyable
+{
     public constructor(
         public room: Room,
         public sender: RoomMember,
@@ -42,12 +43,7 @@ export class VoiceBroadcastPreRecording
     }
 
     public start = async (): Promise<void> => {
-        await startNewVoiceBroadcastRecording(
-            this.room,
-            this.client,
-            this.playbacksStore,
-            this.recordingsStore,
-        );
+        await startNewVoiceBroadcastRecording(this.room, this.client, this.playbacksStore, this.recordingsStore);
         this.emit("dismiss", this);
     };
 

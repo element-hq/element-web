@@ -31,15 +31,13 @@ describe("ModuleRunner", () => {
             const module1 = registerMockModule();
             const module2 = registerMockModule();
 
-            const wrapEmit = (module: MockModule) => new Promise((resolve) => {
-                module.on(RoomViewLifecycle.PreviewRoomNotLoggedIn, (val1, val2) => {
-                    resolve([val1, val2]);
+            const wrapEmit = (module: MockModule) =>
+                new Promise((resolve) => {
+                    module.on(RoomViewLifecycle.PreviewRoomNotLoggedIn, (val1, val2) => {
+                        resolve([val1, val2]);
+                    });
                 });
-            });
-            const promises = Promise.all([
-                wrapEmit(module1),
-                wrapEmit(module2),
-            ]);
+            const promises = Promise.all([wrapEmit(module1), wrapEmit(module2)]);
 
             const roomId = "!room:example.org";
             const opts: RoomPreviewOpts = { canJoin: false };

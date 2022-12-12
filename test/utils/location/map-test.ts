@@ -20,28 +20,26 @@ import { makeLegacyLocationEvent, makeLocationEvent } from "../../test-utils/loc
 
 describe("createMapSiteLinkFromEvent", () => {
     it("returns null if event does not contain geouri", () => {
-        expect(createMapSiteLinkFromEvent(mkMessage({
-            room: '1', user: '@sender:server', event: true,
-        }))).toBeNull();
+        expect(
+            createMapSiteLinkFromEvent(
+                mkMessage({
+                    room: "1",
+                    user: "@sender:server",
+                    event: true,
+                }),
+            ),
+        ).toBeNull();
     });
 
     it("returns OpenStreetMap link if event contains m.location", () => {
-        expect(
-            createMapSiteLinkFromEvent(makeLocationEvent("geo:51.5076,-0.1276")),
-        ).toEqual(
-            "https://www.openstreetmap.org/" +
-            "?mlat=51.5076&mlon=-0.1276" +
-            "#map=16/51.5076/-0.1276",
+        expect(createMapSiteLinkFromEvent(makeLocationEvent("geo:51.5076,-0.1276"))).toEqual(
+            "https://www.openstreetmap.org/" + "?mlat=51.5076&mlon=-0.1276" + "#map=16/51.5076/-0.1276",
         );
     });
 
     it("returns OpenStreetMap link if event contains geo_uri", () => {
-        expect(
-            createMapSiteLinkFromEvent(makeLegacyLocationEvent("geo:51.5076,-0.1276")),
-        ).toEqual(
-            "https://www.openstreetmap.org/" +
-            "?mlat=51.5076&mlon=-0.1276" +
-            "#map=16/51.5076/-0.1276",
+        expect(createMapSiteLinkFromEvent(makeLegacyLocationEvent("geo:51.5076,-0.1276"))).toEqual(
+            "https://www.openstreetmap.org/" + "?mlat=51.5076&mlon=-0.1276" + "#map=16/51.5076/-0.1276",
         );
     });
 });

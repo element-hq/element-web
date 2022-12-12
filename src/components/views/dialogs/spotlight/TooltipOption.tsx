@@ -27,13 +27,15 @@ interface TooltipOptionProps extends ComponentProps<typeof RovingAccessibleToolt
 
 export const TooltipOption: React.FC<TooltipOptionProps> = ({ inputRef, className, ...props }) => {
     const [onFocus, isActive, ref] = useRovingTabIndex(inputRef);
-    return <AccessibleTooltipButton
-        {...props}
-        className={classNames(className, "mx_SpotlightDialog_option")}
-        onFocus={onFocus}
-        inputRef={ref}
-        tabIndex={-1}
-        aria-selected={isActive}
-        role="option"
-    />;
+    return (
+        <AccessibleTooltipButton
+            {...props}
+            className={classNames(className, "mx_SpotlightDialog_option")}
+            onFocus={onFocus}
+            inputRef={ref}
+            tabIndex={-1}
+            aria-selected={isActive}
+            role="option"
+        />
+    );
 };

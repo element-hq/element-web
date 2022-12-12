@@ -16,12 +16,7 @@ limitations under the License.
 
 import { MockedObject } from "jest-mock";
 import { makeBeaconInfoContent, makeBeaconContent } from "matrix-js-sdk/src/content-helpers";
-import {
-    MatrixClient,
-    MatrixEvent,
-    Beacon,
-    getBeaconInfoIdentifier,
-} from "matrix-js-sdk/src/matrix";
+import { MatrixClient, MatrixEvent, Beacon, getBeaconInfoIdentifier } from "matrix-js-sdk/src/matrix";
 import { M_BEACON, M_BEACON_INFO } from "matrix-js-sdk/src/@types/beacon";
 import { LocationAssetType } from "matrix-js-sdk/src/@types/location";
 
@@ -50,13 +45,7 @@ export const makeBeaconInfoEvent = (
     contentProps: Partial<InfoContentProps> = {},
     eventId?: string,
 ): MatrixEvent => {
-    const {
-        timeout,
-        isLive,
-        description,
-        assetType,
-        timestamp,
-    } = {
+    const { timeout, isLive, description, assetType, timestamp } = {
         ...DEFAULT_INFO_CONTENT_PROPS,
         ...contentProps,
     };
@@ -84,9 +73,9 @@ type ContentProps = {
     description?: string;
 };
 const DEFAULT_CONTENT_PROPS: ContentProps = {
-    geoUri: 'geo:-36.24484561954707,175.46884959563613;u=10',
+    geoUri: "geo:-36.24484561954707,175.46884959563613;u=10",
     timestamp: 123,
-    beaconInfoId: '$123',
+    beaconInfoId: "$123",
 };
 
 /**
@@ -116,10 +105,13 @@ export const makeBeaconEvent = (
  * Create a mock geolocation position
  * defaults all required properties
  */
-export const makeGeolocationPosition = (
-    { timestamp, coords }:
-        { timestamp?: number, coords?: Partial<GeolocationCoordinates> },
-): GeolocationPosition => ({
+export const makeGeolocationPosition = ({
+    timestamp,
+    coords,
+}: {
+    timestamp?: number;
+    coords?: Partial<GeolocationCoordinates>;
+}): GeolocationPosition => ({
     timestamp: timestamp ?? 1647256791840,
     coords: {
         accuracy: 1,
@@ -141,8 +133,8 @@ export const makeGeolocationPosition = (
 export const mockGeolocation = (): MockedObject<Geolocation> => {
     const mockGeolocation = {
         clearWatch: jest.fn(),
-        getCurrentPosition: jest.fn().mockImplementation(callback => callback(makeGeolocationPosition({}))),
-        watchPosition: jest.fn().mockImplementation(callback => callback(makeGeolocationPosition({}))),
+        getCurrentPosition: jest.fn().mockImplementation((callback) => callback(makeGeolocationPosition({}))),
+        watchPosition: jest.fn().mockImplementation((callback) => callback(makeGeolocationPosition({}))),
     } as unknown as MockedObject<Geolocation>;
 
     // jest jsdom does not provide geolocation
@@ -181,7 +173,7 @@ export const watchPositionMockImplementation = (delays: number[], errorCodes: nu
             totalDelay += delayMs;
             const timeout = window.setTimeout(() => {
                 if (errorCodes[index]) {
-                    error(getMockGeolocationPositionError(errorCodes[index], 'error message'));
+                    error(getMockGeolocationPositionError(errorCodes[index], "error message"));
                 } else {
                     callback({ ...position, timestamp: position.timestamp + totalDelay });
                 }
@@ -203,11 +195,11 @@ export const makeRoomWithBeacons = (
     locationEvents?: MatrixEvent[],
 ): Beacon[] => {
     const room = makeRoomWithStateEvents(beaconInfoEvents, { roomId, mockClient });
-    const beacons = beaconInfoEvents.map(event => room.currentState.beacons.get(getBeaconInfoIdentifier(event)));
+    const beacons = beaconInfoEvents.map((event) => room.currentState.beacons.get(getBeaconInfoIdentifier(event)));
     if (locationEvents) {
-        beacons.forEach(beacon => {
+        beacons.forEach((beacon) => {
             // this filtering happens in roomState, which is bypassed here
-            const validLocationEvents = locationEvents?.filter(event => event.getSender() === beacon.beaconInfoOwner);
+            const validLocationEvents = locationEvents?.filter((event) => event.getSender() === beacon.beaconInfoOwner);
             beacon.addLocations(validLocationEvents);
         });
     }

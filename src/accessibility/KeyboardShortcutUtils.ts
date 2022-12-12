@@ -34,7 +34,7 @@ import {
  * have to be manually mirrored in KeyBindingDefaults.
  */
 const getUIOnlyShortcuts = (): IKeyboardShortcuts => {
-    const ctrlEnterToSend = SettingsStore.getValue('MessageComposerInput.ctrlEnterToSend');
+    const ctrlEnterToSend = SettingsStore.getValue("MessageComposerInput.ctrlEnterToSend");
 
     const keyboardShortcuts: IKeyboardShortcuts = {
         [KeyBindingAction.SendMessage]: {
@@ -94,26 +94,25 @@ const getUIOnlyShortcuts = (): IKeyboardShortcuts => {
 export const getKeyboardShortcuts = (): IKeyboardShortcuts => {
     const overrideBrowserShortcuts = PlatformPeg.get().overrideBrowserShortcuts();
 
-    return Object.keys(KEYBOARD_SHORTCUTS).filter((k: KeyBindingAction) => {
-        if (KEYBOARD_SHORTCUTS[k]?.controller?.settingDisabled) return false;
-        if (MAC_ONLY_SHORTCUTS.includes(k) && !IS_MAC) return false;
-        if (DESKTOP_SHORTCUTS.includes(k) && !overrideBrowserShortcuts) return false;
+    return Object.keys(KEYBOARD_SHORTCUTS)
+        .filter((k: KeyBindingAction) => {
+            if (KEYBOARD_SHORTCUTS[k]?.controller?.settingDisabled) return false;
+            if (MAC_ONLY_SHORTCUTS.includes(k) && !IS_MAC) return false;
+            if (DESKTOP_SHORTCUTS.includes(k) && !overrideBrowserShortcuts) return false;
 
-        return true;
-    }).reduce((o, key) => {
-        o[key] = KEYBOARD_SHORTCUTS[key];
-        return o;
-    }, {} as IKeyboardShortcuts);
+            return true;
+        })
+        .reduce((o, key) => {
+            o[key] = KEYBOARD_SHORTCUTS[key];
+            return o;
+        }, {} as IKeyboardShortcuts);
 };
 
 /**
  * Gets keyboard shortcuts that should be presented to the user in the UI.
  */
 export const getKeyboardShortcutsForUI = (): IKeyboardShortcuts => {
-    const entries = [
-        ...Object.entries(getUIOnlyShortcuts()),
-        ...Object.entries(getKeyboardShortcuts()),
-    ];
+    const entries = [...Object.entries(getUIOnlyShortcuts()), ...Object.entries(getKeyboardShortcuts())];
 
     return entries.reduce((acc, [key, value]) => {
         acc[key] = value;

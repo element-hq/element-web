@@ -22,10 +22,10 @@ describe("User Onboarding (old user)", () => {
     let synapse: SynapseInstance;
 
     beforeEach(() => {
-        cy.startSynapse("default").then(data => {
+        cy.startSynapse("default").then((data) => {
             synapse = data;
             cy.initTestUser(synapse, "Jane Doe");
-            cy.window({ log: false }).then(win => {
+            cy.window({ log: false }).then((win) => {
                 win.localStorage.setItem("mx_registration_time", "2");
             });
             cy.reload().then(() => {
@@ -41,8 +41,8 @@ describe("User Onboarding (old user)", () => {
     });
 
     it("page and preference are hidden", () => {
-        cy.get('.mx_UserOnboardingPage').should('not.exist');
-        cy.get('.mx_UserOnboardingButton').should('not.exist');
+        cy.get(".mx_UserOnboardingPage").should("not.exist");
+        cy.get(".mx_UserOnboardingButton").should("not.exist");
         cy.openUserSettings("Preferences");
         cy.contains("Show shortcut to welcome page above the room list").should("not.exist");
     });

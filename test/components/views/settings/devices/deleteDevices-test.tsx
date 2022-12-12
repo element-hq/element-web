@@ -18,15 +18,15 @@ import { deleteDevicesWithInteractiveAuth } from "../../../../../src/components/
 import Modal from "../../../../../src/Modal";
 import { getMockClientWithEventEmitter, mockClientMethodsUser } from "../../../../test-utils";
 
-describe('deleteDevices()', () => {
-    const userId = '@alice:server.org';
-    const deviceIds = ['device_1', 'device_2'];
+describe("deleteDevices()", () => {
+    const userId = "@alice:server.org";
+    const deviceIds = ["device_1", "device_2"];
     const mockClient = getMockClientWithEventEmitter({
         ...mockClientMethodsUser(userId),
         deleteMultipleDevices: jest.fn(),
     });
 
-    const modalSpy = jest.spyOn(Modal, 'createDialog');
+    const modalSpy = jest.spyOn(Modal, "createDialog");
 
     const interactiveAuthError = { httpStatus: 401, data: { flows: [] } };
 
@@ -34,7 +34,7 @@ describe('deleteDevices()', () => {
         jest.clearAllMocks();
     });
 
-    it('deletes devices and calls onFinished when interactive auth is not required', async () => {
+    it("deletes devices and calls onFinished when interactive auth is not required", async () => {
         mockClient.deleteMultipleDevices.mockResolvedValue({});
         const onFinished = jest.fn();
 
@@ -47,16 +47,14 @@ describe('deleteDevices()', () => {
         expect(modalSpy).not.toHaveBeenCalled();
     });
 
-    it('throws without opening auth dialog when delete fails with a non-401 status code', async () => {
-        const error = new Error('');
+    it("throws without opening auth dialog when delete fails with a non-401 status code", async () => {
+        const error = new Error("");
         // @ts-ignore
         error.httpStatus = 404;
         mockClient.deleteMultipleDevices.mockRejectedValue(error);
         const onFinished = jest.fn();
 
-        await expect(
-            deleteDevicesWithInteractiveAuth(mockClient, deviceIds, onFinished),
-        ).rejects.toThrow(error);
+        await expect(deleteDevicesWithInteractiveAuth(mockClient, deviceIds, onFinished)).rejects.toThrow(error);
 
         expect(onFinished).not.toHaveBeenCalled();
 
@@ -64,8 +62,8 @@ describe('deleteDevices()', () => {
         expect(modalSpy).not.toHaveBeenCalled();
     });
 
-    it('throws without opening auth dialog when delete fails without data.flows', async () => {
-        const error = new Error('');
+    it("throws without opening auth dialog when delete fails without data.flows", async () => {
+        const error = new Error("");
         // @ts-ignore
         error.httpStatus = 401;
         // @ts-ignore
@@ -73,9 +71,7 @@ describe('deleteDevices()', () => {
         mockClient.deleteMultipleDevices.mockRejectedValue(error);
         const onFinished = jest.fn();
 
-        await expect(
-            deleteDevicesWithInteractiveAuth(mockClient, deviceIds, onFinished),
-        ).rejects.toThrow(error);
+        await expect(deleteDevicesWithInteractiveAuth(mockClient, deviceIds, onFinished)).rejects.toThrow(error);
 
         expect(onFinished).not.toHaveBeenCalled();
 
@@ -83,7 +79,7 @@ describe('deleteDevices()', () => {
         expect(modalSpy).not.toHaveBeenCalled();
     });
 
-    it('opens interactive auth dialog when delete fails with 401', async () => {
+    it("opens interactive auth dialog when delete fails with 401", async () => {
         mockClient.deleteMultipleDevices.mockRejectedValue(interactiveAuthError);
         const onFinished = jest.fn();
 
@@ -94,12 +90,10 @@ describe('deleteDevices()', () => {
         // opened modal
         expect(modalSpy).toHaveBeenCalled();
 
-        const [, {
-            title, authData, aestheticsForStagePhases,
-        }] = modalSpy.mock.calls[0];
+        const [, { title, authData, aestheticsForStagePhases }] = modalSpy.mock.calls[0];
 
         // modal opened as expected
-        expect(title).toEqual('Authentication');
+        expect(title).toEqual("Authentication");
         expect(authData).toEqual(interactiveAuthError.data);
         expect(aestheticsForStagePhases).toMatchSnapshot();
     });

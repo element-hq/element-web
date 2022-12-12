@@ -31,24 +31,13 @@ export const RoomStatusBarUnsentMessages = (props: RoomStatusBarUnsentMessagesPr
         <div className="mx_RoomStatusBar mx_RoomStatusBar_unsentMessages">
             <div role="alert">
                 <div className="mx_RoomStatusBar_unsentBadge">
-                    <NotificationBadge
-                        notification={props.notificationState}
-                    />
+                    <NotificationBadge notification={props.notificationState} />
                 </div>
                 <div>
-                    <div className="mx_RoomStatusBar_unsentTitle">
-                        { props.title }
-                    </div>
-                    {
-                        props.description &&
-                        <div className="mx_RoomStatusBar_unsentDescription">
-                            { props.description }
-                        </div>
-                    }
+                    <div className="mx_RoomStatusBar_unsentTitle">{props.title}</div>
+                    {props.description && <div className="mx_RoomStatusBar_unsentDescription">{props.description}</div>}
                 </div>
-                <div className="mx_RoomStatusBar_unsentButtonBar">
-                    { props.buttons }
-                </div>
+                <div className="mx_RoomStatusBar_unsentButtonBar">{props.buttons}</div>
             </div>
         </div>
     );

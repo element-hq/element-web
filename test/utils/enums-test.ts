@@ -26,16 +26,16 @@ enum TestNumberEnum {
     SecondKey = 20,
 }
 
-describe('enums', () => {
-    describe('getEnumValues', () => {
-        it('should work on string enums', () => {
+describe("enums", () => {
+    describe("getEnumValues", () => {
+        it("should work on string enums", () => {
             const result = getEnumValues(TestStringEnum);
             expect(result).toBeDefined();
             expect(result).toHaveLength(2);
-            expect(result).toEqual(['__first__', '__second__']);
+            expect(result).toEqual(["__first__", "__second__"]);
         });
 
-        it('should work on number enums', () => {
+        it("should work on number enums", () => {
             const result = getEnumValues(TestNumberEnum);
             expect(result).toBeDefined();
             expect(result).toHaveLength(2);
@@ -43,23 +43,23 @@ describe('enums', () => {
         });
     });
 
-    describe('isEnumValue', () => {
-        it('should return true on values in a string enum', () => {
-            const result = isEnumValue(TestStringEnum, '__first__');
+    describe("isEnumValue", () => {
+        it("should return true on values in a string enum", () => {
+            const result = isEnumValue(TestStringEnum, "__first__");
             expect(result).toBe(true);
         });
 
-        it('should return false on values not in a string enum', () => {
-            const result = isEnumValue(TestStringEnum, 'not a value');
+        it("should return false on values not in a string enum", () => {
+            const result = isEnumValue(TestStringEnum, "not a value");
             expect(result).toBe(false);
         });
 
-        it('should return true on values in a number enum', () => {
+        it("should return true on values in a number enum", () => {
             const result = isEnumValue(TestNumberEnum, 10);
             expect(result).toBe(true);
         });
 
-        it('should return false on values not in a number enum', () => {
+        it("should return false on values not in a number enum", () => {
             const result = isEnumValue(TestStringEnum, 99);
             expect(result).toBe(false);
         });

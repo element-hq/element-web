@@ -19,23 +19,23 @@ import WidgetUtils from "../../src/utils/WidgetUtils";
 import { mockPlatformPeg } from "../test-utils";
 
 describe("getLocalJitsiWrapperUrl", () => {
-    it('should generate jitsi URL (for defaults)', () => {
+    it("should generate jitsi URL (for defaults)", () => {
         mockPlatformPeg();
 
         expect(WidgetUtils.getLocalJitsiWrapperUrl()).toEqual(
-            'https://app.element.io/jitsi.html'
-            + '#conferenceDomain=$domain'
-            + '&conferenceId=$conferenceId'
-            + '&isAudioOnly=$isAudioOnly'
-            + '&isVideoChannel=$isVideoChannel'
-            + '&displayName=$matrix_display_name'
-            + '&avatarUrl=$matrix_avatar_url'
-            + '&userId=$matrix_user_id'
-            + '&roomId=$matrix_room_id'
-            + '&theme=$theme'
-            + '&roomName=$roomName'
-            + '&supportsScreensharing=true'
-            + '&language=$org.matrix.msc2873.client_language',
+            "https://app.element.io/jitsi.html" +
+                "#conferenceDomain=$domain" +
+                "&conferenceId=$conferenceId" +
+                "&isAudioOnly=$isAudioOnly" +
+                "&isVideoChannel=$isVideoChannel" +
+                "&displayName=$matrix_display_name" +
+                "&avatarUrl=$matrix_avatar_url" +
+                "&userId=$matrix_user_id" +
+                "&roomId=$matrix_room_id" +
+                "&theme=$theme" +
+                "&roomName=$roomName" +
+                "&supportsScreensharing=true" +
+                "&language=$org.matrix.msc2873.client_language",
         );
     });
 });

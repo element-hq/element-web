@@ -22,9 +22,9 @@ limitations under the License.
 
 import React from "react";
 
-import dis from './dispatcher/dispatcher';
-import Modal from './Modal';
-import { _t } from './languageHandler';
+import dis from "./dispatcher/dispatcher";
+import Modal from "./Modal";
+import { _t } from "./languageHandler";
 import QuestionDialog from "./components/views/dialogs/QuestionDialog";
 import { Action } from "./dispatcher/actions";
 
@@ -46,7 +46,7 @@ export const SAFE_LOCALPART_REGEX = /^[a-z0-9=_\-./]+$/;
  */
 export async function startAnyRegistrationFlow(
     // eslint-disable-next-line camelcase
-    options: { go_home_on_cancel?: boolean, go_welcome_on_cancel?: boolean, screen_after?: boolean},
+    options: { go_home_on_cancel?: boolean; go_welcome_on_cancel?: boolean; screen_after?: boolean },
 ): Promise<void> {
     if (options === undefined) options = {};
     const modal = Modal.createDialog(QuestionDialog, {
@@ -60,19 +60,19 @@ export async function startAnyRegistrationFlow(
                 key="start_login"
                 onClick={() => {
                     modal.close();
-                    dis.dispatch({ action: 'start_login', screenAfterLogin: options.screen_after });
+                    dis.dispatch({ action: "start_login", screenAfterLogin: options.screen_after });
                 }}
             >
-                { _t('Sign In') }
+                {_t("Sign In")}
             </button>,
         ],
         onFinished: (proceed) => {
             if (proceed) {
-                dis.dispatch({ action: 'start_registration', screenAfterLogin: options.screen_after });
+                dis.dispatch({ action: "start_registration", screenAfterLogin: options.screen_after });
             } else if (options.go_home_on_cancel) {
                 dis.dispatch({ action: Action.ViewHomePage });
             } else if (options.go_welcome_on_cancel) {
-                dis.dispatch({ action: 'view_welcome_page' });
+                dis.dispatch({ action: "view_welcome_page" });
             }
         },
     });

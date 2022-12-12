@@ -130,27 +130,31 @@ export class OwnProfileStore extends AsyncStoreWithClient<IState> {
         // we don't actually do anything here
     }
 
-    private onProfileUpdate = throttle(async () => {
-        // We specifically do not use the User object we stored for profile info as it
-        // could easily be wrong (such as per-room instead of global profile).
-        const profileInfo = await this.matrixClient.getProfileInfo(this.matrixClient.getUserId());
-        if (profileInfo.displayname) {
-            window.localStorage.setItem(KEY_DISPLAY_NAME, profileInfo.displayname);
-        } else {
-            window.localStorage.removeItem(KEY_DISPLAY_NAME);
-        }
-        if (profileInfo.avatar_url) {
-            window.localStorage.setItem(KEY_AVATAR_URL, profileInfo.avatar_url);
-        } else {
-            window.localStorage.removeItem(KEY_AVATAR_URL);
-        }
+    private onProfileUpdate = throttle(
+        async () => {
+            // We specifically do not use the User object we stored for profile info as it
+            // could easily be wrong (such as per-room instead of global profile).
+            const profileInfo = await this.matrixClient.getProfileInfo(this.matrixClient.getUserId());
+            if (profileInfo.displayname) {
+                window.localStorage.setItem(KEY_DISPLAY_NAME, profileInfo.displayname);
+            } else {
+                window.localStorage.removeItem(KEY_DISPLAY_NAME);
+            }
+            if (profileInfo.avatar_url) {
+                window.localStorage.setItem(KEY_AVATAR_URL, profileInfo.avatar_url);
+            } else {
+                window.localStorage.removeItem(KEY_AVATAR_URL);
+            }
 
-        await this.updateState({
-            displayName: profileInfo.displayname,
-            avatarUrl: profileInfo.avatar_url,
-            fetchedAt: Date.now(),
-        });
-    }, 200, { trailing: true, leading: true });
+            await this.updateState({
+                displayName: profileInfo.displayname,
+                avatarUrl: profileInfo.avatar_url,
+                fetchedAt: Date.now(),
+            });
+        },
+        200,
+        { trailing: true, leading: true },
+    );
 
     private onStateEvents = async (ev: MatrixEvent) => {
         const myUserId = MatrixClientPeg.get().getUserId();

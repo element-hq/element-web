@@ -29,32 +29,41 @@ export function usePlainTextListeners(
 ) {
     const ref = useRef<HTMLDivElement | null>(null);
     const [content, setContent] = useState<string | undefined>(initialContent);
-    const send = useCallback((() => {
+    const send = useCallback(() => {
         if (ref.current) {
-            ref.current.innerHTML = '';
+            ref.current.innerHTML = "";
         }
         onSend?.();
-    }), [ref, onSend]);
+    }, [ref, onSend]);
 
-    const setText = useCallback((text: string) => {
-        setContent(text);
-        onChange?.(text);
-    }, [onChange]);
+    const setText = useCallback(
+        (text: string) => {
+            setContent(text);
+            onChange?.(text);
+        },
+        [onChange],
+    );
 
-    const onInput = useCallback((event: SyntheticEvent<HTMLDivElement, InputEvent | ClipboardEvent>) => {
-        if (isDivElement(event.target)) {
-            setText(event.target.innerHTML);
-        }
-    }, [setText]);
+    const onInput = useCallback(
+        (event: SyntheticEvent<HTMLDivElement, InputEvent | ClipboardEvent>) => {
+            if (isDivElement(event.target)) {
+                setText(event.target.innerHTML);
+            }
+        },
+        [setText],
+    );
 
     const isCtrlEnter = useSettingValue<boolean>("MessageComposerInput.ctrlEnterToSend");
-    const onKeyDown = useCallback((event: KeyboardEvent<HTMLDivElement>) => {
-        if (event.key === 'Enter' && !event.shiftKey && (!isCtrlEnter || (isCtrlEnter && event.ctrlKey))) {
-            event.preventDefault();
-            event.stopPropagation();
-            send();
-        }
-    }, [isCtrlEnter, send]);
+    const onKeyDown = useCallback(
+        (event: KeyboardEvent<HTMLDivElement>) => {
+            if (event.key === "Enter" && !event.shiftKey && (!isCtrlEnter || (isCtrlEnter && event.ctrlKey))) {
+                event.preventDefault();
+                event.stopPropagation();
+                send();
+            }
+        },
+        [isCtrlEnter, send],
+    );
 
     return { ref, onInput, onPaste: onInput, onKeyDown, content, setContent: setText };
 }

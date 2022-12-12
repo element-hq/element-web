@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from "react";
 
-import { _t } from '../../../languageHandler';
+import { _t } from "../../../languageHandler";
 import { IDialogProps } from "./IDialogProps";
 import SettingsStore from "../../../settings/SettingsStore";
 import AccessibleButton from "../elements/AccessibleButton";
@@ -34,28 +34,32 @@ interface IProps extends IDialogProps {
 const BetaFeedbackDialog: React.FC<IProps> = ({ featureId, onFinished }) => {
     const info = SettingsStore.getBetaInfo(featureId);
 
-    return <GenericFeatureFeedbackDialog
-        title={_t("%(featureName)s Beta feedback", { featureName: info.title })}
-        subheading={_t(info.feedbackSubheading)}
-        onFinished={onFinished}
-        rageshakeLabel={info.feedbackLabel}
-        rageshakeData={Object.fromEntries((SettingsStore.getBetaInfo(featureId)?.extraSettings || []).map(k => {
-            return SettingsStore.getValue(k);
-        }))}
-    >
-        <AccessibleButton
-            kind="link_inline"
-            onClick={() => {
-                onFinished(false);
-                defaultDispatcher.dispatch({
-                    action: Action.ViewUserSettings,
-                    initialTabId: UserTab.Labs,
-                });
-            }}
+    return (
+        <GenericFeatureFeedbackDialog
+            title={_t("%(featureName)s Beta feedback", { featureName: info.title })}
+            subheading={_t(info.feedbackSubheading)}
+            onFinished={onFinished}
+            rageshakeLabel={info.feedbackLabel}
+            rageshakeData={Object.fromEntries(
+                (SettingsStore.getBetaInfo(featureId)?.extraSettings || []).map((k) => {
+                    return SettingsStore.getValue(k);
+                }),
+            )}
         >
-            { _t("To leave the beta, visit your settings.") }
-        </AccessibleButton>
-    </GenericFeatureFeedbackDialog>;
+            <AccessibleButton
+                kind="link_inline"
+                onClick={() => {
+                    onFinished(false);
+                    defaultDispatcher.dispatch({
+                        action: Action.ViewUserSettings,
+                        initialTabId: UserTab.Labs,
+                    });
+                }}
+            >
+                {_t("To leave the beta, visit your settings.")}
+            </AccessibleButton>
+        </GenericFeatureFeedbackDialog>
+    );
 };
 
 export default BetaFeedbackDialog;

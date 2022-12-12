@@ -21,7 +21,7 @@ import { SynapseInstance } from "../../plugins/synapsedocker";
 function seedLabs(synapse: SynapseInstance, labsVal: boolean | null): void {
     cy.initTestUser(synapse, "Sally", () => {
         // seed labs flag
-        cy.window({ log: false }).then(win => {
+        cy.window({ log: false }).then((win) => {
             if (typeof labsVal === "boolean") {
                 // stringify boolean
                 win.localStorage.setItem("mx_labs_feature_feature_hidden_read_receipts", `${labsVal}`);
@@ -64,7 +64,7 @@ describe("Hidden Read Receipts Setting Migration", () => {
     let synapse: SynapseInstance;
 
     beforeEach(() => {
-        cy.startSynapse("default").then(data => {
+        cy.startSynapse("default").then((data) => {
             synapse = data;
         });
     });
@@ -73,17 +73,17 @@ describe("Hidden Read Receipts Setting Migration", () => {
         cy.stopSynapse(synapse);
     });
 
-    it('should not migrate the lack of a labs flag', () => {
+    it("should not migrate the lack of a labs flag", () => {
         seedLabs(synapse, null);
         testForVal(null);
     });
 
-    it('should migrate labsHiddenRR=false as sendRR=true', () => {
+    it("should migrate labsHiddenRR=false as sendRR=true", () => {
         seedLabs(synapse, false);
         testForVal(true);
     });
 
-    it('should migrate labsHiddenRR=true as sendRR=false', () => {
+    it("should migrate labsHiddenRR=true as sendRR=false", () => {
         seedLabs(synapse, true);
         testForVal(false);
     });

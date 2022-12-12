@@ -72,9 +72,10 @@ export abstract class OrderingAlgorithm {
 
     protected getRoomIndex(room: Room): number {
         let roomIdx = this.cachedOrderedRooms.indexOf(room);
-        if (roomIdx === -1) { // can only happen if the js-sdk's store goes sideways.
+        if (roomIdx === -1) {
+            // can only happen if the js-sdk's store goes sideways.
             logger.warn(`Degrading performance to find missing room in "${this.tagId}": ${room.roomId}`);
-            roomIdx = this.cachedOrderedRooms.findIndex(r => r.roomId === room.roomId);
+            roomIdx = this.cachedOrderedRooms.findIndex((r) => r.roomId === room.roomId);
         }
         return roomIdx;
     }

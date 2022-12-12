@@ -17,10 +17,7 @@ limitations under the License.
 import React from "react";
 import classNames from "classnames";
 
-import {
-    RovingAccessibleButton,
-    RovingAccessibleTooltipButton,
-} from "../../../accessibility/RovingTabIndex";
+import { RovingAccessibleButton, RovingAccessibleTooltipButton } from "../../../accessibility/RovingTabIndex";
 import NotificationBadge from "./NotificationBadge";
 import { NotificationState } from "../../../stores/notifications/NotificationState";
 import { ButtonEvent } from "../elements/AccessibleButton";
@@ -58,35 +55,30 @@ export default class ExtraTile extends React.Component<IProps, IState> {
     public render(): React.ReactElement {
         // XXX: We copy classes because it's easier
         const classes = classNames({
-            'mx_ExtraTile': true,
-            'mx_RoomTile': true,
-            'mx_RoomTile_selected': this.props.isSelected,
-            'mx_RoomTile_minimized': this.props.isMinimized,
+            mx_ExtraTile: true,
+            mx_RoomTile: true,
+            mx_RoomTile_selected: this.props.isSelected,
+            mx_RoomTile_minimized: this.props.isMinimized,
         });
 
         let badge;
         if (this.props.notificationState) {
-            badge = (
-                <NotificationBadge
-                    notification={this.props.notificationState}
-                    forceCount={false}
-                />
-            );
+            badge = <NotificationBadge notification={this.props.notificationState} forceCount={false} />;
         }
 
         let name = this.props.displayName;
-        if (typeof name !== 'string') name = '';
+        if (typeof name !== "string") name = "";
         name = name.replace(":", ":\u200b"); // add a zero-width space to allow linewrapping after the colon
 
         const nameClasses = classNames({
-            "mx_RoomTile_title": true,
-            "mx_RoomTile_titleHasUnreadEvents": this.props.notificationState?.isUnread,
+            mx_RoomTile_title: true,
+            mx_RoomTile_titleHasUnreadEvents: this.props.notificationState?.isUnread,
         });
 
         let nameContainer = (
             <div className="mx_RoomTile_titleContainer">
                 <div title={name} className={nameClasses} tabIndex={-1} dir="auto">
-                    { name }
+                    {name}
                 </div>
             </div>
         );
@@ -107,15 +99,11 @@ export default class ExtraTile extends React.Component<IProps, IState> {
                     role="treeitem"
                     title={this.props.isMinimized ? name : undefined}
                 >
-                    <div className="mx_RoomTile_avatarContainer">
-                        { this.props.avatar }
-                    </div>
+                    <div className="mx_RoomTile_avatarContainer">{this.props.avatar}</div>
                     <div className="mx_RoomTile_details">
                         <div className="mx_RoomTile_primaryDetails">
-                            { nameContainer }
-                            <div className="mx_RoomTile_badgeContainer">
-                                { badge }
-                            </div>
+                            {nameContainer}
+                            <div className="mx_RoomTile_badgeContainer">{badge}</div>
                         </div>
                     </div>
                 </Button>

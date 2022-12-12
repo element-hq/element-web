@@ -14,28 +14,31 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactNode, useCallback, useEffect, useState } from 'react';
-import maplibregl from 'maplibre-gl';
-import { RoomMember } from 'matrix-js-sdk/src/matrix';
+import React, { ReactNode, useCallback, useEffect, useState } from "react";
+import maplibregl from "maplibre-gl";
+import { RoomMember } from "matrix-js-sdk/src/matrix";
 
-import { createMarker, parseGeoUri } from '../../../utils/location';
-import Marker from './Marker';
+import { createMarker, parseGeoUri } from "../../../utils/location";
+import Marker from "./Marker";
 
 const useMapMarker = (
     map: maplibregl.Map,
     geoUri: string,
-): { marker?: maplibregl.Marker, onElementRef: (el: HTMLDivElement) => void } => {
+): { marker?: maplibregl.Marker; onElementRef: (el: HTMLDivElement) => void } => {
     const [marker, setMarker] = useState<maplibregl.Marker>();
 
-    const onElementRef = useCallback((element: HTMLDivElement) => {
-        if (marker || !element) {
-            return;
-        }
-        const coords = parseGeoUri(geoUri);
-        const newMarker = createMarker(coords, element);
-        newMarker.addTo(map);
-        setMarker(newMarker);
-    }, [marker, geoUri, map]);
+    const onElementRef = useCallback(
+        (element: HTMLDivElement) => {
+            if (marker || !element) {
+                return;
+            }
+            const coords = parseGeoUri(geoUri);
+            const newMarker = createMarker(coords, element);
+            newMarker.addTo(map);
+            setMarker(newMarker);
+        },
+        [marker, geoUri, map],
+    );
 
     useEffect(() => {
         if (marker) {
@@ -44,11 +47,14 @@ const useMapMarker = (
         }
     }, [marker, geoUri]);
 
-    useEffect(() => () => {
-        if (marker) {
-            marker.remove();
-        }
-    }, [marker]);
+    useEffect(
+        () => () => {
+            if (marker) {
+                marker.remove();
+            }
+        },
+        [marker],
+    );
 
     return {
         marker,

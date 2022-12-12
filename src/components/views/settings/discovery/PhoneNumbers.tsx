@@ -15,14 +15,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 import { IThreepid } from "matrix-js-sdk/src/@types/threepids";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../../languageHandler";
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
-import Modal from '../../../../Modal';
-import AddThreepid from '../../../../AddThreepid';
+import Modal from "../../../../Modal";
+import AddThreepid from "../../../../AddThreepid";
 import ErrorDialog from "../../dialogs/ErrorDialog";
 import Field from "../../elements/Field";
 import AccessibleButton from "../../elements/AccessibleButton";
@@ -106,7 +106,7 @@ export class PhoneNumber extends React.Component<IPhoneNumberProps, IPhoneNumber
             });
             Modal.createDialog(ErrorDialog, {
                 title: errorTitle,
-                description: ((err && err.message) ? err.message : _t("Operation failed")),
+                description: err && err.message ? err.message : _t("Operation failed"),
             });
         }
     }
@@ -145,7 +145,7 @@ export class PhoneNumber extends React.Component<IPhoneNumberProps, IPhoneNumber
             });
             Modal.createDialog(ErrorDialog, {
                 title: errorTitle,
-                description: ((err && err.message) ? err.message : _t("Operation failed")),
+                description: err && err.message ? err.message : _t("Operation failed"),
             });
         }
     }
@@ -193,11 +193,11 @@ export class PhoneNumber extends React.Component<IPhoneNumberProps, IPhoneNumber
             });
         } catch (err) {
             this.setState({ continueDisabled: false });
-            if (err.errcode !== 'M_THREEPID_AUTH_FAILED') {
+            if (err.errcode !== "M_THREEPID_AUTH_FAILED") {
                 logger.error("Unable to verify phone number: " + err);
                 Modal.createDialog(ErrorDialog, {
                     title: _t("Unable to verify phone number."),
-                    description: ((err && err.message) ? err.message : _t("Operation failed")),
+                    description: err && err.message ? err.message : _t("Operation failed"),
                 });
             } else {
                 this.setState({ verifyError: _t("Incorrect verification code") });
@@ -211,45 +211,51 @@ export class PhoneNumber extends React.Component<IPhoneNumberProps, IPhoneNumber
 
         let status;
         if (verifying) {
-            status = <span className="mx_ExistingPhoneNumber_verification">
-                <span>
-                    { _t("Please enter verification code sent via text.") }
-                    <br />
-                    { this.state.verifyError }
+            status = (
+                <span className="mx_ExistingPhoneNumber_verification">
+                    <span>
+                        {_t("Please enter verification code sent via text.")}
+                        <br />
+                        {this.state.verifyError}
+                    </span>
+                    <form onSubmit={this.onContinueClick} autoComplete="off" noValidate={true}>
+                        <Field
+                            type="text"
+                            label={_t("Verification code")}
+                            autoComplete="off"
+                            disabled={this.state.continueDisabled}
+                            value={this.state.verificationCode}
+                            onChange={this.onVerificationCodeChange}
+                        />
+                    </form>
                 </span>
-                <form onSubmit={this.onContinueClick} autoComplete="off" noValidate={true}>
-                    <Field
-                        type="text"
-                        label={_t("Verification code")}
-                        autoComplete="off"
-                        disabled={this.state.continueDisabled}
-                        value={this.state.verificationCode}
-                        onChange={this.onVerificationCodeChange}
-                    />
-                </form>
-            </span>;
+            );
         } else if (bound) {
-            status = <AccessibleButton
-                className="mx_ExistingPhoneNumber_confirmBtn"
-                kind="danger_sm"
-                onClick={this.onRevokeClick}
-            >
-                { _t("Revoke") }
-            </AccessibleButton>;
+            status = (
+                <AccessibleButton
+                    className="mx_ExistingPhoneNumber_confirmBtn"
+                    kind="danger_sm"
+                    onClick={this.onRevokeClick}
+                >
+                    {_t("Revoke")}
+                </AccessibleButton>
+            );
         } else {
-            status = <AccessibleButton
-                className="mx_ExistingPhoneNumber_confirmBtn"
-                kind="primary_sm"
-                onClick={this.onShareClick}
-            >
-                { _t("Share") }
-            </AccessibleButton>;
+            status = (
+                <AccessibleButton
+                    className="mx_ExistingPhoneNumber_confirmBtn"
+                    kind="primary_sm"
+                    onClick={this.onShareClick}
+                >
+                    {_t("Share")}
+                </AccessibleButton>
+            );
         }
 
         return (
             <div className="mx_ExistingPhoneNumber">
-                <span className="mx_ExistingPhoneNumber_address">+{ address }</span>
-                { status }
+                <span className="mx_ExistingPhoneNumber_address">+{address}</span>
+                {status}
             </div>
         );
     }
@@ -267,15 +273,13 @@ export default class PhoneNumbers extends React.Component<IProps> {
                 return <PhoneNumber msisdn={e} key={e.address} />;
             });
         } else {
-            content = <span className="mx_SettingsTab_subsectionText">
-                { _t("Discovery options will appear once you have added a phone number above.") }
-            </span>;
+            content = (
+                <span className="mx_SettingsTab_subsectionText">
+                    {_t("Discovery options will appear once you have added a phone number above.")}
+                </span>
+            );
         }
 
-        return (
-            <div className="mx_PhoneNumbers">
-                { content }
-            </div>
-        );
+        return <div className="mx_PhoneNumbers">{content}</div>;
     }
 }

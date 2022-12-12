@@ -46,7 +46,7 @@ describe("RightPanel", () => {
     let synapse: SynapseInstance;
 
     beforeEach(() => {
-        cy.startSynapse("default").then(data => {
+        cy.startSynapse("default").then((data) => {
             synapse = data;
             cy.initTestUser(synapse, NAME).then(() =>
                 cy.window({ log: false }).then(() => {

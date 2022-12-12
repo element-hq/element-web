@@ -36,7 +36,7 @@ export const MenuItemRadio: React.FC<IProps> = ({ children, label, active, disab
             disabled={disabled}
             aria-label={label}
         >
-            { children }
+            {children}
         </RovingAccessibleButton>
     );
 };

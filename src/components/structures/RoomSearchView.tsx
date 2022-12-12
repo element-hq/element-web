@@ -14,10 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { forwardRef, RefObject, useCallback, useContext, useEffect, useRef, useState } from 'react';
-import { ISearchResults } from 'matrix-js-sdk/src/@types/search';
-import { IThreadBundledRelationship } from 'matrix-js-sdk/src/models/event';
-import { THREAD_RELATION_TYPE } from 'matrix-js-sdk/src/models/thread';
+import React, { forwardRef, RefObject, useCallback, useContext, useEffect, useRef, useState } from "react";
+import { ISearchResults } from "matrix-js-sdk/src/@types/search";
+import { IThreadBundledRelationship } from "matrix-js-sdk/src/models/event";
+import { THREAD_RELATION_TYPE } from "matrix-js-sdk/src/models/thread";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import ScrollPanel from "./ScrollPanel";
@@ -35,7 +35,7 @@ import { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import RoomContext from "../../contexts/RoomContext";
 
 const DEBUG = false;
-let debuglog = function(msg: string) {};
+let debuglog = function (msg: string) {};
 
 /* istanbul ignore next */
 if (DEBUG) {
@@ -56,203 +56,222 @@ interface Props {
 
 // XXX: todo: merge overlapping results somehow?
 // XXX: why doesn't searching on name work?
-export const RoomSearchView = forwardRef<ScrollPanel, Props>(({
-    term,
-    scope,
-    promise,
-    abortController,
-    resizeNotifier,
-    permalinkCreator,
-    className,
-    onUpdate,
-}: Props, ref: RefObject<ScrollPanel>) => {
-    const client = useContext(MatrixClientContext);
-    const roomContext = useContext(RoomContext);
-    const [inProgress, setInProgress] = useState(true);
-    const [highlights, setHighlights] = useState<string[] | null>(null);
-    const [results, setResults] = useState<ISearchResults | null>(null);
-    const aborted = useRef(false);
+export const RoomSearchView = forwardRef<ScrollPanel, Props>(
+    (
+        { term, scope, promise, abortController, resizeNotifier, permalinkCreator, className, onUpdate }: Props,
+        ref: RefObject<ScrollPanel>,
+    ) => {
+        const client = useContext(MatrixClientContext);
+        const roomContext = useContext(RoomContext);
+        const [inProgress, setInProgress] = useState(true);
+        const [highlights, setHighlights] = useState<string[] | null>(null);
+        const [results, setResults] = useState<ISearchResults | null>(null);
+        const aborted = useRef(false);
 
-    const handleSearchResult = useCallback((searchPromise: Promise<ISearchResults>): Promise<boolean> => {
-        setInProgress(true);
+        const handleSearchResult = useCallback(
+            (searchPromise: Promise<ISearchResults>): Promise<boolean> => {
+                setInProgress(true);
 
-        return searchPromise.then(async (results) => {
-            debuglog("search complete");
-            if (aborted.current) {
-                logger.error("Discarding stale search results");
-                return false;
-            }
+                return searchPromise
+                    .then(
+                        async (results) => {
+                            debuglog("search complete");
+                            if (aborted.current) {
+                                logger.error("Discarding stale search results");
+                                return false;
+                            }
 
-            // postgres on synapse returns us precise details of the strings
-            // which actually got matched for highlighting.
-            //
-            // In either case, we want to highlight the literal search term
-            // whether it was used by the search engine or not.
+                            // postgres on synapse returns us precise details of the strings
+                            // which actually got matched for highlighting.
+                            //
+                            // In either case, we want to highlight the literal search term
+                            // whether it was used by the search engine or not.
 
-            let highlights = results.highlights;
-            if (!highlights.includes(term)) {
-                highlights = highlights.concat(term);
-            }
+                            let highlights = results.highlights;
+                            if (!highlights.includes(term)) {
+                                highlights = highlights.concat(term);
+                            }
 
-            // For overlapping highlights,
-            // favour longer (more specific) terms first
-            highlights = highlights.sort(function(a, b) {
-                return b.length - a.length;
-            });
+                            // For overlapping highlights,
+                            // favour longer (more specific) terms first
+                            highlights = highlights.sort(function (a, b) {
+                                return b.length - a.length;
+                            });
 
-            if (client.supportsExperimentalThreads()) {
-                // Process all thread roots returned in this batch of search results
-                // XXX: This won't work for results coming from Seshat which won't include the bundled relationship
-                for (const result of results.results) {
-                    for (const event of result.context.getTimeline()) {
-                        const bundledRelationship = event
-                            .getServerAggregatedRelation<IThreadBundledRelationship>(THREAD_RELATION_TYPE.name);
-                        if (!bundledRelationship || event.getThread()) continue;
-                        const room = client.getRoom(event.getRoomId());
-                        const thread = room.findThreadForEvent(event);
-                        if (thread) {
-                            event.setThread(thread);
-                        } else {
-                            room.createThread(event.getId(), event, [], true);
-                        }
-                    }
-                }
-            }
+                            if (client.supportsExperimentalThreads()) {
+                                // Process all thread roots returned in this batch of search results
+                                // XXX: This won't work for results coming from Seshat which won't include the bundled relationship
+                                for (const result of results.results) {
+                                    for (const event of result.context.getTimeline()) {
+                                        const bundledRelationship =
+                                            event.getServerAggregatedRelation<IThreadBundledRelationship>(
+                                                THREAD_RELATION_TYPE.name,
+                                            );
+                                        if (!bundledRelationship || event.getThread()) continue;
+                                        const room = client.getRoom(event.getRoomId());
+                                        const thread = room.findThreadForEvent(event);
+                                        if (thread) {
+                                            event.setThread(thread);
+                                        } else {
+                                            room.createThread(event.getId(), event, [], true);
+                                        }
+                                    }
+                                }
+                            }
 
-            setHighlights(highlights);
-            setResults({ ...results }); // copy to force a refresh
-        }, (error) => {
-            if (aborted.current) {
-                logger.error("Discarding stale search results");
-                return false;
-            }
-            logger.error("Search failed", error);
-            Modal.createDialog(ErrorDialog, {
-                title: _t("Search failed"),
-                description: error?.message
-                    ?? _t("Server may be unavailable, overloaded, or search timed out :("),
-            });
-            return false;
-        }).finally(() => {
-            setInProgress(false);
-        });
-    }, [client, term]);
-
-    // Mount & unmount effect
-    useEffect(() => {
-        aborted.current = false;
-        handleSearchResult(promise);
-        return () => {
-            aborted.current = true;
-            abortController?.abort();
-        };
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-    // show searching spinner
-    if (results?.count === undefined) {
-        return (
-            <div
-                className="mx_RoomView_messagePanel mx_RoomView_messagePanelSearchSpinner"
-                data-testid="messagePanelSearchSpinner"
-            />
+                            setHighlights(highlights);
+                            setResults({ ...results }); // copy to force a refresh
+                        },
+                        (error) => {
+                            if (aborted.current) {
+                                logger.error("Discarding stale search results");
+                                return false;
+                            }
+                            logger.error("Search failed", error);
+                            Modal.createDialog(ErrorDialog, {
+                                title: _t("Search failed"),
+                                description:
+                                    error?.message ??
+                                    _t("Server may be unavailable, overloaded, or search timed out :("),
+                            });
+                            return false;
+                        },
+                    )
+                    .finally(() => {
+                        setInProgress(false);
+                    });
+            },
+            [client, term],
         );
-    }
 
-    const onSearchResultsFillRequest = async (backwards: boolean): Promise<boolean> => {
-        if (!backwards) {
-            return false;
+        // Mount & unmount effect
+        useEffect(() => {
+            aborted.current = false;
+            handleSearchResult(promise);
+            return () => {
+                aborted.current = true;
+                abortController?.abort();
+            };
+        }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+        // show searching spinner
+        if (results?.count === undefined) {
+            return (
+                <div
+                    className="mx_RoomView_messagePanel mx_RoomView_messagePanelSearchSpinner"
+                    data-testid="messagePanelSearchSpinner"
+                />
+            );
+        }
+
+        const onSearchResultsFillRequest = async (backwards: boolean): Promise<boolean> => {
+            if (!backwards) {
+                return false;
+            }
+
+            if (!results.next_batch) {
+                debuglog("no more search results");
+                return false;
+            }
+
+            debuglog("requesting more search results");
+            const searchPromise = searchPagination(results);
+            return handleSearchResult(searchPromise);
+        };
+
+        const ret: JSX.Element[] = [];
+
+        if (inProgress) {
+            ret.push(
+                <li key="search-spinner">
+                    <Spinner />
+                </li>,
+            );
         }
 
         if (!results.next_batch) {
-            debuglog("no more search results");
-            return false;
-        }
-
-        debuglog("requesting more search results");
-        const searchPromise = searchPagination(results);
-        return handleSearchResult(searchPromise);
-    };
-
-    const ret: JSX.Element[] = [];
-
-    if (inProgress) {
-        ret.push(<li key="search-spinner">
-            <Spinner />
-        </li>);
-    }
-
-    if (!results.next_batch) {
-        if (!results?.results?.length) {
-            ret.push(<li key="search-top-marker">
-                <h2 className="mx_RoomView_topMarker">{ _t("No results") }</h2>
-            </li>);
-        } else {
-            ret.push(<li key="search-top-marker">
-                <h2 className="mx_RoomView_topMarker">{ _t("No more results") }</h2>
-            </li>);
-        }
-    }
-
-    // once dynamic content in the search results load, make the scrollPanel check
-    // the scroll offsets.
-    const onHeightChanged = () => {
-        const scrollPanel = ref.current;
-        scrollPanel?.checkScroll();
-    };
-
-    let lastRoomId: string;
-
-    for (let i = (results?.results?.length || 0) - 1; i >= 0; i--) {
-        const result = results.results[i];
-
-        const mxEv = result.context.getEvent();
-        const roomId = mxEv.getRoomId();
-        const room = client.getRoom(roomId);
-        if (!room) {
-            // if we do not have the room in js-sdk stores then hide it as we cannot easily show it
-            // As per the spec, an all rooms search can create this condition,
-            // it happens with Seshat but not Synapse.
-            // It will make the result count not match the displayed count.
-            logger.log("Hiding search result from an unknown room", roomId);
-            continue;
-        }
-
-        if (!haveRendererForEvent(mxEv, roomContext.showHiddenEvents)) {
-            // XXX: can this ever happen? It will make the result count
-            // not match the displayed count.
-            continue;
-        }
-
-        if (scope === SearchScope.All) {
-            if (roomId !== lastRoomId) {
-                ret.push(<li key={mxEv.getId() + "-room"}>
-                    <h2>{ _t("Room") }: { room.name }</h2>
-                </li>);
-                lastRoomId = roomId;
+            if (!results?.results?.length) {
+                ret.push(
+                    <li key="search-top-marker">
+                        <h2 className="mx_RoomView_topMarker">{_t("No results")}</h2>
+                    </li>,
+                );
+            } else {
+                ret.push(
+                    <li key="search-top-marker">
+                        <h2 className="mx_RoomView_topMarker">{_t("No more results")}</h2>
+                    </li>,
+                );
             }
         }
 
-        const resultLink = "#/room/"+roomId+"/"+mxEv.getId();
+        // once dynamic content in the search results load, make the scrollPanel check
+        // the scroll offsets.
+        const onHeightChanged = () => {
+            const scrollPanel = ref.current;
+            scrollPanel?.checkScroll();
+        };
 
-        ret.push(<SearchResultTile
-            key={mxEv.getId()}
-            searchResult={result}
-            searchHighlights={highlights}
-            resultLink={resultLink}
-            permalinkCreator={permalinkCreator}
-            onHeightChanged={onHeightChanged}
-        />);
-    }
+        let lastRoomId: string;
 
-    return (
-        <ScrollPanel
-            ref={ref}
-            className={"mx_RoomView_searchResultsPanel " + className}
-            onFillRequest={onSearchResultsFillRequest}
-            resizeNotifier={resizeNotifier}
-        >
-            <li className="mx_RoomView_scrollheader" />
-            { ret }
-        </ScrollPanel>
-    );
-});
+        for (let i = (results?.results?.length || 0) - 1; i >= 0; i--) {
+            const result = results.results[i];
+
+            const mxEv = result.context.getEvent();
+            const roomId = mxEv.getRoomId();
+            const room = client.getRoom(roomId);
+            if (!room) {
+                // if we do not have the room in js-sdk stores then hide it as we cannot easily show it
+                // As per the spec, an all rooms search can create this condition,
+                // it happens with Seshat but not Synapse.
+                // It will make the result count not match the displayed count.
+                logger.log("Hiding search result from an unknown room", roomId);
+                continue;
+            }
+
+            if (!haveRendererForEvent(mxEv, roomContext.showHiddenEvents)) {
+                // XXX: can this ever happen? It will make the result count
+                // not match the displayed count.
+                continue;
+            }
+
+            if (scope === SearchScope.All) {
+                if (roomId !== lastRoomId) {
+                    ret.push(
+                        <li key={mxEv.getId() + "-room"}>
+                            <h2>
+                                {_t("Room")}: {room.name}
+                            </h2>
+                        </li>,
+                    );
+                    lastRoomId = roomId;
+                }
+            }
+
+            const resultLink = "#/room/" + roomId + "/" + mxEv.getId();
+
+            ret.push(
+                <SearchResultTile
+                    key={mxEv.getId()}
+                    searchResult={result}
+                    searchHighlights={highlights}
+                    resultLink={resultLink}
+                    permalinkCreator={permalinkCreator}
+                    onHeightChanged={onHeightChanged}
+                />,
+            );
+        }
+
+        return (
+            <ScrollPanel
+                ref={ref}
+                className={"mx_RoomView_searchResultsPanel " + className}
+                onFillRequest={onSearchResultsFillRequest}
+                resizeNotifier={resizeNotifier}
+            >
+                <li className="mx_RoomView_scrollheader" />
+                {ret}
+            </ScrollPanel>
+        );
+    },
+);

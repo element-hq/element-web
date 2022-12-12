@@ -25,7 +25,8 @@ limitations under the License.
 .mx_E2EIcon_warning,
 .mx_E2EIcon_normal,
 .mx_E2EIcon_verified {
-    &::before, &::after {
+    &::before,
+    &::after {
         content: "";
         display: block;
         position: absolute;
@@ -42,7 +43,7 @@ limitations under the License.
 /* white infill for the transparency */
 .mx_E2EIcon::before {
     background-color: #ffffff;
-    mask-image: url('$(res)/img/e2e/normal.svg');
+    mask-image: url("$(res)/img/e2e/normal.svg");
     mask-repeat: no-repeat;
     mask-position: center;
     mask-size: 80%;
@@ -50,7 +51,7 @@ limitations under the License.
 
 /* transparent-looking border surrounding the shield for when overlain over avatars */
 .mx_E2EIcon_bordered {
-    mask-image: url('$(res)/img/e2e/normal.svg');
+    mask-image: url("$(res)/img/e2e/normal.svg");
     background-color: $header-panel-bg-color;
 
     /* shrink the actual badge */
@@ -64,16 +65,16 @@ limitations under the License.
 }
 
 .mx_E2EIcon_warning::after {
-    mask-image: url('$(res)/img/e2e/warning.svg');
+    mask-image: url("$(res)/img/e2e/warning.svg");
     background-color: $alert;
 }
 
 .mx_E2EIcon_normal::after {
-    mask-image: url('$(res)/img/e2e/normal.svg');
+    mask-image: url("$(res)/img/e2e/normal.svg");
     background-color: $header-panel-text-primary-color;
 }
 
 .mx_E2EIcon_verified::after {
-    mask-image: url('$(res)/img/e2e/verified.svg');
+    mask-image: url("$(res)/img/e2e/verified.svg");
     background-color: $accent;
 }

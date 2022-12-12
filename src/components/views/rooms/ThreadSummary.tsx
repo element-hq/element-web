@@ -62,9 +62,7 @@ const ThreadSummary = ({ mxEvent, thread, ...props }: IProps) => {
             }}
             aria-label={_t("Open thread")}
         >
-            <span className="mx_ThreadSummary_replies_amount">
-                { countSection }
-            </span>
+            <span className="mx_ThreadSummary_replies_amount">{countSection}</span>
             <ThreadMessagePreview thread={thread} showDisplayname={!roomContext.narrow} />
             <div className="mx_ThreadSummary_chevron" />
         </AccessibleButton>
@@ -99,23 +97,23 @@ export const ThreadMessagePreview = ({ thread, showDisplayname = false }: IPrevi
         return null;
     }
 
-    return <>
-        <MemberAvatar
-            member={lastReply.sender}
-            fallbackUserId={lastReply.getSender()}
-            width={24}
-            height={24}
-            className="mx_ThreadSummary_avatar"
-        />
-        { showDisplayname && <div className="mx_ThreadSummary_sender">
-            { lastReply.sender?.name ?? lastReply.getSender() }
-        </div> }
-        <div className="mx_ThreadSummary_content" title={preview}>
-            <span className="mx_ThreadSummary_message-preview">
-                { preview }
-            </span>
-        </div>
-    </>;
+    return (
+        <>
+            <MemberAvatar
+                member={lastReply.sender}
+                fallbackUserId={lastReply.getSender()}
+                width={24}
+                height={24}
+                className="mx_ThreadSummary_avatar"
+            />
+            {showDisplayname && (
+                <div className="mx_ThreadSummary_sender">{lastReply.sender?.name ?? lastReply.getSender()}</div>
+            )}
+            <div className="mx_ThreadSummary_content" title={preview}>
+                <span className="mx_ThreadSummary_message-preview">{preview}</span>
+            </div>
+        </>
+    );
 };
 
 export default ThreadSummary;

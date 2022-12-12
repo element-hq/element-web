@@ -27,14 +27,12 @@ function LatestResultsComponent({ query, doRequest }) {
     const [updateQuery, updateResult] = useLatestResult(setValueInternal);
     useEffect(() => {
         updateQuery(query);
-        doRequest(query).then(it => {
+        doRequest(query).then((it) => {
             updateResult(query, it);
         });
     }, [doRequest, query, updateQuery, updateResult]);
 
-    return <div>
-        { value }
-    </div>;
+    return <div>{value}</div>;
 }
 
 describe("useLatestResult", () => {

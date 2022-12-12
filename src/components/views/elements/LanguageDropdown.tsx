@@ -15,9 +15,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 
-import * as languageHandler from '../../../languageHandler';
+import * as languageHandler from "../../../languageHandler";
 import SettingsStore from "../../../settings/SettingsStore";
 import { _t } from "../../../languageHandler";
 import Spinner from "./Spinner";
@@ -46,22 +46,25 @@ export default class LanguageDropdown extends React.Component<IProps, IState> {
         super(props);
 
         this.state = {
-            searchQuery: '',
+            searchQuery: "",
             langs: null,
         };
     }
 
     public componentDidMount(): void {
-        languageHandler.getAllLanguagesFromJson().then((langs) => {
-            langs.sort(function(a, b) {
-                if (a.label < b.label) return -1;
-                if (a.label > b.label) return 1;
-                return 0;
+        languageHandler
+            .getAllLanguagesFromJson()
+            .then((langs) => {
+                langs.sort(function (a, b) {
+                    if (a.label < b.label) return -1;
+                    if (a.label > b.label) return 1;
+                    return 0;
+                });
+                this.setState({ langs });
+            })
+            .catch(() => {
+                this.setState({ langs: [{ value: "en", label: "English" }] });
             });
-            this.setState({ langs });
-        }).catch(() => {
-            this.setState({ langs: [{ value: 'en', label: "English" }] });
-        });
 
         if (!this.props.value) {
             // If no value is given, we start with the first
@@ -93,14 +96,12 @@ export default class LanguageDropdown extends React.Component<IProps, IState> {
         }
 
         const options = displayedLanguages.map((language) => {
-            return <div key={language.value}>
-                { language.label }
-            </div>;
+            return <div key={language.value}>{language.label}</div>;
         });
 
         // default value here too, otherwise we need to handle null / undefined
         // values between mounting and the initial value propagating
-        let language = SettingsStore.getValue("language", null, /*excludeDefault:*/true);
+        let language = SettingsStore.getValue("language", null, /*excludeDefault:*/ true);
         let value = null;
         if (language) {
             value = this.props.value || language;
@@ -109,18 +110,19 @@ export default class LanguageDropdown extends React.Component<IProps, IState> {
             value = this.props.value || language;
         }
 
-        return <Dropdown
-            id="mx_LanguageDropdown"
-            className={this.props.className}
-            onOptionChange={this.props.onOptionChange}
-            onSearchChange={this.onSearchChange}
-            searchEnabled={true}
-            value={value}
-            label={_t("Language Dropdown")}
-            disabled={this.props.disabled}
-        >
-            { options }
-        </Dropdown>;
+        return (
+            <Dropdown
+                id="mx_LanguageDropdown"
+                className={this.props.className}
+                onOptionChange={this.props.onOptionChange}
+                onSearchChange={this.onSearchChange}
+                searchEnabled={true}
+                value={value}
+                label={_t("Language Dropdown")}
+                disabled={this.props.disabled}
+            >
+                {options}
+            </Dropdown>
+        );
     }
 }
-

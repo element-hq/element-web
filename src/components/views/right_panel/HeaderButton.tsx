@@ -18,8 +18,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import classNames from 'classnames';
+import React from "react";
+import classNames from "classnames";
 
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import { ButtonEvent } from "../elements/AccessibleButton";
@@ -50,14 +50,16 @@ export default class HeaderButton extends React.Component<IProps> {
             [`mx_RightPanel_${name}`]: true,
         });
 
-        return <AccessibleTooltipButton
-            {...props}
-            aria-selected={isHighlighted}
-            role="tab"
-            title={title}
-            alignment={Alignment.Bottom}
-            className={classes}
-            onClick={onClick}
-        />;
+        return (
+            <AccessibleTooltipButton
+                {...props}
+                aria-selected={isHighlighted}
+                role="tab"
+                title={title}
+                alignment={Alignment.Bottom}
+                className={classes}
+                onClick={onClick}
+            />
+        );
     }
 }

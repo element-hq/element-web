@@ -17,7 +17,7 @@ Let's say we want to close a menu when the correct keys were pressed:
 ```ts
 const onKeyDown = (ev: KeyboardEvent): void => {
     let handled = true;
-    const action = getKeyBindingManager().getAccessibilityAction(ev)
+    const action = getKeyBindingManager().getAccessibilityAction(ev);
     switch (action) {
         case KeyBindingAction.Escape:
             closeMenu();
@@ -26,12 +26,12 @@ const onKeyDown = (ev: KeyboardEvent): void => {
             handled = false;
             break;
     }
-    
+
     if (handled) {
         ev.preventDefault();
         ev.stopPropagation();
     }
-}
+};
 ```
 
 ## Managing keyboard shortcuts

@@ -28,9 +28,7 @@ interface Props {
     voiceBroadcastPreRecording: VoiceBroadcastPreRecording;
 }
 
-export const VoiceBroadcastPreRecordingPip: React.FC<Props> = ({
-    voiceBroadcastPreRecording,
-}) => {
+export const VoiceBroadcastPreRecordingPip: React.FC<Props> = ({ voiceBroadcastPreRecording }) => {
     const pipRef = useRef<HTMLDivElement | null>(null);
     const { currentDevice, currentDeviceLabel, devices, setDevice } = useAudioDeviceSelection();
     const [showDeviceSelect, setShowDeviceSelect] = useState<boolean>(false);
@@ -40,32 +38,31 @@ export const VoiceBroadcastPreRecordingPip: React.FC<Props> = ({
         setDevice(device);
     };
 
-    return <div
-        className="mx_VoiceBroadcastBody mx_VoiceBroadcastBody--pip"
-        ref={pipRef}
-    >
-        <VoiceBroadcastHeader
-            onCloseClick={voiceBroadcastPreRecording.cancel}
-            onMicrophoneLineClick={() => setShowDeviceSelect(true)}
-            room={voiceBroadcastPreRecording.room}
-            microphoneLabel={currentDeviceLabel}
-            showClose={true}
-        />
-        <AccessibleButton
-            className="mx_VoiceBroadcastBody_blockButton"
-            kind="danger"
-            onClick={voiceBroadcastPreRecording.start}
-        >
-            <LiveIcon className="mx_Icon mx_Icon_16" />
-            { _t("Go live") }
-        </AccessibleButton>
-        {
-            showDeviceSelect && <DevicesContextMenu
-                containerRef={pipRef}
-                currentDevice={currentDevice}
-                devices={devices}
-                onDeviceSelect={onDeviceSelect}
+    return (
+        <div className="mx_VoiceBroadcastBody mx_VoiceBroadcastBody--pip" ref={pipRef}>
+            <VoiceBroadcastHeader
+                onCloseClick={voiceBroadcastPreRecording.cancel}
+                onMicrophoneLineClick={() => setShowDeviceSelect(true)}
+                room={voiceBroadcastPreRecording.room}
+                microphoneLabel={currentDeviceLabel}
+                showClose={true}
             />
-        }
-    </div>;
+            <AccessibleButton
+                className="mx_VoiceBroadcastBody_blockButton"
+                kind="danger"
+                onClick={voiceBroadcastPreRecording.start}
+            >
+                <LiveIcon className="mx_Icon mx_Icon_16" />
+                {_t("Go live")}
+            </AccessibleButton>
+            {showDeviceSelect && (
+                <DevicesContextMenu
+                    containerRef={pipRef}
+                    currentDevice={currentDevice}
+                    devices={devices}
+                    onDeviceSelect={onDeviceSelect}
+                />
+            )}
+        </div>
+    );
 };

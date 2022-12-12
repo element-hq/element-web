@@ -14,11 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import EmojiProvider from '../../src/autocomplete/EmojiProvider';
-import { mkStubRoom } from '../test-utils/test-utils';
+import EmojiProvider from "../../src/autocomplete/EmojiProvider";
+import { mkStubRoom } from "../test-utils/test-utils";
 import { add } from "../../src/emojipicker/recent";
 import { stubClient } from "../test-utils";
-import { MatrixClientPeg } from '../../src/MatrixClientPeg';
+import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 
 const EMOJI_SHORTCODES = [
     ":+1",
@@ -39,20 +39,18 @@ const EMOJI_SHORTCODES = [
 // Some emoji shortcodes are too short and do not actually trigger autocompletion until the ending `:`.
 // This means that we cannot compare their autocompletion before and after the ending `:` and have
 // to simply assert that the final completion with the colon is the exact emoji.
-const TOO_SHORT_EMOJI_SHORTCODE = [
-    { emojiShortcode: ":o", expectedEmoji: "⭕️" },
-];
+const TOO_SHORT_EMOJI_SHORTCODE = [{ emojiShortcode: ":o", expectedEmoji: "⭕️" }];
 
-describe('EmojiProvider', function() {
+describe("EmojiProvider", function () {
     const testRoom = mkStubRoom(undefined, undefined, undefined);
     stubClient();
     MatrixClientPeg.get();
 
-    it.each(EMOJI_SHORTCODES)('Returns consistent results after final colon %s', async function(emojiShortcode) {
+    it.each(EMOJI_SHORTCODES)("Returns consistent results after final colon %s", async function (emojiShortcode) {
         const ep = new EmojiProvider(testRoom);
-        const range = { "beginning": true, "start": 0, "end": 3 };
+        const range = { beginning: true, start: 0, end: 3 };
         const completionsBeforeColon = await ep.getCompletions(emojiShortcode, range);
-        const completionsAfterColon = await ep.getCompletions(emojiShortcode + ':', range);
+        const completionsAfterColon = await ep.getCompletions(emojiShortcode + ":", range);
 
         const firstCompletionWithoutColon = completionsBeforeColon[0].completion;
         const firstCompletionWithColon = completionsAfterColon[0].completion;
@@ -60,17 +58,18 @@ describe('EmojiProvider', function() {
         expect(firstCompletionWithoutColon).toEqual(firstCompletionWithColon);
     });
 
-    it.each(
-        TOO_SHORT_EMOJI_SHORTCODE,
-    )('Returns correct results after final colon $emojiShortcode', async ({ emojiShortcode, expectedEmoji }) => {
-        const ep = new EmojiProvider(testRoom);
-        const range = { "beginning": true, "start": 0, "end": 3 };
-        const completions = await ep.getCompletions(emojiShortcode + ':', range);
+    it.each(TOO_SHORT_EMOJI_SHORTCODE)(
+        "Returns correct results after final colon $emojiShortcode",
+        async ({ emojiShortcode, expectedEmoji }) => {
+            const ep = new EmojiProvider(testRoom);
+            const range = { beginning: true, start: 0, end: 3 };
+            const completions = await ep.getCompletions(emojiShortcode + ":", range);
 
-        expect(completions[0].completion).toEqual(expectedEmoji);
-    });
+            expect(completions[0].completion).toEqual(expectedEmoji);
+        },
+    );
 
-    it('Returns correct autocompletion based on recently used emoji', async function() {
+    it("Returns correct autocompletion based on recently used emoji", async function () {
         add("😘"); //kissing_heart
         add("😘");
         add("😚"); //kissing_closed_eyes

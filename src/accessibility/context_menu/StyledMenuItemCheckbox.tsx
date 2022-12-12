@@ -79,7 +79,7 @@ export const StyledMenuItemCheckbox: React.FC<IProps> = ({ children, label, onCh
             inputRef={ref}
             tabIndex={isActive ? 0 : -1}
         >
-            { children }
+            {children}
         </StyledCheckbox>
     );
 };

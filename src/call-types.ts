@@ -16,4 +16,4 @@ limitations under the License.
 
 // Event type for room account data and room creation content used to mark rooms as virtual rooms
 // (and store the ID of their native room)
-export const VIRTUAL_ROOM_EVENT_TYPE = 'im.vector.is_virtual_room';
+export const VIRTUAL_ROOM_EVENT_TYPE = "im.vector.is_virtual_room";

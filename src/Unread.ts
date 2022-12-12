@@ -21,7 +21,7 @@ import { EventType } from "matrix-js-sdk/src/@types/event";
 import { M_BEACON } from "matrix-js-sdk/src/@types/beacon";
 
 import { MatrixClientPeg } from "./MatrixClientPeg";
-import shouldHideEvent from './shouldHideEvent';
+import shouldHideEvent from "./shouldHideEvent";
 import { haveRendererForEvent } from "./events/EventTileFactory";
 import SettingsStore from "./settings/SettingsStore";
 

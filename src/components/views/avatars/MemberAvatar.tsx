@@ -15,17 +15,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useContext } from 'react';
+import React, { useContext } from "react";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
-import { ResizeMethod } from 'matrix-js-sdk/src/@types/partials';
+import { ResizeMethod } from "matrix-js-sdk/src/@types/partials";
 
 import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import BaseAvatar from "./BaseAvatar";
 import { mediaFromMxc } from "../../../customisations/Media";
-import { CardContext } from '../right_panel/context';
-import UserIdentifierCustomisations from '../../../customisations/UserIdentifier';
-import { useRoomMemberProfile } from '../../../hooks/room/useRoomMemberProfile';
+import { CardContext } from "../right_panel/context";
+import UserIdentifierCustomisations from "../../../customisations/UserIdentifier";
+import { useRoomMemberProfile } from "../../../hooks/room/useRoomMemberProfile";
 
 interface IProps extends Omit<React.ComponentProps<typeof BaseAvatar>, "name" | "idName" | "url"> {
     member: RoomMember | null;
@@ -47,7 +47,7 @@ interface IProps extends Omit<React.ComponentProps<typeof BaseAvatar>, "name" | 
 export default function MemberAvatar({
     width,
     height,
-    resizeMethod = 'crop',
+    resizeMethod = "crop",
     viewUserOnClick,
     forceHistorical,
     fallbackUserId,
@@ -76,35 +76,40 @@ export default function MemberAvatar({
         }
 
         if (!title) {
-            title = UserIdentifierCustomisations.getDisplayUserIdentifier(
-                member?.userId ?? "", { roomId: member?.roomId ?? "" },
-            ) ?? fallbackUserId;
+            title =
+                UserIdentifierCustomisations.getDisplayUserIdentifier(member?.userId ?? "", {
+                    roomId: member?.roomId ?? "",
+                }) ?? fallbackUserId;
         }
     }
 
-    return <BaseAvatar
-        {...props}
-        width={width}
-        height={height}
-        resizeMethod={resizeMethod}
-        name={name ?? ""}
-        title={hideTitle ? undefined : title}
-        idName={member?.userId ?? fallbackUserId}
-        url={imageUrl}
-        onClick={viewUserOnClick ? () => {
-            dis.dispatch({
-                action: Action.ViewUser,
-                member: propsMember,
-                push: card.isCard,
-            });
-        } : props.onClick}
-    />;
+    return (
+        <BaseAvatar
+            {...props}
+            width={width}
+            height={height}
+            resizeMethod={resizeMethod}
+            name={name ?? ""}
+            title={hideTitle ? undefined : title}
+            idName={member?.userId ?? fallbackUserId}
+            url={imageUrl}
+            onClick={
+                viewUserOnClick
+                    ? () => {
+                          dis.dispatch({
+                              action: Action.ViewUser,
+                              member: propsMember,
+                              push: card.isCard,
+                          });
+                      }
+                    : props.onClick
+            }
+        />
+    );
 }
 
 export class LegacyMemberAvatar extends React.Component<IProps> {
     public render(): JSX.Element {
-        return <MemberAvatar {...this.props}>
-            { this.props.children }
-        </MemberAvatar>;
+        return <MemberAvatar {...this.props}>{this.props.children}</MemberAvatar>;
     }
 }

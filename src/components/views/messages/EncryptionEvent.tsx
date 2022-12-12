@@ -14,17 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { forwardRef, useContext } from 'react';
+import React, { forwardRef, useContext } from "react";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { IRoomEncryption } from "matrix-js-sdk/src/crypto/RoomList";
 
-import { _t } from '../../../languageHandler';
-import { MatrixClientPeg } from '../../../MatrixClientPeg';
+import { _t } from "../../../languageHandler";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import EventTileBubble from "./EventTileBubble";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { objectHasDiff } from "../../../utils/objects";
-import { isLocalRoom } from '../../../utils/localRoom/isLocalRoom';
+import { isLocalRoom } from "../../../utils/localRoom/isLocalRoom";
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -52,39 +52,50 @@ const EncryptionEvent = forwardRef<HTMLDivElement, IProps>(({ mxEvent, timestamp
             subtitle = _t("Some encryption parameters have been changed.");
         } else if (dmPartner) {
             const displayName = room.getMember(dmPartner)?.rawDisplayName || dmPartner;
-            subtitle = _t("Messages here are end-to-end encrypted. " +
-                "Verify %(displayName)s in their profile - tap on their avatar.", { displayName });
+            subtitle = _t(
+                "Messages here are end-to-end encrypted. " +
+                    "Verify %(displayName)s in their profile - tap on their avatar.",
+                { displayName },
+            );
         } else if (isLocalRoom(room)) {
             subtitle = _t("Messages in this chat will be end-to-end encrypted.");
         } else {
-            subtitle = _t("Messages in this room are end-to-end encrypted. " +
-                "When people join, you can verify them in their profile, just tap on their avatar.");
+            subtitle = _t(
+                "Messages in this room are end-to-end encrypted. " +
+                    "When people join, you can verify them in their profile, just tap on their avatar.",
+            );
         }
 
-        return <EventTileBubble
-            className="mx_cryptoEvent mx_cryptoEvent_icon"
-            title={_t("Encryption enabled")}
-            subtitle={subtitle}
-            timestamp={timestamp}
-        />;
+        return (
+            <EventTileBubble
+                className="mx_cryptoEvent mx_cryptoEvent_icon"
+                title={_t("Encryption enabled")}
+                subtitle={subtitle}
+                timestamp={timestamp}
+            />
+        );
     }
 
     if (isRoomEncrypted) {
-        return <EventTileBubble
-            className="mx_cryptoEvent mx_cryptoEvent_icon"
-            title={_t("Encryption enabled")}
-            subtitle={_t("Ignored attempt to disable encryption")}
-            timestamp={timestamp}
-        />;
+        return (
+            <EventTileBubble
+                className="mx_cryptoEvent mx_cryptoEvent_icon"
+                title={_t("Encryption enabled")}
+                subtitle={_t("Ignored attempt to disable encryption")}
+                timestamp={timestamp}
+            />
+        );
     }
 
-    return <EventTileBubble
-        className="mx_cryptoEvent mx_cryptoEvent_icon mx_cryptoEvent_icon_warning"
-        title={_t("Encryption not enabled")}
-        subtitle={_t("The encryption used by this room isn't supported.")}
-        ref={ref}
-        timestamp={timestamp}
-    />;
+    return (
+        <EventTileBubble
+            className="mx_cryptoEvent mx_cryptoEvent_icon mx_cryptoEvent_icon_warning"
+            title={_t("Encryption not enabled")}
+            subtitle={_t("The encryption used by this room isn't supported.")}
+            ref={ref}
+            timestamp={timestamp}
+        />
+    );
 });
 
 export default EncryptionEvent;

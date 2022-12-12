@@ -54,16 +54,14 @@ interface MockClientOptions {
     users?: IUserChunkMember[];
 }
 
-function mockClient(
-    {
-        userId = "testuser",
-        homeserver = "example.tld",
-        thirdPartyProtocols = {},
-        rooms = [],
-        members = [],
-        users = [],
-    }: MockClientOptions = {},
-): MatrixClient {
+function mockClient({
+    userId = "testuser",
+    homeserver = "example.tld",
+    thirdPartyProtocols = {},
+    rooms = [],
+    members = [],
+    users = [],
+}: MockClientOptions = {}): MatrixClient {
     stubClient();
     const cli = MatrixClientPeg.get();
     MatrixClientPeg.getHomeserverName = jest.fn(() => homeserver);
@@ -72,13 +70,15 @@ function mockClient(
     cli.getThirdpartyProtocols = jest.fn(() => Promise.resolve(thirdPartyProtocols));
     cli.publicRooms = jest.fn((options) => {
         const searchTerm = options?.filter?.generic_search_term?.toLowerCase();
-        const chunk = rooms.filter(it =>
-            !searchTerm ||
-            it.room_id.toLowerCase().includes(searchTerm) ||
-            it.name?.toLowerCase().includes(searchTerm) ||
-            sanitizeHtml(it?.topic, { allowedTags: [] }).toLowerCase().includes(searchTerm) ||
-            it.canonical_alias?.toLowerCase().includes(searchTerm) ||
-            it.aliases?.find(alias => alias.toLowerCase().includes(searchTerm)));
+        const chunk = rooms.filter(
+            (it) =>
+                !searchTerm ||
+                it.room_id.toLowerCase().includes(searchTerm) ||
+                it.name?.toLowerCase().includes(searchTerm) ||
+                sanitizeHtml(it?.topic, { allowedTags: [] }).toLowerCase().includes(searchTerm) ||
+                it.canonical_alias?.toLowerCase().includes(searchTerm) ||
+                it.aliases?.find((alias) => alias.toLowerCase().includes(searchTerm)),
+        );
         return Promise.resolve({
             chunk,
             total_room_count_estimate: chunk.length,
@@ -86,16 +86,19 @@ function mockClient(
     });
     cli.searchUserDirectory = jest.fn(({ term, limit }) => {
         const searchTerm = term?.toLowerCase();
-        const results = users.filter(it => !searchTerm ||
-            it.user_id.toLowerCase().includes(searchTerm) ||
-            it.display_name.toLowerCase().includes(searchTerm));
+        const results = users.filter(
+            (it) =>
+                !searchTerm ||
+                it.user_id.toLowerCase().includes(searchTerm) ||
+                it.display_name.toLowerCase().includes(searchTerm),
+        );
         return Promise.resolve({
             results: results.slice(0, limit ?? +Infinity),
             limited: limit && limit < results.length,
         });
     });
     cli.getProfileInfo = jest.fn(async (userId) => {
-        const member = members.find(it => it.userId === userId);
+        const member = members.find((it) => it.userId === userId);
         if (member) {
             return Promise.resolve({
                 displayname: member.rawDisplayName,
@@ -144,11 +147,7 @@ describe("Spotlight Dialog", () => {
 
     describe("should apply filters supplied via props", () => {
         it("without filter", async () => {
-            const wrapper = mount(
-                <SpotlightDialog
-                    initialFilter={null}
-                    onFinished={() => null} />,
-            );
+            const wrapper = mount(<SpotlightDialog initialFilter={null} onFinished={() => null} />);
             await act(async () => {
                 await sleep(200);
             });
@@ -160,11 +159,7 @@ describe("Spotlight Dialog", () => {
             wrapper.unmount();
         });
         it("with public room filter", async () => {
-            const wrapper = mount(
-                <SpotlightDialog
-                    initialFilter={Filter.PublicRooms}
-                    onFinished={() => null} />,
-            );
+            const wrapper = mount(<SpotlightDialog initialFilter={Filter.PublicRooms} onFinished={() => null} />);
             await act(async () => {
                 await sleep(200);
             });
@@ -186,7 +181,8 @@ describe("Spotlight Dialog", () => {
                 <SpotlightDialog
                     initialFilter={Filter.People}
                     initialText={testPerson.display_name}
-                    onFinished={() => null} />,
+                    onFinished={() => null}
+                />,
             );
             await act(async () => {
                 await sleep(200);
@@ -208,10 +204,7 @@ describe("Spotlight Dialog", () => {
 
     describe("should apply manually selected filter", () => {
         it("with public rooms", async () => {
-            const wrapper = mount(
-                <SpotlightDialog
-                    onFinished={() => null} />,
-            );
+            const wrapper = mount(<SpotlightDialog onFinished={() => null} />);
             await act(async () => {
                 await sleep(1);
             });
@@ -234,11 +227,7 @@ describe("Spotlight Dialog", () => {
             wrapper.unmount();
         });
         it("with people", async () => {
-            const wrapper = mount(
-                <SpotlightDialog
-                    initialText={testPerson.display_name}
-                    onFinished={() => null} />,
-            );
+            const wrapper = mount(<SpotlightDialog initialText={testPerson.display_name} onFinished={() => null} />);
             await act(async () => {
                 await sleep(1);
             });
@@ -264,11 +253,7 @@ describe("Spotlight Dialog", () => {
 
     describe("should allow clearing filter manually", () => {
         it("with public room filter", async () => {
-            const wrapper = mount(
-                <SpotlightDialog
-                    initialFilter={Filter.PublicRooms}
-                    onFinished={() => null} />,
-            );
+            const wrapper = mount(<SpotlightDialog initialFilter={Filter.PublicRooms} onFinished={() => null} />);
             await act(async () => {
                 await sleep(200);
             });
@@ -294,7 +279,8 @@ describe("Spotlight Dialog", () => {
                 <SpotlightDialog
                     initialFilter={Filter.People}
                     initialText={testPerson.display_name}
-                    onFinished={() => null} />,
+                    onFinished={() => null}
+                />,
             );
             await act(async () => {
                 await sleep(200);
@@ -323,11 +309,7 @@ describe("Spotlight Dialog", () => {
         let options: ReactWrapper;
 
         beforeAll(async () => {
-            wrapper = mount(
-                <SpotlightDialog
-                    initialText="test23"
-                    onFinished={() => null} />,
-            );
+            wrapper = mount(<SpotlightDialog initialText="test23" onFinished={() => null} />);
             await act(async () => {
                 await sleep(200);
             });
@@ -357,7 +339,8 @@ describe("Spotlight Dialog", () => {
             <SpotlightDialog
                 initialFilter={Filter.People}
                 initialText={testPerson.display_name}
-                onFinished={() => null} />,
+                onFinished={() => null}
+            />,
         );
 
         await act(async () => {

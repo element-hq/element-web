@@ -53,12 +53,12 @@ export class Mjolnir {
         this.dispatcherRef = dis.register(this.onAction);
         dis.dispatch<DoAfterSyncPreparedPayload<ActionPayload>>({
             action: Action.DoAfterSyncPrepared,
-            deferred_action: { action: 'setup_mjolnir' },
+            deferred_action: { action: "setup_mjolnir" },
         });
     }
 
     private onAction = (payload: ActionPayload) => {
-        if (payload['action'] === 'setup_mjolnir') {
+        if (payload["action"] === "setup_mjolnir") {
             logger.log("Setting up Mjolnir: after sync");
             this.setup();
         }
@@ -93,17 +93,18 @@ export class Mjolnir {
                 topic: _t("This is your list of users/servers you have blocked - don't leave the room!"),
                 preset: Preset.PrivateChat,
             });
-            personalRoomId = resp['room_id'];
-            await SettingsStore.setValue(
-                "mjolnirPersonalRoom", null, SettingLevel.ACCOUNT, personalRoomId);
-            await SettingsStore.setValue(
-                "mjolnirRooms", null, SettingLevel.ACCOUNT, [personalRoomId, ...this._roomIds]);
+            personalRoomId = resp["room_id"];
+            await SettingsStore.setValue("mjolnirPersonalRoom", null, SettingLevel.ACCOUNT, personalRoomId);
+            await SettingsStore.setValue("mjolnirRooms", null, SettingLevel.ACCOUNT, [
+                personalRoomId,
+                ...this._roomIds,
+            ]);
         }
         if (!personalRoomId) {
             throw new Error("Error finding a room ID to use");
         }
 
-        let list = this._lists.find(b => b.roomId === personalRoomId);
+        let list = this._lists.find((b) => b.roomId === personalRoomId);
         if (!list) list = new BanList(personalRoomId);
         // we don't append the list to the tracked rooms because it should already be there.
         // we're just trying to get the caller some utility access to the list
@@ -116,7 +117,7 @@ export class Mjolnir {
         const personalRoomId = SettingsStore.getValue("mjolnirPersonalRoom");
         if (!personalRoomId) return null;
 
-        let list = this._lists.find(b => b.roomId === personalRoomId);
+        let list = this._lists.find((b) => b.roomId === personalRoomId);
         if (!list) list = new BanList(personalRoomId);
         // we don't append the list to the tracked rooms because it should already be there.
         // we're just trying to get the caller some utility access to the list
@@ -131,9 +132,9 @@ export class Mjolnir {
     }
 
     async unsubscribeFromList(roomId: string) {
-        const roomIds = this._roomIds.filter(r => r !== roomId);
+        const roomIds = this._roomIds.filter((r) => r !== roomId);
         await SettingsStore.setValue("mjolnirRooms", null, SettingLevel.ACCOUNT, roomIds);
-        this._lists = this._lists.filter(b => b.roomId !== roomId);
+        this._lists = this._lists.filter((b) => b.roomId !== roomId);
     }
 
     private onEvent = (event: MatrixEvent) => {
@@ -192,4 +193,3 @@ export class Mjolnir {
         return Mjolnir.instance;
     }
 }
-

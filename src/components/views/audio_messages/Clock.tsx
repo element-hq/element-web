@@ -44,8 +44,10 @@ export default class Clock extends React.Component<Props> {
     }
 
     public render() {
-        return <span aria-live={this.props["aria-live"]} role={this.props.role} className='mx_Clock'>
-            { this.props.formatFn(this.props.seconds) }
-        </span>;
+        return (
+            <span aria-live={this.props["aria-live"]} role={this.props.role} className="mx_Clock">
+                {this.props.formatFn(this.props.seconds)}
+            </span>
+        );
     }
 }

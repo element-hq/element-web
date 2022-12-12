@@ -14,10 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 
-import StyledCheckbox, { CheckboxStyle } from '../../elements/StyledCheckbox';
-import DeviceTile, { DeviceTileProps } from './DeviceTile';
+import StyledCheckbox, { CheckboxStyle } from "../../elements/StyledCheckbox";
+import DeviceTile, { DeviceTileProps } from "./DeviceTile";
 
 interface Props extends DeviceTileProps {
     isSelected: boolean;
@@ -25,26 +25,22 @@ interface Props extends DeviceTileProps {
     onClick?: () => void;
 }
 
-const SelectableDeviceTile: React.FC<Props> = ({
-    children,
-    device,
-    isSelected,
-    onSelect,
-    onClick,
-}) => {
-    return <div className='mx_SelectableDeviceTile'>
-        <StyledCheckbox
-            kind={CheckboxStyle.Solid}
-            checked={isSelected}
-            onChange={onSelect}
-            className='mx_SelectableDeviceTile_checkbox'
-            id={`device-tile-checkbox-${device.device_id}`}
-            data-testid={`device-tile-checkbox-${device.device_id}`}
-        />
-        <DeviceTile device={device} onClick={onClick} isSelected={isSelected}>
-            { children }
-        </DeviceTile>
-    </div>;
+const SelectableDeviceTile: React.FC<Props> = ({ children, device, isSelected, onSelect, onClick }) => {
+    return (
+        <div className="mx_SelectableDeviceTile">
+            <StyledCheckbox
+                kind={CheckboxStyle.Solid}
+                checked={isSelected}
+                onChange={onSelect}
+                className="mx_SelectableDeviceTile_checkbox"
+                id={`device-tile-checkbox-${device.device_id}`}
+                data-testid={`device-tile-checkbox-${device.device_id}`}
+            />
+            <DeviceTile device={device} onClick={onClick} isSelected={isSelected}>
+                {children}
+            </DeviceTile>
+        </div>
+    );
 };
 
 export default SelectableDeviceTile;

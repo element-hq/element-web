@@ -20,9 +20,9 @@ const SIZE_LARGE = { w: 800, h: 600 };
 // For Normal the image gets drawn to never exceed SIZE_NORMAL.w, SIZE_NORMAL.h
 // constraint by: timeline width, manual height overrides
 const SIZE_NORMAL_LANDSCAPE = { w: 324, h: 324 }; // for w > h
-const SIZE_NORMAL_PORTRAIT = { w: Math.ceil(324 * (9/16)), h: 324 }; // for h > w
+const SIZE_NORMAL_PORTRAIT = { w: Math.ceil(324 * (9 / 16)), h: 324 }; // for h > w
 
-type Dimensions = { w: number, h: number };
+type Dimensions = { w: number; h: number };
 
 export enum ImageSize {
     Normal = "normal",
@@ -39,8 +39,7 @@ export function suggestedSize(size: ImageSize, contentSize: Dimensions, maxHeigh
     const aspectRatio = contentSize.w / contentSize.h;
     const portrait = aspectRatio < 1;
 
-    const maxSize = (size === ImageSize.Large) ? SIZE_LARGE :
-        portrait ? SIZE_NORMAL_PORTRAIT : SIZE_NORMAL_LANDSCAPE;
+    const maxSize = size === ImageSize.Large ? SIZE_LARGE : portrait ? SIZE_NORMAL_PORTRAIT : SIZE_NORMAL_LANDSCAPE;
     if (!contentSize.w || !contentSize.h) {
         return maxSize;
     }

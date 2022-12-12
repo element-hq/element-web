@@ -85,7 +85,7 @@ describe("RoomStatusBar", () => {
             expect(pendingEvents[2].threadRootId).toBe(rootEvent.getId());
 
             // Filters out the non thread events
-            expect(pendingEvents.every(ev => ev.getId() !== event.getId())).toBe(true);
+            expect(pendingEvents.every((ev) => ev.getId() !== event.getId())).toBe(true);
         });
     });
 });

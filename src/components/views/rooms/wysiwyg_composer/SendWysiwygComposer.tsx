@@ -14,31 +14,29 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ForwardedRef, forwardRef, MutableRefObject } from 'react';
+import React, { ForwardedRef, forwardRef, MutableRefObject } from "react";
 
-import { useWysiwygSendActionHandler } from './hooks/useWysiwygSendActionHandler';
-import { WysiwygComposer } from './components/WysiwygComposer';
-import { PlainTextComposer } from './components/PlainTextComposer';
-import { ComposerFunctions } from './types';
-import { E2EStatus } from '../../../../utils/ShieldUtils';
-import E2EIcon from '../E2EIcon';
-import { AboveLeftOf } from '../../../structures/ContextMenu';
-import { Emoji } from './components/Emoji';
+import { useWysiwygSendActionHandler } from "./hooks/useWysiwygSendActionHandler";
+import { WysiwygComposer } from "./components/WysiwygComposer";
+import { PlainTextComposer } from "./components/PlainTextComposer";
+import { ComposerFunctions } from "./types";
+import { E2EStatus } from "../../../../utils/ShieldUtils";
+import E2EIcon from "../E2EIcon";
+import { AboveLeftOf } from "../../../structures/ContextMenu";
+import { Emoji } from "./components/Emoji";
 
 interface ContentProps {
     disabled?: boolean;
     composerFunctions: ComposerFunctions;
 }
 
-const Content = forwardRef<HTMLElement, ContentProps>(
-    function Content(
-        { disabled = false, composerFunctions }: ContentProps,
-        forwardRef: ForwardedRef<HTMLElement>,
-    ) {
-        useWysiwygSendActionHandler(disabled, forwardRef as MutableRefObject<HTMLElement>, composerFunctions);
-        return null;
-    },
-);
+const Content = forwardRef<HTMLElement, ContentProps>(function Content(
+    { disabled = false, composerFunctions }: ContentProps,
+    forwardRef: ForwardedRef<HTMLElement>,
+) {
+    useWysiwygSendActionHandler(disabled, forwardRef as MutableRefObject<HTMLElement>, composerFunctions);
+    return null;
+});
 
 interface SendWysiwygComposerProps {
     initialContent?: string;
@@ -51,19 +49,26 @@ interface SendWysiwygComposerProps {
     menuPosition: AboveLeftOf;
 }
 
-export function SendWysiwygComposer(
-    { isRichTextEnabled, e2eStatus, menuPosition, ...props }: SendWysiwygComposerProps) {
+export function SendWysiwygComposer({
+    isRichTextEnabled,
+    e2eStatus,
+    menuPosition,
+    ...props
+}: SendWysiwygComposerProps) {
     const Composer = isRichTextEnabled ? WysiwygComposer : PlainTextComposer;
 
-    return <Composer
-        className="mx_SendWysiwygComposer"
-        leftComponent={e2eStatus && <E2EIcon status={e2eStatus} />}
-        rightComponent={(selectPreviousSelection) =>
-            <Emoji menuPosition={menuPosition} selectPreviousSelection={selectPreviousSelection} />}
-        {...props}
-    >
-        { (ref, composerFunctions) => (
-            <Content disabled={props.disabled} ref={ref} composerFunctions={composerFunctions} />
-        ) }
-    </Composer>;
+    return (
+        <Composer
+            className="mx_SendWysiwygComposer"
+            leftComponent={e2eStatus && <E2EIcon status={e2eStatus} />}
+            rightComponent={(selectPreviousSelection) => (
+                <Emoji menuPosition={menuPosition} selectPreviousSelection={selectPreviousSelection} />
+            )}
+            {...props}
+        >
+            {(ref, composerFunctions) => (
+                <Content disabled={props.disabled} ref={ref} composerFunctions={composerFunctions} />
+            )}
+        </Composer>
+    );
 }

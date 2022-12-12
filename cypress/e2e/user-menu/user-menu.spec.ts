@@ -24,10 +24,10 @@ describe("User Menu", () => {
     let user: UserCredentials;
 
     beforeEach(() => {
-        cy.startSynapse("default").then(data => {
+        cy.startSynapse("default").then((data) => {
             synapse = data;
 
-            cy.initTestUser(synapse, "Jeff").then(credentials => {
+            cy.initTestUser(synapse, "Jeff").then((credentials) => {
                 user = credentials;
             });
         });

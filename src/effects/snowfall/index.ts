@@ -13,7 +13,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import ICanvasEffect from '../ICanvasEffect';
+import ICanvasEffect from "../ICanvasEffect";
 import { arrayFastClone } from "../../utils/arrays";
 
 export type SnowfallOptions = {
@@ -65,7 +65,7 @@ export default class Snowfall implements ICanvasEffect {
         if (!canvas) {
             return;
         }
-        this.context = canvas.getContext('2d');
+        this.context = canvas.getContext("2d");
         this.particles = [];
         const count = this.options.maxCount;
         while (this.particles.length < count) {
@@ -86,9 +86,9 @@ export default class Snowfall implements ICanvasEffect {
         particle.x = Math.random() * width;
         particle.y = Math.random() * -height;
         particle.xCol = particle.x;
-        particle.diameter = (Math.random() * 7) + 4;
-        particle.maximumDrift = (Math.random() * this.options.maxDrift) + 3.5;
-        particle.gravity = this.options.gravity + (Math.random() * 6) + 4;
+        particle.diameter = Math.random() * 7 + 4;
+        particle.maximumDrift = Math.random() * this.options.maxDrift + 3.5;
+        particle.gravity = this.options.gravity + Math.random() * 6 + 4;
         return particle;
     };
 
@@ -132,14 +132,14 @@ export default class Snowfall implements ICanvasEffect {
             this.context.save();
             this.context.beginPath();
             this.context.ellipse(particle.x, particle.y, radius, radius, 0, 0, 360);
-            this.context.fillStyle = '#eaeaea'; // grey so it shows up on the light theme
+            this.context.fillStyle = "#eaeaea"; // grey so it shows up on the light theme
             this.context.fill();
             this.context.closePath();
             this.context.restore();
 
             // Remove any dead snowflakes
             const maxBounds = radius * 4; // make sure it's *really* off screen
-            if (particle.y > (height + maxBounds)) {
+            if (particle.y > height + maxBounds) {
                 const idx = this.particles.indexOf(particle);
                 this.particles.splice(idx, 1);
             }

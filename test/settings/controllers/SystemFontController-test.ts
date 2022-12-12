@@ -20,14 +20,14 @@ import SystemFontController from "../../../src/settings/controllers/SystemFontCo
 import { SettingLevel } from "../../../src/settings/SettingLevel";
 import SettingsStore from "../../../src/settings/SettingsStore";
 
-const dispatchSpy = jest.spyOn(dis, 'dispatch');
+const dispatchSpy = jest.spyOn(dis, "dispatch");
 
-describe('SystemFontController', () => {
-    it('dispatches a font size action on change', () => {
-        const getValueSpy = jest.spyOn(SettingsStore, 'getValue').mockReturnValue(true);
+describe("SystemFontController", () => {
+    it("dispatches a font size action on change", () => {
+        const getValueSpy = jest.spyOn(SettingsStore, "getValue").mockReturnValue(true);
         const controller = new SystemFontController();
 
-        controller.onChange(SettingLevel.ACCOUNT, '$room:server', 12);
+        controller.onChange(SettingLevel.ACCOUNT, "$room:server", 12);
 
         expect(dispatchSpy).toHaveBeenCalledWith({
             action: Action.UpdateSystemFont,

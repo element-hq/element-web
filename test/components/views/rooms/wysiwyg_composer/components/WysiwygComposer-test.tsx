@@ -18,35 +18,35 @@ import "@testing-library/jest-dom";
 import React from "react";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 
-import { WysiwygComposer }
-    from "../../../../../../src/components/views/rooms/wysiwyg_composer/components/WysiwygComposer";
+import { WysiwygComposer } from "../../../../../../src/components/views/rooms/wysiwyg_composer/components/WysiwygComposer";
 import SettingsStore from "../../../../../../src/settings/SettingsStore";
 
-describe('WysiwygComposer', () => {
+describe("WysiwygComposer", () => {
     const customRender = (
         onChange = (_content: string) => void 0,
         onSend = () => void 0,
         disabled = false,
-        initialContent?: string) => {
+        initialContent?: string,
+    ) => {
         return render(
             <WysiwygComposer onChange={onChange} onSend={onSend} disabled={disabled} initialContent={initialContent} />,
         );
     };
 
-    it('Should have contentEditable at false when disabled', () => {
+    it("Should have contentEditable at false when disabled", () => {
         // When
         customRender(jest.fn(), jest.fn(), true);
 
         // Then
-        expect(screen.getByRole('textbox')).toHaveAttribute('contentEditable', "false");
+        expect(screen.getByRole("textbox")).toHaveAttribute("contentEditable", "false");
     });
 
-    describe('Standard behavior', () => {
+    describe("Standard behavior", () => {
         const onChange = jest.fn();
         const onSend = jest.fn();
         beforeEach(async () => {
             customRender(onChange, onSend);
-            await waitFor(() => expect(screen.getByRole('textbox')).toHaveAttribute('contentEditable', "true"));
+            await waitFor(() => expect(screen.getByRole("textbox")).toHaveAttribute("contentEditable", "true"));
         });
 
         afterEach(() => {
@@ -54,39 +54,42 @@ describe('WysiwygComposer', () => {
             onSend.mockReset();
         });
 
-        it('Should have contentEditable at true', async () => {
+        it("Should have contentEditable at true", async () => {
             // Then
-            await waitFor(() => expect(screen.getByRole('textbox')).toHaveAttribute('contentEditable', "true"));
+            await waitFor(() => expect(screen.getByRole("textbox")).toHaveAttribute("contentEditable", "true"));
         });
 
-        it('Should have focus', async () => {
+        it("Should have focus", async () => {
             // Then
-            await waitFor(() => expect(screen.getByRole('textbox')).toHaveFocus());
+            await waitFor(() => expect(screen.getByRole("textbox")).toHaveFocus());
         });
 
-        it('Should call onChange handler', async () => {
+        it("Should call onChange handler", async () => {
             // When
-            fireEvent.input(screen.getByRole('textbox'), {
-                data: 'foo bar',
-                inputType: 'insertText',
+            fireEvent.input(screen.getByRole("textbox"), {
+                data: "foo bar",
+                inputType: "insertText",
             });
 
             // Then
-            await waitFor(() => expect(onChange).toBeCalledWith('foo bar'));
+            await waitFor(() => expect(onChange).toBeCalledWith("foo bar"));
         });
 
-        it('Should call onSend when Enter is pressed ', async () => {
-        //When
-            fireEvent(screen.getByRole('textbox'), new InputEvent('input', {
-                inputType: "insertParagraph",
-            }));
+        it("Should call onSend when Enter is pressed ", async () => {
+            //When
+            fireEvent(
+                screen.getByRole("textbox"),
+                new InputEvent("input", {
+                    inputType: "insertParagraph",
+                }),
+            );
 
             // Then it sends a message
             await waitFor(() => expect(onSend).toBeCalledTimes(1));
         });
     });
 
-    describe('When settings require Ctrl+Enter to send', () => {
+    describe("When settings require Ctrl+Enter to send", () => {
         const onChange = jest.fn();
         const onSend = jest.fn();
         beforeEach(async () => {
@@ -94,7 +97,7 @@ describe('WysiwygComposer', () => {
                 if (name === "MessageComposerInput.ctrlEnterToSend") return true;
             });
             customRender(onChange, onSend);
-            await waitFor(() => expect(screen.getByRole('textbox')).toHaveAttribute('contentEditable', "true"));
+            await waitFor(() => expect(screen.getByRole("textbox")).toHaveAttribute("contentEditable", "true"));
         });
 
         afterEach(() => {
@@ -102,25 +105,30 @@ describe('WysiwygComposer', () => {
             onSend.mockReset();
         });
 
-        it('Should not call onSend when Enter is pressed', async () => {
+        it("Should not call onSend when Enter is pressed", async () => {
             // When
-            fireEvent(screen.getByRole('textbox'), new InputEvent('input', {
-                inputType: "insertParagraph",
-            }));
+            fireEvent(
+                screen.getByRole("textbox"),
+                new InputEvent("input", {
+                    inputType: "insertParagraph",
+                }),
+            );
 
             // Then it does not send a message
             await waitFor(() => expect(onSend).toBeCalledTimes(0));
         });
 
-        it('Should send a message when Ctrl+Enter is pressed', async () => {
+        it("Should send a message when Ctrl+Enter is pressed", async () => {
             // When
-            fireEvent(screen.getByRole('textbox'), new InputEvent('input', {
-                inputType: "sendMessage",
-            }));
+            fireEvent(
+                screen.getByRole("textbox"),
+                new InputEvent("input", {
+                    inputType: "sendMessage",
+                }),
+            );
 
             // Then it sends a message
             await waitFor(() => expect(onSend).toBeCalledTimes(1));
         });
     });
 });
-

@@ -36,4 +36,3 @@ export const getForwardableEvent = (event: MatrixEvent, cli: MatrixClient): Matr
     }
     return event;
 };
-

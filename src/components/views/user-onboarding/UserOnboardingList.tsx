@@ -35,35 +35,38 @@ export function UserOnboardingList({ completedTasks, waitingTasks }: Props) {
     const waiting = waitingTasks.length;
     const total = completed + waiting;
 
-    const tasks = useMemo(() => [
-        ...completedTasks.map((it): [Task, boolean] => [it, true]),
-        ...waitingTasks.map((it): [Task, boolean] => [it, false]),
-    ], [completedTasks, waitingTasks]);
+    const tasks = useMemo(
+        () => [
+            ...completedTasks.map((it): [Task, boolean] => [it, true]),
+            ...waitingTasks.map((it): [Task, boolean] => [it, false]),
+        ],
+        [completedTasks, waitingTasks],
+    );
 
     return (
         <div className="mx_UserOnboardingList">
             <div className="mx_UserOnboardingList_header">
                 <Heading size="h3" className="mx_UserOnboardingList_title">
-                    { waiting > 0 ? _t("Only %(count)s steps to go", {
-                        count: waiting,
-                    }) : _t("You did it!") }
+                    {waiting > 0
+                        ? _t("Only %(count)s steps to go", {
+                              count: waiting,
+                          })
+                        : _t("You did it!")}
                 </Heading>
                 <div className="mx_UserOnboardingList_hint">
-                    { _t("Complete these to get the most out of %(brand)s", {
+                    {_t("Complete these to get the most out of %(brand)s", {
                         brand: SdkConfig.get("brand"),
-                    }) }
+                    })}
                 </div>
             </div>
             <div className="mx_UserOnboardingList_progress">
                 <ProgressBar value={completed} max={total} animated />
-                { waiting === 0 && (
-                    <UserOnboardingFeedback />
-                ) }
+                {waiting === 0 && <UserOnboardingFeedback />}
             </div>
             <ol className="mx_UserOnboardingList_list">
-                { tasks.map(([task, completed]) => (
+                {tasks.map(([task, completed]) => (
                     <UserOnboardingTask key={task.id} completed={completed} task={task} />
-                )) }
+                ))}
             </ol>
         </div>
     );

@@ -26,11 +26,7 @@ export const useCurrentVoiceBroadcastPreRecording = (
         voiceBroadcastPreRecordingStore.getCurrent(),
     );
 
-    useTypedEventEmitter(
-        voiceBroadcastPreRecordingStore,
-        "changed",
-        setCurrentVoiceBroadcastPreRecording,
-    );
+    useTypedEventEmitter(voiceBroadcastPreRecordingStore, "changed", setCurrentVoiceBroadcastPreRecording);
 
     return {
         currentVoiceBroadcastPreRecording,

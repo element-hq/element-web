@@ -14,11 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 import { render, screen } from "@testing-library/react";
-import { IThreepid, ThreepidMedium } from 'matrix-js-sdk/src/@types/threepids';
+import { IThreepid, ThreepidMedium } from "matrix-js-sdk/src/@types/threepids";
 
-import { EmailAddress } from '../../../../../src/components/views/settings/discovery/EmailAddresses';
+import { EmailAddress } from "../../../../../src/components/views/settings/discovery/EmailAddresses";
 
 describe("<EmailAddress/>", () => {
     it("should track props.email.bound changes", async () => {

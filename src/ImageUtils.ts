@@ -48,4 +48,3 @@ export function thumbHeight(fullWidth: number, fullHeight: number, thumbWidth: n
         return Math.floor(heightMulti * fullHeight);
     }
 }
-

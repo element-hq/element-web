@@ -14,17 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { mocked } from 'jest-mock';
+import { mocked } from "jest-mock";
 import { ConditionKind, PushRuleActionName, TweakName } from "matrix-js-sdk/src/@types/PushRules";
-import { NotificationCountType, Room } from 'matrix-js-sdk/src/models/room';
+import { NotificationCountType, Room } from "matrix-js-sdk/src/models/room";
 
 import { mkEvent, stubClient } from "./test-utils";
 import { MatrixClientPeg } from "../src/MatrixClientPeg";
-import {
-    getRoomNotifsState,
-    RoomNotifState,
-    getUnreadNotificationCount,
-} from "../src/RoomNotifs";
+import { getRoomNotifsState, RoomNotifState, getUnreadNotificationCount } from "../src/RoomNotifs";
 
 describe("RoomNotifs test", () => {
     beforeEach(() => {
@@ -35,12 +31,14 @@ describe("RoomNotifs test", () => {
         const cli = MatrixClientPeg.get();
         mocked(cli).pushRules = {
             global: {
-                override: [{
-                    rule_id: "!roomId:server",
-                    enabled: true,
-                    default: false,
-                    actions: [],
-                }],
+                override: [
+                    {
+                        rule_id: "!roomId:server",
+                        enabled: true,
+                        default: false,
+                        actions: [],
+                    },
+                ],
             },
         };
         expect(getRoomNotifsState(cli, "!roomId:server")).toBe(null);
@@ -56,17 +54,21 @@ describe("RoomNotifs test", () => {
         const cli = MatrixClientPeg.get();
         cli.pushRules = {
             global: {
-                override: [{
-                    rule_id: "!roomId:server",
-                    enabled: true,
-                    default: false,
-                    conditions: [{
-                        kind: ConditionKind.EventMatch,
-                        key: "room_id",
-                        pattern: "!roomId:server",
-                    }],
-                    actions: [PushRuleActionName.DontNotify],
-                }],
+                override: [
+                    {
+                        rule_id: "!roomId:server",
+                        enabled: true,
+                        default: false,
+                        conditions: [
+                            {
+                                kind: ConditionKind.EventMatch,
+                                key: "room_id",
+                                pattern: "!roomId:server",
+                            },
+                        ],
+                        actions: [PushRuleActionName.DontNotify],
+                    },
+                ],
             },
         };
         expect(getRoomNotifsState(cli, "!roomId:server")).toBe(RoomNotifState.Mute);

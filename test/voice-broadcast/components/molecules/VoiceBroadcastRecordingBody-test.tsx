@@ -30,7 +30,7 @@ import { mkEvent, stubClient } from "../../../test-utils";
 jest.mock("../../../../src/components/views/avatars/RoomAvatar", () => ({
     __esModule: true,
     default: jest.fn().mockImplementation(({ room }) => {
-        return <div data-testid="room-avatar">room avatar: { room.name }</div>;
+        return <div data-testid="room-avatar">room avatar: {room.name}</div>;
     }),
 }));
 

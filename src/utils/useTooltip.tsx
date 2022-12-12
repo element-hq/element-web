@@ -31,10 +31,7 @@ export function useTooltip(props: ComponentProps<typeof Tooltip>): [TooltipEvent
 
     // No need to fill up the DOM with hidden tooltip elements. Only add the
     // tooltip when we're hovering over the item (performance)
-    const tooltip = <Tooltip
-        {...props}
-        visible={isVisible}
-    />;
+    const tooltip = <Tooltip {...props} visible={isVisible} />;
 
     return [{ showTooltip, hideTooltip }, tooltip];
 }

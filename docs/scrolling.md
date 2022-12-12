@@ -8,7 +8,6 @@ During an onscroll event, we check whether we're getting close to the top or bot
 
 ScrollPanel supports a mode to prevent it shrinking. This is used to prevent a jump when at the bottom of the timeline and people start and stop typing. It gets cleared automatically when 200px above the bottom of the timeline.
 
-
 ## BACAT (Bottom-Aligned, Clipped-At-Top) scrolling
 
 BACAT scrolling implements a different way of restoring the scroll position in the timeline while tiles out of view are changing height or tiles are being added or removed. It was added in https://github.com/matrix-org/matrix-react-sdk/pull/2842.

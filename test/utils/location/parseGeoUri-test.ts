@@ -30,128 +30,110 @@ describe("parseGeoUri", () => {
     // these, but it is permitted, and we will fail to parse in that case.
 
     it("rfc5870 6.1 Simple 3-dimensional", () => {
-        expect(parseGeoUri("geo:48.2010,16.3695,183")).toEqual(
-            {
-                latitude: 48.2010,
-                longitude: 16.3695,
-                altitude: 183,
-                accuracy: undefined,
-                altitudeAccuracy: undefined,
-                heading: undefined,
-                speed: undefined,
-            },
-        );
+        expect(parseGeoUri("geo:48.2010,16.3695,183")).toEqual({
+            latitude: 48.201,
+            longitude: 16.3695,
+            altitude: 183,
+            accuracy: undefined,
+            altitudeAccuracy: undefined,
+            heading: undefined,
+            speed: undefined,
+        });
     });
 
     it("rfc5870 6.2 Explicit CRS and accuracy", () => {
-        expect(parseGeoUri("geo:48.198634,16.371648;crs=wgs84;u=40")).toEqual(
-            {
-                latitude: 48.198634,
-                longitude: 16.371648,
-                altitude: undefined,
-                accuracy: 40,
-                altitudeAccuracy: undefined,
-                heading: undefined,
-                speed: undefined,
-            },
-        );
+        expect(parseGeoUri("geo:48.198634,16.371648;crs=wgs84;u=40")).toEqual({
+            latitude: 48.198634,
+            longitude: 16.371648,
+            altitude: undefined,
+            accuracy: 40,
+            altitudeAccuracy: undefined,
+            heading: undefined,
+            speed: undefined,
+        });
     });
 
     it("rfc5870 6.4 Negative longitude and explicit CRS", () => {
-        expect(parseGeoUri("geo:90,-22.43;crs=WGS84")).toEqual(
-            {
-                latitude: 90,
-                longitude: -22.43,
-                altitude: undefined,
-                accuracy: undefined,
-                altitudeAccuracy: undefined,
-                heading: undefined,
-                speed: undefined,
-            },
-        );
+        expect(parseGeoUri("geo:90,-22.43;crs=WGS84")).toEqual({
+            latitude: 90,
+            longitude: -22.43,
+            altitude: undefined,
+            accuracy: undefined,
+            altitudeAccuracy: undefined,
+            heading: undefined,
+            speed: undefined,
+        });
     });
 
     it("rfc5870 6.4 Integer lat and lon", () => {
-        expect(parseGeoUri("geo:90,46")).toEqual(
-            {
-                latitude: 90,
-                longitude: 46,
-                altitude: undefined,
-                accuracy: undefined,
-                altitudeAccuracy: undefined,
-                heading: undefined,
-                speed: undefined,
-            },
-        );
+        expect(parseGeoUri("geo:90,46")).toEqual({
+            latitude: 90,
+            longitude: 46,
+            altitude: undefined,
+            accuracy: undefined,
+            altitudeAccuracy: undefined,
+            heading: undefined,
+            speed: undefined,
+        });
     });
 
     it("rfc5870 6.4 Percent-encoded param value", () => {
-        expect(parseGeoUri("geo:66,30;u=6.500;FOo=this%2dthat")).toEqual(
-            {
-                latitude: 66,
-                longitude: 30,
-                altitude: undefined,
-                accuracy: 6.500,
-                altitudeAccuracy: undefined,
-                heading: undefined,
-                speed: undefined,
-            },
-        );
+        expect(parseGeoUri("geo:66,30;u=6.500;FOo=this%2dthat")).toEqual({
+            latitude: 66,
+            longitude: 30,
+            altitude: undefined,
+            accuracy: 6.5,
+            altitudeAccuracy: undefined,
+            heading: undefined,
+            speed: undefined,
+        });
     });
 
     it("rfc5870 6.4 Unknown param", () => {
-        expect(parseGeoUri("geo:66.0,30;u=6.5;foo=this-that>")).toEqual(
-            {
-                latitude: 66.0,
-                longitude: 30,
-                altitude: undefined,
-                accuracy: 6.5,
-                altitudeAccuracy: undefined,
-                heading: undefined,
-                speed: undefined,
-            },
-        );
+        expect(parseGeoUri("geo:66.0,30;u=6.5;foo=this-that>")).toEqual({
+            latitude: 66.0,
+            longitude: 30,
+            altitude: undefined,
+            accuracy: 6.5,
+            altitudeAccuracy: undefined,
+            heading: undefined,
+            speed: undefined,
+        });
     });
 
     it("rfc5870 6.4 Multiple unknown params", () => {
-        expect(parseGeoUri("geo:70,20;foo=1.00;bar=white")).toEqual(
-            {
-                latitude: 70,
-                longitude: 20,
-                altitude: undefined,
-                accuracy: undefined,
-                altitudeAccuracy: undefined,
-                heading: undefined,
-                speed: undefined,
-            },
-        );
+        expect(parseGeoUri("geo:70,20;foo=1.00;bar=white")).toEqual({
+            latitude: 70,
+            longitude: 20,
+            altitude: undefined,
+            accuracy: undefined,
+            altitudeAccuracy: undefined,
+            heading: undefined,
+            speed: undefined,
+        });
     });
 
     it("Negative latitude", () => {
-        expect(parseGeoUri("geo:-7.5,20")).toEqual(
-            {
-                latitude: -7.5,
-                longitude: 20,
-                altitude: undefined,
-                accuracy: undefined,
-                altitudeAccuracy: undefined,
-                heading: undefined,
-                speed: undefined,
-            },
-        );
+        expect(parseGeoUri("geo:-7.5,20")).toEqual({
+            latitude: -7.5,
+            longitude: 20,
+            altitude: undefined,
+            accuracy: undefined,
+            altitudeAccuracy: undefined,
+            heading: undefined,
+            speed: undefined,
+        });
     });
 
     it("Zero altitude is not unknown", () => {
-        expect(parseGeoUri("geo:-7.5,-20,0")).toEqual(
-            {
-                latitude: -7.5,
-                longitude: -20,
-                altitude: 0,
-                accuracy: undefined,
-                altitudeAccuracy: undefined,
-                heading: undefined,
-                speed: undefined,
-            },
-        );
+        expect(parseGeoUri("geo:-7.5,-20,0")).toEqual({
+            latitude: -7.5,
+            longitude: -20,
+            altitude: 0,
+            accuracy: undefined,
+            altitudeAccuracy: undefined,
+            heading: undefined,
+            speed: undefined,
+        });
     });
 });

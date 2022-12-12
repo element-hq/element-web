@@ -49,13 +49,13 @@ class PassphraseField extends PureComponent<IProps> {
     };
 
     public readonly validate = withValidation<this, zxcvbn.ZXCVBNResult>({
-        description: function(complexity) {
+        description: function (complexity) {
             const score = complexity ? complexity.score : 0;
             return <progress className="mx_PassphraseField_progress" max={4} value={score} />;
         },
         deriveData: async ({ value }) => {
             if (!value) return null;
-            const { scorePassword } = await import('../../../utils/PasswordScorer');
+            const { scorePassword } = await import("../../../utils/PasswordScorer");
             return scorePassword(value);
         },
         rules: [
@@ -66,7 +66,7 @@ class PassphraseField extends PureComponent<IProps> {
             },
             {
                 key: "complexity",
-                test: async function({ value }, complexity) {
+                test: async function ({ value }, complexity) {
                     if (!value) {
                         return false;
                     }
@@ -74,7 +74,7 @@ class PassphraseField extends PureComponent<IProps> {
                     const allowUnsafe = SdkConfig.get("dangerously_allow_unsafe_and_insecure_passwords");
                     return allowUnsafe || safe;
                 },
-                valid: function(complexity) {
+                valid: function (complexity) {
                     // Unsafe passwords that are valid are only possible through a
                     // configuration flag. We'll print some helper text to signal
                     // to the user that their password is allowed, but unsafe.
@@ -83,7 +83,7 @@ class PassphraseField extends PureComponent<IProps> {
                     }
                     return _t(this.props.labelAllowedButUnsafe);
                 },
-                invalid: function(complexity) {
+                invalid: function (complexity) {
                     if (!complexity) {
                         return null;
                     }
@@ -103,18 +103,20 @@ class PassphraseField extends PureComponent<IProps> {
     };
 
     render() {
-        return <Field
-            id={this.props.id}
-            autoFocus={this.props.autoFocus}
-            className={classNames("mx_PassphraseField", this.props.className)}
-            ref={this.props.fieldRef}
-            type="password"
-            autoComplete="new-password"
-            label={_t(this.props.label)}
-            value={this.props.value}
-            onChange={this.props.onChange}
-            onValidate={this.onValidate}
-        />;
+        return (
+            <Field
+                id={this.props.id}
+                autoFocus={this.props.autoFocus}
+                className={classNames("mx_PassphraseField", this.props.className)}
+                ref={this.props.fieldRef}
+                type="password"
+                autoComplete="new-password"
+                label={_t(this.props.label)}
+                value={this.props.value}
+                onChange={this.props.onChange}
+                onValidate={this.onValidate}
+            />
+        );
     }
 }
 

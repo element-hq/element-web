@@ -26,13 +26,13 @@ export type ExtendedDeviceAppInfo = {
     url?: string;
 };
 export type ExtendedDevice = DeviceWithVerification & ExtendedDeviceAppInfo & ExtendedDeviceInformation;
-export type DevicesDictionary = Record<ExtendedDevice['device_id'], ExtendedDevice>;
+export type DevicesDictionary = Record<ExtendedDevice["device_id"], ExtendedDevice>;
 
 export enum DeviceSecurityVariation {
-    Verified = 'Verified',
-    Unverified = 'Unverified',
-    Inactive = 'Inactive',
+    Verified = "Verified",
+    Unverified = "Unverified",
+    Inactive = "Inactive",
     // sessions that do not support encryption
     // eg a session that logged in via api to get an access token
-    Unverifiable = 'Unverifiable'
+    Unverifiable = "Unverifiable",
 }

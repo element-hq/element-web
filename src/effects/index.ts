@@ -28,9 +28,9 @@ import { HeartOptions } from "./hearts";
  */
 export const CHAT_EFFECTS: Array<Effect<{ [key: string]: any }>> = [
     {
-        emojis: ['🎊', '🎉'],
-        msgType: 'nic.custom.confetti',
-        command: 'confetti',
+        emojis: ["🎊", "🎉"],
+        msgType: "nic.custom.confetti",
+        command: "confetti",
         description: () => _td("Sends the given message with confetti"),
         fallbackMessage: () => _t("sends confetti") + " 🎉",
         options: {
@@ -42,9 +42,9 @@ export const CHAT_EFFECTS: Array<Effect<{ [key: string]: any }>> = [
         },
     } as Effect<ConfettiOptions>,
     {
-        emojis: ['🎆'],
-        msgType: 'nic.custom.fireworks',
-        command: 'fireworks',
+        emojis: ["🎆"],
+        msgType: "nic.custom.fireworks",
+        command: "fireworks",
         description: () => _td("Sends the given message with fireworks"),
         fallbackMessage: () => _t("sends fireworks") + " 🎆",
         options: {
@@ -53,9 +53,9 @@ export const CHAT_EFFECTS: Array<Effect<{ [key: string]: any }>> = [
         },
     } as Effect<FireworksOptions>,
     {
-        emojis: ['🌧️', '⛈️', '🌦️'],
-        msgType: 'io.element.effect.rainfall',
-        command: 'rainfall',
+        emojis: ["🌧️", "⛈️", "🌦️"],
+        msgType: "io.element.effect.rainfall",
+        command: "rainfall",
         description: () => _td("Sends the given message with rainfall"),
         fallbackMessage: () => _t("sends rainfall") + " 🌧️",
         options: {
@@ -64,9 +64,9 @@ export const CHAT_EFFECTS: Array<Effect<{ [key: string]: any }>> = [
         },
     } as Effect<RainfallOptions>,
     {
-        emojis: ['❄', '🌨'],
-        msgType: 'io.element.effect.snowfall',
-        command: 'snowfall',
+        emojis: ["❄", "🌨"],
+        msgType: "io.element.effect.snowfall",
+        command: "snowfall",
         description: () => _td("Sends the given message with snowfall"),
         fallbackMessage: () => _t("sends snowfall") + " ❄",
         options: {

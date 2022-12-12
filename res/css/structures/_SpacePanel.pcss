@@ -53,7 +53,7 @@ $activeBorderColor: $primary-content;
             mask-size: contain;
             mask-repeat: no-repeat;
             background-color: $background;
-            mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
+            mask-image: url("$(res)/img/feather-customised/chevron-down.svg");
             transform: rotate(270deg);
         }
 
@@ -173,7 +173,7 @@ $activeBorderColor: $primary-content;
             mask-size: 20px;
             mask-repeat: no-repeat;
             background-color: $tertiary-content;
-            mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
+            mask-image: url("$(res)/img/feather-customised/chevron-down.svg");
         }
 
         .mx_SpaceButton_icon {
@@ -185,7 +185,7 @@ $activeBorderColor: $primary-content;
 
             &::before {
                 position: absolute;
-                content: '';
+                content: "";
                 width: $topLevelHeight;
                 height: $topLevelHeight;
                 top: 0;
@@ -210,26 +210,26 @@ $activeBorderColor: $primary-content;
         }
 
         &.mx_SpaceButton_home .mx_SpaceButton_icon::before {
-            mask-image: url('$(res)/img/element-icons/home.svg');
+            mask-image: url("$(res)/img/element-icons/home.svg");
         }
 
         &.mx_SpaceButton_favourites .mx_SpaceButton_icon::before {
-            mask-image: url('$(res)/img/element-icons/roomlist/favorite.svg');
+            mask-image: url("$(res)/img/element-icons/roomlist/favorite.svg");
         }
 
         &.mx_SpaceButton_people .mx_SpaceButton_icon::before {
-            mask-image: url('$(res)/img/element-icons/room/members.svg');
+            mask-image: url("$(res)/img/element-icons/room/members.svg");
         }
 
         &.mx_SpaceButton_orphans .mx_SpaceButton_icon::before {
-            mask-image: url('$(res)/img/element-icons/roomlist/hash-circle.svg');
+            mask-image: url("$(res)/img/element-icons/roomlist/hash-circle.svg");
         }
 
         &.mx_SpaceButton_new .mx_SpaceButton_icon {
             &::before {
                 background-color: $primary-content;
-                mask-image: url('$(res)/img/element-icons/plus.svg');
-                transition: all .2s ease-in-out; /* TODO transition */
+                mask-image: url("$(res)/img/element-icons/plus.svg");
+                transition: all 0.2s ease-in-out; /* TODO transition */
             }
         }
 
@@ -254,14 +254,14 @@ $activeBorderColor: $primary-content;
             &::before {
                 top: 3px;
                 left: 2px;
-                content: '';
+                content: "";
                 width: 16px;
                 height: 16px;
                 position: absolute;
                 mask-position: center;
                 mask-size: contain;
                 mask-repeat: no-repeat;
-                mask-image: url('$(res)/img/element-icons/context-menu.svg');
+                mask-image: url("$(res)/img/element-icons/context-menu.svg");
                 background: $primary-content;
             }
         }
@@ -392,35 +392,35 @@ $activeBorderColor: $primary-content;
     }
 
     .mx_SpacePanel_iconHome::before {
-        mask-image: url('$(res)/img/element-icons/home.svg');
+        mask-image: url("$(res)/img/element-icons/home.svg");
     }
 
     .mx_SpacePanel_iconInvite::before {
-        mask-image: url('$(res)/img/element-icons/room/invite.svg');
+        mask-image: url("$(res)/img/element-icons/room/invite.svg");
     }
 
     .mx_SpacePanel_iconSettings::before {
-        mask-image: url('$(res)/img/element-icons/settings.svg');
+        mask-image: url("$(res)/img/element-icons/settings.svg");
     }
 
     .mx_SpacePanel_iconLeave::before {
-        mask-image: url('$(res)/img/element-icons/leave.svg');
+        mask-image: url("$(res)/img/element-icons/leave.svg");
     }
 
     .mx_SpacePanel_iconMembers::before {
-        mask-image: url('$(res)/img/element-icons/room/members.svg');
+        mask-image: url("$(res)/img/element-icons/room/members.svg");
     }
 
     .mx_SpacePanel_iconPlus::before {
-        mask-image: url('$(res)/img/element-icons/plus.svg');
+        mask-image: url("$(res)/img/element-icons/plus.svg");
     }
 
     .mx_SpacePanel_iconExplore::before {
-        mask-image: url('$(res)/img/element-icons/roomlist/hash-search.svg');
+        mask-image: url("$(res)/img/element-icons/roomlist/hash-search.svg");
     }
 
     .mx_SpacePanel_iconPreferences::before {
-        mask-image: url('$(res)/img/element-icons/settings/preference.svg');
+        mask-image: url("$(res)/img/element-icons/settings/preference.svg");
     }
 
     .mx_SpacePanel_noIcon {

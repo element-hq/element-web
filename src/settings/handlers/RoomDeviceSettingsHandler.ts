@@ -32,8 +32,8 @@ export default class RoomDeviceSettingsHandler extends AbstractLocalStorageSetti
         // Special case blacklist setting to use legacy values
         if (settingName === "blacklistUnverifiedDevices") {
             const value = this.read("mx_local_settings");
-            if (value?.['blacklistUnverifiedDevicesPerRoom']) {
-                return value['blacklistUnverifiedDevicesPerRoom'][roomId];
+            if (value?.["blacklistUnverifiedDevicesPerRoom"]) {
+                return value["blacklistUnverifiedDevicesPerRoom"][roomId];
             }
         }
 

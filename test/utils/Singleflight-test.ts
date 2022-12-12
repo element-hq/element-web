@@ -16,12 +16,12 @@ limitations under the License.
 
 import { Singleflight } from "../../src/utils/Singleflight";
 
-describe('Singleflight', () => {
+describe("Singleflight", () => {
     afterEach(() => {
         Singleflight.forgetAll();
     });
 
-    it('should throw for bad context variables', () => {
+    it("should throw for bad context variables", () => {
         const permutations: [Object, string][] = [
             [null, null],
             [{}, null],
@@ -38,7 +38,7 @@ describe('Singleflight', () => {
         }
     });
 
-    it('should execute the function once', () => {
+    it("should execute the function once", () => {
         const instance = {};
         const key = "test";
         const val = {}; // unique object for reference check
@@ -52,7 +52,7 @@ describe('Singleflight', () => {
         expect(fn.mock.calls.length).toBe(1);
     });
 
-    it('should execute the function once, even with new contexts', () => {
+    it("should execute the function once, even with new contexts", () => {
         const instance = {};
         const key = "test";
         const val = {}; // unique object for reference check
@@ -67,7 +67,7 @@ describe('Singleflight', () => {
         expect(fn.mock.calls.length).toBe(1);
     });
 
-    it('should execute the function twice if the result was forgotten', () => {
+    it("should execute the function twice if the result was forgotten", () => {
         const instance = {};
         const key = "test";
         const val = {}; // unique object for reference check
@@ -82,7 +82,7 @@ describe('Singleflight', () => {
         expect(fn.mock.calls.length).toBe(2);
     });
 
-    it('should execute the function twice if the instance was forgotten', () => {
+    it("should execute the function twice if the instance was forgotten", () => {
         const instance = {};
         const key = "test";
         const val = {}; // unique object for reference check
@@ -97,7 +97,7 @@ describe('Singleflight', () => {
         expect(fn.mock.calls.length).toBe(2);
     });
 
-    it('should execute the function twice if everything was forgotten', () => {
+    it("should execute the function twice if everything was forgotten", () => {
         const instance = {};
         const key = "test";
         const val = {}; // unique object for reference check
@@ -112,4 +112,3 @@ describe('Singleflight', () => {
         expect(fn.mock.calls.length).toBe(2);
     });
 });
-

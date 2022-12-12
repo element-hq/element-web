@@ -16,11 +16,7 @@ limitations under the License.
 
 import React, { useRef, useState } from "react";
 
-import {
-    VoiceBroadcastControl,
-    VoiceBroadcastInfoState,
-    VoiceBroadcastRecording,
-} from "../..";
+import { VoiceBroadcastControl, VoiceBroadcastInfoState, VoiceBroadcastRecording } from "../..";
 import { useVoiceBroadcastRecording } from "../../hooks/useVoiceBroadcastRecording";
 import { VoiceBroadcastHeader } from "../atoms/VoiceBroadcastHeader";
 import { Icon as StopIcon } from "../../../../res/img/element-icons/Stop.svg";
@@ -38,14 +34,8 @@ interface VoiceBroadcastRecordingPipProps {
 
 export const VoiceBroadcastRecordingPip: React.FC<VoiceBroadcastRecordingPipProps> = ({ recording }) => {
     const pipRef = useRef<HTMLDivElement | null>(null);
-    const {
-        live,
-        timeLeft,
-        recordingState,
-        room,
-        stopRecording,
-        toggleRecording,
-    } = useVoiceBroadcastRecording(recording);
+    const { live, timeLeft, recordingState, room, stopRecording, toggleRecording } =
+        useVoiceBroadcastRecording(recording);
     const { currentDevice, devices, setDevice } = useAudioDeviceSelection();
 
     const onDeviceSelect = async (device: MediaDeviceInfo) => {
@@ -70,46 +60,37 @@ export const VoiceBroadcastRecordingPip: React.FC<VoiceBroadcastRecordingPipProp
 
     const [showDeviceSelect, setShowDeviceSelect] = useState<boolean>(false);
 
-    const toggleControl = recordingState === VoiceBroadcastInfoState.Paused
-        ? <VoiceBroadcastControl
-            className="mx_VoiceBroadcastControl-recording"
-            onClick={toggleRecording}
-            icon={RecordIcon}
-            label={_t("resume voice broadcast")}
-        />
-        : <VoiceBroadcastControl onClick={toggleRecording} icon={PauseIcon} label={_t("pause voice broadcast")} />;
-
-    return <div
-        className="mx_VoiceBroadcastBody mx_VoiceBroadcastBody--pip"
-        ref={pipRef}
-    >
-        <VoiceBroadcastHeader
-            live={live ? "live" : "grey"}
-            room={room}
-            timeLeft={timeLeft}
-        />
-        <hr className="mx_VoiceBroadcastBody_divider" />
-        <div className="mx_VoiceBroadcastBody_controls">
-            { toggleControl }
-            <AccessibleTooltipButton
-                onClick={() => setShowDeviceSelect(true)}
-                title={_t("Change input device")}
-            >
-                <MicrophoneIcon className="mx_Icon mx_Icon_16 mx_Icon_alert" />
-            </AccessibleTooltipButton>
+    const toggleControl =
+        recordingState === VoiceBroadcastInfoState.Paused ? (
             <VoiceBroadcastControl
-                icon={StopIcon}
-                label="Stop Recording"
-                onClick={stopRecording}
+                className="mx_VoiceBroadcastControl-recording"
+                onClick={toggleRecording}
+                icon={RecordIcon}
+                label={_t("resume voice broadcast")}
             />
+        ) : (
+            <VoiceBroadcastControl onClick={toggleRecording} icon={PauseIcon} label={_t("pause voice broadcast")} />
+        );
+
+    return (
+        <div className="mx_VoiceBroadcastBody mx_VoiceBroadcastBody--pip" ref={pipRef}>
+            <VoiceBroadcastHeader live={live ? "live" : "grey"} room={room} timeLeft={timeLeft} />
+            <hr className="mx_VoiceBroadcastBody_divider" />
+            <div className="mx_VoiceBroadcastBody_controls">
+                {toggleControl}
+                <AccessibleTooltipButton onClick={() => setShowDeviceSelect(true)} title={_t("Change input device")}>
+                    <MicrophoneIcon className="mx_Icon mx_Icon_16 mx_Icon_alert" />
+                </AccessibleTooltipButton>
+                <VoiceBroadcastControl icon={StopIcon} label="Stop Recording" onClick={stopRecording} />
+            </div>
+            {showDeviceSelect && (
+                <DevicesContextMenu
+                    containerRef={pipRef}
+                    currentDevice={currentDevice}
+                    devices={devices}
+                    onDeviceSelect={onDeviceSelect}
+                />
+            )}
         </div>
-        {
-            showDeviceSelect && <DevicesContextMenu
-                containerRef={pipRef}
-                currentDevice={currentDevice}
-                devices={devices}
-                onDeviceSelect={onDeviceSelect}
-            />
-        }
-    </div>;
+    );
 };

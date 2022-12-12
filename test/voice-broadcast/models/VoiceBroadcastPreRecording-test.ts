@@ -56,12 +56,7 @@ describe("VoiceBroadcastPreRecording", () => {
         });
 
         it("should start a new voice broadcast recording", () => {
-            expect(startNewVoiceBroadcastRecording).toHaveBeenCalledWith(
-                room,
-                client,
-                playbacksStore,
-                recordingsStore,
-            );
+            expect(startNewVoiceBroadcastRecording).toHaveBeenCalledWith(room, client, playbacksStore, recordingsStore);
         });
 
         it("should emit a dismiss event", () => {

@@ -14,33 +14,33 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import { render } from '@testing-library/react';
+import React from "react";
+import { render } from "@testing-library/react";
 
-import LabsUserSettingsTab from '../../../../../../src/components/views/settings/tabs/user/LabsUserSettingsTab';
-import SettingsStore from '../../../../../../src/settings/SettingsStore';
+import LabsUserSettingsTab from "../../../../../../src/components/views/settings/tabs/user/LabsUserSettingsTab";
+import SettingsStore from "../../../../../../src/settings/SettingsStore";
 import {
     getMockClientWithEventEmitter,
     mockClientMethodsServer,
     mockClientMethodsUser,
-} from '../../../../../test-utils';
-import SdkConfig from '../../../../../../src/SdkConfig';
+} from "../../../../../test-utils";
+import SdkConfig from "../../../../../../src/SdkConfig";
 
-describe('<SecurityUserSettingsTab />', () => {
-    const sdkConfigSpy = jest.spyOn(SdkConfig, 'get');
+describe("<SecurityUserSettingsTab />", () => {
+    const sdkConfigSpy = jest.spyOn(SdkConfig, "get");
 
     const defaultProps = {
         closeSettingsFn: jest.fn(),
     };
     const getComponent = () => <LabsUserSettingsTab {...defaultProps} />;
 
-    const userId = '@alice:server.org';
+    const userId = "@alice:server.org";
     getMockClientWithEventEmitter({
         ...mockClientMethodsUser(userId),
         ...mockClientMethodsServer(),
     });
 
-    const settingsValueSpy = jest.spyOn(SettingsStore, 'getValue');
+    const settingsValueSpy = jest.spyOn(SettingsStore, "getValue");
 
     beforeEach(() => {
         jest.clearAllMocks();
@@ -48,26 +48,26 @@ describe('<SecurityUserSettingsTab />', () => {
         sdkConfigSpy.mockReturnValue(false);
     });
 
-    it('renders settings marked as beta as beta cards', () => {
+    it("renders settings marked as beta as beta cards", () => {
         const { getByTestId } = render(getComponent());
         expect(getByTestId("labs-beta-section")).toMatchSnapshot();
     });
 
-    it('does not render non-beta labs settings when disabled in config', () => {
+    it("does not render non-beta labs settings when disabled in config", () => {
         const { container } = render(getComponent());
-        expect(sdkConfigSpy).toHaveBeenCalledWith('show_labs_settings');
+        expect(sdkConfigSpy).toHaveBeenCalledWith("show_labs_settings");
 
-        const labsSections = container.getElementsByClassName('mx_SettingsTab_section');
+        const labsSections = container.getElementsByClassName("mx_SettingsTab_section");
         // only section is beta section
         expect(labsSections.length).toEqual(1);
     });
 
-    it('renders non-beta labs settings when enabled in config', () => {
+    it("renders non-beta labs settings when enabled in config", () => {
         // enable labs
-        sdkConfigSpy.mockImplementation(configName => configName === 'show_labs_settings');
+        sdkConfigSpy.mockImplementation((configName) => configName === "show_labs_settings");
         const { container } = render(getComponent());
 
-        const labsSections = container.getElementsByClassName('mx_SettingsTab_section');
+        const labsSections = container.getElementsByClassName("mx_SettingsTab_section");
         expect(labsSections.length).toEqual(11);
     });
 });

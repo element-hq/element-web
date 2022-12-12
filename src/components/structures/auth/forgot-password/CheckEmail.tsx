@@ -19,7 +19,7 @@ import React, { ReactNode } from "react";
 import AccessibleButton from "../../../views/elements/AccessibleButton";
 import { Icon as EMailPromptIcon } from "../../../../../res/img/element-icons/email-prompt.svg";
 import { Icon as RetryIcon } from "../../../../../res/img/element-icons/retry.svg";
-import { _t } from '../../../../languageHandler';
+import { _t } from "../../../../languageHandler";
 import Tooltip, { Alignment } from "../../../views/elements/Tooltip";
 import { useTimeoutToggle } from "../../../../hooks/useTimeoutToggle";
 import { ErrorMessage } from "../../ErrorMessage";
@@ -49,50 +49,35 @@ export const CheckEmail: React.FC<CheckEmailProps> = ({
         toggleTooltipVisible();
     };
 
-    return <>
-        <EMailPromptIcon className="mx_AuthBody_emailPromptIcon--shifted" />
-        <h1>{ _t("Check your email to continue") }</h1>
-        <div className="mx_AuthBody_text">
-            <p>
-                { _t(
-                    "Follow the instructions sent to <b>%(email)s</b>",
-                    { email: email },
-                    { b: t => <b>{ t }</b> },
-                ) }
-            </p>
+    return (
+        <>
+            <EMailPromptIcon className="mx_AuthBody_emailPromptIcon--shifted" />
+            <h1>{_t("Check your email to continue")}</h1>
+            <div className="mx_AuthBody_text">
+                <p>
+                    {_t("Follow the instructions sent to <b>%(email)s</b>", { email: email }, { b: (t) => <b>{t}</b> })}
+                </p>
+                <div className="mx_AuthBody_did-not-receive">
+                    <span className="mx_VerifyEMailDialog_text-light">{_t("Wrong email address?")}</span>
+                    <AccessibleButton className="mx_AuthBody_resend-button" kind="link" onClick={onReEnterEmailClick}>
+                        {_t("Re-enter email address")}
+                    </AccessibleButton>
+                </div>
+            </div>
+            {errorText && <ErrorMessage message={errorText} />}
+            <input onClick={onSubmitForm} type="button" className="mx_Login_submit" value={_t("Next")} />
             <div className="mx_AuthBody_did-not-receive">
-                <span className="mx_VerifyEMailDialog_text-light">{ _t("Wrong email address?") }</span>
-                <AccessibleButton
-                    className="mx_AuthBody_resend-button"
-                    kind="link"
-                    onClick={onReEnterEmailClick}
-                >
-                    { _t("Re-enter email address") }
+                <span className="mx_VerifyEMailDialog_text-light">{_t("Did not receive it?")}</span>
+                <AccessibleButton className="mx_AuthBody_resend-button" kind="link" onClick={onResendClickFn}>
+                    <RetryIcon className="mx_Icon mx_Icon_16" />
+                    {_t("Resend")}
+                    <Tooltip
+                        label={_t("Verification link email resent!")}
+                        alignment={Alignment.Top}
+                        visible={tooltipVisible}
+                    />
                 </AccessibleButton>
             </div>
-        </div>
-        { errorText && <ErrorMessage message={errorText} /> }
-        <input
-            onClick={onSubmitForm}
-            type="button"
-            className="mx_Login_submit"
-            value={_t("Next")}
-        />
-        <div className="mx_AuthBody_did-not-receive">
-            <span className="mx_VerifyEMailDialog_text-light">{ _t("Did not receive it?") }</span>
-            <AccessibleButton
-                className="mx_AuthBody_resend-button"
-                kind="link"
-                onClick={onResendClickFn}
-            >
-                <RetryIcon className="mx_Icon mx_Icon_16" />
-                { _t("Resend") }
-                <Tooltip
-                    label={_t("Verification link email resent!")}
-                    alignment={Alignment.Top}
-                    visible={tooltipVisible}
-                />
-            </AccessibleButton>
-        </div>
-    </>;
+        </>
+    );
 };

@@ -60,7 +60,7 @@ export default class ToastStore extends EventEmitter {
      * @param {object} newToast The new toast
      */
     addOrReplaceToast<C extends ComponentClass>(newToast: IToast<C>) {
-        const oldIndex = this.toasts.findIndex(t => t.key === newToast.key);
+        const oldIndex = this.toasts.findIndex((t) => t.key === newToast.key);
         if (oldIndex === -1) {
             let newIndex = this.toasts.length;
             while (newIndex > 0 && this.toasts[newIndex - 1].priority < newToast.priority) --newIndex;
@@ -68,7 +68,7 @@ export default class ToastStore extends EventEmitter {
         } else {
             this.toasts[oldIndex] = newToast;
         }
-        this.emit('update');
+        this.emit("update");
     }
 
     dismissToast(key) {
@@ -77,13 +77,13 @@ export default class ToastStore extends EventEmitter {
         }
 
         const length = this.toasts.length;
-        this.toasts = this.toasts.filter(t => t.key !== key);
+        this.toasts = this.toasts.filter((t) => t.key !== key);
         if (length !== this.toasts.length) {
             if (this.toasts.length === 0) {
                 this.countSeen = 0;
             }
 
-            this.emit('update');
+            this.emit("update");
         }
     }
 

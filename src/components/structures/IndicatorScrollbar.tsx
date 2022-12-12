@@ -38,9 +38,10 @@ interface IState {
     rightIndicatorOffset: string;
 }
 
-export default class IndicatorScrollbar<
-    T extends keyof JSX.IntrinsicElements,
-> extends React.Component<IProps<T>, IState> {
+export default class IndicatorScrollbar<T extends keyof JSX.IntrinsicElements> extends React.Component<
+    IProps<T>,
+    IState
+> {
     private autoHideScrollbar = createRef<AutoHideScrollbar<any>>();
     private scrollElement: HTMLDivElement;
     private likelyTrackpadUser: boolean = null;
@@ -50,8 +51,8 @@ export default class IndicatorScrollbar<
         super(props);
 
         this.state = {
-            leftIndicatorOffset: '0',
-            rightIndicatorOffset: '0',
+            leftIndicatorOffset: "0",
+            rightIndicatorOffset: "0",
         };
     }
 
@@ -84,11 +85,11 @@ export default class IndicatorScrollbar<
 
     private checkOverflow = (): void => {
         const hasTopOverflow = this.scrollElement.scrollTop > 0;
-        const hasBottomOverflow = this.scrollElement.scrollHeight >
-            (this.scrollElement.scrollTop + this.scrollElement.clientHeight);
+        const hasBottomOverflow =
+            this.scrollElement.scrollHeight > this.scrollElement.scrollTop + this.scrollElement.clientHeight;
         const hasLeftOverflow = this.scrollElement.scrollLeft > 0;
-        const hasRightOverflow = this.scrollElement.scrollWidth >
-            (this.scrollElement.scrollLeft + this.scrollElement.clientWidth);
+        const hasRightOverflow =
+            this.scrollElement.scrollWidth > this.scrollElement.scrollLeft + this.scrollElement.clientWidth;
 
         if (hasTopOverflow) {
             this.scrollElement.classList.add("mx_IndicatorScrollbar_topOverflow");
@@ -114,10 +115,10 @@ export default class IndicatorScrollbar<
         if (this.props.trackHorizontalOverflow) {
             this.setState({
                 // Offset from absolute position of the container
-                leftIndicatorOffset: hasLeftOverflow ? `${this.scrollElement.scrollLeft}px` : '0',
+                leftIndicatorOffset: hasLeftOverflow ? `${this.scrollElement.scrollLeft}px` : "0",
 
                 // Negative because we're coming from the right
-                rightIndicatorOffset: hasRightOverflow ? `-${this.scrollElement.scrollLeft}px` : '0',
+                rightIndicatorOffset: hasRightOverflow ? `-${this.scrollElement.scrollLeft}px` : "0",
             });
         }
     };
@@ -143,7 +144,7 @@ export default class IndicatorScrollbar<
             const now = new Date().getTime();
             if (Math.abs(e.deltaX) > 0) {
                 this.likelyTrackpadUser = true;
-                this.checkAgainForTrackpad = now + (1 * 60 * 1000);
+                this.checkAgainForTrackpad = now + 1 * 60 * 1000;
             } else {
                 // if we haven't seen any horizontal scrolling for a while, assume
                 // the user might have plugged in a mousewheel
@@ -158,7 +159,8 @@ export default class IndicatorScrollbar<
                 return;
             }
 
-            if (Math.abs(e.deltaX) <= xyThreshold) { // we are vertically scrolling.
+            if (Math.abs(e.deltaX) <= xyThreshold) {
+                // we are vertically scrolling.
                 // HACK: We increase the amount of scroll to counteract smooth scrolling browsers.
                 // Smooth scrolling browsers (Firefox) use the relative area to determine the scroll
                 // amount, which means the likely small area of content results in a small amount of
@@ -169,7 +171,7 @@ export default class IndicatorScrollbar<
                 const additionalScroll = e.deltaY < 0 ? -50 : 50;
 
                 // noinspection JSSuspiciousNameCombination
-                const val = Math.abs(e.deltaY) < 25 ? (e.deltaY + additionalScroll) : e.deltaY;
+                const val = Math.abs(e.deltaY) < 25 ? e.deltaY + additionalScroll : e.deltaY;
                 this.scrollElement.scrollLeft += val * yRetention;
             }
         }
@@ -181,20 +183,24 @@ export default class IndicatorScrollbar<
 
         const leftIndicatorStyle = { left: this.state.leftIndicatorOffset };
         const rightIndicatorStyle = { right: this.state.rightIndicatorOffset };
-        const leftOverflowIndicator = trackHorizontalOverflow
-            ? <div className="mx_IndicatorScrollbar_leftOverflowIndicator" style={leftIndicatorStyle} /> : null;
-        const rightOverflowIndicator = trackHorizontalOverflow
-            ? <div className="mx_IndicatorScrollbar_rightOverflowIndicator" style={rightIndicatorStyle} /> : null;
+        const leftOverflowIndicator = trackHorizontalOverflow ? (
+            <div className="mx_IndicatorScrollbar_leftOverflowIndicator" style={leftIndicatorStyle} />
+        ) : null;
+        const rightOverflowIndicator = trackHorizontalOverflow ? (
+            <div className="mx_IndicatorScrollbar_rightOverflowIndicator" style={rightIndicatorStyle} />
+        ) : null;
 
-        return (<AutoHideScrollbar
-            {...otherProps}
-            ref={this.autoHideScrollbar}
-            wrappedRef={this.collectScroller}
-            onWheel={this.onMouseWheel}
-        >
-            { leftOverflowIndicator }
-            { children }
-            { rightOverflowIndicator }
-        </AutoHideScrollbar>);
+        return (
+            <AutoHideScrollbar
+                {...otherProps}
+                ref={this.autoHideScrollbar}
+                wrappedRef={this.collectScroller}
+                onWheel={this.onMouseWheel}
+            >
+                {leftOverflowIndicator}
+                {children}
+                {rightOverflowIndicator}
+            </AutoHideScrollbar>
+        );
     }
 }

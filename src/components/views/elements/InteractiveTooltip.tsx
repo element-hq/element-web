@@ -67,7 +67,7 @@ function isInUpperLeftHalf(x: number, y: number, rect: IRect): boolean {
     // Negative slope because Y values grow downwards and for this case, the
     // diagonal goes from larger to smaller Y values.
     const diagonalSlope = getDiagonalSlope(rect) * -1;
-    return isInRect(x, y, rect) && (y <= bottom + diagonalSlope * (x - left));
+    return isInRect(x, y, rect) && y <= bottom + diagonalSlope * (x - left);
 }
 
 function isInLowerRightHalf(x: number, y: number, rect: IRect): boolean {
@@ -75,7 +75,7 @@ function isInLowerRightHalf(x: number, y: number, rect: IRect): boolean {
     // Negative slope because Y values grow downwards and for this case, the
     // diagonal goes from larger to smaller Y values.
     const diagonalSlope = getDiagonalSlope(rect) * -1;
-    return isInRect(x, y, rect) && (y >= bottom + diagonalSlope * (x - left));
+    return isInRect(x, y, rect) && y >= bottom + diagonalSlope * (x - left);
 }
 
 function isInUpperRightHalf(x: number, y: number, rect: IRect): boolean {
@@ -83,7 +83,7 @@ function isInUpperRightHalf(x: number, y: number, rect: IRect): boolean {
     // Positive slope because Y values grow downwards and for this case, the
     // diagonal goes from smaller to larger Y values.
     const diagonalSlope = getDiagonalSlope(rect) * 1;
-    return isInRect(x, y, rect) && (y <= top + diagonalSlope * (x - left));
+    return isInRect(x, y, rect) && y <= top + diagonalSlope * (x - left);
 }
 
 function isInLowerLeftHalf(x: number, y: number, rect: IRect): boolean {
@@ -91,7 +91,7 @@ function isInLowerLeftHalf(x: number, y: number, rect: IRect): boolean {
     // Positive slope because Y values grow downwards and for this case, the
     // diagonal goes from smaller to larger Y values.
     const diagonalSlope = getDiagonalSlope(rect) * 1;
-    return isInRect(x, y, rect) && (y >= top + diagonalSlope * (x - left));
+    return isInRect(x, y, rect) && y >= top + diagonalSlope * (x - left);
 }
 
 export enum Direction {
@@ -284,10 +284,7 @@ export function mouseWithinRegion(
 }
 
 interface IProps {
-    children(props: {
-        ref: RefCallback<HTMLElement>;
-        onMouseOver: MouseEventHandler;
-    }): ReactNode;
+    children(props: { ref: RefCallback<HTMLElement>; onMouseOver: MouseEventHandler }): ReactNode;
     // Content to show in the tooltip
     content: ReactNode;
     direction?: Direction;
@@ -353,11 +350,11 @@ export default class InteractiveTooltip extends React.Component<IProps, IState> 
 
         if (this.props.direction === Direction.Left) {
             const targetLeft = targetRect.left + window.scrollX;
-            return !contentRect || (targetLeft - contentRect.width > MIN_SAFE_DISTANCE_TO_WINDOW_EDGE);
+            return !contentRect || targetLeft - contentRect.width > MIN_SAFE_DISTANCE_TO_WINDOW_EDGE;
         } else {
             const targetRight = targetRect.right + window.scrollX;
             const spaceOnRight = UIStore.instance.windowWidth - targetRight;
-            return contentRect && (spaceOnRight - contentRect.width < MIN_SAFE_DISTANCE_TO_WINDOW_EDGE);
+            return contentRect && spaceOnRight - contentRect.width < MIN_SAFE_DISTANCE_TO_WINDOW_EDGE;
         }
     }
 
@@ -367,11 +364,11 @@ export default class InteractiveTooltip extends React.Component<IProps, IState> 
 
         if (this.props.direction === Direction.Top) {
             const targetTop = targetRect.top + window.scrollY;
-            return !contentRect || (targetTop - contentRect.height > MIN_SAFE_DISTANCE_TO_WINDOW_EDGE);
+            return !contentRect || targetTop - contentRect.height > MIN_SAFE_DISTANCE_TO_WINDOW_EDGE;
         } else {
             const targetBottom = targetRect.bottom + window.scrollY;
             const spaceBelow = UIStore.instance.windowHeight - targetBottom;
-            return contentRect && (spaceBelow - contentRect.height < MIN_SAFE_DISTANCE_TO_WINDOW_EDGE);
+            return contentRect && spaceBelow - contentRect.height < MIN_SAFE_DISTANCE_TO_WINDOW_EDGE;
         }
     }
 
@@ -465,11 +462,11 @@ export default class InteractiveTooltip extends React.Component<IProps, IState> 
         const chevron = <div className={"mx_InteractiveTooltip_chevron_" + chevronFace} />;
 
         const menuClasses = classNames({
-            'mx_InteractiveTooltip': true,
-            'mx_InteractiveTooltip_withChevron_top': chevronFace === ChevronFace.Top,
-            'mx_InteractiveTooltip_withChevron_left': chevronFace === ChevronFace.Left,
-            'mx_InteractiveTooltip_withChevron_right': chevronFace === ChevronFace.Right,
-            'mx_InteractiveTooltip_withChevron_bottom': chevronFace === ChevronFace.Bottom,
+            mx_InteractiveTooltip: true,
+            mx_InteractiveTooltip_withChevron_top: chevronFace === ChevronFace.Top,
+            mx_InteractiveTooltip_withChevron_left: chevronFace === ChevronFace.Left,
+            mx_InteractiveTooltip_withChevron_right: chevronFace === ChevronFace.Right,
+            mx_InteractiveTooltip_withChevron_bottom: chevronFace === ChevronFace.Bottom,
         });
 
         const menuStyle: CSSProperties = {};
@@ -477,12 +474,14 @@ export default class InteractiveTooltip extends React.Component<IProps, IState> 
             menuStyle.left = `-${contentRect.width / 2}px`;
         }
 
-        const tooltip = <div className="mx_InteractiveTooltip_wrapper" style={{ ...position }}>
-            <div className={menuClasses} style={menuStyle} ref={this.collectContentRect}>
-                { chevron }
-                { this.props.content }
+        const tooltip = (
+            <div className="mx_InteractiveTooltip_wrapper" style={{ ...position }}>
+                <div className={menuClasses} style={menuStyle} ref={this.collectContentRect}>
+                    {chevron}
+                    {this.props.content}
+                </div>
             </div>
-        </div>;
+        );
 
         ReactDOM.render(tooltip, getOrCreateContainer());
     }

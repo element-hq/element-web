@@ -14,12 +14,12 @@
  limitations under the License.
  */
 
-import React from 'react';
+import React from "react";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { MsgType } from "matrix-js-sdk/src/@types/event";
 
 import DisambiguatedProfile from "./DisambiguatedProfile";
-import { useRoomMemberProfile } from '../../../hooks/room/useRoomMemberProfile';
+import { useRoomMemberProfile } from "../../../hooks/room/useRoomMemberProfile";
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -32,13 +32,13 @@ export default function SenderProfile({ mxEvent, onClick }: IProps) {
         member: mxEvent.sender,
     });
 
-    return mxEvent.getContent().msgtype !== MsgType.Emote
-        ? <DisambiguatedProfile
+    return mxEvent.getContent().msgtype !== MsgType.Emote ? (
+        <DisambiguatedProfile
             fallbackName={mxEvent.getSender() ?? ""}
             onClick={onClick}
             member={member}
             colored={true}
             emphasizeDisplayName={true}
         />
-        : null;
+    ) : null;
 }

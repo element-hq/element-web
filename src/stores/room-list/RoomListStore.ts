@@ -181,7 +181,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> implements 
             throw new Error("Room list store has no algorithm to process dispatcher update with");
         }
 
-        if (payload.action === 'MatrixActions.Room.receipt') {
+        if (payload.action === "MatrixActions.Room.receipt") {
             // First see if the receipt event is for our own user. If it was, trigger
             // a room update (we probably read the room on a different device).
             if (readReceiptChangeIsFor(payload.event, this.matrixClient)) {
@@ -194,28 +194,26 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> implements 
                 this.updateFn.trigger();
                 return;
             }
-        } else if (payload.action === 'MatrixActions.Room.tags') {
-            const roomPayload = (<any>payload); // TODO: Type out the dispatcher types
+        } else if (payload.action === "MatrixActions.Room.tags") {
+            const roomPayload = <any>payload; // TODO: Type out the dispatcher types
             await this.handleRoomUpdate(roomPayload.room, RoomUpdateCause.PossibleTagChange);
             this.updateFn.trigger();
-        } else if (payload.action === 'MatrixActions.Room.timeline') {
+        } else if (payload.action === "MatrixActions.Room.timeline") {
             const eventPayload = <IRoomTimelineActionPayload>payload;
 
             // Ignore non-live events (backfill) and notification timeline set events (without a room)
-            if (!eventPayload.isLiveEvent ||
-                !eventPayload.isLiveUnfilteredRoomTimelineEvent ||
-                !eventPayload.room
-            ) {
+            if (!eventPayload.isLiveEvent || !eventPayload.isLiveUnfilteredRoomTimelineEvent || !eventPayload.room) {
                 return;
             }
 
             const roomId = eventPayload.event.getRoomId();
             const room = this.matrixClient.getRoom(roomId);
             const tryUpdate = async (updatedRoom: Room) => {
-                if (eventPayload.event.getType() === EventType.RoomTombstone &&
-                    eventPayload.event.getStateKey() === ''
+                if (
+                    eventPayload.event.getType() === EventType.RoomTombstone &&
+                    eventPayload.event.getStateKey() === ""
                 ) {
-                    const newRoom = this.matrixClient.getRoom(eventPayload.event.getContent()['replacement_room']);
+                    const newRoom = this.matrixClient.getRoom(eventPayload.event.getContent()["replacement_room"]);
                     if (newRoom) {
                         // If we have the new room, then the new room check will have seen the predecessor
                         // and did the required updates, so do nothing here.
@@ -236,8 +234,8 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> implements 
             } else {
                 await tryUpdate(room);
             }
-        } else if (payload.action === 'MatrixActions.Event.decrypted') {
-            const eventPayload = (<any>payload); // TODO: Type out the dispatcher types
+        } else if (payload.action === "MatrixActions.Event.decrypted") {
+            const eventPayload = <any>payload; // TODO: Type out the dispatcher types
             const roomId = eventPayload.event.getRoomId();
             if (!roomId) {
                 return;
@@ -249,8 +247,8 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> implements 
             }
             await this.handleRoomUpdate(room, RoomUpdateCause.Timeline);
             this.updateFn.trigger();
-        } else if (payload.action === 'MatrixActions.accountData' && payload.event_type === EventType.Direct) {
-            const eventPayload = (<any>payload); // TODO: Type out the dispatcher types
+        } else if (payload.action === "MatrixActions.accountData" && payload.event_type === EventType.Direct) {
+            const eventPayload = <any>payload; // TODO: Type out the dispatcher types
             const dmMap = eventPayload.event.getContent();
             for (const userId of Object.keys(dmMap)) {
                 const roomIds = dmMap[userId];
@@ -269,16 +267,16 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> implements 
                 }
             }
             this.updateFn.trigger();
-        } else if (payload.action === 'MatrixActions.Room.myMembership') {
-            const membershipPayload = (<any>payload); // TODO: Type out the dispatcher types
+        } else if (payload.action === "MatrixActions.Room.myMembership") {
+            const membershipPayload = <any>payload; // TODO: Type out the dispatcher types
             const oldMembership = getEffectiveMembership(membershipPayload.oldMembership);
             const newMembership = getEffectiveMembership(membershipPayload.membership);
             if (oldMembership !== EffectiveMembership.Join && newMembership === EffectiveMembership.Join) {
                 // If we're joining an upgraded room, we'll want to make sure we don't proliferate
                 // the dead room in the list.
                 const createEvent = membershipPayload.room.currentState.getStateEvents(EventType.RoomCreate, "");
-                if (createEvent && createEvent.getContent()['predecessor']) {
-                    const prevRoom = this.matrixClient.getRoom(createEvent.getContent()['predecessor']['room_id']);
+                if (createEvent && createEvent.getContent()["predecessor"]) {
+                    const prevRoom = this.matrixClient.getRoom(createEvent.getContent()["predecessor"]["room_id"]);
                     if (prevRoom) {
                         const isSticky = this.algorithm.stickyRoom === prevRoom;
                         if (isSticky) {
@@ -325,8 +323,9 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> implements 
             return; // don't do anything on rooms that aren't visible
         }
 
-        if ((cause === RoomUpdateCause.NewRoom || cause === RoomUpdateCause.PossibleTagChange) &&
-            !this.prefilterConditions.every(c => c.isVisible(room))
+        if (
+            (cause === RoomUpdateCause.NewRoom || cause === RoomUpdateCause.PossibleTagChange) &&
+            !this.prefilterConditions.every((c) => c.isVisible(room))
         ) {
             return; // don't do anything on new/moved rooms which ought not to be shown
         }
@@ -492,10 +491,10 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> implements 
     private getPlausibleRooms(): Room[] {
         if (!this.matrixClient) return [];
 
-        let rooms = this.matrixClient.getVisibleRooms().filter(r => VisibilityProvider.instance.isRoomVisible(r));
+        let rooms = this.matrixClient.getVisibleRooms().filter((r) => VisibilityProvider.instance.isRoomVisible(r));
 
         if (this.prefilterConditions.length > 0) {
-            rooms = rooms.filter(r => {
+            rooms = rooms.filter((r) => {
                 for (const filter of this.prefilterConditions) {
                     if (!filter.isVisible(r)) {
                         return false;

@@ -16,8 +16,7 @@ limitations under the License.
 
 import { useState } from "react";
 
-export default function useFocus(
-): [boolean, {onFocus: () => void, onBlur: () => void}] {
+export default function useFocus(): [boolean, { onFocus: () => void; onBlur: () => void }] {
     const [focused, setFocused] = useState(false);
 
     const props = {

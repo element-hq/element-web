@@ -17,7 +17,7 @@ limitations under the License.
 import React, { ReactNode } from "react";
 import { MatrixError } from "matrix-js-sdk/src/http-api";
 
-import { _t, _td, Tags, TranslatedString } from '../languageHandler';
+import { _t, _td, Tags, TranslatedString } from "../languageHandler";
 
 /**
  * Produce a translated error message for a
@@ -40,48 +40,44 @@ export function messageForResourceLimitError(
     extraTranslations?: Tags,
 ): TranslatedString {
     let errString = strings[limitType];
-    if (errString === undefined) errString = strings[''];
+    if (errString === undefined) errString = strings[""];
 
-    const linkSub = sub => {
+    const linkSub = (sub) => {
         if (adminContact) {
-            return <a href={adminContact} target="_blank" rel="noreferrer noopener">{ sub }</a>;
+            return (
+                <a href={adminContact} target="_blank" rel="noreferrer noopener">
+                    {sub}
+                </a>
+            );
         } else {
             return sub;
         }
     };
 
-    if (errString.includes('<a>')) {
-        return _t(errString, {}, Object.assign({ 'a': linkSub }, extraTranslations));
+    if (errString.includes("<a>")) {
+        return _t(errString, {}, Object.assign({ a: linkSub }, extraTranslations));
     } else {
         return _t(errString, {}, extraTranslations);
     }
 }
 
 export function messageForSyncError(err: Error): ReactNode {
-    if (err instanceof MatrixError && err.errcode === 'M_RESOURCE_LIMIT_EXCEEDED') {
-        const limitError = messageForResourceLimitError(
-            err.data.limit_type,
-            err.data.admin_contact,
-            {
-                'monthly_active_user': _td("This homeserver has hit its Monthly Active User limit."),
-                'hs_blocked': _td("This homeserver has been blocked by its administrator."),
-                '': _td("This homeserver has exceeded one of its resource limits."),
-            },
+    if (err instanceof MatrixError && err.errcode === "M_RESOURCE_LIMIT_EXCEEDED") {
+        const limitError = messageForResourceLimitError(err.data.limit_type, err.data.admin_contact, {
+            "monthly_active_user": _td("This homeserver has hit its Monthly Active User limit."),
+            "hs_blocked": _td("This homeserver has been blocked by its administrator."),
+            "": _td("This homeserver has exceeded one of its resource limits."),
+        });
+        const adminContact = messageForResourceLimitError(err.data.limit_type, err.data.admin_contact, {
+            "": _td("Please <a>contact your service administrator</a> to continue using the service."),
+        });
+        return (
+            <div>
+                <div>{limitError}</div>
+                <div>{adminContact}</div>
+            </div>
         );
-        const adminContact = messageForResourceLimitError(
-            err.data.limit_type,
-            err.data.admin_contact,
-            {
-                '': _td("Please <a>contact your service administrator</a> to continue using the service."),
-            },
-        );
-        return <div>
-            <div>{ limitError }</div>
-            <div>{ adminContact }</div>
-        </div>;
     } else {
-        return <div>
-            { _t("Unable to connect to Homeserver. Retrying...") }
-        </div>;
+        return <div>{_t("Unable to connect to Homeserver. Retrying...")}</div>;
     }
 }

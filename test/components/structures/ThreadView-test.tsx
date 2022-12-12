@@ -51,27 +51,25 @@ describe("ThreadView", () => {
         const [event, setEvent] = useState(rootEvent);
         changeEvent = setEvent;
 
-        return <MatrixClientContext.Provider value={mockClient}>
-            <RoomContext.Provider value={getRoomContext(room, {
-                canSendMessages: true,
-            })}>
-                <ThreadView
-                    room={room}
-                    onClose={jest.fn()}
-                    mxEvent={event}
-                    resizeNotifier={new ResizeNotifier()}
-                />
-            </RoomContext.Provider>,
-        </MatrixClientContext.Provider>;
+        return (
+            <MatrixClientContext.Provider value={mockClient}>
+                <RoomContext.Provider
+                    value={getRoomContext(room, {
+                        canSendMessages: true,
+                    })}
+                >
+                    <ThreadView room={room} onClose={jest.fn()} mxEvent={event} resizeNotifier={new ResizeNotifier()} />
+                </RoomContext.Provider>
+                ,
+            </MatrixClientContext.Provider>
+        );
     }
 
     async function getComponent(): Promise<RenderResult> {
-        const renderResult = render(
-            <TestThreadView />,
-        );
+        const renderResult = render(<TestThreadView />);
 
         await waitFor(() => {
-            expect(() => getByTestId(renderResult.container, 'spinner')).toThrow();
+            expect(() => getByTestId(renderResult.container, "spinner")).toThrow();
         });
 
         return renderResult;
@@ -92,9 +90,12 @@ describe("ThreadView", () => {
                 "event_id": rootEvent.getId(),
                 "is_falling_back": true,
                 "m.in_reply_to": {
-                    "event_id": rootEvent.getThread().lastReply((ev: MatrixEvent) => {
-                        return ev.isRelation(THREAD_RELATION_TYPE.name);
-                    }).getId(),
+                    event_id: rootEvent
+                        .getThread()
+                        .lastReply((ev: MatrixEvent) => {
+                            return ev.isRelation(THREAD_RELATION_TYPE.name);
+                        })
+                        .getId(),
                 },
                 "rel_type": RelationType.Thread,
             },
@@ -133,7 +134,9 @@ describe("ThreadView", () => {
         await sendMessage(container, "Hello world!");
 
         expect(mockClient.sendMessage).toHaveBeenCalledWith(
-            ROOM_ID, rootEvent.getId(), expectedMessageBody(rootEvent, "Hello world!"),
+            ROOM_ID,
+            rootEvent.getId(),
+            expectedMessageBody(rootEvent, "Hello world!"),
         );
     });
 
@@ -154,7 +157,9 @@ describe("ThreadView", () => {
         await sendMessage(container, "yolo");
 
         expect(mockClient.sendMessage).toHaveBeenCalledWith(
-            ROOM_ID, rootEvent2.getId(), expectedMessageBody(rootEvent2, "yolo"),
+            ROOM_ID,
+            rootEvent2.getId(),
+            expectedMessageBody(rootEvent2, "yolo"),
         );
     });
 

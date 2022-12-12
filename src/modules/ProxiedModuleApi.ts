@@ -74,15 +74,19 @@ export class ProxiedModuleApi implements ModuleApi {
     >(
         title: string,
         body: (props: P, ref: React.RefObject<C>) => React.ReactNode,
-    ): Promise<{ didOkOrSubmit: boolean, model: M }> {
-        return new Promise<{ didOkOrSubmit: boolean, model: M }>((resolve) => {
-            Modal.createDialog(ModuleUiDialog, {
-                title: title,
-                contentFactory: body,
-                contentProps: <DialogProps>{
-                    moduleApi: this,
+    ): Promise<{ didOkOrSubmit: boolean; model: M }> {
+        return new Promise<{ didOkOrSubmit: boolean; model: M }>((resolve) => {
+            Modal.createDialog(
+                ModuleUiDialog,
+                {
+                    title: title,
+                    contentFactory: body,
+                    contentProps: <DialogProps>{
+                        moduleApi: this,
+                    },
                 },
-            }, "mx_CompoundDialog").finished.then(([didOkOrSubmit, model]) => {
+                "mx_CompoundDialog",
+            ).finished.then(([didOkOrSubmit, model]) => {
                 resolve({ didOkOrSubmit, model });
             });
         });
@@ -98,8 +102,8 @@ export class ProxiedModuleApi implements ModuleApi {
     ): Promise<AccountAuthInfo> {
         const hsUrl = SdkConfig.get("validated_server_config").hsUrl;
         const client = Matrix.createClient({ baseUrl: hsUrl });
-        const deviceName = SdkConfig.get("default_device_display_name")
-            || PlatformPeg.get().getDefaultDeviceDisplayName();
+        const deviceName =
+            SdkConfig.get("default_device_display_name") || PlatformPeg.get().getDefaultDeviceDisplayName();
         const req = {
             username,
             password,
@@ -107,13 +111,15 @@ export class ProxiedModuleApi implements ModuleApi {
             auth: undefined,
             inhibit_login: false,
         };
-        const creds = await (client.registerRequest(req).catch(resp => client.registerRequest({
-            ...req,
-            auth: {
-                session: resp.data.session,
-                type: "m.login.dummy",
-            },
-        })));
+        const creds = await client.registerRequest(req).catch((resp) =>
+            client.registerRequest({
+                ...req,
+                auth: {
+                    session: resp.data.session,
+                    type: "m.login.dummy",
+                },
+            }),
+        );
 
         if (displayName) {
             const profileClient = Matrix.createClient({
@@ -137,13 +143,16 @@ export class ProxiedModuleApi implements ModuleApi {
      * @override
      */
     public async overwriteAccountAuth(accountInfo: AccountAuthInfo): Promise<void> {
-        dispatcher.dispatch<OverwriteLoginPayload>({
-            action: Action.OverwriteLogin,
-            credentials: {
-                ...accountInfo,
-                guest: false,
+        dispatcher.dispatch<OverwriteLoginPayload>(
+            {
+                action: Action.OverwriteLogin,
+                credentials: {
+                    ...accountInfo,
+                    guest: false,
+                },
             },
-        }, true); // require to be sync to match inherited interface behaviour
+            true,
+        ); // require to be sync to match inherited interface behaviour
     }
 
     /**

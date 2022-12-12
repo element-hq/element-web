@@ -19,18 +19,24 @@ import { Thread } from "matrix-js-sdk/src/models/thread";
 
 import { mkMessage, MessageEventProps } from "./test-utils";
 
-export const makeThreadEvent = ({ rootEventId, replyToEventId, ...props }: MessageEventProps & {
-    rootEventId: string; replyToEventId: string;
-}): MatrixEvent => mkMessage({
-    ...props,
-    relatesTo: {
-        event_id: rootEventId,
-        rel_type: "m.thread",
-        ['m.in_reply_to']: {
-            event_id: replyToEventId,
+export const makeThreadEvent = ({
+    rootEventId,
+    replyToEventId,
+    ...props
+}: MessageEventProps & {
+    rootEventId: string;
+    replyToEventId: string;
+}): MatrixEvent =>
+    mkMessage({
+        ...props,
+        relatesTo: {
+            event_id: rootEventId,
+            rel_type: "m.thread",
+            ["m.in_reply_to"]: {
+                event_id: replyToEventId,
+            },
         },
-    },
-});
+    });
 
 type MakeThreadEventsProps = {
     roomId: Room["roomId"];
@@ -48,13 +54,18 @@ type MakeThreadEventsProps = {
 };
 
 export const makeThreadEvents = ({
-    roomId, authorId, participantUserIds, length = 2, ts = 1, currentUserId,
-}: MakeThreadEventsProps): { rootEvent: MatrixEvent, events: MatrixEvent[] } => {
+    roomId,
+    authorId,
+    participantUserIds,
+    length = 2,
+    ts = 1,
+    currentUserId,
+}: MakeThreadEventsProps): { rootEvent: MatrixEvent; events: MatrixEvent[] } => {
     const rootEvent = mkMessage({
         user: authorId,
         event: true,
         room: roomId,
-        msg: 'root event message ' + Math.random(),
+        msg: "root event message " + Math.random(),
         ts,
     });
 
@@ -65,16 +76,18 @@ export const makeThreadEvents = ({
         const prevEvent = events[i - 1];
         const replyToEventId = prevEvent.getId();
         const user = participantUserIds[i % participantUserIds.length];
-        events.push(makeThreadEvent({
-            user,
-            room: roomId,
-            event: true,
-            msg: `reply ${i} by ${user}`,
-            rootEventId,
-            replyToEventId,
-            // replies are 1ms after each other
-            ts: ts + i,
-        }));
+        events.push(
+            makeThreadEvent({
+                user,
+                room: roomId,
+                event: true,
+                msg: `reply ${i} by ${user}`,
+                rootEventId,
+                replyToEventId,
+                // replies are 1ms after each other
+                ts: ts + i,
+            }),
+        );
     }
 
     rootEvent.setUnsigned({
@@ -106,7 +119,7 @@ export const mkThread = ({
     participantUserIds,
     length = 2,
     ts = 1,
-}: MakeThreadProps): { thread: Thread, rootEvent: MatrixEvent, events: MatrixEvent[] } => {
+}: MakeThreadProps): { thread: Thread; rootEvent: MatrixEvent; events: MatrixEvent[] } => {
     const { rootEvent, events } = makeThreadEvents({
         roomId: room.roomId,
         authorId,
@@ -118,9 +131,7 @@ export const mkThread = ({
     expect(rootEvent).toBeTruthy();
 
     for (const evt of events) {
-        room?.reEmitter.reEmit(evt, [
-            MatrixEventEvent.BeforeRedaction,
-        ]);
+        room?.reEmitter.reEmit(evt, [MatrixEventEvent.BeforeRedaction]);
     }
 
     const thread = room.createThread(rootEvent.getId(), rootEvent, events, true);

@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 
 import { _t } from "../../../languageHandler";
 import { CommandCategories, Commands } from "../../../SlashCommands";
@@ -25,7 +25,7 @@ interface IProps extends IDialogProps {}
 
 const SlashCommandHelpDialog: React.FC<IProps> = ({ onFinished }) => {
     const categories = {};
-    Commands.forEach(cmd => {
+    Commands.forEach((cmd) => {
         if (!cmd.isEnabled()) return;
         if (!categories[cmd.category]) {
             categories[cmd.category] = [];
@@ -33,36 +33,45 @@ const SlashCommandHelpDialog: React.FC<IProps> = ({ onFinished }) => {
         categories[cmd.category].push(cmd);
     });
 
-    const body = Object.values(CommandCategories).filter(c => categories[c]).map((category) => {
-        const rows = [
-            <tr key={"_category_" + category} className="mx_SlashCommandHelpDialog_headerRow">
-                <td colSpan={3}>
-                    <h2>{ _t(category) }</h2>
-                </td>
-            </tr>,
-        ];
+    const body = Object.values(CommandCategories)
+        .filter((c) => categories[c])
+        .map((category) => {
+            const rows = [
+                <tr key={"_category_" + category} className="mx_SlashCommandHelpDialog_headerRow">
+                    <td colSpan={3}>
+                        <h2>{_t(category)}</h2>
+                    </td>
+                </tr>,
+            ];
 
-        categories[category].forEach(cmd => {
-            rows.push(<tr key={cmd.command}>
-                <td><strong>{ cmd.getCommand() }</strong></td>
-                <td>{ cmd.args }</td>
-                <td>{ cmd.description }</td>
-            </tr>);
+            categories[category].forEach((cmd) => {
+                rows.push(
+                    <tr key={cmd.command}>
+                        <td>
+                            <strong>{cmd.getCommand()}</strong>
+                        </td>
+                        <td>{cmd.args}</td>
+                        <td>{cmd.description}</td>
+                    </tr>,
+                );
+            });
+
+            return rows;
         });
 
-        return rows;
-    });
-
-    return <InfoDialog
-        className="mx_SlashCommandHelpDialog"
-        title={_t("Command Help")}
-        description={<table>
-            <tbody>
-                { body }
-            </tbody>
-        </table>}
-        hasCloseButton={true}
-        onFinished={onFinished} />;
+    return (
+        <InfoDialog
+            className="mx_SlashCommandHelpDialog"
+            title={_t("Command Help")}
+            description={
+                <table>
+                    <tbody>{body}</tbody>
+                </table>
+            }
+            hasCloseButton={true}
+            onFinished={onFinished}
+        />
+    );
 };
 
 export default SlashCommandHelpDialog;

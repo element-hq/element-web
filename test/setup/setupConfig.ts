@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import SdkConfig, { DEFAULTS } from '../../src/SdkConfig';
+import SdkConfig, { DEFAULTS } from "../../src/SdkConfig";
 
 // uninitialised SdkConfig causes lots of warnings in console
 // init with defaults

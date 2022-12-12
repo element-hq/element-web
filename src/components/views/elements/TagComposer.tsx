@@ -66,29 +66,32 @@ export default class TagComposer extends React.PureComponent<IProps, IState> {
     }
 
     public render() {
-        return <div className='mx_TagComposer'>
-            <form className='mx_TagComposer_input' onSubmit={this.onAdd}>
-                <Field
-                    value={this.state.newTag}
-                    onChange={this.onInputChange}
-                    label={this.props.label || _t("Keyword")}
-                    placeholder={this.props.placeholder || _t("New keyword")}
-                    disabled={this.props.disabled}
-                    autoComplete="off"
-                />
-                <AccessibleButton onClick={this.onAdd} kind='primary' disabled={this.props.disabled}>
-                    { _t("Add") }
-                </AccessibleButton>
-            </form>
-            <div className='mx_TagComposer_tags'>
-                { this.props.tags.map((t, i) => (
-                    <Tag
-                        label={t}
-                        key={t}
-                        onDeleteClick={this.onRemove.bind(this, t)}
-                        disabled={this.props.disabled} />
-                )) }
+        return (
+            <div className="mx_TagComposer">
+                <form className="mx_TagComposer_input" onSubmit={this.onAdd}>
+                    <Field
+                        value={this.state.newTag}
+                        onChange={this.onInputChange}
+                        label={this.props.label || _t("Keyword")}
+                        placeholder={this.props.placeholder || _t("New keyword")}
+                        disabled={this.props.disabled}
+                        autoComplete="off"
+                    />
+                    <AccessibleButton onClick={this.onAdd} kind="primary" disabled={this.props.disabled}>
+                        {_t("Add")}
+                    </AccessibleButton>
+                </form>
+                <div className="mx_TagComposer_tags">
+                    {this.props.tags.map((t, i) => (
+                        <Tag
+                            label={t}
+                            key={t}
+                            onDeleteClick={this.onRemove.bind(this, t)}
+                            disabled={this.props.disabled}
+                        />
+                    ))}
+                </div>
             </div>
-        </div>;
+        );
     }
 }

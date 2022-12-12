@@ -14,10 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 import classNames from "classnames";
 
-import SdkConfig from '../../../SdkConfig';
+import SdkConfig from "../../../SdkConfig";
 import AuthPage from "./AuthPage";
 import { _td } from "../../../languageHandler";
 import SettingsStore from "../../../settings/SettingsStore";
@@ -29,9 +29,7 @@ import { MATRIX_LOGO_HTML } from "../../structures/static-page-vars";
 // translatable strings for Welcome pages
 _td("Sign in with SSO");
 
-interface IProps {
-
-}
+interface IProps {}
 
 export default class Welcome extends React.PureComponent<IProps> {
     public render(): React.ReactNode {
@@ -41,14 +39,16 @@ export default class Welcome extends React.PureComponent<IProps> {
             pageUrl = pagesConfig.get("welcome_url");
         }
         if (!pageUrl) {
-            pageUrl = 'welcome.html';
+            pageUrl = "welcome.html";
         }
 
         return (
             <AuthPage>
-                <div className={classNames("mx_Welcome", {
-                    mx_WelcomePage_registrationDisabled: !SettingsStore.getValue(UIFeature.Registration),
-                })}>
+                <div
+                    className={classNames("mx_Welcome", {
+                        mx_WelcomePage_registrationDisabled: !SettingsStore.getValue(UIFeature.Registration),
+                    })}
+                >
                     <EmbeddedPage
                         className="mx_WelcomePage"
                         url={pageUrl}

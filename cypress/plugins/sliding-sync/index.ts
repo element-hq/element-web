@@ -41,10 +41,7 @@ async function proxyStart(dockerTag: string, synapse: SynapseInstance): Promise<
     const postgresId = await dockerRun({
         image: "postgres",
         containerName: "react-sdk-cypress-sliding-sync-postgres",
-        params: [
-            "--rm",
-            "-e", `POSTGRES_PASSWORD=${PG_PASSWORD}`,
-        ],
+        params: ["--rm", "-e", `POSTGRES_PASSWORD=${PG_PASSWORD}`],
     });
 
     const postgresIp = await dockerIp({ containerId: postgresId });
@@ -54,14 +51,11 @@ async function proxyStart(dockerTag: string, synapse: SynapseInstance): Promise<
     const waitTimeMillis = 30000;
     const startTime = new Date().getTime();
     let lastErr: Error;
-    while ((new Date().getTime() - startTime) < waitTimeMillis) {
+    while (new Date().getTime() - startTime < waitTimeMillis) {
         try {
             await dockerExec({
                 containerId: postgresId,
-                params: [
-                    "pg_isready",
-                    "-U", "postgres",
-                ],
+                params: ["pg_isready", "-U", "postgres"],
             });
             lastErr = null;
             break;
@@ -82,10 +76,14 @@ async function proxyStart(dockerTag: string, synapse: SynapseInstance): Promise<
         containerName: "react-sdk-cypress-sliding-sync-proxy",
         params: [
             "--rm",
-            "-p", `${port}:8008/tcp`,
-            "-e", "SYNCV3_SECRET=bwahahaha",
-            "-e", `SYNCV3_SERVER=http://${synapseIp}:8008`,
-            "-e", `SYNCV3_DB=user=postgres dbname=postgres password=${PG_PASSWORD} host=${postgresIp} sslmode=disable`,
+            "-p",
+            `${port}:8008/tcp`,
+            "-e",
+            "SYNCV3_SECRET=bwahahaha",
+            "-e",
+            `SYNCV3_SERVER=http://${synapseIp}:8008`,
+            "-e",
+            `SYNCV3_DB=user=postgres dbname=postgres password=${PG_PASSWORD} host=${postgresIp} sslmode=disable`,
         ],
     });
     console.log(new Date(), "started!");

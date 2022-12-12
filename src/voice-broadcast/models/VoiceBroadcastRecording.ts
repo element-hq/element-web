@@ -56,7 +56,8 @@ interface EventMap {
 
 export class VoiceBroadcastRecording
     extends TypedEventEmitter<VoiceBroadcastRecordingEvent, EventMap>
-    implements IDestroyable {
+    implements IDestroyable
+{
     private state: VoiceBroadcastInfoState;
     private recorder: VoiceBroadcastRecorder;
     private sequence = 1;
@@ -108,8 +109,8 @@ export class VoiceBroadcastRecording
 
     private onChunkEvent = (event: MatrixEvent): void => {
         if (
-            (!event.getId() && !event.getTxnId())
-            || event.getContent()?.msgtype !== MsgType.Audio // don't add non-audio event
+            (!event.getId() && !event.getTxnId()) ||
+            event.getContent()?.msgtype !== MsgType.Audio // don't add non-audio event
         ) {
             return;
         }
@@ -119,15 +120,19 @@ export class VoiceBroadcastRecording
 
     private setInitialStateFromInfoEvent(): void {
         const room = this.client.getRoom(this.infoEvent.getRoomId());
-        const relations = room?.getUnfilteredTimelineSet()?.relations?.getChildEventsForEvent(
-            this.infoEvent.getId(),
-            RelationType.Reference,
-            VoiceBroadcastInfoEventType,
-        );
+        const relations = room
+            ?.getUnfilteredTimelineSet()
+            ?.relations?.getChildEventsForEvent(
+                this.infoEvent.getId(),
+                RelationType.Reference,
+                VoiceBroadcastInfoEventType,
+            );
         const relatedEvents = relations?.getRelations();
         this.state = !relatedEvents?.find((event: MatrixEvent) => {
             return event.getContent()?.state === VoiceBroadcastInfoState.Stopped;
-        }) ? VoiceBroadcastInfoState.Started : VoiceBroadcastInfoState.Stopped;
+        })
+            ? VoiceBroadcastInfoState.Started
+            : VoiceBroadcastInfoState.Stopped;
     }
 
     public getTimeLeft(): number {
@@ -244,12 +249,9 @@ export class VoiceBroadcastRecording
         return uploadFile(
             this.client,
             this.infoEvent.getRoomId(),
-            new Blob(
-                [chunk.buffer],
-                {
-                    type: this.getRecorder().contentType,
-                },
-            ),
+            new Blob([chunk.buffer], {
+                type: this.getRecorder().contentType,
+            }),
         );
     }
 

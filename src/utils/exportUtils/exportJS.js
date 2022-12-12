@@ -33,10 +33,9 @@ function showToast(text) {
 }
 
 window.onload = () => {
-    document.querySelectorAll('.mx_reply_anchor').forEach(element => {
-        element.addEventListener('click', event => {
+    document.querySelectorAll(".mx_reply_anchor").forEach((element) => {
+        element.addEventListener("click", (event) => {
             showToastIfNeeded(event.target.dataset.scrollTo);
         });
     });
 };
-

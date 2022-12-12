@@ -30,7 +30,7 @@ limitations under the License.
     > a {
         display: grid;
         grid-template:
-            "sender"  auto
+            "sender" auto
             "message" auto
             / auto;
         text-decoration: none;
@@ -49,7 +49,6 @@ limitations under the License.
 
     .mx_RedactedBody,
     .mx_HiddenBody {
-
         padding: 4px 0 2px 20px;
 
         &::before {
@@ -76,7 +75,8 @@ limitations under the License.
         }
 
         // Hide line numbers and edited indicator
-        .mx_EventTile_lineNumbers, .mx_EventTile_edited {
+        .mx_EventTile_lineNumbers,
+        .mx_EventTile_edited {
             display: none;
         }
 
@@ -110,7 +110,7 @@ limitations under the License.
         /* Render replies to emotes inline with the sender avatar */
         grid-template:
             "sender        message" auto
-            / max-content  auto;
+            / max-content auto;
         gap: 4px; // increase spacing
     }
 

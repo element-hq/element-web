@@ -17,7 +17,7 @@ limitations under the License.
 import React from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { _t } from '../../languageHandler';
+import { _t } from "../../languageHandler";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import BaseCard from "../views/right_panel/BaseCard";
 import TimelinePanel from "./TimelinePanel";
@@ -55,10 +55,12 @@ export default class NotificationPanel extends React.PureComponent<IProps, IStat
     };
 
     render() {
-        const emptyState = (<div className="mx_RightPanel_empty mx_NotificationPanel_empty">
-            <h2>{ _t("You're all caught up") }</h2>
-            <p>{ _t('You have no visible notifications.') }</p>
-        </div>);
+        const emptyState = (
+            <div className="mx_RightPanel_empty mx_NotificationPanel_empty">
+                <h2>{_t("You're all caught up")}</h2>
+                <p>{_t("You have no visible notifications.")}</p>
+            </div>
+        );
 
         let content;
         const timelineSet = MatrixClientPeg.get().getNotifTimelineSet();
@@ -80,18 +82,19 @@ export default class NotificationPanel extends React.PureComponent<IProps, IStat
             content = <Spinner />;
         }
 
-        return <RoomContext.Provider value={{
-            ...this.context,
-            timelineRenderingType: TimelineRenderingType.Notification,
-            narrow: this.state.narrow,
-        }}>
-            <BaseCard className="mx_NotificationPanel" onClose={this.props.onClose} withoutScrollContainer>
-                <Measured
-                    sensor={this.card.current}
-                    onMeasurement={this.onMeasurement}
-                />
-                { content }
-            </BaseCard>
-        </RoomContext.Provider>;
+        return (
+            <RoomContext.Provider
+                value={{
+                    ...this.context,
+                    timelineRenderingType: TimelineRenderingType.Notification,
+                    narrow: this.state.narrow,
+                }}
+            >
+                <BaseCard className="mx_NotificationPanel" onClose={this.props.onClose} withoutScrollContainer>
+                    <Measured sensor={this.card.current} onMeasurement={this.onMeasurement} />
+                    {content}
+                </BaseCard>
+            </RoomContext.Provider>
+        );
     }
 }

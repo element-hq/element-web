@@ -52,4 +52,3 @@ export function doesRoomVersionSupport(roomVer: string, featureVer: string): boo
     // from a mile away and can course-correct this function if needed.
     return Number(roomVer) >= Number(featureVer);
 }
-

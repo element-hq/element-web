@@ -47,10 +47,7 @@ export const LIST_UPDATED_EVENT = "list_updated_event";
 // Note: these typically happen when a new room is coming in, such as the user creating or
 // joining the room. For these cases, we need to know about the room prior to handling it otherwise
 // we'll make bad assumptions.
-const CAUSES_REQUIRING_ROOM = [
-    RoomUpdateCause.Timeline,
-    RoomUpdateCause.ReadReceipt,
-];
+const CAUSES_REQUIRING_ROOM = [RoomUpdateCause.Timeline, RoomUpdateCause.ReadReceipt];
 
 interface IStickyRoom {
     room: Room;
@@ -252,8 +249,10 @@ export class Algorithm extends EventEmitter {
                 }
             }
 
-            logger.warn(`Sticky room changed tag & position from ${tag} / ${position} `
-                + `to ${this._stickyRoom.tag} / ${this._stickyRoom.position}`);
+            logger.warn(
+                `Sticky room changed tag & position from ${tag} / ${position} ` +
+                    `to ${this._stickyRoom.tag} / ${this._stickyRoom.position}`,
+            );
 
             tag = this._stickyRoom.tag;
             position = this._stickyRoom.position;
@@ -382,7 +381,7 @@ export class Algorithm extends EventEmitter {
             if (!this._cachedStickyRooms) this.initCachedStickyRooms();
             const rooms = this._cachedStickyRooms[updatedTag];
 
-            const activeRoomIds = new Set([...CallStore.instance.activeCalls].map(call => call.roomId));
+            const activeRoomIds = new Set([...CallStore.instance.activeCalls].map((call) => call.roomId));
             const activeRooms: Room[] = [];
             const inactiveRooms: Room[] = [];
 
@@ -515,7 +514,8 @@ export class Algorithm extends EventEmitter {
         // we also have to update the position of it.
         if (oldStickyRoom && oldStickyRoom.room) {
             this.updateStickyRoom(oldStickyRoom.room);
-            if (this._stickyRoom && this._stickyRoom.room) { // just in case the update doesn't go according to plan
+            if (this._stickyRoom && this._stickyRoom.room) {
+                // just in case the update doesn't go according to plan
                 if (this._stickyRoom.tag !== oldStickyRoom.tag) {
                     // We put the sticky room at the top of the list to treat it as an obvious tag change.
                     this._stickyRoom.position = 0;
@@ -624,7 +624,7 @@ export class Algorithm extends EventEmitter {
             let knownRoomRef = this.rooms.includes(room);
             if (hasTags && !knownRoomRef) {
                 logger.warn(`${room.roomId} might be a reference change - attempting to update reference`);
-                this.rooms = this.rooms.map(r => r.roomId === room.roomId ? room : r);
+                this.rooms = this.rooms.map((r) => (r.roomId === room.roomId ? room : r));
                 knownRoomRef = this.rooms.includes(room);
                 if (!knownRoomRef) {
                     logger.warn(`${room.roomId} is still not referenced. It may be sticky.`);
@@ -715,7 +715,7 @@ export class Algorithm extends EventEmitter {
             }
 
             // Get the tags for the room and populate the cache
-            const roomTags = this.getTagsForRoom(room).filter(t => !isNullOrUndefined(this.cachedRooms[t]));
+            const roomTags = this.getTagsForRoom(room).filter((t) => !isNullOrUndefined(this.cachedRooms[t]));
 
             // "This should never happen" condition - we specify DefaultTagID.Untagged in getTagsForRoom(),
             // which means we should *always* have a tag to go off of.

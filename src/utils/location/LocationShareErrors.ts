@@ -17,18 +17,20 @@ limitations under the License.
 import { _t } from "../../languageHandler";
 
 export enum LocationShareError {
-    MapStyleUrlNotConfigured = 'MapStyleUrlNotConfigured',
-    MapStyleUrlNotReachable = 'MapStyleUrlNotReachable',
-    Default = 'Default'
+    MapStyleUrlNotConfigured = "MapStyleUrlNotConfigured",
+    MapStyleUrlNotReachable = "MapStyleUrlNotReachable",
+    Default = "Default",
 }
 
 export const getLocationShareErrorMessage = (errorType?: LocationShareError): string => {
     switch (errorType) {
         case LocationShareError.MapStyleUrlNotConfigured:
-            return _t('This homeserver is not configured to display maps.');
+            return _t("This homeserver is not configured to display maps.");
         case LocationShareError.MapStyleUrlNotReachable:
         default:
-            return _t(`This homeserver is not configured correctly to display maps, `
-                + `or the configured map server may be unreachable.`);
+            return _t(
+                `This homeserver is not configured correctly to display maps, ` +
+                    `or the configured map server may be unreachable.`,
+            );
     }
 };

@@ -48,9 +48,10 @@ export default abstract class Exporter {
         protected exportOptions: IExportOptions,
         protected setProgressText: React.Dispatch<React.SetStateAction<string>>,
     ) {
-        if (exportOptions.maxSize < 1 * 1024 * 1024|| // Less than 1 MB
+        if (
+            exportOptions.maxSize < 1 * 1024 * 1024 || // Less than 1 MB
             exportOptions.maxSize > 8000 * 1024 * 1024 || // More than 8 GB
-            exportOptions.numberOfMessages > 10**8
+            exportOptions.numberOfMessages > 10 ** 8
         ) {
             throw new Error("Invalid export options");
         }
@@ -64,7 +65,7 @@ export default abstract class Exporter {
 
     protected onBeforeUnload(e: BeforeUnloadEvent): string {
         e.preventDefault();
-        return e.returnValue = _t("Are you sure you want to exit during this export?");
+        return (e.returnValue = _t("Are you sure you want to exit during this export?"));
     }
 
     protected updateProgress(progress: string, log = true, show = true): void {
@@ -84,8 +85,7 @@ export default abstract class Exporter {
         // First try to use the real name of the room, then a translated copy of a generic name,
         // then finally hardcoded default to guarantee we'll have a name.
         const safeRoomName = sanitizeFilename(this.room.name ?? _t("Unnamed Room")).trim() || "Unnamed Room";
-        const safeDate = formatFullDateNoDayISO(new Date())
-            .replace(/:/g, '-'); // ISO format automatically removes a lot of stuff for us
+        const safeDate = formatFullDateNoDayISO(new Date()).replace(/:/g, "-"); // ISO format automatically removes a lot of stuff for us
         const safeBrand = sanitizeFilename(brand);
         return `${safeBrand} - ${safeRoomName} - Chat Export - ${safeDate}`;
     }
@@ -93,7 +93,7 @@ export default abstract class Exporter {
     protected async downloadZIP(): Promise<string | void> {
         const filename = this.destinationFileName;
         const filenameWithoutExt = filename.substring(0, filename.length - 4); // take off the .zip
-        const { default: JSZip } = await import('jszip');
+        const { default: JSZip } = await import("jszip");
 
         const zip = new JSZip();
         // Create a writable stream to the directory
@@ -125,13 +125,9 @@ export default abstract class Exporter {
 
     protected setEventMetadata(event: MatrixEvent): MatrixEvent {
         const roomState = this.client.getRoom(this.room.roomId).currentState;
-        event.sender = roomState.getSentinelMember(
-            event.getSender(),
-        );
+        event.sender = roomState.getSentinelMember(event.getSender());
         if (event.getType() === "m.room.member") {
-            event.target = roomState.getSentinelMember(
-                event.getStateKey(),
-            );
+            event.target = roomState.getSentinelMember(event.getStateKey());
         }
         return event;
     }
@@ -146,7 +142,7 @@ export default abstract class Exporter {
                 limit = 40;
                 break;
             default:
-                limit = 10**8;
+                limit = 10 ** 8;
         }
         return limit;
     }
@@ -154,7 +150,7 @@ export default abstract class Exporter {
     protected async getRequiredEvents(): Promise<MatrixEvent[]> {
         const eventMapper = this.client.getEventMapper();
 
-        let prevToken: string|null = null;
+        let prevToken: string | null = null;
         let limit = this.getLimit();
         const events: MatrixEvent[] = [];
 
@@ -188,26 +184,30 @@ export default abstract class Exporter {
             }
 
             if (this.exportType === ExportType.LastNMessages) {
-                this.updateProgress(_t("Fetched %(count)s events out of %(total)s", {
-                    count: events.length,
-                    total: this.exportOptions.numberOfMessages,
-                }));
+                this.updateProgress(
+                    _t("Fetched %(count)s events out of %(total)s", {
+                        count: events.length,
+                        total: this.exportOptions.numberOfMessages,
+                    }),
+                );
             } else {
-                this.updateProgress(_t("Fetched %(count)s events so far", {
-                    count: events.length,
-                }));
+                this.updateProgress(
+                    _t("Fetched %(count)s events so far", {
+                        count: events.length,
+                    }),
+                );
             }
 
             prevToken = res.end;
         }
         // Reverse the events so that we preserve the order
-        for (let i = 0; i < Math.floor(events.length/2); i++) {
+        for (let i = 0; i < Math.floor(events.length / 2); i++) {
             [events[i], events[events.length - i - 1]] = [events[events.length - i - 1], events[i]];
         }
 
         const decryptionPromises = events
-            .filter(event => event.isEncrypted())
-            .map(event => {
+            .filter((event) => event.isEncrypted())
+            .map((event) => {
                 return this.client.decryptEventIfNeeded(event, {
                     isRetry: true,
                     emit: false,
@@ -242,11 +242,11 @@ export default abstract class Exporter {
     }
 
     public splitFileName(file: string): string[] {
-        const lastDot = file.lastIndexOf('.');
+        const lastDot = file.lastIndexOf(".");
         if (lastDot === -1) return [file, ""];
         const fileName = file.slice(0, lastDot);
         const ext = file.slice(lastDot + 1);
-        return [fileName, '.' + ext];
+        return [fileName, "." + ext];
     }
 
     public getFilePath(event: MatrixEvent): string {
@@ -271,7 +271,7 @@ export default abstract class Exporter {
         if (event.getType() === "m.sticker") fileExt = ".png";
         if (isVoiceMessage(event)) fileExt = ".ogg";
 
-        return fileDirectory + "/" + fileName + '-' + fileDate + fileExt;
+        return fileDirectory + "/" + fileName + "-" + fileDate + fileExt;
     }
 
     protected isReply(event: MatrixEvent): boolean {

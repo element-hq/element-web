@@ -23,7 +23,5 @@ import SdkConfig, { DEFAULTS } from "../../SdkConfig";
  * - If that fails fall back to 120 (two minutes)
  */
 export const getChunkLength = (): number => {
-    return SdkConfig.get("voice_broadcast")?.chunk_length
-        || DEFAULTS.voice_broadcast?.chunk_length
-        || 120;
+    return SdkConfig.get("voice_broadcast")?.chunk_length || DEFAULTS.voice_broadcast?.chunk_length || 120;
 };

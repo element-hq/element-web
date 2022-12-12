@@ -21,8 +21,8 @@ import { MatrixClient } from "matrix-js-sdk/src/client";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { HistoryVisibility } from "matrix-js-sdk/src/@types/partials";
 
-import { MatrixClientPeg } from '../MatrixClientPeg';
-import { AddressType, getAddressType } from '../UserAddress';
+import { MatrixClientPeg } from "../MatrixClientPeg";
+import { AddressType, getAddressType } from "../UserAddress";
 import { _t } from "../languageHandler";
 import Modal from "../Modal";
 import SettingsStore from "../settings/SettingsStore";
@@ -38,7 +38,7 @@ interface IError {
     errcode: string;
 }
 
-const UNKNOWN_PROFILE_ERRORS = ['M_NOT_FOUND', 'M_USER_NOT_FOUND', 'M_PROFILE_UNDISCLOSED', 'M_PROFILE_NOT_FOUND'];
+const UNKNOWN_PROFILE_ERRORS = ["M_NOT_FOUND", "M_USER_NOT_FOUND", "M_PROFILE_UNDISCLOSED", "M_PROFILE_NOT_FOUND"];
 
 export type CompletionStates = Record<string, InviteState>;
 
@@ -92,8 +92,8 @@ export default class MultiInviter {
             if (getAddressType(addr) === null) {
                 this.completionStates[addr] = InviteState.Error;
                 this.errors[addr] = {
-                    errcode: 'M_INVALID',
-                    errorText: _t('Unrecognised address'),
+                    errcode: "M_INVALID",
+                    errorText: _t("Unrecognised address"),
                 };
             }
         }
@@ -112,7 +112,7 @@ export default class MultiInviter {
             return this.deferred.promise;
         }
 
-        return this.deferred.promise.then(async states => {
+        return this.deferred.promise.then(async (states) => {
             const invitedUsers = [];
             for (const [addr, state] of Object.entries(states)) {
                 if (state === InviteState.Invited && getAddressType(addr) === AddressType.MatrixUserId) {
@@ -134,7 +134,7 @@ export default class MultiInviter {
         if (!this.busy) return;
 
         this.canceled = true;
-        this.deferred.reject(new Error('canceled'));
+        this.deferred.reject(new Error("canceled"));
     }
 
     public getCompletionState(addr: string): InviteState {
@@ -174,10 +174,10 @@ export default class MultiInviter {
                     // The error handling during the invitation process covers any API.
                     // Some errors must to me mapped from profile API errors to more specific ones to avoid collisions.
                     switch (err.errcode) {
-                        case 'M_FORBIDDEN':
-                            throw new MatrixError({ errcode: 'M_PROFILE_UNDISCLOSED' });
-                        case 'M_NOT_FOUND':
-                            throw new MatrixError({ errcode: 'M_USER_NOT_FOUND' });
+                        case "M_FORBIDDEN":
+                            throw new MatrixError({ errcode: "M_PROFILE_UNDISCLOSED" });
+                        case "M_NOT_FOUND":
+                            throw new MatrixError({ errcode: "M_USER_NOT_FOUND" });
                         default:
                             throw err;
                     }
@@ -186,7 +186,7 @@ export default class MultiInviter {
 
             return this.matrixClient.invite(roomId, addr, this.reason);
         } else {
-            throw new Error('Unsupported address');
+            throw new Error("Unsupported address");
         }
     }
 
@@ -195,99 +195,101 @@ export default class MultiInviter {
             logger.log(`Inviting ${address}`);
 
             const doInvite = this.inviteToRoom(this.roomId, address, ignoreProfile);
-            doInvite.then(() => {
-                if (this.canceled) {
-                    return;
-                }
-
-                this.completionStates[address] = InviteState.Invited;
-                delete this.errors[address];
-
-                resolve();
-                this.progressCallback?.();
-            }).catch((err) => {
-                if (this.canceled) {
-                    return;
-                }
-
-                logger.error(err);
-
-                const isSpace = this.roomId && this.matrixClient.getRoom(this.roomId)?.isSpaceRoom();
-
-                let errorText: string;
-                let fatal = false;
-                switch (err.errcode) {
-                    case "M_FORBIDDEN":
-                        if (isSpace) {
-                            errorText = _t('You do not have permission to invite people to this space.');
-                        } else {
-                            errorText = _t('You do not have permission to invite people to this room.');
-                        }
-                        fatal = true;
-                        break;
-                    case USER_ALREADY_INVITED:
-                        if (isSpace) {
-                            errorText = _t("User is already invited to the space");
-                        } else {
-                            errorText = _t("User is already invited to the room");
-                        }
-                        break;
-                    case USER_ALREADY_JOINED:
-                        if (isSpace) {
-                            errorText = _t("User is already in the space");
-                        } else {
-                            errorText = _t("User is already in the room");
-                        }
-                        break;
-                    case "M_LIMIT_EXCEEDED":
-                        // we're being throttled so wait a bit & try again
-                        window.setTimeout(() => {
-                            this.doInvite(address, ignoreProfile).then(resolve, reject);
-                        }, 5000);
+            doInvite
+                .then(() => {
+                    if (this.canceled) {
                         return;
-                    case "M_NOT_FOUND":
-                    case "M_USER_NOT_FOUND":
-                        errorText = _t("User does not exist");
-                        break;
-                    case "M_PROFILE_UNDISCLOSED":
-                        errorText = _t("User may or may not exist");
-                        break;
-                    case "M_PROFILE_NOT_FOUND":
-                        if (!ignoreProfile) {
-                            // Invite without the profile check
-                            logger.warn(`User ${address} does not have a profile - inviting anyways automatically`);
-                            this.doInvite(address, true).then(resolve, reject);
-                            return;
-                        }
-                        break;
-                    case "M_BAD_STATE":
-                        errorText = _t("The user must be unbanned before they can be invited.");
-                        break;
-                    case "M_UNSUPPORTED_ROOM_VERSION":
-                        if (isSpace) {
-                            errorText = _t("The user's homeserver does not support the version of the space.");
-                        } else {
-                            errorText = _t("The user's homeserver does not support the version of the room.");
-                        }
-                        break;
-                }
+                    }
 
-                if (!errorText) {
-                    errorText = _t('Unknown server error');
-                }
+                    this.completionStates[address] = InviteState.Invited;
+                    delete this.errors[address];
 
-                this.completionStates[address] = InviteState.Error;
-                this.errors[address] = { errorText, errcode: err.errcode };
-
-                this.busy = !fatal;
-                this._fatal = fatal;
-
-                if (fatal) {
-                    reject(err);
-                } else {
                     resolve();
-                }
-            });
+                    this.progressCallback?.();
+                })
+                .catch((err) => {
+                    if (this.canceled) {
+                        return;
+                    }
+
+                    logger.error(err);
+
+                    const isSpace = this.roomId && this.matrixClient.getRoom(this.roomId)?.isSpaceRoom();
+
+                    let errorText: string;
+                    let fatal = false;
+                    switch (err.errcode) {
+                        case "M_FORBIDDEN":
+                            if (isSpace) {
+                                errorText = _t("You do not have permission to invite people to this space.");
+                            } else {
+                                errorText = _t("You do not have permission to invite people to this room.");
+                            }
+                            fatal = true;
+                            break;
+                        case USER_ALREADY_INVITED:
+                            if (isSpace) {
+                                errorText = _t("User is already invited to the space");
+                            } else {
+                                errorText = _t("User is already invited to the room");
+                            }
+                            break;
+                        case USER_ALREADY_JOINED:
+                            if (isSpace) {
+                                errorText = _t("User is already in the space");
+                            } else {
+                                errorText = _t("User is already in the room");
+                            }
+                            break;
+                        case "M_LIMIT_EXCEEDED":
+                            // we're being throttled so wait a bit & try again
+                            window.setTimeout(() => {
+                                this.doInvite(address, ignoreProfile).then(resolve, reject);
+                            }, 5000);
+                            return;
+                        case "M_NOT_FOUND":
+                        case "M_USER_NOT_FOUND":
+                            errorText = _t("User does not exist");
+                            break;
+                        case "M_PROFILE_UNDISCLOSED":
+                            errorText = _t("User may or may not exist");
+                            break;
+                        case "M_PROFILE_NOT_FOUND":
+                            if (!ignoreProfile) {
+                                // Invite without the profile check
+                                logger.warn(`User ${address} does not have a profile - inviting anyways automatically`);
+                                this.doInvite(address, true).then(resolve, reject);
+                                return;
+                            }
+                            break;
+                        case "M_BAD_STATE":
+                            errorText = _t("The user must be unbanned before they can be invited.");
+                            break;
+                        case "M_UNSUPPORTED_ROOM_VERSION":
+                            if (isSpace) {
+                                errorText = _t("The user's homeserver does not support the version of the space.");
+                            } else {
+                                errorText = _t("The user's homeserver does not support the version of the room.");
+                            }
+                            break;
+                    }
+
+                    if (!errorText) {
+                        errorText = _t("Unknown server error");
+                    }
+
+                    this.completionStates[address] = InviteState.Error;
+                    this.errors[address] = { errorText, errcode: err.errcode };
+
+                    this.busy = !fatal;
+                    this._fatal = fatal;
+
+                    if (fatal) {
+                        reject(err);
+                    } else {
+                        resolve();
+                    }
+                });
         });
     }
 
@@ -301,12 +303,13 @@ export default class MultiInviter {
             if (Object.keys(this.errors).length > 0) {
                 // There were problems inviting some people - see if we can invite them
                 // without caring if they exist or not.
-                const unknownProfileUsers = Object.keys(this.errors)
-                    .filter(a => UNKNOWN_PROFILE_ERRORS.includes(this.errors[a].errcode));
+                const unknownProfileUsers = Object.keys(this.errors).filter((a) =>
+                    UNKNOWN_PROFILE_ERRORS.includes(this.errors[a].errcode),
+                );
 
                 if (unknownProfileUsers.length > 0) {
                     const inviteUnknowns = () => {
-                        const promises = unknownProfileUsers.map(u => this.doInvite(u, true));
+                        const promises = unknownProfileUsers.map((u) => this.doInvite(u, true));
                         Promise.all(promises).then(() => this.deferred.resolve(this.completionStates));
                     };
 
@@ -317,7 +320,7 @@ export default class MultiInviter {
 
                     logger.log("Showing failed to invite dialog...");
                     Modal.createDialog(AskInviteAnywayDialog, {
-                        unknownProfileUsers: unknownProfileUsers.map(u => ({
+                        unknownProfileUsers: unknownProfileUsers.map((u) => ({
                             userId: u,
                             errorText: this.errors[u].errorText,
                         })),
@@ -354,8 +357,10 @@ export default class MultiInviter {
             return;
         }
 
-        this.doInvite(addr, ignoreProfile).then(() => {
-            this.inviteMore(nextIndex + 1, ignoreProfile);
-        }).catch(() => this.deferred.resolve(this.completionStates));
+        this.doInvite(addr, ignoreProfile)
+            .then(() => {
+                this.inviteMore(nextIndex + 1, ignoreProfile);
+            })
+            .catch(() => this.deferred.resolve(this.completionStates));
     }
 }

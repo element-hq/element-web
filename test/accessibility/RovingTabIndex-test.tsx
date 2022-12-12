@@ -46,26 +46,38 @@ const button4 = <Button key={4}>d</Button>;
 
 // mock offsetParent
 Object.defineProperty(HTMLElement.prototype, "offsetParent", {
-    get() { return this.parentNode; },
+    get() {
+        return this.parentNode;
+    },
 });
 
 describe("RovingTabIndex", () => {
     it("RovingTabIndexProvider renders children as expected", () => {
-        const { container } = render(<RovingTabIndexProvider>
-            { () => <div><span>Test</span></div> }
-        </RovingTabIndexProvider>);
+        const { container } = render(
+            <RovingTabIndexProvider>
+                {() => (
+                    <div>
+                        <span>Test</span>
+                    </div>
+                )}
+            </RovingTabIndexProvider>,
+        );
         expect(container.textContent).toBe("Test");
-        expect(container.innerHTML).toBe('<div><span>Test</span></div>');
+        expect(container.innerHTML).toBe("<div><span>Test</span></div>");
     });
 
     it("RovingTabIndexProvider works as expected with useRovingTabIndex", () => {
-        const { container, rerender } = render(<RovingTabIndexProvider>
-            { () => <React.Fragment>
-                { button1 }
-                { button2 }
-                { button3 }
-            </React.Fragment> }
-        </RovingTabIndexProvider>);
+        const { container, rerender } = render(
+            <RovingTabIndexProvider>
+                {() => (
+                    <React.Fragment>
+                        {button1}
+                        {button2}
+                        {button3}
+                    </React.Fragment>
+                )}
+            </RovingTabIndexProvider>,
+        );
 
         // should begin with 0th being active
         checkTabIndexes(container.querySelectorAll("button"), [0, -1, -1]);
@@ -83,42 +95,57 @@ describe("RovingTabIndex", () => {
         checkTabIndexes(container.querySelectorAll("button"), [-1, 0, -1]);
 
         // update the children, it should remain on the same button
-        rerender(<RovingTabIndexProvider>
-            { () => <React.Fragment>
-                { button1 }
-                { button4 }
-                { button2 }
-                { button3 }
-            </React.Fragment> }
-        </RovingTabIndexProvider>);
+        rerender(
+            <RovingTabIndexProvider>
+                {() => (
+                    <React.Fragment>
+                        {button1}
+                        {button4}
+                        {button2}
+                        {button3}
+                    </React.Fragment>
+                )}
+            </RovingTabIndexProvider>,
+        );
         checkTabIndexes(container.querySelectorAll("button"), [-1, -1, 0, -1]);
 
         // update the children, remove the active button, it should move to the next one
-        rerender(<RovingTabIndexProvider>
-            { () => <React.Fragment>
-                { button1 }
-                { button4 }
-                { button3 }
-            </React.Fragment> }
-        </RovingTabIndexProvider>);
+        rerender(
+            <RovingTabIndexProvider>
+                {() => (
+                    <React.Fragment>
+                        {button1}
+                        {button4}
+                        {button3}
+                    </React.Fragment>
+                )}
+            </RovingTabIndexProvider>,
+        );
         checkTabIndexes(container.querySelectorAll("button"), [-1, -1, 0]);
     });
 
     it("RovingTabIndexProvider works as expected with RovingTabIndexWrapper", () => {
-        const { container } = render(<RovingTabIndexProvider>
-            { () => <React.Fragment>
-                { button1 }
-                { button2 }
-                <RovingTabIndexWrapper>
-                    { ({ onFocus, isActive, ref }) =>
-                        <button
-                            onFocus={onFocus}
-                            tabIndex={isActive ? 0 : -1}
-                            ref={ref as React.RefObject<HTMLButtonElement>}>.</button>
-                    }
-                </RovingTabIndexWrapper>
-            </React.Fragment> }
-        </RovingTabIndexProvider>);
+        const { container } = render(
+            <RovingTabIndexProvider>
+                {() => (
+                    <React.Fragment>
+                        {button1}
+                        {button2}
+                        <RovingTabIndexWrapper>
+                            {({ onFocus, isActive, ref }) => (
+                                <button
+                                    onFocus={onFocus}
+                                    tabIndex={isActive ? 0 : -1}
+                                    ref={ref as React.RefObject<HTMLButtonElement>}
+                                >
+                                    .
+                                </button>
+                            )}
+                        </RovingTabIndexWrapper>
+                    </React.Fragment>
+                )}
+            </RovingTabIndexProvider>,
+        );
 
         // should begin with 0th being active
         checkTabIndexes(container.querySelectorAll("button"), [0, -1, -1]);
@@ -132,15 +159,20 @@ describe("RovingTabIndex", () => {
         it("SetFocus works as expected", () => {
             const ref1 = React.createRef<HTMLElement>();
             const ref2 = React.createRef<HTMLElement>();
-            expect(reducer({
-                activeRef: ref1,
-                refs: [ref1, ref2],
-            }, {
-                type: Type.SetFocus,
-                payload: {
-                    ref: ref2,
-                },
-            })).toStrictEqual({
+            expect(
+                reducer(
+                    {
+                        activeRef: ref1,
+                        refs: [ref1, ref2],
+                    },
+                    {
+                        type: Type.SetFocus,
+                        payload: {
+                            ref: ref2,
+                        },
+                    },
+                ),
+            ).toStrictEqual({
                 activeRef: ref2,
                 refs: [ref1, ref2],
             });
@@ -208,12 +240,14 @@ describe("RovingTabIndex", () => {
             const ref3 = React.createRef<HTMLElement>();
             const ref4 = React.createRef<HTMLElement>();
 
-            render(<React.Fragment>
-                <span ref={ref1} />
-                <span ref={ref2} />
-                <span ref={ref3} />
-                <span ref={ref4} />
-            </React.Fragment>);
+            render(
+                <React.Fragment>
+                    <span ref={ref1} />
+                    <span ref={ref2} />
+                    <span ref={ref3} />
+                    <span ref={ref4} />
+                </React.Fragment>,
+            );
 
             let state: IState = {
                 activeRef: null,
@@ -337,4 +371,3 @@ describe("RovingTabIndex", () => {
         });
     });
 });
-

@@ -27,8 +27,7 @@ export enum OIDCState {
 }
 
 export class WidgetPermissionStore {
-    public constructor(private readonly context: SdkContextClass) {
-    }
+    public constructor(private readonly context: SdkContextClass) {}
 
     // TODO (all functions here): Merge widgetKind with the widget definition
 
@@ -38,7 +37,7 @@ export class WidgetPermissionStore {
             location = this.context.client?.getUserId();
         }
         if (kind === WidgetKind.Modal) {
-            location = '*MODAL*-' + location; // to guarantee differentiation from whatever spawned it
+            location = "*MODAL*-" + location; // to guarantee differentiation from whatever spawned it
         }
         if (!location) {
             throw new Error("Failed to determine a location to check the widget's OIDC state with");
@@ -74,8 +73,8 @@ export class WidgetPermissionStore {
         } else if (newState === OIDCState.Denied) {
             currentValues.deny.push(settingsKey);
         } else {
-            currentValues.allow = currentValues.allow.filter(c => c !== settingsKey);
-            currentValues.deny = currentValues.deny.filter(c => c !== settingsKey);
+            currentValues.allow = currentValues.allow.filter((c) => c !== settingsKey);
+            currentValues.deny = currentValues.deny.filter((c) => c !== settingsKey);
         }
 
         SettingsStore.setValue("widgetOpenIDPermissions", null, SettingLevel.DEVICE, currentValues);

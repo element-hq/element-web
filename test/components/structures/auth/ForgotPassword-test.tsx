@@ -100,11 +100,9 @@ describe("<ForgotPassword>", () => {
 
     describe("when starting a password reset flow", () => {
         beforeEach(() => {
-            renderResult = render(<ForgotPassword
-                serverConfig={serverConfig}
-                onComplete={onComplete}
-                onLoginClick={onLoginClick}
-            />);
+            renderResult = render(
+                <ForgotPassword serverConfig={serverConfig} onComplete={onComplete} onLoginClick={onLoginClick} />,
+            );
         });
 
         it("should show the email input and mention the homeserver", () => {
@@ -115,11 +113,9 @@ describe("<ForgotPassword>", () => {
         describe("and updating the server config", () => {
             beforeEach(() => {
                 serverConfig.hsName = "example2.com";
-                renderResult.rerender(<ForgotPassword
-                    serverConfig={serverConfig}
-                    onComplete={onComplete}
-                    onLoginClick={onLoginClick}
-                />);
+                renderResult.rerender(
+                    <ForgotPassword serverConfig={serverConfig} onComplete={onComplete} onLoginClick={onLoginClick} />,
+                );
             });
 
             it("should show the new homeserver server name", () => {
@@ -171,10 +167,12 @@ describe("<ForgotPassword>", () => {
             });
 
             it("should show an info about that", () => {
-                expect(screen.getByText(
-                    "Cannot reach homeserver: "
-                    + "Ensure you have a stable internet connection, or get in touch with the server admin",
-                )).toBeInTheDocument();
+                expect(
+                    screen.getByText(
+                        "Cannot reach homeserver: " +
+                            "Ensure you have a stable internet connection, or get in touch with the server admin",
+                    ),
+                ).toBeInTheDocument();
             });
         });
 

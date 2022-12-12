@@ -91,7 +91,7 @@ describe("RelationsHelper", () => {
         // TODO Michael W: create test utils, remove casts
         relations = {
             getRelations: jest.fn(),
-            on: jest.fn().mockImplementation((type, l) => relationsOnAdd = l),
+            on: jest.fn().mockImplementation((type, l) => (relationsOnAdd = l)),
             off: jest.fn(),
         } as unknown as Relations;
         timelineSet = {

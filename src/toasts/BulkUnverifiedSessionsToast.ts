@@ -14,13 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { _t } from '../languageHandler';
+import { _t } from "../languageHandler";
 import dis from "../dispatcher/dispatcher";
-import DeviceListener from '../DeviceListener';
+import DeviceListener from "../DeviceListener";
 import GenericToast from "../components/views/toasts/GenericToast";
 import ToastStore from "../stores/ToastStore";
 import { Action } from "../dispatcher/actions";
-import { snoozeBulkUnverifiedDeviceReminder } from '../utils/device/snoozeBulkUnverifiedDeviceReminder';
+import { snoozeBulkUnverifiedDeviceReminder } from "../utils/device/snoozeBulkUnverifiedDeviceReminder";
 
 const TOAST_KEY = "reviewsessions";
 

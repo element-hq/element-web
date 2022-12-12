@@ -49,7 +49,7 @@ interface InternalUserOnboardingTask extends UserOnboardingTask {
 
 const onClickStartDm = (ev: ButtonEvent) => {
     PosthogTrackers.trackInteraction("WebUserOnboardingTaskSendDm", ev);
-    defaultDispatcher.dispatch({ action: 'view_create_chat' });
+    defaultDispatcher.dispatch({ action: "view_create_chat" });
 };
 
 const tasks: InternalUserOnboardingTask[] = [
@@ -94,12 +94,14 @@ const tasks: InternalUserOnboardingTask[] = [
     },
     {
         id: "download-apps",
-        title: () => _t("Download %(brand)s", {
-            brand: SdkConfig.get("brand"),
-        }),
-        description: () => _t("Don’t miss a thing by taking %(brand)s with you", {
-            brand: SdkConfig.get("brand"),
-        }),
+        title: () =>
+            _t("Download %(brand)s", {
+                brand: SdkConfig.get("brand"),
+            }),
+        description: () =>
+            _t("Don’t miss a thing by taking %(brand)s with you", {
+                brand: SdkConfig.get("brand"),
+            }),
         completed: (ctx: UserOnboardingContext) => ctx.hasDevices,
         action: {
             label: _t("Download apps"),
@@ -143,10 +145,7 @@ const tasks: InternalUserOnboardingTask[] = [
 
 export function useUserOnboardingTasks(context: UserOnboardingContext): [UserOnboardingTask[], UserOnboardingTask[]] {
     const useCase = useSettingValue<UseCase | null>("FTUE.useCaseSelection") ?? UseCase.Skip;
-    const relevantTasks = useMemo(
-        () => tasks.filter(it => !it.relevant || it.relevant.includes(useCase)),
-        [useCase],
-    );
-    const completedTasks = relevantTasks.filter(it => context && it.completed(context));
-    return [completedTasks, relevantTasks.filter(it => !completedTasks.includes(it))];
+    const relevantTasks = useMemo(() => tasks.filter((it) => !it.relevant || it.relevant.includes(useCase)), [useCase]);
+    const completedTasks = relevantTasks.filter((it) => context && it.completed(context));
+    return [completedTasks, relevantTasks.filter((it) => !completedTasks.includes(it))];
 }

@@ -35,7 +35,7 @@ import { avatarUrlForUser } from "../../../Avatar";
 import EventTile from "../rooms/EventTile";
 import SearchBox from "../../structures/SearchBox";
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
-import { Alignment } from '../elements/Tooltip';
+import { Alignment } from "../elements/Tooltip";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import { StaticNotificationState } from "../../../stores/notifications/StaticNotificationState";
@@ -125,37 +125,37 @@ const Entry: React.FC<IEntryProps> = ({ room, type, content, matrixClient: cli, 
         className = "mx_ForwardList_sendFailed";
         disabled = true;
         title = _t("Failed to send");
-        icon = <NotificationBadge
-            notification={StaticNotificationState.RED_EXCLAMATION}
-        />;
+        icon = <NotificationBadge notification={StaticNotificationState.RED_EXCLAMATION} />;
     }
 
-    return <div className="mx_ForwardList_entry">
-        <AccessibleTooltipButton
-            className="mx_ForwardList_roomButton"
-            onClick={jumpToRoom}
-            title={_t("Open room")}
-            alignment={Alignment.Top}
-        >
-            <DecoratedRoomAvatar room={room} avatarSize={32} />
-            <span className="mx_ForwardList_entry_name">{ room.name }</span>
-            <RoomContextDetails component="span" className="mx_ForwardList_entry_detail" room={room} />
-        </AccessibleTooltipButton>
-        <AccessibleTooltipButton
-            kind={sendState === SendState.Failed ? "danger_outline" : "primary_outline"}
-            className={`mx_ForwardList_sendButton ${className}`}
-            onClick={send}
-            disabled={disabled}
-            title={title}
-            alignment={Alignment.Top}
-        >
-            <div className="mx_ForwardList_sendLabel">{ _t("Send") }</div>
-            { icon }
-        </AccessibleTooltipButton>
-    </div>;
+    return (
+        <div className="mx_ForwardList_entry">
+            <AccessibleTooltipButton
+                className="mx_ForwardList_roomButton"
+                onClick={jumpToRoom}
+                title={_t("Open room")}
+                alignment={Alignment.Top}
+            >
+                <DecoratedRoomAvatar room={room} avatarSize={32} />
+                <span className="mx_ForwardList_entry_name">{room.name}</span>
+                <RoomContextDetails component="span" className="mx_ForwardList_entry_detail" room={room} />
+            </AccessibleTooltipButton>
+            <AccessibleTooltipButton
+                kind={sendState === SendState.Failed ? "danger_outline" : "primary_outline"}
+                className={`mx_ForwardList_sendButton ${className}`}
+                onClick={send}
+                disabled={disabled}
+                title={title}
+                alignment={Alignment.Top}
+            >
+                <div className="mx_ForwardList_sendLabel">{_t("Send")}</div>
+                {icon}
+            </AccessibleTooltipButton>
+        </div>
+    );
 };
 
-const transformEvent = (event: MatrixEvent): {type: string, content: IContent } => {
+const transformEvent = (event: MatrixEvent): { type: string; content: IContent } => {
     const {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         "m.relates_to": _, // strip relations - in future we will attach a relation pointing at the original event
@@ -197,7 +197,7 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
     const userId = cli.getUserId();
     const [profileInfo, setProfileInfo] = useState<any>({});
     useEffect(() => {
-        cli.getProfileInfo(userId).then(info => setProfileInfo(info));
+        cli.getProfileInfo(userId).then((info) => setProfileInfo(info));
     }, [cli, userId]);
 
     const { type, content } = transformEvent(event);
@@ -218,10 +218,7 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
         rawDisplayName: profileInfo.displayname,
         userId,
         getAvatarUrl: (..._) => {
-            return avatarUrlForUser(
-                { avatarUrl: profileInfo.avatar_url },
-                AVATAR_SIZE, AVATAR_SIZE, "crop",
-            );
+            return avatarUrlForUser({ avatarUrl: profileInfo.avatar_url }, AVATAR_SIZE, AVATAR_SIZE, "crop");
         },
         getMxcAvatarUrl: () => profileInfo.avatar_url,
     } as RoomMember;
@@ -231,16 +228,16 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
 
     const previewLayout = useSettingValue<Layout>("layout");
 
-    let rooms = useMemo(() => sortRooms(
-        cli.getVisibleRooms().filter(
-            room => room.getMyMembership() === "join" && !room.isSpaceRoom(),
-        ),
-    ), [cli]);
+    let rooms = useMemo(
+        () =>
+            sortRooms(cli.getVisibleRooms().filter((room) => room.getMyMembership() === "join" && !room.isSpaceRoom())),
+        [cli],
+    );
 
     if (lcQuery) {
         rooms = new QueryMatcher<Room>(rooms, {
             keys: ["name"],
-            funcs: [r => [r.getCanonicalAlias(), ...r.getAltAliases()].filter(Boolean)],
+            funcs: [(r) => [r.getCanonicalAlias(), ...r.getAltAliases()].filter(Boolean)],
             shouldMatchWordsOnly: false,
         }).match(lcQuery);
     }
@@ -252,7 +249,12 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
             <EntityTile
                 className="mx_EntityTile_ellipsis"
                 avatarJsx={
-                    <BaseAvatar url={require("../../../../res/img/ellipsis.svg").default} name="..." width={36} height={36} />
+                    <BaseAvatar
+                        url={require("../../../../res/img/ellipsis.svg").default}
+                        name="..."
+                        width={36}
+                        height={36}
+                    />
                 }
                 name={text}
                 presenceState="online"
@@ -262,58 +264,61 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
         );
     }
 
-    return <BaseDialog
-        title={_t("Forward message")}
-        className="mx_ForwardDialog"
-        contentId="mx_ForwardList"
-        onFinished={onFinished}
-        fixedWidth={false}
-    >
-        <h3>{ _t("Message preview") }</h3>
-        <div className={classnames("mx_ForwardDialog_preview", {
-            "mx_IRCLayout": previewLayout == Layout.IRC,
-        })}>
-            <EventTile
-                mxEvent={mockEvent}
-                layout={previewLayout}
-                permalinkCreator={permalinkCreator}
-                as="div"
-            />
-        </div>
-        <hr />
-        <div className="mx_ForwardList" id="mx_ForwardList">
-            <SearchBox
-                className="mx_textinput_icon mx_textinput_search"
-                placeholder={_t("Search for rooms or people")}
-                onSearch={setQuery}
-                autoFocus={true}
-            />
-            <AutoHideScrollbar className="mx_ForwardList_content">
-                { rooms.length > 0 ? (
-                    <div className="mx_ForwardList_results">
-                        <TruncatedList
-                            className="mx_ForwardList_resultsList"
-                            truncateAt={truncateAt}
-                            createOverflowElement={overflowTile}
-                            getChildren={(start, end) => rooms.slice(start, end).map(room =>
-                                <Entry
-                                    key={room.roomId}
-                                    room={room}
-                                    type={type}
-                                    content={content}
-                                    matrixClient={cli}
-                                    onFinished={onFinished}
-                                />,
-                            )}
-                            getChildCount={() => rooms.length}
-                        />
-                    </div>
-                ) : <span className="mx_ForwardList_noResults">
-                    { _t("No results") }
-                </span> }
-            </AutoHideScrollbar>
-        </div>
-    </BaseDialog>;
+    return (
+        <BaseDialog
+            title={_t("Forward message")}
+            className="mx_ForwardDialog"
+            contentId="mx_ForwardList"
+            onFinished={onFinished}
+            fixedWidth={false}
+        >
+            <h3>{_t("Message preview")}</h3>
+            <div
+                className={classnames("mx_ForwardDialog_preview", {
+                    mx_IRCLayout: previewLayout == Layout.IRC,
+                })}
+            >
+                <EventTile mxEvent={mockEvent} layout={previewLayout} permalinkCreator={permalinkCreator} as="div" />
+            </div>
+            <hr />
+            <div className="mx_ForwardList" id="mx_ForwardList">
+                <SearchBox
+                    className="mx_textinput_icon mx_textinput_search"
+                    placeholder={_t("Search for rooms or people")}
+                    onSearch={setQuery}
+                    autoFocus={true}
+                />
+                <AutoHideScrollbar className="mx_ForwardList_content">
+                    {rooms.length > 0 ? (
+                        <div className="mx_ForwardList_results">
+                            <TruncatedList
+                                className="mx_ForwardList_resultsList"
+                                truncateAt={truncateAt}
+                                createOverflowElement={overflowTile}
+                                getChildren={(start, end) =>
+                                    rooms
+                                        .slice(start, end)
+                                        .map((room) => (
+                                            <Entry
+                                                key={room.roomId}
+                                                room={room}
+                                                type={type}
+                                                content={content}
+                                                matrixClient={cli}
+                                                onFinished={onFinished}
+                                            />
+                                        ))
+                                }
+                                getChildCount={() => rooms.length}
+                            />
+                        </div>
+                    ) : (
+                        <span className="mx_ForwardList_noResults">{_t("No results")}</span>
+                    )}
+                </AutoHideScrollbar>
+            </div>
+        </BaseDialog>
+    );
 };
 
 export default ForwardDialog;

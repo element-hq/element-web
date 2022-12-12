@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from "react";
 
-import { _t } from '../../../languageHandler';
+import { _t } from "../../../languageHandler";
 import Field from "./Field";
 import AccessibleButton from "./AccessibleButton";
 
@@ -61,22 +61,20 @@ export class EditableItem extends React.Component<IItemProps, IItemState> {
         if (this.state.verifyRemove) {
             return (
                 <div className="mx_EditableItem">
-                    <span className="mx_EditableItem_promptText">
-                        { _t("Are you sure?") }
-                    </span>
+                    <span className="mx_EditableItem_promptText">{_t("Are you sure?")}</span>
                     <AccessibleButton
                         onClick={this.onActuallyRemove}
                         kind="primary_sm"
                         className="mx_EditableItem_confirmBtn"
                     >
-                        { _t("Yes") }
+                        {_t("Yes")}
                     </AccessibleButton>
                     <AccessibleButton
                         onClick={this.onDontRemove}
                         kind="danger_sm"
                         className="mx_EditableItem_confirmBtn"
                     >
-                        { _t("No") }
+                        {_t("No")}
                     </AccessibleButton>
                 </div>
             );
@@ -85,7 +83,7 @@ export class EditableItem extends React.Component<IItemProps, IItemState> {
         return (
             <div className="mx_EditableItem">
                 <div onClick={this.onRemove} className="mx_EditableItem_delete" title={_t("Remove")} role="button" />
-                <span className="mx_EditableItem_item">{ this.props.value }</span>
+                <span className="mx_EditableItem_item">{this.props.value}</span>
             </div>
         );
     }
@@ -144,7 +142,7 @@ export default class EditableItemList<P = {}> extends React.PureComponent<IProps
                     type="submit"
                     disabled={!this.props.newItem}
                 >
-                    { _t("Add") }
+                    {_t("Add")}
                 </AccessibleButton>
             </form>
         );
@@ -153,27 +151,20 @@ export default class EditableItemList<P = {}> extends React.PureComponent<IProps
     render() {
         const editableItems = this.props.items.map((item, index) => {
             if (!this.props.canRemove) {
-                return <li key={item}>{ item }</li>;
+                return <li key={item}>{item}</li>;
             }
 
-            return <EditableItem
-                key={item}
-                index={index}
-                value={item}
-                onRemove={this.onItemRemoved}
-            />;
+            return <EditableItem key={item} index={index} value={item} onRemove={this.onItemRemoved} />;
         });
 
-        const editableItemsSection = this.props.canRemove ? editableItems : <ul>{ editableItems }</ul>;
+        const editableItemsSection = this.props.canRemove ? editableItems : <ul>{editableItems}</ul>;
         const label = this.props.items.length > 0 ? this.props.itemsLabel : this.props.noItemsLabel;
 
         return (
             <div className="mx_EditableItemList" id={this.props.id}>
-                <div className="mx_EditableItemList_label">
-                    { label }
-                </div>
-                { editableItemsSection }
-                { this.props.canEdit ? this.renderNewItemField() : <div /> }
+                <div className="mx_EditableItemList_label">{label}</div>
+                {editableItemsSection}
+                {this.props.canEdit ? this.renderNewItemField() : <div />}
             </div>
         );
     }

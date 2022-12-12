@@ -29,7 +29,7 @@ declare global {
 
         interface cy {
             all<T extends Cypress.Chainable[] | []>(
-                commands: T
+                commands: T,
             ): Cypress.Chainable<{ [P in keyof T]: ChainableValue<T[P]> }>;
             queue: any;
         }
@@ -59,16 +59,16 @@ cy.all = function all(commands): Cypress.Chainable {
         return cy.wrap(
             // @see https://lodash.com/docs/4.17.15#lodash
             Cypress._(commands)
-                .map(cmd => {
+                .map((cmd) => {
                     return cmd[chainStart]
                         ? cmd[chainStart].attributes
                         : Cypress._.find(cy.queue.get(), {
-                            attributes: { chainerId: cmd.chainerId },
-                        }).attributes;
+                              attributes: { chainerId: cmd.chainerId },
+                          }).attributes;
                 })
                 .concat(stopCommand.attributes)
                 .slice(1)
-                .map(cmd => {
+                .map((cmd) => {
                     return cmd.prev.get("subject");
                 })
                 .value(),
@@ -79,4 +79,4 @@ cy.all = function all(commands): Cypress.Chainable {
 };
 
 // Needed to make this file a module
-export { };
+export {};

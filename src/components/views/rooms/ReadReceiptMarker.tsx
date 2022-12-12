@@ -15,13 +15,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { createRef, RefObject } from 'react';
+import React, { createRef, RefObject } from "react";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import NodeAnimator from "../../../NodeAnimator";
 import { toPx } from "../../../utils/units";
-import { LegacyMemberAvatar as MemberAvatar } from '../avatars/MemberAvatar';
+import { LegacyMemberAvatar as MemberAvatar } from "../avatars/MemberAvatar";
 import { READ_AVATAR_SIZE } from "./ReadReceiptGroup";
 
 export interface IReadReceiptInfo {
@@ -174,10 +174,10 @@ export default class ReadReceiptMarker extends React.PureComponent<IProps, IStat
 
         const newPosition = this.readReceiptPosition(newInfo);
         const oldPosition = oldInfo
-            // start at the old height and in the old h pos
-            ? this.readReceiptPosition(oldInfo)
-            // treat new RRs as though they were off the top of the screen
-            : -READ_AVATAR_SIZE;
+            ? // start at the old height and in the old h pos
+              this.readReceiptPosition(oldInfo)
+            : // treat new RRs as though they were off the top of the screen
+              -READ_AVATAR_SIZE;
 
         const startStyles = [];
         if (oldInfo?.right) {
@@ -204,7 +204,7 @@ export default class ReadReceiptMarker extends React.PureComponent<IProps, IStat
 
         const style = {
             right: toPx(this.props.offset),
-            top: '0px',
+            top: "0px",
         };
 
         return (

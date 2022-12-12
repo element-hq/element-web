@@ -25,17 +25,12 @@ import { useEventEmitter } from "./useEventEmitter";
 
 export const useNotificationState = (room: Room): [RoomNotifState, (state: RoomNotifState) => void] => {
     const echoChamber = useMemo(() => EchoChamber.forRoom(room), [room]);
-    const [notificationState, setNotificationState] = useState<RoomNotifState>(
-        echoChamber.notificationVolume,
-    );
+    const [notificationState, setNotificationState] = useState<RoomNotifState>(echoChamber.notificationVolume);
     useEventEmitter(echoChamber, PROPERTY_UPDATED, (key: CachedRoomKey) => {
         if (key === CachedRoomKey.NotificationVolume) {
             setNotificationState(echoChamber.notificationVolume);
         }
     });
-    const setter = useCallback(
-        (state: RoomNotifState) => echoChamber.notificationVolume = state,
-        [echoChamber],
-    );
+    const setter = useCallback((state: RoomNotifState) => (echoChamber.notificationVolume = state), [echoChamber]);
     return [notificationState, setter];
 };

@@ -49,13 +49,15 @@ const GenericExpiringToast: React.FC<IProps> = ({
         rejectLabel += ` (${counter})`;
     }
 
-    return <GenericToast
-        description={description}
-        acceptLabel={acceptLabel}
-        onAccept={onAccept}
-        rejectLabel={rejectLabel}
-        onReject={onReject}
-    />;
+    return (
+        <GenericToast
+            description={description}
+            acceptLabel={acceptLabel}
+            onAccept={onAccept}
+            rejectLabel={rejectLabel}
+            onReject={onReject}
+        />
+    );
 };
 
 export default GenericExpiringToast;

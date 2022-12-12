@@ -84,7 +84,7 @@ describe("Reply", () => {
                 content: {
                     "m.relates_to": {
                         "m.in_reply_to": {
-                            "event_id": "$event1",
+                            event_id: "$event1",
                         },
                     },
                 },
@@ -96,24 +96,30 @@ describe("Reply", () => {
 
     describe("stripPlainReply", () => {
         it("Removes leading quotes until the first blank line", () => {
-            expect(stripPlainReply(`
+            expect(
+                stripPlainReply(
+                    `
 > This is part
 > of the quote
 
 But this is not
-            `.trim())).toBe("But this is not");
+            `.trim(),
+                ),
+            ).toBe("But this is not");
         });
     });
 
     describe("stripHTMLReply", () => {
         it("Removes <mx-reply> from the input", () => {
-            expect(stripHTMLReply(`
+            expect(
+                stripHTMLReply(`
                 <mx-reply>
                     This is part
                     of the quote
                 </mx-reply>
                 But this is not
-            `).trim()).toBe("But this is not");
+            `).trim(),
+            ).toBe("But this is not");
         });
     });
 

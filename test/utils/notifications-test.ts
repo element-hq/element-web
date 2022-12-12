@@ -34,7 +34,7 @@ import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 
 jest.mock("../../src/settings/SettingsStore");
 
-describe('notifications', () => {
+describe("notifications", () => {
     let accountDataStore = {};
     let mockClient;
     let accountDataEventKey;
@@ -43,7 +43,7 @@ describe('notifications', () => {
         jest.clearAllMocks();
         mockClient = getMockClientWithEventEmitter({
             isGuest: jest.fn().mockReturnValue(false),
-            getAccountData: jest.fn().mockImplementation(eventType => accountDataStore[eventType]),
+            getAccountData: jest.fn().mockImplementation((eventType) => accountDataStore[eventType]),
             setAccountData: jest.fn().mockImplementation((eventType, content) => {
                 accountDataStore[eventType] = new MatrixEvent({
                     type: eventType,
@@ -56,14 +56,14 @@ describe('notifications', () => {
         mocked(SettingsStore).getValue.mockReturnValue(false);
     });
 
-    describe('createLocalNotification', () => {
-        it('creates account data event', async () => {
+    describe("createLocalNotification", () => {
+        it("creates account data event", async () => {
             await createLocalNotificationSettingsIfNeeded(mockClient);
             const event = mockClient.getAccountData(accountDataEventKey);
             expect(event?.getContent().is_silenced).toBe(true);
         });
 
-        it('does not do anything for guests', async () => {
+        it("does not do anything for guests", async () => {
             mockClient.isGuest.mockReset().mockReturnValue(true);
             await createLocalNotificationSettingsIfNeeded(mockClient);
             const event = mockClient.getAccountData(accountDataEventKey);
@@ -71,7 +71,7 @@ describe('notifications', () => {
         });
 
         it.each(deviceNotificationSettingsKeys)(
-            'unsilenced for existing sessions when %s setting is truthy',
+            "unsilenced for existing sessions when %s setting is truthy",
             async (settingKey) => {
                 mocked(SettingsStore).getValue.mockImplementation((key): any => {
                     return key === settingKey;
@@ -80,7 +80,8 @@ describe('notifications', () => {
                 await createLocalNotificationSettingsIfNeeded(mockClient);
                 const event = mockClient.getAccountData(accountDataEventKey);
                 expect(event?.getContent().is_silenced).toBe(false);
-            });
+            },
+        );
 
         it("does not override an existing account event data", async () => {
             mockClient.setAccountData(accountDataEventKey, {
@@ -93,11 +94,11 @@ describe('notifications', () => {
         });
     });
 
-    describe('localNotificationsAreSilenced', () => {
-        it('defaults to false when no setting exists', () => {
+    describe("localNotificationsAreSilenced", () => {
+        it("defaults to false when no setting exists", () => {
             expect(localNotificationsAreSilenced(mockClient)).toBeFalsy();
         });
-        it('checks the persisted value', () => {
+        it("checks the persisted value", () => {
             mockClient.setAccountData(accountDataEventKey, { is_silenced: true });
             expect(localNotificationsAreSilenced(mockClient)).toBeTruthy();
 

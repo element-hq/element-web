@@ -65,7 +65,8 @@ export default class NotificationBadge extends React.PureComponent<XOR<IProps, I
         };
 
         this.countWatcherRef = SettingsStore.watchSetting(
-            "Notifications.alwaysShowBadgeCounts", this.roomId,
+            "Notifications.alwaysShowBadgeCounts",
+            this.roomId,
             this.countPreferenceChanged,
         );
     }
@@ -125,16 +126,18 @@ export default class NotificationBadge extends React.PureComponent<XOR<IProps, I
             tooltip = <Tooltip className="mx_RoleButton_tooltip" label={label} />;
         }
 
-        return <StatelessNotificationBadge
-            label={label}
-            symbol={notification.symbol}
-            count={notification.count}
-            color={notification.color}
-            onClick={onClick}
-            onMouseOver={this.onMouseOver}
-            onMouseLeave={this.onMouseLeave}
-        >
-            { tooltip }
-        </StatelessNotificationBadge>;
+        return (
+            <StatelessNotificationBadge
+                label={label}
+                symbol={notification.symbol}
+                count={notification.count}
+                color={notification.color}
+                onClick={onClick}
+                onMouseOver={this.onMouseOver}
+                onMouseLeave={this.onMouseLeave}
+            >
+                {tooltip}
+            </StatelessNotificationBadge>
+        );
     }
 }

@@ -187,16 +187,8 @@ function getTextNodeValue(node: Node): string {
 }
 
 export function getRangeForSelection(editor: HTMLDivElement, model: EditorModel, selection: Selection): Range {
-    const focusOffset = getSelectionOffsetAndText(
-        editor,
-        selection.focusNode,
-        selection.focusOffset,
-    ).offset;
-    const anchorOffset = getSelectionOffsetAndText(
-        editor,
-        selection.anchorNode,
-        selection.anchorOffset,
-    ).offset;
+    const focusOffset = getSelectionOffsetAndText(editor, selection.focusNode, selection.focusOffset).offset;
+    const anchorOffset = getSelectionOffsetAndText(editor, selection.anchorNode, selection.anchorOffset).offset;
     const focusPosition = focusOffset.asPosition(model);
     const anchorPosition = anchorOffset.asPosition(model);
     return model.startRange(focusPosition, anchorPosition);

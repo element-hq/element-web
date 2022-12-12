@@ -33,36 +33,39 @@ export function useWysiwygSendActionHandler(
     const roomContext = useRoomContext();
     const timeoutId = useRef<number | null>(null);
 
-    const handler = useCallback((payload: ActionPayload) => {
-        // don't let the user into the composer if it is disabled - all of these branches lead
-        // to the cursor being in the composer
-        if (disabled || !composerElement?.current) return;
+    const handler = useCallback(
+        (payload: ActionPayload) => {
+            // don't let the user into the composer if it is disabled - all of these branches lead
+            // to the cursor being in the composer
+            if (disabled || !composerElement?.current) return;
 
-        const context = payload.context ?? TimelineRenderingType.Room;
+            const context = payload.context ?? TimelineRenderingType.Room;
 
-        switch (payload.action) {
-            case "reply_to_event":
-            case Action.FocusSendMessageComposer:
-                focusComposer(composerElement, context, roomContext, timeoutId);
-                break;
-            case Action.ClearAndFocusSendMessageComposer:
-                composerFunctions.clear();
-                focusComposer(composerElement, context, roomContext, timeoutId);
-                break;
-            case Action.ComposerInsert:
-                if (payload.timelineRenderingType !== roomContext.timelineRenderingType) break;
-                if (payload.composerType !== ComposerType.Send) break;
+            switch (payload.action) {
+                case "reply_to_event":
+                case Action.FocusSendMessageComposer:
+                    focusComposer(composerElement, context, roomContext, timeoutId);
+                    break;
+                case Action.ClearAndFocusSendMessageComposer:
+                    composerFunctions.clear();
+                    focusComposer(composerElement, context, roomContext, timeoutId);
+                    break;
+                case Action.ComposerInsert:
+                    if (payload.timelineRenderingType !== roomContext.timelineRenderingType) break;
+                    if (payload.composerType !== ComposerType.Send) break;
 
-                if (payload.userId) {
-                    // TODO insert mention - see SendMessageComposer
-                } else if (payload.event) {
-                    // TODO insert quote message - see SendMessageComposer
-                } else if (payload.text) {
-                    composerFunctions.insertText(payload.text);
-                }
-                break;
-        }
-    }, [disabled, composerElement, composerFunctions, timeoutId, roomContext]);
+                    if (payload.userId) {
+                        // TODO insert mention - see SendMessageComposer
+                    } else if (payload.event) {
+                        // TODO insert quote message - see SendMessageComposer
+                    } else if (payload.text) {
+                        composerFunctions.insertText(payload.text);
+                    }
+                    break;
+            }
+        },
+        [disabled, composerElement, composerFunctions, timeoutId, roomContext],
+    );
 
     useDispatcher(defaultDispatcher, handler);
 }

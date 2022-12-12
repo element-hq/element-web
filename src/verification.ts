@@ -15,14 +15,14 @@ limitations under the License.
 */
 
 import { User } from "matrix-js-sdk/src/models/user";
-import { verificationMethods as VerificationMethods } from 'matrix-js-sdk/src/crypto';
+import { verificationMethods as VerificationMethods } from "matrix-js-sdk/src/crypto";
 import { RoomMember } from "matrix-js-sdk/src/matrix";
 
-import { MatrixClientPeg } from './MatrixClientPeg';
+import { MatrixClientPeg } from "./MatrixClientPeg";
 import dis from "./dispatcher/dispatcher";
-import Modal from './Modal';
+import Modal from "./Modal";
 import { RightPanelPhases } from "./stores/right-panel/RightPanelStorePhases";
-import { accessSecretStorage } from './SecurityManager';
+import { accessSecretStorage } from "./SecurityManager";
 import UntrustedDeviceDialog from "./components/views/dialogs/UntrustedDeviceDialog";
 import { IDevice } from "./components/views/right_panel/UserInfo";
 import ManualDeviceKeyVerificationDialog from "./components/views/dialogs/ManualDeviceKeyVerificationDialog";
@@ -47,7 +47,7 @@ async function enable4SIfNeeded() {
 export async function verifyDevice(user: User, device: IDevice) {
     const cli = MatrixClientPeg.get();
     if (cli.isGuest()) {
-        dis.dispatch({ action: 'require_registration' });
+        dis.dispatch({ action: "require_registration" });
         return;
     }
     // if cross-signing is not explicitly disabled, check if it should be enabled first.
@@ -81,7 +81,7 @@ export async function verifyDevice(user: User, device: IDevice) {
 export async function legacyVerifyUser(user: User) {
     const cli = MatrixClientPeg.get();
     if (cli.isGuest()) {
-        dis.dispatch({ action: 'require_registration' });
+        dis.dispatch({ action: "require_registration" });
         return;
     }
     // if cross-signing is not explicitly disabled, check if it should be enabled first.
@@ -97,7 +97,7 @@ export async function legacyVerifyUser(user: User) {
 export async function verifyUser(user: User) {
     const cli = MatrixClientPeg.get();
     if (cli.isGuest()) {
-        dis.dispatch({ action: 'require_registration' });
+        dis.dispatch({ action: "require_registration" });
         return;
     }
     if (!(await enable4SIfNeeded())) {
@@ -108,10 +108,8 @@ export async function verifyUser(user: User) {
 }
 
 function setRightPanel(state: IRightPanelCardState) {
-    if (RightPanelStore.instance.roomPhaseHistory.some((card) => (card.phase == RightPanelPhases.RoomSummary))) {
-        RightPanelStore.instance.pushCard(
-            { phase: RightPanelPhases.EncryptionPanel, state },
-        );
+    if (RightPanelStore.instance.roomPhaseHistory.some((card) => card.phase == RightPanelPhases.RoomSummary)) {
+        RightPanelStore.instance.pushCard({ phase: RightPanelPhases.EncryptionPanel, state });
     } else {
         RightPanelStore.instance.setCards([
             { phase: RightPanelPhases.RoomSummary },

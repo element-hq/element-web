@@ -14,30 +14,30 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactElement } from 'react';
-import { render } from '@testing-library/react';
-import { mocked } from 'jest-mock';
+import React, { ReactElement } from "react";
+import { render } from "@testing-library/react";
+import { mocked } from "jest-mock";
 
-import SettingsStore, { CallbackFn } from '../../../../src/settings/SettingsStore';
-import SdkConfig from '../../../../src/SdkConfig';
-import { UserTab } from '../../../../src/components/views/dialogs/UserTab';
-import UserSettingsDialog from '../../../../src/components/views/dialogs/UserSettingsDialog';
-import { IDialogProps } from '../../../../src/components/views/dialogs/IDialogProps';
+import SettingsStore, { CallbackFn } from "../../../../src/settings/SettingsStore";
+import SdkConfig from "../../../../src/SdkConfig";
+import { UserTab } from "../../../../src/components/views/dialogs/UserTab";
+import UserSettingsDialog from "../../../../src/components/views/dialogs/UserSettingsDialog";
+import { IDialogProps } from "../../../../src/components/views/dialogs/IDialogProps";
 import {
     getMockClientWithEventEmitter,
     mockClientMethodsUser,
     mockClientMethodsServer,
     mockPlatformPeg,
-} from '../../../test-utils';
-import { UIFeature } from '../../../../src/settings/UIFeature';
-import { SettingLevel } from '../../../../src/settings/SettingLevel';
+} from "../../../test-utils";
+import { UIFeature } from "../../../../src/settings/UIFeature";
+import { SettingLevel } from "../../../../src/settings/SettingLevel";
 
 mockPlatformPeg({
     supportsSpellCheckSettings: jest.fn().mockReturnValue(false),
-    getAppVersion: jest.fn().mockResolvedValue('1'),
+    getAppVersion: jest.fn().mockResolvedValue("1"),
 });
 
-jest.mock('../../../../src/settings/SettingsStore', () => ({
+jest.mock("../../../../src/settings/SettingsStore", () => ({
     getValue: jest.fn(),
     getValueAt: jest.fn(),
     canSetValue: jest.fn(),
@@ -48,12 +48,12 @@ jest.mock('../../../../src/settings/SettingsStore', () => ({
     getBetaInfo: jest.fn(),
 }));
 
-jest.mock('../../../../src/SdkConfig', () => ({
+jest.mock("../../../../src/SdkConfig", () => ({
     get: jest.fn(),
 }));
 
-describe('<UserSettingsDialog />', () => {
-    const userId = '@alice:server.org';
+describe("<UserSettingsDialog />", () => {
+    const userId = "@alice:server.org";
     const mockSettingsStore = mocked(SettingsStore);
     const mockSdkConfig = mocked(SdkConfig);
     getMockClientWithEventEmitter({
@@ -62,7 +62,7 @@ describe('<UserSettingsDialog />', () => {
     });
 
     const defaultProps = { onFinished: jest.fn() };
-    const getComponent = (props: Partial<IDialogProps & {initialTabId?: UserTab}> = {}): ReactElement => (
+    const getComponent = (props: Partial<IDialogProps & { initialTabId?: UserTab }> = {}): ReactElement => (
         <UserSettingsDialog {...defaultProps} {...props} />
     );
 
@@ -70,52 +70,52 @@ describe('<UserSettingsDialog />', () => {
         jest.clearAllMocks();
         mockSettingsStore.getValue.mockReturnValue(false);
         mockSettingsStore.getFeatureSettingNames.mockReturnValue([]);
-        mockSdkConfig.get.mockReturnValue({ brand: 'Test' });
+        mockSdkConfig.get.mockReturnValue({ brand: "Test" });
     });
 
-    const getActiveTabLabel = (container) => container.querySelector('.mx_TabbedView_tabLabel_active').textContent;
-    const getActiveTabHeading = (container) => container.querySelector('.mx_SettingsTab_heading').textContent;
+    const getActiveTabLabel = (container) => container.querySelector(".mx_TabbedView_tabLabel_active").textContent;
+    const getActiveTabHeading = (container) => container.querySelector(".mx_SettingsTab_heading").textContent;
 
-    it('should render general settings tab when no initialTabId', () => {
+    it("should render general settings tab when no initialTabId", () => {
         const { container } = render(getComponent());
 
-        expect(getActiveTabLabel(container)).toEqual('General');
-        expect(getActiveTabHeading(container)).toEqual('General');
+        expect(getActiveTabLabel(container)).toEqual("General");
+        expect(getActiveTabHeading(container)).toEqual("General");
     });
 
-    it('should render initial tab when initialTabId is set', () => {
+    it("should render initial tab when initialTabId is set", () => {
         const { container } = render(getComponent({ initialTabId: UserTab.Help }));
 
-        expect(getActiveTabLabel(container)).toEqual('Help & About');
-        expect(getActiveTabHeading(container)).toEqual('Help & About');
+        expect(getActiveTabLabel(container)).toEqual("Help & About");
+        expect(getActiveTabHeading(container)).toEqual("Help & About");
     });
 
-    it('should render general tab if initialTabId tab cannot be rendered', () => {
+    it("should render general tab if initialTabId tab cannot be rendered", () => {
         // mjolnir tab is only rendered in some configs
         const { container } = render(getComponent({ initialTabId: UserTab.Mjolnir }));
 
-        expect(getActiveTabLabel(container)).toEqual('General');
-        expect(getActiveTabHeading(container)).toEqual('General');
+        expect(getActiveTabLabel(container)).toEqual("General");
+        expect(getActiveTabHeading(container)).toEqual("General");
     });
 
-    it('renders tabs correctly', () => {
+    it("renders tabs correctly", () => {
         const { container } = render(getComponent());
-        expect(container.querySelectorAll('.mx_TabbedView_tabLabel')).toMatchSnapshot();
+        expect(container.querySelectorAll(".mx_TabbedView_tabLabel")).toMatchSnapshot();
     });
 
-    it('renders ignored users tab when feature_mjolnir is enabled', () => {
+    it("renders ignored users tab when feature_mjolnir is enabled", () => {
         mockSettingsStore.getValue.mockImplementation((settingName): any => settingName === "feature_mjolnir");
         const { getByTestId } = render(getComponent());
         expect(getByTestId(`settings-tab-${UserTab.Mjolnir}`)).toBeTruthy();
     });
 
-    it('renders voip tab when voip is enabled', () => {
+    it("renders voip tab when voip is enabled", () => {
         mockSettingsStore.getValue.mockImplementation((settingName): any => settingName === UIFeature.Voip);
         const { getByTestId } = render(getComponent());
         expect(getByTestId(`settings-tab-${UserTab.Voice}`)).toBeTruthy();
     });
 
-    it('renders session manager tab when enabled', () => {
+    it("renders session manager tab when enabled", () => {
         mockSettingsStore.getValue.mockImplementation((settingName): any => {
             return settingName === "feature_new_device_manager";
         });
@@ -123,23 +123,23 @@ describe('<UserSettingsDialog />', () => {
         expect(getByTestId(`settings-tab-${UserTab.SessionManager}`)).toBeTruthy();
     });
 
-    it('renders labs tab when show_labs_settings is enabled in config', () => {
+    it("renders labs tab when show_labs_settings is enabled in config", () => {
         // @ts-ignore simplified test stub
         mockSdkConfig.get.mockImplementation((configName) => configName === "show_labs_settings");
         const { getByTestId } = render(getComponent());
         expect(getByTestId(`settings-tab-${UserTab.Labs}`)).toBeTruthy();
     });
 
-    it('renders labs tab when some feature is in beta', () => {
-        mockSettingsStore.getFeatureSettingNames.mockReturnValue(['feature_beta_setting', 'feature_just_normal_labs']);
-        mockSettingsStore.getBetaInfo.mockImplementation(
-            (settingName) => settingName === 'feature_beta_setting' ? {} as any : undefined,
+    it("renders labs tab when some feature is in beta", () => {
+        mockSettingsStore.getFeatureSettingNames.mockReturnValue(["feature_beta_setting", "feature_just_normal_labs"]);
+        mockSettingsStore.getBetaInfo.mockImplementation((settingName) =>
+            settingName === "feature_beta_setting" ? ({} as any) : undefined,
         );
         const { getByTestId } = render(getComponent());
         expect(getByTestId(`settings-tab-${UserTab.Labs}`)).toBeTruthy();
     });
 
-    it('watches settings', () => {
+    it("watches settings", () => {
         const watchSettingCallbacks: Record<string, CallbackFn> = {};
 
         mockSettingsStore.watchSetting.mockImplementation((settingName, roomId, callback) => {
@@ -150,17 +150,21 @@ describe('<UserSettingsDialog />', () => {
         const { queryByTestId, unmount } = render(getComponent());
         expect(queryByTestId(`settings-tab-${UserTab.Mjolnir}`)).toBeFalsy();
 
-        expect(mockSettingsStore.watchSetting.mock.calls[0][0]).toEqual('feature_mjolnir');
-        expect(mockSettingsStore.watchSetting.mock.calls[1][0]).toEqual('feature_new_device_manager');
+        expect(mockSettingsStore.watchSetting.mock.calls[0][0]).toEqual("feature_mjolnir");
+        expect(mockSettingsStore.watchSetting.mock.calls[1][0]).toEqual("feature_new_device_manager");
 
         // call the watch setting callback
-        watchSettingCallbacks["feature_mjolnir"]("feature_mjolnir", '', SettingLevel.ACCOUNT, true, true);
+        watchSettingCallbacks["feature_mjolnir"]("feature_mjolnir", "", SettingLevel.ACCOUNT, true, true);
         // tab is rendered now
         expect(queryByTestId(`settings-tab-${UserTab.Mjolnir}`)).toBeTruthy();
 
         // call the watch setting callback
         watchSettingCallbacks["feature_new_device_manager"](
-            "feature_new_device_manager", '', SettingLevel.ACCOUNT, true, true,
+            "feature_new_device_manager",
+            "",
+            SettingLevel.ACCOUNT,
+            true,
+            true,
         );
         // tab is rendered now
         expect(queryByTestId(`settings-tab-${UserTab.SessionManager}`)).toBeTruthy();
@@ -168,7 +172,7 @@ describe('<UserSettingsDialog />', () => {
         unmount();
 
         // unwatches settings on unmount
-        expect(mockSettingsStore.unwatchSetting).toHaveBeenCalledWith('mock-watcher-id-feature_mjolnir');
-        expect(mockSettingsStore.unwatchSetting).toHaveBeenCalledWith('mock-watcher-id-feature_new_device_manager');
+        expect(mockSettingsStore.unwatchSetting).toHaveBeenCalledWith("mock-watcher-id-feature_mjolnir");
+        expect(mockSettingsStore.unwatchSetting).toHaveBeenCalledWith("mock-watcher-id-feature_new_device_manager");
     });
 });

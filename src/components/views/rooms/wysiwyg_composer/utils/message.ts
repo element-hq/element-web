@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { Composer as ComposerEvent } from "@matrix-org/analytics-events/types/typescript/Composer";
-import { IContent, IEventRelation, MatrixEvent } from 'matrix-js-sdk/src/models/event';
+import { IContent, IEventRelation, MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { ISendEventResponse, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { THREAD_RELATION_TYPE } from "matrix-js-sdk/src/models/thread";
 
@@ -27,7 +27,7 @@ import { doMaybeLocalRoomAction } from "../../../../../utils/local-room";
 import { CHAT_EFFECTS } from "../../../../../effects";
 import { containsEmoji } from "../../../../../effects/utils";
 import { IRoomState } from "../../../../structures/RoomView";
-import dis from '../../../../../dispatcher/dispatcher';
+import dis from "../../../../../dispatcher/dispatcher";
 import { createRedactEventDialog } from "../../../dialogs/ConfirmRedactDialog";
 import { endEditing, cancelPreviousPendingEdit } from "./editing";
 import EditorStateTransfer from "../../../../../utils/EditorStateTransfer";
@@ -43,11 +43,7 @@ interface SendMessageParams {
     includeReplyLegacyFallback?: boolean;
 }
 
-export function sendMessage(
-    message: string,
-    isHTML: boolean,
-    { roomContext, mxClient, ...params }: SendMessageParams,
-) {
+export function sendMessage(message: string, isHTML: boolean, { roomContext, mxClient, ...params }: SendMessageParams) {
     const { relation, replyToEvent } = params;
     const { room } = roomContext;
     const { roomId } = room;
@@ -76,11 +72,7 @@ export function sendMessage(
     // TODO quick reaction
 
     if (!content) {
-        content = createMessageContent(
-            message,
-            isHTML,
-            params,
-        );
+        content = createMessageContent(message, isHTML, params);
     }
 
     // don't bother sending an empty message
@@ -92,9 +84,7 @@ export function sendMessage(
         decorateStartSendingTime(content);
     }
 
-    const threadId = relation?.rel_type === THREAD_RELATION_TYPE.name
-        ? relation.event_id
-        : null;
+    const threadId = relation?.rel_type === THREAD_RELATION_TYPE.name ? relation.event_id : null;
 
     const prom = doMaybeLocalRoomAction(
         roomId,
@@ -106,7 +96,7 @@ export function sendMessage(
         // Clear reply_to_event as we put the message into the queue
         // if the send fails, retry will handle resending.
         dis.dispatch({
-            action: 'reply_to_event',
+            action: "reply_to_event",
             event: null,
             context: roomContext.timelineRenderingType,
         });
@@ -124,7 +114,7 @@ export function sendMessage(
         }
     });
     if (SettingsStore.getValue("Performance.addSendMessageTimingMetadata")) {
-        prom.then(resp => {
+        prom.then((resp) => {
             sendRoundTripMetric(mxClient, roomId, resp.event_id);
         });
     }
@@ -149,10 +139,7 @@ interface EditMessageParams {
     editorStateTransfer: EditorStateTransfer;
 }
 
-export function editMessage(
-    html: string,
-    { roomContext, mxClient, editorStateTransfer }: EditMessageParams,
-) {
+export function editMessage(html: string, { roomContext, mxClient, editorStateTransfer }: EditMessageParams) {
     const editedEvent = editorStateTransfer.getEvent();
 
     PosthogAnalytics.instance.trackEvent<ComposerEvent>({
@@ -174,7 +161,7 @@ export function editMessage(
 
     const shouldSend = true;
 
-    if (newContent?.body === '') {
+    if (newContent?.body === "") {
         cancelPreviousPendingEdit(mxClient, editorStateTransfer);
         createRedactEventDialog({
             mxEvent: editedEvent,

@@ -14,9 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 // eslint-disable-next-line deprecate/import
-import { mount, ReactWrapper } from 'enzyme';
+import { mount, ReactWrapper } from "enzyme";
 import { render, screen, act, fireEvent, waitFor, getByRole } from "@testing-library/react";
 import { mocked, Mocked } from "jest-mock";
 import { EventType, RoomType } from "matrix-js-sdk/src/@types/event";
@@ -26,7 +26,7 @@ import { PendingEventOrdering } from "matrix-js-sdk/src/client";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
 import { ClientWidgetApi, Widget } from "matrix-widget-api";
 import EventEmitter from "events";
-import { ISearchResults } from 'matrix-js-sdk/src/@types/search';
+import { ISearchResults } from "matrix-js-sdk/src/@types/search";
 
 import type { MatrixClient } from "matrix-js-sdk/src/client";
 import type { MatrixEvent } from "matrix-js-sdk/src/models/event";
@@ -39,14 +39,14 @@ import {
     resetAsyncStoreWithClient,
     mockPlatformPeg,
 } from "../../../test-utils";
-import { MatrixClientPeg } from '../../../../src/MatrixClientPeg';
-import DMRoomMap from '../../../../src/utils/DMRoomMap';
+import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
+import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import RoomHeader, { IProps as RoomHeaderProps } from "../../../../src/components/views/rooms/RoomHeader";
-import { SearchScope } from '../../../../src/components/views/rooms/SearchBar';
-import { E2EStatus } from '../../../../src/utils/ShieldUtils';
-import { mkEvent } from '../../../test-utils';
+import { SearchScope } from "../../../../src/components/views/rooms/SearchBar";
+import { E2EStatus } from "../../../../src/utils/ShieldUtils";
+import { mkEvent } from "../../../test-utils";
 import { IRoomState } from "../../../../src/components/structures/RoomView";
-import RoomContext from '../../../../src/contexts/RoomContext';
+import RoomContext from "../../../../src/contexts/RoomContext";
 import SdkConfig from "../../../../src/SdkConfig";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import { ElementCall, JitsiCall } from "../../../../src/models/Call";
@@ -60,8 +60,8 @@ import WidgetUtils from "../../../../src/utils/WidgetUtils";
 import { ElementWidgetActions } from "../../../../src/stores/widgets/ElementWidgetActions";
 import MediaDeviceHandler, { MediaDeviceKindEnum } from "../../../../src/MediaDeviceHandler";
 
-describe('RoomHeader (Enzyme)', () => {
-    it('shows the room avatar in a room with only ourselves', () => {
+describe("RoomHeader (Enzyme)", () => {
+    it("shows the room avatar in a room with only ourselves", () => {
         // When we render a non-DM room with 1 person in it
         const room = createRoom({ name: "X Room", isDm: false, userIds: [] });
         const rendered = mountHeader(room);
@@ -75,10 +75,9 @@ describe('RoomHeader (Enzyme)', () => {
         expect(image.prop("src")).toEqual("data:image/png;base64,00");
     });
 
-    it('shows the room avatar in a room with 2 people', () => {
+    it("shows the room avatar in a room with 2 people", () => {
         // When we render a non-DM room with 2 people in it
-        const room = createRoom(
-            { name: "Y Room", isDm: false, userIds: ["other"] });
+        const room = createRoom({ name: "Y Room", isDm: false, userIds: ["other"] });
         const rendered = mountHeader(room);
 
         // Then the room's avatar is the initial of its name
@@ -90,7 +89,7 @@ describe('RoomHeader (Enzyme)', () => {
         expect(image.prop("src")).toEqual("data:image/png;base64,00");
     });
 
-    it('shows the room avatar in a room with >2 people', () => {
+    it("shows the room avatar in a room with >2 people", () => {
         // When we render a non-DM room with 3 people in it
         const room = createRoom({ name: "Z Room", isDm: false, userIds: ["other1", "other2"] });
         const rendered = mountHeader(room);
@@ -104,7 +103,7 @@ describe('RoomHeader (Enzyme)', () => {
         expect(image.prop("src")).toEqual("data:image/png;base64,00");
     });
 
-    it('shows the room avatar in a DM with only ourselves', () => {
+    it("shows the room avatar in a DM with only ourselves", () => {
         // When we render a non-DM room with 1 person in it
         const room = createRoom({ name: "Z Room", isDm: true, userIds: [] });
         const rendered = mountHeader(room);
@@ -118,7 +117,7 @@ describe('RoomHeader (Enzyme)', () => {
         expect(image.prop("src")).toEqual("data:image/png;base64,00");
     });
 
-    it('shows the user avatar in a DM with 2 people', () => {
+    it("shows the user avatar in a DM with 2 people", () => {
         // Note: this is the interesting case - this is the ONLY
         //       time we should use the user's avatar.
 
@@ -134,10 +133,12 @@ describe('RoomHeader (Enzyme)', () => {
         expect(rendered.find(".mx_BaseAvatar_initial")).toHaveLength(0);
     });
 
-    it('shows the room avatar in a DM with >2 people', () => {
+    it("shows the room avatar in a DM with >2 people", () => {
         // When we render a DM room with 3 people in it
         const room = createRoom({
-            name: "Z Room", isDm: true, userIds: ["other1", "other2"],
+            name: "Z Room",
+            isDm: true,
+            userIds: ["other1", "other2"],
         });
         const rendered = mountHeader(room);
 
@@ -160,17 +161,21 @@ describe('RoomHeader (Enzyme)', () => {
 
     it("hides call buttons when the room is tombstoned", () => {
         const room = createRoom({ name: "Room", isDm: false, userIds: [] });
-        const wrapper = mountHeader(room, {}, {
-            tombstone: mkEvent({
-                event: true,
-                type: "m.room.tombstone",
-                room: room.roomId,
-                user: "@user1:server",
-                skey: "",
-                content: {},
-                ts: Date.now(),
-            }),
-        });
+        const wrapper = mountHeader(
+            room,
+            {},
+            {
+                tombstone: mkEvent({
+                    event: true,
+                    type: "m.room.tombstone",
+                    room: room.roomId,
+                    user: "@user1:server",
+                    skey: "",
+                    content: {},
+                    ts: Date.now(),
+                }),
+            },
+        );
 
         expect(wrapper.find('[aria-label="Voice call"]').hostNodes()).toHaveLength(0);
         expect(wrapper.find('[aria-label="Video call"]').hostNodes()).toHaveLength(0);
@@ -211,7 +216,7 @@ function createRoom(info: IRoomCreationInfo) {
     stubClient();
     const client: MatrixClient = MatrixClientPeg.get();
 
-    const roomId = '!1234567890:domain';
+    const roomId = "!1234567890:domain";
     const userId = client.getUserId();
     if (info.isDm) {
         client.getAccountData = (eventType) => {
@@ -246,11 +251,11 @@ function mountHeader(room: Room, propsOverride = {}, roomContext?: Partial<IRoom
     const props = {
         room,
         inRoom: true,
-        onSearchClick: () => { },
+        onSearchClick: () => {},
         onInviteClick: null,
-        onForgetClick: () => { },
-        onCallPlaced: (_type) => { },
-        onAppsClick: () => { },
+        onForgetClick: () => {},
+        onCallPlaced: (_type) => {},
+        onAppsClick: () => {},
         e2eStatus: E2EStatus.Normal,
         appsShown: true,
         searchInfo: {
@@ -265,11 +270,11 @@ function mountHeader(room: Room, propsOverride = {}, roomContext?: Partial<IRoom
         ...propsOverride,
     };
 
-    return mount((
+    return mount(
         <RoomContext.Provider value={{ ...roomContext, room } as IRoomState}>
             <RoomHeader {...props} />
-        </RoomContext.Provider>
-    ));
+        </RoomContext.Provider>,
+    );
 }
 
 function mkCreationEvent(roomId: string, userId: string): MatrixEvent {
@@ -289,9 +294,7 @@ function mkCreationEvent(roomId: string, userId: string): MatrixEvent {
     });
 }
 
-function mkNameEvent(
-    roomId: string, userId: string, name: string,
-): MatrixEvent {
+function mkNameEvent(roomId: string, userId: string, name: string): MatrixEvent {
     return mkEvent({
         event: true,
         type: "m.room.name",
@@ -308,17 +311,15 @@ function mkJoinEvent(roomId: string, userId: string) {
         room: roomId,
         user: userId,
         content: {
-            "membership": "join",
-            "avatar_url": "mxc://example.org/" + userId,
+            membership: "join",
+            avatar_url: "mxc://example.org/" + userId,
         },
     });
     ret.event.state_key = userId;
     return ret;
 }
 
-function mkDirectEvent(
-    roomId: string, userId: string, otherUsers: string[],
-): MatrixEvent {
+function mkDirectEvent(roomId: string, userId: string, otherUsers: string[]): MatrixEvent {
     const content = {};
     for (const otherUserId of otherUsers) {
         content[otherUserId] = [roomId];
@@ -363,7 +364,7 @@ describe("RoomHeader (React Testing Library)", () => {
         });
         room.currentState.setStateEvents([mkCreationEvent(room.roomId, "@alice:example.org")]);
 
-        client.getRoom.mockImplementation(roomId => roomId === room.roomId ? room : null);
+        client.getRoom.mockImplementation((roomId) => (roomId === room.roomId ? room : null));
         client.getRooms.mockReturnValue([room]);
         client.reEmitter.reEmit(room, [RoomStateEvent.Events]);
         client.sendStateEvent.mockImplementation(async (roomId, eventType, content, stateKey = "") => {
@@ -384,13 +385,13 @@ describe("RoomHeader (React Testing Library)", () => {
         bob = mkRoomMember(room.roomId, "@bob:example.org");
         carol = mkRoomMember(room.roomId, "@carol:example.org");
 
-        client.getRoom.mockImplementation(roomId => roomId === room.roomId ? room : null);
+        client.getRoom.mockImplementation((roomId) => (roomId === room.roomId ? room : null));
         client.getRooms.mockReturnValue([room]);
         client.reEmitter.reEmit(room, [RoomStateEvent.Events]);
 
-        await Promise.all([CallStore.instance, WidgetStore.instance].map(
-            store => setupAsyncStoreWithClient(store, client),
-        ));
+        await Promise.all(
+            [CallStore.instance, WidgetStore.instance].map((store) => setupAsyncStoreWithClient(store, client)),
+        );
 
         jest.spyOn(MediaDeviceHandler, "getDevices").mockResolvedValue({
             [MediaDeviceKindEnum.AudioInput]: [],
@@ -412,13 +413,11 @@ describe("RoomHeader (React Testing Library)", () => {
     const mockRoomMembers = (members: RoomMember[]) => {
         jest.spyOn(room, "getJoinedMembers").mockReturnValue(members);
         jest.spyOn(room, "getMember").mockImplementation(
-            userId => members.find(member => member.userId === userId) ?? null,
+            (userId) => members.find((member) => member.userId === userId) ?? null,
         );
     };
     const mockEnabledSettings = (settings: string[]) => {
-        jest.spyOn(SettingsStore, "getValue").mockImplementation(
-            settingName => settings.includes(settingName),
-        );
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName) => settings.includes(settingName));
     };
     const mockEventPowerLevels = (events: { [eventType: string]: number }) => {
         room.currentState.setStateEvents([
@@ -435,7 +434,7 @@ describe("RoomHeader (React Testing Library)", () => {
     const mockLegacyCall = () => {
         jest.spyOn(LegacyCallHandler.instance, "getCallForRoom").mockReturnValue({} as unknown as MatrixCall);
     };
-    const withCall = async (fn: (call: ElementCall) => (void | Promise<void>)): Promise<void> => {
+    const withCall = async (fn: (call: ElementCall) => void | Promise<void>): Promise<void> => {
         await ElementCall.create(room);
         const call = CallStore.instance.getCall(room.roomId);
         if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
@@ -468,10 +467,10 @@ describe("RoomHeader (React Testing Library)", () => {
                 <RoomHeader
                     room={room}
                     inRoom={true}
-                    onSearchClick={() => { }}
+                    onSearchClick={() => {}}
                     onInviteClick={null}
-                    onForgetClick={() => { }}
-                    onAppsClick={() => { }}
+                    onForgetClick={() => {}}
+                    onAppsClick={() => {}}
                     e2eStatus={E2EStatus.Normal}
                     appsShown={true}
                     searchInfo={{
@@ -505,13 +504,13 @@ describe("RoomHeader (React Testing Library)", () => {
     });
 
     it(
-        "hides the voice call button and disables the video call button if configured to use Element Call exclusively "
-        + "and there's an ongoing call",
+        "hides the voice call button and disables the video call button if configured to use Element Call exclusively " +
+            "and there's an ongoing call",
         async () => {
             mockEnabledSettings(["showCallButtonsInComposer", "feature_group_calls"]);
-            SdkConfig.put(
-                { element_call: { url: "https://call.element.io", use_exclusively: true, brand: "Element Call" } },
-            );
+            SdkConfig.put({
+                element_call: { url: "https://call.element.io", use_exclusively: true, brand: "Element Call" },
+            });
             await ElementCall.create(room);
 
             renderHeader();
@@ -521,13 +520,13 @@ describe("RoomHeader (React Testing Library)", () => {
     );
 
     it(
-        "hides the voice call button and starts an Element call when the video call button is pressed if configured to "
-        + "use Element Call exclusively",
+        "hides the voice call button and starts an Element call when the video call button is pressed if configured to " +
+            "use Element Call exclusively",
         async () => {
             mockEnabledSettings(["showCallButtonsInComposer", "feature_group_calls"]);
-            SdkConfig.put(
-                { element_call: { url: "https://call.element.io", use_exclusively: true, brand: "Element Call" } },
-            );
+            SdkConfig.put({
+                element_call: { url: "https://call.element.io", use_exclusively: true, brand: "Element Call" },
+            });
 
             renderHeader();
             expect(screen.queryByRole("button", { name: "Voice call" })).toBeNull();
@@ -535,23 +534,25 @@ describe("RoomHeader (React Testing Library)", () => {
             const dispatcherSpy = jest.fn();
             const dispatcherRef = defaultDispatcher.register(dispatcherSpy);
             fireEvent.click(screen.getByRole("button", { name: "Video call" }));
-            await waitFor(() => expect(dispatcherSpy).toHaveBeenCalledWith({
-                action: Action.ViewRoom,
-                room_id: room.roomId,
-                view_call: true,
-            }));
+            await waitFor(() =>
+                expect(dispatcherSpy).toHaveBeenCalledWith({
+                    action: Action.ViewRoom,
+                    room_id: room.roomId,
+                    view_call: true,
+                }),
+            );
             defaultDispatcher.unregister(dispatcherRef);
         },
     );
 
     it(
-        "hides the voice call button and disables the video call button if configured to use Element Call exclusively "
-        + "and the user lacks permission",
+        "hides the voice call button and disables the video call button if configured to use Element Call exclusively " +
+            "and the user lacks permission",
         () => {
             mockEnabledSettings(["showCallButtonsInComposer", "feature_group_calls"]);
-            SdkConfig.put(
-                { element_call: { url: "https://call.element.io", use_exclusively: true, brand: "Element Call" } },
-            );
+            SdkConfig.put({
+                element_call: { url: "https://call.element.io", use_exclusively: true, brand: "Element Call" },
+            });
             mockEventPowerLevels({ [ElementCall.CALL_EVENT_TYPE.name]: 100 });
 
             renderHeader();
@@ -596,8 +597,8 @@ describe("RoomHeader (React Testing Library)", () => {
     });
 
     it(
-        "starts a legacy 1:1 call when call buttons are pressed in the new group call experience if there's 1 other "
-        + "member",
+        "starts a legacy 1:1 call when call buttons are pressed in the new group call experience if there's 1 other " +
+            "member",
         async () => {
             mockEnabledSettings(["showCallButtonsInComposer", "feature_group_calls"]);
             mockRoomMembers([alice, bob]);
@@ -617,8 +618,8 @@ describe("RoomHeader (React Testing Library)", () => {
     );
 
     it(
-        "creates a Jitsi widget when call buttons are pressed in the new group call experience if the user lacks "
-        + "permission to start Element calls",
+        "creates a Jitsi widget when call buttons are pressed in the new group call experience if the user lacks " +
+            "permission to start Element calls",
         async () => {
             mockEnabledSettings(["showCallButtonsInComposer", "feature_group_calls"]);
             mockRoomMembers([alice, bob, carol]);
@@ -639,8 +640,8 @@ describe("RoomHeader (React Testing Library)", () => {
     );
 
     it(
-        "creates a Jitsi widget when the voice call button is pressed and shows a menu when the video call button is "
-        + "pressed in the new group call experience",
+        "creates a Jitsi widget when the voice call button is pressed and shows a menu when the video call button is " +
+            "pressed in the new group call experience",
         async () => {
             mockEnabledSettings(["showCallButtonsInComposer", "feature_group_calls"]);
             mockRoomMembers([alice, bob, carol]);
@@ -664,18 +665,20 @@ describe("RoomHeader (React Testing Library)", () => {
             const dispatcherRef = defaultDispatcher.register(dispatcherSpy);
             fireEvent.click(screen.getByRole("button", { name: "Video call" }));
             fireEvent.click(getByRole(screen.getByRole("menu"), "menuitem", { name: /element/i }));
-            await waitFor(() => expect(dispatcherSpy).toHaveBeenCalledWith({
-                action: Action.ViewRoom,
-                room_id: room.roomId,
-                view_call: true,
-            }));
+            await waitFor(() =>
+                expect(dispatcherSpy).toHaveBeenCalledWith({
+                    action: Action.ViewRoom,
+                    room_id: room.roomId,
+                    view_call: true,
+                }),
+            );
             defaultDispatcher.unregister(dispatcherRef);
         },
     );
 
     it(
-        "disables the voice call button and starts an Element call when the video call button is pressed in the new "
-        + "group call experience if the user lacks permission to edit widgets",
+        "disables the voice call button and starts an Element call when the video call button is pressed in the new " +
+            "group call experience if the user lacks permission to edit widgets",
         async () => {
             mockEnabledSettings(["showCallButtonsInComposer", "feature_group_calls"]);
             mockRoomMembers([alice, bob, carol]);
@@ -687,11 +690,13 @@ describe("RoomHeader (React Testing Library)", () => {
             const dispatcherSpy = jest.fn();
             const dispatcherRef = defaultDispatcher.register(dispatcherSpy);
             fireEvent.click(screen.getByRole("button", { name: "Video call" }));
-            await waitFor(() => expect(dispatcherSpy).toHaveBeenCalledWith({
-                action: Action.ViewRoom,
-                room_id: room.roomId,
-                view_call: true,
-            }));
+            await waitFor(() =>
+                expect(dispatcherSpy).toHaveBeenCalledWith({
+                    action: Action.ViewRoom,
+                    room_id: room.roomId,
+                    view_call: true,
+                }),
+            );
             defaultDispatcher.unregister(dispatcherRef);
         },
     );
@@ -785,28 +790,32 @@ describe("RoomHeader (React Testing Library)", () => {
         const dispatcherSpy = jest.fn();
         const dispatcherRef = defaultDispatcher.register(dispatcherSpy);
         fireEvent.click(screen.getByRole("button", { name: /close/i }));
-        await waitFor(() => expect(dispatcherSpy).toHaveBeenCalledWith({
-            action: Action.ViewRoom,
-            room_id: room.roomId,
-            view_call: false,
-        }));
+        await waitFor(() =>
+            expect(dispatcherSpy).toHaveBeenCalledWith({
+                action: Action.ViewRoom,
+                room_id: room.roomId,
+                view_call: false,
+            }),
+        );
         defaultDispatcher.unregister(dispatcherRef);
     });
 
     it("shows a reduce button when viewing a call that returns to the timeline when pressed", async () => {
         mockEnabledSettings(["feature_group_calls"]);
 
-        await withCall(async call => {
+        await withCall(async (call) => {
             renderHeader({ viewingCall: true, activeCall: call });
 
             const dispatcherSpy = jest.fn();
             const dispatcherRef = defaultDispatcher.register(dispatcherSpy);
             fireEvent.click(screen.getByRole("button", { name: /timeline/i }));
-            await waitFor(() => expect(dispatcherSpy).toHaveBeenCalledWith({
-                action: Action.ViewRoom,
-                room_id: room.roomId,
-                view_call: false,
-            }));
+            await waitFor(() =>
+                expect(dispatcherSpy).toHaveBeenCalledWith({
+                    action: Action.ViewRoom,
+                    room_id: room.roomId,
+                    view_call: false,
+                }),
+            );
             defaultDispatcher.unregister(dispatcherRef);
         });
     });
@@ -814,7 +823,7 @@ describe("RoomHeader (React Testing Library)", () => {
     it("shows a layout button when viewing a call that shows a menu when pressed", async () => {
         mockEnabledSettings(["feature_group_calls"]);
 
-        await withCall(async call => {
+        await withCall(async (call) => {
             await call.connect();
             const messaging = WidgetMessagingStore.instance.getMessagingForUid(WidgetUtils.getWidgetUid(call.widget));
             renderHeader({ viewingCall: true, activeCall: call });

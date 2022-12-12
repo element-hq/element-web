@@ -14,6 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-export { SendWysiwygComposer } from './SendWysiwygComposer';
-export { EditWysiwygComposer } from './EditWysiwygComposer';
-export { sendMessage } from './utils/message';
+export { SendWysiwygComposer } from "./SendWysiwygComposer";
+export { EditWysiwygComposer } from "./EditWysiwygComposer";
+export { sendMessage } from "./utils/message";

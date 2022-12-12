@@ -28,10 +28,7 @@ describe("requestMediaPermissions", () => {
 
     const itShouldLogTheErrorAndShowTheNoMediaPermissionsModal = () => {
         it("should log the error and show the »No media permissions« modal", () => {
-            expect(logger.log).toHaveBeenCalledWith(
-                "Failed to list userMedia devices",
-                error,
-            );
+            expect(logger.log).toHaveBeenCalledWith("Failed to list userMedia devices", error);
             screen.getByText("No media permissions");
         });
     };
@@ -91,11 +88,9 @@ describe("requestMediaPermissions", () => {
     describe("when no device is available", () => {
         beforeEach(async () => {
             error.name = "NotFoundError";
-            mocked(navigator.mediaDevices.getUserMedia).mockImplementation(
-                async (): Promise<MediaStream> => {
-                    throw error;
-                },
-            );
+            mocked(navigator.mediaDevices.getUserMedia).mockImplementation(async (): Promise<MediaStream> => {
+                throw error;
+            });
             await requestMediaPermissions();
             // required for the modal to settle
             await flushPromises();

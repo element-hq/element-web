@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 
 import TabbedView, { Tab } from "../../structures/TabbedView";
 import { _t, _td } from "../../../languageHandler";
@@ -35,7 +35,7 @@ import BaseDialog from "./BaseDialog";
 import { IDialogProps } from "./IDialogProps";
 import SidebarUserSettingsTab from "../settings/tabs/user/SidebarUserSettingsTab";
 import KeyboardUserSettingsTab from "../settings/tabs/user/KeyboardUserSettingsTab";
-import SessionManagerTab from '../settings/tabs/user/SessionManagerTab';
+import SessionManagerTab from "../settings/tabs/user/SessionManagerTab";
 import { UserTab } from "./UserTab";
 
 interface IProps extends IDialogProps {
@@ -67,7 +67,7 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
     }
 
     public componentWillUnmount(): void {
-        this.settingsWatchers.forEach(watcherRef => SettingsStore.unwatchSetting(watcherRef));
+        this.settingsWatchers.forEach((watcherRef) => SettingsStore.unwatchSetting(watcherRef));
     }
 
     private mjolnirChanged: CallbackFn = (settingName, roomId, atLevel, newValue) => {
@@ -83,104 +83,129 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
     private getTabs() {
         const tabs: Tab[] = [];
 
-        tabs.push(new Tab(
-            UserTab.General,
-            _td("General"),
-            "mx_UserSettingsDialog_settingsIcon",
-            <GeneralUserSettingsTab closeSettingsFn={this.props.onFinished} />,
-            "UserSettingsGeneral",
-        ));
-        tabs.push(new Tab(
-            UserTab.Appearance,
-            _td("Appearance"),
-            "mx_UserSettingsDialog_appearanceIcon",
-            <AppearanceUserSettingsTab />,
-            "UserSettingsAppearance",
-        ));
-        tabs.push(new Tab(
-            UserTab.Notifications,
-            _td("Notifications"),
-            "mx_UserSettingsDialog_bellIcon",
-            <NotificationUserSettingsTab />,
-            "UserSettingsNotifications",
-        ));
-        tabs.push(new Tab(
-            UserTab.Preferences,
-            _td("Preferences"),
-            "mx_UserSettingsDialog_preferencesIcon",
-            <PreferencesUserSettingsTab closeSettingsFn={this.props.onFinished} />,
-            "UserSettingsPreferences",
-        ));
-        tabs.push(new Tab(
-            UserTab.Keyboard,
-            _td("Keyboard"),
-            "mx_UserSettingsDialog_keyboardIcon",
-            <KeyboardUserSettingsTab />,
-            "UserSettingsKeyboard",
-        ));
-        tabs.push(new Tab(
-            UserTab.Sidebar,
-            _td("Sidebar"),
-            "mx_UserSettingsDialog_sidebarIcon",
-            <SidebarUserSettingsTab />,
-            "UserSettingsSidebar",
-        ));
+        tabs.push(
+            new Tab(
+                UserTab.General,
+                _td("General"),
+                "mx_UserSettingsDialog_settingsIcon",
+                <GeneralUserSettingsTab closeSettingsFn={this.props.onFinished} />,
+                "UserSettingsGeneral",
+            ),
+        );
+        tabs.push(
+            new Tab(
+                UserTab.Appearance,
+                _td("Appearance"),
+                "mx_UserSettingsDialog_appearanceIcon",
+                <AppearanceUserSettingsTab />,
+                "UserSettingsAppearance",
+            ),
+        );
+        tabs.push(
+            new Tab(
+                UserTab.Notifications,
+                _td("Notifications"),
+                "mx_UserSettingsDialog_bellIcon",
+                <NotificationUserSettingsTab />,
+                "UserSettingsNotifications",
+            ),
+        );
+        tabs.push(
+            new Tab(
+                UserTab.Preferences,
+                _td("Preferences"),
+                "mx_UserSettingsDialog_preferencesIcon",
+                <PreferencesUserSettingsTab closeSettingsFn={this.props.onFinished} />,
+                "UserSettingsPreferences",
+            ),
+        );
+        tabs.push(
+            new Tab(
+                UserTab.Keyboard,
+                _td("Keyboard"),
+                "mx_UserSettingsDialog_keyboardIcon",
+                <KeyboardUserSettingsTab />,
+                "UserSettingsKeyboard",
+            ),
+        );
+        tabs.push(
+            new Tab(
+                UserTab.Sidebar,
+                _td("Sidebar"),
+                "mx_UserSettingsDialog_sidebarIcon",
+                <SidebarUserSettingsTab />,
+                "UserSettingsSidebar",
+            ),
+        );
 
         if (SettingsStore.getValue(UIFeature.Voip)) {
-            tabs.push(new Tab(
-                UserTab.Voice,
-                _td("Voice & Video"),
-                "mx_UserSettingsDialog_voiceIcon",
-                <VoiceUserSettingsTab />,
-                "UserSettingsVoiceVideo",
-            ));
+            tabs.push(
+                new Tab(
+                    UserTab.Voice,
+                    _td("Voice & Video"),
+                    "mx_UserSettingsDialog_voiceIcon",
+                    <VoiceUserSettingsTab />,
+                    "UserSettingsVoiceVideo",
+                ),
+            );
         }
 
-        tabs.push(new Tab(
-            UserTab.Security,
-            _td("Security & Privacy"),
-            "mx_UserSettingsDialog_securityIcon",
-            <SecurityUserSettingsTab closeSettingsFn={this.props.onFinished} />,
-            "UserSettingsSecurityPrivacy",
-        ));
-        if (this.state.newSessionManagerEnabled) {
-            tabs.push(new Tab(
-                UserTab.SessionManager,
-                _td("Sessions"),
+        tabs.push(
+            new Tab(
+                UserTab.Security,
+                _td("Security & Privacy"),
                 "mx_UserSettingsDialog_securityIcon",
-                <SessionManagerTab />,
-                // don't track with posthog while under construction
-                undefined,
-            ));
+                <SecurityUserSettingsTab closeSettingsFn={this.props.onFinished} />,
+                "UserSettingsSecurityPrivacy",
+            ),
+        );
+        if (this.state.newSessionManagerEnabled) {
+            tabs.push(
+                new Tab(
+                    UserTab.SessionManager,
+                    _td("Sessions"),
+                    "mx_UserSettingsDialog_securityIcon",
+                    <SessionManagerTab />,
+                    // don't track with posthog while under construction
+                    undefined,
+                ),
+            );
         }
         // Show the Labs tab if enabled or if there are any active betas
-        if (SdkConfig.get("show_labs_settings")
-            || SettingsStore.getFeatureSettingNames().some(k => SettingsStore.getBetaInfo(k))
+        if (
+            SdkConfig.get("show_labs_settings") ||
+            SettingsStore.getFeatureSettingNames().some((k) => SettingsStore.getBetaInfo(k))
         ) {
-            tabs.push(new Tab(
-                UserTab.Labs,
-                _td("Labs"),
-                "mx_UserSettingsDialog_labsIcon",
-                <LabsUserSettingsTab />,
-                "UserSettingsLabs",
-            ));
+            tabs.push(
+                new Tab(
+                    UserTab.Labs,
+                    _td("Labs"),
+                    "mx_UserSettingsDialog_labsIcon",
+                    <LabsUserSettingsTab />,
+                    "UserSettingsLabs",
+                ),
+            );
         }
         if (this.state.mjolnirEnabled) {
-            tabs.push(new Tab(
-                UserTab.Mjolnir,
-                _td("Ignored users"),
-                "mx_UserSettingsDialog_mjolnirIcon",
-                <MjolnirUserSettingsTab />,
-                "UserSettingMjolnir",
-            ));
+            tabs.push(
+                new Tab(
+                    UserTab.Mjolnir,
+                    _td("Ignored users"),
+                    "mx_UserSettingsDialog_mjolnirIcon",
+                    <MjolnirUserSettingsTab />,
+                    "UserSettingMjolnir",
+                ),
+            );
         }
-        tabs.push(new Tab(
-            UserTab.Help,
-            _td("Help & About"),
-            "mx_UserSettingsDialog_helpIcon",
-            <HelpUserSettingsTab closeSettingsFn={() => this.props.onFinished(true)} />,
-            "UserSettingsHelpAbout",
-        ));
+        tabs.push(
+            new Tab(
+                UserTab.Help,
+                _td("Help & About"),
+                "mx_UserSettingsDialog_helpIcon",
+                <HelpUserSettingsTab closeSettingsFn={() => this.props.onFinished(true)} />,
+                "UserSettingsHelpAbout",
+            ),
+        );
 
         return tabs;
     }
@@ -188,12 +213,12 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
     render() {
         return (
             <BaseDialog
-                className='mx_UserSettingsDialog'
+                className="mx_UserSettingsDialog"
                 hasCancel={true}
                 onFinished={this.props.onFinished}
                 title={_t("Settings")}
             >
-                <div className='mx_SettingsDialog_content'>
+                <div className="mx_SettingsDialog_content">
                     <TabbedView
                         tabs={this.getTabs()}
                         initialTabId={this.props.initialTabId}

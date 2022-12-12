@@ -14,12 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 
 import PowerSelector from "../../../../src/components/views/elements/PowerSelector";
 
-describe('<PowerSelector />', () => {
+describe("<PowerSelector />", () => {
     it("should reset back to custom value when custom input is blurred blank", async () => {
         const fn = jest.fn();
         render(<PowerSelector value={25} maxValue={100} usersDefault={0} onChange={fn} />);

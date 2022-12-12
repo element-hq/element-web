@@ -17,10 +17,11 @@ limitations under the License.
 import { IThreepid, ThreepidMedium } from "matrix-js-sdk/src/@types/threepids";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 
-import IdentityAuthClient from './IdentityAuthClient';
+import IdentityAuthClient from "./IdentityAuthClient";
 
 export async function getThreepidsWithBindStatus(
-    client: MatrixClient, filterMedium?: ThreepidMedium,
+    client: MatrixClient,
+    filterMedium?: ThreepidMedium,
 ): Promise<IThreepid[]> {
     const userId = client.getUserId();
 
@@ -47,7 +48,7 @@ export async function getThreepidsWithBindStatus(
                 if (filterMedium && medium !== filterMedium) {
                     continue;
                 }
-                const threepid = threepids.find(e => e.medium === medium && e.address === address);
+                const threepid = threepids.find((e) => e.medium === medium && e.address === address);
                 if (!threepid) continue;
                 threepid.bound = true;
             }

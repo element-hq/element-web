@@ -37,11 +37,9 @@ const HistoryTile = () => {
         subtitle = _t("Encrypted messages before this point are unavailable.");
     }
 
-    return <EventTileBubble
-        className="mx_HistoryTile"
-        title={_t("You can't see earlier messages")}
-        subtitle={subtitle}
-    />;
+    return (
+        <EventTileBubble className="mx_HistoryTile" title={_t("You can't see earlier messages")} subtitle={subtitle} />
+    );
 };
 
 export default HistoryTile;

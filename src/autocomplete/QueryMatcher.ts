@@ -16,10 +16,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { at, uniq } from 'lodash';
+import { at, uniq } from "lodash";
 import { removeHiddenChars } from "matrix-js-sdk/src/utils";
 
-import { TimelineRenderingType } from '../contexts/RoomContext';
+import { TimelineRenderingType } from "../contexts/RoomContext";
 import { Leaves } from "../@types/common";
 
 interface IOptions<T extends {}> {
@@ -47,7 +47,7 @@ interface IOptions<T extends {}> {
  */
 export default class QueryMatcher<T extends {}> {
     private _options: IOptions<T>;
-    private _items: Map<string, {object: T, keyWeight: number}[]>;
+    private _items: Map<string, { object: T; keyWeight: number }[]>;
 
     constructor(objects: T[], options: IOptions<T> = { keys: [] }) {
         this._options = options;
@@ -99,7 +99,7 @@ export default class QueryMatcher<T extends {}> {
     match(query: string, limit = -1): T[] {
         query = this.processQuery(query);
         if (this._options.shouldMatchWordsOnly) {
-            query = query.replace(/[^\w]/g, '');
+            query = query.replace(/[^\w]/g, "");
         }
         if (query.length === 0) {
             return [];
@@ -111,13 +111,11 @@ export default class QueryMatcher<T extends {}> {
         for (const [key, candidates] of this._items.entries()) {
             let resultKey = key;
             if (this._options.shouldMatchWordsOnly) {
-                resultKey = resultKey.replace(/[^\w]/g, '');
+                resultKey = resultKey.replace(/[^\w]/g, "");
             }
             const index = resultKey.indexOf(query);
             if (index !== -1) {
-                matches.push(
-                    ...candidates.map((candidate) => ({ index, ...candidate })),
-                );
+                matches.push(...candidates.map((candidate) => ({ index, ...candidate })));
             }
         }
 

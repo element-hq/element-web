@@ -17,8 +17,8 @@ limitations under the License.
 import React, { createRef, CSSProperties, ReactNode, KeyboardEvent } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import SettingsStore from '../../settings/SettingsStore';
-import Timer from '../../utils/Timer';
+import SettingsStore from "../../settings/SettingsStore";
+import Timer from "../../utils/Timer";
 import AutoHideScrollbar from "./AutoHideScrollbar";
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
 import ResizeNotifier from "../../utils/ResizeNotifier";
@@ -165,9 +165,11 @@ export default class ScrollPanel extends React.Component<IProps> {
     public static defaultProps = {
         stickyBottom: true,
         startAtBottom: true,
-        onFillRequest: function(backwards: boolean) { return Promise.resolve(false); },
-        onUnfillRequest: function(backwards: boolean, scrollToken: string) {},
-        onScroll: function() {},
+        onFillRequest: function (backwards: boolean) {
+            return Promise.resolve(false);
+        },
+        onUnfillRequest: function (backwards: boolean, scrollToken: string) {},
+        onScroll: function () {},
     };
 
     private readonly pendingFillRequests: Record<"b" | "f", boolean> = {
@@ -321,7 +323,7 @@ export default class ScrollPanel extends React.Component<IProps> {
         if (backwards) {
             return unclippedScrollTop - sn.clientHeight - UNPAGINATION_PADDING;
         } else {
-            return contentHeight - (unclippedScrollTop + 2*sn.clientHeight) - UNPAGINATION_PADDING;
+            return contentHeight - (unclippedScrollTop + 2 * sn.clientHeight) - UNPAGINATION_PADDING;
         }
     }
 
@@ -379,19 +381,19 @@ export default class ScrollPanel extends React.Component<IProps> {
         }
 
         const itemlist = this.itemlist.current;
-        const firstTile = itemlist && itemlist.firstElementChild as HTMLElement;
+        const firstTile = itemlist && (itemlist.firstElementChild as HTMLElement);
         const contentTop = firstTile && firstTile.offsetTop;
         const fillPromises: Promise<void>[] = [];
 
         // if scrollTop gets to 1 screen from the top of the first tile,
         // try backward filling
-        if (!firstTile || (sn.scrollTop - contentTop) < sn.clientHeight) {
+        if (!firstTile || sn.scrollTop - contentTop < sn.clientHeight) {
             // need to back-fill
             fillPromises.push(this.maybeFill(depth, true));
         }
         // if scrollTop gets to 2 screens from the end (so 1 screen below viewport),
         // try forward filling
-        if ((sn.scrollHeight - sn.scrollTop) < sn.clientHeight * 2) {
+        if (sn.scrollHeight - sn.scrollTop < sn.clientHeight * 2) {
             // need to forward-fill
             fillPromises.push(this.maybeFill(depth, false));
         }
@@ -440,7 +442,7 @@ export default class ScrollPanel extends React.Component<IProps> {
         // If backwards is true, we unpaginate (remove) tiles from the back (top).
         let tile;
         for (let i = 0; i < tiles.length; i++) {
-            tile = tiles[backwards ? i : (tiles.length - 1 - i)];
+            tile = tiles[backwards ? i : tiles.length - 1 - i];
             // Subtract height of tile as if it were unpaginated
             excessHeight -= tile.clientHeight;
             //If removing the tile would lead to future pagination, break before setting scroll token
@@ -449,7 +451,7 @@ export default class ScrollPanel extends React.Component<IProps> {
             }
             // The tile may not have a scroll token, so guard it
             if (tile.dataset.scrollTokens) {
-                markerScrollToken = tile.dataset.scrollTokens.split(',')[0];
+                markerScrollToken = tile.dataset.scrollTokens.split(",")[0];
             }
         }
 
@@ -469,7 +471,7 @@ export default class ScrollPanel extends React.Component<IProps> {
 
     // check if there is already a pending fill request. If not, set one off.
     private maybeFill(depth: number, backwards: boolean): Promise<void> {
-        const dir = backwards ? 'b' : 'f';
+        const dir = backwards ? "b" : "f";
         if (this.pendingFillRequests[dir]) {
             debuglog("Already a fill in progress - not starting another; direction=", dir);
             return Promise.resolve();
@@ -485,25 +487,28 @@ export default class ScrollPanel extends React.Component<IProps> {
         // this will block the scroll event handler for +700ms
         // if messages are already cached in memory,
         // This would cause jumping to happen on Chrome/macOS.
-        return new Promise(resolve => window.setTimeout(resolve, 1)).then(() => {
-            return this.props.onFillRequest(backwards);
-        }).finally(() => {
-            this.pendingFillRequests[dir] = false;
-        }).then((hasMoreResults) => {
-            if (this.unmounted) {
-                return;
-            }
-            // Unpaginate once filling is complete
-            this.checkUnfillState(!backwards);
+        return new Promise((resolve) => window.setTimeout(resolve, 1))
+            .then(() => {
+                return this.props.onFillRequest(backwards);
+            })
+            .finally(() => {
+                this.pendingFillRequests[dir] = false;
+            })
+            .then((hasMoreResults) => {
+                if (this.unmounted) {
+                    return;
+                }
+                // Unpaginate once filling is complete
+                this.checkUnfillState(!backwards);
 
-            debuglog("fill complete; hasMoreResults=", hasMoreResults, "direction=", dir);
-            if (hasMoreResults) {
-                // further pagination requests have been disabled until now, so
-                // it's time to check the fill state again in case the pagination
-                // was insufficient.
-                return this.checkFillState(depth + 1);
-            }
-        });
+                debuglog("fill complete; hasMoreResults=", hasMoreResults, "direction=", dir);
+                if (hasMoreResults) {
+                    // further pagination requests have been disabled until now, so
+                    // it's time to check the fill state again in case the pagination
+                    // was insufficient.
+                    return this.checkFillState(depth + 1);
+                }
+            });
     }
 
     /* get the current scroll state. This returns an object with the following
@@ -630,7 +635,7 @@ export default class ScrollPanel extends React.Component<IProps> {
             // not giving enough content below the trackedNode to scroll downwards
             // enough, so it ends up in the top of the viewport.
             debuglog("scrollToken: setting scrollTop", { offsetBase, pixelOffset, offsetTop: trackedNode.offsetTop });
-            scrollNode.scrollTop = (trackedNode.offsetTop - (scrollNode.clientHeight * offsetBase)) + pixelOffset;
+            scrollNode.scrollTop = trackedNode.offsetTop - scrollNode.clientHeight * offsetBase + pixelOffset;
             this.saveScrollState();
         }
     };
@@ -653,7 +658,8 @@ export default class ScrollPanel extends React.Component<IProps> {
         // loop backwards, from bottom-most message (as that is the most common case)
         for (let i = messages.length - 1; i >= 0; --i) {
             const htmlMessage = messages[i] as HTMLElement;
-            if (!htmlMessage.dataset?.scrollTokens) { // dataset is only specified on HTMLElements
+            if (!htmlMessage.dataset?.scrollTokens) {
+                // dataset is only specified on HTMLElements
                 continue;
             }
             node = htmlMessage;
@@ -669,7 +675,7 @@ export default class ScrollPanel extends React.Component<IProps> {
             debuglog("unable to save scroll state: found no children in the viewport");
             return;
         }
-        const scrollToken = node!.dataset.scrollTokens.split(',')[0];
+        const scrollToken = node!.dataset.scrollTokens.split(",")[0];
         debuglog("saving anchored scroll state to message", scrollToken);
         const bottomOffset = this.topFromBottom(node);
         this.scrollState = {
@@ -791,7 +797,7 @@ export default class ScrollPanel extends React.Component<IProps> {
                 const m = messages[i] as HTMLElement;
                 // 'data-scroll-tokens' is a DOMString of comma-separated scroll tokens
                 // There might only be one scroll token
-                if (scrollToken && m.dataset.scrollTokens?.split(',').includes(scrollToken!)) {
+                if (scrollToken && m.dataset.scrollTokens?.split(",").includes(scrollToken!)) {
                     node = m;
                     break;
                 }
@@ -820,7 +826,7 @@ export default class ScrollPanel extends React.Component<IProps> {
         const lastNodeBottom = lastNode ? lastNode.offsetTop + lastNode.clientHeight : 0;
         const firstNodeTop = itemlist.firstElementChild ? (itemlist.firstElementChild as HTMLElement).offsetTop : 0;
         // 18 is itemlist padding
-        return lastNodeBottom - firstNodeTop + (18 * 2);
+        return lastNodeBottom - firstNodeTop + 18 * 2;
     }
 
     private topFromBottom(node: HTMLElement): number {
@@ -945,10 +951,10 @@ export default class ScrollPanel extends React.Component<IProps> {
                 className={`mx_ScrollPanel ${this.props.className}`}
                 style={this.props.style}
             >
-                { this.props.fixedChildren }
+                {this.props.fixedChildren}
                 <div className="mx_RoomView_messageListWrapper">
                     <ol ref={this.itemlist} className="mx_RoomView_MessageList" aria-live="polite">
-                        { this.props.children }
+                        {this.props.children}
                     </ol>
                 </div>
             </AutoHideScrollbar>

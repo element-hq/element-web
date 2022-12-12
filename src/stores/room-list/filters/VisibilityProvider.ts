@@ -24,8 +24,7 @@ import VoipUserMapper from "../../../VoipUserMapper";
 export class VisibilityProvider {
     private static internalInstance: VisibilityProvider;
 
-    private constructor() {
-    }
+    private constructor() {}
 
     public static get instance(): VisibilityProvider {
         if (!VisibilityProvider.internalInstance) {

@@ -28,18 +28,19 @@ import { stubClient } from "../../test-utils";
 describe("StopGapWidgetDriver", () => {
     let client: MockedObject<MatrixClient>;
 
-    const mkDefaultDriver = (): WidgetDriver => new StopGapWidgetDriver(
-        [],
-        new Widget({
-            id: "test",
-            creatorUserId: "@alice:example.org",
-            type: "example",
-            url: "https://example.org",
-        }),
-        WidgetKind.Room,
-        false,
-        "!1:example.org",
-    );
+    const mkDefaultDriver = (): WidgetDriver =>
+        new StopGapWidgetDriver(
+            [],
+            new Widget({
+                id: "test",
+                creatorUserId: "@alice:example.org",
+                type: "example",
+                url: "https://example.org",
+            }),
+            WidgetKind.Room,
+            false,
+            "!1:example.org",
+        );
 
     beforeEach(() => {
         stubClient();
@@ -107,7 +108,7 @@ describe("StopGapWidgetDriver", () => {
                 },
             },
             "@bob:example.org": {
-                "bobDesktop": {
+                bobDesktop: {
                     hello: "bob",
                 },
             },
@@ -115,7 +116,9 @@ describe("StopGapWidgetDriver", () => {
 
         let driver: WidgetDriver;
 
-        beforeEach(() => { driver = mkDefaultDriver(); });
+        beforeEach(() => {
+            driver = mkDefaultDriver();
+        });
 
         it("sends unencrypted messages", async () => {
             await driver.sendToDevice("org.example.foo", false, contentMap);
@@ -140,7 +143,9 @@ describe("StopGapWidgetDriver", () => {
     describe("getTurnServers", () => {
         let driver: WidgetDriver;
 
-        beforeEach(() => { driver = mkDefaultDriver(); });
+        beforeEach(() => {
+            driver = mkDefaultDriver();
+        });
 
         it("stops if VoIP isn't supported", async () => {
             jest.spyOn(client, "pollingTurnServers", "get").mockReturnValue(false);
@@ -199,77 +204,72 @@ describe("StopGapWidgetDriver", () => {
     describe("readEventRelations", () => {
         let driver: WidgetDriver;
 
-        beforeEach(() => { driver = mkDefaultDriver(); });
+        beforeEach(() => {
+            driver = mkDefaultDriver();
+        });
 
-        it('reads related events from the current room', async () => {
-            jest.spyOn(SdkContextClass.instance.roomViewStore, 'getRoomId').mockReturnValue('!this-room-id');
+        it("reads related events from the current room", async () => {
+            jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue("!this-room-id");
 
             client.relations.mockResolvedValue({
                 originalEvent: new MatrixEvent(),
                 events: [],
             });
 
-            await expect(driver.readEventRelations('$event')).resolves.toEqual({
+            await expect(driver.readEventRelations("$event")).resolves.toEqual({
                 chunk: [],
                 nextBatch: undefined,
                 prevBatch: undefined,
             });
 
-            expect(client.relations).toBeCalledWith('!this-room-id', '$event', null, null, {});
+            expect(client.relations).toBeCalledWith("!this-room-id", "$event", null, null, {});
         });
 
-        it('reads related events from a selected room', async () => {
+        it("reads related events from a selected room", async () => {
             client.relations.mockResolvedValue({
                 originalEvent: new MatrixEvent(),
                 events: [new MatrixEvent(), new MatrixEvent()],
-                nextBatch: 'next-batch-token',
+                nextBatch: "next-batch-token",
             });
 
-            await expect(driver.readEventRelations('$event', '!room-id')).resolves.toEqual({
-                chunk: [
-                    expect.objectContaining({ content: {} }),
-                    expect.objectContaining({ content: {} }),
-                ],
-                nextBatch: 'next-batch-token',
+            await expect(driver.readEventRelations("$event", "!room-id")).resolves.toEqual({
+                chunk: [expect.objectContaining({ content: {} }), expect.objectContaining({ content: {} })],
+                nextBatch: "next-batch-token",
                 prevBatch: undefined,
             });
 
-            expect(client.relations).toBeCalledWith('!room-id', '$event', null, null, {});
+            expect(client.relations).toBeCalledWith("!room-id", "$event", null, null, {});
         });
 
-        it('reads related events with custom parameters', async () => {
+        it("reads related events with custom parameters", async () => {
             client.relations.mockResolvedValue({
                 originalEvent: new MatrixEvent(),
                 events: [],
             });
 
-            await expect(driver.readEventRelations(
-                '$event',
-                '!room-id',
-                'm.reference',
-                'm.room.message',
-                'from-token',
-                'to-token',
-                25,
-                'f',
-            )).resolves.toEqual({
+            await expect(
+                driver.readEventRelations(
+                    "$event",
+                    "!room-id",
+                    "m.reference",
+                    "m.room.message",
+                    "from-token",
+                    "to-token",
+                    25,
+                    "f",
+                ),
+            ).resolves.toEqual({
                 chunk: [],
                 nextBatch: undefined,
                 prevBatch: undefined,
             });
 
-            expect(client.relations).toBeCalledWith(
-                '!room-id',
-                '$event',
-                'm.reference',
-                'm.room.message',
-                {
-                    limit: 25,
-                    from: 'from-token',
-                    to: 'to-token',
-                    dir: Direction.Forward,
-                },
-            );
+            expect(client.relations).toBeCalledWith("!room-id", "$event", "m.reference", "m.room.message", {
+                limit: 25,
+                from: "from-token",
+                to: "to-token",
+                dir: Direction.Forward,
+            });
         });
     });
 });

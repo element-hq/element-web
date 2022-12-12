@@ -146,8 +146,9 @@ export default class ContextMenu extends React.PureComponent<IProps, IState> {
         // We don't need to clean up when unmounting, so ignore
         if (!element) return;
 
-        const first = element.querySelector<HTMLElement>('[role^="menuitem"]')
-            || element.querySelector<HTMLElement>('[tab-index]');
+        const first =
+            element.querySelector<HTMLElement>('[role^="menuitem"]') ||
+            element.querySelector<HTMLElement>("[tab-index]");
 
         if (first) {
             first.focus();
@@ -226,16 +227,18 @@ export default class ContextMenu extends React.PureComponent<IProps, IState> {
             return;
         }
 
-        if ([
-            KeyBindingAction.Escape,
-            // You can only navigate the ContextMenu by arrow keys and Home/End (see RovingTabIndex).
-            // Tabbing to the next section of the page, will close the ContextMenu.
-            KeyBindingAction.Tab,
-            // When someone moves left or right along a <Toolbar /> (like the
-            // MessageActionBar), we should close any ContextMenu that is open.
-            KeyBindingAction.ArrowLeft,
-            KeyBindingAction.ArrowRight,
-        ].includes(action)) {
+        if (
+            [
+                KeyBindingAction.Escape,
+                // You can only navigate the ContextMenu by arrow keys and Home/End (see RovingTabIndex).
+                // Tabbing to the next section of the page, will close the ContextMenu.
+                KeyBindingAction.Tab,
+                // When someone moves left or right along a <Toolbar /> (like the
+                // MessageActionBar), we should close any ContextMenu that is open.
+                KeyBindingAction.ArrowLeft,
+                KeyBindingAction.ArrowRight,
+            ].includes(action)
+        ) {
             this.props.onFinished();
         }
     };
@@ -310,10 +313,7 @@ export default class ContextMenu extends React.PureComponent<IProps, IState> {
                     chevronOffset.top = propsChevronOffset + top - position.top;
                 }
             } else if (position.bottom !== undefined) {
-                position.bottom = Math.min(
-                    position.bottom,
-                    windowHeight - contextMenuRect.height - WINDOW_PADDING,
-                );
+                position.bottom = Math.min(position.bottom, windowHeight - contextMenuRect.height - WINDOW_PADDING);
                 if (chevronOffset.top !== undefined) {
                     chevronOffset.top = propsChevronOffset + position.bottom - bottom;
                 }
@@ -328,10 +328,7 @@ export default class ContextMenu extends React.PureComponent<IProps, IState> {
                     chevronOffset.left = propsChevronOffset + left - position.left;
                 }
             } else if (position.right !== undefined) {
-                position.right = Math.min(
-                    position.right,
-                    windowWidth - contextMenuRect.width - WINDOW_PADDING,
-                );
+                position.right = Math.min(position.right, windowWidth - contextMenuRect.width - WINDOW_PADDING);
                 if (chevronOffset.left !== undefined) {
                     chevronOffset.left = propsChevronOffset + position.right - right;
                 }
@@ -343,25 +340,28 @@ export default class ContextMenu extends React.PureComponent<IProps, IState> {
             chevron = <div style={chevronOffset} className={"mx_ContextualMenu_chevron_" + chevronFace} />;
         }
 
-        const menuClasses = classNames({
-            'mx_ContextualMenu': true,
-            /**
-             * In some cases we may get the number of 0, which still means that we're supposed to properly
-             * add the specific position class, but as it was falsy things didn't work as intended.
-             * In addition, defensively check for counter cases where we may get more than one value,
-             * even if we shouldn't.
-             */
-            'mx_ContextualMenu_left': !hasChevron && position.left !== undefined && !position.right,
-            'mx_ContextualMenu_right': !hasChevron && position.right !== undefined && !position.left,
-            'mx_ContextualMenu_top': !hasChevron && position.top !== undefined && !position.bottom,
-            'mx_ContextualMenu_bottom': !hasChevron && position.bottom !== undefined && !position.top,
-            'mx_ContextualMenu_withChevron_left': chevronFace === ChevronFace.Left,
-            'mx_ContextualMenu_withChevron_right': chevronFace === ChevronFace.Right,
-            'mx_ContextualMenu_withChevron_top': chevronFace === ChevronFace.Top,
-            'mx_ContextualMenu_withChevron_bottom': chevronFace === ChevronFace.Bottom,
-            'mx_ContextualMenu_rightAligned': rightAligned === true,
-            'mx_ContextualMenu_bottomAligned': bottomAligned === true,
-        }, menuClassName);
+        const menuClasses = classNames(
+            {
+                mx_ContextualMenu: true,
+                /**
+                 * In some cases we may get the number of 0, which still means that we're supposed to properly
+                 * add the specific position class, but as it was falsy things didn't work as intended.
+                 * In addition, defensively check for counter cases where we may get more than one value,
+                 * even if we shouldn't.
+                 */
+                mx_ContextualMenu_left: !hasChevron && position.left !== undefined && !position.right,
+                mx_ContextualMenu_right: !hasChevron && position.right !== undefined && !position.left,
+                mx_ContextualMenu_top: !hasChevron && position.top !== undefined && !position.bottom,
+                mx_ContextualMenu_bottom: !hasChevron && position.bottom !== undefined && !position.top,
+                mx_ContextualMenu_withChevron_left: chevronFace === ChevronFace.Left,
+                mx_ContextualMenu_withChevron_right: chevronFace === ChevronFace.Right,
+                mx_ContextualMenu_withChevron_top: chevronFace === ChevronFace.Top,
+                mx_ContextualMenu_withChevron_bottom: chevronFace === ChevronFace.Bottom,
+                mx_ContextualMenu_rightAligned: rightAligned === true,
+                mx_ContextualMenu_bottomAligned: bottomAligned === true,
+            },
+            menuClassName,
+        );
 
         const menuStyle: CSSProperties = {};
         if (menuWidth) {
@@ -403,15 +403,15 @@ export default class ContextMenu extends React.PureComponent<IProps, IState> {
             );
         }
 
-        let body = <>
-            { chevron }
-            { children }
-        </>;
+        let body = (
+            <>
+                {chevron}
+                {children}
+            </>
+        );
 
         if (focusLock) {
-            body = <FocusLock>
-                { body }
-            </FocusLock>;
+            body = <FocusLock>{body}</FocusLock>;
         }
 
         // filter props that are invalid for DOM elements
@@ -423,7 +423,7 @@ export default class ContextMenu extends React.PureComponent<IProps, IState> {
 
         return (
             <RovingTabIndexProvider handleHomeEnd handleUpDown onKeyDown={this.onKeyDown}>
-                { ({ onKeyDownHandler }) => (
+                {({ onKeyDownHandler }) => (
                     <div
                         className={classNames("mx_ContextualMenu_wrapper", wrapperClassName)}
                         style={{ ...position, ...wrapperStyle }}
@@ -431,7 +431,7 @@ export default class ContextMenu extends React.PureComponent<IProps, IState> {
                         onKeyDown={onKeyDownHandler}
                         onContextMenu={this.onContextMenuPreventBubbling}
                     >
-                        { background }
+                        {background}
                         <div
                             className={menuClasses}
                             style={menuStyle}
@@ -439,10 +439,10 @@ export default class ContextMenu extends React.PureComponent<IProps, IState> {
                             role={managed ? "menu" : undefined}
                             {...divProps}
                         >
-                            { body }
+                            {body}
                         </div>
                     </div>
-                ) }
+                )}
             </RovingTabIndexProvider>
         );
     }
@@ -467,7 +467,7 @@ export type ToRightOf = {
 // Placement method for <ContextMenu /> to position context menu to right of elementRect with chevronOffset
 export const toRightOf = (elementRect: Pick<DOMRect, "right" | "top" | "height">, chevronOffset = 12): ToRightOf => {
     const left = elementRect.right + window.scrollX + 3;
-    let top = elementRect.top + (elementRect.height / 2) + window.scrollY;
+    let top = elementRect.top + elementRect.height / 2 + window.scrollY;
     top -= chevronOffset + 8; // where 8 is half the height of the chevron
     return { left, top, chevronOffset };
 };
@@ -481,7 +481,7 @@ export type ToLeftOf = {
 // Placement method for <ContextMenu /> to position context menu to left of elementRect with chevronOffset
 export const toLeftOf = (elementRect: DOMRect, chevronOffset = 12): ToLeftOf => {
     const right = UIStore.instance.windowWidth - elementRect.left + window.scrollX - 3;
-    let top = elementRect.top + (elementRect.height / 2) + window.scrollY;
+    let top = elementRect.top + elementRect.height / 2 + window.scrollY;
     top -= chevronOffset + 8; // where 8 is half the height of the chevron
     return { right, top, chevronOffset };
 };
@@ -523,7 +523,7 @@ export const aboveLeftOf = (
     if (buttonBottom < UIStore.instance.windowHeight / 2) {
         menuOptions.top = buttonBottom + vPadding;
     } else {
-        menuOptions.bottom = (UIStore.instance.windowHeight - buttonTop) + vPadding;
+        menuOptions.bottom = UIStore.instance.windowHeight - buttonTop + vPadding;
     }
 
     return menuOptions;
@@ -547,7 +547,7 @@ export const aboveRightOf = (
     if (buttonBottom < UIStore.instance.windowHeight / 2) {
         menuOptions.top = buttonBottom + vPadding;
     } else {
-        menuOptions.bottom = (UIStore.instance.windowHeight - buttonTop) + vPadding;
+        menuOptions.bottom = UIStore.instance.windowHeight - buttonTop + vPadding;
     }
 
     return menuOptions;
@@ -567,7 +567,7 @@ export const alwaysAboveLeftOf = (
     // Align the right edge of the menu to the right edge of the button
     menuOptions.right = UIStore.instance.windowWidth - buttonRight;
     // Align the menu vertically above the menu
-    menuOptions.bottom = (UIStore.instance.windowHeight - buttonTop) + vPadding;
+    menuOptions.bottom = UIStore.instance.windowHeight - buttonTop + vPadding;
 
     return menuOptions;
 };
@@ -586,7 +586,7 @@ export const alwaysAboveRightOf = (
     // Align the left edge of the menu to the left edge of the button
     menuOptions.left = buttonLeft;
     // Align the menu vertically above the menu
-    menuOptions.bottom = (UIStore.instance.windowHeight - buttonTop) + vPadding;
+    menuOptions.bottom = UIStore.instance.windowHeight - buttonTop + vPadding;
 
     return menuOptions;
 };
@@ -623,20 +623,22 @@ export const useContextMenu = <T extends any = HTMLElement>(inputRef?: RefObject
 
 // XXX: Deprecated, used only for dynamic Tooltips. Avoid using at all costs.
 export function createMenu(ElementClass, props) {
-    const onFinished = function(...args) {
+    const onFinished = function (...args) {
         ReactDOM.unmountComponentAtNode(getOrCreateContainer());
         props?.onFinished?.apply(null, args);
     };
 
-    const menu = <ContextMenu
-        {...props}
-        mountAsChild={true}
-        hasBackground={false}
-        onFinished={onFinished} // eslint-disable-line react/jsx-no-bind
-        windowResize={onFinished} // eslint-disable-line react/jsx-no-bind
-    >
-        <ElementClass {...props} onFinished={onFinished} />
-    </ContextMenu>;
+    const menu = (
+        <ContextMenu
+            {...props}
+            mountAsChild={true}
+            hasBackground={false}
+            onFinished={onFinished} // eslint-disable-line react/jsx-no-bind
+            windowResize={onFinished} // eslint-disable-line react/jsx-no-bind
+        >
+            <ElementClass {...props} onFinished={onFinished} />
+        </ContextMenu>
+    );
 
     ReactDOM.render(menu, getOrCreateContainer());
 

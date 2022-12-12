@@ -14,34 +14,33 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 // eslint-disable-next-line deprecate/import
-import { mount } from 'enzyme';
-import { mocked } from 'jest-mock';
-import maplibregl from 'maplibre-gl';
+import { mount } from "enzyme";
+import { mocked } from "jest-mock";
+import maplibregl from "maplibre-gl";
 
-import SmartMarker from '../../../../src/components/views/location/SmartMarker';
+import SmartMarker from "../../../../src/components/views/location/SmartMarker";
 
-jest.mock('../../../../src/utils/location/findMapStyleUrl', () => ({
-    findMapStyleUrl: jest.fn().mockReturnValue('tileserver.com'),
+jest.mock("../../../../src/utils/location/findMapStyleUrl", () => ({
+    findMapStyleUrl: jest.fn().mockReturnValue("tileserver.com"),
 }));
 
-describe('<SmartMarker />', () => {
+describe("<SmartMarker />", () => {
     const mockMap = new maplibregl.Map();
     const mockMarker = new maplibregl.Marker();
 
     const defaultProps = {
         map: mockMap,
-        geoUri: 'geo:43.2,54.6',
+        geoUri: "geo:43.2,54.6",
     };
-    const getComponent = (props = {}) =>
-        mount(<SmartMarker {...defaultProps} {...props} />);
+    const getComponent = (props = {}) => mount(<SmartMarker {...defaultProps} {...props} />);
 
     beforeEach(() => {
         jest.clearAllMocks();
     });
 
-    it('creates a marker on mount', () => {
+    it("creates a marker on mount", () => {
         const component = getComponent();
         expect(component).toMatchSnapshot();
 
@@ -55,11 +54,11 @@ describe('<SmartMarker />', () => {
         expect(mockMarker.addTo).toHaveBeenCalledWith(mockMap);
     });
 
-    it('updates marker position on change', () => {
-        const component = getComponent({ geoUri: 'geo:40,50' });
+    it("updates marker position on change", () => {
+        const component = getComponent({ geoUri: "geo:40,50" });
 
-        component.setProps({ geoUri: 'geo:41,51' });
-        component.setProps({ geoUri: 'geo:42,52' });
+        component.setProps({ geoUri: "geo:41,51" });
+        component.setProps({ geoUri: "geo:42,52" });
 
         // marker added only once
         expect(maplibregl.Marker).toHaveBeenCalledTimes(1);
@@ -69,7 +68,7 @@ describe('<SmartMarker />', () => {
         expect(mocked(mockMarker.setLngLat)).toHaveBeenCalledWith({ lat: 42, lon: 52 });
     });
 
-    it('removes marker on unmount', () => {
+    it("removes marker on unmount", () => {
         const component = getComponent();
         expect(component).toMatchSnapshot();
 

@@ -68,9 +68,7 @@ export default class LayoutSwitcher extends React.Component<IProps, IState> {
 
         return (
             <div className="mx_SettingsTab_section mx_LayoutSwitcher">
-                <span className="mx_SettingsTab_subheading">
-                    { _t("Message layout") }
-                </span>
+                <span className="mx_SettingsTab_subheading">{_t("Message layout")}</span>
 
                 <div className="mx_LayoutSwitcher_RadioButtons">
                     <label className={ircClasses}>
@@ -88,7 +86,7 @@ export default class LayoutSwitcher extends React.Component<IProps, IState> {
                             checked={this.state.layout === Layout.IRC}
                             onChange={this.onLayoutChange}
                         >
-                            { _t("IRC (Experimental)") }
+                            {_t("IRC (Experimental)")}
                         </StyledRadioButton>
                     </label>
                     <label className={groupClasses}>
@@ -106,7 +104,7 @@ export default class LayoutSwitcher extends React.Component<IProps, IState> {
                             checked={this.state.layout == Layout.Group}
                             onChange={this.onLayoutChange}
                         >
-                            { _t("Modern") }
+                            {_t("Modern")}
                         </StyledRadioButton>
                     </label>
                     <label className={bubbleClasses}>
@@ -124,7 +122,7 @@ export default class LayoutSwitcher extends React.Component<IProps, IState> {
                             checked={this.state.layout == Layout.Bubble}
                             onChange={this.onLayoutChange}
                         >
-                            { _t("Message bubbles") }
+                            {_t("Message bubbles")}
                         </StyledRadioButton>
                     </label>
                 </div>

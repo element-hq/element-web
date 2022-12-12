@@ -31,7 +31,7 @@ type Props = {
     requestClose: () => void;
 };
 
-const MATCH_SYSTEM_THEME_ID = 'MATCH_SYSTEM_THEME_ID';
+const MATCH_SYSTEM_THEME_ID = "MATCH_SYSTEM_THEME_ID";
 
 const QuickThemeSwitcher: React.FC<Props> = ({ requestClose }) => {
     const orderedThemes = useMemo(getOrderedThemes, []);
@@ -41,10 +41,13 @@ const QuickThemeSwitcher: React.FC<Props> = ({ requestClose }) => {
     const theme = nonHighContrast ? nonHighContrast : themeState.theme;
     const { useSystemTheme } = themeState;
 
-    const themeOptions = [{
-        id: MATCH_SYSTEM_THEME_ID,
-        name: _t("Match system"),
-    }, ...orderedThemes];
+    const themeOptions = [
+        {
+            id: MATCH_SYSTEM_THEME_ID,
+            name: _t("Match system"),
+        },
+        ...orderedThemes,
+    ];
 
     const selectedTheme = useSystemTheme ? MATCH_SYSTEM_THEME_ID : theme;
 
@@ -74,21 +77,21 @@ const QuickThemeSwitcher: React.FC<Props> = ({ requestClose }) => {
         requestClose();
     };
 
-    return <div className="mx_QuickThemeSwitcher">
-        <h4 className="mx_QuickThemeSwitcher_heading">{ _t("Theme") }</h4>
-        <Dropdown
-            id="mx_QuickSettingsButton_themePickerDropdown"
-            onOptionChange={onOptionChange}
-            value={selectedTheme}
-            label={_t("Space selection")}
-        >
-            { themeOptions.map((theme) => (
-                <div key={theme.id}>
-                    { theme.name }
-                </div>
-            )) }
-        </Dropdown>
-    </div>;
+    return (
+        <div className="mx_QuickThemeSwitcher">
+            <h4 className="mx_QuickThemeSwitcher_heading">{_t("Theme")}</h4>
+            <Dropdown
+                id="mx_QuickSettingsButton_themePickerDropdown"
+                onOptionChange={onOptionChange}
+                value={selectedTheme}
+                label={_t("Space selection")}
+            >
+                {themeOptions.map((theme) => (
+                    <div key={theme.id}>{theme.name}</div>
+                ))}
+            </Dropdown>
+        </div>
+    );
 };
 
 export default QuickThemeSwitcher;

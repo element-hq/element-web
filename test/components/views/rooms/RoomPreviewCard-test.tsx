@@ -48,14 +48,14 @@ describe("RoomPreviewCard", () => {
             pendingEventOrdering: PendingEventOrdering.Detached,
         });
         alice = mkRoomMember(room.roomId, "@alice:example.org");
-        jest.spyOn(room, "getMember").mockImplementation(userId => userId === alice.userId ? alice : null);
+        jest.spyOn(room, "getMember").mockImplementation((userId) => (userId === alice.userId ? alice : null));
 
-        client.getRoom.mockImplementation(roomId => roomId === room.roomId ? room : null);
+        client.getRoom.mockImplementation((roomId) => (roomId === room.roomId ? room : null));
         client.getRooms.mockReturnValue([room]);
         client.reEmitter.reEmit(room, [RoomStateEvent.Events]);
 
         enabledFeatures = [];
-        jest.spyOn(SettingsStore, "getValue").mockImplementation(settingName =>
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName) =>
             enabledFeatures.includes(settingName) ? true : undefined,
         );
     });
@@ -66,13 +66,7 @@ describe("RoomPreviewCard", () => {
     });
 
     const renderPreview = async (): Promise<void> => {
-        render(
-            <RoomPreviewCard
-                room={room}
-                onJoinButtonClicked={() => { }}
-                onRejectButtonClicked={() => { }}
-            />,
-        );
+        render(<RoomPreviewCard room={room} onJoinButtonClicked={() => {}} onRejectButtonClicked={() => {}} />);
         await act(() => Promise.resolve()); // Allow effects to settle
     };
 

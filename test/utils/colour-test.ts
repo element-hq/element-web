@@ -17,8 +17,8 @@ limitations under the License.
 import { textToHtmlRainbow } from "../../src/utils/colour";
 
 describe("textToHtmlRainbow", () => {
-    it('correctly transform text to html without splitting the emoji in two', () => {
-        expect(textToHtmlRainbow('🐻')).toBe('<font color="#ff00be">🐻</font>');
-        expect(textToHtmlRainbow('🐕‍🦺')).toBe('<font color="#ff00be">🐕‍🦺</font>');
+    it("correctly transform text to html without splitting the emoji in two", () => {
+        expect(textToHtmlRainbow("🐻")).toBe('<font color="#ff00be">🐻</font>');
+        expect(textToHtmlRainbow("🐕‍🦺")).toBe('<font color="#ff00be">🐕‍🦺</font>');
     });
 });

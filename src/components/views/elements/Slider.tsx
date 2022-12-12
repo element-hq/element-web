@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import * as React from 'react';
+import * as React from "react";
 
 interface IProps {
     // A callback for the selected value
@@ -46,7 +46,7 @@ export default class Slider extends React.Component<IProps> {
     private offset(values: number[], value: number): number {
         // the index of the first number greater than value.
         const closest = values.reduce((prev, curr) => {
-            return (value > curr ? prev + 1 : prev);
+            return value > curr ? prev + 1 : prev;
         }, 0);
 
         // Off the left
@@ -71,44 +71,48 @@ export default class Slider extends React.Component<IProps> {
     }
 
     render(): React.ReactNode {
-        const dots = this.props.values.map(v => <Dot
-            active={v <= this.props.value}
-            label={this.props.displayFunc(v)}
-            onClick={this.props.disabled ? () => {} : () => this.props.onSelectionChange(v)}
-            key={v}
-            disabled={this.props.disabled}
-        />);
+        const dots = this.props.values.map((v) => (
+            <Dot
+                active={v <= this.props.value}
+                label={this.props.displayFunc(v)}
+                onClick={this.props.disabled ? () => {} : () => this.props.onSelectionChange(v)}
+                key={v}
+                disabled={this.props.disabled}
+            />
+        ));
 
         let selection = null;
 
         if (!this.props.disabled) {
             const offset = this.offset(this.props.values, this.props.value);
-            selection = <div className="mx_Slider_selection">
-                <div className="mx_Slider_selectionDot" style={{ left: "calc(-1.195em + " + offset + "%)" }}>
-                    <div className="mx_Slider_selectionText">{ this.props.value }</div>
+            selection = (
+                <div className="mx_Slider_selection">
+                    <div className="mx_Slider_selectionDot" style={{ left: "calc(-1.195em + " + offset + "%)" }}>
+                        <div className="mx_Slider_selectionText">{this.props.value}</div>
+                    </div>
+                    <hr style={{ width: offset + "%" }} />
                 </div>
-                <hr style={{ width: offset + "%" }} />
-            </div>;
+            );
         }
 
-        return <div className="mx_Slider">
-            <div>
-                <div className="mx_Slider_bar">
-                    <hr onClick={this.props.disabled ? () => {} : this.onClick.bind(this)} />
-                    { selection }
-                </div>
-                <div className="mx_Slider_dotContainer">
-                    { dots }
+        return (
+            <div className="mx_Slider">
+                <div>
+                    <div className="mx_Slider_bar">
+                        <hr onClick={this.props.disabled ? () => {} : this.onClick.bind(this)} />
+                        {selection}
+                    </div>
+                    <div className="mx_Slider_dotContainer">{dots}</div>
                 </div>
             </div>
-        </div>;
+        );
     }
 
     onClick(event: React.MouseEvent) {
         const width = (event.target as HTMLElement).clientWidth;
         // nativeEvent is safe to use because https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/offsetX
         // is supported by all modern browsers
-        const relativeClick = (event.nativeEvent.offsetX / width);
+        const relativeClick = event.nativeEvent.offsetX / width;
         const nearestValue = this.props.values[Math.round(relativeClick * (this.props.values.length - 1))];
         this.props.onSelectionChange(nearestValue);
     }
@@ -135,13 +139,13 @@ class Dot extends React.PureComponent<IDotProps> {
             className += " mx_Slider_dotActive";
         }
 
-        return <span onClick={this.props.onClick} className="mx_Slider_dotValue">
-            <div className={className} />
-            <div className="mx_Slider_labelContainer">
-                <div className="mx_Slider_label">
-                    { this.props.label }
+        return (
+            <span onClick={this.props.onClick} className="mx_Slider_dotValue">
+                <div className={className} />
+                <div className="mx_Slider_labelContainer">
+                    <div className="mx_Slider_label">{this.props.label}</div>
                 </div>
-            </div>
-        </span>;
+            </span>
+        );
     }
 }

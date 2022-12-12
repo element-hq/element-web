@@ -22,7 +22,7 @@ describe("Update", () => {
     let synapse: SynapseInstance;
 
     beforeEach(() => {
-        cy.startSynapse("default").then(data => {
+        cy.startSynapse("default").then((data) => {
             synapse = data;
         });
     });
@@ -45,9 +45,11 @@ describe("Update", () => {
         cy.initTestUser(synapse, "Ursa");
 
         cy.wait("@version");
-        cy.url().should("contain", "updated=" + NEW_VERSION).then(href => {
-            const url = new URL(href);
-            expect(url.searchParams.get("updated")).to.equal(NEW_VERSION);
-        });
+        cy.url()
+            .should("contain", "updated=" + NEW_VERSION)
+            .then((href) => {
+                const url = new URL(href);
+                expect(url.searchParams.get("updated")).to.equal(NEW_VERSION);
+            });
     });
 });

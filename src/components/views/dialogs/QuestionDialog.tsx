@@ -15,10 +15,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 import classNames from "classnames";
 
-import { _t } from '../../../languageHandler';
+import { _t } from "../../../languageHandler";
 import { IDialogProps } from "./IDialogProps";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
@@ -68,15 +68,16 @@ export default class QuestionDialog extends React.Component<IQuestionDialogProps
                 className={classNames("mx_QuestionDialog", this.props.className)}
                 onFinished={this.props.onFinished}
                 title={this.props.title}
-                contentId='mx_Dialog_content'
+                contentId="mx_Dialog_content"
                 headerImage={this.props.headerImage}
                 hasCancel={this.props.hasCancelButton}
                 fixedWidth={this.props.fixedWidth}
             >
-                <div className="mx_Dialog_content" id='mx_Dialog_content'>
-                    { this.props.description }
+                <div className="mx_Dialog_content" id="mx_Dialog_content">
+                    {this.props.description}
                 </div>
-                <DialogButtons primaryButton={this.props.button || _t('OK')}
+                <DialogButtons
+                    primaryButton={this.props.button || _t("OK")}
                     primaryButtonClass={primaryButtonClass}
                     primaryDisabled={this.props.buttonDisabled}
                     cancelButton={this.props.cancelButton}
@@ -85,7 +86,7 @@ export default class QuestionDialog extends React.Component<IQuestionDialogProps
                     focus={this.props.focus}
                     onCancel={this.onCancel}
                 >
-                    { this.props.extraButtons }
+                    {this.props.extraButtons}
                 </DialogButtons>
             </BaseDialog>
         );

@@ -18,7 +18,7 @@ import React, { useMemo, useState } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { JoinRule } from "matrix-js-sdk/src/@types/partials";
 
-import { _t } from '../../../languageHandler';
+import { _t } from "../../../languageHandler";
 import DialogButtons from "../elements/DialogButtons";
 import BaseDialog from "../dialogs/BaseDialog";
 import SpaceStore from "../../../stores/spaces/SpaceStore";
@@ -34,7 +34,7 @@ const isOnlyAdmin = (room: Room): boolean => {
     if (room.getMember(userId).powerLevelNorm !== 100) {
         return false; // user is not an admin
     }
-    return room.getJoinedMembers().every(member => {
+    return room.getJoinedMembers().every((member) => {
         // return true if every other member has a lower power level (we are highest)
         return member.userId === userId || member.powerLevelNorm < 100;
     });
@@ -43,11 +43,17 @@ const isOnlyAdmin = (room: Room): boolean => {
 const LeaveSpaceDialog: React.FC<IProps> = ({ space, onFinished }) => {
     const spaceChildren = useMemo(() => {
         const roomSet = new Set(SpaceStore.instance.getSpaceFilteredRoomIds(space.roomId));
-        SpaceStore.instance.traverseSpace(space.roomId, spaceId => {
-            if (space.roomId === spaceId) return; // skip the root node
-            roomSet.add(spaceId);
-        }, false);
-        return Array.from(roomSet).map(roomId => space.client.getRoom(roomId)).filter(Boolean);
+        SpaceStore.instance.traverseSpace(
+            space.roomId,
+            (spaceId) => {
+                if (space.roomId === spaceId) return; // skip the root node
+                roomSet.add(spaceId);
+            },
+            false,
+        );
+        return Array.from(roomSet)
+            .map((roomId) => space.client.getRoom(roomId))
+            .filter(Boolean);
     }, [space]);
     const [roomsToLeave, setRoomsToLeave] = useState<Room[]>([]);
     const selectedRooms = useMemo(() => new Set(roomsToLeave), [roomsToLeave]);
@@ -59,58 +65,65 @@ const LeaveSpaceDialog: React.FC<IProps> = ({ space, onFinished }) => {
 
     let onlyAdminWarning;
     if (isOnlyAdmin(space)) {
-        onlyAdminWarning = _t("You're the only admin of this space. " +
-            "Leaving it will mean no one has control over it.");
+        onlyAdminWarning = _t(
+            "You're the only admin of this space. " + "Leaving it will mean no one has control over it.",
+        );
     } else {
         const numChildrenOnlyAdminIn = roomsToLeave.filter(isOnlyAdmin).length;
         if (numChildrenOnlyAdminIn > 0) {
-            onlyAdminWarning = _t("You're the only admin of some of the rooms or spaces you wish to leave. " +
-                "Leaving them will leave them without any admins.");
+            onlyAdminWarning = _t(
+                "You're the only admin of some of the rooms or spaces you wish to leave. " +
+                    "Leaving them will leave them without any admins.",
+            );
         }
     }
 
-    return <BaseDialog
-        title={_t("Leave %(spaceName)s", { spaceName: space.name })}
-        className="mx_LeaveSpaceDialog"
-        contentId="mx_LeaveSpaceDialog"
-        onFinished={() => onFinished(false)}
-        fixedWidth={false}
-    >
-        <div className="mx_Dialog_content" id="mx_LeaveSpaceDialog">
-            <p>
-                { _t("You are about to leave <spaceName/>.", {}, {
-                    spaceName: () => <b>{ space.name }</b>,
-                }) }
-                &nbsp;
-                { rejoinWarning }
-                { rejoinWarning && (<>&nbsp;</>) }
-                { spaceChildren.length > 0 && _t("Would you like to leave the rooms in this space?") }
-            </p>
+    return (
+        <BaseDialog
+            title={_t("Leave %(spaceName)s", { spaceName: space.name })}
+            className="mx_LeaveSpaceDialog"
+            contentId="mx_LeaveSpaceDialog"
+            onFinished={() => onFinished(false)}
+            fixedWidth={false}
+        >
+            <div className="mx_Dialog_content" id="mx_LeaveSpaceDialog">
+                <p>
+                    {_t(
+                        "You are about to leave <spaceName/>.",
+                        {},
+                        {
+                            spaceName: () => <b>{space.name}</b>,
+                        },
+                    )}
+                    &nbsp;
+                    {rejoinWarning}
+                    {rejoinWarning && <>&nbsp;</>}
+                    {spaceChildren.length > 0 && _t("Would you like to leave the rooms in this space?")}
+                </p>
 
-            { spaceChildren.length > 0 && (
-                <SpaceChildrenPicker
-                    space={space}
-                    spaceChildren={spaceChildren}
-                    selected={selectedRooms}
-                    onChange={setRoomsToLeave}
-                    noneLabel={_t("Don't leave any rooms")}
-                    allLabel={_t("Leave all rooms")}
-                    specificLabel={_t("Leave some rooms")}
-                />
-            ) }
+                {spaceChildren.length > 0 && (
+                    <SpaceChildrenPicker
+                        space={space}
+                        spaceChildren={spaceChildren}
+                        selected={selectedRooms}
+                        onChange={setRoomsToLeave}
+                        noneLabel={_t("Don't leave any rooms")}
+                        allLabel={_t("Leave all rooms")}
+                        specificLabel={_t("Leave some rooms")}
+                    />
+                )}
 
-            { onlyAdminWarning && <div className="mx_LeaveSpaceDialog_section_warning">
-                { onlyAdminWarning }
-            </div> }
-        </div>
-        <DialogButtons
-            primaryButton={_t("Leave space")}
-            primaryButtonClass="danger"
-            onPrimaryButtonClick={() => onFinished(true, roomsToLeave)}
-            hasCancel={true}
-            onCancel={() => onFinished(false)}
-        />
-    </BaseDialog>;
+                {onlyAdminWarning && <div className="mx_LeaveSpaceDialog_section_warning">{onlyAdminWarning}</div>}
+            </div>
+            <DialogButtons
+                primaryButton={_t("Leave space")}
+                primaryButtonClass="danger"
+                onPrimaryButtonClick={() => onFinished(true, roomsToLeave)}
+                hasCancel={true}
+                onCancel={() => onFinished(false)}
+            />
+        </BaseDialog>
+    );
 };
 
 export default LeaveSpaceDialog;

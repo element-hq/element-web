@@ -45,15 +45,13 @@ describe("WidgetPermissionStore", () => {
         mocked(SettingsStore.getValue).mockImplementation((setting: string) => {
             return settings[setting];
         });
-        mocked(SettingsStore.setValue).mockImplementation((settingName: string,
-            roomId: string | null,
-            level: SettingLevel,
-            value: any,
-        ): Promise<void> => {
-            // the store doesn't use any specific level or room ID (room IDs are packed into keys in `value`)
-            settings[settingName] = value;
-            return Promise.resolve();
-        });
+        mocked(SettingsStore.setValue).mockImplementation(
+            (settingName: string, roomId: string | null, level: SettingLevel, value: any): Promise<void> => {
+                // the store doesn't use any specific level or room ID (room IDs are packed into keys in `value`)
+                settings[settingName] = value;
+                return Promise.resolve();
+            },
+        );
         mockClient = stubClient();
         const context = new TestSdkContext();
         context.client = mockClient;
@@ -63,39 +61,29 @@ describe("WidgetPermissionStore", () => {
     it("should persist OIDCState.Allowed for a widget", () => {
         widgetPermissionStore.setOIDCState(w, WidgetKind.Account, null, OIDCState.Allowed);
         // check it remembered the value
-        expect(
-            widgetPermissionStore.getOIDCState(w, WidgetKind.Account, null),
-        ).toEqual(OIDCState.Allowed);
+        expect(widgetPermissionStore.getOIDCState(w, WidgetKind.Account, null)).toEqual(OIDCState.Allowed);
     });
 
     it("should persist OIDCState.Denied for a widget", () => {
         widgetPermissionStore.setOIDCState(w, WidgetKind.Account, null, OIDCState.Denied);
         // check it remembered the value
-        expect(
-            widgetPermissionStore.getOIDCState(w, WidgetKind.Account, null),
-        ).toEqual(OIDCState.Denied);
+        expect(widgetPermissionStore.getOIDCState(w, WidgetKind.Account, null)).toEqual(OIDCState.Denied);
     });
 
     it("should update OIDCState for a widget", () => {
         widgetPermissionStore.setOIDCState(w, WidgetKind.Account, null, OIDCState.Allowed);
         widgetPermissionStore.setOIDCState(w, WidgetKind.Account, null, OIDCState.Denied);
         // check it remembered the latest value
-        expect(
-            widgetPermissionStore.getOIDCState(w, WidgetKind.Account, null),
-        ).toEqual(OIDCState.Denied);
+        expect(widgetPermissionStore.getOIDCState(w, WidgetKind.Account, null)).toEqual(OIDCState.Denied);
     });
 
     it("should scope the location for a widget when setting OIDC state", () => {
         // allow this widget for this room
         widgetPermissionStore.setOIDCState(w, WidgetKind.Room, roomId, OIDCState.Allowed);
         // check it remembered the value
-        expect(
-            widgetPermissionStore.getOIDCState(w, WidgetKind.Room, roomId),
-        ).toEqual(OIDCState.Allowed);
+        expect(widgetPermissionStore.getOIDCState(w, WidgetKind.Room, roomId)).toEqual(OIDCState.Allowed);
         // check this is not the case for the entire account
-        expect(
-            widgetPermissionStore.getOIDCState(w, WidgetKind.Account, roomId),
-        ).toEqual(OIDCState.Unknown);
+        expect(widgetPermissionStore.getOIDCState(w, WidgetKind.Account, roomId)).toEqual(OIDCState.Unknown);
     });
     it("is created once in SdkContextClass", () => {
         const context = new SdkContextClass();

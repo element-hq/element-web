@@ -15,34 +15,34 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixClient } from 'matrix-js-sdk/src/client';
+import { MatrixClient } from "matrix-js-sdk/src/client";
 import React, { ReactNode } from "react";
 
-import { _t, _td } from '../languageHandler';
+import { _t, _td } from "../languageHandler";
 import {
     NotificationBodyEnabledController,
     NotificationsEnabledController,
 } from "./controllers/NotificationControllers";
-import ThemeController from './controllers/ThemeController';
-import PushToMatrixClientController from './controllers/PushToMatrixClientController';
+import ThemeController from "./controllers/ThemeController";
+import PushToMatrixClientController from "./controllers/PushToMatrixClientController";
 import ReloadOnChangeController from "./controllers/ReloadOnChangeController";
-import FontSizeController from './controllers/FontSizeController';
-import SystemFontController from './controllers/SystemFontController';
-import UseSystemFontController from './controllers/UseSystemFontController';
+import FontSizeController from "./controllers/FontSizeController";
+import SystemFontController from "./controllers/SystemFontController";
+import UseSystemFontController from "./controllers/UseSystemFontController";
 import { SettingLevel } from "./SettingLevel";
 import SettingController from "./controllers/SettingController";
-import { IS_MAC } from '../Keyboard';
+import { IS_MAC } from "../Keyboard";
 import UIFeatureController from "./controllers/UIFeatureController";
 import { UIFeature } from "./UIFeature";
 import { OrderedMultiController } from "./controllers/OrderedMultiController";
 import { Layout } from "./enums/Layout";
-import ReducedMotionController from './controllers/ReducedMotionController';
+import ReducedMotionController from "./controllers/ReducedMotionController";
 import IncompatibleController from "./controllers/IncompatibleController";
 import { ImageSize } from "./enums/ImageSize";
 import { MetaSpace } from "../stores/spaces";
 import SdkConfig from "../SdkConfig";
-import SlidingSyncController from './controllers/SlidingSyncController';
-import ThreadBetaController from './controllers/ThreadBetaController';
+import SlidingSyncController from "./controllers/SlidingSyncController";
+import ThreadBetaController from "./controllers/ThreadBetaController";
 import { FontWatcher } from "./watchers/FontWatcher";
 
 // These are just a bunch of helper arrays to avoid copy/pasting a bunch of times
@@ -53,10 +53,7 @@ const LEVELS_ROOM_SETTINGS = [
     SettingLevel.ACCOUNT,
     SettingLevel.CONFIG,
 ];
-const LEVELS_ROOM_OR_ACCOUNT = [
-    SettingLevel.ROOM_ACCOUNT,
-    SettingLevel.ACCOUNT,
-];
+const LEVELS_ROOM_OR_ACCOUNT = [SettingLevel.ROOM_ACCOUNT, SettingLevel.ACCOUNT];
 const LEVELS_ROOM_SETTINGS_WITH_ROOM = [
     SettingLevel.DEVICE,
     SettingLevel.ROOM_DEVICE,
@@ -65,22 +62,10 @@ const LEVELS_ROOM_SETTINGS_WITH_ROOM = [
     SettingLevel.CONFIG,
     SettingLevel.ROOM,
 ];
-const LEVELS_ACCOUNT_SETTINGS = [
-    SettingLevel.DEVICE,
-    SettingLevel.ACCOUNT,
-    SettingLevel.CONFIG,
-];
-const LEVELS_FEATURE = [
-    SettingLevel.DEVICE,
-    SettingLevel.CONFIG,
-];
-const LEVELS_DEVICE_ONLY_SETTINGS = [
-    SettingLevel.DEVICE,
-];
-const LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG = [
-    SettingLevel.DEVICE,
-    SettingLevel.CONFIG,
-];
+const LEVELS_ACCOUNT_SETTINGS = [SettingLevel.DEVICE, SettingLevel.ACCOUNT, SettingLevel.CONFIG];
+const LEVELS_FEATURE = [SettingLevel.DEVICE, SettingLevel.CONFIG];
+const LEVELS_DEVICE_ONLY_SETTINGS = [SettingLevel.DEVICE];
+const LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG = [SettingLevel.DEVICE, SettingLevel.CONFIG];
 const LEVELS_UI_FEATURE = [
     SettingLevel.CONFIG,
     // in future we might have a .well-known level or something
@@ -122,23 +107,19 @@ export const labGroupNames: Record<LabGroup, string> = {
     [LabGroup.Developer]: _td("Developer"),
 };
 
-export type SettingValueType = boolean
-    | number
-    | string
-    | number[]
-    | string[]
-    | Record<string, unknown>
-    | null;
+export type SettingValueType = boolean | number | string | number[] | string[] | Record<string, unknown> | null;
 
 export interface IBaseSetting<T extends SettingValueType = SettingValueType> {
     isFeature?: false | undefined;
 
     // Display names are strongly recommended for clarity.
     // Display name can also be an object for different levels.
-    displayName?: string | {
-        // @ts-ignore - TS wants the key to be a string, but we know better
-        [level: SettingLevel]: string;
-    };
+    displayName?:
+        | string
+        | {
+              // @ts-ignore - TS wants the key to be a string, but we know better
+              [level: SettingLevel]: string;
+          };
 
     // Optional description which will be shown as microCopy under SettingsFlags
     description?: string | (() => ReactNode);
@@ -194,7 +175,7 @@ export interface IFeature extends Omit<IBaseSetting<boolean>, "isFeature"> {
 // Type using I-identifier for backwards compatibility from before it became a discriminated union
 export type ISetting = IBaseSetting | IFeature;
 
-export const SETTINGS: {[setting: string]: ISetting} = {
+export const SETTINGS: { [setting: string]: ISetting } = {
     "feature_video_rooms": {
         isFeature: true,
         labsGroup: LabGroup.VoiceAndVideo,
@@ -205,28 +186,33 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         controller: new ReloadOnChangeController(),
         betaInfo: {
             title: _td("Video rooms"),
-            caption: () => <>
-                <p>
-                    { _t("A new way to chat over voice and video in %(brand)s.", {
-                        brand: SdkConfig.get().brand,
-                    }) }
-                </p>
-                <p>
-                    { _t("Video rooms are always-on VoIP channels embedded within a room in %(brand)s.", {
-                        brand: SdkConfig.get().brand,
-                    }) }
-                </p>
-            </>,
+            caption: () => (
+                <>
+                    <p>
+                        {_t("A new way to chat over voice and video in %(brand)s.", {
+                            brand: SdkConfig.get().brand,
+                        })}
+                    </p>
+                    <p>
+                        {_t("Video rooms are always-on VoIP channels embedded within a room in %(brand)s.", {
+                            brand: SdkConfig.get().brand,
+                        })}
+                    </p>
+                </>
+            ),
             faq: () =>
-                SdkConfig.get().bug_report_endpoint_url && <>
-                    <h4>{ _t("How can I create a video room?") }</h4>
-                    <p>{ _t("Use the “+” button in the room section of the left panel.") }</p>
-                    <h4>{ _t("Can I use text chat alongside the video call?") }</h4>
-                    <p>{ _t("Yes, the chat timeline is displayed alongside the video.") }</p>
-                </>,
+                SdkConfig.get().bug_report_endpoint_url && (
+                    <>
+                        <h4>{_t("How can I create a video room?")}</h4>
+                        <p>{_t("Use the “+” button in the room section of the left panel.")}</p>
+                        <h4>{_t("Can I use text chat alongside the video call?")}</h4>
+                        <p>{_t("Yes, the chat timeline is displayed alongside the video.")}</p>
+                    </>
+                ),
             feedbackLabel: "video-room-feedback",
-            feedbackSubheading: _td("Thank you for trying the beta, " +
-                "please go into as much detail as you can so we can improve it."),
+            feedbackSubheading: _td(
+                "Thank you for trying the beta, " + "please go into as much detail as you can so we can improve it.",
+            ),
             image: require("../../res/img/betas/video_rooms.png"),
             requiresRefresh: true,
         },
@@ -250,8 +236,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         labsGroup: LabGroup.Moderation,
         displayName: _td("Report to moderators"),
         description: _td(
-            "In rooms that support moderation, "
-            +"the “Report” button will let you report abuse to room moderators.",
+            "In rooms that support moderation, " + "the “Report” button will let you report abuse to room moderators.",
         ),
         supportedLevels: LEVELS_FEATURE,
         default: false,
@@ -279,36 +264,48 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         default: false,
         betaInfo: {
             title: _td("Threads"),
-            caption: () => <>
-                <p>{ _t("Keep discussions organised with threads.") }</p>
-                <p>{ _t("Threads help keep conversations on-topic and easy to track. <a>Learn more</a>.", {}, {
-                    a: (sub) => <a href="https://element.io/help#threads" rel="noreferrer noopener" target="_blank">
-                        { sub }
-                    </a>,
-                }) }</p>
-            </>,
+            caption: () => (
+                <>
+                    <p>{_t("Keep discussions organised with threads.")}</p>
+                    <p>
+                        {_t(
+                            "Threads help keep conversations on-topic and easy to track. <a>Learn more</a>.",
+                            {},
+                            {
+                                a: (sub) => (
+                                    <a href="https://element.io/help#threads" rel="noreferrer noopener" target="_blank">
+                                        {sub}
+                                    </a>
+                                ),
+                            },
+                        )}
+                    </p>
+                </>
+            ),
             faq: () =>
-                SdkConfig.get().bug_report_endpoint_url && <>
-                    <h4>{ _t("How can I start a thread?") }</h4>
-                    <p>
-                        { _t("Use “%(replyInThread)s” when hovering over a message.", {
-                            replyInThread: _t("Reply in thread"),
-                        }) }
-                    </p>
-                    <h4>{ _t("How can I leave the beta?") }</h4>
-                    <p>
-                        { _t("To leave, return to this page and use the “%(leaveTheBeta)s” button.", {
-                            leaveTheBeta: _t("Leave the beta"),
-                        }) }
-                    </p>
-                </>,
+                SdkConfig.get().bug_report_endpoint_url && (
+                    <>
+                        <h4>{_t("How can I start a thread?")}</h4>
+                        <p>
+                            {_t("Use “%(replyInThread)s” when hovering over a message.", {
+                                replyInThread: _t("Reply in thread"),
+                            })}
+                        </p>
+                        <h4>{_t("How can I leave the beta?")}</h4>
+                        <p>
+                            {_t("To leave, return to this page and use the “%(leaveTheBeta)s” button.", {
+                                leaveTheBeta: _t("Leave the beta"),
+                            })}
+                        </p>
+                    </>
+                ),
             feedbackLabel: "thread-feedback",
-            feedbackSubheading: _td("Thank you for trying the beta, " +
-                "please go into as much detail as you can so we can improve it."),
+            feedbackSubheading: _td(
+                "Thank you for trying the beta, " + "please go into as much detail as you can so we can improve it.",
+            ),
             image: require("../../res/img/betas/threads.png"),
             requiresRefresh: true,
         },
-
     },
     "feature_wysiwyg_composer": {
         isFeature: true,
@@ -434,7 +431,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         isFeature: true,
         labsGroup: LabGroup.Developer,
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
-        displayName: _td('Sliding Sync mode'),
+        displayName: _td("Sliding Sync mode"),
         description: _td("Under active development, cannot be disabled."),
         shouldWarn: true,
         default: false,
@@ -492,20 +489,18 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         displayName: _td("Use new session manager"),
         default: false,
         betaInfo: {
-            title: _td('New session manager'),
-            caption: () => <>
-                <p>
-                    { _td('Have greater visibility and control over all your sessions.') }
-                </p>
-                <p>
-                    { _td(
-                        'Our new sessions manager provides better visibility of all your sessions, '
-                        + 'and greater control over them including the ability to remotely toggle push notifications.',
-                    )
-                    }
-                </p>
-
-            </>,
+            title: _td("New session manager"),
+            caption: () => (
+                <>
+                    <p>{_td("Have greater visibility and control over all your sessions.")}</p>
+                    <p>
+                        {_td(
+                            "Our new sessions manager provides better visibility of all your sessions, " +
+                                "and greater control over them including the ability to remotely toggle push notifications.",
+                        )}
+                    </p>
+                </>
+            ),
         },
     },
     "feature_qr_signin_reciprocate_show": {
@@ -514,7 +509,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevels: LEVELS_FEATURE,
         displayName: _td(
             "Allow a QR code to be shown in session manager to sign in another device " +
-            "(requires compatible homeserver)",
+                "(requires compatible homeserver)",
         ),
         default: false,
     },
@@ -531,24 +526,24 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     },
     "MessageComposerInput.suggestEmoji": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td('Enable Emoji suggestions while typing'),
+        displayName: _td("Enable Emoji suggestions while typing"),
         default: true,
-        invertedSettingName: 'MessageComposerInput.dontSuggestEmoji',
+        invertedSettingName: "MessageComposerInput.dontSuggestEmoji",
     },
     "MessageComposerInput.showStickersButton": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td('Show stickers button'),
+        displayName: _td("Show stickers button"),
         default: true,
         controller: new UIFeatureController(UIFeature.Widgets, false),
     },
     "MessageComposerInput.showPollsButton": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td('Show polls button'),
+        displayName: _td("Show polls button"),
         default: true,
     },
     "MessageComposerInput.insertTrailingColon": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td('Insert a trailing colon after user mentions at the start of a message'),
+        displayName: _td("Insert a trailing colon after user mentions at the start of a message"),
         default: true,
     },
     // TODO: Wire up appropriately to UI (FTUE notifications)
@@ -571,85 +566,85 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     },
     "showRedactions": {
         supportedLevels: LEVELS_ROOM_SETTINGS_WITH_ROOM,
-        displayName: _td('Show a placeholder for removed messages'),
+        displayName: _td("Show a placeholder for removed messages"),
         default: true,
-        invertedSettingName: 'hideRedactions',
+        invertedSettingName: "hideRedactions",
     },
     "showJoinLeaves": {
         supportedLevels: LEVELS_ROOM_SETTINGS_WITH_ROOM,
-        displayName: _td('Show join/leave messages (invites/removes/bans unaffected)'),
+        displayName: _td("Show join/leave messages (invites/removes/bans unaffected)"),
         default: true,
-        invertedSettingName: 'hideJoinLeaves',
+        invertedSettingName: "hideJoinLeaves",
     },
     "showAvatarChanges": {
         supportedLevels: LEVELS_ROOM_SETTINGS_WITH_ROOM,
-        displayName: _td('Show avatar changes'),
+        displayName: _td("Show avatar changes"),
         default: true,
-        invertedSettingName: 'hideAvatarChanges',
+        invertedSettingName: "hideAvatarChanges",
     },
     "showDisplaynameChanges": {
         supportedLevels: LEVELS_ROOM_SETTINGS_WITH_ROOM,
-        displayName: _td('Show display name changes'),
+        displayName: _td("Show display name changes"),
         default: true,
-        invertedSettingName: 'hideDisplaynameChanges',
+        invertedSettingName: "hideDisplaynameChanges",
     },
     "showReadReceipts": {
         supportedLevels: LEVELS_ROOM_SETTINGS,
-        displayName: _td('Show read receipts sent by other users'),
+        displayName: _td("Show read receipts sent by other users"),
         default: true,
-        invertedSettingName: 'hideReadReceipts',
+        invertedSettingName: "hideReadReceipts",
     },
     "showTwelveHourTimestamps": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td('Show timestamps in 12 hour format (e.g. 2:30pm)'),
+        displayName: _td("Show timestamps in 12 hour format (e.g. 2:30pm)"),
         default: false,
     },
     "alwaysShowTimestamps": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td('Always show message timestamps'),
+        displayName: _td("Always show message timestamps"),
         default: false,
     },
     "autoplayGifs": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td('Autoplay GIFs'),
+        displayName: _td("Autoplay GIFs"),
         default: false,
     },
     "autoplayVideo": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td('Autoplay videos'),
+        displayName: _td("Autoplay videos"),
         default: false,
     },
     "enableSyntaxHighlightLanguageDetection": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td('Enable automatic language detection for syntax highlighting'),
+        displayName: _td("Enable automatic language detection for syntax highlighting"),
         default: false,
     },
     "expandCodeByDefault": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td('Expand code blocks by default'),
+        displayName: _td("Expand code blocks by default"),
         default: false,
     },
     "showCodeLineNumbers": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td('Show line numbers in code blocks'),
+        displayName: _td("Show line numbers in code blocks"),
         default: true,
     },
     "scrollToBottomOnMessageSent": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td('Jump to the bottom of the timeline when you send a message'),
+        displayName: _td("Jump to the bottom of the timeline when you send a message"),
         default: true,
     },
     "Pill.shouldShowPillAvatar": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td('Show avatars in user and room mentions'),
+        displayName: _td("Show avatars in user and room mentions"),
         default: true,
-        invertedSettingName: 'Pill.shouldHidePillAvatar',
+        invertedSettingName: "Pill.shouldHidePillAvatar",
     },
     "TextualBody.enableBigEmoji": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td('Enable big emoji in chat'),
+        displayName: _td("Enable big emoji in chat"),
         default: true,
-        invertedSettingName: 'TextualBody.disableBigEmoji',
+        invertedSettingName: "TextualBody.disableBigEmoji",
     },
     "MessageComposerInput.isRichTextEnabled": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
@@ -663,7 +658,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td("Send typing notifications"),
         default: true,
-        invertedSettingName: 'dontSendTypingNotifications',
+        invertedSettingName: "dontSendTypingNotifications",
     },
     "showTypingNotifications": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
@@ -687,22 +682,23 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     },
     "MessageComposerInput.autoReplaceEmoji": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td('Automatically replace plain text Emoji'),
+        displayName: _td("Automatically replace plain text Emoji"),
         default: false,
     },
     "MessageComposerInput.useMarkdown": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td('Enable Markdown'),
-        description: () => _t(
-            "Start messages with <code>/plain</code> to send without markdown and <code>/md</code> to send with.",
-            {},
-            { code: (sub) => <code>{ sub }</code> },
-        ),
+        displayName: _td("Enable Markdown"),
+        description: () =>
+            _t(
+                "Start messages with <code>/plain</code> to send without markdown and <code>/md</code> to send with.",
+                {},
+                { code: (sub) => <code>{sub}</code> },
+            ),
         default: true,
     },
     "VideoView.flipVideoHorizontally": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td('Mirror local video feed'),
+        displayName: _td("Mirror local video feed"),
         default: false,
     },
     "theme": {
@@ -736,7 +732,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         displayName: _td("Allow Peer-to-Peer for 1:1 calls"),
         description: _td("When enabled, the other party might be able to see your IP address"),
         default: true,
-        invertedSettingName: 'webRtcForceTURN',
+        invertedSettingName: "webRtcForceTURN",
     },
     "webrtc_audiooutput": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
@@ -804,14 +800,13 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     },
     "pseudonymousAnalyticsOptIn": {
         supportedLevels: [SettingLevel.ACCOUNT],
-        displayName: _td('Send analytics data'),
+        displayName: _td("Send analytics data"),
         default: null,
     },
     "deviceClientInformationOptIn": {
         supportedLevels: [SettingLevel.ACCOUNT],
         displayName: _td(
-            `Record the client name, version, and url ` +
-            `to recognise sessions more easily in session manager`,
+            `Record the client name, version, and url ` + `to recognise sessions more easily in session manager`,
         ),
         default: false,
     },
@@ -837,8 +832,8 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevels: [SettingLevel.ROOM_DEVICE, SettingLevel.DEVICE],
         supportedLevelsAreOrdered: true,
         displayName: {
-            "default": _td('Never send encrypted messages to unverified sessions from this session'),
-            "room-device": _td('Never send encrypted messages to unverified sessions in this room from this session'),
+            "default": _td("Never send encrypted messages to unverified sessions from this session"),
+            "room-device": _td("Never send encrypted messages to unverified sessions in this room from this session"),
         },
         default: false,
         controller: new UIFeatureController(UIFeature.AdvancedEncryption),
@@ -846,7 +841,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     "urlPreviewsEnabled": {
         supportedLevels: LEVELS_ROOM_SETTINGS_WITH_ROOM,
         displayName: {
-            "default": _td('Enable inline URL previews by default'),
+            "default": _td("Enable inline URL previews by default"),
             "room-account": _td("Enable URL previews for this room (only affects you)"),
             "room": _td("Enable URL previews by default for participants in this room"),
         },
@@ -885,12 +880,12 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     },
     "enableWidgetScreenshots": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td('Enable widget screenshots on supported widgets'),
+        displayName: _td("Enable widget screenshots on supported widgets"),
         default: false,
     },
     "promptBeforeInviteUnknownUsers": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td('Prompt before sending invites to potentially invalid matrix IDs'),
+        displayName: _td("Prompt before sending invites to potentially invalid matrix IDs"),
         default: true,
     },
     "widgetOpenIDPermissions": {
@@ -930,7 +925,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     },
     "lowBandwidth": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
-        displayName: _td('Low bandwidth mode'),
+        displayName: _td("Low bandwidth mode"),
         description: _td("Requires compatible homeserver."),
         default: false,
         controller: new ReloadOnChangeController(),
@@ -940,8 +935,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         displayName: _td("Allow fallback call assist server (turn.matrix.org)"),
         description: _td(
-            "Only applies if your homeserver does not offer one. " +
-            "Your IP address would be shared during a call.",
+            "Only applies if your homeserver does not offer one. " + "Your IP address would be shared during a call.",
         ),
         // This is a tri-state value, where `null` means "prompt the user".
         default: null,
@@ -985,9 +979,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
             // show up and can't be toggled. PushToMatrixClientController doesn't
             // do any overrides anyways.
             new UIFeatureController(UIFeature.AdvancedEncryption),
-            new PushToMatrixClientController(
-                MatrixClient.prototype.setCryptoTrustCrossSignedDevices, true,
-            ),
+            new PushToMatrixClientController(MatrixClient.prototype.setCryptoTrustCrossSignedDevices, true),
         ]),
     },
     "ircDisplayNameWidth": {
@@ -1016,7 +1008,8 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevels: [SettingLevel.CONFIG],
         default: false,
     },
-    "Widgets.pinned": { // deprecated
+    "Widgets.pinned": {
+        // deprecated
         supportedLevels: LEVELS_ROOM_OR_ACCOUNT,
         default: {},
     },

@@ -37,12 +37,7 @@ export default class Login {
     private defaultDeviceDisplayName: string;
     private tempClient: MatrixClient;
 
-    constructor(
-        hsUrl: string,
-        isUrl: string,
-        fallbackHsUrl?: string,
-        opts?: ILoginOptions,
-    ) {
+    constructor(hsUrl: string, isUrl: string, fallbackHsUrl?: string, opts?: ILoginOptions) {
         this.hsUrl = hsUrl;
         this.isUrl = isUrl;
         this.fallbackHsUrl = fallbackHsUrl;
@@ -102,7 +97,7 @@ export default class Login {
         let identifier;
         if (phoneCountry && phoneNumber) {
             identifier = {
-                type: 'm.id.phone',
+                type: "m.id.phone",
                 country: phoneCountry,
                 phone: phoneNumber,
                 // XXX: Synapse historically wanted `number` and not `phone`
@@ -110,13 +105,13 @@ export default class Login {
             };
         } else if (isEmail) {
             identifier = {
-                type: 'm.id.thirdparty',
-                medium: 'email',
+                type: "m.id.thirdparty",
+                medium: "email",
                 address: username,
             };
         } else {
             identifier = {
-                type: 'm.id.user',
+                type: "m.id.user",
                 user: username,
             };
         }
@@ -128,30 +123,30 @@ export default class Login {
         };
 
         const tryFallbackHs = (originalError) => {
-            return sendLoginRequest(
-                this.fallbackHsUrl, this.isUrl, 'm.login.password', loginParams,
-            ).catch((fallbackError) => {
-                logger.log("fallback HS login failed", fallbackError);
-                // throw the original error
-                throw originalError;
-            });
+            return sendLoginRequest(this.fallbackHsUrl, this.isUrl, "m.login.password", loginParams).catch(
+                (fallbackError) => {
+                    logger.log("fallback HS login failed", fallbackError);
+                    // throw the original error
+                    throw originalError;
+                },
+            );
         };
 
         let originalLoginError = null;
-        return sendLoginRequest(
-            this.hsUrl, this.isUrl, 'm.login.password', loginParams,
-        ).catch((error) => {
-            originalLoginError = error;
-            if (error.httpStatus === 403) {
-                if (this.fallbackHsUrl) {
-                    return tryFallbackHs(originalLoginError);
+        return sendLoginRequest(this.hsUrl, this.isUrl, "m.login.password", loginParams)
+            .catch((error) => {
+                originalLoginError = error;
+                if (error.httpStatus === 403) {
+                    if (this.fallbackHsUrl) {
+                        return tryFallbackHs(originalLoginError);
+                    }
                 }
-            }
-            throw originalLoginError;
-        }).catch((error) => {
-            logger.log("Login failed", error);
-            throw error;
-        });
+                throw originalLoginError;
+            })
+            .catch((error) => {
+                logger.log("Login failed", error);
+                throw error;
+            });
     }
 }
 

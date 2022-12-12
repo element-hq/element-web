@@ -33,14 +33,14 @@ export function UserOnboardingFeedback() {
         <div className="mx_UserOnboardingFeedback">
             <div className="mx_UserOnboardingFeedback_content">
                 <Heading size="h4" className="mx_UserOnboardingFeedback_title">
-                    { _t("How are you finding %(brand)s so far?", {
+                    {_t("How are you finding %(brand)s so far?", {
                         brand: SdkConfig.get("brand"),
-                    }) }
+                    })}
                 </Heading>
                 <div className="mx_UserOnboardingFeedback_text">
-                    { _t("We’d appreciate any feedback on how you’re finding %(brand)s.", {
+                    {_t("We’d appreciate any feedback on how you’re finding %(brand)s.", {
                         brand: SdkConfig.get("brand"),
-                    }) }
+                    })}
                 </div>
             </div>
             <AccessibleButton
@@ -52,7 +52,7 @@ export function UserOnboardingFeedback() {
                     });
                 }}
             >
-                { _t("Feedback") }
+                {_t("Feedback")}
             </AccessibleButton>
         </div>
     );

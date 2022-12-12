@@ -15,10 +15,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { filesize } from 'filesize';
+import { filesize } from "filesize";
 
-import { IMediaEventContent } from '../customisations/models/IMediaEventContent';
-import { _t } from '../languageHandler';
+import { IMediaEventContent } from "../customisations/models/IMediaEventContent";
+import { _t } from "../languageHandler";
 
 /**
  * Extracts a human readable label for the file attachment to use as
@@ -47,13 +47,16 @@ export function presentableTextForFile(
     // will have a 3 character (plus full stop) extension. The goal is to knock
     // the label down to 15-25 characters, not perfect accuracy.
     if (shortened && text.length > 19) {
-        const parts = text.split('.');
-        let fileName = parts.slice(0, parts.length - 1).join('.').substring(0, 15);
+        const parts = text.split(".");
+        let fileName = parts
+            .slice(0, parts.length - 1)
+            .join(".")
+            .substring(0, 15);
         const extension = parts[parts.length - 1];
 
         // Trim off any full stops from the file name to avoid a case where we
         // add an ellipsis that looks really funky.
-        fileName = fileName.replace(/\.*$/g, '');
+        fileName = fileName.replace(/\.*$/g, "");
 
         text = `${fileName}...${extension}`;
     }
@@ -66,7 +69,7 @@ export function presentableTextForFile(
         // it since it is "ugly", users generally aren't aware what it
         // means and the type of the attachment can usually be inferred
         // from the file extension.
-        text += ' (' + filesize(content.info.size) + ')';
+        text += " (" + filesize(content.info.size) + ")";
     }
     return text;
 }

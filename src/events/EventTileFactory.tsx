@@ -111,7 +111,7 @@ const STATE_EVENT_TILE_TYPES = new Map<string, Factory>([
     [EventType.RoomPinnedEvents, TextualEventFactory],
     [EventType.RoomServerAcl, TextualEventFactory],
     // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
-    ['im.vector.modular.widgets', TextualEventFactory], // note that Jitsi widgets are special in pickFactory()
+    ["im.vector.modular.widgets", TextualEventFactory], // note that Jitsi widgets are special in pickFactory()
     [WIDGET_LAYOUT_EVENT_TYPE, TextualEventFactory],
     [EventType.RoomTombstone, TextualEventFactory],
     [EventType.RoomJoinRules, TextualEventFactory],
@@ -167,9 +167,7 @@ export function pickFactory(
         return JSONEventFactory;
     }
 
-    const noEventFactoryFactory: (() => Optional<Factory>) = () => showHiddenEvents
-        ? JSONEventFactory
-        : undefined; // just don't render things that we shouldn't render
+    const noEventFactoryFactory: () => Optional<Factory> = () => (showHiddenEvents ? JSONEventFactory : undefined); // just don't render things that we shouldn't render
 
     // We run all the event type checks first as they might override the factory entirely.
 
@@ -184,7 +182,7 @@ export function pickFactory(
         const content = mxEvent.getContent();
         if (content?.msgtype === MsgType.KeyVerificationRequest) {
             const me = cli.getUserId();
-            if (mxEvent.getSender() !== me && content['to'] !== me) {
+            if (mxEvent.getSender() !== me && content["to"] !== me) {
                 return noEventFactoryFactory(); // not for/from us
             } else {
                 // override the factory
@@ -212,10 +210,10 @@ export function pickFactory(
 
     // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
     if (evType === "im.vector.modular.widgets") {
-        let type = mxEvent.getContent()['type'];
+        let type = mxEvent.getContent()["type"];
         if (!type) {
             // deleted/invalid widget - try the past widget type
-            type = mxEvent.getPrevContent()['type'];
+            type = mxEvent.getPrevContent()["type"];
         }
 
         if (WidgetType.JITSI.matches(type)) {
@@ -236,7 +234,7 @@ export function pickFactory(
             return TextualEventFactory;
         }
 
-        if (SINGULAR_STATE_EVENTS.has(evType) && mxEvent.getStateKey() !== '') {
+        if (SINGULAR_STATE_EVENTS.has(evType) && mxEvent.getStateKey() !== "") {
             return noEventFactoryFactory(); // improper event type to render
         }
 
@@ -394,7 +392,7 @@ export function renderReplyTile(
 // XXX: this'll eventually be dynamic based on the fields once we have extensible event types
 const messageTypes = [EventType.RoomMessage, EventType.Sticker];
 export function isMessageEvent(ev: MatrixEvent): boolean {
-    return (messageTypes.includes(ev.getType() as EventType)) || M_POLL_START.matches(ev.getType());
+    return messageTypes.includes(ev.getType() as EventType) || M_POLL_START.matches(ev.getType());
 }
 
 export function haveRendererForEvent(mxEvent: MatrixEvent, showHiddenEvents: boolean): boolean {
@@ -412,12 +410,14 @@ export function haveRendererForEvent(mxEvent: MatrixEvent, showHiddenEvents: boo
     if (handler === TextualEventFactory) {
         return hasText(mxEvent, showHiddenEvents);
     } else if (handler === STATE_EVENT_TILE_TYPES.get(EventType.RoomCreate)) {
-        return Boolean(mxEvent.getContent()['predecessor']);
-    } else if (ElementCall.CALL_EVENT_TYPE.names.some(eventType => handler === STATE_EVENT_TILE_TYPES.get(eventType))) {
-        const intent = mxEvent.getContent()['m.intent'];
+        return Boolean(mxEvent.getContent()["predecessor"]);
+    } else if (
+        ElementCall.CALL_EVENT_TYPE.names.some((eventType) => handler === STATE_EVENT_TILE_TYPES.get(eventType))
+    ) {
+        const intent = mxEvent.getContent()["m.intent"];
         const newlyStarted = Object.keys(mxEvent.getPrevContent()).length === 0;
         // Only interested in events that mark the start of a non-room call
-        return newlyStarted && typeof intent === 'string' && intent !== GroupCallIntent.Room;
+        return newlyStarted && typeof intent === "string" && intent !== GroupCallIntent.Room;
     } else if (handler === JSONEventFactory) {
         return false;
     } else {

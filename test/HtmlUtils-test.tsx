@@ -14,13 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 // eslint-disable-next-line deprecate/import
-import { mount } from 'enzyme';
-import { mocked } from 'jest-mock';
+import { mount } from "enzyme";
+import { mocked } from "jest-mock";
 
-import { topicToHtml } from '../src/HtmlUtils';
-import SettingsStore from '../src/settings/SettingsStore';
+import { topicToHtml } from "../src/HtmlUtils";
+import SettingsStore from "../src/settings/SettingsStore";
 
 jest.mock("../src/settings/SettingsStore");
 
@@ -30,38 +30,39 @@ const enableHtmlTopicFeature = () => {
     });
 };
 
-describe('HtmlUtils', () => {
-    it('converts plain text topic to HTML', () => {
-        const component = mount(<div>{ topicToHtml("pizza", null, null, false) }</div>);
+describe("HtmlUtils", () => {
+    it("converts plain text topic to HTML", () => {
+        const component = mount(<div>{topicToHtml("pizza", null, null, false)}</div>);
         const wrapper = component.render();
         expect(wrapper.children().first().html()).toEqual("pizza");
     });
 
-    it('converts plain text topic with emoji to HTML', () => {
-        const component = mount(<div>{ topicToHtml("pizza 🍕", null, null, false) }</div>);
+    it("converts plain text topic with emoji to HTML", () => {
+        const component = mount(<div>{topicToHtml("pizza 🍕", null, null, false)}</div>);
         const wrapper = component.render();
-        expect(wrapper.children().first().html()).toEqual("pizza <span class=\"mx_Emoji\" title=\":pizza:\">🍕</span>");
+        expect(wrapper.children().first().html()).toEqual('pizza <span class="mx_Emoji" title=":pizza:">🍕</span>');
     });
 
-    it('converts literal HTML topic to HTML', async () => {
+    it("converts literal HTML topic to HTML", async () => {
         enableHtmlTopicFeature();
-        const component = mount(<div>{ topicToHtml("<b>pizza</b>", null, null, false) }</div>);
+        const component = mount(<div>{topicToHtml("<b>pizza</b>", null, null, false)}</div>);
         const wrapper = component.render();
         expect(wrapper.children().first().html()).toEqual("&lt;b&gt;pizza&lt;/b&gt;");
     });
 
-    it('converts true HTML topic to HTML', async () => {
+    it("converts true HTML topic to HTML", async () => {
         enableHtmlTopicFeature();
-        const component = mount(<div>{ topicToHtml("**pizza**", "<b>pizza</b>", null, false) }</div>);
+        const component = mount(<div>{topicToHtml("**pizza**", "<b>pizza</b>", null, false)}</div>);
         const wrapper = component.render();
         expect(wrapper.children().first().html()).toEqual("<b>pizza</b>");
     });
 
-    it('converts true HTML topic with emoji to HTML', async () => {
+    it("converts true HTML topic with emoji to HTML", async () => {
         enableHtmlTopicFeature();
-        const component = mount(<div>{ topicToHtml("**pizza** 🍕", "<b>pizza</b> 🍕", null, false) }</div>);
+        const component = mount(<div>{topicToHtml("**pizza** 🍕", "<b>pizza</b> 🍕", null, false)}</div>);
         const wrapper = component.render();
-        expect(wrapper.children().first().html())
-            .toEqual("<b>pizza</b> <span class=\"mx_Emoji\" title=\":pizza:\">🍕</span>");
+        expect(wrapper.children().first().html()).toEqual(
+            '<b>pizza</b> <span class="mx_Emoji" title=":pizza:">🍕</span>',
+        );
     });
 });

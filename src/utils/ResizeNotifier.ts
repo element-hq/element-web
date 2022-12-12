@@ -76,4 +76,3 @@ export default class ResizeNotifier extends EventEmitter {
         this.updateMiddlePanel();
     }
 }
-

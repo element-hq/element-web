@@ -16,33 +16,33 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactNode } from 'react';
-import { logger } from 'matrix-js-sdk/src/logger';
+import React, { ReactNode } from "react";
+import { logger } from "matrix-js-sdk/src/logger";
 import { createClient } from "matrix-js-sdk/src/matrix";
-import { sleep } from 'matrix-js-sdk/src/utils';
+import { sleep } from "matrix-js-sdk/src/utils";
 
-import { _t, _td } from '../../../languageHandler';
+import { _t, _td } from "../../../languageHandler";
 import Modal from "../../../Modal";
 import PasswordReset from "../../../PasswordReset";
 import AuthPage from "../../views/auth/AuthPage";
-import PassphraseField from '../../views/auth/PassphraseField';
-import { PASSWORD_MIN_SCORE } from '../../views/auth/RegistrationForm';
+import PassphraseField from "../../views/auth/PassphraseField";
+import { PASSWORD_MIN_SCORE } from "../../views/auth/RegistrationForm";
 import AuthHeader from "../../views/auth/AuthHeader";
 import AuthBody from "../../views/auth/AuthBody";
 import PassphraseConfirmField from "../../views/auth/PassphraseConfirmField";
-import StyledCheckbox from '../../views/elements/StyledCheckbox';
-import { ValidatedServerConfig } from '../../../utils/ValidatedServerConfig';
+import StyledCheckbox from "../../views/elements/StyledCheckbox";
+import { ValidatedServerConfig } from "../../../utils/ValidatedServerConfig";
 import { Icon as LockIcon } from "../../../../res/img/element-icons/lock.svg";
-import QuestionDialog from '../../views/dialogs/QuestionDialog';
-import { EnterEmail } from './forgot-password/EnterEmail';
-import { CheckEmail } from './forgot-password/CheckEmail';
-import Field from '../../views/elements/Field';
-import { ErrorMessage } from '../ErrorMessage';
+import QuestionDialog from "../../views/dialogs/QuestionDialog";
+import { EnterEmail } from "./forgot-password/EnterEmail";
+import { CheckEmail } from "./forgot-password/CheckEmail";
+import Field from "../../views/elements/Field";
+import { ErrorMessage } from "../ErrorMessage";
 import { Icon as CheckboxIcon } from "../../../../res/img/element-icons/Checkbox.svg";
-import { VerifyEmailModal } from './forgot-password/VerifyEmailModal';
-import Spinner from '../../views/elements/Spinner';
-import { formatSeconds } from '../../../DateUtils';
-import AutoDiscoveryUtils from '../../../utils/AutoDiscoveryUtils';
+import { VerifyEmailModal } from "./forgot-password/VerifyEmailModal";
+import Spinner from "../../views/elements/Spinner";
+import { formatSeconds } from "../../../DateUtils";
+import AutoDiscoveryUtils from "../../../utils/AutoDiscoveryUtils";
 
 const emailCheckInterval = 2000;
 
@@ -115,7 +115,8 @@ export default class ForgotPassword extends React.Component<Props, State> {
     }
 
     public componentDidUpdate(prevProps: Readonly<Props>) {
-        if (prevProps.serverConfig.hsUrl !== this.props.serverConfig.hsUrl ||
+        if (
+            prevProps.serverConfig.hsUrl !== this.props.serverConfig.hsUrl ||
             prevProps.serverConfig.isUrl !== this.props.serverConfig.isUrl
         ) {
             // Do a liveliness check on the new URLs
@@ -128,19 +129,16 @@ export default class ForgotPassword extends React.Component<Props, State> {
 
     private async checkServerLiveliness(serverConfig: ValidatedServerConfig): Promise<void> {
         try {
-            await AutoDiscoveryUtils.validateServerConfigWithStaticUrls(
-                serverConfig.hsUrl,
-                serverConfig.isUrl,
-            );
+            await AutoDiscoveryUtils.validateServerConfigWithStaticUrls(serverConfig.hsUrl, serverConfig.isUrl);
 
             this.setState({
                 serverIsAlive: true,
             });
         } catch (e: any) {
-            const {
-                serverIsAlive,
-                serverDeadError,
-            } = AutoDiscoveryUtils.authComponentStateForError(e, "forgot_password");
+            const { serverIsAlive, serverDeadError } = AutoDiscoveryUtils.authComponentStateForError(
+                e,
+                "forgot_password",
+            );
             this.setState({
                 serverIsAlive,
                 errorText: serverDeadError,
@@ -190,12 +188,9 @@ export default class ForgotPassword extends React.Component<Props, State> {
 
             const errorText = isNaN(retryAfterMs)
                 ? _t("Too many attempts in a short time. Wait some time before trying again.")
-                : _t(
-                    "Too many attempts in a short time. Retry after %(timeout)s.",
-                    {
-                        timeout: formatSeconds(retryAfterMs / 1000),
-                    },
-                );
+                : _t("Too many attempts in a short time. Retry after %(timeout)s.", {
+                      timeout: formatSeconds(retryAfterMs / 1000),
+                  });
 
             this.setState({
                 errorText,
@@ -205,8 +200,10 @@ export default class ForgotPassword extends React.Component<Props, State> {
 
         if (err?.name === "ConnectionError") {
             this.setState({
-                errorText: _t("Cannot reach homeserver") + ": "
-                    + _t("Ensure you have a stable internet connection, or get in touch with the server admin"),
+                errorText:
+                    _t("Cannot reach homeserver") +
+                    ": " +
+                    _t("Ensure you have a stable internet connection, or get in touch with the server admin"),
             });
             return;
         }
@@ -227,10 +224,7 @@ export default class ForgotPassword extends React.Component<Props, State> {
     }
 
     private async verifyFieldsBeforeSubmit(): Promise<boolean> {
-        const fieldIdsInDisplayOrder = [
-            this.fieldPassword,
-            this.fieldPasswordConfirm,
-        ];
+        const fieldIdsInDisplayOrder = [this.fieldPassword, this.fieldPasswordConfirm];
 
         const invalidFields: Field[] = [];
 
@@ -256,7 +250,7 @@ export default class ForgotPassword extends React.Component<Props, State> {
     }
 
     private async onPhasePasswordInputSubmit(): Promise<void> {
-        if (!await this.verifyFieldsBeforeSubmit()) return;
+        if (!(await this.verifyFieldsBeforeSubmit())) return;
 
         if (this.state.logoutDevices) {
             const logoutDevicesConfirmation = await this.renderConfirmLogoutDevicesDialog();
@@ -357,124 +351,137 @@ export default class ForgotPassword extends React.Component<Props, State> {
     };
 
     renderEnterEmail(): JSX.Element {
-        return <EnterEmail
-            email={this.state.email}
-            errorText={this.state.errorText}
-            homeserver={this.props.serverConfig.hsName}
-            loading={this.state.phase === Phase.SendingEmail}
-            onInputChanged={this.onInputChanged}
-            onLoginClick={this.props.onLoginClick!} // set by default props
-            onSubmitForm={this.onSubmitForm}
-        />;
+        return (
+            <EnterEmail
+                email={this.state.email}
+                errorText={this.state.errorText}
+                homeserver={this.props.serverConfig.hsName}
+                loading={this.state.phase === Phase.SendingEmail}
+                onInputChanged={this.onInputChanged}
+                onLoginClick={this.props.onLoginClick!} // set by default props
+                onSubmitForm={this.onSubmitForm}
+            />
+        );
     }
 
     async renderConfirmLogoutDevicesDialog(): Promise<boolean> {
         const { finished } = Modal.createDialog<[boolean]>(QuestionDialog, {
-            title: _t('Warning!'),
-            description:
+            title: _t("Warning!"),
+            description: (
                 <div>
-                    <p>{ !this.state.serverSupportsControlOfDevicesLogout ?
-                        _t(
-                            "Resetting your password on this homeserver will cause all of your devices to be " +
-                            "signed out. This will delete the message encryption keys stored on them, " +
-                            "making encrypted chat history unreadable.",
-                        ) :
-                        _t(
-                            "Signing out your devices will delete the message encryption keys stored on them, " +
-                            "making encrypted chat history unreadable.",
-                        )
-                    }</p>
-                    <p>{ _t(
-                        "If you want to retain access to your chat history in encrypted rooms, set up Key Backup " +
-                        "or export your message keys from one of your other devices before proceeding.",
-                    ) }</p>
-                </div>,
-            button: _t('Continue'),
+                    <p>
+                        {!this.state.serverSupportsControlOfDevicesLogout
+                            ? _t(
+                                  "Resetting your password on this homeserver will cause all of your devices to be " +
+                                      "signed out. This will delete the message encryption keys stored on them, " +
+                                      "making encrypted chat history unreadable.",
+                              )
+                            : _t(
+                                  "Signing out your devices will delete the message encryption keys stored on them, " +
+                                      "making encrypted chat history unreadable.",
+                              )}
+                    </p>
+                    <p>
+                        {_t(
+                            "If you want to retain access to your chat history in encrypted rooms, set up Key Backup " +
+                                "or export your message keys from one of your other devices before proceeding.",
+                        )}
+                    </p>
+                </div>
+            ),
+            button: _t("Continue"),
         });
         const [confirmed] = await finished;
         return confirmed;
     }
 
     renderCheckEmail(): JSX.Element {
-        return <CheckEmail
-            email={this.state.email}
-            errorText={this.state.errorText}
-            onReEnterEmailClick={() => this.setState({ phase: Phase.EnterEmail })}
-            onResendClick={this.sendVerificationMail}
-            onSubmitForm={this.onSubmitForm}
-        />;
+        return (
+            <CheckEmail
+                email={this.state.email}
+                errorText={this.state.errorText}
+                onReEnterEmailClick={() => this.setState({ phase: Phase.EnterEmail })}
+                onResendClick={this.sendVerificationMail}
+                onSubmitForm={this.onSubmitForm}
+            />
+        );
     }
 
     renderSetPassword(): JSX.Element {
-        const submitButtonChild = this.state.phase === Phase.ResettingPassword
-            ? <Spinner w={16} h={16} />
-            : _t("Reset password");
+        const submitButtonChild =
+            this.state.phase === Phase.ResettingPassword ? <Spinner w={16} h={16} /> : _t("Reset password");
 
-        return <>
-            <LockIcon className="mx_AuthBody_lockIcon" />
-            <h1>{ _t("Reset your password") }</h1>
-            <form onSubmit={this.onSubmitForm}>
-                <fieldset disabled={this.state.phase === Phase.ResettingPassword}>
-                    <div className="mx_AuthBody_fieldRow">
-                        <PassphraseField
-                            name="reset_password"
-                            type="password"
-                            label={_td("New Password")}
-                            value={this.state.password}
-                            minScore={PASSWORD_MIN_SCORE}
-                            fieldRef={field => this.fieldPassword = field}
-                            onChange={this.onInputChanged.bind(this, "password")}
-                            autoComplete="new-password"
-                        />
-                        <PassphraseConfirmField
-                            name="reset_password_confirm"
-                            label={_td("Confirm new password")}
-                            labelRequired={_td("A new password must be entered.")}
-                            labelInvalid={_td("New passwords must match each other.")}
-                            value={this.state.password2}
-                            password={this.state.password}
-                            fieldRef={field => this.fieldPasswordConfirm = field}
-                            onChange={this.onInputChanged.bind(this, "password2")}
-                            autoComplete="new-password"
-                        />
-                    </div>
-                    { this.state.serverSupportsControlOfDevicesLogout ?
+        return (
+            <>
+                <LockIcon className="mx_AuthBody_lockIcon" />
+                <h1>{_t("Reset your password")}</h1>
+                <form onSubmit={this.onSubmitForm}>
+                    <fieldset disabled={this.state.phase === Phase.ResettingPassword}>
                         <div className="mx_AuthBody_fieldRow">
-                            <StyledCheckbox onChange={() => this.setState({ logoutDevices: !this.state.logoutDevices })} checked={this.state.logoutDevices}>
-                                { _t("Sign out of all devices") }
-                            </StyledCheckbox>
-                        </div> : null
-                    }
-                    { this.state.errorText && <ErrorMessage message={this.state.errorText} /> }
-                    <button
-                        type="submit"
-                        className="mx_Login_submit"
-                    >
-                        { submitButtonChild }
-                    </button>
-                </fieldset>
-            </form>
-        </>;
+                            <PassphraseField
+                                name="reset_password"
+                                type="password"
+                                label={_td("New Password")}
+                                value={this.state.password}
+                                minScore={PASSWORD_MIN_SCORE}
+                                fieldRef={(field) => (this.fieldPassword = field)}
+                                onChange={this.onInputChanged.bind(this, "password")}
+                                autoComplete="new-password"
+                            />
+                            <PassphraseConfirmField
+                                name="reset_password_confirm"
+                                label={_td("Confirm new password")}
+                                labelRequired={_td("A new password must be entered.")}
+                                labelInvalid={_td("New passwords must match each other.")}
+                                value={this.state.password2}
+                                password={this.state.password}
+                                fieldRef={(field) => (this.fieldPasswordConfirm = field)}
+                                onChange={this.onInputChanged.bind(this, "password2")}
+                                autoComplete="new-password"
+                            />
+                        </div>
+                        {this.state.serverSupportsControlOfDevicesLogout ? (
+                            <div className="mx_AuthBody_fieldRow">
+                                <StyledCheckbox
+                                    onChange={() => this.setState({ logoutDevices: !this.state.logoutDevices })}
+                                    checked={this.state.logoutDevices}
+                                >
+                                    {_t("Sign out of all devices")}
+                                </StyledCheckbox>
+                            </div>
+                        ) : null}
+                        {this.state.errorText && <ErrorMessage message={this.state.errorText} />}
+                        <button type="submit" className="mx_Login_submit">
+                            {submitButtonChild}
+                        </button>
+                    </fieldset>
+                </form>
+            </>
+        );
     }
 
     renderDone() {
-        return <>
-            <CheckboxIcon className="mx_Icon mx_Icon_32 mx_Icon_accent" />
-            <h1>{ _t("Your password has been reset.") }</h1>
-            { this.state.logoutDevices ?
-                <p>{ _t(
-                    "You have been logged out of all devices and will no longer receive " +
-                    "push notifications. To re-enable notifications, sign in again on each " +
-                    "device.",
-                ) }</p>
-                : null
-            }
-            <input
-                className="mx_Login_submit"
-                type="button"
-                onClick={this.props.onComplete}
-                value={_t('Return to login screen')} />
-        </>;
+        return (
+            <>
+                <CheckboxIcon className="mx_Icon mx_Icon_32 mx_Icon_accent" />
+                <h1>{_t("Your password has been reset.")}</h1>
+                {this.state.logoutDevices ? (
+                    <p>
+                        {_t(
+                            "You have been logged out of all devices and will no longer receive " +
+                                "push notifications. To re-enable notifications, sign in again on each " +
+                                "device.",
+                        )}
+                    </p>
+                ) : null}
+                <input
+                    className="mx_Login_submit"
+                    type="button"
+                    onClick={this.props.onComplete}
+                    value={_t("Return to login screen")}
+                />
+            </>
+        );
     }
 
     render() {
@@ -507,9 +514,7 @@ export default class ForgotPassword extends React.Component<Props, State> {
         return (
             <AuthPage>
                 <AuthHeader />
-                <AuthBody className="mx_AuthBody_forgot-password">
-                    { resetPasswordJsx }
-                </AuthBody>
+                <AuthBody className="mx_AuthBody_forgot-password">{resetPasswordJsx}</AuthBody>
             </AuthPage>
         );
     }

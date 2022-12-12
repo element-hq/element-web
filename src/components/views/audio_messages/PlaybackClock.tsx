@@ -74,9 +74,6 @@ export default class PlaybackClock extends React.PureComponent<IProps, IState> {
                 seconds = this.state.durationSeconds;
             }
         }
-        return <Clock
-            seconds={seconds}
-            role="timer"
-        />;
+        return <Clock seconds={seconds} role="timer" />;
     }
 }

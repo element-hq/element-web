@@ -77,9 +77,9 @@ Cypress.Commands.add("getBot", (synapse: SynapseInstance, opts: CreateBotOpts): 
     opts = Object.assign({}, defaultCreateBotOptions, opts);
     const username = Cypress._.uniqueId("userId_");
     const password = Cypress._.uniqueId("password_");
-    return cy.registerUser(synapse, username, password, opts.displayName).then(credentials => {
+    return cy.registerUser(synapse, username, password, opts.displayName).then((credentials) => {
         cy.log(`Registered bot user ${username} with displayname ${opts.displayName}`);
-        return cy.window({ log: false }).then(win => {
+        return cy.window({ log: false }).then((win) => {
             const cli = new win.matrixcs.MatrixClient({
                 baseUrl: synapse.baseUrl,
                 userId: credentials.userId,
@@ -103,12 +103,17 @@ Cypress.Commands.add("getBot", (synapse: SynapseInstance, opts: CreateBotOpts): 
             }
 
             return cy.wrap(
-                cli.initCrypto()
+                cli
+                    .initCrypto()
                     .then(() => cli.setGlobalErrorOnUnknownDevices(false))
                     .then(() => cli.startClient())
-                    .then(() => cli.bootstrapCrossSigning({
-                        authUploadDeviceSigningKeys: async func => { await func({}); },
-                    }))
+                    .then(() =>
+                        cli.bootstrapCrossSigning({
+                            authUploadDeviceSigningKeys: async (func) => {
+                                await func({});
+                            },
+                        }),
+                    )
                     .then(() => cli),
             );
         });
@@ -129,13 +134,15 @@ Cypress.Commands.add("botJoinRoomByName", (cli: MatrixClient, roomName: string):
     return cy.wrap(Promise.reject(`Bot room join failed. Cannot find room '${roomName}'`));
 });
 
-Cypress.Commands.add("botSendMessage", (
-    cli: MatrixClient,
-    roomId: string,
-    message: string,
-): Chainable<ISendEventResponse> => {
-    return cy.wrap(cli.sendMessage(roomId, {
-        msgtype: "m.text",
-        body: message,
-    }), { log: false });
-});
+Cypress.Commands.add(
+    "botSendMessage",
+    (cli: MatrixClient, roomId: string, message: string): Chainable<ISendEventResponse> => {
+        return cy.wrap(
+            cli.sendMessage(roomId, {
+                msgtype: "m.text",
+                body: message,
+            }),
+            { log: false },
+        );
+    },
+);

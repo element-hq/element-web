@@ -27,7 +27,7 @@ export async function implicitlyReverted() {
 export const PROPERTY_UPDATED = "property_updated";
 
 export abstract class GenericEchoChamber<C extends EchoContext, K, V> extends EventEmitter {
-    private cache = new Map<K, {txn: EchoTransaction, val: V}>();
+    private cache = new Map<K, { txn: EchoTransaction; val: V }>();
     protected matrixClient: MatrixClient;
 
     protected constructor(public readonly context: C, private lookupFn: (key: K) => V) {
@@ -84,8 +84,10 @@ export abstract class GenericEchoChamber<C extends EchoContext, K, V> extends Ev
         const ctxn = this.context.beginTransaction(auditName, runFn);
         this.cacheVal(key, targetVal, ctxn); // set the cache now as it won't be updated by the .when() ladder below.
 
-        ctxn.when(TransactionStatus.Pending, () => this.cacheVal(key, targetVal, ctxn))
-            .when(TransactionStatus.Error, () => revertFn());
+        ctxn.when(TransactionStatus.Pending, () => this.cacheVal(key, targetVal, ctxn)).when(
+            TransactionStatus.Error,
+            () => revertFn(),
+        );
 
         ctxn.run();
     }

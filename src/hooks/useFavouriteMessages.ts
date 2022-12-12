@@ -1,4 +1,3 @@
-
 /*
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
@@ -17,8 +16,7 @@ limitations under the License.
 
 import { useState } from "react";
 
-const favouriteMessageIds = JSON.parse(
-    localStorage?.getItem("io_element_favouriteMessages")?? "[]") as string[];
+const favouriteMessageIds = JSON.parse(localStorage?.getItem("io_element_favouriteMessages") ?? "[]") as string[];
 
 export default function useFavouriteMessages() {
     const [, setX] = useState<string[]>();
@@ -27,11 +25,12 @@ export default function useFavouriteMessages() {
     const isFavourite = (eventId: string): boolean => favouriteMessageIds.includes(eventId);
 
     const toggleFavourite = (eventId: string) => {
-        isFavourite(eventId) ? favouriteMessageIds.splice(favouriteMessageIds.indexOf(eventId), 1)
+        isFavourite(eventId)
+            ? favouriteMessageIds.splice(favouriteMessageIds.indexOf(eventId), 1)
             : favouriteMessageIds.push(eventId);
 
         //update the local storage
-        localStorage.setItem('io_element_favouriteMessages', JSON.stringify(favouriteMessageIds));
+        localStorage.setItem("io_element_favouriteMessages", JSON.stringify(favouriteMessageIds));
 
         // This forces a re-render to account for changes in appearance in real-time when the favourite button is toggled
         setX([]);

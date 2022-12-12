@@ -23,7 +23,7 @@ import { _t } from "../../../languageHandler";
 
 export class StickerEventPreview implements IPreview {
     public getTextFor(event: MatrixEvent, tagId?: TagID, isThread?: boolean): string {
-        const stickerName = event.getContent()['body'];
+        const stickerName = event.getContent()["body"];
         if (!stickerName) return null;
 
         if (isThread || isSelf(event) || !shouldPrefixMessagesIn(event.getRoomId(), tagId)) {

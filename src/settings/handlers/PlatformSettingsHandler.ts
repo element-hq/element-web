@@ -41,7 +41,7 @@ export default class PlatformSettingsHandler extends SettingsHandler {
             // Load setting values as they are async and `getValue` must be synchronous
             Object.entries(SETTINGS).forEach(([key, setting]) => {
                 if (setting.supportedLevels.includes(SettingLevel.PLATFORM) && payload.platform.supportsSetting(key)) {
-                    payload.platform.getSettingValue(key).then(value => {
+                    payload.platform.getSettingValue(key).then((value) => {
                         this.store[key] = value;
                     });
                 }

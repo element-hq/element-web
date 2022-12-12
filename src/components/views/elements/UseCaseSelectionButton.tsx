@@ -44,15 +44,18 @@ export function UseCaseSelectionButton({ useCase, onClick, selected }: Props) {
     return (
         <AccessibleButton
             className={classNames("mx_UseCaseSelectionButton", {
-                "mx_UseCaseSelectionButton_selected": selected,
+                mx_UseCaseSelectionButton_selected: selected,
             })}
-            onClick={async () => onClick(useCase)}>
-            <div className={classNames("mx_UseCaseSelectionButton_icon", {
-                "mx_UseCaseSelectionButton_messaging": useCase === UseCase.PersonalMessaging,
-                "mx_UseCaseSelectionButton_work": useCase === UseCase.WorkMessaging,
-                "mx_UseCaseSelectionButton_community": useCase === UseCase.CommunityMessaging,
-            })} />
-            <span>{ label }</span>
+            onClick={async () => onClick(useCase)}
+        >
+            <div
+                className={classNames("mx_UseCaseSelectionButton_icon", {
+                    mx_UseCaseSelectionButton_messaging: useCase === UseCase.PersonalMessaging,
+                    mx_UseCaseSelectionButton_work: useCase === UseCase.WorkMessaging,
+                    mx_UseCaseSelectionButton_community: useCase === UseCase.CommunityMessaging,
+                })}
+            />
+            <span>{label}</span>
             <div className="mx_UseCaseSelectionButton_selectedIcon" />
         </AccessibleButton>
     );

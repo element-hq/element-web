@@ -107,7 +107,8 @@ export default class DeviceSettingsHandler extends AbstractLocalStorageSettingsH
         this.watchers.unwatchSetting(cb);
     }
 
-    private getSettings(): any { // TODO: [TS] Type return
+    private getSettings(): any {
+        // TODO: [TS] Type return
         return this.getObject("mx_local_settings");
     }
 

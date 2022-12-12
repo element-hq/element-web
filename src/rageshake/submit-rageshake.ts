@@ -16,14 +16,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import pako from 'pako';
+import pako from "pako";
 import Tar from "tar-js";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { MatrixClientPeg } from '../MatrixClientPeg';
-import PlatformPeg from '../PlatformPeg';
-import { _t } from '../languageHandler';
-import * as rageshake from './rageshake';
+import { MatrixClientPeg } from "../MatrixClientPeg";
+import PlatformPeg from "../PlatformPeg";
+import { _t } from "../languageHandler";
+import * as rageshake from "./rageshake";
 import SettingsStore from "../settings/SettingsStore";
 import SdkConfig from "../SdkConfig";
 
@@ -53,26 +53,26 @@ async function collectBugReport(opts: IOpts = {}, gzipLogs = true) {
     let installedPWA = "UNKNOWN";
     try {
         // Known to work at least for desktop Chrome
-        installedPWA = String(window.matchMedia('(display-mode: standalone)').matches);
+        installedPWA = String(window.matchMedia("(display-mode: standalone)").matches);
     } catch (e) {}
 
     let touchInput = "UNKNOWN";
     try {
         // MDN claims broad support across browsers
-        touchInput = String(window.matchMedia('(pointer: coarse)').matches);
-    } catch (e) { }
+        touchInput = String(window.matchMedia("(pointer: coarse)").matches);
+    } catch (e) {}
 
     const client = MatrixClientPeg.get();
 
     logger.log("Sending bug report.");
 
     const body = new FormData();
-    body.append('text', opts.userText || "User did not supply any additional text.");
-    body.append('app', opts.customApp || 'element-web');
-    body.append('version', version);
-    body.append('user_agent', userAgent);
-    body.append('installed_pwa', installedPWA);
-    body.append('touch_input', touchInput);
+    body.append("text", opts.userText || "User did not supply any additional text.");
+    body.append("app", opts.customApp || "element-web");
+    body.append("version", version);
+    body.append("user_agent", userAgent);
+    body.append("installed_pwa", installedPWA);
+    body.append("touch_input", touchInput);
 
     if (opts.customFields) {
         for (const key in opts.customFields) {
@@ -81,35 +81,45 @@ async function collectBugReport(opts: IOpts = {}, gzipLogs = true) {
     }
 
     if (client) {
-        body.append('user_id', client.credentials.userId);
-        body.append('device_id', client.deviceId);
+        body.append("user_id", client.credentials.userId);
+        body.append("device_id", client.deviceId);
 
         if (client.isCryptoEnabled()) {
             const keys = [`ed25519:${client.getDeviceEd25519Key()}`];
             if (client.getDeviceCurve25519Key) {
                 keys.push(`curve25519:${client.getDeviceCurve25519Key()}`);
             }
-            body.append('device_keys', keys.join(', '));
-            body.append('cross_signing_key', client.getCrossSigningId());
+            body.append("device_keys", keys.join(", "));
+            body.append("cross_signing_key", client.getCrossSigningId());
 
             // add cross-signing status information
             const crossSigning = client.crypto.crossSigningInfo;
             const secretStorage = client.crypto.secretStorage;
 
             body.append("cross_signing_ready", String(await client.isCrossSigningReady()));
-            body.append("cross_signing_supported_by_hs",
-                String(await client.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing")));
+            body.append(
+                "cross_signing_supported_by_hs",
+                String(await client.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing")),
+            );
             body.append("cross_signing_key", crossSigning.getId());
-            body.append("cross_signing_privkey_in_secret_storage",
-                String(!!(await crossSigning.isStoredInSecretStorage(secretStorage))));
+            body.append(
+                "cross_signing_privkey_in_secret_storage",
+                String(!!(await crossSigning.isStoredInSecretStorage(secretStorage))),
+            );
 
             const pkCache = client.getCrossSigningCacheCallbacks();
-            body.append("cross_signing_master_privkey_cached",
-                String(!!(pkCache && (await pkCache.getCrossSigningKeyCache("master")))));
-            body.append("cross_signing_self_signing_privkey_cached",
-                String(!!(pkCache && (await pkCache.getCrossSigningKeyCache("self_signing")))));
-            body.append("cross_signing_user_signing_privkey_cached",
-                String(!!(pkCache && (await pkCache.getCrossSigningKeyCache("user_signing")))));
+            body.append(
+                "cross_signing_master_privkey_cached",
+                String(!!(pkCache && (await pkCache.getCrossSigningKeyCache("master")))),
+            );
+            body.append(
+                "cross_signing_self_signing_privkey_cached",
+                String(!!(pkCache && (await pkCache.getCrossSigningKeyCache("self_signing")))),
+            );
+            body.append(
+                "cross_signing_user_signing_privkey_cached",
+                String(!!(pkCache && (await pkCache.getCrossSigningKeyCache("user_signing")))),
+            );
 
             body.append("secret_storage_ready", String(await client.isSecretStorageReady()));
             body.append("secret_storage_key_in_account", String(!!(await secretStorage.hasKey())));
@@ -123,14 +133,14 @@ async function collectBugReport(opts: IOpts = {}, gzipLogs = true) {
 
     if (opts.labels) {
         for (const label of opts.labels) {
-            body.append('label', label);
+            body.append("label", label);
         }
     }
 
     // add labs options
-    const enabledLabs = SettingsStore.getFeatureSettingNames().filter(f => SettingsStore.getValue(f));
+    const enabledLabs = SettingsStore.getFeatureSettingNames().filter((f) => SettingsStore.getValue(f));
     if (enabledLabs.length) {
-        body.append('enabled_labs', enabledLabs.join(', '));
+        body.append("enabled_labs", enabledLabs.join(", "));
     }
     // if low bandwidth mode is enabled, say so over rageshake, it causes many issues
     if (SettingsStore.getValue("lowBandwidth")) {
@@ -142,7 +152,8 @@ async function collectBugReport(opts: IOpts = {}, gzipLogs = true) {
         try {
             body.append("storageManager_persisted", String(await navigator.storage.persisted()));
         } catch (e) {}
-    } else if (document.hasStorageAccess) { // Safari
+    } else if (document.hasStorageAccess) {
+        // Safari
         try {
             body.append("storageManager_persisted", String(await document.hasStorageAccess()));
         } catch (e) {}
@@ -153,7 +164,7 @@ async function collectBugReport(opts: IOpts = {}, gzipLogs = true) {
             body.append("storageManager_quota", String(estimate.quota));
             body.append("storageManager_usage", String(estimate.usage));
             if (estimate.usageDetails) {
-                Object.keys(estimate.usageDetails).forEach(k => {
+                Object.keys(estimate.usageDetails).forEach((k) => {
                     body.append(`storageManager_usage_${k}`, String(estimate.usageDetails[k]));
                 });
             }
@@ -161,13 +172,13 @@ async function collectBugReport(opts: IOpts = {}, gzipLogs = true) {
     }
 
     if (window.Modernizr) {
-        const missingFeatures = Object.keys(window.Modernizr).filter(key => window.Modernizr[key] === false);
+        const missingFeatures = Object.keys(window.Modernizr).filter((key) => window.Modernizr[key] === false);
         if (missingFeatures.length > 0) {
             body.append("modernizr_missing_features", missingFeatures.join(", "));
         }
     }
 
-    body.append("mx_local_settings", localStorage.getItem('mx_local_settings'));
+    body.append("mx_local_settings", localStorage.getItem("mx_local_settings"));
 
     if (opts.sendLogs) {
         progressCallback(_t("Collecting logs"));
@@ -181,7 +192,7 @@ async function collectBugReport(opts: IOpts = {}, gzipLogs = true) {
                 buf = pako.gzip(buf);
             }
 
-            body.append('compressed-log', new Blob([buf]), entry.id);
+            body.append("compressed-log", new Blob([buf]), entry.id);
         }
     }
 
@@ -238,26 +249,26 @@ export async function downloadBugReport(opts: IOpts = {}) {
     const tape = new Tar();
     let i = 0;
     for (const [key, value] of body.entries()) {
-        if (key === 'compressed-log') {
-            await new Promise<void>((resolve => {
+        if (key === "compressed-log") {
+            await new Promise<void>((resolve) => {
                 const reader = new FileReader();
-                reader.addEventListener('loadend', ev => {
+                reader.addEventListener("loadend", (ev) => {
                     tape.append(`log-${i++}.log`, new TextDecoder().decode(ev.target.result as ArrayBuffer));
                     resolve();
                 });
                 reader.readAsArrayBuffer(value as Blob);
-            }));
+            });
         } else {
             metadata += `${key} = ${value}\n`;
         }
     }
-    tape.append('issue.txt', metadata);
+    tape.append("issue.txt", metadata);
 
     // We have to create a new anchor to download if we want a filename. Otherwise we could
     // just use window.open.
-    const dl = document.createElement('a');
+    const dl = document.createElement("a");
     dl.href = `data:application/octet-stream;base64,${btoa(uint8ToString(tape.out))}`;
-    dl.download = 'rageshake.tar';
+    dl.download = "rageshake.tar";
     document.body.appendChild(dl);
     dl.click();
     document.body.removeChild(dl);
@@ -265,7 +276,7 @@ export async function downloadBugReport(opts: IOpts = {}) {
 
 // Source: https://github.com/beatgammit/tar-js/blob/master/examples/main.js
 function uint8ToString(buf: Buffer) {
-    let out = '';
+    let out = "";
     for (let i = 0; i < buf.length; i += 1) {
         out += String.fromCharCode(buf[i]);
     }
@@ -307,7 +318,7 @@ function submitReport(endpoint: string, body: FormData, progressCallback: (str: 
         req.open("POST", endpoint);
         req.responseType = "json";
         req.timeout = 5 * 60 * 1000;
-        req.onreadystatechange = function() {
+        req.onreadystatechange = function () {
             if (req.readyState === XMLHttpRequest.LOADING) {
                 progressCallback(_t("Waiting for response from server"));
             } else if (req.readyState === XMLHttpRequest.DONE) {

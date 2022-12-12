@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import sanitizeHtml from 'sanitize-html';
+import sanitizeHtml from "sanitize-html";
 
 export interface IExtendedSanitizeOptions extends sanitizeHtml.IOptions {
     // This option only exists in 2.x RCs so far, so not yet present in the

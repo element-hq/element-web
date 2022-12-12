@@ -20,7 +20,7 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import { ResizeMethod } from "matrix-js-sdk/src/@types/partials";
 import { split } from "lodash";
 
-import DMRoomMap from './utils/DMRoomMap';
+import DMRoomMap from "./utils/DMRoomMap";
 import { mediaFromMxc } from "./customisations/Media";
 import { isLocalRoom } from "./utils/localRoom/isLocalRoom";
 
@@ -39,7 +39,7 @@ export function avatarUrlForMember(
         // member can be null here currently since on invites, the JS SDK
         // does not have enough info to build a RoomMember object for
         // the inviter.
-        url = defaultAvatarUrlForString(member ? member.userId : '');
+        url = defaultAvatarUrlForString(member ? member.userId : "");
     }
     return url;
 }
@@ -55,10 +55,15 @@ export function avatarUrlForUser(
 }
 
 function isValidHexColor(color: string): boolean {
-    return typeof color === "string" &&
+    return (
+        typeof color === "string" &&
         (color.length === 7 || color.length === 9) &&
         color.charAt(0) === "#" &&
-        !color.slice(1).split("").some(c => isNaN(parseInt(c, 16)));
+        !color
+            .slice(1)
+            .split("")
+            .some((c) => isNaN(parseInt(c, 16)))
+    );
 }
 
 function urlForColor(color: string): string {
@@ -83,7 +88,7 @@ const colorToDataURLCache = new Map<string, string>();
 
 export function defaultAvatarUrlForString(s: string): string {
     if (!s) return ""; // XXX: should never happen but empirically does by evidence of a rageshake
-    const defaultColors = ['#0DBD8B', '#368bd6', '#ac3ba8'];
+    const defaultColors = ["#0DBD8B", "#368bd6", "#ac3ba8"];
     let total = 0;
     for (let i = 0; i < s.length; ++i) {
         total += s.charCodeAt(i);
@@ -124,7 +129,7 @@ export function getInitialLetter(name: string): string {
     }
 
     const initial = name[0];
-    if ((initial === '@' || initial === '#' || initial === '+') && name[1]) {
+    if ((initial === "@" || initial === "#" || initial === "+") && name[1]) {
         name = name.substring(1);
     }
 
@@ -143,10 +148,7 @@ export function avatarUrlForRoom(room: Room, width: number, height: number, resi
     if (room.isSpaceRoom()) return null;
 
     // If the room is not a DM don't fallback to a member avatar
-    if (
-        !DMRoomMap.shared().getUserIdForRoomId(room.roomId)
-        && !(isLocalRoom(room))
-    ) {
+    if (!DMRoomMap.shared().getUserIdForRoomId(room.roomId) && !isLocalRoom(room)) {
         return null;
     }
 

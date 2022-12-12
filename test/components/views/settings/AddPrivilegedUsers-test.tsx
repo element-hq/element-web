@@ -13,34 +13,31 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React from 'react';
-import { act, fireEvent, render, waitFor } from '@testing-library/react';
+import React from "react";
+import { act, fireEvent, render, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mocked } from "jest-mock";
 import { RoomMember, EventType } from "matrix-js-sdk/src/matrix";
 
-import {
-    getMockClientWithEventEmitter,
-    makeRoomWithStateEvents,
-    mkEvent,
-} from "../../../test-utils";
-import MatrixClientContext from '../../../../src/contexts/MatrixClientContext';
+import { getMockClientWithEventEmitter, makeRoomWithStateEvents, mkEvent } from "../../../test-utils";
+import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import {
     AddPrivilegedUsers,
-    getUserIdsFromCompletions, hasLowerOrEqualLevelThanDefaultLevel,
+    getUserIdsFromCompletions,
+    hasLowerOrEqualLevelThanDefaultLevel,
 } from "../../../../src/components/views/settings/AddPrivilegedUsers";
 import UserProvider from "../../../../src/autocomplete/UserProvider";
 import { ICompletion } from "../../../../src/autocomplete/Autocompleter";
 
-jest.mock('../../../../src/autocomplete/UserProvider');
+jest.mock("../../../../src/autocomplete/UserProvider");
 
 const completions: ICompletion[] = [
-    { type: 'user', completion: 'user_1', completionId: '@user_1:host.local', range: { start: 1, end: 1 } },
-    { type: 'user', completion: 'user_2', completionId: '@user_2:host.local', range: { start: 1, end: 1 } },
-    { type: 'user', completion: 'user_without_completion_id', range: { start: 1, end: 1 } },
+    { type: "user", completion: "user_1", completionId: "@user_1:host.local", range: { start: 1, end: 1 } },
+    { type: "user", completion: "user_2", completionId: "@user_2:host.local", range: { start: 1, end: 1 } },
+    { type: "user", completion: "user_without_completion_id", range: { start: 1, end: 1 } },
 ];
 
-describe('<AddPrivilegedUsers />', () => {
+describe("<AddPrivilegedUsers />", () => {
     const provider = mocked(UserProvider, { shallow: true });
     provider.prototype.getCompletions.mockResolvedValue(completions);
 
@@ -50,9 +47,9 @@ describe('<AddPrivilegedUsers />', () => {
         setPowerLevel: jest.fn(),
     });
 
-    const room = makeRoomWithStateEvents([], { roomId: 'room_id', mockClient: mockClient });
+    const room = makeRoomWithStateEvents([], { roomId: "room_id", mockClient: mockClient });
     room.getMember = (userId: string) => {
-        const member = new RoomMember('room_id', userId);
+        const member = new RoomMember("room_id", userId);
         member.powerLevel = 0;
 
         return member;
@@ -61,36 +58,34 @@ describe('<AddPrivilegedUsers />', () => {
         return mkEvent({
             type: EventType.RoomPowerLevels,
             content: {},
-            user: 'user_id',
+            user: "user_id",
         });
     };
 
-    const getComponent = () =>
+    const getComponent = () => (
         <MatrixClientContext.Provider value={mockClient}>
-            <AddPrivilegedUsers
-                room={room}
-                defaultUserLevel={0}
-            />
-        </MatrixClientContext.Provider>;
+            <AddPrivilegedUsers room={room} defaultUserLevel={0} />
+        </MatrixClientContext.Provider>
+    );
 
-    it('checks whether form submit works as intended', async () => {
+    it("checks whether form submit works as intended", async () => {
         const { getByTestId, queryAllByTestId } = render(getComponent());
 
         // Verify that the submit button is disabled initially.
-        const submitButton = getByTestId('add-privileged-users-submit-button');
+        const submitButton = getByTestId("add-privileged-users-submit-button");
         expect(submitButton).toBeDisabled();
 
         // Find some suggestions and select them.
-        const autocompleteInput = getByTestId('autocomplete-input');
+        const autocompleteInput = getByTestId("autocomplete-input");
 
         act(() => {
             fireEvent.focus(autocompleteInput);
-            fireEvent.change(autocompleteInput, { target: { value: 'u' } });
+            fireEvent.change(autocompleteInput, { target: { value: "u" } });
         });
 
         await waitFor(() => expect(provider.mock.instances[0].getCompletions).toHaveBeenCalledTimes(1));
-        const matchOne = getByTestId('autocomplete-suggestion-item-@user_1:host.local');
-        const matchTwo = getByTestId('autocomplete-suggestion-item-@user_2:host.local');
+        const matchOne = getByTestId("autocomplete-suggestion-item-@user_1:host.local");
+        const matchTwo = getByTestId("autocomplete-suggestion-item-@user_2:host.local");
 
         act(() => {
             fireEvent.mouseDown(matchOne);
@@ -101,16 +96,16 @@ describe('<AddPrivilegedUsers />', () => {
         });
 
         // Check that `defaultUserLevel` is initially set and select a higher power level.
-        expect((getByTestId('power-level-option-0') as HTMLOptionElement).selected).toBeTruthy();
-        expect((getByTestId('power-level-option-50') as HTMLOptionElement).selected).toBeFalsy();
-        expect((getByTestId('power-level-option-100') as HTMLOptionElement).selected).toBeFalsy();
+        expect((getByTestId("power-level-option-0") as HTMLOptionElement).selected).toBeTruthy();
+        expect((getByTestId("power-level-option-50") as HTMLOptionElement).selected).toBeFalsy();
+        expect((getByTestId("power-level-option-100") as HTMLOptionElement).selected).toBeFalsy();
 
-        const powerLevelSelect = getByTestId('power-level-select-element');
+        const powerLevelSelect = getByTestId("power-level-select-element");
         await userEvent.selectOptions(powerLevelSelect, "100");
 
-        expect((getByTestId('power-level-option-0') as HTMLOptionElement).selected).toBeFalsy();
-        expect((getByTestId('power-level-option-50') as HTMLOptionElement).selected).toBeFalsy();
-        expect((getByTestId('power-level-option-100') as HTMLOptionElement).selected).toBeTruthy();
+        expect((getByTestId("power-level-option-0") as HTMLOptionElement).selected).toBeFalsy();
+        expect((getByTestId("power-level-option-50") as HTMLOptionElement).selected).toBeFalsy();
+        expect((getByTestId("power-level-option-100") as HTMLOptionElement).selected).toBeTruthy();
 
         // The submit button should be enabled now.
         expect(submitButton).toBeEnabled();
@@ -126,24 +121,25 @@ describe('<AddPrivilegedUsers />', () => {
         expect(submitButton).toBeDisabled();
 
         // Verify that previously selected items are reset.
-        const selectionItems = queryAllByTestId('autocomplete-selection-item', { exact: false });
+        const selectionItems = queryAllByTestId("autocomplete-selection-item", { exact: false });
         expect(selectionItems).toHaveLength(0);
 
         // Verify that power level select is reset to `defaultUserLevel`.
-        expect((getByTestId('power-level-option-0') as HTMLOptionElement).selected).toBeTruthy();
-        expect((getByTestId('power-level-option-50') as HTMLOptionElement).selected).toBeFalsy();
-        expect((getByTestId('power-level-option-100') as HTMLOptionElement).selected).toBeFalsy();
+        expect((getByTestId("power-level-option-0") as HTMLOptionElement).selected).toBeTruthy();
+        expect((getByTestId("power-level-option-50") as HTMLOptionElement).selected).toBeFalsy();
+        expect((getByTestId("power-level-option-100") as HTMLOptionElement).selected).toBeFalsy();
     });
 
-    it('getUserIdsFromCompletions() should map completions to user id\'s', () => {
-        expect(getUserIdsFromCompletions(completions)).toStrictEqual(['@user_1:host.local', '@user_2:host.local']);
+    it("getUserIdsFromCompletions() should map completions to user id's", () => {
+        expect(getUserIdsFromCompletions(completions)).toStrictEqual(["@user_1:host.local", "@user_2:host.local"]);
     });
 
     it.each([
         { defaultUserLevel: -50, expectation: false },
         { defaultUserLevel: 0, expectation: true },
         { defaultUserLevel: 50, expectation: true },
-    ])('hasLowerOrEqualLevelThanDefaultLevel() should return $expectation for default level $defaultUserLevel',
+    ])(
+        "hasLowerOrEqualLevelThanDefaultLevel() should return $expectation for default level $defaultUserLevel",
         ({ defaultUserLevel, expectation }) => {
             expect(hasLowerOrEqualLevelThanDefaultLevel(room, completions[0], defaultUserLevel)).toBe(expectation);
         },

@@ -53,11 +53,7 @@ describe("MessageComposerButtons", () => {
             false,
         );
 
-        expect(buttonLabels(buttons)).toEqual([
-            "Emoji",
-            "Attachment",
-            "More options",
-        ]);
+        expect(buttonLabels(buttons)).toEqual(["Emoji", "Attachment", "More options"]);
     });
 
     it("Renders other buttons in menu in wide mode", () => {
@@ -76,12 +72,7 @@ describe("MessageComposerButtons", () => {
             "Emoji",
             "Attachment",
             "More options",
-            [
-                "Sticker",
-                "Voice Message",
-                "Poll",
-                "Location",
-            ],
+            ["Sticker", "Voice Message", "Poll", "Location"],
         ]);
     });
 
@@ -97,10 +88,7 @@ describe("MessageComposerButtons", () => {
             true,
         );
 
-        expect(buttonLabels(buttons)).toEqual([
-            "Emoji",
-            "More options",
-        ]);
+        expect(buttonLabels(buttons)).toEqual(["Emoji", "More options"]);
     });
 
     it("Renders other buttons in menu (except voice messages) in narrow mode", () => {
@@ -115,20 +103,11 @@ describe("MessageComposerButtons", () => {
             true,
         );
 
-        expect(buttonLabels(buttons)).toEqual([
-            "Emoji",
-            "More options",
-            [
-                "Attachment",
-                "Sticker",
-                "Poll",
-                "Location",
-            ],
-        ]);
+        expect(buttonLabels(buttons)).toEqual(["Emoji", "More options", ["Attachment", "Sticker", "Poll", "Location"]]);
     });
 
-    describe('polls button', () => {
-        it('should render when asked to', () => {
+    describe("polls button", () => {
+        it("should render when asked to", () => {
             const buttons = wrapAndRender(
                 <MessageComposerButtons
                     {...mockProps}
@@ -143,16 +122,11 @@ describe("MessageComposerButtons", () => {
             expect(buttonLabels(buttons)).toEqual([
                 "Emoji",
                 "More options",
-                [
-                    "Attachment",
-                    "Sticker",
-                    "Poll",
-                    "Location",
-                ],
+                ["Attachment", "Sticker", "Poll", "Location"],
             ]);
         });
 
-        it('should not render when asked not to', () => {
+        it("should not render when asked not to", () => {
             const buttons = wrapAndRender(
                 <MessageComposerButtons
                     {...mockProps}
@@ -195,13 +169,7 @@ describe("MessageComposerButtons", () => {
                 "Emoji",
                 "Attachment",
                 "More options",
-                [
-                    "Sticker",
-                    "Voice Message",
-                    "Voice broadcast",
-                    "Poll",
-                    "Location",
-                ],
+                ["Sticker", "Voice Message", "Voice broadcast", "Poll", "Location"],
             ]);
         });
     });
@@ -209,13 +177,13 @@ describe("MessageComposerButtons", () => {
 
 function wrapAndRender(component: React.ReactElement, narrow: boolean): ReactWrapper {
     const mockClient = createTestClient();
-    jest.spyOn(MatrixClientPeg, 'get').mockReturnValue(mockClient);
+    jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
     const roomId = "myroomid";
     const mockRoom: any = {
         currentState: undefined,
         roomId,
         client: mockClient,
-        getMember: function(userId: string): RoomMember {
+        getMember: function (userId: string): RoomMember {
             return new RoomMember(roomId, userId);
         },
     };
@@ -223,9 +191,7 @@ function wrapAndRender(component: React.ReactElement, narrow: boolean): ReactWra
 
     return mount(
         <MatrixClientContext.Provider value={mockClient}>
-            <RoomContext.Provider value={roomState}>
-                { component }
-            </RoomContext.Provider>
+            <RoomContext.Provider value={roomState}>{component}</RoomContext.Provider>
         </MatrixClientContext.Provider>,
     );
 }
@@ -274,23 +240,17 @@ function createRoomState(room: Room, narrow: boolean): IRoomState {
 function buttonLabels(buttons: ReactWrapper): any[] {
     // Note: Depends on the fact that the mini buttons use aria-label
     // and the labels under More options use textContent
-    const mainButtons = (
-        buttons
-            .find('div.mx_MessageComposer_button[aria-label]')
-            .map((button: ReactWrapper) => button.prop("aria-label") as string)
-            .filter(x => x)
-    );
+    const mainButtons = buttons
+        .find("div.mx_MessageComposer_button[aria-label]")
+        .map((button: ReactWrapper) => button.prop("aria-label") as string)
+        .filter((x) => x);
 
-    const extraButtons = (
-        buttons
-            .find('.mx_MessageComposer_Menu div.mx_AccessibleButton[role="menuitem"]')
-            .map((button: ReactWrapper) => button.text())
-            .filter(x => x)
-    );
+    const extraButtons = buttons
+        .find('.mx_MessageComposer_Menu div.mx_AccessibleButton[role="menuitem"]')
+        .map((button: ReactWrapper) => button.text())
+        .filter((x) => x);
 
-    const list: any[] = [
-        ...mainButtons,
-    ];
+    const list: any[] = [...mainButtons];
 
     if (extraButtons.length > 0) {
         list.push(extraButtons);

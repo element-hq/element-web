@@ -16,15 +16,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 
-import { _t } from '../../../languageHandler';
+import { _t } from "../../../languageHandler";
 
 export default class AuthFooter extends React.Component {
     public render(): React.ReactNode {
         return (
             <footer className="mx_AuthFooter" role="contentinfo">
-                <a href="https://matrix.org" target="_blank" rel="noreferrer noopener">{ _t("powered by Matrix") }</a>
+                <a href="https://matrix.org" target="_blank" rel="noreferrer noopener">
+                    {_t("powered by Matrix")}
+                </a>
             </footer>
         );
     }

@@ -59,8 +59,10 @@ export class ModuleUiDialog extends ScrollableBaseModal<IProps, IState> {
     }
 
     protected renderContent(): React.ReactNode {
-        return <div className="mx_ModuleUiDialog">
-            { this.props.contentFactory(this.props.contentProps, this.contentRef) }
-        </div>;
+        return (
+            <div className="mx_ModuleUiDialog">
+                {this.props.contentFactory(this.props.contentProps, this.contentRef)}
+            </div>
+        );
     }
 }

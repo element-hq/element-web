@@ -15,23 +15,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { DeviceInfo } from "matrix-js-sdk/src/crypto/deviceinfo";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
 import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
-import { UserTrustLevel } from 'matrix-js-sdk/src/crypto/CrossSigning';
+import { UserTrustLevel } from "matrix-js-sdk/src/crypto/CrossSigning";
 
 import dis from "../../../dispatcher/dispatcher";
-import { _t } from '../../../languageHandler';
+import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { Action } from "../../../dispatcher/actions";
 import EntityTile, { PowerStatus } from "./EntityTile";
 import MemberAvatar from "./../avatars/MemberAvatar";
 import DisambiguatedProfile from "../messages/DisambiguatedProfile";
-import UserIdentifierCustomisations from '../../../customisations/UserIdentifier';
+import UserIdentifierCustomisations from "../../../customisations/UserIdentifier";
 
 interface IProps {
     member: RoomMember;
@@ -127,7 +127,7 @@ export default class MemberTile extends React.Component<IProps, IState> {
         }
 
         const devices = cli.getStoredDevicesForUser(userId);
-        const anyDeviceUnverified = devices.some(device => {
+        const anyDeviceUnverified = devices.some((device) => {
             const { deviceId } = device;
             // For your own devices, we use the stricter check of cross-signing
             // verification to encourage everyone to trust their own devices via
@@ -152,14 +152,11 @@ export default class MemberTile extends React.Component<IProps, IState> {
         if (
             nextProps.member.user &&
             (this.userLastModifiedTime === undefined ||
-            this.userLastModifiedTime < nextProps.member.user.getLastModifiedTime())
+                this.userLastModifiedTime < nextProps.member.user.getLastModifiedTime())
         ) {
             return true;
         }
-        if (
-            nextState.isRoomEncrypted !== this.state.isRoomEncrypted ||
-            nextState.e2eStatus !== this.state.e2eStatus
-        ) {
+        if (nextState.isRoomEncrypted !== this.state.isRoomEncrypted || nextState.e2eStatus !== this.state.e2eStatus) {
             return true;
         }
         return false;
@@ -179,9 +176,9 @@ export default class MemberTile extends React.Component<IProps, IState> {
 
     private getPowerLabel(): string {
         return _t("%(userName)s (power %(powerLevelNumber)s)", {
-            userName: UserIdentifierCustomisations.getDisplayUserIdentifier(
-                this.props.member.userId, { roomId: this.props.member.roomId },
-            ),
+            userName: UserIdentifierCustomisations.getDisplayUserIdentifier(this.props.member.userId, {
+                roomId: this.props.member.roomId,
+            }),
             powerLevelNumber: this.props.member.powerLevel,
         }).trim();
     }
@@ -191,9 +188,7 @@ export default class MemberTile extends React.Component<IProps, IState> {
         const name = this.getDisplayName();
         const presenceState = member.user ? member.user.presence : null;
 
-        const av = (
-            <MemberAvatar member={member} width={36} height={36} aria-hidden="true" />
-        );
+        const av = <MemberAvatar member={member} width={36} height={36} aria-hidden="true" />;
 
         if (member.user) {
             this.userLastModifiedTime = member.user.getLastModifiedTime();
@@ -221,12 +216,7 @@ export default class MemberTile extends React.Component<IProps, IState> {
             e2eStatus = this.state.e2eStatus;
         }
 
-        const nameJSX = (
-            <DisambiguatedProfile
-                member={member}
-                fallbackName={name || ""}
-            />
-        );
+        const nameJSX = <DisambiguatedProfile member={member} fallbackName={name || ""} />;
 
         return (
             <EntityTile

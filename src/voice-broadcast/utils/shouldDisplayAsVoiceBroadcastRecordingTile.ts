@@ -24,7 +24,5 @@ export const shouldDisplayAsVoiceBroadcastRecordingTile = (
     event: MatrixEvent,
 ): boolean => {
     const userId = client.getUserId();
-    return !!userId
-        && userId === event.getSender()
-        && state !== VoiceBroadcastInfoState.Stopped;
+    return !!userId && userId === event.getSender() && state !== VoiceBroadcastInfoState.Stopped;
 };

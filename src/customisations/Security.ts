@@ -14,23 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { ISecretStorageKeyInfo } from 'matrix-js-sdk/src/crypto/api';
+import { ISecretStorageKeyInfo } from "matrix-js-sdk/src/crypto/api";
 
 import { IMatrixClientCreds } from "../MatrixClientPeg";
 import { Kind as SetupEncryptionKind } from "../toasts/SetupEncryptionToast";
 
 /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-function examineLoginResponse(
-    response: any,
-    credentials: IMatrixClientCreds,
-): void {
+function examineLoginResponse(response: any, credentials: IMatrixClientCreds): void {
     // E.g. add additional data to the persisted credentials
 }
 
 /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-function persistCredentials(
-    credentials: IMatrixClientCreds,
-): void {
+function persistCredentials(credentials: IMatrixClientCreds): void {
     // E.g. store any additional credential fields
 }
 
@@ -47,9 +42,7 @@ function getSecretStorageKey(): Uint8Array {
 }
 
 /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-function getDehydrationKey(
-    keyInfo: ISecretStorageKeyInfo,
-): Promise<Uint8Array> {
+function getDehydrationKey(keyInfo: ISecretStorageKeyInfo): Promise<Uint8Array> {
     return Promise.resolve(null);
 }
 

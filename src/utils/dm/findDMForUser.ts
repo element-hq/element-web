@@ -30,29 +30,30 @@ import { getFunctionalMembers } from "../room/getFunctionalMembers";
  */
 export function findDMForUser(client: MatrixClient, userId: string): Room {
     const roomIds = DMRoomMap.shared().getDMRoomsForUserId(userId);
-    const rooms = roomIds.map(id => client.getRoom(id));
-    const suitableDMRooms = rooms.filter(r => {
-        // Validate that we are joined and the other person is also joined. We'll also make sure
-        // that the room also looks like a DM (until we have canonical DMs to tell us). For now,
-        // a DM is a room of two people that contains those two people exactly. This does mean
-        // that bots, assistants, etc will ruin a room's DM-ness, though this is a problem for
-        // canonical DMs to solve.
-        if (r && r.getMyMembership() === "join") {
-            if (isLocalRoom(r)) return false;
+    const rooms = roomIds.map((id) => client.getRoom(id));
+    const suitableDMRooms = rooms
+        .filter((r) => {
+            // Validate that we are joined and the other person is also joined. We'll also make sure
+            // that the room also looks like a DM (until we have canonical DMs to tell us). For now,
+            // a DM is a room of two people that contains those two people exactly. This does mean
+            // that bots, assistants, etc will ruin a room's DM-ness, though this is a problem for
+            // canonical DMs to solve.
+            if (r && r.getMyMembership() === "join") {
+                if (isLocalRoom(r)) return false;
 
-            const functionalUsers = getFunctionalMembers(r);
-            const members = r.currentState.getMembers();
-            const joinedMembers = members.filter(
-                m => !functionalUsers.includes(m.userId) && isJoinedOrNearlyJoined(m.membership),
-            );
-            const otherMember = joinedMembers.find(m => m.userId === userId);
-            return otherMember && joinedMembers.length === 2;
-        }
-        return false;
-    }).sort((r1, r2) => {
-        return r2.getLastActiveTimestamp() -
-            r1.getLastActiveTimestamp();
-    });
+                const functionalUsers = getFunctionalMembers(r);
+                const members = r.currentState.getMembers();
+                const joinedMembers = members.filter(
+                    (m) => !functionalUsers.includes(m.userId) && isJoinedOrNearlyJoined(m.membership),
+                );
+                const otherMember = joinedMembers.find((m) => m.userId === userId);
+                return otherMember && joinedMembers.length === 2;
+            }
+            return false;
+        })
+        .sort((r1, r2) => {
+            return r2.getLastActiveTimestamp() - r1.getLastActiveTimestamp();
+        });
     if (suitableDMRooms.length) {
         return suitableDMRooms[0];
     }

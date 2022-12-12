@@ -17,16 +17,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import { Room } from 'matrix-js-sdk/src/models/room';
+import React from "react";
+import { Room } from "matrix-js-sdk/src/models/room";
 
-import { _t } from '../languageHandler';
-import AutocompleteProvider from './AutocompleteProvider';
-import QueryMatcher from './QueryMatcher';
-import { TextualCompletion } from './Components';
+import { _t } from "../languageHandler";
+import AutocompleteProvider from "./AutocompleteProvider";
+import QueryMatcher from "./QueryMatcher";
+import { TextualCompletion } from "./Components";
 import { ICompletion, ISelectionRange } from "./Autocompleter";
-import { Command, Commands, CommandMap } from '../SlashCommands';
-import { TimelineRenderingType } from '../contexts/RoomContext';
+import { Command, Commands, CommandMap } from "../SlashCommands";
+import { TimelineRenderingType } from "../contexts/RoomContext";
 
 const COMMAND_RE = /(^\/\w*)(?: .*)?/g;
 
@@ -36,7 +36,7 @@ export default class CommandProvider extends AutocompleteProvider {
     constructor(room: Room, renderingType?: TimelineRenderingType) {
         super({ commandRegex: COMMAND_RE, renderingType });
         this.matcher = new QueryMatcher(Commands, {
-            keys: ['command', 'args', 'description'],
+            keys: ["command", "args", "description"],
             funcs: [({ aliases }) => aliases.join(" ")], // aliases
             context: renderingType,
         });
@@ -62,7 +62,7 @@ export default class CommandProvider extends AutocompleteProvider {
                 matches = [CommandMap.get(name)];
             }
         } else {
-            if (query === '/') {
+            if (query === "/") {
                 // If they have just entered `/` show everything
                 // We exclude the limit on purpose to have a comprehensive list
                 matches = Commands;
@@ -72,31 +72,36 @@ export default class CommandProvider extends AutocompleteProvider {
             }
         }
 
-        return matches.filter(cmd => {
-            const display = !cmd.renderingTypes || cmd.renderingTypes.includes(this.renderingType);
-            return cmd.isEnabled() && display;
-        }).map((result) => {
-            let completion = result.getCommand() + ' ';
-            const usedAlias = result.aliases.find(alias => `/${alias}` === command[1]);
-            // If the command (or an alias) is the same as the one they entered, we don't want to discard their arguments
-            if (usedAlias || result.getCommand() === command[1]) {
-                completion = command[0];
-            }
+        return matches
+            .filter((cmd) => {
+                const display = !cmd.renderingTypes || cmd.renderingTypes.includes(this.renderingType);
+                return cmd.isEnabled() && display;
+            })
+            .map((result) => {
+                let completion = result.getCommand() + " ";
+                const usedAlias = result.aliases.find((alias) => `/${alias}` === command[1]);
+                // If the command (or an alias) is the same as the one they entered, we don't want to discard their arguments
+                if (usedAlias || result.getCommand() === command[1]) {
+                    completion = command[0];
+                }
 
-            return {
-                completion,
-                type: "command",
-                component: <TextualCompletion
-                    title={`/${usedAlias || result.command}`}
-                    subtitle={result.args}
-                    description={_t(result.description)} />,
-                range,
-            };
-        });
+                return {
+                    completion,
+                    type: "command",
+                    component: (
+                        <TextualCompletion
+                            title={`/${usedAlias || result.command}`}
+                            subtitle={result.args}
+                            description={_t(result.description)}
+                        />
+                    ),
+                    range,
+                };
+            });
     }
 
     getName() {
-        return '*️⃣ ' + _t('Commands');
+        return "*️⃣ " + _t("Commands");
     }
 
     renderCompletions(completions: React.ReactNode[]): React.ReactNode {
@@ -106,7 +111,7 @@ export default class CommandProvider extends AutocompleteProvider {
                 role="presentation"
                 aria-label={_t("Command Autocomplete")}
             >
-                { completions }
+                {completions}
             </div>
         );
     }

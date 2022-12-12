@@ -57,13 +57,15 @@ describe("VoiceBroadcastBody", () => {
     let testPlayback: VoiceBroadcastPlayback;
 
     const renderVoiceBroadcast = () => {
-        render(<VoiceBroadcastBody
-            mxEvent={infoEvent}
-            mediaEventHelper={new MediaEventHelper(infoEvent)}
-            onHeightChanged={() => {}}
-            onMessageAllowed={() => {}}
-            permalinkCreator={new RoomPermalinkCreator(room)}
-        />);
+        render(
+            <VoiceBroadcastBody
+                mxEvent={infoEvent}
+                mediaEventHelper={new MediaEventHelper(infoEvent)}
+                onHeightChanged={() => {}}
+                onMessageAllowed={() => {}}
+                permalinkCreator={new RoomPermalinkCreator(room)}
+            />,
+        );
         testRecording = VoiceBroadcastRecordingsStore.instance().getByInfoEvent(infoEvent, client);
     };
 
@@ -79,12 +81,7 @@ describe("VoiceBroadcastBody", () => {
             return null;
         });
 
-        infoEvent = mkVoiceBroadcastInfoStateEvent(
-            roomId,
-            VoiceBroadcastInfoState.Started,
-            userId,
-            deviceId,
-        );
+        infoEvent = mkVoiceBroadcastInfoStateEvent(roomId, VoiceBroadcastInfoState.Started, userId, deviceId);
         stoppedEvent = mkVoiceBroadcastInfoStateEvent(
             roomId,
             VoiceBroadcastInfoState.Stopped,

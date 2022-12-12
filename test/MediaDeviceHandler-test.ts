@@ -14,13 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { mocked } from 'jest-mock';
+import { mocked } from "jest-mock";
 
 import { SettingLevel } from "../src/settings/SettingLevel";
-import { MatrixClientPeg } from '../src/MatrixClientPeg';
+import { MatrixClientPeg } from "../src/MatrixClientPeg";
 import { stubClient } from "./test-utils";
 import MediaDeviceHandler from "../src/MediaDeviceHandler";
-import SettingsStore from '../src/settings/SettingsStore';
+import SettingsStore from "../src/settings/SettingsStore";
 
 jest.mock("../src/settings/SettingsStore");
 
@@ -51,9 +51,7 @@ describe("MediaDeviceHandler", () => {
         await MediaDeviceHandler.setAudioNoiseSuppression(false);
 
         expectedAudioSettings.forEach((value, key) => {
-            expect(SettingsStoreMock.setValue).toHaveBeenCalledWith(
-                key, null, SettingLevel.DEVICE, value,
-            );
+            expect(SettingsStoreMock.setValue).toHaveBeenCalledWith(key, null, SettingLevel.DEVICE, value);
         });
 
         expect(MatrixClientPeg.get().getMediaHandler().setAudioSettings).toHaveBeenCalledWith({

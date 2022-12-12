@@ -55,8 +55,10 @@ export interface ISuggestedRoom extends IHierarchyRoom {
 }
 
 export function isMetaSpace(spaceKey: SpaceKey): boolean {
-    return spaceKey === MetaSpace.Home ||
+    return (
+        spaceKey === MetaSpace.Home ||
         spaceKey === MetaSpace.Favourites ||
         spaceKey === MetaSpace.People ||
-        spaceKey === MetaSpace.Orphans;
+        spaceKey === MetaSpace.Orphans
+    );
 }

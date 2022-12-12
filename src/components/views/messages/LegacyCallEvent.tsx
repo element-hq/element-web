@@ -14,24 +14,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { createRef } from 'react';
+import React, { createRef } from "react";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { CallErrorCode, CallState } from 'matrix-js-sdk/src/webrtc/call';
-import classNames from 'classnames';
+import { CallErrorCode, CallState } from "matrix-js-sdk/src/webrtc/call";
+import classNames from "classnames";
 
-import { _t } from '../../../languageHandler';
-import MemberAvatar from '../avatars/MemberAvatar';
+import { _t } from "../../../languageHandler";
+import MemberAvatar from "../avatars/MemberAvatar";
 import LegacyCallEventGrouper, {
     LegacyCallEventGrouperEvent,
     CustomCallState,
-} from '../../structures/LegacyCallEventGrouper';
-import AccessibleButton from '../elements/AccessibleButton';
-import InfoTooltip, { InfoTooltipKind } from '../elements/InfoTooltip';
-import AccessibleTooltipButton from '../elements/AccessibleTooltipButton';
+} from "../../structures/LegacyCallEventGrouper";
+import AccessibleButton from "../elements/AccessibleButton";
+import InfoTooltip, { InfoTooltipKind } from "../elements/InfoTooltip";
+import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import { formatPreciseDuration } from "../../../DateUtils";
 import Clock from "../audio_messages/Clock";
 
-const MAX_NON_NARROW_WIDTH = 450 / 70 * 100;
+const MAX_NON_NARROW_WIDTH = (450 / 70) * 100;
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -104,16 +104,16 @@ export default class LegacyCallEvent extends React.PureComponent<IProps, IState>
                 onClick={this.props.callEventGrouper.callBack}
                 kind="primary"
             >
-                <span> { text } </span>
+                <span> {text} </span>
             </AccessibleButton>
         );
     }
 
     private renderSilenceIcon(): JSX.Element {
         const silenceClass = classNames({
-            "mx_LegacyCallEvent_iconButton": true,
-            "mx_LegacyCallEvent_unSilence": this.state.silenced,
-            "mx_LegacyCallEvent_silence": !this.state.silenced,
+            mx_LegacyCallEvent_iconButton: true,
+            mx_LegacyCallEvent_unSilence: this.state.silenced,
+            mx_LegacyCallEvent_silence: !this.state.silenced,
         });
 
         return (
@@ -134,22 +134,22 @@ export default class LegacyCallEvent extends React.PureComponent<IProps, IState>
 
             return (
                 <div className="mx_LegacyCallEvent_content">
-                    { silenceIcon }
+                    {silenceIcon}
                     <AccessibleButton
                         className="mx_LegacyCallEvent_content_button mx_LegacyCallEvent_content_button_reject"
                         onClick={this.props.callEventGrouper.rejectCall}
                         kind="danger"
                     >
-                        <span> { _t("Decline") } </span>
+                        <span> {_t("Decline")} </span>
                     </AccessibleButton>
                     <AccessibleButton
                         className="mx_LegacyCallEvent_content_button mx_LegacyCallEvent_content_button_answer"
                         onClick={this.props.callEventGrouper.answerCall}
                         kind="primary"
                     >
-                        <span> { _t("Accept") } </span>
+                        <span> {_t("Accept")} </span>
                     </AccessibleButton>
-                    { this.props.timestamp }
+                    {this.props.timestamp}
                 </div>
             );
         }
@@ -160,12 +160,12 @@ export default class LegacyCallEvent extends React.PureComponent<IProps, IState>
             if (gotRejected) {
                 return (
                     <div className="mx_LegacyCallEvent_content">
-                        { _t("Call declined") }
-                        { this.renderCallBackButton(_t("Call back")) }
-                        { this.props.timestamp }
+                        {_t("Call declined")}
+                        {this.renderCallBackButton(_t("Call back"))}
+                        {this.props.timestamp}
                     </div>
                 );
-            } else if (([CallErrorCode.UserHangup, "user hangup"].includes(hangupReason) || !hangupReason)) {
+            } else if ([CallErrorCode.UserHangup, "user hangup"].includes(hangupReason) || !hangupReason) {
                 // workaround for https://github.com/vector-im/element-web/issues/5178
                 // it seems Android randomly sets a reason of "user hangup" which is
                 // interpreted as an error code :(
@@ -179,16 +179,16 @@ export default class LegacyCallEvent extends React.PureComponent<IProps, IState>
                 }
                 return (
                     <div className="mx_LegacyCallEvent_content">
-                        { text }
-                        { this.props.timestamp }
+                        {text}
+                        {this.props.timestamp}
                     </div>
                 );
             } else if (hangupReason === CallErrorCode.InviteTimeout) {
                 return (
                     <div className="mx_LegacyCallEvent_content">
-                        { _t("No answer") }
-                        { this.renderCallBackButton(_t("Call back")) }
-                        { this.props.timestamp }
+                        {_t("No answer")}
+                        {this.renderCallBackButton(_t("Call back"))}
+                        {this.props.timestamp}
                     </div>
                 );
             }
@@ -211,7 +211,7 @@ export default class LegacyCallEvent extends React.PureComponent<IProps, IState>
             } else if (hangupReason === CallErrorCode.UserBusy) {
                 reason = _t("The user you called is busy.");
             } else {
-                reason = _t('Unknown failure: %(reason)s', { reason: hangupReason });
+                reason = _t("Unknown failure: %(reason)s", { reason: hangupReason });
             }
 
             return (
@@ -221,9 +221,9 @@ export default class LegacyCallEvent extends React.PureComponent<IProps, IState>
                         className="mx_LegacyCallEvent_content_tooltip"
                         kind={InfoTooltipKind.Warning}
                     />
-                    { _t("Connection failed") }
-                    { this.renderCallBackButton(_t("Retry")) }
-                    { this.props.timestamp }
+                    {_t("Connection failed")}
+                    {this.renderCallBackButton(_t("Retry"))}
+                    {this.props.timestamp}
                 </div>
             );
         }
@@ -231,32 +231,32 @@ export default class LegacyCallEvent extends React.PureComponent<IProps, IState>
             return (
                 <div className="mx_LegacyCallEvent_content">
                     <Clock seconds={this.state.length} aria-live="off" />
-                    { this.props.timestamp }
+                    {this.props.timestamp}
                 </div>
             );
         }
         if (state === CallState.Connecting) {
             return (
                 <div className="mx_LegacyCallEvent_content">
-                    { _t("Connecting") }
-                    { this.props.timestamp }
+                    {_t("Connecting")}
+                    {this.props.timestamp}
                 </div>
             );
         }
         if (state === CustomCallState.Missed) {
             return (
                 <div className="mx_LegacyCallEvent_content">
-                    { _t("Missed call") }
-                    { this.renderCallBackButton(_t("Call back")) }
-                    { this.props.timestamp }
+                    {_t("Missed call")}
+                    {this.renderCallBackButton(_t("Call back"))}
+                    {this.props.timestamp}
                 </div>
             );
         }
 
         return (
             <div className="mx_LegacyCallEvent_content">
-                { _t("The call is in an unknown state!") }
-                { this.props.timestamp }
+                {_t("The call is in an unknown state!")}
+                {this.props.timestamp}
             </div>
         );
     }
@@ -285,24 +285,18 @@ export default class LegacyCallEvent extends React.PureComponent<IProps, IState>
         return (
             <div className="mx_LegacyCallEvent_wrapper" ref={this.wrapperElement}>
                 <div className={className}>
-                    { silenceIcon }
+                    {silenceIcon}
                     <div className="mx_LegacyCallEvent_info">
-                        <MemberAvatar
-                            member={event.sender}
-                            width={32}
-                            height={32}
-                        />
+                        <MemberAvatar member={event.sender} width={32} height={32} />
                         <div className="mx_LegacyCallEvent_info_basic">
-                            <div className="mx_LegacyCallEvent_sender">
-                                { sender }
-                            </div>
+                            <div className="mx_LegacyCallEvent_sender">{sender}</div>
                             <div className="mx_LegacyCallEvent_type">
                                 <div className="mx_LegacyCallEvent_type_icon" />
-                                { callType }
+                                {callType}
                             </div>
                         </div>
                     </div>
-                    { content }
+                    {content}
                 </div>
             </div>
         );

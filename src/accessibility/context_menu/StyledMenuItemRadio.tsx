@@ -79,7 +79,7 @@ export const StyledMenuItemRadio: React.FC<IProps> = ({ children, label, onChang
             inputRef={ref}
             tabIndex={isActive ? 0 : -1}
         >
-            { children }
+            {children}
         </StyledRadioButton>
     );
 };

@@ -36,7 +36,8 @@ type EventHandlerMap = {
 
 export abstract class NotificationState
     extends TypedEventEmitter<NotificationStateEvents, EventHandlerMap>
-    implements INotificationStateSnapshotParams, IDestroyable {
+    implements INotificationStateSnapshotParams, IDestroyable
+{
     //
     protected _symbol: string | null = null;
     protected _count = 0;

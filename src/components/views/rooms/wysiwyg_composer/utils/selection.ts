@@ -14,9 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-export function setSelection(selection:
-    Pick<Selection, 'anchorNode' | 'anchorOffset' | 'focusNode' | 'focusOffset'>,
-) {
+export function setSelection(selection: Pick<Selection, "anchorNode" | "anchorOffset" | "focusNode" | "focusOffset">) {
     if (selection.anchorNode && selection.focusNode) {
         const range = new Range();
         range.setStart(selection.anchorNode, selection.anchorOffset);
@@ -26,4 +24,3 @@ export function setSelection(selection:
         document.getSelection()?.addRange(range);
     }
 }
-

@@ -14,16 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Room } from 'matrix-js-sdk/src/models/room';
+import { Room } from "matrix-js-sdk/src/models/room";
 import { logger } from "matrix-js-sdk/src/logger";
-import { EventType } from 'matrix-js-sdk/src/@types/event';
+import { EventType } from "matrix-js-sdk/src/@types/event";
 
-import { ensureVirtualRoomExists } from './createRoom';
+import { ensureVirtualRoomExists } from "./createRoom";
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import DMRoomMap from "./utils/DMRoomMap";
-import LegacyCallHandler from './LegacyCallHandler';
+import LegacyCallHandler from "./LegacyCallHandler";
 import { VIRTUAL_ROOM_EVENT_TYPE } from "./call-types";
-import { findDMForUser } from './utils/dm/findDMForUser';
+import { findDMForUser } from "./utils/dm/findDMForUser";
 
 // Functions for mapping virtual users & rooms. Currently the only lookup
 // is sip virtual: there could be others in the future.
@@ -92,9 +92,9 @@ export default class VoipUserMapper {
         if (!virtualRoom) return null;
         const virtualRoomEvent = virtualRoom.getAccountData(VIRTUAL_ROOM_EVENT_TYPE);
         if (!virtualRoomEvent || !virtualRoomEvent.getContent()) return null;
-        const nativeRoomID = virtualRoomEvent.getContent()['native_room'];
+        const nativeRoomID = virtualRoomEvent.getContent()["native_room"];
         const nativeRoom = MatrixClientPeg.get().getRoom(nativeRoomID);
-        if (!nativeRoom || nativeRoom.getMyMembership() !== 'join') return null;
+        if (!nativeRoom || nativeRoom.getMyMembership() !== "join") return null;
 
         return nativeRoomID;
     }

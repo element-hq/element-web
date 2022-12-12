@@ -26,14 +26,12 @@ import { LocationShareError } from "./LocationShareErrors";
  * that, defaults to the same tile server listed by matrix.org.
  */
 export function findMapStyleUrl(): string {
-    const mapStyleUrl = (
-        getTileServerWellKnown()?.map_style_url ??
-        SdkConfig.get().map_style_url
-    );
+    const mapStyleUrl = getTileServerWellKnown()?.map_style_url ?? SdkConfig.get().map_style_url;
 
     if (!mapStyleUrl) {
-        logger.error("'map_style_url' missing from homeserver .well-known area, and " +
-            "missing from from config.json.");
+        logger.error(
+            "'map_style_url' missing from homeserver .well-known area, and " + "missing from from config.json.",
+        );
         throw new Error(LocationShareError.MapStyleUrlNotConfigured);
     }
 

@@ -14,18 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import { RendezvousFailureReason } from 'matrix-js-sdk/src/rendezvous';
+import React from "react";
+import { RendezvousFailureReason } from "matrix-js-sdk/src/rendezvous";
 
 import { _t } from "../../../languageHandler";
-import AccessibleButton from '../elements/AccessibleButton';
-import QRCode from '../elements/QRCode';
-import Spinner from '../elements/Spinner';
+import AccessibleButton from "../elements/AccessibleButton";
+import QRCode from "../elements/QRCode";
+import Spinner from "../elements/Spinner";
 import { Icon as BackButtonIcon } from "../../../../res/img/element-icons/back.svg";
 import { Icon as DevicesIcon } from "../../../../res/img/element-icons/devices.svg";
 import { Icon as WarningBadge } from "../../../../res/img/element-icons/warning-badge.svg";
 import { Icon as InfoIcon } from "../../../../res/img/element-icons/i.svg";
-import { Click, Phase } from './LoginWithQR';
+import { Click, Phase } from "./LoginWithQR";
 
 interface IProps {
     phase: Phase;
@@ -52,25 +52,25 @@ export default class LoginWithQRFlow extends React.Component<IProps> {
         };
     };
 
-    private cancelButton = () => <AccessibleButton
-        data-testid="cancel-button"
-        kind="primary_outline"
-        onClick={this.handleClick(Click.Cancel)}
-    >
-        { _t("Cancel") }
-    </AccessibleButton>;
+    private cancelButton = () => (
+        <AccessibleButton data-testid="cancel-button" kind="primary_outline" onClick={this.handleClick(Click.Cancel)}>
+            {_t("Cancel")}
+        </AccessibleButton>
+    );
 
     private simpleSpinner = (description?: string): JSX.Element => {
-        return <div className="mx_LoginWithQR_spinner">
-            <div>
-                <Spinner />
-                { description && <p>{ description }</p> }
+        return (
+            <div className="mx_LoginWithQR_spinner">
+                <div>
+                    <Spinner />
+                    {description && <p>{description}</p>}
+                </div>
             </div>
-        </div>;
+        );
     };
 
     public render() {
-        let title = '';
+        let title = "";
         let titleIcon: JSX.Element | undefined;
         let main: JSX.Element | undefined;
         let buttons: JSX.Element | undefined;
@@ -116,67 +116,80 @@ export default class LoginWithQRFlow extends React.Component<IProps> {
                 centreTitle = true;
                 titleIcon = <WarningBadge className="error" />;
                 backButton = false;
-                main = <p data-testid="cancellation-message">{ cancellationMessage }</p>;
-                buttons = <>
-                    <AccessibleButton
-                        data-testid="try-again-button"
-                        kind="primary"
-                        onClick={this.handleClick(Click.TryAgain)}
-                    >
-                        { _t("Try again") }
-                    </AccessibleButton>
-                    { this.cancelButton() }
-                </>;
+                main = <p data-testid="cancellation-message">{cancellationMessage}</p>;
+                buttons = (
+                    <>
+                        <AccessibleButton
+                            data-testid="try-again-button"
+                            kind="primary"
+                            onClick={this.handleClick(Click.TryAgain)}
+                        >
+                            {_t("Try again")}
+                        </AccessibleButton>
+                        {this.cancelButton()}
+                    </>
+                );
                 break;
             case Phase.Connected:
                 title = _t("Devices connected");
                 titleIcon = <DevicesIcon className="normal" />;
                 backButton = false;
-                main = <>
-                    <p>{ _t("Check that the code below matches with your other device:") }</p>
-                    <div className="mx_LoginWithQR_confirmationDigits">
-                        { this.props.confirmationDigits }
-                    </div>
-                    <div className="mx_LoginWithQR_confirmationAlert">
-                        <div>
-                            <InfoIcon />
+                main = (
+                    <>
+                        <p>{_t("Check that the code below matches with your other device:")}</p>
+                        <div className="mx_LoginWithQR_confirmationDigits">{this.props.confirmationDigits}</div>
+                        <div className="mx_LoginWithQR_confirmationAlert">
+                            <div>
+                                <InfoIcon />
+                            </div>
+                            <div>
+                                {_t("By approving access for this device, it will have full access to your account.")}
+                            </div>
                         </div>
-                        <div>{ _t("By approving access for this device, it will have full access to your account.") }</div>
-                    </div>
-                </>;
+                    </>
+                );
 
-                buttons = <>
-                    <AccessibleButton
-                        data-testid="decline-login-button"
-                        kind="primary_outline"
-                        onClick={this.handleClick(Click.Decline)}
-                    >
-                        { _t("Cancel") }
-                    </AccessibleButton>
-                    <AccessibleButton
-                        data-testid="approve-login-button"
-                        kind="primary"
-                        onClick={this.handleClick(Click.Approve)}
-                    >
-                        { _t("Approve") }
-                    </AccessibleButton>
-                </>;
+                buttons = (
+                    <>
+                        <AccessibleButton
+                            data-testid="decline-login-button"
+                            kind="primary_outline"
+                            onClick={this.handleClick(Click.Decline)}
+                        >
+                            {_t("Cancel")}
+                        </AccessibleButton>
+                        <AccessibleButton
+                            data-testid="approve-login-button"
+                            kind="primary"
+                            onClick={this.handleClick(Click.Approve)}
+                        >
+                            {_t("Approve")}
+                        </AccessibleButton>
+                    </>
+                );
                 break;
             case Phase.ShowingQR:
-                title =_t("Sign in with QR code");
+                title = _t("Sign in with QR code");
                 if (this.props.code) {
-                    const code = <div className="mx_LoginWithQR_qrWrapper">
-                        <QRCode data={[{ data: Buffer.from(this.props.code ?? ''), mode: 'byte' }]} className="mx_QRCode" />
-                    </div>;
-                    main = <>
-                        <p>{ _t("Scan the QR code below with your device that's signed out.") }</p>
-                        <ol>
-                            <li>{ _t("Start at the sign in screen") }</li>
-                            <li>{ _t("Select 'Scan QR code'") }</li>
-                            <li>{ _t("Review and approve the sign in") }</li>
-                        </ol>
-                        { code }
-                    </>;
+                    const code = (
+                        <div className="mx_LoginWithQR_qrWrapper">
+                            <QRCode
+                                data={[{ data: Buffer.from(this.props.code ?? ""), mode: "byte" }]}
+                                className="mx_QRCode"
+                            />
+                        </div>
+                    );
+                    main = (
+                        <>
+                            <p>{_t("Scan the QR code below with your device that's signed out.")}</p>
+                            <ol>
+                                <li>{_t("Start at the sign in screen")}</li>
+                                <li>{_t("Select 'Scan QR code'")}</li>
+                                <li>{_t("Review and approve the sign in")}</li>
+                            </ol>
+                            {code}
+                        </>
+                    );
                 } else {
                     main = this.simpleSpinner();
                     buttons = this.cancelButton();
@@ -203,7 +216,7 @@ export default class LoginWithQRFlow extends React.Component<IProps> {
         return (
             <div data-testid="login-with-qr" className="mx_LoginWithQR">
                 <div className={centreTitle ? "mx_LoginWithQR_centreTitle" : ""}>
-                    { backButton ?
+                    {backButton ? (
                         <AccessibleButton
                             data-testid="back-button"
                             className="mx_LoginWithQR_BackButton"
@@ -212,15 +225,14 @@ export default class LoginWithQRFlow extends React.Component<IProps> {
                         >
                             <BackButtonIcon />
                         </AccessibleButton>
-                        : null }
-                    <h1>{ titleIcon }{ title }</h1>
+                    ) : null}
+                    <h1>
+                        {titleIcon}
+                        {title}
+                    </h1>
                 </div>
-                <div className="mx_LoginWithQR_main">
-                    { main }
-                </div>
-                <div className="mx_LoginWithQR_buttons">
-                    { buttons }
-                </div>
+                <div className="mx_LoginWithQR_main">{main}</div>
+                <div className="mx_LoginWithQR_buttons">{buttons}</div>
             </div>
         );
     }

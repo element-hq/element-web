@@ -55,7 +55,7 @@ $MinWidth: 240px;
         /* We then render the pill handle in an ::after to keep it in the handle's */
         /* area without being a massive line across the screen */
         &::after {
-            content: '';
+            content: "";
             position: absolute;
             border-radius: 3px;
 
@@ -85,7 +85,7 @@ $MinWidth: 240px;
             width: 4px;
             border-radius: 4px;
 
-            content: '';
+            content: "";
 
             background-color: $primary-content;
             opacity: 0.8;
@@ -231,7 +231,7 @@ $MinWidth: 240px;
 
     &::before {
         background-color: $muted-fg-color;
-        content: '';
+        content: "";
         height: 24px;
         mask-position: center;
         mask-repeat: no-repeat;
@@ -243,7 +243,7 @@ $MinWidth: 240px;
     &:hover::after {
         background-color: $panel-actions;
         border-radius: 50%;
-        content: '';
+        content: "";
         height: 24px;
         left: 0;
         position: absolute;
@@ -264,11 +264,11 @@ $MinWidth: 240px;
     }
 
     &.mx_AppTileMenuBar_iconButton_popout::before {
-        mask-image: url('$(res)/img/feather-customised/widget/external-link.svg');
+        mask-image: url("$(res)/img/feather-customised/widget/external-link.svg");
     }
 
     &.mx_AppTileMenuBar_iconButton_menu::before {
-        mask-image: url('$(res)/img/element-icons/room/ellipsis.svg');
+        mask-image: url("$(res)/img/element-icons/room/ellipsis.svg");
     }
 }
 
@@ -353,9 +353,9 @@ $MinWidth: 240px;
     width: 12px;
     height: 12px;
     mask-position: center;
-    content: '';
+    content: "";
     vertical-align: middle;
-    mask-image: url('$(res)/img/feather-customised/help-circle.svg');
+    mask-image: url("$(res)/img/feather-customised/help-circle.svg");
 }
 
 .mx_AppPermissionWarning_tooltip {
@@ -398,8 +398,12 @@ $MinWidth: 240px;
 }
 
 @keyframes mx_AppLoading_spinner_fadeIn_animation {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 .mx_AppLoading iframe {

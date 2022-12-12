@@ -14,15 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { forwardRef, ReactNode, KeyboardEvent, Ref } from 'react';
-import classNames from 'classnames';
+import React, { forwardRef, ReactNode, KeyboardEvent, Ref } from "react";
+import classNames from "classnames";
 
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import { _t } from "../../../languageHandler";
 import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
-import RightPanelStore from '../../../stores/right-panel/RightPanelStore';
-import { backLabelForPhase } from '../../../stores/right-panel/RightPanelStorePhases';
-import { CardContext } from './context';
+import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
+import { backLabelForPhase } from "../../../stores/right-panel/RightPanelStorePhases";
+import { CardContext } from "./context";
 
 interface IProps {
     header?: ReactNode;
@@ -43,64 +43,58 @@ interface IGroupProps {
 }
 
 export const Group: React.FC<IGroupProps> = ({ className, title, children }) => {
-    return <div className={classNames("mx_BaseCard_Group", className)}>
-        <h1>{ title }</h1>
-        { children }
-    </div>;
+    return (
+        <div className={classNames("mx_BaseCard_Group", className)}>
+            <h1>{title}</h1>
+            {children}
+        </div>
+    );
 };
 
-const BaseCard: React.FC<IProps> = forwardRef<HTMLDivElement, IProps>(({
-    closeLabel,
-    onClose,
-    onBack,
-    className,
-    header,
-    footer,
-    withoutScrollContainer,
-    children,
-    onKeyDown,
-}, ref) => {
-    let backButton;
-    const cardHistory = RightPanelStore.instance.roomPhaseHistory;
-    if (cardHistory.length > 1) {
-        const prevCard = cardHistory[cardHistory.length - 2];
-        const onBackClick = (ev: ButtonEvent) => {
-            onBack?.(ev);
-            RightPanelStore.instance.popCard();
-        };
-        const label = backLabelForPhase(prevCard.phase) ?? _t("Back");
-        backButton = <AccessibleButton className="mx_BaseCard_back" onClick={onBackClick} title={label} />;
-    }
+const BaseCard: React.FC<IProps> = forwardRef<HTMLDivElement, IProps>(
+    ({ closeLabel, onClose, onBack, className, header, footer, withoutScrollContainer, children, onKeyDown }, ref) => {
+        let backButton;
+        const cardHistory = RightPanelStore.instance.roomPhaseHistory;
+        if (cardHistory.length > 1) {
+            const prevCard = cardHistory[cardHistory.length - 2];
+            const onBackClick = (ev: ButtonEvent) => {
+                onBack?.(ev);
+                RightPanelStore.instance.popCard();
+            };
+            const label = backLabelForPhase(prevCard.phase) ?? _t("Back");
+            backButton = <AccessibleButton className="mx_BaseCard_back" onClick={onBackClick} title={label} />;
+        }
 
-    let closeButton;
-    if (onClose) {
-        closeButton = <AccessibleButton
-            data-test-id='base-card-close-button'
-            className="mx_BaseCard_close"
-            onClick={onClose}
-            title={closeLabel || _t("Close")}
-        />;
-    }
+        let closeButton;
+        if (onClose) {
+            closeButton = (
+                <AccessibleButton
+                    data-test-id="base-card-close-button"
+                    className="mx_BaseCard_close"
+                    onClick={onClose}
+                    title={closeLabel || _t("Close")}
+                />
+            );
+        }
 
-    if (!withoutScrollContainer) {
-        children = <AutoHideScrollbar>
-            { children }
-        </AutoHideScrollbar>;
-    }
+        if (!withoutScrollContainer) {
+            children = <AutoHideScrollbar>{children}</AutoHideScrollbar>;
+        }
 
-    return (
-        <CardContext.Provider value={{ isCard: true }}>
-            <div className={classNames("mx_BaseCard", className)} ref={ref} onKeyDown={onKeyDown}>
-                <div className="mx_BaseCard_header">
-                    { backButton }
-                    { closeButton }
-                    { header }
+        return (
+            <CardContext.Provider value={{ isCard: true }}>
+                <div className={classNames("mx_BaseCard", className)} ref={ref} onKeyDown={onKeyDown}>
+                    <div className="mx_BaseCard_header">
+                        {backButton}
+                        {closeButton}
+                        {header}
+                    </div>
+                    {children}
+                    {footer && <div className="mx_BaseCard_footer">{footer}</div>}
                 </div>
-                { children }
-                { footer && <div className="mx_BaseCard_footer">{ footer }</div> }
-            </div>
-        </CardContext.Provider>
-    );
-});
+            </CardContext.Provider>
+        );
+    },
+);
 
 export default BaseCard;

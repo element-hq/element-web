@@ -42,21 +42,26 @@ export default function SearchWarning({ isRoomEncrypted, kind }: IProps) {
     if (EventIndexPeg.error) {
         return (
             <div className="mx_SearchWarning">
-                { _t("Message search initialisation failed, check <a>your settings</a> for more information", {}, {
-                    a: sub => (
-                        <AccessibleButton
-                            kind="link_inline"
-                            onClick={(evt) => {
-                                evt.preventDefault();
-                                dis.dispatch({
-                                    action: Action.ViewUserSettings,
-                                    initialTabId: UserTab.Security,
-                                });
-                            }}
-                        >
-                            { sub }
-                        </AccessibleButton>),
-                }) }
+                {_t(
+                    "Message search initialisation failed, check <a>your settings</a> for more information",
+                    {},
+                    {
+                        a: (sub) => (
+                            <AccessibleButton
+                                kind="link_inline"
+                                onClick={(evt) => {
+                                    evt.preventDefault();
+                                    dis.dispatch({
+                                        action: Action.ViewUserSettings,
+                                        initialTabId: UserTab.Security,
+                                    });
+                                }}
+                            >
+                                {sub}
+                            </AccessibleButton>
+                        ),
+                    },
+                )}
             </div>
         );
     }
@@ -71,14 +76,30 @@ export default function SearchWarning({ isRoomEncrypted, kind }: IProps) {
         const buildUrl = desktopBuilds.get("url");
         switch (kind) {
             case WarningKind.Files:
-                text = _t("Use the <a>Desktop app</a> to see all encrypted files", {}, {
-                    a: sub => (<a href={buildUrl} target="_blank" rel="noreferrer noopener">{ sub }</a>),
-                });
+                text = _t(
+                    "Use the <a>Desktop app</a> to see all encrypted files",
+                    {},
+                    {
+                        a: (sub) => (
+                            <a href={buildUrl} target="_blank" rel="noreferrer noopener">
+                                {sub}
+                            </a>
+                        ),
+                    },
+                );
                 break;
             case WarningKind.Search:
-                text = _t("Use the <a>Desktop app</a> to search encrypted messages", {}, {
-                    a: sub => (<a href={buildUrl} target="_blank" rel="noreferrer noopener">{ sub }</a>),
-                });
+                text = _t(
+                    "Use the <a>Desktop app</a> to search encrypted messages",
+                    {},
+                    {
+                        a: (sub) => (
+                            <a href={buildUrl} target="_blank" rel="noreferrer noopener">
+                                {sub}
+                            </a>
+                        ),
+                    },
+                );
                 break;
         }
     } else {
@@ -100,8 +121,8 @@ export default function SearchWarning({ isRoomEncrypted, kind }: IProps) {
 
     return (
         <div className="mx_SearchWarning">
-            { logo }
-            <span>{ text }</span>
+            {logo}
+            <span>{text}</span>
         </div>
     );
 }

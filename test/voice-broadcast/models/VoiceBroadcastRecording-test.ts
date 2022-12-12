@@ -47,7 +47,7 @@ import dis from "../../../src/dispatcher/dispatcher";
 import { VoiceRecording } from "../../../src/audio/VoiceRecording";
 
 jest.mock("../../../src/voice-broadcast/audio/VoiceBroadcastRecorder", () => ({
-    ...jest.requireActual("../../../src/voice-broadcast/audio/VoiceBroadcastRecorder") as object,
+    ...(jest.requireActual("../../../src/voice-broadcast/audio/VoiceBroadcastRecorder") as object),
     createVoiceBroadcastRecorder: jest.fn(),
 }));
 
@@ -141,44 +141,41 @@ describe("VoiceBroadcastRecording", () => {
                 new Blob([new Uint8Array(data)], { type: voiceBroadcastRecorder.contentType }),
             );
 
-            expect(mocked(client.sendMessage)).toHaveBeenCalledWith(
-                roomId,
-                {
-                    body: "Voice message",
+            expect(mocked(client.sendMessage)).toHaveBeenCalledWith(roomId, {
+                body: "Voice message",
+                file: {
+                    file: true,
+                },
+                info: {
+                    duration,
+                    mimetype: "audio/ogg",
+                    size,
+                },
+                ["m.relates_to"]: {
+                    event_id: infoEvent.getId(),
+                    rel_type: "m.reference",
+                },
+                msgtype: "m.audio",
+                ["org.matrix.msc1767.audio"]: {
+                    duration,
+                    waveform: undefined,
+                },
+                ["org.matrix.msc1767.file"]: {
                     file: {
                         file: true,
                     },
-                    info: {
-                        duration,
-                        mimetype: "audio/ogg",
-                        size,
-                    },
-                    ["m.relates_to"]: {
-                        event_id: infoEvent.getId(),
-                        rel_type: "m.reference",
-                    },
-                    msgtype: "m.audio",
-                    ["org.matrix.msc1767.audio"]: {
-                        duration,
-                        waveform: undefined,
-                    },
-                    ["org.matrix.msc1767.file"]: {
-                        file: {
-                            file: true,
-                        },
-                        mimetype: "audio/ogg",
-                        name: "Voice message.ogg",
-                        size,
-                        url: "mxc://example.com/vb",
-                    },
-                    ["org.matrix.msc1767.text"]: "Voice message",
-                    ["org.matrix.msc3245.voice"]: {},
+                    mimetype: "audio/ogg",
+                    name: "Voice message.ogg",
+                    size,
                     url: "mxc://example.com/vb",
-                    ["io.element.voice_broadcast_chunk"]: {
-                        sequence,
-                    },
                 },
-            );
+                ["org.matrix.msc1767.text"]: "Voice message",
+                ["org.matrix.msc3245.voice"]: {},
+                url: "mxc://example.com/vb",
+                ["io.element.voice_broadcast_chunk"]: {
+                    sequence,
+                },
+            });
         });
     };
 
@@ -202,40 +199,42 @@ describe("VoiceBroadcastRecording", () => {
             file: uploadedFile,
         });
 
-        mocked(createVoiceMessageContent).mockImplementation((
-            mxc: string,
-            mimetype: string,
-            duration: number,
-            size: number,
-            file?: IEncryptedFile,
-            waveform?: number[],
-        ) => {
-            return {
-                body: "Voice message",
-                msgtype: MsgType.Audio,
-                url: mxc,
-                file,
-                info: {
-                    duration,
-                    mimetype,
-                    size,
-                },
-                ["org.matrix.msc1767.text"]: "Voice message",
-                ["org.matrix.msc1767.file"]: {
+        mocked(createVoiceMessageContent).mockImplementation(
+            (
+                mxc: string,
+                mimetype: string,
+                duration: number,
+                size: number,
+                file?: IEncryptedFile,
+                waveform?: number[],
+            ) => {
+                return {
+                    body: "Voice message",
+                    msgtype: MsgType.Audio,
                     url: mxc,
                     file,
-                    name: "Voice message.ogg",
-                    mimetype,
-                    size,
-                },
-                ["org.matrix.msc1767.audio"]: {
-                    duration,
-                    // https://github.com/matrix-org/matrix-doc/pull/3246
-                    waveform,
-                },
-                ["org.matrix.msc3245.voice"]: {}, // No content, this is a rendering hint
-            };
-        });
+                    info: {
+                        duration,
+                        mimetype,
+                        size,
+                    },
+                    ["org.matrix.msc1767.text"]: "Voice message",
+                    ["org.matrix.msc1767.file"]: {
+                        url: mxc,
+                        file,
+                        name: "Voice message.ogg",
+                        mimetype,
+                        size,
+                    },
+                    ["org.matrix.msc1767.audio"]: {
+                        duration,
+                        // https://github.com/matrix-org/matrix-doc/pull/3246
+                        waveform,
+                    },
+                    ["org.matrix.msc3245.voice"]: {}, // No content, this is a rendering hint
+                };
+            },
+        );
     });
 
     afterEach(() => {
@@ -291,9 +290,12 @@ describe("VoiceBroadcastRecording", () => {
 
             describe("and receiving a call action", () => {
                 beforeEach(() => {
-                    dis.dispatch({
-                        action: "call_state",
-                    }, true);
+                    dis.dispatch(
+                        {
+                            action: "call_state",
+                        },
+                        true,
+                    );
                 });
 
                 itShouldBeInState(VoiceBroadcastInfoState.Paused);
@@ -327,13 +329,10 @@ describe("VoiceBroadcastRecording", () => {
 
             describe("and a chunk has been recorded", () => {
                 beforeEach(async () => {
-                    voiceBroadcastRecorder.emit(
-                        VoiceBroadcastRecorderEvent.ChunkRecorded,
-                        {
-                            buffer: new Uint8Array([1, 2, 3]),
-                            length: 23,
-                        },
-                    );
+                    voiceBroadcastRecorder.emit(VoiceBroadcastRecorderEvent.ChunkRecorded, {
+                        buffer: new Uint8Array([1, 2, 3]),
+                        length: 23,
+                    });
                 });
 
                 itShouldSendAVoiceMessage([1, 2, 3], 3, 23, 1);
@@ -451,21 +450,19 @@ describe("VoiceBroadcastRecording", () => {
 
             const timelineSet = {
                 relations: {
-                    getChildEventsForEvent: jest.fn().mockImplementation(
-                        (
-                            eventId: string,
-                            relationType: RelationType | string,
-                            eventType: EventType | string,
-                        ) => {
-                            if (
-                                eventId === infoEvent.getId()
-                                && relationType === RelationType.Reference
-                                && eventType === VoiceBroadcastInfoEventType
-                            ) {
-                                return relationsContainer;
-                            }
-                        },
-                    ),
+                    getChildEventsForEvent: jest
+                        .fn()
+                        .mockImplementation(
+                            (eventId: string, relationType: RelationType | string, eventType: EventType | string) => {
+                                if (
+                                    eventId === infoEvent.getId() &&
+                                    relationType === RelationType.Reference &&
+                                    eventType === VoiceBroadcastInfoEventType
+                                ) {
+                                    return relationsContainer;
+                                }
+                            },
+                        ),
                 },
             } as unknown as EventTimelineSet;
             mocked(room.getUnfilteredTimelineSet).mockReturnValue(timelineSet);

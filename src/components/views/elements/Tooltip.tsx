@@ -17,9 +17,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { CSSProperties } from 'react';
-import ReactDOM from 'react-dom';
-import classNames from 'classnames';
+import React, { CSSProperties } from "react";
+import ReactDOM from "react-dom";
+import classNames from "classnames";
 
 import UIStore from "../../../stores/UIStore";
 import { objectHasDiff } from "../../../utils/objects";
@@ -35,22 +35,22 @@ export enum Alignment {
 }
 
 export interface ITooltipProps {
-        // Class applied to the element used to position the tooltip
-        className?: string;
-        // Class applied to the tooltip itself
-        tooltipClassName?: string;
-        // Whether the tooltip is visible or hidden.
-        // The hidden state allows animating the tooltip away via CSS.
-        // Defaults to visible if unset.
-        visible?: boolean;
-        // the react element to put into the tooltip
-        label: React.ReactNode;
-        alignment?: Alignment; // defaults to Natural
-        // id describing tooltip
-        // used to associate tooltip with target for a11y
-        id?: string;
-        // If the parent is over this width, act as if it is only this wide
-        maxParentWidth?: number;
+    // Class applied to the element used to position the tooltip
+    className?: string;
+    // Class applied to the tooltip itself
+    tooltipClassName?: string;
+    // Whether the tooltip is visible or hidden.
+    // The hidden state allows animating the tooltip away via CSS.
+    // Defaults to visible if unset.
+    visible?: boolean;
+    // the react element to put into the tooltip
+    label: React.ReactNode;
+    alignment?: Alignment; // defaults to Natural
+    // id describing tooltip
+    // used to associate tooltip with target for a11y
+    id?: string;
+    // If the parent is over this width, act as if it is only this wide
+    maxParentWidth?: number;
 }
 
 type State = Partial<Pick<CSSProperties, "display" | "right" | "top" | "transform" | "left">>;
@@ -82,12 +82,12 @@ export default class Tooltip extends React.PureComponent<ITooltipProps, State> {
     }
 
     public componentDidMount() {
-        window.addEventListener('scroll', this.updatePosition, {
+        window.addEventListener("scroll", this.updatePosition, {
             passive: true,
             capture: true,
         });
 
-        this.parent = ReactDOM.findDOMNode(this)?.parentNode as Element ?? null;
+        this.parent = (ReactDOM.findDOMNode(this)?.parentNode as Element) ?? null;
 
         this.updatePosition();
     }
@@ -100,7 +100,7 @@ export default class Tooltip extends React.PureComponent<ITooltipProps, State> {
 
     // Remove the wrapper element, as the tooltip has finished using it
     public componentWillUnmount() {
-        window.removeEventListener('scroll', this.updatePosition, {
+        window.removeEventListener("scroll", this.updatePosition, {
             capture: true,
         });
     }
@@ -114,18 +114,14 @@ export default class Tooltip extends React.PureComponent<ITooltipProps, State> {
         const parentBox = this.parent.getBoundingClientRect();
         const width = UIStore.instance.windowWidth;
         const spacing = 6;
-        const parentWidth = (
-            this.props.maxParentWidth
-                ? Math.min(parentBox.width, this.props.maxParentWidth)
-                : parentBox.width
-        );
+        const parentWidth = this.props.maxParentWidth
+            ? Math.min(parentBox.width, this.props.maxParentWidth)
+            : parentBox.width;
         const baseTop = parentBox.top + window.scrollY;
-        const centerTop = parentBox.top + window.scrollY + (parentBox.height / 2);
+        const centerTop = parentBox.top + window.scrollY + parentBox.height / 2;
         const right = width - parentBox.left - window.scrollX;
         const left = parentBox.right + window.scrollX;
-        const horizontalCenter = (
-            parentBox.left - window.scrollX + (parentWidth / 2)
-        );
+        const horizontalCenter = parentBox.left - window.scrollX + parentWidth / 2;
 
         const style: State = {};
         switch (this.props.alignment) {
@@ -136,7 +132,7 @@ export default class Tooltip extends React.PureComponent<ITooltipProps, State> {
                     style.transform = "translateY(-50%)";
                     break;
                 }
-                // fall through to Right
+            // fall through to Right
             case Alignment.Right:
                 style.left = left + spacing;
                 style.top = centerTop;
@@ -180,8 +176,8 @@ export default class Tooltip extends React.PureComponent<ITooltipProps, State> {
 
     public render() {
         const tooltipClasses = classNames("mx_Tooltip", this.props.tooltipClassName, {
-            "mx_Tooltip_visible": this.props.visible,
-            "mx_Tooltip_invisible": !this.props.visible,
+            mx_Tooltip_visible: this.props.visible,
+            mx_Tooltip_invisible: !this.props.visible,
         });
 
         const style = { ...this.state };
@@ -192,14 +188,10 @@ export default class Tooltip extends React.PureComponent<ITooltipProps, State> {
         const tooltip = (
             <div role="tooltip" className={tooltipClasses} style={style}>
                 <div className="mx_Tooltip_chevron" />
-                { this.props.label }
+                {this.props.label}
             </div>
         );
 
-        return (
-            <div className={this.props.className}>
-                { ReactDOM.createPortal(tooltip, Tooltip.container) }
-            </div>
-        );
+        return <div className={this.props.className}>{ReactDOM.createPortal(tooltip, Tooltip.container)}</div>;
     }
 }

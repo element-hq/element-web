@@ -20,4 +20,3 @@ import { RightPanelPhases } from "../../stores/right-panel/RightPanelStorePhases
 export const showThreadPanel = () => {
     RightPanelStore.instance.setCard({ phase: RightPanelPhases.ThreadPanel });
 };
-

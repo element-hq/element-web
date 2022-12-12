@@ -17,7 +17,7 @@ limitations under the License.
 import EventEmitter from "events";
 
 export enum UI_EVENTS {
-    Resize = "resize"
+    Resize = "resize",
 }
 
 export default class UIStore extends EventEmitter {
@@ -86,14 +86,14 @@ export default class UIStore extends EventEmitter {
     }
 
     private resizeObserverCallback = (entries: ResizeObserverEntry[]) => {
-        const windowEntry = entries.find(entry => entry.target === document.body);
+        const windowEntry = entries.find((entry) => entry.target === document.body);
 
         if (windowEntry) {
             this.windowWidth = windowEntry.contentRect.width;
             this.windowHeight = windowEntry.contentRect.height;
         }
 
-        entries.forEach(entry => {
+        entries.forEach((entry) => {
             const trackedElementName = this.trackedUiElements.get(entry.target);
             if (trackedElementName) {
                 this.uiElementDimensions.set(trackedElementName, entry.contentRect);

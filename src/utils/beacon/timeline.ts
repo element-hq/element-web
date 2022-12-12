@@ -21,11 +21,8 @@ import { M_BEACON_INFO } from "matrix-js-sdk/src/@types/beacon";
  * beacon_info events without live property set to true
  * should be displayed in the timeline
  */
-export const shouldDisplayAsBeaconTile = (event: MatrixEvent): boolean => (
+export const shouldDisplayAsBeaconTile = (event: MatrixEvent): boolean =>
     M_BEACON_INFO.matches(event.getType()) &&
-    (
-        event.getContent()?.live ||
+    (event.getContent()?.live ||
         // redacted beacons should show 'message deleted' tile
-        event.isRedacted()
-    )
-);
+        event.isRedacted());

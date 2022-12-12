@@ -65,9 +65,8 @@ export default class PosthogTrackers {
     }
 
     private trackPage(durationMs?: number): void {
-        const screenName = this.view === Views.LOGGED_IN
-            ? loggedInPageTypeMap[this.pageType]
-            : notLoggedInMap[this.view];
+        const screenName =
+            this.view === Views.LOGGED_IN ? loggedInPageTypeMap[this.pageType] : notLoggedInMap[this.view];
         PosthogAnalytics.instance.trackEvent<ScreenEvent>({
             eventName: "$pageview",
             $current_url: screenName,

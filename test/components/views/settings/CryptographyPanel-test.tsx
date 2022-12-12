@@ -14,16 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactElement } from 'react';
-import ReactDOM from 'react-dom';
-import { MatrixClient } from 'matrix-js-sdk/src/matrix';
+import React, { ReactElement } from "react";
+import ReactDOM from "react-dom";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
-import { MatrixClientPeg } from '../../../../src/MatrixClientPeg';
-import * as TestUtils from '../../../test-utils';
-import CryptographyPanel from '../../../../src/components/views/settings/CryptographyPanel';
+import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
+import * as TestUtils from "../../../test-utils";
+import CryptographyPanel from "../../../../src/components/views/settings/CryptographyPanel";
 
-describe('CryptographyPanel', () => {
-    it('shows the session ID and key', () => {
+describe("CryptographyPanel", () => {
+    it("shows the session ID and key", () => {
         const sessionId = "ABCDEFGHIJ";
         const sessionKey = "AbCDeFghIJK7L/m4nOPqRSTUVW4xyzaBCDef6gHIJkl";
         const sessionKeyFormatted = "<b>AbCD eFgh IJK7 L/m4 nOPq RSTU VW4x yzaB CDef 6gHI Jkl</b>";
@@ -45,7 +45,7 @@ describe('CryptographyPanel', () => {
 });
 
 function render(component: ReactElement<CryptographyPanel>): HTMLDivElement {
-    const parentDiv = document.createElement('div');
+    const parentDiv = document.createElement("div");
     document.body.appendChild(parentDiv);
     ReactDOM.render(component, parentDiv);
     return parentDiv;

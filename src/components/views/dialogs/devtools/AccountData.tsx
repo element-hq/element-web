@@ -26,9 +26,7 @@ import { _t } from "../../../../languageHandler";
 export const AccountDataEventEditor = ({ mxEvent, onBack }: IEditorProps) => {
     const cli = useContext(MatrixClientContext);
 
-    const fields = useMemo(() => [
-        eventTypeField(mxEvent?.getType()),
-    ], [mxEvent]);
+    const fields = useMemo(() => [eventTypeField(mxEvent?.getType())], [mxEvent]);
 
     const onSend = ([eventType]: string[], content?: IContent) => {
         return cli.setAccountData(eventType, content);
@@ -42,9 +40,7 @@ export const RoomAccountDataEventEditor = ({ mxEvent, onBack }: IEditorProps) =>
     const context = useContext(DevtoolsContext);
     const cli = useContext(MatrixClientContext);
 
-    const fields = useMemo(() => [
-        eventTypeField(mxEvent?.getType()),
-    ], [mxEvent]);
+    const fields = useMemo(() => [eventTypeField(mxEvent?.getType())], [mxEvent]);
 
     const onSend = ([eventType]: string[], content?: IContent) => {
         return cli.setRoomAccountData(context.room.roomId, eventType, content);
@@ -75,43 +71,49 @@ const BaseAccountDataExplorer = ({ events, Editor, actionLabel, onBack, setTool 
         setTool(actionLabel, Editor);
     };
 
-    return <BaseTool onBack={onBack} actionLabel={actionLabel} onAction={onAction}>
-        <FilteredList query={query} onChange={setQuery}>
-            {
-                Object.entries(events).map(([eventType, ev]) => {
+    return (
+        <BaseTool onBack={onBack} actionLabel={actionLabel} onAction={onAction}>
+            <FilteredList query={query} onChange={setQuery}>
+                {Object.entries(events).map(([eventType, ev]) => {
                     const onClick = () => {
                         setEvent(ev);
                     };
 
-                    return <button className="mx_DevTools_button" key={eventType} onClick={onClick}>
-                        { eventType }
-                    </button>;
-                })
-            }
-        </FilteredList>
-    </BaseTool>;
+                    return (
+                        <button className="mx_DevTools_button" key={eventType} onClick={onClick}>
+                            {eventType}
+                        </button>
+                    );
+                })}
+            </FilteredList>
+        </BaseTool>
+    );
 };
 
 export const AccountDataExplorer = ({ onBack, setTool }: IDevtoolsProps) => {
     const cli = useContext(MatrixClientContext);
 
-    return <BaseAccountDataExplorer
-        events={cli.store.accountData}
-        Editor={AccountDataEventEditor}
-        actionLabel={_t("Send custom account data event")}
-        onBack={onBack}
-        setTool={setTool}
-    />;
+    return (
+        <BaseAccountDataExplorer
+            events={cli.store.accountData}
+            Editor={AccountDataEventEditor}
+            actionLabel={_t("Send custom account data event")}
+            onBack={onBack}
+            setTool={setTool}
+        />
+    );
 };
 
 export const RoomAccountDataExplorer = ({ onBack, setTool }: IDevtoolsProps) => {
     const context = useContext(DevtoolsContext);
 
-    return <BaseAccountDataExplorer
-        events={context.room.accountData}
-        Editor={RoomAccountDataEventEditor}
-        actionLabel={_t("Send custom room account data event")}
-        onBack={onBack}
-        setTool={setTool}
-    />;
+    return (
+        <BaseAccountDataExplorer
+            events={context.room.accountData}
+            Editor={RoomAccountDataEventEditor}
+            actionLabel={_t("Send custom room account data event")}
+            onBack={onBack}
+            setTool={setTool}
+        />
+    );
 };

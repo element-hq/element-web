@@ -58,13 +58,9 @@ export const VoiceBroadcastBody: React.FC<IBodyProps> = ({ mxEvent }) => {
 
     if (shouldDisplayAsVoiceBroadcastRecordingTile(infoState, client, mxEvent)) {
         const recording = VoiceBroadcastRecordingsStore.instance().getByInfoEvent(mxEvent, client);
-        return <VoiceBroadcastRecordingBody
-            recording={recording}
-        />;
+        return <VoiceBroadcastRecordingBody recording={recording} />;
     }
 
     const playback = VoiceBroadcastPlaybacksStore.instance().getByInfoEvent(mxEvent, client);
-    return <VoiceBroadcastPlaybackBody
-        playback={playback}
-    />;
+    return <VoiceBroadcastPlaybackBody playback={playback} />;
 };

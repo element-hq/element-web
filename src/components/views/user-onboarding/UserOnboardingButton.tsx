@@ -42,9 +42,7 @@ export function UserOnboardingButton({ selected, minimized }: Props) {
         return null;
     }
 
-    return (
-        <UserOnboardingButtonInternal selected={selected} minimized={minimized} />
-    );
+    return <UserOnboardingButtonInternal selected={selected} minimized={minimized} />;
 }
 
 function UserOnboardingButtonInternal({ selected, minimized }: Props) {
@@ -67,23 +65,21 @@ function UserOnboardingButtonInternal({ selected, minimized }: Props) {
     return (
         <AccessibleButton
             className={classNames("mx_UserOnboardingButton", {
-                "mx_UserOnboardingButton_selected": selected,
-                "mx_UserOnboardingButton_minimized": minimized,
+                mx_UserOnboardingButton_selected: selected,
+                mx_UserOnboardingButton_minimized: minimized,
             })}
-            onClick={onClick}>
-            { !minimized && (
+            onClick={onClick}
+        >
+            {!minimized && (
                 <>
                     <div className="mx_UserOnboardingButton_content">
                         <Heading size="h4" className="mx_Heading_h4">
-                            { _t("Welcome") }
+                            {_t("Welcome")}
                         </Heading>
-                        <AccessibleButton
-                            className="mx_UserOnboardingButton_close"
-                            onClick={onDismiss}
-                        />
+                        <AccessibleButton className="mx_UserOnboardingButton_close" onClick={onDismiss} />
                     </div>
                 </>
-            ) }
+            )}
         </AccessibleButton>
     );
 }

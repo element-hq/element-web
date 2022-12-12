@@ -19,7 +19,7 @@ import { MutableRefObject, useCallback, useEffect, useRef } from "react";
 import useFocus from "../../../../../hooks/useFocus";
 import { setSelection } from "../utils/selection";
 
-type SubSelection = Pick<Selection, 'anchorNode' | 'anchorOffset' | 'focusNode' | 'focusOffset'>;
+type SubSelection = Pick<Selection, "anchorNode" | "anchorOffset" | "focusNode" | "focusOffset">;
 
 function setSelectionRef(selectionRef: MutableRefObject<SubSelection>) {
     const selection = document.getSelection();
@@ -49,10 +49,10 @@ export function useSelection() {
         }
 
         if (isFocused) {
-            document.addEventListener('selectionchange', onSelectionChange);
+            document.addEventListener("selectionchange", onSelectionChange);
         }
 
-        return () => document.removeEventListener('selectionchange', onSelectionChange);
+        return () => document.removeEventListener("selectionchange", onSelectionChange);
     }, [isFocused]);
 
     const onInput = useCallback(() => {

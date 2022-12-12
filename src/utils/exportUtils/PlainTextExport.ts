@@ -61,7 +61,7 @@ export default class PlainTextExporter extends Exporter {
 
         rplSource = match[2].substring(1);
         // Get the first non-blank line from the source.
-        const lines = rplSource.split('\n').filter((line) => !/^\s*$/.test(line));
+        const lines = rplSource.split("\n").filter((line) => !/^\s*$/.test(line));
         if (lines.length > 0) {
             // Cut to a maximum length.
             rplSource = lines[0].substring(0, REPLY_SOURCE_MAX_LENGTH);
@@ -111,10 +111,14 @@ export default class PlainTextExporter extends Exporter {
         let content = "";
         for (let i = 0; i < events.length; i++) {
             const event = events[i];
-            this.updateProgress(_t("Processing event %(number)s out of %(total)s", {
-                number: i + 1,
-                total: events.length,
-            }), false, true);
+            this.updateProgress(
+                _t("Processing event %(number)s out of %(total)s", {
+                    number: i + 1,
+                    total: events.length,
+                }),
+                false,
+                true,
+            );
             if (this.cancelled) return this.cleanUp();
             if (!haveRendererForEvent(event, false)) continue;
             const textForEvent = await this.plainTextForEvent(event);
@@ -131,7 +135,7 @@ export default class PlainTextExporter extends Exporter {
         const res = await this.getRequiredEvents();
         const fetchEnd = performance.now();
 
-        logger.log(`Fetched ${res.length} events in ${(fetchEnd - fetchStart)/1000}s`);
+        logger.log(`Fetched ${res.length} events in ${(fetchEnd - fetchStart) / 1000}s`);
 
         this.updateProgress(_t("Creating output..."));
         const text = await this.createOutput(res);
@@ -150,10 +154,9 @@ export default class PlainTextExporter extends Exporter {
             logger.info("Export cancelled successfully");
         } else {
             logger.info("Export successful!");
-            logger.log(`Exported ${res.length} events in ${(exportEnd - fetchStart)/1000} seconds`);
+            logger.log(`Exported ${res.length} events in ${(exportEnd - fetchStart) / 1000} seconds`);
         }
 
         this.cleanUp();
     }
 }
-

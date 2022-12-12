@@ -69,15 +69,15 @@ export abstract class ReadyWatchingStore extends EventEmitter implements IDestro
     private onAction = async (payload: ActionPayload) => {
         this.onDispatcherAction(payload);
 
-        if (payload.action === 'MatrixActions.sync') {
+        if (payload.action === "MatrixActions.sync") {
             // Only set the client on the transition into the PREPARED state.
             // Everything after this is unnecessary (we only need to know once we have a client)
             // and we intentionally don't set the client before this point to avoid stores
             // updating for every event emitted during the cached sync.
             if (
-                payload.prevState !== SyncState.Prepared
-                && payload.state === SyncState.Prepared
-                && this.matrixClient !== payload.matrixClient
+                payload.prevState !== SyncState.Prepared &&
+                payload.state === SyncState.Prepared &&
+                this.matrixClient !== payload.matrixClient
             ) {
                 if (this.matrixClient) {
                     await this.onNotReady();
@@ -85,7 +85,7 @@ export abstract class ReadyWatchingStore extends EventEmitter implements IDestro
                 this.matrixClient = payload.matrixClient;
                 await this.onReady();
             }
-        } else if (payload.action === 'on_client_not_viable' || payload.action === Action.OnLoggedOut) {
+        } else if (payload.action === "on_client_not_viable" || payload.action === Action.OnLoggedOut) {
             if (this.matrixClient) {
                 await this.onNotReady();
                 this.matrixClient = null;

@@ -52,7 +52,7 @@ export class EchoStore extends AsyncStoreWithClient<IState> {
     }
 
     public get contexts(): EchoContext[] {
-        return Array.from(this.caches.values()).map(e => e.context);
+        return Array.from(this.caches.values()).map((e) => e.context);
     }
 
     public getOrCreateChamberForRoom(room: Room): RoomEchoChamber {
@@ -99,6 +99,5 @@ export class EchoStore extends AsyncStoreWithClient<IState> {
         }
     }
 
-    protected async onAction(payload: ActionPayload): Promise<void> {
-    }
+    protected async onAction(payload: ActionPayload): Promise<void> {}
 }

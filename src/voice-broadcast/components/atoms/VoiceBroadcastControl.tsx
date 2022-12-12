@@ -26,17 +26,14 @@ interface Props {
     onClick: () => void;
 }
 
-export const VoiceBroadcastControl: React.FC<Props> = ({
-    className = "",
-    icon: Icon,
-    label,
-    onClick,
-}) => {
-    return <AccessibleButton
-        className={classNames("mx_VoiceBroadcastControl", className)}
-        onClick={onClick}
-        aria-label={label}
-    >
-        <Icon className="mx_Icon mx_Icon_16" />
-    </AccessibleButton>;
+export const VoiceBroadcastControl: React.FC<Props> = ({ className = "", icon: Icon, label, onClick }) => {
+    return (
+        <AccessibleButton
+            className={classNames("mx_VoiceBroadcastControl", className)}
+            onClick={onClick}
+            aria-label={label}
+        >
+            <Icon className="mx_Icon mx_Icon_16" />
+        </AccessibleButton>
+    );
 };

@@ -15,12 +15,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import classNames from 'classnames';
+import React from "react";
+import classNames from "classnames";
 
-import { Alignment } from './Tooltip';
+import { Alignment } from "./Tooltip";
 import { _t } from "../../../languageHandler";
-import TooltipTarget from './TooltipTarget';
+import TooltipTarget from "./TooltipTarget";
 
 export enum InfoTooltipKind {
     Info = "info",
@@ -42,21 +42,20 @@ export default class InfoTooltip extends React.PureComponent<ITooltipProps> {
     render() {
         const { tooltip, children, tooltipClassName, className, kind } = this.props;
         const title = _t("Information");
-        const iconClassName = (
-            (kind !== InfoTooltipKind.Warning) ?
-                "mx_InfoTooltip_icon_info" : "mx_InfoTooltip_icon_warning"
-        );
+        const iconClassName =
+            kind !== InfoTooltipKind.Warning ? "mx_InfoTooltip_icon_info" : "mx_InfoTooltip_icon_warning";
 
         // Tooltip are forced on the right for a more natural feel to them on info icons
         return (
-            <TooltipTarget tooltipTargetClassName={classNames("mx_InfoTooltip", className)}
+            <TooltipTarget
+                tooltipTargetClassName={classNames("mx_InfoTooltip", className)}
                 className="mx_InfoTooltip_container"
                 tooltipClassName={classNames("mx_InfoTooltip_tooltip", tooltipClassName)}
                 label={tooltip || title}
                 alignment={Alignment.Right}
             >
                 <span className={classNames("mx_InfoTooltip_icon", iconClassName)} aria-label={title} />
-                { children }
+                {children}
             </TooltipTarget>
         );
     }

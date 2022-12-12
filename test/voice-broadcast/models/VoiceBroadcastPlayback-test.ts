@@ -115,12 +115,7 @@ describe("VoiceBroadcastPlayback", () => {
     };
 
     const mkInfoEvent = (state: VoiceBroadcastInfoState) => {
-        return mkVoiceBroadcastInfoStateEvent(
-            roomId,
-            state,
-            userId,
-            deviceId,
-        );
+        return mkVoiceBroadcastInfoStateEvent(roomId, state, userId, deviceId);
     };
 
     const mkPlayback = async () => {
@@ -350,7 +345,7 @@ describe("VoiceBroadcastPlayback", () => {
             });
 
             describe("and skipping to the middle of the second chunk", () => {
-                const middleOfSecondChunk = (chunk1Length + (chunk2Length / 2)) / 1000;
+                const middleOfSecondChunk = (chunk1Length + chunk2Length / 2) / 1000;
 
                 beforeEach(async () => {
                     await playback.skipTo(middleOfSecondChunk);

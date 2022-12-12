@@ -17,14 +17,14 @@ limitations under the License.
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { IConfigOptions } from "../IConfigOptions";
-import { getEmbeddedPagesWellKnown } from '../utils/WellKnownUtils';
+import { getEmbeddedPagesWellKnown } from "../utils/WellKnownUtils";
 import { SnakedObject } from "./SnakedObject";
 
 export function getHomePageUrl(appConfig: IConfigOptions): string | null {
     const config = new SnakedObject(appConfig);
 
     const pagesConfig = config.get("embedded_pages");
-    let pageUrl = pagesConfig ? (new SnakedObject(pagesConfig).get("home_url")) : null;
+    let pageUrl = pagesConfig ? new SnakedObject(pagesConfig).get("home_url") : null;
 
     if (!pageUrl) {
         // This is a deprecated config option for the home page
@@ -34,7 +34,7 @@ export function getHomePageUrl(appConfig: IConfigOptions): string | null {
         if (pageUrl) {
             logger.warn(
                 "You are using a deprecated config option: `welcomePageUrl`. Please use " +
-                "`embedded_pages.home_url` instead, per https://github.com/vector-im/element-web/issues/21428",
+                    "`embedded_pages.home_url` instead, per https://github.com/vector-im/element-web/issues/21428",
             );
         }
     }
@@ -49,7 +49,5 @@ export function getHomePageUrl(appConfig: IConfigOptions): string | null {
 export function shouldUseLoginForWelcome(appConfig: IConfigOptions): boolean {
     const config = new SnakedObject(appConfig);
     const pagesConfig = config.get("embedded_pages");
-    return pagesConfig
-        ? ((new SnakedObject(pagesConfig).get("login_for_welcome")) === true)
-        : false;
+    return pagesConfig ? new SnakedObject(pagesConfig).get("login_for_welcome") === true : false;
 }

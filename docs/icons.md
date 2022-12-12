@@ -6,6 +6,7 @@ Each .svg exports a `ReactComponent` at the named export `Icon`.
 Icons have `role="presentation"` and `aria-hidden` automatically applied. These can be overriden by passing props to the icon component.
 
 eg
+
 ```
 import { Icon as FavoriteIcon } from 'res/img/element-icons/favorite.svg';
 

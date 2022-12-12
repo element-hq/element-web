@@ -15,12 +15,7 @@ limitations under the License.
 */
 
 import { mocked } from "jest-mock";
-import {
-    MatrixEvent,
-    EventType,
-    MsgType,
-    Room,
-} from "matrix-js-sdk/src/matrix";
+import { MatrixEvent, EventType, MsgType, Room } from "matrix-js-sdk/src/matrix";
 import { ReceiptType } from "matrix-js-sdk/src/@types/read_receipts";
 
 import { haveRendererForEvent } from "../src/events/EventTileFactory";
@@ -35,18 +30,18 @@ jest.mock("../src/events/EventTileFactory", () => ({
 
 describe("Unread", () => {
     // A different user.
-    const aliceId = '@alice:server.org';
+    const aliceId = "@alice:server.org";
     stubClient();
     const client = MatrixClientPeg.get();
 
-    describe('eventTriggersUnreadCount()', () => {
+    describe("eventTriggersUnreadCount()", () => {
         // setup events
         const alicesMessage = new MatrixEvent({
             type: EventType.RoomMessage,
             sender: aliceId,
             content: {
                 msgtype: MsgType.Text,
-                body: 'Hello from Alice',
+                body: "Hello from Alice",
             },
         });
 
@@ -55,7 +50,7 @@ describe("Unread", () => {
             sender: client.getUserId()!,
             content: {
                 msgtype: MsgType.Text,
-                body: 'Hello from Bob',
+                body: "Hello from Bob",
             },
         });
 
@@ -70,31 +65,31 @@ describe("Unread", () => {
             mocked(haveRendererForEvent).mockClear().mockReturnValue(false);
         });
 
-        it('returns false when the event was sent by the current user', () => {
+        it("returns false when the event was sent by the current user", () => {
             expect(eventTriggersUnreadCount(ourMessage)).toBe(false);
             // returned early before checking renderer
             expect(haveRendererForEvent).not.toHaveBeenCalled();
         });
 
-        it('returns false for a redacted event', () => {
+        it("returns false for a redacted event", () => {
             expect(eventTriggersUnreadCount(redactedEvent)).toBe(false);
             // returned early before checking renderer
             expect(haveRendererForEvent).not.toHaveBeenCalled();
         });
 
-        it('returns false for an event without a renderer', () => {
+        it("returns false for an event without a renderer", () => {
             mocked(haveRendererForEvent).mockReturnValue(false);
             expect(eventTriggersUnreadCount(alicesMessage)).toBe(false);
             expect(haveRendererForEvent).toHaveBeenCalledWith(alicesMessage, false);
         });
 
-        it('returns true for an event with a renderer', () => {
+        it("returns true for an event with a renderer", () => {
             mocked(haveRendererForEvent).mockReturnValue(true);
             expect(eventTriggersUnreadCount(alicesMessage)).toBe(true);
             expect(haveRendererForEvent).toHaveBeenCalledWith(alicesMessage, false);
         });
 
-        it('returns false for beacon locations', () => {
+        it("returns false for beacon locations", () => {
             const beaconLocationEvent = makeBeaconEvent(aliceId);
             expect(eventTriggersUnreadCount(beaconLocationEvent)).toBe(false);
             expect(haveRendererForEvent).not.toHaveBeenCalled();
@@ -110,7 +105,7 @@ describe("Unread", () => {
         ];
 
         it.each(noUnreadEventTypes)(
-            'returns false without checking for renderer for events with type %s',
+            "returns false without checking for renderer for events with type %s",
             (eventType) => {
                 const event = new MatrixEvent({
                     type: eventType,
@@ -148,11 +143,11 @@ describe("Unread", () => {
             mocked(haveRendererForEvent).mockClear().mockReturnValue(true);
         });
 
-        it('returns true for a room with no receipts', () => {
+        it("returns true for a room with no receipts", () => {
             expect(doesRoomHaveUnreadMessages(room)).toBe(true);
         });
 
-        it('returns false for a room when the latest event was sent by the current user', () => {
+        it("returns false for a room when the latest event was sent by the current user", () => {
             event = mkEvent({
                 event: true,
                 type: "m.room.message",
@@ -166,7 +161,7 @@ describe("Unread", () => {
             expect(doesRoomHaveUnreadMessages(room)).toBe(false);
         });
 
-        it('returns false for a room when the read receipt is at the latest event', () => {
+        it("returns false for a room when the read receipt is at the latest event", () => {
             const receipt = new MatrixEvent({
                 type: "m.receipt",
                 room_id: "!foo:bar",
@@ -183,7 +178,7 @@ describe("Unread", () => {
             expect(doesRoomHaveUnreadMessages(room)).toBe(false);
         });
 
-        it('returns true for a room when the read receipt is earlier than the latest event', () => {
+        it("returns true for a room when the read receipt is earlier than the latest event", () => {
             const receipt = new MatrixEvent({
                 type: "m.receipt",
                 room_id: "!foo:bar",
@@ -210,7 +205,7 @@ describe("Unread", () => {
             expect(doesRoomHaveUnreadMessages(room)).toBe(true);
         });
 
-        it('returns true for a room with an unread message in a thread', () => {
+        it("returns true for a room with an unread message in a thread", () => {
             // Mark the main timeline as read.
             const receipt = new MatrixEvent({
                 type: "m.receipt",
@@ -231,7 +226,7 @@ describe("Unread", () => {
             expect(doesRoomHaveUnreadMessages(room)).toBe(true);
         });
 
-        it('returns false for a room when the latest thread event was sent by the current user', () => {
+        it("returns false for a room when the latest thread event was sent by the current user", () => {
             // Mark the main timeline as read.
             const receipt = new MatrixEvent({
                 type: "m.receipt",
@@ -252,7 +247,7 @@ describe("Unread", () => {
             expect(doesRoomHaveUnreadMessages(room)).toBe(false);
         });
 
-        it('returns false for a room with read thread messages', () => {
+        it("returns false for a room with read thread messages", () => {
             // Mark the main timeline as read.
             let receipt = new MatrixEvent({
                 type: "m.receipt",
@@ -268,9 +263,7 @@ describe("Unread", () => {
             room.addReceipt(receipt);
 
             // Create threads.
-            const { rootEvent, events } = mkThread(
-                { room, client, authorId: myId, participantUserIds: [aliceId] },
-            );
+            const { rootEvent, events } = mkThread({ room, client, authorId: myId, participantUserIds: [aliceId] });
 
             // Mark the thread as read.
             receipt = new MatrixEvent({
@@ -289,7 +282,7 @@ describe("Unread", () => {
             expect(doesRoomHaveUnreadMessages(room)).toBe(false);
         });
 
-        it('returns true for a room when read receipt is not on the latest thread messages', () => {
+        it("returns true for a room when read receipt is not on the latest thread messages", () => {
             // Mark the main timeline as read.
             let receipt = new MatrixEvent({
                 type: "m.receipt",
@@ -305,9 +298,7 @@ describe("Unread", () => {
             room.addReceipt(receipt);
 
             // Create threads.
-            const { rootEvent, events } = mkThread(
-                { room, client, authorId: myId, participantUserIds: [aliceId] },
-            );
+            const { rootEvent, events } = mkThread({ room, client, authorId: myId, participantUserIds: [aliceId] });
 
             // Mark the thread as read.
             receipt = new MatrixEvent({

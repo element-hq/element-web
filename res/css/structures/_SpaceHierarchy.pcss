@@ -124,7 +124,7 @@ limitations under the License.
         background-color: $background;
 
         &::before {
-            content: '';
+            content: "";
             position: absolute;
             top: 0;
             left: 0;
@@ -135,7 +135,7 @@ limitations under the License.
             background-color: $tertiary-content;
             mask-size: 16px;
             transform: rotate(270deg);
-            mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
+            mask-image: url("$(res)/img/feather-customised/chevron-down.svg");
         }
 
         &.mx_SpaceHierarchy_subspace_toggle_shown::before {
@@ -215,7 +215,7 @@ limitations under the License.
                             padding-left: 16px;
 
                             &::before {
-                                content: '';
+                                content: "";
                                 width: 20px;
                                 height: 20px;
                                 top: -2px;
@@ -225,7 +225,7 @@ limitations under the License.
                                 mask-size: contain;
                                 mask-repeat: no-repeat;
                                 background-color: $accent;
-                                mask-image: url('$(res)/img/element-icons/roomlist/checkmark.svg');
+                                mask-image: url("$(res)/img/element-icons/roomlist/checkmark.svg");
                             }
                         }
                     }
@@ -272,7 +272,8 @@ limitations under the License.
                     }
                 }
 
-                &:hover, &:focus-within {
+                &:hover,
+                &:focus-within {
                     background-color: $spacePanel-bg-color;
 
                     .mx_AccessibleButton {

@@ -80,13 +80,15 @@ describe("isRoomReady", () => {
 
                 describe("and a RoomHistoryVisibility event", () => {
                     beforeEach(() => {
-                        room1.currentState.setStateEvents([mkEvent({
-                            user: userId1,
-                            event: true,
-                            type: EventType.RoomHistoryVisibility,
-                            room: room1.roomId,
-                            content: {},
-                        })]);
+                        room1.currentState.setStateEvents([
+                            mkEvent({
+                                user: userId1,
+                                event: true,
+                                type: EventType.RoomHistoryVisibility,
+                                room: room1.roomId,
+                                content: {},
+                            }),
+                        ]);
                     });
 
                     it("it should return true", () => {
@@ -104,13 +106,15 @@ describe("isRoomReady", () => {
 
                         describe("and a room encryption state event", () => {
                             beforeEach(() => {
-                                room1.currentState.setStateEvents([mkEvent({
-                                    user: userId1,
-                                    event: true,
-                                    type: EventType.RoomEncryption,
-                                    room: room1.roomId,
-                                    content: {},
-                                })]);
+                                room1.currentState.setStateEvents([
+                                    mkEvent({
+                                        user: userId1,
+                                        event: true,
+                                        type: EventType.RoomEncryption,
+                                        room: room1.roomId,
+                                        content: {},
+                                    }),
+                                ]);
                             });
 
                             it("it should return true", () => {
@@ -123,4 +127,3 @@ describe("isRoomReady", () => {
         });
     });
 });
-

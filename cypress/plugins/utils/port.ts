@@ -17,7 +17,7 @@ limitations under the License.
 import * as net from "net";
 
 export async function getFreePort(): Promise<number> {
-    return new Promise<number>(resolve => {
+    return new Promise<number>((resolve) => {
         const srv = net.createServer();
         srv.listen(0, () => {
             const port = (<net.AddressInfo>srv.address()).port;

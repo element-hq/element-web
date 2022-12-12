@@ -27,19 +27,23 @@ interface OptionProps extends ComponentProps<typeof RovingAccessibleButton> {
 
 export const Option: React.FC<OptionProps> = ({ inputRef, children, endAdornment, className, ...props }) => {
     const [onFocus, isActive, ref] = useRovingTabIndex(inputRef);
-    return <AccessibleButton
-        {...props}
-        className={classNames(className, "mx_SpotlightDialog_option")}
-        onFocus={onFocus}
-        inputRef={ref}
-        tabIndex={-1}
-        aria-selected={isActive}
-        role="option"
-    >
-        { children }
-        <div className="mx_SpotlightDialog_option--endAdornment">
-            <kbd className="mx_SpotlightDialog_enterPrompt" aria-hidden>↵</kbd>
-            { endAdornment }
-        </div>
-    </AccessibleButton>;
+    return (
+        <AccessibleButton
+            {...props}
+            className={classNames(className, "mx_SpotlightDialog_option")}
+            onFocus={onFocus}
+            inputRef={ref}
+            tabIndex={-1}
+            aria-selected={isActive}
+            role="option"
+        >
+            {children}
+            <div className="mx_SpotlightDialog_option--endAdornment">
+                <kbd className="mx_SpotlightDialog_enterPrompt" aria-hidden>
+                    ↵
+                </kbd>
+                {endAdornment}
+            </div>
+        </AccessibleButton>
+    );
 };

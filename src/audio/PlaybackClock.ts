@@ -64,8 +64,7 @@ export class PlaybackClock implements IDestroyable {
     private clipDuration = 0;
     private placeholderDuration = 0;
 
-    public constructor(private context: AudioContext) {
-    }
+    public constructor(private context: AudioContext) {}
 
     public get durationSeconds(): number {
         return this.clipDuration || this.placeholderDuration;
@@ -104,7 +103,7 @@ export class PlaybackClock implements IDestroyable {
      * @param {MatrixEvent} event The event to use for placeholders.
      */
     public populatePlaceholdersFrom(event: MatrixEvent) {
-        const durationMs = Number(event.getContent()['info']?.['duration']);
+        const durationMs = Number(event.getContent()["info"]?.["duration"]);
         if (Number.isFinite(durationMs)) this.placeholderDuration = durationMs / 1000;
     }
 

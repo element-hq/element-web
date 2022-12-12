@@ -15,16 +15,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { _t } from '../../../languageHandler';
+import { _t } from "../../../languageHandler";
 import { ensureDMExists } from "../../../createRoom";
 import { IDialogProps } from "./IDialogProps";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import SdkConfig from '../../../SdkConfig';
-import Markdown from '../../../Markdown';
+import SdkConfig from "../../../SdkConfig";
+import Markdown from "../../../Markdown";
 import SettingsStore from "../../../settings/SettingsStore";
 import StyledRadioButton from "../elements/StyledRadioButton";
 import BaseDialog from "./BaseDialog";
@@ -71,7 +71,7 @@ enum NonStandardValue {
     // Non-standard abuse nature.
     // It should never leave the client - we use it to fallback to
     // server-wide abuse reporting.
-    Admin = "non-standard.abuse.nature.admin"
+    Admin = "non-standard.abuse.nature.admin",
 }
 
 type ExtendedNature = Nature | NonStandardValue;
@@ -117,30 +117,47 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
                 }
                 if (Array.isArray(stateEvent)) {
                     // Internal error.
-                    throw new TypeError(`getStateEvents(${stateEventType}, ${stateEventType}) ` +
-                        "should return at most one state event");
+                    throw new TypeError(
+                        `getStateEvents(${stateEventType}, ${stateEventType}) ` +
+                            "should return at most one state event",
+                    );
                 }
                 const event = stateEvent.event;
                 if (!("content" in event) || typeof event["content"] != "object") {
                     // The room is improperly configured.
                     // Display this debug message for the sake of moderators.
-                    console.debug("Moderation error", "state event", stateEventType,
-                        "should have an object field `content`, got", event);
+                    console.debug(
+                        "Moderation error",
+                        "state event",
+                        stateEventType,
+                        "should have an object field `content`, got",
+                        event,
+                    );
                     continue;
                 }
                 const content = event["content"];
                 if (!("room_id" in content) || typeof content["room_id"] != "string") {
                     // The room is improperly configured.
                     // Display this debug message for the sake of moderators.
-                    console.debug("Moderation error", "state event", stateEventType,
-                        "should have a string field `content.room_id`, got", event);
+                    console.debug(
+                        "Moderation error",
+                        "state event",
+                        stateEventType,
+                        "should have a string field `content.room_id`, got",
+                        event,
+                    );
                     continue;
                 }
                 if (!("user_id" in content) || typeof content["user_id"] != "string") {
                     // The room is improperly configured.
                     // Display this debug message for the sake of moderators.
-                    console.debug("Moderation error", "state event", stateEventType,
-                        "should have a string field `content.user_id`, got", event);
+                    console.debug(
+                        "Moderation error",
+                        "state event",
+                        stateEventType,
+                        "should have a string field `content.user_id`, got",
+                        event,
+                    );
                     continue;
                 }
                 moderatedByRoomId = content["room_id"];
@@ -194,9 +211,9 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
             // This room supports moderation.
             // We need a nature.
             // If the nature is `NATURE.OTHER` or `NON_STANDARD_NATURE.ADMIN`, we also need a `reason`.
-            if (!this.state.nature ||
-                    ((this.state.nature == Nature.Other || this.state.nature == NonStandardValue.Admin)
-                        && !reason)
+            if (
+                !this.state.nature ||
+                ((this.state.nature == Nature.Other || this.state.nature == NonStandardValue.Admin) && !reason)
             ) {
                 this.setState({
                     err: _t("Please fill why you're reporting."),
@@ -243,10 +260,7 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
 
             // if the user should also be ignored, do that
             if (this.state.ignoreUserToo) {
-                await client.setIgnoredUsers([
-                    ...client.getIgnoredUsers(),
-                    ev.getSender(),
-                ]);
+                await client.setIgnoredUsers([...client.getIgnoredUsers(), ev.getSender()]);
             }
 
             this.props.onFinished(true);
@@ -262,9 +276,7 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
     public render() {
         let error = null;
         if (this.state.err) {
-            error = <div className="error">
-                { this.state.err }
-            </div>;
+            error = <div className="error">{this.state.err}</div>;
         }
 
         let progress = null;
@@ -276,16 +288,17 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
             );
         }
 
-        const ignoreUserCheckbox = <LabelledCheckbox
-            value={this.state.ignoreUserToo}
-            label={_t("Ignore user")}
-            byline={_t("Check if you want to hide all current and future messages from this user.")}
-            onChange={this.onIgnoreUserTooChanged}
-            disabled={this.state.busy}
-        />;
+        const ignoreUserCheckbox = (
+            <LabelledCheckbox
+                value={this.state.ignoreUserToo}
+                label={_t("Ignore user")}
+                byline={_t("Check if you want to hide all current and future messages from this user.")}
+                onChange={this.onIgnoreUserTooChanged}
+                disabled={this.state.busy}
+            />
+        );
 
-        const adminMessageMD = SdkConfig
-            .getObject("report_event")?.get("admin_message_md", "adminMessageMD");
+        const adminMessageMD = SdkConfig.getObject("report_event")?.get("admin_message_md", "adminMessageMD");
         let adminMessage;
         if (adminMessageMD) {
             const html = new Markdown(adminMessageMD).toHTML({ externalLinks: true });
@@ -300,42 +313,55 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
             let subtitle;
             switch (this.state.nature) {
                 case Nature.Disagreement:
-                    subtitle = _t("What this user is writing is wrong.\n" +
-                        "This will be reported to the room moderators.");
+                    subtitle = _t(
+                        "What this user is writing is wrong.\n" + "This will be reported to the room moderators.",
+                    );
                     break;
                 case Nature.Toxic:
-                    subtitle = _t("This user is displaying toxic behaviour, " +
-                        "for instance by insulting other users or sharing " +
-                        " adult-only content in a family-friendly room " +
-                        " or otherwise violating the rules of this room.\n" +
-                        "This will be reported to the room moderators.");
+                    subtitle = _t(
+                        "This user is displaying toxic behaviour, " +
+                            "for instance by insulting other users or sharing " +
+                            " adult-only content in a family-friendly room " +
+                            " or otherwise violating the rules of this room.\n" +
+                            "This will be reported to the room moderators.",
+                    );
                     break;
                 case Nature.Illegal:
-                    subtitle = _t("This user is displaying illegal behaviour, " +
-                        "for instance by doxing people or threatening violence.\n" +
-                        "This will be reported to the room moderators who may escalate this to legal authorities.");
+                    subtitle = _t(
+                        "This user is displaying illegal behaviour, " +
+                            "for instance by doxing people or threatening violence.\n" +
+                            "This will be reported to the room moderators who may escalate this to legal authorities.",
+                    );
                     break;
                 case Nature.Spam:
-                    subtitle = _t("This user is spamming the room with ads, links to ads or to propaganda.\n" +
-                        "This will be reported to the room moderators.");
+                    subtitle = _t(
+                        "This user is spamming the room with ads, links to ads or to propaganda.\n" +
+                            "This will be reported to the room moderators.",
+                    );
                     break;
                 case NonStandardValue.Admin:
                     if (client.isRoomEncrypted(this.props.mxEvent.getRoomId())) {
-                        subtitle = _t("This room is dedicated to illegal or toxic content " +
-                            "or the moderators fail to moderate illegal or toxic content.\n" +
-                            "This will be reported to the administrators of %(homeserver)s. " +
-                            "The administrators will NOT be able to read the encrypted content of this room.",
-                        { homeserver: homeServerName });
+                        subtitle = _t(
+                            "This room is dedicated to illegal or toxic content " +
+                                "or the moderators fail to moderate illegal or toxic content.\n" +
+                                "This will be reported to the administrators of %(homeserver)s. " +
+                                "The administrators will NOT be able to read the encrypted content of this room.",
+                            { homeserver: homeServerName },
+                        );
                     } else {
-                        subtitle = _t("This room is dedicated to illegal or toxic content " +
-                            "or the moderators fail to moderate illegal or toxic content.\n" +
-                            " This will be reported to the administrators of %(homeserver)s.",
-                        { homeserver: homeServerName });
+                        subtitle = _t(
+                            "This room is dedicated to illegal or toxic content " +
+                                "or the moderators fail to moderate illegal or toxic content.\n" +
+                                " This will be reported to the administrators of %(homeserver)s.",
+                            { homeserver: homeServerName },
+                        );
                     }
                     break;
                 case Nature.Other:
-                    subtitle = _t("Any other reason. Please describe the problem.\n" +
-                        "This will be reported to the room moderators.");
+                    subtitle = _t(
+                        "Any other reason. Please describe the problem.\n" +
+                            "This will be reported to the room moderators.",
+                    );
                     break;
                 default:
                     subtitle = _t("Please pick a nature and describe what makes this message abusive.");
@@ -346,8 +372,8 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
                 <BaseDialog
                     className="mx_ReportEventDialog"
                     onFinished={this.props.onFinished}
-                    title={_t('Report Content')}
-                    contentId='mx_ReportEventDialog'
+                    title={_t("Report Content")}
+                    contentId="mx_ReportEventDialog"
                 >
                     <div>
                         <StyledRadioButton
@@ -356,7 +382,7 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
                             checked={this.state.nature == Nature.Disagreement}
                             onChange={this.onNatureChosen}
                         >
-                            { _t('Disagree') }
+                            {_t("Disagree")}
                         </StyledRadioButton>
                         <StyledRadioButton
                             name="nature"
@@ -364,7 +390,7 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
                             checked={this.state.nature == Nature.Toxic}
                             onChange={this.onNatureChosen}
                         >
-                            { _t('Toxic Behaviour') }
+                            {_t("Toxic Behaviour")}
                         </StyledRadioButton>
                         <StyledRadioButton
                             name="nature"
@@ -372,7 +398,7 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
                             checked={this.state.nature == Nature.Illegal}
                             onChange={this.onNatureChosen}
                         >
-                            { _t('Illegal Content') }
+                            {_t("Illegal Content")}
                         </StyledRadioButton>
                         <StyledRadioButton
                             name="nature"
@@ -380,7 +406,7 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
                             checked={this.state.nature == Nature.Spam}
                             onChange={this.onNatureChosen}
                         >
-                            { _t('Spam or propaganda') }
+                            {_t("Spam or propaganda")}
                         </StyledRadioButton>
                         <StyledRadioButton
                             name="nature"
@@ -388,7 +414,7 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
                             checked={this.state.nature == NonStandardValue.Admin}
                             onChange={this.onNatureChosen}
                         >
-                            { _t('Report the entire room') }
+                            {_t("Report the entire room")}
                         </StyledRadioButton>
                         <StyledRadioButton
                             name="nature"
@@ -396,11 +422,9 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
                             checked={this.state.nature == Nature.Other}
                             onChange={this.onNatureChosen}
                         >
-                            { _t('Other') }
+                            {_t("Other")}
                         </StyledRadioButton>
-                        <p>
-                            { subtitle }
-                        </p>
+                        <p>{subtitle}</p>
                         <Field
                             className="mx_ReportEventDialog_reason"
                             element="textarea"
@@ -410,9 +434,9 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
                             value={this.state.reason}
                             disabled={this.state.busy}
                         />
-                        { progress }
-                        { error }
-                        { ignoreUserCheckbox }
+                        {progress}
+                        {error}
+                        {ignoreUserCheckbox}
                     </div>
                     <DialogButtons
                         primaryButton={_t("Send report")}
@@ -430,19 +454,19 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
             <BaseDialog
                 className="mx_ReportEventDialog"
                 onFinished={this.props.onFinished}
-                title={_t('Report Content to Your Homeserver Administrator')}
-                contentId='mx_ReportEventDialog'
+                title={_t("Report Content to Your Homeserver Administrator")}
+                contentId="mx_ReportEventDialog"
             >
                 <div className="mx_ReportEventDialog" id="mx_ReportEventDialog">
                     <p>
-                        {
-                            _t("Reporting this message will send its unique 'event ID' to the administrator of " +
+                        {_t(
+                            "Reporting this message will send its unique 'event ID' to the administrator of " +
                                 "your homeserver. If messages in this room are encrypted, your homeserver " +
                                 "administrator will not be able to read the message text or view any files " +
-                                "or images.")
-                        }
+                                "or images.",
+                        )}
                     </p>
-                    { adminMessage }
+                    {adminMessage}
                     <Field
                         className="mx_ReportEventDialog_reason"
                         element="textarea"
@@ -452,9 +476,9 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
                         value={this.state.reason}
                         disabled={this.state.busy}
                     />
-                    { progress }
-                    { error }
-                    { ignoreUserCheckbox }
+                    {progress}
+                    {error}
+                    {ignoreUserCheckbox}
                 </div>
                 <DialogButtons
                     primaryButton={_t("Send report")}

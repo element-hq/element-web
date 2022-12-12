@@ -41,8 +41,7 @@ const keyMap = new EnhancedMap<Object, EnhancedMap<string, unknown>>();
  * variables to strings to essentially namespace the field, for most cases.
  */
 export class Singleflight {
-    private constructor() {
-    }
+    private constructor() {}
 
     /**
      * A void marker to help with returning a value in a singleflight context.
@@ -80,8 +79,7 @@ export class Singleflight {
 }
 
 class SingleflightContext {
-    public constructor(private instance: Object, private key: string) {
-    }
+    public constructor(private instance: Object, private key: string) {}
 
     /**
      * Forget this particular instance and key combination, discarding the result.

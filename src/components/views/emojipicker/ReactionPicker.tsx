@@ -15,17 +15,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { Relations, RelationsEvent } from 'matrix-js-sdk/src/models/relations';
-import { EventType, RelationType } from 'matrix-js-sdk/src/@types/event';
+import { Relations, RelationsEvent } from "matrix-js-sdk/src/models/relations";
+import { EventType, RelationType } from "matrix-js-sdk/src/@types/event";
 
 import EmojiPicker from "./EmojiPicker";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import dis from "../../../dispatcher/dispatcher";
-import { Action } from '../../../dispatcher/actions';
+import { Action } from "../../../dispatcher/actions";
 import RoomContext from "../../../contexts/RoomContext";
-import { FocusComposerPayload } from '../../../dispatcher/payloads/FocusComposerPayload';
+import { FocusComposerPayload } from "../../../dispatcher/payloads/FocusComposerPayload";
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -79,9 +79,11 @@ class ReactionPicker extends React.Component<IProps, IState> {
         }
         const userId = MatrixClientPeg.get().getUserId();
         const myAnnotations = this.props.reactions.getAnnotationsBySender()[userId] || [];
-        return Object.fromEntries([...myAnnotations]
-            .filter(event => !event.isRedacted())
-            .map(event => [event.getRelation().key, event.getId()]));
+        return Object.fromEntries(
+            [...myAnnotations]
+                .filter((event) => !event.isRedacted())
+                .map((event) => [event.getRelation().key, event.getId()]),
+        );
     }
 
     private onReactionsChange = () => {
@@ -107,9 +109,9 @@ class ReactionPicker extends React.Component<IProps, IState> {
         } else {
             MatrixClientPeg.get().sendEvent(this.props.mxEvent.getRoomId(), EventType.Reaction, {
                 "m.relates_to": {
-                    "rel_type": RelationType.Annotation,
-                    "event_id": this.props.mxEvent.getId(),
-                    "key": reaction,
+                    rel_type: RelationType.Annotation,
+                    event_id: this.props.mxEvent.getId(),
+                    key: reaction,
                 },
             });
             dis.dispatch({ action: "message_sent" });
@@ -129,12 +131,14 @@ class ReactionPicker extends React.Component<IProps, IState> {
     };
 
     render() {
-        return <EmojiPicker
-            onChoose={this.onChoose}
-            isEmojiDisabled={this.isEmojiDisabled}
-            selectedEmojis={this.state.selectedEmojis}
-            showQuickReactions={true}
-        />;
+        return (
+            <EmojiPicker
+                onChoose={this.onChoose}
+                isEmojiDisabled={this.isEmojiDisabled}
+                selectedEmojis={this.state.selectedEmojis}
+                showQuickReactions={true}
+            />
+        );
     }
 }
 

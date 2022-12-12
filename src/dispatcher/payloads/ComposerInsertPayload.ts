@@ -44,7 +44,6 @@ interface IComposerInsertPlaintextPayload extends IBaseComposerInsertPayload {
 }
 
 export type ComposerInsertPayload =
-    IComposerInsertMentionPayload |
-    IComposerInsertQuotePayload |
-    IComposerInsertPlaintextPayload;
-
+    | IComposerInsertMentionPayload
+    | IComposerInsertQuotePayload
+    | IComposerInsertPlaintextPayload;

@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { EventEmitter } from 'events';
-import AwaitLock from 'await-lock';
+import { EventEmitter } from "events";
+import AwaitLock from "await-lock";
 import { Dispatcher } from "flux";
 
 import { ActionPayload } from "../dispatcher/payloads";

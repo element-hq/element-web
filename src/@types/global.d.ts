@@ -73,7 +73,7 @@ declare global {
         // https://github.com/microsoft/TypeScript-DOM-lib-generator/issues/1029#issuecomment-869224737
         // https://developer.mozilla.org/en-US/docs/Web/API/OffscreenCanvas
         OffscreenCanvas?: {
-            new(width: number, height: number): OffscreenCanvas;
+            new (width: number, height: number): OffscreenCanvas;
         };
 
         mxContentMessages: ContentMessages;
@@ -149,10 +149,7 @@ declare global {
 
     // https://developer.mozilla.org/en-US/docs/Web/API/OffscreenCanvas
     interface OffscreenCanvas {
-        convertToBlob(opts?: {
-            type?: string;
-            quality?: number;
-        }): Promise<Blob>;
+        convertToBlob(opts?: { type?: string; quality?: number }): Promise<Blob>;
     }
 
     interface HTMLAudioElement {
@@ -201,11 +198,7 @@ declare global {
     // https://github.com/microsoft/TypeScript/issues/28308#issuecomment-650802278
     interface AudioWorkletProcessor {
         readonly port: MessagePort;
-        process(
-            inputs: Float32Array[][],
-            outputs: Float32Array[][],
-            parameters: Record<string, Float32Array>
-        ): boolean;
+        process(inputs: Float32Array[][], outputs: Float32Array[][], parameters: Record<string, Float32Array>): boolean;
     }
 
     // https://github.com/microsoft/TypeScript/issues/28308#issuecomment-650802278
@@ -222,11 +215,9 @@ declare global {
     // https://github.com/microsoft/TypeScript/issues/28308#issuecomment-650802278
     function registerProcessor(
         name: string,
-        processorCtor: (new (
-            options?: AudioWorkletNodeOptions
-        ) => AudioWorkletProcessor) & {
+        processorCtor: (new (options?: AudioWorkletNodeOptions) => AudioWorkletProcessor) & {
             parameterDescriptors?: AudioParamDescriptor[];
-        }
+        },
     );
 
     // eslint-disable-next-line no-var

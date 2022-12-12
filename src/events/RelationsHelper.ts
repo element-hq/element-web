@@ -34,9 +34,7 @@ interface EventMap {
  * Optionally receive the current events by calling emitCurrent().
  * Clean up everything by calling destroy().
  */
-export class RelationsHelper
-    extends TypedEventEmitter<RelationsHelperEvent, EventMap>
-    implements IDestroyable {
+export class RelationsHelper extends TypedEventEmitter<RelationsHelperEvent, EventMap> implements IDestroyable {
     private relations?: Relations;
     private eventId: string;
     private roomId: string;
@@ -89,11 +87,9 @@ export class RelationsHelper
 
     private setRelations(): void {
         const room = this.client.getRoom(this.event.getRoomId());
-        this.relations = room?.getUnfilteredTimelineSet()?.relations?.getChildEventsForEvent(
-            this.eventId,
-            this.relationType,
-            this.relationEventType,
-        );
+        this.relations = room
+            ?.getUnfilteredTimelineSet()
+            ?.relations?.getChildEventsForEvent(this.eventId, this.relationType, this.relationEventType);
     }
 
     private onRelationsAdd = (event: MatrixEvent): void => {
@@ -101,7 +97,7 @@ export class RelationsHelper
     };
 
     public emitCurrent(): void {
-        this.relations?.getRelations()?.forEach(e => this.emit(RelationsHelperEvent.Add, e));
+        this.relations?.getRelations()?.forEach((e) => this.emit(RelationsHelperEvent.Add, e));
     }
 
     public getCurrent(): MatrixEvent[] {
@@ -126,7 +122,7 @@ export class RelationsHelper
                 },
             );
             nextBatch = response?.nextBatch;
-            response?.events.forEach(e => this.emit(RelationsHelperEvent.Add, e));
+            response?.events.forEach((e) => this.emit(RelationsHelperEvent.Add, e));
         } while (nextBatch);
     }
 

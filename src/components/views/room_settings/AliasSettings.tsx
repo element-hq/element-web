@@ -19,7 +19,7 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import EditableItemList from "../elements/EditableItemList";
-import { _t } from '../../../languageHandler';
+import { _t } from "../../../languageHandler";
 import Field from "../elements/Field";
 import Spinner from "../elements/Spinner";
 import ErrorDialog from "../dialogs/ErrorDialog";
@@ -68,7 +68,7 @@ class EditableAliasesList extends EditableItemList<IEditableAliasesListProps> {
                     roomId={this.props.roomId}
                 />
                 <AccessibleButton onClick={this.onAliasAdded} kind="primary">
-                    { _t("Add") }
+                    {_t("Add")}
                 </AccessibleButton>
             </form>
         );
@@ -170,20 +170,22 @@ export default class AliasSettings extends React.Component<IProps, IState> {
 
         if (alias) eventContent["alias"] = alias;
 
-        this.context.sendStateEvent(this.props.roomId, "m.room.canonical_alias",
-            eventContent, "").catch((err) => {
-            logger.error(err);
-            Modal.createDialog(ErrorDialog, {
-                title: _t("Error updating main address"),
-                description: _t(
-                    "There was an error updating the room's main address. It may not be allowed by the server " +
-                    "or a temporary failure occurred.",
-                ),
+        this.context
+            .sendStateEvent(this.props.roomId, "m.room.canonical_alias", eventContent, "")
+            .catch((err) => {
+                logger.error(err);
+                Modal.createDialog(ErrorDialog, {
+                    title: _t("Error updating main address"),
+                    description: _t(
+                        "There was an error updating the room's main address. It may not be allowed by the server " +
+                            "or a temporary failure occurred.",
+                    ),
+                });
+                this.setState({ canonicalAlias: oldAlias });
+            })
+            .finally(() => {
+                this.setState({ updatingCanonicalAlias: false });
             });
-            this.setState({ canonicalAlias: oldAlias });
-        }).finally(() => {
-            this.setState({ updatingCanonicalAlias: false });
-        });
     }
 
     private changeAltAliases(altAliases: string[]) {
@@ -202,7 +204,8 @@ export default class AliasSettings extends React.Component<IProps, IState> {
             eventContent["alt_aliases"] = altAliases;
         }
 
-        this.context.sendStateEvent(this.props.roomId, "m.room.canonical_alias", eventContent, "")
+        this.context
+            .sendStateEvent(this.props.roomId, "m.room.canonical_alias", eventContent, "")
             .then(() => {
                 this.setState({
                     altAliases,
@@ -215,10 +218,11 @@ export default class AliasSettings extends React.Component<IProps, IState> {
                     title: _t("Error updating main address"),
                     description: _t(
                         "There was an error updating the room's alternative addresses. " +
-                    "It may not be allowed by the server or a temporary failure occurred.",
+                            "It may not be allowed by the server or a temporary failure occurred.",
                     ),
                 });
-            }).finally(() => {
+            })
+            .finally(() => {
                 this.setState({ updatingCanonicalAlias: false });
             });
     }
@@ -231,55 +235,61 @@ export default class AliasSettings extends React.Component<IProps, IState> {
         if (!alias || alias.length === 0) return; // ignore attempts to create blank aliases
 
         const localDomain = this.context.getDomain();
-        if (!alias.includes(':')) alias += ':' + localDomain;
+        if (!alias.includes(":")) alias += ":" + localDomain;
 
-        this.context.createAlias(alias, this.props.roomId).then(() => {
-            this.setState({
-                localAliases: this.state.localAliases.concat(alias),
-                newAlias: null,
+        this.context
+            .createAlias(alias, this.props.roomId)
+            .then(() => {
+                this.setState({
+                    localAliases: this.state.localAliases.concat(alias),
+                    newAlias: null,
+                });
+                if (!this.state.canonicalAlias) {
+                    this.changeCanonicalAlias(alias);
+                }
+            })
+            .catch((err) => {
+                logger.error(err);
+                Modal.createDialog(ErrorDialog, {
+                    title: _t("Error creating address"),
+                    description: _t(
+                        "There was an error creating that address. It may not be allowed by the server " +
+                            "or a temporary failure occurred.",
+                    ),
+                });
             });
-            if (!this.state.canonicalAlias) {
-                this.changeCanonicalAlias(alias);
-            }
-        }).catch((err) => {
-            logger.error(err);
-            Modal.createDialog(ErrorDialog, {
-                title: _t("Error creating address"),
-                description: _t(
-                    "There was an error creating that address. It may not be allowed by the server " +
-                    "or a temporary failure occurred.",
-                ),
-            });
-        });
     };
 
     private onLocalAliasDeleted = (index: number) => {
         const alias = this.state.localAliases[index];
         // TODO: In future, we should probably be making sure that the alias actually belongs
         // to this room. See https://github.com/vector-im/element-web/issues/7353
-        this.context.deleteAlias(alias).then(() => {
-            const localAliases = this.state.localAliases.filter(a => a !== alias);
-            this.setState({ localAliases });
+        this.context
+            .deleteAlias(alias)
+            .then(() => {
+                const localAliases = this.state.localAliases.filter((a) => a !== alias);
+                this.setState({ localAliases });
 
-            if (this.state.canonicalAlias === alias) {
-                this.changeCanonicalAlias(null);
-            }
-        }).catch((err) => {
-            logger.error(err);
-            let description;
-            if (err.errcode === "M_FORBIDDEN") {
-                description = _t("You don't have permission to delete the address.");
-            } else {
-                description = _t(
-                    "There was an error removing that address. It may no longer exist or a temporary " +
-                    "error occurred.",
-                );
-            }
-            Modal.createDialog(ErrorDialog, {
-                title: _t("Error removing address"),
-                description,
+                if (this.state.canonicalAlias === alias) {
+                    this.changeCanonicalAlias(null);
+                }
+            })
+            .catch((err) => {
+                logger.error(err);
+                let description;
+                if (err.errcode === "M_FORBIDDEN") {
+                    description = _t("You don't have permission to delete the address.");
+                } else {
+                    description = _t(
+                        "There was an error removing that address. It may no longer exist or a temporary " +
+                            "error occurred.",
+                    );
+                }
+                Modal.createDialog(ErrorDialog, {
+                    title: _t("Error removing address"),
+                    description,
+                });
             });
-        });
     };
 
     private onLocalAliasesToggled = (event: ChangeEvent<HTMLDetailsElement>) => {
@@ -303,7 +313,7 @@ export default class AliasSettings extends React.Component<IProps, IState> {
 
     private onAltAliasAdded = (alias: string) => {
         const altAliases = this.state.altAliases.slice();
-        if (!altAliases.some(a => a.trim() === alias.trim())) {
+        if (!altAliases.some((a) => a.trim() === alias.trim())) {
             altAliases.push(alias.trim());
             this.changeAltAliases(altAliases);
             this.setState({ newAltAlias: "" });
@@ -322,7 +332,7 @@ export default class AliasSettings extends React.Component<IProps, IState> {
 
     private getLocalNonAltAliases() {
         const { altAliases } = this.state;
-        return this.state.localAliases.filter(alias => !altAliases.includes(alias));
+        return this.state.localAliases.filter((alias) => !altAliases.includes(alias));
     }
 
     render() {
@@ -337,27 +347,28 @@ export default class AliasSettings extends React.Component<IProps, IState> {
                 onChange={this.onCanonicalAliasChange}
                 value={canonicalValue}
                 disabled={this.state.updatingCanonicalAlias || !this.props.canSetCanonicalAlias}
-                element='select'
-                id='canonicalAlias'
-                label={_t('Main address')}
+                element="select"
+                id="canonicalAlias"
+                label={_t("Main address")}
             >
-                <option value="" key="unset">{ _t('not specified') }</option>
-                {
-                    this.getAliases().map((alias, i) => {
-                        if (alias === this.state.canonicalAlias) found = true;
-                        return (
-                            <option value={alias} key={i}>
-                                { alias }
-                            </option>
-                        );
-                    })
-                }
-                {
-                    found || !this.state.canonicalAlias ? '' :
-                        <option value={this.state.canonicalAlias} key='arbitrary'>
-                            { this.state.canonicalAlias }
+                <option value="" key="unset">
+                    {_t("not specified")}
+                </option>
+                {this.getAliases().map((alias, i) => {
+                    if (alias === this.state.canonicalAlias) found = true;
+                    return (
+                        <option value={alias} key={i}>
+                            {alias}
                         </option>
-                }
+                    );
+                })}
+                {found || !this.state.canonicalAlias ? (
+                    ""
+                ) : (
+                    <option value={this.state.canonicalAlias} key="arbitrary">
+                        {this.state.canonicalAlias}
+                    </option>
+                )}
             </Field>
         );
 
@@ -365,37 +376,41 @@ export default class AliasSettings extends React.Component<IProps, IState> {
         if (this.state.localAliasesLoading) {
             localAliasesList = <Spinner />;
         } else {
-            localAliasesList = (<EditableAliasesList
-                id="roomAliases"
-                items={this.state.localAliases}
-                newItem={this.state.newAlias}
-                onNewItemChanged={this.onNewAliasChanged}
-                canRemove={this.props.canSetAliases}
-                canEdit={this.props.canSetAliases}
-                onItemAdded={this.onLocalAliasAdded}
-                onItemRemoved={this.onLocalAliasDeleted}
-                noItemsLabel={isSpaceRoom
-                    ? _t("This space has no local addresses")
-                    : _t("This room has no local addresses")}
-                placeholder={_t('Local address')}
-                domain={localDomain}
-            />);
+            localAliasesList = (
+                <EditableAliasesList
+                    id="roomAliases"
+                    items={this.state.localAliases}
+                    newItem={this.state.newAlias}
+                    onNewItemChanged={this.onNewAliasChanged}
+                    canRemove={this.props.canSetAliases}
+                    canEdit={this.props.canSetAliases}
+                    onItemAdded={this.onLocalAliasAdded}
+                    onItemRemoved={this.onLocalAliasDeleted}
+                    noItemsLabel={
+                        isSpaceRoom ? _t("This space has no local addresses") : _t("This room has no local addresses")
+                    }
+                    placeholder={_t("Local address")}
+                    domain={localDomain}
+                />
+            );
         }
 
         return (
-            <div className='mx_AliasSettings'>
+            <div className="mx_AliasSettings">
                 <SettingsFieldset
-                    data-test-id='published-address-fieldset'
+                    data-test-id="published-address-fieldset"
                     legend={_t("Published Addresses")}
-                    description={<>
-                        { isSpaceRoom
-                            ? _t("Published addresses can be used by anyone on any server to join your space.")
-                            : _t("Published addresses can be used by anyone on any server to join your room.") }
-                        &nbsp;
-                        { _t("To publish an address, it needs to be set as a local address first.") }
-                    </>}
+                    description={
+                        <>
+                            {isSpaceRoom
+                                ? _t("Published addresses can be used by anyone on any server to join your space.")
+                                : _t("Published addresses can be used by anyone on any server to join your room.")}
+                            &nbsp;
+                            {_t("To publish an address, it needs to be set as a local address first.")}
+                        </>
+                    }
                 >
-                    { /*
+                    {/*
                 <span className='mx_SettingsTab_subheading'>{ _t("Published Addresses") }</span>
                 <p>
                     { isSpaceRoom
@@ -403,18 +418,19 @@ export default class AliasSettings extends React.Component<IProps, IState> {
                         : _t("Published addresses can be used by anyone on any server to join your room.") }
                     &nbsp;
                     { _t("To publish an address, it needs to be set as a local address first.") }
-                </p> */ }
-                    { canonicalAliasSection }
-                    { this.props.hidePublishSetting
-                        ? null
-                        : <RoomPublishSetting
+                </p> */}
+                    {canonicalAliasSection}
+                    {this.props.hidePublishSetting ? null : (
+                        <RoomPublishSetting
                             roomId={this.props.roomId}
                             canSetCanonicalAlias={this.props.canSetCanonicalAlias}
-                        /> }
+                        />
+                    )}
                     <datalist id="mx_AliasSettings_altRecommendations">
-                        { this.getLocalNonAltAliases().map(alias => {
+                        {this.getLocalNonAltAliases().map((alias) => {
                             return <option value={alias} key={alias} />;
-                        }) };
+                        })}
+                        ;
                     </datalist>
                     <EditableAliasesList
                         id="roomAltAliases"
@@ -426,26 +442,34 @@ export default class AliasSettings extends React.Component<IProps, IState> {
                         onItemAdded={this.onAltAliasAdded}
                         onItemRemoved={this.onAltAliasDeleted}
                         suggestionsListId="mx_AliasSettings_altRecommendations"
-                        itemsLabel={_t('Other published addresses:')}
-                        noItemsLabel={_t('No other published addresses yet, add one below')}
-                        placeholder={_t('New published address (e.g. #alias:server)')}
+                        itemsLabel={_t("Other published addresses:")}
+                        noItemsLabel={_t("No other published addresses yet, add one below")}
+                        placeholder={_t("New published address (e.g. #alias:server)")}
                         roomId={this.props.roomId}
                     />
                 </SettingsFieldset>
                 <SettingsFieldset
-                    data-test-id='local-address-fieldset'
+                    data-test-id="local-address-fieldset"
                     legend={_t("Local Addresses")}
-                    description={isSpaceRoom
-                        ? _t("Set addresses for this space so users can find this space " +
-                            "through your homeserver (%(localDomain)s)", { localDomain })
-                        : _t("Set addresses for this room so users can find this room " +
-                        "through your homeserver (%(localDomain)s)", { localDomain })}>
+                    description={
+                        isSpaceRoom
+                            ? _t(
+                                  "Set addresses for this space so users can find this space " +
+                                      "through your homeserver (%(localDomain)s)",
+                                  { localDomain },
+                              )
+                            : _t(
+                                  "Set addresses for this room so users can find this room " +
+                                      "through your homeserver (%(localDomain)s)",
+                                  { localDomain },
+                              )
+                    }
+                >
                     <details onToggle={this.onLocalAliasesToggled} open={this.state.detailsOpen}>
-                        <summary>{ this.state.detailsOpen ? _t('Show less') : _t("Show more") }</summary>
-                        { localAliasesList }
+                        <summary>{this.state.detailsOpen ? _t("Show less") : _t("Show more")}</summary>
+                        {localAliasesList}
                     </details>
                 </SettingsFieldset>
-
             </div>
         );
     }

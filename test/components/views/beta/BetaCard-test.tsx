@@ -25,7 +25,7 @@ import SettingsStore from "../../../../src/settings/SettingsStore";
 jest.mock("../../../../src/utils/Feedback");
 jest.mock("../../../../src/settings/SettingsStore");
 
-describe('<BetaCard />', () => {
+describe("<BetaCard />", () => {
     describe("Feedback prompt", () => {
         const featureId = "featureId";
 

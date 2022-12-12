@@ -57,8 +57,8 @@ export default class RoomSettingsHandler extends MatrixClientBackedSettingsHandl
         if (room && state !== room.currentState) return;
 
         if (event.getType() === "org.matrix.room.preview_urls") {
-            let val = event.getContent()['disable'];
-            if (typeof (val) !== "boolean") {
+            let val = event.getContent()["disable"];
+            if (typeof val !== "boolean") {
                 val = null;
             } else {
                 val = !val;
@@ -81,8 +81,8 @@ export default class RoomSettingsHandler extends MatrixClientBackedSettingsHandl
             const content = this.getSettings(roomId, "org.matrix.room.preview_urls") || {};
 
             // Check to make sure that we actually got a boolean
-            if (typeof (content['disable']) !== "boolean") return null;
-            return !content['disable'];
+            if (typeof content["disable"] !== "boolean") return null;
+            return !content["disable"];
         }
 
         const settings = this.getSettings(roomId) || {};
@@ -90,12 +90,7 @@ export default class RoomSettingsHandler extends MatrixClientBackedSettingsHandl
     }
 
     // helper function to send state event then await it being echoed back
-    private async sendStateEvent(
-        roomId: string,
-        eventType: string,
-        field: string,
-        value: any,
-    ): Promise<void> {
+    private async sendStateEvent(roomId: string, eventType: string, field: string, value: any): Promise<void> {
         const content = this.getSettings(roomId, eventType) || {};
         content[field] = value;
 

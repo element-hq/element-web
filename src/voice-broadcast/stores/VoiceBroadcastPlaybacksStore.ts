@@ -35,7 +35,8 @@ interface EventMap {
  */
 export class VoiceBroadcastPlaybacksStore
     extends TypedEventEmitter<VoiceBroadcastPlaybacksStoreEvent, EventMap>
-    implements IDestroyable {
+    implements IDestroyable
+{
     private current: VoiceBroadcastPlayback | null;
 
     /** Playbacks indexed by their info event id. */
@@ -83,10 +84,7 @@ export class VoiceBroadcastPlaybacksStore
         playback.on(VoiceBroadcastPlaybackEvent.StateChanged, this.onPlaybackStateChanged);
     }
 
-    private onPlaybackStateChanged = (
-        state: VoiceBroadcastPlaybackState,
-        playback: VoiceBroadcastPlayback,
-    ): void => {
+    private onPlaybackStateChanged = (state: VoiceBroadcastPlaybackState, playback: VoiceBroadcastPlayback): void => {
         switch (state) {
             case VoiceBroadcastPlaybackState.Buffering:
             case VoiceBroadcastPlaybackState.Playing:

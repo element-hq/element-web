@@ -27,8 +27,8 @@ import { Action } from "../../../dispatcher/actions";
 import AccessibleButton from "../elements/AccessibleButton";
 import MessageEvent from "../messages/MessageEvent";
 import MemberAvatar from "../avatars/MemberAvatar";
-import { _t } from '../../../languageHandler';
-import { formatDate } from '../../../DateUtils';
+import { _t } from "../../../languageHandler";
+import { formatDate } from "../../../DateUtils";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { getUserNameColorClass } from "../../../utils/FormattingUtils";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
@@ -78,8 +78,8 @@ export default class PinnedEventTile extends React.Component<IProps> {
 
             try {
                 await Promise.all(
-                    [M_POLL_RESPONSE.name, M_POLL_RESPONSE.altName, M_POLL_END.name, M_POLL_END.altName]
-                        .map(async eventType => {
+                    [M_POLL_RESPONSE.name, M_POLL_RESPONSE.altName, M_POLL_END.name, M_POLL_END.altName].map(
+                        async (eventType) => {
                             const relations = new Relations(RelationType.Reference, eventType, room);
                             relations.setTargetEvent(this.props.event);
 
@@ -91,12 +91,17 @@ export default class PinnedEventTile extends React.Component<IProps> {
                             let nextBatch: string | undefined;
                             do {
                                 const page = await this.context.relations(
-                                    roomId, eventId, RelationType.Reference, eventType, { from: nextBatch },
+                                    roomId,
+                                    eventId,
+                                    RelationType.Reference,
+                                    eventType,
+                                    { from: nextBatch },
                                 );
                                 nextBatch = page.nextBatch;
-                                page.events.forEach(event => relations.addEvent(event));
+                                page.events.forEach((event) => relations.addEvent(event));
                             } while (nextBatch);
-                        }),
+                        },
+                    ),
                 );
             } catch (err) {
                 logger.error(`Error fetching responses to pinned poll ${eventId} in room ${roomId}`);
@@ -119,43 +124,45 @@ export default class PinnedEventTile extends React.Component<IProps> {
             );
         }
 
-        return <div className="mx_PinnedEventTile">
-            <MemberAvatar
-                className="mx_PinnedEventTile_senderAvatar"
-                member={this.props.event.sender}
-                width={AVATAR_SIZE}
-                height={AVATAR_SIZE}
-                fallbackUserId={sender}
-            />
-
-            <span className={"mx_PinnedEventTile_sender " + getUserNameColorClass(sender)}>
-                { this.props.event.sender?.name || sender }
-            </span>
-
-            { unpinButton }
-
-            <div className="mx_PinnedEventTile_message">
-                <MessageEvent
-                    mxEvent={this.props.event}
-                    getRelationsForEvent={this.getRelationsForEvent}
-                    // @ts-ignore - complaining that className is invalid when it's not
-                    className="mx_PinnedEventTile_body"
-                    maxImageHeight={150}
-                    onHeightChanged={() => {}} // we need to give this, apparently
-                    permalinkCreator={this.props.permalinkCreator}
-                    replacingEventId={this.props.event.replacingEventId()}
+        return (
+            <div className="mx_PinnedEventTile">
+                <MemberAvatar
+                    className="mx_PinnedEventTile_senderAvatar"
+                    member={this.props.event.sender}
+                    width={AVATAR_SIZE}
+                    height={AVATAR_SIZE}
+                    fallbackUserId={sender}
                 />
-            </div>
 
-            <div className="mx_PinnedEventTile_footer">
-                <span className="mx_MessageTimestamp mx_PinnedEventTile_timestamp">
-                    { formatDate(new Date(this.props.event.getTs())) }
+                <span className={"mx_PinnedEventTile_sender " + getUserNameColorClass(sender)}>
+                    {this.props.event.sender?.name || sender}
                 </span>
 
-                <AccessibleButton onClick={this.onTileClicked} kind="link">
-                    { _t("View message") }
-                </AccessibleButton>
+                {unpinButton}
+
+                <div className="mx_PinnedEventTile_message">
+                    <MessageEvent
+                        mxEvent={this.props.event}
+                        getRelationsForEvent={this.getRelationsForEvent}
+                        // @ts-ignore - complaining that className is invalid when it's not
+                        className="mx_PinnedEventTile_body"
+                        maxImageHeight={150}
+                        onHeightChanged={() => {}} // we need to give this, apparently
+                        permalinkCreator={this.props.permalinkCreator}
+                        replacingEventId={this.props.event.replacingEventId()}
+                    />
+                </div>
+
+                <div className="mx_PinnedEventTile_footer">
+                    <span className="mx_MessageTimestamp mx_PinnedEventTile_timestamp">
+                        {formatDate(new Date(this.props.event.getTs()))}
+                    </span>
+
+                    <AccessibleButton onClick={this.onTileClicked} kind="link">
+                        {_t("View message")}
+                    </AccessibleButton>
+                </div>
             </div>
-        </div>;
+        );
     }
 }

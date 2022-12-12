@@ -14,14 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useContext } from 'react';
-import { Beacon } from 'matrix-js-sdk/src/matrix';
-import { LocationAssetType } from 'matrix-js-sdk/src/@types/location';
+import React, { useContext } from "react";
+import { Beacon } from "matrix-js-sdk/src/matrix";
+import { LocationAssetType } from "matrix-js-sdk/src/@types/location";
 
-import MatrixClientContext from '../../../contexts/MatrixClientContext';
-import BeaconStatus from './BeaconStatus';
-import { BeaconDisplayStatus } from './displayStatus';
-import ShareLatestLocation from './ShareLatestLocation';
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import BeaconStatus from "./BeaconStatus";
+import { BeaconDisplayStatus } from "./displayStatus";
+import ShareLatestLocation from "./ShareLatestLocation";
 
 interface Props {
     beacon: Beacon;
@@ -42,17 +42,19 @@ const useBeaconName = (beacon: Beacon): string => {
 const BeaconStatusTooltip: React.FC<Props> = ({ beacon }) => {
     const label = useBeaconName(beacon);
 
-    return <div className='mx_BeaconStatusTooltip'>
-        <BeaconStatus
-            beacon={beacon}
-            label={label}
-            displayStatus={BeaconDisplayStatus.Active}
-            displayLiveTimeRemaining
-            className='mx_BeaconStatusTooltip_inner'
-        >
-            <ShareLatestLocation latestLocationState={beacon.latestLocationState} />
-        </BeaconStatus>
-    </div>;
+    return (
+        <div className="mx_BeaconStatusTooltip">
+            <BeaconStatus
+                beacon={beacon}
+                label={label}
+                displayStatus={BeaconDisplayStatus.Active}
+                displayLiveTimeRemaining
+                className="mx_BeaconStatusTooltip_inner"
+            >
+                <ShareLatestLocation latestLocationState={beacon.latestLocationState} />
+            </BeaconStatus>
+        </div>
+    );
 };
 
 export default BeaconStatusTooltip;

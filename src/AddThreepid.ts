@@ -18,10 +18,10 @@ limitations under the License.
 
 import { IRequestMsisdnTokenResponse, IRequestTokenResponse } from "matrix-js-sdk/src/matrix";
 
-import { MatrixClientPeg } from './MatrixClientPeg';
-import Modal from './Modal';
-import { _t } from './languageHandler';
-import IdentityAuthClient from './IdentityAuthClient';
+import { MatrixClientPeg } from "./MatrixClientPeg";
+import Modal from "./Modal";
+import { _t } from "./languageHandler";
+import IdentityAuthClient from "./IdentityAuthClient";
 import { SSOAuthEntry } from "./components/views/auth/InteractiveAuthEntryComponents";
 import InteractiveAuthDialog from "./components/views/dialogs/InteractiveAuthDialog";
 
@@ -58,17 +58,22 @@ export default class AddThreepid {
      * @return {Promise} Resolves when the email has been sent. Then call checkEmailLinkClicked().
      */
     public addEmailAddress(emailAddress: string): Promise<IRequestTokenResponse> {
-        return MatrixClientPeg.get().requestAdd3pidEmailToken(emailAddress, this.clientSecret, 1).then((res) => {
-            this.sessionId = res.sid;
-            return res;
-        }, function(err) {
-            if (err.errcode === 'M_THREEPID_IN_USE') {
-                err.message = _t('This email address is already in use');
-            } else if (err.httpStatus) {
-                err.message = err.message + ` (Status ${err.httpStatus})`;
-            }
-            throw err;
-        });
+        return MatrixClientPeg.get()
+            .requestAdd3pidEmailToken(emailAddress, this.clientSecret, 1)
+            .then(
+                (res) => {
+                    this.sessionId = res.sid;
+                    return res;
+                },
+                function (err) {
+                    if (err.errcode === "M_THREEPID_IN_USE") {
+                        err.message = _t("This email address is already in use");
+                    } else if (err.httpStatus) {
+                        err.message = err.message + ` (Status ${err.httpStatus})`;
+                    }
+                    throw err;
+                },
+            );
     }
 
     /**
@@ -83,20 +88,22 @@ export default class AddThreepid {
             // For separate bind, request a token directly from the IS.
             const authClient = new IdentityAuthClient();
             const identityAccessToken = await authClient.getAccessToken();
-            return MatrixClientPeg.get().requestEmailToken(
-                emailAddress, this.clientSecret, 1,
-                undefined, identityAccessToken,
-            ).then((res) => {
-                this.sessionId = res.sid;
-                return res;
-            }, function(err) {
-                if (err.errcode === 'M_THREEPID_IN_USE') {
-                    err.message = _t('This email address is already in use');
-                } else if (err.httpStatus) {
-                    err.message = err.message + ` (Status ${err.httpStatus})`;
-                }
-                throw err;
-            });
+            return MatrixClientPeg.get()
+                .requestEmailToken(emailAddress, this.clientSecret, 1, undefined, identityAccessToken)
+                .then(
+                    (res) => {
+                        this.sessionId = res.sid;
+                        return res;
+                    },
+                    function (err) {
+                        if (err.errcode === "M_THREEPID_IN_USE") {
+                            err.message = _t("This email address is already in use");
+                        } else if (err.httpStatus) {
+                            err.message = err.message + ` (Status ${err.httpStatus})`;
+                        }
+                        throw err;
+                    },
+                );
         } else {
             // For tangled bind, request a token via the HS.
             return this.addEmailAddress(emailAddress);
@@ -111,20 +118,23 @@ export default class AddThreepid {
      * @return {Promise} Resolves when the text message has been sent. Then call haveMsisdnToken().
      */
     public addMsisdn(phoneCountry: string, phoneNumber: string): Promise<IRequestMsisdnTokenResponse> {
-        return MatrixClientPeg.get().requestAdd3pidMsisdnToken(
-            phoneCountry, phoneNumber, this.clientSecret, 1,
-        ).then((res) => {
-            this.sessionId = res.sid;
-            this.submitUrl = res.submit_url;
-            return res;
-        }, function(err) {
-            if (err.errcode === 'M_THREEPID_IN_USE') {
-                err.message = _t('This phone number is already in use');
-            } else if (err.httpStatus) {
-                err.message = err.message + ` (Status ${err.httpStatus})`;
-            }
-            throw err;
-        });
+        return MatrixClientPeg.get()
+            .requestAdd3pidMsisdnToken(phoneCountry, phoneNumber, this.clientSecret, 1)
+            .then(
+                (res) => {
+                    this.sessionId = res.sid;
+                    this.submitUrl = res.submit_url;
+                    return res;
+                },
+                function (err) {
+                    if (err.errcode === "M_THREEPID_IN_USE") {
+                        err.message = _t("This phone number is already in use");
+                    } else if (err.httpStatus) {
+                        err.message = err.message + ` (Status ${err.httpStatus})`;
+                    }
+                    throw err;
+                },
+            );
     }
 
     /**
@@ -140,20 +150,22 @@ export default class AddThreepid {
             // For separate bind, request a token directly from the IS.
             const authClient = new IdentityAuthClient();
             const identityAccessToken = await authClient.getAccessToken();
-            return MatrixClientPeg.get().requestMsisdnToken(
-                phoneCountry, phoneNumber, this.clientSecret, 1,
-                undefined, identityAccessToken,
-            ).then((res) => {
-                this.sessionId = res.sid;
-                return res;
-            }, function(err) {
-                if (err.errcode === 'M_THREEPID_IN_USE') {
-                    err.message = _t('This phone number is already in use');
-                } else if (err.httpStatus) {
-                    err.message = err.message + ` (Status ${err.httpStatus})`;
-                }
-                throw err;
-            });
+            return MatrixClientPeg.get()
+                .requestMsisdnToken(phoneCountry, phoneNumber, this.clientSecret, 1, undefined, identityAccessToken)
+                .then(
+                    (res) => {
+                        this.sessionId = res.sid;
+                        return res;
+                    },
+                    function (err) {
+                        if (err.errcode === "M_THREEPID_IN_USE") {
+                            err.message = _t("This phone number is already in use");
+                        } else if (err.httpStatus) {
+                            err.message = err.message + ` (Status ${err.httpStatus})`;
+                        }
+                        throw err;
+                    },
+                );
         } else {
             // For tangled bind, request a token via the HS.
             return this.addMsisdn(phoneCountry, phoneNumber);
@@ -194,8 +206,10 @@ export default class AddThreepid {
                         const dialogAesthetics = {
                             [SSOAuthEntry.PHASE_PREAUTH]: {
                                 title: _t("Use Single Sign On to continue"),
-                                body: _t("Confirm adding this email address by using " +
-                                    "Single Sign On to prove your identity."),
+                                body: _t(
+                                    "Confirm adding this email address by using " +
+                                        "Single Sign On to prove your identity.",
+                                ),
                                 continueText: _t("Single Sign On"),
                                 continueKind: "primary",
                             },
@@ -220,15 +234,18 @@ export default class AddThreepid {
                     }
                 }
             } else {
-                await MatrixClientPeg.get().addThreePid({
-                    sid: this.sessionId,
-                    client_secret: this.clientSecret,
-                    id_server: getIdServerDomain(),
-                }, this.bind);
+                await MatrixClientPeg.get().addThreePid(
+                    {
+                        sid: this.sessionId,
+                        client_secret: this.clientSecret,
+                        id_server: getIdServerDomain(),
+                    },
+                    this.bind,
+                );
             }
         } catch (err) {
             if (err.httpStatus === 401) {
-                err.message = _t('Failed to verify email address: make sure you clicked the link in the email');
+                err.message = _t("Failed to verify email address: make sure you clicked the link in the email");
             } else if (err.httpStatus) {
                 err.message += ` (Status ${err.httpStatus})`;
             }
@@ -240,7 +257,7 @@ export default class AddThreepid {
      * @param {{type: string, session?: string}} auth UI auth object
      * @return {Promise<Object>} Response from /3pid/add call (in current spec, an empty object)
      */
-    private makeAddThreepidOnlyRequest = (auth?: {type: string, session?: string}): Promise<{}> => {
+    private makeAddThreepidOnlyRequest = (auth?: { type: string; session?: string }): Promise<{}> => {
         return MatrixClientPeg.get().addThreePidOnly({
             sid: this.sessionId,
             client_secret: this.clientSecret,
@@ -258,8 +275,7 @@ export default class AddThreepid {
      */
     public async haveMsisdnToken(msisdnToken: string): Promise<any[]> {
         const authClient = new IdentityAuthClient();
-        const supportsSeparateAddAndBind =
-            await MatrixClientPeg.get().doesServerSupportSeparateAddAndBind();
+        const supportsSeparateAddAndBind = await MatrixClientPeg.get().doesServerSupportSeparateAddAndBind();
 
         let result;
         if (this.submitUrl) {
@@ -307,8 +323,9 @@ export default class AddThreepid {
                     const dialogAesthetics = {
                         [SSOAuthEntry.PHASE_PREAUTH]: {
                             title: _t("Use Single Sign On to continue"),
-                            body: _t("Confirm adding this phone number by using " +
-                                "Single Sign On to prove your identity."),
+                            body: _t(
+                                "Confirm adding this phone number by using " + "Single Sign On to prove your identity.",
+                            ),
                             continueText: _t("Single Sign On"),
                             continueKind: "primary",
                         },
@@ -333,11 +350,14 @@ export default class AddThreepid {
                 }
             }
         } else {
-            await MatrixClientPeg.get().addThreePid({
-                sid: this.sessionId,
-                client_secret: this.clientSecret,
-                id_server: getIdServerDomain(),
-            }, this.bind);
+            await MatrixClientPeg.get().addThreePid(
+                {
+                    sid: this.sessionId,
+                    client_secret: this.clientSecret,
+                    id_server: getIdServerDomain(),
+                },
+                this.bind,
+            );
         }
     }
 }

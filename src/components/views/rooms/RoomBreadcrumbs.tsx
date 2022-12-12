@@ -30,8 +30,7 @@ import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { ButtonEvent } from "../elements/AccessibleButton";
 
-interface IProps {
-}
+interface IProps {}
 
 interface IState {
     // Both of these control the animation for the breadcrumbs. For details on the
@@ -44,7 +43,7 @@ interface IState {
     skipFirst: boolean;
 }
 
-const RoomBreadcrumbTile = ({ room, onClick }: { room: Room, onClick: (ev: ButtonEvent) => void }) => {
+const RoomBreadcrumbTile = ({ room, onClick }: { room: Room; onClick: (ev: ButtonEvent) => void }) => {
     const [onFocus, isActive, ref] = useRovingTabIndex();
 
     return (
@@ -123,23 +122,16 @@ export default class RoomBreadcrumbs extends React.PureComponent<IProps, IState>
         if (tiles.length > 0) {
             // NOTE: The CSSTransition timeout MUST match the timeout in our CSS!
             return (
-                <CSSTransition
-                    appear={true}
-                    in={this.state.doAnimation}
-                    timeout={640}
-                    classNames='mx_RoomBreadcrumbs'
-                >
-                    <Toolbar className='mx_RoomBreadcrumbs' aria-label={_t("Recently visited rooms")}>
-                        { tiles.slice(this.state.skipFirst ? 1 : 0) }
+                <CSSTransition appear={true} in={this.state.doAnimation} timeout={640} classNames="mx_RoomBreadcrumbs">
+                    <Toolbar className="mx_RoomBreadcrumbs" aria-label={_t("Recently visited rooms")}>
+                        {tiles.slice(this.state.skipFirst ? 1 : 0)}
                     </Toolbar>
                 </CSSTransition>
             );
         } else {
             return (
-                <div className='mx_RoomBreadcrumbs'>
-                    <div className="mx_RoomBreadcrumbs_placeholder">
-                        { _t("No recently visited rooms") }
-                    </div>
+                <div className="mx_RoomBreadcrumbs">
+                    <div className="mx_RoomBreadcrumbs_placeholder">{_t("No recently visited rooms")}</div>
                 </div>
             );
         }

@@ -15,10 +15,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { SyntheticEvent, FocusEvent } from 'react';
+import React, { SyntheticEvent, FocusEvent } from "react";
 
 import AccessibleButton from "./AccessibleButton";
-import Tooltip, { Alignment } from './Tooltip';
+import Tooltip, { Alignment } from "./Tooltip";
 
 interface IProps extends React.ComponentProps<typeof AccessibleButton> {
     title?: string;
@@ -75,14 +75,12 @@ export default class AccessibleTooltipButton extends React.PureComponent<IProps,
 
     render() {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { title, tooltip, children, tooltipClassName, forceHide, alignment, onHideTooltip,
-            ...props } = this.props;
+        const { title, tooltip, children, tooltipClassName, forceHide, alignment, onHideTooltip, ...props } =
+            this.props;
 
-        const tip = this.state.hover && (title || tooltip) && <Tooltip
-            tooltipClassName={tooltipClassName}
-            label={tooltip || title}
-            alignment={alignment}
-        />;
+        const tip = this.state.hover && (title || tooltip) && (
+            <Tooltip tooltipClassName={tooltipClassName} label={tooltip || title} alignment={alignment} />
+        );
         return (
             <AccessibleButton
                 {...props}
@@ -92,9 +90,9 @@ export default class AccessibleTooltipButton extends React.PureComponent<IProps,
                 onBlur={this.hideTooltip || props.onBlur}
                 aria-label={title || props["aria-label"]}
             >
-                { children }
-                { this.props.label }
-                { (tooltip || title) && tip }
+                {children}
+                {this.props.label}
+                {(tooltip || title) && tip}
             </AccessibleButton>
         );
     }

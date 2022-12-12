@@ -70,9 +70,7 @@ export const recordClientInformation = async (
  * @todo(kerrya) revisit after MSC3391: account data deletion is done
  * (PSBE-12)
  */
-export const removeClientInformation = async (
-    matrixClient: MatrixClient,
-): Promise<void> => {
+export const removeClientInformation = async (matrixClient: MatrixClient): Promise<void> => {
     const deviceId = matrixClient.getDeviceId();
     const type = getClientInformationEventType(deviceId);
     const clientInformation = getDeviceClientInformation(matrixClient, deviceId);
@@ -84,7 +82,7 @@ export const removeClientInformation = async (
 };
 
 const sanitizeContentString = (value: unknown): string | undefined =>
-    value && typeof value === 'string' ? value : undefined;
+    value && typeof value === "string" ? value : undefined;
 
 export const getDeviceClientInformation = (matrixClient: MatrixClient, deviceId: string): DeviceClientInformation => {
     const event = matrixClient.getAccountData(getClientInformationEventType(deviceId));
@@ -101,4 +99,3 @@ export const getDeviceClientInformation = (matrixClient: MatrixClient, deviceId:
         url: sanitizeContentString(url),
     };
 };
-

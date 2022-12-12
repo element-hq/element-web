@@ -45,11 +45,14 @@ describe("leaveRoomBehaviour", () => {
         room = mkRoom(client, "!1:example.org");
         space = mkRoom(client, "!2:example.org");
         space.isSpaceRoom.mockReturnValue(true);
-        client.getRoom.mockImplementation(roomId => {
+        client.getRoom.mockImplementation((roomId) => {
             switch (roomId) {
-                case room.roomId: return room;
-                case space.roomId: return space;
-                default: return null;
+                case room.roomId:
+                    return room;
+                case space.roomId:
+                    return space;
+                default:
+                    return null;
             }
         });
 
@@ -62,16 +65,20 @@ describe("leaveRoomBehaviour", () => {
         jest.restoreAllMocks();
     });
 
-    const viewRoom = (room: Room) => defaultDispatcher.dispatch<ViewRoomPayload>({
-        action: Action.ViewRoom,
-        room_id: room.roomId,
-        metricsTrigger: undefined,
-    }, true);
+    const viewRoom = (room: Room) =>
+        defaultDispatcher.dispatch<ViewRoomPayload>(
+            {
+                action: Action.ViewRoom,
+                room_id: room.roomId,
+                metricsTrigger: undefined,
+            },
+            true,
+        );
 
     const expectDispatch = async <T extends ActionPayload>(payload: T) => {
         const dispatcherSpy = jest.fn();
         const dispatcherRef = defaultDispatcher.register(dispatcherSpy);
-        await new Promise<void>(resolve => setImmediate(resolve)); // Flush the dispatcher
+        await new Promise<void>((resolve) => setImmediate(resolve)); // Flush the dispatcher
         expect(dispatcherSpy).toHaveBeenCalledWith(payload);
         defaultDispatcher.unregister(dispatcherRef);
     };
@@ -84,8 +91,8 @@ describe("leaveRoomBehaviour", () => {
     });
 
     it("returns to the parent space after leaving a room inside of a space that was being viewed", async () => {
-        jest.spyOn(SpaceStore.instance, "getCanonicalParent").mockImplementation(
-            roomId => roomId === room.roomId ? space : null,
+        jest.spyOn(SpaceStore.instance, "getCanonicalParent").mockImplementation((roomId) =>
+            roomId === room.roomId ? space : null,
         );
         viewRoom(room);
         SpaceStore.instance.setActiveSpace(space.roomId, false);
@@ -108,8 +115,8 @@ describe("leaveRoomBehaviour", () => {
 
     it("returns to the parent space after leaving a subspace that was being viewed", async () => {
         room.isSpaceRoom.mockReturnValue(true);
-        jest.spyOn(SpaceStore.instance, "getCanonicalParent").mockImplementation(
-            roomId => roomId === room.roomId ? space : null,
+        jest.spyOn(SpaceStore.instance, "getCanonicalParent").mockImplementation((roomId) =>
+            roomId === room.roomId ? space : null,
         );
         viewRoom(room);
         SpaceStore.instance.setActiveSpace(room.roomId, false);

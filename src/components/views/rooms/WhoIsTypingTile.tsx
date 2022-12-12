@@ -15,16 +15,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
 import { RoomMember, RoomMemberEvent } from "matrix-js-sdk/src/models/room-member";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { compare } from "matrix-js-sdk/src/utils";
 
-import * as WhoIsTyping from '../../../WhoIsTyping';
-import Timer from '../../../utils/Timer';
-import { MatrixClientPeg } from '../../../MatrixClientPeg';
-import MemberAvatar from '../avatars/MemberAvatar';
+import * as WhoIsTyping from "../../../WhoIsTyping";
+import Timer from "../../../utils/Timer";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import MemberAvatar from "../avatars/MemberAvatar";
 
 interface IProps {
     // the room this statusbar is representing.
@@ -139,7 +139,9 @@ export default class WhoIsTypingTile extends React.Component<IProps, IState> {
                 timer.start();
                 timer.finished().then(
                     () => this.removeUserTimer(m.userId), // on elapsed
-                    () => {/* aborted */},
+                    () => {
+                        /* aborted */
+                    },
                 );
             }
             return delayedStopTypingTimers;
@@ -189,7 +191,7 @@ export default class WhoIsTypingTile extends React.Component<IProps, IState> {
         if (othersCount > 0) {
             avatars.push(
                 <span className="mx_WhoIsTypingTile_remainingAvatarPlaceholder" key="others">
-                    +{ othersCount }
+                    +{othersCount}
                 </span>,
             );
         }
@@ -199,8 +201,9 @@ export default class WhoIsTypingTile extends React.Component<IProps, IState> {
 
     render() {
         let usersTyping = this.state.usersTyping;
-        const stoppedUsersOnTimer = Object.keys(this.state.delayedStopTypingTimers)
-            .map((userId) => this.props.room.getMember(userId));
+        const stoppedUsersOnTimer = Object.keys(this.state.delayedStopTypingTimers).map((userId) =>
+            this.props.room.getMember(userId),
+        );
         // append the users that have been reported not typing anymore
         // but have a timeout timer running so they can disappear
         // when a message comes in
@@ -209,10 +212,7 @@ export default class WhoIsTypingTile extends React.Component<IProps, IState> {
         // moved to delayedStopTypingTimers
         usersTyping.sort((a, b) => compare(a.name, b.name));
 
-        const typingString = WhoIsTyping.whoIsTypingString(
-            usersTyping,
-            this.props.whoIsTypingLimit,
-        );
+        const typingString = WhoIsTyping.whoIsTypingString(usersTyping, this.props.whoIsTypingLimit);
         if (!typingString) {
             return null;
         }
@@ -220,11 +220,9 @@ export default class WhoIsTypingTile extends React.Component<IProps, IState> {
         return (
             <li className="mx_WhoIsTypingTile" aria-atomic="true">
                 <div className="mx_WhoIsTypingTile_avatars">
-                    { this.renderTypingIndicatorAvatars(usersTyping, this.props.whoIsTypingLimit) }
+                    {this.renderTypingIndicatorAvatars(usersTyping, this.props.whoIsTypingLimit)}
                 </div>
-                <div className="mx_WhoIsTypingTile_label">
-                    { typingString }
-                </div>
+                <div className="mx_WhoIsTypingTile_label">{typingString}</div>
             </li>
         );
     }

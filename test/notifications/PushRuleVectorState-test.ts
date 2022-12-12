@@ -15,32 +15,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {
-    PushRuleActionName,
-    TweakHighlight,
-    TweakName,
-    TweakSound,
-} from "matrix-js-sdk/src/matrix";
+import { PushRuleActionName, TweakHighlight, TweakName, TweakSound } from "matrix-js-sdk/src/matrix";
 
 import { PushRuleVectorState } from "../../src/notifications";
 
-describe("PushRuleVectorState", function() {
-    describe("contentRuleVectorStateKind", function() {
-        it("should understand normal notifications", function() {
+describe("PushRuleVectorState", function () {
+    describe("contentRuleVectorStateKind", function () {
+        it("should understand normal notifications", function () {
             const rule = {
-                actions: [
-                    PushRuleActionName.Notify,
-                ],
+                actions: [PushRuleActionName.Notify],
                 default: false,
                 enabled: false,
-                rule_id: '1',
+                rule_id: "1",
             };
 
-            expect(PushRuleVectorState.contentRuleVectorStateKind(rule)).
-                toEqual(PushRuleVectorState.ON);
+            expect(PushRuleVectorState.contentRuleVectorStateKind(rule)).toEqual(PushRuleVectorState.ON);
         });
 
-        it("should handle loud notifications", function() {
+        it("should handle loud notifications", function () {
             const rule = {
                 actions: [
                     PushRuleActionName.Notify,
@@ -49,14 +41,13 @@ describe("PushRuleVectorState", function() {
                 ],
                 default: false,
                 enabled: false,
-                rule_id: '1',
+                rule_id: "1",
             };
 
-            expect(PushRuleVectorState.contentRuleVectorStateKind(rule)).
-                toEqual(PushRuleVectorState.LOUD);
+            expect(PushRuleVectorState.contentRuleVectorStateKind(rule)).toEqual(PushRuleVectorState.LOUD);
         });
 
-        it("should understand missing highlight.value", function() {
+        it("should understand missing highlight.value", function () {
             const rule = {
                 actions: [
                     PushRuleActionName.Notify,
@@ -65,11 +56,10 @@ describe("PushRuleVectorState", function() {
                 ],
                 default: false,
                 enabled: false,
-                rule_id: '1',
+                rule_id: "1",
             };
 
-            expect(PushRuleVectorState.contentRuleVectorStateKind(rule)).
-                toEqual(PushRuleVectorState.LOUD);
+            expect(PushRuleVectorState.contentRuleVectorStateKind(rule)).toEqual(PushRuleVectorState.LOUD);
         });
     });
 });

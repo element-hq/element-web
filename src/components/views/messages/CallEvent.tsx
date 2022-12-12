@@ -50,56 +50,47 @@ interface ActiveCallEventProps {
 }
 
 const ActiveCallEvent = forwardRef<any, ActiveCallEventProps>(
-    (
-        {
-            mxEvent,
-            call,
-            participatingMembers,
-            buttonText,
-            buttonKind,
-            buttonDisabledTooltip,
-            onButtonClick,
-        },
-        ref,
-    ) => {
+    ({ mxEvent, call, participatingMembers, buttonText, buttonKind, buttonDisabledTooltip, onButtonClick }, ref) => {
         const senderName = useMemo(() => mxEvent.sender?.name ?? mxEvent.getSender(), [mxEvent]);
 
         const facePileMembers = useMemo(() => participatingMembers.slice(0, MAX_FACES), [participatingMembers]);
         const facePileOverflow = participatingMembers.length > facePileMembers.length;
 
-        return <div className="mx_CallEvent_wrapper" ref={ref}>
-            <div className="mx_CallEvent mx_CallEvent_active">
-                <MemberAvatar
-                    member={mxEvent.sender}
-                    fallbackUserId={mxEvent.getSender()}
-                    viewUserOnClick
-                    width={24}
-                    height={24}
-                />
-                <div className="mx_CallEvent_infoRows">
-                    <span className="mx_CallEvent_title">
-                        { _t("%(name)s started a video call", { name: senderName }) }
-                    </span>
-                    <LiveContentSummary
-                        type={LiveContentType.Video}
-                        text={_t("Video call")}
-                        active={false}
-                        participantCount={participatingMembers.length}
+        return (
+            <div className="mx_CallEvent_wrapper" ref={ref}>
+                <div className="mx_CallEvent mx_CallEvent_active">
+                    <MemberAvatar
+                        member={mxEvent.sender}
+                        fallbackUserId={mxEvent.getSender()}
+                        viewUserOnClick
+                        width={24}
+                        height={24}
                     />
-                    <FacePile members={facePileMembers} faceSize={24} overflow={facePileOverflow} />
+                    <div className="mx_CallEvent_infoRows">
+                        <span className="mx_CallEvent_title">
+                            {_t("%(name)s started a video call", { name: senderName })}
+                        </span>
+                        <LiveContentSummary
+                            type={LiveContentType.Video}
+                            text={_t("Video call")}
+                            active={false}
+                            participantCount={participatingMembers.length}
+                        />
+                        <FacePile members={facePileMembers} faceSize={24} overflow={facePileOverflow} />
+                    </div>
+                    {call && <GroupCallDuration groupCall={call.groupCall} />}
+                    <AccessibleTooltipButton
+                        className="mx_CallEvent_button"
+                        kind={buttonKind}
+                        disabled={onButtonClick === null || buttonDisabledTooltip !== undefined}
+                        onClick={onButtonClick}
+                        tooltip={buttonDisabledTooltip}
+                    >
+                        {buttonText}
+                    </AccessibleTooltipButton>
                 </div>
-                { call && <GroupCallDuration groupCall={call.groupCall} /> }
-                <AccessibleTooltipButton
-                    className="mx_CallEvent_button"
-                    kind={buttonKind}
-                    disabled={onButtonClick === null || buttonDisabledTooltip !== undefined}
-                    onClick={onButtonClick}
-                    tooltip={buttonDisabledTooltip}
-                >
-                    { buttonText }
-                </AccessibleTooltipButton>
             </div>
-        </div>;
+        );
     },
 );
 
@@ -113,40 +104,52 @@ const ActiveLoadedCallEvent = forwardRef<any, ActiveLoadedCallEventProps>(({ mxE
     const participatingMembers = useParticipatingMembers(call);
     const joinCallButtonDisabledTooltip = useJoinCallButtonDisabledTooltip(call);
 
-    const connect = useCallback((ev: ButtonEvent) => {
-        ev.preventDefault();
-        defaultDispatcher.dispatch<ViewRoomPayload>({
-            action: Action.ViewRoom,
-            room_id: mxEvent.getRoomId()!,
-            view_call: true,
-            metricsTrigger: undefined,
-        });
-    }, [mxEvent]);
+    const connect = useCallback(
+        (ev: ButtonEvent) => {
+            ev.preventDefault();
+            defaultDispatcher.dispatch<ViewRoomPayload>({
+                action: Action.ViewRoom,
+                room_id: mxEvent.getRoomId()!,
+                view_call: true,
+                metricsTrigger: undefined,
+            });
+        },
+        [mxEvent],
+    );
 
-    const disconnect = useCallback((ev: ButtonEvent) => {
-        ev.preventDefault();
-        call.disconnect();
-    }, [call]);
+    const disconnect = useCallback(
+        (ev: ButtonEvent) => {
+            ev.preventDefault();
+            call.disconnect();
+        },
+        [call],
+    );
 
     const [buttonText, buttonKind, onButtonClick] = useMemo(() => {
         switch (connectionState) {
-            case ConnectionState.Disconnected: return [_t("Join"), "primary", connect];
-            case ConnectionState.Connecting: return [_t("Join"), "primary", null];
-            case ConnectionState.Connected: return [_t("Leave"), "danger", disconnect];
-            case ConnectionState.Disconnecting: return [_t("Leave"), "danger", null];
+            case ConnectionState.Disconnected:
+                return [_t("Join"), "primary", connect];
+            case ConnectionState.Connecting:
+                return [_t("Join"), "primary", null];
+            case ConnectionState.Connected:
+                return [_t("Leave"), "danger", disconnect];
+            case ConnectionState.Disconnecting:
+                return [_t("Leave"), "danger", null];
         }
     }, [connectionState, connect, disconnect]);
 
-    return <ActiveCallEvent
-        ref={ref}
-        mxEvent={mxEvent}
-        call={call}
-        participatingMembers={participatingMembers}
-        buttonText={buttonText}
-        buttonKind={buttonKind}
-        buttonDisabledTooltip={joinCallButtonDisabledTooltip ?? undefined}
-        onButtonClick={onButtonClick}
-    />;
+    return (
+        <ActiveCallEvent
+            ref={ref}
+            mxEvent={mxEvent}
+            call={call}
+            participatingMembers={participatingMembers}
+            buttonText={buttonText}
+            buttonKind={buttonKind}
+            buttonDisabledTooltip={joinCallButtonDisabledTooltip ?? undefined}
+            onButtonClick={onButtonClick}
+        />
+    );
 });
 
 interface CallEventProps {
@@ -159,30 +162,35 @@ interface CallEventProps {
 export const CallEvent = forwardRef<any, CallEventProps>(({ mxEvent }, ref) => {
     const client = useContext(MatrixClientContext);
     const call = useCall(mxEvent.getRoomId()!);
-    const latestEvent = client.getRoom(mxEvent.getRoomId())!.currentState
-        .getStateEvents(mxEvent.getType(), mxEvent.getStateKey()!);
+    const latestEvent = client
+        .getRoom(mxEvent.getRoomId())!
+        .currentState.getStateEvents(mxEvent.getType(), mxEvent.getStateKey()!);
 
     if ("m.terminated" in latestEvent.getContent()) {
         // The call is terminated
-        return <div className="mx_CallEvent_wrapper" ref={ref}>
-            <div className="mx_CallEvent mx_CallEvent_inactive">
-                <span className="mx_CallEvent_title">{ _t("Video call ended") }</span>
-                <CallDuration delta={latestEvent.getTs() - mxEvent.getTs()} />
+        return (
+            <div className="mx_CallEvent_wrapper" ref={ref}>
+                <div className="mx_CallEvent mx_CallEvent_inactive">
+                    <span className="mx_CallEvent_title">{_t("Video call ended")}</span>
+                    <CallDuration delta={latestEvent.getTs() - mxEvent.getTs()} />
+                </div>
             </div>
-        </div>;
+        );
     }
 
     if (call === null) {
         // There should be a call, but it hasn't loaded yet
-        return <ActiveCallEvent
-            ref={ref}
-            mxEvent={mxEvent}
-            call={null}
-            participatingMembers={[]}
-            buttonText={_t("Join")}
-            buttonKind="primary"
-            onButtonClick={null}
-        />;
+        return (
+            <ActiveCallEvent
+                ref={ref}
+                mxEvent={mxEvent}
+                call={null}
+                participatingMembers={[]}
+                buttonText={_t("Join")}
+                buttonKind="primary"
+                onButtonClick={null}
+            />
+        );
     }
 
     return <ActiveLoadedCallEvent mxEvent={mxEvent} call={call as ElementCall} ref={ref} />;

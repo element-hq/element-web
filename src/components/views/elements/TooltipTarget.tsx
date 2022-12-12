@@ -14,13 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { HTMLAttributes } from 'react';
+import React, { HTMLAttributes } from "react";
 
 import useFocus from "../../../hooks/useFocus";
 import useHover from "../../../hooks/useHover";
-import Tooltip, { ITooltipProps } from './Tooltip';
+import Tooltip, { ITooltipProps } from "./Tooltip";
 
-interface IProps extends HTMLAttributes<HTMLSpanElement>, Omit<ITooltipProps, 'visible'> {
+interface IProps extends HTMLAttributes<HTMLSpanElement>, Omit<ITooltipProps, "visible"> {
     tooltipTargetClassName?: string;
     ignoreHover?: (ev: React.MouseEvent) => boolean;
 }
@@ -47,15 +47,17 @@ const TooltipTarget: React.FC<IProps> = ({
 
     // No need to fill up the DOM with hidden tooltip elements. Only add the
     // tooltip when we're hovering over the item (performance)
-    const tooltip = (isFocused || isHovering) && <Tooltip
-        id={id}
-        className={className}
-        tooltipClassName={tooltipClassName}
-        label={label}
-        alignment={alignment}
-        visible={isFocused || isHovering}
-        maxParentWidth={maxParentWidth}
-    />;
+    const tooltip = (isFocused || isHovering) && (
+        <Tooltip
+            id={id}
+            className={className}
+            tooltipClassName={tooltipClassName}
+            label={label}
+            alignment={alignment}
+            visible={isFocused || isHovering}
+            maxParentWidth={maxParentWidth}
+        />
+    );
 
     return (
         <div
@@ -66,8 +68,8 @@ const TooltipTarget: React.FC<IProps> = ({
             className={tooltipTargetClassName}
             {...rest}
         >
-            { children }
-            { tooltip }
+            {children}
+            {tooltip}
         </div>
     );
 };

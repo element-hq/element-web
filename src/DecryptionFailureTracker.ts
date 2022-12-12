@@ -18,7 +18,7 @@ import { DecryptionError } from "matrix-js-sdk/src/crypto/algorithms";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Error as ErrorEvent } from "@matrix-org/analytics-events/types/typescript/Error";
 
-import { PosthogAnalytics } from './PosthogAnalytics';
+import { PosthogAnalytics } from "./PosthogAnalytics";
 
 export class DecryptionFailure {
     public readonly ts: number;
@@ -35,28 +35,31 @@ type TrackingFn = (count: number, trackedErrCode: ErrorCode, rawError: string) =
 export type ErrCodeMapFn = (errcode: string) => ErrorCode;
 
 export class DecryptionFailureTracker {
-    private static internalInstance = new DecryptionFailureTracker((total, errorCode, rawError) => {
-        for (let i = 0; i < total; i++) {
-            PosthogAnalytics.instance.trackEvent<ErrorEvent>({
-                eventName: "Error",
-                domain: "E2EE",
-                name: errorCode,
-                context: `mxc_crypto_error_type_${rawError}`,
-            });
-        }
-    }, (errorCode) => {
-        // Map JS-SDK error codes to tracker codes for aggregation
-        switch (errorCode) {
-            case 'MEGOLM_UNKNOWN_INBOUND_SESSION_ID':
-                return 'OlmKeysNotSentError';
-            case 'OLM_UNKNOWN_MESSAGE_INDEX':
-                return 'OlmIndexError';
-            case undefined:
-                return 'OlmUnspecifiedError';
-            default:
-                return 'UnknownError';
-        }
-    });
+    private static internalInstance = new DecryptionFailureTracker(
+        (total, errorCode, rawError) => {
+            for (let i = 0; i < total; i++) {
+                PosthogAnalytics.instance.trackEvent<ErrorEvent>({
+                    eventName: "Error",
+                    domain: "E2EE",
+                    name: errorCode,
+                    context: `mxc_crypto_error_type_${rawError}`,
+                });
+            }
+        },
+        (errorCode) => {
+            // Map JS-SDK error codes to tracker codes for aggregation
+            switch (errorCode) {
+                case "MEGOLM_UNKNOWN_INBOUND_SESSION_ID":
+                    return "OlmKeysNotSentError";
+                case "OLM_UNKNOWN_MESSAGE_INDEX":
+                    return "OlmIndexError";
+                case undefined:
+                    return "OlmUnspecifiedError";
+                default:
+                    return "UnknownError";
+            }
+        },
+    );
 
     // Map of event IDs to DecryptionFailure items.
     public failures: Map<string, DecryptionFailure> = new Map();
@@ -108,12 +111,12 @@ export class DecryptionFailureTracker {
      * trackedErrorCode. If not provided, the `.code` of errors will be used.
      */
     private constructor(private readonly fn: TrackingFn, private readonly errorCodeMapFn: ErrCodeMapFn) {
-        if (!fn || typeof fn !== 'function') {
-            throw new Error('DecryptionFailureTracker requires tracking function');
+        if (!fn || typeof fn !== "function") {
+            throw new Error("DecryptionFailureTracker requires tracking function");
         }
 
-        if (typeof errorCodeMapFn !== 'function') {
-            throw new Error('DecryptionFailureTracker second constructor argument should be a function');
+        if (typeof errorCodeMapFn !== "function") {
+            throw new Error("DecryptionFailureTracker second constructor argument should be a function");
         }
     }
 
@@ -145,7 +148,9 @@ export class DecryptionFailureTracker {
     public addVisibleEvent(e: MatrixEvent): void {
         const eventId = e.getId();
 
-        if (this.trackedEvents.has(eventId)) { return; }
+        if (this.trackedEvents.has(eventId)) {
+            return;
+        }
 
         this.visibleEvents.add(eventId);
         if (this.failures.has(eventId) && !this.visibleFailures.has(eventId)) {
@@ -156,7 +161,9 @@ export class DecryptionFailureTracker {
     public addDecryptionFailure(failure: DecryptionFailure): void {
         const eventId = failure.failedEventId;
 
-        if (this.trackedEvents.has(eventId)) { return; }
+        if (this.trackedEvents.has(eventId)) {
+            return;
+        }
 
         this.failures.set(eventId, failure);
         if (this.visibleEvents.has(eventId) && !this.visibleFailures.has(eventId)) {
@@ -179,10 +186,7 @@ export class DecryptionFailureTracker {
             DecryptionFailureTracker.CHECK_INTERVAL_MS,
         );
 
-        this.trackInterval = window.setInterval(
-            () => this.trackFailures(),
-            DecryptionFailureTracker.TRACK_INTERVAL_MS,
-        );
+        this.trackInterval = window.setInterval(() => this.trackFailures(), DecryptionFailureTracker.TRACK_INTERVAL_MS);
     }
 
     /**

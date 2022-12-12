@@ -20,7 +20,7 @@ import { Visibility } from "matrix-js-sdk/src/@types/partials";
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import DirectoryCustomisations from '../../../customisations/Directory';
+import DirectoryCustomisations from "../../../customisations/Directory";
 
 interface IProps {
     roomId: string;
@@ -47,20 +47,19 @@ export default class RoomPublishSetting extends React.PureComponent<IProps, ISta
         this.setState({ isRoomPublished: newValue });
         const client = MatrixClientPeg.get();
 
-        client.setRoomDirectoryVisibility(
-            this.props.roomId,
-            newValue ? Visibility.Public : Visibility.Private,
-        ).catch(() => {
-            // Roll back the local echo on the change
-            this.setState({ isRoomPublished: valueBefore });
-        });
+        client
+            .setRoomDirectoryVisibility(this.props.roomId, newValue ? Visibility.Public : Visibility.Private)
+            .catch(() => {
+                // Roll back the local echo on the change
+                this.setState({ isRoomPublished: valueBefore });
+            });
     };
 
     componentDidMount() {
         const client = MatrixClientPeg.get();
-        client.getRoomDirectoryVisibility(this.props.roomId).then((result => {
-            this.setState({ isRoomPublished: result.visibility === 'public' });
-        }));
+        client.getRoomDirectoryVisibility(this.props.roomId).then((result) => {
+            this.setState({ isRoomPublished: result.visibility === "public" });
+        });
     }
 
     render() {
@@ -69,13 +68,14 @@ export default class RoomPublishSetting extends React.PureComponent<IProps, ISta
         const room = client.getRoom(this.props.roomId);
         const isRoomPublishable = room.getJoinRule() !== "invite";
 
-        const enabled = (
+        const enabled =
             (DirectoryCustomisations.requireCanonicalAliasAccessToPublish?.() === false ||
-            this.props.canSetCanonicalAlias) && (isRoomPublishable || this.state.isRoomPublished)
-        );
+                this.props.canSetCanonicalAlias) &&
+            (isRoomPublishable || this.state.isRoomPublished);
 
         return (
-            <LabelledToggleSwitch value={this.state.isRoomPublished}
+            <LabelledToggleSwitch
+                value={this.state.isRoomPublished}
                 onChange={this.onRoomPublishChange}
                 disabled={!enabled}
                 label={_t("Publish this room to the public in %(domain)s's room directory?", {

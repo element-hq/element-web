@@ -18,7 +18,7 @@ limitations under the License.
 
 import React from "react";
 
-import { _t } from '../../../languageHandler';
+import { _t } from "../../../languageHandler";
 
 interface IProps {
     // The primary button which is styled differently and has default focus.
@@ -32,7 +32,7 @@ interface IProps {
 
     // onClick handler for the primary button. Note that the returned promise, if
     // returning a promise, is not used.
-    onPrimaryButtonClick?: (ev: React.MouseEvent) => (void | Promise<void>);
+    onPrimaryButtonClick?: (ev: React.MouseEvent) => void | Promise<void>;
 
     // should there be a cancel button? default: true
     hasCancel?: boolean;
@@ -79,38 +79,41 @@ export default class DialogButtons extends React.Component<IProps> {
         let cancelButton;
 
         if (this.props.cancelButton || this.props.hasCancel) {
-            cancelButton = <button
-                // important: the default type is 'submit' and this button comes before the
-                // primary in the DOM so will get form submissions unless we make it not a submit.
-                data-testid="dialog-cancel-button"
-                type="button"
-                onClick={this.onCancelClick}
-                className={this.props.cancelButtonClass}
-                disabled={this.props.disabled}
-            >
-                { this.props.cancelButton || _t("Cancel") }
-            </button>;
+            cancelButton = (
+                <button
+                    // important: the default type is 'submit' and this button comes before the
+                    // primary in the DOM so will get form submissions unless we make it not a submit.
+                    data-testid="dialog-cancel-button"
+                    type="button"
+                    onClick={this.onCancelClick}
+                    className={this.props.cancelButtonClass}
+                    disabled={this.props.disabled}
+                >
+                    {this.props.cancelButton || _t("Cancel")}
+                </button>
+            );
         }
 
         let additive = null;
         if (this.props.additive) {
-            additive = <div className="mx_Dialog_buttons_additive">{ this.props.additive }</div>;
+            additive = <div className="mx_Dialog_buttons_additive">{this.props.additive}</div>;
         }
 
         return (
             <div className="mx_Dialog_buttons">
-                { additive }
+                {additive}
                 <span className="mx_Dialog_buttons_row">
-                    { cancelButton }
-                    { this.props.children }
-                    <button type={this.props.primaryIsSubmit ? 'submit' : 'button'}
+                    {cancelButton}
+                    {this.props.children}
+                    <button
+                        type={this.props.primaryIsSubmit ? "submit" : "button"}
                         data-testid="dialog-primary-button"
                         className={primaryButtonClassName}
                         onClick={this.props.onPrimaryButtonClick}
                         autoFocus={this.props.focus}
                         disabled={this.props.disabled || this.props.primaryDisabled}
                     >
-                        { this.props.primaryButton }
+                        {this.props.primaryButton}
                     </button>
                 </span>
             </div>

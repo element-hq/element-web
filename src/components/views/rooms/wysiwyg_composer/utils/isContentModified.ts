@@ -21,9 +21,12 @@ import EditorStateTransfer from "../../../../../utils/EditorStateTransfer";
 export function isContentModified(newContent: IContent, editorStateTransfer: EditorStateTransfer): boolean {
     // if nothing has changed then bail
     const oldContent = editorStateTransfer.getEvent().getContent();
-    if (oldContent["msgtype"] === newContent["msgtype"] && oldContent["body"] === newContent["body"] &&
+    if (
+        oldContent["msgtype"] === newContent["msgtype"] &&
+        oldContent["body"] === newContent["body"] &&
         oldContent["format"] === newContent["format"] &&
-        oldContent["formatted_body"] === newContent["formatted_body"]) {
+        oldContent["formatted_body"] === newContent["formatted_body"]
+    ) {
         return false;
     }
     return true;

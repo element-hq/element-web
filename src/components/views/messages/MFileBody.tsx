@@ -14,12 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { createRef } from 'react';
-import { filesize } from 'filesize';
+import React, { createRef } from "react";
+import { filesize } from "filesize";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { _t } from '../../../languageHandler';
-import Modal from '../../../Modal';
+import { _t } from "../../../languageHandler";
+import Modal from "../../../Modal";
 import AccessibleButton from "../elements/AccessibleButton";
 import { mediaFromContent } from "../../../customisations/Media";
 import ErrorDialog from "../dialogs/ErrorDialog";
@@ -35,7 +35,7 @@ export let DOWNLOAD_ICON_URL; // cached copy of the download.svg asset for the s
 async function cacheDownloadIcon() {
     if (DOWNLOAD_ICON_URL) return; // cached already
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const svg = await fetch(require('../../../../res/img/download.svg').default).then(r => r.text());
+    const svg = await fetch(require("../../../../res/img/download.svg").default).then((r) => r.text());
     DOWNLOAD_ICON_URL = "data:image/svg+xml;base64," + window.btoa(svg);
 }
 
@@ -207,7 +207,7 @@ export default class MFileBody extends React.Component<IProps, IState> {
                     <span className="mx_MFileBody_info_icon" />
                     <TextWithTooltip tooltip={presentableTextForFile(this.content, _t("Attachment"), true)}>
                         <span className="mx_MFileBody_info_filename">
-                            { presentableTextForFile(this.content, _t("Attachment"), true, true) }
+                            {presentableTextForFile(this.content, _t("Attachment"), true, true)}
                         </span>
                     </TextWithTooltip>
                 </AccessibleButton>
@@ -217,18 +217,18 @@ export default class MFileBody extends React.Component<IProps, IState> {
         if (this.props.forExport) {
             const content = this.props.mxEvent.getContent();
             // During export, the content url will point to the MSC, which will later point to a local url
-            return <span className="mx_MFileBody">
-                <a href={content.file?.url || content.url}>
-                    { placeholder }
-                </a>
-            </span>;
+            return (
+                <span className="mx_MFileBody">
+                    <a href={content.file?.url || content.url}>{placeholder}</a>
+                </span>
+            );
         }
 
-        let showDownloadLink = !this.props.showGenericPlaceholder || (
-            this.context.timelineRenderingType !== TimelineRenderingType.Room &&
-            this.context.timelineRenderingType !== TimelineRenderingType.Search &&
-            this.context.timelineRenderingType !== TimelineRenderingType.Pinned
-        );
+        let showDownloadLink =
+            !this.props.showGenericPlaceholder ||
+            (this.context.timelineRenderingType !== TimelineRenderingType.Room &&
+                this.context.timelineRenderingType !== TimelineRenderingType.Search &&
+                this.context.timelineRenderingType !== TimelineRenderingType.Pinned);
 
         if (this.context.timelineRenderingType === TimelineRenderingType.Thread) {
             showDownloadLink = false;
@@ -244,12 +244,14 @@ export default class MFileBody extends React.Component<IProps, IState> {
                 // but it is not guaranteed between various browsers' settings.
                 return (
                     <span className="mx_MFileBody">
-                        { placeholder }
-                        { showDownloadLink && <div className="mx_MFileBody_download">
-                            <AccessibleButton onClick={this.decryptFile}>
-                                { _t("Decrypt %(text)s", { text: this.linkText }) }
-                            </AccessibleButton>
-                        </div> }
+                        {placeholder}
+                        {showDownloadLink && (
+                            <div className="mx_MFileBody_download">
+                                <AccessibleButton onClick={this.decryptFile}>
+                                    {_t("Decrypt %(text)s", { text: this.linkText })}
+                                </AccessibleButton>
+                            </div>
+                        )}
                     </span>
                 );
             }
@@ -259,34 +261,37 @@ export default class MFileBody extends React.Component<IProps, IState> {
             // If the attachment is encrypted then put the link inside an iframe.
             return (
                 <span className="mx_MFileBody">
-                    { placeholder }
-                    { showDownloadLink && <div className="mx_MFileBody_download">
-                        <div aria-hidden style={{ display: "none" }}>
-                            { /*
-                              * Add dummy copy of the "a" tag
-                              * We'll use it to learn how the download link
-                              * would have been styled if it was rendered inline.
-                              */ }
-                            { /* this violates multiple eslint rules
-                            so ignore it completely */ }
-                            { /* eslint-disable-next-line */ }
-                            <a ref={this.dummyLink} />
-                        </div>
-                        { /*
+                    {placeholder}
+                    {showDownloadLink && (
+                        <div className="mx_MFileBody_download">
+                            <div aria-hidden style={{ display: "none" }}>
+                                {/*
+                                 * Add dummy copy of the "a" tag
+                                 * We'll use it to learn how the download link
+                                 * would have been styled if it was rendered inline.
+                                 */}
+                                {/* this violates multiple eslint rules
+                            so ignore it completely */}
+                                {/* eslint-disable-next-line */}
+                                <a ref={this.dummyLink} />
+                            </div>
+                            {/*
                             TODO: Move iframe (and dummy link) into FileDownloader.
                             We currently have it set up this way because of styles applied to the iframe
                             itself which cannot be easily handled/overridden by the FileDownloader. In
                             future, the download link may disappear entirely at which point it could also
                             be suitable to just remove this bit of code.
-                         */ }
-                        <iframe
-                            aria-hidden
-                            title={presentableTextForFile(this.content, _t("Attachment"), true, true)}
-                            src={url}
-                            onLoad={() => this.downloadFile(this.fileName, this.linkText)}
-                            ref={this.iframe}
-                            sandbox="allow-scripts allow-downloads allow-downloads-without-user-activation" />
-                    </div> }
+                         */}
+                            <iframe
+                                aria-hidden
+                                title={presentableTextForFile(this.content, _t("Attachment"), true, true)}
+                                src={url}
+                                onLoad={() => this.downloadFile(this.fileName, this.linkText)}
+                                ref={this.iframe}
+                                sandbox="allow-scripts allow-downloads allow-downloads-without-user-activation"
+                            />
+                        </div>
+                    )}
                 </span>
             );
         } else if (contentUrl) {
@@ -304,7 +309,7 @@ export default class MFileBody extends React.Component<IProps, IState> {
             // we won't try and convert it. Likewise, if the file size is unknown then we'll assume
             // it is too big. There is the risk of the reported file size and the actual file size
             // being different, however the user shouldn't normally run into this problem.
-            const fileTooBig = typeof(fileSize) === 'number' ? fileSize > 524288000 : true;
+            const fileTooBig = typeof fileSize === "number" ? fileSize > 524288000 : true;
 
             if (["application/pdf"].includes(fileType) && !fileTooBig) {
                 // We want to force a download on this type, so use an onClick handler.
@@ -321,7 +326,7 @@ export default class MFileBody extends React.Component<IProps, IState> {
                         const blobUrl = URL.createObjectURL(blob);
 
                         // We have to create an anchor to download the file
-                        const tempAnchor = document.createElement('a');
+                        const tempAnchor = document.createElement("a");
                         tempAnchor.download = this.fileName;
                         tempAnchor.href = blobUrl;
                         document.body.appendChild(tempAnchor); // for firefox: https://stackoverflow.com/a/32226068
@@ -336,26 +341,30 @@ export default class MFileBody extends React.Component<IProps, IState> {
 
             return (
                 <span className="mx_MFileBody">
-                    { placeholder }
-                    { showDownloadLink && <div className="mx_MFileBody_download">
-                        <a {...downloadProps}>
-                            <span className="mx_MFileBody_download_icon" />
-                            { _t("Download %(text)s", { text: this.linkText }) }
-                        </a>
-                        { this.context.timelineRenderingType === TimelineRenderingType.File && (
-                            <div className="mx_MImageBody_size">
-                                { this.content.info?.size ? filesize(this.content.info.size) : "" }
-                            </div>
-                        ) }
-                    </div> }
+                    {placeholder}
+                    {showDownloadLink && (
+                        <div className="mx_MFileBody_download">
+                            <a {...downloadProps}>
+                                <span className="mx_MFileBody_download_icon" />
+                                {_t("Download %(text)s", { text: this.linkText })}
+                            </a>
+                            {this.context.timelineRenderingType === TimelineRenderingType.File && (
+                                <div className="mx_MImageBody_size">
+                                    {this.content.info?.size ? filesize(this.content.info.size) : ""}
+                                </div>
+                            )}
+                        </div>
+                    )}
                 </span>
             );
         } else {
-            const extra = this.linkText ? (': ' + this.linkText) : '';
-            return <span className="mx_MFileBody">
-                { placeholder }
-                { _t("Invalid file%(extra)s", { extra: extra }) }
-            </span>;
+            const extra = this.linkText ? ": " + this.linkText : "";
+            return (
+                <span className="mx_MFileBody">
+                    {placeholder}
+                    {_t("Invalid file%(extra)s", { extra: extra })}
+                </span>
+            );
         }
     }
 }

@@ -14,26 +14,27 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { forwardRef, RefObject } from 'react';
-import classNames from 'classnames';
+import React, { forwardRef, RefObject } from "react";
+import classNames from "classnames";
 
-import EditorStateTransfer from '../../../../utils/EditorStateTransfer';
-import { WysiwygComposer } from './components/WysiwygComposer';
-import { EditionButtons } from './components/EditionButtons';
-import { useWysiwygEditActionHandler } from './hooks/useWysiwygEditActionHandler';
-import { useEditing } from './hooks/useEditing';
-import { useInitialContent } from './hooks/useInitialContent';
+import EditorStateTransfer from "../../../../utils/EditorStateTransfer";
+import { WysiwygComposer } from "./components/WysiwygComposer";
+import { EditionButtons } from "./components/EditionButtons";
+import { useWysiwygEditActionHandler } from "./hooks/useWysiwygEditActionHandler";
+import { useEditing } from "./hooks/useEditing";
+import { useInitialContent } from "./hooks/useInitialContent";
 
 interface ContentProps {
     disabled: boolean;
 }
 
-const Content = forwardRef<HTMLElement, ContentProps>(
-    function Content({ disabled }: ContentProps, forwardRef: RefObject<HTMLElement>) {
-        useWysiwygEditActionHandler(disabled, forwardRef);
-        return null;
-    },
-);
+const Content = forwardRef<HTMLElement, ContentProps>(function Content(
+    { disabled }: ContentProps,
+    forwardRef: RefObject<HTMLElement>,
+) {
+    useWysiwygEditActionHandler(disabled, forwardRef);
+    return null;
+});
 
 interface EditWysiwygComposerProps {
     disabled?: boolean;
@@ -48,17 +49,26 @@ export function EditWysiwygComposer({ editorStateTransfer, className, ...props }
 
     const { editMessage, endEditing, onChange, isSaveDisabled } = useEditing(editorStateTransfer, initialContent);
 
-    return isReady && <WysiwygComposer
-        className={classNames("mx_EditWysiwygComposer", className)}
-        initialContent={initialContent}
-        onChange={onChange}
-        onSend={editMessage}
-        {...props}>
-        { (ref) => (
-            <>
-                <Content disabled={props.disabled} ref={ref} />
-                <EditionButtons onCancelClick={endEditing} onSaveClick={editMessage} isSaveDisabled={isSaveDisabled} />
-            </>)
-        }
-    </WysiwygComposer>;
+    return (
+        isReady && (
+            <WysiwygComposer
+                className={classNames("mx_EditWysiwygComposer", className)}
+                initialContent={initialContent}
+                onChange={onChange}
+                onSend={editMessage}
+                {...props}
+            >
+                {(ref) => (
+                    <>
+                        <Content disabled={props.disabled} ref={ref} />
+                        <EditionButtons
+                            onCancelClick={endEditing}
+                            onSaveClick={editMessage}
+                            isSaveDisabled={isSaveDisabled}
+                        />
+                    </>
+                )}
+            </WysiwygComposer>
+        )
+    );
 }

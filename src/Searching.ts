@@ -36,7 +36,7 @@ async function serverSideSearch(
     term: string,
     roomId: string = undefined,
     abortSignal?: AbortSignal,
-): Promise<{ response: ISearchResponse, query: ISearchRequestBody }> {
+): Promise<{ response: ISearchResponse; query: ISearchRequestBody }> {
     const client = MatrixClientPeg.get();
 
     const filter: IRoomEventFilter = {
@@ -160,7 +160,7 @@ async function localSearch(
     searchTerm: string,
     roomId: string = undefined,
     processResult = true,
-): Promise<{ response: IResultRoomEvents, query: ISearchArgs }> {
+): Promise<{ response: IResultRoomEvents; query: ISearchArgs }> {
     const eventIndex = EventIndexPeg.get();
 
     const searchArgs: ISearchArgs = {

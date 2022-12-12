@@ -17,19 +17,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useCallback, useContext, useEffect, useState } from 'react';
-import classNames from 'classnames';
-import { ResizeMethod } from 'matrix-js-sdk/src/@types/partials';
+import React, { useCallback, useContext, useEffect, useState } from "react";
+import classNames from "classnames";
+import { ResizeMethod } from "matrix-js-sdk/src/@types/partials";
 import { ClientEvent } from "matrix-js-sdk/src/client";
 
-import * as AvatarLogic from '../../../Avatar';
+import * as AvatarLogic from "../../../Avatar";
 import SettingsStore from "../../../settings/SettingsStore";
-import AccessibleButton from '../elements/AccessibleButton';
+import AccessibleButton from "../elements/AccessibleButton";
 import RoomContext from "../../../contexts/RoomContext";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { useTypedEventEmitter } from "../../../hooks/useEventEmitter";
 import { toPx } from "../../../utils/units";
-import { _t } from '../../../languageHandler';
+import { _t } from "../../../languageHandler";
 
 interface IProps {
     name: string; // The name (first initial used as default)
@@ -70,14 +70,13 @@ const useImageUrl = ({ url, urls }): [string, () => void] => {
     // Since this is a hot code path and the settings store can be slow, we
     // use the cached lowBandwidth value from the room context if it exists
     const roomContext = useContext(RoomContext);
-    const lowBandwidth = roomContext ?
-        roomContext.lowBandwidth : SettingsStore.getValue("lowBandwidth");
+    const lowBandwidth = roomContext ? roomContext.lowBandwidth : SettingsStore.getValue("lowBandwidth");
 
     const [imageUrls, setUrls] = useState<string[]>(calculateUrls(url, urls, lowBandwidth));
     const [urlsIndex, setIndex] = useState<number>(0);
 
     const onError = useCallback(() => {
-        setIndex(i => i + 1); // try the next one
+        setIndex((i) => i + 1); // try the next one
     }, []);
 
     useEffect(() => {
@@ -131,7 +130,7 @@ const BaseAvatar = (props: IProps) => {
                     lineHeight: toPx(height),
                 }}
             >
-                { initialLetter }
+                {initialLetter}
             </span>
         );
         const imgNode = (
@@ -146,7 +145,8 @@ const BaseAvatar = (props: IProps) => {
                     height: toPx(height),
                 }}
                 aria-hidden="true"
-                data-testid="avatar-img" />
+                data-testid="avatar-img"
+            />
         );
 
         if (onClick) {
@@ -160,8 +160,8 @@ const BaseAvatar = (props: IProps) => {
                     onClick={onClick}
                     inputRef={inputRef}
                 >
-                    { textNode }
-                    { imgNode }
+                    {textNode}
+                    {imgNode}
                 </AccessibleButton>
             );
         } else {
@@ -172,8 +172,8 @@ const BaseAvatar = (props: IProps) => {
                     {...otherProps}
                     role="presentation"
                 >
-                    { textNode }
-                    { imgNode }
+                    {textNode}
+                    {imgNode}
                 </span>
             );
         }
@@ -183,7 +183,7 @@ const BaseAvatar = (props: IProps) => {
         return (
             <AccessibleButton
                 className={classNames("mx_BaseAvatar mx_BaseAvatar_image", className)}
-                element='img'
+                element="img"
                 src={imageUrl}
                 onClick={onClick}
                 onError={onError}
@@ -195,7 +195,8 @@ const BaseAvatar = (props: IProps) => {
                 alt={_t("Avatar")}
                 inputRef={inputRef}
                 data-testid="avatar-img"
-                {...otherProps} />
+                {...otherProps}
+            />
         );
     } else {
         return (
@@ -211,7 +212,8 @@ const BaseAvatar = (props: IProps) => {
                 alt=""
                 ref={inputRef}
                 data-testid="avatar-img"
-                {...otherProps} />
+                {...otherProps}
+            />
         );
     }
 };

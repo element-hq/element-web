@@ -20,7 +20,7 @@ import { IEncryptedFile } from "../customisations/models/IMediaEventContent";
 
 export class RoomUpload {
     public readonly abortController = new AbortController();
-    public promise: Promise<{ url?: string, file?: IEncryptedFile }>;
+    public promise: Promise<{ url?: string; file?: IEncryptedFile }>;
     private uploaded = 0;
 
     constructor(

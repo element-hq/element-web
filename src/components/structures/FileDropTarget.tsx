@@ -41,17 +41,17 @@ const FileDropTarget: React.FC<IProps> = ({ parent, onFileDrop }) => {
             ev.stopPropagation();
             ev.preventDefault();
 
-            setState(state => ({
+            setState((state) => ({
                 // We always increment the counter no matter the types, because dragging is
                 // still happening. If we didn't, the drag counter would get out of sync.
                 counter: state.counter + 1,
                 // See:
                 // https://docs.w3cub.com/dom/datatransfer/types
                 // https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API/Recommended_drag_types#file
-                dragging: (
-                    ev.dataTransfer.types.includes("Files") ||
-                    ev.dataTransfer.types.includes("application/x-moz-file")
-                ) ? true : state.dragging,
+                dragging:
+                    ev.dataTransfer.types.includes("Files") || ev.dataTransfer.types.includes("application/x-moz-file")
+                        ? true
+                        : state.dragging,
             }));
         };
 
@@ -59,7 +59,7 @@ const FileDropTarget: React.FC<IProps> = ({ parent, onFileDrop }) => {
             ev.stopPropagation();
             ev.preventDefault();
 
-            setState(state => ({
+            setState((state) => ({
                 counter: state.counter - 1,
                 dragging: state.counter <= 1 ? false : state.dragging,
             }));
@@ -84,7 +84,7 @@ const FileDropTarget: React.FC<IProps> = ({ parent, onFileDrop }) => {
             ev.preventDefault();
             onFileDrop(ev.dataTransfer);
 
-            setState(state => ({
+            setState((state) => ({
                 dragging: false,
                 counter: state.counter - 1,
             }));
@@ -108,10 +108,16 @@ const FileDropTarget: React.FC<IProps> = ({ parent, onFileDrop }) => {
     }, [parent, onFileDrop]);
 
     if (state.dragging) {
-        return <div className="mx_FileDropTarget">
-            <img src={require("../../../res/img/upload-big.svg").default} className="mx_FileDropTarget_image" alt="" />
-            { _t("Drop file here to upload") }
-        </div>;
+        return (
+            <div className="mx_FileDropTarget">
+                <img
+                    src={require("../../../res/img/upload-big.svg").default}
+                    className="mx_FileDropTarget_image"
+                    alt=""
+                />
+                {_t("Drop file here to upload")}
+            </div>
+        );
     }
 
     return null;

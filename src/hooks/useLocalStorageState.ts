@@ -35,10 +35,13 @@ export const useLocalStorageState = <T>(key: string, initialValue: T): [T, Dispa
         setValue(getValue(lsKey, initialValue));
     }, [lsKey, initialValue]);
 
-    const _setValue: Dispatch<SetStateAction<T>> = useCallback((v: T) => {
-        window.localStorage.setItem(lsKey, JSON.stringify(v));
-        setValue(v);
-    }, [lsKey]);
+    const _setValue: Dispatch<SetStateAction<T>> = useCallback(
+        (v: T) => {
+            window.localStorage.setItem(lsKey, JSON.stringify(v));
+            setValue(v);
+        },
+        [lsKey],
+    );
 
     return [value, _setValue];
 };

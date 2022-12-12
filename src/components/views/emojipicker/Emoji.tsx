@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 
 import { MenuItem } from "../../structures/ContextMenu";
 import { IEmoji } from "../../../emoji";
@@ -43,8 +43,8 @@ class Emoji extends React.PureComponent<IProps> {
                 label={emoji.unicode}
                 disabled={this.props.disabled}
             >
-                <div className={`mx_EmojiPicker_item ${isSelected ? 'mx_EmojiPicker_item_selected' : ''}`}>
-                    { emoji.unicode }
+                <div className={`mx_EmojiPicker_item ${isSelected ? "mx_EmojiPicker_item_selected" : ""}`}>
+                    {emoji.unicode}
                 </div>
             </MenuItem>
         );

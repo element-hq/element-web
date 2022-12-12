@@ -45,8 +45,9 @@ import { VoiceBroadcastInfoState } from "../../../../src/voice-broadcast";
 import { mkVoiceBroadcastInfoStateEvent } from "../../../voice-broadcast/utils/test-utils";
 
 describe("RoomTile", () => {
-    jest.spyOn(PlatformPeg, "get")
-        .mockReturnValue({ overrideBrowserShortcuts: () => false } as unknown as BasePlatform);
+    jest.spyOn(PlatformPeg, "get").mockReturnValue({
+        overrideBrowserShortcuts: () => false,
+    } as unknown as BasePlatform);
     useMockedCalls();
 
     const setUpVoiceBroadcast = (state: VoiceBroadcastInfoState): void => {
@@ -64,12 +65,7 @@ describe("RoomTile", () => {
 
     const renderRoomTile = (): void => {
         renderResult = render(
-            <RoomTile
-                room={room}
-                showMessagePreview={false}
-                isMinimized={false}
-                tag={DefaultTagID.Untagged}
-            />,
+            <RoomTile room={room} showMessagePreview={false} isMinimized={false} tag={DefaultTagID.Untagged} />,
         );
     };
 
@@ -93,7 +89,7 @@ describe("RoomTile", () => {
             pendingEventOrdering: PendingEventOrdering.Detached,
         });
 
-        client.getRoom.mockImplementation(roomId => roomId === room.roomId ? room : null);
+        client.getRoom.mockImplementation((roomId) => (roomId === room.roomId ? room : null));
         client.getRooms.mockReturnValue([room]);
         client.reEmitter.reEmit(room, [RoomStateEvent.Events]);
 
@@ -141,7 +137,7 @@ describe("RoomTile", () => {
             // Insert an await point in the connection method so we can inspect
             // the intermediate connecting state
             let completeConnection: () => void;
-            const connectionCompleted = new Promise<void>(resolve => completeConnection = resolve);
+            const connectionCompleted = new Promise<void>((resolve) => (completeConnection = resolve));
             jest.spyOn(call, "performConnection").mockReturnValue(connectionCompleted);
 
             await Promise.all([
@@ -154,32 +150,32 @@ describe("RoomTile", () => {
                 call.connect(),
             ]);
 
-            await Promise.all([
-                screen.findByText("Video"),
-                call.disconnect(),
-            ]);
+            await Promise.all([screen.findByText("Video"), call.disconnect()]);
         });
 
         it("tracks participants", () => {
-            const alice: [RoomMember, Set<string>] = [
-                mkRoomMember(room.roomId, "@alice:example.org"), new Set(["a"]),
-            ];
+            const alice: [RoomMember, Set<string>] = [mkRoomMember(room.roomId, "@alice:example.org"), new Set(["a"])];
             const bob: [RoomMember, Set<string>] = [
-                mkRoomMember(room.roomId, "@bob:example.org"), new Set(["b1", "b2"]),
+                mkRoomMember(room.roomId, "@bob:example.org"),
+                new Set(["b1", "b2"]),
             ];
-            const carol: [RoomMember, Set<string>] = [
-                mkRoomMember(room.roomId, "@carol:example.org"), new Set(["c"]),
-            ];
+            const carol: [RoomMember, Set<string>] = [mkRoomMember(room.roomId, "@carol:example.org"), new Set(["c"])];
 
             expect(screen.queryByLabelText(/participant/)).toBe(null);
 
-            act(() => { call.participants = new Map([alice]); });
+            act(() => {
+                call.participants = new Map([alice]);
+            });
             expect(screen.getByLabelText("1 participant").textContent).toBe("1");
 
-            act(() => { call.participants = new Map([alice, bob, carol]); });
+            act(() => {
+                call.participants = new Map([alice, bob, carol]);
+            });
             expect(screen.getByLabelText("4 participants").textContent).toBe("4");
 
-            act(() => { call.participants = new Map(); });
+            act(() => {
+                call.participants = new Map();
+            });
             expect(screen.queryByLabelText(/participant/)).toBe(null);
         });
 

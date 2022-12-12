@@ -14,22 +14,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import { IMyDevice } from 'matrix-js-sdk/src/client';
+import React from "react";
+import { IMyDevice } from "matrix-js-sdk/src/client";
 import { logger } from "matrix-js-sdk/src/logger";
-import classNames from 'classnames';
+import classNames from "classnames";
 
-import { _t } from '../../../languageHandler';
-import { MatrixClientPeg } from '../../../MatrixClientPeg';
+import { _t } from "../../../languageHandler";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import AccessibleButton from "../elements/AccessibleButton";
 import Field from "../elements/Field";
 import Modal from "../../../Modal";
-import SetupEncryptionDialog from '../dialogs/security/SetupEncryptionDialog';
-import VerificationRequestDialog from '../../views/dialogs/VerificationRequestDialog';
-import LogoutDialog from '../dialogs/LogoutDialog';
-import DeviceTile from './devices/DeviceTile';
-import SelectableDeviceTile from './devices/SelectableDeviceTile';
-import { DeviceType } from '../../../utils/device/parseUserAgent';
+import SetupEncryptionDialog from "../dialogs/security/SetupEncryptionDialog";
+import VerificationRequestDialog from "../../views/dialogs/VerificationRequestDialog";
+import LogoutDialog from "../dialogs/LogoutDialog";
+import DeviceTile from "./devices/DeviceTile";
+import SelectableDeviceTile from "./devices/SelectableDeviceTile";
+import { DeviceType } from "../../../utils/device/parseUserAgent";
 
 interface IProps {
     device: IMyDevice;
@@ -71,12 +71,14 @@ export default class DevicesPanelEntry extends React.Component<IProps, IState> {
 
     private onRenameSubmit = async () => {
         this.setState({ renaming: false });
-        await MatrixClientPeg.get().setDeviceDetails(this.props.device.device_id, {
-            display_name: this.state.displayName,
-        }).catch((e) => {
-            logger.error("Error setting session display name", e);
-            throw new Error(_t("Failed to set display name"));
-        });
+        await MatrixClientPeg.get()
+            .setDeviceDetails(this.props.device.device_id, {
+                display_name: this.state.displayName,
+            })
+            .catch((e) => {
+                logger.error("Error setting session display name", e);
+                throw new Error(_t("Failed to set display name"));
+            });
         this.props.onDeviceChange();
     };
 
@@ -85,9 +87,13 @@ export default class DevicesPanelEntry extends React.Component<IProps, IState> {
     };
 
     private onOwnDeviceSignOut = (): void => {
-        Modal.createDialog(LogoutDialog,
-            /* props= */{}, /* className= */null,
-            /* isPriority= */false, /* isStatic= */true);
+        Modal.createDialog(
+            LogoutDialog,
+            /* props= */ {},
+            /* className= */ null,
+            /* isPriority= */ false,
+            /* isStatic= */ true,
+        );
     };
 
     private verify = async () => {
@@ -98,10 +104,7 @@ export default class DevicesPanelEntry extends React.Component<IProps, IState> {
         } else {
             const cli = MatrixClientPeg.get();
             const userId = cli.getUserId();
-            const verificationRequestPromise = cli.requestVerification(
-                userId,
-                [this.props.device.device_id],
-            );
+            const verificationRequestPromise = cli.requestVerification(userId, [this.props.device.device_id]);
             Modal.createDialog(VerificationRequestDialog, {
                 verificationRequestPromise,
                 member: cli.getUser(userId),
@@ -115,25 +118,29 @@ export default class DevicesPanelEntry extends React.Component<IProps, IState> {
     };
 
     public render(): JSX.Element {
-        let iconClass = '';
+        let iconClass = "";
         let verifyButton: JSX.Element;
         if (this.props.verified !== null) {
             iconClass = this.props.verified ? "mx_E2EIcon_verified" : "mx_E2EIcon_warning";
             if (!this.props.verified && this.props.canBeVerified) {
-                verifyButton = <AccessibleButton kind="primary" onClick={this.verify}>
-                    { _t("Verify") }
-                </AccessibleButton>;
+                verifyButton = (
+                    <AccessibleButton kind="primary" onClick={this.verify}>
+                        {_t("Verify")}
+                    </AccessibleButton>
+                );
             }
         }
 
         let signOutButton: JSX.Element;
         if (this.props.isOwnDevice) {
-            signOutButton = <AccessibleButton kind="danger_outline" onClick={this.onOwnDeviceSignOut}>
-                { _t("Sign Out") }
-            </AccessibleButton>;
+            signOutButton = (
+                <AccessibleButton kind="danger_outline" onClick={this.onOwnDeviceSignOut}>
+                    {_t("Sign Out")}
+                </AccessibleButton>
+            );
         }
 
-        const buttons = this.state.renaming ?
+        const buttons = this.state.renaming ? (
             <form className="mx_DevicesPanel_renameForm" onSubmit={this.onRenameSubmit}>
                 <Field
                     label={_t("Display Name")}
@@ -145,14 +152,16 @@ export default class DevicesPanelEntry extends React.Component<IProps, IState> {
                 />
                 <AccessibleButton onClick={this.onRenameSubmit} kind="confirm_sm" />
                 <AccessibleButton onClick={this.onRenameCancel} kind="cancel_sm" />
-            </form> :
+            </form>
+        ) : (
             <React.Fragment>
-                { signOutButton }
-                { verifyButton }
+                {signOutButton}
+                {verifyButton}
                 <AccessibleButton kind="primary_outline" onClick={this.onRename}>
-                    { _t("Rename") }
+                    {_t("Rename")}
                 </AccessibleButton>
-            </React.Fragment>;
+            </React.Fragment>
+        );
 
         const extendedDevice = {
             ...this.props.device,
@@ -161,20 +170,24 @@ export default class DevicesPanelEntry extends React.Component<IProps, IState> {
         };
 
         if (this.props.isOwnDevice) {
-            return <div className={classNames("mx_DevicesPanel_device", "mx_DevicesPanel_myDevice")}>
-                <div className="mx_DevicesPanel_deviceTrust">
-                    <span className={"mx_DevicesPanel_icon mx_E2EIcon " + iconClass} />
+            return (
+                <div className={classNames("mx_DevicesPanel_device", "mx_DevicesPanel_myDevice")}>
+                    <div className="mx_DevicesPanel_deviceTrust">
+                        <span className={"mx_DevicesPanel_icon mx_E2EIcon " + iconClass} />
+                    </div>
+                    <DeviceTile device={extendedDevice}>{buttons}</DeviceTile>
                 </div>
-                <DeviceTile device={extendedDevice}>
-                    { buttons }
-                </DeviceTile>
-            </div>;
+            );
         }
 
         return (
             <div className="mx_DevicesPanel_device">
-                <SelectableDeviceTile device={extendedDevice} onSelect={this.onDeviceToggled} isSelected={this.props.selected}>
-                    { buttons }
+                <SelectableDeviceTile
+                    device={extendedDevice}
+                    onSelect={this.onDeviceToggled}
+                    isSelected={this.props.selected}
+                >
+                    {buttons}
                 </SelectableDeviceTile>
             </div>
         );

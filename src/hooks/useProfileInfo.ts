@@ -36,30 +36,33 @@ export const useProfileInfo = () => {
 
     const [updateQuery, updateResult] = useLatestResult<string, IProfileInfo | null>(setProfile);
 
-    const search = useCallback(async ({ query: term }: IProfileInfoOpts): Promise<boolean> => {
-        updateQuery(term);
-        if (!term?.length || !term.startsWith('@') || !term.includes(':')) {
-            setProfile(null);
-            return true;
-        }
+    const search = useCallback(
+        async ({ query: term }: IProfileInfoOpts): Promise<boolean> => {
+            updateQuery(term);
+            if (!term?.length || !term.startsWith("@") || !term.includes(":")) {
+                setProfile(null);
+                return true;
+            }
 
-        setLoading(true);
-        try {
-            const result = await MatrixClientPeg.get().getProfileInfo(term);
-            updateResult(term, {
-                user_id: term,
-                avatar_url: result.avatar_url,
-                display_name: result.displayname,
-            });
-            return true;
-        } catch (e) {
-            console.error("Could not fetch profile info for params", { term }, e);
-            updateResult(term, null);
-            return false;
-        } finally {
-            setLoading(false);
-        }
-    }, [updateQuery, updateResult]);
+            setLoading(true);
+            try {
+                const result = await MatrixClientPeg.get().getProfileInfo(term);
+                updateResult(term, {
+                    user_id: term,
+                    avatar_url: result.avatar_url,
+                    display_name: result.displayname,
+                });
+                return true;
+            } catch (e) {
+                console.error("Could not fetch profile info for params", { term }, e);
+                updateResult(term, null);
+                return false;
+            } finally {
+                setLoading(false);
+            }
+        },
+        [updateQuery, updateResult],
+    );
 
     return {
         ready: true,

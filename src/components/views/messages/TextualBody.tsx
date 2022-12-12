@@ -14,22 +14,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { createRef, SyntheticEvent, MouseEvent, ReactNode } from 'react';
-import ReactDOM from 'react-dom';
-import highlight from 'highlight.js';
+import React, { createRef, SyntheticEvent, MouseEvent, ReactNode } from "react";
+import ReactDOM from "react-dom";
+import highlight from "highlight.js";
 import { MsgType } from "matrix-js-sdk/src/@types/event";
 import { isEventLike, LegacyMsgType, M_MESSAGE, MessageEvent } from "matrix-events-sdk";
 
-import * as HtmlUtils from '../../../HtmlUtils';
-import { formatDate } from '../../../DateUtils';
-import Modal from '../../../Modal';
-import dis from '../../../dispatcher/dispatcher';
-import { _t } from '../../../languageHandler';
-import * as ContextMenu from '../../structures/ContextMenu';
-import { ChevronFace, toRightOf } from '../../structures/ContextMenu';
+import * as HtmlUtils from "../../../HtmlUtils";
+import { formatDate } from "../../../DateUtils";
+import Modal from "../../../Modal";
+import dis from "../../../dispatcher/dispatcher";
+import { _t } from "../../../languageHandler";
+import * as ContextMenu from "../../structures/ContextMenu";
+import { ChevronFace, toRightOf } from "../../structures/ContextMenu";
 import SettingsStore from "../../../settings/SettingsStore";
-import { pillifyLinks, unmountPills } from '../../../utils/pillify';
-import { tooltipifyLinks, unmountTooltips } from '../../../utils/tooltipify';
+import { pillifyLinks, unmountPills } from "../../../utils/pillify";
+import { tooltipifyLinks, unmountTooltips } from "../../../utils/tooltipify";
 import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
 import { isPermalinkHost, tryTransformPermalinkToLocalHref } from "../../../utils/permalinks/Permalinks";
 import { copyPlaintext } from "../../../utils/strings";
@@ -41,14 +41,14 @@ import GenericTextContextMenu from "../context_menus/GenericTextContextMenu";
 import Spoiler from "../elements/Spoiler";
 import QuestionDialog from "../dialogs/QuestionDialog";
 import MessageEditHistoryDialog from "../dialogs/MessageEditHistoryDialog";
-import EditMessageComposer from '../rooms/EditMessageComposer';
-import LinkPreviewGroup from '../rooms/LinkPreviewGroup';
+import EditMessageComposer from "../rooms/EditMessageComposer";
+import LinkPreviewGroup from "../rooms/LinkPreviewGroup";
 import { IBodyProps } from "./IBodyProps";
 import RoomContext from "../../../contexts/RoomContext";
-import AccessibleButton from '../elements/AccessibleButton';
+import AccessibleButton from "../elements/AccessibleButton";
 import { options as linkifyOpts } from "../../../linkify-matrix";
-import { getParentEventId } from '../../../utils/Reply';
-import { EditWysiwygComposer } from '../rooms/wysiwyg_composer';
+import { getParentEventId } from "../../../utils/Reply";
+import { EditWysiwygComposer } from "../rooms/wysiwyg_composer";
 
 const MAX_HIGHLIGHT_LENGTH = 4096;
 
@@ -150,7 +150,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         // Calculate how many percent does the pre element take up.
         // If it's less than 30% we don't add the expansion button.
         // We also round the number as it sometimes can be 29.99...
-        const percentageOfViewport = Math.round(pre.offsetHeight / UIStore.instance.windowHeight * 100);
+        const percentageOfViewport = Math.round((pre.offsetHeight / UIStore.instance.windowHeight) * 100);
         // TODO: additionally show the button if it's an expanded quoted message
         if (percentageOfViewport < 30) return;
 
@@ -196,7 +196,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
             const { close } = ContextMenu.createMenu(GenericTextContextMenu, {
                 ...toRightOf(buttonRect, 0),
                 chevronFace: ChevronFace.None,
-                message: successful ? _t('Copied!') : _t('Failed to copy'),
+                message: successful ? _t("Copied!") : _t("Failed to copy"),
             });
             button.onmouseleave = close;
         };
@@ -225,32 +225,34 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
     private addLineNumbers(pre: HTMLPreElement): void {
         // Calculate number of lines in pre
         const number = pre.innerHTML.replace(/\n(<\/code>)?$/, "").split(/\n/).length;
-        const lineNumbers = document.createElement('span');
-        lineNumbers.className = 'mx_EventTile_lineNumbers';
+        const lineNumbers = document.createElement("span");
+        lineNumbers.className = "mx_EventTile_lineNumbers";
         // Iterate through lines starting with 1 (number of the first line is 1)
         for (let i = 1; i <= number; i++) {
-            const s = document.createElement('span');
+            const s = document.createElement("span");
             s.textContent = i.toString();
             lineNumbers.appendChild(s);
         }
         pre.prepend(lineNumbers);
-        pre.append(document.createElement('span'));
+        pre.append(document.createElement("span"));
     }
 
     private highlightCode(code: HTMLElement): void {
         if (code.textContent.length > MAX_HIGHLIGHT_LENGTH) {
             console.log(
                 "Code block is bigger than highlight limit (" +
-                code.textContent.length + " > " + MAX_HIGHLIGHT_LENGTH +
-                "): not highlighting",
+                    code.textContent.length +
+                    " > " +
+                    MAX_HIGHLIGHT_LENGTH +
+                    "): not highlighting",
             );
             return;
         }
 
         let advertisedLang;
         for (const cl of code.className.split(/\s+/)) {
-            if (cl.startsWith('language-')) {
-                const maybeLang = cl.split('-', 2)[1];
+            if (cl.startsWith("language-")) {
+                const maybeLang = cl.split("-", 2)[1];
                 if (highlight.getLanguage(maybeLang)) {
                     advertisedLang = maybeLang;
                     break;
@@ -299,16 +301,17 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         //console.info("shouldComponentUpdate: ShowUrlPreview for %s is %s", this.props.mxEvent.getId(), this.props.showUrlPreview);
 
         // exploit that events are immutable :)
-        return (nextProps.mxEvent.getId() !== this.props.mxEvent.getId() ||
-                nextProps.highlights !== this.props.highlights ||
-                nextProps.replacingEventId !== this.props.replacingEventId ||
-                nextProps.highlightLink !== this.props.highlightLink ||
-                nextProps.showUrlPreview !== this.props.showUrlPreview ||
-                nextProps.editState !== this.props.editState ||
-                nextState.links !== this.state.links ||
-                nextState.widgetHidden !== this.state.widgetHidden ||
-                nextProps.isSeeingThroughMessageHiddenForModeration
-                    !== this.props.isSeeingThroughMessageHiddenForModeration);
+        return (
+            nextProps.mxEvent.getId() !== this.props.mxEvent.getId() ||
+            nextProps.highlights !== this.props.highlights ||
+            nextProps.replacingEventId !== this.props.replacingEventId ||
+            nextProps.highlightLink !== this.props.highlightLink ||
+            nextProps.showUrlPreview !== this.props.showUrlPreview ||
+            nextProps.editState !== this.props.editState ||
+            nextState.links !== this.state.links ||
+            nextState.widgetHidden !== this.state.widgetHidden ||
+            nextProps.isSeeingThroughMessageHiddenForModeration !== this.props.isSeeingThroughMessageHiddenForModeration
+        );
     }
 
     private calculateUrlPreview(): void {
@@ -337,7 +340,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         let node = nodes[0];
         while (node) {
             if (node.tagName === "SPAN" && typeof node.getAttribute("data-mx-spoiler") === "string") {
-                const spoilerContainer = document.createElement('span');
+                const spoilerContainer = document.createElement("span");
 
                 const reason = node.getAttribute("data-mx-spoiler");
                 node.removeAttribute("data-mx-spoiler"); // we don't want to recurse
@@ -366,8 +369,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
                 if (this.isLinkPreviewable(node)) {
                     links.push(node.getAttribute("href"));
                 }
-            } else if (node.tagName === "PRE" || node.tagName === "CODE" ||
-                    node.tagName === "BLOCKQUOTE") {
+            } else if (node.tagName === "PRE" || node.tagName === "CODE" || node.tagName === "BLOCKQUOTE") {
                 continue;
             } else if (node.children && node.children.length) {
                 links = links.concat(this.findLinks(node.children));
@@ -378,8 +380,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
 
     private isLinkPreviewable(node: Element): boolean {
         // don't try to preview relative links
-        if (!node.getAttribute("href").startsWith("http://") &&
-            !node.getAttribute("href").startsWith("https://")) {
+        if (!node.getAttribute("href").startsWith("http://") && !node.getAttribute("href").startsWith("https://")) {
             return false;
         }
 
@@ -486,12 +487,16 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
             const integrationsUrl = integrationManager.uiUrl;
             Modal.createDialog(QuestionDialog, {
                 title: _t("Add an Integration"),
-                description:
+                description: (
                     <div>
-                        { _t("You are about to be taken to a third-party site so you can " +
-                            "authenticate your account for use with %(integrationsUrl)s. " +
-                            "Do you wish to continue?", { integrationsUrl: integrationsUrl }) }
-                    </div>,
+                        {_t(
+                            "You are about to be taken to a third-party site so you can " +
+                                "authenticate your account for use with %(integrationsUrl)s. " +
+                                "Do you wish to continue?",
+                            { integrationsUrl: integrationsUrl },
+                        )}
+                    </div>
+                ),
                 button: _t("Continue"),
                 onFinished(confirmed) {
                     if (!confirmed) {
@@ -502,7 +507,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
                     const left = (window.screen.width - width) / 2;
                     const top = (window.screen.height - height) / 2;
                     const features = `height=${height}, width=${width}, top=${top}, left=${left},`;
-                    const wnd = window.open(completeUrl, '_blank', features);
+                    const wnd = window.open(completeUrl, "_blank", features);
                     wnd.opener = null;
                 },
             });
@@ -517,14 +522,12 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         const date = this.props.mxEvent.replacingEventDate();
         const dateString = date && formatDate(date);
 
-        const tooltip = <div>
-            <div className="mx_Tooltip_title">
-                { _t("Edited at %(date)s", { date: dateString }) }
+        const tooltip = (
+            <div>
+                <div className="mx_Tooltip_title">{_t("Edited at %(date)s", { date: dateString })}</div>
+                <div className="mx_Tooltip_sub">{_t("Click to view edits")}</div>
             </div>
-            <div className="mx_Tooltip_sub">
-                { _t("Click to view edits") }
-            </div>
-        </div>;
+        );
 
         return (
             <AccessibleTooltipButton
@@ -533,7 +536,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
                 title={_t("Edited at %(date)s. Click to view edits.", { date: dateString })}
                 tooltip={tooltip}
             >
-                <span>{ `(${_t("edited")})` }</span>
+                <span>{`(${_t("edited")})`}</span>
             </AccessibleTooltipButton>
         );
     }
@@ -556,17 +559,17 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
                 }
                 break;
         }
-        return (
-            <span className="mx_EventTile_pendingModeration">{ `(${text})` }</span>
-        );
+        return <span className="mx_EventTile_pendingModeration">{`(${text})`}</span>;
     }
 
     render() {
         if (this.props.editState) {
             const isWysiwygComposerEnabled = SettingsStore.getValue("feature_wysiwyg_composer");
-            return isWysiwygComposerEnabled ?
-                <EditWysiwygComposer editorStateTransfer={this.props.editState} className="mx_EventTile_content" /> :
-                <EditMessageComposer editState={this.props.editState} className="mx_EventTile_content" />;
+            return isWysiwygComposerEnabled ? (
+                <EditWysiwygComposer editorStateTransfer={this.props.editState} className="mx_EventTile_content" />
+            ) : (
+                <EditMessageComposer editState={this.props.editState} className="mx_EventTile_content" />
+            );
         }
         const mxEvent = this.props.mxEvent;
         const content = mxEvent.getContent();
@@ -581,27 +584,29 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
             if (extev?.isEquivalentTo(M_MESSAGE)) {
                 isEmote = isEventLike(extev.wireFormat, LegacyMsgType.Emote);
                 isNotice = isEventLike(extev.wireFormat, LegacyMsgType.Notice);
-                body = HtmlUtils.bodyToHtml({
-                    body: extev.text,
-                    format: extev.html ? "org.matrix.custom.html" : undefined,
-                    formatted_body: extev.html,
-                    msgtype: MsgType.Text,
-                }, this.props.highlights, {
-                    disableBigEmoji: isEmote
-                        || !SettingsStore.getValue<boolean>('TextualBody.enableBigEmoji'),
-                    // Part of Replies fallback support
-                    stripReplyFallback: stripReply,
-                    ref: this.contentRef,
-                    returnString: false,
-                });
+                body = HtmlUtils.bodyToHtml(
+                    {
+                        body: extev.text,
+                        format: extev.html ? "org.matrix.custom.html" : undefined,
+                        formatted_body: extev.html,
+                        msgtype: MsgType.Text,
+                    },
+                    this.props.highlights,
+                    {
+                        disableBigEmoji: isEmote || !SettingsStore.getValue<boolean>("TextualBody.enableBigEmoji"),
+                        // Part of Replies fallback support
+                        stripReplyFallback: stripReply,
+                        ref: this.contentRef,
+                        returnString: false,
+                    },
+                );
             }
         }
         if (!body) {
             isEmote = content.msgtype === MsgType.Emote;
             isNotice = content.msgtype === MsgType.Notice;
             body = HtmlUtils.bodyToHtml(content, this.props.highlights, {
-                disableBigEmoji: isEmote
-                    || !SettingsStore.getValue<boolean>('TextualBody.enableBigEmoji'),
+                disableBigEmoji: isEmote || !SettingsStore.getValue<boolean>("TextualBody.enableBigEmoji"),
                 // Part of Replies fallback support
                 stripReplyFallback: stripReply,
                 ref: this.contentRef,
@@ -609,73 +614,72 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
             });
         }
         if (this.props.replacingEventId) {
-            body = <>
-                { body }
-                { this.renderEditedMarker() }
-            </>;
+            body = (
+                <>
+                    {body}
+                    {this.renderEditedMarker()}
+                </>
+            );
         }
         if (this.props.isSeeingThroughMessageHiddenForModeration) {
-            body = <>
-                { body }
-                { this.renderPendingModerationMarker() }
-            </>;
+            body = (
+                <>
+                    {body}
+                    {this.renderPendingModerationMarker()}
+                </>
+            );
         }
 
         if (this.props.highlightLink) {
-            body = <a href={this.props.highlightLink}>{ body }</a>;
+            body = <a href={this.props.highlightLink}>{body}</a>;
         } else if (content.data && typeof content.data["org.matrix.neb.starter_link"] === "string") {
             body = (
                 <AccessibleButton
                     kind="link_inline"
                     onClick={this.onStarterLinkClick.bind(this, content.data["org.matrix.neb.starter_link"])}
                 >
-                    { body }
+                    {body}
                 </AccessibleButton>
             );
         }
 
         let widgets;
         if (this.state.links.length && !this.state.widgetHidden && this.props.showUrlPreview) {
-            widgets = <LinkPreviewGroup
-                links={this.state.links}
-                mxEvent={this.props.mxEvent}
-                onCancelClick={this.onCancelClick}
-                onHeightChanged={this.props.onHeightChanged}
-            />;
+            widgets = (
+                <LinkPreviewGroup
+                    links={this.state.links}
+                    mxEvent={this.props.mxEvent}
+                    onCancelClick={this.onCancelClick}
+                    onHeightChanged={this.props.onHeightChanged}
+                />
+            );
         }
 
         if (isEmote) {
             return (
-                <div className="mx_MEmoteBody mx_EventTile_content"
-                    onClick={this.onBodyLinkClick}
-                >
+                <div className="mx_MEmoteBody mx_EventTile_content" onClick={this.onBodyLinkClick}>
                     *&nbsp;
-                    <span
-                        className="mx_MEmoteBody_sender"
-                        onClick={this.onEmoteSenderClick}
-                    >
-                        { mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender() }
+                    <span className="mx_MEmoteBody_sender" onClick={this.onEmoteSenderClick}>
+                        {mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender()}
                     </span>
                     &nbsp;
-                    { body }
-                    { widgets }
+                    {body}
+                    {widgets}
                 </div>
             );
         }
         if (isNotice) {
             return (
-                <div className="mx_MNoticeBody mx_EventTile_content"
-                    onClick={this.onBodyLinkClick}
-                >
-                    { body }
-                    { widgets }
+                <div className="mx_MNoticeBody mx_EventTile_content" onClick={this.onBodyLinkClick}>
+                    {body}
+                    {widgets}
                 </div>
             );
         }
         return (
             <div className="mx_MTextBody mx_EventTile_content" onClick={this.onBodyLinkClick}>
-                { body }
-                { widgets }
+                {body}
+                {widgets}
             </div>
         );
     }

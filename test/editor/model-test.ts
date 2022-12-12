@@ -18,9 +18,9 @@ import EditorModel from "../../src/editor/model";
 import { createPartCreator, createRenderer } from "./mock";
 import DocumentOffset from "../../src/editor/offset";
 
-describe('editor/model', function() {
-    describe('plain text manipulation', function() {
-        it('insert text into empty document', function() {
+describe("editor/model", function () {
+    describe("plain text manipulation", function () {
+        it("insert text into empty document", function () {
             const renderer = createRenderer();
             const model = new EditorModel([], createPartCreator(), renderer);
             model.update("hello", "insertText", new DocumentOffset(5, true));
@@ -31,7 +31,7 @@ describe('editor/model', function() {
             expect(model.parts[0].type).toBe("plain");
             expect(model.parts[0].text).toBe("hello");
         });
-        it('append text to existing document', function() {
+        it("append text to existing document", function () {
             const renderer = createRenderer();
             const pc = createPartCreator();
             const model = new EditorModel([pc.plain("hello")], pc, renderer);
@@ -43,7 +43,7 @@ describe('editor/model', function() {
             expect(model.parts[0].type).toBe("plain");
             expect(model.parts[0].text).toBe("hello world");
         });
-        it('prepend text to existing document', function() {
+        it("prepend text to existing document", function () {
             const renderer = createRenderer();
             const pc = createPartCreator();
             const model = new EditorModel([pc.plain("world")], pc, renderer);
@@ -56,8 +56,8 @@ describe('editor/model', function() {
             expect(model.parts[0].text).toBe("hello world");
         });
     });
-    describe('handling line breaks', function() {
-        it('insert new line into existing document', function() {
+    describe("handling line breaks", function () {
+        it("insert new line into existing document", function () {
             const renderer = createRenderer();
             const pc = createPartCreator();
             const model = new EditorModel([pc.plain("hello")], pc, renderer);
@@ -71,7 +71,7 @@ describe('editor/model', function() {
             expect(model.parts[1].type).toBe("newline");
             expect(model.parts[1].text).toBe("\n");
         });
-        it('insert multiple new lines into existing document', function() {
+        it("insert multiple new lines into existing document", function () {
             const renderer = createRenderer();
             const pc = createPartCreator();
             const model = new EditorModel([pc.plain("hello")], pc, renderer);
@@ -91,15 +91,14 @@ describe('editor/model', function() {
             expect(model.parts[4].type).toBe("plain");
             expect(model.parts[4].text).toBe("world!");
         });
-        it('type in empty line', function() {
+        it("type in empty line", function () {
             const renderer = createRenderer();
             const pc = createPartCreator();
-            const model = new EditorModel([
-                pc.plain("hello"),
-                pc.newline(),
-                pc.newline(),
-                pc.plain("world"),
-            ], pc, renderer);
+            const model = new EditorModel(
+                [pc.plain("hello"), pc.newline(), pc.newline(), pc.plain("world")],
+                pc,
+                renderer,
+            );
             model.update("hello\nwarm\nworld", "insertText", new DocumentOffset(10, true));
             expect(renderer.count).toBe(1);
             expect(renderer.caret.index).toBe(2);
@@ -117,14 +116,11 @@ describe('editor/model', function() {
             expect(model.parts[4].text).toBe("world");
         });
     });
-    describe('non-editable part manipulation', function() {
-        it('typing at start of non-editable part prepends', function() {
+    describe("non-editable part manipulation", function () {
+        it("typing at start of non-editable part prepends", function () {
             const renderer = createRenderer();
             const pc = createPartCreator();
-            const model = new EditorModel([
-                pc.plain("try "),
-                pc.roomPill("#someroom"),
-            ], pc, renderer);
+            const model = new EditorModel([pc.plain("try "), pc.roomPill("#someroom")], pc, renderer);
             model.update("try foo#someroom", "insertText", new DocumentOffset(7, false));
             expect(renderer.caret.index).toBe(0);
             expect(renderer.caret.offset).toBe(7);
@@ -134,14 +130,10 @@ describe('editor/model', function() {
             expect(model.parts[1].type).toBe("room-pill");
             expect(model.parts[1].text).toBe("#someroom");
         });
-        it('typing in middle of non-editable part appends', function() {
+        it("typing in middle of non-editable part appends", function () {
             const renderer = createRenderer();
             const pc = createPartCreator();
-            const model = new EditorModel([
-                pc.plain("try "),
-                pc.roomPill("#someroom"),
-                pc.plain("?"),
-            ], pc, renderer);
+            const model = new EditorModel([pc.plain("try "), pc.roomPill("#someroom"), pc.plain("?")], pc, renderer);
             model.update("try #some perhapsroom?", "insertText", new DocumentOffset(17, false));
             expect(renderer.caret.index).toBe(2);
             expect(renderer.caret.offset).toBe(8);
@@ -153,7 +145,7 @@ describe('editor/model', function() {
             expect(model.parts[2].type).toBe("plain");
             expect(model.parts[2].text).toBe(" perhaps?");
         });
-        it('remove non-editable part with backspace', function() {
+        it("remove non-editable part with backspace", function () {
             const renderer = createRenderer();
             const pc = createPartCreator();
             const model = new EditorModel([pc.roomPill("#someroom")], pc, renderer);
@@ -163,7 +155,7 @@ describe('editor/model', function() {
             expect(renderer.caret.offset).toBe(0);
             expect(model.parts.length).toBe(0);
         });
-        it('remove non-editable part with delete', function() {
+        it("remove non-editable part with delete", function () {
             const renderer = createRenderer();
             const pc = createPartCreator();
             const model = new EditorModel([pc.roomPill("#someroom")], pc, renderer);
@@ -174,8 +166,8 @@ describe('editor/model', function() {
             expect(model.parts.length).toBe(0);
         });
     });
-    describe('auto-complete', function() {
-        it('insert user pill', function() {
+    describe("auto-complete", function () {
+        it("insert user pill", function () {
             const renderer = createRenderer();
             const pc = createPartCreator([{ resourceId: "@alice", label: "Alice" }]);
             const model = new EditorModel([pc.plain("hello ")], pc, renderer);
@@ -205,7 +197,7 @@ describe('editor/model', function() {
             expect(model.parts[1].text).toBe("Alice");
         });
 
-        it('insert room pill', function() {
+        it("insert room pill", function () {
             const renderer = createRenderer();
             const pc = createPartCreator([{ resourceId: "#riot-dev" }]);
             const model = new EditorModel([pc.plain("hello ")], pc, renderer);
@@ -235,7 +227,7 @@ describe('editor/model', function() {
             expect(model.parts[1].text).toBe("#riot-dev");
         });
 
-        it('type after inserting pill', function() {
+        it("type after inserting pill", function () {
             const renderer = createRenderer();
             const pc = createPartCreator([{ resourceId: "#riot-dev" }]);
             const model = new EditorModel([pc.plain("hello ")], pc, renderer);
@@ -258,7 +250,7 @@ describe('editor/model', function() {
             expect(model.parts[2].text).toBe("!!");
         });
 
-        it('pasting text does not trigger auto-complete', function() {
+        it("pasting text does not trigger auto-complete", function () {
             const renderer = createRenderer();
             const pc = createPartCreator([{ resourceId: "#define-room" }]);
             const model = new EditorModel([pc.plain("try ")], pc, renderer);
@@ -273,7 +265,7 @@ describe('editor/model', function() {
             expect(model.parts[0].text).toBe("try #define");
         });
 
-        it('dropping text does not trigger auto-complete', function() {
+        it("dropping text does not trigger auto-complete", function () {
             const renderer = createRenderer();
             const pc = createPartCreator([{ resourceId: "#define-room" }]);
             const model = new EditorModel([pc.plain("try ")], pc, renderer);
@@ -288,7 +280,7 @@ describe('editor/model', function() {
             expect(model.parts[0].text).toBe("try #define");
         });
 
-        it('insert room pill without splitting at the colon', () => {
+        it("insert room pill without splitting at the colon", () => {
             const renderer = createRenderer();
             const pc = createPartCreator([{ resourceId: "#room:server" }]);
             const model = new EditorModel([], pc, renderer);
@@ -308,7 +300,7 @@ describe('editor/model', function() {
             expect(model.parts[0].text).toBe("#room:s");
         });
 
-        it('allow typing e-mail addresses without splitting at the @', () => {
+        it("allow typing e-mail addresses without splitting at the @", () => {
             const renderer = createRenderer();
             const pc = createPartCreator([{ resourceId: "@alice", label: "Alice" }]);
             const model = new EditorModel([], pc, renderer);

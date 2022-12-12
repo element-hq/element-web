@@ -26,19 +26,16 @@ interface IProps {
     disabled?: boolean;
 }
 
-export const Tag = ({
-    icon,
-    label,
-    onDeleteClick,
-    disabled = false,
-}: IProps) => {
-    return <div className='mx_Tag'>
-        { icon?.() }
-        { label }
-        { onDeleteClick && (
-            <AccessibleButton className="mx_Tag_delete" onClick={onDeleteClick} disabled={disabled}>
-                <CancelRounded />
-            </AccessibleButton>
-        ) }
-    </div>;
+export const Tag = ({ icon, label, onDeleteClick, disabled = false }: IProps) => {
+    return (
+        <div className="mx_Tag">
+            {icon?.()}
+            {label}
+            {onDeleteClick && (
+                <AccessibleButton className="mx_Tag_delete" onClick={onDeleteClick} disabled={disabled}>
+                    <CancelRounded />
+                </AccessibleButton>
+            )}
+        </div>
+    );
 };

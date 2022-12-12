@@ -15,12 +15,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { createRef, RefObject } from 'react';
+import React, { createRef, RefObject } from "react";
 import classNames from "classnames";
 
 import AccessibleButton from "../elements/AccessibleButton";
-import { _t } from '../../../languageHandler';
-import { PosthogScreenTracker } from '../../../PosthogTrackers';
+import { _t } from "../../../languageHandler";
+import { PosthogScreenTracker } from "../../../PosthogTrackers";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import SearchWarning, { WarningKind } from "../elements/SearchWarning";
@@ -104,7 +104,7 @@ export default class SearchBar extends React.Component<IProps, IState> {
                             aria-checked={this.state.scope === SearchScope.Room}
                             role="radio"
                         >
-                            { _t("This Room") }
+                            {_t("This Room")}
                         </AccessibleButton>
                         <AccessibleButton
                             className={allRoomsClasses}
@@ -112,7 +112,7 @@ export default class SearchBar extends React.Component<IProps, IState> {
                             aria-checked={this.state.scope === SearchScope.All}
                             role="radio"
                         >
-                            { _t("All Rooms") }
+                            {_t("All Rooms")}
                         </AccessibleButton>
                     </div>
                     <div className="mx_SearchBar_input mx_textinput">

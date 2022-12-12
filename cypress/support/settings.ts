@@ -102,26 +102,27 @@ declare global {
 }
 
 Cypress.Commands.add("getSettingsStore", (): Chainable<typeof SettingsStore> => {
-    return cy.window({ log: false }).then(win => win.mxSettingsStore);
+    return cy.window({ log: false }).then((win) => win.mxSettingsStore);
 });
 
-Cypress.Commands.add("setSettingValue", (
-    name: string,
-    roomId: string,
-    level: SettingLevel,
-    value: any,
-): Chainable<void> => {
-    return cy.getSettingsStore().then((store: typeof SettingsStore) => {
-        return cy.wrap(store.setValue(name, roomId, level, value));
-    });
-});
+Cypress.Commands.add(
+    "setSettingValue",
+    (name: string, roomId: string, level: SettingLevel, value: any): Chainable<void> => {
+        return cy.getSettingsStore().then((store: typeof SettingsStore) => {
+            return cy.wrap(store.setValue(name, roomId, level, value));
+        });
+    },
+);
 
 // eslint-disable-next-line max-len
-Cypress.Commands.add("getSettingValue", <T = any>(name: string, roomId?: string, excludeDefault?: boolean): Chainable<T> => {
-    return cy.getSettingsStore().then((store: typeof SettingsStore) => {
-        return store.getValue(name, roomId, excludeDefault);
-    });
-});
+Cypress.Commands.add(
+    "getSettingValue",
+    <T = any>(name: string, roomId?: string, excludeDefault?: boolean): Chainable<T> => {
+        return cy.getSettingsStore().then((store: typeof SettingsStore) => {
+            return store.getValue(name, roomId, excludeDefault);
+        });
+    },
+);
 
 Cypress.Commands.add("openUserMenu", (): Chainable<JQuery<HTMLElement>> => {
     cy.get('[aria-label="User menu"]').click();
@@ -162,16 +163,22 @@ Cypress.Commands.add("closeDialog", (): Chainable<JQuery<HTMLElement>> => {
 });
 
 Cypress.Commands.add("joinBeta", (name: string): Chainable<JQuery<HTMLElement>> => {
-    return cy.contains(".mx_BetaCard_title", name).closest(".mx_BetaCard").within(() => {
-        return cy.get(".mx_BetaCard_buttons").contains("Join the beta").click();
-    });
+    return cy
+        .contains(".mx_BetaCard_title", name)
+        .closest(".mx_BetaCard")
+        .within(() => {
+            return cy.get(".mx_BetaCard_buttons").contains("Join the beta").click();
+        });
 });
 
 Cypress.Commands.add("leaveBeta", (name: string): Chainable<JQuery<HTMLElement>> => {
-    return cy.contains(".mx_BetaCard_title", name).closest(".mx_BetaCard").within(() => {
-        return cy.get(".mx_BetaCard_buttons").contains("Leave the beta").click();
-    });
+    return cy
+        .contains(".mx_BetaCard_title", name)
+        .closest(".mx_BetaCard")
+        .within(() => {
+            return cy.get(".mx_BetaCard_buttons").contains("Leave the beta").click();
+        });
 });
 
 // Needed to make this file a module
-export { };
+export {};

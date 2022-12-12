@@ -80,7 +80,10 @@ export interface IValidationResult {
  *     the overall validity and a feedback UI that can be rendered for more detail.
  */
 export default function withValidation<T = void, D = void>({
-    description, hideDescriptionIfValid, deriveData, rules,
+    description,
+    hideDescriptionIfValid,
+    deriveData,
+    rules,
 }: IArgs<T, D>) {
     return async function onValidate(
         this: T,
@@ -154,18 +157,22 @@ export default function withValidation<T = void, D = void>({
 
         let details;
         if (results && results.length) {
-            details = <ul className="mx_Validation_details">
-                { results.map(result => {
-                    const classes = classNames({
-                        "mx_Validation_detail": true,
-                        "mx_Validation_valid": result.valid,
-                        "mx_Validation_invalid": !result.valid,
-                    });
-                    return <li key={result.key} className={classes}>
-                        { result.text }
-                    </li>;
-                }) }
-            </ul>;
+            details = (
+                <ul className="mx_Validation_details">
+                    {results.map((result) => {
+                        const classes = classNames({
+                            mx_Validation_detail: true,
+                            mx_Validation_valid: result.valid,
+                            mx_Validation_invalid: !result.valid,
+                        });
+                        return (
+                            <li key={result.key} className={classes}>
+                                {result.text}
+                            </li>
+                        );
+                    })}
+                </ul>
+            );
         }
 
         let summary;
@@ -173,15 +180,17 @@ export default function withValidation<T = void, D = void>({
             // We're setting `this` to whichever component holds the validation
             // function. That allows rules to access the state of the component.
             const content = description.call(this, derivedData, results);
-            summary = content ? <div className="mx_Validation_description">{ content }</div> : undefined;
+            summary = content ? <div className="mx_Validation_description">{content}</div> : undefined;
         }
 
         let feedback;
         if (summary || details) {
-            feedback = <div className="mx_Validation">
-                { summary }
-                { details }
-            </div>;
+            feedback = (
+                <div className="mx_Validation">
+                    {summary}
+                    {details}
+                </div>
+            );
         }
 
         return {

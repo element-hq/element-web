@@ -14,11 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 
-import { _t } from '../../../languageHandler';
-import ConfirmRedactDialog from './ConfirmRedactDialog';
-import ErrorDialog from './ErrorDialog';
+import { _t } from "../../../languageHandler";
+import ConfirmRedactDialog from "./ConfirmRedactDialog";
+import ErrorDialog from "./ErrorDialog";
 import BaseDialog from "./BaseDialog";
 import Spinner from "../elements/Spinner";
 
@@ -79,16 +79,13 @@ export default class ConfirmAndWaitRedactDialog extends React.PureComponent<IPro
                 return (
                     <ErrorDialog
                         onFinished={this.props.onFinished}
-                        title={_t('Error')}
-                        description={_t('You cannot delete this message. (%(code)s)', { code })}
+                        title={_t("Error")}
+                        description={_t("You cannot delete this message. (%(code)s)", { code })}
                     />
                 );
             } else {
                 return (
-                    <BaseDialog
-                        onFinished={this.props.onFinished}
-                        hasCancel={false}
-                        title={_t("Removing…")}>
+                    <BaseDialog onFinished={this.props.onFinished} hasCancel={false} title={_t("Removing…")}>
                         <Spinner />
                     </BaseDialog>
                 );

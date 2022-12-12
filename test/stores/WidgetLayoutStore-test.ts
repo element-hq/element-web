@@ -31,17 +31,18 @@ const mockRoom = <Room>{
                 getContent: () => null,
             };
         },
-    } };
+    },
+};
 
 const mockApps = [
-        <IApp> { roomId: roomId, id: "1" },
-        <IApp> { roomId: roomId, id: "2" },
-        <IApp> { roomId: roomId, id: "3" },
-        <IApp> { roomId: roomId, id: "4" },
+    <IApp>{ roomId: roomId, id: "1" },
+    <IApp>{ roomId: roomId, id: "2" },
+    <IApp>{ roomId: roomId, id: "3" },
+    <IApp>{ roomId: roomId, id: "4" },
 ];
 
 // fake the WidgetStore.instance to just return an object with `getApps`
-jest.spyOn(WidgetStore, 'instance', 'get').mockReturnValue(<WidgetStore>{ getApps: (_room) => mockApps });
+jest.spyOn(WidgetStore, "instance", "get").mockReturnValue(<WidgetStore>{ getApps: (_room) => mockApps });
 
 describe("WidgetLayoutStore", () => {
     // we need to init a client so it does not error, when asking for DeviceStorage handlers (SettingsStore.setValue("Widgets.layout"))
@@ -63,16 +64,16 @@ describe("WidgetLayoutStore", () => {
         store.moveToContainer(mockRoom, mockApps[0], Container.Top);
         store.moveToContainer(mockRoom, mockApps[1], Container.Top);
         store.moveToContainer(mockRoom, mockApps[2], Container.Top);
-        expect(new Set(store.getContainerWidgets(mockRoom, Container.Top)))
-            .toEqual(new Set([mockApps[0], mockApps[1], mockApps[2]]));
+        expect(new Set(store.getContainerWidgets(mockRoom, Container.Top))).toEqual(
+            new Set([mockApps[0], mockApps[1], mockApps[2]]),
+        );
     });
     it("cannot add more than three widgets to top container", async () => {
         store.recalculateRoom(mockRoom);
         store.moveToContainer(mockRoom, mockApps[0], Container.Top);
         store.moveToContainer(mockRoom, mockApps[1], Container.Top);
         store.moveToContainer(mockRoom, mockApps[2], Container.Top);
-        expect(store.canAddToContainer(mockRoom, Container.Top))
-            .toEqual(false);
+        expect(store.canAddToContainer(mockRoom, Container.Top)).toEqual(false);
     });
     it("remove pins when maximising (other widget)", async () => {
         store.recalculateRoom(mockRoom);
@@ -80,12 +81,11 @@ describe("WidgetLayoutStore", () => {
         store.moveToContainer(mockRoom, mockApps[1], Container.Top);
         store.moveToContainer(mockRoom, mockApps[2], Container.Top);
         store.moveToContainer(mockRoom, mockApps[3], Container.Center);
-        expect(store.getContainerWidgets(mockRoom, Container.Top))
-            .toEqual([]);
-        expect(new Set(store.getContainerWidgets(mockRoom, Container.Right)))
-            .toEqual(new Set([mockApps[0], mockApps[1], mockApps[2]]));
-        expect(store.getContainerWidgets(mockRoom, Container.Center))
-            .toEqual([mockApps[3]]);
+        expect(store.getContainerWidgets(mockRoom, Container.Top)).toEqual([]);
+        expect(new Set(store.getContainerWidgets(mockRoom, Container.Right))).toEqual(
+            new Set([mockApps[0], mockApps[1], mockApps[2]]),
+        );
+        expect(store.getContainerWidgets(mockRoom, Container.Center)).toEqual([mockApps[3]]);
     });
     it("remove pins when maximising (one of the pinned widgets)", async () => {
         store.recalculateRoom(mockRoom);
@@ -93,33 +93,30 @@ describe("WidgetLayoutStore", () => {
         store.moveToContainer(mockRoom, mockApps[1], Container.Top);
         store.moveToContainer(mockRoom, mockApps[2], Container.Top);
         store.moveToContainer(mockRoom, mockApps[0], Container.Center);
-        expect(store.getContainerWidgets(mockRoom, Container.Top))
-            .toEqual([]);
-        expect(store.getContainerWidgets(mockRoom, Container.Center))
-            .toEqual([mockApps[0]]);
-        expect(new Set(store.getContainerWidgets(mockRoom, Container.Right)))
-            .toEqual(new Set([mockApps[1], mockApps[2], mockApps[3]]));
+        expect(store.getContainerWidgets(mockRoom, Container.Top)).toEqual([]);
+        expect(store.getContainerWidgets(mockRoom, Container.Center)).toEqual([mockApps[0]]);
+        expect(new Set(store.getContainerWidgets(mockRoom, Container.Right))).toEqual(
+            new Set([mockApps[1], mockApps[2], mockApps[3]]),
+        );
     });
     it("remove maximised when pinning (other widget)", async () => {
         store.recalculateRoom(mockRoom);
         store.moveToContainer(mockRoom, mockApps[0], Container.Center);
         store.moveToContainer(mockRoom, mockApps[1], Container.Top);
-        expect(store.getContainerWidgets(mockRoom, Container.Top))
-            .toEqual([mockApps[1]]);
-        expect(store.getContainerWidgets(mockRoom, Container.Center))
-            .toEqual([]);
-        expect(new Set(store.getContainerWidgets(mockRoom, Container.Right)))
-            .toEqual(new Set([mockApps[2], mockApps[3], mockApps[0]]));
+        expect(store.getContainerWidgets(mockRoom, Container.Top)).toEqual([mockApps[1]]);
+        expect(store.getContainerWidgets(mockRoom, Container.Center)).toEqual([]);
+        expect(new Set(store.getContainerWidgets(mockRoom, Container.Right))).toEqual(
+            new Set([mockApps[2], mockApps[3], mockApps[0]]),
+        );
     });
     it("remove maximised when pinning (same widget)", async () => {
         store.recalculateRoom(mockRoom);
         store.moveToContainer(mockRoom, mockApps[0], Container.Center);
         store.moveToContainer(mockRoom, mockApps[0], Container.Top);
-        expect(store.getContainerWidgets(mockRoom, Container.Top))
-            .toEqual([mockApps[0]]);
-        expect(store.getContainerWidgets(mockRoom, Container.Center))
-            .toEqual([]);
-        expect(new Set(store.getContainerWidgets(mockRoom, Container.Right)))
-            .toEqual(new Set([mockApps[2], mockApps[3], mockApps[1]]));
+        expect(store.getContainerWidgets(mockRoom, Container.Top)).toEqual([mockApps[0]]);
+        expect(store.getContainerWidgets(mockRoom, Container.Center)).toEqual([]);
+        expect(new Set(store.getContainerWidgets(mockRoom, Container.Right))).toEqual(
+            new Set([mockApps[2], mockApps[3], mockApps[1]]),
+        );
     });
 });

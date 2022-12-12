@@ -150,15 +150,18 @@ function reconcileEmptyLine(lineContainer: HTMLElement): void {
 }
 
 export function renderModel(editor: HTMLDivElement, model: EditorModel): void {
-    const lines = model.parts.reduce((linesArr, part) => {
-        if (part.type === Type.Newline) {
-            linesArr.push([]);
-        } else {
-            const lastLine = linesArr[linesArr.length - 1];
-            lastLine.push(part);
-        }
-        return linesArr;
-    }, [[]]);
+    const lines = model.parts.reduce(
+        (linesArr, part) => {
+            if (part.type === Type.Newline) {
+                linesArr.push([]);
+            } else {
+                const lastLine = linesArr[linesArr.length - 1];
+                lastLine.push(part);
+            }
+            return linesArr;
+        },
+        [[]],
+    );
     lines.forEach((parts, i) => {
         // find first (and remove anything else) div without className
         // (as browsers insert these in contenteditable) line container

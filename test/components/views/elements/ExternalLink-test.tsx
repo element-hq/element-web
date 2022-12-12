@@ -12,39 +12,45 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import { renderIntoDocument } from 'react-dom/test-utils';
+import React from "react";
+import { renderIntoDocument } from "react-dom/test-utils";
 
-import ExternalLink from '../../../../src/components/views/elements/ExternalLink';
+import ExternalLink from "../../../../src/components/views/elements/ExternalLink";
 
-describe('<ExternalLink />', () => {
+describe("<ExternalLink />", () => {
     const defaultProps = {
-        "href": 'test.com',
+        "href": "test.com",
         "onClick": jest.fn(),
-        "className": 'myCustomClass',
-        'data-test-id': 'test',
+        "className": "myCustomClass",
+        "data-test-id": "test",
     };
     const getComponent = (props = {}) => {
         const wrapper = renderIntoDocument<HTMLDivElement>(
-            <div><ExternalLink {...defaultProps} {...props} /></div>,
+            <div>
+                <ExternalLink {...defaultProps} {...props} />
+            </div>,
         ) as HTMLDivElement;
         return wrapper.children[0];
     };
 
-    it('renders link correctly', () => {
-        const children = <span>react element <b>children</b></span>;
-        expect(getComponent({ children, target: '_self', rel: 'noopener' })).toMatchSnapshot();
+    it("renders link correctly", () => {
+        const children = (
+            <span>
+                react element <b>children</b>
+            </span>
+        );
+        expect(getComponent({ children, target: "_self", rel: "noopener" })).toMatchSnapshot();
     });
 
-    it('defaults target and rel', () => {
-        const children = 'test';
+    it("defaults target and rel", () => {
+        const children = "test";
         const component = getComponent({ children });
-        expect(component.getAttribute('rel')).toEqual('noreferrer noopener');
-        expect(component.getAttribute('target')).toEqual('_blank');
+        expect(component.getAttribute("rel")).toEqual("noreferrer noopener");
+        expect(component.getAttribute("target")).toEqual("_blank");
     });
 
-    it('renders plain text link correctly', () => {
-        const children = 'test';
+    it("renders plain text link correctly", () => {
+        const children = "test";
         expect(getComponent({ children })).toMatchSnapshot();
     });
 });

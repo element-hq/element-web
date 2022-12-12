@@ -16,14 +16,14 @@ limitations under the License.
 
 import { logger } from "matrix-js-sdk/src/logger";
 
-const SNOOZE_KEY = 'mx_snooze_bulk_unverified_device_nag';
+const SNOOZE_KEY = "mx_snooze_bulk_unverified_device_nag";
 // one week
 const snoozePeriod = 1000 * 60 * 60 * 24 * 7;
 export const snoozeBulkUnverifiedDeviceReminder = () => {
     try {
         localStorage.setItem(SNOOZE_KEY, String(Date.now()));
     } catch (error) {
-        logger.error('Failed to persist bulk unverified device nag snooze', error);
+        logger.error("Failed to persist bulk unverified device nag snooze", error);
     }
 };
 
@@ -31,9 +31,9 @@ export const isBulkUnverifiedDeviceReminderSnoozed = () => {
     try {
         const snoozedTimestamp = localStorage.getItem(SNOOZE_KEY);
 
-        const parsedTimestamp = Number.parseInt(snoozedTimestamp || '', 10);
+        const parsedTimestamp = Number.parseInt(snoozedTimestamp || "", 10);
 
-        return Number.isInteger(parsedTimestamp) && (parsedTimestamp + snoozePeriod) > Date.now();
+        return Number.isInteger(parsedTimestamp) && parsedTimestamp + snoozePeriod > Date.now();
     } catch (error) {
         return false;
     }

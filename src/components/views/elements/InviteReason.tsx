@@ -47,17 +47,19 @@ export default class InviteReason extends React.PureComponent<IProps, IState> {
 
     render() {
         const classes = classNames({
-            "mx_InviteReason": true,
-            "mx_InviteReason_hidden": this.state.hidden,
+            mx_InviteReason: true,
+            mx_InviteReason_hidden: this.state.hidden,
         });
 
-        return <div className={classes}>
-            <div className="mx_InviteReason_reason">{ this.props.htmlReason ? sanitizedHtmlNode(this.props.htmlReason) : this.props.reason }</div>
-            <div className="mx_InviteReason_view"
-                onClick={this.onViewClick}
-            >
-                { _t("View message") }
+        return (
+            <div className={classes}>
+                <div className="mx_InviteReason_reason">
+                    {this.props.htmlReason ? sanitizedHtmlNode(this.props.htmlReason) : this.props.reason}
+                </div>
+                <div className="mx_InviteReason_view" onClick={this.onViewClick}>
+                    {_t("View message")}
+                </div>
             </div>
-        </div>;
+        );
     }
 }

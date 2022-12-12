@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 
 interface IProps {
     errorMsg?: string;
@@ -22,12 +22,12 @@ interface IProps {
 
 const AppWarning: React.FC<IProps> = (props) => {
     return (
-        <div className='mx_AppPermissionWarning'>
-            <div className='mx_AppPermissionWarningImage'>
-                <img src={require("../../../../res/img/warning.svg").default} alt='' />
+        <div className="mx_AppPermissionWarning">
+            <div className="mx_AppPermissionWarningImage">
+                <img src={require("../../../../res/img/warning.svg").default} alt="" />
             </div>
-            <div className='mx_AppPermissionWarningText'>
-                <span className='mx_AppPermissionWarningTextLabel'>{ props.errorMsg || "Error" }</span>
+            <div className="mx_AppPermissionWarningText">
+                <span className="mx_AppPermissionWarningTextLabel">{props.errorMsg || "Error"}</span>
             </div>
         </div>
     );

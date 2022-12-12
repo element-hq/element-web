@@ -48,36 +48,40 @@ const SpecificChildrenPicker = ({ filterPlaceholder, rooms, selected, onChange }
 
         const matcher = new QueryMatcher<Room>(rooms, {
             keys: ["name"],
-            funcs: [r => [r.getCanonicalAlias(), ...r.getAltAliases()].filter(Boolean)],
+            funcs: [(r) => [r.getCanonicalAlias(), ...r.getAltAliases()].filter(Boolean)],
             shouldMatchWordsOnly: false,
         });
 
         return matcher.match(lcQuery);
     }, [rooms, lcQuery]);
 
-    return <div className="mx_SpaceChildrenPicker">
-        <SearchBox
-            className="mx_textinput_icon mx_textinput_search"
-            placeholder={filterPlaceholder}
-            onSearch={setQuery}
-            autoFocus={true}
-        />
-        <AutoHideScrollbar>
-            { filteredRooms.map(room => {
-                return <Entry
-                    key={room.roomId}
-                    room={room}
-                    checked={selected.has(room)}
-                    onChange={(checked) => {
-                        onChange(checked, room);
-                    }}
-                />;
-            }) }
-            { filteredRooms.length < 1 ? <span className="mx_SpaceChildrenPicker_noResults">
-                { _t("No results") }
-            </span> : undefined }
-        </AutoHideScrollbar>
-    </div>;
+    return (
+        <div className="mx_SpaceChildrenPicker">
+            <SearchBox
+                className="mx_textinput_icon mx_textinput_search"
+                placeholder={filterPlaceholder}
+                onSearch={setQuery}
+                autoFocus={true}
+            />
+            <AutoHideScrollbar>
+                {filteredRooms.map((room) => {
+                    return (
+                        <Entry
+                            key={room.roomId}
+                            room={room}
+                            checked={selected.has(room)}
+                            onChange={(checked) => {
+                                onChange(checked, room);
+                            }}
+                        />
+                    );
+                })}
+                {filteredRooms.length < 1 ? (
+                    <span className="mx_SpaceChildrenPicker_noResults">{_t("No results")}</span>
+                ) : undefined}
+            </AutoHideScrollbar>
+        </div>
+    );
 };
 
 interface IProps {
@@ -109,42 +113,46 @@ const SpaceChildrenPicker = ({
         }
     }, [onChange, state, spaceChildren]);
 
-    return <>
-        <div className="mx_SpaceChildrenPicker">
-            <StyledRadioGroup
-                name="roomsToLeave"
-                value={state}
-                onChange={setState}
-                definitions={[
-                    {
-                        value: Target.None,
-                        label: noneLabel,
-                    }, {
-                        value: Target.All,
-                        label: allLabel,
-                    }, {
-                        value: Target.Specific,
-                        label: specificLabel,
-                    },
-                ].filter(d => d.label)}
-            />
-        </div>
+    return (
+        <>
+            <div className="mx_SpaceChildrenPicker">
+                <StyledRadioGroup
+                    name="roomsToLeave"
+                    value={state}
+                    onChange={setState}
+                    definitions={[
+                        {
+                            value: Target.None,
+                            label: noneLabel,
+                        },
+                        {
+                            value: Target.All,
+                            label: allLabel,
+                        },
+                        {
+                            value: Target.Specific,
+                            label: specificLabel,
+                        },
+                    ].filter((d) => d.label)}
+                />
+            </div>
 
-        { state === Target.Specific && (
-            <SpecificChildrenPicker
-                filterPlaceholder={_t("Search %(spaceName)s", { spaceName: space.name })}
-                rooms={spaceChildren}
-                selected={selected}
-                onChange={(isSelected: boolean, room: Room) => {
-                    if (isSelected) {
-                        onChange([room, ...selected]);
-                    } else {
-                        onChange([...selected].filter(r => r !== room));
-                    }
-                }}
-            />
-        ) }
-    </>;
+            {state === Target.Specific && (
+                <SpecificChildrenPicker
+                    filterPlaceholder={_t("Search %(spaceName)s", { spaceName: space.name })}
+                    rooms={spaceChildren}
+                    selected={selected}
+                    onChange={(isSelected: boolean, room: Room) => {
+                        if (isSelected) {
+                            onChange([room, ...selected]);
+                        } else {
+                            onChange([...selected].filter((r) => r !== room));
+                        }
+                    }}
+                />
+            )}
+        </>
+    );
 };
 
 export default SpaceChildrenPicker;

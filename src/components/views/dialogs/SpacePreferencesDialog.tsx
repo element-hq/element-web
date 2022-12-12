@@ -17,7 +17,7 @@ limitations under the License.
 import React, { ChangeEvent } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
 
-import { _t, _td } from '../../../languageHandler';
+import { _t, _td } from "../../../languageHandler";
 import BaseDialog from "../dialogs/BaseDialog";
 import { IDialogProps } from "./IDialogProps";
 import TabbedView, { Tab } from "../../structures/TabbedView";
@@ -38,7 +38,7 @@ const SpacePreferencesAppearanceTab = ({ space }: Pick<IProps, "space">) => {
 
     return (
         <div className="mx_SettingsTab">
-            <div className="mx_SettingsTab_heading">{ _t("Sections to show") }</div>
+            <div className="mx_SettingsTab_heading">{_t("Sections to show")}</div>
 
             <div className="mx_SettingsTab_section">
                 <StyledCheckbox
@@ -52,13 +52,16 @@ const SpacePreferencesAppearanceTab = ({ space }: Pick<IProps, "space">) => {
                         );
                     }}
                 >
-                    { _t("People") }
+                    {_t("People")}
                 </StyledCheckbox>
                 <p>
-                    { _t("This groups your chats with members of this space. " +
-                        "Turning this off will hide those chats from your view of %(spaceName)s.", {
-                        spaceName: space.name,
-                    }) }
+                    {_t(
+                        "This groups your chats with members of this space. " +
+                            "Turning this off will hide those chats from your view of %(spaceName)s.",
+                        {
+                            spaceName: space.name,
+                        },
+                    )}
                 </p>
             </div>
         </div>

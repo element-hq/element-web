@@ -14,11 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect } from "react";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
-import { _t } from '../languageHandler';
-import RoomAvatar from '../components/views/avatars/RoomAvatar';
+import { _t } from "../languageHandler";
+import RoomAvatar from "../components/views/avatars/RoomAvatar";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";
@@ -47,15 +47,17 @@ interface JoinCallButtonWithCallProps {
 function JoinCallButtonWithCall({ onClick, call }: JoinCallButtonWithCallProps) {
     const disabledTooltip = useJoinCallButtonDisabledTooltip(call);
 
-    return <AccessibleTooltipButton
-        className="mx_IncomingCallToast_joinButton"
-        onClick={onClick}
-        disabled={disabledTooltip !== null}
-        tooltip={disabledTooltip}
-        kind="primary"
-    >
-        { _t("Join") }
-    </AccessibleTooltipButton>;
+    return (
+        <AccessibleTooltipButton
+            className="mx_IncomingCallToast_joinButton"
+            onClick={onClick}
+            disabled={disabledTooltip !== null}
+            tooltip={disabledTooltip}
+            kind="primary"
+        >
+            {_t("Join")}
+        </AccessibleTooltipButton>
+    );
 }
 
 interface Props {
@@ -71,9 +73,15 @@ export function IncomingCallToast({ callEvent }: Props) {
         ToastStore.sharedInstance().dismissToast(getIncomingCallToastKey(callEvent.getStateKey()!));
     }, [callEvent]);
 
-    const latestEvent = useRoomState(room, useCallback((state) => {
-        return state.getStateEvents(callEvent.getType(), callEvent.getStateKey()!);
-    }, [callEvent]));
+    const latestEvent = useRoomState(
+        room,
+        useCallback(
+            (state) => {
+                return state.getStateEvents(callEvent.getType(), callEvent.getStateKey()!);
+            },
+            [callEvent],
+        ),
+    );
 
     useEffect(() => {
         if ("m.terminated" in latestEvent.getContent()) {
@@ -81,73 +89,77 @@ export function IncomingCallToast({ callEvent }: Props) {
         }
     }, [latestEvent, dismissToast]);
 
-    useDispatcher(defaultDispatcher, useCallback((payload: ActionPayload) => {
-        if (
-            payload.action === Action.ViewRoom
-            && payload.room_id === roomId
-            && payload.view_call
-        ) {
-            dismissToast();
-        }
-    }, [roomId, dismissToast]));
-
-    const onJoinClick = useCallback((e: ButtonEvent): void => {
-        e.stopPropagation();
-
-        defaultDispatcher.dispatch<ViewRoomPayload>({
-            action: Action.ViewRoom,
-            room_id: room.roomId,
-            view_call: true,
-            metricsTrigger: undefined,
-        });
-        dismissToast();
-    }, [room, dismissToast]);
-
-    const onCloseClick = useCallback((e: ButtonEvent): void => {
-        e.stopPropagation();
-
-        dismissToast();
-    }, [dismissToast]);
-
-    return <React.Fragment>
-        <RoomAvatar
-            room={room ?? undefined}
-            height={24}
-            width={24}
-        />
-        <div className="mx_IncomingCallToast_content">
-            <div className="mx_IncomingCallToast_info">
-                <span className="mx_IncomingCallToast_room">
-                    { room ? room.name : _t("Unknown room") }
-                </span>
-                <div className="mx_IncomingCallToast_message">
-                    { _t("Video call started") }
-                </div>
-                { call
-                    ? <LiveContentSummaryWithCall call={call} />
-                    : <LiveContentSummary
-                        type={LiveContentType.Video}
-                        text={_t("Video")}
-                        active={false}
-                        participantCount={0}
-                    />
+    useDispatcher(
+        defaultDispatcher,
+        useCallback(
+            (payload: ActionPayload) => {
+                if (payload.action === Action.ViewRoom && payload.room_id === roomId && payload.view_call) {
+                    dismissToast();
                 }
+            },
+            [roomId, dismissToast],
+        ),
+    );
+
+    const onJoinClick = useCallback(
+        (e: ButtonEvent): void => {
+            e.stopPropagation();
+
+            defaultDispatcher.dispatch<ViewRoomPayload>({
+                action: Action.ViewRoom,
+                room_id: room.roomId,
+                view_call: true,
+                metricsTrigger: undefined,
+            });
+            dismissToast();
+        },
+        [room, dismissToast],
+    );
+
+    const onCloseClick = useCallback(
+        (e: ButtonEvent): void => {
+            e.stopPropagation();
+
+            dismissToast();
+        },
+        [dismissToast],
+    );
+
+    return (
+        <React.Fragment>
+            <RoomAvatar room={room ?? undefined} height={24} width={24} />
+            <div className="mx_IncomingCallToast_content">
+                <div className="mx_IncomingCallToast_info">
+                    <span className="mx_IncomingCallToast_room">{room ? room.name : _t("Unknown room")}</span>
+                    <div className="mx_IncomingCallToast_message">{_t("Video call started")}</div>
+                    {call ? (
+                        <LiveContentSummaryWithCall call={call} />
+                    ) : (
+                        <LiveContentSummary
+                            type={LiveContentType.Video}
+                            text={_t("Video")}
+                            active={false}
+                            participantCount={0}
+                        />
+                    )}
+                </div>
+                {call ? (
+                    <JoinCallButtonWithCall onClick={onJoinClick} call={call} />
+                ) : (
+                    <AccessibleTooltipButton
+                        className="mx_IncomingCallToast_joinButton"
+                        onClick={onJoinClick}
+                        kind="primary"
+                    >
+                        {_t("Join")}
+                    </AccessibleTooltipButton>
+                )}
             </div>
-            { call
-                ? <JoinCallButtonWithCall onClick={onJoinClick} call={call} />
-                : <AccessibleTooltipButton
-                    className="mx_IncomingCallToast_joinButton"
-                    onClick={onJoinClick}
-                    kind="primary"
-                >
-                    { _t("Join") }
-                </AccessibleTooltipButton>
-            }
-        </div>
-        <AccessibleTooltipButton
-            className="mx_IncomingCallToast_closeButton"
-            onClick={onCloseClick}
-            title={_t("Close")}
-        />
-    </React.Fragment>;
+            <AccessibleTooltipButton
+                className="mx_IncomingCallToast_closeButton"
+                onClick={onCloseClick}
+                title={_t("Close")}
+            />
+        </React.Fragment>
+    );
 }

@@ -19,8 +19,8 @@ import { AutoDiscovery } from "matrix-js-sdk/src/autodiscovery";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import AutoDiscoveryUtils from "../../../utils/AutoDiscoveryUtils";
-import BaseDialog from './BaseDialog';
-import { _t } from '../../../languageHandler';
+import BaseDialog from "./BaseDialog";
+import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
 import SdkConfig from "../../../SdkConfig";
 import Field from "../elements/Field";
@@ -133,13 +133,14 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
                 key: "required",
                 test: ({ value, allowEmpty }) => allowEmpty || !!value,
                 invalid: () => _t("Specify a homeserver"),
-            }, {
+            },
+            {
                 key: "valid",
-                test: async function({ value }, { error }) {
+                test: async function ({ value }, { error }) {
                     if (!value) return true;
                     return !error;
                 },
-                invalid: function({ error }) {
+                invalid: function ({ error }) {
                     return error;
                 },
             },
@@ -172,70 +173,70 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
         if (this.defaultServer.hsNameIsDifferent) {
             defaultServerName = (
                 <TextWithTooltip class="mx_Login_underlinedServerName" tooltip={this.defaultServer.hsUrl}>
-                    { this.defaultServer.hsName }
+                    {this.defaultServer.hsName}
                 </TextWithTooltip>
             );
         }
 
-        return <BaseDialog
-            title={this.props.title || _t("Sign into your homeserver")}
-            className="mx_ServerPickerDialog"
-            contentId="mx_ServerPickerDialog"
-            onFinished={this.props.onFinished}
-            fixedWidth={false}
-            hasCancel={true}
-        >
-            <form className="mx_Dialog_content" id="mx_ServerPickerDialog" onSubmit={this.onSubmit}>
-                <p>
-                    { _t("We call the places where you can host your account 'homeservers'.") } { text }
-                </p>
+        return (
+            <BaseDialog
+                title={this.props.title || _t("Sign into your homeserver")}
+                className="mx_ServerPickerDialog"
+                contentId="mx_ServerPickerDialog"
+                onFinished={this.props.onFinished}
+                fixedWidth={false}
+                hasCancel={true}
+            >
+                <form className="mx_Dialog_content" id="mx_ServerPickerDialog" onSubmit={this.onSubmit}>
+                    <p>
+                        {_t("We call the places where you can host your account 'homeservers'.")} {text}
+                    </p>
 
-                <StyledRadioButton
-                    name="defaultChosen"
-                    value="true"
-                    checked={this.state.defaultChosen}
-                    onChange={this.onDefaultChosen}
-                >
-                    { defaultServerName }
-                </StyledRadioButton>
+                    <StyledRadioButton
+                        name="defaultChosen"
+                        value="true"
+                        checked={this.state.defaultChosen}
+                        onChange={this.onDefaultChosen}
+                    >
+                        {defaultServerName}
+                    </StyledRadioButton>
 
-                <StyledRadioButton
-                    name="defaultChosen"
-                    value="false"
-                    className="mx_ServerPickerDialog_otherHomeserverRadio"
-                    checked={!this.state.defaultChosen}
-                    onChange={this.onOtherChosen}
-                    childrenInLabel={false}
-                    aria-label={_t("Other homeserver")}
-                >
-                    <Field
-                        type="text"
-                        className="mx_ServerPickerDialog_otherHomeserver"
-                        label={_t("Other homeserver")}
-                        onChange={this.onHomeserverChange}
-                        onFocus={this.onOtherChosen}
-                        ref={this.fieldRef}
-                        onValidate={this.onHomeserverValidate}
-                        value={this.state.otherHomeserver}
-                        validateOnChange={false}
-                        validateOnFocus={false}
-                        autoFocus={true}
-                        id="mx_homeserverInput"
-                    />
-                </StyledRadioButton>
-                <p>
-                    { _t("Use your preferred Matrix homeserver if you have one, or host your own.") }
-                </p>
+                    <StyledRadioButton
+                        name="defaultChosen"
+                        value="false"
+                        className="mx_ServerPickerDialog_otherHomeserverRadio"
+                        checked={!this.state.defaultChosen}
+                        onChange={this.onOtherChosen}
+                        childrenInLabel={false}
+                        aria-label={_t("Other homeserver")}
+                    >
+                        <Field
+                            type="text"
+                            className="mx_ServerPickerDialog_otherHomeserver"
+                            label={_t("Other homeserver")}
+                            onChange={this.onHomeserverChange}
+                            onFocus={this.onOtherChosen}
+                            ref={this.fieldRef}
+                            onValidate={this.onHomeserverValidate}
+                            value={this.state.otherHomeserver}
+                            validateOnChange={false}
+                            validateOnFocus={false}
+                            autoFocus={true}
+                            id="mx_homeserverInput"
+                        />
+                    </StyledRadioButton>
+                    <p>{_t("Use your preferred Matrix homeserver if you have one, or host your own.")}</p>
 
-                <AccessibleButton className="mx_ServerPickerDialog_continue" kind="primary" onClick={this.onSubmit}>
-                    { _t("Continue") }
-                </AccessibleButton>
+                    <AccessibleButton className="mx_ServerPickerDialog_continue" kind="primary" onClick={this.onSubmit}>
+                        {_t("Continue")}
+                    </AccessibleButton>
 
-                <h2>{ _t("Learn more") }</h2>
-                <a href="https://matrix.org/faq/#what-is-a-homeserver%3F" target="_blank" rel="noreferrer noopener">
-                    { _t("About homeservers") }
-                </a>
-            </form>
-        </BaseDialog>;
+                    <h2>{_t("Learn more")}</h2>
+                    <a href="https://matrix.org/faq/#what-is-a-homeserver%3F" target="_blank" rel="noreferrer noopener">
+                        {_t("About homeservers")}
+                    </a>
+                </form>
+            </BaseDialog>
+        );
     }
 }

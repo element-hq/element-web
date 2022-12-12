@@ -14,13 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {
-    MatrixClient,
-    Room,
-} from 'matrix-js-sdk/src/matrix';
+import { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 
-import { shieldStatusForRoom } from '../../src/utils/ShieldUtils';
-import DMRoomMap from '../../src/utils/DMRoomMap';
+import { shieldStatusForRoom } from "../../src/utils/ShieldUtils";
+import DMRoomMap from "../../src/utils/DMRoomMap";
 
 function mkClient(selfTrust = false) {
     return {
@@ -30,13 +27,13 @@ function mkClient(selfTrust = false) {
             wasCrossSigningVerified: () => userId[1] == "T" || userId[1] == "W",
         }),
         checkDeviceTrust: (userId, deviceId) => ({
-            isVerified: () => userId === "@self:localhost" ? selfTrust : userId[2] == "T",
+            isVerified: () => (userId === "@self:localhost" ? selfTrust : userId[2] == "T"),
         }),
         getStoredDevicesForUser: (userId) => ["DEVICE"],
     } as unknown as MatrixClient;
 }
 
-describe("mkClient self-test", function() {
+describe("mkClient self-test", function () {
     test.each([true, false])("behaves well for self-trust=%s", (v) => {
         const client = mkClient(v);
         expect(client.checkDeviceTrust("@self:localhost", "DEVICE").isVerified()).toBe(v);
@@ -46,8 +43,8 @@ describe("mkClient self-test", function() {
         ["@TT:h", true],
         ["@TF:h", true],
         ["@FT:h", false],
-        ["@FF:h", false]],
-    )("behaves well for user trust %s", (userId, trust) => {
+        ["@FF:h", false],
+    ])("behaves well for user trust %s", (userId, trust) => {
         expect(mkClient().checkUserTrust(userId).isCrossSigningVerified()).toBe(trust);
     });
 
@@ -55,28 +52,30 @@ describe("mkClient self-test", function() {
         ["@TT:h", true],
         ["@TF:h", false],
         ["@FT:h", true],
-        ["@FF:h", false]],
-    )("behaves well for device trust %s", (userId, trust) => {
+        ["@FF:h", false],
+    ])("behaves well for device trust %s", (userId, trust) => {
         expect(mkClient().checkDeviceTrust(userId, "device").isVerified()).toBe(trust);
     });
 });
 
-describe("shieldStatusForMembership self-trust behaviour", function() {
+describe("shieldStatusForMembership self-trust behaviour", function () {
     beforeAll(() => {
         const mockInstance = {
-            getUserIdForRoomId: (roomId) => roomId === "DM" ? "@any:h" : null,
+            getUserIdForRoomId: (roomId) => (roomId === "DM" ? "@any:h" : null),
         } as unknown as DMRoomMap;
-        jest.spyOn(DMRoomMap, 'shared').mockReturnValue(mockInstance);
+        jest.spyOn(DMRoomMap, "shared").mockReturnValue(mockInstance);
     });
 
     afterAll(() => {
-        jest.spyOn(DMRoomMap, 'shared').mockRestore();
+        jest.spyOn(DMRoomMap, "shared").mockRestore();
     });
 
-    it.each(
-        [[true, true], [true, false],
-            [false, true], [false, false]],
-    )("2 unverified: returns 'normal', self-trust = %s, DM = %s", async (trusted, dm) => {
+    it.each([
+        [true, true],
+        [true, false],
+        [false, true],
+        [false, false],
+    ])("2 unverified: returns 'normal', self-trust = %s, DM = %s", async (trusted, dm) => {
         const client = mkClient(trusted);
         const room = {
             roomId: dm ? "DM" : "other",
@@ -86,10 +85,12 @@ describe("shieldStatusForMembership self-trust behaviour", function() {
         expect(status).toEqual("normal");
     });
 
-    it.each(
-        [["verified", true, true], ["verified", true, false],
-            ["verified", false, true], ["warning", false, false]],
-    )("2 verified: returns '%s', self-trust = %s, DM = %s", async (result, trusted, dm) => {
+    it.each([
+        ["verified", true, true],
+        ["verified", true, false],
+        ["verified", false, true],
+        ["warning", false, false],
+    ])("2 verified: returns '%s', self-trust = %s, DM = %s", async (result, trusted, dm) => {
         const client = mkClient(trusted);
         const room = {
             roomId: dm ? "DM" : "other",
@@ -99,10 +100,12 @@ describe("shieldStatusForMembership self-trust behaviour", function() {
         expect(status).toEqual(result);
     });
 
-    it.each(
-        [["normal", true, true], ["normal", true, false],
-            ["normal", false, true], ["warning", false, false]],
-    )("2 mixed: returns '%s', self-trust = %s, DM = %s", async (result, trusted, dm) => {
+    it.each([
+        ["normal", true, true],
+        ["normal", true, false],
+        ["normal", false, true],
+        ["warning", false, false],
+    ])("2 mixed: returns '%s', self-trust = %s, DM = %s", async (result, trusted, dm) => {
         const client = mkClient(trusted);
         const room = {
             roomId: dm ? "DM" : "other",
@@ -112,10 +115,12 @@ describe("shieldStatusForMembership self-trust behaviour", function() {
         expect(status).toEqual(result);
     });
 
-    it.each(
-        [["verified", true, true], ["verified", true, false],
-            ["warning", false, true], ["warning", false, false]],
-    )("0 others: returns '%s', self-trust = %s, DM = %s", async (result, trusted, dm) => {
+    it.each([
+        ["verified", true, true],
+        ["verified", true, false],
+        ["warning", false, true],
+        ["warning", false, false],
+    ])("0 others: returns '%s', self-trust = %s, DM = %s", async (result, trusted, dm) => {
         const client = mkClient(trusted);
         const room = {
             roomId: dm ? "DM" : "other",
@@ -125,10 +130,12 @@ describe("shieldStatusForMembership self-trust behaviour", function() {
         expect(status).toEqual(result);
     });
 
-    it.each(
-        [["verified", true, true], ["verified", true, false],
-            ["verified", false, true], ["verified", false, false]],
-    )("1 verified: returns '%s', self-trust = %s, DM = %s", async (result, trusted, dm) => {
+    it.each([
+        ["verified", true, true],
+        ["verified", true, false],
+        ["verified", false, true],
+        ["verified", false, false],
+    ])("1 verified: returns '%s', self-trust = %s, DM = %s", async (result, trusted, dm) => {
         const client = mkClient(trusted);
         const room = {
             roomId: dm ? "DM" : "other",
@@ -138,10 +145,12 @@ describe("shieldStatusForMembership self-trust behaviour", function() {
         expect(status).toEqual(result);
     });
 
-    it.each(
-        [["normal", true, true], ["normal", true, false],
-            ["normal", false, true], ["normal", false, false]],
-    )("1 unverified: returns '%s', self-trust = %s, DM = %s", async (result, trusted, dm) => {
+    it.each([
+        ["normal", true, true],
+        ["normal", true, false],
+        ["normal", false, true],
+        ["normal", false, false],
+    ])("1 unverified: returns '%s', self-trust = %s, DM = %s", async (result, trusted, dm) => {
         const client = mkClient(trusted);
         const room = {
             roomId: dm ? "DM" : "other",
@@ -152,17 +161,18 @@ describe("shieldStatusForMembership self-trust behaviour", function() {
     });
 });
 
-describe("shieldStatusForMembership other-trust behaviour", function() {
+describe("shieldStatusForMembership other-trust behaviour", function () {
     beforeAll(() => {
         const mockInstance = {
-            getUserIdForRoomId: (roomId) => roomId === "DM" ? "@any:h" : null,
+            getUserIdForRoomId: (roomId) => (roomId === "DM" ? "@any:h" : null),
         } as unknown as DMRoomMap;
-        jest.spyOn(DMRoomMap, 'shared').mockReturnValue(mockInstance);
+        jest.spyOn(DMRoomMap, "shared").mockReturnValue(mockInstance);
     });
 
-    it.each(
-        [["warning", true], ["warning", false]],
-    )("1 verified/untrusted: returns '%s', DM = %s", async (result, dm) => {
+    it.each([
+        ["warning", true],
+        ["warning", false],
+    ])("1 verified/untrusted: returns '%s', DM = %s", async (result, dm) => {
         const client = mkClient(true);
         const room = {
             roomId: dm ? "DM" : "other",
@@ -172,9 +182,10 @@ describe("shieldStatusForMembership other-trust behaviour", function() {
         expect(status).toEqual(result);
     });
 
-    it.each(
-        [["warning", true], ["warning", false]],
-    )("2 verified/untrusted: returns '%s', DM = %s", async (result, dm) => {
+    it.each([
+        ["warning", true],
+        ["warning", false],
+    ])("2 verified/untrusted: returns '%s', DM = %s", async (result, dm) => {
         const client = mkClient(true);
         const room = {
             roomId: dm ? "DM" : "other",
@@ -184,9 +195,10 @@ describe("shieldStatusForMembership other-trust behaviour", function() {
         expect(status).toEqual(result);
     });
 
-    it.each(
-        [["normal", true], ["normal", false]],
-    )("2 unverified/untrusted: returns '%s', DM = %s", async (result, dm) => {
+    it.each([
+        ["normal", true],
+        ["normal", false],
+    ])("2 unverified/untrusted: returns '%s', DM = %s", async (result, dm) => {
         const client = mkClient(true);
         const room = {
             roomId: dm ? "DM" : "other",
@@ -196,9 +208,10 @@ describe("shieldStatusForMembership other-trust behaviour", function() {
         expect(status).toEqual(result);
     });
 
-    it.each(
-        [["warning", true], ["warning", false]],
-    )("2 was verified: returns '%s', DM = %s", async (result, dm) => {
+    it.each([
+        ["warning", true],
+        ["warning", false],
+    ])("2 was verified: returns '%s', DM = %s", async (result, dm) => {
         const client = mkClient(true);
         const room = {
             roomId: dm ? "DM" : "other",

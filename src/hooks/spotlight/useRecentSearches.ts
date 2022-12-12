@@ -25,11 +25,14 @@ export const useRecentSearches = (): [Room[], () => void] => {
     const [rooms, setRooms] = useState(() => {
         const cli = MatrixClientPeg.get();
         const recents = SettingsStore.getValue("SpotlightSearch.recentSearches", null);
-        return recents.map(r => cli.getRoom(r)).filter(Boolean);
+        return recents.map((r) => cli.getRoom(r)).filter(Boolean);
     });
 
-    return [rooms, () => {
-        SettingsStore.setValue("SpotlightSearch.recentSearches", null, SettingLevel.ACCOUNT, []);
-        setRooms([]);
-    }];
+    return [
+        rooms,
+        () => {
+            SettingsStore.setValue("SpotlightSearch.recentSearches", null, SettingLevel.ACCOUNT, []);
+            setRooms([]);
+        },
+    ];
 };

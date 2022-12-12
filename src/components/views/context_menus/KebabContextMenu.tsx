@@ -14,12 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 
-import { Icon as ContextMenuIcon } from '../../../../res/img/element-icons/context-menu.svg';
-import { ChevronFace, ContextMenuButton, useContextMenu } from '../../structures/ContextMenu';
-import AccessibleButton from '../elements/AccessibleButton';
-import IconizedContextMenu, { IconizedContextMenuOptionList } from './IconizedContextMenu';
+import { Icon as ContextMenuIcon } from "../../../../res/img/element-icons/context-menu.svg";
+import { ChevronFace, ContextMenuButton, useContextMenu } from "../../structures/ContextMenu";
+import AccessibleButton from "../elements/AccessibleButton";
+import IconizedContextMenu, { IconizedContextMenuOptionList } from "./IconizedContextMenu";
 
 const contextMenuBelow = (elementRect: DOMRect) => {
     // align the context menu's icons with the icon which opened the context menu
@@ -34,33 +34,25 @@ interface KebabContextMenuProps extends Partial<React.ComponentProps<typeof Acce
     title: string;
 }
 
-export const KebabContextMenu: React.FC<KebabContextMenuProps> = ({
-    options,
-    title,
-    ...props
-}) => {
+export const KebabContextMenu: React.FC<KebabContextMenuProps> = ({ options, title, ...props }) => {
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
 
-    return <>
-        <ContextMenuButton
-            {...props}
-            onClick={openMenu}
-            title={title}
-            isExpanded={menuDisplayed}
-            inputRef={button}
-        >
-            <ContextMenuIcon className='mx_KebabContextMenu_icon' />
-        </ContextMenuButton>
-        { menuDisplayed && (<IconizedContextMenu
-            onFinished={closeMenu}
-            compact
-            rightAligned
-            closeOnInteraction
-            {...contextMenuBelow(button.current.getBoundingClientRect())}
-        >
-            <IconizedContextMenuOptionList>
-                { options }
-            </IconizedContextMenuOptionList>
-        </IconizedContextMenu>) }
-    </>;
+    return (
+        <>
+            <ContextMenuButton {...props} onClick={openMenu} title={title} isExpanded={menuDisplayed} inputRef={button}>
+                <ContextMenuIcon className="mx_KebabContextMenu_icon" />
+            </ContextMenuButton>
+            {menuDisplayed && (
+                <IconizedContextMenu
+                    onFinished={closeMenu}
+                    compact
+                    rightAligned
+                    closeOnInteraction
+                    {...contextMenuBelow(button.current.getBoundingClientRect())}
+                >
+                    <IconizedContextMenuOptionList>{options}</IconizedContextMenuOptionList>
+                </IconizedContextMenu>
+            )}
+        </>
+    );
 };

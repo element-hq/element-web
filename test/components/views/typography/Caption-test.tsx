@@ -14,26 +14,29 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import { render } from '@testing-library/react';
+import React from "react";
+import { render } from "@testing-library/react";
 
-import { Caption } from '../../../../src/components/views/typography/Caption';
+import { Caption } from "../../../../src/components/views/typography/Caption";
 
-describe('<Caption />', () => {
+describe("<Caption />", () => {
     const defaultProps = {
-        'children': 'test',
-        'data-testid': 'test test id',
+        "children": "test",
+        "data-testid": "test test id",
     };
-    const getComponent = (props = {}) =>
-        (<Caption {...defaultProps} {...props} />);
+    const getComponent = (props = {}) => <Caption {...defaultProps} {...props} />;
 
-    it('renders plain text children', () => {
+    it("renders plain text children", () => {
         const { container } = render(getComponent());
         expect({ container }).toMatchSnapshot();
     });
 
-    it('renders react children', () => {
-        const children = <>Test <b>test but bold</b></>;
+    it("renders react children", () => {
+        const children = (
+            <>
+                Test <b>test but bold</b>
+            </>
+        );
         const { container } = render(getComponent({ children }));
         expect({ container }).toMatchSnapshot();
     });

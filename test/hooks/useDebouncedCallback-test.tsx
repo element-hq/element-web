@@ -23,13 +23,13 @@ describe("useDebouncedCallback", () => {
     afterAll(() => jest.useRealTimers());
 
     function render(enabled: boolean, callback: (...params: any) => void, params: any) {
-        return renderHook(
-            ({ enabled, callback, params }) => useDebouncedCallback(enabled, callback, params),
-            { initialProps: {
+        return renderHook(({ enabled, callback, params }) => useDebouncedCallback(enabled, callback, params), {
+            initialProps: {
                 enabled,
                 callback,
                 params,
-            } });
+            },
+        });
     }
 
     it("should be able to handle empty parameters", async () => {

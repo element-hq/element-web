@@ -44,7 +44,7 @@ import { StopGapWidgetDriver } from "./StopGapWidgetDriver";
 import { WidgetMessagingStore } from "./WidgetMessagingStore";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { OwnProfileStore } from "../OwnProfileStore";
-import WidgetUtils from '../../utils/WidgetUtils';
+import WidgetUtils from "../../utils/WidgetUtils";
 import { IntegrationManagers } from "../../integrations/IntegrationManagers";
 import SettingsStore from "../../settings/SettingsStore";
 import { WidgetType } from "../../widgets/WidgetType";
@@ -108,13 +108,13 @@ export class ElementWidget extends Widget {
     }
 
     public get rawData(): IWidgetData {
-        let conferenceId = super.rawData['conferenceId'];
+        let conferenceId = super.rawData["conferenceId"];
         if (conferenceId === undefined) {
             // we'll need to parse the conference ID out of the URL for v1 Jitsi widgets
             const parsedUrl = new URL(super.templateUrl); // use super to get the raw widget URL
             conferenceId = parsedUrl.searchParams.get("confId");
         }
-        let domain = super.rawData['domain'];
+        let domain = super.rawData["domain"];
         if (domain === undefined) {
             // v1 widgets default to meet.element.io regardless of user settings
             domain = "meet.element.io";
@@ -144,10 +144,14 @@ export class ElementWidget extends Widget {
     }
 
     public getCompleteUrl(params: ITemplateParams, asPopout = false): string {
-        return runTemplate(asPopout ? this.popoutTemplateUrl : this.templateUrl, {
-            ...this.rawDefinition,
-            data: this.rawData,
-        }, params);
+        return runTemplate(
+            asPopout ? this.popoutTemplateUrl : this.templateUrl,
+            {
+                ...this.rawDefinition,
+                data: this.rawData,
+            },
+            params,
+        );
     }
 }
 
@@ -226,19 +230,19 @@ export class StopGapWidget extends EventEmitter {
         // TODO: Replace these with proper widget params
         // See https://github.com/matrix-org/matrix-doc/pull/1958/files#r405714833
         if (!opts?.asPopout) {
-            parsed.searchParams.set('widgetId', this.mockWidget.id);
-            parsed.searchParams.set('parentUrl', window.location.href.split('#', 2)[0]);
+            parsed.searchParams.set("widgetId", this.mockWidget.id);
+            parsed.searchParams.set("parentUrl", window.location.href.split("#", 2)[0]);
 
             // Give the widget a scalar token if we're supposed to (more legacy)
             // TODO: Stop doing this
             if (this.scalarToken) {
-                parsed.searchParams.set('scalar_token', this.scalarToken);
+                parsed.searchParams.set("scalar_token", this.scalarToken);
             }
         }
 
         // Replace the encoded dollar signs back to dollar signs. They have no special meaning
         // in HTTP, but URL parsers encode them anyways.
-        return parsed.toString().replace(/%24/g, '$');
+        return parsed.toString().replace(/%24/g, "$");
     }
 
     public get isManagedByManager(): boolean {
@@ -271,7 +275,11 @@ export class StopGapWidget extends EventEmitter {
 
         const allowedCapabilities = this.appTileProps.whitelistCapabilities || [];
         const driver = new StopGapWidgetDriver(
-            allowedCapabilities, this.mockWidget, this.kind, this.virtual, this.roomId,
+            allowedCapabilities,
+            this.mockWidget,
+            this.kind,
+            this.virtual,
+            this.roomId,
         );
 
         this.messaging = new ClientWidgetApi(this.mockWidget, iframe, driver);
@@ -333,11 +341,14 @@ export class StopGapWidget extends EventEmitter {
         this.client.on(MatrixEventEvent.Decrypted, this.onEventDecrypted);
         this.client.on(ClientEvent.ToDeviceEvent, this.onToDeviceEvent);
 
-        this.messaging.on(`action:${WidgetApiFromWidgetAction.UpdateAlwaysOnScreen}`,
+        this.messaging.on(
+            `action:${WidgetApiFromWidgetAction.UpdateAlwaysOnScreen}`,
             (ev: CustomEvent<IStickyActionRequest>) => {
                 if (this.messaging.hasCapability(MatrixCapabilities.AlwaysOnScreen)) {
                     ActiveWidgetStore.instance.setWidgetPersistence(
-                        this.mockWidget.id, this.roomId, ev.detail.data.value,
+                        this.mockWidget.id,
+                        this.roomId,
+                        ev.detail.data.value,
                     );
                     ev.preventDefault();
                     this.messaging.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{}); // ack
@@ -347,7 +358,8 @@ export class StopGapWidget extends EventEmitter {
 
         // TODO: Replace this event listener with appropriate driver functionality once the API
         // establishes a sane way to send events back and forth.
-        this.messaging.on(`action:${WidgetApiFromWidgetAction.SendSticker}`,
+        this.messaging.on(
+            `action:${WidgetApiFromWidgetAction.SendSticker}`,
             (ev: CustomEvent<IStickerActionRequest>) => {
                 if (this.messaging.hasCapability(MatrixCapabilities.StickerSending)) {
                     // Acknowledge first
@@ -356,7 +368,7 @@ export class StopGapWidget extends EventEmitter {
 
                     // Send the sticker
                     defaultDispatcher.dispatch({
-                        action: 'm.sticker',
+                        action: "m.sticker",
                         data: ev.detail.data,
                         widgetId: this.mockWidget.id,
                     });
@@ -365,7 +377,8 @@ export class StopGapWidget extends EventEmitter {
         );
 
         if (WidgetType.STICKERPICKER.matches(this.mockWidget.type)) {
-            this.messaging.on(`action:${ElementWidgetActions.OpenIntegrationManager}`,
+            this.messaging.on(
+                `action:${ElementWidgetActions.OpenIntegrationManager}`,
                 (ev: CustomEvent<IWidgetApiRequest>) => {
                     // Acknowledge first
                     ev.preventDefault();
@@ -381,30 +394,30 @@ export class StopGapWidget extends EventEmitter {
                     const integId = <string>data?.integId;
 
                     // noinspection JSIgnoredPromiseFromCall
-                    IntegrationManagers.sharedInstance().getPrimaryManager().open(
-                        this.client.getRoom(SdkContextClass.instance.roomViewStore.getRoomId()),
-                        `type_${integType}`,
-                        integId,
-                    );
+                    IntegrationManagers.sharedInstance()
+                        .getPrimaryManager()
+                        .open(
+                            this.client.getRoom(SdkContextClass.instance.roomViewStore.getRoomId()),
+                            `type_${integType}`,
+                            integId,
+                        );
                 },
             );
         }
 
         if (WidgetType.JITSI.matches(this.mockWidget.type)) {
-            this.messaging.on(`action:${ElementWidgetActions.HangupCall}`,
-                (ev: CustomEvent<IHangupCallApiRequest>) => {
-                    ev.preventDefault();
-                    if (ev.detail.data?.errorMessage) {
-                        Modal.createDialog(ErrorDialog, {
-                            title: _t("Connection lost"),
-                            description: _t("You were disconnected from the call. (Error: %(message)s)", {
-                                message: ev.detail.data.errorMessage,
-                            }),
-                        });
-                    }
-                    this.messaging.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{});
-                },
-            );
+            this.messaging.on(`action:${ElementWidgetActions.HangupCall}`, (ev: CustomEvent<IHangupCallApiRequest>) => {
+                ev.preventDefault();
+                if (ev.detail.data?.errorMessage) {
+                    Modal.createDialog(ErrorDialog, {
+                        title: _t("Connection lost"),
+                        description: _t("You were disconnected from the call. (Error: %(message)s)", {
+                            message: ev.detail.data.errorMessage,
+                        }),
+                    });
+                }
+                this.messaging.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{});
+            });
         }
     }
 
@@ -510,7 +523,7 @@ export class StopGapWidget extends EventEmitter {
         this.readUpToMap[ev.getRoomId()] = ev.getId();
 
         const raw = ev.getEffectiveEvent();
-        this.messaging.feedEvent(raw as IRoomEvent, this.eventListenerRoomId).catch(e => {
+        this.messaging.feedEvent(raw as IRoomEvent, this.eventListenerRoomId).catch((e) => {
             logger.error("Error sending event to widget: ", e);
         });
     }

@@ -24,7 +24,7 @@ import { MatrixClientPeg } from "../src/MatrixClientPeg";
 import WidgetStore from "../src/stores/WidgetStore";
 import WidgetUtils from "../src/utils/WidgetUtils";
 import { JitsiCall, ElementCall } from "../src/models/Call";
-import createRoom, { canEncryptToAllUsers } from '../src/createRoom';
+import createRoom, { canEncryptToAllUsers } from "../src/createRoom";
 import SettingsStore from "../src/settings/SettingsStore";
 
 describe("createRoom", () => {
@@ -46,17 +46,19 @@ describe("createRoom", () => {
         const userId = client.getUserId()!;
         const roomId = await createRoom({ roomType: RoomType.ElementVideo });
 
-        const [[{
-            power_level_content_override: {
-                users: {
-                    [userId]: userPower,
+        const [
+            [
+                {
+                    power_level_content_override: {
+                        users: { [userId]: userPower },
+                        events: {
+                            "im.vector.modular.widgets": widgetPower,
+                            [JitsiCall.MEMBER_EVENT_TYPE]: callMemberPower,
+                        },
+                    },
                 },
-                events: {
-                    "im.vector.modular.widgets": widgetPower,
-                    [JitsiCall.MEMBER_EVENT_TYPE]: callMemberPower,
-                },
-            },
-        }]] = client.createRoom.mock.calls as any; // no good type
+            ],
+        ] = client.createRoom.mock.calls as any; // no good type
 
         // We should have had enough power to be able to set up the widget
         expect(userPower).toBeGreaterThanOrEqual(widgetPower);
@@ -76,17 +78,19 @@ describe("createRoom", () => {
         const createCallSpy = jest.spyOn(ElementCall, "create");
         const roomId = await createRoom({ roomType: RoomType.UnstableCall });
 
-        const [[{
-            power_level_content_override: {
-                users: {
-                    [userId]: userPower,
+        const [
+            [
+                {
+                    power_level_content_override: {
+                        users: { [userId]: userPower },
+                        events: {
+                            [ElementCall.CALL_EVENT_TYPE.name]: callPower,
+                            [ElementCall.MEMBER_EVENT_TYPE.name]: callMemberPower,
+                        },
+                    },
                 },
-                events: {
-                    [ElementCall.CALL_EVENT_TYPE.name]: callPower,
-                    [ElementCall.MEMBER_EVENT_TYPE.name]: callMemberPower,
-                },
-            },
-        }]] = client.createRoom.mock.calls;
+            ],
+        ] = client.createRoom.mock.calls;
 
         // We should have had enough power to be able to set up the call
         expect(userPower).toBeGreaterThanOrEqual(callPower);
@@ -118,14 +122,18 @@ describe("createRoom", () => {
 
         await createRoom({});
 
-        const [[{
-            power_level_content_override: {
-                events: {
-                    [ElementCall.CALL_EVENT_TYPE.name]: callPower,
-                    [ElementCall.MEMBER_EVENT_TYPE.name]: callMemberPower,
+        const [
+            [
+                {
+                    power_level_content_override: {
+                        events: {
+                            [ElementCall.CALL_EVENT_TYPE.name]: callPower,
+                            [ElementCall.MEMBER_EVENT_TYPE.name]: callMemberPower,
+                        },
+                    },
                 },
-            },
-        }]] = client.createRoom.mock.calls;
+            ],
+        ] = client.createRoom.mock.calls;
 
         expect(callPower).toBe(100);
         expect(callMemberPower).toBe(100);
@@ -135,22 +143,26 @@ describe("createRoom", () => {
         client.uploadContent.mockResolvedValue({ content_uri: "mxc://foobar" });
         const avatar = new File([], "avatar.png");
         await createRoom({ avatar });
-        expect(client.createRoom).toHaveBeenCalledWith(expect.objectContaining({
-            initial_state: expect.arrayContaining([{
-                content: {
-                    url: "mxc://foobar",
-                },
-                type: "m.room.avatar",
-            }]),
-        }));
+        expect(client.createRoom).toHaveBeenCalledWith(
+            expect.objectContaining({
+                initial_state: expect.arrayContaining([
+                    {
+                        content: {
+                            url: "mxc://foobar",
+                        },
+                        type: "m.room.avatar",
+                    },
+                ]),
+            }),
+        );
     });
 });
 
 describe("canEncryptToAllUsers", () => {
     const trueUser = {
         "@goodUser:localhost": {
-            "DEV1": {} as unknown as IDevice,
-            "DEV2": {} as unknown as IDevice,
+            DEV1: {} as unknown as IDevice,
+            DEV2: {} as unknown as IDevice,
         },
     };
     const falseUser = {

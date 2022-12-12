@@ -40,24 +40,26 @@ const GenericToast: React.FC<XOR<IPropsExtended, IProps>> = ({
     onAccept,
     onReject,
 }) => {
-    const detailContent = detail ? <div className="mx_Toast_detail">
-        { detail }
-    </div> : null;
+    const detailContent = detail ? <div className="mx_Toast_detail">{detail}</div> : null;
 
-    return <div>
-        <div className="mx_Toast_description">
-            { description }
-            { detailContent }
+    return (
+        <div>
+            <div className="mx_Toast_description">
+                {description}
+                {detailContent}
+            </div>
+            <div className="mx_Toast_buttons" aria-live="off">
+                {onReject && rejectLabel && (
+                    <AccessibleButton kind="danger_outline" onClick={onReject}>
+                        {rejectLabel}
+                    </AccessibleButton>
+                )}
+                <AccessibleButton onClick={onAccept} kind="primary">
+                    {acceptLabel}
+                </AccessibleButton>
+            </div>
         </div>
-        <div className="mx_Toast_buttons" aria-live="off">
-            { onReject && rejectLabel && <AccessibleButton kind="danger_outline" onClick={onReject}>
-                { rejectLabel }
-            </AccessibleButton> }
-            <AccessibleButton onClick={onAccept} kind="primary">
-                { acceptLabel }
-            </AccessibleButton>
-        </div>
-    </div>;
+    );
 };
 
 export default GenericToast;

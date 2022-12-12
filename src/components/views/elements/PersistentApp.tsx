@@ -15,12 +15,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ContextType, MutableRefObject } from 'react';
+import React, { ContextType, MutableRefObject } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
 
-import WidgetUtils from '../../../utils/WidgetUtils';
+import WidgetUtils from "../../../utils/WidgetUtils";
 import AppTile from "./AppTile";
-import WidgetStore from '../../../stores/WidgetStore';
+import WidgetStore from "../../../stores/WidgetStore";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
 interface IProps {
@@ -44,20 +44,21 @@ export default class PersistentApp extends React.Component<IProps> {
         const app = WidgetStore.instance.get(this.props.persistentWidgetId, this.props.persistentRoomId);
         if (!app) return null;
 
-        return <AppTile
-            key={app.id}
-            app={app}
-            fullWidth={true}
-            room={this.room}
-            userId={this.context.credentials.userId}
-            creatorUserId={app.creatorUserId}
-            widgetPageTitle={WidgetUtils.getWidgetDataTitle(app)}
-            waitForIframeLoad={app.waitForIframeLoad}
-            miniMode={true}
-            showMenubar={false}
-            pointerEvents={this.props.pointerEvents}
-            movePersistedElement={this.props.movePersistedElement}
-        />;
+        return (
+            <AppTile
+                key={app.id}
+                app={app}
+                fullWidth={true}
+                room={this.room}
+                userId={this.context.credentials.userId}
+                creatorUserId={app.creatorUserId}
+                widgetPageTitle={WidgetUtils.getWidgetDataTitle(app)}
+                waitForIframeLoad={app.waitForIframeLoad}
+                miniMode={true}
+                showMenubar={false}
+                pointerEvents={this.props.pointerEvents}
+                movePersistedElement={this.props.movePersistedElement}
+            />
+        );
     }
 }
-

@@ -18,7 +18,7 @@ limitations under the License.
 
 import Chainable = Cypress.Chainable;
 import AUTWindow = Cypress.AUTWindow;
-import { ProxyInstance } from '../plugins/sliding-sync';
+import { ProxyInstance } from "../plugins/sliding-sync";
 import { SynapseInstance } from "../plugins/synapsedocker";
 
 declare global {
@@ -49,7 +49,7 @@ function stopProxy(proxy?: ProxyInstance): Chainable<AUTWindow> {
     if (!proxy) return;
     // Navigate away from app to stop the background network requests which will race with Synapse shutting down
     return cy.window({ log: false }).then((win) => {
-        win.location.href = 'about:blank';
+        win.location.href = "about:blank";
         cy.task("proxyStop", proxy);
     });
 }

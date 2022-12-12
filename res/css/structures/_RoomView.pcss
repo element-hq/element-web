@@ -74,7 +74,7 @@ limitations under the License.
 
 .mx_RoomView_messagePanelSearchSpinner {
     flex: 1;
-    background-image: url('$(res)/img/typing-indicator-2x.gif');
+    background-image: url("$(res)/img/typing-indicator-2x.gif");
     background-position: center 367px;
     background-size: 25px;
     background-repeat: no-repeat;
@@ -83,11 +83,11 @@ limitations under the License.
 
 .mx_RoomView_messagePanelSearchSpinner::before {
     background-color: $info-plinth-fg-color;
-    mask: url('$(res)/img/feather-customised/search-input.svg');
+    mask: url("$(res)/img/feather-customised/search-input.svg");
     mask-repeat: no-repeat;
     mask-position: center;
     mask-size: 50px;
-    content: '';
+    content: "";
     position: absolute;
     top: 286px;
     left: 0;
@@ -126,7 +126,7 @@ limitations under the License.
     z-index: 1000;
     overflow: hidden;
 
-    transition: all .2s ease-out;
+    transition: all 0.2s ease-out;
 }
 
 .mx_RoomView_statusArea_expanded {
@@ -155,7 +155,7 @@ limitations under the License.
     .mx_RoomView_messageListWrapper {
         justify-content: flex-start;
 
-        >.mx_RoomView_MessageList > li > ol {
+        > .mx_RoomView_MessageList > li > ol {
             list-style-type: none;
         }
     }
@@ -222,7 +222,7 @@ hr.mx_RoomView_myReadMarker {
 
 .mx_RoomView_callStatusBar .mx_UploadBar_uploadFilename {
     color: $accent-fg-color;
-    opacity: 1.0;
+    opacity: 1;
 }
 
 .mx_RoomView_inCall .mx_RoomView_statusAreaBox_line {

@@ -15,12 +15,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import { AuthType, IAuthData } from 'matrix-js-sdk/src/interactive-auth';
+import React from "react";
+import { AuthType, IAuthData } from "matrix-js-sdk/src/interactive-auth";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { MatrixClientPeg } from '../../../MatrixClientPeg';
-import { _t } from '../../../languageHandler';
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { _t } from "../../../languageHandler";
 import InteractiveAuth, { ERROR_USER_CANCELLED, InteractiveAuthCallback } from "../../structures/InteractiveAuth";
 import { DEFAULT_PHASE, PasswordAuthEntry, SSOAuthEntry } from "../auth/InteractiveAuthEntryComponents";
 import StyledCheckbox from "../elements/StyledCheckbox";
@@ -62,7 +62,7 @@ export default class DeactivateAccountDialog extends React.Component<IProps, ISt
             continueKind: null,
         };
 
-        this.initAuth(/* shouldErase= */false);
+        this.initAuth(/* shouldErase= */ false);
     }
 
     private onStagePhaseChange = (stage: AuthType, phase: string): void => {
@@ -119,14 +119,17 @@ export default class DeactivateAccountDialog extends React.Component<IProps, ISt
         // XXX: this should be returning a promise to maintain the state inside the state machine correct
         // but given that a deactivation is followed by a local logout and all object instances being thrown away
         // this isn't done.
-        MatrixClientPeg.get().deactivateAccount(auth, this.state.shouldErase).then(r => {
-            // Deactivation worked - logout & close this dialog
-            defaultDispatcher.fire(Action.TriggerLogout);
-            this.props.onFinished(true);
-        }).catch(e => {
-            logger.error(e);
-            this.setState({ errStr: _t("There was a problem communicating with the server. Please try again.") });
-        });
+        MatrixClientPeg.get()
+            .deactivateAccount(auth, this.state.shouldErase)
+            .then((r) => {
+                // Deactivation worked - logout & close this dialog
+                defaultDispatcher.fire(Action.TriggerLogout);
+                this.props.onFinished(true);
+            })
+            .catch((e) => {
+                logger.error(e);
+                this.setState({ errStr: _t("There was a problem communicating with the server. Please try again.") });
+            });
     };
 
     private onEraseFieldChange = (ev: React.FormEvent<HTMLInputElement>): void => {
@@ -141,7 +144,7 @@ export default class DeactivateAccountDialog extends React.Component<IProps, ISt
         });
 
         // As mentioned above, set up for auth again to get updated UIA session info
-        this.initAuth(/* shouldErase= */ev.currentTarget.checked);
+        this.initAuth(/* shouldErase= */ ev.currentTarget.checked);
     };
 
     private onCancel(): void {
@@ -149,36 +152,37 @@ export default class DeactivateAccountDialog extends React.Component<IProps, ISt
     }
 
     private initAuth(shouldErase: boolean): void {
-        MatrixClientPeg.get().deactivateAccount(null, shouldErase).then(r => {
-            // If we got here, oops. The server didn't require any auth.
-            // Our application lifecycle will catch the error and do the logout bits.
-            // We'll try to log something in an vain attempt to record what happened (storage
-            // is also obliterated on logout).
-            logger.warn("User's account got deactivated without confirmation: Server had no auth");
-            this.setState({ errStr: _t("Server did not require any authentication") });
-        }).catch(e => {
-            if (e && e.httpStatus === 401 && e.data) {
-                // Valid UIA response
-                this.setState({ authData: e.data, authEnabled: true });
-            } else {
-                this.setState({ errStr: _t("Server did not return valid authentication information.") });
-            }
-        });
+        MatrixClientPeg.get()
+            .deactivateAccount(null, shouldErase)
+            .then((r) => {
+                // If we got here, oops. The server didn't require any auth.
+                // Our application lifecycle will catch the error and do the logout bits.
+                // We'll try to log something in an vain attempt to record what happened (storage
+                // is also obliterated on logout).
+                logger.warn("User's account got deactivated without confirmation: Server had no auth");
+                this.setState({ errStr: _t("Server did not require any authentication") });
+            })
+            .catch((e) => {
+                if (e && e.httpStatus === 401 && e.data) {
+                    // Valid UIA response
+                    this.setState({ authData: e.data, authEnabled: true });
+                } else {
+                    this.setState({ errStr: _t("Server did not return valid authentication information.") });
+                }
+            });
     }
 
     public render() {
         let error = null;
         if (this.state.errStr) {
-            error = <div className="error">
-                { this.state.errStr }
-            </div>;
+            error = <div className="error">{this.state.errStr}</div>;
         }
 
-        let auth = <div>{ _t("Loading...") }</div>;
+        let auth = <div>{_t("Loading...")}</div>;
         if (this.state.authData && this.state.authEnabled) {
             auth = (
                 <div>
-                    { this.state.bodyText }
+                    {this.state.bodyText}
                     <InteractiveAuth
                         matrixClient={MatrixClientPeg.get()}
                         authData={this.state.authData}
@@ -204,27 +208,36 @@ export default class DeactivateAccountDialog extends React.Component<IProps, ISt
                 screenName="DeactivateAccount"
             >
                 <div className="mx_Dialog_content">
-                    <p>{ _t("Confirm that you would like to deactivate your account. If you proceed:") }</p>
+                    <p>{_t("Confirm that you would like to deactivate your account. If you proceed:")}</p>
                     <ul>
-                        <li>{ _t("You will not be able to reactivate your account") }</li>
-                        <li>{ _t("You will no longer be able to log in") }</li>
-                        <li>{ _t("No one will be able to reuse your username (MXID), including you: this username will remain unavailable") }</li>
-                        <li>{ _t("You will leave all rooms and DMs that you are in") }</li>
-                        <li>{ _t("You will be removed from the identity server: your friends will no longer be able to find you with your email or phone number") }</li>
+                        <li>{_t("You will not be able to reactivate your account")}</li>
+                        <li>{_t("You will no longer be able to log in")}</li>
+                        <li>
+                            {_t(
+                                "No one will be able to reuse your username (MXID), including you: this username will remain unavailable",
+                            )}
+                        </li>
+                        <li>{_t("You will leave all rooms and DMs that you are in")}</li>
+                        <li>
+                            {_t(
+                                "You will be removed from the identity server: your friends will no longer be able to find you with your email or phone number",
+                            )}
+                        </li>
                     </ul>
-                    <p>{ _t("Your old messages will still be visible to people who received them, just like emails you sent in the past. Would you like to hide your sent messages from people who join rooms in the future?") }</p>
+                    <p>
+                        {_t(
+                            "Your old messages will still be visible to people who received them, just like emails you sent in the past. Would you like to hide your sent messages from people who join rooms in the future?",
+                        )}
+                    </p>
 
                     <div className="mx_DeactivateAccountDialog_input_section">
                         <p>
-                            <StyledCheckbox
-                                checked={this.state.shouldErase}
-                                onChange={this.onEraseFieldChange}
-                            >
-                                { _t("Hide my messages from new joiners") }
+                            <StyledCheckbox checked={this.state.shouldErase} onChange={this.onEraseFieldChange}>
+                                {_t("Hide my messages from new joiners")}
                             </StyledCheckbox>
                         </p>
-                        { error }
-                        { auth }
+                        {error}
+                        {auth}
                     </div>
                 </div>
             </BaseDialog>

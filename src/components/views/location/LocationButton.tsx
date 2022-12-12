@@ -14,16 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactElement, SyntheticEvent, useContext } from 'react';
-import classNames from 'classnames';
-import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
-import { IEventRelation } from 'matrix-js-sdk/src/models/event';
+import React, { ReactElement, SyntheticEvent, useContext } from "react";
+import classNames from "classnames";
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import { IEventRelation } from "matrix-js-sdk/src/models/event";
 
-import { _t } from '../../../languageHandler';
-import { CollapsibleButton } from '../rooms/CollapsibleButton';
+import { _t } from "../../../languageHandler";
+import { CollapsibleButton } from "../rooms/CollapsibleButton";
 import { aboveLeftOf, useContextMenu, AboveLeftOf } from "../../structures/ContextMenu";
 import { OverflowMenuContext } from "../rooms/MessageComposerButtons";
-import LocationShareMenu from './LocationShareMenu';
+import LocationShareMenu from "./LocationShareMenu";
 
 interface IProps {
     roomId: string;
@@ -43,37 +43,37 @@ export const LocationButton: React.FC<IProps> = ({ roomId, sender, menuPosition,
 
     let contextMenu: ReactElement;
     if (menuDisplayed) {
-        const position = menuPosition ?? aboveLeftOf(
-            button.current.getBoundingClientRect());
+        const position = menuPosition ?? aboveLeftOf(button.current.getBoundingClientRect());
 
-        contextMenu = <LocationShareMenu
-            menuPosition={position}
-            onFinished={_onFinished}
-            sender={sender}
-            roomId={roomId}
-            openMenu={openMenu}
-            relation={relation}
-        />;
+        contextMenu = (
+            <LocationShareMenu
+                menuPosition={position}
+                onFinished={_onFinished}
+                sender={sender}
+                roomId={roomId}
+                openMenu={openMenu}
+                relation={relation}
+            />
+        );
     }
 
-    const className = classNames(
-        "mx_MessageComposer_button",
-        {
-            "mx_MessageComposer_button_highlight": menuDisplayed,
-        },
+    const className = classNames("mx_MessageComposer_button", {
+        mx_MessageComposer_button_highlight: menuDisplayed,
+    });
+
+    return (
+        <React.Fragment>
+            <CollapsibleButton
+                className={className}
+                iconClassName="mx_MessageComposer_location"
+                onClick={openMenu}
+                title={_t("Location")}
+                inputRef={button}
+            />
+
+            {contextMenu}
+        </React.Fragment>
     );
-
-    return <React.Fragment>
-        <CollapsibleButton
-            className={className}
-            iconClassName="mx_MessageComposer_location"
-            onClick={openMenu}
-            title={_t("Location")}
-            inputRef={button}
-        />
-
-        { contextMenu }
-    </React.Fragment>;
 };
 
 export default LocationButton;

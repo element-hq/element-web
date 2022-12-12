@@ -16,28 +16,12 @@ limitations under the License.
 
 import React from "react";
 import { act } from "react-dom/test-utils";
-import {
-    Room,
-    PendingEventOrdering,
-    MatrixClient,
-    RoomMember,
-    RoomStateEvent,
-} from "matrix-js-sdk/src/matrix";
+import { Room, PendingEventOrdering, MatrixClient, RoomMember, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 import { ClientWidgetApi, Widget } from "matrix-widget-api";
-import {
-    cleanup,
-    render,
-    screen,
-} from "@testing-library/react";
+import { cleanup, render, screen } from "@testing-library/react";
 import { mocked, Mocked } from "jest-mock";
 
-import {
-    mkRoomMember,
-    MockedCall,
-    setupAsyncStoreWithClient,
-    stubClient,
-    useMockedCalls,
-} from "../../../test-utils";
+import { mkRoomMember, MockedCall, setupAsyncStoreWithClient, stubClient, useMockedCalls } from "../../../test-utils";
 import RoomCallBanner from "../../../../src/components/views/beacon/RoomCallBanner";
 import { CallStore } from "../../../../src/stores/CallStore";
 import { WidgetMessagingStore } from "../../../../src/stores/widgets/WidgetMessagingStore";
@@ -64,13 +48,9 @@ describe("<RoomCallBanner />", () => {
             pendingEventOrdering: PendingEventOrdering.Detached,
         });
         alice = mkRoomMember(room.roomId, "@alice:example.org");
-        jest.spyOn(room, "getMember").mockImplementation((userId) =>
-            userId === alice.userId ? alice : null,
-        );
+        jest.spyOn(room, "getMember").mockImplementation((userId) => (userId === alice.userId ? alice : null));
 
-        client.getRoom.mockImplementation((roomId) =>
-            roomId === room.roomId ? room : null,
-        );
+        client.getRoom.mockImplementation((roomId) => (roomId === room.roomId ? room : null));
         client.getRooms.mockReturnValue([room]);
         client.reEmitter.reEmit(room, [RoomStateEvent.Events]);
 
@@ -100,7 +80,9 @@ describe("<RoomCallBanner />", () => {
         beforeEach(() => {
             MockedCall.create(room, "1");
             const maybeCall = CallStore.instance.getCall(room.roomId);
-            if (!(maybeCall instanceof MockedCall)) {throw new Error("Failed to create call");}
+            if (!(maybeCall instanceof MockedCall)) {
+                throw new Error("Failed to create call");
+            }
             call = maybeCall;
 
             widget = new Widget(call.widget);

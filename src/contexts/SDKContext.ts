@@ -102,9 +102,7 @@ export class SdkContextClass {
     }
     public get roomViewStore(): RoomViewStore {
         if (!this._RoomViewStore) {
-            this._RoomViewStore = new RoomViewStore(
-                defaultDispatcher, this,
-            );
+            this._RoomViewStore = new RoomViewStore(defaultDispatcher, this);
         }
         return this._RoomViewStore;
     }

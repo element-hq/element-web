@@ -20,14 +20,14 @@ limitations under the License.
     /* white infill for the transparency */
     &.mx_cryptoEvent_icon::before {
         background-color: #ffffff;
-        mask-image: url('$(res)/img/e2e/normal.svg');
+        mask-image: url("$(res)/img/e2e/normal.svg");
         mask-repeat: no-repeat;
         mask-position: center;
         mask-size: 80%;
     }
 
     &.mx_cryptoEvent_icon::after {
-        mask-image: url('$(res)/img/e2e/normal.svg');
+        mask-image: url("$(res)/img/e2e/normal.svg");
         background-color: $header-panel-text-primary-color;
     }
 
@@ -41,7 +41,8 @@ limitations under the License.
         background-color: $alert;
     }
 
-    .mx_cryptoEvent_state, .mx_cryptoEvent_buttons {
+    .mx_cryptoEvent_state,
+    .mx_cryptoEvent_buttons {
         grid-column: 3;
         grid-row: 1 / 3;
     }

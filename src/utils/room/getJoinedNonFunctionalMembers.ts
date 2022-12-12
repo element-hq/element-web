@@ -23,5 +23,5 @@ import { getFunctionalMembers } from "./getFunctionalMembers";
  */
 export const getJoinedNonFunctionalMembers = (room: Room): RoomMember[] => {
     const functionalMembers = getFunctionalMembers(room);
-    return room.getJoinedMembers().filter(m => !functionalMembers.includes(m.userId));
+    return room.getJoinedMembers().filter((m) => !functionalMembers.includes(m.userId));
 };

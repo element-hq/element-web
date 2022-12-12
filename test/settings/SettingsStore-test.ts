@@ -44,13 +44,13 @@ describe("SettingsStore", () => {
             }),
         } as unknown as BasePlatform);
 
-        TEST_DATA.forEach(d => {
+        TEST_DATA.forEach((d) => {
             SettingsStore.setValue(d.name, null, d.level, d.value);
         });
     });
 
     describe("getValueAt", () => {
-        TEST_DATA.forEach(d => {
+        TEST_DATA.forEach((d) => {
             it(`should return the value "${d.level}"."${d.name}"`, () => {
                 expect(SettingsStore.getValueAt(d.level, d.name)).toBe(d.value);
                 // regression test #22545

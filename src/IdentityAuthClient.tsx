@@ -15,19 +15,19 @@ limitations under the License.
 */
 
 import React from "react";
-import { SERVICE_TYPES } from 'matrix-js-sdk/src/service-types';
-import { createClient, MatrixClient } from 'matrix-js-sdk/src/matrix';
+import { SERVICE_TYPES } from "matrix-js-sdk/src/service-types";
+import { createClient, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { MatrixClientPeg } from './MatrixClientPeg';
-import Modal from './Modal';
-import { _t } from './languageHandler';
-import { Service, startTermsFlow, TermsNotSignedError } from './Terms';
+import { MatrixClientPeg } from "./MatrixClientPeg";
+import Modal from "./Modal";
+import { _t } from "./languageHandler";
+import { Service, startTermsFlow, TermsNotSignedError } from "./Terms";
 import {
     doesAccountDataHaveIdentityServer,
     doesIdentityServerHaveTerms,
     setToDefaultIdentityServer,
-} from './utils/IdentityServerUtils';
+} from "./utils/IdentityServerUtils";
 import QuestionDialog from "./components/views/dialogs/QuestionDialog";
 import { abbreviateUrl } from "./utils/UrlUtils";
 
@@ -101,10 +101,7 @@ export default class IdentityAuthClient {
             try {
                 await this.checkToken(token);
             } catch (e) {
-                if (
-                    e instanceof TermsNotSignedError ||
-                    e instanceof AbortedIdentityActionError
-                ) {
+                if (e instanceof TermsNotSignedError || e instanceof AbortedIdentityActionError) {
                     // Retrying won't help this
                     throw e;
                 }
@@ -128,11 +125,7 @@ export default class IdentityAuthClient {
         } catch (e) {
             if (e.errcode === "M_TERMS_NOT_SIGNED") {
                 logger.log("Identity server requires new terms to be agreed to");
-                await startTermsFlow([new Service(
-                    SERVICE_TYPES.IS,
-                    identityServerUrl,
-                    token,
-                )]);
+                await startTermsFlow([new Service(SERVICE_TYPES.IS, identityServerUrl, token)]);
                 return;
             }
             throw e;
@@ -147,17 +140,18 @@ export default class IdentityAuthClient {
                 title: _t("Identity server has no terms of service"),
                 description: (
                     <div>
-                        <p>{ _t(
-                            "This action requires accessing the default identity server " +
-                        "<server /> to validate an email address or phone number, " +
-                        "but the server does not have any terms of service.", {},
-                            {
-                                server: () => <b>{ abbreviateUrl(identityServerUrl) }</b>,
-                            },
-                        ) }</p>
-                        <p>{ _t(
-                            "Only continue if you trust the owner of the server.",
-                        ) }</p>
+                        <p>
+                            {_t(
+                                "This action requires accessing the default identity server " +
+                                    "<server /> to validate an email address or phone number, " +
+                                    "but the server does not have any terms of service.",
+                                {},
+                                {
+                                    server: () => <b>{abbreviateUrl(identityServerUrl)}</b>,
+                                },
+                            )}
+                        </p>
+                        <p>{_t("Only continue if you trust the owner of the server.")}</p>
                     </div>
                 ),
                 button: _t("Trust"),
@@ -166,9 +160,7 @@ export default class IdentityAuthClient {
             if (confirmed) {
                 setToDefaultIdentityServer();
             } else {
-                throw new AbortedIdentityActionError(
-                    "User aborted identity server action without terms",
-                );
+                throw new AbortedIdentityActionError("User aborted identity server action without terms");
             }
         }
 
@@ -182,8 +174,7 @@ export default class IdentityAuthClient {
     public async registerForToken(check = true): Promise<string> {
         const hsOpenIdToken = await MatrixClientPeg.get().getOpenIdToken();
         // XXX: The spec is `token`, but we used `access_token` for a Sydent release.
-        const { access_token: accessToken, token } =
-            await this.matrixClient.registerWithIdentityServer(hsOpenIdToken);
+        const { access_token: accessToken, token } = await this.matrixClient.registerWithIdentityServer(hsOpenIdToken);
         const identityAccessToken = token ? token : accessToken;
         if (check) await this.checkToken(identityAccessToken);
         return identityAccessToken;

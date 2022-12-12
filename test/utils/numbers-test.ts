@@ -16,9 +16,9 @@ limitations under the License.
 
 import { clamp, defaultNumber, percentageOf, percentageWithin, sum } from "../../src/utils/numbers";
 
-describe('numbers', () => {
-    describe('defaultNumber', () => {
-        it('should use the default when the input is not a number', () => {
+describe("numbers", () => {
+    describe("defaultNumber", () => {
+        it("should use the default when the input is not a number", () => {
             const def = 42;
 
             let result = defaultNumber(null, def);
@@ -31,7 +31,7 @@ describe('numbers', () => {
             expect(result).toBe(def);
         });
 
-        it('should use the number when it is a number', () => {
+        it("should use the number when it is a number", () => {
             const input = 24;
             const def = 42;
             const result = defaultNumber(input, def);
@@ -39,8 +39,8 @@ describe('numbers', () => {
         });
     });
 
-    describe('clamp', () => {
-        it('should clamp high numbers', () => {
+    describe("clamp", () => {
+        it("should clamp high numbers", () => {
             const input = 101;
             const min = 0;
             const max = 100;
@@ -48,7 +48,7 @@ describe('numbers', () => {
             expect(result).toBe(max);
         });
 
-        it('should clamp low numbers', () => {
+        it("should clamp low numbers", () => {
             const input = -1;
             const min = 0;
             const max = 100;
@@ -56,7 +56,7 @@ describe('numbers', () => {
             expect(result).toBe(min);
         });
 
-        it('should not clamp numbers in range', () => {
+        it("should not clamp numbers in range", () => {
             const input = 50;
             const min = 0;
             const max = 100;
@@ -64,9 +64,9 @@ describe('numbers', () => {
             expect(result).toBe(input);
         });
 
-        it('should clamp floats', () => {
-            const min = -0.10;
-            const max = +0.10;
+        it("should clamp floats", () => {
+            const min = -0.1;
+            const max = +0.1;
 
             let result = clamp(-1.2, min, max);
             expect(result).toBe(min);
@@ -79,83 +79,84 @@ describe('numbers', () => {
         });
     });
 
-    describe('sum', () => {
-        it('should sum', () => { // duh
+    describe("sum", () => {
+        it("should sum", () => {
+            // duh
             const result = sum(1, 2, 1, 4);
             expect(result).toBe(8);
         });
     });
 
-    describe('percentageWithin', () => {
-        it('should work within 0-100', () => {
+    describe("percentageWithin", () => {
+        it("should work within 0-100", () => {
             const result = percentageWithin(0.4, 0, 100);
             expect(result).toBe(40);
         });
 
-        it('should work within 0-100 when pct > 1', () => {
+        it("should work within 0-100 when pct > 1", () => {
             const result = percentageWithin(1.4, 0, 100);
             expect(result).toBe(140);
         });
 
-        it('should work within 0-100 when pct < 0', () => {
+        it("should work within 0-100 when pct < 0", () => {
             const result = percentageWithin(-1.4, 0, 100);
             expect(result).toBe(-140);
         });
 
-        it('should work with ranges other than 0-100', () => {
+        it("should work with ranges other than 0-100", () => {
             const result = percentageWithin(0.4, 10, 20);
             expect(result).toBe(14);
         });
 
-        it('should work with ranges other than 0-100 when pct > 1', () => {
+        it("should work with ranges other than 0-100 when pct > 1", () => {
             const result = percentageWithin(1.4, 10, 20);
             expect(result).toBe(24);
         });
 
-        it('should work with ranges other than 0-100 when pct < 0', () => {
+        it("should work with ranges other than 0-100 when pct < 0", () => {
             const result = percentageWithin(-1.4, 10, 20);
             expect(result).toBe(-4);
         });
 
-        it('should work with floats', () => {
+        it("should work with floats", () => {
             const result = percentageWithin(0.4, 10.2, 20.4);
             expect(result).toBe(14.28);
         });
     });
 
     // These are the inverse of percentageWithin
-    describe('percentageOf', () => {
-        it('should work within 0-100', () => {
+    describe("percentageOf", () => {
+        it("should work within 0-100", () => {
             const result = percentageOf(40, 0, 100);
             expect(result).toBe(0.4);
         });
 
-        it('should work within 0-100 when val > 100', () => {
+        it("should work within 0-100 when val > 100", () => {
             const result = percentageOf(140, 0, 100);
-            expect(result).toBe(1.40);
+            expect(result).toBe(1.4);
         });
 
-        it('should work within 0-100 when val < 0', () => {
+        it("should work within 0-100 when val < 0", () => {
             const result = percentageOf(-140, 0, 100);
-            expect(result).toBe(-1.40);
+            expect(result).toBe(-1.4);
         });
 
-        it('should work with ranges other than 0-100', () => {
+        it("should work with ranges other than 0-100", () => {
             const result = percentageOf(14, 10, 20);
             expect(result).toBe(0.4);
         });
 
-        it('should work with ranges other than 0-100 when val > 100', () => {
+        it("should work with ranges other than 0-100 when val > 100", () => {
             const result = percentageOf(24, 10, 20);
             expect(result).toBe(1.4);
         });
 
-        it('should work with ranges other than 0-100 when val < 0', () => {
+        it("should work with ranges other than 0-100 when val < 0", () => {
             const result = percentageOf(-4, 10, 20);
             expect(result).toBe(-1.4);
         });
 
-        it('should work with floats', () => {
+        it("should work with floats", () => {
             const result = percentageOf(14.28, 10.2, 20.4);
             expect(result).toBe(0.4);
         });

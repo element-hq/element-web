@@ -24,16 +24,10 @@ interface Props {
     onClick: () => void;
 }
 
-export const SeekButton: React.FC<Props> = ({
-    onClick,
-    icon: Icon,
-    label,
-}) => {
-    return <AccessibleButton
-        kind="secondary_content"
-        onClick={onClick}
-        aria-label={label}
-    >
-        <Icon className="mx_Icon mx_Icon_24" />
-    </AccessibleButton>;
+export const SeekButton: React.FC<Props> = ({ onClick, icon: Icon, label }) => {
+    return (
+        <AccessibleButton kind="secondary_content" onClick={onClick} aria-label={label}>
+            <Icon className="mx_Icon mx_Icon_24" />
+        </AccessibleButton>
+    );
 };

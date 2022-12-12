@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-const fs = require('fs/promises');
-const path = require('path');
+const fs = require("fs/promises");
+const path = require("path");
 
 /**
  * Unsophisticated script to create a styled, unit-tested react component.
@@ -51,18 +51,17 @@ describe('<%%ComponentName%% />', () => {
 .mx_%%ComponentName%% {
 
 }
-`
-}
-
+`,
+};
 
 const options = {
     alias: {
-        filePath: 'f',
-        withStyle: 's'
-    }
-}
+        filePath: "f",
+        withStyle: "s",
+    },
+};
 
-const args = require('minimist')(process.argv, options);
+const args = require("minimist")(process.argv, options);
 
 const ensureDirectoryExists = async (filePath) => {
     const dirName = path.parse(filePath).dir;
@@ -70,54 +69,77 @@ const ensureDirectoryExists = async (filePath) => {
     try {
         await fs.access(dirName);
         return;
-    } catch (error) { }
+    } catch (error) {}
 
-    await fs.mkdir(dirName, { recursive: true })
-}
+    await fs.mkdir(dirName, { recursive: true });
+};
 
-const makeFile = async ({
-    filePath, componentName, extension, base, template, prefix, componentFilePath
-}) => {
-    const newFilePath = path.join(base, path.dirname(filePath), `${prefix || ''}${path.basename(filePath)}${extension}`)
+const makeFile = async ({ filePath, componentName, extension, base, template, prefix, componentFilePath }) => {
+    const newFilePath = path.join(
+        base,
+        path.dirname(filePath),
+        `${prefix || ""}${path.basename(filePath)}${extension}`,
+    );
     await ensureDirectoryExists(newFilePath);
 
-    const relativePathToComponent = path.parse(path.relative(path.dirname(newFilePath), componentFilePath || ''));
+    const relativePathToComponent = path.parse(path.relative(path.dirname(newFilePath), componentFilePath || ""));
     const importComponentPath = path.join(relativePathToComponent.dir, relativePathToComponent.name);
 
     try {
-        await fs.writeFile(newFilePath, fillTemplate(template, componentName, importComponentPath), { flag: 'wx' });
+        await fs.writeFile(newFilePath, fillTemplate(template, componentName, importComponentPath), { flag: "wx" });
         console.log(`Created ${path.relative(process.cwd(), newFilePath)}`);
         return newFilePath;
     } catch (error) {
-        if (error.code === 'EEXIST') {
+        if (error.code === "EEXIST") {
             console.log(`File already exists ${path.relative(process.cwd(), newFilePath)}`);
             return newFilePath;
         } else {
             throw error;
         }
     }
-}
+};
 
 const fillTemplate = (template, componentName, relativeComponentFilePath, skinnedSdkPath) =>
-    template.replace(/%%ComponentName%%/g, componentName)
-        .replace(/%%RelativeComponentPath%%/g, relativeComponentFilePath)
-
+    template
+        .replace(/%%ComponentName%%/g, componentName)
+        .replace(/%%RelativeComponentPath%%/g, relativeComponentFilePath);
 
 const makeReactComponent = async () => {
     const { filePath, withStyle } = args;
 
     if (!filePath) {
-        throw new Error('No file path provided, did you forget -f?')
+        throw new Error("No file path provided, did you forget -f?");
     }
 
-    const componentName = filePath.split('/').slice(-1).pop();
+    const componentName = filePath.split("/").slice(-1).pop();
 
-    const componentFilePath = await makeFile({ filePath, componentName, base: 'src', extension: '.tsx', template: TEMPLATES.COMPONENT });
-    await makeFile({ filePath, componentFilePath, componentName, base: 'test', extension: '-test.tsx', template: TEMPLATES.TEST, componentName });
+    const componentFilePath = await makeFile({
+        filePath,
+        componentName,
+        base: "src",
+        extension: ".tsx",
+        template: TEMPLATES.COMPONENT,
+    });
+    await makeFile({
+        filePath,
+        componentFilePath,
+        componentName,
+        base: "test",
+        extension: "-test.tsx",
+        template: TEMPLATES.TEST,
+        componentName,
+    });
     if (withStyle) {
-        await makeFile({ filePath, componentName, base: 'res/css', prefix: '_', extension: '.pcss', template: TEMPLATES.STYLE });
+        await makeFile({
+            filePath,
+            componentName,
+            base: "res/css",
+            prefix: "_",
+            extension: ".pcss",
+            template: TEMPLATES.STYLE,
+        });
     }
-}
+};
 
 // Wrapper since await at the top level is not well supported yet
 function run() {
@@ -128,4 +150,3 @@ function run() {
 
 run();
 return;
-

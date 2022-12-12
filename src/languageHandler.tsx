@@ -17,8 +17,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import counterpart from 'counterpart';
-import React from 'react';
+import counterpart from "counterpart";
+import React from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { Optional } from "matrix-events-sdk";
 
@@ -32,17 +32,17 @@ import { ModuleRunner } from "./modules/ModuleRunner";
 // @ts-ignore - $webapp is a webpack resolve alias pointing to the output directory, see webpack config
 import webpackLangJsonUrl from "$webapp/i18n/languages.json";
 
-const i18nFolder = 'i18n/';
+const i18nFolder = "i18n/";
 
 // Control whether to also return original, untranslated strings
 // Useful for debugging and testing
 const ANNOTATE_STRINGS = false;
 
 // We use english strings as keys, some of which contain full stops
-counterpart.setSeparator('|');
+counterpart.setSeparator("|");
 
 // see `translateWithFallback` for an explanation of fallback handling
-const FALLBACK_LOCALE = 'en';
+const FALLBACK_LOCALE = "en";
 counterpart.setFallbackLocale(FALLBACK_LOCALE);
 
 export interface ITranslatableError extends Error {
@@ -63,7 +63,7 @@ export function newTranslatableError(message: string, variables?: IVariables): I
 }
 
 export function getUserLanguage(): string {
-    const language = SettingsStore.getValue("language", null, /*excludeDefault:*/true);
+    const language = SettingsStore.getValue("language", null, /*excludeDefault:*/ true);
     if (language) {
         return language;
     } else {
@@ -73,7 +73,8 @@ export function getUserLanguage(): string {
 
 // Function which only purpose is to mark that a string is translatable
 // Does not actually do anything. It's helpful for automatic extraction of translatable strings
-export function _td(s: string): string { // eslint-disable-line @typescript-eslint/naming-convention
+export function _td(s: string): string {
+    // eslint-disable-line @typescript-eslint/naming-convention
     return s;
 }
 
@@ -86,12 +87,14 @@ export function _td(s: string): string { // eslint-disable-line @typescript-esli
  * for this reason, force fallbackLocale === locale in the first call to translate
  * and fallback 'manually' so we can mark fallback strings appropriately
  * */
-const translateWithFallback = (text: string, options?: object): { translated?: string, isFallback?: boolean } => {
+const translateWithFallback = (text: string, options?: object): { translated?: string; isFallback?: boolean } => {
     const translated = counterpart.translate(text, { ...options, fallbackLocale: counterpart.getLocale() });
     if (!translated || translated.startsWith("missing translation:")) {
         const fallbackTranslated = counterpart.translate(text, { ...options, locale: FALLBACK_LOCALE });
-        if ((!fallbackTranslated || fallbackTranslated.startsWith("missing translation:"))
-            && process.env.NODE_ENV !== "development") {
+        if (
+            (!fallbackTranslated || fallbackTranslated.startsWith("missing translation:")) &&
+            process.env.NODE_ENV !== "development"
+        ) {
             // Even the translation via FALLBACK_LOCALE failed; this can happen if
             //
             // 1. The string isn't in the translations dictionary, usually because you're in develop
@@ -127,15 +130,15 @@ function safeCounterpartTranslate(text: string, variables?: object) {
     // valid ES6 template strings to i18n strings it's extremely easy to pass undefined/null
     // if there are no existing null guards. To avoid this making the app completely inoperable,
     // we'll check all the values for undefined/null and stringify them here.
-    if (options && typeof options === 'object') {
+    if (options && typeof options === "object") {
         Object.keys(options).forEach((k) => {
             if (options[k] === undefined) {
                 logger.warn("safeCounterpartTranslate called with undefined interpolation name: " + k);
-                options[k] = 'undefined';
+                options[k] = "undefined";
             }
             if (options[k] === null) {
                 logger.warn("safeCounterpartTranslate called with null interpolation name: " + k);
-                options[k] = 'null';
+                options[k] = "null";
             }
         });
     }
@@ -160,10 +163,14 @@ const annotateStrings = (result: TranslatedString, translationKey: string): Tran
         return result;
     }
 
-    if (typeof result === 'string') {
+    if (typeof result === "string") {
         return `@@${translationKey}##${result}@@`;
     } else {
-        return <span className='translated-string' data-orig-string={translationKey}>{ result }</span>;
+        return (
+            <span className="translated-string" data-orig-string={translationKey}>
+                {result}
+            </span>
+        );
     }
 };
 
@@ -213,7 +220,7 @@ export function _tDom(text: string, variables?: IVariables, tags?: Tags): Transl
     const substituted = substitute(translated, variables, tags);
 
     // wrap en fallback translation with lang attribute for screen readers
-    const result = isFallback ? <span lang='en'>{ substituted }</span> : substituted;
+    const result = isFallback ? <span lang="en">{substituted}</span> : substituted;
 
     return annotateStrings(result, text);
 }
@@ -226,7 +233,7 @@ export function _tDom(text: string, variables?: IVariables, tags?: Tags): Transl
  */
 export function sanitizeForTranslation(text: string): string {
     // Add a non-breaking space so the regex doesn't trigger when translating.
-    return text.replace(/%\(([^)]*)\)/g, '%\xa0($1)');
+    return text.replace(/%\(([^)]*)\)/g, "%\xa0($1)");
 }
 
 /*
@@ -295,7 +302,8 @@ export function replaceByRegexes(text: string, mapping: IVariables | Tags): stri
         let matchFoundSomewhere = false; // If we don't find a match anywhere we want to log it
         for (let outputIndex = 0; outputIndex < output.length; outputIndex++) {
             const inputText = output[outputIndex];
-            if (typeof inputText !== 'string') { // We might have inserted objects earlier, don't try to replace them
+            if (typeof inputText !== "string") {
+                // We might have inserted objects earlier, don't try to replace them
                 continue;
             }
 
@@ -325,13 +333,13 @@ export function replaceByRegexes(text: string, mapping: IVariables | Tags): stri
                     replaced = mapping[regexpString];
                 }
 
-                if (typeof replaced === 'object') {
+                if (typeof replaced === "object") {
                     shouldWrapInSpan = true;
                 }
 
                 // Here we also need to check that it actually is a string before comparing against one
                 // The head and tail are always strings
-                if (typeof replaced !== 'string' || replaced !== '') {
+                if (typeof replaced !== "string" || replaced !== "") {
                     parts.push(replaced);
                 }
 
@@ -356,25 +364,27 @@ export function replaceByRegexes(text: string, mapping: IVariables | Tags): stri
             // remove the old element at the same time
             output.splice(outputIndex, 1, ...parts);
 
-            if (head !== '') { // Don't push empty nodes, they are of no use
+            if (head !== "") {
+                // Don't push empty nodes, they are of no use
                 output.splice(outputIndex, 0, head);
             }
         }
-        if (!matchFoundSomewhere) { // The current regexp did not match anything in the input
+        if (!matchFoundSomewhere) {
+            // The current regexp did not match anything in the input
             // Missing matches is entirely possible because you might choose to show some variables only in the case
             // of e.g. plurals. It's still a bit suspicious, and could be due to an error, so log it.
             // However, not showing count is so common that it's not worth logging. And other commonly unused variables
             // here, if there are any.
-            if (regexpString !== '%\\(count\\)s') {
+            if (regexpString !== "%\\(count\\)s") {
                 logger.log(`Could not find ${regexp} in ${text}`);
             }
         }
     }
 
     if (shouldWrapInSpan) {
-        return React.createElement('span', null, ...output);
+        return React.createElement("span", null, ...output);
     } else {
-        return output.join('');
+        return output.join("");
     }
 }
 
@@ -404,40 +414,43 @@ export function setLanguage(preferredLangs: string | string[]) {
 
     let langToUse: string;
     let availLangs: Languages;
-    return getLangsJson().then((result) => {
-        availLangs = result;
+    return getLangsJson()
+        .then((result) => {
+            availLangs = result;
 
-        for (let i = 0; i < preferredLangs.length; ++i) {
-            if (availLangs.hasOwnProperty(preferredLangs[i])) {
-                langToUse = preferredLangs[i];
-                break;
+            for (let i = 0; i < preferredLangs.length; ++i) {
+                if (availLangs.hasOwnProperty(preferredLangs[i])) {
+                    langToUse = preferredLangs[i];
+                    break;
+                }
             }
-        }
-        if (!langToUse) {
-            // Fallback to en_EN if none is found
-            langToUse = 'en';
-            logger.error("Unable to find an appropriate language");
-        }
+            if (!langToUse) {
+                // Fallback to en_EN if none is found
+                langToUse = "en";
+                logger.error("Unable to find an appropriate language");
+            }
 
-        return getLanguageRetry(i18nFolder + availLangs[langToUse].fileName);
-    }).then(async (langData) => {
-        counterpart.registerTranslations(langToUse, langData);
-        await registerCustomTranslations();
-        counterpart.setLocale(langToUse);
-        await SettingsStore.setValue("language", null, SettingLevel.DEVICE, langToUse);
-        // Adds a lot of noise to test runs, so disable logging there.
-        if (process.env.NODE_ENV !== "test") {
-            logger.log("set language to " + langToUse);
-        }
+            return getLanguageRetry(i18nFolder + availLangs[langToUse].fileName);
+        })
+        .then(async (langData) => {
+            counterpart.registerTranslations(langToUse, langData);
+            await registerCustomTranslations();
+            counterpart.setLocale(langToUse);
+            await SettingsStore.setValue("language", null, SettingLevel.DEVICE, langToUse);
+            // Adds a lot of noise to test runs, so disable logging there.
+            if (process.env.NODE_ENV !== "test") {
+                logger.log("set language to " + langToUse);
+            }
 
-        // Set 'en' as fallback language:
-        if (langToUse !== "en") {
-            return getLanguageRetry(i18nFolder + availLangs['en'].fileName);
-        }
-    }).then(async (langData) => {
-        if (langData) counterpart.registerTranslations('en', langData);
-        await registerCustomTranslations();
-    });
+            // Set 'en' as fallback language:
+            if (langToUse !== "en") {
+                return getLanguageRetry(i18nFolder + availLangs["en"].fileName);
+            }
+        })
+        .then(async (langData) => {
+            if (langData) counterpart.registerTranslations("en", langData);
+            await registerCustomTranslations();
+        });
 }
 
 type Language = {
@@ -451,8 +464,8 @@ export function getAllLanguagesFromJson(): Promise<Language[]> {
         for (const langKey in langsObject) {
             if (langsObject.hasOwnProperty(langKey)) {
                 langs.push({
-                    'value': langKey,
-                    'label': langsObject[langKey].label,
+                    value: langKey,
+                    label: langsObject[langKey].label,
                 });
             }
         }
@@ -482,7 +495,7 @@ export function getLanguageFromBrowser() {
 export function getNormalizedLanguageKeys(language: string) {
     const languageKeys: string[] = [];
     const normalizedLanguage = normalizeLanguageKey(language);
-    const languageParts = normalizedLanguage.split('-');
+    const languageParts = normalizedLanguage.split("-");
     if (languageParts.length === 2 && languageParts[0] === languageParts[1]) {
         languageKeys.push(languageParts[0]);
     } else {
@@ -535,7 +548,7 @@ export function pickBestLanguage(langs: string[]): string {
 
     {
         // Neither of those? Try an english variant.
-        const enIndex = normalisedLangs.findIndex((l) => l.startsWith('en'));
+        const enIndex = normalisedLangs.findIndex((l) => l.startsWith("en"));
         if (enIndex > -1) return langs[enIndex];
     }
 
@@ -545,10 +558,11 @@ export function pickBestLanguage(langs: string[]): string {
 
 async function getLangsJson(): Promise<Languages> {
     let url: string;
-    if (typeof(webpackLangJsonUrl) === 'string') { // in Jest this 'url' isn't a URL, so just fall through
+    if (typeof webpackLangJsonUrl === "string") {
+        // in Jest this 'url' isn't a URL, so just fall through
         url = webpackLangJsonUrl;
     } else {
-        url = i18nFolder + 'languages.json';
+        url = i18nFolder + "languages.json";
     }
 
     const res = await fetch(url, { method: "GET" });
@@ -561,17 +575,23 @@ async function getLangsJson(): Promise<Languages> {
 }
 
 interface ICounterpartTranslation {
-    [key: string]: string | {
-        [pluralisation: string]: string;
-    };
+    [key: string]:
+        | string
+        | {
+              [pluralisation: string]: string;
+          };
 }
 
 async function getLanguageRetry(langPath: string, num = 3): Promise<ICounterpartTranslation> {
-    return retry(() => getLanguage(langPath), num, e => {
-        logger.log("Failed to load i18n", langPath);
-        logger.error(e);
-        return true; // always retry
-    });
+    return retry(
+        () => getLanguage(langPath),
+        num,
+        (e) => {
+            logger.log("Failed to load i18n", langPath);
+            logger.error(e);
+            return true; // always retry
+        },
+    );
 }
 
 async function getLanguage(langPath: string): Promise<ICounterpartTranslation> {
@@ -646,12 +666,12 @@ export async function registerCustomTranslations() {
         if (Date.now() >= cachedCustomTranslationsExpire) {
             json = CustomTranslationOptions.lookupFn
                 ? CustomTranslationOptions.lookupFn(lookupUrl)
-                : (await (await fetch(lookupUrl)).json() as ICustomTranslations);
+                : ((await (await fetch(lookupUrl)).json()) as ICustomTranslations);
             cachedCustomTranslations = json;
 
             // Set expiration to the future, but not too far. Just trying to avoid
             // repeated, successive, calls to the server rather than anything long-term.
-            cachedCustomTranslationsExpire = Date.now() + (5 * 60 * 1000);
+            cachedCustomTranslationsExpire = Date.now() + 5 * 60 * 1000;
         } else {
             json = cachedCustomTranslations;
         }
@@ -668,6 +688,6 @@ export async function registerCustomTranslations() {
         logger.warn("Ignoring error while registering custom translations: ", e);
 
         // Like above: trigger a cache of the json to avoid successive calls.
-        cachedCustomTranslationsExpire = Date.now() + (5 * 60 * 1000);
+        cachedCustomTranslationsExpire = Date.now() + 5 * 60 * 1000;
     }
 }

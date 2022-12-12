@@ -15,10 +15,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { sleep } from 'matrix-js-sdk/src/utils';
+import { sleep } from "matrix-js-sdk/src/utils";
 
-import SettingsStore from '../../../src/settings/SettingsStore';
-import { SettingLevel } from '../../../src/settings/SettingLevel';
+import SettingsStore from "../../../src/settings/SettingsStore";
+import { SettingLevel } from "../../../src/settings/SettingLevel";
 import { FontWatcher } from "../../../src/settings/watchers/FontWatcher";
 import { Action } from "../../../src/dispatcher/actions";
 import { untilDispatch } from "../../test-utils";
@@ -31,7 +31,7 @@ async function setSystemFont(font: string): Promise<void> {
     await sleep(1); // await the FontWatcher doing its action
 }
 
-describe('FontWatcher', function() {
+describe("FontWatcher", function () {
     it("should load font on start()", async () => {
         const watcher = new FontWatcher();
         await setSystemFont("Font Name");
@@ -67,15 +67,15 @@ describe('FontWatcher', function() {
             fontWatcher.stop();
         });
 
-        it('encloses the fonts by double quotes and sets them as the system font', async () => {
+        it("encloses the fonts by double quotes and sets them as the system font", async () => {
             await setSystemFont("Fira Sans Thin, Commodore 64");
             expect(document.body.style.fontFamily).toBe(`"Fira Sans Thin","Commodore 64"`);
         });
-        it('does not add double quotes if already present and sets the font as the system font', async () => {
+        it("does not add double quotes if already present and sets the font as the system font", async () => {
             await setSystemFont(`"Commodore 64"`);
             expect(document.body.style.fontFamily).toBe(`"Commodore 64"`);
         });
-        it('trims whitespace, encloses the fonts by double quotes, and sets them as the system font', async () => {
+        it("trims whitespace, encloses the fonts by double quotes, and sets them as the system font", async () => {
             await setSystemFont(`  Fira Code  ,  "Commodore 64" `);
             expect(document.body.style.fontFamily).toBe(`"Fira Code","Commodore 64"`);
         });

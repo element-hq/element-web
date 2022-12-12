@@ -44,17 +44,19 @@ export function GenericDropdownMenuOption<T extends Key>({
     onClick: (ev: ButtonEvent) => void;
     isSelected: boolean;
 }): JSX.Element {
-    return <MenuItemRadio
-        active={isSelected}
-        className="mx_GenericDropdownMenu_Option mx_GenericDropdownMenu_Option--item"
-        onClick={onClick}
-    >
-        <div className="mx_GenericDropdownMenu_Option--label">
-            <span>{ label }</span>
-            <span>{ description }</span>
-        </div>
-        { adornment }
-    </MenuItemRadio>;
+    return (
+        <MenuItemRadio
+            active={isSelected}
+            className="mx_GenericDropdownMenu_Option mx_GenericDropdownMenu_Option--item"
+            onClick={onClick}
+        >
+            <div className="mx_GenericDropdownMenu_Option--label">
+                <span>{label}</span>
+                <span>{description}</span>
+            </div>
+            {adornment}
+        </MenuItemRadio>
+    );
 }
 
 export function GenericDropdownMenuGroup<T extends Key>({
@@ -63,33 +65,35 @@ export function GenericDropdownMenuGroup<T extends Key>({
     adornment,
     children,
 }: PropsWithChildren<GenericDropdownMenuOption<T>>): JSX.Element {
-    return <>
-        <div className="mx_GenericDropdownMenu_Option mx_GenericDropdownMenu_Option--header">
-            <div className="mx_GenericDropdownMenu_Option--label">
-                <span>{ label }</span>
-                <span>{ description }</span>
+    return (
+        <>
+            <div className="mx_GenericDropdownMenu_Option mx_GenericDropdownMenu_Option--header">
+                <div className="mx_GenericDropdownMenu_Option--label">
+                    <span>{label}</span>
+                    <span>{description}</span>
+                </div>
+                {adornment}
             </div>
-            { adornment }
-        </div>
-        { children }
-    </>;
+            {children}
+        </>
+    );
 }
 
-function isGenericDropdownMenuGroup<T>(
-    item: GenericDropdownMenuItem<T>,
-): item is GenericDropdownMenuGroup<T> {
+function isGenericDropdownMenuGroup<T>(item: GenericDropdownMenuItem<T>): item is GenericDropdownMenuGroup<T> {
     return "options" in item;
 }
 
-type WithKeyFunction<T> = T extends Key ? {
-    toKey?: (key: T) => Key;
-} : {
-    toKey: (key: T) => Key;
-};
+type WithKeyFunction<T> = T extends Key
+    ? {
+          toKey?: (key: T) => Key;
+      }
+    : {
+          toKey: (key: T) => Key;
+      };
 
 type IProps<T> = WithKeyFunction<T> & {
     value: T;
-    options: (readonly GenericDropdownMenuOption<T>[] | readonly GenericDropdownMenuGroup<T>[]);
+    options: readonly GenericDropdownMenuOption<T>[] | readonly GenericDropdownMenuGroup<T>[];
     onChange: (option: T) => void;
     selectedLabel: (option: GenericDropdownMenuItem<T> | null | undefined) => ReactNode;
     onOpen?: (ev: ButtonEvent) => void;
@@ -102,82 +106,98 @@ type IProps<T> = WithKeyFunction<T> & {
     }>;
 };
 
-export function GenericDropdownMenu<T>(
-    { value, onChange, options, selectedLabel, onOpen, onClose, toKey, className, AdditionalOptions }: IProps<T>,
-): JSX.Element {
+export function GenericDropdownMenu<T>({
+    value,
+    onChange,
+    options,
+    selectedLabel,
+    onOpen,
+    onClose,
+    toKey,
+    className,
+    AdditionalOptions,
+}: IProps<T>): JSX.Element {
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu<HTMLElement>();
 
     const selected: GenericDropdownMenuItem<T> | null = options
-        .flatMap(it => isGenericDropdownMenuGroup(it) ? [it, ...it.options] : [it])
-        .find(option => toKey ? toKey(option.key) === toKey(value) : option.key === value);
+        .flatMap((it) => (isGenericDropdownMenuGroup(it) ? [it, ...it.options] : [it]))
+        .find((option) => (toKey ? toKey(option.key) === toKey(value) : option.key === value));
     let contextMenuOptions: JSX.Element;
     if (options && isGenericDropdownMenuGroup(options[0])) {
-        contextMenuOptions = <>
-            { options.map(group => (
-                <GenericDropdownMenuGroup
-                    key={toKey?.(group.key) ?? group.key}
-                    label={group.label}
-                    description={group.description}
-                    adornment={group.adornment}
-                >
-                    { group.options.map(option => (
-                        <GenericDropdownMenuOption
-                            key={toKey?.(option.key) ?? option.key}
-                            label={option.label}
-                            description={option.description}
-                            onClick={(ev: ButtonEvent) => {
-                                onChange(option.key);
-                                closeMenu();
-                                onClose?.(ev);
-                            }}
-                            adornment={option.adornment}
-                            isSelected={option === selected}
-                        />
-                    )) }
-                </GenericDropdownMenuGroup>
-            )) }
-        </>;
+        contextMenuOptions = (
+            <>
+                {options.map((group) => (
+                    <GenericDropdownMenuGroup
+                        key={toKey?.(group.key) ?? group.key}
+                        label={group.label}
+                        description={group.description}
+                        adornment={group.adornment}
+                    >
+                        {group.options.map((option) => (
+                            <GenericDropdownMenuOption
+                                key={toKey?.(option.key) ?? option.key}
+                                label={option.label}
+                                description={option.description}
+                                onClick={(ev: ButtonEvent) => {
+                                    onChange(option.key);
+                                    closeMenu();
+                                    onClose?.(ev);
+                                }}
+                                adornment={option.adornment}
+                                isSelected={option === selected}
+                            />
+                        ))}
+                    </GenericDropdownMenuGroup>
+                ))}
+            </>
+        );
     } else {
-        contextMenuOptions = <>
-            { options.map(option => (
-                <GenericDropdownMenuOption
-                    key={toKey?.(option.key) ?? option.key}
-                    label={option.label}
-                    description={option.description}
-                    onClick={(ev: ButtonEvent) => {
-                        onChange(option.key);
-                        closeMenu();
-                        onClose?.(ev);
-                    }}
-                    adornment={option.adornment}
-                    isSelected={option === selected}
-                />
-            )) }
-        </>;
+        contextMenuOptions = (
+            <>
+                {options.map((option) => (
+                    <GenericDropdownMenuOption
+                        key={toKey?.(option.key) ?? option.key}
+                        label={option.label}
+                        description={option.description}
+                        onClick={(ev: ButtonEvent) => {
+                            onChange(option.key);
+                            closeMenu();
+                            onClose?.(ev);
+                        }}
+                        adornment={option.adornment}
+                        isSelected={option === selected}
+                    />
+                ))}
+            </>
+        );
     }
-    const contextMenu = menuDisplayed ? <ContextMenu
-        onFinished={closeMenu}
-        chevronFace={ChevronFace.Top}
-        wrapperClassName={classNames("mx_GenericDropdownMenu_wrapper", className)}
-        {...aboveLeftOf(button.current.getBoundingClientRect())}
-    >
-        { contextMenuOptions }
-        { AdditionalOptions && (
-            <AdditionalOptions menuDisplayed={menuDisplayed} openMenu={openMenu} closeMenu={closeMenu} />
-        ) }
-    </ContextMenu> : null;
-    return <>
-        <ContextMenuButton
-            className="mx_GenericDropdownMenu_button"
-            inputRef={button}
-            isExpanded={menuDisplayed}
-            onClick={(ev: ButtonEvent) => {
-                openMenu();
-                onOpen?.(ev);
-            }}
+    const contextMenu = menuDisplayed ? (
+        <ContextMenu
+            onFinished={closeMenu}
+            chevronFace={ChevronFace.Top}
+            wrapperClassName={classNames("mx_GenericDropdownMenu_wrapper", className)}
+            {...aboveLeftOf(button.current.getBoundingClientRect())}
         >
-            { selectedLabel(selected) }
-        </ContextMenuButton>
-        { contextMenu }
-    </>;
+            {contextMenuOptions}
+            {AdditionalOptions && (
+                <AdditionalOptions menuDisplayed={menuDisplayed} openMenu={openMenu} closeMenu={closeMenu} />
+            )}
+        </ContextMenu>
+    ) : null;
+    return (
+        <>
+            <ContextMenuButton
+                className="mx_GenericDropdownMenu_button"
+                inputRef={button}
+                isExpanded={menuDisplayed}
+                onClick={(ev: ButtonEvent) => {
+                    openMenu();
+                    onOpen?.(ev);
+                }}
+            >
+                {selectedLabel(selected)}
+            </ContextMenuButton>
+            {contextMenu}
+        </>
+    );
 }

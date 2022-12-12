@@ -19,7 +19,7 @@ import { IWidget } from "matrix-widget-api";
 
 import { SynapseInstance } from "../../plugins/synapsedocker";
 
-const ROOM_NAME = 'Test Room';
+const ROOM_NAME = "Test Room";
 const WIDGET_ID = "fake-widget";
 const WIDGET_HTML = `
     <html lang="en">
@@ -32,18 +32,18 @@ const WIDGET_HTML = `
     </html>
 `;
 
-describe('Widget Layout', () => {
+describe("Widget Layout", () => {
     let widgetUrl: string;
     let synapse: SynapseInstance;
     let roomId: string;
 
     beforeEach(() => {
-        cy.startSynapse("default").then(data => {
+        cy.startSynapse("default").then((data) => {
             synapse = data;
 
             cy.initTestUser(synapse, "Sally");
         });
-        cy.serveHtmlFile(WIDGET_HTML).then(url => {
+        cy.serveHtmlFile(WIDGET_HTML).then((url) => {
             widgetUrl = url;
         });
 
@@ -53,34 +53,38 @@ describe('Widget Layout', () => {
             roomId = id;
 
             // setup widget via state event
-            cy.getClient().then(async matrixClient => {
-                const content: IWidget = {
-                    id: WIDGET_ID,
-                    creatorUserId: 'somebody',
-                    type: 'widget',
-                    name: 'widget',
-                    url: widgetUrl,
-                };
-                await matrixClient.sendStateEvent(roomId, 'im.vector.modular.widgets', content, WIDGET_ID);
-            }).as('widgetEventSent');
+            cy.getClient()
+                .then(async (matrixClient) => {
+                    const content: IWidget = {
+                        id: WIDGET_ID,
+                        creatorUserId: "somebody",
+                        type: "widget",
+                        name: "widget",
+                        url: widgetUrl,
+                    };
+                    await matrixClient.sendStateEvent(roomId, "im.vector.modular.widgets", content, WIDGET_ID);
+                })
+                .as("widgetEventSent");
 
             // set initial layout
-            cy.getClient().then(async matrixClient => {
-                const content = {
-                    widgets: {
-                        [WIDGET_ID]: {
-                            container: 'top', index: 1, width: 100, height: 0,
+            cy.getClient()
+                .then(async (matrixClient) => {
+                    const content = {
+                        widgets: {
+                            [WIDGET_ID]: {
+                                container: "top",
+                                index: 1,
+                                width: 100,
+                                height: 0,
+                            },
                         },
-                    },
-                };
-                await matrixClient.sendStateEvent(roomId, 'io.element.widgets.layout', content, "");
-            }).as('layoutEventSent');
+                    };
+                    await matrixClient.sendStateEvent(roomId, "io.element.widgets.layout", content, "");
+                })
+                .as("layoutEventSent");
         });
 
-        cy.all([
-            cy.get<string>("@widgetEventSent"),
-            cy.get<string>("@layoutEventSent"),
-        ]).then(() => {
+        cy.all([cy.get<string>("@widgetEventSent"), cy.get<string>("@layoutEventSent")]).then(() => {
             // open the room
             cy.viewRoomByName(ROOM_NAME);
         });
@@ -91,31 +95,34 @@ describe('Widget Layout', () => {
         cy.stopWebServers();
     });
 
-    it('manually resize the height of the top container layout', () => {
-        cy.get('iframe[title="widget"]').invoke('height').should('be.lessThan', 250);
+    it("manually resize the height of the top container layout", () => {
+        cy.get('iframe[title="widget"]').invoke("height").should("be.lessThan", 250);
 
-        cy.get('.mx_AppsContainer_resizerHandle')
-            .trigger('mousedown')
-            .trigger('mousemove', { clientX: 0, clientY: 550, force: true })
-            .trigger('mouseup', { clientX: 0, clientY: 550, force: true });
+        cy.get(".mx_AppsContainer_resizerHandle")
+            .trigger("mousedown")
+            .trigger("mousemove", { clientX: 0, clientY: 550, force: true })
+            .trigger("mouseup", { clientX: 0, clientY: 550, force: true });
 
-        cy.get('iframe[title="widget"]').invoke('height').should('be.greaterThan', 400);
+        cy.get('iframe[title="widget"]').invoke("height").should("be.greaterThan", 400);
     });
 
-    it('programatically resize the height of the top container layout', () => {
-        cy.get('iframe[title="widget"]').invoke('height').should('be.lessThan', 250);
+    it("programatically resize the height of the top container layout", () => {
+        cy.get('iframe[title="widget"]').invoke("height").should("be.lessThan", 250);
 
-        cy.getClient().then(async matrixClient => {
+        cy.getClient().then(async (matrixClient) => {
             const content = {
                 widgets: {
                     [WIDGET_ID]: {
-                        container: 'top', index: 1, width: 100, height: 100,
+                        container: "top",
+                        index: 1,
+                        width: 100,
+                        height: 100,
                     },
                 },
             };
-            await matrixClient.sendStateEvent(roomId, 'io.element.widgets.layout', content, "");
+            await matrixClient.sendStateEvent(roomId, "io.element.widgets.layout", content, "");
         });
 
-        cy.get('iframe[title="widget"]').invoke('height').should('be.greaterThan', 400);
+        cy.get('iframe[title="widget"]').invoke("height").should("be.greaterThan", 400);
     });
 });

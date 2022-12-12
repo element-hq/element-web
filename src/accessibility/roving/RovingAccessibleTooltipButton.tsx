@@ -28,14 +28,15 @@ interface IProps extends Omit<ATBProps, "inputRef" | "tabIndex"> {
 // Wrapper to allow use of useRovingTabIndex for simple AccessibleTooltipButtons outside of React Functional Components.
 export const RovingAccessibleTooltipButton: React.FC<IProps> = ({ inputRef, onFocus, ...props }) => {
     const [onFocusInternal, isActive, ref] = useRovingTabIndex(inputRef);
-    return <AccessibleTooltipButton
-        {...props}
-        onFocus={event => {
-            onFocusInternal();
-            onFocus?.(event);
-        }}
-        inputRef={ref}
-        tabIndex={isActive ? 0 : -1}
-    />;
+    return (
+        <AccessibleTooltipButton
+            {...props}
+            onFocus={(event) => {
+                onFocusInternal();
+                onFocus?.(event);
+            }}
+            inputRef={ref}
+            tabIndex={isActive ? 0 : -1}
+        />
+    );
 };
-

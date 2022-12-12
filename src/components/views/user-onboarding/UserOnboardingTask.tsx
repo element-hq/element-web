@@ -31,9 +31,11 @@ export function UserOnboardingTask({ task, completed = false }: Props) {
     const description = typeof task.description === "function" ? task.description() : task.description;
 
     return (
-        <li className={classNames("mx_UserOnboardingTask", {
-            "mx_UserOnboardingTask_completed": completed,
-        })}>
+        <li
+            className={classNames("mx_UserOnboardingTask", {
+                mx_UserOnboardingTask_completed: completed,
+            })}
+        >
             <div
                 className="mx_UserOnboardingTask_number"
                 role="checkbox"
@@ -41,27 +43,24 @@ export function UserOnboardingTask({ task, completed = false }: Props) {
                 aria-checked={completed}
                 aria-labelledby={`mx_UserOnboardingTask_${task.id}`}
             />
-            <div
-                id={`mx_UserOnboardingTask_${task.id}`}
-                className="mx_UserOnboardingTask_content">
+            <div id={`mx_UserOnboardingTask_${task.id}`} className="mx_UserOnboardingTask_content">
                 <Heading size="h4" className="mx_UserOnboardingTask_title">
-                    { title }
+                    {title}
                 </Heading>
-                <div className="mx_UserOnboardingTask_description">
-                    { description }
-                </div>
+                <div className="mx_UserOnboardingTask_description">{description}</div>
             </div>
-            { task.action && (!task.action.hideOnComplete || !completed) && (
+            {task.action && (!task.action.hideOnComplete || !completed) && (
                 <AccessibleButton
                     element="a"
                     className="mx_UserOnboardingTask_action"
                     kind="primary_outline"
                     href={task.action.href}
                     target="_blank"
-                    onClick={task.action.onClick}>
-                    { task.action.label }
+                    onClick={task.action.onClick}
+                >
+                    {task.action.label}
                 </AccessibleButton>
-            ) }
+            )}
         </li>
     );
 }

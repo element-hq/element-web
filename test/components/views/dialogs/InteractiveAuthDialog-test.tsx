@@ -15,17 +15,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import { act } from 'react-dom/test-utils';
+import React from "react";
+import { act } from "react-dom/test-utils";
 // eslint-disable-next-line deprecate/import
-import { mount, ReactWrapper } from 'enzyme';
+import { mount, ReactWrapper } from "enzyme";
 
 import InteractiveAuthDialog from "../../../../src/components/views/dialogs/InteractiveAuthDialog";
-import { flushPromises, getMockClientWithEventEmitter, unmockClientPeg } from '../../../test-utils';
+import { flushPromises, getMockClientWithEventEmitter, unmockClientPeg } from "../../../test-utils";
 
-describe('InteractiveAuthDialog', function() {
+describe("InteractiveAuthDialog", function () {
     const mockClient = getMockClientWithEventEmitter({
-        generateClientSecret: jest.fn().mockReturnValue('t35tcl1Ent5ECr3T'),
+        generateClientSecret: jest.fn().mockReturnValue("t35tcl1Ent5ECr3T"),
     });
 
     const defaultProps = {
@@ -33,12 +33,9 @@ describe('InteractiveAuthDialog', function() {
         makeRequest: jest.fn().mockResolvedValue(undefined),
         onFinished: jest.fn(),
     };
-    const getComponent = (props = {}) => mount(<InteractiveAuthDialog
-        {...defaultProps}
-        {...props}
-    />);
+    const getComponent = (props = {}) => mount(<InteractiveAuthDialog {...defaultProps} {...props} />);
 
-    beforeEach(function() {
+    beforeEach(function () {
         jest.clearAllMocks();
         mockClient.credentials = null;
     });
@@ -49,16 +46,14 @@ describe('InteractiveAuthDialog', function() {
 
     const getSubmitButton = (wrapper: ReactWrapper) => wrapper.find('[type="submit"]').at(0);
 
-    it('Should successfully complete a password flow', async () => {
+    it("Should successfully complete a password flow", async () => {
         const onFinished = jest.fn();
         const makeRequest = jest.fn().mockResolvedValue({ a: 1 });
 
         mockClient.credentials = { userId: "@user:id" };
         const authData = {
             session: "sess",
-            flows: [
-                { "stages": ["m.login.password"] },
-            ],
+            flows: [{ stages: ["m.login.password"] }],
         };
 
         const wrapper = getComponent({ makeRequest, onFinished, authData });
@@ -66,7 +61,7 @@ describe('InteractiveAuthDialog', function() {
         const passwordNode = wrapper.find('input[type="password"]').at(0);
         const submitNode = getSubmitButton(wrapper);
 
-        const formNode = wrapper.find('form').at(0);
+        const formNode = wrapper.find("form").at(0);
         expect(passwordNode).toBeTruthy();
         expect(submitNode).toBeTruthy();
 
@@ -75,7 +70,7 @@ describe('InteractiveAuthDialog', function() {
 
         // put something in the password box
         act(() => {
-            passwordNode.simulate('change', { target: { value: "s3kr3t" } });
+            passwordNode.simulate("change", { target: { value: "s3kr3t" } });
             wrapper.setProps({});
         });
 
@@ -84,22 +79,24 @@ describe('InteractiveAuthDialog', function() {
 
         // hit enter; that should trigger a request
         act(() => {
-            formNode.simulate('submit');
+            formNode.simulate("submit");
         });
 
         // wait for auth request to resolve
         await flushPromises();
 
         expect(makeRequest).toHaveBeenCalledTimes(1);
-        expect(makeRequest).toBeCalledWith(expect.objectContaining({
-            session: "sess",
-            type: "m.login.password",
-            password: "s3kr3t",
-            identifier: {
-                type: "m.id.user",
-                user: "@user:id",
-            },
-        }));
+        expect(makeRequest).toBeCalledWith(
+            expect.objectContaining({
+                session: "sess",
+                type: "m.login.password",
+                password: "s3kr3t",
+                identifier: {
+                    type: "m.id.user",
+                    user: "@user:id",
+                },
+            }),
+        );
 
         expect(onFinished).toBeCalledTimes(1);
         expect(onFinished).toBeCalledWith(true, { a: 1 });

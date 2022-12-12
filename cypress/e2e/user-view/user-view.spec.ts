@@ -23,7 +23,7 @@ describe("UserView", () => {
     let synapse: SynapseInstance;
 
     beforeEach(() => {
-        cy.startSynapse("default").then(data => {
+        cy.startSynapse("default").then((data) => {
             synapse = data;
 
             cy.initTestUser(synapse, "Violet");
@@ -36,7 +36,7 @@ describe("UserView", () => {
     });
 
     it("should render the user view as expected", () => {
-        cy.get<MatrixClient>("@bot").then(bot => {
+        cy.get<MatrixClient>("@bot").then((bot) => {
             cy.visit(`/#/user/${bot.getUserId()}`);
         });
 

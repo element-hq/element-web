@@ -14,12 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import { MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
+import React from "react";
+import { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 
-import { _t } from '../../../languageHandler';
-import ContextMenu, { IProps as IContextMenuProps, MenuItem } from '../../structures/ContextMenu';
-import LegacyCallHandler from '../../../LegacyCallHandler';
+import { _t } from "../../../languageHandler";
+import ContextMenu, { IProps as IContextMenuProps, MenuItem } from "../../structures/ContextMenu";
+import LegacyCallHandler from "../../../LegacyCallHandler";
 
 interface IProps extends IContextMenuProps {
     call: MatrixCall;
@@ -52,16 +52,20 @@ export default class LegacyCallContextMenu extends React.Component<IProps> {
 
         let transferItem;
         if (this.props.call.opponentCanBeTransferred()) {
-            transferItem = <MenuItem className="mx_LegacyCallContextMenu_item" onClick={this.onTransferClick}>
-                { _t("Transfer") }
-            </MenuItem>;
+            transferItem = (
+                <MenuItem className="mx_LegacyCallContextMenu_item" onClick={this.onTransferClick}>
+                    {_t("Transfer")}
+                </MenuItem>
+            );
         }
 
-        return <ContextMenu {...this.props}>
-            <MenuItem className="mx_LegacyCallContextMenu_item" onClick={handler}>
-                { holdUnholdCaption }
-            </MenuItem>
-            { transferItem }
-        </ContextMenu>;
+        return (
+            <ContextMenu {...this.props}>
+                <MenuItem className="mx_LegacyCallContextMenu_item" onClick={handler}>
+                    {holdUnholdCaption}
+                </MenuItem>
+                {transferItem}
+            </ContextMenu>
+        );
     }
 }

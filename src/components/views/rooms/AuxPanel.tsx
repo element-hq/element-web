@@ -14,20 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import { lexicographicCompare } from 'matrix-js-sdk/src/utils';
-import { Room } from 'matrix-js-sdk/src/models/room';
-import { throttle } from 'lodash';
+import React from "react";
+import { lexicographicCompare } from "matrix-js-sdk/src/utils";
+import { Room } from "matrix-js-sdk/src/models/room";
+import { throttle } from "lodash";
 import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
-import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import AppsDrawer from './AppsDrawer';
+import AppsDrawer from "./AppsDrawer";
 import SettingsStore from "../../../settings/SettingsStore";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import { UIFeature } from "../../../settings/UIFeature";
 import ResizeNotifier from "../../../utils/ResizeNotifier";
-import LegacyCallViewForRoom from '../voip/LegacyCallViewForRoom';
+import LegacyCallViewForRoom from "../voip/LegacyCallViewForRoom";
 import { objectHasDiff } from "../../../utils/objects";
 
 interface IProps {
@@ -86,15 +86,19 @@ export default class AuxPanel extends React.Component<IProps, IState> {
         }
     };
 
-    private updateCounters = throttle(() => {
-        this.setState({ counters: this.computeCounters() });
-    }, 500, { leading: true, trailing: true });
+    private updateCounters = throttle(
+        () => {
+            this.setState({ counters: this.computeCounters() });
+        },
+        500,
+        { leading: true, trailing: true },
+    );
 
     private computeCounters() {
         const counters = [];
 
         if (this.props.room && SettingsStore.getValue("feature_state_counters")) {
-            const stateEvs = this.props.room.currentState.getStateEvents('re.jki.counter');
+            const stateEvs = this.props.room.currentState.getStateEvents("re.jki.counter");
             stateEvs.sort((a, b) => lexicographicCompare(a.getStateKey(), b.getStateKey()));
 
             for (const ev of stateEvs) {
@@ -132,12 +136,14 @@ export default class AuxPanel extends React.Component<IProps, IState> {
 
         let appsDrawer;
         if (SettingsStore.getValue(UIFeature.Widgets)) {
-            appsDrawer = <AppsDrawer
-                room={this.props.room}
-                userId={this.props.userId}
-                showApps={this.props.showApps}
-                resizeNotifier={this.props.resizeNotifier}
-            />;
+            appsDrawer = (
+                <AppsDrawer
+                    room={this.props.room}
+                    userId={this.props.userId}
+                    showApps={this.props.showApps}
+                    resizeNotifier={this.props.resizeNotifier}
+                />
+            );
         }
 
         let stateViews = null;
@@ -151,12 +157,16 @@ export default class AuxPanel extends React.Component<IProps, IState> {
                 const severity = counter.severity;
                 const stateKey = counter.stateKey;
 
-                let span = <span>{ title }: { value }</span>;
+                let span = (
+                    <span>
+                        {title}: {value}
+                    </span>
+                );
 
                 if (link) {
                     span = (
                         <a href={link} target="_blank" rel="noreferrer noopener">
-                            { span }
+                            {span}
                         </a>
                     );
                 }
@@ -167,35 +177,31 @@ export default class AuxPanel extends React.Component<IProps, IState> {
                         data-severity={severity}
                         key={"x-" + stateKey}
                     >
-                        { span }
+                        {span}
                     </span>
                 );
 
                 counters.push(span);
                 counters.push(
-                    <span
-                        className="m_RoomView_auxPanel_stateViews_delim"
-                        key={"delim" + idx}
-                    > ─ </span>,
+                    <span className="m_RoomView_auxPanel_stateViews_delim" key={"delim" + idx}>
+                        {" "}
+                        ─{" "}
+                    </span>,
                 );
             });
 
             if (counters.length > 0) {
                 counters.pop(); // remove last deliminator
-                stateViews = (
-                    <div className="m_RoomView_auxPanel_stateViews">
-                        { counters }
-                    </div>
-                );
+                stateViews = <div className="m_RoomView_auxPanel_stateViews">{counters}</div>;
             }
         }
 
         return (
             <AutoHideScrollbar className="mx_RoomView_auxPanel">
-                { stateViews }
-                { this.props.children }
-                { appsDrawer }
-                { callView }
+                {stateViews}
+                {this.props.children}
+                {appsDrawer}
+                {callView}
             </AutoHideScrollbar>
         );
     }

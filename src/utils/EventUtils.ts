@@ -14,16 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { EventStatus, MatrixEvent } from 'matrix-js-sdk/src/models/event';
+import { EventStatus, MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { EventType, EVENT_VISIBILITY_CHANGE_TYPE, MsgType, RelationType } from "matrix-js-sdk/src/@types/event";
-import { MatrixClient } from 'matrix-js-sdk/src/client';
-import { logger } from 'matrix-js-sdk/src/logger';
+import { MatrixClient } from "matrix-js-sdk/src/client";
+import { logger } from "matrix-js-sdk/src/logger";
 import { M_POLL_START } from "matrix-events-sdk";
 import { M_LOCATION } from "matrix-js-sdk/src/@types/location";
-import { M_BEACON_INFO } from 'matrix-js-sdk/src/@types/beacon';
-import { THREAD_RELATION_TYPE } from 'matrix-js-sdk/src/models/thread';
+import { M_BEACON_INFO } from "matrix-js-sdk/src/@types/beacon";
+import { THREAD_RELATION_TYPE } from "matrix-js-sdk/src/models/thread";
 
-import { MatrixClientPeg } from '../MatrixClientPeg';
+import { MatrixClientPeg } from "../MatrixClientPeg";
 import shouldHideEvent from "../shouldHideEvent";
 import { GetRelationsForEvent } from "../components/views/rooms/EventTile";
 import SettingsStore from "../settings/SettingsStore";
@@ -48,13 +48,13 @@ export function isContentActionable(mxEvent: MatrixEvent): boolean {
     const isSent = !eventStatus || eventStatus === EventStatus.SENT;
 
     if (isSent && !mxEvent.isRedacted()) {
-        if (mxEvent.getType() === 'm.room.message') {
+        if (mxEvent.getType() === "m.room.message") {
             const content = mxEvent.getContent();
-            if (content.msgtype && content.msgtype !== 'm.bad.encrypted' && content.hasOwnProperty('body')) {
+            if (content.msgtype && content.msgtype !== "m.bad.encrypted" && content.hasOwnProperty("body")) {
                 return true;
             }
         } else if (
-            mxEvent.getType() === 'm.sticker' ||
+            mxEvent.getType() === "m.sticker" ||
             M_POLL_START.matches(mxEvent.getType()) ||
             M_BEACON_INFO.matches(mxEvent.getType())
         ) {
@@ -66,10 +66,7 @@ export function isContentActionable(mxEvent: MatrixEvent): boolean {
 }
 
 export function canEditContent(mxEvent: MatrixEvent): boolean {
-    const isCancellable = (
-        mxEvent.getType() === EventType.RoomMessage ||
-        M_POLL_START.matches(mxEvent.getType())
-    );
+    const isCancellable = mxEvent.getType() === EventType.RoomMessage || M_POLL_START.matches(mxEvent.getType());
 
     if (
         !isCancellable ||
@@ -84,11 +81,7 @@ export function canEditContent(mxEvent: MatrixEvent): boolean {
     const { msgtype, body } = mxEvent.getOriginalContent();
     return (
         M_POLL_START.matches(mxEvent.getType()) ||
-        (
-            (msgtype === MsgType.Text || msgtype === MsgType.Emote) &&
-            !!body &&
-            typeof body === 'string'
-        )
+        ((msgtype === MsgType.Text || msgtype === MsgType.Emote) && !!body && typeof body === "string")
     );
 }
 
@@ -118,17 +111,17 @@ export function findEditableEvent({
     const beginIdx = isForward ? 0 : maxIdx;
     let endIdx = isForward ? maxIdx : 0;
     if (!fromEventId) {
-        endIdx = Math.min(Math.max(0, beginIdx + (inc * MAX_JUMP_DISTANCE)), maxIdx);
+        endIdx = Math.min(Math.max(0, beginIdx + inc * MAX_JUMP_DISTANCE), maxIdx);
     }
     let foundFromEventId = !fromEventId;
-    for (let i = beginIdx; i !== (endIdx + inc); i += inc) {
+    for (let i = beginIdx; i !== endIdx + inc; i += inc) {
         const e = events[i];
         // find start event first
         if (!foundFromEventId && e.getId() === fromEventId) {
             foundFromEventId = true;
             // don't look further than MAX_JUMP_DISTANCE events from `fromEventId`
             // to not iterate potentially 1000nds of events on key up/down
-            endIdx = Math.min(Math.max(0, i + (inc * MAX_JUMP_DISTANCE)), maxIdx);
+            endIdx = Math.min(Math.max(0, i + inc * MAX_JUMP_DISTANCE), maxIdx);
         } else if (foundFromEventId && !shouldHideEvent(e) && canEditOwnEvent(e)) {
             // otherwise look for editable event
             return e;
@@ -194,14 +187,16 @@ export function getMessageModerationState(mxEvent: MatrixEvent, client?: MatrixC
     }
 
     const room = client.getRoom(mxEvent.getRoomId());
-    if (EVENT_VISIBILITY_CHANGE_TYPE.name
-        && room.currentState.maySendStateEvent(EVENT_VISIBILITY_CHANGE_TYPE.name, client.getUserId())
+    if (
+        EVENT_VISIBILITY_CHANGE_TYPE.name &&
+        room.currentState.maySendStateEvent(EVENT_VISIBILITY_CHANGE_TYPE.name, client.getUserId())
     ) {
         // We're a moderator (as indicated by prefixed event name), show the message.
         return MessageModerationState.SEE_THROUGH_FOR_CURRENT_USER;
     }
-    if (EVENT_VISIBILITY_CHANGE_TYPE.altName
-        && room.currentState.maySendStateEvent(EVENT_VISIBILITY_CHANGE_TYPE.altName, client.getUserId())
+    if (
+        EVENT_VISIBILITY_CHANGE_TYPE.altName &&
+        room.currentState.maySendStateEvent(EVENT_VISIBILITY_CHANGE_TYPE.altName, client.getUserId())
     ) {
         // We're a moderator (as indicated by unprefixed event name), show the message.
         return MessageModerationState.SEE_THROUGH_FOR_CURRENT_USER;
@@ -213,10 +208,7 @@ export function getMessageModerationState(mxEvent: MatrixEvent, client?: MatrixC
 export function isVoiceMessage(mxEvent: MatrixEvent): boolean {
     const content = mxEvent.getContent();
     // MSC2516 is a legacy identifier. See https://github.com/matrix-org/matrix-doc/pull/3245
-    return (
-        !!content['org.matrix.msc2516.voice'] ||
-        !!content['org.matrix.msc3245.voice']
-    );
+    return !!content["org.matrix.msc2516.voice"] || !!content["org.matrix.msc3245.voice"];
 }
 
 export async function fetchInitialEvent(
@@ -234,15 +226,15 @@ export async function fetchInitialEvent(
         initialEvent = null;
     }
 
-    if (client.supportsExperimentalThreads() &&
+    if (
+        client.supportsExperimentalThreads() &&
         initialEvent?.isRelation(THREAD_RELATION_TYPE.name) &&
         !initialEvent.getThread()
     ) {
         const threadId = initialEvent.threadRootId;
         const room = client.getRoom(roomId);
         const mapper = client.getEventMapper();
-        const rootEvent = room.findEventById(threadId)
-            ?? mapper(await client.fetchRoomEvent(roomId, threadId));
+        const rootEvent = room.findEventById(threadId) ?? mapper(await client.fetchRoomEvent(roomId, threadId));
         try {
             room.createThread(threadId, rootEvent, [initialEvent], true);
         } catch (e) {
@@ -279,10 +271,7 @@ export const isLocationEvent = (event: MatrixEvent): boolean => {
     const eventType = event.getType();
     return (
         M_LOCATION.matches(eventType) ||
-        (
-            eventType === EventType.RoomMessage &&
-            M_LOCATION.matches(event.getContent().msgtype)
-        )
+        (eventType === EventType.RoomMessage && M_LOCATION.matches(event.getContent().msgtype))
     );
 };
 
