@@ -50,7 +50,9 @@ export * from "./utils/hasRoomLiveVoiceBroadcast";
 export * from "./utils/findRoomLiveVoiceBroadcastFromUserAndDevice";
 export * from "./utils/shouldDisplayAsVoiceBroadcastRecordingTile";
 export * from "./utils/shouldDisplayAsVoiceBroadcastTile";
+export * from "./utils/shouldDisplayAsVoiceBroadcastStoppedText";
 export * from "./utils/startNewVoiceBroadcastRecording";
+export * from "./utils/textForVoiceBroadcastStoppedEvent";
 export * from "./utils/VoiceBroadcastResumer";
 
 export const VoiceBroadcastInfoEventType = "io.element.voice_broadcast_info";

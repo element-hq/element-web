@@ -14,22 +14,30 @@ limitations under the License.
 import { EventType, MatrixClient, MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
 
 import { JSONEventFactory, pickFactory } from "../../src/events/EventTileFactory";
-import { VoiceBroadcastChunkEventType } from "../../src/voice-broadcast";
+import { VoiceBroadcastChunkEventType, VoiceBroadcastInfoState } from "../../src/voice-broadcast";
 import { createTestClient, mkEvent } from "../test-utils";
+import { mkVoiceBroadcastInfoStateEvent } from "../voice-broadcast/utils/test-utils";
 
 const roomId = "!room:example.com";
 
 describe("pickFactory", () => {
+    let voiceBroadcastStoppedEvent: MatrixEvent;
     let voiceBroadcastChunkEvent: MatrixEvent;
     let audioMessageEvent: MatrixEvent;
     let client: MatrixClient;
 
     beforeAll(() => {
         client = createTestClient();
+        voiceBroadcastStoppedEvent = mkVoiceBroadcastInfoStateEvent(
+            "!room:example.com",
+            VoiceBroadcastInfoState.Stopped,
+            client.getUserId()!,
+            client.deviceId!,
+        );
         voiceBroadcastChunkEvent = mkEvent({
             event: true,
             type: EventType.RoomMessage,
-            user: client.getUserId(),
+            user: client.getUserId()!,
             room: roomId,
             content: {
                 msgtype: MsgType.Audio,
@@ -39,7 +47,7 @@ describe("pickFactory", () => {
         audioMessageEvent = mkEvent({
             event: true,
             type: EventType.RoomMessage,
-            user: client.getUserId(),
+            user: client.getUserId()!,
             room: roomId,
             content: {
                 msgtype: MsgType.Audio,
@@ -52,7 +60,7 @@ describe("pickFactory", () => {
             type: EventType.RoomPowerLevels,
             state_key: "",
             content: {},
-            sender: client.getUserId(),
+            sender: client.getUserId()!,
             room_id: roomId,
         });
         expect(pickFactory(event, client, true)).toBe(JSONEventFactory);
@@ -63,6 +71,10 @@ describe("pickFactory", () => {
             expect(pickFactory(voiceBroadcastChunkEvent, client, true)).toBeInstanceOf(Function);
         });
 
+        it("should return a Function for a voice broadcast stopped event", () => {
+            expect(pickFactory(voiceBroadcastStoppedEvent, client, true)).toBeInstanceOf(Function);
+        });
+
         it("should return a function for an audio message event", () => {
             expect(pickFactory(audioMessageEvent, client, true)).toBeInstanceOf(Function);
         });
@@ -71,6 +83,10 @@ describe("pickFactory", () => {
     describe("when not showing hidden events", () => {
         it("should return undefined for a voice broadcast event", () => {
             expect(pickFactory(voiceBroadcastChunkEvent, client, false)).toBeUndefined();
+        });
+
+        it("should return a Function for a voice broadcast stopped event", () => {
+            expect(pickFactory(voiceBroadcastStoppedEvent, client, true)).toBeInstanceOf(Function);
         });
 
         it("should return a function for an audio message event", () => {

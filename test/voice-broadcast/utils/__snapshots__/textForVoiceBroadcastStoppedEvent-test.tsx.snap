@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`textForVoiceBroadcastStoppedEvent should render other users broadcast as expected 1`] = `
+<div>
+  <div>
+    @other:example.com ended a voice broadcast
+  </div>
+</div>
+`;
+
+exports[`textForVoiceBroadcastStoppedEvent should render own broadcast as expected 1`] = `
+<div>
+  <div>
+    You ended a voice broadcast
+  </div>
+</div>
+`;
+
+exports[`textForVoiceBroadcastStoppedEvent should render without login as expected 1`] = `
+<div>
+  <div>
+    @other:example.com ended a voice broadcast
+  </div>
+</div>
+`;
+
+exports[`textForVoiceBroadcastStoppedEvent when rendering an event with relation to the start event should render events with relation to the start event 1`] = `
+<div>
+  <div>
+    <span>
+      You ended a 
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+        role="button"
+        tabindex="0"
+      >
+        voice broadcast
+      </div>
+    </span>
+  </div>
+</div>
+`;
