@@ -9,6 +9,7 @@ jobs:
         runs-on: ubuntu-latest
         if: |
             contains(github.event.issue.assignees.*.login, 't3chguy') ||
+            contains(github.event.issue.assignees.*.login, 'andybalaam') ||
             contains(github.event.issue.assignees.*.login, 'turt2live')
         steps:
             - uses: alex-page/github-project-automation-plus@1f8873e97e3c8f58161a323b7c568c1f623a1c4d
