@@ -18,84 +18,84 @@ import EditorModel from "../../src/editor/model";
 import { htmlSerializeIfNeeded } from "../../src/editor/serialize";
 import { createPartCreator } from "./mock";
 
-describe('editor/serialize', function() {
-    describe('with markdown', function() {
-        it('user pill turns message into html', function() {
+describe("editor/serialize", function () {
+    describe("with markdown", function () {
+        it("user pill turns message into html", function () {
             const pc = createPartCreator();
             const model = new EditorModel([pc.userPill("Alice", "@alice:hs.tld")], pc);
             const html = htmlSerializeIfNeeded(model, {});
-            expect(html).toBe("<a href=\"https://matrix.to/#/@alice:hs.tld\">Alice</a>");
+            expect(html).toBe('<a href="https://matrix.to/#/@alice:hs.tld">Alice</a>');
         });
-        it('room pill turns message into html', function() {
+        it("room pill turns message into html", function () {
             const pc = createPartCreator();
             const model = new EditorModel([pc.roomPill("#room:hs.tld")], pc);
             const html = htmlSerializeIfNeeded(model, {});
-            expect(html).toBe("<a href=\"https://matrix.to/#/#room:hs.tld\">#room:hs.tld</a>");
+            expect(html).toBe('<a href="https://matrix.to/#/#room:hs.tld">#room:hs.tld</a>');
         });
-        it('@room pill turns message into html', function() {
+        it("@room pill turns message into html", function () {
             const pc = createPartCreator();
             const model = new EditorModel([pc.atRoomPill("@room")], pc);
             const html = htmlSerializeIfNeeded(model, {});
             expect(html).toBeFalsy();
         });
-        it('any markdown turns message into html', function() {
+        it("any markdown turns message into html", function () {
             const pc = createPartCreator();
             const model = new EditorModel([pc.plain("*hello* world")], pc);
             const html = htmlSerializeIfNeeded(model, {});
             expect(html).toBe("<em>hello</em> world");
         });
-        it('displaynames ending in a backslash work', function() {
+        it("displaynames ending in a backslash work", function () {
             const pc = createPartCreator();
             const model = new EditorModel([pc.userPill("Displayname\\", "@user:server")], pc);
             const html = htmlSerializeIfNeeded(model, {});
-            expect(html).toBe("<a href=\"https://matrix.to/#/@user:server\">Displayname\\</a>");
+            expect(html).toBe('<a href="https://matrix.to/#/@user:server">Displayname\\</a>');
         });
-        it('displaynames containing an opening square bracket work', function() {
+        it("displaynames containing an opening square bracket work", function () {
             const pc = createPartCreator();
             const model = new EditorModel([pc.userPill("Displayname[[", "@user:server")], pc);
             const html = htmlSerializeIfNeeded(model, {});
-            expect(html).toBe("<a href=\"https://matrix.to/#/@user:server\">Displayname[[</a>");
+            expect(html).toBe('<a href="https://matrix.to/#/@user:server">Displayname[[</a>');
         });
-        it('displaynames containing a closing square bracket work', function() {
+        it("displaynames containing a closing square bracket work", function () {
             const pc = createPartCreator();
             const model = new EditorModel([pc.userPill("Displayname]", "@user:server")], pc);
             const html = htmlSerializeIfNeeded(model, {});
-            expect(html).toBe("<a href=\"https://matrix.to/#/@user:server\">Displayname]</a>");
+            expect(html).toBe('<a href="https://matrix.to/#/@user:server">Displayname]</a>');
         });
-        it('escaped markdown should not retain backslashes', function() {
+        it("escaped markdown should not retain backslashes", function () {
             const pc = createPartCreator();
-            const model = new EditorModel([pc.plain('\\*hello\\* world')], pc);
+            const model = new EditorModel([pc.plain("\\*hello\\* world")], pc);
             const html = htmlSerializeIfNeeded(model, {});
-            expect(html).toBe('*hello* world');
+            expect(html).toBe("*hello* world");
         });
-        it('escaped markdown should convert HTML entities', function() {
+        it("escaped markdown should convert HTML entities", function () {
             const pc = createPartCreator();
-            const model = new EditorModel([pc.plain('\\*hello\\* world < hey world!')], pc);
+            const model = new EditorModel([pc.plain("\\*hello\\* world < hey world!")], pc);
             const html = htmlSerializeIfNeeded(model, {});
-            expect(html).toBe('*hello* world &lt; hey world!');
+            expect(html).toBe("*hello* world &lt; hey world!");
         });
     });
-    describe('with plaintext', function() {
-        it('markdown remains plaintext', function() {
+    describe("with plaintext", function () {
+        it("markdown remains plaintext", function () {
             const pc = createPartCreator();
             const model = new EditorModel([pc.plain("*hello* world")], pc);
             const html = htmlSerializeIfNeeded(model, { useMarkdown: false });
             expect(html).toBe("*hello* world");
         });
-        it('markdown should retain backslashes', function() {
+        it("markdown should retain backslashes", function () {
             const pc = createPartCreator();
-            const model = new EditorModel([pc.plain('\\*hello\\* world')], pc);
+            const model = new EditorModel([pc.plain("\\*hello\\* world")], pc);
             const html = htmlSerializeIfNeeded(model, { useMarkdown: false });
-            expect(html).toBe('\\*hello\\* world');
+            expect(html).toBe("\\*hello\\* world");
         });
-        it('markdown should convert HTML entities', function() {
+        it("markdown should convert HTML entities", function () {
             const pc = createPartCreator();
-            const model = new EditorModel([pc.plain('\\*hello\\* world < hey world!')], pc);
+            const model = new EditorModel([pc.plain("\\*hello\\* world < hey world!")], pc);
             const html = htmlSerializeIfNeeded(model, { useMarkdown: false });
-            expect(html).toBe('\\*hello\\* world &lt; hey world!');
+            expect(html).toBe("\\*hello\\* world &lt; hey world!");
         });
 
-        it('plaintext remains plaintext even when forcing html', function() {
+        it("plaintext remains plaintext even when forcing html", function () {
             const pc = createPartCreator();
             const model = new EditorModel([pc.plain("hello world")], pc);
             const html = htmlSerializeIfNeeded(model, { forceHTML: true, useMarkdown: false });

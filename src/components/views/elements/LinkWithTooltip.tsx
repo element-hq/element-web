@@ -14,11 +14,11 @@
  limitations under the License.
  */
 
-import React from 'react';
+import React from "react";
 
-import TextWithTooltip from './TextWithTooltip';
+import TextWithTooltip from "./TextWithTooltip";
 
-interface IProps extends Omit<React.ComponentProps<typeof TextWithTooltip>, "tabIndex" | "onClick" > {}
+interface IProps extends Omit<React.ComponentProps<typeof TextWithTooltip>, "tabIndex" | "onClick"> {}
 
 export default class LinkWithTooltip extends React.Component<IProps> {
     constructor(props: IProps) {
@@ -34,10 +34,10 @@ export default class LinkWithTooltip extends React.Component<IProps> {
                 // itself allows focusing which also triggers the tooltip.
                 tabIndex={-1}
                 tooltip={tooltip}
-                onClick={e => (e.target as HTMLElement).blur()} // Force tooltip to hide on clickout
+                onClick={(e) => (e.target as HTMLElement).blur()} // Force tooltip to hide on clickout
                 {...props}
             >
-                { children }
+                {children}
             </TextWithTooltip>
         );
     }

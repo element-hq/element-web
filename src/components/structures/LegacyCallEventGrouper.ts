@@ -17,9 +17,9 @@ limitations under the License.
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { CallEvent, CallState, CallType, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
-import { EventEmitter } from 'events';
+import { EventEmitter } from "events";
 
-import LegacyCallHandler, { LegacyCallHandlerEvent } from '../../LegacyCallHandler';
+import LegacyCallHandler, { LegacyCallHandlerEvent } from "../../LegacyCallHandler";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 
 export enum LegacyCallEventGrouperEvent {
@@ -35,10 +35,7 @@ const CONNECTING_STATES = [
     CallState.CreateAnswer,
 ];
 
-const SUPPORTED_STATES = [
-    CallState.Connected,
-    CallState.Ringing,
-];
+const SUPPORTED_STATES = [CallState.Connected, CallState.Ringing];
 
 export enum CustomCallState {
     Missed = "missed",
@@ -54,7 +51,7 @@ export function buildLegacyCallEventGroupers(
     events?: MatrixEvent[],
 ): Map<string, LegacyCallEventGrouper> {
     const newCallEventGroupers = new Map();
-    events?.forEach(ev => {
+    events?.forEach((ev) => {
         if (!isCallEvent(ev)) {
             return;
         }
@@ -83,7 +80,8 @@ export default class LegacyCallEventGrouper extends EventEmitter {
 
         LegacyCallHandler.instance.addListener(LegacyCallHandlerEvent.CallsChanged, this.setCall);
         LegacyCallHandler.instance.addListener(
-            LegacyCallHandlerEvent.SilencedCallsChanged, this.onSilencedCallsChanged,
+            LegacyCallHandlerEvent.SilencedCallsChanged,
+            this.onSilencedCallsChanged,
         );
     }
 
@@ -108,7 +106,7 @@ export default class LegacyCallEventGrouper extends EventEmitter {
         if (!invite) return;
 
         // FIXME: Find a better way to determine this from the event?
-        if (invite.getContent()?.offer?.sdp?.indexOf('m=video') !== -1) return false;
+        if (invite.getContent()?.offer?.sdp?.indexOf("m=video") !== -1) return false;
         return true;
     }
 
@@ -167,9 +165,9 @@ export default class LegacyCallEventGrouper extends EventEmitter {
 
     public toggleSilenced = () => {
         const silenced = LegacyCallHandler.instance.isCallSilenced(this.callId);
-        silenced ?
-            LegacyCallHandler.instance.unSilenceCall(this.callId) :
-            LegacyCallHandler.instance.silenceCall(this.callId);
+        silenced
+            ? LegacyCallHandler.instance.unSilenceCall(this.callId)
+            : LegacyCallHandler.instance.silenceCall(this.callId);
     };
 
     private setCallListeners() {

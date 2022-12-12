@@ -16,10 +16,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 
-import { TimelineRenderingType } from '../contexts/RoomContext';
-import type { ICompletion, ISelectionRange } from './Autocompleter';
+import { TimelineRenderingType } from "../contexts/RoomContext";
+import type { ICompletion, ISelectionRange } from "./Autocompleter";
 
 export interface ICommand {
     command: string | null;
@@ -44,13 +44,13 @@ export default abstract class AutocompleteProvider {
     protected constructor({ commandRegex, forcedCommandRegex, renderingType }: IAutocompleteOptions) {
         if (commandRegex) {
             if (!commandRegex.global) {
-                throw new Error('commandRegex must have global flag set');
+                throw new Error("commandRegex must have global flag set");
             }
             this.commandRegex = commandRegex;
         }
         if (forcedCommandRegex) {
             if (!forcedCommandRegex.global) {
-                throw new Error('forcedCommandRegex must have global flag set');
+                throw new Error("forcedCommandRegex must have global flag set");
             }
             this.forcedCommandRegex = forcedCommandRegex;
         }

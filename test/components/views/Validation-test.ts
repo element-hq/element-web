@@ -21,11 +21,15 @@ describe("Validation", () => {
         const handler = withValidation({
             rules: [],
         });
-        return expect(handler({
-            value: "value",
-            focused: true,
-        })).resolves.toEqual(expect.objectContaining({
-            valid: true,
-        }));
+        return expect(
+            handler({
+                value: "value",
+                focused: true,
+            }),
+        ).resolves.toEqual(
+            expect.objectContaining({
+                valid: true,
+            }),
+        );
     });
 });

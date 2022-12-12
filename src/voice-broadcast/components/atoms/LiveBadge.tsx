@@ -24,18 +24,15 @@ interface Props {
     grey?: boolean;
 }
 
-export const LiveBadge: React.FC<Props> = ({
-    grey = false,
-}) => {
-    const liveBadgeClasses = classNames(
-        "mx_LiveBadge",
-        {
-            "mx_LiveBadge--grey": grey,
-        },
-    );
+export const LiveBadge: React.FC<Props> = ({ grey = false }) => {
+    const liveBadgeClasses = classNames("mx_LiveBadge", {
+        "mx_LiveBadge--grey": grey,
+    });
 
-    return <div className={liveBadgeClasses}>
-        <LiveIcon className="mx_Icon mx_Icon_16" />
-        { _t("Live") }
-    </div>;
+    return (
+        <div className={liveBadgeClasses}>
+            <LiveIcon className="mx_Icon mx_Icon_16" />
+            {_t("Live")}
+        </div>
+    );
 };

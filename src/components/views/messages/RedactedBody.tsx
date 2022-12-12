@@ -45,7 +45,7 @@ const RedactedBody = React.forwardRef<any, IProps | IBodyProps>(({ mxEvent }, re
 
     return (
         <span className="mx_RedactedBody" ref={ref} title={titleText}>
-            { text }
+            {text}
         </span>
     );
 });

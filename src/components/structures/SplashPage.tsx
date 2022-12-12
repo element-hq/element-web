@@ -21,7 +21,9 @@ interface Props extends DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLEleme
 
 export default function SplashPage({ children, className, ...other }: Props) {
     const classes = classNames(className, "mx_SplashPage");
-    return <main {...other} className={classes}>
-        { children }
-    </main>;
+    return (
+        <main {...other} className={classes}>
+            {children}
+        </main>
+    );
 }

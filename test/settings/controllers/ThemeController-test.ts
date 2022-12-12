@@ -19,57 +19,50 @@ import { SettingLevel } from "../../../src/settings/SettingLevel";
 import SettingsStore from "../../../src/settings/SettingsStore";
 import { DEFAULT_THEME } from "../../../src/theme";
 
-describe('ThemeController', () => {
-    jest.spyOn(SettingsStore, 'getValue').mockReturnValue([]);
+describe("ThemeController", () => {
+    jest.spyOn(SettingsStore, "getValue").mockReturnValue([]);
 
     afterEach(() => {
         // reset
         ThemeController.isLogin = false;
     });
 
-    it('returns null when calculatedValue is falsy', () => {
+    it("returns null when calculatedValue is falsy", () => {
         const controller = new ThemeController();
 
-        expect(controller.getValueOverride(
-            SettingLevel.ACCOUNT,
-            '$room:server',
-            undefined, /* calculatedValue */
-            SettingLevel.ACCOUNT,
-        )).toEqual(null);
+        expect(
+            controller.getValueOverride(
+                SettingLevel.ACCOUNT,
+                "$room:server",
+                undefined /* calculatedValue */,
+                SettingLevel.ACCOUNT,
+            ),
+        ).toEqual(null);
     });
 
-    it('returns light when login flag is set', () => {
+    it("returns light when login flag is set", () => {
         const controller = new ThemeController();
 
         ThemeController.isLogin = true;
 
-        expect(controller.getValueOverride(
-            SettingLevel.ACCOUNT,
-            '$room:server',
-            'dark',
-            SettingLevel.ACCOUNT,
-        )).toEqual('light');
+        expect(controller.getValueOverride(SettingLevel.ACCOUNT, "$room:server", "dark", SettingLevel.ACCOUNT)).toEqual(
+            "light",
+        );
     });
 
-    it('returns default theme when value is not a valid theme', () => {
+    it("returns default theme when value is not a valid theme", () => {
         const controller = new ThemeController();
 
-        expect(controller.getValueOverride(
-            SettingLevel.ACCOUNT,
-            '$room:server',
-            'my-test-theme',
-            SettingLevel.ACCOUNT,
-        )).toEqual(DEFAULT_THEME);
+        expect(
+            controller.getValueOverride(SettingLevel.ACCOUNT, "$room:server", "my-test-theme", SettingLevel.ACCOUNT),
+        ).toEqual(DEFAULT_THEME);
     });
 
-    it('returns null when value is a valid theme', () => {
+    it("returns null when value is a valid theme", () => {
         const controller = new ThemeController();
 
-        expect(controller.getValueOverride(
-            SettingLevel.ACCOUNT,
-            '$room:server',
-            'dark',
-            SettingLevel.ACCOUNT,
-        )).toEqual(null);
+        expect(controller.getValueOverride(SettingLevel.ACCOUNT, "$room:server", "dark", SettingLevel.ACCOUNT)).toEqual(
+            null,
+        );
     });
 });

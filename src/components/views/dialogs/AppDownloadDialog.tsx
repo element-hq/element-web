@@ -47,59 +47,61 @@ export const AppDownloadDialog: FC<IDialogProps> = ({ onFinished }: IDialogProps
             title={_t("Download %(brand)s", { brand })}
             className="mx_AppDownloadDialog"
             fixedWidth
-            onFinished={onFinished}>
-            { desktopBuilds?.get("available") && (
+            onFinished={onFinished}
+        >
+            {desktopBuilds?.get("available") && (
                 <div className="mx_AppDownloadDialog_desktop">
-                    <Heading size="h3">
-                        { _t("Download %(brand)s Desktop", { brand }) }
-                    </Heading>
+                    <Heading size="h3">{_t("Download %(brand)s Desktop", { brand })}</Heading>
                     <AccessibleButton
                         kind="primary"
                         element="a"
                         href={desktopBuilds?.get("url")}
                         target="_blank"
-                        onClick={() => {}}>
-                        { _t("Download %(brand)s Desktop", { brand }) }
+                        onClick={() => {}}
+                    >
+                        {_t("Download %(brand)s Desktop", { brand })}
                     </AccessibleButton>
                 </div>
-            ) }
+            )}
             <div className="mx_AppDownloadDialog_mobile">
                 <div className="mx_AppDownloadDialog_app">
-                    <Heading size="h3">
-                        { _t("iOS") }
-                    </Heading>
+                    <Heading size="h3">{_t("iOS")}</Heading>
                     <QRCode data={urlAppStore} margin={0} width={172} />
-                    <div className="mx_AppDownloadDialog_info">{ _t("%(qrCode)s or %(appLinks)s", {
-                        appLinks: "",
-                        qrCode: "",
-                    }) }</div>
+                    <div className="mx_AppDownloadDialog_info">
+                        {_t("%(qrCode)s or %(appLinks)s", {
+                            appLinks: "",
+                            qrCode: "",
+                        })}
+                    </div>
                     <div className="mx_AppDownloadDialog_links">
                         <AccessibleButton
                             element="a"
                             href={urlAppStore}
                             target="_blank"
                             aria-label={_t("Download on the App Store")}
-                            onClick={() => {}}>
+                            onClick={() => {}}
+                        >
                             <IOSBadge />
                         </AccessibleButton>
                     </div>
                 </div>
                 <div className="mx_AppDownloadDialog_app">
-                    <Heading size="h3">
-                        { _t("Android") }
-                    </Heading>
+                    <Heading size="h3">{_t("Android")}</Heading>
                     <QRCode data={urlAndroid} margin={0} width={172} />
-                    <div className="mx_AppDownloadDialog_info">{ _t("%(qrCode)s or %(appLinks)s", {
-                        appLinks: "",
-                        qrCode: "",
-                    }) }</div>
+                    <div className="mx_AppDownloadDialog_info">
+                        {_t("%(qrCode)s or %(appLinks)s", {
+                            appLinks: "",
+                            qrCode: "",
+                        })}
+                    </div>
                     <div className="mx_AppDownloadDialog_links">
                         <AccessibleButton
                             element="a"
                             href={urlGooglePlay}
                             target="_blank"
                             aria-label={_t("Get it on Google Play")}
-                            onClick={() => {}}>
+                            onClick={() => {}}
+                        >
                             <GooglePlayBadge />
                         </AccessibleButton>
                         <AccessibleButton
@@ -107,15 +109,16 @@ export const AppDownloadDialog: FC<IDialogProps> = ({ onFinished }: IDialogProps
                             href={urlFDroid}
                             target="_blank"
                             aria-label={_t("Get it on F-Droid")}
-                            onClick={() => {}}>
+                            onClick={() => {}}
+                        >
                             <FDroidBadge />
                         </AccessibleButton>
                     </div>
                 </div>
             </div>
             <div className="mx_AppDownloadDialog_legal">
-                <p>{ _t("App Store® and the Apple logo® are trademarks of Apple Inc.") }</p>
-                <p>{ _t("Google Play and the Google Play logo are trademarks of Google LLC.") }</p>
+                <p>{_t("App Store® and the Apple logo® are trademarks of Apple Inc.")}</p>
+                <p>{_t("Google Play and the Google Play logo are trademarks of Google LLC.")}</p>
             </div>
         </BaseDialog>
     );

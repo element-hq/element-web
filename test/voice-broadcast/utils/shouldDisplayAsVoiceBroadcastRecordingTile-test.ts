@@ -31,42 +31,12 @@ const testCases = [
         VoiceBroadcastInfoState.Started,
         true, // expected return value
     ],
-    [
-        "@user1:example.com",
-        "@user1:example.com",
-        VoiceBroadcastInfoState.Paused,
-        true,
-    ],
-    [
-        "@user1:example.com",
-        "@user1:example.com",
-        VoiceBroadcastInfoState.Resumed,
-        true,
-    ],
-    [
-        "@user1:example.com",
-        "@user1:example.com",
-        VoiceBroadcastInfoState.Stopped,
-        false,
-    ],
-    [
-        "@user2:example.com",
-        "@user1:example.com",
-        VoiceBroadcastInfoState.Started,
-        false,
-    ],
-    [
-        null,
-        null,
-        null,
-        false,
-    ],
-    [
-        undefined,
-        undefined,
-        undefined,
-        false,
-    ],
+    ["@user1:example.com", "@user1:example.com", VoiceBroadcastInfoState.Paused, true],
+    ["@user1:example.com", "@user1:example.com", VoiceBroadcastInfoState.Resumed, true],
+    ["@user1:example.com", "@user1:example.com", VoiceBroadcastInfoState.Stopped, false],
+    ["@user2:example.com", "@user1:example.com", VoiceBroadcastInfoState.Started, false],
+    [null, null, null, false],
+    [undefined, undefined, undefined, false],
 ];
 
 describe("shouldDisplayAsVoiceBroadcastRecordingTile", () => {
@@ -94,5 +64,6 @@ describe("shouldDisplayAsVoiceBroadcastRecordingTile", () => {
             it(`should return ${expected}`, () => {
                 expect(shouldDisplayAsVoiceBroadcastRecordingTile(state, client, event)).toBe(expected);
             });
-        });
+        },
+    );
 });

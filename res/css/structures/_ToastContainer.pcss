@@ -48,7 +48,8 @@ limitations under the License.
         padding: 8px;
 
         &.mx_Toast_hasIcon {
-            &::before, &::after {
+            &::before,
+            &::after {
                 content: "";
                 width: 22px;
                 height: 22px;
@@ -70,7 +71,7 @@ limitations under the License.
                 /* white infill for the hollow svg mask */
                 &::before {
                     background-color: #ffffff;
-                    mask-image: url('$(res)/img/e2e/normal.svg');
+                    mask-image: url("$(res)/img/e2e/normal.svg");
                     mask-size: 80%;
                 }
 
@@ -81,16 +82,17 @@ limitations under the License.
             }
 
             &.mx_Toast_icon_secure_backup::after {
-                mask-image: url('$(res)/img/feather-customised/secure-backup.svg');
+                mask-image: url("$(res)/img/feather-customised/secure-backup.svg");
                 background-color: $primary-content;
             }
 
             &.mx_Toast_icon_labs::after {
-                mask-image: url('$(res)/img/element-icons/flask.svg');
+                mask-image: url("$(res)/img/element-icons/flask.svg");
                 background-color: $secondary-content;
             }
 
-            .mx_Toast_title, .mx_Toast_body {
+            .mx_Toast_title,
+            .mx_Toast_body {
                 grid-column: 2;
             }
         }

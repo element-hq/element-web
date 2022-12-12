@@ -85,11 +85,14 @@ export const showToast = (kind: Kind) => {
 
     const onAccept = async () => {
         if (kind === Kind.VERIFY_THIS_SESSION) {
-            Modal.createDialog(SetupEncryptionDialog,
-                {}, null, /* priority = */ false, /* static = */ true);
+            Modal.createDialog(SetupEncryptionDialog, {}, null, /* priority = */ false, /* static = */ true);
         } else {
             const modal = Modal.createDialog(
-                Spinner, null, "mx_Dialog_spinner", /* priority */ false, /* static */ true,
+                Spinner,
+                null,
+                "mx_Dialog_spinner",
+                /* priority */ false,
+                /* static */ true,
             );
             try {
                 await accessSecretStorage();

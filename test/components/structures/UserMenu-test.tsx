@@ -42,10 +42,7 @@ describe("<UserMenu>", () => {
             client.getUserId() || "",
             client.getDeviceId() || "",
         );
-        voiceBroadcastRecording = new VoiceBroadcastRecording(
-            voiceBroadcastInfoEvent,
-            client,
-        );
+        voiceBroadcastRecording = new VoiceBroadcastRecording(voiceBroadcastInfoEvent, client);
     });
 
     beforeEach(() => {

@@ -111,7 +111,7 @@ export default class ResizeItem<C extends IConfig = IConfig> {
     }
 
     public first() {
-        const firstHandle = Array.from(this.domNode.parentElement.children).find(el => {
+        const firstHandle = Array.from(this.domNode.parentElement.children).find((el) => {
             return this.resizer.isResizeHandle(<HTMLElement>el);
         });
         if (firstHandle) {
@@ -120,9 +120,11 @@ export default class ResizeItem<C extends IConfig = IConfig> {
     }
 
     public last() {
-        const lastHandle = Array.from(this.domNode.parentElement.children).reverse().find(el => {
-            return this.resizer.isResizeHandle(<HTMLElement>el);
-        });
+        const lastHandle = Array.from(this.domNode.parentElement.children)
+            .reverse()
+            .find((el) => {
+                return this.resizer.isResizeHandle(<HTMLElement>el);
+            });
         if (lastHandle) {
             return this.copyWith(<HTMLElement>lastHandle, this.resizer, this.sizer);
         }

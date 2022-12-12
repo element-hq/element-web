@@ -14,21 +14,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 import { fireEvent, render } from "@testing-library/react";
 
-import ShareLatestLocation from '../../../../src/components/views/beacon/ShareLatestLocation';
-import { copyPlaintext } from '../../../../src/utils/strings';
-import { flushPromises } from '../../../test-utils';
+import ShareLatestLocation from "../../../../src/components/views/beacon/ShareLatestLocation";
+import { copyPlaintext } from "../../../../src/utils/strings";
+import { flushPromises } from "../../../test-utils";
 
-jest.mock('../../../../src/utils/strings', () => ({
+jest.mock("../../../../src/utils/strings", () => ({
     copyPlaintext: jest.fn().mockResolvedValue(undefined),
 }));
 
-describe('<ShareLatestLocation />', () => {
+describe("<ShareLatestLocation />", () => {
     const defaultProps = {
         latestLocationState: {
-            uri: 'geo:51,42;u=35',
+            uri: "geo:51,42;u=35",
             timestamp: 123,
         },
     };
@@ -38,18 +38,18 @@ describe('<ShareLatestLocation />', () => {
         jest.clearAllMocks();
     });
 
-    it('renders null when no location', () => {
+    it("renders null when no location", () => {
         const { container } = getComponent({ latestLocationState: undefined });
         expect(container.innerHTML).toBeFalsy();
     });
 
-    it('renders share buttons when there is a location', async () => {
+    it("renders share buttons when there is a location", async () => {
         const { container, asFragment } = getComponent();
         expect(asFragment()).toMatchSnapshot();
 
-        fireEvent.click(container.querySelector('.mx_CopyableText_copyButton'));
+        fireEvent.click(container.querySelector(".mx_CopyableText_copyButton"));
         await flushPromises();
 
-        expect(copyPlaintext).toHaveBeenCalledWith('51,42');
+        expect(copyPlaintext).toHaveBeenCalledWith("51,42");
     });
 });

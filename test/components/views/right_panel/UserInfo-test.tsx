@@ -14,24 +14,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 // eslint-disable-next-line deprecate/import
-import { mount } from 'enzyme';
-import { mocked } from 'jest-mock';
+import { mount } from "enzyme";
+import { mocked } from "jest-mock";
 import { act } from "react-dom/test-utils";
-import { Room, User, MatrixClient } from 'matrix-js-sdk/src/matrix';
-import { Phase, VerificationRequest } from 'matrix-js-sdk/src/crypto/verification/request/VerificationRequest';
+import { Room, User, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { Phase, VerificationRequest } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 
-import UserInfo from '../../../../src/components/views/right_panel/UserInfo';
-import { RightPanelPhases } from '../../../../src/stores/right-panel/RightPanelStorePhases';
-import { MatrixClientPeg } from '../../../../src/MatrixClientPeg';
-import MatrixClientContext from '../../../../src/contexts/MatrixClientContext';
-import VerificationPanel from '../../../../src/components/views/right_panel/VerificationPanel';
-import EncryptionInfo from '../../../../src/components/views/right_panel/EncryptionInfo';
+import UserInfo from "../../../../src/components/views/right_panel/UserInfo";
+import { RightPanelPhases } from "../../../../src/stores/right-panel/RightPanelStorePhases";
+import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
+import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
+import VerificationPanel from "../../../../src/components/views/right_panel/VerificationPanel";
+import EncryptionInfo from "../../../../src/components/views/right_panel/EncryptionInfo";
 
 const findByTestId = (component, id) => component.find(`[data-test-id="${id}"]`);
 
-jest.mock('../../../../src/utils/DMRoomMap', () => {
+jest.mock("../../../../src/utils/DMRoomMap", () => {
     const mock = {
         getUserIdForRoomId: jest.fn(),
         getDMRoomsForUserId: jest.fn(),
@@ -43,8 +43,8 @@ jest.mock('../../../../src/utils/DMRoomMap', () => {
     };
 });
 
-describe('<UserInfo />', () => {
-    const defaultUserId = '@test:test';
+describe("<UserInfo />", () => {
+    const defaultUserId = "@test:test";
     const defaultUser = new User(defaultUserId);
 
     const mockClient = mocked({
@@ -57,7 +57,7 @@ describe('<UserInfo />', () => {
         isSynapseAdministrator: jest.fn().mockResolvedValue(false),
         isRoomEncrypted: jest.fn().mockReturnValue(false),
         doesServerSupportUnstableFeature: jest.fn().mockReturnValue(false),
-        mxcUrlToHttp: jest.fn().mockReturnValue('mock-mxcUrlToHttp'),
+        mxcUrlToHttp: jest.fn().mockReturnValue("mock-mxcUrlToHttp"),
         removeListener: jest.fn(),
         currentState: {
             on: jest.fn(),
@@ -65,7 +65,9 @@ describe('<UserInfo />', () => {
     } as unknown as MatrixClient);
 
     const verificationRequest = {
-        pending: true, on: jest.fn(), phase: Phase.Ready,
+        pending: true,
+        on: jest.fn(),
+        phase: Phase.Ready,
         channel: { transactionId: 1 },
         otherPartySupportsMethod: jest.fn(),
     } as unknown as VerificationRequest;
@@ -77,51 +79,49 @@ describe('<UserInfo />', () => {
         onClose: jest.fn(),
     };
 
-    const getComponent = (props = {}) => mount(
-        <UserInfo {...defaultProps} {...props} />,
-        {
+    const getComponent = (props = {}) =>
+        mount(<UserInfo {...defaultProps} {...props} />, {
             wrappingComponent: MatrixClientContext.Provider,
             wrappingComponentProps: { value: mockClient },
-        },
-    );
+        });
 
     beforeAll(() => {
-        jest.spyOn(MatrixClientPeg, 'get').mockReturnValue(mockClient);
+        jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
     });
 
     beforeEach(() => {
         mockClient.getUser.mockClear().mockReturnValue({} as unknown as User);
     });
 
-    it('closes on close button click', () => {
+    it("closes on close button click", () => {
         const onClose = jest.fn();
         const component = getComponent({ onClose });
         act(() => {
-            findByTestId(component, 'base-card-close-button').at(0).simulate('click');
+            findByTestId(component, "base-card-close-button").at(0).simulate("click");
         });
 
         expect(onClose).toHaveBeenCalled();
     });
 
-    describe('without a room', () => {
-        it('does not render space header', () => {
+    describe("without a room", () => {
+        it("does not render space header", () => {
             const component = getComponent();
-            expect(findByTestId(component, 'space-header').length).toBeFalsy();
+            expect(findByTestId(component, "space-header").length).toBeFalsy();
         });
 
-        it('renders user info', () => {
+        it("renders user info", () => {
             const component = getComponent();
             expect(component.find("BasicUserInfo").length).toBeTruthy();
         });
 
-        it('renders encryption info panel without pending verification', () => {
+        it("renders encryption info panel without pending verification", () => {
             const phase = RightPanelPhases.EncryptionPanel;
             const component = getComponent({ phase });
 
             expect(component.find(EncryptionInfo).length).toBeTruthy();
         });
 
-        it('renders encryption verification panel with pending verification', () => {
+        it("renders encryption verification panel with pending verification", () => {
             const phase = RightPanelPhases.EncryptionPanel;
             const component = getComponent({ phase, verificationRequest });
 
@@ -129,22 +129,22 @@ describe('<UserInfo />', () => {
             expect(component.find(VerificationPanel).length).toBeTruthy();
         });
 
-        it('renders close button correctly when encryption panel with a pending verification request', () => {
+        it("renders close button correctly when encryption panel with a pending verification request", () => {
             const phase = RightPanelPhases.EncryptionPanel;
             const component = getComponent({ phase, verificationRequest });
 
-            expect(findByTestId(component, 'base-card-close-button').at(0).props().title).toEqual('Cancel');
+            expect(findByTestId(component, "base-card-close-button").at(0).props().title).toEqual("Cancel");
         });
     });
 
-    describe('with a room', () => {
+    describe("with a room", () => {
         const room = {
-            roomId: '!fkfk',
+            roomId: "!fkfk",
             getType: jest.fn().mockReturnValue(undefined),
             isSpaceRoom: jest.fn().mockReturnValue(false),
             getMember: jest.fn().mockReturnValue(undefined),
-            getMxcAvatarUrl: jest.fn().mockReturnValue('mock-avatar-url'),
-            name: 'test room',
+            getMxcAvatarUrl: jest.fn().mockReturnValue("mock-avatar-url"),
+            name: "test room",
             on: jest.fn(),
             currentState: {
                 getStateEvents: jest.fn(),
@@ -152,32 +152,33 @@ describe('<UserInfo />', () => {
             },
         } as unknown as Room;
 
-        it('renders user info', () => {
+        it("renders user info", () => {
             const component = getComponent();
             expect(component.find("BasicUserInfo").length).toBeTruthy();
         });
 
-        it('does not render space header when room is not a space room', () => {
+        it("does not render space header when room is not a space room", () => {
             const component = getComponent({ room });
-            expect(findByTestId(component, 'space-header').length).toBeFalsy();
+            expect(findByTestId(component, "space-header").length).toBeFalsy();
         });
 
-        it('renders space header when room is a space room', () => {
+        it("renders space header when room is a space room", () => {
             const spaceRoom = {
-                ...room, isSpaceRoom: jest.fn().mockReturnValue(true),
+                ...room,
+                isSpaceRoom: jest.fn().mockReturnValue(true),
             };
             const component = getComponent({ room: spaceRoom });
-            expect(findByTestId(component, 'space-header').length).toBeTruthy();
+            expect(findByTestId(component, "space-header").length).toBeTruthy();
         });
 
-        it('renders encryption info panel without pending verification', () => {
+        it("renders encryption info panel without pending verification", () => {
             const phase = RightPanelPhases.EncryptionPanel;
             const component = getComponent({ phase, room });
 
             expect(component.find(EncryptionInfo).length).toBeTruthy();
         });
 
-        it('renders encryption verification panel with pending verification', () => {
+        it("renders encryption verification panel with pending verification", () => {
             const phase = RightPanelPhases.EncryptionPanel;
             const component = getComponent({ phase, verificationRequest, room });
 

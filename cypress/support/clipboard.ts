@@ -41,7 +41,7 @@ declare global {
 }
 
 Cypress.Commands.add("mockClipboard", () => {
-    cy.window({ log: false }).then(win => {
+    cy.window({ log: false }).then((win) => {
         win.navigator.clipboard.writeText = (text) => {
             copyText = text;
             return Promise.resolve();
@@ -54,4 +54,4 @@ Cypress.Commands.add("getClipboardText", (): Chainable<string> => {
 });
 
 // Needed to make this file a module
-export { };
+export {};

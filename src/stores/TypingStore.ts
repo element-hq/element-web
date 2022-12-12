@@ -61,8 +61,8 @@ export default class TypingStore {
         // No typing notifications for local rooms
         if (isLocalRoom(roomId)) return;
 
-        if (!SettingsStore.getValue('sendTypingNotifications')) return;
-        if (SettingsStore.getValue('lowBandwidth')) return;
+        if (!SettingsStore.getValue("sendTypingNotifications")) return;
+        if (SettingsStore.getValue("lowBandwidth")) return;
         // Disable typing notification for threads for the initial launch
         // before we figure out a better user experience for them
         if (SettingsStore.getValue("feature_thread") && threadId) return;
@@ -85,19 +85,25 @@ export default class TypingStore {
 
         if (isTyping) {
             if (!currentTyping.serverTimer.isRunning()) {
-                currentTyping.serverTimer.restart().finished().then(() => {
-                    const currentTyping = this.typingStates[roomId];
-                    if (currentTyping) currentTyping.isTyping = false;
+                currentTyping.serverTimer
+                    .restart()
+                    .finished()
+                    .then(() => {
+                        const currentTyping = this.typingStates[roomId];
+                        if (currentTyping) currentTyping.isTyping = false;
 
-                    // The server will (should) time us out on typing, so we don't
-                    // need to advertise a stop of typing.
-                });
+                        // The server will (should) time us out on typing, so we don't
+                        // need to advertise a stop of typing.
+                    });
             } else currentTyping.serverTimer.restart();
 
             if (!currentTyping.userTimer.isRunning()) {
-                currentTyping.userTimer.restart().finished().then(() => {
-                    this.setSelfTyping(roomId, threadId, false);
-                });
+                currentTyping.userTimer
+                    .restart()
+                    .finished()
+                    .then(() => {
+                        this.setSelfTyping(roomId, threadId, false);
+                    });
             } else currentTyping.userTimer.restart();
         }
 

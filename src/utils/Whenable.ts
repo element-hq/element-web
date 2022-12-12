@@ -28,7 +28,7 @@ export type WhenFn<T> = (w: Whenable<T>) => void;
  * the consumer needs to know *when* that happens.
  */
 export abstract class Whenable<T> implements IDestroyable {
-    private listeners: {condition: T | null, fn: WhenFn<T>}[] = [];
+    private listeners: { condition: T | null; fn: WhenFn<T> }[] = [];
 
     /**
      * Sets up a call to `fn` *when* the `condition` is met.

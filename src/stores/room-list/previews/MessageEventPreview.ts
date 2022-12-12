@@ -30,15 +30,15 @@ export class MessageEventPreview implements IPreview {
 
         if (event.isRelation(RelationType.Replace)) {
             // It's an edit, generate the preview on the new text
-            eventContent = event.getContent()['m.new_content'];
+            eventContent = event.getContent()["m.new_content"];
         }
 
-        if (!eventContent?.['body']) return null; // invalid for our purposes
+        if (!eventContent?.["body"]) return null; // invalid for our purposes
 
-        let body = eventContent['body'].trim();
+        let body = eventContent["body"].trim();
         if (!body) return null; // invalid event, no preview
         // A msgtype is actually required in the spec but the app is a bit softer on this requirement
-        const msgtype = eventContent['msgtype'] ?? MsgType.Text;
+        const msgtype = eventContent["msgtype"] ?? MsgType.Text;
 
         const hasHtml = eventContent.format === "org.matrix.custom.html" && eventContent.formatted_body;
         if (hasHtml) {
@@ -46,12 +46,12 @@ export class MessageEventPreview implements IPreview {
         }
 
         // XXX: Newer relations have a getRelation() function which is not compatible with replies.
-        if (event.getWireContent()['m.relates_to']?.['m.in_reply_to']) {
+        if (event.getWireContent()["m.relates_to"]?.["m.in_reply_to"]) {
             // If this is a reply, get the real reply and use that
             if (hasHtml) {
-                body = (stripHTMLReply(body) || '').trim();
+                body = (stripHTMLReply(body) || "").trim();
             } else {
-                body = (stripPlainReply(body) || '').trim();
+                body = (stripPlainReply(body) || "").trim();
             }
             if (!body) return null; // invalid event, no preview
         }

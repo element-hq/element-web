@@ -14,18 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { mocked } from 'jest-mock';
-import { logger } from 'matrix-js-sdk/src/logger';
+import { mocked } from "jest-mock";
+import { logger } from "matrix-js-sdk/src/logger";
 
-import { createAudioContext, decodeOgg } from '../../src/audio/compat';
+import { createAudioContext, decodeOgg } from "../../src/audio/compat";
 import { Playback, PlaybackState } from "../../src/audio/Playback";
 
-jest.mock('../../src/audio/compat', () => ({
+jest.mock("../../src/audio/compat", () => ({
     createAudioContext: jest.fn(),
     decodeOgg: jest.fn(),
 }));
 
-describe('Playback', () => {
+describe("Playback", () => {
     const mockAudioBufferSourceNode = {
         addEventListener: jest.fn(),
         connect: jest.fn(),
@@ -47,18 +47,16 @@ describe('Playback', () => {
     const mockChannelData = new Float32Array();
 
     beforeEach(() => {
-        jest.spyOn(logger, 'error').mockRestore();
+        jest.spyOn(logger, "error").mockRestore();
         mockAudioBuffer.getChannelData.mockClear().mockReturnValue(mockChannelData);
-        mockAudioContext.decodeAudioData.mockReset().mockImplementation(
-            (_b, callback) => callback(mockAudioBuffer),
-        );
+        mockAudioContext.decodeAudioData.mockReset().mockImplementation((_b, callback) => callback(mockAudioBuffer));
         mockAudioContext.resume.mockClear().mockResolvedValue(undefined);
         mockAudioContext.suspend.mockClear().mockResolvedValue(undefined);
         mocked(decodeOgg).mockClear().mockResolvedValue(new ArrayBuffer(1));
         mocked(createAudioContext).mockReturnValue(mockAudioContext as unknown as AudioContext);
     });
 
-    it('initialises correctly', () => {
+    it("initialises correctly", () => {
         const buffer = new ArrayBuffer(8);
 
         const playback = new Playback(buffer);
@@ -71,7 +69,7 @@ describe('Playback', () => {
         expect(playback.currentState).toEqual(PlaybackState.Decoding);
     });
 
-    it('toggles playback on from stopped state', async () => {
+    it("toggles playback on from stopped state", async () => {
         const buffer = new ArrayBuffer(8);
         const playback = new Playback(buffer);
         await playback.prepare();
@@ -83,7 +81,7 @@ describe('Playback', () => {
         expect(playback.currentState).toEqual(PlaybackState.Playing);
     });
 
-    it('toggles playback to paused from playing state', async () => {
+    it("toggles playback to paused from playing state", async () => {
         const buffer = new ArrayBuffer(8);
         const playback = new Playback(buffer);
         await playback.prepare();
@@ -96,7 +94,7 @@ describe('Playback', () => {
         expect(playback.currentState).toEqual(PlaybackState.Paused);
     });
 
-    it('stop playbacks', async () => {
+    it("stop playbacks", async () => {
         const buffer = new ArrayBuffer(8);
         const playback = new Playback(buffer);
         await playback.prepare();
@@ -109,8 +107,8 @@ describe('Playback', () => {
         expect(playback.currentState).toEqual(PlaybackState.Stopped);
     });
 
-    describe('prepare()', () => {
-        it('decodes audio data when not greater than 5mb', async () => {
+    describe("prepare()", () => {
+        it("decodes audio data when not greater than 5mb", async () => {
             const buffer = new ArrayBuffer(8);
 
             const playback = new Playback(buffer);
@@ -127,18 +125,16 @@ describe('Playback', () => {
             expect(playback.currentState).toEqual(PlaybackState.Stopped);
         });
 
-        it('tries to decode ogg when decodeAudioData fails', async () => {
+        it("tries to decode ogg when decodeAudioData fails", async () => {
             // stub logger to keep console clean from expected error
-            jest.spyOn(logger, 'error').mockReturnValue(undefined);
-            jest.spyOn(logger, 'warn').mockReturnValue(undefined);
+            jest.spyOn(logger, "error").mockReturnValue(undefined);
+            jest.spyOn(logger, "warn").mockReturnValue(undefined);
 
             const buffer = new ArrayBuffer(8);
-            const decodingError = new Error('test');
-            mockAudioContext.decodeAudioData.mockImplementationOnce(
-                (_b, _callback, error) => error(decodingError),
-            ).mockImplementationOnce(
-                (_b, callback) => callback(mockAudioBuffer),
-            );
+            const decodingError = new Error("test");
+            mockAudioContext.decodeAudioData
+                .mockImplementationOnce((_b, _callback, error) => error(decodingError))
+                .mockImplementationOnce((_b, callback) => callback(mockAudioBuffer));
 
             const playback = new Playback(buffer);
 
@@ -154,7 +150,7 @@ describe('Playback', () => {
             expect(playback.currentState).toEqual(PlaybackState.Stopped);
         });
 
-        it('does not try to re-decode audio', async () => {
+        it("does not try to re-decode audio", async () => {
             const buffer = new ArrayBuffer(8);
             const playback = new Playback(buffer);
             await playback.prepare();

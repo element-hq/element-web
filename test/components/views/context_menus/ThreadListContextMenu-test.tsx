@@ -38,10 +38,7 @@ describe("ThreadListContextMenu", () => {
     let event: MatrixEvent;
 
     function getComponent(props: Partial<ThreadListContextMenuProps>) {
-        return render(<ThreadListContextMenu
-            mxEvent={event}
-            {...props}
-        />);
+        return render(<ThreadListContextMenu mxEvent={event} {...props} />);
     }
 
     beforeEach(() => {

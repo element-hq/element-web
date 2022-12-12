@@ -19,34 +19,28 @@ import { Linkify } from "../../../../src/components/views/elements/Linkify";
 
 describe("Linkify", () => {
     it("linkifies the context", () => {
-        const { container } = render(<Linkify>
-            https://perdu.com
-        </Linkify>);
+        const { container } = render(<Linkify>https://perdu.com</Linkify>);
         expect(container.innerHTML).toBe(
-            "<div><a href=\"https://perdu.com\" class=\"linkified\" target=\"_blank\" rel=\"noreferrer noopener\">"+
-            "https://perdu.com" +
-            "</a></div>",
+            '<div><a href="https://perdu.com" class="linkified" target="_blank" rel="noreferrer noopener">' +
+                "https://perdu.com" +
+                "</a></div>",
         );
     });
 
     it("correctly linkifies a room alias", () => {
-        const { container } = render(<Linkify>
-            #element-web:matrix.org
-        </Linkify>);
+        const { container } = render(<Linkify>#element-web:matrix.org</Linkify>);
         expect(container.innerHTML).toBe(
             "<div>" +
-            "<a href=\"https://matrix.to/#/#element-web:matrix.org\" class=\"linkified\" rel=\"noreferrer noopener\">" +
-            "#element-web:matrix.org" +
-            "</a></div>",
+                '<a href="https://matrix.to/#/#element-web:matrix.org" class="linkified" rel="noreferrer noopener">' +
+                "#element-web:matrix.org" +
+                "</a></div>",
         );
     });
 
     it("changes the root tag name", () => {
         const TAG_NAME = "p";
 
-        const { container } = render(<Linkify as={TAG_NAME}>
-            Hello world!
-        </Linkify>);
+        const { container } = render(<Linkify as={TAG_NAME}>Hello world!</Linkify>);
 
         expect(container.querySelectorAll("p")).toHaveLength(1);
     });
@@ -60,31 +54,29 @@ describe("Linkify", () => {
 
             // upon clicking the element, change the content, and expect
             // linkify to update
-            return <div onClick={onClick}>
-                <Linkify>
-                    { n % 2 === 0
-                        ? "https://perdu.com"
-                        : "https://matrix.org" }
-                </Linkify>
-            </div>;
+            return (
+                <div onClick={onClick}>
+                    <Linkify>{n % 2 === 0 ? "https://perdu.com" : "https://matrix.org"}</Linkify>
+                </div>
+            );
         }
 
         const { container } = render(<DummyTest />);
 
         expect(container.innerHTML).toBe(
             "<div><div>" +
-            "<a href=\"https://perdu.com\" class=\"linkified\" target=\"_blank\" rel=\"noreferrer noopener\">" +
-            "https://perdu.com" +
-            "</a></div></div>",
+                '<a href="https://perdu.com" class="linkified" target="_blank" rel="noreferrer noopener">' +
+                "https://perdu.com" +
+                "</a></div></div>",
         );
 
         fireEvent.click(container.querySelector("div"));
 
         expect(container.innerHTML).toBe(
             "<div><div>" +
-            "<a href=\"https://matrix.org\" class=\"linkified\" target=\"_blank\" rel=\"noreferrer noopener\">" +
-            "https://matrix.org" +
-            "</a></div></div>",
+                '<a href="https://matrix.org" class="linkified" target="_blank" rel="noreferrer noopener">' +
+                "https://matrix.org" +
+                "</a></div></div>",
         );
     });
 });

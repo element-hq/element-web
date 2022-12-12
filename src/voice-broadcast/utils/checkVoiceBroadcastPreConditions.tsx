@@ -25,8 +25,14 @@ import Modal from "../../Modal";
 const showAlreadyRecordingDialog = () => {
     Modal.createDialog(InfoDialog, {
         title: _t("Can't start a new voice broadcast"),
-        description: <p>{ _t("You are already recording a voice broadcast. "
-                             + "Please end your current voice broadcast to start a new one.") }</p>,
+        description: (
+            <p>
+                {_t(
+                    "You are already recording a voice broadcast. " +
+                        "Please end your current voice broadcast to start a new one.",
+                )}
+            </p>
+        ),
         hasCloseButton: true,
     });
 };
@@ -34,8 +40,14 @@ const showAlreadyRecordingDialog = () => {
 const showInsufficientPermissionsDialog = () => {
     Modal.createDialog(InfoDialog, {
         title: _t("Can't start a new voice broadcast"),
-        description: <p>{ _t("You don't have the required permissions to start a voice broadcast in this room. "
-                             + "Contact a room administrator to upgrade your permissions.") }</p>,
+        description: (
+            <p>
+                {_t(
+                    "You don't have the required permissions to start a voice broadcast in this room. " +
+                        "Contact a room administrator to upgrade your permissions.",
+                )}
+            </p>
+        ),
         hasCloseButton: true,
     });
 };
@@ -43,8 +55,14 @@ const showInsufficientPermissionsDialog = () => {
 const showOthersAlreadyRecordingDialog = () => {
     Modal.createDialog(InfoDialog, {
         title: _t("Can't start a new voice broadcast"),
-        description: <p>{ _t("Someone else is already recording a voice broadcast. "
-                             + "Wait for their voice broadcast to end to start a new one.") }</p>,
+        description: (
+            <p>
+                {_t(
+                    "Someone else is already recording a voice broadcast. " +
+                        "Wait for their voice broadcast to end to start a new one.",
+                )}
+            </p>
+        ),
         hasCloseButton: true,
     });
 };

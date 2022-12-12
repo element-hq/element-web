@@ -20,17 +20,13 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import AccessibleButton from "../elements/AccessibleButton";
 import Modal from "../../../Modal";
-import QuestionDialog from './QuestionDialog';
+import QuestionDialog from "./QuestionDialog";
 import SdkConfig from "../../../SdkConfig";
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { HostSignupStore } from "../../../stores/HostSignupStore";
 import { OwnProfileStore } from "../../../stores/OwnProfileStore";
-import {
-    IPostmessage,
-    IPostmessageResponseData,
-    PostmessageAction,
-} from "./HostSignupDialogTypes";
+import { IPostmessage, IPostmessageResponseData, PostmessageAction } from "./HostSignupDialogTypes";
 import { IConfigOptions } from "../../../IConfigOptions";
 import { SnakedObject } from "../../../utils/SnakedObject";
 
@@ -117,21 +113,18 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
             // We're done, close
             return this.closeDialog();
         } else {
-            Modal.createDialog(
-                QuestionDialog,
-                {
-                    title: _t("Confirm abort of host creation"),
-                    description: _t(
-                        "Are you sure you wish to abort creation of the host? The process cannot be continued.",
-                    ),
-                    button: _t("Abort"),
-                    onFinished: result => {
-                        if (result) {
-                            return this.closeDialog();
-                        }
-                    },
+            Modal.createDialog(QuestionDialog, {
+                title: _t("Confirm abort of host creation"),
+                description: _t(
+                    "Are you sure you wish to abort creation of the host? The process cannot be continued.",
+                ),
+                button: _t("Abort"),
+                onFinished: (result) => {
+                    if (result) {
+                        return this.closeDialog();
+                    }
                 },
-            );
+            });
         }
     };
 
@@ -177,44 +170,45 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
         const textComponent = (
             <>
                 <p>
-                    { _t("Continuing temporarily allows the %(hostSignupBrand)s setup process to access your " +
-                        "account to fetch verified email addresses. This data is not stored.", {
-                        hostSignupBrand: this.config.get("brand"),
-                    }) }
+                    {_t(
+                        "Continuing temporarily allows the %(hostSignupBrand)s setup process to access your " +
+                            "account to fetch verified email addresses. This data is not stored.",
+                        {
+                            hostSignupBrand: this.config.get("brand"),
+                        },
+                    )}
                 </p>
                 <p>
-                    { _t("Learn more in our <privacyPolicyLink />, <termsOfServiceLink /> and <cookiePolicyLink />.",
+                    {_t(
+                        "Learn more in our <privacyPolicyLink />, <termsOfServiceLink /> and <cookiePolicyLink />.",
                         {},
                         {
                             cookiePolicyLink: () => (
                                 <a href={cookiePolicyUrl} target="_blank" rel="noreferrer noopener">
-                                    { _t("Cookie Policy") }
+                                    {_t("Cookie Policy")}
                                 </a>
                             ),
                             privacyPolicyLink: () => (
                                 <a href={privacyPolicyUrl} target="_blank" rel="noreferrer noopener">
-                                    { _t("Privacy Policy") }
+                                    {_t("Privacy Policy")}
                                 </a>
                             ),
                             termsOfServiceLink: () => (
                                 <a href={tosUrl} target="_blank" rel="noreferrer noopener">
-                                    { _t("Terms of Service") }
+                                    {_t("Terms of Service")}
                                 </a>
                             ),
                         },
-                    ) }
+                    )}
                 </p>
             </>
         );
-        Modal.createDialog(
-            QuestionDialog,
-            {
-                title: _t("You should know"),
-                description: textComponent,
-                button: _t("Continue"),
-                onFinished: this.onAccountDetailsDialogFinished,
-            },
-        );
+        Modal.createDialog(QuestionDialog, {
+            title: _t("You should know"),
+            description: textComponent,
+            button: _t("Continue"),
+            onFinished: this.onAccountDetailsDialogFinished,
+        });
     };
 
     public componentDidMount() {
@@ -230,21 +224,19 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
 
     public render(): React.ReactNode {
         return (
-            <div className={classNames({ "mx_Dialog_wrapper": !this.state.minimized })}>
+            <div className={classNames({ mx_Dialog_wrapper: !this.state.minimized })}>
                 <div
-                    className={classNames("mx_Dialog",
-                        {
-                            "mx_HostSignupDialog_minimized": this.state.minimized,
-                            "mx_HostSignupDialog": !this.state.minimized,
-                        },
-                    )}
+                    className={classNames("mx_Dialog", {
+                        mx_HostSignupDialog_minimized: this.state.minimized,
+                        mx_HostSignupDialog: !this.state.minimized,
+                    })}
                 >
-                    { this.state.minimized &&
+                    {this.state.minimized && (
                         <div className="mx_Dialog_header mx_Dialog_headerWithButton">
                             <div className="mx_Dialog_title">
-                                { _t("%(hostSignupBrand)s Setup", {
+                                {_t("%(hostSignupBrand)s Setup", {
                                     hostSignupBrand: this.config.get("brand"),
-                                }) }
+                                })}
                             </div>
                             <AccessibleButton
                                 className="mx_HostSignup_maximize_button"
@@ -253,8 +245,8 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
                                 title={_t("Maximise dialog")}
                             />
                         </div>
-                    }
-                    { !this.state.minimized &&
+                    )}
+                    {!this.state.minimized && (
                         <div className="mx_Dialog_header mx_Dialog_headerWithCancel">
                             <AccessibleButton
                                 onClick={this.minimizeDialog}
@@ -269,25 +261,18 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
                                 title={_t("Close dialog")}
                             />
                         </div>
-                    }
-                    { this.state.error &&
-                        <div>
-                            { this.state.error }
-                        </div>
-                    }
-                    { !this.state.error &&
+                    )}
+                    {this.state.error && <div>{this.state.error}</div>}
+                    {!this.state.error && (
                         <iframe
-                            title={_t(
-                                "Upgrade to %(hostSignupBrand)s",
-                                {
-                                    hostSignupBrand: this.config.get("brand"),
-                                },
-                            )}
+                            title={_t("Upgrade to %(hostSignupBrand)s", {
+                                hostSignupBrand: this.config.get("brand"),
+                            })}
                             src={this.config.get("url")}
                             ref={this.iframeRef}
                             sandbox="allow-forms allow-scripts allow-same-origin allow-popups"
                         />
-                    }
+                    )}
                 </div>
             </div>
         );

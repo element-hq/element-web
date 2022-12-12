@@ -14,28 +14,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import { render } from '@testing-library/react';
+import React from "react";
+import { render } from "@testing-library/react";
 
 import * as TestUtils from "../../../test-utils";
-import ThemeChoicePanel from '../../../../src/components/views/settings/ThemeChoicePanel';
+import ThemeChoicePanel from "../../../../src/components/views/settings/ThemeChoicePanel";
 
 // Fake random strings to give a predictable snapshot
-jest.mock(
-    'matrix-js-sdk/src/randomstring',
-    () => {
-        return {
-            randomString: () => "abdefghi",
-        };
-    },
-);
+jest.mock("matrix-js-sdk/src/randomstring", () => {
+    return {
+        randomString: () => "abdefghi",
+    };
+});
 
-describe('ThemeChoicePanel', () => {
-    it('renders the theme choice UI', () => {
+describe("ThemeChoicePanel", () => {
+    it("renders the theme choice UI", () => {
         TestUtils.stubClient();
-        const { asFragment } = render(
-            <ThemeChoicePanel />,
-        );
+        const { asFragment } = render(<ThemeChoicePanel />);
         expect(asFragment()).toMatchSnapshot();
     });
 });

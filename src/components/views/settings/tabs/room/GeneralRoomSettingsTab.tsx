@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ContextType } from 'react';
+import React, { ContextType } from "react";
 
 import { _t } from "../../../../../languageHandler";
 import RoomProfileSettings from "../../../room_settings/RoomProfileSettings";
@@ -49,7 +49,7 @@ export default class GeneralRoomSettingsTab extends React.Component<IProps, ISta
 
     private onLeaveClick = (ev: ButtonEvent): void => {
         dis.dispatch({
-            action: 'leave_room',
+            action: "leave_room",
             room_id: this.props.roomId,
         });
 
@@ -62,41 +62,43 @@ export default class GeneralRoomSettingsTab extends React.Component<IProps, ISta
 
         const canSetAliases = true; // Previously, we arbitrarily only allowed admins to do this
         const canSetCanonical = room.currentState.mayClientSendStateEvent("m.room.canonical_alias", client);
-        const canonicalAliasEv = room.currentState.getStateEvents("m.room.canonical_alias", '');
+        const canonicalAliasEv = room.currentState.getStateEvents("m.room.canonical_alias", "");
 
-        const urlPreviewSettings = SettingsStore.getValue(UIFeature.URLPreviews) ?
-            <UrlPreviewSettings room={room} /> :
-            null;
+        const urlPreviewSettings = SettingsStore.getValue(UIFeature.URLPreviews) ? (
+            <UrlPreviewSettings room={room} />
+        ) : null;
 
         let leaveSection;
         if (room.getMyMembership() === "join") {
-            leaveSection = <>
-                <span className='mx_SettingsTab_subheading'>{ _t("Leave room") }</span>
-                <div className='mx_SettingsTab_section'>
-                    <AccessibleButton kind='danger' onClick={this.onLeaveClick}>
-                        { _t('Leave room') }
-                    </AccessibleButton>
-                </div>
-            </>;
+            leaveSection = (
+                <>
+                    <span className="mx_SettingsTab_subheading">{_t("Leave room")}</span>
+                    <div className="mx_SettingsTab_section">
+                        <AccessibleButton kind="danger" onClick={this.onLeaveClick}>
+                            {_t("Leave room")}
+                        </AccessibleButton>
+                    </div>
+                </>
+            );
         }
 
         return (
             <div className="mx_SettingsTab mx_GeneralRoomSettingsTab">
-                <div className="mx_SettingsTab_heading">{ _t("General") }</div>
-                <div className='mx_SettingsTab_section mx_GeneralRoomSettingsTab_profileSection'>
+                <div className="mx_SettingsTab_heading">{_t("General")}</div>
+                <div className="mx_SettingsTab_section mx_GeneralRoomSettingsTab_profileSection">
                     <RoomProfileSettings roomId={this.props.roomId} />
                 </div>
 
-                <div className="mx_SettingsTab_heading">{ _t("Room Addresses") }</div>
+                <div className="mx_SettingsTab_heading">{_t("Room Addresses")}</div>
                 <AliasSettings
                     roomId={this.props.roomId}
                     canSetCanonicalAlias={canSetCanonical}
                     canSetAliases={canSetAliases}
                     canonicalAliasEvent={canonicalAliasEv}
                 />
-                <div className="mx_SettingsTab_heading">{ _t("Other") }</div>
-                { urlPreviewSettings }
-                { leaveSection }
+                <div className="mx_SettingsTab_heading">{_t("Other")}</div>
+                {urlPreviewSettings}
+                {leaveSection}
             </div>
         );
     }

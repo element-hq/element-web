@@ -39,7 +39,7 @@ export async function awaitRoomDownSync(cli: MatrixClient, roomId: string): Prom
     const room = cli.getRoom(roomId);
     if (room) return room; // already have the room
 
-    return new Promise<Room>(resolve => {
+    return new Promise<Room>((resolve) => {
         // We have to wait for the js-sdk to give us the room back so
         // we can more effectively abuse the MultiInviter behaviour
         // which heavily relies on the Room object being available.
@@ -69,22 +69,21 @@ export async function upgradeRoom(
 
     let toInvite: string[] = [];
     if (inviteUsers) {
-        toInvite = [
-            ...room.getMembersWithMembership("join"),
-            ...room.getMembersWithMembership("invite"),
-        ].map(m => m.userId).filter(m => m !== cli.getUserId());
+        toInvite = [...room.getMembersWithMembership("join"), ...room.getMembersWithMembership("invite")]
+            .map((m) => m.userId)
+            .filter((m) => m !== cli.getUserId());
     }
 
     let parentsToRelink: Room[] = [];
     if (updateSpaces) {
         parentsToRelink = Array.from(SpaceStore.instance.getKnownParents(room.roomId))
-            .map(roomId => cli.getRoom(roomId))
-            .filter(parent => parent?.currentState.maySendStateEvent(EventType.SpaceChild, cli.getUserId()));
+            .map((roomId) => cli.getRoom(roomId))
+            .filter((parent) => parent?.currentState.maySendStateEvent(EventType.SpaceChild, cli.getUserId()));
     }
 
     const progress: IProgress = {
         roomUpgraded: false,
-        roomSynced: (awaitRoom || inviteUsers) ? false : undefined,
+        roomSynced: awaitRoom || inviteUsers ? false : undefined,
         inviteUsersProgress: inviteUsers ? 0 : undefined,
         inviteUsersTotal: toInvite.length,
         updateSpacesProgress: updateSpaces ? 0 : undefined,
@@ -100,8 +99,8 @@ export async function upgradeRoom(
         logger.error(e);
 
         Modal.createDialog(ErrorDialog, {
-            title: _t('Error upgrading room'),
-            description: _t('Double check that your server supports the room version chosen and try again.'),
+            title: _t("Error upgrading room"),
+            description: _t("Double check that your server supports the room version chosen and try again."),
         });
         throw e;
     }
@@ -127,10 +126,15 @@ export async function upgradeRoom(
         try {
             for (const parent of parentsToRelink) {
                 const currentEv = parent.currentState.getStateEvents(EventType.SpaceChild, room.roomId);
-                await cli.sendStateEvent(parent.roomId, EventType.SpaceChild, {
-                    ...(currentEv?.getContent() || {}), // copy existing attributes like suggested
-                    via: [cli.getDomain()],
-                }, newRoomId);
+                await cli.sendStateEvent(
+                    parent.roomId,
+                    EventType.SpaceChild,
+                    {
+                        ...(currentEv?.getContent() || {}), // copy existing attributes like suggested
+                        via: [cli.getDomain()],
+                    },
+                    newRoomId,
+                );
                 await cli.sendStateEvent(parent.roomId, EventType.SpaceChild, {}, room.roomId);
 
                 progress.updateSpacesProgress++;

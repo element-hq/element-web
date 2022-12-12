@@ -29,10 +29,10 @@ import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { UserTab } from "../dialogs/UserTab";
 import QuickThemeSwitcher from "./QuickThemeSwitcher";
-import { Icon as PinUprightIcon } from '../../../../res/img/element-icons/room/pin-upright.svg';
-import { Icon as EllipsisIcon } from '../../../../res/img/element-icons/room/ellipsis.svg';
-import { Icon as MembersIcon } from '../../../../res/img/element-icons/room/members.svg';
-import { Icon as FavoriteIcon } from '../../../../res/img/element-icons/roomlist/favorite.svg';
+import { Icon as PinUprightIcon } from "../../../../res/img/element-icons/room/pin-upright.svg";
+import { Icon as EllipsisIcon } from "../../../../res/img/element-icons/room/ellipsis.svg";
+import { Icon as MembersIcon } from "../../../../res/img/element-icons/room/members.svg";
+import { Icon as FavoriteIcon } from "../../../../res/img/element-icons/roomlist/favorite.svg";
 import SettingsStore from "../../../settings/SettingsStore";
 import Modal from "../../../Modal";
 import DevtoolsDialog from "../dialogs/DevtoolsDialog";
@@ -41,99 +41,104 @@ import { SdkContextClass } from "../../../contexts/SDKContext";
 const QuickSettingsButton = ({ isPanelCollapsed = false }) => {
     const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<HTMLDivElement>();
 
-    const {
-        [MetaSpace.Favourites]: favouritesEnabled,
-        [MetaSpace.People]: peopleEnabled,
-    } = useSettingValue<Record<MetaSpace, boolean>>("Spaces.enabledMetaSpaces");
+    const { [MetaSpace.Favourites]: favouritesEnabled, [MetaSpace.People]: peopleEnabled } =
+        useSettingValue<Record<MetaSpace, boolean>>("Spaces.enabledMetaSpaces");
 
     let contextMenu: JSX.Element;
     if (menuDisplayed) {
-        contextMenu = <ContextMenu
-            {...alwaysAboveRightOf(handle.current.getBoundingClientRect(), ChevronFace.None, 16)}
-            wrapperClassName="mx_QuickSettingsButton_ContextMenuWrapper"
-            onFinished={closeMenu}
-            managed={false}
-            focusLock={true}
-        >
-            <h2>{ _t("Quick settings") }</h2>
-
-            <AccessibleButton
-                onClick={() => {
-                    closeMenu();
-                    defaultDispatcher.dispatch({ action: Action.ViewUserSettings });
-                }}
-                kind="primary_outline"
+        contextMenu = (
+            <ContextMenu
+                {...alwaysAboveRightOf(handle.current.getBoundingClientRect(), ChevronFace.None, 16)}
+                wrapperClassName="mx_QuickSettingsButton_ContextMenuWrapper"
+                onFinished={closeMenu}
+                managed={false}
+                focusLock={true}
             >
-                { _t("All settings") }
-            </AccessibleButton>
+                <h2>{_t("Quick settings")}</h2>
 
-            { SettingsStore.getValue("developerMode") && (
                 <AccessibleButton
                     onClick={() => {
                         closeMenu();
-                        Modal.createDialog(DevtoolsDialog, {
-                            roomId: SdkContextClass.instance.roomViewStore.getRoomId(),
-                        }, "mx_DevtoolsDialog_wrapper");
+                        defaultDispatcher.dispatch({ action: Action.ViewUserSettings });
                     }}
-                    kind="danger_outline"
+                    kind="primary_outline"
                 >
-                    { _t("Developer tools") }
+                    {_t("All settings")}
                 </AccessibleButton>
-            ) }
 
-            <h4 className="mx_QuickSettingsButton_pinToSidebarHeading">
-                <PinUprightIcon className="mx_QuickSettingsButton_icon" />
-                { _t("Pin to sidebar") }
-            </h4>
+                {SettingsStore.getValue("developerMode") && (
+                    <AccessibleButton
+                        onClick={() => {
+                            closeMenu();
+                            Modal.createDialog(
+                                DevtoolsDialog,
+                                {
+                                    roomId: SdkContextClass.instance.roomViewStore.getRoomId(),
+                                },
+                                "mx_DevtoolsDialog_wrapper",
+                            );
+                        }}
+                        kind="danger_outline"
+                    >
+                        {_t("Developer tools")}
+                    </AccessibleButton>
+                )}
 
-            <StyledCheckbox
-                className="mx_QuickSettingsButton_favouritesCheckbox"
-                checked={!!favouritesEnabled}
-                onChange={onMetaSpaceChangeFactory(MetaSpace.Favourites, "WebQuickSettingsPinToSidebarCheckbox")}
-            >
-                <FavoriteIcon className="mx_QuickSettingsButton_icon" />
-                { _t("Favourites") }
-            </StyledCheckbox>
-            <StyledCheckbox
-                className="mx_QuickSettingsButton_peopleCheckbox"
-                checked={!!peopleEnabled}
-                onChange={onMetaSpaceChangeFactory(MetaSpace.People, "WebQuickSettingsPinToSidebarCheckbox")}
-            >
+                <h4 className="mx_QuickSettingsButton_pinToSidebarHeading">
+                    <PinUprightIcon className="mx_QuickSettingsButton_icon" />
+                    {_t("Pin to sidebar")}
+                </h4>
 
-                <MembersIcon className="mx_QuickSettingsButton_icon" />
-                { _t("People") }
-            </StyledCheckbox>
-            <AccessibleButton
-                className="mx_QuickSettingsButton_moreOptionsButton"
-                onClick={() => {
-                    closeMenu();
-                    defaultDispatcher.dispatch({
-                        action: Action.ViewUserSettings,
-                        initialTabId: UserTab.Sidebar,
-                    });
-                }}
-            >
-                <EllipsisIcon className="mx_QuickSettingsButton_icon" />
-                { _t("More options") }
-            </AccessibleButton>
+                <StyledCheckbox
+                    className="mx_QuickSettingsButton_favouritesCheckbox"
+                    checked={!!favouritesEnabled}
+                    onChange={onMetaSpaceChangeFactory(MetaSpace.Favourites, "WebQuickSettingsPinToSidebarCheckbox")}
+                >
+                    <FavoriteIcon className="mx_QuickSettingsButton_icon" />
+                    {_t("Favourites")}
+                </StyledCheckbox>
+                <StyledCheckbox
+                    className="mx_QuickSettingsButton_peopleCheckbox"
+                    checked={!!peopleEnabled}
+                    onChange={onMetaSpaceChangeFactory(MetaSpace.People, "WebQuickSettingsPinToSidebarCheckbox")}
+                >
+                    <MembersIcon className="mx_QuickSettingsButton_icon" />
+                    {_t("People")}
+                </StyledCheckbox>
+                <AccessibleButton
+                    className="mx_QuickSettingsButton_moreOptionsButton"
+                    onClick={() => {
+                        closeMenu();
+                        defaultDispatcher.dispatch({
+                            action: Action.ViewUserSettings,
+                            initialTabId: UserTab.Sidebar,
+                        });
+                    }}
+                >
+                    <EllipsisIcon className="mx_QuickSettingsButton_icon" />
+                    {_t("More options")}
+                </AccessibleButton>
 
-            <QuickThemeSwitcher requestClose={closeMenu} />
-        </ContextMenu>;
+                <QuickThemeSwitcher requestClose={closeMenu} />
+            </ContextMenu>
+        );
     }
 
-    return <>
-        <AccessibleTooltipButton
-            className={classNames("mx_QuickSettingsButton", { expanded: !isPanelCollapsed })}
-            onClick={openMenu}
-            title={_t("Quick settings")}
-            inputRef={handle}
-            forceHide={!isPanelCollapsed}
-        >
-            { !isPanelCollapsed ? _t("Settings") : null }
-        </AccessibleTooltipButton>
+    return (
+        <>
+            <AccessibleTooltipButton
+                className={classNames("mx_QuickSettingsButton", { expanded: !isPanelCollapsed })}
+                onClick={openMenu}
+                title={_t("Quick settings")}
+                inputRef={handle}
+                forceHide={!isPanelCollapsed}
+            >
+                {!isPanelCollapsed ? _t("Settings") : null}
+            </AccessibleTooltipButton>
 
-        { contextMenu }
-    </>;
+            {contextMenu}
+        </>
+    );
 };
 
 export default QuickSettingsButton;

@@ -37,36 +37,40 @@ export default class RecoveryMethodRemovedDialog extends React.PureComponent<IPr
         this.props.onFinished();
         Modal.createDialogAsync(
             import("./CreateKeyBackupDialog") as unknown as Promise<ComponentType<{}>>,
-            null, null, /* priority = */ false, /* static = */ true,
+            null,
+            null,
+            /* priority = */ false,
+            /* static = */ true,
         );
     };
 
     public render(): JSX.Element {
-        const title = <span className="mx_KeyBackupFailedDialog_title">
-            { _t("Recovery Method Removed") }
-        </span>;
+        const title = <span className="mx_KeyBackupFailedDialog_title">{_t("Recovery Method Removed")}</span>;
 
         return (
-            <BaseDialog className="mx_KeyBackupFailedDialog"
-                onFinished={this.props.onFinished}
-                title={title}
-            >
+            <BaseDialog className="mx_KeyBackupFailedDialog" onFinished={this.props.onFinished} title={title}>
                 <div>
-                    <p>{ _t(
-                        "This session has detected that your Security Phrase and key " +
-                        "for Secure Messages have been removed.",
-                    ) }</p>
-                    <p>{ _t(
-                        "If you did this accidentally, you can setup Secure Messages on " +
-                        "this session which will re-encrypt this session's message " +
-                        "history with a new recovery method.",
-                    ) }</p>
-                    <p className="warning">{ _t(
-                        "If you didn't remove the recovery method, an " +
-                        "attacker may be trying to access your account. " +
-                        "Change your account password and set a new recovery " +
-                        "method immediately in Settings.",
-                    ) }</p>
+                    <p>
+                        {_t(
+                            "This session has detected that your Security Phrase and key " +
+                                "for Secure Messages have been removed.",
+                        )}
+                    </p>
+                    <p>
+                        {_t(
+                            "If you did this accidentally, you can setup Secure Messages on " +
+                                "this session which will re-encrypt this session's message " +
+                                "history with a new recovery method.",
+                        )}
+                    </p>
+                    <p className="warning">
+                        {_t(
+                            "If you didn't remove the recovery method, an " +
+                                "attacker may be trying to access your account. " +
+                                "Change your account password and set a new recovery " +
+                                "method immediately in Settings.",
+                        )}
+                    </p>
                     <DialogButtons
                         primaryButton={_t("Set up Secure Messages")}
                         onPrimaryButtonClick={this.onSetupClick}

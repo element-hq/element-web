@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../languageHandler";
@@ -24,9 +24,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import ToggleSwitch from "../elements/ToggleSwitch";
 
-interface IProps {
-
-}
+interface IProps {}
 
 interface IState {
     currentManager: IntegrationManagerInstance;
@@ -47,7 +45,7 @@ export default class SetIntegrationManager extends React.Component<IProps, IStat
 
     private onProvisioningToggled = (): void => {
         const current = this.state.provisioningEnabled;
-        SettingsStore.setValue("integrationProvisioning", null, SettingLevel.ACCOUNT, !current).catch(err => {
+        SettingsStore.setValue("integrationProvisioning", null, SettingLevel.ACCOUNT, !current).catch((err) => {
             logger.error("Error changing integration manager provisioning");
             logger.error(err);
 
@@ -63,21 +61,20 @@ export default class SetIntegrationManager extends React.Component<IProps, IStat
         if (currentManager) {
             managerName = `(${currentManager.name})`;
             bodyText = _t(
-                "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, " +
-                "and sticker packs.",
+                "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, " + "and sticker packs.",
                 { serverName: currentManager.name },
-                { b: sub => <b>{ sub }</b> },
+                { b: (sub) => <b>{sub}</b> },
             );
         } else {
             bodyText = _t("Use an integration manager to manage bots, widgets, and sticker packs.");
         }
 
         return (
-            <div className='mx_SetIntegrationManager'>
+            <div className="mx_SetIntegrationManager">
                 <div className="mx_SettingsFlag">
                     <div className="mx_SetIntegrationManager_heading_manager">
-                        <span className="mx_SettingsTab_heading">{ _t("Manage integrations") }</span>
-                        <span className="mx_SettingsTab_subheading">{ managerName }</span>
+                        <span className="mx_SettingsTab_heading">{_t("Manage integrations")}</span>
+                        <span className="mx_SettingsTab_subheading">{managerName}</span>
                     </div>
                     <ToggleSwitch
                         checked={this.state.provisioningEnabled}
@@ -85,14 +82,12 @@ export default class SetIntegrationManager extends React.Component<IProps, IStat
                         onChange={this.onProvisioningToggled}
                     />
                 </div>
+                <div className="mx_SettingsTab_subsectionText">{bodyText}</div>
                 <div className="mx_SettingsTab_subsectionText">
-                    { bodyText }
-                </div>
-                <div className="mx_SettingsTab_subsectionText">
-                    { _t(
+                    {_t(
                         "Integration managers receive configuration data, and can modify widgets, " +
-                        "send room invites, and set power levels on your behalf.",
-                    ) }
+                            "send room invites, and set power levels on your behalf.",
+                    )}
                 </div>
             </div>
         );

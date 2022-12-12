@@ -25,7 +25,7 @@ export function getConfigLivestreamUrl() {
 }
 
 // Dummy rtmp URL used to signal that we want a special audio-only stream
-const AUDIOSTREAM_DUMMY_URL = 'rtmp://audiostream.dummy/';
+const AUDIOSTREAM_DUMMY_URL = "rtmp://audiostream.dummy/";
 
 async function createLiveStream(roomId: string) {
     const openIdToken = await MatrixClientPeg.get().getOpenIdToken();
@@ -33,7 +33,7 @@ async function createLiveStream(roomId: string) {
     const url = getConfigLivestreamUrl() + "/createStream";
 
     const response = await window.fetch(url, {
-        method: 'POST',
+        method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
@@ -44,7 +44,7 @@ async function createLiveStream(roomId: string) {
     });
 
     const respBody = await response.json();
-    return respBody['stream_id'];
+    return respBody["stream_id"];
 }
 
 export async function startJitsiAudioLivestream(widgetMessaging: ClientWidgetApi, roomId: string) {

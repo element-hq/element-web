@@ -135,8 +135,12 @@ limitations under the License.
 }
 
 @keyframes visualbell {
-    from { background-color: $visual-bell-bg-color; }
-    to { background-color: $background; }
+    from {
+        background-color: $visual-bell-bg-color;
+    }
+    to {
+        background-color: $background;
+    }
 }
 
 .mx_MessageComposer_input_error {
@@ -170,7 +174,7 @@ limitations under the License.
 .mx_MessageComposer_input textarea::-moz-placeholder {
     line-height: 100%;
     color: $accent;
-    opacity: 1.0;
+    opacity: 1;
 }
 .mx_MessageComposer_input textarea::-webkit-input-placeholder {
     color: $accent;
@@ -181,7 +185,7 @@ limitations under the License.
 }
 
 .mx_MessageComposer_button {
-    @mixin composerButton 50%,$accent;
+    @mixin composerButton 50%, $accent;
 
     &:last-child {
         margin-right: auto;
@@ -223,7 +227,7 @@ limitations under the License.
     }
 
     .mx_MessageComposer_button {
-        @mixin composerButton 5px,$tertiary-content;
+        @mixin composerButton 5px, $tertiary-content;
 
         &.mx_MessageComposer_closeButtonMenu {
             &::after {
@@ -242,39 +246,39 @@ limitations under the License.
 }
 
 .mx_MessageComposer_upload::before {
-    mask-image: url('$(res)/img/element-icons/room/composer/attach.svg');
+    mask-image: url("$(res)/img/element-icons/room/composer/attach.svg");
 }
 
 .mx_MessageComposer_poll::before {
-    mask-image: url('$(res)/img/element-icons/room/composer/poll.svg');
+    mask-image: url("$(res)/img/element-icons/room/composer/poll.svg");
 }
 
 .mx_MessageComposer_voiceMessage::before {
-    mask-image: url('$(res)/img/voip/mic-on-mask.svg');
+    mask-image: url("$(res)/img/voip/mic-on-mask.svg");
 }
 
 .mx_MessageComposer_voiceBroadcast::before {
-    mask-image: url('$(res)/img/element-icons/live.svg');
+    mask-image: url("$(res)/img/element-icons/live.svg");
 }
 
 .mx_MessageComposer_plain_text::before {
-    mask-image: url('$(res)/img/element-icons/room/composer/plain_text.svg');
+    mask-image: url("$(res)/img/element-icons/room/composer/plain_text.svg");
 }
 
 .mx_MessageComposer_rich_text::before {
-    mask-image: url('$(res)/img/element-icons/room/composer/rich_text.svg');
+    mask-image: url("$(res)/img/element-icons/room/composer/rich_text.svg");
 }
 
 .mx_MessageComposer_location::before {
-    mask-image: url('$(res)/img/element-icons/room/composer/location.svg');
+    mask-image: url("$(res)/img/element-icons/room/composer/location.svg");
 }
 
 .mx_MessageComposer_stickers::before {
-    mask-image: url('$(res)/img/element-icons/room/composer/sticker.svg');
+    mask-image: url("$(res)/img/element-icons/room/composer/sticker.svg");
 }
 
 .mx_MessageComposer_buttonMenu::before {
-    mask-image: url('$(res)/img/image-view/more.svg');
+    mask-image: url("$(res)/img/image-view/more.svg");
 }
 
 .mx_MessageComposer_sendMessage {
@@ -292,13 +296,13 @@ limitations under the License.
         top: 8px;
         left: 9px;
 
-        mask-image: url('$(res)/img/element-icons/send-message.svg');
+        mask-image: url("$(res)/img/element-icons/send-message.svg");
         mask-repeat: no-repeat;
         mask-size: contain;
         mask-position: center;
 
         background-color: $button-fg-color;
-        content: '';
+        content: "";
     }
 }
 
@@ -359,7 +363,7 @@ limitations under the License.
 .mx_MessageComposer_formatbar_markdown,
 .mx_MessageComposer_input_markdownIndicator {
     cursor: pointer;
-    mask-image: url('$(res)/img/markdown.svg');
+    mask-image: url("$(res)/img/markdown.svg");
     mask-size: contain;
     mask-position: center;
     mask-repeat: no-repeat;

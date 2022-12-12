@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 .mx_EmojiButton {
-    @mixin composerButton 50%,$accent;
+    @mixin composerButton 50%, $accent;
 }
 
 .mx_EmojiButton_highlight {
@@ -23,11 +23,11 @@ limitations under the License.
 }
 
 .mx_EmojiButton_icon::before {
-    mask-image: url('$(res)/img/element-icons/room/composer/emoji.svg');
+    mask-image: url("$(res)/img/element-icons/room/composer/emoji.svg");
 }
 
 .mx_MessageComposer_wysiwyg {
     .mx_EmojiButton {
-        @mixin composerButton 5px,$tertiary-content;
+        @mixin composerButton 5px, $tertiary-content;
     }
 }

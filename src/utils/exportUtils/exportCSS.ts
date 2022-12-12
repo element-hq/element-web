@@ -52,7 +52,7 @@ async function getRulesFromCssFile(path: string): Promise<CSSStyleSheet> {
 // doesn't cull rules which won't apply due to the full selector not matching but gets rid of a LOT of cruft anyway.
 const getExportCSS = async (usedClasses: Set<string>): Promise<string> => {
     // only include bundle.css and the data-mx-theme=light styling
-    const stylesheets = Array.from(document.styleSheets).filter(s => {
+    const stylesheets = Array.from(document.styleSheets).filter((s) => {
         return s.href?.endsWith("bundle.css") || isLightTheme(s);
     });
 
@@ -70,12 +70,14 @@ const getExportCSS = async (usedClasses: Set<string>): Promise<string> => {
             const selectorText = (rule as CSSStyleRule).selectorText;
 
             // only skip the rule if all branches (,) of the selector are redundant
-            if (selectorText?.split(",").every(selector => {
-                const classes = selector.match(cssSelectorTextClassesRegex);
-                if (classes && !classes.every(c => usedClasses.has(c.substring(1)))) {
-                    return true; // signal as a redundant selector
-                }
-            })) {
+            if (
+                selectorText?.split(",").every((selector) => {
+                    const classes = selector.match(cssSelectorTextClassesRegex);
+                    if (classes && !classes.every((c) => usedClasses.has(c.substring(1)))) {
+                        return true; // signal as a redundant selector
+                    }
+                })
+            ) {
                 continue; // skip this rule as it is redundant
             }
 

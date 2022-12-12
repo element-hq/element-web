@@ -15,5 +15,5 @@ limitations under the License.
 */
 
 export function htmlToPlainText(html: string) {
-    return new DOMParser().parseFromString(html, 'text/html').documentElement.textContent;
+    return new DOMParser().parseFromString(html, "text/html").documentElement.textContent;
 }

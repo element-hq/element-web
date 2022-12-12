@@ -20,10 +20,10 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomType } from "matrix-js-sdk/src/@types/event";
 import { JoinRule, Preset, Visibility } from "matrix-js-sdk/src/@types/partials";
 
-import SdkConfig from '../../../SdkConfig';
-import withValidation, { IFieldState } from '../elements/Validation';
-import { _t } from '../../../languageHandler';
-import { MatrixClientPeg } from '../../../MatrixClientPeg';
+import SdkConfig from "../../../SdkConfig";
+import withValidation, { IFieldState } from "../elements/Validation";
+import { _t } from "../../../languageHandler";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { IOpts } from "../../../createRoom";
 import Field from "../elements/Field";
 import RoomAliasField from "../elements/RoomAliasField";
@@ -87,13 +87,14 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
             canChangeEncryption: true,
         };
 
-        MatrixClientPeg.get().doesServerForceEncryptionForPreset(Preset.PrivateChat)
-            .then(isForced => this.setState({ canChangeEncryption: !isForced }));
+        MatrixClientPeg.get()
+            .doesServerForceEncryptionForPreset(Preset.PrivateChat)
+            .then((isForced) => this.setState({ canChangeEncryption: !isForced }));
     }
 
     private roomCreateOptions() {
         const opts: IOpts = {};
-        const createOpts: IOpts["createOpts"] = opts.createOpts = {};
+        const createOpts: IOpts["createOpts"] = (opts.createOpts = {});
         opts.roomType = this.props.type;
         createOpts.name = this.state.name;
 
@@ -112,7 +113,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
             createOpts.topic = this.state.topic;
         }
         if (this.state.noFederate) {
-            createOpts.creation_content = { 'm.federate': false };
+            createOpts.creation_content = { "m.federate": false };
         }
 
         opts.parentSpace = this.props.parentSpace;
@@ -150,7 +151,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
         }
         // Validation and state updates are async, so we need to wait for them to complete
         // first. Queue a `setState` callback and wait for it to resolve.
-        await new Promise<void>(resolve => this.setState({}, resolve));
+        await new Promise<void>((resolve) => this.setState({}, resolve));
         if (this.state.nameIsValid && (!this.aliasField.current || this.aliasField.current.isValid)) {
             this.props.onFinished(true, this.roomCreateOptions());
         } else {
@@ -235,39 +236,49 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
 
         let publicPrivateLabel: JSX.Element;
         if (this.state.joinRule === JoinRule.Restricted) {
-            publicPrivateLabel = <p>
-                { _t(
-                    "Everyone in <SpaceName/> will be able to find and join this room.", {}, {
-                        SpaceName: () => <b>{ this.props.parentSpace.name }</b>,
-                    },
-                ) }
-                &nbsp;
-                { _t("You can change this at any time from room settings.") }
-            </p>;
+            publicPrivateLabel = (
+                <p>
+                    {_t(
+                        "Everyone in <SpaceName/> will be able to find and join this room.",
+                        {},
+                        {
+                            SpaceName: () => <b>{this.props.parentSpace.name}</b>,
+                        },
+                    )}
+                    &nbsp;
+                    {_t("You can change this at any time from room settings.")}
+                </p>
+            );
         } else if (this.state.joinRule === JoinRule.Public && this.props.parentSpace) {
-            publicPrivateLabel = <p>
-                { _t(
-                    "Anyone will be able to find and join this room, not just members of <SpaceName/>.", {}, {
-                        SpaceName: () => <b>{ this.props.parentSpace.name }</b>,
-                    },
-                ) }
-                &nbsp;
-                { _t("You can change this at any time from room settings.") }
-            </p>;
+            publicPrivateLabel = (
+                <p>
+                    {_t(
+                        "Anyone will be able to find and join this room, not just members of <SpaceName/>.",
+                        {},
+                        {
+                            SpaceName: () => <b>{this.props.parentSpace.name}</b>,
+                        },
+                    )}
+                    &nbsp;
+                    {_t("You can change this at any time from room settings.")}
+                </p>
+            );
         } else if (this.state.joinRule === JoinRule.Public) {
-            publicPrivateLabel = <p>
-                { _t("Anyone will be able to find and join this room.") }
-                &nbsp;
-                { _t("You can change this at any time from room settings.") }
-            </p>;
+            publicPrivateLabel = (
+                <p>
+                    {_t("Anyone will be able to find and join this room.")}
+                    &nbsp;
+                    {_t("You can change this at any time from room settings.")}
+                </p>
+            );
         } else if (this.state.joinRule === JoinRule.Invite) {
-            publicPrivateLabel = <p>
-                { _t(
-                    "Only people invited will be able to find and join this room.",
-                ) }
-                &nbsp;
-                { _t("You can change this at any time from room settings.") }
-            </p>;
+            publicPrivateLabel = (
+                <p>
+                    {_t("Only people invited will be able to find and join this room.")}
+                    &nbsp;
+                    {_t("You can change this at any time from room settings.")}
+                </p>
+            );
         }
 
         let e2eeSection: JSX.Element;
@@ -282,31 +293,35 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
                     microcopy = _t("Your server requires encryption to be enabled in private rooms.");
                 }
             } else {
-                microcopy = _t("Your server admin has disabled end-to-end encryption by default " +
-                    "in private rooms & Direct Messages.");
+                microcopy = _t(
+                    "Your server admin has disabled end-to-end encryption by default " +
+                        "in private rooms & Direct Messages.",
+                );
             }
-            e2eeSection = <React.Fragment>
-                <LabelledToggleSwitch
-                    label={_t("Enable end-to-end encryption")}
-                    onChange={this.onEncryptedChange}
-                    value={this.state.isEncrypted}
-                    className='mx_CreateRoomDialog_e2eSwitch' // for end-to-end tests
-                    disabled={!this.state.canChangeEncryption}
-                />
-                <p>{ microcopy }</p>
-            </React.Fragment>;
+            e2eeSection = (
+                <React.Fragment>
+                    <LabelledToggleSwitch
+                        label={_t("Enable end-to-end encryption")}
+                        onChange={this.onEncryptedChange}
+                        value={this.state.isEncrypted}
+                        className="mx_CreateRoomDialog_e2eSwitch" // for end-to-end tests
+                        disabled={!this.state.canChangeEncryption}
+                    />
+                    <p>{microcopy}</p>
+                </React.Fragment>
+            );
         }
 
         let federateLabel = _t(
             "You might enable this if the room will only be used for collaborating with internal " +
-            "teams on your homeserver. This cannot be changed later.",
+                "teams on your homeserver. This cannot be changed later.",
         );
         if (SdkConfig.get().default_federate === false) {
             // We only change the label if the default setting is different to avoid jarring text changes to the
             // user. They will have read the implications of turning this off/on, so no need to rephrase for them.
             federateLabel = _t(
                 "You might disable this if the room will be used for collaborating with external " +
-                "teams who have their own homeserver. This cannot be changed later.",
+                    "teams who have their own homeserver. This cannot be changed later.",
             );
         }
 
@@ -316,7 +331,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
         } else if (this.props.parentSpace) {
             title = _t("Create a room");
         } else {
-            title = this.state.joinRule === JoinRule.Public ? _t('Create a public room') : _t('Create a private room');
+            title = this.state.joinRule === JoinRule.Public ? _t("Create a public room") : _t("Create a private room");
         }
 
         return (
@@ -330,14 +345,14 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
                     <div className="mx_Dialog_content">
                         <Field
                             ref={this.nameField}
-                            label={_t('Name')}
+                            label={_t("Name")}
                             onChange={this.onNameChange}
                             onValidate={this.onNameValidate}
                             value={this.state.name}
                             className="mx_CreateRoomDialog_name"
                         />
                         <Field
-                            label={_t('Topic (optional)')}
+                            label={_t("Topic (optional)")}
                             onChange={this.onTopicChange}
                             value={this.state.topic}
                             className="mx_CreateRoomDialog_topic"
@@ -352,28 +367,29 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
                             onChange={this.onJoinRuleChange}
                         />
 
-                        { publicPrivateLabel }
-                        { e2eeSection }
-                        { aliasField }
+                        {publicPrivateLabel}
+                        {e2eeSection}
+                        {aliasField}
                         <details onToggle={this.onDetailsToggled} className="mx_CreateRoomDialog_details">
                             <summary className="mx_CreateRoomDialog_details_summary">
-                                { this.state.detailsOpen ? _t('Hide advanced') : _t('Show advanced') }
+                                {this.state.detailsOpen ? _t("Hide advanced") : _t("Show advanced")}
                             </summary>
                             <LabelledToggleSwitch
-                                label={_t(
-                                    "Block anyone not part of %(serverName)s from ever joining this room.",
-                                    { serverName: MatrixClientPeg.getHomeserverName() },
-                                )}
+                                label={_t("Block anyone not part of %(serverName)s from ever joining this room.", {
+                                    serverName: MatrixClientPeg.getHomeserverName(),
+                                })}
                                 onChange={this.onNoFederateChange}
                                 value={this.state.noFederate}
                             />
-                            <p>{ federateLabel }</p>
+                            <p>{federateLabel}</p>
                         </details>
                     </div>
                 </form>
-                <DialogButtons primaryButton={isVideoRoom ? _t('Create video room') : _t('Create room')}
+                <DialogButtons
+                    primaryButton={isVideoRoom ? _t("Create video room") : _t("Create room")}
                     onPrimaryButtonClick={this.onOk}
-                    onCancel={this.onCancel} />
+                    onCancel={this.onCancel}
+                />
             </BaseDialog>
         );
     }

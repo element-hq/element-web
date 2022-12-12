@@ -1,12 +1,6 @@
 module.exports = {
-    plugins: [
-        "matrix-org",
-    ],
-    extends: [
-        "plugin:matrix-org/babel",
-        "plugin:matrix-org/react",
-        "plugin:matrix-org/a11y",
-    ],
+    plugins: ["matrix-org"],
+    extends: ["plugin:matrix-org/babel", "plugin:matrix-org/react", "plugin:matrix-org/a11y"],
     env: {
         browser: true,
         node: true,
@@ -40,34 +34,47 @@ module.exports = {
         ],
 
         // Ban matrix-js-sdk/src imports in favour of matrix-js-sdk/src/matrix imports to prevent unleashing hell.
-        "no-restricted-imports": ["error", {
-            "paths": [{
-                "name": "matrix-js-sdk",
-                "message": "Please use matrix-js-sdk/src/matrix instead",
-            }, {
-                "name": "matrix-js-sdk/",
-                "message": "Please use matrix-js-sdk/src/matrix instead",
-            }, {
-                "name": "matrix-js-sdk/src",
-                "message": "Please use matrix-js-sdk/src/matrix instead",
-            }, {
-                "name": "matrix-js-sdk/src/",
-                "message": "Please use matrix-js-sdk/src/matrix instead",
-            }, {
-                "name": "matrix-js-sdk/src/index",
-                "message": "Please use matrix-js-sdk/src/matrix instead",
-            }, {
-                "name": "matrix-react-sdk",
-                "message": "Please use matrix-react-sdk/src/index instead",
-            }, {
-                "name": "matrix-react-sdk/",
-                "message": "Please use matrix-react-sdk/src/index instead",
-            }],
-            "patterns": [{
-                "group": ["matrix-js-sdk/lib", "matrix-js-sdk/lib/", "matrix-js-sdk/lib/**"],
-                "message": "Please use matrix-js-sdk/src/* instead",
-            }],
-        }],
+        "no-restricted-imports": [
+            "error",
+            {
+                paths: [
+                    {
+                        name: "matrix-js-sdk",
+                        message: "Please use matrix-js-sdk/src/matrix instead",
+                    },
+                    {
+                        name: "matrix-js-sdk/",
+                        message: "Please use matrix-js-sdk/src/matrix instead",
+                    },
+                    {
+                        name: "matrix-js-sdk/src",
+                        message: "Please use matrix-js-sdk/src/matrix instead",
+                    },
+                    {
+                        name: "matrix-js-sdk/src/",
+                        message: "Please use matrix-js-sdk/src/matrix instead",
+                    },
+                    {
+                        name: "matrix-js-sdk/src/index",
+                        message: "Please use matrix-js-sdk/src/matrix instead",
+                    },
+                    {
+                        name: "matrix-react-sdk",
+                        message: "Please use matrix-react-sdk/src/index instead",
+                    },
+                    {
+                        name: "matrix-react-sdk/",
+                        message: "Please use matrix-react-sdk/src/index instead",
+                    },
+                ],
+                patterns: [
+                    {
+                        group: ["matrix-js-sdk/lib", "matrix-js-sdk/lib/", "matrix-js-sdk/lib/**"],
+                        message: "Please use matrix-js-sdk/src/* instead",
+                    },
+                ],
+            },
+        ],
 
         // There are too many a11y violations to fix at once
         // Turn violated rules off until they are fixed
@@ -90,15 +97,8 @@ module.exports = {
     },
     overrides: [
         {
-            files: [
-                "src/**/*.{ts,tsx}",
-                "test/**/*.{ts,tsx}",
-                "cypress/**/*.ts",
-            ],
-            extends: [
-                "plugin:matrix-org/typescript",
-                "plugin:matrix-org/react",
-            ],
+            files: ["src/**/*.{ts,tsx}", "test/**/*.{ts,tsx}", "cypress/**/*.ts"],
+            extends: ["plugin:matrix-org/typescript", "plugin:matrix-org/react"],
             rules: {
                 // temporary disabled
                 "@typescript-eslint/explicit-function-return-type": "off",
@@ -151,12 +151,12 @@ module.exports = {
                 "src/components/views/rooms/MessageComposer.tsx",
                 "src/components/views/rooms/ReplyPreview.tsx",
                 "src/components/views/settings/tabs/room/SecurityRoomSettingsTab.tsx",
-                "src/components/views/settings/tabs/user/GeneralUserSettingsTab.tsx"
+                "src/components/views/settings/tabs/user/GeneralUserSettingsTab.tsx",
             ],
             rules: {
                 "@typescript-eslint/no-var-requires": "off",
             },
-        }
+        },
     ],
     settings: {
         react: {
@@ -166,7 +166,7 @@ module.exports = {
 };
 
 function buildRestrictedPropertiesOptions(properties, message) {
-    return properties.map(prop => {
+    return properties.map((prop) => {
         let [object, property] = prop.split(".");
         if (object === "*") {
             object = undefined;

@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import hljs from 'highlight.js';
+import React from "react";
+import hljs from "highlight.js";
 
 interface IProps {
     language?: string;
@@ -34,4 +34,3 @@ export default class SyntaxHighlight extends React.PureComponent<IProps> {
         );
     }
 }
-

@@ -158,18 +158,12 @@ describe("direct-messages", () => {
                 mocked(startDm).mockResolvedValue(room1.roomId);
             });
 
-            it(
-                "should set the room into creating state and call waitForRoomReadyAndApplyAfterCreateCallbacks",
-                async () => {
-                    const result = await dmModule.createRoomFromLocalRoom(mockClient, localRoom);
-                    expect(result).toBe(room1.roomId);
-                    expect(localRoom.state).toBe(LocalRoomState.CREATING);
-                    expect(waitForRoomReadyAndApplyAfterCreateCallbacks).toHaveBeenCalledWith(
-                        mockClient,
-                        localRoom,
-                    );
-                },
-            );
+            it("should set the room into creating state and call waitForRoomReadyAndApplyAfterCreateCallbacks", async () => {
+                const result = await dmModule.createRoomFromLocalRoom(mockClient, localRoom);
+                expect(result).toBe(room1.roomId);
+                expect(localRoom.state).toBe(LocalRoomState.CREATING);
+                expect(waitForRoomReadyAndApplyAfterCreateCallbacks).toHaveBeenCalledWith(mockClient, localRoom);
+            });
         });
     });
 });

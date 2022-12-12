@@ -92,15 +92,11 @@ describe("RolesRoomSettingsTab", () => {
         });
 
         it("should update the power levels", () => {
-            expect(cli.sendStateEvent).toHaveBeenCalledWith(
-                roomId,
-                EventType.RoomPowerLevels,
-                {
-                    events: {
-                        [VoiceBroadcastInfoEventType]: 0,
-                    },
+            expect(cli.sendStateEvent).toHaveBeenCalledWith(roomId, EventType.RoomPowerLevels, {
+                events: {
+                    [VoiceBroadcastInfoEventType]: 0,
                 },
-            );
+            });
         });
     });
 
@@ -145,15 +141,11 @@ describe("RolesRoomSettingsTab", () => {
                     });
 
                     expect(getJoinCallSelectedOption(tab)?.textContent).toBe("Default");
-                    expect(cli.sendStateEvent).toHaveBeenCalledWith(
-                        roomId,
-                        EventType.RoomPowerLevels,
-                        {
-                            events: {
-                                [ElementCall.MEMBER_EVENT_TYPE.name]: 0,
-                            },
+                    expect(cli.sendStateEvent).toHaveBeenCalledWith(roomId, EventType.RoomPowerLevels, {
+                        events: {
+                            [ElementCall.MEMBER_EVENT_TYPE.name]: 0,
                         },
-                    );
+                    });
                 });
             });
 
@@ -170,15 +162,11 @@ describe("RolesRoomSettingsTab", () => {
                     });
 
                     expect(getStartCallSelectedOption(tab)?.textContent).toBe("Default");
-                    expect(cli.sendStateEvent).toHaveBeenCalledWith(
-                        roomId,
-                        EventType.RoomPowerLevels,
-                        {
-                            events: {
-                                [ElementCall.CALL_EVENT_TYPE.name]: 0,
-                            },
+                    expect(cli.sendStateEvent).toHaveBeenCalledWith(roomId, EventType.RoomPowerLevels, {
+                        events: {
+                            [ElementCall.CALL_EVENT_TYPE.name]: 0,
                         },
-                    );
+                    });
                 });
             });
         });

@@ -47,15 +47,15 @@ describe("Analytics Toast", () => {
     });
 
     it("should not show an analytics toast if config has nothing about posthog", () => {
-        cy.intercept("/config.json?cachebuster=*", req => {
-            req.continue(res => {
+        cy.intercept("/config.json?cachebuster=*", (req) => {
+            req.continue((res) => {
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 const { posthog, ...body } = res.body;
                 res.send(200, body);
             });
         });
 
-        cy.startSynapse("default").then(data => {
+        cy.startSynapse("default").then((data) => {
             synapse = data;
             cy.initTestUser(synapse, "Tod");
         });
@@ -66,8 +66,8 @@ describe("Analytics Toast", () => {
 
     describe("with posthog enabled", () => {
         beforeEach(() => {
-            cy.intercept("/config.json?cachebuster=*", req => {
-                req.continue(res => {
+            cy.intercept("/config.json?cachebuster=*", (req) => {
+                req.continue((res) => {
                     res.send(200, {
                         ...res.body,
                         posthog: {
@@ -78,7 +78,7 @@ describe("Analytics Toast", () => {
                 });
             });
 
-            cy.startSynapse("default").then(data => {
+            cy.startSynapse("default").then((data) => {
                 synapse = data;
                 cy.initTestUser(synapse, "Tod");
                 rejectToast("Notifications");

@@ -41,8 +41,8 @@ describe("KeyboardShortcutUtils", () => {
     it("doesn't change KEYBOARD_SHORTCUTS when getting shortcuts", async () => {
         mockKeyboardShortcuts({
             KEYBOARD_SHORTCUTS: {
-                "Keybind1": {},
-                "Keybind2": {},
+                Keybind1: {},
+                Keybind2: {},
             },
             MAC_ONLY_SHORTCUTS: ["Keybind1"],
             DESKTOP_SHORTCUTS: ["Keybind2"],
@@ -62,29 +62,29 @@ describe("KeyboardShortcutUtils", () => {
         it("when on web and not on macOS ", async () => {
             mockKeyboardShortcuts({
                 KEYBOARD_SHORTCUTS: {
-                    "Keybind1": {},
-                    "Keybind2": {},
-                    "Keybind3": { "controller": { settingDisabled: true } },
-                    "Keybind4": {},
+                    Keybind1: {},
+                    Keybind2: {},
+                    Keybind3: { controller: { settingDisabled: true } },
+                    Keybind4: {},
                 },
                 MAC_ONLY_SHORTCUTS: ["Keybind1"],
                 DESKTOP_SHORTCUTS: ["Keybind2"],
             });
             mockPlatformPeg({ overrideBrowserShortcuts: jest.fn().mockReturnValue(false) });
-            expect((await getUtils()).getKeyboardShortcuts()).toEqual({ "Keybind4": {} });
+            expect((await getUtils()).getKeyboardShortcuts()).toEqual({ Keybind4: {} });
         });
 
         it("when on desktop", async () => {
             mockKeyboardShortcuts({
                 KEYBOARD_SHORTCUTS: {
-                    "Keybind1": {},
-                    "Keybind2": {},
+                    Keybind1: {},
+                    Keybind2: {},
                 },
                 MAC_ONLY_SHORTCUTS: [],
                 DESKTOP_SHORTCUTS: ["Keybind2"],
             });
             mockPlatformPeg({ overrideBrowserShortcuts: jest.fn().mockReturnValue(true) });
-            expect((await getUtils()).getKeyboardShortcuts()).toEqual({ "Keybind1": {}, "Keybind2": {} });
+            expect((await getUtils()).getKeyboardShortcuts()).toEqual({ Keybind1: {}, Keybind2: {} });
         });
     });
 });

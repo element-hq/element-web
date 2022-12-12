@@ -14,20 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { filesize } from "filesize";
-import { IEventRelation } from 'matrix-js-sdk/src/matrix';
+import { IEventRelation } from "matrix-js-sdk/src/matrix";
 import { Optional } from "matrix-events-sdk";
 
-import ContentMessages from '../../ContentMessages';
+import ContentMessages from "../../ContentMessages";
 import dis from "../../dispatcher/dispatcher";
-import { _t } from '../../languageHandler';
+import { _t } from "../../languageHandler";
 import { Action } from "../../dispatcher/actions";
 import ProgressBar from "../views/elements/ProgressBar";
 import AccessibleButton, { ButtonEvent } from "../views/elements/AccessibleButton";
 import { RoomUpload } from "../../models/RoomUpload";
-import { ActionPayload } from '../../dispatcher/payloads';
+import { ActionPayload } from "../../dispatcher/payloads";
 import { UploadPayload } from "../../dispatcher/payloads/UploadPayload";
 
 interface IProps {
@@ -77,7 +77,7 @@ export default class UploadBar extends React.PureComponent<IProps, IState> {
 
     private getUploadsInRoom(): RoomUpload[] {
         const uploads = ContentMessages.sharedInstance().getCurrentUploads(this.props.relation);
-        return uploads.filter(u => u.roomId === this.props.room.roomId);
+        return uploads.filter((u) => u.roomId === this.props.room.roomId);
     }
 
     private calculateState(): IState {
@@ -109,18 +109,18 @@ export default class UploadBar extends React.PureComponent<IProps, IState> {
         }
 
         // MUST use var name 'count' for pluralization to kick in
-        const uploadText = _t(
-            "Uploading %(filename)s and %(count)s others", {
-                filename: this.state.currentFile,
-                count: this.state.countFiles - 1,
-            },
-        );
+        const uploadText = _t("Uploading %(filename)s and %(count)s others", {
+            filename: this.state.currentFile,
+            count: this.state.countFiles - 1,
+        });
 
         const uploadSize = filesize(this.state.currentTotal!);
         return (
             <div className="mx_UploadBar">
-                <div className="mx_UploadBar_filename">{ uploadText } ({ uploadSize })</div>
-                <AccessibleButton onClick={this.onCancelClick} className='mx_UploadBar_cancel' />
+                <div className="mx_UploadBar_filename">
+                    {uploadText} ({uploadSize})
+                </div>
+                <AccessibleButton onClick={this.onCancelClick} className="mx_UploadBar_cancel" />
                 <ProgressBar value={this.state.currentLoaded!} max={this.state.currentTotal!} />
             </div>
         );

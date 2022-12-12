@@ -14,4 +14,4 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-module.exports = require('matrix-js-sdk/spec/slowReporter');
+module.exports = require("matrix-js-sdk/spec/slowReporter");

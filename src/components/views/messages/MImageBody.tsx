@@ -15,30 +15,30 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ComponentProps, createRef } from 'react';
+import React, { ComponentProps, createRef } from "react";
 import { Blurhash } from "react-blurhash";
-import classNames from 'classnames';
-import { CSSTransition, SwitchTransition } from 'react-transition-group';
+import classNames from "classnames";
+import { CSSTransition, SwitchTransition } from "react-transition-group";
 import { logger } from "matrix-js-sdk/src/logger";
 import { ClientEvent, ClientEventHandlerMap } from "matrix-js-sdk/src/client";
 
-import MFileBody from './MFileBody';
-import Modal from '../../../Modal';
-import { _t } from '../../../languageHandler';
+import MFileBody from "./MFileBody";
+import Modal from "../../../Modal";
+import { _t } from "../../../languageHandler";
 import SettingsStore from "../../../settings/SettingsStore";
-import Spinner from '../elements/Spinner';
+import Spinner from "../elements/Spinner";
 import { Media, mediaFromContent } from "../../../customisations/Media";
 import { BLURHASH_FIELD, createThumbnail } from "../../../utils/image-media";
-import { IMediaEventContent } from '../../../customisations/models/IMediaEventContent';
-import ImageView from '../elements/ImageView';
+import { IMediaEventContent } from "../../../customisations/models/IMediaEventContent";
+import ImageView from "../elements/ImageView";
 import { IBodyProps } from "./IBodyProps";
 import { ImageSize, suggestedSize as suggestedImageSize } from "../../../settings/enums/ImageSize";
-import { MatrixClientPeg } from '../../../MatrixClientPeg';
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
-import { blobIsAnimated, mayBeAnimated } from '../../../utils/Image';
+import { blobIsAnimated, mayBeAnimated } from "../../../utils/Image";
 import { presentableTextForFile } from "../../../utils/FileUtils";
-import { createReconnectedListener } from '../../../utils/connection';
-import MediaProcessingError from './shared/MediaProcessingError';
+import { createReconnectedListener } from "../../../utils/connection";
+import MediaProcessingError from "./shared/MediaProcessingError";
 import { DecryptError, DownloadError } from "../../../utils/DecryptFile";
 
 enum Placeholder {
@@ -104,7 +104,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
             const httpUrl = this.state.contentUrl;
             const params: Omit<ComponentProps<typeof ImageView>, "onFinished"> = {
                 src: httpUrl,
-                name: content.body?.length > 0 ? content.body : _t('Attachment'),
+                name: content.body?.length > 0 ? content.body : _t("Attachment"),
                 mxEvent: this.props.mxEvent,
                 permalinkCreator: this.props.permalinkCreator,
             };
@@ -202,7 +202,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         if (info?.mimetype === "image/svg+xml" && media.hasThumbnail) {
             // Special-case to return clientside sender-generated thumbnails for SVGs, if any,
             // given we deliberately don't thumbnail them serverside to prevent billion lol attacks and similar.
-            return media.getThumbnailHttp(thumbWidth, thumbHeight, 'scale');
+            return media.getThumbnailHttp(thumbWidth, thumbHeight, "scale");
         }
 
         // we try to download the correct resolution for hi-res images (like retina screenshots).
@@ -214,11 +214,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         //     thumbnailing to produce the static preview image)
         //   - On a low DPI device, always thumbnail to save bandwidth
         //   - If there's no sizing info in the event, default to thumbnail
-        if (
-            this.state.isAnimated ||
-            window.devicePixelRatio === 1.0 ||
-            (!info || !info.w || !info.h || !info.size)
-        ) {
+        if (this.state.isAnimated || window.devicePixelRatio === 1.0 || !info || !info.w || !info.h || !info.size) {
             return media.getThumbnailOfSourceHttp(thumbWidth, thumbHeight);
         }
 
@@ -229,10 +225,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         // As a compromise, let's switch to non-retina thumbnails only if the original image is both
         // physically too large and going to be massive to load in the timeline (e.g. >1MB).
 
-        const isLargerThanThumbnail = (
-            info.w > thumbWidth ||
-            info.h > thumbHeight
-        );
+        const isLargerThanThumbnail = info.w > thumbWidth || info.h > thumbHeight;
         const isLargeFileSize = info.size > 1 * 1024 * 1024; // 1mb
 
         if (isLargeFileSize && isLargerThanThumbnail) {
@@ -253,10 +246,10 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         let contentUrl: string;
         if (this.props.mediaEventHelper.media.isEncrypted) {
             try {
-                ([contentUrl, thumbUrl] = await Promise.all([
+                [contentUrl, thumbUrl] = await Promise.all([
                     this.props.mediaEventHelper.sourceUrl.value,
                     this.props.mediaEventHelper.thumbnailUrl.value,
-                ]));
+                ]);
             } catch (error) {
                 if (this.unmounted) return;
 
@@ -302,7 +295,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
 
                 try {
                     const blob = await this.props.mediaEventHelper.sourceBlob.value;
-                    if (!await blobIsAnimated(content.info?.mimetype, blob)) {
+                    if (!(await blobIsAnimated(content.info?.mimetype, blob))) {
                         isAnimated = false;
                     }
 
@@ -335,8 +328,8 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
     componentDidMount() {
         this.unmounted = false;
 
-        const showImage = this.state.showImage ||
-            localStorage.getItem("mx_ShowImage_" + this.props.mxEvent.getId()) === "true";
+        const showImage =
+            this.state.showImage || localStorage.getItem("mx_ShowImage_" + this.props.mxEvent.getId()) === "true";
 
         if (showImage) {
             // noinspection JSIgnoredPromiseFromCall
@@ -373,18 +366,13 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
 
     protected getBanner(content: IMediaEventContent): JSX.Element {
         // Hide it for the threads list & the file panel where we show it as text anyway.
-        if ([
-            TimelineRenderingType.ThreadsList,
-            TimelineRenderingType.File,
-        ].includes(this.context.timelineRenderingType)) {
+        if (
+            [TimelineRenderingType.ThreadsList, TimelineRenderingType.File].includes(this.context.timelineRenderingType)
+        ) {
             return null;
         }
 
-        return (
-            <span className="mx_MImageBody_banner">
-                { presentableTextForFile(content, _t("Image"), true, true) }
-            </span>
-        );
+        return <span className="mx_MImageBody_banner">{presentableTextForFile(content, _t("Image"), true, true)}</span>;
     }
 
     protected messageContent(
@@ -418,7 +406,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
                 } else {
                     imageElement = (
                         <img
-                            style={{ display: 'none' }}
+                            style={{ display: "none" }}
                             src={thumbUrl}
                             ref={this.image}
                             alt={content.body}
@@ -446,13 +434,11 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         let gifLabel: JSX.Element;
 
         if (!this.props.forExport && !this.state.imgLoaded) {
-            const classes = classNames('mx_MImageBody_placeholder', {
-                'mx_MImageBody_placeholder--blurhash': this.props.mxEvent.getContent().info?.[BLURHASH_FIELD],
+            const classes = classNames("mx_MImageBody_placeholder", {
+                "mx_MImageBody_placeholder--blurhash": this.props.mxEvent.getContent().info?.[BLURHASH_FIELD],
             });
 
-            placeholder = <div className={classes}>
-                { this.getPlaceholder(maxWidth, maxHeight) }
-            </div>;
+            placeholder = <div className={classes}>{this.getPlaceholder(maxWidth, maxHeight)}</div>;
         }
 
         let showPlaceholder = Boolean(placeholder);
@@ -496,33 +482,34 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         const sizing = infoSvg ? { maxHeight, maxWidth, width: maxWidth } : { maxHeight, maxWidth };
 
         if (!this.props.forExport) {
-            placeholder = <SwitchTransition mode="out-in">
-                <CSSTransition
-                    classNames="mx_rtg--fade"
-                    key={`img-${showPlaceholder}`}
-                    timeout={300}
-                >
-                    { showPlaceholder ? placeholder : <></> /* Transition always expects a child */ }
-                </CSSTransition>
-            </SwitchTransition>;
+            placeholder = (
+                <SwitchTransition mode="out-in">
+                    <CSSTransition classNames="mx_rtg--fade" key={`img-${showPlaceholder}`} timeout={300}>
+                        {showPlaceholder ? placeholder : <></> /* Transition always expects a child */}
+                    </CSSTransition>
+                </SwitchTransition>
+            );
         }
 
         const thumbnail = (
-            <div className="mx_MImageBody_thumbnail_container" style={{ maxHeight, maxWidth, aspectRatio: `${infoWidth}/${infoHeight}` }}>
-                { placeholder }
+            <div
+                className="mx_MImageBody_thumbnail_container"
+                style={{ maxHeight, maxWidth, aspectRatio: `${infoWidth}/${infoHeight}` }}
+            >
+                {placeholder}
 
                 <div style={sizing}>
-                    { img }
-                    { gifLabel }
-                    { banner }
+                    {img}
+                    {gifLabel}
+                    {banner}
                 </div>
 
-                { /* HACK: This div fills out space while the image loads, to prevent scroll jumps */ }
-                { !this.props.forExport && !this.state.imgLoaded && (
+                {/* HACK: This div fills out space while the image loads, to prevent scroll jumps */}
+                {!this.props.forExport && !this.state.imgLoaded && (
                     <div style={{ height: maxHeight, width: maxWidth }} />
-                ) }
+                )}
 
-                { this.state.hover && this.getTooltip() }
+                {this.state.hover && this.getTooltip()}
             </div>
         );
 
@@ -531,9 +518,11 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
 
     // Overridden by MStickerBody
     protected wrapImage(contentUrl: string, children: JSX.Element): JSX.Element {
-        return <a href={contentUrl} target={this.props.forExport ? "_blank" : undefined} onClick={this.onClick}>
-            { children }
-        </a>;
+        return (
+            <a href={contentUrl} target={this.props.forExport ? "_blank" : undefined} onClick={this.onClick}>
+                {children}
+            </a>
+        );
     }
 
     // Overridden by MStickerBody
@@ -562,13 +551,12 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
          * In the room timeline or the thread context we don't need the download
          * link as the message action bar will fulfill that
          */
-        const hasMessageActionBar = (
+        const hasMessageActionBar =
             this.context.timelineRenderingType === TimelineRenderingType.Room ||
             this.context.timelineRenderingType === TimelineRenderingType.Pinned ||
             this.context.timelineRenderingType === TimelineRenderingType.Search ||
             this.context.timelineRenderingType === TimelineRenderingType.Thread ||
-            this.context.timelineRenderingType === TimelineRenderingType.ThreadsList
-        );
+            this.context.timelineRenderingType === TimelineRenderingType.ThreadsList;
         if (!hasMessageActionBar) {
             return <MFileBody {...this.props} showGenericPlaceholder={false} />;
         }
@@ -585,11 +573,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
                 errorText = _t("Error downloading image");
             }
 
-            return (
-                <MediaProcessingError className="mx_MImageBody">
-                    { errorText }
-                </MediaProcessingError>
-            );
+            return <MediaProcessingError className="mx_MImageBody">{errorText}</MediaProcessingError>;
         }
 
         let contentUrl = this.state.contentUrl;
@@ -608,8 +592,8 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
 
         return (
             <div className="mx_MImageBody">
-                { thumbnail }
-                { fileBody }
+                {thumbnail}
+                {fileBody}
             </div>
         );
     }
@@ -623,13 +607,13 @@ interface PlaceholderIProps {
 export class HiddenImagePlaceholder extends React.PureComponent<PlaceholderIProps> {
     render() {
         const maxWidth = this.props.maxWidth ? this.props.maxWidth + "px" : null;
-        let className = 'mx_HiddenImagePlaceholder';
-        if (this.props.hover) className += ' mx_HiddenImagePlaceholder_hover';
+        let className = "mx_HiddenImagePlaceholder";
+        if (this.props.hover) className += " mx_HiddenImagePlaceholder_hover";
         return (
             <div className={className} style={{ maxWidth: `min(100%, ${maxWidth}px)` }}>
-                <div className='mx_HiddenImagePlaceholder_button'>
-                    <span className='mx_HiddenImagePlaceholder_eye' />
-                    <span>{ _t("Show image") }</span>
+                <div className="mx_HiddenImagePlaceholder_button">
+                    <span className="mx_HiddenImagePlaceholder_eye" />
+                    <span>{_t("Show image")}</span>
                 </div>
             </div>
         );

@@ -14,31 +14,27 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useContext } from 'react';
-import { Room, Beacon } from 'matrix-js-sdk/src/matrix';
-import { LocationAssetType } from 'matrix-js-sdk/src/@types/location';
+import React, { useContext } from "react";
+import { Room, Beacon } from "matrix-js-sdk/src/matrix";
+import { LocationAssetType } from "matrix-js-sdk/src/@types/location";
 
-import { OwnBeaconStore, OwnBeaconStoreEvent } from '../../../stores/OwnBeaconStore';
-import { useEventEmitterState } from '../../../hooks/useEventEmitter';
-import OwnBeaconStatus from './OwnBeaconStatus';
-import { BeaconDisplayStatus } from './displayStatus';
-import MatrixClientContext from '../../../contexts/MatrixClientContext';
-import MemberAvatar from '../avatars/MemberAvatar';
-import StyledLiveBeaconIcon from './StyledLiveBeaconIcon';
+import { OwnBeaconStore, OwnBeaconStoreEvent } from "../../../stores/OwnBeaconStore";
+import { useEventEmitterState } from "../../../hooks/useEventEmitter";
+import OwnBeaconStatus from "./OwnBeaconStatus";
+import { BeaconDisplayStatus } from "./displayStatus";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import MemberAvatar from "../avatars/MemberAvatar";
+import StyledLiveBeaconIcon from "./StyledLiveBeaconIcon";
 
 interface Props {
-    roomId: Room['roomId'];
+    roomId: Room["roomId"];
 }
 
-const useOwnBeacon = (roomId: Room['roomId']): Beacon | undefined => {
-    const ownBeacon = useEventEmitterState(
-        OwnBeaconStore.instance,
-        OwnBeaconStoreEvent.LivenessChange,
-        () => {
-            const [ownBeaconId] = OwnBeaconStore.instance.getLiveBeaconIds(roomId);
-            return OwnBeaconStore.instance.getBeaconById(ownBeaconId);
-        },
-    );
+const useOwnBeacon = (roomId: Room["roomId"]): Beacon | undefined => {
+    const ownBeacon = useEventEmitterState(OwnBeaconStore.instance, OwnBeaconStoreEvent.LivenessChange, () => {
+        const [ownBeaconId] = OwnBeaconStore.instance.getLiveBeaconIds(roomId);
+        return OwnBeaconStore.instance.getBeaconById(ownBeaconId);
+    });
 
     return ownBeacon;
 };
@@ -54,26 +50,27 @@ const DialogOwnBeaconStatus: React.FC<Props> = ({ roomId }) => {
     }
 
     const isSelfLocation = beacon.beaconInfo.assetType === LocationAssetType.Self;
-    const beaconMember = isSelfLocation ?
-        room.getMember(beacon.beaconInfoOwner) :
-        undefined;
+    const beaconMember = isSelfLocation ? room.getMember(beacon.beaconInfoOwner) : undefined;
 
-    return <div className='mx_DialogOwnBeaconStatus'>
-        { isSelfLocation ?
-            <MemberAvatar
-                className='mx_DialogOwnBeaconStatus_avatar'
-                member={beaconMember}
-                height={32}
-                width={32}
-            /> :
-            <StyledLiveBeaconIcon className='mx_DialogOwnBeaconStatus_avatarIcon' />
-        }
-        <OwnBeaconStatus
-            className='mx_DialogOwnBeaconStatus_status'
-            beacon={beacon}
-            displayStatus={BeaconDisplayStatus.Active}
-        />
-    </div>;
+    return (
+        <div className="mx_DialogOwnBeaconStatus">
+            {isSelfLocation ? (
+                <MemberAvatar
+                    className="mx_DialogOwnBeaconStatus_avatar"
+                    member={beaconMember}
+                    height={32}
+                    width={32}
+                />
+            ) : (
+                <StyledLiveBeaconIcon className="mx_DialogOwnBeaconStatus_avatarIcon" />
+            )}
+            <OwnBeaconStatus
+                className="mx_DialogOwnBeaconStatus_status"
+                beacon={beacon}
+                displayStatus={BeaconDisplayStatus.Active}
+            />
+        </div>
+    );
 };
 
 export default DialogOwnBeaconStatus;

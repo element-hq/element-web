@@ -73,13 +73,13 @@ interface IRightPanelForRoomStored {
 
 export function convertToStorePanel(cacheRoom: IRightPanelForRoom): IRightPanelForRoomStored {
     if (!cacheRoom) return cacheRoom;
-    const storeHistory = [...cacheRoom.history].map(panelState => convertCardToStore(panelState));
+    const storeHistory = [...cacheRoom.history].map((panelState) => convertCardToStore(panelState));
     return { isOpen: cacheRoom.isOpen, history: storeHistory };
 }
 
 export function convertToStatePanel(storeRoom: IRightPanelForRoomStored, room: Room): IRightPanelForRoom {
     if (!storeRoom) return storeRoom;
-    const stateHistory = [...storeRoom.history].map(panelStateStore => convertStoreToCard(panelStateStore, room));
+    const stateHistory = [...storeRoom.history].map((panelStateStore) => convertStoreToCard(panelStateStore, room));
     return { history: stateHistory, isOpen: storeRoom.isOpen };
 }
 
@@ -90,14 +90,10 @@ export function convertCardToStore(panelState: IRightPanelCard): IRightPanelCard
         spaceId: state.spaceId,
         isInitialEventHighlighted: state.isInitialEventHighlighted,
         initialEventScrollIntoView: state.initialEventScrollIntoView,
-        threadHeadEventId: !!state?.threadHeadEvent?.getId() ?
-            panelState.state.threadHeadEvent.getId() : undefined,
-        memberInfoEventId: !!state?.memberInfoEvent?.getId() ?
-            panelState.state.memberInfoEvent.getId() : undefined,
-        initialEventId: !!state?.initialEvent?.getId() ?
-            panelState.state.initialEvent.getId() : undefined,
-        memberId: !!state?.member?.userId ?
-            panelState.state.member.userId : undefined,
+        threadHeadEventId: !!state?.threadHeadEvent?.getId() ? panelState.state.threadHeadEvent.getId() : undefined,
+        memberInfoEventId: !!state?.memberInfoEvent?.getId() ? panelState.state.memberInfoEvent.getId() : undefined,
+        initialEventId: !!state?.initialEvent?.getId() ? panelState.state.initialEvent.getId() : undefined,
+        memberId: !!state?.member?.userId ? panelState.state.member.userId : undefined,
     };
 
     return { state: stateStored, phase: panelState.phase };
@@ -110,14 +106,14 @@ function convertStoreToCard(panelStateStore: IRightPanelCardStored, room: Room):
         spaceId: stateStored.spaceId,
         isInitialEventHighlighted: stateStored.isInitialEventHighlighted,
         initialEventScrollIntoView: stateStored.initialEventScrollIntoView,
-        threadHeadEvent: !!stateStored?.threadHeadEventId ?
-            room.findEventById(stateStored.threadHeadEventId) : undefined,
-        memberInfoEvent: !!stateStored?.memberInfoEventId ?
-            room.findEventById(stateStored.memberInfoEventId) : undefined,
-        initialEvent: !!stateStored?.initialEventId ?
-            room.findEventById(stateStored.initialEventId) : undefined,
-        member: !!stateStored?.memberId ?
-            room.getMember(stateStored.memberId) : undefined,
+        threadHeadEvent: !!stateStored?.threadHeadEventId
+            ? room.findEventById(stateStored.threadHeadEventId)
+            : undefined,
+        memberInfoEvent: !!stateStored?.memberInfoEventId
+            ? room.findEventById(stateStored.memberInfoEventId)
+            : undefined,
+        initialEvent: !!stateStored?.initialEventId ? room.findEventById(stateStored.initialEventId) : undefined,
+        member: !!stateStored?.memberId ? room.getMember(stateStored.memberId) : undefined,
     };
 
     return { state: state, phase: panelStateStore.phase };

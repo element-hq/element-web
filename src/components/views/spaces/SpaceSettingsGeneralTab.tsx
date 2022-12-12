@@ -65,10 +65,12 @@ const SpaceSettingsGeneralTab = ({ matrixClient: cli, space, onFinished }: IProp
 
         if (avatarChanged) {
             if (newAvatar) {
-                promises.push((async () => {
-                    const { content_uri: url } = await cli.uploadContent(newAvatar);
-                    await cli.sendStateEvent(space.roomId, EventType.RoomAvatar, { url }, "");
-                })());
+                promises.push(
+                    (async () => {
+                        const { content_uri: url } = await cli.uploadContent(newAvatar);
+                        await cli.sendStateEvent(space.roomId, EventType.RoomAvatar, { url }, "");
+                    })(),
+                );
             } else {
                 promises.push(cli.sendStateEvent(space.roomId, EventType.RoomAvatar, {}, ""));
             }
@@ -85,57 +87,59 @@ const SpaceSettingsGeneralTab = ({ matrixClient: cli, space, onFinished }: IProp
 
         const results = await Promise.allSettled(promises);
         setBusy(false);
-        const failures = results.filter(r => r.status === "rejected");
+        const failures = results.filter((r) => r.status === "rejected");
         if (failures.length > 0) {
             logger.error("Failed to save space settings: ", failures);
             setError(_t("Failed to save space settings."));
         }
     };
 
-    return <div className="mx_SettingsTab">
-        <div className="mx_SettingsTab_heading">{ _t("General") }</div>
+    return (
+        <div className="mx_SettingsTab">
+            <div className="mx_SettingsTab_heading">{_t("General")}</div>
 
-        <div>{ _t("Edit settings relating to your space.") }</div>
+            <div>{_t("Edit settings relating to your space.")}</div>
 
-        { error && <div className="mx_SpaceRoomView_errorText">{ error }</div> }
+            {error && <div className="mx_SpaceRoomView_errorText">{error}</div>}
 
-        <div className="mx_SettingsTab_section">
-            <SpaceBasicSettings
-                avatarUrl={avatarUrlForRoom(space, 80, 80, "crop")}
-                avatarDisabled={busy || !canSetAvatar}
-                setAvatar={setNewAvatar}
-                name={name}
-                nameDisabled={busy || !canSetName}
-                setName={setName}
-                topic={topic}
-                topicDisabled={busy || !canSetTopic}
-                setTopic={setTopic}
-            />
+            <div className="mx_SettingsTab_section">
+                <SpaceBasicSettings
+                    avatarUrl={avatarUrlForRoom(space, 80, 80, "crop")}
+                    avatarDisabled={busy || !canSetAvatar}
+                    setAvatar={setNewAvatar}
+                    name={name}
+                    nameDisabled={busy || !canSetName}
+                    setName={setName}
+                    topic={topic}
+                    topicDisabled={busy || !canSetTopic}
+                    setTopic={setTopic}
+                />
 
-            <AccessibleButton
-                onClick={onCancel}
-                disabled={busy || !(avatarChanged || nameChanged || topicChanged)}
-                kind="link"
-            >
-                { _t("Cancel") }
-            </AccessibleButton>
-            <AccessibleButton onClick={onSave} disabled={busy} kind="primary">
-                { busy ? _t("Saving...") : _t("Save Changes") }
-            </AccessibleButton>
+                <AccessibleButton
+                    onClick={onCancel}
+                    disabled={busy || !(avatarChanged || nameChanged || topicChanged)}
+                    kind="link"
+                >
+                    {_t("Cancel")}
+                </AccessibleButton>
+                <AccessibleButton onClick={onSave} disabled={busy} kind="primary">
+                    {busy ? _t("Saving...") : _t("Save Changes")}
+                </AccessibleButton>
+            </div>
+
+            <span className="mx_SettingsTab_subheading">{_t("Leave Space")}</span>
+            <div className="mx_SettingsTab_section mx_SettingsTab_subsectionText">
+                <AccessibleButton
+                    kind="danger"
+                    onClick={() => {
+                        leaveSpace(space);
+                    }}
+                >
+                    {_t("Leave Space")}
+                </AccessibleButton>
+            </div>
         </div>
-
-        <span className="mx_SettingsTab_subheading">{ _t("Leave Space") }</span>
-        <div className="mx_SettingsTab_section mx_SettingsTab_subsectionText">
-            <AccessibleButton
-                kind="danger"
-                onClick={() => {
-                    leaveSpace(space);
-                }}
-            >
-                { _t("Leave Space") }
-            </AccessibleButton>
-        </div>
-    </div>;
+    );
 };
 
 export default SpaceSettingsGeneralTab;

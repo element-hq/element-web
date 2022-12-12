@@ -17,7 +17,7 @@ limitations under the License.
 import * as React from "react";
 import { useRef, useState } from "react";
 
-import { _t, _td } from '../../../languageHandler';
+import { _t, _td } from "../../../languageHandler";
 import { IDialogProps } from "./IDialogProps";
 import Field from "../elements/Field";
 import BaseDialog from "./BaseDialog";
@@ -47,37 +47,41 @@ const RegistrationEmailPromptDialog: React.FC<IProps> = ({ onFinished }) => {
         onFinished(true, email);
     };
 
-    return <BaseDialog
-        title={_t("Continuing without email")}
-        className="mx_RegistrationEmailPromptDialog"
-        contentId="mx_RegistrationEmailPromptDialog"
-        onFinished={() => onFinished(false)}
-        fixedWidth={false}
-    >
-        <div className="mx_Dialog_content" id="mx_RegistrationEmailPromptDialog">
-            <p>{ _t("Just a heads up, if you don't add an email and forget your password, you could " +
-                "<b>permanently lose access to your account</b>.", {}, {
-                b: sub => <b>{ sub }</b>,
-            }) }</p>
-            <form onSubmit={onSubmit}>
-                <EmailField
-                    fieldRef={fieldRef}
-                    autoFocus={true}
-                    label={_td("Email (optional)")}
-                    value={email}
-                    onChange={ev => {
-                        const target = ev.target as HTMLInputElement;
-                        setEmail(target.value);
-                    }}
-                />
-            </form>
-        </div>
-        <DialogButtons
-            primaryButton={_t("Continue")}
-            onPrimaryButtonClick={onSubmit}
-            hasCancel={false}
-        />
-    </BaseDialog>;
+    return (
+        <BaseDialog
+            title={_t("Continuing without email")}
+            className="mx_RegistrationEmailPromptDialog"
+            contentId="mx_RegistrationEmailPromptDialog"
+            onFinished={() => onFinished(false)}
+            fixedWidth={false}
+        >
+            <div className="mx_Dialog_content" id="mx_RegistrationEmailPromptDialog">
+                <p>
+                    {_t(
+                        "Just a heads up, if you don't add an email and forget your password, you could " +
+                            "<b>permanently lose access to your account</b>.",
+                        {},
+                        {
+                            b: (sub) => <b>{sub}</b>,
+                        },
+                    )}
+                </p>
+                <form onSubmit={onSubmit}>
+                    <EmailField
+                        fieldRef={fieldRef}
+                        autoFocus={true}
+                        label={_td("Email (optional)")}
+                        value={email}
+                        onChange={(ev) => {
+                            const target = ev.target as HTMLInputElement;
+                            setEmail(target.value);
+                        }}
+                    />
+                </form>
+            </div>
+            <DialogButtons primaryButton={_t("Continue")} onPrimaryButtonClick={onSubmit} hasCancel={false} />
+        </BaseDialog>
+    );
 };
 
 export default RegistrationEmailPromptDialog;

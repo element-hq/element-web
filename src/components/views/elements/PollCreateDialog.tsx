@@ -29,7 +29,7 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import ScrollableBaseModal, { IScrollableBaseState } from "../dialogs/ScrollableBaseModal";
 import { IDialogProps } from "../dialogs/IDialogProps";
 import QuestionDialog from "../dialogs/QuestionDialog";
-import Modal from '../../../Modal';
+import Modal from "../../../Modal";
 import { _t } from "../../../languageHandler";
 import { arrayFastClone, arraySeed } from "../../../utils/arrays";
 import Field from "./Field";
@@ -40,7 +40,7 @@ import { doMaybeLocalRoomAction } from "../../../utils/local-room";
 interface IProps extends IDialogProps {
     room: Room;
     threadId?: string;
-    editingMxEvent?: MatrixEvent;  // Truthy if we are editing an existing poll
+    editingMxEvent?: MatrixEvent; // Truthy if we are editing an existing poll
 }
 
 enum FocusTarget {
@@ -83,7 +83,7 @@ function editingInitialState(editingMxEvent: MatrixEvent): IState {
         actionLabel: _t("Done"),
         canSubmit: true,
         question: poll.question.text,
-        options: poll.answers.map(ans => ans.text),
+        options: poll.answers.map((ans) => ans.text),
         busy: false,
         kind: poll.kind,
         autoFocusTarget: FocusTarget.Topic,
@@ -96,11 +96,7 @@ export default class PollCreateDialog extends ScrollableBaseModal<IProps, IState
     public constructor(props: IProps) {
         super(props);
 
-        this.state = (
-            props.editingMxEvent
-                ? editingInitialState(props.editingMxEvent)
-                : creatingInitialState()
-        );
+        this.state = props.editingMxEvent ? editingInitialState(props.editingMxEvent) : creatingInitialState();
     }
 
     private checkCanSubmit() {
@@ -108,7 +104,7 @@ export default class PollCreateDialog extends ScrollableBaseModal<IProps, IState
             canSubmit:
                 !this.state.busy &&
                 this.state.question.trim().length > 0 &&
-                this.state.options.filter(op => op.trim().length > 0).length >= MIN_OPTIONS,
+                this.state.options.filter((op) => op.trim().length > 0).length >= MIN_OPTIONS,
         });
     }
 
@@ -141,7 +137,7 @@ export default class PollCreateDialog extends ScrollableBaseModal<IProps, IState
     private createEvent(): IPartialEvent<object> {
         const pollStart = PollStartEvent.from(
             this.state.question.trim(),
-            this.state.options.map(a => a.trim()).filter(a => !!a),
+            this.state.options.map((a) => a.trim()).filter((a) => !!a),
             this.state.kind,
         ).serialize();
 
@@ -149,14 +145,14 @@ export default class PollCreateDialog extends ScrollableBaseModal<IProps, IState
             return pollStart;
         } else {
             return {
-                "content": {
+                content: {
                     "m.new_content": pollStart.content,
                     "m.relates_to": {
-                        "rel_type": "m.replace",
-                        "event_id": this.props.editingMxEvent.getId(),
+                        rel_type: "m.replace",
+                        event_id: this.props.editingMxEvent.getId(),
                     },
                 },
-                "type": pollStart.type,
+                type: pollStart.type,
             };
         }
     }
@@ -166,32 +162,27 @@ export default class PollCreateDialog extends ScrollableBaseModal<IProps, IState
         const pollEvent = this.createEvent();
         doMaybeLocalRoomAction(
             this.props.room.roomId,
-            (actualRoomId: string) => this.matrixClient.sendEvent(
-                actualRoomId,
-                this.props.threadId,
-                pollEvent.type,
-                pollEvent.content,
-            ),
+            (actualRoomId: string) =>
+                this.matrixClient.sendEvent(actualRoomId, this.props.threadId, pollEvent.type, pollEvent.content),
             this.matrixClient,
-        ).then(
-            () => this.props.onFinished(true),
-        ).catch(e => {
-            console.error("Failed to post poll:", e);
-            Modal.createDialog(QuestionDialog, {
-                title: _t("Failed to post poll"),
-                description: _t(
-                    "Sorry, the poll you tried to create was not posted."),
-                button: _t('Try again'),
-                cancelButton: _t('Cancel'),
-                onFinished: (tryAgain: boolean) => {
-                    if (!tryAgain) {
-                        this.cancel();
-                    } else {
-                        this.setState({ busy: false, canSubmit: true });
-                    }
-                },
+        )
+            .then(() => this.props.onFinished(true))
+            .catch((e) => {
+                console.error("Failed to post poll:", e);
+                Modal.createDialog(QuestionDialog, {
+                    title: _t("Failed to post poll"),
+                    description: _t("Sorry, the poll you tried to create was not posted."),
+                    button: _t("Try again"),
+                    cancelButton: _t("Cancel"),
+                    onFinished: (tryAgain: boolean) => {
+                        if (!tryAgain) {
+                            this.cancel();
+                        } else {
+                            this.setState({ busy: false, canSubmit: true });
+                        }
+                    },
+                });
             });
-        });
     }
 
     protected cancel(): void {
@@ -199,87 +190,75 @@ export default class PollCreateDialog extends ScrollableBaseModal<IProps, IState
     }
 
     protected renderContent(): React.ReactNode {
-        return <div className="mx_PollCreateDialog">
-            <h2>{ _t("Poll type") }</h2>
-            <Field
-                element="select"
-                value={this.state.kind.name}
-                onChange={this.onPollTypeChange}
-            >
-                <option
-                    key={M_POLL_KIND_DISCLOSED.name}
-                    value={M_POLL_KIND_DISCLOSED.name}
+        return (
+            <div className="mx_PollCreateDialog">
+                <h2>{_t("Poll type")}</h2>
+                <Field element="select" value={this.state.kind.name} onChange={this.onPollTypeChange}>
+                    <option key={M_POLL_KIND_DISCLOSED.name} value={M_POLL_KIND_DISCLOSED.name}>
+                        {_t("Open poll")}
+                    </option>
+                    <option key={M_POLL_KIND_UNDISCLOSED.name} value={M_POLL_KIND_UNDISCLOSED.name}>
+                        {_t("Closed poll")}
+                    </option>
+                </Field>
+                <p>{pollTypeNotes(this.state.kind)}</p>
+                <h2>{_t("What is your poll question or topic?")}</h2>
+                <Field
+                    id="poll-topic-input"
+                    value={this.state.question}
+                    maxLength={MAX_QUESTION_LENGTH}
+                    label={_t("Question or topic")}
+                    placeholder={_t("Write something...")}
+                    onChange={this.onQuestionChange}
+                    usePlaceholderAsHint={true}
+                    disabled={this.state.busy}
+                    autoFocus={this.state.autoFocusTarget === FocusTarget.Topic}
+                />
+                <h2>{_t("Create options")}</h2>
+                {this.state.options.map((op, i) => (
+                    <div key={`option_${i}`} className="mx_PollCreateDialog_option">
+                        <Field
+                            id={`pollcreate_option_${i}`}
+                            value={op}
+                            maxLength={MAX_OPTION_LENGTH}
+                            label={_t("Option %(number)s", { number: i + 1 })}
+                            placeholder={_t("Write an option")}
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => this.onOptionChange(i, e)}
+                            usePlaceholderAsHint={true}
+                            disabled={this.state.busy}
+                            autoFocus={
+                                this.state.autoFocusTarget === FocusTarget.NewOption &&
+                                i === this.state.options.length - 1
+                            }
+                        />
+                        <AccessibleButton
+                            onClick={() => this.onOptionRemove(i)}
+                            className="mx_PollCreateDialog_removeOption"
+                            disabled={this.state.busy}
+                        />
+                    </div>
+                ))}
+                <AccessibleButton
+                    onClick={this.onOptionAdd}
+                    disabled={this.state.busy || this.state.options.length >= MAX_OPTIONS}
+                    kind="secondary"
+                    className="mx_PollCreateDialog_addOption"
+                    inputRef={this.addOptionRef}
                 >
-                    { _t("Open poll") }
-                </option>
-                <option
-                    key={M_POLL_KIND_UNDISCLOSED.name}
-                    value={M_POLL_KIND_UNDISCLOSED.name}
-                >
-                    { _t("Closed poll") }
-                </option>
-            </Field>
-            <p>{ pollTypeNotes(this.state.kind) }</p>
-            <h2>{ _t("What is your poll question or topic?") }</h2>
-            <Field
-                id='poll-topic-input'
-                value={this.state.question}
-                maxLength={MAX_QUESTION_LENGTH}
-                label={_t("Question or topic")}
-                placeholder={_t("Write something...")}
-                onChange={this.onQuestionChange}
-                usePlaceholderAsHint={true}
-                disabled={this.state.busy}
-                autoFocus={this.state.autoFocusTarget === FocusTarget.Topic}
-            />
-            <h2>{ _t("Create options") }</h2>
-            {
-                this.state.options.map((op, i) => <div key={`option_${i}`} className="mx_PollCreateDialog_option">
-                    <Field
-                        id={`pollcreate_option_${i}`}
-                        value={op}
-                        maxLength={MAX_OPTION_LENGTH}
-                        label={_t("Option %(number)s", { number: i + 1 })}
-                        placeholder={_t("Write an option")}
-                        onChange={
-                            (e: ChangeEvent<HTMLInputElement>) =>
-                                this.onOptionChange(i, e)
-                        }
-                        usePlaceholderAsHint={true}
-                        disabled={this.state.busy}
-                        autoFocus={
-                            this.state.autoFocusTarget === FocusTarget.NewOption &&
-                            i === this.state.options.length - 1
-                        }
-                    />
-                    <AccessibleButton
-                        onClick={() => this.onOptionRemove(i)}
-                        className="mx_PollCreateDialog_removeOption"
-                        disabled={this.state.busy}
-                    />
-                </div>)
-            }
-            <AccessibleButton
-                onClick={this.onOptionAdd}
-                disabled={this.state.busy || this.state.options.length >= MAX_OPTIONS}
-                kind="secondary"
-                className="mx_PollCreateDialog_addOption"
-                inputRef={this.addOptionRef}
-            >{ _t("Add option") }</AccessibleButton>
-            {
-                this.state.busy &&
-                    <div className="mx_PollCreateDialog_busy"><Spinner /></div>
-            }
-        </div>;
+                    {_t("Add option")}
+                </AccessibleButton>
+                {this.state.busy && (
+                    <div className="mx_PollCreateDialog_busy">
+                        <Spinner />
+                    </div>
+                )}
+            </div>
+        );
     }
 
     onPollTypeChange = (e: ChangeEvent<HTMLSelectElement>) => {
         this.setState({
-            kind: (
-                M_POLL_KIND_DISCLOSED.matches(e.target.value)
-                    ? M_POLL_KIND_DISCLOSED
-                    : M_POLL_KIND_UNDISCLOSED
-            ),
+            kind: M_POLL_KIND_DISCLOSED.matches(e.target.value) ? M_POLL_KIND_DISCLOSED : M_POLL_KIND_UNDISCLOSED,
         });
     };
 }

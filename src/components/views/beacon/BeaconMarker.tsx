@@ -14,17 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactNode, useContext } from 'react';
-import maplibregl from 'maplibre-gl';
-import {
-    Beacon,
-    BeaconEvent,
-} from 'matrix-js-sdk/src/matrix';
-import { LocationAssetType } from 'matrix-js-sdk/src/@types/location';
+import React, { ReactNode, useContext } from "react";
+import maplibregl from "maplibre-gl";
+import { Beacon, BeaconEvent } from "matrix-js-sdk/src/matrix";
+import { LocationAssetType } from "matrix-js-sdk/src/@types/location";
 
-import MatrixClientContext from '../../../contexts/MatrixClientContext';
-import { useEventEmitterState } from '../../../hooks/useEventEmitter';
-import SmartMarker from '../location/SmartMarker';
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import { useEventEmitterState } from "../../../hooks/useEventEmitter";
+import SmartMarker from "../location/SmartMarker";
 
 interface Props {
     map: maplibregl.Map;
@@ -50,18 +47,19 @@ const BeaconMarker: React.FC<Props> = ({ map, beacon, tooltip }) => {
 
     const geoUri = latestLocationState?.uri;
 
-    const markerRoomMember = beacon.beaconInfo.assetType === LocationAssetType.Self ?
-        room.getMember(beacon.beaconInfoOwner) :
-        undefined;
+    const markerRoomMember =
+        beacon.beaconInfo.assetType === LocationAssetType.Self ? room.getMember(beacon.beaconInfoOwner) : undefined;
 
-    return <SmartMarker
-        map={map}
-        id={beacon.identifier}
-        geoUri={geoUri}
-        roomMember={markerRoomMember}
-        tooltip={tooltip}
-        useMemberColor
-    />;
+    return (
+        <SmartMarker
+            map={map}
+            id={beacon.identifier}
+            geoUri={geoUri}
+            roomMember={markerRoomMember}
+            tooltip={tooltip}
+            useMemberColor
+        />
+    );
 };
 
 export default BeaconMarker;

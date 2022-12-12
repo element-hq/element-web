@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import { fireEvent, render } from '@testing-library/react';
+import React from "react";
+import { fireEvent, render } from "@testing-library/react";
 
 import SearchBar, { SearchScope } from "../../../../src/components/views/rooms/SearchBar";
 import { KeyBindingAction } from "../../../../src/accessibility/KeyboardShortcuts";
@@ -31,8 +31,7 @@ const searchProps = {
 
 jest.mock("../../../../src/KeyBindingsManager", () => ({
     __esModule: true,
-    getKeyBindingsManager: jest.fn(() => (
-        { getAccessibilityAction: jest.fn(() => mockCurrentEvent) })),
+    getKeyBindingsManager: jest.fn(() => ({ getAccessibilityAction: jest.fn(() => mockCurrentEvent) })),
 }));
 
 describe("SearchBar", () => {
@@ -91,7 +90,7 @@ describe("SearchBar", () => {
         expect(searchProps.onCancelClick).toHaveBeenCalledTimes(1);
 
         fireEvent.focus(input!);
-        fireEvent.keyDown(input!, { key: 'Escape', code: 'Escape', charCode: 27 });
+        fireEvent.keyDown(input!, { key: "Escape", code: "Escape", charCode: 27 });
 
         expect(searchProps.onCancelClick).toHaveBeenCalledTimes(2);
     });

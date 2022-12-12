@@ -21,8 +21,9 @@ import { MatrixEvent, MsgType, RoomMember } from "matrix-js-sdk/src/matrix";
 import { THREAD_RELATION_TYPE } from "matrix-js-sdk/src/models/thread";
 
 import { createTestClient, mkEvent, mkStubRoom, stubClient } from "../../../test-utils";
-import MessageComposer, { MessageComposer as MessageComposerClass }
-    from "../../../../src/components/views/rooms/MessageComposer";
+import MessageComposer, {
+    MessageComposer as MessageComposerClass,
+} from "../../../../src/components/views/rooms/MessageComposer";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import RoomContext from "../../../../src/contexts/RoomContext";
@@ -65,15 +66,20 @@ describe("MessageComposer", () => {
         });
 
         it("Does not render a SendMessageComposer or MessageComposerButtons when room is tombstoned", () => {
-            const wrapper = wrapAndRender({ room }, true, false, mkEvent({
-                event: true,
-                type: "m.room.tombstone",
-                room: room.roomId,
-                user: "@user1:server",
-                skey: "",
-                content: {},
-                ts: Date.now(),
-            }));
+            const wrapper = wrapAndRender(
+                { room },
+                true,
+                false,
+                mkEvent({
+                    event: true,
+                    type: "m.room.tombstone",
+                    room: room.roomId,
+                    user: "@user1:server",
+                    skey: "",
+                    content: {},
+                    ts: Date.now(),
+                }),
+            );
 
             expect(wrapper.find("SendMessageComposer")).toHaveLength(0);
             expect(wrapper.find("MessageComposerButtons")).toHaveLength(0);
@@ -150,11 +156,14 @@ describe("MessageComposer", () => {
                         beforeEach(async () => {
                             // simulate settings update
                             await SettingsStore.setValue(setting, null, SettingLevel.DEVICE, !value);
-                            dis.dispatch({
-                                action: Action.SettingUpdated,
-                                settingName: setting,
-                                newValue: !value,
-                            }, true);
+                            dis.dispatch(
+                                {
+                                    action: Action.SettingUpdated,
+                                    settingName: setting,
+                                    newValue: !value,
+                                },
+                                true,
+                            );
                             wrapper.update();
                         });
 
@@ -339,7 +348,7 @@ describe("MessageComposer", () => {
         });
     });
 
-    it('should render SendWysiwygComposer', () => {
+    it("should render SendWysiwygComposer", () => {
         const room = mkStubRoom("!roomId:server", "Room 1", cli);
 
         SettingsStore.setValue("feature_wysiwyg_composer", null, SettingLevel.DEVICE, true);
@@ -362,7 +371,7 @@ function wrapAndRender(
         currentState: undefined,
         roomId,
         client: mockClient,
-        getMember: function(userId: string): RoomMember {
+        getMember: function (userId: string): RoomMember {
             return new RoomMember(roomId, userId);
         },
     };

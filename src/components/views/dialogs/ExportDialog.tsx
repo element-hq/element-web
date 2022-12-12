@@ -25,12 +25,7 @@ import DialogButtons from "../elements/DialogButtons";
 import Field from "../elements/Field";
 import StyledRadioGroup from "../elements/StyledRadioGroup";
 import StyledCheckbox from "../elements/StyledCheckbox";
-import {
-    ExportFormat,
-    ExportType,
-    textForFormat,
-    textForType,
-} from "../../../utils/exportUtils/exportUtils";
+import { ExportFormat, ExportType, textForFormat, textForType } from "../../../utils/exportUtils/exportUtils";
 import withValidation, { IFieldState, IValidationResult } from "../elements/Validation";
 import HTMLExporter from "../../../utils/exportUtils/HtmlExport";
 import JSONExporter from "../../../utils/exportUtils/JSONExport";
@@ -69,8 +64,7 @@ const useExportFormState = (): ExportConfig => {
 
     const [exportFormat, setExportFormat] = useState(config.format ?? ExportFormat.Html);
     const [exportType, setExportType] = useState(config.range ?? ExportType.Timeline);
-    const [includeAttachments, setAttachments] =
-        useState(config.includeAttachments ?? false);
+    const [includeAttachments, setAttachments] = useState(config.includeAttachments ?? false);
     const [numberOfMessages, setNumberOfMessages] = useState<number>(config.numberOfMessages ?? 100);
     const [sizeLimit, setSizeLimit] = useState<number | null>(config.sizeMb ?? 8);
 
@@ -109,14 +103,11 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
     const [displayCancel, setCancelWarning] = useState(false);
     const [exportCancelled, setExportCancelled] = useState(false);
     const [exportSuccessful, setExportSuccessful] = useState(false);
-    const [exporter, setExporter] = useStateCallback<Exporter>(
-        null,
-        async (exporter: Exporter) => {
-            await exporter?.export().then(() => {
-                if (!exportCancelled) setExportSuccessful(true);
-            });
-        },
-    );
+    const [exporter, setExporter] = useStateCallback<Exporter>(null, async (exporter: Exporter) => {
+        await exporter?.export().then(() => {
+            if (!exportCancelled) setExportSuccessful(true);
+        });
+    });
 
     const startExport = async () => {
         const exportOptions = {
@@ -126,34 +117,13 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
         };
         switch (exportFormat) {
             case ExportFormat.Html:
-                setExporter(
-                    new HTMLExporter(
-                        room,
-                        ExportType[exportType],
-                        exportOptions,
-                        setExportProgressText,
-                    ),
-                );
+                setExporter(new HTMLExporter(room, ExportType[exportType], exportOptions, setExportProgressText));
                 break;
             case ExportFormat.Json:
-                setExporter(
-                    new JSONExporter(
-                        room,
-                        ExportType[exportType],
-                        exportOptions,
-                        setExportProgressText,
-                    ),
-                );
+                setExporter(new JSONExporter(room, ExportType[exportType], exportOptions, setExportProgressText));
                 break;
             case ExportFormat.PlainText:
-                setExporter(
-                    new PlainTextExporter(
-                        room,
-                        ExportType[exportType],
-                        exportOptions,
-                        setExportProgressText,
-                    ),
-                );
+                setExporter(new PlainTextExporter(room, ExportType[exportType], exportOptions, setExportProgressText));
                 break;
             default:
                 logger.error("Unknown export format");
@@ -162,17 +132,18 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
     };
 
     const onExportClick = async () => {
-        const isValidSize = !setSizeLimit || (await sizeLimitRef.current.validate({
-            focused: false,
-        }));
+        const isValidSize =
+            !setSizeLimit ||
+            (await sizeLimitRef.current.validate({
+                focused: false,
+            }));
 
         if (!isValidSize) {
             sizeLimitRef.current.validate({ focused: true });
             return;
         }
         if (exportType === ExportType.LastNMessages) {
-            const isValidNumberOfMessages =
-                await messageCountRef.current.validate({ focused: false });
+            const isValidNumberOfMessages = await messageCountRef.current.validate({ focused: false });
             if (!isValidNumberOfMessages) {
                 messageCountRef.current.validate({ focused: true });
                 return;
@@ -197,7 +168,8 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                         max,
                     });
                 },
-            }, {
+            },
+            {
                 key: "number",
                 test: ({ value }) => {
                     const parsedSize = parseInt(value, 10);
@@ -206,10 +178,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                 invalid: () => {
                     const min = 1;
                     const max = 2000;
-                    return _t(
-                        "Size can only be a number between %(min)s MB and %(max)s MB",
-                        { min, max },
-                    );
+                    return _t("Size can only be a number between %(min)s MB and %(max)s MB", { min, max });
                 },
             },
         ],
@@ -235,7 +204,8 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                         max,
                     });
                 },
-            }, {
+            },
+            {
                 key: "number",
                 test: ({ value }) => {
                     const parsedSize = parseInt(value, 10);
@@ -244,10 +214,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                 invalid: () => {
                     const min = 1;
                     const max = 10 ** 8;
-                    return _t(
-                        "Number of messages can only be a number between %(min)s and %(max)s",
-                        { min, max },
-                    );
+                    return _t("Number of messages can only be a number between %(min)s and %(max)s", { min, max });
                 },
             },
         ],
@@ -278,7 +245,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
     const exportTypeOptions = Object.keys(ExportType).map((type) => {
         return (
             <option key={type} value={ExportType[type]}>
-                { textForType(ExportType[type]) }
+                {textForType(ExportType[type])}
             </option>
         );
     });
@@ -301,7 +268,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
         );
     }
 
-    const sizePostFix = <span>{ _t("MB") }</span>;
+    const sizePostFix = <span>{_t("MB")}</span>;
 
     if (exportCancelled) {
         // Display successful cancellation message
@@ -318,9 +285,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
         return (
             <InfoDialog
                 title={_t("Export Successful")}
-                description={_t(
-                    "Your export was successful. Find it in your Downloads folder.",
-                )}
+                description={_t("Your export was successful. Find it in your Downloads folder.")}
                 hasCloseButton={true}
                 onFinished={onFinished}
             />
@@ -335,11 +300,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                 onFinished={onFinished}
                 fixedWidth={true}
             >
-                <p>
-                    { _t(
-                        "Are you sure you want to stop exporting your data? If you do, you'll need to start over.",
-                    ) }
-                </p>
+                <p>{_t("Are you sure you want to stop exporting your data? If you do, you'll need to start over.")}</p>
                 <DialogButtons
                     primaryButton={_t("Stop")}
                     primaryButtonClass="danger"
@@ -361,32 +322,25 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                 onFinished={onFinished}
                 fixedWidth={true}
             >
-                { !isExporting ? <p>
-                    { _t(
-                        "Select from the options below to export chats from your timeline",
-                    ) }
-                </p> : null }
+                {!isExporting ? <p>{_t("Select from the options below to export chats from your timeline")}</p> : null}
 
                 <div className="mx_ExportDialog_options">
-                    { !!setExportFormat && <>
-                        <span className="mx_ExportDialog_subheading">
-                            { _t("Format") }
-                        </span>
+                    {!!setExportFormat && (
+                        <>
+                            <span className="mx_ExportDialog_subheading">{_t("Format")}</span>
 
-                        <StyledRadioGroup
-                            name="exportFormat"
-                            value={exportFormat}
-                            onChange={(key) => setExportFormat(ExportFormat[key])}
-                            definitions={exportFormatOptions}
-                        />
-                    </> }
+                            <StyledRadioGroup
+                                name="exportFormat"
+                                value={exportFormat}
+                                onChange={(key) => setExportFormat(ExportFormat[key])}
+                                definitions={exportFormatOptions}
+                            />
+                        </>
+                    )}
 
-                    {
-                        !!setExportType && <>
-
-                            <span className="mx_ExportDialog_subheading">
-                                { _t("Messages") }
-                            </span>
+                    {!!setExportType && (
+                        <>
+                            <span className="mx_ExportDialog_subheading">{_t("Messages")}</span>
 
                             <Field
                                 id="export-type"
@@ -396,52 +350,47 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                                     setExportType(ExportType[e.target.value]);
                                 }}
                             >
-                                { exportTypeOptions }
+                                {exportTypeOptions}
                             </Field>
-                            { messageCount }
+                            {messageCount}
                         </>
-                    }
+                    )}
 
-                    { setSizeLimit && <>
-                        <span className="mx_ExportDialog_subheading">
-                            { _t("Size Limit") }
-                        </span>
+                    {setSizeLimit && (
+                        <>
+                            <span className="mx_ExportDialog_subheading">{_t("Size Limit")}</span>
 
-                        <Field
-                            id="size-limit"
-                            type="number"
-                            autoComplete="off"
-                            onValidate={onValidateSize}
-                            element="input"
-                            ref={sizeLimitRef}
-                            value={sizeLimit.toString()}
-                            postfixComponent={sizePostFix}
-                            onChange={(e) => setSizeLimit(parseInt(e.target.value))}
-                        />
-                    </> }
+                            <Field
+                                id="size-limit"
+                                type="number"
+                                autoComplete="off"
+                                onValidate={onValidateSize}
+                                element="input"
+                                ref={sizeLimitRef}
+                                value={sizeLimit.toString()}
+                                postfixComponent={sizePostFix}
+                                onChange={(e) => setSizeLimit(parseInt(e.target.value))}
+                            />
+                        </>
+                    )}
 
-                    { setAttachments && <>
-                        <StyledCheckbox
-                            className="mx_ExportDialog_attachments-checkbox"
-                            id="include-attachments"
-                            checked={includeAttachments}
-                            onChange={(e) =>
-                                setAttachments(
-                                    (e.target as HTMLInputElement).checked,
-                                )
-                            }
-                        >
-                            { _t("Include Attachments") }
-                        </StyledCheckbox>
-                    </> }
-
+                    {setAttachments && (
+                        <>
+                            <StyledCheckbox
+                                className="mx_ExportDialog_attachments-checkbox"
+                                id="include-attachments"
+                                checked={includeAttachments}
+                                onChange={(e) => setAttachments((e.target as HTMLInputElement).checked)}
+                            >
+                                {_t("Include Attachments")}
+                            </StyledCheckbox>
+                        </>
+                    )}
                 </div>
-                { isExporting ? (
-                    <div data-test-id='export-progress' className="mx_ExportDialog_progress">
+                {isExporting ? (
+                    <div data-test-id="export-progress" className="mx_ExportDialog_progress">
                         <Spinner w={24} h={24} />
-                        <p>
-                            { exportProgressText }
-                        </p>
+                        <p>{exportProgressText}</p>
                         <DialogButtons
                             primaryButton={_t("Cancel")}
                             primaryButtonClass="danger"
@@ -455,7 +404,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                         onPrimaryButtonClick={onExportClick}
                         onCancel={() => onFinished(false)}
                     />
-                ) }
+                )}
             </BaseDialog>
         );
     }

@@ -1,4 +1,3 @@
-
 /*
 Copyright 2022 Šimon Brandner <simon.bra.ag@gmail.com>
 

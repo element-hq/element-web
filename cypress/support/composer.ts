@@ -33,7 +33,7 @@ declare global {
 }
 
 Cypress.Commands.add("getComposer", (isRightPanel?: boolean): Chainable<JQuery> => {
-    const panelClass = isRightPanel ? '.mx_RightPanel' : '.mx_RoomView_body';
+    const panelClass = isRightPanel ? ".mx_RightPanel" : ".mx_RoomView_body";
     return cy.get(`${panelClass} .mx_MessageComposer`);
 });
 
@@ -41,8 +41,8 @@ Cypress.Commands.add("openMessageComposerOptions", (isRightPanel?: boolean): Cha
     cy.getComposer(isRightPanel).within(() => {
         cy.get('[aria-label="More options"]').click();
     });
-    return cy.get('.mx_MessageComposer_Menu');
+    return cy.get(".mx_MessageComposer_Menu");
 });
 
 // Needed to make this file a module
-export { };
+export {};

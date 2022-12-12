@@ -36,12 +36,12 @@ export class NotificationUtils {
         if (notify) {
             const actions: PushRuleAction[] = [PushRuleActionName.Notify];
             if (sound) {
-                actions.push({ "set_tweak": "sound", "value": sound } as TweakSound);
+                actions.push({ set_tweak: "sound", value: sound } as TweakSound);
             }
             if (highlight) {
-                actions.push({ "set_tweak": "highlight" } as TweakHighlight);
+                actions.push({ set_tweak: "highlight" } as TweakHighlight);
             } else {
-                actions.push({ "set_tweak": "highlight", "value": false } as TweakHighlight);
+                actions.push({ set_tweak: "highlight", value: false } as TweakHighlight);
             }
             return actions;
         } else {

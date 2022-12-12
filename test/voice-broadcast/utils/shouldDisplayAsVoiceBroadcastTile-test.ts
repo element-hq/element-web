@@ -125,25 +125,22 @@ describe("shouldDisplayAsVoiceBroadcastTile", () => {
         itShouldReturnTrue();
     });
 
-    describe.each(
-        [
-            VoiceBroadcastInfoState.Paused,
-            VoiceBroadcastInfoState.Resumed,
-            VoiceBroadcastInfoState.Stopped,
-        ],
-    )("when a voice broadcast info event in state %s occurs", (state: VoiceBroadcastInfoState) => {
-        beforeEach(() => {
-            event = mkEvent({
-                event: true,
-                type: VoiceBroadcastInfoEventType,
-                room: roomId,
-                user: senderId,
-                content: {
-                    state,
-                },
+    describe.each([VoiceBroadcastInfoState.Paused, VoiceBroadcastInfoState.Resumed, VoiceBroadcastInfoState.Stopped])(
+        "when a voice broadcast info event in state %s occurs",
+        (state: VoiceBroadcastInfoState) => {
+            beforeEach(() => {
+                event = mkEvent({
+                    event: true,
+                    type: VoiceBroadcastInfoEventType,
+                    room: roomId,
+                    user: senderId,
+                    content: {
+                        state,
+                    },
+                });
             });
-        });
 
-        itShouldReturnFalse();
-    });
+            itShouldReturnFalse();
+        },
+    );
 });

@@ -44,20 +44,26 @@ export default class LabelledToggleSwitch extends React.PureComponent<IProps> {
     public render() {
         // This is a minimal version of a SettingsFlag
         const { label, caption } = this.props;
-        let firstPart = <span className="mx_SettingsFlag_label">
-            { label }
-            { caption && <>
-                <br />
-                <Caption>{ caption }</Caption>
-            </> }
-        </span>;
-        let secondPart = <ToggleSwitch
-            checked={this.props.value}
-            disabled={this.props.disabled}
-            onChange={this.props.onChange}
-            title={this.props.label}
-            tooltip={this.props.tooltip}
-        />;
+        let firstPart = (
+            <span className="mx_SettingsFlag_label">
+                {label}
+                {caption && (
+                    <>
+                        <br />
+                        <Caption>{caption}</Caption>
+                    </>
+                )}
+            </span>
+        );
+        let secondPart = (
+            <ToggleSwitch
+                checked={this.props.value}
+                disabled={this.props.disabled}
+                onChange={this.props.onChange}
+                title={this.props.label}
+                tooltip={this.props.tooltip}
+            />
+        );
 
         if (this.props.toggleInFront) {
             const temp = firstPart;
@@ -66,12 +72,12 @@ export default class LabelledToggleSwitch extends React.PureComponent<IProps> {
         }
 
         const classes = classNames("mx_SettingsFlag", this.props.className, {
-            "mx_SettingsFlag_toggleInFront": this.props.toggleInFront,
+            mx_SettingsFlag_toggleInFront: this.props.toggleInFront,
         });
         return (
             <div data-testid={this.props["data-testid"]} className={classes}>
-                { firstPart }
-                { secondPart }
+                {firstPart}
+                {secondPart}
             </div>
         );
     }

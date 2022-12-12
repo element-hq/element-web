@@ -27,8 +27,7 @@ type Callback = (part: Part, startIdx: number, endIdx: number) => void;
 export type Predicate = (index: number, offset: number, part: Part) => boolean;
 
 export default class DocumentPosition implements IPosition {
-    constructor(public readonly index: number, public readonly offset: number) {
-    }
+    constructor(public readonly index: number, public readonly offset: number) {}
 
     public compare(otherPos: DocumentPosition): number {
         if (this.index === otherPos.index) {
@@ -73,7 +72,7 @@ export default class DocumentPosition implements IPosition {
                 offset += 1;
             }
             // end reached
-            if (index === (parts.length - 1)) {
+            if (index === parts.length - 1) {
                 return new DocumentPosition(index, offset);
             } else {
                 index += 1;

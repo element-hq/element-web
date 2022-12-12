@@ -17,7 +17,7 @@ limitations under the License.
 import React, { RefCallback, ComponentType } from "react";
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
-import { MatrixClientPeg as peg } from '../../src/MatrixClientPeg';
+import { MatrixClientPeg as peg } from "../../src/MatrixClientPeg";
 import MatrixClientContext from "../../src/contexts/MatrixClientContext";
 import { SDKContext, SdkContextClass } from "../../src/contexts/SDKContext";
 
@@ -33,9 +33,11 @@ export function wrapInMatrixClientContext<T>(WrappedComponent: ComponentType<T>)
         }
 
         render() {
-            return <MatrixClientContext.Provider value={this._matrixClient}>
-                <WrappedComponent ref={this.props.wrappedRef} {...this.props} />
-            </MatrixClientContext.Provider>;
+            return (
+                <MatrixClientContext.Provider value={this._matrixClient}>
+                    <WrappedComponent ref={this.props.wrappedRef} {...this.props} />
+                </MatrixClientContext.Provider>
+            );
         }
     }
     return Wrapper;
@@ -47,9 +49,11 @@ export function wrapInSdkContext<T>(
 ): ComponentType<WrapperProps<T>> {
     return class extends React.Component<WrapperProps<T>> {
         render() {
-            return <SDKContext.Provider value={sdkContext}>
-                <WrappedComponent {...this.props} />
-            </SDKContext.Provider>;
+            return (
+                <SDKContext.Provider value={sdkContext}>
+                    <WrappedComponent {...this.props} />
+                </SDKContext.Provider>
+            );
         }
     };
 }

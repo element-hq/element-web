@@ -44,25 +44,29 @@ export default class RecordingPlayback extends AudioPlayerBase<IProps> {
     // rendering properties (specifically the difference of a waveform or not).
 
     private renderComposerLook(): ReactNode {
-        return <>
-            <PlaybackClock playback={this.props.playback} />
-            <PlaybackWaveform playback={this.props.playback} />
-        </>;
+        return (
+            <>
+                <PlaybackClock playback={this.props.playback} />
+                <PlaybackWaveform playback={this.props.playback} />
+            </>
+        );
     }
 
     private renderTimelineLook(): ReactNode {
-        return <>
-            <div className="mx_RecordingPlayback_timelineLayoutMiddle">
-                <PlaybackWaveform playback={this.props.playback} />
-                <SeekBar
-                    playback={this.props.playback}
-                    tabIndex={0} // allow keyboard users to fall into the seek bar
-                    disabled={this.state.playbackPhase === PlaybackState.Decoding}
-                    ref={this.seekRef}
-                />
-            </div>
-            <PlaybackClock playback={this.props.playback} />
-        </>;
+        return (
+            <>
+                <div className="mx_RecordingPlayback_timelineLayoutMiddle">
+                    <PlaybackWaveform playback={this.props.playback} />
+                    <SeekBar
+                        playback={this.props.playback}
+                        tabIndex={0} // allow keyboard users to fall into the seek bar
+                        disabled={this.state.playbackPhase === PlaybackState.Decoding}
+                        ref={this.seekRef}
+                    />
+                </div>
+                <PlaybackClock playback={this.props.playback} />
+            </>
+        );
     }
 
     protected renderComponent(): ReactNode {
@@ -84,7 +88,7 @@ export default class RecordingPlayback extends AudioPlayerBase<IProps> {
                     playbackPhase={this.state.playbackPhase}
                     ref={this.playPauseRef}
                 />
-                { body }
+                {body}
             </div>
         );
     }

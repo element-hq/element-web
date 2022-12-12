@@ -27,18 +27,14 @@ import { stubClient } from "../test-utils/test-utils";
 function ProfileInfoComponent({ onClick }) {
     const profileInfo = useProfileInfo();
 
-    const {
-        ready,
-        loading,
-        profile,
-    } = profileInfo;
+    const { ready, loading, profile } = profileInfo;
 
-    return <div onClick={() => onClick(profileInfo)}>
-        { (!ready || loading) && `ready: ${ready}, loading: ${loading}` }
-        { profile && (
-            `Name: ${profile.display_name}`
-        ) }
-    </div>;
+    return (
+        <div onClick={() => onClick(profileInfo)}>
+            {(!ready || loading) && `ready: ${ready}, loading: ${loading}`}
+            {profile && `Name: ${profile.display_name}`}
+        </div>
+    );
 }
 
 describe("useProfileInfo", () => {
@@ -58,12 +54,16 @@ describe("useProfileInfo", () => {
     it("should display user profile when searching", async () => {
         const query = "@user:home.server";
 
-        const wrapper = mount(<ProfileInfoComponent onClick={(hook) => {
-            hook.search({
-                limit: 1,
-                query,
-            });
-        }} />);
+        const wrapper = mount(
+            <ProfileInfoComponent
+                onClick={(hook) => {
+                    hook.search({
+                        limit: 1,
+                        query,
+                    });
+                }}
+            />,
+        );
 
         await act(async () => {
             await sleep(1);
@@ -75,12 +75,16 @@ describe("useProfileInfo", () => {
     });
 
     it("should work with empty queries", async () => {
-        const wrapper = mount(<ProfileInfoComponent onClick={(hook) => {
-            hook.search({
-                limit: 1,
-                query: "",
-            });
-        }} />);
+        const wrapper = mount(
+            <ProfileInfoComponent
+                onClick={(hook) => {
+                    hook.search({
+                        limit: 1,
+                        query: "",
+                    });
+                }}
+            />,
+        );
 
         await act(async () => {
             await sleep(1);
@@ -92,18 +96,19 @@ describe("useProfileInfo", () => {
     });
 
     it("should treat invalid mxids as empty queries", async () => {
-        const queries = [
-            "@user",
-            "user@home.server",
-        ];
+        const queries = ["@user", "user@home.server"];
 
         for (const query of queries) {
-            const wrapper = mount(<ProfileInfoComponent onClick={(hook) => {
-                hook.search({
-                    limit: 1,
-                    query,
-                });
-            }} />);
+            const wrapper = mount(
+                <ProfileInfoComponent
+                    onClick={(hook) => {
+                        hook.search({
+                            limit: 1,
+                            query,
+                        });
+                    }}
+                />,
+            );
 
             await act(async () => {
                 await sleep(1);
@@ -116,15 +121,21 @@ describe("useProfileInfo", () => {
     });
 
     it("should recover from a server exception", async () => {
-        cli.getProfileInfo = () => { throw new Error("Oops"); };
+        cli.getProfileInfo = () => {
+            throw new Error("Oops");
+        };
         const query = "@user:home.server";
 
-        const wrapper = mount(<ProfileInfoComponent onClick={(hook) => {
-            hook.search({
-                limit: 1,
-                query,
-            });
-        }} />);
+        const wrapper = mount(
+            <ProfileInfoComponent
+                onClick={(hook) => {
+                    hook.search({
+                        limit: 1,
+                        query,
+                    });
+                }}
+            />,
+        );
         await act(async () => {
             await sleep(1);
             wrapper.simulate("click");
@@ -138,12 +149,16 @@ describe("useProfileInfo", () => {
         cli.getProfileInfo = () => null;
         const query = "@user:home.server";
 
-        const wrapper = mount(<ProfileInfoComponent onClick={(hook) => {
-            hook.search({
-                limit: 1,
-                query,
-            });
-        }} />);
+        const wrapper = mount(
+            <ProfileInfoComponent
+                onClick={(hook) => {
+                    hook.search({
+                        limit: 1,
+                        query,
+                    });
+                }}
+            />,
+        );
         await act(async () => {
             await sleep(1);
             wrapper.simulate("click");

@@ -36,14 +36,11 @@ describe("MemberAvatar", () => {
     let member: RoomMember;
 
     function getComponent(props) {
-        return <RoomContext.Provider value={getRoomContext(room, {})}>
-            <MemberAvatar
-                member={null}
-                width={35}
-                height={35}
-                {...props}
-            />
-        </RoomContext.Provider>;
+        return (
+            <RoomContext.Provider value={getRoomContext(room, {})}>
+                <MemberAvatar member={null} width={35} height={35} {...props} />
+            </RoomContext.Provider>
+        );
     }
 
     beforeEach(() => {

@@ -30,33 +30,36 @@ export const useUserDirectory = () => {
 
     const [loading, setLoading] = useState(false);
 
-    const [updateQuery, updateResult] = useLatestResult<{ term: string, limit?: number }, DirectoryMember[]>(setUsers);
+    const [updateQuery, updateResult] = useLatestResult<{ term: string; limit?: number }, DirectoryMember[]>(setUsers);
 
-    const search = useCallback(async ({
-        limit = 20,
-        query: term,
-    }: IUserDirectoryOpts): Promise<boolean> => {
-        const opts = { limit, term };
-        updateQuery(opts);
+    const search = useCallback(
+        async ({ limit = 20, query: term }: IUserDirectoryOpts): Promise<boolean> => {
+            const opts = { limit, term };
+            updateQuery(opts);
 
-        if (!term?.length) {
-            setUsers([]);
-            return true;
-        }
+            if (!term?.length) {
+                setUsers([]);
+                return true;
+            }
 
-        try {
-            setLoading(true);
-            const { results } = await MatrixClientPeg.get().searchUserDirectory(opts);
-            updateResult(opts, results.map(user => new DirectoryMember(user)));
-            return true;
-        } catch (e) {
-            console.error("Could not fetch user in user directory for params", { limit, term }, e);
-            updateResult(opts, []);
-            return false;
-        } finally {
-            setLoading(false);
-        }
-    }, [updateQuery, updateResult]);
+            try {
+                setLoading(true);
+                const { results } = await MatrixClientPeg.get().searchUserDirectory(opts);
+                updateResult(
+                    opts,
+                    results.map((user) => new DirectoryMember(user)),
+                );
+                return true;
+            } catch (e) {
+                console.error("Could not fetch user in user directory for params", { limit, term }, e);
+                updateResult(opts, []);
+                return false;
+            } finally {
+                setLoading(false);
+            }
+        },
+        [updateQuery, updateResult],
+    );
 
     return {
         ready: true,

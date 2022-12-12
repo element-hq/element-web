@@ -27,7 +27,7 @@ $tertiary-content: var(--tertiary-content, $tertiary-content);
 $quaternary-content: var(--quaternary-content, $quaternary-content);
 $quinary-content: var(--quinary-content, $quinary-content);
 /* XXX: workaround for Safari 15.3 linear-gradient bug https://github.com/vector-im/element-web/issues/21670 */
-$system-transparent: var(--system-transparent, rgba($system, 0.0));
+$system-transparent: var(--system-transparent, rgba($system, 0));
 $system: var(--system, $system);
 $background: var(--background, $background);
 $panels: rgba($system, 0.9);
@@ -90,7 +90,7 @@ $roomtile-default-badge-bg-color: var(--roomlist-text-secondary-color);
 
 /* --roomlist-separator-color */
 $input-darker-bg-color: var(--roomlist-separator-color);
-$primary-hairline-color: var(--roomlist-separator-color);/* originally #e5e5e5, but close enough */
+$primary-hairline-color: var(--roomlist-separator-color); /* originally #e5e5e5, but close enough */
 
 /* --timeline-text-secondary-color */
 $authpage-secondary-color: var(--timeline-text-secondary-color);
@@ -136,8 +136,10 @@ $eventbubble-others-bg: var(--eventbubble-others-bg, $eventbubble-others-bg);
 $eventbubble-bg-hover: var(--eventbubble-bg-hover, $eventbubble-bg-hover);
 $eventbubble-reply-color: var(--eventbubble-reply-color, $eventbubble-reply-color);
 
-$reaction-row-button-selected-bg-color:
-    var(--reaction-row-button-selected-bg-color, $reaction-row-button-selected-bg-color);
+$reaction-row-button-selected-bg-color: var(
+    --reaction-row-button-selected-bg-color,
+    $reaction-row-button-selected-bg-color
+);
 
 $menu-selected-color: var(--menu-selected-color, $menu-selected-color);
 $pill-bg-color: var(--other-user-pill-bg-color, $pill-bg-color);

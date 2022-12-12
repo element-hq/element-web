@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { forwardRef } from 'react';
-import classNames from 'classnames';
+import React, { forwardRef } from "react";
+import classNames from "classnames";
 
 /* These were earlier stateless functional components but had to be converted
 since we need to use refs/findDOMNode to access the underlying DOM node to focus the correct completion,
@@ -31,24 +31,18 @@ interface ITextualCompletionProps {
 }
 
 export const TextualCompletion = forwardRef<ITextualCompletionProps, any>((props, ref) => {
-    const {
-        title,
-        subtitle,
-        description,
-        className,
-        'aria-selected': ariaSelectedAttribute,
-        ...restProps
-    } = props;
+    const { title, subtitle, description, className, "aria-selected": ariaSelectedAttribute, ...restProps } = props;
     return (
-        <div {...restProps}
-            className={classNames('mx_Autocomplete_Completion_block', className)}
+        <div
+            {...restProps}
+            className={classNames("mx_Autocomplete_Completion_block", className)}
             role="option"
             aria-selected={ariaSelectedAttribute}
             ref={ref}
         >
-            <span className="mx_Autocomplete_Completion_title">{ title }</span>
-            <span className="mx_Autocomplete_Completion_subtitle">{ subtitle }</span>
-            <span className="mx_Autocomplete_Completion_description">{ description }</span>
+            <span className="mx_Autocomplete_Completion_title">{title}</span>
+            <span className="mx_Autocomplete_Completion_subtitle">{subtitle}</span>
+            <span className="mx_Autocomplete_Completion_description">{description}</span>
         </div>
     );
 });
@@ -64,20 +58,21 @@ export const PillCompletion = forwardRef<IPillCompletionProps, any>((props, ref)
         description,
         className,
         children,
-        'aria-selected': ariaSelectedAttribute,
+        "aria-selected": ariaSelectedAttribute,
         ...restProps
     } = props;
     return (
-        <div {...restProps}
-            className={classNames('mx_Autocomplete_Completion_pill', className)}
+        <div
+            {...restProps}
+            className={classNames("mx_Autocomplete_Completion_pill", className)}
             role="option"
             aria-selected={ariaSelectedAttribute}
             ref={ref}
         >
-            { children }
-            <span className="mx_Autocomplete_Completion_title">{ title }</span>
-            <span className="mx_Autocomplete_Completion_subtitle">{ subtitle }</span>
-            <span className="mx_Autocomplete_Completion_description">{ description }</span>
+            {children}
+            <span className="mx_Autocomplete_Completion_title">{title}</span>
+            <span className="mx_Autocomplete_Completion_subtitle">{subtitle}</span>
+            <span className="mx_Autocomplete_Completion_description">{description}</span>
         </div>
     );
 });

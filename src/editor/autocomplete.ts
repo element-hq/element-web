@@ -39,8 +39,7 @@ export default class AutocompleteWrapperModel {
         private getAutocompleterComponent: GetAutocompleterComponent,
         private updateQuery: UpdateQuery,
         private partCreator: PartCreator | CommandPartCreator,
-    ) {
-    }
+    ) {}
 
     public onEscape(e: KeyboardEvent): void {
         this.getAutocompleterComponent().onEscape(e);

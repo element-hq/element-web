@@ -27,10 +27,13 @@ describe("<ContextMenu />", () => {
     // Hardcode window and menu dimensions
     const windowSize = 300;
     const menuSize = 200;
-    jest.spyOn(UIStore, "instance", "get").mockImplementation(() => ({
-        windowWidth: windowSize,
-        windowHeight: windowSize,
-    }) as unknown as UIStore);
+    jest.spyOn(UIStore, "instance", "get").mockImplementation(
+        () =>
+            ({
+                windowWidth: windowSize,
+                windowHeight: windowSize,
+            } as unknown as UIStore),
+    );
     window.Element.prototype.getBoundingClientRect = jest.fn().mockReturnValue({
         width: menuSize,
         height: menuSize,

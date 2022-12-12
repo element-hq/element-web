@@ -32,35 +32,39 @@ interface IProps extends HTMLAttributes<HTMLSpanElement> {
 const FacePile: FC<IProps> = ({ members, faceSize, overflow, tooltip, children, ...props }) => {
     const faces = members.map(
         tooltip
-            ? m => <MemberAvatar key={m.userId} member={m} width={faceSize} height={faceSize} hideTitle />
-            : m => <TooltipTarget key={m.userId} label={m.name}>
-                <MemberAvatar
-                    member={m}
-                    width={faceSize}
-                    height={faceSize}
-                    viewUserOnClick={!props.onClick}
-                    hideTitle
-                />
-            </TooltipTarget>,
+            ? (m) => <MemberAvatar key={m.userId} member={m} width={faceSize} height={faceSize} hideTitle />
+            : (m) => (
+                  <TooltipTarget key={m.userId} label={m.name}>
+                      <MemberAvatar
+                          member={m}
+                          width={faceSize}
+                          height={faceSize}
+                          viewUserOnClick={!props.onClick}
+                          hideTitle
+                      />
+                  </TooltipTarget>
+              ),
     );
 
-    const pileContents = <>
-        { overflow ? <span className="mx_FacePile_more" /> : null }
-        { faces }
-    </>;
+    const pileContents = (
+        <>
+            {overflow ? <span className="mx_FacePile_more" /> : null}
+            {faces}
+        </>
+    );
 
-    return <div {...props} className="mx_FacePile">
-        { tooltip ? (
-            <TextWithTooltip class="mx_FacePile_faces" tooltip={tooltip}>
-                { pileContents }
-            </TextWithTooltip>
-        ) : (
-            <div className="mx_FacePile_faces">
-                { pileContents }
-            </div>
-        ) }
-        { children }
-    </div>;
+    return (
+        <div {...props} className="mx_FacePile">
+            {tooltip ? (
+                <TextWithTooltip class="mx_FacePile_faces" tooltip={tooltip}>
+                    {pileContents}
+                </TextWithTooltip>
+            ) : (
+                <div className="mx_FacePile_faces">{pileContents}</div>
+            )}
+            {children}
+        </div>
+    );
 };
 
 export default FacePile;

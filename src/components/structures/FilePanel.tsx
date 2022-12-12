@@ -15,26 +15,26 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { createRef } from 'react';
-import { Filter } from 'matrix-js-sdk/src/filter';
+import React, { createRef } from "react";
+import { Filter } from "matrix-js-sdk/src/filter";
 import { EventTimelineSet, IRoomTimelineData } from "matrix-js-sdk/src/models/event-timeline-set";
 import { Direction } from "matrix-js-sdk/src/models/event-timeline";
 import { MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/models/event";
-import { Room, RoomEvent } from 'matrix-js-sdk/src/models/room';
-import { TimelineWindow } from 'matrix-js-sdk/src/timeline-window';
+import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
+import { TimelineWindow } from "matrix-js-sdk/src/timeline-window";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { MatrixClientPeg } from '../../MatrixClientPeg';
+import { MatrixClientPeg } from "../../MatrixClientPeg";
 import EventIndexPeg from "../../indexing/EventIndexPeg";
-import { _t } from '../../languageHandler';
+import { _t } from "../../languageHandler";
 import SearchWarning, { WarningKind } from "../views/elements/SearchWarning";
 import BaseCard from "../views/right_panel/BaseCard";
-import ResizeNotifier from '../../utils/ResizeNotifier';
+import ResizeNotifier from "../../utils/ResizeNotifier";
 import TimelinePanel from "./TimelinePanel";
 import Spinner from "../views/elements/Spinner";
 import { Layout } from "../../settings/enums/Layout";
-import RoomContext, { TimelineRenderingType } from '../../contexts/RoomContext';
-import Measured from '../views/elements/Measured';
+import RoomContext, { TimelineRenderingType } from "../../contexts/RoomContext";
+import Measured from "../views/elements/Measured";
 
 interface IProps {
     roomId: string;
@@ -145,18 +145,14 @@ class FilePanel extends React.Component<IProps, IState> {
         const client = MatrixClientPeg.get();
 
         const filter = new Filter(client.credentials.userId);
-        filter.setDefinition(
-            {
-                "room": {
-                    "timeline": {
-                        "contains_url": true,
-                        "types": [
-                            "m.room.message",
-                        ],
-                    },
+        filter.setDefinition({
+            room: {
+                timeline: {
+                    contains_url: true,
+                    types: ["m.room.message"],
                 },
             },
-        );
+        });
 
         const filterId = await client.getOrCreateFilter("FILTER_FILES_" + client.credentials.userId, filter);
         filter.filterId = filterId;
@@ -229,52 +225,58 @@ class FilePanel extends React.Component<IProps, IState> {
 
     public render() {
         if (MatrixClientPeg.get().isGuest()) {
-            return <BaseCard
-                className="mx_FilePanel mx_RoomView_messageListWrapper"
-                onClose={this.props.onClose}
-            >
-                <div className="mx_RoomView_empty">
-                    { _t("You must <a>register</a> to use this functionality",
-                        {},
-                        { 'a': (sub) => <a href="#/register" key="sub">{ sub }</a> })
-                    }
-                </div>
-            </BaseCard>;
+            return (
+                <BaseCard className="mx_FilePanel mx_RoomView_messageListWrapper" onClose={this.props.onClose}>
+                    <div className="mx_RoomView_empty">
+                        {_t(
+                            "You must <a>register</a> to use this functionality",
+                            {},
+                            {
+                                a: (sub) => (
+                                    <a href="#/register" key="sub">
+                                        {sub}
+                                    </a>
+                                ),
+                            },
+                        )}
+                    </div>
+                </BaseCard>
+            );
         } else if (this.noRoom) {
-            return <BaseCard
-                className="mx_FilePanel mx_RoomView_messageListWrapper"
-                onClose={this.props.onClose}
-            >
-                <div className="mx_RoomView_empty">{ _t("You must join the room to see its files") }</div>
-            </BaseCard>;
+            return (
+                <BaseCard className="mx_FilePanel mx_RoomView_messageListWrapper" onClose={this.props.onClose}>
+                    <div className="mx_RoomView_empty">{_t("You must join the room to see its files")}</div>
+                </BaseCard>
+            );
         }
 
         // wrap a TimelinePanel with the jump-to-event bits turned off.
 
-        const emptyState = (<div className="mx_RightPanel_empty mx_FilePanel_empty">
-            <h2>{ _t('No files visible in this room') }</h2>
-            <p>{ _t('Attach files from chat or just drag and drop them anywhere in a room.') }</p>
-        </div>);
+        const emptyState = (
+            <div className="mx_RightPanel_empty mx_FilePanel_empty">
+                <h2>{_t("No files visible in this room")}</h2>
+                <p>{_t("Attach files from chat or just drag and drop them anywhere in a room.")}</p>
+            </div>
+        );
 
         const isRoomEncrypted = this.noRoom ? false : MatrixClientPeg.get().isRoomEncrypted(this.props.roomId);
 
         if (this.state.timelineSet) {
             return (
-                <RoomContext.Provider value={{
-                    ...this.context,
-                    timelineRenderingType: TimelineRenderingType.File,
-                    narrow: this.state.narrow,
-                }}>
+                <RoomContext.Provider
+                    value={{
+                        ...this.context,
+                        timelineRenderingType: TimelineRenderingType.File,
+                        narrow: this.state.narrow,
+                    }}
+                >
                     <BaseCard
                         className="mx_FilePanel"
                         onClose={this.props.onClose}
                         withoutScrollContainer
                         ref={this.card}
                     >
-                        <Measured
-                            sensor={this.card.current}
-                            onMeasurement={this.onMeasurement}
-                        />
+                        <Measured sensor={this.card.current} onMeasurement={this.onMeasurement} />
                         <SearchWarning isRoomEncrypted={isRoomEncrypted} kind={WarningKind.Files} />
                         <TimelinePanel
                             manageReadReceipts={false}
@@ -291,14 +293,13 @@ class FilePanel extends React.Component<IProps, IState> {
             );
         } else {
             return (
-                <RoomContext.Provider value={{
-                    ...this.context,
-                    timelineRenderingType: TimelineRenderingType.File,
-                }}>
-                    <BaseCard
-                        className="mx_FilePanel"
-                        onClose={this.props.onClose}
-                    >
+                <RoomContext.Provider
+                    value={{
+                        ...this.context,
+                        timelineRenderingType: TimelineRenderingType.File,
+                    }}
+                >
+                    <BaseCard className="mx_FilePanel" onClose={this.props.onClose}>
                         <Spinner />
                     </BaseCard>
                 </RoomContext.Provider>

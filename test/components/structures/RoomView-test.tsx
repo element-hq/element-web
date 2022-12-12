@@ -75,7 +75,7 @@ describe("RoomView", () => {
         stores.client = cli;
         stores.rightPanelStore.useUnitTestClient(cli);
 
-        jest.spyOn(VoipUserMapper.sharedInstance(), 'getVirtualRoomForRoom').mockResolvedValue(null);
+        jest.spyOn(VoipUserMapper.sharedInstance(), "getVirtualRoomForRoom").mockResolvedValue(null);
     });
 
     afterEach(async () => {
@@ -85,7 +85,7 @@ describe("RoomView", () => {
 
     const mountRoomView = async (): Promise<ReactWrapper> => {
         if (stores.roomViewStore.getRoomId() !== room.roomId) {
-            const switchedRoom = new Promise<void>(resolve => {
+            const switchedRoom = new Promise<void>((resolve) => {
                 const subFn = () => {
                     if (stores.roomViewStore.getRoomId()) {
                         stores.roomViewStore.off(UPDATE_EVENT, subFn);
@@ -121,7 +121,7 @@ describe("RoomView", () => {
 
     const renderRoomView = async (): Promise<ReturnType<typeof render>> => {
         if (stores.roomViewStore.getRoomId() !== room.roomId) {
-            const switchedRoom = new Promise<void>(resolve => {
+            const switchedRoom = new Promise<void>((resolve) => {
                 const subFn = () => {
                     if (stores.roomViewStore.getRoomId()) {
                         stores.roomViewStore.off(UPDATE_EVENT, subFn);
@@ -180,13 +180,15 @@ describe("RoomView", () => {
         cli.isRoomEncrypted.mockReturnValue(true);
 
         // and fake an encryption event into the room to prompt it to re-check
-        room.addLiveEvents([new MatrixEvent({
-            type: "m.room.encryption",
-            sender: cli.getUserId()!,
-            content: {},
-            event_id: "someid",
-            room_id: room.roomId,
-        })]);
+        room.addLiveEvents([
+            new MatrixEvent({
+                type: "m.room.encryption",
+                sender: cli.getUserId()!,
+                content: {},
+                event_id: "someid",
+                room_id: room.roomId,
+            }),
+        ]);
 
         // URL previews should now be disabled
         expect(roomViewInstance.state.showUrlPreview).toBe(false);
@@ -200,13 +202,13 @@ describe("RoomView", () => {
         expect(roomViewInstance.state.liveTimeline).not.toEqual(oldTimeline);
     });
 
-    describe('with virtual rooms', () => {
+    describe("with virtual rooms", () => {
         it("checks for a virtual room on initial load", async () => {
             const { container } = await renderRoomView();
             expect(VoipUserMapper.sharedInstance().getVirtualRoomForRoom).toHaveBeenCalledWith(room.roomId);
 
             // quick check that rendered without error
-            expect(container.querySelector('.mx_ErrorBoundary')).toBeFalsy();
+            expect(container.querySelector(".mx_ErrorBoundary")).toBeFalsy();
         });
 
         it("checks for a virtual room on room event", async () => {
@@ -307,7 +309,7 @@ describe("RoomView", () => {
             it("clicking retry should set the room state to new dispatch a local room event", async () => {
                 jest.spyOn(defaultDispatcher, "dispatch");
                 const { getByText } = await renderRoomView();
-                fireEvent.click(getByText('Retry'));
+                fireEvent.click(getByText("Retry"));
                 expect(localRoom.state).toBe(LocalRoomState.NEW);
                 expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({
                     action: "local_room_event",

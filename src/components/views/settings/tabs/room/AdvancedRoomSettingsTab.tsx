@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import { EventType } from 'matrix-js-sdk/src/@types/event';
+import React from "react";
+import { EventType } from "matrix-js-sdk/src/@types/event";
 
 import { _t } from "../../../../../languageHandler";
 import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
@@ -23,7 +23,7 @@ import AccessibleButton from "../../../elements/AccessibleButton";
 import RoomUpgradeDialog from "../../../dialogs/RoomUpgradeDialog";
 import Modal from "../../../../../Modal";
 import dis from "../../../../../dispatcher/dispatcher";
-import { Action } from '../../../../../dispatcher/actions';
+import { Action } from "../../../../../dispatcher/actions";
 import CopyableText from "../../../elements/CopyableText";
 import { ViewRoomPayload } from "../../../../../dispatcher/payloads/ViewRoomPayload";
 
@@ -100,30 +100,31 @@ export default class AdvancedRoomSettingsTab extends React.Component<IProps, ISt
         const isSpace = room.isSpaceRoom();
 
         let unfederatableSection;
-        const createEvent = room.currentState.getStateEvents(EventType.RoomCreate, '');
-        if (createEvent && createEvent.getContent()['m.federate'] === false) {
-            unfederatableSection = <div>{ _t('This room is not accessible by remote Matrix servers') }</div>;
+        const createEvent = room.currentState.getStateEvents(EventType.RoomCreate, "");
+        if (createEvent && createEvent.getContent()["m.federate"] === false) {
+            unfederatableSection = <div>{_t("This room is not accessible by remote Matrix servers")}</div>;
         }
 
         let roomUpgradeButton;
         if (this.state.upgradeRecommendation && this.state.upgradeRecommendation.needsUpgrade && !this.state.upgraded) {
             roomUpgradeButton = (
                 <div>
-                    <p className='mx_SettingsTab_warningText'>
-                        { _t(
+                    <p className="mx_SettingsTab_warningText">
+                        {_t(
                             "<b>Warning</b>: Upgrading a room will <i>not automatically migrate room members " +
-                            "to the new version of the room.</i> We'll post a link to the new room in the old " +
-                            "version of the room - room members will have to click this link to join the new room.",
-                            {}, {
-                                "b": (sub) => <b>{ sub }</b>,
-                                "i": (sub) => <i>{ sub }</i>,
+                                "to the new version of the room.</i> We'll post a link to the new room in the old " +
+                                "version of the room - room members will have to click this link to join the new room.",
+                            {},
+                            {
+                                b: (sub) => <b>{sub}</b>,
+                                i: (sub) => <i>{sub}</i>,
                             },
-                        ) }
+                        )}
                     </p>
-                    <AccessibleButton onClick={this.upgradeRoom} kind='primary'>
-                        { isSpace
+                    <AccessibleButton onClick={this.upgradeRoom} kind="primary">
+                        {isSpace
                             ? _t("Upgrade this space to the recommended room version")
-                            : _t("Upgrade this room to the recommended room version") }
+                            : _t("Upgrade this room to the recommended room version")}
                     </AccessibleButton>
                 </div>
             );
@@ -139,35 +140,33 @@ export default class AdvancedRoomSettingsTab extends React.Component<IProps, ISt
             }
 
             oldRoomLink = (
-                <AccessibleButton element='a' onClick={this.onOldRoomClicked}>
-                    { copy }
+                <AccessibleButton element="a" onClick={this.onOldRoomClicked}>
+                    {copy}
                 </AccessibleButton>
             );
         }
 
         return (
             <div className="mx_SettingsTab">
-                <div className="mx_SettingsTab_heading">{ _t("Advanced") }</div>
-                <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>
-                    <span className='mx_SettingsTab_subheading'>
-                        { room?.isSpaceRoom() ? _t("Space information") : _t("Room information") }
+                <div className="mx_SettingsTab_heading">{_t("Advanced")}</div>
+                <div className="mx_SettingsTab_section mx_SettingsTab_subsectionText">
+                    <span className="mx_SettingsTab_subheading">
+                        {room?.isSpaceRoom() ? _t("Space information") : _t("Room information")}
                     </span>
                     <div>
-                        <span>{ _t("Internal room ID") }</span>
-                        <CopyableText getTextToCopy={() => this.props.roomId}>
-                            { this.props.roomId }
-                        </CopyableText>
+                        <span>{_t("Internal room ID")}</span>
+                        <CopyableText getTextToCopy={() => this.props.roomId}>{this.props.roomId}</CopyableText>
                     </div>
-                    { unfederatableSection }
+                    {unfederatableSection}
                 </div>
-                <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>
-                    <span className='mx_SettingsTab_subheading'>{ _t("Room version") }</span>
+                <div className="mx_SettingsTab_section mx_SettingsTab_subsectionText">
+                    <span className="mx_SettingsTab_subheading">{_t("Room version")}</span>
                     <div>
-                        <span>{ _t("Room version:") }</span>&nbsp;
-                        { room.getVersion() }
+                        <span>{_t("Room version:")}</span>&nbsp;
+                        {room.getVersion()}
                     </div>
-                    { oldRoomLink }
-                    { roomUpgradeButton }
+                    {oldRoomLink}
+                    {roomUpgradeButton}
                 </div>
             </div>
         );

@@ -17,12 +17,12 @@ limitations under the License.
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { Room } from "matrix-js-sdk/src/models/room";
 
-import DMRoomMap from './DMRoomMap';
+import DMRoomMap from "./DMRoomMap";
 
 export enum E2EStatus {
     Warning = "warning",
     Verified = "verified",
-    Normal = "normal"
+    Normal = "normal",
 }
 
 export async function shieldStatusForRoom(client: MatrixClient, room: Room): Promise<E2EStatus> {
@@ -31,10 +31,10 @@ export async function shieldStatusForRoom(client: MatrixClient, room: Room): Pro
 
     const verified: string[] = [];
     const unverified: string[] = [];
-    members.filter((userId) => userId !== client.getUserId())
+    members
+        .filter((userId) => userId !== client.getUserId())
         .forEach((userId) => {
-            (client.checkUserTrust(userId).isCrossSigningVerified() ?
-                verified : unverified).push(userId);
+            (client.checkUserTrust(userId).isCrossSigningVerified() ? verified : unverified).push(userId);
         });
 
     /* Alarm if any unverified users were verified before. */
@@ -46,10 +46,11 @@ export async function shieldStatusForRoom(client: MatrixClient, room: Room): Pro
 
     /* Check all verified user devices. */
     /* Don't alarm if no other users are verified  */
-    const includeUser = (verified.length > 0) &&    // Don't alarm for self in rooms where nobody else is verified
-                        !inDMMap &&                 // Don't alarm for self in DMs with other users
-                        (members.length !== 2) ||   // Don't alarm for self in 1:1 chats with other users
-                        (members.length === 1);     // Do alarm for self if we're alone in a room
+    const includeUser =
+        (verified.length > 0 && // Don't alarm for self in rooms where nobody else is verified
+            !inDMMap && // Don't alarm for self in DMs with other users
+            members.length !== 2) || // Don't alarm for self in 1:1 chats with other users
+        members.length === 1; // Do alarm for self if we're alone in a room
     const targets = includeUser ? [...verified, client.getUserId()] : verified;
     for (const userId of targets) {
         const devices = client.getStoredDevicesForUser(userId);

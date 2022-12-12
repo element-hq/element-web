@@ -15,11 +15,7 @@ limitations under the License.
 */
 
 import { mocked } from "jest-mock";
-import {
-    MatrixClient,
-    MatrixEvent,
-    Room,
-} from "matrix-js-sdk/src/matrix";
+import { MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 
 import {
     VoiceBroadcastInfoState,
@@ -61,18 +57,8 @@ describe("VoiceBroadcastPlaybacksStore", () => {
             return null;
         });
 
-        infoEvent1 = mkVoiceBroadcastInfoStateEvent(
-            roomId,
-            VoiceBroadcastInfoState.Started,
-            userId,
-            deviceId,
-        );
-        infoEvent2 = mkVoiceBroadcastInfoStateEvent(
-            roomId,
-            VoiceBroadcastInfoState.Started,
-            userId,
-            deviceId,
-        );
+        infoEvent1 = mkVoiceBroadcastInfoStateEvent(roomId, VoiceBroadcastInfoState.Started, userId, deviceId);
+        infoEvent2 = mkVoiceBroadcastInfoStateEvent(roomId, VoiceBroadcastInfoState.Started, userId, deviceId);
         playback1 = new VoiceBroadcastPlayback(infoEvent1, client);
         jest.spyOn(playback1, "off");
         playback2 = new VoiceBroadcastPlayback(infoEvent2, client);

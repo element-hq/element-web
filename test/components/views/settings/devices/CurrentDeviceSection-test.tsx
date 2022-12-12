@@ -14,15 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import { fireEvent, render } from '@testing-library/react';
-import { act } from 'react-dom/test-utils';
+import React from "react";
+import { fireEvent, render } from "@testing-library/react";
+import { act } from "react-dom/test-utils";
 
-import CurrentDeviceSection from '../../../../../src/components/views/settings/devices/CurrentDeviceSection';
-import { DeviceType } from '../../../../../src/utils/device/parseUserAgent';
+import CurrentDeviceSection from "../../../../../src/components/views/settings/devices/CurrentDeviceSection";
+import { DeviceType } from "../../../../../src/utils/device/parseUserAgent";
 
-describe('<CurrentDeviceSection />', () => {
-    const deviceId = 'alices_device';
+describe("<CurrentDeviceSection />", () => {
+    const deviceId = "alices_device";
 
     const alicesVerifiedDevice = {
         device_id: deviceId,
@@ -44,60 +44,59 @@ describe('<CurrentDeviceSection />', () => {
         isSigningOut: false,
     };
 
-    const getComponent = (props = {}): React.ReactElement =>
-        (<CurrentDeviceSection {...defaultProps} {...props} />);
+    const getComponent = (props = {}): React.ReactElement => <CurrentDeviceSection {...defaultProps} {...props} />;
 
-    it('renders spinner while device is loading', () => {
+    it("renders spinner while device is loading", () => {
         const { container } = render(getComponent({ device: undefined, isLoading: true }));
-        expect(container.getElementsByClassName('mx_Spinner').length).toBeTruthy();
+        expect(container.getElementsByClassName("mx_Spinner").length).toBeTruthy();
     });
 
-    it('handles when device is falsy', async () => {
+    it("handles when device is falsy", async () => {
         const { container } = render(getComponent({ device: undefined }));
         expect(container).toMatchSnapshot();
     });
 
-    it('renders device and correct security card when device is verified', () => {
+    it("renders device and correct security card when device is verified", () => {
         const { container } = render(getComponent());
         expect(container).toMatchSnapshot();
     });
 
-    it('renders device and correct security card when device is unverified', () => {
+    it("renders device and correct security card when device is unverified", () => {
         const { container } = render(getComponent({ device: alicesUnverifiedDevice }));
         expect(container).toMatchSnapshot();
     });
 
-    it('displays device details on main tile click', () => {
+    it("displays device details on main tile click", () => {
         const { getByTestId, container } = render(getComponent({ device: alicesUnverifiedDevice }));
 
         act(() => {
             fireEvent.click(getByTestId(`device-tile-${alicesUnverifiedDevice.device_id}`));
         });
 
-        expect(container.getElementsByClassName('mx_DeviceDetails').length).toBeTruthy();
+        expect(container.getElementsByClassName("mx_DeviceDetails").length).toBeTruthy();
 
         act(() => {
             fireEvent.click(getByTestId(`device-tile-${alicesUnverifiedDevice.device_id}`));
         });
 
         // device details are hidden
-        expect(container.getElementsByClassName('mx_DeviceDetails').length).toBeFalsy();
+        expect(container.getElementsByClassName("mx_DeviceDetails").length).toBeFalsy();
     });
 
-    it('displays device details on toggle click', () => {
+    it("displays device details on toggle click", () => {
         const { container, getByTestId } = render(getComponent({ device: alicesUnverifiedDevice }));
 
         act(() => {
-            fireEvent.click(getByTestId('current-session-toggle-details'));
+            fireEvent.click(getByTestId("current-session-toggle-details"));
         });
 
-        expect(container.getElementsByClassName('mx_DeviceDetails')).toMatchSnapshot();
+        expect(container.getElementsByClassName("mx_DeviceDetails")).toMatchSnapshot();
 
         act(() => {
-            fireEvent.click(getByTestId('current-session-toggle-details'));
+            fireEvent.click(getByTestId("current-session-toggle-details"));
         });
 
         // device details are hidden
-        expect(container.getElementsByClassName('mx_DeviceDetails').length).toBeFalsy();
+        expect(container.getElementsByClassName("mx_DeviceDetails").length).toBeFalsy();
     });
 });

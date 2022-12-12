@@ -49,4 +49,4 @@ Cypress.Commands.add("serveHtmlFile", serveHtmlFile);
 Cypress.Commands.add("stopWebServers", stopWebServers);
 
 // Needed to make this file a module
-export { };
+export {};

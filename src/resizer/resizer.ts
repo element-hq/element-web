@@ -46,18 +46,14 @@ export default class Resizer<C extends IConfig = IConfig> {
     constructor(
         public container: HTMLElement,
         private readonly distributorCtor: {
-            new(item: ResizeItem): FixedDistributor<C, any>;
+            new (item: ResizeItem): FixedDistributor<C, any>;
             createItem(
                 resizeHandle: HTMLDivElement,
                 resizer: Resizer,
                 sizer: Sizer,
-                container: HTMLElement
+                container: HTMLElement,
             ): ResizeItem;
-            createSizer(
-                containerElement: HTMLElement,
-                vertical: boolean,
-                reverse: boolean
-            ): Sizer;
+            createSizer(containerElement: HTMLElement, vertical: boolean, reverse: boolean): Sizer;
         },
         public readonly config?: C,
     ) {
@@ -124,9 +120,12 @@ export default class Resizer<C extends IConfig = IConfig> {
         const hasHandler = this?.config?.handler;
         // prevent that stacked resizer's are both activated with one mouse event
         // (this is possible because the mouse events are connected to the containers not the handles)
-        if (!resizeHandle || // if no resizeHandle exist / mouse event hit the container not the handle
+        if (
+            !resizeHandle || // if no resizeHandle exist / mouse event hit the container not the handle
             (!hasHandler && resizeHandle.parentElement !== this.container) || // no handler from config -> check if the containers match
-            (hasHandler && resizeHandle !== hasHandler)) { // handler from config -> check if the handlers match
+            (hasHandler && resizeHandle !== hasHandler)
+        ) {
+            // handler from config -> check if the handlers match
             return;
         }
 
@@ -167,24 +166,29 @@ export default class Resizer<C extends IConfig = IConfig> {
         body.addEventListener("mousemove", onMouseMove, false);
     };
 
-    private onResize = throttle(() => {
-        const distributors = this.getDistributors();
+    private onResize = throttle(
+        () => {
+            const distributors = this.getDistributors();
 
-        // relax all items if they had any overconstrained flexboxes
-        distributors.forEach(d => d.start());
-        distributors.forEach(d => d.finish());
-    }, 100, { trailing: true, leading: true });
+            // relax all items if they had any overconstrained flexboxes
+            distributors.forEach((d) => d.start());
+            distributors.forEach((d) => d.finish());
+        },
+        100,
+        { trailing: true, leading: true },
+    );
 
     public getDistributors = () => {
-        return this.getResizeHandles().map(handle => {
+        return this.getResizeHandles().map((handle) => {
             const { distributor } = this.createSizerAndDistributor(<HTMLDivElement>handle);
             return distributor;
         });
     };
 
-    private createSizerAndDistributor(
-        resizeHandle: HTMLDivElement,
-    ): {sizer: Sizer, distributor: FixedDistributor<any>} {
+    private createSizerAndDistributor(resizeHandle: HTMLDivElement): {
+        sizer: Sizer;
+        distributor: FixedDistributor<any>;
+    } {
         const vertical = resizeHandle.classList.contains(this.classNames.vertical);
         const reverse = this.isReverseResizeHandle(resizeHandle);
         const Distributor = this.distributorCtor;

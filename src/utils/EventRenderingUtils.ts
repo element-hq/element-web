@@ -25,7 +25,11 @@ import { MatrixClientPeg } from "../MatrixClientPeg";
 import { getMessageModerationState, isLocationEvent, MessageModerationState } from "./EventUtils";
 import { ElementCall } from "../models/Call";
 
-export function getEventDisplayInfo(mxEvent: MatrixEvent, showHiddenEvents: boolean, hideEvent?: boolean): {
+export function getEventDisplayInfo(
+    mxEvent: MatrixEvent,
+    showHiddenEvents: boolean,
+    hideEvent?: boolean,
+): {
     isInfoMessage: boolean;
     hasRenderer: boolean;
     isBubbleMessage: boolean;
@@ -55,17 +59,15 @@ export function getEventDisplayInfo(mxEvent: MatrixEvent, showHiddenEvents: bool
     let factory = pickFactory(mxEvent, MatrixClientPeg.get(), showHiddenEvents);
 
     // Info messages are basically information about commands processed on a room
-    let isBubbleMessage = (
+    let isBubbleMessage =
         eventType.startsWith("m.key.verification") ||
         (eventType === EventType.RoomMessage && msgtype?.startsWith("m.key.verification")) ||
-        (eventType === EventType.RoomCreate) ||
-        (eventType === EventType.RoomEncryption) ||
-        (factory === JitsiEventFactory)
-    );
-    const isLeftAlignedBubbleMessage = !isBubbleMessage && (
-        eventType === EventType.CallInvite || ElementCall.CALL_EVENT_TYPE.matches(eventType)
-    );
-    let isInfoMessage = (
+        eventType === EventType.RoomCreate ||
+        eventType === EventType.RoomEncryption ||
+        factory === JitsiEventFactory;
+    const isLeftAlignedBubbleMessage =
+        !isBubbleMessage && (eventType === EventType.CallInvite || ElementCall.CALL_EVENT_TYPE.matches(eventType));
+    let isInfoMessage =
         !isBubbleMessage &&
         !isLeftAlignedBubbleMessage &&
         eventType !== EventType.RoomMessage &&
@@ -73,15 +75,13 @@ export function getEventDisplayInfo(mxEvent: MatrixEvent, showHiddenEvents: bool
         eventType !== EventType.Sticker &&
         eventType !== EventType.RoomCreate &&
         !M_POLL_START.matches(eventType) &&
-        !M_BEACON_INFO.matches(eventType)
-    );
+        !M_BEACON_INFO.matches(eventType);
     // Some non-info messages want to be rendered in the appropriate bubble column but without the bubble background
-    const noBubbleEvent = (
+    const noBubbleEvent =
         (eventType === EventType.RoomMessage && msgtype === MsgType.Emote) ||
         M_POLL_START.matches(eventType) ||
         M_BEACON_INFO.matches(eventType) ||
-        isLocationEvent(mxEvent)
-    );
+        isLocationEvent(mxEvent);
 
     // If we're showing hidden events in the timeline, we should use the
     // source tile when there's no regular tile for an event and also for

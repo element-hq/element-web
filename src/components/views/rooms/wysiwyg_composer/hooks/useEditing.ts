@@ -28,14 +28,17 @@ export function useEditing(editorStateTransfer: EditorStateTransfer, initialCont
 
     const [isSaveDisabled, setIsSaveDisabled] = useState(true);
     const [content, setContent] = useState(initialContent);
-    const onChange = useCallback((_content: string) => {
-        setContent(_content);
-        setIsSaveDisabled(_isSaveDisabled => _isSaveDisabled && _content === initialContent);
-    }, [initialContent]);
+    const onChange = useCallback(
+        (_content: string) => {
+            setContent(_content);
+            setIsSaveDisabled((_isSaveDisabled) => _isSaveDisabled && _content === initialContent);
+        },
+        [initialContent],
+    );
 
-    const editMessageMemoized = useCallback(() =>
-        content !== undefined && editMessage(content, { roomContext, mxClient, editorStateTransfer }),
-    [content, roomContext, mxClient, editorStateTransfer],
+    const editMessageMemoized = useCallback(
+        () => content !== undefined && editMessage(content, { roomContext, mxClient, editorStateTransfer }),
+        [content, roomContext, mxClient, editorStateTransfer],
     );
 
     const endEditingMemoized = useCallback(() => endEditing(roomContext), [roomContext]);

@@ -32,12 +32,7 @@ import {
     PollEndEvent,
 } from "matrix-events-sdk";
 
-import {
-    stubClient,
-    mkStubRoom,
-    mkEvent,
-    mkMessage,
-} from "../../../test-utils";
+import { stubClient, mkStubRoom, mkEvent, mkMessage } from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import PinnedMessagesCard from "../../../../src/components/views/right_panel/PinnedMessagesCard";
 import PinnedEventTile from "../../../../src/components/views/rooms/PinnedEventTile";
@@ -53,31 +48,34 @@ describe("<PinnedMessagesCard />", () => {
     cli.relations.mockResolvedValue({ originalEvent: {} as unknown as MatrixEvent, events: [] });
 
     const mkRoom = (localPins: MatrixEvent[], nonLocalPins: MatrixEvent[]): Room => {
-        const room = mkStubRoom("!room:example.org", 'room', cli);
+        const room = mkStubRoom("!room:example.org", "room", cli);
         // Deferred since we may be adding or removing pins later
         const pins = () => [...localPins, ...nonLocalPins];
 
         // Insert pin IDs into room state
-        mocked(room.currentState).getStateEvents.mockImplementation((): any => mkEvent({
-            event: true,
-            type: EventType.RoomPinnedEvents,
-            content: {
-                pinned: pins().map(e => e.getId()),
-            },
-            user: '@user:example.org',
-            room: '!room:example.org',
-        }));
+        mocked(room.currentState).getStateEvents.mockImplementation((): any =>
+            mkEvent({
+                event: true,
+                type: EventType.RoomPinnedEvents,
+                content: {
+                    pinned: pins().map((e) => e.getId()),
+                },
+                user: "@user:example.org",
+                room: "!room:example.org",
+            }),
+        );
 
         // Insert local pins into local timeline set
-        room.getUnfilteredTimelineSet = () => ({
-            getTimelineForEvent: () => ({
-                getEvents: () => localPins,
-            }),
-        } as unknown as EventTimelineSet);
+        room.getUnfilteredTimelineSet = () =>
+            ({
+                getTimelineForEvent: () => ({
+                    getEvents: () => localPins,
+                }),
+            } as unknown as EventTimelineSet);
 
         // Return all pins over fetchRoomEvent
         cli.fetchRoomEvent.mockImplementation((roomId, eventId) => {
-            const event = pins().find(e => e.getId() === eventId)?.event;
+            const event = pins().find((e) => e.getId() === eventId)?.event;
             return Promise.resolve(event as IMinimalEvent);
         });
 
@@ -87,16 +85,19 @@ describe("<PinnedMessagesCard />", () => {
     const mountPins = async (room: Room): Promise<ReactWrapper<ComponentProps<typeof PinnedMessagesCard>>> => {
         let pins;
         await act(async () => {
-            pins = mount(<PinnedMessagesCard
-                room={room}
-                onClose={jest.fn()}
-                permalinkCreator={new RoomPermalinkCreator(room, room.roomId)}
-            />, {
-                wrappingComponent: MatrixClientContext.Provider,
-                wrappingComponentProps: { value: cli },
-            });
+            pins = mount(
+                <PinnedMessagesCard
+                    room={room}
+                    onClose={jest.fn()}
+                    permalinkCreator={new RoomPermalinkCreator(room, room.roomId)}
+                />,
+                {
+                    wrappingComponent: MatrixClientContext.Provider,
+                    wrappingComponentProps: { value: cli },
+                },
+            );
             // Wait a tick for state updates
-            await new Promise(resolve => setImmediate(resolve));
+            await new Promise((resolve) => setImmediate(resolve));
         });
         pins.update();
 
@@ -105,15 +106,16 @@ describe("<PinnedMessagesCard />", () => {
 
     const emitPinUpdates = async (pins: ReactWrapper<ComponentProps<typeof PinnedMessagesCard>>) => {
         const room = pins.props().room;
-        const pinListener = mocked(room.currentState).on.mock.calls
-            .find(([eventName, listener]) => eventName === RoomStateEvent.Events)[1];
+        const pinListener = mocked(room.currentState).on.mock.calls.find(
+            ([eventName, listener]) => eventName === RoomStateEvent.Events,
+        )[1];
 
         await act(async () => {
             // Emit the update
             // @ts-ignore what is going on here?
             pinListener(room.currentState.getStateEvents());
             // Wait a tick for state updates
-            await new Promise(resolve => setImmediate(resolve));
+            await new Promise((resolve) => setImmediate(resolve));
         });
         pins.update();
     };
@@ -240,12 +242,14 @@ describe("<PinnedMessagesCard />", () => {
             ["@alice:example.org", 0],
             ["@bob:example.org", 0],
             ["@eve:example.org", 1],
-        ].map(([user, option], i) => mkEvent({
-            ...PollResponseEvent.from([answers[option].id], poll.getId()).serialize(),
-            event: true,
-            room: "!room:example.org",
-            user: user as string,
-        }));
+        ].map(([user, option], i) =>
+            mkEvent({
+                ...PollResponseEvent.from([answers[option].id], poll.getId()).serialize(),
+                event: true,
+                room: "!room:example.org",
+                user: user as string,
+            }),
+        );
         const end = mkEvent({
             ...PollEndEvent.from(poll.getId(), "Closing the poll").serialize(),
             event: true,
@@ -259,9 +263,9 @@ describe("<PinnedMessagesCard />", () => {
                 switch (eventType) {
                     case M_POLL_RESPONSE.name:
                         // Paginate the results, for added challenge
-                        return (from === "page2") ?
-                            { originalEvent: poll, events: responses.slice(2) } :
-                            { originalEvent: poll, events: responses.slice(0, 2), nextBatch: "page2" };
+                        return from === "page2"
+                            ? { originalEvent: poll, events: responses.slice(2) }
+                            : { originalEvent: poll, events: responses.slice(0, 2), nextBatch: "page2" };
                     case M_POLL_END.name:
                         return { originalEvent: null, events: [end] };
                 }

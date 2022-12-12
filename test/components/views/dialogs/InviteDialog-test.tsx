@@ -28,9 +28,11 @@ import { ValidatedServerConfig } from "../../../../src/utils/ValidatedServerConf
 import { IConfigOptions } from "../../../../src/IConfigOptions";
 
 const mockGetAccessToken = jest.fn().mockResolvedValue("getAccessToken");
-jest.mock("../../../../src/IdentityAuthClient", () => jest.fn().mockImplementation(() => ({
-    getAccessToken: mockGetAccessToken,
-})));
+jest.mock("../../../../src/IdentityAuthClient", () =>
+    jest.fn().mockImplementation(() => ({
+        getAccessToken: mockGetAccessToken,
+    })),
+);
 
 describe("InviteDialog", () => {
     const roomId = "!111111111111111111:example.org";
@@ -43,7 +45,7 @@ describe("InviteDialog", () => {
         getRooms: jest.fn(),
         getAccountData: jest.fn(),
         getPushActionsForEvent: jest.fn(),
-        mxcUrlToHttp: jest.fn().mockReturnValue(''),
+        mxcUrlToHttp: jest.fn().mockReturnValue(""),
         isRoomEncrypted: jest.fn().mockReturnValue(false),
         getProfileInfo: jest.fn().mockRejectedValue({ errcode: "" }),
         getIdentityServerUrl: jest.fn(),
@@ -70,58 +72,46 @@ describe("InviteDialog", () => {
     });
 
     afterAll(() => {
-        jest.spyOn(MatrixClientPeg, 'get').mockRestore();
+        jest.spyOn(MatrixClientPeg, "get").mockRestore();
     });
 
     it("should label with space name", () => {
         mockClient.getRoom(roomId).isSpaceRoom = jest.fn().mockReturnValue(true);
         mockClient.getRoom(roomId).getType = jest.fn().mockReturnValue(RoomType.Space);
         mockClient.getRoom(roomId).name = "Space";
-        render((
-            <InviteDialog
-                kind={KIND_INVITE}
-                roomId={roomId}
-                onFinished={jest.fn()}
-            />
-        ));
+        render(<InviteDialog kind={KIND_INVITE} roomId={roomId} onFinished={jest.fn()} />);
 
         expect(screen.queryByText("Invite to Space")).toBeTruthy();
     });
 
     it("should label with room name", () => {
-        render((
-            <InviteDialog
-                kind={KIND_INVITE}
-                roomId={roomId}
-                onFinished={jest.fn()}
-            />
-        ));
+        render(<InviteDialog kind={KIND_INVITE} roomId={roomId} onFinished={jest.fn()} />);
 
         expect(screen.queryByText("Invite to Room")).toBeTruthy();
     });
 
     it("should suggest valid MXIDs even if unknown", async () => {
-        render((
+        render(
             <InviteDialog
                 kind={KIND_INVITE}
                 roomId={roomId}
                 onFinished={jest.fn()}
                 initialText="@localpart:server.tld"
-            />
-        ));
+            />,
+        );
 
         await screen.findAllByText("@localpart:server.tld"); // Using findAllByText as the MXID is used for name too
     });
 
     it("should not suggest invalid MXIDs", () => {
-        render((
+        render(
             <InviteDialog
                 kind={KIND_INVITE}
                 roomId={roomId}
                 onFinished={jest.fn()}
                 initialText="@localpart:server:tld"
-            />
-        ));
+            />,
+        );
 
         expect(screen.queryByText("@localpart:server:tld")).toBeFalsy();
     });
@@ -138,14 +128,9 @@ describe("InviteDialog", () => {
             avatar_url: "mxc://foo/bar",
         });
 
-        render((
-            <InviteDialog
-                kind={KIND_INVITE}
-                roomId={roomId}
-                onFinished={jest.fn()}
-                initialText="foobar@email.com"
-            />
-        ));
+        render(
+            <InviteDialog kind={KIND_INVITE} roomId={roomId} onFinished={jest.fn()} initialText="foobar@email.com" />,
+        );
 
         await screen.findByText("Mr. Foo");
         await screen.findByText("@foobar:server");
@@ -157,14 +142,9 @@ describe("InviteDialog", () => {
         mockClient.getIdentityServerUrl.mockReturnValue("https://identity-server");
         mockClient.lookupThreePid.mockResolvedValue({});
 
-        render((
-            <InviteDialog
-                kind={KIND_INVITE}
-                roomId={roomId}
-                onFinished={jest.fn()}
-                initialText="foobar@email.com"
-            />
-        ));
+        render(
+            <InviteDialog kind={KIND_INVITE} roomId={roomId} onFinished={jest.fn()} initialText="foobar@email.com" />,
+        );
 
         await screen.findByText("foobar@email.com");
         await screen.findByText("Invite by email");

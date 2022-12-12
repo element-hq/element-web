@@ -55,25 +55,29 @@ const VerificationRequestExplorer: React.FC<{
             setRequestTimeout(request.timeout);
         }, 500);
 
-        return () => { clearInterval(id); };
+        return () => {
+            clearInterval(id);
+        };
     }, [request]);
 
-    return (<div className="mx_DevTools_VerificationRequest">
-        <dl>
-            <dt>{ _t("Transaction") }</dt>
-            <dd>{ txnId }</dd>
-            <dt>{ _t("Phase") }</dt>
-            <dd>{ PHASE_MAP[request.phase] ? _t(PHASE_MAP[request.phase]) : request.phase }</dd>
-            <dt>{ _t("Timeout") }</dt>
-            <dd>{ Math.floor(timeout / 1000) }</dd>
-            <dt>{ _t("Methods") }</dt>
-            <dd>{ request.methods && request.methods.join(", ") }</dd>
-            <dt>{ _t("Requester") }</dt>
-            <dd>{ request.requestingUserId }</dd>
-            <dt>{ _t("Observe only") }</dt>
-            <dd>{ JSON.stringify(request.observeOnly) }</dd>
-        </dl>
-    </div>);
+    return (
+        <div className="mx_DevTools_VerificationRequest">
+            <dl>
+                <dt>{_t("Transaction")}</dt>
+                <dd>{txnId}</dd>
+                <dt>{_t("Phase")}</dt>
+                <dd>{PHASE_MAP[request.phase] ? _t(PHASE_MAP[request.phase]) : request.phase}</dd>
+                <dt>{_t("Timeout")}</dt>
+                <dd>{Math.floor(timeout / 1000)}</dd>
+                <dt>{_t("Methods")}</dt>
+                <dd>{request.methods && request.methods.join(", ")}</dd>
+                <dt>{_t("Requester")}</dt>
+                <dd>{request.requestingUserId}</dd>
+                <dt>{_t("Observe only")}</dt>
+                <dd>{JSON.stringify(request.observeOnly)}</dd>
+            </dl>
+        </div>
+    );
 };
 
 const VerificationExplorer = ({ onBack }: IDevtoolsProps) => {
@@ -81,16 +85,22 @@ const VerificationExplorer = ({ onBack }: IDevtoolsProps) => {
     const context = useContext(DevtoolsContext);
 
     const requests = useTypedEventEmitterState(cli, CryptoEvent.VerificationRequest, () => {
-        return cli.crypto.inRoomVerificationRequests["requestsByRoomId"]?.get(context.room.roomId)
-            ?? new Map<string, VerificationRequest>();
+        return (
+            cli.crypto.inRoomVerificationRequests["requestsByRoomId"]?.get(context.room.roomId) ??
+            new Map<string, VerificationRequest>()
+        );
     });
 
-    return <BaseTool onBack={onBack}>
-        { Array.from(requests.entries()).reverse().map(([txnId, request]) =>
-            <VerificationRequestExplorer txnId={txnId} request={request} key={txnId} />,
-        ) }
-        { requests.size < 1 && _t("No verification requests found") }
-    </BaseTool>;
+    return (
+        <BaseTool onBack={onBack}>
+            {Array.from(requests.entries())
+                .reverse()
+                .map(([txnId, request]) => (
+                    <VerificationRequestExplorer txnId={txnId} request={request} key={txnId} />
+                ))}
+            {requests.size < 1 && _t("No verification requests found")}
+        </BaseTool>
+    );
 };
 
 export default VerificationExplorer;

@@ -32,7 +32,7 @@ export class PollStartEventPreview implements IPreview {
 
         if (event.isRelation("m.replace")) {
             // It's an edit, generate the preview on the new text
-            eventContent = event.getContent()['m.new_content'];
+            eventContent = event.getContent()["m.new_content"];
         }
 
         // Check we have the information we need, and bail out if not
@@ -52,9 +52,7 @@ export class PollStartEventPreview implements IPreview {
             if (isThread || isSelf(event) || !shouldPrefixMessagesIn(event.getRoomId(), tagId)) {
                 return question;
             } else {
-                return _t("%(senderName)s: %(message)s",
-                    { senderName: getSenderName(event), message: question },
-                );
+                return _t("%(senderName)s: %(message)s", { senderName: getSenderName(event), message: question });
             }
         } catch (e) {
             if (e instanceof InvalidEventError) {

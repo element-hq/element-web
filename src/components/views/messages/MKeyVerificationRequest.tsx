@@ -14,18 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import { MatrixEvent } from 'matrix-js-sdk/src/matrix';
+import React from "react";
+import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { VerificationRequestEvent } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 
-import { MatrixClientPeg } from '../../../MatrixClientPeg';
-import { _t } from '../../../languageHandler';
-import { getNameForEventRoom, userLabelForEventRoom } from '../../../utils/KeyVerificationStateObserver';
-import { RightPanelPhases } from '../../../stores/right-panel/RightPanelStorePhases';
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { _t } from "../../../languageHandler";
+import { getNameForEventRoom, userLabelForEventRoom } from "../../../utils/KeyVerificationStateObserver";
+import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
 import EventTileBubble from "./EventTileBubble";
-import AccessibleButton from '../elements/AccessibleButton';
-import RightPanelStore from '../../../stores/right-panel/RightPanelStore';
+import AccessibleButton from "../elements/AccessibleButton";
+import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -130,9 +130,11 @@ export default class MKeyVerificationRequest extends React.Component<IProps> {
             let stateLabel;
             const accepted = request.ready || request.started || request.done;
             if (accepted) {
-                stateLabel = (<AccessibleButton onClick={this.openRequest}>
-                    { this.acceptedLabel(request.receivingUserId) }
-                </AccessibleButton>);
+                stateLabel = (
+                    <AccessibleButton onClick={this.openRequest}>
+                        {this.acceptedLabel(request.receivingUserId)}
+                    </AccessibleButton>
+                );
             } else if (request.cancelled) {
                 stateLabel = this.cancelledLabel(request.cancellingUserId);
             } else if (request.accepting) {
@@ -140,7 +142,7 @@ export default class MKeyVerificationRequest extends React.Component<IProps> {
             } else if (request.declining) {
                 stateLabel = _t("Declining …");
             }
-            stateNode = (<div className="mx_cryptoEvent_state">{ stateLabel }</div>);
+            stateNode = <div className="mx_cryptoEvent_state">{stateLabel}</div>;
         }
 
         if (!request.initiatedByMe) {
@@ -148,29 +150,34 @@ export default class MKeyVerificationRequest extends React.Component<IProps> {
             title = _t("%(name)s wants to verify", { name });
             subtitle = userLabelForEventRoom(request.requestingUserId, mxEvent.getRoomId());
             if (request.canAccept) {
-                stateNode = (<div className="mx_cryptoEvent_buttons">
-                    <AccessibleButton kind="danger" onClick={this.onRejectClicked}>
-                        { _t("Decline") }
-                    </AccessibleButton>
-                    <AccessibleButton kind="primary" onClick={this.onAcceptClicked}>
-                        { _t("Accept") }
-                    </AccessibleButton>
-                </div>);
+                stateNode = (
+                    <div className="mx_cryptoEvent_buttons">
+                        <AccessibleButton kind="danger" onClick={this.onRejectClicked}>
+                            {_t("Decline")}
+                        </AccessibleButton>
+                        <AccessibleButton kind="primary" onClick={this.onAcceptClicked}>
+                            {_t("Accept")}
+                        </AccessibleButton>
+                    </div>
+                );
             }
-        } else { // request sent by us
+        } else {
+            // request sent by us
             title = _t("You sent a verification request");
             subtitle = userLabelForEventRoom(request.receivingUserId, mxEvent.getRoomId());
         }
 
         if (title) {
-            return <EventTileBubble
-                className="mx_cryptoEvent mx_cryptoEvent_icon"
-                title={title}
-                subtitle={subtitle}
-                timestamp={this.props.timestamp}
-            >
-                { stateNode }
-            </EventTileBubble>;
+            return (
+                <EventTileBubble
+                    className="mx_cryptoEvent mx_cryptoEvent_icon"
+                    title={title}
+                    subtitle={subtitle}
+                    timestamp={this.props.timestamp}
+                >
+                    {stateNode}
+                </EventTileBubble>
+            );
         }
         return null;
     }

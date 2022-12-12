@@ -58,12 +58,14 @@ limitations under the License.
             line-height: $font-15px;
         }
 
-        a, .mx_AccessibleButton_kind_link {
+        a,
+        .mx_AccessibleButton_kind_link {
             color: $accent;
             text-decoration: underline;
         }
 
-        &::before, &::after {
+        &::before,
+        &::after {
             content: "";
             position: absolute;
             width: 40px;
@@ -87,7 +89,7 @@ limitations under the License.
 
     .mx_FeedbackDialog_reportBug {
         &::after {
-            mask-image: url('$(res)/img/feather-customised/bug.svg');
+            mask-image: url("$(res)/img/feather-customised/bug.svg");
         }
     }
 
@@ -95,7 +97,7 @@ limitations under the License.
         .mx_StyledRadioButton {
             display: inline-flex;
             font-size: 20px;
-            transition: font-size 1s, border .5s;
+            transition: font-size 1s, border 0.5s;
             border-radius: 50%;
             border: 2px solid transparent;
             margin-top: 12px;
@@ -132,7 +134,7 @@ limitations under the License.
         }
 
         &::after {
-            mask-image: url('$(res)/img/element-icons/feedback.svg');
+            mask-image: url("$(res)/img/element-icons/feedback.svg");
         }
     }
 }

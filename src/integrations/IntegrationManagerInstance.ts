@@ -14,13 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import url from 'url';
+import url from "url";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import type { Room } from "matrix-js-sdk/src/models/room";
 import ScalarAuthClient from "../ScalarAuthClient";
 import { dialogTermsInteractionCallback, TermsNotSignedError } from "../Terms";
-import Modal from '../Modal';
+import Modal from "../Modal";
 import SettingsStore from "../settings/SettingsStore";
 import IntegrationManager from "../components/views/settings/IntegrationManager";
 import { IntegrationManagers } from "./IntegrationManagers";
@@ -52,8 +52,8 @@ export class IntegrationManagerInstance {
 
     get trimmedApiUrl(): string {
         const parsed = url.parse(this.apiUrl);
-        parsed.pathname = '';
-        parsed.path = '';
+        parsed.pathname = "";
+        parsed.path = "";
         return url.format(parsed);
     }
 
@@ -66,16 +66,14 @@ export class IntegrationManagerInstance {
             return IntegrationManagers.sharedInstance().showDisabledDialog();
         }
 
-        const dialog = Modal.createDialog(IntegrationManager, { loading: true }, 'mx_IntegrationManager');
+        const dialog = Modal.createDialog(IntegrationManager, { loading: true }, "mx_IntegrationManager");
 
         const client = this.getScalarClient();
         client.setTermsInteractionCallback((policyInfo, agreedUrls) => {
             // To avoid visual glitching of two modals stacking briefly, we customise the
             // terms dialog sizing when it will appear for the integration manager so that
             // it gets the same basic size as the integration manager's own modal.
-            return dialogTermsInteractionCallback(
-                policyInfo, agreedUrls, 'mx_TermsDialog_forIntegrationManager',
-            );
+            return dialogTermsInteractionCallback(policyInfo, agreedUrls, "mx_TermsDialog_forIntegrationManager");
         });
 
         const newProps = {};
@@ -98,6 +96,6 @@ export class IntegrationManagerInstance {
 
         // Close the old dialog and open a new one
         dialog.close();
-        Modal.createDialog(IntegrationManager, newProps, 'mx_IntegrationManager');
+        Modal.createDialog(IntegrationManager, newProps, "mx_IntegrationManager");
     }
 }

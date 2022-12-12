@@ -17,7 +17,7 @@ limitations under the License.
 import Range from "./range";
 import { Part, Type } from "./parts";
 import { Formatting } from "../components/views/rooms/MessageComposerFormatBar";
-import { longestBacktickSequence } from './deserialize';
+import { longestBacktickSequence } from "./deserialize";
 
 /**
  * Some common queries and transformations on the editor model
@@ -109,11 +109,13 @@ export function replaceRangeAndAutoAdjustCaret(
     const distanceFromEnd = range.length - relativeOffset;
     // Handle edge case where the caret is located within the suffix or prefix
     if (rangeHasFormatting) {
-        if (relativeOffset < prefixLength) { // Was the caret at the left format string?
+        if (relativeOffset < prefixLength) {
+            // Was the caret at the left format string?
             replaceRangeAndMoveCaret(range, newParts, -(range.length - 2 * suffixLength));
             return;
         }
-        if (distanceFromEnd < suffixLength) { // Was the caret at the right format string?
+        if (distanceFromEnd < suffixLength) {
+            // Was the caret at the right format string?
             replaceRangeAndMoveCaret(range, newParts, 0, true);
             return;
         }
@@ -122,7 +124,10 @@ export function replaceRangeAndAutoAdjustCaret(
     model.transform(() => {
         const offsetDirection = Math.sign(range.replace(newParts)); // Compensates for shrinkage or expansion
         const atEnd = distanceFromEnd === suffixLength;
-        return lastStartingPosition.asOffset(model).add(offsetDirection * prefixLength, atEnd).asPosition(model);
+        return lastStartingPosition
+            .asOffset(model)
+            .add(offsetDirection * prefixLength, atEnd)
+            .asPosition(model);
     });
 }
 
@@ -180,12 +185,10 @@ export function formatRangeAsCode(range: Range): void {
     const { model, parts } = range;
     const { partCreator } = model;
 
-    const hasBlockFormatting = (range.length > 0)
-        && range.text.startsWith("```")
-        && range.text.endsWith("```")
-        && range.text.includes('\n');
+    const hasBlockFormatting =
+        range.length > 0 && range.text.startsWith("```") && range.text.endsWith("```") && range.text.includes("\n");
 
-    const needsBlockFormatting = parts.some(p => p.type === Type.Newline);
+    const needsBlockFormatting = parts.some((p) => p.type === Type.Newline);
 
     if (hasBlockFormatting) {
         parts.shift();
@@ -199,9 +202,7 @@ export function formatRangeAsCode(range: Range): void {
         if (!rangeStartsAtBeginningOfLine(range)) {
             parts.unshift(partCreator.newline());
         }
-        parts.push(
-            partCreator.newline(),
-            partCreator.plain("```"));
+        parts.push(partCreator.newline(), partCreator.plain("```"));
         if (!rangeEndsAtEndOfLine(range)) {
             parts.push(partCreator.newline());
         }
@@ -232,8 +233,8 @@ export function formatRangeAsLink(range: Range, text?: string) {
 }
 
 // parts helper methods
-const isBlank = part => !part.text || !/\S/.test(part.text);
-const isNL = part => part.type === Type.Newline;
+const isBlank = (part) => !part.text || !/\S/.test(part.text);
+const isNL = (part) => part.type === Type.Newline;
 
 export function toggleInlineFormat(range: Range, prefix: string, suffix = prefix): void {
     const { model, parts } = range;
@@ -277,9 +278,8 @@ export function toggleInlineFormat(range: Range, prefix: string, suffix = prefix
         const base = startIdx + offset;
         const index = endIdx + offset;
 
-        const isFormatted = (index - base > 0) &&
-            parts[base].text.startsWith(prefix) &&
-            parts[index - 1].text.endsWith(suffix);
+        const isFormatted =
+            index - base > 0 && parts[base].text.startsWith(prefix) && parts[index - 1].text.endsWith(suffix);
 
         if (isFormatted) {
             // remove prefix and suffix formatting string

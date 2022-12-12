@@ -53,9 +53,7 @@ export default class AudioFeedArrayForLegacyCall extends React.Component<IProps,
 
     render() {
         return this.state.feeds.map((feed, i) => {
-            return (
-                <AudioFeed feed={feed} key={i} />
-            );
+            return <AudioFeed feed={feed} key={i} />;
         });
     }
 }

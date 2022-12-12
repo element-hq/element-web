@@ -14,11 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import EventEmitter from 'events';
+import EventEmitter from "events";
 import { MatrixEvent, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 import { RoomState } from "matrix-js-sdk/src/models/room-state";
 
-import { MatrixClientPeg } from '../MatrixClientPeg';
+import { MatrixClientPeg } from "../MatrixClientPeg";
 import WidgetUtils from "../utils/WidgetUtils";
 import { WidgetMessagingStore } from "./widgets/WidgetMessagingStore";
 

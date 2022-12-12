@@ -29,10 +29,7 @@ import { privateShouldBeEncrypted } from "./rooms";
 import { createDmLocalRoom } from "./dm/createDmLocalRoom";
 import { startDm } from "./dm/startDm";
 
-export async function startDmOnFirstMessage(
-    client: MatrixClient,
-    targets: Member[],
-): Promise<Room> {
+export async function startDmOnFirstMessage(client: MatrixClient, targets: Member[]): Promise<Room> {
     const existingRoom = findDMRoom(client, targets);
     if (existingRoom) {
         dis.dispatch<ViewRoomPayload>({
@@ -114,7 +111,7 @@ export class DirectoryMember extends Member {
     private readonly avatarUrl?: string;
 
     // eslint-disable-next-line camelcase
-    constructor(userDirResult: { user_id: string, display_name?: string, avatar_url?: string }) {
+    constructor(userDirResult: { user_id: string; display_name?: string; avatar_url?: string }) {
         super();
         this._userId = userDirResult.user_id;
         this.displayName = userDirResult.display_name;
@@ -147,7 +144,7 @@ export class ThreepidMember extends Member {
     // better type support in the react-sdk we can use this trick to determine the kind
     // of 3PID we're dealing with, if any.
     get isEmail(): boolean {
-        return this.id.includes('@');
+        return this.id.includes("@");
     }
 
     // These next class members are for the Member interface
@@ -181,9 +178,9 @@ export async function determineCreateRoomEncryptionOption(client: MatrixClient, 
     if (privateShouldBeEncrypted()) {
         // Check whether all users have uploaded device keys before.
         // If so, enable encryption in the new room.
-        const has3PidMembers = targets.some(t => t instanceof ThreepidMember);
+        const has3PidMembers = targets.some((t) => t instanceof ThreepidMember);
         if (!has3PidMembers) {
-            const targetIds = targets.map(t => t.userId);
+            const targetIds = targets.map((t) => t.userId);
             const allHaveDeviceKeys = await canEncryptToAllUsers(client, targetIds);
             if (allHaveDeviceKeys) {
                 return true;

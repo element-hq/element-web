@@ -45,21 +45,21 @@ export class MockedCall extends Call {
 
     public static get(room: Room): MockedCall | null {
         const [event] = room.currentState.getStateEvents(this.EVENT_TYPE);
-        return (event === undefined || "m.terminated" in event.getContent())
-            ? null
-            : new MockedCall(room, event);
+        return event === undefined || "m.terminated" in event.getContent() ? null : new MockedCall(room, event);
     }
 
     public static create(room: Room, id: string) {
-        room.addLiveEvents([mkEvent({
-            event: true,
-            type: this.EVENT_TYPE,
-            room: room.roomId,
-            user: "@alice:example.org",
-            content: { "m.type": "m.video", "m.intent": "m.prompt" },
-            skey: id,
-            ts: Date.now(),
-        })]);
+        room.addLiveEvents([
+            mkEvent({
+                event: true,
+                type: this.EVENT_TYPE,
+                room: room.roomId,
+                user: "@alice:example.org",
+                content: { "m.type": "m.video", "m.intent": "m.prompt" },
+                skey: id,
+                ts: Date.now(),
+            }),
+        ]);
         // @ts-ignore deliberately calling a private method
         // Let CallStore know that a call might now exist
         CallStore.instance.updateRoom(room);
@@ -86,15 +86,17 @@ export class MockedCall extends Call {
 
     public destroy() {
         // Terminate the call for good measure
-        this.room.addLiveEvents([mkEvent({
-            event: true,
-            type: MockedCall.EVENT_TYPE,
-            room: this.room.roomId,
-            user: "@alice:example.org",
-            content: { ...this.event.getContent(), "m.terminated": "Call ended" },
-            skey: this.widget.id,
-            ts: Date.now(),
-        })]);
+        this.room.addLiveEvents([
+            mkEvent({
+                event: true,
+                type: MockedCall.EVENT_TYPE,
+                room: this.room.roomId,
+                user: "@alice:example.org",
+                content: { ...this.event.getContent(), "m.terminated": "Call ended" },
+                skey: this.widget.id,
+                ts: Date.now(),
+            }),
+        ]);
 
         super.destroy();
     }
@@ -104,7 +106,7 @@ export class MockedCall extends Call {
  * Sets up the call store to use mocked calls.
  */
 export const useMockedCalls = () => {
-    Call.get = room => MockedCall.get(room);
-    JitsiCall.create = async room => MockedCall.create(room, "1");
-    ElementCall.create = async room => MockedCall.create(room, "1");
+    Call.get = (room) => MockedCall.get(room);
+    JitsiCall.create = async (room) => MockedCall.create(room, "1");
+    ElementCall.create = async (room) => MockedCall.create(room, "1");
 };

@@ -36,7 +36,7 @@ jest.mock("../../../../src/utils/media/requestMediaPermissions");
 jest.mock("../../../../src/components/views/avatars/RoomAvatar", () => ({
     __esModule: true,
     default: jest.fn().mockImplementation(({ room }) => {
-        return <div data-testid="room-avatar">room avatar: { room.name }</div>;
+        return <div data-testid="room-avatar">room avatar: {room.name}</div>;
     }),
 }));
 
@@ -55,11 +55,13 @@ describe("VoiceBroadcastPreRecordingPip", () => {
         sender = new RoomMember(room.roomId, client.getUserId() || "");
         playbacksStore = new VoiceBroadcastPlaybacksStore();
         recordingsStore = new VoiceBroadcastRecordingsStore();
-        mocked(requestMediaPermissions).mockReturnValue(new Promise<MediaStream>((r) => {
-            r({
-                getTracks: () => [],
-            } as unknown as MediaStream);
-        }));
+        mocked(requestMediaPermissions).mockReturnValue(
+            new Promise<MediaStream>((r) => {
+                r({
+                    getTracks: () => [],
+                } as unknown as MediaStream);
+            }),
+        );
         jest.spyOn(MediaDeviceHandler, "getDevices").mockResolvedValue({
             [MediaDeviceKindEnum.AudioInput]: [
                 {
@@ -75,13 +77,7 @@ describe("VoiceBroadcastPreRecordingPip", () => {
             [MediaDeviceKindEnum.VideoInput]: [],
         });
         jest.spyOn(MediaDeviceHandler.instance, "setDevice").mockImplementation();
-        preRecording = new VoiceBroadcastPreRecording(
-            room,
-            sender,
-            client,
-            playbacksStore,
-            recordingsStore,
-        );
+        preRecording = new VoiceBroadcastPreRecording(room, sender, client, playbacksStore, recordingsStore);
     });
 
     afterAll(() => {
@@ -90,9 +86,7 @@ describe("VoiceBroadcastPreRecordingPip", () => {
 
     describe("when rendered", () => {
         beforeEach(async () => {
-            renderResult = render(<VoiceBroadcastPreRecordingPip
-                voiceBroadcastPreRecording={preRecording}
-            />);
+            renderResult = render(<VoiceBroadcastPreRecordingPip voiceBroadcastPreRecording={preRecording} />);
 
             await act(async () => {
                 flushPromises();

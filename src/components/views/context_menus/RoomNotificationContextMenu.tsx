@@ -36,10 +36,7 @@ interface IProps extends IContextMenuProps {
 export const RoomNotificationContextMenu = ({ room, onFinished, ...props }: IProps) => {
     const [notificationState, setNotificationState] = useNotificationState(room);
 
-    const wrapHandler = (
-        handler: (ev: ButtonEvent) => void,
-        persistent = false,
-    ): (ev: ButtonEvent) => void => {
+    const wrapHandler = (handler: (ev: ButtonEvent) => void, persistent = false): ((ev: ButtonEvent) => void) => {
         return (ev: ButtonEvent) => {
             ev.preventDefault();
             ev.stopPropagation();
@@ -53,45 +50,50 @@ export const RoomNotificationContextMenu = ({ room, onFinished, ...props }: IPro
         };
     };
 
-    const defaultOption: JSX.Element = <IconizedContextMenuRadio
-        label={_t("Use default")}
-        active={notificationState === RoomNotifState.AllMessages}
-        iconClassName="mx_RoomNotificationContextMenu_iconBell"
-        onClick={wrapHandler(() => setNotificationState(RoomNotifState.AllMessages))}
-    />;
+    const defaultOption: JSX.Element = (
+        <IconizedContextMenuRadio
+            label={_t("Use default")}
+            active={notificationState === RoomNotifState.AllMessages}
+            iconClassName="mx_RoomNotificationContextMenu_iconBell"
+            onClick={wrapHandler(() => setNotificationState(RoomNotifState.AllMessages))}
+        />
+    );
 
-    const allMessagesOption: JSX.Element = <IconizedContextMenuRadio
-        label={_t("All messages")}
-        active={notificationState === RoomNotifState.AllMessagesLoud}
-        iconClassName="mx_RoomNotificationContextMenu_iconBellDot"
-        onClick={wrapHandler(() => setNotificationState(RoomNotifState.AllMessagesLoud))}
-    />;
+    const allMessagesOption: JSX.Element = (
+        <IconizedContextMenuRadio
+            label={_t("All messages")}
+            active={notificationState === RoomNotifState.AllMessagesLoud}
+            iconClassName="mx_RoomNotificationContextMenu_iconBellDot"
+            onClick={wrapHandler(() => setNotificationState(RoomNotifState.AllMessagesLoud))}
+        />
+    );
 
-    const mentionsOption: JSX.Element = <IconizedContextMenuRadio
-        label={_t("Mentions & Keywords")}
-        active={notificationState === RoomNotifState.MentionsOnly}
-        iconClassName="mx_RoomNotificationContextMenu_iconBellMentions"
-        onClick={wrapHandler(() => setNotificationState(RoomNotifState.MentionsOnly))}
-    />;
+    const mentionsOption: JSX.Element = (
+        <IconizedContextMenuRadio
+            label={_t("Mentions & Keywords")}
+            active={notificationState === RoomNotifState.MentionsOnly}
+            iconClassName="mx_RoomNotificationContextMenu_iconBellMentions"
+            onClick={wrapHandler(() => setNotificationState(RoomNotifState.MentionsOnly))}
+        />
+    );
 
-    const muteOption: JSX.Element = <IconizedContextMenuRadio
-        label={_t("Off")}
-        active={notificationState === RoomNotifState.Mute}
-        iconClassName="mx_RoomNotificationContextMenu_iconBellCrossed"
-        onClick={wrapHandler(() => setNotificationState(RoomNotifState.Mute))}
-    />;
+    const muteOption: JSX.Element = (
+        <IconizedContextMenuRadio
+            label={_t("Off")}
+            active={notificationState === RoomNotifState.Mute}
+            iconClassName="mx_RoomNotificationContextMenu_iconBellCrossed"
+            onClick={wrapHandler(() => setNotificationState(RoomNotifState.Mute))}
+        />
+    );
 
-    return <IconizedContextMenu
-        {...props}
-        onFinished={onFinished}
-        className="mx_RoomNotificationContextMenu"
-        compact
-    >
-        <IconizedContextMenuOptionList first>
-            { defaultOption }
-            { allMessagesOption }
-            { mentionsOption }
-            { muteOption }
-        </IconizedContextMenuOptionList>
-    </IconizedContextMenu>;
+    return (
+        <IconizedContextMenu {...props} onFinished={onFinished} className="mx_RoomNotificationContextMenu" compact>
+            <IconizedContextMenuOptionList first>
+                {defaultOption}
+                {allMessagesOption}
+                {mentionsOption}
+                {muteOption}
+            </IconizedContextMenuOptionList>
+        </IconizedContextMenu>
+    );
 };

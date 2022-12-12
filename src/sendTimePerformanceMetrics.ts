@@ -22,7 +22,7 @@ import { MatrixClient } from "matrix-js-sdk/src/matrix";
  * @param {object} content The event content.
  */
 export function decorateStartSendingTime(content: object) {
-    content['io.element.performance_metrics'] = {
+    content["io.element.performance_metrics"] = {
         sendStartTs: Date.now(),
     };
 }
@@ -36,11 +36,11 @@ export function decorateStartSendingTime(content: object) {
  */
 export function sendRoundTripMetric(client: MatrixClient, inRoomId: string, forEventId: string) {
     // noinspection JSIgnoredPromiseFromCall
-    client.sendEvent(inRoomId, 'io.element.performance_metric', {
+    client.sendEvent(inRoomId, "io.element.performance_metric", {
         "io.element.performance_metrics": {
             forEventId: forEventId,
             responseTs: Date.now(),
-            kind: 'send_time',
+            kind: "send_time",
         },
     });
 }

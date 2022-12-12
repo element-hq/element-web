@@ -14,30 +14,31 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef } from "react";
 
-import { _t } from '../../../languageHandler';
-import SdkConfig from '../../../SdkConfig';
+import { _t } from "../../../languageHandler";
+import SdkConfig from "../../../SdkConfig";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
 import Spinner from "../elements/Spinner";
 import { IDialogProps } from "./IDialogProps";
 
 interface IProps extends IDialogProps {
-    failures: Record<string, Record<string, {
-        errcode: string;
-        error: string;
-    }>>;
+    failures: Record<
+        string,
+        Record<
+            string,
+            {
+                errcode: string;
+                error: string;
+            }
+        >
+    >;
     source: string;
     continuation: () => Promise<void>;
 }
 
-const KeySignatureUploadFailedDialog: React.FC<IProps> = ({
-    failures,
-    source,
-    continuation,
-    onFinished,
-}) => {
+const KeySignatureUploadFailedDialog: React.FC<IProps> = ({ failures, source, continuation, onFinished }) => {
     const RETRIES = 2;
     const [retry, setRetry] = useState(RETRIES);
     const [cancelled, setCancelled] = useState(false);
@@ -60,13 +61,10 @@ const KeySignatureUploadFailedDialog: React.FC<IProps> = ({
             }).finally(() => {
                 setCancelled(true);
             });
-            await Promise.race([
-                continuation(),
-                cancel,
-            ]);
+            await Promise.race([continuation(), cancel]);
             setSuccess(true);
         } catch (e) {
-            setRetry(r => r-1);
+            setRetry((r) => r - 1);
         } finally {
             onCancel.current = onFinished;
             setRetrying(false);
@@ -78,44 +76,42 @@ const KeySignatureUploadFailedDialog: React.FC<IProps> = ({
         const reason = causes.get(source) || defaultCause;
         const brand = SdkConfig.get().brand;
 
-        body = (<div>
-            <p>{ _t("%(brand)s encountered an error during upload of:", { brand }) }</p>
-            <p>{ reason }</p>
-            { retrying && <Spinner /> }
-            <pre>{ JSON.stringify(failures, null, 2) }</pre>
-            <DialogButtons
-                primaryButton='Retry'
-                hasCancel={true}
-                onPrimaryButtonClick={onRetry}
-                onCancel={onCancel.current}
-                primaryDisabled={retrying}
-            />
-        </div>);
+        body = (
+            <div>
+                <p>{_t("%(brand)s encountered an error during upload of:", { brand })}</p>
+                <p>{reason}</p>
+                {retrying && <Spinner />}
+                <pre>{JSON.stringify(failures, null, 2)}</pre>
+                <DialogButtons
+                    primaryButton="Retry"
+                    hasCancel={true}
+                    onPrimaryButtonClick={onRetry}
+                    onCancel={onCancel.current}
+                    primaryDisabled={retrying}
+                />
+            </div>
+        );
     } else {
         let text = _t("Upload completed");
         if (!success) {
             text = cancelled ? _t("Cancelled signature upload") : _t("Unable to upload");
         }
 
-        body = (<div>
-            <span>{ text }</span>
-            <DialogButtons
-                primaryButton={_t("OK")}
-                hasCancel={false}
-                onPrimaryButtonClick={onFinished}
-            />
-        </div>);
+        body = (
+            <div>
+                <span>{text}</span>
+                <DialogButtons primaryButton={_t("OK")} hasCancel={false} onPrimaryButtonClick={onFinished} />
+            </div>
+        );
     }
 
     return (
         <BaseDialog
-            title={success ?
-                _t("Signature upload success") :
-                _t("Signature upload failed")}
+            title={success ? _t("Signature upload success") : _t("Signature upload failed")}
             fixedWidth={false}
             onFinished={() => {}}
         >
-            { body }
+            {body}
         </BaseDialog>
     );
 };

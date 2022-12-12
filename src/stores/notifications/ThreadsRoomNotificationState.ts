@@ -54,10 +54,7 @@ export class ThreadsRoomNotificationState extends NotificationState implements I
 
     private onNewThread = (thread: Thread): void => {
         const notificationState = new ThreadNotificationState(thread);
-        this.threadsState.set(
-            thread,
-            notificationState,
-        );
+        this.threadsState.set(thread, notificationState);
         notificationState.on(NotificationStateEvents.Update, this.onThreadUpdate);
     };
 

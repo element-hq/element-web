@@ -15,18 +15,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import { CrossSigningKeys } from 'matrix-js-sdk/src/client';
+import React from "react";
+import { CrossSigningKeys } from "matrix-js-sdk/src/client";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { MatrixClientPeg } from '../../../../MatrixClientPeg';
-import { _t } from '../../../../languageHandler';
-import Modal from '../../../../Modal';
-import { SSOAuthEntry } from '../../auth/InteractiveAuthEntryComponents';
-import DialogButtons from '../../elements/DialogButtons';
-import BaseDialog from '../BaseDialog';
-import Spinner from '../../elements/Spinner';
-import InteractiveAuthDialog from '../InteractiveAuthDialog';
+import { MatrixClientPeg } from "../../../../MatrixClientPeg";
+import { _t } from "../../../../languageHandler";
+import Modal from "../../../../Modal";
+import { SSOAuthEntry } from "../../auth/InteractiveAuthEntryComponents";
+import DialogButtons from "../../elements/DialogButtons";
+import BaseDialog from "../BaseDialog";
+import Spinner from "../../elements/Spinner";
+import InteractiveAuthDialog from "../InteractiveAuthDialog";
 
 interface IProps {
     accountPassword?: string;
@@ -82,8 +82,8 @@ export default class CreateCrossSigningDialog extends React.PureComponent<IProps
                 logger.log("uploadDeviceSigningKeys advertised no flows!");
                 return;
             }
-            const canUploadKeysWithPasswordOnly = error.data.flows.some(f => {
-                return f.stages.length === 1 && f.stages[0] === 'm.login.password';
+            const canUploadKeysWithPasswordOnly = error.data.flows.some((f) => {
+                return f.stages.length === 1 && f.stages[0] === "m.login.password";
             });
             this.setState({
                 canUploadKeysWithPasswordOnly,
@@ -94,9 +94,9 @@ export default class CreateCrossSigningDialog extends React.PureComponent<IProps
     private doBootstrapUIAuth = async (makeRequest: (authData: any) => Promise<{}>): Promise<void> => {
         if (this.state.canUploadKeysWithPasswordOnly && this.state.accountPassword) {
             await makeRequest({
-                type: 'm.login.password',
+                type: "m.login.password",
                 identifier: {
-                    type: 'm.id.user',
+                    type: "m.id.user",
                     user: MatrixClientPeg.get().getUserId(),
                 },
                 // TODO: Remove `user` once servers support proper UIA
@@ -170,31 +170,35 @@ export default class CreateCrossSigningDialog extends React.PureComponent<IProps
     render() {
         let content;
         if (this.state.error) {
-            content = <div>
-                <p>{ _t("Unable to set up keys") }</p>
-                <div className="mx_Dialog_buttons">
-                    <DialogButtons primaryButton={_t('Retry')}
-                        onPrimaryButtonClick={this.bootstrapCrossSigning}
-                        onCancel={this.onCancel}
-                    />
+            content = (
+                <div>
+                    <p>{_t("Unable to set up keys")}</p>
+                    <div className="mx_Dialog_buttons">
+                        <DialogButtons
+                            primaryButton={_t("Retry")}
+                            onPrimaryButtonClick={this.bootstrapCrossSigning}
+                            onCancel={this.onCancel}
+                        />
+                    </div>
                 </div>
-            </div>;
+            );
         } else {
-            content = <div>
-                <Spinner />
-            </div>;
+            content = (
+                <div>
+                    <Spinner />
+                </div>
+            );
         }
 
         return (
-            <BaseDialog className="mx_CreateCrossSigningDialog"
+            <BaseDialog
+                className="mx_CreateCrossSigningDialog"
                 onFinished={this.props.onFinished}
                 title={_t("Setting up keys")}
                 hasCancel={false}
                 fixedWidth={false}
             >
-                <div>
-                    { content }
-                </div>
+                <div>{content}</div>
             </BaseDialog>
         );
     }

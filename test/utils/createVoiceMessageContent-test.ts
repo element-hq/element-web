@@ -20,13 +20,15 @@ import { createVoiceMessageContent } from "../../src/utils/createVoiceMessageCon
 
 describe("createVoiceMessageContent", () => {
     it("should create a voice message content", () => {
-        expect(createVoiceMessageContent(
-            "mxc://example.com/file",
-            "ogg/opus",
-            23000,
-            42000,
-            {} as unknown as IEncryptedFile,
-            [1, 2, 3],
-        )).toMatchSnapshot();
+        expect(
+            createVoiceMessageContent(
+                "mxc://example.com/file",
+                "ogg/opus",
+                23000,
+                42000,
+                {} as unknown as IEncryptedFile,
+                [1, 2, 3],
+            ),
+        ).toMatchSnapshot();
     });
 });

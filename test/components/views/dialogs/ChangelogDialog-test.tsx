@@ -35,11 +35,13 @@ describe("<ChangelogDialog />", () => {
             ahead_by: 24,
             behind_by: 0,
             total_commits: 24,
-            commits: [{
-                sha: "commit-sha",
-                html_url: "https://api.github.com/repos/vector-im/element-web/commit/commit-sha",
-                commit: { message: "This is the first commit message" },
-            }],
+            commits: [
+                {
+                    sha: "commit-sha",
+                    html_url: "https://api.github.com/repos/vector-im/element-web/commit/commit-sha",
+                    commit: { message: "This is the first commit message" },
+                },
+            ],
             files: [],
         });
         const reactUrl = "https://riot.im/github/repos/matrix-org/matrix-react-sdk/compare/oldsha2...newsha2";
@@ -55,11 +57,13 @@ describe("<ChangelogDialog />", () => {
             ahead_by: 83,
             behind_by: 0,
             total_commits: 83,
-            commits: [{
-                sha: "commit-sha0",
-                html_url: "https://api.github.com/repos/matrix-org/matrix-react-sdk/commit/commit-sha",
-                commit: { message: "This is a commit message" },
-            }],
+            commits: [
+                {
+                    sha: "commit-sha0",
+                    html_url: "https://api.github.com/repos/matrix-org/matrix-react-sdk/commit/commit-sha",
+                    commit: { message: "This is a commit message" },
+                },
+            ],
             files: [],
         });
         const jsUrl = "https://riot.im/github/repos/matrix-org/matrix-js-sdk/compare/oldsha3...newsha3";
@@ -75,23 +79,26 @@ describe("<ChangelogDialog />", () => {
             ahead_by: 48,
             behind_by: 0,
             total_commits: 48,
-            commits: [{
-                sha: "commit-sha1",
-                html_url: "https://api.github.com/repos/matrix-org/matrix-js-sdk/commit/commit-sha1",
-                commit: { message: "This is a commit message" },
-            }, {
-                sha: "commit-sha2",
-                html_url: "https://api.github.com/repos/matrix-org/matrix-js-sdk/commit/commit-sha2",
-                commit: { message: "This is another commit message" },
-            }],
+            commits: [
+                {
+                    sha: "commit-sha1",
+                    html_url: "https://api.github.com/repos/matrix-org/matrix-js-sdk/commit/commit-sha1",
+                    commit: { message: "This is a commit message" },
+                },
+                {
+                    sha: "commit-sha2",
+                    html_url: "https://api.github.com/repos/matrix-org/matrix-js-sdk/commit/commit-sha2",
+                    commit: { message: "This is another commit message" },
+                },
+            ],
             files: [],
         });
 
         const newVersion = "newsha1-react-newsha2-js-newsha3";
         const oldVersion = "oldsha1-react-oldsha2-js-oldsha3";
-        const { asFragment } = render((
-            <ChangelogDialog newVersion={newVersion} version={oldVersion} onFinished={jest.fn()} />
-        ));
+        const { asFragment } = render(
+            <ChangelogDialog newVersion={newVersion} version={oldVersion} onFinished={jest.fn()} />,
+        );
 
         // Wait for spinners to go away
         await waitForElementToBeRemoved(screen.getAllByRole("progressbar"));

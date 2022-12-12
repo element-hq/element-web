@@ -15,11 +15,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { createRef, HTMLProps } from 'react';
-import { throttle } from 'lodash';
-import classNames from 'classnames';
+import React, { createRef, HTMLProps } from "react";
+import { throttle } from "lodash";
+import classNames from "classnames";
 
-import AccessibleButton from '../../components/views/elements/AccessibleButton';
+import AccessibleButton from "../../components/views/elements/AccessibleButton";
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 
@@ -60,9 +60,13 @@ export default class SearchBox extends React.Component<IProps, IState> {
         this.onSearch();
     };
 
-    private onSearch = throttle((): void => {
-        this.props.onSearch(this.search.current.value);
-    }, 200, { trailing: true, leading: true });
+    private onSearch = throttle(
+        (): void => {
+            this.props.onSearch(this.search.current.value);
+        },
+        200,
+        { trailing: true, leading: true },
+    );
 
     private onKeyDown = (ev: React.KeyboardEvent): void => {
         const action = getKeyBindingsManager().getAccessibilityAction(ev);
@@ -99,8 +103,20 @@ export default class SearchBox extends React.Component<IProps, IState> {
 
     public render(): JSX.Element {
         /* eslint @typescript-eslint/no-unused-vars: ["error", { "ignoreRestSiblings": true }] */
-        const { onSearch, onCleared, onKeyDown, onFocus, onBlur, className = "", placeholder, blurredPlaceholder,
-            autoFocus, initialValue, collapsed, ...props } = this.props;
+        const {
+            onSearch,
+            onCleared,
+            onKeyDown,
+            onFocus,
+            onBlur,
+            className = "",
+            placeholder,
+            blurredPlaceholder,
+            autoFocus,
+            initialValue,
+            collapsed,
+            ...props
+        } = this.props;
 
         // check for collapsed here and
         // not at parent so we keep
@@ -109,19 +125,23 @@ export default class SearchBox extends React.Component<IProps, IState> {
         if (collapsed) {
             return null;
         }
-        const clearButton = (!this.state.blurred || this.state.searchTerm) ?
-            (<AccessibleButton
-                key="button"
-                tabIndex={-1}
-                className="mx_SearchBox_closeButton"
-                onClick={() => {this.clearSearch("button"); }}
-            />) : undefined;
+        const clearButton =
+            !this.state.blurred || this.state.searchTerm ? (
+                <AccessibleButton
+                    key="button"
+                    tabIndex={-1}
+                    className="mx_SearchBox_closeButton"
+                    onClick={() => {
+                        this.clearSearch("button");
+                    }}
+                />
+            ) : undefined;
 
         // show a shorter placeholder when blurred, if requested
         // this is used for the room filter field that has
         // the explore button next to it when blurred
         return (
-            <div className={classNames("mx_SearchBox", "mx_textinput", { "mx_SearchBox_blurred": this.state.blurred })}>
+            <div className={classNames("mx_SearchBox", "mx_textinput", { mx_SearchBox_blurred: this.state.blurred })}>
                 <input
                     {...props}
                     key="searchfield"
@@ -133,12 +153,12 @@ export default class SearchBox extends React.Component<IProps, IState> {
                     onChange={this.onChange}
                     onKeyDown={this.onKeyDown}
                     onBlur={this.onBlur}
-                    placeholder={this.state.blurred ? (blurredPlaceholder || placeholder) : placeholder}
+                    placeholder={this.state.blurred ? blurredPlaceholder || placeholder : placeholder}
                     autoComplete="off"
                     autoFocus={this.props.autoFocus}
                     data-testid="searchbox-input"
                 />
-                { clearButton }
+                {clearButton}
             </div>
         );
     }

@@ -14,12 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {
-    Beacon,
-    Room,
-    RoomStateEvent,
-    MatrixClient,
-} from "matrix-js-sdk/src/matrix";
+import { Beacon, Room, RoomStateEvent, MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { useEventEmitterState } from "../../hooks/useEventEmitter";
 
@@ -28,13 +23,11 @@ import { useEventEmitterState } from "../../hooks/useEventEmitter";
  *
  * Beacons are removed from array when they become inactive
  */
-export const useLiveBeacons = (roomId: Room['roomId'], matrixClient: MatrixClient): Beacon[] => {
+export const useLiveBeacons = (roomId: Room["roomId"], matrixClient: MatrixClient): Beacon[] => {
     const room = matrixClient.getRoom(roomId);
 
-    const liveBeacons = useEventEmitterState(
-        room.currentState,
-        RoomStateEvent.BeaconLiveness,
-        () => room.currentState?.liveBeaconIds.map(beaconIdentifier => room.currentState.beacons.get(beaconIdentifier)),
+    const liveBeacons = useEventEmitterState(room.currentState, RoomStateEvent.BeaconLiveness, () =>
+        room.currentState?.liveBeaconIds.map((beaconIdentifier) => room.currentState.beacons.get(beaconIdentifier)),
     );
 
     return liveBeacons;

@@ -16,7 +16,7 @@ limitations under the License.
 
 // We're importing via require specifically so the svg becomes a URI rather than a DOM element.
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const matrixSvg = require('../../../res/img/matrix.svg').default;
+const matrixSvg = require("../../../res/img/matrix.svg").default;
 
 /**
  * Intended to replace $matrixLogo in the welcome page.

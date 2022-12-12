@@ -32,7 +32,7 @@ declare global {
 }
 
 Cypress.Commands.add("tweakConfig", (tweaks: Record<string, any>): Chainable<AUTWindow> => {
-    return cy.window().then(win => {
+    return cy.window().then((win) => {
         // note: we can't *set* the object because the window version is effectively a pointer.
         for (const [k, v] of Object.entries(tweaks)) {
             // @ts-ignore - for some reason it's not picking up on global.d.ts types.
@@ -42,4 +42,4 @@ Cypress.Commands.add("tweakConfig", (tweaks: Record<string, any>): Chainable<AUT
 });
 
 // Needed to make this file a module
-export { };
+export {};

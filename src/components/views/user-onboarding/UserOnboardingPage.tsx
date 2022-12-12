@@ -77,10 +77,10 @@ export function UserOnboardingPage({ justRegistered = false }: Props) {
         return <EmbeddedPage className="mx_HomePage" url={pageUrl} scrollbar={true} />;
     }
 
-    return <AutoHideScrollbar className="mx_UserOnboardingPage">
-        <UserOnboardingHeader useCase={useCase} />
-        { showList && (
-            <UserOnboardingList completedTasks={completedTasks} waitingTasks={waitingTasks} />
-        ) }
-    </AutoHideScrollbar>;
+    return (
+        <AutoHideScrollbar className="mx_UserOnboardingPage">
+            <UserOnboardingHeader useCase={useCase} />
+            {showList && <UserOnboardingList completedTasks={completedTasks} waitingTasks={waitingTasks} />}
+        </AutoHideScrollbar>
+    );
 }

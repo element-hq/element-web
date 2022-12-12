@@ -14,14 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
-import React from 'react';
-import { RendezvousFailureReason } from 'matrix-js-sdk/src/rendezvous';
+import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import React from "react";
+import { RendezvousFailureReason } from "matrix-js-sdk/src/rendezvous";
 
-import LoginWithQRFlow from '../../../../../src/components/views/auth/LoginWithQRFlow';
-import { Click, Phase } from '../../../../../src/components/views/auth/LoginWithQR';
+import LoginWithQRFlow from "../../../../../src/components/views/auth/LoginWithQRFlow";
+import { Click, Phase } from "../../../../../src/components/views/auth/LoginWithQR";
 
-describe('<LoginWithQRFlow />', () => {
+describe("<LoginWithQRFlow />", () => {
     const onClick = jest.fn();
 
     const defaultProps = {
@@ -34,81 +34,81 @@ describe('<LoginWithQRFlow />', () => {
         failureReason?: RendezvousFailureReason;
         code?: string;
         confirmationDigits?: string;
-    }) =>
-        (<LoginWithQRFlow {...defaultProps} {...props} />);
+    }) => <LoginWithQRFlow {...defaultProps} {...props} />;
 
-    beforeEach(() => {
-    });
+    beforeEach(() => {});
 
     afterEach(() => {
         onClick.mockReset();
         cleanup();
     });
 
-    it('renders spinner while loading', async () => {
+    it("renders spinner while loading", async () => {
         const { container } = render(getComponent({ phase: Phase.Loading }));
         expect(container).toMatchSnapshot();
     });
 
-    it('renders spinner whilst QR generating', async () => {
+    it("renders spinner whilst QR generating", async () => {
         const { container } = render(getComponent({ phase: Phase.ShowingQR }));
-        expect(screen.getAllByTestId('cancel-button')).toHaveLength(1);
+        expect(screen.getAllByTestId("cancel-button")).toHaveLength(1);
         expect(container).toMatchSnapshot();
-        fireEvent.click(screen.getByTestId('cancel-button'));
+        fireEvent.click(screen.getByTestId("cancel-button"));
         expect(onClick).toHaveBeenCalledWith(Click.Cancel);
     });
 
-    it('renders QR code', async () => {
-        const { container } = render(getComponent({ phase: Phase.ShowingQR, code: 'mock-code' }));
+    it("renders QR code", async () => {
+        const { container } = render(getComponent({ phase: Phase.ShowingQR, code: "mock-code" }));
         // QR code is rendered async so we wait for it:
-        await waitFor(() => screen.getAllByAltText('QR Code').length === 1);
+        await waitFor(() => screen.getAllByAltText("QR Code").length === 1);
         expect(container).toMatchSnapshot();
     });
 
-    it('renders spinner while connecting', async () => {
+    it("renders spinner while connecting", async () => {
         const { container } = render(getComponent({ phase: Phase.Connecting }));
-        expect(screen.getAllByTestId('cancel-button')).toHaveLength(1);
+        expect(screen.getAllByTestId("cancel-button")).toHaveLength(1);
         expect(container).toMatchSnapshot();
-        fireEvent.click(screen.getByTestId('cancel-button'));
+        fireEvent.click(screen.getByTestId("cancel-button"));
         expect(onClick).toHaveBeenCalledWith(Click.Cancel);
     });
 
-    it('renders code when connected', async () => {
-        const { container } = render(getComponent({ phase: Phase.Connected, confirmationDigits: 'mock-digits' }));
-        expect(screen.getAllByText('mock-digits')).toHaveLength(1);
-        expect(screen.getAllByTestId('decline-login-button')).toHaveLength(1);
-        expect(screen.getAllByTestId('approve-login-button')).toHaveLength(1);
+    it("renders code when connected", async () => {
+        const { container } = render(getComponent({ phase: Phase.Connected, confirmationDigits: "mock-digits" }));
+        expect(screen.getAllByText("mock-digits")).toHaveLength(1);
+        expect(screen.getAllByTestId("decline-login-button")).toHaveLength(1);
+        expect(screen.getAllByTestId("approve-login-button")).toHaveLength(1);
         expect(container).toMatchSnapshot();
-        fireEvent.click(screen.getByTestId('decline-login-button'));
+        fireEvent.click(screen.getByTestId("decline-login-button"));
         expect(onClick).toHaveBeenCalledWith(Click.Decline);
-        fireEvent.click(screen.getByTestId('approve-login-button'));
+        fireEvent.click(screen.getByTestId("approve-login-button"));
         expect(onClick).toHaveBeenCalledWith(Click.Approve);
     });
 
-    it('renders spinner while signing in', async () => {
+    it("renders spinner while signing in", async () => {
         const { container } = render(getComponent({ phase: Phase.WaitingForDevice }));
-        expect(screen.getAllByTestId('cancel-button')).toHaveLength(1);
+        expect(screen.getAllByTestId("cancel-button")).toHaveLength(1);
         expect(container).toMatchSnapshot();
-        fireEvent.click(screen.getByTestId('cancel-button'));
+        fireEvent.click(screen.getByTestId("cancel-button"));
         expect(onClick).toHaveBeenCalledWith(Click.Cancel);
     });
 
-    it('renders spinner while verifying', async () => {
+    it("renders spinner while verifying", async () => {
         const { container } = render(getComponent({ phase: Phase.Verifying }));
         expect(container).toMatchSnapshot();
     });
 
-    describe('errors', () => {
+    describe("errors", () => {
         for (const failureReason of Object.values(RendezvousFailureReason)) {
             it(`renders ${failureReason}`, async () => {
-                const { container } = render(getComponent({
-                    phase: Phase.Error,
-                    failureReason,
-                }));
-                expect(screen.getAllByTestId('cancellation-message')).toHaveLength(1);
-                expect(screen.getAllByTestId('try-again-button')).toHaveLength(1);
+                const { container } = render(
+                    getComponent({
+                        phase: Phase.Error,
+                        failureReason,
+                    }),
+                );
+                expect(screen.getAllByTestId("cancellation-message")).toHaveLength(1);
+                expect(screen.getAllByTestId("try-again-button")).toHaveLength(1);
                 expect(container).toMatchSnapshot();
-                fireEvent.click(screen.getByTestId('try-again-button'));
+                fireEvent.click(screen.getByTestId("try-again-button"));
                 expect(onClick).toHaveBeenCalledWith(Click.TryAgain);
             });
         }

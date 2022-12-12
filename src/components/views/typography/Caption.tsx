@@ -14,14 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { HTMLAttributes } from 'react';
+import React, { HTMLAttributes } from "react";
 
-interface Props extends Omit<HTMLAttributes<HTMLSpanElement>, 'className'> {
+interface Props extends Omit<HTMLAttributes<HTMLSpanElement>, "className"> {
     children: React.ReactNode;
 }
 
 export const Caption: React.FC<Props> = ({ children, ...rest }) => {
-    return <span className='mx_Caption' {...rest}>
-        { children }
-    </span>;
+    return (
+        <span className="mx_Caption" {...rest}>
+            {children}
+        </span>
+    );
 };

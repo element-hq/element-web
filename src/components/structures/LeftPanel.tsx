@@ -157,11 +157,14 @@ export default class LeftPanel extends React.Component<IProps, IState> {
 
         // We track which styles we want on a target before making the changes to avoid
         // excessive layout updates.
-        const targetStyles = new Map<HTMLDivElement, {
-            stickyTop?: boolean;
-            stickyBottom?: boolean;
-            makeInvisible?: boolean;
-        }>();
+        const targetStyles = new Map<
+            HTMLDivElement,
+            {
+                stickyTop?: boolean;
+                stickyBottom?: boolean;
+                makeInvisible?: boolean;
+            }
+        >();
 
         let lastTopHeader;
         let firstBottomHeader;
@@ -171,8 +174,8 @@ export default class LeftPanel extends React.Component<IProps, IState> {
 
             // When an element is <=40% off screen, make it take over
             const offScreenFactor = 0.4;
-            const isOffTop = (sublist.offsetTop + (offScreenFactor * HEADER_HEIGHT)) <= topEdge;
-            const isOffBottom = (sublist.offsetTop + (offScreenFactor * HEADER_HEIGHT)) >= bottomEdge;
+            const isOffTop = sublist.offsetTop + offScreenFactor * HEADER_HEIGHT <= topEdge;
+            const isOffBottom = sublist.offsetTop + offScreenFactor * HEADER_HEIGHT >= bottomEdge;
 
             if (isOffTop || sublist === sublists[0]) {
                 targetStyles.set(header, { stickyTop: true });
@@ -215,7 +218,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                     header.classList.remove("mx_RoomSublist_headerContainer_stickyTop");
                 }
                 if (header.style.top) {
-                    header.style.removeProperty('top');
+                    header.style.removeProperty("top");
                 }
             }
 
@@ -224,8 +227,8 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                     header.classList.add("mx_RoomSublist_headerContainer_stickyBottom");
                 }
 
-                const offset = UIStore.instance.windowHeight -
-                    (list.parentElement.offsetTop + list.parentElement.offsetHeight);
+                const offset =
+                    UIStore.instance.windowHeight - (list.parentElement.offsetTop + list.parentElement.offsetHeight);
                 const newBottom = `${offset}px`;
                 if (header.style.bottom !== newBottom) {
                     header.style.bottom = newBottom;
@@ -235,7 +238,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                     header.classList.remove("mx_RoomSublist_headerContainer_stickyBottom");
                 }
                 if (header.style.bottom) {
-                    header.style.removeProperty('bottom');
+                    header.style.removeProperty("bottom");
                 }
             }
 
@@ -259,7 +262,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                 }
 
                 if (header.style.width) {
-                    header.style.removeProperty('width');
+                    header.style.removeProperty("width");
                 }
             }
         }
@@ -326,23 +329,26 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         // If we have dialer support, show a button to bring up the dial pad
         // to start a new call
         if (LegacyCallHandler.instance.getSupportsPstnProtocol()) {
-            dialPadButton =
+            dialPadButton = (
                 <AccessibleTooltipButton
                     className={classNames("mx_LeftPanel_dialPadButton", {})}
                     onClick={this.onDialPad}
                     title={_t("Open dial pad")}
-                />;
+                />
+            );
         }
 
         let rightButton: JSX.Element;
         if (this.state.showBreadcrumbs === BreadcrumbsMode.Labs) {
             rightButton = <RecentlyViewedButton />;
         } else if (this.state.activeSpace === MetaSpace.Home && shouldShowComponent(UIComponent.ExploreRooms)) {
-            rightButton = <AccessibleTooltipButton
-                className="mx_LeftPanel_exploreButton"
-                onClick={this.onExplore}
-                title={_t("Explore rooms")}
-            />;
+            rightButton = (
+                <AccessibleTooltipButton
+                    className="mx_LeftPanel_exploreButton"
+                    onClick={this.onExplore}
+                    title={_t("Explore rooms")}
+                />
+            );
         }
 
         return (
@@ -354,45 +360,40 @@ export default class LeftPanel extends React.Component<IProps, IState> {
             >
                 <RoomSearch isMinimized={this.props.isMinimized} />
 
-                { dialPadButton }
-                { rightButton }
+                {dialPadButton}
+                {rightButton}
             </div>
         );
     }
 
     public render(): React.ReactNode {
-        const roomList = <RoomList
-            onKeyDown={this.onKeyDown}
-            resizeNotifier={this.props.resizeNotifier}
-            onFocus={this.onFocus}
-            onBlur={this.onBlur}
-            isMinimized={this.props.isMinimized}
-            activeSpace={this.state.activeSpace}
-            onResize={this.refreshStickyHeaders}
-            onListCollapse={this.refreshStickyHeaders}
-            ref={this.roomListRef}
-        />;
+        const roomList = (
+            <RoomList
+                onKeyDown={this.onKeyDown}
+                resizeNotifier={this.props.resizeNotifier}
+                onFocus={this.onFocus}
+                onBlur={this.onBlur}
+                isMinimized={this.props.isMinimized}
+                activeSpace={this.state.activeSpace}
+                onResize={this.refreshStickyHeaders}
+                onListCollapse={this.refreshStickyHeaders}
+                ref={this.roomListRef}
+            />
+        );
 
         const containerClasses = classNames({
-            "mx_LeftPanel": true,
-            "mx_LeftPanel_minimized": this.props.isMinimized,
+            mx_LeftPanel: true,
+            mx_LeftPanel_minimized: this.props.isMinimized,
         });
 
-        const roomListClasses = classNames(
-            "mx_LeftPanel_actualRoomListContainer",
-            "mx_AutoHideScrollbar",
-        );
+        const roomListClasses = classNames("mx_LeftPanel_actualRoomListContainer", "mx_AutoHideScrollbar");
 
         return (
             <div className={containerClasses}>
                 <div className="mx_LeftPanel_roomListContainer">
-                    { this.renderSearchDialExplore() }
-                    { this.renderBreadcrumbs() }
-                    { !this.props.isMinimized && (
-                        <RoomListHeader
-                            onVisibilityChange={this.refreshStickyHeaders}
-                        />
-                    ) }
+                    {this.renderSearchDialExplore()}
+                    {this.renderBreadcrumbs()}
+                    {!this.props.isMinimized && <RoomListHeader onVisibilityChange={this.refreshStickyHeaders} />}
                     <UserOnboardingButton
                         selected={this.props.pageType === PageType.HomePage}
                         minimized={this.props.isMinimized}
@@ -405,7 +406,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                             // overflow:scroll;, so force it out of tab order.
                             tabIndex={-1}
                         >
-                            { roomList }
+                            {roomList}
                         </div>
                     </div>
                 </div>

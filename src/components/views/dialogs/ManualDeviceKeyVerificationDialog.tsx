@@ -18,12 +18,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 import { DeviceInfo } from "matrix-js-sdk/src/crypto/deviceinfo";
 
-import { MatrixClientPeg } from '../../../MatrixClientPeg';
-import * as FormattingUtils from '../../../utils/FormattingUtils';
-import { _t } from '../../../languageHandler';
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import * as FormattingUtils from "../../../utils/FormattingUtils";
+import { _t } from "../../../languageHandler";
 import QuestionDialog from "./QuestionDialog";
 import { IDialogProps } from "./IDialogProps";
 
@@ -35,9 +35,7 @@ interface IProps extends IDialogProps {
 export default class ManualDeviceKeyVerificationDialog extends React.Component<IProps> {
     private onLegacyFinished = (confirm: boolean): void => {
         if (confirm) {
-            MatrixClientPeg.get().setDeviceVerified(
-                this.props.userId, this.props.device.deviceId, true,
-            );
+            MatrixClientPeg.get().setDeviceVerified(this.props.userId, this.props.device.deviceId, true);
         }
         this.props.onFinished(confirm);
     };
@@ -53,19 +51,29 @@ export default class ManualDeviceKeyVerificationDialog extends React.Component<I
         const key = FormattingUtils.formatCryptoKey(this.props.device.getFingerprint());
         const body = (
             <div>
-                <p>
-                    { text }
-                </p>
+                <p>{text}</p>
                 <div className="mx_DeviceVerifyDialog_cryptoSection">
                     <ul>
-                        <li><label>{ _t("Session name") }:</label> <span>{ this.props.device.getDisplayName() }</span></li>
-                        <li><label>{ _t("Session ID") }:</label> <span><code>{ this.props.device.deviceId }</code></span></li>
-                        <li><label>{ _t("Session key") }:</label> <span><code><b>{ key }</b></code></span></li>
+                        <li>
+                            <label>{_t("Session name")}:</label> <span>{this.props.device.getDisplayName()}</span>
+                        </li>
+                        <li>
+                            <label>{_t("Session ID")}:</label>{" "}
+                            <span>
+                                <code>{this.props.device.deviceId}</code>
+                            </span>
+                        </li>
+                        <li>
+                            <label>{_t("Session key")}:</label>{" "}
+                            <span>
+                                <code>
+                                    <b>{key}</b>
+                                </code>
+                            </span>
+                        </li>
                     </ul>
                 </div>
-                <p>
-                    { _t("If they don't match, the security of your communication may be compromised.") }
-                </p>
+                <p>{_t("If they don't match, the security of your communication may be compromised.")}</p>
             </div>
         );
 

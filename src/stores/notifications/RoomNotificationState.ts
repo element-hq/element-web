@@ -24,8 +24,8 @@ import { IDestroyable } from "../../utils/IDestroyable";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { EffectiveMembership, getEffectiveMembership } from "../../utils/membership";
 import { readReceiptChangeIsFor } from "../../utils/read-receipts";
-import * as RoomNotifs from '../../RoomNotifs';
-import * as Unread from '../../Unread';
+import * as RoomNotifs from "../../RoomNotifs";
+import * as Unread from "../../Unread";
 import { NotificationState, NotificationStateEvents } from "./NotificationState";
 import { getUnsentMessages } from "../../components/structures/RoomStatusBar";
 import { ThreadsRoomNotificationState } from "./ThreadsRoomNotificationState";
@@ -117,9 +117,9 @@ export class RoomNotificationState extends NotificationState implements IDestroy
             this._color = NotificationColor.Unsent;
             this._symbol = "!";
             this._count = 1; // not used, technically
-        } else if (RoomNotifs.getRoomNotifsState(
-            this.room.client, this.room.roomId,
-        ) === RoomNotifs.RoomNotifState.Mute) {
+        } else if (
+            RoomNotifs.getRoomNotifsState(this.room.client, this.room.roomId) === RoomNotifs.RoomNotifState.Mute
+        ) {
             // When muted we suppress all notification states, even if we have context on them.
             this._color = NotificationColor.None;
             this._symbol = null;
@@ -136,7 +136,7 @@ export class RoomNotificationState extends NotificationState implements IDestroy
             // red notifications. If we don't have a grey count for some reason we use the red
             // count. If that count is broken for some reason, assume zero. This avoids us showing
             // a badge for 'NaN' (which formats as 'NaNB' for NaN Billion).
-            const trueCount = greyNotifs ? greyNotifs : (redNotifs ? redNotifs : 0);
+            const trueCount = greyNotifs ? greyNotifs : redNotifs ? redNotifs : 0;
 
             // Note: we only set the symbol if we have an actual count. We don't want to show
             // zero on badges.

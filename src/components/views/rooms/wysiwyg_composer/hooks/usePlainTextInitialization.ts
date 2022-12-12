@@ -16,7 +16,7 @@ limitations under the License.
 
 import { RefObject, useEffect } from "react";
 
-export function usePlainTextInitialization(initialContent = '', ref: RefObject<HTMLElement>) {
+export function usePlainTextInitialization(initialContent = "", ref: RefObject<HTMLElement>) {
     useEffect(() => {
         if (ref.current) {
             ref.current.innerText = initialContent;

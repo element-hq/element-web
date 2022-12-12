@@ -14,21 +14,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import classNames from 'classnames';
+import React from "react";
+import classNames from "classnames";
 
-import { Icon as UnknownDeviceIcon } from '../../../../../res/img/element-icons/settings/unknown-device.svg';
-import { Icon as DesktopIcon } from '../../../../../res/img/element-icons/settings/desktop.svg';
-import { Icon as WebIcon } from '../../../../../res/img/element-icons/settings/web.svg';
-import { Icon as MobileIcon } from '../../../../../res/img/element-icons/settings/mobile.svg';
-import { Icon as VerifiedIcon } from '../../../../../res/img/e2e/verified.svg';
-import { Icon as UnverifiedIcon } from '../../../../../res/img/e2e/warning.svg';
-import { _t } from '../../../../languageHandler';
-import { ExtendedDevice } from './types';
-import { DeviceType } from '../../../../utils/device/parseUserAgent';
+import { Icon as UnknownDeviceIcon } from "../../../../../res/img/element-icons/settings/unknown-device.svg";
+import { Icon as DesktopIcon } from "../../../../../res/img/element-icons/settings/desktop.svg";
+import { Icon as WebIcon } from "../../../../../res/img/element-icons/settings/web.svg";
+import { Icon as MobileIcon } from "../../../../../res/img/element-icons/settings/mobile.svg";
+import { Icon as VerifiedIcon } from "../../../../../res/img/e2e/verified.svg";
+import { Icon as UnverifiedIcon } from "../../../../../res/img/e2e/warning.svg";
+import { _t } from "../../../../languageHandler";
+import { ExtendedDevice } from "./types";
+import { DeviceType } from "../../../../utils/device/parseUserAgent";
 
 interface Props {
-    isVerified?: ExtendedDevice['isVerified'];
+    isVerified?: ExtendedDevice["isVerified"];
     isSelected?: boolean;
     deviceType?: DeviceType;
 }
@@ -40,44 +40,37 @@ const deviceTypeIcon: Record<DeviceType, React.FC<React.SVGProps<SVGSVGElement>>
     [DeviceType.Unknown]: UnknownDeviceIcon,
 };
 const deviceTypeLabel: Record<DeviceType, string> = {
-    [DeviceType.Desktop]: _t('Desktop session'),
-    [DeviceType.Mobile]: _t('Mobile session'),
-    [DeviceType.Web]: _t('Web session'),
-    [DeviceType.Unknown]: _t('Unknown session type'),
+    [DeviceType.Desktop]: _t("Desktop session"),
+    [DeviceType.Mobile]: _t("Mobile session"),
+    [DeviceType.Web]: _t("Web session"),
+    [DeviceType.Unknown]: _t("Unknown session type"),
 };
 
-export const DeviceTypeIcon: React.FC<Props> = ({
-    isVerified,
-    isSelected,
-    deviceType,
-}) => {
+export const DeviceTypeIcon: React.FC<Props> = ({ isVerified, isSelected, deviceType }) => {
     const Icon = deviceTypeIcon[deviceType] || deviceTypeIcon[DeviceType.Unknown];
     const label = deviceTypeLabel[deviceType] || deviceTypeLabel[DeviceType.Unknown];
     return (
-        <div className={classNames('mx_DeviceTypeIcon', {
-            mx_DeviceTypeIcon_selected: isSelected,
-        })}
+        <div
+            className={classNames("mx_DeviceTypeIcon", {
+                mx_DeviceTypeIcon_selected: isSelected,
+            })}
         >
-            <div className='mx_DeviceTypeIcon_deviceIconWrapper'>
-                <Icon
-                    className='mx_DeviceTypeIcon_deviceIcon'
-                    role='img'
-                    aria-label={label}
-                />
+            <div className="mx_DeviceTypeIcon_deviceIconWrapper">
+                <Icon className="mx_DeviceTypeIcon_deviceIcon" role="img" aria-label={label} />
             </div>
-            {
-                isVerified
-                    ? <VerifiedIcon
-                        className={classNames('mx_DeviceTypeIcon_verificationIcon', 'verified')}
-                        role='img'
-                        aria-label={_t('Verified')}
-                    />
-                    : <UnverifiedIcon
-                        className={classNames('mx_DeviceTypeIcon_verificationIcon', 'unverified')}
-                        role='img'
-                        aria-label={_t('Unverified')}
-                    />
-            }
-        </div>);
+            {isVerified ? (
+                <VerifiedIcon
+                    className={classNames("mx_DeviceTypeIcon_verificationIcon", "verified")}
+                    role="img"
+                    aria-label={_t("Verified")}
+                />
+            ) : (
+                <UnverifiedIcon
+                    className={classNames("mx_DeviceTypeIcon_verificationIcon", "unverified")}
+                    role="img"
+                    aria-label={_t("Unverified")}
+                />
+            )}
+        </div>
+    );
 };
-

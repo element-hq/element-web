@@ -14,10 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import FakeTimers from '@sinonjs/fake-timers';
-import EventEmitter from 'events';
+import FakeTimers from "@sinonjs/fake-timers";
+import EventEmitter from "events";
 
-import UserActivity from '../src/UserActivity';
+import UserActivity from "../src/UserActivity";
 
 class FakeDomEventEmitter extends EventEmitter {
     addEventListener(what, l) {
@@ -29,13 +29,13 @@ class FakeDomEventEmitter extends EventEmitter {
     }
 }
 
-describe('UserActivity', function() {
+describe("UserActivity", function () {
     let fakeWindow;
     let fakeDocument;
     let userActivity;
     let clock;
 
-    beforeEach(function() {
+    beforeEach(function () {
         fakeWindow = new FakeDomEventEmitter();
         fakeDocument = new FakeDomEventEmitter();
         userActivity = new UserActivity(fakeWindow, fakeDocument);
@@ -43,26 +43,26 @@ describe('UserActivity', function() {
         clock = FakeTimers.install();
     });
 
-    afterEach(function() {
+    afterEach(function () {
         userActivity.stop();
         userActivity = null;
         clock.uninstall();
         clock = null;
     });
 
-    it('should return the same shared instance', function() {
+    it("should return the same shared instance", function () {
         expect(UserActivity.sharedInstance()).toBe(UserActivity.sharedInstance());
     });
 
-    it('should consider user inactive if no activity', function() {
+    it("should consider user inactive if no activity", function () {
         expect(userActivity.userActiveNow()).toBe(false);
     });
 
-    it('should consider user not active recently if no activity', function() {
+    it("should consider user not active recently if no activity", function () {
         expect(userActivity.userActiveRecently()).toBe(false);
     });
 
-    it('should not consider user active after activity if no window focus', function() {
+    it("should not consider user active after activity if no window focus", function () {
         fakeDocument.hasFocus = jest.fn().mockReturnValue(false);
 
         userActivity.onUserActivity({});
@@ -70,7 +70,7 @@ describe('UserActivity', function() {
         expect(userActivity.userActiveRecently()).toBe(false);
     });
 
-    it('should consider user active shortly after activity', function() {
+    it("should consider user active shortly after activity", function () {
         fakeDocument.hasFocus = jest.fn().mockReturnValue(true);
 
         userActivity.onUserActivity({});
@@ -81,7 +81,7 @@ describe('UserActivity', function() {
         expect(userActivity.userActiveRecently()).toBe(true);
     });
 
-    it('should consider user not active after 10s of no activity', function() {
+    it("should consider user not active after 10s of no activity", function () {
         fakeDocument.hasFocus = jest.fn().mockReturnValue(true);
 
         userActivity.onUserActivity({});
@@ -89,7 +89,7 @@ describe('UserActivity', function() {
         expect(userActivity.userActiveNow()).toBe(false);
     });
 
-    it('should consider user passive after 10s of no activity', function() {
+    it("should consider user passive after 10s of no activity", function () {
         fakeDocument.hasFocus = jest.fn().mockReturnValue(true);
 
         userActivity.onUserActivity({});
@@ -97,19 +97,19 @@ describe('UserActivity', function() {
         expect(userActivity.userActiveRecently()).toBe(true);
     });
 
-    it('should not consider user passive after 10s if window un-focused', function() {
+    it("should not consider user passive after 10s if window un-focused", function () {
         fakeDocument.hasFocus = jest.fn().mockReturnValue(true);
 
         userActivity.onUserActivity({});
         clock.tick(10000);
 
         fakeDocument.hasFocus = jest.fn().mockReturnValue(false);
-        fakeWindow.emit('blur', {});
+        fakeWindow.emit("blur", {});
 
         expect(userActivity.userActiveRecently()).toBe(false);
     });
 
-    it('should not consider user passive after 3 mins', function() {
+    it("should not consider user passive after 3 mins", function () {
         fakeDocument.hasFocus = jest.fn().mockReturnValue(true);
 
         userActivity.onUserActivity({});
@@ -118,7 +118,7 @@ describe('UserActivity', function() {
         expect(userActivity.userActiveRecently()).toBe(false);
     });
 
-    it('should extend timer on activity', function() {
+    it("should extend timer on activity", function () {
         fakeDocument.hasFocus = jest.fn().mockReturnValue(true);
 
         userActivity.onUserActivity({});

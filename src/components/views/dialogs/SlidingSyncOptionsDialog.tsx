@@ -14,11 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import { MatrixClient, Method } from 'matrix-js-sdk/src/matrix';
-import { logger } from 'matrix-js-sdk/src/logger';
+import React from "react";
+import { MatrixClient, Method } from "matrix-js-sdk/src/matrix";
+import { logger } from "matrix-js-sdk/src/logger";
 
-import { _t } from '../../../languageHandler';
+import { _t } from "../../../languageHandler";
 import { IDialogProps } from "./IDialogProps";
 import SettingsStore from "../../../settings/SettingsStore";
 import TextInputDialog from "./TextInputDialog";
@@ -66,7 +66,15 @@ async function proxyHealthCheck(endpoint: string, hsUrl?: string): Promise<void>
 export const SlidingSyncOptionsDialog: React.FC<IDialogProps> = ({ onFinished }) => {
     const cli = MatrixClientPeg.get();
     const currentProxy = SettingsStore.getValue("feature_sliding_sync_proxy_url");
-    const hasNativeSupport = useAsyncMemo(() => syncHealthCheck(cli).then(() => true, () => false), [], null);
+    const hasNativeSupport = useAsyncMemo(
+        () =>
+            syncHealthCheck(cli).then(
+                () => true,
+                () => false,
+            ),
+        [],
+        null,
+    );
 
     let nativeSupport: string;
     if (hasNativeSupport === null) {
@@ -91,7 +99,8 @@ export const SlidingSyncOptionsDialog: React.FC<IDialogProps> = ({ onFinished })
                 key: "required",
                 test: async ({ value }) => !!value || hasNativeSupport,
                 invalid: () => _t("Your server lacks native support, you must specify a proxy"),
-            }, {
+            },
+            {
                 key: "working",
                 final: true,
                 test: async (_, { error }) => !error,
@@ -101,23 +110,29 @@ export const SlidingSyncOptionsDialog: React.FC<IDialogProps> = ({ onFinished })
         ],
     });
 
-    return <TextInputDialog
-        title={_t("Sliding Sync configuration")}
-        description={<div>
-            <div><b>{ _t("To disable you will need to log out and back in, use with caution!") }</b></div>
-            { nativeSupport }
-        </div>}
-        placeholder={hasNativeSupport ? _t('Proxy URL (optional)') : _t('Proxy URL')}
-        value={currentProxy}
-        button={_t("Enable")}
-        validator={validProxy}
-        onFinished={(enable: boolean, proxyUrl: string) => {
-            if (enable) {
-                SettingsStore.setValue("feature_sliding_sync_proxy_url", null, SettingLevel.DEVICE, proxyUrl);
-                onFinished(true);
-            } else {
-                onFinished(false);
+    return (
+        <TextInputDialog
+            title={_t("Sliding Sync configuration")}
+            description={
+                <div>
+                    <div>
+                        <b>{_t("To disable you will need to log out and back in, use with caution!")}</b>
+                    </div>
+                    {nativeSupport}
+                </div>
             }
-        }}
-    />;
+            placeholder={hasNativeSupport ? _t("Proxy URL (optional)") : _t("Proxy URL")}
+            value={currentProxy}
+            button={_t("Enable")}
+            validator={validProxy}
+            onFinished={(enable: boolean, proxyUrl: string) => {
+                if (enable) {
+                    SettingsStore.setValue("feature_sliding_sync_proxy_url", null, SettingLevel.DEVICE, proxyUrl);
+                    onFinished(true);
+                } else {
+                    onFinished(false);
+                }
+            }}
+        />
+    );
 };

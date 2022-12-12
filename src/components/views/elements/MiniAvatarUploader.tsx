@@ -14,14 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import classNames from 'classnames';
-import { EventType } from 'matrix-js-sdk/src/@types/event';
-import React, { useContext, useRef, useState, MouseEvent } from 'react';
+import classNames from "classnames";
+import { EventType } from "matrix-js-sdk/src/@types/event";
+import React, { useContext, useRef, useState, MouseEvent } from "react";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import RoomContext from "../../../contexts/RoomContext";
 import { useTimeout } from "../../../hooks/useTimeout";
-import { TranslatedString } from '../../../languageHandler';
+import { TranslatedString } from "../../../languageHandler";
 import { chromeFileInputFix } from "../../../utils/BrowserWorkarounds";
 import AccessibleButton from "./AccessibleButton";
 import Spinner from "./Spinner";
@@ -38,7 +38,13 @@ interface IProps {
 }
 
 const MiniAvatarUploader: React.FC<IProps> = ({
-    hasAvatar, hasAvatarLabel, noAvatarLabel, setAvatarUrl, isUserAvatar, children, onClick,
+    hasAvatar,
+    hasAvatarLabel,
+    noAvatarLabel,
+    setAvatarUrl,
+    isUserAvatar,
+    children,
+    onClick,
 }) => {
     const cli = useContext(MatrixClientContext);
     const [busy, setBusy] = useState(false);
@@ -54,62 +60,64 @@ const MiniAvatarUploader: React.FC<IProps> = ({
 
     const uploadRef = useRef<HTMLInputElement>();
 
-    const label = (hasAvatar || busy) ? hasAvatarLabel : noAvatarLabel;
+    const label = hasAvatar || busy ? hasAvatarLabel : noAvatarLabel;
 
     const { room } = useContext(RoomContext);
     const canSetAvatar = isUserAvatar || room?.currentState?.maySendStateEvent(EventType.RoomAvatar, cli.getUserId());
-    if (!canSetAvatar) return <React.Fragment>{ children }</React.Fragment>;
+    if (!canSetAvatar) return <React.Fragment>{children}</React.Fragment>;
 
     const visible = !!label && (hover || show);
-    return <React.Fragment>
-        <input
-            type="file"
-            ref={uploadRef}
-            className="mx_MiniAvatarUploader_input"
-            onClick={(ev) => {
-                chromeFileInputFix(ev);
-                onClick?.(ev);
-            }}
-            onChange={async (ev) => {
-                if (!ev.target.files?.length) return;
-                setBusy(true);
-                const file = ev.target.files[0];
-                const { content_uri: uri } = await cli.uploadContent(file);
-                await setAvatarUrl(uri);
-                setBusy(false);
-            }}
-            accept="image/*"
-        />
+    return (
+        <React.Fragment>
+            <input
+                type="file"
+                ref={uploadRef}
+                className="mx_MiniAvatarUploader_input"
+                onClick={(ev) => {
+                    chromeFileInputFix(ev);
+                    onClick?.(ev);
+                }}
+                onChange={async (ev) => {
+                    if (!ev.target.files?.length) return;
+                    setBusy(true);
+                    const file = ev.target.files[0];
+                    const { content_uri: uri } = await cli.uploadContent(file);
+                    await setAvatarUrl(uri);
+                    setBusy(false);
+                }}
+                accept="image/*"
+            />
 
-        <AccessibleButton
-            className={classNames("mx_MiniAvatarUploader", {
-                mx_MiniAvatarUploader_busy: busy,
-                mx_MiniAvatarUploader_hasAvatar: hasAvatar,
-            })}
-            disabled={busy}
-            onClick={() => {
-                uploadRef.current.click();
-            }}
-            onMouseOver={() => setHover(true)}
-            onMouseLeave={() => setHover(false)}
-        >
-            { children }
+            <AccessibleButton
+                className={classNames("mx_MiniAvatarUploader", {
+                    mx_MiniAvatarUploader_busy: busy,
+                    mx_MiniAvatarUploader_hasAvatar: hasAvatar,
+                })}
+                disabled={busy}
+                onClick={() => {
+                    uploadRef.current.click();
+                }}
+                onMouseOver={() => setHover(true)}
+                onMouseLeave={() => setHover(false)}
+            >
+                {children}
 
-            <div className="mx_MiniAvatarUploader_indicator">
-                { busy ?
-                    <Spinner w={20} h={20} /> :
-                    <div className="mx_MiniAvatarUploader_cameraIcon" /> }
-            </div>
+                <div className="mx_MiniAvatarUploader_indicator">
+                    {busy ? <Spinner w={20} h={20} /> : <div className="mx_MiniAvatarUploader_cameraIcon" />}
+                </div>
 
-            <div className={classNames("mx_Tooltip", {
-                "mx_Tooltip_visible": visible,
-                "mx_Tooltip_invisible": !visible,
-            })}>
-                <div className="mx_Tooltip_chevron" />
-                { label }
-            </div>
-        </AccessibleButton>
-    </React.Fragment>;
+                <div
+                    className={classNames("mx_Tooltip", {
+                        mx_Tooltip_visible: visible,
+                        mx_Tooltip_invisible: !visible,
+                    })}
+                >
+                    <div className="mx_Tooltip_chevron" />
+                    {label}
+                </div>
+            </AccessibleButton>
+        </React.Fragment>
+    );
 };
 
 export default MiniAvatarUploader;

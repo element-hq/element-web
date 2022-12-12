@@ -14,19 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import { ClientEvent, MatrixEvent } from 'matrix-js-sdk/src/matrix';
+import React from "react";
+import { ClientEvent, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
 
-import { MatrixClientPeg } from '../../../MatrixClientPeg';
-import { _t } from '../../../languageHandler';
-import Modal from '../../../Modal';
-import Spinner from '../elements/Spinner';
-import InteractiveAuthDialog from '../dialogs/InteractiveAuthDialog';
-import ConfirmDestroyCrossSigningDialog from '../dialogs/security/ConfirmDestroyCrossSigningDialog';
-import SetupEncryptionDialog from '../dialogs/security/SetupEncryptionDialog';
-import { accessSecretStorage } from '../../../SecurityManager';
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { _t } from "../../../languageHandler";
+import Modal from "../../../Modal";
+import Spinner from "../elements/Spinner";
+import InteractiveAuthDialog from "../dialogs/InteractiveAuthDialog";
+import ConfirmDestroyCrossSigningDialog from "../dialogs/security/ConfirmDestroyCrossSigningDialog";
+import SetupEncryptionDialog from "../dialogs/security/SetupEncryptionDialog";
+import { accessSecretStorage } from "../../../SecurityManager";
 import AccessibleButton from "../elements/AccessibleButton";
 
 interface IState {
@@ -97,8 +97,9 @@ export default class CrossSigningPanel extends React.PureComponent<{}, IState> {
         const masterPrivateKeyCached = !!(pkCache && (await pkCache.getCrossSigningKeyCache("master")));
         const selfSigningPrivateKeyCached = !!(pkCache && (await pkCache.getCrossSigningKeyCache("self_signing")));
         const userSigningPrivateKeyCached = !!(pkCache && (await pkCache.getCrossSigningKeyCache("user_signing")));
-        const homeserverSupportsCrossSigning =
-            await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing");
+        const homeserverSupportsCrossSigning = await cli.doesServerSupportUnstableFeature(
+            "org.matrix.e2e_cross_signing",
+        );
         const crossSigningReady = await cli.isCrossSigningReady();
 
         this.setState({
@@ -170,49 +171,43 @@ export default class CrossSigningPanel extends React.PureComponent<{}, IState> {
 
         let errorSection;
         if (error) {
-            errorSection = <div className="error">{ error.toString() }</div>;
+            errorSection = <div className="error">{error.toString()}</div>;
         }
 
         let summarisedStatus;
         if (homeserverSupportsCrossSigning === undefined) {
             summarisedStatus = <Spinner />;
         } else if (!homeserverSupportsCrossSigning) {
-            summarisedStatus = <p>{ _t(
-                "Your homeserver does not support cross-signing.",
-            ) }</p>;
+            summarisedStatus = <p>{_t("Your homeserver does not support cross-signing.")}</p>;
         } else if (crossSigningReady && crossSigningPrivateKeysInStorage) {
-            summarisedStatus = <p>✅ { _t(
-                "Cross-signing is ready for use.",
-            ) }</p>;
+            summarisedStatus = <p>✅ {_t("Cross-signing is ready for use.")}</p>;
         } else if (crossSigningReady && !crossSigningPrivateKeysInStorage) {
-            summarisedStatus = <p>⚠️ { _t(
-                "Cross-signing is ready but keys are not backed up.",
-            ) }</p>;
+            summarisedStatus = <p>⚠️ {_t("Cross-signing is ready but keys are not backed up.")}</p>;
         } else if (crossSigningPrivateKeysInStorage) {
-            summarisedStatus = <p>{ _t(
-                "Your account has a cross-signing identity in secret storage, " +
-                "but it is not yet trusted by this session.",
-            ) }</p>;
+            summarisedStatus = (
+                <p>
+                    {_t(
+                        "Your account has a cross-signing identity in secret storage, " +
+                            "but it is not yet trusted by this session.",
+                    )}
+                </p>
+            );
         } else {
-            summarisedStatus = <p>{ _t(
-                "Cross-signing is not set up.",
-            ) }</p>;
+            summarisedStatus = <p>{_t("Cross-signing is not set up.")}</p>;
         }
 
-        const keysExistAnywhere = (
+        const keysExistAnywhere =
             crossSigningPublicKeysOnDevice ||
             crossSigningPrivateKeysInStorage ||
             masterPrivateKeyCached ||
             selfSigningPrivateKeyCached ||
-            userSigningPrivateKeyCached
-        );
-        const keysExistEverywhere = (
+            userSigningPrivateKeyCached;
+        const keysExistEverywhere =
             crossSigningPublicKeysOnDevice &&
             crossSigningPrivateKeysInStorage &&
             masterPrivateKeyCached &&
             selfSigningPrivateKeyCached &&
-            userSigningPrivateKeyCached
-        );
+            userSigningPrivateKeyCached;
 
         const actions = [];
 
@@ -224,7 +219,7 @@ export default class CrossSigningPanel extends React.PureComponent<{}, IState> {
             }
             actions.push(
                 <AccessibleButton key="setup" kind="primary" onClick={this.onBootstrapClick}>
-                    { buttonCaption }
+                    {buttonCaption}
                 </AccessibleButton>,
             );
         }
@@ -232,52 +227,56 @@ export default class CrossSigningPanel extends React.PureComponent<{}, IState> {
         if (keysExistAnywhere) {
             actions.push(
                 <AccessibleButton key="reset" kind="danger" onClick={this.resetCrossSigning}>
-                    { _t("Reset") }
+                    {_t("Reset")}
                 </AccessibleButton>,
             );
         }
 
         let actionRow;
         if (actions.length) {
-            actionRow = <div className="mx_CrossSigningPanel_buttonRow">
-                { actions }
-            </div>;
+            actionRow = <div className="mx_CrossSigningPanel_buttonRow">{actions}</div>;
         }
 
         return (
             <div>
-                { summarisedStatus }
+                {summarisedStatus}
                 <details>
-                    <summary>{ _t("Advanced") }</summary>
-                    <table className="mx_CrossSigningPanel_statusList"><tbody>
-                        <tr>
-                            <td>{ _t("Cross-signing public keys:") }</td>
-                            <td>{ crossSigningPublicKeysOnDevice ? _t("in memory") : _t("not found") }</td>
-                        </tr>
-                        <tr>
-                            <td>{ _t("Cross-signing private keys:") }</td>
-                            <td>{ crossSigningPrivateKeysInStorage ? _t("in secret storage") : _t("not found in storage") }</td>
-                        </tr>
-                        <tr>
-                            <td>{ _t("Master private key:") }</td>
-                            <td>{ masterPrivateKeyCached ? _t("cached locally") : _t("not found locally") }</td>
-                        </tr>
-                        <tr>
-                            <td>{ _t("Self signing private key:") }</td>
-                            <td>{ selfSigningPrivateKeyCached ? _t("cached locally") : _t("not found locally") }</td>
-                        </tr>
-                        <tr>
-                            <td>{ _t("User signing private key:") }</td>
-                            <td>{ userSigningPrivateKeyCached ? _t("cached locally") : _t("not found locally") }</td>
-                        </tr>
-                        <tr>
-                            <td>{ _t("Homeserver feature support:") }</td>
-                            <td>{ homeserverSupportsCrossSigning ? _t("exists") : _t("not found") }</td>
-                        </tr>
-                    </tbody></table>
+                    <summary>{_t("Advanced")}</summary>
+                    <table className="mx_CrossSigningPanel_statusList">
+                        <tbody>
+                            <tr>
+                                <td>{_t("Cross-signing public keys:")}</td>
+                                <td>{crossSigningPublicKeysOnDevice ? _t("in memory") : _t("not found")}</td>
+                            </tr>
+                            <tr>
+                                <td>{_t("Cross-signing private keys:")}</td>
+                                <td>
+                                    {crossSigningPrivateKeysInStorage
+                                        ? _t("in secret storage")
+                                        : _t("not found in storage")}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>{_t("Master private key:")}</td>
+                                <td>{masterPrivateKeyCached ? _t("cached locally") : _t("not found locally")}</td>
+                            </tr>
+                            <tr>
+                                <td>{_t("Self signing private key:")}</td>
+                                <td>{selfSigningPrivateKeyCached ? _t("cached locally") : _t("not found locally")}</td>
+                            </tr>
+                            <tr>
+                                <td>{_t("User signing private key:")}</td>
+                                <td>{userSigningPrivateKeyCached ? _t("cached locally") : _t("not found locally")}</td>
+                            </tr>
+                            <tr>
+                                <td>{_t("Homeserver feature support:")}</td>
+                                <td>{homeserverSupportsCrossSigning ? _t("exists") : _t("not found")}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </details>
-                { errorSection }
-                { actionRow }
+                {errorSection}
+                {actionRow}
             </div>
         );
     }

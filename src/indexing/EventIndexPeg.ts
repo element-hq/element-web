@@ -24,7 +24,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import PlatformPeg from "../PlatformPeg";
 import EventIndex from "../indexing/EventIndex";
 import { MatrixClientPeg } from "../MatrixClientPeg";
-import SettingsStore from '../settings/SettingsStore';
+import SettingsStore from "../settings/SettingsStore";
 import { SettingLevel } from "../settings/SettingLevel";
 
 const INDEX_VERSION = 1;
@@ -62,7 +62,7 @@ export class EventIndexPeg {
             return false;
         }
 
-        if (!SettingsStore.getValueAt(SettingLevel.DEVICE, 'enableEventIndexing')) {
+        if (!SettingsStore.getValueAt(SettingLevel.DEVICE, "enableEventIndexing")) {
             logger.log("EventIndex: Event indexing is disabled, not initializing");
             return false;
         }

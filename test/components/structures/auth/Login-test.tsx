@@ -14,13 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 import { fireEvent, render, screen, waitForElementToBeRemoved } from "@testing-library/react";
-import { mocked, MockedObject } from 'jest-mock';
+import { mocked, MockedObject } from "jest-mock";
 import { createClient, MatrixClient } from "matrix-js-sdk/src/matrix";
 import fetchMock from "fetch-mock-jest";
 
-import SdkConfig from '../../../../src/SdkConfig';
+import SdkConfig from "../../../../src/SdkConfig";
 import { mkServerConfig, mockPlatformPeg, unmockPlatformPeg } from "../../../test-utils";
 import Login from "../../../../src/components/structures/auth/Login";
 import BasePlatform from "../../../../src/BasePlatform";
@@ -29,7 +29,7 @@ jest.mock("matrix-js-sdk/src/matrix");
 
 jest.useRealTimers();
 
-describe('Login', function() {
+describe("Login", function () {
     let platform: MockedObject<BasePlatform>;
 
     const mockClient = mocked({
@@ -37,14 +37,14 @@ describe('Login', function() {
         loginFlows: jest.fn(),
     } as unknown as MatrixClient);
 
-    beforeEach(function() {
+    beforeEach(function () {
         SdkConfig.put({
             brand: "test-brand",
             disable_custom_urls: true,
         });
         mockClient.login.mockClear().mockResolvedValue({});
         mockClient.loginFlows.mockClear().mockResolvedValue({ flows: [{ type: "m.login.password" }] });
-        mocked(createClient).mockImplementation(opts => {
+        mocked(createClient).mockImplementation((opts) => {
             mockClient.idBaseUrl = opts.idBaseUrl;
             mockClient.baseUrl = opts.baseUrl;
             return mockClient;
@@ -58,26 +58,28 @@ describe('Login', function() {
         });
     });
 
-    afterEach(function() {
+    afterEach(function () {
         fetchMock.restore();
         SdkConfig.unset(); // we touch the config, so clean up
         unmockPlatformPeg();
     });
 
     function getRawComponent(hsUrl = "https://matrix.org", isUrl = "https://vector.im") {
-        return <Login
-            serverConfig={mkServerConfig(hsUrl, isUrl)}
-            onLoggedIn={() => { }}
-            onRegisterClick={() => { }}
-            onServerConfigChange={() => { }}
-        />;
+        return (
+            <Login
+                serverConfig={mkServerConfig(hsUrl, isUrl)}
+                onLoggedIn={() => {}}
+                onRegisterClick={() => {}}
+                onServerConfigChange={() => {}}
+            />
+        );
     }
 
     function getComponent(hsUrl?: string, isUrl?: string) {
         return render(getRawComponent(hsUrl, isUrl));
     }
 
-    it('should show form with change server link', async () => {
+    it("should show form with change server link", async () => {
         SdkConfig.put({
             brand: "test-brand",
             disable_custom_urls: false,
@@ -90,7 +92,7 @@ describe('Login', function() {
         expect(container.querySelector(".mx_ServerPicker_change")).toBeTruthy();
     });
 
-    it('should show form without change server link when custom URLs disabled', async () => {
+    it("should show form without change server link when custom URLs disabled", async () => {
         const { container } = getComponent();
         await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading..."));
 
@@ -122,19 +124,25 @@ describe('Login', function() {
 
     it("should show multiple SSO buttons if multiple identity_providers are available", async () => {
         mockClient.loginFlows.mockResolvedValue({
-            flows: [{
-                "type": "m.login.sso",
-                "identity_providers": [{
-                    id: "a",
-                    name: "Provider 1",
-                }, {
-                    id: "b",
-                    name: "Provider 2",
-                }, {
-                    id: "c",
-                    name: "Provider 3",
-                }],
-            }],
+            flows: [
+                {
+                    type: "m.login.sso",
+                    identity_providers: [
+                        {
+                            id: "a",
+                            name: "Provider 1",
+                        },
+                        {
+                            id: "b",
+                            name: "Provider 2",
+                        },
+                        {
+                            id: "c",
+                            name: "Provider 3",
+                        },
+                    ],
+                },
+            ],
         });
 
         const { container } = getComponent();
@@ -146,9 +154,11 @@ describe('Login', function() {
 
     it("should show single SSO button if identity_providers is null", async () => {
         mockClient.loginFlows.mockResolvedValue({
-            flows: [{
-                "type": "m.login.sso",
-            }],
+            flows: [
+                {
+                    type: "m.login.sso",
+                },
+            ],
         });
 
         const { container } = getComponent();
@@ -160,9 +170,11 @@ describe('Login', function() {
 
     it("should handle serverConfig updates correctly", async () => {
         mockClient.loginFlows.mockResolvedValue({
-            flows: [{
-                "type": "m.login.sso",
-            }],
+            flows: [
+                {
+                    type: "m.login.sso",
+                },
+            ],
         });
 
         const { container, rerender } = render(getRawComponent());

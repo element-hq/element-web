@@ -32,9 +32,8 @@ limitations under the License.
     bottom: 30px;
     font-size: 17px;
     padding: 6px 16px;
-    font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir,
-        segoe ui, helvetica neue, helvetica, Ubuntu, roboto, noto, arial,
-        sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, helvetica, Ubuntu,
+        roboto, noto, arial, sans-serif;
     font-weight: 400;
     line-height: 1.43;
     border-radius: 4px;
@@ -126,7 +125,6 @@ a.mx_reply_anchor:hover {
 
 .mx_RedactedBody,
 .mx_HiddenBody {
-
     padding-left: unset;
 }
 

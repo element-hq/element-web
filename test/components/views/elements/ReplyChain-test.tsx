@@ -14,12 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import * as testUtils from '../../../test-utils';
+import * as testUtils from "../../../test-utils";
 import { getParentEventId } from "../../../../src/utils/Reply";
 
 describe("ReplyChain", () => {
-    describe('getParentEventId', () => {
-        it('retrieves relation reply from unedited event', () => {
+    describe("getParentEventId", () => {
+        it("retrieves relation reply from unedited event", () => {
             const originalEventWithRelation = testUtils.mkEvent({
                 event: true,
                 type: "m.room.message",
@@ -28,7 +28,7 @@ describe("ReplyChain", () => {
                     "body": "> Reply to this message\n\n foo",
                     "m.relates_to": {
                         "m.in_reply_to": {
-                            "event_id": "$qkjmFBTEc0VvfVyzq1CJuh1QZi_xDIgNEFjZ4Pq34og",
+                            event_id: "$qkjmFBTEc0VvfVyzq1CJuh1QZi_xDIgNEFjZ4Pq34og",
                         },
                     },
                 },
@@ -36,11 +36,12 @@ describe("ReplyChain", () => {
                 room: "room_id",
             });
 
-            expect(getParentEventId(originalEventWithRelation))
-                .toStrictEqual('$qkjmFBTEc0VvfVyzq1CJuh1QZi_xDIgNEFjZ4Pq34og');
+            expect(getParentEventId(originalEventWithRelation)).toStrictEqual(
+                "$qkjmFBTEc0VvfVyzq1CJuh1QZi_xDIgNEFjZ4Pq34og",
+            );
         });
 
-        it('retrieves relation reply from original event when edited', () => {
+        it("retrieves relation reply from original event when edited", () => {
             const originalEventWithRelation = testUtils.mkEvent({
                 event: true,
                 type: "m.room.message",
@@ -49,7 +50,7 @@ describe("ReplyChain", () => {
                     "body": "> Reply to this message\n\n foo",
                     "m.relates_to": {
                         "m.in_reply_to": {
-                            "event_id": "$qkjmFBTEc0VvfVyzq1CJuh1QZi_xDIgNEFjZ4Pq34og",
+                            event_id: "$qkjmFBTEc0VvfVyzq1CJuh1QZi_xDIgNEFjZ4Pq34og",
                         },
                     },
                 },
@@ -64,12 +65,12 @@ describe("ReplyChain", () => {
                     "msgtype": "m.text",
                     "body": "> Reply to this message\n\n * foo bar",
                     "m.new_content": {
-                        "msgtype": "m.text",
-                        "body": "foo bar",
+                        msgtype: "m.text",
+                        body: "foo bar",
                     },
                     "m.relates_to": {
-                        "rel_type": "m.replace",
-                        "event_id": originalEventWithRelation.getId(),
+                        rel_type: "m.replace",
+                        event_id: originalEventWithRelation.getId(),
                     },
                 },
                 user: "some_other_user",
@@ -80,11 +81,12 @@ describe("ReplyChain", () => {
             originalEventWithRelation.makeReplaced(editEvent);
 
             // The relation should be pulled from the original event
-            expect(getParentEventId(originalEventWithRelation))
-                .toStrictEqual('$qkjmFBTEc0VvfVyzq1CJuh1QZi_xDIgNEFjZ4Pq34og');
+            expect(getParentEventId(originalEventWithRelation)).toStrictEqual(
+                "$qkjmFBTEc0VvfVyzq1CJuh1QZi_xDIgNEFjZ4Pq34og",
+            );
         });
 
-        it('retrieves relation reply from edit event when provided', () => {
+        it("retrieves relation reply from edit event when provided", () => {
             const originalEvent = testUtils.mkEvent({
                 event: true,
                 type: "m.room.message",
@@ -107,13 +109,13 @@ describe("ReplyChain", () => {
                         "body": "foo bar",
                         "m.relates_to": {
                             "m.in_reply_to": {
-                                "event_id": "$qkjmFBTEc0VvfVyzq1CJuh1QZi_xDIgNEFjZ4Pq34og",
+                                event_id: "$qkjmFBTEc0VvfVyzq1CJuh1QZi_xDIgNEFjZ4Pq34og",
                             },
                         },
                     },
                     "m.relates_to": {
-                        "rel_type": "m.replace",
-                        "event_id": originalEvent.getId(),
+                        rel_type: "m.replace",
+                        event_id: originalEvent.getId(),
                     },
                 },
                 user: "some_other_user",
@@ -124,11 +126,10 @@ describe("ReplyChain", () => {
             originalEvent.makeReplaced(editEvent);
 
             // The relation should be pulled from the edit event
-            expect(getParentEventId(originalEvent))
-                .toStrictEqual('$qkjmFBTEc0VvfVyzq1CJuh1QZi_xDIgNEFjZ4Pq34og');
+            expect(getParentEventId(originalEvent)).toStrictEqual("$qkjmFBTEc0VvfVyzq1CJuh1QZi_xDIgNEFjZ4Pq34og");
         });
 
-        it('prefers relation reply from edit event over original event', () => {
+        it("prefers relation reply from edit event over original event", () => {
             const originalEventWithRelation = testUtils.mkEvent({
                 event: true,
                 type: "m.room.message",
@@ -137,7 +138,7 @@ describe("ReplyChain", () => {
                     "body": "> Reply to this message\n\n foo",
                     "m.relates_to": {
                         "m.in_reply_to": {
-                            "event_id": "$111",
+                            event_id: "$111",
                         },
                     },
                 },
@@ -156,13 +157,13 @@ describe("ReplyChain", () => {
                         "body": "foo bar",
                         "m.relates_to": {
                             "m.in_reply_to": {
-                                "event_id": "$999",
+                                event_id: "$999",
                             },
                         },
                     },
                     "m.relates_to": {
-                        "rel_type": "m.replace",
-                        "event_id": originalEventWithRelation.getId(),
+                        rel_type: "m.replace",
+                        event_id: originalEventWithRelation.getId(),
                     },
                 },
                 user: "some_other_user",
@@ -173,10 +174,10 @@ describe("ReplyChain", () => {
             originalEventWithRelation.makeReplaced(editEvent);
 
             // The relation should be pulled from the edit event
-            expect(getParentEventId(originalEventWithRelation)).toStrictEqual('$999');
+            expect(getParentEventId(originalEventWithRelation)).toStrictEqual("$999");
         });
 
-        it('able to clear relation reply from original event by providing empty relation field', () => {
+        it("able to clear relation reply from original event by providing empty relation field", () => {
             const originalEventWithRelation = testUtils.mkEvent({
                 event: true,
                 type: "m.room.message",
@@ -185,7 +186,7 @@ describe("ReplyChain", () => {
                     "body": "> Reply to this message\n\n foo",
                     "m.relates_to": {
                         "m.in_reply_to": {
-                            "event_id": "$111",
+                            event_id: "$111",
                         },
                     },
                 },
@@ -206,8 +207,8 @@ describe("ReplyChain", () => {
                         "m.relates_to": {},
                     },
                     "m.relates_to": {
-                        "rel_type": "m.replace",
-                        "event_id": originalEventWithRelation.getId(),
+                        rel_type: "m.replace",
+                        event_id: originalEventWithRelation.getId(),
                     },
                 },
                 user: "some_other_user",

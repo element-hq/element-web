@@ -63,9 +63,9 @@ export function splitRoomsByMembership(rooms: Room[]): MembershipSplit {
 }
 
 export function getEffectiveMembership(membership: string): EffectiveMembership {
-    if (membership === 'invite') {
+    if (membership === "invite") {
         return EffectiveMembership.Invite;
-    } else if (membership === 'join') {
+    } else if (membership === "join") {
         // TODO: Include knocks? Update docs as needed in the enum. https://github.com/vector-im/element-web/issues/14237
         return EffectiveMembership.Join;
     } else {
@@ -88,7 +88,8 @@ export async function waitForMember(client: MatrixClient, roomId: string, userId
     const { timeout } = opts;
     let handler;
     return new Promise((resolve) => {
-        handler = function(_, __, member: RoomMember) { // eslint-disable-line @typescript-eslint/naming-convention
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        handler = function (_, __, member: RoomMember) {
             if (member.userId !== userId) return;
             if (member.roomId !== roomId) return;
             resolve(true);

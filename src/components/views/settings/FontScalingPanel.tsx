@@ -14,22 +14,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent } from "react";
 
-import EventTilePreview from '../elements/EventTilePreview';
-import Field from '../elements/Field';
-import SettingsFlag from '../elements/SettingsFlag';
+import EventTilePreview from "../elements/EventTilePreview";
+import Field from "../elements/Field";
+import SettingsFlag from "../elements/SettingsFlag";
 import SettingsStore from "../../../settings/SettingsStore";
 import Slider from "../elements/Slider";
 import { FontWatcher } from "../../../settings/watchers/FontWatcher";
-import { IValidationResult, IFieldState } from '../elements/Validation';
+import { IValidationResult, IFieldState } from "../elements/Validation";
 import { Layout } from "../../../settings/enums/Layout";
-import { MatrixClientPeg } from '../../../MatrixClientPeg';
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import { _t } from "../../../languageHandler";
 
-interface IProps {
-}
+interface IProps {}
 
 interface IState {
     // String displaying the current selected fontSize.
@@ -97,66 +96,59 @@ export default class FontScalingPanel extends React.Component<IProps, IState> {
         if (!(min <= parsedSize && parsedSize <= max)) {
             return {
                 valid: false,
-                feedback: _t('Custom font size can only be between %(min)s pt and %(max)s pt', { min, max }),
+                feedback: _t("Custom font size can only be between %(min)s pt and %(max)s pt", { min, max }),
             };
         }
 
-        SettingsStore.setValue(
-            "baseFontSize",
-            null,
-            SettingLevel.DEVICE,
-            parseInt(value, 10) - FontWatcher.SIZE_DIFF,
-        );
+        SettingsStore.setValue("baseFontSize", null, SettingLevel.DEVICE, parseInt(value, 10) - FontWatcher.SIZE_DIFF);
 
-        return { valid: true, feedback: _t('Use between %(min)s pt and %(max)s pt', { min, max }) };
+        return { valid: true, feedback: _t("Use between %(min)s pt and %(max)s pt", { min, max }) };
     };
 
     public render() {
-        return <div className="mx_SettingsTab_section mx_FontScalingPanel">
-
-            <span className="mx_SettingsTab_subheading">{ _t("Font size") }</span>
-            <EventTilePreview
-                className="mx_FontScalingPanel_preview"
-                message={this.MESSAGE_PREVIEW_TEXT}
-                layout={this.state.layout}
-                userId={this.state.userId}
-                displayName={this.state.displayName}
-                avatarUrl={this.state.avatarUrl}
-            />
-            <div className="mx_FontScalingPanel_fontSlider">
-                <div className="mx_FontScalingPanel_fontSlider_smallText">Aa</div>
-                <Slider
-                    values={[13, 14, 15, 16, 18]}
-                    value={parseInt(this.state.fontSize, 10)}
-                    onSelectionChange={this.onFontSizeChanged}
-                    displayFunc={_ => ""}
-                    disabled={this.state.useCustomFontSize}
+        return (
+            <div className="mx_SettingsTab_section mx_FontScalingPanel">
+                <span className="mx_SettingsTab_subheading">{_t("Font size")}</span>
+                <EventTilePreview
+                    className="mx_FontScalingPanel_preview"
+                    message={this.MESSAGE_PREVIEW_TEXT}
+                    layout={this.state.layout}
+                    userId={this.state.userId}
+                    displayName={this.state.displayName}
+                    avatarUrl={this.state.avatarUrl}
                 />
-                <div className="mx_FontScalingPanel_fontSlider_largeText">Aa</div>
+                <div className="mx_FontScalingPanel_fontSlider">
+                    <div className="mx_FontScalingPanel_fontSlider_smallText">Aa</div>
+                    <Slider
+                        values={[13, 14, 15, 16, 18]}
+                        value={parseInt(this.state.fontSize, 10)}
+                        onSelectionChange={this.onFontSizeChanged}
+                        displayFunc={(_) => ""}
+                        disabled={this.state.useCustomFontSize}
+                    />
+                    <div className="mx_FontScalingPanel_fontSlider_largeText">Aa</div>
+                </div>
+
+                <SettingsFlag
+                    name="useCustomFontSize"
+                    level={SettingLevel.ACCOUNT}
+                    onChange={(checked) => this.setState({ useCustomFontSize: checked })}
+                    useCheckbox={true}
+                />
+
+                <Field
+                    type="number"
+                    label={_t("Font size")}
+                    autoComplete="off"
+                    placeholder={this.state.fontSize.toString()}
+                    value={this.state.fontSize.toString()}
+                    id="font_size_field"
+                    onValidate={this.onValidateFontSize}
+                    onChange={(value: ChangeEvent<HTMLInputElement>) => this.setState({ fontSize: value.target.value })}
+                    disabled={!this.state.useCustomFontSize}
+                    className="mx_FontScalingPanel_customFontSizeField"
+                />
             </div>
-
-            <SettingsFlag
-                name="useCustomFontSize"
-                level={SettingLevel.ACCOUNT}
-                onChange={(checked) => this.setState({ useCustomFontSize: checked })}
-                useCheckbox={true}
-            />
-
-            <Field
-                type="number"
-                label={_t("Font size")}
-                autoComplete="off"
-                placeholder={this.state.fontSize.toString()}
-                value={this.state.fontSize.toString()}
-                id="font_size_field"
-                onValidate={this.onValidateFontSize}
-                onChange={
-                    (value: ChangeEvent<HTMLInputElement>) =>
-                        this.setState({ fontSize: value.target.value })
-                }
-                disabled={!this.state.useCustomFontSize}
-                className="mx_FontScalingPanel_customFontSizeField"
-            />
-        </div>;
+        );
     }
 }

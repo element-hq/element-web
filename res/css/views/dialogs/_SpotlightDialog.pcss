@@ -93,11 +93,11 @@ limitations under the License.
             }
 
             &.mx_SpotlightDialog_filterPeople::before {
-                mask-image: url('$(res)/img/element-icons/room/members.svg');
+                mask-image: url("$(res)/img/element-icons/room/members.svg");
             }
 
             &.mx_SpotlightDialog_filterPublicRooms::before {
-                mask-image: url('$(res)/img/element-icons/roomlist/explore.svg');
+                mask-image: url("$(res)/img/element-icons/roomlist/explore.svg");
             }
 
             .mx_SpotlightDialog_filter--close {
@@ -156,7 +156,8 @@ limitations under the License.
         padding: $spacing-16;
 
         .mx_SpotlightDialog_section {
-            > h4, > .mx_SpotlightDialog_sectionHeader > h4 {
+            > h4,
+            > .mx_SpotlightDialog_sectionHeader > h4 {
                 font-weight: $font-semi-bold;
                 font-size: $font-12px;
                 line-height: $font-15px;
@@ -216,7 +217,8 @@ limitations under the License.
                     margin-left: $spacing-16;
                 }
 
-                &:hover, &[aria-selected="true"] {
+                &:hover,
+                &[aria-selected="true"] {
                     background-color: $quinary-content;
                 }
             }
@@ -329,7 +331,7 @@ limitations under the License.
                     &::before {
                         top: 2px;
                         left: 2px;
-                        content: '';
+                        content: "";
                         width: 16px;
                         height: 16px;
                         position: absolute;
@@ -339,16 +341,18 @@ limitations under the License.
                         background: $tertiary-content;
                     }
 
-                    &:hover::before, &[aria-selected="true"]::before {
+                    &:hover::before,
+                    &[aria-selected="true"]::before {
                         background-color: $secondary-content;
                     }
                 }
 
                 .mx_SpotlightDialog_option--menu::before {
-                    mask-image: url('$(res)/img/element-icons/context-menu.svg');
+                    mask-image: url("$(res)/img/element-icons/context-menu.svg");
                 }
 
-                &:hover, &[aria-selected="true"] {
+                &:hover,
+                &[aria-selected="true"] {
                     background-color: $system;
 
                     .mx_SpotlightDialog_option--menu,
@@ -419,19 +423,19 @@ limitations under the License.
             }
 
             .mx_SpotlightDialog_startChat::before {
-                mask-image: url('$(res)/img/element-icons/room/members.svg');
+                mask-image: url("$(res)/img/element-icons/room/members.svg");
             }
 
             .mx_SpotlightDialog_joinRoomAlias::before {
-                mask-image: url('$(res)/img/element-icons/roomlist/hash-circle.svg');
+                mask-image: url("$(res)/img/element-icons/roomlist/hash-circle.svg");
             }
 
             .mx_SpotlightDialog_explorePublicRooms::before {
-                mask-image: url('$(res)/img/element-icons/roomlist/explore.svg');
+                mask-image: url("$(res)/img/element-icons/roomlist/explore.svg");
             }
 
             .mx_SpotlightDialog_startGroupChat::before {
-                mask-image: url('$(res)/img/element-icons/group-members.svg');
+                mask-image: url("$(res)/img/element-icons/group-members.svg");
             }
 
             .mx_SpotlightDialog_otherSearches_messageSearchText {
@@ -448,7 +452,7 @@ limitations under the License.
                 mask-repeat: no-repeat;
                 mask-position: center;
                 mask-size: contain;
-                mask-image: url('$(res)/img/element-icons/room/search-inset.svg');
+                mask-image: url("$(res)/img/element-icons/room/search-inset.svg");
             }
         }
 
@@ -491,19 +495,19 @@ limitations under the License.
             mask-size: contain;
 
             &.mx_SpotlightDialog_metaspaceResult_home-space {
-                mask-image: url('$(res)/img/element-icons/home.svg');
+                mask-image: url("$(res)/img/element-icons/home.svg");
             }
 
             &.mx_SpotlightDialog_metaspaceResult_favourites-space {
-                mask-image: url('$(res)/img/element-icons/roomlist/favorite.svg');
+                mask-image: url("$(res)/img/element-icons/roomlist/favorite.svg");
             }
 
             &.mx_SpotlightDialog_metaspaceResult_people-space {
-                mask-image: url('$(res)/img/element-icons/room/members.svg');
+                mask-image: url("$(res)/img/element-icons/room/members.svg");
             }
 
             &.mx_SpotlightDialog_metaspaceResult_orphans-space {
-                mask-image: url('$(res)/img/element-icons/roomlist/hash-circle.svg');
+                mask-image: url("$(res)/img/element-icons/roomlist/hash-circle.svg");
             }
         }
     }

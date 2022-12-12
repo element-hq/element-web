@@ -131,9 +131,9 @@ export class Media {
     public getSquareThumbnailHttp(dim: number): string {
         dim = Math.floor(dim * window.devicePixelRatio); // scale using the device pixel ratio to keep images clear
         if (this.hasThumbnail) {
-            return this.getThumbnailHttp(dim, dim, 'crop');
+            return this.getThumbnailHttp(dim, dim, "crop");
         }
-        return this.getThumbnailOfSourceHttp(dim, dim, 'crop');
+        return this.getThumbnailOfSourceHttp(dim, dim, "crop");
     }
 
     /**

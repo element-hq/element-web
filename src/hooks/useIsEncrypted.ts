@@ -27,11 +27,14 @@ import { useTypedEventEmitter } from "./useEventEmitter";
 export function useIsEncrypted(cli: MatrixClient, room?: Room): boolean | undefined {
     const [isEncrypted, setIsEncrypted] = useState(room ? cli.isRoomEncrypted(room.roomId) : undefined);
 
-    const update = useCallback((event: MatrixEvent) => {
-        if (room && event.getType() === EventType.RoomEncryption) {
-            setIsEncrypted(cli.isRoomEncrypted(room.roomId));
-        }
-    }, [cli, room]);
+    const update = useCallback(
+        (event: MatrixEvent) => {
+            if (room && event.getType() === EventType.RoomEncryption) {
+                setIsEncrypted(cli.isRoomEncrypted(room.roomId));
+            }
+        },
+        [cli, room],
+    );
     useTypedEventEmitter(room?.currentState, RoomStateEvent.Events, update);
 
     return isEncrypted;

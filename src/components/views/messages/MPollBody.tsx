@@ -14,12 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import classNames from 'classnames';
+import React from "react";
+import classNames from "classnames";
 import { logger } from "matrix-js-sdk/src/logger";
 import { MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/models/event";
-import { Relations, RelationsEvent } from 'matrix-js-sdk/src/models/relations';
-import { MatrixClient } from 'matrix-js-sdk/src/matrix';
+import { Relations, RelationsEvent } from "matrix-js-sdk/src/models/relations";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
 import {
     M_POLL_END,
     M_POLL_KIND_DISCLOSED,
@@ -32,13 +32,13 @@ import {
 } from "matrix-events-sdk";
 import { RelatedRelations } from "matrix-js-sdk/src/models/related-relations";
 
-import { _t } from '../../../languageHandler';
-import Modal from '../../../Modal';
+import { _t } from "../../../languageHandler";
+import Modal from "../../../Modal";
 import { IBodyProps } from "./IBodyProps";
-import { formatCommaSeparatedList } from '../../../utils/FormattingUtils';
-import StyledRadioButton from '../elements/StyledRadioButton';
+import { formatCommaSeparatedList } from "../../../utils/FormattingUtils";
+import StyledRadioButton from "../elements/StyledRadioButton";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import ErrorDialog from '../dialogs/ErrorDialog';
+import ErrorDialog from "../dialogs/ErrorDialog";
 import { GetRelationsForEvent } from "../rooms/EventTile";
 import PollCreateDialog from "../elements/PollCreateDialog";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -49,26 +49,15 @@ interface IState {
     endRelations: RelatedRelations; // Poll end events
 }
 
-export function createVoteRelations(
-    getRelationsForEvent: GetRelationsForEvent,
-    eventId: string,
-) {
+export function createVoteRelations(getRelationsForEvent: GetRelationsForEvent, eventId: string) {
     const relationsList: Relations[] = [];
 
-    const pollResponseRelations = getRelationsForEvent(
-        eventId,
-        "m.reference",
-        M_POLL_RESPONSE.name,
-    );
+    const pollResponseRelations = getRelationsForEvent(eventId, "m.reference", M_POLL_RESPONSE.name);
     if (pollResponseRelations) {
         relationsList.push(pollResponseRelations);
     }
 
-    const pollResposnseAltRelations = getRelationsForEvent(
-        eventId,
-        "m.reference",
-        M_POLL_RESPONSE.altName,
-    );
+    const pollResposnseAltRelations = getRelationsForEvent(eventId, "m.reference", M_POLL_RESPONSE.altName);
     if (pollResposnseAltRelations) {
         relationsList.push(pollResposnseAltRelations);
     }
@@ -89,7 +78,7 @@ export function findTopAnswer(
     if (!pollEventId) {
         logger.warn(
             "findTopAnswer: Poll event needs an event ID to fetch relations in order to determine " +
-            "the top answer - assuming no best answer",
+                "the top answer - assuming no best answer",
         );
         return "";
     }
@@ -101,27 +90,19 @@ export function findTopAnswer(
     }
 
     const findAnswerText = (answerId: string) => {
-        return poll.answers.find(a => a.id === answerId)?.text ?? "";
+        return poll.answers.find((a) => a.id === answerId)?.text ?? "";
     };
 
     const voteRelations = createVoteRelations(getRelationsForEvent, pollEventId);
 
     const relationsList: Relations[] = [];
 
-    const pollEndRelations = getRelationsForEvent(
-        pollEventId,
-        "m.reference",
-        M_POLL_END.name,
-    );
+    const pollEndRelations = getRelationsForEvent(pollEventId, "m.reference", M_POLL_END.name);
     if (pollEndRelations) {
         relationsList.push(pollEndRelations);
     }
 
-    const pollEndAltRelations = getRelationsForEvent(
-        pollEventId,
-        "m.reference",
-        M_POLL_END.altName,
-    );
+    const pollEndAltRelations = getRelationsForEvent(pollEventId, "m.reference", M_POLL_END.altName);
     if (pollEndAltRelations) {
         relationsList.push(pollEndAltRelations);
     }
@@ -160,7 +141,7 @@ export function isPollEnded(
     if (!pollEventId) {
         logger.warn(
             "isPollEnded: Poll event must have event ID in order to determine whether it has ended " +
-            "- assuming poll has not ended",
+                "- assuming poll has not ended",
         );
         return false;
     }
@@ -169,7 +150,7 @@ export function isPollEnded(
     if (!roomId) {
         logger.warn(
             "isPollEnded: Poll event must have room ID in order to determine whether it has ended " +
-            "- assuming poll has not ended",
+                "- assuming poll has not ended",
         );
         return false;
     }
@@ -177,28 +158,19 @@ export function isPollEnded(
     const roomCurrentState = matrixClient.getRoom(roomId)?.currentState;
     function userCanRedact(endEvent: MatrixEvent) {
         const endEventSender = endEvent.getSender();
-        return endEventSender && roomCurrentState && roomCurrentState.maySendRedactionForEvent(
-            pollEvent,
-            endEventSender,
+        return (
+            endEventSender && roomCurrentState && roomCurrentState.maySendRedactionForEvent(pollEvent, endEventSender)
         );
     }
 
     const relationsList: Relations[] = [];
 
-    const pollEndRelations = getRelationsForEvent(
-        pollEventId,
-        "m.reference",
-        M_POLL_END.name,
-    );
+    const pollEndRelations = getRelationsForEvent(pollEventId, "m.reference", M_POLL_END.name);
     if (pollEndRelations) {
         relationsList.push(pollEndRelations);
     }
 
-    const pollEndAltRelations = getRelationsForEvent(
-        pollEventId,
-        "m.reference",
-        M_POLL_END.altName,
-    );
+    const pollEndAltRelations = getRelationsForEvent(pollEventId, "m.reference", M_POLL_END.altName);
     if (pollEndAltRelations) {
         relationsList.push(pollEndAltRelations);
     }
@@ -226,15 +198,10 @@ export function pollAlreadyHasVotes(mxEvent: MatrixEvent, getRelationsForEvent?:
 
 export function launchPollEditor(mxEvent: MatrixEvent, getRelationsForEvent?: GetRelationsForEvent): void {
     if (pollAlreadyHasVotes(mxEvent, getRelationsForEvent)) {
-        Modal.createDialog(
-            ErrorDialog,
-            {
-                title: _t("Can't edit poll"),
-                description: _t(
-                    "Sorry, you can't edit a poll after votes have been cast.",
-                ),
-            },
-        );
+        Modal.createDialog(ErrorDialog, {
+            title: _t("Can't edit poll"),
+            description: _t("Sorry, you can't edit a poll after votes have been cast."),
+        });
     } else {
         Modal.createDialog(
             PollCreateDialog,
@@ -243,9 +210,9 @@ export function launchPollEditor(mxEvent: MatrixEvent, getRelationsForEvent?: Ge
                 threadId: mxEvent.getThread()?.id ?? null,
                 editingMxEvent: mxEvent,
             },
-            'mx_CompoundDialog',
+            "mx_CompoundDialog",
             false, // isPriorityModal
-            true,  // isStaticModal
+            true, // isStaticModal
         );
     }
 }
@@ -346,21 +313,13 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
 
         const response = PollResponseEvent.from([answerId], this.props.mxEvent.getId()).serialize();
 
-        this.context.sendEvent(
-            this.props.mxEvent.getRoomId(),
-            response.type,
-            response.content,
-        ).catch((e: any) => {
+        this.context.sendEvent(this.props.mxEvent.getRoomId(), response.type, response.content).catch((e: any) => {
             console.error("Failed to submit poll response event:", e);
 
-            Modal.createDialog(
-                ErrorDialog,
-                {
-                    title: _t("Vote not registered"),
-                    description: _t(
-                        "Sorry, your vote was not registered. Please try again."),
-                },
-            );
+            Modal.createDialog(ErrorDialog, {
+                title: _t("Vote not registered"),
+                description: _t("Sorry, your vote was not registered. Please try again."),
+            });
         });
 
         this.setState({ selected: answerId });
@@ -387,22 +346,14 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
                 return null;
             }
 
-            const relations = this.props.getRelationsForEvent(
-                eventId,
-                "m.reference",
-                eventType.name,
-            );
+            const relations = this.props.getRelationsForEvent(eventId, "m.reference", eventType.name);
             if (relations) {
                 relationsList.push(relations);
             }
 
             // If there is an alternatve experimental event type, also look for that
             if (eventType.altName) {
-                const altRelations = this.props.getRelationsForEvent(
-                    eventId,
-                    "m.reference",
-                    eventType.altName,
-                );
+                const altRelations = this.props.getRelationsForEvent(eventId, "m.reference", eventType.altName);
                 if (altRelations) {
                     relationsList.push(altRelations);
                 }
@@ -419,12 +370,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
      */
     private collectUserVotes(): Map<string, UserVote> {
         return collectUserVotes(
-            allVotes(
-                this.props.mxEvent,
-                this.context,
-                this.state.voteRelations,
-                this.state.endRelations,
-            ),
+            allVotes(this.props.mxEvent, this.context, this.state.voteRelations, this.state.endRelations),
             this.context.getUserId(),
             this.state.selected,
         );
@@ -439,10 +385,10 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
      * have already seen.
      */
     private unselectIfNewEventFromMe() {
-        const newEvents: MatrixEvent[] = this.state.voteRelations.getRelations()
+        const newEvents: MatrixEvent[] = this.state.voteRelations
+            .getRelations()
             .filter(isPollResponse)
-            .filter((mxEvent: MatrixEvent) =>
-                !this.seenEventIds.includes(mxEvent.getId()!));
+            .filter((mxEvent: MatrixEvent) => !this.seenEventIds.includes(mxEvent.getId()!));
         let newSelected = this.state.selected;
 
         if (newEvents.length > 0) {
@@ -466,11 +412,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
     }
 
     private isEnded(): boolean {
-        return isPollEnded(
-            this.props.mxEvent,
-            this.context,
-            this.props.getRelationsForEvent,
-        );
+        return isPollEnded(this.props.mxEvent, this.context, this.props.getRelationsForEvent);
     }
 
     render() {
@@ -493,36 +435,31 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
 
         let totalText: string;
         if (ended) {
-            totalText = _t(
-                "Final result based on %(count)s votes",
-                { count: totalVotes },
-            );
+            totalText = _t("Final result based on %(count)s votes", { count: totalVotes });
         } else if (!disclosed) {
             totalText = _t("Results will be visible when the poll is ended");
         } else if (myVote === undefined) {
             if (totalVotes === 0) {
                 totalText = _t("No votes cast");
             } else {
-                totalText = _t(
-                    "%(count)s votes cast. Vote to see the results",
-                    { count: totalVotes },
-                );
+                totalText = _t("%(count)s votes cast. Vote to see the results", { count: totalVotes });
             }
         } else {
             totalText = _t("Based on %(count)s votes", { count: totalVotes });
         }
 
-        const editedSpan = (
-            this.props.mxEvent.replacingEvent()
-                ? <span className="mx_MPollBody_edited"> ({ _t("edited") })</span>
-                : null
-        );
+        const editedSpan = this.props.mxEvent.replacingEvent() ? (
+            <span className="mx_MPollBody_edited"> ({_t("edited")})</span>
+        ) : null;
 
-        return <div className="mx_MPollBody">
-            <h2>{ poll.question.text }{ editedSpan }</h2>
-            <div className="mx_MPollBody_allOptions">
-                {
-                    poll.answers.map((answer: PollAnswerSubevent) => {
+        return (
+            <div className="mx_MPollBody">
+                <h2>
+                    {poll.question.text}
+                    {editedSpan}
+                </h2>
+                <div className="mx_MPollBody_allOptions">
+                    {poll.answers.map((answer: PollAnswerSubevent) => {
                         let answerVotes = 0;
                         let votesText = "";
 
@@ -531,53 +468,40 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
                             votesText = _t("%(count)s votes", { count: answerVotes });
                         }
 
-                        const checked = (
-                            (!ended && myVote === answer.id) ||
-                            (ended && answerVotes === winCount)
-                        );
+                        const checked = (!ended && myVote === answer.id) || (ended && answerVotes === winCount);
                         const cls = classNames({
-                            "mx_MPollBody_option": true,
-                            "mx_MPollBody_option_checked": checked,
-                            "mx_MPollBody_option_ended": ended,
+                            mx_MPollBody_option: true,
+                            mx_MPollBody_option_checked: checked,
+                            mx_MPollBody_option_ended: ended,
                         });
 
-                        const answerPercent = (
-                            totalVotes === 0
-                                ? 0
-                                : Math.round(100.0 * answerVotes / totalVotes)
-                        );
-                        return <div
-                            key={answer.id}
-                            className={cls}
-                            onClick={() => this.selectOption(answer.id)}
-                        >
-                            { (
-                                ended
-                                    ? <EndedPollOption
-                                        answer={answer}
-                                        checked={checked}
-                                        votesText={votesText} />
-                                    : <LivePollOption
+                        const answerPercent = totalVotes === 0 ? 0 : Math.round((100.0 * answerVotes) / totalVotes);
+                        return (
+                            <div key={answer.id} className={cls} onClick={() => this.selectOption(answer.id)}>
+                                {ended ? (
+                                    <EndedPollOption answer={answer} checked={checked} votesText={votesText} />
+                                ) : (
+                                    <LivePollOption
                                         pollId={pollId}
                                         answer={answer}
                                         checked={checked}
                                         votesText={votesText}
-                                        onOptionSelected={this.onOptionSelected} />
-                            ) }
-                            <div className="mx_MPollBody_popularityBackground">
-                                <div
-                                    className="mx_MPollBody_popularityAmount"
-                                    style={{ "width": `${answerPercent}%` }}
-                                />
+                                        onOptionSelected={this.onOptionSelected}
+                                    />
+                                )}
+                                <div className="mx_MPollBody_popularityBackground">
+                                    <div
+                                        className="mx_MPollBody_popularityAmount"
+                                        style={{ width: `${answerPercent}%` }}
+                                    />
+                                </div>
                             </div>
-                        </div>;
-                    })
-                }
+                        );
+                    })}
+                </div>
+                <div className="mx_MPollBody_totalVotes">{totalText}</div>
             </div>
-            <div className="mx_MPollBody_totalVotes">
-                { totalText }
-            </div>
-        </div>;
+        );
     }
 }
 
@@ -589,19 +513,17 @@ interface IEndedPollOptionProps {
 
 function EndedPollOption(props: IEndedPollOptionProps) {
     const cls = classNames({
-        "mx_MPollBody_endedOption": true,
-        "mx_MPollBody_endedOptionWinner": props.checked,
+        mx_MPollBody_endedOption: true,
+        mx_MPollBody_endedOptionWinner: props.checked,
     });
-    return <div className={cls} data-value={props.answer.id}>
-        <div className="mx_MPollBody_optionDescription">
-            <div className="mx_MPollBody_optionText">
-                { props.answer.text }
-            </div>
-            <div className="mx_MPollBody_optionVoteCount">
-                { props.votesText }
+    return (
+        <div className={cls} data-value={props.answer.id}>
+            <div className="mx_MPollBody_optionDescription">
+                <div className="mx_MPollBody_optionText">{props.answer.text}</div>
+                <div className="mx_MPollBody_optionVoteCount">{props.votesText}</div>
             </div>
         </div>
-    </div>;
+    );
 }
 
 interface ILivePollOptionProps {
@@ -613,27 +535,24 @@ interface ILivePollOptionProps {
 }
 
 function LivePollOption(props: ILivePollOptionProps) {
-    return <StyledRadioButton
-        className="mx_MPollBody_live-option"
-        name={`poll_answer_select-${props.pollId}`}
-        value={props.answer.id}
-        checked={props.checked}
-        onChange={props.onOptionSelected}
-    >
-        <div className="mx_MPollBody_optionDescription">
-            <div className="mx_MPollBody_optionText">
-                { props.answer.text }
+    return (
+        <StyledRadioButton
+            className="mx_MPollBody_live-option"
+            name={`poll_answer_select-${props.pollId}`}
+            value={props.answer.id}
+            checked={props.checked}
+            onChange={props.onOptionSelected}
+        >
+            <div className="mx_MPollBody_optionDescription">
+                <div className="mx_MPollBody_optionText">{props.answer.text}</div>
+                <div className="mx_MPollBody_optionVoteCount">{props.votesText}</div>
             </div>
-            <div className="mx_MPollBody_optionVoteCount">
-                { props.votesText }
-            </div>
-        </div>
-    </StyledRadioButton>;
+        </StyledRadioButton>
+    );
 }
 
 export class UserVote {
-    constructor(public readonly ts: number, public readonly sender: string, public readonly answers: string[]) {
-    }
+    constructor(public readonly ts: number, public readonly sender: string, public readonly answers: string[]) {}
 }
 
 function userResponseFromPollResponseEvent(event: MatrixEvent): UserVote {
@@ -642,11 +561,7 @@ function userResponseFromPollResponseEvent(event: MatrixEvent): UserVote {
         throw new Error("Failed to parse Poll Response Event to determine user response");
     }
 
-    return new UserVote(
-        event.getTs(),
-        event.getSender(),
-        response.answerIds,
-    );
+    return new UserVote(event.getTs(), event.getSender(), response.answerIds);
 }
 
 export function allVotes(
@@ -660,14 +575,12 @@ export function allVotes(
     function isOnOrBeforeEnd(responseEvent: MatrixEvent): boolean {
         // From MSC3381:
         // "Votes sent on or before the end event's timestamp are valid votes"
-        return (
-            endTs === null ||
-            responseEvent.getTs() <= endTs
-        );
+        return endTs === null || responseEvent.getTs() <= endTs;
     }
 
     if (voteRelations) {
-        return voteRelations.getRelations()
+        return voteRelations
+            .getRelations()
             .filter(isPollResponse)
             .filter(isOnOrBeforeEnd)
             .map(userResponseFromPollResponseEvent);
@@ -691,18 +604,13 @@ export function pollEndTs(
 
     const roomCurrentState = matrixClient.getRoom(pollEvent.getRoomId()).currentState;
     function userCanRedact(endEvent: MatrixEvent) {
-        return roomCurrentState.maySendRedactionForEvent(
-            pollEvent,
-            endEvent.getSender(),
-        );
+        return roomCurrentState.maySendRedactionForEvent(pollEvent, endEvent.getSender());
     }
 
-    const tss: number[] = (
-        endRelations
-            .getRelations()
-            .filter(userCanRedact)
-            .map((evt: MatrixEvent) => evt.getTs())
-    );
+    const tss: number[] = endRelations
+        .getRelations()
+        .filter(userCanRedact)
+        .map((evt: MatrixEvent) => evt.getTs());
 
     if (tss.length === 0) {
         return null;
@@ -744,10 +652,7 @@ function collectUserVotes(
     return userVotes;
 }
 
-function countVotes(
-    userVotes: Map<string, UserVote>,
-    pollStart: PollStartEvent,
-): Map<string, number> {
+function countVotes(userVotes: Map<string, UserVote>, pollStart: PollStartEvent): Map<string, number> {
     const collected = new Map<string, number>();
 
     for (const response of userVotes.values()) {

@@ -14,10 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { _t } from '../languageHandler';
+import { _t } from "../languageHandler";
 import dis from "../dispatcher/dispatcher";
-import { MatrixClientPeg } from '../MatrixClientPeg';
-import DeviceListener from '../DeviceListener';
+import { MatrixClientPeg } from "../MatrixClientPeg";
+import DeviceListener from "../DeviceListener";
 import ToastStore from "../stores/ToastStore";
 import GenericToast from "../components/views/toasts/GenericToast";
 import { Action } from "../dispatcher/actions";

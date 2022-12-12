@@ -14,31 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 import { fireEvent, render } from "@testing-library/react";
-import { act } from 'react-dom/test-utils';
+import { act } from "react-dom/test-utils";
 
 import TabbedView, { Tab, TabLocation } from "../../../src/components/structures/TabbedView";
 
-describe('<TabbedView />', () => {
-    const generalTab = new Tab(
-        'GENERAL',
-        'General',
-        'general',
-        <div>general</div>,
-    );
-    const labsTab = new Tab(
-        'LABS',
-        'Labs',
-        'labs',
-        <div>labs</div>,
-    );
-    const securityTab = new Tab(
-        'SECURITY',
-        'Security',
-        'security',
-        <div>security</div>,
-    );
+describe("<TabbedView />", () => {
+    const generalTab = new Tab("GENERAL", "General", "general", <div>general</div>);
+    const labsTab = new Tab("LABS", "Labs", "labs", <div>labs</div>);
+    const securityTab = new Tab("SECURITY", "Security", "security", <div>security</div>);
     const defaultProps = {
         tabLocation: TabLocation.LEFT,
         tabs: [generalTab, labsTab, securityTab],
@@ -47,39 +32,39 @@ describe('<TabbedView />', () => {
 
     const getTabTestId = (tab: Tab): string => `settings-tab-${tab.id}`;
     const getActiveTab = (container: HTMLElement): Element | undefined =>
-        container.getElementsByClassName('mx_TabbedView_tabLabel_active')[0];
+        container.getElementsByClassName("mx_TabbedView_tabLabel_active")[0];
     const getActiveTabBody = (container: HTMLElement): Element | undefined =>
-        container.getElementsByClassName('mx_TabbedView_tabPanel')[0];
+        container.getElementsByClassName("mx_TabbedView_tabPanel")[0];
 
-    it('renders tabs', () => {
+    it("renders tabs", () => {
         const { container } = render(getComponent());
         expect(container).toMatchSnapshot();
     });
 
-    it('renders first tab as active tab when no initialTabId', () => {
+    it("renders first tab as active tab when no initialTabId", () => {
         const { container } = render(getComponent());
         expect(getActiveTab(container).textContent).toEqual(generalTab.label);
-        expect(getActiveTabBody(container).textContent).toEqual('general');
+        expect(getActiveTabBody(container).textContent).toEqual("general");
     });
 
-    it('renders first tab as active tab when initialTabId is not valid', () => {
-        const { container } = render(getComponent({ initialTabId: 'bad-tab-id' }));
+    it("renders first tab as active tab when initialTabId is not valid", () => {
+        const { container } = render(getComponent({ initialTabId: "bad-tab-id" }));
         expect(getActiveTab(container).textContent).toEqual(generalTab.label);
-        expect(getActiveTabBody(container).textContent).toEqual('general');
+        expect(getActiveTabBody(container).textContent).toEqual("general");
     });
 
-    it('renders initialTabId tab as active when valid', () => {
+    it("renders initialTabId tab as active when valid", () => {
         const { container } = render(getComponent({ initialTabId: securityTab.id }));
         expect(getActiveTab(container).textContent).toEqual(securityTab.label);
-        expect(getActiveTabBody(container).textContent).toEqual('security');
+        expect(getActiveTabBody(container).textContent).toEqual("security");
     });
 
-    it('renders without error when there are no tabs', () => {
+    it("renders without error when there are no tabs", () => {
         const { container } = render(getComponent({ tabs: [] }));
         expect(container).toMatchSnapshot();
     });
 
-    it('sets active tab on tab click', () => {
+    it("sets active tab on tab click", () => {
         const { container, getByTestId } = render(getComponent());
 
         act(() => {
@@ -87,10 +72,10 @@ describe('<TabbedView />', () => {
         });
 
         expect(getActiveTab(container).textContent).toEqual(securityTab.label);
-        expect(getActiveTabBody(container).textContent).toEqual('security');
+        expect(getActiveTabBody(container).textContent).toEqual("security");
     });
 
-    it('calls onchange on on tab click', () => {
+    it("calls onchange on on tab click", () => {
         const onChange = jest.fn();
         const { getByTestId } = render(getComponent({ onChange }));
 
@@ -101,7 +86,7 @@ describe('<TabbedView />', () => {
         expect(onChange).toHaveBeenCalledWith(securityTab.id);
     });
 
-    it('keeps same tab active when order of tabs changes', () => {
+    it("keeps same tab active when order of tabs changes", () => {
         // start with middle tab active
         const { container, rerender } = render(getComponent({ initialTabId: labsTab.id }));
 
@@ -113,7 +98,7 @@ describe('<TabbedView />', () => {
         expect(getActiveTab(container).textContent).toEqual(labsTab.label);
     });
 
-    it('does not reactivate inititalTabId on rerender', () => {
+    it("does not reactivate inititalTabId on rerender", () => {
         const { container, getByTestId, rerender } = render(getComponent());
 
         expect(getActiveTab(container).textContent).toEqual(generalTab.label);

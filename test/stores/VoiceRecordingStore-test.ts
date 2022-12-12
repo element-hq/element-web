@@ -1,4 +1,3 @@
-
 /*
 Copyright 2022 The Matrix.org Foundation C.I.C.
 
@@ -17,18 +16,18 @@ limitations under the License.
 
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
-import { VoiceRecordingStore } from '../../src/stores/VoiceRecordingStore';
+import { VoiceRecordingStore } from "../../src/stores/VoiceRecordingStore";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import { flushPromises } from "../test-utils";
 import { VoiceMessageRecording } from "../../src/audio/VoiceMessageRecording";
 
 const stubClient = {} as undefined as MatrixClient;
-jest.spyOn(MatrixClientPeg, 'get').mockReturnValue(stubClient);
+jest.spyOn(MatrixClientPeg, "get").mockReturnValue(stubClient);
 
-describe('VoiceRecordingStore', () => {
-    const room1Id = '!room1:server.org';
-    const room2Id = '!room2:server.org';
-    const room3Id = '!room3:server.org';
+describe("VoiceRecordingStore", () => {
+    const room1Id = "!room1:server.org";
+    const room2Id = "!room2:server.org";
+    const room3Id = "!room3:server.org";
     const room1Recording = { destroy: jest.fn() } as unknown as VoiceMessageRecording;
     const room2Recording = { destroy: jest.fn() } as unknown as VoiceMessageRecording;
 
@@ -44,20 +43,20 @@ describe('VoiceRecordingStore', () => {
         return store;
     };
 
-    describe('startRecording()', () => {
-        it('throws when roomId is falsy', () => {
+    describe("startRecording()", () => {
+        it("throws when roomId is falsy", () => {
             const store = mkStore();
             expect(() => store.startRecording(undefined)).toThrow("Recording must be associated with a room");
         });
 
-        it('throws when room already has a recording', () => {
+        it("throws when room already has a recording", () => {
             const store = mkStore();
             // @ts-ignore
             store.storeState = state;
             expect(() => store.startRecording(room2Id)).toThrow("A recording is already in progress");
         });
 
-        it('creates and adds recording to state', async () => {
+        it("creates and adds recording to state", async () => {
             const store = mkStore();
             const result = store.startRecording(room2Id);
 
@@ -68,8 +67,8 @@ describe('VoiceRecordingStore', () => {
         });
     });
 
-    describe('disposeRecording()', () => {
-        it('destroys recording for a room if it exists in state', async () => {
+    describe("disposeRecording()", () => {
+        it("destroys recording for a room if it exists in state", async () => {
             const store = mkStore();
             // @ts-ignore
             store.storeState = state;
@@ -79,7 +78,7 @@ describe('VoiceRecordingStore', () => {
             expect(room1Recording.destroy).toHaveBeenCalled();
         });
 
-        it('removes room from state when it has a recording', async () => {
+        it("removes room from state when it has a recording", async () => {
             const store = mkStore();
             // @ts-ignore
             store.storeState = state;
@@ -89,7 +88,7 @@ describe('VoiceRecordingStore', () => {
             expect(store.getActiveRecording(room2Id)).toBeFalsy();
         });
 
-        it('removes room from state when it has a falsy recording', async () => {
+        it("removes room from state when it has a falsy recording", async () => {
             const store = mkStore();
             // @ts-ignore
             store.storeState = state;

@@ -21,10 +21,7 @@ import type { EventEmitter } from "events";
 
 type Handler = (...args: any[]) => void;
 
-export function useTypedEventEmitter<
-    Events extends string,
-    Arguments extends ListenerMap<Events>,
->(
+export function useTypedEventEmitter<Events extends string, Arguments extends ListenerMap<Events>>(
     emitter: TypedEventEmitter<Events, Arguments>,
     eventName: Events,
     handler: Handler,
@@ -35,11 +32,7 @@ export function useTypedEventEmitter<
 /**
  * Hook to wrap an EventEmitter on and off in hook lifecycle
  */
-export function useEventEmitter(
-    emitter: EventEmitter | undefined,
-    eventName: string | symbol,
-    handler: Handler,
-): void {
+export function useEventEmitter(emitter: EventEmitter | undefined, eventName: string | symbol, handler: Handler): void {
     // Create a ref that stores handler
     const savedHandler = useRef(handler);
 
@@ -70,11 +63,7 @@ export function useEventEmitter(
 
 type Mapper<T> = (...args: any[]) => T;
 
-export function useTypedEventEmitterState<
-    T,
-    Events extends string,
-    Arguments extends ListenerMap<Events>,
->(
+export function useTypedEventEmitterState<T, Events extends string, Arguments extends ListenerMap<Events>>(
     emitter: TypedEventEmitter<Events, Arguments>,
     eventName: Events,
     fn: Mapper<T>,
@@ -88,9 +77,12 @@ export function useEventEmitterState<T>(
     fn: Mapper<T>,
 ): T {
     const [value, setValue] = useState<T>(fn);
-    const handler = useCallback((...args: any[]) => {
-        setValue(fn(...args));
-    }, [fn]);
+    const handler = useCallback(
+        (...args: any[]) => {
+            setValue(fn(...args));
+        },
+        [fn],
+    );
     // re-run when the emitter changes
     useEffect(handler, [emitter]); // eslint-disable-line react-hooks/exhaustive-deps
     useEventEmitter(emitter, eventName, handler);

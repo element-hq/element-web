@@ -34,8 +34,7 @@ export function useRoomMemberProfile({
 
     const member = useMemo(() => {
         const threadContexts = [TimelineRenderingType.ThreadsList, TimelineRenderingType.Thread];
-        if ((!forceHistorical && useOnlyCurrentProfiles)
-            || threadContexts.includes(context.timelineRenderingType)) {
+        if ((!forceHistorical && useOnlyCurrentProfiles) || threadContexts.includes(context.timelineRenderingType)) {
             const currentMember = context.room?.getMember(userId);
             if (currentMember) return currentMember;
         }

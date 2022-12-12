@@ -14,10 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 
-import { MatrixClientPeg } from '../../../MatrixClientPeg';
-import { _t } from '../../../languageHandler';
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { _t } from "../../../languageHandler";
 import EditableTextContainer from "../elements/EditableTextContainer";
 
 export default class ChangeDisplayName extends React.Component {
@@ -33,7 +33,7 @@ export default class ChangeDisplayName extends React.Component {
 
     private changeDisplayName = (newDisplayname: string): Promise<{}> => {
         const cli = MatrixClientPeg.get();
-        return cli.setDisplayName(newDisplayname).catch(function() {
+        return cli.setDisplayName(newDisplayname).catch(function () {
             throw new Error("Failed to set display name");
         });
     };
@@ -44,7 +44,8 @@ export default class ChangeDisplayName extends React.Component {
                 getInitialValue={this.getDisplayName}
                 placeholder={_t("No display name")}
                 blurToSubmit={true}
-                onSubmit={this.changeDisplayName} />
+                onSubmit={this.changeDisplayName}
+            />
         );
     }
 }

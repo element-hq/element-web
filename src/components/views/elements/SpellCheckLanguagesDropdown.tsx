@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 
 import Dropdown from "../../views/elements/Dropdown";
 import PlatformPeg from "../../../PlatformPeg";
@@ -39,14 +39,16 @@ interface SpellCheckLanguagesDropdownIState {
     languages: any;
 }
 
-export default class SpellCheckLanguagesDropdown extends React.Component<SpellCheckLanguagesDropdownIProps,
-                                                                         SpellCheckLanguagesDropdownIState> {
+export default class SpellCheckLanguagesDropdown extends React.Component<
+    SpellCheckLanguagesDropdownIProps,
+    SpellCheckLanguagesDropdownIState
+> {
     constructor(props) {
         super(props);
         this.onSearchChange = this.onSearchChange.bind(this);
 
         this.state = {
-            searchQuery: '',
+            searchQuery: "",
             languages: null,
         };
     }
@@ -54,23 +56,25 @@ export default class SpellCheckLanguagesDropdown extends React.Component<SpellCh
     componentDidMount() {
         const plaf = PlatformPeg.get();
         if (plaf) {
-            plaf.getAvailableSpellCheckLanguages().then((languages) => {
-                languages.sort(function(a, b) {
-                    if (a < b) return -1;
-                    if (a > b) return 1;
-                    return 0;
-                });
-                const langs = [];
-                languages.forEach((language) => {
-                    langs.push({
-                        label: language,
-                        value: language,
+            plaf.getAvailableSpellCheckLanguages()
+                .then((languages) => {
+                    languages.sort(function (a, b) {
+                        if (a < b) return -1;
+                        if (a > b) return 1;
+                        return 0;
                     });
+                    const langs = [];
+                    languages.forEach((language) => {
+                        langs.push({
+                            label: language,
+                            value: language,
+                        });
+                    });
+                    this.setState({ languages: langs });
+                })
+                .catch((e) => {
+                    this.setState({ languages: ["en"] });
                 });
-                this.setState({ languages: langs });
-            }).catch((e) => {
-                this.setState({ languages: ['en'] });
-            });
         }
     }
 
@@ -93,14 +97,12 @@ export default class SpellCheckLanguagesDropdown extends React.Component<SpellCh
         }
 
         const options = displayedLanguages.map((language) => {
-            return <div key={language.value}>
-                { language.label }
-            </div>;
+            return <div key={language.value}>{language.label}</div>;
         });
 
         // default value here too, otherwise we need to handle null / undefined;
         // values between mounting and the initial value propagating
-        let language = SettingsStore.getValue("language", null, /*excludeDefault:*/true);
+        let language = SettingsStore.getValue("language", null, /*excludeDefault:*/ true);
         let value = null;
         if (language) {
             value = this.props.value || language;
@@ -109,17 +111,19 @@ export default class SpellCheckLanguagesDropdown extends React.Component<SpellCh
             value = this.props.value || language;
         }
 
-        return <Dropdown
-            id="mx_LanguageDropdown"
-            className={this.props.className}
-            onOptionChange={this.props.onOptionChange}
-            onSearchChange={this.onSearchChange}
-            searchEnabled={true}
-            value={value}
-            label={_t("Language Dropdown")}
-            placeholder={_t("Choose a locale")}
-        >
-            { options }
-        </Dropdown>;
+        return (
+            <Dropdown
+                id="mx_LanguageDropdown"
+                className={this.props.className}
+                onOptionChange={this.props.onOptionChange}
+                onSearchChange={this.onSearchChange}
+                searchEnabled={true}
+                value={value}
+                label={_t("Language Dropdown")}
+                placeholder={_t("Choose a locale")}
+            >
+                {options}
+            </Dropdown>
+        );
     }
 }

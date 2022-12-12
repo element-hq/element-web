@@ -104,7 +104,7 @@ export default class Sizer {
     public offsetFromEvent(event: MouseEvent) {
         const pos = this.vertical ? event.pageY : event.pageX;
         if (this.reverse) {
-            return (this.getPageOffset() + this.getTotalSize()) - pos;
+            return this.getPageOffset() + this.getTotalSize() - pos;
         } else {
             return pos - this.getPageOffset();
         }

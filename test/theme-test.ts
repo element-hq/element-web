@@ -16,8 +16,8 @@ limitations under the License.
 
 import { setTheme } from "../src/theme";
 
-describe('theme', () => {
-    describe('setTheme', () => {
+describe("theme", () => {
+    describe("setTheme", () => {
         let lightTheme;
         let darkTheme;
 
@@ -27,30 +27,30 @@ describe('theme', () => {
             const styles = [
                 {
                     attributes: {
-                        'data-mx-theme': {
-                            value: 'light',
+                        "data-mx-theme": {
+                            value: "light",
                         },
                     },
                     disabled: true,
-                    href: 'urlLight',
+                    href: "urlLight",
                     onload: () => void 0,
                 },
                 {
                     attributes: {
-                        'data-mx-theme': {
-                            value: 'dark',
+                        "data-mx-theme": {
+                            value: "dark",
                         },
                     },
                     disabled: true,
-                    href: 'urlDark',
+                    href: "urlDark",
                     onload: () => void 0,
                 },
             ];
             lightTheme = styles[0];
             darkTheme = styles[1];
 
-            jest.spyOn(document.body, 'style', 'get').mockReturnValue([] as any);
-            spyQuerySelectorAll = jest.spyOn(document, 'querySelectorAll').mockReturnValue(styles as any);
+            jest.spyOn(document.body, "style", "get").mockReturnValue([] as any);
+            spyQuerySelectorAll = jest.spyOn(document, "querySelectorAll").mockReturnValue(styles as any);
         });
 
         afterEach(() => {
@@ -58,44 +58,46 @@ describe('theme', () => {
             jest.useRealTimers();
         });
 
-        it('should switch theme on onload call', async () => {
+        it("should switch theme on onload call", async () => {
             // When
-            await new Promise(resolve => {
-                setTheme('light').then(resolve);
+            await new Promise((resolve) => {
+                setTheme("light").then(resolve);
                 lightTheme.onload();
             });
 
             // Then
-            expect(spyQuerySelectorAll).toHaveBeenCalledWith('[data-mx-theme]');
+            expect(spyQuerySelectorAll).toHaveBeenCalledWith("[data-mx-theme]");
             expect(spyQuerySelectorAll).toBeCalledTimes(1);
             expect(lightTheme.disabled).toBe(false);
             expect(darkTheme.disabled).toBe(true);
         });
 
-        it('should reject promise on onerror call', () => {
-            return expect(new Promise(resolve => {
-                setTheme('light').catch(e => resolve(e));
-                lightTheme.onerror('call onerror');
-            })).resolves.toBe('call onerror');
+        it("should reject promise on onerror call", () => {
+            return expect(
+                new Promise((resolve) => {
+                    setTheme("light").catch((e) => resolve(e));
+                    lightTheme.onerror("call onerror");
+                }),
+            ).resolves.toBe("call onerror");
         });
 
-        it('should switch theme if CSS are preloaded', async () => {
+        it("should switch theme if CSS are preloaded", async () => {
             // When
-            jest.spyOn(document, 'styleSheets', 'get').mockReturnValue([lightTheme] as any);
+            jest.spyOn(document, "styleSheets", "get").mockReturnValue([lightTheme] as any);
 
-            await setTheme('light');
+            await setTheme("light");
 
             // Then
             expect(lightTheme.disabled).toBe(false);
             expect(darkTheme.disabled).toBe(true);
         });
 
-        it('should switch theme if CSS is loaded during pooling', async () => {
+        it("should switch theme if CSS is loaded during pooling", async () => {
             // When
             jest.useFakeTimers();
-            await new Promise(resolve => {
-                setTheme('light').then(resolve);
-                jest.spyOn(document, 'styleSheets', 'get').mockReturnValue([lightTheme] as any);
+            await new Promise((resolve) => {
+                setTheme("light").then(resolve);
+                jest.spyOn(document, "styleSheets", "get").mockReturnValue([lightTheme] as any);
                 jest.advanceTimersByTime(200);
             });
 
@@ -104,10 +106,10 @@ describe('theme', () => {
             expect(darkTheme.disabled).toBe(true);
         });
 
-        it('should reject promise if pooling maximum value is reached', () => {
+        it("should reject promise if pooling maximum value is reached", () => {
             jest.useFakeTimers();
-            return new Promise(resolve => {
-                setTheme('light').catch(resolve);
+            return new Promise((resolve) => {
+                setTheme("light").catch(resolve);
                 jest.advanceTimersByTime(200 * 10);
             });
         });

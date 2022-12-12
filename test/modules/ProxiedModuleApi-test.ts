@@ -36,8 +36,8 @@ describe("ProxiedApiModule", () => {
 
             const translations: TranslationStringsObject = {
                 ["custom string"]: {
-                    "en": "custom string",
-                    "fr": "custom french string",
+                    en: "custom string",
+                    fr: "custom french string",
                 },
             };
             api.registerTranslations(translations);
@@ -60,12 +60,12 @@ describe("ProxiedApiModule", () => {
                 expect(module.apiInstance).toBeInstanceOf(ProxiedModuleApi);
                 module.apiInstance.registerTranslations({
                     [en]: {
-                        "en": en,
-                        "de": de,
+                        en: en,
+                        de: de,
                     },
                     [enVars]: {
-                        "en": enVars,
-                        "de": deVars,
+                        en: enVars,
+                        de: deVars,
                     },
                 });
                 await setLanguage("de"); // calls `registerCustomTranslations()` for us

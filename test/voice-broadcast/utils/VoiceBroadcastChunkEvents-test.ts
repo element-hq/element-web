@@ -50,11 +50,7 @@ describe("VoiceBroadcastChunkEvents", () => {
         beforeEach(() => {
             chunkEvents.addEvent(eventSeq2Time4);
             chunkEvents.addEvent(eventSeq1Time1);
-            chunkEvents.addEvents([
-                eventSeq4Time1,
-                eventSeq2Time4Dup,
-                eventSeq3Time2,
-            ]);
+            chunkEvents.addEvents([eventSeq4Time1, eventSeq2Time4Dup, eventSeq3Time2]);
         });
 
         it("should provide the events sort by sequence", () => {
@@ -122,12 +118,7 @@ describe("VoiceBroadcastChunkEvents", () => {
         beforeEach(() => {
             chunkEvents.addEvent(eventSeq2Time4);
             chunkEvents.addEvent(eventSeq1Time1);
-            chunkEvents.addEvents([
-                eventSeq4Time1,
-                eventSeqUTime3,
-                eventSeq2Time4Dup,
-                eventSeq3Time2,
-            ]);
+            chunkEvents.addEvents([eventSeq4Time1, eventSeqUTime3, eventSeq2Time4Dup, eventSeq3Time2]);
         });
 
         it("should provide the events sort by timestamp without duplicates", () => {

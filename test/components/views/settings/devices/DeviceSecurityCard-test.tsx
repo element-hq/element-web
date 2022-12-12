@@ -14,31 +14,32 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { render } from '@testing-library/react';
-import React from 'react';
+import { render } from "@testing-library/react";
+import React from "react";
 
-import DeviceSecurityCard from '../../../../../src/components/views/settings/devices/DeviceSecurityCard';
-import { DeviceSecurityVariation } from '../../../../../src/components/views/settings/devices/types';
+import DeviceSecurityCard from "../../../../../src/components/views/settings/devices/DeviceSecurityCard";
+import { DeviceSecurityVariation } from "../../../../../src/components/views/settings/devices/types";
 
-describe('<DeviceSecurityCard />', () => {
+describe("<DeviceSecurityCard />", () => {
     const defaultProps = {
         variation: DeviceSecurityVariation.Verified,
-        heading: 'Verified session',
-        description: 'nice',
+        heading: "Verified session",
+        description: "nice",
     };
-    const getComponent = (props = {}): React.ReactElement =>
-        <DeviceSecurityCard {...defaultProps} {...props} />;
+    const getComponent = (props = {}): React.ReactElement => <DeviceSecurityCard {...defaultProps} {...props} />;
 
-    it('renders basic card', () => {
+    it("renders basic card", () => {
         const { container } = render(getComponent());
         expect(container).toMatchSnapshot();
     });
 
-    it('renders with children', () => {
-        const { container } = render(getComponent({
-            children: <div>hey</div>,
-            variation: DeviceSecurityVariation.Unverified,
-        }));
+    it("renders with children", () => {
+        const { container } = render(
+            getComponent({
+                children: <div>hey</div>,
+                variation: DeviceSecurityVariation.Unverified,
+            }),
+        );
         expect(container).toMatchSnapshot();
     });
 });

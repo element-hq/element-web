@@ -27,9 +27,9 @@ import { THREAD_RELATION_TYPE } from "matrix-js-sdk/src/models/thread";
 import { removeElement } from "matrix-js-sdk/src/utils";
 
 import { IEncryptedFile, IMediaEventContent, IMediaEventInfo } from "./customisations/models/IMediaEventContent";
-import dis from './dispatcher/dispatcher';
-import { _t } from './languageHandler';
-import Modal from './Modal';
+import dis from "./dispatcher/dispatcher";
+import { _t } from "./languageHandler";
+import Modal from "./Modal";
 import Spinner from "./components/views/elements/Spinner";
 import { Action } from "./dispatcher/actions";
 import {
@@ -73,11 +73,11 @@ async function loadImageElement(imageFile: File) {
     const img = new Image();
     const objectUrl = URL.createObjectURL(imageFile);
     const imgPromise = new Promise((resolve, reject) => {
-        img.onload = function() {
+        img.onload = function () {
             URL.revokeObjectURL(objectUrl);
             resolve(img);
         };
-        img.onerror = function(e) {
+        img.onerror = function (e) {
             reject(e);
         };
     });
@@ -92,11 +92,11 @@ async function loadImageElement(imageFile: File) {
         // Thus we could slice the file down to only sniff the first 0x1000
         // bytes (but this makes extractPngChunks choke on the corrupt file)
         const headers = imageFile; //.slice(0, 0x1000);
-        parsePromise = readFileAsArrayBuffer(headers).then(arrayBuffer => {
+        parsePromise = readFileAsArrayBuffer(headers).then((arrayBuffer) => {
             const buffer = new Uint8Array(arrayBuffer);
             const chunks = extractPngChunks(buffer);
             for (const chunk of chunks) {
-                if (chunk.name === 'pHYs') {
+                if (chunk.name === "pHYs") {
                     if (chunk.data.byteLength !== PHYS_HIDPI.length) return;
                     return chunk.data.every((val, i) => val === PHYS_HIDPI[i]);
                 }
@@ -106,8 +106,8 @@ async function loadImageElement(imageFile: File) {
     }
 
     const [hidpi] = await Promise.all([parsePromise, imgPromise]);
-    const width = hidpi ? (img.width >> 1) : img.width;
-    const height = hidpi ? (img.height >> 1) : img.height;
+    const width = hidpi ? img.width >> 1 : img.width;
+    const height = hidpi ? img.height >> 1 : img.height;
     return { width, height, img };
 }
 
@@ -154,7 +154,7 @@ async function infoForImageFile(
             imageFile.size <= IMAGE_SIZE_THRESHOLD_THUMBNAIL ||
             // thumbnail is not sufficiently smaller than original
             (sizeDifference <= IMAGE_THUMBNAIL_MIN_REDUCTION_SIZE &&
-                sizeDifference <= (imageFile.size * IMAGE_THUMBNAIL_MIN_REDUCTION_PERCENT))
+                sizeDifference <= imageFile.size * IMAGE_THUMBNAIL_MIN_REDUCTION_PERCENT)
         ) {
             delete imageInfo["thumbnail_info"];
             return imageInfo;
@@ -185,13 +185,13 @@ function loadVideoElement(videoFile: File): Promise<HTMLVideoElement> {
 
         const reader = new FileReader();
 
-        reader.onload = function(ev) {
+        reader.onload = function (ev) {
             // Wait until we have enough data to thumbnail the first frame.
-            video.onloadeddata = async function() {
+            video.onloadeddata = async function () {
                 resolve(video);
                 video.pause();
             };
-            video.onerror = function(e) {
+            video.onerror = function (e) {
                 reject(e);
             };
 
@@ -206,7 +206,7 @@ function loadVideoElement(videoFile: File): Promise<HTMLVideoElement> {
             video.load();
             video.play();
         };
-        reader.onerror = function(e) {
+        reader.onerror = function (e) {
             reject(e);
         };
         reader.readAsDataURL(videoFile);
@@ -229,16 +229,19 @@ function infoForVideoFile(
     const thumbnailType = "image/jpeg";
 
     let videoInfo: Partial<IMediaEventInfo>;
-    return loadVideoElement(videoFile).then((video) => {
-        return createThumbnail(video, video.videoWidth, video.videoHeight, thumbnailType);
-    }).then((result) => {
-        videoInfo = result.info;
-        return uploadFile(matrixClient, roomId, result.thumbnail);
-    }).then((result) => {
-        videoInfo.thumbnail_url = result.url;
-        videoInfo.thumbnail_file = result.file;
-        return videoInfo;
-    });
+    return loadVideoElement(videoFile)
+        .then((video) => {
+            return createThumbnail(video, video.videoWidth, video.videoHeight, thumbnailType);
+        })
+        .then((result) => {
+            videoInfo = result.info;
+            return uploadFile(matrixClient, roomId, result.thumbnail);
+        })
+        .then((result) => {
+            videoInfo.thumbnail_url = result.url;
+            videoInfo.thumbnail_file = result.file;
+            return videoInfo;
+        });
 }
 
 /**
@@ -250,10 +253,10 @@ function infoForVideoFile(
 function readFileAsArrayBuffer(file: File | Blob): Promise<ArrayBuffer> {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
-        reader.onload = function(e) {
+        reader.onload = function (e) {
             resolve(e.target.result as ArrayBuffer);
         };
-        reader.onerror = function(e) {
+        reader.onerror = function (e) {
             reject(e);
         };
         reader.readAsArrayBuffer(file);
@@ -280,7 +283,7 @@ export async function uploadFile(
     file: File | Blob,
     progressHandler?: UploadOpts["progressHandler"],
     controller?: AbortController,
-): Promise<{ url?: string, file?: IEncryptedFile }> {
+): Promise<{ url?: string; file?: IEncryptedFile }> {
     const abortController = controller ?? new AbortController();
 
     // If the room is encrypted then encrypt the file before uploading it.
@@ -357,13 +360,14 @@ export default class ContentMessages {
         context = TimelineRenderingType.Room,
     ): Promise<void> {
         if (matrixClient.isGuest()) {
-            dis.dispatch({ action: 'require_registration' });
+            dis.dispatch({ action: "require_registration" });
             return;
         }
 
         const replyToEvent = SdkContextClass.instance.roomViewStore.getQuotingEvent();
-        if (!this.mediaConfig) { // hot-path optimization to not flash a spinner if we don't need to
-            const modal = Modal.createDialog(Spinner, null, 'mx_Dialog_spinner');
+        if (!this.mediaConfig) {
+            // hot-path optimization to not flash a spinner if we don't need to
+            const modal = Modal.createDialog(Spinner, null, "mx_Dialog_spinner");
             await this.ensureMediaConfigFetched(matrixClient);
             modal.close();
         }
@@ -410,16 +414,8 @@ export default class ContentMessages {
                 }
             }
 
-            promBefore = doMaybeLocalRoomAction(
-                roomId,
-                (actualRoomId) => this.sendContentToRoom(
-                    file,
-                    actualRoomId,
-                    relation,
-                    matrixClient,
-                    replyToEvent,
-                    loopPromiseBefore,
-                ),
+            promBefore = doMaybeLocalRoomAction(roomId, (actualRoomId) =>
+                this.sendContentToRoom(file, actualRoomId, relation, matrixClient, replyToEvent, loopPromiseBefore),
             );
         }
 
@@ -440,11 +436,13 @@ export default class ContentMessages {
     }
 
     public getCurrentUploads(relation?: IEventRelation): RoomUpload[] {
-        return this.inprogress.filter(roomUpload => {
+        return this.inprogress.filter((roomUpload) => {
             const noRelation = !relation && !roomUpload.relation;
-            const matchingRelation = relation && roomUpload.relation
-                && relation.rel_type === roomUpload.relation.rel_type
-                && relation.event_id === roomUpload.relation.event_id;
+            const matchingRelation =
+                relation &&
+                roomUpload.relation &&
+                relation.rel_type === roomUpload.relation.rel_type &&
+                relation.event_id === roomUpload.relation.event_id;
 
             return (noRelation || matchingRelation) && !roomUpload.cancelled;
         });
@@ -498,7 +496,7 @@ export default class ContentMessages {
         }
 
         try {
-            if (file.type.startsWith('image/')) {
+            if (file.type.startsWith("image/")) {
                 content.msgtype = MsgType.Image;
                 try {
                     const imageInfo = await infoForImageFile(matrixClient, roomId, file);
@@ -508,9 +506,9 @@ export default class ContentMessages {
                     logger.error(e);
                     content.msgtype = MsgType.File;
                 }
-            } else if (file.type.indexOf('audio/') === 0) {
+            } else if (file.type.indexOf("audio/") === 0) {
                 content.msgtype = MsgType.Audio;
-            } else if (file.type.indexOf('video/') === 0) {
+            } else if (file.type.indexOf("video/") === 0) {
                 content.msgtype = MsgType.Video;
                 try {
                     const videoInfo = await infoForVideoFile(matrixClient, roomId, file);
@@ -543,7 +541,7 @@ export default class ContentMessages {
             }
 
             dis.dispatch<UploadFinishedPayload>({ action: Action.UploadFinished, upload });
-            dis.dispatch({ action: 'message_sent' });
+            dis.dispatch({ action: "message_sent" });
         } catch (error) {
             // 413: File was too big or upset the server in some way:
             // clear the media size limit so we fetch it again next time we try to upload
@@ -554,26 +552,27 @@ export default class ContentMessages {
             if (!upload.cancelled) {
                 let desc = _t("The file '%(fileName)s' failed to upload.", { fileName: upload.fileName });
                 if (error.httpStatus === 413) {
-                    desc = _t(
-                        "The file '%(fileName)s' exceeds this homeserver's size limit for uploads",
-                        { fileName: upload.fileName },
-                    );
+                    desc = _t("The file '%(fileName)s' exceeds this homeserver's size limit for uploads", {
+                        fileName: upload.fileName,
+                    });
                 }
                 Modal.createDialog(ErrorDialog, {
-                    title: _t('Upload Failed'),
+                    title: _t("Upload Failed"),
                     description: desc,
                 });
                 dis.dispatch<UploadErrorPayload>({ action: Action.UploadFailed, upload, error });
             }
         } finally {
-            removeElement(this.inprogress, e => e.promise === upload.promise);
+            removeElement(this.inprogress, (e) => e.promise === upload.promise);
         }
     }
 
     private isFileSizeAcceptable(file: File) {
-        if (this.mediaConfig !== null &&
+        if (
+            this.mediaConfig !== null &&
             this.mediaConfig["m.upload.size"] !== undefined &&
-            file.size > this.mediaConfig["m.upload.size"]) {
+            file.size > this.mediaConfig["m.upload.size"]
+        ) {
             return false;
         }
         return true;
@@ -583,16 +582,20 @@ export default class ContentMessages {
         if (this.mediaConfig !== null) return;
 
         logger.log("[Media Config] Fetching");
-        return matrixClient.getMediaConfig().then((config) => {
-            logger.log("[Media Config] Fetched config:", config);
-            return config;
-        }).catch(() => {
-            // Media repo can't or won't report limits, so provide an empty object (no limits).
-            logger.log("[Media Config] Could not fetch config, so not limiting uploads.");
-            return {};
-        }).then((config) => {
-            this.mediaConfig = config;
-        });
+        return matrixClient
+            .getMediaConfig()
+            .then((config) => {
+                logger.log("[Media Config] Fetched config:", config);
+                return config;
+            })
+            .catch(() => {
+                // Media repo can't or won't report limits, so provide an empty object (no limits).
+                logger.log("[Media Config] Could not fetch config, so not limiting uploads.");
+                return {};
+            })
+            .then((config) => {
+                this.mediaConfig = config;
+            });
     }
 
     static sharedInstance() {

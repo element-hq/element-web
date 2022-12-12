@@ -25,7 +25,6 @@ limitations under the License.
 
 .mx_UserInfo.mx_BaseCard {
     .mx_UserInfo_container:not(.mx_UserInfo_separator) {
-
         > div > p {
             margin-top: 0;
             margin-bottom: 0;
@@ -88,7 +87,8 @@ limitations under the License.
 }
 
 /* Special case styling for EncryptionPanel in a Modal dialog */
-.mx_Dialog, .mx_CompleteSecurity_body {
+.mx_Dialog,
+.mx_CompleteSecurity_body {
     .mx_VerificationPanel_QRPhase_startOptions {
         display: flex;
         margin-top: 10px;
@@ -117,7 +117,8 @@ limitations under the License.
             max-width: 310px;
             justify-content: space-between;
 
-            canvas, .mx_VerificationPanel_QRPhase_noQR {
+            canvas,
+            .mx_VerificationPanel_QRPhase_noQR {
                 width: 220px !important;
                 height: 220px !important;
                 background-color: #fff;

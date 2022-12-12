@@ -72,7 +72,7 @@ export function selectText(target: Element) {
  */
 export function copyNode(ref: Element): boolean {
     selectText(ref);
-    return document.execCommand('copy');
+    return document.execCommand("copy");
 }
 
 /**

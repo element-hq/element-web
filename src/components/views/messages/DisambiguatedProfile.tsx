@@ -15,11 +15,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
-import classNames from 'classnames';
+import React from "react";
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import classNames from "classnames";
 
-import { getUserNameColorClass } from '../../../utils/FormattingUtils';
+import { getUserNameColorClass } from "../../../utils/FormattingUtils";
 import UserIdentifier from "../../../customisations/UserIdentifier";
 
 interface IProps {
@@ -45,24 +45,22 @@ export default class DisambiguatedProfile extends React.Component<IProps> {
         if (member?.disambiguate && mxid) {
             mxidElement = (
                 <span className="mx_DisambiguatedProfile_mxid">
-                    { UserIdentifier.getDisplayUserIdentifier(
-                        mxid, { withDisplayName: true, roomId: member.roomId },
-                    ) }
+                    {UserIdentifier.getDisplayUserIdentifier(mxid, { withDisplayName: true, roomId: member.roomId })}
                 </span>
             );
         }
 
         const displayNameClasses = classNames({
-            "mx_DisambiguatedProfile_displayName": emphasizeDisplayName,
+            mx_DisambiguatedProfile_displayName: emphasizeDisplayName,
             [colorClass]: true,
         });
 
         return (
             <div className="mx_DisambiguatedProfile" onClick={onClick}>
                 <span className={displayNameClasses} dir="auto">
-                    { rawDisplayName }
+                    {rawDisplayName}
                 </span>
-                { mxidElement }
+                {mxidElement}
             </div>
         );
     }

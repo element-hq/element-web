@@ -14,15 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { _t } from './languageHandler';
+import { _t } from "./languageHandler";
 
 export function levelRoleMap(usersDefault: number): Record<number | "undefined", string> {
     return {
-        undefined: _t('Default'),
-        0: _t('Restricted'),
-        [usersDefault]: _t('Default'),
-        50: _t('Moderator'),
-        100: _t('Admin'),
+        undefined: _t("Default"),
+        0: _t("Restricted"),
+        [usersDefault]: _t("Default"),
+        50: _t("Moderator"),
+        100: _t("Admin"),
     };
 }
 

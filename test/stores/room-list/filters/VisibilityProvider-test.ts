@@ -43,7 +43,7 @@ jest.mock("../../../../src/customisations/RoomList", () => ({
 const createRoom = (isSpaceRoom = false): Room => {
     return {
         isSpaceRoom: () => isSpaceRoom,
-        getType: () => isSpaceRoom ? RoomType.Space : undefined,
+        getType: () => (isSpaceRoom ? RoomType.Space : undefined),
     } as unknown as Room;
 };
 

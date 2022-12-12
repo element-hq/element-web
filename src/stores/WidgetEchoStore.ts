@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import EventEmitter from 'events';
-import { IWidget } from 'matrix-widget-api';
+import EventEmitter from "events";
+import { IWidget } from "matrix-widget-api";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 import { WidgetType } from "../widgets/WidgetType";
@@ -101,13 +101,13 @@ class WidgetEchoStore extends EventEmitter {
         if (this.roomWidgetEcho[roomId] === undefined) this.roomWidgetEcho[roomId] = {};
 
         this.roomWidgetEcho[roomId][widgetId] = state;
-        this.emit('update', roomId, widgetId);
+        this.emit("update", roomId, widgetId);
     }
 
     removeRoomWidgetEcho(roomId: string, widgetId: string) {
         delete this.roomWidgetEcho[roomId][widgetId];
         if (Object.keys(this.roomWidgetEcho[roomId]).length === 0) delete this.roomWidgetEcho[roomId];
-        this.emit('update', roomId, widgetId);
+        this.emit("update", roomId, widgetId);
     }
 }
 

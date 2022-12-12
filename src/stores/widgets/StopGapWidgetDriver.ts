@@ -89,9 +89,11 @@ export class StopGapWidgetDriver extends WidgetDriver {
         // Always allow screenshots to be taken because it's a client-induced flow. The widget can't
         // spew screenshots at us and can't request screenshots of us, so it's up to us to provide the
         // button if the widget says it supports screenshots.
-        this.allowedCapabilities = new Set([...allowedCapabilities,
+        this.allowedCapabilities = new Set([
+            ...allowedCapabilities,
             MatrixCapabilities.Screenshots,
-            ElementWidgetCapabilities.RequiresClient]);
+            ElementWidgetCapabilities.RequiresClient,
+        ]);
 
         // Grant the permissions that are specific to given widget types
         if (WidgetType.JITSI.matches(this.forWidget.type) && forWidgetKind === WidgetKind.Room) {
@@ -105,8 +107,8 @@ export class StopGapWidgetDriver extends WidgetDriver {
             // Widgets don't technically need to request this capability, but Scalar still does.
             this.allowedCapabilities.add("visibility");
         } else if (
-            virtual
-            && new URL(SdkConfig.get("element_call").url ?? DEFAULTS.element_call.url).origin === this.forWidget.origin
+            virtual &&
+            new URL(SdkConfig.get("element_call").url ?? DEFAULTS.element_call.url).origin === this.forWidget.origin
         ) {
             // This is a trusted Element Call widget that we control
             this.allowedCapabilities.add(MatrixCapabilities.AlwaysOnScreen);
@@ -127,7 +129,9 @@ export class StopGapWidgetDriver extends WidgetDriver {
             );
             this.allowedCapabilities.add(
                 WidgetEventCapability.forStateEvent(
-                    EventDirection.Send, "org.matrix.msc3401.call.member", MatrixClientPeg.get().getUserId()!,
+                    EventDirection.Send,
+                    "org.matrix.msc3401.call.member",
+                    MatrixClientPeg.get().getUserId()!,
                 ).raw,
             );
             this.allowedCapabilities.add(
@@ -164,14 +168,14 @@ export class StopGapWidgetDriver extends WidgetDriver {
         const diff = iterableDiff(requested, this.allowedCapabilities);
         const missing = new Set(diff.removed); // "removed" is "in A (requested) but not in B (allowed)"
         const allowedSoFar = new Set(this.allowedCapabilities);
-        getRememberedCapabilitiesForWidget(this.forWidget).forEach(cap => {
+        getRememberedCapabilitiesForWidget(this.forWidget).forEach((cap) => {
             allowedSoFar.add(cap);
             missing.delete(cap);
         });
         if (WidgetPermissionCustomisations.preapproveCapabilities) {
             const approved = await WidgetPermissionCustomisations.preapproveCapabilities(this.forWidget, requested);
             if (approved) {
-                approved.forEach(cap => {
+                approved.forEach((cap) => {
                     allowedSoFar.add(cap);
                     missing.delete(cap);
                 });
@@ -181,14 +185,12 @@ export class StopGapWidgetDriver extends WidgetDriver {
         let rememberApproved = false;
         if (missing.size > 0) {
             try {
-                const [result] = await Modal.createDialog(
-                    WidgetCapabilitiesPromptDialog,
-                    {
-                        requestedCapabilities: missing,
-                        widget: this.forWidget,
-                        widgetKind: this.forWidgetKind,
-                    }).finished;
-                (result.approved || []).forEach(cap => allowedSoFar.add(cap));
+                const [result] = await Modal.createDialog(WidgetCapabilitiesPromptDialog, {
+                    requestedCapabilities: missing,
+                    widget: this.forWidget,
+                    widgetKind: this.forWidgetKind,
+                }).finished;
+                (result.approved || []).forEach((cap) => allowedSoFar.add(cap));
                 rememberApproved = result.remember;
             } catch (e) {
                 logger.error("Non-fatal error getting capabilities: ", e);
@@ -223,7 +225,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
             r = await client.sendStateEvent(roomId, eventType, content, stateKey);
         } else if (eventType === EventType.RoomRedaction) {
             // special case: extract the `redacts` property and call redact
-            r = await client.redactEvent(roomId, content['redacts']);
+            r = await client.redactEvent(roomId, content["redacts"]);
         } else {
             // message event
             r = await client.sendEvent(roomId, eventType, content);
@@ -261,8 +263,9 @@ export class StopGapWidgetDriver extends WidgetDriver {
                         if (deviceId === "*") {
                             // Send the message to all devices we have keys for
                             await client.encryptAndSendToDevices(
-                                Object.values(deviceInfoMap[userId]).map(deviceInfo => ({
-                                    userId, deviceInfo,
+                                Object.values(deviceInfoMap[userId]).map((deviceInfo) => ({
+                                    userId,
+                                    deviceInfo,
                                 })),
                                 content,
                             );
@@ -280,9 +283,11 @@ export class StopGapWidgetDriver extends WidgetDriver {
             await client.queueToDevice({
                 eventType,
                 batch: Object.entries(contentMap).flatMap(([userId, userContentMap]) =>
-                    Object.entries(userContentMap).map(([deviceId, content]) =>
-                        ({ userId, deviceId, payload: content }),
-                    ),
+                    Object.entries(userContentMap).map(([deviceId, content]) => ({
+                        userId,
+                        deviceId,
+                        payload: content,
+                    })),
                 ),
             });
         }
@@ -293,9 +298,11 @@ export class StopGapWidgetDriver extends WidgetDriver {
         if (!client) throw new Error("Not attached to a client");
 
         const targetRooms = roomIds
-            ? (roomIds.includes(Symbols.AnyRoom) ? client.getVisibleRooms() : roomIds.map(r => client.getRoom(r)))
+            ? roomIds.includes(Symbols.AnyRoom)
+                ? client.getVisibleRooms()
+                : roomIds.map((r) => client.getRoom(r))
             : [client.getRoom(SdkContextClass.instance.roomViewStore.getRoomId())];
-        return targetRooms.filter(r => !!r);
+        return targetRooms.filter((r) => !!r);
     }
 
     public async readRoomEvents(
@@ -316,11 +323,11 @@ export class StopGapWidgetDriver extends WidgetDriver {
 
                 const ev = events[i];
                 if (ev.getType() !== eventType || ev.isState()) continue;
-                if (eventType === EventType.RoomMessage && msgtype && msgtype !== ev.getContent()['msgtype']) continue;
+                if (eventType === EventType.RoomMessage && msgtype && msgtype !== ev.getContent()["msgtype"]) continue;
                 results.push(ev);
             }
 
-            results.forEach(e => allResults.push(e.getEffectiveEvent() as IRoomEvent));
+            results.forEach((e) => allResults.push(e.getEffectiveEvent() as IRoomEvent));
         }
         return allResults;
     }
@@ -347,14 +354,16 @@ export class StopGapWidgetDriver extends WidgetDriver {
                 }
             }
 
-            results.slice(0, limitPerRoom).forEach(e => allResults.push(e.getEffectiveEvent() as IRoomEvent));
+            results.slice(0, limitPerRoom).forEach((e) => allResults.push(e.getEffectiveEvent() as IRoomEvent));
         }
         return allResults;
     }
 
     public async askOpenID(observer: SimpleObservable<IOpenIDUpdate>) {
         const oidcState = SdkContextClass.instance.widgetPermissionStore.getOIDCState(
-            this.forWidget, this.forWidgetKind, this.inRoomId,
+            this.forWidget,
+            this.forWidgetKind,
+            this.inRoomId,
         );
 
         const getToken = (): Promise<IOpenIDCredentials> => {
@@ -389,7 +398,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
         navigateToPermalink(uri);
     }
 
-    public async* getTurnServers(): AsyncGenerator<ITurnServer> {
+    public async *getTurnServers(): AsyncGenerator<ITurnServer> {
         const client = MatrixClientPeg.get();
         if (!client.pollingTurnServers || !client.getTurnServers().length) return;
 
@@ -397,7 +406,9 @@ export class StopGapWidgetDriver extends WidgetDriver {
         let setError: (error: Error) => void;
 
         const onTurnServers = ([server]: IClientTurnServer[]) => setTurnServer(normalizeTurnServer(server));
-        const onTurnServersError = (error: Error, fatal: boolean) => { if (fatal) setError(error); };
+        const onTurnServersError = (error: Error, fatal: boolean) => {
+            if (fatal) setError(error);
+        };
 
         client.on(ClientEvent.TurnServers, onTurnServers);
         client.on(ClientEvent.TurnServersError, onTurnServersError);
@@ -429,21 +440,17 @@ export class StopGapWidgetDriver extends WidgetDriver {
         from?: string,
         to?: string,
         limit?: number,
-        direction?: 'f' | 'b',
+        direction?: "f" | "b",
     ): Promise<IReadEventRelationsResult> {
         const client = MatrixClientPeg.get();
         const dir = direction as Direction;
         roomId = roomId ?? SdkContextClass.instance.roomViewStore.getRoomId() ?? undefined;
 
         if (typeof roomId !== "string") {
-            throw new Error('Error while reading the current room');
+            throw new Error("Error while reading the current room");
         }
 
-        const {
-            events,
-            nextBatch,
-            prevBatch,
-        } = await client.relations(
+        const { events, nextBatch, prevBatch } = await client.relations(
             roomId,
             eventId,
             relationType ?? null,
@@ -452,7 +459,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
         );
 
         return {
-            chunk: events.map(e => e.getEffectiveEvent() as IRoomEvent),
+            chunk: events.map((e) => e.getEffectiveEvent() as IRoomEvent),
             nextBatch,
             prevBatch,
         };

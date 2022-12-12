@@ -15,8 +15,8 @@ limitations under the License.
 */
 
 // @ts-ignore
-import Recorder from 'opus-recorder/dist/recorder.min.js';
-import encoderPath from 'opus-recorder/dist/encoderWorker.min.js';
+import Recorder from "opus-recorder/dist/recorder.min.js";
+import encoderPath from "opus-recorder/dist/encoderWorker.min.js";
 import { SimpleObservable } from "matrix-widget-api";
 import EventEmitter from "events";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -137,15 +137,15 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
 
                 // Dev note: we can't use `addEventListener` for some reason. It just doesn't work.
                 this.recorderWorklet.port.onmessage = (ev) => {
-                    switch (ev.data['ev']) {
+                    switch (ev.data["ev"]) {
                         case PayloadEvent.Timekeep:
-                            this.processAudioUpdate(ev.data['timeSeconds']);
+                            this.processAudioUpdate(ev.data["timeSeconds"]);
                             break;
                         case PayloadEvent.AmplitudeMark:
                             // Sanity check to make sure we're adding about one sample per second
-                            if (ev.data['forIndex'] === this.amplitudes.length) {
-                                this.amplitudes.push(ev.data['amplitude']);
-                                this.liveWaveform.pushValue(ev.data['amplitude']);
+                            if (ev.data["forIndex"] === this.amplitudes.length) {
+                                this.amplitudes.push(ev.data["amplitude"]);
+                                this.liveWaveform.pushValue(ev.data["amplitude"]);
                             }
                             break;
                     }
@@ -159,8 +159,9 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
                 this.recorderProcessor.addEventListener("audioprocess", this.onAudioProcess);
             }
 
-            const recorderOptions = this.shouldRecordInHighQuality() ?
-                highQualityRecorderOptions : voiceRecorderOptions;
+            const recorderOptions = this.shouldRecordInHighQuality()
+                ? highQualityRecorderOptions
+                : voiceRecorderOptions;
             const { encoderApplication, bitrate } = recorderOptions;
 
             this.recorder = new Recorder({
@@ -184,12 +185,13 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
             this.recorder.ondataavailable = (data: ArrayBuffer) => this?.onDataAvailable(data);
         } catch (e) {
             logger.error("Error starting recording: ", e);
-            if (e instanceof DOMException) { // Unhelpful DOMExceptions are common - parse them sanely
+            if (e instanceof DOMException) {
+                // Unhelpful DOMExceptions are common - parse them sanely
                 logger.error(`${e.name} (${e.code}): ${e.message}`);
             }
 
             // Clean up as best as possible
-            if (this.recorderStream) this.recorderStream.getTracks().forEach(t => t.stop());
+            if (this.recorderStream) this.recorderStream.getTracks().forEach((t) => t.stop());
             if (this.recorderSource) this.recorderSource.disconnect();
             if (this.recorder) this.recorder.close();
             if (this.recorderContext) {
@@ -221,7 +223,7 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
         if (!this.recording) return;
 
         this.observable.update({
-            waveform: this.liveWaveform.value.map(v => clamp(v, 0, 1)),
+            waveform: this.liveWaveform.value.map((v) => clamp(v, 0, 1)),
             timeSeconds: timeSeconds,
         });
 
@@ -243,7 +245,8 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
         }
 
         const secondsLeft = TARGET_MAX_LENGTH - this.recorderSeconds;
-        if (secondsLeft < 0) { // go over to make sure we definitely capture that last frame
+        if (secondsLeft < 0) {
+            // go over to make sure we definitely capture that last frame
             // noinspection JSIgnoredPromiseFromCall - we aren't concerned with it overlapping
             this.stop();
         } else if (secondsLeft <= TARGET_WARN_TIME_LEFT) {
@@ -256,7 +259,7 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
 
     /**
      * {@link https://github.com/chris-rudmin/opus-recorder#instance-fields ref for recorderSeconds}
-    */
+     */
     public get recorderSeconds() {
         return this.recorder.encodedSamplePosition / 48000;
     }
@@ -295,7 +298,7 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
             await this.recorderContext.close();
 
             // Now stop all the media tracks so we can release them back to the user/OS
-            this.recorderStream.getTracks().forEach(t => t.stop());
+            this.recorderStream.getTracks().forEach((t) => t.stop());
 
             // Finally do our post-processing and clean up
             this.recording = false;

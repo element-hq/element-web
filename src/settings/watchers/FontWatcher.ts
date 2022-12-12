@@ -14,11 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import dis from '../../dispatcher/dispatcher';
-import SettingsStore from '../SettingsStore';
+import dis from "../../dispatcher/dispatcher";
+import SettingsStore from "../SettingsStore";
 import IWatcher from "./Watcher";
-import { toPx } from '../../utils/units';
-import { Action } from '../../dispatcher/actions';
+import { toPx } from "../../utils/units";
+import { Action } from "../../dispatcher/actions";
 import { SettingLevel } from "../SettingLevel";
 import { UpdateSystemFontPayload } from "../../dispatcher/payloads/UpdateSystemFontPayload";
 import { ActionPayload } from "../../dispatcher/payloads";
@@ -84,15 +84,15 @@ export class FontWatcher implements IWatcher {
         if (useSystemFont) {
             // Make sure that fonts with spaces in their names get interpreted properly
             document.body.style.fontFamily = font
-                .split(',')
-                .map(font => {
+                .split(",")
+                .map((font) => {
                     font = font.trim();
                     if (!font.startsWith('"') && !font.endsWith('"')) {
                         font = `"${font}"`;
                     }
                     return font;
                 })
-                .join(',');
+                .join(",");
         } else {
             document.body.style.fontFamily = "";
         }

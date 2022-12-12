@@ -34,7 +34,7 @@ describe("Login", () => {
         const password = "p4s5W0rD";
 
         beforeEach(() => {
-            cy.startSynapse("consent").then(data => {
+            cy.startSynapse("consent").then((data) => {
                 synapse = data;
                 cy.registerUser(synapse, username, password);
                 cy.visit("/#/login");
@@ -52,19 +52,19 @@ describe("Login", () => {
             cy.get(".mx_ServerPickerDialog_otherHomeserver").type(synapse.baseUrl);
             cy.get(".mx_ServerPickerDialog_continue").click();
             // wait for the dialog to go away
-            cy.get('.mx_ServerPickerDialog').should('not.exist');
+            cy.get(".mx_ServerPickerDialog").should("not.exist");
 
             cy.get("#mx_LoginForm_username").type(username);
             cy.get("#mx_LoginForm_password").type(password);
             cy.get(".mx_Login_submit").click();
 
-            cy.url().should('contain', '/#/home', { timeout: 30000 });
+            cy.url().should("contain", "/#/home", { timeout: 30000 });
         });
     });
 
     describe("logout", () => {
         beforeEach(() => {
-            cy.startSynapse("consent").then(data => {
+            cy.startSynapse("consent").then((data) => {
                 synapse = data;
                 cy.initTestUser(synapse, "Erin");
             });

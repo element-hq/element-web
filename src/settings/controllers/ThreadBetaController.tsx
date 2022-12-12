@@ -30,15 +30,25 @@ export default class ThreadBetaController extends SettingController {
 
         const { finished } = Modal.createDialog<[boolean]>(QuestionDialog, {
             title: _t("Partial Support for Threads"),
-            description: <>
-                <p>{ _t("Your homeserver does not currently support threads, so this feature may be unreliable. " +
-                    "Some threaded messages may not be reliably available. <a>Learn more</a>.", {}, {
-                    a: sub => (
-                        <a href="https://element.io/help#threads" target="_blank" rel="noreferrer noopener">{ sub }</a>
-                    ),
-                }) }</p>
-                <p>{ _t("Do you want to enable threads anyway?") }</p>
-            </>,
+            description: (
+                <>
+                    <p>
+                        {_t(
+                            "Your homeserver does not currently support threads, so this feature may be unreliable. " +
+                                "Some threaded messages may not be reliably available. <a>Learn more</a>.",
+                            {},
+                            {
+                                a: (sub) => (
+                                    <a href="https://element.io/help#threads" target="_blank" rel="noreferrer noopener">
+                                        {sub}
+                                    </a>
+                                ),
+                            },
+                        )}
+                    </p>
+                    <p>{_t("Do you want to enable threads anyway?")}</p>
+                </>
+            ),
             button: _t("Yes, enable"),
         });
         const [enable] = await finished;

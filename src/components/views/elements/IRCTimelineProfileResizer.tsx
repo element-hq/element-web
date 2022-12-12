@@ -14,10 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 
 import SettingsStore from "../../../settings/SettingsStore";
-import Draggable, { ILocationState } from './Draggable';
+import Draggable, { ILocationState } from "./Draggable";
 import { SettingLevel } from "../../../settings/SettingLevel";
 
 interface IProps {
@@ -43,9 +43,12 @@ export default class IRCTimelineProfileResizer extends React.Component<IProps, I
     }
 
     componentDidMount() {
-        this.setState({
-            IRCLayoutRoot: document.querySelector(".mx_IRCLayout"),
-        }, () => this.updateCSSWidth(this.state.width));
+        this.setState(
+            {
+                IRCLayoutRoot: document.querySelector(".mx_IRCLayout"),
+            },
+            () => this.updateCSSWidth(this.state.width),
+        );
     }
 
     private dragFunc = (location: ILocationState, event: MouseEvent): ILocationState => {
@@ -89,10 +92,6 @@ export default class IRCTimelineProfileResizer extends React.Component<IProps, I
     };
 
     render() {
-        return <Draggable
-            className="mx_ProfileResizer"
-            dragFunc={this.dragFunc}
-            onMouseUp={this.onMoueUp}
-        />;
+        return <Draggable className="mx_ProfileResizer" dragFunc={this.dragFunc} onMouseUp={this.onMoueUp} />;
     }
 }

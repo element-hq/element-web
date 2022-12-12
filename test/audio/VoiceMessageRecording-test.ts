@@ -57,10 +57,7 @@ describe("VoiceMessageRecording", () => {
             liveData: jest.fn(),
             amplitudes: testAmplitudes,
         } as unknown as VoiceRecording;
-        voiceMessageRecording = new VoiceMessageRecording(
-            client,
-            voiceRecording,
-        );
+        voiceMessageRecording = new VoiceMessageRecording(client, voiceRecording);
     });
 
     it("hasRecording should return false", () => {
@@ -120,9 +117,7 @@ describe("VoiceMessageRecording", () => {
     });
 
     it("upload should raise an error", async () => {
-        await expect(voiceMessageRecording.upload(roomId))
-            .rejects
-            .toThrow("No recording available to upload");
+        await expect(voiceMessageRecording.upload(roomId)).rejects.toThrow("No recording available to upload");
     });
 
     describe("when the first data has been received", () => {
@@ -157,21 +152,23 @@ describe("VoiceMessageRecording", () => {
                 uploadFileRoomId = null;
                 uploadBlob = null;
 
-                mocked(uploadFile).mockImplementation((
-                    matrixClient: MatrixClient,
-                    roomId: string,
-                    file: File | Blob,
-                    _progressHandler?: UploadOpts["progressHandler"],
-                ): Promise<{ url?: string, file?: IEncryptedFile }> => {
-                    uploadFileClient = matrixClient;
-                    uploadFileRoomId = roomId;
-                    uploadBlob = file;
-                    // @ts-ignore
-                    return Promise.resolve({
-                        url: uploadUrl,
-                        file: encryptedFile,
-                    });
-                });
+                mocked(uploadFile).mockImplementation(
+                    (
+                        matrixClient: MatrixClient,
+                        roomId: string,
+                        file: File | Blob,
+                        _progressHandler?: UploadOpts["progressHandler"],
+                    ): Promise<{ url?: string; file?: IEncryptedFile }> => {
+                        uploadFileClient = matrixClient;
+                        uploadFileRoomId = roomId;
+                        uploadBlob = file;
+                        // @ts-ignore
+                        return Promise.resolve({
+                            url: uploadUrl,
+                            file: encryptedFile,
+                        });
+                    },
+                );
             });
 
             it("should upload the file and trigger the upload events", async () => {

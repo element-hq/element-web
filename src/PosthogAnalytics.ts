@@ -14,14 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import posthog, { PostHog, Properties } from 'posthog-js';
+import posthog, { PostHog, Properties } from "posthog-js";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { logger } from "matrix-js-sdk/src/logger";
 import { UserProperties } from "@matrix-org/analytics-events/types/typescript/UserProperties";
-import { Signup } from '@matrix-org/analytics-events/types/typescript/Signup';
+import { Signup } from "@matrix-org/analytics-events/types/typescript/Signup";
 
-import PlatformPeg from './PlatformPeg';
-import SdkConfig from './SdkConfig';
+import PlatformPeg from "./PlatformPeg";
+import SdkConfig from "./SdkConfig";
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import SettingsStore from "./settings/SettingsStore";
 import { ScreenName } from "./PosthogTrackers";
@@ -52,8 +52,8 @@ export interface IPosthogEvent {
     eventName: string;
 
     // do not allow these to be sent manually, we enqueue them all for caching purposes
-    "$set"?: void;
-    "$set_once"?: void;
+    $set?: void;
+    $set_once?: void;
 }
 
 export interface IPostHogEventOptions {
@@ -63,22 +63,32 @@ export interface IPostHogEventOptions {
 export enum Anonymity {
     Disabled,
     Anonymous,
-    Pseudonymous
+    Pseudonymous,
 }
 
 const whitelistedScreens = new Set([
-    "register", "login", "forgot_password", "soft_logout", "new", "settings", "welcome", "home", "start", "directory",
-    "start_sso", "start_cas", "complete_security", "post_registration", "room", "user",
+    "register",
+    "login",
+    "forgot_password",
+    "soft_logout",
+    "new",
+    "settings",
+    "welcome",
+    "home",
+    "start",
+    "directory",
+    "start_sso",
+    "start_cas",
+    "complete_security",
+    "post_registration",
+    "room",
+    "user",
 ]);
 
-export function getRedactedCurrentLocation(
-    origin: string,
-    hash: string,
-    pathname: string,
-): string {
+export function getRedactedCurrentLocation(origin: string, hash: string, pathname: string): string {
     // Redact PII from the current location.
     // For known screens, assumes a URL structure of /<screen name>/might/be/pii
-    if (origin.startsWith('file://')) {
+    if (origin.startsWith("file://")) {
         pathname = "/<redacted_file_scheme_url>/";
     }
 
@@ -210,13 +220,13 @@ export class PosthogAnalytics {
 
         if (this.anonymity == Anonymity.Anonymous) {
             // drop referrer information for anonymous users
-            properties['$referrer'] = null;
-            properties['$referring_domain'] = null;
-            properties['$initial_referrer'] = null;
-            properties['$initial_referring_domain'] = null;
+            properties["$referrer"] = null;
+            properties["$referring_domain"] = null;
+            properties["$initial_referrer"] = null;
+            properties["$initial_referring_domain"] = null;
 
             // drop device ID, which is a UUID persisted in local storage
-            properties['$device_id'] = null;
+            properties["$device_id"] = null;
         }
 
         return properties;
@@ -280,7 +290,7 @@ export class PosthogAnalytics {
     }
 
     private static getRandomAnalyticsId(): string {
-        return [...crypto.getRandomValues(new Uint8Array(16))].map((c) => c.toString(16)).join('');
+        return [...crypto.getRandomValues(new Uint8Array(16))].map((c) => c.toString(16)).join("");
     }
 
     public async identifyUser(client: MatrixClient, analyticsIdGenerator: () => string): Promise<void> {
@@ -297,8 +307,10 @@ export class PosthogAnalytics {
                     // until the next time account data is refreshed and this function is called (most likely on next
                     // page load). This will happen pretty infrequently, so we can tolerate the possibility.
                     analyticsID = analyticsIdGenerator();
-                    await client.setAccountData(PosthogAnalytics.ANALYTICS_EVENT_TYPE,
-                        Object.assign({ id: analyticsID }, accountData));
+                    await client.setAccountData(
+                        PosthogAnalytics.ANALYTICS_EVENT_TYPE,
+                        Object.assign({ id: analyticsID }, accountData),
+                    );
                 }
                 this.posthog.identify(analyticsID);
             } catch (e) {
@@ -320,10 +332,7 @@ export class PosthogAnalytics {
         this.setAnonymity(Anonymity.Disabled);
     }
 
-    public trackEvent<E extends IPosthogEvent>(
-        { eventName, ...properties }: E,
-        options?: IPostHogEventOptions,
-    ): void {
+    public trackEvent<E extends IPosthogEvent>({ eventName, ...properties }: E, options?: IPostHogEventOptions): void {
         if (this.anonymity == Anonymity.Disabled || this.anonymity == Anonymity.Anonymous) return;
         this.capture(eventName, properties, options);
     }
@@ -383,10 +392,13 @@ export class PosthogAnalytics {
         //  * When the user changes their preferences on this device
         // Note that for new accounts, pseudonymousAnalyticsOptIn won't be set, so updateAnonymityFromSettings
         // won't be called (i.e. this.anonymity will be left as the default, until the setting changes)
-        SettingsStore.watchSetting("pseudonymousAnalyticsOptIn", null,
+        SettingsStore.watchSetting(
+            "pseudonymousAnalyticsOptIn",
+            null,
             (originalSettingName, changedInRoomId, atLevel, newValueAtLevel, newValue) => {
                 this.updateAnonymityFromSettings(!!newValue);
-            });
+            },
+        );
     }
 
     public setAuthenticationType(authenticationType: Signup["authenticationType"]): void {
@@ -404,9 +416,12 @@ export class PosthogAnalytics {
             options.timestamp = new Date(registrationTime);
         }
 
-        return this.trackEvent<Signup>({
-            eventName: "Signup",
-            authenticationType: this.authenticationType,
-        }, options);
+        return this.trackEvent<Signup>(
+            {
+                eventName: "Signup",
+                authenticationType: this.authenticationType,
+            },
+            options,
+        );
     }
 }

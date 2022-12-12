@@ -88,7 +88,8 @@ export const showToast = (): void => {
         // them to opt in again.
         props = {
             description: _t(
-                "You previously consented to share anonymous usage data with us. We're updating how that works."),
+                "You previously consented to share anonymous usage data with us. We're updating how that works.",
+            ),
             acceptLabel: _t("That's fine"),
             onAccept,
             rejectLabel: _t("Learn more"),
@@ -98,18 +99,24 @@ export const showToast = (): void => {
         // The user had no analytics setting previously set, so we just need to prompt to opt-in, rather than
         // explaining any change.
         const learnMoreLink = (sub: string) => (
-            <AccessibleButton kind="link_inline" onClick={onLearnMoreNoOptIn}>{ sub }</AccessibleButton>
+            <AccessibleButton kind="link_inline" onClick={onLearnMoreNoOptIn}>
+                {sub}
+            </AccessibleButton>
         );
         props = {
             description: _t(
                 "Share anonymous data to help us identify issues. Nothing personal. No third parties. " +
-                "<LearnMoreLink>Learn More</LearnMoreLink>", {}, { "LearnMoreLink": learnMoreLink }),
+                    "<LearnMoreLink>Learn More</LearnMoreLink>",
+                {},
+                { LearnMoreLink: learnMoreLink },
+            ),
             acceptLabel: _t("Yes"),
             onAccept,
             rejectLabel: _t("No"),
             onReject,
         };
-    } else { // false
+    } else {
+        // false
         // The user previously opted out of analytics, don't ask again
         return;
     }

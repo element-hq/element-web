@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { useState, useEffect, DependencyList } from 'react';
+import { useState, useEffect, DependencyList } from "react";
 
 type Fn<T> = () => Promise<T>;
 
@@ -22,7 +22,7 @@ export const useAsyncMemo = <T>(fn: Fn<T>, deps: DependencyList, initialValue?: 
     const [value, setValue] = useState<T>(initialValue);
     useEffect(() => {
         let discard = false;
-        fn().then(v => {
+        fn().then((v) => {
             if (!discard) {
                 setValue(v);
             }

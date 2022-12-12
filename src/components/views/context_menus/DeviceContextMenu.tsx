@@ -34,12 +34,14 @@ interface IDeviceContextMenuDeviceProps {
 }
 
 const DeviceContextMenuDevice: React.FC<IDeviceContextMenuDeviceProps> = ({ label, selected, onClick }) => {
-    return <IconizedContextMenuRadio
-        iconClassName="mx_DeviceContextMenu_device_icon"
-        label={label}
-        active={selected}
-        onClick={onClick}
-    />;
+    return (
+        <IconizedContextMenuRadio
+            iconClassName="mx_DeviceContextMenu_device_icon"
+            label={label}
+            active={selected}
+            onClick={onClick}
+        />
+    );
 };
 
 interface IDeviceContextMenuSectionProps {
@@ -62,16 +64,20 @@ const DeviceContextMenuSection: React.FC<IDeviceContextMenuSectionProps> = ({ de
         setSelectedDevice(deviceId);
     };
 
-    return <IconizedContextMenuOptionList label={_t(SECTION_NAMES[deviceKind])}>
-        { devices.map(({ label, deviceId }) => {
-            return <DeviceContextMenuDevice
-                key={deviceId}
-                label={label}
-                selected={selectedDevice === deviceId}
-                onClick={() => onDeviceClick(deviceId)}
-            />;
-        }) }
-    </IconizedContextMenuOptionList>;
+    return (
+        <IconizedContextMenuOptionList label={_t(SECTION_NAMES[deviceKind])}>
+            {devices.map(({ label, deviceId }) => {
+                return (
+                    <DeviceContextMenuDevice
+                        key={deviceId}
+                        label={label}
+                        selected={selectedDevice === deviceId}
+                        onClick={() => onDeviceClick(deviceId)}
+                    />
+                );
+            })}
+        </IconizedContextMenuOptionList>
+    );
 };
 
 interface IProps extends IContextMenuProps {
@@ -79,11 +85,13 @@ interface IProps extends IContextMenuProps {
 }
 
 const DeviceContextMenu: React.FC<IProps> = ({ deviceKinds, ...props }) => {
-    return <IconizedContextMenu compact className="mx_DeviceContextMenu" {...props}>
-        { deviceKinds.map((kind) => {
-            return <DeviceContextMenuSection key={kind} deviceKind={kind as MediaDeviceKindEnum} />;
-        }) }
-    </IconizedContextMenu>;
+    return (
+        <IconizedContextMenu compact className="mx_DeviceContextMenu" {...props}>
+            {deviceKinds.map((kind) => {
+                return <DeviceContextMenuSection key={kind} deviceKind={kind as MediaDeviceKindEnum} />;
+            })}
+        </IconizedContextMenu>
+    );
 };
 
 export default DeviceContextMenu;

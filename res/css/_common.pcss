@@ -23,7 +23,7 @@ limitations under the License.
 @import "./_spacing.pcss";
 @import url("maplibre-gl/dist/maplibre-gl.css");
 
-$hover-transition: 0.08s cubic-bezier(.46, .03, .52, .96); /* quadratic */
+$hover-transition: 0.08s cubic-bezier(0.46, 0.03, 0.52, 0.96); /* quadratic */
 
 $selected-message-border-width: 4px;
 
@@ -40,8 +40,8 @@ $timeline-image-border-radius: 8px;
 :root {
     font-size: 10px;
 
-    --transition-short: .1s;
-    --transition-standard: .3s;
+    --transition-short: 0.1s;
+    --transition-standard: 0.3s;
 }
 
 @media (prefers-reduced-motion) {
@@ -74,13 +74,16 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
-pre, code {
+pre,
+code {
     font-family: $monospace-font-family;
     font-size: 100% !important;
 }
 
-.error, .warning,
-.text-error, .text-warning {
+.error,
+.warning,
+.text-error,
+.text-warning {
     color: $alert;
 }
 
@@ -132,7 +135,7 @@ input[type="search"].mx_textinput_icon {
 /* FIXME THEME - Tint by CSS rather than referencing a duplicate asset */
 input[type="text"].mx_textinput_icon.mx_textinput_search,
 input[type="search"].mx_textinput_icon.mx_textinput_search {
-    background-image: url('$(res)/img/feather-customised/search-input.svg');
+    background-image: url("$(res)/img/feather-customised/search-input.svg");
 }
 
 /* dont search UI as not all browsers support it, */
@@ -150,7 +153,9 @@ textarea::placeholder {
     opacity: initial;
 }
 
-input[type="text"], input[type="password"], textarea {
+input[type="text"],
+input[type="password"],
+textarea {
     background-color: transparent;
     color: $primary-content;
 }
@@ -160,7 +165,9 @@ textarea {
     color: $primary-content;
 }
 
-input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
+input[type="text"]:focus,
+input[type="password"]:focus,
+textarea:focus {
     outline: none;
     box-shadow: none;
 }
@@ -197,7 +204,8 @@ legend {
 /* it has the appearance of a text box so the controls */
 /* appear to be part of the input */
 
-.mx_Dialog, .mx_MatrixChat_wrapper {
+.mx_Dialog,
+.mx_MatrixChat_wrapper {
     .mx_textinput > input[type="text"],
     .mx_textinput > input[type="search"] {
         border: none;
@@ -213,7 +221,7 @@ legend {
         background-color: transparent;
         color: $input-darker-fg-color;
         border-radius: 4px;
-        border: 1px solid rgba($primary-content, .1);
+        border: 1px solid rgba($primary-content, 0.1);
         /* these things should probably not be defined globally */
         margin: 9px;
     }
@@ -226,7 +234,7 @@ legend {
     :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type="text"]::placeholder,
     :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type="search"]::placeholder,
     .mx_textinput input::placeholder {
-        color: rgba($input-darker-fg-color, .75);
+        color: rgba($input-darker-fg-color, 0.75);
     }
 }
 
@@ -329,7 +337,7 @@ legend {
     pre code {
         white-space: pre; /* we want code blocks to be scrollable and not wrap */
 
-        >* {
+        > * {
             display: inline;
         }
     }
@@ -457,7 +465,7 @@ legend {
 }
 
 @define-mixin customisedCancelButton {
-    mask: url('$(res)/img/cancel.svg');
+    mask: url("$(res)/img/cancel.svg");
     mask-repeat: no-repeat;
     mask-position: center;
     mask-size: cover;
@@ -768,7 +776,7 @@ legend {
         align-items: center;
 
         &::before {
-            content: '';
+            content: "";
             display: inline-block;
             background-color: $button-fg-color;
             mask-position: center;
@@ -789,7 +797,7 @@ legend {
 @define-mixin ThreadSummaryIcon {
     content: "";
     display: inline-block;
-    mask-image: url('$(res)/img/element-icons/thread-summary.svg');
+    mask-image: url("$(res)/img/element-icons/thread-summary.svg");
     mask-position: center;
     mask-repeat: no-repeat;
     mask-size: contain;
@@ -806,7 +814,7 @@ legend {
     }
 }
 
-@define-mixin composerButton $border-radius,$hover-color {
+@define-mixin composerButton $border-radius, $hover-color {
     --size: 26px;
     position: relative;
     cursor: pointer;
@@ -817,7 +825,7 @@ legend {
     border-radius: $border-radius;
 
     &::before {
-        content: '';
+        content: "";
         position: absolute;
         top: 3px;
         left: 3px;
@@ -830,7 +838,7 @@ legend {
     }
 
     &::after {
-        content: '';
+        content: "";
         position: absolute;
         left: 0;
         top: 0;

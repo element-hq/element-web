@@ -16,7 +16,7 @@ limitations under the License.
 
 import { arrayDiff, arrayUnion, arrayIntersection } from "./arrays";
 
-type ObjectExcluding<O extends {}, P extends (keyof O)[]> = {[k in Exclude<keyof O, P[number]>]: O[k]};
+type ObjectExcluding<O extends {}, P extends (keyof O)[]> = { [k in Exclude<keyof O, P[number]>]: O[k] };
 
 /**
  * Gets a new object which represents the provided object, excluding some properties.
@@ -45,13 +45,13 @@ export function objectExcluding<O extends {}, P extends Array<keyof O>>(a: O, pr
  * @param props The property names to keep.
  * @returns The new object with only the provided properties.
  */
-export function objectWithOnly<O extends {}, P extends Array<keyof O>>(a: O, props: P): {[k in P[number]]: O[k]} {
+export function objectWithOnly<O extends {}, P extends Array<keyof O>>(a: O, props: P): { [k in P[number]]: O[k] } {
     const existingProps = Object.keys(a) as (keyof O)[];
     const diff = arrayDiff(existingProps, props);
     if (diff.removed.length === 0) {
         return objectShallowClone(a);
     } else {
-        return objectExcluding(a, diff.removed) as {[k in P[number]]: O[k]};
+        return objectExcluding(a, diff.removed) as { [k in P[number]]: O[k] };
     }
 }
 
@@ -94,10 +94,10 @@ export function objectHasDiff<O extends {}>(a: O, b: O): boolean {
     // if the amalgamation of both sets of keys has the a different length to the inputs then there must be a change
     if (possibleChanges.length !== aKeys.length) return true;
 
-    return possibleChanges.some(k => a[k] !== b[k]);
+    return possibleChanges.some((k) => a[k] !== b[k]);
 }
 
-type Diff<K> = { changed: K[], added: K[], removed: K[] };
+type Diff<K> = { changed: K[]; added: K[]; removed: K[] };
 
 /**
  * Determines the keys added, changed, and removed between two objects.
@@ -112,7 +112,7 @@ export function objectDiff<O extends {}>(a: O, b: O): Diff<keyof O> {
     const bKeys = Object.keys(b) as (keyof O)[];
     const keyDiff = arrayDiff(aKeys, bKeys);
     const possibleChanges = arrayIntersection(aKeys, bKeys);
-    const changes = possibleChanges.filter(k => a[k] !== b[k]);
+    const changes = possibleChanges.filter((k) => a[k] !== b[k]);
 
     return { changed: changes, added: keyDiff.added, removed: keyDiff.removed };
 }

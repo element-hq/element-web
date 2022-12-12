@@ -31,10 +31,10 @@ describe("Location sharing", () => {
     };
 
     beforeEach(() => {
-        cy.window().then(win => {
+        cy.window().then((win) => {
             win.localStorage.setItem("mx_lhs_size", "0"); // Collapse left panel for these tests
         });
-        cy.startSynapse("default").then(data => {
+        cy.startSynapse("default").then((data) => {
             synapse = data;
 
             cy.initTestUser(synapse, "Tom");
@@ -47,31 +47,28 @@ describe("Location sharing", () => {
 
     it("sends and displays pin drop location message successfully", () => {
         let roomId: string;
-        cy.createRoom({}).then(_roomId => {
+        cy.createRoom({}).then((_roomId) => {
             roomId = _roomId;
-            cy.visit('/#/room/' + roomId);
+            cy.visit("/#/room/" + roomId);
         });
 
         cy.openMessageComposerOptions().within(() => {
             cy.get('[aria-label="Location"]').click();
         });
 
-        selectLocationShareTypeOption('Pin').click();
+        selectLocationShareTypeOption("Pin").click();
 
-        cy.get('#mx_LocationPicker_map').click('center');
+        cy.get("#mx_LocationPicker_map").click("center");
 
         submitShareLocation();
 
-        cy.get(".mx_RoomView_body .mx_EventTile .mx_MLocationBody", { timeout: 10000 })
-            .should('exist')
-            .click();
+        cy.get(".mx_RoomView_body .mx_EventTile .mx_MLocationBody", { timeout: 10000 }).should("exist").click();
 
         // clicking location tile opens maximised map
-        cy.get('.mx_LocationViewDialog_wrapper').should('exist');
+        cy.get(".mx_LocationViewDialog_wrapper").should("exist");
 
         cy.get('[aria-label="Close dialog"]').click();
 
-        cy.get('.mx_Marker')
-            .should('exist');
+        cy.get(".mx_Marker").should("exist");
     });
 });

@@ -42,7 +42,8 @@ export function dockerRun(opts: {
 
     const args = [
         "run",
-        "--name", `${opts.containerName}-${crypto.randomBytes(4).toString("hex")}`,
+        "--name",
+        `${opts.containerName}-${crypto.randomBytes(4).toString("hex")}`,
         "-d",
         ...params,
         opts.image,
@@ -58,23 +59,22 @@ export function dockerRun(opts: {
     });
 }
 
-export function dockerExec(args: {
-    containerId: string;
-    params: string[];
-}): Promise<void> {
+export function dockerExec(args: { containerId: string; params: string[] }): Promise<void> {
     return new Promise<void>((resolve, reject) => {
-        childProcess.execFile("docker", [
-            "exec", args.containerId,
-            ...args.params,
-        ], { encoding: 'utf8' }, (err, stdout, stderr) => {
-            if (err) {
-                console.log(stdout);
-                console.log(stderr);
-                reject(err);
-                return;
-            }
-            resolve();
-        });
+        childProcess.execFile(
+            "docker",
+            ["exec", args.containerId, ...args.params],
+            { encoding: "utf8" },
+            (err, stdout, stderr) => {
+                if (err) {
+                    console.log(stdout);
+                    console.log(stderr);
+                    reject(err);
+                    return;
+                }
+                resolve();
+            },
+        );
     });
 }
 
@@ -87,58 +87,45 @@ export async function dockerLogs(args: {
     const stderrFile = args.stderrFile ? await fse.open(args.stderrFile, "w") : "ignore";
 
     await new Promise<void>((resolve) => {
-        childProcess.spawn("docker", [
-            "logs",
-            args.containerId,
-        ], {
-            stdio: ["ignore", stdoutFile, stderrFile],
-        }).once('close', resolve);
+        childProcess
+            .spawn("docker", ["logs", args.containerId], {
+                stdio: ["ignore", stdoutFile, stderrFile],
+            })
+            .once("close", resolve);
     });
 
     if (args.stdoutFile) await fse.close(<number>stdoutFile);
     if (args.stderrFile) await fse.close(<number>stderrFile);
 }
 
-export function dockerStop(args: {
-    containerId: string;
-}): Promise<void> {
+export function dockerStop(args: { containerId: string }): Promise<void> {
     return new Promise<void>((resolve, reject) => {
-        childProcess.execFile('docker', [
-            "stop",
-            args.containerId,
-        ], err => {
+        childProcess.execFile("docker", ["stop", args.containerId], (err) => {
             if (err) reject(err);
             resolve();
         });
     });
 }
 
-export function dockerRm(args: {
-    containerId: string;
-}): Promise<void> {
+export function dockerRm(args: { containerId: string }): Promise<void> {
     return new Promise<void>((resolve, reject) => {
-        childProcess.execFile('docker', [
-            "rm",
-            args.containerId,
-        ], err => {
+        childProcess.execFile("docker", ["rm", args.containerId], (err) => {
             if (err) reject(err);
             resolve();
         });
     });
 }
 
-export function dockerIp(args: {
-    containerId: string;
-}): Promise<string> {
+export function dockerIp(args: { containerId: string }): Promise<string> {
     return new Promise<string>((resolve, reject) => {
-        childProcess.execFile('docker', [
-            "inspect",
-            "-f", "{{ .NetworkSettings.IPAddress }}",
-            args.containerId,
-        ], (err, stdout) => {
-            if (err) reject(err);
-            else resolve(stdout.trim());
-        });
+        childProcess.execFile(
+            "docker",
+            ["inspect", "-f", "{{ .NetworkSettings.IPAddress }}", args.containerId],
+            (err, stdout) => {
+                if (err) reject(err);
+                else resolve(stdout.trim());
+            },
+        );
     });
 }
 

@@ -17,7 +17,7 @@ limitations under the License.
 import { IAnnotatedPushRule, PushRuleAction } from "matrix-js-sdk/src/@types/PushRules";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { _td } from '../languageHandler';
+import { _td } from "../languageHandler";
 import { StandardActions } from "./StandardActions";
 import { PushRuleVectorState, VectorState } from "./PushRuleVectorState";
 import { NotificationUtils } from "./NotificationUtils";
@@ -47,7 +47,8 @@ class VectorPushRuleDefinition {
             enabled = rule.enabled;
         }
 
-        for (const stateKey in PushRuleVectorState.states) { // eslint-disable-line guard-for-in
+        for (const stateKey in PushRuleVectorState.states) {
+            // eslint-disable-line guard-for-in
             const state: VectorState = PushRuleVectorState.states[stateKey];
             const vectorStateToActions = this.vectorStateToActions[state];
 
@@ -61,17 +62,21 @@ class VectorPushRuleDefinition {
                 // Use `decodeActions` on both sides to canonicalize things like
                 // value: true vs. unspecified for highlight (which defaults to
                 // true, making them equivalent).
-                if (enabled &&
-                        JSON.stringify(NotificationUtils.decodeActions(rule.actions)) ===
-                        JSON.stringify(NotificationUtils.decodeActions(vectorStateToActions))) {
+                if (
+                    enabled &&
+                    JSON.stringify(NotificationUtils.decodeActions(rule.actions)) ===
+                        JSON.stringify(NotificationUtils.decodeActions(vectorStateToActions))
+                ) {
                     return state;
                 }
             }
         }
 
-        logger.error(`Cannot translate rule actions into Vector rule state. ` +
-            `Rule: ${JSON.stringify(rule)}, ` +
-            `Expected: ${JSON.stringify(this.vectorStateToActions)}`);
+        logger.error(
+            `Cannot translate rule actions into Vector rule state. ` +
+                `Rule: ${JSON.stringify(rule)}, ` +
+                `Expected: ${JSON.stringify(this.vectorStateToActions)}`,
+        );
         return undefined;
     }
 }
@@ -84,7 +89,8 @@ export const VectorPushRulesDefinitions = {
     // Messages containing user's display name
     ".m.rule.contains_display_name": new VectorPushRuleDefinition({
         description: _td("Messages containing my display name"), // passed through _t() translation in src/components/views/settings/Notifications.js
-        vectorStateToActions: { // The actions for each vector state, or null to disable the rule.
+        vectorStateToActions: {
+            // The actions for each vector state, or null to disable the rule.
             [VectorState.On]: StandardActions.ACTION_NOTIFY,
             [VectorState.Loud]: StandardActions.ACTION_HIGHLIGHT_DEFAULT_SOUND,
             [VectorState.Off]: StandardActions.ACTION_DISABLED,
@@ -94,7 +100,8 @@ export const VectorPushRulesDefinitions = {
     // Messages containing user's username (localpart/MXID)
     ".m.rule.contains_user_name": new VectorPushRuleDefinition({
         description: _td("Messages containing my username"), // passed through _t() translation in src/components/views/settings/Notifications.js
-        vectorStateToActions: { // The actions for each vector state, or null to disable the rule.
+        vectorStateToActions: {
+            // The actions for each vector state, or null to disable the rule.
             [VectorState.On]: StandardActions.ACTION_NOTIFY,
             [VectorState.Loud]: StandardActions.ACTION_HIGHLIGHT_DEFAULT_SOUND,
             [VectorState.Off]: StandardActions.ACTION_DISABLED,
@@ -104,7 +111,8 @@ export const VectorPushRulesDefinitions = {
     // Messages containing @room
     ".m.rule.roomnotif": new VectorPushRuleDefinition({
         description: _td("Messages containing @room"), // passed through _t() translation in src/components/views/settings/Notifications.js
-        vectorStateToActions: { // The actions for each vector state, or null to disable the rule.
+        vectorStateToActions: {
+            // The actions for each vector state, or null to disable the rule.
             [VectorState.On]: StandardActions.ACTION_NOTIFY,
             [VectorState.Loud]: StandardActions.ACTION_HIGHLIGHT,
             [VectorState.Off]: StandardActions.ACTION_DISABLED,
@@ -189,7 +197,8 @@ export const VectorPushRulesDefinitions = {
     // Room upgrades (tombstones)
     ".m.rule.tombstone": new VectorPushRuleDefinition({
         description: _td("When rooms are upgraded"), // passed through _t() translation in src/components/views/settings/Notifications.js
-        vectorStateToActions: { // The actions for each vector state, or null to disable the rule.
+        vectorStateToActions: {
+            // The actions for each vector state, or null to disable the rule.
             [VectorState.On]: StandardActions.ACTION_NOTIFY,
             [VectorState.Loud]: StandardActions.ACTION_HIGHLIGHT,
             [VectorState.Off]: StandardActions.ACTION_DISABLED,

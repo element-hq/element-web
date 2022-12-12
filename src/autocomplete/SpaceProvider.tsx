@@ -16,13 +16,15 @@ limitations under the License.
 
 import React from "react";
 
-import { _t } from '../languageHandler';
-import { MatrixClientPeg } from '../MatrixClientPeg';
+import { _t } from "../languageHandler";
+import { MatrixClientPeg } from "../MatrixClientPeg";
 import RoomProvider from "./RoomProvider";
 
 export default class SpaceProvider extends RoomProvider {
     protected getRooms() {
-        return MatrixClientPeg.get().getVisibleRooms().filter(r => r.isSpaceRoom());
+        return MatrixClientPeg.get()
+            .getVisibleRooms()
+            .filter((r) => r.isSpaceRoom());
     }
 
     getName() {
@@ -36,7 +38,7 @@ export default class SpaceProvider extends RoomProvider {
                 role="listbox"
                 aria-label={_t("Space Autocomplete")}
             >
-                { completions }
+                {completions}
             </div>
         );
     }

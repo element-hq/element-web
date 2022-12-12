@@ -30,13 +30,13 @@ interface IProps {
     className?: string;
 }
 
-const CopyableText: React.FC<IProps> = ({ children, getTextToCopy, border=true, className }) => {
+const CopyableText: React.FC<IProps> = ({ children, getTextToCopy, border = true, className }) => {
     const [tooltip, setTooltip] = useState<string | undefined>(undefined);
 
     const onCopyClickInternal = async (e: ButtonEvent) => {
         e.preventDefault();
         const successful = await copyPlaintext(getTextToCopy());
-        setTooltip(successful ? _t('Copied!') : _t('Failed to copy'));
+        setTooltip(successful ? _t("Copied!") : _t("Failed to copy"));
     };
 
     const onHideTooltip = () => {
@@ -49,15 +49,17 @@ const CopyableText: React.FC<IProps> = ({ children, getTextToCopy, border=true, 
         mx_CopyableText_border: border,
     });
 
-    return <div className={combinedClassName}>
-        { children }
-        <AccessibleTooltipButton
-            title={tooltip ?? _t("Copy")}
-            onClick={onCopyClickInternal}
-            className="mx_CopyableText_copyButton"
-            onHideTooltip={onHideTooltip}
-        />
-    </div>;
+    return (
+        <div className={combinedClassName}>
+            {children}
+            <AccessibleTooltipButton
+                title={tooltip ?? _t("Copy")}
+                onClick={onCopyClickInternal}
+                className="mx_CopyableText_copyButton"
+                onHideTooltip={onHideTooltip}
+            />
+        </div>
+    );
 };
 
 export default CopyableText;

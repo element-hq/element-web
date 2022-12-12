@@ -14,9 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 
-import MImageBody from './MImageBody';
+import MImageBody from "./MImageBody";
 import { BLURHASH_FIELD } from "../../../utils/image-media";
 import Tooltip from "../elements/Tooltip";
 import { IMediaEventContent } from "../../../customisations/models/IMediaEventContent";
@@ -37,7 +37,12 @@ export default class MStickerBody extends MImageBody {
         if (!this.state.showImage) {
             onClick = this.onClick;
         }
-        return <div className="mx_MStickerBody_wrapper" onClick={onClick}> { children } </div>;
+        return (
+            <div className="mx_MStickerBody_wrapper" onClick={onClick}>
+                {" "}
+                {children}{" "}
+            </div>
+        );
     }
 
     // Placeholder to show in place of the sticker image if img onLoad hasn't fired yet.
@@ -61,9 +66,11 @@ export default class MStickerBody extends MImageBody {
 
         if (!content || !content.body || !content.info || !content.info.w) return null;
 
-        return <div style={{ left: content.info.w + 'px' }} className="mx_MStickerBody_tooltip">
-            <Tooltip label={content.body} />
-        </div>;
+        return (
+            <div style={{ left: content.info.w + "px" }} className="mx_MStickerBody_tooltip">
+                <Tooltip label={content.body} />
+            </div>
+        );
     }
 
     // Don't show "Download this_file.png ..."

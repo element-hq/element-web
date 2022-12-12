@@ -14,18 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactNode, useContext, useEffect } from 'react';
-import classNames from 'classnames';
-import maplibregl from 'maplibre-gl';
-import { ClientEvent, IClientWellKnown } from 'matrix-js-sdk/src/matrix';
-import { logger } from 'matrix-js-sdk/src/logger';
+import React, { ReactNode, useContext, useEffect } from "react";
+import classNames from "classnames";
+import maplibregl from "maplibre-gl";
+import { ClientEvent, IClientWellKnown } from "matrix-js-sdk/src/matrix";
+import { logger } from "matrix-js-sdk/src/logger";
 
-import MatrixClientContext from '../../../contexts/MatrixClientContext';
-import { useEventEmitterState } from '../../../hooks/useEventEmitter';
-import { parseGeoUri } from '../../../utils/location';
-import { tileServerFromWellKnown } from '../../../utils/WellKnownUtils';
-import { useMap } from '../../../utils/location/useMap';
-import { Bounds } from '../../../utils/beacon/bounds';
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import { useEventEmitterState } from "../../../hooks/useEventEmitter";
+import { parseGeoUri } from "../../../utils/location";
+import { tileServerFromWellKnown } from "../../../utils/WellKnownUtils";
+import { useMap } from "../../../utils/location/useMap";
+import { Bounds } from "../../../utils/beacon/bounds";
 
 const useMapWithStyle = ({ id, centerGeoUri, onError, interactive, bounds }) => {
     const bodyId = `mx_Map_${id}`;
@@ -52,7 +52,7 @@ const useMapWithStyle = ({ id, centerGeoUri, onError, interactive, bounds }) => 
                 const coords = parseGeoUri(centerGeoUri);
                 map.setCenter({ lon: coords.longitude, lat: coords.latitude });
             } catch (_error) {
-                logger.error('Could not set map center');
+                logger.error("Could not set map center");
             }
         }
     }, [map, centerGeoUri]);
@@ -66,7 +66,7 @@ const useMapWithStyle = ({ id, centerGeoUri, onError, interactive, bounds }) => 
                 );
                 map.fitBounds(lngLatBounds, { padding: 100, maxZoom: 15 });
             } catch (_error) {
-                logger.error('Invalid map bounds');
+                logger.error("Invalid map bounds");
             }
         }
     }, [map, bounds]);
@@ -92,25 +92,13 @@ interface MapProps {
     className?: string;
     onClick?: () => void;
     onError?: (error: Error) => void;
-    children?: (renderProps: {
-        map: maplibregl.Map;
-    }) => ReactNode;
+    children?: (renderProps: { map: maplibregl.Map }) => ReactNode;
 }
 
-const Map: React.FC<MapProps> = ({
-    bounds,
-    centerGeoUri,
-    children,
-    className,
-    id,
-    interactive,
-    onError, onClick,
-}) => {
+const Map: React.FC<MapProps> = ({ bounds, centerGeoUri, children, className, id, interactive, onError, onClick }) => {
     const { map, bodyId } = useMapWithStyle({ centerGeoUri, onError, id, interactive, bounds });
 
-    const onMapClick = (
-        event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    ) => {
+    const onMapClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         // Eat click events when clicking the attribution button
         const target = event.target as Element;
         if (target.classList.contains("maplibregl-ctrl-attrib-button")) {
@@ -120,12 +108,11 @@ const Map: React.FC<MapProps> = ({
         onClick && onClick();
     };
 
-    return <div className={classNames('mx_Map', className)}
-        id={bodyId}
-        onClick={onMapClick}
-    >
-        { !!children && !!map && children({ map }) }
-    </div>;
+    return (
+        <div className={classNames("mx_Map", className)} id={bodyId} onClick={onMapClick}>
+            {!!children && !!map && children({ map })}
+        </div>
+    );
 };
 
 export default Map;

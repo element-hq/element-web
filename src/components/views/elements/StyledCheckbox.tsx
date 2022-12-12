@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from "react";
 import { randomString } from "matrix-js-sdk/src/randomstring";
-import classnames from 'classnames';
+import classnames from "classnames";
 
 export enum CheckboxStyle {
     Solid = "solid",
@@ -29,8 +29,7 @@ interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
     id?: string;
 }
 
-interface IState {
-}
+interface IState {}
 
 export default class StyledCheckbox extends React.PureComponent<IProps, IState> {
     private id: string;
@@ -49,33 +48,27 @@ export default class StyledCheckbox extends React.PureComponent<IProps, IState> 
         /* eslint @typescript-eslint/no-unused-vars: ["error", { "ignoreRestSiblings": true }] */
         const { children, className, kind = CheckboxStyle.Solid, inputRef, ...otherProps } = this.props;
 
-        const newClassName = classnames(
-            "mx_Checkbox",
-            className,
-            {
-                "mx_Checkbox_hasKind": kind,
-                [`mx_Checkbox_kind_${kind}`]: kind,
-            },
-        );
-        return <span className={newClassName}>
-            <input
-                // Pass through the ref - used for keyboard shortcut access to some buttons
-                ref={inputRef}
-                id={this.id}
-                {...otherProps}
-                type="checkbox"
-            />
-            <label htmlFor={this.id}>
-                { /* Using the div to center the image */ }
-                <div className="mx_Checkbox_background">
-                    <div className="mx_Checkbox_checkmark" />
-                </div>
-                { !!this.props.children &&
-                    <div>
-                        { this.props.children }
+        const newClassName = classnames("mx_Checkbox", className, {
+            mx_Checkbox_hasKind: kind,
+            [`mx_Checkbox_kind_${kind}`]: kind,
+        });
+        return (
+            <span className={newClassName}>
+                <input
+                    // Pass through the ref - used for keyboard shortcut access to some buttons
+                    ref={inputRef}
+                    id={this.id}
+                    {...otherProps}
+                    type="checkbox"
+                />
+                <label htmlFor={this.id}>
+                    {/* Using the div to center the image */}
+                    <div className="mx_Checkbox_background">
+                        <div className="mx_Checkbox_checkmark" />
                     </div>
-                }
-            </label>
-        </span>;
+                    {!!this.props.children && <div>{this.props.children}</div>}
+                </label>
+            </span>
+        );
     }
 }

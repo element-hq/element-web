@@ -29,7 +29,7 @@ describe("Create Room", () => {
     let synapse: SynapseInstance;
 
     beforeEach(() => {
-        cy.startSynapse("default").then(data => {
+        cy.startSynapse("default").then((data) => {
             synapse = data;
 
             cy.initTestUser(synapse, "Jim");

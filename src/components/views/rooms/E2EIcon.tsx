@@ -16,9 +16,9 @@ limitations under the License.
 */
 
 import React, { useState } from "react";
-import classNames from 'classnames';
+import classNames from "classnames";
 
-import { _t, _td } from '../../../languageHandler';
+import { _t, _td } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
 import Tooltip, { Alignment } from "../elements/Tooltip";
 import { E2EStatus } from "../../../utils/ShieldUtils";
@@ -65,13 +65,16 @@ const E2EIcon: React.FC<IProps> = ({
 }) => {
     const [hover, setHover] = useState(false);
 
-    const classes = classNames({
-        mx_E2EIcon: true,
-        mx_E2EIcon_bordered: bordered,
-        mx_E2EIcon_warning: status === E2EState.Warning,
-        mx_E2EIcon_normal: status === E2EState.Normal,
-        mx_E2EIcon_verified: status === E2EState.Verified,
-    }, className);
+    const classes = classNames(
+        {
+            mx_E2EIcon: true,
+            mx_E2EIcon_bordered: bordered,
+            mx_E2EIcon_warning: status === E2EState.Warning,
+            mx_E2EIcon_normal: status === E2EState.Normal,
+            mx_E2EIcon_verified: status === E2EState.Verified,
+        },
+        className,
+    );
 
     let e2eTitle;
     if (isUser) {
@@ -102,14 +105,16 @@ const E2EIcon: React.FC<IProps> = ({
                 className={classes}
                 style={style}
             >
-                { tip }
+                {tip}
             </AccessibleButton>
         );
     }
 
-    return <div onMouseOver={onMouseOver} onMouseLeave={onMouseLeave} className={classes} style={style}>
-        { tip }
-    </div>;
+    return (
+        <div onMouseOver={onMouseOver} onMouseLeave={onMouseLeave} className={classes} style={style}>
+            {tip}
+        </div>
+    );
 };
 
 export default E2EIcon;

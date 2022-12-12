@@ -29,28 +29,25 @@ interface Props {
     onDeviceSelect: (device: MediaDeviceInfo) => void;
 }
 
-export const DevicesContextMenu: React.FC<Props> = ({
-    containerRef,
-    currentDevice,
-    devices,
-    onDeviceSelect,
-}) => {
+export const DevicesContextMenu: React.FC<Props> = ({ containerRef, currentDevice, devices, onDeviceSelect }) => {
     const deviceOptions = devices.map((d: MediaDeviceInfo) => {
-        return <IconizedContextMenuRadio
-            key={d.deviceId}
-            active={d.deviceId === currentDevice?.deviceId}
-            onClick={() => onDeviceSelect(d)}
-            label={d.label}
-        />;
+        return (
+            <IconizedContextMenuRadio
+                key={d.deviceId}
+                active={d.deviceId === currentDevice?.deviceId}
+                onClick={() => onDeviceSelect(d)}
+                label={d.label}
+            />
+        );
     });
 
-    return <IconizedContextMenu
-        mountAsChild={false}
-        onFinished={() => {}}
-        {...toLeftOrRightOf(containerRef.current.getBoundingClientRect(), 0)}
-    >
-        <IconizedContextMenuOptionList>
-            { deviceOptions }
-        </IconizedContextMenuOptionList>
-    </IconizedContextMenu>;
+    return (
+        <IconizedContextMenu
+            mountAsChild={false}
+            onFinished={() => {}}
+            {...toLeftOrRightOf(containerRef.current.getBoundingClientRect(), 0)}
+        >
+            <IconizedContextMenuOptionList>{deviceOptions}</IconizedContextMenuOptionList>
+        </IconizedContextMenu>
+    );
 };

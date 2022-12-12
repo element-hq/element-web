@@ -41,7 +41,7 @@ const RoomInfoLine: FC<IProps> = ({ room }) => {
             return null;
         }
     }, [room]);
-    const joinRule = useRoomState(room, state => state.getJoinRule());
+    const joinRule = useRoomState(room, (state) => state.getJoinRule());
     const membership = useMyRoomMembership(room);
     const memberCount = useRoomMemberCount(room);
 
@@ -64,27 +64,31 @@ const RoomInfoLine: FC<IProps> = ({ room }) => {
     let members: JSX.Element;
     if (membership === "invite" && summary) {
         // Don't trust local state and instead use the summary API
-        members = <span className="mx_RoomInfoLine_members">
-            { _t("%(count)s members", { count: summary.num_joined_members }) }
-        </span>;
-    } else if (memberCount && summary !== undefined) { // summary is not still loading
-        const viewMembers = () => RightPanelStore.instance.setCard({
-            phase: room.isSpaceRoom() ? RightPanelPhases.SpaceMemberList : RightPanelPhases.RoomMemberList,
-        });
+        members = (
+            <span className="mx_RoomInfoLine_members">
+                {_t("%(count)s members", { count: summary.num_joined_members })}
+            </span>
+        );
+    } else if (memberCount && summary !== undefined) {
+        // summary is not still loading
+        const viewMembers = () =>
+            RightPanelStore.instance.setCard({
+                phase: room.isSpaceRoom() ? RightPanelPhases.SpaceMemberList : RightPanelPhases.RoomMemberList,
+            });
 
-        members = <AccessibleButton
-            kind="link"
-            className="mx_RoomInfoLine_members"
-            onClick={viewMembers}
-        >
-            { _t("%(count)s members", { count: memberCount }) }
-        </AccessibleButton>;
+        members = (
+            <AccessibleButton kind="link" className="mx_RoomInfoLine_members" onClick={viewMembers}>
+                {_t("%(count)s members", { count: memberCount })}
+            </AccessibleButton>
+        );
     }
 
-    return <div className={`mx_RoomInfoLine ${iconClass}`}>
-        { roomType }
-        { members }
-    </div>;
+    return (
+        <div className={`mx_RoomInfoLine ${iconClass}`}>
+            {roomType}
+            {members}
+        </div>
+    );
 };
 
 export default RoomInfoLine;

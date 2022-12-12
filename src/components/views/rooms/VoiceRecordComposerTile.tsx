@@ -128,7 +128,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
                 Math.round(this.state.recorder.durationSeconds * 1000),
                 this.state.recorder.contentLength,
                 upload.encrypted,
-                this.state.recorder.getPlayback().thumbnailWaveform.map(v => Math.round(v * 1024)),
+                this.state.recorder.getPlayback().thumbnailWaveform.map((v) => Math.round(v * 1024)),
             );
 
             attachRelation(content, relation);
@@ -140,15 +140,14 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
                 // Clear reply_to_event as we put the message into the queue
                 // if the send fails, retry will handle resending.
                 defaultDispatcher.dispatch({
-                    action: 'reply_to_event',
+                    action: "reply_to_event",
                     event: null,
                     context: this.context.timelineRenderingType,
                 });
             }
 
-            doMaybeLocalRoomAction(
-                this.props.room.roomId,
-                (actualRoomId: string) => MatrixClientPeg.get().sendMessage(actualRoomId, content),
+            doMaybeLocalRoomAction(this.props.room.roomId, (actualRoomId: string) =>
+                MatrixClientPeg.get().sendMessage(actualRoomId, content),
             );
         } catch (e) {
             logger.error("Error sending voice message:", e);
@@ -181,11 +180,15 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         const accessError = () => {
             Modal.createDialog(ErrorDialog, {
                 title: _t("Unable to access your microphone"),
-                description: <>
-                    <p>{ _t(
-                        "We were unable to access your microphone. Please check your browser settings and try again.",
-                    ) }</p>
-                </>,
+                description: (
+                    <>
+                        <p>
+                            {_t(
+                                "We were unable to access your microphone. Please check your browser settings and try again.",
+                            )}
+                        </p>
+                    </>
+                ),
             });
         };
 
@@ -196,11 +199,15 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
             if (!devices?.[MediaDeviceKindEnum.AudioInput]?.length) {
                 Modal.createDialog(ErrorDialog, {
                     title: _t("No microphone found"),
-                    description: <>
-                        <p>{ _t(
-                            "We didn't find a microphone on your device. Please check your settings and try again.",
-                        ) }</p>
-                    </>,
+                    description: (
+                        <>
+                            <p>
+                                {_t(
+                                    "We didn't find a microphone on your device. Please check your settings and try again.",
+                                )}
+                            </p>
+                        </>
+                    ),
                 });
                 return;
             }
@@ -247,17 +254,16 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         if (!this.state.recorder) return null; // no recorder means we're not recording: no waveform
 
         if (this.state.recordingPhase !== RecordingState.Started) {
-            return <RecordingPlayback
-                playback={this.state.recorder.getPlayback()}
-                layout={PlaybackLayout.Composer}
-            />;
+            return <RecordingPlayback playback={this.state.recorder.getPlayback()} layout={PlaybackLayout.Composer} />;
         }
 
         // only other UI is the recording-in-progress UI
-        return <div className="mx_MediaBody mx_VoiceMessagePrimaryContainer mx_VoiceRecordComposerTile_recording">
-            <LiveRecordingClock recorder={this.state.recorder} />
-            <LiveRecordingWaveform recorder={this.state.recorder} />
-        </div>;
+        return (
+            <div className="mx_MediaBody mx_VoiceMessagePrimaryContainer mx_VoiceRecordComposerTile_recording">
+                <LiveRecordingClock recorder={this.state.recorder} />
+                <LiveRecordingWaveform recorder={this.state.recorder} />
+            </div>
+        );
     }
 
     public render(): ReactNode {
@@ -271,46 +277,56 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
                 tooltip = _t("Stop recording");
             }
 
-            stopBtn = <AccessibleTooltipButton
-                className="mx_VoiceRecordComposerTile_stop"
-                onClick={this.onRecordStartEndClick}
-                title={tooltip}
-            />;
+            stopBtn = (
+                <AccessibleTooltipButton
+                    className="mx_VoiceRecordComposerTile_stop"
+                    onClick={this.onRecordStartEndClick}
+                    title={tooltip}
+                />
+            );
             if (this.state.recorder && !this.state.recorder?.isRecording) {
                 stopBtn = null;
             }
         }
 
         if (this.state.recorder && this.state.recordingPhase !== RecordingState.Uploading) {
-            deleteButton = <AccessibleTooltipButton
-                className='mx_VoiceRecordComposerTile_delete'
-                title={_t("Delete")}
-                onClick={this.onCancel}
-            />;
+            deleteButton = (
+                <AccessibleTooltipButton
+                    className="mx_VoiceRecordComposerTile_delete"
+                    title={_t("Delete")}
+                    onClick={this.onCancel}
+                />
+            );
         }
 
         let uploadIndicator;
         if (this.state.recordingPhase === RecordingState.Uploading) {
-            uploadIndicator = <span className='mx_VoiceRecordComposerTile_uploadingState'>
-                <InlineSpinner w={16} h={16} />
-            </span>;
-        } else if (this.state.didUploadFail && this.state.recordingPhase === RecordingState.Ended) {
-            uploadIndicator = <span className='mx_VoiceRecordComposerTile_failedState'>
-                <span className='mx_VoiceRecordComposerTile_uploadState_badge'>
-                    { /* Need to stick the badge in a span to ensure it doesn't create a block component */ }
-                    <NotificationBadge
-                        notification={StaticNotificationState.forSymbol("!", NotificationColor.Red)}
-                    />
+            uploadIndicator = (
+                <span className="mx_VoiceRecordComposerTile_uploadingState">
+                    <InlineSpinner w={16} h={16} />
                 </span>
-                <span className='text-warning'>{ _t("Failed to send") }</span>
-            </span>;
+            );
+        } else if (this.state.didUploadFail && this.state.recordingPhase === RecordingState.Ended) {
+            uploadIndicator = (
+                <span className="mx_VoiceRecordComposerTile_failedState">
+                    <span className="mx_VoiceRecordComposerTile_uploadState_badge">
+                        {/* Need to stick the badge in a span to ensure it doesn't create a block component */}
+                        <NotificationBadge
+                            notification={StaticNotificationState.forSymbol("!", NotificationColor.Red)}
+                        />
+                    </span>
+                    <span className="text-warning">{_t("Failed to send")}</span>
+                </span>
+            );
         }
 
-        return (<>
-            { uploadIndicator }
-            { deleteButton }
-            { stopBtn }
-            { this.renderWaveformArea() }
-        </>);
+        return (
+            <>
+                {uploadIndicator}
+                {deleteButton}
+                {stopBtn}
+                {this.renderWaveformArea()}
+            </>
+        );
     }
 }

@@ -17,24 +17,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import { sortBy } from 'lodash';
+import React from "react";
+import { sortBy } from "lodash";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { RoomState, RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 import { IRoomTimelineData } from "matrix-js-sdk/src/models/event-timeline-set";
 
-import { MatrixClientPeg } from '../MatrixClientPeg';
-import QueryMatcher from './QueryMatcher';
-import { PillCompletion } from './Components';
-import AutocompleteProvider from './AutocompleteProvider';
-import { _t } from '../languageHandler';
+import { MatrixClientPeg } from "../MatrixClientPeg";
+import QueryMatcher from "./QueryMatcher";
+import { PillCompletion } from "./Components";
+import AutocompleteProvider from "./AutocompleteProvider";
+import { _t } from "../languageHandler";
 import { makeUserPermalink } from "../utils/permalinks/Permalinks";
 import { ICompletion, ISelectionRange } from "./Autocompleter";
-import MemberAvatar from '../components/views/avatars/MemberAvatar';
-import { TimelineRenderingType } from '../contexts/RoomContext';
-import UserIdentifierCustomisations from '../customisations/UserIdentifier';
+import MemberAvatar from "../components/views/avatars/MemberAvatar";
+import { TimelineRenderingType } from "../contexts/RoomContext";
+import UserIdentifierCustomisations from "../customisations/UserIdentifier";
 
 const USER_REGEX = /\B@\S*/g;
 
@@ -55,8 +55,8 @@ export default class UserProvider extends AutocompleteProvider {
         });
         this.room = room;
         this.matcher = new QueryMatcher([], {
-            keys: ['name'],
-            funcs: [obj => obj.userId.slice(1)], // index by user id minus the leading '@'
+            keys: ["name"],
+            funcs: [(obj) => obj.userId.slice(1)], // index by user id minus the leading '@'
             shouldMatchWordsOnly: false,
         });
 
@@ -117,21 +117,22 @@ export default class UserProvider extends AutocompleteProvider {
 
         const fullMatch = command[0];
         // Don't search if the query is a single "@"
-        if (fullMatch && fullMatch !== '@') {
+        if (fullMatch && fullMatch !== "@") {
             // Don't include the '@' in our search query - it's only used as a way to trigger completion
-            const query = fullMatch.startsWith('@') ? fullMatch.substring(1) : fullMatch;
+            const query = fullMatch.startsWith("@") ? fullMatch.substring(1) : fullMatch;
             completions = this.matcher.match(query, limit).map((user) => {
-                const description = UserIdentifierCustomisations.getDisplayUserIdentifier(
-                    user.userId, { roomId: this.room.roomId, withDisplayName: true },
-                );
-                const displayName = (user.name || user.userId || '');
+                const description = UserIdentifierCustomisations.getDisplayUserIdentifier(user.userId, {
+                    roomId: this.room.roomId,
+                    withDisplayName: true,
+                });
+                const displayName = user.name || user.userId || "";
                 return {
                     // Length of completion should equal length of text in decorator. draft-js
                     // relies on the length of the entity === length of the text in the decoration.
                     completion: user.rawDisplayName,
                     completionId: user.userId,
                     type: "user",
-                    suffix: (selection.beginning && range.start === 0) ? ': ' : ' ',
+                    suffix: selection.beginning && range.start === 0 ? ": " : " ",
                     href: makeUserPermalink(user.userId),
                     component: (
                         <PillCompletion title={displayName} description={description}>
@@ -146,7 +147,7 @@ export default class UserProvider extends AutocompleteProvider {
     }
 
     getName(): string {
-        return _t('Users');
+        return _t("Users");
     }
 
     private makeUsers() {
@@ -161,7 +162,7 @@ export default class UserProvider extends AutocompleteProvider {
         this.users = this.room.getJoinedMembers().filter(({ userId }) => userId !== currentUserId);
         this.users = this.users.concat(this.room.getMembersWithMembership("invite"));
 
-        this.users = sortBy(this.users, (member) => 1E20 - lastSpoken[member.userId] || 1E20);
+        this.users = sortBy(this.users, (member) => 1e20 - lastSpoken[member.userId] || 1e20);
 
         this.matcher.setObjects(this.users);
     }
@@ -173,7 +174,9 @@ export default class UserProvider extends AutocompleteProvider {
 
         // Move the user that spoke to the front of the array
         this.users.splice(
-            this.users.findIndex((user2) => user2.userId === user.userId), 1);
+            this.users.findIndex((user2) => user2.userId === user.userId),
+            1,
+        );
         this.users = [user, ...this.users];
 
         this.matcher.setObjects(this.users);
@@ -186,7 +189,7 @@ export default class UserProvider extends AutocompleteProvider {
                 role="presentation"
                 aria-label={_t("User Autocomplete")}
             >
-                { completions }
+                {completions}
             </div>
         );
     }

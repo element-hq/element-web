@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { InputHTMLAttributes, SelectHTMLAttributes, TextareaHTMLAttributes, RefObject } from 'react';
-import classNames from 'classnames';
+import React, { InputHTMLAttributes, SelectHTMLAttributes, TextareaHTMLAttributes, RefObject } from "react";
+import classNames from "classnames";
 import { debounce } from "lodash";
 
 import { IFieldState, IValidationResult } from "./Validation";
@@ -240,10 +240,25 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
 
     public render() {
         /* eslint @typescript-eslint/no-unused-vars: ["error", { "ignoreRestSiblings": true }] */
-        const { element, inputRef, prefixComponent, postfixComponent, className, onValidate, children,
-            tooltipContent, forceValidity, tooltipClassName, list, validateOnBlur, validateOnChange, validateOnFocus,
-            usePlaceholderAsHint, forceTooltipVisible,
-            ...inputProps } = this.props;
+        const {
+            element,
+            inputRef,
+            prefixComponent,
+            postfixComponent,
+            className,
+            onValidate,
+            children,
+            tooltipContent,
+            forceValidity,
+            tooltipClassName,
+            list,
+            validateOnBlur,
+            validateOnChange,
+            validateOnFocus,
+            usePlaceholderAsHint,
+            forceTooltipVisible,
+            ...inputProps
+        } = this.props;
 
         this.inputRef = inputRef || React.createRef();
 
@@ -261,48 +276,45 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
 
         let prefixContainer = null;
         if (prefixComponent) {
-            prefixContainer = <span className="mx_Field_prefix">{ prefixComponent }</span>;
+            prefixContainer = <span className="mx_Field_prefix">{prefixComponent}</span>;
         }
         let postfixContainer = null;
         if (postfixComponent) {
-            postfixContainer = <span className="mx_Field_postfix">{ postfixComponent }</span>;
+            postfixContainer = <span className="mx_Field_postfix">{postfixComponent}</span>;
         }
 
         const hasValidationFlag = forceValidity !== null && forceValidity !== undefined;
-        const fieldClasses = classNames(
-            "mx_Field",
-            `mx_Field_${this.props.element}`,
-            className,
-            {
-                // If we have a prefix element, leave the label always at the top left and
-                // don't animate it, as it looks a bit clunky and would add complexity to do
-                // properly.
-                mx_Field_labelAlwaysTopLeft: prefixComponent || usePlaceholderAsHint,
-                mx_Field_placeholderIsHint: usePlaceholderAsHint,
-                mx_Field_valid: hasValidationFlag ? forceValidity : onValidate && this.state.valid === true,
-                mx_Field_invalid: hasValidationFlag
-                    ? !forceValidity
-                    : onValidate && this.state.valid === false,
-            },
-        );
+        const fieldClasses = classNames("mx_Field", `mx_Field_${this.props.element}`, className, {
+            // If we have a prefix element, leave the label always at the top left and
+            // don't animate it, as it looks a bit clunky and would add complexity to do
+            // properly.
+            mx_Field_labelAlwaysTopLeft: prefixComponent || usePlaceholderAsHint,
+            mx_Field_placeholderIsHint: usePlaceholderAsHint,
+            mx_Field_valid: hasValidationFlag ? forceValidity : onValidate && this.state.valid === true,
+            mx_Field_invalid: hasValidationFlag ? !forceValidity : onValidate && this.state.valid === false,
+        });
 
         // Handle displaying feedback on validity
         let fieldTooltip;
         if (tooltipContent || this.state.feedback) {
-            fieldTooltip = <Tooltip
-                tooltipClassName={classNames("mx_Field_tooltip", "mx_Tooltip_noMargin", tooltipClassName)}
-                visible={(this.state.focused && forceTooltipVisible) || this.state.feedbackVisible}
-                label={tooltipContent || this.state.feedback}
-                alignment={Tooltip.Alignment.Right}
-            />;
+            fieldTooltip = (
+                <Tooltip
+                    tooltipClassName={classNames("mx_Field_tooltip", "mx_Tooltip_noMargin", tooltipClassName)}
+                    visible={(this.state.focused && forceTooltipVisible) || this.state.feedbackVisible}
+                    label={tooltipContent || this.state.feedback}
+                    alignment={Tooltip.Alignment.Right}
+                />
+            );
         }
 
-        return <div className={fieldClasses}>
-            { prefixContainer }
-            { fieldInput }
-            <label htmlFor={this.id}>{ this.props.label }</label>
-            { postfixContainer }
-            { fieldTooltip }
-        </div>;
+        return (
+            <div className={fieldClasses}>
+                {prefixContainer}
+                {fieldInput}
+                <label htmlFor={this.id}>{this.props.label}</label>
+                {postfixContainer}
+                {fieldTooltip}
+            </div>
+        );
     }
 }

@@ -14,17 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import { fireEvent, render } from '@testing-library/react';
-import { PUSHER_ENABLED } from 'matrix-js-sdk/src/@types/event';
+import React from "react";
+import { fireEvent, render } from "@testing-library/react";
+import { PUSHER_ENABLED } from "matrix-js-sdk/src/@types/event";
 
-import DeviceDetails from '../../../../../src/components/views/settings/devices/DeviceDetails';
-import { mkPusher } from '../../../../test-utils/test-utils';
-import { DeviceType } from '../../../../../src/utils/device/parseUserAgent';
+import DeviceDetails from "../../../../../src/components/views/settings/devices/DeviceDetails";
+import { mkPusher } from "../../../../test-utils/test-utils";
+import { DeviceType } from "../../../../../src/utils/device/parseUserAgent";
 
-describe('<DeviceDetails />', () => {
+describe("<DeviceDetails />", () => {
     const baseDevice = {
-        device_id: 'my-device',
+        device_id: "my-device",
         isVerified: false,
         deviceType: DeviceType.Unknown,
     };
@@ -49,27 +49,27 @@ describe('<DeviceDetails />', () => {
         jest.setSystemTime(now);
     });
 
-    it('renders device without metadata', () => {
+    it("renders device without metadata", () => {
         const { container } = render(getComponent());
         expect(container).toMatchSnapshot();
     });
 
-    it('renders device with metadata', () => {
+    it("renders device with metadata", () => {
         const device = {
             ...baseDevice,
-            display_name: 'My Device',
-            last_seen_ip: '123.456.789',
+            display_name: "My Device",
+            last_seen_ip: "123.456.789",
             last_seen_ts: now - 60000000,
-            appName: 'Element Web',
-            client: 'Firefox 100',
-            deviceModel: 'Iphone X',
-            deviceOperatingSystem: 'Windows 95',
+            appName: "Element Web",
+            client: "Firefox 100",
+            deviceModel: "Iphone X",
+            deviceOperatingSystem: "Windows 95",
         };
         const { container } = render(getComponent({ device }));
         expect(container).toMatchSnapshot();
     });
 
-    it('renders a verified device', () => {
+    it("renders a verified device", () => {
         const device = {
             ...baseDevice,
             isVerified: true,
@@ -78,17 +78,15 @@ describe('<DeviceDetails />', () => {
         expect(container).toMatchSnapshot();
     });
 
-    it('disables sign out button while sign out is pending', () => {
+    it("disables sign out button while sign out is pending", () => {
         const device = {
             ...baseDevice,
         };
         const { getByTestId } = render(getComponent({ device, isSigningOut: true }));
-        expect(
-            getByTestId('device-detail-sign-out-cta').getAttribute('aria-disabled'),
-        ).toEqual("true");
+        expect(getByTestId("device-detail-sign-out-cta").getAttribute("aria-disabled")).toEqual("true");
     });
 
-    it('renders the push notification section when a pusher exists', () => {
+    it("renders the push notification section when a pusher exists", () => {
         const device = {
             ...baseDevice,
         };
@@ -96,30 +94,34 @@ describe('<DeviceDetails />', () => {
             device_id: device.device_id,
         });
 
-        const { getByTestId } = render(getComponent({
-            device,
-            pusher,
-            isSigningOut: true,
-        }));
+        const { getByTestId } = render(
+            getComponent({
+                device,
+                pusher,
+                isSigningOut: true,
+            }),
+        );
 
-        expect(getByTestId('device-detail-push-notification')).toBeTruthy();
+        expect(getByTestId("device-detail-push-notification")).toBeTruthy();
     });
 
-    it('hides the push notification section when no pusher', () => {
+    it("hides the push notification section when no pusher", () => {
         const device = {
             ...baseDevice,
         };
 
-        const { getByTestId } = render(getComponent({
-            device,
-            pusher: null,
-            isSigningOut: true,
-        }));
+        const { getByTestId } = render(
+            getComponent({
+                device,
+                pusher: null,
+                isSigningOut: true,
+            }),
+        );
 
-        expect(() => getByTestId('device-detail-push-notification')).toThrow();
+        expect(() => getByTestId("device-detail-push-notification")).toThrow();
     });
 
-    it('disables the checkbox when there is no server support', () => {
+    it("disables the checkbox when there is no server support", () => {
         const device = {
             ...baseDevice,
         };
@@ -128,20 +130,22 @@ describe('<DeviceDetails />', () => {
             [PUSHER_ENABLED.name]: false,
         });
 
-        const { getByTestId } = render(getComponent({
-            device,
-            pusher,
-            isSigningOut: true,
-            supportsMSC3881: false,
-        }));
+        const { getByTestId } = render(
+            getComponent({
+                device,
+                pusher,
+                isSigningOut: true,
+                supportsMSC3881: false,
+            }),
+        );
 
-        const checkbox = getByTestId('device-detail-push-notification-checkbox');
+        const checkbox = getByTestId("device-detail-push-notification-checkbox");
 
-        expect(checkbox.getAttribute('aria-disabled')).toEqual("true");
-        expect(checkbox.getAttribute('aria-checked')).toEqual("false");
+        expect(checkbox.getAttribute("aria-disabled")).toEqual("true");
+        expect(checkbox.getAttribute("aria-checked")).toEqual("false");
     });
 
-    it('changes the pusher status when clicked', () => {
+    it("changes the pusher status when clicked", () => {
         const device = {
             ...baseDevice,
         };
@@ -153,35 +157,39 @@ describe('<DeviceDetails />', () => {
             [PUSHER_ENABLED.name]: enabled,
         });
 
-        const { getByTestId } = render(getComponent({
-            device,
-            pusher,
-            isSigningOut: true,
-        }));
+        const { getByTestId } = render(
+            getComponent({
+                device,
+                pusher,
+                isSigningOut: true,
+            }),
+        );
 
-        const checkbox = getByTestId('device-detail-push-notification-checkbox');
+        const checkbox = getByTestId("device-detail-push-notification-checkbox");
 
         fireEvent.click(checkbox);
 
         expect(defaultProps.setPushNotifications).toHaveBeenCalledWith(device.device_id, !enabled);
     });
 
-    it('changes the local notifications settings status when clicked', () => {
+    it("changes the local notifications settings status when clicked", () => {
         const device = {
             ...baseDevice,
         };
 
         const enabled = false;
 
-        const { getByTestId } = render(getComponent({
-            device,
-            localNotificationSettings: {
-                is_silenced: !enabled,
-            },
-            isSigningOut: true,
-        }));
+        const { getByTestId } = render(
+            getComponent({
+                device,
+                localNotificationSettings: {
+                    is_silenced: !enabled,
+                },
+                isSigningOut: true,
+            }),
+        );
 
-        const checkbox = getByTestId('device-detail-push-notification-checkbox');
+        const checkbox = getByTestId("device-detail-push-notification-checkbox");
         fireEvent.click(checkbox);
 
         expect(defaultProps.setPushNotifications).toHaveBeenCalledWith(device.device_id, !enabled);

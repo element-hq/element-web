@@ -14,43 +14,33 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 
-import { _t } from '../../../languageHandler';
-import Modal from '../../../Modal';
-import InfoDialog from '../dialogs/InfoDialog';
-import AccessibleButton, { IAccessibleButtonProps } from './AccessibleButton';
+import { _t } from "../../../languageHandler";
+import Modal from "../../../Modal";
+import InfoDialog from "../dialogs/InfoDialog";
+import AccessibleButton, { IAccessibleButtonProps } from "./AccessibleButton";
 
 export interface LearnMoreProps extends IAccessibleButtonProps {
     title: string;
     description: string | React.ReactNode;
 }
 
-const LearnMore: React.FC<LearnMoreProps> = ({
-    title,
-    description,
-    ...rest
-}) => {
+const LearnMore: React.FC<LearnMoreProps> = ({ title, description, ...rest }) => {
     const onClick = () => {
-        Modal.createDialog(
-            InfoDialog,
-            {
-                title,
-                description,
-                button: _t('Got it'),
-                hasCloseButton: true,
-            },
-        );
+        Modal.createDialog(InfoDialog, {
+            title,
+            description,
+            button: _t("Got it"),
+            hasCloseButton: true,
+        });
     };
 
-    return <AccessibleButton
-        {...rest}
-        kind='link_inline'
-        onClick={onClick}
-        className='mx_LearnMore_button'
-    >
-        { _t('Learn more') }
-    </AccessibleButton>;
+    return (
+        <AccessibleButton {...rest} kind="link_inline" onClick={onClick} className="mx_LearnMore_button">
+            {_t("Learn more")}
+        </AccessibleButton>
+    );
 };
 
 export default LearnMore;

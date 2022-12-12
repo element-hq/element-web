@@ -1,59 +1,59 @@
 name: Tests
 on:
-  pull_request: { }
-  push:
-    branches: [ develop, master ]
-  repository_dispatch:
-    types: [ upstream-sdk-notify ]
+    pull_request: {}
+    push:
+        branches: [develop, master]
+    repository_dispatch:
+        types: [upstream-sdk-notify]
 env:
-  # These must be set for fetchdep.sh to get the right branch
-  REPOSITORY: ${{ github.repository }}
-  PR_NUMBER: ${{ github.event.pull_request.number }}
+    # These must be set for fetchdep.sh to get the right branch
+    REPOSITORY: ${{ github.repository }}
+    PR_NUMBER: ${{ github.event.pull_request.number }}
 jobs:
-  jest:
-    name: Jest
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    jest:
+        name: Jest
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
 
-      - name: Yarn cache
-        uses: actions/setup-node@v3
-        with:
-          cache: 'yarn'
+            - name: Yarn cache
+              uses: actions/setup-node@v3
+              with:
+                  cache: "yarn"
 
-      - name: Install Deps
-        run: "./scripts/ci/install-deps.sh --ignore-scripts"
+            - name: Install Deps
+              run: "./scripts/ci/install-deps.sh --ignore-scripts"
 
-      - name: Get number of CPU cores
-        id: cpu-cores
-        uses: SimenB/github-actions-cpu-cores@v1
+            - name: Get number of CPU cores
+              id: cpu-cores
+              uses: SimenB/github-actions-cpu-cores@v1
 
-      - name: Run tests with coverage and metrics
-        if: github.ref == 'refs/heads/develop'
-        run: "yarn coverage --ci --reporters github-actions '--reporters=<rootDir>/test/slowReporter.js' --max-workers ${{ steps.cpu-cores.outputs.count }}"
+            - name: Run tests with coverage and metrics
+              if: github.ref == 'refs/heads/develop'
+              run: "yarn coverage --ci --reporters github-actions '--reporters=<rootDir>/test/slowReporter.js' --max-workers ${{ steps.cpu-cores.outputs.count }}"
 
-      - name: Run tests with coverage
-        if: github.ref != 'refs/heads/develop'
-        run: "yarn coverage --ci --reporters github-actions --max-workers ${{ steps.cpu-cores.outputs.count }}"
+            - name: Run tests with coverage
+              if: github.ref != 'refs/heads/develop'
+              run: "yarn coverage --ci --reporters github-actions --max-workers ${{ steps.cpu-cores.outputs.count }}"
 
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: coverage
-          path: |
-            coverage
-            !coverage/lcov-report
+            - name: Upload Artifact
+              uses: actions/upload-artifact@v3
+              with:
+                  name: coverage
+                  path: |
+                      coverage
+                      !coverage/lcov-report
 
-  app-tests:
-    name: Element Web Integration Tests
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
+    app-tests:
+        name: Element Web Integration Tests
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
 
-      - uses: actions/setup-node@v3
-        with:
-          cache: 'yarn'
+            - uses: actions/setup-node@v3
+              with:
+                  cache: "yarn"
 
-      - name: Run tests
-        run: "./scripts/ci/app-tests.sh"
+            - name: Run tests
+              run: "./scripts/ci/app-tests.sh"

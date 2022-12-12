@@ -23,7 +23,5 @@ import SdkConfig, { DEFAULTS } from "../../SdkConfig";
  * - If that fails fall back to four hours
  */
 export const getMaxBroadcastLength = (): number => {
-    return SdkConfig.get("voice_broadcast")?.max_length
-        || DEFAULTS.voice_broadcast?.max_length
-        || 4 * 60 * 60;
+    return SdkConfig.get("voice_broadcast")?.max_length || DEFAULTS.voice_broadcast?.max_length || 4 * 60 * 60;
 };

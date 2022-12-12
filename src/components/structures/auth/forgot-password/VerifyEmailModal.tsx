@@ -46,55 +46,49 @@ export const VerifyEmailModal: React.FC<Props> = ({
         toggleTooltipVisible();
     };
 
-    return <>
-        <EmailPromptIcon className="mx_AuthBody_emailPromptIcon" />
-        <h1>{ _t("Verify your email to continue") }</h1>
-        <p>
-            { _t(
-                `We need to know it’s you before resetting your password.
+    return (
+        <>
+            <EmailPromptIcon className="mx_AuthBody_emailPromptIcon" />
+            <h1>{_t("Verify your email to continue")}</h1>
+            <p>
+                {_t(
+                    `We need to know it’s you before resetting your password.
                     Click the link in the email we just sent to <b>%(email)s</b>`,
-                {
-                    email,
-                },
-                {
-                    b: sub => <b>{ sub }</b>,
-                },
-            ) }
-        </p>
+                    {
+                        email,
+                    },
+                    {
+                        b: (sub) => <b>{sub}</b>,
+                    },
+                )}
+            </p>
 
-        <div className="mx_AuthBody_did-not-receive">
-            <span className="mx_VerifyEMailDialog_text-light">{ _t("Did not receive it?") }</span>
+            <div className="mx_AuthBody_did-not-receive">
+                <span className="mx_VerifyEMailDialog_text-light">{_t("Did not receive it?")}</span>
+                <AccessibleButton className="mx_AuthBody_resend-button" kind="link" onClick={onResendClickFn}>
+                    <RetryIcon className="mx_Icon mx_Icon_16" />
+                    {_t("Resend")}
+                    <Tooltip
+                        label={_t("Verification link email resent!")}
+                        alignment={Alignment.Top}
+                        visible={tooltipVisible}
+                    />
+                </AccessibleButton>
+                {errorText && <ErrorMessage message={errorText} />}
+            </div>
+
+            <div className="mx_AuthBody_did-not-receive">
+                <span className="mx_VerifyEMailDialog_text-light">{_t("Wrong email address?")}</span>
+                <AccessibleButton className="mx_AuthBody_resend-button" kind="link" onClick={onReEnterEmailClick}>
+                    {_t("Re-enter email address")}
+                </AccessibleButton>
+            </div>
+
             <AccessibleButton
-                className="mx_AuthBody_resend-button"
-                kind="link"
-                onClick={onResendClickFn}
-            >
-                <RetryIcon className="mx_Icon mx_Icon_16" />
-                { _t("Resend") }
-                <Tooltip
-                    label={_t("Verification link email resent!")}
-                    alignment={Alignment.Top}
-                    visible={tooltipVisible}
-                />
-            </AccessibleButton>
-            { errorText && <ErrorMessage message={errorText} /> }
-        </div>
-
-        <div className="mx_AuthBody_did-not-receive">
-            <span className="mx_VerifyEMailDialog_text-light">{ _t("Wrong email address?") }</span>
-            <AccessibleButton
-                className="mx_AuthBody_resend-button"
-                kind="link"
-                onClick={onReEnterEmailClick}
-            >
-                { _t("Re-enter email address") }
-            </AccessibleButton>
-        </div>
-
-        <AccessibleButton
-            onClick={onCloseClick}
-            className="mx_Dialog_cancelButton"
-            aria-label={_t("Close dialog")}
-        />
-    </>;
+                onClick={onCloseClick}
+                className="mx_Dialog_cancelButton"
+                aria-label={_t("Close dialog")}
+            />
+        </>
+    );
 };

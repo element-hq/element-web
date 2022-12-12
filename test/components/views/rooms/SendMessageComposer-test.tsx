@@ -30,8 +30,8 @@ import { createPartCreator, createRenderer } from "../../../editor/mock";
 import { createTestClient, mkEvent, mkStubRoom } from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
-import DocumentOffset from '../../../../src/editor/offset';
-import { Layout } from '../../../../src/settings/enums/Layout';
+import DocumentOffset from "../../../../src/editor/offset";
+import { Layout } from "../../../../src/settings/enums/Layout";
 import { IRoomState } from "../../../../src/components/structures/RoomView";
 import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalinks";
 import { mockPlatformPeg } from "../../../test-utils/platform";
@@ -42,7 +42,7 @@ jest.mock("../../../../src/utils/local-room", () => ({
     doMaybeLocalRoomAction: jest.fn(),
 }));
 
-describe('<SendMessageComposer/>', () => {
+describe("<SendMessageComposer/>", () => {
     const defaultRoomContext: IRoomState = {
         roomLoading: true,
         peekLoading: false,
@@ -156,16 +156,16 @@ describe('<SendMessageComposer/>', () => {
 
     describe("functions correctly mounted", () => {
         const mockClient = createTestClient();
-        jest.spyOn(MatrixClientPeg, 'get').mockReturnValue(mockClient);
-        const mockRoom = mkStubRoom('myfakeroom', 'myfakeroom', mockClient) as any;
+        jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
+        const mockRoom = mkStubRoom("myfakeroom", "myfakeroom", mockClient) as any;
         const mockEvent = mkEvent({
             type: "m.room.message",
-            room: 'myfakeroom',
-            user: 'myfakeuser',
-            content: { "msgtype": "m.text", "body": "Replying to this" },
+            room: "myfakeroom",
+            user: "myfakeuser",
+            content: { msgtype: "m.text", body: "Replying to this" },
             event: true,
         });
-        mockRoom.findEventById = jest.fn(eventId => {
+        mockRoom.findEventById = jest.fn((eventId) => {
             return eventId === mockEvent.getId() ? mockEvent : null;
         });
 
@@ -216,7 +216,7 @@ describe('<SendMessageComposer/>', () => {
             // ensure the right state was persisted to localStorage
             unmount();
             expect(JSON.parse(localStorage.getItem(key))).toStrictEqual({
-                parts: [{ "type": "plain", "text": "Test Text" }],
+                parts: [{ type: "plain", text: "Test Text" }],
                 replyEventId: mockEvent.getId(),
             });
 
@@ -247,9 +247,9 @@ describe('<SendMessageComposer/>', () => {
             expect(localStorage.getItem(key)).toBeNull();
 
             // ensure the right state was persisted to localStorage
-            window.dispatchEvent(new Event('beforeunload'));
+            window.dispatchEvent(new Event("beforeunload"));
             expect(JSON.parse(localStorage.getItem(key))).toStrictEqual({
-                parts: [{ "type": "plain", "text": "Hello World" }],
+                parts: [{ type: "plain", text: "Hello World" }],
             });
         });
 
@@ -272,19 +272,17 @@ describe('<SendMessageComposer/>', () => {
             expect(container.textContent).toBe("");
             const str = sessionStorage.getItem(`mx_cider_history_${mockRoom.roomId}[0]`);
             expect(JSON.parse(str)).toStrictEqual({
-                parts: [{ "type": "plain", "text": "This is a message" }],
+                parts: [{ type: "plain", text: "This is a message" }],
                 replyEventId: mockEvent.getId(),
             });
         });
 
         it("correctly sends a message", () => {
-            mocked(doMaybeLocalRoomAction).mockImplementation(<T extends {}>(
-                roomId: string,
-                fn: (actualRoomId: string) => Promise<T>,
-                _client?: MatrixClient,
-            ) => {
-                return fn(roomId);
-            });
+            mocked(doMaybeLocalRoomAction).mockImplementation(
+                <T extends {}>(roomId: string, fn: (actualRoomId: string) => Promise<T>, _client?: MatrixClient) => {
+                    return fn(roomId);
+                },
+            );
 
             mockPlatformPeg({ overrideBrowserShortcuts: jest.fn().mockReturnValue(false) });
             const { container } = getComponent();
@@ -292,14 +290,10 @@ describe('<SendMessageComposer/>', () => {
             addTextToComposer(container, "test message");
             fireEvent.keyDown(container.querySelector(".mx_SendMessageComposer"), { key: "Enter" });
 
-            expect(mockClient.sendMessage).toHaveBeenCalledWith(
-                "myfakeroom",
-                null,
-                {
-                    "body": "test message",
-                    "msgtype": MsgType.Text,
-                },
-            );
+            expect(mockClient.sendMessage).toHaveBeenCalledWith("myfakeroom", null, {
+                body: "test message",
+                msgtype: MsgType.Text,
+            });
         });
     });
 
@@ -339,4 +333,3 @@ describe('<SendMessageComposer/>', () => {
         });
     });
 });
-

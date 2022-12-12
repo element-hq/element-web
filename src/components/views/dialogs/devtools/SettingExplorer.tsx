@@ -66,7 +66,11 @@ interface ICanEditLevelFieldProps {
 const CanEditLevelField = ({ setting, roomId, level }: ICanEditLevelFieldProps) => {
     const canEdit = SettingsStore.canSetValue(setting, roomId, level);
     const className = canEdit ? "mx_DevTools_SettingsExplorer_mutable" : "mx_DevTools_SettingsExplorer_immutable";
-    return <td className={className}><code>{ canEdit.toString() }</code></td>;
+    return (
+        <td className={className}>
+            <code>{canEdit.toString()}</code>
+        </td>
+    );
 };
 
 function renderExplicitSettingValues(setting: string, roomId: string): string {
@@ -91,8 +95,9 @@ interface IEditSettingProps extends Pick<IDevtoolsProps, "onBack"> {
 const EditSetting = ({ setting, onBack }: IEditSettingProps) => {
     const context = useContext(DevtoolsContext);
     const [explicitValue, setExplicitValue] = useState(renderExplicitSettingValues(setting, null));
-    const [explicitRoomValue, setExplicitRoomValue] =
-        useState(renderExplicitSettingValues(setting, context.room.roomId));
+    const [explicitRoomValue, setExplicitRoomValue] = useState(
+        renderExplicitSettingValues(setting, context.room.roomId),
+    );
 
     const onSave = async () => {
         try {
@@ -124,65 +129,73 @@ const EditSetting = ({ setting, onBack }: IEditSettingProps) => {
         }
     };
 
-    return <BaseTool onBack={onBack} actionLabel={_t("Save setting values")} onAction={onSave}>
-        <h3>{ _t("Setting:") } <code>{ setting }</code></h3>
+    return (
+        <BaseTool onBack={onBack} actionLabel={_t("Save setting values")} onAction={onSave}>
+            <h3>
+                {_t("Setting:")} <code>{setting}</code>
+            </h3>
 
-        <div className="mx_DevTools_SettingsExplorer_warning">
-            <b>{ _t("Caution:") }</b> { _t("This UI does NOT check the types of the values. Use at your own risk.") }
-        </div>
+            <div className="mx_DevTools_SettingsExplorer_warning">
+                <b>{_t("Caution:")}</b> {_t("This UI does NOT check the types of the values. Use at your own risk.")}
+            </div>
 
-        <div>
-            { _t("Setting definition:") }
-            <pre><code>{ JSON.stringify(SETTINGS[setting], null, 4) }</code></pre>
-        </div>
+            <div>
+                {_t("Setting definition:")}
+                <pre>
+                    <code>{JSON.stringify(SETTINGS[setting], null, 4)}</code>
+                </pre>
+            </div>
 
-        <div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>{ _t("Level") }</th>
-                        <th>{ _t("Settable at global") }</th>
-                        <th>{ _t("Settable at room") }</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    { LEVEL_ORDER.map(lvl => (
-                        <tr key={lvl}>
-                            <td><code>{ lvl }</code></td>
-                            <CanEditLevelField setting={setting} level={lvl} />
-                            <CanEditLevelField setting={setting} roomId={context.room.roomId} level={lvl} />
+            <div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>{_t("Level")}</th>
+                            <th>{_t("Settable at global")}</th>
+                            <th>{_t("Settable at room")}</th>
                         </tr>
-                    )) }
-                </tbody>
-            </table>
-        </div>
+                    </thead>
+                    <tbody>
+                        {LEVEL_ORDER.map((lvl) => (
+                            <tr key={lvl}>
+                                <td>
+                                    <code>{lvl}</code>
+                                </td>
+                                <CanEditLevelField setting={setting} level={lvl} />
+                                <CanEditLevelField setting={setting} roomId={context.room.roomId} level={lvl} />
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
 
-        <div>
-            <Field
-                id="valExpl"
-                label={_t("Values at explicit levels")}
-                type="text"
-                className="mx_DevTools_textarea"
-                element="textarea"
-                autoComplete="off"
-                value={explicitValue}
-                onChange={e => setExplicitValue(e.target.value)}
-            />
-        </div>
+            <div>
+                <Field
+                    id="valExpl"
+                    label={_t("Values at explicit levels")}
+                    type="text"
+                    className="mx_DevTools_textarea"
+                    element="textarea"
+                    autoComplete="off"
+                    value={explicitValue}
+                    onChange={(e) => setExplicitValue(e.target.value)}
+                />
+            </div>
 
-        <div>
-            <Field
-                id="valExpl"
-                label={_t("Values at explicit levels in this room")}
-                type="text"
-                className="mx_DevTools_textarea"
-                element="textarea"
-                autoComplete="off"
-                value={explicitRoomValue}
-                onChange={e => setExplicitRoomValue(e.target.value)}
-            />
-        </div>
-    </BaseTool>;
+            <div>
+                <Field
+                    id="valExpl"
+                    label={_t("Values at explicit levels in this room")}
+                    type="text"
+                    className="mx_DevTools_textarea"
+                    element="textarea"
+                    autoComplete="off"
+                    value={explicitRoomValue}
+                    onChange={(e) => setExplicitRoomValue(e.target.value)}
+                />
+            </div>
+        </BaseTool>
+    );
 };
 
 interface IViewSettingProps extends Pick<IDevtoolsProps, "onBack"> {
@@ -193,40 +206,50 @@ interface IViewSettingProps extends Pick<IDevtoolsProps, "onBack"> {
 const ViewSetting = ({ setting, onEdit, onBack }: IViewSettingProps) => {
     const context = useContext(DevtoolsContext);
 
-    return <BaseTool onBack={onBack} actionLabel={_t("Edit values")} onAction={onEdit}>
-        <h3>{ _t("Setting:") } <code>{ setting }</code></h3>
+    return (
+        <BaseTool onBack={onBack} actionLabel={_t("Edit values")} onAction={onEdit}>
+            <h3>
+                {_t("Setting:")} <code>{setting}</code>
+            </h3>
 
-        <div>
-            { _t("Setting definition:") }
-            <pre><code>{ JSON.stringify(SETTINGS[setting], null, 4) }</code></pre>
-        </div>
+            <div>
+                {_t("Setting definition:")}
+                <pre>
+                    <code>{JSON.stringify(SETTINGS[setting], null, 4)}</code>
+                </pre>
+            </div>
 
-        <div>
-            { _t("Value:") }&nbsp;
-            <code>{ renderSettingValue(SettingsStore.getValue(setting)) }</code>
-        </div>
+            <div>
+                {_t("Value:")}&nbsp;
+                <code>{renderSettingValue(SettingsStore.getValue(setting))}</code>
+            </div>
 
-        <div>
-            { _t("Value in this room:") }&nbsp;
-            <code>{ renderSettingValue(SettingsStore.getValue(setting, context.room.roomId)) }</code>
-        </div>
+            <div>
+                {_t("Value in this room:")}&nbsp;
+                <code>{renderSettingValue(SettingsStore.getValue(setting, context.room.roomId))}</code>
+            </div>
 
-        <div>
-            { _t("Values at explicit levels:") }
-            <pre><code>{ renderExplicitSettingValues(setting, null) }</code></pre>
-        </div>
+            <div>
+                {_t("Values at explicit levels:")}
+                <pre>
+                    <code>{renderExplicitSettingValues(setting, null)}</code>
+                </pre>
+            </div>
 
-        <div>
-            { _t("Values at explicit levels in this room:") }
-            <pre><code>{ renderExplicitSettingValues(setting, context.room.roomId) }</code></pre>
-        </div>
-    </BaseTool>;
+            <div>
+                {_t("Values at explicit levels in this room:")}
+                <pre>
+                    <code>{renderExplicitSettingValues(setting, context.room.roomId)}</code>
+                </pre>
+            </div>
+        </BaseTool>
+    );
 };
 
 function renderSettingValue(val: any): string {
     // Note: we don't .toString() a string because we want JSON.stringify to inject quotes for us
     const toStringTypes = ["boolean", "number"];
-    if (toStringTypes.includes(typeof(val))) {
+    if (toStringTypes.includes(typeof val)) {
         return val.toString();
     } else {
         return JSON.stringify(val);
@@ -246,60 +269,60 @@ const SettingsList = ({ onBack, onView, onEdit }: ISettingsListProps) => {
         let allSettings = Object.keys(SETTINGS);
         if (query) {
             const lcQuery = query.toLowerCase();
-            allSettings = allSettings.filter(setting => setting.toLowerCase().includes(lcQuery));
+            allSettings = allSettings.filter((setting) => setting.toLowerCase().includes(lcQuery));
         }
         return allSettings;
     }, [query]);
 
-    return <BaseTool onBack={onBack} className="mx_DevTools_SettingsExplorer">
-        <Field
-            label={_t("Filter results")}
-            autoFocus={true}
-            size={64}
-            type="text"
-            autoComplete="off"
-            value={query}
-            onChange={ev => setQuery(ev.target.value)}
-            className="mx_TextInputDialog_input mx_DevTools_RoomStateExplorer_query"
-        />
-        <table>
-            <thead>
-                <tr>
-                    <th>{ _t("Setting ID") }</th>
-                    <th>{ _t("Value") }</th>
-                    <th>{ _t("Value in this room") }</th>
-                </tr>
-            </thead>
-            <tbody>
-                { allSettings.map(i => (
-                    <tr key={i}>
-                        <td>
-                            <AccessibleButton
-                                kind="link_inline"
-                                className="mx_DevTools_SettingsExplorer_setting"
-                                onClick={() => onView(i)}
-                            >
-                                <code>{ i }</code>
-                            </AccessibleButton>
-                            <AccessibleButton
-                                alt={_t("Edit setting")}
-                                onClick={() => onEdit(i)}
-                                className="mx_DevTools_SettingsExplorer_edit"
-                            >
-                                ✏
-                            </AccessibleButton>
-                        </td>
-                        <td>
-                            <code>{ renderSettingValue(SettingsStore.getValue(i)) }</code>
-                        </td>
-                        <td>
-                            <code>
-                                { renderSettingValue(SettingsStore.getValue(i, context.room.roomId)) }
-                            </code>
-                        </td>
+    return (
+        <BaseTool onBack={onBack} className="mx_DevTools_SettingsExplorer">
+            <Field
+                label={_t("Filter results")}
+                autoFocus={true}
+                size={64}
+                type="text"
+                autoComplete="off"
+                value={query}
+                onChange={(ev) => setQuery(ev.target.value)}
+                className="mx_TextInputDialog_input mx_DevTools_RoomStateExplorer_query"
+            />
+            <table>
+                <thead>
+                    <tr>
+                        <th>{_t("Setting ID")}</th>
+                        <th>{_t("Value")}</th>
+                        <th>{_t("Value in this room")}</th>
                     </tr>
-                )) }
-            </tbody>
-        </table>
-    </BaseTool>;
+                </thead>
+                <tbody>
+                    {allSettings.map((i) => (
+                        <tr key={i}>
+                            <td>
+                                <AccessibleButton
+                                    kind="link_inline"
+                                    className="mx_DevTools_SettingsExplorer_setting"
+                                    onClick={() => onView(i)}
+                                >
+                                    <code>{i}</code>
+                                </AccessibleButton>
+                                <AccessibleButton
+                                    alt={_t("Edit setting")}
+                                    onClick={() => onEdit(i)}
+                                    className="mx_DevTools_SettingsExplorer_edit"
+                                >
+                                    ✏
+                                </AccessibleButton>
+                            </td>
+                            <td>
+                                <code>{renderSettingValue(SettingsStore.getValue(i))}</code>
+                            </td>
+                            <td>
+                                <code>{renderSettingValue(SettingsStore.getValue(i, context.room.roomId))}</code>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </BaseTool>
+    );
 };

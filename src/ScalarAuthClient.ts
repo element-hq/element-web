@@ -14,14 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import url from 'url';
+import url from "url";
 import { SERVICE_TYPES } from "matrix-js-sdk/src/service-types";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { logger } from "matrix-js-sdk/src/logger";
-import { IOpenIDToken } from 'matrix-js-sdk/src/matrix';
+import { IOpenIDToken } from "matrix-js-sdk/src/matrix";
 
 import SettingsStore from "./settings/SettingsStore";
-import { Service, startTermsFlow, TermsInteractionCallback, TermsNotSignedError } from './Terms';
+import { Service, startTermsFlow, TermsInteractionCallback, TermsNotSignedError } from "./Terms";
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import SdkConfig from "./SdkConfig";
 import { WidgetType } from "./widgets/WidgetType";
@@ -129,58 +129,63 @@ export default class ScalarAuthClient {
     }
 
     private checkToken(token: string): Promise<string> {
-        return this.getAccountName(token).then(userId => {
-            const me = MatrixClientPeg.get().getUserId();
-            if (userId !== me) {
-                throw new Error("Scalar token is owned by someone else: " + me);
-            }
-            return token;
-        }).catch((e) => {
-            if (e instanceof TermsNotSignedError) {
-                logger.log("Integration manager requires new terms to be agreed to");
-                // The terms endpoints are new and so live on standard _matrix prefixes,
-                // but IM rest urls are currently configured with paths, so remove the
-                // path from the base URL before passing it to the js-sdk
+        return this.getAccountName(token)
+            .then((userId) => {
+                const me = MatrixClientPeg.get().getUserId();
+                if (userId !== me) {
+                    throw new Error("Scalar token is owned by someone else: " + me);
+                }
+                return token;
+            })
+            .catch((e) => {
+                if (e instanceof TermsNotSignedError) {
+                    logger.log("Integration manager requires new terms to be agreed to");
+                    // The terms endpoints are new and so live on standard _matrix prefixes,
+                    // but IM rest urls are currently configured with paths, so remove the
+                    // path from the base URL before passing it to the js-sdk
 
-                // We continue to use the full URL for the calls done by
-                // matrix-react-sdk, but the standard terms API called
-                // by the js-sdk lives on the standard _matrix path. This means we
-                // don't support running IMs on a non-root path, but it's the only
-                // realistic way of transitioning to _matrix paths since configs in
-                // the wild contain bits of the API path.
+                    // We continue to use the full URL for the calls done by
+                    // matrix-react-sdk, but the standard terms API called
+                    // by the js-sdk lives on the standard _matrix path. This means we
+                    // don't support running IMs on a non-root path, but it's the only
+                    // realistic way of transitioning to _matrix paths since configs in
+                    // the wild contain bits of the API path.
 
-                // Once we've fully transitioned to _matrix URLs, we can give people
-                // a grace period to update their configs, then use the rest url as
-                // a regular base url.
-                const parsedImRestUrl = url.parse(this.apiUrl);
-                parsedImRestUrl.path = '';
-                parsedImRestUrl.pathname = '';
-                return startTermsFlow([new Service(
-                    SERVICE_TYPES.IM,
-                    url.format(parsedImRestUrl),
-                    token,
-                )], this.termsInteractionCallback).then(() => {
-                    return token;
-                });
-            } else {
-                throw e;
-            }
-        });
+                    // Once we've fully transitioned to _matrix URLs, we can give people
+                    // a grace period to update their configs, then use the rest url as
+                    // a regular base url.
+                    const parsedImRestUrl = url.parse(this.apiUrl);
+                    parsedImRestUrl.path = "";
+                    parsedImRestUrl.pathname = "";
+                    return startTermsFlow(
+                        [new Service(SERVICE_TYPES.IM, url.format(parsedImRestUrl), token)],
+                        this.termsInteractionCallback,
+                    ).then(() => {
+                        return token;
+                    });
+                } else {
+                    throw e;
+                }
+            });
     }
 
     registerForToken(): Promise<string> {
         // Get openid bearer token from the HS as the first part of our dance
-        return MatrixClientPeg.get().getOpenIdToken().then((tokenObject) => {
-            // Now we can send that to scalar and exchange it for a scalar token
-            return this.exchangeForScalarToken(tokenObject);
-        }).then((token) => {
-            // Validate it (this mostly checks to see if the IM needs us to agree to some terms)
-            return this.checkToken(token);
-        }).then((token) => {
-            this.scalarToken = token;
-            this.writeTokenToStore();
-            return token;
-        });
+        return MatrixClientPeg.get()
+            .getOpenIdToken()
+            .then((tokenObject) => {
+                // Now we can send that to scalar and exchange it for a scalar token
+                return this.exchangeForScalarToken(tokenObject);
+            })
+            .then((token) => {
+                // Validate it (this mostly checks to see if the IM needs us to agree to some terms)
+                return this.checkToken(token);
+            })
+            .then((token) => {
+                this.scalarToken = token;
+                this.writeTokenToStore();
+                return token;
+            });
     }
 
     public async exchangeForScalarToken(openidTokenObject: IOpenIDToken): Promise<string> {
@@ -208,7 +213,7 @@ export default class ScalarAuthClient {
     }
 
     public async getScalarPageTitle(url: string): Promise<string> {
-        const scalarPageLookupUrl = new URL(this.getStarterLink(this.apiUrl + '/widgets/title_lookup'));
+        const scalarPageLookupUrl = new URL(this.getStarterLink(this.apiUrl + "/widgets/title_lookup"));
         scalarPageLookupUrl.searchParams.set("curl", encodeURIComponent(url));
 
         const res = await fetch(scalarPageLookupUrl, {
@@ -260,10 +265,10 @@ export default class ScalarAuthClient {
         url += "&room_name=" + encodeURIComponent(roomName);
         url += "&theme=" + encodeURIComponent(SettingsStore.getValue("theme"));
         if (id) {
-            url += '&integ_id=' + encodeURIComponent(id);
+            url += "&integ_id=" + encodeURIComponent(id);
         }
         if (screen) {
-            url += '&screen=' + encodeURIComponent(screen);
+            url += "&screen=" + encodeURIComponent(screen);
         }
         return url;
     }

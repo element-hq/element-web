@@ -14,9 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 import { render, screen } from "@testing-library/react";
-import { IThreepid, ThreepidMedium } from 'matrix-js-sdk/src/@types/threepids';
+import { IThreepid, ThreepidMedium } from "matrix-js-sdk/src/@types/threepids";
 
 import { PhoneNumber } from "../../../../../src/components/views/settings/discovery/PhoneNumbers";
 

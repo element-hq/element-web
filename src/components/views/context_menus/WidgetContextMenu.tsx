@@ -70,20 +70,19 @@ const WidgetContextMenu: React.FC<IProps> = ({
                 // XXX: won't i18n well, but looks like widget api only support 'message'?
                 const message = err.message || _t("Unable to start audio streaming.");
                 Modal.createDialog(ErrorDialog, {
-                    title: _t('Failed to start livestream'),
+                    title: _t("Failed to start livestream"),
                     description: message,
                 });
             }
             onFinished();
         };
-        streamAudioStreamButton = <IconizedContextMenuOption
-            onClick={onStreamAudioClick}
-            label={_t("Start audio stream")}
-        />;
+        streamAudioStreamButton = (
+            <IconizedContextMenuOption onClick={onStreamAudioClick} label={_t("Start audio stream")} />
+        );
     }
 
     const pinnedWidgets = WidgetLayoutStore.instance.getContainerWidgets(room, Container.Top);
-    const widgetIndex = pinnedWidgets.findIndex(widget => widget.id === app.id);
+    const widgetIndex = pinnedWidgets.findIndex((widget) => widget.id === app.id);
 
     let editButton;
     if (canModify && WidgetUtils.isManagedByManager(app)) {
@@ -103,14 +102,17 @@ const WidgetContextMenu: React.FC<IProps> = ({
     const screenshotsEnabled = SettingsStore.getValue("enableWidgetScreenshots");
     if (screenshotsEnabled && widgetMessaging?.hasCapability(MatrixCapabilities.Screenshots)) {
         const onSnapshotClick = () => {
-            widgetMessaging?.takeScreenshot().then(data => {
-                dis.dispatch({
-                    action: 'picture_snapshot',
-                    file: data.screenshot,
+            widgetMessaging
+                ?.takeScreenshot()
+                .then((data) => {
+                    dis.dispatch({
+                        action: "picture_snapshot",
+                        file: data.screenshot,
+                    });
+                })
+                .catch((err) => {
+                    logger.error("Failed to take screenshot: ", err);
                 });
-            }).catch(err => {
-                logger.error("Failed to take screenshot: ", err);
-            });
             onFinished();
         };
 
@@ -128,7 +130,8 @@ const WidgetContextMenu: React.FC<IProps> = ({
                     title: _t("Delete Widget"),
                     description: _t(
                         "Deleting a widget removes it for all users in this room." +
-                        " Are you sure you want to delete this widget?"),
+                            " Are you sure you want to delete this widget?",
+                    ),
                     button: _t("Delete widget"),
                     onFinished: (confirmed) => {
                         if (!confirmed) return;
@@ -140,15 +143,17 @@ const WidgetContextMenu: React.FC<IProps> = ({
             onFinished();
         };
 
-        deleteButton = <IconizedContextMenuOption
-            onClick={_onDeleteClick}
-            label={userWidget ? _t("Remove") : _t("Remove for everyone")}
-        />;
+        deleteButton = (
+            <IconizedContextMenuOption
+                onClick={_onDeleteClick}
+                label={userWidget ? _t("Remove") : _t("Remove for everyone")}
+            />
+        );
     }
 
     const isAllowedWidget =
-        (app.eventId !== undefined && (SettingsStore.getValue("allowedWidgets", roomId)[app.eventId] ?? false))
-        || app.creatorUserId === cli.getUserId();
+        (app.eventId !== undefined && (SettingsStore.getValue("allowedWidgets", roomId)[app.eventId] ?? false)) ||
+        app.creatorUserId === cli.getUserId();
 
     const isLocalWidget = WidgetType.JITSI.matches(app.type);
     let revokeButton;
@@ -158,7 +163,7 @@ const WidgetContextMenu: React.FC<IProps> = ({
             const current = SettingsStore.getValue("allowedWidgets", roomId);
             if (app.eventId !== undefined) current[app.eventId] = false;
             const level = SettingsStore.firstSupportedLevel("allowedWidgets");
-            SettingsStore.setValue("allowedWidgets", roomId, level, current).catch(err => {
+            SettingsStore.setValue("allowedWidgets", roomId, level, current).catch((err) => {
                 logger.error(err);
                 // We don't really need to do anything about this - the user will just hit the button again.
             });
@@ -188,17 +193,19 @@ const WidgetContextMenu: React.FC<IProps> = ({
         moveRightButton = <IconizedContextMenuOption onClick={onClick} label={_t("Move right")} />;
     }
 
-    return <IconizedContextMenu {...props} chevronFace={ChevronFace.None} onFinished={onFinished}>
-        <IconizedContextMenuOptionList>
-            { streamAudioStreamButton }
-            { editButton }
-            { revokeButton }
-            { deleteButton }
-            { snapshotButton }
-            { moveLeftButton }
-            { moveRightButton }
-        </IconizedContextMenuOptionList>
-    </IconizedContextMenu>;
+    return (
+        <IconizedContextMenu {...props} chevronFace={ChevronFace.None} onFinished={onFinished}>
+            <IconizedContextMenuOptionList>
+                {streamAudioStreamButton}
+                {editButton}
+                {revokeButton}
+                {deleteButton}
+                {snapshotButton}
+                {moveLeftButton}
+                {moveRightButton}
+            </IconizedContextMenuOptionList>
+        </IconizedContextMenu>
+    );
 };
 
 export default WidgetContextMenu;

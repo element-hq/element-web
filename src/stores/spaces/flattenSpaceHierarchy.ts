@@ -26,13 +26,11 @@ const traverseSpaceDescendants = (
 ): Set<SpaceKey> => {
     flatSpace.add(spaceId);
     const descendentSpaces = spaceDescendantMap.get(spaceId);
-    descendentSpaces?.forEach(
-        descendantSpaceId => {
-            if (!flatSpace.has(descendantSpaceId)) {
-                traverseSpaceDescendants(spaceDescendantMap, descendantSpaceId, flatSpace);
-            }
-        },
-    );
+    descendentSpaces?.forEach((descendantSpaceId) => {
+        if (!flatSpace.has(descendantSpaceId)) {
+            traverseSpaceDescendants(spaceDescendantMap, descendantSpaceId, flatSpace);
+        }
+    });
 
     return flatSpace;
 };
@@ -51,7 +49,7 @@ export const flattenSpaceHierarchy = (
     const flattenedSpaceIds = traverseSpaceDescendants(spaceDescendantMap, spaceId);
     const flattenedRooms = new Set<string>();
 
-    flattenedSpaceIds.forEach(id => {
+    flattenedSpaceIds.forEach((id) => {
         const roomIds = spaceEntityMap.get(id);
         roomIds?.forEach(flattenedRooms.add, flattenedRooms);
     });
@@ -59,18 +57,19 @@ export const flattenSpaceHierarchy = (
     return flattenedRooms;
 };
 
-export const flattenSpaceHierarchyWithCache = (cache: SpaceEntityMap) => (
-    spaceEntityMap: SpaceEntityMap,
-    spaceDescendantMap: SpaceDescendantMap,
-    spaceId: SpaceKey,
-    useCache = true,
-): Set<string> => {
-    if (useCache && cache.has(spaceId)) {
-        return cache.get(spaceId);
-    }
-    const result = flattenSpaceHierarchy(spaceEntityMap, spaceDescendantMap, spaceId);
-    cache.set(spaceId, result);
+export const flattenSpaceHierarchyWithCache =
+    (cache: SpaceEntityMap) =>
+    (
+        spaceEntityMap: SpaceEntityMap,
+        spaceDescendantMap: SpaceDescendantMap,
+        spaceId: SpaceKey,
+        useCache = true,
+    ): Set<string> => {
+        if (useCache && cache.has(spaceId)) {
+            return cache.get(spaceId);
+        }
+        const result = flattenSpaceHierarchy(spaceEntityMap, spaceDescendantMap, spaceId);
+        cache.set(spaceId, result);
 
-    return result;
-};
-
+        return result;
+    };

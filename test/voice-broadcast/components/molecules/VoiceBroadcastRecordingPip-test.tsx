@@ -38,7 +38,7 @@ jest.mock("../../../../src/utils/media/requestMediaPermissions");
 jest.mock("../../../../src/components/views/avatars/RoomAvatar", () => ({
     __esModule: true,
     default: jest.fn().mockImplementation(({ room }) => {
-        return <div data-testid="room-avatar">room avatar: { room.name }</div>;
+        return <div data-testid="room-avatar">room avatar: {room.name}</div>;
     }),
 }));
 
@@ -62,12 +62,7 @@ describe("VoiceBroadcastRecordingPip", () => {
     let restoreConsole: () => void;
 
     const renderPip = async (state: VoiceBroadcastInfoState) => {
-        infoEvent = mkVoiceBroadcastInfoStateEvent(
-            roomId,
-            state,
-            client.getUserId() || "",
-            client.getDeviceId() || "",
-        );
+        infoEvent = mkVoiceBroadcastInfoStateEvent(roomId, state, client.getUserId() || "", client.getDeviceId() || "");
         recording = new VoiceBroadcastRecording(infoEvent, client, state);
         jest.spyOn(recording, "pause");
         jest.spyOn(recording, "resume");
@@ -79,11 +74,13 @@ describe("VoiceBroadcastRecordingPip", () => {
 
     beforeAll(() => {
         client = stubClient();
-        mocked(requestMediaPermissions).mockReturnValue(new Promise<MediaStream>((r) => {
-            r({
-                getTracks: () => [],
-            } as unknown as MediaStream);
-        }));
+        mocked(requestMediaPermissions).mockReturnValue(
+            new Promise<MediaStream>((r) => {
+                r({
+                    getTracks: () => [],
+                } as unknown as MediaStream);
+            }),
+        );
         jest.spyOn(MediaDeviceHandler, "getDevices").mockResolvedValue({
             [MediaDeviceKindEnum.AudioInput]: [
                 {

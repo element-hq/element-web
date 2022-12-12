@@ -15,37 +15,42 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 import { fireEvent, render, screen, waitForElementToBeRemoved } from "@testing-library/react";
-import { createClient, MatrixClient } from 'matrix-js-sdk/src/matrix';
-import { MatrixError } from 'matrix-js-sdk/src/http-api/errors';
-import { mocked } from 'jest-mock';
+import { createClient, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { MatrixError } from "matrix-js-sdk/src/http-api/errors";
+import { mocked } from "jest-mock";
 import fetchMock from "fetch-mock-jest";
 
-import SdkConfig, { DEFAULTS } from '../../../../src/SdkConfig';
+import SdkConfig, { DEFAULTS } from "../../../../src/SdkConfig";
 import { mkServerConfig, mockPlatformPeg, unmockPlatformPeg } from "../../../test-utils";
 import Registration from "../../../../src/components/structures/auth/Registration";
 
-jest.mock('matrix-js-sdk/src/matrix');
+jest.mock("matrix-js-sdk/src/matrix");
 jest.useFakeTimers();
 
-describe('Registration', function() {
+describe("Registration", function () {
     const registerRequest = jest.fn();
     const mockClient = mocked({
         registerRequest,
         loginFlows: jest.fn(),
     } as unknown as MatrixClient);
 
-    beforeEach(function() {
+    beforeEach(function () {
         SdkConfig.put({
             ...DEFAULTS,
             disable_custom_urls: true,
         });
-        mockClient.registerRequest.mockRejectedValueOnce(new MatrixError({
-            flows: [{ stages: [] }],
-        }, 401));
+        mockClient.registerRequest.mockRejectedValueOnce(
+            new MatrixError(
+                {
+                    flows: [{ stages: [] }],
+                },
+                401,
+            ),
+        );
         mockClient.loginFlows.mockClear().mockResolvedValue({ flows: [{ type: "m.login.password" }] });
-        mocked(createClient).mockImplementation(opts => {
+        mocked(createClient).mockImplementation((opts) => {
             mockClient.idBaseUrl = opts.idBaseUrl;
             mockClient.baseUrl = opts.baseUrl;
             return mockClient;
@@ -59,14 +64,14 @@ describe('Registration', function() {
         });
     });
 
-    afterEach(function() {
+    afterEach(function () {
         fetchMock.restore();
         SdkConfig.unset(); // we touch the config, so clean up
         unmockPlatformPeg();
     });
 
     const defaultProps = {
-        defaultDeviceDisplayName: 'test-device-display-name',
+        defaultDeviceDisplayName: "test-device-display-name",
         makeRegistrationUrl: jest.fn(),
         onLoggedIn: jest.fn(),
         onLoginClick: jest.fn(),
@@ -74,22 +79,19 @@ describe('Registration', function() {
     };
 
     function getRawComponent(hsUrl = "https://matrix.org", isUrl = "https://vector.im") {
-        return <Registration
-            {...defaultProps}
-            serverConfig={mkServerConfig(hsUrl, isUrl)}
-        />;
+        return <Registration {...defaultProps} serverConfig={mkServerConfig(hsUrl, isUrl)} />;
     }
 
     function getComponent(hsUrl?: string, isUrl?: string) {
         return render(getRawComponent(hsUrl, isUrl));
     }
 
-    it('should show server picker', async function() {
+    it("should show server picker", async function () {
         const { container } = getComponent();
         expect(container.querySelector(".mx_ServerPicker")).toBeTruthy();
     });
 
-    it('should show form when custom URLs disabled', async function() {
+    it("should show form when custom URLs disabled", async function () {
         const { container } = getComponent();
         await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading..."));
         expect(container.querySelector("form")).toBeTruthy();
@@ -106,9 +108,11 @@ describe('Registration', function() {
 
     it("should handle serverConfig updates correctly", async () => {
         mockClient.loginFlows.mockResolvedValue({
-            flows: [{
-                "type": "m.login.sso",
-            }],
+            flows: [
+                {
+                    type: "m.login.sso",
+                },
+            ],
         });
 
         const { container, rerender } = render(getRawComponent());

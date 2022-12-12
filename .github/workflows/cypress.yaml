@@ -1,172 +1,175 @@
 # Triggers after the layered build has finished, taking the artifact and running cypress on it
 name: Cypress End to End Tests
 on:
-  workflow_run:
-    workflows: [ "Element Web - Build" ]
-    types:
-      - completed
+    workflow_run:
+        workflows: ["Element Web - Build"]
+        types:
+            - completed
 jobs:
-  prepare:
-    name: Prepare
-    if: github.event.workflow_run.conclusion == 'success'
-    runs-on: ubuntu-latest
-    permissions:
-      actions: read
-      issues: read
-      statuses: write
-      pull-requests: read
-    outputs:
-      uuid: ${{ steps.uuid.outputs.value }}
-      pr_id: ${{ steps.prdetails.outputs.pr_id }}
-      commit_message: ${{ steps.commit.outputs.message }}
-      commit_author: ${{ steps.commit.outputs.author }}
-      commit_email: ${{ steps.commit.outputs.email }}
-      percy_enable: ${{ steps.percy.outputs.value || '1' }}
-    steps:
-      # We create the status here and then update it to success/failure in the `report` stage
-      # This provides an easy link to this workflow_run from the PR before Cypress is done.
-      - uses: Sibz/github-status-action@v1
-        with:
-          authToken: ${{ secrets.GITHUB_TOKEN }}
-          state: pending
-          context: ${{ github.workflow }} / cypress (${{ github.event.workflow_run.event }} => ${{ github.event_name }})
-          sha: ${{ github.event.workflow_run.head_sha }}
-          target_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    prepare:
+        name: Prepare
+        if: github.event.workflow_run.conclusion == 'success'
+        runs-on: ubuntu-latest
+        permissions:
+            actions: read
+            issues: read
+            statuses: write
+            pull-requests: read
+        outputs:
+            uuid: ${{ steps.uuid.outputs.value }}
+            pr_id: ${{ steps.prdetails.outputs.pr_id }}
+            commit_message: ${{ steps.commit.outputs.message }}
+            commit_author: ${{ steps.commit.outputs.author }}
+            commit_email: ${{ steps.commit.outputs.email }}
+            percy_enable: ${{ steps.percy.outputs.value || '1' }}
+        steps:
+            # We create the status here and then update it to success/failure in the `report` stage
+            # This provides an easy link to this workflow_run from the PR before Cypress is done.
+            - uses: Sibz/github-status-action@v1
+              with:
+                  authToken: ${{ secrets.GITHUB_TOKEN }}
+                  state: pending
+                  context: ${{ github.workflow }} / cypress (${{ github.event.workflow_run.event }} => ${{ github.event_name }})
+                  sha: ${{ github.event.workflow_run.head_sha }}
+                  target_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
-      - id: prdetails
-        if: github.event.workflow_run.event == 'pull_request'
-        uses: matrix-org/pr-details-action@v1.2
-        with:
-          owner: ${{ github.event.workflow_run.head_repository.owner.login }}
-          branch: ${{ github.event.workflow_run.head_branch }}
+            - id: prdetails
+              if: github.event.workflow_run.event == 'pull_request'
+              uses: matrix-org/pr-details-action@v1.2
+              with:
+                  owner: ${{ github.event.workflow_run.head_repository.owner.login }}
+                  branch: ${{ github.event.workflow_run.head_branch }}
 
-      - name: Get commit details
-        id: commit
-        if: github.event.workflow_run.event == 'pull_request'
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const response = await github.rest.git.getCommit({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              commit_sha: "${{ github.event.workflow_run.head_sha }}",
-            });
-            core.setOutput("message", response.data.message);
-            core.setOutput("author", response.data.author.name);
-            core.setOutput("email", response.data.author.email);
+            - name: Get commit details
+              id: commit
+              if: github.event.workflow_run.event == 'pull_request'
+              uses: actions/github-script@v6
+              with:
+                  script: |
+                      const response = await github.rest.git.getCommit({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        commit_sha: "${{ github.event.workflow_run.head_sha }}",
+                      });
+                      core.setOutput("message", response.data.message);
+                      core.setOutput("author", response.data.author.name);
+                      core.setOutput("email", response.data.author.email);
 
-      # Only run Percy when it is demanded or on develop
-      - name: Disable Percy if not needed
-        id: percy
-        if: |
-          github.event.workflow_run.event == 'pull_request' &&
-          !contains(fromJSON(steps.prdetails.outputs.data).labels.*.name, 'X-Needs-Percy')
-        run: echo "::set-output name=value::0"
+            # Only run Percy when it is demanded or on develop
+            - name: Disable Percy if not needed
+              id: percy
+              if: |
+                  github.event.workflow_run.event == 'pull_request' &&
+                  !contains(fromJSON(steps.prdetails.outputs.data).labels.*.name, 'X-Needs-Percy')
+              run: echo "::set-output name=value::0"
 
-      - name: Generate unique ID 💎
-        id: uuid
-        run: echo "::set-output name=value::sha-$GITHUB_SHA-time-$(date +"%s")"
+            - name: Generate unique ID 💎
+              id: uuid
+              run: echo "::set-output name=value::sha-$GITHUB_SHA-time-$(date +"%s")"
 
-  tests:
-    name: "Run Tests"
-    needs: prepare
-    runs-on: ubuntu-latest
-    permissions:
-      actions: read
-      issues: read
-      pull-requests: read
-    environment: Cypress
-      #strategy:
-      #    fail-fast: false
-      #    matrix:
-      #      # Run 4 instances in Parallel
-      #      runner: [1, 2, 3, 4]
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          # XXX: We're checking out untrusted code in a secure context
-          # We need to be careful to not trust anything this code outputs/may do
-          # We need to check this out to access the cypress tests which are on the head branch
-          repository: ${{ github.event.workflow_run.head_repository.full_name }}
-          ref: ${{ github.event.workflow_run.head_sha }}
-          persist-credentials: false
+    tests:
+        name: "Run Tests"
+        needs: prepare
+        runs-on: ubuntu-latest
+        permissions:
+            actions: read
+            issues: read
+            pull-requests: read
+        environment:
+            Cypress
+            #strategy:
+            #    fail-fast: false
+            #    matrix:
+            #      # Run 4 instances in Parallel
+            #      runner: [1, 2, 3, 4]
+        steps:
+            - uses: actions/checkout@v3
+              with:
+                  # XXX: We're checking out untrusted code in a secure context
+                  # We need to be careful to not trust anything this code outputs/may do
+                  # We need to check this out to access the cypress tests which are on the head branch
+                  repository: ${{ github.event.workflow_run.head_repository.full_name }}
+                  ref: ${{ github.event.workflow_run.head_sha }}
+                  persist-credentials: false
 
-      # There's a 'download artifact' action, but it hasn't been updated for the workflow_run action
-      # (https://github.com/actions/download-artifact/issues/60) so instead we get this mess:
-      - name: 📥 Download artifact
-        uses: dawidd6/action-download-artifact@v2
-        with:
-          run_id: ${{ github.event.workflow_run.id }}
-          name: previewbuild
-          path: webapp
+            # There's a 'download artifact' action, but it hasn't been updated for the workflow_run action
+            # (https://github.com/actions/download-artifact/issues/60) so instead we get this mess:
+            - name: 📥 Download artifact
+              uses: dawidd6/action-download-artifact@v2
+              with:
+                  run_id: ${{ github.event.workflow_run.id }}
+                  name: previewbuild
+                  path: webapp
 
-      - name: Run Cypress tests
-        uses: cypress-io/github-action@v4.2.2
-        with:
-          # The built-in Electron runner seems to grind to a halt trying
-          # to run the tests, so use chrome.
-          browser: chrome
-          start: npx serve -p 8080 webapp
-          wait-on: 'http://localhost:8080'
-          record: true
-            #parallel: true
-            #command-prefix: 'yarn percy exec --parallel --'
-          command-prefix: 'yarn percy exec --'
-          ci-build-id: ${{ needs.prepare.outputs.uuid }}
-        env:
-          # pass the Dashboard record key as an environment variable
-          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+            - name: Run Cypress tests
+              uses: cypress-io/github-action@v4.2.2
+              with:
+                  # The built-in Electron runner seems to grind to a halt trying
+                  # to run the tests, so use chrome.
+                  browser: chrome
+                  start: npx serve -p 8080 webapp
+                  wait-on: "http://localhost:8080"
+                  record:
+                      true
+                      #parallel: true
+                      #command-prefix: 'yarn percy exec --parallel --'
+                  command-prefix: "yarn percy exec --"
+                  ci-build-id: ${{ needs.prepare.outputs.uuid }}
+              env:
+                  # pass the Dashboard record key as an environment variable
+                  CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
 
-          # Use existing chromium rather than downloading another
-          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
+                  # Use existing chromium rather than downloading another
+                  PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
 
-          # pass GitHub token to allow accurately detecting a build vs a re-run build
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  # pass GitHub token to allow accurately detecting a build vs a re-run build
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-          # make Node's os.tmpdir() return something where we actually have permissions
-          TMPDIR: ${{ runner.temp }}
+                  # make Node's os.tmpdir() return something where we actually have permissions
+                  TMPDIR: ${{ runner.temp }}
 
-          # tell Cypress more details about the context of this run
-          COMMIT_INFO_BRANCH: ${{ github.event.workflow_run.head_branch }}
-          COMMIT_INFO_SHA: ${{ github.event.workflow_run.head_sha }}
-          COMMIT_INFO_REMOTE: ${{ github.repositoryUrl }}
-          COMMIT_INFO_MESSAGE: ${{ needs.prepare.outputs.commit_message }}
-          COMMIT_INFO_AUTHOR: ${{ needs.prepare.outputs.commit_author }}
-          COMMIT_INFO_EMAIL: ${{ needs.prepare.outputs.commit_email }}
+                  # tell Cypress more details about the context of this run
+                  COMMIT_INFO_BRANCH: ${{ github.event.workflow_run.head_branch }}
+                  COMMIT_INFO_SHA: ${{ github.event.workflow_run.head_sha }}
+                  COMMIT_INFO_REMOTE: ${{ github.repositoryUrl }}
+                  COMMIT_INFO_MESSAGE: ${{ needs.prepare.outputs.commit_message }}
+                  COMMIT_INFO_AUTHOR: ${{ needs.prepare.outputs.commit_author }}
+                  COMMIT_INFO_EMAIL: ${{ needs.prepare.outputs.commit_email }}
 
-          # pass the Percy token as an environment variable
-          PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
-          PERCY_ENABLE: ${{ needs.prepare.outputs.percy_enable }}
-          PERCY_BROWSER_EXECUTABLE: /usr/bin/chromium-browser
-          # tell Percy more details about the context of this run
-          PERCY_BRANCH: ${{ github.event.workflow_run.head_branch }}
-          PERCY_COMMIT: ${{ github.event.workflow_run.head_sha }}
-          PERCY_PULL_REQUEST: ${{ needs.prepare.outputs.pr_id }}
-            #PERCY_PARALLEL_TOTAL: ${{ strategy.job-total }}
-          PERCY_PARALLEL_NONCE: ${{ needs.prepare.outputs.uuid }}
+                  # pass the Percy token as an environment variable
+                  PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
+                  PERCY_ENABLE: ${{ needs.prepare.outputs.percy_enable }}
+                  PERCY_BROWSER_EXECUTABLE: /usr/bin/chromium-browser
+                  # tell Percy more details about the context of this run
+                  PERCY_BRANCH: ${{ github.event.workflow_run.head_branch }}
+                  PERCY_COMMIT: ${{ github.event.workflow_run.head_sha }}
+                  PERCY_PULL_REQUEST:
+                      ${{ needs.prepare.outputs.pr_id }}
+                      #PERCY_PARALLEL_TOTAL: ${{ strategy.job-total }}
+                  PERCY_PARALLEL_NONCE: ${{ needs.prepare.outputs.uuid }}
 
-      - name: Upload Artifact
-        if: failure()
-        uses: actions/upload-artifact@v3
-        with:
-          name: cypress-results
-          path: |
-            cypress/screenshots
-            cypress/videos
-            cypress/synapselogs
+            - name: Upload Artifact
+              if: failure()
+              uses: actions/upload-artifact@v3
+              with:
+                  name: cypress-results
+                  path: |
+                      cypress/screenshots
+                      cypress/videos
+                      cypress/synapselogs
 
-  report:
-    name: Report results
-    needs: tests
-    runs-on: ubuntu-latest
-    if: always()
-    permissions:
-      statuses: write
-    steps:
-      - uses: Sibz/github-status-action@v1
-        with:
-          authToken: ${{ secrets.GITHUB_TOKEN }}
-          state: ${{ needs.tests.result == 'success' && 'success' || 'failure' }}
-          context: ${{ github.workflow }} / cypress (${{ github.event.workflow_run.event }} => ${{ github.event_name }})
-          sha: ${{ github.event.workflow_run.head_sha }}
-          target_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    report:
+        name: Report results
+        needs: tests
+        runs-on: ubuntu-latest
+        if: always()
+        permissions:
+            statuses: write
+        steps:
+            - uses: Sibz/github-status-action@v1
+              with:
+                  authToken: ${{ secrets.GITHUB_TOKEN }}
+                  state: ${{ needs.tests.result == 'success' && 'success' || 'failure' }}
+                  context: ${{ github.workflow }} / cypress (${{ github.event.workflow_run.event }} => ${{ github.event_name }})
+                  sha: ${{ github.event.workflow_run.head_sha }}
+                  target_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}

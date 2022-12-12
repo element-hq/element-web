@@ -16,17 +16,17 @@ limitations under the License.
 
 import { FixedRollingArray } from "../../src/utils/FixedRollingArray";
 
-describe('FixedRollingArray', () => {
-    it('should seed the array with the given value', () => {
+describe("FixedRollingArray", () => {
+    it("should seed the array with the given value", () => {
         const seed = "test";
         const width = 24;
         const array = new FixedRollingArray(width, seed);
 
         expect(array.value.length).toBe(width);
-        expect(array.value.every(v => v === seed)).toBe(true);
+        expect(array.value.every((v) => v === seed)).toBe(true);
     });
 
-    it('should insert at the correct end', () => {
+    it("should insert at the correct end", () => {
         const seed = "test";
         const value = "changed";
         const width = 24;
@@ -37,7 +37,7 @@ describe('FixedRollingArray', () => {
         expect(array.value[0]).toBe(value);
     });
 
-    it('should roll over', () => {
+    it("should roll over", () => {
         const seed = -1;
         const width = 24;
         const array = new FixedRollingArray(width, seed);

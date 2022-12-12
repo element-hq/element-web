@@ -14,14 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 import { IGeneratedSas } from "matrix-js-sdk/src/crypto/verification/SAS";
 import { DeviceInfo } from "matrix-js-sdk/src//crypto/deviceinfo";
 
-import { _t, _td } from '../../../languageHandler';
+import { _t, _td } from "../../../languageHandler";
 import { PendingActionSpinner } from "../right_panel/EncryptionInfo";
 import AccessibleButton from "../elements/AccessibleButton";
-import { fixupColorFonts } from '../../../utils/FontManager';
+import { fixupColorFonts } from "../../../utils/FontManager";
 
 interface IProps {
     pending?: boolean;
@@ -73,49 +73,37 @@ export default class VerificationShowSas extends React.Component<IProps, IState>
         let sasDisplay;
         let sasCaption;
         if (this.props.sas.emoji) {
-            const emojiBlocks = this.props.sas.emoji.map(
-                (emoji, i) => <div className="mx_VerificationShowSas_emojiSas_block" key={i}>
-                    <div className="mx_VerificationShowSas_emojiSas_emoji">
-                        { emoji[0] }
-                    </div>
-                    <div className="mx_VerificationShowSas_emojiSas_label">
-                        { _t(capFirst(emoji[1])) }
-                    </div>
-                </div>,
+            const emojiBlocks = this.props.sas.emoji.map((emoji, i) => (
+                <div className="mx_VerificationShowSas_emojiSas_block" key={i}>
+                    <div className="mx_VerificationShowSas_emojiSas_emoji">{emoji[0]}</div>
+                    <div className="mx_VerificationShowSas_emojiSas_label">{_t(capFirst(emoji[1]))}</div>
+                </div>
+            ));
+            sasDisplay = (
+                <div className="mx_VerificationShowSas_emojiSas">
+                    {emojiBlocks.slice(0, 4)}
+                    <div className="mx_VerificationShowSas_emojiSas_break" />
+                    {emojiBlocks.slice(4)}
+                </div>
             );
-            sasDisplay = <div className="mx_VerificationShowSas_emojiSas">
-                { emojiBlocks.slice(0, 4) }
-                <div className="mx_VerificationShowSas_emojiSas_break" />
-                { emojiBlocks.slice(4) }
-            </div>;
-            sasCaption = this.props.isSelf ?
-                _t(
-                    "Confirm the emoji below are displayed on both devices, in the same order:",
-                ):
-                _t(
-                    "Verify this user by confirming the following emoji appear on their screen.",
-                );
+            sasCaption = this.props.isSelf
+                ? _t("Confirm the emoji below are displayed on both devices, in the same order:")
+                : _t("Verify this user by confirming the following emoji appear on their screen.");
         } else if (this.props.sas.decimal) {
-            const numberBlocks = this.props.sas.decimal.map((num, i) => <span key={i}>
-                { num }
-            </span>);
-            sasDisplay = <div className="mx_VerificationShowSas_decimalSas">
-                { numberBlocks }
-            </div>;
-            sasCaption = this.props.isSelf ?
-                _t(
-                    "Verify this device by confirming the following number appears on its screen.",
-                ):
-                _t(
-                    "Verify this user by confirming the following number appears on their screen.",
-                );
+            const numberBlocks = this.props.sas.decimal.map((num, i) => <span key={i}>{num}</span>);
+            sasDisplay = <div className="mx_VerificationShowSas_decimalSas">{numberBlocks}</div>;
+            sasCaption = this.props.isSelf
+                ? _t("Verify this device by confirming the following number appears on its screen.")
+                : _t("Verify this user by confirming the following number appears on their screen.");
         } else {
-            return <div>
-                { _t("Unable to find a supported verification method.") }
-                <AccessibleButton kind="primary" onClick={this.props.onCancel}>
-                    { _t('Cancel') }
-                </AccessibleButton>
-            </div>;
+            return (
+                <div>
+                    {_t("Unable to find a supported verification method.")}
+                    <AccessibleButton kind="primary" onClick={this.props.onCancel}>
+                        {_t("Cancel")}
+                    </AccessibleButton>
+                </div>
+            );
         }
 
         let confirm;
@@ -125,13 +113,13 @@ export default class VerificationShowSas extends React.Component<IProps, IState>
             // logged out during verification
             if (this.props.device) {
                 text = _t("Waiting for you to verify on your other device, %(deviceName)s (%(deviceId)s)…", {
-                    deviceName: this.props.device ? this.props.device.getDisplayName() : '',
-                    deviceId: this.props.device ? this.props.device.deviceId : '',
+                    deviceName: this.props.device ? this.props.device.getDisplayName() : "",
+                    deviceId: this.props.device ? this.props.device.deviceId : "",
                 });
             } else {
                 text = _t("Waiting for you to verify on your other device…");
             }
-            confirm = <p>{ text }</p>;
+            confirm = <p>{text}</p>;
         } else if (this.state.pending || this.state.cancelling) {
             let text;
             if (this.state.pending) {
@@ -142,24 +130,30 @@ export default class VerificationShowSas extends React.Component<IProps, IState>
             }
             confirm = <PendingActionSpinner text={text} />;
         } else {
-            confirm = <div className="mx_VerificationShowSas_buttonRow">
-                <AccessibleButton onClick={this.onDontMatchClick} kind="danger">
-                    { _t("They don't match") }
-                </AccessibleButton>
-                <AccessibleButton onClick={this.onMatchClick} kind="primary">
-                    { _t("They match") }
-                </AccessibleButton>
-            </div>;
+            confirm = (
+                <div className="mx_VerificationShowSas_buttonRow">
+                    <AccessibleButton onClick={this.onDontMatchClick} kind="danger">
+                        {_t("They don't match")}
+                    </AccessibleButton>
+                    <AccessibleButton onClick={this.onMatchClick} kind="primary">
+                        {_t("They match")}
+                    </AccessibleButton>
+                </div>
+            );
         }
 
-        return <div className="mx_VerificationShowSas">
-            <p>{ sasCaption }</p>
-            { sasDisplay }
-            <p>{ this.props.isSelf ?
-                "":
-                _t("To be secure, do this in person or use a trusted way to communicate.") }</p>
-            { confirm }
-        </div>;
+        return (
+            <div className="mx_VerificationShowSas">
+                <p>{sasCaption}</p>
+                {sasDisplay}
+                <p>
+                    {this.props.isSelf
+                        ? ""
+                        : _t("To be secure, do this in person or use a trusted way to communicate.")}
+                </p>
+                {confirm}
+            </div>
+        );
     }
 }
 

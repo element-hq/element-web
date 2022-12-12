@@ -32,7 +32,7 @@ TextInputField.renderFactory = (props) => (
     <Field
         type="text"
         value={props.value}
-        onChange={e => props.onChange(e.target.value)}
+        onChange={(e) => props.onChange(e.target.value)}
         label={props.label}
         autoComplete="off"
     />

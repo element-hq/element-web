@@ -14,19 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ComponentProps, createRef } from 'react';
-import { decode } from 'html-entities';
-import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
-import { IPreviewUrlResponse } from 'matrix-js-sdk/src/client';
+import React, { ComponentProps, createRef } from "react";
+import { decode } from "html-entities";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { IPreviewUrlResponse } from "matrix-js-sdk/src/client";
 
-import { linkifyElement } from '../../../HtmlUtils';
+import { linkifyElement } from "../../../HtmlUtils";
 import SettingsStore from "../../../settings/SettingsStore";
 import Modal from "../../../Modal";
 import * as ImageUtils from "../../../ImageUtils";
 import { mediaFromMxc } from "../../../customisations/Media";
-import ImageView from '../elements/ImageView';
-import LinkWithTooltip from '../elements/LinkWithTooltip';
-import PlatformPeg from '../../../PlatformPeg';
+import ImageView from "../elements/ImageView";
+import LinkWithTooltip from "../elements/LinkWithTooltip";
+import PlatformPeg from "../../../PlatformPeg";
 
 interface IProps {
     link: string;
@@ -50,7 +50,7 @@ export default class LinkPreviewWidget extends React.Component<IProps> {
         }
     }
 
-    private onImageClick = ev => {
+    private onImageClick = (ev) => {
         const p = this.props.preview;
         if (ev.button != 0 || ev.metaKey) return;
         ev.preventDefault();
@@ -98,28 +98,32 @@ export default class LinkPreviewWidget extends React.Component<IProps> {
         const imageMaxHeight = 100;
         if (image && image.startsWith("mxc://")) {
             // We deliberately don't want a square here, so use the source HTTP thumbnail function
-            image = mediaFromMxc(image).getThumbnailOfSourceHttp(imageMaxWidth, imageMaxHeight, 'scale');
+            image = mediaFromMxc(image).getThumbnailOfSourceHttp(imageMaxWidth, imageMaxHeight, "scale");
         }
 
         let thumbHeight = imageMaxHeight;
         if (p["og:image:width"] && p["og:image:height"]) {
             thumbHeight = ImageUtils.thumbHeight(
-                p["og:image:width"], p["og:image:height"],
-                imageMaxWidth, imageMaxHeight,
+                p["og:image:width"],
+                p["og:image:height"],
+                imageMaxWidth,
+                imageMaxHeight,
             );
         }
 
         let img;
         if (image) {
-            img = <div className="mx_LinkPreviewWidget_image" style={{ height: thumbHeight }}>
-                <img
-                    ref={this.image}
-                    style={{ maxWidth: imageMaxWidth, maxHeight: imageMaxHeight }}
-                    src={image}
-                    onClick={this.onImageClick}
-                    alt=""
-                />
-            </div>;
+            img = (
+                <div className="mx_LinkPreviewWidget_image" style={{ height: thumbHeight }}>
+                    <img
+                        ref={this.image}
+                        style={{ maxWidth: imageMaxWidth, maxHeight: imageMaxHeight }}
+                        src={image}
+                        onClick={this.onImageClick}
+                        alt=""
+                    />
+                </div>
+            );
         }
 
         // The description includes &-encoded HTML entities, we decode those as React treats the thing as an
@@ -127,30 +131,36 @@ export default class LinkPreviewWidget extends React.Component<IProps> {
         const description = decode(p["og:description"] || "");
 
         const title = p["og:title"]?.trim() ?? "";
-        const anchor = <a href={this.props.link} target="_blank" rel="noreferrer noopener">{ title }</a>;
+        const anchor = (
+            <a href={this.props.link} target="_blank" rel="noreferrer noopener">
+                {title}
+            </a>
+        );
         const needsTooltip = PlatformPeg.get()?.needsUrlTooltips() && this.props.link !== title;
 
         return (
             <div className="mx_LinkPreviewWidget">
                 <div className="mx_LinkPreviewWidget_wrapImageCaption">
-                    { img }
+                    {img}
                     <div className="mx_LinkPreviewWidget_caption">
                         <div className="mx_LinkPreviewWidget_title">
-                            { needsTooltip ? <LinkWithTooltip
-                                tooltip={new URL(this.props.link, window.location.href).toString()}
-                            >
-                                { anchor }
-                            </LinkWithTooltip> : anchor }
-                            { p["og:site_name"] && <span className="mx_LinkPreviewWidget_siteName">
-                                { (" - " + p["og:site_name"]) }
-                            </span> }
+                            {needsTooltip ? (
+                                <LinkWithTooltip tooltip={new URL(this.props.link, window.location.href).toString()}>
+                                    {anchor}
+                                </LinkWithTooltip>
+                            ) : (
+                                anchor
+                            )}
+                            {p["og:site_name"] && (
+                                <span className="mx_LinkPreviewWidget_siteName">{" - " + p["og:site_name"]}</span>
+                            )}
                         </div>
                         <div className="mx_LinkPreviewWidget_description" ref={this.description}>
-                            { description }
+                            {description}
                         </div>
                     </div>
                 </div>
-                { this.props.children }
+                {this.props.children}
             </div>
         );
     }

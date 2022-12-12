@@ -112,15 +112,15 @@ const SSOButton: React.FC<ISSOButtonProps> = ({
         // TODO fallback icon
         return (
             <AccessibleTooltipButton {...props} title={label} className={classes} onClick={onClick}>
-                { icon }
+                {icon}
             </AccessibleTooltipButton>
         );
     }
 
     return (
         <AccessibleButton {...props} className={classes} onClick={onClick}>
-            { icon }
-            { label }
+            {icon}
+            {label}
         </AccessibleButton>
     );
 };
@@ -138,37 +138,41 @@ const MAX_PER_ROW = 6;
 const SSOButtons: React.FC<IProps> = ({ matrixClient, flow, loginType, fragmentAfterLogin, primary }) => {
     const providers = flow.identity_providers || [];
     if (providers.length < 2) {
-        return <div className="mx_SSOButtons">
-            <SSOButton
-                matrixClient={matrixClient}
-                loginType={loginType}
-                fragmentAfterLogin={fragmentAfterLogin}
-                idp={providers[0]}
-                primary={primary}
-            />
-        </div>;
+        return (
+            <div className="mx_SSOButtons">
+                <SSOButton
+                    matrixClient={matrixClient}
+                    loginType={loginType}
+                    fragmentAfterLogin={fragmentAfterLogin}
+                    idp={providers[0]}
+                    primary={primary}
+                />
+            </div>
+        );
     }
 
     const rows = Math.ceil(providers.length / MAX_PER_ROW);
     const size = Math.ceil(providers.length / rows);
 
-    return <div className="mx_SSOButtons">
-        { chunk(providers, size).map(chunk => (
-            <div key={chunk[0].id} className="mx_SSOButtons_row">
-                { chunk.map(idp => (
-                    <SSOButton
-                        key={idp.id}
-                        matrixClient={matrixClient}
-                        loginType={loginType}
-                        fragmentAfterLogin={fragmentAfterLogin}
-                        idp={idp}
-                        mini={true}
-                        primary={primary}
-                    />
-                )) }
-            </div>
-        )) }
-    </div>;
+    return (
+        <div className="mx_SSOButtons">
+            {chunk(providers, size).map((chunk) => (
+                <div key={chunk[0].id} className="mx_SSOButtons_row">
+                    {chunk.map((idp) => (
+                        <SSOButton
+                            key={idp.id}
+                            matrixClient={matrixClient}
+                            loginType={loginType}
+                            fragmentAfterLogin={fragmentAfterLogin}
+                            idp={idp}
+                            mini={true}
+                            primary={primary}
+                        />
+                    ))}
+                </div>
+            ))}
+        </div>
+    );
 };
 
 export default SSOButtons;

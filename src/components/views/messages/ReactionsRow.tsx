@@ -19,8 +19,8 @@ import classNames from "classnames";
 import { MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/models/event";
 import { Relations, RelationsEvent } from "matrix-js-sdk/src/models/relations";
 
-import { _t } from '../../../languageHandler';
-import { isContentActionable } from '../../../utils/EventUtils';
+import { _t } from "../../../languageHandler";
+import { isContentActionable } from "../../../utils/EventUtils";
 import { ContextMenuTooltipButton } from "../../../accessibility/context_menu/ContextMenuTooltipButton";
 import ContextMenu, { aboveLeftOf, useContextMenu } from "../../structures/ContextMenu";
 import ReactionPicker from "../emojipicker/ReactionPicker";
@@ -37,28 +37,32 @@ const ReactButton = ({ mxEvent, reactions }: IProps) => {
     let contextMenu;
     if (menuDisplayed) {
         const buttonRect = button.current.getBoundingClientRect();
-        contextMenu = <ContextMenu {...aboveLeftOf(buttonRect)} onFinished={closeMenu} managed={false}>
-            <ReactionPicker mxEvent={mxEvent} reactions={reactions} onFinished={closeMenu} />
-        </ContextMenu>;
+        contextMenu = (
+            <ContextMenu {...aboveLeftOf(buttonRect)} onFinished={closeMenu} managed={false}>
+                <ReactionPicker mxEvent={mxEvent} reactions={reactions} onFinished={closeMenu} />
+            </ContextMenu>
+        );
     }
 
-    return <React.Fragment>
-        <ContextMenuTooltipButton
-            className={classNames("mx_ReactionsRow_addReactionButton", {
-                mx_ReactionsRow_addReactionButton_active: menuDisplayed,
-            })}
-            title={_t("Add reaction")}
-            onClick={openMenu}
-            onContextMenu={e => {
-                e.preventDefault();
-                openMenu();
-            }}
-            isExpanded={menuDisplayed}
-            inputRef={button}
-        />
+    return (
+        <React.Fragment>
+            <ContextMenuTooltipButton
+                className={classNames("mx_ReactionsRow_addReactionButton", {
+                    mx_ReactionsRow_addReactionButton_active: menuDisplayed,
+                })}
+                title={_t("Add reaction")}
+                onClick={openMenu}
+                onContextMenu={(e) => {
+                    e.preventDefault();
+                    openMenu();
+                }}
+                isExpanded={menuDisplayed}
+                inputRef={button}
+            />
 
-        { contextMenu }
-    </React.Fragment>;
+            {contextMenu}
+        </React.Fragment>
+    );
 };
 
 interface IProps {
@@ -165,30 +169,37 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
             return null;
         }
 
-        let items = reactions.getSortedAnnotationsByKey().map(([content, events]) => {
-            const count = events.size;
-            if (!count) {
-                return null;
-            }
-            const myReactionEvent = myReactions && myReactions.find(mxEvent => {
-                if (mxEvent.isRedacted()) {
-                    return false;
+        let items = reactions
+            .getSortedAnnotationsByKey()
+            .map(([content, events]) => {
+                const count = events.size;
+                if (!count) {
+                    return null;
                 }
-                return mxEvent.getRelation().key === content;
-            });
-            return <ReactionsRowButton
-                key={content}
-                content={content}
-                count={count}
-                mxEvent={mxEvent}
-                reactionEvents={events}
-                myReactionEvent={myReactionEvent}
-                disabled={
-                    !this.context.canReact ||
-                    (myReactionEvent && !myReactionEvent.isRedacted() && !this.context.canSelfRedact)
-                }
-            />;
-        }).filter(item => !!item);
+                const myReactionEvent =
+                    myReactions &&
+                    myReactions.find((mxEvent) => {
+                        if (mxEvent.isRedacted()) {
+                            return false;
+                        }
+                        return mxEvent.getRelation().key === content;
+                    });
+                return (
+                    <ReactionsRowButton
+                        key={content}
+                        content={content}
+                        count={count}
+                        mxEvent={mxEvent}
+                        reactionEvents={events}
+                        myReactionEvent={myReactionEvent}
+                        disabled={
+                            !this.context.canReact ||
+                            (myReactionEvent && !myReactionEvent.isRedacted() && !this.context.canSelfRedact)
+                        }
+                    />
+                );
+            })
+            .filter((item) => !!item);
 
         if (!items.length) return null;
 
@@ -196,15 +207,13 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
         // The "+ 1" ensure that the "show all" reveals something that takes up
         // more space than the button itself.
         let showAllButton: JSX.Element;
-        if ((items.length > MAX_ITEMS_WHEN_LIMITED + 1) && !showAll) {
+        if (items.length > MAX_ITEMS_WHEN_LIMITED + 1 && !showAll) {
             items = items.slice(0, MAX_ITEMS_WHEN_LIMITED);
-            showAllButton = <AccessibleButton
-                kind="link_inline"
-                className="mx_ReactionsRow_showAll"
-                onClick={this.onShowAllClick}
-            >
-                { _t("Show all") }
-            </AccessibleButton>;
+            showAllButton = (
+                <AccessibleButton kind="link_inline" className="mx_ReactionsRow_showAll" onClick={this.onShowAllClick}>
+                    {_t("Show all")}
+                </AccessibleButton>
+            );
         }
 
         let addReactionButton: JSX.Element;
@@ -212,14 +221,12 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
             addReactionButton = <ReactButton mxEvent={mxEvent} reactions={reactions} />;
         }
 
-        return <div
-            className="mx_ReactionsRow"
-            role="toolbar"
-            aria-label={_t("Reactions")}
-        >
-            { items }
-            { showAllButton }
-            { addReactionButton }
-        </div>;
+        return (
+            <div className="mx_ReactionsRow" role="toolbar" aria-label={_t("Reactions")}>
+                {items}
+                {showAllButton}
+                {addReactionButton}
+            </div>
+        );
     }
 }

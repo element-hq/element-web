@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import classNames from "classnames";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
 import { _t } from "../../../languageHandler";
 import { UseCase } from "../../../settings/enums/UseCase";
@@ -47,17 +47,17 @@ export function UseCaseSelection({ onFinished }: Props) {
     }, [selection, onFinished]);
 
     return (
-        <SplashPage className={classNames(
-            "mx_UseCaseSelection", {
-                "mx_UseCaseSelection_selected": selection !== null,
-            },
-        )}>
+        <SplashPage
+            className={classNames("mx_UseCaseSelection", {
+                mx_UseCaseSelection_selected: selection !== null,
+            })}
+        >
             <div className="mx_UseCaseSelection_title mx_UseCaseSelection_slideIn">
-                <h1>{ _t("You're in") }</h1>
+                <h1>{_t("You're in")}</h1>
             </div>
             <div className="mx_UseCaseSelection_info mx_UseCaseSelection_slideInDelayed">
-                <h2>{ _t("Who will you chat to the most?") }</h2>
-                <h3>{ _t("We'll help you get connected.") }</h3>
+                <h2>{_t("Who will you chat to the most?")}</h2>
+                <h3>{_t("We'll help you get connected.")}</h3>
             </div>
             <div className="mx_UseCaseSelection_options mx_UseCaseSelection_slideInDelayed">
                 <UseCaseSelectionButton
@@ -78,7 +78,7 @@ export function UseCaseSelection({ onFinished }: Props) {
             </div>
             <div className="mx_UseCaseSelection_skip mx_UseCaseSelection_slideInDelayed">
                 <AccessibleButton kind="link" onClick={async () => setSelected(UseCase.Skip)}>
-                    { _t("Skip") }
+                    {_t("Skip")}
                 </AccessibleButton>
             </div>
         </SplashPage>

@@ -21,23 +21,28 @@ import {
     PushRuleKind,
     RuleId,
     TweakName,
-} from 'matrix-js-sdk/src/matrix';
-import { CallEvent, CallState, CallType, MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
-import EventEmitter from 'events';
-import { mocked } from 'jest-mock';
-import { CallEventHandlerEvent } from 'matrix-js-sdk/src/webrtc/callEventHandler';
+} from "matrix-js-sdk/src/matrix";
+import { CallEvent, CallState, CallType, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
+import EventEmitter from "events";
+import { mocked } from "jest-mock";
+import { CallEventHandlerEvent } from "matrix-js-sdk/src/webrtc/callEventHandler";
 
 import LegacyCallHandler, {
-    LegacyCallHandlerEvent, AudioID, PROTOCOL_PSTN, PROTOCOL_PSTN_PREFIXED, PROTOCOL_SIP_NATIVE, PROTOCOL_SIP_VIRTUAL,
-} from '../src/LegacyCallHandler';
-import { stubClient, mkStubRoom, untilDispatch } from './test-utils';
-import { MatrixClientPeg } from '../src/MatrixClientPeg';
-import DMRoomMap from '../src/utils/DMRoomMap';
-import SdkConfig from '../src/SdkConfig';
+    LegacyCallHandlerEvent,
+    AudioID,
+    PROTOCOL_PSTN,
+    PROTOCOL_PSTN_PREFIXED,
+    PROTOCOL_SIP_NATIVE,
+    PROTOCOL_SIP_VIRTUAL,
+} from "../src/LegacyCallHandler";
+import { stubClient, mkStubRoom, untilDispatch } from "./test-utils";
+import { MatrixClientPeg } from "../src/MatrixClientPeg";
+import DMRoomMap from "../src/utils/DMRoomMap";
+import SdkConfig from "../src/SdkConfig";
 import { Action } from "../src/dispatcher/actions";
 import { getFunctionalMembers } from "../src/utils/room/getFunctionalMembers";
-import SettingsStore from '../src/settings/SettingsStore';
-import { UIFeature } from '../src/settings/UIFeature';
+import SettingsStore from "../src/settings/SettingsStore";
+import { UIFeature } from "../src/settings/UIFeature";
 
 jest.mock("../src/utils/room/getFunctionalMembers", () => ({
     getFunctionalMembers: jest.fn(),
@@ -67,34 +72,34 @@ const VIRTUAL_ROOM_BOB = "$virtual_bob_room:example.org";
 const BOB_PHONE_NUMBER = "01818118181";
 
 function mkStubDM(roomId, userId) {
-    const room = mkStubRoom(roomId, 'room', MatrixClientPeg.get());
+    const room = mkStubRoom(roomId, "room", MatrixClientPeg.get());
     room.getJoinedMembers = jest.fn().mockReturnValue([
         {
-            userId: '@me:example.org',
-            name: 'Member',
-            rawDisplayName: 'Member',
+            userId: "@me:example.org",
+            name: "Member",
+            rawDisplayName: "Member",
             roomId: roomId,
-            membership: 'join',
-            getAvatarUrl: () => 'mxc://avatar.url/image.png',
-            getMxcAvatarUrl: () => 'mxc://avatar.url/image.png',
+            membership: "join",
+            getAvatarUrl: () => "mxc://avatar.url/image.png",
+            getMxcAvatarUrl: () => "mxc://avatar.url/image.png",
         },
         {
             userId: userId,
-            name: 'Member',
-            rawDisplayName: 'Member',
+            name: "Member",
+            rawDisplayName: "Member",
             roomId: roomId,
-            membership: 'join',
-            getAvatarUrl: () => 'mxc://avatar.url/image.png',
-            getMxcAvatarUrl: () => 'mxc://avatar.url/image.png',
+            membership: "join",
+            getAvatarUrl: () => "mxc://avatar.url/image.png",
+            getMxcAvatarUrl: () => "mxc://avatar.url/image.png",
         },
         {
             userId: FUNCTIONAL_USER,
-            name: 'Bot user',
-            rawDisplayName: 'Bot user',
+            name: "Bot user",
+            rawDisplayName: "Bot user",
             roomId: roomId,
-            membership: 'join',
-            getAvatarUrl: () => 'mxc://avatar.url/image.png',
-            getMxcAvatarUrl: () => 'mxc://avatar.url/image.png',
+            membership: "join",
+            getAvatarUrl: () => "mxc://avatar.url/image.png",
+            getMxcAvatarUrl: () => "mxc://avatar.url/image.png",
         },
     ]);
     room.currentState.getMembers = room.getJoinedMembers;
@@ -127,7 +132,7 @@ function untilCallHandlerEvent(callHandler: LegacyCallHandler, event: LegacyCall
     });
 }
 
-describe('LegacyCallHandler', () => {
+describe("LegacyCallHandler", () => {
     let dmRoomMap;
     let callHandler;
     let audioElement: HTMLAudioElement;
@@ -136,11 +141,11 @@ describe('LegacyCallHandler', () => {
     // what addresses the app has looked up via pstn and native lookup
     let pstnLookup: string;
     let nativeLookup: string;
-    const deviceId = 'my-device';
+    const deviceId = "my-device";
 
     beforeEach(async () => {
         stubClient();
-        MatrixClientPeg.get().createCall = roomId => {
+        MatrixClientPeg.get().createCall = (roomId) => {
             if (fakeCall && fakeCall.roomId !== roomId) {
                 throw new Error("Only one call is supported!");
             }
@@ -160,16 +165,14 @@ describe('LegacyCallHandler', () => {
         callHandler = new LegacyCallHandler();
         callHandler.start();
 
-        mocked(getFunctionalMembers).mockReturnValue([
-            FUNCTIONAL_USER,
-        ]);
+        mocked(getFunctionalMembers).mockReturnValue([FUNCTIONAL_USER]);
 
         const nativeRoomAlice = mkStubDM(NATIVE_ROOM_ALICE, NATIVE_ALICE);
         const nativeRoomBob = mkStubDM(NATIVE_ROOM_BOB, NATIVE_BOB);
         const nativeRoomCharie = mkStubDM(NATIVE_ROOM_CHARLIE, NATIVE_CHARLIE);
         const virtualBobRoom = mkStubDM(VIRTUAL_ROOM_BOB, VIRTUAL_BOB);
 
-        MatrixClientPeg.get().getRoom = roomId => {
+        MatrixClientPeg.get().getRoom = (roomId) => {
             switch (roomId) {
                 case NATIVE_ROOM_ALICE:
                     return nativeRoomAlice;
@@ -217,44 +220,50 @@ describe('LegacyCallHandler', () => {
 
         MatrixClientPeg.get().getThirdpartyUser = (proto, params) => {
             if ([PROTOCOL_PSTN, PROTOCOL_PSTN_PREFIXED].includes(proto)) {
-                pstnLookup = params['m.id.phone'];
-                return Promise.resolve([{
-                    userid: VIRTUAL_BOB,
-                    protocol: "m.id.phone",
-                    fields: {
-                        is_native: true,
-                        lookup_success: true,
-                    },
-                }]);
-            } else if (proto === PROTOCOL_SIP_NATIVE) {
-                nativeLookup = params['virtual_mxid'];
-                if (params['virtual_mxid'] === VIRTUAL_BOB) {
-                    return Promise.resolve([{
-                        userid: NATIVE_BOB,
-                        protocol: "im.vector.protocol.sip_native",
+                pstnLookup = params["m.id.phone"];
+                return Promise.resolve([
+                    {
+                        userid: VIRTUAL_BOB,
+                        protocol: "m.id.phone",
                         fields: {
                             is_native: true,
                             lookup_success: true,
                         },
-                    }]);
+                    },
+                ]);
+            } else if (proto === PROTOCOL_SIP_NATIVE) {
+                nativeLookup = params["virtual_mxid"];
+                if (params["virtual_mxid"] === VIRTUAL_BOB) {
+                    return Promise.resolve([
+                        {
+                            userid: NATIVE_BOB,
+                            protocol: "im.vector.protocol.sip_native",
+                            fields: {
+                                is_native: true,
+                                lookup_success: true,
+                            },
+                        },
+                    ]);
                 }
                 return Promise.resolve([]);
             } else if (proto === PROTOCOL_SIP_VIRTUAL) {
-                if (params['native_mxid'] === NATIVE_BOB) {
-                    return Promise.resolve([{
-                        userid: VIRTUAL_BOB,
-                        protocol: "im.vector.protocol.sip_virtual",
-                        fields: {
-                            is_virtual: true,
-                            lookup_success: true,
+                if (params["native_mxid"] === NATIVE_BOB) {
+                    return Promise.resolve([
+                        {
+                            userid: VIRTUAL_BOB,
+                            protocol: "im.vector.protocol.sip_virtual",
+                            fields: {
+                                is_virtual: true,
+                                lookup_success: true,
+                            },
                         },
-                    }]);
+                    ]);
                 }
                 return Promise.resolve([]);
             }
         };
 
-        audioElement = document.createElement('audio');
+        audioElement = document.createElement("audio");
         audioElement.id = "remoteAudio";
         document.body.appendChild(audioElement);
     });
@@ -271,7 +280,7 @@ describe('LegacyCallHandler', () => {
         SdkConfig.unset();
     });
 
-    it('should look up the correct user and start a call in the room when a phone number is dialled', async () => {
+    it("should look up the correct user and start a call in the room when a phone number is dialled", async () => {
         await callHandler.dialNumber(BOB_PHONE_NUMBER);
 
         expect(pstnLookup).toEqual(BOB_PHONE_NUMBER);
@@ -289,7 +298,7 @@ describe('LegacyCallHandler', () => {
         expect(callHandler.roomIdForCall(fakeCall)).toEqual(NATIVE_ROOM_BOB);
     });
 
-    it('should look up the correct user and start a call in the room when a call is transferred', async () => {
+    it("should look up the correct user and start a call in the room when a call is transferred", async () => {
         // we can pass a very minimal object as as the call since we pass consultFirst=true:
         // we don't need to actually do any transferring
         const mockTransferreeCall = { type: CallType.Voice };
@@ -304,7 +313,7 @@ describe('LegacyCallHandler', () => {
         expect(callHandler.roomIdForCall(fakeCall)).toEqual(NATIVE_ROOM_BOB);
     });
 
-    it('should move calls between rooms when remote asserted identity changes', async () => {
+    it("should move calls between rooms when remote asserted identity changes", async () => {
         callHandler.placeCall(NATIVE_ROOM_ALICE, CallType.Voice);
 
         await untilCallHandlerEvent(callHandler, LegacyCallHandlerEvent.CallState);
@@ -313,7 +322,7 @@ describe('LegacyCallHandler', () => {
         expect(callHandler.getCallForRoom(NATIVE_ROOM_ALICE)).toBe(fakeCall);
 
         let callRoomChangeEventCount = 0;
-        const roomChangePromise = new Promise<void>(resolve => {
+        const roomChangePromise = new Promise<void>((resolve) => {
             callHandler.addListener(LegacyCallHandlerEvent.CallChangeRoom, () => {
                 ++callRoomChangeEventCount;
                 resolve();
@@ -355,7 +364,7 @@ describe('LegacyCallHandler', () => {
     });
 });
 
-describe('LegacyCallHandler without third party protocols', () => {
+describe("LegacyCallHandler without third party protocols", () => {
     let dmRoomMap;
     let callHandler: LegacyCallHandler;
     let audioElement: HTMLAudioElement;
@@ -363,7 +372,7 @@ describe('LegacyCallHandler without third party protocols', () => {
 
     beforeEach(() => {
         stubClient();
-        MatrixClientPeg.get().createCall = roomId => {
+        MatrixClientPeg.get().createCall = (roomId) => {
             if (fakeCall && fakeCall.roomId !== roomId) {
                 throw new Error("Only one call is supported!");
             }
@@ -380,7 +389,7 @@ describe('LegacyCallHandler without third party protocols', () => {
 
         const nativeRoomAlice = mkStubDM(NATIVE_ROOM_ALICE, NATIVE_ALICE);
 
-        MatrixClientPeg.get().getRoom = roomId => {
+        MatrixClientPeg.get().getRoom = (roomId) => {
             switch (roomId) {
                 case NATIVE_ROOM_ALICE:
                     return nativeRoomAlice;
@@ -409,7 +418,7 @@ describe('LegacyCallHandler without third party protocols', () => {
             throw new Error("Endpoint unsupported.");
         };
 
-        audioElement = document.createElement('audio');
+        audioElement = document.createElement("audio");
         audioElement.id = "remoteAudio";
         document.body.appendChild(audioElement);
     });
@@ -426,7 +435,7 @@ describe('LegacyCallHandler without third party protocols', () => {
         SdkConfig.unset();
     });
 
-    it('should still start a native call', async () => {
+    it("should still start a native call", async () => {
         callHandler.placeCall(NATIVE_ROOM_ALICE, CallType.Voice);
 
         await untilCallHandlerEvent(callHandler, LegacyCallHandlerEvent.CallState);
@@ -439,8 +448,8 @@ describe('LegacyCallHandler without third party protocols', () => {
         expect(callHandler.roomIdForCall(fakeCall)).toEqual(NATIVE_ROOM_ALICE);
     });
 
-    describe('incoming calls', () => {
-        const roomId = 'test-room-id';
+    describe("incoming calls", () => {
+        const roomId = "test-room-id";
 
         const mockAudioElement = {
             play: jest.fn(),
@@ -451,35 +460,35 @@ describe('LegacyCallHandler without third party protocols', () => {
         } as unknown as HTMLMediaElement;
         beforeEach(() => {
             jest.clearAllMocks();
-            jest.spyOn(SettingsStore, 'getValue').mockImplementation(setting =>
-                setting === UIFeature.Voip);
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => setting === UIFeature.Voip);
 
-            jest.spyOn(MatrixClientPeg.get(), 'supportsVoip').mockReturnValue(true);
+            jest.spyOn(MatrixClientPeg.get(), "supportsVoip").mockReturnValue(true);
 
             MatrixClientPeg.get().isFallbackICEServerAllowed = jest.fn();
             MatrixClientPeg.get().prepareToEncrypt = jest.fn();
 
             MatrixClientPeg.get().pushRules = {
                 global: {
-                    [PushRuleKind.Override]: [{
-                        rule_id: RuleId.IncomingCall,
-                        default: false,
-                        enabled: true,
-                        actions: [
-                            {
-                                set_tweak: TweakName.Sound,
-                                value: 'ring',
-                            },
-                        ]
-                        ,
-                    }],
+                    [PushRuleKind.Override]: [
+                        {
+                            rule_id: RuleId.IncomingCall,
+                            default: false,
+                            enabled: true,
+                            actions: [
+                                {
+                                    set_tweak: TweakName.Sound,
+                                    value: "ring",
+                                },
+                            ],
+                        },
+                    ],
                 },
             };
 
-            jest.spyOn(document, 'getElementById').mockReturnValue(mockAudioElement);
+            jest.spyOn(document, "getElementById").mockReturnValue(mockAudioElement);
 
             // silence local notifications by default
-            jest.spyOn(MatrixClientPeg.get(), 'getAccountData').mockImplementation((eventType) => {
+            jest.spyOn(MatrixClientPeg.get(), "getAccountData").mockImplementation((eventType) => {
                 if (eventType.includes(LOCAL_NOTIFICATION_SETTINGS_PREFIX.name)) {
                     return new MatrixEvent({
                         type: eventType,
@@ -491,7 +500,7 @@ describe('LegacyCallHandler without third party protocols', () => {
             });
         });
 
-        it('should unmute <audio> before playing', () => {
+        it("should unmute <audio> before playing", () => {
             // Test setup: set the audio element as muted
             mockAudioElement.muted = true;
             expect(mockAudioElement.muted).toStrictEqual(true);
@@ -504,7 +513,7 @@ describe('LegacyCallHandler without third party protocols', () => {
             expect(mockAudioElement.play).toHaveBeenCalled();
         });
 
-        it('listens for incoming call events when voip is enabled', () => {
+        it("listens for incoming call events when voip is enabled", () => {
             const call = new MatrixCall({
                 client: MatrixClientPeg.get(),
                 roomId,
@@ -517,9 +526,9 @@ describe('LegacyCallHandler without third party protocols', () => {
             expect(callHandler.getCallForRoom(roomId)).toEqual(call);
         });
 
-        it('rings when incoming call state is ringing and notifications set to ring', () => {
+        it("rings when incoming call state is ringing and notifications set to ring", () => {
             // remove local notification silencing mock for this test
-            jest.spyOn(MatrixClientPeg.get(), 'getAccountData').mockReturnValue(undefined);
+            jest.spyOn(MatrixClientPeg.get(), "getAccountData").mockReturnValue(undefined);
             const call = new MatrixCall({
                 client: MatrixClientPeg.get(),
                 roomId,
@@ -536,7 +545,7 @@ describe('LegacyCallHandler without third party protocols', () => {
             expect(mockAudioElement.play).toHaveBeenCalled();
         });
 
-        it('does not ring when incoming call state is ringing but local notifications are silenced', () => {
+        it("does not ring when incoming call state is ringing but local notifications are silenced", () => {
             const call = new MatrixCall({
                 client: MatrixClientPeg.get(),
                 roomId,
@@ -554,7 +563,7 @@ describe('LegacyCallHandler without third party protocols', () => {
             expect(callHandler.isCallSilenced(call.callId)).toEqual(true);
         });
 
-        it('should force calls to silent when local notifications are silenced', async () => {
+        it("should force calls to silent when local notifications are silenced", async () => {
             const call = new MatrixCall({
                 client: MatrixClientPeg.get(),
                 roomId,
@@ -567,13 +576,13 @@ describe('LegacyCallHandler without third party protocols', () => {
             expect(callHandler.isCallSilenced(call.callId)).toEqual(true);
         });
 
-        it('does not unsilence calls when local notifications are silenced', async () => {
+        it("does not unsilence calls when local notifications are silenced", async () => {
             const call = new MatrixCall({
                 client: MatrixClientPeg.get(),
                 roomId,
             });
             const cli = MatrixClientPeg.get();
-            const callHandlerEmitSpy = jest.spyOn(callHandler, 'emit');
+            const callHandlerEmitSpy = jest.spyOn(callHandler, "emit");
 
             cli.emit(CallEventHandlerEvent.Incoming, call);
             // reset emit call count

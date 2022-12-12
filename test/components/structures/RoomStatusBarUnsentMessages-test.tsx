@@ -24,7 +24,7 @@ describe("RoomStatusBarUnsentMessages", () => {
     const title = "test title";
     const description = "test description";
     const buttonsText = "test buttons";
-    const buttons = <div>{ buttonsText }</div>;
+    const buttons = <div>{buttonsText}</div>;
 
     beforeEach(() => {
         render(

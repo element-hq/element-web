@@ -16,12 +16,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { IAuthData } from "matrix-js-sdk/src/interactive-auth";
 
-import { _t } from '../../../languageHandler';
-import AccessibleButton from '../elements/AccessibleButton';
+import { _t } from "../../../languageHandler";
+import AccessibleButton from "../elements/AccessibleButton";
 import InteractiveAuth, { ERROR_USER_CANCELLED, InteractiveAuthCallback } from "../../structures/InteractiveAuth";
 import { SSOAuthEntry } from "../auth/InteractiveAuthEntryComponents";
 import BaseDialog from "./BaseDialog";
@@ -144,7 +144,7 @@ export default class InteractiveAuthDialog extends React.Component<InteractiveAu
         // Let's pick a title, body, and other params text that we'll show to the user. The order
         // is most specific first, so stagePhase > our props > defaults.
 
-        let title = this.state.authError ? 'Error' : (this.props.title || _t('Authentication'));
+        let title = this.state.authError ? "Error" : this.props.title || _t("Authentication");
         let body = this.state.authError ? null : this.props.body;
         let continueText = null;
         let continueKind = null;
@@ -162,21 +162,18 @@ export default class InteractiveAuthDialog extends React.Component<InteractiveAu
         let content;
         if (this.state.authError) {
             content = (
-                <div id='mx_Dialog_content'>
-                    <div role="alert">{ this.state.authError.message || this.state.authError.toString() }</div>
+                <div id="mx_Dialog_content">
+                    <div role="alert">{this.state.authError.message || this.state.authError.toString()}</div>
                     <br />
-                    <AccessibleButton onClick={this.onDismissClick}
-                        className="mx_GeneralButton"
-                        autoFocus={true}
-                    >
-                        { _t("Dismiss") }
+                    <AccessibleButton onClick={this.onDismissClick} className="mx_GeneralButton" autoFocus={true}>
+                        {_t("Dismiss")}
                     </AccessibleButton>
                 </div>
             );
         } else {
             content = (
-                <div id='mx_Dialog_content'>
-                    { body }
+                <div id="mx_Dialog_content">
+                    {body}
                     <InteractiveAuth
                         matrixClient={this.props.matrixClient}
                         authData={this.props.authData}
@@ -191,12 +188,13 @@ export default class InteractiveAuthDialog extends React.Component<InteractiveAu
         }
 
         return (
-            <BaseDialog className="mx_InteractiveAuthDialog"
+            <BaseDialog
+                className="mx_InteractiveAuthDialog"
                 onFinished={this.props.onFinished}
                 title={title}
-                contentId='mx_Dialog_content'
+                contentId="mx_Dialog_content"
             >
-                { content }
+                {content}
             </BaseDialog>
         );
     }

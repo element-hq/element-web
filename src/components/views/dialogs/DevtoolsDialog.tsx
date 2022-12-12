@@ -15,9 +15,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-import { _t, _td } from '../../../languageHandler';
+import { _t, _td } from "../../../languageHandler";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import BaseDialog from "./BaseDialog";
 import { TimelineEventEditor } from "./devtools/Event";
@@ -26,11 +26,11 @@ import VerificationExplorer from "./devtools/VerificationExplorer";
 import SettingExplorer from "./devtools/SettingExplorer";
 import { RoomStateExplorer } from "./devtools/RoomState";
 import BaseTool, { DevtoolsContext, IDevtoolsProps } from "./devtools/BaseTool";
-import WidgetExplorer from './devtools/WidgetExplorer';
+import WidgetExplorer from "./devtools/WidgetExplorer";
 import { AccountDataExplorer, RoomAccountDataExplorer } from "./devtools/AccountData";
 import SettingsFlag from "../elements/SettingsFlag";
 import { SettingLevel } from "../../../settings/SettingLevel";
-import ServerInfo from './devtools/ServerInfo';
+import ServerInfo from "./devtools/ServerInfo";
 
 enum Category {
     Room,
@@ -83,41 +83,47 @@ const DevtoolsDialog: React.FC<IProps> = ({ roomId, onFinished }) => {
         const onBack = () => {
             onFinished(false);
         };
-        body = <BaseTool onBack={onBack}>
-            { Object.entries(Tools).map(([category, tools]) => (
-                <div key={category}>
-                    <h3>{ _t(categoryLabels[category]) }</h3>
-                    { tools.map(([label, tool]) => {
-                        const onClick = () => {
-                            setTool([label, tool]);
-                        };
-                        return <button className="mx_DevTools_button" key={label} onClick={onClick}>
-                            { _t(label) }
-                        </button>;
-                    }) }
+        body = (
+            <BaseTool onBack={onBack}>
+                {Object.entries(Tools).map(([category, tools]) => (
+                    <div key={category}>
+                        <h3>{_t(categoryLabels[category])}</h3>
+                        {tools.map(([label, tool]) => {
+                            const onClick = () => {
+                                setTool([label, tool]);
+                            };
+                            return (
+                                <button className="mx_DevTools_button" key={label} onClick={onClick}>
+                                    {_t(label)}
+                                </button>
+                            );
+                        })}
+                    </div>
+                ))}
+                <div>
+                    <h3>{_t("Options")}</h3>
+                    <SettingsFlag name="developerMode" level={SettingLevel.ACCOUNT} />
+                    <SettingsFlag name="showHiddenEventsInTimeline" level={SettingLevel.DEVICE} />
+                    <SettingsFlag name="enableWidgetScreenshots" level={SettingLevel.ACCOUNT} />
                 </div>
-            )) }
-            <div>
-                <h3>{ _t("Options") }</h3>
-                <SettingsFlag name="developerMode" level={SettingLevel.ACCOUNT} />
-                <SettingsFlag name="showHiddenEventsInTimeline" level={SettingLevel.DEVICE} />
-                <SettingsFlag name="enableWidgetScreenshots" level={SettingLevel.ACCOUNT} />
-            </div>
-        </BaseTool>;
+            </BaseTool>
+        );
     }
 
     const label = tool ? tool[0] : _t("Toolbox");
     return (
         <BaseDialog className="mx_QuestionDialog" onFinished={onFinished} title={_t("Developer Tools")}>
             <MatrixClientContext.Consumer>
-                { (cli) => <>
-                    <div className="mx_DevTools_label_left">{ label }</div>
-                    <div className="mx_DevTools_label_right">{ _t("Room ID: %(roomId)s", { roomId }) }</div>
-                    <div className="mx_DevTools_label_bottom" />
-                    <DevtoolsContext.Provider value={{ room: cli.getRoom(roomId) }}>
-                        { body }
-                    </DevtoolsContext.Provider>
-                </> }
+                {(cli) => (
+                    <>
+                        <div className="mx_DevTools_label_left">{label}</div>
+                        <div className="mx_DevTools_label_right">{_t("Room ID: %(roomId)s", { roomId })}</div>
+                        <div className="mx_DevTools_label_bottom" />
+                        <DevtoolsContext.Provider value={{ room: cli.getRoom(roomId) }}>
+                            {body}
+                        </DevtoolsContext.Provider>
+                    </>
+                )}
             </MatrixClientContext.Consumer>
         </BaseDialog>
     );

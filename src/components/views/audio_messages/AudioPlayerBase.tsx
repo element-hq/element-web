@@ -55,7 +55,7 @@ export default abstract class AudioPlayerBase<T extends IProps = IProps> extends
 
         // Don't wait for the promise to complete - it will emit a progress update when it
         // is done, and it's not meant to take long anyhow.
-        this.props.playback.prepare().catch(e => {
+        this.props.playback.prepare().catch((e) => {
             logger.error("Error processing audio file:", e);
             this.setState({ error: true });
         });
@@ -95,9 +95,11 @@ export default abstract class AudioPlayerBase<T extends IProps = IProps> extends
     protected abstract renderComponent(): ReactNode;
 
     public render(): ReactNode {
-        return <>
-            { this.renderComponent() }
-            { this.state.error && <div className="text-warning">{ _t("Error downloading audio") }</div> }
-        </>;
+        return (
+            <>
+                {this.renderComponent()}
+                {this.state.error && <div className="text-warning">{_t("Error downloading audio")}</div>}
+            </>
+        );
     }
 }

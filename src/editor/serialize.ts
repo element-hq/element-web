@@ -15,16 +15,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { encode } from 'html-entities';
-import cheerio from 'cheerio';
+import { encode } from "html-entities";
+import cheerio from "cheerio";
 import escapeHtml from "escape-html";
 
-import Markdown from '../Markdown';
+import Markdown from "../Markdown";
 import { makeGenericPermalink } from "../utils/permalinks/Permalinks";
 import EditorModel from "./model";
-import SettingsStore from '../settings/SettingsStore';
-import SdkConfig from '../SdkConfig';
-import { Type } from './parts';
+import SettingsStore from "../settings/SettingsStore";
+import SdkConfig from "../SdkConfig";
+import { Type } from "./parts";
 
 export function mdSerialize(model: EditorModel): string {
     return model.parts.reduce((html, part) => {
@@ -40,11 +40,17 @@ export function mdSerialize(model: EditorModel): string {
             case Type.RoomPill:
                 // Here we use the resourceId for compatibility with non-rich text clients
                 // See https://github.com/vector-im/element-web/issues/16660
-                return html +
-                    `[${part.resourceId.replace(/[[\\\]]/g, c => "\\" + c)}](${makeGenericPermalink(part.resourceId)})`;
+                return (
+                    html +
+                    `[${part.resourceId.replace(/[[\\\]]/g, (c) => "\\" + c)}](${makeGenericPermalink(
+                        part.resourceId,
+                    )})`
+                );
             case Type.UserPill:
-                return html +
-                    `[${part.text.replace(/[[\\\]]/g, c => "\\" + c)}](${makeGenericPermalink(part.resourceId)})`;
+                return (
+                    html +
+                    `[${part.text.replace(/[[\\\]]/g, (c) => "\\" + c)}](${makeGenericPermalink(part.resourceId)})`
+                );
         }
     }, "");
 }
@@ -59,7 +65,7 @@ export function htmlSerializeIfNeeded(
     { forceHTML = false, useMarkdown = true }: ISerializeOpts = {},
 ): string {
     if (!useMarkdown) {
-        return escapeHtml(textSerialize(model)).replace(/\n/g, '<br/>');
+        return escapeHtml(textSerialize(model)).replace(/\n/g, "<br/>");
     }
 
     const md = mdSerialize(model);
@@ -71,10 +77,10 @@ export function htmlSerializeFromMdIfNeeded(md: string, { forceHTML = false } = 
     const orig = md;
 
     if (SettingsStore.getValue("feature_latex_maths")) {
-        const patternNames = ['tex', 'latex'];
-        const patternTypes = ['display', 'inline'];
+        const patternNames = ["tex", "latex"];
+        const patternTypes = ["display", "inline"];
         const patternDefaults = {
-            "tex": {
+            tex: {
                 // detect math with tex delimiters, inline: $...$, display $$...$$
                 // preferably use negative lookbehinds, not supported in all major browsers:
                 // const displayPattern = "^(?<!\\\\)\\$\\$(?![ \\t])(([^$]|\\\\\\$)+?)\\$\\$$";
@@ -83,7 +89,7 @@ export function htmlSerializeFromMdIfNeeded(md: string, { forceHTML = false } = 
                 // conditions for display math detection $$...$$:
                 // - pattern starts and ends on a new line
                 // - left delimiter ($$) is not escaped by backslash
-                "display": "(^)\\$\\$(([^$]|\\\\\\$)+?)\\$\\$$",
+                display: "(^)\\$\\$(([^$]|\\\\\\$)+?)\\$\\$$",
 
                 // conditions for inline math detection $...$:
                 // - pattern starts at beginning of line, follows whitespace character or punctuation
@@ -91,32 +97,31 @@ export function htmlSerializeFromMdIfNeeded(md: string, { forceHTML = false } = 
                 // - left and right delimiters ($) are not escaped by backslashes
                 // - left delimiter is not followed by whitespace character
                 // - right delimiter is not prefixed with whitespace character
-                "inline":
-                    "(^|\\s|[.,!?:;])(?!\\\\)\\$(?!\\s)(([^$\\n]|\\\\\\$)*([^\\\\\\s\\$]|\\\\\\$)(?:\\\\\\$)?)\\$",
+                inline: "(^|\\s|[.,!?:;])(?!\\\\)\\$(?!\\s)(([^$\\n]|\\\\\\$)*([^\\\\\\s\\$]|\\\\\\$)(?:\\\\\\$)?)\\$",
             },
-            "latex": {
+            latex: {
                 // detect math with latex delimiters, inline: \(...\), display \[...\]
 
                 // conditions for display math detection \[...\]:
                 // - pattern starts and ends on a new line
                 // - pattern is not empty
-                "display": "(^)\\\\\\[(?!\\\\\\])(.*?)\\\\\\]$",
+                display: "(^)\\\\\\[(?!\\\\\\])(.*?)\\\\\\]$",
 
                 // conditions for inline math detection \(...\):
                 // - pattern starts at beginning of line or is not prefixed with backslash
                 // - pattern is not empty
-                "inline": "(^|[^\\\\])\\\\\\((?!\\\\\\))(.*?)\\\\\\)",
+                inline: "(^|[^\\\\])\\\\\\((?!\\\\\\))(.*?)\\\\\\)",
             },
         };
 
-        patternNames.forEach(function(patternName) {
-            patternTypes.forEach(function(patternType) {
+        patternNames.forEach(function (patternName) {
+            patternTypes.forEach(function (patternType) {
                 // get the regex replace pattern from config or use the default
-                const pattern = (((SdkConfig.get("latex_maths_delims") ||
-                    {})[patternType] || {})["pattern"] || {})[patternName] ||
+                const pattern =
+                    (((SdkConfig.get("latex_maths_delims") || {})[patternType] || {})["pattern"] || {})[patternName] ||
                     patternDefaults[patternName][patternType];
 
-                md = md.replace(RegExp(pattern, "gms"), function(m, p1, p2) {
+                md = md.replace(RegExp(pattern, "gms"), function (m, p1, p2) {
                     const p2e = encode(p2);
                     switch (patternType) {
                         case "display":
@@ -130,7 +135,9 @@ export function htmlSerializeFromMdIfNeeded(md: string, { forceHTML = false } = 
 
         // make sure div tags always start on a new line, otherwise it will confuse
         // the markdown parser
-        md = md.replace(/(.)<div/g, function(m, p1) { return `${p1}\n<div`; });
+        md = md.replace(/(.)<div/g, function (m, p1) {
+            return `${p1}\n<div`;
+        });
     }
 
     const parser = new Markdown(md);
@@ -156,13 +163,13 @@ export function htmlSerializeFromMdIfNeeded(md: string, { forceHTML = false } = 
             // since maths delimiters are handled before Markdown,
             // code blocks could contain mangled content.
             // replace code blocks with original content
-            phtmlOrig('code').each(function(i) {
-                phtml('code').eq(i).text(phtmlOrig('code').eq(i).text());
+            phtmlOrig("code").each(function (i) {
+                phtml("code").eq(i).text(phtmlOrig("code").eq(i).text());
             });
 
             // add fallback output for latex math, which should not be interpreted as markdown
-            phtml('div, span').each(function(i, e) {
-                const tex = phtml(e).attr('data-mx-maths');
+            phtml("div, span").each(function (i, e) {
+                const tex = phtml(e).attr("data-mx-maths");
                 if (tex) {
                     phtml(e).html(`<code>${tex}</code>`);
                 }
@@ -207,7 +214,7 @@ export function startsWith(model: EditorModel, prefix: string, caseSensitive = t
     const firstPart = model.parts[0];
     // part type will be "plain" while editing,
     // and "command" while composing a message.
-    let text = firstPart?.text || '';
+    let text = firstPart?.text || "";
     if (!caseSensitive) {
         prefix = prefix.toLowerCase();
         text = text.toLowerCase();

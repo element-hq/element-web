@@ -28,7 +28,8 @@ progress.mx_PassphraseField_progress {
 
     @mixin ProgressBarBorderRadius "2px";
     @mixin ProgressBarColour $PassphraseStrengthLow;
-    &[value="2"], &[value="3"] {
+    &[value="2"],
+    &[value="3"] {
         @mixin ProgressBarColour $PassphraseStrengthMedium;
     }
     &[value="4"] {

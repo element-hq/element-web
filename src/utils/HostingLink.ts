@@ -14,15 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import SdkConfig from '../SdkConfig';
-import { MatrixClientPeg } from '../MatrixClientPeg';
+import SdkConfig from "../SdkConfig";
+import { MatrixClientPeg } from "../MatrixClientPeg";
 
 export function getHostingLink(campaign: string): string {
     const hostingLink = SdkConfig.get().hosting_signup_link;
     if (!hostingLink) return null;
     if (!campaign) return hostingLink;
 
-    if (MatrixClientPeg.get().getDomain() !== 'matrix.org') return null;
+    if (MatrixClientPeg.get().getDomain() !== "matrix.org") return null;
 
     try {
         const hostingUrl = new URL(hostingLink);

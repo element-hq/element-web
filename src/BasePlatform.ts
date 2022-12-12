@@ -23,8 +23,8 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/models/room";
 
-import dis from './dispatcher/dispatcher';
-import BaseEventIndexManager from './indexing/BaseEventIndexManager';
+import dis from "./dispatcher/dispatcher";
+import BaseEventIndexManager from "./indexing/BaseEventIndexManager";
 import { ActionPayload } from "./dispatcher/payloads";
 import { CheckUpdatesPayload } from "./dispatcher/payloads/CheckUpdatesPayload";
 import { Action } from "./dispatcher/actions";
@@ -80,7 +80,7 @@ export default abstract class BasePlatform {
 
     protected onAction = (payload: ActionPayload): void => {
         switch (payload.action) {
-            case 'on_client_not_viable':
+            case "on_client_not_viable":
             case Action.OnLoggedOut:
                 this.setNotificationCount(0);
                 break;
@@ -200,7 +200,7 @@ export default abstract class BasePlatform {
             body: msg,
             silent: true, // we play our own sounds
         };
-        if (avatarUrl) notifBody['icon'] = avatarUrl;
+        if (avatarUrl) notifBody["icon"] = avatarUrl;
         const notification = new window.Notification(title, notifBody);
 
         notification.onclick = () => {
@@ -376,7 +376,8 @@ export default abstract class BasePlatform {
 
         try {
             const key = await crypto.subtle.decrypt(
-                { name: "AES-GCM", iv: data.iv, additionalData }, data.cryptoKey,
+                { name: "AES-GCM", iv: data.iv, additionalData },
+                data.cryptoKey,
                 data.encrypted,
             );
             return encodeUnpaddedBase64(key);
@@ -400,9 +401,10 @@ export default abstract class BasePlatform {
         const crypto = window.crypto;
         const randomArray = new Uint8Array(32);
         crypto.getRandomValues(randomArray);
-        const cryptoKey = await crypto.subtle.generateKey(
-            { name: "AES-GCM", length: 256 }, false, ["encrypt", "decrypt"],
-        );
+        const cryptoKey = await crypto.subtle.generateKey({ name: "AES-GCM", length: 256 }, false, [
+            "encrypt",
+            "decrypt",
+        ]);
         const iv = new Uint8Array(32);
         crypto.getRandomValues(iv);
 
@@ -415,9 +417,7 @@ export default abstract class BasePlatform {
             additionalData[userId.length + 1 + i] = deviceId.charCodeAt(i);
         }
 
-        const encrypted = await crypto.subtle.encrypt(
-            { name: "AES-GCM", iv, additionalData }, cryptoKey, randomArray,
-        );
+        const encrypted = await crypto.subtle.encrypt({ name: "AES-GCM", iv, additionalData }, cryptoKey, randomArray);
 
         try {
             await idbSave("pickleKey", [userId, deviceId], { encrypted, iv, cryptoKey });

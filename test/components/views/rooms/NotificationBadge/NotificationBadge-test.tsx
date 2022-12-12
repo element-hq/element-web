@@ -17,9 +17,7 @@ limitations under the License.
 import { fireEvent, render } from "@testing-library/react";
 import React from "react";
 
-import {
-    StatelessNotificationBadge,
-} from "../../../../../src/components/views/rooms/NotificationBadge/StatelessNotificationBadge";
+import { StatelessNotificationBadge } from "../../../../../src/components/views/rooms/NotificationBadge/StatelessNotificationBadge";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { NotificationColor } from "../../../../../src/stores/notifications/NotificationColor";
 
@@ -28,14 +26,16 @@ describe("NotificationBadge", () => {
         it("lets you click it", () => {
             const cb = jest.fn();
 
-            const { container } = render(<StatelessNotificationBadge
-                symbol=""
-                color={NotificationColor.Red}
-                count={5}
-                onClick={cb}
-                onMouseOver={cb}
-                onMouseLeave={cb}
-            />);
+            const { container } = render(
+                <StatelessNotificationBadge
+                    symbol=""
+                    color={NotificationColor.Red}
+                    count={5}
+                    onClick={cb}
+                    onMouseOver={cb}
+                    onMouseLeave={cb}
+                />,
+            );
 
             fireEvent.click(container.firstChild);
             expect(cb).toHaveBeenCalledTimes(1);
@@ -52,11 +52,9 @@ describe("NotificationBadge", () => {
                 return name === "feature_hidebold";
             });
 
-            const { container } = render(<StatelessNotificationBadge
-                symbol=""
-                color={NotificationColor.Bold}
-                count={1}
-            />);
+            const { container } = render(
+                <StatelessNotificationBadge symbol="" color={NotificationColor.Bold} count={1} />,
+            );
 
             expect(container.firstChild).toBeNull();
         });

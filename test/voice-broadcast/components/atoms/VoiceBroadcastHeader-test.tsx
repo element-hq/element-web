@@ -23,7 +23,7 @@ import { mkRoom, stubClient } from "../../../test-utils";
 jest.mock("../../../../src/components/views/avatars/RoomAvatar", () => ({
     __esModule: true,
     default: jest.fn().mockImplementation(({ room }) => {
-        return <div data-testid="room-avatar">room avatar: { room.name }</div>;
+        return <div data-testid="room-avatar">room avatar: {room.name}</div>;
     }),
 }));
 
@@ -35,18 +35,16 @@ describe("VoiceBroadcastHeader", () => {
     const sender = new RoomMember(roomId, userId);
     let container: Container;
 
-    const renderHeader = (
-        live: VoiceBroadcastLiveness,
-        showBroadcast?: boolean,
-        buffering?: boolean,
-    ): RenderResult => {
-        return render(<VoiceBroadcastHeader
-            live={live}
-            microphoneLabel={sender.name}
-            room={room}
-            showBroadcast={showBroadcast}
-            showBuffering={buffering}
-        />);
+    const renderHeader = (live: VoiceBroadcastLiveness, showBroadcast?: boolean, buffering?: boolean): RenderResult => {
+        return render(
+            <VoiceBroadcastHeader
+                live={live}
+                microphoneLabel={sender.name}
+                room={room}
+                showBroadcast={showBroadcast}
+                showBuffering={buffering}
+            />,
+        );
     };
 
     beforeAll(() => {

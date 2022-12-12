@@ -33,10 +33,13 @@ declare global {
 }
 
 Cypress.Commands.add("enableLabsFeature", (feature: string): Chainable<null> => {
-    return cy.window({ log: false }).then(win => {
-        win.localStorage.setItem(`mx_labs_feature_${feature}`, "true");
-    }).then(() => null);
+    return cy
+        .window({ log: false })
+        .then((win) => {
+            win.localStorage.setItem(`mx_labs_feature_${feature}`, "true");
+        })
+        .then(() => null);
 });
 
 // Needed to make this file a module
-export { };
+export {};

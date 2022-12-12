@@ -14,40 +14,40 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { fireEvent, render } from '@testing-library/react';
-import React from 'react';
+import { fireEvent, render } from "@testing-library/react";
+import React from "react";
 
-import FilteredDeviceListHeader from '../../../../../src/components/views/settings/devices/FilteredDeviceListHeader';
+import FilteredDeviceListHeader from "../../../../../src/components/views/settings/devices/FilteredDeviceListHeader";
 
-describe('<FilteredDeviceListHeader />', () => {
+describe("<FilteredDeviceListHeader />", () => {
     const defaultProps = {
         selectedDeviceCount: 0,
         isAllSelected: false,
         toggleSelectAll: jest.fn(),
         children: <div>test</div>,
-        ['data-testid']: 'test123',
+        ["data-testid"]: "test123",
     };
-    const getComponent = (props = {}) => (<FilteredDeviceListHeader {...defaultProps} {...props} />);
+    const getComponent = (props = {}) => <FilteredDeviceListHeader {...defaultProps} {...props} />;
 
-    it('renders correctly when no devices are selected', () => {
+    it("renders correctly when no devices are selected", () => {
         const { container } = render(getComponent());
         expect(container).toMatchSnapshot();
     });
 
-    it('renders correctly when all devices are selected', () => {
+    it("renders correctly when all devices are selected", () => {
         const { container } = render(getComponent({ isAllSelected: true }));
         expect(container).toMatchSnapshot();
     });
 
-    it('renders correctly when some devices are selected', () => {
+    it("renders correctly when some devices are selected", () => {
         const { getByText } = render(getComponent({ selectedDeviceCount: 2 }));
-        expect(getByText('2 sessions selected')).toBeTruthy();
+        expect(getByText("2 sessions selected")).toBeTruthy();
     });
 
-    it('clicking checkbox toggles selection', () => {
+    it("clicking checkbox toggles selection", () => {
         const toggleSelectAll = jest.fn();
         const { getByTestId } = render(getComponent({ toggleSelectAll }));
-        fireEvent.click(getByTestId('device-select-all-checkbox'));
+        fireEvent.click(getByTestId("device-select-all-checkbox"));
 
         expect(toggleSelectAll).toHaveBeenCalled();
     });

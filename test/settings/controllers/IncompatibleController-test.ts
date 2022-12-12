@@ -18,15 +18,15 @@ import IncompatibleController from "../../../src/settings/controllers/Incompatib
 import { SettingLevel } from "../../../src/settings/SettingLevel";
 import SettingsStore from "../../../src/settings/SettingsStore";
 
-describe('IncompatibleController', () => {
-    const settingsGetValueSpy = jest.spyOn(SettingsStore, 'getValue');
+describe("IncompatibleController", () => {
+    const settingsGetValueSpy = jest.spyOn(SettingsStore, "getValue");
     beforeEach(() => {
         settingsGetValueSpy.mockClear();
     });
 
-    describe('incompatibleSetting', () => {
-        describe('when incompatibleValue is not set', () => {
-            it('returns true when setting value is true', () => {
+    describe("incompatibleSetting", () => {
+        describe("when incompatibleValue is not set", () => {
+            it("returns true when setting value is true", () => {
                 // no incompatible value set, defaulted to true
                 const controller = new IncompatibleController("feature_spotlight", { key: null });
                 settingsGetValueSpy.mockReturnValue(true);
@@ -36,56 +36,56 @@ describe('IncompatibleController', () => {
                 expect(settingsGetValueSpy).toHaveBeenCalledWith("feature_spotlight");
             });
 
-            it('returns false when setting value is not true', () => {
+            it("returns false when setting value is not true", () => {
                 // no incompatible value set, defaulted to true
                 const controller = new IncompatibleController("feature_spotlight", { key: null });
-                settingsGetValueSpy.mockReturnValue('test');
+                settingsGetValueSpy.mockReturnValue("test");
                 expect(controller.incompatibleSetting).toBe(false);
             });
         });
 
-        describe('when incompatibleValue is set to a value', () => {
-            it('returns true when setting value matches incompatible value', () => {
-                const controller = new IncompatibleController("feature_spotlight", { key: null }, 'test');
-                settingsGetValueSpy.mockReturnValue('test');
+        describe("when incompatibleValue is set to a value", () => {
+            it("returns true when setting value matches incompatible value", () => {
+                const controller = new IncompatibleController("feature_spotlight", { key: null }, "test");
+                settingsGetValueSpy.mockReturnValue("test");
                 expect(controller.incompatibleSetting).toBe(true);
             });
 
-            it('returns false when setting value is not true', () => {
-                const controller = new IncompatibleController("feature_spotlight", { key: null }, 'test');
-                settingsGetValueSpy.mockReturnValue('not test');
+            it("returns false when setting value is not true", () => {
+                const controller = new IncompatibleController("feature_spotlight", { key: null }, "test");
+                settingsGetValueSpy.mockReturnValue("not test");
                 expect(controller.incompatibleSetting).toBe(false);
             });
         });
 
-        describe('when incompatibleValue is set to a function', () => {
-            it('returns result from incompatibleValue function', () => {
+        describe("when incompatibleValue is set to a function", () => {
+            it("returns result from incompatibleValue function", () => {
                 const incompatibleValueFn = jest.fn().mockReturnValue(false);
                 const controller = new IncompatibleController("feature_spotlight", { key: null }, incompatibleValueFn);
-                settingsGetValueSpy.mockReturnValue('test');
+                settingsGetValueSpy.mockReturnValue("test");
                 expect(controller.incompatibleSetting).toBe(false);
-                expect(incompatibleValueFn).toHaveBeenCalledWith('test');
+                expect(incompatibleValueFn).toHaveBeenCalledWith("test");
             });
         });
     });
 
-    describe('getValueOverride()', () => {
-        it('returns forced value when setting is incompatible', () => {
+    describe("getValueOverride()", () => {
+        it("returns forced value when setting is incompatible", () => {
             settingsGetValueSpy.mockReturnValue(true);
             const forcedValue = { key: null };
             const controller = new IncompatibleController("feature_spotlight", forcedValue);
-            expect(controller.getValueOverride(
-                SettingLevel.ACCOUNT, '$room:server', true, SettingLevel.ACCOUNT,
-            )).toEqual(forcedValue);
+            expect(
+                controller.getValueOverride(SettingLevel.ACCOUNT, "$room:server", true, SettingLevel.ACCOUNT),
+            ).toEqual(forcedValue);
         });
 
-        it('returns null when setting is not incompatible', () => {
+        it("returns null when setting is not incompatible", () => {
             settingsGetValueSpy.mockReturnValue(false);
             const forcedValue = { key: null };
             const controller = new IncompatibleController("feature_spotlight", forcedValue);
-            expect(controller.getValueOverride(
-                SettingLevel.ACCOUNT, '$room:server', true, SettingLevel.ACCOUNT,
-            )).toEqual(null);
+            expect(
+                controller.getValueOverride(SettingLevel.ACCOUNT, "$room:server", true, SettingLevel.ACCOUNT),
+            ).toEqual(null);
         });
     });
 });

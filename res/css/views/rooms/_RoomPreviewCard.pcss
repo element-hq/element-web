@@ -42,7 +42,7 @@ limitations under the License.
             mask-repeat: no-repeat;
             mask-position: center;
             mask-size: contain;
-            mask-image: url('$(res)/img/element-icons/room/room-summary.svg');
+            mask-image: url("$(res)/img/element-icons/room/room-summary.svg");
             background-color: $secondary-content;
         }
     }
@@ -71,7 +71,8 @@ limitations under the License.
         align-items: center;
 
         .mx_RoomAvatar_isSpaceRoom {
-            &.mx_BaseAvatar_image, .mx_BaseAvatar_image {
+            &.mx_BaseAvatar_image,
+            .mx_BaseAvatar_image {
                 border-radius: 12px;
             }
         }
@@ -95,7 +96,7 @@ limitations under the License.
                 mask-size: 22px;
                 mask-position: center;
                 mask-repeat: no-repeat;
-                mask-image: url('$(res)/img/element-icons/call/video-call.svg');
+                mask-image: url("$(res)/img/element-icons/call/video-call.svg");
             }
         }
 

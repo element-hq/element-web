@@ -15,9 +15,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { createClient, IRequestTokenResponse, MatrixClient } from 'matrix-js-sdk/src/matrix';
+import { createClient, IRequestTokenResponse, MatrixClient } from "matrix-js-sdk/src/matrix";
 
-import { _t } from './languageHandler';
+import { _t } from "./languageHandler";
 
 /**
  * Allows a user to reset their password on a homeserver.
@@ -73,8 +73,8 @@ export default class PasswordReset {
             this.sessionId = result.sid;
             return result;
         } catch (err: any) {
-            if (err.errcode === 'M_THREEPID_NOT_FOUND') {
-                err.message = _t('This email address was not found');
+            if (err.errcode === "M_THREEPID_NOT_FOUND") {
+                err.message = _t("This email address was not found");
             } else if (err.httpStatus) {
                 err.message = err.message + ` (Status ${err.httpStatus})`;
             }
@@ -88,17 +88,20 @@ export default class PasswordReset {
      */
     public requestResetToken(emailAddress: string): Promise<IRequestTokenResponse> {
         this.sendAttempt++;
-        return this.client.requestPasswordEmailToken(emailAddress, this.clientSecret, this.sendAttempt).then((res) => {
-            this.sessionId = res.sid;
-            return res;
-        }, function(err) {
-            if (err.errcode === 'M_THREEPID_NOT_FOUND') {
-                err.message = _t('This email address was not found');
-            } else if (err.httpStatus) {
-                err.message = err.message + ` (Status ${err.httpStatus})`;
-            }
-            throw err;
-        });
+        return this.client.requestPasswordEmailToken(emailAddress, this.clientSecret, this.sendAttempt).then(
+            (res) => {
+                this.sessionId = res.sid;
+                return res;
+            },
+            function (err) {
+                if (err.errcode === "M_THREEPID_NOT_FOUND") {
+                    err.message = _t("This email address was not found");
+                } else if (err.httpStatus) {
+                    err.message = err.message + ` (Status ${err.httpStatus})`;
+                }
+                throw err;
+            },
+        );
     }
 
     public async setNewPassword(password: string): Promise<void> {
@@ -120,22 +123,27 @@ export default class PasswordReset {
         };
 
         try {
-            await this.client.setPassword({
-                // Note: Though this sounds like a login type for identity servers only, it
-                // has a dual purpose of being used for homeservers too.
-                type: "m.login.email.identity",
-                // TODO: Remove `threepid_creds` once servers support proper UIA
-                // See https://github.com/matrix-org/synapse/issues/5665
-                // See https://github.com/matrix-org/matrix-doc/issues/2220
-                threepid_creds: creds,
-                threepidCreds: creds,
-            }, this.password, this.logoutDevices);
+            await this.client.setPassword(
+                {
+                    // Note: Though this sounds like a login type for identity servers only, it
+                    // has a dual purpose of being used for homeservers too.
+                    type: "m.login.email.identity",
+                    // TODO: Remove `threepid_creds` once servers support proper UIA
+                    // See https://github.com/matrix-org/synapse/issues/5665
+                    // See https://github.com/matrix-org/matrix-doc/issues/2220
+                    threepid_creds: creds,
+                    threepidCreds: creds,
+                },
+                this.password,
+                this.logoutDevices,
+            );
         } catch (err: any) {
             if (err.httpStatus === 401) {
-                err.message = _t('Failed to verify email address: make sure you clicked the link in the email');
+                err.message = _t("Failed to verify email address: make sure you clicked the link in the email");
             } else if (err.httpStatus === 404) {
-                err.message =
-                    _t('Your email address does not appear to be associated with a Matrix ID on this Homeserver.');
+                err.message = _t(
+                    "Your email address does not appear to be associated with a Matrix ID on this Homeserver.",
+                );
             } else if (err.httpStatus) {
                 err.message += ` (Status ${err.httpStatus})`;
             }
@@ -143,4 +151,3 @@ export default class PasswordReset {
         }
     }
 }
-

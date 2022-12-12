@@ -31,7 +31,7 @@ export class MockModule extends RuntimeModule {
 
 export function registerMockModule(): MockModule {
     let module: MockModule;
-    ModuleRunner.instance.registerModule(api => {
+    ModuleRunner.instance.registerModule((api) => {
         if (module) {
             throw new Error("State machine error: ModuleRunner created the module twice");
         }

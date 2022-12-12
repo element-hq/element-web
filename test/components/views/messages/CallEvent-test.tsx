@@ -68,16 +68,18 @@ describe("CallEvent", () => {
         alice = mkRoomMember(room.roomId, "@alice:example.org");
         bob = mkRoomMember(room.roomId, "@bob:example.org");
         jest.spyOn(room, "getMember").mockImplementation(
-            userId => [alice, bob].find(member => member.userId === userId) ?? null,
+            (userId) => [alice, bob].find((member) => member.userId === userId) ?? null,
         );
 
-        client.getRoom.mockImplementation(roomId => roomId === room.roomId ? room : null);
+        client.getRoom.mockImplementation((roomId) => (roomId === room.roomId ? room : null));
         client.getRooms.mockReturnValue([room]);
         client.reEmitter.reEmit(room, [RoomStateEvent.Events]);
 
-        await Promise.all([CallStore.instance, WidgetMessagingStore.instance].map(
-            store => setupAsyncStoreWithClient(store, client),
-        ));
+        await Promise.all(
+            [CallStore.instance, WidgetMessagingStore.instance].map((store) =>
+                setupAsyncStoreWithClient(store, client),
+            ),
+        );
 
         MockedCall.create(room, "1");
         const maybeCall = CallStore.instance.getCall(room.roomId);
@@ -99,7 +101,9 @@ describe("CallEvent", () => {
         jest.restoreAllMocks();
     });
 
-    const renderEvent = () => { render(<CallEvent mxEvent={call.event} />); };
+    const renderEvent = () => {
+        render(<CallEvent mxEvent={call.event} />);
+    };
 
     it("shows a message and duration if the call was ended", () => {
         jest.advanceTimersByTime(90000);
@@ -121,7 +125,10 @@ describe("CallEvent", () => {
 
     it("shows call details and connection controls if the call is loaded", async () => {
         jest.advanceTimersByTime(90000);
-        call.participants = new Map([[alice, new Set(["a"])], [bob, new Set(["b"])]]);
+        call.participants = new Map([
+            [alice, new Set(["a"])],
+            [bob, new Set(["b"])],
+        ]);
         renderEvent();
 
         screen.getByText("@alice:example.org started a video call");
@@ -132,11 +139,13 @@ describe("CallEvent", () => {
         const dispatcherSpy = jest.fn();
         const dispatcherRef = defaultDispatcher.register(dispatcherSpy);
         fireEvent.click(screen.getByRole("button", { name: "Join" }));
-        await waitFor(() => expect(dispatcherSpy).toHaveBeenCalledWith({
-            action: Action.ViewRoom,
-            room_id: room.roomId,
-            view_call: true,
-        }));
+        await waitFor(() =>
+            expect(dispatcherSpy).toHaveBeenCalledWith({
+                action: Action.ViewRoom,
+                room_id: room.roomId,
+                view_call: true,
+            }),
+        );
         defaultDispatcher.unregister(dispatcherRef);
         await act(() => call.connect());
 

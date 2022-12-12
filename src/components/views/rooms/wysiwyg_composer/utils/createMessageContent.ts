@@ -25,8 +25,8 @@ import { htmlToPlainText } from "../../../../../utils/room/htmlToPlaintext";
 // Merges favouring the given relation
 function attachRelation(content: IContent, relation?: IEventRelation): void {
     if (relation) {
-        content['m.relates_to'] = {
-            ...(content['m.relates_to'] || {}),
+        content["m.relates_to"] = {
+            ...(content["m.relates_to"] || {}),
             ...relation,
         };
     }
@@ -44,10 +44,10 @@ function getHtmlReplyFallback(mxEvent: MatrixEvent): string {
 
 function getTextReplyFallback(mxEvent: MatrixEvent): string {
     const body = mxEvent.getContent().body;
-    if (typeof body !== 'string') {
+    if (typeof body !== "string") {
         return "";
     }
-    const lines = body.split("\n").map(l => l.trim());
+    const lines = body.split("\n").map((l) => l.trim());
     if (lines.length > 2 && lines[0].startsWith("> ") && lines[1].length === 0) {
         return `${lines[0]}\n\n`;
     }
@@ -65,8 +65,13 @@ interface CreateMessageContentParams {
 export function createMessageContent(
     message: string,
     isHTML: boolean,
-    { relation, replyToEvent, permalinkCreator, includeReplyLegacyFallback = true, editedEvent }:
-    CreateMessageContentParams,
+    {
+        relation,
+        replyToEvent,
+        permalinkCreator,
+        includeReplyLegacyFallback = true,
+        editedEvent,
+    }: CreateMessageContentParams,
 ): IContent {
     // TODO emote ?
 
@@ -86,9 +91,9 @@ export function createMessageContent(
     // const body = textSerialize(model);
 
     // TODO remove this ugly hack for replace br tag
-    const body = isHTML && htmlToPlainText(message) || message.replace(/<br>/g, '\n');
-    const bodyPrefix = isReplyAndEditing && getTextReplyFallback(editedEvent) || '';
-    const formattedBodyPrefix = isReplyAndEditing && getHtmlReplyFallback(editedEvent) || '';
+    const body = (isHTML && htmlToPlainText(message)) || message.replace(/<br>/g, "\n");
+    const bodyPrefix = (isReplyAndEditing && getTextReplyFallback(editedEvent)) || "";
+    const formattedBodyPrefix = (isReplyAndEditing && getHtmlReplyFallback(editedEvent)) || "";
 
     const content: IContent = {
         // TODO emote
@@ -100,12 +105,11 @@ export function createMessageContent(
     // TODO markdown support
 
     const isMarkdownEnabled = SettingsStore.getValue<boolean>("MessageComposerInput.useMarkdown");
-    const formattedBody =
-        isHTML ?
-            message :
-            isMarkdownEnabled ?
-                htmlSerializeFromMdIfNeeded(message, { forceHTML: isReply }) :
-                null;
+    const formattedBody = isHTML
+        ? message
+        : isMarkdownEnabled
+        ? htmlSerializeFromMdIfNeeded(message, { forceHTML: isReply })
+        : null;
 
     if (formattedBody) {
         content.format = "org.matrix.custom.html";
@@ -113,20 +117,18 @@ export function createMessageContent(
     }
 
     if (isEditing) {
-        content['m.new_content'] = {
-            "msgtype": content.msgtype,
-            "body": body,
+        content["m.new_content"] = {
+            msgtype: content.msgtype,
+            body: body,
         };
 
         if (formattedBody) {
-            content['m.new_content'].format = "org.matrix.custom.html";
-            content['m.new_content']['formatted_body'] = formattedBody;
+            content["m.new_content"].format = "org.matrix.custom.html";
+            content["m.new_content"]["formatted_body"] = formattedBody;
         }
     }
 
-    const newRelation = isEditing ?
-        { ...relation, 'rel_type': 'm.replace', 'event_id': editedEvent.getId() }
-        : relation;
+    const newRelation = isEditing ? { ...relation, rel_type: "m.replace", event_id: editedEvent.getId() } : relation;
 
     attachRelation(content, newRelation);
 

@@ -95,9 +95,7 @@ export default class NodeAnimator extends React.Component<IProps> {
                     newProps.style = startStyle;
                 }
 
-                newProps.ref = ((n) => this.collectNode(
-                    c.key, n, restingStyle,
-                ));
+                newProps.ref = (n) => this.collectNode(c.key, n, restingStyle);
 
                 this.children[c.key] = React.cloneElement(c, newProps);
             }
@@ -105,11 +103,7 @@ export default class NodeAnimator extends React.Component<IProps> {
     }
 
     private collectNode(k: string, node: React.ReactInstance, restingStyle: React.CSSProperties): void {
-        if (
-            node &&
-            this.nodes[k] === undefined &&
-            this.props.startStyles.length > 0
-        ) {
+        if (node && this.nodes[k] === undefined && this.props.startStyles.length > 0) {
             const startStyles = this.props.startStyles;
             const domNode = ReactDom.findDOMNode(node);
             // start from startStyle 1: 0 is the one we gave it
@@ -127,8 +121,6 @@ export default class NodeAnimator extends React.Component<IProps> {
     }
 
     public render(): JSX.Element {
-        return (
-            <>{ Object.values(this.children) }</>
-        );
+        return <>{Object.values(this.children)}</>;
     }
 }

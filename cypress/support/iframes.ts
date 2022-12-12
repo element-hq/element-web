@@ -35,11 +35,15 @@ declare global {
 
 // Inspired by https://www.cypress.io/blog/2020/02/12/working-with-iframes-in-cypress/
 Cypress.Commands.add("accessIframe", (selector: string): Chainable<JQuery<HTMLElement>> => {
-    return cy.get(selector)
-        .its("0.contentDocument.body").should("not.be.empty")
-        // Cypress loses types in the mess of wrapping, so force cast
-        .then(cy.wrap) as Chainable<JQuery<HTMLElement>>;
+    return (
+        cy
+            .get(selector)
+            .its("0.contentDocument.body")
+            .should("not.be.empty")
+            // Cypress loses types in the mess of wrapping, so force cast
+            .then(cy.wrap) as Chainable<JQuery<HTMLElement>>
+    );
 });
 
 // Needed to make this file a module
-export { };
+export {};

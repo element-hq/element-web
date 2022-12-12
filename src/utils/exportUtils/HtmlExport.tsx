@@ -106,31 +106,27 @@ export default class HTMLExporter extends Exporter {
 
         const exportedText = renderToStaticMarkup(
             <p>
-                { _t(
+                {_t(
                     "This is the start of export of <roomName/>. Exported by <exporterDetails/> at %(exportDate)s.",
                     {
                         exportDate,
                     },
                     {
-                        roomName: () => <b>{ this.room.name }</b>,
+                        roomName: () => <b>{this.room.name}</b>,
                         exporterDetails: () => (
-                            <a
-                                href={`https://matrix.to/#/${exporter}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                { exporterName ? (
+                            <a href={`https://matrix.to/#/${exporter}`} target="_blank" rel="noopener noreferrer">
+                                {exporterName ? (
                                     <>
-                                        <b>{ exporterName }</b>
-                                        { " (" + exporter + ")" }
+                                        <b>{exporterName}</b>
+                                        {" (" + exporter + ")"}
                                     </>
                                 ) : (
-                                    <b>{ exporter }</b>
-                                ) }
+                                    <b>{exporter}</b>
+                                )}
                             </a>
                         ),
                     },
-                ) }
+                )}
             </p>,
         );
 
@@ -224,12 +220,7 @@ export default class HTMLExporter extends Exporter {
     protected getAvatarURL(event: MatrixEvent): string {
         const member = event.sender;
         return (
-            member.getMxcAvatarUrl() &&
-            mediaFromMxc(member.getMxcAvatarUrl()).getThumbnailOfSourceHttp(
-                30,
-                30,
-                "crop",
-            )
+            member.getMxcAvatarUrl() && mediaFromMxc(member.getMxcAvatarUrl()).getThumbnailOfSourceHttp(30, 30, "crop")
         );
     }
 
@@ -241,7 +232,7 @@ export default class HTMLExporter extends Exporter {
                 this.avatars.set(member.userId, true);
                 const image = await fetch(avatarUrl);
                 const blob = await image.blob();
-                this.addFile(`users/${member.userId.replace(/:/g, '-')}.png`, blob);
+                this.addFile(`users/${member.userId.replace(/:/g, "-")}.png`, blob);
             } catch (err) {
                 logger.log("Failed to fetch user's avatar" + err);
             }
@@ -264,32 +255,34 @@ export default class HTMLExporter extends Exporter {
     }
 
     public getEventTile(mxEv: MatrixEvent, continuation: boolean) {
-        return <div className="mx_Export_EventWrapper" id={mxEv.getId()}>
-            <MatrixClientContext.Provider value={this.client}>
-                <EventTile
-                    mxEvent={mxEv}
-                    continuation={continuation}
-                    isRedacted={mxEv.isRedacted()}
-                    replacingEventId={mxEv.replacingEventId()}
-                    forExport={true}
-                    readReceipts={null}
-                    alwaysShowTimestamps={true}
-                    readReceiptMap={null}
-                    showUrlPreview={false}
-                    checkUnmounting={() => false}
-                    isTwelveHour={false}
-                    last={false}
-                    lastInSection={false}
-                    permalinkCreator={this.permalinkCreator}
-                    lastSuccessful={false}
-                    isSelectedEvent={false}
-                    getRelationsForEvent={null}
-                    showReactions={false}
-                    layout={Layout.Group}
-                    showReadReceipts={false}
-                />
-            </MatrixClientContext.Provider>
-        </div>;
+        return (
+            <div className="mx_Export_EventWrapper" id={mxEv.getId()}>
+                <MatrixClientContext.Provider value={this.client}>
+                    <EventTile
+                        mxEvent={mxEv}
+                        continuation={continuation}
+                        isRedacted={mxEv.isRedacted()}
+                        replacingEventId={mxEv.replacingEventId()}
+                        forExport={true}
+                        readReceipts={null}
+                        alwaysShowTimestamps={true}
+                        readReceiptMap={null}
+                        showUrlPreview={false}
+                        checkUnmounting={() => false}
+                        isTwelveHour={false}
+                        last={false}
+                        lastInSection={false}
+                        permalinkCreator={this.permalinkCreator}
+                        lastSuccessful={false}
+                        isSelectedEvent={false}
+                        getRelationsForEvent={null}
+                        showReactions={false}
+                        layout={Layout.Group}
+                        showReadReceipts={false}
+                    />
+                </MatrixClientContext.Provider>
+            </div>
+        );
     }
 
     protected async getEventTileMarkup(mxEv: MatrixEvent, continuation: boolean, filePath?: string) {
@@ -305,11 +298,8 @@ export default class HTMLExporter extends Exporter {
         ) {
             // to linkify textual events, we'll need lifecycle methods which won't be invoked in renderToString
             // So, we'll have to render the component into a temporary root element
-            const tempRoot = document.createElement('div');
-            ReactDOM.render(
-                EventTile,
-                tempRoot,
-            );
+            const tempRoot = document.createElement("div");
+            ReactDOM.render(EventTile, tempRoot);
             eventTileMarkup = tempRoot.innerHTML;
         } else {
             eventTileMarkup = renderToStaticMarkup(EventTile);
@@ -319,17 +309,17 @@ export default class HTMLExporter extends Exporter {
             const mxc = mxEv.getContent().url ?? mxEv.getContent().file?.url;
             eventTileMarkup = eventTileMarkup.split(mxc).join(filePath);
         }
-        eventTileMarkup = eventTileMarkup.replace(/<span class="mx_MFileBody_info_icon".*?>.*?<\/span>/, '');
+        eventTileMarkup = eventTileMarkup.replace(/<span class="mx_MFileBody_info_icon".*?>.*?<\/span>/, "");
         if (hasAvatar) {
             eventTileMarkup = eventTileMarkup.replace(
-                encodeURI(this.getAvatarURL(mxEv)).replace(/&/g, '&amp;'),
+                encodeURI(this.getAvatarURL(mxEv)).replace(/&/g, "&amp;"),
                 `users/${mxEv.sender.userId.replace(/:/g, "-")}.png`,
             );
         }
         return eventTileMarkup;
     }
 
-    protected createModifiedEvent(text: string, mxEv: MatrixEvent, italic=true) {
+    protected createModifiedEvent(text: string, mxEv: MatrixEvent, italic = true) {
         const modifiedContent = {
             msgtype: "m.text",
             body: `${text}`,
@@ -337,8 +327,8 @@ export default class HTMLExporter extends Exporter {
             formatted_body: `${text}`,
         };
         if (italic) {
-            modifiedContent.formatted_body = '<em>' + modifiedContent.formatted_body + '</em>';
-            modifiedContent.body = '*' + modifiedContent.body + '*';
+            modifiedContent.formatted_body = "<em>" + modifiedContent.formatted_body + "</em>";
+            modifiedContent.body = "*" + modifiedContent.body + "*";
         }
         const modifiedEvent = new MatrixEvent();
         modifiedEvent.event = mxEv.event;
@@ -402,15 +392,20 @@ export default class HTMLExporter extends Exporter {
         let prevEvent = null;
         for (let i = start; i < Math.min(start + 1000, events.length); i++) {
             const event = events[i];
-            this.updateProgress(_t("Processing event %(number)s out of %(total)s", {
-                number: i + 1,
-                total: events.length,
-            }), false, true);
+            this.updateProgress(
+                _t("Processing event %(number)s out of %(total)s", {
+                    number: i + 1,
+                    total: events.length,
+                }),
+                false,
+                true,
+            );
             if (this.cancelled) return this.cleanUp();
             if (!haveRendererForEvent(event, false)) continue;
 
             content += this.needsDateSeparator(event, prevEvent) ? this.getDateSeparator(event) : "";
-            const shouldBeJoined = !this.needsDateSeparator(event, prevEvent) &&
+            const shouldBeJoined =
+                !this.needsDateSeparator(event, prevEvent) &&
                 shouldFormContinuation(prevEvent, event, false, this.threadsEnabled);
             const body = await this.createMessageBody(event, shouldBeJoined);
             this.totalSize += Buffer.byteLength(body);
@@ -427,10 +422,14 @@ export default class HTMLExporter extends Exporter {
         const res = await this.getRequiredEvents();
         const fetchEnd = performance.now();
 
-        this.updateProgress(_t("Fetched %(count)s events in %(seconds)ss", {
-            count: res.length,
-            seconds: (fetchEnd - fetchStart) / 1000,
-        }), true, false);
+        this.updateProgress(
+            _t("Fetched %(count)s events in %(seconds)ss", {
+                count: res.length,
+                seconds: (fetchEnd - fetchStart) / 1000,
+            }),
+            true,
+            false,
+        );
 
         this.updateProgress(_t("Creating HTML..."));
 
@@ -438,8 +437,8 @@ export default class HTMLExporter extends Exporter {
         for (let page = 0; page < res.length / 1000; page++) {
             const html = await this.createHTML(res, page * 1000);
             const document = new DOMParser().parseFromString(html, "text/html");
-            document.querySelectorAll("*").forEach(element => {
-                element.classList.forEach(c => usedClasses.add(c));
+            document.querySelectorAll("*").forEach((element) => {
+                element.classList.forEach((c) => usedClasses.add(c));
             });
             this.addFile(`messages${page ? page + 1 : ""}.html`, new Blob([html]));
         }
@@ -456,10 +455,12 @@ export default class HTMLExporter extends Exporter {
             logger.info("Export cancelled successfully");
         } else {
             this.updateProgress(_t("Export successful!"));
-            this.updateProgress(_t("Exported %(count)s events in %(seconds)s seconds", {
-                count: res.length,
-                seconds: (exportEnd - fetchStart) / 1000,
-            }));
+            this.updateProgress(
+                _t("Exported %(count)s events in %(seconds)s seconds", {
+                    count: res.length,
+                    seconds: (exportEnd - fetchStart) / 1000,
+                }),
+            );
         }
 
         this.cleanUp();

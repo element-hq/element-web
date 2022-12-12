@@ -46,7 +46,8 @@ export const showToast = () => {
         props: {
             description: _t(
                 "%(brand)s is experimental on a mobile web browser. " +
-                "For a better experience and the latest features, use our free native app.", { brand },
+                    "For a better experience and the latest features, use our free native app.",
+                { brand },
             ),
             acceptLabel: _t("Use app"),
             onAccept,

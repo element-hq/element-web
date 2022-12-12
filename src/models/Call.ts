@@ -62,12 +62,14 @@ const waitForEvent = async (
     pred: (...args: any[]) => boolean = () => true,
 ): Promise<void> => {
     let listener: (...args: any[]) => void;
-    const wait = new Promise<void>(resolve => {
-        listener = (...args) => { if (pred(...args)) resolve(); };
+    const wait = new Promise<void>((resolve) => {
+        listener = (...args) => {
+            if (pred(...args)) resolve();
+        };
         emitter.on(event, listener);
     });
 
-    const timedOut = await timeout(wait, false, TIMEOUT_MS) === false;
+    const timedOut = (await timeout(wait, false, TIMEOUT_MS)) === false;
     emitter.off(event, listener!);
     if (timedOut) throw new Error("Timed out");
 };
@@ -208,20 +210,18 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
     public async connect(): Promise<void> {
         this.connectionState = ConnectionState.Connecting;
 
-        const {
-            [MediaDeviceKindEnum.AudioInput]: audioInputs,
-            [MediaDeviceKindEnum.VideoInput]: videoInputs,
-        } = await MediaDeviceHandler.getDevices();
+        const { [MediaDeviceKindEnum.AudioInput]: audioInputs, [MediaDeviceKindEnum.VideoInput]: videoInputs } =
+            await MediaDeviceHandler.getDevices();
 
         let audioInput: MediaDeviceInfo | null = null;
         if (!MediaDeviceHandler.startWithAudioMuted) {
             const deviceId = MediaDeviceHandler.getAudioInput();
-            audioInput = audioInputs.find(d => d.deviceId === deviceId) ?? audioInputs[0] ?? null;
+            audioInput = audioInputs.find((d) => d.deviceId === deviceId) ?? audioInputs[0] ?? null;
         }
         let videoInput: MediaDeviceInfo | null = null;
         if (!MediaDeviceHandler.startWithVideoMuted) {
             const deviceId = MediaDeviceHandler.getVideoInput();
-            videoInput = videoInputs.find(d => d.deviceId === deviceId) ?? videoInputs[0] ?? null;
+            videoInput = videoInputs.find((d) => d.deviceId === deviceId) ?? videoInputs[0] ?? null;
         }
 
         const messagingStore = WidgetMessagingStore.instance;
@@ -323,7 +323,7 @@ export class JitsiCall extends Call {
         if (SettingsStore.getValue("feature_video_rooms") && room.isElementVideoRoom()) {
             const apps = WidgetStore.instance.getApps(room.roomId);
             // The isVideoChannel field differentiates rich Jitsi calls from bare Jitsi widgets
-            const jitsiWidget = apps.find(app => WidgetType.JITSI.matches(app.type) && app.data?.isVideoChannel);
+            const jitsiWidget = apps.find((app) => WidgetType.JITSI.matches(app.type) && app.data?.isVideoChannel);
             if (jitsiWidget) return new JitsiCall(jitsiWidget, room.client);
         }
 
@@ -348,13 +348,14 @@ export class JitsiCall extends Call {
             const member = this.room.getMember(e.getStateKey()!);
             const content = e.getContent<JitsiCallMemberContent>();
             const expiresAt = typeof content.expires_ts === "number" ? content.expires_ts : -Infinity;
-            let devices = expiresAt > now && Array.isArray(content.devices)
-                ? content.devices.filter(d => typeof d === "string")
-                : [];
+            let devices =
+                expiresAt > now && Array.isArray(content.devices)
+                    ? content.devices.filter((d) => typeof d === "string")
+                    : [];
 
             // Apply local echo for the disconnected case
             if (!this.connected && member?.userId === this.client.getUserId()) {
-                devices = devices.filter(d => d !== this.client.getDeviceId());
+                devices = devices.filter((d) => d !== this.client.getDeviceId());
             }
             // Must have a connected device and still be joined to the room
             if (devices.length > 0 && member?.membership === "join") {
@@ -386,7 +387,7 @@ export class JitsiCall extends Call {
      * @param fn A function from the current devices to the new devices. If it
      *     returns null, the update is skipped.
      */
-    private async updateDevices(fn: (devices: string[]) => (string[] | null)): Promise<void> {
+    private async updateDevices(fn: (devices: string[]) => string[] | null): Promise<void> {
         if (this.room.getMyMembership() !== "join") return;
 
         const event = this.room.currentState.getStateEvents(JitsiCall.MEMBER_EVENT_TYPE, this.client.getUserId()!);
@@ -402,7 +403,10 @@ export class JitsiCall extends Call {
             };
 
             await this.client.sendStateEvent(
-                this.roomId, JitsiCall.MEMBER_EVENT_TYPE, newContent, this.client.getUserId()!,
+                this.roomId,
+                JitsiCall.MEMBER_EVENT_TYPE,
+                newContent,
+                this.client.getUserId()!,
             );
         }
     }
@@ -410,16 +414,18 @@ export class JitsiCall extends Call {
     public async clean(): Promise<void> {
         const now = Date.now();
         const { devices: myDevices } = await this.client.getDevices();
-        const deviceMap = new Map<string, IMyDevice>(myDevices.map(d => [d.device_id, d]));
+        const deviceMap = new Map<string, IMyDevice>(myDevices.map((d) => [d.device_id, d]));
 
         // Clean up our member state by filtering out logged out devices,
         // inactive devices, and our own device (if we're disconnected)
-        await this.updateDevices(devices => {
-            const newDevices = devices.filter(d => {
+        await this.updateDevices((devices) => {
+            const newDevices = devices.filter((d) => {
                 const device = deviceMap.get(d);
-                return device?.last_seen_ts !== undefined
-                    && !(d === this.client.getDeviceId() && !this.connected)
-                    && (now - device.last_seen_ts) < this.STUCK_DEVICE_TIMEOUT_MS;
+                return (
+                    device?.last_seen_ts !== undefined &&
+                    !(d === this.client.getDeviceId() && !this.connected) &&
+                    now - device.last_seen_ts < this.STUCK_DEVICE_TIMEOUT_MS
+                );
             });
 
             // Skip the update if the devices are unchanged
@@ -428,11 +434,11 @@ export class JitsiCall extends Call {
     }
 
     private async addOurDevice(): Promise<void> {
-        await this.updateDevices(devices => Array.from(new Set(devices).add(this.client.getDeviceId()!)));
+        await this.updateDevices((devices) => Array.from(new Set(devices).add(this.client.getDeviceId()!)));
     }
 
     private async removeOurDevice(): Promise<void> {
-        await this.updateDevices(devices => {
+        await this.updateDevices((devices) => {
             const devicesSet = new Set(devices);
             devicesSet.delete(this.client.getDeviceId()!);
             return Array.from(devicesSet);
@@ -637,13 +643,16 @@ export class ElementCall extends Call {
         // To use Element Call without touching room state, we create a virtual
         // widget (one that doesn't have a corresponding state event)
         super(
-            WidgetStore.instance.addVirtualWidget({
-                id: randomString(24), // So that it's globally unique
-                creatorUserId: client.getUserId()!,
-                name: "Element Call",
-                type: MatrixWidgetType.Custom,
-                url: url.toString(),
-            }, groupCall.room.roomId),
+            WidgetStore.instance.addVirtualWidget(
+                {
+                    id: randomString(24), // So that it's globally unique
+                    creatorUserId: client.getUserId()!,
+                    name: "Element Call",
+                    type: MatrixWidgetType.Custom,
+                    url: url.toString(),
+                },
+                groupCall.room.roomId,
+            ),
             client,
         );
 
@@ -657,11 +666,10 @@ export class ElementCall extends Call {
     public static get(room: Room): ElementCall | null {
         // Only supported in the new group call experience or in video rooms
         if (
-            SettingsStore.getValue("feature_group_calls") || (
-                SettingsStore.getValue("feature_video_rooms")
-                && SettingsStore.getValue("feature_element_call_video_rooms")
-                && room.isCallRoom()
-            )
+            SettingsStore.getValue("feature_group_calls") ||
+            (SettingsStore.getValue("feature_video_rooms") &&
+                SettingsStore.getValue("feature_element_call_video_rooms") &&
+                room.isCallRoom())
         ) {
             const groupCall = room.client.groupCallEventHandler!.groupCalls.get(room.roomId);
             if (groupCall !== undefined) return new ElementCall(groupCall, room.client);
@@ -671,9 +679,10 @@ export class ElementCall extends Call {
     }
 
     public static async create(room: Room): Promise<void> {
-        const isVideoRoom = SettingsStore.getValue("feature_video_rooms")
-            && SettingsStore.getValue("feature_element_call_video_rooms")
-            && room.isCallRoom();
+        const isVideoRoom =
+            SettingsStore.getValue("feature_video_rooms") &&
+            SettingsStore.getValue("feature_element_call_video_rooms") &&
+            room.isCallRoom();
 
         const groupCall = new GroupCall(
             room.client,
@@ -746,9 +755,7 @@ export class ElementCall extends Call {
      * @param layout The layout to switch to.
      */
     public async setLayout(layout: Layout): Promise<void> {
-        const action = layout === Layout.Tile
-            ? ElementWidgetActions.TileLayout
-            : ElementWidgetActions.SpotlightLayout;
+        const action = layout === Layout.Tile ? ElementWidgetActions.TileLayout : ElementWidgetActions.SpotlightLayout;
 
         await this.messaging!.transport.send(action, {});
     }
@@ -764,8 +771,10 @@ export class ElementCall extends Call {
     }
 
     private get mayTerminate(): boolean {
-        return this.groupCall.intent !== GroupCallIntent.Room
-            && this.room.currentState.mayClientSendStateEvent(ElementCall.CALL_EVENT_TYPE.name, this.client);
+        return (
+            this.groupCall.intent !== GroupCallIntent.Room &&
+            this.room.currentState.mayClientSendStateEvent(ElementCall.CALL_EVENT_TYPE.name, this.client)
+        );
     }
 
     private onParticipants = async (

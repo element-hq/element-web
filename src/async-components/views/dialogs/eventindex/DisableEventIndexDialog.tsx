@@ -14,13 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 
 import BaseDialog from "../../../../components/views/dialogs/BaseDialog";
 import Spinner from "../../../../components/views/elements/Spinner";
 import DialogButtons from "../../../../components/views/elements/DialogButtons";
 import dis from "../../../../dispatcher/dispatcher";
-import { _t } from '../../../../languageHandler';
+import { _t } from "../../../../languageHandler";
 import SettingsStore from "../../../../settings/SettingsStore";
 import EventIndexPeg from "../../../../indexing/EventIndexPeg";
 import { Action } from "../../../../dispatcher/actions";
@@ -50,7 +50,7 @@ export default class DisableEventIndexDialog extends React.Component<IProps, ISt
             disabling: true,
         });
 
-        await SettingsStore.setValue('enableEventIndexing', null, SettingLevel.DEVICE, false);
+        await SettingsStore.setValue("enableEventIndexing", null, SettingLevel.DEVICE, false);
         await EventIndexPeg.deleteEventIndex();
         this.props.onFinished(true);
         dis.fire(Action.ViewUserSettings);
@@ -59,10 +59,10 @@ export default class DisableEventIndexDialog extends React.Component<IProps, ISt
     public render(): React.ReactNode {
         return (
             <BaseDialog onFinished={this.props.onFinished} title={_t("Are you sure?")}>
-                { _t("If disabled, messages from encrypted rooms won't appear in search results.") }
-                { this.state.disabling ? <Spinner /> : <div /> }
+                {_t("If disabled, messages from encrypted rooms won't appear in search results.")}
+                {this.state.disabling ? <Spinner /> : <div />}
                 <DialogButtons
-                    primaryButton={_t('Disable')}
+                    primaryButton={_t("Disable")}
                     onPrimaryButtonClick={this.onDisable}
                     primaryButtonClass="danger"
                     cancelButtonClass="warning"

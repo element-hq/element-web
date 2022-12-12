@@ -5,22 +5,21 @@ different values for a setting at particular levels of interest. For example, a 
 they want URL previews off, but in all other rooms they want them enabled. The `SettingsStore` helps mask the complexity
 of dealing with the different levels and exposes easy to use getters and setters.
 
-
 ## Levels
 
 Granular Settings rely on a series of known levels in order to use the correct value for the scenario. These levels, in
 order of priority, are:
-* `device` - The current user's device
-* `room-device` - The current user's device, but only when in a specific room
-* `room-account` - The current user's account, but only when in a specific room
-* `account` - The current user's account
-* `room` - A specific room (setting for all members of the room)
-* `config` - Values are defined by the `setting_defaults` key (usually) in `config.json`
-* `default` - The hardcoded default for the settings
+
+-   `device` - The current user's device
+-   `room-device` - The current user's device, but only when in a specific room
+-   `room-account` - The current user's account, but only when in a specific room
+-   `account` - The current user's account
+-   `room` - A specific room (setting for all members of the room)
+-   `config` - Values are defined by the `setting_defaults` key (usually) in `config.json`
+-   `default` - The hardcoded default for the settings
 
 Individual settings may control which levels are appropriate for them as part of the defaults. This is often to ensure
 that room administrators cannot force account-only settings upon participants.
-
 
 ## Settings
 
@@ -29,6 +28,7 @@ Settings are the different options a user may set or experience in the applicati
 
 Settings that support the config level can be set in the config file under the `setting_defaults` key (note that some
 settings, like the "theme" setting, are special cased in the config file):
+
 ```json5
 {
   ...
@@ -56,13 +56,14 @@ target level.
 Values are defined at particular levels and should be done in a safe manner. There are two checks to perform to ensure a
 clean save: is the level supported and can the user actually set the value. In most cases, neither should be an issue
 although there are circumstances where this changes. An example of a safe call is:
+
 ```javascript
 const isSupported = SettingsStore.isLevelSupported(SettingLevel.ROOM);
 if (isSupported) {
-  const canSetValue = SettingsStore.canSetValue("mySetting", "!curbf:matrix.org", SettingLevel.ROOM);
-  if (canSetValue) {
-    SettingsStore.setValue("mySetting", "!curbf:matrix.org", SettingLevel.ROOM, newValue);
-  }
+    const canSetValue = SettingsStore.canSetValue("mySetting", "!curbf:matrix.org", SettingLevel.ROOM);
+    if (canSetValue) {
+        SettingsStore.setValue("mySetting", "!curbf:matrix.org", SettingLevel.ROOM, newValue);
+    }
 }
 ```
 
@@ -73,19 +74,14 @@ instance, the component which allows changing the setting may be hidden conditio
 
 Where possible, the `SettingsFlag` component should be used to set simple "flip-a-bit" (true/false) settings. The
 `SettingsFlag` also supports simple radio button options, such as the theme the user would like to use.
-```html
-<SettingsFlag name="theSettingId"
-              level={SettingsLevel.ROOM}
-              roomId="!curbf:matrix.org"
-              label={_td("Your label here")} // optional, if falsey then the `SettingsStore` will be used
-              onChange={function(newValue) { }} // optional, called after saving
-              isExplicit={false} // this is passed along to `SettingsStore.getValueAt`, defaulting to false
-              manualSave={false} // if true, saving is delayed. You will need to call .save() on this component
 
-              // Options for radio buttons
-              group="your-radio-group" // this enables radio button support
-              value="yourValueHere" // the value for this particular option
-/>
+```html
+<SettingsFlag name="theSettingId" level={SettingsLevel.ROOM} roomId="!curbf:matrix.org" label={_td("Your label here")}
+// optional, if falsey then the `SettingsStore` will be used onChange={function(newValue) { }} // optional, called after
+saving isExplicit={false} // this is passed along to `SettingsStore.getValueAt`, defaulting to false manualSave={false}
+// if true, saving is delayed. You will need to call .save() on this component // Options for radio buttons
+group="your-radio-group" // this enables radio button support value="yourValueHere" // the value for this particular
+option />
 ```
 
 ### Getting the display name for a setting
@@ -93,16 +89,16 @@ Where possible, the `SettingsFlag` component should be used to set simple "flip-
 Simply call `SettingsStore.getDisplayName`. The appropriate display name will be returned and automatically translated
 for you. If a display name cannot be found, it will return `null`.
 
-
 ## Features
 
 Feature flags are just like regular settings with some underlying semantics for how they are meant to be used. Usually
 a feature flag is used when a portion of the application is under development or not ready for full release yet, such
-as new functionality or experimental ideas. In these cases, the feature name *should* be named with the `feature_*`
+as new functionality or experimental ideas. In these cases, the feature name _should_ be named with the `feature_*`
 convention and must be tagged with `isFeature: true` in the setting definition. By doing so, the feature will automatically
 appear in the "labs" section of the user's settings.
 
 Features can be controlled at the config level using the following structure:
+
 ```json
 "features": {
   "feature_lazyloading": true
@@ -144,7 +140,6 @@ additional steps to actually enable notifications.
 
 For more information, see `src/settings/controllers/SettingController.ts`.
 
-
 ## Local echo
 
 `SettingsStore` will perform local echo on all settings to ensure that immediately getting values does not cause a
@@ -160,7 +155,6 @@ SettingsStore.setValue(...).then(() => {
 SettingsStore.getValue(...); // this will return the value set in `setValue` above.
 ```
 
-
 ## Watching for changes
 
 Most use cases do not need to set up a watcher because they are able to react to changes as they are made, or the
@@ -174,12 +168,11 @@ An example of a watcher in action would be:
 
 ```javascript
 class MyComponent extends React.Component {
-
     settingWatcherRef = null;
 
     componentWillMount() {
         const callback = (settingName, roomId, level, newValAtLevel, newVal) => {
-            this.setState({color: newVal});
+            this.setState({ color: newVal });
         };
         this.settingWatcherRef = SettingsStore.watchSetting("roomColor", "!example:matrix.org", callback);
     }
@@ -189,7 +182,6 @@ class MyComponent extends React.Component {
     }
 }
 ```
-
 
 # Maintainers Reference
 

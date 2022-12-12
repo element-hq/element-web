@@ -47,9 +47,11 @@ export class MediaEventHelper implements IDestroyable {
     }
 
     public get fileName(): string {
-        return this.event.getContent<IMediaEventContent>().filename
-            || this.event.getContent<IMediaEventContent>().body
-            || "download";
+        return (
+            this.event.getContent<IMediaEventContent>().filename ||
+            this.event.getContent<IMediaEventContent>().body ||
+            "download"
+        );
     }
 
     public destroy() {
@@ -83,7 +85,7 @@ export class MediaEventHelper implements IDestroyable {
             const content = this.event.getContent<IMediaEventContent>();
             return decryptFile(content.file, content.info);
         }
-        return this.media.downloadSource().then(r => r.blob());
+        return this.media.downloadSource().then((r) => r.blob());
     };
 
     private fetchThumbnail = () => {
@@ -100,7 +102,7 @@ export class MediaEventHelper implements IDestroyable {
             }
         }
 
-        return fetch(this.media.thumbnailHttp).then(r => r.blob());
+        return fetch(this.media.thumbnailHttp).then((r) => r.blob());
     };
 
     public static isEligible(event: MatrixEvent): boolean {
@@ -110,14 +112,9 @@ export class MediaEventHelper implements IDestroyable {
         if (event.getType() !== EventType.RoomMessage) return false;
 
         const content = event.getContent();
-        const mediaMsgTypes: string[] = [
-            MsgType.Video,
-            MsgType.Audio,
-            MsgType.Image,
-            MsgType.File,
-        ];
+        const mediaMsgTypes: string[] = [MsgType.Video, MsgType.Audio, MsgType.Image, MsgType.File];
         if (mediaMsgTypes.includes(content.msgtype)) return true;
-        if (typeof(content.url) === 'string') return true;
+        if (typeof content.url === "string") return true;
 
         // Finally, it's probably not media
         return false;

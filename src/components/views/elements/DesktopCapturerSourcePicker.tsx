@@ -14,14 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import classNames from 'classnames';
+import React from "react";
+import classNames from "classnames";
 
-import { _t } from '../../../languageHandler';
+import { _t } from "../../../languageHandler";
 import BaseDialog from "..//dialogs/BaseDialog";
 import DialogButtons from "./DialogButtons";
-import AccessibleButton from './AccessibleButton';
-import TabbedView, { Tab, TabLocation } from '../../structures/TabbedView';
+import AccessibleButton from "./AccessibleButton";
+import TabbedView, { Tab, TabLocation } from "../../structures/TabbedView";
 import PlatformPeg from "../../../PlatformPeg";
 
 export function getDesktopCapturerSources(): Promise<Array<DesktopCapturerSource>> {
@@ -30,10 +30,7 @@ export function getDesktopCapturerSources(): Promise<Array<DesktopCapturerSource
             height: 176,
             width: 312,
         },
-        types: [
-            "screen",
-            "window",
-        ],
+        types: ["screen", "window"],
     };
     return PlatformPeg.get().getDesktopCapturerSources(options);
 }
@@ -70,11 +67,8 @@ export class ExistingSource extends React.Component<ExistingSourceIProps> {
                 title={this.props.source.name}
                 onClick={this.onClick}
             >
-                <img
-                    className={thumbnailClasses}
-                    src={this.props.source.thumbnailURL}
-                />
-                <span className="mx_desktopCapturerSourcePicker_source_name">{ this.props.source.name }</span>
+                <img className={thumbnailClasses} src={this.props.source.thumbnailURL} />
+                <span className="mx_desktopCapturerSourcePicker_source_name">{this.props.source.name}</span>
             </AccessibleButton>
         );
     }
@@ -89,10 +83,7 @@ export interface PickerIProps {
     onFinished(sourceId: string): void;
 }
 
-export default class DesktopCapturerSourcePicker extends React.Component<
-    PickerIProps,
-    PickerIState
-> {
+export default class DesktopCapturerSourcePicker extends React.Component<PickerIProps, PickerIState> {
     interval: number;
 
     constructor(props: PickerIProps) {
@@ -142,22 +133,20 @@ export default class DesktopCapturerSourcePicker extends React.Component<
     };
 
     private getTab(type: "screen" | "window", label: string): Tab {
-        const sources = this.state.sources.filter((source) => source.id.startsWith(type)).map((source) => {
-            return (
-                <ExistingSource
-                    selected={this.state.selectedSource?.id === source.id}
-                    source={source}
-                    onSelect={this.onSelect}
-                    key={source.id}
-                />
-            );
-        });
+        const sources = this.state.sources
+            .filter((source) => source.id.startsWith(type))
+            .map((source) => {
+                return (
+                    <ExistingSource
+                        selected={this.state.selectedSource?.id === source.id}
+                        source={source}
+                        onSelect={this.onSelect}
+                        key={source.id}
+                    />
+                );
+            });
 
-        return new Tab(type, label, null, (
-            <div className="mx_desktopCapturerSourcePicker_tab">
-                { sources }
-            </div>
-        ));
+        return new Tab(type, label, null, <div className="mx_desktopCapturerSourcePicker_tab">{sources}</div>);
     }
 
     render() {

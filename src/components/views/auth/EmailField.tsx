@@ -75,16 +75,18 @@ class EmailField extends PureComponent<IProps> {
     };
 
     render() {
-        return <Field
-            id={this.props.id}
-            ref={this.props.fieldRef}
-            type="text"
-            label={_t(this.props.label)}
-            value={this.props.value}
-            autoFocus={this.props.autoFocus}
-            onChange={this.props.onChange}
-            onValidate={this.onValidate}
-        />;
+        return (
+            <Field
+                id={this.props.id}
+                ref={this.props.fieldRef}
+                type="text"
+                label={_t(this.props.label)}
+                value={this.props.value}
+                autoFocus={this.props.autoFocus}
+                onChange={this.props.onChange}
+                onValidate={this.onValidate}
+            />
+        );
     }
 }
 

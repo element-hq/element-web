@@ -32,10 +32,10 @@ export function AuthHeaderDisplay({ title, icon, serverPicker, children }: Props
     const current = context.state.length ? context.state[0] : null;
     return (
         <Fragment>
-            { current?.icon ?? icon }
-            <h1>{ current?.title ?? title }</h1>
-            { children }
-            { current?.hideServerPicker !== true && serverPicker }
+            {current?.icon ?? icon}
+            <h1>{current?.title ?? title}</h1>
+            {children}
+            {current?.hideServerPicker !== true && serverPicker}
         </Fragment>
     );
 }

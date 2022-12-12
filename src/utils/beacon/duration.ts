@@ -25,7 +25,7 @@ import { Beacon } from "matrix-js-sdk/src/matrix";
  * @returns remainingMs
  */
 export const msUntilExpiry = (startTimestamp: number, durationMs: number): number =>
-    Math.max(0, (startTimestamp + durationMs) - Date.now());
+    Math.max(0, startTimestamp + durationMs - Date.now());
 
 export const getBeaconMsUntilExpiry = (beaconInfo: BeaconInfoState): number =>
     msUntilExpiry(beaconInfo.timestamp, beaconInfo.timeout);

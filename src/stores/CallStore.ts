@@ -69,7 +69,7 @@ export class CallStore extends AsyncStoreWithClient<{}> {
         const uncleanlyDisconnectedRoomIds = SettingsStore.getValue<string[]>("activeCallRoomIds");
         if (uncleanlyDisconnectedRoomIds.length) {
             await Promise.all([
-                ...uncleanlyDisconnectedRoomIds.map(async uncleanlyDisconnectedRoomId => {
+                ...uncleanlyDisconnectedRoomIds.map(async (uncleanlyDisconnectedRoomId) => {
                     logger.log(`Cleaning up call state for room ${uncleanlyDisconnectedRoomId}`);
                     await this.getCall(uncleanlyDisconnectedRoomId)?.clean();
                 }),
@@ -108,7 +108,12 @@ export class CallStore extends AsyncStoreWithClient<{}> {
         this.emit(CallStoreEvent.ActiveCalls, value);
 
         // The room IDs are persisted to settings so we can detect unclean disconnects
-        SettingsStore.setValue("activeCallRoomIds", null, SettingLevel.DEVICE, [...value].map(call => call.roomId));
+        SettingsStore.setValue(
+            "activeCallRoomIds",
+            null,
+            SettingLevel.DEVICE,
+            [...value].map((call) => call.roomId),
+        );
     }
 
     private calls = new Map<string, Call>(); // Key is room ID
@@ -123,7 +128,7 @@ export class CallStore extends AsyncStoreWithClient<{}> {
                     if (state === ConnectionState.Connected) {
                         this.activeCalls = new Set([...this.activeCalls, call]);
                     } else if (state === ConnectionState.Disconnected) {
-                        this.activeCalls = new Set([...this.activeCalls].filter(c => c !== call));
+                        this.activeCalls = new Set([...this.activeCalls].filter((c) => c !== call));
                     }
                 };
                 const onDestroy = () => {
@@ -136,10 +141,13 @@ export class CallStore extends AsyncStoreWithClient<{}> {
                 call.on(CallEvent.Destroy, onDestroy);
 
                 this.calls.set(room.roomId, call);
-                this.callListeners.set(call, new Map<CallEvent, (...args: unknown[]) => unknown>([
-                    [CallEvent.ConnectionState, onConnectionState],
-                    [CallEvent.Destroy, onDestroy],
-                ]));
+                this.callListeners.set(
+                    call,
+                    new Map<CallEvent, (...args: unknown[]) => unknown>([
+                        [CallEvent.ConnectionState, onConnectionState],
+                        [CallEvent.Destroy, onDestroy],
+                    ]),
+                );
             }
 
             this.emit(CallStoreEvent.Call, call, room.roomId);

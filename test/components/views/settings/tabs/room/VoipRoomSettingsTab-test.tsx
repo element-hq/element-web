@@ -88,16 +88,18 @@ describe("RolesRoomSettingsTab", () => {
                     const tab = renderTab();
 
                     fireEvent.click(getElementCallSwitch(tab).querySelector(".mx_ToggleSwitch"));
-                    await waitFor(() => expect(cli.sendStateEvent).toHaveBeenCalledWith(
-                        room.roomId,
-                        EventType.RoomPowerLevels,
-                        expect.objectContaining({
-                            events: {
-                                [ElementCall.CALL_EVENT_TYPE.name]: 50,
-                                [ElementCall.MEMBER_EVENT_TYPE.name]: 0,
-                            },
-                        }),
-                    ));
+                    await waitFor(() =>
+                        expect(cli.sendStateEvent).toHaveBeenCalledWith(
+                            room.roomId,
+                            EventType.RoomPowerLevels,
+                            expect.objectContaining({
+                                events: {
+                                    [ElementCall.CALL_EVENT_TYPE.name]: 50,
+                                    [ElementCall.MEMBER_EVENT_TYPE.name]: 0,
+                                },
+                            }),
+                        ),
+                    );
                 });
 
                 it("enables Element calls in private room", async () => {
@@ -106,16 +108,18 @@ describe("RolesRoomSettingsTab", () => {
                     const tab = renderTab();
 
                     fireEvent.click(getElementCallSwitch(tab).querySelector(".mx_ToggleSwitch"));
-                    await waitFor(() => expect(cli.sendStateEvent).toHaveBeenCalledWith(
-                        room.roomId,
-                        EventType.RoomPowerLevels,
-                        expect.objectContaining({
-                            events: {
-                                [ElementCall.CALL_EVENT_TYPE.name]: 0,
-                                [ElementCall.MEMBER_EVENT_TYPE.name]: 0,
-                            },
-                        }),
-                    ));
+                    await waitFor(() =>
+                        expect(cli.sendStateEvent).toHaveBeenCalledWith(
+                            room.roomId,
+                            EventType.RoomPowerLevels,
+                            expect.objectContaining({
+                                events: {
+                                    [ElementCall.CALL_EVENT_TYPE.name]: 0,
+                                    [ElementCall.MEMBER_EVENT_TYPE.name]: 0,
+                                },
+                            }),
+                        ),
+                    );
                 });
             });
 
@@ -125,16 +129,18 @@ describe("RolesRoomSettingsTab", () => {
                 const tab = renderTab();
 
                 fireEvent.click(getElementCallSwitch(tab).querySelector(".mx_ToggleSwitch"));
-                await waitFor(() => expect(cli.sendStateEvent).toHaveBeenCalledWith(
-                    room.roomId,
-                    EventType.RoomPowerLevels,
-                    expect.objectContaining({
-                        events: {
-                            [ElementCall.CALL_EVENT_TYPE.name]: 100,
-                            [ElementCall.MEMBER_EVENT_TYPE.name]: 100,
-                        },
-                    }),
-                ));
+                await waitFor(() =>
+                    expect(cli.sendStateEvent).toHaveBeenCalledWith(
+                        room.roomId,
+                        EventType.RoomPowerLevels,
+                        expect.objectContaining({
+                            events: {
+                                [ElementCall.CALL_EVENT_TYPE.name]: 100,
+                                [ElementCall.MEMBER_EVENT_TYPE.name]: 100,
+                            },
+                        }),
+                    ),
+                );
             });
         });
     });

@@ -14,12 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import classNames from 'classnames';
-import React from 'react';
+import classNames from "classnames";
+import React from "react";
 
-import { Icon as CaretIcon } from '../../../../../res/img/feather-customised/dropdown-arrow.svg';
-import { _t } from '../../../../languageHandler';
-import AccessibleTooltipButton from '../../elements/AccessibleTooltipButton';
+import { Icon as CaretIcon } from "../../../../../res/img/feather-customised/dropdown-arrow.svg";
+import { _t } from "../../../../languageHandler";
+import AccessibleTooltipButton from "../../elements/AccessibleTooltipButton";
 
 interface Props extends React.ComponentProps<typeof AccessibleTooltipButton> {
     isExpanded: boolean;
@@ -27,17 +27,19 @@ interface Props extends React.ComponentProps<typeof AccessibleTooltipButton> {
 }
 
 export const DeviceExpandDetailsButton: React.FC<Props> = ({ isExpanded, onClick, ...rest }) => {
-    const label = isExpanded ? _t('Hide details') : _t('Show details');
-    return <AccessibleTooltipButton
-        {...rest}
-        aria-label={label}
-        title={label}
-        kind='icon'
-        className={classNames('mx_DeviceExpandDetailsButton', {
-            mx_DeviceExpandDetailsButton_expanded: isExpanded,
-        })}
-        onClick={onClick}
-    >
-        <CaretIcon className='mx_DeviceExpandDetailsButton_icon' />
-    </AccessibleTooltipButton>;
+    const label = isExpanded ? _t("Hide details") : _t("Show details");
+    return (
+        <AccessibleTooltipButton
+            {...rest}
+            aria-label={label}
+            title={label}
+            kind="icon"
+            className={classNames("mx_DeviceExpandDetailsButton", {
+                mx_DeviceExpandDetailsButton_expanded: isExpanded,
+            })}
+            onClick={onClick}
+        >
+            <CaretIcon className="mx_DeviceExpandDetailsButton_icon" />
+        </AccessibleTooltipButton>
+    );
 };

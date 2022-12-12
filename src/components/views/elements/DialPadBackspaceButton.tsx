@@ -26,12 +26,14 @@ interface IProps {
 
 export default class DialPadBackspaceButton extends React.PureComponent<IProps> {
     render() {
-        return <div className="mx_DialPadBackspaceButtonWrapper">
-            <AccessibleButton
-                className="mx_DialPadBackspaceButton"
-                onClick={this.props.onBackspacePress}
-                aria-label={_t("Backspace")}
-            />
-        </div>;
+        return (
+            <div className="mx_DialPadBackspaceButtonWrapper">
+                <AccessibleButton
+                    className="mx_DialPadBackspaceButton"
+                    onClick={this.props.onBackspacePress}
+                    aria-label={_t("Backspace")}
+                />
+            </div>
+        );
     }
 }

@@ -23,10 +23,10 @@ import {
     IStageStatus,
 } from "matrix-js-sdk/src/interactive-auth";
 import { MatrixClient } from "matrix-js-sdk/src/client";
-import React, { createRef } from 'react';
+import React, { createRef } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import getEntryComponentForLoginType, { IStageComponent } from '../views/auth/InteractiveAuthEntryComponents';
+import getEntryComponentForLoginType, { IStageComponent } from "../views/auth/InteractiveAuthEntryComponents";
 import Spinner from "../views/elements/Spinner";
 
 export const ERROR_USER_CANCELLED = new Error("User cancelled auth session");
@@ -34,12 +34,9 @@ export const ERROR_USER_CANCELLED = new Error("User cancelled auth session");
 type InteractiveAuthCallbackSuccess = (
     success: true,
     response: IAuthData,
-    extra?: { emailSid?: string, clientSecret?: string }
+    extra?: { emailSid?: string; clientSecret?: string },
 ) => void;
-type InteractiveAuthCallbackFailure = (
-    success: false,
-    response: IAuthData | Error,
-) => void;
+type InteractiveAuthCallbackFailure = (success: false, response: IAuthData | Error) => void;
 export type InteractiveAuthCallback = InteractiveAuthCallbackSuccess & InteractiveAuthCallbackFailure;
 
 interface IProps {
@@ -134,25 +131,28 @@ export default class InteractiveAuthComponent extends React.Component<IProps, IS
     }
 
     public componentDidMount() {
-        this.authLogic.attemptAuth().then((result) => {
-            const extra = {
-                emailSid: this.authLogic.getEmailSid(),
-                clientSecret: this.authLogic.getClientSecret(),
-            };
-            this.props.onAuthFinished(true, result, extra);
-        }).catch((error) => {
-            this.props.onAuthFinished(false, error);
-            logger.error("Error during user-interactive auth:", error);
-            if (this.unmounted) {
-                return;
-            }
+        this.authLogic
+            .attemptAuth()
+            .then((result) => {
+                const extra = {
+                    emailSid: this.authLogic.getEmailSid(),
+                    clientSecret: this.authLogic.getClientSecret(),
+                };
+                this.props.onAuthFinished(true, result, extra);
+            })
+            .catch((error) => {
+                this.props.onAuthFinished(false, error);
+                logger.error("Error during user-interactive auth:", error);
+                if (this.unmounted) {
+                    return;
+                }
 
-            const msg = error.message || error.toString();
-            this.setState({
-                errorText: msg,
-                errorCode: error.errcode,
+                const msg = error.message || error.toString();
+                this.setState({
+                    errorText: msg,
+                    errorCode: error.errcode,
+                });
             });
-        });
     }
 
     componentWillUnmount() {
@@ -168,7 +168,7 @@ export default class InteractiveAuthComponent extends React.Component<IProps, IS
         secret: string,
         attempt: number,
         session: string,
-    ): Promise<{sid: string}> => {
+    ): Promise<{ sid: string }> => {
         this.setState({
             busy: true,
         });
@@ -183,19 +183,22 @@ export default class InteractiveAuthComponent extends React.Component<IProps, IS
 
     private authStateUpdated = (stageType: AuthType, stageState: IStageStatus): void => {
         const oldStage = this.state.authStage;
-        this.setState({
-            busy: false,
-            authStage: stageType,
-            stageState: stageState,
-            errorText: stageState.error,
-            errorCode: stageState.errcode,
-        }, () => {
-            if (oldStage !== stageType) {
-                this.setFocus();
-            } else if (!stageState.error) {
-                this.stageComponent.current?.attemptFailed?.();
-            }
-        });
+        this.setState(
+            {
+                busy: false,
+                authStage: stageType,
+                stageState: stageState,
+                errorText: stageState.error,
+                errorCode: stageState.errcode,
+            },
+            () => {
+                if (oldStage !== stageType) {
+                    this.setFocus();
+                } else if (!stageState.error) {
+                    this.stageComponent.current?.attemptFailed?.();
+                }
+            },
+        );
     };
 
     private requestCallback = (auth: IAuthData | null, background: boolean): Promise<IAuthData> => {

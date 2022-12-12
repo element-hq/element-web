@@ -18,11 +18,7 @@ import { useEffect } from "react";
 
 const DEBOUNCE_TIMEOUT = 100;
 
-export function useDebouncedCallback<T extends any[]>(
-    enabled: boolean,
-    callback: (...params: T) => void,
-    params: T,
-) {
+export function useDebouncedCallback<T extends any[]>(enabled: boolean, callback: (...params: T) => void, params: T) {
     useEffect(() => {
         let handle: number | null = null;
         const doSearch = () => {

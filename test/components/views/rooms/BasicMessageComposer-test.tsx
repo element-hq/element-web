@@ -14,12 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 // eslint-disable-next-line deprecate/import
-import { mount, ReactWrapper } from 'enzyme';
-import { MatrixClient, Room } from 'matrix-js-sdk/src/matrix';
+import { mount, ReactWrapper } from "enzyme";
+import { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 
-import BasicMessageComposer from '../../../../src/components/views/rooms/BasicMessageComposer';
+import BasicMessageComposer from "../../../../src/components/views/rooms/BasicMessageComposer";
 import * as TestUtils from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import EditorModel from "../../../../src/editor/model";
@@ -40,7 +40,7 @@ describe("BasicMessageComposer", () => {
 
         wrapper.find(".mx_BasicMessageComposer_input").simulate("paste", {
             clipboardData: {
-                getData: type => {
+                getData: (type) => {
                     if (type === "text/plain") {
                         return "https://element.io";
                     }
@@ -56,11 +56,9 @@ describe("BasicMessageComposer", () => {
 function render(model: EditorModel): ReactWrapper {
     const client: MatrixClient = MatrixClientPeg.get();
 
-    const roomId = '!1234567890:domain';
+    const roomId = "!1234567890:domain";
     const userId = client.getUserId();
     const room = new Room(roomId, client, userId);
 
-    return mount((
-        <BasicMessageComposer model={model} room={room} />
-    ));
+    return mount(<BasicMessageComposer model={model} room={room} />);
 }

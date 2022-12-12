@@ -32,50 +32,50 @@ export const useSlidingSyncRoomSearch = () => {
     const [loading, setLoading] = useState(false);
     const listIndex = SlidingSyncManager.instance.getOrAllocateListIndex(SlidingSyncManager.ListSearch);
 
-    const [updateQuery, updateResult] = useLatestResult<{ term: string, limit?: number }, Room[]>(setRooms);
+    const [updateQuery, updateResult] = useLatestResult<{ term: string; limit?: number }, Room[]>(setRooms);
 
-    const search = useCallback(async ({
-        limit = 100,
-        query: term,
-    }: SlidingSyncRoomSearchOpts): Promise<boolean> => {
-        const opts = { limit, term };
-        updateQuery(opts);
+    const search = useCallback(
+        async ({ limit = 100, query: term }: SlidingSyncRoomSearchOpts): Promise<boolean> => {
+            const opts = { limit, term };
+            updateQuery(opts);
 
-        if (!term?.length) {
-            setRooms([]);
-            return true;
-        }
-
-        try {
-            setLoading(true);
-            await SlidingSyncManager.instance.ensureListRegistered(listIndex, {
-                ranges: [[0, limit]],
-                filters: {
-                    room_name_like: term,
-                },
-            });
-            const rooms = [];
-            const { roomIndexToRoomId } = SlidingSyncManager.instance.slidingSync.getListData(listIndex);
-            let i = 0;
-            while (roomIndexToRoomId[i]) {
-                const roomId = roomIndexToRoomId[i];
-                const room = MatrixClientPeg.get().getRoom(roomId);
-                if (room) {
-                    rooms.push(room);
-                }
-                i++;
+            if (!term?.length) {
+                setRooms([]);
+                return true;
             }
-            updateResult(opts, rooms);
-            return true;
-        } catch (e) {
-            console.error("Could not fetch sliding sync rooms for params", { limit, term }, e);
-            updateResult(opts, []);
-            return false;
-        } finally {
-            setLoading(false);
-            // TODO: delete the list?
-        }
-    }, [updateQuery, updateResult, listIndex]);
+
+            try {
+                setLoading(true);
+                await SlidingSyncManager.instance.ensureListRegistered(listIndex, {
+                    ranges: [[0, limit]],
+                    filters: {
+                        room_name_like: term,
+                    },
+                });
+                const rooms = [];
+                const { roomIndexToRoomId } = SlidingSyncManager.instance.slidingSync.getListData(listIndex);
+                let i = 0;
+                while (roomIndexToRoomId[i]) {
+                    const roomId = roomIndexToRoomId[i];
+                    const room = MatrixClientPeg.get().getRoom(roomId);
+                    if (room) {
+                        rooms.push(room);
+                    }
+                    i++;
+                }
+                updateResult(opts, rooms);
+                return true;
+            } catch (e) {
+                console.error("Could not fetch sliding sync rooms for params", { limit, term }, e);
+                updateResult(opts, []);
+                return false;
+            } finally {
+                setLoading(false);
+                // TODO: delete the list?
+            }
+        },
+        [updateQuery, updateResult, listIndex],
+    );
 
     return {
         loading,

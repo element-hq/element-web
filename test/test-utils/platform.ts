@@ -37,10 +37,10 @@ export const mockPlatformPeg = (
     platformMocks: Partial<Record<MethodLikeKeys<BasePlatform>, unknown>> = {},
 ): MockedObject<BasePlatform> => {
     const mockPlatform = new MockPlatform(platformMocks);
-    jest.spyOn(PlatformPeg, 'get').mockReturnValue(mockPlatform);
+    jest.spyOn(PlatformPeg, "get").mockReturnValue(mockPlatform);
     return mocked(mockPlatform);
 };
 
 export const unmockPlatformPeg = () => {
-    jest.spyOn(PlatformPeg, 'get').mockRestore();
+    jest.spyOn(PlatformPeg, "get").mockRestore();
 };

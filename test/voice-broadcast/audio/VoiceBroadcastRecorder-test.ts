@@ -86,13 +86,10 @@ describe("VoiceBroadcastRecorder", () => {
         };
 
         const expectOnFirstChunkRecorded = (): void => {
-            expect(onChunkRecorded).toHaveBeenNthCalledWith(
-                1,
-                {
-                    buffer: concat(headers1, headers2, chunk1),
-                    length: 42,
-                },
-            );
+            expect(onChunkRecorded).toHaveBeenNthCalledWith(1, {
+                buffer: concat(headers1, headers2, chunk1),
+                length: 42,
+            });
         };
 
         const itShouldNotEmitAChunkRecordedEvent = (): void => {
@@ -223,13 +220,10 @@ describe("VoiceBroadcastRecorder", () => {
             it("should emit ChunkRecorded events", () => {
                 expectOnFirstChunkRecorded();
 
-                expect(onChunkRecorded).toHaveBeenNthCalledWith(
-                    2,
-                    {
-                        buffer: concat(headers1, headers2, chunk2a, chunk2b),
-                        length: 72 - 42, // 72 (position at second chunk) - 42 (position of first chunk)
-                    },
-                );
+                expect(onChunkRecorded).toHaveBeenNthCalledWith(2, {
+                    buffer: concat(headers1, headers2, chunk2a, chunk2b),
+                    length: 72 - 42, // 72 (position at second chunk) - 42 (position of first chunk)
+                });
             });
         });
     });

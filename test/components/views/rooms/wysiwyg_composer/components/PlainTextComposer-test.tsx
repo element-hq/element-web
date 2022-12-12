@@ -14,84 +14,89 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-import { PlainTextComposer }
-    from "../../../../../../src/components/views/rooms/wysiwyg_composer/components/PlainTextComposer";
+import { PlainTextComposer } from "../../../../../../src/components/views/rooms/wysiwyg_composer/components/PlainTextComposer";
 
-describe('PlainTextComposer', () => {
+describe("PlainTextComposer", () => {
     const customRender = (
         onChange = (_content: string) => void 0,
         onSend = () => void 0,
         disabled = false,
-        initialContent?: string) => {
+        initialContent?: string,
+    ) => {
         return render(
-            <PlainTextComposer onChange={onChange} onSend={onSend} disabled={disabled} initialContent={initialContent} />,
+            <PlainTextComposer
+                onChange={onChange}
+                onSend={onSend}
+                disabled={disabled}
+                initialContent={initialContent}
+            />,
         );
     };
 
-    it('Should have contentEditable at false when disabled', () => {
+    it("Should have contentEditable at false when disabled", () => {
         // When
         customRender(jest.fn(), jest.fn(), true);
 
         // Then
-        expect(screen.getByRole('textbox')).toHaveAttribute('contentEditable', "false");
+        expect(screen.getByRole("textbox")).toHaveAttribute("contentEditable", "false");
     });
 
-    it('Should have focus', () => {
+    it("Should have focus", () => {
         // When
         customRender(jest.fn(), jest.fn(), false);
 
         // Then
-        expect(screen.getByRole('textbox')).toHaveFocus();
+        expect(screen.getByRole("textbox")).toHaveFocus();
     });
 
-    it('Should call onChange handler', async () => {
+    it("Should call onChange handler", async () => {
         // When
-        const content = 'content';
+        const content = "content";
         const onChange = jest.fn();
         customRender(onChange, jest.fn());
-        await userEvent.type(screen.getByRole('textbox'), content);
+        await userEvent.type(screen.getByRole("textbox"), content);
 
         // Then
         expect(onChange).toBeCalledWith(content);
     });
 
-    it('Should call onSend when Enter is pressed', async () => {
+    it("Should call onSend when Enter is pressed", async () => {
         //When
         const onSend = jest.fn();
         customRender(jest.fn(), onSend);
-        await userEvent.type(screen.getByRole('textbox'), '{enter}');
+        await userEvent.type(screen.getByRole("textbox"), "{enter}");
 
         // Then it sends a message
         expect(onSend).toBeCalledTimes(1);
     });
 
-    it('Should clear textbox content when clear is called', async () => {
+    it("Should clear textbox content when clear is called", async () => {
         //When
         let composer;
         render(
             <PlainTextComposer onChange={jest.fn()} onSend={jest.fn()}>
-                { (ref, composerFunctions) => {
+                {(ref, composerFunctions) => {
                     composer = composerFunctions;
                     return null;
-                } }
+                }}
             </PlainTextComposer>,
         );
-        await userEvent.type(screen.getByRole('textbox'), 'content');
-        expect(screen.getByRole('textbox').innerHTML).toBe('content');
+        await userEvent.type(screen.getByRole("textbox"), "content");
+        expect(screen.getByRole("textbox").innerHTML).toBe("content");
         composer.clear();
 
         // Then
-        expect(screen.getByRole('textbox').innerHTML).toBeFalsy();
+        expect(screen.getByRole("textbox").innerHTML).toBeFalsy();
     });
 
-    it('Should have data-is-expanded when it has two lines', async () => {
+    it("Should have data-is-expanded when it has two lines", async () => {
         let resizeHandler: ResizeObserverCallback = jest.fn();
         let editor: Element | null = null;
-        jest.spyOn(global, 'ResizeObserver').mockImplementation((handler) => {
+        jest.spyOn(global, "ResizeObserver").mockImplementation((handler) => {
             resizeHandler = handler;
             return {
                 observe: (element) => {
@@ -100,21 +105,18 @@ describe('PlainTextComposer', () => {
                 unobserve: jest.fn(),
                 disconnect: jest.fn(),
             };
-        },
-        );
-        jest.spyOn(global, 'requestAnimationFrame').mockImplementation(cb => {
+        });
+        jest.spyOn(global, "requestAnimationFrame").mockImplementation((cb) => {
             cb(0);
             return 0;
         });
 
         //When
-        render(
-            <PlainTextComposer onChange={jest.fn()} onSend={jest.fn()} />,
-        );
+        render(<PlainTextComposer onChange={jest.fn()} onSend={jest.fn()} />);
 
         // Then
-        expect(screen.getByTestId('WysiwygComposerEditor').attributes['data-is-expanded'].value).toBe('false');
-        expect(editor).toBe(screen.getByRole('textbox'));
+        expect(screen.getByTestId("WysiwygComposerEditor").attributes["data-is-expanded"].value).toBe("false");
+        expect(editor).toBe(screen.getByRole("textbox"));
 
         // When
         resizeHandler(
@@ -124,7 +126,7 @@ describe('PlainTextComposer', () => {
         jest.runAllTimers();
 
         // Then
-        expect(screen.getByTestId('WysiwygComposerEditor').attributes['data-is-expanded'].value).toBe('true');
+        expect(screen.getByTestId("WysiwygComposerEditor").attributes["data-is-expanded"].value).toBe("true");
 
         (global.ResizeObserver as jest.Mock).mockRestore();
         (global.requestAnimationFrame as jest.Mock).mockRestore();

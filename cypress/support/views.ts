@@ -70,4 +70,4 @@ Cypress.Commands.add("viewSpaceHomeByName", (name: string): Chainable<JQuery<HTM
 });
 
 // Needed to make this file a module
-export { };
+export {};

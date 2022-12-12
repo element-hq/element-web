@@ -48,8 +48,8 @@ describe("<MImageBody/>", () => {
         getIgnoredUsers: jest.fn(),
         getVersions: jest.fn().mockResolvedValue({
             unstable_features: {
-                'org.matrix.msc3882': true,
-                'org.matrix.msc3886': true,
+                "org.matrix.msc3882": true,
+                "org.matrix.msc3886": true,
             },
         }),
     });
@@ -75,11 +75,13 @@ describe("<MImageBody/>", () => {
     it("should show error when encrypted media cannot be downloaded", async () => {
         fetchMock.getOnce(url, { status: 500 });
 
-        render(<MImageBody
-            {...props}
-            mxEvent={encryptedMediaEvent}
-            mediaEventHelper={new MediaEventHelper(encryptedMediaEvent)}
-        />);
+        render(
+            <MImageBody
+                {...props}
+                mxEvent={encryptedMediaEvent}
+                mediaEventHelper={new MediaEventHelper(encryptedMediaEvent)}
+            />,
+        );
 
         await screen.findByText("Error downloading image");
     });
@@ -88,11 +90,13 @@ describe("<MImageBody/>", () => {
         fetchMock.getOnce(url, "thisistotallyanencryptedpng");
         mocked(encrypt.decryptAttachment).mockRejectedValue(new Error("Failed to decrypt"));
 
-        render(<MImageBody
-            {...props}
-            mxEvent={encryptedMediaEvent}
-            mediaEventHelper={new MediaEventHelper(encryptedMediaEvent)}
-        />);
+        render(
+            <MImageBody
+                {...props}
+                mxEvent={encryptedMediaEvent}
+                mediaEventHelper={new MediaEventHelper(encryptedMediaEvent)}
+            />,
+        );
 
         await screen.findByText("Error decrypting image");
     });

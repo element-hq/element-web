@@ -47,14 +47,16 @@ import { AsyncActionPayload } from "../dispatcher/payloads";
 export function asyncAction(id: string, fn: () => Promise<any>, pendingFn: () => any | null): AsyncActionPayload {
     const helper = (dispatch) => {
         dispatch({
-            action: id + '.pending',
-            request: typeof pendingFn === 'function' ? pendingFn() : undefined,
+            action: id + ".pending",
+            request: typeof pendingFn === "function" ? pendingFn() : undefined,
         });
-        fn().then((result) => {
-            dispatch({ action: id + '.success', result });
-        }).catch((err) => {
-            dispatch({ action: id + '.failure', err });
-        });
+        fn()
+            .then((result) => {
+                dispatch({ action: id + ".success", result });
+            })
+            .catch((err) => {
+                dispatch({ action: id + ".failure", err });
+            });
     };
     return new AsyncActionPayload(helper);
 }

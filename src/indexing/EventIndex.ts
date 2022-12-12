@@ -15,13 +15,13 @@ limitations under the License.
 */
 
 import { EventEmitter } from "events";
-import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
-import { Direction, EventTimeline } from 'matrix-js-sdk/src/models/event-timeline';
-import { Room, RoomEvent } from 'matrix-js-sdk/src/models/room';
-import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
-import { EventTimelineSet, IRoomTimelineData } from 'matrix-js-sdk/src/models/event-timeline-set';
-import { RoomState, RoomStateEvent } from 'matrix-js-sdk/src/models/room-state';
-import { TimelineIndex, TimelineWindow } from 'matrix-js-sdk/src/timeline-window';
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import { Direction, EventTimeline } from "matrix-js-sdk/src/models/event-timeline";
+import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { EventTimelineSet, IRoomTimelineData } from "matrix-js-sdk/src/models/event-timeline-set";
+import { RoomState, RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
+import { TimelineIndex, TimelineWindow } from "matrix-js-sdk/src/timeline-window";
 import { sleep } from "matrix-js-sdk/src/utils";
 import { IResultRoomEvents } from "matrix-js-sdk/src/@types/search";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -107,43 +107,45 @@ export default class EventIndex extends EventEmitter {
 
         // Gather the prev_batch tokens and create checkpoints for
         // our message crawler.
-        await Promise.all(encryptedRooms.map(async (room) => {
-            const timeline = room.getLiveTimeline();
-            const token = timeline.getPaginationToken(Direction.Backward);
+        await Promise.all(
+            encryptedRooms.map(async (room) => {
+                const timeline = room.getLiveTimeline();
+                const token = timeline.getPaginationToken(Direction.Backward);
 
-            const backCheckpoint: ICrawlerCheckpoint = {
-                roomId: room.roomId,
-                token: token,
-                direction: Direction.Backward,
-                fullCrawl: true,
-            };
+                const backCheckpoint: ICrawlerCheckpoint = {
+                    roomId: room.roomId,
+                    token: token,
+                    direction: Direction.Backward,
+                    fullCrawl: true,
+                };
 
-            const forwardCheckpoint: ICrawlerCheckpoint = {
-                roomId: room.roomId,
-                token: token,
-                direction: Direction.Forward,
-            };
+                const forwardCheckpoint: ICrawlerCheckpoint = {
+                    roomId: room.roomId,
+                    token: token,
+                    direction: Direction.Forward,
+                };
 
-            try {
-                if (backCheckpoint.token) {
-                    await indexManager.addCrawlerCheckpoint(backCheckpoint);
-                    this.crawlerCheckpoints.push(backCheckpoint);
+                try {
+                    if (backCheckpoint.token) {
+                        await indexManager.addCrawlerCheckpoint(backCheckpoint);
+                        this.crawlerCheckpoints.push(backCheckpoint);
+                    }
+
+                    if (forwardCheckpoint.token) {
+                        await indexManager.addCrawlerCheckpoint(forwardCheckpoint);
+                        this.crawlerCheckpoints.push(forwardCheckpoint);
+                    }
+                } catch (e) {
+                    logger.log(
+                        "EventIndex: Error adding initial checkpoints for room",
+                        room.roomId,
+                        backCheckpoint,
+                        forwardCheckpoint,
+                        e,
+                    );
                 }
-
-                if (forwardCheckpoint.token) {
-                    await indexManager.addCrawlerCheckpoint(forwardCheckpoint);
-                    this.crawlerCheckpoints.push(forwardCheckpoint);
-                }
-            } catch (e) {
-                logger.log(
-                    "EventIndex: Error adding initial checkpoints for room",
-                    room.roomId,
-                    backCheckpoint,
-                    forwardCheckpoint,
-                    e,
-                );
-            }
-        }));
+            }),
+        );
     }
 
     /*
@@ -245,8 +247,7 @@ export default class EventIndex extends EventEmitter {
         if (!room) return;
         if (!MatrixClientPeg.get().isRoomEncrypted(room.roomId)) return;
 
-        logger.log("EventIndex: Adding a checkpoint because of a limited timeline",
-            room.roomId);
+        logger.log("EventIndex: Adding a checkpoint because of a limited timeline", room.roomId);
 
         this.addRoomCheckpoint(room.roomId, false);
     };
@@ -262,11 +263,9 @@ export default class EventIndex extends EventEmitter {
      * otherwise.
      */
     private isValidEvent(ev: MatrixEvent): boolean {
-        const isUsefulType = [
-            EventType.RoomMessage,
-            EventType.RoomName,
-            EventType.RoomTopic,
-        ].includes(ev.getType() as EventType);
+        const isUsefulType = [EventType.RoomMessage, EventType.RoomName, EventType.RoomTopic].includes(
+            ev.getType() as EventType,
+        );
         const validEventType = isUsefulType && !ev.isRedacted() && !ev.isDecryptionFailure();
 
         let validMsgType = true;
@@ -382,12 +381,7 @@ export default class EventIndex extends EventEmitter {
         try {
             await indexManager.addCrawlerCheckpoint(checkpoint);
         } catch (e) {
-            logger.log(
-                "EventIndex: Error adding new checkpoint for room",
-                room.roomId,
-                checkpoint,
-                e,
-            );
+            logger.log("EventIndex: Error adding new checkpoint for room", room.roomId, checkpoint, e);
         }
 
         this.crawlerCheckpoints.push(checkpoint);
@@ -418,7 +412,7 @@ export default class EventIndex extends EventEmitter {
         let idle = false;
 
         while (!cancelled) {
-            let sleepTime = SettingsStore.getValueAt(SettingLevel.DEVICE, 'crawlerSleepTime');
+            let sleepTime = SettingsStore.getValueAt(SettingLevel.DEVICE, "crawlerSleepTime");
 
             // Don't let the user configure a lower sleep time than 100 ms.
             sleepTime = Math.max(sleepTime, 100);
@@ -468,8 +462,11 @@ export default class EventIndex extends EventEmitter {
                 );
             } catch (e) {
                 if (e.httpStatus === 403) {
-                    logger.log("EventIndex: Removing checkpoint as we don't have ",
-                        "permissions to fetch messages from this room.", checkpoint);
+                    logger.log(
+                        "EventIndex: Removing checkpoint as we don't have ",
+                        "permissions to fetch messages from this room.",
+                        checkpoint,
+                    );
                     try {
                         await indexManager.removeCrawlerCheckpoint(checkpoint);
                     } catch (e) {
@@ -514,9 +511,8 @@ export default class EventIndex extends EventEmitter {
 
             const profiles = {};
 
-            stateEvents.forEach(ev => {
-                if (ev.event.content &&
-                    ev.event.content.membership === "join") {
+            stateEvents.forEach((ev) => {
+                if (ev.event.content && ev.event.content.membership === "join") {
                     profiles[ev.event.sender] = {
                         displayname: ev.event.content.displayname,
                         avatar_url: ev.event.content.avatar_url,
@@ -525,8 +521,8 @@ export default class EventIndex extends EventEmitter {
             });
 
             const decryptionPromises = matrixEvents
-                .filter(event => event.isEncrypted())
-                .map(event => {
+                .filter((event) => event.isEncrypted())
+                .map((event) => {
                     return client.decryptEventIfNeeded(event, {
                         isRetry: true,
                         emit: false,
@@ -542,7 +538,7 @@ export default class EventIndex extends EventEmitter {
             const filteredEvents = matrixEvents.filter(this.isValidEvent);
 
             // Collect the redaction events, so we can delete the redacted events from the index.
-            const redactionEvents = matrixEvents.filter(ev => ev.isRedaction());
+            const redactionEvents = matrixEvents.filter((ev) => ev.isRedaction());
 
             // Let us convert the events back into a format that EventIndex can
             // consume.
@@ -585,14 +581,16 @@ export default class EventIndex extends EventEmitter {
                     }
                 }
 
-                const eventsAlreadyAdded = await indexManager.addHistoricEvents(
-                    events, newCheckpoint, checkpoint);
+                const eventsAlreadyAdded = await indexManager.addHistoricEvents(events, newCheckpoint, checkpoint);
 
                 // We didn't get a valid new checkpoint from the server, nothing
                 // to do here anymore.
                 if (!newCheckpoint) {
-                    logger.log("EventIndex: The server didn't return a valid ",
-                        "new checkpoint, not continuing the crawl.", checkpoint);
+                    logger.log(
+                        "EventIndex: The server didn't return a valid ",
+                        "new checkpoint, not continuing the crawl.",
+                        checkpoint,
+                    );
                     continue;
                 }
 
@@ -601,13 +599,19 @@ export default class EventIndex extends EventEmitter {
                 // Let us delete the checkpoint in that case, otherwise push
                 // the new checkpoint to be used by the crawler.
                 if (eventsAlreadyAdded === true && newCheckpoint.fullCrawl !== true) {
-                    logger.log("EventIndex: Checkpoint had already all events",
-                        "added, stopping the crawl", checkpoint);
+                    logger.log(
+                        "EventIndex: Checkpoint had already all events",
+                        "added, stopping the crawl",
+                        checkpoint,
+                    );
                     await indexManager.removeCrawlerCheckpoint(newCheckpoint);
                 } else {
                     if (eventsAlreadyAdded === true) {
-                        logger.log("EventIndex: Checkpoint had already all events",
-                            "added, but continuing due to a full crawl", checkpoint);
+                        logger.log(
+                            "EventIndex: Checkpoint had already all events",
+                            "added, but continuing due to a full crawl",
+                            checkpoint,
+                        );
                     }
                     this.crawlerCheckpoints.push(newCheckpoint);
                 }
@@ -718,7 +722,7 @@ export default class EventIndex extends EventEmitter {
         const eventMapper = client.getEventMapper();
 
         // Turn the events into MatrixEvent objects.
-        const matrixEvents = events.map(e => {
+        const matrixEvents = events.map((e) => {
             const matrixEvent = eventMapper(e.event);
 
             const member = new RoomMember(room.roomId, matrixEvent.getSender());
@@ -729,21 +733,19 @@ export default class EventIndex extends EventEmitter {
             member.name = e.profile.displayname + " (" + matrixEvent.getSender() + ")";
 
             // This is sets the avatar URL.
-            const memberEvent = eventMapper(
-                {
-                    content: {
-                        membership: "join",
-                        avatar_url: e.profile.avatar_url,
-                        displayname: e.profile.displayname,
-                    },
-                    type: EventType.RoomMember,
-                    event_id: matrixEvent.getId() + ":eventIndex",
-                    room_id: matrixEvent.getRoomId(),
-                    sender: matrixEvent.getSender(),
-                    origin_server_ts: matrixEvent.getTs(),
-                    state_key: matrixEvent.getSender(),
+            const memberEvent = eventMapper({
+                content: {
+                    membership: "join",
+                    avatar_url: e.profile.avatar_url,
+                    displayname: e.profile.displayname,
                 },
-            );
+                type: EventType.RoomMember,
+                event_id: matrixEvent.getId() + ":eventIndex",
+                room_id: matrixEvent.getRoomId(),
+                sender: matrixEvent.getSender(),
+                origin_server_ts: matrixEvent.getTs(),
+                state_key: matrixEvent.getSender(),
+            });
 
             // We set this manually to avoid emitting RoomMember.membership and
             // RoomMember.name events.
@@ -800,11 +802,11 @@ export default class EventIndex extends EventEmitter {
         // existing timeline e.g. if you close and re-open the FilePanel.
         if (fromEvent === null) {
             matrixEvents.reverse();
-            direction = direction == EventTimeline.BACKWARDS ? EventTimeline.FORWARDS: EventTimeline.BACKWARDS;
+            direction = direction == EventTimeline.BACKWARDS ? EventTimeline.FORWARDS : EventTimeline.BACKWARDS;
         }
 
         // Add the events to the timeline of the file panel.
-        matrixEvents.forEach(e => {
+        matrixEvents.forEach((e) => {
             if (!timelineSet.eventIdToTimeline(e.getId())) {
                 timelineSet.addEventToTimeline(e, timeline, direction == EventTimeline.BACKWARDS);
             }
@@ -819,8 +821,12 @@ export default class EventIndex extends EventEmitter {
             ret = true;
         }
 
-        logger.log("EventIndex: Populating file panel with", matrixEvents.length,
-            "events and setting the pagination token to", paginationToken);
+        logger.log(
+            "EventIndex: Populating file panel with",
+            matrixEvents.length,
+            "events and setting the pagination token to",
+            paginationToken,
+        );
 
         timeline.setPaginationToken(paginationToken, EventTimeline.BACKWARDS);
         return ret;
@@ -869,14 +875,7 @@ export default class EventIndex extends EventEmitter {
             const timelineSet = timeline.getTimelineSet();
             const token = timeline.getPaginationToken(direction);
 
-            const ret = await this.populateFileTimeline(
-                timelineSet,
-                timeline,
-                room,
-                limit,
-                token,
-                direction,
-            );
+            const ret = await this.populateFileTimeline(timelineSet, timeline, room, limit, token, direction);
 
             timelineIndex.pendingPaginate = null;
             timelineWindow.extend(direction, limit);

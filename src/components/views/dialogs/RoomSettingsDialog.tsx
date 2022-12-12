@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 import { RoomEvent } from "matrix-js-sdk/src/models/room";
 
 import TabbedView, { Tab } from "../../structures/TabbedView";
@@ -31,7 +31,7 @@ import dis from "../../../dispatcher/dispatcher";
 import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
 import BaseDialog from "./BaseDialog";
-import { Action } from '../../../dispatcher/actions';
+import { Action } from "../../../dispatcher/actions";
 import { VoipRoomSettingsTab } from "../settings/tabs/room/VoipRoomSettingsTab";
 
 export const ROOM_GENERAL_TAB = "ROOM_GENERAL_TAB";
@@ -57,7 +57,7 @@ export default class RoomSettingsDialog extends React.Component<IProps, IState> 
 
     constructor(props: IProps) {
         super(props);
-        this.state = { roomName: '' };
+        this.state = { roomName: "" };
     }
 
     public componentDidMount() {
@@ -91,67 +91,90 @@ export default class RoomSettingsDialog extends React.Component<IProps, IState> 
     private getTabs(): Tab[] {
         const tabs: Tab[] = [];
 
-        tabs.push(new Tab(
-            ROOM_GENERAL_TAB,
-            _td("General"),
-            "mx_RoomSettingsDialog_settingsIcon",
-            <GeneralRoomSettingsTab roomId={this.props.roomId} />,
-            "RoomSettingsGeneral",
-        ));
+        tabs.push(
+            new Tab(
+                ROOM_GENERAL_TAB,
+                _td("General"),
+                "mx_RoomSettingsDialog_settingsIcon",
+                <GeneralRoomSettingsTab roomId={this.props.roomId} />,
+                "RoomSettingsGeneral",
+            ),
+        );
         if (SettingsStore.getValue("feature_group_calls")) {
-            tabs.push(new Tab(
-                ROOM_VOIP_TAB,
-                _td("Voice & Video"),
-                "mx_RoomSettingsDialog_voiceIcon",
-                <VoipRoomSettingsTab roomId={this.props.roomId} />,
-            ));
+            tabs.push(
+                new Tab(
+                    ROOM_VOIP_TAB,
+                    _td("Voice & Video"),
+                    "mx_RoomSettingsDialog_voiceIcon",
+                    <VoipRoomSettingsTab roomId={this.props.roomId} />,
+                ),
+            );
         }
-        tabs.push(new Tab(
-            ROOM_SECURITY_TAB,
-            _td("Security & Privacy"),
-            "mx_RoomSettingsDialog_securityIcon",
-            <SecurityRoomSettingsTab
-                roomId={this.props.roomId}
-                closeSettingsFn={() => this.props.onFinished(true)}
-            />,
-            "RoomSettingsSecurityPrivacy",
-        ));
-        tabs.push(new Tab(
-            ROOM_ROLES_TAB,
-            _td("Roles & Permissions"),
-            "mx_RoomSettingsDialog_rolesIcon",
-            <RolesRoomSettingsTab roomId={this.props.roomId} />,
-            "RoomSettingsRolesPermissions",
-        ));
-        tabs.push(new Tab(
-            ROOM_NOTIFICATIONS_TAB,
-            _td("Notifications"),
-            "mx_RoomSettingsDialog_notificationsIcon",
-            <NotificationSettingsTab roomId={this.props.roomId} closeSettingsFn={() => this.props.onFinished(true)} />,
-            "RoomSettingsNotifications",
-        ));
+        tabs.push(
+            new Tab(
+                ROOM_SECURITY_TAB,
+                _td("Security & Privacy"),
+                "mx_RoomSettingsDialog_securityIcon",
+                (
+                    <SecurityRoomSettingsTab
+                        roomId={this.props.roomId}
+                        closeSettingsFn={() => this.props.onFinished(true)}
+                    />
+                ),
+                "RoomSettingsSecurityPrivacy",
+            ),
+        );
+        tabs.push(
+            new Tab(
+                ROOM_ROLES_TAB,
+                _td("Roles & Permissions"),
+                "mx_RoomSettingsDialog_rolesIcon",
+                <RolesRoomSettingsTab roomId={this.props.roomId} />,
+                "RoomSettingsRolesPermissions",
+            ),
+        );
+        tabs.push(
+            new Tab(
+                ROOM_NOTIFICATIONS_TAB,
+                _td("Notifications"),
+                "mx_RoomSettingsDialog_notificationsIcon",
+                (
+                    <NotificationSettingsTab
+                        roomId={this.props.roomId}
+                        closeSettingsFn={() => this.props.onFinished(true)}
+                    />
+                ),
+                "RoomSettingsNotifications",
+            ),
+        );
 
         if (SettingsStore.getValue("feature_bridge_state")) {
-            tabs.push(new Tab(
-                ROOM_BRIDGES_TAB,
-                _td("Bridges"),
-                "mx_RoomSettingsDialog_bridgesIcon",
-                <BridgeSettingsTab roomId={this.props.roomId} />,
-                "RoomSettingsBridges",
-            ));
+            tabs.push(
+                new Tab(
+                    ROOM_BRIDGES_TAB,
+                    _td("Bridges"),
+                    "mx_RoomSettingsDialog_bridgesIcon",
+                    <BridgeSettingsTab roomId={this.props.roomId} />,
+                    "RoomSettingsBridges",
+                ),
+            );
         }
 
         if (SettingsStore.getValue(UIFeature.AdvancedSettings)) {
-            tabs.push(new Tab(
-                ROOM_ADVANCED_TAB,
-                _td("Advanced"),
-                "mx_RoomSettingsDialog_warningIcon",
-                <AdvancedRoomSettingsTab
-                    roomId={this.props.roomId}
-                    closeSettingsFn={() => this.props.onFinished(true)}
-                />,
-                "RoomSettingsAdvanced",
-            ));
+            tabs.push(
+                new Tab(
+                    ROOM_ADVANCED_TAB,
+                    _td("Advanced"),
+                    "mx_RoomSettingsDialog_warningIcon",
+                    (
+                        <AdvancedRoomSettingsTab
+                            roomId={this.props.roomId}
+                            closeSettingsFn={() => this.props.onFinished(true)}
+                        />
+                    ),
+                    "RoomSettingsAdvanced",
+                ),
+            );
         }
 
         return tabs;
@@ -161,12 +184,12 @@ export default class RoomSettingsDialog extends React.Component<IProps, IState> 
         const roomName = this.state.roomName;
         return (
             <BaseDialog
-                className='mx_RoomSettingsDialog'
+                className="mx_RoomSettingsDialog"
                 hasCancel={true}
                 onFinished={this.props.onFinished}
                 title={_t("Room Settings - %(roomName)s", { roomName })}
             >
-                <div className='mx_SettingsDialog_content'>
+                <div className="mx_SettingsDialog_content">
                     <TabbedView
                         tabs={this.getTabs()}
                         initialTabId={this.props.initialTabId}

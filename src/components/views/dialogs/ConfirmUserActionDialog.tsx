@@ -14,16 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ChangeEvent, FormEvent, ReactNode } from 'react';
+import React, { ChangeEvent, FormEvent, ReactNode } from "react";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import classNames from "classnames";
 
-import { _t } from '../../../languageHandler';
-import MemberAvatar from '../avatars/MemberAvatar';
+import { _t } from "../../../languageHandler";
+import MemberAvatar from "../avatars/MemberAvatar";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
-import Field from '../elements/Field';
-import UserIdentifierCustomisations from '../../../customisations/UserIdentifier';
+import Field from "../elements/Field";
+import UserIdentifierCustomisations from "../../../customisations/UserIdentifier";
 
 interface IProps {
     // matrix-js-sdk (room) member object.
@@ -84,7 +84,7 @@ export default class ConfirmUserActionDialog extends React.Component<IProps, ISt
     };
 
     public render() {
-        const confirmButtonClass = this.props.danger ? 'danger' : '';
+        const confirmButtonClass = this.props.danger ? "danger" : "";
 
         let reasonBox;
         if (this.props.askReason) {
@@ -106,35 +106,35 @@ export default class ConfirmUserActionDialog extends React.Component<IProps, ISt
         const name = this.props.member.name;
         const userId = this.props.member.userId;
 
-        const displayUserIdentifier = UserIdentifierCustomisations.getDisplayUserIdentifier(
-            userId, { roomId: this.props.roomId, withDisplayName: true },
-        );
+        const displayUserIdentifier = UserIdentifierCustomisations.getDisplayUserIdentifier(userId, {
+            roomId: this.props.roomId,
+            withDisplayName: true,
+        });
 
         return (
             <BaseDialog
                 className={classNames("mx_ConfirmUserActionDialog", this.props.className)}
                 onFinished={this.props.onFinished}
                 title={this.props.title}
-                contentId='mx_Dialog_content'
+                contentId="mx_Dialog_content"
             >
                 <div id="mx_Dialog_content" className="mx_Dialog_content">
                     <div className="mx_ConfirmUserActionDialog_user">
-                        <div className="mx_ConfirmUserActionDialog_avatar">
-                            { avatar }
-                        </div>
-                        <div className="mx_ConfirmUserActionDialog_name">{ name }</div>
-                        <div className="mx_ConfirmUserActionDialog_userId">{ displayUserIdentifier }</div>
+                        <div className="mx_ConfirmUserActionDialog_avatar">{avatar}</div>
+                        <div className="mx_ConfirmUserActionDialog_name">{name}</div>
+                        <div className="mx_ConfirmUserActionDialog_userId">{displayUserIdentifier}</div>
                     </div>
 
-                    { reasonBox }
-                    { this.props.children }
+                    {reasonBox}
+                    {this.props.children}
                 </div>
                 <DialogButtons
                     primaryButton={this.props.action}
                     onPrimaryButtonClick={this.onOk}
                     primaryButtonClass={confirmButtonClass}
                     focus={!this.props.askReason}
-                    onCancel={this.onCancel} />
+                    onCancel={this.onCancel}
+                />
             </BaseDialog>
         );
     }

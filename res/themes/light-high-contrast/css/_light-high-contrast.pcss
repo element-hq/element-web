@@ -1,21 +1,21 @@
 /* Reference: https://www.figma.com/file/RnLKnv09glhxGIZtn8zfmh/UI-Themes-%26-Accessibility?node-id=321%3A65847 */
 $accent: #268075;
-$alert: #D62C25;
-$links: #0A6ECA;
-$primary-content: #17191C;
-$secondary-content: #5E6266;
+$alert: #d62c25;
+$links: #0a6eca;
+$primary-content: #17191c;
+$secondary-content: #5e6266;
 $tertiary-content: $secondary-content;
 $quaternary-content: $secondary-content;
 $quinary-content: $secondary-content;
 
-$username-variant1-color: #0A6ECA;
-$username-variant2-color: #AC3BA8;
+$username-variant1-color: #0a6eca;
+$username-variant2-color: #ac3ba8;
 $username-variant3-color: #078662;
-$username-variant4-color: #CC1449;
-$username-variant5-color: #BE4C00;
-$username-variant6-color: #1C7274;
-$username-variant7-color: #5C56F5;
-$username-variant8-color: #3E810A;
+$username-variant4-color: #cc1449;
+$username-variant5-color: #be4c00;
+$username-variant6-color: #1c7274;
+$username-variant7-color: #5c56f5;
+$username-variant8-color: #3e810a;
 
 $accent-alt: $links;
 $input-border-color: $secondary-content;
@@ -60,13 +60,13 @@ $roomtopic-color: $secondary-content;
 /* Add padding (and remove margin to compensate), so the outline is not */
 /* chopped off on the left */
 .mx_TabbedView_tabPanel {
-    margin-left: 236px !important;  /* Remove 4 to allow 4 in mx_SettingsTab */
+    margin-left: 236px !important; /* Remove 4 to allow 4 in mx_SettingsTab */
 }
 .mx_SettingsTab {
     padding-left: 4px !important;
 }
 .mx_BaseCard {
-    padding-left: 4px !important;  /* Remove 4 to allow 4 in mx_BaseCard_Group */
+    padding-left: 4px !important; /* Remove 4 to allow 4 in mx_BaseCard_Group */
 }
 .mx_BaseCard_Group {
     padding-left: 4px !important;
@@ -82,7 +82,8 @@ $roomtopic-color: $secondary-content;
     opacity: 1 !important;
 }
 
-.mx_Dialog, .mx_MatrixChat_wrapper {
+.mx_Dialog,
+.mx_MatrixChat_wrapper {
     :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type="text"]::placeholder,
     :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type="search"]::placeholder,
     .mx_textinput input::placeholder {
@@ -107,7 +108,8 @@ $roomtopic-color: $secondary-content;
 }
 
 .mx_RoomSearch {
-    &.mx_RoomSearch_focused, &.mx_RoomSearch_hasQuery {
+    &.mx_RoomSearch_focused,
+    &.mx_RoomSearch_hasQuery {
         .mx_RoomSearch_clearButton {
             &::before {
                 background-color: $background !important;
@@ -150,7 +152,8 @@ $roomtopic-color: $secondary-content;
     #mx_SpotlightDialog_content {
         .mx_SpotlightDialog_recentlyViewed {
             .mx_SpotlightDialog_option {
-                &:hover, &[aria-selected="true"] {
+                &:hover,
+                &[aria-selected="true"] {
                     color: $background !important;
 
                     .mx_DecoratedRoomAvatar_icon::before {
@@ -164,7 +167,8 @@ $roomtopic-color: $secondary-content;
         .mx_SpotlightDialog_otherSearches,
         .mx_SpotlightDialog_hiddenResults {
             .mx_SpotlightDialog_option {
-                &:hover, &[aria-selected="true"] {
+                &:hover,
+                &[aria-selected="true"] {
                     background-color: $quinary-content !important;
                     color: $background !important;
 

@@ -18,7 +18,7 @@ limitations under the License.
 import React from "react";
 
 import SettingsStore from "../../../settings/SettingsStore";
-import { _t } from '../../../languageHandler';
+import { _t } from "../../../languageHandler";
 import ToggleSwitch from "./ToggleSwitch";
 import StyledCheckbox from "./StyledCheckbox";
 import { SettingLevel } from "../../../settings/SettingLevel";
@@ -80,49 +80,50 @@ export default class SettingsFlag extends React.Component<IProps, IState> {
 
         if (!canChange && this.props.hideIfCannotSet) return null;
 
-        const label = (this.props.label
-            ? _t(this.props.label)
-            : SettingsStore.getDisplayName(this.props.name, this.props.level)) ?? undefined;
+        const label =
+            (this.props.label
+                ? _t(this.props.label)
+                : SettingsStore.getDisplayName(this.props.name, this.props.level)) ?? undefined;
         const description = SettingsStore.getDescription(this.props.name);
         const shouldWarn = SettingsStore.shouldHaveWarning(this.props.name);
 
         let disabledDescription: JSX.Element | null = null;
         if (this.props.disabled && this.props.disabledDescription) {
-            disabledDescription = <div className="mx_SettingsFlag_microcopy">
-                { this.props.disabledDescription }
-            </div>;
+            disabledDescription = <div className="mx_SettingsFlag_microcopy">{this.props.disabledDescription}</div>;
         }
 
         if (this.props.useCheckbox) {
-            return <StyledCheckbox
-                checked={this.state.value}
-                onChange={this.checkBoxOnChange}
-                disabled={this.props.disabled || !canChange}
-            >
-                { label }
-            </StyledCheckbox>;
+            return (
+                <StyledCheckbox
+                    checked={this.state.value}
+                    onChange={this.checkBoxOnChange}
+                    disabled={this.props.disabled || !canChange}
+                >
+                    {label}
+                </StyledCheckbox>
+            );
         } else {
             return (
                 <div className="mx_SettingsFlag">
                     <label className="mx_SettingsFlag_label">
-                        <span className="mx_SettingsFlag_labelText">{ label }</span>
-                        { description && <div className="mx_SettingsFlag_microcopy">
-                            { shouldWarn
-                                ? _t(
-                                    "<w>WARNING:</w> <description/>", {},
-                                    {
-                                        "w": (sub) => (
-                                            <span className="mx_SettingsTab_microcopy_warning">
-                                                { sub }
-                                            </span>
-                                        ),
-                                        "description": description,
-                                    },
-                                )
-                                : description
-                            }
-                        </div> }
-                        { disabledDescription }
+                        <span className="mx_SettingsFlag_labelText">{label}</span>
+                        {description && (
+                            <div className="mx_SettingsFlag_microcopy">
+                                {shouldWarn
+                                    ? _t(
+                                          "<w>WARNING:</w> <description/>",
+                                          {},
+                                          {
+                                              w: (sub) => (
+                                                  <span className="mx_SettingsTab_microcopy_warning">{sub}</span>
+                                              ),
+                                              description: description,
+                                          },
+                                      )
+                                    : description}
+                            </div>
+                        )}
+                        {disabledDescription}
                     </label>
                     <ToggleSwitch
                         checked={this.state.value}

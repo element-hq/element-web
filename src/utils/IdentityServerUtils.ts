@@ -14,11 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { SERVICE_TYPES } from 'matrix-js-sdk/src/service-types';
+import { SERVICE_TYPES } from "matrix-js-sdk/src/service-types";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import SdkConfig from '../SdkConfig';
-import { MatrixClientPeg } from '../MatrixClientPeg';
+import SdkConfig from "../SdkConfig";
+import { MatrixClientPeg } from "../MatrixClientPeg";
 
 export function getDefaultIdentityServerUrl(): string {
     return SdkConfig.get("validated_server_config").isUrl;
@@ -45,10 +45,10 @@ export async function doesIdentityServerHaveTerms(fullUrl: string): Promise<bool
         }
     }
 
-    return terms && terms["policies"] && (Object.keys(terms["policies"]).length > 0);
+    return terms && terms["policies"] && Object.keys(terms["policies"]).length > 0;
 }
 
 export function doesAccountDataHaveIdentityServer(): boolean {
     const event = MatrixClientPeg.get().getAccountData("m.identity_server");
-    return event && event.getContent() && event.getContent()['base_url'];
+    return event && event.getContent() && event.getContent()["base_url"];
 }

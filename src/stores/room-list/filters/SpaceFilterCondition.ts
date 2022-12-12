@@ -50,10 +50,11 @@ export class SpaceFilterCondition extends EventEmitter implements IFilterConditi
         this.userIds = new Set(SpaceStore.instance.getSpaceFilteredUserIds(this.space));
 
         const beforeShowPeopleInSpace = this.showPeopleInSpace;
-        this.showPeopleInSpace = isMetaSpace(this.space[0]) ||
-            SettingsStore.getValue("Spaces.showPeopleInSpace", this.space);
+        this.showPeopleInSpace =
+            isMetaSpace(this.space[0]) || SettingsStore.getValue("Spaces.showPeopleInSpace", this.space);
 
-        if (forceUpdate ||
+        if (
+            forceUpdate ||
             beforeShowPeopleInSpace !== this.showPeopleInSpace ||
             setHasDiff(beforeRoomIds, this.roomIds) ||
             setHasDiff(beforeUserIds, this.userIds)
@@ -69,7 +70,7 @@ export class SpaceFilterCondition extends EventEmitter implements IFilterConditi
 
     public updateSpace(space: SpaceKey) {
         SpaceStore.instance.off(this.space, this.onStoreUpdate);
-        SpaceStore.instance.on(this.space = space, this.onStoreUpdate);
+        SpaceStore.instance.on((this.space = space), this.onStoreUpdate);
         this.onStoreUpdate(true); // initial update from the change to the space
     }
 

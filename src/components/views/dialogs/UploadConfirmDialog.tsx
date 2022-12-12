@@ -15,12 +15,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 import { filesize } from "filesize";
 
-import { Icon as FileIcon } from '../../../../res/img/feather-customised/files.svg';
-import { _t } from '../../../languageHandler';
-import { getBlobSafeMimeType } from '../../../utils/blobs';
+import { Icon as FileIcon } from "../../../../res/img/feather-customised/files.svg";
+import { _t } from "../../../languageHandler";
+import { getBlobSafeMimeType } from "../../../utils/blobs";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
 
@@ -45,9 +45,7 @@ export default class UploadConfirmDialog extends React.Component<IProps> {
         // Create a fresh `Blob` for previewing (even though `File` already is
         // one) so we can adjust the MIME type if needed.
         this.mimeType = getBlobSafeMimeType(props.file.type);
-        const blob = new Blob([props.file], { type:
-            this.mimeType,
-        });
+        const blob = new Blob([props.file], { type: this.mimeType });
         this.objectUrl = URL.createObjectURL(blob);
     }
 
@@ -70,15 +68,12 @@ export default class UploadConfirmDialog extends React.Component<IProps> {
     render() {
         let title: string;
         if (this.props.totalFiles > 1 && this.props.currentIndex !== undefined) {
-            title = _t(
-                "Upload files (%(current)s of %(total)s)",
-                {
-                    current: this.props.currentIndex + 1,
-                    total: this.props.totalFiles,
-                },
-            );
+            title = _t("Upload files (%(current)s of %(total)s)", {
+                current: this.props.currentIndex + 1,
+                total: this.props.totalFiles,
+            });
         } else {
-            title = _t('Upload files');
+            title = _t("Upload files");
         }
 
         const fileId = `mx-uploadconfirmdialog-${this.props.file.name}`;
@@ -86,31 +81,24 @@ export default class UploadConfirmDialog extends React.Component<IProps> {
         let placeholder: JSX.Element;
         if (this.mimeType.startsWith("image/")) {
             preview = (
-                <img
-                    className="mx_UploadConfirmDialog_imagePreview"
-                    src={this.objectUrl}
-                    aria-labelledby={fileId}
-                />
+                <img className="mx_UploadConfirmDialog_imagePreview" src={this.objectUrl} aria-labelledby={fileId} />
             );
         } else if (this.mimeType.startsWith("video/")) {
             preview = (
-                <video className="mx_UploadConfirmDialog_imagePreview" src={this.objectUrl} playsInline controls={false} />
-            );
-        } else {
-            placeholder = (
-                <FileIcon
-                    className="mx_UploadConfirmDialog_fileIcon"
-                    height={18}
-                    width={18}
+                <video
+                    className="mx_UploadConfirmDialog_imagePreview"
+                    src={this.objectUrl}
+                    playsInline
+                    controls={false}
                 />
             );
+        } else {
+            placeholder = <FileIcon className="mx_UploadConfirmDialog_fileIcon" height={18} width={18} />;
         }
 
         let uploadAllButton;
         if (this.props.currentIndex + 1 < this.props.totalFiles) {
-            uploadAllButton = <button onClick={this.onUploadAllClick}>
-                { _t("Upload all") }
-            </button>;
+            uploadAllButton = <button onClick={this.onUploadAllClick}>{_t("Upload all")}</button>;
         }
 
         return (
@@ -124,21 +112,22 @@ export default class UploadConfirmDialog extends React.Component<IProps> {
                 <div id="mx_Dialog_content">
                     <div className="mx_UploadConfirmDialog_previewOuter">
                         <div className="mx_UploadConfirmDialog_previewInner">
-                            { preview && <div>{ preview }</div> }
+                            {preview && <div>{preview}</div>}
                             <div id={fileId}>
-                                { placeholder }
-                                { this.props.file.name } ({ filesize(this.props.file.size) })
+                                {placeholder}
+                                {this.props.file.name} ({filesize(this.props.file.size)})
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <DialogButtons primaryButton={_t('Upload')}
+                <DialogButtons
+                    primaryButton={_t("Upload")}
                     hasCancel={false}
                     onPrimaryButtonClick={this.onUploadClick}
                     focus={true}
                 >
-                    { uploadAllButton }
+                    {uploadAllButton}
                 </DialogButtons>
             </BaseDialog>
         );

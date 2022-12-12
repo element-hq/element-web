@@ -20,19 +20,11 @@ interface VoiceBroadcastRecordingBodyProps {
 }
 
 export const VoiceBroadcastRecordingBody: React.FC<VoiceBroadcastRecordingBodyProps> = ({ recording }) => {
-    const {
-        live,
-        room,
-        sender,
-    } = useVoiceBroadcastRecording(recording);
+    const { live, room, sender } = useVoiceBroadcastRecording(recording);
 
     return (
         <div className="mx_VoiceBroadcastBody">
-            <VoiceBroadcastHeader
-                live={live ? "live" : "grey"}
-                microphoneLabel={sender?.name}
-                room={room}
-            />
+            <VoiceBroadcastHeader live={live ? "live" : "grey"} microphoneLabel={sender?.name} room={room} />
         </div>
     );
 };

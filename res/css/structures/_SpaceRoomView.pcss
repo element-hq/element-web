@@ -37,7 +37,7 @@ $SpaceRoomViewInnerWidth: 428px;
 
     &::before {
         position: absolute;
-        content: '';
+        content: "";
         width: 32px;
         height: 32px;
         top: 24px;
@@ -157,7 +157,7 @@ $SpaceRoomViewInnerWidth: 428px;
             /* XXX: Temporary for the Spaces release only */
             .mx_SpaceFeedbackPrompt {
                 padding: 7px; /* 8px - 1px border */
-                border: 1px solid rgba($primary-content, .1);
+                border: 1px solid rgba($primary-content, 0.1);
                 border-radius: 8px;
                 width: max-content;
                 height: fit-content;
@@ -236,7 +236,7 @@ $SpaceRoomViewInnerWidth: 428px;
                         width: 16px;
                         background: #fff; /* white icon fill */
                         mask-size: 16px;
-                        mask-image: url('$(res)/img/element-icons/room/invite.svg');
+                        mask-image: url("$(res)/img/element-icons/room/invite.svg");
                     }
                 }
 
@@ -251,7 +251,7 @@ $SpaceRoomViewInnerWidth: 428px;
                         width: 24px;
                         background: $tertiary-content;
                         mask-size: contain;
-                        mask-image: url('$(res)/img/element-icons/settings.svg');
+                        mask-image: url("$(res)/img/element-icons/settings.svg");
                     }
                 }
             }
@@ -277,11 +277,11 @@ $SpaceRoomViewInnerWidth: 428px;
         }
 
         .mx_SpaceRoomView_privateScope_justMeButton::before {
-            mask-image: url('$(res)/img/element-icons/room/members.svg');
+            mask-image: url("$(res)/img/element-icons/room/members.svg");
         }
 
         .mx_SpaceRoomView_privateScope_meAndMyTeammatesButton::before {
-            mask-image: url('$(res)/img/element-icons/group-members.svg');
+            mask-image: url("$(res)/img/element-icons/group-members.svg");
         }
     }
 
@@ -335,7 +335,7 @@ $SpaceRoomViewInnerWidth: 428px;
                 color: $accent;
 
                 &::before {
-                    mask-image: url('$(res)/img/element-icons/room/invite.svg');
+                    mask-image: url("$(res)/img/element-icons/room/invite.svg");
                     background-color: $accent;
                 }
             }

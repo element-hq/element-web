@@ -25,9 +25,7 @@ import React from "react";
 export function jsxJoin(array: Array<string | JSX.Element>, joiner?: string | JSX.Element): JSX.Element {
     const newArray = [];
     array.forEach((element, index) => {
-        newArray.push(element, (index === array.length - 1) ? null : joiner);
+        newArray.push(element, index === array.length - 1 ? null : joiner);
     });
-    return (
-        <span>{ newArray }</span>
-    );
+    return <span>{newArray}</span>;
 }

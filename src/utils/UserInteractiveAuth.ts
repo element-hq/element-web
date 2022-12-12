@@ -25,13 +25,13 @@ type FunctionWithUIA<R, A> = (auth?: IAuthData, ...args: A[]) => Promise<UIAResp
 export function wrapRequestWithDialog<R, A = any>(
     requestFunction: FunctionWithUIA<R, A>,
     opts: Omit<InteractiveAuthDialogProps, "makeRequest" | "onFinished">,
-): ((...args: A[]) => Promise<R>) {
-    return async function(...args): Promise<R> {
+): (...args: A[]) => Promise<R> {
+    return async function (...args): Promise<R> {
         return new Promise((resolve, reject) => {
             const boundFunction = requestFunction.bind(opts.matrixClient) as FunctionWithUIA<R, A>;
             boundFunction(undefined, ...args)
                 .then((res) => resolve(res as R))
-                .catch(error => {
+                .catch((error) => {
                     if (error.httpStatus !== 401 || !error.data?.flows) {
                         // doesn't look like an interactive-auth failure
                         return reject(error);

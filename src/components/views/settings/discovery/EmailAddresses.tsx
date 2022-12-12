@@ -15,14 +15,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 import { IThreepid } from "matrix-js-sdk/src/@types/threepids";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../../languageHandler";
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
-import Modal from '../../../../Modal';
-import AddThreepid from '../../../../AddThreepid';
+import Modal from "../../../../Modal";
+import AddThreepid from "../../../../AddThreepid";
 import ErrorDialog from "../../dialogs/ErrorDialog";
 import AccessibleButton from "../../elements/AccessibleButton";
 
@@ -106,7 +106,7 @@ export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddr
             });
             Modal.createDialog(ErrorDialog, {
                 title: errorTitle,
-                description: ((err && err.message) ? err.message : _t("Operation failed")),
+                description: err && err.message ? err.message : _t("Operation failed"),
             });
         }
     }
@@ -141,7 +141,7 @@ export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddr
             });
             Modal.createDialog(ErrorDialog, {
                 title: errorTitle,
-                description: ((err && err.message) ? err.message : _t("Operation failed")),
+                description: err && err.message ? err.message : _t("Operation failed"),
             });
         }
     }
@@ -180,17 +180,18 @@ export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddr
             });
         } catch (err) {
             this.setState({ continueDisabled: false });
-            if (err.errcode === 'M_THREEPID_AUTH_FAILED') {
+            if (err.errcode === "M_THREEPID_AUTH_FAILED") {
                 Modal.createDialog(ErrorDialog, {
                     title: _t("Your email address hasn't been verified yet"),
-                    description: _t("Click the link in the email you received to verify " +
-                        "and then click continue again."),
+                    description: _t(
+                        "Click the link in the email you received to verify " + "and then click continue again.",
+                    ),
                 });
             } else {
                 logger.error("Unable to verify email address: " + err);
                 Modal.createDialog(ErrorDialog, {
                     title: _t("Unable to verify email address."),
-                    description: ((err && err.message) ? err.message : _t("Operation failed")),
+                    description: err && err.message ? err.message : _t("Operation failed"),
                 });
             }
         }
@@ -202,39 +203,45 @@ export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddr
 
         let status;
         if (verifying) {
-            status = <span>
-                { _t("Verify the link in your inbox") }
+            status = (
+                <span>
+                    {_t("Verify the link in your inbox")}
+                    <AccessibleButton
+                        className="mx_ExistingEmailAddress_confirmBtn"
+                        kind="primary_sm"
+                        onClick={this.onContinueClick}
+                        disabled={this.state.continueDisabled}
+                    >
+                        {_t("Complete")}
+                    </AccessibleButton>
+                </span>
+            );
+        } else if (bound) {
+            status = (
+                <AccessibleButton
+                    className="mx_ExistingEmailAddress_confirmBtn"
+                    kind="danger_sm"
+                    onClick={this.onRevokeClick}
+                >
+                    {_t("Revoke")}
+                </AccessibleButton>
+            );
+        } else {
+            status = (
                 <AccessibleButton
                     className="mx_ExistingEmailAddress_confirmBtn"
                     kind="primary_sm"
-                    onClick={this.onContinueClick}
-                    disabled={this.state.continueDisabled}
+                    onClick={this.onShareClick}
                 >
-                    { _t("Complete") }
+                    {_t("Share")}
                 </AccessibleButton>
-            </span>;
-        } else if (bound) {
-            status = <AccessibleButton
-                className="mx_ExistingEmailAddress_confirmBtn"
-                kind="danger_sm"
-                onClick={this.onRevokeClick}
-            >
-                { _t("Revoke") }
-            </AccessibleButton>;
-        } else {
-            status = <AccessibleButton
-                className="mx_ExistingEmailAddress_confirmBtn"
-                kind="primary_sm"
-                onClick={this.onShareClick}
-            >
-                { _t("Share") }
-            </AccessibleButton>;
+            );
         }
 
         return (
             <div className="mx_ExistingEmailAddress">
-                <span className="mx_ExistingEmailAddress_email">{ address }</span>
-                { status }
+                <span className="mx_ExistingEmailAddress_email">{address}</span>
+                {status}
             </div>
         );
     }
@@ -251,15 +258,13 @@ export default class EmailAddresses extends React.Component<IProps> {
                 return <EmailAddress email={e} key={e.address} />;
             });
         } else {
-            content = <span className="mx_SettingsTab_subsectionText">
-                { _t("Discovery options will appear once you have added an email above.") }
-            </span>;
+            content = (
+                <span className="mx_SettingsTab_subsectionText">
+                    {_t("Discovery options will appear once you have added an email above.")}
+                </span>
+            );
         }
 
-        return (
-            <div className="mx_EmailAddresses">
-                { content }
-            </div>
-        );
+        return <div className="mx_EmailAddresses">{content}</div>;
     }
 }

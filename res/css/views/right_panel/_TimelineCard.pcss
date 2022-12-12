@@ -37,7 +37,7 @@ limitations under the License.
             padding-right: 11px;
 
             &::after {
-                content: '';
+                content: "";
                 display: block;
                 position: absolute;
                 left: 0;
@@ -171,13 +171,15 @@ limitations under the License.
     }
 
     .mx_GenericEventListSummary_unstyledList, /* RR next to a message on the event list summary */
-    .mx_RoomView_MessageList {                /* RR next to a message on the messsge list */
+    .mx_RoomView_MessageList {
+        /* RR next to a message on the messsge list */
         .mx_EventTile[data-layout="bubble"] {
             .mx_ReadReceiptGroup {
                 /* 6px: scroll bar width (magic number) */
                 /* stylelint-disable-next-line declaration-colon-space-after */
-                inset-inline-end:
-                    calc(-1 * var(--ReadReceiptGroup_EventBubbleTile-spacing-end) + $container-gap-width + 6px);
+                inset-inline-end: calc(
+                    -1 * var(--ReadReceiptGroup_EventBubbleTile-spacing-end) + $container-gap-width + 6px
+                );
             }
 
             &.mx_EventTile_info {

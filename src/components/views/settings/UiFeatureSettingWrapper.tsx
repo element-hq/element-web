@@ -14,17 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 
-import SettingsStore from '../../../settings/SettingsStore';
-import { UIFeature } from '../../../settings/UIFeature';
+import SettingsStore from "../../../settings/SettingsStore";
+import { UIFeature } from "../../../settings/UIFeature";
 
 interface IProps {
     uiFeature: UIFeature;
 }
 const UiFeatureSettingWrapper: React.FC<IProps> = ({ children, uiFeature }) => {
     const settingValue = SettingsStore.getValue(uiFeature);
-    return settingValue && children ? <>{ children }</> : null;
+    return settingValue && children ? <>{children}</> : null;
 };
 
 export default UiFeatureSettingWrapper;

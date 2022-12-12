@@ -33,7 +33,7 @@ const moveLexicographicallyTest = (
         zipped[index][1] = order;
     });
 
-    const newOrders = sortBy(zipped, i => i[1]);
+    const newOrders = sortBy(zipped, (i) => i[1]);
     expect(newOrders[toIndex][0]).toBe(fromIndex);
     expect(ops).toHaveLength(expectedChanges);
 };
@@ -64,73 +64,33 @@ describe("stringOrderField", () => {
         });
 
         it("should work when all orders are undefined", () => {
-            moveLexicographicallyTest(
-                [undefined, undefined, undefined, undefined, undefined, undefined],
-                4,
-                1,
-                2,
-            );
+            moveLexicographicallyTest([undefined, undefined, undefined, undefined, undefined, undefined], 4, 1, 2);
         });
 
         it("should work when moving to end and all orders are undefined", () => {
-            moveLexicographicallyTest(
-                [undefined, undefined, undefined, undefined, undefined, undefined],
-                1,
-                4,
-                5,
-            );
+            moveLexicographicallyTest([undefined, undefined, undefined, undefined, undefined, undefined], 1, 4, 5);
         });
 
         it("should work when moving left and some orders are undefined", () => {
-            moveLexicographicallyTest(
-                ["a", "c", "e", undefined, undefined, undefined],
-                5,
-                2,
-                1,
-            );
+            moveLexicographicallyTest(["a", "c", "e", undefined, undefined, undefined], 5, 2, 1);
 
-            moveLexicographicallyTest(
-                ["a", "a", "e", undefined, undefined, undefined],
-                5,
-                1,
-                2,
-            );
+            moveLexicographicallyTest(["a", "a", "e", undefined, undefined, undefined], 5, 1, 2);
         });
 
         it("should work moving to the start when all is undefined", () => {
-            moveLexicographicallyTest(
-                [undefined, undefined, undefined, undefined],
-                2,
-                0,
-                1,
-            );
+            moveLexicographicallyTest([undefined, undefined, undefined, undefined], 2, 0, 1);
         });
 
         it("should work moving to the end when all is undefined", () => {
-            moveLexicographicallyTest(
-                [undefined, undefined, undefined, undefined],
-                1,
-                3,
-                4,
-            );
+            moveLexicographicallyTest([undefined, undefined, undefined, undefined], 1, 3, 4);
         });
 
         it("should work moving left when all is undefined", () => {
-            moveLexicographicallyTest(
-                [undefined, undefined, undefined, undefined, undefined, undefined],
-                4,
-                1,
-                2,
-            );
+            moveLexicographicallyTest([undefined, undefined, undefined, undefined, undefined, undefined], 4, 1, 2);
         });
 
         it("should work moving right when all is undefined", () => {
-            moveLexicographicallyTest(
-                [undefined, undefined, undefined, undefined],
-                1,
-                2,
-                3,
-            );
+            moveLexicographicallyTest([undefined, undefined, undefined, undefined], 1, 2, 3);
         });
 
         it("should work moving more right when all is undefined", () => {
@@ -143,12 +103,7 @@ describe("stringOrderField", () => {
         });
 
         it("should work moving left when right is undefined", () => {
-            moveLexicographicallyTest(
-                ["20", undefined, undefined, undefined, undefined, undefined],
-                4,
-                2,
-                2,
-            );
+            moveLexicographicallyTest(["20", undefined, undefined, undefined, undefined, undefined], 4, 2, 2);
         });
 
         it("should work moving right when right is undefined", () => {
@@ -161,49 +116,23 @@ describe("stringOrderField", () => {
         });
 
         it("should work moving left when right is defined", () => {
-            moveLexicographicallyTest(
-                ["10", "20", "30", "40", undefined, undefined],
-                3,
-                1,
-                1,
-            );
+            moveLexicographicallyTest(["10", "20", "30", "40", undefined, undefined], 3, 1, 1);
         });
 
         it("should work moving right when right is defined", () => {
-            moveLexicographicallyTest(
-                ["10", "20", "30", "40", "50", undefined],
-                1,
-                3,
-                1,
-            );
+            moveLexicographicallyTest(["10", "20", "30", "40", "50", undefined], 1, 3, 1);
         });
 
         it("should work moving left when all is defined", () => {
-            moveLexicographicallyTest(
-                ["11", "13", "15", "17", "19"],
-                2,
-                1,
-                1,
-            );
+            moveLexicographicallyTest(["11", "13", "15", "17", "19"], 2, 1, 1);
         });
 
         it("should work moving right when all is defined", () => {
-            moveLexicographicallyTest(
-                ["11", "13", "15", "17", "19"],
-                1,
-                2,
-                1,
-            );
+            moveLexicographicallyTest(["11", "13", "15", "17", "19"], 1, 2, 1);
         });
 
         it("should work moving left into no left space", () => {
-            moveLexicographicallyTest(
-                ["11", "12", "13", "14", "19"],
-                3,
-                1,
-                2,
-                2,
-            );
+            moveLexicographicallyTest(["11", "12", "13", "14", "19"], 3, 1, 2, 2);
 
             moveLexicographicallyTest(
                 [
@@ -223,13 +152,7 @@ describe("stringOrderField", () => {
         });
 
         it("should work moving right into no right space", () => {
-            moveLexicographicallyTest(
-                ["15", "16", "17", "18", "19"],
-                1,
-                3,
-                3,
-                2,
-            );
+            moveLexicographicallyTest(["15", "16", "17", "18", "19"], 1, 3, 3, 2);
 
             moveLexicographicallyTest(
                 [
@@ -247,30 +170,13 @@ describe("stringOrderField", () => {
         });
 
         it("should work moving right into no left space", () => {
-            moveLexicographicallyTest(
-                ["11", "12", "13", "14", "15", "16", undefined],
-                1,
-                3,
-                3,
-            );
+            moveLexicographicallyTest(["11", "12", "13", "14", "15", "16", undefined], 1, 3, 3);
 
-            moveLexicographicallyTest(
-                ["0", "1", "2", "3", "4", "5"],
-                1,
-                3,
-                3,
-                1,
-            );
+            moveLexicographicallyTest(["0", "1", "2", "3", "4", "5"], 1, 3, 3, 1);
         });
 
         it("should work moving left into no right space", () => {
-            moveLexicographicallyTest(
-                ["15", "16", "17", "18", "19"],
-                4,
-                3,
-                4,
-                2,
-            );
+            moveLexicographicallyTest(["15", "16", "17", "18", "19"], 4, 3, 4, 2);
 
             moveLexicographicallyTest(
                 [
@@ -288,4 +194,3 @@ describe("stringOrderField", () => {
         });
     });
 });
-

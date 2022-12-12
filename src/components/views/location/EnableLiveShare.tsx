@@ -14,49 +14,49 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-import { _t } from '../../../languageHandler';
-import StyledLiveBeaconIcon from '../beacon/StyledLiveBeaconIcon';
-import AccessibleButton from '../elements/AccessibleButton';
-import LabelledToggleSwitch from '../elements/LabelledToggleSwitch';
-import Heading from '../typography/Heading';
+import { _t } from "../../../languageHandler";
+import StyledLiveBeaconIcon from "../beacon/StyledLiveBeaconIcon";
+import AccessibleButton from "../elements/AccessibleButton";
+import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
+import Heading from "../typography/Heading";
 
 interface Props {
     onSubmit: () => void;
 }
 
-export const EnableLiveShare: React.FC<Props> = ({
-    onSubmit,
-}) => {
+export const EnableLiveShare: React.FC<Props> = ({ onSubmit }) => {
     const [isEnabled, setEnabled] = useState(false);
     return (
-        <div data-test-id='location-picker-enable-live-share' className='mx_EnableLiveShare'>
-            <StyledLiveBeaconIcon className='mx_EnableLiveShare_icon' />
-            <Heading className='mx_EnableLiveShare_heading' size='h3'>{ _t('Live location sharing') }</Heading>
-            <p className='mx_EnableLiveShare_description'>
-                { _t(
-                    'Please note: this is a labs feature using a temporary implementation. ' +
-                    'This means you will not be able to delete your location history, ' +
-                    'and advanced users will be able to see your location history ' +
-                    'even after you stop sharing your live location with this room.',
-                ) }
+        <div data-test-id="location-picker-enable-live-share" className="mx_EnableLiveShare">
+            <StyledLiveBeaconIcon className="mx_EnableLiveShare_icon" />
+            <Heading className="mx_EnableLiveShare_heading" size="h3">
+                {_t("Live location sharing")}
+            </Heading>
+            <p className="mx_EnableLiveShare_description">
+                {_t(
+                    "Please note: this is a labs feature using a temporary implementation. " +
+                        "This means you will not be able to delete your location history, " +
+                        "and advanced users will be able to see your location history " +
+                        "even after you stop sharing your live location with this room.",
+                )}
             </p>
             <LabelledToggleSwitch
-                data-test-id='enable-live-share-toggle'
+                data-test-id="enable-live-share-toggle"
                 value={isEnabled}
                 onChange={setEnabled}
-                label={_t('Enable live location sharing')}
+                label={_t("Enable live location sharing")}
             />
             <AccessibleButton
-                data-test-id='enable-live-share-submit'
-                className='mx_EnableLiveShare_button'
-                element='button'
-                kind='primary'
+                data-test-id="enable-live-share-submit"
+                className="mx_EnableLiveShare_button"
+                element="button"
+                kind="primary"
                 onClick={onSubmit}
                 disabled={!isEnabled}
             >
-                { _t('OK') }
+                {_t("OK")}
             </AccessibleButton>
         </div>
     );

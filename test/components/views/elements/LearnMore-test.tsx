@@ -14,44 +14,41 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import { fireEvent, render } from '@testing-library/react';
+import React from "react";
+import { fireEvent, render } from "@testing-library/react";
 
-import LearnMore from '../../../../src/components/views/elements/LearnMore';
-import Modal from '../../../../src/Modal';
-import InfoDialog from '../../../../src/components/views/dialogs/InfoDialog';
+import LearnMore from "../../../../src/components/views/elements/LearnMore";
+import Modal from "../../../../src/Modal";
+import InfoDialog from "../../../../src/components/views/dialogs/InfoDialog";
 
-describe('<LearnMore />', () => {
+describe("<LearnMore />", () => {
     const defaultProps = {
-        title: 'Test',
-        description: 'test test test',
-        ['data-testid']: 'testid',
+        title: "Test",
+        description: "test test test",
+        ["data-testid"]: "testid",
     };
-    const getComponent = (props = {}) =>
-        (<LearnMore {...defaultProps} {...props} />);
+    const getComponent = (props = {}) => <LearnMore {...defaultProps} {...props} />;
 
-    const modalSpy = jest.spyOn(Modal, 'createDialog').mockReturnValue(undefined);
+    const modalSpy = jest.spyOn(Modal, "createDialog").mockReturnValue(undefined);
 
     beforeEach(() => {
         jest.clearAllMocks();
     });
 
-    it('renders button', () => {
+    it("renders button", () => {
         const { container } = render(getComponent());
         expect(container).toMatchSnapshot();
     });
 
-    it('opens modal on click', async () => {
+    it("opens modal on click", async () => {
         const { getByTestId } = render(getComponent());
-        fireEvent.click(getByTestId('testid'));
+        fireEvent.click(getByTestId("testid"));
 
-        expect(modalSpy).toHaveBeenCalledWith(
-            InfoDialog,
-            {
-                button: 'Got it',
-                description: defaultProps.description,
-                hasCloseButton: true,
-                title: defaultProps.title,
-            });
+        expect(modalSpy).toHaveBeenCalledWith(InfoDialog, {
+            button: "Got it",
+            description: defaultProps.description,
+            hasCloseButton: true,
+            title: defaultProps.title,
+        });
     });
 });

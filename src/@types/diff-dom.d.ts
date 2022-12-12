@@ -26,8 +26,7 @@ declare module "diff-dom" {
         newValue: string;
     }
 
-    interface IOpts {
-    }
+    interface IOpts {}
 
     export class DiffDOM {
         public constructor(opts?: IOpts);

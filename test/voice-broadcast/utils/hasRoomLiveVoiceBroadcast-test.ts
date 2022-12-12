@@ -31,16 +31,8 @@ describe("hasRoomLiveVoiceBroadcast", () => {
     let room: Room;
     let expectedEvent: MatrixEvent | null = null;
 
-    const addVoiceBroadcastInfoEvent = (
-        state: VoiceBroadcastInfoState,
-        sender: string,
-    ): MatrixEvent => {
-        const infoEvent = mkVoiceBroadcastInfoStateEvent(
-            room.roomId,
-            state,
-            sender,
-            "ASD123",
-        );
+    const addVoiceBroadcastInfoEvent = (state: VoiceBroadcastInfoState, sender: string): MatrixEvent => {
+        const infoEvent = mkVoiceBroadcastInfoStateEvent(room.roomId, state, sender, "ASD123");
         room.currentState.setStateEvents([infoEvent]);
         return infoEvent;
     };

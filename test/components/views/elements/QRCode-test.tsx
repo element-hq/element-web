@@ -24,13 +24,13 @@ describe("<QRCode />", () => {
 
     it("renders a QR with defaults", async () => {
         const { container, getAllByAltText } = render(<QRCode data="asd" />);
-        await waitFor(() => getAllByAltText('QR Code').length === 1);
+        await waitFor(() => getAllByAltText("QR Code").length === 1);
         expect(container).toMatchSnapshot();
     });
 
     it("renders a QR with high error correction level", async () => {
         const { container, getAllByAltText } = render(<QRCode data="asd" errorCorrectionLevel="high" />);
-        await waitFor(() => getAllByAltText('QR Code').length === 1);
+        await waitFor(() => getAllByAltText("QR Code").length === 1);
         expect(container).toMatchSnapshot();
     });
 });

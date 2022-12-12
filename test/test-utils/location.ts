@@ -20,38 +20,35 @@ import { MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
 
 let id = 1;
 export const makeLegacyLocationEvent = (geoUri: string): MatrixEvent => {
-    return new MatrixEvent(
-        {
-            "event_id": `$${++id}`,
-            "type": EventType.RoomMessage,
-            "content": {
-                "body": "Something about where I am",
-                "msgtype": "m.location",
-                "geo_uri": geoUri,
-            },
+    return new MatrixEvent({
+        event_id: `$${++id}`,
+        type: EventType.RoomMessage,
+        content: {
+            body: "Something about where I am",
+            msgtype: "m.location",
+            geo_uri: geoUri,
         },
-    );
+    });
 };
 
 export const makeLocationEvent = (geoUri: string, assetType?: LocationAssetType): MatrixEvent => {
-    return new MatrixEvent(
-        {
-            "event_id": `$${++id}`,
-            "type": M_LOCATION.name,
-            "content": makeLocationContent(
-                `Found at ${geoUri} at 2021-12-21T12:22+0000`,
-                geoUri,
-                252523,
-                "Human-readable label",
-                assetType,
-            ),
-        },
-    );
+    return new MatrixEvent({
+        event_id: `$${++id}`,
+        type: M_LOCATION.name,
+        content: makeLocationContent(
+            `Found at ${geoUri} at 2021-12-21T12:22+0000`,
+            geoUri,
+            252523,
+            "Human-readable label",
+            assetType,
+        ),
+    });
 };
 
 // https://developer.mozilla.org/en-US/docs/Web/API/GeolocationPositionError
 export const getMockGeolocationPositionError = (code: number, message: string): GeolocationPositionError => ({
-    code, message,
+    code,
+    message,
     PERMISSION_DENIED: 1,
     POSITION_UNAVAILABLE: 2,
     TIMEOUT: 3,

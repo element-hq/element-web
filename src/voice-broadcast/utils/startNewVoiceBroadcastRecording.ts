@@ -51,10 +51,7 @@ const startBroadcast = async (
 
         if (voiceBroadcastEvent?.getId() === result.event_id) {
             room.off(RoomStateEvent.Events, onRoomStateEvents);
-            const recording = new VoiceBroadcastRecording(
-                voiceBroadcastEvent,
-                client,
-            );
+            const recording = new VoiceBroadcastRecording(voiceBroadcastEvent, client);
             recordingsStore.setCurrent(recording);
             recording.start();
             resolve(recording);

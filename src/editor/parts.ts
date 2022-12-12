@@ -21,11 +21,7 @@ import { MatrixClient } from "matrix-js-sdk/src/client";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { Room } from "matrix-js-sdk/src/models/room";
 
-import AutocompleteWrapperModel, {
-    GetAutocompleterComponent,
-    UpdateCallback,
-    UpdateQuery,
-} from "./autocomplete";
+import AutocompleteWrapperModel, { GetAutocompleterComponent, UpdateCallback, UpdateQuery } from "./autocomplete";
 import { unicodeToShortcode } from "../HtmlUtils";
 import * as Avatar from "../Avatar";
 import defaultDispatcher from "../dispatcher/dispatcher";
@@ -117,7 +113,7 @@ abstract class BasePart {
     public remove(offset: number, len: number): string | undefined {
         // validate
         const strWithRemoval = this.text.slice(0, offset) + this.text.slice(offset + len);
-        for (let i = offset; i < (len + offset); ++i) {
+        for (let i = offset; i < len + offset; ++i) {
             const chr = this.text.charAt(i);
             if (!this.acceptsRemoval(i, chr)) {
                 return strWithRemoval;
@@ -216,8 +212,7 @@ abstract class PlainBasePart extends BasePart {
 
             // or split if the previous character is a space
             // or if it is a + and this is a :
-            return this._text[offset - 1] !== " " &&
-                (this._text[offset - 1] !== "+" || chr !== ":");
+            return this._text[offset - 1] !== " " && (this._text[offset - 1] !== "+" || chr !== ":");
         }
         return true;
     }
@@ -262,7 +257,7 @@ export abstract class PillPart extends BasePart implements IPillPart {
     }
 
     protected acceptsRemoval(position: number, chr: string): boolean {
-        return position !== 0;  //if you remove initial # or @, pill should become plain
+        return position !== 0; //if you remove initial # or @, pill should become plain
     }
 
     public toDOMNode(): Node {
@@ -291,10 +286,12 @@ export abstract class PillPart extends BasePart implements IPillPart {
     }
 
     public canUpdateDOMNode(node: HTMLElement): boolean {
-        return node.nodeType === Node.ELEMENT_NODE &&
-               node.nodeName === "SPAN" &&
-               node.childNodes.length === 1 &&
-               node.childNodes[0].nodeType === Node.TEXT_NODE;
+        return (
+            node.nodeType === Node.ELEMENT_NODE &&
+            node.nodeName === "SPAN" &&
+            node.childNodes.length === 1 &&
+            node.childNodes[0].nodeType === Node.TEXT_NODE
+        );
     }
 
     // helper method for subclasses
@@ -519,12 +516,7 @@ class PillCandidatePart extends PlainBasePart implements IPillCandidatePart {
 export function getAutoCompleteCreator(getAutocompleterComponent: GetAutocompleterComponent, updateQuery: UpdateQuery) {
     return (partCreator: PartCreator) => {
         return (updateCallback: UpdateCallback) => {
-            return new AutocompleteWrapperModel(
-                updateCallback,
-                getAutocompleterComponent,
-                updateQuery,
-                partCreator,
-            );
+            return new AutocompleteWrapperModel(updateCallback, getAutocompleterComponent, updateQuery, partCreator);
         };
     };
 }
@@ -615,8 +607,7 @@ export class PartCreator {
             room = this.client.getRoom(roomId || alias);
         } else {
             room = this.client.getRooms().find((r) => {
-                return r.getCanonicalAlias() === alias ||
-                       r.getAltAliases().includes(alias);
+                return r.getCanonicalAlias() === alias || r.getAltAliases().includes(alias);
             });
         }
         return new RoomPillPart(alias, room ? room.name : alias, room);

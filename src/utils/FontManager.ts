@@ -29,13 +29,15 @@ function safariVersionCheck(ua: string): boolean {
         if (safariVersionMatch) {
             const macOSVersionStr = safariVersionMatch[1];
             const safariVersionStr = safariVersionMatch[2];
-            const macOSVersion = macOSVersionStr.split("_").map(n => parseInt(n, 10));
-            const safariVersion = safariVersionStr.split(".").map(n => parseInt(n, 10));
+            const macOSVersion = macOSVersionStr.split("_").map((n) => parseInt(n, 10));
+            const safariVersion = safariVersionStr.split(".").map((n) => parseInt(n, 10));
             const colrFontSupported = macOSVersion[0] >= 10 && macOSVersion[1] >= 14 && safariVersion[0] >= 12;
             // https://www.colorfonts.wtf/ states safari supports COLR fonts from this version on
-            logger.log(`COLR support on Safari requires macOS 10.14 and Safari 12, ` +
-                `detected Safari ${safariVersionStr} on macOS ${macOSVersionStr}, ` +
-                `COLR supported: ${colrFontSupported}`);
+            logger.log(
+                `COLR support on Safari requires macOS 10.14 and Safari 12, ` +
+                    `detected Safari ${safariVersionStr} on macOS ${macOSVersionStr}, ` +
+                    `COLR supported: ${colrFontSupported}`,
+            );
             return colrFontSupported;
         }
     } catch (err) {
@@ -66,11 +68,12 @@ async function isColrFontSupported(): Promise<boolean> {
     }
 
     try {
-        const canvas = document.createElement('canvas');
-        const context = canvas.getContext('2d');
+        const canvas = document.createElement("canvas");
+        const context = canvas.getContext("2d");
         const img = new Image();
         // eslint-disable-next-line
-        const fontCOLR = 'd09GRgABAAAAAAKAAAwAAAAAAowAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABDT0xSAAACVAAAABYAAAAYAAIAJUNQQUwAAAJsAAAAEgAAABLJAAAQT1MvMgAAAYAAAAA6AAAAYBfxJ0pjbWFwAAABxAAAACcAAAAsAAzpM2dseWYAAAH0AAAAGgAAABoNIh0kaGVhZAAAARwAAAAvAAAANgxLumdoaGVhAAABTAAAABUAAAAkCAEEAmhtdHgAAAG8AAAABgAAAAYEAAAAbG9jYQAAAewAAAAGAAAABgANAABtYXhwAAABZAAAABsAAAAgAg4AHW5hbWUAAAIQAAAAOAAAAD4C5wsecG9zdAAAAkgAAAAMAAAAIAADAAB4AWNgZGAAYQ5+qdB4fpuvDNIsDCBwaQGTAIi+VlscBaJZGMDiHAxMIAoAtjIF/QB4AWNgZGBgYQACOAkUQQWMAAGRABAAAAB4AWNgZGBgYGJgAdMMUJILJMQgAWICAAH3AC4AeAFjYGFhYJzAwMrAwDST6QwDA0M/hGZ8zWDMyMmAChgFkDgKQMBw4CXDSwYWEBdIYgAFBgYA/8sIdAAABAAAAAAAAAB4AWNgYGBkYAZiBgYeBhYGBSDNAoRA/kuG//8hpDgjWJ4BAFVMBiYAAAAAAAANAAAAAQAAAAAEAAQAAAMAABEhESEEAPwABAD8AAAAeAEtxgUNgAAAAMHHIQTShTlOAty9/4bf7AARCwlBNhBw4L/43qXjYGUmf19TMuLcj/BJL3XfBg54AWNgZsALAAB9AAR4AWNgYGAEYj4gFgGygGwICQACOwAoAAAAAAABAAEAAQAAAA4AAAAAyP8AAA==';
+        const fontCOLR =
+            "d09GRgABAAAAAAKAAAwAAAAAAowAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABDT0xSAAACVAAAABYAAAAYAAIAJUNQQUwAAAJsAAAAEgAAABLJAAAQT1MvMgAAAYAAAAA6AAAAYBfxJ0pjbWFwAAABxAAAACcAAAAsAAzpM2dseWYAAAH0AAAAGgAAABoNIh0kaGVhZAAAARwAAAAvAAAANgxLumdoaGVhAAABTAAAABUAAAAkCAEEAmhtdHgAAAG8AAAABgAAAAYEAAAAbG9jYQAAAewAAAAGAAAABgANAABtYXhwAAABZAAAABsAAAAgAg4AHW5hbWUAAAIQAAAAOAAAAD4C5wsecG9zdAAAAkgAAAAMAAAAIAADAAB4AWNgZGAAYQ5+qdB4fpuvDNIsDCBwaQGTAIi+VlscBaJZGMDiHAxMIAoAtjIF/QB4AWNgZGBgYQACOAkUQQWMAAGRABAAAAB4AWNgZGBgYGJgAdMMUJILJMQgAWICAAH3AC4AeAFjYGFhYJzAwMrAwDST6QwDA0M/hGZ8zWDMyMmAChgFkDgKQMBw4CXDSwYWEBdIYgAFBgYA/8sIdAAABAAAAAAAAAB4AWNgYGBkYAZiBgYeBhYGBSDNAoRA/kuG//8hpDgjWJ4BAFVMBiYAAAAAAAANAAAAAQAAAAAEAAQAAAMAABEhESEEAPwABAD8AAAAeAEtxgUNgAAAAMHHIQTShTlOAty9/4bf7AARCwlBNhBw4L/43qXjYGUmf19TMuLcj/BJL3XfBg54AWNgZsALAAB9AAR4AWNgYGAEYj4gFgGygGwICQACOwAoAAAAAAABAAEAAQAAAA4AAAAAyP8AAA==";
         const svg = `
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="100" style="background:#fff;fill:#000;">
             <style type="text/css">
@@ -86,13 +89,13 @@ async function isColrFontSupported(): Promise<boolean> {
         canvas.width = 20;
         canvas.height = 100;
 
-        img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+        img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
 
         logger.log("Waiting for COLR SVG to load");
-        await new Promise(resolve => img.onload = resolve);
+        await new Promise((resolve) => (img.onload = resolve));
         logger.log("Drawing canvas to detect COLR support");
         context.drawImage(img, 0, 0);
-        const colrFontSupported = (context.getImageData(10, 10, 1, 1).data[0] === 200);
+        const colrFontSupported = context.getImageData(10, 10, 1, 1).data[0] === 200;
         logger.log("Canvas check revealed COLR is supported? " + colrFontSupported);
         return colrFontSupported;
     } catch (e) {
@@ -124,4 +127,3 @@ export async function fixupColorFonts(): Promise<void> {
     }
     // ...and if SBIX is not supported, the browser will fall back to one of the native fonts specified.
 }
-

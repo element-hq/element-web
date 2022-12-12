@@ -60,18 +60,20 @@ const validateEventContent = withValidation<any, Error | undefined>({
             return e;
         }
     },
-    rules: [{
-        key: "validJson",
-        test: ({ value }, error) => {
-            if (!value) return true;
-            return !error;
+    rules: [
+        {
+            key: "validJson",
+            test: ({ value }, error) => {
+                if (!value) return true;
+                return !error;
+            },
+            invalid: (error) => _t("Doesn't look like valid JSON.") + " " + error,
         },
-        invalid: (error) => _t("Doesn't look like valid JSON.") + " " + error,
-    }],
+    ],
 });
 
 export const EventEditor = ({ fieldDefs, defaultContent = "{\n\n}", onSend, onBack }: IEventEditorProps) => {
-    const [fieldData, setFieldData] = useState<string[]>(fieldDefs.map(def => def.default ?? ""));
+    const [fieldData, setFieldData] = useState<string[]>(fieldDefs.map((def) => def.default ?? ""));
     const [content, setContent] = useState<string>(defaultContent);
     const contentField = useRef<Field>();
 
@@ -85,10 +87,12 @@ export const EventEditor = ({ fieldDefs, defaultContent = "{\n\n}", onSend, onBa
             type="text"
             autoComplete="on"
             value={fieldData[i]}
-            onChange={ev => setFieldData(data => {
-                data[i] = ev.target.value;
-                return [...data];
-            })}
+            onChange={(ev) =>
+                setFieldData((data) => {
+                    data[i] = ev.target.value;
+                    return [...data];
+                })
+            }
         />
     ));
 
@@ -110,29 +114,25 @@ export const EventEditor = ({ fieldDefs, defaultContent = "{\n\n}", onSend, onBa
         return _t("Event sent!");
     };
 
-    return <BaseTool
-        actionLabel={_t("Send")}
-        onAction={onAction}
-        onBack={onBack}
-    >
-        <div className="mx_DevTools_eventTypeStateKeyGroup">
-            { fields }
-        </div>
+    return (
+        <BaseTool actionLabel={_t("Send")} onAction={onAction} onBack={onBack}>
+            <div className="mx_DevTools_eventTypeStateKeyGroup">{fields}</div>
 
-        <Field
-            id="evContent"
-            label={_t("Event Content")}
-            type="text"
-            className="mx_DevTools_textarea"
-            autoComplete="off"
-            value={content}
-            onChange={ev => setContent(ev.target.value)}
-            element="textarea"
-            onValidate={validateEventContent}
-            ref={contentField}
-            autoFocus={!!defaultContent}
-        />
-    </BaseTool>;
+            <Field
+                id="evContent"
+                label={_t("Event Content")}
+                type="text"
+                className="mx_DevTools_textarea"
+                autoComplete="off"
+                value={content}
+                onChange={(ev) => setContent(ev.target.value)}
+                element="textarea"
+                onValidate={validateEventContent}
+                ref={contentField}
+                autoFocus={!!defaultContent}
+            />
+        </BaseTool>
+    );
 };
 
 export interface IEditorProps extends Pick<IDevtoolsProps, "onBack"> {
@@ -157,11 +157,11 @@ export const EventViewer = ({ mxEvent, onBack, Editor }: IViewerProps) => {
         setEditing(true);
     };
 
-    return <BaseTool onBack={onBack} actionLabel={_t("Edit")} onAction={onAction}>
-        <SyntaxHighlight language="json">
-            { stringify(mxEvent.event) }
-        </SyntaxHighlight>
-    </BaseTool>;
+    return (
+        <BaseTool onBack={onBack} actionLabel={_t("Edit")} onAction={onAction}>
+            <SyntaxHighlight language="json">{stringify(mxEvent.event)}</SyntaxHighlight>
+        </BaseTool>
+    );
 };
 
 // returns the id of the initial message, not the id of the previous edit
@@ -175,9 +175,7 @@ export const TimelineEventEditor = ({ mxEvent, onBack }: IEditorProps) => {
     const context = useContext(DevtoolsContext);
     const cli = useContext(MatrixClientContext);
 
-    const fields = useMemo(() => [
-        eventTypeField(mxEvent?.getType()),
-    ], [mxEvent]);
+    const fields = useMemo(() => [eventTypeField(mxEvent?.getType())], [mxEvent]);
 
     const onSend = ([eventType]: string[], content?: IContent) => {
         return cli.sendEvent(context.room.roomId, eventType, content);

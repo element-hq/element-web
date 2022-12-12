@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 import classNames from "classnames";
 
 import { _t } from "../../../languageHandler";
@@ -40,11 +40,11 @@ class Header extends React.PureComponent<IProps> {
     }
 
     private changeCategoryRelative(delta: number) {
-        const current = this.props.categories.findIndex(c => c.visible);
+        const current = this.props.categories.findIndex((c) => c.visible);
         this.changeCategoryAbsolute(current + delta, delta);
     }
 
-    private changeCategoryAbsolute(index: number, delta=1) {
+    private changeCategoryAbsolute(index: number, delta = 1) {
         const category = this.props.categories[this.findNearestEnabled(index, delta)];
         if (category) {
             this.props.onAnchorClick(category.id);
@@ -90,24 +90,26 @@ class Header extends React.PureComponent<IProps> {
                 aria-label={_t("Categories")}
                 onKeyDown={this.onKeyDown}
             >
-                { this.props.categories.map(category => {
+                {this.props.categories.map((category) => {
                     const classes = classNames(`mx_EmojiPicker_anchor mx_EmojiPicker_anchor_${category.id}`, {
                         mx_EmojiPicker_anchor_visible: category.visible,
                     });
                     // Properties of this button are also modified by EmojiPicker's updateVisibility in DOM.
-                    return <button
-                        disabled={!category.enabled}
-                        key={category.id}
-                        ref={category.ref}
-                        className={classes}
-                        onClick={() => this.props.onAnchorClick(category.id)}
-                        title={category.name}
-                        role="tab"
-                        tabIndex={category.visible ? 0 : -1} // roving
-                        aria-selected={category.visible}
-                        aria-controls={`mx_EmojiPicker_category_${category.id}`}
-                    />;
-                }) }
+                    return (
+                        <button
+                            disabled={!category.enabled}
+                            key={category.id}
+                            ref={category.ref}
+                            className={classes}
+                            onClick={() => this.props.onAnchorClick(category.id)}
+                            title={category.name}
+                            role="tab"
+                            tabIndex={category.visible ? 0 : -1} // roving
+                            aria-selected={category.visible}
+                            aria-controls={`mx_EmojiPicker_category_${category.id}`}
+                        />
+                    );
+                })}
             </nav>
         );
     }

@@ -33,45 +33,52 @@ const RecentlyViewedButton = () => {
     const tooltipRef = useRef<InteractiveTooltip>();
     const crumbs = useEventEmitterState(BreadcrumbsStore.instance, UPDATE_EVENT, () => BreadcrumbsStore.instance.rooms);
 
-    const content = <div className="mx_RecentlyViewedButton_ContextMenu">
-        <h4>{ _t("Recently viewed") }</h4>
-        <div>
-            { crumbs.map(crumb => {
-                return <MenuItem
-                    key={crumb.roomId}
-                    onClick={(ev) => {
-                        dis.dispatch<ViewRoomPayload>({
-                            action: Action.ViewRoom,
-                            room_id: crumb.roomId,
-                            metricsTrigger: "WebVerticalBreadcrumbs",
-                            metricsViaKeyboard: ev.type !== "click",
-                        });
-                        tooltipRef.current?.hideTooltip();
-                    }}
-                >
-                    { crumb.isSpaceRoom()
-                        ? <RoomAvatar room={crumb} width={24} height={24} />
-                        : <DecoratedRoomAvatar room={crumb} avatarSize={24} tooltipProps={{ tabIndex: -1 }} />
-                    }
-                    <span className="mx_RecentlyViewedButton_entry_label">
-                        <div>{ crumb.name }</div>
-                        <RoomContextDetails className="mx_RecentlyViewedButton_entry_spaces" room={crumb} />
-                    </span>
-                </MenuItem>;
-            }) }
+    const content = (
+        <div className="mx_RecentlyViewedButton_ContextMenu">
+            <h4>{_t("Recently viewed")}</h4>
+            <div>
+                {crumbs.map((crumb) => {
+                    return (
+                        <MenuItem
+                            key={crumb.roomId}
+                            onClick={(ev) => {
+                                dis.dispatch<ViewRoomPayload>({
+                                    action: Action.ViewRoom,
+                                    room_id: crumb.roomId,
+                                    metricsTrigger: "WebVerticalBreadcrumbs",
+                                    metricsViaKeyboard: ev.type !== "click",
+                                });
+                                tooltipRef.current?.hideTooltip();
+                            }}
+                        >
+                            {crumb.isSpaceRoom() ? (
+                                <RoomAvatar room={crumb} width={24} height={24} />
+                            ) : (
+                                <DecoratedRoomAvatar room={crumb} avatarSize={24} tooltipProps={{ tabIndex: -1 }} />
+                            )}
+                            <span className="mx_RecentlyViewedButton_entry_label">
+                                <div>{crumb.name}</div>
+                                <RoomContextDetails className="mx_RecentlyViewedButton_entry_spaces" room={crumb} />
+                            </span>
+                        </MenuItem>
+                    );
+                })}
+            </div>
         </div>
-    </div>;
+    );
 
-    return <InteractiveTooltip content={content} direction={Direction.Right} ref={tooltipRef}>
-        { ({ ref, onMouseOver }) => (
-            <span
-                className="mx_LeftPanel_recentsButton"
-                title={_t("Recently viewed")}
-                ref={ref}
-                onMouseOver={onMouseOver}
-            />
-        ) }
-    </InteractiveTooltip>;
+    return (
+        <InteractiveTooltip content={content} direction={Direction.Right} ref={tooltipRef}>
+            {({ ref, onMouseOver }) => (
+                <span
+                    className="mx_LeftPanel_recentsButton"
+                    title={_t("Recently viewed")}
+                    ref={ref}
+                    onMouseOver={onMouseOver}
+                />
+            )}
+        </InteractiveTooltip>
+    );
 };
 
 export default RecentlyViewedButton;

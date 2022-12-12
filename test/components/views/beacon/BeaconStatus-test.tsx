@@ -14,75 +14,75 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 // eslint-disable-next-line deprecate/import
-import { mount } from 'enzyme';
-import { Beacon } from 'matrix-js-sdk/src/matrix';
+import { mount } from "enzyme";
+import { Beacon } from "matrix-js-sdk/src/matrix";
 
-import BeaconStatus from '../../../../src/components/views/beacon/BeaconStatus';
-import { BeaconDisplayStatus } from '../../../../src/components/views/beacon/displayStatus';
-import { findByTestId, makeBeaconInfoEvent } from '../../../test-utils';
+import BeaconStatus from "../../../../src/components/views/beacon/BeaconStatus";
+import { BeaconDisplayStatus } from "../../../../src/components/views/beacon/displayStatus";
+import { findByTestId, makeBeaconInfoEvent } from "../../../test-utils";
 
-describe('<BeaconStatus />', () => {
+describe("<BeaconStatus />", () => {
     const defaultProps = {
         displayStatus: BeaconDisplayStatus.Loading,
-        label: 'test label',
+        label: "test label",
         withIcon: true,
     };
-    const getComponent = (props = {}) =>
-        mount(<BeaconStatus {...defaultProps} {...props} />);
+    const getComponent = (props = {}) => mount(<BeaconStatus {...defaultProps} {...props} />);
 
-    it('renders loading state', () => {
+    it("renders loading state", () => {
         const component = getComponent({ displayStatus: BeaconDisplayStatus.Loading });
         expect(component).toMatchSnapshot();
     });
 
-    it('renders stopped state', () => {
+    it("renders stopped state", () => {
         const component = getComponent({ displayStatus: BeaconDisplayStatus.Stopped });
         expect(component).toMatchSnapshot();
     });
 
-    it('renders without icon', () => {
+    it("renders without icon", () => {
         const component = getComponent({ withIcon: false, displayStatus: BeaconDisplayStatus.Stopped });
-        expect(component.find('StyledLiveBeaconIcon').length).toBeFalsy();
+        expect(component.find("StyledLiveBeaconIcon").length).toBeFalsy();
     });
 
-    describe('active state', () => {
-        it('renders without children', () => {
+    describe("active state", () => {
+        it("renders without children", () => {
             // mock for stable snapshot
-            jest.spyOn(Date, 'now').mockReturnValue(123456789);
-            const beacon = new Beacon(makeBeaconInfoEvent('@user:server', '!room:server', { isLive: false }, '$1'));
+            jest.spyOn(Date, "now").mockReturnValue(123456789);
+            const beacon = new Beacon(makeBeaconInfoEvent("@user:server", "!room:server", { isLive: false }, "$1"));
             const component = getComponent({ beacon, displayStatus: BeaconDisplayStatus.Active });
             expect(component).toMatchSnapshot();
         });
 
-        it('renders with children', () => {
-            const beacon = new Beacon(makeBeaconInfoEvent('@user:server', '!room:sever', { isLive: false }));
+        it("renders with children", () => {
+            const beacon = new Beacon(makeBeaconInfoEvent("@user:server", "!room:sever", { isLive: false }));
             const component = getComponent({
                 beacon,
-                children: <span data-test-id='test'>test</span>,
+                children: <span data-test-id="test">test</span>,
                 displayStatus: BeaconDisplayStatus.Active,
             });
-            expect(findByTestId(component, 'test-child')).toMatchSnapshot();
+            expect(findByTestId(component, "test-child")).toMatchSnapshot();
         });
 
-        it('renders static remaining time when displayLiveTimeRemaining is falsy', () => {
+        it("renders static remaining time when displayLiveTimeRemaining is falsy", () => {
             // mock for stable snapshot
-            jest.spyOn(Date, 'now').mockReturnValue(123456789);
-            const beacon = new Beacon(makeBeaconInfoEvent('@user:server', '!room:server', { isLive: false }, '$1'));
+            jest.spyOn(Date, "now").mockReturnValue(123456789);
+            const beacon = new Beacon(makeBeaconInfoEvent("@user:server", "!room:server", { isLive: false }, "$1"));
             const component = getComponent({ beacon, displayStatus: BeaconDisplayStatus.Active });
-            expect(component.text().includes('Live until 11:17')).toBeTruthy();
+            expect(component.text().includes("Live until 11:17")).toBeTruthy();
         });
 
-        it('renders live time remaining when displayLiveTimeRemaining is truthy', () => {
+        it("renders live time remaining when displayLiveTimeRemaining is truthy", () => {
             // mock for stable snapshot
-            jest.spyOn(Date, 'now').mockReturnValue(123456789);
-            const beacon = new Beacon(makeBeaconInfoEvent('@user:server', '!room:server', { isLive: false }, '$1'));
+            jest.spyOn(Date, "now").mockReturnValue(123456789);
+            const beacon = new Beacon(makeBeaconInfoEvent("@user:server", "!room:server", { isLive: false }, "$1"));
             const component = getComponent({
-                beacon, displayStatus: BeaconDisplayStatus.Active,
+                beacon,
+                displayStatus: BeaconDisplayStatus.Active,
                 displayLiveTimeRemaining: true,
             });
-            expect(component.text().includes('1h left')).toBeTruthy();
+            expect(component.text().includes("1h left")).toBeTruthy();
         });
     });
 });

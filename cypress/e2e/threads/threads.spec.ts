@@ -21,7 +21,7 @@ import { MatrixClient } from "../../global";
 
 function markWindowBeforeReload(): void {
     // mark our window object to "know" when it gets reloaded
-    cy.window().then(w => w.beforeReload = true);
+    cy.window().then((w) => (w.beforeReload = true));
 }
 
 describe("Threads", () => {
@@ -30,10 +30,10 @@ describe("Threads", () => {
     beforeEach(() => {
         // Default threads to ON for this spec
         cy.enableLabsFeature("feature_thread");
-        cy.window().then(win => {
+        cy.window().then((win) => {
             win.localStorage.setItem("mx_lhs_size", "0"); // Collapse left panel for these tests
         });
-        cy.startSynapse("default").then(data => {
+        cy.startSynapse("default").then((data) => {
             synapse = data;
 
             cy.initTestUser(synapse, "Tom");
@@ -78,12 +78,12 @@ describe("Threads", () => {
         cy.getBot(synapse, {
             displayName: "BotBob",
             autoAcceptInvites: false,
-        }).then(_bot => {
+        }).then((_bot) => {
             bot = _bot;
         });
 
         let roomId: string;
-        cy.createRoom({}).then(_roomId => {
+        cy.createRoom({}).then((_roomId) => {
             roomId = _roomId;
             cy.inviteUser(roomId, bot.getUserId());
             bot.joinRoom(roomId);
@@ -95,10 +95,11 @@ describe("Threads", () => {
 
         // Wait for message to send, get its ID and save as @threadId
         cy.contains(".mx_RoomView_body .mx_EventTile[data-scroll-tokens]", "Hello Mr. Bot")
-            .invoke("attr", "data-scroll-tokens").as("threadId");
+            .invoke("attr", "data-scroll-tokens")
+            .as("threadId");
 
         // Bot starts thread
-        cy.get<string>("@threadId").then(threadId => {
+        cy.get<string>("@threadId").then((threadId) => {
             bot.sendMessage(roomId, threadId, {
                 body: "Hello there",
                 msgtype: "m.text",
@@ -119,7 +120,8 @@ describe("Threads", () => {
 
         // User reacts to message instead
         cy.contains(".mx_ThreadView .mx_EventTile .mx_EventTile_line", "Hello there")
-            .find('[aria-label="React"]').click({ force: true }); // Cypress has no ability to hover
+            .find('[aria-label="React"]')
+            .click({ force: true }); // Cypress has no ability to hover
         cy.get(".mx_EmojiPicker").within(() => {
             cy.get('input[type="text"]').type("wave");
             cy.contains('[role="menuitem"]', "👋").click();
@@ -127,7 +129,8 @@ describe("Threads", () => {
 
         // User redacts their prior response
         cy.contains(".mx_ThreadView .mx_EventTile .mx_EventTile_line", "Test")
-            .find('[aria-label="Options"]').click({ force: true }); // Cypress has no ability to hover
+            .find('[aria-label="Options"]')
+            .click({ force: true }); // Cypress has no ability to hover
         cy.get(".mx_IconizedContextMenu").within(() => {
             cy.contains('[role="menuitem"]', "Remove").click();
         });
@@ -144,7 +147,7 @@ describe("Threads", () => {
         cy.get(".mx_ThreadPanel .mx_BaseCard_close").click();
 
         // Bot responds to thread
-        cy.get<string>("@threadId").then(threadId => {
+        cy.get<string>("@threadId").then((threadId) => {
             bot.sendMessage(roomId, threadId, {
                 body: "How are things?",
                 msgtype: "m.text",
@@ -178,45 +181,55 @@ describe("Threads", () => {
             cy.get(".mx_BasicMessageComposer_input").type(" How about yourself?{enter}");
         });
         cy.get(".mx_RoomView_body .mx_ThreadSummary .mx_ThreadSummary_sender").should("contain", "Tom");
-        cy.get(".mx_RoomView_body .mx_ThreadSummary .mx_ThreadSummary_content")
-            .should("contain", "Great! How about yourself?");
+        cy.get(".mx_RoomView_body .mx_ThreadSummary .mx_ThreadSummary_content").should(
+            "contain",
+            "Great! How about yourself?",
+        );
 
         // User closes right panel
         cy.get(".mx_ThreadView .mx_BaseCard_close").click();
 
         // Bot responds to thread and saves the id of their message to @eventId
-        cy.get<string>("@threadId").then(threadId => {
-            cy.wrap(bot.sendMessage(roomId, threadId, {
-                body: "I'm very good thanks",
-                msgtype: "m.text",
-            }).then(res => res.event_id)).as("eventId");
+        cy.get<string>("@threadId").then((threadId) => {
+            cy.wrap(
+                bot
+                    .sendMessage(roomId, threadId, {
+                        body: "I'm very good thanks",
+                        msgtype: "m.text",
+                    })
+                    .then((res) => res.event_id),
+            ).as("eventId");
         });
 
         // User asserts
         cy.get(".mx_RoomView_body .mx_ThreadSummary .mx_ThreadSummary_sender").should("contain", "BotBob");
-        cy.get(".mx_RoomView_body .mx_ThreadSummary .mx_ThreadSummary_content")
-            .should("contain", "I'm very good thanks");
+        cy.get(".mx_RoomView_body .mx_ThreadSummary .mx_ThreadSummary_content").should(
+            "contain",
+            "I'm very good thanks",
+        );
 
         // Bot edits their latest event
-        cy.get<string>("@eventId").then(eventId => {
+        cy.get<string>("@eventId").then((eventId) => {
             bot.sendMessage(roomId, {
                 "body": "* I'm very good thanks :)",
                 "msgtype": "m.text",
                 "m.new_content": {
-                    "body": "I'm very good thanks :)",
-                    "msgtype": "m.text",
+                    body: "I'm very good thanks :)",
+                    msgtype: "m.text",
                 },
                 "m.relates_to": {
-                    "rel_type": "m.replace",
-                    "event_id": eventId,
+                    rel_type: "m.replace",
+                    event_id: eventId,
                 },
             });
         });
 
         // User asserts
         cy.get(".mx_RoomView_body .mx_ThreadSummary .mx_ThreadSummary_sender").should("contain", "BotBob");
-        cy.get(".mx_RoomView_body .mx_ThreadSummary .mx_ThreadSummary_content")
-            .should("contain", "I'm very good thanks :)");
+        cy.get(".mx_RoomView_body .mx_ThreadSummary .mx_ThreadSummary_content").should(
+            "contain",
+            "I'm very good thanks :)",
+        );
     });
 
     it("can send voice messages", () => {
@@ -227,7 +240,7 @@ describe("Threads", () => {
         });
 
         let roomId: string;
-        cy.createRoom({}).then(_roomId => {
+        cy.createRoom({}).then((_roomId) => {
             roomId = _roomId;
             cy.visit("/#/room/" + roomId);
         });
@@ -237,7 +250,9 @@ describe("Threads", () => {
 
         // Create thread
         cy.contains(".mx_RoomView_body .mx_EventTile[data-scroll-tokens]", "Hello Mr. Bot")
-            .realHover().find(".mx_MessageActionBar_threadButton").click();
+            .realHover()
+            .find(".mx_MessageActionBar_threadButton")
+            .click();
         cy.get(".mx_ThreadView_timelinePanelWrapper").should("have.length", 1);
 
         cy.openMessageComposerOptions(true).find(`[aria-label="Voice Message"]`).click();
@@ -250,7 +265,7 @@ describe("Threads", () => {
     it("right panel behaves correctly", () => {
         // Create room
         let roomId: string;
-        cy.createRoom({}).then(_roomId => {
+        cy.createRoom({}).then((_roomId) => {
             roomId = _roomId;
             cy.visit("/#/room/" + roomId);
         });
@@ -259,7 +274,9 @@ describe("Threads", () => {
 
         // Create thread
         cy.contains(".mx_RoomView_body .mx_EventTile[data-scroll-tokens]", "Hello Mr. Bot")
-            .realHover().find(".mx_MessageActionBar_threadButton").click();
+            .realHover()
+            .find(".mx_MessageActionBar_threadButton")
+            .click();
         cy.get(".mx_ThreadView_timelinePanelWrapper").should("have.length", 1);
 
         // Send message to thread
@@ -271,7 +288,9 @@ describe("Threads", () => {
 
         // Open existing thread
         cy.contains(".mx_RoomView_body .mx_EventTile[data-scroll-tokens]", "Hello Mr. Bot")
-            .realHover().find(".mx_MessageActionBar_threadButton").click();
+            .realHover()
+            .find(".mx_MessageActionBar_threadButton")
+            .click();
         cy.get(".mx_ThreadView_timelinePanelWrapper").should("have.length", 1);
         cy.get(".mx_BaseCard .mx_EventTile").should("contain", "Hello Mr. Bot");
         cy.get(".mx_BaseCard .mx_EventTile").should("contain", "Hello Mr. User");

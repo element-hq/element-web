@@ -26,11 +26,11 @@ import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalink
 
 jest.mock("../../../../src/components/views/messages/UnknownBody", () => ({
     __esModule: true,
-    default: () => (<div data-testid="unknown-body" />),
+    default: () => <div data-testid="unknown-body" />,
 }));
 
 jest.mock("../../../../src/voice-broadcast/components/VoiceBroadcastBody", () => ({
-    VoiceBroadcastBody: () => (<div data-testid="voice-broadcast-body" />),
+    VoiceBroadcastBody: () => <div data-testid="voice-broadcast-body" />,
 }));
 
 describe("MessageEvent", () => {
@@ -39,11 +39,13 @@ describe("MessageEvent", () => {
     let event: MatrixEvent;
 
     const renderMessageEvent = (): RenderResult => {
-        return render(<MessageEvent
-            mxEvent={event}
-            onHeightChanged={jest.fn()}
-            permalinkCreator={new RoomPermalinkCreator(room)}
-        />);
+        return render(
+            <MessageEvent
+                mxEvent={event}
+                onHeightChanged={jest.fn()}
+                permalinkCreator={new RoomPermalinkCreator(room)}
+            />,
+        );
     };
 
     beforeEach(() => {

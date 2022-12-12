@@ -14,21 +14,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import { fireEvent, render } from '@testing-library/react';
-import { act } from 'react-dom/test-utils';
+import React from "react";
+import { fireEvent, render } from "@testing-library/react";
+import { act } from "react-dom/test-utils";
 
-import DialogSidebar from '../../../../src/components/views/beacon/DialogSidebar';
-import MatrixClientContext from '../../../../src/contexts/MatrixClientContext';
+import DialogSidebar from "../../../../src/components/views/beacon/DialogSidebar";
+import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import {
     getMockClientWithEventEmitter,
     makeBeaconEvent,
     makeBeaconInfoEvent,
     makeRoomWithBeacons,
     mockClientMethodsUser,
-} from '../../../test-utils';
+} from "../../../test-utils";
 
-describe('<DialogSidebar />', () => {
+describe("<DialogSidebar />", () => {
     const defaultProps = {
         beacons: [],
         requestClose: jest.fn(),
@@ -37,66 +37,66 @@ describe('<DialogSidebar />', () => {
 
     const now = 1647270879403;
 
-    const roomId = '!room:server.org';
-    const aliceId = '@alice:server.org';
+    const roomId = "!room:server.org";
+    const aliceId = "@alice:server.org";
     const client = getMockClientWithEventEmitter({
         ...mockClientMethodsUser(aliceId),
         getRoom: jest.fn(),
     });
 
-    const beaconEvent = makeBeaconInfoEvent(aliceId,
-        roomId,
-        { isLive: true, timestamp: now },
-        '$alice-room1-1',
-    );
-    const location1 = makeBeaconEvent(
-        aliceId, { beaconInfoId: beaconEvent.getId(), geoUri: 'geo:51,41', timestamp: now },
-    );
+    const beaconEvent = makeBeaconInfoEvent(aliceId, roomId, { isLive: true, timestamp: now }, "$alice-room1-1");
+    const location1 = makeBeaconEvent(aliceId, {
+        beaconInfoId: beaconEvent.getId(),
+        geoUri: "geo:51,41",
+        timestamp: now,
+    });
 
     const getComponent = (props = {}) => (
         <MatrixClientContext.Provider value={client}>
-            <DialogSidebar {...defaultProps} {...props} />);
-        </MatrixClientContext.Provider>);
+            <DialogSidebar {...defaultProps} {...props} />
+            );
+        </MatrixClientContext.Provider>
+    );
 
     beforeEach(() => {
         // mock now so time based text in snapshots is stable
-        jest.spyOn(Date, 'now').mockReturnValue(now);
+        jest.spyOn(Date, "now").mockReturnValue(now);
     });
 
     afterAll(() => {
-        jest.spyOn(Date, 'now').mockRestore();
+        jest.spyOn(Date, "now").mockRestore();
     });
 
-    it('renders sidebar correctly without beacons', () => {
+    it("renders sidebar correctly without beacons", () => {
         const { container } = render(getComponent());
         expect(container).toMatchSnapshot();
     });
 
-    it('renders sidebar correctly with beacons', () => {
+    it("renders sidebar correctly with beacons", () => {
         const [beacon] = makeRoomWithBeacons(roomId, client, [beaconEvent], [location1]);
         const { container } = render(getComponent({ beacons: [beacon] }));
         expect(container).toMatchSnapshot();
     });
 
-    it('calls on beacon click', () => {
+    it("calls on beacon click", () => {
         const onBeaconClick = jest.fn();
         const [beacon] = makeRoomWithBeacons(roomId, client, [beaconEvent], [location1]);
         const { container } = render(getComponent({ beacons: [beacon], onBeaconClick }));
 
         act(() => {
-            const [listItem] = container.getElementsByClassName('mx_BeaconListItem');
+            const [listItem] = container.getElementsByClassName("mx_BeaconListItem");
             fireEvent.click(listItem);
         });
 
         expect(onBeaconClick).toHaveBeenCalled();
     });
 
-    it('closes on close button click', () => {
+    it("closes on close button click", () => {
         const requestClose = jest.fn();
         const { getByTestId } = render(getComponent({ requestClose }));
 
         act(() => {
-            fireEvent.click(getByTestId('dialog-sidebar-close'));
+            fireEvent.click(getByTestId("dialog-sidebar-close"));
         });
         expect(requestClose).toHaveBeenCalled();
     });

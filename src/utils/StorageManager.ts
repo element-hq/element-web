@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { LocalStorageCryptoStore } from 'matrix-js-sdk/src/crypto/store/localStorage-crypto-store';
+import { LocalStorageCryptoStore } from "matrix-js-sdk/src/crypto/store/localStorage-crypto-store";
 import { IndexedDBStore } from "matrix-js-sdk/src/store/indexeddb";
 import { IndexedDBCryptoStore } from "matrix-js-sdk/src/crypto/store/indexeddb-crypto-store";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -42,10 +42,11 @@ function error(msg: string, ...args: string[]) {
 
 export function tryPersistStorage() {
     if (navigator.storage && navigator.storage.persist) {
-        navigator.storage.persist().then(persistent => {
+        navigator.storage.persist().then((persistent) => {
             logger.log("StorageManager: Persistent?", persistent);
         });
-    } else if (document.requestStorageAccess) { // Safari
+    } else if (document.requestStorageAccess) {
+        // Safari
         document.requestStorageAccess().then(
             () => logger.log("StorageManager: Persistent?", true),
             () => logger.log("StorageManager: Persistent?", false),
@@ -101,8 +102,8 @@ export async function checkConsistency() {
         healthy = false;
         error(
             "Data exists in local storage and crypto is marked as initialised " +
-            " but no data found in crypto store. " +
-            "IndexedDB storage has likely been evicted by the browser!",
+                " but no data found in crypto store. " +
+                "IndexedDB storage has likely been evicted by the browser!",
         );
     }
 
@@ -123,9 +124,7 @@ export async function checkConsistency() {
 async function checkSyncStore() {
     let exists = false;
     try {
-        exists = await IndexedDBStore.exists(
-            indexedDB, SYNC_STORE_NAME,
-        );
+        exists = await IndexedDBStore.exists(indexedDB, SYNC_STORE_NAME);
         log(`Sync store using IndexedDB contains data? ${exists}`);
         return { exists, healthy: true };
     } catch (e) {
@@ -138,9 +137,7 @@ async function checkSyncStore() {
 async function checkCryptoStore() {
     let exists = false;
     try {
-        exists = await IndexedDBCryptoStore.exists(
-            indexedDB, CRYPTO_STORE_NAME,
-        );
+        exists = await IndexedDBCryptoStore.exists(indexedDB, CRYPTO_STORE_NAME);
         log(`Crypto store using IndexedDB contains data? ${exists}`);
         return { exists, healthy: true };
     } catch (e) {
@@ -183,7 +180,9 @@ async function idbInit(): Promise<void> {
     idb = await new Promise((resolve, reject) => {
         const request = indexedDB.open("matrix-react-sdk", 1);
         request.onerror = reject;
-        request.onsuccess = () => { resolve(request.result); };
+        request.onsuccess = () => {
+            resolve(request.result);
+        };
         request.onupgradeneeded = () => {
             const db = request.result;
             db.createObjectStore("pickleKey");
@@ -192,10 +191,7 @@ async function idbInit(): Promise<void> {
     });
 }
 
-export async function idbLoad(
-    table: string,
-    key: string | string[],
-): Promise<any> {
+export async function idbLoad(table: string, key: string | string[]): Promise<any> {
     if (!idb) {
         await idbInit();
     }
@@ -206,15 +202,13 @@ export async function idbLoad(
         const objectStore = txn.objectStore(table);
         const request = objectStore.get(key);
         request.onerror = reject;
-        request.onsuccess = (event) => { resolve(request.result); };
+        request.onsuccess = (event) => {
+            resolve(request.result);
+        };
     });
 }
 
-export async function idbSave(
-    table: string,
-    key: string | string[],
-    data: any,
-): Promise<void> {
+export async function idbSave(table: string, key: string | string[], data: any): Promise<void> {
     if (!idb) {
         await idbInit();
     }
@@ -225,14 +219,13 @@ export async function idbSave(
         const objectStore = txn.objectStore(table);
         const request = objectStore.put(data, key);
         request.onerror = reject;
-        request.onsuccess = (event) => { resolve(); };
+        request.onsuccess = (event) => {
+            resolve();
+        };
     });
 }
 
-export async function idbDelete(
-    table: string,
-    key: string | string[],
-): Promise<void> {
+export async function idbDelete(table: string, key: string | string[]): Promise<void> {
     if (!idb) {
         await idbInit();
     }
@@ -243,6 +236,8 @@ export async function idbDelete(
         const objectStore = txn.objectStore(table);
         const request = objectStore.delete(key);
         request.onerror = reject;
-        request.onsuccess = () => { resolve(); };
+        request.onsuccess = () => {
+            resolve();
+        };
     });
 }

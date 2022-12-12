@@ -92,18 +92,14 @@ export class SlidingRoomListStoreClass extends AsyncStoreWithClient<IState> impl
         const slidingSyncIndex = this.context.slidingSyncManager.getOrAllocateListIndex(tagId);
         switch (sort) {
             case SortAlgorithm.Alphabetic:
-                await this.context.slidingSyncManager.ensureListRegistered(
-                    slidingSyncIndex, {
-                        sort: SlidingSyncSortToFilter[SortAlgorithm.Alphabetic],
-                    },
-                );
+                await this.context.slidingSyncManager.ensureListRegistered(slidingSyncIndex, {
+                    sort: SlidingSyncSortToFilter[SortAlgorithm.Alphabetic],
+                });
                 break;
             case SortAlgorithm.Recent:
-                await this.context.slidingSyncManager.ensureListRegistered(
-                    slidingSyncIndex, {
-                        sort: SlidingSyncSortToFilter[SortAlgorithm.Recent],
-                    },
-                );
+                await this.context.slidingSyncManager.ensureListRegistered(slidingSyncIndex, {
+                    sort: SlidingSyncSortToFilter[SortAlgorithm.Recent],
+                });
                 break;
             case SortAlgorithm.Manual:
                 logger.error("cannot enable manual sort in sliding sync mode");
@@ -211,11 +207,13 @@ export class SlidingRoomListStoreClass extends AsyncStoreWithClient<IState> impl
         });
 
         // order from low to high
-        const orderedRoomIndexes = Object.keys(roomIndexToRoomId).map((numStr) => {
-            return Number(numStr);
-        }).sort((a, b) => {
-            return a-b;
-        });
+        const orderedRoomIndexes = Object.keys(roomIndexToRoomId)
+            .map((numStr) => {
+                return Number(numStr);
+            })
+            .sort((a, b) => {
+                return a - b;
+            });
         const seenRoomIds = new Set<string>();
         const orderedRoomIds = orderedRoomIndexes.map((i) => {
             const rid = roomIndexToRoomId[i];
@@ -262,7 +260,7 @@ export class SlidingRoomListStoreClass extends AsyncStoreWithClient<IState> impl
 
     private onSlidingSyncListUpdate(listIndex: number, joinCount: number, roomIndexToRoomId: Record<number, string>) {
         const tagId = this.context.slidingSyncManager.listIdForIndex(listIndex);
-        this.counts[tagId]= joinCount;
+        this.counts[tagId] = joinCount;
         this.refreshOrderedLists(tagId, roomIndexToRoomId);
         // let the UI update
         this.emit(LISTS_UPDATE_EVENT);
@@ -333,12 +331,14 @@ export class SlidingRoomListStoreClass extends AsyncStoreWithClient<IState> impl
             this.tagIdToSortAlgo[tagId] = sort;
             this.emit(LISTS_LOADING_EVENT, tagId, true);
             const index = this.context.slidingSyncManager.getOrAllocateListIndex(tagId);
-            this.context.slidingSyncManager.ensureListRegistered(index, {
-                filters: filter,
-                sort: SlidingSyncSortToFilter[sort],
-            }).then(() => {
-                this.emit(LISTS_LOADING_EVENT, tagId, false);
-            });
+            this.context.slidingSyncManager
+                .ensureListRegistered(index, {
+                    filters: filter,
+                    sort: SlidingSyncSortToFilter[sort],
+                })
+                .then(() => {
+                    this.emit(LISTS_LOADING_EVENT, tagId, false);
+                });
         });
     }
 
@@ -348,26 +348,29 @@ export class SlidingRoomListStoreClass extends AsyncStoreWithClient<IState> impl
         const tagId = DefaultTagID.Untagged;
         const filters = filterConditions[tagId];
         const oldSpace = filters.spaces?.[0];
-        filters.spaces = (activeSpace && activeSpace != MetaSpace.Home) ? [activeSpace] : undefined;
+        filters.spaces = activeSpace && activeSpace != MetaSpace.Home ? [activeSpace] : undefined;
         if (oldSpace !== activeSpace) {
             // include subspaces in this list
-            this.context.spaceStore.traverseSpace(activeSpace, (roomId: string) => {
-                if (roomId === activeSpace) {
-                    return;
-                }
-                filters.spaces.push(roomId); // add subspace
-            }, false);
+            this.context.spaceStore.traverseSpace(
+                activeSpace,
+                (roomId: string) => {
+                    if (roomId === activeSpace) {
+                        return;
+                    }
+                    filters.spaces.push(roomId); // add subspace
+                },
+                false,
+            );
 
             this.emit(LISTS_LOADING_EVENT, tagId, true);
             const index = this.context.slidingSyncManager.getOrAllocateListIndex(tagId);
-            this.context.slidingSyncManager.ensureListRegistered(
-                index,
-                {
+            this.context.slidingSyncManager
+                .ensureListRegistered(index, {
                     filters: filters,
-                },
-            ).then(() => {
-                this.emit(LISTS_LOADING_EVENT, tagId, false);
-            });
+                })
+                .then(() => {
+                    this.emit(LISTS_LOADING_EVENT, tagId, false);
+                });
         }
     };
 
@@ -392,9 +395,7 @@ export class SlidingRoomListStoreClass extends AsyncStoreWithClient<IState> impl
         await this.resetStore();
     }
 
-    protected async onAction(payload: ActionPayload) {
-    }
+    protected async onAction(payload: ActionPayload) {}
 
-    protected async onDispatchAsync(payload: ActionPayload) {
-    }
+    protected async onDispatchAsync(payload: ActionPayload) {}
 }

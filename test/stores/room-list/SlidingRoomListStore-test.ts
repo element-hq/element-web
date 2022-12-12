@@ -13,9 +13,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import { mocked } from 'jest-mock';
-import { SlidingSync, SlidingSyncEvent } from 'matrix-js-sdk/src/sliding-sync';
-import { Room } from 'matrix-js-sdk/src/matrix';
+import { mocked } from "jest-mock";
+import { SlidingSync, SlidingSyncEvent } from "matrix-js-sdk/src/sliding-sync";
+import { Room } from "matrix-js-sdk/src/matrix";
 
 import {
     LISTS_UPDATE_EVENT,
@@ -24,18 +24,18 @@ import {
 } from "../../../src/stores/room-list/SlidingRoomListStore";
 import { SpaceStoreClass } from "../../../src/stores/spaces/SpaceStore";
 import { MockEventEmitter, stubClient, untilEmission } from "../../test-utils";
-import { TestSdkContext } from '../../TestSdkContext';
-import { SlidingSyncManager } from '../../../src/SlidingSyncManager';
-import { RoomViewStore } from '../../../src/stores/RoomViewStore';
-import { MatrixDispatcher } from '../../../src/dispatcher/dispatcher';
-import { SortAlgorithm } from '../../../src/stores/room-list/algorithms/models';
-import { DefaultTagID, TagID } from '../../../src/stores/room-list/models';
-import { UPDATE_SELECTED_SPACE } from '../../../src/stores/spaces';
-import { LISTS_LOADING_EVENT } from '../../../src/stores/room-list/RoomListStore';
-import { UPDATE_EVENT } from '../../../src/stores/AsyncStore';
+import { TestSdkContext } from "../../TestSdkContext";
+import { SlidingSyncManager } from "../../../src/SlidingSyncManager";
+import { RoomViewStore } from "../../../src/stores/RoomViewStore";
+import { MatrixDispatcher } from "../../../src/dispatcher/dispatcher";
+import { SortAlgorithm } from "../../../src/stores/room-list/algorithms/models";
+import { DefaultTagID, TagID } from "../../../src/stores/room-list/models";
+import { UPDATE_SELECTED_SPACE } from "../../../src/stores/spaces";
+import { LISTS_LOADING_EVENT } from "../../../src/stores/room-list/RoomListStore";
+import { UPDATE_EVENT } from "../../../src/stores/AsyncStore";
 
-jest.mock('../../../src/SlidingSyncManager');
-const MockSlidingSyncManager = <jest.Mock<SlidingSyncManager>><unknown>SlidingSyncManager;
+jest.mock("../../../src/SlidingSyncManager");
+const MockSlidingSyncManager = <jest.Mock<SlidingSyncManager>>(<unknown>SlidingSyncManager);
 
 describe("SlidingRoomListStore", () => {
     let store: SlidingRoomListStoreClass;
@@ -54,12 +54,16 @@ describe("SlidingRoomListStore", () => {
             },
         }) as SpaceStoreClass;
         context._SlidingSyncManager = new MockSlidingSyncManager();
-        context._SlidingSyncManager.slidingSync = mocked(new MockEventEmitter({
-            getListData: jest.fn(),
-        }) as unknown as SlidingSync);
-        context._RoomViewStore = mocked(new MockEventEmitter({
-            getRoomId: jest.fn(),
-        }) as unknown as RoomViewStore);
+        context._SlidingSyncManager.slidingSync = mocked(
+            new MockEventEmitter({
+                getListData: jest.fn(),
+            }) as unknown as SlidingSync,
+        );
+        context._RoomViewStore = mocked(
+            new MockEventEmitter({
+                getRoomId: jest.fn(),
+            }) as unknown as RoomViewStore,
+        );
 
         // mock implementations to allow the store to map tag IDs to sliding sync list indexes and vice versa
         let index = 0;
@@ -208,12 +212,13 @@ describe("SlidingRoomListStore", () => {
             return indexToListData[i] || null;
         });
 
-        expect(store.getTagsForRoom(new Room(roomA, context.client, context.client.getUserId()))).toEqual(
-            [DefaultTagID.Untagged],
-        );
-        expect(store.getTagsForRoom(new Room(roomB, context.client, context.client.getUserId()))).toEqual(
-            [DefaultTagID.Favourite, DefaultTagID.Untagged],
-        );
+        expect(store.getTagsForRoom(new Room(roomA, context.client, context.client.getUserId()))).toEqual([
+            DefaultTagID.Untagged,
+        ]);
+        expect(store.getTagsForRoom(new Room(roomB, context.client, context.client.getUserId()))).toEqual([
+            DefaultTagID.Favourite,
+            DefaultTagID.Untagged,
+        ]);
     });
 
     it("emits LISTS_UPDATE_EVENT when slidingSync lists update", async () => {
@@ -224,7 +229,8 @@ describe("SlidingRoomListStore", () => {
         const tagId = DefaultTagID.Favourite;
         const listIndex = context.slidingSyncManager.getOrAllocateListIndex(tagId);
         const joinCount = 10;
-        const roomIndexToRoomId = { // mixed to ensure we sort
+        const roomIndexToRoomId = {
+            // mixed to ensure we sort
             1: roomB,
             2: roomC,
             0: roomA,
@@ -261,7 +267,8 @@ describe("SlidingRoomListStore", () => {
         const tagId = DefaultTagID.Favourite;
         const listIndex = context.slidingSyncManager.getOrAllocateListIndex(tagId);
         const joinCount = 10;
-        const roomIndexToRoomId = { // mixed to ensure we sort
+        const roomIndexToRoomId = {
+            // mixed to ensure we sort
             1: roomIdB,
             2: roomIdC,
             0: roomIdA,

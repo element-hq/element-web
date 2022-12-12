@@ -15,12 +15,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import classnames from 'classnames';
-import { MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
-import React from 'react';
-import { CallFeed, CallFeedEvent } from 'matrix-js-sdk/src/webrtc/callFeed';
-import { logger } from 'matrix-js-sdk/src/logger';
-import { SDPStreamMetadataPurpose } from 'matrix-js-sdk/src/webrtc/callEventTypes';
+import classnames from "classnames";
+import { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
+import React from "react";
+import { CallFeed, CallFeedEvent } from "matrix-js-sdk/src/webrtc/callFeed";
+import { logger } from "matrix-js-sdk/src/logger";
+import { SDPStreamMetadataPurpose } from "matrix-js-sdk/src/webrtc/callEventTypes";
 
 import SettingsStore from "../../../settings/SettingsStore";
 import MemberAvatar from "../avatars/MemberAvatar";
@@ -73,10 +73,7 @@ export default class VideoFeed extends React.PureComponent<IProps, IState> {
     componentDidUpdate(prevProps: IProps, prevState: IState) {
         this.updateFeed(prevProps.feed, this.props.feed);
         // If the mutes state has changed, we try to playMedia()
-        if (
-            prevState.videoMuted !== this.state.videoMuted ||
-            prevProps.feed.stream !== this.props.feed.stream
-        ) {
+        if (prevState.videoMuted !== this.state.videoMuted || prevProps.feed.stream !== this.props.feed.stream) {
             this.playMedia();
         }
     }
@@ -90,12 +87,12 @@ export default class VideoFeed extends React.PureComponent<IProps, IState> {
 
     private setElementRef = (element: HTMLVideoElement): void => {
         if (!element) {
-            this.element?.removeEventListener('resize', this.onResize);
+            this.element?.removeEventListener("resize", this.onResize);
             return;
         }
 
         this.element = element;
-        element.addEventListener('resize', this.onResize);
+        element.addEventListener("resize", this.onResize);
     };
 
     private updateFeed(oldFeed: CallFeed, newFeed: CallFeed) {
@@ -140,7 +137,8 @@ export default class VideoFeed extends React.PureComponent<IProps, IState> {
         } catch (e) {
             logger.info(
                 `Failed to play media element with feed for userId ` +
-                `${this.props.feed.userId} with purpose ${this.props.feed.purpose}`, e,
+                    `${this.props.feed.userId} with purpose ${this.props.feed.purpose}`,
+                e,
             );
         }
     }
@@ -193,14 +191,8 @@ export default class VideoFeed extends React.PureComponent<IProps, IState> {
         });
 
         let micIcon;
-        if (
-            feed.purpose !== SDPStreamMetadataPurpose.Screenshare &&
-            !primary &&
-            !pipMode
-        ) {
-            micIcon = (
-                <div className={micIconClasses} />
-            );
+        if (feed.purpose !== SDPStreamMetadataPurpose.Screenshare && !primary && !pipMode) {
+            micIcon = <div className={micIconClasses} />;
         }
 
         let content;
@@ -213,31 +205,22 @@ export default class VideoFeed extends React.PureComponent<IProps, IState> {
             else if (!pipMode && primary) avatarSize = 160;
             else; // TBD
 
-            content =(
-                <MemberAvatar
-                    member={member}
-                    height={avatarSize}
-                    width={avatarSize}
-                />
-            );
+            content = <MemberAvatar member={member} height={avatarSize} width={avatarSize} />;
         } else {
             const videoClasses = classnames("mx_VideoFeed_video", {
-                mx_VideoFeed_video_mirror: (
+                mx_VideoFeed_video_mirror:
                     this.props.feed.isLocal() &&
                     this.props.feed.purpose === SDPStreamMetadataPurpose.Usermedia &&
-                    SettingsStore.getValue('VideoView.flipVideoHorizontally')
-                ),
+                    SettingsStore.getValue("VideoView.flipVideoHorizontally"),
             });
 
-            content = (
-                <video className={videoClasses} ref={this.setElementRef} />
-            );
+            content = <video className={videoClasses} ref={this.setElementRef} />;
         }
 
         return (
             <div className={wrapperClasses}>
-                { micIcon }
-                { content }
+                {micIcon}
+                {content}
             </div>
         );
     }

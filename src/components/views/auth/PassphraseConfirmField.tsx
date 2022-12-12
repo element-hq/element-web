@@ -66,16 +66,18 @@ class PassphraseConfirmField extends PureComponent<IProps> {
     };
 
     render() {
-        return <Field
-            id={this.props.id}
-            ref={this.props.fieldRef}
-            type="password"
-            label={_t(this.props.label)}
-            autoComplete={this.props.autoComplete}
-            value={this.props.value}
-            onChange={this.props.onChange}
-            onValidate={this.onValidate}
-        />;
+        return (
+            <Field
+                id={this.props.id}
+                ref={this.props.fieldRef}
+                type="password"
+                label={_t(this.props.label)}
+                autoComplete={this.props.autoComplete}
+                value={this.props.value}
+                onChange={this.props.onChange}
+                onValidate={this.onValidate}
+            />
+        );
     }
 }
 

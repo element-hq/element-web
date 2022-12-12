@@ -16,20 +16,19 @@ limitations under the License.
 */
 
 import "./@types/commonmark"; // import better types than @types/commonmark
-import * as commonmark from 'commonmark';
+import * as commonmark from "commonmark";
 import { escape } from "lodash";
-import { logger } from 'matrix-js-sdk/src/logger';
+import { logger } from "matrix-js-sdk/src/logger";
 
-import { linkify } from './linkify-matrix';
+import { linkify } from "./linkify-matrix";
 
-const ALLOWED_HTML_TAGS = ['sub', 'sup', 'del', 'u'];
+const ALLOWED_HTML_TAGS = ["sub", "sup", "del", "u"];
 
 // These types of node are definitely text
-const TEXT_NODES = ['text', 'softbreak', 'linebreak', 'paragraph', 'document'];
+const TEXT_NODES = ["text", "softbreak", "linebreak", "paragraph", "document"];
 
 function isAllowedHtmlTag(node: commonmark.Node): boolean {
-    if (node.literal != null &&
-        node.literal.match('^<((div|span) data-mx-maths="[^"]*"|/(div|span))>$') != null) {
+    if (node.literal != null && node.literal.match('^<((div|span) data-mx-maths="[^"]*"|/(div|span))>$') != null) {
         return true;
     }
 
@@ -59,14 +58,14 @@ function isMultiLine(node: commonmark.Node): boolean {
 
 function getTextUntilEndOrLinebreak(node: commonmark.Node) {
     let currentNode = node;
-    let text = '';
-    while (currentNode !== null && currentNode.type !== 'softbreak' && currentNode.type !== 'linebreak') {
+    let text = "";
+    while (currentNode !== null && currentNode.type !== "softbreak" && currentNode.type !== "linebreak") {
         const { literal, type } = currentNode;
-        if (type === 'text' && literal) {
+        if (type === "text" && literal) {
             let n = 0;
             let char = literal[n];
-            while (char !== ' ' && char !== null && n <= literal.length) {
-                if (char === ' ') {
+            while (char !== " " && char !== null && n <= literal.length) {
+                if (char === " ") {
                     break;
                 }
                 if (char) {
@@ -75,7 +74,7 @@ function getTextUntilEndOrLinebreak(node: commonmark.Node) {
                 n += 1;
                 char = literal[n];
             }
-            if (char === ' ') {
+            if (char === " ") {
                 break;
             }
         }
@@ -85,8 +84,8 @@ function getTextUntilEndOrLinebreak(node: commonmark.Node) {
 }
 
 const formattingChangesByNodeType = {
-    'emph': '_',
-    'strong': '__',
+    emph: "_",
+    strong: "__",
 };
 
 /**
@@ -98,7 +97,7 @@ const innerNodeLiteral = (node: commonmark.Node): string => {
     const walker = node.walker();
     let step: commonmark.NodeWalkingStep;
 
-    while (step = walker.next()) {
+    while ((step = walker.next())) {
         const currentNode = step.node;
         const currentNodeLiteral = currentNode.literal;
         if (step.entering && currentNode.type === "text" && currentNodeLiteral) {
@@ -141,13 +140,13 @@ export default class Markdown {
     private repairLinks(parsed: commonmark.Node) {
         const walker = parsed.walker();
         let event: commonmark.NodeWalkingStep = null;
-        let text = '';
+        let text = "";
         let isInPara = false;
         let previousNode: commonmark.Node | null = null;
         let shouldUnlinkFormattingNode = false;
         while ((event = walker.next())) {
             const { node } = event;
-            if (node.type === 'paragraph') {
+            if (node.type === "paragraph") {
                 if (event.entering) {
                     isInPara = true;
                 } else {
@@ -157,25 +156,25 @@ export default class Markdown {
             if (isInPara) {
                 // Clear saved string when line ends
                 if (
-                    node.type === 'softbreak' ||
-                    node.type === 'linebreak' ||
+                    node.type === "softbreak" ||
+                    node.type === "linebreak" ||
                     // Also start calculating the text from the beginning on any spaces
-                    (node.type === 'text' && node.literal === ' ')
+                    (node.type === "text" && node.literal === " ")
                 ) {
-                    text = '';
+                    text = "";
                     continue;
                 }
 
                 // Break up text nodes on spaces, so that we don't shoot past them without resetting
-                if (node.type === 'text') {
+                if (node.type === "text") {
                     const [thisPart, ...nextParts] = node.literal.split(/( )/);
                     node.literal = thisPart;
                     text += thisPart;
 
                     // Add the remaining parts as siblings
-                    nextParts.reverse().forEach(part => {
+                    nextParts.reverse().forEach((part) => {
                         if (part) {
-                            const nextNode = new commonmark.Node('text');
+                            const nextNode = new commonmark.Node("text");
                             nextNode.literal = part;
                             node.insertAfter(nextNode);
                             // Make the iterator aware of the newly inserted node
@@ -185,7 +184,7 @@ export default class Markdown {
                 }
 
                 // We should not do this if previous node was not a textnode, as we can't combine it then.
-                if ((node.type === 'emph' || node.type === 'strong') && previousNode.type === 'text') {
+                if ((node.type === "emph" || node.type === "strong") && previousNode.type === "text") {
                     if (event.entering) {
                         const foundLinks = linkify.find(text);
                         for (const { value } of foundLinks) {
@@ -201,10 +200,10 @@ export default class Markdown {
                                 const newLinks = linkify.find(newText);
                                 // Should always find only one link here, if it finds more it means that the algorithm is broken
                                 if (newLinks.length === 1) {
-                                    const emphasisTextNode = new commonmark.Node('text');
+                                    const emphasisTextNode = new commonmark.Node("text");
                                     emphasisTextNode.literal = nonEmphasizedText;
                                     previousNode.insertAfter(emphasisTextNode);
-                                    node.firstChild.literal = '';
+                                    node.firstChild.literal = "";
                                     event = node.walker().next();
                                     // Remove `em` opening and closing nodes
                                     node.unlink();
@@ -239,12 +238,12 @@ export default class Markdown {
         const walker = this.parsed.walker();
 
         let ev: commonmark.NodeWalkingStep;
-        while (ev = walker.next()) {
+        while ((ev = walker.next())) {
             const node = ev.node;
             if (TEXT_NODES.indexOf(node.type) > -1) {
                 // definitely text
                 continue;
-            } else if (node.type == 'html_inline' || node.type == 'html_block') {
+            } else if (node.type == "html_inline" || node.type == "html_block") {
                 // if it's an allowed html tag, we need to render it and therefore
                 // we will need to use HTML. If it's not allowed, it's not HTML since
                 // we'll just be treating it as text.
@@ -267,7 +266,7 @@ export default class Markdown {
             // so if these are just newline characters then the
             // block quote ends up all on one line
             // (https://github.com/vector-im/element-web/issues/3154)
-            softbreak: '<br />',
+            softbreak: "<br />",
         });
 
         // Trying to strip out the wrapping <p/> causes a lot more complication
@@ -279,7 +278,7 @@ export default class Markdown {
         //
         // Let's try sending with <p/>s anyway for now, though.
         const realParagraph = renderer.paragraph;
-        renderer.paragraph = function(node: commonmark.Node, entering: boolean) {
+        renderer.paragraph = function (node: commonmark.Node, entering: boolean) {
             // If there is only one top level node, just return the
             // bare text: it's a single line of text and so should be
             // 'inline', rather than unnecessarily wrapped in its own
@@ -288,31 +287,31 @@ export default class Markdown {
             // However, if it's a blockquote, adds a p tag anyway
             // in order to avoid deviation to commonmark and unexpected
             // results when parsing the formatted HTML.
-            if (node.parent.type === 'block_quote'|| isMultiLine(node)) {
+            if (node.parent.type === "block_quote" || isMultiLine(node)) {
                 realParagraph.call(this, node, entering);
             }
         };
 
-        renderer.link = function(node, entering) {
+        renderer.link = function (node, entering) {
             const attrs = this.attrs(node);
             if (entering) {
-                attrs.push(['href', this.esc(node.destination)]);
+                attrs.push(["href", this.esc(node.destination)]);
                 if (node.title) {
-                    attrs.push(['title', this.esc(node.title)]);
+                    attrs.push(["title", this.esc(node.title)]);
                 }
                 // Modified link behaviour to treat them all as external and
                 // thus opening in a new tab.
                 if (externalLinks) {
-                    attrs.push(['target', '_blank']);
-                    attrs.push(['rel', 'noreferrer noopener']);
+                    attrs.push(["target", "_blank"]);
+                    attrs.push(["rel", "noreferrer noopener"]);
                 }
-                this.tag('a', attrs);
+                this.tag("a", attrs);
             } else {
-                this.tag('/a');
+                this.tag("/a");
             }
         };
 
-        renderer.html_inline = function(node: commonmark.Node) {
+        renderer.html_inline = function (node: commonmark.Node) {
             if (isAllowedHtmlTag(node)) {
                 this.lit(node.literal);
             } else {
@@ -320,7 +319,7 @@ export default class Markdown {
             }
         };
 
-        renderer.html_block = function(node: commonmark.Node) {
+        renderer.html_block = function (node: commonmark.Node) {
             /*
             // as with `paragraph`, we only insert line breaks
             // if there are multiple lines in the markdown.
@@ -348,19 +347,19 @@ export default class Markdown {
     toPlaintext(): string {
         const renderer = new commonmark.HtmlRenderer({ safe: false });
 
-        renderer.paragraph = function(node: commonmark.Node, entering: boolean) {
+        renderer.paragraph = function (node: commonmark.Node, entering: boolean) {
             // as with toHTML, only append lines to paragraphs if there are
             // multiple paragraphs
             if (isMultiLine(node)) {
                 if (!entering && node.next) {
-                    this.lit('\n\n');
+                    this.lit("\n\n");
                 }
             }
         };
 
-        renderer.html_block = function(node: commonmark.Node) {
+        renderer.html_block = function (node: commonmark.Node) {
             this.lit(node.literal);
-            if (isMultiLine(node) && node.next) this.lit('\n\n');
+            if (isMultiLine(node) && node.next) this.lit("\n\n");
         };
 
         return renderer.render(this.parsed);

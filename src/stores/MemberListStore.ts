@@ -31,14 +31,11 @@ export class MemberListStore {
     // cache of Display Name -> name to sort based on. This strips out special symbols like @.
     private readonly sortNames = new Map<string, string>();
     // list of room IDs that have been lazy loaded
-    private readonly loadedRooms = new Set<string>;
+    private readonly loadedRooms = new Set<string>();
 
     private collator?: Intl.Collator;
 
-    public constructor(
-        private readonly stores: SdkContextClass,
-    ) {
-    }
+    public constructor(private readonly stores: SdkContextClass) {}
 
     /**
      * Load the member list. Call this whenever the list may have changed.
@@ -47,7 +44,8 @@ export class MemberListStore {
      * @returns A list of filtered and sorted room members, grouped by membership.
      */
     public async loadMemberList(
-        roomId: string, searchQuery?: string,
+        roomId: string,
+        searchQuery?: string,
     ): Promise<Record<"joined" | "invited", RoomMember[]>> {
         if (!this.stores.client) {
             return {
@@ -56,7 +54,7 @@ export class MemberListStore {
             };
         }
         const language = SettingsStore.getValue("language");
-        this.collator = new Intl.Collator(language, { sensitivity: 'base', ignorePunctuation: false });
+        this.collator = new Intl.Collator(language, { sensitivity: "base", ignorePunctuation: false });
         const members = await this.loadMembers(roomId);
         // Filter then sort as it's more efficient than sorting tons of members we will just filter out later.
         // Also sort each group, as there's no point comparing invited/joined users when they aren't in the same list!
@@ -99,7 +97,9 @@ export class MemberListStore {
             // load using traditional lazy loading
             try {
                 await room.loadMembersIfNeeded();
-            } catch (ex) {/* already logged in RoomView */}
+            } catch (ex) {
+                /* already logged in RoomView */
+            }
         }
         // remember that we have loaded the members so we don't hit /members all the time. We
         // will forget this on refresh which is fine as we only store the data in-memory.
@@ -161,9 +161,7 @@ export class MemberListStore {
      * @param query The textual query to filter based on.
      * @returns An object with a list of joined and invited users respectively.
      */
-    private filterMembers(
-        members: Array<RoomMember>, query?: string,
-    ): Record<"joined" | "invited", RoomMember[]> {
+    private filterMembers(members: Array<RoomMember>, query?: string): Record<"joined" | "invited", RoomMember[]> {
         const result: Record<"joined" | "invited", RoomMember[]> = {
             joined: [],
             invited: [],
@@ -216,15 +214,15 @@ export class MemberListStore {
 
         // First by presence
         if (showPresence) {
-            const convertPresence = (p: string): string => p === 'unavailable' ? 'online' : p;
+            const convertPresence = (p: string): string => (p === "unavailable" ? "online" : p);
             const presenceIndex = (p: string): number => {
-                const order = ['active', 'online', 'offline'];
+                const order = ["active", "online", "offline"];
                 const idx = order.indexOf(convertPresence(p));
                 return idx === -1 ? order.length : idx; // unknown states at the end
             };
 
-            const idxA = presenceIndex(userA!.currentlyActive ? 'active' : userA!.presence);
-            const idxB = presenceIndex(userB!.currentlyActive ? 'active' : userB!.presence);
+            const idxA = presenceIndex(userA!.currentlyActive ? "active" : userA!.presence);
+            const idxB = presenceIndex(userB!.currentlyActive ? "active" : userB!.presence);
             if (idxA !== idxB) {
                 return idxA - idxB;
             }
@@ -254,7 +252,7 @@ export class MemberListStore {
         if (result) {
             return result;
         }
-        result = (name[0] === '@' ? name.slice(1) : name).replace(SORT_REGEX, "");
+        result = (name[0] === "@" ? name.slice(1) : name).replace(SORT_REGEX, "");
         this.sortNames.set(name, result);
         return result;
     }

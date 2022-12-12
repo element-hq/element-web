@@ -23,12 +23,12 @@ import { arrayDiff, arrayIntersection } from "./arrays";
  * @param b The second Map. Must be defined.
  * @returns The difference between the keys of each Map.
  */
-export function mapDiff<K, V>(a: Map<K, V>, b: Map<K, V>): { changed: K[], added: K[], removed: K[] } {
+export function mapDiff<K, V>(a: Map<K, V>, b: Map<K, V>): { changed: K[]; added: K[]; removed: K[] } {
     const aKeys = [...a.keys()];
     const bKeys = [...b.keys()];
     const keyDiff = arrayDiff(aKeys, bKeys);
     const possibleChanges = arrayIntersection(aKeys, bKeys);
-    const changes = possibleChanges.filter(k => a.get(k) !== b.get(k));
+    const changes = possibleChanges.filter((k) => a.get(k) !== b.get(k));
 
     return { changed: changes, added: keyDiff.added, removed: keyDiff.removed };
 }

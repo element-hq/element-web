@@ -14,29 +14,31 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 import { EventStatus, MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { SyncState, ISyncStateData } from "matrix-js-sdk/src/sync";
 import { Room } from "matrix-js-sdk/src/models/room";
 
-import { _t, _td } from '../../languageHandler';
-import Resend from '../../Resend';
-import dis from '../../dispatcher/dispatcher';
-import { messageForResourceLimitError } from '../../utils/ErrorUtils';
+import { _t, _td } from "../../languageHandler";
+import Resend from "../../Resend";
+import dis from "../../dispatcher/dispatcher";
+import { messageForResourceLimitError } from "../../utils/ErrorUtils";
 import { Action } from "../../dispatcher/actions";
 import { StaticNotificationState } from "../../stores/notifications/StaticNotificationState";
 import AccessibleButton from "../views/elements/AccessibleButton";
 import InlineSpinner from "../views/elements/InlineSpinner";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
-import { RoomStatusBarUnsentMessages } from './RoomStatusBarUnsentMessages';
+import { RoomStatusBarUnsentMessages } from "./RoomStatusBarUnsentMessages";
 
 const STATUS_BAR_HIDDEN = 0;
 const STATUS_BAR_EXPANDED = 1;
 const STATUS_BAR_EXPANDED_LARGE = 2;
 
 export function getUnsentMessages(room: Room, threadId?: string): MatrixEvent[] {
-    if (!room) { return []; }
-    return room.getPendingEvents().filter(function(ev) {
+    if (!room) {
+        return [];
+    }
+    return room.getPendingEvents().filter(function (ev) {
         const isNotSent = ev.status === EventStatus.NOT_SENT;
         const belongsToTheThread = threadId === ev.threadRootId;
         return isNotSent && (!threadId || belongsToTheThread);
@@ -181,8 +183,8 @@ export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
         // if it's a resource limit exceeded error: those are shown in the top bar.
         const errorIsMauError = Boolean(
             this.state.syncStateData &&
-            this.state.syncStateData.error &&
-            this.state.syncStateData.error.name === 'M_RESOURCE_LIMIT_EXCEEDED',
+                this.state.syncStateData.error &&
+                this.state.syncStateData.error.name === "M_RESOURCE_LIMIT_EXCEEDED",
         );
         return this.state.syncState === "ERROR" && !errorIsMauError;
     }
@@ -195,10 +197,10 @@ export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
         let consentError = null;
         let resourceLimitError = null;
         for (const m of unsentMessages) {
-            if (m.error && m.error.errcode === 'M_CONSENT_NOT_GIVEN') {
+            if (m.error && m.error.errcode === "M_CONSENT_NOT_GIVEN") {
                 consentError = m.error;
                 break;
-            } else if (m.error && m.error.errcode === 'M_RESOURCE_LIMIT_EXCEEDED') {
+            } else if (m.error && m.error.errcode === "M_RESOURCE_LIMIT_EXCEEDED") {
                 resourceLimitError = m.error;
                 break;
             }
@@ -206,13 +208,14 @@ export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
         if (consentError) {
             title = _t(
                 "You can't send any messages until you review and agree to " +
-                "<consentLink>our terms and conditions</consentLink>.",
+                    "<consentLink>our terms and conditions</consentLink>.",
                 {},
                 {
-                    'consentLink': (sub) =>
+                    consentLink: (sub) => (
                         <a href={consentError.data && consentError.data.consent_uri} target="_blank">
-                            { sub }
-                        </a>,
+                            {sub}
+                        </a>
+                    ),
                 },
             );
         } else if (resourceLimitError) {
@@ -220,46 +223,52 @@ export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
                 resourceLimitError.data.limit_type,
                 resourceLimitError.data.admin_contact,
                 {
-                    'monthly_active_user': _td(
+                    "monthly_active_user": _td(
                         "Your message wasn't sent because this homeserver has hit its Monthly Active User Limit. " +
-                        "Please <a>contact your service administrator</a> to continue using the service.",
+                            "Please <a>contact your service administrator</a> to continue using the service.",
                     ),
-                    'hs_disabled': _td(
+                    "hs_disabled": _td(
                         "Your message wasn't sent because this homeserver has been blocked by its administrator. " +
-                        "Please <a>contact your service administrator</a> to continue using the service.",
+                            "Please <a>contact your service administrator</a> to continue using the service.",
                     ),
-                    '': _td(
+                    "": _td(
                         "Your message wasn't sent because this homeserver has exceeded a resource limit. " +
-                        "Please <a>contact your service administrator</a> to continue using the service.",
+                            "Please <a>contact your service administrator</a> to continue using the service.",
                     ),
                 },
             );
         } else {
-            title = _t('Some of your messages have not been sent');
+            title = _t("Some of your messages have not been sent");
         }
 
-        let buttonRow = <>
-            <AccessibleButton onClick={this.onCancelAllClick} className="mx_RoomStatusBar_unsentCancelAllBtn">
-                { _t("Delete all") }
-            </AccessibleButton>
-            <AccessibleButton onClick={this.onResendAllClick} className="mx_RoomStatusBar_unsentRetry">
-                { _t("Retry all") }
-            </AccessibleButton>
-        </>;
+        let buttonRow = (
+            <>
+                <AccessibleButton onClick={this.onCancelAllClick} className="mx_RoomStatusBar_unsentCancelAllBtn">
+                    {_t("Delete all")}
+                </AccessibleButton>
+                <AccessibleButton onClick={this.onResendAllClick} className="mx_RoomStatusBar_unsentRetry">
+                    {_t("Retry all")}
+                </AccessibleButton>
+            </>
+        );
         if (this.state.isResending) {
-            buttonRow = <>
-                <InlineSpinner w={20} h={20} />
-                { /* span for css */ }
-                <span>{ _t("Sending") }</span>
-            </>;
+            buttonRow = (
+                <>
+                    <InlineSpinner w={20} h={20} />
+                    {/* span for css */}
+                    <span>{_t("Sending")}</span>
+                </>
+            );
         }
 
-        return <RoomStatusBarUnsentMessages
-            title={title}
-            description={_t("You can select all or individual messages to retry or delete")}
-            notificationState={StaticNotificationState.RED_EXCLAMATION}
-            buttons={buttonRow}
-        />;
+        return (
+            <RoomStatusBarUnsentMessages
+                title={title}
+                description={_t("You can select all or individual messages to retry or delete")}
+                notificationState={StaticNotificationState.RED_EXCLAMATION}
+                buttons={buttonRow}
+            />
+        );
     }
 
     public render(): JSX.Element {
@@ -273,13 +282,14 @@ export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
                                 width="24"
                                 height="24"
                                 title="/!\ "
-                                alt="/!\ " />
+                                alt="/!\ "
+                            />
                             <div>
                                 <div className="mx_RoomStatusBar_connectionLostBar_title">
-                                    { _t('Connectivity to the server has been lost.') }
+                                    {_t("Connectivity to the server has been lost.")}
                                 </div>
                                 <div className="mx_RoomStatusBar_connectionLostBar_desc">
-                                    { _t('Sent messages will be stored until your connection has returned.') }
+                                    {_t("Sent messages will be stored until your connection has returned.")}
                                 </div>
                             </div>
                         </div>

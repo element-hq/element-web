@@ -45,7 +45,8 @@ export interface ChunkRecordedPayload {
  */
 export class VoiceBroadcastRecorder
     extends TypedEventEmitter<VoiceBroadcastRecorderEvent, EventMap>
-    implements IDestroyable {
+    implements IDestroyable
+{
     private headers = new Uint8Array(0);
     private chunkBuffer = new Uint8Array(0);
     // position of the previous chunk in seconds
@@ -54,10 +55,7 @@ export class VoiceBroadcastRecorder
     // current chunk length in seconds
     private currentChunkLength = 0;
 
-    public constructor(
-        private voiceRecording: VoiceRecording,
-        public readonly targetChunkLength: number,
-    ) {
+    public constructor(private voiceRecording: VoiceRecording, public readonly targetChunkLength: number) {
         super();
         this.voiceRecording.onDataAvailable = this.onDataAvailable;
     }
@@ -148,10 +146,7 @@ export class VoiceBroadcastRecorder
             return;
         }
 
-        this.emit(
-            VoiceBroadcastRecorderEvent.ChunkRecorded,
-            this.extractChunk(),
-        );
+        this.emit(VoiceBroadcastRecorderEvent.ChunkRecorded, this.extractChunk());
     }
 
     public destroy(): void {

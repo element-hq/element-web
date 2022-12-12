@@ -27,10 +27,7 @@ import { Action } from "../../../dispatcher/actions";
 import { ConnectionState, ElementCall } from "../../../models/Call";
 import { useCall } from "../../../hooks/useCall";
 import { useEventEmitterState } from "../../../hooks/useEventEmitter";
-import {
-    OwnBeaconStore,
-    OwnBeaconStoreEvent,
-} from "../../../stores/OwnBeaconStore";
+import { OwnBeaconStore, OwnBeaconStoreEvent } from "../../../stores/OwnBeaconStore";
 import { GroupCallDuration } from "../voip/CallDuration";
 import { SdkContextClass } from "../../../contexts/SDKContext";
 
@@ -39,10 +36,7 @@ interface RoomCallBannerProps {
     call: ElementCall;
 }
 
-const RoomCallBannerInner: React.FC<RoomCallBannerProps> = ({
-    roomId,
-    call,
-}) => {
+const RoomCallBannerInner: React.FC<RoomCallBannerProps> = ({ roomId, call }) => {
     const connect = useCallback(
         (ev: ButtonEvent) => {
             ev.preventDefault();
@@ -58,7 +52,8 @@ const RoomCallBannerInner: React.FC<RoomCallBannerProps> = ({
 
     const onClick = useCallback(() => {
         const event = call.groupCall.room.currentState.getStateEvents(
-            EventType.GroupCallPrefix, call.groupCall.groupCallId,
+            EventType.GroupCallPrefix,
+            call.groupCall.groupCallId,
         );
         if (event === null) {
             logger.error("Couldn't find a group call event to jump to");
@@ -76,22 +71,14 @@ const RoomCallBannerInner: React.FC<RoomCallBannerProps> = ({
     }, [call, roomId]);
 
     return (
-        <div
-            className="mx_RoomCallBanner"
-            onClick={onClick}
-        >
+        <div className="mx_RoomCallBanner" onClick={onClick}>
             <div className="mx_RoomCallBanner_text">
-                <span className="mx_RoomCallBanner_label">{ _t("Video call") }</span>
+                <span className="mx_RoomCallBanner_label">{_t("Video call")}</span>
                 <GroupCallDuration groupCall={call.groupCall} />
             </div>
 
-            <AccessibleButton
-                onClick={connect}
-                kind="primary"
-                element="button"
-                disabled={false}
-            >
-                { _t("Join") }
+            <AccessibleButton onClick={connect} kind="primary" element="button" disabled={false}>
+                {_t("Join")}
             </AccessibleButton>
         </div>
     );
@@ -111,10 +98,8 @@ const RoomCallBanner: React.FC<Props> = ({ roomId }) => {
         () => OwnBeaconStore.instance.isMonitoringLiveLocation,
     );
 
-    const liveBeaconIds = useEventEmitterState(
-        OwnBeaconStore.instance,
-        OwnBeaconStoreEvent.LivenessChange,
-        () => OwnBeaconStore.instance.getLiveBeaconIds(roomId),
+    const liveBeaconIds = useEventEmitterState(OwnBeaconStore.instance, OwnBeaconStoreEvent.LivenessChange, () =>
+        OwnBeaconStore.instance.getLiveBeaconIds(roomId),
     );
 
     if (isMonitoringLiveLocation && liveBeaconIds.length) {

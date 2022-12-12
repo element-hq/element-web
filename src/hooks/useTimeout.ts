@@ -59,7 +59,7 @@ export const useInterval = (handler: Handler, intervalMs: number) => {
 // Hook to simplify a variable counting down to 0, handler called when it reached 0
 export const useExpiringCounter = (handler: Handler, intervalMs: number, initialCount: number) => {
     const [count, setCount] = useState(initialCount);
-    useInterval(() => setCount(c => c - 1), intervalMs);
+    useInterval(() => setCount((c) => c - 1), intervalMs);
     if (count === 0) {
         handler();
     }

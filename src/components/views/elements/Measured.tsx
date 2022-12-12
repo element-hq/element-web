@@ -50,8 +50,7 @@ export default class Measured extends React.PureComponent<IProps> {
             UIStore.instance.stopTrackingElementDimensions(`Measured${this.instanceId}`);
         }
         if (current) {
-            UIStore.instance.trackElementDimensions(`Measured${this.instanceId}`,
-                this.props.sensor);
+            UIStore.instance.trackElementDimensions(`Measured${this.instanceId}`, this.props.sensor);
         }
     }
 

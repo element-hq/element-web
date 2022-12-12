@@ -39,7 +39,7 @@ export default class SendHistoryManager {
         let index = 0;
         let itemJSON;
 
-        while (itemJSON = sessionStorage.getItem(`${this.prefix}[${index}]`)) {
+        while ((itemJSON = sessionStorage.getItem(`${this.prefix}[${index}]`))) {
             try {
                 this.history.push(JSON.parse(itemJSON));
             } catch (e) {

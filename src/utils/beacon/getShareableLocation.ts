@@ -14,11 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {
-    MatrixClient,
-    MatrixEvent,
-    getBeaconInfoIdentifier,
-} from "matrix-js-sdk/src/matrix";
+import { MatrixClient, MatrixEvent, getBeaconInfoIdentifier } from "matrix-js-sdk/src/matrix";
 
 /**
  * Beacons should only have shareable locations (open in external mapping tool, forward)

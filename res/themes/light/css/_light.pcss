@@ -10,35 +10,22 @@
 /* Noto Color Emoji contains digits, in fixed-width, therefore causing
    digits in flowed text to stand out.
    TODO: Consider putting all emoji fonts to the end rather than the front. */
-$font-family: 'Inter',
-    'Twemoji',
-    'Apple Color Emoji',
-    'Segoe UI Emoji',
-    'STIXGeneral',
-    'Arial',
-    'Helvetica',
-    sans-serif,
-    'Noto Color Emoji';
+$font-family: "Inter", "Twemoji", "Apple Color Emoji", "Segoe UI Emoji", "STIXGeneral", "Arial", "Helvetica", sans-serif,
+    "Noto Color Emoji";
 
-$monospace-font-family: 'Inconsolata',
-    'Twemoji',
-    'Apple Color Emoji',
-    'Segoe UI Emoji',
-    'STIXGeneral',
-    'Courier',
-    monospace,
-    'Noto Color Emoji';
+$monospace-font-family: "Inconsolata", "Twemoji", "Apple Color Emoji", "Segoe UI Emoji", "STIXGeneral", "Courier",
+    monospace, "Noto Color Emoji";
 
 /* Colors from Figma Compound https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound?node-id=559%3A120 */
 /* ******************** */
-$primary-content: #17191C;
-$secondary-content: #737D8C;
-$tertiary-content: #8D97A5;
+$primary-content: #17191c;
+$secondary-content: #737d8c;
+$tertiary-content: #8d97a5;
 $quaternary-content: #c1c6cd;
-$quinary-content: #E3E8F0;
+$quinary-content: #e3e8f0;
 
-$system: #F4F6FA;
-$system-transparent: rgba($system, 0.0); /* XXX: workaround for Safari 15.3 linear-gradient bug */
+$system: #f4f6fa;
+$system-transparent: rgba($system, 0); /* XXX: workaround for Safari 15.3 linear-gradient bug */
 $background: #ffffff;
 $overlay-background: rgba($background, 0.85);
 
@@ -48,13 +35,13 @@ $panel-hover: rgba($tertiary-content, 0.1);
 $panel-actions: rgba($tertiary-content, 0.2);
 $space-nav: rgba($tertiary-content, 0.15);
 
-$accent: #0DBD8B;
-$alert: #FF5B55;
+$accent: #0dbd8b;
+$alert: #ff5b55;
 $links: #0086e6;
 
 $username-variant1-color: #368bd6;
 $username-variant2-color: #ac3ba8;
-$username-variant3-color: #0DBD8B;
+$username-variant3-color: #0dbd8b;
 $username-variant4-color: #e64f7a;
 $username-variant5-color: #ff812d;
 $username-variant6-color: #2dc2c5;
@@ -83,7 +70,7 @@ $neutral-badge-color: #dbdbdb;
 $strong-input-border-color: #c7c7c7;
 $preview-widget-bar-color: #dddddd;
 $accent-fg-color: $background;
-$accent-alt: #238CF5;
+$accent-alt: #238cf5;
 $info-plinth-fg-color: #888;
 /* ******************** */
 
@@ -98,11 +85,10 @@ $event-selected-color: #f6f7f8;
 $topleftmenu-color: #212121;
 $roomtopic-color: #9e9e9e;
 $spacePanel-bg-color: rgba(232, 232, 232, 0.77);
-$panel-gradient: rgba(242, 245, 248, 0),
-    rgba(242, 245, 248, 1);
+$panel-gradient: rgba(242, 245, 248, 0), rgba(242, 245, 248, 1);
 $h3-color: #3d3b39;
 $event-highlight-bg-color: $yellow-background;
-$header-panel-text-primary-color: #91A1C0;
+$header-panel-text-primary-color: #91a1c0;
 /* ******************** */
 
 /* Blockquote */
@@ -190,7 +176,7 @@ $imagebody-giflabel-color: $background;
 
 /* RoomList */
 /* ******************** */
-$roomlist-bg-color: rgba(245, 245, 245, 0.90);
+$roomlist-bg-color: rgba(245, 245, 245, 0.9);
 $roomsublist-skeleton-ui-bg: linear-gradient(180deg, $background 0%, #ffffff00 100%);
 $roomtile-default-badge-bg-color: $muted-fg-color;
 /* ******************** */
@@ -262,9 +248,9 @@ $voice-record-icon-color: $tertiary-content;
 
 /* Bubble tiles */
 /* ******************** */
-$eventbubble-self-bg: #E7F8F3;
-$eventbubble-others-bg: #E8EDF4;
-$eventbubble-bg-hover: #F6F7F8;
+$eventbubble-self-bg: #e7f8f3;
+$eventbubble-others-bg: #e8edf4;
+$eventbubble-bg-hover: #f6f7f8;
 $eventbubble-reply-color: $quaternary-content;
 /* ******************** */
 
@@ -281,15 +267,15 @@ $call-view-button-on-foreground: $secondary-content;
 $call-view-button-on-background: $background;
 $call-view-button-off-foreground: $background;
 $call-view-button-off-background: $secondary-content;
-$call-view-content-background: #21262C;
+$call-view-content-background: #21262c;
 
 $video-feed-secondary-background: #394049; /* XXX: Color from dark theme */
 $voipcall-plinth-color: $system;
 
 /* All of these are from dark theme */
-$call-lobby-system: #21262C;
-$call-lobby-background: #15191E;
-$call-lobby-primary-content: #FFFFFF;
+$call-lobby-system: #21262c;
+$call-lobby-background: #15191e;
+$call-lobby-primary-content: #ffffff;
 /* ******************** */
 
 /* One-off colors */
@@ -362,7 +348,8 @@ $live-badge-color: #ffffff;
     outline: none;
 }
 
-@define-mixin mx_DialogButton_hover {}
+@define-mixin mx_DialogButton_hover {
+}
 
 @define-mixin mx_DialogButton_danger {
     background-color: $accent;

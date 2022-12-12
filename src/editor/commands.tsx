@@ -34,8 +34,11 @@ export function isSlashCommand(model: EditorModel): boolean {
             return true;
         }
 
-        if (firstPart.text.startsWith("/") && !firstPart.text.startsWith("//")
-            && (firstPart.type === Type.Plain || firstPart.type === Type.PillCandidate)) {
+        if (
+            firstPart.text.startsWith("/") &&
+            !firstPart.text.startsWith("//") &&
+            (firstPart.type === Type.Plain || firstPart.type === Type.PillCandidate)
+        ) {
             return true;
         }
     }
@@ -81,7 +84,7 @@ export async function runSlashCommand(
         const title = isServerError ? _td("Server error") : _td("Command error");
 
         let errText;
-        if (typeof error === 'string') {
+        if (typeof error === "string") {
             errText = error;
         } else if ((error as ITranslatableError).translatedMessage) {
             // Check for translatable errors (newTranslatableError)
@@ -107,23 +110,31 @@ export async function shouldSendAnyway(commandText: string): Promise<boolean> {
     // ask the user if their unknown command should be sent as a message
     const { finished } = Modal.createDialog(QuestionDialog, {
         title: _t("Unknown Command"),
-        description: <div>
-            <p>
-                { _t("Unrecognised command: %(commandText)s", { commandText }) }
-            </p>
-            <p>
-                { _t("You can use <code>/help</code> to list available commands. " +
-                    "Did you mean to send this as a message?", {}, {
-                    code: t => <code>{ t }</code>,
-                }) }
-            </p>
-            <p>
-                { _t("Hint: Begin your message with <code>//</code> to start it with a slash.", {}, {
-                    code: t => <code>{ t }</code>,
-                }) }
-            </p>
-        </div>,
-        button: _t('Send as message'),
+        description: (
+            <div>
+                <p>{_t("Unrecognised command: %(commandText)s", { commandText })}</p>
+                <p>
+                    {_t(
+                        "You can use <code>/help</code> to list available commands. " +
+                            "Did you mean to send this as a message?",
+                        {},
+                        {
+                            code: (t) => <code>{t}</code>,
+                        },
+                    )}
+                </p>
+                <p>
+                    {_t(
+                        "Hint: Begin your message with <code>//</code> to start it with a slash.",
+                        {},
+                        {
+                            code: (t) => <code>{t}</code>,
+                        },
+                    )}
+                </p>
+            </div>
+        ),
+        button: _t("Send as message"),
     });
     const [sendAnyway] = await finished;
     return sendAnyway;

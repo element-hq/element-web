@@ -56,7 +56,7 @@ function remoteRender(event: MessageEvent): void {
 
     const body = document.body;
     // Don't display scrollbars if the link takes more than one line to display.
-    body.style .margin = "0px";
+    body.style.margin = "0px";
     body.style.overflow = "hidden";
     body.appendChild(a);
 
@@ -65,7 +65,7 @@ function remoteRender(event: MessageEvent): void {
     }
 }
 
-window.onmessage = function(e: MessageEvent): void {
+window.onmessage = function (e: MessageEvent): void {
     if (e.origin === window.location.origin) {
         if (e.data.blob) remoteRender(e);
     }

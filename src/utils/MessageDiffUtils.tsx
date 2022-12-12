@@ -14,18 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactNode } from 'react';
-import classNames from 'classnames';
-import { diff_match_patch as DiffMatchPatch } from 'diff-match-patch';
+import React, { ReactNode } from "react";
+import classNames from "classnames";
+import { diff_match_patch as DiffMatchPatch } from "diff-match-patch";
 import { DiffDOM, IDiff } from "diff-dom";
 import { IContent } from "matrix-js-sdk/src/models/event";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { bodyToHtml, checkBlockNode, IOptsReturnString } from "../HtmlUtils";
 
-const decodeEntities = (function() {
+const decodeEntities = (function () {
     let textarea = null;
-    return function(str: string): string {
+    return function (str: string): string {
         if (!textarea) {
             textarea = document.createElement("textarea");
         }
@@ -235,7 +235,8 @@ function filterCancelingOutDiffs(originalDiffActions: IDiff[]): IDiff[] {
         const diff = diffActions[i];
         if (diff.action === "removeTextElement") {
             const nextDiff = diffActions[i + 1];
-            const cancelsOut = nextDiff &&
+            const cancelsOut =
+                nextDiff &&
                 nextDiff.action === "addTextElement" &&
                 nextDiff.text === diff.text &&
                 routeIsEqual(nextDiff.route, diff.route);
@@ -283,8 +284,8 @@ export function editBodyDiffToHtml(originalContent: IContent, editContent: ICont
     // take the html out of the modified DOM tree again
     const safeBody = originalRootNode.innerHTML;
     const className = classNames({
-        'mx_EventTile_body': true,
-        'markdown-body': true,
+        "mx_EventTile_body": true,
+        "markdown-body": true,
     });
     return <span key="body" className={className} dangerouslySetInnerHTML={{ __html: safeBody }} dir="auto" />;
 }

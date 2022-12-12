@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixClientPeg } from '../MatrixClientPeg';
-import { _t } from '../languageHandler';
+import { MatrixClientPeg } from "../MatrixClientPeg";
+import { _t } from "../languageHandler";
 
 export function getNameForEventRoom(userId: string, roomId: string): string {
     const client = MatrixClientPeg.get();

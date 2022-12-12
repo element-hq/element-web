@@ -37,10 +37,7 @@ export class VoiceMessageRecording implements IDestroyable {
     private buffer = new Uint8Array(0); // use this.audioBuffer to access
     private playback: Playback;
 
-    public constructor(
-        private matrixClient: MatrixClient,
-        private voiceRecording: VoiceRecording,
-    ) {
+    public constructor(private matrixClient: MatrixClient, private voiceRecording: VoiceRecording) {
         this.voiceRecording.onDataAvailable = this.onDataAvailable;
     }
 
@@ -106,12 +103,9 @@ export class VoiceMessageRecording implements IDestroyable {
             const { url: mxc, file: encrypted } = await uploadFile(
                 this.matrixClient,
                 inRoomId,
-                new Blob(
-                    [this.audioBuffer],
-                    {
-                        type: this.contentType,
-                    },
-                ),
+                new Blob([this.audioBuffer], {
+                    type: this.contentType,
+                }),
             );
             this.lastUpload = { mxc, encrypted };
             this.emit(RecordingState.Uploaded);

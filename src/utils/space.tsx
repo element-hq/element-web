@@ -41,18 +41,20 @@ import { SdkContextClass } from "../contexts/SDKContext";
 
 export const shouldShowSpaceSettings = (space: Room) => {
     const userId = space.client.getUserId();
-    return space.getMyMembership() === "join"
-        && (space.currentState.maySendStateEvent(EventType.RoomAvatar, userId)
-            || space.currentState.maySendStateEvent(EventType.RoomName, userId)
-            || space.currentState.maySendStateEvent(EventType.RoomTopic, userId)
-            || space.currentState.maySendStateEvent(EventType.RoomJoinRules, userId));
+    return (
+        space.getMyMembership() === "join" &&
+        (space.currentState.maySendStateEvent(EventType.RoomAvatar, userId) ||
+            space.currentState.maySendStateEvent(EventType.RoomName, userId) ||
+            space.currentState.maySendStateEvent(EventType.RoomTopic, userId) ||
+            space.currentState.maySendStateEvent(EventType.RoomJoinRules, userId))
+    );
 };
 
 export const makeSpaceParentEvent = (room: Room, canonical = false) => ({
     type: EventType.SpaceParent,
     content: {
-        "via": calculateRoomVia(room),
-        "canonical": canonical,
+        via: calculateRoomVia(room),
+        canonical: canonical,
     },
     state_key: room.roomId,
 });
@@ -85,19 +87,20 @@ export const showCreateNewRoom = async (space: Room, type?: RoomType): Promise<b
 };
 
 export const shouldShowSpaceInvite = (space: Room) =>
-    (
-        (space?.getMyMembership() === "join" && space.canInvite(space.client.getUserId())) ||
-        space.getJoinRule() === JoinRule.Public
-    ) && shouldShowComponent(UIComponent.InviteUsers);
+    ((space?.getMyMembership() === "join" && space.canInvite(space.client.getUserId())) ||
+        space.getJoinRule() === JoinRule.Public) &&
+    shouldShowComponent(UIComponent.InviteUsers);
 
 export const showSpaceInvite = (space: Room, initialText = ""): void => {
     if (space.getJoinRule() === "public") {
         const modal = Modal.createDialog(InfoDialog, {
             title: _t("Invite to %(spaceName)s", { spaceName: space.name }),
-            description: <React.Fragment>
-                <span>{ _t("Share your public space") }</span>
-                <SpacePublicShare space={space} onFinished={() => modal.close()} />
-            </React.Fragment>,
+            description: (
+                <React.Fragment>
+                    <span>{_t("Share your public space")}</span>
+                    <SpacePublicShare space={space} onFinished={() => modal.close()} />
+                </React.Fragment>
+            ),
             fixedWidth: false,
             button: false,
             className: "mx_SpacePanel_sharePublicSpace",
@@ -109,27 +112,35 @@ export const showSpaceInvite = (space: Room, initialText = ""): void => {
 };
 
 export const showAddExistingSubspace = (space: Room): void => {
-    Modal.createDialog(AddExistingSubspaceDialog, {
-        space,
-        onCreateSubspaceClick: () => showCreateNewSubspace(space),
-        onFinished: (added: boolean) => {
-            if (added && SdkContextClass.instance.roomViewStore.getRoomId() === space.roomId) {
-                defaultDispatcher.fire(Action.UpdateSpaceHierarchy);
-            }
+    Modal.createDialog(
+        AddExistingSubspaceDialog,
+        {
+            space,
+            onCreateSubspaceClick: () => showCreateNewSubspace(space),
+            onFinished: (added: boolean) => {
+                if (added && SdkContextClass.instance.roomViewStore.getRoomId() === space.roomId) {
+                    defaultDispatcher.fire(Action.UpdateSpaceHierarchy);
+                }
+            },
         },
-    }, "mx_AddExistingToSpaceDialog_wrapper");
+        "mx_AddExistingToSpaceDialog_wrapper",
+    );
 };
 
 export const showCreateNewSubspace = (space: Room): void => {
-    Modal.createDialog(CreateSubspaceDialog, {
-        space,
-        onAddExistingSpaceClick: () => showAddExistingSubspace(space),
-        onFinished: (added: boolean) => {
-            if (added && SdkContextClass.instance.roomViewStore.getRoomId() === space.roomId) {
-                defaultDispatcher.fire(Action.UpdateSpaceHierarchy);
-            }
+    Modal.createDialog(
+        CreateSubspaceDialog,
+        {
+            space,
+            onAddExistingSpaceClick: () => showAddExistingSubspace(space),
+            onFinished: (added: boolean) => {
+                if (added && SdkContextClass.instance.roomViewStore.getRoomId() === space.roomId) {
+                    defaultDispatcher.fire(Action.UpdateSpaceHierarchy);
+                }
+            },
         },
-    }, "mx_CreateSubspaceDialog_wrapper");
+        "mx_CreateSubspaceDialog_wrapper",
+    );
 };
 
 export const bulkSpaceBehaviour = async (

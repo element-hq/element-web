@@ -14,16 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-export * from './beacon';
-export * from './client';
-export * from './location';
-export * from './platform';
-export * from './poll';
-export * from './room';
-export * from './test-utils';
-export * from './call';
-export * from './wrappers';
-export * from './utilities';
-export * from './date';
-export * from './relations';
-export * from './console';
+export * from "./beacon";
+export * from "./client";
+export * from "./location";
+export * from "./platform";
+export * from "./poll";
+export * from "./room";
+export * from "./test-utils";
+export * from "./call";
+export * from "./wrappers";
+export * from "./utilities";
+export * from "./date";
+export * from "./relations";
+export * from "./console";

@@ -191,13 +191,18 @@ export class RoomPermalinkCreator {
                         const serverName = getServerName(userId);
 
                         const domain = getHostnameFromMatrixServerName(serverName) ?? serverName;
-                        return !isHostnameIpAddress(domain) &&
+                        return (
+                            !isHostnameIpAddress(domain) &&
                             !isHostInRegex(domain, this.bannedHostsRegexps) &&
-                            isHostInRegex(domain, this.allowedHostsRegexps);
+                            isHostInRegex(domain, this.allowedHostsRegexps)
+                        );
                     });
-                    const maxEntry = allowedEntries.reduce((max, entry) => {
-                        return (entry[1] > max[1]) ? entry : max;
-                    }, [null, 0]);
+                    const maxEntry = allowedEntries.reduce(
+                        (max, entry) => {
+                            return entry[1] > max[1] ? entry : max;
+                        },
+                        [null, 0],
+                    );
                     const [userId, powerLevel] = maxEntry;
                     // object wasn't empty, and max entry wasn't a demotion from the default
                     if (userId !== null && powerLevel >= 50) {
@@ -219,11 +224,11 @@ export class RoomPermalinkCreator {
                 const getRegex = (hostname) => new RegExp("^" + utils.globToRegexp(hostname, false) + "$");
 
                 const denied = aclEvent.getContent().deny || [];
-                denied.forEach(h => bannedHostsRegexps.push(getRegex(h)));
+                denied.forEach((h) => bannedHostsRegexps.push(getRegex(h)));
 
                 const allowed = aclEvent.getContent().allow || [];
                 allowedHostsRegexps = []; // we don't want to use the default rule here
-                allowed.forEach(h => allowedHostsRegexps.push(getRegex(h)));
+                allowed.forEach((h) => allowedHostsRegexps.push(getRegex(h)));
             }
         }
         this.bannedHostsRegexps = bannedHostsRegexps;
@@ -248,8 +253,9 @@ export class RoomPermalinkCreator {
             candidates.add(getServerName(this.highestPlUserId));
         }
 
-        const serversByPopulation = Object.keys(this.populationMap)
-            .sort((a, b) => this.populationMap[b] - this.populationMap[a]);
+        const serversByPopulation = Object.keys(this.populationMap).sort(
+            (a, b) => this.populationMap[b] - this.populationMap[a],
+        );
 
         for (let i = 0; i < serversByPopulation.length && candidates.size < MAX_SERVER_CANDIDATES; i++) {
             const serverName = serversByPopulation[i];
@@ -283,7 +289,7 @@ export function makeRoomPermalink(roomId: string): string {
 
     // If the roomId isn't actually a room ID, don't try to list the servers.
     // Aliases are already routable, and don't need extra information.
-    if (roomId[0] !== '!') return getPermalinkConstructor().forRoom(roomId, []);
+    if (roomId[0] !== "!") return getPermalinkConstructor().forRoom(roomId, []);
 
     const client = MatrixClientPeg.get();
     const room = client.getRoom(roomId);
@@ -313,15 +319,15 @@ export function tryTransformEntityToPermalink(entity: string): string {
     if (!entity) return null;
 
     // Check to see if it is a bare entity for starters
-    if (entity[0] === '#' || entity[0] === '!') return makeRoomPermalink(entity);
-    if (entity[0] === '@') return makeUserPermalink(entity);
+    if (entity[0] === "#" || entity[0] === "!") return makeRoomPermalink(entity);
+    if (entity[0] === "@") return makeUserPermalink(entity);
 
     if (entity.slice(0, 7) === "matrix:") {
         try {
             const permalinkParts = parsePermalink(entity);
             if (permalinkParts) {
                 if (permalinkParts.roomIdOrAlias) {
-                    const eventIdPart = permalinkParts.eventId ? `/${permalinkParts.eventId}` : '';
+                    const eventIdPart = permalinkParts.eventId ? `/${permalinkParts.eventId}` : "";
                     let pl = matrixtoBaseUrl + `/#/${permalinkParts.roomIdOrAlias}${eventIdPart}`;
                     if (permalinkParts.viaServers.length > 0) {
                         pl += new MatrixToPermalinkConstructor().encodeServerCandidates(permalinkParts.viaServers);
@@ -344,7 +350,8 @@ export function tryTransformEntityToPermalink(entity: string): string {
  * @returns {string} The transformed permalink or original URL if unable.
  */
 export function tryTransformPermalinkToLocalHref(permalink: string): string {
-    if (!permalink.startsWith("http:") &&
+    if (
+        !permalink.startsWith("http:") &&
         !permalink.startsWith("https:") &&
         !permalink.startsWith("matrix:") &&
         !permalink.startsWith("vector:") // Element Desktop
@@ -367,7 +374,7 @@ export function tryTransformPermalinkToLocalHref(permalink: string): string {
         const permalinkParts = parsePermalink(permalink);
         if (permalinkParts) {
             if (permalinkParts.roomIdOrAlias) {
-                const eventIdPart = permalinkParts.eventId ? `/${permalinkParts.eventId}` : '';
+                const eventIdPart = permalinkParts.eventId ? `/${permalinkParts.eventId}` : "";
                 permalink = `#/room/${permalinkParts.roomIdOrAlias}${eventIdPart}`;
                 if (permalinkParts.viaServers.length > 0) {
                     permalink += new MatrixToPermalinkConstructor().encodeServerCandidates(permalinkParts.viaServers);
@@ -393,7 +400,7 @@ export function getPrimaryPermalinkEntity(permalink: string): string {
             if (m) {
                 // A bit of a hack, but it gets the job done
                 const handler = new ElementPermalinkConstructor("http://localhost");
-                const entityInfo = m[1].split('#').slice(1).join('#');
+                const entityInfo = m[1].split("#").slice(1).join("#");
                 permalinkParts = handler.parsePermalink(`http://localhost/#${entityInfo}`);
             }
         }
@@ -452,7 +459,7 @@ function isHostInRegex(hostname: string, regexps: RegExp[]): boolean {
     if (!hostname) return true; // assumed
     if (regexps.length > 0 && !regexps[0].test) throw new Error(regexps[0].toString());
 
-    return regexps.some(h => h.test(hostname));
+    return regexps.some((h) => h.test(hostname));
 }
 
 function isHostnameIpAddress(hostname: string): boolean {

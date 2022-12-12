@@ -133,7 +133,8 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<IState> {
 
         PosthogAnalytics.instance.setProperty("numFavouriteRooms", numFavourites);
 
-        if (this.globalState.symbol !== globalState.symbol ||
+        if (
+            this.globalState.symbol !== globalState.symbol ||
             this.globalState.count !== globalState.count ||
             this.globalState.color !== globalState.color ||
             this.globalState.numUnreadStates !== globalState.numUnreadStates ||
@@ -156,6 +157,5 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<IState> {
     }
 
     // We don't need this, but our contract says we do.
-    protected async onAction(payload: ActionPayload): Promise<void> {
-    }
+    protected async onAction(payload: ActionPayload): Promise<void> {}
 }

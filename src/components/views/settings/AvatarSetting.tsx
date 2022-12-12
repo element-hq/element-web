@@ -35,12 +35,14 @@ const AvatarSetting: React.FC<IProps> = ({ avatarUrl, avatarAltText, avatarName,
         onMouseLeave: () => setIsHovering(false),
     };
 
-    let avatarElement = <AccessibleButton
-        element="div"
-        onClick={uploadAvatar}
-        className="mx_AvatarSetting_avatarPlaceholder"
-        {...hoveringProps}
-    />;
+    let avatarElement = (
+        <AccessibleButton
+            element="div"
+            onClick={uploadAvatar}
+            className="mx_AvatarSetting_avatarPlaceholder"
+            {...hoveringProps}
+        />
+    );
     if (avatarUrl) {
         avatarElement = (
             <AccessibleButton
@@ -57,33 +59,35 @@ const AvatarSetting: React.FC<IProps> = ({ avatarUrl, avatarAltText, avatarName,
     let uploadAvatarBtn;
     if (uploadAvatar) {
         // insert an empty div to be the host for a css mask containing the upload.svg
-        uploadAvatarBtn = <AccessibleButton
-            onClick={uploadAvatar}
-            className='mx_AvatarSetting_uploadButton'
-            {...hoveringProps}
-        />;
+        uploadAvatarBtn = (
+            <AccessibleButton onClick={uploadAvatar} className="mx_AvatarSetting_uploadButton" {...hoveringProps} />
+        );
     }
 
     let removeAvatarBtn;
     if (avatarUrl && removeAvatar) {
-        removeAvatarBtn = <AccessibleButton onClick={removeAvatar} kind="link_sm">
-            { _t("Remove") }
-        </AccessibleButton>;
+        removeAvatarBtn = (
+            <AccessibleButton onClick={removeAvatar} kind="link_sm">
+                {_t("Remove")}
+            </AccessibleButton>
+        );
     }
 
     const avatarClasses = classNames({
-        "mx_AvatarSetting_avatar": true,
-        "mx_AvatarSetting_avatar_hovering": isHovering && uploadAvatar,
+        mx_AvatarSetting_avatar: true,
+        mx_AvatarSetting_avatar_hovering: isHovering && uploadAvatar,
     });
-    return <div className={avatarClasses}>
-        { avatarElement }
-        <div className="mx_AvatarSetting_hover">
-            <div className="mx_AvatarSetting_hoverBg" />
-            <span>{ _t("Upload") }</span>
+    return (
+        <div className={avatarClasses}>
+            {avatarElement}
+            <div className="mx_AvatarSetting_hover">
+                <div className="mx_AvatarSetting_hoverBg" />
+                <span>{_t("Upload")}</span>
+            </div>
+            {uploadAvatarBtn}
+            {removeAvatarBtn}
         </div>
-        { uploadAvatarBtn }
-        { removeAvatarBtn }
-    </div>;
+    );
 };
 
 export default AvatarSetting;

@@ -67,7 +67,8 @@ export default class SdkConfig {
     public static get(): IConfigOptions;
     public static get<K extends keyof IConfigOptions>(key: K, altCaseName?: string): IConfigOptions[K];
     public static get<K extends keyof IConfigOptions = never>(
-        key?: K, altCaseName?: string,
+        key?: K,
+        altCaseName?: string,
     ): IConfigOptions | IConfigOptions[K] {
         if (key === undefined) {
             // safe to cast as a fallback - we want to break the runtime contract in this case
@@ -77,7 +78,8 @@ export default class SdkConfig {
     }
 
     public static getObject<K extends KeysWithObjectShape<IConfigOptions>>(
-        key: K, altCaseName?: string,
+        key: K,
+        altCaseName?: string,
     ): Optional<SnakedObject<IConfigOptions[K]>> {
         const val = SdkConfig.get(key, altCaseName);
         if (val !== null && val !== undefined) {

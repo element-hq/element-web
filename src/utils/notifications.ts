@@ -45,7 +45,7 @@ export async function createLocalNotificationSettingsIfNeeded(cli: MatrixClient)
     if (!event) {
         // If any of the above is true, we fall in the "backwards compat" case,
         // and `is_silenced` will be set to `false`
-        const isSilenced = !deviceNotificationSettingsKeys.some(key => SettingsStore.getValue(key));
+        const isSilenced = !deviceNotificationSettingsKeys.some((key) => SettingsStore.getValue(key));
 
         await cli.setAccountData(eventType, {
             is_silenced: isSilenced,
@@ -68,9 +68,10 @@ export function clearAllNotifications(client: MatrixClient): Promise<Array<{}>> 
             const lastRoomEvent = roomEvents?.[roomEvents?.length - 1];
             const lastThreadLastEvent = lastThreadEvents?.[lastThreadEvents?.length - 1];
 
-            const lastEvent = (lastRoomEvent?.getTs() ?? 0) > (lastThreadLastEvent?.getTs() ?? 0)
-                ? lastRoomEvent
-                : lastThreadLastEvent;
+            const lastEvent =
+                (lastRoomEvent?.getTs() ?? 0) > (lastThreadLastEvent?.getTs() ?? 0)
+                    ? lastRoomEvent
+                    : lastThreadLastEvent;
 
             if (lastEvent) {
                 const receiptType = SettingsStore.getValue("sendReadReceipts", room.roomId)

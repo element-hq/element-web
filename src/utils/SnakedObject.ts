@@ -15,12 +15,11 @@ limitations under the License.
 */
 
 export function snakeToCamel(s: string): string {
-    return s.replace(/._./g, v => `${v[0]}${v[2].toUpperCase()}`);
+    return s.replace(/._./g, (v) => `${v[0]}${v[2].toUpperCase()}`);
 }
 
 export class SnakedObject<T = Record<string, any>> {
-    public constructor(private obj: T) {
-    }
+    public constructor(private obj: T) {}
 
     public get<K extends string & keyof T>(key: K, altCaseName?: string): T[K] {
         const val = this.obj[key];

@@ -14,7 +14,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import ICanvasEffect from '../ICanvasEffect';
+import ICanvasEffect from "../ICanvasEffect";
 import { arrayFastClone } from "../../utils/arrays";
 
 export type RainfallOptions = {
@@ -60,7 +60,7 @@ export default class Rainfall implements ICanvasEffect {
         if (!canvas) {
             return;
         }
-        this.context = canvas.getContext('2d');
+        this.context = canvas.getContext("2d");
         this.particles = [];
         const count = this.options.maxCount;
         while (this.particles.length < count) {
@@ -81,8 +81,8 @@ export default class Rainfall implements ICanvasEffect {
         particle.x = Math.random() * width;
         particle.y = Math.random() * -height;
         particle.width = Math.random() * 1.5;
-        particle.height = (particle.width * 15) + 4;
-        particle.speed = (Math.random() * this.options.speed * 4/5) + this.options.speed;
+        particle.height = particle.width * 15 + 4;
+        particle.speed = (Math.random() * this.options.speed * 4) / 5 + this.options.speed;
         return particle;
     };
 
@@ -115,14 +115,14 @@ export default class Rainfall implements ICanvasEffect {
             this.context.save();
             this.context.beginPath();
             this.context.rect(particle.x, particle.y, particle.width, particle.height);
-            this.context.fillStyle = '#5dadec'; // light blue
+            this.context.fillStyle = "#5dadec"; // light blue
             this.context.fill();
             this.context.closePath();
             this.context.restore();
 
             // Remove dead raindrops
             const maxBounds = height * 2;
-            if (particle.y > (height + maxBounds)) {
+            if (particle.y > height + maxBounds) {
                 const idx = this.particles.indexOf(particle);
                 this.particles.splice(idx, 1);
             }

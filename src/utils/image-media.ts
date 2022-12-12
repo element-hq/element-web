@@ -95,7 +95,7 @@ export async function createThumbnail(
     if (window.OffscreenCanvas && canvas instanceof OffscreenCanvas) {
         thumbnailPromise = canvas.convertToBlob({ type: mimeType });
     } else {
-        thumbnailPromise = new Promise<Blob>(resolve => (canvas as HTMLCanvasElement).toBlob(resolve, mimeType));
+        thumbnailPromise = new Promise<Blob>((resolve) => (canvas as HTMLCanvasElement).toBlob(resolve, mimeType));
     }
 
     const imageData = context.getImageData(0, 0, targetWidth, targetHeight);

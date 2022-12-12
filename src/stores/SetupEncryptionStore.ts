@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import EventEmitter from 'events';
+import EventEmitter from "events";
 import {
     PHASE_DONE as VERIF_PHASE_DONE,
     VerificationRequest,
@@ -25,11 +25,11 @@ import { ISecretStorageKeyInfo } from "matrix-js-sdk/src/crypto/api";
 import { logger } from "matrix-js-sdk/src/logger";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
 
-import { MatrixClientPeg } from '../MatrixClientPeg';
-import { AccessCancelledError, accessSecretStorage } from '../SecurityManager';
-import Modal from '../Modal';
-import InteractiveAuthDialog from '../components/views/dialogs/InteractiveAuthDialog';
-import { _t } from '../languageHandler';
+import { MatrixClientPeg } from "../MatrixClientPeg";
+import { AccessCancelledError, accessSecretStorage } from "../SecurityManager";
+import Modal from "../Modal";
+import InteractiveAuthDialog from "../components/views/dialogs/InteractiveAuthDialog";
+import { _t } from "../languageHandler";
 
 export enum Phase {
     Loading = 0,
@@ -99,7 +99,7 @@ export class SetupEncryptionStore extends EventEmitter {
     public async fetchKeyInfo(): Promise<void> {
         if (!this.started) return; // bail if we were stopped
         const cli = MatrixClientPeg.get();
-        const keys = await cli.isSecretStored('m.cross_signing.master');
+        const keys = await cli.isSecretStored("m.cross_signing.master");
         if (keys === null || Object.keys(keys).length === 0) {
             this.keyId = null;
             this.keyInfo = null;
@@ -113,17 +113,14 @@ export class SetupEncryptionStore extends EventEmitter {
         const dehydratedDevice = await cli.getDehydratedDevice();
         const ownUserId = cli.getUserId();
         const crossSigningInfo = cli.getStoredCrossSigningForUser(ownUserId);
-        this.hasDevicesToVerifyAgainst = cli.getStoredDevicesForUser(ownUserId).some(
-            device =>
-                device.getIdentityKey() &&
-                (!dehydratedDevice || (device.deviceId != dehydratedDevice.device_id)) &&
-                crossSigningInfo.checkDeviceTrust(
-                    crossSigningInfo,
-                    device,
-                    false,
-                    true,
-                ).isCrossSigningVerified(),
-        );
+        this.hasDevicesToVerifyAgainst = cli
+            .getStoredDevicesForUser(ownUserId)
+            .some(
+                (device) =>
+                    device.getIdentityKey() &&
+                    (!dehydratedDevice || device.deviceId != dehydratedDevice.device_id) &&
+                    crossSigningInfo.checkDeviceTrust(crossSigningInfo, device, false, true).isCrossSigningVerified(),
+            );
 
         this.phase = Phase.Intro;
         this.emit("update");

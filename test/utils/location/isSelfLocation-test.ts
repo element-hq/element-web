@@ -28,7 +28,7 @@ import { isSelfLocation } from "../../../src/utils/location";
 
 describe("isSelfLocation", () => {
     it("Returns true for a full m.asset event", () => {
-        const content = makeLocationContent("", '0', Date.now());
+        const content = makeLocationContent("", "0", Date.now());
         expect(isSelfLocation(content)).toBe(true);
     });
 
@@ -62,11 +62,12 @@ describe("isSelfLocation", () => {
 
     it("Returns false for an unknown asset type", () => {
         const content = makeLocationContent(
-            undefined, /* text */
+            undefined /* text */,
             "geo:foo",
             0,
-            undefined, /* description */
-            "org.example.unknown" as unknown as LocationAssetType);
+            undefined /* description */,
+            "org.example.unknown" as unknown as LocationAssetType,
+        );
         expect(isSelfLocation(content)).toBe(false);
     });
 });

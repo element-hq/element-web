@@ -15,14 +15,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import ReactDOM from 'react-dom';
-import classNames from 'classnames';
+import React from "react";
+import ReactDOM from "react-dom";
+import classNames from "classnames";
 import { defer, sleep } from "matrix-js-sdk/src/utils";
-import { TypedEventEmitter } from 'matrix-js-sdk/src/models/typed-event-emitter';
+import { TypedEventEmitter } from "matrix-js-sdk/src/models/typed-event-emitter";
 
-import dis from './dispatcher/dispatcher';
-import AsyncWrapper from './AsyncWrapper';
+import dis from "./dispatcher/dispatcher";
+import AsyncWrapper from "./AsyncWrapper";
 
 const DIALOG_CONTAINER_ID = "mx_Dialog_Container";
 const STATIC_DIALOG_CONTAINER_ID = "mx_Dialog_StaticContainer";
@@ -172,40 +172,43 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
         props: IProps<T>,
     ): [IHandle<T>["close"], IHandle<T>["finished"]] {
         const deferred = defer<T>();
-        return [async (...args: T) => {
-            if (modal.beforeClosePromise) {
-                await modal.beforeClosePromise;
-            } else if (modal.onBeforeClose) {
-                modal.beforeClosePromise = modal.onBeforeClose(modal.closeReason);
-                const shouldClose = await modal.beforeClosePromise;
-                modal.beforeClosePromise = null;
-                if (!shouldClose) {
-                    return;
+        return [
+            async (...args: T) => {
+                if (modal.beforeClosePromise) {
+                    await modal.beforeClosePromise;
+                } else if (modal.onBeforeClose) {
+                    modal.beforeClosePromise = modal.onBeforeClose(modal.closeReason);
+                    const shouldClose = await modal.beforeClosePromise;
+                    modal.beforeClosePromise = null;
+                    if (!shouldClose) {
+                        return;
+                    }
                 }
-            }
-            deferred.resolve(args);
-            if (props && props.onFinished) props.onFinished.apply(null, args);
-            const i = this.modals.indexOf(modal);
-            if (i >= 0) {
-                this.modals.splice(i, 1);
-            }
+                deferred.resolve(args);
+                if (props && props.onFinished) props.onFinished.apply(null, args);
+                const i = this.modals.indexOf(modal);
+                if (i >= 0) {
+                    this.modals.splice(i, 1);
+                }
 
-            if (this.priorityModal === modal) {
-                this.priorityModal = null;
+                if (this.priorityModal === modal) {
+                    this.priorityModal = null;
 
-                // XXX: This is destructive
-                this.modals = [];
-            }
+                    // XXX: This is destructive
+                    this.modals = [];
+                }
 
-            if (this.staticModal === modal) {
-                this.staticModal = null;
+                if (this.staticModal === modal) {
+                    this.staticModal = null;
 
-                // XXX: This is destructive
-                this.modals = [];
-            }
+                    // XXX: This is destructive
+                    this.modals = [];
+                }
 
-            this.reRender();
-        }, deferred.promise];
+                this.reRender();
+            },
+            deferred.promise,
+        ];
     }
 
     /**
@@ -314,7 +317,7 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
     };
 
     private getCurrentModal(): IModal<any> {
-        return this.priorityModal ? this.priorityModal : (this.modals[0] || this.staticModal);
+        return this.priorityModal ? this.priorityModal : this.modals[0] || this.staticModal;
     }
 
     private async reRender() {
@@ -325,7 +328,7 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
             // If there is no modal to render, make all of Element available
             // to screen reader users again
             dis.dispatch({
-                action: 'aria_unhide_main_app',
+                action: "aria_unhide_main_app",
             });
             ReactDOM.unmountComponentAtNode(ModalManager.getOrCreateContainer());
             ReactDOM.unmountComponentAtNode(ModalManager.getOrCreateStaticContainer());
@@ -336,7 +339,7 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
         // so they won't be able to navigate into it and act on it using
         // screen reader specific features
         dis.dispatch({
-            action: 'aria_hide_main_app',
+            action: "aria_hide_main_app",
         });
 
         if (this.staticModal) {
@@ -344,9 +347,7 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
 
             const staticDialog = (
                 <div className={classes}>
-                    <div className="mx_Dialog">
-                        { this.staticModal.elem }
-                    </div>
+                    <div className="mx_Dialog">{this.staticModal.elem}</div>
                     <div
                         data-testid="dialog-background"
                         className="mx_Dialog_background mx_Dialog_staticBackground"
@@ -369,9 +370,7 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
 
             const dialog = (
                 <div className={classes}>
-                    <div className="mx_Dialog">
-                        { modal.elem }
-                    </div>
+                    <div className="mx_Dialog">{modal.elem}</div>
                     <div
                         data-testid="dialog-background"
                         className="mx_Dialog_background"

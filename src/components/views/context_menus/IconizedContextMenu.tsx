@@ -21,7 +21,8 @@ import ContextMenu, {
     ChevronFace,
     IProps as IContextMenuProps,
     MenuItem,
-    MenuItemCheckbox, MenuItemRadio,
+    MenuItemCheckbox,
+    MenuItemRadio,
 } from "../../structures/ContextMenu";
 import { _t } from "../../../languageHandler";
 
@@ -58,19 +59,21 @@ export const IconizedContextMenuRadio: React.FC<IRadioProps> = ({
     className,
     ...props
 }) => {
-    return <MenuItemRadio
-        {...props}
-        className={classNames(className, {
-            mx_IconizedContextMenu_item: true,
-            mx_IconizedContextMenu_active: active,
-        })}
-        active={active}
-        label={label}
-    >
-        { iconClassName && <span className={classNames("mx_IconizedContextMenu_icon", iconClassName)} /> }
-        <span className="mx_IconizedContextMenu_label">{ label }</span>
-        { active && <span className="mx_IconizedContextMenu_icon mx_IconizedContextMenu_checked" /> }
-    </MenuItemRadio>;
+    return (
+        <MenuItemRadio
+            {...props}
+            className={classNames(className, {
+                mx_IconizedContextMenu_item: true,
+                mx_IconizedContextMenu_active: active,
+            })}
+            active={active}
+            label={label}
+        >
+            {iconClassName && <span className={classNames("mx_IconizedContextMenu_icon", iconClassName)} />}
+            <span className="mx_IconizedContextMenu_label">{label}</span>
+            {active && <span className="mx_IconizedContextMenu_icon mx_IconizedContextMenu_checked" />}
+        </MenuItemRadio>
+    );
 };
 
 export const IconizedContextMenuCheckbox: React.FC<ICheckboxProps> = ({
@@ -83,29 +86,33 @@ export const IconizedContextMenuCheckbox: React.FC<ICheckboxProps> = ({
 }) => {
     let marker: JSX.Element;
     if (words) {
-        marker = <span className="mx_IconizedContextMenu_activeText">
-            { active ? _t("On") : _t("Off") }
-        </span>;
+        marker = <span className="mx_IconizedContextMenu_activeText">{active ? _t("On") : _t("Off")}</span>;
     } else {
-        marker = <span className={classNames("mx_IconizedContextMenu_icon", {
-            mx_IconizedContextMenu_checked: active,
-            mx_IconizedContextMenu_unchecked: !active,
-        })} />;
+        marker = (
+            <span
+                className={classNames("mx_IconizedContextMenu_icon", {
+                    mx_IconizedContextMenu_checked: active,
+                    mx_IconizedContextMenu_unchecked: !active,
+                })}
+            />
+        );
     }
 
-    return <MenuItemCheckbox
-        {...props}
-        className={classNames(className, {
-            mx_IconizedContextMenu_item: true,
-            mx_IconizedContextMenu_active: active,
-        })}
-        active={active}
-        label={label}
-    >
-        <span className={classNames("mx_IconizedContextMenu_icon", iconClassName)} />
-        <span className="mx_IconizedContextMenu_label">{ label }</span>
-        { marker }
-    </MenuItemCheckbox>;
+    return (
+        <MenuItemCheckbox
+            {...props}
+            className={classNames(className, {
+                mx_IconizedContextMenu_item: true,
+                mx_IconizedContextMenu_active: active,
+            })}
+            active={active}
+            label={label}
+        >
+            <span className={classNames("mx_IconizedContextMenu_icon", iconClassName)} />
+            <span className="mx_IconizedContextMenu_label">{label}</span>
+            {marker}
+        </MenuItemCheckbox>
+    );
 };
 
 export const IconizedContextMenuOption: React.FC<IOptionProps> = ({
@@ -116,18 +123,20 @@ export const IconizedContextMenuOption: React.FC<IOptionProps> = ({
     isDestructive,
     ...props
 }) => {
-    return <MenuItem
-        {...props}
-        className={classNames(className, {
-            mx_IconizedContextMenu_item: true,
-            mx_IconizedContextMenu_itemDestructive: isDestructive,
-        })}
-        label={label}
-    >
-        { iconClassName && <span className={classNames("mx_IconizedContextMenu_icon", iconClassName)} /> }
-        <span className="mx_IconizedContextMenu_label">{ label }</span>
-        { children }
-    </MenuItem>;
+    return (
+        <MenuItem
+            {...props}
+            className={classNames(className, {
+                mx_IconizedContextMenu_item: true,
+                mx_IconizedContextMenu_itemDestructive: isDestructive,
+            })}
+            label={label}
+        >
+            {iconClassName && <span className={classNames("mx_IconizedContextMenu_icon", iconClassName)} />}
+            <span className="mx_IconizedContextMenu_label">{label}</span>
+            {children}
+        </MenuItem>
+    );
 };
 
 export const IconizedContextMenuOptionList: React.FC<IOptionListProps> = ({
@@ -142,10 +151,16 @@ export const IconizedContextMenuOptionList: React.FC<IOptionListProps> = ({
         mx_IconizedContextMenu_optionList_red: red,
     });
 
-    return <div className={classes}>
-        { label && <div><span className="mx_IconizedContextMenu_optionList_label">{ label }</span></div> }
-        { children }
-    </div>;
+    return (
+        <div className={classes}>
+            {label && (
+                <div>
+                    <span className="mx_IconizedContextMenu_optionList_label">{label}</span>
+                </div>
+            )}
+            {children}
+        </div>
+    );
 };
 
 const IconizedContextMenu: React.FC<IProps> = ({ className, children, compact, ...props }) => {
@@ -153,12 +168,11 @@ const IconizedContextMenu: React.FC<IProps> = ({ className, children, compact, .
         mx_IconizedContextMenu_compact: compact,
     });
 
-    return <ContextMenu chevronFace={ChevronFace.None} {...props}>
-        <div className={classes}>
-            { children }
-        </div>
-    </ContextMenu>;
+    return (
+        <ContextMenu chevronFace={ChevronFace.None} {...props}>
+            <div className={classes}>{children}</div>
+        </ContextMenu>
+    );
 };
 
 export default IconizedContextMenu;
-

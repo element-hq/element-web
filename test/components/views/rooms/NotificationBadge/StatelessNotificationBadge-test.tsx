@@ -17,22 +17,14 @@ limitations under the License.
 import React from "react";
 import { render } from "@testing-library/react";
 
-import {
-    StatelessNotificationBadge,
-} from "../../../../../src/components/views/rooms/NotificationBadge/StatelessNotificationBadge";
+import { StatelessNotificationBadge } from "../../../../../src/components/views/rooms/NotificationBadge/StatelessNotificationBadge";
 import { NotificationColor } from "../../../../../src/stores/notifications/NotificationColor";
 
 describe("StatelessNotificationBadge", () => {
     it("is highlighted when unsent", () => {
         const { container } = render(
-            <StatelessNotificationBadge
-                symbol="!"
-                count={0}
-                color={NotificationColor.Unsent}
-            />,
+            <StatelessNotificationBadge symbol="!" count={0} color={NotificationColor.Unsent} />,
         );
-        expect(
-            container.querySelector(".mx_NotificationBadge_highlighted"),
-        ).not.toBe(null);
+        expect(container.querySelector(".mx_NotificationBadge_highlighted")).not.toBe(null);
     });
 });

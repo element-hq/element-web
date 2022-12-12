@@ -14,14 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import {
-    Capability,
-    isTimelineCapability,
-    Widget,
-    WidgetEventCapability,
-    WidgetKind,
-} from "matrix-widget-api";
+import React from "react";
+import { Capability, isTimelineCapability, Widget, WidgetEventCapability, WidgetKind } from "matrix-widget-api";
 import { lexicographicCompare } from "matrix-js-sdk/src/utils";
 
 import BaseDialog from "./BaseDialog";
@@ -56,10 +50,10 @@ export default class WidgetCapabilitiesPromptDialog extends React.PureComponent<
         super(props);
 
         const parsedEvents = WidgetEventCapability.findEventCapabilities(this.props.requestedCapabilities);
-        parsedEvents.forEach(e => this.eventPermissionsMap.set(e.raw, e));
+        parsedEvents.forEach((e) => this.eventPermissionsMap.set(e.raw, e));
 
         const states: IBooleanStates = {};
-        this.props.requestedCapabilities.forEach(c => states[c] = true);
+        this.props.requestedCapabilities.forEach((c) => (states[c] = true));
 
         this.state = {
             booleanStates: states,
@@ -78,9 +72,11 @@ export default class WidgetCapabilitiesPromptDialog extends React.PureComponent<
     };
 
     private onSubmit = async (ev) => {
-        this.closeAndTryRemember(Object.entries(this.state.booleanStates)
-            .filter(([_, isSelected]) => isSelected)
-            .map(([cap]) => cap));
+        this.closeAndTryRemember(
+            Object.entries(this.state.booleanStates)
+                .filter(([_, isSelected]) => isSelected)
+                .map(([cap]) => cap),
+        );
     };
 
     private onReject = async (ev) => {
@@ -107,17 +103,16 @@ export default class WidgetCapabilitiesPromptDialog extends React.PureComponent<
         });
         const checkboxRows = orderedCapabilities.map(([cap, isChecked], i) => {
             const text = CapabilityText.for(cap, this.props.widgetKind);
-            const byline = text.byline
-                ? <span className="mx_WidgetCapabilitiesPromptDialog_byline">{ text.byline }</span>
-                : null;
+            const byline = text.byline ? (
+                <span className="mx_WidgetCapabilitiesPromptDialog_byline">{text.byline}</span>
+            ) : null;
 
             return (
                 <div className="mx_WidgetCapabilitiesPromptDialog_cap" key={cap + i}>
-                    <StyledCheckbox
-                        checked={isChecked}
-                        onChange={() => this.onToggle(cap)}
-                    >{ text.primary }</StyledCheckbox>
-                    { byline }
+                    <StyledCheckbox checked={isChecked} onChange={() => this.onToggle(cap)}>
+                        {text.primary}
+                    </StyledCheckbox>
+                    {byline}
                 </div>
             );
         });
@@ -130,8 +125,8 @@ export default class WidgetCapabilitiesPromptDialog extends React.PureComponent<
             >
                 <form onSubmit={this.onSubmit}>
                     <div className="mx_Dialog_content">
-                        <div className="text-muted">{ _t("This widget would like to:") }</div>
-                        { checkboxRows }
+                        <div className="text-muted">{_t("This widget would like to:")}</div>
+                        {checkboxRows}
                         <DialogButtons
                             primaryButton={_t("Approve")}
                             cancelButton={_t("Decline All")}
@@ -142,7 +137,9 @@ export default class WidgetCapabilitiesPromptDialog extends React.PureComponent<
                                     value={this.state.rememberSelection}
                                     toggleInFront={true}
                                     onChange={this.onRememberSelectionChange}
-                                    label={_t("Remember my selection for this widget")} />}
+                                    label={_t("Remember my selection for this widget")}
+                                />
+                            }
                         />
                     </div>
                 </form>

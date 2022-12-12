@@ -84,11 +84,7 @@ export default class PerformanceMonitor {
         }
 
         performance.mark(this.STOP_PREFIX + key);
-        performance.measure(
-            key,
-            this.START_PREFIX + key,
-            this.STOP_PREFIX + key,
-        );
+        performance.measure(key, this.START_PREFIX + key, this.STOP_PREFIX + key);
 
         this.clear(name, id);
 
@@ -99,7 +95,7 @@ export default class PerformanceMonitor {
         // when adding a data callback
         this.entries.push(measurement);
 
-        this.listeners.forEach(listener => {
+        this.listeners.forEach((listener) => {
             if (this.shouldEmit(listener, measurement)) {
                 listener.callback([measurement]);
             }
@@ -118,7 +114,7 @@ export default class PerformanceMonitor {
     }
 
     getEntries({ name, type }: GetEntriesOptions = {}): PerformanceEntry[] {
-        return this.entries.filter(entry => {
+        return this.entries.filter((entry) => {
             const satisfiesName = !name || entry.name === name;
             const satisfiedType = !type || entry.entryType === type;
             return satisfiesName && satisfiedType;
@@ -128,7 +124,7 @@ export default class PerformanceMonitor {
     addPerformanceDataCallback(listener: PerformanceDataListener, buffer = false) {
         this.listeners.push(listener);
         if (buffer) {
-            const toEmit = this.entries.filter(entry => this.shouldEmit(listener, entry));
+            const toEmit = this.entries.filter((entry) => this.shouldEmit(listener, entry));
             if (toEmit.length > 0) {
                 listener.callback(toEmit);
             }
@@ -140,7 +136,7 @@ export default class PerformanceMonitor {
             this.listeners = [];
         } else {
             this.listeners.splice(
-                this.listeners.findIndex(listener => listener.callback === callback),
+                this.listeners.findIndex((listener) => listener.callback === callback),
                 1,
             );
         }
@@ -165,15 +161,13 @@ export default class PerformanceMonitor {
      * @returns {string} a compound of the name and identifier if present
      */
     private buildKey(name: string, id?: string): string {
-        const suffix = id ? `:${id}` : '';
+        const suffix = id ? `:${id}` : "";
         return `${name}${suffix}`;
     }
 }
 
 // Convenience exports
-export {
-    PerformanceEntryNames,
-};
+export { PerformanceEntryNames };
 
 // Exposing those to the window object to bridge them from tests
 window.mxPerformanceMonitor = PerformanceMonitor.instance;

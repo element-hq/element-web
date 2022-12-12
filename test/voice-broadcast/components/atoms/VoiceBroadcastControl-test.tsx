@@ -31,11 +31,7 @@ describe("VoiceBroadcastControl", () => {
 
     describe("when rendering it", () => {
         beforeEach(() => {
-            result = render(<VoiceBroadcastControl
-                onClick={onClick}
-                label="test label"
-                icon={StopIcon}
-            />);
+            result = render(<VoiceBroadcastControl onClick={onClick} label="test label" icon={StopIcon} />);
         });
 
         it("should render as expected", () => {

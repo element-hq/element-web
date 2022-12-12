@@ -26,8 +26,8 @@ export const parseGeoUri = (uri: string): GeolocationCoordinates => {
 
     const m = uri.match(/^\s*geo:(.*?)\s*$/);
     if (!m) return;
-    const parts = m[1].split(';');
-    const coords = parts[0].split(',');
+    const parts = m[1].split(";");
+    const coords = parts[0].split(",");
     let uncertainty: number;
     for (const param of parts.slice(1)) {
         const m = param.match(/u=(.*)/);

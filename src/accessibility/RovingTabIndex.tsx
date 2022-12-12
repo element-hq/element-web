@@ -117,7 +117,7 @@ export const reducer = (state: IState, action: IAction) => {
         }
 
         case Type.Unregister: {
-            const oldIndex = state.refs.findIndex(r => r === action.payload.ref);
+            const oldIndex = state.refs.findIndex((r) => r === action.payload.ref);
 
             if (oldIndex === -1) {
                 return state; // already removed, this should not happen
@@ -129,8 +129,8 @@ export const reducer = (state: IState, action: IAction) => {
                 if (oldIndex >= state.refs.length) {
                     state.activeRef = findSiblingElement(state.refs, state.refs.length - 1, true);
                 } else {
-                    state.activeRef = findSiblingElement(state.refs, oldIndex)
-                        || findSiblingElement(state.refs, oldIndex, true);
+                    state.activeRef =
+                        findSiblingElement(state.refs, oldIndex) || findSiblingElement(state.refs, oldIndex, true);
                 }
                 if (document.activeElement === document.body) {
                     // if the focus got reverted to the body then the user was likely focused on the unmounted element
@@ -159,9 +159,7 @@ interface IProps {
     handleHomeEnd?: boolean;
     handleUpDown?: boolean;
     handleLeftRight?: boolean;
-    children(renderProps: {
-        onKeyDownHandler(ev: React.KeyboardEvent);
-    });
+    children(renderProps: { onKeyDownHandler(ev: React.KeyboardEvent) });
     onKeyDown?(ev: React.KeyboardEvent, state: IState);
 }
 
@@ -199,96 +197,107 @@ export const RovingTabIndexProvider: React.FC<IProps> = ({
 
     const context = useMemo<IContext>(() => ({ state, dispatch }), [state]);
 
-    const onKeyDownHandler = useCallback((ev: React.KeyboardEvent) => {
-        if (onKeyDown) {
-            onKeyDown(ev, context.state);
-            if (ev.defaultPrevented) {
-                return;
+    const onKeyDownHandler = useCallback(
+        (ev: React.KeyboardEvent) => {
+            if (onKeyDown) {
+                onKeyDown(ev, context.state);
+                if (ev.defaultPrevented) {
+                    return;
+                }
             }
-        }
 
-        let handled = false;
-        const action = getKeyBindingsManager().getAccessibilityAction(ev);
-        let focusRef: RefObject<HTMLElement>;
-        // Don't interfere with input default keydown behaviour
-        // but allow people to move focus from it with Tab.
-        if (checkInputableElement(ev.target as HTMLElement)) {
-            switch (action) {
-                case KeyBindingAction.Tab:
-                    handled = true;
-                    if (context.state.refs.length > 0) {
-                        const idx = context.state.refs.indexOf(context.state.activeRef);
-                        focusRef = findSiblingElement(context.state.refs, idx + (ev.shiftKey ? -1 : 1), ev.shiftKey);
-                    }
-                    break;
-            }
-        } else {
-            // check if we actually have any items
-            switch (action) {
-                case KeyBindingAction.Home:
-                    if (handleHomeEnd) {
-                        handled = true;
-                        // move focus to first (visible) item
-                        focusRef = findSiblingElement(context.state.refs, 0);
-                    }
-                    break;
-
-                case KeyBindingAction.End:
-                    if (handleHomeEnd) {
-                        handled = true;
-                        // move focus to last (visible) item
-                        focusRef = findSiblingElement(context.state.refs, context.state.refs.length - 1, true);
-                    }
-                    break;
-
-                case KeyBindingAction.ArrowDown:
-                case KeyBindingAction.ArrowRight:
-                    if ((action === KeyBindingAction.ArrowDown && handleUpDown) ||
-                        (action === KeyBindingAction.ArrowRight && handleLeftRight)
-                    ) {
+            let handled = false;
+            const action = getKeyBindingsManager().getAccessibilityAction(ev);
+            let focusRef: RefObject<HTMLElement>;
+            // Don't interfere with input default keydown behaviour
+            // but allow people to move focus from it with Tab.
+            if (checkInputableElement(ev.target as HTMLElement)) {
+                switch (action) {
+                    case KeyBindingAction.Tab:
                         handled = true;
                         if (context.state.refs.length > 0) {
                             const idx = context.state.refs.indexOf(context.state.activeRef);
-                            focusRef = findSiblingElement(context.state.refs, idx + 1);
+                            focusRef = findSiblingElement(
+                                context.state.refs,
+                                idx + (ev.shiftKey ? -1 : 1),
+                                ev.shiftKey,
+                            );
                         }
-                    }
-                    break;
+                        break;
+                }
+            } else {
+                // check if we actually have any items
+                switch (action) {
+                    case KeyBindingAction.Home:
+                        if (handleHomeEnd) {
+                            handled = true;
+                            // move focus to first (visible) item
+                            focusRef = findSiblingElement(context.state.refs, 0);
+                        }
+                        break;
 
-                case KeyBindingAction.ArrowUp:
-                case KeyBindingAction.ArrowLeft:
-                    if ((action === KeyBindingAction.ArrowUp && handleUpDown) ||
-                        (action === KeyBindingAction.ArrowLeft && handleLeftRight)
-                    ) {
-                        handled = true;
-                        if (context.state.refs.length > 0) {
-                            const idx = context.state.refs.indexOf(context.state.activeRef);
-                            focusRef = findSiblingElement(context.state.refs, idx - 1, true);
+                    case KeyBindingAction.End:
+                        if (handleHomeEnd) {
+                            handled = true;
+                            // move focus to last (visible) item
+                            focusRef = findSiblingElement(context.state.refs, context.state.refs.length - 1, true);
                         }
-                    }
-                    break;
+                        break;
+
+                    case KeyBindingAction.ArrowDown:
+                    case KeyBindingAction.ArrowRight:
+                        if (
+                            (action === KeyBindingAction.ArrowDown && handleUpDown) ||
+                            (action === KeyBindingAction.ArrowRight && handleLeftRight)
+                        ) {
+                            handled = true;
+                            if (context.state.refs.length > 0) {
+                                const idx = context.state.refs.indexOf(context.state.activeRef);
+                                focusRef = findSiblingElement(context.state.refs, idx + 1);
+                            }
+                        }
+                        break;
+
+                    case KeyBindingAction.ArrowUp:
+                    case KeyBindingAction.ArrowLeft:
+                        if (
+                            (action === KeyBindingAction.ArrowUp && handleUpDown) ||
+                            (action === KeyBindingAction.ArrowLeft && handleLeftRight)
+                        ) {
+                            handled = true;
+                            if (context.state.refs.length > 0) {
+                                const idx = context.state.refs.indexOf(context.state.activeRef);
+                                focusRef = findSiblingElement(context.state.refs, idx - 1, true);
+                            }
+                        }
+                        break;
+                }
             }
-        }
 
-        if (handled) {
-            ev.preventDefault();
-            ev.stopPropagation();
-        }
+            if (handled) {
+                ev.preventDefault();
+                ev.stopPropagation();
+            }
 
-        if (focusRef) {
-            focusRef.current?.focus();
-            // programmatic focus doesn't fire the onFocus handler, so we must do the do ourselves
-            dispatch({
-                type: Type.SetFocus,
-                payload: {
-                    ref: focusRef,
-                },
-            });
-        }
-    }, [context, onKeyDown, handleHomeEnd, handleUpDown, handleLeftRight]);
+            if (focusRef) {
+                focusRef.current?.focus();
+                // programmatic focus doesn't fire the onFocus handler, so we must do the do ourselves
+                dispatch({
+                    type: Type.SetFocus,
+                    payload: {
+                        ref: focusRef,
+                    },
+                });
+            }
+        },
+        [context, onKeyDown, handleHomeEnd, handleUpDown, handleLeftRight],
+    );
 
-    return <RovingTabIndexContext.Provider value={context}>
-        { children({ onKeyDownHandler }) }
-    </RovingTabIndexContext.Provider>;
+    return (
+        <RovingTabIndexContext.Provider value={context}>
+            {children({ onKeyDownHandler })}
+        </RovingTabIndexContext.Provider>
+    );
 };
 
 // Hook to register a roving tab index

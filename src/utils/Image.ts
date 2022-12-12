@@ -76,7 +76,7 @@ export async function blobIsAnimated(mimeType: string | undefined, blob: Blob): 
 
             // Graphics Control Extension section is where GIF animation data is stored
             // First 2 bytes must be 0x21 and 0xF9
-            if ((extensionIntroducer & 0x21) && (graphicsControlLabel & 0xF9)) {
+            if (extensionIntroducer & 0x21 && graphicsControlLabel & 0xf9) {
                 // skip to the 2 bytes with the delay time
                 delayTime = dv.getUint16(offset + 4);
             }
@@ -88,17 +88,13 @@ export async function blobIsAnimated(mimeType: string | undefined, blob: Blob): 
         case "image/apng": {
             // Based on https://stackoverflow.com/a/68618296
             const arr = await blob.arrayBuffer();
-            if (arrayHasDiff([
-                0x89,
-                0x50, 0x4E, 0x47,
-                0x0D, 0x0A,
-                0x1A,
-                0x0A,
-            ], Array.from(arrayBufferRead(arr, 0, 8)))) {
+            if (
+                arrayHasDiff([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a], Array.from(arrayBufferRead(arr, 0, 8)))
+            ) {
                 return false;
             }
 
-            for (let i = 8; i < blob.size;) {
+            for (let i = 8; i < blob.size; ) {
                 const length = arrayBufferReadInt(arr, i);
                 i += 4;
                 const type = arrayBufferReadStr(arr, i, 4);

@@ -36,7 +36,7 @@ export const MenuItemCheckbox: React.FC<IProps> = ({ children, label, active, di
             disabled={disabled}
             aria-label={label}
         >
-            { children }
+            {children}
         </RovingAccessibleButton>
     );
 };

@@ -32,11 +32,9 @@ describe("findRoomLiveVoiceBroadcastFromUserAndDevice", () => {
 
     const itShouldReturnNull = () => {
         it("should return null", () => {
-            expect(findRoomLiveVoiceBroadcastFromUserAndDevice(
-                room,
-                client.getUserId(),
-                client.getDeviceId(),
-            )).toBeNull();
+            expect(
+                findRoomLiveVoiceBroadcastFromUserAndDevice(room, client.getUserId(), client.getDeviceId()),
+            ).toBeNull();
         });
     };
 
@@ -117,11 +115,9 @@ describe("findRoomLiveVoiceBroadcastFromUserAndDevice", () => {
                 client.getUserId(),
             );
 
-            expect(findRoomLiveVoiceBroadcastFromUserAndDevice(
-                room,
-                client.getUserId(),
-                client.getDeviceId(),
-            )).toBe(event);
+            expect(findRoomLiveVoiceBroadcastFromUserAndDevice(room, client.getUserId(), client.getDeviceId())).toBe(
+                event,
+            );
         });
     });
 });

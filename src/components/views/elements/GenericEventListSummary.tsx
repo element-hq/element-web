@@ -20,30 +20,30 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import MemberAvatar from '../avatars/MemberAvatar';
-import { _t } from '../../../languageHandler';
+import MemberAvatar from "../avatars/MemberAvatar";
+import { _t } from "../../../languageHandler";
 import { useStateToggle } from "../../../hooks/useStateToggle";
 import AccessibleButton from "./AccessibleButton";
-import { Layout } from '../../../settings/enums/Layout';
+import { Layout } from "../../../settings/enums/Layout";
 
 interface IProps {
     // An array of member events to summarise
-    events: MatrixEvent[];
+    "events": MatrixEvent[];
     // The minimum number of events needed to trigger summarisation
-    threshold?: number;
+    "threshold"?: number;
     // Whether or not to begin with state.expanded=true
-    startExpanded?: boolean;
+    "startExpanded"?: boolean;
     // The list of room members for which to show avatars next to the summary
-    summaryMembers?: RoomMember[];
+    "summaryMembers"?: RoomMember[];
     // The text to show as the summary of this event list
-    summaryText?: string | JSX.Element;
+    "summaryText"?: string | JSX.Element;
     // An array of EventTiles to render when expanded
-    children: ReactNode[];
+    "children": ReactNode[];
     // Called when the event list expansion is toggled
     onToggle?(): void;
     // The layout currently used
-    layout?: Layout;
-    'data-testid'?: string;
+    "layout"?: Layout;
+    "data-testid"?: string;
 }
 
 const GenericEventListSummary: React.FC<IProps> = ({
@@ -55,7 +55,7 @@ const GenericEventListSummary: React.FC<IProps> = ({
     summaryMembers = [],
     summaryText,
     layout = Layout.Group,
-    'data-testid': testId,
+    "data-testid": testId,
 }) => {
     const [expanded, toggleExpanded] = useStateToggle(startExpanded);
 
@@ -66,46 +66,52 @@ const GenericEventListSummary: React.FC<IProps> = ({
         }
     }, [expanded]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    const eventIds = events.map((e) => e.getId()).join(',');
+    const eventIds = events.map((e) => e.getId()).join(",");
 
     // If we are only given few events then just pass them through
     if (events.length < threshold) {
         return (
-            <li className="mx_GenericEventListSummary" data-scroll-tokens={eventIds} data-expanded={true} data-layout={layout}>
-                <ol className="mx_GenericEventListSummary_unstyledList">
-                    { children }
-                </ol>
+            <li
+                className="mx_GenericEventListSummary"
+                data-scroll-tokens={eventIds}
+                data-expanded={true}
+                data-layout={layout}
+            >
+                <ol className="mx_GenericEventListSummary_unstyledList">{children}</ol>
             </li>
         );
     }
 
     let body;
     if (expanded) {
-        body = <React.Fragment>
-            <div className="mx_GenericEventListSummary_line">&nbsp;</div>
-            <ol className="mx_GenericEventListSummary_unstyledList">
-                { children }
-            </ol>
-        </React.Fragment>;
+        body = (
+            <React.Fragment>
+                <div className="mx_GenericEventListSummary_line">&nbsp;</div>
+                <ol className="mx_GenericEventListSummary_unstyledList">{children}</ol>
+            </React.Fragment>
+        );
     } else {
-        const uniqueMembers = uniqBy(summaryMembers.filter(member => {
-            if (!member?.getMxcAvatarUrl) {
-                logger.error("EventListSummary given null summaryMember, termites may be afoot eating event senders",
-                    summaryMembers);
-                return false;
-            }
-            return true;
-        }), member => member.getMxcAvatarUrl());
+        const uniqueMembers = uniqBy(
+            summaryMembers.filter((member) => {
+                if (!member?.getMxcAvatarUrl) {
+                    logger.error(
+                        "EventListSummary given null summaryMember, termites may be afoot eating event senders",
+                        summaryMembers,
+                    );
+                    return false;
+                }
+                return true;
+            }),
+            (member) => member.getMxcAvatarUrl(),
+        );
         const avatars = uniqueMembers.map((m) => <MemberAvatar key={m.userId} member={m} width={14} height={14} />);
         body = (
             <div className="mx_EventTile_line">
                 <div className="mx_EventTile_info">
                     <span className="mx_GenericEventListSummary_avatars" onClick={toggleExpanded}>
-                        { avatars }
+                        {avatars}
                     </span>
-                    <span className="mx_TextualEvent mx_GenericEventListSummary_summary">
-                        { summaryText }
-                    </span>
+                    <span className="mx_TextualEvent mx_GenericEventListSummary_summary">{summaryText}</span>
                 </div>
             </div>
         );
@@ -125,9 +131,9 @@ const GenericEventListSummary: React.FC<IProps> = ({
                 onClick={toggleExpanded}
                 aria-expanded={expanded}
             >
-                { expanded ? _t('collapse') : _t('expand') }
+                {expanded ? _t("collapse") : _t("expand")}
             </AccessibleButton>
-            { body }
+            {body}
         </li>
     );
 };

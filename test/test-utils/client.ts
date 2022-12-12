@@ -32,7 +32,7 @@ export class MockEventEmitter<T> extends EventEmitter {
      * @param mockProperties An object with the mock property or function implementations. 'getters'
      * are correctly cloned to this event emitter.
      */
-    constructor(mockProperties: Partial<Record<MethodLikeKeys<T>|PropertyLikeKeys<T>, unknown>> = {}) {
+    constructor(mockProperties: Partial<Record<MethodLikeKeys<T> | PropertyLikeKeys<T>, unknown>> = {}) {
         super();
         // We must use defineProperties and not assign as the former clones getters correctly,
         // whereas the latter invokes the getter and sets the return value permanently on the
@@ -70,17 +70,17 @@ export const getMockClientWithEventEmitter = (
 ): MockedObject<MatrixClient> => {
     const mock = mocked(new MockClientWithEventEmitter(mockProperties) as unknown as MatrixClient);
 
-    jest.spyOn(MatrixClientPeg, 'get').mockReturnValue(mock);
+    jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mock);
 
     // @ts-ignore simplified test stub
     mock.canSupport = new Map();
-    Object.keys(Feature).forEach(feature => {
+    Object.keys(Feature).forEach((feature) => {
         mock.canSupport.set(feature as Feature, ServerSupport.Stable);
     });
     return mock;
 };
 
-export const unmockClientPeg = () => jest.spyOn(MatrixClientPeg, 'get').mockRestore();
+export const unmockClientPeg = () => jest.spyOn(MatrixClientPeg, "get").mockRestore();
 
 /**
  * Returns basic mocked client methods related to the current user
@@ -90,11 +90,11 @@ export const unmockClientPeg = () => jest.spyOn(MatrixClientPeg, 'get').mockRest
     });
  * ```
  */
-export const mockClientMethodsUser = (userId = '@alice:domain') => ({
+export const mockClientMethodsUser = (userId = "@alice:domain") => ({
     getUserId: jest.fn().mockReturnValue(userId),
     getUser: jest.fn().mockReturnValue(new User(userId)),
     isGuest: jest.fn().mockReturnValue(false),
-    mxcUrlToHttp: jest.fn().mockReturnValue('mock-mxcUrlToHttp'),
+    mxcUrlToHttp: jest.fn().mockReturnValue("mock-mxcUrlToHttp"),
     credentials: { userId },
     getThreePids: jest.fn().mockResolvedValue({ threepids: [] }),
     getAccessToken: jest.fn(),
@@ -130,15 +130,15 @@ export const mockClientMethodsServer = (): Partial<Record<MethodLikeKeys<MatrixC
 });
 
 export const mockClientMethodsDevice = (
-    deviceId = 'test-device-id',
+    deviceId = "test-device-id",
 ): Partial<Record<MethodLikeKeys<MatrixClient>, unknown>> => ({
     getDeviceId: jest.fn().mockReturnValue(deviceId),
     getDeviceEd25519Key: jest.fn(),
     getDevices: jest.fn().mockResolvedValue({ devices: [] }),
 });
 
-export const mockClientMethodsCrypto = (): Partial<Record<
-    MethodLikeKeys<MatrixClient> & PropertyLikeKeys<MatrixClient>, unknown>
+export const mockClientMethodsCrypto = (): Partial<
+    Record<MethodLikeKeys<MatrixClient> & PropertyLikeKeys<MatrixClient>, unknown>
 > => ({
     isCryptoEnabled: jest.fn(),
     isSecretStorageReady: jest.fn(),
@@ -156,4 +156,3 @@ export const mockClientMethodsCrypto = (): Partial<Record<
         },
     },
 });
-

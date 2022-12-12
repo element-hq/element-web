@@ -30,7 +30,7 @@ export function readReceiptChangeIsFor(event: MatrixEvent, client: MatrixClient)
         for (const [receiptType, receipt] of Object.entries(event.getContent()[eventId])) {
             if (!isSupportedReceiptType(receiptType)) continue;
 
-            if (Object.keys((receipt || {})).includes(myUserId)) return true;
+            if (Object.keys(receipt || {}).includes(myUserId)) return true;
         }
     }
 }

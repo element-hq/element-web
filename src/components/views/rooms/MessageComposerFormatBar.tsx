@@ -14,10 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { createRef } from 'react';
-import classNames from 'classnames';
+import React, { createRef } from "react";
+import classNames from "classnames";
 
-import { _t } from '../../../languageHandler';
+import { _t } from "../../../languageHandler";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 
 export enum Formatting {
@@ -48,16 +48,53 @@ export default class MessageComposerFormatBar extends React.PureComponent<IProps
 
     render() {
         const classes = classNames("mx_MessageComposerFormatBar", {
-            "mx_MessageComposerFormatBar_shown": this.state.visible,
+            mx_MessageComposerFormatBar_shown: this.state.visible,
         });
-        return (<div className={classes} ref={this.formatBarRef}>
-            <FormatButton label={_t("Bold")} onClick={() => this.props.onAction(Formatting.Bold)} icon="Bold" shortcut={this.props.shortcuts.bold} visible={this.state.visible} />
-            <FormatButton label={_t("Italics")} onClick={() => this.props.onAction(Formatting.Italics)} icon="Italic" shortcut={this.props.shortcuts.italics} visible={this.state.visible} />
-            <FormatButton label={_t("Strikethrough")} onClick={() => this.props.onAction(Formatting.Strikethrough)} icon="Strikethrough" visible={this.state.visible} />
-            <FormatButton label={_t("Code block")} onClick={() => this.props.onAction(Formatting.Code)} icon="Code" shortcut={this.props.shortcuts.code} visible={this.state.visible} />
-            <FormatButton label={_t("Quote")} onClick={() => this.props.onAction(Formatting.Quote)} icon="Quote" shortcut={this.props.shortcuts.quote} visible={this.state.visible} />
-            <FormatButton label={_t("Insert link")} onClick={() => this.props.onAction(Formatting.InsertLink)} icon="InsertLink" shortcut={this.props.shortcuts.insert_link} visible={this.state.visible} />
-        </div>);
+        return (
+            <div className={classes} ref={this.formatBarRef}>
+                <FormatButton
+                    label={_t("Bold")}
+                    onClick={() => this.props.onAction(Formatting.Bold)}
+                    icon="Bold"
+                    shortcut={this.props.shortcuts.bold}
+                    visible={this.state.visible}
+                />
+                <FormatButton
+                    label={_t("Italics")}
+                    onClick={() => this.props.onAction(Formatting.Italics)}
+                    icon="Italic"
+                    shortcut={this.props.shortcuts.italics}
+                    visible={this.state.visible}
+                />
+                <FormatButton
+                    label={_t("Strikethrough")}
+                    onClick={() => this.props.onAction(Formatting.Strikethrough)}
+                    icon="Strikethrough"
+                    visible={this.state.visible}
+                />
+                <FormatButton
+                    label={_t("Code block")}
+                    onClick={() => this.props.onAction(Formatting.Code)}
+                    icon="Code"
+                    shortcut={this.props.shortcuts.code}
+                    visible={this.state.visible}
+                />
+                <FormatButton
+                    label={_t("Quote")}
+                    onClick={() => this.props.onAction(Formatting.Quote)}
+                    icon="Quote"
+                    shortcut={this.props.shortcuts.quote}
+                    visible={this.state.visible}
+                />
+                <FormatButton
+                    label={_t("Insert link")}
+                    onClick={() => this.props.onAction(Formatting.InsertLink)}
+                    icon="InsertLink"
+                    shortcut={this.props.shortcuts.insert_link}
+                    visible={this.state.visible}
+                />
+            </div>
+        );
     }
 
     public showAt(selectionRect: DOMRect): void {
@@ -91,18 +128,14 @@ class FormatButton extends React.PureComponent<IFormatButtonProps> {
         const className = `mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIcon${this.props.icon}`;
         let shortcut;
         if (this.props.shortcut) {
-            shortcut = <div className="mx_MessageComposerFormatBar_tooltipShortcut">
-                { this.props.shortcut }
-            </div>;
+            shortcut = <div className="mx_MessageComposerFormatBar_tooltipShortcut">{this.props.shortcut}</div>;
         }
-        const tooltip = <div>
-            <div className="mx_Tooltip_title">
-                { this.props.label }
+        const tooltip = (
+            <div>
+                <div className="mx_Tooltip_title">{this.props.label}</div>
+                <div className="mx_Tooltip_sub">{shortcut}</div>
             </div>
-            <div className="mx_Tooltip_sub">
-                { shortcut }
-            </div>
-        </div>;
+        );
 
         // element="button" and type="button" are necessary for the buttons to work on WebKit,
         // otherwise the text is deselected before onClick can ever be called
@@ -113,7 +146,8 @@ class FormatButton extends React.PureComponent<IFormatButtonProps> {
                 onClick={this.props.onClick}
                 title={this.props.label}
                 tooltip={tooltip}
-                className={className} />
+                className={className}
+            />
         );
     }
 }

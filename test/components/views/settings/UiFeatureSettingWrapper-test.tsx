@@ -14,16 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import { render } from '@testing-library/react';
+import React from "react";
+import { render } from "@testing-library/react";
 
-import SettingsStore from '../../../../src/settings/SettingsStore';
-import UiFeatureSettingWrapper from '../../../../src/components/views/settings/UiFeatureSettingWrapper';
-import { UIFeature } from '../../../../src/settings/UIFeature';
+import SettingsStore from "../../../../src/settings/SettingsStore";
+import UiFeatureSettingWrapper from "../../../../src/components/views/settings/UiFeatureSettingWrapper";
+import { UIFeature } from "../../../../src/settings/UIFeature";
 
-jest.mock('../../../../src/settings/SettingsStore');
+jest.mock("../../../../src/settings/SettingsStore");
 
-describe('<UiFeatureSettingWrapper>', () => {
+describe("<UiFeatureSettingWrapper>", () => {
     const defaultProps = {
         uiFeature: UIFeature.Feedback,
         children: <div>test</div>,
@@ -34,20 +34,20 @@ describe('<UiFeatureSettingWrapper>', () => {
         (SettingsStore.getValue as jest.Mock).mockClear().mockReturnValue(true);
     });
 
-    it('renders children when setting is truthy', () => {
+    it("renders children when setting is truthy", () => {
         const { asFragment } = getComponent();
 
         expect(asFragment()).toMatchSnapshot();
         expect(SettingsStore.getValue).toHaveBeenCalledWith(defaultProps.uiFeature);
     });
 
-    it('returns null when setting is truthy but children are undefined', () => {
+    it("returns null when setting is truthy but children are undefined", () => {
         const { asFragment } = getComponent({ children: undefined });
 
         expect(asFragment()).toMatchSnapshot();
     });
 
-    it('returns null when setting is falsy', () => {
+    it("returns null when setting is falsy", () => {
         (SettingsStore.getValue as jest.Mock).mockReturnValue(false);
         const { asFragment } = getComponent();
 

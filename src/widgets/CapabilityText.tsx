@@ -21,7 +21,8 @@ import {
     getTimelineRoomIDFromCapability,
     isTimelineCapability,
     isTimelineCapabilityFor,
-    MatrixCapabilities, Symbols,
+    MatrixCapabilities,
+    Symbols,
     WidgetEventCapability,
     WidgetKind,
 } from "matrix-widget-api";
@@ -165,17 +166,27 @@ export class CapabilityText {
                 const roomId = getTimelineRoomIDFromCapability(capability);
                 const room = MatrixClientPeg.get().getRoom(roomId);
                 return {
-                    primary: _t("The above, but in <Room /> as well", {}, {
-                        Room: () => {
-                            if (room) {
-                                return <TextWithTooltip tooltip={room.getCanonicalAlias() ?? roomId}>
-                                    <b>{ room.name }</b>
-                                </TextWithTooltip>;
-                            } else {
-                                return <b><code>{ roomId }</code></b>;
-                            }
+                    primary: _t(
+                        "The above, but in <Room /> as well",
+                        {},
+                        {
+                            Room: () => {
+                                if (room) {
+                                    return (
+                                        <TextWithTooltip tooltip={room.getCanonicalAlias() ?? roomId}>
+                                            <b>{room.name}</b>
+                                        </TextWithTooltip>
+                                    );
+                                } else {
+                                    return (
+                                        <b>
+                                            <code>{roomId}</code>
+                                        </b>
+                                    );
+                                }
+                            },
                         },
-                    }),
+                    ),
                 };
             }
         }
@@ -193,9 +204,10 @@ export class CapabilityText {
 
             // See if we have a static line of text to provide for the given event type and
             // direction. The hope is that we do for common event types for friendlier copy.
-            const evSendRecv = eventCap.kind === EventKind.State
-                ? CapabilityText.stateSendRecvCaps
-                : CapabilityText.nonStateSendRecvCaps;
+            const evSendRecv =
+                eventCap.kind === EventKind.State
+                    ? CapabilityText.stateSendRecvCaps
+                    : CapabilityText.nonStateSendRecvCaps;
             if (evSendRecv[eventCap.eventType]) {
                 const textForKind = evSendRecv[eventCap.eventType];
                 const textForDirection = textForKind[kind] || textForKind[GENERIC_WIDGET_KIND];
@@ -211,40 +223,57 @@ export class CapabilityText {
             if (kind === WidgetKind.Room) {
                 if (eventCap.direction === EventDirection.Send) {
                     return {
-                        primary: _t("Send <b>%(eventType)s</b> events as you in this room", {
-                            eventType: eventCap.eventType,
-                        }, {
-                            b: sub => <b>{ sub }</b>,
-                        }),
+                        primary: _t(
+                            "Send <b>%(eventType)s</b> events as you in this room",
+                            {
+                                eventType: eventCap.eventType,
+                            },
+                            {
+                                b: (sub) => <b>{sub}</b>,
+                            },
+                        ),
                         byline: CapabilityText.bylineFor(eventCap),
                     };
                 } else {
                     return {
-                        primary: _t("See <b>%(eventType)s</b> events posted to this room", {
-                            eventType: eventCap.eventType,
-                        }, {
-                            b: sub => <b>{ sub }</b>,
-                        }),
+                        primary: _t(
+                            "See <b>%(eventType)s</b> events posted to this room",
+                            {
+                                eventType: eventCap.eventType,
+                            },
+                            {
+                                b: (sub) => <b>{sub}</b>,
+                            },
+                        ),
                         byline: CapabilityText.bylineFor(eventCap),
                     };
                 }
-            } else { // assume generic
+            } else {
+                // assume generic
                 if (eventCap.direction === EventDirection.Send) {
                     return {
-                        primary: _t("Send <b>%(eventType)s</b> events as you in your active room", {
-                            eventType: eventCap.eventType,
-                        }, {
-                            b: sub => <b>{ sub }</b>,
-                        }),
+                        primary: _t(
+                            "Send <b>%(eventType)s</b> events as you in your active room",
+                            {
+                                eventType: eventCap.eventType,
+                            },
+                            {
+                                b: (sub) => <b>{sub}</b>,
+                            },
+                        ),
                         byline: CapabilityText.bylineFor(eventCap),
                     };
                 } else {
                     return {
-                        primary: _t("See <b>%(eventType)s</b> events posted to your active room", {
-                            eventType: eventCap.eventType,
-                        }, {
-                            b: sub => <b>{ sub }</b>,
-                        }),
+                        primary: _t(
+                            "See <b>%(eventType)s</b> events posted to your active room",
+                            {
+                                eventType: eventCap.eventType,
+                            },
+                            {
+                                b: (sub) => <b>{sub}</b>,
+                            },
+                        ),
                         byline: CapabilityText.bylineFor(eventCap),
                     };
                 }
@@ -253,9 +282,13 @@ export class CapabilityText {
 
         // We don't have enough context to render this capability specially, so we'll present it as-is
         return {
-            primary: _t("The <b>%(capability)s</b> capability", { capability }, {
-                b: sub => <b>{ sub }</b>,
-            }),
+            primary: _t(
+                "The <b>%(capability)s</b> capability",
+                { capability },
+                {
+                    b: (sub) => <b>{sub}</b>,
+                },
+            ),
         };
     }
 
@@ -264,15 +297,17 @@ export class CapabilityText {
         if (!eventCap.keyStr) {
             if (eventCap.direction === EventDirection.Send) {
                 return {
-                    primary: kind === WidgetKind.Room
-                        ? _t("Send messages as you in this room")
-                        : _t("Send messages as you in your active room"),
+                    primary:
+                        kind === WidgetKind.Room
+                            ? _t("Send messages as you in this room")
+                            : _t("Send messages as you in your active room"),
                 };
             } else {
                 return {
-                    primary: kind === WidgetKind.Room
-                        ? _t("See messages posted to this room")
-                        : _t("See messages posted to your active room"),
+                    primary:
+                        kind === WidgetKind.Room
+                            ? _t("See messages posted to this room")
+                            : _t("See messages posted to your active room"),
                 };
             }
         }
@@ -283,75 +318,85 @@ export class CapabilityText {
             case MsgType.Text: {
                 if (eventCap.direction === EventDirection.Send) {
                     return {
-                        primary: kind === WidgetKind.Room
-                            ? _t("Send text messages as you in this room")
-                            : _t("Send text messages as you in your active room"),
+                        primary:
+                            kind === WidgetKind.Room
+                                ? _t("Send text messages as you in this room")
+                                : _t("Send text messages as you in your active room"),
                     };
                 } else {
                     return {
-                        primary: kind === WidgetKind.Room
-                            ? _t("See text messages posted to this room")
-                            : _t("See text messages posted to your active room"),
+                        primary:
+                            kind === WidgetKind.Room
+                                ? _t("See text messages posted to this room")
+                                : _t("See text messages posted to your active room"),
                     };
                 }
             }
             case MsgType.Emote: {
                 if (eventCap.direction === EventDirection.Send) {
                     return {
-                        primary: kind === WidgetKind.Room
-                            ? _t("Send emotes as you in this room")
-                            : _t("Send emotes as you in your active room"),
+                        primary:
+                            kind === WidgetKind.Room
+                                ? _t("Send emotes as you in this room")
+                                : _t("Send emotes as you in your active room"),
                     };
                 } else {
                     return {
-                        primary: kind === WidgetKind.Room
-                            ? _t("See emotes posted to this room")
-                            : _t("See emotes posted to your active room"),
+                        primary:
+                            kind === WidgetKind.Room
+                                ? _t("See emotes posted to this room")
+                                : _t("See emotes posted to your active room"),
                     };
                 }
             }
             case MsgType.Image: {
                 if (eventCap.direction === EventDirection.Send) {
                     return {
-                        primary: kind === WidgetKind.Room
-                            ? _t("Send images as you in this room")
-                            : _t("Send images as you in your active room"),
+                        primary:
+                            kind === WidgetKind.Room
+                                ? _t("Send images as you in this room")
+                                : _t("Send images as you in your active room"),
                     };
                 } else {
                     return {
-                        primary: kind === WidgetKind.Room
-                            ? _t("See images posted to this room")
-                            : _t("See images posted to your active room"),
+                        primary:
+                            kind === WidgetKind.Room
+                                ? _t("See images posted to this room")
+                                : _t("See images posted to your active room"),
                     };
                 }
             }
             case MsgType.Video: {
                 if (eventCap.direction === EventDirection.Send) {
                     return {
-                        primary: kind === WidgetKind.Room
-                            ? _t("Send videos as you in this room")
-                            : _t("Send videos as you in your active room"),
+                        primary:
+                            kind === WidgetKind.Room
+                                ? _t("Send videos as you in this room")
+                                : _t("Send videos as you in your active room"),
                     };
                 } else {
                     return {
-                        primary: kind === WidgetKind.Room
-                            ? _t("See videos posted to this room")
-                            : _t("See videos posted to your active room"),
+                        primary:
+                            kind === WidgetKind.Room
+                                ? _t("See videos posted to this room")
+                                : _t("See videos posted to your active room"),
                     };
                 }
             }
             case MsgType.File: {
                 if (eventCap.direction === EventDirection.Send) {
                     return {
-                        primary: kind === WidgetKind.Room
-                            ? _t("Send general files as you in this room")
-                            : _t("Send general files as you in your active room"),
+                        primary:
+                            kind === WidgetKind.Room
+                                ? _t("Send general files as you in this room")
+                                : _t("Send general files as you in your active room"),
                     };
                 } else {
                     return {
-                        primary: kind === WidgetKind.Room
-                            ? _t("See general files posted to this room")
-                            : _t("See general files posted to your active room"),
+                        primary:
+                            kind === WidgetKind.Room
+                                ? _t("See general files posted to this room")
+                                : _t("See general files posted to your active room"),
                     };
                 }
             }
@@ -359,31 +404,47 @@ export class CapabilityText {
                 let primary: TranslatedString;
                 if (eventCap.direction === EventDirection.Send) {
                     if (kind === WidgetKind.Room) {
-                        primary = _t("Send <b>%(msgtype)s</b> messages as you in this room", {
-                            msgtype: eventCap.keyStr,
-                        }, {
-                            b: sub => <b>{ sub }</b>,
-                        });
+                        primary = _t(
+                            "Send <b>%(msgtype)s</b> messages as you in this room",
+                            {
+                                msgtype: eventCap.keyStr,
+                            },
+                            {
+                                b: (sub) => <b>{sub}</b>,
+                            },
+                        );
                     } else {
-                        primary = _t("Send <b>%(msgtype)s</b> messages as you in your active room", {
-                            msgtype: eventCap.keyStr,
-                        }, {
-                            b: sub => <b>{ sub }</b>,
-                        });
+                        primary = _t(
+                            "Send <b>%(msgtype)s</b> messages as you in your active room",
+                            {
+                                msgtype: eventCap.keyStr,
+                            },
+                            {
+                                b: (sub) => <b>{sub}</b>,
+                            },
+                        );
                     }
                 } else {
                     if (kind === WidgetKind.Room) {
-                        primary = _t("See <b>%(msgtype)s</b> messages posted to this room", {
-                            msgtype: eventCap.keyStr,
-                        }, {
-                            b: sub => <b>{ sub }</b>,
-                        });
+                        primary = _t(
+                            "See <b>%(msgtype)s</b> messages posted to this room",
+                            {
+                                msgtype: eventCap.keyStr,
+                            },
+                            {
+                                b: (sub) => <b>{sub}</b>,
+                            },
+                        );
                     } else {
-                        primary = _t("See <b>%(msgtype)s</b> messages posted to your active room", {
-                            msgtype: eventCap.keyStr,
-                        }, {
-                            b: sub => <b>{ sub }</b>,
-                        });
+                        primary = _t(
+                            "See <b>%(msgtype)s</b> messages posted to your active room",
+                            {
+                                msgtype: eventCap.keyStr,
+                            },
+                            {
+                                b: (sub) => <b>{sub}</b>,
+                            },
+                        );
                     }
                 }
                 return { primary };

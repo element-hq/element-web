@@ -34,7 +34,8 @@ limitations under the License.
         border-radius: 8px;
     }
 
-    .mx_DecoratedRoomAvatar, .mx_RoomTile_avatarContainer {
+    .mx_DecoratedRoomAvatar,
+    .mx_RoomTile_avatarContainer {
         margin-right: 10px;
     }
 
@@ -54,7 +55,8 @@ limitations under the License.
         flex-direction: column;
         justify-content: center;
 
-        .mx_RoomTile_title, .mx_RoomTile_subtitle {
+        .mx_RoomTile_title,
+        .mx_RoomTile_subtitle {
             width: 100%;
 
             /* Ellipsize any text overflow */
@@ -120,7 +122,7 @@ limitations under the License.
         &::before {
             top: 2px;
             left: 2px;
-            content: '';
+            content: "";
             width: 16px;
             height: 16px;
             position: absolute;
@@ -137,7 +139,7 @@ limitations under the License.
     }
 
     .mx_RoomTile_menuButton::before {
-        mask-image: url('$(res)/img/element-icons/context-menu.svg');
+        mask-image: url("$(res)/img/element-icons/context-menu.svg");
     }
 
     &:not(.mx_RoomTile_minimized) {
@@ -163,7 +165,8 @@ limitations under the License.
         align-items: center;
         position: relative;
 
-        .mx_DecoratedRoomAvatar, .mx_RoomTile_avatarContainer {
+        .mx_DecoratedRoomAvatar,
+        .mx_RoomTile_avatarContainer {
             margin-right: 0;
         }
     }
@@ -171,80 +174,80 @@ limitations under the License.
 
 /* We use these both in context menus and the room tiles */
 .mx_RoomTile_iconBell::before {
-    mask-image: url('$(res)/img/element-icons/notifications.svg');
+    mask-image: url("$(res)/img/element-icons/notifications.svg");
 }
 .mx_RoomTile_iconBellDot::before {
-    mask-image: url('$(res)/img/element-icons/roomlist/notifications-default.svg');
+    mask-image: url("$(res)/img/element-icons/roomlist/notifications-default.svg");
 }
 .mx_RoomTile_iconBellCrossed::before {
-    mask-image: url('$(res)/img/element-icons/roomlist/notifications-off.svg');
+    mask-image: url("$(res)/img/element-icons/roomlist/notifications-off.svg");
 }
 .mx_RoomTile_iconBellMentions::before {
-    mask-image: url('$(res)/img/element-icons/roomlist/notifications-dm.svg');
+    mask-image: url("$(res)/img/element-icons/roomlist/notifications-dm.svg");
 }
 
 .mx_RoomTile_contextMenu {
     .mx_RoomTile_iconStar::before {
-        mask-image: url('$(res)/img/element-icons/roomlist/favorite.svg');
+        mask-image: url("$(res)/img/element-icons/roomlist/favorite.svg");
     }
 
     .mx_RoomTile_iconArrowDown::before {
-        mask-image: url('$(res)/img/element-icons/roomlist/low-priority.svg');
+        mask-image: url("$(res)/img/element-icons/roomlist/low-priority.svg");
     }
 
     .mx_RoomTile_iconNotificationsDefault::before {
-        mask-image: url('$(res)/img/element-icons/notifications.svg');
+        mask-image: url("$(res)/img/element-icons/notifications.svg");
     }
 
     .mx_RoomTile_iconNotificationsAllMessages::before {
-        mask-image: url('$(res)/img/element-icons/roomlist/notifications-default.svg');
+        mask-image: url("$(res)/img/element-icons/roomlist/notifications-default.svg");
     }
 
     .mx_RoomTile_iconNotificationsMentionsKeywords::before {
-        mask-image: url('$(res)/img/element-icons/roomlist/notifications-dm.svg');
+        mask-image: url("$(res)/img/element-icons/roomlist/notifications-dm.svg");
     }
 
     .mx_RoomTile_iconNotificationsNone::before {
-        mask-image: url('$(res)/img/element-icons/roomlist/notifications-off.svg');
+        mask-image: url("$(res)/img/element-icons/roomlist/notifications-off.svg");
     }
 
     .mx_RoomTile_iconPeople::before {
-        mask-image: url('$(res)/img/element-icons/room/members.svg');
+        mask-image: url("$(res)/img/element-icons/room/members.svg");
     }
 
     .mx_RoomTile_iconFiles::before {
-        mask-image: url('$(res)/img/element-icons/room/files.svg');
+        mask-image: url("$(res)/img/element-icons/room/files.svg");
     }
 
     .mx_RoomTile_iconPins::before {
-        mask-image: url('$(res)/img/element-icons/room/pin-upright.svg');
+        mask-image: url("$(res)/img/element-icons/room/pin-upright.svg");
     }
 
     .mx_RoomTile_iconWidgets::before {
-        mask-image: url('$(res)/img/element-icons/room/apps.svg');
+        mask-image: url("$(res)/img/element-icons/room/apps.svg");
     }
 
     .mx_RoomTile_iconSettings::before {
-        mask-image: url('$(res)/img/element-icons/settings.svg');
+        mask-image: url("$(res)/img/element-icons/settings.svg");
     }
 
     .mx_RoomTile_iconExport::before {
-        mask-image: url('$(res)/img/element-icons/export.svg');
+        mask-image: url("$(res)/img/element-icons/export.svg");
     }
 
     .mx_RoomTile_iconDeveloperTools::before {
-        mask-image: url('$(res)/img/element-icons/settings/flask.svg');
+        mask-image: url("$(res)/img/element-icons/settings/flask.svg");
     }
 
     .mx_RoomTile_iconCopyLink::before {
-        mask-image: url('$(res)/img/element-icons/link.svg');
+        mask-image: url("$(res)/img/element-icons/link.svg");
     }
 
     .mx_RoomTile_iconInvite::before {
-        mask-image: url('$(res)/img/element-icons/room/invite.svg');
+        mask-image: url("$(res)/img/element-icons/room/invite.svg");
     }
 
     .mx_RoomTile_iconSignOut::before {
-        mask-image: url('$(res)/img/element-icons/leave.svg');
+        mask-image: url("$(res)/img/element-icons/leave.svg");
     }
 }

@@ -18,7 +18,7 @@ import { MatrixClient, Room, PendingEventOrdering } from "matrix-js-sdk/src/matr
 
 import { Member } from "../utils/direct-messages";
 
-export const LOCAL_ROOM_ID_PREFIX = 'local+';
+export const LOCAL_ROOM_ID_PREFIX = "local+";
 
 export enum LocalRoomState {
     NEW, // new local room; only known to the client

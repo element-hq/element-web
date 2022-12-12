@@ -14,18 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 
-import { _t } from '../../../languageHandler';
+import { _t } from "../../../languageHandler";
 import SdkConfig from "../../../SdkConfig";
-import Modal from '../../../Modal';
+import Modal from "../../../Modal";
 import SettingsStore from "../../../settings/SettingsStore";
 import AccessibleButton from "../elements/AccessibleButton";
 import { formatBytes, formatCountLong } from "../../../utils/FormattingUtils";
 import EventIndexPeg from "../../../indexing/EventIndexPeg";
 import { SettingLevel } from "../../../settings/SettingLevel";
-import SeshatResetDialog from '../dialogs/SeshatResetDialog';
-import InlineSpinner from '../elements/InlineSpinner';
+import SeshatResetDialog from "../dialogs/SeshatResetDialog";
+import InlineSpinner from "../elements/InlineSpinner";
 
 interface IState {
     enabling: boolean;
@@ -42,8 +42,7 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
             enabling: false,
             eventIndexSize: 0,
             roomCount: 0,
-            eventIndexingEnabled:
-                SettingsStore.getValueAt(SettingLevel.DEVICE, 'enableEventIndexing'),
+            eventIndexingEnabled: SettingsStore.getValueAt(SettingLevel.DEVICE, "enableEventIndexing"),
         };
     }
 
@@ -79,7 +78,7 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
 
     async updateState() {
         const eventIndex = EventIndexPeg.get();
-        const eventIndexingEnabled = SettingsStore.getValueAt(SettingLevel.DEVICE, 'enableEventIndexing');
+        const eventIndexingEnabled = SettingsStore.getValueAt(SettingLevel.DEVICE, "enableEventIndexing");
         const enabling = false;
 
         let eventIndexSize = 0;
@@ -111,10 +110,13 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
         Modal.createDialogAsync(
             // @ts-ignore: TS doesn't seem to like the type of this now that it
             // has also been converted to TS as well, but I can't figure out why...
-            import('../../../async-components/views/dialogs/eventindex/ManageEventIndexDialog'),
+            import("../../../async-components/views/dialogs/eventindex/ManageEventIndexDialog"),
             {
                 onFinished: () => {},
-            }, null, /* priority = */ false, /* static = */ true,
+            },
+            null,
+            /* priority = */ false,
+            /* static = */ true,
         );
     };
 
@@ -126,7 +128,7 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
         await EventIndexPeg.initEventIndex();
         await EventIndexPeg.get().addInitialCheckpoints();
         EventIndexPeg.get().startCrawler();
-        await SettingsStore.setValue('enableEventIndexing', null, SettingLevel.DEVICE, true);
+        await SettingsStore.setValue("enableEventIndexing", null, SettingLevel.DEVICE, true);
         await this.updateState();
     };
 
@@ -134,7 +136,7 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
         const { close } = Modal.createDialog(SeshatResetDialog, {
             onFinished: async (success) => {
                 if (success) {
-                    await SettingsStore.setValue('enableEventIndexing', null, SettingLevel.DEVICE, false);
+                    await SettingsStore.setValue("enableEventIndexing", null, SettingLevel.DEVICE, false);
                     await EventIndexPeg.deleteEventIndex();
                     await this.onEnable();
                     close();
@@ -150,20 +152,22 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
         if (EventIndexPeg.get() !== null) {
             eventIndexingSettings = (
                 <div>
-                    <div className='mx_SettingsTab_subsectionText'>{ _t(
-                        "Securely cache encrypted messages locally for them " +
-                        "to appear in search results, using %(size)s to store messages from %(rooms)s rooms.",
-                        {
-                            size: formatBytes(this.state.eventIndexSize, 0),
-                            // This drives the singular / plural string
-                            // selection for "room" / "rooms" only.
-                            count: this.state.roomCount,
-                            rooms: formatCountLong(this.state.roomCount),
-                        },
-                    ) }</div>
+                    <div className="mx_SettingsTab_subsectionText">
+                        {_t(
+                            "Securely cache encrypted messages locally for them " +
+                                "to appear in search results, using %(size)s to store messages from %(rooms)s rooms.",
+                            {
+                                size: formatBytes(this.state.eventIndexSize, 0),
+                                // This drives the singular / plural string
+                                // selection for "room" / "rooms" only.
+                                count: this.state.roomCount,
+                                rooms: formatCountLong(this.state.roomCount),
+                            },
+                        )}
+                    </div>
                     <div>
                         <AccessibleButton kind="primary" onClick={this.onManage}>
-                            { _t("Manage") }
+                            {_t("Manage")}
                         </AccessibleButton>
                     </div>
                 </div>
@@ -171,87 +175,78 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
         } else if (!this.state.eventIndexingEnabled && EventIndexPeg.supportIsInstalled()) {
             eventIndexingSettings = (
                 <div>
-                    <div className='mx_SettingsTab_subsectionText'>{ _t(
-                        "Securely cache encrypted messages locally for them to " +
-                        "appear in search results.",
-                    ) }</div>
+                    <div className="mx_SettingsTab_subsectionText">
+                        {_t("Securely cache encrypted messages locally for them to " + "appear in search results.")}
+                    </div>
                     <div>
-                        <AccessibleButton
-                            kind="primary"
-                            disabled={this.state.enabling}
-                            onClick={this.onEnable}
-                        >
-                            { _t("Enable") }
+                        <AccessibleButton kind="primary" disabled={this.state.enabling} onClick={this.onEnable}>
+                            {_t("Enable")}
                         </AccessibleButton>
-                        { this.state.enabling ? <InlineSpinner /> : <div /> }
+                        {this.state.enabling ? <InlineSpinner /> : <div />}
                     </div>
                 </div>
             );
         } else if (EventIndexPeg.platformHasSupport() && !EventIndexPeg.supportIsInstalled()) {
-            const nativeLink = (
+            const nativeLink =
                 "https://github.com/vector-im/element-desktop/blob/develop/" +
                 "docs/native-node-modules.md#" +
-                "adding-seshat-for-search-in-e2e-encrypted-rooms"
-            );
+                "adding-seshat-for-search-in-e2e-encrypted-rooms";
 
             eventIndexingSettings = (
-                <div className='mx_SettingsTab_subsectionText'>{ _t(
-                    "%(brand)s is missing some components required for securely " +
-                    "caching encrypted messages locally. If you'd like to " +
-                    "experiment with this feature, build a custom %(brand)s Desktop " +
-                    "with <nativeLink>search components added</nativeLink>.",
-                    {
-                        brand,
-                    },
-                    {
-                        nativeLink: sub => <a
-                            href={nativeLink}
-                            target="_blank"
-                            rel="noreferrer noopener"
-                        >{ sub }</a>,
-                    },
-                ) }</div>
+                <div className="mx_SettingsTab_subsectionText">
+                    {_t(
+                        "%(brand)s is missing some components required for securely " +
+                            "caching encrypted messages locally. If you'd like to " +
+                            "experiment with this feature, build a custom %(brand)s Desktop " +
+                            "with <nativeLink>search components added</nativeLink>.",
+                        {
+                            brand,
+                        },
+                        {
+                            nativeLink: (sub) => (
+                                <a href={nativeLink} target="_blank" rel="noreferrer noopener">
+                                    {sub}
+                                </a>
+                            ),
+                        },
+                    )}
+                </div>
             );
         } else if (!EventIndexPeg.platformHasSupport()) {
             eventIndexingSettings = (
-                <div className='mx_SettingsTab_subsectionText'>{ _t(
-                    "%(brand)s can't securely cache encrypted messages locally " +
-                    "while running in a web browser. Use <desktopLink>%(brand)s Desktop</desktopLink> " +
-                    "for encrypted messages to appear in search results.",
-                    {
-                        brand,
-                    },
-                    {
-                        desktopLink: sub => <a
-                            href="https://element.io/get-started"
-                            target="_blank"
-                            rel="noreferrer noopener"
-                        >{ sub }</a>,
-                    },
-                ) }</div>
+                <div className="mx_SettingsTab_subsectionText">
+                    {_t(
+                        "%(brand)s can't securely cache encrypted messages locally " +
+                            "while running in a web browser. Use <desktopLink>%(brand)s Desktop</desktopLink> " +
+                            "for encrypted messages to appear in search results.",
+                        {
+                            brand,
+                        },
+                        {
+                            desktopLink: (sub) => (
+                                <a href="https://element.io/get-started" target="_blank" rel="noreferrer noopener">
+                                    {sub}
+                                </a>
+                            ),
+                        },
+                    )}
+                </div>
             );
         } else {
             eventIndexingSettings = (
-                <div className='mx_SettingsTab_subsectionText'>
-                    <p>
-                        { this.state.enabling
-                            ? <InlineSpinner />
-                            : _t("Message search initialisation failed")
-                        }
-                    </p>
-                    { EventIndexPeg.error && (
+                <div className="mx_SettingsTab_subsectionText">
+                    <p>{this.state.enabling ? <InlineSpinner /> : _t("Message search initialisation failed")}</p>
+                    {EventIndexPeg.error && (
                         <details>
-                            <summary>{ _t("Advanced") }</summary>
-                            <code>
-                                { EventIndexPeg.error.message }
-                            </code>
+                            <summary>{_t("Advanced")}</summary>
+                            <code>{EventIndexPeg.error.message}</code>
                             <p>
                                 <AccessibleButton key="delete" kind="danger" onClick={this.confirmEventStoreReset}>
-                                    { _t("Reset") }
+                                    {_t("Reset")}
                                 </AccessibleButton>
                             </p>
                         </details>
-                    ) }
+                    )}
                 </div>
             );
         }

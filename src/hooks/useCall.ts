@@ -37,14 +37,14 @@ export const useConnectionState = (call: Call): ConnectionState =>
     useTypedEventEmitterState(
         call,
         CallEvent.ConnectionState,
-        useCallback(state => state ?? call.connectionState, [call]),
+        useCallback((state) => state ?? call.connectionState, [call]),
     );
 
 export const useParticipants = (call: Call): Map<RoomMember, Set<string>> =>
     useTypedEventEmitterState(
         call,
         CallEvent.Participants,
-        useCallback(state => state ?? call.participants, [call]),
+        useCallback((state) => state ?? call.participants, [call]),
     );
 
 export const useParticipantCount = (call: Call): number => {
@@ -71,8 +71,9 @@ export const useParticipatingMembers = (call: Call): RoomMember[] => {
 };
 
 export const useFull = (call: Call): boolean => {
-    return useParticipantCount(call) >= (
-        SdkConfig.get("element_call").participant_limit ?? DEFAULTS.element_call.participant_limit!
+    return (
+        useParticipantCount(call) >=
+        (SdkConfig.get("element_call").participant_limit ?? DEFAULTS.element_call.participant_limit!)
     );
 };
 
@@ -89,5 +90,5 @@ export const useLayout = (call: ElementCall): Layout =>
     useTypedEventEmitterState(
         call,
         CallEvent.Layout,
-        useCallback(state => state ?? call.layout, [call]),
+        useCallback((state) => state ?? call.layout, [call]),
     );

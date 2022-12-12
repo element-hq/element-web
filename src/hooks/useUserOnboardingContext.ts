@@ -42,10 +42,7 @@ const USER_ONBOARDING_CONTEXT_INTERVAL = 5000;
 function useRefOf<T extends any[], R>(value: (...values: T) => R): (...values: T) => R {
     const ref = useRef(value);
     ref.current = value;
-    return useCallback(
-        (...values: T) => ref.current(...values),
-        [],
-    );
+    return useCallback((...values: T) => ref.current(...values), []);
 }
 
 function useUserOnboardingContextValue<T>(defaultValue: T, callback: (cli: MatrixClient) => Promise<T>): T {
@@ -71,7 +68,7 @@ function useUserOnboardingContextValue<T>(defaultValue: T, callback: (cli: Matri
                 handle = window.setTimeout(repeater, USER_ONBOARDING_CONTEXT_INTERVAL);
             }
         };
-        repeater().catch(err => logger.warn("could not update user onboarding context", err));
+        repeater().catch((err) => logger.warn("could not update user onboarding context", err));
         cli.on(ClientEvent.AccountData, repeater);
         return () => {
             enabled = false;
@@ -93,7 +90,7 @@ export function useUserOnboardingContext(): UserOnboardingContext | null {
     const hasDevices = useUserOnboardingContextValue(false, async (cli) => {
         const myDevice = cli.getDeviceId();
         const devices = await cli.getDevices();
-        return Boolean(devices.devices.find(device => device.device_id !== myDevice));
+        return Boolean(devices.devices.find((device) => device.device_id !== myDevice));
     });
     const hasDmRooms = useUserOnboardingContextValue(false, async () => {
         const dmRooms = DMRoomMap.shared().getUniqueRoomsWithIndividuals() ?? {};

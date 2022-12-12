@@ -16,12 +16,12 @@ limitations under the License.
 
 import fetchMock from "fetch-mock-jest";
 import { TextDecoder, TextEncoder } from "util";
-import fetch from 'node-fetch';
+import fetch from "node-fetch";
 
 // jest 27 removes setImmediate from jsdom
 // polyfill until setImmediate use in client can be removed
 // @ts-ignore - we know the contract is wrong. That's why we're stubbing it.
-global.setImmediate = callback => window.setTimeout(callback, 0);
+global.setImmediate = (callback) => window.setTimeout(callback, 0);
 
 // Stub ResizeObserver
 // @ts-ignore - we know it's a duplicate (that's why we're stubbing it)
@@ -56,7 +56,7 @@ class MyClipboardEvent extends Event {}
 window.ClipboardEvent = MyClipboardEvent as any;
 
 // matchMedia is not included in jsdom
-const mockMatchMedia = jest.fn().mockImplementation(query => ({
+const mockMatchMedia = jest.fn().mockImplementation((query) => ({
     matches: false,
     media: query,
     onchange: null,

@@ -19,9 +19,7 @@ import { useState } from "react";
 import { VoiceBroadcastRecordingsStore, VoiceBroadcastRecordingsStoreEvent } from "..";
 import { useTypedEventEmitter } from "../../hooks/useEventEmitter";
 
-export const useCurrentVoiceBroadcastRecording = (
-    voiceBroadcastRecordingsStore: VoiceBroadcastRecordingsStore,
-) => {
+export const useCurrentVoiceBroadcastRecording = (voiceBroadcastRecordingsStore: VoiceBroadcastRecordingsStore) => {
     const [currentVoiceBroadcastRecording, setCurrentVoiceBroadcastRecording] = useState(
         voiceBroadcastRecordingsStore.getCurrent(),
     );

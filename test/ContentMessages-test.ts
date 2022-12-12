@@ -63,24 +63,15 @@ describe("ContentMessages", () => {
     describe("sendStickerContentToRoom", () => {
         beforeEach(() => {
             mocked(client.sendStickerMessage).mockReturnValue(prom);
-            mocked(doMaybeLocalRoomAction).mockImplementation(<T>(
-                roomId: string,
-                fn: (actualRoomId: string) => Promise<T>,
-                client?: MatrixClient,
-            ) => {
-                return fn(roomId);
-            });
+            mocked(doMaybeLocalRoomAction).mockImplementation(
+                <T>(roomId: string, fn: (actualRoomId: string) => Promise<T>, client?: MatrixClient) => {
+                    return fn(roomId);
+                },
+            );
         });
 
         it("should forward the call to doMaybeLocalRoomAction", async () => {
-            await contentMessages.sendStickerContentToRoom(
-                stickerUrl,
-                roomId,
-                null,
-                imageInfo,
-                text,
-                client,
-            );
+            await contentMessages.sendStickerContentToRoom(stickerUrl, roomId, null, imageInfo, text, client);
             expect(client.sendStickerMessage).toHaveBeenCalledWith(roomId, null, stickerUrl, imageInfo, text);
         });
     });
@@ -88,22 +79,25 @@ describe("ContentMessages", () => {
     describe("sendContentToRoom", () => {
         const roomId = "!roomId:server";
         beforeEach(() => {
-            Object.defineProperty(global.Image.prototype, 'src', {
+            Object.defineProperty(global.Image.prototype, "src", {
                 // Define the property setter
                 set(src) {
                     window.setTimeout(() => this.onload());
                 },
             });
-            Object.defineProperty(global.Image.prototype, 'height', {
-                get() { return 600; },
+            Object.defineProperty(global.Image.prototype, "height", {
+                get() {
+                    return 600;
+                },
             });
-            Object.defineProperty(global.Image.prototype, 'width', {
-                get() { return 800; },
+            Object.defineProperty(global.Image.prototype, "width", {
+                get() {
+                    return 800;
+                },
             });
-            mocked(doMaybeLocalRoomAction).mockImplementation(<T>(
-                roomId: string,
-                fn: (actualRoomId: string) => Promise<T>,
-            ) => fn(roomId));
+            mocked(doMaybeLocalRoomAction).mockImplementation(
+                <T>(roomId: string, fn: (actualRoomId: string) => Promise<T>) => fn(roomId),
+            );
             mocked(BlurhashEncoder.instance.getBlurhash).mockResolvedValue(undefined);
         });
 
@@ -111,34 +105,46 @@ describe("ContentMessages", () => {
             mocked(client.uploadContent).mockResolvedValue({ content_uri: "mxc://server/file" });
             const file = new File([], "fileName", { type: "image/jpeg" });
             await contentMessages.sendContentToRoom(file, roomId, undefined, client, undefined);
-            expect(client.sendMessage).toHaveBeenCalledWith(roomId, null, expect.objectContaining({
-                url: "mxc://server/file",
-                msgtype: "m.image",
-            }));
+            expect(client.sendMessage).toHaveBeenCalledWith(
+                roomId,
+                null,
+                expect.objectContaining({
+                    url: "mxc://server/file",
+                    msgtype: "m.image",
+                }),
+            );
         });
 
         it("should fall back to m.file for invalid image files", async () => {
             mocked(client.uploadContent).mockResolvedValue({ content_uri: "mxc://server/file" });
             const file = new File([], "fileName", { type: "image/png" });
             await contentMessages.sendContentToRoom(file, roomId, undefined, client, undefined);
-            expect(client.sendMessage).toHaveBeenCalledWith(roomId, null, expect.objectContaining({
-                url: "mxc://server/file",
-                msgtype: "m.file",
-            }));
+            expect(client.sendMessage).toHaveBeenCalledWith(
+                roomId,
+                null,
+                expect.objectContaining({
+                    url: "mxc://server/file",
+                    msgtype: "m.file",
+                }),
+            );
         });
 
         it("should use m.video for video files", async () => {
-            jest.spyOn(document, "createElement").mockImplementation(tagName => {
+            jest.spyOn(document, "createElement").mockImplementation((tagName) => {
                 const element = createElement(tagName);
                 if (tagName === "video") {
                     (<HTMLVideoElement>element).load = jest.fn();
                     (<HTMLVideoElement>element).play = () => element.onloadeddata(new Event("loadeddata"));
                     (<HTMLVideoElement>element).pause = jest.fn();
-                    Object.defineProperty(element, 'videoHeight', {
-                        get() { return 600; },
+                    Object.defineProperty(element, "videoHeight", {
+                        get() {
+                            return 600;
+                        },
                     });
-                    Object.defineProperty(element, 'videoWidth', {
-                        get() { return 800; },
+                    Object.defineProperty(element, "videoWidth", {
+                        get() {
+                            return 800;
+                        },
                     });
                 }
                 return element;
@@ -147,31 +153,43 @@ describe("ContentMessages", () => {
             mocked(client.uploadContent).mockResolvedValue({ content_uri: "mxc://server/file" });
             const file = new File([], "fileName", { type: "video/mp4" });
             await contentMessages.sendContentToRoom(file, roomId, undefined, client, undefined);
-            expect(client.sendMessage).toHaveBeenCalledWith(roomId, null, expect.objectContaining({
-                url: "mxc://server/file",
-                msgtype: "m.video",
-            }));
+            expect(client.sendMessage).toHaveBeenCalledWith(
+                roomId,
+                null,
+                expect.objectContaining({
+                    url: "mxc://server/file",
+                    msgtype: "m.video",
+                }),
+            );
         });
 
         it("should use m.audio for audio files", async () => {
             mocked(client.uploadContent).mockResolvedValue({ content_uri: "mxc://server/file" });
             const file = new File([], "fileName", { type: "audio/mp3" });
             await contentMessages.sendContentToRoom(file, roomId, undefined, client, undefined);
-            expect(client.sendMessage).toHaveBeenCalledWith(roomId, null, expect.objectContaining({
-                url: "mxc://server/file",
-                msgtype: "m.audio",
-            }));
+            expect(client.sendMessage).toHaveBeenCalledWith(
+                roomId,
+                null,
+                expect.objectContaining({
+                    url: "mxc://server/file",
+                    msgtype: "m.audio",
+                }),
+            );
         });
 
         it("should default to name 'Attachment' if file doesn't have a name", async () => {
             mocked(client.uploadContent).mockResolvedValue({ content_uri: "mxc://server/file" });
             const file = new File([], "", { type: "text/plain" });
             await contentMessages.sendContentToRoom(file, roomId, undefined, client, undefined);
-            expect(client.sendMessage).toHaveBeenCalledWith(roomId, null, expect.objectContaining({
-                url: "mxc://server/file",
-                msgtype: "m.file",
-                body: "Attachment",
-            }));
+            expect(client.sendMessage).toHaveBeenCalledWith(
+                roomId,
+                null,
+                expect.objectContaining({
+                    url: "mxc://server/file",
+                    msgtype: "m.file",
+                    body: "Attachment",
+                }),
+            );
         });
 
         it("should keep RoomUpload's total and loaded values up to date", async () => {
@@ -196,10 +214,9 @@ describe("ContentMessages", () => {
         const roomId = "!roomId:server";
 
         beforeEach(() => {
-            mocked(doMaybeLocalRoomAction).mockImplementation(<T>(
-                roomId: string,
-                fn: (actualRoomId: string) => Promise<T>,
-            ) => fn(roomId));
+            mocked(doMaybeLocalRoomAction).mockImplementation(
+                <T>(roomId: string, fn: (actualRoomId: string) => Promise<T>) => fn(roomId),
+            );
         });
 
         it("should return only uploads for the given relation", async () => {
@@ -284,14 +301,19 @@ describe("uploadFile", () => {
         const res = await uploadFile(client, "!roomId:server", file, progressHandler);
 
         expect(res.url).toBeFalsy();
-        expect(res.file).toEqual(expect.objectContaining({
-            url: "mxc://server/file",
-        }));
+        expect(res.file).toEqual(
+            expect.objectContaining({
+                url: "mxc://server/file",
+            }),
+        );
         expect(encrypt.encryptAttachment).toHaveBeenCalled();
-        expect(client.uploadContent).toHaveBeenCalledWith(expect.any(Blob), expect.objectContaining({
-            progressHandler,
-            includeFilename: false,
-        }));
+        expect(client.uploadContent).toHaveBeenCalledWith(
+            expect.any(Blob),
+            expect.objectContaining({
+                progressHandler,
+                includeFilename: false,
+            }),
+        );
         expect(mocked(client.uploadContent).mock.calls[0][0]).not.toBe(file);
     });
 

@@ -48,31 +48,34 @@ export default class RoomSearch extends React.PureComponent<IProps> {
     }
 
     private onAction = (payload: ActionPayload) => {
-        if (payload.action === 'focus_room_filter') {
+        if (payload.action === "focus_room_filter") {
             this.openSpotlight();
         }
     };
 
     public render(): React.ReactNode {
-        const classes = classNames({
-            'mx_RoomSearch': true,
-            'mx_RoomSearch_minimized': this.props.isMinimized,
-        }, 'mx_RoomSearch_spotlightTrigger');
-
-        const icon = (
-            <div className="mx_RoomSearch_icon" />
+        const classes = classNames(
+            {
+                mx_RoomSearch: true,
+                mx_RoomSearch_minimized: this.props.isMinimized,
+            },
+            "mx_RoomSearch_spotlightTrigger",
         );
 
-        const shortcutPrompt = <kbd className="mx_RoomSearch_shortcutPrompt">
-            { IS_MAC ? "⌘ K" : _t(ALTERNATE_KEY_NAME[Key.CONTROL]) + " K" }
-        </kbd>;
+        const icon = <div className="mx_RoomSearch_icon" />;
 
-        return <AccessibleButton onClick={this.openSpotlight} className={classes}>
-            { icon }
-            { (!this.props.isMinimized) && <div className="mx_RoomSearch_spotlightTriggerText">
-                { _t("Search") }
-            </div> }
-            { shortcutPrompt }
-        </AccessibleButton>;
+        const shortcutPrompt = (
+            <kbd className="mx_RoomSearch_shortcutPrompt">
+                {IS_MAC ? "⌘ K" : _t(ALTERNATE_KEY_NAME[Key.CONTROL]) + " K"}
+            </kbd>
+        );
+
+        return (
+            <AccessibleButton onClick={this.openSpotlight} className={classes}>
+                {icon}
+                {!this.props.isMinimized && <div className="mx_RoomSearch_spotlightTriggerText">{_t("Search")}</div>}
+                {shortcutPrompt}
+            </AccessibleButton>
+        );
     }
 }

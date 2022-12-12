@@ -95,14 +95,12 @@ describe("StopGapWidget", () => {
 
         describe(`and receiving a action:${ElementWidgetActions.JoinCall} message`, () => {
             beforeEach(async () => {
-                messaging.on.mock.calls.find(
-                    ([event, listener]) => {
-                        if (event === `action:${ElementWidgetActions.JoinCall}`) {
-                            listener();
-                            return true;
-                        }
-                    },
-                );
+                messaging.on.mock.calls.find(([event, listener]) => {
+                    if (event === `action:${ElementWidgetActions.JoinCall}`) {
+                        listener();
+                        return true;
+                    }
+                });
             });
 
             it("should pause the current voice broadcast recording", () => {

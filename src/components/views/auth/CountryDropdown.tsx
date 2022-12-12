@@ -14,9 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 
-import { COUNTRIES, getEmojiFlag, PhoneNumberCountryDefinition } from '../../../phonenumber';
+import { COUNTRIES, getEmojiFlag, PhoneNumberCountryDefinition } from "../../../phonenumber";
 import SdkConfig from "../../../SdkConfig";
 import { _t } from "../../../languageHandler";
 import Dropdown from "../elements/Dropdown";
@@ -28,7 +28,7 @@ for (const c of COUNTRIES) {
 
 function countryMatchesSearchQuery(query: string, country: PhoneNumberCountryDefinition): boolean {
     // Remove '+' if present (when searching for a prefix)
-    if (query[0] === '+') {
+    if (query[0] === "+") {
         query = query.slice(1);
     }
 
@@ -59,12 +59,12 @@ export default class CountryDropdown extends React.Component<IProps, IState> {
         let defaultCountry: PhoneNumberCountryDefinition = COUNTRIES[0];
         const defaultCountryCode = SdkConfig.get("default_country_code");
         if (defaultCountryCode) {
-            const country = COUNTRIES.find(c => c.iso2 === defaultCountryCode.toUpperCase());
+            const country = COUNTRIES.find((c) => c.iso2 === defaultCountryCode.toUpperCase());
             if (country) defaultCountry = country;
         }
 
         this.state = {
-            searchQuery: '',
+            searchQuery: "",
             defaultCountry,
         };
     }
@@ -89,7 +89,7 @@ export default class CountryDropdown extends React.Component<IProps, IState> {
     };
 
     private flagImgForIso2(iso2: string): React.ReactNode {
-        return <div className="mx_Dropdown_option_emoji">{ getEmojiFlag(iso2) }</div>;
+        return <div className="mx_Dropdown_option_emoji">{getEmojiFlag(iso2)}</div>;
     }
 
     private getShortOption = (iso2: string): React.ReactNode => {
@@ -98,24 +98,21 @@ export default class CountryDropdown extends React.Component<IProps, IState> {
         }
         let countryPrefix;
         if (this.props.showPrefix) {
-            countryPrefix = '+' + COUNTRIES_BY_ISO2[iso2].prefix;
+            countryPrefix = "+" + COUNTRIES_BY_ISO2[iso2].prefix;
         }
-        return <span className="mx_CountryDropdown_shortOption">
-            { this.flagImgForIso2(iso2) }
-            { countryPrefix }
-        </span>;
+        return (
+            <span className="mx_CountryDropdown_shortOption">
+                {this.flagImgForIso2(iso2)}
+                {countryPrefix}
+            </span>
+        );
     };
 
     public render(): React.ReactNode {
         let displayedCountries;
         if (this.state.searchQuery) {
-            displayedCountries = COUNTRIES.filter(
-                countryMatchesSearchQuery.bind(this, this.state.searchQuery),
-            );
-            if (
-                this.state.searchQuery.length == 2 &&
-                COUNTRIES_BY_ISO2[this.state.searchQuery.toUpperCase()]
-            ) {
+            displayedCountries = COUNTRIES.filter(countryMatchesSearchQuery.bind(this, this.state.searchQuery));
+            if (this.state.searchQuery.length == 2 && COUNTRIES_BY_ISO2[this.state.searchQuery.toUpperCase()]) {
                 // exact ISO2 country name match: make the first result the matches ISO2
                 const matched = COUNTRIES_BY_ISO2[this.state.searchQuery.toUpperCase()];
                 displayedCountries = displayedCountries.filter((c) => {
@@ -128,29 +125,33 @@ export default class CountryDropdown extends React.Component<IProps, IState> {
         }
 
         const options = displayedCountries.map((country) => {
-            return <div className="mx_CountryDropdown_option" key={country.iso2}>
-                { this.flagImgForIso2(country.iso2) }
-                { _t(country.name) } (+{ country.prefix })
-            </div>;
+            return (
+                <div className="mx_CountryDropdown_option" key={country.iso2}>
+                    {this.flagImgForIso2(country.iso2)}
+                    {_t(country.name)} (+{country.prefix})
+                </div>
+            );
         });
 
         // default value here too, otherwise we need to handle null / undefined
         // values between mounting and the initial value propagating
         const value = this.props.value || this.state.defaultCountry.iso2;
 
-        return <Dropdown
-            id="mx_CountryDropdown"
-            className={this.props.className + " mx_CountryDropdown"}
-            onOptionChange={this.onOptionChange}
-            onSearchChange={this.onSearchChange}
-            menuWidth={298}
-            getShortOption={this.getShortOption}
-            value={value}
-            searchEnabled={true}
-            disabled={this.props.disabled}
-            label={_t("Country Dropdown")}
-        >
-            { options }
-        </Dropdown>;
+        return (
+            <Dropdown
+                id="mx_CountryDropdown"
+                className={this.props.className + " mx_CountryDropdown"}
+                onOptionChange={this.onOptionChange}
+                onSearchChange={this.onSearchChange}
+                menuWidth={298}
+                getShortOption={this.getShortOption}
+                value={value}
+                searchEnabled={true}
+                disabled={this.props.disabled}
+                label={_t("Country Dropdown")}
+            >
+                {options}
+            </Dropdown>
+        );
     }
 }

@@ -14,33 +14,29 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import ReactTestUtils from 'react-dom/test-utils';
-import ReactDOM from 'react-dom';
-import {
-    PendingEventOrdering,
-    Room,
-    RoomMember,
-} from 'matrix-js-sdk/src/matrix';
+import React from "react";
+import ReactTestUtils from "react-dom/test-utils";
+import ReactDOM from "react-dom";
+import { PendingEventOrdering, Room, RoomMember } from "matrix-js-sdk/src/matrix";
 
-import * as TestUtils from '../../../test-utils';
-import { MatrixClientPeg } from '../../../../src/MatrixClientPeg';
-import dis from '../../../../src/dispatcher/dispatcher';
-import DMRoomMap from '../../../../src/utils/DMRoomMap';
+import * as TestUtils from "../../../test-utils";
+import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
+import dis from "../../../../src/dispatcher/dispatcher";
+import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import { DefaultTagID } from "../../../../src/stores/room-list/models";
 import RoomListStore, { RoomListStoreClass } from "../../../../src/stores/room-list/RoomListStore";
 import RoomListLayoutStore from "../../../../src/stores/room-list/RoomListLayoutStore";
 import RoomList from "../../../../src/components/views/rooms/RoomList";
 import RoomSublist from "../../../../src/components/views/rooms/RoomSublist";
 import { RoomTile } from "../../../../src/components/views/rooms/RoomTile";
-import { getMockClientWithEventEmitter, mockClientMethodsUser } from '../../../test-utils';
-import ResizeNotifier from '../../../../src/utils/ResizeNotifier';
+import { getMockClientWithEventEmitter, mockClientMethodsUser } from "../../../test-utils";
+import ResizeNotifier from "../../../../src/utils/ResizeNotifier";
 
 function generateRoomId() {
-    return '!' + Math.random().toString().slice(2, 10) + ':domain';
+    return "!" + Math.random().toString().slice(2, 10) + ":domain";
 }
 
-describe('RoomList', () => {
+describe("RoomList", () => {
     function createRoom(opts) {
         const room = new Room(generateRoomId(), MatrixClientPeg.get(), client.getUserId(), {
             // The room list now uses getPendingEvents(), so we need a detached ordering.
@@ -54,9 +50,9 @@ describe('RoomList', () => {
 
     let parentDiv = null;
     let root = null;
-    const myUserId = '@me:domain';
+    const myUserId = "@me:domain";
 
-    const movingRoomId = '!someroomid';
+    const movingRoomId = "!someroomid";
     let movingRoom: Room | undefined;
     let otherRoom: Room | undefined;
 
@@ -77,10 +73,10 @@ describe('RoomList', () => {
         onResize: jest.fn(),
         resizeNotifier: {} as unknown as ResizeNotifier,
         isMinimized: false,
-        activeSpace: '',
+        activeSpace: "",
     };
 
-    beforeEach(async function(done) {
+    beforeEach(async function (done) {
         RoomListStoreClass.TEST_MODE = true;
         jest.clearAllMocks();
 
@@ -88,43 +84,42 @@ describe('RoomList', () => {
 
         DMRoomMap.makeShared();
 
-        parentDiv = document.createElement('div');
+        parentDiv = document.createElement("div");
         document.body.appendChild(parentDiv);
 
         const WrappedRoomList = TestUtils.wrapInMatrixClientContext(RoomList);
-        root = ReactDOM.render(
-            <WrappedRoomList {...defaultProps} />,
-            parentDiv,
-        );
+        root = ReactDOM.render(<WrappedRoomList {...defaultProps} />, parentDiv);
         ReactTestUtils.findRenderedComponentWithType(root, RoomList);
 
-        movingRoom = createRoom({ name: 'Moving room' });
+        movingRoom = createRoom({ name: "Moving room" });
         expect(movingRoom.roomId).not.toBe(null);
 
         // Mock joined member
         myMember = new RoomMember(movingRoomId, myUserId);
-        myMember.membership = 'join';
-        movingRoom.updateMyMembership('join');
-        movingRoom.getMember = (userId) => ({
-            [client.credentials.userId]: myMember,
-        }[userId]);
+        myMember.membership = "join";
+        movingRoom.updateMyMembership("join");
+        movingRoom.getMember = (userId) =>
+            ({
+                [client.credentials.userId]: myMember,
+            }[userId]);
 
-        otherRoom = createRoom({ name: 'Other room' });
+        otherRoom = createRoom({ name: "Other room" });
         myOtherMember = new RoomMember(otherRoom.roomId, myUserId);
-        myOtherMember.membership = 'join';
-        otherRoom.updateMyMembership('join');
-        otherRoom.getMember = (userId) => ({
-            [client.credentials.userId]: myOtherMember,
-        }[userId]);
+        myOtherMember.membership = "join";
+        otherRoom.updateMyMembership("join");
+        otherRoom.getMember = (userId) =>
+            ({
+                [client.credentials.userId]: myOtherMember,
+            }[userId]);
 
         // Mock the matrix client
         const mockRooms = [
             movingRoom,
             otherRoom,
-            createRoom({ tags: { 'm.favourite': { order: 0.1 } }, name: 'Some other room' }),
-            createRoom({ tags: { 'm.favourite': { order: 0.2 } }, name: 'Some other room 2' }),
-            createRoom({ tags: { 'm.lowpriority': {} }, name: 'Some unimportant room' }),
-            createRoom({ tags: { 'custom.tag': {} }, name: 'Some room customly tagged' }),
+            createRoom({ tags: { "m.favourite": { order: 0.1 } }, name: "Some other room" }),
+            createRoom({ tags: { "m.favourite": { order: 0.2 } }, name: "Some other room 2" }),
+            createRoom({ tags: { "m.lowpriority": {} }, name: "Some unimportant room" }),
+            createRoom({ tags: { "custom.tag": {} }, name: "Some room customly tagged" }),
         ];
         client.getRooms.mockReturnValue(mockRooms);
         client.getVisibleRooms.mockReturnValue(mockRooms);
@@ -166,9 +161,14 @@ describe('RoomList', () => {
             expectedRoomTile = roomTiles.find((tile) => tile.props.room === room);
         } catch (err) {
             // truncate the error message because it's spammy
-            err.message = 'Error finding RoomTile for ' + room.roomId + ' in ' +
-                subListTest + ': ' +
-                err.message.split('componentType')[0] + '...';
+            err.message =
+                "Error finding RoomTile for " +
+                room.roomId +
+                " in " +
+                subListTest +
+                ": " +
+                err.message.split("componentType")[0] +
+                "...";
             throw err;
         }
 
@@ -193,77 +193,81 @@ describe('RoomList', () => {
             // Mock inverse m.direct
             // @ts-ignore forcing private property
             DMRoomMap.shared().roomToUser = {
-                [movingRoom.roomId]: '@someotheruser:domain',
+                [movingRoom.roomId]: "@someotheruser:domain",
             };
         }
 
-        dis.dispatch({ action: 'MatrixActions.sync', prevState: null, state: 'PREPARED', matrixClient: client });
+        dis.dispatch({ action: "MatrixActions.sync", prevState: null, state: "PREPARED", matrixClient: client });
 
         expectRoomInSubList(movingRoom, srcSubListTest);
 
-        dis.dispatch({ action: 'RoomListActions.tagRoom.pending', request: {
-            oldTagId, newTagId, room: movingRoom,
-        } });
+        dis.dispatch({
+            action: "RoomListActions.tagRoom.pending",
+            request: {
+                oldTagId,
+                newTagId,
+                room: movingRoom,
+            },
+        });
 
         expectRoomInSubList(movingRoom, destSubListTest);
     }
 
     function itDoesCorrectOptimisticUpdatesForDraggedRoomTiles() {
         // TODO: Re-enable dragging tests when we support dragging again.
-        describe.skip('does correct optimistic update when dragging from', () => {
-            it('rooms to people', () => {
+        describe.skip("does correct optimistic update when dragging from", () => {
+            it("rooms to people", () => {
                 expectCorrectMove(undefined, DefaultTagID.DM);
             });
 
-            it('rooms to favourites', () => {
-                expectCorrectMove(undefined, 'm.favourite');
+            it("rooms to favourites", () => {
+                expectCorrectMove(undefined, "m.favourite");
             });
 
-            it('rooms to low priority', () => {
-                expectCorrectMove(undefined, 'm.lowpriority');
+            it("rooms to low priority", () => {
+                expectCorrectMove(undefined, "m.lowpriority");
             });
 
             // XXX: Known to fail - the view does not update immediately to reflect the change.
             // Whe running the app live, it updates when some other event occurs (likely the
             // m.direct arriving) that these tests do not fire.
-            xit('people to rooms', () => {
+            xit("people to rooms", () => {
                 expectCorrectMove(DefaultTagID.DM, undefined);
             });
 
-            it('people to favourites', () => {
-                expectCorrectMove(DefaultTagID.DM, 'm.favourite');
+            it("people to favourites", () => {
+                expectCorrectMove(DefaultTagID.DM, "m.favourite");
             });
 
-            it('people to lowpriority', () => {
-                expectCorrectMove(DefaultTagID.DM, 'm.lowpriority');
+            it("people to lowpriority", () => {
+                expectCorrectMove(DefaultTagID.DM, "m.lowpriority");
             });
 
-            it('low priority to rooms', () => {
-                expectCorrectMove('m.lowpriority', undefined);
+            it("low priority to rooms", () => {
+                expectCorrectMove("m.lowpriority", undefined);
             });
 
-            it('low priority to people', () => {
-                expectCorrectMove('m.lowpriority', DefaultTagID.DM);
+            it("low priority to people", () => {
+                expectCorrectMove("m.lowpriority", DefaultTagID.DM);
             });
 
-            it('low priority to low priority', () => {
-                expectCorrectMove('m.lowpriority', 'm.lowpriority');
+            it("low priority to low priority", () => {
+                expectCorrectMove("m.lowpriority", "m.lowpriority");
             });
 
-            it('favourites to rooms', () => {
-                expectCorrectMove('m.favourite', undefined);
+            it("favourites to rooms", () => {
+                expectCorrectMove("m.favourite", undefined);
             });
 
-            it('favourites to people', () => {
-                expectCorrectMove('m.favourite', DefaultTagID.DM);
+            it("favourites to people", () => {
+                expectCorrectMove("m.favourite", DefaultTagID.DM);
             });
 
-            it('favourites to low priority', () => {
-                expectCorrectMove('m.favourite', 'm.lowpriority');
+            it("favourites to low priority", () => {
+                expectCorrectMove("m.favourite", "m.lowpriority");
             });
         });
     }
 
     itDoesCorrectOptimisticUpdatesForDraggedRoomTiles();
 });
-

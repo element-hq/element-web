@@ -14,12 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Store } from 'flux/utils';
+import { Store } from "flux/utils";
 
-import { Action } from '../dispatcher/actions';
-import dis from '../dispatcher/dispatcher';
+import { Action } from "../dispatcher/actions";
+import dis from "../dispatcher/dispatcher";
 import { ActionPayload } from "../dispatcher/payloads";
-import { DoAfterSyncPreparedPayload } from '../dispatcher/payloads/DoAfterSyncPreparedPayload';
+import { DoAfterSyncPreparedPayload } from "../dispatcher/payloads/DoAfterSyncPreparedPayload";
 
 interface IState {
     deferredAction: any;
@@ -46,20 +46,21 @@ class LifecycleStore extends Store<ActionPayload> {
         this.__emitChange();
     }
 
-    protected __onDispatch(payload: ActionPayload | DoAfterSyncPreparedPayload<ActionPayload>) { // eslint-disable-line @typescript-eslint/naming-convention
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    protected __onDispatch(payload: ActionPayload | DoAfterSyncPreparedPayload<ActionPayload>) {
         switch (payload.action) {
             case Action.DoAfterSyncPrepared:
                 this.setState({
                     deferredAction: payload.deferred_action,
                 });
                 break;
-            case 'cancel_after_sync_prepared':
+            case "cancel_after_sync_prepared":
                 this.setState({
                     deferredAction: null,
                 });
                 break;
-            case 'MatrixActions.sync': {
-                if (payload.state !== 'PREPARED') {
+            case "MatrixActions.sync": {
+                if (payload.state !== "PREPARED") {
                     break;
                 }
                 if (!this.state.deferredAction) break;
@@ -70,7 +71,7 @@ class LifecycleStore extends Store<ActionPayload> {
                 dis.dispatch(deferredAction);
                 break;
             }
-            case 'on_client_not_viable':
+            case "on_client_not_viable":
             case Action.OnLoggedOut:
                 this.reset();
                 break;

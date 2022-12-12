@@ -31,7 +31,7 @@ import {
     concat,
 } from "../../src/utils/arrays";
 
-type TestParams = { input: number[], output: number[] };
+type TestParams = { input: number[]; output: number[] };
 type TestCase = [string, TestParams];
 
 function expectSample(input: number[], expected: number[], smooth = false) {
@@ -41,74 +41,70 @@ function expectSample(input: number[], expected: number[], smooth = false) {
     expect(result).toEqual(expected);
 }
 
-describe('arrays', () => {
-    describe('arrayFastResample', () => {
+describe("arrays", () => {
+    describe("arrayFastResample", () => {
         const downsampleCases: TestCase[] = [
-            ['Odd -> Even', { input: [1, 2, 3, 4, 5], output: [1, 4] }],
-            ['Odd -> Odd', { input: [1, 2, 3, 4, 5], output: [1, 3, 5] }],
-            ['Even -> Odd', { input: [1, 2, 3, 4], output: [1, 2, 3] }],
-            ['Even -> Even', { input: [1, 2, 3, 4], output: [1, 3] }],
+            ["Odd -> Even", { input: [1, 2, 3, 4, 5], output: [1, 4] }],
+            ["Odd -> Odd", { input: [1, 2, 3, 4, 5], output: [1, 3, 5] }],
+            ["Even -> Odd", { input: [1, 2, 3, 4], output: [1, 2, 3] }],
+            ["Even -> Even", { input: [1, 2, 3, 4], output: [1, 3] }],
         ];
-        it.each(downsampleCases)('downsamples correctly from %s', (_d, { input, output }) =>
+        it.each(downsampleCases)("downsamples correctly from %s", (_d, { input, output }) =>
             expectSample(input, output),
         );
 
         const upsampleCases: TestCase[] = [
-            ['Odd -> Even', { input: [1, 2, 3], output: [1, 1, 2, 2, 3, 3] }],
-            ['Odd -> Odd', { input: [1, 2, 3], output: [1, 1, 2, 2, 3] }],
-            ['Even -> Odd', { input: [1, 2], output: [1, 1, 1, 2, 2] }],
-            ['Even -> Even', { input: [1, 2], output: [1, 1, 1, 2, 2, 2] }],
+            ["Odd -> Even", { input: [1, 2, 3], output: [1, 1, 2, 2, 3, 3] }],
+            ["Odd -> Odd", { input: [1, 2, 3], output: [1, 1, 2, 2, 3] }],
+            ["Even -> Odd", { input: [1, 2], output: [1, 1, 1, 2, 2] }],
+            ["Even -> Even", { input: [1, 2], output: [1, 1, 1, 2, 2, 2] }],
         ];
-        it.each(upsampleCases)('upsamples correctly from %s', (_d, { input, output }) =>
-            expectSample(input, output),
-        );
+        it.each(upsampleCases)("upsamples correctly from %s", (_d, { input, output }) => expectSample(input, output));
 
         const maintainSampleCases: TestCase[] = [
-            ['Odd', { input: [1, 2, 3], output: [1, 2, 3] }], // Odd
-            ['Even', { input: [1, 2], output: [1, 2] }], // Even
+            ["Odd", { input: [1, 2, 3], output: [1, 2, 3] }], // Odd
+            ["Even", { input: [1, 2], output: [1, 2] }], // Even
         ];
 
-        it.each(maintainSampleCases)('maintains samples for %s', (_d, { input, output }) =>
+        it.each(maintainSampleCases)("maintains samples for %s", (_d, { input, output }) =>
             expectSample(input, output),
         );
     });
 
-    describe('arraySmoothingResample', () => {
+    describe("arraySmoothingResample", () => {
         // Dev note: these aren't great samples, but they demonstrate the bare minimum. Ideally
         // we'd be feeding a thousand values in and seeing what a curve of 250 values looks like,
         // but that's not really feasible to manually verify accuracy.
         const downsampleCases: TestCase[] = [
-            ['Odd -> Even', { input: [4, 4, 1, 4, 4, 1, 4, 4, 1], output: [3, 3, 3, 3] }],
-            ['Odd -> Odd', { input: [4, 4, 1, 4, 4, 1, 4, 4, 1], output: [3, 3, 3] }],
-            ['Even -> Odd', { input: [4, 4, 1, 4, 4, 1, 4, 4], output: [3, 3, 3] }],
-            ['Even -> Even', { input: [4, 4, 1, 4, 4, 1, 4, 4], output: [3, 3] }],
+            ["Odd -> Even", { input: [4, 4, 1, 4, 4, 1, 4, 4, 1], output: [3, 3, 3, 3] }],
+            ["Odd -> Odd", { input: [4, 4, 1, 4, 4, 1, 4, 4, 1], output: [3, 3, 3] }],
+            ["Even -> Odd", { input: [4, 4, 1, 4, 4, 1, 4, 4], output: [3, 3, 3] }],
+            ["Even -> Even", { input: [4, 4, 1, 4, 4, 1, 4, 4], output: [3, 3] }],
         ];
 
-        it.each(downsampleCases)('downsamples correctly from %s', (_d, { input, output }) =>
+        it.each(downsampleCases)("downsamples correctly from %s", (_d, { input, output }) =>
             expectSample(input, output, true),
         );
 
         const upsampleCases: TestCase[] = [
-            ['Odd -> Even', { input: [2, 0, 2], output: [2, 2, 0, 0, 2, 2] }],
-            ['Odd -> Odd', { input: [2, 0, 2], output: [2, 2, 0, 0, 2] }],
-            ['Even -> Odd', { input: [2, 0], output: [2, 2, 2, 0, 0] }],
-            ['Even -> Even', { input: [2, 0], output: [2, 2, 2, 0, 0, 0] }],
+            ["Odd -> Even", { input: [2, 0, 2], output: [2, 2, 0, 0, 2, 2] }],
+            ["Odd -> Odd", { input: [2, 0, 2], output: [2, 2, 0, 0, 2] }],
+            ["Even -> Odd", { input: [2, 0], output: [2, 2, 2, 0, 0] }],
+            ["Even -> Even", { input: [2, 0], output: [2, 2, 2, 0, 0, 0] }],
         ];
-        it.each(upsampleCases)('upsamples correctly from %s', (_d, { input, output }) =>
+        it.each(upsampleCases)("upsamples correctly from %s", (_d, { input, output }) =>
             expectSample(input, output, true),
         );
 
         const maintainCases: TestCase[] = [
-            ['Odd', { input: [2, 0, 2], output: [2, 0, 2] }],
-            ['Even', { input: [2, 0], output: [2, 0] }],
+            ["Odd", { input: [2, 0, 2], output: [2, 0, 2] }],
+            ["Even", { input: [2, 0], output: [2, 0] }],
         ];
-        it.each(maintainCases)('maintains samples for %s', (_d, { input, output }) =>
-            expectSample(input, output),
-        );
+        it.each(maintainCases)("maintains samples for %s", (_d, { input, output }) => expectSample(input, output));
     });
 
-    describe('arrayRescale', () => {
-        it('should rescale', () => {
+    describe("arrayRescale", () => {
+        it("should rescale", () => {
             const input = [8, 9, 1, 0, 2, 7, 10];
             const output = [80, 90, 10, 0, 20, 70, 100];
             const result = arrayRescale(input, 0, 100);
@@ -118,8 +114,8 @@ describe('arrays', () => {
         });
     });
 
-    describe('arrayTrimFill', () => {
-        it('should shrink arrays', () => {
+    describe("arrayTrimFill", () => {
+        it("should shrink arrays", () => {
             const input = [1, 2, 3];
             const output = [1, 2];
             const seed = [4, 5, 6];
@@ -129,7 +125,7 @@ describe('arrays', () => {
             expect(result).toEqual(output);
         });
 
-        it('should expand arrays', () => {
+        it("should expand arrays", () => {
             const input = [1, 2, 3];
             const output = [1, 2, 3, 4, 5];
             const seed = [4, 5, 6];
@@ -139,7 +135,7 @@ describe('arrays', () => {
             expect(result).toEqual(output);
         });
 
-        it('should keep arrays the same', () => {
+        it("should keep arrays the same", () => {
             const input = [1, 2, 3];
             const output = [1, 2, 3];
             const seed = [4, 5, 6];
@@ -150,8 +146,8 @@ describe('arrays', () => {
         });
     });
 
-    describe('arraySeed', () => {
-        it('should create an array of given length', () => {
+    describe("arraySeed", () => {
+        it("should create an array of given length", () => {
             const val = 1;
             const output = [val, val, val];
             const result = arraySeed(val, output.length);
@@ -159,7 +155,7 @@ describe('arrays', () => {
             expect(result).toHaveLength(output.length);
             expect(result).toEqual(output);
         });
-        it('should maintain pointers', () => {
+        it("should maintain pointers", () => {
             const val = {}; // this works because `{} !== {}`, which is what toEqual checks
             const output = [val, val, val];
             const result = arraySeed(val, output.length);
@@ -169,8 +165,8 @@ describe('arrays', () => {
         });
     });
 
-    describe('arrayFastClone', () => {
-        it('should break pointer reference on source array', () => {
+    describe("arrayFastClone", () => {
+        it("should break pointer reference on source array", () => {
             const val = {}; // we'll test to make sure the values maintain pointers too
             const input = [val, val, val];
             const result = arrayFastClone(input);
@@ -181,29 +177,29 @@ describe('arrays', () => {
         });
     });
 
-    describe('arrayHasOrderChange', () => {
-        it('should flag true on B ordering difference', () => {
+    describe("arrayHasOrderChange", () => {
+        it("should flag true on B ordering difference", () => {
             const a = [1, 2, 3];
             const b = [3, 2, 1];
             const result = arrayHasOrderChange(a, b);
             expect(result).toBe(true);
         });
 
-        it('should flag false on no ordering difference', () => {
+        it("should flag false on no ordering difference", () => {
             const a = [1, 2, 3];
             const b = [1, 2, 3];
             const result = arrayHasOrderChange(a, b);
             expect(result).toBe(false);
         });
 
-        it('should flag true on A length > B length', () => {
+        it("should flag true on A length > B length", () => {
             const a = [1, 2, 3, 4];
             const b = [1, 2, 3];
             const result = arrayHasOrderChange(a, b);
             expect(result).toBe(true);
         });
 
-        it('should flag true on A length < B length', () => {
+        it("should flag true on A length < B length", () => {
             const a = [1, 2, 3];
             const b = [1, 2, 3, 4];
             const result = arrayHasOrderChange(a, b);
@@ -211,36 +207,36 @@ describe('arrays', () => {
         });
     });
 
-    describe('arrayHasDiff', () => {
-        it('should flag true on A length > B length', () => {
+    describe("arrayHasDiff", () => {
+        it("should flag true on A length > B length", () => {
             const a = [1, 2, 3, 4];
             const b = [1, 2, 3];
             const result = arrayHasDiff(a, b);
             expect(result).toBe(true);
         });
 
-        it('should flag true on A length < B length', () => {
+        it("should flag true on A length < B length", () => {
             const a = [1, 2, 3];
             const b = [1, 2, 3, 4];
             const result = arrayHasDiff(a, b);
             expect(result).toBe(true);
         });
 
-        it('should flag true on element differences', () => {
+        it("should flag true on element differences", () => {
             const a = [1, 2, 3];
             const b = [4, 5, 6];
             const result = arrayHasDiff(a, b);
             expect(result).toBe(true);
         });
 
-        it('should flag false if same but order different', () => {
+        it("should flag false if same but order different", () => {
             const a = [1, 2, 3];
             const b = [3, 1, 2];
             const result = arrayHasDiff(a, b);
             expect(result).toBe(false);
         });
 
-        it('should flag false if same', () => {
+        it("should flag false if same", () => {
             const a = [1, 2, 3];
             const b = [1, 2, 3];
             const result = arrayHasDiff(a, b);
@@ -248,8 +244,8 @@ describe('arrays', () => {
         });
     });
 
-    describe('arrayDiff', () => {
-        it('should see added from A->B', () => {
+    describe("arrayDiff", () => {
+        it("should see added from A->B", () => {
             const a = [1, 2, 3];
             const b = [1, 2, 3, 4];
             const result = arrayDiff(a, b);
@@ -261,7 +257,7 @@ describe('arrays', () => {
             expect(result.added).toEqual([4]);
         });
 
-        it('should see removed from A->B', () => {
+        it("should see removed from A->B", () => {
             const a = [1, 2, 3];
             const b = [1, 2];
             const result = arrayDiff(a, b);
@@ -273,7 +269,7 @@ describe('arrays', () => {
             expect(result.removed).toEqual([3]);
         });
 
-        it('should see added and removed in the same set', () => {
+        it("should see added and removed in the same set", () => {
             const a = [1, 2, 3];
             const b = [1, 2, 4]; // note diff
             const result = arrayDiff(a, b);
@@ -287,8 +283,8 @@ describe('arrays', () => {
         });
     });
 
-    describe('arrayIntersection', () => {
-        it('should return the intersection', () => {
+    describe("arrayIntersection", () => {
+        it("should return the intersection", () => {
             const a = [1, 2, 3];
             const b = [1, 2, 4]; // note diff
             const result = arrayIntersection(a, b);
@@ -297,7 +293,7 @@ describe('arrays', () => {
             expect(result).toEqual([1, 2]);
         });
 
-        it('should return an empty array on no matches', () => {
+        it("should return an empty array on no matches", () => {
             const a = [1, 2, 3];
             const b = [4, 5, 6];
             const result = arrayIntersection(a, b);
@@ -306,8 +302,8 @@ describe('arrays', () => {
         });
     });
 
-    describe('arrayUnion', () => {
-        it('should union 3 arrays with deduplication', () => {
+    describe("arrayUnion", () => {
+        it("should union 3 arrays with deduplication", () => {
             const a = [1, 2, 3];
             const b = [1, 2, 4, 5]; // note missing 3
             const c = [6, 7, 8, 9];
@@ -317,7 +313,7 @@ describe('arrays', () => {
             expect(result).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
         });
 
-        it('should deduplicate a single array', () => {
+        it("should deduplicate a single array", () => {
             // dev note: this is technically an edge case, but it is described behaviour if the
             // function is only provided one array (it'll merge the array against itself)
             const a = [1, 1, 2, 2, 3, 3];
@@ -328,21 +324,35 @@ describe('arrays', () => {
         });
     });
 
-    describe('ArrayUtil', () => {
-        it('should maintain the pointer to the given array', () => {
+    describe("ArrayUtil", () => {
+        it("should maintain the pointer to the given array", () => {
             const input = [1, 2, 3];
             const result = new ArrayUtil(input);
             expect(result.value).toBe(input);
         });
 
-        it('should group appropriately', () => {
-            const input = [['a', 1], ['b', 2], ['c', 3], ['a', 4], ['a', 5], ['b', 6]];
+        it("should group appropriately", () => {
+            const input = [
+                ["a", 1],
+                ["b", 2],
+                ["c", 3],
+                ["a", 4],
+                ["a", 5],
+                ["b", 6],
+            ];
             const output = {
-                'a': [['a', 1], ['a', 4], ['a', 5]],
-                'b': [['b', 2], ['b', 6]],
-                'c': [['c', 3]],
+                a: [
+                    ["a", 1],
+                    ["a", 4],
+                    ["a", 5],
+                ],
+                b: [
+                    ["b", 2],
+                    ["b", 6],
+                ],
+                c: [["c", 3]],
             };
-            const result = new ArrayUtil(input).groupBy(p => p[0]);
+            const result = new ArrayUtil(input).groupBy((p) => p[0]);
             expect(result).toBeDefined();
             expect(result.value).toBeDefined();
 
@@ -351,25 +361,25 @@ describe('arrays', () => {
         });
     });
 
-    describe('GroupedArray', () => {
-        it('should maintain the pointer to the given map', () => {
+    describe("GroupedArray", () => {
+        it("should maintain the pointer to the given map", () => {
             const input = new Map([
-                ['a', [1, 2, 3]],
-                ['b', [7, 8, 9]],
-                ['c', [4, 5, 6]],
+                ["a", [1, 2, 3]],
+                ["b", [7, 8, 9]],
+                ["c", [4, 5, 6]],
             ]);
             const result = new GroupedArray(input);
             expect(result.value).toBe(input);
         });
 
-        it('should ordering by the provided key order', () => {
+        it("should ordering by the provided key order", () => {
             const input = new Map([
-                ['a', [1, 2, 3]],
-                ['b', [7, 8, 9]], // note counting diff
-                ['c', [4, 5, 6]],
+                ["a", [1, 2, 3]],
+                ["b", [7, 8, 9]], // note counting diff
+                ["c", [4, 5, 6]],
             ]);
             const output = [4, 5, 6, 1, 2, 3, 7, 8, 9];
-            const keyOrder = ['c', 'a', 'b']; // note weird order to cause the `output` to be strange
+            const keyOrder = ["c", "a", "b"]; // note weird order to cause the `output` to be strange
             const result = new GroupedArray(input).orderBy(keyOrder);
             expect(result).toBeDefined();
             expect(result.value).toBeDefined();
@@ -404,4 +414,3 @@ describe('arrays', () => {
         });
     });
 });
-

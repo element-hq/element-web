@@ -15,7 +15,9 @@ limitations under the License.
 */
 
 .mx_RoomView_body[data-layout="bubble"] {
-    .mx_RoomView_timeline, .mx_RoomView_statusArea, .mx_MessageComposer {
+    .mx_RoomView_timeline,
+    .mx_RoomView_statusArea,
+    .mx_MessageComposer {
         width: 100%;
         max-width: 1200px;
         margin: 0 auto;
@@ -75,7 +77,7 @@ limitations under the License.
     }
 
     &::before {
-        content: '';
+        content: "";
         position: absolute;
         top: -1px;
         bottom: -1px;
@@ -87,7 +89,6 @@ limitations under the License.
 
     &:hover,
     &.mx_EventTile_selected {
-
         &::before {
             background: $eventbubble-bg-hover;
         }
@@ -478,7 +479,7 @@ limitations under the License.
                 "reply reply" auto
                 "shield body" auto
                 "shield link" auto
-                / auto  1fr;
+                / auto 1fr;
 
             .mx_UnknownBody,
             .mx_EventTile_keyRequestInfo,
@@ -512,7 +513,7 @@ limitations under the License.
                 grid-template:
                     "shield source" auto
                     "shield link" auto
-                    / auto  1fr;
+                    / auto 1fr;
 
                 .mx_ViewSourceEvent {
                     grid-area: source;
@@ -538,7 +539,8 @@ limitations under the License.
         padding-right: 60px; /* align with bubbles text */
         font-style: italic;
 
-        > a { /* timestamp anchor wrapper */
+        > a {
+            /* timestamp anchor wrapper */
             align-self: center;
             bottom: unset;
             top: unset;
@@ -601,7 +603,8 @@ limitations under the License.
             bottom: unset;
             align-self: center;
 
-            .mx_MessageTimestamp, &.mx_MessageTimestamp {
+            .mx_MessageTimestamp,
+            &.mx_MessageTimestamp {
                 vertical-align: middle;
             }
         }

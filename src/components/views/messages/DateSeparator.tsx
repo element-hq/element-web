@@ -15,38 +15,30 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import { Direction } from 'matrix-js-sdk/src/models/event-timeline';
+import React from "react";
+import { Direction } from "matrix-js-sdk/src/models/event-timeline";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { _t } from '../../../languageHandler';
-import { formatFullDateNoTime } from '../../../DateUtils';
-import { MatrixClientPeg } from '../../../MatrixClientPeg';
-import dis from '../../../dispatcher/dispatcher';
-import { Action } from '../../../dispatcher/actions';
-import SettingsStore from '../../../settings/SettingsStore';
-import { UIFeature } from '../../../settings/UIFeature';
-import Modal from '../../../Modal';
-import ErrorDialog from '../dialogs/ErrorDialog';
-import { contextMenuBelow } from '../rooms/RoomTile';
+import { _t } from "../../../languageHandler";
+import { formatFullDateNoTime } from "../../../DateUtils";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import dis from "../../../dispatcher/dispatcher";
+import { Action } from "../../../dispatcher/actions";
+import SettingsStore from "../../../settings/SettingsStore";
+import { UIFeature } from "../../../settings/UIFeature";
+import Modal from "../../../Modal";
+import ErrorDialog from "../dialogs/ErrorDialog";
+import { contextMenuBelow } from "../rooms/RoomTile";
 import { ContextMenuTooltipButton } from "../../structures/ContextMenu";
 import IconizedContextMenu, {
     IconizedContextMenuOption,
     IconizedContextMenuOptionList,
 } from "../context_menus/IconizedContextMenu";
-import JumpToDatePicker from './JumpToDatePicker';
+import JumpToDatePicker from "./JumpToDatePicker";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 
 function getDaysArray(): string[] {
-    return [
-        _t('Sunday'),
-        _t('Monday'),
-        _t('Tuesday'),
-        _t('Wednesday'),
-        _t('Thursday'),
-        _t('Friday'),
-        _t('Saturday'),
-    ];
+    return [_t("Sunday"), _t("Monday"), _t("Tuesday"), _t("Wednesday"), _t("Thursday"), _t("Friday"), _t("Saturday")];
 }
 
 interface IProps {
@@ -114,9 +106,9 @@ export default class DateSeparator extends React.Component<IProps, IState> {
         yesterday.setDate(today.getDate() - 1);
 
         if (date.toDateString() === today.toDateString()) {
-            return _t('Today');
+            return _t("Today");
         } else if (date.toDateString() === yesterday.toDateString()) {
-            return _t('Yesterday');
+            return _t("Yesterday");
         } else if (today.getTime() - date.getTime() < 6 * 24 * 60 * 60 * 1000) {
             return days[date.getDay()];
         } else {
@@ -137,7 +129,7 @@ export default class DateSeparator extends React.Component<IProps, IState> {
             );
             logger.log(
                 `/timestamp_to_event: ` +
-                `found ${eventId} (${originServerTs}) for timestamp=${unixTimestamp} (looking forward)`,
+                    `found ${eventId} (${originServerTs}) for timestamp=${unixTimestamp} (looking forward)`,
             );
 
             dis.dispatch<ViewRoomPayload>({
@@ -155,8 +147,8 @@ export default class DateSeparator extends React.Component<IProps, IState> {
             if (typeof code !== "undefined") {
                 // display error message stating you couldn't delete this.
                 Modal.createDialog(ErrorDialog, {
-                    title: _t('Error'),
-                    description: _t('Unable to find event at that date. (%(code)s)', { code }),
+                    title: _t("Error"),
+                    description: _t("Unable to find event at that date. (%(code)s)", { code }),
                 });
             }
         }
@@ -191,29 +183,25 @@ export default class DateSeparator extends React.Component<IProps, IState> {
     private renderJumpToDateMenu(): React.ReactElement {
         let contextMenu: JSX.Element;
         if (this.state.contextMenuPosition) {
-            contextMenu = <IconizedContextMenu
-                {...contextMenuBelow(this.state.contextMenuPosition)}
-                onFinished={this.onContextMenuCloseClick}
-            >
-                <IconizedContextMenuOptionList first>
-                    <IconizedContextMenuOption
-                        label={_t("Last week")}
-                        onClick={this.onLastWeekClicked}
-                    />
-                    <IconizedContextMenuOption
-                        label={_t("Last month")}
-                        onClick={this.onLastMonthClicked}
-                    />
-                    <IconizedContextMenuOption
-                        label={_t("The beginning of the room")}
-                        onClick={this.onTheBeginningClicked}
-                    />
-                </IconizedContextMenuOptionList>
+            contextMenu = (
+                <IconizedContextMenu
+                    {...contextMenuBelow(this.state.contextMenuPosition)}
+                    onFinished={this.onContextMenuCloseClick}
+                >
+                    <IconizedContextMenuOptionList first>
+                        <IconizedContextMenuOption label={_t("Last week")} onClick={this.onLastWeekClicked} />
+                        <IconizedContextMenuOption label={_t("Last month")} onClick={this.onLastMonthClicked} />
+                        <IconizedContextMenuOption
+                            label={_t("The beginning of the room")}
+                            onClick={this.onTheBeginningClicked}
+                        />
+                    </IconizedContextMenuOptionList>
 
-                <IconizedContextMenuOptionList>
-                    <JumpToDatePicker ts={this.props.ts} onDatePicked={this.onDatePicked} />
-                </IconizedContextMenuOptionList>
-            </IconizedContextMenu>;
+                    <IconizedContextMenuOptionList>
+                        <JumpToDatePicker ts={this.props.ts} onDatePicked={this.onDatePicked} />
+                    </IconizedContextMenuOptionList>
+                </IconizedContextMenu>
+            );
         }
 
         return (
@@ -223,9 +211,9 @@ export default class DateSeparator extends React.Component<IProps, IState> {
                 isExpanded={!!this.state.contextMenuPosition}
                 title={_t("Jump to date")}
             >
-                <h2 aria-hidden="true">{ this.getLabel() }</h2>
+                <h2 aria-hidden="true">{this.getLabel()}</h2>
                 <div className="mx_DateSeparator_chevron" />
-                { contextMenu }
+                {contextMenu}
             </ContextMenuTooltipButton>
         );
     }
@@ -237,15 +225,17 @@ export default class DateSeparator extends React.Component<IProps, IState> {
         if (this.state.jumpToDateEnabled) {
             dateHeaderContent = this.renderJumpToDateMenu();
         } else {
-            dateHeaderContent = <h2 aria-hidden="true">{ label }</h2>;
+            dateHeaderContent = <h2 aria-hidden="true">{label}</h2>;
         }
 
         // ARIA treats <hr/>s as separators, here we abuse them slightly so manually treat this entire thing as one
         // tab-index=-1 to allow it to be focusable but do not add tab stop for it, primarily for screen readers
-        return <div className="mx_DateSeparator" role="separator" tabIndex={-1} aria-label={label}>
-            <hr role="none" />
-            { dateHeaderContent }
-            <hr role="none" />
-        </div>;
+        return (
+            <div className="mx_DateSeparator" role="separator" tabIndex={-1} aria-label={label}>
+                <hr role="none" />
+                {dateHeaderContent}
+                <hr role="none" />
+            </div>
+        );
     }
 }

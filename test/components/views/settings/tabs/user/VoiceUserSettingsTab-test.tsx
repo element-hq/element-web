@@ -14,31 +14,31 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import { mocked } from 'jest-mock';
-import { render } from '@testing-library/react';
+import React from "react";
+import { mocked } from "jest-mock";
+import { render } from "@testing-library/react";
 
-import VoiceUserSettingsTab from '../../../../../../src/components/views/settings/tabs/user/VoiceUserSettingsTab';
+import VoiceUserSettingsTab from "../../../../../../src/components/views/settings/tabs/user/VoiceUserSettingsTab";
 import MediaDeviceHandler from "../../../../../../src/MediaDeviceHandler";
 
 jest.mock("../../../../../../src/MediaDeviceHandler");
 const MediaDeviceHandlerMock = mocked(MediaDeviceHandler);
 
-describe('<VoiceUserSettingsTab />', () => {
-    const getComponent = (): React.ReactElement => (<VoiceUserSettingsTab />);
+describe("<VoiceUserSettingsTab />", () => {
+    const getComponent = (): React.ReactElement => <VoiceUserSettingsTab />;
 
     beforeEach(() => {
         jest.clearAllMocks();
     });
 
-    it('renders audio processing settings', () => {
+    it("renders audio processing settings", () => {
         const { getByTestId } = render(getComponent());
-        expect(getByTestId('voice-auto-gain')).toBeTruthy();
-        expect(getByTestId('voice-noise-suppression')).toBeTruthy();
-        expect(getByTestId('voice-echo-cancellation')).toBeTruthy();
+        expect(getByTestId("voice-auto-gain")).toBeTruthy();
+        expect(getByTestId("voice-noise-suppression")).toBeTruthy();
+        expect(getByTestId("voice-echo-cancellation")).toBeTruthy();
     });
 
-    it('sets and displays audio processing settings', () => {
+    it("sets and displays audio processing settings", () => {
         MediaDeviceHandlerMock.getAudioAutoGainControl.mockReturnValue(false);
         MediaDeviceHandlerMock.getAudioEchoCancellation.mockReturnValue(true);
         MediaDeviceHandlerMock.getAudioNoiseSuppression.mockReturnValue(false);

@@ -59,24 +59,18 @@ const BaseTool: React.FC<XOR<IMinProps, IProps>> = ({ className, actionLabel, on
             });
         };
 
-        actionButton = (
-            <button onClick={onActionClick}>
-                { actionLabel }
-            </button>
-        );
+        actionButton = <button onClick={onActionClick}>{actionLabel}</button>;
     }
 
-    return <>
-        <div className={classNames("mx_DevTools_content", className)}>
-            { children }
-        </div>
-        <div className="mx_Dialog_buttons">
-            <button onClick={onBackClick}>
-                { _t("Back") }
-            </button>
-            { actionButton }
-        </div>
-    </>;
+    return (
+        <>
+            <div className={classNames("mx_DevTools_content", className)}>{children}</div>
+            <div className="mx_Dialog_buttons">
+                <button onClick={onBackClick}>{_t("Back")}</button>
+                {actionButton}
+            </div>
+        </>
+    );
 };
 
 export default BaseTool;

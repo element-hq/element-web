@@ -123,9 +123,12 @@ describe("MemberListStore", () => {
         addMember(room, doris, "join", "AAAAA");
         ({ invited, joined } = await store.loadMemberList(roomId));
         expect(invited).toEqual([]);
-        expect(joined).toEqual(
-            [room.getMember(doris), room.getMember(alice), room.getMember(bob), room.getMember(charlie)],
-        );
+        expect(joined).toEqual([
+            room.getMember(doris),
+            room.getMember(alice),
+            room.getMember(bob),
+            room.getMember(charlie),
+        ]);
     });
 
     it("filters based on a search query", async () => {
@@ -164,7 +167,7 @@ describe("MemberListStore", () => {
 
     describe("sliding sync", () => {
         beforeEach(() => {
-            jest.spyOn(SettingsStore, 'getValue').mockImplementation((settingName, roomId, value) => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName, roomId, value) => {
                 return settingName === "feature_sliding_sync"; // this is enabled, everything else is disabled.
             });
             client.members = jest.fn();
@@ -210,26 +213,32 @@ function addEventToRoom(room: Room, ev: MatrixEvent) {
 }
 
 function setPowerLevels(room: Room, pl: IContent) {
-    addEventToRoom(room, new MatrixEvent({
-        type: EventType.RoomPowerLevels,
-        state_key: "",
-        content: pl,
-        sender: room.getCreator()!,
-        room_id: room.roomId,
-        event_id: "$" + Math.random(),
-    }));
+    addEventToRoom(
+        room,
+        new MatrixEvent({
+            type: EventType.RoomPowerLevels,
+            state_key: "",
+            content: pl,
+            sender: room.getCreator()!,
+            room_id: room.roomId,
+            event_id: "$" + Math.random(),
+        }),
+    );
 }
 
 function addMember(room: Room, userId: string, membership: string, displayName?: string) {
-    addEventToRoom(room, new MatrixEvent({
-        type: EventType.RoomMember,
-        state_key: userId,
-        content: {
-            membership: membership,
-            displayname: displayName,
-        },
-        sender: userId,
-        room_id: room.roomId,
-        event_id: "$" + Math.random(),
-    }));
+    addEventToRoom(
+        room,
+        new MatrixEvent({
+            type: EventType.RoomMember,
+            state_key: userId,
+            content: {
+                membership: membership,
+                displayname: displayName,
+            },
+            sender: userId,
+            room_id: room.roomId,
+            event_id: "$" + Math.random(),
+        }),
+    );
 }

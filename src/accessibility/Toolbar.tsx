@@ -20,8 +20,7 @@ import { RovingTabIndexProvider } from "./RovingTabIndex";
 import { getKeyBindingsManager } from "../KeyBindingsManager";
 import { KeyBindingAction } from "./KeyboardShortcuts";
 
-interface IProps extends Omit<React.HTMLProps<HTMLDivElement>, "onKeyDown"> {
-}
+interface IProps extends Omit<React.HTMLProps<HTMLDivElement>, "onKeyDown"> {}
 
 // This component implements the Toolbar design pattern from the WAI-ARIA Authoring Practices guidelines.
 // https://www.w3.org/TR/wai-aria-practices-1.1/#toolbar
@@ -39,7 +38,7 @@ const Toolbar: React.FC<IProps> = ({ children, ...props }) => {
         switch (action) {
             case KeyBindingAction.ArrowUp:
             case KeyBindingAction.ArrowDown:
-                if (target.hasAttribute('aria-haspopup')) {
+                if (target.hasAttribute("aria-haspopup")) {
                     target.click();
                 }
                 break;
@@ -54,11 +53,15 @@ const Toolbar: React.FC<IProps> = ({ children, ...props }) => {
         }
     };
 
-    return <RovingTabIndexProvider handleHomeEnd handleLeftRight onKeyDown={onKeyDown}>
-        { ({ onKeyDownHandler }) => <div {...props} onKeyDown={onKeyDownHandler} role="toolbar">
-            { children }
-        </div> }
-    </RovingTabIndexProvider>;
+    return (
+        <RovingTabIndexProvider handleHomeEnd handleLeftRight onKeyDown={onKeyDown}>
+            {({ onKeyDownHandler }) => (
+                <div {...props} onKeyDown={onKeyDownHandler} role="toolbar">
+                    {children}
+                </div>
+            )}
+        </RovingTabIndexProvider>
+    );
 };
 
 export default Toolbar;

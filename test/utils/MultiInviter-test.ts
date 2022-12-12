@@ -14,32 +14,32 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { mocked } from 'jest-mock';
-import { MatrixClient } from 'matrix-js-sdk/src/matrix';
+import { mocked } from "jest-mock";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
-import { MatrixClientPeg } from '../../src/MatrixClientPeg';
-import Modal, { ModalManager } from '../../src/Modal';
-import SettingsStore from '../../src/settings/SettingsStore';
-import MultiInviter, { CompletionStates } from '../../src/utils/MultiInviter';
-import * as TestUtilsMatrix from '../test-utils';
+import { MatrixClientPeg } from "../../src/MatrixClientPeg";
+import Modal, { ModalManager } from "../../src/Modal";
+import SettingsStore from "../../src/settings/SettingsStore";
+import MultiInviter, { CompletionStates } from "../../src/utils/MultiInviter";
+import * as TestUtilsMatrix from "../test-utils";
 
-const ROOMID = '!room:server';
+const ROOMID = "!room:server";
 
-const MXID1 = '@user1:server';
-const MXID2 = '@user2:server';
-const MXID3 = '@user3:server';
+const MXID1 = "@user1:server";
+const MXID2 = "@user2:server";
+const MXID3 = "@user3:server";
 
 const MXID_PROFILE_STATES = {
     [MXID1]: Promise.resolve({}),
-    [MXID2]: Promise.reject({ errcode: 'M_FORBIDDEN' }),
-    [MXID3]: Promise.reject({ errcode: 'M_NOT_FOUND' }),
+    [MXID2]: Promise.reject({ errcode: "M_FORBIDDEN" }),
+    [MXID3]: Promise.reject({ errcode: "M_NOT_FOUND" }),
 };
 
-jest.mock('../../src/Modal', () => ({
+jest.mock("../../src/Modal", () => ({
     createDialog: jest.fn(),
 }));
 
-jest.mock('../../src/settings/SettingsStore', () => ({
+jest.mock("../../src/settings/SettingsStore", () => ({
     getValue: jest.fn(),
     monitorSetting: jest.fn(),
     watchSetting: jest.fn(),
@@ -48,30 +48,28 @@ jest.mock('../../src/settings/SettingsStore', () => ({
 const mockPromptBeforeInviteUnknownUsers = (value: boolean) => {
     mocked(SettingsStore.getValue).mockImplementation(
         (settingName: string, roomId: string = null, _excludeDefault = false): any => {
-            if (settingName === 'promptBeforeInviteUnknownUsers' && roomId === ROOMID) {
+            if (settingName === "promptBeforeInviteUnknownUsers" && roomId === ROOMID) {
                 return value;
             }
         },
     );
 };
 
-const mockCreateTrackedDialog = (callbackName: 'onInviteAnyways'|'onGiveUp') => {
-    mocked(Modal.createDialog).mockImplementation(
-        (...rest: Parameters<ModalManager['createDialog']>): any => {
-            rest[1][callbackName]();
-        },
-    );
+const mockCreateTrackedDialog = (callbackName: "onInviteAnyways" | "onGiveUp") => {
+    mocked(Modal.createDialog).mockImplementation((...rest: Parameters<ModalManager["createDialog"]>): any => {
+        rest[1][callbackName]();
+    });
 };
 
 const expectAllInvitedResult = (result: CompletionStates) => {
     expect(result).toEqual({
-        [MXID1]: 'invited',
-        [MXID2]: 'invited',
-        [MXID3]: 'invited',
+        [MXID1]: "invited",
+        [MXID2]: "invited",
+        [MXID3]: "invited",
     });
 };
 
-describe('MultiInviter', () => {
+describe("MultiInviter", () => {
     let client: jest.Mocked<MatrixClient>;
     let inviter: MultiInviter;
 
@@ -92,11 +90,11 @@ describe('MultiInviter', () => {
         inviter = new MultiInviter(ROOMID);
     });
 
-    describe('invite', () => {
-        describe('with promptBeforeInviteUnknownUsers = false', () => {
+    describe("invite", () => {
+        describe("with promptBeforeInviteUnknownUsers = false", () => {
             beforeEach(() => mockPromptBeforeInviteUnknownUsers(false));
 
-            it('should invite all users', async () => {
+            it("should invite all users", async () => {
                 const result = await inviter.invite([MXID1, MXID2, MXID3]);
 
                 expect(client.invite).toHaveBeenCalledTimes(3);
@@ -108,13 +106,13 @@ describe('MultiInviter', () => {
             });
         });
 
-        describe('with promptBeforeInviteUnknownUsers = true and', () => {
+        describe("with promptBeforeInviteUnknownUsers = true and", () => {
             beforeEach(() => mockPromptBeforeInviteUnknownUsers(true));
 
-            describe('confirming the unknown user dialog', () => {
-                beforeEach(() => mockCreateTrackedDialog('onInviteAnyways'));
+            describe("confirming the unknown user dialog", () => {
+                beforeEach(() => mockCreateTrackedDialog("onInviteAnyways"));
 
-                it('should invite all users', async () => {
+                it("should invite all users", async () => {
                     const result = await inviter.invite([MXID1, MXID2, MXID3]);
 
                     expect(client.invite).toHaveBeenCalledTimes(3);
@@ -126,10 +124,10 @@ describe('MultiInviter', () => {
                 });
             });
 
-            describe('declining the unknown user dialog', () => {
-                beforeEach(() => mockCreateTrackedDialog('onGiveUp'));
+            describe("declining the unknown user dialog", () => {
+                beforeEach(() => mockCreateTrackedDialog("onGiveUp"));
 
-                it('should only invite existing users', async () => {
+                it("should only invite existing users", async () => {
                     const result = await inviter.invite([MXID1, MXID2, MXID3]);
 
                     expect(client.invite).toHaveBeenCalledTimes(1);

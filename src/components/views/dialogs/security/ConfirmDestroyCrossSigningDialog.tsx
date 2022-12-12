@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 
 import { _t } from "../../../../languageHandler";
 import BaseDialog from "../BaseDialog";
@@ -36,19 +36,19 @@ export default class ConfirmDestroyCrossSigningDialog extends React.Component<IP
     render() {
         return (
             <BaseDialog
-                className='mx_ConfirmDestroyCrossSigningDialog'
+                className="mx_ConfirmDestroyCrossSigningDialog"
                 hasCancel={true}
                 onFinished={this.props.onFinished}
                 title={_t("Destroy cross-signing keys?")}
             >
-                <div className='mx_ConfirmDestroyCrossSigningDialog_content'>
+                <div className="mx_ConfirmDestroyCrossSigningDialog_content">
                     <p>
-                        { _t(
+                        {_t(
                             "Deleting cross-signing keys is permanent. " +
-                            "Anyone you have verified with will see security alerts. " +
-                            "You almost certainly don't want to do this, unless " +
-                            "you've lost every device you can cross-sign from.",
-                        ) }
+                                "Anyone you have verified with will see security alerts. " +
+                                "You almost certainly don't want to do this, unless " +
+                                "you've lost every device you can cross-sign from.",
+                        )}
                     </p>
                 </div>
                 <DialogButtons

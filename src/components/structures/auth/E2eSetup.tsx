@@ -14,11 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 
-import AuthPage from '../../views/auth/AuthPage';
-import CompleteSecurityBody from '../../views/auth/CompleteSecurityBody';
-import CreateCrossSigningDialog from '../../views/dialogs/security/CreateCrossSigningDialog';
+import AuthPage from "../../views/auth/AuthPage";
+import CompleteSecurityBody from "../../views/auth/CompleteSecurityBody";
+import CreateCrossSigningDialog from "../../views/dialogs/security/CreateCrossSigningDialog";
 
 interface IProps {
     onFinished: () => void;

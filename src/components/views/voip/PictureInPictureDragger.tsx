@@ -14,11 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { createRef } from 'react';
+import React, { createRef } from "react";
 
-import UIStore, { UI_EVENTS } from '../../../stores/UIStore';
-import { lerp } from '../../../utils/AnimationUtils';
-import { MarkedExecution } from '../../../utils/MarkedExecution';
+import UIStore, { UI_EVENTS } from "../../../stores/UIStore";
+import { lerp } from "../../../utils/AnimationUtils";
+import { MarkedExecution } from "../../../utils/MarkedExecution";
 
 const PIP_VIEW_WIDTH = 336;
 const PIP_VIEW_HEIGHT = 232;
@@ -110,8 +110,7 @@ export default class PictureInPictureDragger extends React.Component<IProps> {
     private setStyle = () => {
         if (!this.callViewWrapper.current) return;
         // Set the element's style directly, bypassing React for efficiency
-        this.callViewWrapper.current.style.transform =
-            `translateX(${this.translationX}px) translateY(${this.translationY}px)`;
+        this.callViewWrapper.current.style.transform = `translateX(${this.translationX}px) translateY(${this.translationY}px)`;
     };
 
     private setTranslation(inTranslationX: number, inTranslationY: number) {
@@ -147,14 +146,10 @@ export default class PictureInPictureDragger extends React.Component<IProps> {
         // We subtract the PiP size from the window size in order to calculate
         // the position to snap to from the PiP center and not its top-left
         // corner
-        const windowWidth = (
-            UIStore.instance.windowWidth -
-            (this.callViewWrapper.current?.clientWidth || PIP_VIEW_WIDTH)
-        );
-        const windowHeight = (
-            UIStore.instance.windowHeight -
-            (this.callViewWrapper.current?.clientHeight || PIP_VIEW_HEIGHT)
-        );
+        const windowWidth =
+            UIStore.instance.windowWidth - (this.callViewWrapper.current?.clientWidth || PIP_VIEW_WIDTH);
+        const windowHeight =
+            UIStore.instance.windowHeight - (this.callViewWrapper.current?.clientHeight || PIP_VIEW_HEIGHT);
 
         if (translationX >= windowWidth / 2 && translationY >= windowHeight / 2) {
             this.desiredTranslationX = windowWidth - PADDING.right;
@@ -216,10 +211,10 @@ export default class PictureInPictureDragger extends React.Component<IProps> {
                 ref={this.callViewWrapper}
                 onDoubleClick={this.props.onDoubleClick}
             >
-                { this.props.children({
+                {this.props.children({
                     onStartMoving: this.onStartMoving,
                     onResize: this.onResize,
-                }) }
+                })}
             </aside>
         );
     }

@@ -28,9 +28,9 @@ import {
 } from "matrix-js-sdk/src/@types/partials";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { MatrixClientPeg } from './MatrixClientPeg';
-import Modal from './Modal';
-import { _t } from './languageHandler';
+import { MatrixClientPeg } from "./MatrixClientPeg";
+import Modal from "./Modal";
+import { _t } from "./languageHandler";
 import dis from "./dispatcher/dispatcher";
 import * as Rooms from "./Rooms";
 import { getAddressType } from "./UserAddress";
@@ -106,7 +106,7 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
 
     const client = MatrixClientPeg.get();
     if (client.isGuest()) {
-        dis.dispatch({ action: 'require_registration' });
+        dis.dispatch({ action: "require_registration" });
         return null;
     }
 
@@ -118,15 +118,17 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
     createOpts.visibility = createOpts.visibility || Visibility.Private;
     if (opts.dmUserId && createOpts.invite === undefined) {
         switch (getAddressType(opts.dmUserId)) {
-            case 'mx-user-id':
+            case "mx-user-id":
                 createOpts.invite = [opts.dmUserId];
                 break;
-            case 'email':
-                createOpts.invite_3pid = [{
-                    id_server: MatrixClientPeg.get().getIdentityServerUrl(true),
-                    medium: 'email',
-                    address: opts.dmUserId,
-                }];
+            case "email":
+                createOpts.invite_3pid = [
+                    {
+                        id_server: MatrixClientPeg.get().getIdentityServerUrl(true),
+                        medium: "email",
+                        address: opts.dmUserId,
+                    },
+                ];
         }
     }
     if (opts.dmUserId && createOpts.is_direct === undefined) {
@@ -193,20 +195,20 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
     // actually drop you right in to a chat.
     if (opts.guestAccess) {
         createOpts.initial_state.push({
-            type: 'm.room.guest_access',
-            state_key: '',
+            type: "m.room.guest_access",
+            state_key: "",
             content: {
-                guest_access: 'can_join',
+                guest_access: "can_join",
             },
         });
     }
 
     if (opts.encryption) {
         createOpts.initial_state.push({
-            type: 'm.room.encryption',
-            state_key: '',
+            type: "m.room.encryption",
+            state_key: "",
             content: {
-                algorithm: 'm.megolm.v1.aes-sha2',
+                algorithm: "m.megolm.v1.aes-sha2",
             },
         });
     }
@@ -214,9 +216,8 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
     if (opts.parentSpace) {
         createOpts.initial_state.push(makeSpaceParentEvent(opts.parentSpace, true));
         if (!opts.historyVisibility) {
-            opts.historyVisibility = createOpts.preset === Preset.PublicChat
-                ? HistoryVisibility.WorldReadable
-                : HistoryVisibility.Invited;
+            opts.historyVisibility =
+                createOpts.preset === Preset.PublicChat ? HistoryVisibility.WorldReadable : HistoryVisibility.Invited;
         }
 
         if (opts.joinRule === JoinRule.Restricted) {
@@ -225,11 +226,13 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
             createOpts.initial_state.push({
                 type: EventType.RoomJoinRules,
                 content: {
-                    "join_rule": JoinRule.Restricted,
-                    "allow": [{
-                        "type": RestrictedAllowType.RoomMembership,
-                        "room_id": opts.parentSpace.roomId,
-                    }],
+                    join_rule: JoinRule.Restricted,
+                    allow: [
+                        {
+                            type: RestrictedAllowType.RoomMembership,
+                            room_id: opts.parentSpace.roomId,
+                        },
+                    ],
                 },
             });
         }
@@ -259,114 +262,133 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
         createOpts.initial_state.push({
             type: EventType.RoomHistoryVisibility,
             content: {
-                "history_visibility": opts.historyVisibility,
+                history_visibility: opts.historyVisibility,
             },
         });
     }
 
     let modal;
-    if (opts.spinner) modal = Modal.createDialog(Spinner, null, 'mx_Dialog_spinner');
+    if (opts.spinner) modal = Modal.createDialog(Spinner, null, "mx_Dialog_spinner");
 
     let roomId: string;
     let room: Promise<Room>;
-    return client.createRoom(createOpts).catch(function(err) {
-        // NB This checks for the Synapse-specific error condition of a room creation
-        // having been denied because the requesting user wanted to publish the room,
-        // but the server denies them that permission (via room_list_publication_rules).
-        // The check below responds by retrying without publishing the room.
-        if (err.httpStatus === 403 && err.errcode === "M_UNKNOWN" && err.data.error === "Not allowed to publish room") {
-            logger.warn("Failed to publish room, try again without publishing it");
-            createOpts.visibility = Visibility.Private;
-            return client.createRoom(createOpts);
-        } else {
-            return Promise.reject(err);
-        }
-    }).finally(function() {
-        if (modal) modal.close();
-    }).then(async res => {
-        roomId = res.room_id;
-
-        room = new Promise(resolve => {
-            const storedRoom = client.getRoom(roomId);
-            if (storedRoom) {
-                resolve(storedRoom);
+    return client
+        .createRoom(createOpts)
+        .catch(function (err) {
+            // NB This checks for the Synapse-specific error condition of a room creation
+            // having been denied because the requesting user wanted to publish the room,
+            // but the server denies them that permission (via room_list_publication_rules).
+            // The check below responds by retrying without publishing the room.
+            if (
+                err.httpStatus === 403 &&
+                err.errcode === "M_UNKNOWN" &&
+                err.data.error === "Not allowed to publish room"
+            ) {
+                logger.warn("Failed to publish room, try again without publishing it");
+                createOpts.visibility = Visibility.Private;
+                return client.createRoom(createOpts);
             } else {
-                // The room hasn't arrived down sync yet
-                const onRoom = (emittedRoom: Room) => {
-                    if (emittedRoom.roomId === roomId) {
-                        resolve(emittedRoom);
-                        client.off(ClientEvent.Room, onRoom);
-                    }
-                };
-                client.on(ClientEvent.Room, onRoom);
+                return Promise.reject(err);
             }
-        });
+        })
+        .finally(function () {
+            if (modal) modal.close();
+        })
+        .then(async (res) => {
+            roomId = res.room_id;
 
-        if (opts.dmUserId) await Rooms.setDMRoom(roomId, opts.dmUserId);
-    }).then(() => {
-        if (opts.parentSpace) {
-            return SpaceStore.instance.addRoomToSpace(opts.parentSpace, roomId, [client.getDomain()], opts.suggested);
-        }
-    }).then(async () => {
-        if (opts.roomType === RoomType.ElementVideo) {
-            // Set up this video room with a Jitsi call
-            await JitsiCall.create(await room);
-
-            // Reset our power level back to admin so that the widget becomes immutable
-            const plEvent = (await room).currentState.getStateEvents(EventType.RoomPowerLevels, "");
-            await client.setPowerLevel(roomId, client.getUserId()!, 100, plEvent);
-        } else if (opts.roomType === RoomType.UnstableCall) {
-            // Set up this video room with an Element call
-            await ElementCall.create(await room);
-
-            // Reset our power level back to admin so that the call becomes immutable
-            const plEvent = (await room).currentState.getStateEvents(EventType.RoomPowerLevels, "");
-            await client.setPowerLevel(roomId, client.getUserId()!, 100, plEvent);
-        }
-    }).then(function() {
-        // NB we haven't necessarily blocked on the room promise, so we race
-        // here with the client knowing that the room exists, causing things
-        // like https://github.com/vector-im/vector-web/issues/1813
-        // Even if we were to block on the echo, servers tend to split the room
-        // state over multiple syncs so we can't atomically know when we have the
-        // entire thing.
-        if (opts.andView) {
-            dis.dispatch<ViewRoomPayload>({
-                action: Action.ViewRoom,
-                room_id: roomId,
-                should_peek: false,
-                // Creating a room will have joined us to the room,
-                // so we are expecting the room to come down the sync
-                // stream, if it hasn't already.
-                joining: true,
-                justCreatedOpts: opts,
-                metricsTrigger: "Created",
+            room = new Promise((resolve) => {
+                const storedRoom = client.getRoom(roomId);
+                if (storedRoom) {
+                    resolve(storedRoom);
+                } else {
+                    // The room hasn't arrived down sync yet
+                    const onRoom = (emittedRoom: Room) => {
+                        if (emittedRoom.roomId === roomId) {
+                            resolve(emittedRoom);
+                            client.off(ClientEvent.Room, onRoom);
+                        }
+                    };
+                    client.on(ClientEvent.Room, onRoom);
+                }
             });
-        }
-        return roomId;
-    }, function(err) {
-        // Raise the error if the caller requested that we do so.
-        if (opts.inlineErrors) throw err;
 
-        // We also failed to join the room (this sets joining to false in RoomViewStore)
-        dis.dispatch({
-            action: Action.JoinRoomError,
-            roomId,
-        });
-        logger.error("Failed to create room " + roomId + " " + err);
-        let description = _t("Server may be unavailable, overloaded, or you hit a bug.");
-        if (err.errcode === "M_UNSUPPORTED_ROOM_VERSION") {
-            // Technically not possible with the UI as of April 2019 because there's no
-            // options for the user to change this. However, it's not a bad thing to report
-            // the error to the user for if/when the UI is available.
-            description = _t("The server does not support the room version specified.");
-        }
-        Modal.createDialog(ErrorDialog, {
-            title: _t("Failure to create room"),
-            description,
-        });
-        return null;
-    });
+            if (opts.dmUserId) await Rooms.setDMRoom(roomId, opts.dmUserId);
+        })
+        .then(() => {
+            if (opts.parentSpace) {
+                return SpaceStore.instance.addRoomToSpace(
+                    opts.parentSpace,
+                    roomId,
+                    [client.getDomain()],
+                    opts.suggested,
+                );
+            }
+        })
+        .then(async () => {
+            if (opts.roomType === RoomType.ElementVideo) {
+                // Set up this video room with a Jitsi call
+                await JitsiCall.create(await room);
+
+                // Reset our power level back to admin so that the widget becomes immutable
+                const plEvent = (await room).currentState.getStateEvents(EventType.RoomPowerLevels, "");
+                await client.setPowerLevel(roomId, client.getUserId()!, 100, plEvent);
+            } else if (opts.roomType === RoomType.UnstableCall) {
+                // Set up this video room with an Element call
+                await ElementCall.create(await room);
+
+                // Reset our power level back to admin so that the call becomes immutable
+                const plEvent = (await room).currentState.getStateEvents(EventType.RoomPowerLevels, "");
+                await client.setPowerLevel(roomId, client.getUserId()!, 100, plEvent);
+            }
+        })
+        .then(
+            function () {
+                // NB we haven't necessarily blocked on the room promise, so we race
+                // here with the client knowing that the room exists, causing things
+                // like https://github.com/vector-im/vector-web/issues/1813
+                // Even if we were to block on the echo, servers tend to split the room
+                // state over multiple syncs so we can't atomically know when we have the
+                // entire thing.
+                if (opts.andView) {
+                    dis.dispatch<ViewRoomPayload>({
+                        action: Action.ViewRoom,
+                        room_id: roomId,
+                        should_peek: false,
+                        // Creating a room will have joined us to the room,
+                        // so we are expecting the room to come down the sync
+                        // stream, if it hasn't already.
+                        joining: true,
+                        justCreatedOpts: opts,
+                        metricsTrigger: "Created",
+                    });
+                }
+                return roomId;
+            },
+            function (err) {
+                // Raise the error if the caller requested that we do so.
+                if (opts.inlineErrors) throw err;
+
+                // We also failed to join the room (this sets joining to false in RoomViewStore)
+                dis.dispatch({
+                    action: Action.JoinRoomError,
+                    roomId,
+                });
+                logger.error("Failed to create room " + roomId + " " + err);
+                let description = _t("Server may be unavailable, overloaded, or you hit a bug.");
+                if (err.errcode === "M_UNSUPPORTED_ROOM_VERSION") {
+                    // Technically not possible with the UI as of April 2019 because there's no
+                    // options for the user to change this. However, it's not a bad thing to report
+                    // the error to the user for if/when the UI is available.
+                    description = _t("The server does not support the room version specified.");
+                }
+                Modal.createDialog(ErrorDialog, {
+                    title: _t("Failure to create room"),
+                    description,
+                });
+                return null;
+            },
+        );
 }
 
 /*
@@ -377,9 +399,10 @@ export async function canEncryptToAllUsers(client: MatrixClient, userIds: string
     try {
         const usersDeviceMap = await client.downloadKeys(userIds);
         // { "@user:host": { "DEVICE": {...}, ... }, ... }
-        return Object.values(usersDeviceMap).every((userDevices) =>
-            // { "DEVICE": {...}, ... }
-            Object.keys(userDevices).length > 0,
+        return Object.values(usersDeviceMap).every(
+            (userDevices) =>
+                // { "DEVICE": {...}, ... }
+                Object.keys(userDevices).length > 0,
         );
     } catch (e) {
         logger.error("Error determining if it's possible to encrypt to all users: ", e);
@@ -391,7 +414,9 @@ export async function canEncryptToAllUsers(client: MatrixClient, userIds: string
 // without polluting ensureDMExists with unrelated stuff (also
 // they're never encrypted).
 export async function ensureVirtualRoomExists(
-    client: MatrixClient, userId: string, nativeRoomId: string,
+    client: MatrixClient,
+    userId: string,
+    nativeRoomId: string,
 ): Promise<string> {
     const existingDMRoom = findDMForUser(client, userId);
     let roomId;

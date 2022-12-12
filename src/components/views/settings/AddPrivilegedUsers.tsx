@@ -14,12 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { FormEvent, useCallback, useContext, useRef, useState } from 'react';
-import { Room } from 'matrix-js-sdk/src/models/room';
+import React, { FormEvent, useCallback, useContext, useRef, useState } from "react";
+import { Room } from "matrix-js-sdk/src/models/room";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 
 import { _t } from "../../../languageHandler";
-import { ICompletion } from '../../../autocomplete/Autocompleter';
+import { ICompletion } from "../../../autocomplete/Autocompleter";
 import UserProvider from "../../../autocomplete/UserProvider";
 import { AutocompleteInput } from "../../structures/AutocompleteInput";
 import PowerSelector from "../elements/PowerSelector";
@@ -77,10 +77,10 @@ export const AddPrivilegedUsers: React.FC<AddPrivilegedUsersProps> = ({ room, de
     };
 
     return (
-        <form style={{ display: 'flex' }} onSubmit={onSubmit}>
+        <form style={{ display: "flex" }} onSubmit={onSubmit}>
             <SettingsFieldset
-                legend={_t('Add privileged users')}
-                description={_t('Give one or multiple users in this room more privileges')}
+                legend={_t("Add privileged users")}
+                description={_t("Give one or multiple users in this room more privileges")}
                 style={{ flexGrow: 1 }}
             >
                 <AutocompleteInput
@@ -92,25 +92,21 @@ export const AddPrivilegedUsers: React.FC<AddPrivilegedUsersProps> = ({ room, de
                 />
                 <PowerSelector value={powerLevel} onChange={setPowerLevel} />
                 <AccessibleButton
-                    type='submit'
-                    element='button'
-                    kind='primary'
+                    type="submit"
+                    element="button"
+                    kind="primary"
                     disabled={!selectedUsers.length || isLoading}
                     onClick={null}
-                    data-testid='add-privileged-users-submit-button'
+                    data-testid="add-privileged-users-submit-button"
                 >
-                    { _t('Apply') }
+                    {_t("Apply")}
                 </AccessibleButton>
             </SettingsFieldset>
         </form>
     );
 };
 
-export const hasLowerOrEqualLevelThanDefaultLevel = (
-    room: Room,
-    user: ICompletion,
-    defaultUserLevel: number,
-) => {
+export const hasLowerOrEqualLevelThanDefaultLevel = (room: Room, user: ICompletion, defaultUserLevel: number) => {
     if (user.completionId === undefined) {
         return false;
     }
@@ -125,8 +121,8 @@ export const hasLowerOrEqualLevelThanDefaultLevel = (
 };
 
 export const getUserIdsFromCompletions = (completions: ICompletion[]) => {
-    const completionsWithId = completions.filter(completion => completion.completionId !== undefined);
+    const completionsWithId = completions.filter((completion) => completion.completionId !== undefined);
 
     // undefined completionId's are filtered out above but TypeScript does not seem to understand.
-    return completionsWithId.map(completion => completion.completionId!);
+    return completionsWithId.map((completion) => completion.completionId!);
 };

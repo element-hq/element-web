@@ -38,7 +38,7 @@ class MockAutoComplete {
     }
 
     tryComplete(close = true) {
-        const matches = this._completions.filter(o => {
+        const matches = this._completions.filter((o) => {
             return o.resourceId.startsWith(this._part.text);
         });
         if (matches.length === 1 && this._part.text.length > 1) {
@@ -62,7 +62,9 @@ class MockAutoComplete {
 // MockClient & MockRoom are only used for avatars in room and user pills,
 // which is not tested
 class MockRoom {
-    getMember() { return null; }
+    getMember() {
+        return null;
+    }
 }
 
 export function createPartCreator(completions = []) {

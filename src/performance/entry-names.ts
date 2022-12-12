@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 export enum PerformanceEntryNames {
-
     /**
      * Application wide
      */

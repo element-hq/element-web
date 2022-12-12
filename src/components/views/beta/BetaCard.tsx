@@ -49,26 +49,24 @@ export const BetaPill = ({
     tooltipCaption = _t("Click for more info"),
 }: IBetaPillProps) => {
     if (onClick) {
-        return <AccessibleTooltipButton
-            className="mx_BetaCard_betaPill"
-            title={`${tooltipTitle} ${tooltipCaption}`}
-            tooltip={<div>
-                <div className="mx_Tooltip_title">
-                    { tooltipTitle }
-                </div>
-                <div className="mx_Tooltip_sub">
-                    { tooltipCaption }
-                </div>
-            </div>}
-            onClick={onClick}
-        >
-            { _t("Beta") }
-        </AccessibleTooltipButton>;
+        return (
+            <AccessibleTooltipButton
+                className="mx_BetaCard_betaPill"
+                title={`${tooltipTitle} ${tooltipCaption}`}
+                tooltip={
+                    <div>
+                        <div className="mx_Tooltip_title">{tooltipTitle}</div>
+                        <div className="mx_Tooltip_sub">{tooltipCaption}</div>
+                    </div>
+                }
+                onClick={onClick}
+            >
+                {_t("Beta")}
+            </AccessibleTooltipButton>
+        );
     }
 
-    return <span className="mx_BetaCard_betaPill">
-        { _t("Beta") }
-    </span>;
+    return <span className="mx_BetaCard_betaPill">{_t("Beta")}</span>;
 };
 
 const BetaCard = ({ title: titleOverride, featureId }: IProps) => {
@@ -77,27 +75,20 @@ const BetaCard = ({ title: titleOverride, featureId }: IProps) => {
     const [busy, setBusy] = useState(false);
     if (!info) return null; // Beta is invalid/disabled
 
-    const {
-        title,
-        caption,
-        faq,
-        image,
-        feedbackLabel,
-        feedbackSubheading,
-        extraSettings,
-        requiresRefresh,
-    } = info;
+    const { title, caption, faq, image, feedbackLabel, feedbackSubheading, extraSettings, requiresRefresh } = info;
 
     let feedbackButton;
     if (value && feedbackLabel && feedbackSubheading && shouldShowFeedback()) {
-        feedbackButton = <AccessibleButton
-            onClick={() => {
-                Modal.createDialog(BetaFeedbackDialog, { featureId });
-            }}
-            kind="primary"
-        >
-            { _t("Feedback") }
-        </AccessibleButton>;
+        feedbackButton = (
+            <AccessibleButton
+                onClick={() => {
+                    Modal.createDialog(BetaFeedbackDialog, { featureId });
+                }}
+                kind="primary"
+            >
+                {_t("Feedback")}
+            </AccessibleButton>
+        );
     }
 
     let refreshWarning: string;
@@ -117,52 +108,52 @@ const BetaCard = ({ title: titleOverride, featureId }: IProps) => {
         content = _t("Join the beta");
     }
 
-    return <div className="mx_BetaCard">
-        <div className="mx_BetaCard_columns">
-            <div className="mx_BetaCard_columns_description">
-                <h3 className="mx_BetaCard_title">
-                    <span>{ titleOverride || _t(title) }</span>
-                    <BetaPill />
-                </h3>
-                <div className="mx_BetaCard_caption">{ caption() }</div>
-                <div className="mx_BetaCard_buttons">
-                    { feedbackButton }
-                    <AccessibleButton
-                        onClick={async () => {
-                            setBusy(true);
-                            // make it look like we're doing something for two seconds,
-                            // otherwise users think clicking did nothing
-                            if (!requiresRefresh) {
-                                await sleep(2000);
-                            }
-                            await SettingsStore.setValue(featureId, null, SettingLevel.DEVICE, !value);
-                            if (!requiresRefresh) {
-                                setBusy(false);
-                            }
-                        }}
-                        kind={feedbackButton ? "primary_outline" : "primary"}
-                        disabled={busy}
-                    >
-                        { content }
-                    </AccessibleButton>
+    return (
+        <div className="mx_BetaCard">
+            <div className="mx_BetaCard_columns">
+                <div className="mx_BetaCard_columns_description">
+                    <h3 className="mx_BetaCard_title">
+                        <span>{titleOverride || _t(title)}</span>
+                        <BetaPill />
+                    </h3>
+                    <div className="mx_BetaCard_caption">{caption()}</div>
+                    <div className="mx_BetaCard_buttons">
+                        {feedbackButton}
+                        <AccessibleButton
+                            onClick={async () => {
+                                setBusy(true);
+                                // make it look like we're doing something for two seconds,
+                                // otherwise users think clicking did nothing
+                                if (!requiresRefresh) {
+                                    await sleep(2000);
+                                }
+                                await SettingsStore.setValue(featureId, null, SettingLevel.DEVICE, !value);
+                                if (!requiresRefresh) {
+                                    setBusy(false);
+                                }
+                            }}
+                            kind={feedbackButton ? "primary_outline" : "primary"}
+                            disabled={busy}
+                        >
+                            {content}
+                        </AccessibleButton>
+                    </div>
+                    {refreshWarning && <div className="mx_BetaCard_refreshWarning">{refreshWarning}</div>}
+                    {faq && <div className="mx_BetaCard_faq">{faq(value)}</div>}
                 </div>
-                { refreshWarning && <div className="mx_BetaCard_refreshWarning">
-                    { refreshWarning }
-                </div> }
-                { faq && <div className="mx_BetaCard_faq">
-                    { faq(value) }
-                </div> }
+                <div className="mx_BetaCard_columns_image_wrapper">
+                    <img className="mx_BetaCard_columns_image" src={image} alt="" />
+                </div>
             </div>
-            <div className="mx_BetaCard_columns_image_wrapper">
-                <img className="mx_BetaCard_columns_image" src={image} alt="" />
-            </div>
+            {extraSettings && value && (
+                <div className="mx_BetaCard_relatedSettings">
+                    {extraSettings.map((key) => (
+                        <SettingsFlag key={key} name={key} level={SettingLevel.DEVICE} />
+                    ))}
+                </div>
+            )}
         </div>
-        { extraSettings && value && <div className="mx_BetaCard_relatedSettings">
-            { extraSettings.map(key => (
-                <SettingsFlag key={key} name={key} level={SettingLevel.DEVICE} />
-            )) }
-        </div> }
-    </div>;
+    );
 };
 
 export default BetaCard;

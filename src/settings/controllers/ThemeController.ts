@@ -30,7 +30,7 @@ export default class ThemeController extends SettingController {
     ): any {
         if (!calculatedValue) return null; // Don't override null themes
 
-        if (ThemeController.isLogin) return 'light';
+        if (ThemeController.isLogin) return "light";
 
         const themes = enumerateThemes();
         // Override in case some no longer supported theme is stored here

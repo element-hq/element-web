@@ -14,13 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
-import React from 'react';
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import React from "react";
 
-import { _t } from '../../../languageHandler';
-import { MatrixClientPeg } from '../../../MatrixClientPeg';
-import Modal from '../../../Modal';
-import ErrorDialog from './ErrorDialog';
+import { _t } from "../../../languageHandler";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import Modal from "../../../Modal";
+import ErrorDialog from "./ErrorDialog";
 import TextInputDialog from "./TextInputDialog";
 
 interface IProps {
@@ -33,11 +33,13 @@ interface IProps {
 export default class ConfirmRedactDialog extends React.Component<IProps> {
     render() {
         return (
-            <TextInputDialog onFinished={this.props.onFinished}
+            <TextInputDialog
+                onFinished={this.props.onFinished}
                 title={_t("Confirm Removal")}
-                description={
-                    _t("Are you sure you wish to remove (delete) this event? " +
-                       "Note that if you delete a room name or topic change, it could undo the change.")}
+                description={_t(
+                    "Are you sure you wish to remove (delete) this event? " +
+                        "Note that if you delete a room name or topic change, it could undo the change.",
+                )}
                 placeholder={_t("Reason (optional)")}
                 focus
                 button={_t("Remove")}
@@ -53,32 +55,31 @@ export function createRedactEventDialog({
     mxEvent: MatrixEvent;
     onCloseDialog?: () => void;
 }) {
-    Modal.createDialog(ConfirmRedactDialog, {
-        onFinished: async (proceed: boolean, reason?: string) => {
-            if (!proceed) return;
+    Modal.createDialog(
+        ConfirmRedactDialog,
+        {
+            onFinished: async (proceed: boolean, reason?: string) => {
+                if (!proceed) return;
 
-            const cli = MatrixClientPeg.get();
-            try {
-                onCloseDialog?.();
-                await cli.redactEvent(
-                    mxEvent.getRoomId(),
-                    mxEvent.getId(),
-                    undefined,
-                    reason ? { reason } : {},
-                );
-            } catch (e) {
-                const code = e.errcode || e.statusCode;
-                // only show the dialog if failing for something other than a network error
-                // (e.g. no errcode or statusCode) as in that case the redactions end up in the
-                // detached queue and we show the room status bar to allow retry
-                if (typeof code !== "undefined") {
-                    // display error message stating you couldn't delete this.
-                    Modal.createDialog(ErrorDialog, {
-                        title: _t('Error'),
-                        description: _t('You cannot delete this message. (%(code)s)', { code }),
-                    });
+                const cli = MatrixClientPeg.get();
+                try {
+                    onCloseDialog?.();
+                    await cli.redactEvent(mxEvent.getRoomId(), mxEvent.getId(), undefined, reason ? { reason } : {});
+                } catch (e) {
+                    const code = e.errcode || e.statusCode;
+                    // only show the dialog if failing for something other than a network error
+                    // (e.g. no errcode or statusCode) as in that case the redactions end up in the
+                    // detached queue and we show the room status bar to allow retry
+                    if (typeof code !== "undefined") {
+                        // display error message stating you couldn't delete this.
+                        Modal.createDialog(ErrorDialog, {
+                            title: _t("Error"),
+                            description: _t("You cannot delete this message. (%(code)s)", { code }),
+                        });
+                    }
                 }
-            }
+            },
         },
-    }, 'mx_Dialog_confirmredact');
+        "mx_Dialog_confirmredact",
+    );
 }

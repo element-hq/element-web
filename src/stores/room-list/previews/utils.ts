@@ -21,7 +21,7 @@ import { DefaultTagID, TagID } from "../models";
 
 export function isSelf(event: MatrixEvent): boolean {
     const selfUserId = MatrixClientPeg.get().getUserId();
-    if (event.getType() === 'm.room.member') {
+    if (event.getType() === "m.room.member") {
         return event.getStateKey() === selfUserId;
     }
     return event.getSender() === selfUserId;

@@ -84,10 +84,14 @@ export default class JSONExporter extends Exporter {
     protected async createOutput(events: MatrixEvent[]) {
         for (let i = 0; i < events.length; i++) {
             const event = events[i];
-            this.updateProgress(_t("Processing event %(number)s out of %(total)s", {
-                number: i + 1,
-                total: events.length,
-            }), false, true);
+            this.updateProgress(
+                _t("Processing event %(number)s out of %(total)s", {
+                    number: i + 1,
+                    total: events.length,
+                }),
+                false,
+                true,
+            );
             if (this.cancelled) return this.cleanUp();
             if (!haveRendererForEvent(event, false)) continue;
             this.messages.push(await this.getJSONString(event));
@@ -103,7 +107,7 @@ export default class JSONExporter extends Exporter {
         const res = await this.getRequiredEvents();
         const fetchEnd = performance.now();
 
-        logger.log(`Fetched ${res.length} events in ${(fetchEnd - fetchStart)/1000}s`);
+        logger.log(`Fetched ${res.length} events in ${(fetchEnd - fetchStart) / 1000}s`);
 
         logger.info("Creating output...");
         const text = await this.createOutput(res);
@@ -122,10 +126,9 @@ export default class JSONExporter extends Exporter {
             logger.info("Export cancelled successfully");
         } else {
             logger.info("Export successful!");
-            logger.log(`Exported ${res.length} events in ${(exportEnd - fetchStart)/1000} seconds`);
+            logger.log(`Exported ${res.length} events in ${(exportEnd - fetchStart) / 1000} seconds`);
         }
 
         this.cleanUp();
     }
 }
-

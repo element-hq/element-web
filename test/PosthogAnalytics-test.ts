@@ -14,25 +14,26 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { mocked } from 'jest-mock';
-import { PostHog } from 'posthog-js';
+import { mocked } from "jest-mock";
+import { PostHog } from "posthog-js";
 
-import { Anonymity, getRedactedCurrentLocation, IPosthogEvent, PosthogAnalytics } from '../src/PosthogAnalytics';
-import SdkConfig from '../src/SdkConfig';
-import { getMockClientWithEventEmitter } from './test-utils';
+import { Anonymity, getRedactedCurrentLocation, IPosthogEvent, PosthogAnalytics } from "../src/PosthogAnalytics";
+import SdkConfig from "../src/SdkConfig";
+import { getMockClientWithEventEmitter } from "./test-utils";
 import SettingsStore from "../src/settings/SettingsStore";
 import { Layout } from "../src/settings/enums/Layout";
 import defaultDispatcher from "../src/dispatcher/dispatcher";
 import { Action } from "../src/dispatcher/actions";
 import { SettingLevel } from "../src/settings/SettingLevel";
 
-const getFakePosthog = (): PostHog => ({
-    capture: jest.fn(),
-    init: jest.fn(),
-    identify: jest.fn(),
-    reset: jest.fn(),
-    register: jest.fn(),
-} as unknown as PostHog);
+const getFakePosthog = (): PostHog =>
+    ({
+        capture: jest.fn(),
+        init: jest.fn(),
+        identify: jest.fn(),
+        reset: jest.fn(),
+        register: jest.fn(),
+    } as unknown as PostHog);
 
 export interface ITestEvent extends IPosthogEvent {
     eventName: "JestTestEvents";
@@ -198,58 +199,70 @@ describe("PosthogAnalytics", () => {
 
         it("should send layout IRC correctly", async () => {
             await SettingsStore.setValue("layout", null, SettingLevel.DEVICE, Layout.IRC);
-            defaultDispatcher.dispatch({
-                action: Action.SettingUpdated,
-                settingName: "layout",
-            }, true);
+            defaultDispatcher.dispatch(
+                {
+                    action: Action.SettingUpdated,
+                    settingName: "layout",
+                },
+                true,
+            );
             analytics.trackEvent<ITestEvent>({
                 eventName: "JestTestEvents",
             });
             expect(mocked(fakePosthog).capture.mock.calls[0][1]["$set"]).toStrictEqual({
-                "WebLayout": "IRC",
+                WebLayout: "IRC",
             });
         });
 
         it("should send layout Bubble correctly", async () => {
             await SettingsStore.setValue("layout", null, SettingLevel.DEVICE, Layout.Bubble);
-            defaultDispatcher.dispatch({
-                action: Action.SettingUpdated,
-                settingName: "layout",
-            }, true);
+            defaultDispatcher.dispatch(
+                {
+                    action: Action.SettingUpdated,
+                    settingName: "layout",
+                },
+                true,
+            );
             analytics.trackEvent<ITestEvent>({
                 eventName: "JestTestEvents",
             });
             expect(mocked(fakePosthog).capture.mock.calls[0][1]["$set"]).toStrictEqual({
-                "WebLayout": "Bubble",
+                WebLayout: "Bubble",
             });
         });
 
         it("should send layout Group correctly", async () => {
             await SettingsStore.setValue("layout", null, SettingLevel.DEVICE, Layout.Group);
-            defaultDispatcher.dispatch({
-                action: Action.SettingUpdated,
-                settingName: "layout",
-            }, true);
+            defaultDispatcher.dispatch(
+                {
+                    action: Action.SettingUpdated,
+                    settingName: "layout",
+                },
+                true,
+            );
             analytics.trackEvent<ITestEvent>({
                 eventName: "JestTestEvents",
             });
             expect(mocked(fakePosthog).capture.mock.calls[0][1]["$set"]).toStrictEqual({
-                "WebLayout": "Group",
+                WebLayout: "Group",
             });
         });
 
         it("should send layout Compact correctly", async () => {
             await SettingsStore.setValue("layout", null, SettingLevel.DEVICE, Layout.Group);
             await SettingsStore.setValue("useCompactLayout", null, SettingLevel.DEVICE, true);
-            defaultDispatcher.dispatch({
-                action: Action.SettingUpdated,
-                settingName: "useCompactLayout",
-            }, true);
+            defaultDispatcher.dispatch(
+                {
+                    action: Action.SettingUpdated,
+                    settingName: "useCompactLayout",
+                },
+                true,
+            );
             analytics.trackEvent<ITestEvent>({
                 eventName: "JestTestEvents",
             });
             expect(mocked(fakePosthog).capture.mock.calls[0][1]["$set"]).toStrictEqual({
-                "WebLayout": "Compact",
+                WebLayout: "Compact",
             });
         });
     });

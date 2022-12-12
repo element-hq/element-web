@@ -14,27 +14,27 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
-import { randomString } from 'matrix-js-sdk/src/randomstring';
-import { ClientEvent, ClientEventHandlerMap } from 'matrix-js-sdk/src/matrix';
+import React from "react";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { randomString } from "matrix-js-sdk/src/randomstring";
+import { ClientEvent, ClientEventHandlerMap } from "matrix-js-sdk/src/matrix";
 
-import { _t } from '../../../languageHandler';
-import Modal from '../../../Modal';
+import { _t } from "../../../languageHandler";
+import Modal from "../../../Modal";
 import {
     locationEventGeoUri,
     getLocationShareErrorMessage,
     LocationShareError,
     isSelfLocation,
-} from '../../../utils/location';
-import MatrixClientContext from '../../../contexts/MatrixClientContext';
-import TooltipTarget from '../elements/TooltipTarget';
-import { Alignment } from '../elements/Tooltip';
-import LocationViewDialog from '../location/LocationViewDialog';
-import Map from '../location/Map';
-import SmartMarker from '../location/SmartMarker';
+} from "../../../utils/location";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import TooltipTarget from "../elements/TooltipTarget";
+import { Alignment } from "../elements/Tooltip";
+import LocationViewDialog from "../location/LocationViewDialog";
+import Map from "../location/Map";
+import SmartMarker from "../location/SmartMarker";
 import { IBodyProps } from "./IBodyProps";
-import { createReconnectedListener } from '../../../utils/connection';
+import { createReconnectedListener } from "../../../utils/connection";
 
 interface IState {
     error: Error;
@@ -89,33 +89,37 @@ export default class MLocationBody extends React.Component<IBodyProps, IState> {
     }
 
     render(): React.ReactElement<HTMLDivElement> {
-        return this.state.error ?
-            <LocationBodyFallbackContent error={this.state.error} event={this.props.mxEvent} /> :
+        return this.state.error ? (
+            <LocationBodyFallbackContent error={this.state.error} event={this.props.mxEvent} />
+        ) : (
             <LocationBodyContent
                 mxEvent={this.props.mxEvent}
                 mapId={this.mapId}
                 onError={this.onError}
                 tooltip={_t("Expand map")}
                 onClick={this.onClick}
-            />;
+            />
+        );
     }
 }
 
-export const LocationBodyFallbackContent: React.FC<{ event: MatrixEvent, error: Error }> = ({ error, event }) => {
+export const LocationBodyFallbackContent: React.FC<{ event: MatrixEvent; error: Error }> = ({ error, event }) => {
     const errorType = error?.message as LocationShareError;
-    const message = `${_t('Unable to load map')}: ${getLocationShareErrorMessage(errorType)}`;
+    const message = `${_t("Unable to load map")}: ${getLocationShareErrorMessage(errorType)}`;
 
-    const locationFallback = isSelfLocation(event.getContent()) ?
-        (_t('Shared their location: ') + event.getContent()?.body) :
-        (_t('Shared a location: ') + event.getContent()?.body);
+    const locationFallback = isSelfLocation(event.getContent())
+        ? _t("Shared their location: ") + event.getContent()?.body
+        : _t("Shared a location: ") + event.getContent()?.body;
 
-    return <div className="mx_EventTile_body mx_MLocationBody">
-        <span className={errorType !== LocationShareError.MapStyleUrlNotConfigured ? "mx_EventTile_tileError" : ''}>
-            { message }
-        </span>
-        <br />
-        { locationFallback }
-    </div>;
+    return (
+        <div className="mx_EventTile_body mx_MLocationBody">
+            <span className={errorType !== LocationShareError.MapStyleUrlNotConfigured ? "mx_EventTile_tileError" : ""}>
+                {message}
+            </span>
+            <br />
+            {locationFallback}
+        </div>
+    );
 };
 
 interface LocationBodyContentProps {
@@ -136,36 +140,23 @@ export const LocationBodyContent: React.FC<LocationBodyContentProps> = ({
     const markerRoomMember = isSelfLocation(mxEvent.getContent()) ? mxEvent.sender : undefined;
     const geoUri = locationEventGeoUri(mxEvent);
 
-    const mapElement = (<Map
-        id={mapId}
-        centerGeoUri={geoUri}
-        onClick={onClick}
-        onError={onError}
-        className="mx_MLocationBody_map"
-    >
-        {
-            ({ map }) =>
-                <SmartMarker
-                    map={map}
-                    id={`${mapId}-marker`}
-                    geoUri={geoUri}
-                    roomMember={markerRoomMember}
-                />
-        }
-    </Map>);
+    const mapElement = (
+        <Map id={mapId} centerGeoUri={geoUri} onClick={onClick} onError={onError} className="mx_MLocationBody_map">
+            {({ map }) => (
+                <SmartMarker map={map} id={`${mapId}-marker`} geoUri={geoUri} roomMember={markerRoomMember} />
+            )}
+        </Map>
+    );
 
-    return <div className="mx_MLocationBody">
-        {
-            tooltip
-                ? <TooltipTarget
-                    label={tooltip}
-                    alignment={Alignment.InnerBottom}
-                    maxParentWidth={450}
-                >
-                    { mapElement }
+    return (
+        <div className="mx_MLocationBody">
+            {tooltip ? (
+                <TooltipTarget label={tooltip} alignment={Alignment.InnerBottom} maxParentWidth={450}>
+                    {mapElement}
                 </TooltipTarget>
-                : mapElement
-        }
-    </div>;
+            ) : (
+                mapElement
+            )}
+        </div>
+    );
 };
-

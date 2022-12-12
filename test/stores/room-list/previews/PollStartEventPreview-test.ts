@@ -20,7 +20,7 @@ import { PollStartEventPreview } from "../../../../src/stores/room-list/previews
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import { makePollStartEvent } from "../../../test-utils";
 
-jest.spyOn(MatrixClientPeg, 'get').mockReturnValue({
+jest.spyOn(MatrixClientPeg, "get").mockReturnValue({
     getUserId: () => "@me:example.com",
 } as unknown as MatrixClient);
 
@@ -37,4 +37,3 @@ describe("PollStartEventPreview", () => {
         expect(preview.getTextFor(pollStartEvent)).toBe("@yo:example.com: Your Question");
     });
 });
-

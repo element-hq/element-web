@@ -98,4 +98,3 @@ export class ListNotificationState extends NotificationState {
         this.emitIfUpdated(snapshot);
     }
 }
-

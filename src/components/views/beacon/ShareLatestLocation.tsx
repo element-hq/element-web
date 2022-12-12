@@ -14,14 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useEffect, useState } from 'react';
-import { BeaconLocationState } from 'matrix-js-sdk/src/content-helpers';
+import React, { useEffect, useState } from "react";
+import { BeaconLocationState } from "matrix-js-sdk/src/content-helpers";
 
-import { Icon as ExternalLinkIcon } from '../../../../res/img/external-link.svg';
-import { _t } from '../../../languageHandler';
-import { makeMapSiteLink, parseGeoUri } from '../../../utils/location';
-import CopyableText from '../elements/CopyableText';
-import TooltipTarget from '../elements/TooltipTarget';
+import { Icon as ExternalLinkIcon } from "../../../../res/img/external-link.svg";
+import { _t } from "../../../languageHandler";
+import { makeMapSiteLink, parseGeoUri } from "../../../utils/location";
+import CopyableText from "../elements/CopyableText";
+import TooltipTarget from "../elements/TooltipTarget";
 
 interface Props {
     latestLocationState?: BeaconLocationState;
@@ -44,23 +44,16 @@ const ShareLatestLocation: React.FC<Props> = ({ latestLocationState }) => {
     const latLonString = `${coords.latitude},${coords.longitude}`;
     const mapLink = makeMapSiteLink(coords);
 
-    return <>
-        <TooltipTarget label={_t('Open in OpenStreetMap')}>
-            <a
-                data-testid='open-location-in-osm'
-                href={mapLink}
-                target='_blank'
-                rel='noreferrer noopener'
-            >
-                <ExternalLinkIcon className='mx_ShareLatestLocation_icon' />
-            </a>
-        </TooltipTarget>
-        <CopyableText
-            className='mx_ShareLatestLocation_copy'
-            border={false}
-            getTextToCopy={() => latLonString}
-        />
-    </>;
+    return (
+        <>
+            <TooltipTarget label={_t("Open in OpenStreetMap")}>
+                <a data-testid="open-location-in-osm" href={mapLink} target="_blank" rel="noreferrer noopener">
+                    <ExternalLinkIcon className="mx_ShareLatestLocation_icon" />
+                </a>
+            </TooltipTarget>
+            <CopyableText className="mx_ShareLatestLocation_copy" border={false} getTextToCopy={() => latLonString} />
+        </>
+    );
 };
 
 export default ShareLatestLocation;

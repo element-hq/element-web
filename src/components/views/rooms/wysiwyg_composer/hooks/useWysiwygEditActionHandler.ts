@@ -23,26 +23,26 @@ import { TimelineRenderingType, useRoomContext } from "../../../../../contexts/R
 import { useDispatcher } from "../../../../../hooks/useDispatcher";
 import { focusComposer } from "./utils";
 
-export function useWysiwygEditActionHandler(
-    disabled: boolean,
-    composerElement: RefObject<HTMLElement>,
-) {
+export function useWysiwygEditActionHandler(disabled: boolean, composerElement: RefObject<HTMLElement>) {
     const roomContext = useRoomContext();
     const timeoutId = useRef<number | null>(null);
 
-    const handler = useCallback((payload: ActionPayload) => {
-        // don't let the user into the composer if it is disabled - all of these branches lead
-        // to the cursor being in the composer
-        if (disabled || !composerElement.current) return;
+    const handler = useCallback(
+        (payload: ActionPayload) => {
+            // don't let the user into the composer if it is disabled - all of these branches lead
+            // to the cursor being in the composer
+            if (disabled || !composerElement.current) return;
 
-        const context = payload.context ?? TimelineRenderingType.Room;
+            const context = payload.context ?? TimelineRenderingType.Room;
 
-        switch (payload.action) {
-            case Action.FocusEditMessageComposer:
-                focusComposer(composerElement, context, roomContext, timeoutId);
-                break;
-        }
-    }, [disabled, composerElement, timeoutId, roomContext]);
+            switch (payload.action) {
+                case Action.FocusEditMessageComposer:
+                    focusComposer(composerElement, context, roomContext, timeoutId);
+                    break;
+            }
+        },
+        [disabled, composerElement, timeoutId, roomContext],
+    );
 
     useDispatcher(defaultDispatcher, handler);
 }

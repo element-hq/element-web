@@ -24,11 +24,7 @@ interface Props {
     onClick?: (ev: MouseEvent) => void;
 }
 
-export function Linkify({
-    as = "div",
-    children,
-    onClick,
-}: Props): JSX.Element {
+export function Linkify({ as = "div", children, onClick }: Props): JSX.Element {
     const ref = useRef();
 
     useLayoutEffect(() => {
@@ -41,4 +37,3 @@ export function Linkify({
         onClick,
     });
 }
-

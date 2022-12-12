@@ -32,22 +32,26 @@ export function SearchResultAvatar({ user, size }: SearchResultAvatarProps): JSX
         // we can’t show a real avatar here, but we try to create the exact same markup that a real avatar would have
         // BaseAvatar makes the avatar, if it's not clickable but just for decoration, invisible to screenreaders by
         // specifically setting an empty alt text, so we do the same.
-        return <img
-            className="mx_SearchResultAvatar mx_SearchResultAvatar_threepidAvatar"
-            alt=""
-            src={emailPillAvatar}
-            width={size}
-            height={size}
-        />;
+        return (
+            <img
+                className="mx_SearchResultAvatar mx_SearchResultAvatar_threepidAvatar"
+                alt=""
+                src={emailPillAvatar}
+                width={size}
+                height={size}
+            />
+        );
     } else {
         const avatarUrl = user.getMxcAvatarUrl();
-        return <BaseAvatar
-            className="mx_SearchResultAvatar"
-            url={avatarUrl ? mediaFromMxc(avatarUrl).getSquareThumbnailHttp(size) : null}
-            name={user.name}
-            idName={user.userId}
-            width={size}
-            height={size}
-        />;
+        return (
+            <BaseAvatar
+                className="mx_SearchResultAvatar"
+                url={avatarUrl ? mediaFromMxc(avatarUrl).getSquareThumbnailHttp(size) : null}
+                name={user.name}
+                idName={user.userId}
+                width={size}
+                height={size}
+            />
+        );
     }
 }

@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 
 import { _t } from "../../../languageHandler";
 import BaseDialog from "./BaseDialog";
@@ -27,15 +27,17 @@ export default class SeshatResetDialog extends React.PureComponent<IDialogProps>
             <BaseDialog
                 hasCancel={true}
                 onFinished={this.props.onFinished.bind(null, false)}
-                title={_t("Reset event store?")}>
+                title={_t("Reset event store?")}
+            >
                 <div>
                     <p>
-                        { _t("You most likely do not want to reset your event index store") }
+                        {_t("You most likely do not want to reset your event index store")}
                         <br />
-                        { _t("If you do, please note that none of your messages will be deleted, " +
-                            "but the search experience might be degraded for a few moments " +
-                            "whilst the index is recreated",
-                        ) }
+                        {_t(
+                            "If you do, please note that none of your messages will be deleted, " +
+                                "but the search experience might be degraded for a few moments " +
+                                "whilst the index is recreated",
+                        )}
                     </p>
                 </div>
                 <DialogButtons

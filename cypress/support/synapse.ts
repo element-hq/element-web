@@ -16,7 +16,7 @@ limitations under the License.
 
 /// <reference types="cypress" />
 
-import * as crypto from 'crypto';
+import * as crypto from "crypto";
 
 import Chainable = Cypress.Chainable;
 import AUTWindow = Cypress.AUTWindow;
@@ -64,7 +64,7 @@ function stopSynapse(synapse?: SynapseInstance): Chainable<AUTWindow> {
     if (!synapse) return;
     // Navigate away from app to stop the background network requests which will race with Synapse shutting down
     return cy.window({ log: false }).then((win) => {
-        win.location.href = 'about:blank';
+        win.location.href = "about:blank";
         cy.task("synapseStop", synapse.synapseId);
     });
 }
@@ -83,38 +83,42 @@ function registerUser(
     displayName?: string,
 ): Chainable<Credentials> {
     const url = `${synapse.baseUrl}/_synapse/admin/v1/register`;
-    return cy.then(() => {
-        // get a nonce
-        return cy.request<{ nonce: string }>({ url });
-    }).then(response => {
-        const { nonce } = response.body;
-        const mac = crypto.createHmac('sha1', synapse.registrationSecret).update(
-            `${nonce}\0${username}\0${password}\0notadmin`,
-        ).digest('hex');
+    return cy
+        .then(() => {
+            // get a nonce
+            return cy.request<{ nonce: string }>({ url });
+        })
+        .then((response) => {
+            const { nonce } = response.body;
+            const mac = crypto
+                .createHmac("sha1", synapse.registrationSecret)
+                .update(`${nonce}\0${username}\0${password}\0notadmin`)
+                .digest("hex");
 
-        return cy.request<{
-            access_token: string;
-            user_id: string;
-            home_server: string;
-            device_id: string;
-        }>({
-            url,
-            method: "POST",
-            body: {
-                nonce,
-                username,
-                password,
-                mac,
-                admin: false,
-                displayname: displayName,
-            },
-        });
-    }).then(response => ({
-        homeServer: response.body.home_server,
-        accessToken: response.body.access_token,
-        userId: response.body.user_id,
-        deviceId: response.body.device_id,
-    }));
+            return cy.request<{
+                access_token: string;
+                user_id: string;
+                home_server: string;
+                device_id: string;
+            }>({
+                url,
+                method: "POST",
+                body: {
+                    nonce,
+                    username,
+                    password,
+                    mac,
+                    admin: false,
+                    displayname: displayName,
+                },
+            });
+        })
+        .then((response) => ({
+            homeServer: response.body.home_server,
+            accessToken: response.body.access_token,
+            userId: response.body.user_id,
+            deviceId: response.body.device_id,
+        }));
 }
 
 Cypress.Commands.add("startSynapse", startSynapse);

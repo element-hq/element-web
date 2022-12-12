@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React from "react";
 
 import AuthFooter from "./AuthFooter";
 
@@ -24,9 +24,7 @@ export default class AuthPage extends React.PureComponent {
     public render(): React.ReactNode {
         return (
             <div className="mx_AuthPage">
-                <div className="mx_AuthPage_modal">
-                    { this.props.children }
-                </div>
+                <div className="mx_AuthPage_modal">{this.props.children}</div>
                 <AuthFooter />
             </div>
         );

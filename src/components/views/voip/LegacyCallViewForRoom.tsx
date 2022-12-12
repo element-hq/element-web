@@ -14,12 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { CallState, MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
-import React from 'react';
+import { CallState, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
+import React from "react";
 import { Resizable } from "re-resizable";
 
-import LegacyCallHandler, { LegacyCallHandlerEvent } from '../../../LegacyCallHandler';
-import LegacyCallView from './LegacyCallView';
+import LegacyCallHandler, { LegacyCallHandlerEvent } from "../../../LegacyCallHandler";
+import LegacyCallView from "./LegacyCallView";
 import ResizeNotifier from "../../../utils/ResizeNotifier";
 
 interface IProps {
@@ -107,11 +107,7 @@ export default class LegacyCallViewForRoom extends React.Component<IProps, IStat
                     className="mx_LegacyCallViewForRoom_ResizeWrapper"
                     handleClasses={{ bottom: "mx_LegacyCallViewForRoom_ResizeHandle" }}
                 >
-                    <LegacyCallView
-                        call={this.state.call}
-                        pipMode={false}
-                        showApps={this.props.showApps}
-                    />
+                    <LegacyCallView call={this.state.call} pipMode={false} showApps={this.props.showApps} />
                 </Resizable>
             </div>
         );

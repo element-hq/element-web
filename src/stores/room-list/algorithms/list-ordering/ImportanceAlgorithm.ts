@@ -194,9 +194,10 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
         // room at the top/start of the category. For the few algorithms that will have to move the
         // thing quite far (alphabetic with a Z room for example), the list should already be sorted
         // well enough that it can rip through the array and slot the changed room in quickly.
-        const nextCategoryStartIdx = category === CATEGORY_ORDER[CATEGORY_ORDER.length - 1]
-            ? Number.MAX_SAFE_INTEGER
-            : this.indices[CATEGORY_ORDER[CATEGORY_ORDER.indexOf(category) + 1]];
+        const nextCategoryStartIdx =
+            category === CATEGORY_ORDER[CATEGORY_ORDER.length - 1]
+                ? Number.MAX_SAFE_INTEGER
+                : this.indices[CATEGORY_ORDER[CATEGORY_ORDER.indexOf(category) + 1]];
         const startIdx = this.indices[category];
         const numSort = nextCategoryStartIdx - startIdx; // splice() returns up to the max, so MAX_SAFE_INT is fine
         const unsortedSlice = this.cachedOrderedRooms.splice(startIdx, numSort);
@@ -208,7 +209,7 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
     private getCategoryFromIndices(index: number, indices: ICategoryIndex): NotificationColor {
         for (let i = 0; i < CATEGORY_ORDER.length; i++) {
             const category = CATEGORY_ORDER[i];
-            const isLast = i === (CATEGORY_ORDER.length - 1);
+            const isLast = i === CATEGORY_ORDER.length - 1;
             const startIdx = indices[category];
             const endIdx = isLast ? Number.MAX_SAFE_INTEGER : indices[CATEGORY_ORDER[i + 1]];
             if (index >= startIdx && index < endIdx) {
@@ -267,7 +268,8 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
                 // "should never happen" disclaimer goes here
                 logger.warn(
                     `!! Room list index corruption: ${lastCat} (i:${indices[lastCat]}) is greater ` +
-                    `than ${thisCat} (i:${indices[thisCat]}) - category indices are likely desynced from reality`);
+                        `than ${thisCat} (i:${indices[thisCat]}) - category indices are likely desynced from reality`,
+                );
 
                 // TODO: Regenerate index when this happens: https://github.com/vector-im/element-web/issues/14234
             }

@@ -15,11 +15,7 @@ limitations under the License.
 */
 
 import { mocked } from "jest-mock";
-import {
-    MatrixEvent,
-    EventType,
-    MsgType,
-} from "matrix-js-sdk/src/matrix";
+import { MatrixEvent, EventType, MsgType } from "matrix-js-sdk/src/matrix";
 
 import { haveRendererForEvent } from "../src/events/EventTileFactory";
 import { getMockClientWithEventEmitter, makeBeaconEvent, mockClientMethodsUser } from "./test-utils";
@@ -29,9 +25,9 @@ jest.mock("../src/events/EventTileFactory", () => ({
     haveRendererForEvent: jest.fn(),
 }));
 
-describe('eventTriggersUnreadCount()', () => {
-    const aliceId = '@alice:server.org';
-    const bobId = '@bob:server.org';
+describe("eventTriggersUnreadCount()", () => {
+    const aliceId = "@alice:server.org";
+    const bobId = "@bob:server.org";
 
     // mock user credentials
     getMockClientWithEventEmitter({
@@ -44,7 +40,7 @@ describe('eventTriggersUnreadCount()', () => {
         sender: aliceId,
         content: {
             msgtype: MsgType.Text,
-            body: 'Hello from Alice',
+            body: "Hello from Alice",
         },
     });
 
@@ -53,7 +49,7 @@ describe('eventTriggersUnreadCount()', () => {
         sender: bobId,
         content: {
             msgtype: MsgType.Text,
-            body: 'Hello from Bob',
+            body: "Hello from Bob",
         },
     });
 
@@ -68,31 +64,31 @@ describe('eventTriggersUnreadCount()', () => {
         mocked(haveRendererForEvent).mockClear().mockReturnValue(false);
     });
 
-    it('returns false when the event was sent by the current user', () => {
+    it("returns false when the event was sent by the current user", () => {
         expect(eventTriggersUnreadCount(bobsMessage)).toBe(false);
         // returned early before checking renderer
         expect(haveRendererForEvent).not.toHaveBeenCalled();
     });
 
-    it('returns false for a redacted event', () => {
+    it("returns false for a redacted event", () => {
         expect(eventTriggersUnreadCount(redactedEvent)).toBe(false);
         // returned early before checking renderer
         expect(haveRendererForEvent).not.toHaveBeenCalled();
     });
 
-    it('returns false for an event without a renderer', () => {
+    it("returns false for an event without a renderer", () => {
         mocked(haveRendererForEvent).mockReturnValue(false);
         expect(eventTriggersUnreadCount(alicesMessage)).toBe(false);
         expect(haveRendererForEvent).toHaveBeenCalledWith(alicesMessage, false);
     });
 
-    it('returns true for an event with a renderer', () => {
+    it("returns true for an event with a renderer", () => {
         mocked(haveRendererForEvent).mockReturnValue(true);
         expect(eventTriggersUnreadCount(alicesMessage)).toBe(true);
         expect(haveRendererForEvent).toHaveBeenCalledWith(alicesMessage, false);
     });
 
-    it('returns false for beacon locations', () => {
+    it("returns false for beacon locations", () => {
         const beaconLocationEvent = makeBeaconEvent(aliceId);
         expect(eventTriggersUnreadCount(beaconLocationEvent)).toBe(false);
         expect(haveRendererForEvent).not.toHaveBeenCalled();
@@ -107,7 +103,7 @@ describe('eventTriggersUnreadCount()', () => {
         EventType.RoomServerAcl,
     ];
 
-    it.each(noUnreadEventTypes)('returns false without checking for renderer for events with type %s', (eventType) => {
+    it.each(noUnreadEventTypes)("returns false without checking for renderer for events with type %s", (eventType) => {
         const event = new MatrixEvent({
             type: eventType,
             sender: aliceId,

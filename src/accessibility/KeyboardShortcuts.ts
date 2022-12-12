@@ -23,103 +23,103 @@ import { KeyCombo } from "../KeyBindingsManager";
 
 export enum KeyBindingAction {
     /** Send a message */
-    SendMessage = 'KeyBinding.sendMessageInComposer',
+    SendMessage = "KeyBinding.sendMessageInComposer",
     /** Go backwards through the send history and use the message in composer view */
-    SelectPrevSendHistory = 'KeyBinding.previousMessageInComposerHistory',
+    SelectPrevSendHistory = "KeyBinding.previousMessageInComposerHistory",
     /** Go forwards through the send history */
-    SelectNextSendHistory = 'KeyBinding.nextMessageInComposerHistory',
+    SelectNextSendHistory = "KeyBinding.nextMessageInComposerHistory",
     /** Start editing the user's last sent message */
-    EditPrevMessage = 'KeyBinding.editPreviousMessage',
+    EditPrevMessage = "KeyBinding.editPreviousMessage",
     /** Start editing the user's next sent message */
-    EditNextMessage = 'KeyBinding.editNextMessage',
+    EditNextMessage = "KeyBinding.editNextMessage",
     /** Cancel editing a message or cancel replying to a message */
-    CancelReplyOrEdit = 'KeyBinding.cancelReplyInComposer',
+    CancelReplyOrEdit = "KeyBinding.cancelReplyInComposer",
     /** Show the sticker picker */
-    ShowStickerPicker = 'KeyBinding.showStickerPicker',
+    ShowStickerPicker = "KeyBinding.showStickerPicker",
 
     /** Set bold format the current selection */
-    FormatBold = 'KeyBinding.toggleBoldInComposer',
+    FormatBold = "KeyBinding.toggleBoldInComposer",
     /** Set italics format the current selection */
-    FormatItalics = 'KeyBinding.toggleItalicsInComposer',
+    FormatItalics = "KeyBinding.toggleItalicsInComposer",
     /** Insert link for current selection */
-    FormatLink = 'KeyBinding.FormatLink',
+    FormatLink = "KeyBinding.FormatLink",
     /** Set code format for current selection */
-    FormatCode = 'KeyBinding.FormatCode',
+    FormatCode = "KeyBinding.FormatCode",
     /** Format the current selection as quote */
-    FormatQuote = 'KeyBinding.toggleQuoteInComposer',
+    FormatQuote = "KeyBinding.toggleQuoteInComposer",
     /** Undo the last editing */
-    EditUndo = 'KeyBinding.editUndoInComposer',
+    EditUndo = "KeyBinding.editUndoInComposer",
     /** Redo editing */
-    EditRedo = 'KeyBinding.editRedoInComposer',
+    EditRedo = "KeyBinding.editRedoInComposer",
     /** Insert new line */
-    NewLine = 'KeyBinding.newLineInComposer',
+    NewLine = "KeyBinding.newLineInComposer",
     /** Move the cursor to the start of the message */
-    MoveCursorToStart = 'KeyBinding.jumpToStartInComposer',
+    MoveCursorToStart = "KeyBinding.jumpToStartInComposer",
     /** Move the cursor to the end of the message */
-    MoveCursorToEnd = 'KeyBinding.jumpToEndInComposer',
+    MoveCursorToEnd = "KeyBinding.jumpToEndInComposer",
 
     /** Accepts chosen autocomplete selection */
-    CompleteAutocomplete = 'KeyBinding.completeAutocomplete',
+    CompleteAutocomplete = "KeyBinding.completeAutocomplete",
     /** Accepts chosen autocomplete selection or,
      * if the autocompletion window is not shown, open the window and select the first selection */
-    ForceCompleteAutocomplete = 'KeyBinding.forceCompleteAutocomplete',
+    ForceCompleteAutocomplete = "KeyBinding.forceCompleteAutocomplete",
     /** Move to the previous autocomplete selection */
-    PrevSelectionInAutocomplete = 'KeyBinding.previousOptionInAutoComplete',
+    PrevSelectionInAutocomplete = "KeyBinding.previousOptionInAutoComplete",
     /** Move to the next autocomplete selection */
-    NextSelectionInAutocomplete = 'KeyBinding.nextOptionInAutoComplete',
+    NextSelectionInAutocomplete = "KeyBinding.nextOptionInAutoComplete",
     /** Close the autocompletion window */
-    CancelAutocomplete = 'KeyBinding.cancelAutoComplete',
+    CancelAutocomplete = "KeyBinding.cancelAutoComplete",
 
     /** Clear room list filter field */
-    ClearRoomFilter = 'KeyBinding.clearRoomFilter',
+    ClearRoomFilter = "KeyBinding.clearRoomFilter",
     /** Navigate up/down in the room list */
-    PrevRoom = 'KeyBinding.downerRoom',
+    PrevRoom = "KeyBinding.downerRoom",
     /** Navigate down in the room list */
-    NextRoom = 'KeyBinding.upperRoom',
+    NextRoom = "KeyBinding.upperRoom",
     /** Select room from the room list */
-    SelectRoomInRoomList = 'KeyBinding.selectRoomInRoomList',
+    SelectRoomInRoomList = "KeyBinding.selectRoomInRoomList",
     /** Collapse room list section */
-    CollapseRoomListSection = 'KeyBinding.collapseSectionInRoomList',
+    CollapseRoomListSection = "KeyBinding.collapseSectionInRoomList",
     /** Expand room list section, if already expanded, jump to first room in the selection */
-    ExpandRoomListSection = 'KeyBinding.expandSectionInRoomList',
+    ExpandRoomListSection = "KeyBinding.expandSectionInRoomList",
 
     /** Scroll up in the timeline */
-    ScrollUp = 'KeyBinding.scrollUpInTimeline',
+    ScrollUp = "KeyBinding.scrollUpInTimeline",
     /** Scroll down in the timeline */
-    ScrollDown = 'KeyBinding.scrollDownInTimeline',
+    ScrollDown = "KeyBinding.scrollDownInTimeline",
     /** Dismiss read marker and jump to bottom */
-    DismissReadMarker = 'KeyBinding.dismissReadMarkerAndJumpToBottom',
+    DismissReadMarker = "KeyBinding.dismissReadMarkerAndJumpToBottom",
     /** Jump to oldest unread message */
-    JumpToOldestUnread = 'KeyBinding.jumpToOldestUnreadMessage',
+    JumpToOldestUnread = "KeyBinding.jumpToOldestUnreadMessage",
     /** Upload a file */
-    UploadFile = 'KeyBinding.uploadFileToRoom',
+    UploadFile = "KeyBinding.uploadFileToRoom",
     /** Focus search message in a room (must be enabled) */
-    SearchInRoom = 'KeyBinding.searchInRoom',
+    SearchInRoom = "KeyBinding.searchInRoom",
     /** Jump to the first (downloaded) message in the room */
-    JumpToFirstMessage = 'KeyBinding.jumpToFirstMessageInTimeline',
+    JumpToFirstMessage = "KeyBinding.jumpToFirstMessageInTimeline",
     /** Jump to the latest message in the room */
-    JumpToLatestMessage = 'KeyBinding.jumpToLastMessageInTimeline',
+    JumpToLatestMessage = "KeyBinding.jumpToLastMessageInTimeline",
 
     /** Jump to room search (search for a room) */
-    FilterRooms = 'KeyBinding.filterRooms',
+    FilterRooms = "KeyBinding.filterRooms",
     /** Toggle the space panel */
-    ToggleSpacePanel = 'KeyBinding.toggleSpacePanel',
+    ToggleSpacePanel = "KeyBinding.toggleSpacePanel",
     /** Toggle the room side panel */
-    ToggleRoomSidePanel = 'KeyBinding.toggleRightPanel',
+    ToggleRoomSidePanel = "KeyBinding.toggleRightPanel",
     /** Toggle the user menu */
-    ToggleUserMenu = 'KeyBinding.toggleTopLeftMenu',
+    ToggleUserMenu = "KeyBinding.toggleTopLeftMenu",
     /** Toggle the short cut help dialog */
-    ShowKeyboardSettings = 'KeyBinding.showKeyBindingsSettings',
+    ShowKeyboardSettings = "KeyBinding.showKeyBindingsSettings",
     /** Got to the Element home screen */
-    GoToHome = 'KeyBinding.goToHomeView',
+    GoToHome = "KeyBinding.goToHomeView",
     /** Select prev room */
-    SelectPrevRoom = 'KeyBinding.previousRoom',
+    SelectPrevRoom = "KeyBinding.previousRoom",
     /** Select next room */
-    SelectNextRoom = 'KeyBinding.nextRoom',
+    SelectNextRoom = "KeyBinding.nextRoom",
     /** Select prev room with unread messages */
-    SelectPrevUnreadRoom = 'KeyBinding.previousUnreadRoom',
+    SelectPrevUnreadRoom = "KeyBinding.previousUnreadRoom",
     /** Select next room with unread messages */
-    SelectNextUnreadRoom = 'KeyBinding.nextUnreadRoom',
+    SelectNextUnreadRoom = "KeyBinding.nextUnreadRoom",
 
     /** Switches to a space by number */
     SwitchToSpaceByNumber = "KeyBinding.switchToSpaceByNumber",
@@ -151,20 +151,20 @@ export enum KeyBindingAction {
     Comma = "KeyBinding.comma",
 
     /** Toggle visibility of hidden events */
-    ToggleHiddenEventVisibility = 'KeyBinding.toggleHiddenEventVisibility',
+    ToggleHiddenEventVisibility = "KeyBinding.toggleHiddenEventVisibility",
 }
 
 type KeyboardShortcutSetting = IBaseSetting<KeyCombo>;
 
 export type IKeyboardShortcuts = {
     // TODO: We should figure out what to do with the keyboard shortcuts that are not handled by KeybindingManager
-    [k in (KeyBindingAction)]?: KeyboardShortcutSetting;
+    [k in KeyBindingAction]?: KeyboardShortcutSetting;
 };
 
 export interface ICategory {
     categoryLabel?: string;
     // TODO: We should figure out what to do with the keyboard shortcuts that are not handled by KeybindingManager
-    settingNames: (KeyBindingAction)[];
+    settingNames: KeyBindingAction[];
 }
 
 export enum CategoryName {
@@ -227,13 +227,12 @@ export const CATEGORIES: Record<CategoryName, ICategory> = {
             KeyBindingAction.SelectPrevSendHistory,
             KeyBindingAction.ShowStickerPicker,
         ],
-    }, [CategoryName.CALLS]: {
+    },
+    [CategoryName.CALLS]: {
         categoryLabel: _td("Calls"),
-        settingNames: [
-            KeyBindingAction.ToggleMicInCall,
-            KeyBindingAction.ToggleWebcamInCall,
-        ],
-    }, [CategoryName.ROOM]: {
+        settingNames: [KeyBindingAction.ToggleMicInCall, KeyBindingAction.ToggleWebcamInCall],
+    },
+    [CategoryName.ROOM]: {
         categoryLabel: _td("Room"),
         settingNames: [
             KeyBindingAction.SearchInRoom,
@@ -245,7 +244,8 @@ export const CATEGORIES: Record<CategoryName, ICategory> = {
             KeyBindingAction.JumpToFirstMessage,
             KeyBindingAction.JumpToLatestMessage,
         ],
-    }, [CategoryName.ROOM_LIST]: {
+    },
+    [CategoryName.ROOM_LIST]: {
         categoryLabel: _td("Room List"),
         settingNames: [
             KeyBindingAction.SelectRoomInRoomList,
@@ -255,7 +255,8 @@ export const CATEGORIES: Record<CategoryName, ICategory> = {
             KeyBindingAction.NextRoom,
             KeyBindingAction.PrevRoom,
         ],
-    }, [CategoryName.ACCESSIBILITY]: {
+    },
+    [CategoryName.ACCESSIBILITY]: {
         categoryLabel: _td("Accessibility"),
         settingNames: [
             KeyBindingAction.Escape,
@@ -271,7 +272,8 @@ export const CATEGORIES: Record<CategoryName, ICategory> = {
             KeyBindingAction.ArrowDown,
             KeyBindingAction.Comma,
         ],
-    }, [CategoryName.NAVIGATION]: {
+    },
+    [CategoryName.NAVIGATION]: {
         categoryLabel: _td("Navigation"),
         settingNames: [
             KeyBindingAction.ToggleUserMenu,
@@ -289,7 +291,8 @@ export const CATEGORIES: Record<CategoryName, ICategory> = {
             KeyBindingAction.PreviousVisitedRoomOrSpace,
             KeyBindingAction.NextVisitedRoomOrSpace,
         ],
-    }, [CategoryName.AUTOCOMPLETE]: {
+    },
+    [CategoryName.AUTOCOMPLETE]: {
         categoryLabel: _td("Autocomplete"),
         settingNames: [
             KeyBindingAction.CancelAutocomplete,
@@ -298,11 +301,10 @@ export const CATEGORIES: Record<CategoryName, ICategory> = {
             KeyBindingAction.CompleteAutocomplete,
             KeyBindingAction.ForceCompleteAutocomplete,
         ],
-    }, [CategoryName.LABS]: {
+    },
+    [CategoryName.LABS]: {
         categoryLabel: _td("Labs"),
-        settingNames: [
-            KeyBindingAction.ToggleHiddenEventVisibility,
-        ],
+        settingNames: [KeyBindingAction.ToggleHiddenEventVisibility],
     },
 };
 
@@ -313,9 +315,7 @@ export const DESKTOP_SHORTCUTS = [
     KeyBindingAction.NextVisitedRoomOrSpace,
 ];
 
-export const MAC_ONLY_SHORTCUTS = [
-    KeyBindingAction.OpenUserSettings,
-];
+export const MAC_ONLY_SHORTCUTS = [KeyBindingAction.OpenUserSettings];
 
 // This is very intentionally modelled after SETTINGS as it will make it easier
 // to implement customizable keyboard shortcuts

@@ -17,26 +17,26 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { ICreateClientOpts, PendingEventOrdering, RoomNameState, RoomNameType } from 'matrix-js-sdk/src/matrix';
-import { IStartClientOpts, MatrixClient } from 'matrix-js-sdk/src/client';
-import { MemoryStore } from 'matrix-js-sdk/src/store/memory';
-import * as utils from 'matrix-js-sdk/src/utils';
-import { EventTimeline } from 'matrix-js-sdk/src/models/event-timeline';
-import { EventTimelineSet } from 'matrix-js-sdk/src/models/event-timeline-set';
-import { verificationMethods } from 'matrix-js-sdk/src/crypto';
+import { ICreateClientOpts, PendingEventOrdering, RoomNameState, RoomNameType } from "matrix-js-sdk/src/matrix";
+import { IStartClientOpts, MatrixClient } from "matrix-js-sdk/src/client";
+import { MemoryStore } from "matrix-js-sdk/src/store/memory";
+import * as utils from "matrix-js-sdk/src/utils";
+import { EventTimeline } from "matrix-js-sdk/src/models/event-timeline";
+import { EventTimelineSet } from "matrix-js-sdk/src/models/event-timeline-set";
+import { verificationMethods } from "matrix-js-sdk/src/crypto";
 import { SHOW_QR_CODE_METHOD } from "matrix-js-sdk/src/crypto/verification/QRCode";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import createMatrixClient from './utils/createMatrixClient';
-import SettingsStore from './settings/SettingsStore';
-import MatrixActionCreators from './actions/MatrixActionCreators';
-import Modal from './Modal';
+import createMatrixClient from "./utils/createMatrixClient";
+import SettingsStore from "./settings/SettingsStore";
+import MatrixActionCreators from "./actions/MatrixActionCreators";
+import Modal from "./Modal";
 import MatrixClientBackedSettingsHandler from "./settings/handlers/MatrixClientBackedSettingsHandler";
-import * as StorageManager from './utils/StorageManager';
-import IdentityAuthClient from './IdentityAuthClient';
-import { crossSigningCallbacks, tryToUnlockSecretStorageWithDehydrationKey } from './SecurityManager';
+import * as StorageManager from "./utils/StorageManager";
+import IdentityAuthClient from "./IdentityAuthClient";
+import { crossSigningCallbacks, tryToUnlockSecretStorageWithDehydrationKey } from "./SecurityManager";
 import SecurityCustomisations from "./customisations/Security";
-import { SlidingSyncManager } from './SlidingSyncManager';
+import { SlidingSyncManager } from "./SlidingSyncManager";
 import CryptoStoreTooNewDialog from "./components/views/dialogs/CryptoStoreTooNewDialog";
 import { _t } from "./languageHandler";
 
@@ -156,10 +156,7 @@ class MatrixClientPegClass implements IMatrixClientPeg {
     }
 
     public currentUserIsJustRegistered(): boolean {
-        return (
-            this.matrixClient &&
-            this.matrixClient.credentials.userId === this.justRegisteredUserId
-        );
+        return this.matrixClient && this.matrixClient.credentials.userId === this.justRegisteredUserId;
     }
 
     public userRegisteredWithinLastHours(hours: number): boolean {
@@ -170,7 +167,7 @@ class MatrixClientPegClass implements IMatrixClientPeg {
         try {
             const registrationTime = parseInt(window.localStorage.getItem("mx_registration_time"), 10);
             const diff = Date.now() - registrationTime;
-            return (diff / 36e5) <= hours;
+            return diff / 36e5 <= hours;
         } catch (e) {
             return false;
         }
@@ -191,20 +188,20 @@ class MatrixClientPegClass implements IMatrixClientPeg {
     }
 
     public async assign(): Promise<any> {
-        for (const dbType of ['indexeddb', 'memory']) {
+        for (const dbType of ["indexeddb", "memory"]) {
             try {
                 const promise = this.matrixClient.store.startup();
                 logger.log("MatrixClientPeg: waiting for MatrixClient store to initialise");
                 await promise;
                 break;
             } catch (err) {
-                if (dbType === 'indexeddb') {
-                    logger.error('Error starting matrixclient store - falling back to memory store', err);
+                if (dbType === "indexeddb") {
+                    logger.error("Error starting matrixclient store - falling back to memory store", err);
                     this.matrixClient.store = new MemoryStore({
                         localStorage: localStorage,
                     });
                 } else {
-                    logger.error('Failed to start memory store!', err);
+                    logger.error("Failed to start memory store!", err);
                     throw err;
                 }
             }
@@ -216,13 +213,13 @@ class MatrixClientPegClass implements IMatrixClientPeg {
             if (!SettingsStore.getValue("lowBandwidth") && this.matrixClient.initCrypto) {
                 await this.matrixClient.initCrypto();
                 this.matrixClient.setCryptoTrustCrossSignedDevices(
-                    !SettingsStore.getValue('e2ee.manuallyVerifyAllSessions'),
+                    !SettingsStore.getValue("e2ee.manuallyVerifyAllSessions"),
                 );
                 await tryToUnlockSecretStorageWithDehydrationKey(this.matrixClient);
                 StorageManager.setCryptoInitialised(true);
             }
         } catch (e) {
-            if (e && e.name === 'InvalidCryptoStoreError') {
+            if (e && e.name === "InvalidCryptoStoreError") {
                 // The js-sdk found a crypto DB too new for it to use
                 Modal.createDialog(CryptoStoreTooNewDialog);
             }
@@ -345,8 +342,8 @@ class MatrixClientPegClass implements IMatrixClientPeg {
             deviceId: creds.deviceId,
             pickleKey: creds.pickleKey,
             timelineSupport: true,
-            forceTURN: !SettingsStore.getValue('webRtcAllowPeerToPeer'),
-            fallbackICEServerAllowed: !!SettingsStore.getValue('fallbackICEServerAllowed'),
+            forceTURN: !SettingsStore.getValue("webRtcAllowPeerToPeer"),
+            fallbackICEServerAllowed: !!SettingsStore.getValue("fallbackICEServerAllowed"),
             // Gather up to 20 ICE candidates when a call arrives: this should be more than we'd
             // ever normally need, so effectively this should make all the gathering happen when
             // the call arrives.

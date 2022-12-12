@@ -16,7 +16,7 @@ limitations under the License.
 
 import { useEffect, useState } from "react";
 
-import SettingsStore from '../settings/SettingsStore';
+import SettingsStore from "../settings/SettingsStore";
 
 // Hook to fetch the value of a setting and dynamically update when it changes
 export const useSettingValue = <T>(settingName: string, roomId: string = null, excludeDefault = false) => {

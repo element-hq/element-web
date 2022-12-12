@@ -93,7 +93,10 @@ export class ContentRules {
     }
 
     private static categoriseContentRules(rulesets: IPushRules) {
-        const contentRules: Record<"on"|"on_but_disabled"|"loud"|"loud_but_disabled"|"other", IAnnotatedPushRule[]> = {
+        const contentRules: Record<
+            "on" | "on_but_disabled" | "loud" | "loud_but_disabled" | "other",
+            IAnnotatedPushRule[]
+        > = {
             on: [],
             on_but_disabled: [],
             loud: [],
@@ -106,7 +109,7 @@ export class ContentRules {
                 const r = rulesets.global[kind][i];
 
                 // check it's not a default rule
-                if (r.rule_id[0] === '.' || kind !== PushRuleKind.ContentSpecific) {
+                if (r.rule_id[0] === "." || kind !== PushRuleKind.ContentSpecific) {
                     continue;
                 }
 
