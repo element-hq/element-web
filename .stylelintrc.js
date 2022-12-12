@@ -1,12 +1,14 @@
 module.exports = {
-    "extends": "stylelint-config-standard",
+    "extends": [
+        "stylelint-config-standard",
+        "stylelint-config-prettier",
+    ],
     customSyntax: require('postcss-scss'),
     "plugins": [
         "stylelint-scss",
     ],
     "rules": {
         "color-hex-case": null,
-        "indentation": 4,
         "comment-empty-line-before": null,
         "declaration-empty-line-before": null,
         "length-zero-no-unit": null,

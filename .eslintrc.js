@@ -19,7 +19,6 @@ module.exports = {
         "no-constant-condition": "off",
         "prefer-promise-reject-errors": "off",
         "no-async-promise-executor": "off",
-        "quotes": "off",
         "no-extra-boolean-cast": "off",
 
         // Bind or arrow functions in props causes performance issues (but we
@@ -107,7 +106,6 @@ module.exports = {
 
                 // Things we do that break the ideal style
                 "prefer-promise-reject-errors": "off",
-                "quotes": "off",
                 "no-extra-boolean-cast": "off",
 
                 // Remove Babel things manually due to override limitations
@@ -121,10 +119,6 @@ module.exports = {
                 "@typescript-eslint/ban-ts-comment": "off",
                 // We're okay with assertion errors when we ask for them
                 "@typescript-eslint/no-non-null-assertion": "off",
-
-                // The non-TypeScript rule produces false positives
-                "func-call-spacing": "off",
-                "@typescript-eslint/func-call-spacing": ["error"],
             },
         },
         // temporary override for offending icon require files
