@@ -35,11 +35,16 @@ import {
     canEditOwnEvent,
     fetchInitialEvent,
     findEditableEvent,
+    highlightEvent,
     isContentActionable,
     isLocationEvent,
     isVoiceMessage,
 } from "../../src/utils/EventUtils";
 import { getMockClientWithEventEmitter, makeBeaconInfoEvent, makePollStartEvent, stubClient } from "../test-utils";
+import dis from "../../src/dispatcher/dispatcher";
+import { Action } from "../../src/dispatcher/actions";
+
+jest.mock("../../src/dispatcher/dispatcher");
 
 describe('EventUtils', () => {
     const userId = '@user:server';
@@ -438,6 +443,21 @@ describe('EventUtils', () => {
                 events: [],
                 isForward: true,
             })).toBeUndefined();
+        });
+    });
+
+    describe("highlightEvent", () => {
+        const eventId = "$zLg9jResFQmMO_UKFeWpgLgOgyWrL8qIgLgZ5VywrCQ";
+
+        it("should dispatch an action to view the event", () => {
+            highlightEvent(roomId, eventId);
+            expect(dis.dispatch).toHaveBeenCalledWith({
+                action: Action.ViewRoom,
+                event_id: eventId,
+                highlighted: true,
+                room_id: roomId,
+                metricsTrigger: undefined,
+            });
         });
     });
 });

@@ -31,6 +31,7 @@ import defaultDispatcher from "../dispatcher/dispatcher";
 import { TimelineRenderingType } from "../contexts/RoomContext";
 import { launchPollEditor } from "../components/views/messages/MPollBody";
 import { Action } from "../dispatcher/actions";
+import { ViewRoomPayload } from '../dispatcher/payloads/ViewRoomPayload';
 
 /**
  * Returns whether an event should allow actions like reply, reactions, edit, etc.
@@ -292,3 +293,13 @@ export function hasThreadSummary(event: MatrixEvent): boolean {
 export function canPinEvent(event: MatrixEvent): boolean {
     return !M_BEACON_INFO.matches(event.getType());
 }
+
+export const highlightEvent = (roomId: string, eventId: string): void => {
+    defaultDispatcher.dispatch<ViewRoomPayload>({
+        action: Action.ViewRoom,
+        event_id: eventId,
+        highlighted: true,
+        room_id: roomId,
+        metricsTrigger: undefined, // room doesn't change
+    });
+};

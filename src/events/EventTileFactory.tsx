@@ -47,7 +47,7 @@ import ViewSourceEvent from "../components/views/messages/ViewSourceEvent";
 import { shouldDisplayAsBeaconTile } from "../utils/beacon/timeline";
 import { shouldDisplayAsVoiceBroadcastTile } from "../voice-broadcast/utils/shouldDisplayAsVoiceBroadcastTile";
 import { ElementCall } from "../models/Call";
-import { VoiceBroadcastChunkEventType } from "../voice-broadcast";
+import { shouldDisplayAsVoiceBroadcastStoppedText, VoiceBroadcastChunkEventType } from "../voice-broadcast";
 
 // Subset of EventTile's IProps plus some mixins
 export interface EventTileTypeProps {
@@ -232,6 +232,8 @@ export function pickFactory(
 
         if (shouldDisplayAsVoiceBroadcastTile(mxEvent)) {
             return MessageEventFactory;
+        } else if (shouldDisplayAsVoiceBroadcastStoppedText(mxEvent)) {
+            return TextualEventFactory;
         }
 
         if (SINGULAR_STATE_EVENTS.has(evType) && mxEvent.getStateKey() !== '') {

@@ -37,15 +37,14 @@ import SettingsStore from "./settings/SettingsStore";
 import { ALL_RULE_TYPES, ROOM_RULE_TYPES, SERVER_RULE_TYPES, USER_RULE_TYPES } from "./mjolnir/BanList";
 import { WIDGET_LAYOUT_EVENT_TYPE } from "./stores/widgets/WidgetLayoutStore";
 import { RightPanelPhases } from './stores/right-panel/RightPanelStorePhases';
-import { Action } from './dispatcher/actions';
 import defaultDispatcher from './dispatcher/dispatcher';
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import { ROOM_SECURITY_TAB } from "./components/views/dialogs/RoomSettingsDialog";
 import AccessibleButton from './components/views/elements/AccessibleButton';
 import RightPanelStore from './stores/right-panel/RightPanelStore';
-import { ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
-import { isLocationEvent } from './utils/EventUtils';
+import { highlightEvent, isLocationEvent } from './utils/EventUtils';
 import { ElementCall } from "./models/Call";
+import { textForVoiceBroadcastStoppedEvent, VoiceBroadcastInfoEventType } from './voice-broadcast';
 
 export function getSenderName(event: MatrixEvent): string {
     return event.sender?.name ?? event.getSender() ?? _t("Someone");
@@ -497,16 +496,6 @@ function textForPowerEvent(event: MatrixEvent): () => string | null {
     });
 }
 
-const onPinnedOrUnpinnedMessageClick = (messageId: string, roomId: string): void => {
-    defaultDispatcher.dispatch<ViewRoomPayload>({
-        action: Action.ViewRoom,
-        event_id: messageId,
-        highlighted: true,
-        room_id: roomId,
-        metricsTrigger: undefined, // room doesn't change
-    });
-};
-
 const onPinnedMessagesClick = (): void => {
     RightPanelStore.instance.setCard({ phase: RightPanelPhases.PinnedMessages }, false);
 };
@@ -533,7 +522,7 @@ function textForPinnedEvent(event: MatrixEvent, allowJSX: boolean): () => Render
                         { senderName },
                         {
                             "a": (sub) =>
-                                <AccessibleButton kind='link_inline' onClick={(e) => onPinnedOrUnpinnedMessageClick(messageId, roomId)}>
+                                <AccessibleButton kind='link_inline' onClick={(e) => highlightEvent(roomId, messageId)}>
                                     { sub }
                                 </AccessibleButton>,
                             "b": (sub) =>
@@ -561,7 +550,7 @@ function textForPinnedEvent(event: MatrixEvent, allowJSX: boolean): () => Render
                         { senderName },
                         {
                             "a": (sub) =>
-                                <AccessibleButton kind='link_inline' onClick={(e) => onPinnedOrUnpinnedMessageClick(messageId, roomId)}>
+                                <AccessibleButton kind='link_inline' onClick={(e) => highlightEvent(roomId, messageId)}>
                                     { sub }
                                 </AccessibleButton>,
                             "b": (sub) =>
@@ -765,7 +754,7 @@ function textForPollEndEvent(event: MatrixEvent): () => string | null {
     });
 }
 
-type Renderable = string | JSX.Element | null;
+type Renderable = string | React.ReactNode | null;
 
 interface IHandlers {
     [type: string]:
@@ -801,6 +790,7 @@ const stateHandlers: IHandlers = {
     // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
     'im.vector.modular.widgets': textForWidgetEvent,
     [WIDGET_LAYOUT_EVENT_TYPE]: textForWidgetLayoutEvent,
+    [VoiceBroadcastInfoEventType]: textForVoiceBroadcastStoppedEvent,
 };
 
 // Add all the Mjolnir stuff to the renderer
@@ -832,8 +822,8 @@ export function hasText(ev: MatrixEvent, showHiddenEvents?: boolean): boolean {
  *     to avoid hitting the settings store
  */
 export function textForEvent(ev: MatrixEvent): string;
-export function textForEvent(ev: MatrixEvent, allowJSX: true, showHiddenEvents?: boolean): string | JSX.Element;
-export function textForEvent(ev: MatrixEvent, allowJSX = false, showHiddenEvents?: boolean): string | JSX.Element {
+export function textForEvent(ev: MatrixEvent, allowJSX: true, showHiddenEvents?: boolean): string | React.ReactNode;
+export function textForEvent(ev: MatrixEvent, allowJSX = false, showHiddenEvents?: boolean): string | React.ReactNode {
     const handler = (ev.isState() ? stateHandlers : handlers)[ev.getType()];
     return handler?.(ev, allowJSX, showHiddenEvents)?.() || '';
 }
