@@ -23,33 +23,27 @@ import { highlightEvent } from "../../utils/EventUtils";
 import { getSenderName } from "../../TextForEvent";
 import { _t } from "../../languageHandler";
 
-export const textForVoiceBroadcastStoppedEvent = (event: MatrixEvent): () => ReactNode => {
+export const textForVoiceBroadcastStoppedEvent = (event: MatrixEvent): (() => ReactNode) => {
     return (): ReactNode => {
         const ownUserId = MatrixClientPeg.get()?.getUserId();
         const startEventId = event.getRelation()?.event_id;
         const roomId = event.getRoomId();
 
         const templateTags = {
-            a: (text: string) => startEventId && roomId
-                ? (
-                    <AccessibleButton
-                        kind="link_inline"
-                        onClick={() => highlightEvent(roomId, startEventId)}
-                    >
-                        { text }
+            a: (text: string) =>
+                startEventId && roomId ? (
+                    <AccessibleButton kind="link_inline" onClick={() => highlightEvent(roomId, startEventId)}>
+                        {text}
                     </AccessibleButton>
-                )
-                : text,
+                ) : (
+                    text
+                ),
         };
 
         if (ownUserId && ownUserId === event.getSender()) {
             return _t("You ended a <a>voice broadcast</a>", {}, templateTags);
         }
 
-        return _t(
-            "%(senderName)s ended a <a>voice broadcast</a>",
-            { senderName: getSenderName(event) },
-            templateTags,
-        );
+        return _t("%(senderName)s ended a <a>voice broadcast</a>", { senderName: getSenderName(event) }, templateTags);
     };
 };

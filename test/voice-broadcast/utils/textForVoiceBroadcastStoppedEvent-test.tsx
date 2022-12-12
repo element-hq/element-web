@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from "react";
 import { render, RenderResult, screen } from "@testing-library/react";
-import userEvent from '@testing-library/user-event';
+import userEvent from "@testing-library/user-event";
 import { mocked } from "jest-mock";
 import { MatrixClient, RelationType } from "matrix-js-sdk/src/matrix";
 
@@ -48,7 +48,7 @@ describe("textForVoiceBroadcastStoppedEvent", () => {
             };
         }
 
-        return render(<div>{ textForVoiceBroadcastStoppedEvent(event)() }</div>);
+        return render(<div>{textForVoiceBroadcastStoppedEvent(event)()}</div>);
     };
 
     beforeEach(() => {

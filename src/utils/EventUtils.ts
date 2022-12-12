@@ -31,7 +31,7 @@ import defaultDispatcher from "../dispatcher/dispatcher";
 import { TimelineRenderingType } from "../contexts/RoomContext";
 import { launchPollEditor } from "../components/views/messages/MPollBody";
 import { Action } from "../dispatcher/actions";
-import { ViewRoomPayload } from '../dispatcher/payloads/ViewRoomPayload';
+import { ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";
 
 /**
  * Returns whether an event should allow actions like reply, reactions, edit, etc.
