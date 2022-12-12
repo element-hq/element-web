@@ -26,5 +26,7 @@
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s utiliza características avanzadas do navegador que non están dispoñibles no teu navegador.",
     "Powered by Matrix": "Funciona grazas a Matrix",
     "Use %(brand)s on mobile": "Utiliza %(brand)s no móbil",
-    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Conversas &amp; colaboración descentralizadas e cifradas grazas a $matrixLogo"
+    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Conversas &amp; colaboración descentralizadas e cifradas grazas a $matrixLogo",
+    "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s: %(browserName)s en %(osName)s",
+    "%(brand)s Desktop: %(platformName)s": "%(brand)s para Escritorio: %(platformName)s"
 }
