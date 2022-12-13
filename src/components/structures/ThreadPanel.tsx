@@ -249,7 +249,7 @@ const ThreadPanel: React.FC<IProps> = ({ roomId, onClose, permalinkCreator }) =>
     const openFeedback = shouldShowFeedback()
         ? () => {
               Modal.createDialog(BetaFeedbackDialog, {
-                  featureId: "feature_thread",
+                  featureId: "feature_threadstable",
               });
           }
         : null;

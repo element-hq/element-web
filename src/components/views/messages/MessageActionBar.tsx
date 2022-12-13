@@ -56,7 +56,6 @@ import { Key } from "../../../Keyboard";
 import { ALTERNATE_KEY_NAME } from "../../../accessibility/KeyboardShortcuts";
 import { UserTab } from "../dialogs/UserTab";
 import { Action } from "../../../dispatcher/actions";
-import SdkConfig from "../../../SdkConfig";
 import { ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";
 import useFavouriteMessages from "../../../hooks/useFavouriteMessages";
 import { GetRelationsForEvent } from "../rooms/EventTile";
@@ -204,8 +203,7 @@ const ReplyInThreadButton = ({ mxEvent }: IReplyInThreadButton) => {
 
     const relationType = mxEvent?.getRelation()?.rel_type;
     const hasARelation = !!relationType && relationType !== RelationType.Thread;
-    const firstTimeSeeingThreads = !localStorage.getItem("mx_seen_feature_thread");
-    const threadsEnabled = SettingsStore.getValue("feature_thread");
+    const threadsEnabled = SettingsStore.getValue("feature_threadstable");
 
     if (!threadsEnabled && !Thread.hasServerSideSupport) {
         // hide the prompt if the user would only have degraded mode
@@ -217,11 +215,7 @@ const ReplyInThreadButton = ({ mxEvent }: IReplyInThreadButton) => {
         e.preventDefault();
         e.stopPropagation();
 
-        if (firstTimeSeeingThreads) {
-            localStorage.setItem("mx_seen_feature_thread", "true");
-        }
-
-        if (!SettingsStore.getValue("feature_thread")) {
+        if (!SettingsStore.getValue("feature_threadstable")) {
             dis.dispatch({
                 action: Action.ViewUserSettings,
                 initialTabId: UserTab.Labs,
@@ -257,7 +251,7 @@ const ReplyInThreadButton = ({ mxEvent }: IReplyInThreadButton) => {
                     </div>
                     {!hasARelation && (
                         <div className="mx_Tooltip_sub">
-                            {SettingsStore.getValue("feature_thread")
+                            {SettingsStore.getValue("feature_threadstable")
                                 ? _t("Beta feature")
                                 : _t("Beta feature. Click to learn more.")}
                         </div>
@@ -273,7 +267,6 @@ const ReplyInThreadButton = ({ mxEvent }: IReplyInThreadButton) => {
             onContextMenu={onClick}
         >
             <ThreadIcon />
-            {firstTimeSeeingThreads && !threadsEnabled && <div className="mx_Indicator" />}
         </RovingAccessibleTooltipButton>
     );
 };
@@ -393,21 +386,6 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
     private readonly forbiddenThreadHeadMsgType = [MsgType.KeyVerificationRequest];
 
     private get showReplyInThreadAction(): boolean {
-        if (!SettingsStore.getValue("feature_thread") && !Thread.hasServerSideSupport) {
-            // hide the prompt if the user would only have degraded mode
-            return null;
-        }
-
-        if (
-            !SettingsStore.getBetaInfo("feature_thread") &&
-            !SettingsStore.getValue("feature_thread") &&
-            !SdkConfig.get("show_labs_settings")
-        ) {
-            // Hide the beta prompt if there is no UI to enable it,
-            // e.g if config.json disables it and doesn't enable show labs flags
-            return false;
-        }
-
         const inNotThreadTimeline = this.context.timelineRenderingType !== TimelineRenderingType.Thread;
 
         const isAllowedMessageType =
@@ -568,7 +546,7 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
                     );
                 }
             } else if (
-                SettingsStore.getValue("feature_thread") &&
+                SettingsStore.getValue("feature_threadstable") &&
                 // Show thread icon even for deleted messages, but only within main timeline
                 this.context.timelineRenderingType === TimelineRenderingType.Room &&
                 this.props.mxEvent.getThread()

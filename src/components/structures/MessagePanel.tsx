@@ -287,7 +287,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         // and we check this in a hot code path. This is also cached in our
         // RoomContext, however we still need a fallback for roomless MessagePanels.
         this._showHiddenEvents = SettingsStore.getValue("showHiddenEventsInTimeline");
-        this.threadsEnabled = SettingsStore.getValue("feature_thread");
+        this.threadsEnabled = SettingsStore.getValue("feature_threadstable");
 
         this.showTypingNotificationsWatcherRef = SettingsStore.watchSetting(
             "showTypingNotifications",

@@ -386,6 +386,12 @@ describe("<MessageActionBar />", () => {
         });
 
         describe("when threads feature is not enabled", () => {
+            beforeEach(() => {
+                jest.spyOn(SettingsStore, "getValue").mockImplementation(
+                    (setting) => setting !== "feature_threadstable",
+                );
+            });
+
             it("does not render thread button when threads does not have server support", () => {
                 jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
                 Thread.setServerSideSupport(FeatureSupport.None);
@@ -416,7 +422,9 @@ describe("<MessageActionBar />", () => {
 
         describe("when threads feature is enabled", () => {
             beforeEach(() => {
-                jest.spyOn(SettingsStore, "getValue").mockImplementation((setting) => setting === "feature_thread");
+                jest.spyOn(SettingsStore, "getValue").mockImplementation(
+                    (setting) => setting === "feature_threadstable",
+                );
             });
 
             it("renders thread button on own actionable event", () => {

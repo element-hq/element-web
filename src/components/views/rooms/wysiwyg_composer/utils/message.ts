@@ -108,7 +108,7 @@ export function sendMessage(message: string, isHTML: boolean, { roomContext, mxC
             // For initial threads launch, chat effects are disabled
             // see #19731
             const isNotThread = relation?.rel_type !== THREAD_RELATION_TYPE.name;
-            if (!SettingsStore.getValue("feature_thread") || isNotThread) {
+            if (!SettingsStore.getValue("feature_threadstable") || isNotThread) {
                 dis.dispatch({ action: `effects.${effect.command}` });
             }
         }

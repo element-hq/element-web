@@ -71,11 +71,7 @@ const ReplyInThreadButton = ({ mxEvent, closeMenu }: IReplyInThreadButton) => {
     if (Boolean(relationType) && relationType !== RelationType.Thread) return null;
 
     const onClick = (): void => {
-        if (!localStorage.getItem("mx_seen_feature_thread")) {
-            localStorage.setItem("mx_seen_feature_thread", "true");
-        }
-
-        if (!SettingsStore.getValue("feature_thread")) {
+        if (!SettingsStore.getValue("feature_threadstable")) {
             dis.dispatch({
                 action: Action.ViewUserSettings,
                 initialTabId: UserTab.Labs,
@@ -644,7 +640,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             rightClick &&
             contentActionable &&
             canSendMessages &&
-            SettingsStore.getValue("feature_thread") &&
+            SettingsStore.getValue("feature_threadstable") &&
             Thread.hasServerSideSupport &&
             timelineRenderingType !== TimelineRenderingType.Thread
         ) {

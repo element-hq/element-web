@@ -80,7 +80,7 @@ exports[`<SecurityUserSettingsTab /> renders settings marked as beta as beta car
           class="mx_BetaCard_title"
         >
           <span>
-            Threads
+            Threaded messages
           </span>
           <span
             class="mx_BetaCard_betaPill"
@@ -124,9 +124,6 @@ exports[`<SecurityUserSettingsTab /> renders settings marked as beta as beta car
         >
           Joining the beta will reload .
         </div>
-        <div
-          class="mx_BetaCard_faq"
-        />
       </div>
       <div
         class="mx_BetaCard_columns_image_wrapper"
@@ -134,7 +131,6 @@ exports[`<SecurityUserSettingsTab /> renders settings marked as beta as beta car
         <img
           alt=""
           class="mx_BetaCard_columns_image"
-          src="image-file-stub"
         />
       </div>
     </div>

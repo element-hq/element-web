@@ -169,6 +169,7 @@ describe("TimelinePanel", () => {
             const getValueCopy = SettingsStore.getValue;
             SettingsStore.getValue = jest.fn().mockImplementation((name: string) => {
                 if (name === "sendReadReceipts") return true;
+                if (name === "feature_threadstable") return false;
                 return getValueCopy(name);
             });
 
@@ -182,6 +183,7 @@ describe("TimelinePanel", () => {
             const getValueCopy = SettingsStore.getValue;
             SettingsStore.getValue = jest.fn().mockImplementation((name: string) => {
                 if (name === "sendReadReceipts") return false;
+                if (name === "feature_threadstable") return false;
                 return getValueCopy(name);
             });
 
@@ -358,7 +360,7 @@ describe("TimelinePanel", () => {
             client.supportsExperimentalThreads = () => true;
             const getValueCopy = SettingsStore.getValue;
             SettingsStore.getValue = jest.fn().mockImplementation((name: string) => {
-                if (name === "feature_thread") return true;
+                if (name === "feature_threadstable") return true;
                 return getValueCopy(name);
             });
 

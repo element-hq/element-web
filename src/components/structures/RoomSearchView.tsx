@@ -33,6 +33,7 @@ import ResizeNotifier from "../../utils/ResizeNotifier";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import RoomContext from "../../contexts/RoomContext";
+import SettingsStore from "../../settings/SettingsStore";
 
 const DEBUG = false;
 let debuglog = function (msg: string) {};
@@ -98,7 +99,7 @@ export const RoomSearchView = forwardRef<ScrollPanel, Props>(
                                 return b.length - a.length;
                             });
 
-                            if (client.supportsExperimentalThreads()) {
+                            if (SettingsStore.getValue("feature_threadstable")) {
                                 // Process all thread roots returned in this batch of search results
                                 // XXX: This won't work for results coming from Seshat which won't include the bundled relationship
                                 for (const result of results.results) {

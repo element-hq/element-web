@@ -19,17 +19,10 @@ limitations under the License.
 import { SynapseInstance } from "../../plugins/synapsedocker";
 import { MatrixClient } from "../../global";
 
-function markWindowBeforeReload(): void {
-    // mark our window object to "know" when it gets reloaded
-    cy.window().then((w) => (w.beforeReload = true));
-}
-
 describe("Threads", () => {
     let synapse: SynapseInstance;
 
     beforeEach(() => {
-        // Default threads to ON for this spec
-        cy.enableLabsFeature("feature_thread");
         cy.window().then((win) => {
             win.localStorage.setItem("mx_lhs_size", "0"); // Collapse left panel for these tests
         });
@@ -42,35 +35,6 @@ describe("Threads", () => {
 
     afterEach(() => {
         cy.stopSynapse(synapse);
-    });
-
-    it("should reload when enabling threads beta", () => {
-        markWindowBeforeReload();
-
-        // Turn off
-        cy.openUserSettings("Labs").within(() => {
-            // initially the new property is there
-            cy.window().should("have.prop", "beforeReload", true);
-
-            cy.leaveBeta("Threads");
-            cy.wait(1000);
-            // after reload the property should be gone
-            cy.window().should("not.have.prop", "beforeReload");
-        });
-
-        cy.get(".mx_MatrixChat", { timeout: 15000 }); // wait for the app
-        markWindowBeforeReload();
-
-        // Turn on
-        cy.openUserSettings("Labs").within(() => {
-            // initially the new property is there
-            cy.window().should("have.prop", "beforeReload", true);
-
-            cy.joinBeta("Threads");
-            cy.wait(1000);
-            // after reload the property should be gone
-            cy.window().should("not.have.prop", "beforeReload");
-        });
     });
 
     it("should be usable for a conversation", () => {

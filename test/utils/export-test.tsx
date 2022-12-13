@@ -45,25 +45,32 @@ interface ITestContent extends IContent {
 }
 
 describe("export", function () {
-    stubClient();
-    client = MatrixClientPeg.get();
-    client.getUserId = () => {
-        return MY_USER_ID;
-    };
+    let mockExportOptions: IExportOptions;
+    let mockRoom: Room;
+    let ts0: number;
+    let events: MatrixEvent[];
+    beforeEach(() => {
+        stubClient();
+        client = MatrixClientPeg.get();
+        client.getUserId = () => {
+            return MY_USER_ID;
+        };
 
-    const mockExportOptions: IExportOptions = {
-        numberOfMessages: 5,
-        maxSize: 100 * 1024 * 1024,
-        attachmentsIncluded: false,
-    };
+        mockExportOptions = {
+            numberOfMessages: 5,
+            maxSize: 100 * 1024 * 1024,
+            attachmentsIncluded: false,
+        };
 
-    function createRoom() {
-        const room = new Room(generateRoomId(), null, client.getUserId());
-        return room;
-    }
-    const mockRoom = createRoom();
-
-    const ts0 = Date.now();
+        function createRoom() {
+            const room = new Room(generateRoomId(), null, client.getUserId());
+            return room;
+        }
+        mockRoom = createRoom();
+        ts0 = Date.now();
+        events = mkEvents();
+        jest.spyOn(client, "getRoom").mockReturnValue(mockRoom);
+    });
 
     function mkRedactedEvent(i = 0) {
         return new MatrixEvent({
@@ -217,8 +224,6 @@ describe("export", function () {
         }
         return matrixEvents;
     }
-
-    const events: MatrixEvent[] = mkEvents();
 
     it("checks if the export format is valid", function () {
         function isValidFormat(format: string): boolean {

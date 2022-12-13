@@ -19,14 +19,21 @@ import { SearchResult } from "matrix-js-sdk/src/models/search-result";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { render } from "@testing-library/react";
+import { Room } from "matrix-js-sdk/src/models/room";
 
-import { createTestClient } from "../../../test-utils";
-import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
+import { stubClient } from "../../../test-utils";
 import SearchResultTile from "../../../../src/components/views/rooms/SearchResultTile";
+import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
+
+const ROOM_ID = "!qPewotXpIctQySfjSy:localhost";
 
 describe("SearchResultTile", () => {
     beforeAll(() => {
-        MatrixClientPeg.get = () => createTestClient();
+        stubClient();
+        const cli = MatrixClientPeg.get();
+
+        const room = new Room(ROOM_ID, cli, "@bob:example.org");
+        jest.spyOn(cli, "getRoom").mockReturnValue(room);
     });
 
     it("Sets up appropriate callEventGrouper for m.call. events", () => {
@@ -44,7 +51,7 @@ describe("SearchResultTile", () => {
                             },
                             event_id: "$144429830826TWwbB:localhost",
                             origin_server_ts: 1432735824653,
-                            room_id: "!qPewotXpIctQySfjSy:localhost",
+                            room_id: ROOM_ID,
                             sender: "@example:example.org",
                             type: "m.room.message",
                             unsigned: {
@@ -59,7 +66,7 @@ describe("SearchResultTile", () => {
                                 {
                                     type: EventType.CallInvite,
                                     sender: "@user1:server",
-                                    room_id: "!qPewotXpIctQySfjSy:localhost",
+                                    room_id: ROOM_ID,
                                     origin_server_ts: 1432735824652,
                                     content: { call_id: "call.1" },
                                     event_id: "$1:server",
@@ -69,7 +76,7 @@ describe("SearchResultTile", () => {
                                 {
                                     type: EventType.CallAnswer,
                                     sender: "@user2:server",
-                                    room_id: "!qPewotXpIctQySfjSy:localhost",
+                                    room_id: ROOM_ID,
                                     origin_server_ts: 1432735824654,
                                     content: { call_id: "call.1" },
                                     event_id: "$2:server",

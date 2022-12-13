@@ -1683,7 +1683,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         is very tied to the main room timeline, we are forcing the timeline to
         send read receipts for threaded events */
         const isThreadTimeline = this.context.timelineRenderingType === TimelineRenderingType.Thread;
-        if (SettingsStore.getValue("feature_thread") && isThreadTimeline) {
+        if (SettingsStore.getValue("feature_threadstable") && isThreadTimeline) {
             return 0;
         }
         const index = this.state.events.findIndex((ev) => ev.getId() === evId);
