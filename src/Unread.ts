@@ -66,7 +66,7 @@ export function doesRoomHaveUnreadMessages(room: Room): boolean {
     // despite the name of the method :((
     const readUpToId = room.getEventReadUpTo(myUserId!);
 
-    if (!SettingsStore.getValue("feature_thread")) {
+    if (!SettingsStore.getValue("feature_threadstable")) {
         // as we don't send RRs for our own messages, make sure we special case that
         // if *we* sent the last message into the room, we consider it not unread!
         // Should fix: https://github.com/vector-im/element-web/issues/3263
