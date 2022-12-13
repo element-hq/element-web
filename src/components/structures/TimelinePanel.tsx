@@ -342,11 +342,15 @@ class TimelinePanel extends React.Component<IProps, IState> {
         const differentEventId = prevProps.eventId != this.props.eventId;
         const differentHighlightedEventId = prevProps.highlightedEventId != this.props.highlightedEventId;
         const differentAvoidJump = prevProps.eventScrollIntoView && !this.props.eventScrollIntoView;
+        const differentOverlayTimeline = prevProps.overlayTimelineSet !== this.props.overlayTimelineSet;
         if (differentEventId || differentHighlightedEventId || differentAvoidJump) {
             logger.log(
                 `TimelinePanel switching to eventId ${this.props.eventId} (was ${prevProps.eventId}), ` +
                     `scrollIntoView: ${this.props.eventScrollIntoView} (was ${prevProps.eventScrollIntoView})`,
             );
+            this.initTimeline(this.props);
+        } else if (differentOverlayTimeline) {
+            logger.log(`TimelinePanel updating overlay timeline.`);
             this.initTimeline(this.props);
         }
     }
