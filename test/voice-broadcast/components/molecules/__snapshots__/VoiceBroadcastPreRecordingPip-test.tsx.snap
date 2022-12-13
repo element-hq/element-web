@@ -9,18 +9,30 @@ exports[`VoiceBroadcastPreRecordingPip when rendered should match the snapshot 1
       class="mx_VoiceBroadcastHeader"
     >
       <div
-        data-testid="room-avatar"
+        class="mx_AccessibleButton"
+        role="button"
+        tabindex="0"
       >
-        room avatar: 
-        !room@example.com
+        <div
+          data-testid="room-avatar"
+        >
+          room avatar: 
+          !room@example.com
+        </div>
       </div>
       <div
         class="mx_VoiceBroadcastHeader_content"
       >
         <div
-          class="mx_VoiceBroadcastHeader_room"
+          class="mx_AccessibleButton"
+          role="button"
+          tabindex="0"
         >
-          !room@example.com
+          <div
+            class="mx_VoiceBroadcastHeader_room"
+          >
+            !room@example.com
+          </div>
         </div>
         <div
           aria-label="Change input device"

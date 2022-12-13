@@ -41,6 +41,7 @@ export const VoiceBroadcastPreRecordingPip: React.FC<Props> = ({ voiceBroadcastP
     return (
         <div className="mx_VoiceBroadcastBody mx_VoiceBroadcastBody--pip" ref={pipRef}>
             <VoiceBroadcastHeader
+                linkToRoom={true}
                 onCloseClick={voiceBroadcastPreRecording.cancel}
                 onMicrophoneLineClick={() => setShowDeviceSelect(true)}
                 room={voiceBroadcastPreRecording.room}

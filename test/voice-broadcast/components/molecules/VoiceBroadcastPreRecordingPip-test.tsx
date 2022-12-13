@@ -29,7 +29,10 @@ import {
 import { flushPromises, stubClient } from "../../../test-utils";
 import { requestMediaPermissions } from "../../../../src/utils/media/requestMediaPermissions";
 import MediaDeviceHandler, { MediaDeviceKindEnum } from "../../../../src/MediaDeviceHandler";
+import dis from "../../../../src/dispatcher/dispatcher";
+import { Action } from "../../../../src/dispatcher/actions";
 
+jest.mock("../../../../src/dispatcher/dispatcher");
 jest.mock("../../../../src/utils/media/requestMediaPermissions");
 
 // mock RoomAvatar, because it is doing too much fancy stuff
@@ -49,19 +52,25 @@ describe("VoiceBroadcastPreRecordingPip", () => {
     let room: Room;
     let sender: RoomMember;
 
+    const itShouldShowTheBroadcastRoom = () => {
+        it("should show the broadcast room", () => {
+            expect(dis.dispatch).toHaveBeenCalledWith({
+                action: Action.ViewRoom,
+                room_id: room.roomId,
+                metricsTrigger: undefined,
+            });
+        });
+    };
+
     beforeEach(() => {
         client = stubClient();
         room = new Room("!room@example.com", client, client.getUserId() || "");
         sender = new RoomMember(room.roomId, client.getUserId() || "");
         playbacksStore = new VoiceBroadcastPlaybacksStore();
         recordingsStore = new VoiceBroadcastRecordingsStore();
-        mocked(requestMediaPermissions).mockReturnValue(
-            new Promise<MediaStream>((r) => {
-                r({
-                    getTracks: () => [],
-                } as unknown as MediaStream);
-            }),
-        );
+        mocked(requestMediaPermissions).mockResolvedValue({
+            getTracks: (): Array<MediaStreamTrack> => [],
+        } as unknown as MediaStream);
         jest.spyOn(MediaDeviceHandler, "getDevices").mockResolvedValue({
             [MediaDeviceKindEnum.AudioInput]: [
                 {
@@ -95,6 +104,22 @@ describe("VoiceBroadcastPreRecordingPip", () => {
 
         it("should match the snapshot", () => {
             expect(renderResult.container).toMatchSnapshot();
+        });
+
+        describe("and clicking the room name", () => {
+            beforeEach(async () => {
+                await userEvent.click(screen.getByText(room.name));
+            });
+
+            itShouldShowTheBroadcastRoom();
+        });
+
+        describe("and clicking the room avatar", () => {
+            beforeEach(async () => {
+                await userEvent.click(screen.getByText(`room avatar: ${room.name}`));
+            });
+
+            itShouldShowTheBroadcastRoom();
         });
 
         describe("and clicking the device label", () => {

@@ -74,7 +74,7 @@ export const VoiceBroadcastRecordingPip: React.FC<VoiceBroadcastRecordingPipProp
 
     return (
         <div className="mx_VoiceBroadcastBody mx_VoiceBroadcastBody--pip" ref={pipRef}>
-            <VoiceBroadcastHeader live={live ? "live" : "grey"} room={room} timeLeft={timeLeft} />
+            <VoiceBroadcastHeader linkToRoom={true} live={live ? "live" : "grey"} room={room} timeLeft={timeLeft} />
             <hr className="mx_VoiceBroadcastBody_divider" />
             <div className="mx_VoiceBroadcastBody_controls">
                 {toggleControl}

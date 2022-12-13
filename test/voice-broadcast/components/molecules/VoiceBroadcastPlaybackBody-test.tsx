@@ -30,6 +30,10 @@ import {
 } from "../../../../src/voice-broadcast";
 import { stubClient } from "../../../test-utils";
 import { mkVoiceBroadcastInfoStateEvent } from "../../utils/test-utils";
+import dis from "../../../../src/dispatcher/dispatcher";
+import { Action } from "../../../../src/dispatcher/actions";
+
+jest.mock("../../../../src/dispatcher/dispatcher");
 
 // mock RoomAvatar, because it is doing too much fancy stuff
 jest.mock("../../../../src/components/views/avatars/RoomAvatar", () => ({
@@ -125,6 +129,42 @@ describe("VoiceBroadcastPlaybackBody", () => {
 
                 it("should seek 30s forward", () => {
                     expect(playback.skipTo).toHaveBeenCalledWith(10 * 60 + 30);
+                });
+            });
+        });
+
+        describe("and clicking the room name", () => {
+            beforeEach(async () => {
+                await userEvent.click(screen.getByText("My room"));
+            });
+
+            it("should not view the room", () => {
+                expect(dis.dispatch).not.toHaveBeenCalled();
+            });
+        });
+    });
+
+    describe("when rendering a playing broadcast in pip mode", () => {
+        beforeEach(() => {
+            mocked(playback.getState).mockReturnValue(VoiceBroadcastPlaybackState.Playing);
+            mocked(playback.getLiveness).mockReturnValue("not-live");
+            renderResult = render(<VoiceBroadcastPlaybackBody pip={true} playback={playback} />);
+        });
+
+        it("should render as expected", () => {
+            expect(renderResult.container).toMatchSnapshot();
+        });
+
+        describe("and clicking the room name", () => {
+            beforeEach(async () => {
+                await userEvent.click(screen.getByText("My room"));
+            });
+
+            it("should view the room", () => {
+                expect(dis.dispatch).toHaveBeenCalledWith({
+                    action: Action.ViewRoom,
+                    room_id: roomId,
+                    metricsTrigger: undefined,
                 });
             });
         });

@@ -98,6 +98,7 @@ export const VoiceBroadcastPlaybackBody: React.FC<VoiceBroadcastPlaybackBodyProp
     return (
         <div className={classes}>
             <VoiceBroadcastHeader
+                linkToRoom={pip}
                 live={liveness}
                 microphoneLabel={sender?.name}
                 room={room}

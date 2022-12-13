@@ -9,18 +9,30 @@ exports[`VoiceBroadcastRecordingPip when rendering a paused recording should ren
       class="mx_VoiceBroadcastHeader"
     >
       <div
-        data-testid="room-avatar"
+        class="mx_AccessibleButton"
+        role="button"
+        tabindex="0"
       >
-        room avatar: 
-        My room
+        <div
+          data-testid="room-avatar"
+        >
+          room avatar: 
+          My room
+        </div>
       </div>
       <div
         class="mx_VoiceBroadcastHeader_content"
       >
         <div
-          class="mx_VoiceBroadcastHeader_room"
+          class="mx_AccessibleButton"
+          role="button"
+          tabindex="0"
         >
-          My room
+          <div
+            class="mx_VoiceBroadcastHeader_room"
+          >
+            My room
+          </div>
         </div>
         <div
           class="mx_VoiceBroadcastHeader_line"
@@ -94,18 +106,30 @@ exports[`VoiceBroadcastRecordingPip when rendering a started recording should re
       class="mx_VoiceBroadcastHeader"
     >
       <div
-        data-testid="room-avatar"
+        class="mx_AccessibleButton"
+        role="button"
+        tabindex="0"
       >
-        room avatar: 
-        My room
+        <div
+          data-testid="room-avatar"
+        >
+          room avatar: 
+          My room
+        </div>
       </div>
       <div
         class="mx_VoiceBroadcastHeader_content"
       >
         <div
-          class="mx_VoiceBroadcastHeader_room"
+          class="mx_AccessibleButton"
+          role="button"
+          tabindex="0"
         >
-          My room
+          <div
+            class="mx_VoiceBroadcastHeader_room"
+          >
+            My room
+          </div>
         </div>
         <div
           class="mx_VoiceBroadcastHeader_line"
