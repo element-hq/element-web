@@ -533,7 +533,6 @@
     "You do not have permission to invite people to this room.": "Немате дозволу за позивање људи у ову собу.",
     "Encryption upgrade available": "Надоградња шифровања је доступна",
     "%(senderName)s: %(reaction)s": "%(senderName)s: %(reaction)s",
-    "Try out new ways to ignore people (experimental)": "Испробајте нове начине за игнорисање људи (у пробној фази)",
     "Show info about bridges in room settings": "Прикажи податке о мостовима у подешавањима собе",
     "Enable Emoji suggestions while typing": "Омогући предлоге емоџија приликом куцања",
     "Upload": "Отпреми",

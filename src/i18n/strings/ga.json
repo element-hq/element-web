@@ -705,7 +705,6 @@
     "(~%(count)s results)|other": "(~%(count)s torthaí)",
     "No answer": "Gan freagair",
     "Unknown failure: %(reason)s": "Teip anaithnid: %(reason)s",
-    "Low bandwidth mode (requires compatible homeserver)": "Modh bandaleithid íseal (teastaíonn freastalaí comhoiriúnach)",
     "Enable encryption in settings.": "Tosaigh criptiú sna socruithe.",
     "Cross-signing is ready but keys are not backed up.": "Tá tras-sínigh réidh ach ní dhéantar cóip chúltaca d'eochracha.",
     "Bans user with given id": "Toirmisc úsáideoir leis an ID áirithe",

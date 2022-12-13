@@ -813,7 +813,6 @@
     "Single Sign On": "Single-sign-on",
     "Capitalization doesn't help very much": "Store bokstavar hjelp dessverre lite",
     "Predictable substitutions like '@' instead of 'a' don't help very much": "Forutsigbare teiknbytte som '@' istaden for 'a' hjelp dessverre lite",
-    "Try out new ways to ignore people (experimental)": "Prøv ut nye måtar å ignorere folk på (eksperimentelt)",
     "Your account has a cross-signing identity in secret storage, but it is not yet trusted by this session.": "Kontoen din har ein kryss-signert identitet det hemmelege lageret, økta di stolar ikkje på denne enno.",
     "in secret storage": "i hemmeleg lager",
     "Secret storage public key:": "Public-nøkkel for hemmeleg lager:",

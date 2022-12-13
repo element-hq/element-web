@@ -1107,7 +1107,6 @@
     "%(name)s cancelled": "%(name)s님이 취소했습니다",
     "%(name)s wants to verify": "%(name)s님이 확인을 요청합니다",
     "You sent a verification request": "확인 요청을 보냈습니다",
-    "Try out new ways to ignore people (experimental)": "새 방식으로 사람들을 무시하기 (실험)",
     "My Ban List": "차단 목록",
     "This is your list of users/servers you have blocked - don't leave the room!": "차단한 사용자/서버 목록입니다 - 방을 떠나지 마세요!",
     "Ignored/Blocked": "무시됨/차단됨",
