@@ -596,6 +596,32 @@ describe("ElementCall", () => {
 
             expect(Call.get(room)).toBeNull();
         });
+
+        it("passes font settings through widget URL", async () => {
+            const originalGetValue = SettingsStore.getValue;
+            SettingsStore.getValue = <T>(name: string, roomId?: string, excludeDefault?: boolean) => {
+                switch (name) {
+                    case "baseFontSize":
+                        return 12 as T;
+                    case "useSystemFont":
+                        return true as T;
+                    case "systemFont":
+                        return "OpenDyslexic, DejaVu Sans" as T;
+                    default:
+                        return originalGetValue<T>(name, roomId, excludeDefault);
+                }
+            };
+
+            await ElementCall.create(room);
+            const call = Call.get(room);
+            if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
+
+            const urlParams = new URLSearchParams(new URL(call.widget.url).hash.slice(1));
+            expect(urlParams.get("fontScale")).toBe("1.2");
+            expect(urlParams.getAll("font")).toEqual(["OpenDyslexic", "DejaVu Sans"]);
+
+            SettingsStore.getValue = originalGetValue;
+        });
     });
 
     describe("instance in a non-video room", () => {

@@ -52,6 +52,7 @@ import PlatformPeg from "../PlatformPeg";
 import { getCurrentLanguage } from "../languageHandler";
 import DesktopCapturerSourcePicker from "../components/views/elements/DesktopCapturerSourcePicker";
 import Modal from "../Modal";
+import { FontWatcher } from "../settings/watchers/FontWatcher";
 
 const TIMEOUT_MS = 16000;
 
@@ -626,8 +627,6 @@ export class ElementCall extends Call {
 
     private constructor(public readonly groupCall: GroupCall, client: MatrixClient) {
         // Splice together the Element Call URL for this call
-        const url = new URL(SdkConfig.get("element_call").url ?? DEFAULTS.element_call.url!);
-        url.pathname = "/room";
         const params = new URLSearchParams({
             embed: "",
             preload: "",
@@ -637,7 +636,24 @@ export class ElementCall extends Call {
             roomId: groupCall.room.roomId,
             baseUrl: client.baseUrl,
             lang: getCurrentLanguage().replace("_", "-"),
+            fontScale: `${SettingsStore.getValue("baseFontSize") / FontWatcher.DEFAULT_SIZE}`,
         });
+
+        // Set custom fonts
+        if (SettingsStore.getValue("useSystemFont")) {
+            SettingsStore.getValue<string>("systemFont")
+                .split(",")
+                .map((font) => {
+                    // Strip whitespace and quotes
+                    font = font.trim();
+                    if (font.startsWith('"') && font.endsWith('"')) font = font.slice(1, -1);
+                    return font;
+                })
+                .forEach((font) => params.append("font", font));
+        }
+
+        const url = new URL(SdkConfig.get("element_call").url ?? DEFAULTS.element_call.url!);
+        url.pathname = "/room";
         url.hash = `#?${params.toString()}`;
 
         // To use Element Call without touching room state, we create a virtual
