@@ -10071,6 +10071,11 @@ postcss-simple-vars@^5.0.2:
   dependencies:
     postcss "^7.0.14"
 
+postcss-simple-vars@^7.0.0:
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/postcss-simple-vars/-/postcss-simple-vars-7.0.1.tgz#836b3097a54dcd13dbd3c36a5dbdd512fad2954c"
+  integrity sha512-5GLLXaS8qmzHMOjVxqkk1TZPf1jMqesiI7qLhnlyERalG0sMbHIbJqrcnrpmZdKCLglHnRHoEBB61RtGTsj++A==
+
 postcss-svgo@^4.0.3:
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/postcss-svgo/-/postcss-svgo-4.0.3.tgz#343a2cdbac9505d416243d496f724f38894c941e"
