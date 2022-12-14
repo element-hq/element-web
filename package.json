@@ -137,7 +137,7 @@
         "minimist": "^1.2.6",
         "mkdirp": "^1.0.4",
         "modernizr": "^3.12.0",
-        "node-fetch": "^2.6.7",
+        "node-fetch": "^3.0.0",
         "optimize-css-assets-webpack-plugin": "^5.0.4",
         "postcss": "^8.4.16",
         "postcss-easings": "^2.0.0",
