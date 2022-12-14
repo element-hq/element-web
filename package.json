@@ -133,7 +133,7 @@
         "loader-utils": "^3.0.0",
         "matrix-mock-request": "^2.5.0",
         "matrix-web-i18n": "^1.3.0",
-        "mini-css-extract-plugin": "^1",
+        "mini-css-extract-plugin": "^2.0.0",
         "minimist": "^1.2.6",
         "mkdirp": "^1.0.4",
         "modernizr": "^3.12.0",
