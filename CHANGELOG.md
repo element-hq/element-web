@@ -1,4 +1,4 @@
-Changes in [3.63.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.63.0-rc.1) (2022-12-14)
+Changes in [3.63.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.63.0-rc.2) (2022-12-14)
 ===============================================================================================================
 
 ## ✨ Features
