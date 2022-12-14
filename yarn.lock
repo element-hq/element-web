@@ -2003,9 +2003,9 @@
     "@types/istanbul-lib-report" "*"
 
 "@types/jest@^29.0.0":
-  version "29.2.3"
-  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-29.2.3.tgz#f5fd88e43e5a9e4221ca361e23790d48fcf0a211"
-  integrity sha512-6XwoEbmatfyoCjWRX7z0fKMmgYKe9+/HrviJ5k0X/tjJWHGAezZOfYaxqQKuzG/TvQyr+ktjm4jgbk0s4/oF2w==
+  version "29.2.4"
+  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-29.2.4.tgz#9c155c4b81c9570dbd183eb8604aa0ae80ba5a5b"
+  integrity sha512-PipFB04k2qTRPePduVLTRiPzQfvMeLwUN3Z21hsAKaB/W9IIzgB2pizCL466ftJlcyZqnHoC9ZHpxLGl3fS86A==
   dependencies:
     expect "^29.0.0"
     pretty-format "^29.0.0"
@@ -2050,9 +2050,9 @@
   integrity sha512-jhMOZSS0UGYTS9pqvt6q3wtT3uvOSve5piTEmTMx3zzTuBLvSIMxSIBIc3d5lajVD5h4xc41AMZD2M5orN3PxA==
 
 "@types/node@*":
-  version "18.11.9"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.11.9.tgz#02d013de7058cea16d36168ef2fc653464cfbad4"
-  integrity sha512-CRpX21/kGdzjOpFsZSkcrXMGIBWMGNIHXXBVFSH+ggkftxg+XYP20TESbh+zFvFj3EQOl5byk0HTRn1IL6hbqg==
+  version "18.11.15"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.11.15.tgz#de0e1fbd2b22b962d45971431e2ae696643d3f5d"
+  integrity sha512-VkhBbVo2+2oozlkdHXLrb3zjsRkpdnaU2bXmX8Wgle3PUi569eLRaHGlgETQHR7lLL1w7GiG3h9SnePhxNDecw==
 
 "@types/node@^16":
   version "16.18.4"
@@ -2198,9 +2198,9 @@
   integrity sha512-iO9ZQHkZxHn4mSakYV0vFHAVDyEOIJQrV2uZ06HxEPcx+mt8swXoZHIbaaJ2crJYFfErySgktuTZ3BeLz+XmFA==
 
 "@types/yargs@^17.0.8":
-  version "17.0.15"
-  resolved "https://registry.yarnpkg.com/@types/yargs/-/yargs-17.0.15.tgz#5b62c89fb049e2fc8378394a2861a593055f0866"
-  integrity sha512-ZHc4W2dnEQPfhn06TBEdWaiUHEZAocYaiVMfwOipY5jcJt/251wVrKCBWBetGZWO5CF8tdb7L3DmdxVlZ2BOIg==
+  version "17.0.17"
+  resolved "https://registry.yarnpkg.com/@types/yargs/-/yargs-17.0.17.tgz#5672e5621f8e0fca13f433a8017aae4b7a2a03e7"
+  integrity sha512-72bWxFKTK6uwWJAVT+3rF6Jo6RTojiJ27FQo8Rf60AL+VZbzoVPnMFhKsUnbjR8A3BTCYQ7Mv3hnl8T0A+CX9g==
   dependencies:
     "@types/yargs-parser" "*"
 
