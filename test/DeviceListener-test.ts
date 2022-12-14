@@ -96,6 +96,7 @@ describe("DeviceListener", () => {
             getDeviceId: jest.fn().mockReturnValue(deviceId),
             setAccountData: jest.fn(),
             getAccountData: jest.fn(),
+            deleteAccountData: jest.fn(),
             checkDeviceTrust: jest.fn().mockReturnValue(new DeviceTrustLevel(false, false, false, false)),
         });
         jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
@@ -188,9 +189,8 @@ describe("DeviceListener", () => {
                 mockClient!.getAccountData.mockReturnValue(clientInfoEvent);
                 await createAndStart();
 
-                expect(mockClient!.setAccountData).toHaveBeenCalledWith(
+                expect(mockClient!.deleteAccountData).toHaveBeenCalledWith(
                     `io.element.matrix_client_information.${deviceId}`,
-                    {},
                 );
             });
 
@@ -198,7 +198,7 @@ describe("DeviceListener", () => {
                 mockClient!.getAccountData.mockReturnValue(emptyClientInfoEvent);
                 await createAndStart();
 
-                expect(mockClient!.setAccountData).not.toHaveBeenCalled();
+                expect(mockClient!.deleteAccountData).not.toHaveBeenCalled();
             });
 
             it("does not save client information on logged in action", async () => {
