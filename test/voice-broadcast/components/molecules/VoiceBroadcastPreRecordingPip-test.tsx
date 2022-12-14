@@ -87,6 +87,7 @@ describe("VoiceBroadcastPreRecordingPip", () => {
         });
         jest.spyOn(MediaDeviceHandler.instance, "setDevice").mockImplementation();
         preRecording = new VoiceBroadcastPreRecording(room, sender, client, playbacksStore, recordingsStore);
+        jest.spyOn(preRecording, "start").mockResolvedValue();
     });
 
     afterAll(() => {
@@ -104,6 +105,19 @@ describe("VoiceBroadcastPreRecordingPip", () => {
 
         it("should match the snapshot", () => {
             expect(renderResult.container).toMatchSnapshot();
+        });
+
+        describe("and double clicking »Go live«", () => {
+            beforeEach(async () => {
+                await act(async () => {
+                    await userEvent.click(screen.getByText("Go live"));
+                    await userEvent.click(screen.getByText("Go live"));
+                });
+            });
+
+            it("should call start once", () => {
+                expect(preRecording.start).toHaveBeenCalledTimes(1);
+            });
         });
 
         describe("and clicking the room name", () => {
