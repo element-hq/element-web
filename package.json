@@ -107,7 +107,7 @@
         "chokidar": "^3.5.1",
         "concurrently": "^7.0.0",
         "cpx": "^1.5.0",
-        "css-loader": "^4",
+        "css-loader": "^6.0.0",
         "dotenv": "^16.0.2",
         "eslint": "8.28.0",
         "eslint-config-google": "^0.14.0",
