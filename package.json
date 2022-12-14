@@ -144,7 +144,7 @@
         "postcss-hexrgba": "2.0.1",
         "postcss-import": "^12.0.1",
         "postcss-loader": "^3.0.0",
-        "postcss-mixins": "^6.2.3",
+        "postcss-mixins": "^9.0.0",
         "postcss-nested": "^4.2.3",
         "postcss-preset-env": "^6.7.0",
         "postcss-scss": "^4.0.4",
