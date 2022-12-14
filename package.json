@@ -146,7 +146,7 @@
         "postcss-loader": "^3.0.0",
         "postcss-mixins": "^6.2.3",
         "postcss-nested": "^4.2.3",
-        "postcss-preset-env": "^6.7.0",
+        "postcss-preset-env": "^7.0.0",
         "postcss-scss": "^4.0.4",
         "postcss-simple-vars": "^5.0.2",
         "prettier": "2.8.0",
