@@ -75,13 +75,17 @@ instance, the component which allows changing the setting may be hidden conditio
 Where possible, the `SettingsFlag` component should be used to set simple "flip-a-bit" (true/false) settings. The
 `SettingsFlag` also supports simple radio button options, such as the theme the user would like to use.
 
-```html
-<SettingsFlag name="theSettingId" level={SettingsLevel.ROOM} roomId="!curbf:matrix.org" label={_td("Your label here")}
-// optional, if falsey then the `SettingsStore` will be used onChange={function(newValue) { }} // optional, called after
-saving isExplicit={false} // this is passed along to `SettingsStore.getValueAt`, defaulting to false manualSave={false}
-// if true, saving is delayed. You will need to call .save() on this component // Options for radio buttons
-group="your-radio-group" // this enables radio button support value="yourValueHere" // the value for this particular
-option />
+```TSX
+<SettingsFlag name="theSettingId" level={SettingsLevel.ROOM} roomId="!curbf:matrix.org"
+    label={_td("Your label here")} // optional, if falsey then the `SettingsStore` will be used
+    onChange={function(newValue) { }} // optional, called after saving
+    isExplicit={false} // this is passed along to `SettingsStore.getValueAt`, defaulting to false
+    manualSave={false} // if true, saving is delayed. You will need to call .save() on this component
+
+    // Options for radio buttons
+    group="your-radio-group" // this enables radio button support
+    value="yourValueHere" // the value for this particular option
+/>
 ```
 
 ### Getting the display name for a setting
