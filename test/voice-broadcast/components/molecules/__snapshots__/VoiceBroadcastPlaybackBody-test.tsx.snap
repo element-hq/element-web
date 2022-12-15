@@ -18,9 +18,13 @@ exports[`VoiceBroadcastPlaybackBody when rendering a 0/not-live broadcast should
         class="mx_VoiceBroadcastHeader_content"
       >
         <div
-          class="mx_VoiceBroadcastHeader_room"
+          class="mx_VoiceBroadcastHeader_room_wrapper"
         >
-          My room
+          <div
+            class="mx_VoiceBroadcastHeader_room"
+          >
+            My room
+          </div>
         </div>
         <div
           aria-label="Change input device"
@@ -125,9 +129,13 @@ exports[`VoiceBroadcastPlaybackBody when rendering a 1/live broadcast should ren
         class="mx_VoiceBroadcastHeader_content"
       >
         <div
-          class="mx_VoiceBroadcastHeader_room"
+          class="mx_VoiceBroadcastHeader_room_wrapper"
         >
-          My room
+          <div
+            class="mx_VoiceBroadcastHeader_room"
+          >
+            My room
+          </div>
         </div>
         <div
           aria-label="Change input device"
@@ -240,9 +248,13 @@ exports[`VoiceBroadcastPlaybackBody when rendering a buffering voice broadcast s
         class="mx_VoiceBroadcastHeader_content"
       >
         <div
-          class="mx_VoiceBroadcastHeader_room"
+          class="mx_VoiceBroadcastHeader_room_wrapper"
         >
-          My room
+          <div
+            class="mx_VoiceBroadcastHeader_room"
+          >
+            My room
+          </div>
         </div>
         <div
           aria-label="Change input device"
@@ -374,9 +386,13 @@ exports[`VoiceBroadcastPlaybackBody when rendering a playing broadcast in pip mo
           tabindex="0"
         >
           <div
-            class="mx_VoiceBroadcastHeader_room"
+            class="mx_VoiceBroadcastHeader_room_wrapper"
           >
-            My room
+            <div
+              class="mx_VoiceBroadcastHeader_room"
+            >
+              My room
+            </div>
           </div>
         </div>
         <div
@@ -482,9 +498,13 @@ exports[`VoiceBroadcastPlaybackBody when rendering a playing broadcast should re
         class="mx_VoiceBroadcastHeader_content"
       >
         <div
-          class="mx_VoiceBroadcastHeader_room"
+          class="mx_VoiceBroadcastHeader_room_wrapper"
         >
-          My room
+          <div
+            class="mx_VoiceBroadcastHeader_room"
+          >
+            My room
+          </div>
         </div>
         <div
           aria-label="Change input device"
@@ -589,9 +609,13 @@ exports[`VoiceBroadcastPlaybackBody when rendering a stopped broadcast should re
         class="mx_VoiceBroadcastHeader_content"
       >
         <div
-          class="mx_VoiceBroadcastHeader_room"
+          class="mx_VoiceBroadcastHeader_room_wrapper"
         >
-          My room
+          <div
+            class="mx_VoiceBroadcastHeader_room"
+          >
+            My room
+          </div>
         </div>
         <div
           aria-label="Change input device"

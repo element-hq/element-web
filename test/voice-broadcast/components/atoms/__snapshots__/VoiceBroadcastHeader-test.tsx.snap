@@ -15,9 +15,13 @@ exports[`VoiceBroadcastHeader when rendering a buffering live broadcast header w
       class="mx_VoiceBroadcastHeader_content"
     >
       <div
-        class="mx_VoiceBroadcastHeader_room"
+        class="mx_VoiceBroadcastHeader_room_wrapper"
       >
-        !room:example.com
+        <div
+          class="mx_VoiceBroadcastHeader_room"
+        >
+          !room:example.com
+        </div>
       </div>
       <div
         aria-label="Change input device"
@@ -68,9 +72,13 @@ exports[`VoiceBroadcastHeader when rendering a live (grey) broadcast header with
       class="mx_VoiceBroadcastHeader_content"
     >
       <div
-        class="mx_VoiceBroadcastHeader_room"
+        class="mx_VoiceBroadcastHeader_room_wrapper"
       >
-        !room:example.com
+        <div
+          class="mx_VoiceBroadcastHeader_room"
+        >
+          !room:example.com
+        </div>
       </div>
       <div
         aria-label="Change input device"
@@ -121,9 +129,13 @@ exports[`VoiceBroadcastHeader when rendering a live broadcast header with broadc
       class="mx_VoiceBroadcastHeader_content"
     >
       <div
-        class="mx_VoiceBroadcastHeader_room"
+        class="mx_VoiceBroadcastHeader_room_wrapper"
       >
-        !room:example.com
+        <div
+          class="mx_VoiceBroadcastHeader_room"
+        >
+          !room:example.com
+        </div>
       </div>
       <div
         aria-label="Change input device"
@@ -190,9 +202,13 @@ exports[`VoiceBroadcastHeader when rendering a non-live broadcast header should 
       class="mx_VoiceBroadcastHeader_content"
     >
       <div
-        class="mx_VoiceBroadcastHeader_room"
+        class="mx_VoiceBroadcastHeader_room_wrapper"
       >
-        !room:example.com
+        <div
+          class="mx_VoiceBroadcastHeader_room"
+        >
+          !room:example.com
+        </div>
       </div>
       <div
         aria-label="Change input device"

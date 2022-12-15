@@ -18,14 +18,12 @@ import React, { ReactElement } from "react";
 import classNames from "classnames";
 
 import {
-    VoiceBroadcastControl,
     VoiceBroadcastHeader,
     VoiceBroadcastPlayback,
+    VoiceBroadcastPlaybackControl,
     VoiceBroadcastPlaybackState,
 } from "../..";
 import { useVoiceBroadcastPlayback } from "../../hooks/useVoiceBroadcastPlayback";
-import { Icon as PlayIcon } from "../../../../res/img/element-icons/play.svg";
-import { Icon as PauseIcon } from "../../../../res/img/element-icons/pause.svg";
 import { Icon as Back30sIcon } from "../../../../res/img/element-icons/Back30s.svg";
 import { Icon as Forward30sIcon } from "../../../../res/img/element-icons/Forward30s.svg";
 import { _t } from "../../../languageHandler";
@@ -42,32 +40,6 @@ interface VoiceBroadcastPlaybackBodyProps {
 
 export const VoiceBroadcastPlaybackBody: React.FC<VoiceBroadcastPlaybackBodyProps> = ({ pip = false, playback }) => {
     const { times, liveness, playbackState, room, sender, toggle } = useVoiceBroadcastPlayback(playback);
-
-    let controlIcon: React.FC<React.SVGProps<SVGSVGElement>>;
-    let controlLabel: string;
-    let className = "";
-
-    switch (playbackState) {
-        case VoiceBroadcastPlaybackState.Stopped:
-            controlIcon = PlayIcon;
-            className = "mx_VoiceBroadcastControl-play";
-            controlLabel = _t("play voice broadcast");
-            break;
-        case VoiceBroadcastPlaybackState.Paused:
-            controlIcon = PlayIcon;
-            className = "mx_VoiceBroadcastControl-play";
-            controlLabel = _t("resume voice broadcast");
-            break;
-        case VoiceBroadcastPlaybackState.Buffering:
-        case VoiceBroadcastPlaybackState.Playing:
-            controlIcon = PauseIcon;
-            controlLabel = _t("pause voice broadcast");
-            break;
-    }
-
-    const control = (
-        <VoiceBroadcastControl className={className} label={controlLabel} icon={controlIcon} onClick={toggle} />
-    );
 
     let seekBackwardButton: ReactElement | null = null;
     let seekForwardButton: ReactElement | null = null;
@@ -107,7 +79,7 @@ export const VoiceBroadcastPlaybackBody: React.FC<VoiceBroadcastPlaybackBodyProp
             />
             <div className="mx_VoiceBroadcastBody_controls">
                 {seekBackwardButton}
-                {control}
+                <VoiceBroadcastPlaybackControl state={playbackState} onClick={toggle} />
                 {seekForwardButton}
             </div>
             <SeekBar playback={playback} />

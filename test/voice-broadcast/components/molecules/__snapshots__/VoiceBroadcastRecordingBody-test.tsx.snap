@@ -18,9 +18,13 @@ exports[`VoiceBroadcastRecordingBody when rendering a live broadcast should rend
         class="mx_VoiceBroadcastHeader_content"
       >
         <div
-          class="mx_VoiceBroadcastHeader_room"
+          class="mx_VoiceBroadcastHeader_room_wrapper"
         >
-          My room
+          <div
+            class="mx_VoiceBroadcastHeader_room"
+          >
+            My room
+          </div>
         </div>
         <div
           aria-label="Change input device"
@@ -67,9 +71,13 @@ exports[`VoiceBroadcastRecordingBody when rendering a paused broadcast should re
         class="mx_VoiceBroadcastHeader_content"
       >
         <div
-          class="mx_VoiceBroadcastHeader_room"
+          class="mx_VoiceBroadcastHeader_room_wrapper"
         >
-          My room
+          <div
+            class="mx_VoiceBroadcastHeader_room"
+          >
+            My room
+          </div>
         </div>
         <div
           aria-label="Change input device"

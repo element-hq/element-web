@@ -21,6 +21,7 @@ limitations under the License.
     display: inline-block;
     font-size: $font-12px;
     padding: $spacing-12;
+    width: 271px;
 
     .mx_Clock {
         line-height: 1;
@@ -30,6 +31,24 @@ limitations under the License.
 .mx_VoiceBroadcastBody--pip {
     background-color: $system;
     box-shadow: 0 2px 8px 0 #0000004a;
+}
+
+.mx_VoiceBroadcastBody--small {
+    display: flex;
+    gap: $spacing-8;
+    width: 192px;
+
+    .mx_VoiceBroadcastHeader {
+        margin-bottom: 0;
+    }
+
+    .mx_VoiceBroadcastControl {
+        align-self: center;
+    }
+
+    .mx_LiveBadge {
+        margin-top: 4px;
+    }
 }
 
 .mx_VoiceBroadcastBody_divider {
@@ -55,4 +74,10 @@ limitations under the License.
 .mx_AccessibleButton.mx_VoiceBroadcastBody_blockButton {
     display: flex;
     gap: $spacing-8;
+}
+
+.mx_VoiceBroadcastBody__small-close {
+    right: 8px;
+    position: absolute;
+    top: 8px;
 }

@@ -34,12 +34,14 @@ import AccessibleTooltipButton from "../../../components/views/elements/Accessib
 interface VoiceBroadcastHeaderProps {
     linkToRoom?: boolean;
     live?: VoiceBroadcastLiveness;
+    liveBadgePosition?: "middle" | "right";
     onCloseClick?: () => void;
     onMicrophoneLineClick?: ((e: ButtonEvent) => void | Promise<void>) | null;
     room: Room;
     microphoneLabel?: string;
     showBroadcast?: boolean;
     showBuffering?: boolean;
+    bufferingPosition?: "line" | "title";
     timeLeft?: number;
     showClose?: boolean;
 }
@@ -47,12 +49,14 @@ interface VoiceBroadcastHeaderProps {
 export const VoiceBroadcastHeader: React.FC<VoiceBroadcastHeaderProps> = ({
     linkToRoom = false,
     live = "not-live",
+    liveBadgePosition = "right",
     onCloseClick = () => {},
     onMicrophoneLineClick = null,
     room,
     microphoneLabel,
     showBroadcast = false,
     showBuffering = false,
+    bufferingPosition = "line",
     showClose = false,
     timeLeft,
 }) => {
@@ -78,7 +82,7 @@ export const VoiceBroadcastHeader: React.FC<VoiceBroadcastHeaderProps> = ({
         </div>
     );
 
-    const buffering = showBuffering && (
+    const bufferingLine = showBuffering && bufferingPosition === "line" && (
         <div className="mx_VoiceBroadcastHeader_line">
             <Spinner w={14} h={14} />
             {_t("Buffering…")}
@@ -110,7 +114,12 @@ export const VoiceBroadcastHeader: React.FC<VoiceBroadcastHeaderProps> = ({
     };
 
     let roomAvatar = <RoomAvatar room={room} width={32} height={32} />;
-    let roomName = <div className="mx_VoiceBroadcastHeader_room">{room.name}</div>;
+    let roomName = (
+        <div className="mx_VoiceBroadcastHeader_room_wrapper">
+            <div className="mx_VoiceBroadcastHeader_room">{room.name}</div>
+            {showBuffering && bufferingPosition === "title" && <Spinner w={12} h={12} />}
+        </div>
+    );
 
     if (linkToRoom) {
         roomAvatar = <AccessibleButton onClick={onRoomAvatarOrNameClick}>{roomAvatar}</AccessibleButton>;
@@ -126,9 +135,10 @@ export const VoiceBroadcastHeader: React.FC<VoiceBroadcastHeaderProps> = ({
                 {microphoneLine}
                 {timeLeftLine}
                 {broadcast}
-                {buffering}
+                {bufferingLine}
+                {liveBadgePosition === "middle" && liveBadge}
             </div>
-            {liveBadge}
+            {liveBadgePosition === "right" && liveBadge}
             {closeButton}
         </div>
     );

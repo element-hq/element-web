@@ -193,7 +193,7 @@ describe("PipView", () => {
         new RoomViewStore(defaultDispatcher, sdkContext);
     };
 
-    const startVoiceBroadcastPlayback = (room: Room): MatrixEvent => {
+    const mkVoiceBroadcast = (room: Room): MatrixEvent => {
         const infoEvent = makeVoiceBroadcastInfoStateEvent();
         room.currentState.setStateEvents([infoEvent]);
         defaultDispatcher.dispatch<IRoomStateEventsActionPayload>(
@@ -278,7 +278,7 @@ describe("PipView", () => {
 
     describe("when there is a voice broadcast playback and pre-recording", () => {
         beforeEach(() => {
-            startVoiceBroadcastPlayback(room);
+            mkVoiceBroadcast(room);
             setUpVoiceBroadcastPreRecording();
             renderPip();
         });
@@ -301,13 +301,31 @@ describe("PipView", () => {
         });
     });
 
+    describe("when listening to a voice broadcast in a room and then switching to another room", () => {
+        beforeEach(async () => {
+            setUpRoomViewStore();
+            viewRoom(room.roomId);
+            mkVoiceBroadcast(room);
+            await voiceBroadcastPlaybacksStore.getCurrent()?.start();
+            viewRoom(room2.roomId);
+            renderPip();
+        });
+
+        it("should render the small voice broadcast playback PiP", () => {
+            // check for the „pause voice broadcast“ button
+            expect(screen.getByLabelText("pause voice broadcast")).toBeInTheDocument();
+            // check for the absence of the „30s forward“ button
+            expect(screen.queryByLabelText("30s forward")).not.toBeInTheDocument();
+        });
+    });
+
     describe("when viewing a room with a live voice broadcast", () => {
-        let startEvent: MatrixEvent | null = null;
+        let startEvent!: MatrixEvent;
 
         beforeEach(() => {
             setUpRoomViewStore();
             viewRoom(room.roomId);
-            startEvent = startVoiceBroadcastPlayback(room);
+            startEvent = mkVoiceBroadcast(room);
             renderPip();
         });
 

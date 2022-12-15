@@ -1,0 +1,61 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<VoiceBroadcastPlaybackControl /> should render state 0 as expected 1`] = `
+<div>
+  <div
+    aria-label="resume voice broadcast"
+    class="mx_AccessibleButton mx_VoiceBroadcastControl mx_VoiceBroadcastControl-play"
+    role="button"
+    tabindex="0"
+  >
+    <div
+      class="mx_Icon mx_Icon_16"
+    />
+  </div>
+</div>
+`;
+
+exports[`<VoiceBroadcastPlaybackControl /> should render state 1 as expected 1`] = `
+<div>
+  <div
+    aria-label="pause voice broadcast"
+    class="mx_AccessibleButton mx_VoiceBroadcastControl"
+    role="button"
+    tabindex="0"
+  >
+    <div
+      class="mx_Icon mx_Icon_16"
+    />
+  </div>
+</div>
+`;
+
+exports[`<VoiceBroadcastPlaybackControl /> should render state 2 as expected 1`] = `
+<div>
+  <div
+    aria-label="play voice broadcast"
+    class="mx_AccessibleButton mx_VoiceBroadcastControl mx_VoiceBroadcastControl-play"
+    role="button"
+    tabindex="0"
+  >
+    <div
+      class="mx_Icon mx_Icon_16"
+    />
+  </div>
+</div>
+`;
+
+exports[`<VoiceBroadcastPlaybackControl /> should render state 3 as expected 1`] = `
+<div>
+  <div
+    aria-label="pause voice broadcast"
+    class="mx_AccessibleButton mx_VoiceBroadcastControl"
+    role="button"
+    tabindex="0"
+  >
+    <div
+      class="mx_Icon mx_Icon_16"
+    />
+  </div>
+</div>
+`;

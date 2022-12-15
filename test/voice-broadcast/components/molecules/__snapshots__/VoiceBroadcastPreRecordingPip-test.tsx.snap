@@ -29,9 +29,13 @@ exports[`VoiceBroadcastPreRecordingPip when rendered should match the snapshot 1
           tabindex="0"
         >
           <div
-            class="mx_VoiceBroadcastHeader_room"
+            class="mx_VoiceBroadcastHeader_room_wrapper"
           >
-            !room@example.com
+            <div
+              class="mx_VoiceBroadcastHeader_room"
+            >
+              !room@example.com
+            </div>
           </div>
         </div>
         <div

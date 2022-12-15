@@ -17,7 +17,7 @@ limitations under the License.
     gap: $spacing-8;
     line-height: 20px;
     margin-bottom: $spacing-16;
-    width: 266px;
+    min-width: 0;
 }
 
 .mx_VoiceBroadcastHeader_content {
@@ -25,9 +25,17 @@ limitations under the License.
     min-width: 0;
 }
 
+.mx_VoiceBroadcastHeader_room_wrapper {
+    align-items: center;
+    display: flex;
+    gap: 4px;
+    justify-content: flex-start;
+}
+
 .mx_VoiceBroadcastHeader_room {
     font-size: $font-12px;
     font-weight: $font-semi-bold;
+    min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
