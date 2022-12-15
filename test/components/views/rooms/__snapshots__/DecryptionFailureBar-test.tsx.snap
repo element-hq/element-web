@@ -1,0 +1,573 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<DecryptionFailureBar /> Displays a general error message if there are no other verified devices 1`] = `
+<div
+  class="mx_DecryptionFailureBar"
+>
+  <div
+    class="mx_DecryptionFailureBar_icon"
+  />
+  <div
+    class="mx_DecryptionFailureBar_message"
+  >
+    <div
+      class="mx_DecryptionFailureBar_message_headline"
+    >
+      Some messages could not be decrypted
+    </div>
+    <div
+      class="mx_DecryptionFailureBar_message_body"
+    >
+      Unfortunately, there are no other verified devices to request decryption keys from. Signing in and verifying other devices may help avoid this situation in the future.
+    </div>
+  </div>
+  <div
+    class="mx_DecryptionFailureBar_button"
+  />
+</div>
+`;
+
+exports[`<DecryptionFailureBar /> Displays a loading spinner 1`] = `
+<div
+  class="mx_DecryptionFailureBar"
+>
+  <div
+    class="mx_Spinner"
+  >
+    <div
+      aria-label="Loading..."
+      class="mx_Spinner_icon"
+      data-testid="spinner"
+      role="progressbar"
+      style="width: 32px; height: 32px;"
+    />
+  </div>
+  <div
+    class="mx_DecryptionFailureBar_message"
+  >
+    <div
+      class="mx_DecryptionFailureBar_message_headline"
+    >
+      Decrypting messages...
+    </div>
+    <div
+      class="mx_DecryptionFailureBar_message_body"
+    >
+      Please wait as we try to decrypt your messages. This may take a few moments.
+    </div>
+  </div>
+  <div
+    class="mx_DecryptionFailureBar_button"
+  />
+</div>
+`;
+
+exports[`<DecryptionFailureBar /> Displays button to resend key requests if we are verified 1`] = `
+<div
+  class="mx_DecryptionFailureBar"
+>
+  <div
+    class="mx_DecryptionFailureBar_icon"
+  />
+  <div
+    class="mx_DecryptionFailureBar_message"
+  >
+    <div
+      class="mx_DecryptionFailureBar_message_headline"
+    >
+      Open another device to load encrypted messages
+    </div>
+    <div
+      class="mx_DecryptionFailureBar_message_body"
+    >
+      This device is requesting decryption keys from your other devices. Opening one of your other devices may speed this up.
+    </div>
+  </div>
+  <div
+    class="mx_DecryptionFailureBar_button"
+  >
+    <div
+      class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline"
+      role="button"
+      tabindex="0"
+    >
+      View your device list
+    </div>
+  </div>
+  <div
+    class="mx_DecryptionFailureBar_button"
+  >
+    <div
+      class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+      role="button"
+      tabindex="0"
+    >
+      Resend key requests
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<DecryptionFailureBar /> Displays button to resend key requests if we are verified 2`] = `
+<div
+  class="mx_DecryptionFailureBar"
+>
+  <div
+    class="mx_DecryptionFailureBar_icon"
+  />
+  <div
+    class="mx_DecryptionFailureBar_message"
+  >
+    <div
+      class="mx_DecryptionFailureBar_message_headline"
+    >
+      Open another device to load encrypted messages
+    </div>
+    <div
+      class="mx_DecryptionFailureBar_message_body"
+    >
+      This device is requesting decryption keys from your other devices. Opening one of your other devices may speed this up.
+    </div>
+  </div>
+  <div
+    class="mx_DecryptionFailureBar_button"
+  >
+    <div
+      class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline"
+      role="button"
+      tabindex="0"
+    >
+      View your device list
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<DecryptionFailureBar /> Displays the button to resend key requests only if there are sessions we haven't already requested 1`] = `
+<div
+  class="mx_DecryptionFailureBar"
+>
+  <div
+    class="mx_DecryptionFailureBar_icon"
+  />
+  <div
+    class="mx_DecryptionFailureBar_message"
+  >
+    <div
+      class="mx_DecryptionFailureBar_message_headline"
+    >
+      Open another device to load encrypted messages
+    </div>
+    <div
+      class="mx_DecryptionFailureBar_message_body"
+    >
+      This device is requesting decryption keys from your other devices. Opening one of your other devices may speed this up.
+    </div>
+  </div>
+  <div
+    class="mx_DecryptionFailureBar_button"
+  >
+    <div
+      class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline"
+      role="button"
+      tabindex="0"
+    >
+      View your device list
+    </div>
+  </div>
+  <div
+    class="mx_DecryptionFailureBar_button"
+  >
+    <div
+      class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+      role="button"
+      tabindex="0"
+    >
+      Resend key requests
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<DecryptionFailureBar /> Displays the button to resend key requests only if there are sessions we haven't already requested 2`] = `
+<div
+  class="mx_DecryptionFailureBar"
+>
+  <div
+    class="mx_DecryptionFailureBar_icon"
+  />
+  <div
+    class="mx_DecryptionFailureBar_message"
+  >
+    <div
+      class="mx_DecryptionFailureBar_message_headline"
+    >
+      Open another device to load encrypted messages
+    </div>
+    <div
+      class="mx_DecryptionFailureBar_message_body"
+    >
+      This device is requesting decryption keys from your other devices. Opening one of your other devices may speed this up.
+    </div>
+  </div>
+  <div
+    class="mx_DecryptionFailureBar_button"
+  >
+    <div
+      class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline"
+      role="button"
+      tabindex="0"
+    >
+      View your device list
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<DecryptionFailureBar /> Displays the button to resend key requests only if there are sessions we haven't already requested 3`] = `
+<div
+  class="mx_DecryptionFailureBar"
+>
+  <div
+    class="mx_DecryptionFailureBar_icon"
+  />
+  <div
+    class="mx_DecryptionFailureBar_message"
+  >
+    <div
+      class="mx_DecryptionFailureBar_message_headline"
+    >
+      Open another device to load encrypted messages
+    </div>
+    <div
+      class="mx_DecryptionFailureBar_message_body"
+    >
+      This device is requesting decryption keys from your other devices. Opening one of your other devices may speed this up.
+    </div>
+  </div>
+  <div
+    class="mx_DecryptionFailureBar_button"
+  >
+    <div
+      class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline"
+      role="button"
+      tabindex="0"
+    >
+      View your device list
+    </div>
+  </div>
+  <div
+    class="mx_DecryptionFailureBar_button"
+  >
+    <div
+      class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+      role="button"
+      tabindex="0"
+    >
+      Resend key requests
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<DecryptionFailureBar /> Displays the button to resend key requests only if there are sessions we haven't already requested 4`] = `
+<div
+  class="mx_DecryptionFailureBar"
+>
+  <div
+    class="mx_DecryptionFailureBar_icon"
+  />
+  <div
+    class="mx_DecryptionFailureBar_message"
+  >
+    <div
+      class="mx_DecryptionFailureBar_message_headline"
+    >
+      Open another device to load encrypted messages
+    </div>
+    <div
+      class="mx_DecryptionFailureBar_message_body"
+    >
+      This device is requesting decryption keys from your other devices. Opening one of your other devices may speed this up.
+    </div>
+  </div>
+  <div
+    class="mx_DecryptionFailureBar_button"
+  >
+    <div
+      class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline"
+      role="button"
+      tabindex="0"
+    >
+      View your device list
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<DecryptionFailureBar /> Does not display a button to send key requests if we are unverified 1`] = `
+<div
+  class="mx_DecryptionFailureBar"
+>
+  <div
+    class="mx_DecryptionFailureBar_icon"
+  />
+  <div
+    class="mx_DecryptionFailureBar_message"
+  >
+    <div
+      class="mx_DecryptionFailureBar_message_headline"
+    >
+      Verify this device to access all messages
+    </div>
+    <div
+      class="mx_DecryptionFailureBar_message_body"
+    >
+      This device was unable to decrypt some messages because it has not been verified yet.
+    </div>
+  </div>
+  <div
+    class="mx_DecryptionFailureBar_button"
+  >
+    <div
+      class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+      role="button"
+      tabindex="0"
+    >
+      Verify
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<DecryptionFailureBar /> Handles device updates 1`] = `
+<div
+  class="mx_DecryptionFailureBar"
+>
+  <div
+    class="mx_DecryptionFailureBar_icon"
+  />
+  <div
+    class="mx_DecryptionFailureBar_message"
+  >
+    <div
+      class="mx_DecryptionFailureBar_message_headline"
+    >
+      Verify this device to access all messages
+    </div>
+    <div
+      class="mx_DecryptionFailureBar_message_body"
+    >
+      This device was unable to decrypt some messages because it has not been verified yet.
+    </div>
+  </div>
+  <div
+    class="mx_DecryptionFailureBar_button"
+  >
+    <div
+      class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+      role="button"
+      tabindex="0"
+    >
+      Verify
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<DecryptionFailureBar /> Handles device updates 2`] = `
+<div
+  class="mx_DecryptionFailureBar"
+>
+  <div
+    class="mx_DecryptionFailureBar_icon"
+  />
+  <div
+    class="mx_DecryptionFailureBar_message"
+  >
+    <div
+      class="mx_DecryptionFailureBar_message_headline"
+    >
+      Open another device to load encrypted messages
+    </div>
+    <div
+      class="mx_DecryptionFailureBar_message_body"
+    >
+      This device is requesting decryption keys from your other devices. Opening one of your other devices may speed this up.
+    </div>
+  </div>
+  <div
+    class="mx_DecryptionFailureBar_button"
+  >
+    <div
+      class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline"
+      role="button"
+      tabindex="0"
+    >
+      View your device list
+    </div>
+  </div>
+  <div
+    class="mx_DecryptionFailureBar_button"
+  >
+    <div
+      class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+      role="button"
+      tabindex="0"
+    >
+      Resend key requests
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<DecryptionFailureBar /> Prompts the user to reset if they have no other verified devices and no backups 1`] = `
+<div
+  class="mx_DecryptionFailureBar"
+>
+  <div
+    class="mx_DecryptionFailureBar_icon"
+  />
+  <div
+    class="mx_DecryptionFailureBar_message"
+  >
+    <div
+      class="mx_DecryptionFailureBar_message_headline"
+    >
+      Reset your keys to prevent future decryption errors
+    </div>
+    <div
+      class="mx_DecryptionFailureBar_message_body"
+    >
+      You will not be able to access old undecryptable messages, but resetting your keys will allow you to receive new messages.
+    </div>
+  </div>
+  <div
+    class="mx_DecryptionFailureBar_button"
+  >
+    <div
+      class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+      role="button"
+      tabindex="0"
+    >
+      Reset
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<DecryptionFailureBar /> Prompts the user to verify if they have backups 1`] = `
+<div
+  class="mx_DecryptionFailureBar"
+>
+  <div
+    class="mx_DecryptionFailureBar_icon"
+  />
+  <div
+    class="mx_DecryptionFailureBar_message"
+  >
+    <div
+      class="mx_DecryptionFailureBar_message_headline"
+    >
+      Verify this device to access all messages
+    </div>
+    <div
+      class="mx_DecryptionFailureBar_message_body"
+    >
+      This device was unable to decrypt some messages because it has not been verified yet.
+    </div>
+  </div>
+  <div
+    class="mx_DecryptionFailureBar_button"
+  >
+    <div
+      class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+      role="button"
+      tabindex="0"
+    >
+      Verify
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<DecryptionFailureBar /> Prompts the user to verify if they have other devices 1`] = `
+<div
+  class="mx_DecryptionFailureBar"
+>
+  <div
+    class="mx_DecryptionFailureBar_icon"
+  />
+  <div
+    class="mx_DecryptionFailureBar_message"
+  >
+    <div
+      class="mx_DecryptionFailureBar_message_headline"
+    >
+      Verify this device to access all messages
+    </div>
+    <div
+      class="mx_DecryptionFailureBar_message_body"
+    >
+      This device was unable to decrypt some messages because it has not been verified yet.
+    </div>
+  </div>
+  <div
+    class="mx_DecryptionFailureBar_button"
+  >
+    <div
+      class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+      role="button"
+      tabindex="0"
+    >
+      Verify
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<DecryptionFailureBar /> Recommends opening other devices if there are other verified devices 1`] = `
+<div
+  class="mx_DecryptionFailureBar"
+>
+  <div
+    class="mx_DecryptionFailureBar_icon"
+  />
+  <div
+    class="mx_DecryptionFailureBar_message"
+  >
+    <div
+      class="mx_DecryptionFailureBar_message_headline"
+    >
+      Open another device to load encrypted messages
+    </div>
+    <div
+      class="mx_DecryptionFailureBar_message_body"
+    >
+      This device is requesting decryption keys from your other devices. Opening one of your other devices may speed this up.
+    </div>
+  </div>
+  <div
+    class="mx_DecryptionFailureBar_button"
+  >
+    <div
+      class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline"
+      role="button"
+      tabindex="0"
+    >
+      View your device list
+    </div>
+  </div>
+  <div
+    class="mx_DecryptionFailureBar_button"
+  >
+    <div
+      class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+      role="button"
+      tabindex="0"
+    >
+      Resend key requests
+    </div>
+  </div>
+</div>
+`;

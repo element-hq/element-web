@@ -69,7 +69,7 @@ function stopSynapse(synapse?: SynapseInstance): Chainable<AUTWindow> {
     });
 }
 
-interface Credentials {
+export interface Credentials {
     accessToken: string;
     userId: string;
     deviceId: string;

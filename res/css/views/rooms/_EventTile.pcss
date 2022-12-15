@@ -685,6 +685,11 @@ $left-gutter: 64px;
         mask-image: url("$(res)/img/e2e/normal.svg");
         background-color: $header-panel-text-primary-color;
     }
+
+    &.mx_EventTile_e2eIcon_decryption_failure::after {
+        mask-image: url("$(res)/img/e2e/decryption-failure.svg");
+        background-color: $secondary-content;
+    }
 }
 
 .mx_EventTile_body {
@@ -791,33 +796,6 @@ $left-gutter: 64px;
 
 .mx_EventTile_expandButton {
     mask-image: url("$(res)/img/element-icons/maximise-expand.svg");
-}
-
-.mx_EventTile_keyRequestInfo {
-    font-size: $font-12px;
-
-    .mx_EventTile_keyRequestInfo_text {
-        opacity: 0.5;
-
-        .mx_AccessibleButton {
-            color: $primary-content;
-            text-decoration: underline;
-        }
-    }
-}
-
-.mx_EventTile_keyRequestInfo_tooltip_contents p {
-    text-align: auto;
-    margin-left: 3px;
-    margin-right: 3px;
-
-    &:first-child {
-        margin-top: 0px;
-    }
-
-    &:last-child {
-        margin-bottom: 0px;
-    }
 }
 
 .mx_EventTile_tileError {

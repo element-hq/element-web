@@ -40,6 +40,7 @@ import MPollBody from "./MPollBody";
 import MLocationBody from "./MLocationBody";
 import MjolnirBody from "./MjolnirBody";
 import MBeaconBody from "./MBeaconBody";
+import DecryptionFailureBody from "./DecryptionFailureBody";
 import { GetRelationsForEvent, IEventTileOps } from "../rooms/EventTile";
 import { VoiceBroadcastBody, VoiceBroadcastInfoEventType, VoiceBroadcastInfoState } from "../../../voice-broadcast";
 
@@ -152,7 +153,9 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
         let BodyType: React.ComponentType<Partial<IBodyProps>> | ReactAnyComponent = RedactedBody;
         if (!this.props.mxEvent.isRedacted()) {
             // only resolve BodyType if event is not redacted
-            if (type && this.evTypes.has(type)) {
+            if (this.props.mxEvent.isDecryptionFailure()) {
+                BodyType = DecryptionFailureBody;
+            } else if (type && this.evTypes.has(type)) {
                 BodyType = this.evTypes.get(type);
             } else if (msgtype && this.bodyTypes.has(msgtype)) {
                 BodyType = this.bodyTypes.get(msgtype);

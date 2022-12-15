@@ -478,11 +478,9 @@ limitations under the License.
             grid-template:
                 "reply reply" auto
                 "shield body" auto
-                "shield link" auto
                 / auto 1fr;
 
             .mx_UnknownBody,
-            .mx_EventTile_keyRequestInfo,
             .mx_ReplyChain_wrapper,
             .mx_ViewSourceEvent {
                 min-width: 0; /* Prevent a grid blowout */
@@ -490,14 +488,13 @@ limitations under the License.
 
             .mx_EventTile_e2eIcon {
                 grid-area: shield;
+                margin-top: auto;
+                margin-bottom: auto;
             }
 
-            .mx_UnknownBody {
+            .mx_UnknownBody,
+            .mx_DecryptionFailureBody {
                 grid-area: body;
-            }
-
-            .mx_EventTile_keyRequestInfo {
-                grid-area: link;
             }
 
             .mx_ReplyChain_wrapper {
@@ -512,7 +509,6 @@ limitations under the License.
                 align-items: center;
                 grid-template:
                     "shield source" auto
-                    "shield link" auto
                     / auto 1fr;
 
                 .mx_ViewSourceEvent {

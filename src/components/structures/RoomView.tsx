@@ -61,6 +61,7 @@ import RoomPreviewBar from "../views/rooms/RoomPreviewBar";
 import RoomPreviewCard from "../views/rooms/RoomPreviewCard";
 import SearchBar, { SearchScope } from "../views/rooms/SearchBar";
 import RoomUpgradeWarningBar from "../views/rooms/RoomUpgradeWarningBar";
+import { DecryptionFailureBar } from "../views/rooms/DecryptionFailureBar";
 import AuxPanel from "../views/rooms/AuxPanel";
 import RoomHeader, { ISearchInfo } from "../views/rooms/RoomHeader";
 import { IOOBData, IThreepidInvite } from "../../stores/ThreepidInviteStore";
@@ -220,6 +221,8 @@ export interface IRoomState {
     threadId?: string;
     liveTimeline?: EventTimeline;
     narrow: boolean;
+    // List of undecryptable events currently visible on-screen
+    visibleDecryptionFailures?: MatrixEvent[];
 }
 
 interface LocalRoomViewProps {
@@ -412,6 +415,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             timelineRenderingType: TimelineRenderingType.Room,
             liveTimeline: undefined,
             narrow: false,
+            visibleDecryptionFailures: [],
         };
 
         this.dispatcherRef = dis.register(this.onAction);
@@ -1166,6 +1170,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     private onEventDecrypted = (ev: MatrixEvent) => {
         if (!this.state.room || !this.state.matrixClientIsReady) return; // not ready at all
         if (ev.getRoomId() !== this.state.room.roomId) return; // not for us
+        this.updateVisibleDecryptionFailures();
         if (ev.isDecryptionFailure()) return;
         this.handleEffects(ev);
     };
@@ -1470,7 +1475,21 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         }
     };
 
-    private onMessageListScroll = (ev) => {
+    private updateVisibleDecryptionFailures = throttle(
+        () =>
+            this.setState((prevState) => ({
+                visibleDecryptionFailures:
+                    this.messagePanel?.getVisibleDecryptionFailures(
+                        // If there were visible failures last time we checked,
+                        // add a margin to provide hysteresis and prevent flickering
+                        (prevState.visibleDecryptionFailures?.length ?? 0) > 0,
+                    ) ?? [],
+            })),
+        500,
+        { leading: false, trailing: true },
+    );
+
+    private onMessageListScroll = () => {
         if (this.messagePanel.isAtEndOfLiveTimeline()) {
             this.setState({
                 numUnreadMessages: 0,
@@ -1482,6 +1501,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             });
         }
         this.updateTopUnreadMessagesBar();
+        this.updateVisibleDecryptionFailures();
     };
 
     private resetJumpToEvent = (eventId?: string) => {
@@ -2028,7 +2048,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
         const hiddenHighlightCount = this.getHiddenHighlightCount();
 
-        let aux = null;
+        let aux: JSX.Element | undefined;
         let previewBar;
         if (this.state.timelineRenderingType === TimelineRenderingType.Search) {
             aux = (
@@ -2079,6 +2099,11 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             );
         }
 
+        let decryptionFailureBar: JSX.Element | undefined;
+        if (this.state.visibleDecryptionFailures && this.state.visibleDecryptionFailures.length > 0) {
+            decryptionFailureBar = <DecryptionFailureBar failures={this.state.visibleDecryptionFailures} />;
+        }
+
         if (this.state.room?.isSpaceRoom() && !this.props.forceTimeline) {
             return (
                 <SpaceRoomView
@@ -2103,6 +2128,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 resizeNotifier={this.props.resizeNotifier}
             >
                 {aux}
+                {decryptionFailureBar}
             </AuxPanel>
         );
 
