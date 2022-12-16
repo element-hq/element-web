@@ -18,13 +18,14 @@ import { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 
 import type { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 import type { ISasEvent } from "matrix-js-sdk/src/crypto/verification/SAS";
+import type { CypressBot } from "../../support/bot";
 import { SynapseInstance } from "../../plugins/synapsedocker";
 import Chainable = Cypress.Chainable;
 
 type EmojiMapping = [emoji: string, name: string];
 interface CryptoTestContext extends Mocha.Context {
     synapse: SynapseInstance;
-    bob: MatrixClient;
+    bob: CypressBot;
 }
 
 const waitForVerificationRequest = (cli: MatrixClient): Promise<VerificationRequest> => {
