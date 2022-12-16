@@ -190,7 +190,7 @@ describe("VoiceBroadcastPlayback", () => {
         describe("and calling start", () => {
             startPlayback();
 
-            itShouldHaveLiveness("grey");
+            itShouldHaveLiveness("live");
 
             it("should be in buffering state", () => {
                 expect(playback.getState()).toBe(VoiceBroadcastPlaybackState.Buffering);
