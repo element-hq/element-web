@@ -44,6 +44,7 @@ import SdkConfig from "../SdkConfig";
 import SlidingSyncController from "./controllers/SlidingSyncController";
 import ThreadBetaController from "./controllers/ThreadBetaController";
 import { FontWatcher } from "./watchers/FontWatcher";
+import RustCryptoSdkController from "./controllers/RustCryptoSdkController";
 
 // These are just a bunch of helper arrays to avoid copy/pasting a bunch of times
 const LEVELS_ROOM_SETTINGS = [
@@ -490,6 +491,17 @@ export const SETTINGS: { [setting: string]: ISetting } = {
                 "(requires compatible homeserver)",
         ),
         default: false,
+    },
+    "feature_rust_crypto": {
+        // use the rust matrix-sdk-crypto-js for crypto.
+        isFeature: true,
+        labsGroup: LabGroup.Developer,
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
+        displayName: _td("Rust cryptography implementation"),
+        description: _td("Under active development. Can currently only be enabled via config.json"),
+        // shouldWarn: true,
+        default: false,
+        controller: new RustCryptoSdkController(),
     },
     "baseFontSize": {
         displayName: _td("Font size"),

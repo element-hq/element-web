@@ -39,6 +39,7 @@ import SecurityCustomisations from "./customisations/Security";
 import { SlidingSyncManager } from "./SlidingSyncManager";
 import CryptoStoreTooNewDialog from "./components/views/dialogs/CryptoStoreTooNewDialog";
 import { _t } from "./languageHandler";
+import { SettingLevel } from "./settings/SettingLevel";
 
 export interface IMatrixClientCreds {
     homeserverUrl: string;
@@ -208,24 +209,8 @@ class MatrixClientPegClass implements IMatrixClientPeg {
         }
 
         // try to initialise e2e on the new client
-        try {
-            // check that we have a version of the js-sdk which includes initCrypto
-            if (!SettingsStore.getValue("lowBandwidth") && this.matrixClient.initCrypto) {
-                await this.matrixClient.initCrypto();
-                this.matrixClient.setCryptoTrustCrossSignedDevices(
-                    !SettingsStore.getValue("e2ee.manuallyVerifyAllSessions"),
-                );
-                await tryToUnlockSecretStorageWithDehydrationKey(this.matrixClient);
-                StorageManager.setCryptoInitialised(true);
-            }
-        } catch (e) {
-            if (e && e.name === "InvalidCryptoStoreError") {
-                // The js-sdk found a crypto DB too new for it to use
-                Modal.createDialog(CryptoStoreTooNewDialog);
-            }
-            // this can happen for a number of reasons, the most likely being
-            // that the olm library was missing. It's not fatal.
-            logger.warn("Unable to initialise e2e", e);
+        if (!SettingsStore.getValue("lowBandwidth")) {
+            await this.initClientCrypto();
         }
 
         const opts = utils.deepCopy(this.opts);
@@ -254,6 +239,48 @@ class MatrixClientPegClass implements IMatrixClientPeg {
         MatrixClientBackedSettingsHandler.matrixClient = this.matrixClient;
 
         return opts;
+    }
+
+    /**
+     * Attempt to initialize the crypto layer on a newly-created MatrixClient
+     */
+    private async initClientCrypto(): Promise<void> {
+        const useRustCrypto = SettingsStore.getValue("feature_rust_crypto");
+
+        // we want to make sure that the same crypto implementation is used throughout the lifetime of a device,
+        // so persist the setting at the device layer
+        // (At some point, we'll allow the user to *enable* the setting via labs, which will migrate their existing
+        // device to the rust-sdk implementation, but that won't change anything here).
+        await SettingsStore.setValue("feature_rust_crypto", null, SettingLevel.DEVICE, useRustCrypto);
+
+        // Now we can initialise the right crypto impl.
+        if (useRustCrypto) {
+            await this.matrixClient.initRustCrypto();
+
+            // TODO: device dehydration and whathaveyou
+            return;
+        }
+
+        // fall back to the libolm layer.
+        try {
+            // check that we have a version of the js-sdk which includes initCrypto
+            if (this.matrixClient.initCrypto) {
+                await this.matrixClient.initCrypto();
+                this.matrixClient.setCryptoTrustCrossSignedDevices(
+                    !SettingsStore.getValue("e2ee.manuallyVerifyAllSessions"),
+                );
+                await tryToUnlockSecretStorageWithDehydrationKey(this.matrixClient);
+                StorageManager.setCryptoInitialised(true);
+            }
+        } catch (e) {
+            if (e instanceof Error && e.name === "InvalidCryptoStoreError") {
+                // The js-sdk found a crypto DB too new for it to use
+                Modal.createDialog(CryptoStoreTooNewDialog);
+            }
+            // this can happen for a number of reasons, the most likely being
+            // that the olm library was missing. It's not fatal.
+            logger.warn("Unable to initialise e2e", e);
+        }
     }
 
     public async start(): Promise<any> {

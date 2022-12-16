@@ -952,6 +952,8 @@
     "Have greater visibility and control over all your sessions.": "Have greater visibility and control over all your sessions.",
     "Our new sessions manager provides better visibility of all your sessions, and greater control over them including the ability to remotely toggle push notifications.": "Our new sessions manager provides better visibility of all your sessions, and greater control over them including the ability to remotely toggle push notifications.",
     "Allow a QR code to be shown in session manager to sign in another device (requires compatible homeserver)": "Allow a QR code to be shown in session manager to sign in another device (requires compatible homeserver)",
+    "Rust cryptography implementation": "Rust cryptography implementation",
+    "Under active development. Can currently only be enabled via config.json": "Under active development. Can currently only be enabled via config.json",
     "Font size": "Font size",
     "Use custom size": "Use custom size",
     "Enable Emoji suggestions while typing": "Enable Emoji suggestions while typing",
