@@ -33,16 +33,16 @@ describe("VoiceBroadcastChunkEvents", () => {
     let chunkEvents: VoiceBroadcastChunkEvents;
 
     beforeEach(() => {
-        eventSeq1Time1 = mkVoiceBroadcastChunkEvent(userId, roomId, 7, 1, 1);
-        eventSeq2Time4 = mkVoiceBroadcastChunkEvent(userId, roomId, 23, 2, 4);
-        eventSeq2Time4Dup = mkVoiceBroadcastChunkEvent(userId, roomId, 3141, 2, 4);
+        eventSeq1Time1 = mkVoiceBroadcastChunkEvent("info1", userId, roomId, 7, 1, 1);
+        eventSeq2Time4 = mkVoiceBroadcastChunkEvent("info1", userId, roomId, 23, 2, 4);
+        eventSeq2Time4Dup = mkVoiceBroadcastChunkEvent("info1", userId, roomId, 3141, 2, 4);
         jest.spyOn(eventSeq2Time4Dup, "getId").mockReturnValue(eventSeq2Time4.getId());
-        eventSeq3Time2 = mkVoiceBroadcastChunkEvent(userId, roomId, 42, 3, 2);
+        eventSeq3Time2 = mkVoiceBroadcastChunkEvent("info1", userId, roomId, 42, 3, 2);
         eventSeq3Time2.setTxnId(txnId);
-        eventSeq3Time2T = mkVoiceBroadcastChunkEvent(userId, roomId, 42, 3, 2);
+        eventSeq3Time2T = mkVoiceBroadcastChunkEvent("info1", userId, roomId, 42, 3, 2);
         eventSeq3Time2T.setTxnId(txnId);
-        eventSeq4Time1 = mkVoiceBroadcastChunkEvent(userId, roomId, 69, 4, 1);
-        eventSeqUTime3 = mkVoiceBroadcastChunkEvent(userId, roomId, 314, undefined, 3);
+        eventSeq4Time1 = mkVoiceBroadcastChunkEvent("info1", userId, roomId, 69, 4, 1);
+        eventSeqUTime3 = mkVoiceBroadcastChunkEvent("info1", userId, roomId, 314, undefined, 3);
         chunkEvents = new VoiceBroadcastChunkEvents();
     });
 

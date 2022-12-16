@@ -15,24 +15,13 @@ limitations under the License.
 */
 
 import { mocked } from "jest-mock";
-import {
-    EventTimelineSet,
-    EventType,
-    MatrixClient,
-    MatrixEvent,
-    MatrixEventEvent,
-    RelationType,
-    Room,
-} from "matrix-js-sdk/src/matrix";
-import { Relations } from "matrix-js-sdk/src/models/relations";
-import { RelationsContainer } from "matrix-js-sdk/src/models/relations-container";
+import { EventType, MatrixClient, MatrixEvent, MatrixEventEvent, RelationType, Room } from "matrix-js-sdk/src/matrix";
 
 import { RelationsHelper, RelationsHelperEvent } from "../../src/events/RelationsHelper";
-import { mkEvent, mkRelationsContainer, mkStubRoom, stubClient } from "../test-utils";
+import { mkEvent, stubClient } from "../test-utils";
 
 describe("RelationsHelper", () => {
     const roomId = "!room:example.com";
-    let userId: string;
     let event: MatrixEvent;
     let relatedEvent1: MatrixEvent;
     let relatedEvent2: MatrixEvent;
@@ -41,62 +30,59 @@ describe("RelationsHelper", () => {
     let client: MatrixClient;
     let relationsHelper: RelationsHelper;
     let onAdd: (event: MatrixEvent) => void;
-    let timelineSet: EventTimelineSet;
-    let relationsContainer: RelationsContainer;
-    let relations: Relations;
-    let relationsOnAdd: (event: MatrixEvent) => void;
 
     beforeEach(() => {
         client = stubClient();
-        userId = client.getUserId() || "";
         mocked(client.relations).mockClear();
-        room = mkStubRoom(roomId, "test room", client);
-        mocked(client.getRoom).mockImplementation((getRoomId?: string) => {
-            if (getRoomId === roomId) {
-                return room;
-            }
-
+        room = new Room(roomId, client, client.getSafeUserId());
+        mocked(client.getRoom).mockImplementation((getRoomId?: string): Room | null => {
+            if (getRoomId === roomId) return room;
             return null;
         });
         event = mkEvent({
             event: true,
             type: EventType.RoomMessage,
             room: roomId,
-            user: userId,
+            user: client.getSafeUserId(),
             content: {},
         });
         relatedEvent1 = mkEvent({
             event: true,
             type: EventType.RoomMessage,
             room: roomId,
-            user: userId,
-            content: { relatedEvent: 1 },
+            user: client.getSafeUserId(),
+            content: {
+                ["m.relates_to"]: {
+                    rel_type: RelationType.Reference,
+                    event_id: event.getId(),
+                },
+            },
         });
         relatedEvent2 = mkEvent({
             event: true,
             type: EventType.RoomMessage,
             room: roomId,
-            user: userId,
-            content: { relatedEvent: 2 },
+            user: client.getSafeUserId(),
+            content: {
+                ["m.relates_to"]: {
+                    rel_type: RelationType.Reference,
+                    event_id: event.getId(),
+                },
+            },
         });
         relatedEvent3 = mkEvent({
             event: true,
             type: EventType.RoomMessage,
             room: roomId,
-            user: userId,
-            content: { relatedEvent: 3 },
+            user: client.getSafeUserId(),
+            content: {
+                ["m.relates_to"]: {
+                    rel_type: RelationType.Reference,
+                    event_id: event.getId(),
+                },
+            },
         });
         onAdd = jest.fn();
-        relationsContainer = mkRelationsContainer();
-        // TODO Michael W: create test utils, remove casts
-        relations = {
-            getRelations: jest.fn(),
-            on: jest.fn().mockImplementation((type, l) => (relationsOnAdd = l)),
-            off: jest.fn(),
-        } as unknown as Relations;
-        timelineSet = {
-            relations: relationsContainer,
-        } as unknown as EventTimelineSet;
     });
 
     afterEach(() => {
@@ -139,13 +125,10 @@ describe("RelationsHelper", () => {
             });
         });
 
-        describe("and relations are created and a new event appears", () => {
+        describe("and a new event appears", () => {
             beforeEach(() => {
-                mocked(room.getUnfilteredTimelineSet).mockReturnValue(timelineSet);
-                mocked(relationsContainer.getChildEventsForEvent).mockReturnValue(relations);
-                mocked(relations.getRelations).mockReturnValue([relatedEvent1]);
+                room.relations.aggregateChildEvent(relatedEvent2);
                 event.emit(MatrixEventEvent.RelationsCreated, RelationType.Reference, EventType.RoomMessage);
-                relationsOnAdd(relatedEvent2);
             });
 
             it("should emit the new event", () => {
@@ -184,9 +167,7 @@ describe("RelationsHelper", () => {
 
     describe("when there is an event with relations", () => {
         beforeEach(() => {
-            mocked(room.getUnfilteredTimelineSet).mockReturnValue(timelineSet);
-            mocked(relationsContainer.getChildEventsForEvent).mockReturnValue(relations);
-            mocked(relations.getRelations).mockReturnValue([relatedEvent1]);
+            room.relations.aggregateChildEvent(relatedEvent1);
             relationsHelper = new RelationsHelper(event, RelationType.Reference, EventType.RoomMessage, client);
             relationsHelper.on(RelationsHelperEvent.Add, onAdd);
         });
@@ -203,7 +184,8 @@ describe("RelationsHelper", () => {
 
         describe("and a new event appears", () => {
             beforeEach(() => {
-                relationsOnAdd(relatedEvent2);
+                room.relations.aggregateChildEvent(relatedEvent2);
+                event.emit(MatrixEventEvent.RelationsCreated, RelationType.Reference, EventType.RoomMessage);
             });
 
             it("should emit the new event", () => {

@@ -15,11 +15,10 @@ limitations under the License.
 */
 
 import { mocked } from "jest-mock";
-import { MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 
 import { Playback, PlaybackState } from "../../../src/audio/Playback";
 import { PlaybackManager } from "../../../src/audio/PlaybackManager";
-import { RelationsHelperEvent } from "../../../src/events/RelationsHelper";
 import { MediaEventHelper } from "../../../src/utils/MediaEventHelper";
 import {
     VoiceBroadcastInfoState,
@@ -44,6 +43,7 @@ describe("VoiceBroadcastPlayback", () => {
     const userId = "@user:example.com";
     let deviceId: string;
     const roomId = "!room:example.com";
+    let room: Room;
     let client: MatrixClient;
     let infoEvent: MatrixEvent;
     let playback: VoiceBroadcastPlayback;
@@ -133,16 +133,13 @@ describe("VoiceBroadcastPlayback", () => {
         });
     };
 
-    beforeAll(() => {
-        client = stubClient();
-        deviceId = client.getDeviceId() || "";
-
-        chunk1Event = mkVoiceBroadcastChunkEvent(userId, roomId, chunk1Length, 1);
-        chunk2Event = mkVoiceBroadcastChunkEvent(userId, roomId, chunk2Length, 2);
+    const createChunkEvents = () => {
+        chunk1Event = mkVoiceBroadcastChunkEvent(infoEvent.getId()!, userId, roomId, chunk1Length, 1);
+        chunk2Event = mkVoiceBroadcastChunkEvent(infoEvent.getId()!, userId, roomId, chunk2Length, 2);
         chunk2Event.setTxnId("tx-id-1");
-        chunk2BEvent = mkVoiceBroadcastChunkEvent(userId, roomId, chunk2Length, 2);
+        chunk2BEvent = mkVoiceBroadcastChunkEvent(infoEvent.getId()!, userId, roomId, chunk2Length, 2);
         chunk2BEvent.setTxnId("tx-id-1");
-        chunk3Event = mkVoiceBroadcastChunkEvent(userId, roomId, chunk3Length, 3);
+        chunk3Event = mkVoiceBroadcastChunkEvent(infoEvent.getId()!, userId, roomId, chunk3Length, 3);
 
         chunk1Helper = mkChunkHelper(chunk1Data);
         chunk2Helper = mkChunkHelper(chunk2Data);
@@ -167,10 +164,17 @@ describe("VoiceBroadcastPlayback", () => {
             if (event === chunk2Event) return chunk2Helper;
             if (event === chunk3Event) return chunk3Helper;
         });
-    });
+    };
 
     beforeEach(() => {
+        client = stubClient();
+        deviceId = client.getDeviceId() || "";
         jest.clearAllMocks();
+        room = new Room(roomId, client, client.getSafeUserId());
+        mocked(client.getRoom).mockImplementation((roomId: string): Room | null => {
+            if (roomId === room.roomId) return room;
+            return null;
+        });
         onStateChanged = jest.fn();
     });
 
@@ -180,10 +184,9 @@ describe("VoiceBroadcastPlayback", () => {
 
     describe(`when there is a ${VoiceBroadcastInfoState.Resumed} broadcast without chunks yet`, () => {
         beforeEach(async () => {
-            // info relation
-            mocked(client.relations).mockResolvedValueOnce({ events: [] });
-            setUpChunkEvents([]);
             infoEvent = mkInfoEvent(VoiceBroadcastInfoState.Resumed);
+            createChunkEvents();
+            room.addLiveEvents([infoEvent]);
             playback = await mkPlayback();
         });
 
@@ -222,9 +225,7 @@ describe("VoiceBroadcastPlayback", () => {
 
             describe("and receiving the first chunk", () => {
                 beforeEach(() => {
-                    // TODO Michael W: Use RelationsHelper
-                    // @ts-ignore
-                    playback.chunkRelationHelper.emit(RelationsHelperEvent.Add, chunk1Event);
+                    room.relations.aggregateChildEvent(chunk1Event);
                 });
 
                 itShouldSetTheStateTo(VoiceBroadcastPlaybackState.Playing);
@@ -243,10 +244,13 @@ describe("VoiceBroadcastPlayback", () => {
 
     describe(`when there is a ${VoiceBroadcastInfoState.Resumed} voice broadcast with some chunks`, () => {
         beforeEach(async () => {
-            // info relation
             mocked(client.relations).mockResolvedValueOnce({ events: [] });
-            setUpChunkEvents([chunk2Event, chunk1Event]);
             infoEvent = mkInfoEvent(VoiceBroadcastInfoState.Resumed);
+            createChunkEvents();
+            setUpChunkEvents([chunk2Event, chunk1Event]);
+            room.addLiveEvents([infoEvent, chunk1Event, chunk2Event]);
+            room.relations.aggregateChildEvent(chunk2Event);
+            room.relations.aggregateChildEvent(chunk1Event);
             playback = await mkPlayback();
         });
 
@@ -256,8 +260,8 @@ describe("VoiceBroadcastPlayback", () => {
 
         describe("and an event with the same transaction Id occurs", () => {
             beforeEach(() => {
-                // @ts-ignore
-                playback.chunkRelationHelper.emit(RelationsHelperEvent.Add, chunk2BEvent);
+                room.addLiveEvents([chunk2BEvent]);
+                room.relations.aggregateChildEvent(chunk2BEvent);
             });
 
             it("durationSeconds should not change", () => {
@@ -284,9 +288,8 @@ describe("VoiceBroadcastPlayback", () => {
 
                 describe("and the next chunk arrived", () => {
                     beforeEach(() => {
-                        // TODO Michael W: Use RelationsHelper
-                        // @ts-ignore
-                        playback.chunkRelationHelper.emit(RelationsHelperEvent.Add, chunk3Event);
+                        room.addLiveEvents([chunk3Event]);
+                        room.relations.aggregateChildEvent(chunk3Event);
                     });
 
                     itShouldSetTheStateTo(VoiceBroadcastPlaybackState.Playing);
@@ -312,8 +315,10 @@ describe("VoiceBroadcastPlayback", () => {
 
     describe("when there is a stopped voice broadcast", () => {
         beforeEach(async () => {
-            setUpChunkEvents([chunk2Event, chunk1Event]);
             infoEvent = mkInfoEvent(VoiceBroadcastInfoState.Stopped);
+            createChunkEvents();
+            setUpChunkEvents([chunk2Event, chunk1Event]);
+            room.addLiveEvents([infoEvent, chunk1Event, chunk2Event]);
             playback = await mkPlayback();
         });
 

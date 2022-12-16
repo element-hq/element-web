@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { EventType, MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
+import { EventType, MatrixEvent, MsgType, RelationType } from "matrix-js-sdk/src/matrix";
 
 import {
     VoiceBroadcastChunkEventType,
@@ -54,6 +54,7 @@ export const mkVoiceBroadcastInfoStateEvent = (
 };
 
 export const mkVoiceBroadcastChunkEvent = (
+    infoEventId: string,
     userId: string,
     roomId: string,
     duration: number,
@@ -75,6 +76,10 @@ export const mkVoiceBroadcastChunkEvent = (
             },
             [VoiceBroadcastChunkEventType]: {
                 ...(sequence ? { sequence } : {}),
+            },
+            ["m.relates_to"]: {
+                rel_type: RelationType.Reference,
+                event_id: infoEventId,
             },
         },
         ts: timestamp,
