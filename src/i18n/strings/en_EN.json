@@ -650,6 +650,8 @@
     "Someone else is already recording a voice broadcast. Wait for their voice broadcast to end to start a new one.": "Someone else is already recording a voice broadcast. Wait for their voice broadcast to end to start a new one.",
     "You ended a <a>voice broadcast</a>": "You ended a <a>voice broadcast</a>",
     "%(senderName)s ended a <a>voice broadcast</a>": "%(senderName)s ended a <a>voice broadcast</a>",
+    "You ended a voice broadcast": "You ended a voice broadcast",
+    "%(senderName)s ended a voice broadcast": "%(senderName)s ended a voice broadcast",
     "Stop live broadcasting?": "Stop live broadcasting?",
     "Are you sure you want to stop your live broadcast?This will end the broadcast and the full recording will be available in the room.": "Are you sure you want to stop your live broadcast?This will end the broadcast and the full recording will be available in the room.",
     "Yes, stop broadcast": "Yes, stop broadcast",

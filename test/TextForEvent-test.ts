@@ -19,12 +19,13 @@ import TestRenderer from "react-test-renderer";
 import { ReactElement } from "react";
 import { mocked } from "jest-mock";
 
-import { getSenderName, textForEvent } from "../src/TextForEvent";
+import { textForEvent } from "../src/TextForEvent";
 import SettingsStore from "../src/settings/SettingsStore";
 import { createTestClient, stubClient } from "./test-utils";
 import { MatrixClientPeg } from "../src/MatrixClientPeg";
 import UserIdentifierCustomisations from "../src/customisations/UserIdentifier";
 import { ElementCall } from "../src/models/Call";
+import { getSenderName } from "../src/utils/event/getSenderName";
 
 jest.mock("../src/settings/SettingsStore");
 jest.mock("../src/customisations/UserIdentifier", () => ({

@@ -23,10 +23,14 @@ import { _t, sanitizeForTranslation } from "../../../languageHandler";
 import { getSenderName, isSelf, shouldPrefixMessagesIn } from "./utils";
 import { getHtmlText } from "../../../HtmlUtils";
 import { stripHTMLReply, stripPlainReply } from "../../../utils/Reply";
+import { VoiceBroadcastChunkEventType } from "../../../voice-broadcast/types";
 
 export class MessageEventPreview implements IPreview {
-    public getTextFor(event: MatrixEvent, tagId?: TagID, isThread?: boolean): string {
+    public getTextFor(event: MatrixEvent, tagId?: TagID, isThread?: boolean): string | null {
         let eventContent = event.getContent();
+
+        // no preview for broadcast chunks
+        if (eventContent[VoiceBroadcastChunkEventType]) return null;
 
         if (event.isRelation(RelationType.Replace)) {
             // It's an edit, generate the preview on the new text

@@ -45,10 +45,7 @@ import RightPanelStore from "./stores/right-panel/RightPanelStore";
 import { highlightEvent, isLocationEvent } from "./utils/EventUtils";
 import { ElementCall } from "./models/Call";
 import { textForVoiceBroadcastStoppedEvent, VoiceBroadcastInfoEventType } from "./voice-broadcast";
-
-export function getSenderName(event: MatrixEvent): string {
-    return event.sender?.name ?? event.getSender() ?? _t("Someone");
-}
+import { getSenderName } from "./utils/event/getSenderName";
 
 function getRoomMemberDisplayname(event: MatrixEvent, userId = event.getSender()): string {
     const client = MatrixClientPeg.get();
