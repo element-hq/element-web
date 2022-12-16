@@ -66,7 +66,7 @@ export default class EditableTextContainer extends React.Component<IProps, IStat
         },
     };
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {

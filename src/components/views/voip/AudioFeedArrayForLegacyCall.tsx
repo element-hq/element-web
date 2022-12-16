@@ -29,7 +29,7 @@ interface IState {
 }
 
 export default class AudioFeedArrayForLegacyCall extends React.Component<IProps, IState> {
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {
@@ -37,21 +37,21 @@ export default class AudioFeedArrayForLegacyCall extends React.Component<IProps,
         };
     }
 
-    componentDidMount() {
+    public componentDidMount() {
         this.props.call.addListener(CallEvent.FeedsChanged, this.onFeedsChanged);
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         this.props.call.removeListener(CallEvent.FeedsChanged, this.onFeedsChanged);
     }
 
-    onFeedsChanged = () => {
+    public onFeedsChanged = () => {
         this.setState({
             feeds: this.props.call.getRemoteFeeds(),
         });
     };
 
-    render() {
+    public render() {
         return this.state.feeds.map((feed, i) => {
             return <AudioFeed feed={feed} key={i} />;
         });

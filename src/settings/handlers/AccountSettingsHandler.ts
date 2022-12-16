@@ -37,7 +37,7 @@ const DEFAULT_SETTINGS_EVENT_TYPE = "im.vector.web.settings";
  * This handler does not make use of the roomId parameter.
  */
 export default class AccountSettingsHandler extends MatrixClientBackedSettingsHandler {
-    constructor(public readonly watchers: WatchManager) {
+    public constructor(public readonly watchers: WatchManager) {
         super();
     }
 

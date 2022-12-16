@@ -53,7 +53,7 @@ export default class RoomUpgradeWarningDialog extends React.Component<IProps, IS
     private readonly isPrivate: boolean;
     private readonly currentVersion: string;
 
-    constructor(props) {
+    public constructor(props) {
         super(props);
 
         const room = MatrixClientPeg.get().getRoom(this.props.roomId);
@@ -100,7 +100,7 @@ export default class RoomUpgradeWarningDialog extends React.Component<IProps, IS
         Modal.createDialog(BugReportDialog, {});
     };
 
-    render() {
+    public render() {
         const brand = SdkConfig.get().brand;
 
         let inviteToggle = null;

@@ -23,38 +23,38 @@ export const baseUrl = `https://${host}`;
  * Generates matrix.to permalinks
  */
 export default class MatrixToPermalinkConstructor extends PermalinkConstructor {
-    constructor() {
+    public constructor() {
         super();
     }
 
-    forEvent(roomId: string, eventId: string, serverCandidates: string[]): string {
+    public forEvent(roomId: string, eventId: string, serverCandidates: string[]): string {
         return `${baseUrl}/#/${roomId}/${eventId}${this.encodeServerCandidates(serverCandidates)}`;
     }
 
-    forRoom(roomIdOrAlias: string, serverCandidates: string[]): string {
+    public forRoom(roomIdOrAlias: string, serverCandidates: string[]): string {
         return `${baseUrl}/#/${roomIdOrAlias}${this.encodeServerCandidates(serverCandidates)}`;
     }
 
-    forUser(userId: string): string {
+    public forUser(userId: string): string {
         return `${baseUrl}/#/${userId}`;
     }
 
-    forEntity(entityId: string): string {
+    public forEntity(entityId: string): string {
         return `${baseUrl}/#/${entityId}`;
     }
 
-    isPermalinkHost(testHost: string): boolean {
+    public isPermalinkHost(testHost: string): boolean {
         return testHost === host;
     }
 
-    encodeServerCandidates(candidates: string[]) {
+    public encodeServerCandidates(candidates: string[]) {
         if (!candidates || candidates.length === 0) return "";
         return `?via=${candidates.map((c) => encodeURIComponent(c)).join("&via=")}`;
     }
 
     // Heavily inspired by/borrowed from the matrix-bot-sdk (with permission):
     // https://github.com/turt2live/matrix-js-bot-sdk/blob/7c4665c9a25c2c8e0fe4e509f2616505b5b66a1c/src/Permalinks.ts#L33-L61
-    parsePermalink(fullUrl: string): PermalinkParts {
+    public parsePermalink(fullUrl: string): PermalinkParts {
         if (!fullUrl || !fullUrl.startsWith(baseUrl)) {
             throw new Error("Does not appear to be a permalink");
         }

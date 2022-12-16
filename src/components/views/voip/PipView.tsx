@@ -138,7 +138,7 @@ class PipView extends React.Component<IProps, IState> {
     // Proper solution: use useRef (requires the component to be refactored to a functional component).
     private movePersistedElement = createRef<() => void>() as React.MutableRefObject<() => void>;
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         const roomId = SdkContextClass.instance.roomViewStore.getRoomId();

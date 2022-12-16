@@ -16,7 +16,7 @@ limitations under the License.
 
 declare module "*.worker.ts" {
     class WebpackWorker extends Worker {
-        constructor();
+        public constructor();
     }
 
     export default WebpackWorker;

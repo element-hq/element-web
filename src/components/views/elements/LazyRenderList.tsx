@@ -17,7 +17,7 @@ limitations under the License.
 import React from "react";
 
 class ItemRange {
-    constructor(public topCount: number, public renderCount: number, public bottomCount: number) {}
+    public constructor(public topCount: number, public renderCount: number, public bottomCount: number) {}
 
     public contains(range: ItemRange): boolean {
         // don't contain empty ranges
@@ -85,7 +85,7 @@ export default class LazyRenderList<T = any> extends React.Component<IProps<T>, 
         overflowMargin: 5,
     };
 
-    constructor(props: IProps<T>) {
+    public constructor(props: IProps<T>) {
         super(props);
 
         this.state = {

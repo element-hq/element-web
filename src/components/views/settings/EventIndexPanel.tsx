@@ -35,7 +35,7 @@ interface IState {
 }
 
 export default class EventIndexPanel extends React.Component<{}, IState> {
-    constructor(props) {
+    public constructor(props) {
         super(props);
 
         this.state = {
@@ -46,7 +46,7 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
         };
     }
 
-    updateCurrentRoom = async (room) => {
+    public updateCurrentRoom = async () => {
         const eventIndex = EventIndexPeg.get();
         let stats;
 
@@ -64,7 +64,7 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
         });
     };
 
-    componentWillUnmount(): void {
+    public componentWillUnmount(): void {
         const eventIndex = EventIndexPeg.get();
 
         if (eventIndex !== null) {
@@ -72,11 +72,11 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
         }
     }
 
-    componentDidMount(): void {
+    public componentDidMount(): void {
         this.updateState();
     }
 
-    async updateState() {
+    public async updateState() {
         const eventIndex = EventIndexPeg.get();
         const eventIndexingEnabled = SettingsStore.getValueAt(SettingLevel.DEVICE, "enableEventIndexing");
         const enabling = false;
@@ -145,7 +145,7 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
         });
     };
 
-    render() {
+    public render() {
         let eventIndexingSettings = null;
         const brand = SdkConfig.get().brand;
 

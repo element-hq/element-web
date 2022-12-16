@@ -52,7 +52,7 @@ interface IState {
 export default class VideoFeed extends React.PureComponent<IProps, IState> {
     private element: HTMLVideoElement;
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {
@@ -61,16 +61,16 @@ export default class VideoFeed extends React.PureComponent<IProps, IState> {
         };
     }
 
-    componentDidMount() {
+    public componentDidMount() {
         this.updateFeed(null, this.props.feed);
         this.playMedia();
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         this.updateFeed(this.props.feed, null);
     }
 
-    componentDidUpdate(prevProps: IProps, prevState: IState) {
+    public componentDidUpdate(prevProps: IProps, prevState: IState) {
         this.updateFeed(prevProps.feed, this.props.feed);
         // If the mutes state has changed, we try to playMedia()
         if (prevState.videoMuted !== this.state.videoMuted || prevProps.feed.stream !== this.props.feed.stream) {
@@ -78,7 +78,7 @@ export default class VideoFeed extends React.PureComponent<IProps, IState> {
         }
     }
 
-    static getDerivedStateFromProps(props: IProps) {
+    public static getDerivedStateFromProps(props: IProps) {
         return {
             audioMuted: props.feed.isAudioMuted(),
             videoMuted: props.feed.isVideoMuted(),
@@ -177,7 +177,7 @@ export default class VideoFeed extends React.PureComponent<IProps, IState> {
         }
     };
 
-    render() {
+    public render() {
         const { pipMode, primary, secondary, feed } = this.props;
 
         const wrapperClasses = classnames("mx_VideoFeed", {

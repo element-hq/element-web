@@ -57,7 +57,7 @@ export class EditableItem extends React.Component<IItemProps, IItemState> {
         this.setState({ verifyRemove: false });
     };
 
-    render() {
+    public render() {
         if (this.state.verifyRemove) {
             return (
                 <div className="mx_EditableItem">
@@ -148,7 +148,7 @@ export default class EditableItemList<P = {}> extends React.PureComponent<IProps
         );
     }
 
-    render() {
+    public render() {
         const editableItems = this.props.items.map((item, index) => {
             if (!this.props.canRemove) {
                 return <li key={item}>{item}</li>;

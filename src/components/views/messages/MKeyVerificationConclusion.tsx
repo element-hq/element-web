@@ -36,7 +36,7 @@ interface IProps {
 }
 
 export default class MKeyVerificationConclusion extends React.Component<IProps> {
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
     }
 

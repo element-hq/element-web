@@ -45,7 +45,7 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
     private readonly fieldRef = createRef<Field>();
     private validatedConf: ValidatedServerConfig;
 
-    constructor(props) {
+    public constructor(props) {
         super(props);
 
         const config = SdkConfig.get();

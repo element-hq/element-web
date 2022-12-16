@@ -68,7 +68,7 @@ export default class Tooltip extends React.PureComponent<ITooltipProps, State> {
         alignment: Alignment.Natural,
     };
 
-    constructor(props) {
+    public constructor(props) {
         super(props);
 
         this.state = {};

@@ -72,11 +72,11 @@ function colonsTrimmed(str: string): string {
 }
 
 export default class EmojiProvider extends AutocompleteProvider {
-    matcher: QueryMatcher<ISortedEmoji>;
-    nameMatcher: QueryMatcher<ISortedEmoji>;
+    public matcher: QueryMatcher<ISortedEmoji>;
+    public nameMatcher: QueryMatcher<ISortedEmoji>;
     private readonly recentlyUsed: IEmoji[];
 
-    constructor(room: Room, renderingType?: TimelineRenderingType) {
+    public constructor(room: Room, renderingType?: TimelineRenderingType) {
         super({ commandRegex: EMOJI_REGEX, renderingType });
         this.matcher = new QueryMatcher<ISortedEmoji>(SORTED_EMOJI, {
             keys: [],
@@ -93,7 +93,7 @@ export default class EmojiProvider extends AutocompleteProvider {
         this.recentlyUsed = Array.from(new Set(recent.get().map(getEmojiFromUnicode).filter(Boolean)));
     }
 
-    async getCompletions(
+    public async getCompletions(
         query: string,
         selection: ISelectionRange,
         force?: boolean,
@@ -154,11 +154,11 @@ export default class EmojiProvider extends AutocompleteProvider {
         return [];
     }
 
-    getName() {
+    public getName() {
         return "😃 " + _t("Emoji");
     }
 
-    renderCompletions(completions: React.ReactNode[]): React.ReactNode {
+    public renderCompletions(completions: React.ReactNode[]): React.ReactNode {
         return (
             <div
                 className="mx_Autocomplete_Completion_container_pill"

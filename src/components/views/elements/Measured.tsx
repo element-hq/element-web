@@ -28,21 +28,21 @@ export default class Measured extends React.PureComponent<IProps> {
     private static instanceCount = 0;
     private readonly instanceId: number;
 
-    static defaultProps = {
+    public static defaultProps = {
         breakpoint: 500,
     };
 
-    constructor(props) {
+    public constructor(props) {
         super(props);
 
         this.instanceId = Measured.instanceCount++;
     }
 
-    componentDidMount() {
+    public componentDidMount() {
         UIStore.instance.on(`Measured${this.instanceId}`, this.onResize);
     }
 
-    componentDidUpdate(prevProps: Readonly<IProps>) {
+    public componentDidUpdate(prevProps: Readonly<IProps>) {
         const previous = prevProps.sensor;
         const current = this.props.sensor;
         if (previous === current) return;
@@ -54,7 +54,7 @@ export default class Measured extends React.PureComponent<IProps> {
         }
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         UIStore.instance.off(`Measured${this.instanceId}`, this.onResize);
         UIStore.instance.stopTrackingElementDimensions(`Measured${this.instanceId}`);
     }
@@ -64,7 +64,7 @@ export default class Measured extends React.PureComponent<IProps> {
         this.props.onMeasurement(entry.contentRect.width <= this.props.breakpoint);
     };
 
-    render() {
+    public render() {
         return null;
     }
 }

@@ -37,7 +37,7 @@ export default class Login {
     private defaultDeviceDisplayName: string;
     private tempClient: MatrixClient;
 
-    constructor(hsUrl: string, isUrl: string, fallbackHsUrl?: string, opts?: ILoginOptions) {
+    public constructor(hsUrl: string, isUrl: string, fallbackHsUrl?: string, opts?: ILoginOptions) {
         this.hsUrl = hsUrl;
         this.isUrl = isUrl;
         this.fallbackHsUrl = fallbackHsUrl;

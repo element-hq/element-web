@@ -37,7 +37,7 @@ export class Tab {
      * @param {React.ReactNode} body The JSX for the tab container.
      * @param {string} screenName The screen name to report to Posthog.
      */
-    constructor(
+    public constructor(
         public readonly id: string,
         public readonly label: string,
         public readonly icon: string,
@@ -64,7 +64,7 @@ interface IState {
 }
 
 export default class TabbedView extends React.Component<IProps, IState> {
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         const initialTabIdIsValid = props.tabs.find((tab) => tab.id === props.initialTabId);
@@ -73,7 +73,7 @@ export default class TabbedView extends React.Component<IProps, IState> {
         };
     }
 
-    static defaultProps = {
+    public static defaultProps = {
         tabLocation: TabLocation.LEFT,
     };
 

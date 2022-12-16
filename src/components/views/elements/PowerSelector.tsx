@@ -60,7 +60,7 @@ export default class PowerSelector extends React.Component<IProps, IState> {
         usersDefault: 0,
     };
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {

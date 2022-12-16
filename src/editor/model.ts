@@ -57,7 +57,7 @@ export default class EditorModel {
     private autoCompletePartCount = 0;
     private transformCallback: TransformCallback = null;
 
-    constructor(parts: Part[], partCreator: PartCreator, private updateCallback: UpdateCallback = null) {
+    public constructor(parts: Part[], partCreator: PartCreator, private updateCallback: UpdateCallback = null) {
         this._parts = parts;
         this._partCreator = partCreator;
         this.transformCallback = null;

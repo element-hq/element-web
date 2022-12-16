@@ -62,7 +62,7 @@ export default class EditableText extends React.Component<IProps, IState> {
         blurToSubmit: false,
     };
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {

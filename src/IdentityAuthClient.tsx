@@ -44,7 +44,7 @@ export default class IdentityAuthClient {
      * When provided, this class will operate solely within memory, refusing to
      * persist any information such as tokens. Default null (not provided).
      */
-    constructor(identityUrl?: string) {
+    public constructor(identityUrl?: string) {
         if (identityUrl) {
             // XXX: We shouldn't have to create a whole new MatrixClient just to
             // do identity server auth. The functions don't take an identity URL

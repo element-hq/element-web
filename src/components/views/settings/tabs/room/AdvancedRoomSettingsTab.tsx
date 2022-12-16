@@ -46,7 +46,7 @@ interface IState {
 }
 
 export default class AdvancedRoomSettingsTab extends React.Component<IProps, IState> {
-    constructor(props, context) {
+    public constructor(props, context) {
         super(props, context);
 
         this.state = {
@@ -94,7 +94,7 @@ export default class AdvancedRoomSettingsTab extends React.Component<IProps, ISt
         this.props.closeSettingsFn();
     };
 
-    render() {
+    public render() {
         const client = MatrixClientPeg.get();
         const room = client.getRoom(this.props.roomId);
         const isSpace = room.isSpaceRoom();

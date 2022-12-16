@@ -105,7 +105,7 @@ export class KeyBindingsManager {
      * To overwrite the default key bindings add a new providers before the default provider, e.g. a provider for
      * customized key bindings.
      */
-    bindingsProviders: IKeyBindingsProvider[] = [defaultBindingsProvider];
+    public bindingsProviders: IKeyBindingsProvider[] = [defaultBindingsProvider];
 
     /**
      * Finds a matching KeyAction for a given KeyboardEvent
@@ -124,56 +124,56 @@ export class KeyBindingsManager {
         return undefined;
     }
 
-    getMessageComposerAction(ev: KeyboardEvent | React.KeyboardEvent): KeyBindingAction | undefined {
+    public getMessageComposerAction(ev: KeyboardEvent | React.KeyboardEvent): KeyBindingAction | undefined {
         return this.getAction(
             this.bindingsProviders.map((it) => it.getMessageComposerBindings),
             ev,
         );
     }
 
-    getAutocompleteAction(ev: KeyboardEvent | React.KeyboardEvent): KeyBindingAction | undefined {
+    public getAutocompleteAction(ev: KeyboardEvent | React.KeyboardEvent): KeyBindingAction | undefined {
         return this.getAction(
             this.bindingsProviders.map((it) => it.getAutocompleteBindings),
             ev,
         );
     }
 
-    getRoomListAction(ev: KeyboardEvent | React.KeyboardEvent): KeyBindingAction | undefined {
+    public getRoomListAction(ev: KeyboardEvent | React.KeyboardEvent): KeyBindingAction | undefined {
         return this.getAction(
             this.bindingsProviders.map((it) => it.getRoomListBindings),
             ev,
         );
     }
 
-    getRoomAction(ev: KeyboardEvent | React.KeyboardEvent): KeyBindingAction | undefined {
+    public getRoomAction(ev: KeyboardEvent | React.KeyboardEvent): KeyBindingAction | undefined {
         return this.getAction(
             this.bindingsProviders.map((it) => it.getRoomBindings),
             ev,
         );
     }
 
-    getNavigationAction(ev: KeyboardEvent | React.KeyboardEvent): KeyBindingAction | undefined {
+    public getNavigationAction(ev: KeyboardEvent | React.KeyboardEvent): KeyBindingAction | undefined {
         return this.getAction(
             this.bindingsProviders.map((it) => it.getNavigationBindings),
             ev,
         );
     }
 
-    getAccessibilityAction(ev: KeyboardEvent | React.KeyboardEvent): KeyBindingAction | undefined {
+    public getAccessibilityAction(ev: KeyboardEvent | React.KeyboardEvent): KeyBindingAction | undefined {
         return this.getAction(
             this.bindingsProviders.map((it) => it.getAccessibilityBindings),
             ev,
         );
     }
 
-    getCallAction(ev: KeyboardEvent | React.KeyboardEvent): KeyBindingAction | undefined {
+    public getCallAction(ev: KeyboardEvent | React.KeyboardEvent): KeyBindingAction | undefined {
         return this.getAction(
             this.bindingsProviders.map((it) => it.getCallBindings),
             ev,
         );
     }
 
-    getLabsAction(ev: KeyboardEvent | React.KeyboardEvent): KeyBindingAction | undefined {
+    public getLabsAction(ev: KeyboardEvent | React.KeyboardEvent): KeyBindingAction | undefined {
         return this.getAction(
             this.bindingsProviders.map((it) => it.getLabsBindings),
             ev,

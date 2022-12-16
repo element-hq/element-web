@@ -56,7 +56,7 @@ interface IState {
 export default class IncomingSasDialog extends React.Component<IProps, IState> {
     private showSasEvent: ISasEvent;
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         let phase = PHASE_START;

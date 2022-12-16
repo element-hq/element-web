@@ -143,7 +143,7 @@ interface ISendMessageComposerProps extends MatrixClientProps {
 }
 
 export class SendMessageComposer extends React.Component<ISendMessageComposerProps> {
-    static contextType = RoomContext;
+    public static contextType = RoomContext;
     public context!: React.ContextType<typeof RoomContext>;
 
     private readonly prepareToEncrypt?: DebouncedFunc<() => void>;
@@ -153,11 +153,11 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
     private dispatcherRef: string;
     private sendHistoryManager: SendHistoryManager;
 
-    static defaultProps = {
+    public static defaultProps = {
         includeReplyLegacyFallback: true,
     };
 
-    constructor(props: ISendMessageComposerProps, context: React.ContextType<typeof RoomContext>) {
+    public constructor(props: ISendMessageComposerProps, context: React.ContextType<typeof RoomContext>) {
         super(props, context);
         this.context = context; // otherwise React will only set it prior to render due to type def above
 
@@ -462,7 +462,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
         }
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         dis.unregister(this.dispatcherRef);
         window.removeEventListener("beforeunload", this.saveStoredEditorState);
         this.saveStoredEditorState();
@@ -572,7 +572,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
         this.editorRef.current?.focus();
     };
 
-    render() {
+    public render() {
         const threadId =
             this.props.relation?.rel_type === THREAD_RELATION_TYPE.name ? this.props.relation.event_id : null;
         return (

@@ -224,7 +224,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
     private voteRelationsReceived = false;
     private endRelationsReceived = false;
 
-    constructor(props: IBodyProps) {
+    public constructor(props: IBodyProps) {
         super(props);
 
         this.state = {
@@ -237,7 +237,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
         this.props.mxEvent.on(MatrixEventEvent.RelationsCreated, this.onRelationsCreated);
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         this.props.mxEvent.off(MatrixEventEvent.RelationsCreated, this.onRelationsCreated);
         this.removeListeners(this.state.voteRelations, this.state.endRelations);
     }
@@ -415,7 +415,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
         return isPollEnded(this.props.mxEvent, this.context, this.props.getRelationsForEvent);
     }
 
-    render() {
+    public render() {
         const poll = this.props.mxEvent.unstableExtensibleEvent as PollStartEvent;
         if (!poll?.isEquivalentTo(M_POLL_START)) return null; // invalid
 
@@ -552,7 +552,7 @@ function LivePollOption(props: ILivePollOptionProps) {
 }
 
 export class UserVote {
-    constructor(public readonly ts: number, public readonly sender: string, public readonly answers: string[]) {}
+    public constructor(public readonly ts: number, public readonly sender: string, public readonly answers: string[]) {}
 }
 
 function userResponseFromPollResponseEvent(event: MatrixEvent): UserVote {

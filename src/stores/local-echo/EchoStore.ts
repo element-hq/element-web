@@ -39,7 +39,7 @@ export class EchoStore extends AsyncStoreWithClient<IState> {
 
     private caches = new Map<ContextKey, GenericEchoChamber<any, any, any>>();
 
-    constructor() {
+    public constructor() {
         super(defaultDispatcher);
     }
 

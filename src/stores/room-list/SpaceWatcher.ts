@@ -28,7 +28,7 @@ export class SpaceWatcher {
     private activeSpace: SpaceKey = SpaceStore.instance.activeSpace;
     private allRoomsInHome: boolean = SpaceStore.instance.allRoomsInHome;
 
-    constructor(private store: Interface) {
+    public constructor(private store: Interface) {
         if (SpaceWatcher.needsFilter(this.activeSpace, this.allRoomsInHome)) {
             this.updateFilter();
             store.addFilter(this.filter);

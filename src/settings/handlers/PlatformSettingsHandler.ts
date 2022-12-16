@@ -29,7 +29,7 @@ import { Action } from "../../dispatcher/actions";
 export default class PlatformSettingsHandler extends SettingsHandler {
     private store: { [settingName: string]: any } = {};
 
-    constructor() {
+    public constructor() {
         super();
 
         defaultDispatcher.register(this.onAction);

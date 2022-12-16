@@ -22,7 +22,7 @@ import SettingController from "./SettingController";
  * When the value changes, call a setter function on the matrix client with the new value
  */
 export default class PushToMatrixClientController extends SettingController {
-    constructor(private setter: Function, private inverse: boolean) {
+    public constructor(private setter: Function, private inverse: boolean) {
         super();
     }
 

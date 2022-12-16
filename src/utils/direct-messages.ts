@@ -111,7 +111,7 @@ export class DirectoryMember extends Member {
     private readonly avatarUrl?: string;
 
     // eslint-disable-next-line camelcase
-    constructor(userDirResult: { user_id: string; display_name?: string; avatar_url?: string }) {
+    public constructor(userDirResult: { user_id: string; display_name?: string; avatar_url?: string }) {
         super();
         this._userId = userDirResult.user_id;
         this.displayName = userDirResult.display_name;
@@ -119,15 +119,15 @@ export class DirectoryMember extends Member {
     }
 
     // These next class members are for the Member interface
-    get name(): string {
+    public get name(): string {
         return this.displayName || this._userId;
     }
 
-    get userId(): string {
+    public get userId(): string {
         return this._userId;
     }
 
-    getMxcAvatarUrl(): string {
+    public getMxcAvatarUrl(): string {
         return this.avatarUrl;
     }
 }
@@ -135,7 +135,7 @@ export class DirectoryMember extends Member {
 export class ThreepidMember extends Member {
     private readonly id: string;
 
-    constructor(id: string) {
+    public constructor(id: string) {
         super();
         this.id = id;
     }
@@ -143,20 +143,20 @@ export class ThreepidMember extends Member {
     // This is a getter that would be falsy on all other implementations. Until we have
     // better type support in the react-sdk we can use this trick to determine the kind
     // of 3PID we're dealing with, if any.
-    get isEmail(): boolean {
+    public get isEmail(): boolean {
         return this.id.includes("@");
     }
 
     // These next class members are for the Member interface
-    get name(): string {
+    public get name(): string {
         return this.id;
     }
 
-    get userId(): string {
+    public get userId(): string {
         return this.id;
     }
 
-    getMxcAvatarUrl(): string {
+    public getMxcAvatarUrl(): string {
         return null;
     }
 }

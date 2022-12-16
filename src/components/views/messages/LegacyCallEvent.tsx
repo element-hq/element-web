@@ -50,7 +50,7 @@ export default class LegacyCallEvent extends React.PureComponent<IProps, IState>
     private wrapperElement = createRef<HTMLDivElement>();
     private resizeObserver: ResizeObserver;
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {
@@ -61,7 +61,7 @@ export default class LegacyCallEvent extends React.PureComponent<IProps, IState>
         };
     }
 
-    componentDidMount() {
+    public componentDidMount() {
         this.props.callEventGrouper.addListener(LegacyCallEventGrouperEvent.StateChanged, this.onStateChanged);
         this.props.callEventGrouper.addListener(LegacyCallEventGrouperEvent.SilencedChanged, this.onSilencedChanged);
         this.props.callEventGrouper.addListener(LegacyCallEventGrouperEvent.LengthChanged, this.onLengthChanged);
@@ -70,7 +70,7 @@ export default class LegacyCallEvent extends React.PureComponent<IProps, IState>
         this.wrapperElement.current && this.resizeObserver.observe(this.wrapperElement.current);
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         this.props.callEventGrouper.removeListener(LegacyCallEventGrouperEvent.StateChanged, this.onStateChanged);
         this.props.callEventGrouper.removeListener(LegacyCallEventGrouperEvent.SilencedChanged, this.onSilencedChanged);
         this.props.callEventGrouper.removeListener(LegacyCallEventGrouperEvent.LengthChanged, this.onLengthChanged);

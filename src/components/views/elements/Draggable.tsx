@@ -34,7 +34,7 @@ export interface ILocationState {
 }
 
 export default class Draggable extends React.Component<IProps, IState> {
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {
@@ -73,7 +73,7 @@ export default class Draggable extends React.Component<IProps, IState> {
         });
     }
 
-    render() {
+    public render() {
         return <div className={this.props.className} onMouseDown={this.onMouseDown} />;
     }
 }

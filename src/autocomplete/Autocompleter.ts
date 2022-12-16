@@ -59,23 +59,23 @@ export interface IProviderCompletions {
 }
 
 export default class Autocompleter {
-    room: Room;
-    providers: AutocompleteProvider[];
+    public room: Room;
+    public providers: AutocompleteProvider[];
 
-    constructor(room: Room, renderingType: TimelineRenderingType = TimelineRenderingType.Room) {
+    public constructor(room: Room, renderingType: TimelineRenderingType = TimelineRenderingType.Room) {
         this.room = room;
         this.providers = PROVIDERS.map((Prov) => {
             return new Prov(room, renderingType);
         });
     }
 
-    destroy() {
+    public destroy() {
         this.providers.forEach((p) => {
             p.destroy();
         });
     }
 
-    async getCompletions(
+    public async getCompletions(
         query: string,
         selection: ISelectionRange,
         force = false,

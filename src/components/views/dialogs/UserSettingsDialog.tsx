@@ -50,7 +50,7 @@ interface IState {
 export default class UserSettingsDialog extends React.Component<IProps, IState> {
     private settingsWatchers: string[] = [];
 
-    constructor(props) {
+    public constructor(props) {
         super(props);
 
         this.state = {
@@ -210,7 +210,7 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
         return tabs;
     }
 
-    render() {
+    public render() {
         return (
             <BaseDialog
                 className="mx_UserSettingsDialog"

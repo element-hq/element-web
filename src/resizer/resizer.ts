@@ -43,7 +43,7 @@ export default class Resizer<C extends IConfig = IConfig> {
 
     // TODO move vertical/horizontal to config option/container class
     // as it doesn't make sense to mix them within one container/Resizer
-    constructor(
+    public constructor(
         public container: HTMLElement,
         private readonly distributorCtor: {
             new (item: ResizeItem): FixedDistributor<C, any>;

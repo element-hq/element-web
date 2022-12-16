@@ -22,7 +22,7 @@ export default class ResizeItem<C extends IConfig = IConfig> {
     protected readonly id: string;
     protected reverse: boolean;
 
-    constructor(
+    public constructor(
         handle: HTMLElement,
         public readonly resizer: Resizer<C>,
         public readonly sizer: Sizer,

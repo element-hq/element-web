@@ -46,7 +46,7 @@ const KEY_FRAME_INTERVAL = 15;
 export default class Rainfall implements ICanvasEffect {
     private readonly options: RainfallOptions;
 
-    constructor(options: { [key: string]: any }) {
+    public constructor(options: { [key: string]: any }) {
         this.options = { ...DefaultOptions, ...options };
     }
 

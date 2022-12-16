@@ -70,7 +70,7 @@ export default class Slider extends React.Component<IProps> {
         return 100 * (closest - 1 + linearInterpolation) * intervalWidth;
     }
 
-    render(): React.ReactNode {
+    public render(): React.ReactNode {
         const dots = this.props.values.map((v) => (
             <Dot
                 active={v <= this.props.value}
@@ -108,7 +108,7 @@ export default class Slider extends React.Component<IProps> {
         );
     }
 
-    onClick(event: React.MouseEvent) {
+    public onClick(event: React.MouseEvent) {
         const width = (event.target as HTMLElement).clientWidth;
         // nativeEvent is safe to use because https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/offsetX
         // is supported by all modern browsers
@@ -133,7 +133,7 @@ interface IDotProps {
 }
 
 class Dot extends React.PureComponent<IDotProps> {
-    render(): React.ReactNode {
+    public render(): React.ReactNode {
         let className = "mx_Slider_dot";
         if (!this.props.disabled && this.props.active) {
             className += " mx_Slider_dotActive";

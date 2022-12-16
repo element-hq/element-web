@@ -32,7 +32,7 @@ export class FontWatcher implements IWatcher {
 
     private dispatcherRef: string;
 
-    constructor() {
+    public constructor() {
         this.dispatcherRef = null;
     }
 

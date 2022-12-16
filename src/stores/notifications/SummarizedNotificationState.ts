@@ -26,7 +26,7 @@ import { NotificationState } from "./NotificationState";
 export class SummarizedNotificationState extends NotificationState {
     private totalStatesWithUnread = 0;
 
-    constructor() {
+    public constructor() {
         super();
         this._symbol = null;
         this._count = 0;

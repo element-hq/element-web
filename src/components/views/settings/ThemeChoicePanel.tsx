@@ -51,7 +51,7 @@ interface IState extends IThemeState {
 export default class ThemeChoicePanel extends React.Component<IProps, IState> {
     private themeTimer: number;
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {
@@ -268,7 +268,7 @@ export default class ThemeChoicePanel extends React.Component<IProps, IState> {
         );
     }
 
-    apparentSelectedThemeId() {
+    public apparentSelectedThemeId() {
         if (this.state.useSystemTheme) {
             return undefined;
         }

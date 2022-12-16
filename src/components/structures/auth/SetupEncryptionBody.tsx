@@ -45,7 +45,7 @@ interface IState {
 }
 
 export default class SetupEncryptionBody extends React.Component<IProps, IState> {
-    constructor(props) {
+    public constructor(props) {
         super(props);
         const store = SetupEncryptionStore.sharedInstance();
         store.on("update", this.onStoreUpdate);

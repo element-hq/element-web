@@ -34,10 +34,10 @@ interface IState {
 }
 
 export default class RoomUpgradeWarningBar extends React.PureComponent<IProps, IState> {
-    static contextType = MatrixClientContext;
+    public static contextType = MatrixClientContext;
     public context!: React.ContextType<typeof MatrixClientContext>;
 
-    constructor(props, context) {
+    public constructor(props, context) {
         super(props, context);
 
         const tombstone = this.props.room.currentState.getStateEvents("m.room.tombstone", "");

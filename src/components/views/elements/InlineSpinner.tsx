@@ -25,12 +25,12 @@ interface IProps {
 }
 
 export default class InlineSpinner extends React.PureComponent<IProps> {
-    static defaultProps = {
+    public static defaultProps = {
         w: 16,
         h: 16,
     };
 
-    render() {
+    public render() {
         return (
             <div className="mx_InlineSpinner">
                 <div

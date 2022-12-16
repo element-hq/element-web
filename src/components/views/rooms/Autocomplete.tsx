@@ -50,14 +50,14 @@ interface IState {
 }
 
 export default class Autocomplete extends React.PureComponent<IProps, IState> {
-    autocompleter: Autocompleter;
-    queryRequested: string;
-    debounceCompletionsRequest: number;
+    public autocompleter: Autocompleter;
+    public queryRequested: string;
+    public debounceCompletionsRequest: number;
     private containerRef = createRef<HTMLDivElement>();
 
     public static contextType = RoomContext;
 
-    constructor(props) {
+    public constructor(props) {
         super(props);
 
         this.state = {
@@ -79,7 +79,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         };
     }
 
-    componentDidMount() {
+    public componentDidMount() {
         this.autocompleter = new Autocompleter(this.props.room, this.context.timelineRenderingType);
         this.applyNewProps();
     }
@@ -98,7 +98,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         this.complete(this.props.query, this.props.selection);
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         this.autocompleter.destroy();
     }
 
@@ -265,7 +265,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         }
     }
 
-    componentDidUpdate(prevProps: IProps) {
+    public componentDidUpdate(prevProps: IProps) {
         this.applyNewProps(prevProps.query, prevProps.room);
         // this is the selected completion, so scroll it into view if needed
         const selectedCompletion = this.refs[`completion${this.state.selectionOffset}`] as HTMLElement;
@@ -280,7 +280,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         }
     }
 
-    render() {
+    public render() {
         let position = 1;
         const renderedCompletions = this.state.completions
             .map((completionResult, i) => {

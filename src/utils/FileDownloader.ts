@@ -75,7 +75,7 @@ export class FileDownloader {
      * @param iframeFn Function to get a pre-configured iframe. Set to null to have the downloader
      * use a generic, hidden, iframe.
      */
-    constructor(private iframeFn: getIframeFn = null) {}
+    public constructor(private iframeFn: getIframeFn = null) {}
 
     private get iframe(): HTMLIFrameElement {
         const iframe = this.iframeFn?.();

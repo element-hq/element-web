@@ -27,7 +27,7 @@ export class ListNotificationState extends NotificationState {
     private rooms: Room[] = [];
     private states: { [roomId: string]: RoomNotificationState } = {};
 
-    constructor(private byTileCount = false, private getRoomFn: FetchRoomFn) {
+    public constructor(private byTileCount = false, private getRoomFn: FetchRoomFn) {
         super();
     }
 

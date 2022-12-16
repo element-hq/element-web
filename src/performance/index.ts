@@ -31,7 +31,7 @@ interface PerformanceDataListener {
 }
 
 export default class PerformanceMonitor {
-    static _instance: PerformanceMonitor;
+    private static _instance: PerformanceMonitor;
 
     private START_PREFIX = "start:";
     private STOP_PREFIX = "stop:";
@@ -52,7 +52,7 @@ export default class PerformanceMonitor {
      * @param id Specify an identifier appended to the measurement name
      * @returns {void}
      */
-    start(name: string, id?: string): void {
+    public start(name: string, id?: string): void {
         if (!this.supportsPerformanceApi()) {
             return;
         }
@@ -73,7 +73,7 @@ export default class PerformanceMonitor {
      * @param id Specify an identifier appended to the measurement name
      * @returns The measurement
      */
-    stop(name: string, id?: string): PerformanceEntry {
+    public stop(name: string, id?: string): PerformanceEntry {
         if (!this.supportsPerformanceApi()) {
             return;
         }
@@ -104,7 +104,7 @@ export default class PerformanceMonitor {
         return measurement;
     }
 
-    clear(name: string, id?: string): void {
+    public clear(name: string, id?: string): void {
         if (!this.supportsPerformanceApi()) {
             return;
         }
@@ -113,7 +113,7 @@ export default class PerformanceMonitor {
         performance.clearMarks(this.STOP_PREFIX + key);
     }
 
-    getEntries({ name, type }: GetEntriesOptions = {}): PerformanceEntry[] {
+    public getEntries({ name, type }: GetEntriesOptions = {}): PerformanceEntry[] {
         return this.entries.filter((entry) => {
             const satisfiesName = !name || entry.name === name;
             const satisfiedType = !type || entry.entryType === type;
@@ -121,7 +121,7 @@ export default class PerformanceMonitor {
         });
     }
 
-    addPerformanceDataCallback(listener: PerformanceDataListener, buffer = false) {
+    public addPerformanceDataCallback(listener: PerformanceDataListener, buffer = false) {
         this.listeners.push(listener);
         if (buffer) {
             const toEmit = this.entries.filter((entry) => this.shouldEmit(listener, entry));
@@ -131,7 +131,7 @@ export default class PerformanceMonitor {
         }
     }
 
-    removePerformanceDataCallback(callback?: PerformanceCallbackFunction) {
+    public removePerformanceDataCallback(callback?: PerformanceCallbackFunction) {
         if (!callback) {
             this.listeners = [];
         } else {

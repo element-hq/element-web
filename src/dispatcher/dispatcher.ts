@@ -33,7 +33,7 @@ export class MatrixDispatcher extends Dispatcher<ActionPayload> {
      *        an operation that the browser requires user interaction
      *        for. Default false (async).
      */
-    dispatch<T extends ActionPayload>(payload: T, sync = false) {
+    public dispatch<T extends ActionPayload>(payload: T, sync = false) {
         if (payload instanceof AsyncActionPayload) {
             payload.fn((action: ActionPayload) => {
                 this.dispatch(action, sync);
@@ -60,7 +60,7 @@ export class MatrixDispatcher extends Dispatcher<ActionPayload> {
      * @param {boolean=false} sync Whether the dispatch should be sync or not.
      * @see dispatch(action: ActionPayload, sync: boolean)
      */
-    fire(action: Action, sync = false) {
+    public fire(action: Action, sync = false) {
         this.dispatch({ action }, sync);
     }
 }

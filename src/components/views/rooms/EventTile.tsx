@@ -260,17 +260,17 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
     public readonly ref = createRef<HTMLElement>();
 
-    static defaultProps = {
+    public static defaultProps = {
         // no-op function because onHeightChanged is optional yet some sub-components assume its existence
         onHeightChanged: function () {},
         forExport: false,
         layout: Layout.Group,
     };
 
-    static contextType = RoomContext;
+    public static contextType = RoomContext;
     public context!: React.ContextType<typeof RoomContext>;
 
-    constructor(props: EventTileProps, context: React.ContextType<typeof MatrixClientContext>) {
+    public constructor(props: EventTileProps, context: React.ContextType<typeof MatrixClientContext>) {
         super(props, context);
 
         const thread = this.thread;
@@ -364,7 +364,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         return true;
     }
 
-    componentDidMount() {
+    public componentDidMount() {
         this.suppressReadReceiptAnimation = false;
         const client = MatrixClientPeg.get();
         if (!this.props.forExport) {
@@ -442,7 +442,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         this.setState({ thread });
     };
 
-    shouldComponentUpdate(nextProps: EventTileProps, nextState: IState): boolean {
+    public shouldComponentUpdate(nextProps: EventTileProps, nextState: IState): boolean {
         if (objectHasDiff(this.state, nextState)) {
             return true;
         }
@@ -450,7 +450,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         return !this.propsEqual(this.props, nextProps);
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         const client = MatrixClientPeg.get();
         if (client) {
             client.removeListener(CryptoEvent.DeviceVerificationChanged, this.onDeviceVerificationChanged);
@@ -470,7 +470,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         this.threadState?.off(NotificationStateEvents.Update, this.onThreadStateUpdate);
     }
 
-    componentDidUpdate(prevProps: Readonly<EventTileProps>) {
+    public componentDidUpdate(prevProps: Readonly<EventTileProps>) {
         // If we're not listening for receipts and expect to be, register a listener.
         if (!this.isListeningForReceipts && (this.shouldShowSentReceipt || this.shouldShowSendingReceipt)) {
             MatrixClientPeg.get().on(RoomEvent.Receipt, this.onRoomReceipt);
@@ -1558,7 +1558,7 @@ interface IE2ePadlockState {
 }
 
 class E2ePadlock extends React.Component<IE2ePadlockProps, IE2ePadlockState> {
-    constructor(props: IE2ePadlockProps) {
+    public constructor(props: IE2ePadlockProps) {
         super(props);
 
         this.state = {

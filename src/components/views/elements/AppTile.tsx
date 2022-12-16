@@ -104,7 +104,7 @@ interface IState {
 
 export default class AppTile extends React.Component<IProps, IState> {
     public static contextType = MatrixClientContext;
-    context: ContextType<typeof MatrixClientContext>;
+    public context: ContextType<typeof MatrixClientContext>;
 
     public static defaultProps: Partial<IProps> = {
         waitForIframeLoad: true,
@@ -126,7 +126,7 @@ export default class AppTile extends React.Component<IProps, IState> {
     private dispatcherRef: string;
     private unmounted: boolean;
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         // Tiles in miniMode are floating, and therefore not docked

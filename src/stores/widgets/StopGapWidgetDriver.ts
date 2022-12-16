@@ -77,7 +77,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
     private allowedCapabilities: Set<Capability>;
 
     // TODO: Refactor widgetKind into the Widget class
-    constructor(
+    public constructor(
         allowedCapabilities: Capability[],
         private forWidget: Widget,
         private forWidgetKind: WidgetKind,

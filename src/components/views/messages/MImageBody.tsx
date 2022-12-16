@@ -63,7 +63,7 @@ interface IState {
 }
 
 export default class MImageBody extends React.Component<IBodyProps, IState> {
-    static contextType = RoomContext;
+    public static contextType = RoomContext;
     public context!: React.ContextType<typeof RoomContext>;
 
     private unmounted = true;
@@ -72,7 +72,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
     private sizeWatcher: string;
     private reconnectedListener: ClientEventHandlerMap[ClientEvent.Sync];
 
-    constructor(props: IBodyProps) {
+    public constructor(props: IBodyProps) {
         super(props);
 
         this.reconnectedListener = createReconnectedListener(this.clearError);
@@ -325,7 +325,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         }
     }
 
-    componentDidMount() {
+    public componentDidMount() {
         this.unmounted = false;
 
         const showImage =
@@ -354,7 +354,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         });
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         this.unmounted = true;
         MatrixClientPeg.get().off(ClientEvent.Sync, this.reconnectedListener);
         this.clearBlurhashTimeout();
@@ -562,7 +562,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         }
     }
 
-    render() {
+    public render() {
         const content = this.props.mxEvent.getContent<IMediaEventContent>();
 
         if (this.state.error) {
@@ -605,7 +605,7 @@ interface PlaceholderIProps {
 }
 
 export class HiddenImagePlaceholder extends React.PureComponent<PlaceholderIProps> {
-    render() {
+    public render() {
         const maxWidth = this.props.maxWidth ? this.props.maxWidth + "px" : null;
         let className = "mx_HiddenImagePlaceholder";
         if (this.props.hover) className += " mx_HiddenImagePlaceholder_hover";

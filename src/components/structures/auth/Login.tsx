@@ -110,7 +110,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
 
     private readonly stepRendererMap: Record<string, () => ReactNode>;
 
-    constructor(props) {
+    public constructor(props) {
         super(props);
 
         this.state = {
@@ -148,7 +148,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
         this.initLoginLogic(this.props.serverConfig);
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         this.unmounted = true;
     }
 
@@ -162,9 +162,9 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
         }
     }
 
-    isBusy = () => this.state.busy || this.props.busy;
+    public isBusy = () => this.state.busy || this.props.busy;
 
-    onPasswordLogin = async (username, phoneCountry, phoneNumber, password) => {
+    public onPasswordLogin = async (username, phoneCountry, phoneNumber, password) => {
         if (!this.state.serverIsAlive) {
             this.setState({ busy: true });
             // Do a quick liveliness check on the URLs
@@ -264,11 +264,11 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
         );
     };
 
-    onUsernameChanged = (username) => {
+    public onUsernameChanged = (username) => {
         this.setState({ username: username });
     };
 
-    onUsernameBlur = async (username) => {
+    public onUsernameBlur = async (username) => {
         const doWellknownLookup = username[0] === "@";
         this.setState({
             username: username,
@@ -315,23 +315,23 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
         }
     };
 
-    onPhoneCountryChanged = (phoneCountry) => {
+    public onPhoneCountryChanged = (phoneCountry) => {
         this.setState({ phoneCountry: phoneCountry });
     };
 
-    onPhoneNumberChanged = (phoneNumber) => {
+    public onPhoneNumberChanged = (phoneNumber) => {
         this.setState({
             phoneNumber: phoneNumber,
         });
     };
 
-    onRegisterClick = (ev) => {
+    public onRegisterClick = (ev) => {
         ev.preventDefault();
         ev.stopPropagation();
         this.props.onRegisterClick();
     };
 
-    onTryRegisterClick = (ev) => {
+    public onTryRegisterClick = (ev) => {
         const hasPasswordFlow = this.state.flows?.find((flow) => flow.type === "m.login.password");
         const ssoFlow = this.state.flows?.find((flow) => flow.type === "m.login.sso" || flow.type === "m.login.cas");
         // If has no password flow but an SSO flow guess that the user wants to register with SSO.
@@ -502,7 +502,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
         return errorText;
     }
 
-    renderLoginComponentForFlows() {
+    public renderLoginComponentForFlows() {
         if (!this.state.flows) return null;
 
         // this is the ideal order we want to show the flows in
@@ -553,7 +553,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
         );
     };
 
-    render() {
+    public render() {
         const loader =
             this.isBusy() && !this.state.busyLoggingIn ? (
                 <div className="mx_Login_loader">

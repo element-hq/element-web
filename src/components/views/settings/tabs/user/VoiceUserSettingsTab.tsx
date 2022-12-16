@@ -38,7 +38,7 @@ interface IState {
 }
 
 export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
-    constructor(props: {}) {
+    public constructor(props: {}) {
         super(props);
 
         this.state = {
@@ -52,7 +52,7 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
         };
     }
 
-    async componentDidMount() {
+    public async componentDidMount() {
         const canSeeDeviceLabels = await MediaDeviceHandler.hasAnyLabeledDevices();
         if (canSeeDeviceLabels) {
             this.refreshMediaDevices();
@@ -121,7 +121,7 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
         );
     }
 
-    render() {
+    public render() {
         let requestButton = null;
         let speakerDropdown = null;
         let microphoneDropdown = null;

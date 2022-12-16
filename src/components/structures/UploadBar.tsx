@@ -57,7 +57,7 @@ export default class UploadBar extends React.PureComponent<IProps, IState> {
     private dispatcherRef: Optional<string>;
     private mounted = false;
 
-    constructor(props) {
+    public constructor(props) {
         super(props);
 
         // Set initial state to any available upload in this room - we might be mounting
@@ -65,12 +65,12 @@ export default class UploadBar extends React.PureComponent<IProps, IState> {
         this.state = this.calculateState();
     }
 
-    componentDidMount() {
+    public componentDidMount() {
         this.dispatcherRef = dis.register(this.onAction);
         this.mounted = true;
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         this.mounted = false;
         dis.unregister(this.dispatcherRef!);
     }
@@ -103,7 +103,7 @@ export default class UploadBar extends React.PureComponent<IProps, IState> {
         ContentMessages.sharedInstance().cancelUpload(this.state.currentUpload!);
     };
 
-    render() {
+    public render() {
         if (!this.state.currentFile) {
             return null;
         }

@@ -37,7 +37,7 @@ const INITIAL_STATE = {
 class LifecycleStore extends Store<ActionPayload> {
     private state: IState = INITIAL_STATE;
 
-    constructor() {
+    public constructor() {
         super(dis);
     }
 

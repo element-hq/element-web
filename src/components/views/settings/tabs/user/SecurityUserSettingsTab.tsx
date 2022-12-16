@@ -87,7 +87,7 @@ interface IState {
 export default class SecurityUserSettingsTab extends React.Component<IProps, IState> {
     private dispatcherRef: string;
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         // Get rooms we're invited to

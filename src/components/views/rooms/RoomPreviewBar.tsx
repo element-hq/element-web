@@ -100,11 +100,11 @@ interface IState {
 }
 
 export default class RoomPreviewBar extends React.Component<IProps, IState> {
-    static defaultProps = {
+    public static defaultProps = {
         onJoinClick() {},
     };
 
-    constructor(props) {
+    public constructor(props) {
         super(props);
 
         this.state = {
@@ -112,11 +112,11 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
         };
     }
 
-    componentDidMount() {
+    public componentDidMount() {
         this.checkInvitedEmail();
     }
 
-    componentDidUpdate(prevProps, prevState) {
+    public componentDidUpdate(prevProps, prevState) {
         if (this.props.invitedEmail !== prevProps.invitedEmail || this.props.inviterName !== prevProps.inviterName) {
             this.checkInvitedEmail();
         }
@@ -270,7 +270,7 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
         dis.dispatch({ action: "start_registration", screenAfterLogin: this.makeScreenAfterLogin() });
     };
 
-    render() {
+    public render() {
         const brand = SdkConfig.get().brand;
         const roomName = this.props.room?.name ?? this.props.roomAlias ?? "";
         const isSpace = this.props.room?.isSpaceRoom() ?? this.props.oobData?.roomType === RoomType.Space;

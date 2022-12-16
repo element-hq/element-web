@@ -35,11 +35,11 @@ interface ITooltipProps {
 }
 
 export default class InfoTooltip extends React.PureComponent<ITooltipProps> {
-    constructor(props: ITooltipProps) {
+    public constructor(props: ITooltipProps) {
         super(props);
     }
 
-    render() {
+    public render() {
         const { tooltip, children, tooltipClassName, className, kind } = this.props;
         const title = _t("Information");
         const iconClassName =

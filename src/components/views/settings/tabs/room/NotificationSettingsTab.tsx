@@ -47,10 +47,10 @@ export default class NotificationsSettingsTab extends React.Component<IProps, IS
     private readonly roomProps: RoomEchoChamber;
     private soundUpload = createRef<HTMLInputElement>();
 
-    static contextType = MatrixClientContext;
+    public static contextType = MatrixClientContext;
     public context!: React.ContextType<typeof MatrixClientContext>;
 
-    constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
+    public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
         super(props, context);
 
         this.roomProps = EchoChamber.forRoom(context.getRoom(this.props.roomId));

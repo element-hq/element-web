@@ -194,11 +194,11 @@ interface IItemState {
 }
 
 export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
-    static contextType = MatrixClientContext;
+    public static contextType = MatrixClientContext;
 
     private buttonRef = createRef<HTMLDivElement>();
 
-    constructor(props) {
+    public constructor(props) {
         super(props);
 
         const collapsed = SpaceTreeLevelLayoutStore.instance.getSpaceCollapsedState(
@@ -217,7 +217,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
         this.props.space.on(RoomEvent.Name, this.onRoomNameChange);
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         SpaceStore.instance.off(this.props.space.roomId, this.onSpaceUpdate);
         this.props.space.off(RoomEvent.Name, this.onRoomNameChange);
     }
@@ -298,7 +298,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
         }
     };
 
-    render() {
+    public render() {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const {
             space,

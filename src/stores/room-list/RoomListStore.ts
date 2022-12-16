@@ -65,7 +65,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> implements 
         this.emit(LISTS_UPDATE_EVENT);
     });
 
-    constructor(dis: MatrixDispatcher) {
+    public constructor(dis: MatrixDispatcher) {
         super(dis);
         this.setMaxListeners(20); // RoomList + LeftPanel + 8xRoomSubList + spares
         this.algorithm.start();

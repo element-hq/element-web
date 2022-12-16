@@ -56,7 +56,7 @@ export default class SeekBar extends React.PureComponent<IProps, IState> {
         disabled: false,
     };
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {

@@ -41,7 +41,7 @@ interface IState {
 }
 
 export default class UserView extends React.Component<IProps, IState> {
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
         this.state = {
             loading: true,

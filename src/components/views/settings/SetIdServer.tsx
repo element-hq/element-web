@@ -82,7 +82,7 @@ interface IState {
 export default class SetIdServer extends React.Component<IProps, IState> {
     private dispatcherRef: string;
 
-    constructor(props) {
+    public constructor(props) {
         super(props);
 
         let defaultIdServer = "";
@@ -103,11 +103,11 @@ export default class SetIdServer extends React.Component<IProps, IState> {
         };
     }
 
-    componentDidMount(): void {
+    public componentDidMount(): void {
         this.dispatcherRef = dis.register(this.onAction);
     }
 
-    componentWillUnmount(): void {
+    public componentWillUnmount(): void {
         dis.unregister(this.dispatcherRef);
     }
 
@@ -372,7 +372,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
         });
     };
 
-    render() {
+    public render() {
         const idServerUrl = this.state.currentClientIdServer;
         let sectionTitle;
         let bodyText;

@@ -42,7 +42,7 @@ export default class AutoDiscoveryUtils {
      * @param {string | Error} error The error to check
      * @returns {boolean} True if the error is a liveliness error.
      */
-    static isLivelinessError(error: string | Error): boolean {
+    public static isLivelinessError(error: string | Error): boolean {
         if (!error) return false;
         return !!LIVELINESS_DISCOVERY_ERRORS.find((e) =>
             typeof error === "string" ? e === error : e === error.message,
@@ -57,7 +57,7 @@ export default class AutoDiscoveryUtils {
      * implementation for known values.
      * @returns {*} The state for the component, given the error.
      */
-    static authComponentStateForError(err: string | Error | null, pageName = "login"): IAuthComponentState {
+    public static authComponentStateForError(err: string | Error | null, pageName = "login"): IAuthComponentState {
         if (!err) {
             return {
                 serverIsAlive: true,
@@ -140,7 +140,7 @@ export default class AutoDiscoveryUtils {
      * not be raised.
      * @returns {Promise<ValidatedServerConfig>} Resolves to the validated configuration.
      */
-    static async validateServerConfigWithStaticUrls(
+    public static async validateServerConfigWithStaticUrls(
         homeserverUrl: string,
         identityUrl?: string,
         syntaxOnly = false,
@@ -174,7 +174,7 @@ export default class AutoDiscoveryUtils {
      * @param {string} serverName The homeserver domain name (eg: "matrix.org") to validate.
      * @returns {Promise<ValidatedServerConfig>} Resolves to the validated configuration.
      */
-    static async validateServerName(serverName: string): Promise<ValidatedServerConfig> {
+    public static async validateServerName(serverName: string): Promise<ValidatedServerConfig> {
         const result = await AutoDiscovery.findClientConfig(serverName);
         return AutoDiscoveryUtils.buildValidatedConfigFromDiscovery(serverName, result);
     }
@@ -188,7 +188,7 @@ export default class AutoDiscoveryUtils {
      * @param {boolean} isSynthetic If true, then the discoveryResult was synthesised locally.
      * @returns {Promise<ValidatedServerConfig>} Resolves to the validated configuration.
      */
-    static buildValidatedConfigFromDiscovery(
+    public static buildValidatedConfigFromDiscovery(
         serverName: string,
         discoveryResult,
         syntaxOnly = false,

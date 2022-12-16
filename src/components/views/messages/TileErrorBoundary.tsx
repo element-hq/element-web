@@ -37,7 +37,7 @@ interface IState {
 }
 
 export default class TileErrorBoundary extends React.Component<IProps, IState> {
-    constructor(props) {
+    public constructor(props) {
         super(props);
 
         this.state = {
@@ -45,7 +45,7 @@ export default class TileErrorBoundary extends React.Component<IProps, IState> {
         };
     }
 
-    static getDerivedStateFromError(error: Error): Partial<IState> {
+    public static getDerivedStateFromError(error: Error): Partial<IState> {
         // Side effects are not permitted here, so we only update the state so
         // that the next render shows an error message.
         return { error };
@@ -68,7 +68,7 @@ export default class TileErrorBoundary extends React.Component<IProps, IState> {
         );
     };
 
-    render() {
+    public render() {
         if (this.state.error) {
             const { mxEvent } = this.props;
             const classes = {

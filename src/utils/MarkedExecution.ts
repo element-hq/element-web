@@ -30,7 +30,7 @@ export class MarkedExecution {
      * @param {Function} onMarkCallback A function that is called when a new mark is made. Not
      * called if a mark is already flagged.
      */
-    constructor(private fn: () => void, private onMarkCallback?: () => void) {}
+    public constructor(private fn: () => void, private onMarkCallback?: () => void) {}
 
     /**
      * Resets the mark without calling the function.

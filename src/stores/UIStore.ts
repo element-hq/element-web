@@ -31,7 +31,7 @@ export default class UIStore extends EventEmitter {
     public windowWidth: number;
     public windowHeight: number;
 
-    constructor() {
+    public constructor() {
         super();
 
         // eslint-disable-next-line no-restricted-properties

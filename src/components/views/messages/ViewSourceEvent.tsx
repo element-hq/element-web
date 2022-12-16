@@ -31,7 +31,7 @@ interface IState {
 }
 
 export default class ViewSourceEvent extends React.PureComponent<IProps, IState> {
-    constructor(props) {
+    public constructor(props) {
         super(props);
 
         this.state = {

@@ -71,7 +71,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
     private focusedElement = null;
     private isDoingStickyHeaders = false;
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {

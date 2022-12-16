@@ -47,7 +47,7 @@ export default class NodeAnimator extends React.Component<IProps> {
         startStyles: [],
     };
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.updateChildren(this.props.children);

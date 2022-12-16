@@ -99,7 +99,7 @@ export class BannedUser extends React.Component<IBannedUserProps> {
             });
     };
 
-    render() {
+    public render() {
         let unbanButton;
 
         if (this.props.canUnban) {
@@ -132,11 +132,11 @@ interface IProps {
 }
 
 export default class RolesRoomSettingsTab extends React.Component<IProps> {
-    componentDidMount() {
+    public componentDidMount() {
         MatrixClientPeg.get().on(RoomStateEvent.Update, this.onRoomStateUpdate);
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         const client = MatrixClientPeg.get();
         if (client) {
             client.removeListener(RoomStateEvent.Update, this.onRoomStateUpdate);
@@ -232,7 +232,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
         });
     };
 
-    render() {
+    public render() {
         const client = MatrixClientPeg.get();
         const room = client.getRoom(this.props.roomId);
         const isSpaceRoom = room.isSpaceRoom();

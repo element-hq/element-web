@@ -46,15 +46,15 @@ interface IState {
 }
 
 export default class ReactionsRowButton extends React.PureComponent<IProps, IState> {
-    static contextType = MatrixClientContext;
+    public static contextType = MatrixClientContext;
     public context!: React.ContextType<typeof MatrixClientContext>;
 
-    state = {
+    public state = {
         tooltipRendered: false,
         tooltipVisible: false,
     };
 
-    onClick = () => {
+    public onClick = () => {
         const { mxEvent, myReactionEvent, content } = this.props;
         if (myReactionEvent) {
             this.context.redactEvent(mxEvent.getRoomId(), myReactionEvent.getId());
@@ -70,7 +70,7 @@ export default class ReactionsRowButton extends React.PureComponent<IProps, ISta
         }
     };
 
-    onMouseOver = () => {
+    public onMouseOver = () => {
         this.setState({
             // To avoid littering the DOM with a tooltip for every reaction,
             // only render it on first use.
@@ -79,13 +79,13 @@ export default class ReactionsRowButton extends React.PureComponent<IProps, ISta
         });
     };
 
-    onMouseLeave = () => {
+    public onMouseLeave = () => {
         this.setState({
             tooltipVisible: false,
         });
     };
 
-    render() {
+    public render() {
         const { mxEvent, content, count, reactionEvents, myReactionEvent } = this.props;
 
         const classes = classNames({

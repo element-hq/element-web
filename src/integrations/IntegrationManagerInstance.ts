@@ -38,30 +38,30 @@ export class IntegrationManagerInstance {
     public readonly id: string; // only applicable in some cases
 
     // Per the spec: UI URL is optional.
-    constructor(kind: string, apiUrl: string, uiUrl: string = apiUrl, id?: string) {
+    public constructor(kind: string, apiUrl: string, uiUrl: string = apiUrl, id?: string) {
         this.kind = kind;
         this.apiUrl = apiUrl;
         this.uiUrl = uiUrl;
         this.id = id;
     }
 
-    get name(): string {
+    public get name(): string {
         const parsed = url.parse(this.uiUrl);
         return parsed.host;
     }
 
-    get trimmedApiUrl(): string {
+    public get trimmedApiUrl(): string {
         const parsed = url.parse(this.apiUrl);
         parsed.pathname = "";
         parsed.path = "";
         return url.format(parsed);
     }
 
-    getScalarClient(): ScalarAuthClient {
+    public getScalarClient(): ScalarAuthClient {
         return new ScalarAuthClient(this.apiUrl, this.uiUrl);
     }
 
-    async open(room: Room = null, screen: string = null, integrationId: string = null): Promise<void> {
+    public async open(room: Room = null, screen: string = null, integrationId: string = null): Promise<void> {
         if (!SettingsStore.getValue("integrationProvisioning")) {
             return IntegrationManagers.sharedInstance().showDisabledDialog();
         }

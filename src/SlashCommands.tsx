@@ -138,7 +138,7 @@ export class Command {
     public readonly analyticsName?: SlashCommandEvent["command"];
     private readonly _isEnabled?: () => boolean;
 
-    constructor(opts: ICommandOpts) {
+    public constructor(opts: ICommandOpts) {
         this.command = opts.command;
         this.aliases = opts.aliases || [];
         this.args = opts.args || "";

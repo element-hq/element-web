@@ -33,7 +33,7 @@ class TermsCheckbox extends React.PureComponent<ITermsCheckboxProps> {
         this.props.onChange(this.props.url, ev.currentTarget.checked);
     };
 
-    render() {
+    public render() {
         return <input type="checkbox" onChange={this.onChange} checked={this.props.checked} />;
     }
 }
@@ -63,7 +63,7 @@ interface IState {
 }
 
 export default class TermsDialog extends React.PureComponent<ITermsDialogProps, IState> {
-    constructor(props) {
+    public constructor(props) {
         super(props);
         this.state = {
             // url -> boolean

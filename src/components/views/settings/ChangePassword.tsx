@@ -74,7 +74,7 @@ export default class ChangePassword extends React.Component<IProps, IState> {
         confirm: true,
     };
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {

@@ -78,10 +78,10 @@ interface IState {
 }
 
 export default class ReactionsRow extends React.PureComponent<IProps, IState> {
-    static contextType = RoomContext;
+    public static contextType = RoomContext;
     public context!: React.ContextType<typeof RoomContext>;
 
-    constructor(props: IProps, context: React.ContextType<typeof RoomContext>) {
+    public constructor(props: IProps, context: React.ContextType<typeof RoomContext>) {
         super(props, context);
         this.context = context;
 
@@ -91,7 +91,7 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
         };
     }
 
-    componentDidMount() {
+    public componentDidMount() {
         const { mxEvent, reactions } = this.props;
 
         if (mxEvent.isBeingDecrypted() || mxEvent.shouldAttemptDecryption()) {
@@ -105,7 +105,7 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
         }
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         const { mxEvent, reactions } = this.props;
 
         mxEvent.off(MatrixEventEvent.Decrypted, this.onDecrypted);
@@ -117,7 +117,7 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
         }
     }
 
-    componentDidUpdate(prevProps: IProps) {
+    public componentDidUpdate(prevProps: IProps) {
         if (this.props.reactions && prevProps.reactions !== this.props.reactions) {
             this.props.reactions.on(RelationsEvent.Add, this.onReactionsChange);
             this.props.reactions.on(RelationsEvent.Remove, this.onReactionsChange);
@@ -161,7 +161,7 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
         });
     };
 
-    render() {
+    public render() {
         const { mxEvent, reactions } = this.props;
         const { myReactions, showAll } = this.state;
 

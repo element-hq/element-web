@@ -49,11 +49,11 @@ export class IntegrationManagers {
         return IntegrationManagers.instance;
     }
 
-    constructor() {
+    public constructor() {
         this.compileManagers();
     }
 
-    startWatching(): void {
+    public startWatching(): void {
         this.stopWatching();
         this.client = MatrixClientPeg.get();
         this.client.on(ClientEvent.AccountData, this.onAccountData);
@@ -61,7 +61,7 @@ export class IntegrationManagers {
         this.compileManagers();
     }
 
-    stopWatching(): void {
+    public stopWatching(): void {
         if (!this.client) return;
         this.client.removeListener(ClientEvent.AccountData, this.onAccountData);
         this.client.removeListener(ClientEvent.ClientWellKnown, this.setupHomeserverManagers);
@@ -141,11 +141,11 @@ export class IntegrationManagers {
         }
     };
 
-    hasManager(): boolean {
+    public hasManager(): boolean {
         return this.managers.length > 0;
     }
 
-    getOrderedManagers(): IntegrationManagerInstance[] {
+    public getOrderedManagers(): IntegrationManagerInstance[] {
         const ordered = [];
         for (const kind of KIND_PREFERENCE) {
             const managers = this.managers.filter((m) => m.kind === kind);
@@ -161,7 +161,7 @@ export class IntegrationManagers {
         return ordered;
     }
 
-    getPrimaryManager(): IntegrationManagerInstance {
+    public getPrimaryManager(): IntegrationManagerInstance {
         if (this.hasManager()) {
             if (this.primaryManager) return this.primaryManager;
 
@@ -172,15 +172,15 @@ export class IntegrationManagers {
         }
     }
 
-    openNoManagerDialog(): void {
+    public openNoManagerDialog(): void {
         Modal.createDialog(IntegrationsImpossibleDialog);
     }
 
-    showDisabledDialog(): void {
+    public showDisabledDialog(): void {
         Modal.createDialog(IntegrationsDisabledDialog);
     }
 
-    async overwriteManagerOnAccount(manager: IntegrationManagerInstance) {
+    public async overwriteManagerOnAccount(manager: IntegrationManagerInstance) {
         // TODO: TravisR - We should be logging out of scalar clients.
         await WidgetUtils.removeIntegrationManagerWidgets();
 
@@ -195,7 +195,7 @@ export class IntegrationManagers {
      * @returns {Promise<IntegrationManagerInstance>} Resolves to an integration manager instance,
      * or null if none was found.
      */
-    async tryDiscoverManager(domainName: string): Promise<IntegrationManagerInstance> {
+    public async tryDiscoverManager(domainName: string): Promise<IntegrationManagerInstance> {
         logger.log("Looking up integration manager via .well-known");
         if (domainName.startsWith("http:") || domainName.startsWith("https:")) {
             // trim off the scheme and just use the domain

@@ -29,7 +29,7 @@ export class NotificationUtils {
     //   "highlight: true/false,
     // }
     // to a list of push actions.
-    static encodeActions(action: IEncodedActions): PushRuleAction[] {
+    public static encodeActions(action: IEncodedActions): PushRuleAction[] {
         const notify = action.notify;
         const sound = action.sound;
         const highlight = action.highlight;
@@ -55,7 +55,7 @@ export class NotificationUtils {
     //   "highlight: true/false,
     // }
     // If the actions couldn't be decoded then returns null.
-    static decodeActions(actions: PushRuleAction[]): IEncodedActions {
+    public static decodeActions(actions: PushRuleAction[]): IEncodedActions {
         let notify = false;
         let sound = null;
         let highlight = false;

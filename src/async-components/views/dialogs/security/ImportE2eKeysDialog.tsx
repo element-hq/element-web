@@ -57,7 +57,7 @@ export default class ImportE2eKeysDialog extends React.Component<IProps, IState>
     private unmounted = false;
     private file = createRef<HTMLInputElement>();
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {

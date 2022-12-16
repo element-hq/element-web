@@ -78,7 +78,7 @@ export default class PersistedElement extends React.Component<IProps> {
     private childContainer: HTMLDivElement;
     private child: HTMLDivElement;
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.resizeObserver = new ResizeObserver(this.repositionChild);
@@ -107,7 +107,7 @@ export default class PersistedElement extends React.Component<IProps> {
         }
     }
 
-    static isMounted(persistKey) {
+    public static isMounted(persistKey) {
         return Boolean(getContainer("mx_persistedElement_" + persistKey));
     }
 

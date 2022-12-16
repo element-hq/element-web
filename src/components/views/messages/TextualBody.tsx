@@ -67,10 +67,10 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
     private pills: Element[] = [];
     private tooltips: Element[] = [];
 
-    static contextType = RoomContext;
+    public static contextType = RoomContext;
     public context!: React.ContextType<typeof RoomContext>;
 
-    constructor(props) {
+    public constructor(props) {
         super(props);
 
         this.state = {
@@ -79,7 +79,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         };
     }
 
-    componentDidMount() {
+    public componentDidMount() {
         if (!this.props.editState) {
             this.applyFormatting();
         }
@@ -281,7 +281,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         }
     }
 
-    componentDidUpdate(prevProps) {
+    public componentDidUpdate(prevProps) {
         if (!this.props.editState) {
             const stoppedEditing = prevProps.editState && !this.props.editState;
             const messageWasEdited = prevProps.replacingEventId !== this.props.replacingEventId;
@@ -291,13 +291,13 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         }
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         this.unmounted = true;
         unmountPills(this.pills);
         unmountTooltips(this.tooltips);
     }
 
-    shouldComponentUpdate(nextProps, nextState) {
+    public shouldComponentUpdate(nextProps, nextState) {
         //console.info("shouldComponentUpdate: ShowUrlPreview for %s is %s", this.props.mxEvent.getId(), this.props.showUrlPreview);
 
         // exploit that events are immutable :)
@@ -562,7 +562,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         return <span className="mx_EventTile_pendingModeration">{`(${text})`}</span>;
     }
 
-    render() {
+    public render() {
         if (this.props.editState) {
             const isWysiwygComposerEnabled = SettingsStore.getValue("feature_wysiwyg_composer");
             return isWysiwygComposerEnabled ? (

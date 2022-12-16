@@ -71,7 +71,7 @@ interface IState {
 }
 
 export default class TimelineCard extends React.Component<IProps, IState> {
-    static contextType = RoomContext;
+    public static contextType = RoomContext;
 
     private dispatcherRef: string;
     private layoutWatcherRef: string;
@@ -79,7 +79,7 @@ export default class TimelineCard extends React.Component<IProps, IState> {
     private card = React.createRef<HTMLDivElement>();
     private readReceiptsSettingWatcher: string;
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
         this.state = {
             showReadReceipts: SettingsStore.getValue("showReadReceipts", props.room.roomId),

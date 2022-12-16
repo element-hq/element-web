@@ -46,7 +46,7 @@ interface IState {
  * may need to complete some steps to proceed.
  */
 export default class CreateCrossSigningDialog extends React.PureComponent<IProps, IState> {
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {
@@ -167,7 +167,7 @@ export default class CreateCrossSigningDialog extends React.PureComponent<IProps
         this.props.onFinished(false);
     };
 
-    render() {
+    public render() {
         let content;
         if (this.state.error) {
             content = (

@@ -39,14 +39,14 @@ export default class LiveRecordingClock extends React.PureComponent<IProps, ISta
         () => requestAnimationFrame(() => this.scheduledUpdate.trigger()),
     );
 
-    constructor(props) {
+    public constructor(props) {
         super(props);
         this.state = {
             seconds: 0,
         };
     }
 
-    componentDidMount() {
+    public componentDidMount() {
         this.props.recorder.liveData.onUpdate((update: IRecordingUpdate) => {
             this.seconds = update.timeSeconds;
             this.scheduledUpdate.mark();

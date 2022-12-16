@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 export class GenericError extends Error {
-    constructor(public readonly message: string, public readonly description?: string | undefined) {
+    public constructor(public readonly message: string, public readonly description?: string | undefined) {
         super(message);
     }
 }

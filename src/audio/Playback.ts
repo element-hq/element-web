@@ -83,7 +83,7 @@ export class Playback extends EventEmitter implements IDestroyable, PlaybackInte
      * @param {number[]} seedWaveform Optional seed waveform to present until the proper waveform
      * can be calculated. Contains values between zero and one, inclusive.
      */
-    constructor(private buf: ArrayBuffer, seedWaveform = DEFAULT_WAVEFORM) {
+    public constructor(private buf: ArrayBuffer, seedWaveform = DEFAULT_WAVEFORM) {
         super();
         // Capture the file size early as reading the buffer will result in a 0-length buffer left behind
         this.fileSize = this.buf.byteLength;

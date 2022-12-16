@@ -35,7 +35,7 @@ interface IMenuOptionProps {
 }
 
 class MenuOption extends React.Component<IMenuOptionProps> {
-    static defaultProps = {
+    public static defaultProps = {
         disabled: false,
     };
 
@@ -49,7 +49,7 @@ class MenuOption extends React.Component<IMenuOptionProps> {
         this.props.onClick(this.props.dropdownKey);
     };
 
-    render() {
+    public render() {
         const optClasses = classnames({
             mx_Dropdown_option: true,
             mx_Dropdown_option_highlight: this.props.highlighted,
@@ -117,7 +117,7 @@ export default class Dropdown extends React.Component<DropdownProps, IState> {
     private ignoreEvent: MouseEvent = null;
     private childrenByKey: Record<string, ReactNode> = {};
 
-    constructor(props: DropdownProps) {
+    public constructor(props: DropdownProps) {
         super(props);
 
         this.reindexChildren(this.props.children);
@@ -149,7 +149,7 @@ export default class Dropdown extends React.Component<DropdownProps, IState> {
         }
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         document.removeEventListener("click", this.onDocumentClick, false);
     }
 
@@ -327,7 +327,7 @@ export default class Dropdown extends React.Component<DropdownProps, IState> {
         return options;
     }
 
-    render() {
+    public render() {
         let currentValue;
 
         const menuStyle: CSSProperties = {};

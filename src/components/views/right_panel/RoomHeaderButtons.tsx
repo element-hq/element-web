@@ -139,7 +139,7 @@ export default class RoomHeaderButtons extends HeaderButtons<IProps> {
         return client.canSupport.get(Feature.ThreadUnreadNotifications) !== ServerSupport.Unsupported;
     }
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props, HeaderKind.Room);
 
         this.threadNotificationState =

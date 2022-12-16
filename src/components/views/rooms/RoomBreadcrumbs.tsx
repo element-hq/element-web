@@ -71,7 +71,7 @@ const RoomBreadcrumbTile = ({ room, onClick }: { room: Room; onClick: (ev: Butto
 export default class RoomBreadcrumbs extends React.PureComponent<IProps, IState> {
     private isMounted = true;
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {

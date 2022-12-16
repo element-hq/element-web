@@ -41,7 +41,7 @@ interface IProps extends Omit<IInputProps, "onValidate"> {
 }
 
 class PassphraseField extends PureComponent<IProps> {
-    static defaultProps = {
+    public static defaultProps = {
         label: _td("Password"),
         labelEnterPassword: _td("Enter password"),
         labelStrongPassword: _td("Nice, strong password!"),
@@ -94,7 +94,7 @@ class PassphraseField extends PureComponent<IProps> {
         ],
     });
 
-    onValidate = async (fieldState: IFieldState) => {
+    public onValidate = async (fieldState: IFieldState) => {
         const result = await this.validate(fieldState);
         if (this.props.onValidate) {
             this.props.onValidate(result);
@@ -102,7 +102,7 @@ class PassphraseField extends PureComponent<IProps> {
         return result;
     };
 
-    render() {
+    public render() {
         return (
             <Field
                 id={this.props.id}

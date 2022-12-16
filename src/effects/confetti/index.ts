@@ -61,7 +61,7 @@ export const DefaultOptions: ConfettiOptions = {
 export default class Confetti implements ICanvasEffect {
     private readonly options: ConfettiOptions;
 
-    constructor(options: { [key: string]: any }) {
+    public constructor(options: { [key: string]: any }) {
         this.options = { ...DefaultOptions, ...options };
     }
 

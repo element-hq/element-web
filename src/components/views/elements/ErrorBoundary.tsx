@@ -34,7 +34,7 @@ interface IState {
  * catch exceptions during rendering in the component tree below them.
  */
 export default class ErrorBoundary extends React.PureComponent<{}, IState> {
-    constructor(props) {
+    public constructor(props) {
         super(props);
 
         this.state = {
@@ -42,13 +42,13 @@ export default class ErrorBoundary extends React.PureComponent<{}, IState> {
         };
     }
 
-    static getDerivedStateFromError(error: Error): Partial<IState> {
+    public static getDerivedStateFromError(error: Error): Partial<IState> {
         // Side effects are not permitted here, so we only update the state so
         // that the next render shows an error message.
         return { error };
     }
 
-    componentDidCatch(error: Error, { componentStack }: ErrorInfo): void {
+    public componentDidCatch(error: Error, { componentStack }: ErrorInfo): void {
         // Browser consoles are better at formatting output when native errors are passed
         // in their own `console.error` invocation.
         logger.error(error);
@@ -73,7 +73,7 @@ export default class ErrorBoundary extends React.PureComponent<{}, IState> {
         });
     };
 
-    render() {
+    public render() {
         if (this.state.error) {
             const newIssueUrl = "https://github.com/vector-im/element-web/issues/new/choose";
 

@@ -46,7 +46,7 @@ interface IState {
 export default class WidgetCapabilitiesPromptDialog extends React.PureComponent<IProps, IState> {
     private eventPermissionsMap = new Map<Capability, WidgetEventCapability>();
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         const parsedEvents = WidgetEventCapability.findEventCapabilities(this.props.requestedCapabilities);

@@ -38,7 +38,7 @@ interface IState {
 }
 
 export default class WidgetOpenIDPermissionsDialog extends React.PureComponent<IProps, IState> {
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {

@@ -85,7 +85,7 @@ export type Part = IBasePart | IPillCandidatePart | IPillPart;
 abstract class BasePart {
     protected _text: string;
 
-    constructor(text = "") {
+    public constructor(text = "") {
         this._text = text;
     }
 
@@ -248,7 +248,7 @@ export class PlainPart extends PlainBasePart implements IBasePart {
 }
 
 export abstract class PillPart extends BasePart implements IPillPart {
-    constructor(public resourceId: string, label) {
+    public constructor(public resourceId: string, label) {
         super(label);
     }
 
@@ -408,7 +408,7 @@ export class EmojiPart extends BasePart implements IBasePart {
 }
 
 class RoomPillPart extends PillPart {
-    constructor(resourceId: string, label: string, private room?: Room) {
+    public constructor(resourceId: string, label: string, private room?: Room) {
         super(resourceId, label);
     }
 
@@ -432,7 +432,7 @@ class RoomPillPart extends PillPart {
 }
 
 class AtRoomPillPart extends RoomPillPart {
-    constructor(text: string, room: Room) {
+    public constructor(text: string, room: Room) {
         super(text, text, room);
     }
 
@@ -449,7 +449,7 @@ class AtRoomPillPart extends RoomPillPart {
 }
 
 class UserPillPart extends PillPart {
-    constructor(userId, displayName, private member: RoomMember) {
+    public constructor(userId, displayName, private member: RoomMember) {
         super(userId, displayName);
     }
 
@@ -484,7 +484,7 @@ class UserPillPart extends PillPart {
 }
 
 class PillCandidatePart extends PlainBasePart implements IPillCandidatePart {
-    constructor(text: string, private autoCompleteCreator: IAutocompleteCreator) {
+    public constructor(text: string, private autoCompleteCreator: IAutocompleteCreator) {
         super(text);
     }
 
@@ -508,7 +508,7 @@ class PillCandidatePart extends PlainBasePart implements IPillCandidatePart {
         return true;
     }
 
-    get type(): IPillCandidatePart["type"] {
+    public get type(): IPillCandidatePart["type"] {
         return Type.PillCandidate;
     }
 }
@@ -530,7 +530,7 @@ interface IAutocompleteCreator {
 export class PartCreator {
     protected readonly autoCompleteCreator: IAutocompleteCreator;
 
-    constructor(
+    public constructor(
         private readonly room: Room,
         private readonly client: MatrixClient,
         autoCompleteCreator: AutoCompleteCreator = null,

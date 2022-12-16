@@ -57,7 +57,7 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
     private geolocate?: maplibregl.GeolocateControl = null;
     private marker?: maplibregl.Marker = null;
 
-    constructor(props: ILocationPickerProps) {
+    public constructor(props: ILocationPickerProps) {
         super(props);
 
         this.state = {
@@ -71,7 +71,7 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
         return "mx_MLocationPicker_marker";
     };
 
-    componentDidMount() {
+    public componentDidMount() {
         this.context.on(ClientEvent.ClientWellKnown, this.updateStyleUrl);
 
         try {
@@ -128,7 +128,7 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
         }
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         this.geolocate?.off("error", this.onGeolocateError);
         this.geolocate?.off("geolocate", this.onGeolocate);
         this.map?.off("click", this.onClick);
@@ -208,7 +208,7 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
         this.props.onFinished();
     };
 
-    render() {
+    public render() {
         if (this.state.error) {
             return (
                 <div className="mx_LocationPicker mx_LocationPicker_hasError">

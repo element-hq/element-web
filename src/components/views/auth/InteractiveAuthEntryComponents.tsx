@@ -98,9 +98,9 @@ interface IPasswordAuthEntryState {
 }
 
 export class PasswordAuthEntry extends React.Component<IAuthEntryProps, IPasswordAuthEntryState> {
-    static LOGIN_TYPE = AuthType.Password;
+    public static LOGIN_TYPE = AuthType.Password;
 
-    constructor(props) {
+    public constructor(props) {
         super(props);
 
         this.state = {
@@ -108,7 +108,7 @@ export class PasswordAuthEntry extends React.Component<IAuthEntryProps, IPasswor
         };
     }
 
-    componentDidMount() {
+    public componentDidMount() {
         this.props.onPhaseChange(DEFAULT_PHASE);
     }
 
@@ -136,7 +136,7 @@ export class PasswordAuthEntry extends React.Component<IAuthEntryProps, IPasswor
         });
     };
 
-    render() {
+    public render() {
         const passwordBoxClass = classNames({
             error: this.props.errorText,
         });
@@ -194,9 +194,9 @@ interface IRecaptchaAuthEntryProps extends IAuthEntryProps {
 /* eslint-enable camelcase */
 
 export class RecaptchaAuthEntry extends React.Component<IRecaptchaAuthEntryProps> {
-    static LOGIN_TYPE = AuthType.Recaptcha;
+    public static LOGIN_TYPE = AuthType.Recaptcha;
 
-    componentDidMount() {
+    public componentDidMount() {
         this.props.onPhaseChange(DEFAULT_PHASE);
     }
 
@@ -207,7 +207,7 @@ export class RecaptchaAuthEntry extends React.Component<IRecaptchaAuthEntryProps
         });
     };
 
-    render() {
+    public render() {
         if (this.props.busy) {
             return <Spinner />;
         }
@@ -262,9 +262,9 @@ interface ITermsAuthEntryState {
 }
 
 export class TermsAuthEntry extends React.Component<ITermsAuthEntryProps, ITermsAuthEntryState> {
-    static LOGIN_TYPE = AuthType.Terms;
+    public static LOGIN_TYPE = AuthType.Terms;
 
-    constructor(props) {
+    public constructor(props) {
         super(props);
 
         // example stageParams:
@@ -320,7 +320,7 @@ export class TermsAuthEntry extends React.Component<ITermsAuthEntryProps, ITerms
         };
     }
 
-    componentDidMount() {
+    public componentDidMount() {
         this.props.onPhaseChange(DEFAULT_PHASE);
     }
 
@@ -349,7 +349,7 @@ export class TermsAuthEntry extends React.Component<ITermsAuthEntryProps, ITerms
         }
     };
 
-    render() {
+    public render() {
         if (this.props.busy) {
             return <Spinner />;
         }
@@ -423,9 +423,9 @@ export class EmailIdentityAuthEntry extends React.Component<
     IEmailIdentityAuthEntryProps,
     IEmailIdentityAuthEntryState
 > {
-    static LOGIN_TYPE = AuthType.Email;
+    public static LOGIN_TYPE = AuthType.Email;
 
-    constructor(props: IEmailIdentityAuthEntryProps) {
+    public constructor(props: IEmailIdentityAuthEntryProps) {
         super(props);
 
         this.state = {
@@ -434,11 +434,11 @@ export class EmailIdentityAuthEntry extends React.Component<
         };
     }
 
-    componentDidMount() {
+    public componentDidMount() {
         this.props.onPhaseChange(DEFAULT_PHASE);
     }
 
-    render() {
+    public render() {
         let errorSection;
         // ignore the error when errcode is M_UNAUTHORIZED as we expect that error until the link is clicked.
         if (this.props.errorText && this.props.errorCode !== "M_UNAUTHORIZED") {
@@ -549,13 +549,13 @@ interface IMsisdnAuthEntryState {
 }
 
 export class MsisdnAuthEntry extends React.Component<IMsisdnAuthEntryProps, IMsisdnAuthEntryState> {
-    static LOGIN_TYPE = AuthType.Msisdn;
+    public static LOGIN_TYPE = AuthType.Msisdn;
 
     private submitUrl: string;
     private sid: string;
     private msisdn: string;
 
-    constructor(props) {
+    public constructor(props) {
         super(props);
 
         this.state = {
@@ -565,7 +565,7 @@ export class MsisdnAuthEntry extends React.Component<IMsisdnAuthEntryProps, IMsi
         };
     }
 
-    componentDidMount() {
+    public componentDidMount() {
         this.props.onPhaseChange(DEFAULT_PHASE);
 
         this.setState({ requestingToken: true });
@@ -646,7 +646,7 @@ export class MsisdnAuthEntry extends React.Component<IMsisdnAuthEntryProps, IMsi
         }
     };
 
-    render() {
+    public render() {
         if (this.state.requestingToken) {
             return <Spinner />;
         } else {
@@ -704,16 +704,16 @@ interface ISSOAuthEntryState {
 }
 
 export class SSOAuthEntry extends React.Component<ISSOAuthEntryProps, ISSOAuthEntryState> {
-    static LOGIN_TYPE = AuthType.Sso;
-    static UNSTABLE_LOGIN_TYPE = AuthType.SsoUnstable;
+    public static LOGIN_TYPE = AuthType.Sso;
+    public static UNSTABLE_LOGIN_TYPE = AuthType.SsoUnstable;
 
-    static PHASE_PREAUTH = 1; // button to start SSO
-    static PHASE_POSTAUTH = 2; // button to confirm SSO completed
+    public static PHASE_PREAUTH = 1; // button to start SSO
+    public static PHASE_POSTAUTH = 2; // button to confirm SSO completed
 
     private ssoUrl: string;
     private popupWindow: Window;
 
-    constructor(props) {
+    public constructor(props) {
         super(props);
 
         // We actually send the user through fallback auth so we don't have to
@@ -729,11 +729,11 @@ export class SSOAuthEntry extends React.Component<ISSOAuthEntryProps, ISSOAuthEn
         };
     }
 
-    componentDidMount() {
+    public componentDidMount() {
         this.props.onPhaseChange(SSOAuthEntry.PHASE_PREAUTH);
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         window.removeEventListener("message", this.onReceiveMessage);
         if (this.popupWindow) {
             this.popupWindow.close();
@@ -770,7 +770,7 @@ export class SSOAuthEntry extends React.Component<ISSOAuthEntryProps, ISSOAuthEn
         this.props.submitAuthDict({});
     };
 
-    render() {
+    public render() {
         let continueButton = null;
         const cancelButton = (
             <AccessibleButton
@@ -825,7 +825,7 @@ export class FallbackAuthEntry extends React.Component<IAuthEntryProps> {
     private popupWindow: Window;
     private fallbackButton = createRef<HTMLButtonElement>();
 
-    constructor(props) {
+    public constructor(props) {
         super(props);
 
         // we have to make the user click a button, as browsers will block
@@ -834,11 +834,11 @@ export class FallbackAuthEntry extends React.Component<IAuthEntryProps> {
         window.addEventListener("message", this.onReceiveMessage);
     }
 
-    componentDidMount() {
+    public componentDidMount() {
         this.props.onPhaseChange(DEFAULT_PHASE);
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         window.removeEventListener("message", this.onReceiveMessage);
         if (this.popupWindow) {
             this.popupWindow.close();
@@ -865,7 +865,7 @@ export class FallbackAuthEntry extends React.Component<IAuthEntryProps> {
         }
     };
 
-    render() {
+    public render() {
         let errorSection;
         if (this.props.errorText) {
             errorSection = (

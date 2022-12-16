@@ -47,21 +47,21 @@ interface IState {
 }
 
 export default class WhoIsTypingTile extends React.Component<IProps, IState> {
-    static defaultProps = {
+    public static defaultProps = {
         whoIsTypingLimit: 3,
     };
 
-    state = {
+    public state = {
         usersTyping: WhoIsTyping.usersTypingApartFromMe(this.props.room),
         delayedStopTypingTimers: {},
     };
 
-    componentDidMount() {
+    public componentDidMount() {
         MatrixClientPeg.get().on(RoomMemberEvent.Typing, this.onRoomMemberTyping);
         MatrixClientPeg.get().on(RoomEvent.Timeline, this.onRoomTimeline);
     }
 
-    componentDidUpdate(_, prevState) {
+    public componentDidUpdate(_, prevState) {
         const wasVisible = WhoIsTypingTile.isVisible(prevState);
         const isVisible = WhoIsTypingTile.isVisible(this.state);
         if (this.props.onShown && !wasVisible && isVisible) {
@@ -71,7 +71,7 @@ export default class WhoIsTypingTile extends React.Component<IProps, IState> {
         }
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         // we may have entirely lost our client as we're logging out before clicking login on the guest bar...
         const client = MatrixClientPeg.get();
         if (client) {
@@ -199,7 +199,7 @@ export default class WhoIsTypingTile extends React.Component<IProps, IState> {
         return avatars;
     }
 
-    render() {
+    public render() {
         let usersTyping = this.state.usersTyping;
         const stoppedUsersOnTimer = Object.keys(this.state.delayedStopTypingTimers).map((userId) =>
             this.props.room.getMember(userId),

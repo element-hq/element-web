@@ -75,7 +75,7 @@ export default class LegacyCallEventGrouper extends EventEmitter {
     private call: MatrixCall;
     public state: CallState | CustomCallState;
 
-    constructor() {
+    public constructor() {
         super();
 
         LegacyCallHandler.instance.addListener(LegacyCallHandlerEvent.CallsChanged, this.setCall);

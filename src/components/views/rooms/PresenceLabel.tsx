@@ -33,7 +33,7 @@ interface IProps {
 }
 
 export default class PresenceLabel extends React.Component<IProps> {
-    static defaultProps = {
+    public static defaultProps = {
         activeAgo: -1,
         presenceState: null,
     };
@@ -82,7 +82,7 @@ export default class PresenceLabel extends React.Component<IProps> {
         }
     }
 
-    render() {
+    public render() {
         return (
             <div className="mx_PresenceLabel">
                 {this.getPrettyPresence(this.props.presenceState, this.props.activeAgo, this.props.currentlyActive)}

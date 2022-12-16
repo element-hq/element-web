@@ -33,7 +33,7 @@ export default class ConfirmWipeDeviceDialog extends React.Component<IProps> {
         this.props.onFinished(false);
     };
 
-    render() {
+    public render() {
         return (
             <BaseDialog
                 className="mx_ConfirmWipeDeviceDialog"

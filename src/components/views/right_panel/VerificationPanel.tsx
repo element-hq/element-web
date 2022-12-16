@@ -56,7 +56,7 @@ interface IState {
 export default class VerificationPanel extends React.PureComponent<IProps, IState> {
     private hasVerifier: boolean;
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
         this.state = {};
         this.hasVerifier = false;

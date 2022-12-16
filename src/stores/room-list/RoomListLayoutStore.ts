@@ -29,7 +29,7 @@ export default class RoomListLayoutStore extends AsyncStoreWithClient<IState> {
 
     private readonly layoutMap = new Map<TagID, ListLayout>();
 
-    constructor() {
+    public constructor() {
         super(defaultDispatcher);
     }
 

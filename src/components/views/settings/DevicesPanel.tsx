@@ -45,7 +45,7 @@ export default class DevicesPanel extends React.Component<IProps, IState> {
     public context!: React.ContextType<typeof MatrixClientContext>;
     private unmounted = false;
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
         this.state = {
             devices: [],

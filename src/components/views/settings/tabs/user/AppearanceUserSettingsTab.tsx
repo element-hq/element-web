@@ -50,7 +50,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
 
     private unmounted = false;
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {
@@ -64,7 +64,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         };
     }
 
-    async componentDidMount() {
+    public async componentDidMount() {
         // Fetch the current user profile for the message preview
         const client = MatrixClientPeg.get();
         const userId = client.getUserId();
@@ -78,7 +78,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         });
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         this.unmounted = true;
     }
 
@@ -139,7 +139,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         );
     }
 
-    render() {
+    public render() {
         const brand = SdkConfig.get().brand;
 
         return (

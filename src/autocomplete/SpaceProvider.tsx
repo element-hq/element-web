@@ -27,11 +27,11 @@ export default class SpaceProvider extends RoomProvider {
             .filter((r) => r.isSpaceRoom());
     }
 
-    getName() {
+    public getName() {
         return _t("Spaces");
     }
 
-    renderCompletions(completions: React.ReactNode[]): React.ReactNode {
+    public renderCompletions(completions: React.ReactNode[]): React.ReactNode {
         return (
             <div
                 className="mx_Autocomplete_Completion_container_pill mx_Autocomplete_Completion_container_truncate"

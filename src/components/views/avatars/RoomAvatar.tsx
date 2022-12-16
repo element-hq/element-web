@@ -54,7 +54,7 @@ export default class RoomAvatar extends React.Component<IProps, IState> {
         oobData: {},
     };
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {

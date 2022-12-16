@@ -41,12 +41,12 @@ interface IState {
 export default class MessageComposerFormatBar extends React.PureComponent<IProps, IState> {
     private readonly formatBarRef = createRef<HTMLDivElement>();
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
         this.state = { visible: false };
     }
 
-    render() {
+    public render() {
         const classes = classNames("mx_MessageComposerFormatBar", {
             mx_MessageComposerFormatBar_shown: this.state.visible,
         });
@@ -124,7 +124,7 @@ interface IFormatButtonProps {
 }
 
 class FormatButton extends React.PureComponent<IFormatButtonProps> {
-    render() {
+    public render() {
         const className = `mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIcon${this.props.icon}`;
         let shortcut;
         if (this.props.shortcut) {

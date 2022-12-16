@@ -102,7 +102,6 @@ module.exports = {
             rules: {
                 // temporary disabled
                 "@typescript-eslint/explicit-function-return-type": "off",
-                "@typescript-eslint/explicit-member-accessibility": "off",
 
                 // Things we do that break the ideal style
                 "prefer-promise-reject-errors": "off",
@@ -155,6 +154,14 @@ module.exports = {
             ],
             rules: {
                 "@typescript-eslint/no-var-requires": "off",
+            },
+        },
+        {
+            files: ["test/**/*.{ts,tsx}", "cypress/**/*.ts"],
+            rules: {
+                // We don't need super strict typing in test utilities
+                "@typescript-eslint/explicit-function-return-type": "off",
+                "@typescript-eslint/explicit-member-accessibility": "off",
             },
         },
     ],

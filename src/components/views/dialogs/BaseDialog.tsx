@@ -88,7 +88,7 @@ export default class BaseDialog extends React.Component<IProps> {
         fixedWidth: true,
     };
 
-    constructor(props) {
+    public constructor(props) {
         super(props);
 
         this.matrixClient = MatrixClientPeg.get();

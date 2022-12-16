@@ -62,7 +62,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
     private nameField = createRef<Field>();
     private aliasField = createRef<RoomAliasField>();
 
-    constructor(props) {
+    public constructor(props) {
         super(props);
 
         this.supportsRestricted = !!this.props.parentSpace;
@@ -124,7 +124,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
         return opts;
     }
 
-    componentDidMount() {
+    public componentDidMount() {
         // move focus to first field when showing dialog
         this.nameField.current.focus();
     }
@@ -216,7 +216,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
         ],
     });
 
-    render() {
+    public render() {
         const isVideoRoom = this.props.type === RoomType.ElementVideo;
 
         let aliasField: JSX.Element;

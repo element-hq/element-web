@@ -64,7 +64,7 @@ export default class MultiInviter {
      * @param {string} roomId The ID of the room to invite to
      * @param {function} progressCallback optional callback, fired after each invite.
      */
-    constructor(private roomId: string, private readonly progressCallback?: () => void) {
+    public constructor(private roomId: string, private readonly progressCallback?: () => void) {
         this.matrixClient = MatrixClientPeg.get();
     }
 

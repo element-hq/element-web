@@ -48,7 +48,7 @@ export class EventIndexPeg {
      * @return {Promise<boolean>} A promise that will resolve to true if an
      * EventIndex was successfully initialized, false otherwise.
      */
-    async init() {
+    public async init() {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
         if (!indexManager) {
             logger.log("EventIndex: Platform doesn't support event indexing, not initializing.");
@@ -76,7 +76,7 @@ export class EventIndexPeg {
      * @returns {boolean} True if the event index was successfully initialized,
      * false otherwise.
      */
-    async initEventIndex() {
+    public async initEventIndex() {
         const index = new EventIndex();
         const indexManager = PlatformPeg.get().getEventIndexingManager();
         const client = MatrixClientPeg.get();
@@ -119,7 +119,7 @@ export class EventIndexPeg {
      * @return {boolean} True if it has support, false otherwise. Note that this
      * does not mean that support is installed.
      */
-    platformHasSupport(): boolean {
+    public platformHasSupport(): boolean {
         return PlatformPeg.get().getEventIndexingManager() !== null;
     }
 
@@ -132,7 +132,7 @@ export class EventIndexPeg {
      *
      * @return {boolean} True if support is installed, false otherwise.
      */
-    supportIsInstalled(): boolean {
+    public supportIsInstalled(): boolean {
         return this._supportIsInstalled;
     }
 
@@ -141,16 +141,16 @@ export class EventIndexPeg {
      *
      * @return {EventIndex} The current event index.
      */
-    get() {
+    public get() {
         return this.index;
     }
 
-    start() {
+    public start() {
         if (this.index === null) return;
         this.index.startCrawler();
     }
 
-    stop() {
+    public stop() {
         if (this.index === null) return;
         this.index.stopCrawler();
     }
@@ -163,7 +163,7 @@ export class EventIndexPeg {
      * @return {Promise} A promise that will resolve once the event index is
      * closed.
      */
-    async unset() {
+    public async unset() {
         if (this.index === null) return;
         await this.index.close();
         this.index = null;
@@ -177,7 +177,7 @@ export class EventIndexPeg {
      * @return {Promise} A promise that will resolve once the event index is
      * deleted.
      */
-    async deleteEventIndex() {
+    public async deleteEventIndex() {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
 
         if (indexManager !== null) {

@@ -308,7 +308,7 @@ export default class InteractiveTooltip extends React.Component<IProps, IState> 
         side: Direction.Top,
     };
 
-    constructor(props, context) {
+    public constructor(props, context) {
         super(props, context);
 
         this.state = {
@@ -317,7 +317,7 @@ export default class InteractiveTooltip extends React.Component<IProps, IState> 
         };
     }
 
-    componentDidUpdate() {
+    public componentDidUpdate() {
         // Whenever this passthrough component updates, also render the tooltip
         // in a separate DOM tree. This allows the tooltip content to participate
         // the normal React rendering cycle: when this component re-renders, the
@@ -327,7 +327,7 @@ export default class InteractiveTooltip extends React.Component<IProps, IState> 
         this.renderTooltip();
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         document.removeEventListener("mousemove", this.onMouseMove);
     }
 
@@ -486,7 +486,7 @@ export default class InteractiveTooltip extends React.Component<IProps, IState> 
         ReactDOM.render(tooltip, getOrCreateContainer());
     }
 
-    render() {
+    public render() {
         return this.props.children({
             ref: this.collectTarget,
             onMouseOver: this.onTargetMouseOver,

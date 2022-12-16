@@ -48,7 +48,7 @@ type AnyPassphrase = KeysStartingWith<IState, "passphrase">;
 export default class ExportE2eKeysDialog extends React.Component<IProps, IState> {
     private unmounted = false;
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {

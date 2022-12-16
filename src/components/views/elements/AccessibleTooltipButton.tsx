@@ -36,14 +36,14 @@ interface IState {
 }
 
 export default class AccessibleTooltipButton extends React.PureComponent<IProps, IState> {
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
         this.state = {
             hover: false,
         };
     }
 
-    componentDidUpdate(prevProps: Readonly<IProps>) {
+    public componentDidUpdate(prevProps: Readonly<IProps>) {
         if (!prevProps.forceHide && this.props.forceHide && this.state.hover) {
             this.setState({
                 hover: false,
@@ -73,7 +73,7 @@ export default class AccessibleTooltipButton extends React.PureComponent<IProps,
         if (ev.relatedTarget) this.showTooltip();
     };
 
-    render() {
+    public render() {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { title, tooltip, children, tooltipClassName, forceHide, alignment, onHideTooltip, ...props } =
             this.props;

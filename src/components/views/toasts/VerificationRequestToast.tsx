@@ -49,12 +49,12 @@ interface IState {
 export default class VerificationRequestToast extends React.PureComponent<IProps, IState> {
     private intervalHandle: number;
 
-    constructor(props) {
+    public constructor(props) {
         super(props);
         this.state = { counter: Math.ceil(props.request.timeout / 1000) };
     }
 
-    async componentDidMount() {
+    public async componentDidMount() {
         const { request } = this.props;
         if (request.timeout && request.timeout > 0) {
             this.intervalHandle = window.setInterval(() => {
@@ -83,7 +83,7 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
         }
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         clearInterval(this.intervalHandle);
         const { request } = this.props;
         request.off(VerificationRequestEvent.Change, this.checkRequestIsPending);
@@ -96,7 +96,7 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
         }
     };
 
-    cancel = () => {
+    public cancel = () => {
         ToastStore.sharedInstance().dismissToast(this.props.toastKey);
         try {
             this.props.request.cancel();
@@ -105,7 +105,7 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
         }
     };
 
-    accept = async () => {
+    public accept = async () => {
         ToastStore.sharedInstance().dismissToast(this.props.toastKey);
         const { request } = this.props;
         // no room id for to_device requests
@@ -148,7 +148,7 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
         }
     };
 
-    render() {
+    public render() {
         const { request } = this.props;
         let description;
         let detail;

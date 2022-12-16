@@ -104,7 +104,7 @@ export default class LegacyCallView extends React.Component<IProps, IState> {
     private contentWrapperRef = createRef<HTMLDivElement>();
     private buttonsRef = createRef<LegacyCallViewButtons>();
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         const { primary, secondary, sidebar } = LegacyCallView.getOrderedFeeds(this.props.call.getFeeds());
@@ -140,7 +140,7 @@ export default class LegacyCallView extends React.Component<IProps, IState> {
         dis.unregister(this.dispatcherRef);
     }
 
-    static getDerivedStateFromProps(props: IProps): Partial<IState> {
+    public static getDerivedStateFromProps(props: IProps): Partial<IState> {
         const { primary, secondary, sidebar } = LegacyCallView.getOrderedFeeds(props.call.getFeeds());
 
         return {
@@ -232,7 +232,7 @@ export default class LegacyCallView extends React.Component<IProps, IState> {
         this.buttonsRef.current?.showControls();
     };
 
-    static getOrderedFeeds(feeds: Array<CallFeed>): {
+    public static getOrderedFeeds(feeds: Array<CallFeed>): {
         primary?: CallFeed;
         secondary?: CallFeed;
         sidebar: Array<CallFeed>;

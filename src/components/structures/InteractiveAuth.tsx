@@ -99,7 +99,7 @@ export default class InteractiveAuthComponent extends React.Component<IProps, IS
 
     private unmounted = false;
 
-    constructor(props) {
+    public constructor(props) {
         super(props);
 
         this.state = {
@@ -155,7 +155,7 @@ export default class InteractiveAuthComponent extends React.Component<IProps, IS
             });
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         this.unmounted = true;
 
         if (this.intervalId !== null) {
@@ -249,7 +249,7 @@ export default class InteractiveAuthComponent extends React.Component<IProps, IS
         this.authLogic.setEmailSid(sid);
     };
 
-    render() {
+    public render() {
         const stage = this.state.authStage;
         if (!stage) {
             if (this.state.busy) {

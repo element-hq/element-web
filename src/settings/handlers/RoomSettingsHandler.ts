@@ -31,7 +31,7 @@ const DEFAULT_SETTINGS_EVENT_TYPE = "im.vector.web.settings";
  * Gets and sets settings at the "room" level.
  */
 export default class RoomSettingsHandler extends MatrixClientBackedSettingsHandler {
-    constructor(public readonly watchers: WatchManager) {
+    public constructor(public readonly watchers: WatchManager) {
         super();
     }
 

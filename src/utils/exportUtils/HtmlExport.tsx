@@ -49,7 +49,7 @@ export default class HTMLExporter extends Exporter {
     protected mediaOmitText: string;
     private threadsEnabled: boolean;
 
-    constructor(
+    public constructor(
         room: Room,
         exportType: ExportType,
         exportOptions: IExportOptions,

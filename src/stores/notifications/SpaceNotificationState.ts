@@ -28,7 +28,7 @@ export class SpaceNotificationState extends NotificationState {
     public rooms: Room[] = []; // exposed only for tests
     private states: { [spaceId: string]: RoomNotificationState } = {};
 
-    constructor(private getRoomFn: FetchRoomFn) {
+    public constructor(private getRoomFn: FetchRoomFn) {
         super();
     }
 

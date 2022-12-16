@@ -71,10 +71,10 @@ export default class MemberList extends React.Component<IProps, IState> {
     private showPresence = true;
     private mounted = false;
 
-    static contextType = SDKContext;
+    public static contextType = SDKContext;
     public context!: React.ContextType<typeof SDKContext>;
 
-    constructor(props: IProps, context: React.ContextType<typeof SDKContext>) {
+    public constructor(props: IProps, context: React.ContextType<typeof SDKContext>) {
         super(props);
         this.state = this.getMembersState([], []);
         this.showPresence = context.memberListStore.isPresenceEnabled();
@@ -97,7 +97,7 @@ export default class MemberList extends React.Component<IProps, IState> {
         cli.on(RoomEvent.MyMembership, this.onMyMembership);
     }
 
-    componentDidMount(): void {
+    public componentDidMount(): void {
         this.updateListNow(true);
     }
 
@@ -359,7 +359,7 @@ export default class MemberList extends React.Component<IProps, IState> {
         return this.state.filteredInvitedMembers.length + (this.getPending3PidInvites() || []).length;
     };
 
-    render() {
+    public render() {
         if (this.state.loading) {
             return (
                 <BaseCard className="mx_MemberList" onClose={this.props.onClose}>

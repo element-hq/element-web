@@ -21,7 +21,7 @@ import { textForVoiceBroadcastStoppedEventWithoutLink } from "../../../voice-bro
 import { IPreview } from "./IPreview";
 
 export class VoiceBroadcastPreview implements IPreview {
-    getTextFor(event: MatrixEvent, tagId?: string, isThread?: boolean): string | null {
+    public getTextFor(event: MatrixEvent, tagId?: string, isThread?: boolean): string | null {
         if (!event.isRedacted() && event.getContent()?.state === VoiceBroadcastInfoState.Stopped) {
             return textForVoiceBroadcastStoppedEventWithoutLink(event);
         }

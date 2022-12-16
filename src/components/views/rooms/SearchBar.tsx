@@ -44,7 +44,7 @@ export enum SearchScope {
 export default class SearchBar extends React.Component<IProps, IState> {
     private searchTerm: RefObject<HTMLInputElement> = createRef();
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
         this.state = {
             scope: SearchScope.Room,

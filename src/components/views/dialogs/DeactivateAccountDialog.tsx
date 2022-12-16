@@ -46,7 +46,7 @@ interface IState {
 }
 
 export default class DeactivateAccountDialog extends React.Component<IProps, IState> {
-    constructor(props) {
+    public constructor(props) {
         super(props);
 
         this.state = {

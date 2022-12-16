@@ -611,13 +611,13 @@ const SpaceSetupPrivateInvite = ({ space, onFinished }) => {
 };
 
 export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
-    static contextType = MatrixClientContext;
+    public static contextType = MatrixClientContext;
     public context!: React.ContextType<typeof MatrixClientContext>;
 
     private readonly creator: string;
     private readonly dispatcherRef: string;
 
-    constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
+    public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
         super(props, context);
 
         let phase = Phase.Landing;
@@ -642,11 +642,11 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
         RightPanelStore.instance.on(UPDATE_EVENT, this.onRightPanelStoreUpdate);
     }
 
-    componentDidMount() {
+    public componentDidMount() {
         this.context.on(RoomEvent.MyMembership, this.onMyMembership);
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         defaultDispatcher.unregister(this.dispatcherRef);
         RightPanelStore.instance.off(UPDATE_EVENT, this.onRightPanelStoreUpdate);
         this.context.off(RoomEvent.MyMembership, this.onMyMembership);
@@ -794,7 +794,7 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
         }
     }
 
-    render() {
+    public render() {
         const rightPanel =
             this.state.showRightPanel && this.state.phase === Phase.Landing ? (
                 <RightPanel room={this.props.space} resizeNotifier={this.props.resizeNotifier} />

@@ -59,7 +59,7 @@ const KEY_FRAME_INTERVAL = 15; // 15ms, roughly
 export default class Hearts implements ICanvasEffect {
     private readonly options: HeartOptions;
 
-    constructor(options: { [key: string]: any }) {
+    public constructor(options: { [key: string]: any }) {
         this.options = { ...DefaultOptions, ...options };
     }
 

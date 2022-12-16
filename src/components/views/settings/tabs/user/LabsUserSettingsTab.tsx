@@ -33,7 +33,7 @@ interface IState {
 }
 
 export default class LabsUserSettingsTab extends React.Component<{}, IState> {
-    constructor(props: {}) {
+    public constructor(props: {}) {
         super(props);
 
         const cli = MatrixClientPeg.get();

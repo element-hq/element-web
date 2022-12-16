@@ -28,7 +28,7 @@ export default class Range {
     private _lastStart: DocumentPosition;
     private _initializedEmpty: boolean;
 
-    constructor(public readonly model: EditorModel, positionA: DocumentPosition, positionB = positionA) {
+    public constructor(public readonly model: EditorModel, positionA: DocumentPosition, positionB = positionA) {
         const bIsLarger = positionA.compare(positionB) < 0;
         this._start = bIsLarger ? positionA : positionB;
         this._end = bIsLarger ? positionB : positionA;

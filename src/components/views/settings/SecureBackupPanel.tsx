@@ -47,7 +47,7 @@ interface IState {
 export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
     private unmounted = false;
 
-    constructor(props: {}) {
+    public constructor(props: {}) {
         super(props);
 
         this.state = {

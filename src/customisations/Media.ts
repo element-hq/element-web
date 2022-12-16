@@ -36,7 +36,7 @@ export class Media {
     private client: MatrixClient;
 
     // Per above, this constructor signature can be whatever is helpful for you.
-    constructor(private prepared: IPreparedMedia, client?: MatrixClient) {
+    public constructor(private prepared: IPreparedMedia, client?: MatrixClient) {
         this.client = client ?? MatrixClientPeg.get();
         if (!this.client) {
             throw new Error("No possible MatrixClient for media resolution. Please provide one or log in.");

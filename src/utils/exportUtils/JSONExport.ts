@@ -29,7 +29,7 @@ export default class JSONExporter extends Exporter {
     protected totalSize = 0;
     protected messages: Record<string, any>[] = [];
 
-    constructor(
+    public constructor(
         room: Room,
         exportType: ExportType,
         exportOptions: IExportOptions,

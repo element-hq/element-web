@@ -75,7 +75,7 @@ export default class Pill extends React.Component<IProps, IState> {
         return "@room".length;
     }
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {

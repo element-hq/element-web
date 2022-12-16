@@ -24,7 +24,7 @@ import AbstractLocalStorageSettingsHandler from "./AbstractLocalStorageSettingsH
  * room.
  */
 export default class RoomDeviceSettingsHandler extends AbstractLocalStorageSettingsHandler {
-    constructor(public readonly watchers: WatchManager) {
+    public constructor(public readonly watchers: WatchManager) {
         super();
     }
 

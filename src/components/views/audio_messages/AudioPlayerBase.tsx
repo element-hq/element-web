@@ -42,7 +42,7 @@ export default abstract class AudioPlayerBase<T extends IProps = IProps> extends
     protected seekRef: RefObject<SeekBar> = createRef();
     protected playPauseRef: RefObject<PlayPauseButton> = createRef();
 
-    constructor(props: T) {
+    public constructor(props: T) {
         super(props);
 
         // Playback instances can be reused in the composer

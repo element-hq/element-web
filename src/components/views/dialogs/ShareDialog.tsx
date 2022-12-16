@@ -75,7 +75,7 @@ interface IState {
 }
 
 export default class ShareDialog extends React.PureComponent<IProps, IState> {
-    constructor(props) {
+    public constructor(props) {
         super(props);
 
         let permalinkCreator: RoomPermalinkCreator = null;
@@ -91,7 +91,7 @@ export default class ShareDialog extends React.PureComponent<IProps, IState> {
         };
     }
 
-    static onLinkClick(e) {
+    public static onLinkClick(e) {
         e.preventDefault();
         selectText(e.target);
     }
@@ -124,7 +124,7 @@ export default class ShareDialog extends React.PureComponent<IProps, IState> {
         return matrixToUrl;
     }
 
-    render() {
+    public render() {
         let title;
         let checkbox;
 

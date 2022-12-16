@@ -40,7 +40,7 @@ export default class DMRoomMap {
     private hasSentOutPatchDirectAccountDataPatch: boolean;
     private mDirectEvent: { [key: string]: string[] };
 
-    constructor(private readonly matrixClient: MatrixClient) {
+    public constructor(private readonly matrixClient: MatrixClient) {
         // see onAccountData
         this.hasSentOutPatchDirectAccountDataPatch = false;
 

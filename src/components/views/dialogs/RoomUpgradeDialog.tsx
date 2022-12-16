@@ -37,11 +37,11 @@ interface IState {
 export default class RoomUpgradeDialog extends React.Component<IProps, IState> {
     private targetVersion: string;
 
-    state = {
+    public state = {
         busy: true,
     };
 
-    async componentDidMount() {
+    public async componentDidMount() {
         const recommended = await this.props.room.getRecommendedVersion();
         this.targetVersion = recommended.version;
         this.setState({ busy: false });
@@ -68,7 +68,7 @@ export default class RoomUpgradeDialog extends React.Component<IProps, IState> {
             });
     };
 
-    render() {
+    public render() {
         let buttons;
         if (this.state.busy) {
             buttons = <Spinner />;

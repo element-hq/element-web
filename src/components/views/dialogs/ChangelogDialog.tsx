@@ -30,7 +30,7 @@ interface IProps {
 const REPOS = ["vector-im/element-web", "matrix-org/matrix-react-sdk", "matrix-org/matrix-js-sdk"];
 
 export default class ChangelogDialog extends React.Component<IProps> {
-    constructor(props) {
+    public constructor(props) {
         super(props);
 
         this.state = {};

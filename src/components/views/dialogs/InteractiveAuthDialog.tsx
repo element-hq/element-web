@@ -83,7 +83,7 @@ interface IState {
 }
 
 export default class InteractiveAuthDialog extends React.Component<InteractiveAuthDialogProps, IState> {
-    constructor(props: InteractiveAuthDialogProps) {
+    public constructor(props: InteractiveAuthDialogProps) {
         super(props);
 
         this.state = {

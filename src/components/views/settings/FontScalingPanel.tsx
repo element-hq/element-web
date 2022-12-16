@@ -48,7 +48,7 @@ export default class FontScalingPanel extends React.Component<IProps, IState> {
 
     private unmounted = false;
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {
@@ -61,7 +61,7 @@ export default class FontScalingPanel extends React.Component<IProps, IState> {
         };
     }
 
-    async componentDidMount() {
+    public async componentDidMount() {
         // Fetch the current user profile for the message preview
         const client = MatrixClientPeg.get();
         const userId = client.getUserId();
@@ -75,7 +75,7 @@ export default class FontScalingPanel extends React.Component<IProps, IState> {
         });
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         this.unmounted = true;
     }
 

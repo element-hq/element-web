@@ -100,7 +100,7 @@ class DMUserTile extends React.PureComponent<IDMUserTileProps> {
         this.props.onRemove(this.props.member);
     };
 
-    render() {
+    public render() {
         const avatarSize = 20;
         const avatar = <SearchResultAvatar user={this.props.member} size={avatarSize} />;
 
@@ -187,7 +187,7 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
         return result;
     }
 
-    render() {
+    public render() {
         let timestamp = null;
         if (this.props.lastActiveTs) {
             const humanTs = humanizeTime(this.props.lastActiveTs);
@@ -301,7 +301,7 @@ interface IInviteDialogState {
 }
 
 export default class InviteDialog extends React.PureComponent<Props, IInviteDialogState> {
-    static defaultProps = {
+    public static defaultProps = {
         kind: KIND_DM,
         initialText: "",
     };
@@ -311,7 +311,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
     private numberEntryFieldRef: React.RefObject<Field> = createRef();
     private unmounted = false;
 
-    constructor(props) {
+    public constructor(props) {
         super(props);
 
         if (props.kind === KIND_INVITE && !props.roomId) {
@@ -351,13 +351,13 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         };
     }
 
-    componentDidMount() {
+    public componentDidMount() {
         if (this.props.initialText) {
             this.updateSuggestions(this.props.initialText);
         }
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         this.unmounted = true;
     }
 
@@ -1078,7 +1078,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         }
     }
 
-    render() {
+    public render() {
         let spinner = null;
         if (this.state.busy) {
             spinner = <Spinner w={20} h={20} />;

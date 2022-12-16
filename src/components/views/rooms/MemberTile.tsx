@@ -47,11 +47,11 @@ export default class MemberTile extends React.Component<IProps, IState> {
     private userLastModifiedTime: number;
     private memberLastModifiedTime: number;
 
-    static defaultProps = {
+    public static defaultProps = {
         showPresence: true,
     };
 
-    constructor(props) {
+    public constructor(props) {
         super(props);
 
         this.state = {
@@ -60,7 +60,7 @@ export default class MemberTile extends React.Component<IProps, IState> {
         };
     }
 
-    componentDidMount() {
+    public componentDidMount() {
         const cli = MatrixClientPeg.get();
 
         const { roomId } = this.props.member;
@@ -80,7 +80,7 @@ export default class MemberTile extends React.Component<IProps, IState> {
         }
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         const cli = MatrixClientPeg.get();
 
         if (cli) {
@@ -142,7 +142,7 @@ export default class MemberTile extends React.Component<IProps, IState> {
         });
     }
 
-    shouldComponentUpdate(nextProps: IProps, nextState: IState): boolean {
+    public shouldComponentUpdate(nextProps: IProps, nextState: IState): boolean {
         if (
             this.memberLastModifiedTime === undefined ||
             this.memberLastModifiedTime < nextProps.member.getLastModifiedTime()
@@ -183,7 +183,7 @@ export default class MemberTile extends React.Component<IProps, IState> {
         }).trim();
     }
 
-    render() {
+    public render() {
         const member = this.props.member;
         const name = this.getDisplayName();
         const presenceState = member.user ? member.user.presence : null;

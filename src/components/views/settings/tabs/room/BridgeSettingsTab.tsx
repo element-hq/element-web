@@ -42,14 +42,14 @@ export default class BridgeSettingsTab extends React.Component<IProps> {
         return <BridgeTile key={event.getId()} room={room} ev={event} />;
     }
 
-    static getBridgeStateEvents(roomId: string): MatrixEvent[] {
+    public static getBridgeStateEvents(roomId: string): MatrixEvent[] {
         const client = MatrixClientPeg.get();
         const roomState = client.getRoom(roomId).currentState;
 
         return BRIDGE_EVENT_TYPES.map((typeName) => roomState.getStateEvents(typeName)).flat(1);
     }
 
-    render() {
+    public render() {
         // This settings tab will only be invoked if the following function returns more
         // than 0 events, so no validation is needed at this stage.
         const bridgeEvents = BridgeSettingsTab.getBridgeStateEvents(this.props.roomId);

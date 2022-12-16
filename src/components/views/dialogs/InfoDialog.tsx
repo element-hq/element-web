@@ -34,7 +34,7 @@ interface IProps extends IDialogProps {
 }
 
 export default class InfoDialog extends React.Component<IProps> {
-    static defaultProps = {
+    public static defaultProps = {
         title: "",
         description: "",
         hasCloseButton: false,
@@ -44,7 +44,7 @@ export default class InfoDialog extends React.Component<IProps> {
         this.props.onFinished();
     };
 
-    render() {
+    public render() {
         return (
             <BaseDialog
                 className="mx_InfoDialog"

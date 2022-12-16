@@ -96,14 +96,14 @@ interface IState {
 
 export default class AliasSettings extends React.Component<IProps, IState> {
     public static contextType = MatrixClientContext;
-    context: ContextType<typeof MatrixClientContext>;
+    public context: ContextType<typeof MatrixClientContext>;
 
-    static defaultProps = {
+    public static defaultProps = {
         canSetAliases: false,
         canSetCanonicalAlias: false,
     };
 
-    constructor(props, context: ContextType<typeof MatrixClientContext>) {
+    public constructor(props, context: ContextType<typeof MatrixClientContext>) {
         super(props, context);
 
         const state = {
@@ -127,7 +127,7 @@ export default class AliasSettings extends React.Component<IProps, IState> {
         this.state = state;
     }
 
-    componentDidMount() {
+    public componentDidMount() {
         if (this.props.canSetCanonicalAlias) {
             // load local aliases for providing recommendations
             // for the canonical alias and alt_aliases
@@ -335,7 +335,7 @@ export default class AliasSettings extends React.Component<IProps, IState> {
         return this.state.localAliases.filter((alias) => !altAliases.includes(alias));
     }
 
-    render() {
+    public render() {
         const mxClient = this.context;
         const localDomain = mxClient.getDomain();
         const isSpaceRoom = mxClient.getRoom(this.props.roomId)?.isSpaceRoom();

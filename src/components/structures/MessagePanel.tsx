@@ -214,10 +214,10 @@ interface IReadReceiptForUser {
 /* (almost) stateless UI component which builds the event tiles in the room timeline.
  */
 export default class MessagePanel extends React.Component<IProps, IState> {
-    static contextType = RoomContext;
+    public static contextType = RoomContext;
     public context!: React.ContextType<typeof RoomContext>;
 
-    static defaultProps = {
+    public static defaultProps = {
         disableGrouping: false,
     };
 
@@ -272,7 +272,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     // A map to allow groupers to maintain consistent keys even if their first event is uprooted due to back-pagination.
     public grouperKeyMap = new WeakMap<MatrixEvent, string>();
 
-    constructor(props, context) {
+    public constructor(props, context) {
         super(props, context);
 
         this.state = {
@@ -296,19 +296,19 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         );
     }
 
-    componentDidMount() {
+    public componentDidMount() {
         this.calculateRoomMembersCount();
         this.props.room?.currentState.on(RoomStateEvent.Update, this.calculateRoomMembersCount);
         this.isMounted = true;
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         this.isMounted = false;
         this.props.room?.currentState.off(RoomStateEvent.Update, this.calculateRoomMembersCount);
         SettingsStore.unwatchSetting(this.showTypingNotificationsWatcherRef);
     }
 
-    componentDidUpdate(prevProps, prevState) {
+    public componentDidUpdate(prevProps, prevState) {
         if (prevProps.layout !== this.props.layout) {
             this.calculateRoomMembersCount();
         }
@@ -982,7 +982,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         }
     }
 
-    render() {
+    public render() {
         let topSpinner;
         let bottomSpinner;
         if (this.props.backPaginating) {
@@ -1057,14 +1057,14 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 }
 
 abstract class BaseGrouper {
-    static canStartGroup = (panel: MessagePanel, ev: MatrixEvent): boolean => true;
+    public static canStartGroup = (panel: MessagePanel, ev: MatrixEvent): boolean => true;
 
     public events: MatrixEvent[] = [];
     // events that we include in the group but then eject out and place above the group.
     public ejectedEvents: MatrixEvent[] = [];
     public readMarker: ReactNode;
 
-    constructor(
+    public constructor(
         public readonly panel: MessagePanel,
         public readonly event: MatrixEvent,
         public readonly prevEvent: MatrixEvent,
@@ -1097,7 +1097,7 @@ abstract class BaseGrouper {
 // Grouping only events sent by the same user that sent the `m.room.create` and only until
 // the first non-state event, beacon_info event or membership event which is not regarding the sender of the `m.room.create` event
 class CreationGrouper extends BaseGrouper {
-    static canStartGroup = function (panel: MessagePanel, ev: MatrixEvent): boolean {
+    public static canStartGroup = function (panel: MessagePanel, ev: MatrixEvent): boolean {
         return ev.getType() === EventType.RoomCreate;
     };
 
@@ -1231,7 +1231,7 @@ class CreationGrouper extends BaseGrouper {
 
 // Wrap consecutive grouped events in a ListSummary
 class MainGrouper extends BaseGrouper {
-    static canStartGroup = function (panel: MessagePanel, ev: MatrixEvent): boolean {
+    public static canStartGroup = function (panel: MessagePanel, ev: MatrixEvent): boolean {
         if (!panel.shouldShowEvent(ev)) return false;
 
         if (ev.isState() && groupedStateEvents.includes(ev.getType() as EventType)) {
@@ -1249,7 +1249,7 @@ class MainGrouper extends BaseGrouper {
         return false;
     };
 
-    constructor(
+    public constructor(
         public readonly panel: MessagePanel,
         public readonly event: MatrixEvent,
         public readonly prevEvent: MatrixEvent,

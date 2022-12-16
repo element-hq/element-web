@@ -44,7 +44,7 @@ export default abstract class HeaderButtons<P = {}> extends React.Component<IPro
     private unmounted = false;
     private dispatcherRef: string;
 
-    constructor(props: IProps & P, kind: HeaderKind) {
+    public constructor(props: IProps & P, kind: HeaderKind) {
         super(props);
 
         const rps = RightPanelStore.instance;

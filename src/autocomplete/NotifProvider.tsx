@@ -28,11 +28,16 @@ import { TimelineRenderingType } from "../contexts/RoomContext";
 const AT_ROOM_REGEX = /@\S*/g;
 
 export default class NotifProvider extends AutocompleteProvider {
-    constructor(public room: Room, renderingType?: TimelineRenderingType) {
+    public constructor(public room: Room, renderingType?: TimelineRenderingType) {
         super({ commandRegex: AT_ROOM_REGEX, renderingType });
     }
 
-    async getCompletions(query: string, selection: ISelectionRange, force = false, limit = -1): Promise<ICompletion[]> {
+    public async getCompletions(
+        query: string,
+        selection: ISelectionRange,
+        force = false,
+        limit = -1,
+    ): Promise<ICompletion[]> {
         const client = MatrixClientPeg.get();
 
         if (!this.room.currentState.mayTriggerNotifOfType("room", client.credentials.userId)) return [];
@@ -60,11 +65,11 @@ export default class NotifProvider extends AutocompleteProvider {
         return [];
     }
 
-    getName() {
+    public getName() {
         return "❗️ " + _t("Room Notification");
     }
 
-    renderCompletions(completions: React.ReactNode[]): React.ReactNode {
+    public renderCompletions(completions: React.ReactNode[]): React.ReactNode {
         return (
             <div
                 className="mx_Autocomplete_Completion_container_pill mx_Autocomplete_Completion_container_truncate"

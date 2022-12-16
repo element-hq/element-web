@@ -55,10 +55,10 @@ interface IState {
 }
 
 export default class SecurityRoomSettingsTab extends React.Component<IProps, IState> {
-    static contextType = MatrixClientContext;
+    public static contextType = MatrixClientContext;
     public context!: React.ContextType<typeof MatrixClientContext>;
 
-    constructor(props, context) {
+    public constructor(props, context) {
         super(props, context);
 
         const state = context.getRoom(this.props.roomId).currentState;
@@ -80,7 +80,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         };
     }
 
-    componentDidMount() {
+    public componentDidMount() {
         this.context.on(RoomStateEvent.Events, this.onStateEvent);
         this.hasAliases().then((hasAliases) => this.setState({ hasAliases }));
     }
@@ -89,7 +89,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         return event?.getContent()[key] || defaultValue;
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         this.context.removeListener(RoomStateEvent.Events, this.onStateEvent);
     }
 
@@ -414,7 +414,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         );
     }
 
-    render() {
+    public render() {
         const client = this.context;
         const room = client.getRoom(this.props.roomId);
         const isEncrypted = this.state.encrypted;

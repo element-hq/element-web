@@ -67,7 +67,7 @@ export function isSecretStorageBeingAccessed(): boolean {
 }
 
 export class AccessCancelledError extends Error {
-    constructor() {
+    public constructor() {
         super("Secret storage access canceled");
     }
 }

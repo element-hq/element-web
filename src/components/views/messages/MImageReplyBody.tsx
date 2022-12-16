@@ -30,7 +30,7 @@ export default class MImageReplyBody extends MImageBody {
         return children;
     }
 
-    render() {
+    public render() {
         if (this.state.error) {
             return super.render();
         }

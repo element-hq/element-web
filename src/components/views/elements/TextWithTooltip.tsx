@@ -28,7 +28,7 @@ interface IProps extends HTMLAttributes<HTMLSpanElement> {
 }
 
 export default class TextWithTooltip extends React.Component<IProps> {
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
     }
 

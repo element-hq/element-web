@@ -33,7 +33,7 @@ export type IProps<T extends keyof JSX.IntrinsicElements> = DynamicHtmlElementPr
 };
 
 export default class AutoHideScrollbar<T extends keyof JSX.IntrinsicElements> extends React.Component<IProps<T>> {
-    static defaultProps = {
+    public static defaultProps = {
         element: "div" as keyof ReactHTML,
     };
 

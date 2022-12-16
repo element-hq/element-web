@@ -43,7 +43,7 @@ export default class SpellCheckLanguagesDropdown extends React.Component<
     SpellCheckLanguagesDropdownIProps,
     SpellCheckLanguagesDropdownIState
 > {
-    constructor(props) {
+    public constructor(props) {
         super(props);
         this.onSearchChange = this.onSearchChange.bind(this);
 
@@ -53,7 +53,7 @@ export default class SpellCheckLanguagesDropdown extends React.Component<
         };
     }
 
-    componentDidMount() {
+    public componentDidMount() {
         const plaf = PlatformPeg.get();
         if (plaf) {
             plaf.getAvailableSpellCheckLanguages()
@@ -82,7 +82,7 @@ export default class SpellCheckLanguagesDropdown extends React.Component<
         this.setState({ searchQuery });
     }
 
-    render() {
+    public render() {
         if (this.state.languages === null) {
             return <Spinner />;
         }

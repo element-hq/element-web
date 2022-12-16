@@ -29,7 +29,7 @@ export class ThreadsRoomNotificationState extends NotificationState implements I
     protected _count = 0;
     protected _color = NotificationColor.None;
 
-    constructor(public readonly room: Room) {
+    public constructor(public readonly room: Room) {
         super();
         for (const thread of this.room.getThreads()) {
             this.onNewThread(thread);

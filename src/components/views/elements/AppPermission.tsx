@@ -44,11 +44,11 @@ interface IState {
 }
 
 export default class AppPermission extends React.Component<IProps, IState> {
-    static defaultProps: Partial<IProps> = {
+    public static defaultProps: Partial<IProps> = {
         onPermissionGranted: () => {},
     };
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         // The first step is to pick apart the widget so we can render information about it
@@ -88,7 +88,7 @@ export default class AppPermission extends React.Component<IProps, IState> {
         }
     }
 
-    render() {
+    public render() {
         const brand = SdkConfig.get().brand;
 
         const displayName = this.state.roomMember ? this.state.roomMember.name : this.props.creatorUserId;

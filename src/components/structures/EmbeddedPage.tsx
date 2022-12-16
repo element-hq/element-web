@@ -48,7 +48,7 @@ export default class EmbeddedPage extends React.PureComponent<IProps, IState> {
     private unmounted = false;
     private dispatcherRef: string = null;
 
-    constructor(props: IProps, context: typeof MatrixClientContext) {
+    public constructor(props: IProps, context: typeof MatrixClientContext) {
         super(props, context);
 
         this.state = {

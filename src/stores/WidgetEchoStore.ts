@@ -31,7 +31,7 @@ class WidgetEchoStore extends EventEmitter {
         };
     };
 
-    constructor() {
+    public constructor() {
         super();
 
         this.roomWidgetEcho = {
@@ -54,7 +54,7 @@ class WidgetEchoStore extends EventEmitter {
      * @param {MatrixEvent[]} currentRoomWidgets Current widgets for the room
      * @returns {MatrixEvent[]} List of widgets in the room, minus any pending removal
      */
-    getEchoedRoomWidgets(roomId: string, currentRoomWidgets: MatrixEvent[]): MatrixEvent[] {
+    public getEchoedRoomWidgets(roomId: string, currentRoomWidgets: MatrixEvent[]): MatrixEvent[] {
         const echoedWidgets = [];
 
         const roomEchoState = Object.assign({}, this.roomWidgetEcho[roomId]);
@@ -73,7 +73,7 @@ class WidgetEchoStore extends EventEmitter {
         return echoedWidgets;
     }
 
-    roomHasPendingWidgetsOfType(roomId: string, currentRoomWidgets: MatrixEvent[], type?: WidgetType): boolean {
+    public roomHasPendingWidgetsOfType(roomId: string, currentRoomWidgets: MatrixEvent[], type?: WidgetType): boolean {
         const roomEchoState = Object.assign({}, this.roomWidgetEcho[roomId]);
 
         // any widget IDs that are already in the room are not pending, so
@@ -93,18 +93,18 @@ class WidgetEchoStore extends EventEmitter {
         }
     }
 
-    roomHasPendingWidgets(roomId: string, currentRoomWidgets: MatrixEvent[]): boolean {
+    public roomHasPendingWidgets(roomId: string, currentRoomWidgets: MatrixEvent[]): boolean {
         return this.roomHasPendingWidgetsOfType(roomId, currentRoomWidgets);
     }
 
-    setRoomWidgetEcho(roomId: string, widgetId: string, state: IWidget) {
+    public setRoomWidgetEcho(roomId: string, widgetId: string, state: IWidget) {
         if (this.roomWidgetEcho[roomId] === undefined) this.roomWidgetEcho[roomId] = {};
 
         this.roomWidgetEcho[roomId][widgetId] = state;
         this.emit("update", roomId, widgetId);
     }
 
-    removeRoomWidgetEcho(roomId: string, widgetId: string) {
+    public removeRoomWidgetEcho(roomId: string, widgetId: string) {
         delete this.roomWidgetEcho[roomId][widgetId];
         if (Object.keys(this.roomWidgetEcho[roomId]).length === 0) delete this.roomWidgetEcho[roomId];
         this.emit("update", roomId, widgetId);

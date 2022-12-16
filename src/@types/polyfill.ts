@@ -48,7 +48,7 @@ export function polyfillTouchEvent() {
             public get scale(): number {
                 return 0.0;
             }
-            constructor(eventType: string, params?: any) {
+            public constructor(eventType: string, params?: any) {
                 super(eventType, params);
             }
         };

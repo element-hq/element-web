@@ -47,7 +47,7 @@ interface IState {
 export default class ThirdPartyMemberInfo extends React.Component<IProps, IState> {
     private room: Room;
 
-    constructor(props) {
+    public constructor(props) {
         super(props);
 
         this.room = MatrixClientPeg.get().getRoom(this.props.event.getRoomId());
@@ -69,18 +69,18 @@ export default class ThirdPartyMemberInfo extends React.Component<IProps, IState
         };
     }
 
-    componentDidMount(): void {
+    public componentDidMount(): void {
         MatrixClientPeg.get().on(RoomStateEvent.Events, this.onRoomStateEvents);
     }
 
-    componentWillUnmount(): void {
+    public componentWillUnmount(): void {
         const client = MatrixClientPeg.get();
         if (client) {
             client.removeListener(RoomStateEvent.Events, this.onRoomStateEvents);
         }
     }
 
-    onRoomStateEvents = (ev: MatrixEvent) => {
+    public onRoomStateEvents = (ev: MatrixEvent) => {
         if (ev.getType() === EventType.RoomThirdPartyInvite && ev.getStateKey() === this.state.stateKey) {
             const newDisplayName = ev.getContent().display_name;
             const isInvited = isValid3pidInvite(ev);
@@ -91,14 +91,14 @@ export default class ThirdPartyMemberInfo extends React.Component<IProps, IState
         }
     };
 
-    onCancel = () => {
+    public onCancel = () => {
         dis.dispatch({
             action: "view_3pid_invite",
             event: null,
         });
     };
 
-    onKickClick = () => {
+    public onKickClick = () => {
         MatrixClientPeg.get()
             .sendStateEvent(this.state.roomId, "m.room.third_party_invite", {}, this.state.stateKey)
             .catch((err) => {
@@ -120,7 +120,7 @@ export default class ThirdPartyMemberInfo extends React.Component<IProps, IState
         this.setState({ invited: false });
     };
 
-    render() {
+    public render() {
         let adminTools = null;
         if (this.state.canKick && this.state.invited) {
             adminTools = (

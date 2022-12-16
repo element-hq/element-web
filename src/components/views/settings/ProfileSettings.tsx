@@ -45,7 +45,7 @@ interface IState {
 export default class ProfileSettings extends React.Component<{}, IState> {
     private avatarUpload: React.RefObject<HTMLInputElement> = createRef();
 
-    constructor(props: {}) {
+    public constructor(props: {}) {
         super(props);
 
         const client = MatrixClientPeg.get();

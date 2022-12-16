@@ -79,17 +79,17 @@ enum TransitionType {
 const SEP = ",";
 
 export default class EventListSummary extends React.Component<IProps> {
-    static contextType = RoomContext;
+    public static contextType = RoomContext;
     public context!: React.ContextType<typeof RoomContext>;
 
-    static defaultProps = {
+    public static defaultProps = {
         summaryLength: 1,
         threshold: 3,
         avatarsMaxLength: 5,
         layout: Layout.Group,
     };
 
-    shouldComponentUpdate(nextProps: IProps): boolean {
+    public shouldComponentUpdate(nextProps: IProps): boolean {
         // Update if
         //  - The number of summarised events has changed
         //  - or if the summary is about to toggle to become collapsed
@@ -451,7 +451,7 @@ export default class EventListSummary extends React.Component<IProps> {
         }
     }
 
-    getAggregate(userEvents: Record<string, IUserEvents[]>) {
+    public getAggregate(userEvents: Record<string, IUserEvents[]>) {
         // A map of aggregate type to arrays of display names. Each aggregate type
         // is a comma-delimited string of transitions, e.g. "joined,left,kicked".
         // The array of display names is the array of users who went through that
@@ -489,7 +489,7 @@ export default class EventListSummary extends React.Component<IProps> {
         };
     }
 
-    render() {
+    public render() {
         const eventsToRender = this.props.events;
 
         // Map user IDs to latest Avatar Member. ES6 Maps are ordered by when the key was created,

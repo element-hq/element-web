@@ -136,7 +136,7 @@ export class VoiceMessageRecording implements IDestroyable {
         return this.voiceRecording.isSupported;
     }
 
-    destroy(): void {
+    public destroy(): void {
         this.playback?.destroy();
         this.voiceRecording.destroy();
     }

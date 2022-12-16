@@ -112,12 +112,12 @@ interface IState {
 export default class ContextMenu extends React.PureComponent<IProps, IState> {
     private readonly initialFocus: HTMLElement;
 
-    static defaultProps = {
+    public static defaultProps = {
         hasBackground: true,
         managed: true,
     };
 
-    constructor(props, context) {
+    public constructor(props, context) {
         super(props, context);
 
         this.state = {
@@ -447,7 +447,7 @@ export default class ContextMenu extends React.PureComponent<IProps, IState> {
         );
     }
 
-    render(): React.ReactChild {
+    public render(): React.ReactChild {
         if (this.props.mountAsChild) {
             // Render as a child of the current parent
             return this.renderMenu();

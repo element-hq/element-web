@@ -48,7 +48,7 @@ interface IState {
 }
 
 export default class MessageEditHistoryDialog extends React.PureComponent<IProps, IState> {
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
         this.state = {
             originalEvent: null,

@@ -50,7 +50,7 @@ interface IExistingEmailAddressState {
 }
 
 export class ExistingEmailAddress extends React.Component<IExistingEmailAddressProps, IExistingEmailAddressState> {
-    constructor(props: IExistingEmailAddressProps) {
+    public constructor(props: IExistingEmailAddressProps) {
         super(props);
 
         this.state = {
@@ -139,7 +139,7 @@ interface IState {
 }
 
 export default class EmailAddresses extends React.Component<IProps, IState> {
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {

@@ -34,7 +34,7 @@ export default class TypingStore {
         };
     };
 
-    constructor(private readonly context: SdkContextClass) {
+    public constructor(private readonly context: SdkContextClass) {
         this.reset();
     }
 

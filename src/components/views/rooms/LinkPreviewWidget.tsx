@@ -38,13 +38,13 @@ export default class LinkPreviewWidget extends React.Component<IProps> {
     private readonly description = createRef<HTMLDivElement>();
     private image = createRef<HTMLImageElement>();
 
-    componentDidMount() {
+    public componentDidMount() {
         if (this.description.current) {
             linkifyElement(this.description.current);
         }
     }
 
-    componentDidUpdate() {
+    public componentDidUpdate() {
         if (this.description.current) {
             linkifyElement(this.description.current);
         }
@@ -83,7 +83,7 @@ export default class LinkPreviewWidget extends React.Component<IProps> {
         Modal.createDialog(ImageView, params, "mx_Dialog_lightbox", null, true);
     };
 
-    render() {
+    public render() {
         const p = this.props.preview;
         if (!p || Object.keys(p).length === 0) {
             return <div />;

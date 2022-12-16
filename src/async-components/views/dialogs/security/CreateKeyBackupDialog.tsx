@@ -67,7 +67,7 @@ export default class CreateKeyBackupDialog extends React.PureComponent<IProps, I
     private recoveryKeyNode = createRef<HTMLElement>();
     private passphraseField = createRef<Field>();
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {

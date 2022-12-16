@@ -38,11 +38,11 @@ interface IState {
  * Component which shows the global notification list using a TimelinePanel
  */
 export default class NotificationPanel extends React.PureComponent<IProps, IState> {
-    static contextType = RoomContext;
+    public static contextType = RoomContext;
 
     private card = React.createRef<HTMLDivElement>();
 
-    constructor(props) {
+    public constructor(props) {
         super(props);
 
         this.state = {
@@ -54,7 +54,7 @@ export default class NotificationPanel extends React.PureComponent<IProps, IStat
         this.setState({ narrow });
     };
 
-    render() {
+    public render() {
         const emptyState = (
             <div className="mx_RightPanel_empty mx_NotificationPanel_empty">
                 <h2>{_t("You're all caught up")}</h2>

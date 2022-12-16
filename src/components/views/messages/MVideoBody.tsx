@@ -41,13 +41,13 @@ interface IState {
 }
 
 export default class MVideoBody extends React.PureComponent<IBodyProps, IState> {
-    static contextType = RoomContext;
+    public static contextType = RoomContext;
     public context!: React.ContextType<typeof RoomContext>;
 
     private videoRef = React.createRef<HTMLVideoElement>();
     private sizeWatcher: string;
 
-    constructor(props) {
+    public constructor(props) {
         super(props);
 
         this.state = {
@@ -232,7 +232,7 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
         return this.showFileBody && <MFileBody {...this.props} showGenericPlaceholder={false} />;
     };
 
-    render() {
+    public render() {
         const content = this.props.mxEvent.getContent();
         const autoplay = SettingsStore.getValue("autoplayVideo");
 

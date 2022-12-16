@@ -21,7 +21,7 @@ import TextWithTooltip from "./TextWithTooltip";
 interface IProps extends Omit<React.ComponentProps<typeof TextWithTooltip>, "tabIndex" | "onClick"> {}
 
 export default class LinkWithTooltip extends React.Component<IProps> {
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
     }
 

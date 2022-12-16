@@ -29,17 +29,17 @@ they have two methods:
         This method usually ends up calling `resize` once the start offset is subtracted.
 */
 export default class FixedDistributor<C extends IConfig, I extends ResizeItem<any> = ResizeItem<C>> {
-    static createItem(resizeHandle: HTMLDivElement, resizer: Resizer, sizer: Sizer): ResizeItem {
+    public static createItem(resizeHandle: HTMLDivElement, resizer: Resizer, sizer: Sizer): ResizeItem {
         return new ResizeItem(resizeHandle, resizer, sizer);
     }
 
-    static createSizer(containerElement: HTMLElement, vertical: boolean, reverse: boolean): Sizer {
+    public static createSizer(containerElement: HTMLElement, vertical: boolean, reverse: boolean): Sizer {
         return new Sizer(containerElement, vertical, reverse);
     }
 
     private readonly beforeOffset: number;
 
-    constructor(public readonly item: I) {
+    public constructor(public readonly item: I) {
         this.beforeOffset = item.offset();
     }
 

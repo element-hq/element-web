@@ -85,7 +85,7 @@ interface IState {
 }
 
 export default class EntityTile extends React.PureComponent<IProps, IState> {
-    static defaultProps = {
+    public static defaultProps = {
         onClick: () => {},
         presenceState: "offline",
         presenceLastActiveAgo: 0,
@@ -95,7 +95,7 @@ export default class EntityTile extends React.PureComponent<IProps, IState> {
         showPresence: true,
     };
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {
@@ -103,7 +103,7 @@ export default class EntityTile extends React.PureComponent<IProps, IState> {
         };
     }
 
-    render() {
+    public render() {
         const mainClassNames = {
             mx_EntityTile: true,
             mx_EntityTile_noHover: this.props.suppressOnHover,

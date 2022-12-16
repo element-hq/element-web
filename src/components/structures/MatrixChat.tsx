@@ -210,9 +210,9 @@ interface IState {
 }
 
 export default class MatrixChat extends React.PureComponent<IProps, IState> {
-    static displayName = "MatrixChat";
+    public static displayName = "MatrixChat";
 
-    static defaultProps = {
+    public static defaultProps = {
         realQueryParams: {},
         startingFragmentQueryParams: {},
         config: {},
@@ -237,7 +237,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     private readonly fontWatcher: FontWatcher;
     private readonly stores: SdkContextClass;
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
         this.stores = SdkContextClass.instance;
         this.stores.constructEagerStores();
@@ -417,7 +417,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         window.addEventListener("resize", this.onWindowResized);
     }
 
-    componentDidUpdate(prevProps, prevState) {
+    public componentDidUpdate(prevProps, prevState) {
         if (this.shouldTrackPageChange(prevState, this.state)) {
             const durationMs = this.stopPageChangeTimer();
             PosthogTrackers.instance.trackPageChange(this.state.view, this.state.page_type, durationMs);
@@ -428,7 +428,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         }
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         Lifecycle.stopMatrixClient();
         dis.unregister(this.dispatcherRef);
         this.themeWatcher.stop();
@@ -2016,7 +2016,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         return fragmentAfterLogin;
     }
 
-    render() {
+    public render() {
         const fragmentAfterLogin = this.getFragmentAfterLogin();
         let view = null;
 

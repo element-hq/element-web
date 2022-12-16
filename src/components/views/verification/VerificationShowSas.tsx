@@ -44,7 +44,7 @@ function capFirst(s) {
 }
 
 export default class VerificationShowSas extends React.Component<IProps, IState> {
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {
@@ -69,7 +69,7 @@ export default class VerificationShowSas extends React.Component<IProps, IState>
         this.props.onCancel();
     };
 
-    render() {
+    public render() {
         let sasDisplay;
         let sasCaption;
         if (this.props.sas.emoji) {

@@ -46,7 +46,7 @@ interface IExistingPhoneNumberState {
 }
 
 export class ExistingPhoneNumber extends React.Component<IExistingPhoneNumberProps, IExistingPhoneNumberState> {
-    constructor(props: IExistingPhoneNumberProps) {
+    public constructor(props: IExistingPhoneNumberProps) {
         super(props);
 
         this.state = {
@@ -139,7 +139,7 @@ interface IState {
 }
 
 export default class PhoneNumbers extends React.Component<IProps, IState> {
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {

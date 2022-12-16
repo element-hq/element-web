@@ -23,7 +23,7 @@ import { PosthogAnalytics } from "./PosthogAnalytics";
 export class DecryptionFailure {
     public readonly ts: number;
 
-    constructor(public readonly failedEventId: string, public readonly errorCode: string) {
+    public constructor(public readonly failedEventId: string, public readonly errorCode: string) {
         this.ts = Date.now();
     }
 }
@@ -87,14 +87,14 @@ export class DecryptionFailureTracker {
     public trackInterval: number = null;
 
     // Spread the load on `Analytics` by tracking at a low frequency, `TRACK_INTERVAL_MS`.
-    static TRACK_INTERVAL_MS = 60000;
+    public static TRACK_INTERVAL_MS = 60000;
 
     // Call `checkFailures` every `CHECK_INTERVAL_MS`.
-    static CHECK_INTERVAL_MS = 5000;
+    public static CHECK_INTERVAL_MS = 5000;
 
     // Give events a chance to be decrypted by waiting `GRACE_PERIOD_MS` before counting
     // the failure in `failureCounts`.
-    static GRACE_PERIOD_MS = 4000;
+    public static GRACE_PERIOD_MS = 4000;
 
     /**
      * Create a new DecryptionFailureTracker.

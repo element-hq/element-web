@@ -93,7 +93,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
     private buttonRef: React.RefObject<HTMLButtonElement> = createRef();
     private voiceBroadcastRecordingStore = VoiceBroadcastRecordingsStore.instance();
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {

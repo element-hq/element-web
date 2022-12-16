@@ -33,7 +33,7 @@ interface IState {
 }
 
 export default class RoomPublishSetting extends React.PureComponent<IProps, IState> {
-    constructor(props, context) {
+    public constructor(props, context) {
         super(props, context);
 
         this.state = {
@@ -55,14 +55,14 @@ export default class RoomPublishSetting extends React.PureComponent<IProps, ISta
             });
     };
 
-    componentDidMount() {
+    public componentDidMount() {
         const client = MatrixClientPeg.get();
         client.getRoomDirectoryVisibility(this.props.roomId).then((result) => {
             this.setState({ isRoomPublished: result.visibility === "public" });
         });
     }
 
-    render() {
+    public render() {
         const client = MatrixClientPeg.get();
 
         const room = client.getRoom(this.props.roomId);

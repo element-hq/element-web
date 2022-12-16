@@ -39,7 +39,7 @@ interface IProps extends Omit<IInputProps, "onValidate"> {
 }
 
 class EmailField extends PureComponent<IProps> {
-    static defaultProps = {
+    public static defaultProps = {
         label: _td("Email"),
         labelRequired: _td("Enter email address"),
         labelInvalid: _td("Doesn't look like a valid email address"),
@@ -60,7 +60,7 @@ class EmailField extends PureComponent<IProps> {
         ],
     });
 
-    onValidate = async (fieldState: IFieldState) => {
+    public onValidate = async (fieldState: IFieldState) => {
         let validate = this.validate;
         if (this.props.validationRules) {
             validate = this.props.validationRules;
@@ -74,7 +74,7 @@ class EmailField extends PureComponent<IProps> {
         return result;
     };
 
-    render() {
+    public render() {
         return (
             <Field
                 id={this.props.id}

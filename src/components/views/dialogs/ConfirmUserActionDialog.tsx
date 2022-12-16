@@ -55,12 +55,12 @@ interface IState {
  * Also tweaks the style for 'dangerous' actions (albeit only with colour)
  */
 export default class ConfirmUserActionDialog extends React.Component<IProps, IState> {
-    static defaultProps = {
+    public static defaultProps = {
         danger: false,
         askReason: false,
     };
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {

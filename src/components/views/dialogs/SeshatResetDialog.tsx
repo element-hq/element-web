@@ -22,7 +22,7 @@ import DialogButtons from "../elements/DialogButtons";
 import { IDialogProps } from "./IDialogProps";
 
 export default class SeshatResetDialog extends React.PureComponent<IDialogProps> {
-    render() {
+    public render() {
         return (
             <BaseDialog
                 hasCancel={true}

@@ -66,7 +66,7 @@ enum LoginField {
  * The email/username/phone fields are fully-controlled, the password field is not.
  */
 export default class PasswordLogin extends React.PureComponent<IProps, IState> {
-    static defaultProps = {
+    public static defaultProps = {
         onUsernameChanged: function () {},
         onUsernameBlur: function () {},
         onPhoneCountryChanged: function () {},
@@ -75,7 +75,7 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
         disableSubmit: false,
     };
 
-    constructor(props) {
+    public constructor(props) {
         super(props);
         this.state = {
             // Field error codes by field ID
@@ -363,7 +363,7 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
         }
     }
 
-    render() {
+    public render() {
         let forgotPasswordJsx;
 
         if (this.props.onForgotPasswordClick) {

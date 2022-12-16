@@ -45,7 +45,7 @@ const GLYPH = "👾";
 export default class SpaceInvaders implements ICanvasEffect {
     private readonly options: SpaceInvadersOptions;
 
-    constructor(options: { [key: string]: any }) {
+    public constructor(options: { [key: string]: any }) {
         this.options = { ...DefaultOptions, ...options };
     }
 

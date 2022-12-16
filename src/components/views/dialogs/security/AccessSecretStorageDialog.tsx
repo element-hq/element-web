@@ -62,7 +62,7 @@ interface IState {
 export default class AccessSecretStorageDialog extends React.PureComponent<IProps, IState> {
     private fileUpload = React.createRef<HTMLInputElement>();
 
-    constructor(props) {
+    public constructor(props) {
         super(props);
 
         this.state = {
@@ -268,7 +268,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
         }
     }
 
-    render() {
+    public render() {
         const hasPassphrase =
             this.props.keyInfo &&
             this.props.keyInfo.passphrase &&

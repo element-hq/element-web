@@ -35,7 +35,7 @@ class VectorPushRuleDefinition {
     public readonly description: string;
     public readonly vectorStateToActions: StateToActionsMap;
 
-    constructor(opts: IVectorPushRuleDefinition) {
+    public constructor(opts: IVectorPushRuleDefinition) {
         this.description = opts.description;
         this.vectorStateToActions = opts.vectorStateToActions;
     }

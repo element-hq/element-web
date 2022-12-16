@@ -29,11 +29,11 @@ interface IProps {
 }
 
 export default class MJitsiWidgetEvent extends React.PureComponent<IProps> {
-    constructor(props) {
+    public constructor(props) {
         super(props);
     }
 
-    render() {
+    public render() {
         const url = this.props.mxEvent.getContent()["url"];
         const prevUrl = this.props.mxEvent.getPrevContent()["url"];
         const senderName = this.props.mxEvent.sender?.name || this.props.mxEvent.getSender();

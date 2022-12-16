@@ -146,7 +146,7 @@ export class PosthogAnalytics {
         return this._instance;
     }
 
-    constructor(private readonly posthog: PostHog) {
+    public constructor(private readonly posthog: PostHog) {
         const posthogConfig = SdkConfig.getObject("posthog");
         if (posthogConfig) {
             this.posthog.init(posthogConfig.get("project_api_key"), {

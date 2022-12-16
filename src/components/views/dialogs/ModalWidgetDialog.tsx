@@ -61,11 +61,11 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
     private readonly possibleButtons: ModalButtonID[];
     private appFrame: React.RefObject<HTMLIFrameElement> = React.createRef();
 
-    state: IState = {
+    public state: IState = {
         disabledButtonIds: (this.props.widgetDefinition.buttons || []).filter((b) => b.disabled).map((b) => b.id),
     };
 
-    constructor(props) {
+    public constructor(props) {
         super(props);
 
         this.widget = new ElementWidget({

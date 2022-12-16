@@ -27,7 +27,7 @@ import { SettingLevel } from "../SettingLevel";
  * will be used - other controllers will not be considered.
  */
 export class OrderedMultiController extends SettingController {
-    constructor(public readonly controllers: SettingController[]) {
+    public constructor(public readonly controllers: SettingController[]) {
         super();
     }
 

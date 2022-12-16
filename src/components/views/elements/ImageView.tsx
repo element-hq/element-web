@@ -91,7 +91,7 @@ interface IState {
 }
 
 export default class ImageView extends React.Component<IProps, IState> {
-    constructor(props) {
+    public constructor(props) {
         super(props);
 
         const { thumbnailInfo } = this.props;
@@ -126,7 +126,7 @@ export default class ImageView extends React.Component<IProps, IState> {
     private animatingLoading = false;
     private imageIsLoaded = false;
 
-    componentDidMount() {
+    public componentDidMount() {
         // We have to use addEventListener() because the listener
         // needs to be passive in order to work with Chromium
         this.focusLock.current.addEventListener("wheel", this.onWheel, { passive: false });
@@ -136,7 +136,7 @@ export default class ImageView extends React.Component<IProps, IState> {
         this.image.current.addEventListener("load", this.imageLoaded);
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         this.focusLock.current.removeEventListener("wheel", this.onWheel);
         window.removeEventListener("resize", this.recalculateZoom);
         this.image.current.removeEventListener("load", this.imageLoaded);
@@ -411,7 +411,7 @@ export default class ImageView extends React.Component<IProps, IState> {
         return <React.Fragment>{contextMenu}</React.Fragment>;
     }
 
-    render() {
+    public render() {
         const showEventMeta = !!this.props.mxEvent;
 
         let transitionClassName;

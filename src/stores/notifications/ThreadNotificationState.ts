@@ -27,7 +27,7 @@ export class ThreadNotificationState extends NotificationState implements IDestr
     protected _count = 0;
     protected _color = NotificationColor.None;
 
-    constructor(public readonly thread: Thread) {
+    public constructor(public readonly thread: Thread) {
         super();
         this.thread.on(ThreadEvent.NewReply, this.handleNewThreadReply);
         this.thread.on(ThreadEvent.ViewThread, this.resetThreadNotification);

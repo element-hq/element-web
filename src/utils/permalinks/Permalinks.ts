@@ -94,7 +94,7 @@ export class RoomPermalinkCreator {
     // Some of the tests done by this class are relatively expensive, so normally
     // throttled to not happen on every update. Pass false as the shouldThrottle
     // param to disable this behaviour, eg. for tests.
-    constructor(room: Room, roomId: string | null = null, shouldThrottle = true) {
+    public constructor(room: Room, roomId: string | null = null, shouldThrottle = true) {
         this.room = room;
         this.roomId = room ? room.roomId : roomId;
         this.highestPlUserId = null;

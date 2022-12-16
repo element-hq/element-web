@@ -71,7 +71,7 @@ import { Alignment } from "../elements/Tooltip";
 import RoomCallBanner from "../beacon/RoomCallBanner";
 
 class DisabledWithReason {
-    constructor(public readonly reason: string) {}
+    public constructor(public readonly reason: string) {}
 }
 
 interface VoiceCallButtonProps {
@@ -482,7 +482,7 @@ interface IState {
 }
 
 export default class RoomHeader extends React.Component<IProps, IState> {
-    static defaultProps = {
+    public static defaultProps = {
         editing: false,
         inRoom: false,
         excludedRightPanelPhaseButtons: [],
@@ -490,11 +490,11 @@ export default class RoomHeader extends React.Component<IProps, IState> {
         enableRoomOptionsMenu: true,
     };
 
-    static contextType = RoomContext;
+    public static contextType = RoomContext;
     public context!: React.ContextType<typeof RoomContext>;
     private readonly client = this.props.room.client;
 
-    constructor(props: IProps, context: IState) {
+    public constructor(props: IProps, context: IState) {
         super(props, context);
         const notiStore = RoomNotificationStateStore.instance.getRoomState(props.room);
         notiStore.on(NotificationStateEvents.Update, this.onNotificationUpdate);

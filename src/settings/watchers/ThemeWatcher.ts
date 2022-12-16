@@ -36,7 +36,7 @@ export default class ThemeWatcher {
 
     private currentTheme: string;
 
-    constructor() {
+    public constructor() {
         this.themeWatchRef = null;
         this.systemThemeWatchRef = null;
         this.dispatcherRef = null;

@@ -43,31 +43,31 @@ export function ruleTypeToStable(rule: string): string {
 }
 
 export class BanList {
-    _rules: ListRule[] = [];
-    _roomId: string;
+    private _rules: ListRule[] = [];
+    private _roomId: string;
 
-    constructor(roomId: string) {
+    public constructor(roomId: string) {
         this._roomId = roomId;
         this.updateList();
     }
 
-    get roomId(): string {
+    public get roomId(): string {
         return this._roomId;
     }
 
-    get serverRules(): ListRule[] {
+    public get serverRules(): ListRule[] {
         return this._rules.filter((r) => r.kind === RULE_SERVER);
     }
 
-    get userRules(): ListRule[] {
+    public get userRules(): ListRule[] {
         return this._rules.filter((r) => r.kind === RULE_USER);
     }
 
-    get roomRules(): ListRule[] {
+    public get roomRules(): ListRule[] {
         return this._rules.filter((r) => r.kind === RULE_ROOM);
     }
 
-    async banEntity(kind: string, entity: string, reason: string): Promise<any> {
+    public async banEntity(kind: string, entity: string, reason: string): Promise<any> {
         await MatrixClientPeg.get().sendStateEvent(
             this._roomId,
             ruleTypeToStable(kind),
@@ -81,7 +81,7 @@ export class BanList {
         this._rules.push(new ListRule(entity, RECOMMENDATION_BAN, reason, ruleTypeToStable(kind)));
     }
 
-    async unbanEntity(kind: string, entity: string): Promise<any> {
+    public async unbanEntity(kind: string, entity: string): Promise<any> {
         // Empty state event is effectively deleting it.
         await MatrixClientPeg.get().sendStateEvent(this._roomId, ruleTypeToStable(kind), {}, "rule:" + entity);
         this._rules = this._rules.filter((r) => {
@@ -91,7 +91,7 @@ export class BanList {
         });
     }
 
-    updateList() {
+    public updateList() {
         this._rules = [];
 
         const room = MatrixClientPeg.get().getRoom(this._roomId);

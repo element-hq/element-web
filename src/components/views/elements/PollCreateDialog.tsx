@@ -256,7 +256,7 @@ export default class PollCreateDialog extends ScrollableBaseModal<IProps, IState
         );
     }
 
-    onPollTypeChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    public onPollTypeChange = (e: ChangeEvent<HTMLSelectElement>) => {
         this.setState({
             kind: M_POLL_KIND_DISCLOSED.matches(e.target.value) ? M_POLL_KIND_DISCLOSED : M_POLL_KIND_UNDISCLOSED,
         });

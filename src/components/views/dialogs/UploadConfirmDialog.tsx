@@ -35,11 +35,11 @@ export default class UploadConfirmDialog extends React.Component<IProps> {
     private readonly objectUrl: string;
     private readonly mimeType: string;
 
-    static defaultProps = {
+    public static defaultProps = {
         totalFiles: 1,
     };
 
-    constructor(props) {
+    public constructor(props) {
         super(props);
 
         // Create a fresh `Blob` for previewing (even though `File` already is
@@ -49,7 +49,7 @@ export default class UploadConfirmDialog extends React.Component<IProps> {
         this.objectUrl = URL.createObjectURL(blob);
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         if (this.objectUrl) URL.revokeObjectURL(this.objectUrl);
     }
 
@@ -65,7 +65,7 @@ export default class UploadConfirmDialog extends React.Component<IProps> {
         this.props.onFinished(true, true);
     };
 
-    render() {
+    public render() {
         let title: string;
         if (this.props.totalFiles > 1 && this.props.currentIndex !== undefined) {
             title = _t("Upload files (%(current)s of %(total)s)", {

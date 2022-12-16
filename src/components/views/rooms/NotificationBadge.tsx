@@ -55,7 +55,7 @@ interface IState {
 export default class NotificationBadge extends React.PureComponent<XOR<IProps, IClickableProps>, IState> {
     private countWatcherRef: string;
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
         this.props.notification.on(NotificationStateEvents.Update, this.onNotificationUpdate);
 

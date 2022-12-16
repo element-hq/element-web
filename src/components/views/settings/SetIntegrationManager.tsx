@@ -32,7 +32,7 @@ interface IState {
 }
 
 export default class SetIntegrationManager extends React.Component<IProps, IState> {
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         const currentManager = IntegrationManagers.sharedInstance().getPrimaryManager();

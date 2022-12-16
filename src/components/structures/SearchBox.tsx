@@ -45,7 +45,7 @@ interface IState {
 export default class SearchBox extends React.Component<IProps, IState> {
     private search = createRef<HTMLInputElement>();
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {

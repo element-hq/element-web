@@ -438,10 +438,10 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
     private treeRef = createRef<HTMLDivElement>();
     private favouriteMessageWatcher: string;
 
-    static contextType = MatrixClientContext;
+    public static contextType = MatrixClientContext;
     public context!: React.ContextType<typeof MatrixClientContext>;
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {

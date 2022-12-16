@@ -19,7 +19,7 @@ implements DOM/CSS operations for resizing.
 The sizer determines what CSS mechanism is used for sizing items, like flexbox, ...
 */
 export default class Sizer {
-    constructor(
+    public constructor(
         protected readonly container: HTMLElement,
         protected readonly vertical: boolean,
         protected readonly reverse: boolean,

@@ -61,7 +61,7 @@ export default class AppsDrawer extends React.Component<IProps, IState> {
         showApps: true,
     };
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {

@@ -39,7 +39,7 @@ interface IState {
 }
 
 export default class LayoutSwitcher extends React.Component<IProps, IState> {
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {

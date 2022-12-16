@@ -48,7 +48,7 @@ function matcherObject(room: Room, displayedAlias: string, matchName = "") {
 export default class RoomProvider extends AutocompleteProvider {
     protected matcher: QueryMatcher<Room>;
 
-    constructor(room: Room, renderingType?: TimelineRenderingType) {
+    public constructor(room: Room, renderingType?: TimelineRenderingType) {
         super({ commandRegex: ROOM_REGEX, renderingType });
         this.matcher = new QueryMatcher([], {
             keys: ["displayedAlias", "matchName"],
@@ -62,7 +62,12 @@ export default class RoomProvider extends AutocompleteProvider {
         return cli.getVisibleRooms().filter((r) => !r.isSpaceRoom());
     }
 
-    async getCompletions(query: string, selection: ISelectionRange, force = false, limit = -1): Promise<ICompletion[]> {
+    public async getCompletions(
+        query: string,
+        selection: ISelectionRange,
+        force = false,
+        limit = -1,
+    ): Promise<ICompletion[]> {
         let completions = [];
         const { command, range } = this.getCurrentCommand(query, selection, force);
         if (command) {
@@ -118,11 +123,11 @@ export default class RoomProvider extends AutocompleteProvider {
         return completions;
     }
 
-    getName() {
+    public getName() {
         return _t("Rooms");
     }
 
-    renderCompletions(completions: React.ReactNode[]): React.ReactNode {
+    public renderCompletions(completions: React.ReactNode[]): React.ReactNode {
         return (
             <div
                 className="mx_Autocomplete_Completion_container_pill mx_Autocomplete_Completion_container_truncate"

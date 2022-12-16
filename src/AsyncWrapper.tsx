@@ -47,7 +47,7 @@ export default class AsyncWrapper extends React.Component<IProps, IState> {
         error: null,
     };
 
-    componentDidMount() {
+    public componentDidMount() {
         // XXX: temporary logging to try to diagnose
         // https://github.com/vector-im/element-web/issues/3148
         logger.log("Starting load of AsyncWrapper for modal");
@@ -69,7 +69,7 @@ export default class AsyncWrapper extends React.Component<IProps, IState> {
             });
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         this.unmounted = true;
     }
 
@@ -77,7 +77,7 @@ export default class AsyncWrapper extends React.Component<IProps, IState> {
         this.props.onFinished(false);
     };
 
-    render() {
+    public render() {
         if (this.state.component) {
             const Component = this.state.component;
             return <Component {...this.props} />;

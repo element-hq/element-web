@@ -31,23 +31,23 @@ export enum VectorState {
 
 export class PushRuleVectorState {
     // Backwards compatibility (things should probably be using the enum above instead)
-    static OFF = VectorState.Off;
-    static ON = VectorState.On;
-    static LOUD = VectorState.Loud;
+    public static OFF = VectorState.Off;
+    public static ON = VectorState.On;
+    public static LOUD = VectorState.Loud;
 
     /**
      * Enum for state of a push rule as defined by the Vector UI.
      * @readonly
      * @enum {string}
      */
-    static states = VectorState;
+    public static states = VectorState;
 
     /**
      * Convert a PushRuleVectorState to a list of actions
      *
      * @return [object] list of push-rule actions
      */
-    static actionsFor(pushRuleVectorState: VectorState) {
+    public static actionsFor(pushRuleVectorState: VectorState) {
         if (pushRuleVectorState === VectorState.On) {
             return StandardActions.ACTION_NOTIFY;
         } else if (pushRuleVectorState === VectorState.Loud) {
@@ -62,7 +62,7 @@ export class PushRuleVectorState {
      * category or in PushRuleVectorState.LOUD, regardless of its enabled
      * state. Returns null if it does not match these categories.
      */
-    static contentRuleVectorStateKind(rule: IPushRule): VectorState {
+    public static contentRuleVectorStateKind(rule: IPushRule): VectorState {
         const decoded = NotificationUtils.decodeActions(rule.actions);
 
         if (!decoded) {

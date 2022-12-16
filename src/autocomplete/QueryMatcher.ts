@@ -49,7 +49,7 @@ export default class QueryMatcher<T extends {}> {
     private _options: IOptions<T>;
     private _items: Map<string, { object: T; keyWeight: number }[]>;
 
-    constructor(objects: T[], options: IOptions<T> = { keys: [] }) {
+    public constructor(objects: T[], options: IOptions<T> = { keys: [] }) {
         this._options = options;
 
         this.setObjects(objects);
@@ -61,7 +61,7 @@ export default class QueryMatcher<T extends {}> {
         }
     }
 
-    setObjects(objects: T[]) {
+    public setObjects(objects: T[]) {
         this._items = new Map();
 
         for (const object of objects) {
@@ -96,7 +96,7 @@ export default class QueryMatcher<T extends {}> {
         }
     }
 
-    match(query: string, limit = -1): T[] {
+    public match(query: string, limit = -1): T[] {
         query = this.processQuery(query);
         if (this._options.shouldMatchWordsOnly) {
             query = query.replace(/[^\w]/g, "");

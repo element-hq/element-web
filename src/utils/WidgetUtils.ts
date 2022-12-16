@@ -57,7 +57,7 @@ export default class WidgetUtils {
      * @return Boolean -- true if the user can modify widgets in this room
      * @throws Error -- specifies the error reason
      */
-    static canUserModifyWidgets(roomId: string): boolean {
+    public static canUserModifyWidgets(roomId: string): boolean {
         if (!roomId) {
             logger.warn("No room ID specified");
             return false;
@@ -96,7 +96,7 @@ export default class WidgetUtils {
      * @param  {[type]}  testUrlString URL to check
      * @return {Boolean} True if specified URL is a scalar URL
      */
-    static isScalarUrl(testUrlString: string): boolean {
+    public static isScalarUrl(testUrlString: string): boolean {
         if (!testUrlString) {
             logger.error("Scalar URL check failed. No URL specified");
             return false;
@@ -139,7 +139,7 @@ export default class WidgetUtils {
      * @returns {Promise} that resolves when the widget is in the
      *     requested state according to the `add` param
      */
-    static waitForUserWidget(widgetId: string, add: boolean): Promise<void> {
+    public static waitForUserWidget(widgetId: string, add: boolean): Promise<void> {
         return new Promise((resolve, reject) => {
             // Tests an account data event, returning true if it's in the state
             // we're waiting for it to be in
@@ -186,7 +186,7 @@ export default class WidgetUtils {
      * @returns {Promise} that resolves when the widget is in the
      *     requested state according to the `add` param
      */
-    static waitForRoomWidget(widgetId: string, roomId: string, add: boolean): Promise<void> {
+    public static waitForRoomWidget(widgetId: string, roomId: string, add: boolean): Promise<void> {
         return new Promise((resolve, reject) => {
             // Tests a list of state events, returning true if it's in the state
             // we're waiting for it to be in
@@ -229,7 +229,7 @@ export default class WidgetUtils {
         });
     }
 
-    static setUserWidget(
+    public static setUserWidget(
         widgetId: string,
         widgetType: WidgetType,
         widgetUrl: string,
@@ -282,7 +282,7 @@ export default class WidgetUtils {
             });
     }
 
-    static setRoomWidget(
+    public static setRoomWidget(
         roomId: string,
         widgetId: string,
         widgetType?: WidgetType,
@@ -312,7 +312,7 @@ export default class WidgetUtils {
         return WidgetUtils.setRoomWidgetContent(roomId, widgetId, content);
     }
 
-    static setRoomWidgetContent(roomId: string, widgetId: string, content: IWidget) {
+    public static setRoomWidgetContent(roomId: string, widgetId: string, content: IWidget) {
         const addingWidget = !!content.url;
 
         WidgetEchoStore.setRoomWidgetEcho(roomId, widgetId, content);
@@ -334,7 +334,7 @@ export default class WidgetUtils {
      * @param  {Room} room The room to get widgets force
      * @return {[object]} Array containing current / active room widgets
      */
-    static getRoomWidgets(room: Room) {
+    public static getRoomWidgets(room: Room) {
         // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
         const appsStateEvents = room.currentState.getStateEvents("im.vector.modular.widgets");
         if (!appsStateEvents) {
@@ -350,7 +350,7 @@ export default class WidgetUtils {
      * Get user specific widgets (not linked to a specific room)
      * @return {object} Event content object containing current / active user widgets
      */
-    static getUserWidgets(): Record<string, IWidgetEvent> {
+    public static getUserWidgets(): Record<string, IWidgetEvent> {
         const client = MatrixClientPeg.get();
         if (!client) {
             throw new Error("User not logged in");
@@ -366,7 +366,7 @@ export default class WidgetUtils {
      * Get user specific widgets (not linked to a specific room) as an array
      * @return {[object]} Array containing current / active user widgets
      */
-    static getUserWidgetsArray(): IWidgetEvent[] {
+    public static getUserWidgetsArray(): IWidgetEvent[] {
         return Object.values(WidgetUtils.getUserWidgets());
     }
 
@@ -374,7 +374,7 @@ export default class WidgetUtils {
      * Get active stickerpicker widgets (stickerpickers are user widgets by nature)
      * @return {[object]} Array containing current / active stickerpicker widgets
      */
-    static getStickerpickerWidgets(): IWidgetEvent[] {
+    public static getStickerpickerWidgets(): IWidgetEvent[] {
         const widgets = WidgetUtils.getUserWidgetsArray();
         return widgets.filter((widget) => widget.content && widget.content.type === "m.stickerpicker");
     }
@@ -383,12 +383,12 @@ export default class WidgetUtils {
      * Get all integration manager widgets for this user.
      * @returns {Object[]} An array of integration manager user widgets.
      */
-    static getIntegrationManagerWidgets(): IWidgetEvent[] {
+    public static getIntegrationManagerWidgets(): IWidgetEvent[] {
         const widgets = WidgetUtils.getUserWidgetsArray();
         return widgets.filter((w) => w.content && w.content.type === "m.integration_manager");
     }
 
-    static getRoomWidgetsOfType(room: Room, type: WidgetType): MatrixEvent[] {
+    public static getRoomWidgetsOfType(room: Room, type: WidgetType): MatrixEvent[] {
         const widgets = WidgetUtils.getRoomWidgets(room) || [];
         return widgets.filter((w) => {
             const content = w.getContent();
@@ -396,7 +396,7 @@ export default class WidgetUtils {
         });
     }
 
-    static async removeIntegrationManagerWidgets(): Promise<void> {
+    public static async removeIntegrationManagerWidgets(): Promise<void> {
         const client = MatrixClientPeg.get();
         if (!client) {
             throw new Error("User not logged in");
@@ -412,7 +412,7 @@ export default class WidgetUtils {
         await client.setAccountData("m.widgets", userWidgets);
     }
 
-    static addIntegrationManagerWidget(name: string, uiUrl: string, apiUrl: string): Promise<void> {
+    public static addIntegrationManagerWidget(name: string, uiUrl: string, apiUrl: string): Promise<void> {
         return WidgetUtils.setUserWidget(
             "integration_manager_" + new Date().getTime(),
             WidgetType.INTEGRATION_MANAGER,
@@ -426,7 +426,7 @@ export default class WidgetUtils {
      * Remove all stickerpicker widgets (stickerpickers are user widgets by nature)
      * @return {Promise} Resolves on account data updated
      */
-    static async removeStickerpickerWidgets(): Promise<void> {
+    public static async removeStickerpickerWidgets(): Promise<void> {
         const client = MatrixClientPeg.get();
         if (!client) {
             throw new Error("User not logged in");
@@ -442,7 +442,7 @@ export default class WidgetUtils {
         await client.setAccountData("m.widgets", userWidgets);
     }
 
-    static async addJitsiWidget(
+    public static async addJitsiWidget(
         roomId: string,
         type: CallType,
         name: string,
@@ -480,7 +480,7 @@ export default class WidgetUtils {
         });
     }
 
-    static makeAppConfig(
+    public static makeAppConfig(
         appId: string,
         app: Partial<IApp>,
         senderUserId: string,
@@ -500,7 +500,7 @@ export default class WidgetUtils {
         return app as IApp;
     }
 
-    static getLocalJitsiWrapperUrl(opts: { forLocalRender?: boolean; auth?: string } = {}) {
+    public static getLocalJitsiWrapperUrl(opts: { forLocalRender?: boolean; auth?: string } = {}) {
         // NB. we can't just encodeURIComponent all of these because the $ signs need to be there
         const queryStringParts = [
             "conferenceDomain=$domain",
@@ -534,30 +534,30 @@ export default class WidgetUtils {
         return url.href;
     }
 
-    static getWidgetName(app?: IApp): string {
+    public static getWidgetName(app?: IApp): string {
         return app?.name?.trim() || _t("Unknown App");
     }
 
-    static getWidgetDataTitle(app?: IApp): string {
+    public static getWidgetDataTitle(app?: IApp): string {
         return app?.data?.title?.trim() || "";
     }
 
-    static getWidgetUid(app?: IApp): string {
+    public static getWidgetUid(app?: IApp): string {
         return app ? WidgetUtils.calcWidgetUid(app.id, app.roomId) : "";
     }
 
-    static calcWidgetUid(widgetId: string, roomId?: string): string {
+    public static calcWidgetUid(widgetId: string, roomId?: string): string {
         return roomId ? `room_${roomId}_${widgetId}` : `user_${widgetId}`;
     }
 
-    static editWidget(room: Room, app: IApp): void {
+    public static editWidget(room: Room, app: IApp): void {
         // noinspection JSIgnoredPromiseFromCall
         IntegrationManagers.sharedInstance()
             .getPrimaryManager()
             .open(room, "type_" + app.type, app.id);
     }
 
-    static isManagedByManager(app) {
+    public static isManagedByManager(app) {
         if (WidgetUtils.isScalarUrl(app.url)) {
             const managers = IntegrationManagers.sharedInstance();
             if (managers.hasManager()) {

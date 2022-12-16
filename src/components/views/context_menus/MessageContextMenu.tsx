@@ -135,12 +135,12 @@ interface IState {
 }
 
 export default class MessageContextMenu extends React.Component<IProps, IState> {
-    static contextType = RoomContext;
+    public static contextType = RoomContext;
     public context!: React.ContextType<typeof RoomContext>;
 
     private reactButtonRef = createRef<any>(); // XXX Ref to a functional component
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {

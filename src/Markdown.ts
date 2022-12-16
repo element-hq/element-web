@@ -117,7 +117,7 @@ export default class Markdown {
     private input: string;
     private parsed: commonmark.Node;
 
-    constructor(input: string) {
+    public constructor(input: string) {
         this.input = input;
 
         const parser = new commonmark.Parser();
@@ -234,7 +234,7 @@ export default class Markdown {
         return parsed;
     }
 
-    isPlainText(): boolean {
+    public isPlainText(): boolean {
         const walker = this.parsed.walker();
 
         let ev: commonmark.NodeWalkingStep;
@@ -257,7 +257,7 @@ export default class Markdown {
         return true;
     }
 
-    toHTML({ externalLinks = false } = {}): string {
+    public toHTML({ externalLinks = false } = {}): string {
         const renderer = new commonmark.HtmlRenderer({
             safe: false,
 
@@ -344,7 +344,7 @@ export default class Markdown {
      * N.B. this does **NOT** render arbitrary MD to plain text - only MD
      * which has no formatting.  Otherwise it emits HTML(!).
      */
-    toPlaintext(): string {
+    public toPlaintext(): string {
         const renderer = new commonmark.HtmlRenderer({ safe: false });
 
         renderer.paragraph = function (node: commonmark.Node, entering: boolean) {

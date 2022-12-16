@@ -63,7 +63,7 @@ interface IState {
  * Container tile for rendering the voice message recorder in the composer.
  */
 export default class VoiceRecordComposerTile extends React.PureComponent<IProps, IState> {
-    static contextType = RoomContext;
+    public static contextType = RoomContext;
     public context!: React.ContextType<typeof RoomContext>;
     private voiceRecordingId: string;
 

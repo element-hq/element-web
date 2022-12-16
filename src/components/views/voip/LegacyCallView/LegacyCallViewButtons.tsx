@@ -152,7 +152,7 @@ export default class LegacyCallViewButtons extends React.Component<IProps, IStat
     private contextMenuButton = createRef<HTMLDivElement>();
     private controlsHideTimer: number = null;
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {

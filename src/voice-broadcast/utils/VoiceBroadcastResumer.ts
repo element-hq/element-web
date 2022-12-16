@@ -93,7 +93,7 @@ export class VoiceBroadcastResumer implements IDestroyable {
         this.client.sendStateEvent(roomId, VoiceBroadcastInfoEventType, content, userId);
     }
 
-    destroy(): void {
+    public destroy(): void {
         this.client.off(ClientEvent.Sync, this.onClientSync);
     }
 }

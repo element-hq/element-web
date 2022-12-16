@@ -22,7 +22,7 @@ import { Action } from "../../dispatcher/actions";
 import { SettingLevel } from "../SettingLevel";
 
 export default class UseSystemFontController extends SettingController {
-    constructor() {
+    public constructor() {
         super();
     }
 

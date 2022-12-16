@@ -96,7 +96,7 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
     // If the room supports moderation, the moderation information.
     private moderation?: Moderation;
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         let moderatedByRoomId = null;

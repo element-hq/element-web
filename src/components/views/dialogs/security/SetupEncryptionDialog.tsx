@@ -38,7 +38,7 @@ interface IState {
 export default class SetupEncryptionDialog extends React.Component<IProps, IState> {
     private store: SetupEncryptionStore;
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.store = SetupEncryptionStore.sharedInstance();

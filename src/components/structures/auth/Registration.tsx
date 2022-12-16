@@ -125,7 +125,7 @@ export default class Registration extends React.Component<IProps, IState> {
     // `replaceClient` tracks latest serverConfig to spot when it changes under the async method which fetches flows
     private latestServerConfig: ValidatedServerConfig;
 
-    constructor(props) {
+    public constructor(props) {
         super(props);
 
         this.state = {
@@ -148,13 +148,13 @@ export default class Registration extends React.Component<IProps, IState> {
         });
     }
 
-    componentDidMount() {
+    public componentDidMount() {
         this.replaceClient(this.props.serverConfig);
         //triggers a confirmation dialog for data loss before page unloads/refreshes
         window.addEventListener("beforeunload", this.unloadCallback);
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         window.removeEventListener("beforeunload", this.unloadCallback);
     }
 
@@ -565,7 +565,7 @@ export default class Registration extends React.Component<IProps, IState> {
         }
     }
 
-    render() {
+    public render() {
         let errorText;
         const err = this.state.errorText;
         if (err) {

@@ -47,7 +47,7 @@ export interface ExistingSourceIProps {
 }
 
 export class ExistingSource extends React.Component<ExistingSourceIProps> {
-    constructor(props: ExistingSourceIProps) {
+    public constructor(props: ExistingSourceIProps) {
         super(props);
     }
 
@@ -55,7 +55,7 @@ export class ExistingSource extends React.Component<ExistingSourceIProps> {
         this.props.onSelect(this.props.source);
     };
 
-    render() {
+    public render() {
         const thumbnailClasses = classNames({
             mx_desktopCapturerSourcePicker_source_thumbnail: true,
             mx_desktopCapturerSourcePicker_source_thumbnail_selected: this.props.selected,
@@ -84,9 +84,9 @@ export interface PickerIProps {
 }
 
 export default class DesktopCapturerSourcePicker extends React.Component<PickerIProps, PickerIState> {
-    interval: number;
+    public interval: number;
 
-    constructor(props: PickerIProps) {
+    public constructor(props: PickerIProps) {
         super(props);
 
         this.state = {
@@ -96,7 +96,7 @@ export default class DesktopCapturerSourcePicker extends React.Component<PickerI
         };
     }
 
-    async componentDidMount() {
+    public async componentDidMount() {
         // window.setInterval() first waits and then executes, therefore
         // we call getDesktopCapturerSources() here without any delay.
         // Otherwise the dialog would be left empty for some time.
@@ -112,7 +112,7 @@ export default class DesktopCapturerSourcePicker extends React.Component<PickerI
         }, 500);
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         clearInterval(this.interval);
     }
 
@@ -149,7 +149,7 @@ export default class DesktopCapturerSourcePicker extends React.Component<PickerI
         return new Tab(type, label, null, <div className="mx_desktopCapturerSourcePicker_tab">{sources}</div>);
     }
 
-    render() {
+    public render() {
         const tabs = [
             this.getTab("screen", _t("Share entire screen")),
             this.getTab("window", _t("Application window")),

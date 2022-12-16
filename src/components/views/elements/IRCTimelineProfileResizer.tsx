@@ -33,7 +33,7 @@ interface IState {
 }
 
 export default class IRCTimelineProfileResizer extends React.Component<IProps, IState> {
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {
@@ -42,7 +42,7 @@ export default class IRCTimelineProfileResizer extends React.Component<IProps, I
         };
     }
 
-    componentDidMount() {
+    public componentDidMount() {
         this.setState(
             {
                 IRCLayoutRoot: document.querySelector(".mx_IRCLayout"),
@@ -91,7 +91,7 @@ export default class IRCTimelineProfileResizer extends React.Component<IProps, I
         }
     };
 
-    render() {
+    public render() {
         return <Draggable className="mx_ProfileResizer" dragFunc={this.dragFunc} onMouseUp={this.onMoueUp} />;
     }
 }

@@ -54,7 +54,7 @@ export default class TextInputDialog extends React.Component<IProps, IState> {
         hasCancel: true,
     };
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {

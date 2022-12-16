@@ -21,7 +21,7 @@ import { Action } from "../../dispatcher/actions";
 import { SettingLevel } from "../SettingLevel";
 
 export default class FontSizeController extends SettingController {
-    constructor() {
+    public constructor() {
         super();
     }
 

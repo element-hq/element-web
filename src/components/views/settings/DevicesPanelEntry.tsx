@@ -47,7 +47,7 @@ interface IState {
 }
 
 export default class DevicesPanelEntry extends React.Component<IProps, IState> {
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
         this.state = {
             renaming: false,

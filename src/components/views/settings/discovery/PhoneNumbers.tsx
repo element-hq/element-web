@@ -48,7 +48,7 @@ interface IPhoneNumberState {
 }
 
 export class PhoneNumber extends React.Component<IPhoneNumberProps, IPhoneNumberState> {
-    constructor(props: IPhoneNumberProps) {
+    public constructor(props: IPhoneNumberProps) {
         super(props);
 
         const { bound } = props.msisdn;

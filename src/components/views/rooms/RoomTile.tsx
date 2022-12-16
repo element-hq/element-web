@@ -87,7 +87,7 @@ export class RoomTile extends React.PureComponent<ClassProps, State> {
     private notificationState: NotificationState;
     private roomProps: RoomEchoChamber;
 
-    constructor(props: ClassProps) {
+    public constructor(props: ClassProps) {
         super(props);
 
         this.state = {

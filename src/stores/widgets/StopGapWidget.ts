@@ -83,7 +83,7 @@ interface IAppTileProps {
 
 // TODO: Don't use this because it's wrong
 export class ElementWidget extends Widget {
-    constructor(private rawDefinition: IWidget) {
+    public constructor(private rawDefinition: IWidget) {
         super(rawDefinition);
     }
 
@@ -165,7 +165,7 @@ export class StopGapWidget extends EventEmitter {
     private readonly virtual: boolean;
     private readUpToMap: { [roomId: string]: string } = {}; // room ID to event ID
 
-    constructor(private appTileProps: IAppTileProps) {
+    public constructor(private appTileProps: IAppTileProps) {
         super();
         this.client = MatrixClientPeg.get();
 

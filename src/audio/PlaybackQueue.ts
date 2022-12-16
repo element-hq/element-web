@@ -48,7 +48,7 @@ export class PlaybackQueue {
     private currentPlaybackId: string; // event ID, broken out from above for ease of use
     private recentFullPlays = new Set<string>(); // event IDs
 
-    constructor(private room: Room) {
+    public constructor(private room: Room) {
         this.loadClocks();
 
         SdkContextClass.instance.roomViewStore.addRoomListener(this.room.roomId, (isActive) => {

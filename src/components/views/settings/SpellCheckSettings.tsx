@@ -42,7 +42,7 @@ export class ExistingSpellCheckLanguage extends React.Component<ExistingSpellChe
         return this.props.onRemoved(this.props.language);
     };
 
-    render() {
+    public render() {
         return (
             <div className="mx_ExistingSpellCheckLanguage">
                 <span className="mx_ExistingSpellCheckLanguage_language">{this.props.language}</span>
@@ -55,7 +55,7 @@ export class ExistingSpellCheckLanguage extends React.Component<ExistingSpellChe
 }
 
 export default class SpellCheckLanguages extends React.Component<SpellCheckLanguagesIProps, SpellCheckLanguagesIState> {
-    constructor(props) {
+    public constructor(props) {
         super(props);
         this.state = {
             newLanguage: "",
@@ -86,7 +86,7 @@ export default class SpellCheckLanguages extends React.Component<SpellCheckLangu
         this.setState({ newLanguage: language });
     };
 
-    render() {
+    public render() {
         const existingSpellCheckLanguages = this.props.languages.map((e) => {
             return <ExistingSpellCheckLanguage language={e} onRemoved={this.onRemoved} key={e} />;
         });

@@ -123,14 +123,14 @@ interface IState {
 }
 
 class EditMessageComposer extends React.Component<IEditMessageComposerProps, IState> {
-    static contextType = RoomContext;
-    context!: React.ContextType<typeof RoomContext>;
+    public static contextType = RoomContext;
+    public context!: React.ContextType<typeof RoomContext>;
 
     private readonly editorRef = createRef<BasicMessageComposer>();
     private readonly dispatcherRef: string;
     private model: EditorModel = null;
 
-    constructor(props: IEditMessageComposerProps, context: React.ContextType<typeof RoomContext>) {
+    public constructor(props: IEditMessageComposerProps, context: React.ContextType<typeof RoomContext>) {
         super(props);
         this.context = context; // otherwise React will only set it prior to render due to type def above
 
@@ -369,7 +369,7 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
         }
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         // store caret and serialized parts in the
         // editorstate so it can be restored when the remote echo event tile gets rendered
         // in case we're currently editing a pending event
@@ -446,7 +446,7 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
         }
     };
 
-    render() {
+    public render() {
         return (
             <div className={classNames("mx_EditMessageComposer", this.props.className)} onKeyDown={this.onKeyDown}>
                 <BasicMessageComposer

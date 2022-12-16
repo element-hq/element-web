@@ -55,7 +55,7 @@ interface IState {
 export default class RoomSettingsDialog extends React.Component<IProps, IState> {
     private dispatcherRef: string;
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
         this.state = { roomName: "" };
     }
@@ -180,7 +180,7 @@ export default class RoomSettingsDialog extends React.Component<IProps, IState> 
         return tabs;
     }
 
-    render() {
+    public render() {
         const roomName = this.state.roomName;
         return (
             <BaseDialog

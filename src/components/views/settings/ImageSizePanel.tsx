@@ -31,7 +31,7 @@ interface IState {
 }
 
 export default class ImageSizePanel extends React.Component<IProps, IState> {
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {

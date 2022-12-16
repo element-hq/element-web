@@ -34,14 +34,14 @@ interface ICaptchaFormState {
  * A pure UI component which displays a captcha form.
  */
 export default class CaptchaForm extends React.Component<ICaptchaFormProps, ICaptchaFormState> {
-    static defaultProps = {
+    public static defaultProps = {
         onCaptchaResponse: () => {},
     };
 
     private captchaWidgetId?: string;
     private recaptchaContainer = createRef<HTMLDivElement>();
 
-    constructor(props: ICaptchaFormProps) {
+    public constructor(props: ICaptchaFormProps) {
         super(props);
 
         this.state = {
@@ -49,7 +49,7 @@ export default class CaptchaForm extends React.Component<ICaptchaFormProps, ICap
         };
     }
 
-    componentDidMount() {
+    public componentDidMount() {
         // Just putting a script tag into the returned jsx doesn't work, annoyingly,
         // so we do this instead.
         if (this.isRecaptchaReady()) {
@@ -69,7 +69,7 @@ export default class CaptchaForm extends React.Component<ICaptchaFormProps, ICap
         }
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         this.resetRecaptcha();
     }
 
@@ -122,7 +122,7 @@ export default class CaptchaForm extends React.Component<ICaptchaFormProps, ICap
         }
     }
 
-    render() {
+    public render() {
         let error = null;
         if (this.state.errorText) {
             error = <div className="error">{this.state.errorText}</div>;

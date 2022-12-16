@@ -76,7 +76,7 @@ interface IState {
 }
 
 export default class ThreadView extends React.Component<IProps, IState> {
-    static contextType = RoomContext;
+    public static contextType = RoomContext;
     public context!: React.ContextType<typeof RoomContext>;
 
     private dispatcherRef: string;
@@ -84,7 +84,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
     private timelinePanel = createRef<TimelinePanel>();
     private card = createRef<HTMLDivElement>();
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         const thread = this.props.room.getThread(this.props.mxEvent.getId());

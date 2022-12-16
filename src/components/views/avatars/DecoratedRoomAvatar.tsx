@@ -82,7 +82,7 @@ export default class DecoratedRoomAvatar extends React.PureComponent<IProps, ISt
     private isUnmounted = false;
     private isWatchingTimeline = false;
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {

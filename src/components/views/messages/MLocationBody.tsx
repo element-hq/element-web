@@ -46,7 +46,7 @@ export default class MLocationBody extends React.Component<IBodyProps, IState> {
     private mapId: string;
     private reconnectedListener: ClientEventHandlerMap[ClientEvent.Sync];
 
-    constructor(props: IBodyProps) {
+    public constructor(props: IBodyProps) {
         super(props);
 
         // multiple instances of same map might be in document
@@ -84,11 +84,11 @@ export default class MLocationBody extends React.Component<IBodyProps, IState> {
         this.context.on(ClientEvent.Sync, this.reconnectedListener);
     };
 
-    componentWillUnmount(): void {
+    public componentWillUnmount(): void {
         this.context.off(ClientEvent.Sync, this.reconnectedListener);
     }
 
-    render(): React.ReactElement<HTMLDivElement> {
+    public render(): React.ReactElement<HTMLDivElement> {
         return this.state.error ? (
             <LocationBodyFallbackContent error={this.state.error} event={this.props.mxEvent} />
         ) : (

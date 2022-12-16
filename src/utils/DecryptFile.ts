@@ -23,7 +23,7 @@ import { IEncryptedFile, IMediaEventInfo } from "../customisations/models/IMedia
 import { getBlobSafeMimeType } from "./blobs";
 
 export class DownloadError extends Error {
-    constructor(e) {
+    public constructor(e) {
         super(e.message);
         this.name = "DownloadError";
         this.stack = e.stack;
@@ -31,7 +31,7 @@ export class DownloadError extends Error {
 }
 
 export class DecryptError extends Error {
-    constructor(e) {
+    public constructor(e) {
         super(e.message);
         this.name = "DecryptError";
         this.stack = e.stack;

@@ -28,7 +28,7 @@ interface IProps {
 }
 
 export default class LegacyCallViewSidebar extends React.Component<IProps> {
-    render() {
+    public render() {
         const feeds = this.props.feeds.map((feed) => {
             return (
                 <VideoFeed

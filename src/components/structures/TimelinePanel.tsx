@@ -227,13 +227,13 @@ interface IEventIndexOpts {
  * Also responsible for handling and sending read receipts.
  */
 class TimelinePanel extends React.Component<IProps, IState> {
-    static contextType = RoomContext;
+    public static contextType = RoomContext;
     public context!: React.ContextType<typeof RoomContext>;
 
     // a map from room id to read marker event timestamp
-    static roomReadMarkerTsMap: Record<string, number> = {};
+    public static roomReadMarkerTsMap: Record<string, number> = {};
 
-    static defaultProps = {
+    public static defaultProps = {
         // By default, disable the timelineCap in favour of unpaginating based on
         // event tile heights. (See _unpaginateEvents)
         timelineCap: Number.MAX_VALUE,
@@ -257,7 +257,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
     // A map of <callId, LegacyCallEventGrouper>
     private callEventGroupers = new Map<string, LegacyCallEventGrouper>();
 
-    constructor(props: IProps, context: React.ContextType<typeof RoomContext>) {
+    public constructor(props: IProps, context: React.ContextType<typeof RoomContext>) {
         super(props, context);
         this.context = context;
 
@@ -360,7 +360,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         }
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         // set a boolean to say we've been unmounted, which any pending
         // promises can use to throw away their results.
         //
@@ -1883,7 +1883,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         this.callEventGroupers = buildLegacyCallEventGroupers(this.callEventGroupers, events);
     }
 
-    render() {
+    public render() {
         // just show a spinner while the timeline loads.
         //
         // put it in a div of the right class (mx_RoomView_messagePanel) so

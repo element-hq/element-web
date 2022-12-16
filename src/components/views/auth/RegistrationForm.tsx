@@ -95,12 +95,12 @@ interface IState {
  * A pure UI component which displays a registration form.
  */
 export default class RegistrationForm extends React.PureComponent<IProps, IState> {
-    static defaultProps = {
+    public static defaultProps = {
         onValidationChange: logger.error,
         canSubmit: true,
     };
 
-    constructor(props) {
+    public constructor(props) {
         super(props);
 
         this.state = {
@@ -468,7 +468,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         );
     }
 
-    renderPasswordConfirm() {
+    public renderPasswordConfirm() {
         return (
             <PassphraseConfirmField
                 id="mx_RegistrationForm_passwordConfirm"
@@ -482,7 +482,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         );
     }
 
-    renderPhoneNumber() {
+    public renderPhoneNumber() {
         if (!this.showPhoneNumber()) {
             return null;
         }
@@ -508,7 +508,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         );
     }
 
-    renderUsername() {
+    public renderUsername() {
         return (
             <Field
                 id="mx_RegistrationForm_username"
@@ -524,7 +524,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         );
     }
 
-    render() {
+    public render() {
         const registerButton = (
             <input className="mx_Login_submit" type="submit" value={_t("Register")} disabled={!this.props.canSubmit} />
         );

@@ -58,11 +58,11 @@ interface IState {
 }
 
 export default class Stickerpicker extends React.PureComponent<IProps, IState> {
-    static defaultProps = {
+    public static defaultProps = {
         threadId: null,
     };
 
-    static currentWidget;
+    public static currentWidget;
 
     private dispatcherRef: string;
 
@@ -73,7 +73,7 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
     // This is loaded by _acquireScalarClient on an as-needed basis.
     private scalarClient: ScalarAuthClient = null;
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
         this.state = {
             imError: null,

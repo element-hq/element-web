@@ -43,7 +43,7 @@ interface IState {
 export default class CrossSigningPanel extends React.PureComponent<{}, IState> {
     private unmounted = false;
 
-    constructor(props) {
+    public constructor(props) {
         super(props);
 
         this.state = {};

@@ -47,7 +47,7 @@ export default class IndicatorScrollbar<T extends keyof JSX.IntrinsicElements> e
     private likelyTrackpadUser: boolean = null;
     private checkAgainForTrackpad = 0; // ts in milliseconds to recheck this._likelyTrackpadUser
 
-    constructor(props: IProps<T>) {
+    public constructor(props: IProps<T>) {
         super(props);
 
         this.state = {

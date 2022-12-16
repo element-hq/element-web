@@ -32,10 +32,10 @@ interface IProps {
 
 export default class PersistentApp extends React.Component<IProps> {
     public static contextType = MatrixClientContext;
-    context: ContextType<typeof MatrixClientContext>;
+    public context: ContextType<typeof MatrixClientContext>;
     private room: Room;
 
-    constructor(props: IProps, context: ContextType<typeof MatrixClientContext>) {
+    public constructor(props: IProps, context: ContextType<typeof MatrixClientContext>) {
         super(props, context);
         this.room = context.getRoom(this.props.persistentRoomId)!;
     }

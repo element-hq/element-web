@@ -29,7 +29,7 @@ export default class PlainTextExporter extends Exporter {
     protected totalSize: number;
     protected mediaOmitText: string;
 
-    constructor(
+    public constructor(
         room: Room,
         exportType: ExportType,
         exportOptions: IExportOptions,

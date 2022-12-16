@@ -28,7 +28,7 @@ export abstract class ReadyWatchingStore extends EventEmitter implements IDestro
     protected matrixClient: MatrixClient;
     private dispatcherRef: string | null = null;
 
-    constructor(protected readonly dispatcher: Dispatcher<ActionPayload>) {
+    public constructor(protected readonly dispatcher: Dispatcher<ActionPayload>) {
         super();
     }
 

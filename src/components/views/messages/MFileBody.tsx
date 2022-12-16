@@ -106,10 +106,10 @@ interface IState {
 }
 
 export default class MFileBody extends React.Component<IProps, IState> {
-    static contextType = RoomContext;
+    public static contextType = RoomContext;
     public context!: React.ContextType<typeof RoomContext>;
 
-    static defaultProps = {
+    public static defaultProps = {
         showGenericPlaceholder: true,
     };
 

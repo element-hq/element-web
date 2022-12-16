@@ -46,7 +46,7 @@ interface IState {
 export default class SetEmailDialog extends React.Component<IProps, IState> {
     private addThreepid: AddThreepid;
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {

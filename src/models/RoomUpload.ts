@@ -23,7 +23,7 @@ export class RoomUpload {
     public promise: Promise<{ url?: string; file?: IEncryptedFile }>;
     private uploaded = 0;
 
-    constructor(
+    public constructor(
         public readonly roomId: string,
         public readonly fileName: string,
         public readonly relation?: IEventRelation,

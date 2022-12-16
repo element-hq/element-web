@@ -36,7 +36,7 @@ interface IState {
 }
 
 export default class MjolnirUserSettingsTab extends React.Component<{}, IState> {
-    constructor(props) {
+    public constructor(props) {
         super(props);
 
         this.state = {
@@ -246,7 +246,7 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
         );
     }
 
-    render() {
+    public render() {
         const brand = SdkConfig.get().brand;
 
         return (

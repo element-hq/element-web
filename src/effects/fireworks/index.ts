@@ -62,7 +62,7 @@ export const DefaultOptions: FireworksOptions = {
 export default class Fireworks implements ICanvasEffect {
     private readonly options: FireworksOptions;
 
-    constructor(options: { [key: string]: any }) {
+    public constructor(options: { [key: string]: any }) {
         this.options = { ...DefaultOptions, ...options };
     }
 

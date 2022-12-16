@@ -15,15 +15,15 @@ limitations under the License.
 */
 
 export class ValidatedServerConfig {
-    hsUrl: string;
-    hsName: string;
-    hsNameIsDifferent: string;
+    public hsUrl: string;
+    public hsName: string;
+    public hsNameIsDifferent: string;
 
-    isUrl: string;
+    public isUrl: string;
 
-    isDefault: boolean;
+    public isDefault: boolean;
     // when the server config is based on static URLs the hsName is not resolvable and things may wish to use hsUrl
-    isNameResolvable: boolean;
+    public isNameResolvable: boolean;
 
-    warning: string;
+    public warning: string;
 }

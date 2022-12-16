@@ -57,7 +57,7 @@ class EmojiPicker extends React.Component<IProps, IState> {
 
     private scrollRef = React.createRef<AutoHideScrollbar<"div">>();
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {
@@ -249,7 +249,7 @@ class EmojiPicker extends React.Component<IProps, IState> {
         return CATEGORY_HEADER_HEIGHT + Math.ceil(count / EMOJIS_PER_ROW) * EMOJI_HEIGHT;
     }
 
-    render() {
+    public render() {
         let heightBefore = 0;
         return (
             <div className="mx_EmojiPicker" data-testid="mx_EmojiPicker">

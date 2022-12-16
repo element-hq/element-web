@@ -40,7 +40,7 @@ interface IState {
  * or nothing if there is no call in that room.
  */
 export default class LegacyCallViewForRoom extends React.Component<IProps, IState> {
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
         this.state = {
             call: this.getCall(),

@@ -43,7 +43,7 @@ class PercentageSizer extends Sizer {
 }
 
 export default class PercentageDistributor extends FixedDistributor<IConfig> {
-    static createSizer(containerElement: HTMLElement, vertical: boolean, reverse: boolean) {
+    public static createSizer(containerElement: HTMLElement, vertical: boolean, reverse: boolean) {
         return new PercentageSizer(containerElement, vertical, reverse);
     }
 }

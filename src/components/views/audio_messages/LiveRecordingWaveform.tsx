@@ -44,14 +44,14 @@ export default class LiveRecordingWaveform extends React.PureComponent<IProps, I
         () => requestAnimationFrame(() => this.scheduledUpdate.trigger()),
     );
 
-    constructor(props) {
+    public constructor(props) {
         super(props);
         this.state = {
             waveform: arraySeed(0, RECORDING_PLAYBACK_SAMPLES),
         };
     }
 
-    componentDidMount() {
+    public componentDidMount() {
         this.props.recorder.liveData.onUpdate((update: IRecordingUpdate) => {
             // The incoming data is between zero and one, so we don't need to clamp/rescale it.
             this.waveform = arrayFastResample(Array.from(update.waveform), RECORDING_PLAYBACK_SAMPLES);

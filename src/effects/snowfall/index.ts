@@ -51,7 +51,7 @@ const KEY_FRAME_INTERVAL = 15; // 15ms, roughly
 export default class Snowfall implements ICanvasEffect {
     private readonly options: SnowfallOptions;
 
-    constructor(options: { [key: string]: any }) {
+    public constructor(options: { [key: string]: any }) {
         this.options = { ...DefaultOptions, ...options };
     }
 

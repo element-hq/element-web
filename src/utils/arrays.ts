@@ -248,7 +248,7 @@ export class ArrayUtil<T> {
      * Create a new array helper.
      * @param a The array to help. Can be modified in-place.
      */
-    constructor(private a: T[]) {}
+    public constructor(private a: T[]) {}
 
     /**
      * The value of this array, after all appropriate alterations.
@@ -281,7 +281,7 @@ export class GroupedArray<K, T> {
      * Creates a new group helper.
      * @param val The group to help. Can be modified in-place.
      */
-    constructor(private val: Map<K, T[]>) {}
+    public constructor(private val: Map<K, T[]>) {}
 
     /**
      * The value of this group, after all applicable alterations.

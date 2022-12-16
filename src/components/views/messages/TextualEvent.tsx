@@ -25,7 +25,7 @@ interface IProps {
 }
 
 export default class TextualEvent extends React.Component<IProps> {
-    static contextType = RoomContext;
+    public static contextType = RoomContext;
 
     public render() {
         const text = TextForEvent.textForEvent(this.props.mxEvent, true, this.context?.showHiddenEvents);

@@ -104,7 +104,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
     private recoveryKeyNode = createRef<HTMLElement>();
     private passphraseField = createRef<Field>();
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         let passPhraseKeySelected;

@@ -55,7 +55,7 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
     private pills: Element[] = [];
     private tooltips: Element[] = [];
 
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
 
         const cli = MatrixClientPeg.get();

@@ -42,7 +42,7 @@ interface IState {
 }
 
 export default class HelpUserSettingsTab extends React.Component<IProps, IState> {
-    constructor(props) {
+    public constructor(props) {
         super(props);
 
         this.state = {
@@ -51,7 +51,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
         };
     }
 
-    componentDidMount(): void {
+    public componentDidMount(): void {
         PlatformPeg.get()
             .getAppVersion()
             .then((ver) => this.setState({ appVersion: ver }))
@@ -206,7 +206,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
         });
     };
 
-    render() {
+    public render() {
         const brand = SdkConfig.get().brand;
 
         let faqText = _t(

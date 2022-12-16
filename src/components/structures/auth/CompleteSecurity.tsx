@@ -33,7 +33,7 @@ interface IState {
 }
 
 export default class CompleteSecurity extends React.Component<IProps, IState> {
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
         const store = SetupEncryptionStore.sharedInstance();
         store.on("update", this.onStoreUpdate);

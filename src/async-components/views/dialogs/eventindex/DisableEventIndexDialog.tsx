@@ -38,7 +38,7 @@ interface IState {
  * Allows the user to disable the Event Index.
  */
 export default class DisableEventIndexDialog extends React.Component<IProps, IState> {
-    constructor(props: IProps) {
+    public constructor(props: IProps) {
         super(props);
         this.state = {
             disabling: false,
