@@ -316,29 +316,6 @@ export function mkEvent(opts: MakeEventProps): MatrixEvent {
 }
 
 /**
- * Create an m.presence event.
- * @param {Object} opts Values for the presence.
- * @return {Object|MatrixEvent} The event
- */
-export function mkPresence(opts) {
-    if (!opts.user) {
-        throw new Error("Missing user");
-    }
-    const event = {
-        event_id: "$" + Math.random() + "-" + Math.random(),
-        type: "m.presence",
-        sender: opts.user,
-        content: {
-            avatar_url: opts.url,
-            displayname: opts.name,
-            last_active_ago: opts.ago,
-            presence: opts.presence || "offline",
-        },
-    };
-    return opts.event ? new MatrixEvent(event) : event;
-}
-
-/**
  * Create an m.room.member event.
  * @param {Object} opts Values for the membership.
  * @param {string} opts.room The room ID for the event.
