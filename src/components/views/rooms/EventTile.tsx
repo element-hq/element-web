@@ -395,7 +395,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         const room = client.getRoom(this.props.mxEvent.getRoomId());
         room?.on(ThreadEvent.New, this.onNewThread);
 
-        this.verifyEvent(this.props.mxEvent);
+        this.verifyEvent();
     }
 
     private get supportsThreadNotifications(): boolean {
@@ -478,7 +478,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         }
         // re-check the sender verification as outgoing events progress through the send process.
         if (prevProps.eventSendStatus !== this.props.eventSendStatus) {
-            this.verifyEvent(this.props.mxEvent);
+            this.verifyEvent();
         }
     }
 
@@ -588,23 +588,25 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         // we need to re-verify the sending device.
         // (we call onHeightChanged in verifyEvent to handle the case where decryption
         // has caused a change in size of the event tile)
-        this.verifyEvent(this.props.mxEvent);
+        this.verifyEvent();
         this.forceUpdate();
     };
 
     private onDeviceVerificationChanged = (userId: string, device: string): void => {
         if (userId === this.props.mxEvent.getSender()) {
-            this.verifyEvent(this.props.mxEvent);
+            this.verifyEvent();
         }
     };
 
     private onUserVerificationChanged = (userId: string, _trustStatus: UserTrustLevel): void => {
         if (userId === this.props.mxEvent.getSender()) {
-            this.verifyEvent(this.props.mxEvent);
+            this.verifyEvent();
         }
     };
 
-    private async verifyEvent(mxEvent: MatrixEvent): Promise<void> {
+    private verifyEvent(): void {
+        const mxEvent = this.props.mxEvent;
+
         if (!mxEvent.isEncrypted() || mxEvent.isRedacted()) {
             return;
         }
