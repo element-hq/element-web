@@ -19,7 +19,7 @@ import React from "react";
 import { mount } from "enzyme";
 import { LocationAssetType } from "matrix-js-sdk/src/@types/location";
 import { ClientEvent, RoomMember } from "matrix-js-sdk/src/matrix";
-import maplibregl from "maplibre-gl";
+import * as maplibregl from "maplibre-gl";
 import { logger } from "matrix-js-sdk/src/logger";
 import { act } from "react-dom/test-utils";
 import { SyncState } from "matrix-js-sdk/src/sync";
@@ -35,6 +35,7 @@ import { makeLocationEvent } from "../../../test-utils/location";
 import { getMockClientWithEventEmitter } from "../../../test-utils";
 
 describe("MLocationBody", () => {
+    const mapOptions = { container: {} as unknown as HTMLElement, style: "" };
     describe("<MLocationBody>", () => {
         const roomId = "!room:server";
         const userId = "@user:server";
@@ -60,7 +61,7 @@ describe("MLocationBody", () => {
                 wrappingComponentProps: { value: mockClient },
             });
         const getMapErrorComponent = () => {
-            const mockMap = new maplibregl.Map();
+            const mockMap = new maplibregl.Map(mapOptions);
             mockClient.getClientWellKnown.mockReturnValue({
                 [TILE_SERVER_WK_KEY.name]: { map_style_url: "bad-tile-server.com" },
             });
@@ -72,10 +73,6 @@ describe("MLocationBody", () => {
 
             return component;
         };
-
-        beforeAll(() => {
-            maplibregl.AttributionControl = jest.fn();
-        });
 
         beforeEach(() => {
             jest.clearAllMocks();
@@ -131,7 +128,7 @@ describe("MLocationBody", () => {
             });
 
             it("renders map correctly", () => {
-                const mockMap = new maplibregl.Map();
+                const mockMap = new maplibregl.Map(mapOptions);
                 const component = getComponent();
 
                 expect(component).toMatchSnapshot();
@@ -154,7 +151,7 @@ describe("MLocationBody", () => {
             });
 
             it("renders marker correctly for a non-self share", () => {
-                const mockMap = new maplibregl.Map();
+                const mockMap = new maplibregl.Map(mapOptions);
                 const component = getComponent();
 
                 expect(component.find("SmartMarker").at(0).props()).toEqual(

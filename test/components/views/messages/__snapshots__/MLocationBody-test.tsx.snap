@@ -131,11 +131,11 @@ exports[`MLocationBody <MLocationBody> without error renders map correctly 1`] =
                     "addControl": [MockFunction] {
                       "calls": [
                         [
-                          mockConstructor {},
+                          MockAttributionControl {},
                           "top-right",
                         ],
                         [
-                          mockConstructor {},
+                          MockAttributionControl {},
                           "top-right",
                         ],
                       ],

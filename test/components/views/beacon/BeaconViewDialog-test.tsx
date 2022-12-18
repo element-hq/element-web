@@ -19,7 +19,7 @@ import React from "react";
 import { mount, ReactWrapper } from "enzyme";
 import { act } from "react-dom/test-utils";
 import { MatrixClient, MatrixEvent, Room, RoomMember, getBeaconInfoIdentifier } from "matrix-js-sdk/src/matrix";
-import maplibregl from "maplibre-gl";
+import * as maplibregl from "maplibre-gl";
 import { mocked } from "jest-mock";
 
 import BeaconViewDialog from "../../../../src/components/views/beacon/BeaconViewDialog";
@@ -58,7 +58,8 @@ describe("<BeaconViewDialog />", () => {
         getVisibleRooms: jest.fn().mockReturnValue([]),
     });
 
-    const mockMap = new maplibregl.Map();
+    const mapOptions = { container: {} as unknown as HTMLElement, style: "" };
+    const mockMap = new maplibregl.Map(mapOptions);
 
     // make fresh rooms every time
     // as we update room state
@@ -90,10 +91,6 @@ describe("<BeaconViewDialog />", () => {
             findByTestId(component, "beacon-view-dialog-open-sidebar").at(0).simulate("click");
             component.setProps({});
         });
-
-    beforeAll(() => {
-        maplibregl.AttributionControl = jest.fn();
-    });
 
     beforeEach(() => {
         jest.spyOn(OwnBeaconStore.instance, "getLiveBeaconIds").mockRestore();

@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { ReactNode, useContext } from "react";
-import maplibregl from "maplibre-gl";
+import * as maplibregl from "maplibre-gl";
 import { Beacon, BeaconEvent } from "matrix-js-sdk/src/matrix";
 import { LocationAssetType } from "matrix-js-sdk/src/@types/location";
 

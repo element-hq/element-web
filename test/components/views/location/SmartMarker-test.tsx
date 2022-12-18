@@ -18,7 +18,7 @@ import React from "react";
 // eslint-disable-next-line deprecate/import
 import { mount } from "enzyme";
 import { mocked } from "jest-mock";
-import maplibregl from "maplibre-gl";
+import * as maplibregl from "maplibre-gl";
 
 import SmartMarker from "../../../../src/components/views/location/SmartMarker";
 
@@ -27,7 +27,8 @@ jest.mock("../../../../src/utils/location/findMapStyleUrl", () => ({
 }));
 
 describe("<SmartMarker />", () => {
-    const mockMap = new maplibregl.Map();
+    const mapOptions = { container: {} as unknown as HTMLElement, style: "" };
+    const mockMap = new maplibregl.Map(mapOptions);
     const mockMarker = new maplibregl.Marker();
 
     const defaultProps = {

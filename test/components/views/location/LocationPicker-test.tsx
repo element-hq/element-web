@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import maplibregl from "maplibre-gl";
+import * as maplibregl from "maplibre-gl";
 // eslint-disable-next-line deprecate/import
 import { mount } from "enzyme";
 import { act } from "react-dom/test-utils";
@@ -62,8 +62,9 @@ describe("LocationPicker", () => {
                 wrappingComponentProps: { value: mockClient },
             });
 
-        const mockMap = new maplibregl.Map();
-        const mockGeolocate = new maplibregl.GeolocateControl();
+        const mapOptions = { container: {} as unknown as HTMLElement, style: "" };
+        const mockMap = new maplibregl.Map(mapOptions);
+        const mockGeolocate = new maplibregl.GeolocateControl({});
         const mockMarker = new maplibregl.Marker();
 
         const mockGeolocationPosition = {

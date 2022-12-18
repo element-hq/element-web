@@ -137,7 +137,7 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
 
     private addMarkerToMap = () => {
         this.marker = new maplibregl.Marker({
-            element: document.getElementById(this.getMarkerId()),
+            element: document.getElementById(this.getMarkerId()) ?? undefined,
             anchor: "bottom",
             offset: [0, -1],
         })

@@ -17,14 +17,15 @@ limitations under the License.
 import React from "react";
 // eslint-disable-next-line deprecate/import
 import { mount } from "enzyme";
-import maplibregl from "maplibre-gl";
+import * as maplibregl from "maplibre-gl";
 import { act } from "react-dom/test-utils";
 
 import ZoomButtons from "../../../../src/components/views/location/ZoomButtons";
 import { findByTestId } from "../../../test-utils";
 
 describe("<ZoomButtons />", () => {
-    const mockMap = new maplibregl.Map();
+    const mapOptions = { container: {} as unknown as HTMLElement, style: "" };
+    const mockMap = new maplibregl.Map(mapOptions);
     const defaultProps = {
         map: mockMap,
     };
