@@ -388,6 +388,7 @@ export class VoiceBroadcastPlayback
 
     public stop(): void {
         this.setState(VoiceBroadcastPlaybackState.Stopped);
+        this.getCurrentPlayback()?.stop();
         this.currentlyPlaying = null;
         this.setPosition(0);
     }
@@ -397,7 +398,6 @@ export class VoiceBroadcastPlayback
         if (this.getState() === VoiceBroadcastPlaybackState.Stopped) return;
 
         this.setState(VoiceBroadcastPlaybackState.Paused);
-        if (!this.currentlyPlaying) return;
         this.getCurrentPlayback()?.pause();
     }
 
