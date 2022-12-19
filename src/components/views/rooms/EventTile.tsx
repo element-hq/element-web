@@ -232,7 +232,7 @@ interface IState {
     // Whether the action bar is focused.
     actionBarFocused: boolean;
     // Whether the event's sender has been verified.
-    verified: string;
+    verified: string | null;
     // The Relations model from the JS SDK for reactions to `mxEvent`
     reactions?: Relations | null | undefined;
 
@@ -278,7 +278,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         this.state = {
             // Whether the action bar is focused.
             actionBarFocused: false,
-            // Whether the event's sender has been verified.
+            // Whether the event's sender has been verified. `null` if no attempt has yet been made to verify
+            // (including if the event is not encrypted).
             verified: null,
             // The Relations model from the JS SDK for reactions to `mxEvent`
             reactions: this.getReactions(),
