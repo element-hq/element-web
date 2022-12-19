@@ -191,8 +191,6 @@ export interface IConfigOptions {
         description: string;
         show_once?: boolean;
     };
-
-    use_rust_crypto_sdk?: boolean;
 }
 
 export interface ISsoRedirectOptions {
