@@ -37,11 +37,14 @@ declare global {
              * @param synapse the synapse returned by startSynapse
              * @param displayName the displayName to give the test user
              * @param prelaunchFn optional function to run before the app is visited
+             * @param userIdPrefix optional prefix to use for the generated user id. If unspecified, `user_` will be
+             *     useed.
              */
             initTestUser(
                 synapse: SynapseInstance,
                 displayName: string,
                 prelaunchFn?: () => void,
+                userIdPrefix?: string,
             ): Chainable<UserCredentials>;
             /**
              * Logs into synapse with the given username/password
@@ -91,7 +94,12 @@ Cypress.Commands.add(
 // eslint-disable-next-line max-len
 Cypress.Commands.add(
     "initTestUser",
-    (synapse: SynapseInstance, displayName: string, prelaunchFn?: () => void): Chainable<UserCredentials> => {
+    (
+        synapse: SynapseInstance,
+        displayName: string,
+        prelaunchFn?: () => void,
+        userIdPrefix = "user_",
+    ): Chainable<UserCredentials> => {
         // XXX: work around Cypress not clearing IDB between tests
         cy.window({ log: false }).then((win) => {
             win.indexedDB.databases()?.then((databases) => {
@@ -101,7 +109,7 @@ Cypress.Commands.add(
             });
         });
 
-        const username = Cypress._.uniqueId("userId_");
+        const username = Cypress._.uniqueId(userIdPrefix);
         const password = Cypress._.uniqueId("password_");
         return cy
             .registerUser(synapse, username, password, displayName)

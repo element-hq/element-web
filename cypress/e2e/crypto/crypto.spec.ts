@@ -158,8 +158,8 @@ describe("Cryptography", function () {
         cy.startSynapse("default")
             .as("synapse")
             .then((synapse: SynapseInstance) => {
-                cy.initTestUser(synapse, "Alice");
-                cy.getBot(synapse, { displayName: "Bob", autoAcceptInvites: false }).as("bob");
+                cy.initTestUser(synapse, "Alice", undefined, "alice_");
+                cy.getBot(synapse, { displayName: "Bob", autoAcceptInvites: false, userIdPrefix: "bob_" }).as("bob");
             });
     });
 
