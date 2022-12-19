@@ -1007,8 +1007,6 @@
     "Enable URL previews by default for participants in this room": "Enable URL previews by default for participants in this room",
     "Enable widget screenshots on supported widgets": "Enable widget screenshots on supported widgets",
     "Prompt before sending invites to potentially invalid matrix IDs": "Prompt before sending invites to potentially invalid matrix IDs",
-    "Order rooms by name": "Order rooms by name",
-    "Show rooms with unread notifications first": "Show rooms with unread notifications first",
     "Show shortcuts to recently viewed rooms above the room list": "Show shortcuts to recently viewed rooms above the room list",
     "Show shortcut to welcome checklist above the room list": "Show shortcut to welcome checklist above the room list",
     "Show hidden events in timeline": "Show hidden events in timeline",

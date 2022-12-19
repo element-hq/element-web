@@ -16,7 +16,6 @@ limitations under the License.
 
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { Room } from "matrix-js-sdk/src/models/room";
-import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 
@@ -387,7 +386,6 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> implements 
 
     // logic must match calculateListOrder
     private calculateTagSorting(tagId: TagID): SortAlgorithm {
-        const settingAlphabetical = SettingsStore.getValue("RoomList.orderAlphabetically", null, true);
         const definedSort = this.getTagSorting(tagId);
         const storedSort = this.getStoredTagSorting(tagId);
 
@@ -397,8 +395,6 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> implements 
         let tagSort = SortAlgorithm.Recent;
         if (storedSort) {
             tagSort = storedSort;
-        } else if (!isNullOrUndefined(settingAlphabetical)) {
-            tagSort = settingAlphabetical ? SortAlgorithm.Alphabetic : SortAlgorithm.Recent;
         } else if (definedSort) {
             tagSort = definedSort;
         } // else default (already set)
@@ -430,7 +426,6 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> implements 
     // logic must match calculateTagSorting
     private calculateListOrder(tagId: TagID): ListAlgorithm {
         const defaultOrder = ListAlgorithm.Importance;
-        const settingImportance = SettingsStore.getValue("RoomList.orderByImportance", null, true);
         const definedOrder = this.getListOrder(tagId);
         const storedOrder = this.getStoredListOrder(tagId);
 
@@ -440,8 +435,6 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> implements 
         let listOrder = defaultOrder;
         if (storedOrder) {
             listOrder = storedOrder;
-        } else if (!isNullOrUndefined(settingImportance)) {
-            listOrder = settingImportance ? ListAlgorithm.Importance : ListAlgorithm.Natural;
         } else if (definedOrder) {
             listOrder = definedOrder;
         } // else default (already set)
