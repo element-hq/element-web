@@ -115,7 +115,7 @@ const CurrentDeviceSection: React.FC<Props> = ({
                             onClick={() => setIsExpanded(!isExpanded)}
                         />
                     </DeviceTile>
-                    {isExpanded && (
+                    {isExpanded ? (
                         <DeviceDetails
                             device={device}
                             localNotificationSettings={localNotificationSettings}
@@ -125,9 +125,12 @@ const CurrentDeviceSection: React.FC<Props> = ({
                             onSignOutDevice={onSignOutCurrentDevice}
                             saveDeviceName={saveDeviceName}
                         />
+                    ) : (
+                        <>
+                            <br />
+                            <DeviceVerificationStatusCard device={device} onVerifyDevice={onVerifyCurrentDevice} />
+                        </>
                     )}
-                    <br />
-                    <DeviceVerificationStatusCard device={device} onVerifyDevice={onVerifyCurrentDevice} />
                 </>
             )}
         </SettingsSubsection>

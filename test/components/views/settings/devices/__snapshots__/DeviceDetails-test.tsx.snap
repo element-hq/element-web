@@ -13,11 +13,11 @@ exports[`<DeviceDetails /> renders a verified device 1`] = `
         class="mx_DeviceDetailHeading"
         data-testid="device-detail-heading"
       >
-        <h3
-          class="mx_Heading_h3"
+        <h4
+          class="mx_Heading_h4"
         >
           my-device
-        </h3>
+        </h4>
         <div
           class="mx_AccessibleButton mx_DeviceDetailHeading_renameCta mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
           data-testid="device-heading-rename-cta"
@@ -122,11 +122,11 @@ exports[`<DeviceDetails /> renders device with metadata 1`] = `
         class="mx_DeviceDetailHeading"
         data-testid="device-detail-heading"
       >
-        <h3
-          class="mx_Heading_h3"
+        <h4
+          class="mx_Heading_h4"
         >
           My Device
-        </h3>
+        </h4>
         <div
           class="mx_AccessibleButton mx_DeviceDetailHeading_renameCta mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
           data-testid="device-heading-rename-cta"
@@ -331,11 +331,11 @@ exports[`<DeviceDetails /> renders device without metadata 1`] = `
         class="mx_DeviceDetailHeading"
         data-testid="device-detail-heading"
       >
-        <h3
-          class="mx_Heading_h3"
+        <h4
+          class="mx_Heading_h4"
         >
           my-device
-        </h3>
+        </h4>
         <div
           class="mx_AccessibleButton mx_DeviceDetailHeading_renameCta mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
           data-testid="device-heading-rename-cta"
