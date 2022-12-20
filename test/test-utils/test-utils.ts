@@ -38,6 +38,8 @@ import { normalize } from "matrix-js-sdk/src/utils";
 import { ReEmitter } from "matrix-js-sdk/src/ReEmitter";
 import { MediaHandler } from "matrix-js-sdk/src/webrtc/mediaHandler";
 import { Feature, ServerSupport } from "matrix-js-sdk/src/feature";
+import { CryptoBackend } from "matrix-js-sdk/src/common-crypto/CryptoBackend";
+import { IEventDecryptionResult } from "matrix-js-sdk/src/@types/crypto";
 
 import type { GroupCall } from "matrix-js-sdk/src/webrtc/groupCall";
 import { MatrixClientPeg as peg } from "../../src/MatrixClientPeg";
@@ -316,26 +318,48 @@ export function mkEvent(opts: MakeEventProps): MatrixEvent {
 }
 
 /**
- * Create an m.presence event.
- * @param {Object} opts Values for the presence.
- * @return {Object|MatrixEvent} The event
+ * Create an m.room.encrypted event
+ *
+ * @param opts - Values for the event
+ * @param opts.room - The ID of the room for the event
+ * @param opts.user - The sender of the event
+ * @param opts.plainType - The type the event will have, once it has been decrypted
+ * @param opts.plainContent - The content the event will have, once it has been decrypted
  */
-export function mkPresence(opts) {
-    if (!opts.user) {
-        throw new Error("Missing user");
-    }
-    const event = {
-        event_id: "$" + Math.random() + "-" + Math.random(),
-        type: "m.presence",
-        sender: opts.user,
-        content: {
-            avatar_url: opts.url,
-            displayname: opts.name,
-            last_active_ago: opts.ago,
-            presence: opts.presence || "offline",
+export async function mkEncryptedEvent(opts: {
+    room: Room["roomId"];
+    user: User["userId"];
+    plainType: string;
+    plainContent: IContent;
+}): Promise<MatrixEvent> {
+    // we construct an event which has been decrypted by stubbing out CryptoBackend.decryptEvent and then
+    // calling MatrixEvent.attemptDecryption.
+
+    const mxEvent = mkEvent({
+        type: "m.room.encrypted",
+        room: opts.room,
+        user: opts.user,
+        event: true,
+        content: {},
+    });
+
+    const decryptionResult: IEventDecryptionResult = {
+        claimedEd25519Key: "",
+        clearEvent: {
+            type: opts.plainType,
+            content: opts.plainContent,
         },
+        forwardingCurve25519KeyChain: [],
+        senderCurve25519Key: "",
+        untrusted: false,
     };
-    return opts.event ? new MatrixEvent(event) : event;
+
+    const mockCrypto = {
+        decryptEvent: async (_ev): Promise<IEventDecryptionResult> => decryptionResult,
+    } as CryptoBackend;
+
+    await mxEvent.attemptDecryption(mockCrypto);
+    return mxEvent;
 }
 
 /**

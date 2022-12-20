@@ -232,7 +232,7 @@ interface IState {
     // Whether the action bar is focused.
     actionBarFocused: boolean;
     // Whether the event's sender has been verified.
-    verified: string;
+    verified: string | null;
     // The Relations model from the JS SDK for reactions to `mxEvent`
     reactions?: Relations | null | undefined;
 
@@ -278,7 +278,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         this.state = {
             // Whether the action bar is focused.
             actionBarFocused: false,
-            // Whether the event's sender has been verified.
+            // Whether the event's sender has been verified. `null` if no attempt has yet been made to verify
+            // (including if the event is not encrypted).
             verified: null,
             // The Relations model from the JS SDK for reactions to `mxEvent`
             reactions: this.getReactions(),
@@ -371,6 +372,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             client.on(CryptoEvent.DeviceVerificationChanged, this.onDeviceVerificationChanged);
             client.on(CryptoEvent.UserTrustStatusChanged, this.onUserVerificationChanged);
             this.props.mxEvent.on(MatrixEventEvent.Decrypted, this.onDecrypted);
+            this.props.mxEvent.on(MatrixEventEvent.Replaced, this.onReplaced);
             DecryptionFailureTracker.instance.addVisibleEvent(this.props.mxEvent);
             if (this.props.showReactions) {
                 this.props.mxEvent.on(MatrixEventEvent.RelationsCreated, this.onReactionsCreated);
@@ -395,7 +397,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         const room = client.getRoom(this.props.mxEvent.getRoomId());
         room?.on(ThreadEvent.New, this.onNewThread);
 
-        this.verifyEvent(this.props.mxEvent);
+        this.verifyEvent();
     }
 
     private get supportsThreadNotifications(): boolean {
@@ -461,6 +463,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         }
         this.isListeningForReceipts = false;
         this.props.mxEvent.removeListener(MatrixEventEvent.Decrypted, this.onDecrypted);
+        this.props.mxEvent.removeListener(MatrixEventEvent.Replaced, this.onReplaced);
         if (this.props.showReactions) {
             this.props.mxEvent.removeListener(MatrixEventEvent.RelationsCreated, this.onReactionsCreated);
         }
@@ -470,7 +473,11 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         this.threadState?.off(NotificationStateEvents.Update, this.onThreadStateUpdate);
     }
 
-    public componentDidUpdate(prevProps: Readonly<EventTileProps>) {
+    public componentDidUpdate(prevProps: Readonly<EventTileProps>, prevState: Readonly<IState>) {
+        // If the verification state changed, the height might have changed
+        if (prevState.verified !== this.state.verified && this.props.onHeightChanged) {
+            this.props.onHeightChanged();
+        }
         // If we're not listening for receipts and expect to be, register a listener.
         if (!this.isListeningForReceipts && (this.shouldShowSentReceipt || this.shouldShowSendingReceipt)) {
             MatrixClientPeg.get().on(RoomEvent.Receipt, this.onRoomReceipt);
@@ -478,7 +485,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         }
         // re-check the sender verification as outgoing events progress through the send process.
         if (prevProps.eventSendStatus !== this.props.eventSendStatus) {
-            this.verifyEvent(this.props.mxEvent);
+            this.verifyEvent();
         }
     }
 
@@ -586,26 +593,36 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
      */
     private onDecrypted = () => {
         // we need to re-verify the sending device.
-        // (we call onHeightChanged in verifyEvent to handle the case where decryption
-        // has caused a change in size of the event tile)
-        this.verifyEvent(this.props.mxEvent);
-        this.forceUpdate();
+        this.verifyEvent();
+        // decryption might, of course, trigger a height change, so call onHeightChanged after the re-render
+        this.forceUpdate(this.props.onHeightChanged);
     };
 
     private onDeviceVerificationChanged = (userId: string, device: string): void => {
         if (userId === this.props.mxEvent.getSender()) {
-            this.verifyEvent(this.props.mxEvent);
+            this.verifyEvent();
         }
     };
 
     private onUserVerificationChanged = (userId: string, _trustStatus: UserTrustLevel): void => {
         if (userId === this.props.mxEvent.getSender()) {
-            this.verifyEvent(this.props.mxEvent);
+            this.verifyEvent();
         }
     };
 
-    private async verifyEvent(mxEvent: MatrixEvent): Promise<void> {
+    /** called when the event is edited after we show it. */
+    private onReplaced = () => {
+        // re-verify the event if it is replaced (the edit may not be verified)
+        this.verifyEvent();
+    };
+
+    private verifyEvent(): void {
+        // if the event was edited, show the verification info for the edit, not
+        // the original
+        const mxEvent = this.props.mxEvent.replacingEvent() ?? this.props.mxEvent;
+
         if (!mxEvent.isEncrypted() || mxEvent.isRedacted()) {
+            this.setState({ verified: null });
             return;
         }
 
@@ -615,12 +632,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         if (encryptionInfo.mismatchedSender) {
             // something definitely wrong is going on here
-            this.setState(
-                {
-                    verified: E2EState.Warning,
-                },
-                this.props.onHeightChanged,
-            ); // Decryption may have caused a change in size
+            this.setState({ verified: E2EState.Warning });
             return;
         }
 
@@ -628,53 +640,28 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             // If the message is unauthenticated, then display a grey
             // shield, otherwise if the user isn't cross-signed then
             // nothing's needed
-            this.setState(
-                {
-                    verified: encryptionInfo.authenticated ? E2EState.Normal : E2EState.Unauthenticated,
-                },
-                this.props.onHeightChanged,
-            ); // Decryption may have caused a change in size
+            this.setState({ verified: encryptionInfo.authenticated ? E2EState.Normal : E2EState.Unauthenticated });
             return;
         }
 
         const eventSenderTrust =
             encryptionInfo.sender && MatrixClientPeg.get().checkDeviceTrust(senderId, encryptionInfo.sender.deviceId);
         if (!eventSenderTrust) {
-            this.setState(
-                {
-                    verified: E2EState.Unknown,
-                },
-                this.props.onHeightChanged,
-            ); // Decryption may have caused a change in size
+            this.setState({ verified: E2EState.Unknown });
             return;
         }
 
         if (!eventSenderTrust.isVerified()) {
-            this.setState(
-                {
-                    verified: E2EState.Warning,
-                },
-                this.props.onHeightChanged,
-            ); // Decryption may have caused a change in size
+            this.setState({ verified: E2EState.Warning });
             return;
         }
 
         if (!encryptionInfo.authenticated) {
-            this.setState(
-                {
-                    verified: E2EState.Unauthenticated,
-                },
-                this.props.onHeightChanged,
-            ); // Decryption may have caused a change in size
+            this.setState({ verified: E2EState.Unauthenticated });
             return;
         }
 
-        this.setState(
-            {
-                verified: E2EState.Verified,
-            },
-            this.props.onHeightChanged,
-        ); // Decryption may have caused a change in size
+        this.setState({ verified: E2EState.Verified });
     }
 
     private propsEqual(objA: EventTileProps, objB: EventTileProps): boolean {
@@ -768,7 +755,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     };
 
     private renderE2EPadlock() {
-        const ev = this.props.mxEvent;
+        // if the event was edited, show the verification info for the edit, not
+        // the original
+        const ev = this.props.mxEvent.replacingEvent() ?? this.props.mxEvent;
 
         // no icon for local rooms
         if (isLocalRoom(ev.getRoomId()!)) return;
