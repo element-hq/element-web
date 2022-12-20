@@ -390,6 +390,8 @@
     "Power level must be positive integer.": "Power level must be positive integer.",
     "You are not in this room.": "You are not in this room.",
     "You do not have permission to do that in this room.": "You do not have permission to do that in this room.",
+    "Failed to send event": "Failed to send event",
+    "Failed to read events": "Failed to read events",
     "Missing room_id in request": "Missing room_id in request",
     "Room %(roomId)s not visible": "Room %(roomId)s not visible",
     "Missing user_id in request": "Missing user_id in request",
