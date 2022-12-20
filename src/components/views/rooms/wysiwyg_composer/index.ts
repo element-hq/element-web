@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-export { SendWysiwygComposer } from "./SendWysiwygComposer";
-export { EditWysiwygComposer } from "./EditWysiwygComposer";
+export {
+    DynamicImportSendWysiwygComposer as SendWysiwygComposer,
+    DynamicImportEditWysiwygComposer as EditWysiwygComposer,
+} from "./DynamicImportWysiwygComposer";
 export { sendMessage } from "./utils/message";
