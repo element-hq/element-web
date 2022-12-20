@@ -51,6 +51,10 @@ const defaultCreateBotOptions = {
     bootstrapCrossSigning: true,
 } as CreateBotOpts;
 
+export interface CypressBot extends MatrixClient {
+    __cypress_password: string;
+}
+
 declare global {
     // eslint-disable-next-line @typescript-eslint/no-namespace
     namespace Cypress {
@@ -60,7 +64,7 @@ declare global {
              * @param synapse the instance on which to register the bot user
              * @param opts create bot options
              */
-            getBot(synapse: SynapseInstance, opts: CreateBotOpts): Chainable<MatrixClient>;
+            getBot(synapse: SynapseInstance, opts: CreateBotOpts): Chainable<CypressBot>;
             /**
              * Returns a new Bot instance logged in as an existing user
              * @param synapse the instance on which to register the bot user
@@ -156,14 +160,20 @@ function setupBotClient(
     });
 }
 
-Cypress.Commands.add("getBot", (synapse: SynapseInstance, opts: CreateBotOpts): Chainable<MatrixClient> => {
+Cypress.Commands.add("getBot", (synapse: SynapseInstance, opts: CreateBotOpts): Chainable<CypressBot> => {
     opts = Object.assign({}, defaultCreateBotOptions, opts);
     const username = Cypress._.uniqueId(opts.userIdPrefix);
     const password = Cypress._.uniqueId("password_");
-    return cy.registerUser(synapse, username, password, opts.displayName).then((credentials) => {
-        cy.log(`Registered bot user ${username} with displayname ${opts.displayName}`);
-        return setupBotClient(synapse, credentials, opts);
-    });
+    return cy
+        .registerUser(synapse, username, password, opts.displayName)
+        .then((credentials) => {
+            cy.log(`Registered bot user ${username} with displayname ${opts.displayName}`);
+            return setupBotClient(synapse, credentials, opts);
+        })
+        .then((client): Chainable<CypressBot> => {
+            Object.assign(client, { __cypress_password: password });
+            return cy.wrap(client as CypressBot);
+        });
 });
 
 Cypress.Commands.add(
