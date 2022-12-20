@@ -19,7 +19,7 @@ limitations under the License.
 
 import { IWidget } from "matrix-widget-api/src/interfaces/IWidget";
 
-import type {MatrixClient, MatrixEvent, Room} from "matrix-js-sdk/src/matrix";
+import type { MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import { SynapseInstance } from "../../plugins/synapsedocker";
 import { UserCredentials } from "../../support/login";
 
@@ -99,17 +99,17 @@ describe("Widget Events", () => {
     let demoWidgetUrl: string;
 
     beforeEach(() => {
-        cy.startSynapse("default").then(data => {
+        cy.startSynapse("default").then((data) => {
             synapse = data;
 
-            cy.initTestUser(synapse, "Mike").then(_user => {
+            cy.initTestUser(synapse, "Mike").then((_user) => {
                 user = _user;
             });
-            cy.getBot(synapse, { displayName: "Bot", autoAcceptInvites: true }).then(_bot => {
+            cy.getBot(synapse, { displayName: "Bot", autoAcceptInvites: true }).then((_bot) => {
                 bot = _bot;
             });
         });
-        cy.serveHtmlFile(DEMO_WIDGET_HTML).then(url => {
+        cy.serveHtmlFile(DEMO_WIDGET_HTML).then((url) => {
             demoWidgetUrl = url;
         });
     });
@@ -119,52 +119,56 @@ describe("Widget Events", () => {
         cy.stopWebServers();
     });
 
-    it('should be updated if user is re-invited into the room with updated state event', () => {
+    it("should be updated if user is re-invited into the room with updated state event", () => {
         cy.createRoom({
             name: ROOM_NAME,
             invite: [bot.getUserId()],
-        }).then(roomId => {
+        }).then((roomId) => {
             // setup widget via state event
-            cy.getClient().then(async matrixClient => {
-                const content: IWidget = {
-                    id: DEMO_WIDGET_ID,
-                    creatorUserId: 'somebody',
-                    type: DEMO_WIDGET_TYPE,
-                    name: DEMO_WIDGET_NAME,
-                    url: demoWidgetUrl,
-                };
-                await matrixClient.sendStateEvent(roomId, 'im.vector.modular.widgets', content, DEMO_WIDGET_ID);
-            }).as('widgetEventSent');
+            cy.getClient()
+                .then(async (matrixClient) => {
+                    const content: IWidget = {
+                        id: DEMO_WIDGET_ID,
+                        creatorUserId: "somebody",
+                        type: DEMO_WIDGET_TYPE,
+                        name: DEMO_WIDGET_NAME,
+                        url: demoWidgetUrl,
+                    };
+                    await matrixClient.sendStateEvent(roomId, "im.vector.modular.widgets", content, DEMO_WIDGET_ID);
+                })
+                .as("widgetEventSent");
 
             // set initial layout
-            cy.getClient().then(async matrixClient => {
-                const content = {
-                    widgets: {
-                        [DEMO_WIDGET_ID]: {
-                            container: 'top', index: 1, width: 100, height: 0,
+            cy.getClient()
+                .then(async (matrixClient) => {
+                    const content = {
+                        widgets: {
+                            [DEMO_WIDGET_ID]: {
+                                container: "top",
+                                index: 1,
+                                width: 100,
+                                height: 0,
+                            },
                         },
-                    },
-                };
-                await matrixClient.sendStateEvent(roomId, 'io.element.widgets.layout', content, "");
-            }).as('layoutEventSent');
+                    };
+                    await matrixClient.sendStateEvent(roomId, "io.element.widgets.layout", content, "");
+                })
+                .as("layoutEventSent");
 
             // open the room
             cy.viewRoomByName(ROOM_NAME);
 
             // approve capabilities
-            cy.contains('.mx_WidgetCapabilitiesPromptDialog button', 'Approve').click();
+            cy.contains(".mx_WidgetCapabilitiesPromptDialog button", "Approve").click();
 
-            cy.all([
-                cy.get<string>("@widgetEventSent"),
-                cy.get<string>("@layoutEventSent"),
-            ]).then(async () => {
+            cy.all([cy.get<string>("@widgetEventSent"), cy.get<string>("@layoutEventSent")]).then(async () => {
                 // bot creates a new room with 'net.metadata_invite_shared' state event
                 const { room_id: roomNew } = await bot.createRoom({
                     name: "New room",
                     initial_state: [
                         {
-                            type: 'net.metadata_invite_shared',
-                            state_key: '',
+                            type: "net.metadata_invite_shared",
+                            state_key: "",
                             content: {
                                 value: "initial",
                             },
@@ -175,28 +179,39 @@ describe("Widget Events", () => {
                 await bot.invite(roomNew, user.userId);
 
                 // widget should receive 'net.metadata_invite_shared' event after invite
-                cy.window().then(async win => {
+                cy.window().then(async (win) => {
                     await waitForRoom(win, roomId, (room) => {
                         const events = room.getLiveTimeline().getEvents();
-                        return events.some(e => e.getType() === 'net.widget_echo'
-                            && e.getContent().type === 'net.metadata_invite_shared'
-                            && e.getContent().content.value === 'initial');
+                        return events.some(
+                            (e) =>
+                                e.getType() === "net.widget_echo" &&
+                                e.getContent().type === "net.metadata_invite_shared" &&
+                                e.getContent().content.value === "initial",
+                        );
                     });
                 });
 
-                await bot.sendStateEvent(roomNew, 'net.metadata_invite_shared', {
-                    value: "new_value",
-                }, '');
+                await bot.sendStateEvent(
+                    roomNew,
+                    "net.metadata_invite_shared",
+                    {
+                        value: "new_value",
+                    },
+                    "",
+                );
 
-                await bot.invite(roomNew, user.userId, 'something changed in the room');
+                await bot.invite(roomNew, user.userId, "something changed in the room");
 
                 // widget should receive updated 'net.metadata_invite_shared' event after re-invite
-                cy.window().then(async win => {
+                cy.window().then(async (win) => {
                     await waitForRoom(win, roomId, (room) => {
                         const events = room.getLiveTimeline().getEvents();
-                        return events.some(e => e.getType() === 'net.widget_echo'
-                            && e.getContent().type === 'net.metadata_invite_shared'
-                            && e.getContent().content.value === 'new_value');
+                        return events.some(
+                            (e) =>
+                                e.getType() === "net.widget_echo" &&
+                                e.getContent().type === "net.metadata_invite_shared" &&
+                                e.getContent().content.value === "new_value",
+                        );
                     });
                 });
             });
