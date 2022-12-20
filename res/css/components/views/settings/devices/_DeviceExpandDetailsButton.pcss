@@ -23,17 +23,25 @@ limitations under the License.
     color: $secondary-content;
 
     --icon-transform: rotate(-90deg);
+
+    &:hover {
+        background: $quinary-content;
+    }
 }
 
 .mx_DeviceExpandDetailsButton.mx_DeviceExpandDetailsButton_expanded {
     --icon-transform: rotate(0deg);
 
     background: $system;
+
+    &:hover {
+        background: $quinary-content;
+    }
 }
 
 .mx_DeviceExpandDetailsButton_icon {
-    height: 12px;
-    width: 12px;
+    height: 16px;
+    width: 16px;
 
     transition: all 0.3s;
     transform: var(--icon-transform);

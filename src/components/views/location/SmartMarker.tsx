@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { ReactNode, useCallback, useEffect, useState } from "react";
-import maplibregl from "maplibre-gl";
+import * as maplibregl from "maplibre-gl";
 import { RoomMember } from "matrix-js-sdk/src/matrix";
 
 import { createMarker, parseGeoUri } from "../../../utils/location";

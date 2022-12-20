@@ -17,7 +17,7 @@ limitations under the License.
 import React from "react";
 // eslint-disable-next-line deprecate/import
 import { mount } from "enzyme";
-import maplibregl from "maplibre-gl";
+import * as maplibregl from "maplibre-gl";
 import { act } from "react-dom/test-utils";
 import { Beacon, Room, RoomMember, MatrixEvent, getBeaconInfoIdentifier } from "matrix-js-sdk/src/matrix";
 
@@ -41,7 +41,8 @@ describe("<BeaconMarker />", () => {
 
     const aliceMember = new RoomMember(roomId, aliceId);
 
-    const mockMap = new maplibregl.Map();
+    const mapOptions = { container: {} as unknown as HTMLElement, style: "" };
+    const mockMap = new maplibregl.Map(mapOptions);
 
     const mockClient = getMockClientWithEventEmitter({
         getClientWellKnown: jest.fn().mockReturnValue({

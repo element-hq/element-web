@@ -16,7 +16,7 @@ limitations under the License.
 
 import React, { ReactNode, useContext, useEffect } from "react";
 import classNames from "classnames";
-import maplibregl from "maplibre-gl";
+import * as maplibregl from "maplibre-gl";
 import { ClientEvent, IClientWellKnown } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 

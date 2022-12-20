@@ -420,6 +420,21 @@ describe("<SessionManagerTab />", () => {
 
             expect(getByTestId("current-session-section")).toMatchSnapshot();
         });
+
+        it("expands current session details", async () => {
+            mockClient.getDevices.mockResolvedValue({ devices: [alicesDevice, alicesMobileDevice] });
+            const { getByTestId } = render(getComponent());
+
+            await act(async () => {
+                await flushPromises();
+            });
+
+            fireEvent.click(getByTestId("current-session-toggle-details"));
+
+            expect(getByTestId(`device-detail-${alicesDevice.device_id}`)).toBeTruthy();
+            // only one security card rendered
+            expect(getByTestId("current-session-section").querySelectorAll(".mx_DeviceSecurityCard").length).toEqual(1);
+        });
     });
 
     describe("device detail expansion", () => {

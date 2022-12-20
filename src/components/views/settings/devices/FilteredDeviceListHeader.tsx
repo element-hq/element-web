@@ -50,7 +50,7 @@ const FilteredDeviceListHeader: React.FC<Props> = ({
             </TooltipTarget>
             <span className="mx_FilteredDeviceListHeader_label">
                 {selectedDeviceCount > 0
-                    ? _t("%(selectedDeviceCount)s sessions selected", { selectedDeviceCount })
+                    ? _t("%(count)s sessions selected", { count: selectedDeviceCount })
                     : _t("Sessions")}
             </span>
             {children}

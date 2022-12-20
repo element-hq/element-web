@@ -28,6 +28,7 @@ class MockMap extends EventEmitter {
 }
 const MockMapInstance = new MockMap();
 
+class MockAttributionControl {}
 class MockGeolocateControl extends EventEmitter {
     trigger = jest.fn();
 }
@@ -43,5 +44,5 @@ module.exports = {
     LngLat,
     LngLatBounds,
     NavigationControl,
-    AttributionControl,
+    AttributionControl: MockAttributionControl,
 };

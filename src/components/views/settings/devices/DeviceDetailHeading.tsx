@@ -134,7 +134,7 @@ export const DeviceDetailHeading: React.FC<Props> = ({ device, saveDeviceName })
         <DeviceNameEditor device={device} saveDeviceName={saveDeviceName} stopEditing={() => setIsEditing(false)} />
     ) : (
         <div className="mx_DeviceDetailHeading" data-testid="device-detail-heading">
-            <Heading size="h3">{device.display_name || device.device_id}</Heading>
+            <Heading size="h4">{device.display_name || device.device_id}</Heading>
             <AccessibleButton
                 kind="link_inline"
                 onClick={() => setIsEditing(true)}

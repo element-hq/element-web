@@ -20,24 +20,29 @@ limitations under the License.
         left: unset;
         right: -$spacing-12;
         width: 232px;
+        padding: $spacing-12;
 
         border: 1px solid $quinary-content;
         border-radius: 8px;
         box-shadow: 0px 1px 3px rgba(23, 25, 28, 0.05);
 
+        background-color: $system;
+
         .mx_Dropdown_option_highlight {
-            background-color: $system;
+            background-color: transparent;
         }
     }
 
     .mx_Dropdown_input {
         height: 24px;
-        background-color: $quinary-content;
-        border-color: $quinary-content;
+        background-color: transparent;
+        border-color: transparent;
         color: $secondary-content;
         border-radius: 4px;
 
-        &:focus {
+        &:focus,
+        &:hover {
+            background-color: $quinary-content;
             border-color: $quinary-content;
         }
     }

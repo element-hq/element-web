@@ -56,6 +56,7 @@ import {
     doMaybeSetCurrentVoiceBroadcastPlayback,
 } from "../voice-broadcast";
 import { IRoomStateEventsActionPayload } from "../actions/MatrixActionCreators";
+import { showCantStartACallDialog } from "../voice-broadcast/utils/showCantStartACallDialog";
 
 const NUM_JOIN_RETRY = 5;
 
@@ -178,6 +179,16 @@ export class RoomViewStore extends EventEmitter {
         }
         if (!stateChanged) {
             return;
+        }
+
+        if (newState.viewingCall) {
+            // Pause current broadcast, if any
+            this.stores.voiceBroadcastPlaybacksStore.getCurrent()?.pause();
+
+            if (this.stores.voiceBroadcastRecordingsStore.getCurrent()) {
+                showCantStartACallDialog();
+                newState.viewingCall = false;
+            }
         }
 
         const lastRoomId = this.state.roomId;

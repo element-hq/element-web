@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LegacyCallHandler when recording a voice broadcast and placing a call should show the info dialog 1`] = `
+[MockFunction] {
+  "calls": [
+    [
+      [Function],
+      {
+        "description": <p>
+          You can’t start a call as you are currently recording a live broadcast. Please end your live broadcast in order to start a call.
+        </p>,
+        "hasCloseButton": true,
+        "title": "Can’t start a call",
+      },
+    ],
+  ],
+  "results": [
+    {
+      "type": "return",
+      "value": undefined,
+    },
+  ],
+}
+`;

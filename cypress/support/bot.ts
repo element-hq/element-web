@@ -23,6 +23,10 @@ import Chainable = Cypress.Chainable;
 
 interface CreateBotOpts {
     /**
+     * A prefix to use for the userid. If unspecified, "bot_" will be used.
+     */
+    userIdPrefix?: string;
+    /**
      * Whether the bot should automatically accept all invites.
      */
     autoAcceptInvites?: boolean;
@@ -41,6 +45,7 @@ interface CreateBotOpts {
 }
 
 const defaultCreateBotOptions = {
+    userIdPrefix: "bot_",
     autoAcceptInvites: true,
     startClient: true,
     bootstrapCrossSigning: true,
@@ -157,7 +162,7 @@ function setupBotClient(
 
 Cypress.Commands.add("getBot", (synapse: SynapseInstance, opts: CreateBotOpts): Chainable<CypressBot> => {
     opts = Object.assign({}, defaultCreateBotOptions, opts);
-    const username = Cypress._.uniqueId("userId_");
+    const username = Cypress._.uniqueId(opts.userIdPrefix);
     const password = Cypress._.uniqueId("password_");
     return cy
         .registerUser(synapse, username, password, opts.displayName)

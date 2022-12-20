@@ -17,7 +17,7 @@ limitations under the License.
 import React, { useState, useEffect } from "react";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { Beacon, Room } from "matrix-js-sdk/src/matrix";
-import maplibregl from "maplibre-gl";
+import * as maplibregl from "maplibre-gl";
 
 import { Icon as LiveLocationIcon } from "../../../../res/img/location/live-location.svg";
 import { useLiveBeacons } from "../../../utils/beacon/useLiveBeacons";

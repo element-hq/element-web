@@ -104,7 +104,7 @@ describe("Device manager", () => {
                 cy.get(".mx_Spinner").should("not.exist");
 
                 // session name updated in details
-                cy.get(".mx_DeviceDetailHeading h3").should("have.text", sessionName);
+                cy.get(".mx_DeviceDetailHeading h4").should("have.text", sessionName);
                 // and main list item
                 cy.get(".mx_DeviceTile h4").should("have.text", sessionName);
 

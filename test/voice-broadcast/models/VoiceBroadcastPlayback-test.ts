@@ -411,6 +411,10 @@ describe("VoiceBroadcastPlayback", () => {
                 stopPlayback();
                 itShouldSetTheStateTo(VoiceBroadcastPlaybackState.Stopped);
 
+                it("should stop the playback", () => {
+                    expect(chunk1Playback.stop).toHaveBeenCalled();
+                });
+
                 describe("and skipping to somewhere in the middle of the first chunk", () => {
                     beforeEach(async () => {
                         mocked(chunk1Playback.play).mockClear();

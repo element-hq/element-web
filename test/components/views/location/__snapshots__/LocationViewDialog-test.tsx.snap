@@ -26,7 +26,7 @@ exports[`<LocationViewDialog /> renders map correctly 1`] = `
           "addControl": [MockFunction] {
             "calls": [
               [
-                mockConstructor {},
+                MockAttributionControl {},
                 "top-right",
               ],
             ],
@@ -94,7 +94,7 @@ exports[`<LocationViewDialog /> renders map correctly 1`] = `
           "addControl": [MockFunction] {
             "calls": [
               [
-                mockConstructor {},
+                MockAttributionControl {},
                 "top-right",
               ],
             ],

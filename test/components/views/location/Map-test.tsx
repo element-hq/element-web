@@ -18,7 +18,7 @@ import React from "react";
 // eslint-disable-next-line deprecate/import
 import { mount } from "enzyme";
 import { act } from "react-dom/test-utils";
-import maplibregl from "maplibre-gl";
+import * as maplibregl from "maplibre-gl";
 import { ClientEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -45,10 +45,6 @@ describe("<Map />", () => {
             wrappingComponentProps: { value: matrixClient },
         });
 
-    beforeAll(() => {
-        maplibregl.AttributionControl = jest.fn();
-    });
-
     beforeEach(() => {
         jest.clearAllMocks();
         matrixClient.getClientWellKnown.mockReturnValue({
@@ -58,7 +54,8 @@ describe("<Map />", () => {
         jest.spyOn(logger, "error").mockRestore();
     });
 
-    const mockMap = new maplibregl.Map();
+    const mapOptions = { container: {} as unknown as HTMLElement, style: "" };
+    const mockMap = new maplibregl.Map(mapOptions);
 
     it("renders", () => {
         const component = getComponent();

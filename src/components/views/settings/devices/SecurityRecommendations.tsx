@@ -53,7 +53,7 @@ const SecurityRecommendations: React.FC<Props> = ({ devices, currentDeviceId, go
     return (
         <SettingsSubsection
             heading={_t("Security recommendations")}
-            description={_t("Improve your account security by following these recommendations")}
+            description={_t("Improve your account security by following these recommendations.")}
             data-testid="security-recommendations-section"
         >
             {!!unverifiedDevicesCount && (
@@ -89,7 +89,7 @@ const SecurityRecommendations: React.FC<Props> = ({ devices, currentDeviceId, go
                             <>
                                 {_t(
                                     `Consider signing out from old sessions ` +
-                                        `(%(inactiveAgeDays)s days or older) you don't use anymore`,
+                                        `(%(inactiveAgeDays)s days or older) you don't use anymore.`,
                                     { inactiveAgeDays },
                                 )}
                                 <DeviceSecurityLearnMore variation={DeviceSecurityVariation.Inactive} />

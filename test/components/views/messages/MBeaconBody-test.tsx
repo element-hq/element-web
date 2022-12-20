@@ -18,7 +18,7 @@ import React from "react";
 // eslint-disable-next-line deprecate/import
 import { mount } from "enzyme";
 import { act } from "react-dom/test-utils";
-import maplibregl from "maplibre-gl";
+import * as maplibregl from "maplibre-gl";
 import { BeaconEvent, getBeaconInfoIdentifier, RelationType, MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
 import { Relations } from "matrix-js-sdk/src/models/relations";
 import { M_BEACON } from "matrix-js-sdk/src/@types/beacon";
@@ -48,7 +48,8 @@ describe("<MBeaconBody />", () => {
     const roomId = "!room:server";
     const aliceId = "@alice:server";
 
-    const mockMap = new maplibregl.Map();
+    const mapOptions = { container: {} as unknown as HTMLElement, style: "" };
+    const mockMap = new maplibregl.Map(mapOptions);
     const mockMarker = new maplibregl.Marker();
 
     const mockClient = getMockClientWithEventEmitter({
@@ -80,10 +81,6 @@ describe("<MBeaconBody />", () => {
         });
 
     const modalSpy = jest.spyOn(Modal, "createDialog").mockReturnValue(undefined);
-
-    beforeAll(() => {
-        maplibregl.AttributionControl = jest.fn();
-    });
 
     beforeEach(() => {
         jest.clearAllMocks();
