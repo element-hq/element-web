@@ -1,8 +1,9 @@
-Changes in [3.63.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.63.0-rc.2) (2022-12-14)
-===============================================================================================================
+Changes in [3.63.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.63.0) (2022-12-21)
+=====================================================================================================
 
 ## ✨ Features
- * Enable threads by default ([\#9736](https://github.com/matrix-org/matrix-react-sdk/pull/9736)). Fixes vector-im/element-web#19270 vector-im/element-web#21910 and vector-im/element-web#23946.
+ * Prevent unnecessary m.direct updates ([\#9805](https://github.com/matrix-org/matrix-react-sdk/pull/9805)). Fixes vector-im/element-web#24059.
+ * Fix checkForPreJoinUISI for thread roots ([\#9803](https://github.com/matrix-org/matrix-react-sdk/pull/9803)). Fixes vector-im/element-web#24054.
  * Add inline code formatting to rich text editor ([\#9720](https://github.com/matrix-org/matrix-react-sdk/pull/9720)).
  * Add emoji handling for plain text mode of the new rich text editor ([\#9727](https://github.com/matrix-org/matrix-react-sdk/pull/9727)).
  * Overlay virtual room call events into main timeline ([\#9626](https://github.com/matrix-org/matrix-react-sdk/pull/9626)). Fixes vector-im/element-web#22929.
