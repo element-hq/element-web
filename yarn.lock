@@ -1484,6 +1484,11 @@
   resolved "https://registry.yarnpkg.com/@matrix-org/analytics-events/-/analytics-events-0.3.0.tgz#a428f7e3f164ffadf38f35bc0f0f9a3e47369ce6"
   integrity sha512-f1WIMA8tjNB3V5g1C34yIpIJK47z6IJ4SLiY4j+J9Gw4X8C3TKGTAx563rMcMvW3Uk/PFqnIBXtkavHBXoYJ9A==
 
+"@matrix-org/matrix-sdk-crypto-js@^0.1.0-alpha.2":
+  version "0.1.0-alpha.2"
+  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-js/-/matrix-sdk-crypto-js-0.1.0-alpha.2.tgz#a09d0fea858e817da971a3c9f904632ef7b49eb6"
+  integrity sha512-oVkBCh9YP7H9i4gAoQbZzswniczfo/aIptNa4dxRi4Ff9lSvUCFv6Hvzi7C+90c0/PWZLXjIDTIAWZYmwyd2fA==
+
 "@matrix-org/matrix-wysiwyg@^0.9.0":
   version "0.9.0"
   resolved "https://registry.yarnpkg.com/@matrix-org/matrix-wysiwyg/-/matrix-wysiwyg-0.9.0.tgz#8651eacdc0bbfa313501e4feeb713c74dbf099cc"
@@ -8148,6 +8153,24 @@ matrix-js-sdk@23.0.0:
     unhomoglyph "^1.0.6"
     uuid "7"
 
+"matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
+  version "23.0.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/1ebcac37cca04f108548376f02a7a2d0666904d6"
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+    "@matrix-org/matrix-sdk-crypto-js" "^0.1.0-alpha.2"
+    another-json "^0.2.0"
+    bs58 "^5.0.0"
+    content-type "^1.0.4"
+    loglevel "^1.7.1"
+    matrix-events-sdk "0.0.1"
+    matrix-widget-api "^1.0.0"
+    p-retry "4"
+    qs "^6.9.6"
+    sdp-transform "^2.14.1"
+    unhomoglyph "^1.0.6"
+    uuid "9"
+
 matrix-mock-request@^2.5.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/matrix-mock-request/-/matrix-mock-request-2.6.0.tgz#0855c10b250668ce542b697251087be2bcc23f92"
@@ -12465,6 +12488,11 @@ uuid@8.3.2, uuid@^8.3.2:
   version "8.3.2"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
   integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==
+
+uuid@9:
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-9.0.0.tgz#592f550650024a38ceb0c562f2f6aa435761efb5"
+  integrity sha512-MXcSTerfPa4uqyzStbRoTgt5XIe3x5+42+q1sDuy3R5MDk66URdLMOZe5aPX/SQd+kuYAh0FdP/pO28IkQyTeg==
 
 uuid@^3.3.2:
   version "3.4.0"
