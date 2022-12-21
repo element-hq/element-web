@@ -46,6 +46,8 @@ limitations under the License.
         padding: $spacing-12;
         color: $call-lobby-primary-content;
         background-color: $call-lobby-background;
+
+        --facepile-background: $call-lobby-background;
         border-radius: 8px;
 
         display: flex;
@@ -57,10 +59,6 @@ limitations under the License.
         .mx_FacePile {
             width: fit-content;
             margin: $spacing-8 auto 0;
-
-            .mx_FacePile_faces .mx_BaseAvatar_image {
-                border-color: $call-lobby-background;
-            }
         }
 
         .mx_CallView_preview {
