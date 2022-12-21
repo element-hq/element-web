@@ -1632,7 +1632,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         let i = events.length - 1;
         let userMembership = "leave";
         for (; i >= 0; i--) {
-            const timeline = room.getTimelineForEvent(events[i].getId());
+            const timeline = this.props.timelineSet.getTimelineForEvent(events[i].getId()!);
             if (!timeline) {
                 // Somehow, it seems to be possible for live events to not have
                 // a timeline, even though that should not happen. :(
