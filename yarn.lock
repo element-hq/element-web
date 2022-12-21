@@ -1525,9 +1525,9 @@
   resolved "https://registry.yarnpkg.com/@matrix-org/matrix-wysiwyg/-/matrix-wysiwyg-0.9.0.tgz#8651eacdc0bbfa313501e4feeb713c74dbf099cc"
   integrity sha512-utxLZPSmBR/oKFeLLteAfqprhSW8prrH9IKzeMK1VswQYganPusYYO8u86kCQt4SuDz/1Zc8C7r76xmOiVJ9JQ==
 
-"@matrix-org/olm@https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.8.tgz":
-  version "3.2.8"
-  resolved "https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.8.tgz#8d53636d045e1776e2a2ec6613e57330dd9ce856"
+"@matrix-org/olm@https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.14.tgz":
+  version "3.2.14"
+  resolved "https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.14.tgz#acd96c00a881d0f462e1f97a56c73742c8dbc984"
 
 "@matrix-org/react-sdk-module-api@^0.0.3":
   version "0.0.3"
@@ -6395,9 +6395,10 @@ matrix-events-sdk@0.0.1:
   resolved "https://registry.yarnpkg.com/matrix-events-sdk/-/matrix-events-sdk-0.0.1.tgz#c8c38911e2cb29023b0bbac8d6f32e0de2c957dd"
   integrity sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==
 
-"matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "22.0.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/ccab6985ad5567960fa9bc4cd95fc39241560b80"
+matrix-js-sdk@23.0.0:
+  version "23.0.0"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-23.0.0.tgz#b25a727c0bc8821168a450a2d801dc77dc340f00"
+  integrity sha512-FbbVxbH+K9ekec4hfnAD64KaP1X4DRQw1htw0qnx761saJEW3rQc1bTQtEyKFi4dZz7XaFYbspVUXeWkVqnqew==
   dependencies:
     "@babel/runtime" "^7.12.5"
     another-json "^0.2.0"
