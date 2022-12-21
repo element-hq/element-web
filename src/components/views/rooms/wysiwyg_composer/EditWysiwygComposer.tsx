@@ -43,32 +43,35 @@ interface EditWysiwygComposerProps {
     className?: string;
 }
 
-export function EditWysiwygComposer({ editorStateTransfer, className, ...props }: EditWysiwygComposerProps) {
+// Default needed for React.lazy
+export default function EditWysiwygComposer({ editorStateTransfer, className, ...props }: EditWysiwygComposerProps) {
     const initialContent = useInitialContent(editorStateTransfer);
     const isReady = !editorStateTransfer || initialContent !== undefined;
 
     const { editMessage, endEditing, onChange, isSaveDisabled } = useEditing(editorStateTransfer, initialContent);
 
+    if (!isReady) {
+        return null;
+    }
+
     return (
-        isReady && (
-            <WysiwygComposer
-                className={classNames("mx_EditWysiwygComposer", className)}
-                initialContent={initialContent}
-                onChange={onChange}
-                onSend={editMessage}
-                {...props}
-            >
-                {(ref) => (
-                    <>
-                        <Content disabled={props.disabled} ref={ref} />
-                        <EditionButtons
-                            onCancelClick={endEditing}
-                            onSaveClick={editMessage}
-                            isSaveDisabled={isSaveDisabled}
-                        />
-                    </>
-                )}
-            </WysiwygComposer>
-        )
+        <WysiwygComposer
+            className={classNames("mx_EditWysiwygComposer", className)}
+            initialContent={initialContent}
+            onChange={onChange}
+            onSend={editMessage}
+            {...props}
+        >
+            {(ref) => (
+                <>
+                    <Content disabled={props.disabled} ref={ref} />
+                    <EditionButtons
+                        onCancelClick={endEditing}
+                        onSaveClick={editMessage}
+                        isSaveDisabled={isSaveDisabled}
+                    />
+                </>
+            )}
+        </WysiwygComposer>
     );
 }

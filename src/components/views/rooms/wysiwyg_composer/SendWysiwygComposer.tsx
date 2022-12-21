@@ -49,7 +49,8 @@ interface SendWysiwygComposerProps {
     menuPosition: AboveLeftOf;
 }
 
-export function SendWysiwygComposer({
+// Default needed for React.lazy
+export default function SendWysiwygComposer({
     isRichTextEnabled,
     e2eStatus,
     menuPosition,
