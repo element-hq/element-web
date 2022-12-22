@@ -467,7 +467,7 @@ describe("<Notifications />", () => {
             expect(mockClient.sendReadReceipt).toHaveBeenCalled();
 
             await waitFor(() => {
-                expect(clearNotificationEl.className).not.toContain("mx_AccessibleButton_disabled");
+                expect(clearNotificationEl).not.toBeInTheDocument();
             });
         });
     });
