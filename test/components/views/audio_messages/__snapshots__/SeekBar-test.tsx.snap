@@ -1,6 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`SeekBar when rendering a SeekBar should render as expected 1`] = `
+exports[`SeekBar when rendering a SeekBar and the playback proceeds should render as expected 1`] = `
+<div>
+  <input
+    class="mx_SeekBar"
+    max="1"
+    min="0"
+    step="0.001"
+    style="--fillTo: 0.22183670221231896;"
+    tabindex="0"
+    type="range"
+    value="0.22183670221231896"
+  />
+</div>
+`;
+
+exports[`SeekBar when rendering a SeekBar should render the initial position 1`] = `
 <div>
   <input
     class="mx_SeekBar"
@@ -23,10 +38,10 @@ exports[`SeekBar when rendering a disabled SeekBar should render as expected 1`]
     max="1"
     min="0"
     step="0.001"
-    style="--fillTo: 0;"
+    style="--fillTo: 0.0999840840362884;"
     tabindex="0"
     type="range"
-    value="0"
+    value="0.0999840840362884"
   />
 </div>
 `;
