@@ -124,11 +124,16 @@ const CurrentDeviceSection: React.FC<Props> = ({
                             onVerifyDevice={onVerifyCurrentDevice}
                             onSignOutDevice={onSignOutCurrentDevice}
                             saveDeviceName={saveDeviceName}
+                            className="mx_CurrentDeviceSection_deviceDetails"
                         />
                     ) : (
                         <>
                             <br />
-                            <DeviceVerificationStatusCard device={device} onVerifyDevice={onVerifyCurrentDevice} />
+                            <DeviceVerificationStatusCard
+                                device={device}
+                                onVerifyDevice={onVerifyCurrentDevice}
+                                isCurrentDevice
+                            />
                         </>
                     )}
                 </>

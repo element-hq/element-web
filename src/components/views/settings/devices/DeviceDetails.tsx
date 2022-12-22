@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
+import classNames from "classnames";
 import { IPusher } from "matrix-js-sdk/src/@types/PushRules";
 import { PUSHER_ENABLED } from "matrix-js-sdk/src/@types/event";
 import { LocalNotificationSettings } from "matrix-js-sdk/src/@types/local_notifications";
@@ -38,6 +39,8 @@ interface Props {
     saveDeviceName: (deviceName: string) => Promise<void>;
     setPushNotifications?: (deviceId: string, enabled: boolean) => Promise<void> | undefined;
     supportsMSC3881?: boolean | undefined;
+    className?: string;
+    isCurrentDevice?: boolean;
 }
 
 interface MetadataTable {
@@ -56,6 +59,8 @@ const DeviceDetails: React.FC<Props> = ({
     saveDeviceName,
     setPushNotifications,
     supportsMSC3881,
+    className,
+    isCurrentDevice,
 }) => {
     const metadata: MetadataTable[] = [
         {
@@ -113,10 +118,10 @@ const DeviceDetails: React.FC<Props> = ({
     }
 
     return (
-        <div className="mx_DeviceDetails" data-testid={`device-detail-${device.device_id}`}>
+        <div className={classNames("mx_DeviceDetails", className)} data-testid={`device-detail-${device.device_id}`}>
             <section className="mx_DeviceDetails_section">
                 <DeviceDetailHeading device={device} saveDeviceName={saveDeviceName} />
-                <DeviceVerificationStatusCard device={device} onVerifyDevice={onVerifyDevice} />
+                <DeviceVerificationStatusCard device={device} onVerifyDevice={onVerifyDevice} isCurrentDevice />
             </section>
             <section className="mx_DeviceDetails_section">
                 <p className="mx_DeviceDetails_sectionHeading">{_t("Session details")}</p>

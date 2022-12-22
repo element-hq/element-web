@@ -3,7 +3,7 @@
 exports[`<CurrentDeviceSection /> displays device details on toggle click 1`] = `
 HTMLCollection [
   <div
-    class="mx_DeviceDetails"
+    class="mx_DeviceDetails mx_CurrentDeviceSection_deviceDetails"
     data-testid="device-detail-alices_device"
   >
     <section
@@ -49,7 +49,7 @@ HTMLCollection [
           <p
             class="mx_DeviceSecurityCard_description"
           >
-            Verify or sign out from this session for best security and reliability.
+            Verify your current session for enhanced secure messaging.
             <div
               class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
               role="button"
@@ -272,7 +272,7 @@ exports[`<CurrentDeviceSection /> renders device and correct security card when 
           <p
             class="mx_DeviceSecurityCard_description"
           >
-            Verify or sign out from this session for best security and reliability.
+            Verify your current session for enhanced secure messaging.
             <div
               class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
               role="button"
@@ -415,7 +415,7 @@ exports[`<CurrentDeviceSection /> renders device and correct security card when 
           <p
             class="mx_DeviceSecurityCard_description"
           >
-            Verify or sign out from this session for best security and reliability.
+            Verify your current session for enhanced secure messaging.
             <div
               class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
               role="button"
