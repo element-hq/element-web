@@ -136,7 +136,7 @@ export function createTestClient(): MatrixClient {
         getTurnServers: jest.fn().mockReturnValue([]),
         getTurnServersExpiry: jest.fn().mockReturnValue(2 ^ 32),
         getThirdpartyUser: jest.fn().mockResolvedValue([]),
-        getAccountData: (type) => {
+        getAccountData: jest.fn().mockImplementation((type) => {
             return mkEvent({
                 user: undefined,
                 room: undefined,
@@ -144,7 +144,7 @@ export function createTestClient(): MatrixClient {
                 event: true,
                 content: {},
             });
-        },
+        }),
         mxcUrlToHttp: (mxc) => `http://this.is.a.url/${mxc.substring(6)}`,
         setAccountData: jest.fn(),
         setRoomAccountData: jest.fn(),
