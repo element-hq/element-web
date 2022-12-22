@@ -18,6 +18,7 @@ limitations under the License.
 
 import _ from "lodash";
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { Interception } from "cypress/types/net-stubbing";
 
 import { SynapseInstance } from "../../plugins/synapsedocker";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
@@ -406,5 +407,56 @@ describe("Sliding Sync", () => {
         cy.contains(".mx_EventTile_selected", "Permalink me").should("exist");
         // ensure the reply-to does not disappear
         cy.get(".mx_ReplyPreview").should("exist");
+    });
+
+    it("should send unsubscribe_rooms for every room switch", () => {
+        let roomAId: string;
+        let roomPId: string;
+        // create rooms and check room names are correct
+        cy.createRoom({ name: "Apple" })
+            .as("roomA")
+            .then((roomId) => (roomAId = roomId))
+            .then(() => cy.contains(".mx_RoomSublist", "Apple"));
+
+        cy.createRoom({ name: "Pineapple" })
+            .as("roomP")
+            .then((roomId) => (roomPId = roomId))
+            .then(() => cy.contains(".mx_RoomSublist", "Pineapple"));
+        cy.createRoom({ name: "Orange" })
+            .as("roomO")
+            .then(() => cy.contains(".mx_RoomSublist", "Orange"));
+
+        // Intercept all calls to /sync
+        cy.intercept({ method: "POST", url: "**/sync*" }).as("syncRequest");
+
+        const assertUnsubExists = (interception: Interception, subRoomId: string, unsubRoomId: string) => {
+            const body = interception.request.body;
+            // There may be a request without a txn_id, ignore it, as there won't be any subscription changes
+            if (body.txn_id === undefined) {
+                return;
+            }
+            expect(body.unsubscribe_rooms).eql([unsubRoomId]);
+            expect(body.room_subscriptions).to.not.have.property(unsubRoomId);
+            expect(body.room_subscriptions).to.have.property(subRoomId);
+        };
+
+        // Select the Test Room
+        cy.contains(".mx_RoomTile", "Apple").click();
+
+        // and wait for cypress to get the result as alias
+        cy.wait("@syncRequest").then((interception) => {
+            // This is the first switch, so no unsubscriptions yet.
+            assert.isObject(interception.request.body.room_subscriptions, "room_subscriptions is object");
+        });
+
+        // Switch to another room
+        cy.contains(".mx_RoomTile", "Pineapple").click();
+        cy.wait("@syncRequest").then((interception) => assertUnsubExists(interception, roomPId, roomAId));
+
+        // And switch to even another room
+        cy.contains(".mx_RoomTile", "Apple").click();
+        cy.wait("@syncRequest").then((interception) => assertUnsubExists(interception, roomPId, roomAId));
+
+        // TODO: Add tests for encrypted rooms
     });
 });
