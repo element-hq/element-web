@@ -29,6 +29,7 @@ import {
     ArrayUtil,
     GroupedArray,
     concat,
+    asyncEvery,
 } from "../../src/utils/arrays";
 
 type TestParams = { input: number[]; output: number[] };
@@ -411,6 +412,36 @@ describe("arrays", () => {
 
         it("should concat three arrays", () => {
             expect(concat(array1(), array2(), array3())).toEqual(new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8, 9]));
+        });
+    });
+
+    describe("asyncEvery", () => {
+        it("when called with an empty array, it should return true", async () => {
+            expect(await asyncEvery([], jest.fn().mockResolvedValue(true))).toBe(true);
+        });
+
+        it("when called with some items and the predicate resolves to true for all of them, it should return true", async () => {
+            const predicate = jest.fn().mockResolvedValue(true);
+            expect(await asyncEvery([1, 2, 3], predicate)).toBe(true);
+            expect(predicate).toHaveBeenCalledTimes(3);
+            expect(predicate).toHaveBeenCalledWith(1);
+            expect(predicate).toHaveBeenCalledWith(2);
+            expect(predicate).toHaveBeenCalledWith(3);
+        });
+
+        it("when called with some items and the predicate resolves to false for all of them, it should return false", async () => {
+            const predicate = jest.fn().mockResolvedValue(false);
+            expect(await asyncEvery([1, 2, 3], predicate)).toBe(false);
+            expect(predicate).toHaveBeenCalledTimes(1);
+            expect(predicate).toHaveBeenCalledWith(1);
+        });
+
+        it("when called with some items and the predicate resolves to false for one of them, it should return false", async () => {
+            const predicate = jest.fn().mockResolvedValueOnce(true).mockResolvedValueOnce(false);
+            expect(await asyncEvery([1, 2, 3], predicate)).toBe(false);
+            expect(predicate).toHaveBeenCalledTimes(2);
+            expect(predicate).toHaveBeenCalledWith(1);
+            expect(predicate).toHaveBeenCalledWith(2);
         });
     });
 });

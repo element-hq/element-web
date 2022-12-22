@@ -313,3 +313,13 @@ export const concat = (...arrays: Uint8Array[]): Uint8Array => {
         return concatenated;
     }, new Uint8Array(0));
 };
+
+/**
+ * Async version of Array.every.
+ */
+export async function asyncEvery<T>(values: T[], predicate: (value: T) => Promise<boolean>): Promise<boolean> {
+    for (const value of values) {
+        if (!(await predicate(value))) return false;
+    }
+    return true;
+}

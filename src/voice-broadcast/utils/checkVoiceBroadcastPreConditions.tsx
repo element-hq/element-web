@@ -67,11 +67,11 @@ const showOthersAlreadyRecordingDialog = () => {
     });
 };
 
-export const checkVoiceBroadcastPreConditions = (
+export const checkVoiceBroadcastPreConditions = async (
     room: Room,
     client: MatrixClient,
     recordingsStore: VoiceBroadcastRecordingsStore,
-): boolean => {
+): Promise<boolean> => {
     if (recordingsStore.getCurrent()) {
         showAlreadyRecordingDialog();
         return false;
@@ -86,7 +86,7 @@ export const checkVoiceBroadcastPreConditions = (
         return false;
     }
 
-    const { hasBroadcast, startedByUser } = hasRoomLiveVoiceBroadcast(room, currentUserId);
+    const { hasBroadcast, startedByUser } = await hasRoomLiveVoiceBroadcast(client, room, currentUserId);
 
     if (hasBroadcast && startedByUser) {
         showAlreadyRecordingDialog();
