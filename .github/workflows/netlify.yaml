@@ -42,7 +42,7 @@ jobs:
 
             - name: ☁️ Deploy to Netlify
               id: netlify
-              uses: nwtgck/actions-netlify@v1.2
+              uses: nwtgck/actions-netlify@v2.0
               with:
                   publish-dir: webapp
                   deploy-message: "Deploy from GitHub Actions"
