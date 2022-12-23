@@ -16,7 +16,7 @@ limitations under the License.
 
 import "@testing-library/jest-dom";
 import React from "react";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import RoomContext from "../../../../../src/contexts/RoomContext";
@@ -117,12 +117,9 @@ describe("SendWysiwygComposer", () => {
         expect(screen.getByTestId("PlainTextComposer")).toBeTruthy();
     });
 
-    describe.each([
-        { isRichTextEnabled: true, emptyContent: "<br>" },
-        { isRichTextEnabled: false, emptyContent: "" },
-    ])(
+    describe.each([{ isRichTextEnabled: true }, { isRichTextEnabled: false }])(
         "Should focus when receiving an Action.FocusSendMessageComposer action",
-        ({ isRichTextEnabled, emptyContent }) => {
+        ({ isRichTextEnabled }) => {
             afterEach(() => {
                 jest.resetAllMocks();
             });
@@ -198,7 +195,9 @@ describe("SendWysiwygComposer", () => {
                 });
 
                 // Wait for event dispatch to happen
-                await flushPromises();
+                await act(async () => {
+                    await flushPromises();
+                });
 
                 // Then we don't get it because we are disabled
                 expect(screen.getByRole("textbox")).not.toHaveFocus();

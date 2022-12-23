@@ -14,9 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-export type ComposerFunctions = {
-    clear: () => void;
-    insertText: (text: string) => void;
-};
+.mx_LinkModal {
+    padding: $spacing-32;
 
-export type SubSelection = Pick<Selection, "anchorNode" | "anchorOffset" | "focusNode" | "focusOffset">;
+    .mx_Dialog_content {
+        margin-top: 30px;
+        margin-bottom: 42px;
+    }
+
+    .mx_LinkModal_content {
+        display: flex;
+        flex-direction: column;
+    }
+}

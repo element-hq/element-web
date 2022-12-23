@@ -251,20 +251,20 @@ describe("EditWysiwygComposer", () => {
         expect(screen.getByRole("textbox")).not.toHaveFocus();
 
         // When we send an action that would cause us to get focus
-        act(() => {
-            defaultDispatcher.dispatch({
-                action: Action.FocusEditMessageComposer,
-                context: null,
-            });
-            // (Send a second event to exercise the clearTimeout logic)
-            defaultDispatcher.dispatch({
-                action: Action.FocusEditMessageComposer,
-                context: null,
-            });
+        defaultDispatcher.dispatch({
+            action: Action.FocusEditMessageComposer,
+            context: null,
+        });
+        // (Send a second event to exercise the clearTimeout logic)
+        defaultDispatcher.dispatch({
+            action: Action.FocusEditMessageComposer,
+            context: null,
         });
 
         // Wait for event dispatch to happen
-        await flushPromises();
+        await act(async () => {
+            await flushPromises();
+        });
 
         // Then we don't get it because we are disabled
         expect(screen.getByRole("textbox")).not.toHaveFocus();

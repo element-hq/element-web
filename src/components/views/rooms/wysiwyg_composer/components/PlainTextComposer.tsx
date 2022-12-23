@@ -33,7 +33,7 @@ interface PlainTextComposerProps {
     initialContent?: string;
     className?: string;
     leftComponent?: ReactNode;
-    rightComponent?: (selectPreviousSelection: () => void) => ReactNode;
+    rightComponent?: ReactNode;
     children?: (ref: MutableRefObject<HTMLDivElement | null>, composerFunctions: ComposerFunctions) => ReactNode;
 }
 

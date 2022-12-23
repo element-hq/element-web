@@ -14,9 +14,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-export type ComposerFunctions = {
-    clear: () => void;
-    insertText: (text: string) => void;
-};
+import { createContext, useContext } from "react";
 
-export type SubSelection = Pick<Selection, "anchorNode" | "anchorOffset" | "focusNode" | "focusOffset">;
+import { SubSelection } from "./types";
+
+export function getDefaultContextValue(): { selection: SubSelection } {
+    return {
+        selection: { anchorNode: null, anchorOffset: 0, focusNode: null, focusOffset: 0 },
+    };
+}
+
+export interface ComposerContextState {
+    selection: SubSelection;
+}
+
+export const ComposerContext = createContext<ComposerContextState>(getDefaultContextValue());
+ComposerContext.displayName = "ComposerContext";
+
+export function useComposerContext() {
+    return useContext(ComposerContext);
+}

@@ -14,7 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-export function setSelection(selection: Pick<Selection, "anchorNode" | "anchorOffset" | "focusNode" | "focusOffset">) {
+import { SubSelection } from "../types";
+
+export function setSelection(selection: SubSelection) {
     if (selection.anchorNode && selection.focusNode) {
         const range = new Range();
         range.setStart(selection.anchorNode, selection.anchorOffset);
@@ -23,4 +25,12 @@ export function setSelection(selection: Pick<Selection, "anchorNode" | "anchorOf
         document.getSelection()?.removeAllRanges();
         document.getSelection()?.addRange(range);
     }
+
+    // Waiting for the next loop to ensure that the selection is effective
+    return new Promise((resolve) => setTimeout(resolve, 0));
+}
+
+export function isSelectionEmpty() {
+    const selection = document.getSelection();
+    return Boolean(selection?.isCollapsed);
 }

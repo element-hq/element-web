@@ -20,6 +20,7 @@ import userEvent from "@testing-library/user-event";
 import { AllActionStates, FormattingFunctions } from "@matrix-org/matrix-wysiwyg";
 
 import { FormattingButtons } from "../../../../../../src/components/views/rooms/wysiwyg_composer/components/FormattingButtons";
+import * as LinkModal from "../../../../../../src/components/views/rooms/wysiwyg_composer/components/LinkModal";
 
 describe("FormattingButtons", () => {
     const wysiwyg = {
@@ -28,6 +29,7 @@ describe("FormattingButtons", () => {
         underline: jest.fn(),
         strikeThrough: jest.fn(),
         inlineCode: jest.fn(),
+        link: jest.fn(),
     } as unknown as FormattingFunctions;
 
     const actionStates = {
@@ -36,6 +38,7 @@ describe("FormattingButtons", () => {
         underline: "enabled",
         strikeThrough: "enabled",
         inlineCode: "enabled",
+        link: "enabled",
     } as AllActionStates;
 
     afterEach(() => {
@@ -52,16 +55,19 @@ describe("FormattingButtons", () => {
         expect(screen.getByLabelText("Underline")).not.toHaveClass("mx_FormattingButtons_active");
         expect(screen.getByLabelText("Strikethrough")).not.toHaveClass("mx_FormattingButtons_active");
         expect(screen.getByLabelText("Code")).not.toHaveClass("mx_FormattingButtons_active");
+        expect(screen.getByLabelText("Link")).not.toHaveClass("mx_FormattingButtons_active");
     });
 
     it("Should call wysiwyg function on button click", () => {
         // When
+        const spy = jest.spyOn(LinkModal, "openLinkModal");
         render(<FormattingButtons composer={wysiwyg} actionStates={actionStates} />);
         screen.getByLabelText("Bold").click();
         screen.getByLabelText("Italic").click();
         screen.getByLabelText("Underline").click();
         screen.getByLabelText("Strikethrough").click();
         screen.getByLabelText("Code").click();
+        screen.getByLabelText("Link").click();
 
         // Then
         expect(wysiwyg.bold).toHaveBeenCalledTimes(1);
@@ -69,6 +75,7 @@ describe("FormattingButtons", () => {
         expect(wysiwyg.underline).toHaveBeenCalledTimes(1);
         expect(wysiwyg.strikeThrough).toHaveBeenCalledTimes(1);
         expect(wysiwyg.inlineCode).toHaveBeenCalledTimes(1);
+        expect(spy).toHaveBeenCalledTimes(1);
     });
 
     it("Should display the tooltip on mouse over", async () => {

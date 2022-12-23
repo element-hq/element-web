@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import { PlainTextComposer } from "../../../../../../src/components/views/rooms/wysiwyg_composer/components/PlainTextComposer";
@@ -106,10 +106,7 @@ describe("PlainTextComposer", () => {
                 disconnect: jest.fn(),
             };
         });
-        jest.spyOn(global, "requestAnimationFrame").mockImplementation((cb) => {
-            cb(0);
-            return 0;
-        });
+        jest.useFakeTimers();
 
         //When
         render(<PlainTextComposer onChange={jest.fn()} onSend={jest.fn()} />);
@@ -123,12 +120,15 @@ describe("PlainTextComposer", () => {
             [{ contentBoxSize: [{ blockSize: 100 }] } as unknown as ResizeObserverEntry],
             {} as ResizeObserver,
         );
-        jest.runAllTimers();
+
+        act(() => {
+            jest.runAllTimers();
+        });
 
         // Then
         expect(screen.getByTestId("WysiwygComposerEditor").attributes["data-is-expanded"].value).toBe("true");
 
+        jest.useRealTimers();
         (global.ResizeObserver as jest.Mock).mockRestore();
-        (global.requestAnimationFrame as jest.Mock).mockRestore();
     });
 });

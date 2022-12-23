@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ForwardedRef, forwardRef, MutableRefObject } from "react";
+import React, { ForwardedRef, forwardRef, MutableRefObject, useRef } from "react";
 
 import { useWysiwygSendActionHandler } from "./hooks/useWysiwygSendActionHandler";
 import { WysiwygComposer } from "./components/WysiwygComposer";
@@ -24,6 +24,7 @@ import { E2EStatus } from "../../../../utils/ShieldUtils";
 import E2EIcon from "../E2EIcon";
 import { AboveLeftOf } from "../../../structures/ContextMenu";
 import { Emoji } from "./components/Emoji";
+import { ComposerContext, getDefaultContextValue } from "./ComposerContext";
 
 interface ContentProps {
     disabled?: boolean;
@@ -57,19 +58,20 @@ export default function SendWysiwygComposer({
     ...props
 }: SendWysiwygComposerProps) {
     const Composer = isRichTextEnabled ? WysiwygComposer : PlainTextComposer;
+    const defaultContextValue = useRef(getDefaultContextValue());
 
     return (
-        <Composer
-            className="mx_SendWysiwygComposer"
-            leftComponent={e2eStatus && <E2EIcon status={e2eStatus} />}
-            rightComponent={(selectPreviousSelection) => (
-                <Emoji menuPosition={menuPosition} selectPreviousSelection={selectPreviousSelection} />
-            )}
-            {...props}
-        >
-            {(ref, composerFunctions) => (
-                <Content disabled={props.disabled} ref={ref} composerFunctions={composerFunctions} />
-            )}
-        </Composer>
+        <ComposerContext.Provider value={defaultContextValue.current}>
+            <Composer
+                className="mx_SendWysiwygComposer"
+                leftComponent={e2eStatus && <E2EIcon status={e2eStatus} />}
+                rightComponent={<Emoji menuPosition={menuPosition} />}
+                {...props}
+            >
+                {(ref, composerFunctions) => (
+                    <Content disabled={props.disabled} ref={ref} composerFunctions={composerFunctions} />
+                )}
+            </Composer>
+        </ComposerContext.Provider>
     );
 }
