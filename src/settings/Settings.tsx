@@ -90,6 +90,7 @@ export enum LabGroup {
 
 export enum Features {
     VoiceBroadcast = "feature_voice_broadcast",
+    VoiceBroadcastForceSmallChunks = "feature_voice_broadcast_force_small_chunks",
 }
 
 export const labGroupNames: Record<LabGroup, string> = {
@@ -459,6 +460,11 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         supportedLevels: LEVELS_FEATURE,
         displayName: _td("Voice broadcast"),
         description: _td("Under active development"),
+        default: false,
+    },
+    [Features.VoiceBroadcastForceSmallChunks]: {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        displayName: _td("Force 15s voice broadcast chunk length"),
         default: false,
     },
     "feature_new_device_manager": {

@@ -40,6 +40,8 @@ jest.mock("../../../src/audio/VoiceRecording", () => ({
     }),
 }));
 
+jest.mock("../../../src/settings/SettingsStore");
+
 describe("VoiceBroadcastRecorder", () => {
     describe("createVoiceBroadcastRecorder", () => {
         beforeEach(() => {
