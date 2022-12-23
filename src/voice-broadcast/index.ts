@@ -48,6 +48,7 @@ export * from "./utils/doMaybeSetCurrentVoiceBroadcastPlayback";
 export * from "./utils/getChunkLength";
 export * from "./utils/getMaxBroadcastLength";
 export * from "./utils/hasRoomLiveVoiceBroadcast";
+export * from "./utils/isVoiceBroadcastStartedEvent";
 export * from "./utils/findRoomLiveVoiceBroadcastFromUserAndDevice";
 export * from "./utils/retrieveStartedInfoEvent";
 export * from "./utils/shouldDisplayAsVoiceBroadcastRecordingTile";
