@@ -15,34 +15,60 @@ limitations under the License.
 */
 
 import React from "react";
-// eslint-disable-next-line deprecate/import
-import { mount, ReactWrapper } from "enzyme";
-import { Room } from "matrix-js-sdk/src/models/room";
-import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import { render, screen } from "@testing-library/react";
 
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
-import { Layout } from "../../../../src/settings/enums/Layout";
-import RoomContext, { TimelineRenderingType } from "../../../../src/contexts/RoomContext";
-import { createTestClient } from "../../../test-utils";
+import RoomContext from "../../../../src/contexts/RoomContext";
+import { createTestClient, getRoomContext, mkStubRoom } from "../../../test-utils";
 import { IRoomState } from "../../../../src/components/structures/RoomView";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import MessageComposerButtons from "../../../../src/components/views/rooms/MessageComposerButtons";
 
-// @ts-ignore - we're deliberately not implementing the whole interface here, but
-// can't use Partial<> for types because it'll annoy TS more than it helps.
-const mockProps: React.ComponentProps<typeof MessageComposerButtons> = {
-    addEmoji: () => false,
-    haveRecording: false,
-    isStickerPickerOpen: false,
-    menuPosition: undefined,
-    onRecordStartEndClick: () => {},
-    setStickerPickerOpen: () => {},
-    toggleButtonMenu: () => {},
-};
-
 describe("MessageComposerButtons", () => {
+    // @ts-ignore - we're deliberately not implementing the whole interface here, but
+    // can't use Partial<> for types because it'll annoy TS more than it helps.
+    const mockProps: React.ComponentProps<typeof MessageComposerButtons> = {
+        addEmoji: () => false,
+        haveRecording: false,
+        isStickerPickerOpen: false,
+        menuPosition: undefined,
+        onRecordStartEndClick: () => {},
+        setStickerPickerOpen: () => {},
+        toggleButtonMenu: () => {},
+    };
+
+    const mockClient = createTestClient();
+    jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
+
+    function getButtonLabels() {
+        const getLabels = (elements: HTMLElement[]): string[] =>
+            elements
+                .map((element) => element.getAttribute("aria-label"))
+                .filter((label): label is string => label !== null);
+
+        const mainLabels: Array<string | string[]> = getLabels(screen.queryAllByRole("button"));
+        const menuLabels = getLabels(screen.queryAllByRole("menuitem"));
+
+        if (menuLabels.length) {
+            mainLabels.push(getLabels(screen.queryAllByRole("menuitem")));
+        }
+
+        return mainLabels;
+    }
+
+    function wrapAndRender(component: React.ReactElement, narrow: boolean) {
+        const mockRoom = mkStubRoom("myfakeroom", "myfakeroom", mockClient) as any;
+        const defaultRoomContext: IRoomState = getRoomContext(mockRoom, { narrow });
+
+        return render(
+            <MatrixClientContext.Provider value={mockClient}>
+                <RoomContext.Provider value={defaultRoomContext}>{component}</RoomContext.Provider>
+            </MatrixClientContext.Provider>,
+        );
+    }
+
     it("Renders emoji and upload buttons in wide mode", () => {
-        const buttons = wrapAndRender(
+        wrapAndRender(
             <MessageComposerButtons
                 {...mockProps}
                 isMenuOpen={false}
@@ -53,11 +79,11 @@ describe("MessageComposerButtons", () => {
             false,
         );
 
-        expect(buttonLabels(buttons)).toEqual(["Emoji", "Attachment", "More options"]);
+        expect(getButtonLabels()).toEqual(["Emoji", "Attachment", "More options"]);
     });
 
     it("Renders other buttons in menu in wide mode", () => {
-        const buttons = wrapAndRender(
+        wrapAndRender(
             <MessageComposerButtons
                 {...mockProps}
                 isMenuOpen={true}
@@ -68,7 +94,7 @@ describe("MessageComposerButtons", () => {
             false,
         );
 
-        expect(buttonLabels(buttons)).toEqual([
+        expect(getButtonLabels()).toEqual([
             "Emoji",
             "Attachment",
             "More options",
@@ -77,7 +103,7 @@ describe("MessageComposerButtons", () => {
     });
 
     it("Renders only some buttons in narrow mode", () => {
-        const buttons = wrapAndRender(
+        wrapAndRender(
             <MessageComposerButtons
                 {...mockProps}
                 isMenuOpen={false}
@@ -88,11 +114,11 @@ describe("MessageComposerButtons", () => {
             true,
         );
 
-        expect(buttonLabels(buttons)).toEqual(["Emoji", "More options"]);
+        expect(getButtonLabels()).toEqual(["Emoji", "More options"]);
     });
 
     it("Renders other buttons in menu (except voice messages) in narrow mode", () => {
-        const buttons = wrapAndRender(
+        wrapAndRender(
             <MessageComposerButtons
                 {...mockProps}
                 isMenuOpen={true}
@@ -103,12 +129,12 @@ describe("MessageComposerButtons", () => {
             true,
         );
 
-        expect(buttonLabels(buttons)).toEqual(["Emoji", "More options", ["Attachment", "Sticker", "Poll", "Location"]]);
+        expect(getButtonLabels()).toEqual(["Emoji", "More options", ["Attachment", "Sticker", "Poll", "Location"]]);
     });
 
     describe("polls button", () => {
         it("should render when asked to", () => {
-            const buttons = wrapAndRender(
+            wrapAndRender(
                 <MessageComposerButtons
                     {...mockProps}
                     isMenuOpen={true}
@@ -119,15 +145,11 @@ describe("MessageComposerButtons", () => {
                 true,
             );
 
-            expect(buttonLabels(buttons)).toEqual([
-                "Emoji",
-                "More options",
-                ["Attachment", "Sticker", "Poll", "Location"],
-            ]);
+            expect(getButtonLabels()).toEqual(["Emoji", "More options", ["Attachment", "Sticker", "Poll", "Location"]]);
         });
 
         it("should not render when asked not to", () => {
-            const buttons = wrapAndRender(
+            wrapAndRender(
                 <MessageComposerButtons
                     {...mockProps}
                     isMenuOpen={true}
@@ -138,7 +160,7 @@ describe("MessageComposerButtons", () => {
                 true,
             );
 
-            expect(buttonLabels(buttons)).toEqual([
+            expect(getButtonLabels()).toEqual([
                 "Emoji",
                 "More options",
                 [
@@ -153,7 +175,7 @@ describe("MessageComposerButtons", () => {
 
     describe("with showVoiceBroadcastButton = true", () => {
         it("should render the »Voice broadcast« button", () => {
-            const buttons = wrapAndRender(
+            wrapAndRender(
                 <MessageComposerButtons
                     {...mockProps}
                     isMenuOpen={true}
@@ -165,7 +187,7 @@ describe("MessageComposerButtons", () => {
                 false,
             );
 
-            expect(buttonLabels(buttons)).toEqual([
+            expect(getButtonLabels()).toEqual([
                 "Emoji",
                 "Attachment",
                 "More options",
@@ -174,87 +196,3 @@ describe("MessageComposerButtons", () => {
         });
     });
 });
-
-function wrapAndRender(component: React.ReactElement, narrow: boolean): ReactWrapper {
-    const mockClient = createTestClient();
-    jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
-    const roomId = "myroomid";
-    const mockRoom: any = {
-        currentState: undefined,
-        roomId,
-        client: mockClient,
-        getMember: function (userId: string): RoomMember {
-            return new RoomMember(roomId, userId);
-        },
-    };
-    const roomState = createRoomState(mockRoom, narrow);
-
-    return mount(
-        <MatrixClientContext.Provider value={mockClient}>
-            <RoomContext.Provider value={roomState}>{component}</RoomContext.Provider>
-        </MatrixClientContext.Provider>,
-    );
-}
-
-function createRoomState(room: Room, narrow: boolean): IRoomState {
-    return {
-        room: room,
-        roomId: room.roomId,
-        roomLoading: true,
-        peekLoading: false,
-        shouldPeek: true,
-        membersLoaded: false,
-        numUnreadMessages: 0,
-        canSelfRedact: false,
-        canPeek: false,
-        showApps: false,
-        isPeeking: false,
-        showRightPanel: true,
-        joining: false,
-        atEndOfLiveTimeline: true,
-        showTopUnreadMessagesBar: false,
-        statusBarVisible: false,
-        canReact: false,
-        canSendMessages: false,
-        layout: Layout.Group,
-        lowBandwidth: false,
-        alwaysShowTimestamps: false,
-        showTwelveHourTimestamps: false,
-        readMarkerInViewThresholdMs: 3000,
-        readMarkerOutOfViewThresholdMs: 30000,
-        showHiddenEvents: false,
-        showReadReceipts: true,
-        showRedactions: true,
-        showJoinLeaves: true,
-        showAvatarChanges: true,
-        showDisplaynameChanges: true,
-        matrixClientIsReady: false,
-        timelineRenderingType: TimelineRenderingType.Room,
-        liveTimeline: undefined,
-        resizing: false,
-        narrow,
-        activeCall: null,
-    };
-}
-
-function buttonLabels(buttons: ReactWrapper): any[] {
-    // Note: Depends on the fact that the mini buttons use aria-label
-    // and the labels under More options use textContent
-    const mainButtons = buttons
-        .find("div.mx_MessageComposer_button[aria-label]")
-        .map((button: ReactWrapper) => button.prop("aria-label") as string)
-        .filter((x) => x);
-
-    const extraButtons = buttons
-        .find('.mx_MessageComposer_Menu div.mx_AccessibleButton[role="menuitem"]')
-        .map((button: ReactWrapper) => button.text())
-        .filter((x) => x);
-
-    const list: any[] = [...mainButtons];
-
-    if (extraButtons.length > 0) {
-        list.push(extraButtons);
-    }
-
-    return list;
-}
