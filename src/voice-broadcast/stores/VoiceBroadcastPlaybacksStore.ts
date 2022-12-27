@@ -114,13 +114,4 @@ export class VoiceBroadcastPlaybacksStore
 
         this.playbacks = new Map();
     }
-
-    public static readonly _instance = new VoiceBroadcastPlaybacksStore();
-
-    /**
-     * TODO Michael W: replace when https://github.com/matrix-org/matrix-react-sdk/pull/9293 has been merged
-     */
-    public static instance() {
-        return VoiceBroadcastPlaybacksStore._instance;
-    }
 }

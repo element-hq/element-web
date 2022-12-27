@@ -54,7 +54,6 @@ import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { isLocalRoom } from "../../../utils/localRoom/isLocalRoom";
 import { Features } from "../../../settings/Settings";
 import { VoiceMessageRecording } from "../../../audio/VoiceMessageRecording";
-import { VoiceBroadcastRecordingsStore } from "../../../voice-broadcast";
 import { SendWysiwygComposer, sendMessage } from "./wysiwyg_composer/";
 import { MatrixClientProps, withMatrixClientHOC } from "../../../contexts/MatrixClientContext";
 import { htmlToPlainText } from "../../../utils/room/htmlToPlaintext";
@@ -604,7 +603,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
                                             this.props.room,
                                             MatrixClientPeg.get(),
                                             SdkContextClass.instance.voiceBroadcastPlaybacksStore,
-                                            VoiceBroadcastRecordingsStore.instance(),
+                                            SdkContextClass.instance.voiceBroadcastRecordingsStore,
                                             SdkContextClass.instance.voiceBroadcastPreRecordingStore,
                                         );
                                         this.toggleButtonMenu();
