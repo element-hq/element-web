@@ -42,14 +42,26 @@ describe("setUpVoiceBroadcastPreRecording", () => {
     let playback: VoiceBroadcastPlayback;
     let playbacksStore: VoiceBroadcastPlaybacksStore;
     let recordingsStore: VoiceBroadcastRecordingsStore;
+    let preRecording: VoiceBroadcastPreRecording | null;
 
-    const itShouldReturnNull = () => {
+    const itShouldNotCreateAPreRecording = () => {
         it("should return null", () => {
-            expect(
-                setUpVoiceBroadcastPreRecording(room, client, playbacksStore, recordingsStore, preRecordingStore),
-            ).toBeNull();
-            expect(checkVoiceBroadcastPreConditions).toHaveBeenCalledWith(room, client, recordingsStore);
+            expect(preRecording).toBeNull();
         });
+
+        it("should not create a broadcast pre recording", () => {
+            expect(preRecordingStore.getCurrent()).toBeNull();
+        });
+    };
+
+    const setUpPreRecording = async () => {
+        preRecording = await setUpVoiceBroadcastPreRecording(
+            room,
+            client,
+            playbacksStore,
+            recordingsStore,
+            preRecordingStore,
+        );
     };
 
     beforeEach(() => {
@@ -66,6 +78,7 @@ describe("setUpVoiceBroadcastPreRecording", () => {
             client.getUserId()!,
             client.getDeviceId()!,
         );
+        preRecording = null;
         preRecordingStore = new VoiceBroadcastPreRecordingStore();
         playback = new VoiceBroadcastPlayback(infoEvent, client);
         jest.spyOn(playback, "pause");
@@ -74,11 +87,12 @@ describe("setUpVoiceBroadcastPreRecording", () => {
     });
 
     describe("when the preconditions fail", () => {
-        beforeEach(() => {
+        beforeEach(async () => {
             mocked(checkVoiceBroadcastPreConditions).mockResolvedValue(false);
+            await setUpPreRecording();
         });
 
-        itShouldReturnNull();
+        itShouldNotCreateAPreRecording();
     });
 
     describe("when the preconditions pass", () => {
@@ -87,41 +101,37 @@ describe("setUpVoiceBroadcastPreRecording", () => {
         });
 
         describe("and there is no user id", () => {
-            beforeEach(() => {
+            beforeEach(async () => {
                 mocked(client.getUserId).mockReturnValue(null);
+                await setUpPreRecording();
             });
 
-            itShouldReturnNull();
+            itShouldNotCreateAPreRecording();
         });
 
         describe("and there is no room member", () => {
-            beforeEach(() => {
+            beforeEach(async () => {
                 // check test precondition
                 expect(room.getMember(userId)).toBeNull();
+                await setUpPreRecording();
             });
 
-            itShouldReturnNull();
+            itShouldNotCreateAPreRecording();
         });
 
         describe("and there is a room member and listening to another broadcast", () => {
             beforeEach(() => {
                 playbacksStore.setCurrent(playback);
                 room.currentState.setStateEvents([mkRoomMemberJoinEvent(userId, roomId)]);
+                setUpPreRecording();
             });
 
             it("should pause the current playback and create a voice broadcast pre-recording", () => {
-                const result = setUpVoiceBroadcastPreRecording(
-                    room,
-                    client,
-                    playbacksStore,
-                    recordingsStore,
-                    preRecordingStore,
-                );
                 expect(playback.pause).toHaveBeenCalled();
                 expect(playbacksStore.getCurrent()).toBeNull();
 
                 expect(checkVoiceBroadcastPreConditions).toHaveBeenCalledWith(room, client, recordingsStore);
-                expect(result).toBeInstanceOf(VoiceBroadcastPreRecording);
+                expect(preRecording).toBeInstanceOf(VoiceBroadcastPreRecording);
             });
         });
     });
