@@ -24,12 +24,16 @@ import {
 } from "../../../src/voice-broadcast";
 import { mkEvent } from "../../test-utils";
 
+// timestamp incremented on each call to prevent duplicate timestamp
+let timestamp = new Date().getTime();
+
 export const mkVoiceBroadcastInfoStateEvent = (
     roomId: Optional<string>,
     state: Optional<VoiceBroadcastInfoState>,
     senderId: Optional<string>,
     senderDeviceId: Optional<string>,
     startedInfoEvent?: MatrixEvent,
+    lastChunkSequence?: number,
 ): MatrixEvent => {
     const relationContent = {};
 
@@ -39,6 +43,8 @@ export const mkVoiceBroadcastInfoStateEvent = (
             rel_type: "m.reference",
         };
     }
+
+    const lastChunkSequenceContent = lastChunkSequence ? { last_chunk_sequence: lastChunkSequence } : {};
 
     return mkEvent({
         event: true,
@@ -53,7 +59,9 @@ export const mkVoiceBroadcastInfoStateEvent = (
             state,
             device_id: senderDeviceId,
             ...relationContent,
+            ...lastChunkSequenceContent,
         },
+        ts: timestamp++,
     });
 };
 

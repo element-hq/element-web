@@ -31,7 +31,12 @@ import { PlaybackManager } from "../../audio/PlaybackManager";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import { MediaEventHelper } from "../../utils/MediaEventHelper";
 import { IDestroyable } from "../../utils/IDestroyable";
-import { VoiceBroadcastLiveness, VoiceBroadcastInfoEventType, VoiceBroadcastInfoState } from "..";
+import {
+    VoiceBroadcastLiveness,
+    VoiceBroadcastInfoEventType,
+    VoiceBroadcastInfoState,
+    VoiceBroadcastInfoEventContent,
+} from "..";
 import { RelationsHelper, RelationsHelperEvent } from "../../events/RelationsHelper";
 import { VoiceBroadcastChunkEvents } from "../utils/VoiceBroadcastChunkEvents";
 import { determineVoiceBroadcastLiveness } from "../utils/determineVoiceBroadcastLiveness";
@@ -151,10 +156,18 @@ export class VoiceBroadcastPlayback
         this.setDuration(this.chunkEvents.getLength());
 
         if (this.getState() === VoiceBroadcastPlaybackState.Buffering) {
-            await this.start();
+            await this.startOrPlayNext();
         }
 
         return true;
+    };
+
+    private startOrPlayNext = async (): Promise<void> => {
+        if (this.currentlyPlaying) {
+            return this.playNext();
+        }
+
+        return await this.start();
     };
 
     private addInfoEvent = (event: MatrixEvent): void => {
@@ -263,12 +276,26 @@ export class VoiceBroadcastPlayback
             return this.playEvent(next);
         }
 
-        if (this.getInfoState() === VoiceBroadcastInfoState.Stopped) {
+        if (
+            this.getInfoState() === VoiceBroadcastInfoState.Stopped &&
+            this.chunkEvents.getSequenceForEvent(this.currentlyPlaying) === this.lastChunkSequence
+        ) {
             this.stop();
         } else {
             // No more chunks available, although the broadcast is not finished → enter buffering state.
             this.setState(VoiceBroadcastPlaybackState.Buffering);
         }
+    }
+
+    /**
+     * @returns {number} The last chunk sequence from the latest info event.
+     *                   Falls back to the length of received chunks if the info event does not provide the number.
+     */
+    private get lastChunkSequence(): number {
+        return (
+            this.lastInfoEvent.getContent<VoiceBroadcastInfoEventContent>()?.last_chunk_sequence ||
+            this.chunkEvents.getNumberOfEvents()
+        );
     }
 
     private async playEvent(event: MatrixEvent): Promise<void> {

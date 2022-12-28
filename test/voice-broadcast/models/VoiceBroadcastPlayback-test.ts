@@ -279,26 +279,62 @@ describe("VoiceBroadcastPlayback", () => {
                 expect(chunk1Playback.play).not.toHaveBeenCalled();
             });
 
-            describe("and the playback of the last chunk ended", () => {
-                beforeEach(() => {
-                    chunk2Playback.emit(PlaybackState.Stopped);
-                });
-
-                itShouldSetTheStateTo(VoiceBroadcastPlaybackState.Buffering);
-
-                describe("and the next chunk arrived", () => {
+            describe(
+                "and receiving a stop info event with last_chunk_sequence = 2 and " +
+                    "the playback of the last available chunk ends",
+                () => {
                     beforeEach(() => {
-                        room.addLiveEvents([chunk3Event]);
-                        room.relations.aggregateChildEvent(chunk3Event);
+                        const stoppedEvent = mkVoiceBroadcastInfoStateEvent(
+                            roomId,
+                            VoiceBroadcastInfoState.Stopped,
+                            client.getSafeUserId(),
+                            client.deviceId!,
+                            infoEvent,
+                            2,
+                        );
+                        room.addLiveEvents([stoppedEvent]);
+                        room.relations.aggregateChildEvent(stoppedEvent);
+                        chunk2Playback.emit(PlaybackState.Stopped);
                     });
 
-                    itShouldSetTheStateTo(VoiceBroadcastPlaybackState.Playing);
+                    itShouldSetTheStateTo(VoiceBroadcastPlaybackState.Stopped);
+                },
+            );
 
-                    it("should play the next chunk", () => {
-                        expect(chunk3Playback.play).toHaveBeenCalled();
+            describe(
+                "and receiving a stop info event with last_chunk_sequence = 3 and " +
+                    "the playback of the last available chunk ends",
+                () => {
+                    beforeEach(() => {
+                        const stoppedEvent = mkVoiceBroadcastInfoStateEvent(
+                            roomId,
+                            VoiceBroadcastInfoState.Stopped,
+                            client.getSafeUserId(),
+                            client.deviceId!,
+                            infoEvent,
+                            3,
+                        );
+                        room.addLiveEvents([stoppedEvent]);
+                        room.relations.aggregateChildEvent(stoppedEvent);
+                        chunk2Playback.emit(PlaybackState.Stopped);
                     });
-                });
-            });
+
+                    itShouldSetTheStateTo(VoiceBroadcastPlaybackState.Buffering);
+
+                    describe("and the next chunk arrives", () => {
+                        beforeEach(() => {
+                            room.addLiveEvents([chunk3Event]);
+                            room.relations.aggregateChildEvent(chunk3Event);
+                        });
+
+                        itShouldSetTheStateTo(VoiceBroadcastPlaybackState.Playing);
+
+                        it("should play the next chunk", () => {
+                            expect(chunk3Playback.play).toHaveBeenCalled();
+                        });
+                    });
+                },
+            );
 
             describe("and the info event is deleted", () => {
                 beforeEach(() => {
