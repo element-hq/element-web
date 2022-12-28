@@ -15,8 +15,12 @@ limitations under the License.
 */
 
 .mx_LegacyCallPreview {
-    position: fixed;
+    align-items: flex-end;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-16;
     left: 0;
+    position: fixed;
     top: 0;
 
     pointer-events: initial; /* restore pointer events so the user can leave/interact */

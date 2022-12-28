@@ -373,24 +373,20 @@ class PipView extends React.Component<IProps, IState> {
 
     public render() {
         const pipMode = true;
-        let pipContent: CreatePipChildren | null = null;
-
-        if (this.props.voiceBroadcastPlayback) {
-            pipContent = this.createVoiceBroadcastPlaybackPipContent(this.props.voiceBroadcastPlayback);
-        }
-
-        if (this.props.voiceBroadcastPreRecording) {
-            pipContent = this.createVoiceBroadcastPreRecordingPipContent(this.props.voiceBroadcastPreRecording);
-        }
+        let pipContent: Array<CreatePipChildren> = [];
 
         if (this.props.voiceBroadcastRecording) {
-            pipContent = this.createVoiceBroadcastRecordingPipContent(this.props.voiceBroadcastRecording);
+            pipContent = [this.createVoiceBroadcastRecordingPipContent(this.props.voiceBroadcastRecording)];
+        } else if (this.props.voiceBroadcastPreRecording) {
+            pipContent = [this.createVoiceBroadcastPreRecordingPipContent(this.props.voiceBroadcastPreRecording)];
+        } else if (this.props.voiceBroadcastPlayback) {
+            pipContent = [this.createVoiceBroadcastPlaybackPipContent(this.props.voiceBroadcastPlayback)];
         }
 
         if (this.state.primaryCall) {
             // get a ref to call inside the current scope
             const call = this.state.primaryCall;
-            pipContent = ({ onStartMoving, onResize }) => (
+            pipContent.push(({ onStartMoving, onResize }) => (
                 <LegacyCallView
                     onMouseDownOnHeader={onStartMoving}
                     call={call}
@@ -398,7 +394,7 @@ class PipView extends React.Component<IProps, IState> {
                     pipMode={pipMode}
                     onResize={onResize}
                 />
-            );
+            ));
         }
 
         if (this.state.showWidgetInPip) {
@@ -412,7 +408,7 @@ class PipView extends React.Component<IProps, IState> {
             const viewingCallRoom = this.state.viewedRoomId === roomId;
             const isCall = CallStore.instance.getActiveCall(roomId) !== null;
 
-            pipContent = ({ onStartMoving }) => (
+            pipContent.push(({ onStartMoving }) => (
                 <div className={pipViewClasses}>
                     <LegacyCallViewHeader
                         onPipMouseDown={(event) => {
@@ -432,10 +428,10 @@ class PipView extends React.Component<IProps, IState> {
                         movePersistedElement={this.movePersistedElement}
                     />
                 </div>
-            );
+            ));
         }
 
-        if (!!pipContent) {
+        if (pipContent.length) {
             return (
                 <PictureInPictureDragger
                     className="mx_LegacyCallPreview"

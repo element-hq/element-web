@@ -24,18 +24,22 @@ import PictureInPictureDragger, {
 describe("PictureInPictureDragger", () => {
     let renderResult: RenderResult;
 
-    const mkContent1: CreatePipChildren = () => {
-        return <div>content 1</div>;
-    };
+    const mkContent1: Array<CreatePipChildren> = [
+        () => {
+            return <div>content 1</div>;
+        },
+    ];
 
-    const mkContent2: CreatePipChildren = () => {
-        return (
-            <div>
-                content 2<br />
-                content 2.2
-            </div>
-        );
-    };
+    const mkContent2: Array<CreatePipChildren> = [
+        () => {
+            return (
+                <div>
+                    content 2<br />
+                    content 2.2
+                </div>
+            );
+        },
+    ];
 
     describe("when rendering the dragger with PiP content 1", () => {
         beforeEach(() => {
@@ -64,6 +68,18 @@ describe("PictureInPictureDragger", () => {
             it("should update the PiP content", () => {
                 expect(renderResult.container).toMatchSnapshot();
             });
+        });
+    });
+
+    describe("when rendering the dragger with PiP content 1 and 2", () => {
+        beforeEach(() => {
+            renderResult = render(
+                <PictureInPictureDragger draggable={true}>{[...mkContent1, ...mkContent2]}</PictureInPictureDragger>,
+            );
+        });
+
+        it("should render both contents", () => {
+            expect(renderResult.container).toMatchSnapshot();
         });
     });
 });

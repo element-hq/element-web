@@ -47,7 +47,7 @@ interface IChildrenOptions {
 
 interface IProps {
     className?: string;
-    children: CreatePipChildren;
+    children: Array<CreatePipChildren>;
     draggable: boolean;
     onDoubleClick?: () => void;
     onMove?: () => void;
@@ -208,6 +208,13 @@ export default class PictureInPictureDragger extends React.Component<IProps> {
             transform: `translateX(${this.translationX}px) translateY(${this.translationY}px)`,
         };
 
+        const children = this.props.children.map((create: CreatePipChildren) => {
+            return create({
+                onStartMoving: this.onStartMoving,
+                onResize: this.onResize,
+            });
+        });
+
         return (
             <aside
                 className={this.props.className}
@@ -215,10 +222,7 @@ export default class PictureInPictureDragger extends React.Component<IProps> {
                 ref={this.callViewWrapper}
                 onDoubleClick={this.props.onDoubleClick}
             >
-                {this.props.children({
-                    onStartMoving: this.onStartMoving,
-                    onResize: this.onResize,
-                })}
+                {children}
             </aside>
         );
     }
