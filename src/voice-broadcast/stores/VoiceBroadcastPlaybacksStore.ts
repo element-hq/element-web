@@ -37,7 +37,7 @@ export class VoiceBroadcastPlaybacksStore
     extends TypedEventEmitter<VoiceBroadcastPlaybacksStoreEvent, EventMap>
     implements IDestroyable
 {
-    private current: VoiceBroadcastPlayback | null;
+    private current: VoiceBroadcastPlayback | null = null;
 
     /** Playbacks indexed by their info event id. */
     private playbacks = new Map<string, VoiceBroadcastPlayback>();

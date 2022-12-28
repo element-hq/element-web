@@ -57,6 +57,7 @@ import {
 } from "../voice-broadcast";
 import { IRoomStateEventsActionPayload } from "../actions/MatrixActionCreators";
 import { showCantStartACallDialog } from "../voice-broadcast/utils/showCantStartACallDialog";
+import { pauseNonLiveBroadcastFromOtherRoom } from "../voice-broadcast/utils/pauseNonLiveBroadcastFromOtherRoom";
 
 const NUM_JOIN_RETRY = 5;
 
@@ -445,6 +446,7 @@ export class RoomViewStore extends EventEmitter {
             }
 
             if (room) {
+                pauseNonLiveBroadcastFromOtherRoom(room, this.stores.voiceBroadcastPlaybacksStore);
                 this.doMaybeSetCurrentVoiceBroadcastPlayback(room);
             }
         } else if (payload.room_alias) {
