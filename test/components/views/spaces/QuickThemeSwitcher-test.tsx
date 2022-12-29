@@ -15,16 +15,14 @@ limitations under the License.
 */
 
 import React from "react";
-// eslint-disable-next-line deprecate/import
-import { mount } from "enzyme";
+import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { mocked } from "jest-mock";
-import { act } from "react-dom/test-utils";
 
 import QuickThemeSwitcher from "../../../../src/components/views/spaces/QuickThemeSwitcher";
 import { getOrderedThemes } from "../../../../src/theme";
 import ThemeChoicePanel from "../../../../src/components/views/settings/ThemeChoicePanel";
 import SettingsStore from "../../../../src/settings/SettingsStore";
-import { findById } from "../../../test-utils";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import dis from "../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../src/dispatcher/actions";
@@ -52,7 +50,7 @@ describe("<QuickThemeSwitcher />", () => {
     const defaultProps = {
         requestClose: jest.fn(),
     };
-    const getComponent = (props = {}) => mount(<QuickThemeSwitcher {...defaultProps} {...props} />);
+    const renderComponent = (props = {}) => render(<QuickThemeSwitcher {...defaultProps} {...props} />);
 
     beforeEach(() => {
         mocked(getOrderedThemes)
@@ -69,27 +67,21 @@ describe("<QuickThemeSwitcher />", () => {
         mocked(dis).dispatch.mockClear();
     });
 
-    const getSelectedLabel = (component) =>
-        findById(component, "mx_QuickSettingsButton_themePickerDropdown_value").text();
-
-    const openDropdown = (component) =>
-        act(async () => {
-            component.find(".mx_Dropdown_input").at(0).simulate("click");
-            component.setProps({});
+    const selectFromDropdown = async (getByTextArg: RegExp | string) => {
+        const dropdown = screen.getByRole("button", { name: "Space selection" });
+        await userEvent.click(dropdown);
+        await waitFor(() => {
+            expect(dropdown).toHaveAttribute("aria-expanded", "true");
         });
-    const getOption = (component, themeId) =>
-        findById(component, `mx_QuickSettingsButton_themePickerDropdown__${themeId}`).at(0);
-
-    const selectOption = async (component, themeId: string) => {
-        await openDropdown(component);
-        await act(async () => {
-            getOption(component, themeId).simulate("click");
+        await userEvent.click(screen.getByText(getByTextArg));
+        return waitFor(() => {
+            expect(dropdown).toHaveAttribute("aria-expanded", "false");
         });
     };
 
     it("renders dropdown correctly when light theme is selected", () => {
-        const component = getComponent();
-        expect(getSelectedLabel(component)).toEqual("Light");
+        renderComponent();
+        expect(screen.getByText("Light")).toBeInTheDocument();
     });
 
     it("renders dropdown correctly when use system theme is truthy", () => {
@@ -97,15 +89,15 @@ describe("<QuickThemeSwitcher />", () => {
             theme: "light",
             useSystemTheme: true,
         });
-        const component = getComponent();
-        expect(getSelectedLabel(component)).toEqual("Match system");
+        renderComponent();
+        expect(screen.getByText("Match system")).toBeInTheDocument();
     });
 
     it("updates settings when match system is selected", async () => {
         const requestClose = jest.fn();
-        const component = getComponent({ requestClose });
+        renderComponent({ requestClose });
 
-        await selectOption(component, "MATCH_SYSTEM_THEME_ID");
+        await selectFromDropdown(/match system/i);
 
         expect(SettingsStore.setValue).toHaveBeenCalledTimes(1);
         expect(SettingsStore.setValue).toHaveBeenCalledWith("use_system_theme", null, SettingLevel.DEVICE, true);
@@ -117,9 +109,9 @@ describe("<QuickThemeSwitcher />", () => {
     it("updates settings when a theme is selected", async () => {
         // ie not match system
         const requestClose = jest.fn();
-        const component = getComponent({ requestClose });
+        renderComponent({ requestClose });
 
-        await selectOption(component, "dark");
+        await selectFromDropdown(/dark/i);
 
         expect(SettingsStore.setValue).toHaveBeenCalledWith("use_system_theme", null, SettingLevel.DEVICE, false);
         expect(SettingsStore.setValue).toHaveBeenCalledWith("theme", null, SettingLevel.DEVICE, "dark");
@@ -131,9 +123,9 @@ describe("<QuickThemeSwitcher />", () => {
     it("rechecks theme when setting theme fails", async () => {
         mocked(SettingsStore.setValue).mockRejectedValue("oops");
         const requestClose = jest.fn();
-        const component = getComponent({ requestClose });
+        renderComponent({ requestClose });
 
-        await selectOption(component, "MATCH_SYSTEM_THEME_ID");
+        await selectFromDropdown(/match system/i);
 
         expect(dis.dispatch).toHaveBeenCalledWith({ action: Action.RecheckTheme });
         expect(requestClose).toHaveBeenCalled();
