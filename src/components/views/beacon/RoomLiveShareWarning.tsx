@@ -103,7 +103,7 @@ const RoomLiveShareWarningInner: React.FC<RoomLiveShareWarningInnerProps> = ({ l
 
             <AccessibleButton
                 className="mx_RoomLiveShareWarning_stopButton"
-                data-test-id="room-live-share-primary-button"
+                data-testid="room-live-share-primary-button"
                 onClick={stopPropagationWrapper(onButtonClick)}
                 kind="danger"
                 element="button"
@@ -113,7 +113,7 @@ const RoomLiveShareWarningInner: React.FC<RoomLiveShareWarningInnerProps> = ({ l
             </AccessibleButton>
             {hasLocationPublishError && (
                 <AccessibleButton
-                    data-test-id="room-live-share-wire-error-close-button"
+                    data-testid="room-live-share-wire-error-close-button"
                     title={_t("Stop and close")}
                     element="button"
                     className="mx_RoomLiveShareWarning_closeButton"
