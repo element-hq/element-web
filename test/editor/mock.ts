@@ -16,17 +16,18 @@ limitations under the License.
 
 import { Room, MatrixClient } from "matrix-js-sdk/src/matrix";
 
-import AutocompleteWrapperModel from "../../src/editor/autocomplete";
-import { PartCreator } from "../../src/editor/parts";
+import AutocompleteWrapperModel, { UpdateCallback } from "../../src/editor/autocomplete";
+import { Caret } from "../../src/editor/caret";
+import { PillPart, Part, PartCreator } from "../../src/editor/parts";
 import DocumentPosition from "../../src/editor/position";
 
 class MockAutoComplete {
     public _updateCallback;
     public _partCreator;
     public _completions;
-    public _part;
+    public _part: Part | null;
 
-    constructor(updateCallback, partCreator, completions) {
+    constructor(updateCallback: UpdateCallback, partCreator: PartCreator, completions: PillPart[]) {
         this._updateCallback = updateCallback;
         this._partCreator = partCreator;
         this._completions = completions;
@@ -39,13 +40,13 @@ class MockAutoComplete {
 
     tryComplete(close = true) {
         const matches = this._completions.filter((o) => {
-            return o.resourceId.startsWith(this._part.text);
+            return this._part && o.resourceId.startsWith(this._part.text);
         });
-        if (matches.length === 1 && this._part.text.length > 1) {
+        if (matches.length === 1 && this._part && this._part.text.length > 1) {
             const match = matches[0];
             let pill;
             if (match.resourceId[0] === "@") {
-                pill = this._partCreator.userPill(match.label, match.resourceId);
+                pill = this._partCreator.userPill(match.text, match.resourceId);
             } else {
                 pill = this._partCreator.roomPill(match.resourceId);
             }
@@ -54,7 +55,7 @@ class MockAutoComplete {
     }
 
     // called by EditorModel when typing into pill-candidate part
-    onPartUpdate(part, pos) {
+    onPartUpdate(part: Part, pos: DocumentPosition) {
         this._part = part;
     }
 }
@@ -67,9 +68,9 @@ class MockRoom {
     }
 }
 
-export function createPartCreator(completions = []) {
-    const autoCompleteCreator = (partCreator) => {
-        return (updateCallback) =>
+export function createPartCreator(completions: PillPart[] = []) {
+    const autoCompleteCreator = (partCreator: PartCreator) => {
+        return (updateCallback: UpdateCallback) =>
             new MockAutoComplete(updateCallback, partCreator, completions) as unknown as AutocompleteWrapperModel;
     };
     const room = new MockRoom() as unknown as Room;
@@ -81,11 +82,16 @@ export function createPartCreator(completions = []) {
 }
 
 export function createRenderer() {
-    const render = (c: DocumentPosition) => {
+    const render = (c: Caret) => {
         render.caret = c;
         render.count += 1;
     };
     render.count = 0;
-    render.caret = null as DocumentPosition;
+    render.caret = null as unknown as Caret;
     return render;
+}
+
+// in many tests we need to narrow the caret type
+export function isDocumentPosition(caret: Caret): caret is DocumentPosition {
+    return caret instanceof DocumentPosition;
 }
