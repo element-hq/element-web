@@ -643,7 +643,7 @@ describe("<SessionManagerTab />", () => {
             });
 
             fireEvent.click(getByTestId("current-session-menu"));
-            expect(queryByLabelText("Sign out all other sessions")).toBeFalsy();
+            expect(queryByLabelText("Sign out of all other sessions")).toBeFalsy();
         });
 
         it("signs out of all other devices from current session context menu", async () => {
@@ -657,7 +657,7 @@ describe("<SessionManagerTab />", () => {
             });
 
             fireEvent.click(getByTestId("current-session-menu"));
-            fireEvent.click(getByLabelText("Sign out all other sessions"));
+            fireEvent.click(getByLabelText("Sign out of all other sessions (2)"));
             await confirmSignout(getByTestId);
 
             // other devices deleted, excluding current device
@@ -927,6 +927,27 @@ describe("<SessionManagerTab />", () => {
                 );
 
                 resolveDeleteRequest?.();
+            });
+
+            it("signs out of all other devices from other sessions context menu", async () => {
+                mockClient.getDevices.mockResolvedValue({
+                    devices: [alicesDevice, alicesMobileDevice, alicesOlderMobileDevice],
+                });
+                const { getByTestId, getByLabelText } = render(getComponent());
+
+                await act(async () => {
+                    await flushPromises();
+                });
+
+                fireEvent.click(getByTestId("other-sessions-menu"));
+                fireEvent.click(getByLabelText("Sign out of 2 sessions"));
+                await confirmSignout(getByTestId);
+
+                // other devices deleted, excluding current device
+                expect(mockClient.deleteMultipleDevices).toHaveBeenCalledWith(
+                    [alicesMobileDevice.device_id, alicesOlderMobileDevice.device_id],
+                    undefined,
+                );
             });
         });
     });
