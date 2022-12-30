@@ -303,6 +303,7 @@ export async function uploadFile(
             progressHandler,
             abortController,
             includeFilename: false,
+            type: "application/octet-stream",
         });
         if (abortController.signal.aborted) throw new UploadCanceledError();
 
