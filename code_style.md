@@ -51,49 +51,28 @@ in that order.
 
 Unless otherwise specified, the following applies to all code:
 
-1. 120 character limit per line. Match existing code in the file if it is using a lower guide.
-2. A tab/indentation is 4 spaces.
-3. Newlines are Unix.
-4. A file has a single empty line at the end.
-5. Lines are trimmed of all excess whitespace, including blank lines.
-6. Long lines are broken up for readability.
+1. Files must be formatted with Prettier.
+2. 120 character limit per line. Match existing code in the file if it is using a lower guide.
+3. A tab/indentation is 4 spaces.
+4. Newlines are Unix.
+5. A file has a single empty line at the end.
+6. Lines are trimmed of all excess whitespace, including blank lines.
+7. Long lines are broken up for readability.
 
 ## TypeScript / JavaScript {#typescript-javascript}
 
 1. Write TypeScript. Turn JavaScript into TypeScript when working in the area.
 2. Use named exports.
-3. Break long lines to appear as follows:
-
-    ```typescript
-    // Function arguments
-    function doThing(arg1: string, arg2: string, arg3: string): boolean {
-        return !!arg1 && !!arg2 && !!arg3;
-    }
-
-    // Calling a function
-    doThing("String 1", "String 2", "String 3");
-
-    // Reduce line verbosity when possible/reasonable
-    doThing("String1", "String 2", "A much longer string 3");
-
-    // Chaining function calls
-    something
-        .doThing()
-        .doOtherThing()
-        .doMore()
-        .somethingElse((it) => useIt(it));
-    ```
-
-4. Use semicolons for block/line termination.
+3. Use semicolons for block/line termination.
     1. Except when defining interfaces, classes, and non-arrow functions specifically.
-5. When a statement's body is a single line, it may be written without curly braces, so long as the body is placed on
+4. When a statement's body is a single line, it must be written without curly braces, so long as the body is placed on
    the same line as the statement.
 
     ```typescript
     if (x) doThing();
     ```
 
-6. Blocks for `if`, `for`, `switch` and so on must have a space surrounding the condition, but not
+5. Blocks for `if`, `for`, `switch` and so on must have a space surrounding the condition, but not
    within the condition.
 
     ```typescript
@@ -102,55 +81,17 @@ Unless otherwise specified, the following applies to all code:
     }
     ```
 
-7. Mixing of logical operands requires brackets to explicitly define boolean logic.
-
-    ```typescript
-    if ((a > b && b > c) || d < e) return true;
-    ```
-
-8. Ternaries use the same rules as `if` statements, plus the following:
-
-    ```typescript
-    // Single line is acceptable
-    const val = a > b ? doThing() : doOtherThing();
-
-    // Multiline is also okay
-    const val = a > b ? doThing() : doOtherThing();
-
-    // Use brackets when using multiple conditions.
-    // Maximum 3 conditions, prefer 2 or less.
-    const val = a > b && b > c ? doThing() : doOtherThing();
-    ```
-
-9. lowerCamelCase is used for function and variable naming.
-10. UpperCamelCase is used for general naming.
-11. Interface names should not be marked with an uppercase `I`.
-12. One variable declaration per line.
-13. If a variable is not receiving a value on declaration, its type must be defined.
+6. lowerCamelCase is used for function and variable naming.
+7. UpperCamelCase is used for general naming.
+8. Interface names should not be marked with an uppercase `I`.
+9. One variable declaration per line.
+10. If a variable is not receiving a value on declaration, its type must be defined.
 
     ```typescript
     let errorMessage: Optional<string>;
     ```
 
-14. Objects, arrays, enums and so on must have each line terminated with a comma:
-
-    ```typescript
-    const obj = {
-        prop: 1,
-        else: 2,
-    };
-
-    const arr = ["one", "two"];
-
-    enum Thing {
-        Foo,
-        Bar,
-    }
-
-    doThing("arg1", "arg2");
-    ```
-
-15. Objects can use shorthand declarations, including mixing of types.
+11. Objects can use shorthand declarations, including mixing of types.
 
     ```typescript
     {
@@ -161,7 +102,7 @@ Unless otherwise specified, the following applies to all code:
     { room, prop: this.prop }
     ```
 
-16. Object keys should always be non-strings when possible.
+12. Object keys should always be non-strings when possible.
 
     ```typescript
     {
@@ -171,23 +112,23 @@ Unless otherwise specified, the following applies to all code:
     }
     ```
 
-17. Explicitly cast to a boolean.
+13. Explicitly cast to a boolean.
 
     ```typescript
     !!stringVar || Boolean(stringVar);
     ```
 
-18. Use `switch` statements when checking against more than a few enum-like values.
-19. Use `const` for constants, `let` for mutability.
-20. Describe types exhaustively (ensure noImplictAny would pass).
+14. Use `switch` statements when checking against more than a few enum-like values.
+15. Use `const` for constants, `let` for mutability.
+16. Describe types exhaustively (ensure noImplictAny would pass).
     1. Notable exceptions are arrow functions used as parameters, when a void return type is
        obvious, and when declaring and assigning a variable in the same line.
-21. Declare member visibility (public/private/protected).
-22. Private members are private and not prefixed unless required for naming conflicts.
+17. Declare member visibility (public/private/protected).
+18. Private members are private and not prefixed unless required for naming conflicts.
     1. Convention is to use an underscore or the word "internal" to denote conflicted member names.
     2. "Conflicted" typically refers to a getter which wants the same name as the underlying variable.
-23. Prefer readonly members over getters backed by a variable, unless an internal setter is required.
-24. Prefer Interfaces for object definitions, and types for parameter-value-only declarations.
+19. Prefer readonly members over getters backed by a variable, unless an internal setter is required.
+20. Prefer Interfaces for object definitions, and types for parameter-value-only declarations.
 
     1. Note that an explicit type is optional if not expected to be used outside of the function call,
        unlike in this example:
@@ -204,9 +145,9 @@ Unless otherwise specified, the following applies to all code:
         }
         ```
 
-25. Variables/properties which are `public static` should also be `readonly` when possible.
-26. Interface and type properties are terminated with semicolons, not commas.
-27. Prefer arrow formatting when declaring functions for interfaces/types:
+21. Variables/properties which are `public static` should also be `readonly` when possible.
+22. Interface and type properties are terminated with semicolons, not commas.
+23. Prefer arrow formatting when declaring functions for interfaces/types:
 
     ```typescript
     interface Test {
@@ -214,13 +155,13 @@ Unless otherwise specified, the following applies to all code:
     }
     ```
 
-28. Prefer a type definition over an inline type. For example, define an interface.
-29. Always prefer to add types or declare a type over the use of `any`. Prefer inferred types
+24. Prefer a type definition over an inline type. For example, define an interface.
+25. Always prefer to add types or declare a type over the use of `any`. Prefer inferred types
     when they are not `any`.
     1. When using `any`, a comment explaining why must be present.
-30. `import` should be used instead of `require`, as `require` does not have types.
-31. Export only what can be reused.
-32. Prefer a type like `Optional<X>` (`type Optional<T> = T | null | undefined`) instead
+26. `import` should be used instead of `require`, as `require` does not have types.
+27. Export only what can be reused.
+28. Prefer a type like `Optional<X>` (`type Optional<T> = T | null | undefined`) instead
     of truly optional parameters.
 
     1. A notable exception is when the likelihood of a bug is minimal, such as when a function
@@ -238,12 +179,12 @@ Unless otherwise specified, the following applies to all code:
         }
         ```
 
-33. There should be approximately one interface, class, or enum per file unless the file is named
+29. There should be approximately one interface, class, or enum per file unless the file is named
     "types.ts", "global.d.ts", or ends with "-types.ts".
     1. The file name should match the interface, class, or enum name.
-34. Bulk functions can be declared in a single file, though named as "foo-utils.ts" or "utils/foo.ts".
-35. Imports are grouped by external module imports first, then by internal imports.
-36. File ordering is not strict, but should generally follow this sequence:
+30. Bulk functions can be declared in a single file, though named as "foo-utils.ts" or "utils/foo.ts".
+31. Imports are grouped by external module imports first, then by internal imports.
+32. File ordering is not strict, but should generally follow this sequence:
     1. Licence header
     2. Imports
     3. Constants
@@ -258,16 +199,16 @@ Unless otherwise specified, the following applies to all code:
         5. Protected and abstract functions
         6. Public/private functions
         7. Public/protected/private static functions
-37. Variable names should be noticeably unique from their types. For example, "str: string" instead
+33. Variable names should be noticeably unique from their types. For example, "str: string" instead
     of "string: string".
-38. Use double quotes to enclose strings. You may use single quotes if the string contains double quotes.
+34. Use double quotes to enclose strings. You may use single quotes if the string contains double quotes.
 
     ```typescript
     const example1 = "simple string";
     const example2 = 'string containing "double quotes"';
     ```
 
-39. Prefer async-await to promise-chaining
+35. Prefer async-await to promise-chaining
 
     ```typescript
     async function () {
@@ -313,45 +254,21 @@ Inheriting all the rules of TypeScript, the following additionally apply:
 10. Interdependence between stores should be kept to a minimum. Break functions and constants out to utilities
     if at all possible.
 11. A component should only use CSS class names in line with the component name.
+
     1. When knowingly using a class name from another component, document it.
-12. Break components over multiple lines like so:
 
-    ```typescript
-    function render() {
-        return <Component prop1="test" prop2={this.state.variable} />;
-
-        // or
-
-        return <Component prop1="test" prop2={this.state.variable} />;
-
-        // or if children are needed (infer parens usage)
-
-        return (
-            <Component prop1="test" prop2={this.state.variable}>
-                {_t("Short string here")}
-            </Component>
-        );
-
-        return (
-            <Component prop1="test" prop2={this.state.variable}>
-                {_t("Longer string here")}
-            </Component>
-        );
-    }
-    ```
-
-13. Curly braces within JSX should be padded with a space, however properties on those components should not.
+12. Curly braces within JSX should be padded with a space, however properties on those components should not.
     See above code example.
-14. Functions used as properties should either be defined on the class or stored in a variable. They should not
+13. Functions used as properties should either be defined on the class or stored in a variable. They should not
     be inline unless mocking/short-circuiting the value.
-15. Prefer hooks (functional components) over class components. Be consistent with the existing area if unsure
+14. Prefer hooks (functional components) over class components. Be consistent with the existing area if unsure
     which should be used.
     1. Unless the component is considered a "structure", in which case use classes.
-16. Write more views than structures. Structures are chunks of functionality like MatrixChat while views are
+15. Write more views than structures. Structures are chunks of functionality like MatrixChat while views are
     isolated components.
-17. Components should serve a single, or near-single, purpose.
-18. Prefer to derive information from component properties rather than establish state.
-19. Do not use `React.Component::forceUpdate`.
+16. Components should serve a single, or near-single, purpose.
+17. Prefer to derive information from component properties rather than establish state.
+18. Do not use `React.Component::forceUpdate`.
 
 ## Stylesheets (\*.pcss = PostCSS + Plugins)
 
