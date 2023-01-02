@@ -79,6 +79,7 @@ jest.mock("../../src/utils/DMRoomMap", () => {
 describe("RoomViewStore", function () {
     const userId = "@alice:server";
     const roomId = "!randomcharacters:aser.ver";
+    const roomId2 = "!room2:example.com";
     // we need to change the alias to ensure cache misses as the cache exists
     // through all tests.
     let alias = "#somealias2:aser.ver";
@@ -87,9 +88,14 @@ describe("RoomViewStore", function () {
         getRoom: jest.fn(),
         getRoomIdForAlias: jest.fn(),
         isGuest: jest.fn(),
-        getSafeUserId: jest.fn(),
+        getUserId: jest.fn().mockReturnValue(userId),
+        getSafeUserId: jest.fn().mockReturnValue(userId),
+        getDeviceId: jest.fn().mockReturnValue("ABC123"),
+        sendStateEvent: jest.fn().mockResolvedValue({}),
+        supportsExperimentalThreads: jest.fn(),
     });
     const room = new Room(roomId, mockClient, userId);
+    const room2 = new Room(roomId2, mockClient, userId);
 
     const viewCall = async (): Promise<void> => {
         dis.dispatch<ViewRoomPayload>({
@@ -110,7 +116,11 @@ describe("RoomViewStore", function () {
         jest.clearAllMocks();
         mockClient.credentials = { userId: userId };
         mockClient.joinRoom.mockResolvedValue(room);
-        mockClient.getRoom.mockReturnValue(room);
+        mockClient.getRoom.mockImplementation((roomId: string): Room | null => {
+            if (roomId === room.roomId) return room;
+            if (roomId === room2.roomId) return room2;
+            return null;
+        });
         mockClient.isGuest.mockReturnValue(false);
         mockClient.getSafeUserId.mockReturnValue(userId);
 
@@ -118,6 +128,7 @@ describe("RoomViewStore", function () {
         dis = new MatrixDispatcher();
         slidingSyncManager = new MockSlidingSyncManager();
         stores = new TestSdkContext();
+        stores.client = mockClient;
         stores._SlidingSyncManager = slidingSyncManager;
         stores._PosthogAnalytics = new MockPosthogAnalytics();
         stores._SpaceStore = new MockSpaceStore();
@@ -142,7 +153,6 @@ describe("RoomViewStore", function () {
     });
 
     it("emits ActiveRoomChanged when the viewed room changes", async () => {
-        const roomId2 = "!roomid:2";
         dis.dispatch({ action: Action.ViewRoom, room_id: roomId });
         let payload = (await untilDispatch(Action.ActiveRoomChanged, dis)) as ActiveRoomChangedPayload;
         expect(payload.newRoomId).toEqual(roomId);
@@ -155,7 +165,6 @@ describe("RoomViewStore", function () {
     });
 
     it("invokes room activity listeners when the viewed room changes", async () => {
-        const roomId2 = "!roomid:2";
         const callback = jest.fn();
         roomViewStore.addRoomListener(roomId, callback);
         dis.dispatch({ action: Action.ViewRoom, room_id: roomId });
@@ -225,7 +234,6 @@ describe("RoomViewStore", function () {
     });
 
     it("swaps to the replied event room if it is not the current room", async () => {
-        const roomId2 = "!room2:bar";
         dis.dispatch({ action: Action.ViewRoom, room_id: roomId });
         await untilDispatch(Action.ActiveRoomChanged, dis);
         const replyToEvent = {
@@ -294,6 +302,41 @@ describe("RoomViewStore", function () {
             await viewCall();
             expect(Modal.createDialog).toMatchSnapshot();
             expect(roomViewStore.isViewingCall()).toBe(false);
+        });
+
+        describe("and viewing a room with a broadcast", () => {
+            beforeEach(async () => {
+                const broadcastEvent = mkVoiceBroadcastInfoStateEvent(
+                    roomId2,
+                    VoiceBroadcastInfoState.Started,
+                    mockClient.getSafeUserId(),
+                    "ABC123",
+                );
+                room2.addLiveEvents([broadcastEvent]);
+
+                stores.voiceBroadcastPlaybacksStore.getByInfoEvent(broadcastEvent, mockClient);
+                dis.dispatch({ action: Action.ViewRoom, room_id: roomId2 });
+                await untilDispatch(Action.ActiveRoomChanged, dis);
+            });
+
+            it("should continue recording", () => {
+                expect(stores.voiceBroadcastPlaybacksStore.getCurrent()).toBeNull();
+                expect(stores.voiceBroadcastRecordingsStore.getCurrent()?.getState()).toBe(
+                    VoiceBroadcastInfoState.Started,
+                );
+            });
+
+            describe("and stopping the recording", () => {
+                beforeEach(async () => {
+                    await stores.voiceBroadcastRecordingsStore.getCurrent()?.stop();
+                    // check test precondition
+                    expect(stores.voiceBroadcastRecordingsStore.getCurrent()).toBeNull();
+                });
+
+                it("should view the broadcast", () => {
+                    expect(stores.voiceBroadcastPlaybacksStore.getCurrent()?.infoEvent.getRoomId()).toBe(roomId2);
+                });
+            });
         });
     });
 
