@@ -29,6 +29,7 @@ import {
 } from "../../../../src/voice-broadcast";
 import { stubClient } from "../../../test-utils";
 import { mkVoiceBroadcastInfoStateEvent } from "../../utils/test-utils";
+import { SdkContextClass } from "../../../../src/contexts/SDKContext";
 
 // mock RoomAvatar, because it is doing too much fancy stuff
 jest.mock("../../../../src/components/views/avatars/RoomAvatar", () => ({
@@ -60,7 +61,11 @@ describe("<VoiceBroadcastSmallPlaybackBody />", () => {
     });
 
     beforeEach(() => {
-        playback = new VoiceBroadcastPlayback(infoEvent, client);
+        playback = new VoiceBroadcastPlayback(
+            infoEvent,
+            client,
+            SdkContextClass.instance.voiceBroadcastRecordingsStore,
+        );
         jest.spyOn(playback, "toggle").mockImplementation(() => Promise.resolve());
         jest.spyOn(playback, "getLiveness");
         jest.spyOn(playback, "getState");

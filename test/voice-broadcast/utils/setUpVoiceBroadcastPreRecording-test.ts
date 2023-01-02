@@ -80,10 +80,10 @@ describe("setUpVoiceBroadcastPreRecording", () => {
         );
         preRecording = null;
         preRecordingStore = new VoiceBroadcastPreRecordingStore();
-        playback = new VoiceBroadcastPlayback(infoEvent, client);
-        jest.spyOn(playback, "pause");
-        playbacksStore = new VoiceBroadcastPlaybacksStore();
         recordingsStore = new VoiceBroadcastRecordingsStore();
+        playback = new VoiceBroadcastPlayback(infoEvent, client, recordingsStore);
+        jest.spyOn(playback, "pause");
+        playbacksStore = new VoiceBroadcastPlaybacksStore(recordingsStore);
     });
 
     describe("when the preconditions fail", () => {

@@ -26,6 +26,7 @@ import {
     VoiceBroadcastRecording,
     VoiceBroadcastPlaybackBody,
     VoiceBroadcastPlayback,
+    VoiceBroadcastRecordingsStore,
 } from "../../../src/voice-broadcast";
 import { stubClient, wrapInSdkContext } from "../../test-utils";
 import { mkVoiceBroadcastInfoStateEvent } from "../utils/test-utils";
@@ -91,7 +92,7 @@ describe("VoiceBroadcastBody", () => {
         );
         room.addEventsToTimeline([infoEvent], true, room.getLiveTimeline());
         testRecording = new VoiceBroadcastRecording(infoEvent, client);
-        testPlayback = new VoiceBroadcastPlayback(infoEvent, client);
+        testPlayback = new VoiceBroadcastPlayback(infoEvent, client, new VoiceBroadcastRecordingsStore());
         mocked(VoiceBroadcastRecordingBody).mockImplementation(({ recording }): ReactElement | null => {
             if (testRecording === recording) {
                 return <div data-testid="voice-broadcast-recording-body" />;

@@ -132,7 +132,7 @@ describe("RoomViewStore", function () {
         stores._SlidingSyncManager = slidingSyncManager;
         stores._PosthogAnalytics = new MockPosthogAnalytics();
         stores._SpaceStore = new MockSpaceStore();
-        stores._VoiceBroadcastPlaybacksStore = new VoiceBroadcastPlaybacksStore();
+        stores._VoiceBroadcastPlaybacksStore = new VoiceBroadcastPlaybacksStore(stores.voiceBroadcastRecordingsStore);
         roomViewStore = new RoomViewStore(dis, stores);
         stores._RoomViewStore = roomViewStore;
     });
@@ -271,6 +271,7 @@ describe("RoomViewStore", function () {
                     "d42",
                 ),
                 mockClient,
+                stores.voiceBroadcastRecordingsStore,
             );
             stores.voiceBroadcastPlaybacksStore.setCurrent(voiceBroadcastPlayback);
             jest.spyOn(voiceBroadcastPlayback, "pause").mockImplementation();

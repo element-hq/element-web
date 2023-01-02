@@ -20,6 +20,7 @@ import {
     VoiceBroadcastInfoState,
     VoiceBroadcastPlayback,
     VoiceBroadcastPlaybacksStore,
+    VoiceBroadcastRecordingsStore,
 } from "../../../src/voice-broadcast";
 import { pauseNonLiveBroadcastFromOtherRoom } from "../../../src/voice-broadcast/utils/pauseNonLiveBroadcastFromOtherRoom";
 import { stubClient } from "../../test-utils";
@@ -32,6 +33,7 @@ describe("pauseNonLiveBroadcastFromOtherRoom", () => {
     let client: MatrixClient;
     let playback: VoiceBroadcastPlayback;
     let playbacks: VoiceBroadcastPlaybacksStore;
+    let recordings: VoiceBroadcastRecordingsStore;
 
     const mkPlayback = (infoState: VoiceBroadcastInfoState, roomId: string): VoiceBroadcastPlayback => {
         const infoEvent = mkVoiceBroadcastInfoStateEvent(
@@ -40,7 +42,7 @@ describe("pauseNonLiveBroadcastFromOtherRoom", () => {
             client.getSafeUserId(),
             client.getDeviceId()!,
         );
-        const playback = new VoiceBroadcastPlayback(infoEvent, client);
+        const playback = new VoiceBroadcastPlayback(infoEvent, client, recordings);
         jest.spyOn(playback, "pause");
         playbacks.setCurrent(playback);
         return playback;
@@ -49,7 +51,8 @@ describe("pauseNonLiveBroadcastFromOtherRoom", () => {
     beforeEach(() => {
         client = stubClient();
         room = new Room(roomId, client, client.getSafeUserId());
-        playbacks = new VoiceBroadcastPlaybacksStore();
+        recordings = new VoiceBroadcastRecordingsStore();
+        playbacks = new VoiceBroadcastPlaybacksStore(recordings);
         jest.spyOn(playbacks, "clearCurrent");
     });
 

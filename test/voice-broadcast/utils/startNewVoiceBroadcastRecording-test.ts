@@ -84,7 +84,7 @@ describe("startNewVoiceBroadcastRecording", () => {
             skey: "",
         });
 
-        playbacksStore = new VoiceBroadcastPlaybacksStore();
+        playbacksStore = new VoiceBroadcastPlaybacksStore(recordingsStore);
         recordingsStore = {
             setCurrent: jest.fn(),
             getCurrent: jest.fn(),
@@ -112,7 +112,7 @@ describe("startNewVoiceBroadcastRecording", () => {
             let playback: VoiceBroadcastPlayback;
 
             beforeEach(() => {
-                playback = new VoiceBroadcastPlayback(infoEvent, client);
+                playback = new VoiceBroadcastPlayback(infoEvent, client, recordingsStore);
                 jest.spyOn(playback, "pause");
                 playbacksStore.setCurrent(playback);
             });

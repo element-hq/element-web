@@ -36,6 +36,8 @@ import {
     VoiceBroadcastInfoEventType,
     VoiceBroadcastInfoState,
     VoiceBroadcastInfoEventContent,
+    VoiceBroadcastRecordingsStore,
+    showConfirmListenBroadcastStopCurrentDialog,
 } from "..";
 import { RelationsHelper, RelationsHelperEvent } from "../../events/RelationsHelper";
 import { VoiceBroadcastChunkEvents } from "../utils/VoiceBroadcastChunkEvents";
@@ -86,7 +88,7 @@ export class VoiceBroadcastPlayback
     public readonly liveData = new SimpleObservable<number[]>();
     private liveness: VoiceBroadcastLiveness = "not-live";
 
-    // set vial addInfoEvent() in constructor
+    // set via addInfoEvent() in constructor
     private infoState!: VoiceBroadcastInfoState;
     private lastInfoEvent!: MatrixEvent;
 
@@ -94,7 +96,11 @@ export class VoiceBroadcastPlayback
     private chunkRelationHelper!: RelationsHelper;
     private infoRelationHelper!: RelationsHelper;
 
-    public constructor(public readonly infoEvent: MatrixEvent, private client: MatrixClient) {
+    public constructor(
+        public readonly infoEvent: MatrixEvent,
+        private client: MatrixClient,
+        private recordings: VoiceBroadcastRecordingsStore,
+    ) {
         super();
         this.addInfoEvent(this.infoEvent);
         this.infoEvent.on(MatrixEventEvent.BeforeRedaction, this.onBeforeRedaction);
@@ -399,6 +405,21 @@ export class VoiceBroadcastPlayback
     }
 
     public async start(): Promise<void> {
+        if (this.state === VoiceBroadcastPlaybackState.Playing) return;
+
+        const currentRecording = this.recordings.getCurrent();
+
+        if (currentRecording && currentRecording.getState() !== VoiceBroadcastInfoState.Stopped) {
+            const shouldStopRecording = await showConfirmListenBroadcastStopCurrentDialog();
+
+            if (!shouldStopRecording) {
+                // keep recording
+                return;
+            }
+
+            await this.recordings.getCurrent()?.stop();
+        }
+
         const chunkEvents = this.chunkEvents.getEvents();
 
         const toPlay =

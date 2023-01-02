@@ -66,8 +66,8 @@ describe("VoiceBroadcastPreRecordingPip", () => {
         client = stubClient();
         room = new Room("!room@example.com", client, client.getUserId() || "");
         sender = new RoomMember(room.roomId, client.getUserId() || "");
-        playbacksStore = new VoiceBroadcastPlaybacksStore();
         recordingsStore = new VoiceBroadcastRecordingsStore();
+        playbacksStore = new VoiceBroadcastPlaybacksStore(recordingsStore);
         mocked(requestMediaPermissions).mockResolvedValue({
             getTracks: (): Array<MediaStreamTrack> => [],
         } as unknown as MediaStream);

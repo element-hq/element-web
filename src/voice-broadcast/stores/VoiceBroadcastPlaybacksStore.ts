@@ -17,7 +17,12 @@ limitations under the License.
 import { MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { TypedEventEmitter } from "matrix-js-sdk/src/models/typed-event-emitter";
 
-import { VoiceBroadcastPlayback, VoiceBroadcastPlaybackEvent, VoiceBroadcastPlaybackState } from "..";
+import {
+    VoiceBroadcastPlayback,
+    VoiceBroadcastPlaybackEvent,
+    VoiceBroadcastPlaybackState,
+    VoiceBroadcastRecordingsStore,
+} from "..";
 import { IDestroyable } from "../../utils/IDestroyable";
 
 export enum VoiceBroadcastPlaybacksStoreEvent {
@@ -42,7 +47,7 @@ export class VoiceBroadcastPlaybacksStore
     /** Playbacks indexed by their info event id. */
     private playbacks = new Map<string, VoiceBroadcastPlayback>();
 
-    public constructor() {
+    public constructor(private recordings: VoiceBroadcastRecordingsStore) {
         super();
     }
 
@@ -69,7 +74,7 @@ export class VoiceBroadcastPlaybacksStore
         const infoEventId = infoEvent.getId();
 
         if (!this.playbacks.has(infoEventId)) {
-            this.addPlayback(new VoiceBroadcastPlayback(infoEvent, client));
+            this.addPlayback(new VoiceBroadcastPlayback(infoEvent, client, this.recordings));
         }
 
         return this.playbacks.get(infoEventId);

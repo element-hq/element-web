@@ -172,7 +172,7 @@ export class SdkContextClass {
 
     public get voiceBroadcastPlaybacksStore(): VoiceBroadcastPlaybacksStore {
         if (!this._VoiceBroadcastPlaybacksStore) {
-            this._VoiceBroadcastPlaybacksStore = new VoiceBroadcastPlaybacksStore();
+            this._VoiceBroadcastPlaybacksStore = new VoiceBroadcastPlaybacksStore(this.voiceBroadcastRecordingsStore);
         }
         return this._VoiceBroadcastPlaybacksStore;
     }
