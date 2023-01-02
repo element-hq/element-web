@@ -82,7 +82,7 @@ function useUserOnboardingContextValue<T>(defaultValue: T, callback: (cli: Matri
     return value;
 }
 
-export function useUserOnboardingContext(): UserOnboardingContext | null {
+export function useUserOnboardingContext(): UserOnboardingContext {
     const hasAvatar = useUserOnboardingContextValue(false, async (cli) => {
         const profile = await cli.getProfileInfo(cli.getUserId());
         return Boolean(profile?.avatar_url);

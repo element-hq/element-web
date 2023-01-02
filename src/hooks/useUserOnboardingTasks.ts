@@ -30,7 +30,7 @@ import { UseCase } from "../settings/enums/UseCase";
 import { useSettingValue } from "./useSettings";
 import { UserOnboardingContext } from "./useUserOnboardingContext";
 
-export interface UserOnboardingTask {
+interface UserOnboardingTask {
     id: string;
     title: string | (() => string);
     description: string | (() => string);
@@ -41,10 +41,11 @@ export interface UserOnboardingTask {
         href?: string;
         hideOnComplete?: boolean;
     };
+    completed: (ctx: UserOnboardingContext) => boolean;
 }
 
-interface InternalUserOnboardingTask extends UserOnboardingTask {
-    completed: (ctx: UserOnboardingContext) => boolean;
+export interface UserOnboardingTaskWithResolvedCompletion extends Omit<UserOnboardingTask, "completed"> {
+    completed: boolean;
 }
 
 const onClickStartDm = (ev: ButtonEvent) => {
@@ -52,7 +53,7 @@ const onClickStartDm = (ev: ButtonEvent) => {
     defaultDispatcher.dispatch({ action: "view_create_chat" });
 };
 
-const tasks: InternalUserOnboardingTask[] = [
+const tasks: UserOnboardingTask[] = [
     {
         id: "create-account",
         title: _t("Create account"),
@@ -143,9 +144,15 @@ const tasks: InternalUserOnboardingTask[] = [
     },
 ];
 
-export function useUserOnboardingTasks(context: UserOnboardingContext): [UserOnboardingTask[], UserOnboardingTask[]] {
+export function useUserOnboardingTasks(context: UserOnboardingContext) {
     const useCase = useSettingValue<UseCase | null>("FTUE.useCaseSelection") ?? UseCase.Skip;
-    const relevantTasks = useMemo(() => tasks.filter((it) => !it.relevant || it.relevant.includes(useCase)), [useCase]);
-    const completedTasks = relevantTasks.filter((it) => context && it.completed(context));
-    return [completedTasks, relevantTasks.filter((it) => !completedTasks.includes(it))];
+
+    return useMemo<UserOnboardingTaskWithResolvedCompletion[]>(() => {
+        return tasks
+            .filter((task) => !task.relevant || task.relevant.includes(useCase))
+            .map((task) => ({
+                ...task,
+                completed: task.completed(context),
+            }));
+    }, [context, useCase]);
 }
