@@ -24,6 +24,8 @@ import { useDispatcher } from "../../../../../hooks/useDispatcher";
 import { focusComposer } from "./utils";
 import { ComposerFunctions } from "../types";
 import { ComposerType } from "../../../../../dispatcher/payloads/ComposerInsertPayload";
+import { useComposerContext } from "../ComposerContext";
+import { setSelection } from "../utils/selection";
 
 export function useWysiwygSendActionHandler(
     disabled: boolean,
@@ -31,6 +33,7 @@ export function useWysiwygSendActionHandler(
     composerFunctions: ComposerFunctions,
 ) {
     const roomContext = useRoomContext();
+    const composerContext = useComposerContext();
     const timeoutId = useRef<number | null>(null);
 
     const handler = useCallback(
@@ -59,12 +62,12 @@ export function useWysiwygSendActionHandler(
                     } else if (payload.event) {
                         // TODO insert quote message - see SendMessageComposer
                     } else if (payload.text) {
-                        composerFunctions.insertText(payload.text);
+                        setSelection(composerContext.selection).then(() => composerFunctions.insertText(payload.text));
                     }
                     break;
             }
         },
-        [disabled, composerElement, composerFunctions, timeoutId, roomContext],
+        [disabled, composerElement, roomContext, composerFunctions, composerContext],
     );
 
     useDispatcher(defaultDispatcher, handler);

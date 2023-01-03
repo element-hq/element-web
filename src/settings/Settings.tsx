@@ -459,7 +459,6 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         labsGroup: LabGroup.Messaging,
         supportedLevels: LEVELS_FEATURE,
         displayName: _td("Voice broadcast"),
-        description: _td("Under active development"),
         default: false,
     },
     [Features.VoiceBroadcastForceSmallChunks]: {

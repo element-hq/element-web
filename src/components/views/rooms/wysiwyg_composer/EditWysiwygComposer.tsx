@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { forwardRef, RefObject, useRef } from "react";
+import React, { ForwardedRef, forwardRef, MutableRefObject, useRef } from "react";
 import classNames from "classnames";
 
 import EditorStateTransfer from "../../../../utils/EditorStateTransfer";
@@ -24,16 +24,18 @@ import { useWysiwygEditActionHandler } from "./hooks/useWysiwygEditActionHandler
 import { useEditing } from "./hooks/useEditing";
 import { useInitialContent } from "./hooks/useInitialContent";
 import { ComposerContext, getDefaultContextValue } from "./ComposerContext";
+import { ComposerFunctions } from "./types";
 
 interface ContentProps {
-    disabled: boolean;
+    disabled?: boolean;
+    composerFunctions: ComposerFunctions;
 }
 
 const Content = forwardRef<HTMLElement, ContentProps>(function Content(
-    { disabled }: ContentProps,
-    forwardRef: RefObject<HTMLElement>,
+    { disabled = false, composerFunctions }: ContentProps,
+    forwardRef: ForwardedRef<HTMLElement>,
 ) {
-    useWysiwygEditActionHandler(disabled, forwardRef);
+    useWysiwygEditActionHandler(disabled, forwardRef as MutableRefObject<HTMLElement>, composerFunctions);
     return null;
 });
 
@@ -65,9 +67,9 @@ export default function EditWysiwygComposer({ editorStateTransfer, className, ..
                 onSend={editMessage}
                 {...props}
             >
-                {(ref) => (
+                {(ref, composerFunctions) => (
                     <>
-                        <Content disabled={props.disabled} ref={ref} />
+                        <Content disabled={props.disabled} ref={ref} composerFunctions={composerFunctions} />
                         <EditionButtons
                             onCancelClick={endEditing}
                             onSaveClick={editMessage}

@@ -22,9 +22,18 @@ import { ActionPayload } from "../../../../../dispatcher/payloads";
 import { TimelineRenderingType, useRoomContext } from "../../../../../contexts/RoomContext";
 import { useDispatcher } from "../../../../../hooks/useDispatcher";
 import { focusComposer } from "./utils";
+import { ComposerType } from "../../../../../dispatcher/payloads/ComposerInsertPayload";
+import { ComposerFunctions } from "../types";
+import { setSelection } from "../utils/selection";
+import { useComposerContext } from "../ComposerContext";
 
-export function useWysiwygEditActionHandler(disabled: boolean, composerElement: RefObject<HTMLElement>) {
+export function useWysiwygEditActionHandler(
+    disabled: boolean,
+    composerElement: RefObject<HTMLElement>,
+    composerFunctions: ComposerFunctions,
+) {
     const roomContext = useRoomContext();
+    const composerContext = useComposerContext();
     const timeoutId = useRef<number | null>(null);
 
     const handler = useCallback(
@@ -39,9 +48,17 @@ export function useWysiwygEditActionHandler(disabled: boolean, composerElement: 
                 case Action.FocusEditMessageComposer:
                     focusComposer(composerElement, context, roomContext, timeoutId);
                     break;
+                case Action.ComposerInsert:
+                    if (payload.timelineRenderingType !== roomContext.timelineRenderingType) break;
+                    if (payload.composerType !== ComposerType.Edit) break;
+
+                    if (payload.text) {
+                        setSelection(composerContext.selection).then(() => composerFunctions.insertText(payload.text));
+                    }
+                    break;
             }
         },
-        [disabled, composerElement, timeoutId, roomContext],
+        [disabled, composerElement, composerFunctions, timeoutId, roomContext, composerContext],
     );
 
     useDispatcher(defaultDispatcher, handler);
