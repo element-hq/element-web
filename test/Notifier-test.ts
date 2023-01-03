@@ -112,11 +112,11 @@ describe("Notifier", () => {
         });
 
         mockClient.pushRules = {
-            global: undefined,
+            global: {},
         };
-        accountDataEventKey = getLocalNotificationAccountDataEventType(mockClient.deviceId);
+        accountDataEventKey = getLocalNotificationAccountDataEventType(mockClient.deviceId!);
 
-        testRoom = new Room(roomId, mockClient, mockClient.getUserId());
+        testRoom = new Room(roomId, mockClient, mockClient.getSafeUserId());
 
         MockPlatform = mockPlatformPeg({
             supportsNotifications: jest.fn().mockReturnValue(true),
@@ -127,8 +127,10 @@ describe("Notifier", () => {
 
         Notifier.isBodyEnabled = jest.fn().mockReturnValue(true);
 
-        mockClient.getRoom.mockImplementation((id) => {
-            return id === roomId ? testRoom : new Room(id, mockClient, mockClient.getUserId());
+        mockClient.getRoom.mockImplementation((id: string | undefined): Room | null => {
+            if (id === roomId) return testRoom;
+            if (id) return new Room(id, mockClient, mockClient.getSafeUserId());
+            return null;
         });
     });
 
@@ -484,7 +486,7 @@ describe("Notifier", () => {
 
             dis.dispatch<ThreadPayload>({
                 action: Action.ViewThread,
-                thread_id: rootEvent.getId(),
+                thread_id: rootEvent.getId()!,
             });
 
             await waitFor(() => expect(SdkContextClass.instance.roomViewStore.getThreadId()).toBe(rootEvent.getId()));
