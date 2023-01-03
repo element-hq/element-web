@@ -138,7 +138,7 @@
         "mkdirp": "^1.0.4",
         "modernizr": "^3.12.0",
         "node-fetch": "^2.6.7",
-        "optimize-css-assets-webpack-plugin": "^5.0.4",
+        "optimize-css-assets-webpack-plugin": "^6.0.0",
         "postcss": "^8.4.16",
         "postcss-easings": "^2.0.0",
         "postcss-hexrgba": "2.0.1",
