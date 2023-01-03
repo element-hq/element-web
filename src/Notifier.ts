@@ -50,6 +50,7 @@ import { localNotificationsAreSilenced, createLocalNotificationSettingsIfNeeded 
 import { getIncomingCallToastKey, IncomingCallToast } from "./toasts/IncomingCallToast";
 import ToastStore from "./stores/ToastStore";
 import { ElementCall } from "./models/Call";
+import { VoiceBroadcastChunkEventType } from "./voice-broadcast";
 
 /*
  * Dispatches:
@@ -76,6 +77,13 @@ const msgTypeHandlers = {
     },
     [M_LOCATION.altName]: (event: MatrixEvent) => {
         return TextForEvent.textForLocationEvent(event)();
+    },
+    [MsgType.Audio]: (event: MatrixEvent): string | null => {
+        if (event.getContent()?.[VoiceBroadcastChunkEventType]) {
+            // mute broadcast chunks
+            return null;
+        }
+        return TextForEvent.textForEvent(event);
     },
 };
 

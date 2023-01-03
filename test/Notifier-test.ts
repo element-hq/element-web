@@ -20,6 +20,7 @@ import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
 import { IContent, MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { SyncState } from "matrix-js-sdk/src/sync";
 import { waitFor } from "@testing-library/react";
+import { EventType, MsgType } from "matrix-js-sdk/src/matrix";
 
 import BasePlatform from "../src/BasePlatform";
 import { ElementCall } from "../src/models/Call";
@@ -39,6 +40,7 @@ import { mkThread } from "./test-utils/threads";
 import dis from "../src/dispatcher/dispatcher";
 import { ThreadPayload } from "../src/dispatcher/payloads/ThreadPayload";
 import { Action } from "../src/dispatcher/actions";
+import { VoiceBroadcastChunkEventType } from "../src/voice-broadcast";
 
 jest.mock("../src/utils/notifications", () => ({
     // @ts-ignore
@@ -70,6 +72,22 @@ describe("Notifier", () => {
         mockClient!.emit(RoomEvent.Timeline, event, testRoom, false, false, {
             liveEvent: true,
             timeline: testRoom.getLiveTimeline(),
+        });
+    };
+
+    const mkAudioEvent = (broadcastChunk = false): MatrixEvent => {
+        const chunkContent = broadcastChunk ? { [VoiceBroadcastChunkEventType]: {} } : {};
+
+        return mkEvent({
+            event: true,
+            type: EventType.RoomMessage,
+            user: "@user:example.com",
+            room: "!room:example.com",
+            content: {
+                ...chunkContent,
+                msgtype: MsgType.Audio,
+                body: "test audio message",
+            },
         });
     };
 
@@ -255,6 +273,24 @@ describe("Notifier", () => {
             mockClient.setAccountData(accountDataEventKey, event!);
             Notifier._displayPopupNotification(testEvent, testRoom);
             expect(MockPlatform.displayNotification).toHaveBeenCalledTimes(count);
+        });
+
+        it("should display a notification for a voice message", () => {
+            const audioEvent = mkAudioEvent();
+            Notifier._displayPopupNotification(audioEvent, testRoom);
+            expect(MockPlatform.displayNotification).toHaveBeenCalledWith(
+                "@user:example.com (!room1:server)",
+                "@user:example.com: test audio message",
+                "data:image/png;base64,00",
+                testRoom,
+                audioEvent,
+            );
+        });
+
+        it("should not display a notification for a broadcast chunk", () => {
+            const audioEvent = mkAudioEvent(true);
+            Notifier._displayPopupNotification(audioEvent, testRoom);
+            expect(MockPlatform.displayNotification).not.toHaveBeenCalled();
         });
     });
 
@@ -454,6 +490,11 @@ describe("Notifier", () => {
             await waitFor(() => expect(SdkContextClass.instance.roomViewStore.getThreadId()).toBe(rootEvent.getId()));
 
             Notifier._evaluateEvent(events[1]);
+            expect(Notifier._displayPopupNotification).toHaveBeenCalledTimes(1);
+        });
+
+        it("should show a pop-up for an audio message", () => {
+            Notifier._evaluateEvent(mkAudioEvent());
             expect(Notifier._displayPopupNotification).toHaveBeenCalledTimes(1);
         });
     });
