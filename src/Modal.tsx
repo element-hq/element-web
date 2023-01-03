@@ -107,8 +107,8 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
         modal.hidden = !modal.hidden;
     }
 
-    public hasDialogs(): boolean {
-        return !!(this.priorityModal || this.staticModal || this.modals.length > 0);
+    public hasDialogs() {
+        return this.priorityModal || this.staticModal || this.modals.length > 0;
     }
 
     public createDialog<T extends any[]>(
