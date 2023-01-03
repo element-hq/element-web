@@ -71,8 +71,8 @@ Cypress.Commands.add("goOnline", (): void => {
 Cypress.Commands.add("stubDefaultServer", (): void => {
     cy.log("Stubbing vector.im and matrix.org network calls");
     // We intercept vector.im & matrix.org calls so that tests don't fail when it has issues
-    cy.intercept("GET", "https://vector.im/_matrix/identity/api/v1", {
-        fixture: "vector-im-identity-v1.json",
+    cy.intercept("GET", "https://vector.im/_matrix/identity/v2", {
+        fixture: "vector-im-identity-v2.json",
     });
     cy.intercept("GET", "https://matrix.org/.well-known/matrix/client", {
         fixture: "matrix-org-client-well-known.json",
