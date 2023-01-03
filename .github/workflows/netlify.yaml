@@ -35,7 +35,6 @@ jobs:
             - name: 📥 Download artifact
               uses: dawidd6/action-download-artifact@v2
               with:
-                  workflow: element-build-and-test.yaml
                   run_id: ${{ github.event.workflow_run.id }}
                   name: previewbuild
                   path: webapp
