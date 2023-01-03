@@ -224,7 +224,7 @@ describe("loading:", function () {
 
             // Pass the liveliness checks
             httpBackend.when("GET", "/versions").respond(200, { versions: ["r0.4.0"] });
-            httpBackend.when("GET", "/api/v1").respond(200, {});
+            httpBackend.when("GET", "/_matrix/identity/v2").respond(200, {});
 
             return sleep(1)
                 .then(async () => {
@@ -274,7 +274,7 @@ describe("loading:", function () {
 
             // Pass the liveliness checks
             httpBackend.when("GET", "/versions").respond(200, { versions: ["r0.4.0"] });
-            httpBackend.when("GET", "/api/v1").respond(200, {});
+            httpBackend.when("GET", "/_matrix/identity/v2").respond(200, {});
 
             return awaitLoginComponent(matrixChat)
                 .then(async () => {
@@ -286,7 +286,7 @@ describe("loading:", function () {
                     // the only outstanding request should be a GET /login
                     // (in particular there should be no /register request for
                     // guest registration).
-                    const allowedRequests = ["/_matrix/client/r0/login", "/versions", "/api/v1"];
+                    const allowedRequests = ["/_matrix/client/r0/login", "/versions", "/_matrix/identity/v2"];
                     for (const req of httpBackend.requests) {
                         if (req.method === "GET" && allowedRequests.find((p) => req.path.endsWith(p))) {
                             continue;
