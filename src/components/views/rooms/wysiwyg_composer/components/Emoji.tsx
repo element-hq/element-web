@@ -22,8 +22,6 @@ import dis from "../../../../../dispatcher/dispatcher";
 import { ComposerInsertPayload } from "../../../../../dispatcher/payloads/ComposerInsertPayload";
 import { Action } from "../../../../../dispatcher/actions";
 import { useRoomContext } from "../../../../../contexts/RoomContext";
-import { useComposerContext } from "../ComposerContext";
-import { setSelection } from "../utils/selection";
 
 interface EmojiProps {
     menuPosition: AboveLeftOf;
@@ -31,19 +29,16 @@ interface EmojiProps {
 
 export function Emoji({ menuPosition }: EmojiProps) {
     const roomContext = useRoomContext();
-    const composerContext = useComposerContext();
 
     return (
         <EmojiButton
             menuPosition={menuPosition}
             addEmoji={(emoji) => {
-                setSelection(composerContext.selection).then(() =>
-                    dis.dispatch<ComposerInsertPayload>({
-                        action: Action.ComposerInsert,
-                        text: emoji,
-                        timelineRenderingType: roomContext.timelineRenderingType,
-                    }),
-                );
+                dis.dispatch<ComposerInsertPayload>({
+                    action: Action.ComposerInsert,
+                    text: emoji,
+                    timelineRenderingType: roomContext.timelineRenderingType,
+                });
                 return true;
             }}
         />

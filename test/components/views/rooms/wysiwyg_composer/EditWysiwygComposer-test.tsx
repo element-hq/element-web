@@ -26,6 +26,12 @@ import { IRoomState } from "../../../../../src/components/structures/RoomView";
 import { createTestClient, flushPromises, getRoomContext, mkEvent, mkStubRoom } from "../../../../test-utils";
 import { EditWysiwygComposer } from "../../../../../src/components/views/rooms/wysiwyg_composer";
 import EditorStateTransfer from "../../../../../src/utils/EditorStateTransfer";
+import { Emoji } from "../../../../../src/components/views/rooms/wysiwyg_composer/components/Emoji";
+import { ChevronFace } from "../../../../../src/components/structures/ContextMenu";
+import dis from "../../../../../src/dispatcher/dispatcher";
+import { ComposerInsertPayload, ComposerType } from "../../../../../src/dispatcher/payloads/ComposerInsertPayload";
+import { ActionPayload } from "../../../../../src/dispatcher/payloads";
+import * as EmojiButton from "../../../../../src/components/views/rooms/EmojiButton";
 
 describe("EditWysiwygComposer", () => {
     afterEach(() => {
@@ -268,5 +274,45 @@ describe("EditWysiwygComposer", () => {
 
         // Then we don't get it because we are disabled
         expect(screen.getByRole("textbox")).not.toHaveFocus();
+    });
+
+    it("Should add emoji", async () => {
+        // When
+
+        // We are not testing here the emoji button (open modal, select emoji ...)
+        // Instead we are directly firing an emoji to make the test easier to write
+        jest.spyOn(EmojiButton, "EmojiButton").mockImplementation(
+            ({ addEmoji }: { addEmoji: (emoji: string) => void }) => {
+                return (
+                    <button aria-label="Emoji" type="button" onClick={() => addEmoji("🦫")}>
+                        Emoji
+                    </button>
+                );
+            },
+        );
+        render(
+            <MatrixClientContext.Provider value={mockClient}>
+                <RoomContext.Provider value={defaultRoomContext}>
+                    <EditWysiwygComposer editorStateTransfer={editorStateTransfer} />
+                    <Emoji menuPosition={{ chevronFace: ChevronFace.Top }} />
+                </RoomContext.Provider>
+            </MatrixClientContext.Provider>,
+        );
+        // Same behavior as in RoomView.tsx
+        // RoomView is re-dispatching the composer messages.
+        // It adds the composerType fields where the value refers if the composer is in editing or not
+        // The listeners in the RTE ignore the message if the composerType is missing in the payload
+        const dispatcherRef = dis.register((payload: ActionPayload) => {
+            dis.dispatch<ComposerInsertPayload>({
+                ...(payload as ComposerInsertPayload),
+                composerType: ComposerType.Edit,
+            });
+        });
+
+        screen.getByLabelText("Emoji").click();
+
+        // Then
+        await waitFor(() => expect(screen.getByRole("textbox")).toHaveTextContent(/🦫/));
+        dis.unregister(dispatcherRef);
     });
 });

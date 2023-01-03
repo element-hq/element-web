@@ -294,7 +294,7 @@ describe("SendWysiwygComposer", () => {
                 });
 
                 const textNode = screen.getByRole("textbox").firstChild;
-                setSelection({
+                await setSelection({
                     anchorNode: textNode,
                     anchorOffset: 2,
                     focusNode: textNode,
