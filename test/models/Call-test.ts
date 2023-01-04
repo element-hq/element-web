@@ -784,6 +784,13 @@ describe("ElementCall", () => {
             expect(call.connectionState).toBe(ConnectionState.Connected);
         });
 
+        it("disconnects if the widget dies", async () => {
+            await call.connect();
+            expect(call.connectionState).toBe(ConnectionState.Connected);
+            WidgetMessagingStore.instance.stopMessaging(widget, room.roomId);
+            expect(call.connectionState).toBe(ConnectionState.Disconnected);
+        });
+
         it("tracks participants in room state", async () => {
             expect(call.participants).toEqual(new Map());
 
