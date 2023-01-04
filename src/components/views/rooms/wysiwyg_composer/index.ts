@@ -17,5 +17,6 @@ limitations under the License.
 export {
     DynamicImportSendWysiwygComposer as SendWysiwygComposer,
     DynamicImportEditWysiwygComposer as EditWysiwygComposer,
+    dynamicImportSendMessage as sendMessage,
+    dynamicImportConversionFunctions as getConversionFunctions,
 } from "./DynamicImportWysiwygComposer";
-export { sendMessage } from "./utils/message";
