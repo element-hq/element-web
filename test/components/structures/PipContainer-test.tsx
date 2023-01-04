@@ -16,12 +16,14 @@ limitations under the License.
 
 import React from "react";
 import { mocked, Mocked } from "jest-mock";
-import { screen, render, act, cleanup, fireEvent, waitFor } from "@testing-library/react";
+import { screen, render, act, cleanup } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { MatrixClient, PendingEventOrdering } from "matrix-js-sdk/src/client";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 import { Widget, ClientWidgetApi } from "matrix-widget-api";
 import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { UserEvent } from "@testing-library/user-event/dist/types/setup/setup";
 
 import type { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import {
@@ -34,18 +36,19 @@ import {
     wrapInMatrixClientContext,
     wrapInSdkContext,
     mkRoomCreateEvent,
+    mockPlatformPeg,
     flushPromises,
-} from "../../../test-utils";
-import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
-import { CallStore } from "../../../../src/stores/CallStore";
-import { WidgetMessagingStore } from "../../../../src/stores/widgets/WidgetMessagingStore";
-import UnwrappedPipView from "../../../../src/components/views/voip/PipView";
-import ActiveWidgetStore from "../../../../src/stores/ActiveWidgetStore";
-import DMRoomMap from "../../../../src/utils/DMRoomMap";
-import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
-import { Action } from "../../../../src/dispatcher/actions";
-import { ViewRoomPayload } from "../../../../src/dispatcher/payloads/ViewRoomPayload";
-import { TestSdkContext } from "../../../TestSdkContext";
+} from "../../test-utils";
+import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
+import { CallStore } from "../../../src/stores/CallStore";
+import { WidgetMessagingStore } from "../../../src/stores/widgets/WidgetMessagingStore";
+import { PipContainer as UnwrappedPipContainer } from "../../../src/components/structures/PipContainer";
+import ActiveWidgetStore from "../../../src/stores/ActiveWidgetStore";
+import DMRoomMap from "../../../src/utils/DMRoomMap";
+import defaultDispatcher from "../../../src/dispatcher/dispatcher";
+import { Action } from "../../../src/dispatcher/actions";
+import { ViewRoomPayload } from "../../../src/dispatcher/payloads/ViewRoomPayload";
+import { TestSdkContext } from "../../TestSdkContext";
 import {
     VoiceBroadcastInfoState,
     VoiceBroadcastPlaybacksStore,
@@ -53,15 +56,21 @@ import {
     VoiceBroadcastPreRecordingStore,
     VoiceBroadcastRecording,
     VoiceBroadcastRecordingsStore,
-} from "../../../../src/voice-broadcast";
-import { mkVoiceBroadcastInfoStateEvent } from "../../../voice-broadcast/utils/test-utils";
-import { RoomViewStore } from "../../../../src/stores/RoomViewStore";
-import { IRoomStateEventsActionPayload } from "../../../../src/actions/MatrixActionCreators";
+} from "../../../src/voice-broadcast";
+import { mkVoiceBroadcastInfoStateEvent } from "../../voice-broadcast/utils/test-utils";
+import { RoomViewStore } from "../../../src/stores/RoomViewStore";
+import { IRoomStateEventsActionPayload } from "../../../src/actions/MatrixActionCreators";
+import { Container, WidgetLayoutStore } from "../../../src/stores/widgets/WidgetLayoutStore";
+import WidgetStore from "../../../src/stores/WidgetStore";
+import { WidgetType } from "../../../src/widgets/WidgetType";
+import { SdkContextClass } from "../../../src/contexts/SDKContext";
+import { ElementWidgetActions } from "../../../src/stores/widgets/ElementWidgetActions";
 
-describe("PipView", () => {
+describe("PipContainer", () => {
     useMockedCalls();
     jest.spyOn(HTMLMediaElement.prototype, "play").mockImplementation(async () => {});
 
+    let user: UserEvent;
     let sdkContext: TestSdkContext;
     let client: Mocked<MatrixClient>;
     let room: Room;
@@ -78,6 +87,8 @@ describe("PipView", () => {
     };
 
     beforeEach(async () => {
+        user = userEvent.setup();
+
         stubClient();
         client = mocked(MatrixClientPeg.get());
         DMRoomMap.makeShared();
@@ -110,6 +121,8 @@ describe("PipView", () => {
         );
 
         sdkContext = new TestSdkContext();
+        // @ts-ignore PipContainer uses SDKContext in the constructor
+        SdkContextClass.instance = sdkContext;
         voiceBroadcastRecordingsStore = new VoiceBroadcastRecordingsStore();
         voiceBroadcastPreRecordingStore = new VoiceBroadcastPreRecordingStore();
         voiceBroadcastPlaybacksStore = new VoiceBroadcastPlaybacksStore(voiceBroadcastRecordingsStore);
@@ -127,11 +140,11 @@ describe("PipView", () => {
     });
 
     const renderPip = () => {
-        const PipView = wrapInMatrixClientContext(wrapInSdkContext(UnwrappedPipView, sdkContext));
-        render(<PipView />);
+        const PipContainer = wrapInMatrixClientContext(wrapInSdkContext(UnwrappedPipContainer, sdkContext));
+        render(<PipContainer />);
     };
 
-    const viewRoom = (roomId: string) =>
+    const viewRoom = (roomId: string) => {
         defaultDispatcher.dispatch<ViewRoomPayload>(
             {
                 action: Action.ViewRoom,
@@ -140,8 +153,9 @@ describe("PipView", () => {
             },
             true,
         );
+    };
 
-    const withCall = async (fn: () => Promise<void>): Promise<void> => {
+    const withCall = async (fn: (call: MockedCall) => Promise<void>): Promise<void> => {
         MockedCall.create(room, "1");
         const call = CallStore.instance.getCall(room.roomId);
         if (!(call instanceof MockedCall)) throw new Error("Failed to create call");
@@ -156,16 +170,16 @@ describe("PipView", () => {
             ActiveWidgetStore.instance.setWidgetPersistence(widget.id, room.roomId, true);
         });
 
-        await fn();
+        await fn(call);
 
         cleanup();
         call.destroy();
         ActiveWidgetStore.instance.destroyPersistentWidget(widget.id, room.roomId);
     };
 
-    const withWidget = (fn: () => void): void => {
+    const withWidget = async (fn: () => Promise<void>): Promise<void> => {
         act(() => ActiveWidgetStore.instance.setWidgetPersistence("1", room.roomId, true));
-        fn();
+        await fn();
         cleanup();
         ActiveWidgetStore.instance.destroyPersistentWidget("1", room.roomId);
     };
@@ -197,7 +211,7 @@ describe("PipView", () => {
     };
 
     const setUpRoomViewStore = () => {
-        new RoomViewStore(defaultDispatcher, sdkContext);
+        sdkContext._RoomViewStore = new RoomViewStore(defaultDispatcher, sdkContext);
     };
 
     const mkVoiceBroadcast = (room: Room): MatrixEvent => {
@@ -220,54 +234,104 @@ describe("PipView", () => {
         expect(screen.queryByRole("complementary")).toBeNull();
     });
 
-    it("shows an active call with a maximise button", async () => {
+    it("shows an active call with back and leave buttons", async () => {
         renderPip();
 
-        await withCall(async () => {
+        await withCall(async (call) => {
             screen.getByRole("complementary");
-            screen.getByText(room.roomId);
-            expect(screen.queryByRole("button", { name: "Pin" })).toBeNull();
-            expect(screen.queryByRole("button", { name: /return/i })).toBeNull();
 
-            // The maximise button should jump to the call
+            // The return button should jump to the call
             const dispatcherSpy = jest.fn();
             const dispatcherRef = defaultDispatcher.register(dispatcherSpy);
-            fireEvent.click(screen.getByRole("button", { name: "Fill screen" }));
-            await waitFor(() =>
-                expect(dispatcherSpy).toHaveBeenCalledWith({
-                    action: Action.ViewRoom,
-                    room_id: room.roomId,
-                    view_call: true,
-                }),
-            );
+            await user.click(screen.getByRole("button", { name: "Back" }));
+            expect(dispatcherSpy).toHaveBeenCalledWith({
+                action: Action.ViewRoom,
+                room_id: room.roomId,
+                view_call: true,
+                metricsTrigger: expect.any(String),
+            });
             defaultDispatcher.unregister(dispatcherRef);
+
+            // The leave button should disconnect from the call
+            const disconnectSpy = jest.spyOn(call, "disconnect");
+            await user.click(screen.getByRole("button", { name: "Leave" }));
+            expect(disconnectSpy).toHaveBeenCalled();
         });
     });
 
-    it("shows a persistent widget with pin and maximise buttons when viewing the room", () => {
+    it("shows a persistent widget with back button when viewing the room", async () => {
+        setUpRoomViewStore();
         viewRoom(room.roomId);
+        const widget = WidgetStore.instance.addVirtualWidget(
+            {
+                id: "1",
+                creatorUserId: "@alice:exaxmple.org",
+                type: WidgetType.CUSTOM.preferred,
+                url: "https://example.org",
+                name: "Example widget",
+            },
+            room.roomId,
+        );
         renderPip();
 
-        withWidget(() => {
+        await withWidget(async () => {
             screen.getByRole("complementary");
-            screen.getByText(room.roomId);
-            screen.getByRole("button", { name: "Pin" });
-            screen.getByRole("button", { name: "Fill screen" });
-            expect(screen.queryByRole("button", { name: /return/i })).toBeNull();
+
+            // The return button should maximize the widget
+            const moveSpy = jest.spyOn(WidgetLayoutStore.instance, "moveToContainer");
+            await user.click(screen.getByRole("button", { name: "Back" }));
+            expect(moveSpy).toHaveBeenCalledWith(room, widget, Container.Center);
+
+            expect(screen.queryByRole("button", { name: "Leave" })).toBeNull();
         });
+
+        WidgetStore.instance.removeVirtualWidget("1", room.roomId);
     });
 
-    it("shows a persistent widget with a return button when not viewing the room", () => {
+    it("shows a persistent Jitsi widget with back and leave buttons when not viewing the room", async () => {
+        mockPlatformPeg({ supportsJitsiScreensharing: () => true });
+        setUpRoomViewStore();
         viewRoom(room2.roomId);
+        const widget = WidgetStore.instance.addVirtualWidget(
+            {
+                id: "1",
+                creatorUserId: "@alice:exaxmple.org",
+                type: WidgetType.JITSI.preferred,
+                url: "https://meet.example.org",
+                name: "Jitsi example",
+            },
+            room.roomId,
+        );
         renderPip();
 
-        withWidget(() => {
+        await withWidget(async () => {
             screen.getByRole("complementary");
-            screen.getByText(room.roomId);
-            expect(screen.queryByRole("button", { name: "Pin" })).toBeNull();
-            expect(screen.queryByRole("button", { name: "Fill screen" })).toBeNull();
-            screen.getByRole("button", { name: /return/i });
+
+            // The return button should view the room
+            const dispatcherSpy = jest.fn();
+            const dispatcherRef = defaultDispatcher.register(dispatcherSpy);
+            await user.click(screen.getByRole("button", { name: "Back" }));
+            expect(dispatcherSpy).toHaveBeenCalledWith({
+                action: Action.ViewRoom,
+                room_id: room.roomId,
+                metricsTrigger: expect.any(String),
+            });
+            defaultDispatcher.unregister(dispatcherRef);
+
+            // The leave button should hangup the call
+            const sendSpy = jest
+                .fn<
+                    ReturnType<ClientWidgetApi["transport"]["send"]>,
+                    Parameters<ClientWidgetApi["transport"]["send"]>
+                >()
+                .mockResolvedValue({});
+            const mockMessaging = { transport: { send: sendSpy }, stop: () => {} } as unknown as ClientWidgetApi;
+            WidgetMessagingStore.instance.storeMessaging(new Widget(widget), room.roomId, mockMessaging);
+            await user.click(screen.getByRole("button", { name: "Leave" }));
+            expect(sendSpy).toHaveBeenCalledWith(ElementWidgetActions.HangupCall, {});
         });
+
+        WidgetStore.instance.removeVirtualWidget("1", room.roomId);
     });
 
     describe("when there is a voice broadcast recording and pre-recording", () => {
@@ -287,8 +351,8 @@ describe("PipView", () => {
             await withCall(async () => {
                 // Broadcast: Check for the „Live“ badge to be present
                 expect(screen.queryByText("Live")).toBeInTheDocument();
-                // Call: Check for the „Fill screen“ button to be present
-                expect(screen.queryByLabelText("Fill screen")).toBeInTheDocument();
+                // Call: Check for the „Leave“ button to be present
+                screen.getByRole("button", { name: "Leave" });
             });
         });
     });

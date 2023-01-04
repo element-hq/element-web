@@ -15,11 +15,10 @@ limitations under the License.
 */
 
 import React from "react";
-import { render, RenderResult } from "@testing-library/react";
+import { screen, render, RenderResult } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 
-import PictureInPictureDragger, {
-    CreatePipChildren,
-} from "../../../../src/components/views/voip/PictureInPictureDragger";
+import PictureInPictureDragger, { CreatePipChildren } from "../../../src/components/structures/PictureInPictureDragger";
 
 describe("PictureInPictureDragger", () => {
     let renderResult: RenderResult;
@@ -81,5 +80,30 @@ describe("PictureInPictureDragger", () => {
         it("should render both contents", () => {
             expect(renderResult.container).toMatchSnapshot();
         });
+    });
+
+    it("doesn't leak drag events to children as clicks", async () => {
+        const clickSpy = jest.fn();
+        render(
+            <PictureInPictureDragger draggable={true}>
+                {[
+                    ({ onStartMoving }) => (
+                        <div onMouseDown={onStartMoving} onClick={clickSpy}>
+                            Hello
+                        </div>
+                    ),
+                ]}
+            </PictureInPictureDragger>,
+        );
+        const target = screen.getByText("Hello");
+
+        // A click without a drag motion should go through
+        await userEvent.pointer([{ keys: "[MouseLeft>]", target }, { keys: "[/MouseLeft]" }]);
+        expect(clickSpy).toHaveBeenCalled();
+
+        // A drag motion should not trigger a click
+        clickSpy.mockClear();
+        await userEvent.pointer([{ keys: "[MouseLeft>]", target }, { coords: { x: 60, y: 60 } }, "[/MouseLeft]"]);
+        expect(clickSpy).not.toHaveBeenCalled();
     });
 });
