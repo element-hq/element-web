@@ -236,6 +236,11 @@ module.exports = (env, argv) => {
                 {
                     test: /\.worker\.ts$/,
                     loader: "worker-loader",
+                    options: {
+                        // Prevent bundling workers since CSP forbids loading them
+                        // from another origin.
+                        filename: "[hash].worker.js",
+                    },
                 },
                 {
                     test: /\.(ts|js)x?$/,
