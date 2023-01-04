@@ -236,15 +236,6 @@ module.exports = (env, argv) => {
                 {
                     test: /\.worker\.ts$/,
                     loader: "worker-loader",
-                    options: {
-                        // worker-loader v3 defaults to output.publicPath here,
-                        // which causes worker.js to be included in the bundle
-                        // in R2. This in turn causes CSP to fail when loading
-                        // the worker.
-                        // So, we explicitly ask to include it in the webapp
-                        // dir.
-                        publicPath: "webapp",
-                    },
                 },
                 {
                     test: /\.(ts|js)x?$/,
