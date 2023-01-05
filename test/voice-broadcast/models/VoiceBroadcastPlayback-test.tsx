@@ -35,10 +35,6 @@ import { flushPromises, stubClient } from "../../test-utils";
 import { createTestPlayback } from "../../test-utils/audio";
 import { mkVoiceBroadcastChunkEvent, mkVoiceBroadcastInfoStateEvent } from "../utils/test-utils";
 
-jest.mock("../../../src/events/getReferenceRelationsForEvent", () => ({
-    getReferenceRelationsForEvent: jest.fn(),
-}));
-
 jest.mock("../../../src/utils/MediaEventHelper", () => ({
     MediaEventHelper: jest.fn(),
 }));

@@ -16,4 +16,3 @@ limitations under the License.
 
 export { getForwardableEvent } from "./forward/getForwardableEvent";
 export { getShareableLocationEvent } from "./location/getShareableLocationEvent";
-export * from "./getReferenceRelationsForEvent";
