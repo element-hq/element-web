@@ -21,7 +21,7 @@ import {
     VoiceBroadcastChunkEventType,
     VoiceBroadcastInfoEventType,
     VoiceBroadcastInfoState,
-} from "../../../src/voice-broadcast";
+} from "../../../src/voice-broadcast/types";
 import { mkEvent } from "../../test-utils";
 
 // timestamp incremented on each call to prevent duplicate timestamp

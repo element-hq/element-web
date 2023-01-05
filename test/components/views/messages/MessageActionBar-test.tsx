@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { render, fireEvent } from "@testing-library/react";
-import { act } from "react-test-renderer";
+import { act, render, fireEvent } from "@testing-library/react";
 import { EventType, EventStatus, MatrixEvent, MatrixEventEvent, MsgType, Room } from "matrix-js-sdk/src/matrix";
 import { FeatureSupport, Thread } from "matrix-js-sdk/src/models/thread";
 
@@ -34,6 +33,8 @@ import dispatcher from "../../../../src/dispatcher/dispatcher";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import { Action } from "../../../../src/dispatcher/actions";
 import { UserTab } from "../../../../src/components/views/dialogs/UserTab";
+import { mkVoiceBroadcastInfoStateEvent } from "../../../voice-broadcast/utils/test-utils";
+import { VoiceBroadcastInfoState } from "../../../../src/voice-broadcast";
 
 jest.mock("../../../../src/dispatcher/dispatcher");
 
@@ -403,6 +404,17 @@ describe("<MessageActionBar />", () => {
                 jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
                 const { queryByLabelText } = getComponent({ mxEvent: alicesMessageEvent });
                 expect(queryByLabelText("Reply in thread")).toBeTruthy();
+            });
+
+            it("does not render thread button for a voice broadcast", () => {
+                const broadcastEvent = mkVoiceBroadcastInfoStateEvent(
+                    roomId,
+                    VoiceBroadcastInfoState.Started,
+                    userId,
+                    "ABC123",
+                );
+                const { queryByLabelText } = getComponent({ mxEvent: broadcastEvent });
+                expect(queryByLabelText("Reply in thread")).not.toBeInTheDocument();
             });
 
             it("opens user settings on click", () => {
