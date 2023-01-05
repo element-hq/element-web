@@ -26,5 +26,7 @@
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s uzas specialajn funkciojn de retumilo, kiujn via nuna retumilo ne subtenas.",
     "Powered by Matrix": "Povigata de Matrix",
     "Use %(brand)s on mobile": "Uzi %(brand)s poŝtelefone",
-    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Malcentralizita kaj ĉifrita babilejo; kunlaboro danke al $matrixLogo"
+    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Malcentralizita kaj ĉifrita babilejo; kunlaboro danke al $matrixLogo",
+    "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s: %(browserName)s sur %(osName)s",
+    "%(brand)s Desktop: %(platformName)s": "%(brand)s Labortablo: %(platformName)s"
 }
