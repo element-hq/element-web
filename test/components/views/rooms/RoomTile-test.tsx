@@ -75,19 +75,18 @@ describe("RoomTile", () => {
     };
 
     let client: Mocked<MatrixClient>;
-    let restoreConsole: () => void;
     let voiceBroadcastInfoEvent: MatrixEvent;
     let room: Room;
     let renderResult: RenderResult;
     let sdkContext: TestSdkContext;
 
+    filterConsole(
+        // irrelevant for this test
+        "Room !1:example.org does not have an m.room.create event",
+    );
+
     beforeEach(() => {
         sdkContext = new TestSdkContext();
-
-        restoreConsole = filterConsole(
-            // irrelevant for this test
-            "Room !1:example.org does not have an m.room.create event",
-        );
 
         client = mocked(stubClient());
         sdkContext.client = client;
@@ -105,7 +104,6 @@ describe("RoomTile", () => {
     });
 
     afterEach(() => {
-        restoreConsole();
         jest.clearAllMocks();
     });
 
