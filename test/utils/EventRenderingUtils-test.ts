@@ -32,7 +32,7 @@ describe("getEventDisplayInfo", () => {
               "isInfoMessage": false,
               "isLeftAlignedBubbleMessage": false,
               "isSeeingThroughMessageHiddenForModeration": false,
-              "noBubbleEvent": false,
+              "noBubbleEvent": true,
             }
         `);
     });
@@ -46,7 +46,7 @@ describe("getEventDisplayInfo", () => {
               "isInfoMessage": true,
               "isLeftAlignedBubbleMessage": false,
               "isSeeingThroughMessageHiddenForModeration": false,
-              "noBubbleEvent": false,
+              "noBubbleEvent": true,
             }
         `);
     });

@@ -94,7 +94,8 @@ export function getEventDisplayInfo(
         (eventType === EventType.RoomMessage && msgtype === MsgType.Emote) ||
         M_POLL_START.matches(eventType) ||
         M_BEACON_INFO.matches(eventType) ||
-        isLocationEvent(mxEvent);
+        isLocationEvent(mxEvent) ||
+        eventType === VoiceBroadcastInfoEventType;
 
     // If we're showing hidden events in the timeline, we should use the
     // source tile when there's no regular tile for an event and also for
