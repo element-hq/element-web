@@ -29,6 +29,7 @@ import * as Avatar from "../../../Avatar";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { mediaFromMxc } from "../../../customisations/Media";
 import { IOOBData } from "../../../stores/ThreepidInviteStore";
+import { LocalRoom } from "../../../models/LocalRoom";
 
 interface IProps extends Omit<ComponentProps<typeof BaseAvatar>, "name" | "idName" | "url" | "onClick"> {
     // Room may be left unset here, but if it is,
@@ -117,13 +118,26 @@ export default class RoomAvatar extends React.Component<IProps, IState> {
         Modal.createDialog(ImageView, params, "mx_Dialog_lightbox", null, true);
     };
 
+    private get roomIdName(): string | undefined {
+        const room = this.props.room;
+
+        if (room) {
+            const dmMapUserId = DMRoomMap.shared().getUserIdForRoomId(room.roomId);
+            // If the room is a DM, we use the other user's ID for the color hash
+            // in order to match the room avatar with their avatar
+            if (dmMapUserId) return dmMapUserId;
+
+            if (room instanceof LocalRoom && room.targets.length === 1) {
+                return room.targets[0].userId;
+            }
+        }
+
+        return this.props.room?.roomId || this.props.oobData?.roomId;
+    }
+
     public render() {
         const { room, oobData, viewAvatarOnClick, onClick, className, ...otherProps } = this.props;
-
         const roomName = room?.name ?? oobData.name;
-        // If the room is a DM, we use the other user's ID for the color hash
-        // in order to match the room avatar with their avatar
-        const idName = room ? DMRoomMap.shared().getUserIdForRoomId(room.roomId) ?? room.roomId : oobData.roomId;
 
         return (
             <BaseAvatar
@@ -132,7 +146,7 @@ export default class RoomAvatar extends React.Component<IProps, IState> {
                     mx_RoomAvatar_isSpaceRoom: (room?.getType() ?? this.props.oobData?.roomType) === RoomType.Space,
                 })}
                 name={roomName}
-                idName={idName}
+                idName={this.roomIdName}
                 urls={this.state.urls}
                 onClick={viewAvatarOnClick && this.state.urls[0] ? this.onRoomAvatarClick : onClick}
             />

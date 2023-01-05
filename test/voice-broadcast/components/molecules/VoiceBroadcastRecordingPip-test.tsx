@@ -62,7 +62,6 @@ describe("VoiceBroadcastRecordingPip", () => {
     let infoEvent: MatrixEvent;
     let recording: VoiceBroadcastRecording;
     let renderResult: RenderResult;
-    let restoreConsole: () => void;
 
     const renderPip = async (state: VoiceBroadcastInfoState) => {
         infoEvent = mkVoiceBroadcastInfoStateEvent(roomId, state, client.getUserId() || "", client.getDeviceId() || "");
@@ -85,6 +84,8 @@ describe("VoiceBroadcastRecordingPip", () => {
         });
     };
 
+    filterConsole("Starting load of AsyncWrapper for modal");
+
     beforeAll(() => {
         client = stubClient();
         mocked(requestMediaPermissions).mockResolvedValue({
@@ -105,11 +106,6 @@ describe("VoiceBroadcastRecordingPip", () => {
             [MediaDeviceKindEnum.VideoInput]: [],
         });
         jest.spyOn(MediaDeviceHandler.instance, "setDevice").mockImplementation();
-        restoreConsole = filterConsole("Starting load of AsyncWrapper for modal");
-    });
-
-    afterAll(() => {
-        restoreConsole();
     });
 
     describe("when rendering a started recording", () => {
