@@ -27,7 +27,7 @@ interface IProps {
     persistentWidgetId: string;
     persistentRoomId: string;
     pointerEvents?: string;
-    movePersistedElement: MutableRefObject<() => void>;
+    movePersistedElement: MutableRefObject<(() => void) | undefined>;
 }
 
 export default class PersistentApp extends React.Component<IProps> {

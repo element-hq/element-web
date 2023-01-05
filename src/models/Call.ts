@@ -255,6 +255,7 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
         }
 
         this.room.on(RoomEvent.MyMembership, this.onMyMembership);
+        WidgetMessagingStore.instance.on(WidgetMessagingStoreEvent.StopMessaging, this.onStopMessaging);
         window.addEventListener("beforeunload", this.beforeUnload);
         this.connectionState = ConnectionState.Connected;
     }
@@ -275,6 +276,7 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
      */
     public setDisconnected() {
         this.room.off(RoomEvent.MyMembership, this.onMyMembership);
+        WidgetMessagingStore.instance.off(WidgetMessagingStoreEvent.StopMessaging, this.onStopMessaging);
         window.removeEventListener("beforeunload", this.beforeUnload);
         this.messaging = null;
         this.connectionState = ConnectionState.Disconnected;
@@ -290,6 +292,13 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
 
     private onMyMembership = async (_room: Room, membership: string) => {
         if (membership !== "join") this.setDisconnected();
+    };
+
+    private onStopMessaging = (uid: string) => {
+        if (uid === this.widgetUid) {
+            logger.log("The widget died; treating this as a user hangup");
+            this.setDisconnected();
+        }
     };
 
     private beforeUnload = () => this.setDisconnected();

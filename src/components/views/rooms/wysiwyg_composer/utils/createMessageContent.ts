@@ -14,13 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { richToPlain, plainToRich } from "@matrix-org/matrix-wysiwyg";
 import { IContent, IEventRelation, MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
 
-import { htmlSerializeFromMdIfNeeded } from "../../../../../editor/serialize";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import { RoomPermalinkCreator } from "../../../../../utils/permalinks/Permalinks";
 import { addReplyToMessageContent } from "../../../../../utils/Reply";
-import { htmlToPlainText } from "../../../../../utils/room/htmlToPlaintext";
 
 // Merges favouring the given relation
 function attachRelation(content: IContent, relation?: IEventRelation): void {
@@ -62,7 +61,7 @@ interface CreateMessageContentParams {
     editedEvent?: MatrixEvent;
 }
 
-export function createMessageContent(
+export async function createMessageContent(
     message: string,
     isHTML: boolean,
     {
@@ -72,7 +71,7 @@ export function createMessageContent(
         includeReplyLegacyFallback = true,
         editedEvent,
     }: CreateMessageContentParams,
-): IContent {
+): Promise<IContent> {
     // TODO emote ?
 
     const isEditing = Boolean(editedEvent);
@@ -90,26 +89,22 @@ export function createMessageContent(
 
     // const body = textSerialize(model);
 
-    // TODO remove this ugly hack for replace br tag
-    const body = (isHTML && htmlToPlainText(message)) || message.replace(/<br>/g, "\n");
+    // if we're editing rich text, the message content is pure html
+    // BUT if we're not, the message content will be plain text
+    const body = isHTML ? await richToPlain(message) : message;
     const bodyPrefix = (isReplyAndEditing && getTextReplyFallback(editedEvent)) || "";
     const formattedBodyPrefix = (isReplyAndEditing && getHtmlReplyFallback(editedEvent)) || "";
 
     const content: IContent = {
         // TODO emote
         msgtype: MsgType.Text,
-        // TODO when available, use HTML --> Plain text conversion from wysiwyg rust model
         body: isEditing ? `${bodyPrefix} * ${body}` : body,
     };
 
     // TODO markdown support
 
     const isMarkdownEnabled = SettingsStore.getValue<boolean>("MessageComposerInput.useMarkdown");
-    const formattedBody = isHTML
-        ? message
-        : isMarkdownEnabled
-        ? htmlSerializeFromMdIfNeeded(message, { forceHTML: isReply })
-        : null;
+    const formattedBody = isHTML ? message : isMarkdownEnabled ? await plainToRich(message) : null;
 
     if (formattedBody) {
         content.format = "org.matrix.custom.html";

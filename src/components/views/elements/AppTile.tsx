@@ -85,7 +85,7 @@ interface IProps {
     widgetPageTitle?: string;
     showLayoutButtons?: boolean;
     // Handle to manually notify the PersistedElement that it needs to move
-    movePersistedElement?: MutableRefObject<() => void>;
+    movePersistedElement?: MutableRefObject<(() => void) | undefined>;
 }
 
 interface IState {

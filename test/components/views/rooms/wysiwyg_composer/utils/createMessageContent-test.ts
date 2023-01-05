@@ -24,7 +24,7 @@ describe("createMessageContent", () => {
             return "$$permalink$$";
         },
     } as RoomPermalinkCreator;
-    const message = "<i><b>hello</b> world</i>";
+    const message = "<em><b>hello</b> world</em>";
     const mockEvent = mkEvent({
         type: "m.room.message",
         room: "myfakeroom",
@@ -37,31 +37,31 @@ describe("createMessageContent", () => {
         jest.resetAllMocks();
     });
 
-    it("Should create html message", () => {
+    it("Should create html message", async () => {
         // When
-        const content = createMessageContent(message, true, { permalinkCreator });
+        const content = await createMessageContent(message, true, { permalinkCreator });
 
         // Then
         expect(content).toEqual({
-            body: "hello world",
+            body: "*__hello__ world*",
             format: "org.matrix.custom.html",
             formatted_body: message,
             msgtype: "m.text",
         });
     });
 
-    it("Should add reply to message content", () => {
+    it("Should add reply to message content", async () => {
         // When
-        const content = createMessageContent(message, true, { permalinkCreator, replyToEvent: mockEvent });
+        const content = await createMessageContent(message, true, { permalinkCreator, replyToEvent: mockEvent });
 
         // Then
         expect(content).toEqual({
-            "body": "> <myfakeuser> Replying to this\n\nhello world",
+            "body": "> <myfakeuser> Replying to this\n\n*__hello__ world*",
             "format": "org.matrix.custom.html",
             "formatted_body":
                 '<mx-reply><blockquote><a href="$$permalink$$">In reply to</a>' +
                 ' <a href="https://matrix.to/#/myfakeuser">myfakeuser</a>' +
-                "<br>Replying to this</blockquote></mx-reply><i><b>hello</b> world</i>",
+                "<br>Replying to this</blockquote></mx-reply><em><b>hello</b> world</em>",
             "msgtype": "m.text",
             "m.relates_to": {
                 "m.in_reply_to": {
@@ -71,17 +71,17 @@ describe("createMessageContent", () => {
         });
     });
 
-    it("Should add relation to message", () => {
+    it("Should add relation to message", async () => {
         // When
         const relation = {
             rel_type: "m.thread",
             event_id: "myFakeThreadId",
         };
-        const content = createMessageContent(message, true, { permalinkCreator, relation });
+        const content = await createMessageContent(message, true, { permalinkCreator, relation });
 
         // Then
         expect(content).toEqual({
-            "body": "hello world",
+            "body": "*__hello__ world*",
             "format": "org.matrix.custom.html",
             "formatted_body": message,
             "msgtype": "m.text",
@@ -92,7 +92,7 @@ describe("createMessageContent", () => {
         });
     });
 
-    it("Should add fields related to edition", () => {
+    it("Should add fields related to edition", async () => {
         // When
         const editedEvent = mkEvent({
             type: "m.room.message",
@@ -110,16 +110,16 @@ describe("createMessageContent", () => {
             },
             event: true,
         });
-        const content = createMessageContent(message, true, { permalinkCreator, editedEvent });
+        const content = await createMessageContent(message, true, { permalinkCreator, editedEvent });
 
         // Then
         expect(content).toEqual({
-            "body": " * hello world",
+            "body": " * *__hello__ world*",
             "format": "org.matrix.custom.html",
             "formatted_body": ` * ${message}`,
             "msgtype": "m.text",
             "m.new_content": {
-                body: "hello world",
+                body: "*__hello__ world*",
                 format: "org.matrix.custom.html",
                 formatted_body: message,
                 msgtype: "m.text",
