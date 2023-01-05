@@ -243,7 +243,7 @@ jobs:
                                   --title "if you see this please check cypress build for run id not being provisioned" \
                                   -f $file || true
                       #  We want to keep uploading what we can; but don't want the failures/red marks when it fails, so we add || true above.
-                  done 
+                  done
             - name: Close test run
               id: testrailpost
               if: always()
