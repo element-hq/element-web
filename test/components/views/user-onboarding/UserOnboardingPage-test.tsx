@@ -33,8 +33,6 @@ jest.mock("../../../../src/components/structures/HomePage", () => ({
 }));
 
 describe("UserOnboardingPage", () => {
-    let restoreConsole: () => void;
-
     const renderComponent = async (): Promise<RenderResult> => {
         const renderResult = render(<UserOnboardingPage />);
         await act(async () => {
@@ -43,12 +41,10 @@ describe("UserOnboardingPage", () => {
         return renderResult;
     };
 
-    beforeAll(() => {
-        restoreConsole = filterConsole(
-            // unrelated for this test
-            "could not update user onboarding context",
-        );
-    });
+    filterConsole(
+        // unrelated for this test
+        "could not update user onboarding context",
+    );
 
     beforeEach(() => {
         stubClient();
@@ -58,10 +54,6 @@ describe("UserOnboardingPage", () => {
     afterEach(() => {
         jest.useRealTimers();
         jest.restoreAllMocks();
-    });
-
-    afterAll(() => {
-        restoreConsole();
     });
 
     describe("when the user registered before the cutoff date", () => {

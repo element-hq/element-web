@@ -115,7 +115,10 @@ describe("Polls", () => {
 
         const pollParams = {
             title: "Does the polls feature work?",
-            options: ["Yes", "No", "Maybe"],
+            // Since we're going to take a screenshot anyways, we include some
+            // non-ASCII characters here to stress test the app's font config
+            // while we're at it.
+            options: ["Yes", "Noo⃐o⃑o⃩o⃪o⃫o⃬o⃭o⃮o⃯", "のらねこ Maybe?"],
         };
         createPoll(pollParams);
 
