@@ -92,6 +92,7 @@ export const unmockClientPeg = () => jest.spyOn(MatrixClientPeg, "get").mockRest
  */
 export const mockClientMethodsUser = (userId = "@alice:domain") => ({
     getUserId: jest.fn().mockReturnValue(userId),
+    getSafeUserId: jest.fn().mockReturnValue(userId),
     getUser: jest.fn().mockReturnValue(new User(userId)),
     isGuest: jest.fn().mockReturnValue(false),
     mxcUrlToHttp: jest.fn().mockReturnValue("mock-mxcUrlToHttp"),
