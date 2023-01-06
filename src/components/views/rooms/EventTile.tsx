@@ -322,7 +322,12 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         // events and pretty much anything that can't be sent by the composer as a message. For
         // those we rely on local echo giving the impression of things changing, and expect them
         // to be quick.
-        const simpleSendableEvents = [EventType.Sticker, EventType.RoomMessage, EventType.RoomMessageEncrypted];
+        const simpleSendableEvents = [
+            EventType.Sticker,
+            EventType.RoomMessage,
+            EventType.RoomMessageEncrypted,
+            EventType.PollStart,
+        ];
         if (!simpleSendableEvents.includes(this.props.mxEvent.getType() as EventType)) return false;
 
         // Default case
