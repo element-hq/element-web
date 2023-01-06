@@ -92,6 +92,12 @@ jobs:
             #      # Run 4 instances in Parallel
             #      runner: [1, 2, 3, 4]
         steps:
+            - uses: tecolicom/actions-use-apt-tools@v1
+              with:
+                  # Our test suite includes some screenshot tests with unusual diacritics, which are
+                  # supposed to be covered by STIXGeneral.
+                  tools: fonts-stix
+
             - uses: actions/checkout@v3
               with:
                   # XXX: We're checking out untrusted code in a secure context
