@@ -642,7 +642,7 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
                     className="mx_UserNotifSettings_clearNotifsButton"
                     data-testid="clear-notifications"
                 >
-                    {_t("Clear notifications")}
+                    {_t("Mark all as read")}
                 </AccessibleButton>
             );
         }
