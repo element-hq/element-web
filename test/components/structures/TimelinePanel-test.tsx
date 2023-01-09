@@ -172,7 +172,7 @@ describe("TimelinePanel", () => {
             const getValueCopy = SettingsStore.getValue;
             SettingsStore.getValue = jest.fn().mockImplementation((name: string) => {
                 if (name === "sendReadReceipts") return true;
-                if (name === "feature_threadstable") return false;
+                if (name === "feature_threadenabled") return false;
                 return getValueCopy(name);
             });
 
@@ -186,7 +186,7 @@ describe("TimelinePanel", () => {
             const getValueCopy = SettingsStore.getValue;
             SettingsStore.getValue = jest.fn().mockImplementation((name: string) => {
                 if (name === "sendReadReceipts") return false;
-                if (name === "feature_threadstable") return false;
+                if (name === "feature_threadenabled") return false;
                 return getValueCopy(name);
             });
 
@@ -363,7 +363,7 @@ describe("TimelinePanel", () => {
             client.supportsExperimentalThreads = () => true;
             const getValueCopy = SettingsStore.getValue;
             SettingsStore.getValue = jest.fn().mockImplementation((name: string) => {
-                if (name === "feature_threadstable") return true;
+                if (name === "feature_threadenabled") return true;
                 return getValueCopy(name);
             });
 
@@ -518,7 +518,7 @@ describe("TimelinePanel", () => {
     });
 
     it("renders when the last message is an undecryptable thread root", async () => {
-        jest.spyOn(SettingsStore, "getValue").mockImplementation((name) => name === "feature_threadstable");
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((name) => name === "feature_threadenabled");
 
         const client = MatrixClientPeg.get();
         client.isRoomEncrypted = () => true;

@@ -1182,7 +1182,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         CHAT_EFFECTS.forEach((effect) => {
             if (containsEmoji(ev.getContent(), effect.emojis) || ev.getContent().msgtype === effect.msgType) {
                 // For initial threads launch, chat effects are disabled see #19731
-                if (!SettingsStore.getValue("feature_threadstable") || !ev.isRelation(THREAD_RELATION_TYPE.name)) {
+                if (!SettingsStore.getValue("feature_threadenabled") || !ev.isRelation(THREAD_RELATION_TYPE.name)) {
                     dis.dispatch({ action: `effects.${effect.command}` });
                 }
             }

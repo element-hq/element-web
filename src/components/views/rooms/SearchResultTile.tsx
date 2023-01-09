@@ -68,7 +68,7 @@ export default class SearchResultTile extends React.Component<IProps> {
         const layout = SettingsStore.getValue("layout");
         const isTwelveHour = SettingsStore.getValue("showTwelveHourTimestamps");
         const alwaysShowTimestamps = SettingsStore.getValue("alwaysShowTimestamps");
-        const threadsEnabled = SettingsStore.getValue("feature_threadstable");
+        const threadsEnabled = SettingsStore.getValue("feature_threadenabled");
 
         for (let j = 0; j < timeline.length; j++) {
             const mxEv = timeline[j];

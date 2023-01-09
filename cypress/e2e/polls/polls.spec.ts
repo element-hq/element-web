@@ -77,7 +77,7 @@ describe("Polls", () => {
     };
 
     beforeEach(() => {
-        cy.enableLabsFeature("feature_threadstable");
+        cy.enableLabsFeature("feature_threadenabled");
         cy.window().then((win) => {
             win.localStorage.setItem("mx_lhs_size", "0"); // Collapse left panel for these tests
         });

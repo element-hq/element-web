@@ -236,7 +236,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
                         // For initial threads launch, chat effects are disabled
                         // see #19731
                         const isNotThread = content["m.relates_to"].rel_type !== THREAD_RELATION_TYPE.name;
-                        if (!SettingsStore.getValue("feature_threadstable") || isNotThread) {
+                        if (!SettingsStore.getValue("feature_threadenabled") || isNotThread) {
                             dis.dispatch({ action: `effects.${effect.command}` });
                         }
                     }
