@@ -650,6 +650,8 @@
     "You are already recording a voice broadcast. Please end your current voice broadcast to start a new one.": "You are already recording a voice broadcast. Please end your current voice broadcast to start a new one.",
     "You don't have the required permissions to start a voice broadcast in this room. Contact a room administrator to upgrade your permissions.": "You don't have the required permissions to start a voice broadcast in this room. Contact a room administrator to upgrade your permissions.",
     "Someone else is already recording a voice broadcast. Wait for their voice broadcast to end to start a new one.": "Someone else is already recording a voice broadcast. Wait for their voice broadcast to end to start a new one.",
+    "Connection error": "Connection error",
+    "Unfortunately we're unable to start a recording right now. Please try again later.": "Unfortunately we're unable to start a recording right now. Please try again later.",
     "Can’t start a call": "Can’t start a call",
     "You can’t start a call as you are currently recording a live broadcast. Please end your live broadcast in order to start a call.": "You can’t start a call as you are currently recording a live broadcast. Please end your live broadcast in order to start a call.",
     "You ended a <a>voice broadcast</a>": "You ended a <a>voice broadcast</a>",
