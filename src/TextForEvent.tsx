@@ -20,15 +20,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { removeDirectionOverrideChars } from "matrix-js-sdk/src/utils";
 import { GuestAccess, HistoryVisibility, JoinRule } from "matrix-js-sdk/src/@types/partials";
 import { EventType, MsgType } from "matrix-js-sdk/src/@types/event";
-import {
-    M_EMOTE,
-    M_NOTICE,
-    M_MESSAGE,
-    MessageEvent,
-    M_POLL_START,
-    M_POLL_END,
-    PollStartEvent,
-} from "matrix-events-sdk";
+import { M_POLL_START, M_POLL_END, PollStartEvent } from "matrix-events-sdk";
 
 import { _t } from "./languageHandler";
 import * as Roles from "./Roles";
@@ -345,17 +337,6 @@ function textForMessageEvent(ev: MatrixEvent): () => string | null {
         let message = ev.getContent().body;
         if (ev.isRedacted()) {
             message = textForRedactedPollAndMessageEvent(ev);
-        }
-
-        if (SettingsStore.isEnabled("feature_extensible_events")) {
-            const extev = ev.unstableExtensibleEvent as MessageEvent;
-            if (extev) {
-                if (extev.isEquivalentTo(M_EMOTE)) {
-                    return `* ${senderDisplayName} ${extev.text}`;
-                } else if (extev.isEquivalentTo(M_NOTICE) || extev.isEquivalentTo(M_MESSAGE)) {
-                    return `${senderDisplayName}: ${extev.text}`;
-                }
-            }
         }
 
         if (ev.getContent().msgtype === MsgType.Emote) {
