@@ -27,6 +27,11 @@ limitations under the License.
 }
 
 .mx_CompoundDialog {
+    .mx_Dialog {
+        display: flex;
+        flex-direction: column;
+    }
+
     .mx_CompoundDialog_header {
         padding: 32px 32px 16px 32px;
 
@@ -49,6 +54,13 @@ limitations under the License.
         }
     }
 
+    .mx_CompoundDialog_form {
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        max-height: 100%;
+    }
+
     .mx_CompoundDialog_content {
         overflow: auto;
         padding: 8px 32px;
@@ -57,10 +69,6 @@ limitations under the License.
     .mx_CompoundDialog_footer {
         padding: 20px 32px;
         text-align: right;
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
 
         .mx_AccessibleButton {
             margin-left: 24px;
@@ -69,14 +77,17 @@ limitations under the License.
 }
 
 .mx_ScrollableBaseDialog {
+    display: flex;
+    flex-direction: column;
+
     width: 544px; /* fixed */
     height: 516px; /* fixed */
-
-    .mx_CompoundDialog_content {
-        height: 349px; /* dialogHeight - header - footer */
-    }
+    max-width: 100%;
+    min-height: 0;
+    max-height: 80%;
 
     .mx_CompoundDialog_footer {
         box-shadow: 0px -4px 4px rgba(0, 0, 0, 0.05); /* hardcoded colour for both themes */
+        z-index: 1; /* needed to make footer & shadow appear above dialog content */
     }
 }
