@@ -58,6 +58,8 @@ import { SendWysiwygComposer, sendMessage, getConversionFunctions } from "./wysi
 import { MatrixClientProps, withMatrixClientHOC } from "../../../contexts/MatrixClientContext";
 import { setUpVoiceBroadcastPreRecording } from "../../../voice-broadcast/utils/setUpVoiceBroadcastPreRecording";
 import { SdkContextClass } from "../../../contexts/SDKContext";
+import { VoiceBroadcastInfoState } from "../../../voice-broadcast";
+import { createCantStartVoiceMessageBroadcastDialog } from "../dialogs/CantStartVoiceMessageBroadcastDialog";
 
 let instanceCount = 0;
 
@@ -445,6 +447,20 @@ export class MessageComposer extends React.Component<IProps, IState> {
         }
     }
 
+    private onRecordStartEndClick = (): void => {
+        const currentBroadcastRecording = SdkContextClass.instance.voiceBroadcastRecordingsStore.getCurrent();
+
+        if (currentBroadcastRecording && currentBroadcastRecording.getState() !== VoiceBroadcastInfoState.Stopped) {
+            createCantStartVoiceMessageBroadcastDialog();
+        } else {
+            this.voiceRecordingButton.current?.onRecordStartEndClick();
+        }
+
+        if (this.context.narrow) {
+            this.toggleButtonMenu();
+        }
+    };
+
     public render() {
         const hasE2EIcon = Boolean(!this.state.isWysiwygLabEnabled && this.props.e2eStatus);
         const e2eIcon = hasE2EIcon && (
@@ -588,12 +604,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
                                     isStickerPickerOpen={this.state.isStickerPickerOpen}
                                     menuPosition={menuPosition}
                                     relation={this.props.relation}
-                                    onRecordStartEndClick={() => {
-                                        this.voiceRecordingButton.current?.onRecordStartEndClick();
-                                        if (this.context.narrow) {
-                                            this.toggleButtonMenu();
-                                        }
-                                    }}
+                                    onRecordStartEndClick={this.onRecordStartEndClick}
                                     setStickerPickerOpen={this.setStickerPickerOpen}
                                     showLocationButton={!window.electron}
                                     showPollsButton={this.state.showPollsButton}
