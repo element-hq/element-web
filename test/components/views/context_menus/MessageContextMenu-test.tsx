@@ -26,7 +26,7 @@ import {
     getBeaconInfoIdentifier,
     EventType,
 } from "matrix-js-sdk/src/matrix";
-import { M_POLL_KIND_DISCLOSED, PollStartEvent } from "matrix-events-sdk";
+import { ExtensibleEvent, MessageEvent, M_POLL_KIND_DISCLOSED, PollStartEvent } from "matrix-events-sdk";
 import { FeatureSupport, Thread } from "matrix-js-sdk/src/models/thread";
 import { mocked } from "jest-mock";
 import { act } from "@testing-library/react";
@@ -44,7 +44,6 @@ import { ReadPinsEventId } from "../../../../src/components/views/right_panel/ty
 import { Action } from "../../../../src/dispatcher/actions";
 import { mkVoiceBroadcastInfoStateEvent } from "../../../voice-broadcast/utils/test-utils";
 import { VoiceBroadcastInfoState } from "../../../../src/voice-broadcast";
-import { createMessageEventContent } from "../../../test-utils/events";
 
 jest.mock("../../../../src/utils/strings", () => ({
     copyPlaintext: jest.fn(),
@@ -65,7 +64,7 @@ describe("MessageContextMenu", () => {
     });
 
     it("does show copy link button when supplied a link", () => {
-        const eventContent = createMessageEventContent("hello");
+        const eventContent = MessageEvent.from("hello");
         const props = {
             link: "https://google.com/",
         };
@@ -76,7 +75,7 @@ describe("MessageContextMenu", () => {
     });
 
     it("does not show copy link button when not supplied a link", () => {
-        const eventContent = createMessageEventContent("hello");
+        const eventContent = MessageEvent.from("hello");
         const menu = createMenuWithContent(eventContent);
         const copyLinkButton = menu.find('a[aria-label="Copy link"]');
         expect(copyLinkButton).toHaveLength(0);
@@ -92,8 +91,8 @@ describe("MessageContextMenu", () => {
         });
 
         it("does not show pin option when user does not have rights to pin", () => {
-            const eventContent = createMessageEventContent("hello");
-            const event = new MatrixEvent({ type: EventType.RoomMessage, content: eventContent });
+            const eventContent = MessageEvent.from("hello");
+            const event = new MatrixEvent(eventContent.serialize());
 
             const room = makeDefaultRoom();
             // mock permission to disallow adding pinned messages to room
@@ -117,12 +116,8 @@ describe("MessageContextMenu", () => {
         });
 
         it("does not show pin option when pinning feature is disabled", () => {
-            const eventContent = createMessageEventContent("hello");
-            const pinnableEvent = new MatrixEvent({
-                type: EventType.RoomMessage,
-                content: eventContent,
-                room_id: roomId,
-            });
+            const eventContent = MessageEvent.from("hello");
+            const pinnableEvent = new MatrixEvent({ ...eventContent.serialize(), room_id: roomId });
 
             const room = makeDefaultRoom();
             // mock permission to allow adding pinned messages to room
@@ -136,12 +131,8 @@ describe("MessageContextMenu", () => {
         });
 
         it("shows pin option when pinning feature is enabled", () => {
-            const eventContent = createMessageEventContent("hello");
-            const pinnableEvent = new MatrixEvent({
-                type: EventType.RoomMessage,
-                content: eventContent,
-                room_id: roomId,
-            });
+            const eventContent = MessageEvent.from("hello");
+            const pinnableEvent = new MatrixEvent({ ...eventContent.serialize(), room_id: roomId });
 
             const room = makeDefaultRoom();
             // mock permission to allow adding pinned messages to room
@@ -154,12 +145,8 @@ describe("MessageContextMenu", () => {
 
         it("pins event on pin option click", () => {
             const onFinished = jest.fn();
-            const eventContent = createMessageEventContent("hello");
-            const pinnableEvent = new MatrixEvent({
-                type: EventType.RoomMessage,
-                content: eventContent,
-                room_id: roomId,
-            });
+            const eventContent = MessageEvent.from("hello");
+            const pinnableEvent = new MatrixEvent({ ...eventContent.serialize(), room_id: roomId });
             pinnableEvent.event.event_id = "!3";
             const client = MatrixClientPeg.get();
             const room = makeDefaultRoom();
@@ -201,12 +188,8 @@ describe("MessageContextMenu", () => {
         });
 
         it("unpins event on pin option click when event is pinned", () => {
-            const eventContent = createMessageEventContent("hello");
-            const pinnableEvent = new MatrixEvent({
-                type: EventType.RoomMessage,
-                content: eventContent,
-                room_id: roomId,
-            });
+            const eventContent = MessageEvent.from("hello");
+            const pinnableEvent = new MatrixEvent({ ...eventContent.serialize(), room_id: roomId });
             pinnableEvent.event.event_id = "!3";
             const client = MatrixClientPeg.get();
             const room = makeDefaultRoom();
@@ -248,7 +231,7 @@ describe("MessageContextMenu", () => {
 
     describe("message forwarding", () => {
         it("allows forwarding a room message", () => {
-            const eventContent = createMessageEventContent("hello");
+            const eventContent = MessageEvent.from("hello");
             const menu = createMenuWithContent(eventContent);
             expect(menu.find('div[aria-label="Forward"]')).toHaveLength(1);
         });
@@ -352,7 +335,7 @@ describe("MessageContextMenu", () => {
 
     describe("open as map link", () => {
         it("does not allow opening a plain message in open street maps", () => {
-            const eventContent = createMessageEventContent("hello");
+            const eventContent = MessageEvent.from("hello");
             const menu = createMenuWithContent(eventContent);
             expect(menu.find('a[aria-label="Open in OpenStreetMap"]')).toHaveLength(0);
         });
@@ -397,7 +380,7 @@ describe("MessageContextMenu", () => {
     describe("right click", () => {
         it("copy button does work as expected", () => {
             const text = "hello";
-            const eventContent = createMessageEventContent(text);
+            const eventContent = MessageEvent.from(text);
             mocked(getSelectedText).mockReturnValue(text);
 
             const menu = createRightClickMenuWithContent(eventContent);
@@ -408,7 +391,7 @@ describe("MessageContextMenu", () => {
 
         it("copy button is not shown when there is nothing to copy", () => {
             const text = "hello";
-            const eventContent = createMessageEventContent(text);
+            const eventContent = MessageEvent.from(text);
             mocked(getSelectedText).mockReturnValue("");
 
             const menu = createRightClickMenuWithContent(eventContent);
@@ -417,7 +400,7 @@ describe("MessageContextMenu", () => {
         });
 
         it("shows edit button when we can edit", () => {
-            const eventContent = createMessageEventContent("hello");
+            const eventContent = MessageEvent.from("hello");
             mocked(canEditContent).mockReturnValue(true);
 
             const menu = createRightClickMenuWithContent(eventContent);
@@ -426,7 +409,7 @@ describe("MessageContextMenu", () => {
         });
 
         it("does not show edit button when we cannot edit", () => {
-            const eventContent = createMessageEventContent("hello");
+            const eventContent = MessageEvent.from("hello");
             mocked(canEditContent).mockReturnValue(false);
 
             const menu = createRightClickMenuWithContent(eventContent);
@@ -435,7 +418,7 @@ describe("MessageContextMenu", () => {
         });
 
         it("shows reply button when we can reply", () => {
-            const eventContent = createMessageEventContent("hello");
+            const eventContent = MessageEvent.from("hello");
             const context = {
                 canSendMessages: true,
             };
@@ -446,11 +429,11 @@ describe("MessageContextMenu", () => {
         });
 
         it("does not show reply button when we cannot reply", () => {
-            const eventContent = createMessageEventContent("hello");
+            const eventContent = MessageEvent.from("hello");
             const context = {
                 canSendMessages: true,
             };
-            const unsentMessage = new MatrixEvent({ type: EventType.RoomMessage, content: eventContent });
+            const unsentMessage = new MatrixEvent(eventContent.serialize());
             // queued messages are not actionable
             unsentMessage.setStatus(EventStatus.QUEUED);
 
@@ -460,7 +443,7 @@ describe("MessageContextMenu", () => {
         });
 
         it("shows react button when we can react", () => {
-            const eventContent = createMessageEventContent("hello");
+            const eventContent = MessageEvent.from("hello");
             const context = {
                 canReact: true,
             };
@@ -471,7 +454,7 @@ describe("MessageContextMenu", () => {
         });
 
         it("does not show react button when we cannot react", () => {
-            const eventContent = createMessageEventContent("hello");
+            const eventContent = MessageEvent.from("hello");
             const context = {
                 canReact: false,
             };
@@ -482,8 +465,8 @@ describe("MessageContextMenu", () => {
         });
 
         it("shows view in room button when the event is a thread root", () => {
-            const eventContent = createMessageEventContent("hello");
-            const mxEvent = new MatrixEvent({ type: EventType.RoomMessage, content: eventContent });
+            const eventContent = MessageEvent.from("hello");
+            const mxEvent = new MatrixEvent(eventContent.serialize());
             mxEvent.getThread = () => ({ rootEvent: mxEvent } as Thread);
             const props = {
                 rightClick: true,
@@ -498,7 +481,7 @@ describe("MessageContextMenu", () => {
         });
 
         it("does not show view in room button when the event is not a thread root", () => {
-            const eventContent = createMessageEventContent("hello");
+            const eventContent = MessageEvent.from("hello");
 
             const menu = createRightClickMenuWithContent(eventContent);
             const reactButton = menu.find('div[aria-label="View in room"]');
@@ -506,8 +489,8 @@ describe("MessageContextMenu", () => {
         });
 
         it("creates a new thread on reply in thread click", () => {
-            const eventContent = createMessageEventContent("hello");
-            const mxEvent = new MatrixEvent({ type: EventType.RoomMessage, content: eventContent });
+            const eventContent = MessageEvent.from("hello");
+            const mxEvent = new MatrixEvent(eventContent.serialize());
 
             Thread.hasServerSideSupport = FeatureSupport.Stable;
             const context = {
@@ -530,7 +513,7 @@ describe("MessageContextMenu", () => {
     });
 });
 
-function createRightClickMenuWithContent(eventContent: object, context?: Partial<IRoomState>): ReactWrapper {
+function createRightClickMenuWithContent(eventContent: ExtensibleEvent, context?: Partial<IRoomState>): ReactWrapper {
     return createMenuWithContent(eventContent, { rightClick: true }, context);
 }
 
@@ -539,13 +522,11 @@ function createRightClickMenu(mxEvent: MatrixEvent, context?: Partial<IRoomState
 }
 
 function createMenuWithContent(
-    eventContent: object,
+    eventContent: ExtensibleEvent,
     props?: Partial<React.ComponentProps<typeof MessageContextMenu>>,
     context?: Partial<IRoomState>,
 ): ReactWrapper {
-    // XXX: We probably shouldn't be assuming all events are going to be message events, but considering this
-    // test is for the Message context menu, it's a fairly safe assumption.
-    const mxEvent = new MatrixEvent({ type: EventType.RoomMessage, content: eventContent });
+    const mxEvent = new MatrixEvent(eventContent.serialize());
     return createMenu(mxEvent, props, context);
 }
 

@@ -17,6 +17,7 @@ limitations under the License.
 import { render, RenderResult, waitFor, screen } from "@testing-library/react";
 // eslint-disable-next-line deprecate/import
 import { mount, ReactWrapper } from "enzyme";
+import { MessageEvent } from "matrix-events-sdk";
 import { ReceiptType } from "matrix-js-sdk/src/@types/read_receipts";
 import {
     EventTimelineSet,
@@ -47,7 +48,6 @@ import SettingsStore from "../../../src/settings/SettingsStore";
 import { isCallEvent } from "../../../src/components/structures/LegacyCallEventGrouper";
 import { flushPromises, mkMembership, mkRoom, stubClient } from "../../test-utils";
 import { mkThread } from "../../test-utils/threads";
-import { createMessageEventContent } from "../../test-utils/events";
 
 const newReceipt = (eventId: string, userId: string, readTs: number, fullyReadTs: number): MatrixEvent => {
     const receiptContent = {
@@ -89,8 +89,8 @@ const mockEvents = (room: Room, count = 2): MatrixEvent[] => {
                 room_id: room.roomId,
                 event_id: `${room.roomId}_event_${index}`,
                 type: EventType.RoomMessage,
-                sender: "userId",
-                content: createMessageEventContent("`Event${index}`"),
+                user_id: "userId",
+                content: MessageEvent.from(`Event${index}`).serialize().content,
             }),
         );
     }
@@ -125,15 +125,13 @@ describe("TimelinePanel", () => {
                 event_id: "ev0",
                 sender: "@u2:m.org",
                 origin_server_ts: 111,
-                type: EventType.RoomMessage,
-                content: createMessageEventContent("hello 1"),
+                ...MessageEvent.from("hello 1").serialize(),
             });
             const ev1 = new MatrixEvent({
                 event_id: "ev1",
                 sender: "@u2:m.org",
                 origin_server_ts: 222,
-                type: EventType.RoomMessage,
-                content: createMessageEventContent("hello 2"),
+                ...MessageEvent.from("hello 2").serialize(),
             });
 
             const roomId = "#room:example.com";
@@ -387,24 +385,24 @@ describe("TimelinePanel", () => {
                 room_id: room.roomId,
                 event_id: "event_reply_1",
                 type: EventType.RoomMessage,
-                sender: "userId",
-                content: createMessageEventContent("ReplyEvent1"),
+                user_id: "userId",
+                content: MessageEvent.from(`ReplyEvent1`).serialize().content,
             });
 
             reply2 = new MatrixEvent({
                 room_id: room.roomId,
                 event_id: "event_reply_2",
                 type: EventType.RoomMessage,
-                sender: "userId",
-                content: createMessageEventContent("ReplyEvent2"),
+                user_id: "userId",
+                content: MessageEvent.from(`ReplyEvent2`).serialize().content,
             });
 
             root = new MatrixEvent({
                 room_id: room.roomId,
                 event_id: "event_root_1",
                 type: EventType.RoomMessage,
-                sender: "userId",
-                content: createMessageEventContent("RootEvent"),
+                user_id: "userId",
+                content: MessageEvent.from(`RootEvent`).serialize().content,
             });
 
             const eventMap: { [key: string]: MatrixEvent } = {
