@@ -16,7 +16,7 @@ limitations under the License.
 
 /// <reference types="cypress" />
 
-import { SynapseInstance } from "../../plugins/synapsedocker";
+import { HomeserverInstance } from "../../plugins/utils/homeserver";
 import { MatrixClient } from "../../global";
 import Chainable = Cypress.Chainable;
 
@@ -26,7 +26,7 @@ interface Charly {
 }
 
 describe("Lazy Loading", () => {
-    let synapse: SynapseInstance;
+    let homeserver: HomeserverInstance;
     let bob: MatrixClient;
     const charlies: Charly[] = [];
 
@@ -35,12 +35,12 @@ describe("Lazy Loading", () => {
             win.localStorage.setItem("mx_lhs_size", "0"); // Collapse left panel for these tests
         });
 
-        cy.startSynapse("default").then((data) => {
-            synapse = data;
+        cy.startHomeserver("default").then((data) => {
+            homeserver = data;
 
-            cy.initTestUser(synapse, "Alice");
+            cy.initTestUser(homeserver, "Alice");
 
-            cy.getBot(synapse, {
+            cy.getBot(homeserver, {
                 displayName: "Bob",
                 startClient: false,
                 autoAcceptInvites: false,
@@ -50,7 +50,7 @@ describe("Lazy Loading", () => {
 
             for (let i = 1; i <= 10; i++) {
                 const displayName = `Charly #${i}`;
-                cy.getBot(synapse, {
+                cy.getBot(homeserver, {
                     displayName,
                     startClient: false,
                     autoAcceptInvites: false,
@@ -62,7 +62,7 @@ describe("Lazy Loading", () => {
     });
 
     afterEach(() => {
-        cy.stopSynapse(synapse);
+        cy.stopHomeserver(homeserver);
     });
 
     const name = "Lazy Loading Test";

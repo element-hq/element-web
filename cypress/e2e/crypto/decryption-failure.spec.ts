@@ -17,7 +17,7 @@ limitations under the License.
 import type { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 import type { ISasEvent } from "matrix-js-sdk/src/crypto/verification/SAS";
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
-import { SynapseInstance } from "../../plugins/synapsedocker";
+import { HomeserverInstance } from "../../plugins/utils/homeserver";
 import { UserCredentials } from "../../support/login";
 import Chainable = Cypress.Chainable;
 
@@ -56,20 +56,20 @@ const handleVerificationRequest = (request: VerificationRequest): Chainable<Emoj
 };
 
 describe("Decryption Failure Bar", () => {
-    let synapse: SynapseInstance | undefined;
+    let homeserver: HomeserverInstance | undefined;
     let testUser: UserCredentials | undefined;
     let bot: MatrixClient | undefined;
     let roomId: string;
 
     beforeEach(function () {
-        cy.startSynapse("default").then((syn: SynapseInstance) => {
-            synapse = syn;
-            cy.initTestUser(synapse, TEST_USER)
+        cy.startHomeserver("default").then((hs: HomeserverInstance) => {
+            homeserver = hs;
+            cy.initTestUser(homeserver, TEST_USER)
                 .then((creds: UserCredentials) => {
                     testUser = creds;
                 })
                 .then(() => {
-                    cy.getBot(synapse, { displayName: BOT_USER }).then((cli) => {
+                    cy.getBot(homeserver, { displayName: BOT_USER }).then((cli) => {
                         bot = cli;
                     });
                 })
@@ -97,7 +97,7 @@ describe("Decryption Failure Bar", () => {
     });
 
     afterEach(() => {
-        cy.stopSynapse(synapse);
+        cy.stopHomeserver(homeserver);
     });
 
     it(
@@ -105,7 +105,7 @@ describe("Decryption Failure Bar", () => {
             "and there are other verified devices or backups",
         () => {
             let otherDevice: MatrixClient | undefined;
-            cy.loginBot(synapse, testUser.username, testUser.password, {})
+            cy.loginBot(homeserver, testUser.username, testUser.password, {})
                 .then(async (cli) => {
                     otherDevice = cli;
                     await otherDevice.bootstrapCrossSigning({
@@ -169,7 +169,7 @@ describe("Decryption Failure Bar", () => {
         "should prompt the user to reset keys, if this device isn't verified " +
             "and there are no other verified devices or backups",
         () => {
-            cy.loginBot(synapse, testUser.username, testUser.password, {}).then(async (cli) => {
+            cy.loginBot(homeserver, testUser.username, testUser.password, {}).then(async (cli) => {
                 await cli.bootstrapCrossSigning({
                     authUploadDeviceSigningKeys: async (makeRequest) => {
                         await makeRequest({});

@@ -16,7 +16,7 @@ limitations under the License.
 
 /// <reference types="cypress" />
 
-import { SynapseInstance } from "../../plugins/synapsedocker";
+import { HomeserverInstance } from "../../plugins/utils/homeserver";
 import Chainable = Cypress.Chainable;
 
 const ROOM_NAME = "Test room";
@@ -43,12 +43,12 @@ const checkRoomSummaryCard = (name: string): Chainable<JQuery<HTMLElement>> => {
 };
 
 describe("RightPanel", () => {
-    let synapse: SynapseInstance;
+    let homeserver: HomeserverInstance;
 
     beforeEach(() => {
-        cy.startSynapse("default").then((data) => {
-            synapse = data;
-            cy.initTestUser(synapse, NAME).then(() =>
+        cy.startHomeserver("default").then((data) => {
+            homeserver = data;
+            cy.initTestUser(homeserver, NAME).then(() =>
                 cy.window({ log: false }).then(() => {
                     cy.createRoom({ name: ROOM_NAME });
                     cy.createSpace({ name: SPACE_NAME });
@@ -58,7 +58,7 @@ describe("RightPanel", () => {
     });
 
     afterEach(() => {
-        cy.stopSynapse(synapse);
+        cy.stopHomeserver(homeserver);
     });
 
     describe("in rooms", () => {

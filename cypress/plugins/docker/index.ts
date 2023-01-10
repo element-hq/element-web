@@ -30,7 +30,7 @@ export function dockerRun(opts: {
     image: string;
     containerName: string;
     params?: string[];
-    cmd?: string;
+    cmd?: string[];
 }): Promise<string> {
     const userInfo = os.userInfo();
     const params = opts.params ?? [];
@@ -49,7 +49,7 @@ export function dockerRun(opts: {
         opts.image,
     ];
 
-    if (opts.cmd) args.push(opts.cmd);
+    if (opts.cmd) args.push(...opts.cmd);
 
     return new Promise<string>((resolve, reject) => {
         childProcess.execFile("docker", args, (err, stdout) => {

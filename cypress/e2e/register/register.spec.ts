@@ -16,21 +16,21 @@ limitations under the License.
 
 /// <reference types="cypress" />
 
-import { SynapseInstance } from "../../plugins/synapsedocker";
+import { HomeserverInstance } from "../../plugins/utils/homeserver";
 
 describe("Registration", () => {
-    let synapse: SynapseInstance;
+    let homeserver: HomeserverInstance;
 
     beforeEach(() => {
         cy.stubDefaultServer();
         cy.visit("/#/register");
-        cy.startSynapse("consent").then((data) => {
-            synapse = data;
+        cy.startHomeserver("consent").then((data) => {
+            homeserver = data;
         });
     });
 
     afterEach(() => {
-        cy.stopSynapse(synapse);
+        cy.stopHomeserver(homeserver);
     });
 
     it("registers an account and lands on the home screen", () => {
@@ -42,13 +42,13 @@ describe("Registration", () => {
         cy.get(".mx_Dialog").percySnapshotElement("Server Picker", { widths: [516] });
         cy.checkA11y();
 
-        cy.get(".mx_ServerPickerDialog_otherHomeserver").type(synapse.baseUrl);
+        cy.get(".mx_ServerPickerDialog_otherHomeserver").type(homeserver.baseUrl);
         cy.get(".mx_ServerPickerDialog_continue").click();
         // wait for the dialog to go away
         cy.get(".mx_ServerPickerDialog").should("not.exist");
 
         cy.get("#mx_RegistrationForm_username").should("be.visible");
-        // Hide the server text as it contains the randomly allocated Synapse port
+        // Hide the server text as it contains the randomly allocated Homeserver port
         const percyCSS = ".mx_ServerPicker_server { visibility: hidden !important; }";
         cy.percySnapshot("Registration", { percyCSS });
         cy.checkA11y();
@@ -88,7 +88,7 @@ describe("Registration", () => {
     it("should require username to fulfil requirements and be available", () => {
         cy.get(".mx_ServerPicker_change", { timeout: 15000 }).click();
         cy.get(".mx_ServerPickerDialog_continue").should("be.visible");
-        cy.get(".mx_ServerPickerDialog_otherHomeserver").type(synapse.baseUrl);
+        cy.get(".mx_ServerPickerDialog_otherHomeserver").type(homeserver.baseUrl);
         cy.get(".mx_ServerPickerDialog_continue").click();
         // wait for the dialog to go away
         cy.get(".mx_ServerPickerDialog").should("not.exist");

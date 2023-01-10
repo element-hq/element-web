@@ -17,7 +17,7 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import { MatrixClient } from "../../global";
-import { SynapseInstance } from "../../plugins/synapsedocker";
+import { HomeserverInstance } from "../../plugins/utils/homeserver";
 import Chainable = Cypress.Chainable;
 import Loggable = Cypress.Loggable;
 import Timeoutable = Cypress.Timeoutable;
@@ -136,7 +136,7 @@ Cypress.Commands.add("startDM", (name: string) => {
 });
 
 describe("Spotlight", () => {
-    let synapse: SynapseInstance;
+    let homeserver: HomeserverInstance;
 
     const bot1Name = "BotBob";
     let bot1: MatrixClient;
@@ -154,16 +154,16 @@ describe("Spotlight", () => {
     let room3Id: string;
 
     beforeEach(() => {
-        cy.startSynapse("default").then((data) => {
-            synapse = data;
-            cy.initTestUser(synapse, "Jim")
+        cy.startHomeserver("default").then((data) => {
+            homeserver = data;
+            cy.initTestUser(homeserver, "Jim")
                 .then(() =>
-                    cy.getBot(synapse, { displayName: bot1Name }).then((_bot1) => {
+                    cy.getBot(homeserver, { displayName: bot1Name }).then((_bot1) => {
                         bot1 = _bot1;
                     }),
                 )
                 .then(() =>
-                    cy.getBot(synapse, { displayName: bot2Name }).then((_bot2) => {
+                    cy.getBot(homeserver, { displayName: bot2Name }).then((_bot2) => {
                         // eslint-disable-next-line @typescript-eslint/no-unused-vars
                         bot2 = _bot2;
                     }),
@@ -205,7 +205,7 @@ describe("Spotlight", () => {
 
     afterEach(() => {
         cy.visit("/#/home");
-        cy.stopSynapse(synapse);
+        cy.stopHomeserver(homeserver);
     });
 
     it("should be able to add and remove filters via keyboard", () => {

@@ -17,18 +17,18 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import { MatrixClient } from "../../global";
-import { SynapseInstance } from "../../plugins/synapsedocker";
+import { HomeserverInstance } from "../../plugins/utils/homeserver";
 
 describe("User Onboarding (new user)", () => {
-    let synapse: SynapseInstance;
+    let homeserver: HomeserverInstance;
 
     const bot1Name = "BotBob";
     let bot1: MatrixClient;
 
     beforeEach(() => {
-        cy.startSynapse("default").then((data) => {
-            synapse = data;
-            cy.initTestUser(synapse, "Jane Doe");
+        cy.startHomeserver("default").then((data) => {
+            homeserver = data;
+            cy.initTestUser(homeserver, "Jane Doe");
             cy.window({ log: false }).then((win) => {
                 win.localStorage.setItem("mx_registration_time", "1656633601");
             });
@@ -36,7 +36,7 @@ describe("User Onboarding (new user)", () => {
                 // wait for the app to load
                 return cy.get(".mx_MatrixChat", { timeout: 15000 });
             });
-            cy.getBot(synapse, { displayName: bot1Name }).then((_bot1) => {
+            cy.getBot(homeserver, { displayName: bot1Name }).then((_bot1) => {
                 bot1 = _bot1;
             });
             cy.get(".mx_UserOnboardingPage").should("exist");
@@ -51,7 +51,7 @@ describe("User Onboarding (new user)", () => {
     });
 
     afterEach(() => {
-        cy.stopSynapse(synapse);
+        cy.stopHomeserver(homeserver);
     });
 
     it("page is shown and preference exists", () => {
