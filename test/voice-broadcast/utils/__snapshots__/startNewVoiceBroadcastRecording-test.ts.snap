@@ -91,3 +91,26 @@ exports[`startNewVoiceBroadcastRecording when the current user is not allowed to
   ],
 }
 `;
+
+exports[`startNewVoiceBroadcastRecording when trying to start a broadcast if there is no connection should show an info dialog and not start a recording 1`] = `
+[MockFunction] {
+  "calls": [
+    [
+      [Function],
+      {
+        "description": <p>
+          Unfortunately we're unable to start a recording right now. Please try again later.
+        </p>,
+        "hasCloseButton": true,
+        "title": "Connection error",
+      },
+    ],
+  ],
+  "results": [
+    {
+      "type": "return",
+      "value": undefined,
+    },
+  ],
+}
+`;

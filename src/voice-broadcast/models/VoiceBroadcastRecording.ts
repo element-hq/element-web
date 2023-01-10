@@ -60,12 +60,19 @@ export class VoiceBroadcastRecording
 {
     private state: VoiceBroadcastInfoState;
     private recorder: VoiceBroadcastRecorder;
-    private sequence = 1;
     private dispatcherRef: string;
     private chunkEvents = new VoiceBroadcastChunkEvents();
     private chunkRelationHelper: RelationsHelper;
     private maxLength: number;
     private timeLeft: number;
+
+    /**
+     * Broadcast chunks have a sequence number to bring them in the correct order and to know if a message is missing.
+     * This variable holds the last sequence number.
+     * Starts with 0 because there is no chunk at the beginning of a broadcast.
+     * Will be incremented when a chunk message is created.
+     */
+    private sequence = 0;
 
     public constructor(
         public readonly infoEvent: MatrixEvent,
@@ -268,7 +275,8 @@ export class VoiceBroadcastRecording
             event_id: this.infoEvent.getId(),
         };
         content["io.element.voice_broadcast_chunk"] = {
-            sequence: this.sequence++,
+            /** Increment the last sequence number and use it for this message. Also see {@link sequence}. */
+            sequence: ++this.sequence,
         };
 
         await this.client.sendMessage(this.infoEvent.getRoomId(), content);
