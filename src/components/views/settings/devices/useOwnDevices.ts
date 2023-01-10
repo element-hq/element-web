@@ -35,7 +35,7 @@ import { CryptoEvent } from "matrix-js-sdk/src/crypto";
 
 import MatrixClientContext from "../../../../contexts/MatrixClientContext";
 import { _t } from "../../../../languageHandler";
-import { getDeviceClientInformation } from "../../../../utils/device/clientInformation";
+import { getDeviceClientInformation, pruneClientInformation } from "../../../../utils/device/clientInformation";
 import { DevicesDictionary, ExtendedDevice, ExtendedDeviceAppInfo } from "./types";
 import { useEventEmitter } from "../../../../hooks/useEventEmitter";
 import { parseUserAgent } from "../../../../utils/device/parseUserAgent";
@@ -116,8 +116,8 @@ export type DevicesState = {
 export const useOwnDevices = (): DevicesState => {
     const matrixClient = useContext(MatrixClientContext);
 
-    const currentDeviceId = matrixClient.getDeviceId();
-    const userId = matrixClient.getUserId();
+    const currentDeviceId = matrixClient.getDeviceId()!;
+    const userId = matrixClient.getSafeUserId();
 
     const [devices, setDevices] = useState<DevicesState["devices"]>({});
     const [pushers, setPushers] = useState<DevicesState["pushers"]>([]);
@@ -138,11 +138,6 @@ export const useOwnDevices = (): DevicesState => {
     const refreshDevices = useCallback(async () => {
         setIsLoadingDeviceList(true);
         try {
-            // realistically we should never hit this
-            // but it satisfies types
-            if (!userId) {
-                throw new Error("Cannot fetch devices without user id");
-            }
             const devices = await fetchDevicesWithVerification(matrixClient, userId);
             setDevices(devices);
 
@@ -175,6 +170,15 @@ export const useOwnDevices = (): DevicesState => {
     useEffect(() => {
         refreshDevices();
     }, [refreshDevices]);
+
+    useEffect(() => {
+        const deviceIds = Object.keys(devices);
+        // empty devices means devices have not been fetched yet
+        // as there is always at least the current device
+        if (deviceIds.length) {
+            pruneClientInformation(deviceIds, matrixClient);
+        }
+    }, [devices, matrixClient]);
 
     useEventEmitter(matrixClient, CryptoEvent.DevicesUpdated, (users: string[]): void => {
         if (users.includes(userId)) {
