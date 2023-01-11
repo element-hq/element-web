@@ -100,7 +100,7 @@ export const RoomSearchView = forwardRef<ScrollPanel, Props>(
                                 return b.length - a.length;
                             });
 
-                            if (SettingsStore.getValue("feature_threadstable")) {
+                            if (SettingsStore.getValue("feature_threadenabled")) {
                                 // Process all thread roots returned in this batch of search results
                                 // XXX: This won't work for results coming from Seshat which won't include the bundled relationship
                                 for (const result of results.results) {
