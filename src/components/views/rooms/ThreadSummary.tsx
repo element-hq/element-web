@@ -109,9 +109,19 @@ export const ThreadMessagePreview = ({ thread, showDisplayname = false }: IPrevi
             {showDisplayname && (
                 <div className="mx_ThreadSummary_sender">{lastReply.sender?.name ?? lastReply.getSender()}</div>
             )}
-            <div className="mx_ThreadSummary_content" title={preview}>
-                <span className="mx_ThreadSummary_message-preview">{preview}</span>
-            </div>
+
+            {lastReply.isDecryptionFailure() ? (
+                <div
+                    className="mx_ThreadSummary_content mx_DecryptionFailureBody"
+                    title={_t("Unable to decrypt message")}
+                >
+                    <span className="mx_ThreadSummary_message-preview">{_t("Unable to decrypt message")}</span>
+                </div>
+            ) : (
+                <div className="mx_ThreadSummary_content" title={preview}>
+                    <span className="mx_ThreadSummary_message-preview">{preview}</span>
+                </div>
+            )}
         </>
     );
 };
