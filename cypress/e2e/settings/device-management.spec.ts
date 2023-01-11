@@ -16,34 +16,34 @@ limitations under the License.
 
 /// <reference types="cypress" />
 
-import { SynapseInstance } from "../../plugins/synapsedocker";
+import { HomeserverInstance } from "../../plugins/utils/homeserver";
 import type { UserCredentials } from "../../support/login";
 
 describe("Device manager", () => {
-    let synapse: SynapseInstance | undefined;
+    let homeserver: HomeserverInstance | undefined;
     let user: UserCredentials | undefined;
 
     beforeEach(() => {
         cy.enableLabsFeature("feature_new_device_manager");
-        cy.startSynapse("default").then((data) => {
-            synapse = data;
+        cy.startHomeserver("default").then((data) => {
+            homeserver = data;
 
-            cy.initTestUser(synapse, "Alice")
+            cy.initTestUser(homeserver, "Alice")
                 .then((credentials) => {
                     user = credentials;
                 })
                 .then(() => {
                     // create some extra sessions to manage
-                    return cy.loginUser(synapse, user.username, user.password);
+                    return cy.loginUser(homeserver, user.username, user.password);
                 })
                 .then(() => {
-                    return cy.loginUser(synapse, user.username, user.password);
+                    return cy.loginUser(homeserver, user.username, user.password);
                 });
         });
     });
 
     afterEach(() => {
-        cy.stopSynapse(synapse!);
+        cy.stopHomeserver(homeserver!);
     });
 
     it("should display sessions", () => {

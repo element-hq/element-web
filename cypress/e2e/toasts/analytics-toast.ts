@@ -16,7 +16,7 @@ limitations under the License.
 
 /// <reference types="cypress" />
 
-import { SynapseInstance } from "../../plugins/synapsedocker";
+import { HomeserverInstance } from "../../plugins/utils/homeserver";
 import Chainable = Cypress.Chainable;
 
 function assertNoToasts(): void {
@@ -40,10 +40,10 @@ function rejectToast(expectedTitle: string): void {
 }
 
 describe("Analytics Toast", () => {
-    let synapse: SynapseInstance;
+    let homeserver: HomeserverInstance;
 
     afterEach(() => {
-        cy.stopSynapse(synapse);
+        cy.stopHomeserver(homeserver);
     });
 
     it("should not show an analytics toast if config has nothing about posthog", () => {
@@ -55,9 +55,9 @@ describe("Analytics Toast", () => {
             });
         });
 
-        cy.startSynapse("default").then((data) => {
-            synapse = data;
-            cy.initTestUser(synapse, "Tod");
+        cy.startHomeserver("default").then((data) => {
+            homeserver = data;
+            cy.initTestUser(homeserver, "Tod");
         });
 
         rejectToast("Notifications");
@@ -78,9 +78,9 @@ describe("Analytics Toast", () => {
                 });
             });
 
-            cy.startSynapse("default").then((data) => {
-                synapse = data;
-                cy.initTestUser(synapse, "Tod");
+            cy.startHomeserver("default").then((data) => {
+                homeserver = data;
+                cy.initTestUser(homeserver, "Tod");
                 rejectToast("Notifications");
             });
         });

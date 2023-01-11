@@ -18,12 +18,12 @@ import type { ISendEventResponse, MatrixClient, Room } from "matrix-js-sdk/src/m
 import type { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 import type { ISasEvent } from "matrix-js-sdk/src/crypto/verification/SAS";
 import type { CypressBot } from "../../support/bot";
-import { SynapseInstance } from "../../plugins/synapsedocker";
+import { HomeserverInstance } from "../../plugins/utils/homeserver";
 import Chainable = Cypress.Chainable;
 
 type EmojiMapping = [emoji: string, name: string];
 interface CryptoTestContext extends Mocha.Context {
-    synapse: SynapseInstance;
+    homeserver: HomeserverInstance;
     bob: CypressBot;
 }
 
@@ -155,16 +155,16 @@ const verify = function (this: CryptoTestContext) {
 
 describe("Cryptography", function () {
     beforeEach(function () {
-        cy.startSynapse("default")
-            .as("synapse")
-            .then((synapse: SynapseInstance) => {
-                cy.initTestUser(synapse, "Alice", undefined, "alice_");
-                cy.getBot(synapse, { displayName: "Bob", autoAcceptInvites: false, userIdPrefix: "bob_" }).as("bob");
+        cy.startHomeserver("default")
+            .as("homeserver")
+            .then((homeserver: HomeserverInstance) => {
+                cy.initTestUser(homeserver, "Alice", undefined, "alice_");
+                cy.getBot(homeserver, { displayName: "Bob", autoAcceptInvites: false, userIdPrefix: "bob_" }).as("bob");
             });
     });
 
     afterEach(function (this: CryptoTestContext) {
-        cy.stopSynapse(this.synapse);
+        cy.stopHomeserver(this.homeserver);
     });
 
     it("setting up secure key backup should work", () => {
@@ -215,7 +215,7 @@ describe("Cryptography", function () {
         cy.bootstrapCrossSigning();
 
         // bob has a second, not cross-signed, device
-        cy.loginBot(this.synapse, this.bob.getUserId(), this.bob.__cypress_password, {}).as("bobSecondDevice");
+        cy.loginBot(this.homeserver, this.bob.getUserId(), this.bob.__cypress_password, {}).as("bobSecondDevice");
 
         autoJoin(this.bob);
 

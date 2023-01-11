@@ -21,7 +21,7 @@ be tested. When running Cypress tests yourself, the standard `yarn start` from t
 element-web project is fine: leave it running it a different terminal as you would
 when developing.
 
-The tests use Docker to launch Synapse instances to test against, so you'll also
+The tests use Docker to launch Homeserver (Synapse or Dendrite) instances to test against, so you'll also
 need to have Docker installed and working in order to run the Cypress tests.
 
 There are a few different ways to run the tests yourself. The simplest is to run:
@@ -58,10 +58,10 @@ Synapse can be launched with different configurations in order to test element
 in different configurations. `cypress/plugins/synapsedocker/templates` contains
 template configuration files for each different configuration.
 
-Each test suite can then launch whatever Synapse instances it needs it whatever
+Each test suite can then launch whatever Synapse instances it needs in whatever
 configurations.
 
-Note that although tests should stop the Synapse instances after running and the
+Note that although tests should stop the Homeserver instances after running and the
 plugin also stop any remaining instances after all tests have run, it is possible
 to be left with some stray containers if, for example, you terminate a test such
 that the `after()` does not run and also exit Cypress uncleanly. All the containers
@@ -82,29 +82,29 @@ a read.
 ### Getting a Synapse
 
 The key difference is in starting Synapse instances. Tests use this plugin via
-`cy.startSynapse()` to provide a Synapse instance to log into:
+`cy.startHomeserver()` to provide a Homeserver instance to log into:
 
 ```javascript
-cy.startSynapse("consent").then((result) => {
-    synapse = result;
+cy.startHomeserver("consent").then((result) => {
+    homeserver = result;
 });
 ```
 
-This returns an object with information about the Synapse instance, including what port
+This returns an object with information about the Homeserver instance, including what port
 it was started on and the ID that needs to be passed to shut it down again. It also
 returns the registration shared secret (`registrationSecret`) that can be used to
-register users via the REST API. The Synapse has been ensured ready to go by awaiting
+register users via the REST API. The Homeserver has been ensured ready to go by awaiting
 its internal health-check.
 
-Synapse instances should be reasonably cheap to start (you may see the first one take a
+Homeserver instances should be reasonably cheap to start (you may see the first one take a
 while as it pulls the Docker image), so it's generally expected that tests will start a
-Synapse instance for each test suite, i.e. in `before()`, and then tear it down in `after()`.
+Homeserver instance for each test suite, i.e. in `before()`, and then tear it down in `after()`.
 
-To later destroy your Synapse you should call `stopSynapse`, passing the SynapseInstance
+To later destroy your Homeserver you should call `stopHomeserver`, passing the HomeserverInstance
 object you received when starting it.
 
 ```javascript
-cy.stopSynapse(synapse);
+cy.stopHomeserver(homeserver);
 ```
 
 ### Synapse Config Templates
@@ -131,10 +131,10 @@ in a template can be referenced in the config as `/data/foo.html`.
 There exists a basic utility to start the app with a random user already logged in:
 
 ```javascript
-cy.initTestUser(synapse, "Jeff");
+cy.initTestUser(homeserver, "Jeff");
 ```
 
-It takes the SynapseInstance you received from `startSynapse` and a display name for your test user.
+It takes the HomeserverInstance you received from `startHomeserver` and a display name for your test user.
 This custom command will register a random userId using the registrationSecret with a random password
 and the given display name. The returned Chainable will contain details about the credentials for if
 they are needed for User-Interactive Auth or similar but localStorage will already be seeded with them
@@ -147,11 +147,11 @@ but the signature can be maintained for simpler maintenance.
 
 Many tests will also want to start with the client in a room, ready to send & receive messages. Best
 way to do this may be to get an access token for the user and use this to create a room with the REST
-API before logging the user in. You can make use of `cy.getBot(synapse)` and `cy.getClient()` to do this.
+API before logging the user in. You can make use of `cy.getBot(homeserver)` and `cy.getClient()` to do this.
 
 ### Convenience APIs
 
-We should probably end up with convenience APIs that wrap the synapse creation, logging in and room
+We should probably end up with convenience APIs that wrap the homeserver creation, logging in and room
 creation that can be called to set up tests.
 
 ### Using matrix-js-sdk

@@ -16,11 +16,11 @@ limitations under the License.
 
 /// <reference types="cypress" />
 
-import { SynapseInstance } from "../../plugins/synapsedocker";
+import { HomeserverInstance } from "../../plugins/utils/homeserver";
 import Chainable = Cypress.Chainable;
 
 describe("Location sharing", () => {
-    let synapse: SynapseInstance;
+    let homeserver: HomeserverInstance;
 
     const selectLocationShareTypeOption = (shareType: string): Chainable<JQuery> => {
         return cy.get(`[data-test-id="share-location-option-${shareType}"]`);
@@ -34,15 +34,15 @@ describe("Location sharing", () => {
         cy.window().then((win) => {
             win.localStorage.setItem("mx_lhs_size", "0"); // Collapse left panel for these tests
         });
-        cy.startSynapse("default").then((data) => {
-            synapse = data;
+        cy.startHomeserver("default").then((data) => {
+            homeserver = data;
 
-            cy.initTestUser(synapse, "Tom");
+            cy.initTestUser(homeserver, "Tom");
         });
     });
 
     afterEach(() => {
-        cy.stopSynapse(synapse);
+        cy.stopHomeserver(homeserver);
     });
 
     it("sends and displays pin drop location message successfully", () => {

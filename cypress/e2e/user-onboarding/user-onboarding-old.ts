@@ -16,15 +16,15 @@ limitations under the License.
 
 /// <reference types="cypress" />
 
-import { SynapseInstance } from "../../plugins/synapsedocker";
+import { HomeserverInstance } from "../../plugins/utils/homeserver";
 
 describe("User Onboarding (old user)", () => {
-    let synapse: SynapseInstance;
+    let homeserver: HomeserverInstance;
 
     beforeEach(() => {
-        cy.startSynapse("default").then((data) => {
-            synapse = data;
-            cy.initTestUser(synapse, "Jane Doe");
+        cy.startHomeserver("default").then((data) => {
+            homeserver = data;
+            cy.initTestUser(homeserver, "Jane Doe");
             cy.window({ log: false }).then((win) => {
                 win.localStorage.setItem("mx_registration_time", "2");
             });
@@ -37,7 +37,7 @@ describe("User Onboarding (old user)", () => {
 
     afterEach(() => {
         cy.visit("/#/home");
-        cy.stopSynapse(synapse);
+        cy.stopHomeserver(homeserver);
     });
 
     it("page and preference are hidden", () => {

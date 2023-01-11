@@ -18,7 +18,7 @@ limitations under the License.
 
 import type { MatrixClient } from "matrix-js-sdk/src/client";
 import type { ICreateRoomOpts } from "matrix-js-sdk/src/@types/requests";
-import { SynapseInstance } from "../../plugins/synapsedocker";
+import { HomeserverInstance } from "../../plugins/utils/homeserver";
 import Chainable = Cypress.Chainable;
 import { UserCredentials } from "../../support/login";
 
@@ -59,14 +59,14 @@ function spaceChildInitialState(roomId: string): ICreateRoomOpts["initial_state"
 }
 
 describe("Spaces", () => {
-    let synapse: SynapseInstance;
+    let homeserver: HomeserverInstance;
     let user: UserCredentials;
 
     beforeEach(() => {
-        cy.startSynapse("default").then((data) => {
-            synapse = data;
+        cy.startHomeserver("default").then((data) => {
+            homeserver = data;
 
-            cy.initTestUser(synapse, "Sue").then((_user) => {
+            cy.initTestUser(homeserver, "Sue").then((_user) => {
                 user = _user;
                 cy.mockClipboard();
             });
@@ -74,7 +74,7 @@ describe("Spaces", () => {
     });
 
     afterEach(() => {
-        cy.stopSynapse(synapse);
+        cy.stopHomeserver(homeserver);
     });
 
     it.only("should allow user to create public space", () => {
@@ -173,7 +173,7 @@ describe("Spaces", () => {
 
     it("should allow user to invite another to a space", () => {
         let bot: MatrixClient;
-        cy.getBot(synapse, { displayName: "BotBob" }).then((_bot) => {
+        cy.getBot(homeserver, { displayName: "BotBob" }).then((_bot) => {
             bot = _bot;
         });
 
@@ -208,7 +208,7 @@ describe("Spaces", () => {
         });
         cy.getSpacePanelButton("My Space").should("exist");
 
-        cy.getBot(synapse, { displayName: "BotBob" }).then({ timeout: 10000 }, async (bot) => {
+        cy.getBot(homeserver, { displayName: "BotBob" }).then({ timeout: 10000 }, async (bot) => {
             const { room_id: roomId } = await bot.createRoom(spaceCreateOptions("Space Space"));
             await bot.invite(roomId, user.userId);
         });

@@ -376,8 +376,8 @@ function ComposerModeButton({ isRichTextEnabled, onClick }: WysiwygToggleButtonP
         <CollapsibleButton
             className="mx_MessageComposer_button"
             iconClassName={classNames({
-                mx_MessageComposer_plain_text: isRichTextEnabled,
-                mx_MessageComposer_rich_text: !isRichTextEnabled,
+                mx_MessageComposer_plain_text: !isRichTextEnabled,
+                mx_MessageComposer_rich_text: isRichTextEnabled,
             })}
             onClick={onClick}
             title={title}

@@ -16,17 +16,17 @@ limitations under the License.
 
 /// <reference types="cypress" />
 
-import { SynapseInstance } from "../../plugins/synapsedocker";
+import { HomeserverInstance } from "../../plugins/utils/homeserver";
 
 describe("Login", () => {
-    let synapse: SynapseInstance;
+    let homeserver: HomeserverInstance;
 
     beforeEach(() => {
         cy.stubDefaultServer();
     });
 
     afterEach(() => {
-        cy.stopSynapse(synapse);
+        cy.stopHomeserver(homeserver);
     });
 
     describe("m.login.password", () => {
@@ -34,9 +34,9 @@ describe("Login", () => {
         const password = "p4s5W0rD";
 
         beforeEach(() => {
-            cy.startSynapse("consent").then((data) => {
-                synapse = data;
-                cy.registerUser(synapse, username, password);
+            cy.startHomeserver("consent").then((data) => {
+                homeserver = data;
+                cy.registerUser(homeserver, username, password);
                 cy.visit("/#/login");
             });
         });
@@ -49,7 +49,7 @@ describe("Login", () => {
             cy.checkA11y();
 
             cy.get(".mx_ServerPicker_change").click();
-            cy.get(".mx_ServerPickerDialog_otherHomeserver").type(synapse.baseUrl);
+            cy.get(".mx_ServerPickerDialog_otherHomeserver").type(homeserver.baseUrl);
             cy.get(".mx_ServerPickerDialog_continue").click();
             // wait for the dialog to go away
             cy.get(".mx_ServerPickerDialog").should("not.exist");
@@ -64,9 +64,9 @@ describe("Login", () => {
 
     describe("logout", () => {
         beforeEach(() => {
-            cy.startSynapse("consent").then((data) => {
-                synapse = data;
-                cy.initTestUser(synapse, "Erin");
+            cy.startHomeserver("consent").then((data) => {
+                homeserver = data;
+                cy.initTestUser(homeserver, "Erin");
             });
         });
 

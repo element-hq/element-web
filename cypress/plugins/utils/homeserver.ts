@@ -1,5 +1,5 @@
 /*
-Copyright 2022 The Matrix.org Foundation C.I.C.
+Copyright 2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,24 +16,13 @@ limitations under the License.
 
 /// <reference types="cypress" />
 
-import "@percy/cypress";
-import "cypress-real-events";
+export interface HomeserverConfig {
+    configDir: string;
+    registrationSecret: string;
+    baseUrl: string;
+    port: number;
+}
 
-import "./homeserver";
-import "./login";
-import "./labs";
-import "./client";
-import "./settings";
-import "./bot";
-import "./clipboard";
-import "./util";
-import "./app";
-import "./percy";
-import "./webserver";
-import "./views";
-import "./iframes";
-import "./timeline";
-import "./network";
-import "./composer";
-import "./proxy";
-import "./axe";
+export interface HomeserverInstance extends HomeserverConfig {
+    serverId: string;
+}

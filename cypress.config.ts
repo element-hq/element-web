@@ -33,6 +33,7 @@ export default defineConfig({
     env: {
         // Docker tag to use for `ghcr.io/matrix-org/sliding-sync-proxy` image.
         SLIDING_SYNC_PROXY_TAG: "v0.6.0",
+        HOMESERVER: "synapse",
     },
     retries: {
         runMode: 4,

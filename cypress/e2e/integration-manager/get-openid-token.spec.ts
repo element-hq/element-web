@@ -16,7 +16,7 @@ limitations under the License.
 
 /// <reference types="cypress" />
 
-import { SynapseInstance } from "../../plugins/synapsedocker";
+import { HomeserverInstance } from "../../plugins/utils/homeserver";
 import { UserCredentials } from "../../support/login";
 
 const ROOM_NAME = "Integration Manager Test";
@@ -73,17 +73,17 @@ function sendActionFromIntegrationManager(integrationManagerUrl: string) {
 
 describe("Integration Manager: Get OpenID Token", () => {
     let testUser: UserCredentials;
-    let synapse: SynapseInstance;
+    let homeserver: HomeserverInstance;
     let integrationManagerUrl: string;
 
     beforeEach(() => {
         cy.serveHtmlFile(INTEGRATION_MANAGER_HTML).then((url) => {
             integrationManagerUrl = url;
         });
-        cy.startSynapse("default").then((data) => {
-            synapse = data;
+        cy.startHomeserver("default").then((data) => {
+            homeserver = data;
 
-            cy.initTestUser(synapse, USER_DISPLAY_NAME, () => {
+            cy.initTestUser(homeserver, USER_DISPLAY_NAME, () => {
                 cy.window().then((win) => {
                     win.localStorage.setItem("mx_scalar_token", INTEGRATION_MANAGER_TOKEN);
                     win.localStorage.setItem(`mx_scalar_token_at_${integrationManagerUrl}`, INTEGRATION_MANAGER_TOKEN);
@@ -122,7 +122,7 @@ describe("Integration Manager: Get OpenID Token", () => {
     });
 
     afterEach(() => {
-        cy.stopSynapse(synapse);
+        cy.stopHomeserver(homeserver);
         cy.stopWebServers();
     });
 

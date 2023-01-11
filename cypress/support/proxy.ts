@@ -19,7 +19,7 @@ limitations under the License.
 import Chainable = Cypress.Chainable;
 import AUTWindow = Cypress.AUTWindow;
 import { ProxyInstance } from "../plugins/sliding-sync";
-import { SynapseInstance } from "../plugins/synapsedocker";
+import { HomeserverInstance } from "../plugins/utils/homeserver";
 
 declare global {
     // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -27,9 +27,9 @@ declare global {
         interface Chainable {
             /**
              * Start a sliding sync proxy instance.
-             * @param synapse the synapse instance returned by startSynapse
+             * @param homeserver the homeserver instance returned by startHomeserver
              */
-            startProxy(synapse: SynapseInstance): Chainable<ProxyInstance>;
+            startProxy(homeserver: HomeserverInstance): Chainable<ProxyInstance>;
 
             /**
              * Custom command wrapping task:proxyStop whilst preventing uncaught exceptions
@@ -41,13 +41,13 @@ declare global {
     }
 }
 
-function startProxy(synapse: SynapseInstance): Chainable<ProxyInstance> {
-    return cy.task<ProxyInstance>("proxyStart", synapse);
+function startProxy(homeserver: HomeserverInstance): Chainable<ProxyInstance> {
+    return cy.task<ProxyInstance>("proxyStart", homeserver);
 }
 
 function stopProxy(proxy?: ProxyInstance): Chainable<AUTWindow> {
     if (!proxy) return;
-    // Navigate away from app to stop the background network requests which will race with Synapse shutting down
+    // Navigate away from app to stop the background network requests which will race with Homeserver shutting down
     return cy.window({ log: false }).then((win) => {
         win.location.href = "about:blank";
         cy.task("proxyStop", proxy);

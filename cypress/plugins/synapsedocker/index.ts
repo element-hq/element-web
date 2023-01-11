@@ -25,29 +25,18 @@ import PluginEvents = Cypress.PluginEvents;
 import PluginConfigOptions = Cypress.PluginConfigOptions;
 import { getFreePort } from "../utils/port";
 import { dockerExec, dockerLogs, dockerRun, dockerStop } from "../docker";
+import { HomeserverConfig, HomeserverInstance } from "../utils/homeserver";
 
 // A cypress plugins to add command to start & stop synapses in
 // docker with preset templates.
 
-interface SynapseConfig {
-    configDir: string;
-    registrationSecret: string;
-    // Synapse must be configured with its public_baseurl so we have to allocate a port & url at this stage
-    baseUrl: string;
-    port: number;
-}
-
-export interface SynapseInstance extends SynapseConfig {
-    synapseId: string;
-}
-
-const synapses = new Map<string, SynapseInstance>();
+const synapses = new Map<string, HomeserverInstance>();
 
 function randB64Bytes(numBytes: number): string {
     return crypto.randomBytes(numBytes).toString("base64").replace(/=*$/, "");
 }
 
-async function cfgDirFromTemplate(template: string): Promise<SynapseConfig> {
+async function cfgDirFromTemplate(template: string): Promise<HomeserverConfig> {
     const templateDir = path.join(__dirname, "templates", template);
 
     const stats = await fse.stat(templateDir);
@@ -94,7 +83,7 @@ async function cfgDirFromTemplate(template: string): Promise<SynapseConfig> {
 // Start a synapse instance: the template must be the name of
 // one of the templates in the cypress/plugins/synapsedocker/templates
 // directory
-async function synapseStart(template: string): Promise<SynapseInstance> {
+async function synapseStart(template: string): Promise<HomeserverInstance> {
     const synCfg = await cfgDirFromTemplate(template);
 
     console.log(`Starting synapse with config dir ${synCfg.configDir}...`);
@@ -103,7 +92,7 @@ async function synapseStart(template: string): Promise<SynapseInstance> {
         image: "matrixdotorg/synapse:develop",
         containerName: `react-sdk-cypress-synapse`,
         params: ["--rm", "-v", `${synCfg.configDir}:/data`, "-p", `${synCfg.port}:8008/tcp`],
-        cmd: "run",
+        cmd: ["run"],
     });
 
     console.log(`Started synapse with id ${synapseId} on port ${synCfg.port}.`);
@@ -125,7 +114,7 @@ async function synapseStart(template: string): Promise<SynapseInstance> {
         ],
     });
 
-    const synapse: SynapseInstance = { synapseId, ...synCfg };
+    const synapse: HomeserverInstance = { serverId: synapseId, ...synCfg };
     synapses.set(synapseId, synapse);
     return synapse;
 }
