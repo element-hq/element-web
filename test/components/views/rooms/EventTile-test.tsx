@@ -141,9 +141,10 @@ describe("EventTile", () => {
             mxEvent = rootEvent;
         });
 
-        it("shows an unread notification bage", () => {
+        it("shows an unread notification badge", () => {
             const { container } = getComponent({}, TimelineRenderingType.ThreadsList);
 
+            // By default, the thread will assume it is read.
             expect(container.getElementsByClassName("mx_NotificationBadge")).toHaveLength(0);
 
             act(() => {
