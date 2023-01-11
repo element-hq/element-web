@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { Composer as ComposerEvent } from "@matrix-org/analytics-events/types/typescript/Composer";
-import { IContent, IEventRelation, MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { IEventRelation, MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { ISendEventResponse, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { THREAD_RELATION_TYPE } from "matrix-js-sdk/src/models/thread";
 
@@ -34,7 +34,7 @@ import EditorStateTransfer from "../../../../../utils/EditorStateTransfer";
 import { createMessageContent } from "./createMessageContent";
 import { isContentModified } from "./isContentModified";
 
-interface SendMessageParams {
+export interface SendMessageParams {
     mxClient: MatrixClient;
     relation?: IEventRelation;
     replyToEvent?: MatrixEvent;
@@ -43,10 +43,18 @@ interface SendMessageParams {
     includeReplyLegacyFallback?: boolean;
 }
 
-export function sendMessage(message: string, isHTML: boolean, { roomContext, mxClient, ...params }: SendMessageParams) {
+export async function sendMessage(
+    message: string,
+    isHTML: boolean,
+    { roomContext, mxClient, ...params }: SendMessageParams,
+) {
     const { relation, replyToEvent } = params;
     const { room } = roomContext;
-    const { roomId } = room;
+    const roomId = room?.roomId;
+
+    if (!roomId) {
+        return;
+    }
 
     const posthogEvent: ComposerEvent = {
         eventName: "Composer",
@@ -63,17 +71,13 @@ export function sendMessage(message: string, isHTML: boolean, { roomContext, mxC
     }*/
     PosthogAnalytics.instance.trackEvent<ComposerEvent>(posthogEvent);
 
-    let content: IContent;
+    const content = await createMessageContent(message, isHTML, params);
 
     // TODO slash comment
 
     // TODO replace emotion end of message ?
 
     // TODO quick reaction
-
-    if (!content) {
-        content = createMessageContent(message, isHTML, params);
-    }
 
     // don't bother sending an empty message
     if (!content.body.trim()) {
@@ -84,7 +88,7 @@ export function sendMessage(message: string, isHTML: boolean, { roomContext, mxC
         decorateStartSendingTime(content);
     }
 
-    const threadId = relation?.rel_type === THREAD_RELATION_TYPE.name ? relation.event_id : null;
+    const threadId = relation?.event_id && relation?.rel_type === THREAD_RELATION_TYPE.name ? relation.event_id : null;
 
     const prom = doMaybeLocalRoomAction(
         roomId,
@@ -139,7 +143,7 @@ interface EditMessageParams {
     editorStateTransfer: EditorStateTransfer;
 }
 
-export function editMessage(html: string, { roomContext, mxClient, editorStateTransfer }: EditMessageParams) {
+export async function editMessage(html: string, { roomContext, mxClient, editorStateTransfer }: EditMessageParams) {
     const editedEvent = editorStateTransfer.getEvent();
 
     PosthogAnalytics.instance.trackEvent<ComposerEvent>({
@@ -156,7 +160,7 @@ export function editMessage(html: string, { roomContext, mxClient, editorStateTr
         const position = this.model.positionForOffset(caret.offset, caret.atNodeEnd);
         this.editorRef.current?.replaceEmoticon(position, REGEX_EMOTICON);
     }*/
-    const editContent = createMessageContent(html, true, { editedEvent });
+    const editContent = await createMessageContent(html, true, { editedEvent });
     const newContent = editContent["m.new_content"];
 
     const shouldSend = true;
@@ -174,10 +178,10 @@ export function editMessage(html: string, { roomContext, mxClient, editorStateTr
 
     let response: Promise<ISendEventResponse> | undefined;
 
-    // If content is modified then send an updated event into the room
-    if (isContentModified(newContent, editorStateTransfer)) {
-        const roomId = editedEvent.getRoomId();
+    const roomId = editedEvent.getRoomId();
 
+    // If content is modified then send an updated event into the room
+    if (isContentModified(newContent, editorStateTransfer) && roomId) {
         // TODO Slash Commands
 
         if (shouldSend) {

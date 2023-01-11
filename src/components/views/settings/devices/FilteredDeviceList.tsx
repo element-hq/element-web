@@ -213,6 +213,7 @@ const DeviceListItem: React.FC<{
                 saveDeviceName={saveDeviceName}
                 setPushNotifications={setPushNotifications}
                 supportsMSC3881={supportsMSC3881}
+                className="mx_FilteredDeviceList_deviceDetails"
             />
         )}
     </li>

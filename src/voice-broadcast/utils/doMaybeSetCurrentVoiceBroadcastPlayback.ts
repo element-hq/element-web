@@ -34,12 +34,12 @@ import {
  * @param {VoiceBroadcastPlaybacksStore} voiceBroadcastPlaybacksStore
  * @param {VoiceBroadcastRecordingsStore} voiceBroadcastRecordingsStore
  */
-export const doMaybeSetCurrentVoiceBroadcastPlayback = (
+export const doMaybeSetCurrentVoiceBroadcastPlayback = async (
     room: Room,
     client: MatrixClient,
     voiceBroadcastPlaybacksStore: VoiceBroadcastPlaybacksStore,
     voiceBroadcastRecordingsStore: VoiceBroadcastRecordingsStore,
-): void => {
+): Promise<void> => {
     // do not disturb the current recording
     if (voiceBroadcastRecordingsStore.hasCurrent()) return;
 
@@ -50,7 +50,7 @@ export const doMaybeSetCurrentVoiceBroadcastPlayback = (
         return;
     }
 
-    const { infoEvent } = hasRoomLiveVoiceBroadcast(room);
+    const { infoEvent } = await hasRoomLiveVoiceBroadcast(client, room);
 
     if (infoEvent) {
         // live broadcast in the room + no recording + not listening yet: set the current broadcast

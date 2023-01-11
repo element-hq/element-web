@@ -836,7 +836,8 @@ $left-gutter: 64px;
     }
 }
 
-.mx_EventTile[data-shape="ThreadsList"] {
+.mx_EventTile[data-shape="ThreadsList"],
+.mx_EventTile[data-shape="Notification"] {
     --topOffset: $spacing-12;
     --leftOffset: 48px;
     $borderRadius: 8px;
@@ -916,9 +917,7 @@ $left-gutter: 64px;
     }
 
     .mx_DisambiguatedProfile {
-        margin-inline: 0 $spacing-12;
         display: inline-flex;
-        flex: 1;
 
         .mx_DisambiguatedProfile_displayName,
         .mx_DisambiguatedProfile_mxid {
@@ -941,6 +940,7 @@ $left-gutter: 64px;
         width: 100%;
         box-sizing: border-box;
         padding-bottom: 0;
+        padding-inline-start: var(--leftOffset);
 
         .mx_ThreadPanel_replies {
             margin-top: $spacing-8;
@@ -964,11 +964,6 @@ $left-gutter: 64px;
                 white-space: nowrap;
             }
         }
-    }
-
-    .mx_DisambiguatedProfile,
-    .mx_EventTile_line {
-        padding-inline-start: var(--leftOffset);
     }
 
     .mx_MessageTimestamp {
@@ -1297,6 +1292,21 @@ $left-gutter: 64px;
                 $notification-inset-block-start - var(--MatrixChat_useCompactLayout_group-padding-top)
             );
         }
+    }
+}
+
+.mx_EventTile_details {
+    display: flex;
+    width: -webkit-fill-available;
+    align-items: center;
+    justify-content: space-between;
+    gap: $spacing-8;
+    margin-left: var(--leftOffset);
+    .mx_EventTile_truncated {
+        flex: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 }
 

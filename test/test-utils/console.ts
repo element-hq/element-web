@@ -16,36 +16,39 @@ limitations under the License.
 
 type FilteredConsole = Pick<Console, "log" | "error" | "info" | "debug" | "warn">;
 
-const originalFunctions: FilteredConsole = {
-    log: console.log,
-    error: console.error,
-    info: console.info,
-    debug: console.debug,
-    warn: console.warn,
-};
-
 /**
  * Allows to filter out specific messages in console.*.
+ * Call this from any describe block.
+ * Automagically restores the original function by implementing an afterAll hook.
  *
  * @param ignoreList Messages to be filtered
- * @returns function to restore the console
  */
-export const filterConsole = (...ignoreList: string[]): (() => void) => {
-    for (const [key, originalFunction] of Object.entries(originalFunctions)) {
-        window.console[key as keyof FilteredConsole] = (...data: any[]) => {
-            const message = data?.[0]?.message || data?.[0];
+export const filterConsole = (...ignoreList: string[]): void => {
+    const originalFunctions: FilteredConsole = {
+        log: console.log,
+        error: console.error,
+        info: console.info,
+        debug: console.debug,
+        warn: console.warn,
+    };
 
-            if (typeof message === "string" && ignoreList.some((i) => message.includes(i))) {
-                return;
-            }
+    beforeAll(() => {
+        for (const [key, originalFunction] of Object.entries(originalFunctions)) {
+            window.console[key as keyof FilteredConsole] = (...data: any[]) => {
+                const message = data?.[0]?.message || data?.[0];
 
-            originalFunction(...data);
-        };
-    }
+                if (typeof message === "string" && ignoreList.some((i) => message.includes(i))) {
+                    return;
+                }
 
-    return () => {
+                originalFunction(...data);
+            };
+        }
+    });
+
+    afterAll(() => {
         for (const [key, originalFunction] of Object.entries(originalFunctions)) {
             window.console[key as keyof FilteredConsole] = originalFunction;
         }
-    };
+    });
 };

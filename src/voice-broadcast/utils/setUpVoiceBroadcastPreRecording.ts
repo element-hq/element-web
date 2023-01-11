@@ -24,14 +24,14 @@ import {
     VoiceBroadcastRecordingsStore,
 } from "..";
 
-export const setUpVoiceBroadcastPreRecording = (
+export const setUpVoiceBroadcastPreRecording = async (
     room: Room,
     client: MatrixClient,
     playbacksStore: VoiceBroadcastPlaybacksStore,
     recordingsStore: VoiceBroadcastRecordingsStore,
     preRecordingStore: VoiceBroadcastPreRecordingStore,
-): VoiceBroadcastPreRecording | null => {
-    if (!checkVoiceBroadcastPreConditions(room, client, recordingsStore)) {
+): Promise<VoiceBroadcastPreRecording | null> => {
+    if (!(await checkVoiceBroadcastPreConditions(room, client, recordingsStore))) {
         return null;
     }
 

@@ -158,7 +158,7 @@ export class SdkContextClass {
 
     public get voiceBroadcastRecordingsStore(): VoiceBroadcastRecordingsStore {
         if (!this._VoiceBroadcastRecordingsStore) {
-            this._VoiceBroadcastRecordingsStore = VoiceBroadcastRecordingsStore.instance();
+            this._VoiceBroadcastRecordingsStore = new VoiceBroadcastRecordingsStore();
         }
         return this._VoiceBroadcastRecordingsStore;
     }
@@ -172,7 +172,7 @@ export class SdkContextClass {
 
     public get voiceBroadcastPlaybacksStore(): VoiceBroadcastPlaybacksStore {
         if (!this._VoiceBroadcastPlaybacksStore) {
-            this._VoiceBroadcastPlaybacksStore = VoiceBroadcastPlaybacksStore.instance();
+            this._VoiceBroadcastPlaybacksStore = new VoiceBroadcastPlaybacksStore(this.voiceBroadcastRecordingsStore);
         }
         return this._VoiceBroadcastPlaybacksStore;
     }

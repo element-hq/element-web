@@ -18,18 +18,20 @@ import React from "react";
 import { act, render, RenderResult } from "@testing-library/react";
 import { MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
 
-import UserMenu from "../../../src/components/structures/UserMenu";
-import { stubClient } from "../../test-utils";
+import UnwrappedUserMenu from "../../../src/components/structures/UserMenu";
+import { stubClient, wrapInSdkContext } from "../../test-utils";
 import {
     VoiceBroadcastInfoState,
     VoiceBroadcastRecording,
     VoiceBroadcastRecordingsStore,
 } from "../../../src/voice-broadcast";
 import { mkVoiceBroadcastInfoStateEvent } from "../../voice-broadcast/utils/test-utils";
+import { TestSdkContext } from "../../TestSdkContext";
 
 describe("<UserMenu>", () => {
     let client: MatrixClient;
     let renderResult: RenderResult;
+    let sdkContext: TestSdkContext;
     let voiceBroadcastInfoEvent: MatrixEvent;
     let voiceBroadcastRecording: VoiceBroadcastRecording;
     let voiceBroadcastRecordingsStore: VoiceBroadcastRecordingsStore;
@@ -42,15 +44,19 @@ describe("<UserMenu>", () => {
             client.getUserId() || "",
             client.getDeviceId() || "",
         );
-        voiceBroadcastRecording = new VoiceBroadcastRecording(voiceBroadcastInfoEvent, client);
     });
 
     beforeEach(() => {
-        voiceBroadcastRecordingsStore = VoiceBroadcastRecordingsStore.instance();
+        sdkContext = new TestSdkContext();
+        voiceBroadcastRecordingsStore = new VoiceBroadcastRecordingsStore();
+        sdkContext._VoiceBroadcastRecordingsStore = voiceBroadcastRecordingsStore;
+
+        voiceBroadcastRecording = new VoiceBroadcastRecording(voiceBroadcastInfoEvent, client);
     });
 
     describe("when rendered", () => {
         beforeEach(() => {
+            const UserMenu = wrapInSdkContext(UnwrappedUserMenu, sdkContext);
             renderResult = render(<UserMenu isPanelCollapsed={true} />);
         });
 

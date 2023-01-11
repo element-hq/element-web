@@ -92,6 +92,12 @@ jobs:
             #      # Run 4 instances in Parallel
             #      runner: [1, 2, 3, 4]
         steps:
+            - uses: tecolicom/actions-use-apt-tools@v1
+              with:
+                  # Our test suite includes some screenshot tests with unusual diacritics, which are
+                  # supposed to be covered by STIXGeneral.
+                  tools: fonts-stix
+
             - uses: actions/checkout@v3
               with:
                   # XXX: We're checking out untrusted code in a secure context
@@ -241,7 +247,8 @@ jobs:
                                   --run-id $TESTRAIL_RUN_ID \
                                   --suite-id $TESTRAIL_SUITE_ID \
                                   --title "if you see this please check cypress build for run id not being provisioned" \
-                                  -f $file
+                                  -f $file || true
+                      #  We want to keep uploading what we can; but don't want the failures/red marks when it fails, so we add || true above.
                   done
             - name: Close test run
               id: testrailpost

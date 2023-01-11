@@ -92,7 +92,7 @@ export default abstract class Exporter {
 
     protected async downloadZIP(): Promise<string | void> {
         const filename = this.destinationFileName;
-        const filenameWithoutExt = filename.substring(0, filename.length - 4); // take off the .zip
+        const filenameWithoutExt = filename.substring(0, filename.lastIndexOf(".")); // take off the extension
         const { default: JSZip } = await import("jszip");
 
         const zip = new JSZip();
@@ -103,8 +103,7 @@ export default abstract class Exporter {
         for (const file of this.files) zip.file(filenameWithoutExt + "/" + file.name, file.blob);
 
         const content = await zip.generateAsync({ type: "blob" });
-
-        saveAs(content, filename);
+        saveAs(content, filenameWithoutExt + ".zip");
     }
 
     protected cleanUp(): string {

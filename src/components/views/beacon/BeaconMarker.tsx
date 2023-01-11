@@ -45,10 +45,12 @@ const BeaconMarker: React.FC<Props> = ({ map, beacon, tooltip }) => {
         return null;
     }
 
-    const geoUri = latestLocationState?.uri;
+    const geoUri = latestLocationState.uri || "";
 
-    const markerRoomMember =
-        beacon.beaconInfo.assetType === LocationAssetType.Self ? room.getMember(beacon.beaconInfoOwner) : undefined;
+    const assetTypeIsSelf = beacon.beaconInfo?.assetType === LocationAssetType.Self;
+    const _member = room?.getMember(beacon.beaconInfoOwner);
+
+    const markerRoomMember = assetTypeIsSelf && _member ? _member : undefined;
 
     return (
         <SmartMarker

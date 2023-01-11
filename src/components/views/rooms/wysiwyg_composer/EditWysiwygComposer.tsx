@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { forwardRef, RefObject } from "react";
+import React, { ForwardedRef, forwardRef, MutableRefObject, useRef } from "react";
 import classNames from "classnames";
 
 import EditorStateTransfer from "../../../../utils/EditorStateTransfer";
@@ -23,16 +23,19 @@ import { EditionButtons } from "./components/EditionButtons";
 import { useWysiwygEditActionHandler } from "./hooks/useWysiwygEditActionHandler";
 import { useEditing } from "./hooks/useEditing";
 import { useInitialContent } from "./hooks/useInitialContent";
+import { ComposerContext, getDefaultContextValue } from "./ComposerContext";
+import { ComposerFunctions } from "./types";
 
 interface ContentProps {
-    disabled: boolean;
+    disabled?: boolean;
+    composerFunctions: ComposerFunctions;
 }
 
 const Content = forwardRef<HTMLElement, ContentProps>(function Content(
-    { disabled }: ContentProps,
-    forwardRef: RefObject<HTMLElement>,
+    { disabled = false, composerFunctions }: ContentProps,
+    forwardRef: ForwardedRef<HTMLElement>,
 ) {
-    useWysiwygEditActionHandler(disabled, forwardRef);
+    useWysiwygEditActionHandler(disabled, forwardRef as MutableRefObject<HTMLElement>, composerFunctions);
     return null;
 });
 
@@ -43,14 +46,20 @@ interface EditWysiwygComposerProps {
     className?: string;
 }
 
-export function EditWysiwygComposer({ editorStateTransfer, className, ...props }: EditWysiwygComposerProps) {
+// Default needed for React.lazy
+export default function EditWysiwygComposer({ editorStateTransfer, className, ...props }: EditWysiwygComposerProps) {
+    const defaultContextValue = useRef(getDefaultContextValue());
     const initialContent = useInitialContent(editorStateTransfer);
     const isReady = !editorStateTransfer || initialContent !== undefined;
 
     const { editMessage, endEditing, onChange, isSaveDisabled } = useEditing(editorStateTransfer, initialContent);
 
+    if (!isReady) {
+        return null;
+    }
+
     return (
-        isReady && (
+        <ComposerContext.Provider value={defaultContextValue.current}>
             <WysiwygComposer
                 className={classNames("mx_EditWysiwygComposer", className)}
                 initialContent={initialContent}
@@ -58,9 +67,9 @@ export function EditWysiwygComposer({ editorStateTransfer, className, ...props }
                 onSend={editMessage}
                 {...props}
             >
-                {(ref) => (
+                {(ref, composerFunctions) => (
                     <>
-                        <Content disabled={props.disabled} ref={ref} />
+                        <Content disabled={props.disabled} ref={ref} composerFunctions={composerFunctions} />
                         <EditionButtons
                             onCancelClick={endEditing}
                             onSaveClick={editMessage}
@@ -69,6 +78,6 @@ export function EditWysiwygComposer({ editorStateTransfer, className, ...props }
                     </>
                 )}
             </WysiwygComposer>
-        )
+        </ComposerContext.Provider>
     );
 }

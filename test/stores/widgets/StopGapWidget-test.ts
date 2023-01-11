@@ -1,5 +1,5 @@
 /*
-Copyright 2022 The Matrix.org Foundation C.I.C.
+Copyright 2022 The Matrix.org Foundation C.I.C
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,11 +23,8 @@ import { stubClient, mkRoom, mkEvent } from "../../test-utils";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 import { StopGapWidget } from "../../../src/stores/widgets/StopGapWidget";
 import { ElementWidgetActions } from "../../../src/stores/widgets/ElementWidgetActions";
-import {
-    VoiceBroadcastInfoEventType,
-    VoiceBroadcastRecording,
-    VoiceBroadcastRecordingsStore,
-} from "../../../src/voice-broadcast";
+import { VoiceBroadcastInfoEventType, VoiceBroadcastRecording } from "../../../src/voice-broadcast";
+import { SdkContextClass } from "../../../src/contexts/SDKContext";
 
 jest.mock("matrix-widget-api/lib/ClientWidgetApi");
 
@@ -90,7 +87,9 @@ describe("StopGapWidget", () => {
             });
             voiceBroadcastRecording = new VoiceBroadcastRecording(voiceBroadcastInfoEvent, client);
             jest.spyOn(voiceBroadcastRecording, "pause");
-            jest.spyOn(VoiceBroadcastRecordingsStore.instance(), "getCurrent").mockReturnValue(voiceBroadcastRecording);
+            jest.spyOn(SdkContextClass.instance.voiceBroadcastRecordingsStore, "getCurrent").mockReturnValue(
+                voiceBroadcastRecording,
+            );
         });
 
         describe(`and receiving a action:${ElementWidgetActions.JoinCall} message`, () => {

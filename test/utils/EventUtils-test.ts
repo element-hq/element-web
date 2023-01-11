@@ -43,6 +43,8 @@ import {
 import { getMockClientWithEventEmitter, makeBeaconInfoEvent, makePollStartEvent, stubClient } from "../test-utils";
 import dis from "../../src/dispatcher/dispatcher";
 import { Action } from "../../src/dispatcher/actions";
+import { mkVoiceBroadcastInfoStateEvent } from "../voice-broadcast/utils/test-utils";
+import { VoiceBroadcastInfoState } from "../../src/voice-broadcast/types";
 
 jest.mock("../../src/dispatcher/dispatcher");
 
@@ -151,6 +153,20 @@ describe("EventUtils", () => {
         },
     });
 
+    const voiceBroadcastStart = mkVoiceBroadcastInfoStateEvent(
+        "!room:example.com",
+        VoiceBroadcastInfoState.Started,
+        "@user:example.com",
+        "ABC123",
+    );
+
+    const voiceBroadcastStop = mkVoiceBroadcastInfoStateEvent(
+        "!room:example.com",
+        VoiceBroadcastInfoState.Stopped,
+        "@user:example.com",
+        "ABC123",
+    );
+
     describe("isContentActionable()", () => {
         type TestCase = [string, MatrixEvent];
         it.each<TestCase>([
@@ -161,6 +177,7 @@ describe("EventUtils", () => {
             ["room member event", roomMemberEvent],
             ["event without msgtype", noMsgType],
             ["event without content body property", noContentBody],
+            ["broadcast stop event", voiceBroadcastStop],
         ])("returns false for %s", (_description, event) => {
             expect(isContentActionable(event)).toBe(false);
         });
@@ -171,6 +188,7 @@ describe("EventUtils", () => {
             ["event with empty content body", emptyContentBody],
             ["event with a content body", niceTextMessage],
             ["beacon_info event", beaconInfoEvent],
+            ["broadcast start event", voiceBroadcastStart],
         ])("returns true for %s", (_description, event) => {
             expect(isContentActionable(event)).toBe(true);
         });

@@ -16,7 +16,8 @@ limitations under the License.
 
 import React from "react";
 // eslint-disable-next-line deprecate/import
-import { mount } from "enzyme";
+import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { jest } from "@jest/globals";
 import { mocked, MockedObject } from "jest-mock";
 import { MatrixClient } from "matrix-js-sdk/src/client";
@@ -33,8 +34,6 @@ import { RightPanelPhases } from "../../../src/stores/right-panel/RightPanelStor
 import RightPanelStore from "../../../src/stores/right-panel/RightPanelStore";
 import { UPDATE_EVENT } from "../../../src/stores/AsyncStore";
 import { WidgetLayoutStore } from "../../../src/stores/widgets/WidgetLayoutStore";
-import RoomSummaryCard from "../../../src/components/views/right_panel/RoomSummaryCard";
-import MemberList from "../../../src/components/views/rooms/MemberList";
 import { SdkContextClass } from "../../../src/contexts/SDKContext";
 
 const RightPanelBase = wrapInMatrixClientContext(_RightPanel);
@@ -111,15 +110,14 @@ describe("RightPanel", () => {
         });
         await viewedRoom;
 
-        const wrapper = mount(<RightPanel room={r1} resizeNotifier={resizeNotifier} />);
-        expect(wrapper.find(RoomSummaryCard).exists()).toEqual(true);
+        const { container } = render(<RightPanel room={r1} resizeNotifier={resizeNotifier} />);
+        expect(container.getElementsByClassName("mx_RoomSummaryCard")).toHaveLength(1);
 
         const switchedPhases = waitForRpsUpdate();
-        wrapper.find("AccessibleButton.mx_RoomSummaryCard_icon_people").simulate("click");
+        userEvent.click(screen.getByText(/people/i));
         await switchedPhases;
-        wrapper.update();
 
-        expect(wrapper.find(MemberList).exists()).toEqual(true);
+        expect(container.getElementsByClassName("mx_MemberList")).toHaveLength(1);
     });
 
     it("renders info from only one room during room changes", async () => {
@@ -154,7 +152,7 @@ describe("RightPanel", () => {
         await spinUpStores();
 
         // Run initial render with room 1, and also running lifecycle methods
-        const wrapper = mount(<RightPanel room={r1} resizeNotifier={resizeNotifier} />);
+        const { container, rerender } = render(<RightPanel room={r1} resizeNotifier={resizeNotifier} />);
         // Wait for RPS room 1 updates to fire
         const rpsUpdated = waitForRpsUpdate();
         dis.dispatch({
@@ -162,31 +160,26 @@ describe("RightPanel", () => {
             room_id: "r1",
         });
         await rpsUpdated;
+        await waitFor(() => expect(screen.queryByTestId("spinner")).not.toBeInTheDocument());
 
-        // After all that setup, now to the interesting part...
-        // We want to verify that as we change to room 2, we should always have
-        // the correct right panel state for whichever room we are showing.
-        const instance = wrapper.find(_RightPanel).instance() as _RightPanel;
-        const rendered = new Promise<void>((resolve) => {
-            jest.spyOn(instance, "render").mockImplementation(() => {
-                const { props, state } = instance;
-                if (props.room.roomId === "r2" && state.phase === RightPanelPhases.RoomMemberList) {
-                    throw new Error("Tried to render room 1 state for room 2");
-                }
-                if (props.room.roomId === "r2" && state.phase === RightPanelPhases.RoomSummary) {
-                    resolve();
-                }
-                return null;
-            });
-        });
+        // room one will be in the RoomMemberList phase - confirm this is rendered
+        expect(container.getElementsByClassName("mx_MemberList")).toHaveLength(1);
 
-        // Switch to room 2
+        // wait for RPS room 2 updates to fire, then rerender
+        const _rpsUpdated = waitForRpsUpdate();
         dis.dispatch({
             action: Action.ViewRoom,
             room_id: "r2",
         });
-        wrapper.setProps({ room: r2 });
+        await _rpsUpdated;
+        rerender(<RightPanel room={r2} resizeNotifier={resizeNotifier} />);
 
-        await rendered;
+        // After all that setup, now to the interesting part...
+        // We want to verify that as we change to room 2, we should always have
+        // the correct right panel state for whichever room we are showing, so we
+        // confirm we do not have the MemberList class on the page and that we have
+        // the expected room title
+        expect(container.getElementsByClassName("mx_MemberList")).toHaveLength(0);
+        expect(screen.getByRole("heading", { name: "r2" })).toBeInTheDocument();
     });
 });

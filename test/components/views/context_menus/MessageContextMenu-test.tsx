@@ -42,14 +42,15 @@ import dispatcher from "../../../../src/dispatcher/dispatcher";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import { ReadPinsEventId } from "../../../../src/components/views/right_panel/types";
 import { Action } from "../../../../src/dispatcher/actions";
+import { mkVoiceBroadcastInfoStateEvent } from "../../../voice-broadcast/utils/test-utils";
+import { VoiceBroadcastInfoState } from "../../../../src/voice-broadcast";
 
 jest.mock("../../../../src/utils/strings", () => ({
     copyPlaintext: jest.fn(),
     getSelectedText: jest.fn(),
 }));
 jest.mock("../../../../src/utils/EventUtils", () => ({
-    // @ts-ignore don't mock everything
-    ...jest.requireActual("../../../../src/utils/EventUtils"),
+    ...(jest.requireActual("../../../../src/utils/EventUtils") as object),
     canEditContent: jest.fn(),
 }));
 jest.mock("../../../../src/dispatcher/dispatcher");
@@ -238,6 +239,17 @@ describe("MessageContextMenu", () => {
         it("does not allow forwarding a poll", () => {
             const eventContent = PollStartEvent.from("why?", ["42"], M_POLL_KIND_DISCLOSED);
             const menu = createMenuWithContent(eventContent);
+            expect(menu.find('div[aria-label="Forward"]')).toHaveLength(0);
+        });
+
+        it("should not allow forwarding a voice broadcast", () => {
+            const broadcastStartEvent = mkVoiceBroadcastInfoStateEvent(
+                roomId,
+                VoiceBroadcastInfoState.Started,
+                "@user:example.com",
+                "ABC123",
+            );
+            const menu = createMenu(broadcastStartEvent);
             expect(menu.find('div[aria-label="Forward"]')).toHaveLength(0);
         });
 

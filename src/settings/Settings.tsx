@@ -90,6 +90,7 @@ export enum LabGroup {
 
 export enum Features {
     VoiceBroadcast = "feature_voice_broadcast",
+    VoiceBroadcastForceSmallChunks = "feature_voice_broadcast_force_small_chunks",
 }
 
 export const labGroupNames: Record<LabGroup, string> = {
@@ -262,7 +263,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         controller: new ThreadBetaController(),
         displayName: _td("Threaded messages"),
         supportedLevels: LEVELS_FEATURE,
-        default: true,
+        default: false,
         betaInfo: {
             title: _td("Threaded messages"),
             caption: () => (
@@ -458,7 +459,11 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         labsGroup: LabGroup.Messaging,
         supportedLevels: LEVELS_FEATURE,
         displayName: _td("Voice broadcast"),
-        description: _td("Under active development"),
+        default: false,
+    },
+    [Features.VoiceBroadcastForceSmallChunks]: {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        displayName: _td("Force 15s voice broadcast chunk length"),
         default: false,
     },
     "feature_new_device_manager": {

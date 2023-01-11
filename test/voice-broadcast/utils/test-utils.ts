@@ -14,21 +14,26 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { Optional } from "matrix-events-sdk";
 import { EventType, MatrixEvent, MsgType, RelationType } from "matrix-js-sdk/src/matrix";
 
 import {
     VoiceBroadcastChunkEventType,
     VoiceBroadcastInfoEventType,
     VoiceBroadcastInfoState,
-} from "../../../src/voice-broadcast";
+} from "../../../src/voice-broadcast/types";
 import { mkEvent } from "../../test-utils";
 
+// timestamp incremented on each call to prevent duplicate timestamp
+let timestamp = new Date().getTime();
+
 export const mkVoiceBroadcastInfoStateEvent = (
-    roomId: string,
-    state: VoiceBroadcastInfoState,
-    senderId: string,
-    senderDeviceId: string,
+    roomId: Optional<string>,
+    state: Optional<VoiceBroadcastInfoState>,
+    senderId: Optional<string>,
+    senderDeviceId: Optional<string>,
     startedInfoEvent?: MatrixEvent,
+    lastChunkSequence?: number,
 ): MatrixEvent => {
     const relationContent = {};
 
@@ -39,17 +44,24 @@ export const mkVoiceBroadcastInfoStateEvent = (
         };
     }
 
+    const lastChunkSequenceContent = lastChunkSequence ? { last_chunk_sequence: lastChunkSequence } : {};
+
     return mkEvent({
         event: true,
+        // @ts-ignore allow everything here for edge test cases
         room: roomId,
+        // @ts-ignore allow everything here for edge test cases
         user: senderId,
         type: VoiceBroadcastInfoEventType,
+        // @ts-ignore allow everything here for edge test cases
         skey: senderId,
         content: {
             state,
             device_id: senderDeviceId,
             ...relationContent,
+            ...lastChunkSequenceContent,
         },
+        ts: timestamp++,
     });
 };
 

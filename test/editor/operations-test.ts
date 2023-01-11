@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import EditorModel from "../../src/editor/model";
-import { createPartCreator, createRenderer } from "./mock";
+import { createPartCreator, createRenderer, isDocumentPosition } from "./mock";
 import {
     formatRange,
     formatRangeAsCode,
@@ -86,7 +86,9 @@ describe("editor/operations: formatting operations", () => {
 
             expect(range.parts[0].text).toBe(input);
             formatRangeAsLink(range, text);
-            expect(renderer.caret.offset).toBe(4 + expectation.indexOf("|"));
+            if (isDocumentPosition(renderer.caret)) {
+                expect(renderer.caret.offset).toBe(4 + expectation.indexOf("|"));
+            }
             expect(model.parts[0].text).toBe("foo " + expectation.replace("|", "") + " bar");
         });
     });

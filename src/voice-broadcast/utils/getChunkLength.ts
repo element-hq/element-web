@@ -15,13 +15,17 @@ limitations under the License.
 */
 
 import SdkConfig, { DEFAULTS } from "../../SdkConfig";
+import { Features } from "../../settings/Settings";
+import SettingsStore from "../../settings/SettingsStore";
 
 /**
  * Returns the target chunk length for voice broadcasts:
- * - Tries to get the value from the voice_broadcast.chunk_length config
+ * - If {@see Features.VoiceBroadcastForceSmallChunks} is enabled uses 15s chunk length
+ * - Otherwise to get the value from the voice_broadcast.chunk_length config
  * - If that fails from DEFAULTS
  * - If that fails fall back to 120 (two minutes)
  */
 export const getChunkLength = (): number => {
+    if (SettingsStore.getValue(Features.VoiceBroadcastForceSmallChunks)) return 15;
     return SdkConfig.get("voice_broadcast")?.chunk_length || DEFAULTS.voice_broadcast?.chunk_length || 120;
 };

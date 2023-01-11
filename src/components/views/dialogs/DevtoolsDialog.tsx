@@ -31,6 +31,7 @@ import { AccountDataExplorer, RoomAccountDataExplorer } from "./devtools/Account
 import SettingsFlag from "../elements/SettingsFlag";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import ServerInfo from "./devtools/ServerInfo";
+import { Features } from "../../../settings/Settings";
 
 enum Category {
     Room,
@@ -105,6 +106,7 @@ const DevtoolsDialog: React.FC<IProps> = ({ roomId, onFinished }) => {
                     <SettingsFlag name="developerMode" level={SettingLevel.ACCOUNT} />
                     <SettingsFlag name="showHiddenEventsInTimeline" level={SettingLevel.DEVICE} />
                     <SettingsFlag name="enableWidgetScreenshots" level={SettingLevel.ACCOUNT} />
+                    <SettingsFlag name={Features.VoiceBroadcastForceSmallChunks} level={SettingLevel.DEVICE} />
                 </div>
             </BaseTool>
         );

@@ -15,10 +15,13 @@ limitations under the License.
 */
 
 import { mocked } from "jest-mock";
+import { screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 
 import { Playback, PlaybackState } from "../../../src/audio/Playback";
 import { PlaybackManager } from "../../../src/audio/PlaybackManager";
+import { SdkContextClass } from "../../../src/contexts/SDKContext";
 import { MediaEventHelper } from "../../../src/utils/MediaEventHelper";
 import {
     VoiceBroadcastInfoState,
@@ -26,14 +29,11 @@ import {
     VoiceBroadcastPlayback,
     VoiceBroadcastPlaybackEvent,
     VoiceBroadcastPlaybackState,
+    VoiceBroadcastRecording,
 } from "../../../src/voice-broadcast";
 import { flushPromises, stubClient } from "../../test-utils";
 import { createTestPlayback } from "../../test-utils/audio";
 import { mkVoiceBroadcastChunkEvent, mkVoiceBroadcastInfoStateEvent } from "../utils/test-utils";
-
-jest.mock("../../../src/events/getReferenceRelationsForEvent", () => ({
-    getReferenceRelationsForEvent: jest.fn(),
-}));
 
 jest.mock("../../../src/utils/MediaEventHelper", () => ({
     MediaEventHelper: jest.fn(),
@@ -64,6 +64,17 @@ describe("VoiceBroadcastPlayback", () => {
     let chunk1Playback: Playback;
     let chunk2Playback: Playback;
     let chunk3Playback: Playback;
+
+    const queryConfirmListeningDialog = () => {
+        return screen.queryByText(
+            "If you start listening to this live broadcast, your current live broadcast recording will be ended.",
+        );
+    };
+
+    const waitForDialog = async () => {
+        await flushPromises();
+        await flushPromises();
+    };
 
     const itShouldSetTheStateTo = (state: VoiceBroadcastPlaybackState) => {
         it(`should set the state to ${state}`, () => {
@@ -119,7 +130,11 @@ describe("VoiceBroadcastPlayback", () => {
     };
 
     const mkPlayback = async () => {
-        const playback = new VoiceBroadcastPlayback(infoEvent, client);
+        const playback = new VoiceBroadcastPlayback(
+            infoEvent,
+            client,
+            SdkContextClass.instance.voiceBroadcastRecordingsStore,
+        );
         jest.spyOn(playback, "removeAllListeners");
         jest.spyOn(playback, "destroy");
         playback.on(VoiceBroadcastPlaybackEvent.StateChanged, onStateChanged);
@@ -178,7 +193,11 @@ describe("VoiceBroadcastPlayback", () => {
         onStateChanged = jest.fn();
     });
 
-    afterEach(() => {
+    afterEach(async () => {
+        SdkContextClass.instance.voiceBroadcastPlaybacksStore.getCurrent()?.stop();
+        SdkContextClass.instance.voiceBroadcastPlaybacksStore.clearCurrent();
+        await SdkContextClass.instance.voiceBroadcastRecordingsStore.getCurrent()?.stop();
+        SdkContextClass.instance.voiceBroadcastRecordingsStore.clearCurrent();
         playback.destroy();
     });
 
@@ -279,26 +298,62 @@ describe("VoiceBroadcastPlayback", () => {
                 expect(chunk1Playback.play).not.toHaveBeenCalled();
             });
 
-            describe("and the playback of the last chunk ended", () => {
-                beforeEach(() => {
-                    chunk2Playback.emit(PlaybackState.Stopped);
-                });
-
-                itShouldSetTheStateTo(VoiceBroadcastPlaybackState.Buffering);
-
-                describe("and the next chunk arrived", () => {
+            describe(
+                "and receiving a stop info event with last_chunk_sequence = 2 and " +
+                    "the playback of the last available chunk ends",
+                () => {
                     beforeEach(() => {
-                        room.addLiveEvents([chunk3Event]);
-                        room.relations.aggregateChildEvent(chunk3Event);
+                        const stoppedEvent = mkVoiceBroadcastInfoStateEvent(
+                            roomId,
+                            VoiceBroadcastInfoState.Stopped,
+                            client.getSafeUserId(),
+                            client.deviceId!,
+                            infoEvent,
+                            2,
+                        );
+                        room.addLiveEvents([stoppedEvent]);
+                        room.relations.aggregateChildEvent(stoppedEvent);
+                        chunk2Playback.emit(PlaybackState.Stopped);
                     });
 
-                    itShouldSetTheStateTo(VoiceBroadcastPlaybackState.Playing);
+                    itShouldSetTheStateTo(VoiceBroadcastPlaybackState.Stopped);
+                },
+            );
 
-                    it("should play the next chunk", () => {
-                        expect(chunk3Playback.play).toHaveBeenCalled();
+            describe(
+                "and receiving a stop info event with last_chunk_sequence = 3 and " +
+                    "the playback of the last available chunk ends",
+                () => {
+                    beforeEach(() => {
+                        const stoppedEvent = mkVoiceBroadcastInfoStateEvent(
+                            roomId,
+                            VoiceBroadcastInfoState.Stopped,
+                            client.getSafeUserId(),
+                            client.deviceId!,
+                            infoEvent,
+                            3,
+                        );
+                        room.addLiveEvents([stoppedEvent]);
+                        room.relations.aggregateChildEvent(stoppedEvent);
+                        chunk2Playback.emit(PlaybackState.Stopped);
                     });
-                });
-            });
+
+                    itShouldSetTheStateTo(VoiceBroadcastPlaybackState.Buffering);
+
+                    describe("and the next chunk arrives", () => {
+                        beforeEach(() => {
+                            room.addLiveEvents([chunk3Event]);
+                            room.relations.aggregateChildEvent(chunk3Event);
+                        });
+
+                        itShouldSetTheStateTo(VoiceBroadcastPlaybackState.Playing);
+
+                        it("should play the next chunk", () => {
+                            expect(chunk3Playback.play).toHaveBeenCalled();
+                        });
+                    });
+                },
+            );
 
             describe("and the info event is deleted", () => {
                 beforeEach(() => {
@@ -308,6 +363,59 @@ describe("VoiceBroadcastPlayback", () => {
                 it("should stop and destroy the playback", () => {
                     expect(playback.getState()).toBe(VoiceBroadcastPlaybackState.Stopped);
                     expect(playback.destroy).toHaveBeenCalled();
+                });
+            });
+        });
+
+        describe("and currently recording a broadcast", () => {
+            let recording: VoiceBroadcastRecording;
+
+            beforeEach(async () => {
+                recording = new VoiceBroadcastRecording(
+                    mkVoiceBroadcastInfoStateEvent(
+                        roomId,
+                        VoiceBroadcastInfoState.Started,
+                        client.getSafeUserId(),
+                        client.deviceId,
+                    ),
+                    client,
+                );
+                jest.spyOn(recording, "stop");
+                SdkContextClass.instance.voiceBroadcastRecordingsStore.setCurrent(recording);
+                playback.start();
+                await waitForDialog();
+            });
+
+            it("should display a confirm modal", () => {
+                expect(queryConfirmListeningDialog()).toBeInTheDocument();
+            });
+
+            describe("when confirming the dialog", () => {
+                beforeEach(async () => {
+                    await userEvent.click(screen.getByText("Yes, end my recording"));
+                });
+
+                it("should stop the recording", () => {
+                    expect(recording.stop).toHaveBeenCalled();
+                    expect(SdkContextClass.instance.voiceBroadcastRecordingsStore.getCurrent()).toBeNull();
+                });
+
+                it("should not start the playback", () => {
+                    expect(playback.getState()).toBe(VoiceBroadcastPlaybackState.Playing);
+                });
+            });
+
+            describe("when not confirming the dialog", () => {
+                beforeEach(async () => {
+                    await userEvent.click(screen.getByText("No"));
+                });
+
+                it("should not stop the recording", () => {
+                    expect(recording.stop).not.toHaveBeenCalled();
+                });
+
+                it("should start the playback", () => {
+                    expect(playback.getState()).toBe(VoiceBroadcastPlaybackState.Stopped);
                 });
             });
         });
@@ -337,6 +445,12 @@ describe("VoiceBroadcastPlayback", () => {
                 // assert that the first chunk is being played
                 expect(chunk1Playback.play).toHaveBeenCalled();
                 expect(chunk2Playback.play).not.toHaveBeenCalled();
+            });
+
+            describe("and calling start again", () => {
+                it("should not play the first chunk a second time", () => {
+                    expect(chunk1Playback.play).toHaveBeenCalledTimes(1);
+                });
             });
 
             describe("and the chunk playback progresses", () => {

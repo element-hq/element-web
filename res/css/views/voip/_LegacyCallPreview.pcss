@@ -15,11 +15,15 @@ limitations under the License.
 */
 
 .mx_LegacyCallPreview {
-    position: fixed;
+    align-items: flex-end;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-16;
     left: 0;
+    position: fixed;
     top: 0;
-
-    pointer-events: initial; /* restore pointer events so the user can leave/interact */
+    /* Display above any widget elements */
+    z-index: 102;
 
     .mx_VideoFeed_remote.mx_VideoFeed_voice {
         min-height: 150px;

@@ -136,7 +136,7 @@ export function createTestClient(): MatrixClient {
         getTurnServers: jest.fn().mockReturnValue([]),
         getTurnServersExpiry: jest.fn().mockReturnValue(2 ^ 32),
         getThirdpartyUser: jest.fn().mockResolvedValue([]),
-        getAccountData: (type) => {
+        getAccountData: jest.fn().mockImplementation((type) => {
             return mkEvent({
                 user: undefined,
                 room: undefined,
@@ -144,7 +144,7 @@ export function createTestClient(): MatrixClient {
                 event: true,
                 content: {},
             });
-        },
+        }),
         mxcUrlToHttp: (mxc) => `http://this.is.a.url/${mxc.substring(6)}`,
         setAccountData: jest.fn(),
         setRoomAccountData: jest.fn(),
@@ -186,7 +186,7 @@ export function createTestClient(): MatrixClient {
         hasLazyLoadMembersEnabled: jest.fn().mockReturnValue(false),
         isInitialSyncComplete: jest.fn().mockReturnValue(true),
         downloadKeys: jest.fn(),
-        fetchRoomEvent: jest.fn(),
+        fetchRoomEvent: jest.fn().mockRejectedValue({}),
         makeTxnId: jest.fn().mockImplementation(() => `t${txnId++}`),
         sendToDevice: jest.fn().mockResolvedValue(undefined),
         queueToDevice: jest.fn().mockResolvedValue(undefined),
@@ -206,6 +206,7 @@ export function createTestClient(): MatrixClient {
         requestPasswordEmailToken: jest.fn().mockRejectedValue({}),
         setPassword: jest.fn().mockRejectedValue({}),
         groupCallEventHandler: { groupCalls: new Map<string, GroupCall>() },
+        redactEvent: jest.fn(),
     } as unknown as MatrixClient;
 
     client.reEmitter = new ReEmitter(client);

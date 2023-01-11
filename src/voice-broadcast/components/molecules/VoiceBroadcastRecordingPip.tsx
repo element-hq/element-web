@@ -22,7 +22,7 @@ import { VoiceBroadcastHeader } from "../atoms/VoiceBroadcastHeader";
 import { Icon as StopIcon } from "../../../../res/img/element-icons/Stop.svg";
 import { Icon as PauseIcon } from "../../../../res/img/element-icons/pause.svg";
 import { Icon as RecordIcon } from "../../../../res/img/element-icons/Record.svg";
-import { Icon as MicrophoneIcon } from "../../../../res/img/element-icons/Mic.svg";
+import { Icon as MicrophoneIcon } from "../../../../res/img/element-icons/mic.svg";
 import { _t } from "../../../languageHandler";
 import { useAudioDeviceSelection } from "../../../hooks/useAudioDeviceSelection";
 import { DevicesContextMenu } from "../../../components/views/audio_messages/DevicesContextMenu";

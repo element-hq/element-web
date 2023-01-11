@@ -17,7 +17,7 @@ import classNames from "classnames";
 
 import { LiveBadge, VoiceBroadcastLiveness } from "../..";
 import { Icon as LiveIcon } from "../../../../res/img/element-icons/live.svg";
-import { Icon as MicrophoneIcon } from "../../../../res/img/voip/call-view/mic-on.svg";
+import { Icon as MicrophoneIcon } from "../../../../res/img/element-icons/mic.svg";
 import { Icon as TimerIcon } from "../../../../res/img/element-icons/Timer.svg";
 import { _t } from "../../../languageHandler";
 import RoomAvatar from "../../../components/views/avatars/RoomAvatar";

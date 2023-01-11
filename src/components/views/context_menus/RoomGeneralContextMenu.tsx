@@ -23,11 +23,14 @@ import RoomListActions from "../../../actions/RoomListActions";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import dis from "../../../dispatcher/dispatcher";
 import { useEventEmitterState } from "../../../hooks/useEventEmitter";
+import { useUnreadNotifications } from "../../../hooks/useUnreadNotifications";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { _t } from "../../../languageHandler";
+import { NotificationColor } from "../../../stores/notifications/NotificationColor";
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";
 import RoomListStore, { LISTS_UPDATE_EVENT } from "../../../stores/room-list/RoomListStore";
 import DMRoomMap from "../../../utils/DMRoomMap";
+import { clearRoomNotification } from "../../../utils/notifications";
 import { IProps as IContextMenuProps } from "../../structures/ContextMenu";
 import IconizedContextMenu, {
     IconizedContextMenuCheckbox,
@@ -36,7 +39,7 @@ import IconizedContextMenu, {
 } from "../context_menus/IconizedContextMenu";
 import { ButtonEvent } from "../elements/AccessibleButton";
 
-interface IProps extends IContextMenuProps {
+export interface RoomGeneralContextMenuProps extends IContextMenuProps {
     room: Room;
     onPostFavoriteClick?: (event: ButtonEvent) => void;
     onPostLowPriorityClick?: (event: ButtonEvent) => void;
@@ -58,7 +61,7 @@ export const RoomGeneralContextMenu = ({
     onPostLeaveClick,
     onPostForgetClick,
     ...props
-}: IProps) => {
+}: RoomGeneralContextMenuProps) => {
     const cli = useContext(MatrixClientContext);
     const roomTags = useEventEmitterState(RoomListStore.instance, LISTS_UPDATE_EVENT, () =>
         RoomListStore.instance.getTagsForRoom(room),
@@ -115,8 +118,8 @@ export const RoomGeneralContextMenu = ({
         />
     );
 
-    let inviteOption: JSX.Element;
-    if (room.canInvite(cli.getUserId()) && !isDm) {
+    let inviteOption: JSX.Element | null = null;
+    if (room.canInvite(cli.getUserId()!) && !isDm) {
         inviteOption = (
             <IconizedContextMenuOption
                 onClick={wrapHandler(
@@ -133,7 +136,7 @@ export const RoomGeneralContextMenu = ({
         );
     }
 
-    let copyLinkOption: JSX.Element;
+    let copyLinkOption: JSX.Element | null = null;
     if (!isDm) {
         copyLinkOption = (
             <IconizedContextMenuOption
@@ -201,17 +204,34 @@ export const RoomGeneralContextMenu = ({
         );
     }
 
+    const { color } = useUnreadNotifications(room);
+    const markAsReadOption: JSX.Element | null =
+        color > NotificationColor.None ? (
+            <IconizedContextMenuCheckbox
+                onClick={() => {
+                    clearRoomNotification(room, cli);
+                    onFinished?.();
+                }}
+                active={false}
+                label={_t("Mark as read")}
+                iconClassName="mx_RoomGeneralContextMenu_iconMarkAsRead"
+            />
+        ) : null;
+
     return (
         <IconizedContextMenu {...props} onFinished={onFinished} className="mx_RoomGeneralContextMenu" compact>
-            {!roomTags.includes(DefaultTagID.Archived) && (
-                <IconizedContextMenuOptionList>
-                    {favoriteOption}
-                    {lowPriorityOption}
-                    {inviteOption}
-                    {copyLinkOption}
-                    {settingsOption}
-                </IconizedContextMenuOptionList>
-            )}
+            <IconizedContextMenuOptionList>
+                {markAsReadOption}
+                {!roomTags.includes(DefaultTagID.Archived) && (
+                    <>
+                        {favoriteOption}
+                        {lowPriorityOption}
+                        {inviteOption}
+                        {copyLinkOption}
+                        {settingsOption}
+                    </>
+                )}
+            </IconizedContextMenuOptionList>
             <IconizedContextMenuOptionList red>{leaveOption}</IconizedContextMenuOptionList>
         </IconizedContextMenu>
     );

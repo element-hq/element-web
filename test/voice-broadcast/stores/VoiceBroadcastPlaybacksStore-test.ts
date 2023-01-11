@@ -24,6 +24,7 @@ import {
     VoiceBroadcastPlaybacksStore,
     VoiceBroadcastPlaybacksStoreEvent,
     VoiceBroadcastPlaybackState,
+    VoiceBroadcastRecordingsStore,
 } from "../../../src/voice-broadcast";
 import { mkStubRoom, stubClient } from "../../test-utils";
 import { mkVoiceBroadcastInfoStateEvent } from "../utils/test-utils";
@@ -59,12 +60,13 @@ describe("VoiceBroadcastPlaybacksStore", () => {
 
         infoEvent1 = mkVoiceBroadcastInfoStateEvent(roomId, VoiceBroadcastInfoState.Started, userId, deviceId);
         infoEvent2 = mkVoiceBroadcastInfoStateEvent(roomId, VoiceBroadcastInfoState.Started, userId, deviceId);
-        playback1 = new VoiceBroadcastPlayback(infoEvent1, client);
+        const recordings = new VoiceBroadcastRecordingsStore();
+        playback1 = new VoiceBroadcastPlayback(infoEvent1, client, recordings);
         jest.spyOn(playback1, "off");
-        playback2 = new VoiceBroadcastPlayback(infoEvent2, client);
+        playback2 = new VoiceBroadcastPlayback(infoEvent2, client, recordings);
         jest.spyOn(playback2, "off");
 
-        playbacks = new VoiceBroadcastPlaybacksStore();
+        playbacks = new VoiceBroadcastPlaybacksStore(recordings);
         jest.spyOn(playbacks, "removeAllListeners");
         onCurrentChanged = jest.fn();
         playbacks.on(VoiceBroadcastPlaybacksStoreEvent.CurrentChanged, onCurrentChanged);

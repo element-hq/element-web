@@ -62,6 +62,10 @@ describe("VoiceBroadcastChunkEvents", () => {
             ]);
         });
 
+        it("getNumberOfEvents should return 4", () => {
+            expect(chunkEvents.getNumberOfEvents()).toBe(4);
+        });
+
         it("getLength should return the total length of all chunks", () => {
             expect(chunkEvents.getLength()).toBe(3259);
         });
@@ -110,6 +114,7 @@ describe("VoiceBroadcastChunkEvents", () => {
                     eventSeq3Time2T,
                     eventSeq4Time1,
                 ]);
+                expect(chunkEvents.getNumberOfEvents()).toBe(4);
             });
         });
     });
@@ -129,6 +134,17 @@ describe("VoiceBroadcastChunkEvents", () => {
                 eventSeqUTime3,
                 eventSeq2Time4Dup,
             ]);
+            expect(chunkEvents.getNumberOfEvents()).toBe(5);
+        });
+
+        describe("getSequenceForEvent", () => {
+            it("should return the sequence if provided by the event", () => {
+                expect(chunkEvents.getSequenceForEvent(eventSeq3Time2)).toBe(3);
+            });
+
+            it("should return the index if no sequence provided by event", () => {
+                expect(chunkEvents.getSequenceForEvent(eventSeqUTime3)).toBe(4);
+            });
         });
     });
 });

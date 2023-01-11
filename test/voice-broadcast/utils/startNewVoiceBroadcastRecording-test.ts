@@ -16,6 +16,7 @@ limitations under the License.
 
 import { mocked } from "jest-mock";
 import { EventType, ISendEventResponse, MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { SyncState } from "matrix-js-sdk/src/sync";
 
 import Modal from "../../../src/Modal";
 import {
@@ -84,7 +85,7 @@ describe("startNewVoiceBroadcastRecording", () => {
             skey: "",
         });
 
-        playbacksStore = new VoiceBroadcastPlaybacksStore();
+        playbacksStore = new VoiceBroadcastPlaybacksStore(recordingsStore);
         recordingsStore = {
             setCurrent: jest.fn(),
             getCurrent: jest.fn(),
@@ -103,6 +104,18 @@ describe("startNewVoiceBroadcastRecording", () => {
         jest.clearAllMocks();
     });
 
+    describe("when trying to start a broadcast if there is no connection", () => {
+        beforeEach(async () => {
+            mocked(client.getSyncState).mockReturnValue(SyncState.Error);
+            result = await startNewVoiceBroadcastRecording(room, client, playbacksStore, recordingsStore);
+        });
+
+        it("should show an info dialog and not start a recording", () => {
+            expect(result).toBeNull();
+            expect(Modal.createDialog).toMatchSnapshot();
+        });
+    });
+
     describe("when the current user is allowed to send voice broadcast info state events", () => {
         beforeEach(() => {
             mocked(room.currentState.maySendStateEvent).mockReturnValue(true);
@@ -112,7 +125,7 @@ describe("startNewVoiceBroadcastRecording", () => {
             let playback: VoiceBroadcastPlayback;
 
             beforeEach(() => {
-                playback = new VoiceBroadcastPlayback(infoEvent, client);
+                playback = new VoiceBroadcastPlayback(infoEvent, client, recordingsStore);
                 jest.spyOn(playback, "pause");
                 playbacksStore.setCurrent(playback);
             });

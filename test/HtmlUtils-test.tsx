@@ -15,9 +15,8 @@ limitations under the License.
 */
 
 import React from "react";
-// eslint-disable-next-line deprecate/import
-import { mount } from "enzyme";
 import { mocked } from "jest-mock";
+import { render, screen } from "@testing-library/react";
 
 import { topicToHtml } from "../src/HtmlUtils";
 import SettingsStore from "../src/settings/SettingsStore";
@@ -31,38 +30,35 @@ const enableHtmlTopicFeature = () => {
 };
 
 describe("HtmlUtils", () => {
+    function getContent() {
+        return screen.getByRole("contentinfo").children[0].innerHTML;
+    }
+
     it("converts plain text topic to HTML", () => {
-        const component = mount(<div>{topicToHtml("pizza", null, null, false)}</div>);
-        const wrapper = component.render();
-        expect(wrapper.children().first().html()).toEqual("pizza");
+        render(<div role="contentinfo">{topicToHtml("pizza", undefined, null, false)}</div>);
+        expect(getContent()).toEqual("pizza");
     });
 
     it("converts plain text topic with emoji to HTML", () => {
-        const component = mount(<div>{topicToHtml("pizza 🍕", null, null, false)}</div>);
-        const wrapper = component.render();
-        expect(wrapper.children().first().html()).toEqual('pizza <span class="mx_Emoji" title=":pizza:">🍕</span>');
+        render(<div role="contentinfo">{topicToHtml("pizza 🍕", undefined, null, false)}</div>);
+        expect(getContent()).toEqual('pizza <span class="mx_Emoji" title=":pizza:">🍕</span>');
     });
 
     it("converts literal HTML topic to HTML", async () => {
         enableHtmlTopicFeature();
-        const component = mount(<div>{topicToHtml("<b>pizza</b>", null, null, false)}</div>);
-        const wrapper = component.render();
-        expect(wrapper.children().first().html()).toEqual("&lt;b&gt;pizza&lt;/b&gt;");
+        render(<div role="contentinfo">{topicToHtml("<b>pizza</b>", undefined, null, false)}</div>);
+        expect(getContent()).toEqual("&lt;b&gt;pizza&lt;/b&gt;");
     });
 
     it("converts true HTML topic to HTML", async () => {
         enableHtmlTopicFeature();
-        const component = mount(<div>{topicToHtml("**pizza**", "<b>pizza</b>", null, false)}</div>);
-        const wrapper = component.render();
-        expect(wrapper.children().first().html()).toEqual("<b>pizza</b>");
+        render(<div role="contentinfo">{topicToHtml("**pizza**", "<b>pizza</b>", null, false)}</div>);
+        expect(getContent()).toEqual("<b>pizza</b>");
     });
 
     it("converts true HTML topic with emoji to HTML", async () => {
         enableHtmlTopicFeature();
-        const component = mount(<div>{topicToHtml("**pizza** 🍕", "<b>pizza</b> 🍕", null, false)}</div>);
-        const wrapper = component.render();
-        expect(wrapper.children().first().html()).toEqual(
-            '<b>pizza</b> <span class="mx_Emoji" title=":pizza:">🍕</span>',
-        );
+        render(<div role="contentinfo">{topicToHtml("**pizza** 🍕", "<b>pizza</b> 🍕", null, false)}</div>);
+        expect(getContent()).toEqual('<b>pizza</b> <span class="mx_Emoji" title=":pizza:">🍕</span>');
     });
 });

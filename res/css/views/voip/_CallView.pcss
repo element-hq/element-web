@@ -32,7 +32,7 @@ limitations under the License.
         height: 100%;
         border: none;
         border-radius: inherit;
-        background-color: $call-lobby-background;
+        background-color: $call-background;
     }
 
     /* While the lobby is shown, the widget needs to stay loaded but hidden in the background */
@@ -44,8 +44,10 @@ limitations under the License.
         min-height: 0;
         flex-grow: 1;
         padding: $spacing-12;
-        color: $call-lobby-primary-content;
-        background-color: $call-lobby-background;
+        color: $call-primary-content;
+        background-color: $call-background;
+
+        --facepile-background: $call-background;
         border-radius: 8px;
 
         display: flex;
@@ -57,10 +59,6 @@ limitations under the License.
         .mx_FacePile {
             width: fit-content;
             margin: $spacing-8 auto 0;
-
-            .mx_FacePile_faces .mx_BaseAvatar_image {
-                border-color: $call-lobby-background;
-            }
         }
 
         .mx_CallView_preview {
@@ -68,7 +66,7 @@ limitations under the License.
             width: 100%;
             max-width: 800px;
             aspect-ratio: 1.5;
-            background-color: $call-lobby-system;
+            background-color: $call-system;
 
             border-radius: 20px;
             overflow: hidden;
@@ -106,7 +104,7 @@ limitations under the License.
                 left: 0;
                 right: 0;
 
-                background-color: rgba($call-lobby-background, 0.9);
+                background-color: rgba($call-background, 0.9);
 
                 display: flex;
                 justify-content: center;
@@ -122,7 +120,7 @@ limitations under the License.
                         width: $size;
                         height: $size;
 
-                        background-color: $call-lobby-system;
+                        background-color: $call-system;
                         border-radius: calc($size / 2);
 
                         &::before {
@@ -131,13 +129,14 @@ limitations under the License.
                             mask-repeat: no-repeat;
                             mask-size: 20px;
                             mask-position: center;
-                            background-color: $call-lobby-primary-content;
+                            background-color: $call-primary-content;
                             height: 100%;
                             width: 100%;
                         }
 
                         &.mx_CallView_deviceButton_audio::before {
-                            mask-image: url("$(res)/img/voip/call-view/mic-on.svg");
+                            mask-image: url("$(res)/img/element-icons/mic.svg");
+                            mask-size: 14px;
                         }
 
                         &.mx_CallView_deviceButton_video::before {
@@ -154,7 +153,7 @@ limitations under the License.
                         width: $size;
                         height: $size;
 
-                        background-color: $call-lobby-system;
+                        background-color: $call-system;
                         border-radius: calc($size / 2);
 
                         &::before {
@@ -163,7 +162,7 @@ limitations under the License.
                             mask-image: url("$(res)/img/feather-customised/chevron-down.svg");
                             mask-size: $size;
                             mask-position: center;
-                            background-color: $call-lobby-primary-content;
+                            background-color: $call-primary-content;
                             height: 100%;
                             width: 100%;
                         }
@@ -172,16 +171,17 @@ limitations under the License.
                     &.mx_CallView_deviceButtonWrapper_muted {
                         .mx_CallView_deviceButton,
                         .mx_CallView_deviceListButton {
-                            background-color: $call-lobby-primary-content;
+                            background-color: $call-primary-content;
 
                             &::before {
-                                background-color: $call-lobby-system;
+                                background-color: $call-system;
                             }
                         }
 
                         .mx_CallView_deviceButton {
                             &.mx_CallView_deviceButton_audio::before {
-                                mask-image: url("$(res)/img/voip/call-view/mic-off.svg");
+                                mask-image: url("$(res)/img/element-icons/Mic-off.svg");
+                                mask-size: 14px;
                             }
 
                             &.mx_CallView_deviceButton_video::before {

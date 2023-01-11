@@ -14,6 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-export function htmlToPlainText(html: string) {
-    return new DOMParser().parseFromString(html, "text/html").documentElement.textContent;
-}
+import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+
+import { VoiceBroadcastInfoEventType, VoiceBroadcastInfoState } from "../types";
+
+export const isVoiceBroadcastStartedEvent = (event: MatrixEvent): boolean => {
+    return (
+        event.getType() === VoiceBroadcastInfoEventType && event.getContent()?.state === VoiceBroadcastInfoState.Started
+    );
+};

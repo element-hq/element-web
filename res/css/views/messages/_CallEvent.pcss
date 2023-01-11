@@ -29,49 +29,70 @@ limitations under the License.
     border-radius: 8px;
 
     display: flex;
-    align-items: center;
-    justify-content: space-between;
     gap: $spacing-8;
 
-    .mx_CallEvent_title {
-        font-size: $font-15px;
-        line-height: 24px; /* in px to match the avatar */
-    }
-
-    &.mx_CallEvent_inactive .mx_CallEvent_title::before {
-        display: inline-block;
-        vertical-align: middle;
-        content: "";
-        background-color: $secondary-content;
-        mask-image: url("$(res)/img/element-icons/call/video-call.svg");
-        mask-size: 16px;
-        width: 16px;
-        height: 16px;
-        margin-right: 8px;
-    }
-
-    &.mx_CallEvent_active .mx_CallEvent_title {
-        font-weight: 600;
-    }
-
-    > .mx_BaseAvatar {
+    > .mx_BaseAvatar,
+    > .mx_Icon {
         align-self: flex-start;
     }
 
-    > .mx_CallEvent_infoRows {
-        flex-grow: 1;
-
-        display: flex;
-        flex-direction: column;
-        gap: $spacing-4;
+    > .mx_Icon {
+        padding: 0;
+        margin: $spacing-4 0;
+        color: $secondary-content;
     }
 
-    > .mx_CallDuration {
-        padding: $spacing-4;
+    .mx_LiveContentSummary {
+        font-size: $font-12px;
     }
 
-    > .mx_CallEvent_button {
-        box-sizing: border-box;
-        min-width: 120px;
-    }
+    --facepile-background: $system;
+}
+
+.mx_CallEvent_title {
+    font-size: $font-15px;
+    line-height: 24px; /* in px to match the avatar */
+}
+
+.mx_CallEvent_inactive .mx_CallEvent_title::before {
+    display: inline-block;
+    vertical-align: middle;
+    content: "";
+    background-color: $secondary-content;
+    mask-image: url("$(res)/img/element-icons/call/video-call.svg");
+    mask-size: 16px;
+    width: 16px;
+    height: 16px;
+    margin-right: $spacing-8;
+}
+
+.mx_CallEvent_active .mx_CallEvent_title {
+    font-weight: $font-semi-bold;
+}
+
+.mx_CallEvent_columns {
+    flex-grow: 1;
+    display: flex;
+    gap: $spacing-12;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.mx_TimelineCard .mx_CallEvent_columns {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: $spacing-8;
+}
+
+.mx_CallEvent_details {
+    flex-grow: 1;
+
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.mx_CallEvent_button {
+    box-sizing: border-box;
+    min-width: 120px;
 }

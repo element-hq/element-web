@@ -94,7 +94,9 @@ limitations under the License.
             }
 
             &.mx_LegacyCallViewButtons_button_mic::before {
-                mask-image: url("$(res)/img/voip/call-view/mic-on.svg");
+                height: 20px;
+                mask-image: url("$(res)/img/element-icons/mic.svg");
+                width: 20px;
             }
 
             &.mx_LegacyCallViewButtons_button_vid::before {
@@ -123,7 +125,9 @@ limitations under the License.
             }
 
             &.mx_LegacyCallViewButtons_button_mic::before {
-                mask-image: url("$(res)/img/voip/call-view/mic-off.svg");
+                height: 20px;
+                mask-image: url("$(res)/img/element-icons/Mic-off.svg");
+                width: 20px;
             }
 
             &.mx_LegacyCallViewButtons_button_vid::before {
@@ -159,7 +163,7 @@ limitations under the License.
             background-color: $alert;
 
             &::before {
-                mask-image: url("$(res)/img/voip/call-view/hangup.svg");
+                mask-image: url("$(res)/img/element-icons/call/hangup.svg");
                 background-color: white; /* Same on both themes */
             }
         }

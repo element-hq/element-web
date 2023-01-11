@@ -14,18 +14,34 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { Room, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 
 import { hasRoomLiveVoiceBroadcast } from "../utils/hasRoomLiveVoiceBroadcast";
 import { useTypedEventEmitter } from "../../hooks/useEventEmitter";
+import { SDKContext } from "../../contexts/SDKContext";
 
 export const useHasRoomLiveVoiceBroadcast = (room: Room) => {
-    const [hasLiveVoiceBroadcast, setHasLiveVoiceBroadcast] = useState(hasRoomLiveVoiceBroadcast(room).hasBroadcast);
+    const sdkContext = useContext(SDKContext);
+    const [hasLiveVoiceBroadcast, setHasLiveVoiceBroadcast] = useState(false);
 
-    useTypedEventEmitter(room.currentState, RoomStateEvent.Update, () => {
-        setHasLiveVoiceBroadcast(hasRoomLiveVoiceBroadcast(room).hasBroadcast);
-    });
+    const update = useMemo(() => {
+        return sdkContext.client
+            ? () => {
+                  hasRoomLiveVoiceBroadcast(sdkContext.client!, room).then(
+                      ({ hasBroadcast }) => {
+                          setHasLiveVoiceBroadcast(hasBroadcast);
+                      },
+                      () => {}, // no update on error
+                  );
+              }
+            : () => {}; // noop without client
+    }, [room, sdkContext, setHasLiveVoiceBroadcast]);
 
+    useEffect(() => {
+        update();
+    }, [update]);
+
+    useTypedEventEmitter(room.currentState, RoomStateEvent.Update, () => update());
     return hasLiveVoiceBroadcast;
 };

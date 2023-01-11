@@ -24,18 +24,16 @@ import { Action } from "../../../../../dispatcher/actions";
 import { useRoomContext } from "../../../../../contexts/RoomContext";
 
 interface EmojiProps {
-    selectPreviousSelection: () => void;
     menuPosition: AboveLeftOf;
 }
 
-export function Emoji({ selectPreviousSelection, menuPosition }: EmojiProps) {
+export function Emoji({ menuPosition }: EmojiProps) {
     const roomContext = useRoomContext();
 
     return (
         <EmojiButton
             menuPosition={menuPosition}
             addEmoji={(emoji) => {
-                selectPreviousSelection();
                 dis.dispatch<ComposerInsertPayload>({
                     action: Action.ComposerInsert,
                     text: emoji,

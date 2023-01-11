@@ -17,6 +17,9 @@ limitations under the License.
 import { mocked } from "jest-mock";
 
 import SdkConfig, { DEFAULTS } from "../../../src/SdkConfig";
+import { SettingLevel } from "../../../src/settings/SettingLevel";
+import { Features } from "../../../src/settings/Settings";
+import SettingsStore from "../../../src/settings/SettingsStore";
 import { getChunkLength } from "../../../src/voice-broadcast/utils/getChunkLength";
 
 jest.mock("../../../src/SdkConfig");
@@ -48,13 +51,23 @@ describe("getChunkLength", () => {
         });
     });
 
-    describe("if there are no defaults", () => {
+    describe("when there are no defaults", () => {
         beforeEach(() => {
             DEFAULTS.voice_broadcast = undefined;
         });
 
         it("should return the fallback value", () => {
             expect(getChunkLength()).toBe(120);
+        });
+    });
+
+    describe("when the Features.VoiceBroadcastForceSmallChunks is enabled", () => {
+        beforeEach(async () => {
+            await SettingsStore.setValue(Features.VoiceBroadcastForceSmallChunks, null, SettingLevel.DEVICE, true);
+        });
+
+        it("should return a chunk length of 15 seconds", () => {
+            expect(getChunkLength()).toBe(15);
         });
     });
 });

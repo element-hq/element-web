@@ -14,10 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { fireEvent, getByText, render } from "@testing-library/react";
 import React from "react";
-// eslint-disable-next-line deprecate/import
-import { mount } from "enzyme";
-import { act } from "react-dom/test-utils";
 
 import AccessibleButton from "../../../../src/components/views/elements/AccessibleButton";
 import { Key } from "../../../../src/Keyboard";
@@ -28,7 +26,7 @@ describe("<AccessibleButton />", () => {
         onClick: jest.fn(),
         children: "i am a button",
     };
-    const getComponent = (props = {}) => mount(<AccessibleButton {...defaultProps} {...props} />);
+    const getComponent = (props = {}) => render(<AccessibleButton {...defaultProps} {...props} />);
 
     beforeEach(() => {
         mockPlatformPeg();
@@ -38,76 +36,65 @@ describe("<AccessibleButton />", () => {
         unmockPlatformPeg();
     });
 
-    const makeKeyboardEvent = (key: string) =>
-        ({
-            key,
-            stopPropagation: jest.fn(),
-            preventDefault: jest.fn(),
-        } as unknown as KeyboardEvent);
-
     it("renders div with role button by default", () => {
-        const component = getComponent();
-        expect(component).toMatchSnapshot();
+        const { asFragment } = getComponent();
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("renders a button element", () => {
-        const component = getComponent({ element: "button" });
-        expect(component).toMatchSnapshot();
+        const { asFragment } = getComponent({ element: "button" });
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("renders with correct classes when button has kind", () => {
-        const component = getComponent({
+        const { asFragment } = getComponent({
             kind: "primary",
         });
-        expect(component).toMatchSnapshot();
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it("disables button correctly", () => {
         const onClick = jest.fn();
-        const component = getComponent({
+        const { container } = getComponent({
             onClick,
             disabled: true,
         });
-        expect(component.find(".mx_AccessibleButton").props().disabled).toBeTruthy();
-        expect(component.find(".mx_AccessibleButton").props()["aria-disabled"]).toBeTruthy();
 
-        act(() => {
-            component.simulate("click");
-        });
+        const btn = getByText(container, "i am a button");
+
+        expect(btn.hasAttribute("disabled")).toBeTruthy();
+        expect(btn.hasAttribute("aria-disabled")).toBeTruthy();
+
+        fireEvent.click(btn);
 
         expect(onClick).not.toHaveBeenCalled();
 
-        act(() => {
-            const keydownEvent = makeKeyboardEvent(Key.ENTER);
-            component.simulate("keydown", keydownEvent);
-        });
+        fireEvent.keyPress(btn, { key: Key.ENTER, code: Key.ENTER });
 
         expect(onClick).not.toHaveBeenCalled();
     });
 
     it("calls onClick handler on button click", () => {
         const onClick = jest.fn();
-        const component = getComponent({
+        const { container } = getComponent({
             onClick,
         });
 
-        act(() => {
-            component.simulate("click");
-        });
+        const btn = getByText(container, "i am a button");
+        fireEvent.click(btn);
 
         expect(onClick).toHaveBeenCalled();
     });
 
     it("calls onClick handler on button mousedown when triggerOnMousedown is passed", () => {
         const onClick = jest.fn();
-        const component = getComponent({
+        const { container } = getComponent({
             onClick,
             triggerOnMouseDown: true,
         });
 
-        act(() => {
-            component.simulate("mousedown");
-        });
+        const btn = getByText(container, "i am a button");
+        fireEvent.mouseDown(btn);
 
         expect(onClick).toHaveBeenCalled();
     });
@@ -115,91 +102,71 @@ describe("<AccessibleButton />", () => {
     describe("handling keyboard events", () => {
         it("calls onClick handler on enter keydown", () => {
             const onClick = jest.fn();
-            const component = getComponent({
+            const { container } = getComponent({
                 onClick,
             });
 
-            const keyboardEvent = makeKeyboardEvent(Key.ENTER);
-            act(() => {
-                component.simulate("keydown", keyboardEvent);
-            });
+            const btn = getByText(container, "i am a button");
+
+            fireEvent.keyDown(btn, { key: Key.ENTER, code: Key.ENTER });
 
             expect(onClick).toHaveBeenCalled();
 
-            act(() => {
-                component.simulate("keyup", keyboardEvent);
-            });
+            fireEvent.keyUp(btn, { key: Key.ENTER, code: Key.ENTER });
 
             // handler only called once on keydown
             expect(onClick).toHaveBeenCalledTimes(1);
-            // called for both keyup and keydown
-            expect(keyboardEvent.stopPropagation).toHaveBeenCalledTimes(2);
-            expect(keyboardEvent.preventDefault).toHaveBeenCalledTimes(2);
         });
 
         it("calls onClick handler on space keyup", () => {
             const onClick = jest.fn();
-            const component = getComponent({
+            const { container } = getComponent({
                 onClick,
             });
+            const btn = getByText(container, "i am a button");
 
-            const keyboardEvent = makeKeyboardEvent(Key.SPACE);
-            act(() => {
-                component.simulate("keydown", keyboardEvent);
-            });
+            fireEvent.keyDown(btn, { key: Key.SPACE, code: Key.SPACE });
 
             expect(onClick).not.toHaveBeenCalled();
 
-            act(() => {
-                component.simulate("keyup", keyboardEvent);
-            });
+            fireEvent.keyUp(btn, { key: Key.SPACE, code: Key.SPACE });
 
             // handler only called once on keyup
             expect(onClick).toHaveBeenCalledTimes(1);
-            // called for both keyup and keydown
-            expect(keyboardEvent.stopPropagation).toHaveBeenCalledTimes(2);
-            expect(keyboardEvent.preventDefault).toHaveBeenCalledTimes(2);
         });
 
         it("calls onKeydown/onKeyUp handlers for keys other than space and enter", () => {
             const onClick = jest.fn();
             const onKeyDown = jest.fn();
             const onKeyUp = jest.fn();
-            const component = getComponent({
+            const { container } = getComponent({
                 onClick,
                 onKeyDown,
                 onKeyUp,
             });
 
-            const keyboardEvent = makeKeyboardEvent(Key.K);
-            act(() => {
-                component.simulate("keydown", keyboardEvent);
-                component.simulate("keyup", keyboardEvent);
-            });
+            const btn = getByText(container, "i am a button");
+
+            fireEvent.keyDown(btn, { key: Key.K, code: Key.K });
+            fireEvent.keyUp(btn, { key: Key.K, code: Key.K });
 
             expect(onClick).not.toHaveBeenCalled();
             expect(onKeyDown).toHaveBeenCalled();
             expect(onKeyUp).toHaveBeenCalled();
-            expect(keyboardEvent.stopPropagation).not.toHaveBeenCalled();
-            expect(keyboardEvent.preventDefault).not.toHaveBeenCalled();
         });
 
         it("does nothing on non space/enter key presses when no onKeydown/onKeyUp handlers provided", () => {
             const onClick = jest.fn();
-            const component = getComponent({
+            const { container } = getComponent({
                 onClick,
             });
 
-            const keyboardEvent = makeKeyboardEvent(Key.K);
-            act(() => {
-                component.simulate("keydown", keyboardEvent);
-                component.simulate("keyup", keyboardEvent);
-            });
+            const btn = getByText(container, "i am a button");
 
-            // no onClick call, no problems
+            fireEvent.keyDown(btn, { key: Key.K, code: Key.K });
+            fireEvent.keyUp(btn, { key: Key.K, code: Key.K });
+
             expect(onClick).not.toHaveBeenCalled();
-            expect(keyboardEvent.stopPropagation).not.toHaveBeenCalled();
-            expect(keyboardEvent.preventDefault).not.toHaveBeenCalled();
         });
     });
 });

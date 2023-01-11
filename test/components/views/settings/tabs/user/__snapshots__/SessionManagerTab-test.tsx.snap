@@ -167,7 +167,7 @@ exports[`<SessionManagerTab /> current session section renders current session s
         <p
           class="mx_DeviceSecurityCard_description"
         >
-          This session is ready for secure messaging.
+          Your current session is ready for secure messaging.
           <div
             class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
             role="button"
@@ -296,7 +296,7 @@ exports[`<SessionManagerTab /> current session section renders current session s
         <p
           class="mx_DeviceSecurityCard_description"
         >
-          Verify or sign out from this session for best security and reliability.
+          Verify your current session for enhanced secure messaging.
           <div
             class="mx_AccessibleButton mx_LearnMore_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
             role="button"

@@ -14,23 +14,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { MatrixEvent, RelationType } from "matrix-js-sdk/src/matrix";
 
 import {
     VoiceBroadcastRecordingBody,
-    VoiceBroadcastRecordingsStore,
     shouldDisplayAsVoiceBroadcastRecordingTile,
     VoiceBroadcastInfoEventType,
-    VoiceBroadcastPlaybacksStore,
     VoiceBroadcastPlaybackBody,
     VoiceBroadcastInfoState,
 } from "..";
 import { IBodyProps } from "../../components/views/messages/IBodyProps";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { RelationsHelper, RelationsHelperEvent } from "../../events/RelationsHelper";
+import { SDKContext } from "../../contexts/SDKContext";
 
 export const VoiceBroadcastBody: React.FC<IBodyProps> = ({ mxEvent }) => {
+    const sdkContext = useContext(SDKContext);
     const client = MatrixClientPeg.get();
     const [infoState, setInfoState] = useState(mxEvent.getContent()?.state || VoiceBroadcastInfoState.Stopped);
 
@@ -57,10 +57,10 @@ export const VoiceBroadcastBody: React.FC<IBodyProps> = ({ mxEvent }) => {
     });
 
     if (shouldDisplayAsVoiceBroadcastRecordingTile(infoState, client, mxEvent)) {
-        const recording = VoiceBroadcastRecordingsStore.instance().getByInfoEvent(mxEvent, client);
+        const recording = sdkContext.voiceBroadcastRecordingsStore.getByInfoEvent(mxEvent, client);
         return <VoiceBroadcastRecordingBody recording={recording} />;
     }
 
-    const playback = VoiceBroadcastPlaybacksStore.instance().getByInfoEvent(mxEvent, client);
+    const playback = sdkContext.voiceBroadcastPlaybacksStore.getByInfoEvent(mxEvent, client);
     return <VoiceBroadcastPlaybackBody playback={playback} />;
 };

@@ -34,6 +34,9 @@ interface Props {
     isLoading: boolean;
     isSigningOut: boolean;
     localNotificationSettings?: LocalNotificationSettings | undefined;
+    // number of other sessions the user has
+    // excludes current session
+    otherSessionsCount: number;
     setPushNotifications?: (deviceId: string, enabled: boolean) => Promise<void> | undefined;
     onVerifyCurrentDevice: () => void;
     onSignOutCurrentDevice: () => void;
@@ -41,13 +44,17 @@ interface Props {
     saveDeviceName: (deviceName: string) => Promise<void>;
 }
 
-type CurrentDeviceSectionHeadingProps = Pick<Props, "onSignOutCurrentDevice" | "signOutAllOtherSessions"> & {
+type CurrentDeviceSectionHeadingProps = Pick<
+    Props,
+    "onSignOutCurrentDevice" | "signOutAllOtherSessions" | "otherSessionsCount"
+> & {
     disabled?: boolean;
 };
 
 const CurrentDeviceSectionHeading: React.FC<CurrentDeviceSectionHeadingProps> = ({
     onSignOutCurrentDevice,
     signOutAllOtherSessions,
+    otherSessionsCount,
     disabled,
 }) => {
     const menuOptions = [
@@ -61,7 +68,7 @@ const CurrentDeviceSectionHeading: React.FC<CurrentDeviceSectionHeadingProps> = 
             ? [
                   <IconizedContextMenuOption
                       key="sign-out-all-others"
-                      label={_t("Sign out all other sessions")}
+                      label={_t("Sign out of all other sessions (%(otherSessionsCount)s)", { otherSessionsCount })}
                       onClick={signOutAllOtherSessions}
                       isDestructive
                   />,
@@ -85,6 +92,7 @@ const CurrentDeviceSection: React.FC<Props> = ({
     isLoading,
     isSigningOut,
     localNotificationSettings,
+    otherSessionsCount,
     setPushNotifications,
     onVerifyCurrentDevice,
     onSignOutCurrentDevice,
@@ -100,6 +108,7 @@ const CurrentDeviceSection: React.FC<Props> = ({
                 <CurrentDeviceSectionHeading
                     onSignOutCurrentDevice={onSignOutCurrentDevice}
                     signOutAllOtherSessions={signOutAllOtherSessions}
+                    otherSessionsCount={otherSessionsCount}
                     disabled={isLoading || !device || isSigningOut}
                 />
             }
@@ -124,11 +133,16 @@ const CurrentDeviceSection: React.FC<Props> = ({
                             onVerifyDevice={onVerifyCurrentDevice}
                             onSignOutDevice={onSignOutCurrentDevice}
                             saveDeviceName={saveDeviceName}
+                            className="mx_CurrentDeviceSection_deviceDetails"
                         />
                     ) : (
                         <>
                             <br />
-                            <DeviceVerificationStatusCard device={device} onVerifyDevice={onVerifyCurrentDevice} />
+                            <DeviceVerificationStatusCard
+                                device={device}
+                                onVerifyDevice={onVerifyCurrentDevice}
+                                isCurrentDevice
+                            />
                         </>
                     )}
                 </>

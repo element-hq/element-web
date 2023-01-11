@@ -46,6 +46,7 @@ import LogoutDialog from "../../../../../../src/components/views/dialogs/LogoutD
 import { DeviceSecurityVariation, ExtendedDevice } from "../../../../../../src/components/views/settings/devices/types";
 import { INACTIVE_DEVICE_AGE_MS } from "../../../../../../src/components/views/settings/devices/filter";
 import SettingsStore from "../../../../../../src/settings/SettingsStore";
+import { getClientInformationEventType } from "../../../../../../src/utils/device/clientInformation";
 
 mockPlatformPeg();
 
@@ -87,6 +88,7 @@ describe("<SessionManagerTab />", () => {
         generateClientSecret: jest.fn(),
         setDeviceDetails: jest.fn(),
         getAccountData: jest.fn(),
+        deleteAccountData: jest.fn(),
         doesServerSupportUnstableFeature: jest.fn().mockResolvedValue(true),
         getPushers: jest.fn(),
         setPusher: jest.fn(),
@@ -181,6 +183,9 @@ describe("<SessionManagerTab />", () => {
                 }),
             ],
         });
+
+        // @ts-ignore mock
+        mockClient.store = { accountData: {} };
 
         mockClient.getAccountData.mockReset().mockImplementation((eventType) => {
             if (eventType.startsWith(LOCAL_NOTIFICATION_SETTINGS_PREFIX.name)) {
@@ -643,7 +648,7 @@ describe("<SessionManagerTab />", () => {
             });
 
             fireEvent.click(getByTestId("current-session-menu"));
-            expect(queryByLabelText("Sign out all other sessions")).toBeFalsy();
+            expect(queryByLabelText("Sign out of all other sessions")).toBeFalsy();
         });
 
         it("signs out of all other devices from current session context menu", async () => {
@@ -657,7 +662,7 @@ describe("<SessionManagerTab />", () => {
             });
 
             fireEvent.click(getByTestId("current-session-menu"));
-            fireEvent.click(getByLabelText("Sign out all other sessions"));
+            fireEvent.click(getByLabelText("Sign out of all other sessions (2)"));
             await confirmSignout(getByTestId);
 
             // other devices deleted, excluding current device
@@ -665,6 +670,47 @@ describe("<SessionManagerTab />", () => {
                 [alicesMobileDevice.device_id, alicesOlderMobileDevice.device_id],
                 undefined,
             );
+        });
+
+        it("removes account data events for devices after sign out", async () => {
+            const mobileDeviceClientInfo = new MatrixEvent({
+                type: getClientInformationEventType(alicesMobileDevice.device_id),
+                content: {
+                    name: "test",
+                },
+            });
+            // @ts-ignore setup mock
+            mockClient.store = {
+                // @ts-ignore setup mock
+                accountData: {
+                    [mobileDeviceClientInfo.getType()]: mobileDeviceClientInfo,
+                },
+            };
+
+            mockClient.getDevices
+                .mockResolvedValueOnce({
+                    devices: [alicesDevice, alicesMobileDevice, alicesOlderMobileDevice],
+                })
+                .mockResolvedValueOnce({
+                    // refreshed devices after sign out
+                    devices: [alicesDevice],
+                });
+
+            const { getByTestId, getByLabelText } = render(getComponent());
+
+            await act(async () => {
+                await flushPromises();
+            });
+
+            expect(mockClient.deleteAccountData).not.toHaveBeenCalled();
+
+            fireEvent.click(getByTestId("current-session-menu"));
+            fireEvent.click(getByLabelText("Sign out of all other sessions (2)"));
+            await confirmSignout(getByTestId);
+
+            // only called once for signed out device with account data event
+            expect(mockClient.deleteAccountData).toHaveBeenCalledTimes(1);
+            expect(mockClient.deleteAccountData).toHaveBeenCalledWith(mobileDeviceClientInfo.getType());
         });
 
         describe("other devices", () => {
@@ -927,6 +973,27 @@ describe("<SessionManagerTab />", () => {
                 );
 
                 resolveDeleteRequest?.();
+            });
+
+            it("signs out of all other devices from other sessions context menu", async () => {
+                mockClient.getDevices.mockResolvedValue({
+                    devices: [alicesDevice, alicesMobileDevice, alicesOlderMobileDevice],
+                });
+                const { getByTestId, getByLabelText } = render(getComponent());
+
+                await act(async () => {
+                    await flushPromises();
+                });
+
+                fireEvent.click(getByTestId("other-sessions-menu"));
+                fireEvent.click(getByLabelText("Sign out of 2 sessions"));
+                await confirmSignout(getByTestId);
+
+                // other devices deleted, excluding current device
+                expect(mockClient.deleteMultipleDevices).toHaveBeenCalledWith(
+                    [alicesMobileDevice.device_id, alicesOlderMobileDevice.device_id],
+                    undefined,
+                );
             });
         });
     });

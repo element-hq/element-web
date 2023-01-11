@@ -1,6 +1,5 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
-Copyright 2021 Šimon Brandner <simon.bra.ag@gmail.com>
+Copyright 2022 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,20 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+.mx_LinkModal {
+    padding: $spacing-32;
 
-import PipView from "./PipView";
+    .mx_Dialog_content {
+        margin-top: 30px;
+        margin-bottom: 42px;
+    }
 
-interface IProps {}
-
-interface IState {}
-
-export default class PiPContainer extends React.PureComponent<IProps, IState> {
-    public render() {
-        return (
-            <div className="mx_PiPContainer">
-                <PipView />
-            </div>
-        );
+    .mx_LinkModal_content {
+        display: flex;
+        flex-direction: column;
     }
 }

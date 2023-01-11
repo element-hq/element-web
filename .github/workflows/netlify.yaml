@@ -35,14 +35,13 @@ jobs:
             - name: 📥 Download artifact
               uses: dawidd6/action-download-artifact@v2
               with:
-                  workflow: element-build-and-test.yaml
                   run_id: ${{ github.event.workflow_run.id }}
                   name: previewbuild
                   path: webapp
 
             - name: ☁️ Deploy to Netlify
               id: netlify
-              uses: nwtgck/actions-netlify@v1.2
+              uses: nwtgck/actions-netlify@v2.0
               with:
                   publish-dir: webapp
                   deploy-message: "Deploy from GitHub Actions"

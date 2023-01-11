@@ -14,9 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 
-import { VoiceBroadcastInfoEventType, VoiceBroadcastInfoState } from "..";
+import { retrieveStartedInfoEvent, VoiceBroadcastInfoEventType, VoiceBroadcastInfoState } from "..";
+import { asyncEvery } from "../../utils/arrays";
 
 interface Result {
     // whether there is a live broadcast in the room
@@ -27,22 +28,26 @@ interface Result {
     startedByUser: boolean;
 }
 
-export const hasRoomLiveVoiceBroadcast = (room: Room, userId?: string): Result => {
+export const hasRoomLiveVoiceBroadcast = async (client: MatrixClient, room: Room, userId?: string): Promise<Result> => {
     let hasBroadcast = false;
     let startedByUser = false;
     let infoEvent: MatrixEvent | null = null;
 
     const stateEvents = room.currentState.getStateEvents(VoiceBroadcastInfoEventType);
-    stateEvents.every((event: MatrixEvent) => {
+    await asyncEvery(stateEvents, async (event: MatrixEvent) => {
         const state = event.getContent()?.state;
 
         if (state && state !== VoiceBroadcastInfoState.Stopped) {
+            const startEvent = await retrieveStartedInfoEvent(event, client);
+
+            // skip if started voice broadcast event is redacted
+            if (startEvent?.isRedacted()) return true;
+
             hasBroadcast = true;
-            infoEvent = event;
+            infoEvent = startEvent;
 
             // state key = sender's MXID
             if (event.getStateKey() === userId) {
-                infoEvent = event;
                 startedByUser = true;
                 // break here, because more than true / true is not possible
                 return false;

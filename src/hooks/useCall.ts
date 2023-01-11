@@ -33,6 +33,11 @@ export const useCall = (roomId: string): Call | null => {
     return call;
 };
 
+export const useCallForWidget = (widgetId: string, roomId: string): Call | null => {
+    const call = useCall(roomId);
+    return call?.widget.id === widgetId ? call : null;
+};
+
 export const useConnectionState = (call: Call): ConnectionState =>
     useTypedEventEmitterState(
         call,

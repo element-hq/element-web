@@ -53,6 +53,7 @@ import { getCurrentLanguage } from "../languageHandler";
 import DesktopCapturerSourcePicker from "../components/views/elements/DesktopCapturerSourcePicker";
 import Modal from "../Modal";
 import { FontWatcher } from "../settings/watchers/FontWatcher";
+import { PosthogAnalytics } from "../PosthogAnalytics";
 
 const TIMEOUT_MS = 16000;
 
@@ -254,6 +255,7 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
         }
 
         this.room.on(RoomEvent.MyMembership, this.onMyMembership);
+        WidgetMessagingStore.instance.on(WidgetMessagingStoreEvent.StopMessaging, this.onStopMessaging);
         window.addEventListener("beforeunload", this.beforeUnload);
         this.connectionState = ConnectionState.Connected;
     }
@@ -274,6 +276,7 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
      */
     public setDisconnected() {
         this.room.off(RoomEvent.MyMembership, this.onMyMembership);
+        WidgetMessagingStore.instance.off(WidgetMessagingStoreEvent.StopMessaging, this.onStopMessaging);
         window.removeEventListener("beforeunload", this.beforeUnload);
         this.messaging = null;
         this.connectionState = ConnectionState.Disconnected;
@@ -289,6 +292,13 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
 
     private onMyMembership = async (_room: Room, membership: string) => {
         if (membership !== "join") this.setDisconnected();
+    };
+
+    private onStopMessaging = (uid: string) => {
+        if (uid === this.widgetUid) {
+            logger.log("The widget died; treating this as a user hangup");
+            this.setDisconnected();
+        }
     };
 
     private beforeUnload = () => this.setDisconnected();
@@ -626,6 +636,15 @@ export class ElementCall extends Call {
     }
 
     private constructor(public readonly groupCall: GroupCall, client: MatrixClient) {
+        const accountAnalyticsData = client.getAccountData(PosthogAnalytics.ANALYTICS_EVENT_TYPE);
+        // The analyticsID is passed directly to element call (EC) since this codepath is only for EC and no other widget.
+        // We really don't want the same analyticID's for the EC and EW posthog instances (Data on posthog should be limited/anonymized as much as possible).
+        // This is prohibited in EC where a hashed version of the analyticsID is used for the actual posthog identification.
+        // We can pass the raw EW analyticsID here since we need to trust EC with not sending sensitive data to posthog (EC has access to more sensible data than the analyticsID e.g. the username)
+        const analyticsID: string = accountAnalyticsData?.getContent().pseudonymousAnalyticsOptIn
+            ? accountAnalyticsData?.getContent().id
+            : "";
+
         // Splice together the Element Call URL for this call
         const params = new URLSearchParams({
             embed: "",
@@ -637,6 +656,7 @@ export class ElementCall extends Call {
             baseUrl: client.baseUrl,
             lang: getCurrentLanguage().replace("_", "-"),
             fontScale: `${SettingsStore.getValue("baseFontSize") / FontWatcher.DEFAULT_SIZE}`,
+            analyticsID,
         });
 
         // Set custom fonts

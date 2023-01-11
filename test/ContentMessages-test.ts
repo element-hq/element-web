@@ -312,6 +312,7 @@ describe("uploadFile", () => {
             expect.objectContaining({
                 progressHandler,
                 includeFilename: false,
+                type: "application/octet-stream",
             }),
         );
         expect(mocked(client.uploadContent).mock.calls[0][0]).not.toBe(file);

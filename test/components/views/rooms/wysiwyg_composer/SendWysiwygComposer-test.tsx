@@ -16,7 +16,7 @@ limitations under the License.
 
 import "@testing-library/jest-dom";
 import React from "react";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import RoomContext from "../../../../../src/contexts/RoomContext";
@@ -24,7 +24,7 @@ import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../src/dispatcher/actions";
 import { IRoomState } from "../../../../../src/components/structures/RoomView";
 import { createTestClient, flushPromises, getRoomContext, mkEvent, mkStubRoom } from "../../../../test-utils";
-import { SendWysiwygComposer } from "../../../../../src/components/views/rooms/wysiwyg_composer";
+import { SendWysiwygComposer } from "../../../../../src/components/views/rooms/wysiwyg_composer/";
 import { aboveLeftOf } from "../../../../../src/components/structures/ContextMenu";
 import { ComposerInsertPayload, ComposerType } from "../../../../../src/dispatcher/payloads/ComposerInsertPayload";
 import { setSelection } from "../../../../../src/components/views/rooms/wysiwyg_composer/utils/selection";
@@ -101,12 +101,12 @@ describe("SendWysiwygComposer", () => {
         );
     };
 
-    it("Should render WysiwygComposer when isRichTextEnabled is at true", () => {
+    it("Should render WysiwygComposer when isRichTextEnabled is at true", async () => {
         // When
         customRender(jest.fn(), jest.fn(), false, true);
 
         // Then
-        expect(screen.getByTestId("WysiwygComposer")).toBeTruthy();
+        await waitFor(() => expect(screen.getByTestId("WysiwygComposer")).toBeTruthy());
     });
 
     it("Should render PlainTextComposer when isRichTextEnabled is at false", () => {
@@ -117,12 +117,9 @@ describe("SendWysiwygComposer", () => {
         expect(screen.getByTestId("PlainTextComposer")).toBeTruthy();
     });
 
-    describe.each([
-        { isRichTextEnabled: true, emptyContent: "<br>" },
-        { isRichTextEnabled: false, emptyContent: "" },
-    ])(
+    describe.each([{ isRichTextEnabled: true }, { isRichTextEnabled: false }])(
         "Should focus when receiving an Action.FocusSendMessageComposer action",
-        ({ isRichTextEnabled, emptyContent }) => {
+        ({ isRichTextEnabled }) => {
             afterEach(() => {
                 jest.resetAllMocks();
             });
@@ -198,7 +195,9 @@ describe("SendWysiwygComposer", () => {
                 });
 
                 // Wait for event dispatch to happen
-                await flushPromises();
+                await act(async () => {
+                    await flushPromises();
+                });
 
                 // Then we don't get it because we are disabled
                 expect(screen.getByRole("textbox")).not.toHaveFocus();
@@ -295,7 +294,7 @@ describe("SendWysiwygComposer", () => {
                 });
 
                 const textNode = screen.getByRole("textbox").firstChild;
-                setSelection({
+                await setSelection({
                     anchorNode: textNode,
                     anchorOffset: 2,
                     focusNode: textNode,

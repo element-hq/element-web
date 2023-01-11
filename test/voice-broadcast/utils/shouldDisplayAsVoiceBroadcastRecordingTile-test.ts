@@ -17,26 +17,30 @@ limitations under the License.
 import { mocked } from "jest-mock";
 import { MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
 
-import {
-    shouldDisplayAsVoiceBroadcastRecordingTile,
-    VoiceBroadcastInfoEventType,
-    VoiceBroadcastInfoState,
-} from "../../../src/voice-broadcast";
-import { createTestClient, mkEvent } from "../../test-utils";
+import { shouldDisplayAsVoiceBroadcastRecordingTile, VoiceBroadcastInfoState } from "../../../src/voice-broadcast";
+import { createTestClient } from "../../test-utils";
+import { mkVoiceBroadcastInfoStateEvent } from "./test-utils";
 
-const testCases = [
+type TestTuple = [string | null, string, string, string, VoiceBroadcastInfoState, boolean];
+
+const testCases: TestTuple[] = [
     [
         "@user1:example.com", // own MXID
         "@user1:example.com", // sender MXID
+        "ABC123", // own device ID
+        "ABC123", // sender device ID
         VoiceBroadcastInfoState.Started,
         true, // expected return value
     ],
-    ["@user1:example.com", "@user1:example.com", VoiceBroadcastInfoState.Paused, true],
-    ["@user1:example.com", "@user1:example.com", VoiceBroadcastInfoState.Resumed, true],
-    ["@user1:example.com", "@user1:example.com", VoiceBroadcastInfoState.Stopped, false],
-    ["@user2:example.com", "@user1:example.com", VoiceBroadcastInfoState.Started, false],
-    [null, null, null, false],
-    [undefined, undefined, undefined, false],
+    ["@user1:example.com", "@user1:example.com", "ABC123", "ABC123", VoiceBroadcastInfoState.Paused, true],
+    ["@user1:example.com", "@user1:example.com", "ABC123", "ABC123", VoiceBroadcastInfoState.Resumed, true],
+    ["@user1:example.com", "@user1:example.com", "ABC123", "ABC123", VoiceBroadcastInfoState.Stopped, false],
+    ["@user2:example.com", "@user1:example.com", "ABC123", "ABC123", VoiceBroadcastInfoState.Started, false],
+    [null, "@user1:example.com", "ABC123", "ABC123", VoiceBroadcastInfoState.Started, false],
+    // other device
+    ["@user1:example.com", "@user1:example.com", "ABC123", "JKL123", VoiceBroadcastInfoState.Started, false],
+    ["@user1:example.com", "@user1:example.com", "ABC123", "JKL123", VoiceBroadcastInfoState.Paused, false],
+    ["@user1:example.com", "@user1:example.com", "ABC123", "JKL123", VoiceBroadcastInfoState.Resumed, false],
 ];
 
 describe("shouldDisplayAsVoiceBroadcastRecordingTile", () => {
@@ -47,18 +51,13 @@ describe("shouldDisplayAsVoiceBroadcastRecordingTile", () => {
         client = createTestClient();
     });
 
-    describe.each(testCases)(
-        "when called with user »%s«, sender »%s«, state »%s«",
-        (userId: string, senderId: string, state: VoiceBroadcastInfoState, expected: boolean) => {
+    describe.each<TestTuple>(testCases)(
+        "when called with user »%s«, sender »%s«, device »%s«, sender device »%s« state »%s«",
+        (userId, senderId, deviceId, senderDeviceId, state, expected) => {
             beforeEach(() => {
-                event = mkEvent({
-                    event: true,
-                    type: VoiceBroadcastInfoEventType,
-                    room: "!room:example.com",
-                    user: senderId,
-                    content: {},
-                });
+                event = mkVoiceBroadcastInfoStateEvent("!room:example.com", state, senderId, senderDeviceId);
                 mocked(client.getUserId).mockReturnValue(userId);
+                mocked(client.getDeviceId).mockReturnValue(deviceId);
             });
 
             it(`should return ${expected}`, () => {
@@ -66,4 +65,16 @@ describe("shouldDisplayAsVoiceBroadcastRecordingTile", () => {
             });
         },
     );
+
+    it("should return false, when all params are null", () => {
+        event = mkVoiceBroadcastInfoStateEvent("!room:example.com", null, null, null);
+        // @ts-ignore Simulate null state received for any reason.
+        expect(shouldDisplayAsVoiceBroadcastRecordingTile(null, client, event)).toBe(false);
+    });
+
+    it("should return false, when all params are undefined", () => {
+        event = mkVoiceBroadcastInfoStateEvent("!room:example.com", undefined, undefined, undefined);
+        // @ts-ignore Simulate undefined state received for any reason.
+        expect(shouldDisplayAsVoiceBroadcastRecordingTile(undefined, client, event)).toBe(false);
+    });
 });

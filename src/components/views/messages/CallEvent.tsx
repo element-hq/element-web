@@ -66,28 +66,30 @@ const ActiveCallEvent = forwardRef<any, ActiveCallEventProps>(
                         width={24}
                         height={24}
                     />
-                    <div className="mx_CallEvent_infoRows">
-                        <span className="mx_CallEvent_title">
-                            {_t("%(name)s started a video call", { name: senderName })}
-                        </span>
-                        <LiveContentSummary
-                            type={LiveContentType.Video}
-                            text={_t("Video call")}
-                            active={false}
-                            participantCount={participatingMembers.length}
-                        />
-                        <FacePile members={facePileMembers} faceSize={24} overflow={facePileOverflow} />
+                    <div className="mx_CallEvent_columns">
+                        <div className="mx_CallEvent_details">
+                            <span className="mx_CallEvent_title">
+                                {_t("%(name)s started a video call", { name: senderName })}
+                            </span>
+                            <LiveContentSummary
+                                type={LiveContentType.Video}
+                                text={_t("Video call")}
+                                active={false}
+                                participantCount={participatingMembers.length}
+                            />
+                            <FacePile members={facePileMembers} faceSize={24} overflow={facePileOverflow} />
+                        </div>
+                        {call && <GroupCallDuration groupCall={call.groupCall} />}
+                        <AccessibleTooltipButton
+                            className="mx_CallEvent_button"
+                            kind={buttonKind}
+                            disabled={onButtonClick === null || buttonDisabledTooltip !== undefined}
+                            onClick={onButtonClick}
+                            tooltip={buttonDisabledTooltip}
+                        >
+                            {buttonText}
+                        </AccessibleTooltipButton>
                     </div>
-                    {call && <GroupCallDuration groupCall={call.groupCall} />}
-                    <AccessibleTooltipButton
-                        className="mx_CallEvent_button"
-                        kind={buttonKind}
-                        disabled={onButtonClick === null || buttonDisabledTooltip !== undefined}
-                        onClick={onButtonClick}
-                        tooltip={buttonDisabledTooltip}
-                    >
-                        {buttonText}
-                    </AccessibleTooltipButton>
                 </div>
             </div>
         );
@@ -164,15 +166,17 @@ export const CallEvent = forwardRef<any, CallEventProps>(({ mxEvent }, ref) => {
     const call = useCall(mxEvent.getRoomId()!);
     const latestEvent = client
         .getRoom(mxEvent.getRoomId())!
-        .currentState.getStateEvents(mxEvent.getType(), mxEvent.getStateKey()!);
+        .currentState.getStateEvents(mxEvent.getType(), mxEvent.getStateKey()!)!;
 
     if ("m.terminated" in latestEvent.getContent()) {
         // The call is terminated
         return (
             <div className="mx_CallEvent_wrapper" ref={ref}>
                 <div className="mx_CallEvent mx_CallEvent_inactive">
-                    <span className="mx_CallEvent_title">{_t("Video call ended")}</span>
-                    <CallDuration delta={latestEvent.getTs() - mxEvent.getTs()} />
+                    <div className="mx_CallEvent_columns">
+                        <span className="mx_CallEvent_title">{_t("Video call ended")}</span>
+                        <CallDuration delta={latestEvent.getTs() - mxEvent.getTs()} />
+                    </div>
                 </div>
             </div>
         );

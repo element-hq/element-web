@@ -252,6 +252,25 @@ describe("PollCreateDialog", () => {
             },
         });
     });
+
+    it("retains poll disclosure type when editing", () => {
+        const previousEvent: MatrixEvent = new MatrixEvent(
+            PollStartEvent.from("Poll Q", ["Answer 1", "Answer 2"], M_POLL_KIND_DISCLOSED).serialize(),
+        );
+        previousEvent.event.event_id = "$prevEventId";
+
+        const dialog = mount(
+            <PollCreateDialog room={createRoom()} onFinished={jest.fn()} editingMxEvent={previousEvent} />,
+        );
+
+        changeValue(dialog, "Question or topic", "Poll Q updated");
+        dialog.find("button").simulate("click");
+
+        const [, , eventType, sentEventContent] = mockClient.sendEvent.mock.calls[0];
+        expect(M_POLL_START.matches(eventType)).toBeTruthy();
+        // didnt change
+        expect(sentEventContent["m.new_content"][M_POLL_START.name].kind).toEqual(M_POLL_KIND_DISCLOSED.name);
+    });
 });
 
 function createRoom(): Room {

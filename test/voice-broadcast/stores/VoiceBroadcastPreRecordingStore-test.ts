@@ -25,8 +25,6 @@ import {
 } from "../../../src/voice-broadcast";
 import { stubClient } from "../../test-utils";
 
-jest.mock("../../../src/voice-broadcast/stores/VoiceBroadcastRecordingsStore");
-
 describe("VoiceBroadcastPreRecordingStore", () => {
     const roomId = "!room:example.com";
     let client: MatrixClient;
@@ -41,8 +39,8 @@ describe("VoiceBroadcastPreRecordingStore", () => {
         client = stubClient();
         room = new Room(roomId, client, client.getUserId() || "");
         sender = new RoomMember(roomId, client.getUserId() || "");
-        playbacksStore = new VoiceBroadcastPlaybacksStore();
         recordingsStore = new VoiceBroadcastRecordingsStore();
+        playbacksStore = new VoiceBroadcastPlaybacksStore(recordingsStore);
     });
 
     beforeEach(() => {

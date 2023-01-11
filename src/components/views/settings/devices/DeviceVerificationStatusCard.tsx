@@ -22,25 +22,30 @@ import DeviceSecurityCard from "./DeviceSecurityCard";
 import { DeviceSecurityLearnMore } from "./DeviceSecurityLearnMore";
 import { DeviceSecurityVariation, ExtendedDevice } from "./types";
 
-interface Props {
+export interface DeviceVerificationStatusCardProps {
     device: ExtendedDevice;
+    isCurrentDevice?: boolean;
     onVerifyDevice?: () => void;
 }
 
 const getCardProps = (
     device: ExtendedDevice,
+    isCurrentDevice?: boolean,
 ): {
     variation: DeviceSecurityVariation;
     heading: string;
     description: React.ReactNode;
 } => {
     if (device.isVerified) {
+        const descriptionText = isCurrentDevice
+            ? _t("Your current session is ready for secure messaging.")
+            : _t("This session is ready for secure messaging.");
         return {
             variation: DeviceSecurityVariation.Verified,
             heading: _t("Verified session"),
             description: (
                 <>
-                    {_t("This session is ready for secure messaging.")}
+                    {descriptionText}
                     <DeviceSecurityLearnMore variation={DeviceSecurityVariation.Verified} />
                 </>
             ),
@@ -59,20 +64,27 @@ const getCardProps = (
         };
     }
 
+    const descriptionText = isCurrentDevice
+        ? _t("Verify your current session for enhanced secure messaging.")
+        : _t("Verify or sign out from this session for best security and reliability.");
     return {
         variation: DeviceSecurityVariation.Unverified,
         heading: _t("Unverified session"),
         description: (
             <>
-                {_t("Verify or sign out from this session for best security and reliability.")}
+                {descriptionText}
                 <DeviceSecurityLearnMore variation={DeviceSecurityVariation.Unverified} />
             </>
         ),
     };
 };
 
-export const DeviceVerificationStatusCard: React.FC<Props> = ({ device, onVerifyDevice }) => {
-    const securityCardProps = getCardProps(device);
+export const DeviceVerificationStatusCard: React.FC<DeviceVerificationStatusCardProps> = ({
+    device,
+    isCurrentDevice,
+    onVerifyDevice,
+}) => {
+    const securityCardProps = getCardProps(device, isCurrentDevice);
 
     return (
         <DeviceSecurityCard {...securityCardProps}>

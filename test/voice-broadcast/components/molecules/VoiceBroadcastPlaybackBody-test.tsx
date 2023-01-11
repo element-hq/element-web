@@ -32,6 +32,7 @@ import { stubClient } from "../../../test-utils";
 import { mkVoiceBroadcastInfoStateEvent } from "../../utils/test-utils";
 import dis from "../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../src/dispatcher/actions";
+import { SdkContextClass } from "../../../../src/contexts/SDKContext";
 
 jest.mock("../../../../src/dispatcher/dispatcher");
 
@@ -66,7 +67,11 @@ describe("VoiceBroadcastPlaybackBody", () => {
     });
 
     beforeEach(() => {
-        playback = new VoiceBroadcastPlayback(infoEvent, client);
+        playback = new VoiceBroadcastPlayback(
+            infoEvent,
+            client,
+            SdkContextClass.instance.voiceBroadcastRecordingsStore,
+        );
         jest.spyOn(playback, "toggle").mockImplementation(() => Promise.resolve());
         jest.spyOn(playback, "getLiveness");
         jest.spyOn(playback, "getState");

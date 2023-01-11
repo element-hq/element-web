@@ -59,6 +59,7 @@ import { Action } from "../../../dispatcher/actions";
 import { ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";
 import useFavouriteMessages from "../../../hooks/useFavouriteMessages";
 import { GetRelationsForEvent } from "../rooms/EventTile";
+import { VoiceBroadcastInfoEventType } from "../../../voice-broadcast/types";
 
 interface IOptionsButtonProps {
     mxEvent: MatrixEvent;
@@ -394,7 +395,8 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
              * until cross-platform support
              * (PSF-1041)
              */
-            !M_BEACON_INFO.matches(this.props.mxEvent.getType());
+            !M_BEACON_INFO.matches(this.props.mxEvent.getType()) &&
+            !(this.props.mxEvent.getType() === VoiceBroadcastInfoEventType);
 
         return inNotThreadTimeline && isAllowedMessageType;
     }

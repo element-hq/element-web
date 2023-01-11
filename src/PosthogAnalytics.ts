@@ -134,7 +134,7 @@ export class PosthogAnalytics {
     private readonly enabled: boolean = false;
     private static _instance = null;
     private platformSuperProperties = {};
-    private static ANALYTICS_EVENT_TYPE = "im.vector.analytics";
+    public static readonly ANALYTICS_EVENT_TYPE = "im.vector.analytics";
     private propertiesForNextEvent: Partial<Record<"$set" | "$set_once", UserProperties>> = {};
     private userPropertyCache: UserProperties = {};
     private authenticationType: Signup["authenticationType"] = "Other";

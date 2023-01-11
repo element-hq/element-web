@@ -22,7 +22,7 @@ import EmailField from "../../../views/auth/EmailField";
 import { ErrorMessage } from "../../ErrorMessage";
 import Spinner from "../../../views/elements/Spinner";
 import Field from "../../../views/elements/Field";
-import AccessibleButton from "../../../views/elements/AccessibleButton";
+import AccessibleButton, { ButtonEvent } from "../../../views/elements/AccessibleButton";
 
 interface EnterEmailProps {
     email: string;
@@ -94,7 +94,10 @@ export const EnterEmail: React.FC<EnterEmailProps> = ({
                             className="mx_AuthBody_sign-in-instead-button"
                             element="button"
                             kind="link"
-                            onClick={onLoginClick}
+                            onClick={(e: ButtonEvent) => {
+                                e.preventDefault();
+                                onLoginClick();
+                            }}
                         >
                             {_t("Sign in instead")}
                         </AccessibleButton>

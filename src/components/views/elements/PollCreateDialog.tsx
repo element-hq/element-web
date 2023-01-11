@@ -138,7 +138,7 @@ export default class PollCreateDialog extends ScrollableBaseModal<IProps, IState
         const pollStart = PollStartEvent.from(
             this.state.question.trim(),
             this.state.options.map((a) => a.trim()).filter((a) => !!a),
-            this.state.kind,
+            this.state.kind.name,
         ).serialize();
 
         if (!this.props.editingMxEvent) {

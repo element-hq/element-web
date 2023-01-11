@@ -16,7 +16,7 @@ limitations under the License.
 
 import { MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
 
-import { VoiceBroadcastInfoState } from "..";
+import { VoiceBroadcastInfoEventContent, VoiceBroadcastInfoState } from "..";
 
 export const shouldDisplayAsVoiceBroadcastRecordingTile = (
     state: VoiceBroadcastInfoState,
@@ -24,5 +24,10 @@ export const shouldDisplayAsVoiceBroadcastRecordingTile = (
     event: MatrixEvent,
 ): boolean => {
     const userId = client.getUserId();
-    return !!userId && userId === event.getSender() && state !== VoiceBroadcastInfoState.Stopped;
+    return (
+        !!userId &&
+        userId === event.getSender() &&
+        client.getDeviceId() === event.getContent<VoiceBroadcastInfoEventContent>()?.device_id &&
+        state !== VoiceBroadcastInfoState.Stopped
+    );
 };

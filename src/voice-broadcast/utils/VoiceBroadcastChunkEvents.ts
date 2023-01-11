@@ -97,6 +97,19 @@ export class VoiceBroadcastChunkEvents {
         return this.events.indexOf(event) >= this.events.length - 1;
     }
 
+    public getSequenceForEvent(event: MatrixEvent): number | null {
+        const sequence = parseInt(event.getContent()?.[VoiceBroadcastChunkEventType]?.sequence, 10);
+        if (!isNaN(sequence)) return sequence;
+
+        if (this.events.includes(event)) return this.events.indexOf(event) + 1;
+
+        return null;
+    }
+
+    public getNumberOfEvents(): number {
+        return this.events.length;
+    }
+
     private calculateChunkLength(event: MatrixEvent): number {
         return event.getContent()?.["org.matrix.msc1767.audio"]?.duration || event.getContent()?.info?.duration || 0;
     }

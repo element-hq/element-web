@@ -264,10 +264,36 @@ Get an openID token for the current user session.
 Request: No parameters
 Response:
  - The openId token object as described in https://spec.matrix.org/v1.2/client-server-api/#post_matrixclientv3useruseridopenidrequest_token
+
+send_event
+----------
+Sends an event in a room.
+
+Request:
+ - type is the event type to send.
+ - state_key is the state key to send. Omitted if not a state event.
+ - content is the event content to send.
+
+Response:
+ - room_id is the room ID where the event was sent.
+ - event_id is the event ID of the event which was sent.
+
+read_events
+-----------
+Read events from a room.
+
+Request:
+ - type is the event type to read.
+ - state_key is the state key to read, or `true` to read all events of the type. Omitted if not a state event.
+
+Response:
+ - events: Array of events. If none found, this will be an empty array.
+
 */
 
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { IContent, MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { logger } from "matrix-js-sdk/src/logger";
+import { IEvent } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import dis from "./dispatcher/dispatcher";
@@ -295,6 +321,8 @@ enum Action {
     SetBotOptions = "set_bot_options",
     SetBotPower = "set_bot_power",
     GetOpenIdToken = "get_open_id_token",
+    SendEvent = "send_event",
+    ReadEvents = "read_events",
 }
 
 function sendResponse(event: MessageEvent<any>, res: any): void {
@@ -468,13 +496,13 @@ function setWidget(event: MessageEvent<any>, roomId: string | null): void {
     }
 }
 
-function getWidgets(event: MessageEvent<any>, roomId: string): void {
+function getWidgets(event: MessageEvent<any>, roomId: string | null): void {
     const client = MatrixClientPeg.get();
     if (!client) {
         sendError(event, _t("You need to be logged in."));
         return;
     }
-    let widgetStateEvents = [];
+    let widgetStateEvents: Partial<IEvent>[] = [];
 
     if (roomId) {
         const room = client.getRoom(roomId);
@@ -693,6 +721,141 @@ async function getOpenIdToken(event: MessageEvent<any>) {
     }
 }
 
+async function sendEvent(
+    event: MessageEvent<{
+        type: string;
+        state_key?: string;
+        content?: IContent;
+    }>,
+    roomId: string,
+) {
+    const eventType = event.data.type;
+    const stateKey = event.data.state_key;
+    const content = event.data.content;
+
+    if (typeof eventType !== "string") {
+        sendError(event, _t("Failed to send event"), new Error("Invalid 'type' in request"));
+        return;
+    }
+    const allowedEventTypes = ["m.widgets", "im.vector.modular.widgets", "io.element.integrations.installations"];
+    if (!allowedEventTypes.includes(eventType)) {
+        sendError(event, _t("Failed to send event"), new Error("Disallowed 'type' in request"));
+        return;
+    }
+
+    if (!content || typeof content !== "object") {
+        sendError(event, _t("Failed to send event"), new Error("Invalid 'content' in request"));
+        return;
+    }
+
+    const client = MatrixClientPeg.get();
+    if (!client) {
+        sendError(event, _t("You need to be logged in."));
+        return;
+    }
+
+    const room = client.getRoom(roomId);
+    if (!room) {
+        sendError(event, _t("This room is not recognised."));
+        return;
+    }
+
+    if (stateKey !== undefined) {
+        // state event
+        try {
+            const res = await client.sendStateEvent(roomId, eventType, content, stateKey);
+            sendResponse(event, {
+                room_id: roomId,
+                event_id: res.event_id,
+            });
+        } catch (e) {
+            sendError(event, _t("Failed to send event"), e as Error);
+            return;
+        }
+    } else {
+        // message event
+        sendError(event, _t("Failed to send event"), new Error("Sending message events is not implemented"));
+        return;
+    }
+}
+
+async function readEvents(
+    event: MessageEvent<{
+        type: string;
+        state_key?: string | boolean;
+        limit?: number;
+    }>,
+    roomId: string,
+) {
+    const eventType = event.data.type;
+    const stateKey = event.data.state_key;
+    const limit = event.data.limit;
+
+    if (typeof eventType !== "string") {
+        sendError(event, _t("Failed to read events"), new Error("Invalid 'type' in request"));
+        return;
+    }
+    const allowedEventTypes = [
+        "m.room.power_levels",
+        "m.room.encryption",
+        "m.room.member",
+        "m.room.name",
+        "m.widgets",
+        "im.vector.modular.widgets",
+        "io.element.integrations.installations",
+    ];
+    if (!allowedEventTypes.includes(eventType)) {
+        sendError(event, _t("Failed to read events"), new Error("Disallowed 'type' in request"));
+        return;
+    }
+
+    let effectiveLimit: number;
+    if (limit !== undefined) {
+        if (typeof limit !== "number" || limit < 0) {
+            sendError(event, _t("Failed to read events"), new Error("Invalid 'limit' in request"));
+            return;
+        }
+        effectiveLimit = Math.min(limit, Number.MAX_SAFE_INTEGER);
+    } else {
+        effectiveLimit = Number.MAX_SAFE_INTEGER;
+    }
+
+    const client = MatrixClientPeg.get();
+    if (!client) {
+        sendError(event, _t("You need to be logged in."));
+        return;
+    }
+
+    const room = client.getRoom(roomId);
+    if (!room) {
+        sendError(event, _t("This room is not recognised."));
+        return;
+    }
+
+    if (stateKey !== undefined) {
+        // state events
+        if (typeof stateKey !== "string" && stateKey !== true) {
+            sendError(event, _t("Failed to read events"), new Error("Invalid 'state_key' in request"));
+            return;
+        }
+        // When `true` is passed for state key, get events with any state key.
+        const effectiveStateKey = stateKey === true ? undefined : stateKey;
+
+        let events: MatrixEvent[] = [];
+        events = events.concat(room.currentState.getStateEvents(eventType, effectiveStateKey as string) || []);
+        events = events.slice(0, effectiveLimit);
+
+        sendResponse(event, {
+            events: events.map((e) => e.getEffectiveEvent()),
+        });
+        return;
+    } else {
+        // message events
+        sendError(event, _t("Failed to read events"), new Error("Reading message events is not implemented"));
+        return;
+    }
+}
+
 const onMessage = function (event: MessageEvent<any>): void {
     if (!event.origin) {
         // stupid chrome
@@ -785,6 +948,12 @@ const onMessage = function (event: MessageEvent<any>): void {
         return;
     } else if (event.data.action === Action.CanSendEvent) {
         canSendEvent(event, roomId);
+        return;
+    } else if (event.data.action === Action.SendEvent) {
+        sendEvent(event, roomId);
+        return;
+    } else if (event.data.action === Action.ReadEvents) {
+        readEvents(event, roomId);
         return;
     }
 
