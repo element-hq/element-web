@@ -1,5 +1,5 @@
 /*
-Copyright 2022 The Matrix.org Foundation C.I.C.
+Copyright 2022-2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,12 +16,6 @@ limitations under the License.
 
 /// <reference types="cypress" />
 
-// @see https://github.com/cypress-io/cypress/issues/915#issuecomment-475862672
-// Modified due to changes to `cy.queue` https://github.com/cypress-io/cypress/pull/17448
-// Note: this DOES NOT run Promises in parallel like `Promise.all` due to the nature
-// of Cypress promise-like objects and command queue. This only makes it convenient to use the same
-// API but runs the commands sequentially.
-
 declare global {
     // eslint-disable-next-line @typescript-eslint/no-namespace
     namespace Cypress {
@@ -31,16 +25,9 @@ declare global {
             all<T extends Cypress.Chainable[] | []>(
                 commands: T,
             ): Cypress.Chainable<{ [P in keyof T]: ChainableValue<T[P]> }>;
-            queue: any;
-        }
-
-        interface Chainable {
-            chainerId: string;
         }
     }
 }
-
-const chainStart = Symbol("chainStart");
 
 /**
  * @description Returns a single Chainable that resolves when all of the Chainables pass.
@@ -48,34 +35,25 @@ const chainStart = Symbol("chainStart");
  * @returns {Cypress.Chainable} Cypress when all Chainables are resolved.
  */
 cy.all = function all(commands): Cypress.Chainable {
-    const chain = cy.wrap(null, { log: false });
-    const stopCommand = Cypress._.find(cy.queue.get(), {
-        attributes: { chainerId: chain.chainerId },
+    const resultArray = [];
+
+    // as each command completes, store the result in the corresponding location of resultArray.
+    for (let i = 0; i < commands.length; i++) {
+        commands[i].then((val) => {
+            resultArray[i] = val;
+        });
+    }
+
+    // add an entry to the log which, when clicked, will write the results to the console.
+    Cypress.log({
+        name: "all",
+        consoleProps: () => ({ Results: resultArray }),
     });
-    const startCommand = Cypress._.find(cy.queue.get(), {
-        attributes: { chainerId: commands[0].chainerId },
-    });
-    const p = chain.then(() => {
-        return cy.wrap(
-            // @see https://lodash.com/docs/4.17.15#lodash
-            Cypress._(commands)
-                .map((cmd) => {
-                    return cmd[chainStart]
-                        ? cmd[chainStart].attributes
-                        : Cypress._.find(cy.queue.get(), {
-                              attributes: { chainerId: cmd.chainerId },
-                          }).attributes;
-                })
-                .concat(stopCommand.attributes)
-                .slice(1)
-                .map((cmd) => {
-                    return cmd.prev.get("subject");
-                })
-                .value(),
-        );
-    });
-    p[chainStart] = startCommand;
-    return p;
+
+    // return a chainable which wraps the resultArray. Although this doesn't have a direct dependency on the input
+    // commands, cypress won't process it until the commands that precede it on the command queue (which must include
+    // the input commands) have passed.
+    return cy.wrap(resultArray, { log: false });
 };
 
 // Needed to make this file a module
