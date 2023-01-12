@@ -1579,10 +1579,10 @@
   resolved "https://registry.yarnpkg.com/@mapbox/whoots-js/-/whoots-js-3.1.0.tgz#497c67a1cef50d1a2459ba60f315e448d2ad87fe"
   integrity sha512-Es6WcD0nO5l+2BOQS4uLfNPYQaNDfbot3X1XUoloz+x0mPDS3eeORZJl06HXjwBG1fOGwCRnzK88LMdxKRrd6Q==
 
-"@matrix-org/analytics-events@^0.3.0":
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/@matrix-org/analytics-events/-/analytics-events-0.3.0.tgz#a428f7e3f164ffadf38f35bc0f0f9a3e47369ce6"
-  integrity sha512-f1WIMA8tjNB3V5g1C34yIpIJK47z6IJ4SLiY4j+J9Gw4X8C3TKGTAx563rMcMvW3Uk/PFqnIBXtkavHBXoYJ9A==
+"@matrix-org/analytics-events@^0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@matrix-org/analytics-events/-/analytics-events-0.4.0.tgz#ec75400ac41272cd2d47774da433437aba789bcf"
+  integrity sha512-tLeak2pYiyxn431o7EdOJGwRjj2DApybOLZ0YtFMuhv87pBQhc3lz+IKCJ2c8NwV6e7kf4YNaTdXeygBvFPGFw==
 
 "@matrix-org/matrix-sdk-crypto-js@^0.1.0-alpha.2":
   version "0.1.0-alpha.2"
