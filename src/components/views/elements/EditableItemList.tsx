@@ -35,21 +35,21 @@ export class EditableItem extends React.Component<IItemProps, IItemState> {
         verifyRemove: false,
     };
 
-    private onRemove = (e) => {
+    private onRemove = (e): void => {
         e.stopPropagation();
         e.preventDefault();
 
         this.setState({ verifyRemove: true });
     };
 
-    private onDontRemove = (e) => {
+    private onDontRemove = (e): void => {
         e.stopPropagation();
         e.preventDefault();
 
         this.setState({ verifyRemove: false });
     };
 
-    private onActuallyRemove = (e) => {
+    private onActuallyRemove = (e): void => {
         e.stopPropagation();
         e.preventDefault();
 
@@ -57,7 +57,7 @@ export class EditableItem extends React.Component<IItemProps, IItemState> {
         this.setState({ verifyRemove: false });
     };
 
-    public render() {
+    public render(): JSX.Element {
         if (this.state.verifyRemove) {
             return (
                 <div className="mx_EditableItem">
@@ -105,22 +105,22 @@ interface IProps {
 }
 
 export default class EditableItemList<P = {}> extends React.PureComponent<IProps & P> {
-    protected onItemAdded = (e) => {
+    protected onItemAdded = (e): void => {
         e.stopPropagation();
         e.preventDefault();
 
         if (this.props.onItemAdded) this.props.onItemAdded(this.props.newItem);
     };
 
-    protected onItemRemoved = (index) => {
+    protected onItemRemoved = (index: number): void => {
         if (this.props.onItemRemoved) this.props.onItemRemoved(index);
     };
 
-    protected onNewItemChanged = (e) => {
+    protected onNewItemChanged = (e): void => {
         if (this.props.onNewItemChanged) this.props.onNewItemChanged(e.target.value);
     };
 
-    protected renderNewItemField() {
+    protected renderNewItemField(): JSX.Element {
         return (
             <form
                 onSubmit={this.onItemAdded}
@@ -148,7 +148,7 @@ export default class EditableItemList<P = {}> extends React.PureComponent<IProps
         );
     }
 
-    public render() {
+    public render(): JSX.Element {
         const editableItems = this.props.items.map((item, index) => {
             if (!this.props.canRemove) {
                 return <li key={item}>{item}</li>;

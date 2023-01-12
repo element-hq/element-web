@@ -54,7 +54,7 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
         this.config = SdkConfig.getObject("host_signup");
     }
 
-    private messageHandler = async (message: IPostmessage) => {
+    private messageHandler = async (message: IPostmessage): Promise<void> => {
         if (!this.config.get("url").startsWith(message.origin)) {
             return;
         }
@@ -82,7 +82,7 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
         }
     };
 
-    private maximizeDialog = () => {
+    private maximizeDialog = (): void => {
         this.setState({
             minimized: false,
         });
@@ -92,7 +92,7 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
         });
     };
 
-    private minimizeDialog = () => {
+    private minimizeDialog = (): void => {
         this.setState({
             minimized: true,
         });
@@ -102,13 +102,13 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
         });
     };
 
-    private closeDialog = async () => {
+    private closeDialog = async (): Promise<void> => {
         window.removeEventListener("message", this.messageHandler);
         // Finally clear the flag in
         return HostSignupStore.instance.setHostSignupActive(false);
     };
 
-    private onCloseClick = async () => {
+    private onCloseClick = async (): Promise<void> => {
         if (this.state.completed) {
             // We're done, close
             return this.closeDialog();
@@ -128,11 +128,11 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
         }
     };
 
-    private sendMessage = (message: IPostmessageResponseData) => {
+    private sendMessage = (message: IPostmessageResponseData): void => {
         this.iframeRef.current.contentWindow.postMessage(message, this.config.get("url"));
     };
 
-    private async sendAccountDetails() {
+    private async sendAccountDetails(): Promise<void> {
         const openIdToken = await MatrixClientPeg.get().getOpenIdToken();
         if (!openIdToken || !openIdToken.access_token) {
             logger.warn("Failed to connect to homeserver for OpenID token.");
@@ -155,14 +155,14 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
         });
     }
 
-    private onAccountDetailsDialogFinished = async (result) => {
+    private onAccountDetailsDialogFinished = async (result): Promise<void> => {
         if (result) {
             return this.sendAccountDetails();
         }
         return this.closeDialog();
     };
 
-    private onAccountDetailsRequest = () => {
+    private onAccountDetailsRequest = (): void => {
         const cookiePolicyUrl = this.config.get("cookie_policy_url");
         const privacyPolicyUrl = this.config.get("privacy_policy_url");
         const tosUrl = this.config.get("terms_of_service_url");
@@ -211,14 +211,14 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
         });
     };
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         window.addEventListener("message", this.messageHandler);
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         if (HostSignupStore.instance.isHostSignupActive) {
             // Run the close dialog actions if we're still active, otherwise good to go
-            return this.closeDialog();
+            this.closeDialog();
         }
     }
 

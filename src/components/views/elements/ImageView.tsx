@@ -126,7 +126,7 @@ export default class ImageView extends React.Component<IProps, IState> {
     private animatingLoading = false;
     private imageIsLoaded = false;
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         // We have to use addEventListener() because the listener
         // needs to be passive in order to work with Chromium
         this.focusLock.current.addEventListener("wheel", this.onWheel, { passive: false });
@@ -136,13 +136,13 @@ export default class ImageView extends React.Component<IProps, IState> {
         this.image.current.addEventListener("load", this.imageLoaded);
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         this.focusLock.current.removeEventListener("wheel", this.onWheel);
         window.removeEventListener("resize", this.recalculateZoom);
         this.image.current.removeEventListener("load", this.imageLoaded);
     }
 
-    private imageLoaded = () => {
+    private imageLoaded = (): void => {
         // First, we calculate the zoom, so that the image has the same size as
         // the thumbnail
         const { thumbnailInfo } = this.props;
@@ -164,11 +164,11 @@ export default class ImageView extends React.Component<IProps, IState> {
         this.animatingLoading = false;
     };
 
-    private recalculateZoom = () => {
+    private recalculateZoom = (): void => {
         this.setZoomAndRotation();
     };
 
-    private setZoomAndRotation = (inputRotation?: number) => {
+    private setZoomAndRotation = (inputRotation?: number): void => {
         const image = this.image.current;
         const imageWrapper = this.imageWrapper.current;
 
@@ -210,11 +210,11 @@ export default class ImageView extends React.Component<IProps, IState> {
         });
     };
 
-    private zoomDelta(delta: number, anchorX?: number, anchorY?: number) {
+    private zoomDelta(delta: number, anchorX?: number, anchorY?: number): void {
         this.zoom(this.state.zoom + delta, anchorX, anchorY);
     }
 
-    private zoom(zoomLevel: number, anchorX?: number, anchorY?: number) {
+    private zoom(zoomLevel: number, anchorX?: number, anchorY?: number): void {
         const oldZoom = this.state.zoom;
         const maxZoom = this.state.maxZoom === this.state.minZoom ? 2 * this.state.maxZoom : this.state.maxZoom;
         const newZoom = Math.min(zoomLevel, maxZoom);
@@ -267,7 +267,7 @@ export default class ImageView extends React.Component<IProps, IState> {
         }
     }
 
-    private onWheel = (ev: WheelEvent) => {
+    private onWheel = (ev: WheelEvent): void => {
         if (ev.target === this.image.current) {
             ev.stopPropagation();
             ev.preventDefault();
@@ -278,15 +278,15 @@ export default class ImageView extends React.Component<IProps, IState> {
         }
     };
 
-    private onZoomInClick = () => {
+    private onZoomInClick = (): void => {
         this.zoomDelta(ZOOM_STEP);
     };
 
-    private onZoomOutClick = () => {
+    private onZoomOutClick = (): void => {
         this.zoomDelta(-ZOOM_STEP);
     };
 
-    private onKeyDown = (ev: KeyboardEvent) => {
+    private onKeyDown = (ev: KeyboardEvent): void => {
         const action = getKeyBindingsManager().getAccessibilityAction(ev);
         switch (action) {
             case KeyBindingAction.Escape:
@@ -297,17 +297,17 @@ export default class ImageView extends React.Component<IProps, IState> {
         }
     };
 
-    private onRotateCounterClockwiseClick = () => {
+    private onRotateCounterClockwiseClick = (): void => {
         const cur = this.state.rotation;
         this.setZoomAndRotation(cur - 90);
     };
 
-    private onRotateClockwiseClick = () => {
+    private onRotateClockwiseClick = (): void => {
         const cur = this.state.rotation;
         this.setZoomAndRotation(cur + 90);
     };
 
-    private onDownloadClick = () => {
+    private onDownloadClick = (): void => {
         const a = document.createElement("a");
         a.href = this.props.src;
         a.download = this.props.name;
@@ -316,19 +316,19 @@ export default class ImageView extends React.Component<IProps, IState> {
         a.click();
     };
 
-    private onOpenContextMenu = () => {
+    private onOpenContextMenu = (): void => {
         this.setState({
             contextMenuDisplayed: true,
         });
     };
 
-    private onCloseContextMenu = () => {
+    private onCloseContextMenu = (): void => {
         this.setState({
             contextMenuDisplayed: false,
         });
     };
 
-    private onPermalinkClicked = (ev: React.MouseEvent) => {
+    private onPermalinkClicked = (ev: React.MouseEvent): void => {
         // This allows the permalink to be opened in a new tab/window or copied as
         // matrix.to, but also for it to enable routing within Element when clicked.
         ev.preventDefault();
@@ -342,7 +342,7 @@ export default class ImageView extends React.Component<IProps, IState> {
         this.props.onFinished();
     };
 
-    private onStartMoving = (ev: React.MouseEvent) => {
+    private onStartMoving = (ev: React.MouseEvent): void => {
         ev.stopPropagation();
         ev.preventDefault();
 
@@ -368,7 +368,7 @@ export default class ImageView extends React.Component<IProps, IState> {
         this.initY = ev.pageY - this.state.translationY;
     };
 
-    private onMoving = (ev: React.MouseEvent) => {
+    private onMoving = (ev: React.MouseEvent): void => {
         ev.stopPropagation();
         ev.preventDefault();
 
@@ -380,7 +380,7 @@ export default class ImageView extends React.Component<IProps, IState> {
         });
     };
 
-    private onEndMoving = () => {
+    private onEndMoving = (): void => {
         // Zoom out if we haven't moved much
         if (
             this.state.moving === true &&
@@ -394,7 +394,7 @@ export default class ImageView extends React.Component<IProps, IState> {
         this.setState({ moving: false });
     };
 
-    private renderContextMenu() {
+    private renderContextMenu(): JSX.Element {
         let contextMenu = null;
         if (this.state.contextMenuDisplayed) {
             contextMenu = (
@@ -411,7 +411,7 @@ export default class ImageView extends React.Component<IProps, IState> {
         return <React.Fragment>{contextMenu}</React.Fragment>;
     }
 
-    public render() {
+    public render(): JSX.Element {
         const showEventMeta = !!this.props.mxEvent;
 
         let transitionClassName;

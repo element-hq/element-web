@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { ReactNode } from "react";
 import classNames from "classnames";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
@@ -68,7 +68,7 @@ export default class TileErrorBoundary extends React.Component<IProps, IState> {
         );
     };
 
-    public render() {
+    public render(): ReactNode {
         if (this.state.error) {
             const { mxEvent } = this.props;
             const classes = {

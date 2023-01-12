@@ -23,7 +23,7 @@ import { IMediaEventContent } from "../../../customisations/models/IMediaEventCo
 
 export default class MStickerBody extends MImageBody {
     // Mostly empty to prevent default behaviour of MImageBody
-    protected onClick = (ev: React.MouseEvent) => {
+    protected onClick = (ev: React.MouseEvent): void => {
         ev.preventDefault();
         if (!this.state.showImage) {
             this.showImage();
@@ -74,7 +74,7 @@ export default class MStickerBody extends MImageBody {
     }
 
     // Don't show "Download this_file.png ..."
-    protected getFileBody() {
+    protected getFileBody(): JSX.Element {
         return null;
     }
 

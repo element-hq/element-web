@@ -27,7 +27,7 @@ import ContextMenu, { ChevronFace } from "../../structures/ContextMenu";
 import createRoom, { IOpts as ICreateOpts } from "../../../createRoom";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import SpaceBasicSettings, { SpaceAvatar } from "./SpaceBasicSettings";
-import AccessibleButton from "../elements/AccessibleButton";
+import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
 import Field from "../elements/Field";
 import withValidation from "../elements/Validation";
 import RoomAliasField from "../elements/RoomAliasField";
@@ -47,7 +47,7 @@ export const createSpace = async (
     avatar?: string | File,
     createOpts: Partial<ICreateRoomOpts> = {},
     otherOpts: Partial<Omit<ICreateOpts, "createOpts">> = {},
-) => {
+): Promise<string> => {
     return createRoom({
         createOpts: {
             name,
@@ -76,7 +76,12 @@ export const createSpace = async (
     });
 };
 
-const SpaceCreateMenuType = ({ title, description, className, onClick }) => {
+const SpaceCreateMenuType: React.FC<{
+    title: string;
+    description: string;
+    className: string;
+    onClick(): void;
+}> = ({ title, description, className, onClick }) => {
     return (
         <AccessibleButton className={classNames("mx_SpaceCreateMenuType", className)} onClick={onClick}>
             <h3>{title}</h3>
@@ -104,7 +109,9 @@ const nameToLocalpart = (name: string): string => {
 };
 
 // XXX: Temporary for the Spaces release only
-export const SpaceFeedbackPrompt = ({ onClick }: { onClick?: () => void }) => {
+export const SpaceFeedbackPrompt: React.FC<{
+    onClick?(): void;
+}> = ({ onClick }) => {
     if (!shouldShowFeedback()) return null;
 
     return (
@@ -165,7 +172,7 @@ export const SpaceCreateForm: React.FC<ISpaceCreateFormProps> = ({
     const cli = useContext(MatrixClientContext);
     const domain = cli.getDomain();
 
-    const onKeyDown = (ev: KeyboardEvent) => {
+    const onKeyDown = (ev: KeyboardEvent): void => {
         const action = getKeyBindingsManager().getAccessibilityAction(ev);
         switch (action) {
             case KeyBindingAction.Enter:
@@ -226,7 +233,9 @@ export const SpaceCreateForm: React.FC<ISpaceCreateFormProps> = ({
     );
 };
 
-const SpaceCreateMenu = ({ onFinished }) => {
+const SpaceCreateMenu: React.FC<{
+    onFinished(): void;
+}> = ({ onFinished }) => {
     const [visibility, setVisibility] = useState<Visibility>(null);
     const [busy, setBusy] = useState<boolean>(false);
 
@@ -237,7 +246,7 @@ const SpaceCreateMenu = ({ onFinished }) => {
     const [avatar, setAvatar] = useState<File>(null);
     const [topic, setTopic] = useState<string>("");
 
-    const onSpaceCreateClick = async (e) => {
+    const onSpaceCreateClick = async (e: ButtonEvent): Promise<void> => {
         e.preventDefault();
         if (busy) return;
 

@@ -71,7 +71,7 @@ export default class Fireworks implements ICanvasEffect {
     private particles: Array<FireworksParticle> = [];
     public isRunning: boolean;
 
-    public start = async (canvas: HTMLCanvasElement, timeout = 3000) => {
+    public start = async (canvas: HTMLCanvasElement, timeout = 3000): Promise<void> => {
         if (!canvas) {
             return;
         }
@@ -83,14 +83,14 @@ export default class Fireworks implements ICanvasEffect {
         }
     };
 
-    private updateWorld = () => {
+    private updateWorld = (): void => {
         if (!this.isRunning && this.particles.length === 0) return;
         this.update();
         this.paint();
         this.supportsAnimationFrame.call(window, this.updateWorld);
     };
 
-    private update = () => {
+    private update = (): void => {
         if (this.particles.length < this.options.maxCount && this.isRunning) {
             this.createFirework();
         }
@@ -103,7 +103,7 @@ export default class Fireworks implements ICanvasEffect {
         this.particles = alive;
     };
 
-    private paint = () => {
+    private paint = (): void => {
         if (!this.context || !this.context.canvas) return;
         this.context.globalCompositeOperation = "destination-out";
         this.context.fillStyle = "rgba(0,0,0,0.5)";
@@ -114,7 +114,7 @@ export default class Fireworks implements ICanvasEffect {
         }
     };
 
-    private createFirework = () => {
+    private createFirework = (): void => {
         if (!this.context || !this.context.canvas) return;
         const width = this.context.canvas.width;
         const height = this.context.canvas.height;
@@ -146,7 +146,7 @@ export default class Fireworks implements ICanvasEffect {
         }
     };
 
-    public stop = async () => {
+    public stop = async (): Promise<void> => {
         this.isRunning = false;
     };
 
@@ -167,7 +167,7 @@ export default class Fireworks implements ICanvasEffect {
         this.context.restore();
     };
 
-    private move = (particle: FireworksParticle) => {
+    private move = (particle: FireworksParticle): boolean => {
         particle.x += particle.vx;
         particle.vy += this.options.gravity;
         particle.y += particle.vy;

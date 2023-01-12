@@ -32,7 +32,7 @@ const RegistrationEmailPromptDialog: React.FC<IProps> = ({ onFinished }) => {
     const [email, setEmail] = useState("");
     const fieldRef = useRef<Field>();
 
-    const onSubmit = async (e) => {
+    const onSubmit = async (e): Promise<void> => {
         e.preventDefault();
         if (email) {
             const valid = await fieldRef.current.validate({});

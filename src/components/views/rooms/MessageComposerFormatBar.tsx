@@ -46,7 +46,7 @@ export default class MessageComposerFormatBar extends React.PureComponent<IProps
         this.state = { visible: false };
     }
 
-    public render() {
+    public render(): JSX.Element {
         const classes = classNames("mx_MessageComposerFormatBar", {
             mx_MessageComposerFormatBar_shown: this.state.visible,
         });
@@ -124,7 +124,7 @@ interface IFormatButtonProps {
 }
 
 class FormatButton extends React.PureComponent<IFormatButtonProps> {
-    public render() {
+    public render(): JSX.Element {
         const className = `mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIcon${this.props.icon}`;
         let shortcut;
         if (this.props.shortcut) {

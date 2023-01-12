@@ -41,7 +41,7 @@ export const onMetaSpaceChangeFactory =
         );
     };
 
-const SidebarUserSettingsTab = () => {
+const SidebarUserSettingsTab: React.FC = () => {
     const {
         [MetaSpace.Home]: homeEnabled,
         [MetaSpace.Favourites]: favouritesEnabled,

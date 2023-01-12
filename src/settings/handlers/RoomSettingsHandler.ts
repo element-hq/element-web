@@ -35,7 +35,7 @@ export default class RoomSettingsHandler extends MatrixClientBackedSettingsHandl
         super();
     }
 
-    protected initMatrixClient(oldClient: MatrixClient, newClient: MatrixClient) {
+    protected initMatrixClient(oldClient: MatrixClient, newClient: MatrixClient): void {
         if (oldClient) {
             oldClient.removeListener(RoomStateEvent.Events, this.onEvent);
         }
@@ -43,7 +43,7 @@ export default class RoomSettingsHandler extends MatrixClientBackedSettingsHandl
         newClient.on(RoomStateEvent.Events, this.onEvent);
     }
 
-    private onEvent = (event: MatrixEvent, state: RoomState, prevEvent: MatrixEvent) => {
+    private onEvent = (event: MatrixEvent, state: RoomState, prevEvent: MatrixEvent): void => {
         const roomId = event.getRoomId();
         const room = this.client.getRoom(roomId);
 
@@ -97,7 +97,7 @@ export default class RoomSettingsHandler extends MatrixClientBackedSettingsHandl
         const { event_id: eventId } = await this.client.sendStateEvent(roomId, eventType, content);
 
         const deferred = defer<void>();
-        const handler = (event: MatrixEvent) => {
+        const handler = (event: MatrixEvent): void => {
             if (event.getId() !== eventId) return;
             this.client.off(RoomStateEvent.Events, handler);
             deferred.resolve();

@@ -47,17 +47,17 @@ export default class LegacyCallViewForRoom extends React.Component<IProps, IStat
         };
     }
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         LegacyCallHandler.instance.addListener(LegacyCallHandlerEvent.CallState, this.updateCall);
         LegacyCallHandler.instance.addListener(LegacyCallHandlerEvent.CallChangeRoom, this.updateCall);
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         LegacyCallHandler.instance.removeListener(LegacyCallHandlerEvent.CallState, this.updateCall);
         LegacyCallHandler.instance.removeListener(LegacyCallHandlerEvent.CallChangeRoom, this.updateCall);
     }
 
-    private updateCall = () => {
+    private updateCall = (): void => {
         const newCall = this.getCall();
         if (newCall !== this.state.call) {
             this.setState({ call: newCall });
@@ -71,19 +71,19 @@ export default class LegacyCallViewForRoom extends React.Component<IProps, IStat
         return call;
     }
 
-    private onResizeStart = () => {
+    private onResizeStart = (): void => {
         this.props.resizeNotifier.startResizing();
     };
 
-    private onResize = () => {
+    private onResize = (): void => {
         this.props.resizeNotifier.notifyTimelineHeightChanged();
     };
 
-    private onResizeStop = () => {
+    private onResizeStop = (): void => {
         this.props.resizeNotifier.stopResizing();
     };
 
-    public render() {
+    public render(): JSX.Element {
         if (!this.state.call) return null;
 
         return (

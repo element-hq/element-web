@@ -33,7 +33,7 @@ interface IProps extends React.ComponentProps<typeof StyledRadioButton> {
 export const StyledMenuItemRadio: React.FC<IProps> = ({ children, label, onChange, onClose, ...props }) => {
     const [onFocus, isActive, ref] = useRovingTabIndex<HTMLInputElement>();
 
-    const onKeyDown = (e: React.KeyboardEvent) => {
+    const onKeyDown = (e: React.KeyboardEvent): void => {
         let handled = true;
         const action = getKeyBindingsManager().getAccessibilityAction(e);
 
@@ -55,7 +55,7 @@ export const StyledMenuItemRadio: React.FC<IProps> = ({ children, label, onChang
             e.preventDefault();
         }
     };
-    const onKeyUp = (e: React.KeyboardEvent) => {
+    const onKeyUp = (e: React.KeyboardEvent): void => {
         const action = getKeyBindingsManager().getAccessibilityAction(e);
         switch (action) {
             case KeyBindingAction.Enter:

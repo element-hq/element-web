@@ -80,7 +80,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         };
     }
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         this.context.on(RoomStateEvent.Events, this.onStateEvent);
         this.hasAliases().then((hasAliases) => this.setState({ hasAliases }));
     }
@@ -89,11 +89,11 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         return event?.getContent()[key] || defaultValue;
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         this.context.removeListener(RoomStateEvent.Events, this.onStateEvent);
     }
 
-    private onStateEvent = (e: MatrixEvent) => {
+    private onStateEvent = (e: MatrixEvent): void => {
         const refreshWhenTypes: EventType[] = [
             EventType.RoomJoinRules,
             EventType.RoomGuestAccess,
@@ -103,7 +103,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         if (refreshWhenTypes.includes(e.getType() as EventType)) this.forceUpdate();
     };
 
-    private onEncryptionChange = async () => {
+    private onEncryptionChange = async (): Promise<void> => {
         if (this.context.getRoom(this.props.roomId)?.getJoinRule() === JoinRule.Public) {
             const dialog = Modal.createDialog(QuestionDialog, {
                 title: _t("Are you sure you want to add encryption to this public room?"),
@@ -181,7 +181,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         });
     };
 
-    private onGuestAccessChange = (allowed: boolean) => {
+    private onGuestAccessChange = (allowed: boolean): void => {
         const guestAccess = allowed ? GuestAccess.CanJoin : GuestAccess.Forbidden;
         const beforeGuestAccess = this.state.guestAccess;
         if (beforeGuestAccess === guestAccess) return;
@@ -203,7 +203,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
             });
     };
 
-    private createNewRoom = async (defaultPublic: boolean, defaultEncrypted: boolean) => {
+    private createNewRoom = async (defaultPublic: boolean, defaultEncrypted: boolean): Promise<boolean> => {
         const modal = Modal.createDialog<[boolean, IOpts]>(CreateRoomDialog, { defaultPublic, defaultEncrypted });
 
         PosthogTrackers.trackInteraction("WebRoomSettingsSecurityTabCreateNewRoomButton");
@@ -215,7 +215,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         return shouldCreate;
     };
 
-    private onHistoryRadioToggle = (history: HistoryVisibility) => {
+    private onHistoryRadioToggle = (history: HistoryVisibility): void => {
         const beforeHistory = this.state.history;
         if (beforeHistory === history) return;
 
@@ -235,7 +235,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
             });
     };
 
-    private updateBlacklistDevicesFlag = (checked: boolean) => {
+    private updateBlacklistDevicesFlag = (checked: boolean): void => {
         this.context.getRoom(this.props.roomId).setBlacklistUnverifiedDevices(checked);
     };
 
@@ -246,7 +246,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         return Array.isArray(localAliases) && localAliases.length !== 0;
     }
 
-    private renderJoinRule() {
+    private renderJoinRule(): JSX.Element {
         const client = this.context;
         const room = client.getRoom(this.props.roomId);
 
@@ -277,7 +277,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         );
     }
 
-    private onJoinRuleChangeError = (error: Error) => {
+    private onJoinRuleChangeError = (error: Error): void => {
         Modal.createDialog(ErrorDialog, {
             title: _t("Failed to update the join rules"),
             description: error.message ?? _t("Unknown failure"),
@@ -311,7 +311,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                                     a: (sub) => (
                                         <AccessibleButton
                                             kind="link_inline"
-                                            onClick={() => {
+                                            onClick={(): void => {
                                                 dialog.close();
                                                 this.createNewRoom(true, false);
                                             }}
@@ -335,7 +335,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         return true;
     };
 
-    private renderHistory() {
+    private renderHistory(): JSX.Element {
         if (!SettingsStore.getValue(UIFeature.RoomHistorySettings)) {
             return null;
         }
@@ -386,11 +386,11 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         );
     }
 
-    private toggleAdvancedSection = () => {
+    private toggleAdvancedSection = (): void => {
         this.setState({ showAdvancedSection: !this.state.showAdvancedSection });
     };
 
-    private renderAdvanced() {
+    private renderAdvanced(): JSX.Element {
         const client = this.context;
         const guestAccess = this.state.guestAccess;
         const state = client.getRoom(this.props.roomId).currentState;
@@ -414,7 +414,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         );
     }
 
-    public render() {
+    public render(): JSX.Element {
         const client = this.context;
         const room = client.getRoom(this.props.roomId);
         const isEncrypted = this.state.encrypted;

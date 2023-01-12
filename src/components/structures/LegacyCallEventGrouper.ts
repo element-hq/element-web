@@ -142,7 +142,7 @@ export default class LegacyCallEventGrouper extends EventEmitter {
         return [...this.events][0]?.getRoomId();
     }
 
-    private onSilencedCallsChanged = () => {
+    private onSilencedCallsChanged = (): void => {
         const newState = LegacyCallHandler.instance.isCallSilenced(this.callId);
         this.emit(LegacyCallEventGrouperEvent.SilencedChanged, newState);
     };
@@ -163,20 +163,20 @@ export default class LegacyCallEventGrouper extends EventEmitter {
         LegacyCallHandler.instance.placeCall(this.roomId, this.isVoice ? CallType.Voice : CallType.Video);
     };
 
-    public toggleSilenced = () => {
+    public toggleSilenced = (): void => {
         const silenced = LegacyCallHandler.instance.isCallSilenced(this.callId);
         silenced
             ? LegacyCallHandler.instance.unSilenceCall(this.callId)
             : LegacyCallHandler.instance.silenceCall(this.callId);
     };
 
-    private setCallListeners() {
+    private setCallListeners(): void {
         if (!this.call) return;
         this.call.addListener(CallEvent.State, this.setState);
         this.call.addListener(CallEvent.LengthChanged, this.onLengthChanged);
     }
 
-    private setState = () => {
+    private setState = (): void => {
         if (CONNECTING_STATES.includes(this.call?.state)) {
             this.state = CallState.Connecting;
         } else if (SUPPORTED_STATES.includes(this.call?.state)) {
@@ -190,7 +190,7 @@ export default class LegacyCallEventGrouper extends EventEmitter {
         this.emit(LegacyCallEventGrouperEvent.StateChanged, this.state);
     };
 
-    private setCall = () => {
+    private setCall = (): void => {
         if (this.call) return;
 
         this.call = LegacyCallHandler.instance.getCallById(this.callId);
@@ -198,7 +198,7 @@ export default class LegacyCallEventGrouper extends EventEmitter {
         this.setState();
     };
 
-    public add(event: MatrixEvent) {
+    public add(event: MatrixEvent): void {
         if (this.events.has(event)) return; // nothing to do
         this.events.add(event);
         this.setCall();

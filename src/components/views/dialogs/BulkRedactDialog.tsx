@@ -79,7 +79,7 @@ const BulkRedactDialog: React.FC<IBulkRedactDialogProps> = (props) => {
         const count = eventsToRedact.length;
         const user = member.name;
 
-        const redact = async () => {
+        const redact = async (): Promise<void> => {
             logger.info(`Started redacting recent ${count} messages for ${member.userId} in ${room.roomId}`);
             dis.dispatch({
                 action: Action.BulkRedactStart,
@@ -90,7 +90,7 @@ const BulkRedactDialog: React.FC<IBulkRedactDialogProps> = (props) => {
             // so first yield to allow to rerender after closing the dialog.
             await Promise.resolve();
             await Promise.all(
-                eventsToRedact.reverse().map(async (event) => {
+                eventsToRedact.reverse().map(async (event): Promise<void> => {
                     try {
                         await cli.redactEvent(room.roomId, event.getId());
                     } catch (err) {

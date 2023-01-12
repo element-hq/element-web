@@ -77,24 +77,24 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
         };
     }
 
-    private onCancel = () => {
+    private onCancel = (): void => {
         if (this.state.resetting) {
             this.setState({ resetting: false });
         }
         this.props.onFinished(false);
     };
 
-    private onUseRecoveryKeyClick = () => {
+    private onUseRecoveryKeyClick = (): void => {
         this.setState({
             forceRecoveryKey: true,
         });
     };
 
-    private validateRecoveryKeyOnChange = debounce(async () => {
+    private validateRecoveryKeyOnChange = debounce(async (): Promise<void> => {
         await this.validateRecoveryKey();
     }, VALIDATION_THROTTLE_MS);
 
-    private async validateRecoveryKey() {
+    private async validateRecoveryKey(): Promise<void> {
         if (this.state.recoveryKey === "") {
             this.setState({
                 recoveryKeyValid: null,
@@ -119,7 +119,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
         }
     }
 
-    private onRecoveryKeyChange = (ev: ChangeEvent<HTMLInputElement>) => {
+    private onRecoveryKeyChange = (ev: ChangeEvent<HTMLInputElement>): void => {
         this.setState({
             recoveryKey: ev.target.value,
             recoveryKeyFileError: null,
@@ -136,7 +136,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
         this.validateRecoveryKeyOnChange();
     };
 
-    private onRecoveryKeyFileChange = async (ev: ChangeEvent<HTMLInputElement>) => {
+    private onRecoveryKeyFileChange = async (ev: ChangeEvent<HTMLInputElement>): Promise<void> => {
         if (ev.target.files.length === 0) return;
 
         const f = ev.target.files[0];
@@ -169,11 +169,11 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
         }
     };
 
-    private onRecoveryKeyFileUploadClick = () => {
+    private onRecoveryKeyFileUploadClick = (): void => {
         this.fileUpload.current.click();
     };
 
-    private onPassPhraseNext = async (ev: FormEvent<HTMLFormElement> | React.MouseEvent) => {
+    private onPassPhraseNext = async (ev: FormEvent<HTMLFormElement> | React.MouseEvent): Promise<void> => {
         ev.preventDefault();
 
         if (this.state.passPhrase.length <= 0) return;
@@ -188,7 +188,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
         }
     };
 
-    private onRecoveryKeyNext = async (ev: FormEvent<HTMLFormElement> | React.MouseEvent) => {
+    private onRecoveryKeyNext = async (ev: FormEvent<HTMLFormElement> | React.MouseEvent): Promise<void> => {
         ev.preventDefault();
 
         if (!this.state.recoveryKeyValid) return;
@@ -203,19 +203,19 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
         }
     };
 
-    private onPassPhraseChange = (ev: ChangeEvent<HTMLInputElement>) => {
+    private onPassPhraseChange = (ev: ChangeEvent<HTMLInputElement>): void => {
         this.setState({
             passPhrase: ev.target.value,
             keyMatches: null,
         });
     };
 
-    private onResetAllClick = (ev: React.MouseEvent<HTMLAnchorElement>) => {
+    private onResetAllClick = (ev: React.MouseEvent<HTMLAnchorElement>): void => {
         ev.preventDefault();
         this.setState({ resetting: true });
     };
 
-    private onConfirmResetAllClick = async () => {
+    private onConfirmResetAllClick = async (): Promise<void> => {
         // Hide ourselves so the user can interact with the reset dialogs.
         // We don't conclude the promise chain (onFinished) yet to avoid confusing
         // any upstream code flows.
@@ -226,11 +226,11 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
 
         try {
             // Force reset secret storage (which resets the key backup)
-            await accessSecretStorage(async () => {
+            await accessSecretStorage(async (): Promise<void> => {
                 // Now reset cross-signing so everything Just Works™ again.
                 const cli = MatrixClientPeg.get();
                 await cli.bootstrapCrossSigning({
-                    authUploadDeviceSigningKeys: async (makeRequest) => {
+                    authUploadDeviceSigningKeys: async (makeRequest): Promise<void> => {
                         const { finished } = Modal.createDialog(InteractiveAuthDialog, {
                             title: _t("Setting up keys"),
                             matrixClient: cli,
@@ -268,7 +268,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
         }
     }
 
-    public render() {
+    public render(): JSX.Element {
         const hasPassphrase =
             this.props.keyInfo &&
             this.props.keyInfo.passphrase &&

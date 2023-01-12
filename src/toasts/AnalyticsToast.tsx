@@ -30,19 +30,19 @@ import {
 import { Action } from "../dispatcher/actions";
 import SettingsStore from "../settings/SettingsStore";
 
-const onAccept = () => {
+const onAccept = (): void => {
     dis.dispatch({
         action: Action.PseudonymousAnalyticsAccept,
     });
 };
 
-const onReject = () => {
+const onReject = (): void => {
     dis.dispatch({
         action: Action.PseudonymousAnalyticsReject,
     });
 };
 
-const onLearnMoreNoOptIn = () => {
+const onLearnMoreNoOptIn = (): void => {
     showAnalyticsLearnMoreDialog({
         onFinished: (buttonClicked?: ButtonClicked) => {
             if (buttonClicked === ButtonClicked.Primary) {
@@ -56,7 +56,7 @@ const onLearnMoreNoOptIn = () => {
     });
 };
 
-const onLearnMorePreviouslyOptedIn = () => {
+const onLearnMorePreviouslyOptedIn = (): void => {
     showAnalyticsLearnMoreDialog({
         onFinished: (buttonClicked?: ButtonClicked) => {
             if (buttonClicked === ButtonClicked.Primary) {
@@ -98,7 +98,7 @@ export const showToast = (): void => {
     } else if (legacyAnalyticsOptIn === null || legacyAnalyticsOptIn === undefined) {
         // The user had no analytics setting previously set, so we just need to prompt to opt-in, rather than
         // explaining any change.
-        const learnMoreLink = (sub: string) => (
+        const learnMoreLink = (sub: string): JSX.Element => (
             <AccessibleButton kind="link_inline" onClick={onLearnMoreNoOptIn}>
                 {sub}
             </AccessibleButton>
@@ -132,6 +132,6 @@ export const showToast = (): void => {
     });
 };
 
-export const hideToast = () => {
+export const hideToast = (): void => {
     ToastStore.sharedInstance().dismissToast(TOAST_KEY);
 };

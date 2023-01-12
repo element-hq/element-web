@@ -46,7 +46,14 @@ interface IProps {
     aliasWarning?: ReactNode;
 }
 
-const JoinRuleSettings = ({ room, promptUpgrade, aliasWarning, onError, beforeChange, closeSettingsFn }: IProps) => {
+const JoinRuleSettings: React.FC<IProps> = ({
+    room,
+    promptUpgrade,
+    aliasWarning,
+    onError,
+    beforeChange,
+    closeSettingsFn,
+}) => {
     const cli = room.client;
 
     const roomSupportsRestricted = doesRoomVersionSupport(room.getVersion(), PreferredRoomVersions.RestrictedRooms);
@@ -135,7 +142,7 @@ const JoinRuleSettings = ({ room, promptUpgrade, aliasWarning, onError, beforeCh
                 }
             }
 
-            const onRestrictedRoomIdsChange = (newAllowRoomIds: string[]) => {
+            const onRestrictedRoomIdsChange = (newAllowRoomIds: string[]): void => {
                 if (!arrayHasDiff(restrictedAllowRoomIds || [], newAllowRoomIds)) return;
 
                 if (!newAllowRoomIds.length) {
@@ -154,7 +161,7 @@ const JoinRuleSettings = ({ room, promptUpgrade, aliasWarning, onError, beforeCh
                 });
             };
 
-            const onEditRestrictedClick = async () => {
+            const onEditRestrictedClick = async (): Promise<void> => {
                 const restrictedAllowRoomIds = await editRestrictedRoomIds();
                 if (!Array.isArray(restrictedAllowRoomIds)) return;
                 if (restrictedAllowRoomIds.length > 0) {
@@ -224,7 +231,7 @@ const JoinRuleSettings = ({ room, promptUpgrade, aliasWarning, onError, beforeCh
         });
     }
 
-    const onChange = async (joinRule: JoinRule) => {
+    const onChange = async (joinRule: JoinRule): Promise<void> => {
         const beforeJoinRule = content.join_rule;
 
         let restrictedAllowRoomIds: string[];

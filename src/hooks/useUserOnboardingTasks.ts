@@ -48,7 +48,7 @@ export interface UserOnboardingTaskWithResolvedCompletion extends Omit<UserOnboa
     completed: boolean;
 }
 
-const onClickStartDm = (ev: ButtonEvent) => {
+const onClickStartDm = (ev: ButtonEvent): void => {
     PosthogTrackers.trackInteraction("WebUserOnboardingTaskSendDm", ev);
     defaultDispatcher.dispatch({ action: "view_create_chat" });
 };
@@ -144,7 +144,7 @@ const tasks: UserOnboardingTask[] = [
     },
 ];
 
-export function useUserOnboardingTasks(context: UserOnboardingContext) {
+export function useUserOnboardingTasks(context: UserOnboardingContext): UserOnboardingTaskWithResolvedCompletion[] {
     const useCase = useSettingValue<UseCase | null>("FTUE.useCaseSelection") ?? UseCase.Skip;
 
     return useMemo<UserOnboardingTaskWithResolvedCompletion[]>(() => {

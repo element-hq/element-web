@@ -68,7 +68,7 @@ export abstract class Whenable<T> implements IDestroyable {
      * Notifies all the listeners of a given condition.
      * @param condition The new condition that has been met.
      */
-    protected notifyCondition(condition: T) {
+    protected notifyCondition(condition: T): void {
         const listeners = arrayFastClone(this.listeners); // clone just in case the handler modifies us
         for (const listener of listeners) {
             if (listener.condition === null || listener.condition === condition) {
@@ -81,7 +81,7 @@ export abstract class Whenable<T> implements IDestroyable {
         }
     }
 
-    public destroy() {
+    public destroy(): void {
         this.listeners = [];
     }
 }

@@ -150,7 +150,7 @@ export const Lobby: FC<LobbyProps> = ({ room, joinCallButtonDisabledTooltip, con
     }, [videoMuted, setVideoMuted]);
 
     const [videoStream, audioInputs, videoInputs] = useAsyncMemo(
-        async () => {
+        async (): Promise<[MediaStream, MediaDeviceInfo[], MediaDeviceInfo[]]> => {
             let devices = await MediaDeviceHandler.getDevices();
 
             // We get the preview stream before requesting devices: this is because
@@ -210,7 +210,7 @@ export const Lobby: FC<LobbyProps> = ({ room, joinCallButtonDisabledTooltip, con
     }, [videoStream]);
 
     const onConnectClick = useCallback(
-        async (ev: ButtonEvent) => {
+        async (ev: ButtonEvent): Promise<void> => {
             ev.preventDefault();
             setConnecting(true);
             try {
@@ -298,7 +298,7 @@ const StartCallView: FC<StartCallViewProps> = ({ room, resizing, call, setStarti
     const [connected, setConnected] = useState(() => call !== null && isConnected(call.connectionState));
     useEffect(() => {
         if (call !== null) {
-            const onConnectionState = (state: ConnectionState) => setConnected(isConnected(state));
+            const onConnectionState = (state: ConnectionState): void => setConnected(isConnected(state));
             call.on(CallEvent.ConnectionState, onConnectionState);
             return () => {
                 call.off(CallEvent.ConnectionState, onConnectionState);
@@ -306,14 +306,14 @@ const StartCallView: FC<StartCallViewProps> = ({ room, resizing, call, setStarti
         }
     }, [call]);
 
-    const connect = useCallback(async () => {
+    const connect = useCallback(async (): Promise<void> => {
         setStartingCall(true);
         await ElementCall.create(room);
         await connectDeferred.promise;
     }, [room, setStartingCall, connectDeferred]);
 
     useEffect(() => {
-        (async () => {
+        (async (): Promise<void> => {
             // If the call was successfully started, connect automatically
             if (call !== null) {
                 try {
@@ -358,7 +358,7 @@ const JoinCallView: FC<JoinCallViewProps> = ({ room, resizing, call }) => {
     const members = useParticipatingMembers(call);
     const joinCallButtonDisabledTooltip = useJoinCallButtonDisabledTooltip(call);
 
-    const connect = useCallback(async () => {
+    const connect = useCallback(async (): Promise<void> => {
         // Disconnect from any other active calls first, since we don't yet support holding
         await Promise.all([...CallStore.instance.activeCalls].map((call) => call.disconnect()));
         await call.connect();

@@ -37,7 +37,12 @@ interface ISpecificChildrenPickerProps {
     onChange(selected: boolean, room: Room): void;
 }
 
-const SpecificChildrenPicker = ({ filterPlaceholder, rooms, selected, onChange }: ISpecificChildrenPickerProps) => {
+const SpecificChildrenPicker: React.FC<ISpecificChildrenPickerProps> = ({
+    filterPlaceholder,
+    rooms,
+    selected,
+    onChange,
+}) => {
     const [query, setQuery] = useState("");
     const lcQuery = query.toLowerCase().trim();
 
@@ -94,7 +99,7 @@ interface IProps {
     onChange(rooms: Room[]): void;
 }
 
-const SpaceChildrenPicker = ({
+const SpaceChildrenPicker: React.FC<IProps> = ({
     space,
     spaceChildren,
     selected,
@@ -102,7 +107,7 @@ const SpaceChildrenPicker = ({
     noneLabel,
     allLabel,
     specificLabel,
-}: IProps) => {
+}) => {
     const [state, setState] = useState<string>(noneLabel ? Target.None : Target.All);
 
     useEffect(() => {

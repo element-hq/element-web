@@ -68,16 +68,20 @@ interface IMediaConfig {
  * @param {File} imageFile The file to load in an image element.
  * @return {Promise} A promise that resolves with the html image element.
  */
-async function loadImageElement(imageFile: File) {
+async function loadImageElement(imageFile: File): Promise<{
+    width: number;
+    height: number;
+    img: HTMLImageElement;
+}> {
     // Load the file into an html element
     const img = new Image();
     const objectUrl = URL.createObjectURL(imageFile);
     const imgPromise = new Promise((resolve, reject) => {
-        img.onload = function () {
+        img.onload = function (): void {
             URL.revokeObjectURL(objectUrl);
             resolve(img);
         };
-        img.onerror = function (e) {
+        img.onerror = function (e): void {
             reject(e);
         };
     });
@@ -185,13 +189,13 @@ function loadVideoElement(videoFile: File): Promise<HTMLVideoElement> {
 
         const reader = new FileReader();
 
-        reader.onload = function (ev) {
+        reader.onload = function (ev): void {
             // Wait until we have enough data to thumbnail the first frame.
-            video.onloadeddata = async function () {
+            video.onloadeddata = async function (): Promise<void> {
                 resolve(video);
                 video.pause();
             };
-            video.onerror = function (e) {
+            video.onerror = function (e): void {
                 reject(e);
             };
 
@@ -206,7 +210,7 @@ function loadVideoElement(videoFile: File): Promise<HTMLVideoElement> {
             video.load();
             video.play();
         };
-        reader.onerror = function (e) {
+        reader.onerror = function (e): void {
             reject(e);
         };
         reader.readAsDataURL(videoFile);
@@ -253,10 +257,10 @@ function infoForVideoFile(
 function readFileAsArrayBuffer(file: File | Blob): Promise<ArrayBuffer> {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
-        reader.onload = function (e) {
+        reader.onload = function (e): void {
             resolve(e.target.result as ArrayBuffer);
         };
-        reader.onerror = function (e) {
+        reader.onerror = function (e): void {
             reject(e);
         };
         reader.readAsArrayBuffer(file);
@@ -461,7 +465,7 @@ export default class ContentMessages {
         matrixClient: MatrixClient,
         replyToEvent: MatrixEvent | undefined,
         promBefore?: Promise<any>,
-    ) {
+    ): Promise<void> {
         const fileName = file.name || _t("Attachment");
         const content: Omit<IMediaEventContent, "info"> & { info: Partial<IMediaEventInfo> } = {
             body: fileName,
@@ -491,7 +495,7 @@ export default class ContentMessages {
         this.inprogress.push(upload);
         dis.dispatch<UploadStartedPayload>({ action: Action.UploadStarted, upload });
 
-        function onProgress(progress: UploadProgress) {
+        function onProgress(progress: UploadProgress): void {
             upload.onProgress(progress);
             dis.dispatch<UploadProgressPayload>({ action: Action.UploadProgress, upload });
         }
@@ -568,7 +572,7 @@ export default class ContentMessages {
         }
     }
 
-    private isFileSizeAcceptable(file: File) {
+    private isFileSizeAcceptable(file: File): boolean {
         if (
             this.mediaConfig !== null &&
             this.mediaConfig["m.upload.size"] !== undefined &&
@@ -599,7 +603,7 @@ export default class ContentMessages {
             });
     }
 
-    public static sharedInstance() {
+    public static sharedInstance(): ContentMessages {
         if (window.mxContentMessages === undefined) {
             window.mxContentMessages = new ContentMessages();
         }

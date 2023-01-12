@@ -103,13 +103,13 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
     const [displayCancel, setCancelWarning] = useState(false);
     const [exportCancelled, setExportCancelled] = useState(false);
     const [exportSuccessful, setExportSuccessful] = useState(false);
-    const [exporter, setExporter] = useStateCallback<Exporter>(null, async (exporter: Exporter) => {
+    const [exporter, setExporter] = useStateCallback<Exporter>(null, async (exporter: Exporter): Promise<void> => {
         await exporter?.export().then(() => {
             if (!exportCancelled) setExportSuccessful(true);
         });
     });
 
-    const startExport = async () => {
+    const startExport = async (): Promise<void> => {
         const exportOptions = {
             numberOfMessages,
             attachmentsIncluded: includeAttachments,
@@ -131,7 +131,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
         }
     };
 
-    const onExportClick = async () => {
+    const onExportClick = async (): Promise<void> => {
         const isValidSize =
             !setSizeLimit ||
             (await sizeLimitRef.current.validate({
@@ -225,12 +225,12 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
         return result;
     };
 
-    const onCancel = async () => {
+    const onCancel = async (): Promise<void> => {
         if (isExporting) setCancelWarning(true);
         else onFinished(false);
     };
 
-    const confirmCancel = async () => {
+    const confirmCancel = async (): Promise<void> => {
         await exporter?.cancelExport();
         setExportCancelled(true);
         setExporting(false);

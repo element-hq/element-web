@@ -91,7 +91,7 @@ export default class ImportE2eKeysDialog extends React.Component<IProps, IState>
         return false;
     };
 
-    private startImport(file: File, passphrase: string) {
+    private startImport(file: File, passphrase: string): Promise<void> {
         this.setState({
             errStr: null,
             phase: Phase.Importing,

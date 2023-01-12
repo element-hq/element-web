@@ -26,7 +26,7 @@ interface IProps extends Omit<React.HTMLProps<HTMLDivElement>, "onKeyDown"> {}
 // https://www.w3.org/TR/wai-aria-practices-1.1/#toolbar
 // All buttons passed in children must use RovingTabIndex to set `onFocus`, `isActive`, `ref`
 const Toolbar: React.FC<IProps> = ({ children, ...props }) => {
-    const onKeyDown = (ev: React.KeyboardEvent) => {
+    const onKeyDown = (ev: React.KeyboardEvent): void => {
         const target = ev.target as HTMLElement;
         // Don't interfere with input default keydown behaviour
         if (target.tagName === "INPUT") return;

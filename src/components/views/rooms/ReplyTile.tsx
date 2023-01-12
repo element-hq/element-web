@@ -52,13 +52,13 @@ export default class ReplyTile extends React.PureComponent<IProps> {
         onHeightChanged: () => {},
     };
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         this.props.mxEvent.on(MatrixEventEvent.Decrypted, this.onDecrypted);
         this.props.mxEvent.on(MatrixEventEvent.BeforeRedaction, this.onEventRequiresUpdate);
         this.props.mxEvent.on(MatrixEventEvent.Replaced, this.onEventRequiresUpdate);
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         this.props.mxEvent.removeListener(MatrixEventEvent.Decrypted, this.onDecrypted);
         this.props.mxEvent.removeListener(MatrixEventEvent.BeforeRedaction, this.onEventRequiresUpdate);
         this.props.mxEvent.removeListener(MatrixEventEvent.Replaced, this.onEventRequiresUpdate);
@@ -104,7 +104,7 @@ export default class ReplyTile extends React.PureComponent<IProps> {
         }
     };
 
-    public render() {
+    public render(): JSX.Element {
         const mxEvent = this.props.mxEvent;
         const msgType = mxEvent.getContent().msgtype;
         const evType = mxEvent.getType();

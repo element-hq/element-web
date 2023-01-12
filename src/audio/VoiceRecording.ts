@@ -110,7 +110,7 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
         return !MediaDeviceHandler.getAudioNoiseSuppression();
     }
 
-    private async makeRecorder() {
+    private async makeRecorder(): Promise<void> {
         try {
             this.recorderStream = await navigator.mediaDevices.getUserMedia({
                 audio: {
@@ -212,14 +212,14 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
         return !!Recorder.isRecordingSupported();
     }
 
-    private onAudioProcess = (ev: AudioProcessingEvent) => {
+    private onAudioProcess = (ev: AudioProcessingEvent): void => {
         this.processAudioUpdate(ev.playbackTime);
 
         // We skip the functionality of the worklet regarding waveform calculations: we
         // should get that information pretty quick during the playback info.
     };
 
-    private processAudioUpdate = (timeSeconds: number) => {
+    private processAudioUpdate = (timeSeconds: number): void => {
         if (!this.recording) return;
 
         this.observable.update({
@@ -260,7 +260,7 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
     /**
      * {@link https://github.com/chris-rudmin/opus-recorder#instance-fields ref for recorderSeconds}
      */
-    public get recorderSeconds() {
+    public get recorderSeconds(): number {
         return this.recorder.encodedSamplePosition / 48000;
     }
 
@@ -279,7 +279,7 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
     }
 
     public async stop(): Promise<void> {
-        return Singleflight.for(this, "stop").do(async () => {
+        return Singleflight.for(this, "stop").do(async (): Promise<void> => {
             if (!this.recording) {
                 throw new Error("No recording to stop");
             }
@@ -307,7 +307,7 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
         });
     }
 
-    public destroy() {
+    public destroy(): void {
         // noinspection JSIgnoredPromiseFromCall - not concerned about stop() being called async here
         this.stop();
         this.removeAllListeners();

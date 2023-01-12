@@ -29,7 +29,7 @@ interface IProps {
 }
 
 class Header extends React.PureComponent<IProps> {
-    private findNearestEnabled(index: number, delta: number) {
+    private findNearestEnabled(index: number, delta: number): number {
         index += this.props.categories.length;
         const cats = [...this.props.categories, ...this.props.categories, ...this.props.categories];
 
@@ -39,12 +39,12 @@ class Header extends React.PureComponent<IProps> {
         }
     }
 
-    private changeCategoryRelative(delta: number) {
+    private changeCategoryRelative(delta: number): void {
         const current = this.props.categories.findIndex((c) => c.visible);
         this.changeCategoryAbsolute(current + delta, delta);
     }
 
-    private changeCategoryAbsolute(index: number, delta = 1) {
+    private changeCategoryAbsolute(index: number, delta = 1): void {
         const category = this.props.categories[this.findNearestEnabled(index, delta)];
         if (category) {
             this.props.onAnchorClick(category.id);
@@ -54,7 +54,7 @@ class Header extends React.PureComponent<IProps> {
 
     // Implements ARIA Tabs with Automatic Activation pattern
     // https://www.w3.org/TR/wai-aria-practices/examples/tabs/tabs-1/tabs.html
-    private onKeyDown = (ev: React.KeyboardEvent) => {
+    private onKeyDown = (ev: React.KeyboardEvent): void => {
         let handled = true;
 
         const action = getKeyBindingsManager().getAccessibilityAction(ev);
@@ -82,7 +82,7 @@ class Header extends React.PureComponent<IProps> {
         }
     };
 
-    public render() {
+    public render(): JSX.Element {
         return (
             <nav
                 className="mx_EmojiPicker_header"

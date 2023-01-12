@@ -204,7 +204,7 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
     };
 
     // The user has clicked "submit".
-    private onSubmit = async () => {
+    private onSubmit = async (): Promise<void> => {
         let reason = this.state.reason || "";
         reason = reason.trim();
         if (this.moderation) {
@@ -273,7 +273,7 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
         }
     };
 
-    public render() {
+    public render(): JSX.Element {
         let error = null;
         if (this.state.err) {
             error = <div className="error">{this.state.err}</div>;

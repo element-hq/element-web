@@ -135,7 +135,7 @@ class PipContainerInner extends React.Component<IProps, IState> {
         };
     }
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         LegacyCallHandler.instance.addListener(LegacyCallHandlerEvent.CallChangeRoom, this.updateCalls);
         LegacyCallHandler.instance.addListener(LegacyCallHandlerEvent.CallState, this.updateCalls);
         SdkContextClass.instance.roomViewStore.addListener(UPDATE_EVENT, this.onRoomViewStoreUpdate);
@@ -149,7 +149,7 @@ class PipContainerInner extends React.Component<IProps, IState> {
         ActiveWidgetStore.instance.on(ActiveWidgetStoreEvent.Undock, this.onWidgetDockChanges);
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         LegacyCallHandler.instance.removeListener(LegacyCallHandlerEvent.CallChangeRoom, this.updateCalls);
         LegacyCallHandler.instance.removeListener(LegacyCallHandlerEvent.CallState, this.updateCalls);
         const cli = MatrixClientPeg.get();
@@ -164,9 +164,9 @@ class PipContainerInner extends React.Component<IProps, IState> {
         ActiveWidgetStore.instance.off(ActiveWidgetStoreEvent.Undock, this.onWidgetDockChanges);
     }
 
-    private onMove = () => this.props.movePersistedElement.current?.();
+    private onMove = (): void => this.props.movePersistedElement.current?.();
 
-    private onRoomViewStoreUpdate = () => {
+    private onRoomViewStoreUpdate = (): void => {
         const newRoomId = SdkContextClass.instance.roomViewStore.getRoomId();
         const oldRoomId = this.state.viewedRoomId;
         if (newRoomId === oldRoomId) return;
@@ -213,7 +213,7 @@ class PipContainerInner extends React.Component<IProps, IState> {
         this.updateShowWidgetInPip();
     };
 
-    private onCallRemoteHold = () => {
+    private onCallRemoteHold = (): void => {
         if (!this.state.viewedRoomId) return;
         const [primaryCall, secondaryCalls] = getPrimarySecondaryCallsForPip(this.state.viewedRoomId);
 
@@ -238,7 +238,7 @@ class PipContainerInner extends React.Component<IProps, IState> {
     public updateShowWidgetInPip(
         persistentWidgetId = this.state.persistentWidgetId,
         persistentRoomId = this.state.persistentRoomId,
-    ) {
+    ): void {
         let fromAnotherRoom = false;
         let notDocked = false;
         // Sanity check the room - the widget may have been destroyed between render cycles, and
@@ -293,7 +293,7 @@ class PipContainerInner extends React.Component<IProps, IState> {
         );
     }
 
-    public render() {
+    public render(): JSX.Element {
         const pipMode = true;
         let pipContent: Array<CreatePipChildren> = [];
 

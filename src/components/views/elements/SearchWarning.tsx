@@ -35,7 +35,7 @@ interface IProps {
     kind: WarningKind;
 }
 
-export default function SearchWarning({ isRoomEncrypted, kind }: IProps) {
+export default function SearchWarning({ isRoomEncrypted, kind }: IProps): JSX.Element {
     if (!isRoomEncrypted) return null;
     if (EventIndexPeg.get()) return null;
 

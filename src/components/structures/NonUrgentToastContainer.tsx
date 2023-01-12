@@ -37,15 +37,15 @@ export default class NonUrgentToastContainer extends React.PureComponent<IProps,
         NonUrgentToastStore.instance.on(UPDATE_EVENT, this.onUpdateToasts);
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         NonUrgentToastStore.instance.off(UPDATE_EVENT, this.onUpdateToasts);
     }
 
-    private onUpdateToasts = () => {
+    private onUpdateToasts = (): void => {
         this.setState({ toasts: NonUrgentToastStore.instance.components });
     };
 
-    public render() {
+    public render(): JSX.Element {
         const toasts = this.state.toasts.map((t, i) => {
             return (
                 <div className="mx_NonUrgentToastContainer_toast" key={`toast-${i}`}>

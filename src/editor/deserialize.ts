@@ -127,7 +127,7 @@ function parseHeader(n: Node, pc: PartCreator, opts: IParseOptions): Part[] {
     return [prefix, ...parseChildren(n, pc, opts)];
 }
 
-function checkIgnored(n) {
+function checkIgnored(n: Node): boolean {
     if (n.nodeType === Node.TEXT_NODE) {
         // Element adds \n text nodes in a lot of places,
         // which should be ignored
@@ -138,7 +138,7 @@ function checkIgnored(n) {
     return true;
 }
 
-function prefixLines(parts: Part[], prefix: string, pc: PartCreator) {
+function prefixLines(parts: Part[], prefix: string, pc: PartCreator): void {
     parts.unshift(pc.plain(prefix));
     for (let i = 0; i < parts.length; i++) {
         if (parts[i].type === Type.Newline) {
@@ -283,7 +283,7 @@ export function parsePlainTextMessage(body: string, pc: PartCreator, opts: IPars
     }, [] as Part[]);
 }
 
-export function parseEvent(event: MatrixEvent, pc: PartCreator, opts: IParseOptions = { shouldEscape: true }) {
+export function parseEvent(event: MatrixEvent, pc: PartCreator, opts: IParseOptions = { shouldEscape: true }): Part[] {
     const content = event.getContent();
     let parts: Part[];
     const isEmote = content.msgtype === MsgType.Emote;

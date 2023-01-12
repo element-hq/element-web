@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { KeyboardEvent, SyntheticEvent, useCallback, useRef, useState } from "react";
+import { KeyboardEvent, RefObject, SyntheticEvent, useCallback, useRef, useState } from "react";
 
 import { useSettingValue } from "../../../../../hooks/useSettings";
 import { IS_MAC, Key } from "../../../../../Keyboard";
@@ -26,7 +26,7 @@ function isDivElement(target: EventTarget): target is HTMLDivElement {
 // Hitting enter inside the editor inserts an editable div, initially containing a <br />
 // For correct display, first replace this pattern with a newline character and then remove divs
 // noting that they are used to delimit paragraphs
-function amendInnerHtml(text: string) {
+function amendInnerHtml(text: string): string {
     return text
         .replace(/<div><br><\/div>/g, "\n") // this is pressing enter then not typing
         .replace(/<div>/g, "\n") // this is from pressing enter, then typing inside the div
@@ -37,7 +37,14 @@ export function usePlainTextListeners(
     initialContent?: string,
     onChange?: (content: string) => void,
     onSend?: () => void,
-) {
+): {
+    ref: RefObject<HTMLDivElement | null>;
+    content?: string;
+    onInput(event: SyntheticEvent<HTMLDivElement, InputEvent | ClipboardEvent>): void;
+    onPaste(event: SyntheticEvent<HTMLDivElement, InputEvent | ClipboardEvent>): void;
+    onKeyDown(event: KeyboardEvent<HTMLDivElement>): void;
+    setContent(text: string): void;
+} {
     const ref = useRef<HTMLDivElement | null>(null);
     const [content, setContent] = useState<string | undefined>(initialContent);
     const send = useCallback(() => {

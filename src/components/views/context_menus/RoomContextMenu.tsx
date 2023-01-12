@@ -55,7 +55,7 @@ interface IProps extends IContextMenuProps {
     room: Room;
 }
 
-const RoomContextMenu = ({ room, onFinished, ...props }: IProps) => {
+const RoomContextMenu: React.FC<IProps> = ({ room, onFinished, ...props }) => {
     const cli = useContext(MatrixClientContext);
     const roomTags = useEventEmitterState(RoomListStore.instance, LISTS_UPDATE_EVENT, () =>
         RoomListStore.instance.getTagsForRoom(room),
@@ -63,7 +63,7 @@ const RoomContextMenu = ({ room, onFinished, ...props }: IProps) => {
 
     let leaveOption: JSX.Element;
     if (roomTags.includes(DefaultTagID.Archived)) {
-        const onForgetRoomClick = (ev: ButtonEvent) => {
+        const onForgetRoomClick = (ev: ButtonEvent): void => {
             ev.preventDefault();
             ev.stopPropagation();
 
@@ -83,7 +83,7 @@ const RoomContextMenu = ({ room, onFinished, ...props }: IProps) => {
             />
         );
     } else {
-        const onLeaveRoomClick = (ev: ButtonEvent) => {
+        const onLeaveRoomClick = (ev: ButtonEvent): void => {
             ev.preventDefault();
             ev.stopPropagation();
 
@@ -114,7 +114,7 @@ const RoomContextMenu = ({ room, onFinished, ...props }: IProps) => {
 
     let inviteOption: JSX.Element;
     if (room.canInvite(cli.getUserId()!) && !isDm) {
-        const onInviteClick = (ev: ButtonEvent) => {
+        const onInviteClick = (ev: ButtonEvent): void => {
             ev.preventDefault();
             ev.stopPropagation();
 
@@ -323,7 +323,7 @@ const RoomContextMenu = ({ room, onFinished, ...props }: IProps) => {
         );
     }
 
-    const onTagRoom = (ev: ButtonEvent, tagId: TagID) => {
+    const onTagRoom = (ev: ButtonEvent, tagId: TagID): void => {
         ev.preventDefault();
         ev.stopPropagation();
 
@@ -346,7 +346,7 @@ const RoomContextMenu = ({ room, onFinished, ...props }: IProps) => {
         }
     };
 
-    const ensureViewingRoom = (ev: ButtonEvent) => {
+    const ensureViewingRoom = (ev: ButtonEvent): void => {
         if (SdkContextClass.instance.roomViewStore.getRoomId() === room.roomId) return;
         dis.dispatch<ViewRoomPayload>(
             {

@@ -31,17 +31,17 @@ const TOAST_KEY = "update";
  * Check a version string is compatible with the Changelog
  * dialog ([element-version]-react-[react-sdk-version]-js-[js-sdk-version])
  */
-function checkVersion(ver) {
+function checkVersion(ver: string): boolean {
     const parts = ver.split("-");
     return parts.length === 5 && parts[1] === "react" && parts[3] === "js";
 }
 
-function installUpdate() {
+function installUpdate(): void {
     PlatformPeg.get().installUpdate();
 }
 
-export const showToast = (version: string, newVersion: string, releaseNotes?: string) => {
-    function onReject() {
+export const showToast = (version: string, newVersion: string, releaseNotes?: string): void => {
+    function onReject(): void {
         PlatformPeg.get().deferUpdate(newVersion);
     }
 
@@ -93,6 +93,6 @@ export const showToast = (version: string, newVersion: string, releaseNotes?: st
     });
 };
 
-export const hideToast = () => {
+export const hideToast = (): void => {
     ToastStore.sharedInstance().dismissToast(TOAST_KEY);
 };

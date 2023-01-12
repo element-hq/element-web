@@ -45,7 +45,7 @@ export const AddPrivilegedUsers: React.FC<AddPrivilegedUsersProps> = ({ room, de
         [room, defaultUserLevel],
     );
 
-    const onSubmit = async (event: FormEvent) => {
+    const onSubmit = async (event: FormEvent): Promise<void> => {
         event.preventDefault();
         setIsLoading(true);
 
@@ -106,7 +106,11 @@ export const AddPrivilegedUsers: React.FC<AddPrivilegedUsersProps> = ({ room, de
     );
 };
 
-export const hasLowerOrEqualLevelThanDefaultLevel = (room: Room, user: ICompletion, defaultUserLevel: number) => {
+export const hasLowerOrEqualLevelThanDefaultLevel = (
+    room: Room,
+    user: ICompletion,
+    defaultUserLevel: number,
+): boolean => {
     if (user.completionId === undefined) {
         return false;
     }
@@ -120,7 +124,7 @@ export const hasLowerOrEqualLevelThanDefaultLevel = (room: Room, user: ICompleti
     return member.powerLevel <= defaultUserLevel;
 };
 
-export const getUserIdsFromCompletions = (completions: ICompletion[]) => {
+export const getUserIdsFromCompletions = (completions: ICompletion[]): string[] => {
     const completionsWithId = completions.filter((completion) => completion.completionId !== undefined);
 
     // undefined completionId's are filtered out above but TypeScript does not seem to understand.

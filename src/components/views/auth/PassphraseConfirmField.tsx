@@ -56,7 +56,7 @@ class PassphraseConfirmField extends PureComponent<IProps> {
         ],
     });
 
-    private onValidate = async (fieldState: IFieldState) => {
+    private onValidate = async (fieldState: IFieldState): Promise<IValidationResult> => {
         const result = await this.validate(fieldState);
         if (this.props.onValidate) {
             this.props.onValidate(result);
@@ -65,7 +65,7 @@ class PassphraseConfirmField extends PureComponent<IProps> {
         return result;
     };
 
-    public render() {
+    public render(): JSX.Element {
         return (
             <Field
                 id={this.props.id}

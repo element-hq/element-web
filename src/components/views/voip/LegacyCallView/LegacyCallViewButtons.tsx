@@ -25,7 +25,7 @@ import LegacyCallContextMenu from "../../context_menus/LegacyCallContextMenu";
 import DialpadContextMenu from "../../context_menus/DialpadContextMenu";
 import { Alignment } from "../../elements/Tooltip";
 import {
-    alwaysAboveLeftOf,
+    alwaysMenuProps,
     alwaysAboveRightOf,
     ChevronFace,
     ContextMenuTooltipButton,
@@ -226,7 +226,7 @@ export default class LegacyCallViewButtons extends React.Component<IProps, IStat
         if (this.state.showDialpad) {
             dialPad = (
                 <DialpadContextMenu
-                    {...alwaysAboveLeftOf(
+                    {...alwaysMenuProps(
                         this.dialpadButton.current.getBoundingClientRect(),
                         ChevronFace.None,
                         CONTEXT_MENU_VPADDING,
@@ -246,7 +246,7 @@ export default class LegacyCallViewButtons extends React.Component<IProps, IStat
         if (this.state.showMoreMenu) {
             contextMenu = (
                 <LegacyCallContextMenu
-                    {...alwaysAboveLeftOf(
+                    {...alwaysMenuProps(
                         this.contextMenuButton.current.getBoundingClientRect(),
                         ChevronFace.None,
                         CONTEXT_MENU_VPADDING,

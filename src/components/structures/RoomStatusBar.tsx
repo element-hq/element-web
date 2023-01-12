@@ -146,7 +146,7 @@ export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
         dis.fire(Action.FocusSendMessageComposer);
     };
 
-    private onRoomLocalEchoUpdated = (ev: MatrixEvent, room: Room) => {
+    private onRoomLocalEchoUpdated = (ev: MatrixEvent, room: Room): void => {
         if (room.roomId !== this.props.room.roomId) return;
         const messages = getUnsentMessages(this.props.room);
         this.setState({

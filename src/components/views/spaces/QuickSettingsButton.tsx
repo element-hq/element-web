@@ -38,7 +38,9 @@ import Modal from "../../../Modal";
 import DevtoolsDialog from "../dialogs/DevtoolsDialog";
 import { SdkContextClass } from "../../../contexts/SDKContext";
 
-const QuickSettingsButton = ({ isPanelCollapsed = false }) => {
+const QuickSettingsButton: React.FC<{
+    isPanelCollapsed: boolean;
+}> = ({ isPanelCollapsed = false }) => {
     const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<HTMLDivElement>();
 
     const { [MetaSpace.Favourites]: favouritesEnabled, [MetaSpace.People]: peopleEnabled } =

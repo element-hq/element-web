@@ -43,7 +43,7 @@ export class ThreadNotificationState extends NotificationState implements IDestr
         this.thread.off(ThreadEvent.ViewThread, this.resetThreadNotification);
     }
 
-    private handleNewThreadReply = (thread: Thread, event: MatrixEvent) => {
+    private handleNewThreadReply = (thread: Thread, event: MatrixEvent): void => {
         const client = MatrixClientPeg.get();
 
         const myUserId = client.getUserId();
@@ -66,7 +66,7 @@ export class ThreadNotificationState extends NotificationState implements IDestr
         this.updateNotificationState(NotificationColor.None);
     };
 
-    private updateNotificationState(color: NotificationColor) {
+    private updateNotificationState(color: NotificationColor): void {
         const snapshot = this.snapshot();
 
         this._color = color;

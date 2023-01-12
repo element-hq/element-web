@@ -94,7 +94,7 @@ const LinkPreviewGroup: React.FC<IProps> = ({ links, mxEvent, onCancelClick, onH
 
 const fetchPreviews = (cli: MatrixClient, links: string[], ts: number): Promise<[string, IPreviewUrlResponse][]> => {
     return Promise.all<[string, IPreviewUrlResponse] | void>(
-        links.map(async (link) => {
+        links.map(async (link): Promise<[string, IPreviewUrlResponse]> => {
             try {
                 const preview = await cli.getUrlPreview(link, ts);
                 if (preview && Object.keys(preview).length > 0) {

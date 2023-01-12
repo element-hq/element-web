@@ -26,7 +26,7 @@ import { clamp } from "lodash";
  * @param {number} amt the interpolant
  * @returns
  */
-export function lerp(start: number, end: number, amt: number) {
+export function lerp(start: number, end: number, amt: number): number {
     amt = clamp(amt, 0, 1);
     return (1 - amt) * start + amt * end;
 }

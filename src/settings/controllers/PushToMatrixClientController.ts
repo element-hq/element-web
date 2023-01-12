@@ -26,7 +26,7 @@ export default class PushToMatrixClientController extends SettingController {
         super();
     }
 
-    public onChange(level: SettingLevel, roomId: string, newValue: any) {
+    public onChange(level: SettingLevel, roomId: string, newValue: any): void {
         // XXX does this work? This surely isn't necessarily the effective value,
         // but it's what NotificationsEnabledController does...
         this.setter.call(MatrixClientPeg.get(), this.inverse ? !newValue : newValue);

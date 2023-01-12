@@ -62,7 +62,7 @@ enum Icon {
     PresenceBusy = "BUSY",
 }
 
-function tooltipText(variant: Icon) {
+function tooltipText(variant: Icon): string {
     switch (variant) {
         case Icon.Globe:
             return _t("This room is public");
@@ -91,7 +91,7 @@ export default class DecoratedRoomAvatar extends React.PureComponent<IProps, ISt
         };
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         this.isUnmounted = true;
         if (this.isWatchingTimeline) this.props.room.off(RoomEvent.Timeline, this.onRoomTimeline);
         this.dmUser = null; // clear listeners, if any
@@ -120,7 +120,7 @@ export default class DecoratedRoomAvatar extends React.PureComponent<IProps, ISt
         }
     }
 
-    private onRoomTimeline = (ev: MatrixEvent, room: Room | null) => {
+    private onRoomTimeline = (ev: MatrixEvent, room: Room | null): void => {
         if (this.isUnmounted) return;
         if (this.props.room.roomId !== room?.roomId) return;
 
@@ -132,7 +132,7 @@ export default class DecoratedRoomAvatar extends React.PureComponent<IProps, ISt
         }
     };
 
-    private onPresenceUpdate = () => {
+    private onPresenceUpdate = (): void => {
         if (this.isUnmounted) return;
 
         const newIcon = this.getPresenceIcon();

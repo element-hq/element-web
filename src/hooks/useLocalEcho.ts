@@ -22,7 +22,7 @@ export const useLocalEcho = <T>(
     errorFn: (error: Error) => void,
 ): [value: T, handler: (value: T) => void] => {
     const [value, setValue] = useState(currentFactory);
-    const handler = async (value: T) => {
+    const handler = async (value: T): Promise<void> => {
         setValue(value);
         try {
             await setterFn(value);

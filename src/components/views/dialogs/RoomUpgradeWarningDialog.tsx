@@ -70,7 +70,7 @@ export default class RoomUpgradeWarningDialog extends React.Component<IProps, IS
         this.setState({ progressText, progress, total });
     };
 
-    private onContinue = () => {
+    private onContinue = (): void => {
         const opts = {
             continue: true,
             invite: this.isPrivate && this.state.inviteUsersToNewRoom,
@@ -85,22 +85,22 @@ export default class RoomUpgradeWarningDialog extends React.Component<IProps, IS
         }
     };
 
-    private onCancel = () => {
+    private onCancel = (): void => {
         this.props.onFinished({ continue: false, invite: false });
     };
 
-    private onInviteUsersToggle = (inviteUsersToNewRoom: boolean) => {
+    private onInviteUsersToggle = (inviteUsersToNewRoom: boolean): void => {
         this.setState({ inviteUsersToNewRoom });
     };
 
-    private openBugReportDialog = (e) => {
+    private openBugReportDialog = (e): void => {
         e.preventDefault();
         e.stopPropagation();
 
         Modal.createDialog(BugReportDialog, {});
     };
 
-    public render() {
+    public render(): JSX.Element {
         const brand = SdkConfig.get().brand;
 
         let inviteToggle = null;

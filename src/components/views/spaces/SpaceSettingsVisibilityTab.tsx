@@ -37,10 +37,10 @@ interface IProps {
     closeSettingsFn(): void;
 }
 
-const SpaceSettingsVisibilityTab = ({ matrixClient: cli, space, closeSettingsFn }: IProps) => {
+const SpaceSettingsVisibilityTab: React.FC<IProps> = ({ matrixClient: cli, space, closeSettingsFn }) => {
     const [error, setError] = useState("");
     const serverSupportsExploringSpaces = useAsyncMemo<boolean>(
-        async () => {
+        async (): Promise<boolean> => {
             return cli.doesServerSupportUnstableFeature("org.matrix.msc3827.stable");
         },
         [cli],
@@ -153,14 +153,14 @@ const SpaceSettingsVisibilityTab = ({ matrixClient: cli, space, closeSettingsFn 
             >
                 <JoinRuleSettings
                     room={space}
-                    onError={() => setError(_t("Failed to update the visibility of this space"))}
+                    onError={(): void => setError(_t("Failed to update the visibility of this space"))}
                     closeSettingsFn={closeSettingsFn}
                 />
                 {advancedSection}
                 <div className="mx_SettingsTab_toggleWithDescription">
                     <LabelledToggleSwitch
                         value={historyVisibility === HistoryVisibility.WorldReadable}
-                        onChange={(checked: boolean) => {
+                        onChange={(checked: boolean): void => {
                             setHistoryVisibility(checked ? HistoryVisibility.WorldReadable : HistoryVisibility.Shared);
                         }}
                         disabled={!canSetHistoryVisibility}

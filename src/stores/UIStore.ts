@@ -85,7 +85,7 @@ export default class UIStore extends EventEmitter {
         return this.uiElementDimensions.has(name);
     }
 
-    private resizeObserverCallback = (entries: ResizeObserverEntry[]) => {
+    private resizeObserverCallback = (entries: ResizeObserverEntry[]): void => {
         const windowEntry = entries.find((entry) => entry.target === document.body);
 
         if (windowEntry) {

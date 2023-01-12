@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { ReactNode } from "react";
 import ReactDOM from "react-dom";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
@@ -65,7 +65,7 @@ export default class HTMLExporter extends Exporter {
         this.threadsEnabled = SettingsStore.getValue("feature_threadenabled");
     }
 
-    protected async getRoomAvatar() {
+    protected async getRoomAvatar(): Promise<ReactNode> {
         let blob: Blob;
         const avatarUrl = Avatar.avatarUrlForRoom(this.room, 32, 32, "crop");
         const avatarPath = "room.png";
@@ -92,7 +92,7 @@ export default class HTMLExporter extends Exporter {
         return renderToStaticMarkup(avatar);
     }
 
-    protected async wrapHTML(content: string) {
+    protected async wrapHTML(content: string): Promise<string> {
         const roomAvatar = await this.getRoomAvatar();
         const exportDate = formatFullDateNoDayNoTime(new Date());
         const creator = this.room.currentState.getStateEvents(EventType.RoomCreate, "")?.getSender();
@@ -224,7 +224,7 @@ export default class HTMLExporter extends Exporter {
         );
     }
 
-    protected async saveAvatarIfNeeded(event: MatrixEvent) {
+    protected async saveAvatarIfNeeded(event: MatrixEvent): Promise<void> {
         const member = event.sender;
         if (!this.avatars.has(member.userId)) {
             try {
@@ -239,7 +239,7 @@ export default class HTMLExporter extends Exporter {
         }
     }
 
-    protected getDateSeparator(event: MatrixEvent) {
+    protected async getDateSeparator(event: MatrixEvent): Promise<string> {
         const ts = event.getTs();
         const dateSeparator = (
             <li key={ts}>
@@ -249,12 +249,12 @@ export default class HTMLExporter extends Exporter {
         return renderToStaticMarkup(dateSeparator);
     }
 
-    protected needsDateSeparator(event: MatrixEvent, prevEvent: MatrixEvent) {
+    protected async needsDateSeparator(event: MatrixEvent, prevEvent: MatrixEvent): Promise<boolean> {
         if (prevEvent == null) return true;
         return wantsDateSeparator(prevEvent.getDate(), event.getDate());
     }
 
-    public getEventTile(mxEv: MatrixEvent, continuation: boolean) {
+    public getEventTile(mxEv: MatrixEvent, continuation: boolean): JSX.Element {
         return (
             <div className="mx_Export_EventWrapper" id={mxEv.getId()}>
                 <MatrixClientContext.Provider value={this.client}>
@@ -285,7 +285,7 @@ export default class HTMLExporter extends Exporter {
         );
     }
 
-    protected async getEventTileMarkup(mxEv: MatrixEvent, continuation: boolean, filePath?: string) {
+    protected async getEventTileMarkup(mxEv: MatrixEvent, continuation: boolean, filePath?: string): Promise<string> {
         const hasAvatar = !!this.getAvatarURL(mxEv);
         if (hasAvatar) await this.saveAvatarIfNeeded(mxEv);
         const EventTile = this.getEventTile(mxEv, continuation);
@@ -319,7 +319,7 @@ export default class HTMLExporter extends Exporter {
         return eventTileMarkup;
     }
 
-    protected createModifiedEvent(text: string, mxEv: MatrixEvent, italic = true) {
+    protected createModifiedEvent(text: string, mxEv: MatrixEvent, italic = true): MatrixEvent {
         const modifiedContent = {
             msgtype: "m.text",
             body: `${text}`,
@@ -338,7 +338,7 @@ export default class HTMLExporter extends Exporter {
         return modifiedEvent;
     }
 
-    protected async createMessageBody(mxEv: MatrixEvent, joined = false) {
+    protected async createMessageBody(mxEv: MatrixEvent, joined = false): Promise<string> {
         let eventTile: string;
         try {
             if (this.isAttachment(mxEv)) {
@@ -387,7 +387,7 @@ export default class HTMLExporter extends Exporter {
         return eventTile;
     }
 
-    protected async createHTML(events: MatrixEvent[], start: number) {
+    protected async createHTML(events: MatrixEvent[], start: number): Promise<string> {
         let content = "";
         let prevEvent = null;
         for (let i = start; i < Math.min(start + 1000, events.length); i++) {
@@ -415,7 +415,7 @@ export default class HTMLExporter extends Exporter {
         return this.wrapHTML(content);
     }
 
-    public async export() {
+    public async export(): Promise<void> {
         this.updateProgress(_t("Starting export..."));
 
         const fetchStart = performance.now();

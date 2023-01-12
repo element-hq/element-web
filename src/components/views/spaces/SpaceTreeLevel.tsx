@@ -101,7 +101,7 @@ export const SpaceButton = forwardRef<HTMLElement, IButtonProps>(
                 ariaLabel = _t("Jump to first invite.");
             }
 
-            const jumpToNotification = (ev: MouseEvent) => {
+            const jumpToNotification = (ev: MouseEvent): void => {
                 ev.stopPropagation();
                 ev.preventDefault();
                 SpaceStore.instance.setActiveRoomInSpace(spaceKey ?? space.roomId);
@@ -132,8 +132,9 @@ export const SpaceButton = forwardRef<HTMLElement, IButtonProps>(
             );
         }
 
-        const viewSpaceHome = () => defaultDispatcher.dispatch({ action: Action.ViewRoom, room_id: space.roomId });
-        const activateSpace = () => SpaceStore.instance.setActiveSpace(spaceKey ?? space.roomId);
+        const viewSpaceHome = (): void =>
+            defaultDispatcher.dispatch({ action: Action.ViewRoom, room_id: space.roomId });
+        const activateSpace = (): void => SpaceStore.instance.setActiveSpace(spaceKey ?? space.roomId);
         const onClick = props.onClick ?? (selected && space ? viewSpaceHome : activateSpace);
 
         return (
@@ -217,34 +218,34 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
         this.props.space.on(RoomEvent.Name, this.onRoomNameChange);
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         SpaceStore.instance.off(this.props.space.roomId, this.onSpaceUpdate);
         this.props.space.off(RoomEvent.Name, this.onRoomNameChange);
     }
 
-    private onSpaceUpdate = () => {
+    private onSpaceUpdate = (): void => {
         this.setState({
             childSpaces: this.childSpaces,
         });
     };
 
-    private onRoomNameChange = () => {
+    private onRoomNameChange = (): void => {
         this.setState({
             name: this.props.space.name,
         });
     };
 
-    private get childSpaces() {
+    private get childSpaces(): Room[] {
         return SpaceStore.instance
             .getChildSpaces(this.props.space.roomId)
             .filter((s) => !this.props.parents?.has(s.roomId));
     }
 
-    private get isCollapsed() {
+    private get isCollapsed(): boolean {
         return this.state.collapsed || this.props.isPanelCollapsed;
     }
 
-    private toggleCollapse = (evt) => {
+    private toggleCollapse = (evt: ButtonEvent): void => {
         if (this.props.onExpand && this.isCollapsed) {
             this.props.onExpand();
         }
@@ -261,7 +262,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
         evt.stopPropagation();
     };
 
-    private onKeyDown = (ev: React.KeyboardEvent) => {
+    private onKeyDown = (ev: React.KeyboardEvent): void => {
         let handled = true;
         const action = getKeyBindingsManager().getRoomListAction(ev);
         const hasChildren = this.state.childSpaces?.length;
@@ -298,7 +299,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
         }
     };
 
-    public render() {
+    public render(): JSX.Element {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const {
             space,

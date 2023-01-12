@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useState } from "react";
+import React, { ReactNode, useState } from "react";
 
 import { UpdateCheckStatus } from "../../../BasePlatform";
 import PlatformPeg from "../../../PlatformPeg";
@@ -26,11 +26,11 @@ import InlineSpinner from "../../../components/views/elements/InlineSpinner";
 import AccessibleButton from "../../../components/views/elements/AccessibleButton";
 import { CheckUpdatesPayload } from "../../../dispatcher/payloads/CheckUpdatesPayload";
 
-function installUpdate() {
+function installUpdate(): void {
     PlatformPeg.get().installUpdate();
 }
 
-function getStatusText(status: UpdateCheckStatus, errorDetail?: string) {
+function getStatusText(status: UpdateCheckStatus, errorDetail?: string): ReactNode {
     switch (status) {
         case UpdateCheckStatus.Error:
             return _t("Error encountered (%(errorDetail)s).", { errorDetail });
@@ -57,10 +57,10 @@ function getStatusText(status: UpdateCheckStatus, errorDetail?: string) {
 
 const doneStatuses = [UpdateCheckStatus.Ready, UpdateCheckStatus.Error, UpdateCheckStatus.NotAvailable];
 
-const UpdateCheckButton = () => {
+const UpdateCheckButton: React.FC = () => {
     const [state, setState] = useState<CheckUpdatesPayload>(null);
 
-    const onCheckForUpdateClick = () => {
+    const onCheckForUpdateClick = (): void => {
         setState(null);
         PlatformPeg.get().startUpdateCheck();
     };

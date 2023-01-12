@@ -37,7 +37,7 @@ import { parsePermalink } from "./permalinks/Permalinks";
  *   React components which have been mounted as part of this.
  *   The initial caller should pass in an empty array to seed the accumulator.
  */
-export function pillifyLinks(nodes: ArrayLike<Element>, mxEvent: MatrixEvent, pills: Element[]) {
+export function pillifyLinks(nodes: ArrayLike<Element>, mxEvent: MatrixEvent, pills: Element[]): void {
     const room = MatrixClientPeg.get().getRoom(mxEvent.getRoomId());
     const shouldShowPillAvatar = SettingsStore.getValue("Pill.shouldShowPillAvatar");
     let node = nodes[0];
@@ -148,7 +148,7 @@ export function pillifyLinks(nodes: ArrayLike<Element>, mxEvent: MatrixEvent, pi
  * @param {Element[]} pills - array of pill containers whose React
  *   components should be unmounted.
  */
-export function unmountPills(pills: Element[]) {
+export function unmountPills(pills: Element[]): void {
     for (const pillContainer of pills) {
         ReactDOM.unmountComponentAtNode(pillContainer);
     }

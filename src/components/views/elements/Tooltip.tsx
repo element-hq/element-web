@@ -81,7 +81,7 @@ export default class Tooltip extends React.PureComponent<ITooltipProps, State> {
         }
     }
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         window.addEventListener("scroll", this.updatePosition, {
             passive: true,
             capture: true,
@@ -92,14 +92,14 @@ export default class Tooltip extends React.PureComponent<ITooltipProps, State> {
         this.updatePosition();
     }
 
-    public componentDidUpdate(prevProps) {
+    public componentDidUpdate(prevProps): void {
         if (objectHasDiff(prevProps, this.props)) {
             this.updatePosition();
         }
     }
 
     // Remove the wrapper element, as the tooltip has finished using it
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         window.removeEventListener("scroll", this.updatePosition, {
             capture: true,
         });
@@ -174,7 +174,7 @@ export default class Tooltip extends React.PureComponent<ITooltipProps, State> {
         this.setState(style);
     };
 
-    public render() {
+    public render(): JSX.Element {
         const tooltipClasses = classNames("mx_Tooltip", this.props.tooltipClassName, {
             mx_Tooltip_visible: this.props.visible,
             mx_Tooltip_invisible: !this.props.visible,

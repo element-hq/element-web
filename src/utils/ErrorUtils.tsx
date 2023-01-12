@@ -42,7 +42,7 @@ export function messageForResourceLimitError(
     let errString = strings[limitType];
     if (errString === undefined) errString = strings[""];
 
-    const linkSub = (sub) => {
+    const linkSub = (sub: string): ReactNode => {
         if (adminContact) {
             return (
                 <a href={adminContact} target="_blank" rel="noreferrer noopener">

@@ -33,7 +33,7 @@ export const deleteDevicesWithInteractiveAuth = async (
     matrixClient: MatrixClient,
     deviceIds: string[],
     onFinished?: InteractiveAuthCallback,
-) => {
+): Promise<void> => {
     if (!deviceIds.length) {
         return;
     }

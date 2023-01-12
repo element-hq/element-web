@@ -26,7 +26,7 @@ interface Props {
     completed?: boolean;
 }
 
-export function UserOnboardingTask({ task, completed = false }: Props) {
+export function UserOnboardingTask({ task, completed = false }: Props): JSX.Element {
     const title = typeof task.title === "function" ? task.title() : task.title;
     const description = typeof task.description === "function" ? task.description() : task.description;
 

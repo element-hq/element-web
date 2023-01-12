@@ -29,7 +29,7 @@ import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import RoomAvatar from "../avatars/RoomAvatar";
 
-const RecentlyViewedButton = () => {
+const RecentlyViewedButton: React.FC = () => {
     const tooltipRef = useRef<InteractiveTooltip>();
     const crumbs = useEventEmitterState(BreadcrumbsStore.instance, UPDATE_EVENT, () => BreadcrumbsStore.instance.rooms);
 

@@ -50,7 +50,7 @@ export const VoiceBroadcastHeader: React.FC<VoiceBroadcastHeaderProps> = ({
     linkToRoom = false,
     live = "not-live",
     liveBadgePosition = "right",
-    onCloseClick = () => {},
+    onCloseClick = (): void => {},
     onMicrophoneLineClick = null,
     room,
     microphoneLabel,

@@ -60,7 +60,7 @@ export default class EmbeddedPage extends React.PureComponent<IProps, IState> {
         return sanitizeHtml(_t(s));
     }
 
-    private async fetchEmbed() {
+    private async fetchEmbed(): Promise<void> {
         let res: Response;
 
         try {

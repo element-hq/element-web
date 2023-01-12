@@ -20,7 +20,10 @@ import { Dispatcher } from "flux";
 import { ActionPayload } from "../dispatcher/payloads";
 
 // Hook to simplify listening to flux dispatches
-export const useDispatcher = (dispatcher: Dispatcher<ActionPayload>, handler: (payload: ActionPayload) => void) => {
+export const useDispatcher = (
+    dispatcher: Dispatcher<ActionPayload>,
+    handler: (payload: ActionPayload) => void,
+): void => {
     // Create a ref that stores handler
     const savedHandler = useRef((payload: ActionPayload) => {});
 

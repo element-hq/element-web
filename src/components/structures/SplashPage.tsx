@@ -19,7 +19,7 @@ interface Props extends DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLEleme
     children?: ReactNode;
 }
 
-export default function SplashPage({ children, className, ...other }: Props) {
+export default function SplashPage({ children, className, ...other }: Props): JSX.Element {
     const classes = classNames(className, "mx_SplashPage");
     return (
         <main {...other} className={classes}>

@@ -77,13 +77,13 @@ export default class ConfirmUserActionDialog extends React.Component<IProps, ISt
         this.props.onFinished(false);
     };
 
-    private onReasonChange = (ev: ChangeEvent<HTMLInputElement>) => {
+    private onReasonChange = (ev: ChangeEvent<HTMLInputElement>): void => {
         this.setState({
             reason: ev.target.value,
         });
     };
 
-    public render() {
+    public render(): JSX.Element {
         const confirmButtonClass = this.props.danger ? "danger" : "";
 
         let reasonBox;

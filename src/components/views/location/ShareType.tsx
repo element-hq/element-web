@@ -26,7 +26,7 @@ import { Icon as LocationIcon } from "../../../../res/img/element-icons/location
 import { LocationShareType } from "./shareLocation";
 import StyledLiveBeaconIcon from "../beacon/StyledLiveBeaconIcon";
 
-const UserAvatar = () => {
+const UserAvatar: React.FC = () => {
     const matrixClient = useContext(MatrixClientContext);
     const userId = matrixClient.getUserId();
     const displayName = OwnProfileStore.instance.displayName;

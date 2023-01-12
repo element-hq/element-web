@@ -42,7 +42,7 @@ export default class TypingStore {
      * Clears all cached typing states. Intended to be called when the
      * MatrixClientPeg client changes.
      */
-    public reset() {
+    public reset(): void {
         this.typingStates = {
             // "roomId": {
             //     isTyping: bool,     // Whether the user is typing or not

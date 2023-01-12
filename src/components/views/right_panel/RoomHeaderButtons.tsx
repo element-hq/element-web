@@ -61,7 +61,7 @@ interface IUnreadIndicatorProps {
     color?: NotificationColor;
 }
 
-const UnreadIndicator = ({ color }: IUnreadIndicatorProps) => {
+const UnreadIndicator: React.FC<IUnreadIndicatorProps> = ({ color }) => {
     if (color === NotificationColor.None) {
         return null;
     }
@@ -87,7 +87,7 @@ interface IHeaderButtonProps {
     onClick: () => void;
 }
 
-const PinnedMessagesHeaderButton = ({ room, isHighlighted, onClick }: IHeaderButtonProps) => {
+const PinnedMessagesHeaderButton: React.FC<IHeaderButtonProps> = ({ room, isHighlighted, onClick }) => {
     const pinnedEvents = usePinnedEvents(room);
     const readPinnedEvents = useReadPinnedEvents(room);
     if (!pinnedEvents?.length) return null;
@@ -110,7 +110,7 @@ const PinnedMessagesHeaderButton = ({ room, isHighlighted, onClick }: IHeaderBut
     );
 };
 
-const TimelineCardHeaderButton = ({ room, isHighlighted, onClick }: IHeaderButtonProps) => {
+const TimelineCardHeaderButton: React.FC<IHeaderButtonProps> = ({ room, isHighlighted, onClick }) => {
     let unreadIndicator;
     const color = RoomNotificationStateStore.instance.getRoomState(room).color;
     switch (color) {
@@ -231,7 +231,7 @@ export default class RoomHeaderButtons extends HeaderButtons<IProps> {
         });
     };
 
-    protected onAction(payload: ActionPayload) {
+    protected onAction(payload: ActionPayload): void {
         if (payload.action === Action.ViewUser) {
             if (payload.member) {
                 if (payload.push) {
@@ -258,7 +258,7 @@ export default class RoomHeaderButtons extends HeaderButtons<IProps> {
         }
     }
 
-    private onRoomSummaryClicked = () => {
+    private onRoomSummaryClicked = (): void => {
         // use roomPanelPhase rather than this.state.phase as it remembers the latest one if we close
         const currentPhase = RightPanelStore.instance.currentCard.phase;
         if (ROOM_INFO_PHASES.includes(currentPhase)) {
@@ -273,20 +273,20 @@ export default class RoomHeaderButtons extends HeaderButtons<IProps> {
         }
     };
 
-    private onNotificationsClicked = () => {
+    private onNotificationsClicked = (): void => {
         // This toggles for us, if needed
         this.setPhase(RightPanelPhases.NotificationPanel);
     };
 
-    private onPinnedMessagesClicked = () => {
+    private onPinnedMessagesClicked = (): void => {
         // This toggles for us, if needed
         this.setPhase(RightPanelPhases.PinnedMessages);
     };
-    private onTimelineCardClicked = () => {
+    private onTimelineCardClicked = (): void => {
         this.setPhase(RightPanelPhases.Timeline);
     };
 
-    private onThreadsPanelClicked = (ev: ButtonEvent) => {
+    private onThreadsPanelClicked = (ev: ButtonEvent): void => {
         if (RoomHeaderButtons.THREAD_PHASES.includes(this.state.phase)) {
             RightPanelStore.instance.togglePanel(this.props.room?.roomId ?? null);
         } else {
@@ -295,7 +295,7 @@ export default class RoomHeaderButtons extends HeaderButtons<IProps> {
         }
     };
 
-    public renderButtons() {
+    public renderButtons(): JSX.Element {
         if (!this.props.room) {
             return <></>;
         }

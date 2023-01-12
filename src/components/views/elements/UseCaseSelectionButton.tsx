@@ -27,7 +27,7 @@ interface Props {
     onClick: (useCase: UseCase) => void;
 }
 
-export function UseCaseSelectionButton({ useCase, onClick, selected }: Props) {
+export function UseCaseSelectionButton({ useCase, onClick, selected }: Props): JSX.Element {
     let label: string;
     switch (useCase) {
         case UseCase.PersonalMessaging:

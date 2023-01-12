@@ -62,12 +62,14 @@ const RoomLiveShareWarningInner: React.FC<RoomLiveShareWarningInnerProps> = ({ l
 
     // eat events from buttons so navigate to tile
     // is not triggered
-    const stopPropagationWrapper = (callback: () => void) => (e?: ButtonEvent) => {
-        e?.stopPropagation();
-        callback();
-    };
+    const stopPropagationWrapper =
+        (callback: () => void) =>
+        (e?: ButtonEvent): void => {
+            e?.stopPropagation();
+            callback();
+        };
 
-    const onButtonClick = () => {
+    const onButtonClick = (): void => {
         if (hasLocationPublishError) {
             onResetLocationPublishError();
         } else {
@@ -75,7 +77,7 @@ const RoomLiveShareWarningInner: React.FC<RoomLiveShareWarningInnerProps> = ({ l
         }
     };
 
-    const onClick = () => {
+    const onClick = (): void => {
         dispatcher.dispatch<ViewRoomPayload>({
             action: Action.ViewRoom,
             room_id: beacon.roomId,

@@ -61,7 +61,7 @@ export default class MLocationBody extends React.Component<IBodyProps, IState> {
         };
     }
 
-    private onClick = () => {
+    private onClick = (): void => {
         Modal.createDialog(
             LocationViewDialog,
             {
@@ -74,12 +74,12 @@ export default class MLocationBody extends React.Component<IBodyProps, IState> {
         );
     };
 
-    private clearError = () => {
+    private clearError = (): void => {
         this.context.off(ClientEvent.Sync, this.reconnectedListener);
         this.setState({ error: undefined });
     };
 
-    private onError = (error: Error) => {
+    private onError = (error: Error): void => {
         this.setState({ error });
         this.context.on(ClientEvent.Sync, this.reconnectedListener);
     };

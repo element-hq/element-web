@@ -149,7 +149,7 @@ export default class EventListSummary extends React.Component<IProps> {
      * more items in `users` than `this.props.summaryLength`, which is the number of names
      * included before "and [n] others".
      */
-    private renderNameList(users: string[]) {
+    private renderNameList(users: string[]): string {
         return formatCommaSeparatedList(users, this.props.summaryLength);
     }
 
@@ -207,7 +207,10 @@ export default class EventListSummary extends React.Component<IProps> {
      * @param {string[]} transitions the array of transitions to transform.
      * @returns {object[]} an array of coalesced transitions.
      */
-    private static coalesceRepeatedTransitions(transitions: TransitionType[]) {
+    private static coalesceRepeatedTransitions(transitions: TransitionType[]): {
+        transitionType: TransitionType;
+        repeats: number;
+    }[] {
         const res: {
             transitionType: TransitionType;
             repeats: number;
@@ -377,7 +380,7 @@ export default class EventListSummary extends React.Component<IProps> {
         return res;
     }
 
-    private static getTransitionSequence(events: IUserEvents[]) {
+    private static getTransitionSequence(events: IUserEvents[]): TransitionType[] {
         return events.map(EventListSummary.getTransition);
     }
 
@@ -451,7 +454,10 @@ export default class EventListSummary extends React.Component<IProps> {
         }
     }
 
-    public getAggregate(userEvents: Record<string, IUserEvents[]>) {
+    public getAggregate(userEvents: Record<string, IUserEvents[]>): {
+        names: Record<string, string[]>;
+        indices: Record<string, number>;
+    } {
         // A map of aggregate type to arrays of display names. Each aggregate type
         // is a comma-delimited string of transitions, e.g. "joined,left,kicked".
         // The array of display names is the array of users who went through that
@@ -489,7 +495,7 @@ export default class EventListSummary extends React.Component<IProps> {
         };
     }
 
-    public render() {
+    public render(): JSX.Element {
         const eventsToRender = this.props.events;
 
         // Map user IDs to latest Avatar Member. ES6 Maps are ordered by when the key was created,

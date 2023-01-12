@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { Optional } from "matrix-events-sdk";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { EventTimelineSet } from "matrix-js-sdk/src/models/event-timeline-set";
 import { Thread } from "matrix-js-sdk/src/models/thread";
@@ -60,15 +61,12 @@ type ThreadPanelHeaderOption = {
     key: ThreadFilterType;
 };
 
-export const ThreadPanelHeaderFilterOptionItem = ({
-    label,
-    description,
-    onClick,
-    isSelected,
-}: ThreadPanelHeaderOption & {
-    onClick: () => void;
-    isSelected: boolean;
-}) => {
+export const ThreadPanelHeaderFilterOptionItem: React.FC<
+    ThreadPanelHeaderOption & {
+        onClick: () => void;
+        isSelected: boolean;
+    }
+> = ({ label, description, onClick, isSelected }) => {
     return (
         <MenuItemRadio active={isSelected} className="mx_ThreadPanel_Header_FilterOptionItem" onClick={onClick}>
             <span>{label}</span>
@@ -77,15 +75,11 @@ export const ThreadPanelHeaderFilterOptionItem = ({
     );
 };
 
-export const ThreadPanelHeader = ({
-    filterOption,
-    setFilterOption,
-    empty,
-}: {
+export const ThreadPanelHeader: React.FC<{
     filterOption: ThreadFilterType;
     setFilterOption: (filterOption: ThreadFilterType) => void;
     empty: boolean;
-}) => {
+}> = ({ filterOption, setFilterOption, empty }) => {
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu<HTMLElement>();
     const options: readonly ThreadPanelHeaderOption[] = [
         {
@@ -215,30 +209,21 @@ const ThreadPanel: React.FC<IProps> = ({ roomId, onClose, permalinkCreator }) =>
 
     const [filterOption, setFilterOption] = useState<ThreadFilterType>(ThreadFilterType.All);
     const [room, setRoom] = useState<Room | null>(null);
-    const [timelineSet, setTimelineSet] = useState<EventTimelineSet | null>(null);
     const [narrow, setNarrow] = useState<boolean>(false);
+
+    const timelineSet: Optional<EventTimelineSet> =
+        filterOption === ThreadFilterType.My ? room?.threadsTimelineSets[1] : room?.threadsTimelineSets[0];
+    const hasThreads = Boolean(room?.threadsTimelineSets?.[0]?.getLiveTimeline()?.getEvents()?.length);
 
     useEffect(() => {
         const room = mxClient.getRoom(roomId);
-        room.createThreadsTimelineSets()
-            .then(() => {
-                return room.fetchRoomThreads();
-            })
+        room?.createThreadsTimelineSets()
+            .then(() => room.fetchRoomThreads())
             .then(() => {
                 setFilterOption(ThreadFilterType.All);
                 setRoom(room);
             });
     }, [mxClient, roomId]);
-
-    useEffect(() => {
-        if (room) {
-            if (filterOption === ThreadFilterType.My) {
-                setTimelineSet(room.threadsTimelineSets[1]);
-            } else {
-                setTimelineSet(room.threadsTimelineSets[0]);
-            }
-        }
-    }, [room, filterOption]);
 
     useEffect(() => {
         if (timelineSet && !Thread.hasServerSideSupport) {
@@ -268,7 +253,7 @@ const ThreadPanel: React.FC<IProps> = ({ roomId, onClose, permalinkCreator }) =>
                     <ThreadPanelHeader
                         filterOption={filterOption}
                         setFilterOption={setFilterOption}
-                        empty={!timelineSet?.getLiveTimeline()?.getEvents().length}
+                        empty={!hasThreads}
                     />
                 }
                 footer={
@@ -315,7 +300,7 @@ const ThreadPanel: React.FC<IProps> = ({ roomId, onClose, permalinkCreator }) =>
                         showUrlPreview={false} // No URL previews at the threads list level
                         empty={
                             <EmptyThread
-                                hasThreads={room.threadsTimelineSets?.[0]?.getLiveTimeline().getEvents().length > 0}
+                                hasThreads={hasThreads}
                                 filterOption={filterOption}
                                 showAllThreadsCallback={() => setFilterOption(ThreadFilterType.All)}
                             />

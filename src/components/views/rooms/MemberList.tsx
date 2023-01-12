@@ -101,7 +101,7 @@ export default class MemberList extends React.Component<IProps, IState> {
         this.updateListNow(true);
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         this.mounted = false;
         const cli = MatrixClientPeg.get();
         if (cli) {
@@ -321,7 +321,7 @@ export default class MemberList extends React.Component<IProps, IState> {
         }
     }
 
-    private makeMemberTiles(members: Array<RoomMember | MatrixEvent>) {
+    private makeMemberTiles(members: Array<RoomMember | MatrixEvent>): JSX.Element[] {
         return members.map((m) => {
             if (m instanceof RoomMember) {
                 // Is a Matrix invite
@@ -359,7 +359,7 @@ export default class MemberList extends React.Component<IProps, IState> {
         return this.state.filteredInvitedMembers.length + (this.getPending3PidInvites() || []).length;
     };
 
-    public render() {
+    public render(): JSX.Element {
         if (this.state.loading) {
             return (
                 <BaseCard className="mx_MemberList" onClose={this.props.onClose}>

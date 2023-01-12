@@ -36,8 +36,8 @@ interface IOpts {
     customFields?: Record<string, string>;
 }
 
-async function collectBugReport(opts: IOpts = {}, gzipLogs = true) {
-    const progressCallback = opts.progressCallback || (() => {});
+async function collectBugReport(opts: IOpts = {}, gzipLogs = true): Promise<FormData> {
+    const progressCallback = opts.progressCallback || ((): void => {});
 
     progressCallback(_t("Collecting app version information"));
     let version = "UNKNOWN";
@@ -219,7 +219,7 @@ export default async function sendBugReport(bugReportEndpoint: string, opts: IOp
         throw new Error("No bug report endpoint has been set.");
     }
 
-    const progressCallback = opts.progressCallback || (() => {});
+    const progressCallback = opts.progressCallback || ((): void => {});
     const body = await collectBugReport(opts);
 
     progressCallback(_t("Uploading logs"));
@@ -240,8 +240,8 @@ export default async function sendBugReport(bugReportEndpoint: string, opts: IOp
  *
  * @return {Promise} Resolved when the bug report is downloaded (or started).
  */
-export async function downloadBugReport(opts: IOpts = {}) {
-    const progressCallback = opts.progressCallback || (() => {});
+export async function downloadBugReport(opts: IOpts = {}): Promise<void> {
+    const progressCallback = opts.progressCallback || ((): void => {});
     const body = await collectBugReport(opts, false);
 
     progressCallback(_t("Downloading logs"));
@@ -275,7 +275,7 @@ export async function downloadBugReport(opts: IOpts = {}) {
 }
 
 // Source: https://github.com/beatgammit/tar-js/blob/master/examples/main.js
-function uint8ToString(buf: Buffer) {
+function uint8ToString(buf: Buffer): string {
     let out = "";
     for (let i = 0; i < buf.length; i += 1) {
         out += String.fromCharCode(buf[i]);
@@ -289,7 +289,7 @@ export async function submitFeedback(
     comment: string,
     canContact = false,
     extraData: Record<string, string> = {},
-) {
+): Promise<void> {
     let version = "UNKNOWN";
     try {
         version = await PlatformPeg.get().getAppVersion();
@@ -318,7 +318,7 @@ function submitReport(endpoint: string, body: FormData, progressCallback: (str: 
         req.open("POST", endpoint);
         req.responseType = "json";
         req.timeout = 5 * 60 * 1000;
-        req.onreadystatechange = function () {
+        req.onreadystatechange = function (): void {
             if (req.readyState === XMLHttpRequest.LOADING) {
                 progressCallback(_t("Waiting for response from server"));
             } else if (req.readyState === XMLHttpRequest.DONE) {

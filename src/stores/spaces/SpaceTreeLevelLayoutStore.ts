@@ -35,7 +35,7 @@ export default class SpaceTreeLevelLayoutStore {
         return SpaceTreeLevelLayoutStore.internalInstance;
     }
 
-    public setSpaceCollapsedState(roomId: string, parents: Set<string>, collapsed: boolean) {
+    public setSpaceCollapsedState(roomId: string, parents: Set<string>, collapsed: boolean): void {
         // XXX: localStorage doesn't allow booleans
         localStorage.setItem(getSpaceCollapsedKey(roomId, parents), collapsed.toString());
     }

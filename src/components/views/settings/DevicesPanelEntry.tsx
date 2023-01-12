@@ -69,7 +69,7 @@ export default class DevicesPanelEntry extends React.Component<IProps, IState> {
         });
     };
 
-    private onRenameSubmit = async () => {
+    private onRenameSubmit = async (): Promise<void> => {
         this.setState({ renaming: false });
         await MatrixClientPeg.get()
             .setDeviceDetails(this.props.device.device_id, {
@@ -96,7 +96,7 @@ export default class DevicesPanelEntry extends React.Component<IProps, IState> {
         );
     };
 
-    private verify = async () => {
+    private verify = async (): Promise<void> => {
         if (this.props.isOwnDevice) {
             Modal.createDialog(SetupEncryptionDialog, {
                 onFinished: this.props.onDeviceChange,
@@ -108,7 +108,7 @@ export default class DevicesPanelEntry extends React.Component<IProps, IState> {
             Modal.createDialog(VerificationRequestDialog, {
                 verificationRequestPromise,
                 member: cli.getUser(userId),
-                onFinished: async () => {
+                onFinished: async (): Promise<void> => {
                     const request = await verificationRequestPromise;
                     request.cancel();
                     this.props.onDeviceChange();

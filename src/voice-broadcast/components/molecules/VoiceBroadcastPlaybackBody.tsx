@@ -45,7 +45,7 @@ export const VoiceBroadcastPlaybackBody: React.FC<VoiceBroadcastPlaybackBodyProp
     let seekForwardButton: ReactElement | null = null;
 
     if (playbackState !== VoiceBroadcastPlaybackState.Stopped) {
-        const onSeekBackwardButtonClick = () => {
+        const onSeekBackwardButtonClick = (): void => {
             playback.skipTo(Math.max(0, times.position - SEEK_TIME));
         };
 
@@ -53,7 +53,7 @@ export const VoiceBroadcastPlaybackBody: React.FC<VoiceBroadcastPlaybackBodyProp
             <SeekButton icon={Back30sIcon} label={_t("30s backward")} onClick={onSeekBackwardButtonClick} />
         );
 
-        const onSeekForwardButtonClick = () => {
+        const onSeekForwardButtonClick = (): void => {
             playback.skipTo(Math.min(times.duration, times.position + SEEK_TIME));
         };
 

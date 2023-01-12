@@ -449,9 +449,9 @@ export interface IOptsReturnString extends IOpts {
     returnString: true;
 }
 
-const emojiToHtmlSpan = (emoji: string) =>
+const emojiToHtmlSpan = (emoji: string): string =>
     `<span class='mx_Emoji' title='${unicodeToShortcode(emoji)}'>${emoji}</span>`;
-const emojiToJsxSpan = (emoji: string, key: number) => (
+const emojiToJsxSpan = (emoji: string, key: number): JSX.Element => (
     <span key={key} className="mx_Emoji" title={unicodeToShortcode(emoji)}>
         {emoji}
     </span>
@@ -505,7 +505,7 @@ function formatEmojis(message: string, isHtmlMessage: boolean): (JSX.Element | s
  */
 export function bodyToHtml(content: IContent, highlights: Optional<string[]>, opts: IOptsReturnString): string;
 export function bodyToHtml(content: IContent, highlights: Optional<string[]>, opts: IOptsReturnNode): ReactNode;
-export function bodyToHtml(content: IContent, highlights: Optional<string[]>, opts: IOpts = {}) {
+export function bodyToHtml(content: IContent, highlights: Optional<string[]>, opts: IOpts = {}): ReactNode | string {
     const isFormattedBody = content.format === "org.matrix.custom.html" && !!content.formatted_body;
     let bodyHasEmoji = false;
     let isHtmlMessage = false;

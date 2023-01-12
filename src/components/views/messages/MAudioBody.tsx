@@ -45,7 +45,7 @@ export default class MAudioBody extends React.PureComponent<IBodyProps, IState> 
         this.state = {};
     }
 
-    public async componentDidMount() {
+    public async componentDidMount(): Promise<void> {
         let buffer: ArrayBuffer;
 
         try {
@@ -81,7 +81,7 @@ export default class MAudioBody extends React.PureComponent<IBodyProps, IState> 
         // Note: the components later on will handle preparing the Playback class for us.
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         this.state.playback?.destroy();
     }
 
@@ -93,7 +93,7 @@ export default class MAudioBody extends React.PureComponent<IBodyProps, IState> 
         );
     }
 
-    public render() {
+    public render(): JSX.Element {
         if (this.state.error) {
             return (
                 <MediaProcessingError className="mx_MAudioBody">

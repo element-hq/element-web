@@ -16,7 +16,10 @@ limitations under the License.
 
 import { FocusEvent, useCallback, useEffect, useRef, useState } from "react";
 
-export function useIsFocused() {
+export function useIsFocused(): {
+    isFocused: boolean;
+    onFocus(event: FocusEvent<HTMLElement>): void;
+} {
     const [isFocused, setIsFocused] = useState(false);
     const timeoutIDRef = useRef<number>();
 

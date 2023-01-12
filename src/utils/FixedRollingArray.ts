@@ -43,7 +43,7 @@ export class FixedRollingArray<T> {
      * Pushes a value to the array.
      * @param value The value to push.
      */
-    public pushValue(value: T) {
+    public pushValue(value: T): void {
         let swap = arrayFastClone(this.samples);
         swap.splice(0, 0, value);
         if (swap.length > this.width) {

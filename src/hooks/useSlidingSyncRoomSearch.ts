@@ -26,7 +26,11 @@ export interface SlidingSyncRoomSearchOpts {
     query?: string;
 }
 
-export const useSlidingSyncRoomSearch = () => {
+export const useSlidingSyncRoomSearch = (): {
+    loading: boolean;
+    rooms: Room[];
+    search(opts: SlidingSyncRoomSearchOpts): Promise<boolean>;
+} => {
     const [rooms, setRooms] = useState<Room[]>([]);
 
     const [loading, setLoading] = useState(false);

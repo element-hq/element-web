@@ -159,7 +159,7 @@ class LoggedInView extends React.Component<IProps, IState> {
         this.resizeHandler = React.createRef();
     }
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         document.addEventListener("keydown", this.onNativeKeyDown, false);
         LegacyCallHandler.instance.addListener(LegacyCallHandlerEvent.CallState, this.onCallState);
 
@@ -191,7 +191,7 @@ class LoggedInView extends React.Component<IProps, IState> {
         this.refreshBackgroundImage();
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         document.removeEventListener("keydown", this.onNativeKeyDown, false);
         LegacyCallHandler.instance.removeListener(LegacyCallHandlerEvent.CallState, this.onCallState);
         this._matrixClient.removeListener(ClientEvent.AccountData, this.onAccountData);
@@ -221,14 +221,14 @@ class LoggedInView extends React.Component<IProps, IState> {
         this.setState({ backgroundImage });
     };
 
-    public canResetTimelineInRoom = (roomId: string) => {
+    public canResetTimelineInRoom = (roomId: string): boolean => {
         if (!this._roomView.current) {
             return true;
         }
         return this._roomView.current.canResetTimeline();
     };
 
-    private createResizer() {
+    private createResizer(): Resizer {
         let panelSize;
         let panelCollapsed;
         const collapseConfig: ICollapseConfig = {
@@ -268,7 +268,7 @@ class LoggedInView extends React.Component<IProps, IState> {
         return resizer;
     }
 
-    private loadResizerPreferences() {
+    private loadResizerPreferences(): void {
         let lhsSize = parseInt(window.localStorage.getItem("mx_lhs_size"), 10);
         if (isNaN(lhsSize)) {
             lhsSize = 350;
@@ -276,13 +276,13 @@ class LoggedInView extends React.Component<IProps, IState> {
         this.resizer.forHandleWithId("lp-resizer").resize(lhsSize);
     }
 
-    private onAccountData = (event: MatrixEvent) => {
+    private onAccountData = (event: MatrixEvent): void => {
         if (event.getType() === "m.ignored_user_list") {
             dis.dispatch({ action: "ignore_state_changed" });
         }
     };
 
-    private onCompactLayoutChanged = () => {
+    private onCompactLayoutChanged = (): void => {
         this.setState({
             useCompactLayout: SettingsStore.getValue("useCompactLayout"),
         });
@@ -311,13 +311,13 @@ class LoggedInView extends React.Component<IProps, IState> {
         }
     };
 
-    private onUsageLimitDismissed = () => {
+    private onUsageLimitDismissed = (): void => {
         this.setState({
             usageLimitDismissed: true,
         });
     };
 
-    private calculateServerLimitToast(syncError: IState["syncErrorData"], usageLimitEventContent?: IUsageLimit) {
+    private calculateServerLimitToast(syncError: IState["syncErrorData"], usageLimitEventContent?: IUsageLimit): void {
         const error = (syncError?.error as MatrixError)?.errcode === "M_RESOURCE_LIMIT_EXCEEDED";
         if (error) {
             usageLimitEventContent = (syncError?.error as MatrixError).data as IUsageLimit;
@@ -337,9 +337,9 @@ class LoggedInView extends React.Component<IProps, IState> {
         }
     }
 
-    private updateServerNoticeEvents = async () => {
+    private updateServerNoticeEvents = async (): Promise<void> => {
         const serverNoticeList = RoomListStore.instance.orderedLists[DefaultTagID.ServerNotice];
-        if (!serverNoticeList) return [];
+        if (!serverNoticeList) return;
 
         const events = [];
         let pinnedEventTs = 0;
@@ -379,7 +379,7 @@ class LoggedInView extends React.Component<IProps, IState> {
         });
     };
 
-    private onPaste = (ev: ClipboardEvent) => {
+    private onPaste = (ev: ClipboardEvent): void => {
         const element = ev.target as HTMLElement;
         const inputableElement = getInputableElement(element);
         if (inputableElement === document.activeElement) return; // nothing to do
@@ -422,13 +422,13 @@ class LoggedInView extends React.Component<IProps, IState> {
     We also listen with a native listener on the document to get keydown events when no element is focused.
     Bubbling is irrelevant here as the target is the body element.
     */
-    private onReactKeyDown = (ev) => {
+    private onReactKeyDown = (ev): void => {
         // events caught while bubbling up on the root element
         // of this component, so something must be focused.
         this.onKeyDown(ev);
     };
 
-    private onNativeKeyDown = (ev) => {
+    private onNativeKeyDown = (ev): void => {
         // only pass this if there is no focused element.
         // if there is, onKeyDown will be called by the
         // react keydown handler that respects the react bubbling order.
@@ -437,7 +437,7 @@ class LoggedInView extends React.Component<IProps, IState> {
         }
     };
 
-    private onKeyDown = (ev) => {
+    private onKeyDown = (ev): void => {
         let handled = false;
 
         const roomAction = getKeyBindingsManager().getRoomAction(ev);
@@ -615,13 +615,13 @@ class LoggedInView extends React.Component<IProps, IState> {
      * dispatch a page-up/page-down/etc to the appropriate component
      * @param {Object} ev The key event
      */
-    private onScrollKeyPressed = (ev) => {
+    private onScrollKeyPressed = (ev): void => {
         if (this._roomView.current) {
             this._roomView.current.handleScrollKey(ev);
         }
     };
 
-    public render() {
+    public render(): JSX.Element {
         let pageElement;
 
         switch (this.props.page_type) {

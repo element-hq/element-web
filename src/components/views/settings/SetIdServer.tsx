@@ -15,8 +15,9 @@ limitations under the License.
 */
 
 import url from "url";
-import React from "react";
+import React, { ReactNode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
+import { IThreepid } from "matrix-js-sdk/src/@types/threepids";
 
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -42,7 +43,7 @@ const REACHABILITY_TIMEOUT = 10000; // ms
  * @param {string} u The url to check
  * @returns {string} null if url passes all checks, otherwise i18ned error string
  */
-async function checkIdentityServerUrl(u) {
+async function checkIdentityServerUrl(u: string): Promise<string | null> {
     const parsedUrl = url.parse(u);
 
     if (parsedUrl.protocol !== "https:") return _t("Identity server URL must be HTTPS");
@@ -111,7 +112,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
         dis.unregister(this.dispatcherRef);
     }
 
-    private onAction = (payload: ActionPayload) => {
+    private onAction = (payload: ActionPayload): void => {
         // We react to changes in the identity server in the event the user is staring at this form
         // when changing their identity server on another device.
         if (payload.action !== "id_server_changed") return;
@@ -121,13 +122,13 @@ export default class SetIdServer extends React.Component<IProps, IState> {
         });
     };
 
-    private onIdentityServerChanged = (ev) => {
+    private onIdentityServerChanged = (ev: React.ChangeEvent<HTMLInputElement>): void => {
         const u = ev.target.value;
 
         this.setState({ idServer: u });
     };
 
-    private getTooltip = () => {
+    private getTooltip = (): JSX.Element => {
         if (this.state.checking) {
             return (
                 <div>
@@ -142,11 +143,11 @@ export default class SetIdServer extends React.Component<IProps, IState> {
         }
     };
 
-    private idServerChangeEnabled = () => {
+    private idServerChangeEnabled = (): boolean => {
         return !!this.state.idServer && !this.state.busy;
     };
 
-    private saveIdServer = (fullUrl) => {
+    private saveIdServer = (fullUrl: string): void => {
         // Account data change will update localstorage, client, etc through dispatcher
         MatrixClientPeg.get().setAccountData("m.identity_server", {
             base_url: fullUrl,
@@ -159,7 +160,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
         });
     };
 
-    private checkIdServer = async (e) => {
+    private checkIdServer = async (e: React.SyntheticEvent): Promise<void> => {
         e.preventDefault();
         const { idServer, currentClientIdServer } = this.state;
 
@@ -220,8 +221,8 @@ export default class SetIdServer extends React.Component<IProps, IState> {
         });
     };
 
-    private showNoTermsWarning(fullUrl) {
-        const { finished } = Modal.createDialog(QuestionDialog, {
+    private showNoTermsWarning(fullUrl: string): Promise<[boolean]> {
+        const { finished } = Modal.createDialog<[boolean]>(QuestionDialog, {
             title: _t("Identity server has no terms of service"),
             description: (
                 <div>
@@ -236,7 +237,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
         return finished;
     }
 
-    private onDisconnectClicked = async () => {
+    private onDisconnectClicked = async (): Promise<void> => {
         this.setState({ disconnectBusy: true });
         try {
             const [confirmed] = await this.showServerChangeWarning({
@@ -256,10 +257,18 @@ export default class SetIdServer extends React.Component<IProps, IState> {
         }
     };
 
-    private async showServerChangeWarning({ title, unboundMessage, button }) {
+    private async showServerChangeWarning({
+        title,
+        unboundMessage,
+        button,
+    }: {
+        title: string;
+        unboundMessage: ReactNode;
+        button: string;
+    }): Promise<[boolean]> {
         const { currentClientIdServer } = this.state;
 
-        let threepids = [];
+        let threepids: IThreepid[] = [];
         let currentServerReachable = true;
         try {
             threepids = await timeout(
@@ -341,7 +350,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
             message = unboundMessage;
         }
 
-        const { finished } = Modal.createDialog(QuestionDialog, {
+        const { finished } = Modal.createDialog<[boolean]>(QuestionDialog, {
             title,
             description: message,
             button,
@@ -351,7 +360,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
         return finished;
     }
 
-    private disconnectIdServer = () => {
+    private disconnectIdServer = (): void => {
         // Account data change will update localstorage, client, etc through dispatcher
         MatrixClientPeg.get().setAccountData("m.identity_server", {
             base_url: null, // clear
@@ -372,7 +381,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
         });
     };
 
-    public render() {
+    public render(): JSX.Element {
         const idServerUrl = this.state.currentClientIdServer;
         let sectionTitle;
         let bodyText;

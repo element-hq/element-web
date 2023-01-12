@@ -45,8 +45,8 @@ export const AnalyticsLearnMoreDialog: React.FC<IProps> = ({
     cancelButton,
     hasCancel,
 }) => {
-    const onPrimaryButtonClick = () => onFinished && onFinished(ButtonClicked.Primary);
-    const onCancelButtonClick = () => onFinished && onFinished(ButtonClicked.Cancel);
+    const onPrimaryButtonClick = (): void => onFinished?.(ButtonClicked.Primary);
+    const onCancelButtonClick = (): void => onFinished?.(ButtonClicked.Cancel);
     const privacyPolicyLink = privacyPolicyUrl ? (
         <span>
             {_t(

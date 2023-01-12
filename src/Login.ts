@@ -122,7 +122,7 @@ export default class Login {
             initial_device_display_name: this.defaultDeviceDisplayName,
         };
 
-        const tryFallbackHs = (originalError) => {
+        const tryFallbackHs = (originalError: Error): Promise<IMatrixClientCreds> => {
             return sendLoginRequest(this.fallbackHsUrl, this.isUrl, "m.login.password", loginParams).catch(
                 (fallbackError) => {
                     logger.log("fallback HS login failed", fallbackError);

@@ -24,7 +24,7 @@ import MatrixClientContext from "../../../../contexts/MatrixClientContext";
 import { EventEditor, EventViewer, eventTypeField, stateKeyField, IEditorProps, stringify } from "./Event";
 import FilteredList from "./FilteredList";
 
-export const StateEventEditor = ({ mxEvent, onBack }: IEditorProps) => {
+export const StateEventEditor: React.FC<IEditorProps> = ({ mxEvent, onBack }) => {
     const context = useContext(DevtoolsContext);
     const cli = useContext(MatrixClientContext);
 
@@ -33,8 +33,8 @@ export const StateEventEditor = ({ mxEvent, onBack }: IEditorProps) => {
         [mxEvent],
     );
 
-    const onSend = ([eventType, stateKey]: string[], content?: IContent) => {
-        return cli.sendStateEvent(context.room.roomId, eventType, content, stateKey);
+    const onSend = async ([eventType, stateKey]: string[], content?: IContent): Promise<void> => {
+        await cli.sendStateEvent(context.room.roomId, eventType, content, stateKey);
     };
 
     const defaultContent = mxEvent ? stringify(mxEvent.getContent()) : undefined;
@@ -46,7 +46,7 @@ interface StateEventButtonProps {
     onClick(): void;
 }
 
-const StateEventButton = ({ label, onClick }: StateEventButtonProps) => {
+const StateEventButton: React.FC<StateEventButtonProps> = ({ label, onClick }) => {
     const trimmed = label.trim();
 
     return (
@@ -66,7 +66,7 @@ interface IEventTypeProps extends Pick<IDevtoolsProps, "onBack"> {
     eventType: string;
 }
 
-const RoomStateExplorerEventType = ({ eventType, onBack }: IEventTypeProps) => {
+const RoomStateExplorerEventType: React.FC<IEventTypeProps> = ({ eventType, onBack }) => {
     const context = useContext(DevtoolsContext);
     const [query, setQuery] = useState("");
     const [event, setEvent] = useState<MatrixEvent | null>(null);
@@ -82,7 +82,7 @@ const RoomStateExplorerEventType = ({ eventType, onBack }: IEventTypeProps) => {
     }, [events]);
 
     if (event) {
-        const _onBack = () => {
+        const _onBack = (): void => {
             if (events?.size === 1 && events.has("")) {
                 onBack();
             } else {
@@ -103,7 +103,7 @@ const RoomStateExplorerEventType = ({ eventType, onBack }: IEventTypeProps) => {
     );
 };
 
-export const RoomStateExplorer = ({ onBack, setTool }: IDevtoolsProps) => {
+export const RoomStateExplorer: React.FC<IDevtoolsProps> = ({ onBack, setTool }) => {
     const context = useContext(DevtoolsContext);
     const [query, setQuery] = useState("");
     const [eventType, setEventType] = useState<string | null>(null);
@@ -111,13 +111,13 @@ export const RoomStateExplorer = ({ onBack, setTool }: IDevtoolsProps) => {
     const events = context.room.currentState.events;
 
     if (eventType !== null) {
-        const onBack = () => {
+        const onBack = (): void => {
             setEventType(null);
         };
         return <RoomStateExplorerEventType eventType={eventType} onBack={onBack} />;
     }
 
-    const onAction = async () => {
+    const onAction = async (): Promise<void> => {
         setTool(_t("Send custom state event"), StateEventEditor);
     };
 

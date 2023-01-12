@@ -31,7 +31,7 @@ interface IProps extends IDialogProps {}
 const CryptoStoreTooNewDialog: React.FC<IProps> = (props: IProps) => {
     const brand = SdkConfig.get().brand;
 
-    const _onLogoutClicked = () => {
+    const _onLogoutClicked = (): void => {
         Modal.createDialog(QuestionDialog, {
             title: _t("Sign out"),
             description: _t(

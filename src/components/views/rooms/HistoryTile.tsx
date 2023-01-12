@@ -21,7 +21,7 @@ import EventTileBubble from "../messages/EventTileBubble";
 import RoomContext from "../../../contexts/RoomContext";
 import { _t } from "../../../languageHandler";
 
-const HistoryTile = () => {
+const HistoryTile: React.FC = () => {
     const { room } = useContext(RoomContext);
 
     const oldState = room.getLiveTimeline().getState(EventTimeline.BACKWARDS);

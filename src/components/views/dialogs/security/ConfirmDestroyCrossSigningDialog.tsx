@@ -33,7 +33,7 @@ export default class ConfirmDestroyCrossSigningDialog extends React.Component<IP
         this.props.onFinished(false);
     };
 
-    public render() {
+    public render(): JSX.Element {
         return (
             <BaseDialog
                 className="mx_ConfirmDestroyCrossSigningDialog"

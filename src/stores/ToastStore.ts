@@ -40,12 +40,12 @@ export default class ToastStore extends EventEmitter {
     // where the count resets when the stack of toasts clears.
     private countSeen = 0;
 
-    public static sharedInstance() {
+    public static sharedInstance(): ToastStore {
         if (!window.mxToastStore) window.mxToastStore = new ToastStore();
         return window.mxToastStore;
     }
 
-    public reset() {
+    public reset(): void {
         this.toasts = [];
         this.countSeen = 0;
     }
@@ -59,7 +59,7 @@ export default class ToastStore extends EventEmitter {
      *
      * @param {object} newToast The new toast
      */
-    public addOrReplaceToast<C extends ComponentClass>(newToast: IToast<C>) {
+    public addOrReplaceToast<C extends ComponentClass>(newToast: IToast<C>): void {
         const oldIndex = this.toasts.findIndex((t) => t.key === newToast.key);
         if (oldIndex === -1) {
             let newIndex = this.toasts.length;
@@ -71,7 +71,7 @@ export default class ToastStore extends EventEmitter {
         this.emit("update");
     }
 
-    public dismissToast(key: string) {
+    public dismissToast(key: string): void {
         if (this.toasts[0] && this.toasts[0].key === key) {
             this.countSeen++;
         }
@@ -87,11 +87,11 @@ export default class ToastStore extends EventEmitter {
         }
     }
 
-    public getToasts() {
+    public getToasts(): IToast<any>[] {
         return this.toasts;
     }
 
-    public getCountSeen() {
+    public getCountSeen(): number {
         return this.countSeen;
     }
 }

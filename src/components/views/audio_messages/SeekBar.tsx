@@ -67,23 +67,23 @@ export default class SeekBar extends React.PureComponent<IProps, IState> {
         this.props.playback.liveData.onUpdate(() => this.animationFrameFn.mark());
     }
 
-    private doUpdate() {
+    private doUpdate(): void {
         this.setState({
             percentage: percentageOf(this.props.playback.timeSeconds, 0, this.props.playback.durationSeconds),
         });
     }
 
-    public left() {
+    public left(): void {
         // noinspection JSIgnoredPromiseFromCall
         this.props.playback.skipTo(this.props.playback.timeSeconds - ARROW_SKIP_SECONDS);
     }
 
-    public right() {
+    public right(): void {
         // noinspection JSIgnoredPromiseFromCall
         this.props.playback.skipTo(this.props.playback.timeSeconds + ARROW_SKIP_SECONDS);
     }
 
-    private onChange = (ev: ChangeEvent<HTMLInputElement>) => {
+    private onChange = (ev: ChangeEvent<HTMLInputElement>): void => {
         // Thankfully, onChange is only called when the user changes the value, not when we
         // change the value on the component. We can use this as a reliable "skip to X" function.
         //
@@ -91,7 +91,7 @@ export default class SeekBar extends React.PureComponent<IProps, IState> {
         this.props.playback.skipTo(Number(ev.target.value) * this.props.playback.durationSeconds);
     };
 
-    private onMouseDown = (event: React.MouseEvent<Element, MouseEvent>) => {
+    private onMouseDown = (event: React.MouseEvent<Element, MouseEvent>): void => {
         // do not propagate mouse down events, because these should be handled by the seekbar
         event.stopPropagation();
     };

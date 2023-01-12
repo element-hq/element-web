@@ -26,7 +26,7 @@ interface IProps {
     disabled?: boolean;
 }
 
-export const Tag = ({ icon, label, onDeleteClick, disabled = false }: IProps) => {
+export const Tag: React.FC<IProps> = ({ icon, label, onDeleteClick, disabled = false }) => {
     return (
         <div className="mx_Tag">
             {icon?.()}

@@ -33,7 +33,7 @@ interface IProps extends IDialogProps {
     initialTabId?: SpacePreferenceTab;
 }
 
-const SpacePreferencesAppearanceTab = ({ space }: Pick<IProps, "space">) => {
+const SpacePreferencesAppearanceTab: React.FC<Pick<IProps, "space">> = ({ space }) => {
     const showPeople = useSettingValue("Spaces.showPeopleInSpace", space.roomId);
 
     return (

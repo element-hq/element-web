@@ -77,7 +77,7 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
     // Neither the static nor priority modal will be in this list.
     private modals: IModal<any>[] = [];
 
-    private static getOrCreateContainer() {
+    private static getOrCreateContainer(): HTMLElement {
         let container = document.getElementById(DIALOG_CONTAINER_ID);
 
         if (!container) {
@@ -89,7 +89,7 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
         return container;
     }
 
-    private static getOrCreateStaticContainer() {
+    private static getOrCreateStaticContainer(): HTMLElement {
         let container = document.getElementById(STATIC_DIALOG_CONTAINER_ID);
 
         if (!container) {
@@ -101,31 +101,31 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
         return container;
     }
 
-    public toggleCurrentDialogVisibility() {
+    public toggleCurrentDialogVisibility(): void {
         const modal = this.getCurrentModal();
         if (!modal) return;
         modal.hidden = !modal.hidden;
     }
 
-    public hasDialogs() {
-        return this.priorityModal || this.staticModal || this.modals.length > 0;
+    public hasDialogs(): boolean {
+        return !!this.priorityModal || !!this.staticModal || this.modals.length > 0;
     }
 
     public createDialog<T extends any[]>(
         Element: React.ComponentType<any>,
         ...rest: ParametersWithoutFirst<ModalManager["createDialogAsync"]>
-    ) {
+    ): IHandle<T> {
         return this.createDialogAsync<T>(Promise.resolve(Element), ...rest);
     }
 
     public appendDialog<T extends any[]>(
         Element: React.ComponentType,
         ...rest: ParametersWithoutFirst<ModalManager["appendDialogAsync"]>
-    ) {
+    ): IHandle<T> {
         return this.appendDialogAsync<T>(Promise.resolve(Element), ...rest);
     }
 
-    public closeCurrentModal(reason: string) {
+    public closeCurrentModal(reason: string): void {
         const modal = this.getCurrentModal();
         if (!modal) {
             return;
@@ -139,7 +139,11 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
         props?: IProps<T>,
         className?: string,
         options?: IOptions<T>,
-    ) {
+    ): {
+        modal: IModal<T>;
+        closeDialog: IHandle<T>["close"];
+        onFinishedProm: IHandle<T>["finished"];
+    } {
         const modal: IModal<T> = {
             onFinished: props ? props.onFinished : null,
             onBeforeClose: options.onBeforeClose,
@@ -173,7 +177,7 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
     ): [IHandle<T>["close"], IHandle<T>["finished"]] {
         const deferred = defer<T>();
         return [
-            async (...args: T) => {
+            async (...args: T): Promise<void> => {
                 if (modal.beforeClosePromise) {
                     await modal.beforeClosePromise;
                 } else if (modal.onBeforeClose) {
@@ -302,7 +306,7 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
         }
     }
 
-    private onBackgroundClick = () => {
+    private onBackgroundClick = (): void => {
         const modal = this.getCurrentModal();
         if (!modal) {
             return;
@@ -320,7 +324,7 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
         return this.priorityModal ? this.priorityModal : this.modals[0] || this.staticModal;
     }
 
-    private async reRender() {
+    private async reRender(): Promise<void> {
         // await next tick because sometimes ReactDOM can race with itself and cause the modal to wrongly stick around
         await sleep(0);
 

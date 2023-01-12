@@ -17,11 +17,11 @@ limitations under the License.
 import React from "react";
 
 import { Icon as ContextMenuIcon } from "../../../../res/img/element-icons/context-menu.svg";
-import { ChevronFace, ContextMenuButton, useContextMenu } from "../../structures/ContextMenu";
+import { ChevronFace, ContextMenuButton, MenuProps, useContextMenu } from "../../structures/ContextMenu";
 import AccessibleButton from "../elements/AccessibleButton";
 import IconizedContextMenu, { IconizedContextMenuOptionList } from "./IconizedContextMenu";
 
-const contextMenuBelow = (elementRect: DOMRect) => {
+const contextMenuBelow = (elementRect: DOMRect): MenuProps => {
     // align the context menu's icons with the icon which opened the context menu
     const left = elementRect.left + window.scrollX + elementRect.width;
     const top = elementRect.bottom + window.scrollY;

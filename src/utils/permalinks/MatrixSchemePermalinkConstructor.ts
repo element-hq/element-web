@@ -62,7 +62,7 @@ export default class MatrixSchemePermalinkConstructor extends PermalinkConstruct
         return testHost === "";
     }
 
-    public encodeServerCandidates(candidates: string[]) {
+    public encodeServerCandidates(candidates: string[]): string {
         if (!candidates || candidates.length === 0) return "";
         return `?via=${candidates.map((c) => encodeURIComponent(c)).join("&via=")}`;
     }

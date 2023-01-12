@@ -29,7 +29,7 @@ interface IProps {
     onChange(value: string): void;
 }
 
-const FilteredList = ({ children, query, onChange }: IProps) => {
+const FilteredList: React.FC<IProps> = ({ children, query, onChange }) => {
     const [truncateAt, setTruncateAt] = useState<number>(INITIAL_LOAD_TILES);
     const [filteredChildren, setFilteredChildren] = useState<React.ReactElement[]>(children);
 
@@ -51,8 +51,8 @@ const FilteredList = ({ children, query, onChange }: IProps) => {
         return filteredChildren.length;
     };
 
-    const createOverflowElement = (overflowCount: number, totalCount: number) => {
-        const showMore = () => {
+    const createOverflowElement = (overflowCount: number, totalCount: number): JSX.Element => {
+        const showMore = (): void => {
             setTruncateAt((num) => num + LOAD_TILES_STEP_SIZE);
         };
 

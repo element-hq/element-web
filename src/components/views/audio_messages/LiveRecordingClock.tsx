@@ -46,20 +46,20 @@ export default class LiveRecordingClock extends React.PureComponent<IProps, ISta
         };
     }
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         this.props.recorder.liveData.onUpdate((update: IRecordingUpdate) => {
             this.seconds = update.timeSeconds;
             this.scheduledUpdate.mark();
         });
     }
 
-    private updateClock() {
+    private updateClock(): void {
         this.setState({
             seconds: this.seconds,
         });
     }
 
-    public render() {
+    public render(): JSX.Element {
         return <Clock seconds={this.state.seconds} aria-live="off" />;
     }
 }

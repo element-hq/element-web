@@ -25,7 +25,12 @@ export interface IUserDirectoryOpts {
     query?: string;
 }
 
-export const useUserDirectory = () => {
+export const useUserDirectory = (): {
+    ready: boolean;
+    loading: boolean;
+    users: DirectoryMember[];
+    search(opts: IUserDirectoryOpts): Promise<boolean>;
+} => {
     const [users, setUsers] = useState<DirectoryMember[]>([]);
 
     const [loading, setLoading] = useState(false);

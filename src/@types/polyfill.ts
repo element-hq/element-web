@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 // This is intended to fix re-resizer because of its unguarded `instanceof TouchEvent` checks.
-export function polyfillTouchEvent() {
+export function polyfillTouchEvent(): void {
     // Firefox doesn't have touch events without touch devices being present, so create a fake
     // one we can rely on lying about.
     if (!window.TouchEvent) {

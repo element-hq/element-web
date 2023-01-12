@@ -37,7 +37,7 @@ const FileDropTarget: React.FC<IProps> = ({ parent, onFileDrop }) => {
     useEffect(() => {
         if (!parent || parent.ondrop) return;
 
-        const onDragEnter = (ev: DragEvent) => {
+        const onDragEnter = (ev: DragEvent): void => {
             ev.stopPropagation();
             ev.preventDefault();
 
@@ -55,7 +55,7 @@ const FileDropTarget: React.FC<IProps> = ({ parent, onFileDrop }) => {
             }));
         };
 
-        const onDragLeave = (ev: DragEvent) => {
+        const onDragLeave = (ev: DragEvent): void => {
             ev.stopPropagation();
             ev.preventDefault();
 
@@ -65,7 +65,7 @@ const FileDropTarget: React.FC<IProps> = ({ parent, onFileDrop }) => {
             }));
         };
 
-        const onDragOver = (ev: DragEvent) => {
+        const onDragOver = (ev: DragEvent): void => {
             ev.stopPropagation();
             ev.preventDefault();
 
@@ -79,7 +79,7 @@ const FileDropTarget: React.FC<IProps> = ({ parent, onFileDrop }) => {
             }
         };
 
-        const onDrop = (ev: DragEvent) => {
+        const onDrop = (ev: DragEvent): void => {
             ev.stopPropagation();
             ev.preventDefault();
             onFileDrop(ev.dataTransfer);

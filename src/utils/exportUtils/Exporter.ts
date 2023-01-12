@@ -117,7 +117,7 @@ export default abstract class Exporter {
         this.cancelled = true;
     }
 
-    protected downloadPlainText(fileName: string, text: string) {
+    protected downloadPlainText(fileName: string, text: string): void {
         const content = new Blob([text], { type: "text/plain" });
         saveAs(content, fileName);
     }

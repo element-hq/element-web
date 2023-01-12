@@ -17,7 +17,7 @@ limitations under the License.
 export class ValidatedServerConfig {
     public hsUrl: string;
     public hsName: string;
-    public hsNameIsDifferent: string;
+    public hsNameIsDifferent: boolean;
 
     public isUrl: string;
 

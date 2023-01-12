@@ -36,7 +36,7 @@ import { AfterLeaveRoomPayload } from "../dispatcher/payloads/AfterLeaveRoomPayl
 import { bulkSpaceBehaviour } from "./space";
 import { SdkContextClass } from "../contexts/SDKContext";
 
-export async function leaveRoomBehaviour(roomId: string, retry = true, spinner = true) {
+export async function leaveRoomBehaviour(roomId: string, retry = true, spinner = true): Promise<void> {
     let spinnerModal: IHandle<any>;
     if (spinner) {
         spinnerModal = Modal.createDialog(Spinner, null, "mx_Dialog_spinner");
@@ -65,7 +65,7 @@ export async function leaveRoomBehaviour(roomId: string, retry = true, spinner =
             .map(
                 (ev) =>
                     new Promise<void>((resolve, reject) => {
-                        const handler = () => {
+                        const handler = (): void => {
                             if (ev.status === EventStatus.NOT_SENT) {
                                 spinnerModal?.close();
                                 reject(ev.error);
@@ -165,12 +165,12 @@ export async function leaveRoomBehaviour(roomId: string, retry = true, spinner =
     }
 }
 
-export const leaveSpace = (space: Room) => {
+export const leaveSpace = (space: Room): void => {
     Modal.createDialog(
         LeaveSpaceDialog,
         {
             space,
-            onFinished: async (leave: boolean, rooms: Room[]) => {
+            onFinished: async (leave: boolean, rooms: Room[]): Promise<void> => {
                 if (!leave) return;
                 await bulkSpaceBehaviour(space, rooms, (room) => leaveRoomBehaviour(room.roomId));
 

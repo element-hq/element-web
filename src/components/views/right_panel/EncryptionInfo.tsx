@@ -22,7 +22,7 @@ import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
 import Spinner from "../elements/Spinner";
 
-export const PendingActionSpinner = ({ text }) => {
+export const PendingActionSpinner: React.FC<{ text: string }> = ({ text }) => {
     return (
         <div className="mx_EncryptionInfo_spinner">
             <Spinner />

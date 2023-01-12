@@ -22,21 +22,21 @@ import ToastStore from "../stores/ToastStore";
 import GenericToast from "../components/views/toasts/GenericToast";
 import { Action } from "../dispatcher/actions";
 
-function toastKey(deviceId: string) {
+function toastKey(deviceId: string): string {
     return "unverified_session_" + deviceId;
 }
 
-export const showToast = async (deviceId: string) => {
+export const showToast = async (deviceId: string): Promise<void> => {
     const cli = MatrixClientPeg.get();
 
-    const onAccept = () => {
+    const onAccept = (): void => {
         DeviceListener.sharedInstance().dismissUnverifiedSessions([deviceId]);
         dis.dispatch({
             action: Action.ViewUserDeviceSettings,
         });
     };
 
-    const onReject = () => {
+    const onReject = (): void => {
         DeviceListener.sharedInstance().dismissUnverifiedSessions([deviceId]);
     };
 
@@ -62,6 +62,6 @@ export const showToast = async (deviceId: string) => {
     });
 };
 
-export const hideToast = (deviceId: string) => {
+export const hideToast = (deviceId: string): void => {
     ToastStore.sharedInstance().dismissToast(toastKey(deviceId));
 };

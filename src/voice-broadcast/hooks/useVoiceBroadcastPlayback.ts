@@ -15,12 +15,32 @@ limitations under the License.
 */
 
 import { useState } from "react";
+import { Room } from "matrix-js-sdk/src/models/room";
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 
 import { useTypedEventEmitter } from "../../hooks/useEventEmitter";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
-import { VoiceBroadcastPlayback, VoiceBroadcastPlaybackEvent, VoiceBroadcastPlaybackState } from "..";
+import {
+    VoiceBroadcastLiveness,
+    VoiceBroadcastPlayback,
+    VoiceBroadcastPlaybackEvent,
+    VoiceBroadcastPlaybackState,
+} from "..";
 
-export const useVoiceBroadcastPlayback = (playback: VoiceBroadcastPlayback) => {
+export const useVoiceBroadcastPlayback = (
+    playback: VoiceBroadcastPlayback,
+): {
+    times: {
+        duration: number;
+        position: number;
+        timeLeft: number;
+    };
+    sender: RoomMember;
+    liveness: VoiceBroadcastLiveness;
+    playbackState: VoiceBroadcastPlaybackState;
+    toggle(): void;
+    room: Room;
+} => {
     const client = MatrixClientPeg.get();
     const room = client.getRoom(playback.infoEvent.getRoomId());
 
@@ -28,7 +48,7 @@ export const useVoiceBroadcastPlayback = (playback: VoiceBroadcastPlayback) => {
         throw new Error(`Voice Broadcast room not found (event ${playback.infoEvent.getId()})`);
     }
 
-    const playbackToggle = () => {
+    const playbackToggle = (): void => {
         playback.toggle();
     };
 

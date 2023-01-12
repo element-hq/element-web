@@ -22,7 +22,7 @@ import defaultDispatcher from "../../dispatcher/dispatcher";
 import { ActionPayload } from "../../dispatcher/payloads";
 import { Action } from "../../dispatcher/actions";
 import { _t } from "../../languageHandler";
-import { ChevronFace, ContextMenuButton } from "./ContextMenu";
+import { ChevronFace, ContextMenuButton, MenuProps } from "./ContextMenu";
 import { UserTab } from "../views/dialogs/UserTab";
 import { OpenToTabPayload } from "../../dispatcher/payloads/OpenToTabPayload";
 import FeedbackDialog from "../views/dialogs/FeedbackDialog";
@@ -67,7 +67,7 @@ interface IState {
     showLiveAvatarAddon: boolean;
 }
 
-const toRightOf = (rect: PartialDOMRect) => {
+const toRightOf = (rect: PartialDOMRect): MenuProps => {
     return {
         left: rect.width + rect.left + 8,
         top: rect.top,
@@ -75,7 +75,7 @@ const toRightOf = (rect: PartialDOMRect) => {
     };
 };
 
-const below = (rect: PartialDOMRect) => {
+const below = (rect: PartialDOMRect): MenuProps => {
     return {
         left: rect.left,
         top: rect.top + rect.height,
@@ -118,7 +118,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         });
     };
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         this.context.voiceBroadcastRecordingsStore.on(
             VoiceBroadcastRecordingsStoreEvent.CurrentChanged,
             this.onCurrentVoiceBroadcastRecordingChanged,
@@ -127,7 +127,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         this.themeWatcherRef = SettingsStore.watchSetting("theme", null, this.onThemeChanged);
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         if (this.themeWatcherRef) SettingsStore.unwatchSetting(this.themeWatcherRef);
         if (this.dndWatcherRef) SettingsStore.unwatchSetting(this.dndWatcherRef);
         if (this.dispatcherRef) defaultDispatcher.unregister(this.dispatcherRef);
@@ -163,26 +163,26 @@ export default class UserMenu extends React.Component<IProps, IState> {
         }
     }
 
-    private onProfileUpdate = async () => {
+    private onProfileUpdate = async (): Promise<void> => {
         // the store triggered an update, so force a layout update. We don't
         // have any state to store here for that to magically happen.
         this.forceUpdate();
     };
 
-    private onSelectedSpaceUpdate = async () => {
+    private onSelectedSpaceUpdate = async (): Promise<void> => {
         this.setState({
             selectedSpace: SpaceStore.instance.activeSpaceRoom,
         });
     };
 
-    private onThemeChanged = () => {
+    private onThemeChanged = (): void => {
         this.setState({
             isDarkTheme: this.isUserOnDarkTheme(),
             isHighContrast: this.isUserOnHighContrastTheme(),
         });
     };
 
-    private onAction = (payload: ActionPayload) => {
+    private onAction = (payload: ActionPayload): void => {
         switch (payload.action) {
             case Action.ToggleUserMenu:
                 if (this.state.contextMenuPosition) {
@@ -194,13 +194,13 @@ export default class UserMenu extends React.Component<IProps, IState> {
         }
     };
 
-    private onOpenMenuClick = (ev: React.MouseEvent) => {
+    private onOpenMenuClick = (ev: React.MouseEvent): void => {
         ev.preventDefault();
         ev.stopPropagation();
         this.setState({ contextMenuPosition: ev.currentTarget.getBoundingClientRect() });
     };
 
-    private onContextMenu = (ev: React.MouseEvent) => {
+    private onContextMenu = (ev: React.MouseEvent): void => {
         ev.preventDefault();
         ev.stopPropagation();
         this.setState({
@@ -213,11 +213,11 @@ export default class UserMenu extends React.Component<IProps, IState> {
         });
     };
 
-    private onCloseMenu = () => {
+    private onCloseMenu = (): void => {
         this.setState({ contextMenuPosition: null });
     };
 
-    private onSwitchThemeClick = (ev: React.MouseEvent) => {
+    private onSwitchThemeClick = (ev: React.MouseEvent): void => {
         ev.preventDefault();
         ev.stopPropagation();
 
@@ -236,7 +236,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         SettingsStore.setValue("theme", null, SettingLevel.DEVICE, newTheme); // set at same level as Appearance tab
     };
 
-    private onSettingsOpen = (ev: ButtonEvent, tabId: string) => {
+    private onSettingsOpen = (ev: ButtonEvent, tabId: string): void => {
         ev.preventDefault();
         ev.stopPropagation();
 
@@ -245,7 +245,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         this.setState({ contextMenuPosition: null }); // also close the menu
     };
 
-    private onProvideFeedback = (ev: ButtonEvent) => {
+    private onProvideFeedback = (ev: ButtonEvent): void => {
         ev.preventDefault();
         ev.stopPropagation();
 
@@ -253,7 +253,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         this.setState({ contextMenuPosition: null }); // also close the menu
     };
 
-    private onSignOutClick = async (ev: ButtonEvent) => {
+    private onSignOutClick = async (ev: ButtonEvent): Promise<void> => {
         ev.preventDefault();
         ev.stopPropagation();
 
@@ -268,17 +268,17 @@ export default class UserMenu extends React.Component<IProps, IState> {
         this.setState({ contextMenuPosition: null }); // also close the menu
     };
 
-    private onSignInClick = () => {
+    private onSignInClick = (): void => {
         defaultDispatcher.dispatch({ action: "start_login" });
         this.setState({ contextMenuPosition: null }); // also close the menu
     };
 
-    private onRegisterClick = () => {
+    private onRegisterClick = (): void => {
         defaultDispatcher.dispatch({ action: "start_registration" });
         this.setState({ contextMenuPosition: null }); // also close the menu
     };
 
-    private onHomeClick = (ev: ButtonEvent) => {
+    private onHomeClick = (ev: ButtonEvent): void => {
         ev.preventDefault();
         ev.stopPropagation();
 
@@ -429,7 +429,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         );
     };
 
-    public render() {
+    public render(): JSX.Element {
         const avatarSize = 32; // should match border-radius of the avatar
 
         const userId = MatrixClientPeg.get().getUserId();

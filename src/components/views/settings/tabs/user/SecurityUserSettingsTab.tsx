@@ -102,7 +102,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
         };
     }
 
-    private onAction = ({ action }: ActionPayload) => {
+    private onAction = ({ action }: ActionPayload): void => {
         if (action === "ignore_state_changed") {
             const ignoredUserIds = MatrixClientPeg.get().getIgnoredUsers();
             const newWaitingUnignored = this.state.waitingUnignored.filter((e) => ignoredUserIds.includes(e));
@@ -193,7 +193,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
                     // No error, update invited rooms button
                     this.removeInvitedRoom(roomId);
                 },
-                async (e) => {
+                async (e): Promise<void> => {
                     // Action failure
                     if (e.errcode === "M_LIMIT_EXCEEDED") {
                         // Add a delay between each invite change in order to avoid rate
@@ -328,7 +328,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
 
         let privacySection;
         if (PosthogAnalytics.instance.isEnabled()) {
-            const onClickAnalyticsLearnMore = () => {
+            const onClickAnalyticsLearnMore = (): void => {
                 showAnalyticsLearnMoreDialog({
                     primaryButton: _t("Okay"),
                     hasCancel: false,

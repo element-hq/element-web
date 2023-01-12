@@ -36,7 +36,7 @@ export const useSpaceResults = (space?: Room, query?: string): [IHierarchyRoom[]
 
         let unmounted = false;
 
-        (async () => {
+        (async (): Promise<void> => {
             while (hierarchy?.canLoadMore && !unmounted && space === hierarchy.root) {
                 await hierarchy.load();
                 if (hierarchy.canLoadMore) hierarchy.load(); // start next load so that the loading attribute is right

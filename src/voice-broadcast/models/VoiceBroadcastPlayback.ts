@@ -193,7 +193,7 @@ export class VoiceBroadcastPlayback
         this.setInfoState(state);
     };
 
-    private onBeforeRedaction = () => {
+    private onBeforeRedaction = (): void => {
         if (this.getState() !== VoiceBroadcastPlaybackState.Stopped) {
             this.stop();
             // destroy cleans up everything
@@ -466,7 +466,7 @@ export class VoiceBroadcastPlayback
      * playing → paused
      * paused → playing
      */
-    public async toggle() {
+    public async toggle(): Promise<void> {
         if (this.state === VoiceBroadcastPlaybackState.Stopped) {
             await this.start();
             return;

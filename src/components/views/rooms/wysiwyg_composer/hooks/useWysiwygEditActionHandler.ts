@@ -31,7 +31,7 @@ export function useWysiwygEditActionHandler(
     disabled: boolean,
     composerElement: RefObject<HTMLElement>,
     composerFunctions: ComposerFunctions,
-) {
+): void {
     const roomContext = useRoomContext();
     const composerContext = useComposerContext();
     const timeoutId = useRef<number | null>(null);

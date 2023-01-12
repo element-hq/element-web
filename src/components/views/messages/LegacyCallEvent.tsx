@@ -61,7 +61,7 @@ export default class LegacyCallEvent extends React.PureComponent<IProps, IState>
         };
     }
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         this.props.callEventGrouper.addListener(LegacyCallEventGrouperEvent.StateChanged, this.onStateChanged);
         this.props.callEventGrouper.addListener(LegacyCallEventGrouperEvent.SilencedChanged, this.onSilencedChanged);
         this.props.callEventGrouper.addListener(LegacyCallEventGrouperEvent.LengthChanged, this.onLengthChanged);
@@ -70,7 +70,7 @@ export default class LegacyCallEvent extends React.PureComponent<IProps, IState>
         this.wrapperElement.current && this.resizeObserver.observe(this.wrapperElement.current);
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         this.props.callEventGrouper.removeListener(LegacyCallEventGrouperEvent.StateChanged, this.onStateChanged);
         this.props.callEventGrouper.removeListener(LegacyCallEventGrouperEvent.SilencedChanged, this.onSilencedChanged);
         this.props.callEventGrouper.removeListener(LegacyCallEventGrouperEvent.LengthChanged, this.onLengthChanged);
@@ -89,11 +89,11 @@ export default class LegacyCallEvent extends React.PureComponent<IProps, IState>
         this.setState({ narrow: wrapperElementEntry.contentRect.width < MAX_NON_NARROW_WIDTH });
     };
 
-    private onSilencedChanged = (newState) => {
+    private onSilencedChanged = (newState: boolean): void => {
         this.setState({ silenced: newState });
     };
 
-    private onStateChanged = (newState: CallState) => {
+    private onStateChanged = (newState: CallState): void => {
         this.setState({ callState: newState });
     };
 

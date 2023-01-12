@@ -173,7 +173,7 @@ export class RoomViewStore extends EventEmitter {
         this.emit(roomId, isActive);
     }
 
-    private onCurrentBroadcastRecordingChanged = (recording: VoiceBroadcastRecording | null) => {
+    private onCurrentBroadcastRecordingChanged = (recording: VoiceBroadcastRecording | null): void => {
         if (recording === null) {
             const room = this.stores.client?.getRoom(this.state.roomId || undefined);
 
@@ -335,10 +335,11 @@ export class RoomViewStore extends EventEmitter {
                 this.reset();
                 break;
             case "reply_to_event":
-                // If currently viewed room does not match the room in which we wish to reply then change rooms
-                // this can happen when performing a search across all rooms. Persist the data from this event for
-                // both room and search timeline rendering types, search will get auto-closed by RoomView at this time.
-                if ([TimelineRenderingType.Room, TimelineRenderingType.Search].includes(payload.context)) {
+                // Thread timeline view handles its own reply-to-state
+                if (TimelineRenderingType.Thread !== payload.context) {
+                    // If currently viewed room does not match the room in which we wish to reply then change rooms this
+                    // can happen when performing a search across all rooms. Persist the data from this event for both
+                    // room and search timeline rendering types, search will get auto-closed by RoomView at this time.
                     if (payload.event && payload.event.getRoomId() !== this.state.roomId) {
                         this.dis.dispatch<ViewRoomPayload>({
                             action: Action.ViewRoom,
@@ -625,7 +626,7 @@ export class RoomViewStore extends EventEmitter {
      * unregistered.
      * @param dis The new dispatcher to use.
      */
-    public resetDispatcher(dis: MatrixDispatcher) {
+    public resetDispatcher(dis: MatrixDispatcher): void {
         if (this.dispatchToken) {
             this.dis.unregister(this.dispatchToken);
         }

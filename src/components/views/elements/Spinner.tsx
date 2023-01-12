@@ -30,7 +30,7 @@ export default class Spinner extends React.PureComponent<IProps> {
         h: 32,
     };
 
-    public render() {
+    public render(): JSX.Element {
         const { w, h, message } = this.props;
         return (
             <div className="mx_Spinner">

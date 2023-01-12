@@ -77,7 +77,7 @@ const MiniAvatarUploader: React.FC<IProps> = ({
                     chromeFileInputFix(ev);
                     onClick?.(ev);
                 }}
-                onChange={async (ev) => {
+                onChange={async (ev): Promise<void> => {
                     if (!ev.target.files?.length) return;
                     setBusy(true);
                     const file = ev.target.files[0];

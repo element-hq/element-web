@@ -88,8 +88,8 @@ const E2EIcon: React.FC<IProps> = ({
         style = { width: `${size}px`, height: `${size}px` };
     }
 
-    const onMouseOver = () => setHover(true);
-    const onMouseLeave = () => setHover(false);
+    const onMouseOver = (): void => setHover(true);
+    const onMouseLeave = (): void => setHover(false);
 
     let tip;
     if (hover && !hideTooltip) {
