@@ -9,11 +9,22 @@ jobs:
         runs-on: ubuntu-latest
         if: |
             contains(github.event.issue.assignees.*.login, 't3chguy') ||
-            contains(github.event.issue.assignees.*.login, 'andybalaam') ||
-            contains(github.event.issue.assignees.*.login, 'turt2live')
+            contains(github.event.issue.assignees.*.login, 'andybalaam')
         steps:
-            - uses: alex-page/github-project-automation-plus@1f8873e97e3c8f58161a323b7c568c1f623a1c4d
+            - uses: octokit/graphql-action@v2.x
+              id: add_to_project
               with:
-                  project: Web App Team
-                  column: "In Progress"
-                  repo-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+                  headers: '{"GraphQL-Features": "projects_next_graphql"}'
+                  query: |
+                      mutation add_to_project($projectid:ID!,$contentid:ID!) {
+                        addProjectV2ItemById(input: {projectId: $projectid contentId: $contentid}) {
+                          item {
+                            id
+                            }
+                          }
+                        }
+                  projectid: ${{ env.PROJECT_ID }}
+                  contentid: ${{ github.event.issue.node_id }}
+              env:
+                  PROJECT_ID: "PVT_kwDOAM0swc4AKjJS"
+                  GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
