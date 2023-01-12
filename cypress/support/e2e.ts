@@ -19,7 +19,7 @@ limitations under the License.
 import "@percy/cypress";
 import "cypress-real-events";
 
-import "./synapse";
+import "./homeserver";
 import "./login";
 import "./labs";
 import "./client";

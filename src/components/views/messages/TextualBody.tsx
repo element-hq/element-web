@@ -18,7 +18,6 @@ import React, { createRef, SyntheticEvent, MouseEvent, ReactNode } from "react";
 import ReactDOM from "react-dom";
 import highlight from "highlight.js";
 import { MsgType } from "matrix-js-sdk/src/@types/event";
-import { isEventLike, LegacyMsgType, M_MESSAGE, MessageEvent } from "matrix-events-sdk";
 
 import * as HtmlUtils from "../../../HtmlUtils";
 import { formatDate } from "../../../DateUtils";
@@ -579,29 +578,6 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         // only strip reply if this is the original replying event, edits thereafter do not have the fallback
         const stripReply = !mxEvent.replacingEvent() && !!getParentEventId(mxEvent);
         let body: ReactNode;
-        if (SettingsStore.isEnabled("feature_extensible_events")) {
-            const extev = this.props.mxEvent.unstableExtensibleEvent as MessageEvent;
-            if (extev?.isEquivalentTo(M_MESSAGE)) {
-                isEmote = isEventLike(extev.wireFormat, LegacyMsgType.Emote);
-                isNotice = isEventLike(extev.wireFormat, LegacyMsgType.Notice);
-                body = HtmlUtils.bodyToHtml(
-                    {
-                        body: extev.text,
-                        format: extev.html ? "org.matrix.custom.html" : undefined,
-                        formatted_body: extev.html,
-                        msgtype: MsgType.Text,
-                    },
-                    this.props.highlights,
-                    {
-                        disableBigEmoji: isEmote || !SettingsStore.getValue<boolean>("TextualBody.enableBigEmoji"),
-                        // Part of Replies fallback support
-                        stripReplyFallback: stripReply,
-                        ref: this.contentRef,
-                        returnString: false,
-                    },
-                );
-            }
-        }
         if (!body) {
             isEmote = content.msgtype === MsgType.Emote;
             isNotice = content.msgtype === MsgType.Notice;

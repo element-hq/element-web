@@ -16,19 +16,19 @@ limitations under the License.
 
 /// <reference types="cypress" />
 
-import { SynapseInstance } from "../../plugins/synapsedocker";
+import { HomeserverInstance } from "../../plugins/utils/homeserver";
 
 describe("Update", () => {
-    let synapse: SynapseInstance;
+    let homeserver: HomeserverInstance;
 
     beforeEach(() => {
-        cy.startSynapse("default").then((data) => {
-            synapse = data;
+        cy.startHomeserver("default").then((data) => {
+            homeserver = data;
         });
     });
 
     afterEach(() => {
-        cy.stopSynapse(synapse);
+        cy.stopHomeserver(homeserver);
     });
 
     it("should navigate to ?updated=$VERSION if realises it is immediately out of date on load", () => {
@@ -42,7 +42,7 @@ describe("Update", () => {
             },
         }).as("version");
 
-        cy.initTestUser(synapse, "Ursa");
+        cy.initTestUser(homeserver, "Ursa");
 
         cy.wait("@version");
         cy.url()

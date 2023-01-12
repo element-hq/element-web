@@ -17,8 +17,8 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import type { ISendEventResponse, MatrixClient, Room } from "matrix-js-sdk/src/matrix";
-import { SynapseInstance } from "../plugins/synapsedocker";
-import { Credentials } from "./synapse";
+import { HomeserverInstance } from "../plugins/utils/homeserver";
+import { Credentials } from "./homeserver";
 import Chainable = Cypress.Chainable;
 
 interface CreateBotOpts {
@@ -61,19 +61,19 @@ declare global {
         interface Chainable {
             /**
              * Returns a new Bot instance
-             * @param synapse the instance on which to register the bot user
+             * @param homeserver the instance on which to register the bot user
              * @param opts create bot options
              */
-            getBot(synapse: SynapseInstance, opts: CreateBotOpts): Chainable<CypressBot>;
+            getBot(homeserver: HomeserverInstance, opts: CreateBotOpts): Chainable<CypressBot>;
             /**
              * Returns a new Bot instance logged in as an existing user
-             * @param synapse the instance on which to register the bot user
+             * @param homeserver the instance on which to register the bot user
              * @param username the username for the bot to log in with
              * @param password the password for the bot to log in with
              * @param opts create bot options
              */
             loginBot(
-                synapse: SynapseInstance,
+                homeserver: HomeserverInstance,
                 username: string,
                 password: string,
                 opts: CreateBotOpts,
@@ -102,7 +102,7 @@ declare global {
 }
 
 function setupBotClient(
-    synapse: SynapseInstance,
+    homeserver: HomeserverInstance,
     credentials: Credentials,
     opts: CreateBotOpts,
 ): Chainable<MatrixClient> {
@@ -119,7 +119,7 @@ function setupBotClient(
         };
 
         const cli = new win.matrixcs.MatrixClient({
-            baseUrl: synapse.baseUrl,
+            baseUrl: homeserver.baseUrl,
             userId: credentials.userId,
             deviceId: credentials.deviceId,
             accessToken: credentials.accessToken,
@@ -160,15 +160,15 @@ function setupBotClient(
     });
 }
 
-Cypress.Commands.add("getBot", (synapse: SynapseInstance, opts: CreateBotOpts): Chainable<CypressBot> => {
+Cypress.Commands.add("getBot", (homeserver: HomeserverInstance, opts: CreateBotOpts): Chainable<CypressBot> => {
     opts = Object.assign({}, defaultCreateBotOptions, opts);
     const username = Cypress._.uniqueId(opts.userIdPrefix);
     const password = Cypress._.uniqueId("password_");
     return cy
-        .registerUser(synapse, username, password, opts.displayName)
+        .registerUser(homeserver, username, password, opts.displayName)
         .then((credentials) => {
             cy.log(`Registered bot user ${username} with displayname ${opts.displayName}`);
-            return setupBotClient(synapse, credentials, opts);
+            return setupBotClient(homeserver, credentials, opts);
         })
         .then((client): Chainable<CypressBot> => {
             Object.assign(client, { __cypress_password: password });
@@ -178,10 +178,15 @@ Cypress.Commands.add("getBot", (synapse: SynapseInstance, opts: CreateBotOpts): 
 
 Cypress.Commands.add(
     "loginBot",
-    (synapse: SynapseInstance, username: string, password: string, opts: CreateBotOpts): Chainable<MatrixClient> => {
+    (
+        homeserver: HomeserverInstance,
+        username: string,
+        password: string,
+        opts: CreateBotOpts,
+    ): Chainable<MatrixClient> => {
         opts = Object.assign({}, defaultCreateBotOptions, { bootstrapCrossSigning: false }, opts);
-        return cy.loginUser(synapse, username, password).then((credentials) => {
-            return setupBotClient(synapse, credentials, opts);
+        return cy.loginUser(homeserver, username, password).then((credentials) => {
+            return setupBotClient(homeserver, credentials, opts);
         });
     },
 );

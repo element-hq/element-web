@@ -17,7 +17,6 @@ limitations under the License.
 import { render, RenderResult, waitFor, screen } from "@testing-library/react";
 // eslint-disable-next-line deprecate/import
 import { mount, ReactWrapper } from "enzyme";
-import { MessageEvent } from "matrix-events-sdk";
 import { ReceiptType } from "matrix-js-sdk/src/@types/read_receipts";
 import {
     EventTimelineSet,
@@ -48,6 +47,7 @@ import SettingsStore from "../../../src/settings/SettingsStore";
 import { isCallEvent } from "../../../src/components/structures/LegacyCallEventGrouper";
 import { flushPromises, mkMembership, mkRoom, stubClient } from "../../test-utils";
 import { mkThread } from "../../test-utils/threads";
+import { createMessageEventContent } from "../../test-utils/events";
 
 const newReceipt = (eventId: string, userId: string, readTs: number, fullyReadTs: number): MatrixEvent => {
     const receiptContent = {
@@ -89,8 +89,8 @@ const mockEvents = (room: Room, count = 2): MatrixEvent[] => {
                 room_id: room.roomId,
                 event_id: `${room.roomId}_event_${index}`,
                 type: EventType.RoomMessage,
-                user_id: "userId",
-                content: MessageEvent.from(`Event${index}`).serialize().content,
+                sender: "userId",
+                content: createMessageEventContent("`Event${index}`"),
             }),
         );
     }
@@ -125,13 +125,15 @@ describe("TimelinePanel", () => {
                 event_id: "ev0",
                 sender: "@u2:m.org",
                 origin_server_ts: 111,
-                ...MessageEvent.from("hello 1").serialize(),
+                type: EventType.RoomMessage,
+                content: createMessageEventContent("hello 1"),
             });
             const ev1 = new MatrixEvent({
                 event_id: "ev1",
                 sender: "@u2:m.org",
                 origin_server_ts: 222,
-                ...MessageEvent.from("hello 2").serialize(),
+                type: EventType.RoomMessage,
+                content: createMessageEventContent("hello 2"),
             });
 
             const roomId = "#room:example.com";
@@ -172,7 +174,7 @@ describe("TimelinePanel", () => {
             const getValueCopy = SettingsStore.getValue;
             SettingsStore.getValue = jest.fn().mockImplementation((name: string) => {
                 if (name === "sendReadReceipts") return true;
-                if (name === "feature_threadstable") return false;
+                if (name === "feature_threadenabled") return false;
                 return getValueCopy(name);
             });
 
@@ -186,7 +188,7 @@ describe("TimelinePanel", () => {
             const getValueCopy = SettingsStore.getValue;
             SettingsStore.getValue = jest.fn().mockImplementation((name: string) => {
                 if (name === "sendReadReceipts") return false;
-                if (name === "feature_threadstable") return false;
+                if (name === "feature_threadenabled") return false;
                 return getValueCopy(name);
             });
 
@@ -363,7 +365,7 @@ describe("TimelinePanel", () => {
             client.supportsExperimentalThreads = () => true;
             const getValueCopy = SettingsStore.getValue;
             SettingsStore.getValue = jest.fn().mockImplementation((name: string) => {
-                if (name === "feature_threadstable") return true;
+                if (name === "feature_threadenabled") return true;
                 return getValueCopy(name);
             });
 
@@ -385,24 +387,24 @@ describe("TimelinePanel", () => {
                 room_id: room.roomId,
                 event_id: "event_reply_1",
                 type: EventType.RoomMessage,
-                user_id: "userId",
-                content: MessageEvent.from(`ReplyEvent1`).serialize().content,
+                sender: "userId",
+                content: createMessageEventContent("ReplyEvent1"),
             });
 
             reply2 = new MatrixEvent({
                 room_id: room.roomId,
                 event_id: "event_reply_2",
                 type: EventType.RoomMessage,
-                user_id: "userId",
-                content: MessageEvent.from(`ReplyEvent2`).serialize().content,
+                sender: "userId",
+                content: createMessageEventContent("ReplyEvent2"),
             });
 
             root = new MatrixEvent({
                 room_id: room.roomId,
                 event_id: "event_root_1",
                 type: EventType.RoomMessage,
-                user_id: "userId",
-                content: MessageEvent.from(`RootEvent`).serialize().content,
+                sender: "userId",
+                content: createMessageEventContent("RootEvent"),
             });
 
             const eventMap: { [key: string]: MatrixEvent } = {
@@ -518,7 +520,7 @@ describe("TimelinePanel", () => {
     });
 
     it("renders when the last message is an undecryptable thread root", async () => {
-        jest.spyOn(SettingsStore, "getValue").mockImplementation((name) => name === "feature_threadstable");
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((name) => name === "feature_threadenabled");
 
         const client = MatrixClientPeg.get();
         client.isRoomEncrypted = () => true;

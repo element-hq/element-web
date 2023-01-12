@@ -257,13 +257,13 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
-    "feature_threadstable": {
+    "feature_threadenabled": {
         isFeature: true,
         labsGroup: LabGroup.Messaging,
         controller: new ThreadBetaController(),
         displayName: _td("Threaded messages"),
         supportedLevels: LEVELS_FEATURE,
-        default: false,
+        default: true,
         betaInfo: {
             title: _td("Threaded messages"),
             caption: () => (
@@ -338,13 +338,6 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         labsGroup: LabGroup.Encryption,
         displayName: _td("Offline encrypted messaging using dehydrated devices"),
         supportedLevels: LEVELS_FEATURE,
-        default: false,
-    },
-    "feature_extensible_events": {
-        isFeature: true,
-        labsGroup: LabGroup.Developer, // developer for now, eventually Messaging and default on
-        supportedLevels: LEVELS_FEATURE,
-        displayName: _td("Show extensible event representation of events"),
         default: false,
     },
     "useOnlyCurrentProfiles": {

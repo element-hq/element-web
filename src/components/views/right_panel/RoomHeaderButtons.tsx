@@ -21,6 +21,7 @@ limitations under the License.
 import React from "react";
 import classNames from "classnames";
 import { NotificationCountType, Room, RoomEvent } from "matrix-js-sdk/src/models/room";
+import { ThreadEvent } from "matrix-js-sdk/src/models/thread";
 import { Feature, ServerSupport } from "matrix-js-sdk/src/feature";
 
 import { _t } from "../../../languageHandler";
@@ -44,6 +45,7 @@ import { NotificationStateEvents } from "../../../stores/notifications/Notificat
 import PosthogTrackers from "../../../PosthogTrackers";
 import { ButtonEvent } from "../elements/AccessibleButton";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { doesRoomOrThreadHaveUnreadMessages } from "../../../Unread";
 
 const ROOM_INFO_PHASES = [
     RightPanelPhases.RoomSummary,
@@ -154,7 +156,17 @@ export default class RoomHeaderButtons extends HeaderButtons<IProps> {
         if (!this.supportsThreadNotifications) {
             this.threadNotificationState?.on(NotificationStateEvents.Update, this.onNotificationUpdate);
         } else {
+            // Notification badge may change if the notification counts from the
+            // server change, if a new thread is created or updated, or if a
+            // receipt is sent in the thread.
             this.props.room?.on(RoomEvent.UnreadNotifications, this.onNotificationUpdate);
+            this.props.room?.on(RoomEvent.Receipt, this.onNotificationUpdate);
+            this.props.room?.on(RoomEvent.Timeline, this.onNotificationUpdate);
+            this.props.room?.on(RoomEvent.Redaction, this.onNotificationUpdate);
+            this.props.room?.on(RoomEvent.LocalEchoUpdated, this.onNotificationUpdate);
+            this.props.room?.on(RoomEvent.MyMembership, this.onNotificationUpdate);
+            this.props.room?.on(ThreadEvent.New, this.onNotificationUpdate);
+            this.props.room?.on(ThreadEvent.Update, this.onNotificationUpdate);
         }
         this.onNotificationUpdate();
         RoomNotificationStateStore.instance.on(UPDATE_STATUS_INDICATOR, this.onUpdateStatus);
@@ -166,6 +178,13 @@ export default class RoomHeaderButtons extends HeaderButtons<IProps> {
             this.threadNotificationState?.off(NotificationStateEvents.Update, this.onNotificationUpdate);
         } else {
             this.props.room?.off(RoomEvent.UnreadNotifications, this.onNotificationUpdate);
+            this.props.room?.off(RoomEvent.Receipt, this.onNotificationUpdate);
+            this.props.room?.off(RoomEvent.Timeline, this.onNotificationUpdate);
+            this.props.room?.off(RoomEvent.Redaction, this.onNotificationUpdate);
+            this.props.room?.off(RoomEvent.LocalEchoUpdated, this.onNotificationUpdate);
+            this.props.room?.off(RoomEvent.MyMembership, this.onNotificationUpdate);
+            this.props.room?.off(ThreadEvent.New, this.onNotificationUpdate);
+            this.props.room?.off(ThreadEvent.Update, this.onNotificationUpdate);
         }
         RoomNotificationStateStore.instance.off(UPDATE_STATUS_INDICATOR, this.onUpdateStatus);
     }
@@ -191,9 +210,17 @@ export default class RoomHeaderButtons extends HeaderButtons<IProps> {
                 return NotificationColor.Red;
             case NotificationCountType.Total:
                 return NotificationColor.Grey;
-            default:
-                return NotificationColor.None;
         }
+        // We don't have any notified messages, but we might have unread messages. Let's
+        // find out.
+        for (const thread of this.props.room!.getThreads()) {
+            // If the current thread has unread messages, we're done.
+            if (doesRoomOrThreadHaveUnreadMessages(thread)) {
+                return NotificationColor.Bold;
+            }
+        }
+        // Otherwise, no notification color.
+        return NotificationColor.None;
     }
 
     private onUpdateStatus = (notificationState: SummarizedNotificationState): void => {
@@ -297,7 +324,7 @@ export default class RoomHeaderButtons extends HeaderButtons<IProps> {
         );
         rightPanelPhaseButtons.set(
             RightPanelPhases.ThreadPanel,
-            SettingsStore.getValue("feature_threadstable") ? (
+            SettingsStore.getValue("feature_threadenabled") ? (
                 <HeaderButton
                     key={RightPanelPhases.ThreadPanel}
                     name="threadsButton"

@@ -16,23 +16,23 @@ limitations under the License.
 
 /// <reference types="cypress" />
 
-import { SynapseInstance } from "../../plugins/synapsedocker";
+import { HomeserverInstance } from "../../plugins/utils/homeserver";
 import { MatrixClient } from "../../global";
 
 describe("Room Directory", () => {
-    let synapse: SynapseInstance;
+    let homeserver: HomeserverInstance;
 
     beforeEach(() => {
-        cy.startSynapse("default").then((data) => {
-            synapse = data;
+        cy.startHomeserver("default").then((data) => {
+            homeserver = data;
 
-            cy.initTestUser(synapse, "Ray");
-            cy.getBot(synapse, { displayName: "Paul" }).as("bot");
+            cy.initTestUser(homeserver, "Ray");
+            cy.getBot(homeserver, { displayName: "Paul" }).as("bot");
         });
     });
 
     afterEach(() => {
-        cy.stopSynapse(synapse);
+        cy.stopHomeserver(homeserver);
     });
 
     it("should allow admin to add alias & publish room to directory", () => {

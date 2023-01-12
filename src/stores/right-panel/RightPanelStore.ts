@@ -278,10 +278,10 @@ export default class RightPanelStore extends ReadyWatchingStore {
         // (A nicer fix could be to indicate, that the right panel is loading if there is missing state data and re-emit if the data is available)
         switch (card.phase) {
             case RightPanelPhases.ThreadPanel:
-                if (!SettingsStore.getValue("feature_threadstable")) return false;
+                if (!SettingsStore.getValue("feature_threadenabled")) return false;
                 break;
             case RightPanelPhases.ThreadView:
-                if (!SettingsStore.getValue("feature_threadstable")) return false;
+                if (!SettingsStore.getValue("feature_threadenabled")) return false;
                 if (!card.state.threadHeadEvent) {
                     logger.warn("removed card from right panel because of missing threadHeadEvent in card state");
                 }

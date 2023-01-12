@@ -17,7 +17,8 @@ limitations under the License.
 // eslint-disable-next-line deprecate/import
 import { ReactWrapper } from "enzyme";
 import { act } from "react-dom/test-utils";
-import { fireEvent } from "@testing-library/react";
+import { act as actRTL, fireEvent, RenderResult } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 
 export const addTextToComposer = (container: HTMLElement, text: string) =>
     act(() => {
@@ -47,3 +48,10 @@ export const addTextToComposerEnzyme = (wrapper: ReactWrapper, text: string) =>
         wrapper.find('[role="textbox"]').simulate("paste", pasteEvent);
         wrapper.update();
     });
+
+export const addTextToComposerRTL = async (renderResult: RenderResult, text: string): Promise<void> => {
+    await actRTL(async () => {
+        await userEvent.click(renderResult.getByLabelText("Send a message…"));
+        await userEvent.keyboard(text);
+    });
+};

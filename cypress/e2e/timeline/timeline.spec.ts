@@ -16,11 +16,9 @@ limitations under the License.
 
 /// <reference types="cypress" />
 
-import { MessageEvent } from "matrix-events-sdk";
-
 import type { ISendEventResponse } from "matrix-js-sdk/src/@types/requests";
-import type { EventType } from "matrix-js-sdk/src/@types/event";
-import { SynapseInstance } from "../../plugins/synapsedocker";
+import type { EventType, MsgType } from "matrix-js-sdk/src/@types/event";
+import { HomeserverInstance } from "../../plugins/utils/homeserver";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
 import { Layout } from "../../../src/settings/enums/Layout";
 import Chainable = Cypress.Chainable;
@@ -55,16 +53,21 @@ const expectAvatar = (e: JQuery<HTMLElement>, avatarUrl: string): void => {
 };
 
 const sendEvent = (roomId: string, html = false): Chainable<ISendEventResponse> => {
-    return cy.sendEvent(
-        roomId,
-        null,
-        "m.room.message" as EventType,
-        MessageEvent.from("Message", html ? "<b>Message</b>" : undefined).serialize().content,
-    );
+    const content = {
+        msgtype: "m.text" as MsgType,
+        body: "Message",
+        format: undefined,
+        formatted_body: undefined,
+    };
+    if (html) {
+        content.format = "org.matrix.custom.html";
+        content.formatted_body = "<b>Message</b>";
+    }
+    return cy.sendEvent(roomId, null, "m.room.message" as EventType, content);
 };
 
 describe("Timeline", () => {
-    let synapse: SynapseInstance;
+    let homeserver: HomeserverInstance;
 
     let roomId: string;
 
@@ -72,9 +75,9 @@ describe("Timeline", () => {
     let newAvatarUrl: string;
 
     beforeEach(() => {
-        cy.startSynapse("default").then((data) => {
-            synapse = data;
-            cy.initTestUser(synapse, OLD_NAME).then(() =>
+        cy.startHomeserver("default").then((data) => {
+            homeserver = data;
+            cy.initTestUser(homeserver, OLD_NAME).then(() =>
                 cy.createRoom({ name: ROOM_NAME }).then((_room1Id) => {
                     roomId = _room1Id;
                 }),
@@ -83,7 +86,7 @@ describe("Timeline", () => {
     });
 
     afterEach(() => {
-        cy.stopSynapse(synapse);
+        cy.stopHomeserver(homeserver);
     });
 
     describe("useOnlyCurrentProfiles", () => {
@@ -314,12 +317,10 @@ describe("Timeline", () => {
                 },
             }).as("preview_url");
 
-            cy.sendEvent(
-                roomId,
-                null,
-                "m.room.message" as EventType,
-                MessageEvent.from("https://call.element.io/").serialize().content,
-            );
+            cy.sendEvent(roomId, null, "m.room.message" as EventType, {
+                msgtype: "m.text" as MsgType,
+                body: "https://call.element.io/",
+            });
             cy.visit("/#/room/" + roomId);
 
             cy.get(".mx_LinkPreviewWidget").should("exist").should("contain.text", "Element Call");

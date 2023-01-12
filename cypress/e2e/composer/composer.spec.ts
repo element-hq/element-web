@@ -16,25 +16,25 @@ limitations under the License.
 
 /// <reference types="cypress" />
 
-import { SynapseInstance } from "../../plugins/synapsedocker";
+import { HomeserverInstance } from "../../plugins/utils/homeserver";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
 
 describe("Composer", () => {
-    let synapse: SynapseInstance;
+    let homeserver: HomeserverInstance;
 
     beforeEach(() => {
-        cy.startSynapse("default").then((data) => {
-            synapse = data;
+        cy.startHomeserver("default").then((data) => {
+            homeserver = data;
         });
     });
 
     afterEach(() => {
-        cy.stopSynapse(synapse);
+        cy.stopHomeserver(homeserver);
     });
 
     describe("CIDER", () => {
         beforeEach(() => {
-            cy.initTestUser(synapse, "Janet").then(() => {
+            cy.initTestUser(homeserver, "Janet").then(() => {
                 cy.createRoom({ name: "Composing Room" });
             });
             cy.viewRoomByName("Composing Room");
@@ -101,7 +101,7 @@ describe("Composer", () => {
     describe("WYSIWYG", () => {
         beforeEach(() => {
             cy.enableLabsFeature("feature_wysiwyg_composer");
-            cy.initTestUser(synapse, "Janet").then(() => {
+            cy.initTestUser(homeserver, "Janet").then(() => {
                 cy.createRoom({ name: "Composing Room" });
             });
             cy.viewRoomByName("Composing Room");

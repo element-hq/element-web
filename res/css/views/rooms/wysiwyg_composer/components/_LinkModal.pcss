@@ -16,14 +16,32 @@ limitations under the License.
 
 .mx_LinkModal {
     padding: $spacing-32;
-
-    .mx_Dialog_content {
-        margin-top: 30px;
-        margin-bottom: 42px;
-    }
+    max-width: 600px;
+    height: 341px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
 
     .mx_LinkModal_content {
         display: flex;
         flex-direction: column;
+        flex: 1;
+        gap: $spacing-8;
+        margin-top: 7px;
+
+        .mx_LinkModal_Field {
+            flex: initial;
+            height: 40px;
+        }
+
+        .mx_LinkModal_buttons {
+            display: flex;
+            flex: 1;
+            align-items: flex-end;
+
+            .mx_Dialog_buttons {
+                display: inline-block;
+            }
+        }
     }
 }

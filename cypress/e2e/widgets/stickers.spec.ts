@@ -16,7 +16,7 @@ limitations under the License.
 
 /// <reference types="cypress" />
 
-import { SynapseInstance } from "../../plugins/synapsedocker";
+import { HomeserverInstance } from "../../plugins/utils/homeserver";
 
 const STICKER_PICKER_WIDGET_ID = "fake-sticker-picker";
 const STICKER_PICKER_WIDGET_NAME = "Fake Stickers";
@@ -102,13 +102,13 @@ describe("Stickers", () => {
     // See sendStickerFromPicker() for more detail on iframe comms.
 
     let stickerPickerUrl: string;
-    let synapse: SynapseInstance;
+    let homeserver: HomeserverInstance;
 
     beforeEach(() => {
-        cy.startSynapse("default").then((data) => {
-            synapse = data;
+        cy.startHomeserver("default").then((data) => {
+            homeserver = data;
 
-            cy.initTestUser(synapse, "Sally");
+            cy.initTestUser(homeserver, "Sally");
         });
         cy.serveHtmlFile(WIDGET_HTML).then((url) => {
             stickerPickerUrl = url;
@@ -116,7 +116,7 @@ describe("Stickers", () => {
     });
 
     afterEach(() => {
-        cy.stopSynapse(synapse);
+        cy.stopHomeserver(homeserver);
         cy.stopWebServers();
     });
 

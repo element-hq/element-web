@@ -24,6 +24,7 @@ package-lock.json
 /cypress/downloads
 /cypress/screenshots
 /cypress/synapselogs
+/cypress/dendritelogs
 # These could have files in them but don't currently
 # Cypress will still auto-create them though...
 /cypress/performance

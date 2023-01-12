@@ -16,7 +16,7 @@ limitations under the License.
 
 /// <reference types="cypress" />
 
-import { SynapseInstance } from "../../plugins/synapsedocker";
+import { HomeserverInstance } from "../../plugins/utils/homeserver";
 import { MatrixClient } from "../../global";
 
 function markWindowBeforeReload(): void {
@@ -25,23 +25,23 @@ function markWindowBeforeReload(): void {
 }
 
 describe("Threads", () => {
-    let synapse: SynapseInstance;
+    let homeserver: HomeserverInstance;
 
     beforeEach(() => {
         // Default threads to ON for this spec
-        cy.enableLabsFeature("feature_threadstable");
+        cy.enableLabsFeature("feature_threadenabled");
         cy.window().then((win) => {
             win.localStorage.setItem("mx_lhs_size", "0"); // Collapse left panel for these tests
         });
-        cy.startSynapse("default").then((data) => {
-            synapse = data;
+        cy.startHomeserver("default").then((data) => {
+            homeserver = data;
 
-            cy.initTestUser(synapse, "Tom");
+            cy.initTestUser(homeserver, "Tom");
         });
     });
 
     afterEach(() => {
-        cy.stopSynapse(synapse);
+        cy.stopHomeserver(homeserver);
     });
 
     it("should reload when enabling threads beta", () => {
@@ -75,7 +75,7 @@ describe("Threads", () => {
 
     it("should be usable for a conversation", () => {
         let bot: MatrixClient;
-        cy.getBot(synapse, {
+        cy.getBot(homeserver, {
             displayName: "BotBob",
             autoAcceptInvites: false,
         }).then((_bot) => {

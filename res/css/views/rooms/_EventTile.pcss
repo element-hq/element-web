@@ -970,6 +970,7 @@ $left-gutter: 64px;
         font-size: $font-12px;
         max-width: var(--MessageTimestamp-max-width);
         position: initial;
+        margin-left: auto; /* to ensure it's end-aligned even if it's the only element of its parent */
     }
 
     &:hover {
@@ -1297,7 +1298,7 @@ $left-gutter: 64px;
 
 .mx_EventTile_details {
     display: flex;
-    width: -webkit-fill-available;
+    width: fill-available;
     align-items: center;
     justify-content: space-between;
     gap: $spacing-8;

@@ -21,27 +21,7 @@ exports[`RoomGeneralContextMenu renders an empty context menu for archived rooms
       >
         <div
           class="mx_IconizedContextMenu_optionList mx_IconizedContextMenu_optionList_notFirst"
-        >
-          <div
-            aria-checked="false"
-            aria-label="Mark as read"
-            class="mx_AccessibleButton mx_IconizedContextMenu_item"
-            role="menuitemcheckbox"
-            tabindex="0"
-          >
-            <span
-              class="mx_IconizedContextMenu_icon mx_RoomGeneralContextMenu_iconMarkAsRead"
-            />
-            <span
-              class="mx_IconizedContextMenu_label"
-            >
-              Mark as read
-            </span>
-            <span
-              class="mx_IconizedContextMenu_icon mx_IconizedContextMenu_unchecked"
-            />
-          </div>
-        </div>
+        />
         <div
           class="mx_IconizedContextMenu_optionList mx_IconizedContextMenu_optionList_notFirst mx_IconizedContextMenu_optionList_red"
         >
@@ -88,27 +68,7 @@ exports[`RoomGeneralContextMenu renders the default context menu 1`] = `
       >
         <div
           class="mx_IconizedContextMenu_optionList mx_IconizedContextMenu_optionList_notFirst"
-        >
-          <div
-            aria-checked="false"
-            aria-label="Mark as read"
-            class="mx_AccessibleButton mx_IconizedContextMenu_item"
-            role="menuitemcheckbox"
-            tabindex="0"
-          >
-            <span
-              class="mx_IconizedContextMenu_icon mx_RoomGeneralContextMenu_iconMarkAsRead"
-            />
-            <span
-              class="mx_IconizedContextMenu_label"
-            >
-              Mark as read
-            </span>
-            <span
-              class="mx_IconizedContextMenu_icon mx_IconizedContextMenu_unchecked"
-            />
-          </div>
-        </div>
+        />
         <div
           class="mx_IconizedContextMenu_optionList mx_IconizedContextMenu_optionList_notFirst mx_IconizedContextMenu_optionList_red"
         >

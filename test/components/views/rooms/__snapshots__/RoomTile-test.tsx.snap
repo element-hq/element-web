@@ -3,7 +3,7 @@
 exports[`RoomTile should render the room 1`] = `
 <div>
   <div
-    aria-label="!1:​example.org Unread messages."
+    aria-label="!1:​example.org"
     aria-selected="false"
     class="mx_AccessibleButton mx_RoomTile"
     role="treeitem"
@@ -37,7 +37,7 @@ exports[`RoomTile should render the room 1`] = `
       class="mx_RoomTile_titleContainer"
     >
       <div
-        class="mx_RoomTile_title mx_RoomTile_titleHasUnreadEvents"
+        class="mx_RoomTile_title"
         tabindex="-1"
         title="!1:​example.org"
       >
@@ -51,15 +51,7 @@ exports[`RoomTile should render the room 1`] = `
     <div
       aria-hidden="true"
       class="mx_RoomTile_badgeContainer"
-    >
-      <div
-        class="mx_NotificationBadge mx_NotificationBadge_visible mx_NotificationBadge_dot"
-      >
-        <span
-          class="mx_NotificationBadge_count"
-        />
-      </div>
-    </div>
+    />
     <div
       aria-expanded="false"
       aria-haspopup="true"

@@ -120,7 +120,7 @@ export function FormattingButtons({ composer, actionStates }: FormattingButtonsP
             <Button
                 isActive={actionStates.link === "reversed"}
                 label={_td("Link")}
-                onClick={() => openLinkModal(composer, composerContext)}
+                onClick={() => openLinkModal(composer, composerContext, actionStates.link === "reversed")}
                 icon={<LinkIcon className="mx_FormattingButtons_Icon" />}
             />
         </div>
