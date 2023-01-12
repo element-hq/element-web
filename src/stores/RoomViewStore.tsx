@@ -335,10 +335,11 @@ export class RoomViewStore extends EventEmitter {
                 this.reset();
                 break;
             case "reply_to_event":
-                // If currently viewed room does not match the room in which we wish to reply then change rooms
-                // this can happen when performing a search across all rooms. Persist the data from this event for
-                // both room and search timeline rendering types, search will get auto-closed by RoomView at this time.
-                if ([TimelineRenderingType.Room, TimelineRenderingType.Search].includes(payload.context)) {
+                // Thread timeline view handles its own reply-to-state
+                if (TimelineRenderingType.Thread !== payload.context) {
+                    // If currently viewed room does not match the room in which we wish to reply then change rooms this
+                    // can happen when performing a search across all rooms. Persist the data from this event for both
+                    // room and search timeline rendering types, search will get auto-closed by RoomView at this time.
                     if (payload.event && payload.event.getRoomId() !== this.state.roomId) {
                         this.dis.dispatch<ViewRoomPayload>({
                             action: Action.ViewRoom,
