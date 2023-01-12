@@ -84,14 +84,16 @@ jobs:
             actions: read
             issues: read
             pull-requests: read
-        environment:
-            Cypress
-            #strategy:
-            #    fail-fast: false
-            #    matrix:
-            #      # Run 4 instances in Parallel
-            #      runner: [1, 2, 3, 4]
+        environment: Cypress
+        strategy:
+            fail-fast: false
+            matrix:
+                # Run 4 instances in Parallel
+                runner: [1, 2, 3, 4]
         steps:
+            - uses: browser-actions/setup-chrome@latest
+            - run: echo "BROWSER_PATH=$(which chrome)" >> $GITHUB_ENV
+
             - uses: tecolicom/actions-use-apt-tools@v1
               with:
                   # Our test suite includes some screenshot tests with unusual diacritics, which are
@@ -121,14 +123,12 @@ jobs:
               with:
                   # The built-in Electron runner seems to grind to a halt trying
                   # to run the tests, so use chrome.
-                  browser: chrome
+                  browser: "${{ env.BROWSER_PATH }}"
                   start: npx serve -p 8080 webapp
                   wait-on: "http://localhost:8080"
-                  record:
-                      true
-                      #parallel: true
-                      #command-prefix: 'yarn percy exec --parallel --'
-                  command-prefix: "yarn percy exec --"
+                  record: true
+                  parallel: true
+                  command-prefix: "yarn percy exec --parallel --"
                   config: '{"reporter":"cypress-multi-reporters", "reporterOptions": { "configFile": "cypress-ci-reporter-config.json" } }'
                   ci-build-id: ${{ needs.prepare.outputs.uuid }}
               env:
@@ -159,9 +159,8 @@ jobs:
                   # tell Percy more details about the context of this run
                   PERCY_BRANCH: ${{ github.event.workflow_run.head_branch }}
                   PERCY_COMMIT: ${{ github.event.workflow_run.head_sha }}
-                  PERCY_PULL_REQUEST:
-                      ${{ needs.prepare.outputs.pr_id }}
-                      #PERCY_PARALLEL_TOTAL: ${{ strategy.job-total }}
+                  PERCY_PULL_REQUEST: ${{ needs.prepare.outputs.pr_id }}
+                  PERCY_PARALLEL_TOTAL: ${{ strategy.job-total }}
                   PERCY_PARALLEL_NONCE: ${{ needs.prepare.outputs.uuid }}
 
             - name: Upload Artifact
