@@ -95,7 +95,7 @@ jobs:
             - name: Deploy to R2
               run: |
                   aws s3 cp dist/develop.tar.gz s3://$R2_BUCKET/develop.tar.gz --endpoint-url $R2_URL --region=auto
-                  aws s3 cp _deploy/bundles s3://$R2_BUCKET/bundles --recursive --endpoint-url $R2_URL --region=auto
+                  aws s3 cp _deploy/ s3://$R2_BUCKET/ --recursive --endpoint-url $R2_URL --region=auto
               env:
                   AWS_ACCESS_KEY_ID: ${{ secrets.CF_R2_ACCESS_KEY_ID }}
                   AWS_SECRET_ACCESS_KEY: ${{ secrets.CF_R2_TOKEN }}
