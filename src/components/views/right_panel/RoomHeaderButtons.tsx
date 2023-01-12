@@ -324,7 +324,7 @@ export default class RoomHeaderButtons extends HeaderButtons<IProps> {
         );
         rightPanelPhaseButtons.set(
             RightPanelPhases.ThreadPanel,
-            SettingsStore.getValue("feature_threadstable") ? (
+            SettingsStore.getValue("feature_threadenabled") ? (
                 <HeaderButton
                     key={RightPanelPhases.ThreadPanel}
                     name="threadsButton"

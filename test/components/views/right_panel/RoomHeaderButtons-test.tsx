@@ -44,7 +44,7 @@ describe("RoomHeaderButtons-test.tsx", function () {
         });
 
         jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
-            if (name === "feature_threadstable") return true;
+            if (name === "feature_threadenabled") return true;
         });
     });
 

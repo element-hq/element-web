@@ -257,13 +257,13 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
-    "feature_threadstable": {
+    "feature_threadenabled": {
         isFeature: true,
         labsGroup: LabGroup.Messaging,
         controller: new ThreadBetaController(),
         displayName: _td("Threaded messages"),
         supportedLevels: LEVELS_FEATURE,
-        default: false,
+        default: true,
         betaInfo: {
             title: _td("Threaded messages"),
             caption: () => (

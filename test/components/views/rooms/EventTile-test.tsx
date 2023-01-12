@@ -80,7 +80,7 @@ describe("EventTile", () => {
 
         jest.spyOn(client, "getRoom").mockReturnValue(room);
         jest.spyOn(client, "decryptEventIfNeeded").mockResolvedValue();
-        jest.spyOn(SettingsStore, "getValue").mockImplementation((name) => name === "feature_threadstable");
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((name) => name === "feature_threadenabled");
 
         mxEvent = mkMessage({
             room: room.roomId,

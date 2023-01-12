@@ -389,7 +389,7 @@ describe("<MessageActionBar />", () => {
         describe("when threads feature is not enabled", () => {
             beforeEach(() => {
                 jest.spyOn(SettingsStore, "getValue").mockImplementation(
-                    (setting) => setting !== "feature_threadstable",
+                    (setting) => setting !== "feature_threadenabled",
                 );
             });
 
@@ -435,7 +435,7 @@ describe("<MessageActionBar />", () => {
         describe("when threads feature is enabled", () => {
             beforeEach(() => {
                 jest.spyOn(SettingsStore, "getValue").mockImplementation(
-                    (setting) => setting === "feature_threadstable",
+                    (setting) => setting === "feature_threadenabled",
                 );
             });
 

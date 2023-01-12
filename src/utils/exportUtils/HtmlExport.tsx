@@ -62,7 +62,7 @@ export default class HTMLExporter extends Exporter {
         this.mediaOmitText = !this.exportOptions.attachmentsIncluded
             ? _t("Media omitted")
             : _t("Media omitted - file size limit exceeded");
-        this.threadsEnabled = SettingsStore.getValue("feature_threadstable");
+        this.threadsEnabled = SettingsStore.getValue("feature_threadenabled");
     }
 
     protected async getRoomAvatar() {

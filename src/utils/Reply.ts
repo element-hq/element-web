@@ -176,7 +176,7 @@ export function makeReplyMixIn(ev?: MatrixEvent): IEventRelation {
     };
 
     if (ev.threadRootId) {
-        if (SettingsStore.getValue("feature_threadstable")) {
+        if (SettingsStore.getValue("feature_threadenabled")) {
             mixin.is_falling_back = false;
         } else {
             // Clients that do not offer a threading UI should behave as follows when replying, for best interaction
@@ -203,7 +203,7 @@ export function shouldDisplayReply(event: MatrixEvent): boolean {
 
     const relation = event.getRelation();
     if (
-        SettingsStore.getValue("feature_threadstable") &&
+        SettingsStore.getValue("feature_threadenabled") &&
         relation?.rel_type === THREAD_RELATION_TYPE.name &&
         relation?.is_falling_back
     ) {
