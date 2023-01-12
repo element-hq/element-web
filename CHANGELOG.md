@@ -1,3 +1,9 @@
+Changes in [1.11.18-rc.2](https://github.com/vector-im/element-web/releases/tag/v1.11.18-rc.2) (2023-01-12)
+===========================================================================================================
+
+## ✨ Features
+ * Switch threads on for everyone ([\#9879](https://github.com/matrix-org/matrix-react-sdk/pull/9879)).
+
 Changes in [1.11.18-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.11.18-rc.1) (2023-01-11)
 ===========================================================================================================
 
