@@ -61,7 +61,7 @@ export default class QueryMatcher<T extends {}> {
         }
     }
 
-    public setObjects(objects: T[]) {
+    public setObjects(objects: T[]): void {
         this._items = new Map();
 
         for (const object of objects) {

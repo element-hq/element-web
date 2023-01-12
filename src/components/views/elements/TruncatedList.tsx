@@ -70,7 +70,7 @@ export default class TruncatedList extends React.Component<IProps> {
         }
     }
 
-    public render() {
+    public render(): JSX.Element {
         let overflowNode = null;
 
         const totalChildren = this.getChildCount();

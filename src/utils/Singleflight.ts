@@ -64,14 +64,14 @@ export class Singleflight {
      * Forgets all results for a given instance.
      * @param {Object} instance The instance to forget about.
      */
-    public static forgetAllFor(instance: Object) {
+    public static forgetAllFor(instance: Object): void {
         keyMap.delete(instance);
     }
 
     /**
      * Forgets all cached results for all instances. Intended for use by tests.
      */
-    public static forgetAll() {
+    public static forgetAll(): void {
         for (const k of keyMap.keys()) {
             keyMap.remove(k);
         }
@@ -84,7 +84,7 @@ class SingleflightContext {
     /**
      * Forget this particular instance and key combination, discarding the result.
      */
-    public forget() {
+    public forget(): void {
         const map = keyMap.get(this.instance);
         if (!map) return;
         map.remove(this.key);

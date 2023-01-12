@@ -77,7 +77,7 @@ const Button: React.FC<IButtonProps> = ({ children, className, onClick }) => {
     );
 };
 
-export const useWidgets = (room: Room) => {
+export const useWidgets = (room: Room): IApp[] => {
     const [apps, setApps] = useState<IApp[]>(() => WidgetStore.instance.getApps(room.roomId));
 
     const updateApps = useCallback(() => {
@@ -107,7 +107,7 @@ const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
         setCanModifyWidget(WidgetUtils.canUserModifyWidgets(room.roomId));
     }, [room.roomId]);
 
-    const onOpenWidgetClick = () => {
+    const onOpenWidgetClick = (): void => {
         RightPanelStore.instance.pushCard({
             phase: RightPanelPhases.Widget,
             state: { widgetId: app.id },
@@ -216,7 +216,7 @@ const AppsSection: React.FC<IAppsSectionProps> = ({ room }) => {
     // Filter out virtual widgets
     const realApps = useMemo(() => apps.filter((app) => app.eventId !== undefined), [apps]);
 
-    const onManageIntegrations = () => {
+    const onManageIntegrations = (): void => {
         const managers = IntegrationManagers.sharedInstance();
         if (!managers.hasManager()) {
             managers.openNoManagerDialog();
@@ -248,20 +248,20 @@ const AppsSection: React.FC<IAppsSectionProps> = ({ room }) => {
     );
 };
 
-const onRoomMembersClick = (ev: ButtonEvent) => {
+const onRoomMembersClick = (ev: ButtonEvent): void => {
     RightPanelStore.instance.pushCard({ phase: RightPanelPhases.RoomMemberList }, true);
     PosthogTrackers.trackInteraction("WebRightPanelRoomInfoPeopleButton", ev);
 };
 
-const onRoomFilesClick = () => {
+const onRoomFilesClick = (): void => {
     RightPanelStore.instance.pushCard({ phase: RightPanelPhases.FilePanel }, true);
 };
 
-const onRoomPinsClick = () => {
+const onRoomPinsClick = (): void => {
     RightPanelStore.instance.pushCard({ phase: RightPanelPhases.PinnedMessages }, true);
 };
 
-const onRoomSettingsClick = (ev: ButtonEvent) => {
+const onRoomSettingsClick = (ev: ButtonEvent): void => {
     defaultDispatcher.dispatch({ action: "open_room_settings" });
     PosthogTrackers.trackInteraction("WebRightPanelRoomInfoSettingsButton", ev);
 };
@@ -269,13 +269,13 @@ const onRoomSettingsClick = (ev: ButtonEvent) => {
 const RoomSummaryCard: React.FC<IProps> = ({ room, onClose }) => {
     const cli = useContext(MatrixClientContext);
 
-    const onShareRoomClick = () => {
+    const onShareRoomClick = (): void => {
         Modal.createDialog(ShareDialog, {
             target: room,
         });
     };
 
-    const onRoomExportClick = async () => {
+    const onRoomExportClick = async (): Promise<void> => {
         Modal.createDialog(ExportDialog, {
             room,
         });

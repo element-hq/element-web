@@ -29,7 +29,7 @@ export function openLinkModal(
     composer: FormattingFunctions,
     composerContext: ComposerContextState,
     isEditing: boolean,
-) {
+): void {
     const modal = Modal.createDialog(
         LinkModal,
         {
@@ -45,7 +45,7 @@ export function openLinkModal(
     );
 }
 
-function isEmpty(text: string) {
+function isEmpty(text: string): boolean {
     return text.length < 1;
 }
 
@@ -57,7 +57,13 @@ interface LinkModalProps {
     isEditing: boolean;
 }
 
-export function LinkModal({ composer, isTextEnabled, onClose, composerContext, isEditing }: LinkModalProps) {
+export function LinkModal({
+    composer,
+    isTextEnabled,
+    onClose,
+    composerContext,
+    isEditing,
+}: LinkModalProps): JSX.Element {
     const [hasLinkChanged, setHasLinkChanged] = useState(false);
     const [fields, setFields] = useState({ text: "", link: isEditing ? composer.getLink() : "" });
     const hasText = !isEditing && isTextEnabled;

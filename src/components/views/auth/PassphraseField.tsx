@@ -53,7 +53,7 @@ class PassphraseField extends PureComponent<IProps> {
             const score = complexity ? complexity.score : 0;
             return <progress className="mx_PassphraseField_progress" max={4} value={score} />;
         },
-        deriveData: async ({ value }) => {
+        deriveData: async ({ value }): Promise<zxcvbn.ZXCVBNResult> => {
             if (!value) return null;
             const { scorePassword } = await import("../../../utils/PasswordScorer");
             return scorePassword(value);
@@ -66,7 +66,7 @@ class PassphraseField extends PureComponent<IProps> {
             },
             {
                 key: "complexity",
-                test: async function ({ value }, complexity) {
+                test: async function ({ value }, complexity): Promise<boolean> {
                     if (!value) {
                         return false;
                     }
@@ -94,7 +94,7 @@ class PassphraseField extends PureComponent<IProps> {
         ],
     });
 
-    public onValidate = async (fieldState: IFieldState) => {
+    public onValidate = async (fieldState: IFieldState): Promise<IValidationResult> => {
         const result = await this.validate(fieldState);
         if (this.props.onValidate) {
             this.props.onValidate(result);
@@ -102,7 +102,7 @@ class PassphraseField extends PureComponent<IProps> {
         return result;
     };
 
-    public render() {
+    public render(): JSX.Element {
         return (
             <Field
                 id={this.props.id}

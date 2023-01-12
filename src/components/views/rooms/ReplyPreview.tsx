@@ -24,7 +24,7 @@ import ReplyTile from "./ReplyTile";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import AccessibleButton from "../elements/AccessibleButton";
 
-function cancelQuoting(context: TimelineRenderingType) {
+function cancelQuoting(context: TimelineRenderingType): void {
     dis.dispatch({
         action: "reply_to_event",
         event: null,

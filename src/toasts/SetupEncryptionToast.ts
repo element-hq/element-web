@@ -26,7 +26,7 @@ import Spinner from "../components/views/elements/Spinner";
 
 const TOAST_KEY = "setupencryption";
 
-const getTitle = (kind: Kind) => {
+const getTitle = (kind: Kind): string => {
     switch (kind) {
         case Kind.SET_UP_ENCRYPTION:
             return _t("Set up Secure Backup");
@@ -37,7 +37,7 @@ const getTitle = (kind: Kind) => {
     }
 };
 
-const getIcon = (kind: Kind) => {
+const getIcon = (kind: Kind): string => {
     switch (kind) {
         case Kind.SET_UP_ENCRYPTION:
         case Kind.UPGRADE_ENCRYPTION:
@@ -47,7 +47,7 @@ const getIcon = (kind: Kind) => {
     }
 };
 
-const getSetupCaption = (kind: Kind) => {
+const getSetupCaption = (kind: Kind): string => {
     switch (kind) {
         case Kind.SET_UP_ENCRYPTION:
             return _t("Continue");
@@ -58,7 +58,7 @@ const getSetupCaption = (kind: Kind) => {
     }
 };
 
-const getDescription = (kind: Kind) => {
+const getDescription = (kind: Kind): string => {
     switch (kind) {
         case Kind.SET_UP_ENCRYPTION:
         case Kind.UPGRADE_ENCRYPTION:
@@ -74,16 +74,16 @@ export enum Kind {
     VERIFY_THIS_SESSION = "verify_this_session",
 }
 
-const onReject = () => {
+const onReject = (): void => {
     DeviceListener.sharedInstance().dismissEncryptionSetup();
 };
 
-export const showToast = (kind: Kind) => {
+export const showToast = (kind: Kind): void => {
     if (SecurityCustomisations.setupEncryptionNeeded?.(kind)) {
         return;
     }
 
-    const onAccept = async () => {
+    const onAccept = async (): Promise<void> => {
         if (kind === Kind.VERIFY_THIS_SESSION) {
             Modal.createDialog(SetupEncryptionDialog, {}, null, /* priority = */ false, /* static = */ true);
         } else {
@@ -118,6 +118,6 @@ export const showToast = (kind: Kind) => {
     });
 };
 
-export const hideToast = () => {
+export const hideToast = (): void => {
     ToastStore.sharedInstance().dismissToast(TOAST_KEY);
 };

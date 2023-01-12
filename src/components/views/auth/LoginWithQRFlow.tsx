@@ -45,14 +45,14 @@ export default class LoginWithQRFlow extends React.Component<IProps> {
         super(props);
     }
 
-    private handleClick = (type: Click) => {
-        return async (e: React.FormEvent) => {
+    private handleClick = (type: Click): ((e: React.FormEvent) => Promise<void>) => {
+        return async (e: React.FormEvent): Promise<void> => {
             e.preventDefault();
             await this.props.onClick(type);
         };
     };
 
-    private cancelButton = () => (
+    private cancelButton = (): JSX.Element => (
         <AccessibleButton data-testid="cancel-button" kind="primary_outline" onClick={this.handleClick(Click.Cancel)}>
             {_t("Cancel")}
         </AccessibleButton>
@@ -69,7 +69,7 @@ export default class LoginWithQRFlow extends React.Component<IProps> {
         );
     };
 
-    public render() {
+    public render(): JSX.Element {
         let title = "";
         let titleIcon: JSX.Element | undefined;
         let main: JSX.Element | undefined;

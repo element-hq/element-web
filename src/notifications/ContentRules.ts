@@ -92,7 +92,9 @@ export class ContentRules {
         }
     }
 
-    private static categoriseContentRules(rulesets: IPushRules) {
+    private static categoriseContentRules(
+        rulesets: IPushRules,
+    ): Record<"on" | "on_but_disabled" | "loud" | "loud_but_disabled" | "other", IAnnotatedPushRule[]> {
         const contentRules: Record<
             "on" | "on_but_disabled" | "loud" | "loud_but_disabled" | "other",
             IAnnotatedPushRule[]

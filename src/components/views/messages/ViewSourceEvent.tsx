@@ -50,7 +50,7 @@ export default class ViewSourceEvent extends React.PureComponent<IProps, IState>
         }
     }
 
-    private onToggle = (ev: React.MouseEvent) => {
+    private onToggle = (ev: React.MouseEvent): void => {
         ev.preventDefault();
         const { expanded } = this.state;
         this.setState({

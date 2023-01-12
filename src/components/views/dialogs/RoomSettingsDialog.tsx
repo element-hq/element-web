@@ -60,13 +60,13 @@ export default class RoomSettingsDialog extends React.Component<IProps, IState> 
         this.state = { roomName: "" };
     }
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         this.dispatcherRef = dis.register(this.onAction);
         MatrixClientPeg.get().on(RoomEvent.Name, this.onRoomName);
         this.onRoomName();
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         if (this.dispatcherRef) {
             dis.unregister(this.dispatcherRef);
         }
@@ -180,7 +180,7 @@ export default class RoomSettingsDialog extends React.Component<IProps, IState> 
         return tabs;
     }
 
-    public render() {
+    public render(): JSX.Element {
         const roomName = this.state.roomName;
         return (
             <BaseDialog

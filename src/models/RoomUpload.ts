@@ -30,7 +30,7 @@ export class RoomUpload {
         public fileSize = 0,
     ) {}
 
-    public onProgress(progress: UploadProgress) {
+    public onProgress(progress: UploadProgress): void {
         this.uploaded = progress.loaded;
         this.fileSize = progress.total;
     }

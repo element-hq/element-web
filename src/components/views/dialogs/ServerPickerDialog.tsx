@@ -26,7 +26,7 @@ import SdkConfig from "../../../SdkConfig";
 import Field from "../elements/Field";
 import StyledRadioButton from "../elements/StyledRadioButton";
 import TextWithTooltip from "../elements/TextWithTooltip";
-import withValidation, { IFieldState } from "../elements/Validation";
+import withValidation, { IFieldState, IValidationResult } from "../elements/Validation";
 import { ValidatedServerConfig } from "../../../utils/ValidatedServerConfig";
 
 interface IProps {
@@ -67,15 +67,15 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
         };
     }
 
-    private onDefaultChosen = () => {
+    private onDefaultChosen = (): void => {
         this.setState({ defaultChosen: true });
     };
 
-    private onOtherChosen = () => {
+    private onOtherChosen = (): void => {
         this.setState({ defaultChosen: false });
     };
 
-    private onHomeserverChange = (ev) => {
+    private onHomeserverChange = (ev): void => {
         this.setState({ otherHomeserver: ev.target.value });
     };
 
@@ -83,7 +83,7 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
     // If for some reason someone enters "matrix.org" for a URL, we could do a lookup to
     // find their homeserver without demanding they use "https://matrix.org"
     private validate = withValidation<this, { error?: string }>({
-        deriveData: async ({ value }) => {
+        deriveData: async ({ value }): Promise<{ error?: string }> => {
             let hsUrl = value.trim(); // trim to account for random whitespace
 
             // if the URL has no protocol, try validate it as a serverName via well-known
@@ -136,7 +136,7 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
             },
             {
                 key: "valid",
-                test: async function ({ value }, { error }) {
+                test: async function ({ value }, { error }): Promise<boolean> {
                     if (!value) return true;
                     return !error;
                 },
@@ -147,9 +147,9 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
         ],
     });
 
-    private onHomeserverValidate = (fieldState: IFieldState) => this.validate(fieldState);
+    private onHomeserverValidate = (fieldState: IFieldState): Promise<IValidationResult> => this.validate(fieldState);
 
-    private onSubmit = async (ev) => {
+    private onSubmit = async (ev): Promise<void> => {
         ev.preventDefault();
 
         const valid = await this.fieldRef.current.validate({ allowEmpty: false });
@@ -163,7 +163,7 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
         this.props.onFinished(this.state.defaultChosen ? this.defaultServer : this.validatedConf);
     };
 
-    public render() {
+    public render(): JSX.Element {
         let text;
         if (this.defaultServer.hsName === "matrix.org") {
             text = _t("Matrix.org is the biggest public homeserver in the world, so it's a good place for many.");

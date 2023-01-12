@@ -27,7 +27,22 @@ import { tileServerFromWellKnown } from "../../../utils/WellKnownUtils";
 import { useMap } from "../../../utils/location/useMap";
 import { Bounds } from "../../../utils/beacon/bounds";
 
-const useMapWithStyle = ({ id, centerGeoUri, onError, interactive, bounds }) => {
+const useMapWithStyle = ({
+    id,
+    centerGeoUri,
+    onError,
+    interactive,
+    bounds,
+}: {
+    id: string;
+    centerGeoUri?: string;
+    interactive?: boolean;
+    bounds?: Bounds;
+    onError(error: Error): void;
+}): {
+    map: maplibregl.Map;
+    bodyId: string;
+} => {
     const bodyId = `mx_Map_${id}`;
 
     // style config
@@ -98,7 +113,7 @@ interface MapProps {
 const Map: React.FC<MapProps> = ({ bounds, centerGeoUri, children, className, id, interactive, onError, onClick }) => {
     const { map, bodyId } = useMapWithStyle({ centerGeoUri, onError, id, interactive, bounds });
 
-    const onMapClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const onMapClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
         // Eat click events when clicking the attribution button
         const target = event.target as Element;
         if (target.classList.contains("maplibregl-ctrl-attrib-button")) {

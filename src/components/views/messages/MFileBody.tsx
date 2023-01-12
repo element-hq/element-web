@@ -32,7 +32,7 @@ import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContex
 
 export let DOWNLOAD_ICON_URL; // cached copy of the download.svg asset for the sandboxed iframe later on
 
-async function cacheDownloadIcon() {
+async function cacheDownloadIcon(): Promise<void> {
     if (DOWNLOAD_ICON_URL) return; // cached already
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const svg = await fetch(require("../../../../res/img/download.svg").default).then((r) => r.text());
@@ -78,7 +78,7 @@ cacheDownloadIcon();
  * @param {HTMLElement} element The element to get the current style of.
  * @return {string} The CSS style encoded as a string.
  */
-export function computedStyle(element: HTMLElement) {
+export function computedStyle(element: HTMLElement): string {
     if (!element) {
         return "";
     }
@@ -141,7 +141,7 @@ export default class MFileBody extends React.Component<IProps, IState> {
         return presentableTextForFile(this.content);
     }
 
-    private downloadFile(fileName: string, text: string) {
+    private downloadFile(fileName: string, text: string): void {
         this.fileDownloader.download({
             blob: this.state.decryptedBlob,
             name: fileName,
@@ -155,7 +155,7 @@ export default class MFileBody extends React.Component<IProps, IState> {
         });
     }
 
-    public componentDidUpdate(prevProps, prevState) {
+    public componentDidUpdate(prevProps, prevState): void {
         if (this.props.onHeightChanged && !prevState.decryptedBlob && this.state.decryptedBlob) {
             this.props.onHeightChanged();
         }
@@ -179,7 +179,7 @@ export default class MFileBody extends React.Component<IProps, IState> {
         }
     };
 
-    private onPlaceholderClick = async () => {
+    private onPlaceholderClick = async (): Promise<void> => {
         const mediaHelper = this.props.mediaEventHelper;
         if (mediaHelper?.media.isEncrypted) {
             await this.decryptFile();
@@ -194,7 +194,7 @@ export default class MFileBody extends React.Component<IProps, IState> {
         }
     };
 
-    public render() {
+    public render(): JSX.Element {
         const isEncrypted = this.props.mediaEventHelper?.media.isEncrypted;
         const contentUrl = this.getContentUrl();
         const fileSize = this.content.info ? this.content.info.size : null;

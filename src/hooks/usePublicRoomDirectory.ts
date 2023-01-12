@@ -38,7 +38,15 @@ export interface IPublicRoomsOpts {
 
 let thirdParty: Protocols;
 
-export const usePublicRoomDirectory = () => {
+export const usePublicRoomDirectory = (): {
+    ready: boolean;
+    loading: boolean;
+    publicRooms: IPublicRoomsChunkRoom[];
+    protocols: Protocols | null;
+    config?: IPublicRoomDirectoryConfig | null;
+    setConfig(config: IPublicRoomDirectoryConfig): void;
+    search(opts: IPublicRoomsOpts): Promise<boolean>;
+} => {
     const [publicRooms, setPublicRooms] = useState<IPublicRoomsChunkRoom[]>([]);
 
     const [config, setConfigInternal] = useState<IPublicRoomDirectoryConfig | null | undefined>(undefined);
@@ -50,7 +58,7 @@ export const usePublicRoomDirectory = () => {
 
     const [updateQuery, updateResult] = useLatestResult<IRoomDirectoryOptions, IPublicRoomsChunkRoom[]>(setPublicRooms);
 
-    async function initProtocols() {
+    async function initProtocols(): Promise<void> {
         if (!MatrixClientPeg.get()) {
             // We may not have a client yet when invoked from welcome page
             setReady(true);
@@ -63,7 +71,7 @@ export const usePublicRoomDirectory = () => {
         }
     }
 
-    function setConfig(config: IPublicRoomDirectoryConfig) {
+    function setConfig(config: IPublicRoomDirectoryConfig): void {
         if (!ready) {
             throw new Error("public room configuration not initialised yet");
         } else {

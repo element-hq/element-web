@@ -33,7 +33,7 @@ interface ISSOButtonProps extends Omit<IProps, "flow"> {
     mini?: boolean;
 }
 
-const getIcon = (brand: IdentityProviderBrand | string) => {
+const getIcon = (brand: IdentityProviderBrand | string): string | null => {
     switch (brand) {
         case IdentityProviderBrand.Apple:
             return require(`../../../../res/img/element-icons/brands/apple.svg`).default;
@@ -83,7 +83,7 @@ const SSOButton: React.FC<ISSOButtonProps> = ({
 }) => {
     const label = idp ? _t("Continue with %(provider)s", { provider: idp.name }) : _t("Sign in with single sign-on");
 
-    const onClick = () => {
+    const onClick = (): void => {
         const authenticationType = getAuthenticationType(idp?.brand ?? "");
         PosthogAnalytics.instance.setAuthenticationType(authenticationType);
         PlatformPeg.get().startSingleSignOn(matrixClient, loginType, fragmentAfterLogin, idp?.id);

@@ -32,14 +32,14 @@ interface IProps {
     onFinished?(): void;
 }
 
-const SpacePublicShare = ({ space, onFinished }: IProps) => {
+const SpacePublicShare: React.FC<IProps> = ({ space, onFinished }) => {
     const [copiedText, setCopiedText] = useState(_t("Click to copy"));
 
     return (
         <div className="mx_SpacePublicShare">
             <AccessibleButton
                 className="mx_SpacePublicShare_shareButton"
-                onClick={async () => {
+                onClick={async (): Promise<void> => {
                     const permalinkCreator = new RoomPermalinkCreator(space);
                     permalinkCreator.load();
                     const success = await copyPlaintext(permalinkCreator.forShareableRoom());

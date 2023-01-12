@@ -169,7 +169,7 @@ export default class LegacyCallHandler extends EventEmitter {
 
     private silencedCalls = new Set<string>(); // callIds
 
-    public static get instance() {
+    public static get instance(): LegacyCallHandler {
         if (!window.mxLegacyCallHandler) {
             window.mxLegacyCallHandler = new LegacyCallHandler();
         }
@@ -456,7 +456,7 @@ export default class LegacyCallHandler extends EventEmitter {
         return callsNotInThatRoom;
     }
 
-    public getAllActiveCallsForPip(roomId: string) {
+    public getAllActiveCallsForPip(roomId: string): MatrixCall[] {
         const room = MatrixClientPeg.get().getRoom(roomId);
         if (WidgetLayoutStore.instance.hasMaximisedWidget(room)) {
             // This checks if there is space for the call view in the aux panel
@@ -478,7 +478,7 @@ export default class LegacyCallHandler extends EventEmitter {
         const audio = document.getElementById(audioId) as HTMLMediaElement;
         if (audio) {
             this.addEventListenersForAudioElement(audio);
-            const playAudio = async () => {
+            const playAudio = async (): Promise<void> => {
                 try {
                     if (audio.muted) {
                         logger.error(
@@ -524,7 +524,7 @@ export default class LegacyCallHandler extends EventEmitter {
         // TODO: Attach an invisible element for this instead
         // which listens?
         const audio = document.getElementById(audioId) as HTMLMediaElement;
-        const pauseAudio = () => {
+        const pauseAudio = (): void => {
             logger.debug(`${logPrefix} pausing audio`);
             // pause doesn't return a promise, so just do it
             audio.pause();
@@ -600,7 +600,7 @@ export default class LegacyCallHandler extends EventEmitter {
             this.setCallListeners(newCall);
             this.setCallState(newCall, newCall.state);
         });
-        call.on(CallEvent.AssertedIdentityChanged, async () => {
+        call.on(CallEvent.AssertedIdentityChanged, async (): Promise<void> => {
             if (!this.matchesCallForThisRoom(call)) return;
 
             logger.log(`Call ID ${call.callId} got new asserted identity:`, call.getRemoteAssertedIdentity());
@@ -808,7 +808,7 @@ export default class LegacyCallHandler extends EventEmitter {
 
     private showICEFallbackPrompt(): void {
         const cli = MatrixClientPeg.get();
-        const code = (sub) => <code>{sub}</code>;
+        const code = (sub: string): JSX.Element => <code>{sub}</code>;
         Modal.createDialog(
             QuestionDialog,
             {

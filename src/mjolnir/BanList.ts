@@ -91,7 +91,7 @@ export class BanList {
         });
     }
 
-    public updateList() {
+    public updateList(): void {
         this._rules = [];
 
         const room = MatrixClientPeg.get().getRoom(this._roomId);

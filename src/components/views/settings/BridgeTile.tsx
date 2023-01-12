@@ -65,7 +65,7 @@ interface IBridgeStateEvent {
 }
 
 export default class BridgeTile extends React.PureComponent<IProps> {
-    public render() {
+    public render(): JSX.Element {
         const content: IBridgeStateEvent = this.props.ev.getContent();
         // Validate
         if (!content.channel?.id || !content.protocol?.id) {

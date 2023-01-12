@@ -88,7 +88,7 @@ export class FileDownloader {
         return iframe;
     }
 
-    public async download({ blob, name, autoDownload = true, opts = DEFAULT_STYLES }: DownloadOptions) {
+    public async download({ blob, name, autoDownload = true, opts = DEFAULT_STYLES }: DownloadOptions): Promise<void> {
         const iframe = this.iframe; // get the iframe first just in case we need to await onload
         if (this.onLoadPromise) await this.onLoadPromise;
         iframe.contentWindow.postMessage(

@@ -51,7 +51,7 @@ export default class LiveRecordingWaveform extends React.PureComponent<IProps, I
         };
     }
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         this.props.recorder.liveData.onUpdate((update: IRecordingUpdate) => {
             // The incoming data is between zero and one, so we don't need to clamp/rescale it.
             this.waveform = arrayFastResample(Array.from(update.waveform), RECORDING_PLAYBACK_SAMPLES);
@@ -59,11 +59,11 @@ export default class LiveRecordingWaveform extends React.PureComponent<IProps, I
         });
     }
 
-    private updateWaveform() {
+    private updateWaveform(): void {
         this.setState({ waveform: this.waveform });
     }
 
-    public render() {
+    public render(): JSX.Element {
         return <Waveform relHeights={this.state.waveform} />;
     }
 }

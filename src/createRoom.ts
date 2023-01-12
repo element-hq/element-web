@@ -294,7 +294,7 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
         .finally(function () {
             if (modal) modal.close();
         })
-        .then(async (res) => {
+        .then(async (res): Promise<void> => {
             roomId = res.room_id;
 
             room = new Promise((resolve) => {
@@ -303,7 +303,7 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
                     resolve(storedRoom);
                 } else {
                     // The room hasn't arrived down sync yet
-                    const onRoom = (emittedRoom: Room) => {
+                    const onRoom = (emittedRoom: Room): void => {
                         if (emittedRoom.roomId === roomId) {
                             resolve(emittedRoom);
                             client.off(ClientEvent.Room, onRoom);
@@ -325,7 +325,7 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
                 );
             }
         })
-        .then(async () => {
+        .then(async (): Promise<void> => {
             if (opts.roomType === RoomType.ElementVideo) {
                 // Set up this video room with a Jitsi call
                 await JitsiCall.create(await room);
@@ -395,7 +395,7 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
  * Ensure that for every user in a room, there is at least one device that we
  * can encrypt to.
  */
-export async function canEncryptToAllUsers(client: MatrixClient, userIds: string[]) {
+export async function canEncryptToAllUsers(client: MatrixClient, userIds: string[]): Promise<boolean> {
     try {
         const usersDeviceMap = await client.downloadKeys(userIds);
         // { "@user:host": { "DEVICE": {...}, ... }, ... }

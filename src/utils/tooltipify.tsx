@@ -31,7 +31,7 @@ import LinkWithTooltip from "../components/views/elements/LinkWithTooltip";
  *   React components that have been mounted by this function. The initial caller
  *   should pass in an empty array to seed the accumulator.
  */
-export function tooltipifyLinks(rootNodes: ArrayLike<Element>, ignoredNodes: Element[], containers: Element[]) {
+export function tooltipifyLinks(rootNodes: ArrayLike<Element>, ignoredNodes: Element[], containers: Element[]): void {
     if (!PlatformPeg.get()?.needsUrlTooltips()) {
         return;
     }
@@ -83,7 +83,7 @@ export function tooltipifyLinks(rootNodes: ArrayLike<Element>, ignoredNodes: Ele
  *
  * @param {Element[]} containers - array of tooltip containers to unmount
  */
-export function unmountTooltips(containers: Element[]) {
+export function unmountTooltips(containers: Element[]): void {
     for (const container of containers) {
         ReactDOM.unmountComponentAtNode(container);
     }

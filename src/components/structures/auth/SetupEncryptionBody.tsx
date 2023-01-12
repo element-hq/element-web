@@ -61,7 +61,7 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
         };
     }
 
-    private onStoreUpdate = () => {
+    private onStoreUpdate = (): void => {
         const store = SetupEncryptionStore.sharedInstance();
         if (store.phase === Phase.Finished) {
             this.props.onFinished();
@@ -75,18 +75,18 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
         });
     };
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         const store = SetupEncryptionStore.sharedInstance();
         store.off("update", this.onStoreUpdate);
         store.stop();
     }
 
-    private onUsePassphraseClick = async () => {
+    private onUsePassphraseClick = async (): Promise<void> => {
         const store = SetupEncryptionStore.sharedInstance();
         store.usePassPhrase();
     };
 
-    private onVerifyClick = () => {
+    private onVerifyClick = (): void => {
         const cli = MatrixClientPeg.get();
         const userId = cli.getUserId();
         const requestPromise = cli.requestVerification(userId);
@@ -97,7 +97,7 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
         Modal.createDialog(VerificationRequestDialog, {
             verificationRequestPromise: requestPromise,
             member: cli.getUser(userId),
-            onFinished: async () => {
+            onFinished: async (): Promise<void> => {
                 const request = await requestPromise;
                 request.cancel();
                 this.props.onFinished();
@@ -105,43 +105,43 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
         });
     };
 
-    private onSkipConfirmClick = () => {
+    private onSkipConfirmClick = (): void => {
         const store = SetupEncryptionStore.sharedInstance();
         store.skipConfirm();
     };
 
-    private onSkipBackClick = () => {
+    private onSkipBackClick = (): void => {
         const store = SetupEncryptionStore.sharedInstance();
         store.returnAfterSkip();
     };
 
-    private onResetClick = (ev: React.MouseEvent<HTMLButtonElement>) => {
+    private onResetClick = (ev: React.MouseEvent<HTMLButtonElement>): void => {
         ev.preventDefault();
         const store = SetupEncryptionStore.sharedInstance();
         store.reset();
     };
 
-    private onResetConfirmClick = () => {
+    private onResetConfirmClick = (): void => {
         this.props.onFinished();
         const store = SetupEncryptionStore.sharedInstance();
         store.resetConfirm();
     };
 
-    private onResetBackClick = () => {
+    private onResetBackClick = (): void => {
         const store = SetupEncryptionStore.sharedInstance();
         store.returnAfterReset();
     };
 
-    private onDoneClick = () => {
+    private onDoneClick = (): void => {
         const store = SetupEncryptionStore.sharedInstance();
         store.done();
     };
 
-    private onEncryptionPanelClose = () => {
+    private onEncryptionPanelClose = (): void => {
         this.props.onFinished();
     };
 
-    public render() {
+    public render(): JSX.Element {
         const { phase, lostKeys } = this.state;
 
         if (this.state.verificationRequest) {

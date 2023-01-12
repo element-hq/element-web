@@ -23,7 +23,12 @@ import { messageForResourceLimitError } from "../utils/ErrorUtils";
 
 const TOAST_KEY = "serverlimit";
 
-export const showToast = (limitType: string, onHideToast: () => void, adminContact?: string, syncError?: boolean) => {
+export const showToast = (
+    limitType: string,
+    onHideToast: () => void,
+    adminContact?: string,
+    syncError?: boolean,
+): void => {
     const errorText = messageForResourceLimitError(limitType, adminContact, {
         "monthly_active_user": _td("Your homeserver has exceeded its user limit."),
         "hs_blocked": _td("This homeserver has been blocked by its administrator."),
@@ -53,6 +58,6 @@ export const showToast = (limitType: string, onHideToast: () => void, adminConta
     });
 };
 
-export const hideToast = () => {
+export const hideToast = (): void => {
     ToastStore.sharedInstance().dismissToast(TOAST_KEY);
 };

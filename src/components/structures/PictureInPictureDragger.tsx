@@ -79,7 +79,7 @@ export default class PictureInPictureDragger extends React.Component<IProps> {
         this._moving = value;
     }
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         document.addEventListener("mousemove", this.onMoving);
         document.addEventListener("mouseup", this.onEndMoving);
         UIStore.instance.on(UI_EVENTS.Resize, this.onResize);
@@ -87,7 +87,7 @@ export default class PictureInPictureDragger extends React.Component<IProps> {
         this.snap();
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         document.removeEventListener("mousemove", this.onMoving);
         document.removeEventListener("mouseup", this.onEndMoving);
         UIStore.instance.off(UI_EVENTS.Resize, this.onResize);
@@ -97,7 +97,7 @@ export default class PictureInPictureDragger extends React.Component<IProps> {
         if (prevProps.children !== this.props.children) this.snap(true);
     }
 
-    private animationCallback = () => {
+    private animationCallback = (): void => {
         if (
             !this.moving &&
             Math.abs(this.translationX - this.desiredTranslationX) <= 1 &&
@@ -119,13 +119,13 @@ export default class PictureInPictureDragger extends React.Component<IProps> {
         this.props.onMove?.();
     };
 
-    private setStyle = () => {
+    private setStyle = (): void => {
         if (!this.callViewWrapper.current) return;
         // Set the element's style directly, bypassing React for efficiency
         this.callViewWrapper.current.style.transform = `translateX(${this.translationX}px) translateY(${this.translationY}px)`;
     };
 
-    private setTranslation(inTranslationX: number, inTranslationY: number) {
+    private setTranslation(inTranslationX: number, inTranslationY: number): void {
         const width = this.callViewWrapper.current?.clientWidth || PIP_VIEW_WIDTH;
         const height = this.callViewWrapper.current?.clientHeight || PIP_VIEW_HEIGHT;
 
@@ -152,7 +152,7 @@ export default class PictureInPictureDragger extends React.Component<IProps> {
         this.snap(false);
     };
 
-    private snap = (animate = false) => {
+    private snap = (animate = false): void => {
         const translationX = this.desiredTranslationX;
         const translationY = this.desiredTranslationY;
         // We subtract the PiP size from the window size in order to calculate
@@ -187,14 +187,14 @@ export default class PictureInPictureDragger extends React.Component<IProps> {
         this.scheduledUpdate.mark();
     };
 
-    private onStartMoving = (event: React.MouseEvent | MouseEvent) => {
+    private onStartMoving = (event: React.MouseEvent | MouseEvent): void => {
         event.preventDefault();
         event.stopPropagation();
 
         this.mouseHeld = true;
     };
 
-    private onMoving = (event: MouseEvent) => {
+    private onMoving = (event: MouseEvent): void => {
         if (!this.mouseHeld) return;
 
         event.preventDefault();
@@ -210,7 +210,7 @@ export default class PictureInPictureDragger extends React.Component<IProps> {
         this.setTranslation(event.pageX - this.initX, event.pageY - this.initY);
     };
 
-    private onEndMoving = (event: MouseEvent) => {
+    private onEndMoving = (event: MouseEvent): void => {
         if (!this.mouseHeld) return;
 
         event.preventDefault();
@@ -223,7 +223,7 @@ export default class PictureInPictureDragger extends React.Component<IProps> {
         this.snap(true);
     };
 
-    private onClickCapture = (event: React.MouseEvent) => {
+    private onClickCapture = (event: React.MouseEvent): void => {
         // To prevent mouse up events during dragging from being double-counted
         // as clicks, we cancel clicks before they ever reach the target
         if (this.moving) {
@@ -232,7 +232,7 @@ export default class PictureInPictureDragger extends React.Component<IProps> {
         }
     };
 
-    public render() {
+    public render(): JSX.Element {
         const style = {
             transform: `translateX(${this.translationX}px) translateY(${this.translationY}px)`,
         };

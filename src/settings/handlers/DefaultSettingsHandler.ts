@@ -43,7 +43,7 @@ export default class DefaultSettingsHandler extends SettingsHandler {
         throw new Error("Cannot set values on the default level handler");
     }
 
-    public canSetValue(settingName: string, roomId: string) {
+    public canSetValue(settingName: string, roomId: string): boolean {
         return false;
     }
 

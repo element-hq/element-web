@@ -130,7 +130,7 @@ export default class InteractiveAuthComponent extends React.Component<IProps, IS
         }
     }
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         this.authLogic
             .attemptAuth()
             .then((result) => {
@@ -155,7 +155,7 @@ export default class InteractiveAuthComponent extends React.Component<IProps, IS
             });
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         this.unmounted = true;
 
         if (this.intervalId !== null) {
@@ -249,7 +249,7 @@ export default class InteractiveAuthComponent extends React.Component<IProps, IS
         this.authLogic.setEmailSid(sid);
     };
 
-    public render() {
+    public render(): JSX.Element {
         const stage = this.state.authStage;
         if (!stage) {
             if (this.state.busy) {

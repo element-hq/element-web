@@ -136,7 +136,7 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
         return !!this.clearPositionWatch;
     }
 
-    protected async onNotReady() {
+    protected async onNotReady(): Promise<void> {
         this.matrixClient.removeListener(BeaconEvent.LivenessChange, this.onBeaconLiveness);
         this.matrixClient.removeListener(BeaconEvent.New, this.onNewBeacon);
         this.matrixClient.removeListener(BeaconEvent.Update, this.onUpdateBeacon);
@@ -302,13 +302,13 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
     /**
      * Live beacon ids that do not have wire errors
      */
-    private get healthyLiveBeaconIds() {
+    private get healthyLiveBeaconIds(): string[] {
         return this.liveBeaconIds.filter(
             (beaconId) => !this.beaconHasLocationPublishError(beaconId) && !this.beaconUpdateErrors.has(beaconId),
         );
     }
 
-    private initialiseBeaconState = () => {
+    private initialiseBeaconState = (): void => {
         const userId = this.matrixClient.getUserId();
         const visibleRooms = this.matrixClient.getVisibleRooms();
 
@@ -411,7 +411,7 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
      * Geolocation
      */
 
-    private togglePollingLocation = () => {
+    private togglePollingLocation = (): void => {
         if (!!this.liveBeaconIds.length) {
             this.startPollingLocation();
         } else {
@@ -419,7 +419,7 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
         }
     };
 
-    private startPollingLocation = async () => {
+    private startPollingLocation = async (): Promise<void> => {
         // clear any existing interval
         this.stopPollingLocation();
 
@@ -445,7 +445,7 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
         this.emit(OwnBeaconStoreEvent.MonitoringLivePosition);
     };
 
-    private stopPollingLocation = () => {
+    private stopPollingLocation = (): void => {
         clearInterval(this.locationInterval);
         this.locationInterval = undefined;
         this.lastPublishedPositionTimestamp = undefined;
@@ -459,7 +459,7 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
         this.emit(OwnBeaconStoreEvent.MonitoringLivePosition);
     };
 
-    private onWatchedPosition = (position: GeolocationPosition) => {
+    private onWatchedPosition = (position: GeolocationPosition): void => {
         const timedGeoPosition = mapGeolocationPositionToTimedGeo(position);
 
         // if this is our first position, publish immediately
@@ -490,7 +490,7 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
      * (as opposed to using watched location)
      * and publishes it to all live beacons
      */
-    private publishCurrentLocationToBeacons = async () => {
+    private publishCurrentLocationToBeacons = async (): Promise<void> => {
         try {
             const position = await getCurrentPosition();
             this.publishLocationToBeacons(mapGeolocationPositionToTimedGeo(position));
@@ -537,7 +537,7 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
      * Sends m.location events to all live beacons
      * Sets last published beacon
      */
-    private publishLocationToBeacons = async (position: TimedGeoUri) => {
+    private publishLocationToBeacons = async (position: TimedGeoUri): Promise<void> => {
         this.lastPublishedPositionTimestamp = Date.now();
         await Promise.all(
             this.healthyLiveBeaconIds.map((beaconId) =>
@@ -551,7 +551,7 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
     /**
      * Sends m.location event to referencing given beacon
      */
-    private sendLocationToBeacon = async (beacon: Beacon, { geoUri, timestamp }: TimedGeoUri) => {
+    private sendLocationToBeacon = async (beacon: Beacon, { geoUri, timestamp }: TimedGeoUri): Promise<void> => {
         const content = makeBeaconContent(geoUri, timestamp, beacon.beaconInfoId);
         try {
             await this.matrixClient.sendEvent(beacon.roomId, M_BEACON.name, content);

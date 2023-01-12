@@ -56,7 +56,7 @@ function isMultiLine(node: commonmark.Node): boolean {
     return par.firstChild != par.lastChild;
 }
 
-function getTextUntilEndOrLinebreak(node: commonmark.Node) {
+function getTextUntilEndOrLinebreak(node: commonmark.Node): string {
     let currentNode = node;
     let text = "";
     while (currentNode !== null && currentNode.type !== "softbreak" && currentNode.type !== "linebreak") {
@@ -137,7 +137,7 @@ export default class Markdown {
      * See: https://github.com/vector-im/element-web/issues/4674
      * @param parsed
      */
-    private repairLinks(parsed: commonmark.Node) {
+    private repairLinks(parsed: commonmark.Node): commonmark.Node {
         const walker = parsed.walker();
         let event: commonmark.NodeWalkingStep = null;
         let text = "";

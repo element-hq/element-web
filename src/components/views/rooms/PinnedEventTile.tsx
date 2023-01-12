@@ -46,7 +46,7 @@ const AVATAR_SIZE = 24;
 export default class PinnedEventTile extends React.Component<IProps> {
     public static contextType = MatrixClientContext;
 
-    private onTileClicked = () => {
+    private onTileClicked = (): void => {
         dis.dispatch<ViewRoomPayload>({
             action: Action.ViewRoom,
             event_id: this.props.event.getId(),
@@ -69,7 +69,7 @@ export default class PinnedEventTile extends React.Component<IProps> {
         }
     };
 
-    public async componentDidMount() {
+    public async componentDidMount(): Promise<void> {
         // Fetch poll responses
         if (M_POLL_START.matches(this.props.event.getType())) {
             const eventId = this.props.event.getId();
@@ -79,7 +79,7 @@ export default class PinnedEventTile extends React.Component<IProps> {
             try {
                 await Promise.all(
                     [M_POLL_RESPONSE.name, M_POLL_RESPONSE.altName, M_POLL_END.name, M_POLL_END.altName].map(
-                        async (eventType) => {
+                        async (eventType): Promise<void> => {
                             const relations = new Relations(RelationType.Reference, eventType, room);
                             relations.setTargetEvent(this.props.event);
 
@@ -110,7 +110,7 @@ export default class PinnedEventTile extends React.Component<IProps> {
         }
     }
 
-    public render() {
+    public render(): JSX.Element {
         const sender = this.props.event.getSender();
 
         let unpinButton = null;

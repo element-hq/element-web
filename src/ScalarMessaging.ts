@@ -711,7 +711,7 @@ function returnStateEvent(event: MessageEvent<any>, roomId: string, eventType: s
     sendResponse(event, stateEvent.getContent());
 }
 
-async function getOpenIdToken(event: MessageEvent<any>) {
+async function getOpenIdToken(event: MessageEvent<any>): Promise<void> {
     try {
         const tokenObject = await MatrixClientPeg.get().getOpenIdToken();
         sendResponse(event, tokenObject);
@@ -728,7 +728,7 @@ async function sendEvent(
         content?: IContent;
     }>,
     roomId: string,
-) {
+): Promise<void> {
     const eventType = event.data.type;
     const stateKey = event.data.state_key;
     const content = event.data.content;
@@ -786,7 +786,7 @@ async function readEvents(
         limit?: number;
     }>,
     roomId: string,
-) {
+): Promise<void> {
     const eventType = event.data.type;
     const stateKey = event.data.state_key;
     const limit = event.data.limit;

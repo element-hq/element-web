@@ -61,15 +61,12 @@ type ThreadPanelHeaderOption = {
     key: ThreadFilterType;
 };
 
-export const ThreadPanelHeaderFilterOptionItem = ({
-    label,
-    description,
-    onClick,
-    isSelected,
-}: ThreadPanelHeaderOption & {
-    onClick: () => void;
-    isSelected: boolean;
-}) => {
+export const ThreadPanelHeaderFilterOptionItem: React.FC<
+    ThreadPanelHeaderOption & {
+        onClick: () => void;
+        isSelected: boolean;
+    }
+> = ({ label, description, onClick, isSelected }) => {
     return (
         <MenuItemRadio active={isSelected} className="mx_ThreadPanel_Header_FilterOptionItem" onClick={onClick}>
             <span>{label}</span>
@@ -78,15 +75,11 @@ export const ThreadPanelHeaderFilterOptionItem = ({
     );
 };
 
-export const ThreadPanelHeader = ({
-    filterOption,
-    setFilterOption,
-    empty,
-}: {
+export const ThreadPanelHeader: React.FC<{
     filterOption: ThreadFilterType;
     setFilterOption: (filterOption: ThreadFilterType) => void;
     empty: boolean;
-}) => {
+}> = ({ filterOption, setFilterOption, empty }) => {
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu<HTMLElement>();
     const options: readonly ThreadPanelHeaderOption[] = [
         {

@@ -17,5 +17,5 @@ limitations under the License.
 import type { Room } from "matrix-js-sdk/src/models/room";
 import SettingsStore from "../settings/SettingsStore";
 
-export const isVideoRoom = (room: Room) =>
+export const isVideoRoom = (room: Room): boolean =>
     room.isElementVideoRoom() || (SettingsStore.getValue("feature_element_call_video_rooms") && room.isCallRoom());

@@ -47,7 +47,11 @@ interface EditWysiwygComposerProps {
 }
 
 // Default needed for React.lazy
-export default function EditWysiwygComposer({ editorStateTransfer, className, ...props }: EditWysiwygComposerProps) {
+export default function EditWysiwygComposer({
+    editorStateTransfer,
+    className,
+    ...props
+}: EditWysiwygComposerProps): JSX.Element {
     const defaultContextValue = useRef(getDefaultContextValue());
     const initialContent = useInitialContent(editorStateTransfer);
     const isReady = !editorStateTransfer || initialContent !== undefined;

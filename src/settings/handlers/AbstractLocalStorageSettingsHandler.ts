@@ -26,7 +26,7 @@ export default abstract class AbstractLocalStorageSettingsHandler extends Settin
     private static objectCache = new Map<string, object>();
     private static storageListenerBound = false;
 
-    private static onStorageEvent = (e: StorageEvent) => {
+    private static onStorageEvent = (e: StorageEvent): void => {
         if (e.key === null) {
             AbstractLocalStorageSettingsHandler.clear();
         } else {
@@ -36,7 +36,7 @@ export default abstract class AbstractLocalStorageSettingsHandler extends Settin
     };
 
     // Expose the clear event for Lifecycle to call, the storage listener only fires for changes from other tabs
-    public static clear() {
+    public static clear(): void {
         AbstractLocalStorageSettingsHandler.itemCache.clear();
         AbstractLocalStorageSettingsHandler.objectCache.clear();
     }

@@ -36,11 +36,11 @@ const showPickerDialog = (
     title: string,
     serverConfig: ValidatedServerConfig,
     onFinished: (config: ValidatedServerConfig) => void,
-) => {
+): void => {
     Modal.createDialog(ServerPickerDialog, { title, serverConfig, onFinished });
 };
 
-const onHelpClick = () => {
+const onHelpClick = (): void => {
     const brand = SdkConfig.get().brand;
     Modal.createDialog(
         InfoDialog,
@@ -60,12 +60,12 @@ const onHelpClick = () => {
     );
 };
 
-const ServerPicker = ({ title, dialogTitle, serverConfig, onServerConfigChange }: IProps) => {
+const ServerPicker: React.FC<IProps> = ({ title, dialogTitle, serverConfig, onServerConfigChange }) => {
     const disableCustomUrls = SdkConfig.get("disable_custom_urls");
 
     let editBtn;
     if (!disableCustomUrls && onServerConfigChange) {
-        const onClick = () => {
+        const onClick = (): void => {
             showPickerDialog(dialogTitle, serverConfig, (config?: ValidatedServerConfig) => {
                 if (config) {
                     onServerConfigChange(config);

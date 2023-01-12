@@ -137,7 +137,12 @@ export function getInitialLetter(name: string): string {
     return split(name, "", 1)[0].toUpperCase();
 }
 
-export function avatarUrlForRoom(room: Room, width: number, height: number, resizeMethod?: ResizeMethod) {
+export function avatarUrlForRoom(
+    room: Room,
+    width: number,
+    height: number,
+    resizeMethod?: ResizeMethod,
+): string | null {
     if (!room) return null; // null-guard
 
     if (room.getMxcAvatarUrl()) {

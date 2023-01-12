@@ -24,7 +24,7 @@ import { UseCase } from "../../../settings/enums/UseCase";
 import AccessibleButton, { ButtonEvent } from "../../views/elements/AccessibleButton";
 import Heading from "../../views/typography/Heading";
 
-const onClickSendDm = (ev: ButtonEvent) => {
+const onClickSendDm = (ev: ButtonEvent): void => {
     PosthogTrackers.trackInteraction("WebUserOnboardingHeaderSendDm", ev);
     defaultDispatcher.dispatch({ action: "view_create_chat" });
 };
@@ -33,7 +33,7 @@ interface Props {
     useCase: UseCase;
 }
 
-export function UserOnboardingHeader({ useCase }: Props) {
+export function UserOnboardingHeader({ useCase }: Props): JSX.Element {
     let title: string;
     let description: string;
     let image;

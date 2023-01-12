@@ -99,7 +99,7 @@ export default class PollCreateDialog extends ScrollableBaseModal<IProps, IState
         this.state = props.editingMxEvent ? editingInitialState(props.editingMxEvent) : creatingInitialState();
     }
 
-    private checkCanSubmit() {
+    private checkCanSubmit(): void {
         this.setState({
             canSubmit:
                 !this.state.busy &&
@@ -108,23 +108,23 @@ export default class PollCreateDialog extends ScrollableBaseModal<IProps, IState
         });
     }
 
-    private onQuestionChange = (e: ChangeEvent<HTMLInputElement>) => {
+    private onQuestionChange = (e: ChangeEvent<HTMLInputElement>): void => {
         this.setState({ question: e.target.value }, () => this.checkCanSubmit());
     };
 
-    private onOptionChange = (i: number, e: ChangeEvent<HTMLInputElement>) => {
+    private onOptionChange = (i: number, e: ChangeEvent<HTMLInputElement>): void => {
         const newOptions = arrayFastClone(this.state.options);
         newOptions[i] = e.target.value;
         this.setState({ options: newOptions }, () => this.checkCanSubmit());
     };
 
-    private onOptionRemove = (i: number) => {
+    private onOptionRemove = (i: number): void => {
         const newOptions = arrayFastClone(this.state.options);
         newOptions.splice(i, 1);
         this.setState({ options: newOptions }, () => this.checkCanSubmit());
     };
 
-    private onOptionAdd = () => {
+    private onOptionAdd = (): void => {
         const newOptions = arrayFastClone(this.state.options);
         newOptions.push("");
         this.setState({ options: newOptions, autoFocusTarget: FocusTarget.NewOption }, () => {
@@ -256,7 +256,7 @@ export default class PollCreateDialog extends ScrollableBaseModal<IProps, IState
         );
     }
 
-    public onPollTypeChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    public onPollTypeChange = (e: ChangeEvent<HTMLSelectElement>): void => {
         this.setState({
             kind: M_POLL_KIND_DISCLOSED.matches(e.target.value) ? M_POLL_KIND_DISCLOSED : M_POLL_KIND_UNDISCLOSED,
         });

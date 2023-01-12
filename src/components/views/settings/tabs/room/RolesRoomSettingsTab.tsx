@@ -19,7 +19,7 @@ import { EventType } from "matrix-js-sdk/src/@types/event";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { RoomState, RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 import { logger } from "matrix-js-sdk/src/logger";
-import { throttle } from "lodash";
+import { throttle, get } from "lodash";
 import { compare } from "matrix-js-sdk/src/utils";
 
 import { _t, _td } from "../../../../../languageHandler";
@@ -74,7 +74,7 @@ const plEventsToShow: Record<string, IEventShowOpts> = {
 
 // parse a string as an integer; if the input is undefined, or cannot be parsed
 // as an integer, return a default.
-function parseIntWithDefault(val, def) {
+function parseIntWithDefault(val: string, def: number): number {
     const res = parseInt(val);
     return isNaN(res) ? def : res;
 }
@@ -87,7 +87,7 @@ interface IBannedUserProps {
 }
 
 export class BannedUser extends React.Component<IBannedUserProps> {
-    private onUnbanClick = (e) => {
+    private onUnbanClick = (): void => {
         MatrixClientPeg.get()
             .unban(this.props.member.roomId, this.props.member.userId)
             .catch((err) => {
@@ -99,7 +99,7 @@ export class BannedUser extends React.Component<IBannedUserProps> {
             });
     };
 
-    public render() {
+    public render(): JSX.Element {
         let unbanButton;
 
         if (this.props.canUnban) {
@@ -132,18 +132,18 @@ interface IProps {
 }
 
 export default class RolesRoomSettingsTab extends React.Component<IProps> {
-    public componentDidMount() {
+    public componentDidMount(): void {
         MatrixClientPeg.get().on(RoomStateEvent.Update, this.onRoomStateUpdate);
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         const client = MatrixClientPeg.get();
         if (client) {
             client.removeListener(RoomStateEvent.Update, this.onRoomStateUpdate);
         }
     }
 
-    private onRoomStateUpdate = (state: RoomState) => {
+    private onRoomStateUpdate = (state: RoomState): void => {
         if (state.roomId !== this.props.roomId) return;
         this.onThisRoomMembership();
     };
@@ -156,7 +156,11 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
         { leading: true, trailing: true },
     );
 
-    private populateDefaultPlEvents(eventsSection: Record<string, number>, stateLevel: number, eventsLevel: number) {
+    private populateDefaultPlEvents(
+        eventsSection: Record<string, number>,
+        stateLevel: number,
+        eventsLevel: number,
+    ): void {
         for (const desiredEvent of Object.keys(plEventsToShow)) {
             if (!(desiredEvent in eventsSection)) {
                 eventsSection[desiredEvent] = plEventsToShow[desiredEvent].isState ? stateLevel : eventsLevel;
@@ -164,7 +168,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
         }
     }
 
-    private onPowerLevelsChanged = (value: number, powerLevelKey: string) => {
+    private onPowerLevelsChanged = (value: number, powerLevelKey: string): void => {
         const client = MatrixClientPeg.get();
         const room = client.getRoom(this.props.roomId);
         const plEvent = room.currentState.getStateEvents(EventType.RoomPowerLevels, "");
@@ -206,7 +210,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
         });
     };
 
-    private onUserPowerLevelChanged = (value: number, powerLevelKey: string) => {
+    private onUserPowerLevelChanged = (value: number, powerLevelKey: string): void => {
         const client = MatrixClientPeg.get();
         const room = client.getRoom(this.props.roomId);
         const plEvent = room.currentState.getStateEvents(EventType.RoomPowerLevels, "");
@@ -232,7 +236,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
         });
     };
 
-    public render() {
+    public render(): JSX.Element {
         const client = MatrixClientPeg.get();
         const room = client.getRoom(this.props.roomId);
         const isSpaceRoom = room.isSpaceRoom();
@@ -367,9 +371,11 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
             });
 
             // comparator for sorting PL users lexicographically on PL descending, MXID ascending. (case-insensitive)
-            const comparator = (a, b) => {
-                const plDiff = userLevels[b.key] - userLevels[a.key];
-                return plDiff !== 0 ? plDiff : compare(a.key.toLocaleLowerCase(), b.key.toLocaleLowerCase());
+            const comparator = (a: JSX.Element, b: JSX.Element): number => {
+                const aKey = a.key as string;
+                const bKey = b.key as string;
+                const plDiff = userLevels[bKey] - userLevels[aKey];
+                return plDiff !== 0 ? plDiff : compare(aKey.toLocaleLowerCase(), bKey.toLocaleLowerCase());
             };
 
             privilegedUsers.sort(comparator);
@@ -419,16 +425,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
                     return null;
                 }
 
-                const keyPath = key.split(".");
-                let currentObj = plContent;
-                for (const prop of keyPath) {
-                    if (currentObj === undefined) {
-                        break;
-                    }
-                    currentObj = currentObj[prop];
-                }
-
-                const value = parseIntWithDefault(currentObj, descriptor.defaultValue);
+                const value = parseIntWithDefault(get(plContent, key), descriptor.defaultValue);
                 return (
                     <div key={index} className="">
                         <PowerSelector

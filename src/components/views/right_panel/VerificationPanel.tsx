@@ -26,6 +26,7 @@ import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { User } from "matrix-js-sdk/src/models/user";
 import { SAS, SasEvent } from "matrix-js-sdk/src/crypto/verification/SAS";
 import { logger } from "matrix-js-sdk/src/logger";
+import { DeviceInfo } from "matrix-js-sdk/src/crypto/deviceinfo";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import VerificationQRCode from "../elements/crypto/VerificationQRCode";
@@ -62,7 +63,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
         this.hasVerifier = false;
     }
 
-    private renderQRPhase() {
+    private renderQRPhase(): JSX.Element {
         const { member, request } = this.props;
         const showSAS: boolean = request.otherPartySupportsMethod(verificationMethods.SAS);
         const showQR: boolean = request.otherPartySupportsMethod(SCAN_QR_CODE_METHOD);
@@ -187,22 +188,22 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
         );
     }
 
-    private onReciprocateYesClick = () => {
+    private onReciprocateYesClick = (): void => {
         this.setState({ reciprocateButtonClicked: true });
         this.state.reciprocateQREvent.confirm();
     };
 
-    private onReciprocateNoClick = () => {
+    private onReciprocateNoClick = (): void => {
         this.setState({ reciprocateButtonClicked: true });
         this.state.reciprocateQREvent.cancel();
     };
 
-    private getDevice() {
+    private getDevice(): DeviceInfo {
         const deviceId = this.props.request && this.props.request.channel.deviceId;
         return MatrixClientPeg.get().getStoredDevice(MatrixClientPeg.get().getUserId(), deviceId);
     }
 
-    private renderQRReciprocatePhase() {
+    private renderQRReciprocatePhase(): JSX.Element {
         const { member, request } = this.props;
         const description = request.isSelfVerification
             ? _t("Almost there! Is your other device showing the same shield?")
@@ -249,7 +250,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
         );
     }
 
-    private renderVerifiedPhase() {
+    private renderVerifiedPhase(): JSX.Element {
         const { member, request } = this.props;
 
         let text: string;
@@ -293,7 +294,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
         );
     }
 
-    private renderCancelledPhase() {
+    private renderCancelledPhase(): JSX.Element {
         const { member, request } = this.props;
 
         let startAgainInstruction: string;
@@ -331,7 +332,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
         );
     }
 
-    public render() {
+    public render(): JSX.Element {
         const { member, phase, request } = this.props;
 
         const displayName = (member as User).displayName || (member as RoomMember).name || member.userId;
@@ -371,7 +372,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
         return null;
     }
 
-    private startSAS = async () => {
+    private startSAS = async (): Promise<void> => {
         this.setState({ emojiButtonClicked: true });
         const verifier = this.props.request.beginKeyVerification(verificationMethods.SAS);
         try {
@@ -381,15 +382,15 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
         }
     };
 
-    private onSasMatchesClick = () => {
+    private onSasMatchesClick = (): void => {
         this.state.sasEvent.confirm();
     };
 
-    private onSasMismatchesClick = () => {
+    private onSasMismatchesClick = (): void => {
         this.state.sasEvent.mismatch();
     };
 
-    private updateVerifierState = () => {
+    private updateVerifierState = (): void => {
         const { request } = this.props;
         const sasEvent = (request.verifier as SAS).sasEvent;
         const reciprocateQREvent = (request.verifier as ReciprocateQRCode).reciprocateQREvent;
@@ -398,7 +399,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
         this.setState({ sasEvent, reciprocateQREvent });
     };
 
-    private onRequestChange = async () => {
+    private onRequestChange = async (): Promise<void> => {
         const { request } = this.props;
         const hadVerifier = this.hasVerifier;
         this.hasVerifier = !!request.verifier;
@@ -415,7 +416,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
         }
     };
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         const { request } = this.props;
         request.on(VerificationRequestEvent.Change, this.onRequestChange);
         if (request.verifier) {
@@ -426,7 +427,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
         this.onRequestChange();
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         const { request } = this.props;
         if (request.verifier) {
             request.verifier.off(SasEvent.ShowSas, this.updateVerifierState);

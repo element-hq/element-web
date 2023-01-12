@@ -82,7 +82,7 @@ enum SendState {
 const Entry: React.FC<IEntryProps> = ({ room, type, content, matrixClient: cli, onFinished }) => {
     const [sendState, setSendState] = useState<SendState>(SendState.CanSend);
 
-    const jumpToRoom = (ev: ButtonEvent) => {
+    const jumpToRoom = (ev: ButtonEvent): void => {
         dis.dispatch<ViewRoomPayload>({
             action: Action.ViewRoom,
             room_id: room.roomId,
@@ -91,7 +91,7 @@ const Entry: React.FC<IEntryProps> = ({ room, type, content, matrixClient: cli, 
         });
         onFinished(true);
     };
-    const send = async () => {
+    const send = async (): Promise<void> => {
         setSendState(SendState.Sending);
         try {
             await cli.sendEvent(room.roomId, type, content);
@@ -243,7 +243,7 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
     }
 
     const [truncateAt, setTruncateAt] = useState(20);
-    function overflowTile(overflowCount, totalCount) {
+    function overflowTile(overflowCount, totalCount): JSX.Element {
         const text = _t("and %(count)s others...", { count: overflowCount });
         return (
             <EntityTile

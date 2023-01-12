@@ -23,7 +23,7 @@ limitations under the License.
  * @param {*} opts The options (properties) to set on the object.
  * @returns {*} The created object.
  */
-export function makeType(Type: any, opts: any) {
+export function makeType<T>(Type: { new (): T }, opts: Partial<T>): T {
     const c = new Type();
     Object.assign(c, opts);
     return c;

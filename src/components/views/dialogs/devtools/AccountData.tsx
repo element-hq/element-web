@@ -23,27 +23,27 @@ import { EventEditor, EventViewer, eventTypeField, IEditorProps, stringify } fro
 import FilteredList from "./FilteredList";
 import { _t } from "../../../../languageHandler";
 
-export const AccountDataEventEditor = ({ mxEvent, onBack }: IEditorProps) => {
+export const AccountDataEventEditor: React.FC<IEditorProps> = ({ mxEvent, onBack }) => {
     const cli = useContext(MatrixClientContext);
 
     const fields = useMemo(() => [eventTypeField(mxEvent?.getType())], [mxEvent]);
 
-    const onSend = ([eventType]: string[], content?: IContent) => {
-        return cli.setAccountData(eventType, content);
+    const onSend = async ([eventType]: string[], content?: IContent): Promise<void> => {
+        await cli.setAccountData(eventType, content);
     };
 
     const defaultContent = mxEvent ? stringify(mxEvent.getContent()) : undefined;
     return <EventEditor fieldDefs={fields} defaultContent={defaultContent} onSend={onSend} onBack={onBack} />;
 };
 
-export const RoomAccountDataEventEditor = ({ mxEvent, onBack }: IEditorProps) => {
+export const RoomAccountDataEventEditor: React.FC<IEditorProps> = ({ mxEvent, onBack }) => {
     const context = useContext(DevtoolsContext);
     const cli = useContext(MatrixClientContext);
 
     const fields = useMemo(() => [eventTypeField(mxEvent?.getType())], [mxEvent]);
 
-    const onSend = ([eventType]: string[], content?: IContent) => {
-        return cli.setRoomAccountData(context.room.roomId, eventType, content);
+    const onSend = async ([eventType]: string[], content?: IContent): Promise<void> => {
+        await cli.setRoomAccountData(context.room.roomId, eventType, content);
     };
 
     const defaultContent = mxEvent ? stringify(mxEvent.getContent()) : undefined;
@@ -56,18 +56,18 @@ interface IProps extends IDevtoolsProps {
     actionLabel: string;
 }
 
-const BaseAccountDataExplorer = ({ events, Editor, actionLabel, onBack, setTool }: IProps) => {
+const BaseAccountDataExplorer: React.FC<IProps> = ({ events, Editor, actionLabel, onBack, setTool }) => {
     const [query, setQuery] = useState("");
     const [event, setEvent] = useState<MatrixEvent>(null);
 
     if (event) {
-        const onBack = () => {
+        const onBack = (): void => {
             setEvent(null);
         };
         return <EventViewer mxEvent={event} onBack={onBack} Editor={Editor} />;
     }
 
-    const onAction = async () => {
+    const onAction = async (): Promise<void> => {
         setTool(actionLabel, Editor);
     };
 
@@ -75,7 +75,7 @@ const BaseAccountDataExplorer = ({ events, Editor, actionLabel, onBack, setTool 
         <BaseTool onBack={onBack} actionLabel={actionLabel} onAction={onAction}>
             <FilteredList query={query} onChange={setQuery}>
                 {Object.entries(events).map(([eventType, ev]) => {
-                    const onClick = () => {
+                    const onClick = (): void => {
                         setEvent(ev);
                     };
 
@@ -90,7 +90,7 @@ const BaseAccountDataExplorer = ({ events, Editor, actionLabel, onBack, setTool 
     );
 };
 
-export const AccountDataExplorer = ({ onBack, setTool }: IDevtoolsProps) => {
+export const AccountDataExplorer: React.FC<IDevtoolsProps> = ({ onBack, setTool }) => {
     const cli = useContext(MatrixClientContext);
 
     return (
@@ -104,7 +104,7 @@ export const AccountDataExplorer = ({ onBack, setTool }: IDevtoolsProps) => {
     );
 };
 
-export const RoomAccountDataExplorer = ({ onBack, setTool }: IDevtoolsProps) => {
+export const RoomAccountDataExplorer: React.FC<IDevtoolsProps> = ({ onBack, setTool }) => {
     const context = useContext(DevtoolsContext);
 
     return (

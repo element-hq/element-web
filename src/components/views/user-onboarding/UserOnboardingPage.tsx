@@ -43,7 +43,7 @@ export function showUserOnboardingPage(useCase: UseCase): boolean {
 }
 
 const ANIMATION_DURATION = 2800;
-export function UserOnboardingPage({ justRegistered = false }: Props) {
+export function UserOnboardingPage({ justRegistered = false }: Props): JSX.Element {
     const config = SdkConfig.get();
     const pageUrl = getHomePageUrl(config);
 

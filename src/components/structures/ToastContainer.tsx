@@ -39,18 +39,18 @@ export default class ToastContainer extends React.Component<{}, IState> {
         ToastStore.sharedInstance().on("update", this.onToastStoreUpdate);
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         ToastStore.sharedInstance().removeListener("update", this.onToastStoreUpdate);
     }
 
-    private onToastStoreUpdate = () => {
+    private onToastStoreUpdate = (): void => {
         this.setState({
             toasts: ToastStore.sharedInstance().getToasts(),
             countSeen: ToastStore.sharedInstance().getCountSeen(),
         });
     };
 
-    public render() {
+    public render(): JSX.Element {
         const totalCount = this.state.toasts.length;
         const isStacked = totalCount > 1;
         let toast;

@@ -96,7 +96,7 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
         }
     }
 
-    private loadBlurhash() {
+    private loadBlurhash(): void {
         const info = this.props.mxEvent.getContent()?.info;
         if (!info[BLURHASH_FIELD]) return;
 
@@ -132,7 +132,7 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
         }
     }
 
-    public async componentDidMount() {
+    public async componentDidMount(): Promise<void> {
         this.sizeWatcher = SettingsStore.watchSetting("Images.size", null, () => {
             this.forceUpdate(); // we don't really have a reliable thing to update, so just update the whole thing
         });
@@ -186,11 +186,11 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
         }
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         SettingsStore.unwatchSetting(this.sizeWatcher);
     }
 
-    private videoOnPlay = async () => {
+    private videoOnPlay = async (): Promise<void> => {
         if (this.hasContentUrl() || this.state.fetchingData || this.state.error) {
             // We have the file, we are fetching the file, or there is an error.
             return;
@@ -227,12 +227,12 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
         );
     }
 
-    private getFileBody = () => {
+    private getFileBody = (): JSX.Element => {
         if (this.props.forExport) return null;
         return this.showFileBody && <MFileBody {...this.props} showGenericPlaceholder={false} />;
     };
 
-    public render() {
+    public render(): JSX.Element {
         const content = this.props.mxEvent.getContent();
         const autoplay = SettingsStore.getValue("autoplayVideo");
 

@@ -47,11 +47,11 @@ export default class TagComposer extends React.PureComponent<IProps, IState> {
         };
     }
 
-    private onInputChange = (ev: ChangeEvent<HTMLInputElement>) => {
+    private onInputChange = (ev: ChangeEvent<HTMLInputElement>): void => {
         this.setState({ newTag: ev.target.value });
     };
 
-    private onAdd = (ev: FormEvent) => {
+    private onAdd = (ev: FormEvent): void => {
         ev.preventDefault();
         if (!this.state.newTag) return;
 
@@ -59,13 +59,13 @@ export default class TagComposer extends React.PureComponent<IProps, IState> {
         this.setState({ newTag: "" });
     };
 
-    private onRemove(tag: string) {
+    private onRemove(tag: string): void {
         // We probably don't need to proxy this, but for
         // sanity of `this` we'll do so anyways.
         this.props.onRemove(tag);
     }
 
-    public render() {
+    public render(): JSX.Element {
         return (
             <div className="mx_TagComposer">
                 <form className="mx_TagComposer_input" onSubmit={this.onAdd}>

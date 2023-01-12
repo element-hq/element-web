@@ -23,7 +23,11 @@ import {
     VoiceBroadcastPlaybacksStoreEvent,
 } from "../stores/VoiceBroadcastPlaybacksStore";
 
-export const useCurrentVoiceBroadcastPlayback = (voiceBroadcastPlaybackStore: VoiceBroadcastPlaybacksStore) => {
+export const useCurrentVoiceBroadcastPlayback = (
+    voiceBroadcastPlaybackStore: VoiceBroadcastPlaybacksStore,
+): {
+    currentVoiceBroadcastPlayback: VoiceBroadcastPlayback | null;
+} => {
     const [currentVoiceBroadcastPlayback, setVoiceBroadcastPlayback] = useState(
         voiceBroadcastPlaybackStore.getCurrent(),
     );

@@ -41,7 +41,7 @@ export enum RightPanelPhases {
     ThreadPanel = "ThreadPanel",
 }
 
-export function backLabelForPhase(phase: RightPanelPhases) {
+export function backLabelForPhase(phase: RightPanelPhases): string | null {
     switch (phase) {
         case RightPanelPhases.ThreadPanel:
             return _t("Threads");

@@ -75,12 +75,12 @@ export default class AdvancedRoomSettingsTab extends React.Component<IProps, ISt
         });
     }
 
-    private upgradeRoom = (e) => {
+    private upgradeRoom = (e): void => {
         const room = MatrixClientPeg.get().getRoom(this.props.roomId);
         Modal.createDialog(RoomUpgradeDialog, { room });
     };
 
-    private onOldRoomClicked = (e) => {
+    private onOldRoomClicked = (e): void => {
         e.preventDefault();
         e.stopPropagation();
 
@@ -94,7 +94,7 @@ export default class AdvancedRoomSettingsTab extends React.Component<IProps, ISt
         this.props.closeSettingsFn();
     };
 
-    public render() {
+    public render(): JSX.Element {
         const client = MatrixClientPeg.get();
         const room = client.getRoom(this.props.roomId);
         const isSpace = room.isSpaceRoom();

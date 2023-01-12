@@ -37,7 +37,15 @@ function canonicalScore(displayedAlias: string, room: Room): number {
     return displayedAlias === room.getCanonicalAlias() ? 0 : 1;
 }
 
-function matcherObject(room: Room, displayedAlias: string, matchName = "") {
+function matcherObject(
+    room: Room,
+    displayedAlias: string,
+    matchName = "",
+): {
+    room: Room;
+    matchName: string;
+    displayedAlias: string;
+} {
     return {
         room,
         matchName,
@@ -46,7 +54,7 @@ function matcherObject(room: Room, displayedAlias: string, matchName = "") {
 }
 
 export default class RoomProvider extends AutocompleteProvider {
-    protected matcher: QueryMatcher<Room>;
+    protected matcher: QueryMatcher<ReturnType<typeof matcherObject>>;
 
     public constructor(room: Room, renderingType?: TimelineRenderingType) {
         super({ commandRegex: ROOM_REGEX, renderingType });
@@ -55,7 +63,7 @@ export default class RoomProvider extends AutocompleteProvider {
         });
     }
 
-    protected getRooms() {
+    protected getRooms(): Room[] {
         const cli = MatrixClientPeg.get();
 
         // filter out spaces here as they get their own autocomplete provider
@@ -68,7 +76,6 @@ export default class RoomProvider extends AutocompleteProvider {
         force = false,
         limit = -1,
     ): Promise<ICompletion[]> {
-        let completions = [];
         const { command, range } = this.getCurrentCommand(query, selection, force);
         if (command) {
             // the only reason we need to do this is because Fuse only matches on properties
@@ -96,15 +103,15 @@ export default class RoomProvider extends AutocompleteProvider {
 
             this.matcher.setObjects(matcherObjects);
             const matchedString = command[0];
-            completions = this.matcher.match(matchedString, limit);
+            let completions = this.matcher.match(matchedString, limit);
             completions = sortBy(completions, [
                 (c) => canonicalScore(c.displayedAlias, c.room),
                 (c) => c.displayedAlias.length,
             ]);
             completions = uniqBy(completions, (match) => match.room);
-            completions = completions
-                .map((room) => {
-                    return {
+            return completions
+                .map(
+                    (room): ICompletion => ({
                         completion: room.displayedAlias,
                         completionId: room.room.roomId,
                         type: "room",
@@ -116,14 +123,14 @@ export default class RoomProvider extends AutocompleteProvider {
                             </PillCompletion>
                         ),
                         range,
-                    };
-                })
+                    }),
+                )
                 .filter((completion) => !!completion.completion && completion.completion.length > 0);
         }
-        return completions;
+        return [];
     }
 
-    public getName() {
+    public getName(): string {
         return _t("Rooms");
     }
 

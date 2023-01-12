@@ -38,13 +38,13 @@ export class PlaybackManager {
      * instances are paused.
      * @param playback Optional. The playback to leave untouched.
      */
-    public pauseAllExcept(playback?: Playback) {
+    public pauseAllExcept(playback?: Playback): void {
         this.instances
             .filter((p) => p !== playback && p.currentState === PlaybackState.Playing)
             .forEach((p) => p.pause());
     }
 
-    public destroyPlaybackInstance(playback: ManagedPlayback) {
+    public destroyPlaybackInstance(playback: ManagedPlayback): void {
         this.instances = this.instances.filter((p) => p !== playback);
     }
 

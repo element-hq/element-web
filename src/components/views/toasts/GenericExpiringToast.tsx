@@ -38,7 +38,7 @@ const GenericExpiringToast: React.FC<IProps> = ({
     toastKey,
     numSeconds,
 }) => {
-    const onReject = () => {
+    const onReject = (): void => {
         if (onDismiss) onDismiss();
         ToastStore.sharedInstance().dismissToast(toastKey);
     };

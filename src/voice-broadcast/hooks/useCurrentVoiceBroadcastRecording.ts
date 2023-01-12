@@ -16,10 +16,14 @@ limitations under the License.
 
 import { useState } from "react";
 
-import { VoiceBroadcastRecordingsStore, VoiceBroadcastRecordingsStoreEvent } from "..";
+import { VoiceBroadcastRecording, VoiceBroadcastRecordingsStore, VoiceBroadcastRecordingsStoreEvent } from "..";
 import { useTypedEventEmitter } from "../../hooks/useEventEmitter";
 
-export const useCurrentVoiceBroadcastRecording = (voiceBroadcastRecordingsStore: VoiceBroadcastRecordingsStore) => {
+export const useCurrentVoiceBroadcastRecording = (
+    voiceBroadcastRecordingsStore: VoiceBroadcastRecordingsStore,
+): {
+    currentVoiceBroadcastRecording: VoiceBroadcastRecording;
+} => {
     const [currentVoiceBroadcastRecording, setCurrentVoiceBroadcastRecording] = useState(
         voiceBroadcastRecordingsStore.getCurrent(),
     );

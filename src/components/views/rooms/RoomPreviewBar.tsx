@@ -112,17 +112,17 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
         };
     }
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         this.checkInvitedEmail();
     }
 
-    public componentDidUpdate(prevProps, prevState) {
+    public componentDidUpdate(prevProps, prevState): void {
         if (this.props.invitedEmail !== prevProps.invitedEmail || this.props.inviterName !== prevProps.inviterName) {
             this.checkInvitedEmail();
         }
     }
 
-    private async checkInvitedEmail() {
+    private async checkInvitedEmail(): Promise<void> {
         // If this is an invite and we've been told what email address was
         // invited, fetch the user's account emails and discovery bindings so we
         // can check them against the email that was invited.
@@ -262,15 +262,15 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
         };
     }
 
-    private onLoginClick = () => {
+    private onLoginClick = (): void => {
         dis.dispatch({ action: "start_login", screenAfterLogin: this.makeScreenAfterLogin() });
     };
 
-    private onRegisterClick = () => {
+    private onRegisterClick = (): void => {
         dis.dispatch({ action: "start_registration", screenAfterLogin: this.makeScreenAfterLogin() });
     };
 
-    public render() {
+    public render(): JSX.Element {
         const brand = SdkConfig.get().brand;
         const roomName = this.props.room?.name ?? this.props.roomAlias ?? "";
         const isSpace = this.props.room?.isSpaceRoom() ?? this.props.oobData?.roomType === RoomType.Space;

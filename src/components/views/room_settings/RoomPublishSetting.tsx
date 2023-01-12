@@ -41,7 +41,7 @@ export default class RoomPublishSetting extends React.PureComponent<IProps, ISta
         };
     }
 
-    private onRoomPublishChange = (e) => {
+    private onRoomPublishChange = (e): void => {
         const valueBefore = this.state.isRoomPublished;
         const newValue = !valueBefore;
         this.setState({ isRoomPublished: newValue });
@@ -55,14 +55,14 @@ export default class RoomPublishSetting extends React.PureComponent<IProps, ISta
             });
     };
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         const client = MatrixClientPeg.get();
         client.getRoomDirectoryVisibility(this.props.roomId).then((result) => {
             this.setState({ isRoomPublished: result.visibility === "public" });
         });
     }
 
-    public render() {
+    public render(): JSX.Element {
         const client = MatrixClientPeg.get();
 
         const room = client.getRoom(this.props.roomId);

@@ -317,7 +317,7 @@ export default class InteractiveTooltip extends React.Component<IProps, IState> 
         };
     }
 
-    public componentDidUpdate() {
+    public componentDidUpdate(): void {
         // Whenever this passthrough component updates, also render the tooltip
         // in a separate DOM tree. This allows the tooltip content to participate
         // the normal React rendering cycle: when this component re-renders, the
@@ -327,7 +327,7 @@ export default class InteractiveTooltip extends React.Component<IProps, IState> 
         this.renderTooltip();
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         document.removeEventListener("mousemove", this.onMouseMove);
     }
 
@@ -340,7 +340,7 @@ export default class InteractiveTooltip extends React.Component<IProps, IState> 
         });
     };
 
-    private collectTarget = (element: HTMLElement) => {
+    private collectTarget = (element: HTMLElement): void => {
         this.target = element;
     };
 
@@ -376,7 +376,7 @@ export default class InteractiveTooltip extends React.Component<IProps, IState> 
         return this.props.direction === Direction.Left || this.props.direction === Direction.Right;
     }
 
-    private onMouseMove = (ev: MouseEvent) => {
+    private onMouseMove = (ev: MouseEvent): void => {
         const { clientX: x, clientY: y } = ev;
         const { contentRect } = this.state;
         const targetRect = this.target.getBoundingClientRect();
@@ -408,7 +408,7 @@ export default class InteractiveTooltip extends React.Component<IProps, IState> 
         document.addEventListener("mousemove", this.onMouseMove);
     }
 
-    public hideTooltip() {
+    public hideTooltip(): void {
         this.setState({
             visible: false,
         });
@@ -416,7 +416,7 @@ export default class InteractiveTooltip extends React.Component<IProps, IState> 
         document.removeEventListener("mousemove", this.onMouseMove);
     }
 
-    private renderTooltip() {
+    private renderTooltip(): JSX.Element {
         const { contentRect, visible } = this.state;
         if (!visible) {
             ReactDOM.unmountComponentAtNode(getOrCreateContainer());
@@ -486,7 +486,7 @@ export default class InteractiveTooltip extends React.Component<IProps, IState> 
         ReactDOM.render(tooltip, getOrCreateContainer());
     }
 
-    public render() {
+    public render(): ReactNode {
         return this.props.children({
             ref: this.collectTarget,
             onMouseOver: this.onTargetMouseOver,

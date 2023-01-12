@@ -49,7 +49,7 @@ interface IState {
     endRelations: RelatedRelations; // Poll end events
 }
 
-export function createVoteRelations(getRelationsForEvent: GetRelationsForEvent, eventId: string) {
+export function createVoteRelations(getRelationsForEvent: GetRelationsForEvent, eventId: string): RelatedRelations {
     const relationsList: Relations[] = [];
 
     const pollResponseRelations = getRelationsForEvent(eventId, "m.reference", M_POLL_RESPONSE.name);
@@ -89,7 +89,7 @@ export function findTopAnswer(
         return "";
     }
 
-    const findAnswerText = (answerId: string) => {
+    const findAnswerText = (answerId: string): string => {
         return poll.answers.find((a) => a.id === answerId)?.text ?? "";
     };
 
@@ -156,7 +156,7 @@ export function isPollEnded(
     }
 
     const roomCurrentState = matrixClient.getRoom(roomId)?.currentState;
-    function userCanRedact(endEvent: MatrixEvent) {
+    function userCanRedact(endEvent: MatrixEvent): boolean {
         const endEventSender = endEvent.getSender();
         return (
             endEventSender && roomCurrentState && roomCurrentState.maySendRedactionForEvent(pollEvent, endEventSender)
@@ -237,12 +237,12 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
         this.props.mxEvent.on(MatrixEventEvent.RelationsCreated, this.onRelationsCreated);
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         this.props.mxEvent.off(MatrixEventEvent.RelationsCreated, this.onRelationsCreated);
         this.removeListeners(this.state.voteRelations, this.state.endRelations);
     }
 
-    private addListeners(voteRelations?: RelatedRelations, endRelations?: RelatedRelations) {
+    private addListeners(voteRelations?: RelatedRelations, endRelations?: RelatedRelations): void {
         if (voteRelations) {
             voteRelations.on(RelationsEvent.Add, this.onRelationsChange);
             voteRelations.on(RelationsEvent.Remove, this.onRelationsChange);
@@ -255,7 +255,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
         }
     }
 
-    private removeListeners(voteRelations?: RelatedRelations, endRelations?: RelatedRelations) {
+    private removeListeners(voteRelations?: RelatedRelations, endRelations?: RelatedRelations): void {
         if (voteRelations) {
             voteRelations.off(RelationsEvent.Add, this.onRelationsChange);
             voteRelations.off(RelationsEvent.Remove, this.onRelationsChange);
@@ -268,7 +268,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
         }
     }
 
-    private onRelationsCreated = (relationType: string, eventType: string) => {
+    private onRelationsCreated = (relationType: string, eventType: string): void => {
         if (relationType !== "m.reference") {
             return;
         }
@@ -292,7 +292,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
         }
     };
 
-    private onRelationsChange = () => {
+    private onRelationsChange = (): void => {
         // We hold Relations in our state, and they changed under us.
         // Check whether we should delete our selection, and then
         // re-render.
@@ -300,7 +300,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
         this.unselectIfNewEventFromMe();
     };
 
-    private selectOption(answerId: string) {
+    private selectOption(answerId: string): void {
         if (this.isEnded()) {
             return;
         }
@@ -384,7 +384,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
      * Either way, calls setState to update our list of events we
      * have already seen.
      */
-    private unselectIfNewEventFromMe() {
+    private unselectIfNewEventFromMe(): void {
         const newEvents: MatrixEvent[] = this.state.voteRelations
             .getRelations()
             .filter(isPollResponse)
@@ -415,7 +415,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
         return isPollEnded(this.props.mxEvent, this.context, this.props.getRelationsForEvent);
     }
 
-    public render() {
+    public render(): JSX.Element {
         const poll = this.props.mxEvent.unstableExtensibleEvent as PollStartEvent;
         if (!poll?.isEquivalentTo(M_POLL_START)) return null; // invalid
 
@@ -511,7 +511,7 @@ interface IEndedPollOptionProps {
     votesText: string;
 }
 
-function EndedPollOption(props: IEndedPollOptionProps) {
+function EndedPollOption(props: IEndedPollOptionProps): JSX.Element {
     const cls = classNames({
         mx_MPollBody_endedOption: true,
         mx_MPollBody_endedOptionWinner: props.checked,
@@ -534,7 +534,7 @@ interface ILivePollOptionProps {
     onOptionSelected: (e: React.FormEvent<HTMLInputElement>) => void;
 }
 
-function LivePollOption(props: ILivePollOptionProps) {
+function LivePollOption(props: ILivePollOptionProps): JSX.Element {
     return (
         <StyledRadioButton
             className="mx_MPollBody_live-option"
@@ -603,7 +603,7 @@ export function pollEndTs(
     }
 
     const roomCurrentState = matrixClient.getRoom(pollEvent.getRoomId()).currentState;
-    function userCanRedact(endEvent: MatrixEvent) {
+    function userCanRedact(endEvent: MatrixEvent): boolean {
         return roomCurrentState.maySendRedactionForEvent(pollEvent, endEvent.getSender());
     }
 

@@ -476,7 +476,7 @@ export function tryInitStorage(): Promise<void> {
     return global.mx_rage_initStoragePromise;
 }
 
-export function flush() {
+export function flush(): void {
     if (!global.mx_rage_store) {
         return;
     }
@@ -487,7 +487,7 @@ export function flush() {
  * Clean up old logs.
  * @return {Promise} Resolves if cleaned logs.
  */
-export async function cleanup() {
+export async function cleanup(): Promise<void> {
     if (!global.mx_rage_store) {
         return;
     }
@@ -499,7 +499,7 @@ export async function cleanup() {
  *
  * @return {Array<{lines: string, id, string}>}  list of log data
  */
-export async function getLogsForReport() {
+export async function getLogsForReport(): Promise<{ lines: string; id: string }[]> {
     if (!global.mx_rage_logger) {
         throw new Error("No console logger, did you forget to call init()?");
     }

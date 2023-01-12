@@ -56,7 +56,7 @@ export default class SdkConfig {
     private static instance: IConfigOptions;
     private static fallback: SnakedObject<IConfigOptions>;
 
-    private static setInstance(i: IConfigOptions) {
+    private static setInstance(i: IConfigOptions): void {
         SdkConfig.instance = i;
         SdkConfig.fallback = new SnakedObject(i);
 
@@ -90,18 +90,18 @@ export default class SdkConfig {
         return val === undefined ? undefined : null;
     }
 
-    public static put(cfg: Partial<IConfigOptions>) {
+    public static put(cfg: Partial<IConfigOptions>): void {
         SdkConfig.setInstance({ ...DEFAULTS, ...cfg });
     }
 
     /**
      * Resets the config to be completely empty.
      */
-    public static unset() {
+    public static unset(): void {
         SdkConfig.setInstance(<IConfigOptions>{}); // safe to cast - defaults will be applied
     }
 
-    public static add(cfg: Partial<IConfigOptions>) {
+    public static add(cfg: Partial<IConfigOptions>): void {
         SdkConfig.put({ ...SdkConfig.get(), ...cfg });
     }
 }

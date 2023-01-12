@@ -68,7 +68,7 @@ export default class Sizer {
         return offset;
     }
 
-    public getDesiredItemSize(item: HTMLElement) {
+    public getDesiredItemSize(item: HTMLElement): string {
         if (this.vertical) {
             return item.style.height;
         } else {
@@ -76,7 +76,7 @@ export default class Sizer {
         }
     }
 
-    public setItemSize(item: HTMLElement, size: string) {
+    public setItemSize(item: HTMLElement, size: string): void {
         if (this.vertical) {
             item.style.height = size;
         } else {
@@ -84,7 +84,7 @@ export default class Sizer {
         }
     }
 
-    public clearItemSize(item: HTMLElement) {
+    public clearItemSize(item: HTMLElement): void {
         if (this.vertical) {
             item.style.height = null;
         } else {
@@ -92,16 +92,16 @@ export default class Sizer {
         }
     }
 
-    public start(item: HTMLElement) {}
+    public start(item: HTMLElement): void {}
 
-    public finish(item: HTMLElement) {}
+    public finish(item: HTMLElement): void {}
 
     /**
         @param {MouseEvent} event the mouse event
         @return {number} the distance between the cursor and the edge of the container,
             along the applicable axis (vertical or horizontal)
     */
-    public offsetFromEvent(event: MouseEvent) {
+    public offsetFromEvent(event: MouseEvent): number {
         const pos = this.vertical ? event.pageY : event.pageX;
         if (this.reverse) {
             return this.getPageOffset() + this.getTotalSize() - pos;

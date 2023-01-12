@@ -16,7 +16,7 @@ limitations under the License.
 
 import { SubSelection } from "../types";
 
-export function setSelection(selection: SubSelection) {
+export function setSelection(selection: SubSelection): Promise<void> {
     if (selection.anchorNode && selection.focusNode) {
         const range = new Range();
         range.setStart(selection.anchorNode, selection.anchorOffset);
@@ -30,7 +30,7 @@ export function setSelection(selection: SubSelection) {
     return new Promise((resolve) => setTimeout(resolve, 0));
 }
 
-export function isSelectionEmpty() {
+export function isSelectionEmpty(): boolean {
     const selection = document.getSelection();
     return Boolean(selection?.isCollapsed);
 }

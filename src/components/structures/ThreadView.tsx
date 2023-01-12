@@ -137,7 +137,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
         });
     }
 
-    public componentDidUpdate(prevProps) {
+    public componentDidUpdate(prevProps): void {
         if (prevProps.mxEvent !== this.props.mxEvent) {
             this.setupThread(this.props.mxEvent);
         }
@@ -192,7 +192,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
         }
     };
 
-    private setupThread = (mxEv: MatrixEvent) => {
+    private setupThread = (mxEv: MatrixEvent): void => {
         let thread = this.props.room.getThread(mxEv.getId());
         if (!thread) {
             thread = this.props.room.createThread(mxEv.getId(), mxEv, [mxEv], true);
@@ -200,7 +200,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
         this.updateThread(thread);
     };
 
-    private onNewThread = (thread: Thread) => {
+    private onNewThread = (thread: Thread): void => {
         if (thread.id === this.props.mxEvent.getId()) {
             this.setupThread(this.props.mxEvent);
         }
@@ -218,7 +218,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
         });
     }
 
-    private updateThread = (thread?: Thread) => {
+    private updateThread = (thread?: Thread): void => {
         if (this.state.thread === thread) return;
 
         this.setupThreadListeners(thread, this.state.thread);
@@ -276,7 +276,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
         this.setState({ narrow });
     };
 
-    private onKeyDown = (ev: KeyboardEvent) => {
+    private onKeyDown = (ev: KeyboardEvent): void => {
         let handled = false;
 
         const action = getKeyBindingsManager().getRoomAction(ev);
@@ -300,7 +300,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
         }
     };
 
-    private onFileDrop = (dataTransfer: DataTransfer) => {
+    private onFileDrop = (dataTransfer: DataTransfer): void => {
         const roomId = this.props.mxEvent.getRoomId();
         if (roomId) {
             ContentMessages.sharedInstance().sendContentListToRoom(

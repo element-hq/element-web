@@ -35,7 +35,7 @@ export const VoiceBroadcastBody: React.FC<IBodyProps> = ({ mxEvent }) => {
     const [infoState, setInfoState] = useState(mxEvent.getContent()?.state || VoiceBroadcastInfoState.Stopped);
 
     useEffect(() => {
-        const onInfoEvent = (event: MatrixEvent) => {
+        const onInfoEvent = (event: MatrixEvent): void => {
             if (event.getContent()?.state === VoiceBroadcastInfoState.Stopped) {
                 // only a stopped event can change the tile state
                 setInfoState(VoiceBroadcastInfoState.Stopped);

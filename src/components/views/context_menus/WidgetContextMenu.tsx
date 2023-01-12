@@ -62,7 +62,7 @@ const WidgetContextMenu: React.FC<IProps> = ({
 
     let streamAudioStreamButton;
     if (getConfigLivestreamUrl() && WidgetType.JITSI.matches(app.type)) {
-        const onStreamAudioClick = async () => {
+        const onStreamAudioClick = async (): Promise<void> => {
             try {
                 await startJitsiAudioLivestream(widgetMessaging, roomId);
             } catch (err) {
@@ -86,7 +86,7 @@ const WidgetContextMenu: React.FC<IProps> = ({
 
     let editButton;
     if (canModify && WidgetUtils.isManagedByManager(app)) {
-        const _onEditClick = () => {
+        const _onEditClick = (): void => {
             if (onEditClick) {
                 onEditClick();
             } else {
@@ -101,7 +101,7 @@ const WidgetContextMenu: React.FC<IProps> = ({
     let snapshotButton;
     const screenshotsEnabled = SettingsStore.getValue("enableWidgetScreenshots");
     if (screenshotsEnabled && widgetMessaging?.hasCapability(MatrixCapabilities.Screenshots)) {
-        const onSnapshotClick = () => {
+        const onSnapshotClick = (): void => {
             widgetMessaging
                 ?.takeScreenshot()
                 .then((data) => {
@@ -121,7 +121,7 @@ const WidgetContextMenu: React.FC<IProps> = ({
 
     let deleteButton;
     if (onDeleteClick || canModify) {
-        const _onDeleteClick = () => {
+        const _onDeleteClick = (): void => {
             if (onDeleteClick) {
                 onDeleteClick();
             } else {
@@ -158,7 +158,7 @@ const WidgetContextMenu: React.FC<IProps> = ({
     const isLocalWidget = WidgetType.JITSI.matches(app.type);
     let revokeButton;
     if (!userWidget && !isLocalWidget && isAllowedWidget) {
-        const onRevokeClick = () => {
+        const onRevokeClick = (): void => {
             logger.info("Revoking permission for widget to load: " + app.eventId);
             const current = SettingsStore.getValue("allowedWidgets", roomId);
             if (app.eventId !== undefined) current[app.eventId] = false;
@@ -175,7 +175,7 @@ const WidgetContextMenu: React.FC<IProps> = ({
 
     let moveLeftButton;
     if (showUnpin && widgetIndex > 0) {
-        const onClick = () => {
+        const onClick = (): void => {
             WidgetLayoutStore.instance.moveWithinContainer(room, Container.Top, app, -1);
             onFinished();
         };
@@ -185,7 +185,7 @@ const WidgetContextMenu: React.FC<IProps> = ({
 
     let moveRightButton;
     if (showUnpin && widgetIndex < pinnedWidgets.length - 1) {
-        const onClick = () => {
+        const onClick = (): void => {
             WidgetLayoutStore.instance.moveWithinContainer(room, Container.Top, app, 1);
             onFinished();
         };

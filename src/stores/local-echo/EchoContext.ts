@@ -43,7 +43,7 @@ export abstract class EchoContext extends Whenable<ContextTransactionState> impl
         return null;
     }
 
-    public disownTransaction(txn: EchoTransaction) {
+    public disownTransaction(txn: EchoTransaction): void {
         const idx = this._transactions.indexOf(txn);
         if (idx >= 0) this._transactions.splice(idx, 1);
         txn.destroy();
@@ -62,7 +62,7 @@ export abstract class EchoContext extends Whenable<ContextTransactionState> impl
         return txn;
     }
 
-    private checkTransactions = () => {
+    private checkTransactions = (): void => {
         let status = ContextTransactionState.AllSuccessful;
         for (const txn of this.transactions) {
             if (txn.status === TransactionStatus.Error || txn.didPreviouslyFail) {
@@ -77,7 +77,7 @@ export abstract class EchoContext extends Whenable<ContextTransactionState> impl
         this.notifyCondition(status);
     };
 
-    public destroy() {
+    public destroy(): void {
         for (const txn of this.transactions) {
             txn.destroy();
         }

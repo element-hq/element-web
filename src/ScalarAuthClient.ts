@@ -49,7 +49,7 @@ export default class ScalarAuthClient {
         this.isDefaultManager = apiUrl === configApiUrl && configUiUrl === uiUrl;
     }
 
-    private writeTokenToStore() {
+    private writeTokenToStore(): void {
         window.localStorage.setItem("mx_scalar_token_at_" + this.apiUrl, this.scalarToken);
         if (this.isDefaultManager) {
             // We remove the old token from storage to migrate upwards. This is safe
@@ -72,7 +72,7 @@ export default class ScalarAuthClient {
         return this.readTokenFromStore();
     }
 
-    public setTermsInteractionCallback(callback) {
+    public setTermsInteractionCallback(callback: TermsInteractionCallback): void {
         this.termsInteractionCallback = callback;
     }
 

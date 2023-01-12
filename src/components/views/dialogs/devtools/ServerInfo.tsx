@@ -33,11 +33,11 @@ interface IServerWellKnown {
     };
 }
 
-const ServerInfo = ({ onBack }: IDevtoolsProps) => {
+const ServerInfo: React.FC<IDevtoolsProps> = ({ onBack }) => {
     const cli = useContext(MatrixClientContext);
     const capabilities = useAsyncMemo(() => cli.getCapabilities(true).catch(() => FAILED_TO_LOAD), [cli]);
     const clientVersions = useAsyncMemo(() => cli.getVersions().catch(() => FAILED_TO_LOAD), [cli]);
-    const serverVersions = useAsyncMemo<IServerWellKnown | symbol>(async () => {
+    const serverVersions = useAsyncMemo(async (): Promise<IServerWellKnown | symbol> => {
         let baseUrl = cli.getHomeserverUrl();
 
         try {

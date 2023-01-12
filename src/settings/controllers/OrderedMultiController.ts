@@ -44,7 +44,7 @@ export class OrderedMultiController extends SettingController {
         return null; // no override
     }
 
-    public onChange(level: SettingLevel, roomId: string, newValue: any) {
+    public onChange(level: SettingLevel, roomId: string, newValue: any): void {
         for (const controller of this.controllers) {
             controller.onChange(level, roomId, newValue);
         }

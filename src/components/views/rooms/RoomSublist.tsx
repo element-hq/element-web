@@ -134,13 +134,13 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         this.state = Object.assign(this.state, { height: this.calculateInitialHeight() });
     }
 
-    private calculateInitialHeight() {
+    private calculateInitialHeight(): number {
         const requestedVisibleTiles = Math.max(Math.floor(this.layout.visibleTiles), this.layout.minVisibleTiles);
         const tileCount = Math.min(this.numTiles, requestedVisibleTiles);
         return this.layout.tilesToPixelsWithPadding(tileCount, this.padding);
     }
 
-    private get padding() {
+    private get padding(): number {
         let padding = RESIZE_HANDLE_HEIGHT;
         // this is used for calculating the max height of the whole container,
         // and takes into account whether there should be room reserved for the show more/less button
@@ -170,7 +170,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         return RoomSublist.calcNumTiles(this.state.rooms, this.extraTiles);
     }
 
-    private static calcNumTiles(rooms: Room[], extraTiles: any[]) {
+    private static calcNumTiles(rooms: Room[], extraTiles: any[]): number {
         return (rooms || []).length + (extraTiles || []).length;
     }
 
@@ -182,7 +182,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         return Math.min(nVisible, this.numTiles);
     }
 
-    public componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>) {
+    public componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>): void {
         const prevExtraTiles = prevProps.extraTiles;
         // as the rooms can come in one by one we need to reevaluate
         // the amount of available rooms to cap the amount of requested visible rooms by the layout
@@ -247,7 +247,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         return false;
     }
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         this.dispatcherRef = defaultDispatcher.register(this.onAction);
         RoomListStore.instance.on(LISTS_UPDATE_EVENT, this.onListsUpdated);
         RoomListStore.instance.on(LISTS_LOADING_EVENT, this.onListsLoading);
@@ -257,14 +257,14 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         this.tilesRef.current?.addEventListener("scroll", this.onScrollPrevent, { passive: true });
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         defaultDispatcher.unregister(this.dispatcherRef);
         RoomListStore.instance.off(LISTS_UPDATE_EVENT, this.onListsUpdated);
         RoomListStore.instance.off(LISTS_LOADING_EVENT, this.onListsLoading);
         this.tilesRef.current?.removeEventListener("scroll", this.onScrollPrevent);
     }
 
-    private onListsLoading = (tagId: TagID, isLoading: boolean) => {
+    private onListsLoading = (tagId: TagID, isLoading: boolean): void => {
         if (this.props.tagId !== tagId) {
             return;
         }
@@ -273,7 +273,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         });
     };
 
-    private onListsUpdated = () => {
+    private onListsUpdated = (): void => {
         const stateUpdates = {} as IState;
 
         const currentRooms = this.state.rooms;
@@ -287,7 +287,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         }
     };
 
-    private onAction = (payload: ActionPayload) => {
+    private onAction = (payload: ActionPayload): void => {
         if (payload.action === Action.ViewRoom && payload.show_room_tile && this.state.rooms) {
             // XXX: we have to do this a tick later because we have incorrect intermediate props during a room change
             // where we lose the room we are changing from temporarily and then it comes back in an update right after.
@@ -306,7 +306,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         }
     };
 
-    private applyHeightChange(newHeight: number) {
+    private applyHeightChange(newHeight: number): void {
         const heightInTiles = Math.ceil(this.layout.pixelsToTiles(newHeight - this.padding));
         this.layout.visibleTiles = Math.min(this.numTiles, heightInTiles);
     }
@@ -316,13 +316,13 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         travelDirection: Direction,
         refToElement: HTMLDivElement,
         delta: ResizeDelta,
-    ) => {
+    ): void => {
         const newHeight = this.heightAtStart + delta.height;
         this.applyHeightChange(newHeight);
         this.setState({ height: newHeight });
     };
 
-    private onResizeStart = () => {
+    private onResizeStart = (): void => {
         this.heightAtStart = this.state.height;
         this.setState({ isResizing: true });
     };
@@ -332,13 +332,13 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         travelDirection: Direction,
         refToElement: HTMLDivElement,
         delta: ResizeDelta,
-    ) => {
+    ): void => {
         const newHeight = this.heightAtStart + delta.height;
         this.applyHeightChange(newHeight);
         this.setState({ isResizing: false, height: newHeight });
     };
 
-    private onShowAllClick = async () => {
+    private onShowAllClick = async (): Promise<void> => {
         if (this.slidingSyncMode) {
             const slidingSyncIndex = SlidingSyncManager.instance.getOrAllocateListIndex(this.props.tagId);
             const count = RoomListStore.instance.getCount(this.props.tagId);
@@ -356,13 +356,13 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         });
     };
 
-    private onShowLessClick = () => {
+    private onShowLessClick = (): void => {
         const newHeight = this.layout.tilesToPixelsWithPadding(this.layout.defaultVisibleTiles, this.padding);
         this.applyHeightChange(newHeight);
         this.setState({ height: newHeight });
     };
 
-    private focusRoomTile = (index: number) => {
+    private focusRoomTile = (index: number): void => {
         if (!this.sublistRef.current) return;
         const elements = this.sublistRef.current.querySelectorAll<HTMLDivElement>(".mx_RoomTile");
         const element = elements && elements[index];
@@ -371,14 +371,14 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         }
     };
 
-    private onOpenMenuClick = (ev: React.MouseEvent) => {
+    private onOpenMenuClick = (ev: React.MouseEvent): void => {
         ev.preventDefault();
         ev.stopPropagation();
         const target = ev.target as HTMLButtonElement;
         this.setState({ contextMenuPosition: target.getBoundingClientRect() });
     };
 
-    private onContextMenu = (ev: React.MouseEvent) => {
+    private onContextMenu = (ev: React.MouseEvent): void => {
         ev.preventDefault();
         ev.stopPropagation();
         this.setState({
@@ -390,28 +390,28 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         });
     };
 
-    private onCloseMenu = () => {
+    private onCloseMenu = (): void => {
         this.setState({ contextMenuPosition: null });
     };
 
-    private onUnreadFirstChanged = () => {
+    private onUnreadFirstChanged = (): void => {
         const isUnreadFirst = RoomListStore.instance.getListOrder(this.props.tagId) === ListAlgorithm.Importance;
         const newAlgorithm = isUnreadFirst ? ListAlgorithm.Natural : ListAlgorithm.Importance;
         RoomListStore.instance.setListOrder(this.props.tagId, newAlgorithm);
         this.forceUpdate(); // because if the sublist doesn't have any changes then we will miss the list order change
     };
 
-    private onTagSortChanged = async (sort: SortAlgorithm) => {
+    private onTagSortChanged = async (sort: SortAlgorithm): Promise<void> => {
         RoomListStore.instance.setTagSorting(this.props.tagId, sort);
         this.forceUpdate();
     };
 
-    private onMessagePreviewChanged = () => {
+    private onMessagePreviewChanged = (): void => {
         this.layout.showPreviews = !this.layout.showPreviews;
         this.forceUpdate(); // because the layout doesn't trigger a re-render
     };
 
-    private onBadgeClick = (ev: React.MouseEvent) => {
+    private onBadgeClick = (ev: React.MouseEvent): void => {
         ev.preventDefault();
         ev.stopPropagation();
 
@@ -438,7 +438,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         }
     };
 
-    private onHeaderClick = () => {
+    private onHeaderClick = (): void => {
         const possibleSticky = this.headerButton.current.parentElement;
         const sublist = possibleSticky.parentElement.parentElement;
         const list = sublist.parentElement.parentElement;
@@ -465,7 +465,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         }
     };
 
-    private toggleCollapsed = () => {
+    private toggleCollapsed = (): void => {
         if (this.props.forceExpanded) return;
         this.layout.isCollapsed = this.state.isExpanded;
         this.setState({ isExpanded: !this.layout.isCollapsed });
@@ -474,7 +474,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         }
     };
 
-    private onHeaderKeyDown = (ev: React.KeyboardEvent) => {
+    private onHeaderKeyDown = (ev: React.KeyboardEvent): void => {
         const action = getKeyBindingsManager().getRoomListAction(ev);
         switch (action) {
             case KeyBindingAction.CollapseRoomListSection:
@@ -501,7 +501,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         }
     };
 
-    private onKeyDown = (ev: React.KeyboardEvent) => {
+    private onKeyDown = (ev: React.KeyboardEvent): void => {
         const action = getKeyBindingsManager().getAccessibilityAction(ev);
         switch (action) {
             // On ArrowLeft go to the sublist header
@@ -733,7 +733,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         );
     }
 
-    private onScrollPrevent(e: Event) {
+    private onScrollPrevent(e: Event): void {
         // the RoomTile calls scrollIntoView and the browser may scroll a div we do not wish to be scrollable
         // this fixes https://github.com/vector-im/element-web/issues/14413
         (e.target as HTMLDivElement).scrollTop = 0;

@@ -462,13 +462,13 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
         }
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         dis.unregister(this.dispatcherRef);
         window.removeEventListener("beforeunload", this.saveStoredEditorState);
         this.saveStoredEditorState();
     }
 
-    private get editorStateKey() {
+    private get editorStateKey(): string {
         let key = `mx_cider_state_${this.props.room.roomId}`;
         if (this.props.relation?.rel_type === THREAD_RELATION_TYPE.name) {
             key += `_${this.props.relation.event_id}`;
@@ -572,7 +572,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
         this.editorRef.current?.focus();
     };
 
-    public render() {
+    public render(): JSX.Element {
         const threadId =
             this.props.relation?.rel_type === THREAD_RELATION_TYPE.name ? this.props.relation.event_id : null;
         return (

@@ -21,7 +21,7 @@ import { hasRoomLiveVoiceBroadcast } from "../utils/hasRoomLiveVoiceBroadcast";
 import { useTypedEventEmitter } from "../../hooks/useEventEmitter";
 import { SDKContext } from "../../contexts/SDKContext";
 
-export const useHasRoomLiveVoiceBroadcast = (room: Room) => {
+export const useHasRoomLiveVoiceBroadcast = (room: Room): boolean => {
     const sdkContext = useContext(SDKContext);
     const [hasLiveVoiceBroadcast, setHasLiveVoiceBroadcast] = useState(false);
 

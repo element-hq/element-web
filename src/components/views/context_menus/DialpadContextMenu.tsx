@@ -42,7 +42,7 @@ export default class DialpadContextMenu extends React.Component<IProps, IState> 
         };
     }
 
-    public onDigitPress = (digit: string, ev: ButtonEvent) => {
+    public onDigitPress = (digit: string, ev: ButtonEvent): void => {
         this.props.call.sendDtmfDigit(digit);
         this.setState({ value: this.state.value + digit });
 
@@ -54,22 +54,22 @@ export default class DialpadContextMenu extends React.Component<IProps, IState> 
         }
     };
 
-    public onCancelClick = () => {
+    public onCancelClick = (): void => {
         this.props.onFinished();
     };
 
-    public onKeyDown = (ev) => {
+    public onKeyDown = (ev): void => {
         // Prevent Backspace and Delete keys from functioning in the entry field
         if (ev.code === "Backspace" || ev.code === "Delete") {
             ev.preventDefault();
         }
     };
 
-    public onChange = (ev) => {
+    public onChange = (ev): void => {
         this.setState({ value: ev.target.value });
     };
 
-    public render() {
+    public render(): JSX.Element {
         return (
             <ContextMenu {...this.props}>
                 <div className="mx_DialPadContextMenuWrapper">

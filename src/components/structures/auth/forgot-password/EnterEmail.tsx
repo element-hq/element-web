@@ -50,7 +50,7 @@ export const EnterEmail: React.FC<EnterEmailProps> = ({
 
     const emailFieldRef = useRef<Field>(null);
 
-    const onSubmit = async (event: React.FormEvent) => {
+    const onSubmit = async (event: React.FormEvent): Promise<void> => {
         if (await emailFieldRef.current?.validate({ allowEmpty: false })) {
             onSubmitForm(event);
             return;

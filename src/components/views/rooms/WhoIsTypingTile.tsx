@@ -56,12 +56,12 @@ export default class WhoIsTypingTile extends React.Component<IProps, IState> {
         delayedStopTypingTimers: {},
     };
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         MatrixClientPeg.get().on(RoomMemberEvent.Typing, this.onRoomMemberTyping);
         MatrixClientPeg.get().on(RoomEvent.Timeline, this.onRoomTimeline);
     }
 
-    public componentDidUpdate(_, prevState) {
+    public componentDidUpdate(_, prevState): void {
         const wasVisible = WhoIsTypingTile.isVisible(prevState);
         const isVisible = WhoIsTypingTile.isVisible(this.state);
         if (this.props.onShown && !wasVisible && isVisible) {
@@ -71,7 +71,7 @@ export default class WhoIsTypingTile extends React.Component<IProps, IState> {
         }
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         // we may have entirely lost our client as we're logging out before clicking login on the guest bar...
         const client = MatrixClientPeg.get();
         if (client) {
@@ -199,7 +199,7 @@ export default class WhoIsTypingTile extends React.Component<IProps, IState> {
         return avatars;
     }
 
-    public render() {
+    public render(): JSX.Element {
         let usersTyping = this.state.usersTyping;
         const stoppedUsersOnTimer = Object.keys(this.state.delayedStopTypingTimers).map((userId) =>
             this.props.room.getMember(userId),

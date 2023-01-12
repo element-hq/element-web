@@ -39,13 +39,13 @@ export default class InviteReason extends React.PureComponent<IProps, IState> {
         };
     }
 
-    public onViewClick = () => {
+    public onViewClick = (): void => {
         this.setState({
             hidden: false,
         });
     };
 
-    public render() {
+    public render(): JSX.Element {
         const classes = classNames({
             mx_InviteReason: true,
             mx_InviteReason_hidden: this.state.hidden,

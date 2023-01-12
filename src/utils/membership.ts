@@ -17,7 +17,8 @@ limitations under the License.
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
-import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
+import { RoomState, RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 /**
  * Approximation of a membership status for a given room.
@@ -84,10 +85,15 @@ export function isJoinedOrNearlyJoined(membership: string): boolean {
  * NOTE: this assumes you've just created the room and there's not been an opportunity
  * for other code to run, so we shouldn't miss RoomState.newMember when it comes by.
  */
-export async function waitForMember(client: MatrixClient, roomId: string, userId: string, opts = { timeout: 1500 }) {
+export async function waitForMember(
+    client: MatrixClient,
+    roomId: string,
+    userId: string,
+    opts = { timeout: 1500 },
+): Promise<boolean> {
     const { timeout } = opts;
-    let handler;
-    return new Promise((resolve) => {
+    let handler: (event: MatrixEvent, state: RoomState, member: RoomMember) => void;
+    return new Promise<boolean>((resolve) => {
         // eslint-disable-next-line @typescript-eslint/naming-convention
         handler = function (_, __, member: RoomMember) {
             if (member.userId !== userId) return;

@@ -54,7 +54,7 @@ const CreateSubspaceDialog: React.FC<IProps> = ({ space, onAddExistingSpaceClick
     }
     const [joinRule, setJoinRule] = useState<JoinRule>(defaultJoinRule);
 
-    const onCreateSubspaceClick = async (e) => {
+    const onCreateSubspaceClick = async (e): Promise<void> => {
         e.preventDefault();
         if (busy) return;
 

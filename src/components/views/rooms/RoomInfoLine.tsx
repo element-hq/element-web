@@ -17,6 +17,7 @@ limitations under the License.
 import React, { FC } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { JoinRule } from "matrix-js-sdk/src/@types/partials";
+import { MatrixClient } from "matrix-js-sdk/src/client";
 
 import { _t } from "../../../languageHandler";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
@@ -33,7 +34,7 @@ interface IProps {
 
 const RoomInfoLine: FC<IProps> = ({ room }) => {
     // summary will begin as undefined whilst loading and go null if it fails to load or we are not invited.
-    const summary = useAsyncMemo(async () => {
+    const summary = useAsyncMemo(async (): Promise<Awaited<ReturnType<MatrixClient["getRoomSummary"]>> | null> => {
         if (room.getMyMembership() !== "invite") return null;
         try {
             return room.client.getRoomSummary(room.roomId);
@@ -71,7 +72,7 @@ const RoomInfoLine: FC<IProps> = ({ room }) => {
         );
     } else if (memberCount && summary !== undefined) {
         // summary is not still loading
-        const viewMembers = () =>
+        const viewMembers = (): void =>
             RightPanelStore.instance.setCard({
                 phase: room.isSpaceRoom() ? RightPanelPhases.SpaceMemberList : RightPanelPhases.RoomMemberList,
             });

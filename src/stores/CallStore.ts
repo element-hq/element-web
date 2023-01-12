@@ -69,7 +69,7 @@ export class CallStore extends AsyncStoreWithClient<{}> {
         const uncleanlyDisconnectedRoomIds = SettingsStore.getValue<string[]>("activeCallRoomIds");
         if (uncleanlyDisconnectedRoomIds.length) {
             await Promise.all([
-                ...uncleanlyDisconnectedRoomIds.map(async (uncleanlyDisconnectedRoomId) => {
+                ...uncleanlyDisconnectedRoomIds.map(async (uncleanlyDisconnectedRoomId): Promise<void> => {
                     logger.log(`Cleaning up call state for room ${uncleanlyDisconnectedRoomId}`);
                     await this.getCall(uncleanlyDisconnectedRoomId)?.clean();
                 }),
@@ -119,19 +119,19 @@ export class CallStore extends AsyncStoreWithClient<{}> {
     private calls = new Map<string, Call>(); // Key is room ID
     private callListeners = new Map<Call, Map<CallEvent, (...args: unknown[]) => unknown>>();
 
-    private updateRoom(room: Room) {
+    private updateRoom(room: Room): void {
         if (!this.calls.has(room.roomId)) {
             const call = Call.get(room);
 
             if (call) {
-                const onConnectionState = (state: ConnectionState) => {
+                const onConnectionState = (state: ConnectionState): void => {
                     if (state === ConnectionState.Connected) {
                         this.activeCalls = new Set([...this.activeCalls, call]);
                     } else if (state === ConnectionState.Disconnected) {
                         this.activeCalls = new Set([...this.activeCalls].filter((c) => c !== call));
                     }
                 };
-                const onDestroy = () => {
+                const onDestroy = (): void => {
                     this.calls.delete(room.roomId);
                     for (const [event, listener] of this.callListeners.get(call)!) call.off(event, listener);
                     this.updateRoom(room);
@@ -173,7 +173,7 @@ export class CallStore extends AsyncStoreWithClient<{}> {
         return call !== null && this.activeCalls.has(call) ? call : null;
     }
 
-    private onWidgets = (roomId: string | null) => {
+    private onWidgets = (roomId: string | null): void => {
         if (roomId === null) {
             // This store happened to start before the widget store was done
             // loading all rooms, so we need to initialize each room again
@@ -187,5 +187,5 @@ export class CallStore extends AsyncStoreWithClient<{}> {
         }
     };
 
-    private onGroupCall = (groupCall: GroupCall) => this.updateRoom(groupCall.room);
+    private onGroupCall = (groupCall: GroupCall): void => this.updateRoom(groupCall.room);
 }

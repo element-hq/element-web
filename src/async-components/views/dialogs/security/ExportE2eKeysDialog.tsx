@@ -121,7 +121,7 @@ export default class ExportE2eKeysDialog extends React.Component<IProps, IState>
         return false;
     };
 
-    private onPassphraseChange = (ev: React.ChangeEvent<HTMLInputElement>, phrase: AnyPassphrase) => {
+    private onPassphraseChange = (ev: React.ChangeEvent<HTMLInputElement>, phrase: AnyPassphrase): void => {
         this.setState({
             [phrase]: ev.target.value,
         } as Pick<IState, AnyPassphrase>);

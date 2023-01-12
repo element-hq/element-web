@@ -44,11 +44,11 @@ export default class ExtraTile extends React.Component<IProps, IState> {
         };
     }
 
-    private onTileMouseEnter = () => {
+    private onTileMouseEnter = (): void => {
         this.setState({ hover: true });
     };
 
-    private onTileMouseLeave = () => {
+    private onTileMouseLeave = (): void => {
         this.setState({ hover: false });
     };
 

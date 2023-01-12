@@ -109,7 +109,7 @@ export class RoomPermalinkCreator {
         }
     }
 
-    public load() {
+    public load(): void {
         if (!this.room || !this.room.currentState) {
             // Under rare and unknown circumstances it is possible to have a room with no
             // currentState, at least potentially at the early stages of joining a room.
@@ -121,22 +121,22 @@ export class RoomPermalinkCreator {
         this.fullUpdate();
     }
 
-    public start() {
+    public start(): void {
         this.load();
         this.room.currentState.on(RoomStateEvent.Update, this.onRoomStateUpdate);
         this.started = true;
     }
 
-    public stop() {
+    public stop(): void {
         this.room.currentState.removeListener(RoomStateEvent.Update, this.onRoomStateUpdate);
         this.started = false;
     }
 
-    public get serverCandidates() {
+    public get serverCandidates(): string[] {
         return this._serverCandidates;
     }
 
-    public isStarted() {
+    public isStarted(): boolean {
         return this.started;
     }
 
@@ -159,11 +159,11 @@ export class RoomPermalinkCreator {
         return getPermalinkConstructor().forRoom(this.roomId, this._serverCandidates);
     }
 
-    private onRoomStateUpdate = () => {
+    private onRoomStateUpdate = (): void => {
         this.fullUpdate();
     };
 
-    private fullUpdate() {
+    private fullUpdate(): void {
         // This updates the internal state of this object from the room state. It's broken
         // down into separate functions, previously because we did some of these as incremental
         // updates, but they were on member events which can be very numerous, so the incremental
@@ -175,7 +175,7 @@ export class RoomPermalinkCreator {
         this.updateServerCandidates();
     }
 
-    private updateHighestPlUser() {
+    private updateHighestPlUser(): void {
         const plEvent = this.room.currentState.getStateEvents("m.room.power_levels", "");
         if (plEvent) {
             const content = plEvent.getContent();
@@ -215,13 +215,14 @@ export class RoomPermalinkCreator {
         this.highestPlUserId = null;
     }
 
-    private updateAllowedServers() {
+    private updateAllowedServers(): void {
         const bannedHostsRegexps = [];
         let allowedHostsRegexps = [ANY_REGEX]; // default allow everyone
         if (this.room.currentState) {
             const aclEvent = this.room.currentState.getStateEvents(EventType.RoomServerAcl, "");
             if (aclEvent && aclEvent.getContent()) {
-                const getRegex = (hostname) => new RegExp("^" + utils.globToRegexp(hostname, false) + "$");
+                const getRegex = (hostname: string): RegExp =>
+                    new RegExp("^" + utils.globToRegexp(hostname, false) + "$");
 
                 const denied = aclEvent.getContent().deny || [];
                 denied.forEach((h) => bannedHostsRegexps.push(getRegex(h)));
@@ -235,7 +236,7 @@ export class RoomPermalinkCreator {
         this.allowedHostsRegexps = allowedHostsRegexps;
     }
 
-    private updatePopulationMap() {
+    private updatePopulationMap(): void {
         const populationMap: { [server: string]: number } = {};
         for (const member of this.room.getJoinedMembers()) {
             const serverName = getServerName(member.userId);
@@ -247,7 +248,7 @@ export class RoomPermalinkCreator {
         this.populationMap = populationMap;
     }
 
-    private updateServerCandidates = () => {
+    private updateServerCandidates = (): void => {
         const candidates = new Set<string>();
         if (this.highestPlUserId) {
             candidates.add(getServerName(this.highestPlUserId));
@@ -474,7 +475,7 @@ function isHostnameIpAddress(hostname: string): boolean {
     return isIp(hostname);
 }
 
-export const calculateRoomVia = (room: Room) => {
+export const calculateRoomVia = (room: Room): string[] => {
     const permalinkCreator = new RoomPermalinkCreator(room);
     permalinkCreator.load();
     return permalinkCreator.serverCandidates;

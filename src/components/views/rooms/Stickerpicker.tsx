@@ -213,7 +213,7 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
         }
     };
 
-    private onRightPanelStoreUpdate = () => {
+    private onRightPanelStoreUpdate = (): void => {
         this.props.setStickerPickerOpen(false);
     };
 

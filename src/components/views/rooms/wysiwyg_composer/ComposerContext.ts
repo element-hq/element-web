@@ -31,6 +31,6 @@ export interface ComposerContextState {
 export const ComposerContext = createContext<ComposerContextState>(getDefaultContextValue());
 ComposerContext.displayName = "ComposerContext";
 
-export function useComposerContext() {
+export function useComposerContext(): ComposerContextState {
     return useContext(ComposerContext);
 }

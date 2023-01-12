@@ -65,17 +65,17 @@ export default class Resizer<C extends IConfig = IConfig> {
         };
     }
 
-    public setClassNames(classNames: IClassNames) {
+    public setClassNames(classNames: IClassNames): void {
         this.classNames = classNames;
     }
 
-    public attach() {
+    public attach(): void {
         const attachment = this?.config?.handler?.parentElement ?? this.container;
         attachment.addEventListener("mousedown", this.onMouseDown, false);
         window.addEventListener("resize", this.onResize);
     }
 
-    public detach() {
+    public detach(): void {
         const attachment = this?.config?.handler?.parentElement ?? this.container;
         attachment.removeEventListener("mousedown", this.onMouseDown, false);
         window.removeEventListener("resize", this.onResize);
@@ -113,7 +113,7 @@ export default class Resizer<C extends IConfig = IConfig> {
         return el && el.classList.contains(this.classNames.handle);
     }
 
-    private onMouseDown = (event: MouseEvent) => {
+    private onMouseDown = (event: MouseEvent): void => {
         // use closest in case the resize handle contains
         // child dom nodes that can be the target
         const resizeHandle = event.target && (<HTMLDivElement>event.target).closest(`.${this.classNames.handle}`);
@@ -143,13 +143,13 @@ export default class Resizer<C extends IConfig = IConfig> {
         const { sizer, distributor } = this.createSizerAndDistributor(<HTMLDivElement>resizeHandle);
         distributor.start();
 
-        const onMouseMove = (event) => {
+        const onMouseMove = (event: MouseEvent): void => {
             const offset = sizer.offsetFromEvent(event);
             distributor.resizeFromContainerOffset(offset);
         };
 
         const body = document.body;
-        const finishResize = () => {
+        const finishResize = (): void => {
             if (this.classNames.resizing) {
                 this.container?.classList?.remove(this.classNames.resizing);
             }
@@ -178,7 +178,7 @@ export default class Resizer<C extends IConfig = IConfig> {
         { trailing: true, leading: true },
     );
 
-    public getDistributors = () => {
+    public getDistributors = (): FixedDistributor<any, ResizeItem<any>>[] => {
         return this.getResizeHandles().map((handle) => {
             const { distributor } = this.createSizerAndDistributor(<HTMLDivElement>handle);
             return distributor;

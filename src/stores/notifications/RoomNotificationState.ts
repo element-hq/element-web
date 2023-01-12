@@ -70,46 +70,46 @@ export class RoomNotificationState extends NotificationState implements IDestroy
         cli.removeListener(ClientEvent.AccountData, this.handleAccountDataUpdate);
     }
 
-    private handleThreadsUpdate = () => {
+    private handleThreadsUpdate = (): void => {
         this.updateNotificationState();
     };
 
-    private handleLocalEchoUpdated = () => {
+    private handleLocalEchoUpdated = (): void => {
         this.updateNotificationState();
     };
 
-    private handleReadReceipt = (event: MatrixEvent, room: Room) => {
+    private handleReadReceipt = (event: MatrixEvent, room: Room): void => {
         if (!readReceiptChangeIsFor(event, MatrixClientPeg.get())) return; // not our own - ignore
         if (room.roomId !== this.room.roomId) return; // not for us - ignore
         this.updateNotificationState();
     };
 
-    private handleMembershipUpdate = () => {
+    private handleMembershipUpdate = (): void => {
         this.updateNotificationState();
     };
 
-    private handleNotificationCountUpdate = () => {
+    private handleNotificationCountUpdate = (): void => {
         this.updateNotificationState();
     };
 
-    private onEventDecrypted = (event: MatrixEvent) => {
+    private onEventDecrypted = (event: MatrixEvent): void => {
         if (event.getRoomId() !== this.room.roomId) return; // ignore - not for us or notifications timeline
 
         this.updateNotificationState();
     };
 
-    private handleRoomEventUpdate = (event: MatrixEvent) => {
+    private handleRoomEventUpdate = (event: MatrixEvent): void => {
         if (event?.getRoomId() !== this.room.roomId) return; // ignore - not for us or notifications timeline
         this.updateNotificationState();
     };
 
-    private handleAccountDataUpdate = (ev: MatrixEvent) => {
+    private handleAccountDataUpdate = (ev: MatrixEvent): void => {
         if (ev.getType() === "m.push_rules") {
             this.updateNotificationState();
         }
     };
 
-    private updateNotificationState() {
+    private updateNotificationState(): void {
         const snapshot = this.snapshot();
 
         if (getUnsentMessages(this.room).length > 0) {

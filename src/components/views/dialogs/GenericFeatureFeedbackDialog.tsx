@@ -44,7 +44,7 @@ const GenericFeatureFeedbackDialog: React.FC<IProps> = ({
     const [comment, setComment] = useState("");
     const [canContact, setCanContact] = useState(false);
 
-    const sendFeedback = async (ok: boolean) => {
+    const sendFeedback = async (ok: boolean): Promise<void> => {
         if (!ok) return onFinished(false);
 
         submitFeedback(SdkConfig.get().bug_report_endpoint_url, rageshakeLabel, comment, canContact, rageshakeData);

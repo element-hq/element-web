@@ -228,7 +228,7 @@ function textForTombstoneEvent(ev: MatrixEvent): () => string | null {
     return () => _t("%(senderDisplayName)s upgraded this room.", { senderDisplayName });
 }
 
-const onViewJoinRuleSettingsClick = () => {
+const onViewJoinRuleSettingsClick = (): void => {
     defaultDispatcher.dispatch({
         action: "open_room_settings",
         initial_tab_id: ROOM_SECURITY_TAB,

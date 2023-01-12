@@ -46,15 +46,15 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
         };
     }
 
-    private onPersonalRuleChanged = (e) => {
+    private onPersonalRuleChanged = (e): void => {
         this.setState({ newPersonalRule: e.target.value });
     };
 
-    private onNewListChanged = (e) => {
+    private onNewListChanged = (e): void => {
         this.setState({ newList: e.target.value });
     };
 
-    private onAddPersonalRule = async (e) => {
+    private onAddPersonalRule = async (e): Promise<void> => {
         e.preventDefault();
         e.stopPropagation();
 
@@ -80,7 +80,7 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
         }
     };
 
-    private onSubscribeList = async (e) => {
+    private onSubscribeList = async (e): Promise<void> => {
         e.preventDefault();
         e.stopPropagation();
 
@@ -101,7 +101,7 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
         }
     };
 
-    private async removePersonalRule(rule: ListRule) {
+    private async removePersonalRule(rule: ListRule): Promise<void> {
         this.setState({ busy: true });
         try {
             const list = Mjolnir.sharedInstance().getPersonalList();
@@ -118,7 +118,7 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
         }
     }
 
-    private async unsubscribeFromList(list: BanList) {
+    private async unsubscribeFromList(list: BanList): Promise<void> {
         this.setState({ busy: true });
         try {
             await Mjolnir.sharedInstance().unsubscribeFromList(list.roomId);
@@ -135,11 +135,11 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
         }
     }
 
-    private viewListRules(list: BanList) {
+    private viewListRules(list: BanList): void {
         const room = MatrixClientPeg.get().getRoom(list.roomId);
         const name = room ? room.name : list.roomId;
 
-        const renderRules = (rules: ListRule[]) => {
+        const renderRules = (rules: ListRule[]): JSX.Element => {
             if (rules.length === 0) return <i>{_t("None")}</i>;
 
             const tiles = [];
@@ -168,7 +168,7 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
         });
     }
 
-    private renderPersonalBanListRules() {
+    private renderPersonalBanListRules(): JSX.Element {
         const list = Mjolnir.sharedInstance().getPersonalList();
         const rules = list ? [...list.userRules, ...list.serverRules] : [];
         if (!list || rules.length <= 0) return <i>{_t("You have not ignored anyone.")}</i>;
@@ -198,7 +198,7 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
         );
     }
 
-    private renderSubscribedBanLists() {
+    private renderSubscribedBanLists(): JSX.Element {
         const personalList = Mjolnir.sharedInstance().getPersonalList();
         const lists = Mjolnir.sharedInstance().lists.filter((b) => {
             return personalList ? personalList.roomId !== b.roomId : true;
@@ -246,7 +246,7 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
         );
     }
 
-    public render() {
+    public render(): JSX.Element {
         const brand = SdkConfig.get().brand;
 
         return (

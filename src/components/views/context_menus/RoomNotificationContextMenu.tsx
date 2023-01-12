@@ -33,7 +33,7 @@ interface IProps extends IContextMenuProps {
     room: Room;
 }
 
-export const RoomNotificationContextMenu = ({ room, onFinished, ...props }: IProps) => {
+export const RoomNotificationContextMenu: React.FC<IProps> = ({ room, onFinished, ...props }) => {
     const [notificationState, setNotificationState] = useNotificationState(room);
 
     const wrapHandler = (handler: (ev: ButtonEvent) => void, persistent = false): ((ev: ButtonEvent) => void) => {

@@ -145,7 +145,7 @@ export class Playback extends EventEmitter implements IDestroyable, PlaybackInte
         return true; // we don't ever care if the event had listeners, so just return "yes"
     }
 
-    public destroy() {
+    public destroy(): void {
         // Dev note: It's critical that we call stop() during cleanup to ensure that downstream callers
         // are aware of the final clock position before the user triggered an unload.
         // noinspection JSIgnoredPromiseFromCall - not concerned about being called async here
@@ -159,7 +159,7 @@ export class Playback extends EventEmitter implements IDestroyable, PlaybackInte
         }
     }
 
-    public async prepare() {
+    public async prepare(): Promise<void> {
         // don't attempt to decode the media again
         // AudioContext.decodeAudioData detaches the array buffer `this.buf`
         // meaning it cannot be re-read
@@ -190,7 +190,7 @@ export class Playback extends EventEmitter implements IDestroyable, PlaybackInte
                 this.context.decodeAudioData(
                     this.buf,
                     (b) => resolve(b),
-                    async (e) => {
+                    async (e): Promise<void> => {
                         try {
                             // This error handler is largely for Safari as well, which doesn't support Opus/Ogg
                             // very well.
@@ -232,12 +232,12 @@ export class Playback extends EventEmitter implements IDestroyable, PlaybackInte
         this.emit(PlaybackState.Stopped); // signal that we're not decoding anymore
     }
 
-    private onPlaybackEnd = async () => {
+    private onPlaybackEnd = async (): Promise<void> => {
         await this.context.suspend();
         this.emit(PlaybackState.Stopped);
     };
 
-    public async play() {
+    public async play(): Promise<void> {
         // We can't restart a buffer source, so we need to create a new one if we hit the end
         if (this.state === PlaybackState.Stopped) {
             this.disconnectSource();
@@ -256,13 +256,13 @@ export class Playback extends EventEmitter implements IDestroyable, PlaybackInte
         this.emit(PlaybackState.Playing);
     }
 
-    private disconnectSource() {
+    private disconnectSource(): void {
         if (this.element) return; // leave connected, we can (and must) re-use it
         this.source?.disconnect();
         this.source?.removeEventListener("ended", this.onPlaybackEnd);
     }
 
-    private makeNewSourceBuffer() {
+    private makeNewSourceBuffer(): void {
         if (this.element && this.source) return; // leave connected, we can (and must) re-use it
 
         if (this.element) {
@@ -276,22 +276,22 @@ export class Playback extends EventEmitter implements IDestroyable, PlaybackInte
         this.source.connect(this.context.destination);
     }
 
-    public async pause() {
+    public async pause(): Promise<void> {
         await this.context.suspend();
         this.emit(PlaybackState.Paused);
     }
 
-    public async stop() {
+    public async stop(): Promise<void> {
         await this.onPlaybackEnd();
         this.clock.flagStop();
     }
 
-    public async toggle() {
+    public async toggle(): Promise<void> {
         if (this.isPlaying) await this.pause();
         else await this.play();
     }
 
-    public async skipTo(timeSeconds: number) {
+    public async skipTo(timeSeconds: number): Promise<void> {
         // Dev note: this function talks a lot about clock desyncs. There is a clock running
         // independently to the audio context and buffer so that accurate human-perceptible
         // time can be exposed. The PlaybackClock class has more information, but the short

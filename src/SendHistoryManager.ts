@@ -60,7 +60,7 @@ export default class SendHistoryManager {
         };
     }
 
-    public save(editorModel: EditorModel, replyEvent?: MatrixEvent) {
+    public save(editorModel: EditorModel, replyEvent?: MatrixEvent): void {
         const item = SendHistoryManager.createItem(editorModel, replyEvent);
         this.history.push(item);
         this.currentIndex = this.history.length;

@@ -22,7 +22,7 @@ import defaultDispatcher from "../../dispatcher/dispatcher";
  * Redirect to the correct device manager section
  * Based on the labs setting
  */
-export const viewUserDeviceSettings = (isNewDeviceManagerEnabled: boolean) => {
+export const viewUserDeviceSettings = (isNewDeviceManagerEnabled: boolean): void => {
     defaultDispatcher.dispatch({
         action: Action.ViewUserSettings,
         initialTabId: isNewDeviceManagerEnabled ? UserTab.SessionManager : UserTab.Security,

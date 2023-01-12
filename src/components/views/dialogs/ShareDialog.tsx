@@ -91,18 +91,18 @@ export default class ShareDialog extends React.PureComponent<IProps, IState> {
         };
     }
 
-    public static onLinkClick(e) {
+    public static onLinkClick(e): void {
         e.preventDefault();
         selectText(e.target);
     }
 
-    private onLinkSpecificEventCheckboxClick = () => {
+    private onLinkSpecificEventCheckboxClick = (): void => {
         this.setState({
             linkSpecificEvent: !this.state.linkSpecificEvent,
         });
     };
 
-    private getUrl() {
+    private getUrl(): string {
         let matrixToUrl;
 
         if (this.props.target instanceof Room) {
@@ -124,7 +124,7 @@ export default class ShareDialog extends React.PureComponent<IProps, IState> {
         return matrixToUrl;
     }
 
-    public render() {
+    public render(): JSX.Element {
         let title;
         let checkbox;
 

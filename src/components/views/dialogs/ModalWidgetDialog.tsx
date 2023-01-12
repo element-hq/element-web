@@ -76,33 +76,33 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
         this.possibleButtons = (this.props.widgetDefinition.buttons || []).map((b) => b.id);
     }
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         const driver = new StopGapWidgetDriver([], this.widget, WidgetKind.Modal, false);
         const messaging = new ClientWidgetApi(this.widget, this.appFrame.current, driver);
         this.setState({ messaging });
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         this.state.messaging.off("ready", this.onReady);
         this.state.messaging.off(`action:${WidgetApiFromWidgetAction.CloseModalWidget}`, this.onWidgetClose);
         this.state.messaging.stop();
     }
 
-    private onReady = () => {
+    private onReady = (): void => {
         this.state.messaging.sendWidgetConfig(this.props.widgetDefinition);
     };
 
-    private onLoad = () => {
+    private onLoad = (): void => {
         this.state.messaging.once("ready", this.onReady);
         this.state.messaging.on(`action:${WidgetApiFromWidgetAction.CloseModalWidget}`, this.onWidgetClose);
         this.state.messaging.on(`action:${WidgetApiFromWidgetAction.SetModalButtonEnabled}`, this.onButtonEnableToggle);
     };
 
-    private onWidgetClose = (ev: CustomEvent<IModalWidgetCloseRequest>) => {
+    private onWidgetClose = (ev: CustomEvent<IModalWidgetCloseRequest>): void => {
         this.props.onFinished(true, ev.detail.data);
     };
 
-    private onButtonEnableToggle = (ev: CustomEvent<ISetModalButtonEnabledActionRequest>) => {
+    private onButtonEnableToggle = (ev: CustomEvent<ISetModalButtonEnabledActionRequest>): void => {
         ev.preventDefault();
         const isClose = ev.detail.data.button === BuiltInModalButtonID.Close;
         if (isClose || !this.possibleButtons.includes(ev.detail.data.button)) {
@@ -124,7 +124,7 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
         this.state.messaging.transport.reply(ev.detail, {} as IWidgetApiAcknowledgeResponseData);
     };
 
-    public render() {
+    public render(): JSX.Element {
         const templated = this.widget.getCompleteUrl({
             widgetRoomId: this.props.widgetRoomId,
             currentUserId: MatrixClientPeg.get().getUserId(),
@@ -167,7 +167,7 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
                             break;
                     }
 
-                    const onClick = () => {
+                    const onClick = (): void => {
                         this.state.messaging.notifyModalWidgetButtonClicked(def.id);
                     };
 

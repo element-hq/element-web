@@ -85,7 +85,7 @@ export class VoiceBroadcastRecordingsStore extends TypedEventEmitter<VoiceBroadc
         return recording;
     }
 
-    private onCurrentStateChanged = (state: VoiceBroadcastInfoState) => {
+    private onCurrentStateChanged = (state: VoiceBroadcastInfoState): void => {
         if (state === VoiceBroadcastInfoState.Stopped) {
             this.clearCurrent();
         }

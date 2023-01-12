@@ -38,7 +38,7 @@ export class ModuleRunner {
      *
      * Intended for test usage only.
      */
-    public reset() {
+    public reset(): void {
         this.modules = [];
     }
 
@@ -68,7 +68,7 @@ export class ModuleRunner {
      * will be called immediately.
      * @param factory The module factory.
      */
-    public registerModule(factory: ModuleFactory) {
+    public registerModule(factory: ModuleFactory): void {
         this.modules.push(new AppModule(factory));
     }
 

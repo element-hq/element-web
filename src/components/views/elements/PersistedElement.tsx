@@ -23,7 +23,7 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { ActionPayload } from "../../../dispatcher/payloads";
 
-export const getPersistKey = (appId: string) => "widget_" + appId;
+export const getPersistKey = (appId: string): string => "widget_" + appId;
 
 // Shamelessly ripped off Modal.js.  There's probably a better way
 // of doing reusable widgets like dialog boxes & menus where we go and
@@ -106,7 +106,7 @@ export default class PersistedElement extends React.Component<IProps> {
         }
     }
 
-    public static isMounted(persistKey) {
+    public static isMounted(persistKey: string): boolean {
         return Boolean(getContainer("mx_persistedElement_" + persistKey));
     }
 

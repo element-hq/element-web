@@ -188,7 +188,7 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
         return true; // change made
     }
 
-    private sortCategory(category: NotificationColor) {
+    private sortCategory(category: NotificationColor): void {
         // This should be relatively quick because the room is usually inserted at the top of the
         // category, and most popular sorting algorithms will deal with trying to keep the active
         // room at the top/start of the category. For the few algorithms that will have to move the
@@ -227,7 +227,7 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
         fromCategory: NotificationColor,
         toCategory: NotificationColor,
         indices: ICategoryIndex,
-    ) {
+    ): void {
         // We have to update the index of the category *after* the from/toCategory variables
         // in order to update the indices correctly. Because the room is moving from/to those
         // categories, the next category's index will change - not the category we're modifying.
@@ -238,7 +238,7 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
         this.alterCategoryPositionBy(toCategory, +nRooms, indices);
     }
 
-    private alterCategoryPositionBy(category: NotificationColor, n: number, indices: ICategoryIndex) {
+    private alterCategoryPositionBy(category: NotificationColor, n: number, indices: ICategoryIndex): void {
         // Note: when we alter a category's index, we actually have to modify the ones following
         // the target and not the target itself.
 
