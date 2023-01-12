@@ -34,7 +34,7 @@ interface Props {
     minimized: boolean;
 }
 
-export function UserOnboardingButton({ selected, minimized }: Props) {
+export function UserOnboardingButton({ selected, minimized }: Props): JSX.Element {
     const useCase = useSettingValue<UseCase | null>("FTUE.useCaseSelection");
     const visible = useSettingValue<boolean>("FTUE.userOnboardingButton");
 
@@ -45,7 +45,7 @@ export function UserOnboardingButton({ selected, minimized }: Props) {
     return <UserOnboardingButtonInternal selected={selected} minimized={minimized} />;
 }
 
-function UserOnboardingButtonInternal({ selected, minimized }: Props) {
+function UserOnboardingButtonInternal({ selected, minimized }: Props): JSX.Element {
     const onDismiss = useCallback((ev: ButtonEvent) => {
         ev.preventDefault();
         ev.stopPropagation();

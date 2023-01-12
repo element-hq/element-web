@@ -78,7 +78,7 @@ export class SdkContextClass {
      * Automatically construct stores which need to be created eagerly so they can register with
      * the dispatcher.
      */
-    public constructEagerStores() {
+    public constructEagerStores(): void {
         this._RoomViewStore = this.roomViewStore;
     }
 

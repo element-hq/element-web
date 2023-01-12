@@ -223,7 +223,7 @@ export class VoiceBroadcastRecording
         this.chunkRelationHelper.destroy();
     }
 
-    private onBeforeRedaction = () => {
+    private onBeforeRedaction = (): void => {
         if (this.getState() !== VoiceBroadcastInfoState.Stopped) {
             this.setState(VoiceBroadcastInfoState.Stopped);
             // destroy cleans up everything
@@ -231,7 +231,7 @@ export class VoiceBroadcastRecording
         }
     };
 
-    private onAction = (payload: ActionPayload) => {
+    private onAction = (payload: ActionPayload): void => {
         if (payload.action !== "call_state") return;
 
         // pause on any call action
@@ -243,7 +243,7 @@ export class VoiceBroadcastRecording
         this.emit(VoiceBroadcastRecordingEvent.StateChanged, this.state);
     }
 
-    private onCurrentChunkLengthUpdated = (currentChunkLength: number) => {
+    private onCurrentChunkLengthUpdated = (currentChunkLength: number): void => {
         this.setTimeLeft(this.maxLength - this.chunkEvents.getLengthSeconds() - currentChunkLength);
     };
 

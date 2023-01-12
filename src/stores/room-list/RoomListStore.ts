@@ -70,7 +70,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> implements 
         this.algorithm.start();
     }
 
-    private setupWatchers() {
+    private setupWatchers(): void {
         // TODO: Maybe destroy this if this class supports destruction
         new SpaceWatcher(this);
     }
@@ -81,7 +81,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> implements 
     }
 
     // Intended for test usage
-    public async resetStore() {
+    public async resetStore(): Promise<void> {
         await this.reset();
         this.prefilterConditions = [];
         this.initialListsGenerated = false;
@@ -99,7 +99,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> implements 
     }
 
     // Public for test usage. Do not call this.
-    public async makeReady(forcedClient?: MatrixClient) {
+    public async makeReady(forcedClient?: MatrixClient): Promise<void> {
         if (forcedClient) {
             this.readyStore.useUnitTestClient(forcedClient);
         }
@@ -124,7 +124,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> implements 
      * @param trigger Set to false to prevent a list update from being sent. Should only
      * be used if the calling code will manually trigger the update.
      */
-    private handleRVSUpdate({ trigger = true }) {
+    private handleRVSUpdate({ trigger = true }): void {
         if (!this.matrixClient) return; // We assume there won't be RVS updates without a client
 
         const activeRoomId = SdkContextClass.instance.roomViewStore.getRoomId();
@@ -151,7 +151,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> implements 
         await this.resetStore();
     }
 
-    protected async onAction(payload: ActionPayload) {
+    protected async onAction(payload: ActionPayload): Promise<void> {
         // If we're not remotely ready, don't even bother scheduling the dispatch handling.
         // This is repeated in the handler just in case things change between a decision here and
         // when the timer fires.
@@ -170,7 +170,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> implements 
         setImmediate(() => this.onDispatchAsync(payload));
     }
 
-    protected async onDispatchAsync(payload: ActionPayload) {
+    protected async onDispatchAsync(payload: ActionPayload): Promise<void> {
         // Everything here requires a MatrixClient or some sort of logical readiness.
         const logicallyReady = this.matrixClient && this.initialListsGenerated;
         if (!logicallyReady) return;
@@ -207,7 +207,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> implements 
 
             const roomId = eventPayload.event.getRoomId();
             const room = this.matrixClient.getRoom(roomId);
-            const tryUpdate = async (updatedRoom: Room) => {
+            const tryUpdate = async (updatedRoom: Room): Promise<void> => {
                 if (
                     eventPayload.event.getType() === EventType.RoomTombstone &&
                     eventPayload.event.getStateKey() === ""
@@ -225,7 +225,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> implements 
             if (!room) {
                 logger.warn(`Live timeline event ${eventPayload.event.getId()} received without associated room`);
                 logger.warn(`Queuing failed room update for retry as a result.`);
-                window.setTimeout(async () => {
+                window.setTimeout(async (): Promise<void> => {
                     const updatedRoom = this.matrixClient.getRoom(roomId);
                     await tryUpdate(updatedRoom);
                 }, 100); // 100ms should be enough for the room to show up
@@ -335,7 +335,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> implements 
         }
     }
 
-    private async recalculatePrefiltering() {
+    private async recalculatePrefiltering(): Promise<void> {
         if (!this.algorithm) return;
         if (!this.algorithm.hasTagSortingMap) return; // we're still loading
 
@@ -363,12 +363,12 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> implements 
         this.algorithm.updatesInhibited = false;
     }
 
-    public setTagSorting(tagId: TagID, sort: SortAlgorithm) {
+    public setTagSorting(tagId: TagID, sort: SortAlgorithm): void {
         this.setAndPersistTagSorting(tagId, sort);
         this.updateFn.trigger();
     }
 
-    private setAndPersistTagSorting(tagId: TagID, sort: SortAlgorithm) {
+    private setAndPersistTagSorting(tagId: TagID, sort: SortAlgorithm): void {
         this.algorithm.setTagSorting(tagId, sort);
         // TODO: Per-account? https://github.com/vector-im/element-web/issues/14114
         localStorage.setItem(`mx_tagSort_${tagId}`, sort);
@@ -402,12 +402,12 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> implements 
         return tagSort;
     }
 
-    public setListOrder(tagId: TagID, order: ListAlgorithm) {
+    public setListOrder(tagId: TagID, order: ListAlgorithm): void {
         this.setAndPersistListOrder(tagId, order);
         this.updateFn.trigger();
     }
 
-    private setAndPersistListOrder(tagId: TagID, order: ListAlgorithm) {
+    private setAndPersistListOrder(tagId: TagID, order: ListAlgorithm): void {
         this.algorithm.setListOrdering(tagId, order);
         // TODO: Per-account? https://github.com/vector-im/element-web/issues/14114
         localStorage.setItem(`mx_listOrder_${tagId}`, order);
@@ -442,7 +442,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> implements 
         return listOrder;
     }
 
-    private updateAlgorithmInstances() {
+    private updateAlgorithmInstances(): void {
         // We'll require an update, so mark for one. Marking now also prevents the calls
         // to setTagSorting and setListOrder from causing triggers.
         this.updateFn.mark();
@@ -463,18 +463,18 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> implements 
         }
     }
 
-    private onAlgorithmListUpdated = (forceUpdate: boolean) => {
+    private onAlgorithmListUpdated = (forceUpdate: boolean): void => {
         this.updateFn.mark();
         if (forceUpdate) this.updateFn.trigger();
     };
 
-    private onAlgorithmFilterUpdated = () => {
+    private onAlgorithmFilterUpdated = (): void => {
         // The filter can happen off-cycle, so trigger an update. The filter will have
         // already caused a mark.
         this.updateFn.trigger();
     };
 
-    private onPrefilterUpdated = async () => {
+    private onPrefilterUpdated = async (): Promise<void> => {
         await this.recalculatePrefiltering();
         this.updateFn.trigger();
     };
@@ -506,7 +506,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> implements 
      * @param trigger Set to false to prevent a list update from being sent. Should only
      * be used if the calling code will manually trigger the update.
      */
-    public regenerateAllLists({ trigger = true }) {
+    public regenerateAllLists({ trigger = true }): void {
         logger.warn("Regenerating all room lists");
 
         const rooms = this.getPlausibleRooms();
@@ -590,7 +590,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> implements 
      * @param {Room} room The room to update.
      * @param {RoomUpdateCause} cause The cause to update for.
      */
-    public async manualRoomUpdate(room: Room, cause: RoomUpdateCause) {
+    public async manualRoomUpdate(room: Room, cause: RoomUpdateCause): Promise<void> {
         await this.handleRoomUpdate(room, cause);
         this.updateFn.trigger();
     }

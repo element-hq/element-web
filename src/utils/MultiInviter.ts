@@ -68,7 +68,7 @@ export default class MultiInviter {
         this.matrixClient = MatrixClientPeg.get();
     }
 
-    public get fatal() {
+    public get fatal(): boolean {
         return this._fatal;
     }
 
@@ -112,8 +112,8 @@ export default class MultiInviter {
             return this.deferred.promise;
         }
 
-        return this.deferred.promise.then(async (states) => {
-            const invitedUsers = [];
+        return this.deferred.promise.then(async (states): Promise<CompletionStates> => {
+            const invitedUsers: string[] = [];
             for (const [addr, state] of Object.entries(states)) {
                 if (state === InviteState.Invited && getAddressType(addr) === AddressType.MatrixUserId) {
                     invitedUsers.push(addr);
@@ -308,7 +308,7 @@ export default class MultiInviter {
                 );
 
                 if (unknownProfileUsers.length > 0) {
-                    const inviteUnknowns = () => {
+                    const inviteUnknowns = (): void => {
                         const promises = unknownProfileUsers.map((u) => this.doInvite(u, true));
                         Promise.all(promises).then(() => this.deferred.resolve(this.completionStates));
                     };

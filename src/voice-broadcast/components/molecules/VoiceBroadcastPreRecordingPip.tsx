@@ -41,7 +41,7 @@ export const VoiceBroadcastPreRecordingPip: React.FC<Props> = ({ voiceBroadcastP
         disableStartButton: false,
     });
 
-    const onDeviceSelect = (device: MediaDeviceInfo) => {
+    const onDeviceSelect = (device: MediaDeviceInfo): void => {
         setState((state) => ({
             ...state,
             showDeviceSelect: false,
@@ -49,7 +49,7 @@ export const VoiceBroadcastPreRecordingPip: React.FC<Props> = ({ voiceBroadcastP
         setDevice(device);
     };
 
-    const onStartBroadcastClick = () => {
+    const onStartBroadcastClick = (): void => {
         setState((state) => ({
             ...state,
             disableStartButton: true,
@@ -63,7 +63,7 @@ export const VoiceBroadcastPreRecordingPip: React.FC<Props> = ({ voiceBroadcastP
             <VoiceBroadcastHeader
                 linkToRoom={true}
                 onCloseClick={voiceBroadcastPreRecording.cancel}
-                onMicrophoneLineClick={() => setState({ ...state, showDeviceSelect: true })}
+                onMicrophoneLineClick={(): void => setState({ ...state, showDeviceSelect: true })}
                 room={voiceBroadcastPreRecording.room}
                 microphoneLabel={currentDeviceLabel}
                 showClose={true}

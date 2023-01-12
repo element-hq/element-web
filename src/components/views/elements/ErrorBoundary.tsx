@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ErrorInfo } from "react";
+import React, { ErrorInfo, ReactNode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../languageHandler";
@@ -73,7 +73,7 @@ export default class ErrorBoundary extends React.PureComponent<{}, IState> {
         });
     };
 
-    public render() {
+    public render(): ReactNode {
         if (this.state.error) {
             const newIssueUrl = "https://github.com/vector-im/element-web/issues/new/choose";
 

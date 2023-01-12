@@ -46,8 +46,8 @@ function StyledRadioGroup<T extends string>({
     outlined,
     disabled,
     onChange,
-}: IProps<T>) {
-    const _onChange = (e) => {
+}: IProps<T>): JSX.Element {
+    const _onChange = (e): void => {
         onChange(e.target.value);
     };
 

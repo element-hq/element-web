@@ -49,7 +49,7 @@ export default class CrossSigningPanel extends React.PureComponent<{}, IState> {
         this.state = {};
     }
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         const cli = MatrixClientPeg.get();
         cli.on(ClientEvent.AccountData, this.onAccountData);
         cli.on(CryptoEvent.UserTrustStatusChanged, this.onStatusChanged);
@@ -57,7 +57,7 @@ export default class CrossSigningPanel extends React.PureComponent<{}, IState> {
         this.getUpdatedStatus();
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         this.unmounted = true;
         const cli = MatrixClientPeg.get();
         if (!cli) return;
@@ -73,7 +73,7 @@ export default class CrossSigningPanel extends React.PureComponent<{}, IState> {
         }
     };
 
-    private onBootstrapClick = () => {
+    private onBootstrapClick = (): void => {
         if (this.state.crossSigningPrivateKeysInStorage) {
             Modal.createDialog(SetupEncryptionDialog, {}, null, /* priority = */ false, /* static = */ true);
         } else {
@@ -83,7 +83,7 @@ export default class CrossSigningPanel extends React.PureComponent<{}, IState> {
         }
     };
 
-    private onStatusChanged = () => {
+    private onStatusChanged = (): void => {
         this.getUpdatedStatus();
     };
 
@@ -127,7 +127,7 @@ export default class CrossSigningPanel extends React.PureComponent<{}, IState> {
         try {
             const cli = MatrixClientPeg.get();
             await cli.bootstrapCrossSigning({
-                authUploadDeviceSigningKeys: async (makeRequest) => {
+                authUploadDeviceSigningKeys: async (makeRequest): Promise<void> => {
                     const { finished } = Modal.createDialog(InteractiveAuthDialog, {
                         title: _t("Setting up keys"),
                         matrixClient: cli,
@@ -157,7 +157,7 @@ export default class CrossSigningPanel extends React.PureComponent<{}, IState> {
         });
     };
 
-    public render() {
+    public render(): JSX.Element {
         const {
             error,
             crossSigningPublicKeysOnDevice,

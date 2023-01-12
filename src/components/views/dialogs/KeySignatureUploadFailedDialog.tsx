@@ -53,7 +53,7 @@ const KeySignatureUploadFailedDialog: React.FC<IProps> = ({ failures, source, co
     ]);
     const defaultCause = _t("a key signature");
 
-    const onRetry = useCallback(async () => {
+    const onRetry = useCallback(async (): Promise<void> => {
         try {
             setRetrying(true);
             const cancel = new Promise((resolve, reject) => {

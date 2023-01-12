@@ -51,7 +51,7 @@ const QuickThemeSwitcher: React.FC<Props> = ({ requestClose }) => {
 
     const selectedTheme = useSystemTheme ? MATCH_SYSTEM_THEME_ID : theme;
 
-    const onOptionChange = async (newTheme: string) => {
+    const onOptionChange = async (newTheme: string): Promise<void> => {
         PosthogTrackers.trackInteraction("WebQuickSettingsThemeDropdown");
 
         try {

@@ -60,7 +60,7 @@ class EmailField extends PureComponent<IProps> {
         ],
     });
 
-    public onValidate = async (fieldState: IFieldState) => {
+    public onValidate = async (fieldState: IFieldState): Promise<IValidationResult> => {
         let validate = this.validate;
         if (this.props.validationRules) {
             validate = this.props.validationRules;
@@ -74,7 +74,7 @@ class EmailField extends PureComponent<IProps> {
         return result;
     };
 
-    public render() {
+    public render(): JSX.Element {
         return (
             <Field
                 id={this.props.id}

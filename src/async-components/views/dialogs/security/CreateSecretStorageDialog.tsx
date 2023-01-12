@@ -350,7 +350,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                     createSecretStorageKey: async () => this.recoveryKey,
                     keyBackupInfo: this.state.backupInfo,
                     setupNewKeyBackup: !this.state.backupInfo,
-                    getKeyBackupPassphrase: async () => {
+                    getKeyBackupPassphrase: async (): Promise<Uint8Array> => {
                         // We may already have the backup key if we earlier went
                         // through the restore backup path, so pass it along
                         // rather than prompting again.
@@ -383,7 +383,9 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
     private restoreBackup = async (): Promise<void> => {
         // It's possible we'll need the backup key later on for bootstrapping,
         // so let's stash it here, rather than prompting for it twice.
-        const keyCallback = (k) => (this.backupKey = k);
+        const keyCallback = (k: Uint8Array): void => {
+            this.backupKey = k;
+        };
 
         const { finished } = Modal.createDialog(
             RestoreKeyBackupDialog,
@@ -420,7 +422,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
         this.setState({ phase: Phase.ChooseKeyPassphrase });
     };
 
-    private onPassPhraseNextClick = async (e: React.FormEvent) => {
+    private onPassPhraseNextClick = async (e: React.FormEvent): Promise<void> => {
         e.preventDefault();
         if (!this.passphraseField.current) return; // unmounting
 
@@ -434,7 +436,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
         this.setState({ phase: Phase.PassphraseConfirm });
     };
 
-    private onPassPhraseConfirmNextClick = async (e: React.FormEvent) => {
+    private onPassPhraseConfirmNextClick = async (e: React.FormEvent): Promise<void> => {
         e.preventDefault();
 
         if (this.state.passPhrase !== this.state.passPhraseConfirm) return;

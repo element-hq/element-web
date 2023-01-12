@@ -54,7 +54,7 @@ export default function MemberAvatar({
     hideTitle,
     member: propsMember,
     ...props
-}: IProps) {
+}: IProps): JSX.Element {
     const card = useContext(CardContext);
 
     const member = useRoomMemberProfile({

@@ -39,7 +39,7 @@ interface IProps extends IMinProps {
 const BaseTool: React.FC<XOR<IMinProps, IProps>> = ({ className, actionLabel, onBack, onAction, children }) => {
     const [message, setMessage] = useState<string>(null);
 
-    const onBackClick = () => {
+    const onBackClick = (): void => {
         if (message) {
             setMessage(null);
         } else {
@@ -51,7 +51,7 @@ const BaseTool: React.FC<XOR<IMinProps, IProps>> = ({ className, actionLabel, on
     if (message) {
         children = message;
     } else if (onAction) {
-        const onActionClick = () => {
+        const onActionClick = (): void => {
             onAction().then((msg) => {
                 if (typeof msg === "string") {
                     setMessage(msg);

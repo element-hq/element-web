@@ -47,7 +47,7 @@ export default class Range {
         return this._initializedEmpty;
     }
 
-    public setWasEmpty(value: boolean) {
+    public setWasEmpty(value: boolean): void {
         this._initializedEmpty = value;
     }
 

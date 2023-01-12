@@ -67,7 +67,7 @@ export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddr
         };
     }
 
-    public componentDidUpdate(prevProps: Readonly<IEmailAddressProps>) {
+    public componentDidUpdate(prevProps: Readonly<IEmailAddressProps>): void {
         if (this.props.email !== prevProps.email) {
             const { bound } = this.props.email;
             this.setState({ bound });

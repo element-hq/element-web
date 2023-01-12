@@ -58,11 +58,11 @@ export default abstract class ScrollableBaseModal<
         }
     };
 
-    private onCancel = () => {
+    private onCancel = (): void => {
         this.cancel();
     };
 
-    private onSubmit = (e: MouseEvent | FormEvent) => {
+    private onSubmit = (e: MouseEvent | FormEvent): void => {
         e.stopPropagation();
         e.preventDefault();
         if (!this.state.canSubmit) return; // pretend the submit button was disabled

@@ -39,7 +39,7 @@ export interface IPublicRoomDirectoryConfig {
 }
 
 const validServer = withValidation<undefined, { error?: MatrixError }>({
-    deriveData: async ({ value }) => {
+    deriveData: async ({ value }): Promise<{ error?: MatrixError }> => {
         try {
             // check if we can successfully load this server's room directory
             await MatrixClientPeg.get().publicRooms({
@@ -78,7 +78,7 @@ function useSettingsValueWithSetter<T>(
 ): [T, (value: T) => Promise<void>] {
     const [value, setValue] = useState(SettingsStore.getValue<T>(settingName, roomId ?? undefined, excludeDefault));
     const setter = useCallback(
-        async (value: T) => {
+        async (value: T): Promise<void> => {
             setValue(value);
             SettingsStore.setValue(settingName, roomId, level, value);
         },
@@ -105,7 +105,7 @@ interface ServerList {
     setUserDefinedServers: (servers: string[]) => void;
 }
 
-function removeAll<T>(target: Set<T>, ...toRemove: T[]) {
+function removeAll<T>(target: Set<T>, ...toRemove: T[]): void {
     for (const value of toRemove) {
         target.delete(value);
     }
@@ -144,7 +144,7 @@ interface IProps {
     setConfig: (value: IPublicRoomDirectoryConfig | null) => void;
 }
 
-export const NetworkDropdown = ({ protocols, config, setConfig }: IProps) => {
+export const NetworkDropdown: React.FC<IProps> = ({ protocols, config, setConfig }) => {
     const { allServers, homeServer, userDefinedServers, setUserDefinedServers } = useServers();
 
     const options: GenericDropdownMenuItem<IPublicRoomDirectoryConfig | null>[] = allServers.map((roomServer) => ({
@@ -185,7 +185,7 @@ export const NetworkDropdown = ({ protocols, config, setConfig }: IProps) => {
                 <MenuItemRadio
                     active={false}
                     className="mx_GenericDropdownMenu_Option mx_GenericDropdownMenu_Option--item"
-                    onClick={async () => {
+                    onClick={async (): Promise<void> => {
                         closeMenu();
                         const { finished } = Modal.createDialog(
                             TextInputDialog,

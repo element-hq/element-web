@@ -67,13 +67,13 @@ export class IntegrationManagers {
         this.client.removeListener(ClientEvent.ClientWellKnown, this.setupHomeserverManagers);
     }
 
-    private compileManagers() {
+    private compileManagers(): void {
         this.managers = [];
         this.setupConfiguredManager();
         this.setupAccountManagers();
     }
 
-    private setupConfiguredManager() {
+    private setupConfiguredManager(): void {
         const apiUrl: string = SdkConfig.get("integrations_rest_url");
         const uiUrl: string = SdkConfig.get("integrations_ui_url");
 
@@ -83,7 +83,7 @@ export class IntegrationManagers {
         }
     }
 
-    private setupHomeserverManagers = async (discoveryResponse) => {
+    private setupHomeserverManagers = async (discoveryResponse): Promise<void> => {
         logger.log("Updating homeserver-configured integration managers...");
         if (discoveryResponse && discoveryResponse["m.integrations"]) {
             let managers = discoveryResponse["m.integrations"]["managers"];
@@ -113,7 +113,7 @@ export class IntegrationManagers {
         }
     };
 
-    private setupAccountManagers() {
+    private setupAccountManagers(): void {
         if (!this.client || !this.client.getUserId()) return; // not logged in
         const widgets = WidgetUtils.getIntegrationManagerWidgets();
         widgets.forEach((w) => {
@@ -180,7 +180,7 @@ export class IntegrationManagers {
         Modal.createDialog(IntegrationsDisabledDialog);
     }
 
-    public async overwriteManagerOnAccount(manager: IntegrationManagerInstance) {
+    public async overwriteManagerOnAccount(manager: IntegrationManagerInstance): Promise<void> {
         // TODO: TravisR - We should be logging out of scalar clients.
         await WidgetUtils.removeIntegrationManagerWidgets();
 

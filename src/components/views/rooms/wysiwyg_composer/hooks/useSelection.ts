@@ -19,7 +19,7 @@ import { useCallback, useEffect } from "react";
 import useFocus from "../../../../../hooks/useFocus";
 import { useComposerContext, ComposerContextState } from "../ComposerContext";
 
-function setSelectionContext(composerContext: ComposerContextState) {
+function setSelectionContext(composerContext: ComposerContextState): void {
     const selection = document.getSelection();
 
     if (selection) {
@@ -32,12 +32,14 @@ function setSelectionContext(composerContext: ComposerContextState) {
     }
 }
 
-export function useSelection() {
+export function useSelection(): ReturnType<typeof useFocus>[1] & {
+    onInput(): void;
+} {
     const composerContext = useComposerContext();
     const [isFocused, focusProps] = useFocus();
 
     useEffect(() => {
-        function onSelectionChange() {
+        function onSelectionChange(): void {
             setSelectionContext(composerContext);
         }
 

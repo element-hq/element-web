@@ -268,7 +268,7 @@ export default class ThemeChoicePanel extends React.Component<IProps, IState> {
         );
     }
 
-    public apparentSelectedThemeId() {
+    public apparentSelectedThemeId(): string {
         if (this.state.useSystemTheme) {
             return undefined;
         }

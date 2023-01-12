@@ -39,12 +39,12 @@ export default class PlayPauseButton extends React.PureComponent<IProps> {
         super(props);
     }
 
-    private onClick = () => {
+    private onClick = (): void => {
         // noinspection JSIgnoredPromiseFromCall
         this.toggleState();
     };
 
-    public async toggleState() {
+    public async toggleState(): Promise<void> {
         await this.props.playback.toggle();
     }
 

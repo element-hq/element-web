@@ -43,7 +43,7 @@ export async function awaitRoomDownSync(cli: MatrixClient, roomId: string): Prom
         // We have to wait for the js-sdk to give us the room back so
         // we can more effectively abuse the MultiInviter behaviour
         // which heavily relies on the Room object being available.
-        const checkForRoomFn = (room: Room) => {
+        const checkForRoomFn = (room: Room): void => {
             if (room.roomId !== roomId) return;
             resolve(room);
             cli.off(ClientEvent.Room, checkForRoomFn);

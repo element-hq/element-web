@@ -29,14 +29,14 @@ export class WatchManager {
     private watchers = new Map<string, Map<string | symbol, CallbackFn[]>>(); // settingName -> roomId -> CallbackFn[]
 
     // Proxy for handlers to delegate changes to this manager
-    public watchSetting(settingName: string, roomId: string | null, cb: CallbackFn) {
+    public watchSetting(settingName: string, roomId: string | null, cb: CallbackFn): void {
         if (!this.watchers.has(settingName)) this.watchers.set(settingName, new Map());
         if (!this.watchers.get(settingName).has(roomId)) this.watchers.get(settingName).set(roomId, []);
         this.watchers.get(settingName).get(roomId).push(cb);
     }
 
     // Proxy for handlers to delegate changes to this manager
-    public unwatchSetting(cb: CallbackFn) {
+    public unwatchSetting(cb: CallbackFn): void {
         this.watchers.forEach((map) => {
             map.forEach((callbacks) => {
                 let idx;
@@ -47,7 +47,12 @@ export class WatchManager {
         });
     }
 
-    public notifyUpdate(settingName: string, inRoomId: string | null, atLevel: SettingLevel, newValueAtLevel: any) {
+    public notifyUpdate(
+        settingName: string,
+        inRoomId: string | null,
+        atLevel: SettingLevel,
+        newValueAtLevel: any,
+    ): void {
         // Dev note: We could avoid raising changes for ultimately inconsequential changes, but
         // we also don't have a reliable way to get the old value of a setting. Instead, we'll just
         // let it fall through regardless and let the receiver dedupe if they want to.

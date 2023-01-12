@@ -85,7 +85,7 @@ const singleMxcUpload = async (): Promise<string | null> => {
 
             Modal.createDialog(UploadConfirmDialog, {
                 file,
-                onFinished: async (shouldContinue) => {
+                onFinished: async (shouldContinue): Promise<void> => {
                     if (shouldContinue) {
                         const { content_uri: uri } = await MatrixClientPeg.get().uploadContent(file);
                         resolve(uri);
@@ -151,11 +151,11 @@ export class Command {
         this.analyticsName = opts.analyticsName;
     }
 
-    public getCommand() {
+    public getCommand(): string {
         return `/${this.command}`;
     }
 
-    public getCommandWithArgs() {
+    public getCommandWithArgs(): string {
         return this.getCommand() + " " + this.args;
     }
 
@@ -184,7 +184,7 @@ export class Command {
         return this.runFn(roomId, args);
     }
 
-    public getUsage() {
+    public getUsage(): string {
         return _t("Usage") + ": " + this.getCommandWithArgs();
     }
 
@@ -193,15 +193,15 @@ export class Command {
     }
 }
 
-function reject(error) {
+function reject(error?: any): RunResult {
     return { error };
 }
 
-function success(promise?: Promise<any>) {
+function success(promise?: Promise<any>): RunResult {
     return { promise };
 }
 
-function successSync(value: any) {
+function successSync(value: any): RunResult {
     return success(Promise.resolve(value));
 }
 
@@ -319,7 +319,7 @@ export const Commands = [
                 );
 
                 return success(
-                    finished.then(async ([resp]) => {
+                    finished.then(async ([resp]): Promise<void> => {
                         if (!resp?.continue) return;
                         await upgradeRoom(room, args, resp.invite);
                     }),
@@ -338,7 +338,7 @@ export const Commands = [
         runFn: function (roomId, args) {
             if (args) {
                 return success(
-                    (async () => {
+                    (async (): Promise<void> => {
                         const unixTimestamp = Date.parse(args);
                         if (!unixTimestamp) {
                             throw newTranslatableError(
@@ -501,7 +501,9 @@ export const Commands = [
                 ? ContentHelpers.parseTopicContent(content)
                 : { text: _t("This room has no topic.") };
 
-            const ref = (e) => e && linkifyElement(e);
+            const ref = (e): void => {
+                if (e) linkifyElement(e);
+            };
             const body = topicToHtml(topic.text, topic.html, ref, true);
 
             Modal.createDialog(InfoDialog, {
@@ -1028,7 +1030,7 @@ export const Commands = [
                     const fingerprint = matches[3];
 
                     return success(
-                        (async () => {
+                        (async (): Promise<void> => {
                             const device = cli.getStoredDevice(userId, deviceId);
                             if (!device) {
                                 throw newTranslatableError("Unknown (user, session) pair: (%(userId)s, %(deviceId)s)", {
@@ -1205,7 +1207,7 @@ export const Commands = [
         },
         runFn: (roomId) => {
             return success(
-                (async () => {
+                (async (): Promise<void> => {
                     const room = await VoipUserMapper.sharedInstance().getVirtualRoomForRoom(roomId);
                     if (!room) throw newTranslatableError("No virtual room for this room");
                     dis.dispatch<ViewRoomPayload>({
@@ -1231,7 +1233,7 @@ export const Commands = [
             }
 
             return success(
-                (async () => {
+                (async (): Promise<void> => {
                     if (isPhoneNumber) {
                         const results = await LegacyCallHandler.instance.pstnLookup(userId);
                         if (!results || results.length === 0 || !results[0].userid) {
@@ -1265,7 +1267,7 @@ export const Commands = [
                     const [userId, msg] = matches.slice(1);
                     if (userId && userId.startsWith("@") && userId.includes(":")) {
                         return success(
-                            (async () => {
+                            (async (): Promise<void> => {
                                 const cli = MatrixClientPeg.get();
                                 const roomId = await ensureDMExists(cli, userId);
                                 dis.dispatch<ViewRoomPayload>({

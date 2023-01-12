@@ -37,14 +37,14 @@ import { useDispatcher } from "../hooks/useDispatcher";
 import { ActionPayload } from "../dispatcher/payloads";
 import { Call } from "../models/Call";
 
-export const getIncomingCallToastKey = (stateKey: string) => `call_${stateKey}`;
+export const getIncomingCallToastKey = (stateKey: string): string => `call_${stateKey}`;
 
 interface JoinCallButtonWithCallProps {
     onClick: (e: ButtonEvent) => void;
     call: Call;
 }
 
-function JoinCallButtonWithCall({ onClick, call }: JoinCallButtonWithCallProps) {
+function JoinCallButtonWithCall({ onClick, call }: JoinCallButtonWithCallProps): JSX.Element {
     const disabledTooltip = useJoinCallButtonDisabledTooltip(call);
 
     return (
@@ -64,7 +64,7 @@ interface Props {
     callEvent: MatrixEvent;
 }
 
-export function IncomingCallToast({ callEvent }: Props) {
+export function IncomingCallToast({ callEvent }: Props): JSX.Element {
     const roomId = callEvent.getRoomId()!;
     const room = MatrixClientPeg.get().getRoom(roomId);
     const call = useCall(roomId);

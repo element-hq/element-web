@@ -47,12 +47,12 @@ const EffectsOverlay: FunctionComponent<IProps> = ({ roomWidth }) => {
     };
 
     useEffect(() => {
-        const resize = () => {
+        const resize = (): void => {
             if (canvasRef.current && canvasRef.current?.height !== UIStore.instance.windowHeight) {
                 canvasRef.current.height = UIStore.instance.windowHeight;
             }
         };
-        const onAction = (payload: { action: string }) => {
+        const onAction = (payload: { action: string }): void => {
             const actionPrefix = "effects.";
             if (payload.action.indexOf(actionPrefix) === 0) {
                 const effect = payload.action.slice(actionPrefix.length);

@@ -27,7 +27,7 @@ interface IProps {
 }
 
 export default class E2eSetup extends React.Component<IProps> {
-    public render() {
+    public render(): JSX.Element {
         return (
             <AuthPage>
                 <CompleteSecurityBody>

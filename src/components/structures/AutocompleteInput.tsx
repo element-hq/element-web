@@ -52,11 +52,11 @@ export const AutocompleteInput: React.FC<AutocompleteInputProps> = ({
     const editorContainerRef = useRef<HTMLDivElement>(null);
     const editorRef = useRef<HTMLInputElement>(null);
 
-    const focusEditor = () => {
+    const focusEditor = (): void => {
         editorRef?.current?.focus();
     };
 
-    const onQueryChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    const onQueryChange = async (e: ChangeEvent<HTMLInputElement>): Promise<void> => {
         const value = e.target.value.trim();
         setQuery(value);
 
@@ -74,11 +74,11 @@ export const AutocompleteInput: React.FC<AutocompleteInputProps> = ({
         setSuggestions(matches);
     };
 
-    const onClickInputArea = () => {
+    const onClickInputArea = (): void => {
         focusEditor();
     };
 
-    const onKeyDown = (e: KeyboardEvent) => {
+    const onKeyDown = (e: KeyboardEvent): void => {
         const hasModifiers = e.ctrlKey || e.shiftKey || e.metaKey;
 
         // when the field is empty and the user hits backspace remove the right-most target
@@ -87,7 +87,7 @@ export const AutocompleteInput: React.FC<AutocompleteInputProps> = ({
         }
     };
 
-    const toggleSelection = (completion: ICompletion) => {
+    const toggleSelection = (completion: ICompletion): void => {
         const newSelection = [...selection];
         const index = selection.findIndex((selection) => selection.completionId === completion.completionId);
 
@@ -101,7 +101,7 @@ export const AutocompleteInput: React.FC<AutocompleteInputProps> = ({
         focusEditor();
     };
 
-    const removeSelection = (completion: ICompletion) => {
+    const removeSelection = (completion: ICompletion): void => {
         const newSelection = [...selection];
         const index = selection.findIndex((selection) => selection.completionId === completion.completionId);
 

@@ -70,7 +70,7 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
         };
     }
 
-    private fakeEvent({ message }: IState) {
+    private fakeEvent({ message }: IState): MatrixEvent {
         // Fake it till we make it
         /* eslint-disable quote-props */
         const rawEvent = {
@@ -111,7 +111,7 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
         return event;
     }
 
-    public render() {
+    public render(): JSX.Element {
         const className = classnames(this.props.className, {
             mx_IRCLayout: this.props.layout == Layout.IRC,
             mx_EventTilePreview_loader: !this.props.userId,

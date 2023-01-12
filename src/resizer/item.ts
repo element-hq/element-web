@@ -37,12 +37,12 @@ export default class ResizeItem<C extends IConfig = IConfig> {
         this.id = handle.getAttribute("data-id");
     }
 
-    private copyWith(handle: HTMLElement, resizer: Resizer, sizer: Sizer, container?: HTMLElement) {
+    private copyWith(handle: HTMLElement, resizer: Resizer, sizer: Sizer, container?: HTMLElement): ResizeItem {
         const Ctor = this.constructor as typeof ResizeItem;
         return new Ctor(handle, resizer, sizer, container);
     }
 
-    private advance(forwards: boolean) {
+    private advance(forwards: boolean): ResizeItem {
         // opposite direction from fromResizeHandle to get back to handle
         let handle = this.reverse ? this.domNode.previousElementSibling : this.domNode.nextElementSibling;
         const moveNext = forwards !== this.reverse; // xor
@@ -62,39 +62,39 @@ export default class ResizeItem<C extends IConfig = IConfig> {
         }
     }
 
-    public next() {
+    public next(): ResizeItem {
         return this.advance(true);
     }
 
-    public previous() {
+    public previous(): ResizeItem {
         return this.advance(false);
     }
 
-    public size() {
+    public size(): number {
         return this.sizer.getItemSize(this.domNode);
     }
 
-    public offset() {
+    public offset(): number {
         return this.sizer.getItemOffset(this.domNode);
     }
 
-    public start() {
+    public start(): void {
         this.sizer.start(this.domNode);
     }
 
-    public finish() {
+    public finish(): void {
         this.sizer.finish(this.domNode);
     }
 
-    public getSize() {
+    public getSize(): string {
         return this.sizer.getDesiredItemSize(this.domNode);
     }
 
-    public setRawSize(size: string) {
+    public setRawSize(size: string): void {
         this.sizer.setItemSize(this.domNode, size);
     }
 
-    public setSize(size: number) {
+    public setSize(size: number): void {
         this.setRawSize(`${Math.round(size)}px`);
         const callback = this.resizer.config.onResized;
         if (callback) {
@@ -102,7 +102,7 @@ export default class ResizeItem<C extends IConfig = IConfig> {
         }
     }
 
-    public clearSize() {
+    public clearSize(): void {
         this.sizer.clearItemSize(this.domNode);
         const callback = this.resizer.config.onResized;
         if (callback) {
@@ -110,7 +110,7 @@ export default class ResizeItem<C extends IConfig = IConfig> {
         }
     }
 
-    public first() {
+    public first(): ResizeItem {
         const firstHandle = Array.from(this.domNode.parentElement.children).find((el) => {
             return this.resizer.isResizeHandle(<HTMLElement>el);
         });
@@ -119,7 +119,7 @@ export default class ResizeItem<C extends IConfig = IConfig> {
         }
     }
 
-    public last() {
+    public last(): ResizeItem {
         const lastHandle = Array.from(this.domNode.parentElement.children)
             .reverse()
             .find((el) => {

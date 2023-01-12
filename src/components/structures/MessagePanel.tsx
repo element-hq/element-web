@@ -296,19 +296,19 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         );
     }
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         this.calculateRoomMembersCount();
         this.props.room?.currentState.on(RoomStateEvent.Update, this.calculateRoomMembersCount);
         this.isMounted = true;
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         this.isMounted = false;
         this.props.room?.currentState.off(RoomStateEvent.Update, this.calculateRoomMembersCount);
         SettingsStore.unwatchSetting(this.showTypingNotificationsWatcherRef);
     }
 
-    public componentDidUpdate(prevProps, prevState) {
+    public componentDidUpdate(prevProps, prevState): void {
         if (prevProps.layout !== this.props.layout) {
             this.calculateRoomMembersCount();
         }
@@ -752,7 +752,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         const readReceipts = this.readReceiptsByEvent[eventId];
 
         let isLastSuccessful = false;
-        const isSentState = (s) => !s || s === "sent";
+        const isSentState = (s): boolean => !s || s === "sent";
         const isSent = isSentState(mxEv.getAssociatedStatus());
         const hasNextEvent = nextEvent && this.shouldShowEvent(nextEvent);
         if (!hasNextEvent && isSent) {
@@ -982,7 +982,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         }
     }
 
-    public render() {
+    public render(): JSX.Element {
         let topSpinner;
         let bottomSpinner;
         if (this.props.backPaginating) {

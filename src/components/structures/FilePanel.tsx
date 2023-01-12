@@ -223,7 +223,7 @@ class FilePanel extends React.Component<IProps, IState> {
         }
     }
 
-    public render() {
+    public render(): JSX.Element {
         if (MatrixClientPeg.get().isGuest()) {
             return (
                 <BaseCard className="mx_FilePanel mx_RoomView_messageListWrapper" onClose={this.props.onClose}>

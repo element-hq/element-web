@@ -38,7 +38,7 @@ export const VoiceBroadcastRecordingPip: React.FC<VoiceBroadcastRecordingPipProp
         useVoiceBroadcastRecording(recording);
     const { currentDevice, devices, setDevice } = useAudioDeviceSelection();
 
-    const onDeviceSelect = async (device: MediaDeviceInfo) => {
+    const onDeviceSelect = async (device: MediaDeviceInfo): Promise<void> => {
         setShowDeviceSelect(false);
 
         if (currentDevice.deviceId === device.deviceId) {
@@ -78,7 +78,10 @@ export const VoiceBroadcastRecordingPip: React.FC<VoiceBroadcastRecordingPipProp
             <hr className="mx_VoiceBroadcastBody_divider" />
             <div className="mx_VoiceBroadcastBody_controls">
                 {toggleControl}
-                <AccessibleTooltipButton onClick={() => setShowDeviceSelect(true)} title={_t("Change input device")}>
+                <AccessibleTooltipButton
+                    onClick={(): void => setShowDeviceSelect(true)}
+                    title={_t("Change input device")}
+                >
                     <MicrophoneIcon className="mx_Icon mx_Icon_16 mx_Icon_alert" />
                 </AccessibleTooltipButton>
                 <VoiceBroadcastControl icon={StopIcon} label="Stop Recording" onClick={stopRecording} />

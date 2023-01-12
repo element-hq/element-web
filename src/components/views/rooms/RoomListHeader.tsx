@@ -45,7 +45,7 @@ import {
     showCreateNewSubspace,
     showSpaceInvite,
 } from "../../../utils/space";
-import { ChevronFace, ContextMenuTooltipButton, useContextMenu } from "../../structures/ContextMenu";
+import { ChevronFace, ContextMenuTooltipButton, useContextMenu, MenuProps } from "../../structures/ContextMenu";
 import { BetaPill } from "../beta/BetaCard";
 import IconizedContextMenu, {
     IconizedContextMenuOption,
@@ -56,7 +56,7 @@ import InlineSpinner from "../elements/InlineSpinner";
 import TooltipTarget from "../elements/TooltipTarget";
 import { HomeButtonContextMenu } from "../spaces/SpacePanel";
 
-const contextMenuBelow = (elementRect: DOMRect) => {
+const contextMenuBelow = (elementRect: DOMRect): MenuProps => {
     // align the context menu's icons with the icon which opened the context menu
     const left = elementRect.left + window.scrollX;
     const top = elementRect.bottom + window.scrollY + 12;
@@ -74,12 +74,12 @@ const usePendingActions = (): Map<PendingActionType, Set<string>> => {
     const cli = useContext(MatrixClientContext);
     const [actions, setActions] = useState(new Map<PendingActionType, Set<string>>());
 
-    const addAction = (type: PendingActionType, key: string) => {
+    const addAction = (type: PendingActionType, key: string): void => {
         const keys = new Set(actions.get(type));
         keys.add(key);
         setActions(new Map(actions).set(type, keys));
     };
-    const removeAction = (type: PendingActionType, key: string) => {
+    const removeAction = (type: PendingActionType, key: string): void => {
         const keys = new Set(actions.get(type));
         if (keys.delete(key)) {
             setActions(new Map(actions).set(type, keys));
@@ -112,7 +112,7 @@ interface IProps {
     onVisibilityChange?(): void;
 }
 
-const RoomListHeader = ({ onVisibilityChange }: IProps) => {
+const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
     const cli = useContext(MatrixClientContext);
     const [mainMenuDisplayed, mainMenuHandle, openMainMenu, closeMainMenu] = useContextMenu<HTMLDivElement>();
     const [plusMenuDisplayed, plusMenuHandle, openPlusMenu, closePlusMenu] = useContextMenu<HTMLDivElement>();

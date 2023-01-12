@@ -116,7 +116,7 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<IState> {
         return RoomNotificationStateStore.internalInstance;
     }
 
-    private onSync = (state: SyncState, prevState?: SyncState, data?: ISyncStateData) => {
+    private onSync = (state: SyncState, prevState?: SyncState, data?: ISyncStateData): void => {
         // Only count visible rooms to not torment the user with notification counts in rooms they can't see.
         // This will include highlights from the previous version of the room internally
         const globalState = new SummarizedNotificationState();
@@ -145,7 +145,7 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<IState> {
         }
     };
 
-    protected async onReady() {
+    protected async onReady(): Promise<void> {
         this.matrixClient.on(ClientEvent.Sync, this.onSync);
     }
 

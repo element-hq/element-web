@@ -19,7 +19,7 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import { IEventRelation } from "matrix-js-sdk/src/models/event";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import ContextMenu, { AboveLeftOf } from "../../structures/ContextMenu";
+import ContextMenu, { MenuProps } from "../../structures/ContextMenu";
 import LocationPicker, { ILocationPickerProps } from "./LocationPicker";
 import { shareLiveLocation, shareLocation, LocationShareType } from "./shareLocation";
 import SettingsStore from "../../../settings/SettingsStore";
@@ -32,7 +32,7 @@ import { SettingLevel } from "../../../settings/SettingLevel";
 
 type Props = Omit<ILocationPickerProps, "onChoose" | "shareType"> & {
     onFinished: (ev?: SyntheticEvent) => void;
-    menuPosition: AboveLeftOf;
+    menuPosition: MenuProps;
     openMenu: () => void;
     roomId: Room["roomId"];
     relation?: IEventRelation;
@@ -70,7 +70,7 @@ const LocationShareMenu: React.FC<Props> = ({ menuPosition, onFinished, sender, 
             ? shareLiveLocation(matrixClient, roomId, displayName, openMenu)
             : shareLocation(matrixClient, roomId, shareType, relation, openMenu);
 
-    const onLiveShareEnableSubmit = () => {
+    const onLiveShareEnableSubmit = (): void => {
         SettingsStore.setValue("feature_location_share_live", undefined, SettingLevel.DEVICE, true);
     };
 

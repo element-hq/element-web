@@ -102,7 +102,7 @@ export class OwnProfileStore extends AsyncStoreWithClient<IState> {
         }
     }
 
-    protected async onNotReady() {
+    protected async onNotReady(): Promise<void> {
         if (this.monitoredUser) {
             this.monitoredUser.removeListener(UserEvent.DisplayName, this.onProfileUpdate);
             this.monitoredUser.removeListener(UserEvent.AvatarUrl, this.onProfileUpdate);
@@ -111,7 +111,7 @@ export class OwnProfileStore extends AsyncStoreWithClient<IState> {
         await this.reset({});
     }
 
-    protected async onReady() {
+    protected async onReady(): Promise<void> {
         const myUserId = this.matrixClient.getUserId();
         this.monitoredUser = this.matrixClient.getUser(myUserId);
         if (this.monitoredUser) {
@@ -126,12 +126,12 @@ export class OwnProfileStore extends AsyncStoreWithClient<IState> {
         await this.onProfileUpdate(); // trigger an initial update
     }
 
-    protected async onAction(payload: ActionPayload) {
+    protected async onAction(payload: ActionPayload): Promise<void> {
         // we don't actually do anything here
     }
 
     private onProfileUpdate = throttle(
-        async () => {
+        async (): Promise<void> => {
             // We specifically do not use the User object we stored for profile info as it
             // could easily be wrong (such as per-room instead of global profile).
             const profileInfo = await this.matrixClient.getProfileInfo(this.matrixClient.getUserId());
@@ -156,7 +156,7 @@ export class OwnProfileStore extends AsyncStoreWithClient<IState> {
         { trailing: true, leading: true },
     );
 
-    private onStateEvents = async (ev: MatrixEvent) => {
+    private onStateEvents = async (ev: MatrixEvent): Promise<void> => {
         const myUserId = MatrixClientPeg.get().getUserId();
         if (ev.getType() === EventType.RoomMember && ev.getSender() === myUserId && ev.getStateKey() === myUserId) {
             await this.onProfileUpdate();

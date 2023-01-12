@@ -33,17 +33,17 @@ import MiniAvatarUploader, { AVATAR_SIZE } from "../views/elements/MiniAvatarUpl
 import PosthogTrackers from "../../PosthogTrackers";
 import EmbeddedPage from "./EmbeddedPage";
 
-const onClickSendDm = (ev: ButtonEvent) => {
+const onClickSendDm = (ev: ButtonEvent): void => {
     PosthogTrackers.trackInteraction("WebHomeCreateChatButton", ev);
     dis.dispatch({ action: "view_create_chat" });
 };
 
-const onClickExplore = (ev: ButtonEvent) => {
+const onClickExplore = (ev: ButtonEvent): void => {
     PosthogTrackers.trackInteraction("WebHomeExploreRoomsButton", ev);
     dis.fire(Action.ViewRoomDirectory);
 };
 
-const onClickNewRoom = (ev: ButtonEvent) => {
+const onClickNewRoom = (ev: ButtonEvent): void => {
     PosthogTrackers.trackInteraction("WebHomeCreateRoomButton", ev);
     dis.dispatch({ action: "view_create_room" });
 };
@@ -52,12 +52,17 @@ interface IProps {
     justRegistered?: boolean;
 }
 
-const getOwnProfile = (userId: string) => ({
+const getOwnProfile = (
+    userId: string,
+): {
+    displayName: string;
+    avatarUrl: string;
+} => ({
     displayName: OwnProfileStore.instance.displayName || userId,
     avatarUrl: OwnProfileStore.instance.getHttpAvatarUrl(AVATAR_SIZE),
 });
 
-const UserWelcomeTop = () => {
+const UserWelcomeTop: React.FC = () => {
     const cli = useContext(MatrixClientContext);
     const userId = cli.getUserId();
     const [ownProfile, setOwnProfile] = useState(getOwnProfile(userId));

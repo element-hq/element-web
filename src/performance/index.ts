@@ -121,7 +121,7 @@ export default class PerformanceMonitor {
         });
     }
 
-    public addPerformanceDataCallback(listener: PerformanceDataListener, buffer = false) {
+    public addPerformanceDataCallback(listener: PerformanceDataListener, buffer = false): void {
         this.listeners.push(listener);
         if (buffer) {
             const toEmit = this.entries.filter((entry) => this.shouldEmit(listener, entry));
@@ -131,7 +131,7 @@ export default class PerformanceMonitor {
         }
     }
 
-    public removePerformanceDataCallback(callback?: PerformanceCallbackFunction) {
+    public removePerformanceDataCallback(callback?: PerformanceCallbackFunction): void {
         if (!callback) {
             this.listeners = [];
         } else {

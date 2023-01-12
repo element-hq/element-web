@@ -26,7 +26,7 @@ interface IProps {
     onClick?(): void;
 }
 
-export default function SenderProfile({ mxEvent, onClick }: IProps) {
+export default function SenderProfile({ mxEvent, onClick }: IProps): JSX.Element {
     const member = useRoomMemberProfile({
         userId: mxEvent.getSender(),
         member: mxEvent.sender,

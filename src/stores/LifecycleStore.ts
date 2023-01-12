@@ -41,13 +41,13 @@ class LifecycleStore extends Store<ActionPayload> {
         super(dis);
     }
 
-    private setState(newState: Partial<IState>) {
+    private setState(newState: Partial<IState>): void {
         this.state = Object.assign(this.state, newState);
         this.__emitChange();
     }
 
     // eslint-disable-next-line @typescript-eslint/naming-convention
-    protected __onDispatch(payload: ActionPayload | DoAfterSyncPreparedPayload<ActionPayload>) {
+    protected __onDispatch(payload: ActionPayload | DoAfterSyncPreparedPayload<ActionPayload>): void {
         switch (payload.action) {
             case Action.DoAfterSyncPrepared:
                 this.setState({
@@ -78,7 +78,7 @@ class LifecycleStore extends Store<ActionPayload> {
         }
     }
 
-    private reset() {
+    private reset(): void {
         this.state = Object.assign({}, INITIAL_STATE);
     }
 }

@@ -175,7 +175,7 @@ export class PosthogAnalytics {
         this.onLayoutUpdated();
     }
 
-    private onLayoutUpdated = () => {
+    private onLayoutUpdated = (): void => {
         let layout: UserProperties["WebLayout"];
 
         switch (SettingsStore.getValue("layout")) {
@@ -195,7 +195,7 @@ export class PosthogAnalytics {
         this.setProperty("WebLayout", layout);
     };
 
-    private onAction = (payload: ActionPayload) => {
+    private onAction = (payload: ActionPayload): void => {
         if (payload.action !== Action.SettingUpdated) return;
         const settingsPayload = payload as SettingUpdatedPayload;
         if (["layout", "useCompactLayout"].includes(settingsPayload.settingName)) {
@@ -232,7 +232,7 @@ export class PosthogAnalytics {
         return properties;
     };
 
-    private registerSuperProperties(properties: Properties) {
+    private registerSuperProperties(properties: Properties): void {
         if (this.enabled) {
             this.posthog.register(properties);
         }
@@ -255,7 +255,7 @@ export class PosthogAnalytics {
     }
 
     // eslint-disable-nextline no-unused-varsx
-    private capture(eventName: string, properties: Properties, options?: IPostHogEventOptions) {
+    private capture(eventName: string, properties: Properties, options?: IPostHogEventOptions): void {
         if (!this.enabled) {
             return;
         }

@@ -41,7 +41,7 @@ export default class RoomUpgradeDialog extends React.Component<IProps, IState> {
         busy: true,
     };
 
-    public async componentDidMount() {
+    public async componentDidMount(): Promise<void> {
         const recommended = await this.props.room.getRecommendedVersion();
         this.targetVersion = recommended.version;
         this.setState({ busy: false });
@@ -68,7 +68,7 @@ export default class RoomUpgradeDialog extends React.Component<IProps, IState> {
             });
     };
 
-    public render() {
+    public render(): JSX.Element {
         let buttons;
         if (this.state.busy) {
             buttons = <Spinner />;

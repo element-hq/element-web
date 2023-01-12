@@ -55,7 +55,7 @@ const SORTED_EMOJI: ISortedEmoji[] = EMOJI.sort((a, b) => {
     _orderBy: index,
 }));
 
-function score(query, space) {
+function score(query: string, space: string): number {
     const index = space.indexOf(query);
     if (index === -1) {
         return Infinity;
@@ -154,7 +154,7 @@ export default class EmojiProvider extends AutocompleteProvider {
         return [];
     }
 
-    public getName() {
+    public getName(): string {
         return "😃 " + _t("Emoji");
     }
 

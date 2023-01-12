@@ -18,10 +18,13 @@ import { useState } from "react";
 
 import { useTypedEventEmitter } from "../../hooks/useEventEmitter";
 import { VoiceBroadcastPreRecordingStore } from "../stores/VoiceBroadcastPreRecordingStore";
+import { VoiceBroadcastPreRecording } from "../models/VoiceBroadcastPreRecording";
 
 export const useCurrentVoiceBroadcastPreRecording = (
     voiceBroadcastPreRecordingStore: VoiceBroadcastPreRecordingStore,
-) => {
+): {
+    currentVoiceBroadcastPreRecording: VoiceBroadcastPreRecording | null;
+} => {
     const [currentVoiceBroadcastPreRecording, setCurrentVoiceBroadcastPreRecording] = useState(
         voiceBroadcastPreRecordingStore.getCurrent(),
     );

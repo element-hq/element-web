@@ -43,7 +43,7 @@ export default class Clock extends React.Component<Props> {
         return currentFloor !== nextFloor;
     }
 
-    public render() {
+    public render(): JSX.Element {
         return (
             <span aria-live={this.props["aria-live"]} role={this.props.role} className="mx_Clock">
                 {this.props.formatFn(this.props.seconds)}

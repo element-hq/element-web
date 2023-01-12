@@ -38,19 +38,19 @@ export default class LinkPreviewWidget extends React.Component<IProps> {
     private readonly description = createRef<HTMLDivElement>();
     private image = createRef<HTMLImageElement>();
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         if (this.description.current) {
             linkifyElement(this.description.current);
         }
     }
 
-    public componentDidUpdate() {
+    public componentDidUpdate(): void {
         if (this.description.current) {
             linkifyElement(this.description.current);
         }
     }
 
-    private onImageClick = (ev) => {
+    private onImageClick = (ev): void => {
         const p = this.props.preview;
         if (ev.button != 0 || ev.metaKey) return;
         ev.preventDefault();
@@ -83,7 +83,7 @@ export default class LinkPreviewWidget extends React.Component<IProps> {
         Modal.createDialog(ImageView, params, "mx_Dialog_lightbox", null, true);
     };
 
-    public render() {
+    public render(): JSX.Element {
         const p = this.props.preview;
         if (!p || Object.keys(p).length === 0) {
             return <div />;

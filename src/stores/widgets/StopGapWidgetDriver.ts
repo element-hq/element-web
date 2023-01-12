@@ -63,7 +63,7 @@ function getRememberedCapabilitiesForWidget(widget: Widget): Capability[] {
     return JSON.parse(localStorage.getItem(`widget_${widget.id}_approved_caps`) || "[]");
 }
 
-function setRememberedCapabilitiesForWidget(widget: Widget, caps: Capability[]) {
+function setRememberedCapabilitiesForWidget(widget: Widget, caps: Capability[]): void {
     localStorage.setItem(`widget_${widget.id}_approved_caps`, JSON.stringify(caps));
 }
 
@@ -259,7 +259,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
 
             await Promise.all(
                 Object.entries(contentMap).flatMap(([userId, userContentMap]) =>
-                    Object.entries(userContentMap).map(async ([deviceId, content]) => {
+                    Object.entries(userContentMap).map(async ([deviceId, content]): Promise<void> => {
                         if (deviceId === "*") {
                             // Send the message to all devices we have keys for
                             await client.encryptAndSendToDevices(
@@ -359,7 +359,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
         return allResults;
     }
 
-    public async askOpenID(observer: SimpleObservable<IOpenIDUpdate>) {
+    public async askOpenID(observer: SimpleObservable<IOpenIDUpdate>): Promise<void> {
         const oidcState = SdkContextClass.instance.widgetPermissionStore.getOIDCState(
             this.forWidget,
             this.forWidgetKind,
@@ -384,7 +384,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
             widgetKind: this.forWidgetKind,
             inRoomId: this.inRoomId,
 
-            onFinished: async (confirm) => {
+            onFinished: async (confirm): Promise<void> => {
                 if (!confirm) {
                     return observer.update({ state: OpenIDRequestState.Blocked });
                 }
@@ -405,8 +405,8 @@ export class StopGapWidgetDriver extends WidgetDriver {
         let setTurnServer: (server: ITurnServer) => void;
         let setError: (error: Error) => void;
 
-        const onTurnServers = ([server]: IClientTurnServer[]) => setTurnServer(normalizeTurnServer(server));
-        const onTurnServersError = (error: Error, fatal: boolean) => {
+        const onTurnServers = ([server]: IClientTurnServer[]): void => setTurnServer(normalizeTurnServer(server));
+        const onTurnServersError = (error: Error, fatal: boolean): void => {
             if (fatal) setError(error);
         };
 

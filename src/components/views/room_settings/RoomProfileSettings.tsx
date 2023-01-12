@@ -97,7 +97,7 @@ export default class RoomProfileSettings extends React.Component<IProps, IState>
         });
     };
 
-    private isSaveEnabled = () => {
+    private isSaveEnabled = (): boolean => {
         return Boolean(Object.values(this.state.profileFieldsTouched).length);
     };
 

@@ -82,7 +82,7 @@ export default class PresenceLabel extends React.Component<IProps> {
         }
     }
 
-    public render() {
+    public render(): JSX.Element {
         return (
             <div className="mx_PresenceLabel">
                 {this.getPrettyPresence(this.props.presenceState, this.props.activeAgo, this.props.currentlyActive)}

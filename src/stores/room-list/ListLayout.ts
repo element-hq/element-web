@@ -101,11 +101,11 @@ export class ListLayout {
         return px / this.tileHeight;
     }
 
-    public reset() {
+    public reset(): void {
         localStorage.removeItem(this.key);
     }
 
-    private save() {
+    private save(): void {
         localStorage.setItem(this.key, JSON.stringify(this.serialize()));
     }
 

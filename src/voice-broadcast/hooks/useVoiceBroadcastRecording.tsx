@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { Room } from "matrix-js-sdk/src/models/room";
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import React, { useState } from "react";
 
 import { VoiceBroadcastInfoState, VoiceBroadcastRecording, VoiceBroadcastRecordingEvent } from "..";
@@ -40,7 +42,17 @@ const showStopBroadcastingDialog = async (): Promise<boolean> => {
     return confirmed;
 };
 
-export const useVoiceBroadcastRecording = (recording: VoiceBroadcastRecording) => {
+export const useVoiceBroadcastRecording = (
+    recording: VoiceBroadcastRecording,
+): {
+    live: boolean;
+    timeLeft: number;
+    recordingState: VoiceBroadcastInfoState;
+    room: Room;
+    sender: RoomMember;
+    stopRecording(): void;
+    toggleRecording(): void;
+} => {
     const client = MatrixClientPeg.get();
     const roomId = recording.infoEvent.getRoomId();
     const room = client.getRoom(roomId);
@@ -49,7 +61,7 @@ export const useVoiceBroadcastRecording = (recording: VoiceBroadcastRecording) =
         throw new Error("Unable to find voice broadcast room with Id: " + roomId);
     }
 
-    const stopRecording = async () => {
+    const stopRecording = async (): Promise<void> => {
         const confirmed = await showStopBroadcastingDialog();
 
         if (confirmed) {

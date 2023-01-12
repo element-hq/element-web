@@ -20,7 +20,7 @@ import { EventType } from "matrix-js-sdk/src/@types/event";
 import BaseTool, { DevtoolsContext, IDevtoolsProps } from "./BaseTool";
 import { _t } from "../../../../languageHandler";
 
-const ServersInRoom = ({ onBack }: IDevtoolsProps) => {
+const ServersInRoom: React.FC<IDevtoolsProps> = ({ onBack }) => {
     const context = useContext(DevtoolsContext);
 
     const servers = useMemo<Record<string, number>>(() => {

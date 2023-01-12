@@ -14,9 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { AuthType, createClient, IAuthData } from "matrix-js-sdk/src/matrix";
+import { AuthType, createClient, IAuthData, IInputs } from "matrix-js-sdk/src/matrix";
 import React, { Fragment, ReactNode } from "react";
-import { MatrixClient } from "matrix-js-sdk/src/client";
+import { IRequestTokenResponse, MatrixClient } from "matrix-js-sdk/src/client";
 import classNames from "classnames";
 import { logger } from "matrix-js-sdk/src/logger";
 import { ISSOFlow } from "matrix-js-sdk/src/@types/auth";
@@ -32,7 +32,7 @@ import dis from "../../../dispatcher/dispatcher";
 import SSOButtons from "../../views/elements/SSOButtons";
 import ServerPicker from "../../views/elements/ServerPicker";
 import RegistrationForm from "../../views/auth/RegistrationForm";
-import AccessibleButton from "../../views/elements/AccessibleButton";
+import AccessibleButton, { ButtonEvent } from "../../views/elements/AccessibleButton";
 import AuthBody from "../../views/auth/AuthBody";
 import AuthHeader from "../../views/auth/AuthHeader";
 import InteractiveAuth, { InteractiveAuthCallback } from "../InteractiveAuth";
@@ -42,7 +42,7 @@ import { AuthHeaderProvider } from "./header/AuthHeaderProvider";
 import SettingsStore from "../../../settings/SettingsStore";
 import { ValidatedServerConfig } from "../../../utils/ValidatedServerConfig";
 
-const debuglog = (...args: any[]) => {
+const debuglog = (...args: any[]): void => {
     if (SettingsStore.getValue("debug_registration")) {
         logger.log.call(console, "Registration debuglog:", ...args);
     }
@@ -148,17 +148,17 @@ export default class Registration extends React.Component<IProps, IState> {
         });
     }
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         this.replaceClient(this.props.serverConfig);
         //triggers a confirmation dialog for data loss before page unloads/refreshes
         window.addEventListener("beforeunload", this.unloadCallback);
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         window.removeEventListener("beforeunload", this.unloadCallback);
     }
 
-    private unloadCallback = (event: BeforeUnloadEvent) => {
+    private unloadCallback = (event: BeforeUnloadEvent): string => {
         if (this.state.doingUIAuth) {
             event.preventDefault();
             event.returnValue = "";
@@ -166,7 +166,7 @@ export default class Registration extends React.Component<IProps, IState> {
         }
     };
 
-    public componentDidUpdate(prevProps) {
+    public componentDidUpdate(prevProps): void {
         if (
             prevProps.serverConfig.hsUrl !== this.props.serverConfig.hsUrl ||
             prevProps.serverConfig.isUrl !== this.props.serverConfig.isUrl
@@ -175,7 +175,7 @@ export default class Registration extends React.Component<IProps, IState> {
         }
     }
 
-    private async replaceClient(serverConfig: ValidatedServerConfig) {
+    private async replaceClient(serverConfig: ValidatedServerConfig): Promise<void> {
         this.latestServerConfig = serverConfig;
         const { hsUrl, isUrl } = serverConfig;
 
@@ -283,7 +283,12 @@ export default class Registration extends React.Component<IProps, IState> {
         });
     };
 
-    private requestEmailToken = (emailAddress, clientSecret, sendAttempt, sessionId) => {
+    private requestEmailToken = (
+        emailAddress: string,
+        clientSecret: string,
+        sendAttempt: number,
+        sessionId: string,
+    ): Promise<IRequestTokenResponse> => {
         return this.state.matrixClient.requestRegisterEmailToken(
             emailAddress,
             clientSecret,
@@ -297,10 +302,10 @@ export default class Registration extends React.Component<IProps, IState> {
         );
     };
 
-    private onUIAuthFinished: InteractiveAuthCallback = async (success, response) => {
+    private onUIAuthFinished: InteractiveAuthCallback = async (success, response): Promise<void> => {
         debuglog("Registration: ui authentication finished: ", { success, response });
         if (!success) {
-            let errorText: ReactNode = response.message || response.toString();
+            let errorText: ReactNode = (response as Error).message || (response as Error).toString();
             // can we give a better error message?
             if (response.errcode === "M_RESOURCE_LIMIT_EXCEEDED") {
                 const errorTop = messageForResourceLimitError(response.data.limit_type, response.data.admin_contact, {
@@ -404,7 +409,7 @@ export default class Registration extends React.Component<IProps, IState> {
         this.setState(newState);
     };
 
-    private setupPushers() {
+    private setupPushers(): Promise<void> {
         if (!this.props.brand) {
             return Promise.resolve();
         }
@@ -433,13 +438,13 @@ export default class Registration extends React.Component<IProps, IState> {
         );
     }
 
-    private onLoginClick = (ev) => {
+    private onLoginClick = (ev: ButtonEvent): void => {
         ev.preventDefault();
         ev.stopPropagation();
         this.props.onLoginClick();
     };
 
-    private onGoToFormClicked = (ev) => {
+    private onGoToFormClicked = (ev: ButtonEvent): void => {
         ev.preventDefault();
         ev.stopPropagation();
         this.replaceClient(this.props.serverConfig);
@@ -449,7 +454,7 @@ export default class Registration extends React.Component<IProps, IState> {
         });
     };
 
-    private makeRegisterRequest = (auth: IAuthData | null) => {
+    private makeRegisterRequest = (auth: IAuthData | null): Promise<IAuthData> => {
         const registerParams = {
             username: this.state.formVals.username,
             password: this.state.formVals.password,
@@ -464,7 +469,7 @@ export default class Registration extends React.Component<IProps, IState> {
         return this.state.matrixClient.registerRequest(registerParams);
     };
 
-    private getUIAuthInputs() {
+    private getUIAuthInputs(): IInputs {
         return {
             emailAddress: this.state.formVals.email,
             phoneCountry: this.state.formVals.phoneCountry,
@@ -475,7 +480,7 @@ export default class Registration extends React.Component<IProps, IState> {
     // Links to the login page shown after registration is completed are routed through this
     // which checks the user hasn't already logged in somewhere else (perhaps we should do
     // this more generally?)
-    private onLoginClickWithCheck = async (ev) => {
+    private onLoginClickWithCheck = async (ev: ButtonEvent): Promise<boolean> => {
         ev.preventDefault();
 
         const sessionLoaded = await Lifecycle.loadSession({ ignoreGuest: true });
@@ -487,7 +492,7 @@ export default class Registration extends React.Component<IProps, IState> {
         return sessionLoaded;
     };
 
-    private renderRegisterComponent() {
+    private renderRegisterComponent(): JSX.Element {
         if (this.state.matrixClient && this.state.doingUIAuth) {
             return (
                 <InteractiveAuth
@@ -565,7 +570,7 @@ export default class Registration extends React.Component<IProps, IState> {
         }
     }
 
-    public render() {
+    public render(): JSX.Element {
         let errorText;
         const err = this.state.errorText;
         if (err) {
@@ -627,7 +632,7 @@ export default class Registration extends React.Component<IProps, IState> {
                         <p>
                             <AccessibleButton
                                 kind="link_inline"
-                                onClick={async (event) => {
+                                onClick={async (event: ButtonEvent): Promise<void> => {
                                     const sessionLoaded = await this.onLoginClickWithCheck(event);
                                     if (sessionLoaded) {
                                         dis.dispatch({ action: "view_welcome_page" });
@@ -651,7 +656,7 @@ export default class Registration extends React.Component<IProps, IState> {
                                 a: (sub) => (
                                     <AccessibleButton
                                         kind="link_inline"
-                                        onClick={async (event) => {
+                                        onClick={async (event: ButtonEvent): Promise<void> => {
                                             const sessionLoaded = await this.onLoginClickWithCheck(event);
                                             if (sessionLoaded) {
                                                 dis.dispatch({ action: "view_home_page" });

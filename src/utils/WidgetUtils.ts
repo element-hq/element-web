@@ -143,7 +143,7 @@ export default class WidgetUtils {
         return new Promise((resolve, reject) => {
             // Tests an account data event, returning true if it's in the state
             // we're waiting for it to be in
-            function eventInIntendedState(ev) {
+            function eventInIntendedState(ev): boolean {
                 if (!ev || !ev.getContent()) return false;
                 if (add) {
                     return ev.getContent()[widgetId] !== undefined;
@@ -158,7 +158,7 @@ export default class WidgetUtils {
                 return;
             }
 
-            function onAccountData(ev) {
+            function onAccountData(ev): void {
                 const currentAccountDataEvent = MatrixClientPeg.get().getAccountData("m.widgets");
                 if (eventInIntendedState(currentAccountDataEvent)) {
                     MatrixClientPeg.get().removeListener(ClientEvent.AccountData, onAccountData);
@@ -190,7 +190,7 @@ export default class WidgetUtils {
         return new Promise((resolve, reject) => {
             // Tests a list of state events, returning true if it's in the state
             // we're waiting for it to be in
-            function eventsInIntendedState(evList) {
+            function eventsInIntendedState(evList: MatrixEvent[]): boolean {
                 const widgetPresent = evList.some((ev) => {
                     return ev.getContent() && ev.getContent()["id"] === widgetId;
                 });
@@ -209,7 +209,7 @@ export default class WidgetUtils {
                 return;
             }
 
-            function onRoomStateEvents(ev: MatrixEvent) {
+            function onRoomStateEvents(ev: MatrixEvent): void {
                 if (ev.getRoomId() !== roomId || ev.getType() !== "im.vector.modular.widgets") return;
 
                 // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
@@ -235,7 +235,7 @@ export default class WidgetUtils {
         widgetUrl: string,
         widgetName: string,
         widgetData: IWidgetData,
-    ) {
+    ): Promise<void> {
         const content = {
             type: widgetType.preferred,
             url: widgetUrl,
@@ -288,10 +288,10 @@ export default class WidgetUtils {
         widgetType?: WidgetType,
         widgetUrl?: string,
         widgetName?: string,
-        widgetData?: object,
+        widgetData?: IWidgetData,
         widgetAvatarUrl?: string,
-    ) {
-        let content;
+    ): Promise<void> {
+        let content: Partial<IWidget> & { avatar_url?: string };
 
         const addingWidget = Boolean(widgetUrl);
 
@@ -309,10 +309,10 @@ export default class WidgetUtils {
             content = {};
         }
 
-        return WidgetUtils.setRoomWidgetContent(roomId, widgetId, content);
+        return WidgetUtils.setRoomWidgetContent(roomId, widgetId, content as IWidget);
     }
 
-    public static setRoomWidgetContent(roomId: string, widgetId: string, content: IWidget) {
+    public static setRoomWidgetContent(roomId: string, widgetId: string, content: IWidget): Promise<void> {
         const addingWidget = !!content.url;
 
         WidgetEchoStore.setRoomWidgetEcho(roomId, widgetId, content);
@@ -334,7 +334,7 @@ export default class WidgetUtils {
      * @param  {Room} room The room to get widgets force
      * @return {[object]} Array containing current / active room widgets
      */
-    public static getRoomWidgets(room: Room) {
+    public static getRoomWidgets(room: Room): MatrixEvent[] {
         // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
         const appsStateEvents = room.currentState.getStateEvents("im.vector.modular.widgets");
         if (!appsStateEvents) {
@@ -500,7 +500,7 @@ export default class WidgetUtils {
         return app as IApp;
     }
 
-    public static getLocalJitsiWrapperUrl(opts: { forLocalRender?: boolean; auth?: string } = {}) {
+    public static getLocalJitsiWrapperUrl(opts: { forLocalRender?: boolean; auth?: string } = {}): string {
         // NB. we can't just encodeURIComponent all of these because the $ signs need to be there
         const queryStringParts = [
             "conferenceDomain=$domain",
@@ -557,7 +557,7 @@ export default class WidgetUtils {
             .open(room, "type_" + app.type, app.id);
     }
 
-    public static isManagedByManager(app) {
+    public static isManagedByManager(app: IApp): boolean {
         if (WidgetUtils.isScalarUrl(app.url)) {
             const managers = IntegrationManagers.sharedInstance();
             if (managers.hasManager()) {

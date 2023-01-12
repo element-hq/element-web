@@ -121,7 +121,7 @@ const BeaconViewDialog: React.FC<IProps> = ({ initialFocusedBeacon, roomId, matr
         }
     }, [mapDisplayError]);
 
-    const onBeaconListItemClick = (beacon: Beacon) => {
+    const onBeaconListItemClick = (beacon: Beacon): void => {
         setFocusedBeaconState({ beacon, ts: Date.now() });
     };
 

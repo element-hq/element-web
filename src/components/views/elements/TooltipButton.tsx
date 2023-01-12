@@ -28,7 +28,7 @@ export default class TooltipButton extends React.Component<IProps> {
         super(props);
     }
 
-    public render() {
+    public render(): JSX.Element {
         return (
             <TooltipTarget
                 className="mx_TooltipButton_container"

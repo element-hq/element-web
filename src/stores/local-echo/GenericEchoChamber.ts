@@ -20,7 +20,7 @@ import { EventEmitter } from "events";
 import { EchoContext } from "./EchoContext";
 import { EchoTransaction, RunFn, TransactionStatus } from "./EchoTransaction";
 
-export async function implicitlyReverted() {
+export async function implicitlyReverted(): Promise<void> {
     // do nothing :D
 }
 
@@ -34,7 +34,7 @@ export abstract class GenericEchoChamber<C extends EchoContext, K, V> extends Ev
         super();
     }
 
-    public setClient(client: MatrixClient) {
+    public setClient(client: MatrixClient): void {
         const oldClient = this.matrixClient;
         this.matrixClient = client;
         this.onClientChanged(oldClient, client);
@@ -53,12 +53,12 @@ export abstract class GenericEchoChamber<C extends EchoContext, K, V> extends Ev
         return this.cache.has(key) ? this.cache.get(key).val : this.lookupFn(key);
     }
 
-    private cacheVal(key: K, val: V, txn: EchoTransaction) {
+    private cacheVal(key: K, val: V, txn: EchoTransaction): void {
         this.cache.set(key, { txn, val });
         this.emit(PROPERTY_UPDATED, key);
     }
 
-    private decacheKey(key: K) {
+    private decacheKey(key: K): void {
         if (this.cache.has(key)) {
             this.context.disownTransaction(this.cache.get(key).txn);
             this.cache.delete(key);
@@ -66,7 +66,7 @@ export abstract class GenericEchoChamber<C extends EchoContext, K, V> extends Ev
         }
     }
 
-    protected markEchoReceived(key: K) {
+    protected markEchoReceived(key: K): void {
         if (this.cache.has(key)) {
             const txn = this.cache.get(key).txn;
             this.context.disownTransaction(txn);
@@ -75,7 +75,7 @@ export abstract class GenericEchoChamber<C extends EchoContext, K, V> extends Ev
         this.decacheKey(key);
     }
 
-    public setValue(auditName: string, key: K, targetVal: V, runFn: RunFn, revertFn: RunFn) {
+    public setValue(auditName: string, key: K, targetVal: V, runFn: RunFn, revertFn: RunFn): void {
         // Cancel any pending transactions for the same key
         if (this.cache.has(key)) {
             this.cache.get(key).txn.cancel();

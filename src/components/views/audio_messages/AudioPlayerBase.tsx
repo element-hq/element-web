@@ -61,7 +61,7 @@ export default abstract class AudioPlayerBase<T extends IProps = IProps> extends
         });
     }
 
-    protected onKeyDown = (ev: React.KeyboardEvent) => {
+    protected onKeyDown = (ev: React.KeyboardEvent): void => {
         let handled = true;
         const action = getKeyBindingsManager().getAccessibilityAction(ev);
 
@@ -88,7 +88,7 @@ export default abstract class AudioPlayerBase<T extends IProps = IProps> extends
         }
     };
 
-    private onPlaybackUpdate = (ev: PlaybackState) => {
+    private onPlaybackUpdate = (ev: PlaybackState): void => {
         this.setState({ playbackPhase: ev });
     };
 

@@ -21,8 +21,10 @@ import PlatformPeg from "../../../PlatformPeg";
 import SettingsStore from "../../../settings/SettingsStore";
 import { _t } from "../../../languageHandler";
 import Spinner from "./Spinner";
+import * as languageHandler from "../../../languageHandler";
 
-function languageMatchesSearchQuery(query, language) {
+type Languages = Awaited<ReturnType<typeof languageHandler.getAllLanguagesFromJson>>;
+function languageMatchesSearchQuery(query: string, language: Languages[0]): boolean {
     if (language.label.toUpperCase().includes(query.toUpperCase())) return true;
     if (language.value.toUpperCase() === query.toUpperCase()) return true;
     return false;
@@ -36,7 +38,7 @@ interface SpellCheckLanguagesDropdownIProps {
 
 interface SpellCheckLanguagesDropdownIState {
     searchQuery: string;
-    languages: any;
+    languages: Languages;
 }
 
 export default class SpellCheckLanguagesDropdown extends React.Component<
@@ -53,7 +55,7 @@ export default class SpellCheckLanguagesDropdown extends React.Component<
         };
     }
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         const plaf = PlatformPeg.get();
         if (plaf) {
             plaf.getAvailableSpellCheckLanguages()
@@ -63,7 +65,7 @@ export default class SpellCheckLanguagesDropdown extends React.Component<
                         if (a > b) return 1;
                         return 0;
                     });
-                    const langs = [];
+                    const langs: Languages = [];
                     languages.forEach((language) => {
                         langs.push({
                             label: language,
@@ -73,16 +75,23 @@ export default class SpellCheckLanguagesDropdown extends React.Component<
                     this.setState({ languages: langs });
                 })
                 .catch((e) => {
-                    this.setState({ languages: ["en"] });
+                    this.setState({
+                        languages: [
+                            {
+                                value: "en",
+                                label: "English",
+                            },
+                        ],
+                    });
                 });
         }
     }
 
-    private onSearchChange(searchQuery: string) {
+    private onSearchChange(searchQuery: string): void {
         this.setState({ searchQuery });
     }
 
-    public render() {
+    public render(): JSX.Element {
         if (this.state.languages === null) {
             return <Spinner />;
         }

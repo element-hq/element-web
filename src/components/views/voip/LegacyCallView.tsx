@@ -76,7 +76,7 @@ interface IState {
     sidebarShown: boolean;
 }
 
-function getFullScreenElement() {
+function getFullScreenElement(): Element | undefined {
     return (
         document.fullscreenElement ||
         // moz omitted because firefox supports this unprefixed now (webkit here for safari)
@@ -85,7 +85,7 @@ function getFullScreenElement() {
     );
 }
 
-function requestFullscreen(element: Element) {
+function requestFullscreen(element: Element): void {
     const method =
         element.requestFullscreen ||
         // moz omitted since firefox supports unprefixed now
@@ -94,7 +94,7 @@ function requestFullscreen(element: Element) {
     if (method) method.call(element);
 }
 
-function exitFullscreen() {
+function exitFullscreen(): void {
     const exitMethod = document.exitFullscreen || document.webkitExitFullscreen || document.msExitFullscreen;
     if (exitMethod) exitMethod.call(document);
 }

@@ -43,7 +43,7 @@ export default class AccessibleTooltipButton extends React.PureComponent<IProps,
         };
     }
 
-    public componentDidUpdate(prevProps: Readonly<IProps>) {
+    public componentDidUpdate(prevProps: Readonly<IProps>): void {
         if (!prevProps.forceHide && this.props.forceHide && this.state.hover) {
             this.setState({
                 hover: false,
@@ -51,7 +51,7 @@ export default class AccessibleTooltipButton extends React.PureComponent<IProps,
         }
     }
 
-    private showTooltip = () => {
+    private showTooltip = (): void => {
         if (this.props.onHover) this.props.onHover(true);
         if (this.props.forceHide) return;
         this.setState({
@@ -59,7 +59,7 @@ export default class AccessibleTooltipButton extends React.PureComponent<IProps,
         });
     };
 
-    private hideTooltip = (ev: SyntheticEvent) => {
+    private hideTooltip = (ev: SyntheticEvent): void => {
         if (this.props.onHover) this.props.onHover(false);
         this.setState({
             hover: false,
@@ -67,13 +67,13 @@ export default class AccessibleTooltipButton extends React.PureComponent<IProps,
         this.props.onHideTooltip?.(ev);
     };
 
-    private onFocus = (ev: FocusEvent) => {
+    private onFocus = (ev: FocusEvent): void => {
         // We only show the tooltip if focus arrived here from some other
         // element, to avoid leaving tooltips hanging around when a modal closes
         if (ev.relatedTarget) this.showTooltip();
     };
 
-    public render() {
+    public render(): JSX.Element {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { title, tooltip, children, tooltipClassName, forceHide, alignment, onHideTooltip, ...props } =
             this.props;

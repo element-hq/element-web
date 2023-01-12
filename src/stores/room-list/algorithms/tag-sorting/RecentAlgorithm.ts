@@ -72,8 +72,8 @@ export const sortRooms = (rooms: Room[]): Room[] => {
     });
 };
 
-const getLastTs = (r: Room, userId: string) => {
-    const mainTimelineLastTs = (() => {
+const getLastTs = (r: Room, userId: string): number => {
+    const mainTimelineLastTs = ((): number => {
         // Apparently we can have rooms without timelines, at least under testing
         // environments. Just return MAX_INT when this happens.
         if (!r?.timeline) {

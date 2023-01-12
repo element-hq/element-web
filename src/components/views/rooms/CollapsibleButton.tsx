@@ -27,7 +27,13 @@ interface ICollapsibleButtonProps extends ComponentProps<typeof MenuItem> {
     iconClassName: string;
 }
 
-export const CollapsibleButton = ({ title, children, className, iconClassName, ...props }: ICollapsibleButtonProps) => {
+export const CollapsibleButton: React.FC<ICollapsibleButtonProps> = ({
+    title,
+    children,
+    className,
+    iconClassName,
+    ...props
+}) => {
     const inOverflowMenu = !!useContext(OverflowMenuContext);
     if (inOverflowMenu) {
         return <IconizedContextMenuOption {...props} iconClassName={iconClassName} label={title} />;

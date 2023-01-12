@@ -43,7 +43,7 @@ interface IState {
     skipFirst: boolean;
 }
 
-const RoomBreadcrumbTile = ({ room, onClick }: { room: Room; onClick: (ev: ButtonEvent) => void }) => {
+const RoomBreadcrumbTile: React.FC<{ room: Room; onClick: (ev: ButtonEvent) => void }> = ({ room, onClick }) => {
     const [onFocus, isActive, ref] = useRovingTabIndex();
 
     return (
@@ -82,12 +82,12 @@ export default class RoomBreadcrumbs extends React.PureComponent<IProps, IState>
         BreadcrumbsStore.instance.on(UPDATE_EVENT, this.onBreadcrumbsUpdate);
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         this.isMounted = false;
         BreadcrumbsStore.instance.off(UPDATE_EVENT, this.onBreadcrumbsUpdate);
     }
 
-    private onBreadcrumbsUpdate = () => {
+    private onBreadcrumbsUpdate = (): void => {
         if (!this.isMounted) return;
 
         // We need to trick the CSSTransition component into updating, which means we need to
@@ -101,7 +101,7 @@ export default class RoomBreadcrumbs extends React.PureComponent<IProps, IState>
         window.setTimeout(() => this.setState({ doAnimation: true, skipFirst: false }), 0);
     };
 
-    private viewRoom = (room: Room, index: number, viaKeyboard = false) => {
+    private viewRoom = (room: Room, index: number, viaKeyboard = false): void => {
         defaultDispatcher.dispatch<ViewRoomPayload>({
             action: Action.ViewRoom,
             room_id: room.roomId,

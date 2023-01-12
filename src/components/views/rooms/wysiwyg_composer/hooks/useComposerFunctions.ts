@@ -18,7 +18,13 @@ import { RefObject, useMemo } from "react";
 
 import { setSelection } from "../utils/selection";
 
-export function useComposerFunctions(ref: RefObject<HTMLDivElement>, setContent: (content: string) => void) {
+export function useComposerFunctions(
+    ref: RefObject<HTMLDivElement>,
+    setContent: (content: string) => void,
+): {
+    clear(): void;
+    insertText(text: string): void;
+} {
     return useMemo(
         () => ({
             clear: () => {

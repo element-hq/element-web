@@ -50,7 +50,7 @@ interface ICustomTheme {
  * Given a non-high-contrast theme, find the corresponding high-contrast one
  * if it exists, or return undefined if not.
  */
-export function findHighContrastTheme(theme: string) {
+export function findHighContrastTheme(theme: string): string | undefined {
     return HIGH_CONTRAST_THEMES[theme];
 }
 
@@ -58,7 +58,7 @@ export function findHighContrastTheme(theme: string) {
  * Given a high-contrast theme, find the corresponding non-high-contrast one
  * if it exists, or return undefined if not.
  */
-export function findNonHighContrastTheme(hcTheme: string) {
+export function findNonHighContrastTheme(hcTheme: string): string | undefined {
     for (const theme in HIGH_CONTRAST_THEMES) {
         if (HIGH_CONTRAST_THEMES[theme] === hcTheme) {
             return theme;
@@ -69,7 +69,7 @@ export function findNonHighContrastTheme(hcTheme: string) {
 /**
  * Decide whether the supplied theme is high contrast.
  */
-export function isHighContrastTheme(theme: string) {
+export function isHighContrastTheme(theme: string): boolean {
     return Object.values(HIGH_CONTRAST_THEMES).includes(theme);
 }
 
@@ -169,7 +169,7 @@ function generateCustomFontFaceCSS(faces: IFontFaces[]): string {
 function setCustomThemeVars(customTheme: ICustomTheme): void {
     const { style } = document.body;
 
-    function setCSSColorVariable(name, hexColor, doPct = true) {
+    function setCSSColorVariable(name, hexColor, doPct = true): void {
         style.setProperty(`--${name}`, hexColor);
         if (doPct) {
             // uses #rrggbbaa to define the color with alpha values at 0%, 15% and 50%
@@ -270,7 +270,7 @@ export async function setTheme(theme?: string): Promise<void> {
     styleSheet.disabled = false;
 
     return new Promise((resolve, reject) => {
-        const switchTheme = function () {
+        const switchTheme = function (): void {
             // we re-enable our theme here just in case we raced with another
             // theme set request as per https://github.com/vector-im/element-web/issues/5601.
             // We could alternatively lock or similar to stop the race, but
@@ -288,10 +288,10 @@ export async function setTheme(theme?: string): Promise<void> {
             resolve();
         };
 
-        const isStyleSheetLoaded = () =>
+        const isStyleSheetLoaded = (): boolean =>
             Boolean([...document.styleSheets].find((_styleSheet) => _styleSheet?.href === styleSheet.href));
 
-        function waitForStyleSheetLoading() {
+        function waitForStyleSheetLoading(): void {
             // turns out that Firefox preloads the CSS for link elements with
             // the disabled attribute, but Chrome doesn't.
             if (isStyleSheetLoaded()) {

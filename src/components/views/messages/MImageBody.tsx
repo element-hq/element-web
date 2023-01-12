@@ -150,7 +150,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         imgElement.src = this.state.thumbUrl ?? this.state.contentUrl;
     };
 
-    private clearError = () => {
+    private clearError = (): void => {
         MatrixClientPeg.get().off(ClientEvent.Sync, this.reconnectedListener);
         this.setState({ imgError: false });
     };
@@ -239,7 +239,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         return media.srcHttp;
     }
 
-    private async downloadImage() {
+    private async downloadImage(): Promise<void> {
         if (this.state.contentUrl) return; // already downloaded
 
         let thumbUrl: string;
@@ -318,14 +318,14 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         });
     }
 
-    private clearBlurhashTimeout() {
+    private clearBlurhashTimeout(): void {
         if (this.timeout) {
             clearTimeout(this.timeout);
             this.timeout = undefined;
         }
     }
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         this.unmounted = false;
 
         const showImage =
@@ -354,7 +354,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         });
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         this.unmounted = true;
         MatrixClientPeg.get().off(ClientEvent.Sync, this.reconnectedListener);
         this.clearBlurhashTimeout();
@@ -562,7 +562,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         }
     }
 
-    public render() {
+    public render(): JSX.Element {
         const content = this.props.mxEvent.getContent<IMediaEventContent>();
 
         if (this.state.error) {
@@ -605,7 +605,7 @@ interface PlaceholderIProps {
 }
 
 export class HiddenImagePlaceholder extends React.PureComponent<PlaceholderIProps> {
-    public render() {
+    public render(): JSX.Element {
         const maxWidth = this.props.maxWidth ? this.props.maxWidth + "px" : null;
         let className = "mx_HiddenImagePlaceholder";
         if (this.props.hover) className += " mx_HiddenImagePlaceholder_hover";

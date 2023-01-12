@@ -22,6 +22,6 @@ interface Props {
     flex?: boolean;
 }
 
-export default function AuthBody({ flex, className, children }: PropsWithChildren<Props>) {
+export default function AuthBody({ flex, className, children }: PropsWithChildren<Props>): JSX.Element {
     return <main className={classNames("mx_AuthBody", className, { mx_AuthBody_flex: flex })}>{children}</main>;
 }

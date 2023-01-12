@@ -31,7 +31,7 @@ export function useWysiwygSendActionHandler(
     disabled: boolean,
     composerElement: MutableRefObject<HTMLElement>,
     composerFunctions: ComposerFunctions,
-) {
+): void {
     const roomContext = useRoomContext();
     const composerContext = useComposerContext();
     const timeoutId = useRef<number | null>(null);

@@ -20,7 +20,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import SettingsStore from "../settings/SettingsStore";
 import { useAnimation } from "./useAnimation";
 
-const debuglog = (...args: any[]) => {
+const debuglog = (...args: any[]): void => {
     if (SettingsStore.getValue("debug_animation")) {
         logger.log.call(console, "Animation debuglog:", ...args);
     }

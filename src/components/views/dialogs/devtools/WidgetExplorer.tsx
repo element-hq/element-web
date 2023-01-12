@@ -25,7 +25,7 @@ import { UPDATE_EVENT } from "../../../../stores/AsyncStore";
 import FilteredList from "./FilteredList";
 import { StateEventEditor } from "./RoomState";
 
-const WidgetExplorer = ({ onBack }: IDevtoolsProps) => {
+const WidgetExplorer: React.FC<IDevtoolsProps> = ({ onBack }) => {
     const context = useContext(DevtoolsContext);
     const [query, setQuery] = useState("");
     const [widget, setWidget] = useState<IApp>(null);
@@ -35,7 +35,7 @@ const WidgetExplorer = ({ onBack }: IDevtoolsProps) => {
     });
 
     if (widget && widgets.includes(widget)) {
-        const onBack = () => {
+        const onBack = (): void => {
             setWidget(null);
         };
 

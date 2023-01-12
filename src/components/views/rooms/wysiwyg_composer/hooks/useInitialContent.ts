@@ -64,7 +64,7 @@ function parseEditorStateTransfer(
     // this.saveStoredEditorState();
 }
 
-export function useInitialContent(editorStateTransfer: EditorStateTransfer) {
+export function useInitialContent(editorStateTransfer: EditorStateTransfer): string {
     const roomContext = useRoomContext();
     const mxClient = useMatrixClientContext();
 

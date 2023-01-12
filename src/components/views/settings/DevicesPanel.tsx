@@ -64,7 +64,7 @@ export default class DevicesPanel extends React.Component<IProps, IState> {
         this.unmounted = true;
     }
 
-    private onDevicesUpdated = (users: string[]) => {
+    private onDevicesUpdated = (users: string[]): void => {
         if (!users.includes(this.context.getUserId())) return;
         this.loadDevices();
     };

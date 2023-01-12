@@ -132,9 +132,9 @@ export const watchPosition = (
     onWatchPositionError: (error: GeolocationError) => void,
 ): ClearWatchCallback => {
     try {
-        const onError = (error) => onWatchPositionError(mapGeolocationError(error));
+        const onError = (error): void => onWatchPositionError(mapGeolocationError(error));
         const watchId = getGeolocation().watchPosition(onWatchPosition, onError, GeolocationOptions);
-        const clearWatch = () => {
+        const clearWatch = (): void => {
             getGeolocation().clearWatch(watchId);
         };
         return clearWatch;

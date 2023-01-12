@@ -69,7 +69,7 @@ export abstract class AsyncStore<T extends Object> extends EventEmitter {
     /**
      * Stops the store's listening functions, such as the listener to the dispatcher.
      */
-    protected stop() {
+    protected stop(): void {
         if (this.dispatcherRef) this.dispatcher.unregister(this.dispatcherRef);
     }
 
@@ -77,7 +77,7 @@ export abstract class AsyncStore<T extends Object> extends EventEmitter {
      * Updates the state of the store.
      * @param {T|*} newState The state to update in the store using Object.assign()
      */
-    protected async updateState(newState: T | Object) {
+    protected async updateState(newState: T | Object): Promise<void> {
         await this.lock.acquireAsync();
         try {
             this.storeState = Object.freeze(Object.assign(<T>{}, this.storeState, newState));
@@ -92,7 +92,7 @@ export abstract class AsyncStore<T extends Object> extends EventEmitter {
      * @param {T|*} newState The new state of the store.
      * @param {boolean} quiet If true, the function will not raise an UPDATE_EVENT.
      */
-    protected async reset(newState: T | Object = null, quiet = false) {
+    protected async reset(newState: T | Object = null, quiet = false): Promise<void> {
         await this.lock.acquireAsync();
         try {
             this.storeState = Object.freeze(<T>(newState || {}));

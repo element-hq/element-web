@@ -65,12 +65,12 @@ export default class UploadBar extends React.PureComponent<IProps, IState> {
         this.state = this.calculateState();
     }
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         this.dispatcherRef = dis.register(this.onAction);
         this.mounted = true;
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         this.mounted = false;
         dis.unregister(this.dispatcherRef!);
     }
@@ -91,19 +91,19 @@ export default class UploadBar extends React.PureComponent<IProps, IState> {
         };
     }
 
-    private onAction = (payload: ActionPayload) => {
+    private onAction = (payload: ActionPayload): void => {
         if (!this.mounted) return;
         if (isUploadPayload(payload)) {
             this.setState(this.calculateState());
         }
     };
 
-    private onCancelClick = (ev: ButtonEvent) => {
+    private onCancelClick = (ev: ButtonEvent): void => {
         ev.preventDefault();
         ContentMessages.sharedInstance().cancelUpload(this.state.currentUpload!);
     };
 
-    public render() {
+    public render(): JSX.Element {
         if (!this.state.currentFile) {
             return null;
         }

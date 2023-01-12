@@ -100,7 +100,7 @@ export default class CommandProvider extends AutocompleteProvider {
             });
     }
 
-    public getName() {
+    public getName(): string {
         return "*️⃣ " + _t("Commands");
     }
 

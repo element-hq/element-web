@@ -29,7 +29,7 @@ interface IProps {
     onChange(value: JoinRule): void;
 }
 
-const JoinRuleDropdown = ({
+const JoinRuleDropdown: React.FC<IProps> = ({
     label,
     labelInvite,
     labelPublic,
@@ -37,7 +37,7 @@ const JoinRuleDropdown = ({
     value,
     width = 448,
     onChange,
-}: IProps) => {
+}) => {
     const options = [
         <div key={JoinRule.Invite} className="mx_JoinRuleDropdown_invite">
             {labelInvite}

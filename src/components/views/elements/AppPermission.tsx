@@ -88,7 +88,7 @@ export default class AppPermission extends React.Component<IProps, IState> {
         }
     }
 
-    public render() {
+    public render(): JSX.Element {
         const brand = SdkConfig.get().brand;
 
         const displayName = this.state.roomMember ? this.state.roomMember.name : this.props.creatorUserId;

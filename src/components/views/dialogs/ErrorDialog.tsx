@@ -51,11 +51,11 @@ export default class ErrorDialog extends React.Component<IProps, IState> {
         button: null,
     };
 
-    private onClick = () => {
+    private onClick = (): void => {
         this.props.onFinished(true);
     };
 
-    public render() {
+    public render(): JSX.Element {
         return (
             <BaseDialog
                 className="mx_ErrorDialog"

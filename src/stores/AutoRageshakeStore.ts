@@ -66,14 +66,14 @@ export default class AutoRageshakeStore extends AsyncStoreWithClient<IState> {
         return AutoRageshakeStore.internalInstance;
     }
 
-    protected async onAction(payload: ActionPayload) {
+    protected async onAction(payload: ActionPayload): Promise<void> {
         switch (payload.action) {
             case Action.ReportKeyBackupNotEnabled:
                 this.onReportKeyBackupNotEnabled();
         }
     }
 
-    protected async onReady() {
+    protected async onReady(): Promise<void> {
         if (!SettingsStore.getValue("automaticDecryptionErrorReporting")) return;
 
         if (this.matrixClient) {
@@ -83,7 +83,7 @@ export default class AutoRageshakeStore extends AsyncStoreWithClient<IState> {
         }
     }
 
-    protected async onNotReady() {
+    protected async onNotReady(): Promise<void> {
         if (this.matrixClient) {
             this.matrixClient.removeListener(ClientEvent.ToDeviceEvent, this.onDeviceMessage);
             this.matrixClient.removeListener(MatrixEventEvent.Decrypted, this.onDecryptionAttempt);
@@ -141,7 +141,7 @@ export default class AutoRageshakeStore extends AsyncStoreWithClient<IState> {
         }
     }
 
-    private async onSyncStateChange(_state: SyncState, _prevState: SyncState, data: ISyncStateData) {
+    private async onSyncStateChange(_state: SyncState, _prevState: SyncState, data: ISyncStateData): Promise<void> {
         if (!this.state.initialSyncCompleted) {
             await this.updateState({ initialSyncCompleted: !!data.nextSyncToken });
         }

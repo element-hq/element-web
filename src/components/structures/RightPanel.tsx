@@ -101,7 +101,7 @@ export default class RightPanel extends React.Component<IProps, IState> {
         };
     }
 
-    private onRoomStateMember = (ev: MatrixEvent, state: RoomState, member: RoomMember) => {
+    private onRoomStateMember = (ev: MatrixEvent, state: RoomState, member: RoomMember): void => {
         if (!this.props.room || member.roomId !== this.props.room.roomId) {
             return;
         }
@@ -118,11 +118,11 @@ export default class RightPanel extends React.Component<IProps, IState> {
         }
     };
 
-    private onRightPanelStoreUpdate = () => {
+    private onRightPanelStoreUpdate = (): void => {
         this.setState({ ...(RightPanel.getDerivedStateFromProps(this.props) as IState) });
     };
 
-    private onClose = () => {
+    private onClose = (): void => {
         // XXX: There are three different ways of 'closing' this panel depending on what state
         // things are in... this knows far more than it should do about the state of the rest
         // of the app and is generally a bit silly.

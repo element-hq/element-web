@@ -33,7 +33,7 @@ interface IProps {
  * A dialog for confirming a redaction.
  */
 export default class ConfirmRedactDialog extends React.Component<IProps> {
-    public render() {
+    public render(): JSX.Element {
         return (
             <TextInputDialog
                 onFinished={this.props.onFinished}
@@ -56,7 +56,7 @@ export function createRedactEventDialog({
 }: {
     mxEvent: MatrixEvent;
     onCloseDialog?: () => void;
-}) {
+}): void {
     const eventId = mxEvent.getId();
 
     if (!eventId) throw new Error("cannot redact event without ID");
@@ -64,11 +64,10 @@ export function createRedactEventDialog({
     const roomId = mxEvent.getRoomId();
 
     if (!roomId) throw new Error(`cannot redact event ${mxEvent.getId()} without room ID`);
-
     Modal.createDialog(
         ConfirmRedactDialog,
         {
-            onFinished: async (proceed: boolean, reason?: string) => {
+            onFinished: async (proceed: boolean, reason?: string): Promise<void> => {
                 if (!proceed) return;
 
                 const cli = MatrixClientPeg.get();

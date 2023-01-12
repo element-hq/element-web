@@ -54,14 +54,14 @@ export class MediaEventHelper implements IDestroyable {
         );
     }
 
-    public destroy() {
+    public destroy(): void {
         if (this.media.isEncrypted) {
             if (this.sourceUrl.present) URL.revokeObjectURL(this.sourceUrl.cachedValue);
             if (this.thumbnailUrl.present) URL.revokeObjectURL(this.thumbnailUrl.cachedValue);
         }
     }
 
-    private prepareSourceUrl = async () => {
+    private prepareSourceUrl = async (): Promise<string> => {
         if (this.media.isEncrypted) {
             const blob = await this.sourceBlob.value;
             return URL.createObjectURL(blob);
@@ -70,7 +70,7 @@ export class MediaEventHelper implements IDestroyable {
         }
     };
 
-    private prepareThumbnailUrl = async () => {
+    private prepareThumbnailUrl = async (): Promise<string> => {
         if (this.media.isEncrypted) {
             const blob = await this.thumbnailBlob.value;
             if (blob === null) return null;
@@ -80,7 +80,7 @@ export class MediaEventHelper implements IDestroyable {
         }
     };
 
-    private fetchSource = () => {
+    private fetchSource = (): Promise<Blob> => {
         if (this.media.isEncrypted) {
             const content = this.event.getContent<IMediaEventContent>();
             return decryptFile(content.file, content.info);
@@ -88,7 +88,7 @@ export class MediaEventHelper implements IDestroyable {
         return this.media.downloadSource().then((r) => r.blob());
     };
 
-    private fetchThumbnail = () => {
+    private fetchThumbnail = (): Promise<Blob> => {
         if (!this.media.hasThumbnail) return Promise.resolve(null);
 
         if (this.media.isEncrypted) {

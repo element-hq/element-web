@@ -58,7 +58,7 @@ function useUserOnboardingContextValue<T>(defaultValue: T, callback: (cli: Matri
 
         let handle: number | null = null;
         let enabled = true;
-        const repeater = async () => {
+        const repeater = async (): Promise<void> => {
             if (handle !== null) {
                 clearTimeout(handle);
                 handle = null;

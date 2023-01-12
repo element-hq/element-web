@@ -174,7 +174,7 @@ export default class SettingsStore {
 
         const watcherId = `${new Date().getTime()}_${SettingsStore.watcherCount++}_${settingName}_${roomId}`;
 
-        const localizedCallback = (changedInRoomId: string | null, atLevel: SettingLevel, newValAtLevel: any) => {
+        const localizedCallback = (changedInRoomId: string | null, atLevel: SettingLevel, newValAtLevel: any): void => {
             if (!SettingsStore.doesSettingSupportLevel(originalSettingName, atLevel)) {
                 logger.warn(
                     `Setting handler notified for an update of an invalid setting level: ` +
@@ -200,7 +200,7 @@ export default class SettingsStore {
      * @param {string} watcherReference The watcher reference (received from #watchSetting)
      * to cancel.
      */
-    public static unwatchSetting(watcherReference: string) {
+    public static unwatchSetting(watcherReference: string): void {
         if (!SettingsStore.watchers.has(watcherReference)) {
             logger.warn(`Ending non-existent watcher ID ${watcherReference}`);
             return;
@@ -218,12 +218,12 @@ export default class SettingsStore {
      * @param {string} settingName The setting name to monitor.
      * @param {String} roomId The room ID to monitor for changes in. Use null for all rooms.
      */
-    public static monitorSetting(settingName: string, roomId: string | null) {
+    public static monitorSetting(settingName: string, roomId: string | null): void {
         roomId = roomId || null; // the thing wants null specifically to work, so appease it.
 
         if (!this.monitors.has(settingName)) this.monitors.set(settingName, new Map());
 
-        const registerWatcher = () => {
+        const registerWatcher = (): void => {
             this.monitors.get(settingName).set(
                 roomId,
                 SettingsStore.watchSetting(
@@ -266,7 +266,7 @@ export default class SettingsStore {
      * The level to get the display name for; Defaults to 'default'.
      * @return {String} The display name for the setting, or null if not found.
      */
-    public static getDisplayName(settingName: string, atLevel = SettingLevel.DEFAULT) {
+    public static getDisplayName(settingName: string, atLevel = SettingLevel.DEFAULT): string {
         if (!SETTINGS[settingName] || !SETTINGS[settingName].displayName) return null;
 
         let displayName = SETTINGS[settingName].displayName;
@@ -295,7 +295,7 @@ export default class SettingsStore {
      * @param {string} settingName The setting to look up.
      * @return {boolean} True if the setting is a feature.
      */
-    public static isFeature(settingName: string) {
+    public static isFeature(settingName: string): boolean {
         if (!SETTINGS[settingName]) return false;
         return SETTINGS[settingName].isFeature;
     }
@@ -634,7 +634,7 @@ export default class SettingsStore {
      * @param {string} realSettingName The setting name to try and read.
      * @param {string} roomId Optional room ID to test the setting in.
      */
-    public static debugSetting(realSettingName: string, roomId: string) {
+    public static debugSetting(realSettingName: string, roomId: string): void {
         logger.log(`--- DEBUG ${realSettingName}`);
 
         // Note: we intentionally use JSON.stringify here to avoid the console masking the
@@ -646,7 +646,7 @@ export default class SettingsStore {
         logger.log(`--- default level order: ${JSON.stringify(LEVEL_ORDER)}`);
         logger.log(`--- registered handlers: ${JSON.stringify(Object.keys(LEVEL_HANDLERS))}`);
 
-        const doChecks = (settingName) => {
+        const doChecks = (settingName): void => {
             for (const handlerName of Object.keys(LEVEL_HANDLERS)) {
                 const handler = LEVEL_HANDLERS[handlerName];
 

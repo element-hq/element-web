@@ -55,7 +55,7 @@ export default class ThreadBetaController extends SettingController {
         return enable;
     }
 
-    public onChange(level: SettingLevel, roomId: string, newValue: any) {
+    public onChange(level: SettingLevel, roomId: string, newValue: any): void {
         // Requires a reload as we change an option flag on the `js-sdk`
         // And the entire sync history needs to be parsed again
         PlatformPeg.get().reload();

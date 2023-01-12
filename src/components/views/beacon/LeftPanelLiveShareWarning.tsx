@@ -65,7 +65,7 @@ const useLivenessMonitor = (liveBeaconIds: BeaconIdentifier[], beacons: Map<Beac
         // chromium sets the minimum timer interval to 1000ms
         // for inactive tabs
         // refresh beacon monitors when the tab becomes active again
-        const onPageVisibilityChanged = () => {
+        const onPageVisibilityChanged = (): void => {
             if (document.visibilityState === "visible") {
                 liveBeaconIds.forEach((identifier) => beacons.get(identifier)?.monitorLiveness());
             }

@@ -30,7 +30,7 @@ export class ManagedPlayback extends Playback {
         return super.play();
     }
 
-    public destroy() {
+    public destroy(): void {
         this.manager.destroyPlaybackInstance(this);
         super.destroy();
     }

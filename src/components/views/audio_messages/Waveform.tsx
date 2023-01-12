@@ -41,7 +41,7 @@ export default class Waveform extends React.PureComponent<IProps, IState> {
         progress: 1,
     };
 
-    public render() {
+    public render(): JSX.Element {
         return (
             <div className="mx_Waveform">
                 {this.props.relHeights.map((h, i) => {

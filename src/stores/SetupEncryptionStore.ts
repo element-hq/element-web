@@ -50,7 +50,7 @@ export class SetupEncryptionStore extends EventEmitter {
     public keyInfo: ISecretStorageKeyInfo;
     public hasDevicesToVerifyAgainst: boolean;
 
-    public static sharedInstance() {
+    public static sharedInstance(): SetupEncryptionStore {
         if (!window.mxSetupEncryptionStore) window.mxSetupEncryptionStore = new SetupEncryptionStore();
         return window.mxSetupEncryptionStore;
     }
@@ -143,7 +143,7 @@ export class SetupEncryptionStore extends EventEmitter {
             // on the first trust check, and the key backup restore will happen
             // in the background.
             await new Promise((resolve: (value?: unknown) => void, reject: (reason?: any) => void) => {
-                accessSecretStorage(async () => {
+                accessSecretStorage(async (): Promise<void> => {
                     await cli.checkOwnCrossSigningTrust();
                     resolve();
                     if (backupInfo) {
@@ -169,7 +169,7 @@ export class SetupEncryptionStore extends EventEmitter {
         }
     }
 
-    private onUserTrustStatusChanged = (userId: string) => {
+    private onUserTrustStatusChanged = (userId: string): void => {
         if (userId !== MatrixClientPeg.get().getUserId()) return;
         const publicKeysTrusted = MatrixClientPeg.get().getCrossSigningId();
         if (publicKeysTrusted) {
@@ -225,10 +225,10 @@ export class SetupEncryptionStore extends EventEmitter {
             // secret storage key if they had one. Start by resetting
             // secret storage and setting up a new recovery key, then
             // create new cross-signing keys once that succeeds.
-            await accessSecretStorage(async () => {
+            await accessSecretStorage(async (): Promise<void> => {
                 const cli = MatrixClientPeg.get();
                 await cli.bootstrapCrossSigning({
-                    authUploadDeviceSigningKeys: async (makeRequest) => {
+                    authUploadDeviceSigningKeys: async (makeRequest): Promise<void> => {
                         const { finished } = Modal.createDialog(InteractiveAuthDialog, {
                             title: _t("Setting up keys"),
                             matrixClient: cli,

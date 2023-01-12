@@ -86,7 +86,7 @@ export async function waitForRoomReadyAndApplyAfterCreateCallbacks(
     }
 
     return new Promise((resolve) => {
-        const finish = () => {
+        const finish = (): void => {
             if (checkRoomStateIntervalHandle) clearInterval(checkRoomStateIntervalHandle);
             if (stopgapTimeoutHandle) clearTimeout(stopgapTimeoutHandle);
 
@@ -97,7 +97,7 @@ export async function waitForRoomReadyAndApplyAfterCreateCallbacks(
             });
         };
 
-        const stopgapFinish = () => {
+        const stopgapFinish = (): void => {
             logger.warn(`Assuming local room ${localRoom.roomId} is ready after hitting timeout`);
             finish();
         };

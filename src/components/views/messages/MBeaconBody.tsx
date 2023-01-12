@@ -152,7 +152,7 @@ const MBeaconBody: React.FC<IBodyProps> = React.forwardRef(({ mxEvent, getRelati
 
     useHandleBeaconRedaction(mxEvent, matrixClient, getRelationsForEvent);
 
-    const onClick = () => {
+    const onClick = (): void => {
         if (displayStatus !== BeaconDisplayStatus.Active) {
             return;
         }

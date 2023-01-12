@@ -172,7 +172,7 @@ export default class TimelineCard extends React.Component<IProps, IState> {
         this.setState({ narrow });
     };
 
-    private jumpToLiveTimeline = () => {
+    private jumpToLiveTimeline = (): void => {
         if (this.state.initialEventId && this.state.isInitialEventHighlighted) {
             // If we were viewing a highlighted event, firing view_room without
             // an event will take care of both clearing the URL fragment and

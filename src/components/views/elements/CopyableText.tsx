@@ -33,13 +33,13 @@ interface IProps {
 const CopyableText: React.FC<IProps> = ({ children, getTextToCopy, border = true, className }) => {
     const [tooltip, setTooltip] = useState<string | undefined>(undefined);
 
-    const onCopyClickInternal = async (e: ButtonEvent) => {
+    const onCopyClickInternal = async (e: ButtonEvent): Promise<void> => {
         e.preventDefault();
         const successful = await copyPlaintext(getTextToCopy());
         setTooltip(successful ? _t("Copied!") : _t("Failed to copy"));
     };
 
-    const onHideTooltip = () => {
+    const onHideTooltip = (): void => {
         if (tooltip) {
             setTooltip(undefined);
         }

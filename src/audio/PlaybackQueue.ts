@@ -75,28 +75,28 @@ export class PlaybackQueue {
         return queue;
     }
 
-    private persistClocks() {
+    private persistClocks(): void {
         localStorage.setItem(
             `mx_voice_message_clocks_${this.room.roomId}`,
             JSON.stringify(Array.from(this.clockStates.entries())),
         );
     }
 
-    private loadClocks() {
+    private loadClocks(): void {
         const val = localStorage.getItem(`mx_voice_message_clocks_${this.room.roomId}`);
         if (!!val) {
             this.clockStates = new Map<string, number>(JSON.parse(val));
         }
     }
 
-    public unsortedEnqueue(mxEvent: MatrixEvent, playback: Playback) {
+    public unsortedEnqueue(mxEvent: MatrixEvent, playback: Playback): void {
         // We don't ever detach our listeners: we expect the Playback to clean up for us
         this.playbacks.set(mxEvent.getId(), playback);
         playback.on(UPDATE_EVENT, (state) => this.onPlaybackStateChange(playback, mxEvent, state));
         playback.clockInfo.liveData.onUpdate((clock) => this.onPlaybackClock(playback, mxEvent, clock));
     }
 
-    private onPlaybackStateChange(playback: Playback, mxEvent: MatrixEvent, newState: PlaybackState) {
+    private onPlaybackStateChange(playback: Playback, mxEvent: MatrixEvent, newState: PlaybackState): void {
         // Remember where the user got to in playback
         const wasLastPlaying = this.currentPlaybackId === mxEvent.getId();
         if (newState === PlaybackState.Stopped && this.clockStates.has(mxEvent.getId()) && !wasLastPlaying) {
@@ -210,7 +210,7 @@ export class PlaybackQueue {
         }
     }
 
-    private onPlaybackClock(playback: Playback, mxEvent: MatrixEvent, clocks: number[]) {
+    private onPlaybackClock(playback: Playback, mxEvent: MatrixEvent, clocks: number[]): void {
         if (playback.currentState === PlaybackState.Decoding) return; // ignore pre-ready values
 
         if (playback.currentState !== PlaybackState.Stopped) {

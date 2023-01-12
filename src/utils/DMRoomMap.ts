@@ -62,7 +62,7 @@ export default class DMRoomMap {
      * Used by tests
      * @param inst the new shared instance
      */
-    public static setShared(inst: DMRoomMap) {
+    public static setShared(inst: DMRoomMap): void {
         DMRoomMap.sharedInstance = inst;
     }
 
@@ -75,16 +75,16 @@ export default class DMRoomMap {
         return DMRoomMap.sharedInstance;
     }
 
-    public start() {
+    public start(): void {
         this.populateRoomToUser();
         this.matrixClient.on(ClientEvent.AccountData, this.onAccountData);
     }
 
-    public stop() {
+    public stop(): void {
         this.matrixClient.removeListener(ClientEvent.AccountData, this.onAccountData);
     }
 
-    private onAccountData = (ev: MatrixEvent) => {
+    private onAccountData = (ev: MatrixEvent): void => {
         if (ev.getType() == EventType.Direct) {
             this.mDirectEvent = { ...ev.getContent() }; // copy as we will mutate
             this.userToRooms = null;
@@ -97,7 +97,7 @@ export default class DMRoomMap {
      * with ourself, not the other user. Fix it by guessing the other user and
      * modifying userToRooms
      */
-    private patchUpSelfDMs(userToRooms: Record<string, string[]>) {
+    private patchUpSelfDMs(userToRooms: Record<string, string[]>): boolean {
         const myUserId = this.matrixClient.getUserId();
         const selfRoomIds = userToRooms[myUserId];
         if (selfRoomIds) {
@@ -215,7 +215,7 @@ export default class DMRoomMap {
         return this.userToRooms;
     }
 
-    private populateRoomToUser() {
+    private populateRoomToUser(): void {
         this.roomToUser = {};
         for (const user of Object.keys(this.getUserToRooms())) {
             for (const roomId of this.userToRooms[user]) {

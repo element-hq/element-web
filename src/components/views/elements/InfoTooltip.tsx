@@ -39,7 +39,7 @@ export default class InfoTooltip extends React.PureComponent<ITooltipProps> {
         super(props);
     }
 
-    public render() {
+    public render(): JSX.Element {
         const { tooltip, children, tooltipClassName, className, kind } = this.props;
         const title = _t("Information");
         const iconClassName =

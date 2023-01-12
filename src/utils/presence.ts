@@ -17,7 +17,7 @@ limitations under the License.
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import SdkConfig from "../SdkConfig";
 
-export function isPresenceEnabled() {
+export function isPresenceEnabled(): boolean {
     const hsUrl = MatrixClientPeg.get().baseUrl;
     const urls = SdkConfig.get("enable_presence_by_hs_url");
     if (!urls) return true;

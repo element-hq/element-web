@@ -25,7 +25,7 @@ export default class FontSizeController extends SettingController {
         super();
     }
 
-    public onChange(level: SettingLevel, roomId: string, newValue: any) {
+    public onChange(level: SettingLevel, roomId: string, newValue: any): void {
         // Dispatch font size change so that everything open responds to the change.
         dis.dispatch<UpdateFontSizePayload>({
             action: Action.UpdateFontSize,

@@ -64,7 +64,7 @@ export enum ChevronFace {
     None = "none",
 }
 
-export interface IProps extends IPosition {
+export interface MenuProps extends IPosition {
     menuWidth?: number;
     menuHeight?: number;
 
@@ -77,7 +77,9 @@ export interface IProps extends IPosition {
     menuPaddingRight?: number;
 
     zIndex?: number;
+}
 
+export interface IProps extends MenuProps {
     // If true, insert an invisible screen-sized element behind the menu that when clicked will close it.
     hasBackground?: boolean;
     // whether this context menu should be focus managed. If false it must handle itself
@@ -128,21 +130,21 @@ export default class ContextMenu extends React.PureComponent<IProps, IState> {
         this.initialFocus = document.activeElement as HTMLElement;
     }
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         Modal.on(ModalManagerEvent.Opened, this.onModalOpen);
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         Modal.off(ModalManagerEvent.Opened, this.onModalOpen);
         // return focus to the thing which had it before us
         this.initialFocus.focus();
     }
 
-    private onModalOpen = () => {
+    private onModalOpen = (): void => {
         this.props.onFinished?.();
     };
 
-    private collectContextMenuRect = (element: HTMLDivElement) => {
+    private collectContextMenuRect = (element: HTMLDivElement): void => {
         // We don't need to clean up when unmounting, so ignore
         if (!element) return;
 
@@ -159,7 +161,7 @@ export default class ContextMenu extends React.PureComponent<IProps, IState> {
         });
     };
 
-    private onContextMenu = (e) => {
+    private onContextMenu = (e: React.MouseEvent): void => {
         if (this.props.onFinished) {
             this.props.onFinished();
 
@@ -184,20 +186,20 @@ export default class ContextMenu extends React.PureComponent<IProps, IState> {
         }
     };
 
-    private onContextMenuPreventBubbling = (e) => {
+    private onContextMenuPreventBubbling = (e: React.MouseEvent): void => {
         // stop propagation so that any context menu handlers don't leak out of this context menu
         // but do not inhibit the default browser menu
         e.stopPropagation();
     };
 
     // Prevent clicks on the background from going through to the component which opened the menu.
-    private onFinished = (ev: React.MouseEvent) => {
+    private onFinished = (ev: React.MouseEvent): void => {
         ev.stopPropagation();
         ev.preventDefault();
         this.props.onFinished?.();
     };
 
-    private onClick = (ev: React.MouseEvent) => {
+    private onClick = (ev: React.MouseEvent): void => {
         // Don't allow clicks to escape the context menu wrapper
         ev.stopPropagation();
 
@@ -208,7 +210,7 @@ export default class ContextMenu extends React.PureComponent<IProps, IState> {
 
     // We now only handle closing the ContextMenu in this keyDown handler.
     // All of the item/option navigation is delegated to RovingTabIndex.
-    private onKeyDown = (ev: React.KeyboardEvent) => {
+    private onKeyDown = (ev: React.KeyboardEvent): void => {
         ev.stopPropagation(); // prevent keyboard propagating out of the context menu, we're focus-locked
 
         const action = getKeyBindingsManager().getAccessibilityAction(ev);
@@ -243,7 +245,7 @@ export default class ContextMenu extends React.PureComponent<IProps, IState> {
         }
     };
 
-    protected renderMenu(hasBackground = this.props.hasBackground) {
+    protected renderMenu(hasBackground = this.props.hasBackground): JSX.Element {
         const position: Partial<Writeable<DOMRect>> = {};
         const {
             top,
@@ -501,17 +503,13 @@ export const toLeftOrRightOf = (elementRect: DOMRect, chevronOffset = 12): ToRig
     return toRightOf(elementRect, chevronOffset);
 };
 
-export type AboveLeftOf = IPosition & {
-    chevronFace: ChevronFace;
-};
-
 // Placement method for <ContextMenu /> to position context menu right-aligned and flowing to the left of elementRect,
 // and either above or below: wherever there is more space (maybe this should be aboveOrBelowLeftOf?)
 export const aboveLeftOf = (
     elementRect: Pick<DOMRect, "right" | "top" | "bottom">,
     chevronFace = ChevronFace.None,
     vPadding = 0,
-): AboveLeftOf => {
+): MenuProps => {
     const menuOptions: IPosition & { chevronFace: ChevronFace } = { chevronFace };
 
     const buttonRight = elementRect.right + window.scrollX;
@@ -535,7 +533,7 @@ export const aboveRightOf = (
     elementRect: Pick<DOMRect, "left" | "top" | "bottom">,
     chevronFace = ChevronFace.None,
     vPadding = 0,
-): AboveLeftOf => {
+): MenuProps => {
     const menuOptions: IPosition & { chevronFace: ChevronFace } = { chevronFace };
 
     const buttonLeft = elementRect.left + window.scrollX;
@@ -555,11 +553,11 @@ export const aboveRightOf = (
 
 // Placement method for <ContextMenu /> to position context menu right-aligned and flowing to the left of elementRect
 // and always above elementRect
-export const alwaysAboveLeftOf = (
+export const alwaysMenuProps = (
     elementRect: Pick<DOMRect, "right" | "bottom" | "top">,
     chevronFace = ChevronFace.None,
     vPadding = 0,
-) => {
+): IPosition & { chevronFace: ChevronFace } => {
     const menuOptions: IPosition & { chevronFace: ChevronFace } = { chevronFace };
 
     const buttonRight = elementRect.right + window.scrollX;
@@ -578,7 +576,7 @@ export const alwaysAboveRightOf = (
     elementRect: Pick<DOMRect, "left" | "top">,
     chevronFace = ChevronFace.None,
     vPadding = 0,
-) => {
+): IPosition & { chevronFace: ChevronFace } => {
     const menuOptions: IPosition & { chevronFace: ChevronFace } = { chevronFace };
 
     const buttonLeft = elementRect.left + window.scrollX;
@@ -607,12 +605,12 @@ export const useContextMenu = <T extends any = HTMLElement>(inputRef?: RefObject
     }
 
     const [isOpen, setIsOpen] = useState(false);
-    const open = (ev?: SyntheticEvent) => {
+    const open = (ev?: SyntheticEvent): void => {
         ev?.preventDefault();
         ev?.stopPropagation();
         setIsOpen(true);
     };
-    const close = (ev?: SyntheticEvent) => {
+    const close = (ev?: SyntheticEvent): void => {
         ev?.preventDefault();
         ev?.stopPropagation();
         setIsOpen(false);
@@ -622,8 +620,11 @@ export const useContextMenu = <T extends any = HTMLElement>(inputRef?: RefObject
 };
 
 // XXX: Deprecated, used only for dynamic Tooltips. Avoid using at all costs.
-export function createMenu(ElementClass, props) {
-    const onFinished = function (...args) {
+export function createMenu(
+    ElementClass: typeof React.Component,
+    props: Record<string, any>,
+): { close: (...args: any[]) => void } {
+    const onFinished = function (...args): void {
         ReactDOM.unmountComponentAtNode(getOrCreateContainer());
         props?.onFinished?.apply(null, args);
     };

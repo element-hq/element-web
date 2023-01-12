@@ -206,7 +206,7 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
     private resetSecretStorage = async (): Promise<void> => {
         this.setState({ error: null });
         try {
-            await accessSecretStorage(async () => {}, /* forceReset = */ true);
+            await accessSecretStorage(async (): Promise<void> => {}, /* forceReset = */ true);
         } catch (e) {
             logger.error("Error resetting secret storage", e);
             if (this.unmounted) return;
@@ -286,12 +286,12 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
 
             let backupSigStatuses: React.ReactNode = backupSigStatus.sigs.map((sig, i) => {
                 const deviceName = sig.device ? sig.device.getDisplayName() || sig.device.deviceId : null;
-                const validity = (sub) => (
+                const validity = (sub: string): JSX.Element => (
                     <span className={sig.valid ? "mx_SecureBackupPanel_sigValid" : "mx_SecureBackupPanel_sigInvalid"}>
                         {sub}
                     </span>
                 );
-                const verify = (sub) => (
+                const verify = (sub: string): JSX.Element => (
                     <span
                         className={
                             sig.device && sig.deviceTrust.isVerified()
@@ -302,7 +302,9 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
                         {sub}
                     </span>
                 );
-                const device = (sub) => <span className="mx_SecureBackupPanel_deviceName">{deviceName}</span>;
+                const device = (sub: string): JSX.Element => (
+                    <span className="mx_SecureBackupPanel_deviceName">{deviceName}</span>
+                );
                 const fromThisDevice =
                     sig.device && sig.device.getFingerprint() === MatrixClientPeg.get().getDeviceEd25519Key();
                 const fromThisUser = sig.crossSigningId && sig.deviceId === MatrixClientPeg.get().getCrossSigningId();

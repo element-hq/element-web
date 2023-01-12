@@ -23,7 +23,9 @@ import { _t } from "../../../languageHandler";
 import Spinner from "./Spinner";
 import Dropdown from "./Dropdown";
 
-function languageMatchesSearchQuery(query, language) {
+type Languages = Awaited<ReturnType<typeof languageHandler.getAllLanguagesFromJson>>;
+
+function languageMatchesSearchQuery(query: string, language: Languages[0]): boolean {
     if (language.label.toUpperCase().includes(query.toUpperCase())) return true;
     if (language.value.toUpperCase() === query.toUpperCase()) return true;
     return false;
@@ -38,7 +40,7 @@ interface IProps {
 
 interface IState {
     searchQuery: string;
-    langs: Awaited<ReturnType<typeof languageHandler.getAllLanguagesFromJson>>;
+    langs: Languages;
 }
 
 export default class LanguageDropdown extends React.Component<IProps, IState> {

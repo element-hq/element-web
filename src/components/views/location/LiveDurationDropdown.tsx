@@ -33,7 +33,7 @@ interface Props {
     onChange: (timeout: number) => void;
 }
 
-const getLabel = (durationMs: number) => {
+const getLabel = (durationMs: number): string => {
     return _t("Share for %(duration)s", { duration: formatDuration(durationMs) });
 };
 
@@ -54,7 +54,7 @@ const LiveDurationDropdown: React.FC<Props> = ({ timeout, onChange }) => {
         });
     }
 
-    const onOptionChange = (key: string) => {
+    const onOptionChange = (key: string): void => {
         // stringified value back to number
         onChange(+key);
     };

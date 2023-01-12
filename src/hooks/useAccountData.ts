@@ -21,10 +21,10 @@ import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
 
 import { useTypedEventEmitter } from "./useEventEmitter";
 
-const tryGetContent = <T extends {}>(ev?: MatrixEvent) => (ev ? ev.getContent<T>() : undefined);
+const tryGetContent = <T extends {}>(ev?: MatrixEvent): T => (ev ? ev.getContent<T>() : undefined);
 
 // Hook to simplify listening to Matrix account data
-export const useAccountData = <T extends {}>(cli: MatrixClient, eventType: string) => {
+export const useAccountData = <T extends {}>(cli: MatrixClient, eventType: string): T => {
     const [value, setValue] = useState<T>(() => tryGetContent<T>(cli.getAccountData(eventType)));
 
     const handler = useCallback(
@@ -40,7 +40,7 @@ export const useAccountData = <T extends {}>(cli: MatrixClient, eventType: strin
 };
 
 // Hook to simplify listening to Matrix room account data
-export const useRoomAccountData = <T extends {}>(room: Room, eventType: string) => {
+export const useRoomAccountData = <T extends {}>(room: Room, eventType: string): T => {
     const [value, setValue] = useState<T>(() => tryGetContent<T>(room.getAccountData(eventType)));
 
     const handler = useCallback(

@@ -22,11 +22,11 @@ import Modal from "../../../Modal";
 import ServerOfflineDialog from "../dialogs/ServerOfflineDialog";
 
 export default class NonUrgentEchoFailureToast extends React.PureComponent {
-    private openDialog = () => {
+    private openDialog = (): void => {
         Modal.createDialog(ServerOfflineDialog, {});
     };
 
-    public render() {
+    public render(): JSX.Element {
         return (
             <div className="mx_NonUrgentEchoFailureToast">
                 <span className="mx_NonUrgentEchoFailureToast_icon" />

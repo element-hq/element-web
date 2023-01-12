@@ -70,7 +70,7 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
         return this.matrixClient?.getVisibleRooms().length >= 20;
     }
 
-    protected async onAction(payload: SettingUpdatedPayload | ViewRoomPayload | JoinRoomPayload) {
+    protected async onAction(payload: SettingUpdatedPayload | ViewRoomPayload | JoinRoomPayload): Promise<void> {
         if (!this.matrixClient) return;
         if (payload.action === Action.SettingUpdated) {
             if (payload.settingName === "breadcrumb_rooms") {
@@ -95,7 +95,7 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
         }
     }
 
-    protected async onReady() {
+    protected async onReady(): Promise<void> {
         await this.updateRooms();
         await this.updateState({ enabled: SettingsStore.getValue("breadcrumbs", null) });
 
@@ -103,12 +103,12 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
         this.matrixClient.on(ClientEvent.Room, this.onRoom);
     }
 
-    protected async onNotReady() {
+    protected async onNotReady(): Promise<void> {
         this.matrixClient.removeListener(RoomEvent.MyMembership, this.onMyMembership);
         this.matrixClient.removeListener(ClientEvent.Room, this.onRoom);
     }
 
-    private onMyMembership = async (room: Room) => {
+    private onMyMembership = async (room: Room): Promise<void> => {
         // Only turn on breadcrumbs is the user hasn't explicitly turned it off again.
         const settingValueRaw = SettingsStore.getValue("breadcrumbs", null, /*excludeDefault=*/ true);
         if (this.meetsRoomRequirement && isNullOrUndefined(settingValueRaw)) {
@@ -116,7 +116,7 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
         }
     };
 
-    private onRoom = async (room: Room) => {
+    private onRoom = async (room: Room): Promise<void> => {
         const waitingRoom = this.waitingRooms.find((r) => r.roomId === room.roomId);
         if (!waitingRoom) return;
         this.waitingRooms.splice(this.waitingRooms.indexOf(waitingRoom), 1);
@@ -125,7 +125,7 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
         await this.appendRoom(room);
     };
 
-    private async updateRooms() {
+    private async updateRooms(): Promise<void> {
         let roomIds = SettingsStore.getValue("breadcrumb_rooms");
         if (!roomIds || roomIds.length === 0) roomIds = [];
 
@@ -135,7 +135,7 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
         await this.updateState({ rooms });
     }
 
-    private async appendRoom(room: Room) {
+    private async appendRoom(room: Room): Promise<void> {
         let updated = false;
         const rooms = (this.state.rooms || []).slice(); // cheap clone
 

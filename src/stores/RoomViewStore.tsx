@@ -173,7 +173,7 @@ export class RoomViewStore extends EventEmitter {
         this.emit(roomId, isActive);
     }
 
-    private onCurrentBroadcastRecordingChanged = (recording: VoiceBroadcastRecording | null) => {
+    private onCurrentBroadcastRecordingChanged = (recording: VoiceBroadcastRecording | null): void => {
         if (recording === null) {
             const room = this.stores.client?.getRoom(this.state.roomId || undefined);
 
@@ -625,7 +625,7 @@ export class RoomViewStore extends EventEmitter {
      * unregistered.
      * @param dis The new dispatcher to use.
      */
-    public resetDispatcher(dis: MatrixDispatcher) {
+    public resetDispatcher(dis: MatrixDispatcher): void {
         if (this.dispatchToken) {
             this.dis.unregister(this.dispatchToken);
         }

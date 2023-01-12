@@ -19,7 +19,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 const SNOOZE_KEY = "mx_snooze_bulk_unverified_device_nag";
 // one week
 const snoozePeriod = 1000 * 60 * 60 * 24 * 7;
-export const snoozeBulkUnverifiedDeviceReminder = () => {
+export const snoozeBulkUnverifiedDeviceReminder = (): void => {
     try {
         localStorage.setItem(SNOOZE_KEY, String(Date.now()));
     } catch (error) {
@@ -27,7 +27,7 @@ export const snoozeBulkUnverifiedDeviceReminder = () => {
     }
 };
 
-export const isBulkUnverifiedDeviceReminderSnoozed = () => {
+export const isBulkUnverifiedDeviceReminderSnoozed = (): boolean => {
     try {
         const snoozedTimestamp = localStorage.getItem(SNOOZE_KEY);
 

@@ -86,7 +86,7 @@ async function confirmToDismiss(): Promise<boolean> {
 type KeyParams = { passphrase: string; recoveryKey: string };
 
 function makeInputToKey(keyInfo: ISecretStorageKeyInfo): (keyParams: KeyParams) => Promise<Uint8Array> {
-    return async ({ passphrase, recoveryKey }) => {
+    return async ({ passphrase, recoveryKey }): Promise<Uint8Array> => {
         if (passphrase) {
             return deriveKey(passphrase, keyInfo.passphrase.salt, keyInfo.passphrase.iterations);
         } else {
@@ -151,7 +151,7 @@ async function getSecretStorageKey({
         /* props= */
         {
             keyInfo,
-            checkPrivateKey: async (input: KeyParams) => {
+            checkPrivateKey: async (input: KeyParams): Promise<boolean> => {
                 const key = await inputToKey(input);
                 return MatrixClientPeg.get().checkSecretStorageKey(key, keyInfo);
             },
@@ -160,7 +160,7 @@ async function getSecretStorageKey({
         /* isPriorityModal= */ false,
         /* isStaticModal= */ false,
         /* options= */ {
-            onBeforeClose: async (reason) => {
+            onBeforeClose: async (reason): Promise<boolean> => {
                 if (reason === "backgroundClick") {
                     return confirmToDismiss();
                 }
@@ -196,7 +196,7 @@ export async function getDehydrationKey(
         /* props= */
         {
             keyInfo,
-            checkPrivateKey: async (input) => {
+            checkPrivateKey: async (input): Promise<boolean> => {
                 const key = await inputToKey(input);
                 try {
                     checkFunc(key);
@@ -210,7 +210,7 @@ export async function getDehydrationKey(
         /* isPriorityModal= */ false,
         /* isStaticModal= */ false,
         /* options= */ {
-            onBeforeClose: async (reason) => {
+            onBeforeClose: async (reason): Promise<boolean> => {
                 if (reason === "backgroundClick") {
                     return confirmToDismiss();
                 }
@@ -324,7 +324,7 @@ export async function promptForBackupPassphrase(): Promise<Uint8Array> {
  * bootstrapped. Optional.
  * @param {bool} [forceReset] Reset secret storage even if it's already set up
  */
-export async function accessSecretStorage(func = async () => {}, forceReset = false) {
+export async function accessSecretStorage(func = async (): Promise<void> => {}, forceReset = false): Promise<void> {
     const cli = MatrixClientPeg.get();
     secretStorageBeingAccessed = true;
     try {
@@ -342,7 +342,7 @@ export async function accessSecretStorage(func = async () => {}, forceReset = fa
                 /* priority = */ false,
                 /* static = */ true,
                 /* options = */ {
-                    onBeforeClose: async (reason) => {
+                    onBeforeClose: async (reason): Promise<boolean> => {
                         // If Secure Backup is required, you cannot leave the modal.
                         if (reason === "backgroundClick") {
                             return !isSecureBackupRequired();
@@ -357,7 +357,7 @@ export async function accessSecretStorage(func = async () => {}, forceReset = fa
             }
         } else {
             await cli.bootstrapCrossSigning({
-                authUploadDeviceSigningKeys: async (makeRequest) => {
+                authUploadDeviceSigningKeys: async (makeRequest): Promise<void> => {
                     const { finished } = Modal.createDialog(InteractiveAuthDialog, {
                         title: _t("Setting up keys"),
                         matrixClient: cli,

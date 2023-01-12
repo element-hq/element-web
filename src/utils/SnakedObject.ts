@@ -29,7 +29,7 @@ export class SnakedObject<T = Record<string, any>> {
     }
 
     // Make JSON.stringify() pretend that everything is fine
-    public toJSON() {
+    public toJSON(): T {
         return this.obj;
     }
 }

@@ -36,7 +36,7 @@ export default class Timer {
         this.setNotStarted();
     }
 
-    private setNotStarted() {
+    private setNotStarted(): void {
         this.timerHandle = null;
         this.startTs = null;
         this.promise = new Promise<void>((resolve, reject) => {
@@ -47,7 +47,7 @@ export default class Timer {
         });
     }
 
-    private onTimeout = () => {
+    private onTimeout = (): void => {
         const now = Date.now();
         const elapsed = now - this.startTs;
         if (elapsed >= this.timeout) {
@@ -59,7 +59,7 @@ export default class Timer {
         }
     };
 
-    public changeTimeout(timeout: number) {
+    public changeTimeout(timeout: number): void {
         if (timeout === this.timeout) {
             return;
         }
@@ -75,7 +75,7 @@ export default class Timer {
      * if not started before, starts the timer.
      * @returns {Timer} the same timer
      */
-    public start() {
+    public start(): Timer {
         if (!this.isRunning()) {
             this.startTs = Date.now();
             this.timerHandle = window.setTimeout(this.onTimeout, this.timeout);
@@ -87,7 +87,7 @@ export default class Timer {
      * (re)start the timer. If it's running, reset the timeout. If not, start it.
      * @returns {Timer} the same timer
      */
-    public restart() {
+    public restart(): Timer {
         if (this.isRunning()) {
             // don't clearTimeout here as this method
             // can be called in fast succession,
@@ -105,7 +105,7 @@ export default class Timer {
      * and reject the promise for this timer.
      * @returns {Timer} the same timer
      */
-    public abort() {
+    public abort(): Timer {
         if (this.isRunning()) {
             clearTimeout(this.timerHandle);
             this.reject(new Error("Timer was aborted."));
@@ -119,11 +119,11 @@ export default class Timer {
      *or is rejected when abort is called
      *@return {Promise}
      */
-    public finished() {
+    public finished(): Promise<void> {
         return this.promise;
     }
 
-    public isRunning() {
+    public isRunning(): boolean {
         return this.timerHandle !== null;
     }
 }

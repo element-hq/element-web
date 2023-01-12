@@ -167,7 +167,7 @@ export default class CreateCrossSigningDialog extends React.PureComponent<IProps
         this.props.onFinished(false);
     };
 
-    public render() {
+    public render(): JSX.Element {
         let content;
         if (this.state.error) {
             content = (

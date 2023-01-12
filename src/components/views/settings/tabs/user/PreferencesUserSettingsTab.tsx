@@ -122,17 +122,17 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
         });
     }
 
-    private onAutocompleteDelayChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    private onAutocompleteDelayChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         this.setState({ autocompleteDelay: e.target.value });
         SettingsStore.setValue("autocompleteDelay", null, SettingLevel.DEVICE, e.target.value);
     };
 
-    private onReadMarkerInViewThresholdMs = (e: React.ChangeEvent<HTMLInputElement>) => {
+    private onReadMarkerInViewThresholdMs = (e: React.ChangeEvent<HTMLInputElement>): void => {
         this.setState({ readMarkerInViewThresholdMs: e.target.value });
         SettingsStore.setValue("readMarkerInViewThresholdMs", null, SettingLevel.DEVICE, e.target.value);
     };
 
-    private onReadMarkerOutOfViewThresholdMs = (e: React.ChangeEvent<HTMLInputElement>) => {
+    private onReadMarkerOutOfViewThresholdMs = (e: React.ChangeEvent<HTMLInputElement>): void => {
         this.setState({ readMarkerOutOfViewThresholdMs: e.target.value });
         SettingsStore.setValue("readMarkerOutOfViewThresholdMs", null, SettingLevel.DEVICE, e.target.value);
     };
@@ -151,7 +151,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
         });
     };
 
-    public render() {
+    public render(): JSX.Element {
         const useCase = SettingsStore.getValue<UseCase | null>("FTUE.useCaseSelection");
         const roomListSettings = PreferencesUserSettingsTab.ROOM_LIST_SETTINGS
             // Only show the breadcrumbs setting if breadcrumbs v2 is disabled

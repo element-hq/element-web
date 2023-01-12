@@ -58,7 +58,7 @@ export class WidgetPermissionStore {
         return OIDCState.Unknown;
     }
 
-    public setOIDCState(widget: Widget, kind: WidgetKind, roomId: string, newState: OIDCState) {
+    public setOIDCState(widget: Widget, kind: WidgetKind, roomId: string, newState: OIDCState): void {
         const settingsKey = this.packSettingKey(widget, kind, roomId);
 
         let currentValues = SettingsStore.getValue("widgetOpenIDPermissions");

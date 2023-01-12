@@ -69,7 +69,7 @@ export const useOwnLiveBeacons = (liveBeaconIds: BeaconIdentifier[]): LiveBeacon
         .sort(sortBeaconsByLatestExpiry)
         .shift();
 
-    const onStopSharing = async () => {
+    const onStopSharing = async (): Promise<void> => {
         setStoppingInProgress(true);
         try {
             await Promise.all(liveBeaconIds.map((beaconId) => OwnBeaconStore.instance.stopBeacon(beaconId)));
@@ -78,7 +78,7 @@ export const useOwnLiveBeacons = (liveBeaconIds: BeaconIdentifier[]): LiveBeacon
         }
     };
 
-    const onResetLocationPublishError = () => {
+    const onResetLocationPublishError = (): void => {
         liveBeaconIds.forEach((beaconId) => {
             OwnBeaconStore.instance.resetLocationPublishError(beaconId);
         });

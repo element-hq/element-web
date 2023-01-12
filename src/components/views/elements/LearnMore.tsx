@@ -27,7 +27,7 @@ export interface LearnMoreProps extends IAccessibleButtonProps {
 }
 
 const LearnMore: React.FC<LearnMoreProps> = ({ title, description, ...rest }) => {
-    const onClick = () => {
+    const onClick = (): void => {
         Modal.createDialog(InfoDialog, {
             title,
             description,

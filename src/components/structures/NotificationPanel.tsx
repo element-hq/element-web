@@ -55,7 +55,7 @@ export default class NotificationPanel extends React.PureComponent<IProps, IStat
         this.setState({ narrow });
     };
 
-    public render() {
+    public render(): JSX.Element {
         const emptyState = (
             <div className="mx_RightPanel_empty mx_NotificationPanel_empty">
                 <h2>{_t("You're all caught up")}</h2>

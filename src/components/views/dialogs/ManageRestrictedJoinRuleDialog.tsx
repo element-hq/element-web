@@ -33,7 +33,11 @@ interface IProps extends IDialogProps {
     selected?: string[];
 }
 
-const Entry = ({ room, checked, onChange }) => {
+const Entry: React.FC<{
+    room: Room;
+    checked: boolean;
+    onChange(value: boolean): void;
+}> = ({ room, checked, onChange }) => {
     const localRoom = room instanceof Room;
 
     let description;

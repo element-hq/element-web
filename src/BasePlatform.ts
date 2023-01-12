@@ -272,7 +272,7 @@ export default abstract class BasePlatform {
         return null;
     }
 
-    public setLanguage(preferredLangs: string[]) {}
+    public setLanguage(preferredLangs: string[]): void {}
 
     public setSpellCheckEnabled(enabled: boolean): void {}
 
@@ -280,7 +280,7 @@ export default abstract class BasePlatform {
         return null;
     }
 
-    public setSpellCheckLanguages(preferredLangs: string[]) {}
+    public setSpellCheckLanguages(preferredLangs: string[]): void {}
 
     public getSpellCheckLanguages(): Promise<string[]> | null {
         return null;

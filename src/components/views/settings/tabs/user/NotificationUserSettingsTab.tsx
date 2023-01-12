@@ -20,7 +20,7 @@ import { _t } from "../../../../../languageHandler";
 import Notifications from "../../Notifications";
 
 export default class NotificationUserSettingsTab extends React.Component {
-    public render() {
+    public render(): JSX.Element {
         return (
             <div className="mx_SettingsTab">
                 <div className="mx_SettingsTab_heading">{_t("Notifications")}</div>

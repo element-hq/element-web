@@ -97,7 +97,7 @@ export default class ThreepidInviteStore extends EventEmitter {
         return this.getInvites()[0];
     }
 
-    public resolveInvite(invite: IThreepidInvite) {
+    public resolveInvite(invite: IThreepidInvite): void {
         localStorage.removeItem(`${STORAGE_PREFIX}${invite.id}`);
     }
 

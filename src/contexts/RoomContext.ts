@@ -68,6 +68,6 @@ const RoomContext = createContext<IRoomState>({
 });
 RoomContext.displayName = "RoomContext";
 export default RoomContext;
-export function useRoomContext() {
+export function useRoomContext(): IRoomState {
     return useContext(RoomContext);
 }

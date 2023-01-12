@@ -39,7 +39,7 @@ const filters: Record<FilterVariation, DeviceFilterCondition> = {
 export const filterDevicesBySecurityRecommendation = (
     devices: ExtendedDevice[],
     securityVariations: FilterVariation[],
-) => {
+): ExtendedDevice[] => {
     const activeFilters = securityVariations.map((variation) => filters[variation]);
     if (!activeFilters.length) {
         return devices;

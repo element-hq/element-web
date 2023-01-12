@@ -25,7 +25,11 @@ interface EditionButtonsProps {
     isSaveDisabled?: boolean;
 }
 
-export function EditionButtons({ onCancelClick, onSaveClick, isSaveDisabled = false }: EditionButtonsProps) {
+export function EditionButtons({
+    onCancelClick,
+    onSaveClick,
+    isSaveDisabled = false,
+}: EditionButtonsProps): JSX.Element {
     return (
         <div className="mx_EditWysiwygComposer_buttons">
             <AccessibleButton kind="secondary" onClick={onCancelClick}>

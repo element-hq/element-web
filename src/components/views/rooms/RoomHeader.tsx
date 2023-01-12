@@ -96,7 +96,7 @@ const VoiceCallButton: FC<VoiceCallButtonProps> = ({ room, busy, setBusy, behavi
         } else {
             // behavior === "legacy_or_jitsi"
             return {
-                onClick: async (ev: ButtonEvent) => {
+                onClick: async (ev: ButtonEvent): Promise<void> => {
                     ev.preventDefault();
                     setBusy(true);
                     await LegacyCallHandler.instance.placeCall(room.roomId, CallType.Voice);
@@ -134,7 +134,7 @@ interface VideoCallButtonProps {
 const VideoCallButton: FC<VideoCallButtonProps> = ({ room, busy, setBusy, behavior }) => {
     const [menuOpen, buttonRef, openMenu, closeMenu] = useContextMenu();
 
-    const startLegacyCall = useCallback(async () => {
+    const startLegacyCall = useCallback(async (): Promise<void> => {
         setBusy(true);
         await LegacyCallHandler.instance.placeCall(room.roomId, CallType.Video);
         setBusy(false);
@@ -160,7 +160,7 @@ const VideoCallButton: FC<VideoCallButtonProps> = ({ room, busy, setBusy, behavi
             };
         } else if (behavior === "legacy_or_jitsi") {
             return {
-                onClick: async (ev: ButtonEvent) => {
+                onClick: async (ev: ButtonEvent): Promise<void> => {
                     ev.preventDefault();
                     await startLegacyCall();
                 },
@@ -168,7 +168,7 @@ const VideoCallButton: FC<VideoCallButtonProps> = ({ room, busy, setBusy, behavi
             };
         } else if (behavior === "element") {
             return {
-                onClick: async (ev: ButtonEvent) => {
+                onClick: async (ev: ButtonEvent): Promise<void> => {
                     ev.preventDefault();
                     startElementCall();
                 },
@@ -177,7 +177,7 @@ const VideoCallButton: FC<VideoCallButtonProps> = ({ room, busy, setBusy, behavi
         } else {
             // behavior === "jitsi_or_element"
             return {
-                onClick: async (ev: ButtonEvent) => {
+                onClick: async (ev: ButtonEvent): Promise<void> => {
                     ev.preventDefault();
                     openMenu();
                 },
@@ -187,7 +187,7 @@ const VideoCallButton: FC<VideoCallButtonProps> = ({ room, busy, setBusy, behavi
     }, [behavior, startLegacyCall, startElementCall, openMenu]);
 
     const onJitsiClick = useCallback(
-        async (ev: ButtonEvent) => {
+        async (ev: ButtonEvent): Promise<void> => {
             ev.preventDefault();
             closeMenu();
             await startLegacyCall();
@@ -503,23 +503,23 @@ export default class RoomHeader extends React.Component<IProps, IState> {
         };
     }
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         this.client.on(RoomStateEvent.Events, this.onRoomStateEvents);
         RightPanelStore.instance.on(UPDATE_EVENT, this.onRightPanelStoreUpdate);
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         this.client.removeListener(RoomStateEvent.Events, this.onRoomStateEvents);
         const notiStore = RoomNotificationStateStore.instance.getRoomState(this.props.room);
         notiStore.removeListener(NotificationStateEvents.Update, this.onNotificationUpdate);
         RightPanelStore.instance.off(UPDATE_EVENT, this.onRightPanelStoreUpdate);
     }
 
-    private onRightPanelStoreUpdate = () => {
+    private onRightPanelStoreUpdate = (): void => {
         this.setState({ rightPanelOpen: RightPanelStore.instance.isOpen });
     };
 
-    private onRoomStateEvents = (event: MatrixEvent) => {
+    private onRoomStateEvents = (event: MatrixEvent): void => {
         if (!this.props.room || event.getRoomId() !== this.props.room.roomId) {
             return;
         }
@@ -528,7 +528,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
         this.rateLimitedUpdate();
     };
 
-    private onNotificationUpdate = () => {
+    private onNotificationUpdate = (): void => {
         this.forceUpdate();
     };
 
@@ -540,18 +540,18 @@ export default class RoomHeader extends React.Component<IProps, IState> {
         { leading: true, trailing: true },
     );
 
-    private onContextMenuOpenClick = (ev: ButtonEvent) => {
+    private onContextMenuOpenClick = (ev: ButtonEvent): void => {
         ev.preventDefault();
         ev.stopPropagation();
         const target = ev.target as HTMLButtonElement;
         this.setState({ contextMenuPosition: target.getBoundingClientRect() });
     };
 
-    private onContextMenuCloseClick = () => {
+    private onContextMenuCloseClick = (): void => {
         this.setState({ contextMenuPosition: undefined });
     };
 
-    private onHideCallClick = (ev: ButtonEvent) => {
+    private onHideCallClick = (ev: ButtonEvent): void => {
         ev.preventDefault();
         defaultDispatcher.dispatch<ViewRoomPayload>({
             action: Action.ViewRoom,
@@ -659,7 +659,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
         );
     }
 
-    private renderName(oobName: string) {
+    private renderName(oobName: string): JSX.Element {
         let contextMenu: JSX.Element | null = null;
         if (this.state.contextMenuPosition && this.props.room) {
             contextMenu = (
@@ -716,7 +716,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
         return <div className="mx_RoomHeader_name mx_RoomHeader_name--textonly">{roomName}</div>;
     }
 
-    public render() {
+    public render(): JSX.Element {
         const isVideoRoom = SettingsStore.getValue("feature_video_rooms") && calcIsVideoRoom(this.props.room);
 
         let roomAvatar: JSX.Element | null = null;
@@ -788,7 +788,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
 
         const topicElement = <RoomTopic room={this.props.room} className="mx_RoomHeader_topic" />;
 
-        const viewLabs = () =>
+        const viewLabs = (): void =>
             defaultDispatcher.dispatch({
                 action: Action.ViewUserSettings,
                 initialTabId: UserTab.Labs,
