@@ -1,3 +1,9 @@
+Changes in [3.64.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.64.0-rc.2) (2023-01-12)
+===============================================================================================================
+
+## ✨ Features
+ * Switch threads on for everyone ([\#9879](https://github.com/matrix-org/matrix-react-sdk/pull/9879)).
+
 Changes in [3.64.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.64.0-rc.1) (2023-01-11)
 ===============================================================================================================
 
