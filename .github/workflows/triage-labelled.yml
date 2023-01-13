@@ -113,34 +113,6 @@ jobs:
                   PROJECT_ID: "PVT_kwDOAM0swc4AAg6N"
                   GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
-    Delight_issues_to_board:
-        name: Delight issues to project board
-        runs-on: ubuntu-latest
-        if: >
-            contains(github.event.issue.labels.*.name, 'A-New-Search-Experience') ||
-            (contains(github.event.issue.labels.*.name, 'A-Threads') &&
-              (contains(github.event.issue.labels.*.name, 'S-Major') ||
-               contains(github.event.issue.labels.*.name, 'S-Critical'))) ||
-            contains(github.event.issue.labels.*.name, 'Team: Delight') ||
-            contains(github.event.issue.labels.*.name, 'Z-NewUserJourney')
-        steps:
-            - uses: octokit/graphql-action@v2.x
-              with:
-                  headers: '{"GraphQL-Features": "projects_next_graphql"}'
-                  query: |
-                      mutation add_to_project($projectid:ID!,$contentid:ID!) {
-                        addProjectV2ItemById(input: {projectId: $projectid contentId: $contentid}) {
-                          item {
-                            id
-                            }
-                          }
-                        }
-                  projectid: ${{ env.PROJECT_ID }}
-                  contentid: ${{ github.event.issue.node_id }}
-              env:
-                  PROJECT_ID: "PVT_kwDOAM0swc1HvQ"
-                  GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
-
     Search_issues_to_board:
         name: Search issues to project board
         runs-on: ubuntu-latest
