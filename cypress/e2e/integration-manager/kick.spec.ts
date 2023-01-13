@@ -82,9 +82,27 @@ function sendActionFromIntegrationManager(integrationManagerUrl: string, targetR
     });
 }
 
+function clickUntilGone(selector: string, attempt = 0) {
+    if (attempt === 11) {
+        throw new Error("clickUntilGone attempt count exceeded");
+    }
+
+    cy.get(selector)
+        .last()
+        .click()
+        .then(($button) => {
+            const exists = Cypress.$(selector).length > 0;
+            if (exists) {
+                clickUntilGone(selector, ++attempt);
+            }
+        });
+}
+
 function expectKickedMessage(shouldExist: boolean) {
-    // Expand any event summaries
-    cy.get(".mx_GenericEventListSummary_toggle[aria-expanded=false]").click({ multiple: true });
+    // Expand any event summaries, we can't use a click multiple here because clicking one might de-render others
+    // This is quite horrible but seems the most stable way of clicking 0-N buttons,
+    // one at a time with a full re-evaluation after each click
+    clickUntilGone(".mx_GenericEventListSummary_toggle[aria-expanded=false]");
 
     // Check for the event message (or lack thereof)
     cy.contains(".mx_EventTile_line", `${USER_DISPLAY_NAME} removed ${BOT_DISPLAY_NAME}: ${KICK_REASON}`).should(
