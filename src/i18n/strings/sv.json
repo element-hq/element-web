@@ -3704,5 +3704,7 @@
     "Unfortunately we're unable to start a recording right now. Please try again later.": "Tyvärr kunde vi inte starta en inspelning just nu. Vänligen pröva igen senare.",
     "Connection error": "Anslutningsfel",
     "Failed to read events": "Misslyckades att läsa händelser",
-    "Failed to send event": "Misslyckades att skicka händelse"
+    "Failed to send event": "Misslyckades att skicka händelse",
+    "Numbered list": "Numrerad lista",
+    "Bulleted list": "Punktlista"
 }
