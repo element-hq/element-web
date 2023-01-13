@@ -74,7 +74,3 @@ suppress_key_server_warning: true
 
 ui_auth:
     session_timeout: "300s"
-
-room_prejoin_state:
-    additional_event_types:
-        - net.metadata_invite_shared

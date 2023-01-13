@@ -40,7 +40,7 @@ const DEMO_WIDGET_HTML = `
                             response: {
                                 capabilities: [
                                     "org.matrix.msc2762.timeline:*",
-                                    "org.matrix.msc2762.receive.state_event:net.metadata_invite_shared",
+                                    "org.matrix.msc2762.receive.state_event:m.room.topic",
                                     "org.matrix.msc2762.send.event:net.widget_echo"
                                 ]
                             },
@@ -162,15 +162,15 @@ describe("Widget Events", () => {
             cy.contains(".mx_WidgetCapabilitiesPromptDialog button", "Approve").click();
 
             cy.all([cy.get<string>("@widgetEventSent"), cy.get<string>("@layoutEventSent")]).then(async () => {
-                // bot creates a new room with 'net.metadata_invite_shared' state event
+                // bot creates a new room with 'm.room.topic'
                 const { room_id: roomNew } = await bot.createRoom({
                     name: "New room",
                     initial_state: [
                         {
-                            type: "net.metadata_invite_shared",
+                            type: "m.room.topic",
                             state_key: "",
                             content: {
-                                value: "initial",
+                                topic: "topic initial",
                             },
                         },
                     ],
@@ -178,39 +178,40 @@ describe("Widget Events", () => {
 
                 await bot.invite(roomNew, user.userId);
 
-                // widget should receive 'net.metadata_invite_shared' event after invite
+                // widget should receive 'm.room.topic' event after invite
                 cy.window().then(async (win) => {
                     await waitForRoom(win, roomId, (room) => {
                         const events = room.getLiveTimeline().getEvents();
                         return events.some(
                             (e) =>
                                 e.getType() === "net.widget_echo" &&
-                                e.getContent().type === "net.metadata_invite_shared" &&
-                                e.getContent().content.value === "initial",
+                                e.getContent().type === "m.room.topic" &&
+                                e.getContent().content.topic === "topic initial",
                         );
                     });
                 });
 
+                // update the topic
                 await bot.sendStateEvent(
                     roomNew,
-                    "net.metadata_invite_shared",
+                    "m.room.topic",
                     {
-                        value: "new_value",
+                        topic: "topic updated",
                     },
                     "",
                 );
 
                 await bot.invite(roomNew, user.userId, "something changed in the room");
 
-                // widget should receive updated 'net.metadata_invite_shared' event after re-invite
+                // widget should receive updated 'net.room.topic' event after re-invite
                 cy.window().then(async (win) => {
                     await waitForRoom(win, roomId, (room) => {
                         const events = room.getLiveTimeline().getEvents();
                         return events.some(
                             (e) =>
                                 e.getType() === "net.widget_echo" &&
-                                e.getContent().type === "net.metadata_invite_shared" &&
-                                e.getContent().content.value === "new_value",
+                                e.getContent().type === "m.room.topic" &&
+                                e.getContent().content.topic === "topic updated",
                         );
                     });
                 });
