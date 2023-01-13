@@ -27,7 +27,6 @@ export default defineConfig({
             return require("./cypress/plugins/index.ts").default(on, config);
         },
         baseUrl: "http://localhost:8080",
-        experimentalSessionAndOrigin: true,
         specPattern: "cypress/e2e/**/*.{js,jsx,ts,tsx}",
     },
     env: {
