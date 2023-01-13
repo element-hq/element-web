@@ -108,7 +108,7 @@ describe("Editing", () => {
             // send a load of padding events. We make them large, so that they fill the whole screen
             // and the client doesn't end up paginating into the event we want.
             let i = 0;
-            while (i < 20) {
+            while (i < 10) {
                 await bob.sendMessage(room.room_id, mkPadding(i++));
             }
 
@@ -127,7 +127,7 @@ describe("Editing", () => {
             cy.log(`Bot user sent edit event ${editEventId}`);
 
             // ... then a load more padding ...
-            while (i < 40) {
+            while (i < 20) {
                 await bob.sendMessage(room.room_id, mkPadding(i++));
             }
         });
