@@ -15,7 +15,9 @@ limitations under the License.
 */
 
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { InvalidEventError, M_POLL_START_EVENT_CONTENT, PollStartEvent } from "matrix-events-sdk";
+import { PollStartEventContent } from "matrix-js-sdk/src/@types/polls";
+import { InvalidEventError } from "matrix-js-sdk/src/extensible_events_v1/InvalidEventError";
+import { PollStartEvent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
 
 import { IPreview } from "./IPreview";
 import { TagID } from "../models";
@@ -43,7 +45,7 @@ export class PollStartEventPreview implements IPreview {
         try {
             const poll = new PollStartEvent({
                 type: event.getType(),
-                content: eventContent as M_POLL_START_EVENT_CONTENT,
+                content: eventContent as PollStartEventContent,
             });
 
             let question = poll.question.text.trim();

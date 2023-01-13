@@ -17,7 +17,7 @@ limitations under the License.
 import { Room } from "matrix-js-sdk/src/models/room";
 import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { M_POLL_START } from "matrix-events-sdk";
+import { M_POLL_START } from "matrix-js-sdk/src/@types/polls";
 
 import { ActionPayload } from "../../dispatcher/payloads";
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";

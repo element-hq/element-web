@@ -26,10 +26,10 @@ import {
     M_POLL_KIND_UNDISCLOSED,
     M_POLL_RESPONSE,
     M_POLL_START,
-    M_POLL_START_EVENT_CONTENT,
-    M_TEXT,
-    POLL_ANSWER,
-} from "matrix-events-sdk";
+    PollStartEventContent,
+    PollAnswer,
+} from "matrix-js-sdk/src/@types/polls";
+import { M_TEXT } from "matrix-js-sdk/src/@types/extensible_events";
 import { MockedObject } from "jest-mock";
 
 import {
@@ -440,7 +440,7 @@ describe("MPollBody", () => {
             responseEvent("@catrd:example.com", "poutine"),
             responseEvent("@dune2:example.com", "wings"),
         ];
-        const body = newMPollBody(votes, [], null, false);
+        const body = newMPollBody(votes, [], undefined, false);
         expect(votesCount(body, "pizza")).toBe("");
         expect(votesCount(body, "poutine")).toBe("");
         expect(votesCount(body, "italian")).toBe("");
@@ -456,7 +456,7 @@ describe("MPollBody", () => {
             responseEvent("@catrd:example.com", "poutine"),
             responseEvent("@dune2:example.com", "wings"),
         ];
-        const body = newMPollBody(votes, [], null, false);
+        const body = newMPollBody(votes, [], undefined, false);
 
         // My vote is marked
         expect(body.find('input[value="pizza"]').prop("checked")).toBeTruthy();
@@ -474,7 +474,7 @@ describe("MPollBody", () => {
             responseEvent("@dune2:example.com", "wings"),
         ];
         const ends = [endEvent("@me:example.com", 12)];
-        const body = newMPollBody(votes, ends, null, false);
+        const body = newMPollBody(votes, ends, undefined, false);
         expect(endedVotesCount(body, "pizza")).toBe("3 votes");
         expect(endedVotesCount(body, "poutine")).toBe("1 vote");
         expect(endedVotesCount(body, "italian")).toBe("0 votes");
@@ -913,7 +913,7 @@ describe("MPollBody", () => {
             responseEvent("@yh:example.com", "poutine", 14),
         ];
         const ends = [];
-        const body = newMPollBody(votes, ends, null, false);
+        const body = newMPollBody(votes, ends, undefined, false);
         expect(body.html()).toMatchSnapshot();
     });
 
@@ -927,7 +927,7 @@ describe("MPollBody", () => {
             responseEvent("@yh:example.com", "poutine", 14),
         ];
         const ends = [endEvent("@me:example.com", 25)];
-        const body = newMPollBody(votes, ends, null, false);
+        const body = newMPollBody(votes, ends, undefined, false);
         expect(body.html()).toMatchSnapshot();
     });
 });
@@ -951,7 +951,7 @@ function newRelations(relationEvents: Array<MatrixEvent>, eventType: string): Re
 function newMPollBody(
     relationEvents: Array<MatrixEvent>,
     endEvents: Array<MatrixEvent> = [],
-    answers?: POLL_ANSWER[],
+    answers?: PollAnswer[],
     disclosed = true,
 ): ReactWrapper {
     const mxEvent = new MatrixEvent({
@@ -1033,7 +1033,7 @@ function endedVotesCount(wrapper: ReactWrapper, value: string): string {
     return wrapper.find(`div[data-value="${value}"] .mx_MPollBody_optionVoteCount`).text();
 }
 
-function newPollStart(answers?: POLL_ANSWER[], question?: string, disclosed = true): M_POLL_START_EVENT_CONTENT {
+function newPollStart(answers?: PollAnswer[], question?: string, disclosed = true): PollStartEventContent {
     if (!answers) {
         answers = [
             { id: "pizza", [M_TEXT.name]: "Pizza" },
@@ -1047,7 +1047,7 @@ function newPollStart(answers?: POLL_ANSWER[], question?: string, disclosed = tr
         question = "What should we order for the party?";
     }
 
-    const answersFallback = answers.map((a, i) => `${i + 1}. ${a[M_TEXT.name]}`).join("\n");
+    const answersFallback = answers.map((a, i) => `${i + 1}. ${M_TEXT.findIn<string>(a)}`).join("\n");
 
     const fallback = `${question}\n${answersFallback}`;
 

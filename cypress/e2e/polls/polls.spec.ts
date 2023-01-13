@@ -16,8 +16,6 @@ limitations under the License.
 
 /// <reference types="cypress" />
 
-import { PollResponseEvent } from "matrix-events-sdk";
-
 import { HomeserverInstance } from "../../plugins/utils/homeserver";
 import { MatrixClient } from "../../global";
 import Chainable = Cypress.Chainable;
@@ -70,8 +68,16 @@ describe("Polls", () => {
             cy.get('input[type="radio"]')
                 .invoke("attr", "value")
                 .then((optionId) => {
-                    const pollVote = PollResponseEvent.from([optionId], pollId).serialize();
-                    bot.sendEvent(roomId, pollVote.type, pollVote.content);
+                    // We can't use the js-sdk types for this stuff directly, so manually construct the event.
+                    bot.sendEvent(roomId, "org.matrix.msc3381.poll.response", {
+                        "m.relates_to": {
+                            rel_type: "m.reference",
+                            event_id: pollId,
+                        },
+                        "org.matrix.msc3381.poll.response": {
+                            answers: [optionId],
+                        },
+                    });
                 });
         });
     };

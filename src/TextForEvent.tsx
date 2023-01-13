@@ -20,7 +20,8 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { removeDirectionOverrideChars } from "matrix-js-sdk/src/utils";
 import { GuestAccess, HistoryVisibility, JoinRule } from "matrix-js-sdk/src/@types/partials";
 import { EventType, MsgType } from "matrix-js-sdk/src/@types/event";
-import { M_POLL_START, M_POLL_END, PollStartEvent } from "matrix-events-sdk";
+import { M_POLL_START, M_POLL_END } from "matrix-js-sdk/src/@types/polls";
+import { PollStartEvent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
 
 import { _t } from "./languageHandler";
 import * as Roles from "./Roles";
