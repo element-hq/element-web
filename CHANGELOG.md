@@ -1,3 +1,9 @@
+Changes in [3.64.0-rc.3](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.64.0-rc.3) (2023-01-13)
+===============================================================================================================
+
+## 🐛 Bug Fixes
+ * Fix failure to start in firefox private browser ([\#3058](https://github.com/matrix-org/matrix-js-sdk/pull/3058)). Fixes vector-im/element-web#24216.
+
 Changes in [3.64.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.64.0-rc.2) (2023-01-12)
 ===============================================================================================================
 
