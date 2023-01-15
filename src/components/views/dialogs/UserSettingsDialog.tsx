@@ -164,7 +164,7 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
                 new Tab(
                     UserTab.SessionManager,
                     _td("Sessions"),
-                    "mx_UserSettingsDialog_securityIcon",
+                    "mx_UserSettingsDialog_sessionsIcon",
                     <SessionManagerTab />,
                     // don't track with posthog while under construction
                     undefined,
