@@ -3706,5 +3706,6 @@
     "Can't start voice message": "Hang üzenetet nem lehet elindítani",
     "Edit link": "Hivatkozás szerkesztése",
     "Numbered list": "Számozott lista",
-    "Bulleted list": "Lista"
+    "Bulleted list": "Lista",
+    "Decrypted source unavailable": "A visszafejtett forrás nem érhető el"
 }
