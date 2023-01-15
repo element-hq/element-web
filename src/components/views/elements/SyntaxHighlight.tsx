@@ -1,5 +1,6 @@
 /*
 Copyright 2017 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -25,7 +26,7 @@ interface IProps {
 export default class SyntaxHighlight extends React.PureComponent<IProps> {
     public render(): JSX.Element {
         const { children: content, language } = this.props;
-        const highlighted = language ? hljs.highlight(language, content) : hljs.highlightAuto(content);
+        const highlighted = language ? hljs.highlight(content, { language }) : hljs.highlightAuto(content);
 
         return (
             <pre className={`mx_SyntaxHighlight hljs language-${highlighted.language}`}>

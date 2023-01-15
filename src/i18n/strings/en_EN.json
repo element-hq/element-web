@@ -3452,6 +3452,7 @@
     "User menu": "User menu",
     "Could not load user profile": "Could not load user profile",
     "Decrypted event source": "Decrypted event source",
+    "Decrypted source unavailable": "Decrypted source unavailable",
     "Original event source": "Original event source",
     "Event ID: %(eventId)s": "Event ID: %(eventId)s",
     "Thread root ID: %(threadRootId)s": "Thread root ID: %(threadRootId)s",
