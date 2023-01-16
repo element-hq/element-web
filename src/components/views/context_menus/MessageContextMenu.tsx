@@ -21,7 +21,7 @@ import { EventStatus, MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { EventType, RelationType } from "matrix-js-sdk/src/@types/event";
 import { Relations } from "matrix-js-sdk/src/models/relations";
 import { RoomMemberEvent } from "matrix-js-sdk/src/models/room-member";
-import { M_POLL_START } from "matrix-events-sdk";
+import { M_POLL_START } from "matrix-js-sdk/src/@types/polls";
 import { Thread } from "matrix-js-sdk/src/models/thread";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";

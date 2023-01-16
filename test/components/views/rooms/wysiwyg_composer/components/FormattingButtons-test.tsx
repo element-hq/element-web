@@ -17,90 +17,118 @@ limitations under the License.
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { AllActionStates, FormattingFunctions } from "@matrix-org/matrix-wysiwyg";
+import { ActionState, ActionTypes, AllActionStates, FormattingFunctions } from "@matrix-org/matrix-wysiwyg";
 
 import { FormattingButtons } from "../../../../../../src/components/views/rooms/wysiwyg_composer/components/FormattingButtons";
 import * as LinkModal from "../../../../../../src/components/views/rooms/wysiwyg_composer/components/LinkModal";
 
+const mockWysiwyg = {
+    bold: jest.fn(),
+    italic: jest.fn(),
+    underline: jest.fn(),
+    strikeThrough: jest.fn(),
+    inlineCode: jest.fn(),
+    link: jest.fn(),
+    orderedList: jest.fn(),
+    unorderedList: jest.fn(),
+} as unknown as FormattingFunctions;
+
+const openLinkModalSpy = jest.spyOn(LinkModal, "openLinkModal");
+
+const testCases: Record<
+    Exclude<ActionTypes, "undo" | "redo" | "clear">,
+    { label: string; mockFormatFn: jest.Func | jest.SpyInstance }
+> = {
+    bold: { label: "Bold", mockFormatFn: mockWysiwyg.bold },
+    italic: { label: "Italic", mockFormatFn: mockWysiwyg.italic },
+    underline: { label: "Underline", mockFormatFn: mockWysiwyg.underline },
+    strikeThrough: { label: "Strikethrough", mockFormatFn: mockWysiwyg.strikeThrough },
+    inlineCode: { label: "Code", mockFormatFn: mockWysiwyg.inlineCode },
+    link: { label: "Link", mockFormatFn: openLinkModalSpy },
+    orderedList: { label: "Numbered list", mockFormatFn: mockWysiwyg.orderedList },
+    unorderedList: { label: "Bulleted list", mockFormatFn: mockWysiwyg.unorderedList },
+};
+
+const createActionStates = (state: ActionState): AllActionStates => {
+    return Object.fromEntries(Object.keys(testCases).map((testKey) => [testKey, state])) as AllActionStates;
+};
+
+const defaultActionStates = createActionStates("enabled");
+
+const renderComponent = (props = {}) => {
+    return render(<FormattingButtons composer={mockWysiwyg} actionStates={defaultActionStates} {...props} />);
+};
+
+const classes = {
+    active: "mx_FormattingButtons_active",
+    hover: "mx_FormattingButtons_Button_hover",
+};
+
 describe("FormattingButtons", () => {
-    const wysiwyg = {
-        bold: jest.fn(),
-        italic: jest.fn(),
-        underline: jest.fn(),
-        strikeThrough: jest.fn(),
-        inlineCode: jest.fn(),
-        link: jest.fn(),
-    } as unknown as FormattingFunctions;
-
-    const actionStates = {
-        bold: "reversed",
-        italic: "reversed",
-        underline: "enabled",
-        strikeThrough: "enabled",
-        inlineCode: "enabled",
-        link: "enabled",
-    } as AllActionStates;
-
     afterEach(() => {
         jest.resetAllMocks();
     });
 
-    it("Should have the correspond CSS classes", () => {
-        // When
-        render(<FormattingButtons composer={wysiwyg} actionStates={actionStates} />);
+    it("Each button should not have active class when enabled", () => {
+        renderComponent();
 
-        // Then
-        expect(screen.getByLabelText("Bold")).toHaveClass("mx_FormattingButtons_active");
-        expect(screen.getByLabelText("Italic")).toHaveClass("mx_FormattingButtons_active");
-        expect(screen.getByLabelText("Underline")).not.toHaveClass("mx_FormattingButtons_active");
-        expect(screen.getByLabelText("Strikethrough")).not.toHaveClass("mx_FormattingButtons_active");
-        expect(screen.getByLabelText("Code")).not.toHaveClass("mx_FormattingButtons_active");
-        expect(screen.getByLabelText("Link")).not.toHaveClass("mx_FormattingButtons_active");
+        Object.values(testCases).forEach(({ label }) => {
+            expect(screen.getByLabelText(label)).not.toHaveClass(classes.active);
+        });
     });
 
-    it("Should call wysiwyg function on button click", () => {
-        // When
-        const spy = jest.spyOn(LinkModal, "openLinkModal");
-        render(<FormattingButtons composer={wysiwyg} actionStates={actionStates} />);
-        screen.getByLabelText("Bold").click();
-        screen.getByLabelText("Italic").click();
-        screen.getByLabelText("Underline").click();
-        screen.getByLabelText("Strikethrough").click();
-        screen.getByLabelText("Code").click();
-        screen.getByLabelText("Link").click();
+    it("Each button should have active class when reversed", () => {
+        const reversedActionStates = createActionStates("reversed");
+        renderComponent({ actionStates: reversedActionStates });
 
-        // Then
-        expect(wysiwyg.bold).toHaveBeenCalledTimes(1);
-        expect(wysiwyg.italic).toHaveBeenCalledTimes(1);
-        expect(wysiwyg.underline).toHaveBeenCalledTimes(1);
-        expect(wysiwyg.strikeThrough).toHaveBeenCalledTimes(1);
-        expect(wysiwyg.inlineCode).toHaveBeenCalledTimes(1);
-        expect(spy).toHaveBeenCalledTimes(1);
+        Object.values(testCases).forEach((testCase) => {
+            const { label } = testCase;
+            expect(screen.getByLabelText(label)).toHaveClass(classes.active);
+        });
     });
 
-    it("Should display the tooltip on mouse over", async () => {
-        // When
-        const user = userEvent.setup();
-        render(<FormattingButtons composer={wysiwyg} actionStates={actionStates} />);
-        await user.hover(screen.getByLabelText("Bold"));
+    it("Should call wysiwyg function on button click", async () => {
+        renderComponent();
 
-        // Then
-        expect(await screen.findByText("Bold")).toBeTruthy();
+        for (const testCase of Object.values(testCases)) {
+            const { label, mockFormatFn } = testCase;
+
+            screen.getByLabelText(label).click();
+            expect(mockFormatFn).toHaveBeenCalledTimes(1);
+        }
     });
 
-    it("Should not have hover style when active", async () => {
-        // When
-        const user = userEvent.setup();
-        render(<FormattingButtons composer={wysiwyg} actionStates={actionStates} />);
-        await user.hover(screen.getByLabelText("Bold"));
+    it("Each button should display the tooltip on mouse over", async () => {
+        renderComponent();
 
-        // Then
-        expect(screen.getByLabelText("Bold")).not.toHaveClass("mx_FormattingButtons_Button_hover");
+        for (const testCase of Object.values(testCases)) {
+            const { label } = testCase;
 
-        // When
-        await user.hover(screen.getByLabelText("Underline"));
+            await userEvent.hover(screen.getByLabelText(label));
+            expect(await screen.findByText(label)).toBeTruthy();
+        }
+    });
 
-        // Then
-        expect(screen.getByLabelText("Underline")).toHaveClass("mx_FormattingButtons_Button_hover");
+    it("Each button should have hover style when hovered and enabled", async () => {
+        renderComponent();
+
+        for (const testCase of Object.values(testCases)) {
+            const { label } = testCase;
+
+            await userEvent.hover(screen.getByLabelText(label));
+            expect(screen.getByLabelText(label)).toHaveClass("mx_FormattingButtons_Button_hover");
+        }
+    });
+
+    it("Each button should not have hover style when hovered and reversed", async () => {
+        const reversedActionStates = createActionStates("reversed");
+        renderComponent({ actionStates: reversedActionStates });
+
+        for (const testCase of Object.values(testCases)) {
+            const { label } = testCase;
+
+            await userEvent.hover(screen.getByLabelText(label));
+            expect(screen.getByLabelText(label)).not.toHaveClass("mx_FormattingButtons_Button_hover");
+        }
     });
 });

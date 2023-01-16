@@ -20,7 +20,7 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Relations } from "matrix-js-sdk/src/models/relations";
 import { EventType, RelationType } from "matrix-js-sdk/src/@types/event";
 import { logger } from "matrix-js-sdk/src/logger";
-import { M_POLL_START, M_POLL_RESPONSE, M_POLL_END } from "matrix-events-sdk";
+import { M_POLL_START, M_POLL_RESPONSE, M_POLL_END } from "matrix-js-sdk/src/@types/polls";
 
 import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";

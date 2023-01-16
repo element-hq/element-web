@@ -20,17 +20,11 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/models/event";
 import { Relations, RelationsEvent } from "matrix-js-sdk/src/models/relations";
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
-import {
-    M_POLL_END,
-    M_POLL_KIND_DISCLOSED,
-    M_POLL_RESPONSE,
-    M_POLL_START,
-    NamespacedValue,
-    PollAnswerSubevent,
-    PollResponseEvent,
-    PollStartEvent,
-} from "matrix-events-sdk";
+import { M_POLL_END, M_POLL_KIND_DISCLOSED, M_POLL_RESPONSE, M_POLL_START } from "matrix-js-sdk/src/@types/polls";
 import { RelatedRelations } from "matrix-js-sdk/src/models/related-relations";
+import { NamespacedValue } from "matrix-events-sdk";
+import { PollStartEvent, PollAnswerSubevent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
+import { PollResponseEvent } from "matrix-js-sdk/src/extensible_events_v1/PollResponseEvent";
 
 import { _t } from "../../../languageHandler";
 import Modal from "../../../Modal";
@@ -454,7 +448,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
 
         return (
             <div className="mx_MPollBody">
-                <h2>
+                <h2 data-testid="pollQuestion">
                     {poll.question.text}
                     {editedSpan}
                 </h2>
@@ -477,7 +471,12 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
 
                         const answerPercent = totalVotes === 0 ? 0 : Math.round((100.0 * answerVotes) / totalVotes);
                         return (
-                            <div key={answer.id} className={cls} onClick={() => this.selectOption(answer.id)}>
+                            <div
+                                data-testid={`pollOption-${answer.id}`}
+                                key={answer.id}
+                                className={cls}
+                                onClick={() => this.selectOption(answer.id)}
+                            >
                                 {ended ? (
                                     <EndedPollOption answer={answer} checked={checked} votesText={votesText} />
                                 ) : (
@@ -499,7 +498,9 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
                         );
                     })}
                 </div>
-                <div className="mx_MPollBody_totalVotes">{totalText}</div>
+                <div data-testid="totalVotes" className="mx_MPollBody_totalVotes">
+                    {totalText}
+                </div>
             </div>
         );
     }

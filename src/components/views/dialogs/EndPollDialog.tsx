@@ -17,7 +17,7 @@ limitations under the License.
 import React from "react";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { MatrixClient } from "matrix-js-sdk/src/client";
-import { PollEndEvent } from "matrix-events-sdk";
+import { PollEndEvent } from "matrix-js-sdk/src/extensible_events_v1/PollEndEvent";
 
 import { _t } from "../../../languageHandler";
 import { IDialogProps } from "./IDialogProps";

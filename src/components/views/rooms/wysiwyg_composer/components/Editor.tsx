@@ -20,7 +20,7 @@ import React, { CSSProperties, forwardRef, memo, MutableRefObject, ReactNode } f
 import { useIsExpanded } from "../hooks/useIsExpanded";
 import { useSelection } from "../hooks/useSelection";
 
-const HEIGHT_BREAKING_POINT = 20;
+const HEIGHT_BREAKING_POINT = 24;
 
 interface EditorProps {
     disabled: boolean;

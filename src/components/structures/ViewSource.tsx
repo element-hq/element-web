@@ -1,7 +1,6 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2015, 2016, 2019, 2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -77,9 +76,13 @@ export default class ViewSource extends React.Component<IProps, IState> {
                         <summary>
                             <span className="mx_ViewSource_heading">{_t("Decrypted event source")}</span>
                         </summary>
-                        <CopyableText getTextToCopy={copyDecryptedFunc}>
-                            <SyntaxHighlight language="json">{stringify(decryptedEventSource)}</SyntaxHighlight>
-                        </CopyableText>
+                        {decryptedEventSource ? (
+                            <CopyableText getTextToCopy={copyDecryptedFunc}>
+                                <SyntaxHighlight language="json">{stringify(decryptedEventSource)}</SyntaxHighlight>
+                            </CopyableText>
+                        ) : (
+                            <div>{_t("Decrypted source unavailable")}</div>
+                        )}
                     </details>
                     <details className="mx_ViewSource_details">
                         <summary>

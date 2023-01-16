@@ -25,6 +25,7 @@ limitations under the License.
     }
 
     .mx_WysiwygComposer_Editor_content {
+        line-height: $font-22px;
         white-space: pre-wrap;
         word-wrap: break-word;
         outline: none;
@@ -34,6 +35,19 @@ limitations under the License.
         /* navigated through in a single keypress */
         .caretNode {
             user-select: all;
+        }
+
+        ul,
+        ol {
+            margin-top: 0;
+            margin-bottom: 0;
+            padding-inline-start: $spacing-28;
+        }
+
+        // model output always includes a linebreak but we do not want the user
+        // to see it when writing input in lists
+        :is(ol, ul) + br:last-of-type {
+            display: none;
         }
     }
 
