@@ -3706,5 +3706,6 @@
     "You can't start a voice message as you are currently recording a live broadcast. Please end your live broadcast in order to start recording a voice message.": "Du kannst keine Sprachnachricht beginnen, da du im Moment eine Echtzeitübertragung aufzeichnest. Bitte beende deine Sprachübertragung, um ein Gespräch zu beginnen.",
     "Edit link": "Link bearbeiten",
     "Numbered list": "Nummerierte Liste",
-    "Bulleted list": "Ungeordnete Liste"
+    "Bulleted list": "Ungeordnete Liste",
+    "Decrypted source unavailable": "Entschlüsselte Quelle nicht verfügbar"
 }
