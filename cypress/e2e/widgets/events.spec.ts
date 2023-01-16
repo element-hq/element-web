@@ -203,7 +203,7 @@ describe("Widget Events", () => {
 
                 await bot.invite(roomNew, user.userId, "something changed in the room");
 
-                // widget should receive updated 'net.room.topic' event after re-invite
+                // widget should receive updated 'm.room.topic' event after re-invite
                 cy.window().then(async (win) => {
                     await waitForRoom(win, roomId, (room) => {
                         const events = room.getLiveTimeline().getEvents();
