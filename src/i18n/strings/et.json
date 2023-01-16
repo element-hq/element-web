@@ -3706,5 +3706,6 @@
     "Can't start voice message": "Häälsõnumi salvestamine või esitamine ei õnnestu",
     "Edit link": "Muuda linki",
     "Numbered list": "Nummerdatud loend",
-    "Bulleted list": "Täpploend"
+    "Bulleted list": "Täpploend",
+    "Decrypted source unavailable": "Dekrüptitud lähteandmed pole saadaval"
 }
