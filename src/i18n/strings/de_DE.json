@@ -1436,7 +1436,7 @@
     "Enter phone number (required on this homeserver)": "Telefonnummer eingeben (auf diesem Heim-Server erforderlich)",
     "Sign in with SSO": "Einmalanmeldung verwenden",
     "Welcome to %(appName)s": "Willkommen bei %(appName)s",
-    "Send a Direct Message": "Direktnachricht senden",
+    "Send a Direct Message": "Direkt­­nachricht senden",
     "Create a Group Chat": "Gruppenraum erstellen",
     "Use lowercase letters, numbers, dashes and underscores only": "Verwende nur Kleinbuchstaben, Zahlen, Bindestriche und Unterstriche",
     "Syncing...": "Synchronisiere …",
@@ -3704,5 +3704,8 @@
     "Connection error": "Verbindungsfehler",
     "Can't start voice message": "Kann Sprachnachricht nicht beginnen",
     "You can't start a voice message as you are currently recording a live broadcast. Please end your live broadcast in order to start recording a voice message.": "Du kannst keine Sprachnachricht beginnen, da du im Moment eine Echtzeitübertragung aufzeichnest. Bitte beende deine Sprachübertragung, um ein Gespräch zu beginnen.",
-    "Edit link": "Link bearbeiten"
+    "Edit link": "Link bearbeiten",
+    "Numbered list": "Nummerierte Liste",
+    "Bulleted list": "Ungeordnete Liste",
+    "Decrypted source unavailable": "Entschlüsselte Quelle nicht verfügbar"
 }
