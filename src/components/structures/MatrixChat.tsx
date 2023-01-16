@@ -987,6 +987,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 roomJustCreatedOpts: roomInfo.justCreatedOpts,
             },
             () => {
+                ThemeController.isLogin = false;
+                this.themeWatcher.recheck();
                 this.notifyNewScreen("room/" + presentedId, replaceLast);
             },
         );
