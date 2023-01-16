@@ -519,7 +519,17 @@ export class StopGapWidget extends EventEmitter {
             }
         }
 
-        this.readUpToMap[ev.getRoomId()] = ev.getId();
+        // Skip marker assignment if membership is 'invite', otherwise 'm.room.member' from
+        // invitation room will assign it and new state events will be not forwarded to the widget
+        // because of empty timeline for invitation room and assigned marker.
+        const evRoomId = ev.getRoomId();
+        const evId = ev.getId();
+        if (evRoomId && evId) {
+            const room = this.client.getRoom(evRoomId);
+            if (room && room.getMyMembership() === "join") {
+                this.readUpToMap[evRoomId] = evId;
+            }
+        }
 
         const raw = ev.getEffectiveEvent();
         this.messaging.feedEvent(raw as IRoomEvent, this.eventListenerRoomId).catch((e) => {
