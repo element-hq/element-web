@@ -8081,6 +8081,24 @@ matrix-js-sdk@23.1.0-rc.3:
     unhomoglyph "^1.0.6"
     uuid "9"
 
+matrix-js-sdk@23.1.0-rc.4:
+  version "23.1.0-rc.4"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-23.1.0-rc.4.tgz#e1a9a12ad196750a98133ccc110793a1e1857416"
+  integrity sha512-/Hf0RHTBGaEJ/W7cS1D+0/a7x7DBTINim62i6DA/u32ZuSIFmCOFJfLicAvEfviZrcHnPxke68zXGGzcOYUW+w==
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+    "@matrix-org/matrix-sdk-crypto-js" "^0.1.0-alpha.2"
+    another-json "^0.2.0"
+    bs58 "^5.0.0"
+    content-type "^1.0.4"
+    loglevel "^1.7.1"
+    matrix-events-sdk "0.0.1"
+    matrix-widget-api "^1.0.0"
+    p-retry "4"
+    sdp-transform "^2.14.1"
+    unhomoglyph "^1.0.6"
+    uuid "9"
+
 matrix-mock-request@^2.5.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/matrix-mock-request/-/matrix-mock-request-2.6.0.tgz#0855c10b250668ce542b697251087be2bcc23f92"
