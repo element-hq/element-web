@@ -1,3 +1,9 @@
+Changes in [3.64.0-rc.4](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.64.0-rc.4) (2023-01-17)
+===============================================================================================================
+
+## 🐛 Bug Fixes
+ * Correctly handle limited sync responses by resetting the thread timeline ([\#3056](https://github.com/matrix-org/matrix-js-sdk/pull/3056)). Fixes vector-im/element-web#23952.
+
 Changes in [3.64.0-rc.3](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.64.0-rc.3) (2023-01-13)
 ===============================================================================================================
 
