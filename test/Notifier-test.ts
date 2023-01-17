@@ -40,7 +40,8 @@ import { mkThread } from "./test-utils/threads";
 import dis from "../src/dispatcher/dispatcher";
 import { ThreadPayload } from "../src/dispatcher/payloads/ThreadPayload";
 import { Action } from "../src/dispatcher/actions";
-import { VoiceBroadcastChunkEventType } from "../src/voice-broadcast";
+import { VoiceBroadcastChunkEventType, VoiceBroadcastInfoState } from "../src/voice-broadcast";
+import { mkVoiceBroadcastInfoStateEvent } from "./voice-broadcast/utils/test-utils";
 
 jest.mock("../src/utils/notifications", () => ({
     // @ts-ignore
@@ -75,8 +76,8 @@ describe("Notifier", () => {
         });
     };
 
-    const mkAudioEvent = (broadcastChunk = false): MatrixEvent => {
-        const chunkContent = broadcastChunk ? { [VoiceBroadcastChunkEventType]: {} } : {};
+    const mkAudioEvent = (broadcastChunkContent?: object): MatrixEvent => {
+        const chunkContent = broadcastChunkContent ? { [VoiceBroadcastChunkEventType]: broadcastChunkContent } : {};
 
         return mkEvent({
             event: true,
@@ -289,8 +290,20 @@ describe("Notifier", () => {
             );
         });
 
-        it("should not display a notification for a broadcast chunk", () => {
-            const audioEvent = mkAudioEvent(true);
+        it("should display the expected notification for a broadcast chunk with sequence = 1", () => {
+            const audioEvent = mkAudioEvent({ sequence: 1 });
+            Notifier._displayPopupNotification(audioEvent, testRoom);
+            expect(MockPlatform.displayNotification).toHaveBeenCalledWith(
+                "@user:example.com (!room1:server)",
+                "@user:example.com started a voice broadcast",
+                "data:image/png;base64,00",
+                testRoom,
+                audioEvent,
+            );
+        });
+
+        it("should display the expected notification for a broadcast chunk with sequence = 1", () => {
+            const audioEvent = mkAudioEvent({ sequence: 2 });
             Notifier._displayPopupNotification(audioEvent, testRoom);
             expect(MockPlatform.displayNotification).not.toHaveBeenCalled();
         });
@@ -498,6 +511,24 @@ describe("Notifier", () => {
         it("should show a pop-up for an audio message", () => {
             Notifier._evaluateEvent(mkAudioEvent());
             expect(Notifier._displayPopupNotification).toHaveBeenCalledTimes(1);
+        });
+
+        it("should not show a notification for broadcast info events in any case", () => {
+            // Let client decide to show a notification
+            mockClient.getPushActionsForEvent.mockReturnValue({
+                notify: true,
+                tweaks: {},
+            });
+
+            const broadcastStartedEvent = mkVoiceBroadcastInfoStateEvent(
+                "!other:example.org",
+                VoiceBroadcastInfoState.Started,
+                "@user:example.com",
+                "ABC123",
+            );
+
+            Notifier._evaluateEvent(broadcastStartedEvent);
+            expect(Notifier._displayPopupNotification).not.toHaveBeenCalled();
         });
     });
 

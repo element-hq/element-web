@@ -50,7 +50,8 @@ import { localNotificationsAreSilenced, createLocalNotificationSettingsIfNeeded 
 import { getIncomingCallToastKey, IncomingCallToast } from "./toasts/IncomingCallToast";
 import ToastStore from "./stores/ToastStore";
 import { ElementCall } from "./models/Call";
-import { VoiceBroadcastChunkEventType } from "./voice-broadcast";
+import { VoiceBroadcastChunkEventType, VoiceBroadcastInfoEventType } from "./voice-broadcast";
+import { getSenderName } from "./utils/event/getSenderName";
 
 /*
  * Dispatches:
@@ -80,9 +81,16 @@ const msgTypeHandlers = {
     },
     [MsgType.Audio]: (event: MatrixEvent): string | null => {
         if (event.getContent()?.[VoiceBroadcastChunkEventType]) {
-            // mute broadcast chunks
+            if (event.getContent()?.[VoiceBroadcastChunkEventType]?.sequence === 1) {
+                // Show a notification for the first broadcast chunk.
+                // At this point a user received something to listen to.
+                return _t("%(senderName)s started a voice broadcast", { senderName: getSenderName(event) });
+            }
+
+            // Mute other broadcast chunks
             return null;
         }
+
         return TextForEvent.textForEvent(event);
     },
 };
@@ -448,6 +456,9 @@ export const Notifier = {
     },
 
     _evaluateEvent: function (ev: MatrixEvent) {
+        // Mute notifications for broadcast info events
+        if (ev.getType() === VoiceBroadcastInfoEventType) return;
+
         let roomId = ev.getRoomId();
         if (LegacyCallHandler.instance.getSupportsVirtualRooms()) {
             // Attempt to translate a virtual room to a native one

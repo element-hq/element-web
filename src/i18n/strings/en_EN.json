@@ -112,6 +112,7 @@
     "Empty room (was %(oldName)s)": "Empty room (was %(oldName)s)",
     "Default Device": "Default Device",
     "%(name)s is requesting verification": "%(name)s is requesting verification",
+    "%(senderName)s started a voice broadcast": "%(senderName)s started a voice broadcast",
     "%(brand)s does not have permission to send you notifications - please check your browser settings": "%(brand)s does not have permission to send you notifications - please check your browser settings",
     "%(brand)s was not given permission to send notifications - please try again": "%(brand)s was not given permission to send notifications - please try again",
     "Unable to enable Notifications": "Unable to enable Notifications",
