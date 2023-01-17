@@ -3707,5 +3707,7 @@
     "Edit link": "Sunting tautan",
     "Numbered list": "Daftar nomor",
     "Bulleted list": "Daftar bulat",
-    "Decrypted source unavailable": "Sumber terdekripsi tidak tersedia"
+    "Decrypted source unavailable": "Sumber terdekripsi tidak tersedia",
+    "Connection error - Recording paused": "Kesalahan koneksi - Perekaman dijeda",
+    "%(senderName)s started a voice broadcast": "%(senderName)s memulai sebuah siaran suara"
 }
