@@ -3704,5 +3704,10 @@
     "Can't start voice message": "Impossibile iniziare il messaggio vocale",
     "Edit link": "Modifica collegamento",
     "Unfortunately we're unable to start a recording right now. Please try again later.": "Sfortunatamente non riusciamo ad iniziare una registrazione al momento. Riprova più tardi.",
-    "Connection error": "Errore di connessione"
+    "Connection error": "Errore di connessione",
+    "Decrypted source unavailable": "Sorgente decifrata non disponibile",
+    "Numbered list": "Elenco numerato",
+    "Bulleted list": "Elenco puntato",
+    "Connection error - Recording paused": "Errore di connessione - Registrazione in pausa",
+    "%(senderName)s started a voice broadcast": "%(senderName)s ha iniziato una trasmissione vocale"
 }
