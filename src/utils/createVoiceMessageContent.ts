@@ -25,7 +25,7 @@ import { IContent, IEncryptedFile, MsgType } from "matrix-js-sdk/src/matrix";
  * @param {IEncryptedFile} [file] Encrypted file
  */
 export const createVoiceMessageContent = (
-    mxc: string,
+    mxc: string | undefined,
     mimetype: string,
     duration: number,
     size: number,

@@ -18,7 +18,12 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import React, { useState } from "react";
 
-import { VoiceBroadcastInfoState, VoiceBroadcastRecording, VoiceBroadcastRecordingEvent } from "..";
+import {
+    VoiceBroadcastInfoState,
+    VoiceBroadcastRecording,
+    VoiceBroadcastRecordingEvent,
+    VoiceBroadcastRecordingState,
+} from "..";
 import QuestionDialog from "../../components/views/dialogs/QuestionDialog";
 import { useTypedEventEmitter } from "../../hooks/useEventEmitter";
 import { _t } from "../../languageHandler";
@@ -47,7 +52,7 @@ export const useVoiceBroadcastRecording = (
 ): {
     live: boolean;
     timeLeft: number;
-    recordingState: VoiceBroadcastInfoState;
+    recordingState: VoiceBroadcastRecordingState;
     room: Room;
     sender: RoomMember;
     stopRecording(): void;
@@ -81,7 +86,9 @@ export const useVoiceBroadcastRecording = (
     const [timeLeft, setTimeLeft] = useState(recording.getTimeLeft());
     useTypedEventEmitter(recording, VoiceBroadcastRecordingEvent.TimeLeftChanged, setTimeLeft);
 
-    const live = [VoiceBroadcastInfoState.Started, VoiceBroadcastInfoState.Resumed].includes(recordingState);
+    const live = (
+        [VoiceBroadcastInfoState.Started, VoiceBroadcastInfoState.Resumed] as VoiceBroadcastRecordingState[]
+    ).includes(recordingState);
 
     return {
         live,

@@ -16,6 +16,7 @@ limitations under the License.
 
 import { mocked } from "jest-mock";
 import {
+    ClientEvent,
     EventTimelineSet,
     EventType,
     MatrixClient,
@@ -26,6 +27,7 @@ import {
     Room,
 } from "matrix-js-sdk/src/matrix";
 import { Relations } from "matrix-js-sdk/src/models/relations";
+import { SyncState } from "matrix-js-sdk/src/sync";
 
 import { uploadFile } from "../../../src/ContentMessages";
 import { IEncryptedFile } from "../../../src/customisations/models/IMediaEventContent";
@@ -41,6 +43,7 @@ import {
     VoiceBroadcastRecorderEvent,
     VoiceBroadcastRecording,
     VoiceBroadcastRecordingEvent,
+    VoiceBroadcastRecordingState,
 } from "../../../src/voice-broadcast";
 import { mkEvent, mkStubRoom, stubClient } from "../../test-utils";
 import dis from "../../../src/dispatcher/dispatcher";
@@ -84,14 +87,14 @@ describe("VoiceBroadcastRecording", () => {
     let client: MatrixClient;
     let infoEvent: MatrixEvent;
     let voiceBroadcastRecording: VoiceBroadcastRecording;
-    let onStateChanged: (state: VoiceBroadcastInfoState) => void;
+    let onStateChanged: (state: VoiceBroadcastRecordingState) => void;
     let voiceBroadcastRecorder: VoiceBroadcastRecorder;
 
     const mkVoiceBroadcastInfoEvent = (content: VoiceBroadcastInfoEventContent) => {
         return mkEvent({
             event: true,
             type: VoiceBroadcastInfoEventType,
-            user: client.getUserId(),
+            user: client.getSafeUserId(),
             room: roomId,
             content,
         });
@@ -105,9 +108,16 @@ describe("VoiceBroadcastRecording", () => {
         jest.spyOn(voiceBroadcastRecording, "removeAllListeners");
     };
 
-    const itShouldBeInState = (state: VoiceBroadcastInfoState) => {
+    const itShouldBeInState = (state: VoiceBroadcastRecordingState) => {
         it(`should be in state stopped ${state}`, () => {
             expect(voiceBroadcastRecording.getState()).toBe(state);
+        });
+    };
+
+    const emitFirsChunkRecorded = () => {
+        voiceBroadcastRecorder.emit(VoiceBroadcastRecorderEvent.ChunkRecorded, {
+            buffer: new Uint8Array([1, 2, 3]),
+            length: 23,
         });
     };
 
@@ -179,13 +189,22 @@ describe("VoiceBroadcastRecording", () => {
         });
     };
 
+    const setUpUploadFileMock = () => {
+        mocked(uploadFile).mockResolvedValue({
+            url: uploadedUrl,
+            file: uploadedFile,
+        });
+    };
+
     beforeEach(() => {
         client = stubClient();
         room = mkStubRoom(roomId, "Test Room", client);
-        mocked(client.getRoom).mockImplementation((getRoomId: string) => {
+        mocked(client.getRoom).mockImplementation((getRoomId: string | undefined): Room | null => {
             if (getRoomId === roomId) {
                 return room;
             }
+
+            return null;
         });
         onStateChanged = jest.fn();
         voiceBroadcastRecorder = new VoiceBroadcastRecorder(new VoiceRecording(), getChunkLength());
@@ -194,14 +213,11 @@ describe("VoiceBroadcastRecording", () => {
         jest.spyOn(voiceBroadcastRecorder, "destroy");
         mocked(createVoiceBroadcastRecorder).mockReturnValue(voiceBroadcastRecorder);
 
-        mocked(uploadFile).mockResolvedValue({
-            url: uploadedUrl,
-            file: uploadedFile,
-        });
+        setUpUploadFileMock();
 
         mocked(createVoiceMessageContent).mockImplementation(
             (
-                mxc: string,
+                mxc: string | undefined,
                 mimetype: string,
                 duration: number,
                 size: number,
@@ -238,13 +254,45 @@ describe("VoiceBroadcastRecording", () => {
     });
 
     afterEach(() => {
-        voiceBroadcastRecording.off(VoiceBroadcastRecordingEvent.StateChanged, onStateChanged);
+        voiceBroadcastRecording?.off(VoiceBroadcastRecordingEvent.StateChanged, onStateChanged);
+    });
+
+    describe("when there is an info event without id", () => {
+        beforeEach(() => {
+            infoEvent = mkVoiceBroadcastInfoEvent({
+                device_id: client.getDeviceId()!,
+                state: VoiceBroadcastInfoState.Started,
+            });
+            jest.spyOn(infoEvent, "getId").mockReturnValue(undefined);
+        });
+
+        it("should raise an error when creating a broadcast", () => {
+            expect(() => {
+                setUpVoiceBroadcastRecording();
+            }).toThrowError("Cannot create broadcast for info event without Id.");
+        });
+    });
+
+    describe("when there is an info event without room", () => {
+        beforeEach(() => {
+            infoEvent = mkVoiceBroadcastInfoEvent({
+                device_id: client.getDeviceId()!,
+                state: VoiceBroadcastInfoState.Started,
+            });
+            jest.spyOn(infoEvent, "getRoomId").mockReturnValue(undefined);
+        });
+
+        it("should raise an error when creating a broadcast", () => {
+            expect(() => {
+                setUpVoiceBroadcastRecording();
+            }).toThrowError(`Cannot create broadcast for unknown room (info event ${infoEvent.getId()})`);
+        });
     });
 
     describe("when created for a Voice Broadcast Info without relations", () => {
         beforeEach(() => {
             infoEvent = mkVoiceBroadcastInfoEvent({
-                device_id: client.getDeviceId(),
+                device_id: client.getDeviceId()!,
                 state: VoiceBroadcastInfoState.Started,
             });
             setUpVoiceBroadcastRecording();
@@ -278,7 +326,16 @@ describe("VoiceBroadcastRecording", () => {
 
             describe("and the info event is redacted", () => {
                 beforeEach(() => {
-                    infoEvent.emit(MatrixEventEvent.BeforeRedaction, null, null);
+                    infoEvent.emit(
+                        MatrixEventEvent.BeforeRedaction,
+                        infoEvent,
+                        mkEvent({
+                            event: true,
+                            type: EventType.RoomRedaction,
+                            user: client.getSafeUserId(),
+                            content: {},
+                        }),
+                    );
                 });
 
                 itShouldBeInState(VoiceBroadcastInfoState.Stopped);
@@ -329,10 +386,7 @@ describe("VoiceBroadcastRecording", () => {
 
             describe("and a chunk has been recorded", () => {
                 beforeEach(async () => {
-                    voiceBroadcastRecorder.emit(VoiceBroadcastRecorderEvent.ChunkRecorded, {
-                        buffer: new Uint8Array([1, 2, 3]),
-                        length: 23,
-                    });
+                    emitFirsChunkRecorded();
                 });
 
                 itShouldSendAVoiceMessage([1, 2, 3], 3, 23, 1);
@@ -388,6 +442,34 @@ describe("VoiceBroadcastRecording", () => {
                 });
             });
 
+            describe("and there is no connection", () => {
+                beforeEach(() => {
+                    mocked(client.sendStateEvent).mockImplementation(() => {
+                        throw new Error();
+                    });
+                });
+
+                describe.each([
+                    ["pause", async () => voiceBroadcastRecording.pause()],
+                    ["toggle", async () => voiceBroadcastRecording.toggle()],
+                ])("and calling %s", (_case: string, action: Function) => {
+                    beforeEach(async () => {
+                        await action();
+                    });
+
+                    itShouldBeInState("connection_error");
+
+                    describe("and the connection is back", () => {
+                        beforeEach(() => {
+                            mocked(client.sendStateEvent).mockResolvedValue({ event_id: "e1" });
+                            client.emit(ClientEvent.Sync, SyncState.Catchup, SyncState.Error);
+                        });
+
+                        itShouldBeInState(VoiceBroadcastInfoState.Paused);
+                    });
+                });
+            });
+
             describe("and calling destroy", () => {
                 beforeEach(() => {
                     voiceBroadcastRecording.destroy();
@@ -397,6 +479,45 @@ describe("VoiceBroadcastRecording", () => {
                     expect(mocked(voiceBroadcastRecorder.stop)).toHaveBeenCalled();
                     expect(mocked(voiceBroadcastRecorder.destroy)).toHaveBeenCalled();
                     expect(mocked(voiceBroadcastRecording.removeAllListeners)).toHaveBeenCalled();
+                });
+            });
+
+            describe("and a chunk has been recorded and the upload fails", () => {
+                beforeEach(() => {
+                    mocked(uploadFile).mockRejectedValue("Error");
+                    emitFirsChunkRecorded();
+                });
+
+                itShouldBeInState("connection_error");
+
+                describe("and the connection is back", () => {
+                    beforeEach(() => {
+                        setUpUploadFileMock();
+                        client.emit(ClientEvent.Sync, SyncState.Catchup, SyncState.Error);
+                    });
+
+                    itShouldBeInState(VoiceBroadcastInfoState.Paused);
+                    itShouldSendAVoiceMessage([1, 2, 3], 3, 23, 1);
+                });
+            });
+
+            describe("and a chunk has been recorded and sending the voice message fails", () => {
+                beforeEach(() => {
+                    mocked(client.sendMessage).mockRejectedValue("Error");
+                    emitFirsChunkRecorded();
+                });
+
+                itShouldBeInState("connection_error");
+
+                describe("and the connection is back", () => {
+                    beforeEach(() => {
+                        mocked(client.sendMessage).mockClear();
+                        mocked(client.sendMessage).mockResolvedValue({ event_id: "e23" });
+                        client.emit(ClientEvent.Sync, SyncState.Catchup, SyncState.Error);
+                    });
+
+                    itShouldBeInState(VoiceBroadcastInfoState.Paused);
+                    itShouldSendAVoiceMessage([1, 2, 3], 3, 23, 1);
                 });
             });
         });
@@ -431,7 +552,7 @@ describe("VoiceBroadcastRecording", () => {
     describe("when created for a Voice Broadcast Info with a Stopped relation", () => {
         beforeEach(() => {
             infoEvent = mkVoiceBroadcastInfoEvent({
-                device_id: client.getDeviceId(),
+                device_id: client.getDeviceId()!,
                 state: VoiceBroadcastInfoState.Started,
                 chunk_length: 120,
             });
@@ -441,11 +562,11 @@ describe("VoiceBroadcastRecording", () => {
             } as unknown as Relations;
             mocked(relationsContainer.getRelations).mockReturnValue([
                 mkVoiceBroadcastInfoEvent({
-                    device_id: client.getDeviceId(),
+                    device_id: client.getDeviceId()!,
                     state: VoiceBroadcastInfoState.Stopped,
                     ["m.relates_to"]: {
                         rel_type: RelationType.Reference,
-                        event_id: infoEvent.getId(),
+                        event_id: infoEvent.getId()!,
                     },
                 }),
             ]);

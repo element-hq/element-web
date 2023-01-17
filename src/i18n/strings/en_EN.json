@@ -675,6 +675,7 @@
     "Voice broadcast": "Voice broadcast",
     "Buffering…": "Buffering…",
     "play voice broadcast": "play voice broadcast",
+    "Connection error - Recording paused": "Connection error - Recording paused",
     "Cannot reach homeserver": "Cannot reach homeserver",
     "Ensure you have a stable internet connection, or get in touch with the server admin": "Ensure you have a stable internet connection, or get in touch with the server admin",
     "Your %(brand)s is misconfigured": "Your %(brand)s is misconfigured",

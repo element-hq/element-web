@@ -16,7 +16,13 @@ limitations under the License.
 
 import React, { useRef, useState } from "react";
 
-import { VoiceBroadcastControl, VoiceBroadcastInfoState, VoiceBroadcastRecording } from "../..";
+import {
+    VoiceBroadcastControl,
+    VoiceBroadcastInfoState,
+    VoiceBroadcastRecording,
+    VoiceBroadcastRecordingConnectionError,
+    VoiceBroadcastRecordingState,
+} from "../..";
 import { useVoiceBroadcastRecording } from "../../hooks/useVoiceBroadcastRecording";
 import { VoiceBroadcastHeader } from "../atoms/VoiceBroadcastHeader";
 import { Icon as StopIcon } from "../../../../res/img/element-icons/Stop.svg";
@@ -41,14 +47,18 @@ export const VoiceBroadcastRecordingPip: React.FC<VoiceBroadcastRecordingPipProp
     const onDeviceSelect = async (device: MediaDeviceInfo): Promise<void> => {
         setShowDeviceSelect(false);
 
-        if (currentDevice.deviceId === device.deviceId) {
+        if (currentDevice?.deviceId === device.deviceId) {
             // device unchanged
             return;
         }
 
         setDevice(device);
 
-        if ([VoiceBroadcastInfoState.Paused, VoiceBroadcastInfoState.Stopped].includes(recordingState)) {
+        if (
+            (
+                [VoiceBroadcastInfoState.Paused, VoiceBroadcastInfoState.Stopped] as VoiceBroadcastRecordingState[]
+            ).includes(recordingState)
+        ) {
             // Nothing to do in these cases. Resume will use the selected device.
             return;
         }
@@ -72,10 +82,10 @@ export const VoiceBroadcastRecordingPip: React.FC<VoiceBroadcastRecordingPipProp
             <VoiceBroadcastControl onClick={toggleRecording} icon={PauseIcon} label={_t("pause voice broadcast")} />
         );
 
-    return (
-        <div className="mx_VoiceBroadcastBody mx_VoiceBroadcastBody--pip" ref={pipRef}>
-            <VoiceBroadcastHeader linkToRoom={true} live={live ? "live" : "grey"} room={room} timeLeft={timeLeft} />
-            <hr className="mx_VoiceBroadcastBody_divider" />
+    const controls =
+        recordingState === "connection_error" ? (
+            <VoiceBroadcastRecordingConnectionError />
+        ) : (
             <div className="mx_VoiceBroadcastBody_controls">
                 {toggleControl}
                 <AccessibleTooltipButton
@@ -86,6 +96,13 @@ export const VoiceBroadcastRecordingPip: React.FC<VoiceBroadcastRecordingPipProp
                 </AccessibleTooltipButton>
                 <VoiceBroadcastControl icon={StopIcon} label="Stop Recording" onClick={stopRecording} />
             </div>
+        );
+
+    return (
+        <div className="mx_VoiceBroadcastBody mx_VoiceBroadcastBody--pip" ref={pipRef}>
+            <VoiceBroadcastHeader linkToRoom={true} live={live ? "live" : "grey"} room={room} timeLeft={timeLeft} />
+            <hr className="mx_VoiceBroadcastBody_divider" />
+            {controls}
             {showDeviceSelect && (
                 <DevicesContextMenu
                     containerRef={pipRef}
