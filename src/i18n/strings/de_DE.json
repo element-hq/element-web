@@ -3700,12 +3700,14 @@
     "Listen to live broadcast?": "Echtzeitübertragung anhören?",
     "Yes, end my recording": "Ja, beende meine Aufzeichnung",
     "If you start listening to this live broadcast, your current live broadcast recording will be ended.": "Wenn du beginnst, diese Echtzeitübertragung anzuhören, wird deine aktuelle Echtzeitübertragungsaufzeichnung beendet.",
-    "Unfortunately we're unable to start a recording right now. Please try again later.": "Leider ist es aktuell nicht möglich eine Aufnahme zu starten. Bitte versuche es später erneut.",
+    "Unfortunately we're unable to start a recording right now. Please try again later.": "Leider ist es aktuell nicht möglich, eine Aufnahme zu beginnen. Bitte versuche es später erneut.",
     "Connection error": "Verbindungsfehler",
     "Can't start voice message": "Kann Sprachnachricht nicht beginnen",
     "You can't start a voice message as you are currently recording a live broadcast. Please end your live broadcast in order to start recording a voice message.": "Du kannst keine Sprachnachricht beginnen, da du im Moment eine Echtzeitübertragung aufzeichnest. Bitte beende deine Sprachübertragung, um ein Gespräch zu beginnen.",
     "Edit link": "Link bearbeiten",
     "Numbered list": "Nummerierte Liste",
     "Bulleted list": "Ungeordnete Liste",
-    "Decrypted source unavailable": "Entschlüsselte Quelle nicht verfügbar"
+    "Decrypted source unavailable": "Entschlüsselte Quelle nicht verfügbar",
+    "Connection error - Recording paused": "Verbindungsfehler − Aufnahme pausiert",
+    "%(senderName)s started a voice broadcast": "%(senderName)s begann eine Sprachübertragung"
 }
