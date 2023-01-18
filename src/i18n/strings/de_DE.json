@@ -3709,5 +3709,6 @@
     "Bulleted list": "Ungeordnete Liste",
     "Decrypted source unavailable": "Entschlüsselte Quelle nicht verfügbar",
     "Connection error - Recording paused": "Verbindungsfehler − Aufnahme pausiert",
-    "%(senderName)s started a voice broadcast": "%(senderName)s begann eine Sprachübertragung"
+    "%(senderName)s started a voice broadcast": "%(senderName)s begann eine Sprachübertragung",
+    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)"
 }
