@@ -126,6 +126,21 @@ describe("Composer", () => {
             cy.contains(".mx_EventTile_body", "my message 1");
         });
 
+        it("sends only one message when you press Enter multiple times", () => {
+            // Type a message
+            cy.get("div[contenteditable=true]").type("my message 0");
+            // It has not been sent yet
+            cy.contains(".mx_EventTile_body", "my message 0").should("not.exist");
+
+            // Click send
+            cy.get("div[contenteditable=true]").type("{enter}");
+            cy.get("div[contenteditable=true]").type("{enter}");
+            cy.get("div[contenteditable=true]").type("{enter}");
+            // It has been sent
+            cy.contains(".mx_EventTile_body", "my message 0");
+            cy.get(".mx_EventTile_body").should("have.length", 1);
+        });
+
         it("can write formatted text", () => {
             cy.get("div[contenteditable=true]").type("my {ctrl+b}bold{ctrl+b} message");
             cy.get('div[aria-label="Send message"]').click();

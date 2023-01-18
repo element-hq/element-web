@@ -334,7 +334,9 @@ export class MessageComposer extends React.Component<IProps, IState> {
 
         if (this.state.isWysiwygLabEnabled) {
             const { permalinkCreator, relation, replyToEvent } = this.props;
-            await sendMessage(this.state.composerContent, this.state.isRichTextEnabled, {
+            const composerContent = this.state.composerContent;
+            this.setState({ composerContent: "", initialComposerContent: "" });
+            await sendMessage(composerContent, this.state.isRichTextEnabled, {
                 mxClient: this.props.mxClient,
                 roomContext: this.context,
                 permalinkCreator,
@@ -342,7 +344,6 @@ export class MessageComposer extends React.Component<IProps, IState> {
                 replyToEvent,
             });
             dis.dispatch({ action: Action.ClearAndFocusSendMessageComposer });
-            this.setState({ composerContent: "", initialComposerContent: "" });
         }
     };
 
