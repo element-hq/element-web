@@ -1,4 +1,5 @@
 /*
+ Copyright 2023 The Matrix.org Foundation C.I.C.
  Copyright 2015, 2016 OpenMarket Ltd
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,9 +25,10 @@ import { useRoomMemberProfile } from "../../../hooks/room/useRoomMemberProfile";
 interface IProps {
     mxEvent: MatrixEvent;
     onClick?(): void;
+    withTooltip?: boolean;
 }
 
-export default function SenderProfile({ mxEvent, onClick }: IProps): JSX.Element {
+export default function SenderProfile({ mxEvent, onClick, withTooltip }: IProps): JSX.Element {
     const member = useRoomMemberProfile({
         userId: mxEvent.getSender(),
         member: mxEvent.sender,
@@ -39,6 +41,7 @@ export default function SenderProfile({ mxEvent, onClick }: IProps): JSX.Element
             member={member}
             colored={true}
             emphasizeDisplayName={true}
+            withTooltip={withTooltip}
         />
     ) : null;
 }

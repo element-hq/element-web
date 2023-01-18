@@ -2316,6 +2316,7 @@
     "Last month": "Last month",
     "The beginning of the room": "The beginning of the room",
     "Jump to date": "Jump to date",
+    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)",
     "Downloading": "Downloading",
     "Decrypting": "Decrypting",
     "Download": "Download",

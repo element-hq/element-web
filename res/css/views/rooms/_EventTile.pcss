@@ -884,6 +884,7 @@ $left-gutter: 64px;
 
     &::before {
         inset: 0;
+        pointer-events: none; /* ensures the title for the sender name can be correctly displayed */
     }
 
     /* Display notification dot */
@@ -927,8 +928,14 @@ $left-gutter: 64px;
         inset: $padding auto auto $padding;
     }
 
+    .mx_EventTile_details {
+        overflow: hidden;
+    }
+
     .mx_DisambiguatedProfile {
         display: inline-flex;
+        align-items: center;
+        flex: 1;
 
         .mx_DisambiguatedProfile_displayName,
         .mx_DisambiguatedProfile_mxid {
@@ -979,7 +986,9 @@ $left-gutter: 64px;
 
     .mx_MessageTimestamp {
         font-size: $font-12px;
-        max-width: var(--MessageTimestamp-max-width);
+        width: unset; /* Cancel the default width */
+        overflow: hidden; /* ensure correct overflow behavior */
+        text-overflow: ellipsis;
         position: initial;
         margin-left: auto; /* to ensure it's end-aligned even if it's the only element of its parent */
     }
