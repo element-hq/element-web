@@ -3703,5 +3703,12 @@
     "Unfortunately we're unable to start a recording right now. Please try again later.": "Kahjuks me ei saa hetkel salvestamist alustada. Palun proovi hiljem uuesti.",
     "Connection error": "Ühenduse viga",
     "You can't start a voice message as you are currently recording a live broadcast. Please end your live broadcast in order to start recording a voice message.": "Kuna sa hetkel salvestad ringhäälingukõnet, siis häälsõnumi salvestamine või esitamine ei õnnestu. Selleks palun lõpeta ringhäälingukõne.",
-    "Can't start voice message": "Häälsõnumi salvestamine või esitamine ei õnnestu"
+    "Can't start voice message": "Häälsõnumi salvestamine või esitamine ei õnnestu",
+    "Edit link": "Muuda linki",
+    "Numbered list": "Nummerdatud loend",
+    "Bulleted list": "Täpploend",
+    "Decrypted source unavailable": "Dekrüptitud lähteandmed pole saadaval",
+    "Connection error - Recording paused": "Viga võrguühenduses - salvestamine on peatatud",
+    "%(senderName)s started a voice broadcast": "%(senderName)s alustas ringhäälingukõnet",
+    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)"
 }
