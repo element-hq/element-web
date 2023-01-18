@@ -414,7 +414,7 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         widgets.forEach((w, i) => {
             localLayout[w.id] = {
                 container: container,
-                width: widths[i],
+                width: widths?.[i],
                 index: i,
                 height: height,
             };
@@ -437,7 +437,7 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         widgets.forEach((w, i) => {
             localLayout[w.id] = {
                 container: container,
-                width: widths[i],
+                width: widths?.[i],
                 index: i,
                 height: height,
             };
