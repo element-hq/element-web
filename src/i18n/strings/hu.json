@@ -3703,5 +3703,9 @@
     "Unfortunately we're unable to start a recording right now. Please try again later.": "Sajnos most nem lehet elindítani a felvételt. Próbálja meg később.",
     "Connection error": "Kapcsolat hiba",
     "You can't start a voice message as you are currently recording a live broadcast. Please end your live broadcast in order to start recording a voice message.": "Nem lehet hang üzenetet indítani élő közvetítés felvétele közben. Az élő közvetítés bejezése szükséges a hang üzenet indításához.",
-    "Can't start voice message": "Hang üzenetet nem lehet elindítani"
+    "Can't start voice message": "Hang üzenetet nem lehet elindítani",
+    "Edit link": "Hivatkozás szerkesztése",
+    "Numbered list": "Számozott lista",
+    "Bulleted list": "Lista",
+    "Decrypted source unavailable": "A visszafejtett forrás nem érhető el"
 }
