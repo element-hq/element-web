@@ -3709,5 +3709,6 @@
     "Bulleted list": "Zoznam v odrážkach",
     "Decrypted source unavailable": "Dešifrovaný zdroj nie je dostupný",
     "Connection error - Recording paused": "Chyba pripojenia - nahrávanie pozastavené",
-    "%(senderName)s started a voice broadcast": "%(senderName)s začal/a hlasové vysielanie"
+    "%(senderName)s started a voice broadcast": "%(senderName)s začal/a hlasové vysielanie",
+    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)"
 }
