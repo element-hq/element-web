@@ -446,5 +446,7 @@
     "Stickerpack": "ชุดสติ๊กเกอร์",
     "Add some now": "เพิ่มบางส่วนในขณะนี้",
     "You don't currently have any stickerpacks enabled": "ขณะนี้คุณไม่ได้เปิดใช้งานชุดสติกเกอร์ใดๆ",
-    "Failed to connect to integration manager": "ไม่สามารถเชื่อมต่อกับตัวจัดการการรวม"
+    "Failed to connect to integration manager": "ไม่สามารถเชื่อมต่อกับตัวจัดการการรวม",
+    "General failure": "ข้อผิดพลาดทั่วไป",
+    "General": "ทั่วไป"
 }
