@@ -1,25 +1,8 @@
-Changes in [1.11.18-rc.4](https://github.com/vector-im/element-web/releases/tag/v1.11.18-rc.4) (2023-01-17)
-===========================================================================================================
-
-## 🐛 Bug Fixes
- * Correctly handle limited sync responses by resetting the thread timeline ([\#3056](https://github.com/matrix-org/matrix-js-sdk/pull/3056)). Fixes vector-im/element-web#23952.
-
-Changes in [1.11.18-rc.3](https://github.com/vector-im/element-web/releases/tag/v1.11.18-rc.3) (2023-01-13)
-===========================================================================================================
-
-## 🐛 Bug Fixes
- * Fix failure to start in firefox private browser ([\#3058](https://github.com/matrix-org/matrix-js-sdk/pull/3058)). Fixes vector-im/element-web#24216.
-
-Changes in [1.11.18-rc.2](https://github.com/vector-im/element-web/releases/tag/v1.11.18-rc.2) (2023-01-12)
-===========================================================================================================
+Changes in [1.11.18](https://github.com/vector-im/element-web/releases/tag/v1.11.18) (2023-01-18)
+=================================================================================================
 
 ## ✨ Features
  * Switch threads on for everyone ([\#9879](https://github.com/matrix-org/matrix-react-sdk/pull/9879)).
-
-Changes in [1.11.18-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.11.18-rc.1) (2023-01-11)
-===========================================================================================================
-
-## ✨ Features
  * Make threads use new Unable to Decrypt UI ([\#9876](https://github.com/matrix-org/matrix-react-sdk/pull/9876)). Fixes #24060.
  * Add edit and remove actions to link in RTE [Labs] ([\#9864](https://github.com/matrix-org/matrix-react-sdk/pull/9864)).
  * Remove extensible events v1 experimental rendering ([\#9881](https://github.com/matrix-org/matrix-react-sdk/pull/9881)).
@@ -70,6 +53,8 @@ Changes in [1.11.18-rc.1](https://github.com/vector-im/element-web/releases/tag/
  * Ensure that events are correctly updated when they are edited. ([\#9789](https://github.com/matrix-org/matrix-react-sdk/pull/9789)).
  * When stopping a broadcast also stop the playback ([\#9795](https://github.com/matrix-org/matrix-react-sdk/pull/9795)). Fixes #24052.
  * Prevent to start two broadcasts at the same time ([\#9744](https://github.com/matrix-org/matrix-react-sdk/pull/9744)). Fixes #23973.
+ * Correctly handle limited sync responses by resetting the thread timeline ([\#3056](https://github.com/matrix-org/matrix-js-sdk/pull/3056)). Fixes vector-im/element-web#23952.
+ * Fix failure to start in firefox private browser ([\#3058](https://github.com/matrix-org/matrix-js-sdk/pull/3058)). Fixes vector-im/element-web#24216.
 
 Changes in [1.11.17](https://github.com/vector-im/element-web/releases/tag/v1.11.17) (2022-12-21)
 =================================================================================================
