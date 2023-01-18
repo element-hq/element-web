@@ -3707,5 +3707,7 @@
     "Edit link": "Éditer le lien",
     "Numbered list": "Liste numérotée",
     "Bulleted list": "Liste à puces",
-    "Decrypted source unavailable": "Source déchiffrée non disponible"
+    "Decrypted source unavailable": "Source déchiffrée non disponible",
+    "Connection error - Recording paused": "Erreur de connexion – Enregistrement en pause",
+    "%(senderName)s started a voice broadcast": "%(senderName)s a démarré une diffusion audio"
 }
