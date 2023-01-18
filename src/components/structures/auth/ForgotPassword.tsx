@@ -258,6 +258,7 @@ export default class ForgotPassword extends React.Component<Props, State> {
         }
 
         this.phase = Phase.ResettingPassword;
+        this.reset.setLogoutDevices(this.state.logoutDevices);
 
         try {
             await this.reset.setNewPassword(this.state.password);

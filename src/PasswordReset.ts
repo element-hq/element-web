@@ -104,6 +104,10 @@ export default class PasswordReset {
         );
     }
 
+    public setLogoutDevices(logoutDevices: boolean): void {
+        this.logoutDevices = logoutDevices;
+    }
+
     public async setNewPassword(password: string): Promise<void> {
         this.password = password;
         await this.checkEmailLinkClicked();
