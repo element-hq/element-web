@@ -3709,5 +3709,6 @@
     "Bulleted list": "Täpploend",
     "Decrypted source unavailable": "Dekrüptitud lähteandmed pole saadaval",
     "Connection error - Recording paused": "Viga võrguühenduses - salvestamine on peatatud",
-    "%(senderName)s started a voice broadcast": "%(senderName)s alustas ringhäälingukõnet"
+    "%(senderName)s started a voice broadcast": "%(senderName)s alustas ringhäälingukõnet",
+    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)"
 }
