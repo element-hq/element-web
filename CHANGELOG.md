@@ -1,3 +1,9 @@
+Changes in [3.64.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.64.1) (2023-01-18)
+=====================================================================================================
+
+## 🐛 Bug Fixes
+ * Fix crash in older browsers (replace .at() with array.length-1) ([\#9933](https://github.com/matrix-org/matrix-react-sdk/pull/9933)). Fixes matrix-org/element-web-rageshakes#19281.
+
 Changes in [3.64.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.64.0) (2023-01-18)
 =====================================================================================================
 
