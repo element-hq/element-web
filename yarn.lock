@@ -6493,7 +6493,7 @@ matrix-events-sdk@0.0.1:
 
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
   version "23.1.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/2fcc4811dd913bb774dd1c7f67cb693c4456d71e"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/83563c7a01bbeaf7f83f4b7feccc03647b536e7c"
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/matrix-sdk-crypto-js" "^0.1.0-alpha.2"
