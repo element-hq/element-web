@@ -77,7 +77,7 @@ export const useSlidingSyncRoomSearch = (): {
                 // TODO: delete the list?
             }
         },
-        [updateQuery, updateResult, SlidingSyncManager.ListSearch],
+        [updateQuery, updateResult],
     );
 
     return {
