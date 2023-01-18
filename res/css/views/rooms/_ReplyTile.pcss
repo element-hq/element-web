@@ -32,11 +32,12 @@ limitations under the License.
         grid-template:
             "sender" auto
             "message" auto
-            / auto;
+            / 100%;
         text-decoration: none;
         color: $secondary-content;
         transition: color ease 0.15s;
         gap: 2px;
+        max-width: 100%; // avoid overflow with wide content
 
         &:hover {
             color: $primary-content;
