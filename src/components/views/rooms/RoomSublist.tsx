@@ -340,9 +340,8 @@ export default class RoomSublist extends React.Component<IProps, IState> {
 
     private onShowAllClick = async (): Promise<void> => {
         if (this.slidingSyncMode) {
-            const slidingSyncIndex = SlidingSyncManager.instance.getOrAllocateListIndex(this.props.tagId);
             const count = RoomListStore.instance.getCount(this.props.tagId);
-            await SlidingSyncManager.instance.ensureListRegistered(slidingSyncIndex, {
+            await SlidingSyncManager.instance.ensureListRegistered(this.props.tagId, {
                 ranges: [[0, count]],
             });
         }
@@ -566,8 +565,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
             let isAlphabetical = RoomListStore.instance.getTagSorting(this.props.tagId) === SortAlgorithm.Alphabetic;
             let isUnreadFirst = RoomListStore.instance.getListOrder(this.props.tagId) === ListAlgorithm.Importance;
             if (this.slidingSyncMode) {
-                const slidingSyncIndex = SlidingSyncManager.instance.getOrAllocateListIndex(this.props.tagId);
-                const slidingList = SlidingSyncManager.instance.slidingSync.getList(slidingSyncIndex);
+                const slidingList = SlidingSyncManager.instance.slidingSync.getListParams(this.props.tagId);
                 isAlphabetical = slidingList.sort[0] === "by_name";
                 isUnreadFirst = slidingList.sort[0] === "by_notification_level";
             }

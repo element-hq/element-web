@@ -89,15 +89,14 @@ export class SlidingRoomListStoreClass extends AsyncStoreWithClient<IState> impl
     public async setTagSorting(tagId: TagID, sort: SortAlgorithm): Promise<void> {
         logger.info("SlidingRoomListStore.setTagSorting ", tagId, sort);
         this.tagIdToSortAlgo[tagId] = sort;
-        const slidingSyncIndex = this.context.slidingSyncManager.getOrAllocateListIndex(tagId);
         switch (sort) {
             case SortAlgorithm.Alphabetic:
-                await this.context.slidingSyncManager.ensureListRegistered(slidingSyncIndex, {
+                await this.context.slidingSyncManager.ensureListRegistered(tagId, {
                     sort: SlidingSyncSortToFilter[SortAlgorithm.Alphabetic],
                 });
                 break;
             case SortAlgorithm.Recent:
-                await this.context.slidingSyncManager.ensureListRegistered(slidingSyncIndex, {
+                await this.context.slidingSyncManager.ensureListRegistered(tagId, {
                     sort: SlidingSyncSortToFilter[SortAlgorithm.Recent],
                 });
                 break;
@@ -164,8 +163,7 @@ export class SlidingRoomListStoreClass extends AsyncStoreWithClient<IState> impl
         // check all lists for each tag we know about and see if the room is there
         const tags: TagID[] = [];
         for (const tagId in this.tagIdToSortAlgo) {
-            const index = this.context.slidingSyncManager.getOrAllocateListIndex(tagId);
-            const listData = this.context.slidingSyncManager.slidingSync.getListData(index);
+            const listData = this.context.slidingSyncManager.slidingSync.getListData(tagId);
             if (!listData) {
                 continue;
             }
@@ -259,11 +257,10 @@ export class SlidingRoomListStoreClass extends AsyncStoreWithClient<IState> impl
     }
 
     private onSlidingSyncListUpdate(
-        listIndex: number,
+        tagId: string,
         joinCount: number,
         roomIndexToRoomId: Record<number, string>,
     ): void {
-        const tagId = this.context.slidingSyncManager.listIdForIndex(listIndex);
         this.counts[tagId] = joinCount;
         this.refreshOrderedLists(tagId, roomIndexToRoomId);
         // let the UI update
@@ -295,8 +292,7 @@ export class SlidingRoomListStoreClass extends AsyncStoreWithClient<IState> impl
             if (room) {
                 // resort it based on the slidingSync view of the list. This may cause this old sticky
                 // room to cease to exist.
-                const index = this.context.slidingSyncManager.getOrAllocateListIndex(tagId);
-                const listData = this.context.slidingSyncManager.slidingSync.getListData(index);
+                const listData = this.context.slidingSyncManager.slidingSync.getListData(tagId);
                 if (!listData) {
                     continue;
                 }
@@ -334,9 +330,8 @@ export class SlidingRoomListStoreClass extends AsyncStoreWithClient<IState> impl
             const sort = SortAlgorithm.Recent; // default to recency sort, TODO: read from config
             this.tagIdToSortAlgo[tagId] = sort;
             this.emit(LISTS_LOADING_EVENT, tagId, true);
-            const index = this.context.slidingSyncManager.getOrAllocateListIndex(tagId);
             this.context.slidingSyncManager
-                .ensureListRegistered(index, {
+                .ensureListRegistered(tagId, {
                     filters: filter,
                     sort: SlidingSyncSortToFilter[sort],
                 })
@@ -367,9 +362,8 @@ export class SlidingRoomListStoreClass extends AsyncStoreWithClient<IState> impl
             );
 
             this.emit(LISTS_LOADING_EVENT, tagId, true);
-            const index = this.context.slidingSyncManager.getOrAllocateListIndex(tagId);
             this.context.slidingSyncManager
-                .ensureListRegistered(index, {
+                .ensureListRegistered(tagId, {
                     filters: filters,
                 })
                 .then(() => {
