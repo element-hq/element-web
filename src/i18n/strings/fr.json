@@ -3709,5 +3709,6 @@
     "Bulleted list": "Liste à puces",
     "Decrypted source unavailable": "Source déchiffrée non disponible",
     "Connection error - Recording paused": "Erreur de connexion – Enregistrement en pause",
-    "%(senderName)s started a voice broadcast": "%(senderName)s a démarré une diffusion audio"
+    "%(senderName)s started a voice broadcast": "%(senderName)s a démarré une diffusion audio",
+    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)"
 }
