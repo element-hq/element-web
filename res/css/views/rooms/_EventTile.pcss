@@ -548,7 +548,7 @@ $left-gutter: 64px;
         pre,
         code {
             font-family: $monospace-font-family !important;
-            background-color: $codeblock-background-color;
+            background-color: $system;
         }
 
         code:not(pre *) {
@@ -577,6 +577,8 @@ $left-gutter: 64px;
             &::-webkit-scrollbar-corner {
                 background: transparent;
             }
+
+            border: 1px solid $quinary-content;
 
             code {
                 white-space: pre; /* we want code blocks to be scrollable and not wrap */
@@ -756,6 +758,8 @@ $left-gutter: 64px;
 
         .mx_EventTile_collapsedCodeBlock {
             max-height: 30vh;
+            padding-top: $spacing-12;
+            padding-bottom: $spacing-12;
         }
 
         /* Inserted adjacent to <pre> blocks, (See TextualBody) */

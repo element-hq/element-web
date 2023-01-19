@@ -46,8 +46,21 @@ limitations under the License.
 
         // model output always includes a linebreak but we do not want the user
         // to see it when writing input in lists
-        :is(ol, ul) + br:last-of-type {
+        :is(ol, ul, pre) + br:last-of-type {
             display: none;
+        }
+
+        > pre {
+            font-size: $font-15px;
+            line-height: $font-24px;
+
+            margin-top: 0;
+            margin-bottom: 0;
+            padding: $spacing-8 $spacing-12;
+
+            background-color: $inlinecode-background-color;
+            border: 1px solid $inlinecode-border-color;
+            border-radius: 2px;
         }
 
         code {

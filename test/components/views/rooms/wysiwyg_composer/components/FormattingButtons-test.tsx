@@ -28,6 +28,7 @@ const mockWysiwyg = {
     underline: jest.fn(),
     strikeThrough: jest.fn(),
     inlineCode: jest.fn(),
+    codeBlock: jest.fn(),
     link: jest.fn(),
     orderedList: jest.fn(),
     unorderedList: jest.fn(),
@@ -36,7 +37,7 @@ const mockWysiwyg = {
 const openLinkModalSpy = jest.spyOn(LinkModal, "openLinkModal");
 
 const testCases: Record<
-    Exclude<ActionTypes, "undo" | "redo" | "clear" | "codeBlock">,
+    Exclude<ActionTypes, "undo" | "redo" | "clear">,
     { label: string; mockFormatFn: jest.Func | jest.SpyInstance }
 > = {
     bold: { label: "Bold", mockFormatFn: mockWysiwyg.bold },
@@ -44,6 +45,7 @@ const testCases: Record<
     underline: { label: "Underline", mockFormatFn: mockWysiwyg.underline },
     strikeThrough: { label: "Strikethrough", mockFormatFn: mockWysiwyg.strikeThrough },
     inlineCode: { label: "Code", mockFormatFn: mockWysiwyg.inlineCode },
+    codeBlock: { label: "Code block", mockFormatFn: mockWysiwyg.inlineCode },
     link: { label: "Link", mockFormatFn: openLinkModalSpy },
     orderedList: { label: "Numbered list", mockFormatFn: mockWysiwyg.orderedList },
     unorderedList: { label: "Bulleted list", mockFormatFn: mockWysiwyg.unorderedList },
