@@ -85,7 +85,7 @@ export function doesRoomOrThreadHaveUnreadMessages(roomOrThread: Room | Thread):
     //             https://github.com/vector-im/element-web/issues/2427
     // ...and possibly some of the others at
     //             https://github.com/vector-im/element-web/issues/3363
-    if (roomOrThread.timeline.at(-1)?.getSender() === myUserId) {
+    if (roomOrThread.timeline[roomOrThread.timeline.length - 1]?.getSender() === myUserId) {
         return false;
     }
 
