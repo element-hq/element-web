@@ -288,6 +288,37 @@ describe("<ForgotPassword>", () => {
                         });
                     });
 
+                    describe("and confirm the email link and submitting the new password", () => {
+                        beforeEach(async () => {
+                            // fake link confirmed by resolving client.setPassword instead of raising an error
+                            mocked(client.setPassword).mockResolvedValue({});
+                            await click(screen.getByText("Reset password"));
+                        });
+
+                        it("should send the new password (once)", () => {
+                            expect(client.setPassword).toHaveBeenCalledWith(
+                                {
+                                    type: "m.login.email.identity",
+                                    threepid_creds: {
+                                        client_secret: expect.any(String),
+                                        sid: testSid,
+                                    },
+                                    threepidCreds: {
+                                        client_secret: expect.any(String),
+                                        sid: testSid,
+                                    },
+                                },
+                                testPassword,
+                                false,
+                            );
+
+                            // be sure that the next attempt to set the password would have been sent
+                            jest.advanceTimersByTime(3000);
+                            // it should not retry to set the password
+                            expect(client.setPassword).toHaveBeenCalledTimes(1);
+                        });
+                    });
+
                     describe("and submitting it", () => {
                         beforeEach(async () => {
                             await click(screen.getByText("Reset password"));
