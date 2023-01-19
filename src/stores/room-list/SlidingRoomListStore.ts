@@ -256,11 +256,7 @@ export class SlidingRoomListStoreClass extends AsyncStoreWithClient<IState> impl
         this.tagMap = tagMap;
     }
 
-    private onSlidingSyncListUpdate(
-        tagId: string,
-        joinCount: number,
-        roomIndexToRoomId: Record<number, string>,
-    ): void {
+    private onSlidingSyncListUpdate(tagId: string, joinCount: number, roomIndexToRoomId: Record<number, string>): void {
         this.counts[tagId] = joinCount;
         this.refreshOrderedLists(tagId, roomIndexToRoomId);
         // let the UI update

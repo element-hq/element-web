@@ -137,7 +137,13 @@ export class SlidingSyncManager {
         this.listIdToIndex = {};
         // by default use the encrypted subscription as that gets everything, which is a safer
         // default than potentially missing member events.
-        this.slidingSync = new SlidingSync(proxyUrl, new Map(), ENCRYPTED_SUBSCRIPTION, client, SLIDING_SYNC_TIMEOUT_MS);
+        this.slidingSync = new SlidingSync(
+            proxyUrl,
+            new Map(),
+            ENCRYPTED_SUBSCRIPTION,
+            client,
+            SLIDING_SYNC_TIMEOUT_MS,
+        );
         this.slidingSync.addCustomSubscription(UNENCRYPTED_SUBSCRIPTION_NAME, UNENCRYPTED_SUBSCRIPTION);
         // set the space list
         this.slidingSync.setList(SlidingSyncManager.ListSpaces, {
