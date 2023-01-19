@@ -78,6 +78,69 @@ describe("SlidingSyncManager", () => {
         });
     });
 
+    describe("ensureListRegistered", () => {
+        it("creates a new list based on the key", async () => {
+            const listKey = "key";
+            mocked(slidingSync.getListParams).mockReturnValue(null);
+            mocked(slidingSync.setList).mockResolvedValue("yep");
+            await manager.ensureListRegistered(listKey, {
+                sort: ["by_recency"],
+            });
+            expect(slidingSync.setList).toBeCalledWith(
+                listKey,
+                expect.objectContaining({
+                    sort: ["by_recency"],
+                }),
+            );
+        });
+
+        it("updates an existing list based on the key", async () => {
+            const listKey = "key";
+            mocked(slidingSync.getListParams).mockReturnValue({
+                ranges: [[0, 42]],
+            });
+            mocked(slidingSync.setList).mockResolvedValue("yep");
+            await manager.ensureListRegistered(listKey, {
+                sort: ["by_recency"],
+            });
+            expect(slidingSync.setList).toBeCalledWith(
+                listKey,
+                expect.objectContaining({
+                    sort: ["by_recency"],
+                    ranges: [[0, 42]],
+                }),
+            );
+        });
+
+        it("updates ranges on an existing list based on the key if there's no other changes", async () => {
+            const listKey = "key";
+            mocked(slidingSync.getListParams).mockReturnValue({
+                ranges: [[0, 42]],
+            });
+            mocked(slidingSync.setList).mockResolvedValue("yep");
+            await manager.ensureListRegistered(listKey, {
+                ranges: [[0, 52]],
+            });
+            expect(slidingSync.setList).not.toBeCalled();
+            expect(slidingSync.setListRanges).toBeCalledWith(listKey, [[0, 52]]);
+        });
+
+        it("no-ops for idential changes", async () => {
+            const listKey = "key";
+            mocked(slidingSync.getListParams).mockReturnValue({
+                ranges: [[0, 42]],
+                sort: ["by_recency"],
+            });
+            mocked(slidingSync.setList).mockResolvedValue("yep");
+            await manager.ensureListRegistered(listKey, {
+                ranges: [[0, 42]],
+                sort: ["by_recency"],
+            });
+            expect(slidingSync.setList).not.toBeCalled();
+            expect(slidingSync.setListRanges).not.toBeCalled();
+        });
+    });
+
     describe("startSpidering", () => {
         it("requests in batchSizes", async () => {
             const gapMs = 1;
