@@ -42,7 +42,6 @@ describe("SlidingRoomListStore", () => {
     let context: TestSdkContext;
     let dis: MatrixDispatcher;
     let activeSpace: string;
-    let tagIdToIndex = {};
 
     beforeEach(async () => {
         context = new TestSdkContext();
@@ -64,27 +63,6 @@ describe("SlidingRoomListStore", () => {
                 getRoomId: jest.fn(),
             }) as unknown as RoomViewStore,
         );
-
-        // mock implementations to allow the store to map tag IDs to sliding sync list indexes and vice versa
-        let index = 0;
-        tagIdToIndex = {};
-        mocked(context._SlidingSyncManager.getOrAllocateListIndex).mockImplementation((listId: string): number => {
-            if (tagIdToIndex[listId] != null) {
-                return tagIdToIndex[listId];
-            }
-            tagIdToIndex[listId] = index;
-            index++;
-            return index;
-        });
-        mocked(context.slidingSyncManager.listIdForIndex).mockImplementation((i) => {
-            for (const tagId in tagIdToIndex) {
-                const j = tagIdToIndex[tagId];
-                if (i === j) {
-                    return tagId;
-                }
-            }
-            return null;
-        });
         mocked(context._SlidingSyncManager.ensureListRegistered).mockResolvedValue({
             ranges: [[0, 10]],
         });
@@ -108,7 +86,7 @@ describe("SlidingRoomListStore", () => {
             await p;
 
             expect(context._SlidingSyncManager.ensureListRegistered).toHaveBeenCalledWith(
-                tagIdToIndex[DefaultTagID.Untagged],
+                DefaultTagID.Untagged,
                 {
                     filters: expect.objectContaining({
                         spaces: [spaceRoomId],
@@ -127,7 +105,7 @@ describe("SlidingRoomListStore", () => {
             await store.start(); // call onReady
             await p;
             expect(context._SlidingSyncManager.ensureListRegistered).toHaveBeenCalledWith(
-                tagIdToIndex[DefaultTagID.Untagged],
+                DefaultTagID.Untagged,
                 expect.objectContaining({
                     filters: expect.objectContaining({
                         spaces: [spaceRoomId],
@@ -161,7 +139,7 @@ describe("SlidingRoomListStore", () => {
             await p;
 
             expect(context._SlidingSyncManager.ensureListRegistered).toHaveBeenCalledWith(
-                tagIdToIndex[DefaultTagID.Untagged],
+                DefaultTagID.Untagged,
                 {
                     filters: expect.objectContaining({
                         spaces: [spaceRoomId, subSpace1, subSpace2],
@@ -172,16 +150,15 @@ describe("SlidingRoomListStore", () => {
     });
 
     it("setTagSorting alters the 'sort' option in the list", async () => {
-        mocked(context._SlidingSyncManager.getOrAllocateListIndex).mockReturnValue(0);
         const tagId: TagID = "foo";
         await store.setTagSorting(tagId, SortAlgorithm.Alphabetic);
-        expect(context._SlidingSyncManager.ensureListRegistered).toBeCalledWith(0, {
+        expect(context._SlidingSyncManager.ensureListRegistered).toBeCalledWith(tagId, {
             sort: SlidingSyncSortToFilter[SortAlgorithm.Alphabetic],
         });
         expect(store.getTagSorting(tagId)).toEqual(SortAlgorithm.Alphabetic);
 
         await store.setTagSorting(tagId, SortAlgorithm.Recent);
-        expect(context._SlidingSyncManager.ensureListRegistered).toBeCalledWith(0, {
+        expect(context._SlidingSyncManager.ensureListRegistered).toBeCalledWith(tagId, {
             sort: SlidingSyncSortToFilter[SortAlgorithm.Recent],
         });
         expect(store.getTagSorting(tagId)).toEqual(SortAlgorithm.Recent);
@@ -189,27 +166,25 @@ describe("SlidingRoomListStore", () => {
 
     it("getTagsForRoom gets the tags for the room", async () => {
         await store.start();
-        const untaggedIndex = context._SlidingSyncManager.getOrAllocateListIndex(DefaultTagID.Untagged);
-        const favIndex = context._SlidingSyncManager.getOrAllocateListIndex(DefaultTagID.Favourite);
         const roomA = "!a:localhost";
         const roomB = "!b:localhost";
-        const indexToListData = {
-            [untaggedIndex]: {
+        const keyToListData = {
+            [DefaultTagID.Untagged]: {
                 joinedCount: 10,
                 roomIndexToRoomId: {
                     0: roomA,
                     1: roomB,
                 },
             },
-            [favIndex]: {
+            [DefaultTagID.Favourite]: {
                 joinedCount: 2,
                 roomIndexToRoomId: {
                     0: roomB,
                 },
             },
         };
-        mocked(context._SlidingSyncManager.slidingSync.getListData).mockImplementation((i: number) => {
-            return indexToListData[i] || null;
+        mocked(context._SlidingSyncManager.slidingSync.getListData).mockImplementation((key: string) => {
+            return keyToListData[key] || null;
         });
 
         expect(store.getTagsForRoom(new Room(roomA, context.client, context.client.getUserId()))).toEqual([
@@ -227,7 +202,6 @@ describe("SlidingRoomListStore", () => {
         const roomB = "!b:localhost";
         const roomC = "!c:localhost";
         const tagId = DefaultTagID.Favourite;
-        const listIndex = context.slidingSyncManager.getOrAllocateListIndex(tagId);
         const joinCount = 10;
         const roomIndexToRoomId = {
             // mixed to ensure we sort
@@ -252,7 +226,7 @@ describe("SlidingRoomListStore", () => {
             return null;
         });
         const p = untilEmission(store, LISTS_UPDATE_EVENT);
-        context.slidingSyncManager.slidingSync.emit(SlidingSyncEvent.List, listIndex, joinCount, roomIndexToRoomId);
+        context.slidingSyncManager.slidingSync.emit(SlidingSyncEvent.List, tagId, joinCount, roomIndexToRoomId);
         await p;
         expect(store.getCount(tagId)).toEqual(joinCount);
         expect(store.orderedLists[tagId]).toEqual(rooms);
@@ -265,7 +239,6 @@ describe("SlidingRoomListStore", () => {
         const roomIdB = "!b:localhost";
         const roomIdC = "!c:localhost";
         const tagId = DefaultTagID.Favourite;
-        const listIndex = context.slidingSyncManager.getOrAllocateListIndex(tagId);
         const joinCount = 10;
         const roomIndexToRoomId = {
             // mixed to ensure we sort
@@ -287,8 +260,8 @@ describe("SlidingRoomListStore", () => {
             }
             return null;
         });
-        mocked(context._SlidingSyncManager.slidingSync.getListData).mockImplementation((i: number) => {
-            if (i !== listIndex) {
+        mocked(context._SlidingSyncManager.slidingSync.getListData).mockImplementation((key: string) => {
+            if (key !== tagId) {
                 return null;
             }
             return {
@@ -297,7 +270,7 @@ describe("SlidingRoomListStore", () => {
             };
         });
         let p = untilEmission(store, LISTS_UPDATE_EVENT);
-        context.slidingSyncManager.slidingSync.emit(SlidingSyncEvent.List, listIndex, joinCount, roomIndexToRoomId);
+        context.slidingSyncManager.slidingSync.emit(SlidingSyncEvent.List, tagId, joinCount, roomIndexToRoomId);
         await p;
         expect(store.orderedLists[tagId]).toEqual([roomA, roomB, roomC]);
 
@@ -310,7 +283,7 @@ describe("SlidingRoomListStore", () => {
         roomIndexToRoomId[1] = roomIdA;
         roomIndexToRoomId[2] = roomIdB;
         p = untilEmission(store, LISTS_UPDATE_EVENT);
-        context.slidingSyncManager.slidingSync.emit(SlidingSyncEvent.List, listIndex, joinCount, roomIndexToRoomId);
+        context.slidingSyncManager.slidingSync.emit(SlidingSyncEvent.List, tagId, joinCount, roomIndexToRoomId);
         await p;
 
         // check that B didn't move and that A was put below B

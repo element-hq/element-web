@@ -84,7 +84,7 @@ describe("SlidingSyncManager", () => {
             const batchSize = 10;
             mocked(slidingSync.setList).mockResolvedValue("yep");
             mocked(slidingSync.setListRanges).mockResolvedValue("yep");
-            mocked(slidingSync.getListData).mockImplementation((i) => {
+            mocked(slidingSync.getListData).mockImplementation((key) => {
                 return {
                     joinedCount: 64,
                     roomIndexToRoomId: {},
@@ -106,7 +106,7 @@ describe("SlidingSyncManager", () => {
             wantWindows.forEach((range, i) => {
                 if (i === 0) {
                     expect(slidingSync.setList).toBeCalledWith(
-                        manager.getOrAllocateListIndex(SlidingSyncManager.ListSearch),
+                        SlidingSyncManager.ListSearch,
                         expect.objectContaining({
                             ranges: [[0, batchSize - 1], range],
                         }),
@@ -114,7 +114,7 @@ describe("SlidingSyncManager", () => {
                     return;
                 }
                 expect(slidingSync.setListRanges).toBeCalledWith(
-                    manager.getOrAllocateListIndex(SlidingSyncManager.ListSearch),
+                    SlidingSyncManager.ListSearch,
                     [[0, batchSize - 1], range],
                 );
             });
@@ -123,7 +123,7 @@ describe("SlidingSyncManager", () => {
             const gapMs = 1;
             const batchSize = 10;
             mocked(slidingSync.setList).mockResolvedValue("yep");
-            mocked(slidingSync.getListData).mockImplementation((i) => {
+            mocked(slidingSync.getListData).mockImplementation((key) => {
                 return {
                     joinedCount: 0,
                     roomIndexToRoomId: {},
@@ -133,7 +133,7 @@ describe("SlidingSyncManager", () => {
             expect(slidingSync.getListData).toBeCalledTimes(1);
             expect(slidingSync.setList).toBeCalledTimes(1);
             expect(slidingSync.setList).toBeCalledWith(
-                manager.getOrAllocateListIndex(SlidingSyncManager.ListSearch),
+                SlidingSyncManager.ListSearch,
                 expect.objectContaining({
                     ranges: [
                         [0, batchSize - 1],
@@ -146,7 +146,7 @@ describe("SlidingSyncManager", () => {
             const gapMs = 1;
             const batchSize = 10;
             mocked(slidingSync.setList).mockRejectedValue("narp");
-            mocked(slidingSync.getListData).mockImplementation((i) => {
+            mocked(slidingSync.getListData).mockImplementation((key) => {
                 return {
                     joinedCount: 0,
                     roomIndexToRoomId: {},
@@ -156,7 +156,7 @@ describe("SlidingSyncManager", () => {
             expect(slidingSync.getListData).toBeCalledTimes(1);
             expect(slidingSync.setList).toBeCalledTimes(1);
             expect(slidingSync.setList).toBeCalledWith(
-                manager.getOrAllocateListIndex(SlidingSyncManager.ListSearch),
+                SlidingSyncManager.ListSearch,
                 expect.objectContaining({
                     ranges: [
                         [0, batchSize - 1],

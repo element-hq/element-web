@@ -119,12 +119,10 @@ export class SlidingSyncManager {
 
     public slidingSync: SlidingSync;
     private client: MatrixClient;
-    private listIdToIndex: Record<string, number>;
 
     private configureDefer: IDeferred<void>;
 
     public constructor() {
-        this.listIdToIndex = {};
         this.configureDefer = defer<void>();
     }
 
@@ -134,7 +132,6 @@ export class SlidingSyncManager {
 
     public configure(client: MatrixClient, proxyUrl: string): SlidingSync {
         this.client = client;
-        this.listIdToIndex = {};
         // by default use the encrypted subscription as that gets everything, which is a safer
         // default than potentially missing member events.
         this.slidingSync = new SlidingSync(
@@ -177,15 +174,6 @@ export class SlidingSyncManager {
         });
         this.configureDefer.resolve();
         return this.slidingSync;
-    }
-
-    public listIdForIndex(index: number): string | null {
-        for (const listId in this.listIdToIndex) {
-            if (this.listIdToIndex[listId] === index) {
-                return listId;
-            }
-        }
-        return null;
     }
 
     /**
