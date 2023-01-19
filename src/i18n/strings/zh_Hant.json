@@ -3708,6 +3708,7 @@
     "Decrypted source unavailable": "已解密的來源不可用",
     "Numbered list": "編號清單",
     "Bulleted list": "項目符號清單",
-    "Connection error - Recording paused": "連線錯誤 - 錄製已暫停",
-    "%(senderName)s started a voice broadcast": "%(senderName)s 已開始語音廣播"
+    "Connection error - Recording paused": "連線錯誤 - 紀錄已暫停",
+    "%(senderName)s started a voice broadcast": "%(senderName)s 開始了語音廣播",
+    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)"
 }
