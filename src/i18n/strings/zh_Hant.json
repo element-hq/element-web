@@ -3703,5 +3703,12 @@
     "Unfortunately we're unable to start a recording right now. Please try again later.": "很遺憾，我們無法立刻開始錄製。請再試一次。",
     "Connection error": "連線錯誤",
     "You can't start a voice message as you are currently recording a live broadcast. Please end your live broadcast in order to start recording a voice message.": "您無法開始語音訊息，因為您目前正在錄製直播。請結束您的直播，以便開始錄製語音訊息。",
-    "Can't start voice message": "無法開始語音訊息"
+    "Can't start voice message": "無法開始語音訊息",
+    "Edit link": "編輯連結",
+    "Decrypted source unavailable": "已解密的來源不可用",
+    "Numbered list": "編號清單",
+    "Bulleted list": "項目符號清單",
+    "Connection error - Recording paused": "連線錯誤 - 紀錄已暫停",
+    "%(senderName)s started a voice broadcast": "%(senderName)s 開始了語音廣播",
+    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)"
 }

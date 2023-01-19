@@ -3703,5 +3703,12 @@
     "Unfortunately we're unable to start a recording right now. Please try again later.": "Malheureusement, nous ne pouvons pas démarrer l’enregistrement pour le moment. Veuillez réessayer plus tard.",
     "Connection error": "Erreur de connexion",
     "You can't start a voice message as you are currently recording a live broadcast. Please end your live broadcast in order to start recording a voice message.": "Vous ne pouvez pas commencer un message vocal car vous êtes en train d’enregistrer une diffusion en direct. Veuillez terminer cette diffusion pour commencer un message vocal.",
-    "Can't start voice message": "Impossible de commencer un message vocal"
+    "Can't start voice message": "Impossible de commencer un message vocal",
+    "Edit link": "Éditer le lien",
+    "Numbered list": "Liste numérotée",
+    "Bulleted list": "Liste à puces",
+    "Decrypted source unavailable": "Source déchiffrée non disponible",
+    "Connection error - Recording paused": "Erreur de connexion – Enregistrement en pause",
+    "%(senderName)s started a voice broadcast": "%(senderName)s a démarré une diffusion audio",
+    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)"
 }
