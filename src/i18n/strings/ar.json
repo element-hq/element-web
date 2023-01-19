@@ -1358,5 +1358,7 @@
     "You cannot place calls without a connection to the server.": "لا يمكنك إجراء المكالمات دون اتصال بالخادوم.",
     "Connectivity to the server has been lost": "فُقد الاتصال بالخادوم",
     "You cannot place calls in this browser.": "لا يمكنك إجراء المكالمات في هذا المتصفّح.",
-    "Calls are unsupported": "المكالمات غير مدعومة"
+    "Calls are unsupported": "المكالمات غير مدعومة",
+    "%(user1)s and %(user2)s": "%(user1)s و",
+    "Empty room": "غرفة فارغة"
 }
