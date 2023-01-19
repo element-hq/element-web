@@ -62,6 +62,7 @@ const renderComponent = (props = {}) => {
 const classes = {
     active: "mx_FormattingButtons_active",
     hover: "mx_FormattingButtons_Button_hover",
+    disabled: "mx_FormattingButtons_disabled",
 };
 
 describe("FormattingButtons", () => {
@@ -87,6 +88,16 @@ describe("FormattingButtons", () => {
         });
     });
 
+    it("Each button should have disabled class when disabled", () => {
+        const disabledActionStates = createActionStates("disabled");
+        renderComponent({ actionStates: disabledActionStates });
+
+        Object.values(testCases).forEach((testCase) => {
+            const { label } = testCase;
+            expect(screen.getByLabelText(label)).toHaveClass(classes.disabled);
+        });
+    });
+
     it("Should call wysiwyg function on button click", async () => {
         renderComponent();
 
@@ -98,14 +109,26 @@ describe("FormattingButtons", () => {
         }
     });
 
-    it("Each button should display the tooltip on mouse over", async () => {
+    it("Each button should display the tooltip on mouse over when not disabled", async () => {
         renderComponent();
 
         for (const testCase of Object.values(testCases)) {
             const { label } = testCase;
 
             await userEvent.hover(screen.getByLabelText(label));
-            expect(await screen.findByText(label)).toBeTruthy();
+            expect(screen.getByText(label)).toBeInTheDocument();
+        }
+    });
+
+    it("Each button should not display the tooltip on mouse over when disabled", async () => {
+        const disabledActionStates = createActionStates("disabled");
+        renderComponent({ actionStates: disabledActionStates });
+
+        for (const testCase of Object.values(testCases)) {
+            const { label } = testCase;
+
+            await userEvent.hover(screen.getByLabelText(label));
+            expect(screen.queryByText(label)).not.toBeInTheDocument();
         }
     });
 
