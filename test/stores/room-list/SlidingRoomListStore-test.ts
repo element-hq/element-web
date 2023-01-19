@@ -85,14 +85,11 @@ describe("SlidingRoomListStore", () => {
             context._SpaceStore.emit(UPDATE_SELECTED_SPACE, spaceRoomId, false);
             await p;
 
-            expect(context._SlidingSyncManager.ensureListRegistered).toHaveBeenCalledWith(
-                DefaultTagID.Untagged,
-                {
-                    filters: expect.objectContaining({
-                        spaces: [spaceRoomId],
-                    }),
-                },
-            );
+            expect(context._SlidingSyncManager.ensureListRegistered).toHaveBeenCalledWith(DefaultTagID.Untagged, {
+                filters: expect.objectContaining({
+                    spaces: [spaceRoomId],
+                }),
+            });
         });
 
         it("alters 'filters.spaces' on the DefaultTagID.Untagged list if it loads with an active space", async () => {
@@ -138,14 +135,11 @@ describe("SlidingRoomListStore", () => {
             context._SpaceStore.emit(UPDATE_SELECTED_SPACE, spaceRoomId, false);
             await p;
 
-            expect(context._SlidingSyncManager.ensureListRegistered).toHaveBeenCalledWith(
-                DefaultTagID.Untagged,
-                {
-                    filters: expect.objectContaining({
-                        spaces: [spaceRoomId, subSpace1, subSpace2],
-                    }),
-                },
-            );
+            expect(context._SlidingSyncManager.ensureListRegistered).toHaveBeenCalledWith(DefaultTagID.Untagged, {
+                filters: expect.objectContaining({
+                    spaces: [spaceRoomId, subSpace1, subSpace2],
+                }),
+            });
         });
     });
 
@@ -168,7 +162,7 @@ describe("SlidingRoomListStore", () => {
         await store.start();
         const roomA = "!a:localhost";
         const roomB = "!b:localhost";
-        const keyToListData = {
+        const keyToListData: Record<string, { joinedCount: number; roomIndexToRoomId: Record<number, string> }> = {
             [DefaultTagID.Untagged]: {
                 joinedCount: 10,
                 roomIndexToRoomId: {

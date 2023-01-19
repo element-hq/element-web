@@ -113,10 +113,10 @@ describe("SlidingSyncManager", () => {
                     );
                     return;
                 }
-                expect(slidingSync.setListRanges).toBeCalledWith(
-                    SlidingSyncManager.ListSearch,
-                    [[0, batchSize - 1], range],
-                );
+                expect(slidingSync.setListRanges).toBeCalledWith(SlidingSyncManager.ListSearch, [
+                    [0, batchSize - 1],
+                    range,
+                ]);
             });
         });
         it("handles accounts with zero rooms", async () => {
