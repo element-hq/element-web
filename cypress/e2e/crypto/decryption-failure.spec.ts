@@ -105,15 +105,9 @@ describe("Decryption Failure Bar", () => {
             "and there are other verified devices or backups",
         () => {
             let otherDevice: MatrixClient | undefined;
-            cy.loginBot(homeserver, testUser.username, testUser.password, {})
+            cy.loginBot(homeserver, testUser.username, testUser.password, { bootstrapCrossSigning: true })
                 .then(async (cli) => {
                     otherDevice = cli;
-                    await otherDevice.bootstrapCrossSigning({
-                        authUploadDeviceSigningKeys: async (makeRequest) => {
-                            await makeRequest({});
-                        },
-                        setupNewCrossSigning: true,
-                    });
                 })
                 .then(() => {
                     cy.botSendMessage(bot, roomId, "test");
@@ -169,15 +163,11 @@ describe("Decryption Failure Bar", () => {
         "should prompt the user to reset keys, if this device isn't verified " +
             "and there are no other verified devices or backups",
         () => {
-            cy.loginBot(homeserver, testUser.username, testUser.password, {}).then(async (cli) => {
-                await cli.bootstrapCrossSigning({
-                    authUploadDeviceSigningKeys: async (makeRequest) => {
-                        await makeRequest({});
-                    },
-                    setupNewCrossSigning: true,
-                });
-                await cli.logout(true);
-            });
+            cy.loginBot(homeserver, testUser.username, testUser.password, { bootstrapCrossSigning: true }).then(
+                async (cli) => {
+                    await cli.logout(true);
+                },
+            );
 
             cy.botSendMessage(bot, roomId, "test");
             cy.wait(5000);
