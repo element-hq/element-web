@@ -454,7 +454,7 @@
     "%(items)s and %(count)s others|other": "%(items)s y otros %(count)s",
     "%(items)s and %(count)s others|one": "%(items)s y otro más",
     "collapse": "encoger",
-    "expand": "expandir",
+    "expand": "despregar",
     "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "No se pudo cargar el evento al que se respondió, bien porque no existe o no tiene permiso para verlo.",
     "<a>In reply to</a> <pill>": "<a>Respondiendo a </a> <pill>",
     "And %(count)s more...|other": "Y %(count)s más…",

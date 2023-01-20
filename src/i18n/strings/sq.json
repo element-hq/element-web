@@ -3688,5 +3688,14 @@
     "Force 15s voice broadcast chunk length": "Detyro gjatësi copëzash transmetimi zanor prej 15s",
     "Yes, end my recording": "Po, përfundoje regjistrimin tim",
     "If you start listening to this live broadcast, your current live broadcast recording will be ended.": "Nëse filloni të dëgjoni te ky transmetim i drejtpërdrejtë, regjistrimi juaj i tanishëm i një transmetimi të drejtpërdrejtë do të përfundojë.",
-    "Listen to live broadcast?": "Të dëgjohet te transmetimi i drejtpërdrejtë?"
+    "Listen to live broadcast?": "Të dëgjohet te transmetimi i drejtpërdrejtë?",
+    "You can't start a voice message as you are currently recording a live broadcast. Please end your live broadcast in order to start recording a voice message.": "S’mund të niset mesazh zanor, ngaqë aktualisht po regjistroni një transmetim të drejtpërdrejtë. Ju lutemi, përfundoni transmetimin e drejtpërdrejtë, që të mund të nisni regjistrimin e një mesazhi zanor",
+    "Can't start voice message": "S’niset dot mesazh zanor",
+    "Edit link": "Përpunoni lidhje",
+    "Numbered list": "Listë e numërtuar",
+    "Bulleted list": "Listë me toptha",
+    "Connection error - Recording paused": "Gabim lidhjeje - Regjistrimi u ndal",
+    "Unfortunately we're unable to start a recording right now. Please try again later.": "Mjerisht, s’qemë në gjendje të nisnim tani një regjistrim. Ju lutemi, riprovoni më vonë.",
+    "Connection error": "Gabim lidhjeje",
+    "%(senderName)s started a voice broadcast": "%(senderName)s nisi një transmetim zanor"
 }
