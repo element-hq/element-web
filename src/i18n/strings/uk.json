@@ -3704,5 +3704,11 @@
     "Connection error": "Помилка з'єднання",
     "You can't start a voice message as you are currently recording a live broadcast. Please end your live broadcast in order to start recording a voice message.": "Ви не можете розпочати запис голосового повідомлення, оскільки зараз відбувається запис трансляції наживо. Завершіть трансляцію, щоб розпочати запис голосового повідомлення.",
     "Can't start voice message": "Не можливо запустити запис голосового повідомлення",
-    "Edit link": "Змінити посилання"
+    "Edit link": "Змінити посилання",
+    "Numbered list": "Нумерований список",
+    "Bulleted list": "Маркований список",
+    "Decrypted source unavailable": "Розшифроване джерело недоступне",
+    "Connection error - Recording paused": "Помилка з'єднання - Запис призупинено",
+    "%(senderName)s started a voice broadcast": "%(senderName)s розпочинає голосову трансляцію",
+    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)"
 }
