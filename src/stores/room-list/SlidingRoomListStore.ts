@@ -257,7 +257,7 @@ export class SlidingRoomListStoreClass extends AsyncStoreWithClient<IState> impl
                 return;
             }
             rooms.push(room);
-        })
+        });
         tagMap[tagId] = rooms;
         this.tagMap = tagMap;
     }
