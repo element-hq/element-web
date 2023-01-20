@@ -322,11 +322,7 @@ export class SlidingSyncManager {
                 // gradually request more over time, even on errors.
                 await sleep(gapBetweenRequestsMs);
             }
-            const listData = this.slidingSync.getListData(SlidingSyncManager.ListSearch);
-            if (!listData) {
-                // we failed to do the first request, keep trying
-                continue;
-            }
+            const listData = this.slidingSync.getListData(SlidingSyncManager.ListSearch)!;
             hasMore = endIndex + 1 < listData.joinedCount;
             startIndex += batchSize;
             firstTime = false;

@@ -290,4 +290,43 @@ describe("SlidingRoomListStore", () => {
         await p;
         expect(store.orderedLists[tagId].map((r) => r.roomId)).toEqual([roomC, roomA, roomB].map((r) => r.roomId));
     });
+
+    it("gracefully handles unknown room IDs", async () => {
+        await store.start();
+        const roomIdA = "!a:localhost";
+        const roomIdB = "!b:localhost"; // does not exist
+        const roomIdC = "!c:localhost";
+        const roomIndexToRoomId = {
+            0: roomIdA,
+            1: roomIdB, // does not exist
+            2: roomIdC,
+        };
+        const tagId = DefaultTagID.Favourite;
+        const joinCount = 10;
+        // seed the store with 2 rooms
+        const roomA = new Room(roomIdA, context.client!, context.client!.getUserId());
+        const roomC = new Room(roomIdC, context.client!, context.client!.getUserId());
+        mocked(context.client!.getRoom).mockImplementation((roomId: string) => {
+            switch (roomId) {
+                case roomIdA:
+                    return roomA;
+                case roomIdC:
+                    return roomC;
+            }
+            return null;
+        });
+        mocked(context._SlidingSyncManager!.slidingSync.getListData).mockImplementation((key: string) => {
+            if (key !== tagId) {
+                return null;
+            }
+            return {
+                roomIndexToRoomId: roomIndexToRoomId,
+                joinedCount: joinCount,
+            };
+        });
+        let p = untilEmission(store, LISTS_UPDATE_EVENT);
+        context.slidingSyncManager.slidingSync.emit(SlidingSyncEvent.List, tagId, joinCount, roomIndexToRoomId);
+        await p;
+        expect(store.orderedLists[tagId]).toEqual([roomA, roomC]);
+    });
 });
