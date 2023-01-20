@@ -22,6 +22,7 @@ import { Icon as BoldIcon } from "../../../../../../res/img/element-icons/room/c
 import { Icon as ItalicIcon } from "../../../../../../res/img/element-icons/room/composer/italic.svg";
 import { Icon as UnderlineIcon } from "../../../../../../res/img/element-icons/room/composer/underline.svg";
 import { Icon as StrikeThroughIcon } from "../../../../../../res/img/element-icons/room/composer/strikethrough.svg";
+import { Icon as QuoteIcon } from "../../../../../../res/img/element-icons/room/composer/quote.svg";
 import { Icon as InlineCodeIcon } from "../../../../../../res/img/element-icons/room/composer/inline_code.svg";
 import { Icon as LinkIcon } from "../../../../../../res/img/element-icons/room/composer/link.svg";
 import { Icon as BulletedListIcon } from "../../../../../../res/img/element-icons/room/composer/bulleted_list.svg";
@@ -125,6 +126,12 @@ export function FormattingButtons({ composer, actionStates }: FormattingButtonsP
                 label={_td("Numbered list")}
                 onClick={() => composer.orderedList()}
                 icon={<NumberedListIcon className="mx_FormattingButtons_Icon" />}
+            />
+            <Button
+                actionState={actionStates.quote}
+                label={_td("Quote")}
+                onClick={() => composer.quote()}
+                icon={<QuoteIcon className="mx_FormattingButtons_Icon" />}
             />
             <Button
                 actionState={actionStates.inlineCode}

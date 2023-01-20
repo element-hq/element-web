@@ -32,6 +32,7 @@ const mockWysiwyg = {
     link: jest.fn(),
     orderedList: jest.fn(),
     unorderedList: jest.fn(),
+    quote: jest.fn(),
 } as unknown as FormattingFunctions;
 
 const openLinkModalSpy = jest.spyOn(LinkModal, "openLinkModal");
@@ -49,6 +50,7 @@ const testCases: Record<
     link: { label: "Link", mockFormatFn: openLinkModalSpy },
     orderedList: { label: "Numbered list", mockFormatFn: mockWysiwyg.orderedList },
     unorderedList: { label: "Bulleted list", mockFormatFn: mockWysiwyg.unorderedList },
+    quote: { label: "Quote", mockFormatFn: mockWysiwyg.quote },
 };
 
 const createActionStates = (state: ActionState): AllActionStates => {
