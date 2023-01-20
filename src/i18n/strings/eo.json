@@ -2909,5 +2909,22 @@
     "New group call experience": "La nova grupvoka sperto",
     "Favourite Messages": "Ŝatataj Mesaĝoj",
     "Use new session manager": "Uzi nova administrado de salutaĵoj",
-    "New session manager": "Nova administrado de salutaĵoj"
+    "New session manager": "Nova administrado de salutaĵoj",
+    "You previously consented to share anonymous usage data with us. We're updating how that works.": "Vi antaŭe konsentis kunhavigi anonimajn uzdatumojn kun ni. Ni ĝisdatigas kiel tio funkcias.",
+    "Stop": "Fini",
+    "That's fine": "Tio estas bone",
+    "Creating output...": "Kreante eligon...",
+    "Fetching events...": "Alportante okazojn...",
+    "Export successful!": "Eksporto sukcesa!",
+    "Error fetching file": "Eraro alportante dosieron",
+    "Topic: %(topic)s": "Temo: %(topic)s",
+    "This is the start of export of <roomName/>. Exported by <exporterDetails/> at %(exportDate)s.": "Ĉi tio estas la komenco de eksporto de <roomName/>. Eksportite de <exporterDetails/> ĉe %(exportDate)s.",
+    "%(creatorName)s created this room.": "%(creatorName)s kreis ĉi tiun ĉambron.",
+    "Fetched %(count)s events so far|one": "Ĝis nun akiris %(count)s okazon",
+    "Fetched %(count)s events so far|other": "Ĝis nun akiris %(count)s okazojn",
+    "Fetched %(count)s events out of %(total)s|one": "Elportis %(count)s okazon el %(total)s",
+    "Fetched %(count)s events out of %(total)s|other": "Elportis %(count)s okazojn el %(total)s",
+    "Generating a ZIP": "ZIP-arkivo estas generita",
+    "Are you sure you want to exit during this export?": "Ĉu vi vere volas nuligi la eksportadon?",
+    "Map feedback": "Sugestoj pri la mapo"
 }
