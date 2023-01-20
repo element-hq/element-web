@@ -336,6 +336,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
             const { permalinkCreator, relation, replyToEvent } = this.props;
             const composerContent = this.state.composerContent;
             this.setState({ composerContent: "", initialComposerContent: "" });
+            dis.dispatch({ action: Action.ClearAndFocusSendMessageComposer });
             await sendMessage(composerContent, this.state.isRichTextEnabled, {
                 mxClient: this.props.mxClient,
                 roomContext: this.context,
@@ -343,7 +344,6 @@ export class MessageComposer extends React.Component<IProps, IState> {
                 relation,
                 replyToEvent,
             });
-            dis.dispatch({ action: Action.ClearAndFocusSendMessageComposer });
         }
     };
 
