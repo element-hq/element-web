@@ -23,22 +23,28 @@ import { mocked } from "jest-mock";
 import { SlidingSync } from "matrix-js-sdk/src/sliding-sync";
 import { Room } from "matrix-js-sdk/src/matrix";
 
-import { useSlidingSyncRoomSearch } from "../../src/hooks/useSlidingSyncRoomSearch";
+import { SlidingSyncRoomSearchOpts, useSlidingSyncRoomSearch } from "../../src/hooks/useSlidingSyncRoomSearch";
 import { MockEventEmitter, stubClient } from "../test-utils";
 import { SlidingSyncManager } from "../../src/SlidingSyncManager";
 
+type RoomSearchHook = {
+    loading: boolean;
+    rooms: Room[];
+    search(opts: SlidingSyncRoomSearchOpts): Promise<boolean>;
+};
+
 // hooks must be inside a React component else you get:
 // "Invalid hook call. Hooks can only be called inside of the body of a function component."
-function RoomSearchComponent({ onClick }) {
+function RoomSearchComponent(props: { onClick: (h: RoomSearchHook) => void }) {
     const roomSearch = useSlidingSyncRoomSearch();
-    return <div onClick={() => onClick(roomSearch)} />;
+    return <div onClick={() => props.onClick(roomSearch)} />;
 }
 
 describe("useSlidingSyncRoomSearch", () => {
     it("should display rooms when searching", async () => {
         const client = stubClient();
-        const roomA = new Room("!a:localhost", client, client.getUserId());
-        const roomB = new Room("!b:localhost", client, client.getUserId());
+        const roomA = new Room("!a:localhost", client, client.getUserId()!);
+        const roomB = new Room("!b:localhost", client, client.getUserId()!);
         const slidingSync = mocked(
             new MockEventEmitter({
                 getListData: jest.fn(),
@@ -67,7 +73,7 @@ describe("useSlidingSyncRoomSearch", () => {
         });
 
         // first check that everything is empty and then do the search
-        let executeHook = (roomSearch) => {
+        let executeHook = (roomSearch: RoomSearchHook) => {
             expect(roomSearch.loading).toBe(false);
             expect(roomSearch.rooms).toEqual([]);
             roomSearch.search({
@@ -77,7 +83,7 @@ describe("useSlidingSyncRoomSearch", () => {
         };
         const wrapper = mount(
             <RoomSearchComponent
-                onClick={(roomSearch) => {
+                onClick={(roomSearch: RoomSearchHook) => {
                     executeHook(roomSearch);
                 }}
             />,
