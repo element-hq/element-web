@@ -1,3 +1,9 @@
+Changes in [3.64.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.64.2) (2023-01-20)
+=====================================================================================================
+
+## 🐛 Bug Fixes
+ * Fix second occurence of a crash in older browsers
+
 Changes in [3.64.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.64.1) (2023-01-18)
 =====================================================================================================
 

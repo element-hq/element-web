@@ -57,7 +57,7 @@ export enum VoiceBroadcastPlaybackEvent {
     InfoStateChanged = "info_state_changed",
 }
 
-type VoiceBroadcastPlaybackTimes = {
+export type VoiceBroadcastPlaybackTimes = {
     duration: number;
     position: number;
     timeLeft: number;

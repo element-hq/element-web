@@ -38,7 +38,7 @@ import IconizedContextMenu, {
     IconizedContextMenuOption,
     IconizedContextMenuOptionList,
 } from "../context_menus/IconizedContextMenu";
-import { aboveLeftOf, ContextMenuButton, useContextMenu } from "../../structures/ContextMenu";
+import { aboveRightOf, ContextMenuButton, useContextMenu } from "../../structures/ContextMenu";
 import { Alignment } from "../elements/Tooltip";
 import { ButtonEvent } from "../elements/AccessibleButton";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
@@ -81,7 +81,7 @@ const DeviceButton: FC<DeviceButtonProps> = ({
     if (showMenu) {
         const buttonRect = buttonRef.current!.getBoundingClientRect();
         contextMenu = (
-            <IconizedContextMenu {...aboveLeftOf(buttonRect)} onFinished={closeMenu}>
+            <IconizedContextMenu {...aboveRightOf(buttonRect, undefined, 10)} onFinished={closeMenu}>
                 <IconizedContextMenuOptionList>
                     {devices.map((d) => (
                         <IconizedContextMenuOption key={d.deviceId} label={d.label} onClick={() => selectDevice(d)} />
@@ -101,6 +101,7 @@ const DeviceButton: FC<DeviceButtonProps> = ({
         >
             <AccessibleTooltipButton
                 className={`mx_CallView_deviceButton mx_CallView_deviceButton_${kind}`}
+                inputRef={buttonRef}
                 title={muted ? mutedTitle : unmutedTitle}
                 alignment={Alignment.Top}
                 onClick={toggle}
@@ -109,7 +110,6 @@ const DeviceButton: FC<DeviceButtonProps> = ({
             {devices.length > 1 ? (
                 <ContextMenuButton
                     className="mx_CallView_deviceListButton"
-                    inputRef={buttonRef}
                     onClick={openMenu}
                     isExpanded={showMenu}
                     label={deviceListLabel}

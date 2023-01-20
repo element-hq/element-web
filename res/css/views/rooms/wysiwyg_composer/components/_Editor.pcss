@@ -44,9 +44,21 @@ limitations under the License.
             padding-inline-start: $spacing-28;
         }
 
+        blockquote {
+            color: #777;
+            border-left: 2px solid $blockquote-bar-color;
+            border-radius: 2px;
+            padding: 0 10px;
+
+            margin-block-start: 0;
+            margin-block-end: 0;
+            margin-inline-start: 0;
+            margin-inline-end: 0;
+        }
+
         // model output always includes a linebreak but we do not want the user
         // to see it when writing input in lists
-        :is(ol, ul, pre) + br:last-of-type {
+        :is(ol, ul, pre, blockquote) + br:last-of-type {
             display: none;
         }
 

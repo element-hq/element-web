@@ -743,6 +743,13 @@ export default class RoomHeader extends React.Component<IProps, IState> {
 
         const buttons = this.props.showButtons ? this.renderButtons(isVideoRoom) : null;
 
+        let oobName = _t("Join Room");
+        if (this.props.oobData && this.props.oobData.name) {
+            oobName = this.props.oobData.name;
+        }
+
+        const name = this.renderName(oobName);
+
         if (this.props.viewingCall && !isVideoRoom) {
             return (
                 <header className="mx_RoomHeader light-panel">
@@ -752,9 +759,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
                     >
                         <div className="mx_RoomHeader_avatar">{roomAvatar}</div>
                         {icon}
-                        <div className="mx_RoomHeader_name mx_RoomHeader_name--textonly mx_RoomHeader_name--small">
-                            {_t("Video call")}
-                        </div>
+                        {name}
                         {this.props.activeCall instanceof ElementCall && (
                             <GroupCallDuration groupCall={this.props.activeCall.groupCall} />
                         )}
@@ -778,13 +783,6 @@ export default class RoomHeader extends React.Component<IProps, IState> {
                 </div>
             );
         }
-
-        let oobName = _t("Join Room");
-        if (this.props.oobData && this.props.oobData.name) {
-            oobName = this.props.oobData.name;
-        }
-
-        const name = this.renderName(oobName);
 
         const topicElement = <RoomTopic room={this.props.room} className="mx_RoomHeader_topic" />;
 
