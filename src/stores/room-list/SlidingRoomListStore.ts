@@ -29,6 +29,7 @@ import { MetaSpace, SpaceKey, UPDATE_SELECTED_SPACE } from "../spaces";
 import { LISTS_LOADING_EVENT } from "./RoomListStore";
 import { UPDATE_EVENT } from "../AsyncStore";
 import { SdkContextClass } from "../../contexts/SDKContext";
+import { filter } from "lodash";
 
 interface IState {
     // state is tracked in underlying classes
@@ -84,6 +85,7 @@ export class SlidingRoomListStoreClass extends AsyncStoreWithClient<IState> impl
     public constructor(dis: MatrixDispatcher, private readonly context: SdkContextClass) {
         super(dis);
         this.setMaxListeners(20); // RoomList + LeftPanel + 8xRoomSubList + spares
+        this.stickyRoomId = null;
     }
 
     public async setTagSorting(tagId: TagID, sort: SortAlgorithm): Promise<void> {
@@ -249,9 +251,14 @@ export class SlidingRoomListStoreClass extends AsyncStoreWithClient<IState> impl
         }
 
         // now set the rooms
-        const rooms = orderedRoomIds.map((roomId) => {
-            return this.matrixClient.getRoom(roomId);
-        });
+        const rooms: Room[] = [];
+        orderedRoomIds.forEach((roomId) => {
+            const room = this.matrixClient.getRoom(roomId);
+            if (!room) {
+                return;
+            }
+            rooms.push(room);
+        })
         tagMap[tagId] = rooms;
         this.tagMap = tagMap;
     }
@@ -351,6 +358,9 @@ export class SlidingRoomListStoreClass extends AsyncStoreWithClient<IState> impl
                 (roomId: string) => {
                     if (roomId === activeSpace) {
                         return;
+                    }
+                    if (!filters.spaces) {
+                        filters.spaces = [];
                     }
                     filters.spaces.push(roomId); // add subspace
                 },

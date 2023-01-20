@@ -231,7 +231,7 @@ export class SlidingSyncManager {
         } catch (err) {
             logger.debug("ensureListRegistered: update failed txn_id=", err);
         }
-        return this.slidingSync.getListParams(listKey);
+        return this.slidingSync.getListParams(listKey)!;
     }
 
     public async setRoomVisible(roomId: string, visible: boolean): Promise<string> {
@@ -315,13 +315,19 @@ export class SlidingSyncManager {
                 } else {
                     await this.slidingSync.setListRanges(SlidingSyncManager.ListSearch, ranges);
                 }
-                // gradually request more over time
-                await sleep(gapBetweenRequestsMs);
             } catch (err) {
                 // do nothing, as we reject only when we get interrupted but that's fine as the next
                 // request will include our data
+            } finally {
+                // gradually request more over time, even on errors.
+                await sleep(gapBetweenRequestsMs);
             }
-            hasMore = endIndex + 1 < this.slidingSync.getListData(SlidingSyncManager.ListSearch)?.joinedCount;
+            const listData = this.slidingSync.getListData(SlidingSyncManager.ListSearch);
+            if (!listData) {
+                // we failed to do the first request, keep trying
+                continue;
+            }
+            hasMore = endIndex + 1 < listData.joinedCount;
             startIndex += batchSize;
             firstTime = false;
         }

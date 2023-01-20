@@ -566,8 +566,8 @@ export default class RoomSublist extends React.Component<IProps, IState> {
             let isUnreadFirst = RoomListStore.instance.getListOrder(this.props.tagId) === ListAlgorithm.Importance;
             if (this.slidingSyncMode) {
                 const slidingList = SlidingSyncManager.instance.slidingSync.getListParams(this.props.tagId);
-                isAlphabetical = slidingList.sort[0] === "by_name";
-                isUnreadFirst = slidingList.sort[0] === "by_notification_level";
+                isAlphabetical = (slidingList?.sort || [])[0] === "by_name";
+                isUnreadFirst = (slidingList?.sort || [])[0] === "by_notification_level";
             }
 
             // Invites don't get some nonsense options, so only add them if we have to.

@@ -58,7 +58,7 @@ export const useSlidingSyncRoomSearch = (): {
                 const rooms = [];
                 const { roomIndexToRoomId } = SlidingSyncManager.instance.slidingSync.getListData(
                     SlidingSyncManager.ListSearch,
-                );
+                )!;
                 let i = 0;
                 while (roomIndexToRoomId[i]) {
                     const roomId = roomIndexToRoomId[i];
