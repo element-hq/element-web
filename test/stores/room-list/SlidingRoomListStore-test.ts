@@ -324,7 +324,7 @@ describe("SlidingRoomListStore", () => {
                 joinedCount: joinCount,
             };
         });
-        let p = untilEmission(store, LISTS_UPDATE_EVENT);
+        const p = untilEmission(store, LISTS_UPDATE_EVENT);
         context.slidingSyncManager.slidingSync.emit(SlidingSyncEvent.List, tagId, joinCount, roomIndexToRoomId);
         await p;
         expect(store.orderedLists[tagId]).toEqual([roomA, roomC]);
