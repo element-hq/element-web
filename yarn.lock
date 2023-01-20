@@ -1569,10 +1569,10 @@
   resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-js/-/matrix-sdk-crypto-js-0.1.0-alpha.2.tgz#a09d0fea858e817da971a3c9f904632ef7b49eb6"
   integrity sha512-oVkBCh9YP7H9i4gAoQbZzswniczfo/aIptNa4dxRi4Ff9lSvUCFv6Hvzi7C+90c0/PWZLXjIDTIAWZYmwyd2fA==
 
-"@matrix-org/matrix-wysiwyg@^0.19.0":
-  version "0.19.0"
-  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-wysiwyg/-/matrix-wysiwyg-0.19.0.tgz#5ffbabf8a59317ecdb45ba5fa1d06fff150ede40"
-  integrity sha512-1iL/+kjwWAlpWAq64DbkDkE7KGxvR5lNojZgCKMIyuvuKWv8Ikqxa9VOOYFtovKvSqgGRJaYN7/OkKWxZjiDcw==
+"@matrix-org/matrix-wysiwyg@^0.20.0":
+  version "0.20.0"
+  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-wysiwyg/-/matrix-wysiwyg-0.20.0.tgz#6193f790b031eaa96e944b647fe2b27018639d57"
+  integrity sha512-9VqzyccwizglssShi/M+tCxdZDgzsecH4WjlS0HC5KkLmljIxxlHFstf/D3C/G4ZfRodFUh6wUvd+oQI/ScPpw==
 
 "@matrix-org/olm@https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.12.tgz":
   version "3.2.12"
@@ -8187,20 +8187,13 @@ matrix-mock-request@^2.5.0:
   dependencies:
     expect "^28.1.0"
 
-<<<<<<< HEAD
 "matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
-  version "3.64.1"
-  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/576d10315996c0b69d21965d06f2d069491f6d5a"
-=======
-matrix-react-sdk@3.64.2:
   version "3.64.2"
-  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.64.2.tgz#d87ed03f569d4bd5aafca5ae5e27bf2d1532183b"
-  integrity sha512-N5OroTKnbgXtVAWatu1CndAzdWiNr9YXuD7u4dn2sq7hAPIs4XkjRXaFgGNJP3a22GiaxVKlPAhGlpFPBdXKvA==
->>>>>>> master
+  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/9e3de5129dc7af60e58f7d307fdac9089820ea72"
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/analytics-events" "^0.4.0"
-    "@matrix-org/matrix-wysiwyg" "^0.19.0"
+    "@matrix-org/matrix-wysiwyg" "^0.20.0"
     "@matrix-org/react-sdk-module-api" "^0.0.3"
     "@sentry/browser" "^7.0.0"
     "@sentry/tracing" "^7.0.0"
@@ -8235,11 +8228,7 @@ matrix-react-sdk@3.64.2:
     maplibre-gl "^2.0.0"
     matrix-encrypt-attachment "^1.0.3"
     matrix-events-sdk "0.0.1"
-<<<<<<< HEAD
     matrix-js-sdk "github:matrix-org/matrix-js-sdk#develop"
-=======
-    matrix-js-sdk "23.1.1"
->>>>>>> master
     matrix-widget-api "^1.1.1"
     minimist "^1.2.5"
     opus-recorder "^8.0.3"
