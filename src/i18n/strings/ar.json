@@ -26,5 +26,7 @@
     "Failed to start": "فشل البدء",
     "Powered by Matrix": "تدعمه «ماترِكس»",
     "Use %(brand)s on mobile": "استعمل %(brand)s على المحمول",
-    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "محادثة لامركزية، مشفرة &amp; تعمل بواسطة $matrixLogo"
+    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "محادثة لامركزية، مشفرة &amp; تعمل بواسطة $matrixLogo",
+    "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s: %(browserName)s في %(osName)s",
+    "%(brand)s Desktop: %(platformName)s": "%(brand)s سطح المكتب %(platformName)s"
 }
