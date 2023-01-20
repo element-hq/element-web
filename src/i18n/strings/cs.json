@@ -3704,5 +3704,11 @@
     "Connection error": "Chyba připojení",
     "You can't start a voice message as you are currently recording a live broadcast. Please end your live broadcast in order to start recording a voice message.": "Hlasovou zprávu nelze spustit, protože právě nahráváte živé vysílání. Ukončete prosím živé vysílání, abyste mohli začít nahrávat hlasovou zprávu.",
     "Can't start voice message": "Nelze spustit hlasovou zprávu",
-    "Edit link": "Upravit odkaz"
+    "Edit link": "Upravit odkaz",
+    "Numbered list": "Číslovaný seznam",
+    "Bulleted list": "Seznam s odrážkami",
+    "Decrypted source unavailable": "Dešifrovaný zdroj není dostupný",
+    "Connection error - Recording paused": "Chyba připojení - nahrávání pozastaveno",
+    "%(senderName)s started a voice broadcast": "%(senderName)s zahájil(a) hlasové vysílání",
+    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)"
 }
