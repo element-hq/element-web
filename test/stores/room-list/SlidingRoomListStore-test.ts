@@ -30,7 +30,7 @@ import { RoomViewStore } from "../../../src/stores/RoomViewStore";
 import { MatrixDispatcher } from "../../../src/dispatcher/dispatcher";
 import { SortAlgorithm } from "../../../src/stores/room-list/algorithms/models";
 import { DefaultTagID, TagID } from "../../../src/stores/room-list/models";
-import { UPDATE_SELECTED_SPACE } from "../../../src/stores/spaces";
+import { MetaSpace, UPDATE_SELECTED_SPACE } from "../../../src/stores/spaces";
 import { LISTS_LOADING_EVENT } from "../../../src/stores/room-list/RoomListStore";
 import { UPDATE_EVENT } from "../../../src/stores/AsyncStore";
 
@@ -88,6 +88,23 @@ describe("SlidingRoomListStore", () => {
             expect(context._SlidingSyncManager!.ensureListRegistered).toHaveBeenCalledWith(DefaultTagID.Untagged, {
                 filters: expect.objectContaining({
                     spaces: [spaceRoomId],
+                }),
+            });
+        });
+
+        it("gracefully handles subspaces in the home metaspace", async () => {
+            const subspace = "!sub:space";
+            mocked(context._SpaceStore!.traverseSpace).mockImplementation(
+                (spaceId: string, fn: (roomId: string) => void) => {
+                    fn(subspace);
+                },
+            );
+            activeSpace = MetaSpace.Home;
+            await store.start(); // call onReady
+
+            expect(context._SlidingSyncManager!.ensureListRegistered).toHaveBeenCalledWith(DefaultTagID.Untagged, {
+                filters: expect.objectContaining({
+                    spaces: [subspace],
                 }),
             });
         });
