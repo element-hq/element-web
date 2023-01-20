@@ -1,3 +1,9 @@
+Changes in [1.11.20](https://github.com/vector-im/element-web/releases/tag/v1.11.20) (2023-01-20)
+=================================================================================================
+
+## 🐛 Bug Fixes
+ * (Part 2) of prevent crash on older browsers (replace .at() with array.length-1)
+
 Changes in [1.11.19](https://github.com/vector-im/element-web/releases/tag/v1.11.19) (2023-01-18)
 =================================================================================================
 
