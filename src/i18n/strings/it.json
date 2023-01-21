@@ -1447,7 +1447,7 @@
     "Ctrl": "Ctrl",
     "Toggle Bold": "Grassetto sì/no",
     "Toggle Italics": "Corsivo sì/no",
-    "Toggle Quote": "Cita sì/no",
+    "Toggle Quote": "Attiva/disattiva citazione",
     "New line": "Nuova riga",
     "Toggle microphone mute": "Attiva/disattiva microfono",
     "Jump to room search": "Salta alla ricerca stanze",
@@ -3709,5 +3709,6 @@
     "Numbered list": "Elenco numerato",
     "Bulleted list": "Elenco puntato",
     "Connection error - Recording paused": "Errore di connessione - Registrazione in pausa",
-    "%(senderName)s started a voice broadcast": "%(senderName)s ha iniziato una trasmissione vocale"
+    "%(senderName)s started a voice broadcast": "%(senderName)s ha iniziato una trasmissione vocale",
+    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)"
 }
