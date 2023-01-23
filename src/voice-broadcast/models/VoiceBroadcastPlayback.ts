@@ -25,6 +25,7 @@ import {
 import { TypedEventEmitter } from "matrix-js-sdk/src/models/typed-event-emitter";
 import { SimpleObservable } from "matrix-widget-api";
 import { logger } from "matrix-js-sdk/src/logger";
+import { defer, IDeferred } from "matrix-js-sdk/src/utils";
 
 import { Playback, PlaybackInterface, PlaybackState } from "../../audio/Playback";
 import { PlaybackManager } from "../../audio/PlaybackManager";
@@ -95,6 +96,9 @@ export class VoiceBroadcastPlayback
     // set via setUpRelationsHelper() in constructor
     private chunkRelationHelper!: RelationsHelper;
     private infoRelationHelper!: RelationsHelper;
+
+    private skipToNext?: number;
+    private skipToDeferred?: IDeferred<void>;
 
     public constructor(
         public readonly infoEvent: MatrixEvent,
@@ -370,6 +374,28 @@ export class VoiceBroadcastPlayback
     }
 
     public async skipTo(timeSeconds: number): Promise<void> {
+        this.skipToNext = timeSeconds;
+
+        if (this.skipToDeferred) {
+            // Skip to position is already in progress. Return the promise for that.
+            return this.skipToDeferred.promise;
+        }
+
+        this.skipToDeferred = defer();
+
+        while (this.skipToNext !== undefined) {
+            // Skip to position until skipToNext is undefined.
+            // skipToNext can be set if skipTo is called while already skipping.
+            const skipToNext = this.skipToNext;
+            this.skipToNext = undefined;
+            await this.doSkipTo(skipToNext);
+        }
+
+        this.skipToDeferred.resolve();
+        this.skipToDeferred = undefined;
+    }
+
+    private async doSkipTo(timeSeconds: number): Promise<void> {
         const time = timeSeconds * 1000;
         const event = this.chunkEvents.findByTime(time);
 
@@ -379,6 +405,7 @@ export class VoiceBroadcastPlayback
         }
 
         const currentPlayback = this.getCurrentPlayback();
+        const currentPlaybackEvent = this.currentlyPlaying;
         const skipToPlayback = await this.getOrLoadPlaybackForEvent(event);
 
         if (!skipToPlayback) {
@@ -388,10 +415,12 @@ export class VoiceBroadcastPlayback
 
         this.currentlyPlaying = event;
 
-        if (currentPlayback && currentPlayback !== skipToPlayback) {
+        if (currentPlayback && currentPlaybackEvent && currentPlayback !== skipToPlayback) {
+            // only stop and unload the playback here without triggering other effects, e.g. play next
             currentPlayback.off(UPDATE_EVENT, this.onPlaybackStateChange);
             await currentPlayback.stop();
             currentPlayback.on(UPDATE_EVENT, this.onPlaybackStateChange);
+            this.unloadPlayback(currentPlaybackEvent);
         }
 
         const offsetInChunk = time - this.chunkEvents.getLengthTo(event);

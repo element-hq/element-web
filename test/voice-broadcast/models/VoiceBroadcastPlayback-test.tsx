@@ -31,7 +31,7 @@ import {
     VoiceBroadcastPlaybackState,
     VoiceBroadcastRecording,
 } from "../../../src/voice-broadcast";
-import { flushPromises, stubClient } from "../../test-utils";
+import { filterConsole, flushPromises, stubClient } from "../../test-utils";
 import { createTestPlayback } from "../../test-utils/audio";
 import { mkVoiceBroadcastChunkEvent, mkVoiceBroadcastInfoStateEvent } from "../utils/test-utils";
 
@@ -64,6 +64,8 @@ describe("VoiceBroadcastPlayback", () => {
     let chunk1Playback: Playback;
     let chunk2Playback: Playback;
     let chunk3Playback: Playback;
+    let middleOfSecondChunk!: number;
+    let middleOfThirdChunk!: number;
 
     const queryConfirmListeningDialog = () => {
         return screen.queryByText(
@@ -164,6 +166,9 @@ describe("VoiceBroadcastPlayback", () => {
         chunk2Playback = createTestPlayback();
         chunk3Playback = createTestPlayback();
 
+        middleOfSecondChunk = (chunk1Length + chunk2Length / 2) / 1000;
+        middleOfThirdChunk = (chunk1Length + chunk2Length + chunk3Length / 2) / 1000;
+
         jest.spyOn(PlaybackManager.instance, "createPlaybackInstance").mockImplementation(
             (buffer: ArrayBuffer, _waveForm?: number[]) => {
                 if (buffer === chunk1Data) return chunk1Playback;
@@ -181,10 +186,11 @@ describe("VoiceBroadcastPlayback", () => {
         });
     };
 
+    filterConsole("Starting load of AsyncWrapper for modal");
+
     beforeEach(() => {
         client = stubClient();
         deviceId = client.getDeviceId() || "";
-        jest.clearAllMocks();
         room = new Room(roomId, client, client.getSafeUserId());
         mocked(client.getRoom).mockImplementation((roomId: string): Room | null => {
             if (roomId === room.roomId) return room;
@@ -425,8 +431,8 @@ describe("VoiceBroadcastPlayback", () => {
         beforeEach(async () => {
             infoEvent = mkInfoEvent(VoiceBroadcastInfoState.Stopped);
             createChunkEvents();
-            setUpChunkEvents([chunk2Event, chunk1Event]);
-            room.addLiveEvents([infoEvent, chunk1Event, chunk2Event]);
+            setUpChunkEvents([chunk2Event, chunk1Event, chunk3Event]);
+            room.addLiveEvents([infoEvent, chunk1Event, chunk2Event, chunk3Event]);
             playback = await mkPlayback();
         });
 
@@ -472,6 +478,7 @@ describe("VoiceBroadcastPlayback", () => {
 
                 it("should play the second chunk", () => {
                     expect(chunk1Playback.stop).toHaveBeenCalled();
+                    expect(chunk1Playback.destroy).toHaveBeenCalled();
                     expect(chunk2Playback.play).toHaveBeenCalled();
                 });
 
@@ -484,14 +491,37 @@ describe("VoiceBroadcastPlayback", () => {
                         await playback.skipTo(0);
                     });
 
-                    it("should play the second chunk", () => {
-                        expect(chunk1Playback.play).toHaveBeenCalled();
+                    it("should play the first chunk", () => {
                         expect(chunk2Playback.stop).toHaveBeenCalled();
+                        expect(chunk2Playback.destroy).toHaveBeenCalled();
+                        expect(chunk1Playback.play).toHaveBeenCalled();
                     });
 
                     it("should update the time", () => {
                         expect(playback.timeSeconds).toBe(0);
                     });
+                });
+            });
+
+            describe("and skipping multiple times", () => {
+                beforeEach(async () => {
+                    return Promise.all([
+                        playback.skipTo(middleOfSecondChunk),
+                        playback.skipTo(middleOfThirdChunk),
+                        playback.skipTo(0),
+                    ]);
+                });
+
+                it("should only skip to the first and last position", () => {
+                    expect(chunk1Playback.stop).toHaveBeenCalled();
+                    expect(chunk1Playback.destroy).toHaveBeenCalled();
+                    expect(chunk2Playback.play).toHaveBeenCalled();
+
+                    expect(chunk3Playback.play).not.toHaveBeenCalled();
+
+                    expect(chunk2Playback.stop).toHaveBeenCalled();
+                    expect(chunk2Playback.destroy).toHaveBeenCalled();
+                    expect(chunk1Playback.play).toHaveBeenCalled();
                 });
             });
 
@@ -507,8 +537,9 @@ describe("VoiceBroadcastPlayback", () => {
                     // assert that the second chunk is being played
                     expect(chunk2Playback.play).toHaveBeenCalled();
 
-                    // simulate end of second chunk
+                    // simulate end of second and third chunk
                     chunk2Playback.emit(PlaybackState.Stopped);
+                    chunk3Playback.emit(PlaybackState.Stopped);
 
                     // assert that the entire playback is now in stopped state
                     expect(playback.getState()).toBe(VoiceBroadcastPlaybackState.Stopped);
