@@ -2872,5 +2872,8 @@
     "%(hours)sh %(minutes)sm %(seconds)ss": "%(hours)sh %(minutes)sm %(seconds)ss",
     "%(days)sd %(hours)sh %(minutes)sm %(seconds)ss": "%(days)sd %(hours)sh %(minutes)sm %(seconds)ss",
     "%(minutes)sm %(seconds)ss left": "%(minutes)sm %(seconds)ss restantes",
-    "%(hours)sh %(minutes)sm %(seconds)ss left": "%(hours)sh %(minutes)sm %(seconds)ss restantes"
+    "%(hours)sh %(minutes)sm %(seconds)ss left": "%(hours)sh %(minutes)sm %(seconds)ss restantes",
+    "If you start listening to this live broadcast, your current live broadcast recording will be ended.": "Se você começar a ouvir esta tramissão ao vivo, a gravação desta transmissão, será encerrada.",
+    "Listen to live broadcast?": "Ouvir transmissão ao vivo?",
+    "%(senderName)s started a voice broadcast": "%(senderName)s iniciou uma transmissão de voz"
 }
