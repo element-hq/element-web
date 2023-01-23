@@ -23,7 +23,7 @@ import { getFreePort } from "../utils/port";
 import { HomeserverInstance } from "../utils/homeserver";
 
 // A cypress plugin to add command to start & stop https://github.com/matrix-org/sliding-sync
-// SLIDING_SYNC_PROXY_TAG env used as the docker tag to use for `ghcr.io/matrix-org/sliding-sync-proxy` image.
+// SLIDING_SYNC_PROXY_TAG env used as the docker tag to use for `ghcr.io/matrix-org/sliding-sync` image.
 
 export interface ProxyInstance {
     containerId: string;
@@ -72,7 +72,7 @@ async function proxyStart(dockerTag: string, homeserver: HomeserverInstance): Pr
     const port = await getFreePort();
     console.log(new Date(), "starting proxy container...", dockerTag);
     const containerId = await dockerRun({
-        image: "ghcr.io/matrix-org/sliding-sync-proxy:" + dockerTag,
+        image: "ghcr.io/matrix-org/sliding-sync:" + dockerTag,
         containerName: "react-sdk-cypress-sliding-sync-proxy",
         params: [
             "--rm",

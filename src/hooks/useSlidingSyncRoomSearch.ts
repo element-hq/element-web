@@ -34,7 +34,6 @@ export const useSlidingSyncRoomSearch = (): {
     const [rooms, setRooms] = useState<Room[]>([]);
 
     const [loading, setLoading] = useState(false);
-    const listIndex = SlidingSyncManager.instance.getOrAllocateListIndex(SlidingSyncManager.ListSearch);
 
     const [updateQuery, updateResult] = useLatestResult<{ term: string; limit?: number }, Room[]>(setRooms);
 
@@ -50,14 +49,16 @@ export const useSlidingSyncRoomSearch = (): {
 
             try {
                 setLoading(true);
-                await SlidingSyncManager.instance.ensureListRegistered(listIndex, {
+                await SlidingSyncManager.instance.ensureListRegistered(SlidingSyncManager.ListSearch, {
                     ranges: [[0, limit]],
                     filters: {
                         room_name_like: term,
                     },
                 });
                 const rooms = [];
-                const { roomIndexToRoomId } = SlidingSyncManager.instance.slidingSync.getListData(listIndex);
+                const { roomIndexToRoomId } = SlidingSyncManager.instance.slidingSync.getListData(
+                    SlidingSyncManager.ListSearch,
+                )!;
                 let i = 0;
                 while (roomIndexToRoomId[i]) {
                     const roomId = roomIndexToRoomId[i];
@@ -78,7 +79,7 @@ export const useSlidingSyncRoomSearch = (): {
                 // TODO: delete the list?
             }
         },
-        [updateQuery, updateResult, listIndex],
+        [updateQuery, updateResult],
     );
 
     return {
