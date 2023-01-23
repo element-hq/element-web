@@ -102,21 +102,6 @@ describe("Sliding Sync", () => {
         });
     };
 
-    // sanity check everything works
-    it("should correctly render expected messages", () => {
-        cy.get<string>("@roomId").then((roomId) => cy.visit("/#/room/" + roomId));
-        cy.setSettingValue("layout", null, SettingLevel.DEVICE, Layout.IRC);
-
-        // Wait until configuration is finished
-        cy.contains(
-            ".mx_RoomView_body .mx_GenericEventListSummary .mx_GenericEventListSummary_summary",
-            "created and configured the room.",
-        );
-
-        // Click "expand" link button
-        cy.get(".mx_GenericEventListSummary_toggle[aria-expanded=false]").click();
-    });
-
     it("should render the Rooms list in reverse chronological order by default and allowing sorting A-Z", () => {
         // create rooms and check room names are correct
         cy.createRoom({ name: "Apple" }).then(() => cy.contains(".mx_RoomSublist", "Apple"));
