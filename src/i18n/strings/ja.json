@@ -3480,5 +3480,13 @@
     "An error occurred whilst sharing your live location, please try again": "位置情報（ライブ）の共有中にエラーが発生しました。もう一度やり直してください",
     "An error occurred whilst sharing your live location": "位置情報（ライブ）の共有中にエラーが発生しました",
     "An error occurred while stopping your live location": "位置情報（ライブ）を停止する際にエラーが発生しました",
-    "Leaving the beta will reload %(brand)s.": "ベータ版を終了すると%(brand)sをリロードします。"
+    "Leaving the beta will reload %(brand)s.": "ベータ版を終了すると%(brand)sをリロードします。",
+    "We’d appreciate any feedback on how you’re finding %(brand)s.": "%(brand)sに関するフィードバックをいただければ幸いです。",
+    "How are you finding %(brand)s so far?": "%(brand)sについてどう思いますか？",
+    "Only %(count)s steps to go|one": "あと%(count)sつのステップです",
+    "Only %(count)s steps to go|other": "あと%(count)sつのステップです",
+    "You did it!": "完了しました！",
+    "Find your people": "知人を見つける",
+    "Secure messaging for work": "仕事で安全なメッセージングを",
+    "Secure messaging for friends and family": "友達や家族と安全なメッセージングを"
 }
