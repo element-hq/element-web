@@ -50,6 +50,9 @@ export function useWysiwygSendActionHandler(
                     focusComposer(composerElement, context, roomContext, timeoutId);
                     break;
                 case Action.ClearAndFocusSendMessageComposer:
+                    // When a thread is opened, prevent the main composer to steal the thread composer focus
+                    if (payload.timelineRenderingType !== roomContext.timelineRenderingType) break;
+
                     composerFunctions.clear();
                     focusComposer(composerElement, context, roomContext, timeoutId);
                     break;
