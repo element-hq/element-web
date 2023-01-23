@@ -34,15 +34,29 @@ describe("SeekBar", () => {
             frameRequestCallback = callback;
             return 0;
         });
-        playback = createTestPlayback();
     });
 
     afterEach(() => {
         mocked(window.requestAnimationFrame).mockRestore();
     });
 
+    describe("when rendering a SeekBar for an empty playback", () => {
+        beforeEach(() => {
+            playback = createTestPlayback({
+                durationSeconds: 0,
+                timeSeconds: 0,
+            });
+            renderResult = render(<SeekBar ref={seekBarRef} playback={playback} />);
+        });
+
+        it("should render correctly", () => {
+            expect(renderResult.container).toMatchSnapshot();
+        });
+    });
+
     describe("when rendering a SeekBar", () => {
         beforeEach(() => {
+            playback = createTestPlayback();
             renderResult = render(<SeekBar ref={seekBarRef} playback={playback} />);
         });
 
