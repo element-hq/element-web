@@ -145,10 +145,6 @@ If no right panel state is known for the room or it was closed on the last room
 visit, it will default to the room member list. Otherwise, the saved card last
 used in that room is shown.
 
-## Pin drop location sharing (`feature_location_share_pin_drop`) [In Development]
-
-Enables sharing a pin drop location to the timeline.
-
 ## Live location sharing (`feature_location_share_live`) [In Development]
 
 Enables sharing your current location to the timeline, with live updates.
