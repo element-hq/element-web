@@ -25,6 +25,8 @@
 # all phonenumber.js-supported country flags (as SVGs) into
 # PNGs that can be used by CountryDropdown.js.
 
+set -e
+
 # Allow CTRL+C to terminate the script
 trap "echo Exited!; exit;" SIGINT SIGTERM
 

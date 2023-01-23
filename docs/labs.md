@@ -4,6 +4,9 @@ If Labs is enabled in the [Element config](config.md), you can enable some of th
 to `Settings->Labs`. This list is non-exhaustive and subject to change, chat in
 [#element-web:matrix.org](https://matrix.to/#/#element-web:matrix.org) for more information.
 
+If a labs features gets more stable, it _may_ be promoted to a beta feature
+(see [Betas](https://github.com/vector-im/element-web/blob/develop/docs/betas.md)).
+
 **Be warned! Labs features are not finalised, they may be fragile, they may change, they may be
 dropped. Ask in the room if you are unclear about any details here.**
 
@@ -108,10 +111,6 @@ To enable message previews for reactions in DMs only, enable `feature_roomlist_p
 Allows users to receive encrypted messages by creating a device that is stored
 encrypted on the server, as described in [MSC2697](https://github.com/matrix-org/matrix-doc/pull/2697).
 
-## Hidden read receipts (`feature_hidden_read_receipts`)
-
-Enables sending hidden read receipts as per [MSC2285](https://github.com/matrix-org/matrix-doc/pull/2285)
-
 ## Breadcrumbs v2 (`feature_breadcrumbs_v2`)
 
 Instead of showing the horizontal list of breadcrumbs under the filter field, the new UX is an interactive context menu
@@ -123,7 +122,7 @@ Switches to a new room search experience.
 
 ## Extensible events rendering (`feature_extensible_events`) [In Development]
 
-*Intended for developer use only at the moment.*
+_Intended for developer use only at the moment._
 
 Extensible Events are a [new event format](https://github.com/matrix-org/matrix-doc/pull/1767) which
 supports graceful fallback in unknown event types. Instead of rendering nothing or a blank space, events
@@ -146,14 +145,6 @@ If no right panel state is known for the room or it was closed on the last room
 visit, it will default to the room member list. Otherwise, the saved card last
 used in that room is shown.
 
-## Show current profile of users on historical messages (`feature_use_only_current_profiles`)
-
-An experimental flag to determine how the app would behave if a user's current display
-name and avatar (profile) were shown on historical messages instead of the profile details
-at the time when the message was sent.
-
-When enabled, historical messages will use the current profile for the sender.
-
 ## Live location sharing (`feature_location_share_live`) [In Development]
 
 Enables sharing your current location to the timeline, with live updates.
@@ -164,17 +155,23 @@ Threading allows users to branch out a new conversation from the main timeline o
 
 Threads can be access by clicking their summary below the root event on the room timeline. Users can find a comprehensive list of threads by click the icon on the room header button.
 
-This feature might work in degraded mode if the homeserver a user is connected to does not advertise support for the unstable feature `org.matrix.msc3440`  when calling the `/versions` API endpoint.
-
-## Right-click Message Context Menu (`feature_message_right_click_context_menu`)
-
-Enables showing a right-click context menu when right-clicking messages in the
-timeline. This menu shows options that can usually be found in the message
-action bar or in the message options.
+This feature might work in degraded mode if the homeserver a user is connected to does not advertise support for the unstable feature `org.matrix.msc3440` when calling the `/versions` API endpoint.
 
 ## Video rooms (`feature_video_rooms`)
 
 Enables support for creating and joining video rooms, which are persistent video chats that users can jump in and out of.
+
+## Element Call video rooms (`feature_element_call_video_rooms`) [In Development]
+
+Enables support for video rooms that use Element Call rather than Jitsi, and causes the 'New video room' option to create Element Call video rooms rather than Jitsi ones.
+
+This flag will not have any effect unless `feature_video_rooms` is also enabled.
+
+## New group call experience (`feature_group_calls`) [In Development]
+
+This feature allows users to place and join native [MSC3401](https://github.com/matrix-org/matrix-spec-proposals/pull/3401) group calls in compatible rooms, using Element Call.
+
+If you're enabling this at the deployment level, you may also want to reference the docs for the `element_call` config section.
 
 ## Rich text in room topics (`feature_html_topic`) [In Development]
 

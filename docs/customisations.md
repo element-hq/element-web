@@ -30,7 +30,7 @@ maintenance.
 
 **Note**: The project deliberately does not exclude `customisations.json` from Git.
 This is to ensure that in shared projects it's possible to have a common config. By
-default, Element Web does *not* ship with this file to prevent conflicts.
+default, Element Web does _not_ ship with this file to prevent conflicts.
 
 ### Custom components
 
@@ -41,9 +41,10 @@ that properties/state machines won't change.
 ### Component visibility customisation
 
 UI for some actions can be hidden via the ComponentVisibility customisation:
-- inviting users to rooms and spaces,
-- creating rooms,
-- creating spaces,
+
+-   inviting users to rooms and spaces,
+-   creating rooms,
+-   creating spaces,
 
 To customise visibility create a customisation module from [ComponentVisibility](https://github.com/matrix-org/matrix-react-sdk/blob/master/src/customisations/ComponentVisibility.ts) following the instructions above.
 
@@ -55,6 +56,7 @@ might be shown to the user, but they won't have permission to invite users to
 the current room: the button will appear disabled.
 
 For example, to only allow users who meet a certain condition to create spaces:
+
 ```typescript
 function shouldShowComponent(component: UIComponent): boolean {
     if (component === UIComponent.CreateSpaces) {
@@ -65,4 +67,5 @@ function shouldShowComponent(component: UIComponent): boolean {
     return true;
 }
 ```
+
 In this example, all UI related to creating a space will be hidden unless the users meets the custom condition.

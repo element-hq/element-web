@@ -1,11 +1,11 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <title>Rageshake decoder ring</title>
         <script crossorigin src="https://unpkg.com/source-map@0.7.3/dist/source-map.js"></script>
         <script>
             sourceMap.SourceMapConsumer.initialize({
-                "lib/mappings.wasm": "https://unpkg.com/source-map@0.7.3/lib/mappings.wasm"
+                "lib/mappings.wasm": "https://unpkg.com/source-map@0.7.3/lib/mappings.wasm",
             });
         </script>
         <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
@@ -18,12 +18,16 @@
 
         <style>
             @keyframes spin {
-                from {transform:rotate(0deg);}
-                to {transform:rotate(359deg);}
+                from {
+                    transform: rotate(0deg);
+                }
+                to {
+                    transform: rotate(359deg);
+                }
             }
 
             body {
-                font-family: sans-serif
+                font-family: sans-serif;
             }
 
             .spinner {
@@ -44,7 +48,7 @@
             }
 
             .valid::after {
-                content: "✓"
+                content: "✓";
             }
 
             label {
@@ -68,7 +72,7 @@
         <script type="text/javascript">
             document.addEventListener("DOMContentLoaded", () => {
                 try {
-                    ReactDOM.render(React.createElement(Decoder.BundlePicker), document.getElementById("main"))
+                    ReactDOM.render(React.createElement(Decoder.BundlePicker), document.getElementById("main"));
                 } catch (e) {
                     const n = document.createElement("div");
                     n.innerText = `Error starting: ${e.message}`;

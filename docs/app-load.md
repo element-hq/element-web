@@ -15,10 +15,10 @@ Current more parallel flow:
 digraph G {
   node [shape=box];
 
-  subgraph cluster_0 {
-    color=orange;
-    node [style=filled];
-    label = "index.ts";
+subgraph cluster_0 {
+color=orange;
+node [style=filled];
+label = "index.ts";
 
     entrypoint, s0, ready [shape=point];
     rageshake, config, i18n, theme, skin, olm [shape=parallelogram];
@@ -52,33 +52,38 @@ digraph G {
     skin -> ready [color=red];
     theme -> ready [color=red];
     i18n -> ready [color=red];
-  }
 
-  subgraph cluster_1 {
-    color = green;
-    node [style=filled];
-    label = "init.tsx";
+}
+
+subgraph cluster_1 {
+color = green;
+node [style=filled];
+label = "init.tsx";
 
     ready -> loadApp;
     loadApp -> matrixchat;
-  }
+
+}
 }
 </code></pre>
+
 </p>
 </details>
 
 Key:
-+ Parallelogram: async/await task
-+ Box: sync task
-+ Diamond: conditional branch
-+ Egg: user interaction
-+ Blue arrow: async task is allowed to settle but allowed to fail
-+ Red arrow: async task success is asserted
+
+-   Parallelogram: async/await task
+-   Box: sync task
+-   Diamond: conditional branch
+-   Egg: user interaction
+-   Blue arrow: async task is allowed to settle but allowed to fail
+-   Red arrow: async task success is asserted
 
 Notes:
-+ A task begins when all its dependencies (arrows going into it) are fulfilled.
-+ The success of setting up rageshake is never asserted, element-web has a fallback path for running without IDB (and thus rageshake).
-+ Everything is awaited to be settled before the Modernizr check, to allow it to make use of things like i18n if they are successful.
+
+-   A task begins when all its dependencies (arrows going into it) are fulfilled.
+-   The success of setting up rageshake is never asserted, element-web has a fallback path for running without IDB (and thus rageshake).
+-   Everything is awaited to be settled before the Modernizr check, to allow it to make use of things like i18n if they are successful.
 
 Underlying dependencies:
 ![image](https://user-images.githubusercontent.com/2403652/73848977-08624500-4821-11ea-9830-bb0317c41086.png)

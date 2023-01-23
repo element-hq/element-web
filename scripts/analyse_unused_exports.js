@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-'use strict';
+"use strict";
 
 const fs = require("fs");
 const { exec } = require("node:child_process");

@@ -11,9 +11,7 @@
     "The message from the parser is: %(message)s": "Viesti jäsentimeltä: %(message)s",
     "Invalid JSON": "Virheellinen JSON",
     "Unable to load config file: please refresh the page to try again.": "Asetustiedostoa ei voi ladata. Yritä uudelleen lataamalla sivu uudelleen.",
-    "%(brand)s Desktop (%(platformName)s)": "%(brand)sin työpöytäversio (%(platformName)s)",
     "Go to your browser to complete Sign In": "Tee kirjautuminen loppuun selaimessasi",
-    "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "Unsupported browser": "Selainta ei tueta",
     "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Asenna <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink> tai <safariLink>Safari</safariLink>, jotta kaikki toimii parhaiten.",
     "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Voit käyttää edelleen nykyistä selaintasi, mutta jotkut tai kaikki ominaisuudet eivät ehkä toimi ja sovelluksen ulkoasu voi olla virheellinen.",
@@ -27,5 +25,8 @@
     "Powered by Matrix": "Moottorina Matrix",
     "Your browser can't run %(brand)s": "%(brand)s ei toimi selaimessasi",
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s käyttää edistyneitä selaimen ominaisuuksia, joita nykyinen selaimesi ei tue.",
-    "Use %(brand)s on mobile": "Käytä %(brand)sia mobiilisti"
+    "Use %(brand)s on mobile": "Käytä %(brand)sia mobiilisti",
+    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Hajautettu, salattu keskustelu &amp; yhteistyö, taustavoimana $matrixLogo",
+    "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s: %(browserName)s käyttöjärjestelmällä %(osName)s",
+    "%(brand)s Desktop: %(platformName)s": "%(brand)sin työpöytäversio: %(platformName)s"
 }

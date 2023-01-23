@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Fetches the js-sdk and matrix-react-sdk dependencies for development
 # or testing purposes
@@ -6,7 +6,7 @@
 # the branch the current checkout is on, use that branch. Otherwise,
 # use develop.
 
-set -ex
+set -x
 
 GIT_CLONE_ARGS=("$@")
 [ -z "$defbranch" ] && defbranch="develop"

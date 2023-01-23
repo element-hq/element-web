@@ -19,13 +19,11 @@
     "Your browser can't run %(brand)s": "Trình duyệt của bạn không thể chạy %(brand)s",
     "Unsupported browser": "Trình duyệt không được hỗ trợ",
     "Go to your browser to complete Sign In": "Mở trình duyệt web để hoàn thành đăng nhập",
-    "%(brand)s Desktop (%(platformName)s)": "%(brand)s Máy tính để bàn (%(platformName)s)",
     "Open": "Mở",
     "Unable to load config file: please refresh the page to try again.": "Không thể tải tệp cấu hình: hãy tải lại trang để thử lại.",
     "Failed to start": "Khởi động thất bại",
     "Use %(brand)s on mobile": "Sử dụng %(brand)s trên di động",
     "Powered by Matrix": "Được chạy trên giao thức Matrix",
-    "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Thiết lập Element của bạn chứa JSON không hợp lệ. Vui lòng sửa vấn đề và tải lại trang.",
     "Your Element is misconfigured": "Element của bạn bị thiết lập sai",
     "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Dịch vụ chat &amp; liên lạc đã được mã hóa, phi tập trung. Được cung cấp bởi $matrixLogo"

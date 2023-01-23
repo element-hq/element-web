@@ -17,7 +17,6 @@
     "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "A configuração do Element contém um JSON inválido. Corrija o problema e recarregue a página.",
     "Your Element is misconfigured": "O Element está configurado incorretamente",
     "Powered by Matrix": "Desenvolvido por Matrix",
-    "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (2%(browserName)s, 3%(osName)s)",
     "Go to element.io": "Visite element.io",
     "I understand the risks and wish to continue": "Compreendo os riscos e pretendo continuar",
     "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Podes continuar a utilizar teu browser atual, mas algumas funcionalidades podem não funcionar ou aparecerem de forma incorrecta.",
