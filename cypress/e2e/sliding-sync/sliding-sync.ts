@@ -21,8 +21,6 @@ import { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { Interception } from "cypress/types/net-stubbing";
 
 import { HomeserverInstance } from "../../plugins/utils/homeserver";
-import { SettingLevel } from "../../../src/settings/SettingLevel";
-import { Layout } from "../../../src/settings/enums/Layout";
 import { ProxyInstance } from "../../plugins/sliding-sync";
 
 describe("Sliding Sync", () => {
