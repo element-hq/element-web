@@ -67,6 +67,8 @@ $button-gap: 24px;
     flex-direction: row;
     align-items: center;
     color: $lightbox-fg-color;
+    flex-grow: 1;
+    flex-basis: 0;
 }
 
 .mx_ImageView_info {
@@ -82,6 +84,9 @@ $button-gap: 24px;
 .mx_ImageView_title {
     color: $lightbox-fg-color;
     font-size: $font-12px;
+    flex-grow: 1;
+    flex-basis: 0;
+    text-align: center;
 }
 
 .mx_ImageView_toolbar {
@@ -89,6 +94,9 @@ $button-gap: 24px;
     pointer-events: initial;
     display: flex;
     align-items: center;
+    flex-grow: 1;
+    flex-basis: 0;
+    justify-content: flex-end;
     gap: calc($button-gap - ($button-size - $icon-size));
 }
 
