@@ -28,6 +28,7 @@ import { ElementWidgetActions } from "matrix-react-sdk/src/stores/widgets/Elemen
 import { logger } from "matrix-js-sdk/src/logger";
 import { IConfigOptions } from "matrix-react-sdk/src/IConfigOptions";
 import { SnakedObject } from "matrix-react-sdk/src/utils/SnakedObject";
+import { ElementWidgetCapabilities } from "matrix-react-sdk/src/stores/widgets/ElementWidgetCapabilities";
 
 import { getVectorConfig } from "../getconfig";
 
@@ -98,6 +99,10 @@ const setupCompleted = (async (): Promise<string | void> => {
 
             widgetApiReady = new Promise<void>((resolve) => widgetApi.once("ready", resolve));
             widgetApi.requestCapabilities(VideoConferenceCapabilities);
+            if (qsParam("auth", true) === "openidtoken-jwt") {
+                widgetApi.requestCapability(ElementWidgetCapabilities.RequiresClient);
+            }
+
             widgetApi.start();
 
             const handleAction = (
