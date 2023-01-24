@@ -26,5 +26,7 @@
     "Invalid configuration: no default server specified.": "Ógild uppsetning: enginn sjálfgefinn vefþjónn tilgreindur.",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Ógild uppsetning: getur aðeins tilgreint eitt af default_server_config, default_server_name eða default_hs_url.",
     "Use %(brand)s on mobile": "Nota %(brand)s í síma",
-    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Dreifstýrt, dulritað spjall og samskipti keyrt með $matrixLogo"
+    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Dreifstýrt, dulritað spjall og samskipti keyrt með $matrixLogo",
+    "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s: %(browserName)s á %(osName)s",
+    "%(brand)s Desktop: %(platformName)s": "%(brand)s borðtölvuútgáfa: %(platformName)s"
 }
