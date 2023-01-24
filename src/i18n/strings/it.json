@@ -1447,7 +1447,7 @@
     "Ctrl": "Ctrl",
     "Toggle Bold": "Grassetto sì/no",
     "Toggle Italics": "Corsivo sì/no",
-    "Toggle Quote": "Cita sì/no",
+    "Toggle Quote": "Attiva/disattiva citazione",
     "New line": "Nuova riga",
     "Toggle microphone mute": "Attiva/disattiva microfono",
     "Jump to room search": "Salta alla ricerca stanze",
@@ -3699,5 +3699,16 @@
     "Sign out of all other sessions (%(otherSessionsCount)s)": "Disconnetti tutte le altre sessioni (%(otherSessionsCount)s)",
     "Yes, end my recording": "Sì, termina la mia registrazione",
     "If you start listening to this live broadcast, your current live broadcast recording will be ended.": "Se inizi ad ascoltare questa trasmissione in diretta, l'attuale registrazione della tua trasmissione in diretta finirà.",
-    "Listen to live broadcast?": "Ascoltare la trasmissione in diretta?"
+    "Listen to live broadcast?": "Ascoltare la trasmissione in diretta?",
+    "You can't start a voice message as you are currently recording a live broadcast. Please end your live broadcast in order to start recording a voice message.": "Non puoi iniziare un messaggio vocale perché stai registrando una trasmissione in diretta. Termina la trasmissione per potere iniziare un messaggio vocale.",
+    "Can't start voice message": "Impossibile iniziare il messaggio vocale",
+    "Edit link": "Modifica collegamento",
+    "Unfortunately we're unable to start a recording right now. Please try again later.": "Sfortunatamente non riusciamo ad iniziare una registrazione al momento. Riprova più tardi.",
+    "Connection error": "Errore di connessione",
+    "Decrypted source unavailable": "Sorgente decifrata non disponibile",
+    "Numbered list": "Elenco numerato",
+    "Bulleted list": "Elenco puntato",
+    "Connection error - Recording paused": "Errore di connessione - Registrazione in pausa",
+    "%(senderName)s started a voice broadcast": "%(senderName)s ha iniziato una trasmissione vocale",
+    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)"
 }
