@@ -61,7 +61,7 @@
         "jsrsasign": "^10.5.25",
         "katex": "^0.16.0",
         "matrix-js-sdk": "23.2.0-rc.1",
-        "matrix-react-sdk": "github:matrix-org/matrix-react-sdk#develop",
+        "matrix-react-sdk": "3.65.0-rc.1",
         "matrix-widget-api": "^1.1.1",
         "react": "17.0.2",
         "react-dom": "17.0.2",
