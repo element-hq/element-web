@@ -134,7 +134,7 @@ import { ValidatedServerConfig } from "../../utils/ValidatedServerConfig";
 import { isLocalRoom } from "../../utils/localRoom/isLocalRoom";
 import { SdkContextClass, SDKContext } from "../../contexts/SDKContext";
 import { viewUserDeviceSettings } from "../../actions/handlers/viewUserDeviceSettings";
-import { VoiceBroadcastResumer } from "../../voice-broadcast";
+import { cleanUpBroadcasts, VoiceBroadcastResumer } from "../../voice-broadcast";
 import GenericToast from "../views/toasts/GenericToast";
 import { Linkify } from "../views/elements/Linkify";
 import RovingSpotlightDialog, { Filter } from "../views/dialogs/spotlight/SpotlightDialog";
@@ -591,9 +591,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 break;
             case "logout":
                 LegacyCallHandler.instance.hangupAllCalls();
-                Promise.all([...CallStore.instance.activeCalls].map((call) => call.disconnect())).finally(() =>
-                    Lifecycle.logout(),
-                );
+                Promise.all([
+                    ...[...CallStore.instance.activeCalls].map((call) => call.disconnect()),
+                    cleanUpBroadcasts(this.stores),
+                ]).finally(() => Lifecycle.logout());
                 break;
             case "require_registration":
                 startAnyRegistrationFlow(payload as any);
