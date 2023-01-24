@@ -3430,5 +3430,14 @@
     "Sign out of all other sessions (%(otherSessionsCount)s)": "Kirjaudu ulos kaikista muista istunnoista (%(otherSessionsCount)s)",
     "You did it!": "Teit sen!",
     "Right panel stays open": "Oikea paneeli pysyy avoinna",
-    "Currently experimental.": "Tällä hetkellä kokeellinen."
+    "Currently experimental.": "Tällä hetkellä kokeellinen.",
+    "With free end-to-end encrypted messaging, and unlimited voice and video calls, %(brand)s is a great way to stay in touch.": "Ilmaisen päästä päähän -salauksen sekä rajoittamattomien ääni- ja videopuhelujen myötä %(brand)s on oiva tapa pysyä yhteydessä.",
+    "%(senderName)s ended a voice broadcast": "%(senderName)s lopetti äänen yleislähetyksen",
+    "You ended a voice broadcast": "Lopetit äänen yleislähetyksen",
+    "%(senderName)s ended a <a>voice broadcast</a>": "%(senderName)s lopetti <a>äänen yleislähetyksen</a>",
+    "You ended a <a>voice broadcast</a>": "Lopetit <a>äänen yleislähetyksen</a>",
+    "Connection error": "Yhteysvirhe",
+    "%(senderName)s started a voice broadcast": "%(senderName)s aloitti äänen yleislähetyksen",
+    "%(hours)sh %(minutes)sm %(seconds)ss": "%(hours)s t %(minutes)s min %(seconds)s s",
+    "%(days)sd %(hours)sh %(minutes)sm %(seconds)ss": "%(days)s pv %(hours)s t %(minutes)s min %(seconds)s s"
 }

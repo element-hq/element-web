@@ -3703,5 +3703,12 @@
     "Unfortunately we're unable to start a recording right now. Please try again later.": "Bohužiaľ teraz nemôžeme spustiť nahrávanie. Skúste to prosím neskôr.",
     "Connection error": "Chyba pripojenia",
     "You can't start a voice message as you are currently recording a live broadcast. Please end your live broadcast in order to start recording a voice message.": "Nemôžete spustiť hlasovú správu, pretože práve nahrávate živé vysielanie. Ukončite prosím živé vysielanie, aby ste mohli začať nahrávať hlasovú správu.",
-    "Can't start voice message": "Nemožno spustiť hlasovú správu"
+    "Can't start voice message": "Nemožno spustiť hlasovú správu",
+    "Edit link": "Upraviť odkaz",
+    "Numbered list": "Číslovaný zoznam",
+    "Bulleted list": "Zoznam v odrážkach",
+    "Decrypted source unavailable": "Dešifrovaný zdroj nie je dostupný",
+    "Connection error - Recording paused": "Chyba pripojenia - nahrávanie pozastavené",
+    "%(senderName)s started a voice broadcast": "%(senderName)s začal/a hlasové vysielanie",
+    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)"
 }
