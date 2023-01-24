@@ -3203,7 +3203,7 @@
     "Manually verify by text": "テキストによる手動認証",
     "Checking...": "確認中...",
     "Modal Widget": "モーダルウィジェット",
-    "You will no longer be able to log in": "もうログインできません",
+    "You will no longer be able to log in": "ログインできなくなります",
     "Friends and family": "友達と家族",
     "Help": "ヘルプ",
     "Minimise": "最小化",
@@ -3511,5 +3511,13 @@
     "%(count)s Members|one": "%(count)s人の参加者",
     "%(timeRemaining)s left": "残り%(timeRemaining)s",
     "Started": "開始済",
-    "Requested": "要求済"
+    "Requested": "要求済",
+    "If you can't find the room you're looking for, ask for an invite or create a new room.": "探しているルームが見つからない場合、招待を要求するか新しいルームを作成してください。",
+    "If you can't see who you're looking for, send them your invite link.": "探している人が見つからない場合、招待リンクを送信してください。",
+    "View servers in room": "ルームでサーバーを表示",
+    "To continue, please enter your account password:": "続行するには、アカウントのパスワードを入力してください：",
+    "No one will be able to reuse your username (MXID), including you: this username will remain unavailable": "あなたのユーザー名（MXID）は、あなた自身を含めて誰も再利用することができなくなります",
+    "You will leave all rooms and DMs that you are in": "全てのルームとダイレクトメッセージから退出します",
+    "Confirm that you would like to deactivate your account. If you proceed:": "アカウントを非アクティブ化したいことを確認してください。継続すると、",
+    "You will not be able to reactivate your account": "アカウントを再開できなくなります"
 }
