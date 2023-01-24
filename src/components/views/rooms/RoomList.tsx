@@ -51,7 +51,7 @@ import { arrayFastClone, arrayHasDiff } from "../../../utils/arrays";
 import { objectShallowClone, objectWithOnly } from "../../../utils/objects";
 import ResizeNotifier from "../../../utils/ResizeNotifier";
 import { shouldShowSpaceInvite, showAddExistingRooms, showCreateNewRoom, showSpaceInvite } from "../../../utils/space";
-import { ChevronFace, ContextMenuTooltipButton, useContextMenu } from "../../structures/ContextMenu";
+import { ChevronFace, ContextMenuTooltipButton, MenuProps, useContextMenu } from "../../structures/ContextMenu";
 import RoomAvatar from "../avatars/RoomAvatar";
 import { BetaPill } from "../beta/BetaCard";
 import IconizedContextMenu, {
@@ -107,7 +107,7 @@ interface ITagAestheticsMap {
     [tagId: TagID]: ITagAesthetics;
 }
 
-const auxButtonContextMenuPosition = (handle: RefObject<HTMLDivElement>) => {
+const auxButtonContextMenuPosition = (handle: RefObject<HTMLDivElement>): MenuProps => {
     const rect = handle.current.getBoundingClientRect();
     return {
         chevronFace: ChevronFace.None,
@@ -116,7 +116,7 @@ const auxButtonContextMenuPosition = (handle: RefObject<HTMLDivElement>) => {
     };
 };
 
-const DmAuxButton = ({ tabIndex, dispatcher = defaultDispatcher }: IAuxButtonProps) => {
+const DmAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex, dispatcher = defaultDispatcher }) => {
     const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<HTMLDivElement>();
     const activeSpace: Room = useEventEmitterState(SpaceStore.instance, UPDATE_SELECTED_SPACE, () => {
         return SpaceStore.instance.activeSpaceRoom;
@@ -207,7 +207,7 @@ const DmAuxButton = ({ tabIndex, dispatcher = defaultDispatcher }: IAuxButtonPro
     return null;
 };
 
-const UntaggedAuxButton = ({ tabIndex }: IAuxButtonProps) => {
+const UntaggedAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex }) => {
     const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<HTMLDivElement>();
     const activeSpace = useEventEmitterState<Room>(SpaceStore.instance, UPDATE_SELECTED_SPACE, () => {
         return SpaceStore.instance.activeSpaceRoom;
@@ -466,7 +466,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
         this.updateLists(); // trigger the first update
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         SpaceStore.instance.off(UPDATE_SUGGESTED_ROOMS, this.updateSuggestedRooms);
         RoomListStore.instance.off(LISTS_UPDATE_EVENT, this.updateLists);
         SettingsStore.unwatchSetting(this.favouriteMessageWatcher);
@@ -474,13 +474,13 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
         SdkContextClass.instance.roomViewStore.off(UPDATE_EVENT, this.onRoomViewStoreUpdate);
     }
 
-    private onRoomViewStoreUpdate = () => {
+    private onRoomViewStoreUpdate = (): void => {
         this.setState({
             currentRoomId: SdkContextClass.instance.roomViewStore.getRoomId(),
         });
     };
 
-    private onAction = (payload: ActionPayload) => {
+    private onAction = (payload: ActionPayload): void => {
         if (payload.action === Action.ViewRoomDelta) {
             const viewRoomDeltaPayload = payload as ViewRoomDeltaPayload;
             const currentRoomId = SdkContextClass.instance.roomViewStore.getRoomId();
@@ -499,7 +499,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
         }
     };
 
-    private getRoomDelta = (roomId: string, delta: number, unread = false) => {
+    private getRoomDelta = (roomId: string, delta: number, unread = false): Room => {
         const lists = RoomListStore.instance.orderedLists;
         const rooms: Room[] = [];
         TAG_ORDER.forEach((t) => {
@@ -522,11 +522,11 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
         return room;
     };
 
-    private updateSuggestedRooms = (suggestedRooms: ISuggestedRoom[]) => {
+    private updateSuggestedRooms = (suggestedRooms: ISuggestedRoom[]): void => {
         this.setState({ suggestedRooms });
     };
 
-    private updateLists = () => {
+    private updateLists = (): void => {
         const newLists = RoomListStore.instance.orderedLists;
         const previousListIds = Object.keys(this.state.sublists);
         const newListIds = Object.keys(newLists);
@@ -573,7 +573,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                     resizeMethod="crop"
                 />
             );
-            const viewRoom = (ev) => {
+            const viewRoom = (ev): void => {
                 defaultDispatcher.dispatch<ViewRoomPayload>({
                     action: Action.ViewRoom,
                     room_alias: room.canonical_alias || room.aliases?.[0],
@@ -688,7 +688,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
         [...treeItems].find((e) => e.offsetParent !== null)?.focus();
     }
 
-    public render() {
+    public render(): JSX.Element {
         const sublists = this.renderSublists();
         return (
             <RovingTabIndexProvider handleHomeEnd handleUpDown onKeyDown={this.props.onKeyDown}>

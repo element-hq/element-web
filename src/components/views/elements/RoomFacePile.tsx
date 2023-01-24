@@ -27,7 +27,7 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
 const DEFAULT_NUM_FACES = 5;
 
-const isKnownMember = (member: RoomMember) => !!DMRoomMap.shared().getDMRoomsForUserId(member.userId)?.length;
+const isKnownMember = (member: RoomMember): boolean => !!DMRoomMap.shared().getDMRoomsForUserId(member.userId)?.length;
 
 interface IProps extends HTMLAttributes<HTMLSpanElement> {
     room: Room;

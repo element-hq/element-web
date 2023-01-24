@@ -98,21 +98,21 @@ export default class ReplyChain extends React.Component<IProps, IState> {
         return MatrixClientPeg.get();
     }
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         this.initialize();
         this.trySetExpandableQuotes();
     }
 
-    public componentDidUpdate() {
+    public componentDidUpdate(): void {
         this.props.onHeightChanged();
         this.trySetExpandableQuotes();
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         this.unmounted = true;
     }
 
-    private trySetExpandableQuotes() {
+    private trySetExpandableQuotes(): void {
         if (this.props.isQuoteExpanded === undefined && this.blockquoteRef.current) {
             const el: HTMLElement | null = this.blockquoteRef.current.querySelector(".mx_EventTile_body");
             if (el) {
@@ -199,7 +199,7 @@ export default class ReplyChain extends React.Component<IProps, IState> {
         return getUserNameColorClass(ev.getSender()).replace("Username", "ReplyChain");
     }
 
-    public render() {
+    public render(): JSX.Element {
         let header = null;
         if (this.state.err) {
             header = (

@@ -73,7 +73,7 @@ export default class Draggable extends React.Component<IProps, IState> {
         });
     }
 
-    public render() {
+    public render(): JSX.Element {
         return <div className={this.props.className} onMouseDown={this.onMouseDown} />;
     }
 }

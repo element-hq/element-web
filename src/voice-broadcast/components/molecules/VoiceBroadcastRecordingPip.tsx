@@ -16,7 +16,13 @@ limitations under the License.
 
 import React, { useRef, useState } from "react";
 
-import { VoiceBroadcastControl, VoiceBroadcastInfoState, VoiceBroadcastRecording } from "../..";
+import {
+    VoiceBroadcastControl,
+    VoiceBroadcastInfoState,
+    VoiceBroadcastRecording,
+    VoiceBroadcastRecordingConnectionError,
+    VoiceBroadcastRecordingState,
+} from "../..";
 import { useVoiceBroadcastRecording } from "../../hooks/useVoiceBroadcastRecording";
 import { VoiceBroadcastHeader } from "../atoms/VoiceBroadcastHeader";
 import { Icon as StopIcon } from "../../../../res/img/element-icons/Stop.svg";
@@ -38,17 +44,21 @@ export const VoiceBroadcastRecordingPip: React.FC<VoiceBroadcastRecordingPipProp
         useVoiceBroadcastRecording(recording);
     const { currentDevice, devices, setDevice } = useAudioDeviceSelection();
 
-    const onDeviceSelect = async (device: MediaDeviceInfo) => {
+    const onDeviceSelect = async (device: MediaDeviceInfo): Promise<void> => {
         setShowDeviceSelect(false);
 
-        if (currentDevice.deviceId === device.deviceId) {
+        if (currentDevice?.deviceId === device.deviceId) {
             // device unchanged
             return;
         }
 
         setDevice(device);
 
-        if ([VoiceBroadcastInfoState.Paused, VoiceBroadcastInfoState.Stopped].includes(recordingState)) {
+        if (
+            (
+                [VoiceBroadcastInfoState.Paused, VoiceBroadcastInfoState.Stopped] as VoiceBroadcastRecordingState[]
+            ).includes(recordingState)
+        ) {
             // Nothing to do in these cases. Resume will use the selected device.
             return;
         }
@@ -72,17 +82,27 @@ export const VoiceBroadcastRecordingPip: React.FC<VoiceBroadcastRecordingPipProp
             <VoiceBroadcastControl onClick={toggleRecording} icon={PauseIcon} label={_t("pause voice broadcast")} />
         );
 
-    return (
-        <div className="mx_VoiceBroadcastBody mx_VoiceBroadcastBody--pip" ref={pipRef}>
-            <VoiceBroadcastHeader linkToRoom={true} live={live ? "live" : "grey"} room={room} timeLeft={timeLeft} />
-            <hr className="mx_VoiceBroadcastBody_divider" />
+    const controls =
+        recordingState === "connection_error" ? (
+            <VoiceBroadcastRecordingConnectionError />
+        ) : (
             <div className="mx_VoiceBroadcastBody_controls">
                 {toggleControl}
-                <AccessibleTooltipButton onClick={() => setShowDeviceSelect(true)} title={_t("Change input device")}>
+                <AccessibleTooltipButton
+                    onClick={(): void => setShowDeviceSelect(true)}
+                    title={_t("Change input device")}
+                >
                     <MicrophoneIcon className="mx_Icon mx_Icon_16 mx_Icon_alert" />
                 </AccessibleTooltipButton>
                 <VoiceBroadcastControl icon={StopIcon} label="Stop Recording" onClick={stopRecording} />
             </div>
+        );
+
+    return (
+        <div className="mx_VoiceBroadcastBody mx_VoiceBroadcastBody--pip" ref={pipRef}>
+            <VoiceBroadcastHeader linkToRoom={true} live={live ? "live" : "grey"} room={room} timeLeft={timeLeft} />
+            <hr className="mx_VoiceBroadcastBody_divider" />
+            {controls}
             {showDeviceSelect && (
                 <DevicesContextMenu
                     containerRef={pipRef}

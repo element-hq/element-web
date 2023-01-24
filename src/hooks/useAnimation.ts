@@ -19,13 +19,13 @@ import { useCallback, useEffect, useRef } from "react";
 
 import SettingsStore from "../settings/SettingsStore";
 
-const debuglog = (...args: any[]) => {
+const debuglog = (...args: any[]): void => {
     if (SettingsStore.getValue("debug_animation")) {
         logger.log.call(console, "Animation debuglog:", ...args);
     }
 };
 
-export function useAnimation(enabled: boolean, callback: (timestamp: DOMHighResTimeStamp) => boolean) {
+export function useAnimation(enabled: boolean, callback: (timestamp: DOMHighResTimeStamp) => boolean): void {
     const handle = useRef<number | null>(null);
 
     const handler = useCallback(

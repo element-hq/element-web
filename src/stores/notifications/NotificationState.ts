@@ -87,7 +87,7 @@ export abstract class NotificationState
         return this.color >= NotificationColor.Red;
     }
 
-    protected emitIfUpdated(snapshot: NotificationStateSnapshot) {
+    protected emitIfUpdated(snapshot: NotificationStateSnapshot): void {
         if (snapshot.isDifferentFrom(this)) {
             this.emit(NotificationStateEvents.Update);
         }

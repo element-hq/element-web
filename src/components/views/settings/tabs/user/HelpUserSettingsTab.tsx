@@ -80,7 +80,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
         };
     }
 
-    private onClearCacheAndReload = (e) => {
+    private onClearCacheAndReload = (e): void => {
         if (!PlatformPeg.get()) return;
 
         // Dev note: please keep this log line, it's useful when troubleshooting a MatrixClient suddenly
@@ -94,11 +94,11 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
             });
     };
 
-    private onBugReport = (e) => {
+    private onBugReport = (e): void => {
         Modal.createDialog(BugReportDialog, {});
     };
 
-    private onStartBotChat = (e) => {
+    private onStartBotChat = (e): void => {
         this.props.closeSettingsFn();
         createRoom({
             dmUserId: SdkConfig.get("welcome_user_id"),
@@ -106,7 +106,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
         });
     };
 
-    private renderLegal() {
+    private renderLegal(): JSX.Element {
         const tocLinks = SdkConfig.get().terms_and_conditions_links;
         if (!tocLinks) return null;
 
@@ -129,7 +129,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
         );
     }
 
-    private renderCredits() {
+    private renderCredits(): JSX.Element {
         // Note: This is not translated because it is legal text.
         // Also, &nbsp; is ugly but necessary.
         return (
@@ -206,7 +206,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
         });
     };
 
-    public render() {
+    public render(): JSX.Element {
         const brand = SdkConfig.get().brand;
 
         let faqText = _t(

@@ -33,7 +33,7 @@ interface Props {
     label?: string;
 }
 
-export function StatelessNotificationBadge({ symbol, count, color, ...props }: Props) {
+export function StatelessNotificationBadge({ symbol, count, color, ...props }: Props): JSX.Element {
     const hideBold = useSettingValue("feature_hidebold");
 
     // Don't show a badge if we don't need to

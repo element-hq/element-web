@@ -45,7 +45,7 @@ export class SummarizedNotificationState extends NotificationState {
      * @param includeSymbol If true, the notification state's symbol will be taken if one
      * is present.
      */
-    public add(other: NotificationState, includeSymbol = false) {
+    public add(other: NotificationState, includeSymbol = false): void {
         if (other.symbol && includeSymbol) {
             this._symbol = other.symbol;
         }

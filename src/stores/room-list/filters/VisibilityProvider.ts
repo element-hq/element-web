@@ -33,7 +33,7 @@ export class VisibilityProvider {
         return VisibilityProvider.internalInstance;
     }
 
-    public async onNewInvitedRoom(room: Room) {
+    public async onNewInvitedRoom(room: Room): Promise<void> {
         await VoipUserMapper.sharedInstance().onNewInvitedRoom(room);
     }
 

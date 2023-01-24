@@ -52,7 +52,7 @@ export default class DownloadActionButton extends React.PureComponent<IProps, IS
         };
     }
 
-    private onDownloadClick = async () => {
+    private onDownloadClick = async (): Promise<void> => {
         if (this.state.loading) return;
 
         if (this.props.mediaEventHelperGet().media.isEncrypted) {
@@ -71,7 +71,7 @@ export default class DownloadActionButton extends React.PureComponent<IProps, IS
         await this.doDownload();
     };
 
-    private async doDownload() {
+    private async doDownload(): Promise<void> {
         await this.downloader.download({
             blob: this.state.blob,
             name: this.props.mediaEventHelperGet().fileName,
@@ -79,7 +79,7 @@ export default class DownloadActionButton extends React.PureComponent<IProps, IS
         this.setState({ loading: false });
     }
 
-    public render() {
+    public render(): JSX.Element {
         let spinner: JSX.Element;
         if (this.state.loading) {
             spinner = <Spinner w={18} h={18} />;

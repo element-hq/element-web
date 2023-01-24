@@ -51,15 +51,17 @@ interface Props {
     supportsMSC3881?: boolean | undefined;
 }
 
-const isDeviceSelected = (deviceId: ExtendedDevice["device_id"], selectedDeviceIds: ExtendedDevice["device_id"][]) =>
-    selectedDeviceIds.includes(deviceId);
+const isDeviceSelected = (
+    deviceId: ExtendedDevice["device_id"],
+    selectedDeviceIds: ExtendedDevice["device_id"][],
+): boolean => selectedDeviceIds.includes(deviceId);
 
 // devices without timestamp metadata should be sorted last
-const sortDevicesByLatestActivityThenDisplayName = (left: ExtendedDevice, right: ExtendedDevice) =>
+const sortDevicesByLatestActivityThenDisplayName = (left: ExtendedDevice, right: ExtendedDevice): number =>
     (right.last_seen_ts || 0) - (left.last_seen_ts || 0) ||
     (left.display_name || left.device_id).localeCompare(right.display_name || right.device_id);
 
-const getFilteredSortedDevices = (devices: DevicesDictionary, filter?: FilterVariation) =>
+const getFilteredSortedDevices = (devices: DevicesDictionary, filter?: FilterVariation): ExtendedDevice[] =>
     filterDevicesBySecurityRecommendation(Object.values(devices), filter ? [filter] : []).sort(
         sortDevicesByLatestActivityThenDisplayName,
     );
@@ -280,12 +282,12 @@ export const FilteredDeviceList = forwardRef(
             },
         ];
 
-        const onFilterOptionChange = (filterId: DeviceFilterKey) => {
+        const onFilterOptionChange = (filterId: DeviceFilterKey): void => {
             onFilterChange(filterId === ALL_FILTER_ID ? undefined : (filterId as FilterVariation));
         };
 
         const isAllSelected = selectedDeviceIds.length >= sortedDevices.length;
-        const toggleSelectAll = () => {
+        const toggleSelectAll = (): void => {
             if (isAllSelected) {
                 setSelectedDeviceIds([]);
             } else {

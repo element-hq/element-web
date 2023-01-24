@@ -49,7 +49,7 @@ export default class CaptchaForm extends React.Component<ICaptchaFormProps, ICap
         };
     }
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         // Just putting a script tag into the returned jsx doesn't work, annoyingly,
         // so we do this instead.
         if (this.isRecaptchaReady()) {
@@ -69,7 +69,7 @@ export default class CaptchaForm extends React.Component<ICaptchaFormProps, ICap
         }
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         this.resetRecaptcha();
     }
 
@@ -82,7 +82,7 @@ export default class CaptchaForm extends React.Component<ICaptchaFormProps, ICap
         );
     }
 
-    private renderRecaptcha(divId: string) {
+    private renderRecaptcha(divId: string): void {
         if (!this.isRecaptchaReady()) {
             logger.error("grecaptcha not loaded!");
             throw new Error("Recaptcha did not load successfully");
@@ -101,13 +101,13 @@ export default class CaptchaForm extends React.Component<ICaptchaFormProps, ICap
         });
     }
 
-    private resetRecaptcha() {
+    private resetRecaptcha(): void {
         if (this.captchaWidgetId) {
             global?.grecaptcha?.reset(this.captchaWidgetId);
         }
     }
 
-    private onCaptchaLoaded() {
+    private onCaptchaLoaded(): void {
         logger.log("Loaded recaptcha script.");
         try {
             this.renderRecaptcha(DIV_ID);
@@ -122,7 +122,7 @@ export default class CaptchaForm extends React.Component<ICaptchaFormProps, ICap
         }
     }
 
-    public render() {
+    public render(): JSX.Element {
         let error = null;
         if (this.state.errorText) {
             error = <div className="error">{this.state.errorText}</div>;

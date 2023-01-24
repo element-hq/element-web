@@ -65,7 +65,7 @@ export default class NotifProvider extends AutocompleteProvider {
         return [];
     }
 
-    public getName() {
+    public getName(): string {
         return "❗️ " + _t("Room Notification");
     }
 

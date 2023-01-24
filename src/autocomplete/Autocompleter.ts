@@ -69,7 +69,7 @@ export default class Autocompleter {
         });
     }
 
-    public destroy() {
+    public destroy(): void {
         this.providers.forEach((p) => {
             p.destroy();
         });
@@ -88,7 +88,7 @@ export default class Autocompleter {
         */
         // list of results from each provider, each being a list of completions or null if it times out
         const completionsList: ICompletion[][] = await Promise.all(
-            this.providers.map(async (provider) => {
+            this.providers.map(async (provider): Promise<ICompletion[] | null> => {
                 return timeout(
                     provider.getCompletions(query, selection, force, limit),
                     null,

@@ -32,7 +32,7 @@ interface AuthHeaderAction {
 
 export type AuthHeaderReducer = Reducer<ComponentProps<typeof AuthHeaderModifier>[], AuthHeaderAction>;
 
-export function AuthHeaderProvider({ children }: PropsWithChildren<{}>) {
+export function AuthHeaderProvider({ children }: PropsWithChildren<{}>): JSX.Element {
     const [state, dispatch] = useReducer<AuthHeaderReducer>(
         (state: ComponentProps<typeof AuthHeaderModifier>[], action: AuthHeaderAction) => {
             switch (action.type) {

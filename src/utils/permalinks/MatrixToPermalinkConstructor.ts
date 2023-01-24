@@ -47,7 +47,7 @@ export default class MatrixToPermalinkConstructor extends PermalinkConstructor {
         return testHost === host;
     }
 
-    public encodeServerCandidates(candidates: string[]) {
+    public encodeServerCandidates(candidates: string[]): string {
         if (!candidates || candidates.length === 0) return "";
         return `?via=${candidates.map((c) => encodeURIComponent(c)).join("&via=")}`;
     }

@@ -41,7 +41,7 @@ const DeviceNameEditor: React.FC<Props & { stopEditing: () => void }> = ({ devic
 
     const onInputChange = (event: React.ChangeEvent<HTMLInputElement>): void => setDeviceName(event.target.value);
 
-    const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    const onSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
         setIsLoading(true);
         setError(null);
         event.preventDefault();

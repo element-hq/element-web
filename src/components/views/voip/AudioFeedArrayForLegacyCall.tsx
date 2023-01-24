@@ -37,21 +37,21 @@ export default class AudioFeedArrayForLegacyCall extends React.Component<IProps,
         };
     }
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         this.props.call.addListener(CallEvent.FeedsChanged, this.onFeedsChanged);
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         this.props.call.removeListener(CallEvent.FeedsChanged, this.onFeedsChanged);
     }
 
-    public onFeedsChanged = () => {
+    public onFeedsChanged = (): void => {
         this.setState({
             feeds: this.props.call.getRemoteFeeds(),
         });
     };
 
-    public render() {
+    public render(): JSX.Element[] {
         return this.state.feeds.map((feed, i) => {
             return <AudioFeed feed={feed} key={i} />;
         });

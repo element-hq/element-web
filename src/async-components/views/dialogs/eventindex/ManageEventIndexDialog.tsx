@@ -56,7 +56,7 @@ export default class ManageEventIndexDialog extends React.Component<IProps, ISta
         };
     }
 
-    public updateCurrentRoom = async (room) => {
+    public updateCurrentRoom = async (room): Promise<void> => {
         const eventIndex = EventIndexPeg.get();
         let stats;
 
@@ -131,17 +131,17 @@ export default class ManageEventIndexDialog extends React.Component<IProps, ISta
         });
     }
 
-    private onDisable = async () => {
+    private onDisable = async (): Promise<void> => {
         const DisableEventIndexDialog = (await import("./DisableEventIndexDialog")).default;
         Modal.createDialog(DisableEventIndexDialog, null, null, /* priority = */ false, /* static = */ true);
     };
 
-    private onCrawlerSleepTimeChange = (e) => {
+    private onCrawlerSleepTimeChange = (e): void => {
         this.setState({ crawlerSleepTime: e.target.value });
         SettingsStore.setValue("crawlerSleepTime", null, SettingLevel.DEVICE, e.target.value);
     };
 
-    public render() {
+    public render(): JSX.Element {
         const brand = SdkConfig.get().brand;
 
         let crawlerState;

@@ -27,7 +27,7 @@ const PHONE_NUMBER_REGEXP = /^[0-9 -.]+$/;
  *     a national-format number.
  * @return True if the number could be a valid phone number, otherwise false.
  */
-export function looksValid(phoneNumber: string) {
+export function looksValid(phoneNumber: string): boolean {
     return PHONE_NUMBER_REGEXP.test(phoneNumber);
 }
 
@@ -36,7 +36,7 @@ const UNICODE_BASE = 127462 - "A".charCodeAt(0);
 // Country code should be exactly 2 uppercase characters
 const COUNTRY_CODE_REGEX = /^[A-Z]{2}$/;
 
-export const getEmojiFlag = (countryCode: string) => {
+export const getEmojiFlag = (countryCode: string): string => {
     if (!COUNTRY_CODE_REGEX.test(countryCode)) return "";
     // Rip the country code out of the emoji and use that
     return String.fromCodePoint(...countryCode.split("").map((l) => UNICODE_BASE + l.charCodeAt(0)));

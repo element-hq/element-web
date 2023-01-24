@@ -80,7 +80,7 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
         this.setState({ newSessionManagerEnabled: newValue });
     };
 
-    private getTabs() {
+    private getTabs(): Tab[] {
         const tabs: Tab[] = [];
 
         tabs.push(
@@ -164,7 +164,7 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
                 new Tab(
                     UserTab.SessionManager,
                     _td("Sessions"),
-                    "mx_UserSettingsDialog_securityIcon",
+                    "mx_UserSettingsDialog_sessionsIcon",
                     <SessionManagerTab />,
                     // don't track with posthog while under construction
                     undefined,
@@ -210,7 +210,7 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
         return tabs;
     }
 
-    public render() {
+    public render(): JSX.Element {
         return (
             <BaseDialog
                 className="mx_UserSettingsDialog"

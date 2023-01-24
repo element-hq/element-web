@@ -48,7 +48,7 @@ export class EventIndexPeg {
      * @return {Promise<boolean>} A promise that will resolve to true if an
      * EventIndex was successfully initialized, false otherwise.
      */
-    public async init() {
+    public async init(): Promise<boolean> {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
         if (!indexManager) {
             logger.log("EventIndex: Platform doesn't support event indexing, not initializing.");
@@ -76,7 +76,7 @@ export class EventIndexPeg {
      * @returns {boolean} True if the event index was successfully initialized,
      * false otherwise.
      */
-    public async initEventIndex() {
+    public async initEventIndex(): Promise<boolean> {
         const index = new EventIndex();
         const indexManager = PlatformPeg.get().getEventIndexingManager();
         const client = MatrixClientPeg.get();
@@ -141,16 +141,16 @@ export class EventIndexPeg {
      *
      * @return {EventIndex} The current event index.
      */
-    public get() {
+    public get(): EventIndex {
         return this.index;
     }
 
-    public start() {
+    public start(): void {
         if (this.index === null) return;
         this.index.startCrawler();
     }
 
-    public stop() {
+    public stop(): void {
         if (this.index === null) return;
         this.index.stopCrawler();
     }
@@ -163,7 +163,7 @@ export class EventIndexPeg {
      * @return {Promise} A promise that will resolve once the event index is
      * closed.
      */
-    public async unset() {
+    public async unset(): Promise<void> {
         if (this.index === null) return;
         await this.index.close();
         this.index = null;
@@ -177,7 +177,7 @@ export class EventIndexPeg {
      * @return {Promise} A promise that will resolve once the event index is
      * deleted.
      */
-    public async deleteEventIndex() {
+    public async deleteEventIndex(): Promise<void> {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
 
         if (indexManager !== null) {

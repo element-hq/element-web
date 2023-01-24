@@ -58,7 +58,7 @@ export class WidgetMessagingStore extends AsyncStoreWithClient<{}> {
         this.widgetMap.clear();
     }
 
-    public storeMessaging(widget: Widget, roomId: string, widgetApi: ClientWidgetApi) {
+    public storeMessaging(widget: Widget, roomId: string, widgetApi: ClientWidgetApi): void {
         this.stopMessaging(widget, roomId);
         const uid = WidgetUtils.calcWidgetUid(widget.id, roomId);
         this.widgetMap.set(uid, widgetApi);
@@ -66,7 +66,7 @@ export class WidgetMessagingStore extends AsyncStoreWithClient<{}> {
         this.emit(WidgetMessagingStoreEvent.StoreMessaging, uid, widgetApi);
     }
 
-    public stopMessaging(widget: Widget, roomId: string) {
+    public stopMessaging(widget: Widget, roomId: string): void {
         this.stopMessagingByUid(WidgetUtils.calcWidgetUid(widget.id, roomId));
     }
 
@@ -78,7 +78,7 @@ export class WidgetMessagingStore extends AsyncStoreWithClient<{}> {
      * Stops the widget messaging instance for a given widget UID.
      * @param {string} widgetUid The widget UID.
      */
-    public stopMessagingByUid(widgetUid: string) {
+    public stopMessagingByUid(widgetUid: string): void {
         this.widgetMap.remove(widgetUid)?.stop();
         this.emit(WidgetMessagingStoreEvent.StopMessaging, widgetUid);
     }

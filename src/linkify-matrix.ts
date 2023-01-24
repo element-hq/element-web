@@ -50,7 +50,7 @@ function matrixOpaqueIdLinkifyParser({
     utils: any;
     token: "#" | "+" | "@";
     name: Type;
-}) {
+}): void {
     const {
         DOT,
         // IPV4 necessity
@@ -103,7 +103,7 @@ function matrixOpaqueIdLinkifyParser({
     PORT_STATE.tt(NUM, matrixSymbol);
 }
 
-function onUserClick(event: MouseEvent, userId: string) {
+function onUserClick(event: MouseEvent, userId: string): void {
     event.preventDefault();
     const member = new RoomMember(null, userId);
     if (!member) {
@@ -115,7 +115,7 @@ function onUserClick(event: MouseEvent, userId: string) {
     });
 }
 
-function onAliasClick(event: MouseEvent, roomAlias: string) {
+function onAliasClick(event: MouseEvent, roomAlias: string): void {
     event.preventDefault();
     dis.dispatch<ViewRoomPayload>({
         action: Action.ViewRoom,

@@ -61,17 +61,17 @@ export default class WidgetCapabilitiesPromptDialog extends React.PureComponent<
         };
     }
 
-    private onToggle = (capability: Capability) => {
+    private onToggle = (capability: Capability): void => {
         const newStates = objectShallowClone(this.state.booleanStates);
         newStates[capability] = !newStates[capability];
         this.setState({ booleanStates: newStates });
     };
 
-    private onRememberSelectionChange = (newVal: boolean) => {
+    private onRememberSelectionChange = (newVal: boolean): void => {
         this.setState({ rememberSelection: newVal });
     };
 
-    private onSubmit = async (ev) => {
+    private onSubmit = async (ev): Promise<void> => {
         this.closeAndTryRemember(
             Object.entries(this.state.booleanStates)
                 .filter(([_, isSelected]) => isSelected)
@@ -79,15 +79,15 @@ export default class WidgetCapabilitiesPromptDialog extends React.PureComponent<
         );
     };
 
-    private onReject = async (ev) => {
+    private onReject = async (ev): Promise<void> => {
         this.closeAndTryRemember([]); // nothing was approved
     };
 
-    private closeAndTryRemember(approved: Capability[]) {
+    private closeAndTryRemember(approved: Capability[]): void {
         this.props.onFinished({ approved, remember: this.state.rememberSelection });
     }
 
-    public render() {
+    public render(): JSX.Element {
         // We specifically order the timeline capabilities down to the bottom. The capability text
         // generation cares strongly about this.
         const orderedCapabilities = Object.entries(this.state.booleanStates).sort(([capA], [capB]) => {

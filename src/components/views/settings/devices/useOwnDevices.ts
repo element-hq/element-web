@@ -135,7 +135,7 @@ export const useOwnDevices = (): DevicesState => {
         });
     }, [matrixClient]);
 
-    const refreshDevices = useCallback(async () => {
+    const refreshDevices = useCallback(async (): Promise<void> => {
         setIsLoadingDeviceList(true);
         try {
             const devices = await fetchDevicesWithVerification(matrixClient, userId);
@@ -200,7 +200,7 @@ export const useOwnDevices = (): DevicesState => {
 
     const requestDeviceVerification =
         isCurrentDeviceVerified && userId
-            ? async (deviceId: ExtendedDevice["device_id"]) => {
+            ? async (deviceId: ExtendedDevice["device_id"]): Promise<VerificationRequest> => {
                   return await matrixClient.requestVerification(userId, [deviceId]);
               }
             : undefined;

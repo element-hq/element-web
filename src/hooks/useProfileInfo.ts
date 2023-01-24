@@ -29,7 +29,12 @@ export interface IProfileInfo {
     display_name?: string;
 }
 
-export const useProfileInfo = () => {
+export const useProfileInfo = (): {
+    ready: boolean;
+    loading: boolean;
+    profile: IProfileInfo | null;
+    search(opts: IProfileInfoOpts): Promise<boolean>;
+} => {
     const [profile, setProfile] = useState<IProfileInfo | null>(null);
 
     const [loading, setLoading] = useState(false);

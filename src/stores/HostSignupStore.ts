@@ -37,13 +37,13 @@ export class HostSignupStore extends AsyncStore<IState> {
         return this.state.hostSignupActive;
     }
 
-    public async setHostSignupActive(status: boolean) {
+    public async setHostSignupActive(status: boolean): Promise<void> {
         return this.updateState({
             hostSignupActive: status,
         });
     }
 
-    protected onDispatch(payload: ActionPayload) {
+    protected onDispatch(payload: ActionPayload): void {
         // Nothing to do
     }
 }

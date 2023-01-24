@@ -72,7 +72,7 @@ export default class DateSeparator extends React.Component<IProps, IState> {
         );
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         SettingsStore.unwatchSetting(this.settingWatcherRef);
     }
 
@@ -218,7 +218,7 @@ export default class DateSeparator extends React.Component<IProps, IState> {
         );
     }
 
-    public render() {
+    public render(): JSX.Element {
         const label = this.getLabel();
 
         let dateHeaderContent;

@@ -1,5 +1,5 @@
 /*
-Copyright 2022 The Matrix.org Foundation C.I.C.
+Copyright 2022-2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -29,6 +29,8 @@ import ThreadView from "../../../src/components/structures/ThreadView";
 import MatrixClientContext from "../../../src/contexts/MatrixClientContext";
 import RoomContext from "../../../src/contexts/RoomContext";
 import { SdkContextClass } from "../../../src/contexts/SDKContext";
+import { Action } from "../../../src/dispatcher/actions";
+import dispatcher from "../../../src/dispatcher/dispatcher";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 import DMRoomMap from "../../../src/utils/DMRoomMap";
 import ResizeNotifier from "../../../src/utils/ResizeNotifier";
@@ -47,7 +49,7 @@ describe("ThreadView", () => {
 
     let changeEvent: (event: MatrixEvent) => void;
 
-    function TestThreadView() {
+    function TestThreadView({ initialEvent }: { initialEvent?: MatrixEvent }) {
         const [event, setEvent] = useState(rootEvent);
         changeEvent = setEvent;
 
@@ -58,15 +60,21 @@ describe("ThreadView", () => {
                         canSendMessages: true,
                     })}
                 >
-                    <ThreadView room={room} onClose={jest.fn()} mxEvent={event} resizeNotifier={new ResizeNotifier()} />
+                    <ThreadView
+                        room={room}
+                        onClose={jest.fn()}
+                        mxEvent={event}
+                        initialEvent={initialEvent}
+                        resizeNotifier={new ResizeNotifier()}
+                    />
                 </RoomContext.Provider>
                 ,
             </MatrixClientContext.Provider>
         );
     }
 
-    async function getComponent(): Promise<RenderResult> {
-        const renderResult = render(<TestThreadView />);
+    async function getComponent(initialEvent?: MatrixEvent): Promise<RenderResult> {
+        const renderResult = render(<TestThreadView initialEvent={initialEvent} />);
 
         await waitFor(() => {
             expect(() => getByTestId(renderResult.container, "spinner")).toThrow();
@@ -170,5 +178,18 @@ describe("ThreadView", () => {
 
         unmount();
         await waitFor(() => expect(SdkContextClass.instance.roomViewStore.getThreadId()).toBeNull());
+    });
+
+    it("clears highlight message in the room view store", async () => {
+        jest.spyOn(SdkContextClass.instance.roomViewStore, "getRoomId").mockReturnValue(room.roomId);
+        const mock = jest.spyOn(dispatcher, "dispatch");
+        const { unmount } = await getComponent(rootEvent);
+        mock.mockClear();
+        unmount();
+        expect(mock).toHaveBeenCalledWith({
+            action: Action.ViewRoom,
+            room_id: room.roomId,
+            metricsTrigger: undefined,
+        });
     });
 });

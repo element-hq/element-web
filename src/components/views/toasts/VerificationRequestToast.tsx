@@ -54,7 +54,7 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
         this.state = { counter: Math.ceil(props.request.timeout / 1000) };
     }
 
-    public async componentDidMount() {
+    public async componentDidMount(): Promise<void> {
         const { request } = this.props;
         if (request.timeout && request.timeout > 0) {
             this.intervalHandle = window.setInterval(() => {
@@ -83,20 +83,20 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
         }
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         clearInterval(this.intervalHandle);
         const { request } = this.props;
         request.off(VerificationRequestEvent.Change, this.checkRequestIsPending);
     }
 
-    private checkRequestIsPending = () => {
+    private checkRequestIsPending = (): void => {
         const { request } = this.props;
         if (!request.canAccept) {
             ToastStore.sharedInstance().dismissToast(this.props.toastKey);
         }
     };
 
-    public cancel = () => {
+    public cancel = (): void => {
         ToastStore.sharedInstance().dismissToast(this.props.toastKey);
         try {
             this.props.request.cancel();
@@ -105,7 +105,7 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
         }
     };
 
-    public accept = async () => {
+    public accept = async (): Promise<void> => {
         ToastStore.sharedInstance().dismissToast(this.props.toastKey);
         const { request } = this.props;
         // no room id for to_device requests
@@ -148,7 +148,7 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
         }
     };
 
-    public render() {
+    public render(): JSX.Element {
         const { request } = this.props;
         let description;
         let detail;

@@ -52,7 +52,11 @@ interface IProps {
     onFinished(added?: boolean): void;
 }
 
-export const Entry = ({ room, checked, onChange }) => {
+export const Entry: React.FC<{
+    room: Room;
+    checked: boolean;
+    onChange(value: boolean): void;
+}> = ({ room, checked, onChange }) => {
     return (
         <label className="mx_AddExistingToSpace_entry">
             {room?.isSpaceRoom() ? (
@@ -62,7 +66,7 @@ export const Entry = ({ room, checked, onChange }) => {
             )}
             <span className="mx_AddExistingToSpace_entry_name">{room.name}</span>
             <StyledCheckbox
-                onChange={onChange ? (e) => onChange(e.target.checked) : null}
+                onChange={onChange ? (e) => onChange(e.currentTarget.checked) : null}
                 checked={checked}
                 disabled={!onChange}
             />
@@ -183,7 +187,7 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
         );
     }, [visibleRooms, space, lcQuery, existingRoomsSet, existingSubspacesSet]);
 
-    const addRooms = async () => {
+    const addRooms = async (): Promise<void> => {
         setError(null);
         setProgress(0);
 
@@ -192,10 +196,11 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
         for (const room of selectedToAdd) {
             const via = calculateRoomVia(room);
             try {
-                await SpaceStore.instance.addRoomToSpace(space, room.roomId, via).catch(async (e) => {
+                await SpaceStore.instance.addRoomToSpace(space, room.roomId, via).catch(async (e): Promise<void> => {
                     if (e.errcode === "M_LIMIT_EXCEEDED") {
                         await sleep(e.data.retry_after_ms);
-                        return SpaceStore.instance.addRoomToSpace(space, room.roomId, via); // retry
+                        await SpaceStore.instance.addRoomToSpace(space, room.roomId, via); // retry
+                        return;
                     }
 
                     throw e;
@@ -291,7 +296,7 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
         noResults = false;
     }
 
-    const onScroll = () => {
+    const onScroll = (): void => {
         const body = scrollRef.current?.containerRef.current;
         setScrollState({
             scrollTop: body.scrollTop,
@@ -299,7 +304,7 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
         });
     };
 
-    const wrappedRef = (body: HTMLDivElement) => {
+    const wrappedRef = (body: HTMLDivElement): void => {
         setScrollState({
             scrollTop: body.scrollTop,
             height: body.clientHeight,
@@ -382,7 +387,7 @@ interface ISubspaceSelectorProps {
     onChange(space: Room): void;
 }
 
-export const SubspaceSelector = ({ title, space, value, onChange }: ISubspaceSelectorProps) => {
+export const SubspaceSelector: React.FC<ISubspaceSelectorProps> = ({ title, space, value, onChange }) => {
     const options = useMemo(() => {
         return [
             space,

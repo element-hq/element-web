@@ -34,7 +34,7 @@ export class VoiceBroadcastResumer implements IDestroyable {
         }
     }
 
-    private onClientSync = () => {
+    private onClientSync = (): void => {
         if (this.client.getSyncState() === SyncState.Syncing) {
             this.client.off(ClientEvent.Sync, this.onClientSync);
             this.resume();

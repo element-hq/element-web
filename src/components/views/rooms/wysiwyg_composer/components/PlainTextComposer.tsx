@@ -47,7 +47,7 @@ export function PlainTextComposer({
     initialContent,
     leftComponent,
     rightComponent,
-}: PlainTextComposerProps) {
+}: PlainTextComposerProps): JSX.Element {
     const { ref, onInput, onPaste, onKeyDown, content, setContent } = usePlainTextListeners(
         initialContent,
         onChange,

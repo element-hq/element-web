@@ -50,7 +50,7 @@ export default class ThemeWatcher {
         this.currentTheme = this.getEffectiveTheme();
     }
 
-    public start() {
+    public start(): void {
         this.themeWatchRef = SettingsStore.watchSetting("theme", null, this.onChange);
         this.systemThemeWatchRef = SettingsStore.watchSetting("use_system_theme", null, this.onChange);
         if (this.preferDark.addEventListener) {
@@ -61,7 +61,7 @@ export default class ThemeWatcher {
         this.dispatcherRef = dis.register(this.onAction);
     }
 
-    public stop() {
+    public stop(): void {
         if (this.preferDark.addEventListener) {
             this.preferDark.removeEventListener("change", this.onChange);
             this.preferLight.removeEventListener("change", this.onChange);
@@ -72,11 +72,11 @@ export default class ThemeWatcher {
         dis.unregister(this.dispatcherRef);
     }
 
-    private onChange = () => {
+    private onChange = (): void => {
         this.recheck();
     };
 
-    private onAction = (payload: ActionPayload) => {
+    private onAction = (payload: ActionPayload): void => {
         if (payload.action === Action.RecheckTheme) {
             // XXX forceTheme
             this.recheck(payload.forceTheme);
@@ -85,7 +85,7 @@ export default class ThemeWatcher {
 
     // XXX: forceTheme param added here as local echo appears to be unreliable
     // https://github.com/vector-im/element-web/issues/11443
-    public recheck(forceTheme?: string) {
+    public recheck(forceTheme?: string): void {
         const oldTheme = this.currentTheme;
         this.currentTheme = forceTheme === undefined ? this.getEffectiveTheme() : forceTheme;
         if (oldTheme !== this.currentTheme) {
@@ -144,7 +144,7 @@ export default class ThemeWatcher {
         return SettingsStore.getValue("theme");
     }
 
-    private themeBasedOnSystem() {
+    private themeBasedOnSystem(): string {
         let newTheme: string;
         if (this.preferDark.matches) {
             newTheme = "dark";
@@ -160,7 +160,7 @@ export default class ThemeWatcher {
         return newTheme;
     }
 
-    public isSystemThemeSupported() {
+    public isSystemThemeSupported(): boolean {
         return this.preferDark.matches || this.preferLight.matches;
     }
 }

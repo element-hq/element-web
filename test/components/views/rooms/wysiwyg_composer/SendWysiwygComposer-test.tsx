@@ -153,7 +153,7 @@ describe("SendWysiwygComposer", () => {
                 // When we send the right action
                 defaultDispatcher.dispatch({
                     action: Action.ClearAndFocusSendMessageComposer,
-                    context: null,
+                    timelineRenderingType: defaultRoomContext.timelineRenderingType,
                 });
 
                 // Then the component gets the focus

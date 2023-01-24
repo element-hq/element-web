@@ -31,7 +31,7 @@ import AccessibleButton from "../elements/AccessibleButton";
 // The maximum number of reactions to initially show on a message.
 const MAX_ITEMS_WHEN_LIMITED = 8;
 
-const ReactButton = ({ mxEvent, reactions }: IProps) => {
+const ReactButton: React.FC<IProps> = ({ mxEvent, reactions }) => {
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
 
     let contextMenu;
@@ -91,7 +91,7 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
         };
     }
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         const { mxEvent, reactions } = this.props;
 
         if (mxEvent.isBeingDecrypted() || mxEvent.shouldAttemptDecryption()) {
@@ -105,7 +105,7 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
         }
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         const { mxEvent, reactions } = this.props;
 
         mxEvent.off(MatrixEventEvent.Decrypted, this.onDecrypted);
@@ -117,7 +117,7 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
         }
     }
 
-    public componentDidUpdate(prevProps: IProps) {
+    public componentDidUpdate(prevProps: IProps): void {
         if (this.props.reactions && prevProps.reactions !== this.props.reactions) {
             this.props.reactions.on(RelationsEvent.Add, this.onReactionsChange);
             this.props.reactions.on(RelationsEvent.Remove, this.onReactionsChange);
@@ -126,12 +126,12 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
         }
     }
 
-    private onDecrypted = () => {
+    private onDecrypted = (): void => {
         // Decryption changes whether the event is actionable
         this.forceUpdate();
     };
 
-    private onReactionsChange = () => {
+    private onReactionsChange = (): void => {
         // TODO: Call `onHeightChanged` as needed
         this.setState({
             myReactions: this.getMyReactions(),
@@ -142,7 +142,7 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
         this.forceUpdate();
     };
 
-    private getMyReactions() {
+    private getMyReactions(): MatrixEvent[] {
         const reactions = this.props.reactions;
         if (!reactions) {
             return null;
@@ -155,13 +155,13 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
         return [...myReactions.values()];
     }
 
-    private onShowAllClick = () => {
+    private onShowAllClick = (): void => {
         this.setState({
             showAll: true,
         });
     };
 
-    public render() {
+    public render(): JSX.Element {
         const { mxEvent, reactions } = this.props;
         const { myReactions, showAll } = this.state;
 

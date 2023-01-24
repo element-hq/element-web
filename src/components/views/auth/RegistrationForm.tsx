@@ -115,7 +115,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         };
     }
 
-    private onSubmit = async (ev) => {
+    private onSubmit = async (ev): Promise<void> => {
         ev.preventDefault();
         ev.persist();
 
@@ -129,7 +129,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         if (this.state.email === "") {
             if (this.showEmail()) {
                 Modal.createDialog(RegistrationEmailPromptDialog, {
-                    onFinished: async (confirmed: boolean, email?: string) => {
+                    onFinished: async (confirmed: boolean, email?: string): Promise<void> => {
                         if (confirmed) {
                             this.setState(
                                 {
@@ -152,7 +152,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         }
     };
 
-    private doSubmit(ev) {
+    private doSubmit(ev): void {
         PosthogAnalytics.instance.setAuthenticationType("Password");
 
         const email = this.state.email.trim();
@@ -173,7 +173,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         }
     }
 
-    private async verifyFieldsBeforeSubmit() {
+    private async verifyFieldsBeforeSubmit(): Promise<boolean> {
         // Blur the active element if any, so we first run its blur validation,
         // which is less strict than the pass we're about to do below for all fields.
         const activeElement = document.activeElement as HTMLElement;
@@ -231,7 +231,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         return Object.values(this.state.fieldValid).every(Boolean);
     }
 
-    private findFirstInvalidField(fieldIDs: RegistrationField[]) {
+    private findFirstInvalidField(fieldIDs: RegistrationField[]): Field | null {
         for (const fieldID of fieldIDs) {
             if (!this.state.fieldValid[fieldID] && this[fieldID]) {
                 return this[fieldID];
@@ -240,7 +240,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         return null;
     }
 
-    private markFieldValid(fieldID: RegistrationField, valid: boolean) {
+    private markFieldValid(fieldID: RegistrationField, valid: boolean): void {
         const { fieldValid } = this.state;
         fieldValid[fieldID] = valid;
         this.setState({
@@ -248,13 +248,13 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         });
     }
 
-    private onEmailChange = (ev) => {
+    private onEmailChange = (ev): void => {
         this.setState({
             email: ev.target.value.trim(),
         });
     };
 
-    private onEmailValidate = (result: IValidationResult) => {
+    private onEmailValidate = (result: IValidationResult): void => {
         this.markFieldValid(RegistrationField.Email, result.valid);
     };
 
@@ -277,39 +277,39 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         ],
     });
 
-    private onPasswordChange = (ev) => {
+    private onPasswordChange = (ev): void => {
         this.setState({
             password: ev.target.value,
         });
     };
 
-    private onPasswordValidate = (result) => {
+    private onPasswordValidate = (result: IValidationResult): void => {
         this.markFieldValid(RegistrationField.Password, result.valid);
     };
 
-    private onPasswordConfirmChange = (ev) => {
+    private onPasswordConfirmChange = (ev): void => {
         this.setState({
             passwordConfirm: ev.target.value,
         });
     };
 
-    private onPasswordConfirmValidate = (result: IValidationResult) => {
+    private onPasswordConfirmValidate = (result: IValidationResult): void => {
         this.markFieldValid(RegistrationField.PasswordConfirm, result.valid);
     };
 
-    private onPhoneCountryChange = (newVal) => {
+    private onPhoneCountryChange = (newVal): void => {
         this.setState({
             phoneCountry: newVal.iso2,
         });
     };
 
-    private onPhoneNumberChange = (ev) => {
+    private onPhoneNumberChange = (ev): void => {
         this.setState({
             phoneNumber: ev.target.value,
         });
     };
 
-    private onPhoneNumberValidate = async (fieldState) => {
+    private onPhoneNumberValidate = async (fieldState): Promise<IValidationResult> => {
         const result = await this.validatePhoneNumberRules(fieldState);
         this.markFieldValid(RegistrationField.PhoneNumber, result.valid);
         return result;
@@ -334,13 +334,13 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         ],
     });
 
-    private onUsernameChange = (ev) => {
+    private onUsernameChange = (ev): void => {
         this.setState({
             username: ev.target.value,
         });
     };
 
-    private onUsernameValidate = async (fieldState) => {
+    private onUsernameValidate = async (fieldState): Promise<IValidationResult> => {
         const result = await this.validateUsernameRules(fieldState);
         this.markFieldValid(RegistrationField.Username, result.valid);
         return result;
@@ -384,7 +384,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
             {
                 key: "available",
                 final: true,
-                test: async ({ value }, usernameAvailable) => {
+                test: async ({ value }, usernameAvailable): Promise<boolean> => {
                     if (!value) {
                         return true;
                     }
@@ -405,7 +405,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
      * @param {string} step A stage name to check
      * @returns {boolean} Whether it is required
      */
-    private authStepIsRequired(step: string) {
+    private authStepIsRequired(step: string): boolean {
         return this.props.flows.every((flow) => {
             return flow.stages.includes(step);
         });
@@ -417,20 +417,20 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
      * @param {string} step A stage name to check
      * @returns {boolean} Whether it is used
      */
-    private authStepIsUsed(step: string) {
+    private authStepIsUsed(step: string): boolean {
         return this.props.flows.some((flow) => {
             return flow.stages.includes(step);
         });
     }
 
-    private showEmail() {
+    private showEmail(): boolean {
         if (!this.authStepIsUsed("m.login.email.identity")) {
             return false;
         }
         return true;
     }
 
-    private showPhoneNumber() {
+    private showPhoneNumber(): boolean {
         const threePidLogin = !SdkConfig.get().disable_3pid_login;
         if (!threePidLogin || !this.authStepIsUsed("m.login.msisdn")) {
             return false;
@@ -438,7 +438,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         return true;
     }
 
-    private renderEmail() {
+    private renderEmail(): JSX.Element {
         if (!this.showEmail()) {
             return null;
         }
@@ -455,7 +455,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         );
     }
 
-    private renderPassword() {
+    private renderPassword(): JSX.Element {
         return (
             <PassphraseField
                 id="mx_RegistrationForm_password"
@@ -468,7 +468,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         );
     }
 
-    public renderPasswordConfirm() {
+    public renderPasswordConfirm(): JSX.Element {
         return (
             <PassphraseConfirmField
                 id="mx_RegistrationForm_passwordConfirm"
@@ -482,7 +482,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         );
     }
 
-    public renderPhoneNumber() {
+    public renderPhoneNumber(): JSX.Element {
         if (!this.showPhoneNumber()) {
             return null;
         }
@@ -508,7 +508,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         );
     }
 
-    public renderUsername() {
+    public renderUsername(): JSX.Element {
         return (
             <Field
                 id="mx_RegistrationForm_username"
@@ -524,7 +524,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         );
     }
 
-    public render() {
+    public render(): JSX.Element {
         const registerButton = (
             <input className="mx_Login_submit" type="submit" value={_t("Register")} disabled={!this.props.canSubmit} />
         );

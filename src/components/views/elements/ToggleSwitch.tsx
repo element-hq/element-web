@@ -38,8 +38,8 @@ interface IProps {
 }
 
 // Controlled Toggle Switch element, written with Accessibility in mind
-export default ({ checked, disabled = false, title, tooltip, onChange, ...props }: IProps) => {
-    const _onClick = () => {
+export default ({ checked, disabled = false, title, tooltip, onChange, ...props }: IProps): JSX.Element => {
+    const _onClick = (): void => {
         if (disabled) return;
         onChange(!checked);
     };

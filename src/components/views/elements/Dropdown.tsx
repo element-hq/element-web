@@ -39,17 +39,17 @@ class MenuOption extends React.Component<IMenuOptionProps> {
         disabled: false,
     };
 
-    private onMouseEnter = () => {
+    private onMouseEnter = (): void => {
         this.props.onMouseEnter(this.props.dropdownKey);
     };
 
-    private onClick = (e: React.MouseEvent) => {
+    private onClick = (e: React.MouseEvent): void => {
         e.preventDefault();
         e.stopPropagation();
         this.props.onClick(this.props.dropdownKey);
     };
 
-    public render() {
+    public render(): JSX.Element {
         const optClasses = classnames({
             mx_Dropdown_option: true,
             mx_Dropdown_option_highlight: this.props.highlighted,
@@ -139,7 +139,7 @@ export default class Dropdown extends React.Component<DropdownProps, IState> {
         document.addEventListener("click", this.onDocumentClick, false);
     }
 
-    public componentDidUpdate(prevProps: Readonly<DropdownProps>) {
+    public componentDidUpdate(prevProps: Readonly<DropdownProps>): void {
         if (objectHasDiff(this.props, prevProps) && this.props.children?.length) {
             this.reindexChildren(this.props.children);
             const firstChild = this.props.children[0];
@@ -149,7 +149,7 @@ export default class Dropdown extends React.Component<DropdownProps, IState> {
         }
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         document.removeEventListener("click", this.onDocumentClick, false);
     }
 
@@ -160,7 +160,7 @@ export default class Dropdown extends React.Component<DropdownProps, IState> {
         });
     }
 
-    private onDocumentClick = (ev: MouseEvent) => {
+    private onDocumentClick = (ev: MouseEvent): void => {
         // Close the dropdown if the user clicks anywhere that isn't
         // within our root element
         if (ev !== this.ignoreEvent) {
@@ -170,7 +170,7 @@ export default class Dropdown extends React.Component<DropdownProps, IState> {
         }
     };
 
-    private onRootClick = (ev: MouseEvent) => {
+    private onRootClick = (ev: MouseEvent): void => {
         // This captures any clicks that happen within our elements,
         // such that we can then ignore them when they're seen by the
         // click listener on the document handler, ie. not close the
@@ -180,7 +180,7 @@ export default class Dropdown extends React.Component<DropdownProps, IState> {
         this.ignoreEvent = ev;
     };
 
-    private onAccessibleButtonClick = (ev: ButtonEvent) => {
+    private onAccessibleButtonClick = (ev: ButtonEvent): void => {
         if (this.props.disabled) return;
 
         const action = getKeyBindingsManager().getAccessibilityAction(ev as React.KeyboardEvent);
@@ -199,7 +199,7 @@ export default class Dropdown extends React.Component<DropdownProps, IState> {
         }
     };
 
-    private close() {
+    private close(): void {
         this.setState({
             expanded: false,
         });
@@ -209,12 +209,12 @@ export default class Dropdown extends React.Component<DropdownProps, IState> {
         }
     }
 
-    private onMenuOptionClick = (dropdownKey: string) => {
+    private onMenuOptionClick = (dropdownKey: string): void => {
         this.close();
         this.props.onOptionChange(dropdownKey);
     };
 
-    private onKeyDown = (e: React.KeyboardEvent) => {
+    private onKeyDown = (e: React.KeyboardEvent): void => {
         let handled = true;
 
         // These keys don't generate keypress events and so needs to be on keyup
@@ -254,7 +254,7 @@ export default class Dropdown extends React.Component<DropdownProps, IState> {
         }
     };
 
-    private onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    private onInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
         this.setState({
             searchQuery: e.currentTarget.value,
         });
@@ -263,7 +263,7 @@ export default class Dropdown extends React.Component<DropdownProps, IState> {
         }
     };
 
-    private collectRoot = (e: HTMLDivElement) => {
+    private collectRoot = (e: HTMLDivElement): void => {
         if (this.dropdownRootElement) {
             this.dropdownRootElement.removeEventListener("click", this.onRootClick, false);
         }
@@ -273,7 +273,7 @@ export default class Dropdown extends React.Component<DropdownProps, IState> {
         this.dropdownRootElement = e;
     };
 
-    private setHighlightedOption = (optionKey: string) => {
+    private setHighlightedOption = (optionKey: string): void => {
         this.setState({
             highlightedOption: optionKey,
         });
@@ -291,7 +291,7 @@ export default class Dropdown extends React.Component<DropdownProps, IState> {
         return keys[index <= 0 ? keys.length - 1 : (index - 1) % keys.length];
     }
 
-    private scrollIntoView(node: Element) {
+    private scrollIntoView(node: Element): void {
         if (node) {
             node.scrollIntoView({
                 block: "nearest",
@@ -300,7 +300,7 @@ export default class Dropdown extends React.Component<DropdownProps, IState> {
         }
     }
 
-    private getMenuOptions() {
+    private getMenuOptions(): JSX.Element[] {
         const options = React.Children.map(this.props.children, (child: ReactElement) => {
             const highlighted = this.state.highlightedOption === child.key;
             return (
@@ -327,7 +327,7 @@ export default class Dropdown extends React.Component<DropdownProps, IState> {
         return options;
     }
 
-    public render() {
+    public render(): JSX.Element {
         let currentValue;
 
         const menuStyle: CSSProperties = {};

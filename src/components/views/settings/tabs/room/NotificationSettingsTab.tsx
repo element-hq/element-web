@@ -140,12 +140,12 @@ export default class NotificationsSettingsTab extends React.Component<IProps, IS
         });
     };
 
-    private onRoomNotificationChange = (value: RoomNotifState) => {
+    private onRoomNotificationChange = (value: RoomNotifState): void => {
         this.roomProps.notificationVolume = value;
         this.forceUpdate();
     };
 
-    private onOpenSettingsClick = (event: ButtonEvent) => {
+    private onOpenSettingsClick = (event: ButtonEvent): void => {
         // avoid selecting the radio button
         event.preventDefault();
         this.props.closeSettingsFn();

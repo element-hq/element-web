@@ -28,7 +28,7 @@ interface IProps {
 interface IState {}
 
 export default class HostSignupAction extends React.PureComponent<IProps, IState> {
-    private openDialog = async () => {
+    private openDialog = async (): Promise<void> => {
         this.props.onClick?.();
         await HostSignupStore.instance.setHostSignupActive(true);
     };

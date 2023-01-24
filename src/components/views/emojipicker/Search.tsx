@@ -30,12 +30,12 @@ interface IProps {
 class Search extends React.PureComponent<IProps> {
     private inputRef = React.createRef<HTMLInputElement>();
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         // For some reason, neither the autoFocus nor just calling focus() here worked, so here's a window.setTimeout
         window.setTimeout(() => this.inputRef.current.focus(), 0);
     }
 
-    private onKeyDown = (ev: React.KeyboardEvent) => {
+    private onKeyDown = (ev: React.KeyboardEvent): void => {
         const action = getKeyBindingsManager().getAccessibilityAction(ev);
         switch (action) {
             case KeyBindingAction.Enter:
@@ -46,7 +46,7 @@ class Search extends React.PureComponent<IProps> {
         }
     };
 
-    public render() {
+    public render(): JSX.Element {
         let rightButton;
         if (this.props.query) {
             rightButton = (

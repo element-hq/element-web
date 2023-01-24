@@ -24,7 +24,7 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import RoomContext from "../../../contexts/RoomContext";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { _t } from "../../../languageHandler";
-import AccessibleButton from "../elements/AccessibleButton";
+import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
 import MiniAvatarUploader, { AVATAR_SIZE } from "../elements/MiniAvatarUploader";
 import RoomAvatar from "../avatars/RoomAvatar";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
@@ -46,7 +46,7 @@ function hasExpectedEncryptionSettings(matrixClient: MatrixClient, room: Room): 
     return isPublic || !privateShouldBeEncrypted() || isEncrypted;
 }
 
-const NewRoomIntro = () => {
+const NewRoomIntro: React.FC = () => {
     const cli = useContext(MatrixClientContext);
     const { room, roomId } = useContext(RoomContext);
 
@@ -100,7 +100,7 @@ const NewRoomIntro = () => {
         const topic = room.currentState.getStateEvents(EventType.RoomTopic, "")?.getContent()?.topic;
         const canAddTopic = inRoom && room.currentState.maySendStateEvent(EventType.RoomTopic, cli.getUserId());
 
-        const onTopicClick = () => {
+        const onTopicClick = (): void => {
             defaultDispatcher.dispatch(
                 {
                     action: "open_room_settings",
@@ -244,7 +244,7 @@ const NewRoomIntro = () => {
         );
     }
 
-    function openRoomSettings(event) {
+    function openRoomSettings(event: ButtonEvent): void {
         event.preventDefault();
         defaultDispatcher.dispatch({
             action: "open_room_settings",

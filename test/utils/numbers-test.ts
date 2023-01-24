@@ -160,5 +160,9 @@ describe("numbers", () => {
             const result = percentageOf(14.28, 10.2, 20.4);
             expect(result).toBe(0.4);
         });
+
+        it("should return 0 for values that cause a division by zero", () => {
+            expect(percentageOf(0, 0, 0)).toBe(0);
+        });
     });
 });

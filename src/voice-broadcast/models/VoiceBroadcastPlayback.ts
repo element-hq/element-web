@@ -25,6 +25,7 @@ import {
 import { TypedEventEmitter } from "matrix-js-sdk/src/models/typed-event-emitter";
 import { SimpleObservable } from "matrix-widget-api";
 import { logger } from "matrix-js-sdk/src/logger";
+import { defer, IDeferred } from "matrix-js-sdk/src/utils";
 
 import { Playback, PlaybackInterface, PlaybackState } from "../../audio/Playback";
 import { PlaybackManager } from "../../audio/PlaybackManager";
@@ -42,12 +43,14 @@ import {
 import { RelationsHelper, RelationsHelperEvent } from "../../events/RelationsHelper";
 import { VoiceBroadcastChunkEvents } from "../utils/VoiceBroadcastChunkEvents";
 import { determineVoiceBroadcastLiveness } from "../utils/determineVoiceBroadcastLiveness";
+import { _t } from "../../languageHandler";
 
 export enum VoiceBroadcastPlaybackState {
-    Paused,
-    Playing,
-    Stopped,
-    Buffering,
+    Paused = "pause",
+    Playing = "playing",
+    Stopped = "stopped",
+    Buffering = "buffering",
+    Error = "error",
 }
 
 export enum VoiceBroadcastPlaybackEvent {
@@ -57,7 +60,7 @@ export enum VoiceBroadcastPlaybackEvent {
     InfoStateChanged = "info_state_changed",
 }
 
-type VoiceBroadcastPlaybackTimes = {
+export type VoiceBroadcastPlaybackTimes = {
     duration: number;
     position: number;
     timeLeft: number;
@@ -95,6 +98,9 @@ export class VoiceBroadcastPlayback
     // set via setUpRelationsHelper() in constructor
     private chunkRelationHelper!: RelationsHelper;
     private infoRelationHelper!: RelationsHelper;
+
+    private skipToNext?: number;
+    private skipToDeferred?: IDeferred<void>;
 
     public constructor(
         public readonly infoEvent: MatrixEvent,
@@ -193,7 +199,7 @@ export class VoiceBroadcastPlayback
         this.setInfoState(state);
     };
 
-    private onBeforeRedaction = () => {
+    private onBeforeRedaction = (): void => {
         if (this.getState() !== VoiceBroadcastPlaybackState.Stopped) {
             this.stop();
             // destroy cleans up everything
@@ -201,12 +207,24 @@ export class VoiceBroadcastPlayback
         }
     };
 
+    private async tryLoadPlayback(chunkEvent: MatrixEvent): Promise<void> {
+        try {
+            return await this.loadPlayback(chunkEvent);
+        } catch (err) {
+            logger.warn("Unable to load broadcast playback", {
+                message: err.message,
+                broadcastId: this.infoEvent.getId(),
+                chunkId: chunkEvent.getId(),
+            });
+            this.setError();
+        }
+    }
+
     private async loadPlayback(chunkEvent: MatrixEvent): Promise<void> {
         const eventId = chunkEvent.getId();
 
         if (!eventId) {
-            logger.warn("got voice broadcast chunk event without ID", this.infoEvent, chunkEvent);
-            return;
+            throw new Error("Broadcast chunk event without Id occurred");
         }
 
         const helper = new MediaEventHelper(chunkEvent);
@@ -307,16 +325,28 @@ export class VoiceBroadcastPlayback
     private async playEvent(event: MatrixEvent): Promise<void> {
         this.setState(VoiceBroadcastPlaybackState.Playing);
         this.currentlyPlaying = event;
-        const playback = await this.getOrLoadPlaybackForEvent(event);
+        const playback = await this.tryGetOrLoadPlaybackForEvent(event);
         playback?.play();
+    }
+
+    private async tryGetOrLoadPlaybackForEvent(event: MatrixEvent): Promise<Playback | undefined> {
+        try {
+            return await this.getOrLoadPlaybackForEvent(event);
+        } catch (err) {
+            logger.warn("Unable to load broadcast playback", {
+                message: err.message,
+                broadcastId: this.infoEvent.getId(),
+                chunkId: event.getId(),
+            });
+            this.setError();
+        }
     }
 
     private async getOrLoadPlaybackForEvent(event: MatrixEvent): Promise<Playback | undefined> {
         const eventId = event.getId();
 
         if (!eventId) {
-            logger.warn("event without id occurred");
-            return;
+            throw new Error("Broadcast chunk event without Id occurred");
         }
 
         if (!this.playbacks.has(eventId)) {
@@ -326,13 +356,12 @@ export class VoiceBroadcastPlayback
         const playback = this.playbacks.get(eventId);
 
         if (!playback) {
-            // logging error, because this should not happen
-            logger.warn("unable to find playback for event", event);
+            throw new Error(`Unable to find playback for event ${event.getId()}`);
         }
 
         // try to load the playback for the next event for a smooth(er) playback
         const nextEvent = this.chunkEvents.getNext(event);
-        if (nextEvent) this.loadPlayback(nextEvent);
+        if (nextEvent) this.tryLoadPlayback(nextEvent);
 
         return playback;
     }
@@ -370,6 +399,28 @@ export class VoiceBroadcastPlayback
     }
 
     public async skipTo(timeSeconds: number): Promise<void> {
+        this.skipToNext = timeSeconds;
+
+        if (this.skipToDeferred) {
+            // Skip to position is already in progress. Return the promise for that.
+            return this.skipToDeferred.promise;
+        }
+
+        this.skipToDeferred = defer();
+
+        while (this.skipToNext !== undefined) {
+            // Skip to position until skipToNext is undefined.
+            // skipToNext can be set if skipTo is called while already skipping.
+            const skipToNext = this.skipToNext;
+            this.skipToNext = undefined;
+            await this.doSkipTo(skipToNext);
+        }
+
+        this.skipToDeferred.resolve();
+        this.skipToDeferred = undefined;
+    }
+
+    private async doSkipTo(timeSeconds: number): Promise<void> {
         const time = timeSeconds * 1000;
         const event = this.chunkEvents.findByTime(time);
 
@@ -379,7 +430,8 @@ export class VoiceBroadcastPlayback
         }
 
         const currentPlayback = this.getCurrentPlayback();
-        const skipToPlayback = await this.getOrLoadPlaybackForEvent(event);
+        const skipToPlayback = await this.tryGetOrLoadPlaybackForEvent(event);
+        const currentPlaybackEvent = this.currentlyPlaying;
 
         if (!skipToPlayback) {
             logger.warn("voice broadcast chunk to skip to not found", event);
@@ -388,10 +440,12 @@ export class VoiceBroadcastPlayback
 
         this.currentlyPlaying = event;
 
-        if (currentPlayback && currentPlayback !== skipToPlayback) {
+        if (currentPlayback && currentPlaybackEvent && currentPlayback !== skipToPlayback) {
+            // only stop and unload the playback here without triggering other effects, e.g. play next
             currentPlayback.off(UPDATE_EVENT, this.onPlaybackStateChange);
             await currentPlayback.stop();
             currentPlayback.on(UPDATE_EVENT, this.onPlaybackStateChange);
+            this.unloadPlayback(currentPlaybackEvent);
         }
 
         const offsetInChunk = time - this.chunkEvents.getLengthTo(event);
@@ -435,6 +489,9 @@ export class VoiceBroadcastPlayback
     }
 
     public stop(): void {
+        // error is a final state
+        if (this.getState() === VoiceBroadcastPlaybackState.Error) return;
+
         this.setState(VoiceBroadcastPlaybackState.Stopped);
         this.getCurrentPlayback()?.stop();
         this.currentlyPlaying = null;
@@ -442,6 +499,9 @@ export class VoiceBroadcastPlayback
     }
 
     public pause(): void {
+        // error is a final state
+        if (this.getState() === VoiceBroadcastPlaybackState.Error) return;
+
         // stopped voice broadcasts cannot be paused
         if (this.getState() === VoiceBroadcastPlaybackState.Stopped) return;
 
@@ -450,6 +510,9 @@ export class VoiceBroadcastPlayback
     }
 
     public resume(): void {
+        // error is a final state
+        if (this.getState() === VoiceBroadcastPlaybackState.Error) return;
+
         if (!this.currentlyPlaying) {
             // no playback to resume, start from the beginning
             this.start();
@@ -466,7 +529,10 @@ export class VoiceBroadcastPlayback
      * playing → paused
      * paused → playing
      */
-    public async toggle() {
+    public async toggle(): Promise<void> {
+        // error is a final state
+        if (this.getState() === VoiceBroadcastPlaybackState.Error) return;
+
         if (this.state === VoiceBroadcastPlaybackState.Stopped) {
             await this.start();
             return;
@@ -485,12 +551,25 @@ export class VoiceBroadcastPlayback
     }
 
     private setState(state: VoiceBroadcastPlaybackState): void {
+        // error is a final state
+        if (this.getState() === VoiceBroadcastPlaybackState.Error) return;
+
         if (this.state === state) {
             return;
         }
 
         this.state = state;
         this.emit(VoiceBroadcastPlaybackEvent.StateChanged, state, this);
+    }
+
+    /**
+     * Set error state. Stop current playback, if any.
+     */
+    private setError(): void {
+        this.setState(VoiceBroadcastPlaybackState.Error);
+        this.getCurrentPlayback()?.stop();
+        this.currentlyPlaying = null;
+        this.setPosition(0);
     }
 
     public getInfoState(): VoiceBroadcastInfoState {
@@ -505,6 +584,10 @@ export class VoiceBroadcastPlayback
         this.infoState = state;
         this.emit(VoiceBroadcastPlaybackEvent.InfoStateChanged, state);
         this.setLiveness(determineVoiceBroadcastLiveness(this.infoState));
+    }
+
+    public get errorMessage(): string {
+        return this.getState() === VoiceBroadcastPlaybackState.Error ? _t("Unable to play this voice broadcast") : "";
     }
 
     public destroy(): void {

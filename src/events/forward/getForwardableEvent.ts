@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { M_POLL_START } from "matrix-events-sdk";
+import { M_POLL_START } from "matrix-js-sdk/src/@types/polls";
 import { M_BEACON_INFO } from "matrix-js-sdk/src/@types/beacon";
 import { MatrixEvent, MatrixClient } from "matrix-js-sdk/src/matrix";
 

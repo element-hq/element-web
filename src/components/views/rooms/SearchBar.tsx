@@ -51,15 +51,15 @@ export default class SearchBar extends React.Component<IProps, IState> {
         };
     }
 
-    private onThisRoomClick = () => {
+    private onThisRoomClick = (): void => {
         this.setState({ scope: SearchScope.Room }, () => this.searchIfQuery());
     };
 
-    private onAllRoomsClick = () => {
+    private onAllRoomsClick = (): void => {
         this.setState({ scope: SearchScope.All }, () => this.searchIfQuery());
     };
 
-    private onSearchChange = (e: React.KeyboardEvent) => {
+    private onSearchChange = (e: React.KeyboardEvent): void => {
         const action = getKeyBindingsManager().getAccessibilityAction(e);
         switch (action) {
             case KeyBindingAction.Enter:
@@ -82,7 +82,7 @@ export default class SearchBar extends React.Component<IProps, IState> {
         this.props.onSearch(this.searchTerm.current.value, this.state.scope);
     };
 
-    public render() {
+    public render(): JSX.Element {
         const searchButtonClasses = classNames("mx_SearchBar_searchButton", {
             mx_SearchBar_searching: this.props.searchInProgress,
         });

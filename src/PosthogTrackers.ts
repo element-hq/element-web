@@ -107,20 +107,20 @@ export default class PosthogTrackers {
 }
 
 export class PosthogScreenTracker extends PureComponent<{ screenName: ScreenName }> {
-    public componentDidMount() {
+    public componentDidMount(): void {
         PosthogTrackers.instance.trackOverride(this.props.screenName);
     }
 
-    public componentDidUpdate() {
+    public componentDidUpdate(): void {
         // We do not clear the old override here so that we do not send the non-override screen as a transition
         PosthogTrackers.instance.trackOverride(this.props.screenName);
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         PosthogTrackers.instance.clearOverride(this.props.screenName);
     }
 
-    public render() {
+    public render(): JSX.Element {
         return null; // no need to render anything, we just need to hook into the React lifecycle
     }
 }

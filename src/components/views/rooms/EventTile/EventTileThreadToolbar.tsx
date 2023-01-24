@@ -29,7 +29,7 @@ export function EventTileThreadToolbar({
 }: {
     viewInRoom: (evt: ButtonEvent) => void;
     copyLinkToThread: (evt: ButtonEvent) => void;
-}) {
+}): JSX.Element {
     return (
         <Toolbar className="mx_MessageActionBar" aria-label={_t("Message Actions")} aria-live="off">
             <RovingAccessibleTooltipButton

@@ -17,7 +17,7 @@ limitations under the License.
 import { Room } from "matrix-js-sdk/src/models/room";
 import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { M_POLL_START } from "matrix-events-sdk";
+import { M_POLL_START } from "matrix-js-sdk/src/@types/polls";
 
 import { ActionPayload } from "../../dispatcher/payloads";
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
@@ -142,7 +142,7 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
         return previewDef?.previewer.getTextFor(event, null, true) ?? "";
     }
 
-    private async generatePreview(room: Room, tagId?: TagID) {
+    private async generatePreview(room: Room, tagId?: TagID): Promise<void> {
         const events = room.timeline;
         if (!events) return; // should only happen in tests
 
@@ -205,7 +205,7 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
         this.emit(MessagePreviewStore.getPreviewChangedEventName(room), room);
     }
 
-    protected async onAction(payload: ActionPayload) {
+    protected async onAction(payload: ActionPayload): Promise<void> {
         if (!this.matrixClient) return;
 
         if (payload.action === "MatrixActions.Room.timeline" || payload.action === "MatrixActions.Event.decrypted") {

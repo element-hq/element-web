@@ -25,7 +25,7 @@ import { getBeaconMsUntilExpiry } from "../../../utils/beacon";
 
 const MINUTE_MS = 60000;
 const HOUR_MS = MINUTE_MS * 60;
-const getUpdateInterval = (ms: number) => {
+const getUpdateInterval = (ms: number): number => {
     // every 10 mins when more than an hour
     if (ms > HOUR_MS) {
         return MINUTE_MS * 10;

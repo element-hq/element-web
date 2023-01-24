@@ -61,7 +61,7 @@ export class Jitsi {
         return null;
     }
 
-    public start() {
+    public start(): void {
         const cli = MatrixClientPeg.get();
         cli.on(ClientEvent.ClientWellKnown, this.update);
         // call update initially in case we missed the first WellKnown.client event and for if no well-known present

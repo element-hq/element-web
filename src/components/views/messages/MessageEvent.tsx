@@ -18,7 +18,7 @@ import React, { createRef } from "react";
 import { EventType, MsgType } from "matrix-js-sdk/src/@types/event";
 import { M_BEACON_INFO } from "matrix-js-sdk/src/@types/beacon";
 import { M_LOCATION } from "matrix-js-sdk/src/@types/location";
-import { M_POLL_START } from "matrix-events-sdk";
+import { M_POLL_START } from "matrix-js-sdk/src/@types/polls";
 import { MatrixEventEvent } from "matrix-js-sdk/src/models/event";
 
 import SettingsStore from "../../../settings/SettingsStore";
@@ -100,12 +100,12 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
         this.props.mxEvent.addListener(MatrixEventEvent.Decrypted, this.onDecrypted);
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         this.props.mxEvent.removeListener(MatrixEventEvent.Decrypted, this.onDecrypted);
         this.mediaHelper?.destroy();
     }
 
-    public componentDidUpdate(prevProps: Readonly<IProps>) {
+    public componentDidUpdate(prevProps: Readonly<IProps>): void {
         if (this.props.mxEvent !== prevProps.mxEvent && MediaEventHelper.isEligible(this.props.mxEvent)) {
             this.mediaHelper?.destroy();
             this.mediaHelper = new MediaEventHelper(this.props.mxEvent);
@@ -114,7 +114,7 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
         this.updateComponentMaps();
     }
 
-    private updateComponentMaps() {
+    private updateComponentMaps(): void {
         this.bodyTypes = new Map<string, typeof React.Component>(baseBodyTypes.entries());
         for (const [bodyType, bodyComponent] of Object.entries(this.props.overrideBodyTypes ?? {})) {
             this.bodyTypes.set(bodyType, bodyComponent);
@@ -126,11 +126,11 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
         }
     }
 
-    public getEventTileOps = () => {
+    public getEventTileOps = (): IEventTileOps | null => {
         return (this.body.current as IOperableEventTile)?.getEventTileOps?.() || null;
     };
 
-    public getMediaHelper() {
+    public getMediaHelper(): MediaEventHelper {
         return this.mediaHelper;
     }
 
@@ -142,11 +142,11 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
         }
     };
 
-    private onTileUpdate = () => {
+    private onTileUpdate = (): void => {
         this.forceUpdate();
     };
 
-    public render() {
+    public render(): JSX.Element {
         const content = this.props.mxEvent.getContent();
         const type = this.props.mxEvent.getType();
         const msgtype = content.msgtype;

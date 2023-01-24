@@ -40,7 +40,7 @@ export class BlurhashEncoder {
         this.worker.onmessage = this.onMessage;
     }
 
-    private onMessage = (ev: MessageEvent<IBlurhashWorkerResponse>) => {
+    private onMessage = (ev: MessageEvent<IBlurhashWorkerResponse>): void => {
         const { seq, blurhash } = ev.data;
         const deferred = this.pendingDeferredMap.get(seq);
         if (deferred) {

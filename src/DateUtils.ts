@@ -188,7 +188,7 @@ export function wantsDateSeparator(prevEventDate: Date, nextEventDate: Date): bo
     return prevEventDate.getDay() !== nextEventDate.getDay();
 }
 
-export function formatFullDateNoDay(date: Date) {
+export function formatFullDateNoDay(date: Date): string {
     return _t("%(date)s at %(time)s", {
         date: date.toLocaleDateString().replace(/\//g, "-"),
         time: date.toLocaleTimeString().replace(/:/g, "-"),
@@ -205,7 +205,7 @@ export function formatFullDateNoDayISO(date: Date): string {
     return date.toISOString();
 }
 
-export function formatFullDateNoDayNoTime(date: Date) {
+export function formatFullDateNoDayNoTime(date: Date): string {
     return date.getFullYear() + "/" + pad(date.getMonth() + 1) + "/" + pad(date.getDate());
 }
 

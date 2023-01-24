@@ -64,7 +64,7 @@ export default class UserProvider extends AutocompleteProvider {
         MatrixClientPeg.get().on(RoomStateEvent.Update, this.onRoomStateUpdate);
     }
 
-    public destroy() {
+    public destroy(): void {
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener(RoomEvent.Timeline, this.onRoomTimeline);
             MatrixClientPeg.get().removeListener(RoomStateEvent.Update, this.onRoomStateUpdate);
@@ -77,7 +77,7 @@ export default class UserProvider extends AutocompleteProvider {
         toStartOfTimeline: boolean,
         removed: boolean,
         data: IRoomTimelineData,
-    ) => {
+    ): void => {
         if (!room) return; // notification timeline, we'll get this event again with a room specific timeline
         if (removed) return;
         if (room.roomId !== this.room.roomId) return;
@@ -93,7 +93,7 @@ export default class UserProvider extends AutocompleteProvider {
         this.onUserSpoke(ev.sender);
     };
 
-    private onRoomStateUpdate = (state: RoomState) => {
+    private onRoomStateUpdate = (state: RoomState): void => {
         // ignore updates in other rooms
         if (state.roomId !== this.room.roomId) return;
 
@@ -150,7 +150,7 @@ export default class UserProvider extends AutocompleteProvider {
         return _t("Users");
     }
 
-    private makeUsers() {
+    private makeUsers(): void {
         const events = this.room.getLiveTimeline().getEvents();
         const lastSpoken = {};
 
@@ -167,7 +167,7 @@ export default class UserProvider extends AutocompleteProvider {
         this.matcher.setObjects(this.users);
     }
 
-    public onUserSpoke(user: RoomMember) {
+    public onUserSpoke(user: RoomMember): void {
         if (!this.users) return;
         if (!user) return;
         if (user.userId === MatrixClientPeg.get().credentials.userId) return;

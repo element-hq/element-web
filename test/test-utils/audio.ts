@@ -22,7 +22,7 @@ import { PlaybackClock } from "../../src/audio/PlaybackClock";
 import { UPDATE_EVENT } from "../../src/stores/AsyncStore";
 import { PublicInterface } from "../@types/common";
 
-export const createTestPlayback = (): Playback => {
+export const createTestPlayback = (overrides: Partial<Playback> = {}): Playback => {
     const eventEmitter = new EventEmitter();
 
     return {
@@ -63,6 +63,7 @@ export const createTestPlayback = (): Playback => {
         liveData: new SimpleObservable<number[]>(),
         durationSeconds: 31415,
         timeSeconds: 3141,
+        ...overrides,
     } as PublicInterface<Playback> as Playback;
 };
 

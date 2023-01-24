@@ -33,7 +33,7 @@ export interface IEmoji {
 const UNICODE_TO_EMOJI = new Map<string, IEmoji>(); // not exported as gets for it are handled by getEmojiFromUnicode
 export const EMOTICON_TO_EMOJI = new Map<string, IEmoji>();
 
-export const getEmojiFromUnicode = (unicode) => UNICODE_TO_EMOJI.get(stripVariation(unicode));
+export const getEmojiFromUnicode = (unicode: string): IEmoji => UNICODE_TO_EMOJI.get(stripVariation(unicode));
 
 const isRegionalIndicator = (x: string): boolean => {
     // First verify that the string is a single character. We use Array.from
@@ -120,6 +120,6 @@ export const EMOJI: IEmoji[] = EMOJIBASE.map((emojiData: Omit<IEmoji, "shortcode
  * @param {string} str string to strip
  * @returns {string} stripped string
  */
-function stripVariation(str) {
+function stripVariation(str: string): string {
     return str.replace(/[\uFE00-\uFE0F]$/, "");
 }

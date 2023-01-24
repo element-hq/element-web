@@ -114,12 +114,12 @@ const Tile: React.FC<ITileProps> = ({
     const [onFocus, isActive, ref] = useRovingTabIndex();
     const [busy, setBusy] = useState(false);
 
-    const onPreviewClick = (ev: ButtonEvent) => {
+    const onPreviewClick = (ev: ButtonEvent): void => {
         ev.preventDefault();
         ev.stopPropagation();
         onViewRoomClick();
     };
-    const onJoinClick = async (ev: ButtonEvent) => {
+    const onJoinClick = async (ev: ButtonEvent): Promise<void> => {
         setBusy(true);
         ev.preventDefault();
         ev.stopPropagation();
@@ -271,7 +271,7 @@ const Tile: React.FC<ITileProps> = ({
         );
 
         if (showChildren) {
-            const onChildrenKeyDown = (e) => {
+            const onChildrenKeyDown = (e): void => {
                 const action = getKeyBindingsManager().getAccessibilityAction(e);
                 switch (action) {
                     case KeyBindingAction.ArrowLeft:
@@ -439,7 +439,7 @@ const toLocalRoom = (cli: MatrixClient, room: IHierarchyRoom): IHierarchyRoom =>
     return room;
 };
 
-export const HierarchyLevel = ({
+export const HierarchyLevel: React.FC<IHierarchyLevelProps> = ({
     root,
     roomSet,
     hierarchy,
@@ -448,7 +448,7 @@ export const HierarchyLevel = ({
     onViewRoomClick,
     onJoinRoomClick,
     onToggleClick,
-}: IHierarchyLevelProps) => {
+}) => {
     const cli = useContext(MatrixClientContext);
     const space = cli.getRoom(root.room_id);
     const hasPermissions = space?.currentState.maySendStateEvent(EventType.SpaceChild, cli.getUserId());
@@ -553,7 +553,7 @@ export const useRoomHierarchy = (
     });
 
     const loadMore = useCallback(
-        async (pageSize?: number) => {
+        async (pageSize?: number): Promise<void> => {
             if (hierarchy.loading || !hierarchy.canLoadMore || hierarchy.noSupport || error) return;
             await hierarchy.load(pageSize).catch(setError);
             setRooms(hierarchy.rooms);
@@ -578,8 +578,8 @@ export const useRoomHierarchy = (
     };
 };
 
-const useIntersectionObserver = (callback: () => void) => {
-    const handleObserver = (entries: IntersectionObserverEntry[]) => {
+const useIntersectionObserver = (callback: () => void): ((element: HTMLDivElement) => void) => {
+    const handleObserver = (entries: IntersectionObserverEntry[]): void => {
         const target = entries[0];
         if (target.isIntersecting) {
             callback();
@@ -610,7 +610,7 @@ interface IManageButtonsProps {
     setError: Dispatch<SetStateAction<string>>;
 }
 
-const ManageButtons = ({ hierarchy, selected, setSelected, setError }: IManageButtonsProps) => {
+const ManageButtons: React.FC<IManageButtonsProps> = ({ hierarchy, selected, setSelected, setError }) => {
     const cli = useContext(MatrixClientContext);
 
     const [removing, setRemoving] = useState(false);
@@ -645,7 +645,7 @@ const ManageButtons = ({ hierarchy, selected, setSelected, setError }: IManageBu
         <>
             <Button
                 {...props}
-                onClick={async () => {
+                onClick={async (): Promise<void> => {
                     setRemoving(true);
                     try {
                         const userId = cli.getUserId();
@@ -680,7 +680,7 @@ const ManageButtons = ({ hierarchy, selected, setSelected, setError }: IManageBu
             </Button>
             <Button
                 {...props}
-                onClick={async () => {
+                onClick={async (): Promise<void> => {
                     setSaving(true);
                     try {
                         for (const [parentId, childId] of selectedRelations) {
@@ -713,7 +713,7 @@ const ManageButtons = ({ hierarchy, selected, setSelected, setError }: IManageBu
     );
 };
 
-const SpaceHierarchy = ({ space, initialText = "", showRoom, additionalButtons }: IProps) => {
+const SpaceHierarchy: React.FC<IProps> = ({ space, initialText = "", showRoom, additionalButtons }) => {
     const cli = useContext(MatrixClientContext);
     const [query, setQuery] = useState(initialText);
 

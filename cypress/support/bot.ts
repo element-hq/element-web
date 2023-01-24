@@ -150,7 +150,14 @@ function setupBotClient(
                     if (opts.bootstrapCrossSigning) {
                         await cli.bootstrapCrossSigning({
                             authUploadDeviceSigningKeys: async (func) => {
-                                await func({});
+                                await func({
+                                    type: "m.login.password",
+                                    identifier: {
+                                        type: "m.id.user",
+                                        user: credentials.userId,
+                                    },
+                                    password: credentials.password,
+                                });
                             },
                         });
                     }

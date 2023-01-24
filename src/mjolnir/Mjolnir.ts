@@ -47,7 +47,7 @@ export class Mjolnir {
         return this._lists;
     }
 
-    public start() {
+    public start(): void {
         this.mjolnirWatchRef = SettingsStore.watchSetting("mjolnirRooms", null, this.onListsChanged.bind(this));
 
         this.dispatcherRef = dis.register(this.onAction);
@@ -57,20 +57,20 @@ export class Mjolnir {
         });
     }
 
-    private onAction = (payload: ActionPayload) => {
+    private onAction = (payload: ActionPayload): void => {
         if (payload["action"] === "setup_mjolnir") {
             logger.log("Setting up Mjolnir: after sync");
             this.setup();
         }
     };
 
-    public setup() {
+    public setup(): void {
         if (!MatrixClientPeg.get()) return;
         this.updateLists(SettingsStore.getValue("mjolnirRooms"));
         MatrixClientPeg.get().on(RoomStateEvent.Events, this.onEvent);
     }
 
-    public stop() {
+    public stop(): void {
         if (this.mjolnirWatchRef) {
             SettingsStore.unwatchSetting(this.mjolnirWatchRef);
             this.mjolnirWatchRef = null;
@@ -125,19 +125,19 @@ export class Mjolnir {
         return list;
     }
 
-    public async subscribeToList(roomId: string) {
+    public async subscribeToList(roomId: string): Promise<void> {
         const roomIds = [...this._roomIds, roomId];
         await SettingsStore.setValue("mjolnirRooms", null, SettingLevel.ACCOUNT, roomIds);
         this._lists.push(new BanList(roomId));
     }
 
-    public async unsubscribeFromList(roomId: string) {
+    public async unsubscribeFromList(roomId: string): Promise<void> {
         const roomIds = this._roomIds.filter((r) => r !== roomId);
         await SettingsStore.setValue("mjolnirRooms", null, SettingLevel.ACCOUNT, roomIds);
         this._lists = this._lists.filter((b) => b.roomId !== roomId);
     }
 
-    private onEvent = (event: MatrixEvent) => {
+    private onEvent = (event: MatrixEvent): void => {
         if (!MatrixClientPeg.get()) return;
         if (!this._roomIds.includes(event.getRoomId())) return;
         if (!ALL_RULE_TYPES.includes(event.getType())) return;
@@ -145,12 +145,12 @@ export class Mjolnir {
         this.updateLists(this._roomIds);
     };
 
-    private onListsChanged(settingName: string, roomId: string, atLevel: SettingLevel, newValue: string[]) {
+    private onListsChanged(settingName: string, roomId: string, atLevel: SettingLevel, newValue: string[]): void {
         // We know that ban lists are only recorded at one level so we don't need to re-eval them
         this.updateLists(newValue);
     }
 
-    private updateLists(listRoomIds: string[]) {
+    private updateLists(listRoomIds: string[]): void {
         if (!MatrixClientPeg.get()) return;
 
         logger.log("Updating Mjolnir ban lists to: " + listRoomIds);

@@ -102,7 +102,7 @@ export default function AccessibleButton<T extends keyof JSX.IntrinsicElements>(
     onKeyUp,
     triggerOnMouseDown,
     ...restProps
-}: IProps<T>) {
+}: IProps<T>): JSX.Element {
     const newProps: IAccessibleButtonProps = restProps;
     if (disabled) {
         newProps["aria-disabled"] = true;

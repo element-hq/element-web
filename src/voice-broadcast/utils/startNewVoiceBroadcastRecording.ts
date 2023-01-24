@@ -44,7 +44,7 @@ const startBroadcast = async (
 
     let result: ISendEventResponse | null = null;
 
-    const onRoomStateEvents = () => {
+    const onRoomStateEvents = (): void => {
         if (!result) return;
 
         const voiceBroadcastEvent = room.currentState.getStateEvents(VoiceBroadcastInfoEventType, userId);

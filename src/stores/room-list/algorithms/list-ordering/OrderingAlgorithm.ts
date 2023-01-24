@@ -45,7 +45,7 @@ export abstract class OrderingAlgorithm {
      * @param newAlgorithm The new algorithm. Must be defined.
      * @returns Resolves when complete.
      */
-    public setSortAlgorithm(newAlgorithm: SortAlgorithm) {
+    public setSortAlgorithm(newAlgorithm: SortAlgorithm): void {
         if (!newAlgorithm) throw new Error("A sorting algorithm must be defined");
         this.sortingAlgorithm = newAlgorithm;
 

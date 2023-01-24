@@ -25,6 +25,7 @@ limitations under the License.
     }
 
     .mx_WysiwygComposer_Editor_content {
+        line-height: $font-22px;
         white-space: pre-wrap;
         word-wrap: break-word;
         outline: none;
@@ -34,6 +35,52 @@ limitations under the License.
         /* navigated through in a single keypress */
         .caretNode {
             user-select: all;
+        }
+
+        ul,
+        ol {
+            margin-top: 0;
+            margin-bottom: 0;
+            padding-inline-start: $spacing-28;
+        }
+
+        blockquote {
+            color: #777;
+            border-left: 2px solid $blockquote-bar-color;
+            border-radius: 2px;
+            padding: 0 10px;
+
+            margin-block-start: 0;
+            margin-block-end: 0;
+            margin-inline-start: 0;
+            margin-inline-end: 0;
+        }
+
+        // model output always includes a linebreak but we do not want the user
+        // to see it when writing input in lists
+        :is(ol, ul, pre, blockquote) + br:last-of-type {
+            display: none;
+        }
+
+        > pre {
+            font-size: $font-15px;
+            line-height: $font-24px;
+
+            margin-top: 0;
+            margin-bottom: 0;
+            padding: $spacing-8 $spacing-12;
+
+            background-color: $inlinecode-background-color;
+            border: 1px solid $inlinecode-border-color;
+            border-radius: 2px;
+        }
+
+        code {
+            font-family: $monospace-font-family !important;
+            background-color: $inlinecode-background-color;
+            border: 1px solid $inlinecode-border-color;
+            border-radius: 4px;
+            padding: $spacing-2;
         }
     }
 

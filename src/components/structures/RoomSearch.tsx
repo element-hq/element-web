@@ -39,15 +39,15 @@ export default class RoomSearch extends React.PureComponent<IProps> {
         this.dispatcherRef = defaultDispatcher.register(this.onAction);
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         defaultDispatcher.unregister(this.dispatcherRef);
     }
 
-    private openSpotlight() {
+    private openSpotlight(): void {
         Modal.createDialog(SpotlightDialog, {}, "mx_SpotlightDialog_wrapper", false, true);
     }
 
-    private onAction = (payload: ActionPayload) => {
+    private onAction = (payload: ActionPayload): void => {
         if (payload.action === "focus_room_filter") {
             this.openSpotlight();
         }

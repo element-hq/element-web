@@ -22,11 +22,17 @@ import { useEffect, useRef, useState } from "react";
  * @param {boolean} defaultValue Default value
  * @param {number} timeoutMs Time after that the value will be reset
  */
-export const useTimeoutToggle = (defaultValue: boolean, timeoutMs: number) => {
+export const useTimeoutToggle = (
+    defaultValue: boolean,
+    timeoutMs: number,
+): {
+    value: boolean;
+    toggle(): void;
+} => {
     const timeoutId = useRef<number | undefined>();
     const [value, setValue] = useState<boolean>(defaultValue);
 
-    const toggle = () => {
+    const toggle = (): void => {
         setValue(!defaultValue);
         timeoutId.current = window.setTimeout(() => setValue(defaultValue), timeoutMs);
     };

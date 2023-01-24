@@ -33,11 +33,11 @@ interface IProps {
     setTopic(topic: string): void;
 }
 
-export const SpaceAvatar = ({
+export const SpaceAvatar: React.FC<Pick<IProps, "avatarUrl" | "avatarDisabled" | "setAvatar">> = ({
     avatarUrl,
     avatarDisabled = false,
     setAvatar,
-}: Pick<IProps, "avatarUrl" | "avatarDisabled" | "setAvatar">) => {
+}) => {
     const avatarUploadRef = useRef<HTMLInputElement>();
     const [avatar, setAvatarDataUrl] = useState(avatarUrl); // avatar data url cache
 
@@ -112,7 +112,7 @@ export const SpaceAvatar = ({
     );
 };
 
-const SpaceBasicSettings = ({
+const SpaceBasicSettings: React.FC<IProps> = ({
     avatarUrl,
     avatarDisabled = false,
     setAvatar,
@@ -122,7 +122,7 @@ const SpaceBasicSettings = ({
     topic = "",
     topicDisabled = false,
     setTopic,
-}: IProps) => {
+}) => {
     return (
         <div className="mx_SpaceBasicSettings">
             <SpaceAvatar avatarUrl={avatarUrl} avatarDisabled={avatarDisabled} setAvatar={setAvatar} />

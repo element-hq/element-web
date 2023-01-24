@@ -68,7 +68,7 @@ export class SpaceFilterCondition extends EventEmitter implements IFilterConditi
         }
     };
 
-    public updateSpace(space: SpaceKey) {
+    public updateSpace(space: SpaceKey): void {
         SpaceStore.instance.off(this.space, this.onStoreUpdate);
         SpaceStore.instance.on((this.space = space), this.onStoreUpdate);
         this.onStoreUpdate(true); // initial update from the change to the space

@@ -23,7 +23,7 @@ import SettingsFlag from "../elements/SettingsFlag";
 
 const SETTING_MANUALLY_VERIFY_ALL_SESSIONS = "e2ee.manuallyVerifyAllSessions";
 
-const E2eAdvancedPanel = (props) => {
+const E2eAdvancedPanel: React.FC = () => {
     return (
         <div className="mx_SettingsTab_section">
             <span className="mx_SettingsTab_subheading">{_t("Encryption")}</span>

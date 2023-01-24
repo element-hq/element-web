@@ -15,6 +15,21 @@ exports[`SeekBar when rendering a SeekBar and the playback proceeds should rende
 </div>
 `;
 
+exports[`SeekBar when rendering a SeekBar for an empty playback should render correctly 1`] = `
+<div>
+  <input
+    class="mx_SeekBar"
+    max="1"
+    min="0"
+    step="0.001"
+    style="--fillTo: 0;"
+    tabindex="0"
+    type="range"
+    value="0"
+  />
+</div>
+`;
+
 exports[`SeekBar when rendering a SeekBar should render the initial position 1`] = `
 <div>
   <input

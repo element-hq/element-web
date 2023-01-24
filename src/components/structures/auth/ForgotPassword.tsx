@@ -110,11 +110,11 @@ export default class ForgotPassword extends React.Component<Props, State> {
         this.reset = new PasswordReset(this.props.serverConfig.hsUrl, this.props.serverConfig.isUrl);
     }
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         this.checkServerCapabilities(this.props.serverConfig);
     }
 
-    public componentDidUpdate(prevProps: Readonly<Props>) {
+    public componentDidUpdate(prevProps: Readonly<Props>): void {
         if (
             prevProps.serverConfig.hsUrl !== this.props.serverConfig.hsUrl ||
             prevProps.serverConfig.isUrl !== this.props.serverConfig.isUrl
@@ -159,7 +159,7 @@ export default class ForgotPassword extends React.Component<Props, State> {
         });
     }
 
-    private async onPhaseEmailInputSubmit() {
+    private async onPhaseEmailInputSubmit(): Promise<void> {
         this.phase = Phase.SendingEmail;
 
         if (await this.sendVerificationMail()) {
@@ -213,7 +213,7 @@ export default class ForgotPassword extends React.Component<Props, State> {
         });
     }
 
-    private async onPhaseEmailSentSubmit() {
+    private async onPhaseEmailSentSubmit(): Promise<void> {
         this.setState({
             phase: Phase.PasswordInput,
         });
@@ -258,9 +258,12 @@ export default class ForgotPassword extends React.Component<Props, State> {
         }
 
         this.phase = Phase.ResettingPassword;
+        this.reset.setLogoutDevices(this.state.logoutDevices);
 
         try {
             await this.reset.setNewPassword(this.state.password);
+            this.setState({ phase: Phase.Done });
+            return;
         } catch (err: any) {
             if (err.httpStatus !== 401) {
                 // 401 = waiting for email verification, else unknown error
@@ -288,7 +291,7 @@ export default class ForgotPassword extends React.Component<Props, State> {
             false,
             false,
             {
-                onBeforeClose: async (reason?: string) => {
+                onBeforeClose: async (reason?: string): Promise<boolean> => {
                     if (reason === "backgroundClick") {
                         // Modal dismissed by clicking the background.
                         // Go one phase back.
@@ -342,7 +345,7 @@ export default class ForgotPassword extends React.Component<Props, State> {
         }
     };
 
-    private onInputChanged = (stateKey: string, ev: React.FormEvent<HTMLInputElement>) => {
+    private onInputChanged = (stateKey: string, ev: React.FormEvent<HTMLInputElement>): void => {
         let value = ev.currentTarget.value;
         if (stateKey === "email") value = value.trim();
         this.setState({
@@ -460,7 +463,7 @@ export default class ForgotPassword extends React.Component<Props, State> {
         );
     }
 
-    public renderDone() {
+    public renderDone(): JSX.Element {
         return (
             <>
                 <CheckboxIcon className="mx_Icon mx_Icon_32 mx_Icon_accent" />
@@ -484,7 +487,7 @@ export default class ForgotPassword extends React.Component<Props, State> {
         );
     }
 
-    public render() {
+    public render(): JSX.Element {
         let resetPasswordJsx: JSX.Element;
 
         switch (this.state.phase) {

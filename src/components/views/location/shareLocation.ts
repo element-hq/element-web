@@ -107,7 +107,7 @@ const handleShareError = (error: Error, openMenu: () => void, shareType: Locatio
 
 export const shareLiveLocation =
     (client: MatrixClient, roomId: string, displayName: string, openMenu: () => void): ShareLocationFn =>
-    async ({ timeout }) => {
+    async ({ timeout }): Promise<void> => {
         const description = _t(`%(displayName)s's live location`, { displayName });
         try {
             await OwnBeaconStore.instance.createLiveBeacon(
@@ -132,7 +132,7 @@ export const shareLocation =
         relation: IEventRelation | undefined,
         openMenu: () => void,
     ): ShareLocationFn =>
-    async ({ uri, timestamp }) => {
+    async ({ uri, timestamp }): Promise<void> => {
         if (!uri) return;
         try {
             const threadId = relation?.rel_type === THREAD_RELATION_TYPE.name ? relation.event_id : null;

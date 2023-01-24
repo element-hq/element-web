@@ -28,7 +28,7 @@ import RoomAvatar from "../components/views/avatars/RoomAvatar";
 import AccessibleTooltipButton from "../components/views/elements/AccessibleTooltipButton";
 import AccessibleButton from "../components/views/elements/AccessibleButton";
 
-export const getIncomingLegacyCallToastKey = (callId: string) => `call_${callId}`;
+export const getIncomingLegacyCallToastKey = (callId: string): string => `call_${callId}`;
 
 interface IProps {
     call: MatrixCall;
@@ -83,7 +83,7 @@ export default class IncomingLegacyCallToast extends React.Component<IProps, ISt
             : LegacyCallHandler.instance.silenceCall(callId);
     };
 
-    public render() {
+    public render(): JSX.Element {
         const call = this.props.call;
         const room = MatrixClientPeg.get().getRoom(LegacyCallHandler.instance.roomIdForCall(call));
         const isVoice = call.type === CallType.Voice;

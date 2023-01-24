@@ -100,8 +100,12 @@ module.exports = {
             files: ["src/**/*.{ts,tsx}", "test/**/*.{ts,tsx}", "cypress/**/*.ts"],
             extends: ["plugin:matrix-org/typescript", "plugin:matrix-org/react"],
             rules: {
-                // temporary disabled
-                "@typescript-eslint/explicit-function-return-type": "off",
+                "@typescript-eslint/explicit-function-return-type": [
+                    "error",
+                    {
+                        allowExpressions: true,
+                    },
+                ],
 
                 // Things we do that break the ideal style
                 "prefer-promise-reject-errors": "off",

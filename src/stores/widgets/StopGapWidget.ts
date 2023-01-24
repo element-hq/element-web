@@ -252,7 +252,7 @@ export class StopGapWidget extends EventEmitter {
         return !!this.messaging;
     }
 
-    private onOpenModal = async (ev: CustomEvent<IModalWidgetOpenRequest>) => {
+    private onOpenModal = async (ev: CustomEvent<IModalWidgetOpenRequest>): Promise<void> => {
         ev.preventDefault();
         if (ModalWidgetStore.instance.canOpenModalWidget()) {
             ModalWidgetStore.instance.openModalWidget(ev.detail.data, this.mockWidget, this.roomId);
@@ -450,7 +450,7 @@ export class StopGapWidget extends EventEmitter {
      * widget.
      * @param opts
      */
-    public stopMessaging(opts = { forceDestroy: false }) {
+    public stopMessaging(opts = { forceDestroy: false }): void {
         if (!opts?.forceDestroy && ActiveWidgetStore.instance.getWidgetPersistence(this.mockWidget.id, this.roomId)) {
             logger.log("Skipping destroy - persistent widget");
             return;
@@ -464,24 +464,24 @@ export class StopGapWidget extends EventEmitter {
         this.client.off(ClientEvent.ToDeviceEvent, this.onToDeviceEvent);
     }
 
-    private onEvent = (ev: MatrixEvent) => {
+    private onEvent = (ev: MatrixEvent): void => {
         this.client.decryptEventIfNeeded(ev);
         if (ev.isBeingDecrypted() || ev.isDecryptionFailure()) return;
         this.feedEvent(ev);
     };
 
-    private onEventDecrypted = (ev: MatrixEvent) => {
+    private onEventDecrypted = (ev: MatrixEvent): void => {
         if (ev.isDecryptionFailure()) return;
         this.feedEvent(ev);
     };
 
-    private onToDeviceEvent = async (ev: MatrixEvent) => {
+    private onToDeviceEvent = async (ev: MatrixEvent): Promise<void> => {
         await this.client.decryptEventIfNeeded(ev);
         if (ev.isDecryptionFailure()) return;
         await this.messaging.feedToDevice(ev.getEffectiveEvent() as IRoomEvent, ev.isEncrypted());
     };
 
-    private feedEvent(ev: MatrixEvent) {
+    private feedEvent(ev: MatrixEvent): void {
         if (!this.messaging) return;
 
         // Check to see if this event would be before or after our "read up to" marker. If it's
@@ -519,7 +519,17 @@ export class StopGapWidget extends EventEmitter {
             }
         }
 
-        this.readUpToMap[ev.getRoomId()] = ev.getId();
+        // Skip marker assignment if membership is 'invite', otherwise 'm.room.member' from
+        // invitation room will assign it and new state events will be not forwarded to the widget
+        // because of empty timeline for invitation room and assigned marker.
+        const evRoomId = ev.getRoomId();
+        const evId = ev.getId();
+        if (evRoomId && evId) {
+            const room = this.client.getRoom(evRoomId);
+            if (room && room.getMyMembership() === "join") {
+                this.readUpToMap[evRoomId] = evId;
+            }
+        }
 
         const raw = ev.getEffectiveEvent();
         this.messaging.feedEvent(raw as IRoomEvent, this.eventListenerRoomId).catch((e) => {

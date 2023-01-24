@@ -49,23 +49,23 @@ export default class UploadConfirmDialog extends React.Component<IProps> {
         this.objectUrl = URL.createObjectURL(blob);
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         if (this.objectUrl) URL.revokeObjectURL(this.objectUrl);
     }
 
-    private onCancelClick = () => {
+    private onCancelClick = (): void => {
         this.props.onFinished(false);
     };
 
-    private onUploadClick = () => {
+    private onUploadClick = (): void => {
         this.props.onFinished(true);
     };
 
-    private onUploadAllClick = () => {
+    private onUploadAllClick = (): void => {
         this.props.onFinished(true, true);
     };
 
-    public render() {
+    public render(): JSX.Element {
         let title: string;
         if (this.props.totalFiles > 1 && this.props.currentIndex !== undefined) {
             title = _t("Upload files (%(current)s of %(total)s)", {

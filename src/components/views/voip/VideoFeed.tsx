@@ -61,16 +61,16 @@ export default class VideoFeed extends React.PureComponent<IProps, IState> {
         };
     }
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         this.updateFeed(null, this.props.feed);
         this.playMedia();
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         this.updateFeed(this.props.feed, null);
     }
 
-    public componentDidUpdate(prevProps: IProps, prevState: IState) {
+    public componentDidUpdate(prevProps: IProps, prevState: IState): void {
         this.updateFeed(prevProps.feed, this.props.feed);
         // If the mutes state has changed, we try to playMedia()
         if (prevState.videoMuted !== this.state.videoMuted || prevProps.feed.stream !== this.props.feed.stream) {
@@ -78,7 +78,7 @@ export default class VideoFeed extends React.PureComponent<IProps, IState> {
         }
     }
 
-    public static getDerivedStateFromProps(props: IProps) {
+    public static getDerivedStateFromProps(props: IProps): IState {
         return {
             audioMuted: props.feed.isAudioMuted(),
             videoMuted: props.feed.isVideoMuted(),
@@ -95,7 +95,7 @@ export default class VideoFeed extends React.PureComponent<IProps, IState> {
         element.addEventListener("resize", this.onResize);
     };
 
-    private updateFeed(oldFeed: CallFeed, newFeed: CallFeed) {
+    private updateFeed(oldFeed: CallFeed, newFeed: CallFeed): void {
         if (oldFeed === newFeed) return;
 
         if (oldFeed) {
@@ -116,7 +116,7 @@ export default class VideoFeed extends React.PureComponent<IProps, IState> {
         }
     }
 
-    private async playMedia() {
+    private async playMedia(): Promise<void> {
         const element = this.element;
         if (!element) return;
         // We play audio in AudioFeed, not here
@@ -143,7 +143,7 @@ export default class VideoFeed extends React.PureComponent<IProps, IState> {
         }
     }
 
-    private stopMedia() {
+    private stopMedia(): void {
         const element = this.element;
         if (!element) return;
 
@@ -156,7 +156,7 @@ export default class VideoFeed extends React.PureComponent<IProps, IState> {
         // seem to be necessary - Šimon
     }
 
-    private onNewStream = () => {
+    private onNewStream = (): void => {
         this.setState({
             audioMuted: this.props.feed.isAudioMuted(),
             videoMuted: this.props.feed.isVideoMuted(),
@@ -164,20 +164,20 @@ export default class VideoFeed extends React.PureComponent<IProps, IState> {
         this.playMedia();
     };
 
-    private onMuteStateChanged = () => {
+    private onMuteStateChanged = (): void => {
         this.setState({
             audioMuted: this.props.feed.isAudioMuted(),
             videoMuted: this.props.feed.isVideoMuted(),
         });
     };
 
-    private onResize = (e) => {
+    private onResize = (e): void => {
         if (this.props.onResize && !this.props.feed.isLocal()) {
             this.props.onResize(e);
         }
     };
 
-    public render() {
+    public render(): JSX.Element {
         const { pipMode, primary, secondary, feed } = this.props;
 
         const wrapperClasses = classnames("mx_VideoFeed", {

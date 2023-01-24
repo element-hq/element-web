@@ -57,7 +57,7 @@ const BaseCard: React.FC<IProps> = forwardRef<HTMLDivElement, IProps>(
         const cardHistory = RightPanelStore.instance.roomPhaseHistory;
         if (cardHistory.length > 1) {
             const prevCard = cardHistory[cardHistory.length - 2];
-            const onBackClick = (ev: ButtonEvent) => {
+            const onBackClick = (ev: ButtonEvent): void => {
                 onBack?.(ev);
                 RightPanelStore.instance.popCard();
             };

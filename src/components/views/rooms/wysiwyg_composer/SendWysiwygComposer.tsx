@@ -22,7 +22,7 @@ import { PlainTextComposer } from "./components/PlainTextComposer";
 import { ComposerFunctions } from "./types";
 import { E2EStatus } from "../../../../utils/ShieldUtils";
 import E2EIcon from "../E2EIcon";
-import { AboveLeftOf } from "../../../structures/ContextMenu";
+import { MenuProps } from "../../../structures/ContextMenu";
 import { Emoji } from "./components/Emoji";
 import { ComposerContext, getDefaultContextValue } from "./ComposerContext";
 
@@ -47,7 +47,7 @@ interface SendWysiwygComposerProps {
     e2eStatus?: E2EStatus;
     onChange: (content: string) => void;
     onSend: () => void;
-    menuPosition: AboveLeftOf;
+    menuPosition: MenuProps;
 }
 
 // Default needed for React.lazy
@@ -56,7 +56,7 @@ export default function SendWysiwygComposer({
     e2eStatus,
     menuPosition,
     ...props
-}: SendWysiwygComposerProps) {
+}: SendWysiwygComposerProps): JSX.Element {
     const Composer = isRichTextEnabled ? WysiwygComposer : PlainTextComposer;
     const defaultContextValue = useRef(getDefaultContextValue());
 

@@ -40,11 +40,11 @@ export default class InfoDialog extends React.Component<IProps> {
         hasCloseButton: false,
     };
 
-    private onFinished = () => {
+    private onFinished = (): void => {
         this.props.onFinished();
     };
 
-    public render() {
+    public render(): JSX.Element {
         return (
             <BaseDialog
                 className="mx_InfoDialog"

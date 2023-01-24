@@ -41,7 +41,7 @@ class Presence {
      * Start listening the user activity to evaluate his presence state.
      * Any state change will be sent to the homeserver.
      */
-    public async start() {
+    public async start(): Promise<void> {
         this.unavailableTimer = new Timer(UNAVAILABLE_TIME_MS);
         // the user_activity_start action starts the timer
         this.dispatcherRef = dis.register(this.onAction);
@@ -58,7 +58,7 @@ class Presence {
     /**
      * Stop tracking user activity
      */
-    public stop() {
+    public stop(): void {
         if (this.dispatcherRef) {
             dis.unregister(this.dispatcherRef);
             this.dispatcherRef = null;
@@ -73,11 +73,11 @@ class Presence {
      * Get the current presence state.
      * @returns {string} the presence state (see PRESENCE enum)
      */
-    public getState() {
+    public getState(): State {
         return this.state;
     }
 
-    private onAction = (payload: ActionPayload) => {
+    private onAction = (payload: ActionPayload): void => {
         if (payload.action === "user_activity") {
             this.setState(State.Online);
             this.unavailableTimer.restart();
@@ -89,7 +89,7 @@ class Presence {
      * If the state has changed, the homeserver will be notified.
      * @param {string} newState the new presence state (see PRESENCE enum)
      */
-    private async setState(newState: State) {
+    private async setState(newState: State): Promise<void> {
         if (newState === this.state) {
             return;
         }

@@ -18,14 +18,10 @@ import React from "react";
 // eslint-disable-next-line deprecate/import
 import { mount, ReactWrapper } from "enzyme";
 import { Room } from "matrix-js-sdk/src/models/room";
-import {
-    M_POLL_KIND_DISCLOSED,
-    M_POLL_KIND_UNDISCLOSED,
-    M_POLL_START,
-    M_TEXT,
-    PollStartEvent,
-} from "matrix-events-sdk";
+import { M_POLL_KIND_DISCLOSED, M_POLL_KIND_UNDISCLOSED, M_POLL_START } from "matrix-js-sdk/src/@types/polls";
+import { PollStartEvent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { M_TEXT } from "matrix-js-sdk/src/@types/extensible_events";
 
 import { findById, getMockClientWithEventEmitter } from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";

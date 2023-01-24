@@ -99,7 +99,7 @@ const useImageUrl = ({ url, urls }): [string, () => void] => {
     return [imageUrl, onError];
 };
 
-const BaseAvatar = (props: IProps) => {
+const BaseAvatar: React.FC<IProps> = (props) => {
     const {
         name,
         idName,

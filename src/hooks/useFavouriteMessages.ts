@@ -18,13 +18,16 @@ import { useState } from "react";
 
 const favouriteMessageIds = JSON.parse(localStorage?.getItem("io_element_favouriteMessages") ?? "[]") as string[];
 
-export default function useFavouriteMessages() {
+export default function useFavouriteMessages(): {
+    toggleFavourite: (eventId: string) => void;
+    isFavourite: (eventId: string) => boolean;
+} {
     const [, setX] = useState<string[]>();
 
     //checks if an id already exist
     const isFavourite = (eventId: string): boolean => favouriteMessageIds.includes(eventId);
 
-    const toggleFavourite = (eventId: string) => {
+    const toggleFavourite = (eventId: string): void => {
         isFavourite(eventId)
             ? favouriteMessageIds.splice(favouriteMessageIds.indexOf(eventId), 1)
             : favouriteMessageIds.push(eventId);

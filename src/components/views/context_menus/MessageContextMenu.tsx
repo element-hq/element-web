@@ -21,7 +21,7 @@ import { EventStatus, MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { EventType, RelationType } from "matrix-js-sdk/src/@types/event";
 import { Relations } from "matrix-js-sdk/src/models/relations";
 import { RoomMemberEvent } from "matrix-js-sdk/src/models/room-member";
-import { M_POLL_START } from "matrix-events-sdk";
+import { M_POLL_START } from "matrix-js-sdk/src/@types/polls";
 import { Thread } from "matrix-js-sdk/src/models/thread";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -38,7 +38,7 @@ import { Action } from "../../../dispatcher/actions";
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { ButtonEvent } from "../elements/AccessibleButton";
 import { copyPlaintext, getSelectedText } from "../../../utils/strings";
-import ContextMenu, { toRightOf, IPosition, ChevronFace } from "../../structures/ContextMenu";
+import ContextMenu, { toRightOf, MenuProps } from "../../structures/ContextMenu";
 import ReactionPicker from "../emojipicker/ReactionPicker";
 import ViewSource from "../../structures/ViewSource";
 import { createRedactEventDialog } from "../dialogs/ConfirmRedactDialog";
@@ -63,7 +63,7 @@ interface IReplyInThreadButton {
     closeMenu: () => void;
 }
 
-const ReplyInThreadButton = ({ mxEvent, closeMenu }: IReplyInThreadButton) => {
+const ReplyInThreadButton: React.FC<IReplyInThreadButton> = ({ mxEvent, closeMenu }) => {
     const context = useContext(CardContext);
     const relationType = mxEvent?.getRelation()?.rel_type;
 
@@ -104,8 +104,7 @@ const ReplyInThreadButton = ({ mxEvent, closeMenu }: IReplyInThreadButton) => {
     );
 };
 
-interface IProps extends IPosition {
-    chevronFace: ChevronFace;
+interface IProps extends MenuProps {
     /* the MatrixEvent associated with the context menu */
     mxEvent: MatrixEvent;
     // An optional EventTileOps implementation that can be used to unhide preview widgets
@@ -150,7 +149,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
         };
     }
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         MatrixClientPeg.get().on(RoomMemberEvent.PowerLevel, this.checkPermissions);
         this.checkPermissions();
     }

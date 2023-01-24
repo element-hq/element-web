@@ -21,7 +21,7 @@ import dis from "../../../../../dispatcher/dispatcher";
 import { Action } from "../../../../../dispatcher/actions";
 import EditorStateTransfer from "../../../../../utils/EditorStateTransfer";
 
-export function endEditing(roomContext: IRoomState) {
+export function endEditing(roomContext: IRoomState): void {
     // todo local storage
     // localStorage.removeItem(this.editorRoomKey);
     // localStorage.removeItem(this.editorStateKey);
@@ -38,7 +38,7 @@ export function endEditing(roomContext: IRoomState) {
     });
 }
 
-export function cancelPreviousPendingEdit(mxClient: MatrixClient, editorStateTransfer: EditorStateTransfer) {
+export function cancelPreviousPendingEdit(mxClient: MatrixClient, editorStateTransfer: EditorStateTransfer): void {
     const originalEvent = editorStateTransfer.getEvent();
     const previousEdit = originalEvent.replacingEvent();
     if (previousEdit && (previousEdit.status === EventStatus.QUEUED || previousEdit.status === EventStatus.NOT_SENT)) {

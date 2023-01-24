@@ -158,7 +158,7 @@ export default class Pill extends React.Component<IProps, IState> {
         this.load();
     }
 
-    public componentDidUpdate(prevProps: Readonly<IProps>) {
+    public componentDidUpdate(prevProps: Readonly<IProps>): void {
         if (objectHasDiff(this.props, prevProps)) {
             this.load();
         }

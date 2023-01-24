@@ -88,7 +88,7 @@ export default class Confetti implements ICanvasEffect {
 
     public isRunning: boolean;
 
-    public start = async (canvas: HTMLCanvasElement, timeout = 3000) => {
+    public start = async (canvas: HTMLCanvasElement, timeout = 3000): Promise<void> => {
         if (!canvas) {
             return;
         }
@@ -105,7 +105,7 @@ export default class Confetti implements ICanvasEffect {
         }
     };
 
-    public stop = async () => {
+    public stop = async (): Promise<void> => {
         this.isRunning = false;
     };
 
@@ -171,7 +171,7 @@ export default class Confetti implements ICanvasEffect {
         }
     };
 
-    private updateParticles = () => {
+    private updateParticles = (): void => {
         if (!this.context || !this.context.canvas) {
             return;
         }

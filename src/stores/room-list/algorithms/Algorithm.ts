@@ -78,11 +78,11 @@ export class Algorithm extends EventEmitter {
      */
     public updatesInhibited = false;
 
-    public start() {
+    public start(): void {
         CallStore.instance.on(CallStoreEvent.ActiveCalls, this.onActiveCalls);
     }
 
-    public stop() {
+    public stop(): void {
         CallStore.instance.off(CallStoreEvent.ActiveCalls, this.onActiveCalls);
     }
 
@@ -116,7 +116,7 @@ export class Algorithm extends EventEmitter {
      * Awaitable version of the sticky room setter.
      * @param val The new room to sticky.
      */
-    public setStickyRoom(val: Room) {
+    public setStickyRoom(val: Room): void {
         try {
             this.updateStickyRoom(val);
         } catch (e) {
@@ -129,7 +129,7 @@ export class Algorithm extends EventEmitter {
         return this.sortAlgorithms[tagId];
     }
 
-    public setTagSorting(tagId: TagID, sort: SortAlgorithm) {
+    public setTagSorting(tagId: TagID, sort: SortAlgorithm): void {
         if (!tagId) throw new Error("Tag ID must be defined");
         if (!sort) throw new Error("Algorithm must be defined");
         this.sortAlgorithms[tagId] = sort;
@@ -146,7 +146,7 @@ export class Algorithm extends EventEmitter {
         return this.listAlgorithms[tagId];
     }
 
-    public setListOrdering(tagId: TagID, order: ListAlgorithm) {
+    public setListOrdering(tagId: TagID, order: ListAlgorithm): void {
         if (!tagId) throw new Error("Tag ID must be defined");
         if (!order) throw new Error("Algorithm must be defined");
         this.listAlgorithms[tagId] = order;
@@ -160,12 +160,12 @@ export class Algorithm extends EventEmitter {
         this.recalculateActiveCallRooms(tagId);
     }
 
-    private updateStickyRoom(val: Room) {
+    private updateStickyRoom(val: Room): void {
         this.doUpdateStickyRoom(val);
         this._lastStickyRoom = null; // clear to indicate we're done changing
     }
 
-    private doUpdateStickyRoom(val: Room) {
+    private doUpdateStickyRoom(val: Room): void {
         if (val?.isSpaceRoom() && val.getMyMembership() !== "invite") {
             // no-op sticky rooms for spaces - they're effectively virtual rooms
             val = null;
@@ -284,7 +284,7 @@ export class Algorithm extends EventEmitter {
         this.emit(LIST_UPDATED_EVENT);
     }
 
-    private onActiveCalls = () => {
+    private onActiveCalls = (): void => {
         // In case we're unsticking a room, sort it back into natural order
         this.recalculateStickyRoom();
 
@@ -297,7 +297,7 @@ export class Algorithm extends EventEmitter {
         this.emit(LIST_UPDATED_EVENT, true);
     };
 
-    private initCachedStickyRooms() {
+    private initCachedStickyRooms(): void {
         this._cachedStickyRooms = {};
         for (const tagId of Object.keys(this.cachedRooms)) {
             this._cachedStickyRooms[tagId] = [...this.cachedRooms[tagId]]; // shallow clone
@@ -558,8 +558,8 @@ export class Algorithm extends EventEmitter {
     /**
      * Updates the roomsToTags map
      */
-    private updateTagsFromCache() {
-        const newMap = {};
+    private updateTagsFromCache(): void {
+        const newMap: Algorithm["roomIdsToTags"] = {};
 
         const tags = Object.keys(this.cachedRooms);
         for (const tagId of tags) {

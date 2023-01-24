@@ -32,7 +32,7 @@ export const textForVoiceBroadcastStoppedEvent = (event: MatrixEvent): (() => Re
         const templateTags = {
             a: (text: string) =>
                 startEventId && roomId ? (
-                    <AccessibleButton kind="link_inline" onClick={() => highlightEvent(roomId, startEventId)}>
+                    <AccessibleButton kind="link_inline" onClick={(): void => highlightEvent(roomId, startEventId)}>
                         {text}
                     </AccessibleButton>
                 ) : (

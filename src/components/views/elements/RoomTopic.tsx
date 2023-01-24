@@ -37,7 +37,7 @@ interface IProps extends React.HTMLProps<HTMLDivElement> {
     room?: Room;
 }
 
-export default function RoomTopic({ room, ...props }: IProps) {
+export default function RoomTopic({ room, ...props }: IProps): JSX.Element {
     const client = useContext(MatrixClientContext);
     const ref = useRef<HTMLDivElement>();
 

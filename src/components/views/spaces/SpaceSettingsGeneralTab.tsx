@@ -34,7 +34,7 @@ interface IProps extends IDialogProps {
     space: Room;
 }
 
-const SpaceSettingsGeneralTab = ({ matrixClient: cli, space, onFinished }: IProps) => {
+const SpaceSettingsGeneralTab: React.FC<IProps> = ({ matrixClient: cli, space, onFinished }) => {
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState("");
 
@@ -53,20 +53,20 @@ const SpaceSettingsGeneralTab = ({ matrixClient: cli, space, onFinished }: IProp
     const canSetTopic = space.currentState.maySendStateEvent(EventType.RoomTopic, userId);
     const topicChanged = topic !== currentTopic;
 
-    const onCancel = () => {
+    const onCancel = (): void => {
         setNewAvatar(null);
         setName(space.name);
         setTopic(currentTopic);
     };
 
-    const onSave = async () => {
+    const onSave = async (): Promise<void> => {
         setBusy(true);
         const promises: Promise<unknown>[] = [];
 
         if (avatarChanged) {
             if (newAvatar) {
                 promises.push(
-                    (async () => {
+                    (async (): Promise<void> => {
                         const { content_uri: url } = await cli.uploadContent(newAvatar);
                         await cli.sendStateEvent(space.roomId, EventType.RoomAvatar, { url }, "");
                     })(),

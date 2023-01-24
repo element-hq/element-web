@@ -27,12 +27,11 @@ export default defineConfig({
             return require("./cypress/plugins/index.ts").default(on, config);
         },
         baseUrl: "http://localhost:8080",
-        experimentalSessionAndOrigin: true,
         specPattern: "cypress/e2e/**/*.{js,jsx,ts,tsx}",
     },
     env: {
-        // Docker tag to use for `ghcr.io/matrix-org/sliding-sync-proxy` image.
-        SLIDING_SYNC_PROXY_TAG: "v0.6.0",
+        // Docker tag to use for `ghcr.io/matrix-org/sliding-sync` image.
+        SLIDING_SYNC_PROXY_TAG: "v0.99.0-rc1",
         HOMESERVER: "synapse",
     },
     retries: {

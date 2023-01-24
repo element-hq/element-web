@@ -47,13 +47,13 @@ export class DialogOpener {
 
     // We could do this in the constructor, but then we wouldn't have
     // a function to call from Lifecycle to capture the class.
-    public prepare() {
+    public prepare(): void {
         if (this.isRegistered) return;
         defaultDispatcher.register(this.onDispatch);
         this.isRegistered = true;
     }
 
-    private onDispatch = (payload: ActionPayload) => {
+    private onDispatch = (payload: ActionPayload): void => {
         switch (payload.action) {
             case "open_room_settings":
                 Modal.createDialog(

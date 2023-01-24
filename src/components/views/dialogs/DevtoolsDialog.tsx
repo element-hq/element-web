@@ -81,7 +81,7 @@ const DevtoolsDialog: React.FC<IProps> = ({ roomId, onFinished }) => {
         const Tool = tool[1];
         body = <Tool onBack={onBack} setTool={(label, tool) => setTool([label, tool])} />;
     } else {
-        const onBack = () => {
+        const onBack = (): void => {
             onFinished(false);
         };
         body = (
@@ -90,7 +90,7 @@ const DevtoolsDialog: React.FC<IProps> = ({ roomId, onFinished }) => {
                     <div key={category}>
                         <h3>{_t(categoryLabels[category])}</h3>
                         {tools.map(([label, tool]) => {
-                            const onClick = () => {
+                            const onClick = (): void => {
                                 setTool([label, tool]);
                             };
                             return (

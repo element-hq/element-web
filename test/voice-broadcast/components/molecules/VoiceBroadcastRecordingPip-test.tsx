@@ -18,9 +18,10 @@ limitations under the License.
 import React from "react";
 import { act, render, RenderResult, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { ClientEvent, MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { sleep } from "matrix-js-sdk/src/utils";
 import { mocked } from "jest-mock";
+import { SyncState } from "matrix-js-sdk/src/sync";
 
 import {
     VoiceBroadcastInfoState,
@@ -179,6 +180,30 @@ describe("VoiceBroadcastRecordingPip", () => {
 
                 it("should end the recording", () => {
                     expect(recording.getState()).toBe(VoiceBroadcastInfoState.Stopped);
+                });
+            });
+        });
+
+        describe("and there is no connection and clicking the pause button", () => {
+            beforeEach(async () => {
+                mocked(client.sendStateEvent).mockImplementation(() => {
+                    throw new Error();
+                });
+                await userEvent.click(screen.getByLabelText("pause voice broadcast"));
+            });
+
+            it("should show a connection error info", () => {
+                expect(screen.getByText("Connection error - Recording paused")).toBeInTheDocument();
+            });
+
+            describe("and the connection is back", () => {
+                beforeEach(() => {
+                    mocked(client.sendStateEvent).mockResolvedValue({ event_id: "e1" });
+                    client.emit(ClientEvent.Sync, SyncState.Catchup, SyncState.Error);
+                });
+
+                it("should render a paused recording", () => {
+                    expect(screen.getByLabelText("resume voice broadcast")).toBeInTheDocument();
                 });
             });
         });

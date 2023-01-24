@@ -50,7 +50,7 @@ export default class UserActivity {
         this.activeRecentlyTimeout = new Timer(RECENTLY_ACTIVE_THRESHOLD_MS);
     }
 
-    public static sharedInstance() {
+    public static sharedInstance(): UserActivity {
         if (window.mxUserActivity === undefined) {
             window.mxUserActivity = new UserActivity(window, document);
         }
@@ -66,7 +66,7 @@ export default class UserActivity {
      * later on when the user does become active.
      * @param {Timer} timer the timer to use
      */
-    public timeWhileActiveNow(timer: Timer) {
+    public timeWhileActiveNow(timer: Timer): void {
         this.timeWhile(timer, this.attachedActiveNowTimers);
         if (this.userActiveNow()) {
             timer.start();
@@ -82,14 +82,14 @@ export default class UserActivity {
      * later on when the user does become active.
      * @param {Timer} timer the timer to use
      */
-    public timeWhileActiveRecently(timer: Timer) {
+    public timeWhileActiveRecently(timer: Timer): void {
         this.timeWhile(timer, this.attachedActiveRecentlyTimers);
         if (this.userActiveRecently()) {
             timer.start();
         }
     }
 
-    private timeWhile(timer: Timer, attachedTimers: Timer[]) {
+    private timeWhile(timer: Timer, attachedTimers: Timer[]): void {
         // important this happens first
         const index = attachedTimers.indexOf(timer);
         if (index === -1) {
@@ -113,7 +113,7 @@ export default class UserActivity {
     /**
      * Start listening to user activity
      */
-    public start() {
+    public start(): void {
         this.document.addEventListener("mousedown", this.onUserActivity);
         this.document.addEventListener("mousemove", this.onUserActivity);
         this.document.addEventListener("keydown", this.onUserActivity);
@@ -133,7 +133,7 @@ export default class UserActivity {
     /**
      * Stop tracking user activity
      */
-    public stop() {
+    public stop(): void {
         this.document.removeEventListener("mousedown", this.onUserActivity);
         this.document.removeEventListener("mousemove", this.onUserActivity);
         this.document.removeEventListener("keydown", this.onUserActivity);
@@ -152,7 +152,7 @@ export default class UserActivity {
      * user's attention at any given moment.
      * @returns {boolean} true if user is currently 'active'
      */
-    public userActiveNow() {
+    public userActiveNow(): boolean {
         return this.activeNowTimeout.isRunning();
     }
 
@@ -164,11 +164,11 @@ export default class UserActivity {
      * (or they may have gone to make tea and left the window focused).
      * @returns {boolean} true if user has been active recently
      */
-    public userActiveRecently() {
+    public userActiveRecently(): boolean {
         return this.activeRecentlyTimeout.isRunning();
     }
 
-    private onPageVisibilityChanged = (e) => {
+    private onPageVisibilityChanged = (e): void => {
         if (this.document.visibilityState === "hidden") {
             this.activeNowTimeout.abort();
             this.activeRecentlyTimeout.abort();
@@ -177,12 +177,12 @@ export default class UserActivity {
         }
     };
 
-    private onWindowBlurred = () => {
+    private onWindowBlurred = (): void => {
         this.activeNowTimeout.abort();
         this.activeRecentlyTimeout.abort();
     };
 
-    private onUserActivity = (event: MouseEvent) => {
+    private onUserActivity = (event: MouseEvent): void => {
         // ignore anything if the window isn't focused
         if (!this.document.hasFocus()) return;
 
@@ -214,7 +214,7 @@ export default class UserActivity {
         }
     };
 
-    private static async runTimersUntilTimeout(attachedTimers: Timer[], timeout: Timer) {
+    private static async runTimersUntilTimeout(attachedTimers: Timer[], timeout: Timer): Promise<void> {
         attachedTimers.forEach((t) => t.start());
         try {
             await timeout.finished();

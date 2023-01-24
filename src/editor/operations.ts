@@ -131,7 +131,7 @@ export function replaceRangeAndAutoAdjustCaret(
     });
 }
 
-const isFormattable = (_index: number, offset: number, part: Part) => {
+const isFormattable = (_index: number, offset: number, part: Part): boolean => {
     return part.text[offset] !== " " && part.type === Type.Plain;
 };
 
@@ -217,7 +217,7 @@ export function formatRangeAsCode(range: Range): void {
     replaceRangeAndExpandSelection(range, parts);
 }
 
-export function formatRangeAsLink(range: Range, text?: string) {
+export function formatRangeAsLink(range: Range, text?: string): void {
     const { model } = range;
     const { partCreator } = model;
     const linkRegex = /\[(.*?)]\(.*?\)/g;
@@ -233,8 +233,8 @@ export function formatRangeAsLink(range: Range, text?: string) {
 }
 
 // parts helper methods
-const isBlank = (part) => !part.text || !/\S/.test(part.text);
-const isNL = (part) => part.type === Type.Newline;
+const isBlank = (part: Part): boolean => !part.text || !/\S/.test(part.text);
+const isNL = (part: Part): boolean => part.type === Type.Newline;
 
 export function toggleInlineFormat(range: Range, prefix: string, suffix = prefix): void {
     const { model, parts } = range;

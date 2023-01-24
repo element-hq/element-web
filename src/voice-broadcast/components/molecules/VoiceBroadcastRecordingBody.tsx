@@ -13,18 +13,24 @@ limitations under the License.
 
 import React from "react";
 
-import { useVoiceBroadcastRecording, VoiceBroadcastHeader, VoiceBroadcastRecording } from "../..";
+import {
+    useVoiceBroadcastRecording,
+    VoiceBroadcastHeader,
+    VoiceBroadcastRecording,
+    VoiceBroadcastRecordingConnectionError,
+} from "../..";
 
 interface VoiceBroadcastRecordingBodyProps {
     recording: VoiceBroadcastRecording;
 }
 
 export const VoiceBroadcastRecordingBody: React.FC<VoiceBroadcastRecordingBodyProps> = ({ recording }) => {
-    const { live, room, sender } = useVoiceBroadcastRecording(recording);
+    const { live, room, sender, recordingState } = useVoiceBroadcastRecording(recording);
 
     return (
         <div className="mx_VoiceBroadcastBody">
             <VoiceBroadcastHeader live={live ? "live" : "grey"} microphoneLabel={sender?.name} room={room} />
+            {recordingState === "connection_error" && <VoiceBroadcastRecordingConnectionError />}
         </div>
     );
 };

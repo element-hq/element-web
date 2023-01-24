@@ -76,6 +76,7 @@ export interface Credentials {
     userId: string;
     deviceId: string;
     homeServer: string;
+    password: string;
 }
 
 function registerUser(
@@ -120,6 +121,7 @@ function registerUser(
             accessToken: response.body.access_token,
             userId: response.body.user_id,
             deviceId: response.body.device_id,
+            password: password,
         }));
 }
 

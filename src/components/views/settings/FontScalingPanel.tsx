@@ -61,7 +61,7 @@ export default class FontScalingPanel extends React.Component<IProps, IState> {
         };
     }
 
-    public async componentDidMount() {
+    public async componentDidMount(): Promise<void> {
         // Fetch the current user profile for the message preview
         const client = MatrixClientPeg.get();
         const userId = client.getUserId();
@@ -75,7 +75,7 @@ export default class FontScalingPanel extends React.Component<IProps, IState> {
         });
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         this.unmounted = true;
     }
 
@@ -105,7 +105,7 @@ export default class FontScalingPanel extends React.Component<IProps, IState> {
         return { valid: true, feedback: _t("Use between %(min)s pt and %(max)s pt", { min, max }) };
     };
 
-    public render() {
+    public render(): JSX.Element {
         return (
             <div className="mx_SettingsTab_section mx_FontScalingPanel">
                 <span className="mx_SettingsTab_subheading">{_t("Font size")}</span>

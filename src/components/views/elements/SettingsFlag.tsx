@@ -56,17 +56,17 @@ export default class SettingsFlag extends React.Component<IProps, IState> {
         };
     }
 
-    private onChange = async (checked: boolean) => {
+    private onChange = async (checked: boolean): Promise<void> => {
         await this.save(checked);
         this.setState({ value: checked });
         if (this.props.onChange) this.props.onChange(checked);
     };
 
-    private checkBoxOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    private checkBoxOnChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         this.onChange(e.target.checked);
     };
 
-    private save = async (val?: boolean) => {
+    private save = async (val?: boolean): Promise<void> => {
         await SettingsStore.setValue(
             this.props.name,
             this.props.roomId,
@@ -75,7 +75,7 @@ export default class SettingsFlag extends React.Component<IProps, IState> {
         );
     };
 
-    public render() {
+    public render(): JSX.Element {
         const canChange = SettingsStore.canSetValue(this.props.name, this.props.roomId, this.props.level);
 
         if (!canChange && this.props.hideIfCannotSet) return null;

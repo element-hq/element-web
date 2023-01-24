@@ -47,13 +47,13 @@ interface IProps extends IContextMenuProps {
     hideHeader?: boolean;
 }
 
-const SpaceContextMenu = ({ space, hideHeader, onFinished, ...props }: IProps) => {
+const SpaceContextMenu: React.FC<IProps> = ({ space, hideHeader, onFinished, ...props }) => {
     const cli = useContext(MatrixClientContext);
     const userId = cli.getUserId()!;
 
     let inviteOption: JSX.Element | null = null;
     if (space.getJoinRule() === "public" || space.canInvite(userId)) {
-        const onInviteClick = (ev: ButtonEvent) => {
+        const onInviteClick = (ev: ButtonEvent): void => {
             ev.preventDefault();
             ev.stopPropagation();
 
@@ -75,7 +75,7 @@ const SpaceContextMenu = ({ space, hideHeader, onFinished, ...props }: IProps) =
     let settingsOption: JSX.Element | null = null;
     let leaveOption: JSX.Element | null = null;
     if (shouldShowSpaceSettings(space)) {
-        const onSettingsClick = (ev: ButtonEvent) => {
+        const onSettingsClick = (ev: ButtonEvent): void => {
             ev.preventDefault();
             ev.stopPropagation();
 
@@ -92,7 +92,7 @@ const SpaceContextMenu = ({ space, hideHeader, onFinished, ...props }: IProps) =
             />
         );
     } else {
-        const onLeaveClick = (ev: ButtonEvent) => {
+        const onLeaveClick = (ev: ButtonEvent): void => {
             ev.preventDefault();
             ev.stopPropagation();
 
@@ -113,7 +113,7 @@ const SpaceContextMenu = ({ space, hideHeader, onFinished, ...props }: IProps) =
 
     let devtoolsOption: JSX.Element | null = null;
     if (SettingsStore.getValue("developerMode")) {
-        const onViewTimelineClick = (ev: ButtonEvent) => {
+        const onViewTimelineClick = (ev: ButtonEvent): void => {
             ev.preventDefault();
             ev.stopPropagation();
 
@@ -145,7 +145,7 @@ const SpaceContextMenu = ({ space, hideHeader, onFinished, ...props }: IProps) =
 
     let newRoomSection: JSX.Element | null = null;
     if (canAddRooms || canAddSubSpaces) {
-        const onNewRoomClick = (ev: ButtonEvent) => {
+        const onNewRoomClick = (ev: ButtonEvent): void => {
             ev.preventDefault();
             ev.stopPropagation();
 
@@ -154,7 +154,7 @@ const SpaceContextMenu = ({ space, hideHeader, onFinished, ...props }: IProps) =
             onFinished();
         };
 
-        const onNewVideoRoomClick = (ev: ButtonEvent) => {
+        const onNewVideoRoomClick = (ev: ButtonEvent): void => {
             ev.preventDefault();
             ev.stopPropagation();
 
@@ -162,7 +162,7 @@ const SpaceContextMenu = ({ space, hideHeader, onFinished, ...props }: IProps) =
             onFinished();
         };
 
-        const onNewSubspaceClick = (ev: ButtonEvent) => {
+        const onNewSubspaceClick = (ev: ButtonEvent): void => {
             ev.preventDefault();
             ev.stopPropagation();
 
@@ -207,7 +207,7 @@ const SpaceContextMenu = ({ space, hideHeader, onFinished, ...props }: IProps) =
         );
     }
 
-    const onPreferencesClick = (ev: ButtonEvent) => {
+    const onPreferencesClick = (ev: ButtonEvent): void => {
         ev.preventDefault();
         ev.stopPropagation();
 
@@ -215,7 +215,7 @@ const SpaceContextMenu = ({ space, hideHeader, onFinished, ...props }: IProps) =
         onFinished();
     };
 
-    const openSpace = (ev: ButtonEvent) => {
+    const openSpace = (ev: ButtonEvent): void => {
         ev.preventDefault();
         ev.stopPropagation();
 
@@ -227,12 +227,12 @@ const SpaceContextMenu = ({ space, hideHeader, onFinished, ...props }: IProps) =
         onFinished();
     };
 
-    const onExploreRoomsClick = (ev: ButtonEvent) => {
+    const onExploreRoomsClick = (ev: ButtonEvent): void => {
         PosthogTrackers.trackInteraction("WebSpaceContextMenuExploreRoomsItem", ev);
         openSpace(ev);
     };
 
-    const onHomeClick = (ev: ButtonEvent) => {
+    const onHomeClick = (ev: ButtonEvent): void => {
         PosthogTrackers.trackInteraction("WebSpaceContextMenuHomeItem", ev);
         openSpace(ev);
     };

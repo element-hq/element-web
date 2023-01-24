@@ -15,21 +15,49 @@ limitations under the License.
 */
 
 import RoomDeviceSettingsHandler from "../../../src/settings/handlers/RoomDeviceSettingsHandler";
-import { WatchManager } from "../../../src/settings/WatchManager";
+import { SettingLevel } from "../../../src/settings/SettingLevel";
+import { CallbackFn, WatchManager } from "../../../src/settings/WatchManager";
 
 describe("RoomDeviceSettingsHandler", () => {
-    it("should correctly read cached values", () => {
-        const watchers = new WatchManager();
-        const handler = new RoomDeviceSettingsHandler(watchers);
+    const roomId = "!room:example.com";
+    const value = "test value";
+    const testSettings = [
+        "RightPanel.phases",
+        // special case in RoomDeviceSettingsHandler
+        "blacklistUnverifiedDevices",
+    ];
+    let watchers: WatchManager;
+    let handler: RoomDeviceSettingsHandler;
+    let settingListener: CallbackFn;
 
-        const settingName = "RightPanel.phases";
-        const roomId = "!room:server";
-        const value = {
-            isOpen: true,
-            history: [{}],
-        };
+    beforeEach(() => {
+        watchers = new WatchManager();
+        handler = new RoomDeviceSettingsHandler(watchers);
+        settingListener = jest.fn();
+    });
 
-        handler.setValue(settingName, roomId, value);
-        expect(handler.getValue(settingName, roomId)).toEqual(value);
+    afterEach(() => {
+        watchers.unwatchSetting(settingListener);
+    });
+
+    it.each(testSettings)("should write/read/clear the value for »%s«", (setting: string): void => {
+        // initial value should be null
+        watchers.watchSetting(setting, roomId, settingListener);
+
+        expect(handler.getValue(setting, roomId)).toBeNull();
+
+        // set and read value
+        handler.setValue(setting, roomId, value);
+        expect(settingListener).toHaveBeenCalledWith(roomId, SettingLevel.ROOM_DEVICE, value);
+        expect(handler.getValue(setting, roomId)).toEqual(value);
+
+        // clear value
+        handler.setValue(setting, roomId, null);
+        expect(settingListener).toHaveBeenCalledWith(roomId, SettingLevel.ROOM_DEVICE, null);
+        expect(handler.getValue(setting, roomId)).toBeNull();
+    });
+
+    it("canSetValue should return true", () => {
+        expect(handler.canSetValue("test setting", roomId)).toBe(true);
     });
 });

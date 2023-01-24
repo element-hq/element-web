@@ -93,7 +93,7 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
         }
     }
 
-    private async updateMode(mode: Mode) {
+    private async updateMode(mode: Mode): Promise<void> {
         this.setState({ phase: Phase.Loading });
         if (this.state.rendezvous) {
             const rendezvous = this.state.rendezvous;
@@ -150,7 +150,7 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
         }
     };
 
-    private generateCode = async () => {
+    private generateCode = async (): Promise<void> => {
         let rendezvous: MSC3906Rendezvous;
         try {
             const transport = new MSC3886SimpleHttpRendezvousTransport<MSC3903ECDHPayload>({
@@ -190,12 +190,12 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
         }
     };
 
-    private onFailure = (reason: RendezvousFailureReason) => {
+    private onFailure = (reason: RendezvousFailureReason): void => {
         logger.info(`Rendezvous failed: ${reason}`);
         this.setState({ phase: Phase.Error, failureReason: reason });
     };
 
-    public reset() {
+    public reset(): void {
         this.setState({
             rendezvous: undefined,
             confirmationDigits: undefined,
@@ -203,7 +203,7 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
         });
     }
 
-    private onClick = async (type: Click) => {
+    private onClick = async (type: Click): Promise<void> => {
         switch (type) {
             case Click.Cancel:
                 await this.state.rendezvous?.cancel(RendezvousFailureReason.UserCancelled);
@@ -229,7 +229,7 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
         }
     };
 
-    public render() {
+    public render(): JSX.Element {
         return (
             <LoginWithQRFlow
                 onClick={this.onClick}

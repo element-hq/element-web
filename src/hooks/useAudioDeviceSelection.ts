@@ -25,7 +25,14 @@ interface State {
     device: MediaDeviceInfo | null;
 }
 
-export const useAudioDeviceSelection = (onDeviceChanged?: (device: MediaDeviceInfo) => void) => {
+export const useAudioDeviceSelection = (
+    onDeviceChanged?: (device: MediaDeviceInfo) => void,
+): {
+    currentDevice: MediaDeviceInfo;
+    currentDeviceLabel: string;
+    devices: MediaDeviceInfo[];
+    setDevice(device: MediaDeviceInfo): void;
+} => {
     const shouldRequestPermissionsRef = useRef<boolean>(true);
     const [state, setState] = useState<State>({
         devices: [],
@@ -52,7 +59,7 @@ export const useAudioDeviceSelection = (onDeviceChanged?: (device: MediaDeviceIn
         });
     }
 
-    const setDevice = (device: MediaDeviceInfo) => {
+    const setDevice = (device: MediaDeviceInfo): void => {
         const shouldNotify = device.deviceId !== state.device?.deviceId;
         MediaDeviceHandler.instance.setDevice(device.deviceId, MediaDeviceKindEnum.AudioInput);
 

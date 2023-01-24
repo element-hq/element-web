@@ -36,7 +36,7 @@ export class SpaceNotificationState extends NotificationState {
         return this._color === NotificationColor.Unsent ? "!" : null;
     }
 
-    public setRooms(rooms: Room[]) {
+    public setRooms(rooms: Room[]): void {
         const oldRooms = this.rooms;
         const diff = arrayDiff(oldRooms, rooms);
         this.rooms = rooms;
@@ -55,11 +55,11 @@ export class SpaceNotificationState extends NotificationState {
         this.calculateTotalState();
     }
 
-    public getFirstRoomWithNotifications() {
+    public getFirstRoomWithNotifications(): string | undefined {
         return Object.values(this.states).find((state) => state.color >= this.color)?.room.roomId;
     }
 
-    public destroy() {
+    public destroy(): void {
         super.destroy();
         for (const state of Object.values(this.states)) {
             state.off(NotificationStateEvents.Update, this.onRoomNotificationStateUpdate);
@@ -67,11 +67,11 @@ export class SpaceNotificationState extends NotificationState {
         this.states = {};
     }
 
-    private onRoomNotificationStateUpdate = () => {
+    private onRoomNotificationStateUpdate = (): void => {
         this.calculateTotalState();
     };
 
-    private calculateTotalState() {
+    private calculateTotalState(): void {
         const snapshot = this.snapshot();
 
         this._count = 0;

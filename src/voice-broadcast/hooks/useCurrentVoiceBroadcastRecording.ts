@@ -14,20 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { useState } from "react";
+import { VoiceBroadcastRecording, VoiceBroadcastRecordingsStore, VoiceBroadcastRecordingsStoreEvent } from "..";
+import { useTypedEventEmitterState } from "../../hooks/useEventEmitter";
 
-import { VoiceBroadcastRecordingsStore, VoiceBroadcastRecordingsStoreEvent } from "..";
-import { useTypedEventEmitter } from "../../hooks/useEventEmitter";
-
-export const useCurrentVoiceBroadcastRecording = (voiceBroadcastRecordingsStore: VoiceBroadcastRecordingsStore) => {
-    const [currentVoiceBroadcastRecording, setCurrentVoiceBroadcastRecording] = useState(
-        voiceBroadcastRecordingsStore.getCurrent(),
-    );
-
-    useTypedEventEmitter(
+export const useCurrentVoiceBroadcastRecording = (
+    voiceBroadcastRecordingsStore: VoiceBroadcastRecordingsStore,
+): {
+    currentVoiceBroadcastRecording: VoiceBroadcastRecording;
+} => {
+    const currentVoiceBroadcastRecording = useTypedEventEmitterState(
         voiceBroadcastRecordingsStore,
         VoiceBroadcastRecordingsStoreEvent.CurrentChanged,
-        setCurrentVoiceBroadcastRecording,
+        (recording?: VoiceBroadcastRecording) => {
+            return recording ?? voiceBroadcastRecordingsStore.getCurrent();
+        },
     );
 
     return {

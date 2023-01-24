@@ -65,7 +65,7 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
         return WidgetStore.internalInstance;
     }
 
-    private initRoom(roomId: string) {
+    private initRoom(roomId: string): void {
         if (!this.roomMap.has(roomId)) {
             this.roomMap.set(roomId, {
                 widgets: [],
@@ -91,11 +91,11 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
     }
 
     // We don't need this, but our contract says we do.
-    protected async onAction(payload: ActionPayload) {
+    protected async onAction(payload: ActionPayload): Promise<void> {
         return;
     }
 
-    private onWidgetEchoStoreUpdate = (roomId: string, widgetId: string) => {
+    private onWidgetEchoStoreUpdate = (roomId: string, widgetId: string): void => {
         this.initRoom(roomId);
         this.loadRoomWidgets(this.matrixClient.getRoom(roomId));
         this.emit(UPDATE_EVENT, roomId);
@@ -113,7 +113,7 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
         });
     }
 
-    private loadRoomWidgets(room: Room) {
+    private loadRoomWidgets(room: Room): void {
         if (!room) return;
         const roomInfo = this.roomMap.get(room.roomId) || <IRoomWidgets>{};
         roomInfo.widgets = [];
@@ -164,13 +164,13 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
         this.emit(room.roomId);
     }
 
-    private onRoom = (room: Room) => {
+    private onRoom = (room: Room): void => {
         this.initRoom(room.roomId);
         this.loadRoomWidgets(room);
         this.emit(UPDATE_EVENT, room.roomId);
     };
 
-    private onRoomStateEvents = (ev: MatrixEvent) => {
+    private onRoomStateEvents = (ev: MatrixEvent): void => {
         if (ev.getType() !== "im.vector.modular.widgets") return; // TODO: Support m.widget too
         const roomId = ev.getRoomId();
         this.initRoom(roomId);

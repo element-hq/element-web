@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { createRef } from "react";
+import React, { createRef, ReactNode } from "react";
 import classNames from "classnames";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { Room } from "matrix-js-sdk/src/models/room";
@@ -77,10 +77,10 @@ import dis from "../../../dispatcher/dispatcher";
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
 /* eslint-disable camelcase */
 
-interface IRecentUser {
+interface Result {
     userId: string;
-    user: RoomMember;
-    lastActive: number;
+    user: RoomMember | DirectoryMember | ThreepidMember;
+    lastActive?: number;
 }
 
 const INITIAL_ROOMS_SHOWN = 3; // Number of rooms to show at first
@@ -92,7 +92,7 @@ enum TabId {
 }
 
 class DMUserTile extends React.PureComponent<IDMUserTileProps> {
-    private onRemove = (e) => {
+    private onRemove = (e): void => {
         // Stop the browser from highlighting text
         e.preventDefault();
         e.stopPropagation();
@@ -100,7 +100,7 @@ class DMUserTile extends React.PureComponent<IDMUserTileProps> {
         this.props.onRemove(this.props.member);
     };
 
-    public render() {
+    public render(): JSX.Element {
         const avatarSize = 20;
         const avatar = <SearchResultAvatar user={this.props.member} size={avatarSize} />;
 
@@ -139,7 +139,7 @@ interface IDMRoomTileProps {
 }
 
 class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
-    private onClick = (e) => {
+    private onClick = (e): void => {
         // Stop the browser from highlighting text
         e.preventDefault();
         e.stopPropagation();
@@ -147,7 +147,7 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
         this.props.onToggle(this.props.member);
     };
 
-    private highlightName(str: string) {
+    private highlightName(str: string): ReactNode {
         if (!this.props.highlightWord) return str;
 
         // We convert things to lowercase for index searching, but pull substrings from
@@ -156,10 +156,10 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
         const lowerStr = str.toLowerCase();
         const filterStr = this.props.highlightWord.toLowerCase();
 
-        const result = [];
+        const result: JSX.Element[] = [];
 
         let i = 0;
-        let ii;
+        let ii: number;
         while ((ii = lowerStr.indexOf(filterStr, i)) >= 0) {
             // Push any text we missed (first bit/middle of text)
             if (ii > i) {
@@ -187,7 +187,7 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
         return result;
     }
 
-    public render() {
+    public render(): JSX.Element {
         let timestamp = null;
         if (this.props.lastActiveTs) {
             const humanTs = humanizeTime(this.props.lastActiveTs);
@@ -283,12 +283,12 @@ type Props = InviteDMProps | InviteRoomProps | InviteCallProps;
 interface IInviteDialogState {
     targets: Member[]; // array of Member objects (see interface above)
     filterText: string;
-    recents: { user: Member; userId: string }[];
+    recents: Result[];
     numRecentsShown: number;
-    suggestions: { user: Member; userId: string }[];
+    suggestions: Result[];
     numSuggestionsShown: number;
-    serverResultsMixin: { user: Member; userId: string }[];
-    threepidResultsMixin: { user: Member; userId: string }[];
+    serverResultsMixin: Result[];
+    threepidResultsMixin: Result[];
     canUseIdentityServer: boolean;
     tryingIdentityServer: boolean;
     consultFirst: boolean;
@@ -351,21 +351,21 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         };
     }
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         if (this.props.initialText) {
             this.updateSuggestions(this.props.initialText);
         }
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         this.unmounted = true;
     }
 
-    private onConsultFirstChange = (ev) => {
+    private onConsultFirstChange = (ev): void => {
         this.setState({ consultFirst: ev.target.checked });
     };
 
-    public static buildRecents(excludedTargetIds: Set<string>): IRecentUser[] {
+    public static buildRecents(excludedTargetIds: Set<string>): Result[] {
         const rooms = DMRoomMap.shared().getUniqueRoomsWithIndividuals(); // map of userId => js-sdk Room
 
         // Also pull in all the rooms tagged as DefaultTagID.DM so we don't miss anything. Sometimes the
@@ -464,7 +464,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         return newTargets;
     }
 
-    private startDm = async () => {
+    private startDm = async (): Promise<void> => {
         try {
             const cli = MatrixClientPeg.get();
             const targets = this.convertFilter();
@@ -479,7 +479,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         }
     };
 
-    private inviteUsers = async () => {
+    private inviteUsers = async (): Promise<void> => {
         if (this.props.kind !== KIND_INVITE) return;
         this.setState({ busy: true });
         this.convertFilter();
@@ -514,7 +514,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         }
     };
 
-    private transferCall = async () => {
+    private transferCall = async (): Promise<void> => {
         if (this.props.kind !== KIND_CALL_TRANSFER) return;
         if (this.state.currentTabId == TabId.UserDirectory) {
             this.convertFilter();
@@ -538,7 +538,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         this.props.onFinished(true);
     };
 
-    private onKeyDown = (e) => {
+    private onKeyDown = (e): void => {
         if (this.state.busy) return;
 
         let handled = false;
@@ -574,14 +574,14 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         }
     };
 
-    private onCancel = () => {
+    private onCancel = (): void => {
         this.props.onFinished(false);
     };
 
-    private updateSuggestions = async (term: string) => {
+    private updateSuggestions = async (term: string): Promise<void> => {
         MatrixClientPeg.get()
             .searchUserDirectory({ term })
-            .then(async (r) => {
+            .then(async (r): Promise<void> => {
                 if (term !== this.state.filterText) {
                     // Discard the results - we were probably too slow on the server-side to make
                     // these results useful. This is a race we want to avoid because we could overwrite
@@ -692,7 +692,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         }
     };
 
-    private updateFilter = (e) => {
+    private updateFilter = (e): void => {
         const term = e.target.value;
         this.setState({ filterText: term });
 
@@ -707,15 +707,15 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         }, 150); // 150ms debounce (human reaction time + some)
     };
 
-    private showMoreRecents = () => {
+    private showMoreRecents = (): void => {
         this.setState({ numRecentsShown: this.state.numRecentsShown + INCREMENT_ROOMS_SHOWN });
     };
 
-    private showMoreSuggestions = () => {
+    private showMoreSuggestions = (): void => {
         this.setState({ numSuggestionsShown: this.state.numSuggestionsShown + INCREMENT_ROOMS_SHOWN });
     };
 
-    private toggleMember = (member: Member) => {
+    private toggleMember = (member: Member): void => {
         if (!this.state.busy) {
             let filterText = this.state.filterText;
             let targets = this.state.targets.map((t) => t); // cheap clone for mutation
@@ -737,7 +737,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         }
     };
 
-    private removeMember = (member: Member) => {
+    private removeMember = (member: Member): void => {
         const targets = this.state.targets.map((t) => t); // cheap clone for mutation
         const idx = targets.indexOf(member);
         if (idx >= 0) {
@@ -750,7 +750,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         }
     };
 
-    private onPaste = async (e) => {
+    private onPaste = async (e): Promise<void> => {
         if (this.state.filterText) {
             // if the user has already typed something, just let them
             // paste normally.
@@ -825,7 +825,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         this.setState({ targets: [...this.state.targets, ...toAdd] });
     };
 
-    private onClickInputArea = (e) => {
+    private onClickInputArea = (e): void => {
         // Stop the browser from highlighting text
         e.preventDefault();
         e.stopPropagation();
@@ -835,7 +835,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         }
     };
 
-    private onUseDefaultIdentityServerClick = (e) => {
+    private onUseDefaultIdentityServerClick = (e): void => {
         e.preventDefault();
 
         // Update the IS in account data. Actually using it may trigger terms.
@@ -844,17 +844,17 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         this.setState({ canUseIdentityServer: true, tryingIdentityServer: false });
     };
 
-    private onManageSettingsClick = (e) => {
+    private onManageSettingsClick = (e): void => {
         e.preventDefault();
         dis.fire(Action.ViewUserSettings);
         this.props.onFinished(false);
     };
 
-    private renderSection(kind: "recents" | "suggestions") {
+    private renderSection(kind: "recents" | "suggestions"): JSX.Element {
         let sourceMembers = kind === "recents" ? this.state.recents : this.state.suggestions;
         let showNum = kind === "recents" ? this.state.numRecentsShown : this.state.numSuggestionsShown;
         const showMoreFn = kind === "recents" ? this.showMoreRecents.bind(this) : this.showMoreSuggestions.bind(this);
-        const lastActive = (m) => (kind === "recents" ? m.lastActive : null);
+        const lastActive = (m: Result): number | null => (kind === "recents" ? m.lastActive : null);
         let sectionName = kind === "recents" ? _t("Recent Conversations") : _t("Suggestions");
 
         if (this.props.kind === KIND_INVITE) {
@@ -945,7 +945,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         );
     }
 
-    private renderEditor() {
+    private renderEditor(): JSX.Element {
         const hasPlaceholder =
             this.props.kind == KIND_CALL_TRANSFER &&
             this.state.targets.length === 0 &&
@@ -976,7 +976,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         );
     }
 
-    private renderIdentityServerWarning() {
+    private renderIdentityServerWarning(): JSX.Element {
         if (
             !this.state.tryingIdentityServer ||
             this.state.canUseIdentityServer ||
@@ -1030,16 +1030,16 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         }
     }
 
-    private onDialFormSubmit = (ev) => {
+    private onDialFormSubmit = (ev): void => {
         ev.preventDefault();
         this.transferCall();
     };
 
-    private onDialChange = (ev) => {
+    private onDialChange = (ev): void => {
         this.setState({ dialPadValue: ev.currentTarget.value });
     };
 
-    private onDigitPress = (digit: string, ev: ButtonEvent) => {
+    private onDigitPress = (digit: string, ev: ButtonEvent): void => {
         this.setState({ dialPadValue: this.state.dialPadValue + digit });
 
         // Keep the number field focused so that keyboard entry is still available
@@ -1050,7 +1050,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         }
     };
 
-    private onDeletePress = (ev: ButtonEvent) => {
+    private onDeletePress = (ev: ButtonEvent): void => {
         if (this.state.dialPadValue.length === 0) return;
         this.setState({ dialPadValue: this.state.dialPadValue.slice(0, -1) });
 
@@ -1062,11 +1062,11 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         }
     };
 
-    private onTabChange = (tabId: TabId) => {
+    private onTabChange = (tabId: TabId): void => {
         this.setState({ currentTabId: tabId });
     };
 
-    private async onLinkClick(e) {
+    private async onLinkClick(e): Promise<void> {
         e.preventDefault();
         selectText(e.target);
     }
@@ -1078,7 +1078,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         }
     }
 
-    public render() {
+    public render(): JSX.Element {
         let spinner = null;
         if (this.state.busy) {
             spinner = <Spinner w={20} h={20} />;

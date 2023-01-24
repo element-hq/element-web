@@ -252,7 +252,7 @@ const findVisibleRooms = (cli: MatrixClient): Room[] => {
     });
 };
 
-const findVisibleRoomMembers = (cli: MatrixClient, filterDMs = true) => {
+const findVisibleRoomMembers = (cli: MatrixClient, filterDMs = true): RoomMember[] => {
     return Object.values(
         findVisibleRooms(cli)
             .filter((room) => !filterDMs || !DMRoomMap.shared().getUserIdForRoomId(room.roomId))
@@ -489,7 +489,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
         room: { roomId: string; roomAlias?: string; autoJoin?: boolean; shouldPeek?: boolean },
         persist = false,
         viaKeyboard = false,
-    ) => {
+    ): void => {
         if (persist) {
             const recents = new Set(SettingsStore.getValue("SpotlightSearch.recentSearches", null).reverse());
             // remove & add the room to put it at the end
@@ -620,7 +620,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                 const showViewButton =
                     clientRoom?.getMyMembership() === "join" || result.publicRoom.world_readable || cli.isGuest();
 
-                const listener = (ev) => {
+                const listener = (ev): void => {
                     const { publicRoom } = result;
                     viewRoom(
                         {
@@ -1060,7 +1060,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
         );
     }
 
-    const onDialogKeyDown = (ev: KeyboardEvent) => {
+    const onDialogKeyDown = (ev: KeyboardEvent): void => {
         const navigationAction = getKeyBindingsManager().getNavigationAction(ev);
         switch (navigationAction) {
             case KeyBindingAction.FilterRooms:
@@ -1131,7 +1131,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
         }
     };
 
-    const onKeyDown = (ev: KeyboardEvent) => {
+    const onKeyDown = (ev: KeyboardEvent): void => {
         const action = getKeyBindingsManager().getAccessibilityAction(ev);
 
         switch (action) {

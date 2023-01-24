@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<VoiceBroadcastSmallPlaybackBody /> when rendering a { state: 0, liveness: 'not-live' }/%s broadcast should render as expected 1`] = `
+exports[`<VoiceBroadcastSmallPlaybackBody /> when rendering a { state: 'pause', liveness: 'not-live' }/%s broadcast should render as expected 1`] = `
 <div>
   <div
     class="mx_VoiceBroadcastBody mx_VoiceBroadcastBody--pip mx_VoiceBroadcastBody--small"
@@ -76,7 +76,7 @@ exports[`<VoiceBroadcastSmallPlaybackBody /> when rendering a { state: 0, livene
 </div>
 `;
 
-exports[`<VoiceBroadcastSmallPlaybackBody /> when rendering a { state: 1, liveness: 'live' }/%s broadcast should render as expected 1`] = `
+exports[`<VoiceBroadcastSmallPlaybackBody /> when rendering a { state: 'playing', liveness: 'live' }/%s broadcast should render as expected 1`] = `
 <div>
   <div
     class="mx_VoiceBroadcastBody mx_VoiceBroadcastBody--pip mx_VoiceBroadcastBody--small"

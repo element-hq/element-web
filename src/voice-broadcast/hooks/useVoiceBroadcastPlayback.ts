@@ -14,13 +14,33 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { useState } from "react";
+import { Room } from "matrix-js-sdk/src/models/room";
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 
-import { useTypedEventEmitter } from "../../hooks/useEventEmitter";
+import { useTypedEventEmitterState } from "../../hooks/useEventEmitter";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
-import { VoiceBroadcastPlayback, VoiceBroadcastPlaybackEvent, VoiceBroadcastPlaybackState } from "..";
+import {
+    VoiceBroadcastLiveness,
+    VoiceBroadcastPlayback,
+    VoiceBroadcastPlaybackEvent,
+    VoiceBroadcastPlaybackState,
+    VoiceBroadcastPlaybackTimes,
+} from "..";
 
-export const useVoiceBroadcastPlayback = (playback: VoiceBroadcastPlayback) => {
+export const useVoiceBroadcastPlayback = (
+    playback: VoiceBroadcastPlayback,
+): {
+    times: {
+        duration: number;
+        position: number;
+        timeLeft: number;
+    };
+    sender: RoomMember;
+    liveness: VoiceBroadcastLiveness;
+    playbackState: VoiceBroadcastPlaybackState;
+    toggle(): void;
+    room: Room;
+} => {
     const client = MatrixClientPeg.get();
     const room = client.getRoom(playback.infoEvent.getRoomId());
 
@@ -28,28 +48,39 @@ export const useVoiceBroadcastPlayback = (playback: VoiceBroadcastPlayback) => {
         throw new Error(`Voice Broadcast room not found (event ${playback.infoEvent.getId()})`);
     }
 
-    const playbackToggle = () => {
+    const playbackToggle = (): void => {
         playback.toggle();
     };
 
-    const [playbackState, setPlaybackState] = useState(playback.getState());
-    useTypedEventEmitter(
+    const playbackState = useTypedEventEmitterState(
         playback,
         VoiceBroadcastPlaybackEvent.StateChanged,
-        (state: VoiceBroadcastPlaybackState, _playback: VoiceBroadcastPlayback) => {
-            setPlaybackState(state);
+        (state?: VoiceBroadcastPlaybackState) => {
+            return state ?? playback.getState();
         },
     );
 
-    const [times, setTimes] = useState({
-        duration: playback.durationSeconds,
-        position: playback.timeSeconds,
-        timeLeft: playback.timeLeftSeconds,
-    });
-    useTypedEventEmitter(playback, VoiceBroadcastPlaybackEvent.TimesChanged, (t) => setTimes(t));
+    const times = useTypedEventEmitterState(
+        playback,
+        VoiceBroadcastPlaybackEvent.TimesChanged,
+        (t?: VoiceBroadcastPlaybackTimes) => {
+            return (
+                t ?? {
+                    duration: playback.durationSeconds,
+                    position: playback.timeSeconds,
+                    timeLeft: playback.timeLeftSeconds,
+                }
+            );
+        },
+    );
 
-    const [liveness, setLiveness] = useState(playback.getLiveness());
-    useTypedEventEmitter(playback, VoiceBroadcastPlaybackEvent.LivenessChanged, (l) => setLiveness(l));
+    const liveness = useTypedEventEmitterState(
+        playback,
+        VoiceBroadcastPlaybackEvent.LivenessChanged,
+        (l?: VoiceBroadcastLiveness) => {
+            return l ?? playback.getLiveness();
+        },
+    );
 
     return {
         times,

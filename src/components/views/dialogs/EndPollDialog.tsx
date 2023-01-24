@@ -17,7 +17,7 @@ limitations under the License.
 import React from "react";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { MatrixClient } from "matrix-js-sdk/src/client";
-import { PollEndEvent } from "matrix-events-sdk";
+import { PollEndEvent } from "matrix-js-sdk/src/extensible_events_v1/PollEndEvent";
 
 import { _t } from "../../../languageHandler";
 import { IDialogProps } from "./IDialogProps";
@@ -35,7 +35,7 @@ interface IProps extends IDialogProps {
 }
 
 export default class EndPollDialog extends React.Component<IProps> {
-    private onFinished = (endPoll: boolean) => {
+    private onFinished = (endPoll: boolean): void => {
         const topAnswer = findTopAnswer(this.props.event, this.props.matrixClient, this.props.getRelationsForEvent);
 
         const message =
@@ -59,7 +59,7 @@ export default class EndPollDialog extends React.Component<IProps> {
         this.props.onFinished(endPoll);
     };
 
-    public render() {
+    public render(): JSX.Element {
         return (
             <QuestionDialog
                 title={_t("End Poll")}

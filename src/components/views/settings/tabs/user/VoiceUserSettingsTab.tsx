@@ -52,7 +52,7 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
         };
     }
 
-    public async componentDidMount() {
+    public async componentDidMount(): Promise<void> {
         const canSeeDeviceLabels = await MediaDeviceHandler.hasAnyLabeledDevices();
         if (canSeeDeviceLabels) {
             this.refreshMediaDevices();
@@ -121,7 +121,7 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
         );
     }
 
-    public render() {
+    public render(): JSX.Element {
         let requestButton = null;
         let speakerDropdown = null;
         let microphoneDropdown = null;
@@ -157,7 +157,7 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
                     {microphoneDropdown}
                     <LabelledToggleSwitch
                         value={this.state.audioAutoGainControl}
-                        onChange={async (v) => {
+                        onChange={async (v): Promise<void> => {
                             await MediaDeviceHandler.setAudioAutoGainControl(v);
                             this.setState({ audioAutoGainControl: MediaDeviceHandler.getAudioAutoGainControl() });
                         }}
@@ -177,7 +177,7 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
                     <div className="mx_SettingsTab_section">
                         <LabelledToggleSwitch
                             value={this.state.audioNoiseSuppression}
-                            onChange={async (v) => {
+                            onChange={async (v): Promise<void> => {
                                 await MediaDeviceHandler.setAudioNoiseSuppression(v);
                                 this.setState({ audioNoiseSuppression: MediaDeviceHandler.getAudioNoiseSuppression() });
                             }}
@@ -186,7 +186,7 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
                         />
                         <LabelledToggleSwitch
                             value={this.state.audioEchoCancellation}
-                            onChange={async (v) => {
+                            onChange={async (v): Promise<void> => {
                                 await MediaDeviceHandler.setAudioEchoCancellation(v);
                                 this.setState({ audioEchoCancellation: MediaDeviceHandler.getAudioEchoCancellation() });
                             }}

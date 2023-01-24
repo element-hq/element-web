@@ -60,7 +60,7 @@ export default class MemberTile extends React.Component<IProps, IState> {
         };
     }
 
-    public componentDidMount() {
+    public componentDidMount(): void {
         const cli = MatrixClientPeg.get();
 
         const { roomId } = this.props.member;
@@ -80,7 +80,7 @@ export default class MemberTile extends React.Component<IProps, IState> {
         }
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount(): void {
         const cli = MatrixClientPeg.get();
 
         if (cli) {
@@ -183,7 +183,7 @@ export default class MemberTile extends React.Component<IProps, IState> {
         }).trim();
     }
 
-    public render() {
+    public render(): JSX.Element {
         const member = this.props.member;
         const name = this.getDisplayName();
         const presenceState = member.user ? member.user.presence : null;

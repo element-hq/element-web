@@ -108,7 +108,7 @@ export default class Slider extends React.Component<IProps> {
         );
     }
 
-    public onClick(event: React.MouseEvent) {
+    public onClick(event: React.MouseEvent): void {
         const width = (event.target as HTMLElement).clientWidth;
         // nativeEvent is safe to use because https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/offsetX
         // is supported by all modern browsers

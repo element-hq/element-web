@@ -45,7 +45,7 @@ export class ModuleUiDialog extends ScrollableBaseModal<IProps, IState> {
         };
     }
 
-    protected async submit() {
+    protected async submit(): Promise<void> {
         try {
             const model = await this.contentRef.current.trySubmit();
             this.props.onFinished(true, model);

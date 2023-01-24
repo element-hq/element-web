@@ -87,7 +87,7 @@ interface IAction {
     };
 }
 
-export const reducer = (state: IState, action: IAction) => {
+export const reducer: Reducer<IState, IAction> = (state: IState, action: IAction) => {
     switch (action.type) {
         case Type.Register: {
             if (!state.activeRef) {

@@ -32,7 +32,7 @@ interface Props {
     room: Room;
 }
 
-export function RoomResultContextMenus({ room }: Props) {
+export function RoomResultContextMenus({ room }: Props): JSX.Element {
     const [notificationState] = useNotificationState(room);
 
     const [generalMenuPosition, setGeneralMenuPosition] = useState<DOMRect | null>(null);

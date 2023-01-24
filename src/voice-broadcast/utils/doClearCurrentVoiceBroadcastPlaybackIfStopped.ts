@@ -18,7 +18,7 @@ import { VoiceBroadcastPlaybacksStore, VoiceBroadcastPlaybackState } from "..";
 
 export const doClearCurrentVoiceBroadcastPlaybackIfStopped = (
     voiceBroadcastPlaybacksStore: VoiceBroadcastPlaybacksStore,
-) => {
+): void => {
     if (voiceBroadcastPlaybacksStore.getCurrent()?.getState() === VoiceBroadcastPlaybackState.Stopped) {
         // clear current if stopped
         return;

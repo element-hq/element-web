@@ -125,11 +125,11 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         return `update_${room.roomId}`;
     }
 
-    private emitFor(room: Room) {
+    private emitFor(room: Room): void {
         this.emit(WidgetLayoutStore.emissionForRoom(room));
     }
 
-    protected async onReady(): Promise<any> {
+    protected async onReady(): Promise<void> {
         this.updateAllRooms();
 
         this.matrixClient.on(RoomStateEvent.Events, this.updateRoomFromState);
@@ -138,7 +138,7 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         WidgetStore.instance.on(UPDATE_EVENT, this.updateFromWidgetStore);
     }
 
-    protected async onNotReady(): Promise<any> {
+    protected async onNotReady(): Promise<void> {
         this.byRoom = {};
 
         this.matrixClient?.off(RoomStateEvent.Events, this.updateRoomFromState);
@@ -147,14 +147,14 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         WidgetStore.instance.off(UPDATE_EVENT, this.updateFromWidgetStore);
     }
 
-    private updateAllRooms = () => {
+    private updateAllRooms = (): void => {
         this.byRoom = {};
         for (const room of this.matrixClient.getVisibleRooms()) {
             this.recalculateRoom(room);
         }
     };
 
-    private updateFromWidgetStore = (roomId?: string) => {
+    private updateFromWidgetStore = (roomId?: string): void => {
         if (roomId) {
             const room = this.matrixClient.getRoom(roomId);
             if (room) this.recalculateRoom(room);
@@ -163,13 +163,13 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         }
     };
 
-    private updateRoomFromState = (ev: MatrixEvent) => {
+    private updateRoomFromState = (ev: MatrixEvent): void => {
         if (ev.getType() !== WIDGET_LAYOUT_EVENT_TYPE) return;
         const room = this.matrixClient.getRoom(ev.getRoomId());
         if (room) this.recalculateRoom(room);
     };
 
-    private updateFromSettings = (settingName: string, roomId: string /* and other stuff */) => {
+    private updateFromSettings = (settingName: string, roomId: string /* and other stuff */): void => {
         if (roomId) {
             const room = this.matrixClient.getRoom(roomId);
             if (room) this.recalculateRoom(room);
@@ -178,7 +178,7 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         }
     };
 
-    public recalculateRoom(room: Room) {
+    public recalculateRoom(room: Room): void {
         const widgets = WidgetStore.instance.getApps(room.roomId);
         if (!widgets?.length) {
             this.byRoom[room.roomId] = {};
@@ -380,7 +380,7 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         return distributions.map((d) => `${d.toFixed(1)}%`); // actual percents - these are decoded later
     }
 
-    public setResizerDistributions(room: Room, container: Container, distributions: string[]) {
+    public setResizerDistributions(room: Room, container: Container, distributions: string[]): void {
         if (container !== Container.Top) return; // ignore - not relevant
 
         const numbers = distributions.map((d) => Number(Number(d.substring(0, d.length - 1)).toFixed(1)));
@@ -407,14 +407,14 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         return this.byRoom[room.roomId]?.[container]?.height; // let the default get returned if needed
     }
 
-    public setContainerHeight(room: Room, container: Container, height: number) {
+    public setContainerHeight(room: Room, container: Container, height: number): void {
         const widgets = this.getContainerWidgets(room, container);
         const widths = this.byRoom[room.roomId]?.[container]?.distributions;
         const localLayout = {};
         widgets.forEach((w, i) => {
             localLayout[w.id] = {
                 container: container,
-                width: widths[i],
+                width: widths?.[i],
                 index: i,
                 height: height,
             };
@@ -422,7 +422,7 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         this.updateUserLayout(room, localLayout);
     }
 
-    public moveWithinContainer(room: Room, container: Container, widget: IApp, delta: number) {
+    public moveWithinContainer(room: Room, container: Container, widget: IApp, delta: number): void {
         const widgets = arrayFastClone(this.getContainerWidgets(room, container));
         const currentIdx = widgets.findIndex((w) => w.id === widget.id);
         if (currentIdx < 0) return; // no change needed
@@ -437,7 +437,7 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         widgets.forEach((w, i) => {
             localLayout[w.id] = {
                 container: container,
-                width: widths[i],
+                width: widths?.[i],
                 index: i,
                 height: height,
             };
@@ -445,7 +445,7 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         this.updateUserLayout(room, localLayout);
     }
 
-    public moveToContainer(room: Room, widget: IApp, toContainer: Container) {
+    public moveToContainer(room: Room, widget: IApp, toContainer: Container): void {
         const allWidgets = this.getAllWidgets(room);
         if (!allWidgets.some(([w]) => w.id === widget.id)) return; // invalid
         // Prepare other containers (potentially move widgets to obey the following rules)
@@ -478,11 +478,11 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         this.updateUserLayout(room, newLayout);
     }
 
-    public hasMaximisedWidget(room: Room) {
+    public hasMaximisedWidget(room: Room): boolean {
         return this.getContainerWidgets(room, Container.Center).length > 0;
     }
 
-    public hasPinnedWidgets(room: Room) {
+    public hasPinnedWidgets(room: Room): boolean {
         return this.getContainerWidgets(room, Container.Top).length > 0;
     }
 
@@ -491,7 +491,7 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         return room.currentState.maySendStateEvent(WIDGET_LAYOUT_EVENT_TYPE, this.matrixClient.getUserId());
     }
 
-    public copyLayoutToRoom(room: Room) {
+    public copyLayoutToRoom(room: Room): void {
         const allWidgets = this.getAllWidgets(room);
         const evContent: ILayoutStateEvent = { widgets: {} };
         for (const [widget, container] of allWidgets) {
@@ -526,7 +526,7 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         return ret;
     }
 
-    private updateUserLayout(room: Room, newLayout: IWidgetLayouts) {
+    private updateUserLayout(room: Room, newLayout: IWidgetLayouts): void {
         // Polyfill any missing widgets
         const allWidgets = this.getAllWidgets(room);
         for (const [widget, container] of allWidgets) {

@@ -27,11 +27,11 @@ interface Props {
 }
 
 const ZoomButtons: React.FC<Props> = ({ map }) => {
-    const onZoomIn = () => {
+    const onZoomIn = (): void => {
         map.zoomIn();
     };
 
-    const onZoomOut = () => {
+    const onZoomOut = (): void => {
         map.zoomOut();
     };
 

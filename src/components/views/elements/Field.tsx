@@ -26,7 +26,7 @@ const VALIDATION_THROTTLE_MS = 200;
 
 const BASE_ID = "mx_Field";
 let count = 1;
-function getId() {
+function getId(): string {
     return `${BASE_ID}_${count++}`;
 }
 
@@ -157,7 +157,7 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
         this.id = this.props.id || getId();
     }
 
-    public focus() {
+    public focus(): void {
         this.inputRef.current?.focus();
         // programmatic does not fire onFocus handler
         this.setState({
@@ -165,7 +165,7 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
         });
     }
 
-    private onFocus = (ev) => {
+    private onFocus = (ev): void => {
         this.setState({
             focused: true,
         });
@@ -180,7 +180,7 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
         }
     };
 
-    private onChange = (ev) => {
+    private onChange = (ev): void => {
         if (this.props.validateOnChange) {
             this.validateOnChange();
         }
@@ -190,7 +190,7 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
         }
     };
 
-    private onBlur = (ev) => {
+    private onBlur = (ev): void => {
         this.setState({
             focused: false,
         });
@@ -205,7 +205,7 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
         }
     };
 
-    public async validate({ focused, allowEmpty = true }: IValidateOpts) {
+    public async validate({ focused, allowEmpty = true }: IValidateOpts): Promise<boolean> {
         if (!this.props.onValidate) {
             return;
         }
@@ -238,7 +238,7 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
         return valid;
     }
 
-    public render() {
+    public render(): JSX.Element {
         /* eslint @typescript-eslint/no-unused-vars: ["error", { "ignoreRestSiblings": true }] */
         const {
             element,

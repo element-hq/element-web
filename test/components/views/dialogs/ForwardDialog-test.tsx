@@ -18,7 +18,7 @@ import React from "react";
 import { act } from "react-dom/test-utils";
 import { MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
 import { LocationAssetType, M_ASSET, M_LOCATION, M_TIMESTAMP } from "matrix-js-sdk/src/@types/location";
-import { TEXT_NODE_TYPE } from "matrix-js-sdk/src/@types/extensible_events";
+import { M_TEXT } from "matrix-js-sdk/src/@types/extensible_events";
 import { fireEvent, getByTestId, render, RenderResult, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
@@ -248,7 +248,7 @@ describe("ForwardDialog", () => {
             const expectedStrippedContent = {
                 ...modernLocationEvent.getContent(),
                 body: text,
-                [TEXT_NODE_TYPE.name]: text,
+                [M_TEXT.name]: text,
                 [M_TIMESTAMP.name]: now,
                 [M_ASSET.name]: { type: LocationAssetType.Pin },
                 [M_LOCATION.name]: {
@@ -276,7 +276,7 @@ describe("ForwardDialog", () => {
             const expectedStrippedContent = {
                 ...modernLocationEvent.getContent(),
                 body: text,
-                [TEXT_NODE_TYPE.name]: text,
+                [M_TEXT.name]: text,
                 [M_ASSET.name]: { type: LocationAssetType.Pin },
                 [M_LOCATION.name]: {
                     uri: geoUri,
@@ -297,7 +297,7 @@ describe("ForwardDialog", () => {
             const expectedContent = {
                 msgtype: "m.location",
                 body: text,
-                [TEXT_NODE_TYPE.name]: text,
+                [M_TEXT.name]: text,
                 [M_ASSET.name]: { type: LocationAssetType.Pin },
                 [M_LOCATION.name]: {
                     uri: geoUri,

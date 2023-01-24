@@ -45,12 +45,12 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
         return SettingLevel.ACCOUNT;
     }
 
-    public initMatrixClient(oldClient: MatrixClient, newClient: MatrixClient) {
+    public initMatrixClient(oldClient: MatrixClient, newClient: MatrixClient): void {
         oldClient?.removeListener(ClientEvent.AccountData, this.onAccountData);
         newClient.on(ClientEvent.AccountData, this.onAccountData);
     }
 
-    private onAccountData = (event: MatrixEvent, prevEvent: MatrixEvent) => {
+    private onAccountData = (event: MatrixEvent, prevEvent: MatrixEvent): void => {
         if (event.getType() === "org.matrix.preview_urls") {
             let val = event.getContent()["disable"];
             if (typeof val !== "boolean") {
@@ -168,7 +168,7 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
         // Attach a deferred *before* setting the account data to ensure we catch any requests
         // which race between different lines.
         const deferred = defer<void>();
-        const handler = (event: MatrixEvent) => {
+        const handler = (event: MatrixEvent): void => {
             if (event.getType() !== eventType || event.getContent()[field] !== value) return;
             this.client.off(ClientEvent.AccountData, handler);
             deferred.resolve();
@@ -229,7 +229,7 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
         return objectClone(event.getContent()); // clone to prevent mutation
     }
 
-    private notifyBreadcrumbsUpdate(event: MatrixEvent) {
+    private notifyBreadcrumbsUpdate(event: MatrixEvent): void {
         let val = [];
         if (event.getType() === BREADCRUMBS_LEGACY_EVENT_TYPE) {
             // This seems fishy - try and get the event for the new rooms

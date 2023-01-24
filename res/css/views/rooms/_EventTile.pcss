@@ -548,7 +548,19 @@ $left-gutter: 64px;
         pre,
         code {
             font-family: $monospace-font-family !important;
-            background-color: $codeblock-background-color;
+            background-color: $system;
+        }
+
+        code:not(pre *) {
+            background-color: $inlinecode-background-color;
+            border: 1px solid $inlinecode-border-color;
+            border-radius: 4px;
+            // The horizontal padding is added by gfm.css .markdown-body
+            padding: $spacing-2 0;
+            // Avoid inline code blocks to be sticked when on multiple lines
+            line-height: $font-22px;
+            // Avoid the border to be glued to the other words
+            margin-right: $spacing-2;
         }
 
         code {
@@ -565,6 +577,8 @@ $left-gutter: 64px;
             &::-webkit-scrollbar-corner {
                 background: transparent;
             }
+
+            border: 1px solid $quinary-content;
 
             code {
                 white-space: pre; /* we want code blocks to be scrollable and not wrap */
@@ -618,6 +632,17 @@ $left-gutter: 64px;
         ol ol,
         ul ol {
             list-style-type: revert;
+        }
+
+        /* Make list type disc to match rich text editor */
+        > ul {
+            list-style-type: disc;
+        }
+
+        /* Remove top and bottom margin for better consecutive list display */
+        > :is(ol, ul) {
+            margin-top: 0;
+            margin-bottom: 0;
         }
     }
 }
@@ -733,6 +758,8 @@ $left-gutter: 64px;
 
         .mx_EventTile_collapsedCodeBlock {
             max-height: 30vh;
+            padding-top: $spacing-12;
+            padding-bottom: $spacing-12;
         }
 
         /* Inserted adjacent to <pre> blocks, (See TextualBody) */
@@ -873,6 +900,7 @@ $left-gutter: 64px;
 
     &::before {
         inset: 0;
+        pointer-events: none; /* ensures the title for the sender name can be correctly displayed */
     }
 
     /* Display notification dot */
@@ -916,8 +944,14 @@ $left-gutter: 64px;
         inset: $padding auto auto $padding;
     }
 
+    .mx_EventTile_details {
+        overflow: hidden;
+    }
+
     .mx_DisambiguatedProfile {
         display: inline-flex;
+        align-items: center;
+        flex: 1;
 
         .mx_DisambiguatedProfile_displayName,
         .mx_DisambiguatedProfile_mxid {
@@ -968,8 +1002,11 @@ $left-gutter: 64px;
 
     .mx_MessageTimestamp {
         font-size: $font-12px;
-        max-width: var(--MessageTimestamp-max-width);
+        width: unset; /* Cancel the default width */
+        overflow: hidden; /* ensure correct overflow behavior */
+        text-overflow: ellipsis;
         position: initial;
+        margin-left: auto; /* to ensure it's end-aligned even if it's the only element of its parent */
     }
 
     &:hover {
@@ -1297,7 +1334,7 @@ $left-gutter: 64px;
 
 .mx_EventTile_details {
     display: flex;
-    width: -webkit-fill-available;
+    width: stretch;
     align-items: center;
     justify-content: space-between;
     gap: $spacing-8;

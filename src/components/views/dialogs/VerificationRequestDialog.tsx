@@ -47,7 +47,7 @@ export default class VerificationRequestDialog extends React.Component<IProps, I
         }
     }
 
-    public render() {
+    public render(): JSX.Element {
         const request = this.state.verificationRequest;
         const otherUserId = request && request.otherUserId;
         const member = this.props.member || (otherUserId && MatrixClientPeg.get().getUser(otherUserId));
