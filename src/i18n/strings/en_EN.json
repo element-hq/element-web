@@ -3270,6 +3270,8 @@
     "A text message has been sent to %(msisdn)s": "A text message has been sent to %(msisdn)s",
     "Please enter the code it contains:": "Please enter the code it contains:",
     "Submit": "Submit",
+    "Enter a registration token provided by the homeserver administrator.": "Enter a registration token provided by the homeserver administrator.",
+    "Registration token": "Registration token",
     "Something went wrong in confirming your identity. Cancel and try again.": "Something went wrong in confirming your identity. Cancel and try again.",
     "Start authentication": "Start authentication",
     "Sign in new device": "Sign in new device",
