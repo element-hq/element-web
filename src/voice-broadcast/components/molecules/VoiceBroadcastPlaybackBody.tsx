@@ -18,6 +18,7 @@ import React, { ReactElement } from "react";
 import classNames from "classnames";
 
 import {
+    VoiceBroadcastError,
     VoiceBroadcastHeader,
     VoiceBroadcastPlayback,
     VoiceBroadcastPlaybackControl,
@@ -67,6 +68,24 @@ export const VoiceBroadcastPlaybackBody: React.FC<VoiceBroadcastPlaybackBodyProp
         ["mx_VoiceBroadcastBody--pip"]: pip,
     });
 
+    const content =
+        playbackState === VoiceBroadcastPlaybackState.Error ? (
+            <VoiceBroadcastError message={playback.errorMessage} />
+        ) : (
+            <>
+                <div className="mx_VoiceBroadcastBody_controls">
+                    {seekBackwardButton}
+                    <VoiceBroadcastPlaybackControl state={playbackState} onClick={toggle} />
+                    {seekForwardButton}
+                </div>
+                <SeekBar playback={playback} />
+                <div className="mx_VoiceBroadcastBody_timerow">
+                    <Clock seconds={times.position} />
+                    <Clock seconds={-times.timeLeft} />
+                </div>
+            </>
+        );
+
     return (
         <div className={classes}>
             <VoiceBroadcastHeader
@@ -77,16 +96,7 @@ export const VoiceBroadcastPlaybackBody: React.FC<VoiceBroadcastPlaybackBodyProp
                 showBroadcast={playbackState !== VoiceBroadcastPlaybackState.Buffering}
                 showBuffering={playbackState === VoiceBroadcastPlaybackState.Buffering}
             />
-            <div className="mx_VoiceBroadcastBody_controls">
-                {seekBackwardButton}
-                <VoiceBroadcastPlaybackControl state={playbackState} onClick={toggle} />
-                {seekForwardButton}
-            </div>
-            <SeekBar playback={playback} />
-            <div className="mx_VoiceBroadcastBody_timerow">
-                <Clock seconds={times.position} />
-                <Clock seconds={-times.timeLeft} />
-            </div>
+            {content}
         </div>
     );
 };

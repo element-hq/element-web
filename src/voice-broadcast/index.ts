@@ -27,6 +27,7 @@ export * from "./audio/VoiceBroadcastRecorder";
 export * from "./components/VoiceBroadcastBody";
 export * from "./components/atoms/LiveBadge";
 export * from "./components/atoms/VoiceBroadcastControl";
+export * from "./components/atoms/VoiceBroadcastError";
 export * from "./components/atoms/VoiceBroadcastHeader";
 export * from "./components/atoms/VoiceBroadcastPlaybackControl";
 export * from "./components/atoms/VoiceBroadcastRecordingConnectionError";

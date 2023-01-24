@@ -28,7 +28,7 @@ import {
     VoiceBroadcastPlaybackEvent,
     VoiceBroadcastPlaybackState,
 } from "../../../../src/voice-broadcast";
-import { stubClient } from "../../../test-utils";
+import { filterConsole, stubClient } from "../../../test-utils";
 import { mkVoiceBroadcastInfoStateEvent } from "../../utils/test-utils";
 import dis from "../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../src/dispatcher/actions";
@@ -52,6 +52,11 @@ describe("VoiceBroadcastPlaybackBody", () => {
     let infoEvent: MatrixEvent;
     let playback: VoiceBroadcastPlayback;
     let renderResult: RenderResult;
+
+    filterConsole(
+        // expected for some tests
+        "voice broadcast chunk event to skip to not found",
+    );
 
     beforeAll(() => {
         client = stubClient();
@@ -211,6 +216,17 @@ describe("VoiceBroadcastPlaybackBody", () => {
                 expect(await screen.findByText("05:13")).toBeInTheDocument();
                 expect(await screen.findByText("-07:05")).toBeInTheDocument();
             });
+        });
+    });
+
+    describe("when rendering an error broadcast", () => {
+        beforeEach(() => {
+            mocked(playback.getState).mockReturnValue(VoiceBroadcastPlaybackState.Error);
+            renderResult = render(<VoiceBroadcastPlaybackBody playback={playback} />);
+        });
+
+        it("should render as expected", () => {
+            expect(renderResult.container).toMatchSnapshot();
         });
     });
 
