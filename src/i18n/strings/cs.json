@@ -3710,5 +3710,6 @@
     "Decrypted source unavailable": "Dešifrovaný zdroj není dostupný",
     "Connection error - Recording paused": "Chyba připojení - nahrávání pozastaveno",
     "%(senderName)s started a voice broadcast": "%(senderName)s zahájil(a) hlasové vysílání",
-    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)"
+    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)",
+    "Unable to play this voice broadcast": "Nelze přehrát toto hlasové vysílání"
 }
