@@ -65,14 +65,18 @@ export class VoiceBroadcastRecorder
         this.voiceRecording.liveData.onUpdate((data: IRecordingUpdate) => {
             this.setCurrentChunkLength(data.timeSeconds - this.previousChunkEndTimePosition);
         });
-        return;
     }
 
     /**
      * Stops the recording and returns the remaining chunk (if any).
      */
     public async stop(): Promise<Optional<ChunkRecordedPayload>> {
-        await this.voiceRecording.stop();
+        try {
+            await this.voiceRecording.stop();
+        } catch {
+            // Ignore if the recording raises any error.
+        }
+
         // forget about that call, so that we can stop it again later
         Singleflight.forgetAllFor(this.voiceRecording);
         const chunk = this.extractChunk();

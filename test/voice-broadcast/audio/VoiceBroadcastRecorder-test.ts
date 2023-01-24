@@ -205,6 +205,22 @@ describe("VoiceBroadcastRecorder", () => {
                     });
                 });
             });
+
+            describe("and calling stop() with recording.stop error)", () => {
+                let stopPayload: ChunkRecordedPayload;
+
+                beforeEach(async () => {
+                    mocked(voiceRecording.stop).mockRejectedValue("Error");
+                    stopPayload = await voiceBroadcastRecorder.stop();
+                });
+
+                it("should return the remaining chunk", () => {
+                    expect(stopPayload).toEqual({
+                        buffer: concat(headers1, headers2, chunk1),
+                        length: 23,
+                    });
+                });
+            });
         });
 
         describe("when some chunks have been received", () => {

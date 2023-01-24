@@ -333,7 +333,7 @@ export class VoiceBroadcastRecording
      * It sets the connection error state and stops the recorder.
      */
     private async onConnectionError(): Promise<void> {
-        await this.stopRecorder();
+        await this.stopRecorder(false);
         this.setState("connection_error");
     }
 
@@ -418,14 +418,14 @@ export class VoiceBroadcastRecording
         }
     }
 
-    private async stopRecorder(): Promise<void> {
+    private async stopRecorder(emit = true): Promise<void> {
         if (!this.recorder) {
             return;
         }
 
         try {
             const lastChunk = await this.recorder.stop();
-            if (lastChunk) {
+            if (lastChunk && emit) {
                 await this.onChunkRecorded(lastChunk);
             }
         } catch (err) {
