@@ -99,6 +99,9 @@ const setupCompleted = (async (): Promise<string | void> => {
 
             widgetApiReady = new Promise<void>((resolve) => widgetApi.once("ready", resolve));
             widgetApi.requestCapabilities(VideoConferenceCapabilities);
+
+            // jitsi cannot work in a popup if auth token is provided because widgetApi is not available there
+            // so check the token and request the 'requires_client' capability to hide the popup icon in the Element
             if (qsParam("auth", true) === "openidtoken-jwt") {
                 widgetApi.requestCapability(ElementWidgetCapabilities.RequiresClient);
             }
