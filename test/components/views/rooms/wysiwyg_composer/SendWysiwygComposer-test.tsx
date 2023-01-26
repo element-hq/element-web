@@ -299,6 +299,7 @@ describe("SendWysiwygComposer", () => {
                     anchorOffset: 2,
                     focusNode: textNode,
                     focusOffset: 2,
+                    isForward: true,
                 });
                 // the event is not automatically fired by jest
                 document.dispatchEvent(new CustomEvent("selectionchange"));
@@ -307,6 +308,32 @@ describe("SendWysiwygComposer", () => {
 
                 // Then
                 await waitFor(() => expect(screen.getByRole("textbox")).toHaveTextContent(/wo🦫rd/));
+            });
+
+            it("Should add an emoji when a word is selected", async () => {
+                // When
+                screen.getByRole("textbox").focus();
+                screen.getByRole("textbox").innerHTML = "word";
+                fireEvent.input(screen.getByRole("textbox"), {
+                    data: "word",
+                    inputType: "insertText",
+                });
+
+                const textNode = screen.getByRole("textbox").firstChild;
+                await setSelection({
+                    anchorNode: textNode,
+                    anchorOffset: 3,
+                    focusNode: textNode,
+                    focusOffset: 2,
+                    isForward: false,
+                });
+                // the event is not automatically fired by jest
+                document.dispatchEvent(new CustomEvent("selectionchange"));
+
+                emojiButton.click();
+
+                // Then
+                await waitFor(() => expect(screen.getByRole("textbox")).toHaveTextContent(/wo🦫d/));
             });
         },
     );

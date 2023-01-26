@@ -23,11 +23,15 @@ function setSelectionContext(composerContext: ComposerContextState): void {
     const selection = document.getSelection();
 
     if (selection) {
+        const range = selection.getRangeAt(0);
+        const isForward = range.startContainer === selection.anchorNode && range.startOffset === selection.anchorOffset;
+
         composerContext.selection = {
             anchorNode: selection.anchorNode,
             anchorOffset: selection.anchorOffset,
             focusNode: selection.focusNode,
             focusOffset: selection.focusOffset,
+            isForward,
         };
     }
 }

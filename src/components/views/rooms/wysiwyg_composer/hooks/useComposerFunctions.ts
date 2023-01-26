@@ -44,6 +44,7 @@ export function useComposerFunctions(
                         anchorOffset: anchorOffset + text.length,
                         focusNode: ref.current.firstChild,
                         focusOffset: focusOffset + text.length,
+                        isForward: true,
                     });
                     setContent(ref.current.innerHTML);
                 }

@@ -19,4 +19,6 @@ export type ComposerFunctions = {
     insertText: (text: string) => void;
 };
 
-export type SubSelection = Pick<Selection, "anchorNode" | "anchorOffset" | "focusNode" | "focusOffset">;
+export type SubSelection = Pick<Selection, "anchorNode" | "anchorOffset" | "focusNode" | "focusOffset"> & {
+    isForward: boolean;
+};

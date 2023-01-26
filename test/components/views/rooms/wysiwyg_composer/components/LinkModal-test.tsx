@@ -35,6 +35,7 @@ describe("LinkModal", () => {
         anchorNode: null,
         focusOffset: 3,
         anchorOffset: 4,
+        isForward: true,
     };
 
     const customRender = (isTextEnabled: boolean, onClose: () => void, isEditing = false) => {

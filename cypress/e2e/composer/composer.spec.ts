@@ -98,7 +98,7 @@ describe("Composer", () => {
         });
     });
 
-    describe("WYSIWYG", () => {
+    describe("Rich text editor", () => {
         beforeEach(() => {
             cy.enableLabsFeature("feature_wysiwyg_composer");
             cy.initTestUser(homeserver, "Janet").then(() => {
@@ -163,6 +163,26 @@ describe("Composer", () => {
                 cy.get("div[contenteditable=true]").type("{ctrl+enter}");
                 // It was sent
                 cy.contains(".mx_EventTile_body", "my message 3");
+            });
+        });
+
+        describe("links", () => {
+            it("create link with a forward selection", () => {
+                // Type a message
+                cy.get("div[contenteditable=true]").type("my message 0{selectAll}");
+
+                // Open link modal
+                cy.get('button[aria-label="Link"]').click();
+                // Fill the link field
+                cy.get('input[label="Link"]').type("https://matrix.org/");
+                // Click on save
+                cy.get('button[type="submit"]').click();
+                // Send the message
+                cy.get('div[aria-label="Send message"]').click();
+
+                // It was sent
+                cy.contains(".mx_EventTile_body a", "my message 0");
+                cy.get(".mx_EventTile_body a").should("have.attr", "href").and("include", "https://matrix.org/");
             });
         });
     });

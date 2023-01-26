@@ -19,9 +19,14 @@ import { SubSelection } from "../types";
 export function setSelection(selection: SubSelection): Promise<void> {
     if (selection.anchorNode && selection.focusNode) {
         const range = new Range();
-        range.setStart(selection.anchorNode, selection.anchorOffset);
-        range.setEnd(selection.focusNode, selection.focusOffset);
 
+        if (selection.isForward) {
+            range.setStart(selection.anchorNode, selection.anchorOffset);
+            range.setEnd(selection.focusNode, selection.focusOffset);
+        } else {
+            range.setStart(selection.focusNode, selection.focusOffset);
+            range.setEnd(selection.anchorNode, selection.anchorOffset);
+        }
         document.getSelection()?.removeAllRanges();
         document.getSelection()?.addRange(range);
     }
