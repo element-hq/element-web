@@ -3608,8 +3608,10 @@
     "The other device isn't signed in.": "もう一方の端末はサインインしていません。",
     "The other device is already signed in.": "もう一方のデバイスはすでにサインインしています。",
     "<b>%(homeserver)s</b> will send you a verification link to let you reset your password.": "<b>%(homeserver)s</b>が、パスワードの再設定用の認証リンクを送信します。",
-    "Follow the instructions sent to <b>%(email)s</b>": "<b>%(email)s</b>に送信された指示に従ってください",
+    "Follow the instructions sent to <b>%(email)s</b>": "<b>%(email)s</b>に送信される指示に従ってください",
     "Enter your email to reset password": "パスワードを再設定するには、あなたの電子メールを入力してください",
     "Without setting up Secure Message Recovery, you won't be able to restore your encrypted message history if you log out or use another session.": "セキュアメッセージリカバリーを設定しない場合、ログアウトまたは他のセッションを使用した際に、暗号化したメッセージの履歴を復元することができなくなります。",
-    "Set up Secure Message Recovery": "セキュアメッセージリカバリーを設定"
+    "Set up Secure Message Recovery": "セキュアメッセージリカバリーを設定",
+    "Your old messages will still be visible to people who received them, just like emails you sent in the past. Would you like to hide your sent messages from people who join rooms in the future?": "あなたの古いメッセージは、それを受信した人には表示され続けます。これは電子メールの場合と同様です。あなたが送信したメッセージを今後のルームの参加者に表示しないようにしますか？",
+    "Please note: this is a labs feature using a temporary implementation. This means you will not be able to delete your location history, and advanced users will be able to see your location history even after you stop sharing your live location with this room.": "注意：これは一時的な実装による試験機能です。位置情報の履歴を削除することはできません。高度なユーザーは、あなたがこのルームで位置情報（ライブ）の共有を停止した後でも、あなたの位置情報の履歴を閲覧することができます。"
 }
