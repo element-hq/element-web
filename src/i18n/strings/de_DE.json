@@ -3710,5 +3710,8 @@
     "Decrypted source unavailable": "Entschlüsselte Quelle nicht verfügbar",
     "Connection error - Recording paused": "Verbindungsfehler − Aufnahme pausiert",
     "%(senderName)s started a voice broadcast": "%(senderName)s begann eine Sprachübertragung",
-    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)"
+    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)",
+    "Unable to play this voice broadcast": "Wiedergabe der Sprachübertragung nicht möglich",
+    "Registration token": "Registrierungstoken",
+    "Enter a registration token provided by the homeserver administrator.": "Gib einen von deiner Home-Server-Administration zur Verfügung gestellten Registrierungstoken ein."
 }
