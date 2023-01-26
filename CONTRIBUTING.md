@@ -284,6 +284,7 @@ When stacking pull requests, you may wish to do the following:
 [1]: https://github.com/gotwarlost/istanbul/blob/master/ignoring-code-for-coverage.md
 
 # Decoding Stack Traces
+
 Element Web has crashed and given you an obfuscated stack trace? Don't panic:
 use the [Decoder Ring](https://app.element.io/decoder-ring/) (or /decoder-ring/
 on any Element Web deploy). It is somewhat of a manual process, but it should
