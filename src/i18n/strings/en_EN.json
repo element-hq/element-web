@@ -955,6 +955,8 @@
     "New group call experience": "New group call experience",
     "Live Location Sharing": "Live Location Sharing",
     "Temporary implementation. Locations persist in room history.": "Temporary implementation. Locations persist in room history.",
+    "Dynamic room predecessors": "Dynamic room predecessors",
+    "Enable MSC3946 (to support late-arriving room archives)": "Enable MSC3946 (to support late-arriving room archives)",
     "Favourite Messages": "Favourite Messages",
     "Under active development.": "Under active development.",
     "Force 15s voice broadcast chunk length": "Force 15s voice broadcast chunk length",

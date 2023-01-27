@@ -439,6 +439,15 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         shouldWarn: true,
         default: false,
     },
+    "feature_dynamic_room_predecessors": {
+        isFeature: true,
+        labsGroup: LabGroup.Rooms,
+        supportedLevels: LEVELS_FEATURE,
+        displayName: _td("Dynamic room predecessors"),
+        description: _td("Enable MSC3946 (to support late-arriving room archives)"),
+        shouldWarn: true,
+        default: false,
+    },
     "feature_favourite_messages": {
         isFeature: true,
         labsGroup: LabGroup.Messaging,
