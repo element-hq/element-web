@@ -27,11 +27,15 @@ import EventTileBubble from "./EventTileBubble";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 
 interface IProps {
-    /* the MatrixEvent to show */
+    /** The m.room.create MatrixEvent that this tile represents */
     mxEvent: MatrixEvent;
     timestamp?: JSX.Element;
 }
 
+/**
+ * A message tile showing that this room was created as an upgrade of a previous
+ * room.
+ */
 export default class RoomCreate extends React.Component<IProps> {
     private onLinkClicked = (e: React.MouseEvent): void => {
         e.preventDefault();
