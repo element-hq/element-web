@@ -3713,5 +3713,6 @@
     "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)",
     "Registration token": "Registračný token",
     "Enter a registration token provided by the homeserver administrator.": "Zadajte registračný token poskytnutý správcom domovského servera.",
-    "Unable to play this voice broadcast": "Toto hlasové vysielanie nie je možné prehrať"
+    "Unable to play this voice broadcast": "Toto hlasové vysielanie nie je možné prehrať",
+    "Dynamic room predecessors": "Predchodcovia dynamickej miestnosti"
 }
