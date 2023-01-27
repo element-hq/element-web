@@ -1,0 +1,55 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AdvancedRoomSettingsTab should render as expected 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_SettingsTab"
+  >
+    <div
+      class="mx_SettingsTab_heading"
+    >
+      Advanced
+    </div>
+    <div
+      class="mx_SettingsTab_section mx_SettingsTab_subsectionText"
+    >
+      <span
+        class="mx_SettingsTab_subheading"
+      >
+        Room information
+      </span>
+      <div>
+        <span>
+          Internal room ID
+        </span>
+        <div
+          class="mx_CopyableText mx_CopyableText_border"
+        >
+          !room:example.com
+          <div
+            aria-label="Copy"
+            class="mx_AccessibleButton mx_CopyableText_copyButton"
+            role="button"
+            tabindex="0"
+          />
+        </div>
+      </div>
+    </div>
+    <div
+      class="mx_SettingsTab_section mx_SettingsTab_subsectionText"
+    >
+      <span
+        class="mx_SettingsTab_subheading"
+      >
+        Room version
+      </span>
+      <div>
+        <span>
+          Room version:
+        </span>
+         1
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
