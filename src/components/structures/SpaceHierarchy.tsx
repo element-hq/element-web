@@ -419,7 +419,7 @@ const toLocalRoom = (cli: MatrixClient, room: IHierarchyRoom, hierarchy: RoomHie
     // Pick latest room that is actually part of the hierarchy
     let cliRoom = null;
     for (let idx = history.length - 1; idx >= 0; --idx) {
-        if (hierarchy.roomMap[history[idx].roomId]) {
+        if (hierarchy.roomMap.get(history[idx].roomId)) {
             cliRoom = history[idx];
             break;
         }
@@ -432,7 +432,7 @@ const toLocalRoom = (cli: MatrixClient, room: IHierarchyRoom, hierarchy: RoomHie
             room_type: cliRoom.getType(),
             name: cliRoom.name,
             topic: cliRoom.currentState.getStateEvents(EventType.RoomTopic, "")?.getContent().topic,
-            avatar_url: cliRoom.getMxcAvatarUrl(),
+            avatar_url: cliRoom.getMxcAvatarUrl() ?? undefined,
             canonical_alias: cliRoom.getCanonicalAlias(),
             aliases: cliRoom.getAltAliases(),
             world_readable:
