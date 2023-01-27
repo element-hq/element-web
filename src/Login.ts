@@ -19,7 +19,7 @@ limitations under the License.
 import { createClient } from "matrix-js-sdk/src/matrix";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { logger } from "matrix-js-sdk/src/logger";
-import { ILoginParams, LoginFlow } from "matrix-js-sdk/src/@types/auth";
+import { DELEGATED_OIDC_COMPATIBILITY, ILoginParams, LoginFlow } from "matrix-js-sdk/src/@types/auth";
 
 import { IMatrixClientCreds } from "./MatrixClientPeg";
 import SecurityCustomisations from "./customisations/Security";
@@ -32,7 +32,6 @@ export default class Login {
     private hsUrl: string;
     private isUrl: string;
     private fallbackHsUrl: string;
-    // TODO: Flows need a type in JS SDK
     private flows: Array<LoginFlow>;
     private defaultDeviceDisplayName: string;
     private tempClient: MatrixClient;
@@ -81,8 +80,13 @@ export default class Login {
 
     public async getFlows(): Promise<Array<LoginFlow>> {
         const client = this.createTemporaryClient();
-        const { flows } = await client.loginFlows();
-        this.flows = flows;
+        const { flows }: { flows: LoginFlow[] } = await client.loginFlows();
+        // If an m.login.sso flow is present which is also flagged as being for MSC3824 OIDC compatibility then we only
+        // return that flow as (per MSC3824) it is the only one that the user should be offered to give the best experience
+        const oidcCompatibilityFlow = flows.find(
+            (f) => f.type === "m.login.sso" && DELEGATED_OIDC_COMPATIBILITY.findIn(f),
+        );
+        this.flows = oidcCompatibilityFlow ? [oidcCompatibilityFlow] : flows;
         return this.flows;
     }
 

@@ -18,7 +18,7 @@ import React, { ReactNode } from "react";
 import { ConnectionError, MatrixError } from "matrix-js-sdk/src/http-api";
 import classNames from "classnames";
 import { logger } from "matrix-js-sdk/src/logger";
-import { ISSOFlow, LoginFlow } from "matrix-js-sdk/src/@types/auth";
+import { ISSOFlow, LoginFlow, SSOAction } from "matrix-js-sdk/src/@types/auth";
 
 import { _t, _td } from "../../../languageHandler";
 import Login from "../../../Login";
@@ -345,6 +345,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
                 this.loginLogic.createTemporaryClient(),
                 ssoKind,
                 this.props.fragmentAfterLogin,
+                SSOAction.REGISTER,
             );
         } else {
             // Don't intercept - just go through to the register page
@@ -549,6 +550,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
                 loginType={loginType}
                 fragmentAfterLogin={this.props.fragmentAfterLogin}
                 primary={!this.state.flows.find((flow) => flow.type === "m.login.password")}
+                action={SSOAction.LOGIN}
             />
         );
     };

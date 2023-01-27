@@ -19,7 +19,7 @@ import React, { Fragment, ReactNode } from "react";
 import { IRequestTokenResponse, MatrixClient } from "matrix-js-sdk/src/client";
 import classNames from "classnames";
 import { logger } from "matrix-js-sdk/src/logger";
-import { ISSOFlow } from "matrix-js-sdk/src/@types/auth";
+import { ISSOFlow, SSOAction } from "matrix-js-sdk/src/@types/auth";
 
 import { _t, _td } from "../../../languageHandler";
 import { messageForResourceLimitError } from "../../../utils/ErrorUtils";
@@ -539,6 +539,7 @@ export default class Registration extends React.Component<IProps, IState> {
                             flow={this.state.ssoFlow}
                             loginType={this.state.ssoFlow.type === "m.login.sso" ? "sso" : "cas"}
                             fragmentAfterLogin={this.props.fragmentAfterLogin}
+                            action={SSOAction.REGISTER}
                         />
                         <h2 className="mx_AuthBody_centered">
                             {_t("%(ssoButtons)s Or %(usernamePassword)s", {

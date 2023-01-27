@@ -1532,6 +1532,8 @@
     "Email addresses": "Email addresses",
     "Phone numbers": "Phone numbers",
     "Set a new account password...": "Set a new account password...",
+    "Your account details are managed separately at <code>%(hostname)s</code>.": "Your account details are managed separately at <code>%(hostname)s</code>.",
+    "Manage account": "Manage account",
     "Account": "Account",
     "Language and region": "Language and region",
     "Spell check": "Spell check",

@@ -23,6 +23,7 @@ import { MatrixClient } from "matrix-js-sdk/src/client";
 import { decryptAES, encryptAES, IEncryptedPayload } from "matrix-js-sdk/src/crypto/aes";
 import { QueryDict } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
+import { SSOAction } from "matrix-js-sdk/src/@types/auth";
 
 import { IMatrixClientCreds, MatrixClientPeg } from "./MatrixClientPeg";
 import SecurityCustomisations from "./customisations/Security";
@@ -248,7 +249,7 @@ export function attemptTokenLogin(
                             idBaseUrl: identityServer,
                         });
                         const idpId = localStorage.getItem(SSO_IDP_ID_KEY) || undefined;
-                        PlatformPeg.get().startSingleSignOn(cli, "sso", fragmentAfterLogin, idpId);
+                        PlatformPeg.get()?.startSingleSignOn(cli, "sso", fragmentAfterLogin, idpId, SSOAction.LOGIN);
                     }
                 },
             });
