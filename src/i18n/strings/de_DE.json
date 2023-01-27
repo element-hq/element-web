@@ -3715,5 +3715,7 @@
     "Registration token": "Registrierungstoken",
     "Enter a registration token provided by the homeserver administrator.": "Gib einen von deiner Home-Server-Administration zur Verfügung gestellten Registrierungstoken ein.",
     "Manage account": "Konto verwalten",
-    "Your account details are managed separately at <code>%(hostname)s</code>.": "Deine Kontodaten werden separat auf <code>%(hostname)s</code> verwaltet."
+    "Your account details are managed separately at <code>%(hostname)s</code>.": "Deine Kontodaten werden separat auf <code>%(hostname)s</code> verwaltet.",
+    "Dynamic room predecessors": "Veränderbare Raumvorgänger",
+    "Enable MSC3946 (to support late-arriving room archives)": "MSC3946 aktivieren (zur Verknüpfung von Raumarchiven nach der Raumerstellung)"
 }
