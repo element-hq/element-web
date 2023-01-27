@@ -3710,5 +3710,8 @@
     "Decrypted source unavailable": "Sumber terdekripsi tidak tersedia",
     "Connection error - Recording paused": "Kesalahan koneksi - Perekaman dijeda",
     "%(senderName)s started a voice broadcast": "%(senderName)s memulai sebuah siaran suara",
-    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)"
+    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)",
+    "Registration token": "Token pendaftaran",
+    "Enter a registration token provided by the homeserver administrator.": "Masukkan token pendaftaran yang disediakan oleh administrator homeserver.",
+    "Unable to play this voice broadcast": "Tidak dapat memutar siaran suara ini"
 }
