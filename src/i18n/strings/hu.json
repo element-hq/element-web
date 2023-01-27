@@ -3710,5 +3710,6 @@
     "Decrypted source unavailable": "A visszafejtett forrás nem érhető el",
     "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)",
     "Connection error - Recording paused": "Kapcsolódási hiba – Felvétel szüneteltetve",
-    "%(senderName)s started a voice broadcast": "%(senderName)s hangos közvetítést indított"
+    "%(senderName)s started a voice broadcast": "%(senderName)s hangos közvetítést indított",
+    "Unable to play this voice broadcast": "A hang közvetítés nem játszható le"
 }
