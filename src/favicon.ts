@@ -261,3 +261,7 @@ export default class Favicon {
         return elms;
     }
 }
+function setImmediate(arg0: () => void) {
+    throw new Error("Function not implemented.");
+}
+
