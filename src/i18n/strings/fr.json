@@ -3710,5 +3710,8 @@
     "Decrypted source unavailable": "Source déchiffrée non disponible",
     "Connection error - Recording paused": "Erreur de connexion – Enregistrement en pause",
     "%(senderName)s started a voice broadcast": "%(senderName)s a démarré une diffusion audio",
-    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)"
+    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)",
+    "Registration token": "Jeton d’enregistrement",
+    "Enter a registration token provided by the homeserver administrator.": "Saisissez un jeton d’enregistrement fourni par l’administrateur du serveur d’accueil.",
+    "Unable to play this voice broadcast": "Impossible de lire cette diffusion audio"
 }
