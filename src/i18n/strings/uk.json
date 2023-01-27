@@ -3710,5 +3710,8 @@
     "Decrypted source unavailable": "Розшифроване джерело недоступне",
     "Connection error - Recording paused": "Помилка з'єднання - Запис призупинено",
     "%(senderName)s started a voice broadcast": "%(senderName)s розпочинає голосову трансляцію",
-    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)"
+    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)",
+    "Registration token": "Токен реєстрації",
+    "Enter a registration token provided by the homeserver administrator.": "Введіть реєстраційний токен, наданий адміністратором домашнього сервера.",
+    "Unable to play this voice broadcast": "Неможливо відтворити цю голосову трансляцію"
 }
