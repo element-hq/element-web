@@ -85,11 +85,13 @@ describe("SpaceHierarchy", () => {
         });
 
         it("grabs last room that is in hierarchy when latest version is in hierarchy", () => {
-            const hierarchy = { roomMap: new Map([
-                [roomV1.roomId, { room_id: roomV1.roomId } as IHierarchyRoom],
-                [roomV2.roomId, { room_id: roomV2.roomId } as IHierarchyRoom],
-                [roomV3.roomId, { room_id: roomV3.roomId } as IHierarchyRoom],
-            ]) } as RoomHierarchy;
+            const hierarchy = {
+                roomMap: new Map([
+                    [roomV1.roomId, { room_id: roomV1.roomId } as IHierarchyRoom],
+                    [roomV2.roomId, { room_id: roomV2.roomId } as IHierarchyRoom],
+                    [roomV3.roomId, { room_id: roomV3.roomId } as IHierarchyRoom],
+                ]),
+            } as RoomHierarchy;
             const localRoomV1 = toLocalRoom(client, { room_id: roomV1.roomId } as IHierarchyRoom, hierarchy);
             expect(localRoomV1.room_id).toEqual(roomV3.roomId);
             const localRoomV2 = toLocalRoom(client, { room_id: roomV2.roomId } as IHierarchyRoom, hierarchy);
@@ -99,10 +101,12 @@ describe("SpaceHierarchy", () => {
         });
 
         it("grabs last room that is in hierarchy when latest version is *not* in hierarchy", () => {
-            const hierarchy = { roomMap: new Map([
-                [roomV1.roomId, { room_id: roomV1.roomId } as IHierarchyRoom],
-                [roomV2.roomId, { room_id: roomV2.roomId } as IHierarchyRoom]
-            ]) } as RoomHierarchy;
+            const hierarchy = {
+                roomMap: new Map([
+                    [roomV1.roomId, { room_id: roomV1.roomId } as IHierarchyRoom],
+                    [roomV2.roomId, { room_id: roomV2.roomId } as IHierarchyRoom],
+                ]),
+            } as RoomHierarchy;
             const localRoomV1 = toLocalRoom(client, { room_id: roomV1.roomId } as IHierarchyRoom, hierarchy);
             expect(localRoomV1.room_id).toEqual(roomV2.roomId);
             const localRoomV2 = toLocalRoom(client, { room_id: roomV2.roomId } as IHierarchyRoom, hierarchy);
