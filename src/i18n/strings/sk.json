@@ -3714,5 +3714,8 @@
     "Registration token": "Registračný token",
     "Enter a registration token provided by the homeserver administrator.": "Zadajte registračný token poskytnutý správcom domovského servera.",
     "Unable to play this voice broadcast": "Toto hlasové vysielanie nie je možné prehrať",
-    "Dynamic room predecessors": "Predchodcovia dynamickej miestnosti"
+    "Dynamic room predecessors": "Predchodcovia dynamickej miestnosti",
+    "Manage account": "Spravovať účet",
+    "Your account details are managed separately at <code>%(hostname)s</code>.": "Údaje o vašom účte sú spravované samostatne na adrese <code>%(hostname)s</code>.",
+    "Enable MSC3946 (to support late-arriving room archives)": "Zapnúť MSC3946 (na podporu neskorých archívov miestností)"
 }
