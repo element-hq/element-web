@@ -432,8 +432,8 @@ const toLocalRoom = (cli: MatrixClient, room: IHierarchyRoom, hierarchy: RoomHie
             room_type: cliRoom.getType(),
             name: cliRoom.name,
             topic: cliRoom.currentState.getStateEvents(EventType.RoomTopic, "")?.getContent().topic,
-            avatar_url: cliRoom.getMxcAvatarUrl() ?? undefined,
-            canonical_alias: cliRoom.getCanonicalAlias(),
+            avatar_url: cliRoom.getMxcAvatarUrl(),
+            canonical_alias: cliRoom.getCanonicalAlias() ?? undefined,
             aliases: cliRoom.getAltAliases(),
             world_readable:
                 cliRoom.currentState.getStateEvents(EventType.RoomHistoryVisibility, "")?.getContent()
