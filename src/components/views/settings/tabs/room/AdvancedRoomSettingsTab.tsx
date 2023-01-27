@@ -19,13 +19,14 @@ import { EventType } from "matrix-js-sdk/src/@types/event";
 
 import { _t } from "../../../../../languageHandler";
 import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
-import AccessibleButton from "../../../elements/AccessibleButton";
+import AccessibleButton, { ButtonEvent } from "../../../elements/AccessibleButton";
 import RoomUpgradeDialog from "../../../dialogs/RoomUpgradeDialog";
 import Modal from "../../../../../Modal";
 import dis from "../../../../../dispatcher/dispatcher";
 import { Action } from "../../../../../dispatcher/actions";
 import CopyableText from "../../../elements/CopyableText";
 import { ViewRoomPayload } from "../../../../../dispatcher/payloads/ViewRoomPayload";
+import SettingsStore from "../../../../../settings/SettingsStore";
 
 interface IProps {
     roomId: string;
@@ -46,8 +47,10 @@ interface IState {
 }
 
 export default class AdvancedRoomSettingsTab extends React.Component<IProps, IState> {
-    public constructor(props, context) {
+    public constructor(props: IProps, context: any) {
         super(props, context);
+
+        const msc3946ProcessDynamicPredecessor = SettingsStore.getValue("feature_dynamic_room_predecessors");
 
         this.state = {
             // This is eventually set to the value of room.getRecommendedVersion()
@@ -60,11 +63,10 @@ export default class AdvancedRoomSettingsTab extends React.Component<IProps, ISt
             const tombstone = room.currentState.getStateEvents(EventType.RoomTombstone, "");
 
             const additionalStateChanges: Partial<IState> = {};
-            const createEvent = room.currentState.getStateEvents(EventType.RoomCreate, "");
-            const predecessor = createEvent ? createEvent.getContent().predecessor : null;
-            if (predecessor && predecessor.room_id) {
-                additionalStateChanges.oldRoomId = predecessor.room_id;
-                additionalStateChanges.oldEventId = predecessor.event_id;
+            const predecessor = room.findPredecessor(msc3946ProcessDynamicPredecessor);
+            if (predecessor) {
+                additionalStateChanges.oldRoomId = predecessor.roomId;
+                additionalStateChanges.oldEventId = predecessor.eventId;
             }
 
             this.setState({
@@ -75,12 +77,12 @@ export default class AdvancedRoomSettingsTab extends React.Component<IProps, ISt
         });
     }
 
-    private upgradeRoom = (e): void => {
+    private upgradeRoom = (): void => {
         const room = MatrixClientPeg.get().getRoom(this.props.roomId);
         Modal.createDialog(RoomUpgradeDialog, { room });
     };
 
-    private onOldRoomClicked = (e): void => {
+    private onOldRoomClicked = (e: ButtonEvent): void => {
         e.preventDefault();
         e.stopPropagation();
 
