@@ -413,7 +413,7 @@ interface IHierarchyLevelProps {
     onToggleClick?(parentId: string, childId: string): void;
 }
 
-const toLocalRoom = (cli: MatrixClient, room: IHierarchyRoom, hierarchy: RoomHierarchy): IHierarchyRoom => {
+export const toLocalRoom = (cli: MatrixClient, room: IHierarchyRoom, hierarchy: RoomHierarchy): IHierarchyRoom => {
     const history = cli.getRoomUpgradeHistory(room.room_id, true);
 
     // Pick latest room that is actually part of the hierarchy
