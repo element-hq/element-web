@@ -3199,7 +3199,7 @@
     "Copy invite link": "招待リンクをコピー",
     "Show spaces": "スペースを表示",
     "Show rooms": "ルームを表示",
-    "Interactively verify by emoji": "絵文字によるインタラクティブ認証",
+    "Interactively verify by emoji": "絵文字によるインタラクティブな認証",
     "Manually verify by text": "テキストによる手動認証",
     "Checking...": "確認中...",
     "Modal Widget": "モーダルウィジェット",
@@ -3617,5 +3617,9 @@
     "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "このルームをアップグレードするには、現在のルームを閉鎖し、新しくルームを作成する必要があります。ルームの参加者のため、アップグレードの際に以下を行います。",
     "Resetting your password on this homeserver will cause all of your devices to be signed out. This will delete the message encryption keys stored on them, making encrypted chat history unreadable.": "このホームサーバーでパスワードをリセットすると、あなたの端末は全てサインアウトします。端末に保存されているメッセージの暗号鍵が削除され、暗号化された会話の履歴を読むことができなくなります。",
     "If there is additional context that would help in analysing the issue, such as what you were doing at the time, room IDs, user IDs, etc., please include those things here.": "実行していたこと、ルームID、ユーザーIDなど、問題を分析するのに役立つ追加情報があれば、それをここに含めてください。",
-    "Changing your password on this homeserver will cause all of your other devices to be signed out. This will delete the message encryption keys stored on them, and may make encrypted chat history unreadable.": "このホームサーバーでパスワードを変更すると、あなたの端末は全てサインアウトします。端末に保存されているメッセージの暗号鍵が削除され、暗号化された会話の履歴を読むことができなくなります。"
+    "Changing your password on this homeserver will cause all of your other devices to be signed out. This will delete the message encryption keys stored on them, and may make encrypted chat history unreadable.": "このホームサーバーでパスワードを変更すると、あなたの端末は全てサインアウトします。端末に保存されているメッセージの暗号鍵が削除され、暗号化された会話の履歴を読むことができなくなります。",
+    "Reminder: Your browser is unsupported, so your experience may be unpredictable.": "注意：ブラウザーはサポートされていません。期待通りに動作しない可能性があります。",
+    "Invalid identity server discovery response": "IDサーバーのディスカバリー（発見）に関する不正な応答です",
+    "Show: %(instance)s rooms (%(server)s)": "表示：%(instance)s ルーム（%(server)s）",
+    "Manage account": "アカウントを管理"
 }
