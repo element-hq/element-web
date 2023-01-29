@@ -3710,5 +3710,12 @@
     "Decrypted source unavailable": "Source déchiffrée non disponible",
     "Connection error - Recording paused": "Erreur de connexion – Enregistrement en pause",
     "%(senderName)s started a voice broadcast": "%(senderName)s a démarré une diffusion audio",
-    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)"
+    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)",
+    "Registration token": "Jeton d’enregistrement",
+    "Enter a registration token provided by the homeserver administrator.": "Saisissez un jeton d’enregistrement fourni par l’administrateur du serveur d’accueil.",
+    "Unable to play this voice broadcast": "Impossible de lire cette diffusion audio",
+    "Manage account": "Gérer le compte",
+    "Your account details are managed separately at <code>%(hostname)s</code>.": "Les détails de votre compte sont gérés séparément sur <code>%(hostname)s</code>.",
+    "Enable MSC3946 (to support late-arriving room archives)": "Active MSC3946 (pour prendre en charge les archives de salon après création)",
+    "Dynamic room predecessors": "Prédécesseurs de salon dynamique"
 }
