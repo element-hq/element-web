@@ -114,5 +114,15 @@ describe("SpaceHierarchy", () => {
             const localRoomV3 = toLocalRoom(client, { room_id: roomV3.roomId } as IHierarchyRoom, hierarchy);
             expect(localRoomV3.room_id).toEqual(roomV2.roomId);
         });
+
+        it("returns specified room when none of the versions is in hierarchy", () => {
+            const hierarchy = { roomMap: new Map([]) } as RoomHierarchy;
+            const localRoomV1 = toLocalRoom(client, { room_id: roomV1.roomId } as IHierarchyRoom, hierarchy);
+            expect(localRoomV1.room_id).toEqual(roomV1.roomId);
+            const localRoomV2 = toLocalRoom(client, { room_id: roomV2.roomId } as IHierarchyRoom, hierarchy);
+            expect(localRoomV2.room_id).toEqual(roomV2.roomId);
+            const localRoomV3 = toLocalRoom(client, { room_id: roomV3.roomId } as IHierarchyRoom, hierarchy);
+            expect(localRoomV3.room_id).toEqual(roomV3.roomId);
+        });
     });
 });
