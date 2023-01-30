@@ -161,7 +161,7 @@ describe("ThreadPanel", () => {
             Thread.setServerSideSupport(FeatureSupport.Stable);
             Thread.setServerSideListSupport(FeatureSupport.Stable);
             Thread.setServerSideFwdPaginationSupport(FeatureSupport.Stable);
-            jest.spyOn(mockClient, "supportsExperimentalThreads").mockReturnValue(true);
+            jest.spyOn(mockClient, "supportsThreads").mockReturnValue(true);
 
             room = new Room(ROOM_ID, mockClient, mockClient.getUserId() ?? "", {
                 pendingEventOrdering: PendingEventOrdering.Detached,

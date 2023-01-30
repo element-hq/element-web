@@ -38,7 +38,7 @@ describe("RoomHeaderButtons-test.tsx", function () {
 
         stubClient();
         client = MatrixClientPeg.get();
-        client.supportsExperimentalThreads = () => true;
+        client.supportsThreads = () => true;
         room = new Room(ROOM_ID, client, client.getUserId() ?? "", {
             pendingEventOrdering: PendingEventOrdering.Detached,
         });

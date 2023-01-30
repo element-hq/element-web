@@ -362,7 +362,7 @@ describe("TimelinePanel", () => {
             client = MatrixClientPeg.get();
 
             Thread.hasServerSideSupport = FeatureSupport.Stable;
-            client.supportsExperimentalThreads = () => true;
+            client.supportsThreads = () => true;
             const getValueCopy = SettingsStore.getValue;
             SettingsStore.getValue = jest.fn().mockImplementation((name: string) => {
                 if (name === "feature_threadenabled") return true;
@@ -524,7 +524,7 @@ describe("TimelinePanel", () => {
 
         const client = MatrixClientPeg.get();
         client.isRoomEncrypted = () => true;
-        client.supportsExperimentalThreads = () => true;
+        client.supportsThreads = () => true;
         client.decryptEventIfNeeded = () => Promise.resolve();
         const authorId = client.getUserId()!;
         const room = new Room("roomId", client, authorId, {

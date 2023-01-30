@@ -166,7 +166,7 @@ export function createTestClient(): MatrixClient {
         decryptEventIfNeeded: () => Promise.resolve(),
         isUserIgnored: jest.fn().mockReturnValue(false),
         getCapabilities: jest.fn().mockResolvedValue({}),
-        supportsExperimentalThreads: () => false,
+        supportsThreads: () => false,
         getRoomUpgradeHistory: jest.fn().mockReturnValue([]),
         getOpenIdToken: jest.fn().mockResolvedValue(undefined),
         registerWithIdentityServer: jest.fn().mockResolvedValue({}),

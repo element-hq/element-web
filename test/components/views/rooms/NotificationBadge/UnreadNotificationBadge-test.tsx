@@ -48,7 +48,7 @@ describe("UnreadNotificationBadge", () => {
     }
 
     beforeAll(() => {
-        client.supportsExperimentalThreads = () => true;
+        client.supportsThreads = () => true;
     });
 
     beforeEach(() => {

@@ -92,7 +92,7 @@ describe("EventTile", () => {
 
     describe("EventTile thread summary", () => {
         beforeEach(() => {
-            jest.spyOn(client, "supportsExperimentalThreads").mockReturnValue(true);
+            jest.spyOn(client, "supportsThreads").mockReturnValue(true);
         });
 
         it("removes the thread summary when thread is deleted", async () => {

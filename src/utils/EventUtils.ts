@@ -229,11 +229,7 @@ export async function fetchInitialEvent(
         initialEvent = null;
     }
 
-    if (
-        client.supportsExperimentalThreads() &&
-        initialEvent?.isRelation(THREAD_RELATION_TYPE.name) &&
-        !initialEvent.getThread()
-    ) {
+    if (client.supportsThreads() && initialEvent?.isRelation(THREAD_RELATION_TYPE.name) && !initialEvent.getThread()) {
         const threadId = initialEvent.threadRootId;
         const room = client.getRoom(roomId);
         const mapper = client.getEventMapper();
