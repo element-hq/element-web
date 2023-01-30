@@ -9,7 +9,8 @@ jobs:
         runs-on: ubuntu-latest
         if: |
             contains(github.event.issue.assignees.*.login, 't3chguy') ||
-            contains(github.event.issue.assignees.*.login, 'andybalaam')
+            contains(github.event.issue.assignees.*.login, 'andybalaam') ||
+            contains(github.event.issue.assignees.*.login, 'justjanne')
         steps:
             - uses: octokit/graphql-action@v2.x
               id: add_to_project
