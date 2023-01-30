@@ -39,7 +39,7 @@ describe("RoomAvatar", () => {
         const dmRoomMap = new DMRoomMap(client);
         jest.spyOn(dmRoomMap, "getUserIdForRoomId");
         jest.spyOn(DMRoomMap, "shared").mockReturnValue(dmRoomMap);
-        jest.spyOn(AvatarModule, "defaultAvatarUrlForString");
+        jest.spyOn(AvatarModule, "getColorForString");
     });
 
     afterAll(() => {
@@ -48,14 +48,14 @@ describe("RoomAvatar", () => {
 
     afterEach(() => {
         mocked(DMRoomMap.shared().getUserIdForRoomId).mockReset();
-        mocked(AvatarModule.defaultAvatarUrlForString).mockClear();
+        mocked(AvatarModule.getColorForString).mockClear();
     });
 
     it("should render as expected for a Room", () => {
         const room = new Room("!room:example.com", client, client.getSafeUserId());
         room.name = "test room";
         expect(render(<RoomAvatar room={room} />).container).toMatchSnapshot();
-        expect(AvatarModule.defaultAvatarUrlForString).toHaveBeenCalledWith(room.roomId);
+        expect(AvatarModule.getColorForString).toHaveBeenCalledWith(room.roomId);
     });
 
     it("should render as expected for a DM room", () => {
@@ -64,7 +64,7 @@ describe("RoomAvatar", () => {
         room.name = "DM room";
         mocked(DMRoomMap.shared().getUserIdForRoomId).mockReturnValue(userId);
         expect(render(<RoomAvatar room={room} />).container).toMatchSnapshot();
-        expect(AvatarModule.defaultAvatarUrlForString).toHaveBeenCalledWith(userId);
+        expect(AvatarModule.getColorForString).toHaveBeenCalledWith(userId);
     });
 
     it("should render as expected for a LocalRoom", () => {
@@ -73,6 +73,6 @@ describe("RoomAvatar", () => {
         localRoom.name = "local test room";
         localRoom.targets.push(new DirectoryMember({ user_id: userId }));
         expect(render(<RoomAvatar room={localRoom} />).container).toMatchSnapshot();
-        expect(AvatarModule.defaultAvatarUrlForString).toHaveBeenCalledWith(userId);
+        expect(AvatarModule.getColorForString).toHaveBeenCalledWith(userId);
     });
 });

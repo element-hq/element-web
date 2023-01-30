@@ -1,0 +1,72 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<BaseAvatar /> matches snapshot (avatar + click) 1`] = `
+<div>
+  <img
+    alt="Avatar"
+    class="mx_AccessibleButton mx_BaseAvatar mx_BaseAvatar_image mx_SomethingArbitrary"
+    data-testid="avatar-img"
+    role="button"
+    src="https://example.com/images/avatar.gif"
+    style="width: 40px; height: 40px;"
+    tabindex="0"
+    title="Hover title"
+  />
+</div>
+`;
+
+exports[`<BaseAvatar /> matches snapshot (avatar) 1`] = `
+<div>
+  <img
+    alt=""
+    class="mx_BaseAvatar mx_BaseAvatar_image mx_SomethingArbitrary"
+    data-testid="avatar-img"
+    src="https://example.com/images/avatar.gif"
+    style="width: 40px; height: 40px;"
+    title="Hover title"
+  />
+</div>
+`;
+
+exports[`<BaseAvatar /> matches snapshot (no avatar + click) 1`] = `
+<div>
+  <span
+    aria-label="Avatar"
+    aria-live="off"
+    class="mx_AccessibleButton mx_BaseAvatar big-and-bold"
+    role="button"
+    style="width: 40px; height: 40px;"
+    tabindex="0"
+  >
+    <span
+      aria-hidden="true"
+      class="mx_BaseAvatar_image mx_BaseAvatar_initial"
+      data-testid="avatar-img"
+      style="background-color: rgb(13, 189, 139); width: 40px; height: 40px; font-size: 26px; line-height: 40px;"
+      title=":kiss:"
+    >
+      X
+    </span>
+  </span>
+</div>
+`;
+
+exports[`<BaseAvatar /> matches snapshot (no avatar) 1`] = `
+<div>
+  <span
+    class="mx_BaseAvatar big-and-bold"
+    role="presentation"
+    style="width: 40px; height: 40px;"
+  >
+    <span
+      aria-hidden="true"
+      class="mx_BaseAvatar_image mx_BaseAvatar_initial"
+      data-testid="avatar-img"
+      style="background-color: rgb(13, 189, 139); width: 40px; height: 40px; font-size: 26px; line-height: 40px;"
+      title=":kiss:"
+    >
+      X
+    </span>
+  </span>
+</div>
+`;

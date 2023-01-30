@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MemberAvatar matches the snapshot 1`] = `
+<div>
+  <img
+    alt=""
+    class="mx_BaseAvatar mx_BaseAvatar_image"
+    data-testid="avatar-img"
+    src="http://this.is.a.url//placekitten.com/400/400"
+    style="color: pink;"
+    title="Hover title"
+  />
+</div>
+`;

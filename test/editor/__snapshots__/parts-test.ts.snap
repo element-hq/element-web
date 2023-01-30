@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RoomPillPart matches snapshot (avatar) 1`] = `
+<span
+  class="mx_Pill mx_RoomPill"
+  contenteditable="false"
+  spellcheck="false"
+  style="--avatar-background: url('http://this.is.a.url/www.example.com/avatars/room1.jpeg'); --avatar-letter: '';"
+>
+  !room:example.com
+</span>
+`;
+
+exports[`RoomPillPart matches snapshot (no avatar) 1`] = `
+<span
+  class="mx_Pill mx_RoomPill"
+  contenteditable="false"
+  spellcheck="false"
+  style="--avatar-background: #ac3ba8; --avatar-letter: '!';"
+>
+  !room:example.com
+</span>
+`;
+
+exports[`UserPillPart matches snapshot (avatar) 1`] = `
+<span
+  class="mx_UserPill mx_Pill"
+  contenteditable="false"
+  spellcheck="false"
+  style="--avatar-background: url('http://this.is.a.url/www.example.com/avatar.png'); --avatar-letter: '';"
+>
+  DisplayName
+</span>
+`;
+
+exports[`UserPillPart matches snapshot (no avatar) 1`] = `
+<span
+  class="mx_UserPill mx_Pill"
+  contenteditable="false"
+  spellcheck="false"
+  style="--avatar-background: #ac3ba8; --avatar-letter: 'U';"
+>
+  DisplayName
+</span>
+`;
