@@ -208,6 +208,10 @@ export function createTestClient(): MatrixClient {
         setPassword: jest.fn().mockRejectedValue({}),
         groupCallEventHandler: { groupCalls: new Map<string, GroupCall>() },
         redactEvent: jest.fn(),
+
+        createMessagesRequest: jest.fn().mockResolvedValue({
+            chunk: [],
+        }),
     } as unknown as MatrixClient;
 
     client.reEmitter = new ReEmitter(client);
