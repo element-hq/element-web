@@ -33,7 +33,7 @@ import LegacyCallEvent from "../components/views/messages/LegacyCallEvent";
 import { CallEvent } from "../components/views/messages/CallEvent";
 import TextualEvent from "../components/views/messages/TextualEvent";
 import EncryptionEvent from "../components/views/messages/EncryptionEvent";
-import RoomCreate from "../components/views/messages/RoomCreate";
+import { RoomCreate } from "../components/views/messages/RoomCreate";
 import RoomAvatarEvent from "../components/views/messages/RoomAvatarEvent";
 import { WIDGET_LAYOUT_EVENT_TYPE } from "../stores/widgets/WidgetLayoutStore";
 import { ALL_RULE_TYPES } from "../mjolnir/BanList";
@@ -101,7 +101,7 @@ const EVENT_TILE_TYPES = new Map<string, Factory>([
 const STATE_EVENT_TILE_TYPES = new Map<string, Factory>([
     [EventType.RoomEncryption, (ref, props) => <EncryptionEvent ref={ref} {...props} />],
     [EventType.RoomCanonicalAlias, TextualEventFactory],
-    [EventType.RoomCreate, (ref, props) => <RoomCreate ref={ref} {...props} />],
+    [EventType.RoomCreate, (_ref, props) => <RoomCreate {...props} />],
     [EventType.RoomMember, TextualEventFactory],
     [EventType.RoomName, TextualEventFactory],
     [EventType.RoomAvatar, (ref, props) => <RoomAvatarEvent ref={ref} {...props} />],

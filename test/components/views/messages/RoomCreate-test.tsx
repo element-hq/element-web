@@ -22,7 +22,7 @@ import { EventType, MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import dis from "../../../../src/dispatcher/dispatcher";
 import SettingsStore from "../../../../src/settings/SettingsStore";
-import RoomCreate from "../../../../src/components/views/messages/RoomCreate";
+import { RoomCreate } from "../../../../src/components/views/messages/RoomCreate";
 import { stubClient } from "../../../test-utils/test-utils";
 import { Action } from "../../../../src/dispatcher/actions";
 

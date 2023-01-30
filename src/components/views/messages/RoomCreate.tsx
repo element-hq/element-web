@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { useCallback } from "react";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 import dis from "../../../dispatcher/dispatcher";
@@ -36,44 +36,44 @@ interface IProps {
  * A message tile showing that this room was created as an upgrade of a previous
  * room.
  */
-export default class RoomCreate extends React.Component<IProps> {
-    private onLinkClicked = (e: React.MouseEvent): void => {
-        e.preventDefault();
+export const RoomCreate: React.FC<IProps> = ({ mxEvent, timestamp }) => {
+    const onLinkClicked = useCallback(
+        (e: React.MouseEvent): void => {
+            e.preventDefault();
 
-        const predecessor = this.props.mxEvent.getContent()["predecessor"];
+            const predecessor = mxEvent.getContent()["predecessor"];
 
-        dis.dispatch<ViewRoomPayload>({
-            action: Action.ViewRoom,
-            event_id: predecessor["event_id"],
-            highlighted: true,
-            room_id: predecessor["room_id"],
-            metricsTrigger: "Predecessor",
-            metricsViaKeyboard: e.type !== "click",
-        });
-    };
-
-    public render(): JSX.Element {
-        const predecessor = this.props.mxEvent.getContent()["predecessor"];
-        if (predecessor === undefined) {
-            return <div />; // We should never have been instantiated in this case
-        }
-        const prevRoom = MatrixClientPeg.get().getRoom(predecessor["room_id"]);
-        const permalinkCreator = new RoomPermalinkCreator(prevRoom, predecessor["room_id"]);
-        permalinkCreator.load();
-        const predecessorPermalink = permalinkCreator.forEvent(predecessor["event_id"]);
-        const link = (
-            <a href={predecessorPermalink} onClick={this.onLinkClicked}>
-                {_t("Click here to see older messages.")}
-            </a>
-        );
-
-        return (
-            <EventTileBubble
-                className="mx_CreateEvent"
-                title={_t("This room is a continuation of another conversation.")}
-                subtitle={link}
-                timestamp={this.props.timestamp}
-            />
-        );
+            dis.dispatch<ViewRoomPayload>({
+                action: Action.ViewRoom,
+                event_id: predecessor["event_id"],
+                highlighted: true,
+                room_id: predecessor["room_id"],
+                metricsTrigger: "Predecessor",
+                metricsViaKeyboard: e.type !== "click",
+            });
+        },
+        [mxEvent],
+    );
+    const predecessor = mxEvent.getContent()["predecessor"];
+    if (predecessor === undefined) {
+        return <div />; // We should never have been instantiated in this case
     }
-}
+    const prevRoom = MatrixClientPeg.get().getRoom(predecessor["room_id"]);
+    const permalinkCreator = new RoomPermalinkCreator(prevRoom, predecessor["room_id"]);
+    permalinkCreator.load();
+    const predecessorPermalink = permalinkCreator.forEvent(predecessor["event_id"]);
+    const link = (
+        <a href={predecessorPermalink} onClick={onLinkClicked}>
+            {_t("Click here to see older messages.")}
+        </a>
+    );
+
+    return (
+        <EventTileBubble
+            className="mx_CreateEvent"
+            title={_t("This room is a continuation of another conversation.")}
+            subtitle={link}
+            timestamp={timestamp}
+        />
+    );
+};
