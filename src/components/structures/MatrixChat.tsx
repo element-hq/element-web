@@ -138,6 +138,7 @@ import { cleanUpBroadcasts, VoiceBroadcastResumer } from "../../voice-broadcast"
 import GenericToast from "../views/toasts/GenericToast";
 import { Linkify } from "../views/elements/Linkify";
 import RovingSpotlightDialog, { Filter } from "../views/dialogs/spotlight/SpotlightDialog";
+import { findDMForUser } from "../../utils/dm/findDMForUser";
 
 // legacy export
 export { default as Views } from "../../Views";
@@ -1101,13 +1102,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         // TODO: Immutable DMs replaces this
 
         const client = MatrixClientPeg.get();
-        const dmRoomMap = new DMRoomMap(client);
-        const dmRooms = dmRoomMap.getDMRoomsForUserId(userId);
+        const dmRoom = findDMForUser(client, userId);
 
-        if (dmRooms.length > 0) {
+        if (dmRoom) {
             dis.dispatch<ViewRoomPayload>({
                 action: Action.ViewRoom,
-                room_id: dmRooms[0],
+                room_id: dmRoom.roomId,
                 metricsTrigger: "MessageUser",
             });
         } else {
