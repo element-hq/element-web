@@ -66,7 +66,7 @@
         "react": "17.0.2",
         "react-dom": "17.0.2",
         "sanitize-html": "^2.3.2",
-        "ua-parser-js": "^1.0.0"
+        "ua-parser-js": "^1.0.33"
     },
     "devDependencies": {
         "@babel/core": "^7.12.10",
