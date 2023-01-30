@@ -83,7 +83,7 @@ jobs:
             - name: Wait for other steps to succeed
               uses: lewagon/wait-on-check-action@v1.2.0
               with:
-                  ref: ${{ github.ref }}
+                  ref: ${{ github.sha }}
                   running-workflow-name: "Build & Deploy develop.element.io"
                   repo-token: ${{ secrets.GITHUB_TOKEN }}
                   wait-interval: 10
