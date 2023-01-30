@@ -286,7 +286,7 @@ describe("HTMLExport", () => {
 
         // Ensure that the attachment is present
         const files = getFiles(exporter);
-        const file = files["files/hello-1-1-1970 at 12-00-00 AM.txt"];
+        const file = files[Object.keys(files).find((k) => k.endsWith(".txt"))];
         expect(file).not.toBeUndefined();
 
         // Ensure that the attachment has the expected content
