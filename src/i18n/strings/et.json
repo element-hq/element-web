@@ -3716,5 +3716,9 @@
     "Unable to play this voice broadcast": "Selle ringhäälingukõne esitamine ei õnnestu",
     "Enable MSC3946 (to support late-arriving room archives)": "Võta kasutusele MSC3946 (jututoa ajaloo aeglane laadimine)",
     "Your account details are managed separately at <code>%(hostname)s</code>.": "Sinu kasutajakonto lisateave on hallatav siin serveris - <code>%(hostname)s</code>.",
-    "Manage account": "Halda kasutajakontot"
+    "Manage account": "Halda kasutajakontot",
+    "Indent decrease": "Vähenda taandrida",
+    "Indent increase": "Suurenda taandrida",
+    "All messages and invites from this user will be hidden. Are you sure you want to ignore them?": "Kõik selle kasutaja sõnumid ja kutsed saava olema peidetud. Kas sa oled kindel, et soovid teda eirata?",
+    "Ignore %(user)s": "Eira kasutajat %(user)s"
 }
