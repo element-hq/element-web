@@ -72,6 +72,7 @@ const mockRoom = mocked({
     getMxcAvatarUrl: jest.fn().mockReturnValue("mock-avatar-url"),
     name: "test room",
     on: jest.fn(),
+    off: jest.fn(),
     currentState: {
         getStateEvents: jest.fn(),
         on: jest.fn(),
@@ -83,9 +84,12 @@ const mockClient = mocked({
     getUser: jest.fn(),
     isGuest: jest.fn().mockReturnValue(false),
     isUserIgnored: jest.fn(),
+    getIgnoredUsers: jest.fn(),
+    setIgnoredUsers: jest.fn(),
     isCryptoEnabled: jest.fn(),
     getUserId: jest.fn(),
     on: jest.fn(),
+    off: jest.fn(),
     isSynapseAdministrator: jest.fn().mockResolvedValue(false),
     isRoomEncrypted: jest.fn().mockReturnValue(false),
     doesServerSupportUnstableFeature: jest.fn().mockReturnValue(false),
@@ -386,7 +390,10 @@ describe("<UserOptionsSection />", () => {
 
     beforeEach(() => {
         inviteSpy.mockReset();
+        mockClient.setIgnoredUsers.mockClear();
     });
+
+    afterEach(() => Modal.closeCurrentModal("End of test"));
 
     afterAll(() => {
         inviteSpy.mockRestore();
@@ -542,6 +549,52 @@ describe("<UserOptionsSection />", () => {
         await waitFor(() => {
             expect(screen.getByText(/operation failed/i)).toBeInTheDocument();
         });
+    });
+
+    it("shows a modal before ignoring the user", async () => {
+        const originalCreateDialog = Modal.createDialog;
+        const modalSpy = (Modal.createDialog = jest.fn().mockReturnValue({
+            finished: Promise.resolve([true]),
+            close: () => {},
+        }));
+
+        try {
+            mockClient.getIgnoredUsers.mockReturnValue([]);
+            renderComponent({ isIgnored: false });
+
+            await userEvent.click(screen.getByRole("button", { name: "Ignore" }));
+            expect(modalSpy).toHaveBeenCalled();
+            expect(mockClient.setIgnoredUsers).toHaveBeenLastCalledWith([member.userId]);
+        } finally {
+            Modal.createDialog = originalCreateDialog;
+        }
+    });
+
+    it("cancels ignoring the user", async () => {
+        const originalCreateDialog = Modal.createDialog;
+        const modalSpy = (Modal.createDialog = jest.fn().mockReturnValue({
+            finished: Promise.resolve([false]),
+            close: () => {},
+        }));
+
+        try {
+            mockClient.getIgnoredUsers.mockReturnValue([]);
+            renderComponent({ isIgnored: false });
+
+            await userEvent.click(screen.getByRole("button", { name: "Ignore" }));
+            expect(modalSpy).toHaveBeenCalled();
+            expect(mockClient.setIgnoredUsers).not.toHaveBeenCalled();
+        } finally {
+            Modal.createDialog = originalCreateDialog;
+        }
+    });
+
+    it("unignores the user", async () => {
+        mockClient.getIgnoredUsers.mockReturnValue([member.userId]);
+        renderComponent({ isIgnored: true });
+
+        await userEvent.click(screen.getByRole("button", { name: "Unignore" }));
+        expect(mockClient.setIgnoredUsers).toHaveBeenCalledWith([]);
     });
 });
 
