@@ -49,11 +49,8 @@ const SURROGATE_PAIR_PATTERN = /([\ud800-\udbff])([\udc00-\udfff])/;
 // (with plenty of false positives, but that's OK)
 const SYMBOL_PATTERN = /([\u2100-\u2bff])/;
 
-// Regex pattern for Zero-Width joiner unicode characters
-const ZWJ_REGEX = /[\u200D\u2003]/g;
-
-// Regex pattern for whitespace characters
-const WHITESPACE_REGEX = /\s/g;
+// Regex pattern for non-emoji characters that can appear in an "all-emoji" message (Zero-Width Joiner, Zero-Width Space, other whitespace)
+const EMOJI_SEPARATOR_REGEX = /[\u200D\u200B\s]/g;
 
 const BIGEMOJI_REGEX = new RegExp(`^(${EMOJIBASE_REGEX.source})+$`, "i");
 
@@ -591,14 +588,11 @@ export function bodyToHtml(content: IContent, highlights: Optional<string[]>, op
     if (!opts.disableBigEmoji && bodyHasEmoji) {
         let contentBodyTrimmed = contentBody !== undefined ? contentBody.trim() : "";
 
-        // Ignore spaces in body text. Emojis with spaces in between should
-        // still be counted as purely emoji messages.
-        contentBodyTrimmed = contentBodyTrimmed.replace(WHITESPACE_REGEX, "");
-
-        // Remove zero width joiner characters from emoji messages. This ensures
-        // that emojis that are made up of multiple unicode characters are still
-        // presented as large.
-        contentBodyTrimmed = contentBodyTrimmed.replace(ZWJ_REGEX, "");
+        // Remove zero width joiner, zero width spaces and other spaces in body
+        // text. This ensures that emojis with spaces in between or that are made
+        // up of multiple unicode characters are still counted as purely emoji
+        // messages.
+        contentBodyTrimmed = contentBodyTrimmed.replace(EMOJI_SEPARATOR_REGEX, "");
 
         const match = BIGEMOJI_REGEX.exec(contentBodyTrimmed);
         emojiBody =
