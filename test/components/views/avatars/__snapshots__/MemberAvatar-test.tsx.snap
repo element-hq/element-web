@@ -7,7 +7,7 @@ exports[`MemberAvatar matches the snapshot 1`] = `
     class="mx_BaseAvatar mx_BaseAvatar_image"
     data-testid="avatar-img"
     src="http://this.is.a.url//placekitten.com/400/400"
-    style="color: pink;"
+    style="color: pink; width: 35px; height: 35px;"
     title="Hover title"
   />
 </div>

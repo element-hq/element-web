@@ -25,6 +25,8 @@ limitations under the License.
 
         .mx_UserMenu_userAvatar {
             position: relative;
+            /* without this a default avatar will cause this to be 4px oversized and out of alignment */
+            display: inherit;
 
             .mx_BaseAvatar {
                 pointer-events: none; /* makes the avatar non-draggable */

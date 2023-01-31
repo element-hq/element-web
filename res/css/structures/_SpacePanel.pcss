@@ -277,14 +277,11 @@ $activeBorderColor: $primary-content;
         .mx_BaseAvatar:not(.mx_UserMenu_userAvatar_BaseAvatar) .mx_BaseAvatar_initial {
             color: $secondary-content;
             border-radius: 8px;
-            background-color: $panel-actions;
-            font-size: $font-15px !important; /* override inline style */
             font-weight: $font-semi-bold;
             line-height: $font-18px;
-
-            & + .mx_BaseAvatar_image {
-                visibility: hidden;
-            }
+            /* override inline styles which are part of the default avatar style as these uses a monochrome style */
+            background-color: $panel-actions !important;
+            font-size: $font-15px !important;
         }
 
         .mx_SpaceTreeLevel {
