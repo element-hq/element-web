@@ -27,7 +27,6 @@ import { NotificationCountType, Room, RoomEvent } from "matrix-js-sdk/src/models
 import { CallErrorCode } from "matrix-js-sdk/src/webrtc/call";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
 import { UserTrustLevel } from "matrix-js-sdk/src/crypto/CrossSigning";
-import { Feature, ServerSupport } from "matrix-js-sdk/src/feature";
 
 import ReplyChain from "../elements/ReplyChain";
 import { _t } from "../../../languageHandler";
@@ -62,10 +61,6 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { MessagePreviewStore } from "../../../stores/room-list/MessagePreviewStore";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
-import { ThreadNotificationState } from "../../../stores/notifications/ThreadNotificationState";
-import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
-import { NotificationStateEvents } from "../../../stores/notifications/NotificationState";
-import { NotificationColor } from "../../../stores/notifications/NotificationColor";
 import { ButtonEvent } from "../elements/AccessibleButton";
 import { copyPlaintext, getSelectedText } from "../../../utils/strings";
 import { DecryptionFailureTracker } from "../../../DecryptionFailureTracker";
@@ -254,7 +249,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     private isListeningForReceipts: boolean;
     private tile = React.createRef<IEventTileType>();
     private replyChain = React.createRef<ReplyChain>();
-    private threadState: ThreadNotificationState;
 
     public readonly ref = createRef<HTMLElement>();
 
@@ -389,10 +383,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         if (SettingsStore.getValue("feature_threadenabled")) {
             this.props.mxEvent.on(ThreadEvent.Update, this.updateThread);
-
-            if (this.thread && !this.supportsThreadNotifications) {
-                this.setupNotificationListener(this.thread);
-            }
         }
 
         client.decryptEventIfNeeded(this.props.mxEvent);
@@ -403,47 +393,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         this.verifyEvent();
     }
 
-    private get supportsThreadNotifications(): boolean {
-        const client = MatrixClientPeg.get();
-        return client.canSupport.get(Feature.ThreadUnreadNotifications) !== ServerSupport.Unsupported;
-    }
-
-    private setupNotificationListener(thread: Thread): void {
-        if (!this.supportsThreadNotifications) {
-            const notifications = RoomNotificationStateStore.instance.getThreadsRoomState(thread.room);
-            this.threadState = notifications.getThreadRoomState(thread);
-            this.threadState.on(NotificationStateEvents.Update, this.onThreadStateUpdate);
-            this.onThreadStateUpdate();
-        }
-    }
-
-    private onThreadStateUpdate = (): void => {
-        if (!this.supportsThreadNotifications) {
-            let threadNotification = null;
-            switch (this.threadState?.color) {
-                case NotificationColor.Grey:
-                    threadNotification = NotificationCountType.Total;
-                    break;
-                case NotificationColor.Red:
-                    threadNotification = NotificationCountType.Highlight;
-                    break;
-            }
-
-            this.setState({
-                threadNotification,
-            });
-        }
-    };
-
     private updateThread = (thread: Thread): void => {
-        if (thread !== this.state.thread && !this.supportsThreadNotifications) {
-            if (this.threadState) {
-                this.threadState.off(NotificationStateEvents.Update, this.onThreadStateUpdate);
-            }
-
-            this.setupNotificationListener(thread);
-        }
-
         this.setState({ thread });
     };
 
@@ -473,7 +423,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         if (SettingsStore.getValue("feature_threadenabled")) {
             this.props.mxEvent.off(ThreadEvent.Update, this.updateThread);
         }
-        this.threadState?.off(NotificationStateEvents.Update, this.onThreadStateUpdate);
     }
 
     public componentDidUpdate(prevProps: Readonly<EventTileProps>, prevState: Readonly<IState>): void {
@@ -1280,9 +1229,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                         "data-shape": this.context.timelineRenderingType,
                         "data-self": isOwnEvent,
                         "data-has-reply": !!replyChain,
-                        "data-notification": !this.supportsThreadNotifications
-                            ? this.state.threadNotification
-                            : undefined,
                         "onMouseEnter": () => this.setState({ hover: true }),
                         "onMouseLeave": () => this.setState({ hover: false }),
                         "onClick": (ev: MouseEvent) => {

@@ -22,7 +22,6 @@ import React from "react";
 import classNames from "classnames";
 import { NotificationCountType, Room, RoomEvent } from "matrix-js-sdk/src/models/room";
 import { ThreadEvent } from "matrix-js-sdk/src/models/thread";
-import { Feature, ServerSupport } from "matrix-js-sdk/src/feature";
 
 import { _t } from "../../../languageHandler";
 import HeaderButton from "./HeaderButton";
@@ -39,12 +38,9 @@ import {
     UPDATE_STATUS_INDICATOR,
 } from "../../../stores/notifications/RoomNotificationStateStore";
 import { NotificationColor } from "../../../stores/notifications/NotificationColor";
-import { ThreadsRoomNotificationState } from "../../../stores/notifications/ThreadsRoomNotificationState";
 import { SummarizedNotificationState } from "../../../stores/notifications/SummarizedNotificationState";
-import { NotificationStateEvents } from "../../../stores/notifications/NotificationState";
 import PosthogTrackers from "../../../PosthogTrackers";
 import { ButtonEvent } from "../elements/AccessibleButton";
-import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { doesRoomOrThreadHaveUnreadMessages } from "../../../Unread";
 
 const ROOM_INFO_PHASES = [
@@ -133,74 +129,48 @@ interface IProps {
 
 export default class RoomHeaderButtons extends HeaderButtons<IProps> {
     private static readonly THREAD_PHASES = [RightPanelPhases.ThreadPanel, RightPanelPhases.ThreadView];
-    private threadNotificationState: ThreadsRoomNotificationState | null;
     private globalNotificationState: SummarizedNotificationState;
-
-    private get supportsThreadNotifications(): boolean {
-        const client = MatrixClientPeg.get();
-        return client.canSupport.get(Feature.ThreadUnreadNotifications) !== ServerSupport.Unsupported;
-    }
 
     public constructor(props: IProps) {
         super(props, HeaderKind.Room);
-
-        this.threadNotificationState =
-            !this.supportsThreadNotifications && this.props.room
-                ? RoomNotificationStateStore.instance.getThreadsRoomState(this.props.room)
-                : null;
         this.globalNotificationState = RoomNotificationStateStore.instance.globalState;
     }
 
     public componentDidMount(): void {
         super.componentDidMount();
-        if (!this.supportsThreadNotifications) {
-            this.threadNotificationState?.on(NotificationStateEvents.Update, this.onNotificationUpdate);
-        } else {
-            // Notification badge may change if the notification counts from the
-            // server change, if a new thread is created or updated, or if a
-            // receipt is sent in the thread.
-            this.props.room?.on(RoomEvent.UnreadNotifications, this.onNotificationUpdate);
-            this.props.room?.on(RoomEvent.Receipt, this.onNotificationUpdate);
-            this.props.room?.on(RoomEvent.Timeline, this.onNotificationUpdate);
-            this.props.room?.on(RoomEvent.Redaction, this.onNotificationUpdate);
-            this.props.room?.on(RoomEvent.LocalEchoUpdated, this.onNotificationUpdate);
-            this.props.room?.on(RoomEvent.MyMembership, this.onNotificationUpdate);
-            this.props.room?.on(ThreadEvent.New, this.onNotificationUpdate);
-            this.props.room?.on(ThreadEvent.Update, this.onNotificationUpdate);
-        }
+        // Notification badge may change if the notification counts from the
+        // server change, if a new thread is created or updated, or if a
+        // receipt is sent in the thread.
+        this.props.room?.on(RoomEvent.UnreadNotifications, this.onNotificationUpdate);
+        this.props.room?.on(RoomEvent.Receipt, this.onNotificationUpdate);
+        this.props.room?.on(RoomEvent.Timeline, this.onNotificationUpdate);
+        this.props.room?.on(RoomEvent.Redaction, this.onNotificationUpdate);
+        this.props.room?.on(RoomEvent.LocalEchoUpdated, this.onNotificationUpdate);
+        this.props.room?.on(RoomEvent.MyMembership, this.onNotificationUpdate);
+        this.props.room?.on(ThreadEvent.New, this.onNotificationUpdate);
+        this.props.room?.on(ThreadEvent.Update, this.onNotificationUpdate);
         this.onNotificationUpdate();
         RoomNotificationStateStore.instance.on(UPDATE_STATUS_INDICATOR, this.onUpdateStatus);
     }
 
     public componentWillUnmount(): void {
         super.componentWillUnmount();
-        if (!this.supportsThreadNotifications) {
-            this.threadNotificationState?.off(NotificationStateEvents.Update, this.onNotificationUpdate);
-        } else {
-            this.props.room?.off(RoomEvent.UnreadNotifications, this.onNotificationUpdate);
-            this.props.room?.off(RoomEvent.Receipt, this.onNotificationUpdate);
-            this.props.room?.off(RoomEvent.Timeline, this.onNotificationUpdate);
-            this.props.room?.off(RoomEvent.Redaction, this.onNotificationUpdate);
-            this.props.room?.off(RoomEvent.LocalEchoUpdated, this.onNotificationUpdate);
-            this.props.room?.off(RoomEvent.MyMembership, this.onNotificationUpdate);
-            this.props.room?.off(ThreadEvent.New, this.onNotificationUpdate);
-            this.props.room?.off(ThreadEvent.Update, this.onNotificationUpdate);
-        }
+        this.props.room?.off(RoomEvent.UnreadNotifications, this.onNotificationUpdate);
+        this.props.room?.off(RoomEvent.Receipt, this.onNotificationUpdate);
+        this.props.room?.off(RoomEvent.Timeline, this.onNotificationUpdate);
+        this.props.room?.off(RoomEvent.Redaction, this.onNotificationUpdate);
+        this.props.room?.off(RoomEvent.LocalEchoUpdated, this.onNotificationUpdate);
+        this.props.room?.off(RoomEvent.MyMembership, this.onNotificationUpdate);
+        this.props.room?.off(ThreadEvent.New, this.onNotificationUpdate);
+        this.props.room?.off(ThreadEvent.Update, this.onNotificationUpdate);
         RoomNotificationStateStore.instance.off(UPDATE_STATUS_INDICATOR, this.onUpdateStatus);
     }
 
     private onNotificationUpdate = (): void => {
-        let threadNotificationColor: NotificationColor;
-        if (!this.supportsThreadNotifications) {
-            threadNotificationColor = this.threadNotificationState?.color ?? NotificationColor.None;
-        } else {
-            threadNotificationColor = this.notificationColor;
-        }
-
         // console.log
         // XXX: why don't we read from this.state.threadNotificationColor in the render methods?
         this.setState({
-            threadNotificationColor,
+            threadNotificationColor: this.notificationColor,
         });
     };
 

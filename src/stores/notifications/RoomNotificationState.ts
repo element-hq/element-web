@@ -17,7 +17,6 @@ limitations under the License.
 import { MatrixEventEvent } from "matrix-js-sdk/src/models/event";
 import { RoomEvent } from "matrix-js-sdk/src/models/room";
 import { ClientEvent } from "matrix-js-sdk/src/client";
-import { Feature, ServerSupport } from "matrix-js-sdk/src/feature";
 
 import type { Room } from "matrix-js-sdk/src/models/room";
 import type { MatrixEvent } from "matrix-js-sdk/src/models/event";
@@ -25,11 +24,10 @@ import type { IDestroyable } from "../../utils/IDestroyable";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { readReceiptChangeIsFor } from "../../utils/read-receipts";
 import * as RoomNotifs from "../../RoomNotifs";
-import { NotificationState, NotificationStateEvents } from "./NotificationState";
-import type { ThreadsRoomNotificationState } from "./ThreadsRoomNotificationState";
+import { NotificationState } from "./NotificationState";
 
 export class RoomNotificationState extends NotificationState implements IDestroyable {
-    public constructor(public readonly room: Room, private readonly threadsState?: ThreadsRoomNotificationState) {
+    public constructor(public readonly room: Room) {
         super();
         const cli = this.room.client;
         this.room.on(RoomEvent.Receipt, this.handleReadReceipt);
@@ -39,9 +37,6 @@ export class RoomNotificationState extends NotificationState implements IDestroy
         this.room.on(RoomEvent.Redaction, this.handleRoomEventUpdate);
 
         this.room.on(RoomEvent.UnreadNotifications, this.handleNotificationCountUpdate); // for server-sent counts
-        if (cli.canSupport.get(Feature.ThreadUnreadNotifications) === ServerSupport.Unsupported) {
-            this.threadsState?.on(NotificationStateEvents.Update, this.handleThreadsUpdate);
-        }
         cli.on(MatrixEventEvent.Decrypted, this.onEventDecrypted);
         cli.on(ClientEvent.AccountData, this.handleAccountDataUpdate);
         this.updateNotificationState();
@@ -55,18 +50,9 @@ export class RoomNotificationState extends NotificationState implements IDestroy
         this.room.removeListener(RoomEvent.LocalEchoUpdated, this.handleLocalEchoUpdated);
         this.room.removeListener(RoomEvent.Timeline, this.handleRoomEventUpdate);
         this.room.removeListener(RoomEvent.Redaction, this.handleRoomEventUpdate);
-        if (cli.canSupport.get(Feature.ThreadUnreadNotifications) === ServerSupport.Unsupported) {
-            this.room.removeListener(RoomEvent.UnreadNotifications, this.handleNotificationCountUpdate);
-        } else if (this.threadsState) {
-            this.threadsState.removeListener(NotificationStateEvents.Update, this.handleThreadsUpdate);
-        }
         cli.removeListener(MatrixEventEvent.Decrypted, this.onEventDecrypted);
         cli.removeListener(ClientEvent.AccountData, this.handleAccountDataUpdate);
     }
-
-    private handleThreadsUpdate = (): void => {
-        this.updateNotificationState();
-    };
 
     private handleLocalEchoUpdated = (): void => {
         this.updateNotificationState();
