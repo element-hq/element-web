@@ -2174,7 +2174,7 @@
     "Recently visited rooms": "Salons visités récemment",
     "Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Security Key.": "Sauvegardez vos clés de chiffrement et les données de votre compte au cas où vous perdiez l’accès à vos sessions. Vos clés seront sécurisés avec une Clé de Sécurité unique.",
     "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|one": "Mettre en cache localement et de manière sécurisée les messages chiffrés pour qu’ils apparaissent dans les résultats de recherche, en utilisant %(size)s pour stocker les messages de %(rooms)s salons.",
-    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|other": "Mettre en cache localement et de manière sécurisée les messages chiffrés pour qu’ils apparaissent dans les résultats de recherche, en utilisant %(size)s pour stocker les messages de %(rooms)s salons.",
+    "Securely cache encrypted messages locally for them to appear in search results, using %(size)s to store messages from %(rooms)s rooms.|other": "Mettre en cache localement et de manière sécurisée les messages chiffrés pour qu’ils apparaissent dans les résultats de recherche. Actuellement %(size)s sont utilisé pour stocker les messages de %(rooms)s salons.",
     "Channel: <channelLink/>": "Canal : <channelLink/>",
     "Workspace: <networkLink/>": "Espace de travail : <networkLink/>",
     "Dial pad": "Pavé de numérotation",
