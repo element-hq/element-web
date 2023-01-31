@@ -3717,5 +3717,7 @@
     "Manage account": "Konto verwalten",
     "Your account details are managed separately at <code>%(hostname)s</code>.": "Deine Kontodaten werden separat auf <code>%(hostname)s</code> verwaltet.",
     "Dynamic room predecessors": "Veränderbare Raumvorgänger",
-    "Enable MSC3946 (to support late-arriving room archives)": "MSC3946 aktivieren (zur Verknüpfung von Raumarchiven nach der Raumerstellung)"
+    "Enable MSC3946 (to support late-arriving room archives)": "MSC3946 aktivieren (zur Verknüpfung von Raumarchiven nach der Raumerstellung)",
+    "All messages and invites from this user will be hidden. Are you sure you want to ignore them?": "Alle Nachrichten und Einladungen der Person werden verborgen. Bist du sicher, dass du sie ignorieren möchtest?",
+    "Ignore %(user)s": "%(user)s ignorieren"
 }
