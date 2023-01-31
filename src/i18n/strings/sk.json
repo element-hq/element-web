@@ -3717,5 +3717,7 @@
     "Dynamic room predecessors": "Predchodcovia dynamickej miestnosti",
     "Manage account": "Spravovať účet",
     "Your account details are managed separately at <code>%(hostname)s</code>.": "Údaje o vašom účte sú spravované samostatne na adrese <code>%(hostname)s</code>.",
-    "Enable MSC3946 (to support late-arriving room archives)": "Zapnúť MSC3946 (na podporu neskorých archívov miestností)"
+    "Enable MSC3946 (to support late-arriving room archives)": "Zapnúť MSC3946 (na podporu neskorých archívov miestností)",
+    "All messages and invites from this user will be hidden. Are you sure you want to ignore them?": "Všetky správy a pozvánky od tohto používateľa budú skryté. Ste si istí, že ich chcete ignorovať?",
+    "Ignore %(user)s": "Ignorovať %(user)s"
 }
