@@ -58,10 +58,9 @@ export class RoomEchoChamber extends GenericEchoChamber<RoomEchoContext, CachedR
     };
 
     private updateNotificationVolume(): void {
-        this.properties.set(
-            CachedRoomKey.NotificationVolume,
-            getRoomNotifsState(this.matrixClient, this.context.room.roomId),
-        );
+        const state = getRoomNotifsState(this.matrixClient, this.context.room.roomId);
+        if (state) this.properties.set(CachedRoomKey.NotificationVolume, state);
+        else this.properties.delete(CachedRoomKey.NotificationVolume);
         this.markEchoReceived(CachedRoomKey.NotificationVolume);
         this.emit(PROPERTY_UPDATED, CachedRoomKey.NotificationVolume);
     }

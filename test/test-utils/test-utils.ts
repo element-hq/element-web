@@ -1,5 +1,5 @@
 /*
-Copyright 2022 The Matrix.org Foundation C.I.C.
+Copyright 2022 - 2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -33,6 +33,9 @@ import {
     IPusher,
     RoomType,
     KNOWN_SAFE_ROOM_VERSION,
+    ConditionKind,
+    PushRuleActionName,
+    IPushRules,
 } from "matrix-js-sdk/src/matrix";
 import { normalize } from "matrix-js-sdk/src/utils";
 import { ReEmitter } from "matrix-js-sdk/src/ReEmitter";
@@ -139,7 +142,7 @@ export function createTestClient(): MatrixClient {
         getThirdpartyUser: jest.fn().mockResolvedValue([]),
         getAccountData: jest.fn().mockImplementation((type) => {
             return mkEvent({
-                user: undefined,
+                user: "@user:example.com",
                 room: undefined,
                 type,
                 event: true,
@@ -480,8 +483,12 @@ export function mkMessage({
     return mkEvent(event);
 }
 
-export function mkStubRoom(roomId: string = null, name: string, client: MatrixClient): Room {
-    const stubTimeline = { getEvents: () => [] as MatrixEvent[] } as unknown as EventTimeline;
+export function mkStubRoom(
+    roomId: string | null | undefined = null,
+    name: string | undefined,
+    client: MatrixClient | undefined,
+): Room {
+    const stubTimeline = { getEvents: (): MatrixEvent[] => [] } as unknown as EventTimeline;
     return {
         canInvite: jest.fn(),
         client,
@@ -565,22 +572,25 @@ export function mkServerConfig(hsUrl: string, isUrl: string) {
 // These methods make some use of some private methods on the AsyncStoreWithClient to simplify getting into a consistent
 // ready state without needing to wire up a dispatcher and pretend to be a js-sdk client.
 
-export const setupAsyncStoreWithClient = async <T = unknown>(store: AsyncStoreWithClient<T>, client: MatrixClient) => {
-    // @ts-ignore
+export const setupAsyncStoreWithClient = async <T extends Object = any>(
+    store: AsyncStoreWithClient<T>,
+    client: MatrixClient,
+) => {
+    // @ts-ignore protected access
     store.readyStore.useUnitTestClient(client);
-    // @ts-ignore
+    // @ts-ignore protected access
     await store.onReady();
 };
 
-export const resetAsyncStoreWithClient = async <T = unknown>(store: AsyncStoreWithClient<T>) => {
-    // @ts-ignore
+export const resetAsyncStoreWithClient = async <T extends Object = any>(store: AsyncStoreWithClient<T>) => {
+    // @ts-ignore protected access
     await store.onNotReady();
 };
 
 export const mockStateEventImplementation = (events: MatrixEvent[]) => {
     const stateMap = new EnhancedMap<string, Map<string, MatrixEvent>>();
     events.forEach((event) => {
-        stateMap.getOrCreate(event.getType(), new Map()).set(event.getStateKey(), event);
+        stateMap.getOrCreate(event.getType(), new Map()).set(event.getStateKey()!, event);
     });
 
     // recreate the overloading in RoomState
@@ -617,7 +627,7 @@ export const upsertRoomStateEvents = (room: Room, events: MatrixEvent[]): void =
         if (!acc.has(eventType)) {
             acc.set(eventType, new Map());
         }
-        acc.get(eventType).set(event.getStateKey(), event);
+        acc.get(eventType)?.set(event.getStateKey()!, event);
         return acc;
     }, room.currentState.events || new Map<string, Map<string, MatrixEvent>>());
 
@@ -674,3 +684,25 @@ export const mkPusher = (extra: Partial<IPusher> = {}): IPusher => ({
     pushkey: "pushpush",
     ...extra,
 });
+
+/** Add a mute rule for a room. */
+export function muteRoom(room: Room): void {
+    const client = room.client!;
+    client.pushRules = client.pushRules ?? ({ global: [] } as IPushRules);
+    client.pushRules.global = client.pushRules.global ?? {};
+    client.pushRules.global.override = [
+        {
+            default: true,
+            enabled: true,
+            rule_id: "rule_id",
+            conditions: [
+                {
+                    kind: ConditionKind.EventMatch,
+                    key: "room_id",
+                    pattern: room.roomId,
+                },
+            ],
+            actions: [PushRuleActionName.DontNotify],
+        },
+    ];
+}
