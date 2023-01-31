@@ -1,5 +1,5 @@
-Changes in [3.65.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.65.0-rc.1) (2023-01-24)
-===============================================================================================================
+Changes in [3.65.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.65.0) (2023-01-31)
+=====================================================================================================
 
 ## ✨ Features
  * Quotes for rte ([\#9932](https://github.com/matrix-org/matrix-react-sdk/pull/9932)). Contributed by @alunturner.
