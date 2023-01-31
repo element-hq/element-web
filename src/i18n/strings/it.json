@@ -3710,5 +3710,8 @@
     "Bulleted list": "Elenco puntato",
     "Connection error - Recording paused": "Errore di connessione - Registrazione in pausa",
     "%(senderName)s started a voice broadcast": "%(senderName)s ha iniziato una trasmissione vocale",
-    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)"
+    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)",
+    "Registration token": "Token di registrazione",
+    "Enter a registration token provided by the homeserver administrator.": "Inserisci un token di registrazione fornito dall'amministratore dell'homeserver.",
+    "Unable to play this voice broadcast": "Impossibile avviare questa trasmissione vocale"
 }
