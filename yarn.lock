@@ -1589,10 +1589,10 @@
   resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-js/-/matrix-sdk-crypto-js-0.1.0-alpha.2.tgz#a09d0fea858e817da971a3c9f904632ef7b49eb6"
   integrity sha512-oVkBCh9YP7H9i4gAoQbZzswniczfo/aIptNa4dxRi4Ff9lSvUCFv6Hvzi7C+90c0/PWZLXjIDTIAWZYmwyd2fA==
 
-"@matrix-org/matrix-wysiwyg@^0.22.0":
-  version "0.22.0"
-  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-wysiwyg/-/matrix-wysiwyg-0.22.0.tgz#53f1e80d9ae7be0940e0ca905a3952804b029b29"
-  integrity sha512-3b5jGMI56zcqZ2PktrSPMAbzfWmkdupuzcLeemWQ0fT8QuiG4dA72NUxdDyarlz+1eQ+Qm4fu9j/zsPlvNpy8g==
+"@matrix-org/matrix-wysiwyg@^0.23.0":
+  version "0.23.0"
+  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-wysiwyg/-/matrix-wysiwyg-0.23.0.tgz#32242b18ae9dbb28d920c31f50bbac87ff4317fe"
+  integrity sha512-wO5KYznlfsSIMo0R8tyZqfvZrPkQMaL1qBHzhaeKIsC4vK4MnJ9mj6JiS6+XiuHJyc9nqN+IdeUjKyJOnStHaA==
 
 "@matrix-org/olm@https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.14.tgz":
   version "3.2.14"

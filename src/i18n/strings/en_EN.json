@@ -2144,6 +2144,8 @@
     "Underline": "Underline",
     "Bulleted list": "Bulleted list",
     "Numbered list": "Numbered list",
+    "Indent increase": "Indent increase",
+    "Indent decrease": "Indent decrease",
     "Code": "Code",
     "Link": "Link",
     "Edit link": "Edit link",
