@@ -3710,5 +3710,11 @@
     "Decrypted source unavailable": "Dekrüptitud lähteandmed pole saadaval",
     "Connection error - Recording paused": "Viga võrguühenduses - salvestamine on peatatud",
     "%(senderName)s started a voice broadcast": "%(senderName)s alustas ringhäälingukõnet",
-    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)"
+    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)",
+    "Registration token": "Registreerimise tunnuskood",
+    "Enter a registration token provided by the homeserver administrator.": "Sisesta koduserveri haldaja poolt antud tunnuskood.",
+    "Unable to play this voice broadcast": "Selle ringhäälingukõne esitamine ei õnnestu",
+    "Enable MSC3946 (to support late-arriving room archives)": "Võta kasutusele MSC3946 (jututoa ajaloo aeglane laadimine)",
+    "Your account details are managed separately at <code>%(hostname)s</code>.": "Sinu kasutajakonto lisateave on hallatav siin serveris - <code>%(hostname)s</code>.",
+    "Manage account": "Halda kasutajakontot"
 }
