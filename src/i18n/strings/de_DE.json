@@ -3719,5 +3719,7 @@
     "Dynamic room predecessors": "Veränderbare Raumvorgänger",
     "Enable MSC3946 (to support late-arriving room archives)": "MSC3946 aktivieren (zur Verknüpfung von Raumarchiven nach der Raumerstellung)",
     "All messages and invites from this user will be hidden. Are you sure you want to ignore them?": "Alle Nachrichten und Einladungen der Person werden verborgen. Bist du sicher, dass du sie ignorieren möchtest?",
-    "Ignore %(user)s": "%(user)s ignorieren"
+    "Ignore %(user)s": "%(user)s ignorieren",
+    "Indent decrease": "Weniger einrücken",
+    "Indent increase": "Weiter einrücken"
 }
