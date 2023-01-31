@@ -26,7 +26,7 @@ import { MatrixClientPeg } from "./MatrixClientPeg";
 import { NotificationColor } from "./stores/notifications/NotificationColor";
 import { getUnsentMessages } from "./components/structures/RoomStatusBar";
 import { doesRoomHaveUnreadMessages, doesRoomOrThreadHaveUnreadMessages } from "./Unread";
-import { getEffectiveMembership, EffectiveMembership } from "./utils/membership";
+import { EffectiveMembership, getEffectiveMembership } from "./utils/membership";
 
 export enum RoomNotifState {
     AllMessagesLoud = "all_messages_loud",
@@ -202,9 +202,13 @@ function isMuteRule(rule: IPushRule): boolean {
 }
 
 export function determineUnreadState(
-    room: Room,
+    room?: Room,
     threadId?: string,
 ): { color: NotificationColor; symbol: string | null; count: number } {
+    if (!room) {
+        return { symbol: null, count: 0, color: NotificationColor.None };
+    }
+
     if (getUnsentMessages(room, threadId).length > 0) {
         return { symbol: "!", count: 1, color: NotificationColor.Unsent };
     }

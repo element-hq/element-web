@@ -19,11 +19,11 @@ import { useCallback, useEffect, useState } from "react";
 
 import type { NotificationCount, Room } from "matrix-js-sdk/src/models/room";
 import { determineUnreadState } from "../RoomNotifs";
-import type { NotificationColor } from "../stores/notifications/NotificationColor";
+import { NotificationColor } from "../stores/notifications/NotificationColor";
 import { useEventEmitter } from "./useEventEmitter";
 
 export const useUnreadNotifications = (
-    room: Room,
+    room?: Room,
     threadId?: string,
 ): {
     symbol: string | null;
@@ -32,7 +32,7 @@ export const useUnreadNotifications = (
 } => {
     const [symbol, setSymbol] = useState<string | null>(null);
     const [count, setCount] = useState<number>(0);
-    const [color, setColor] = useState<NotificationColor>(0);
+    const [color, setColor] = useState<NotificationColor>(NotificationColor.None);
 
     useEventEmitter(
         room,

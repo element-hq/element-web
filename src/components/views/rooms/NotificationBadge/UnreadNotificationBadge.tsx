@@ -21,7 +21,7 @@ import { useUnreadNotifications } from "../../../../hooks/useUnreadNotifications
 import { StatelessNotificationBadge } from "./StatelessNotificationBadge";
 
 interface Props {
-    room: Room;
+    room?: Room;
     threadId?: string;
 }
 
