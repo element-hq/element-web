@@ -37,6 +37,20 @@ limitations under the License.
             user-select: all;
         }
 
+        // we always have a <br/> tag at the end of the html, we need it to be present at first then hide it as soon as
+        // we have any other elements
+        br:not(:only-child) {
+            display: none;
+        }
+
+        p {
+            margin-top: 0;
+            margin-bottom: 0;
+            // this may seem redundant, but we need to handle zero content formatting tags, which occur when we split a
+            // formatting tag into paragraphs
+            min-height: $font-22px;
+        }
+
         ul,
         ol {
             margin-top: 0;
@@ -54,12 +68,6 @@ limitations under the License.
             margin-block-end: 0;
             margin-inline-start: 0;
             margin-inline-end: 0;
-        }
-
-        // model output always includes a linebreak but we do not want the user
-        // to see it when writing input in lists
-        :is(ol, ul, pre, blockquote) + br:last-of-type {
-            display: none;
         }
 
         > pre {
