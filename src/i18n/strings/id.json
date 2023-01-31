@@ -3717,5 +3717,7 @@
     "Manage account": "Kelola akun",
     "Your account details are managed separately at <code>%(hostname)s</code>.": "Detail akun Anda dikelola secara terpisah di <code>%(hostname)s</code>.",
     "Enable MSC3946 (to support late-arriving room archives)": "Aktifkan MSC3946 (untuk mendukung arsip ruangan yang datang terlambat)",
-    "Dynamic room predecessors": "Pendahulu ruang dinamis"
+    "Dynamic room predecessors": "Pendahulu ruang dinamis",
+    "All messages and invites from this user will be hidden. Are you sure you want to ignore them?": "Semua pesan dan undangan dari pengguna ini akan disembunyikan. Apakah Anda yakin ingin mengabaikan?",
+    "Ignore %(user)s": "Abaikan %(user)s"
 }
