@@ -1,3 +1,9 @@
+Changes in [1.11.22](https://github.com/vector-im/element-web/releases/tag/v1.11.22) (2023-01-31)
+=================================================================================================
+
+## 🐛 Bug Fixes
+ * Bump version number to fix problems upgrading from v1.11.21-rc.1
+
 Changes in [1.11.21](https://github.com/vector-im/element-web/releases/tag/v1.11.21) (2023-01-31)
 =================================================================================================
 
