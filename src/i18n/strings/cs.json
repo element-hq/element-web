@@ -3710,5 +3710,12 @@
     "Decrypted source unavailable": "Dešifrovaný zdroj není dostupný",
     "Connection error - Recording paused": "Chyba připojení - nahrávání pozastaveno",
     "%(senderName)s started a voice broadcast": "%(senderName)s zahájil(a) hlasové vysílání",
-    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)"
+    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)",
+    "Unable to play this voice broadcast": "Nelze přehrát toto hlasové vysílání",
+    "Registration token": "Registrační token",
+    "Enter a registration token provided by the homeserver administrator.": "Zadejte registrační token poskytnutý správcem domovského serveru.",
+    "Manage account": "Spravovat účet",
+    "Your account details are managed separately at <code>%(hostname)s</code>.": "Údaje o vašem účtu jsou spravovány samostatně na adrese <code>%(hostname)s</code>.",
+    "Enable MSC3946 (to support late-arriving room archives)": "Povolit MSC3946 (podpora pozdních archivů místností)",
+    "Dynamic room predecessors": "Předchůdci dynamické místnosti"
 }
