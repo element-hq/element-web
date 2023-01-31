@@ -224,6 +224,10 @@ limitations under the License.
 
 .mx_EmojiPicker_preview_text {
     display: flex;
+    flex: 1;
+    overflow: hidden;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
     flex-direction: column;
 }
 
@@ -233,6 +237,7 @@ limitations under the License.
 
 .mx_EmojiPicker_shortcode {
     color: $light-fg-color;
+    overflow-wrap: break-word;
     font-size: $font-14px;
 
     &::before,
