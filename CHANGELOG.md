@@ -1,9 +1,9 @@
-Changes in [1.11.21-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.11.21-rc.1) (2023-01-24)
-===========================================================================================================
+Changes in [1.11.21](https://github.com/vector-im/element-web/releases/tag/v1.11.21) (2023-01-31)
+=================================================================================================
 
 ## ✨ Features
  * Move pin drop out of labs ([\#22993](https://github.com/vector-im/element-web/pull/22993)).
- * Quotes for rte ([\#9932](https://github.com/matrix-org/matrix-react-sdk/pull/9932)). Contributed by @alunturner.
+ * Quotes for rich text editor (RTE) ([\#9932](https://github.com/matrix-org/matrix-react-sdk/pull/9932)). Contributed by @alunturner.
  * Show the room name in the room header during calls ([\#9942](https://github.com/matrix-org/matrix-react-sdk/pull/9942)). Fixes #24268.
  * Add code blocks to rich text editor ([\#9921](https://github.com/matrix-org/matrix-react-sdk/pull/9921)). Contributed by @alunturner.
  * Add new style for inline code ([\#9936](https://github.com/matrix-org/matrix-react-sdk/pull/9936)). Contributed by @florianduros.
