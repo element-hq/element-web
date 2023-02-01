@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { MouseEventHandler } from "react";
 import { screen, render, RenderResult } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
@@ -82,28 +82,39 @@ describe("PictureInPictureDragger", () => {
         });
     });
 
-    it("doesn't leak drag events to children as clicks", async () => {
-        const clickSpy = jest.fn();
-        render(
-            <PictureInPictureDragger draggable={true}>
-                {[
-                    ({ onStartMoving }) => (
-                        <div onMouseDown={onStartMoving} onClick={clickSpy}>
-                            Hello
-                        </div>
-                    ),
-                ]}
-            </PictureInPictureDragger>,
-        );
-        const target = screen.getByText("Hello");
+    describe("when rendering the dragger", () => {
+        let clickSpy: jest.Mocked<MouseEventHandler>;
+        let target: HTMLElement;
 
-        // A click without a drag motion should go through
-        await userEvent.pointer([{ keys: "[MouseLeft>]", target }, { keys: "[/MouseLeft]" }]);
-        expect(clickSpy).toHaveBeenCalled();
+        beforeEach(() => {
+            clickSpy = jest.fn();
+            render(
+                <PictureInPictureDragger draggable={true}>
+                    {[
+                        ({ onStartMoving }) => (
+                            <div onMouseDown={onStartMoving} onClick={clickSpy}>
+                                Hello
+                            </div>
+                        ),
+                    ]}
+                </PictureInPictureDragger>,
+            );
+            target = screen.getByText("Hello");
+        });
 
-        // A drag motion should not trigger a click
-        clickSpy.mockClear();
-        await userEvent.pointer([{ keys: "[MouseLeft>]", target }, { coords: { x: 60, y: 60 } }, "[/MouseLeft]"]);
-        expect(clickSpy).not.toHaveBeenCalled();
+        it("and clicking without a drag motion, it should pass the click to children", async () => {
+            await userEvent.pointer([{ keys: "[MouseLeft>]", target }, { keys: "[/MouseLeft]" }]);
+            expect(clickSpy).toHaveBeenCalled();
+        });
+
+        it("and clicking with a drag motion above the threshold of 5px, it should not pass the click to children", async () => {
+            await userEvent.pointer([{ keys: "[MouseLeft>]", target }, { coords: { x: 60, y: 2 } }, "[/MouseLeft]"]);
+            expect(clickSpy).not.toHaveBeenCalled();
+        });
+
+        it("and clickign with a drag motion below the threshold of 5px, it should pass the click to the children", async () => {
+            await userEvent.pointer([{ keys: "[MouseLeft>]", target }, { coords: { x: 4, y: 4 } }, "[/MouseLeft]"]);
+            expect(clickSpy).toHaveBeenCalled();
+        });
     });
 });
