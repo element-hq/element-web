@@ -3167,7 +3167,6 @@
     "Toggle Link": "Växla länk av/på",
     "Toggle Code Block": "Växla kodblock av/på",
     "Event ID: %(eventId)s": "Händelse-ID: %(eventId)s",
-    "<a>Give feedback</a>": "<a>Ge återkoppling</a>",
     "Threads are a beta feature": "Trådar är en beta-funktion",
     "<b>Tip:</b> Use “%(replyInThread)s” when hovering over a message.": "<b>Tips:</b> Välj \"%(replyInThread)s\" när du håller över ett meddelande.",
     "Threads help keep your conversations on-topic and easy to track.": "Trådar underlättar för att hålla konversationer till ämnet och gör dem lättare att följa.",
@@ -3706,5 +3705,16 @@
     "Failed to read events": "Misslyckades att läsa händelser",
     "Failed to send event": "Misslyckades att skicka händelse",
     "Numbered list": "Numrerad lista",
-    "Bulleted list": "Punktlista"
+    "Bulleted list": "Punktlista",
+    "Decrypted source unavailable": "Avkrypterad källa otillgänglig",
+    "Registration token": "Registreringstoken",
+    "Enter a registration token provided by the homeserver administrator.": "Ange en registreringstoken försedd av hemserveradministratören.",
+    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)",
+    "Manage account": "Hantera konto",
+    "Your account details are managed separately at <code>%(hostname)s</code>.": "Dina rumsdetaljer hanteras separat av <code>%(hostname)s</code>.",
+    "Enable MSC3946 (to support late-arriving room archives)": "Aktivera MSC3946 (för att stöda sen-ankomna rumsarkiv)",
+    "Dynamic room predecessors": "Dynamiska rumsföregångare",
+    "Connection error - Recording paused": "Anslutningsfel - Inspelning pausad",
+    "Unable to play this voice broadcast": "Kan inte spela den här röstsändningen",
+    "%(senderName)s started a voice broadcast": "%(senderName)s startade en röstsändning"
 }

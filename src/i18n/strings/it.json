@@ -3205,7 +3205,6 @@
     "New video room": "Nuova stanza video",
     "New room": "Nuova stanza",
     "Threads help keep conversations on-topic and easy to track. <a>Learn more</a>.": "Le conversazioni aiutano a tenere le discussioni in tema e rintracciabili. <a>Maggiori info</a>.",
-    "<a>Give feedback</a>": "<a>Lascia feedback</a>",
     "Threads are a beta feature": "Le conversazioni sono una funzionalità beta",
     "Threads help keep your conversations on-topic and easy to track.": "Le conversazioni ti aiutano a tenere le tue discussioni in tema e rintracciabili.",
     "%(featureName)s Beta feedback": "Feedback %(featureName)s beta",
@@ -3710,5 +3709,15 @@
     "Bulleted list": "Elenco puntato",
     "Connection error - Recording paused": "Errore di connessione - Registrazione in pausa",
     "%(senderName)s started a voice broadcast": "%(senderName)s ha iniziato una trasmissione vocale",
-    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)"
+    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)",
+    "Registration token": "Token di registrazione",
+    "Enter a registration token provided by the homeserver administrator.": "Inserisci un token di registrazione fornito dall'amministratore dell'homeserver.",
+    "Unable to play this voice broadcast": "Impossibile avviare questa trasmissione vocale",
+    "All messages and invites from this user will be hidden. Are you sure you want to ignore them?": "Tutti i messaggi e gli inviti da questo utente verranno nascosti. Vuoi davvero ignorarli?",
+    "Ignore %(user)s": "Ignora %(user)s",
+    "Indent decrease": "Diminuzione indentazione",
+    "Indent increase": "Aumento indentazione",
+    "Manage account": "Gestisci account",
+    "Your account details are managed separately at <code>%(hostname)s</code>.": "I dettagli del tuo account sono gestiti separatamente su <code>%(hostname)s</code>.",
+    "Enable MSC3946 (to support late-arriving room archives)": "Attiva MSC3946 (per supportare archivi della stanza arrivati in ritardo)"
 }

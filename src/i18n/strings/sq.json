@@ -3199,7 +3199,6 @@
     "%(count)s participants|other": "%(count)s pjesëmarrës",
     "New video room": "Dhomë e re me video",
     "New room": "Dhomë e re",
-    "<a>Give feedback</a>": "<a>Jepni përshtypjet</a>",
     "Threads are a beta feature": "Rrjedhat janë një veçori beta",
     "Threads help keep your conversations on-topic and easy to track.": "Rrjedhat ndihmojnë që të mbahen bisedat tuaja brenda temës dhe të ndiqen kollaj.",
     "%(featureName)s Beta feedback": "Përshtypje për %(featureName)s Beta",
@@ -3689,7 +3688,7 @@
     "Yes, end my recording": "Po, përfundoje regjistrimin tim",
     "If you start listening to this live broadcast, your current live broadcast recording will be ended.": "Nëse filloni të dëgjoni te ky transmetim i drejtpërdrejtë, regjistrimi juaj i tanishëm i një transmetimi të drejtpërdrejtë do të përfundojë.",
     "Listen to live broadcast?": "Të dëgjohet te transmetimi i drejtpërdrejtë?",
-    "You can't start a voice message as you are currently recording a live broadcast. Please end your live broadcast in order to start recording a voice message.": "S’mund të niset mesazh zanor, ngaqë aktualisht po regjistroni një transmetim të drejtpërdrejtë. Ju lutemi, përfundoni transmetimin e drejtpërdrejtë, që të mund të nisni regjistrimin e një mesazhi zanor",
+    "You can't start a voice message as you are currently recording a live broadcast. Please end your live broadcast in order to start recording a voice message.": "S’mund të niset mesazh zanor, ngaqë aktualisht po incizoni një transmetim të drejtpërdrejtë. Ju lutemi, përfundoni transmetimin e drejtpërdrejtë, që të mund të nisni incizimin e një mesazhi zanor.",
     "Can't start voice message": "S’niset dot mesazh zanor",
     "Edit link": "Përpunoni lidhje",
     "Numbered list": "Listë e numërtuar",
@@ -3697,5 +3696,13 @@
     "Connection error - Recording paused": "Gabim lidhjeje - Regjistrimi u ndal",
     "Unfortunately we're unable to start a recording right now. Please try again later.": "Mjerisht, s’qemë në gjendje të nisnim tani një regjistrim. Ju lutemi, riprovoni më vonë.",
     "Connection error": "Gabim lidhjeje",
-    "%(senderName)s started a voice broadcast": "%(senderName)s nisi një transmetim zanor"
+    "%(senderName)s started a voice broadcast": "%(senderName)s nisi një transmetim zanor",
+    "Decrypted source unavailable": "Burim i shfshehtëzuar jo i passhëm",
+    "Registration token": "Token regjistrimi",
+    "Enter a registration token provided by the homeserver administrator.": "Jepni një token regjistrimi dhënë nga përgjegjësi i shërbyesit Home.",
+    "All messages and invites from this user will be hidden. Are you sure you want to ignore them?": "Krejt mesazhet dhe ftesat prej këtij përdoruesi do të fshihen. Jeni i sigurt se doni të shpërfillet?",
+    "Ignore %(user)s": "Shpërfille %(user)s",
+    "Manage account": "Administroni llogari",
+    "Your account details are managed separately at <code>%(hostname)s</code>.": "Hollësitë e llogarisë tuaj administrohen ndarazi te <code>%(hostname)s</code>.",
+    "Unable to play this voice broadcast": "S’arrihet të luhet ky transmetim zanor"
 }
