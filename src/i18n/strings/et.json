@@ -3204,8 +3204,6 @@
     "%(count)s participants|other": "%(count)s oselejat",
     "New video room": "Uus videotuba",
     "New room": "Uus jututuba",
-    "<a>Give feedback</a>": "<a>Jaga tagasisidet</a>",
-    "Threads are a beta feature": "Jutulõngad on beetajärgus funktsionaalsus",
     "Threads help keep your conversations on-topic and easy to track.": "Jutulõngad aitavad hoida vestlused teemakohastena ning mugavalt loetavatena.",
     "%(featureName)s Beta feedback": "%(featureName)s beetaversiooni tagasiside",
     "Beta feature. Click to learn more.": "Beetafunktsionaalsus. Lisateabe lugemiseks klõpsi siin.",
@@ -3710,5 +3708,15 @@
     "Decrypted source unavailable": "Dekrüptitud lähteandmed pole saadaval",
     "Connection error - Recording paused": "Viga võrguühenduses - salvestamine on peatatud",
     "%(senderName)s started a voice broadcast": "%(senderName)s alustas ringhäälingukõnet",
-    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)"
+    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)",
+    "Registration token": "Registreerimise tunnuskood",
+    "Enter a registration token provided by the homeserver administrator.": "Sisesta koduserveri haldaja poolt antud tunnuskood.",
+    "Unable to play this voice broadcast": "Selle ringhäälingukõne esitamine ei õnnestu",
+    "Enable MSC3946 (to support late-arriving room archives)": "Võta kasutusele MSC3946 (jututoa ajaloo aeglane laadimine)",
+    "Your account details are managed separately at <code>%(hostname)s</code>.": "Sinu kasutajakonto lisateave on hallatav siin serveris - <code>%(hostname)s</code>.",
+    "Manage account": "Halda kasutajakontot",
+    "Indent decrease": "Vähenda taandrida",
+    "Indent increase": "Suurenda taandrida",
+    "All messages and invites from this user will be hidden. Are you sure you want to ignore them?": "Kõik selle kasutaja sõnumid ja kutsed saava olema peidetud. Kas sa oled kindel, et soovid teda eirata?",
+    "Ignore %(user)s": "Eira kasutajat %(user)s"
 }
