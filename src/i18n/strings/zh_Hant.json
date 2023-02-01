@@ -3717,5 +3717,9 @@
     "Your account details are managed separately at <code>%(hostname)s</code>.": "您的帳號詳細資訊在 <code>%(hostname)s</code> 中單獨管理。",
     "Enable MSC3946 (to support late-arriving room archives)": "啟用 MSC3946（為了支援遲到聊天室存檔）",
     "Dynamic room predecessors": "動態聊天室前身",
-    "Unable to play this voice broadcast": "無法播放此音訊廣播"
+    "Unable to play this voice broadcast": "無法播放此音訊廣播",
+    "All messages and invites from this user will be hidden. Are you sure you want to ignore them?": "來自該使用者的所有訊息與邀請都將被隱藏。您確定要忽略它們嗎？",
+    "Ignore %(user)s": "忽略 %(user)s",
+    "Indent decrease": "減少縮排",
+    "Indent increase": "增加縮排"
 }
