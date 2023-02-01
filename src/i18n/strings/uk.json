@@ -3719,5 +3719,6 @@
     "All messages and invites from this user will be hidden. Are you sure you want to ignore them?": "Усі повідомлення та запрошення від цього користувача будуть приховані. Ви впевнені, що хочете їх нехтувати?",
     "Ignore %(user)s": "Нехтувати %(user)s",
     "Indent decrease": "Зменшення відступу",
-    "Indent increase": "Збільшення відступу"
+    "Indent increase": "Збільшення відступу",
+    "Unable to decrypt voice broadcast": "Невдалося розшифрувати голосову трансляцію"
 }
