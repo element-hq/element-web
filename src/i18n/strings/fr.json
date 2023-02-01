@@ -3164,7 +3164,6 @@
     "%(value)sm": "%(value)sm",
     "%(value)sh": "%(value)sh",
     "%(value)sd": "%(value)sd",
-    "Threads are a beta feature": "Les fils de discussion sont une fonctionnalité bêta",
     "Threads help keep your conversations on-topic and easy to track.": "Les fils de discussion vous permettent de recentrer vos conversations et de les rendre facile à suivre.",
     "An error occurred while stopping your live location, please try again": "Une erreur s’est produite en arrêtant le partage de votre position, veuillez réessayer",
     "Create room": "Créer un salon",
@@ -3716,5 +3715,9 @@
     "Manage account": "Gérer le compte",
     "Your account details are managed separately at <code>%(hostname)s</code>.": "Les détails de votre compte sont gérés séparément sur <code>%(hostname)s</code>.",
     "Enable MSC3946 (to support late-arriving room archives)": "Active MSC3946 (pour prendre en charge les archives de salon après création)",
-    "Dynamic room predecessors": "Prédécesseurs de salon dynamique"
+    "Dynamic room predecessors": "Prédécesseurs de salon dynamique",
+    "All messages and invites from this user will be hidden. Are you sure you want to ignore them?": "Tous les messages et invitations de cette utilisateur seront cachés. Êtes-vous sûr de vouloir les ignorer ?",
+    "Ignore %(user)s": "Ignorer %(user)s",
+    "Indent decrease": "Réduire l’indentation",
+    "Indent increase": "Augmenter l’indentation"
 }
