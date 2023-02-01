@@ -3720,5 +3720,7 @@
     "Ignore %(user)s": "Нехтувати %(user)s",
     "Indent decrease": "Зменшення відступу",
     "Indent increase": "Збільшення відступу",
-    "Unable to decrypt voice broadcast": "Невдалося розшифрувати голосову трансляцію"
+    "Unable to decrypt voice broadcast": "Невдалося розшифрувати голосову трансляцію",
+    "View a list of polls in a room. (Under active development)": "Перегляд списку опитувань у кімнаті (в активній розробці)",
+    "Polls history": "Історія опитувань"
 }
