@@ -15,22 +15,16 @@ exports[`RoomTile should render the room 1`] = `
       <span
         class="mx_BaseAvatar"
         role="presentation"
+        style="width: 32px; height: 32px;"
       >
         <span
           aria-hidden="true"
-          class="mx_BaseAvatar_initial"
-          style="font-size: 20.8px; width: 32px; line-height: 32px;"
+          class="mx_BaseAvatar_image mx_BaseAvatar_initial"
+          data-testid="avatar-img"
+          style="background-color: rgb(172, 59, 168); width: 32px; height: 32px; font-size: 20.8px; line-height: 32px;"
         >
           !
         </span>
-        <img
-          alt=""
-          aria-hidden="true"
-          class="mx_BaseAvatar_image"
-          data-testid="avatar-img"
-          src="data:image/png;base64,00"
-          style="width: 32px; height: 32px;"
-        />
       </span>
     </div>
     <div

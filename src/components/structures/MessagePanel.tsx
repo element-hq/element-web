@@ -72,7 +72,7 @@ const groupedStateEvents = [
 // check if there is a previous event and it has the same sender as this event
 // and the types are the same/is in continuedTypes and the time between them is <= CONTINUATION_MAX_INTERVAL
 export function shouldFormContinuation(
-    prevEvent: MatrixEvent,
+    prevEvent: MatrixEvent | null,
     mxEvent: MatrixEvent,
     showHiddenEvents: boolean,
     threadsEnabled: boolean,
@@ -821,7 +821,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
             // here.
             return !this.props.canBackPaginate;
         }
-        return wantsDateSeparator(prevEvent.getDate(), nextEventDate);
+        return wantsDateSeparator(prevEvent.getDate() || undefined, nextEventDate);
     }
 
     // Get a list of read receipts that should be shown next to this event

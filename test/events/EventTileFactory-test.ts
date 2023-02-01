@@ -11,9 +11,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { EventType, MatrixClient, MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
+import { mocked } from "jest-mock";
+import { EventType, MatrixClient, MatrixEvent, MsgType, RelationType, Room } from "matrix-js-sdk/src/matrix";
 
-import { JSONEventFactory, pickFactory } from "../../src/events/EventTileFactory";
+import {
+    JSONEventFactory,
+    MessageEventFactory,
+    pickFactory,
+    TextualEventFactory,
+} from "../../src/events/EventTileFactory";
 import { VoiceBroadcastChunkEventType, VoiceBroadcastInfoState } from "../../src/voice-broadcast";
 import { createTestClient, mkEvent } from "../test-utils";
 import { mkVoiceBroadcastInfoStateEvent } from "../voice-broadcast/utils/test-utils";
@@ -21,15 +27,32 @@ import { mkVoiceBroadcastInfoStateEvent } from "../voice-broadcast/utils/test-ut
 const roomId = "!room:example.com";
 
 describe("pickFactory", () => {
+    let voiceBroadcastStartedEvent: MatrixEvent;
     let voiceBroadcastStoppedEvent: MatrixEvent;
     let voiceBroadcastChunkEvent: MatrixEvent;
+    let utdEvent: MatrixEvent;
+    let utdBroadcastChunkEvent: MatrixEvent;
     let audioMessageEvent: MatrixEvent;
     let client: MatrixClient;
 
     beforeAll(() => {
         client = createTestClient();
+
+        const room = new Room(roomId, client, client.getSafeUserId());
+        mocked(client.getRoom).mockImplementation((getRoomId: string): Room | null => {
+            if (getRoomId === room.roomId) return room;
+            return null;
+        });
+
+        voiceBroadcastStartedEvent = mkVoiceBroadcastInfoStateEvent(
+            roomId,
+            VoiceBroadcastInfoState.Started,
+            client.getUserId()!,
+            client.deviceId!,
+        );
+        room.addLiveEvents([voiceBroadcastStartedEvent]);
         voiceBroadcastStoppedEvent = mkVoiceBroadcastInfoStateEvent(
-            "!room:example.com",
+            roomId,
             VoiceBroadcastInfoState.Stopped,
             client.getUserId()!,
             client.deviceId!,
@@ -53,6 +76,29 @@ describe("pickFactory", () => {
                 msgtype: MsgType.Audio,
             },
         });
+        utdEvent = mkEvent({
+            event: true,
+            type: EventType.RoomMessage,
+            user: client.getUserId()!,
+            room: roomId,
+            content: {
+                msgtype: "m.bad.encrypted",
+            },
+        });
+        utdBroadcastChunkEvent = mkEvent({
+            event: true,
+            type: EventType.RoomMessage,
+            user: client.getUserId()!,
+            room: roomId,
+            content: {
+                "msgtype": "m.bad.encrypted",
+                "m.relates_to": {
+                    rel_type: RelationType.Reference,
+                    event_id: voiceBroadcastStartedEvent.getId(),
+                },
+            },
+        });
+        jest.spyOn(utdBroadcastChunkEvent, "isDecryptionFailure").mockReturnValue(true);
     });
 
     it("should return JSONEventFactory for a no-op m.room.power_levels event", () => {
@@ -67,16 +113,20 @@ describe("pickFactory", () => {
     });
 
     describe("when showing hidden events", () => {
-        it("should return a function for a voice broadcast event", () => {
-            expect(pickFactory(voiceBroadcastChunkEvent, client, true)).toBeInstanceOf(Function);
+        it("should return a JSONEventFactory for a voice broadcast event", () => {
+            expect(pickFactory(voiceBroadcastChunkEvent, client, true)).toBe(JSONEventFactory);
         });
 
-        it("should return a Function for a voice broadcast stopped event", () => {
-            expect(pickFactory(voiceBroadcastStoppedEvent, client, true)).toBeInstanceOf(Function);
+        it("should return a TextualEventFactory for a voice broadcast stopped event", () => {
+            expect(pickFactory(voiceBroadcastStoppedEvent, client, true)).toBe(TextualEventFactory);
         });
 
-        it("should return a function for an audio message event", () => {
-            expect(pickFactory(audioMessageEvent, client, true)).toBeInstanceOf(Function);
+        it("should return a MessageEventFactory for an audio message event", () => {
+            expect(pickFactory(audioMessageEvent, client, true)).toBe(MessageEventFactory);
+        });
+
+        it("should return a MessageEventFactory for a UTD broadcast chunk event", () => {
+            expect(pickFactory(utdBroadcastChunkEvent, client, true)).toBe(MessageEventFactory);
         });
     });
 
@@ -85,12 +135,20 @@ describe("pickFactory", () => {
             expect(pickFactory(voiceBroadcastChunkEvent, client, false)).toBeUndefined();
         });
 
-        it("should return a Function for a voice broadcast stopped event", () => {
-            expect(pickFactory(voiceBroadcastStoppedEvent, client, true)).toBeInstanceOf(Function);
+        it("should return a TextualEventFactory for a voice broadcast stopped event", () => {
+            expect(pickFactory(voiceBroadcastStoppedEvent, client, false)).toBe(TextualEventFactory);
         });
 
-        it("should return a function for an audio message event", () => {
-            expect(pickFactory(audioMessageEvent, client, false)).toBeInstanceOf(Function);
+        it("should return a MessageEventFactory for an audio message event", () => {
+            expect(pickFactory(audioMessageEvent, client, false)).toBe(MessageEventFactory);
+        });
+
+        it("should return a MessageEventFactory for a UTD event", () => {
+            expect(pickFactory(utdEvent, client, false)).toBe(MessageEventFactory);
+        });
+
+        it("should return undefined for a UTD broadcast chunk event", () => {
+            expect(pickFactory(utdBroadcastChunkEvent, client, false)).toBeUndefined();
         });
     });
 });

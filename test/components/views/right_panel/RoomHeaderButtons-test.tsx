@@ -17,7 +17,6 @@ limitations under the License.
 import { render } from "@testing-library/react";
 import { MatrixEvent, MsgType, RelationType } from "matrix-js-sdk/src/matrix";
 import { MatrixClient, PendingEventOrdering } from "matrix-js-sdk/src/client";
-import { Feature, ServerSupport } from "matrix-js-sdk/src/feature";
 import { NotificationCountType, Room } from "matrix-js-sdk/src/models/room";
 import { ReceiptType } from "matrix-js-sdk/src/@types/read_receipts";
 import React from "react";
@@ -38,7 +37,7 @@ describe("RoomHeaderButtons-test.tsx", function () {
 
         stubClient();
         client = MatrixClientPeg.get();
-        client.supportsExperimentalThreads = () => true;
+        client.supportsThreads = () => true;
         room = new Room(ROOM_ID, client, client.getUserId() ?? "", {
             pendingEventOrdering: PendingEventOrdering.Detached,
         });
@@ -172,10 +171,5 @@ describe("RoomHeaderButtons-test.tsx", function () {
         });
         room.addReceipt(receipt);
         expect(container.querySelector(".mx_RightPanel_threadsButton .mx_Indicator")).toBeNull();
-    });
-
-    it("does not explode without a room", () => {
-        client.canSupport.set(Feature.ThreadUnreadNotifications, ServerSupport.Unsupported);
-        expect(() => getComponent()).not.toThrow();
     });
 });

@@ -17,7 +17,7 @@ limitations under the License.
 import { mocked } from "jest-mock";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, MatrixEvent, MatrixEventEvent, Room } from "matrix-js-sdk/src/matrix";
 
 import { Playback, PlaybackState } from "../../../src/audio/Playback";
 import { PlaybackManager } from "../../../src/audio/PlaybackManager";
@@ -266,6 +266,32 @@ describe("VoiceBroadcastPlayback", () => {
 
                 it("should play the first chunk", () => {
                     expect(chunk1Playback.play).toHaveBeenCalled();
+                });
+            });
+
+            describe("and receiving the first undecryptable chunk", () => {
+                beforeEach(() => {
+                    jest.spyOn(chunk1Event, "isDecryptionFailure").mockReturnValue(true);
+                    room.relations.aggregateChildEvent(chunk1Event);
+                });
+
+                itShouldSetTheStateTo(VoiceBroadcastPlaybackState.Error);
+
+                it("should not update the duration", () => {
+                    expect(playback.durationSeconds).toBe(0);
+                });
+
+                describe("and the chunk is decrypted", () => {
+                    beforeEach(() => {
+                        mocked(chunk1Event.isDecryptionFailure).mockReturnValue(false);
+                        chunk1Event.emit(MatrixEventEvent.Decrypted, chunk1Event);
+                    });
+
+                    itShouldSetTheStateTo(VoiceBroadcastPlaybackState.Paused);
+
+                    it("should not update the duration", () => {
+                        expect(playback.durationSeconds).toBe(2.3);
+                    });
                 });
             });
         });

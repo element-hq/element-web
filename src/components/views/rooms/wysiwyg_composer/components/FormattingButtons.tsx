@@ -28,6 +28,8 @@ import { Icon as LinkIcon } from "../../../../../../res/img/element-icons/room/c
 import { Icon as BulletedListIcon } from "../../../../../../res/img/element-icons/room/composer/bulleted_list.svg";
 import { Icon as NumberedListIcon } from "../../../../../../res/img/element-icons/room/composer/numbered_list.svg";
 import { Icon as CodeBlockIcon } from "../../../../../../res/img/element-icons/room/composer/code_block.svg";
+import { Icon as IndentIcon } from "../../../../../../res/img/element-icons/room/composer/indent_increase.svg";
+import { Icon as UnIndentIcon } from "../../../../../../res/img/element-icons/room/composer/indent_decrease.svg";
 import AccessibleTooltipButton from "../../../elements/AccessibleTooltipButton";
 import { Alignment } from "../../../elements/Tooltip";
 import { KeyboardShortcut } from "../../../settings/KeyboardShortcut";
@@ -126,6 +128,18 @@ export function FormattingButtons({ composer, actionStates }: FormattingButtonsP
                 label={_td("Numbered list")}
                 onClick={() => composer.orderedList()}
                 icon={<NumberedListIcon className="mx_FormattingButtons_Icon" />}
+            />
+            <Button
+                actionState={actionStates.indent}
+                label={_td("Indent increase")}
+                onClick={() => composer.indent()}
+                icon={<IndentIcon className="mx_FormattingButtons_Icon" />}
+            />
+            <Button
+                actionState={actionStates.unIndent}
+                label={_td("Indent decrease")}
+                onClick={() => composer.unIndent()}
+                icon={<UnIndentIcon className="mx_FormattingButtons_Icon" />}
             />
             <Button
                 actionState={actionStates.quote}

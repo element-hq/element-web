@@ -1,5 +1,5 @@
 /*
-Copyright 2021 - 2022 The Matrix.org Foundation C.I.C.
+Copyright 2021 - 2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -32,16 +32,9 @@ import { Layout } from "../../settings/enums/Layout";
 import { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import Measured from "../views/elements/Measured";
 import PosthogTrackers from "../../PosthogTrackers";
-import AccessibleButton, { ButtonEvent } from "../views/elements/AccessibleButton";
-import { BetaPill } from "../views/beta/BetaCard";
-import Modal from "../../Modal";
-import BetaFeedbackDialog from "../views/dialogs/BetaFeedbackDialog";
-import { Action } from "../../dispatcher/actions";
-import { UserTab } from "../views/dialogs/UserTab";
-import dis from "../../dispatcher/dispatcher";
+import { ButtonEvent } from "../views/elements/AccessibleButton";
 import Spinner from "../views/elements/Spinner";
 import Heading from "../views/typography/Heading";
-import { shouldShowFeedback } from "../../utils/Feedback";
 
 interface IProps {
     roomId: string;
@@ -231,14 +224,6 @@ const ThreadPanel: React.FC<IProps> = ({ roomId, onClose, permalinkCreator }) =>
         }
     }, [timelineSet, timelinePanel]);
 
-    const openFeedback = shouldShowFeedback()
-        ? () => {
-              Modal.createDialog(BetaFeedbackDialog, {
-                  featureId: "feature_threadenabled",
-              });
-          }
-        : null;
-
     return (
         <RoomContext.Provider
             value={{
@@ -255,32 +240,6 @@ const ThreadPanel: React.FC<IProps> = ({ roomId, onClose, permalinkCreator }) =>
                         setFilterOption={setFilterOption}
                         empty={!hasThreads}
                     />
-                }
-                footer={
-                    <>
-                        <BetaPill
-                            tooltipTitle={_t("Threads are a beta feature")}
-                            tooltipCaption={_t("Click for more info")}
-                            onClick={() => {
-                                dis.dispatch({
-                                    action: Action.ViewUserSettings,
-                                    initialTabId: UserTab.Labs,
-                                });
-                            }}
-                        />
-                        {openFeedback &&
-                            _t(
-                                "<a>Give feedback</a>",
-                                {},
-                                {
-                                    a: (sub) => (
-                                        <AccessibleButton kind="link_inline" onClick={openFeedback}>
-                                            {sub}
-                                        </AccessibleButton>
-                                    ),
-                                },
-                            )}
-                    </>
                 }
                 className="mx_ThreadPanel"
                 onClose={onClose}

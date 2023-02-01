@@ -77,6 +77,7 @@ export function usePlainTextListeners(
     const onKeyDown = useCallback(
         (event: KeyboardEvent<HTMLDivElement>) => {
             if (event.key === Key.ENTER) {
+                // TODO use getKeyBindingsManager().getMessageComposerAction(event) like in useInputEventProcessor
                 const sendModifierIsPressed = IS_MAC ? event.metaKey : event.ctrlKey;
 
                 // if enter should send, send if the user is not pushing shift

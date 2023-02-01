@@ -1,5 +1,5 @@
 /*
-Copyright 2022 The Matrix.org Foundation C.I.C.
+Copyright 2022 - 2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,36 +23,26 @@ import { NotificationCountType, Room } from "matrix-js-sdk/src/models/room";
 import { EventStatus } from "matrix-js-sdk/src/models/event-status";
 import { ReceiptType } from "matrix-js-sdk/src/@types/read_receipts";
 
+import type { MatrixClient } from "matrix-js-sdk/src/client";
 import { mkThread } from "../../../../test-utils/threads";
 import { UnreadNotificationBadge } from "../../../../../src/components/views/rooms/NotificationBadge/UnreadNotificationBadge";
-import { mkEvent, mkMessage, stubClient } from "../../../../test-utils/test-utils";
-import { MatrixClientPeg } from "../../../../../src/MatrixClientPeg";
+import { mkEvent, mkMessage, muteRoom, stubClient } from "../../../../test-utils/test-utils";
 import * as RoomNotifs from "../../../../../src/RoomNotifs";
-
-jest.mock("../../../../../src/RoomNotifs");
-jest.mock("../../../../../src/RoomNotifs", () => ({
-    ...(jest.requireActual("../../../../../src/RoomNotifs") as Object),
-    getRoomNotifsState: jest.fn(),
-}));
 
 const ROOM_ID = "!roomId:example.org";
 let THREAD_ID: string;
 
 describe("UnreadNotificationBadge", () => {
-    stubClient();
-    const client = MatrixClientPeg.get();
+    let client: MatrixClient;
     let room: Room;
 
     function getComponent(threadId?: string) {
         return <UnreadNotificationBadge room={room} threadId={threadId} />;
     }
 
-    beforeAll(() => {
-        client.supportsExperimentalThreads = () => true;
-    });
-
     beforeEach(() => {
-        jest.clearAllMocks();
+        client = stubClient();
+        client.supportsThreads = () => true;
 
         room = new Room(ROOM_ID, client, client.getUserId()!, {
             pendingEventOrdering: PendingEventOrdering.Detached,
@@ -145,41 +135,39 @@ describe("UnreadNotificationBadge", () => {
     });
 
     it("adds a warning for invites", () => {
-        jest.spyOn(room, "getMyMembership").mockReturnValue("invite");
+        room.updateMyMembership("invite");
         render(getComponent());
         expect(screen.queryByText("!")).not.toBeNull();
     });
 
     it("hides counter for muted rooms", () => {
-        jest.spyOn(RoomNotifs, "getRoomNotifsState").mockReset().mockReturnValue(RoomNotifs.RoomNotifState.Mute);
+        muteRoom(room);
 
         const { container } = render(getComponent());
         expect(container.querySelector(".mx_NotificationBadge")).toBeNull();
     });
 
     it("activity renders unread notification badge", () => {
-        act(() => {
-            room.setThreadUnreadNotificationCount(THREAD_ID, NotificationCountType.Total, 0);
-            room.setThreadUnreadNotificationCount(THREAD_ID, NotificationCountType.Highlight, 0);
+        room.setThreadUnreadNotificationCount(THREAD_ID, NotificationCountType.Total, 0);
+        room.setThreadUnreadNotificationCount(THREAD_ID, NotificationCountType.Highlight, 0);
 
-            // Add another event on the thread which is not sent by us.
-            const event = mkEvent({
-                event: true,
-                type: "m.room.message",
-                user: "@alice:server.org",
-                room: room.roomId,
-                content: {
-                    "msgtype": MsgType.Text,
-                    "body": "Hello from Bob",
-                    "m.relates_to": {
-                        event_id: THREAD_ID,
-                        rel_type: RelationType.Thread,
-                    },
+        // Add another event on the thread which is not sent by us.
+        const event = mkEvent({
+            event: true,
+            type: "m.room.message",
+            user: "@alice:server.org",
+            room: room.roomId,
+            content: {
+                "msgtype": MsgType.Text,
+                "body": "Hello from Bob",
+                "m.relates_to": {
+                    event_id: THREAD_ID,
+                    rel_type: RelationType.Thread,
                 },
-                ts: 5,
-            });
-            room.addLiveEvents([event]);
+            },
+            ts: 5,
         });
+        room.addLiveEvents([event]);
 
         const { container } = render(getComponent(THREAD_ID));
         expect(container.querySelector(".mx_NotificationBadge_dot")).toBeTruthy();

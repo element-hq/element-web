@@ -436,7 +436,7 @@ describe("EventUtils", () => {
                 pendingEventOrdering: PendingEventOrdering.Detached,
             });
 
-            jest.spyOn(client, "supportsExperimentalThreads").mockReturnValue(true);
+            jest.spyOn(client, "supportsThreads").mockReturnValue(true);
             jest.spyOn(client, "getRoom").mockReturnValue(room);
             jest.spyOn(client, "fetchRoomEvent").mockImplementation(async (roomId, eventId) => {
                 return events[eventId] ?? Promise.reject();

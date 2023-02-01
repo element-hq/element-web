@@ -124,7 +124,7 @@ describe("Unread", () => {
         const myId = client.getUserId()!;
 
         beforeAll(() => {
-            client.supportsExperimentalThreads = () => true;
+            client.supportsThreads = () => true;
         });
 
         beforeEach(() => {

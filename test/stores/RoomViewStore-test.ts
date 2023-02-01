@@ -93,7 +93,7 @@ describe("RoomViewStore", function () {
         getSafeUserId: jest.fn().mockReturnValue(userId),
         getDeviceId: jest.fn().mockReturnValue("ABC123"),
         sendStateEvent: jest.fn().mockResolvedValue({}),
-        supportsExperimentalThreads: jest.fn(),
+        supportsThreads: jest.fn(),
     });
     const room = new Room(roomId, mockClient, userId);
     const room2 = new Room(roomId2, mockClient, userId);

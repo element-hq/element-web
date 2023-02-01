@@ -17,15 +17,18 @@ limitations under the License.
 import { createContext, useContext } from "react";
 
 import { SubSelection } from "./types";
+import EditorStateTransfer from "../../../../utils/EditorStateTransfer";
 
-export function getDefaultContextValue(): { selection: SubSelection } {
+export function getDefaultContextValue(defaultValue?: Partial<ComposerContextState>): { selection: SubSelection } {
     return {
         selection: { anchorNode: null, anchorOffset: 0, focusNode: null, focusOffset: 0, isForward: true },
+        ...defaultValue,
     };
 }
 
 export interface ComposerContextState {
     selection: SubSelection;
+    editorStateTransfer?: EditorStateTransfer;
 }
 
 export const ComposerContext = createContext<ComposerContextState>(getDefaultContextValue());

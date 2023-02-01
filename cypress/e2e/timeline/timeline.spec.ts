@@ -384,5 +384,24 @@ describe("Timeline", () => {
                 1,
             );
         });
+
+        it("should not be possible to send flag with regional emojis", () => {
+            cy.visit("/#/room/" + roomId);
+
+            // Send a message
+            cy.getComposer().type(":regional_indicator_a");
+            cy.contains(".mx_Autocomplete_Completion_title", ":regional_indicator_a:").click();
+            cy.getComposer().type(":regional_indicator_r");
+            cy.contains(".mx_Autocomplete_Completion_title", ":regional_indicator_r:").click();
+            cy.getComposer().type(" :regional_indicator_z");
+            cy.contains(".mx_Autocomplete_Completion_title", ":regional_indicator_z:").click();
+            cy.getComposer().type(":regional_indicator_a");
+            cy.contains(".mx_Autocomplete_Completion_title", ":regional_indicator_a:").click();
+            cy.getComposer().type("{enter}");
+
+            cy.get(".mx_RoomView_body .mx_EventTile .mx_EventTile_line .mx_MTextBody .mx_EventTile_bigEmoji")
+                .children()
+                .should("have.length", 4);
+        });
     });
 });

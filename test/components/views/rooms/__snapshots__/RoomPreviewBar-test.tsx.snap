@@ -161,22 +161,16 @@ exports[`<RoomPreviewBar /> with an invite without an invited email for a dm roo
     <span
       class="mx_BaseAvatar"
       role="presentation"
+      style="width: 36px; height: 36px;"
     >
       <span
         aria-hidden="true"
-        class="mx_BaseAvatar_initial"
-        style="font-size: 23.400000000000002px; width: 36px; line-height: 36px;"
+        class="mx_BaseAvatar_image mx_BaseAvatar_initial"
+        data-testid="avatar-img"
+        style="background-color: rgb(172, 59, 168); width: 36px; height: 36px; font-size: 23.400000000000002px; line-height: 36px;"
       >
         R
       </span>
-      <img
-        alt=""
-        aria-hidden="true"
-        class="mx_BaseAvatar_image"
-        data-testid="avatar-img"
-        src="data:image/png;base64,00"
-        style="width: 36px; height: 36px;"
-      />
     </span>
   </p>
   <p>
@@ -236,22 +230,16 @@ exports[`<RoomPreviewBar /> with an invite without an invited email for a non-dm
     <span
       class="mx_BaseAvatar"
       role="presentation"
+      style="width: 36px; height: 36px;"
     >
       <span
         aria-hidden="true"
-        class="mx_BaseAvatar_initial"
-        style="font-size: 23.400000000000002px; width: 36px; line-height: 36px;"
+        class="mx_BaseAvatar_image mx_BaseAvatar_initial"
+        data-testid="avatar-img"
+        style="background-color: rgb(172, 59, 168); width: 36px; height: 36px; font-size: 23.400000000000002px; line-height: 36px;"
       >
         R
       </span>
-      <img
-        alt=""
-        aria-hidden="true"
-        class="mx_BaseAvatar_image"
-        data-testid="avatar-img"
-        src="data:image/png;base64,00"
-        style="width: 36px; height: 36px;"
-      />
     </span>
   </p>
   <p>

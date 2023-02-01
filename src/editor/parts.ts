@@ -1,6 +1,5 @@
 /*
-Copyright 2019 New Vector Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -27,6 +26,8 @@ import * as Avatar from "../Avatar";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { Action } from "../dispatcher/actions";
 import SettingsStore from "../settings/SettingsStore";
+
+const REGIONAL_EMOJI_SEPARATOR = String.fromCodePoint(0x200b);
 
 interface ISerializedPart {
     type: Type.Plain | Type.Newline | Type.Emoji | Type.Command | Type.PillCandidate;
@@ -210,9 +211,13 @@ abstract class PlainBasePart extends BasePart {
                 return false;
             }
 
-            // or split if the previous character is a space
+            // or split if the previous character is a space or regional emoji separator
             // or if it is a + and this is a :
-            return this._text[offset - 1] !== " " && (this._text[offset - 1] !== "+" || chr !== ":");
+            return (
+                this._text[offset - 1] !== " " &&
+                this._text[offset - 1] !== REGIONAL_EMOJI_SEPARATOR &&
+                (this._text[offset - 1] !== "+" || chr !== ":")
+            );
         }
         return true;
     }
@@ -295,9 +300,9 @@ export abstract class PillPart extends BasePart implements IPillPart {
     }
 
     // helper method for subclasses
-    protected setAvatarVars(node: HTMLElement, avatarUrl: string, initialLetter: string): void {
-        const avatarBackground = `url('${avatarUrl}')`;
-        const avatarLetter = `'${initialLetter}'`;
+    protected setAvatarVars(node: HTMLElement, avatarBackground: string, initialLetter: string | undefined): void {
+        // const avatarBackground = `url('${avatarUrl}')`;
+        const avatarLetter = `'${initialLetter || ""}'`;
         // check if the value is changing,
         // otherwise the avatars flicker on every keystroke while updating.
         if (node.style.getPropertyValue("--avatar-background") !== avatarBackground) {
@@ -413,13 +418,15 @@ class RoomPillPart extends PillPart {
     }
 
     protected setAvatar(node: HTMLElement): void {
-        let initialLetter = "";
-        let avatarUrl = Avatar.avatarUrlForRoom(this.room, 16, 16, "crop");
-        if (!avatarUrl) {
-            initialLetter = Avatar.getInitialLetter(this.room?.name || this.resourceId);
-            avatarUrl = Avatar.defaultAvatarUrlForString(this.room?.roomId ?? this.resourceId);
+        const avatarUrl = Avatar.avatarUrlForRoom(this.room, 16, 16, "crop");
+        if (avatarUrl) {
+            this.setAvatarVars(node, `url('${avatarUrl}')`, "");
+            return;
         }
-        this.setAvatarVars(node, avatarUrl, initialLetter);
+
+        const initialLetter = Avatar.getInitialLetter(this.room?.name || this.resourceId);
+        const color = Avatar.getColorForString(this.room?.roomId ?? this.resourceId);
+        this.setAvatarVars(node, color, initialLetter);
     }
 
     public get type(): IPillPart["type"] {
@@ -465,14 +472,17 @@ class UserPillPart extends PillPart {
         if (!this.member) {
             return;
         }
-        const name = this.member.name || this.member.userId;
-        const defaultAvatarUrl = Avatar.defaultAvatarUrlForString(this.member.userId);
-        const avatarUrl = Avatar.avatarUrlForMember(this.member, 16, 16, "crop");
-        let initialLetter = "";
-        if (avatarUrl === defaultAvatarUrl) {
-            initialLetter = Avatar.getInitialLetter(name);
+
+        const avatar = Avatar.getMemberAvatar(this.member, 16, 16, "crop");
+        if (avatar) {
+            this.setAvatarVars(node, `url('${avatar}')`, "");
+            return;
         }
-        this.setAvatarVars(node, avatarUrl, initialLetter);
+
+        const name = this.member.name || this.member.userId;
+        const initialLetter = Avatar.getInitialLetter(name);
+        const color = Avatar.getColorForString(this.member.userId);
+        this.setAvatarVars(node, color, initialLetter);
     }
 
     protected onClick = (): void => {
@@ -622,8 +632,13 @@ export class PartCreator {
         return new UserPillPart(userId, displayName, member);
     }
 
+    private static isRegionalIndicator(c: string): boolean {
+        const codePoint = c.codePointAt(0) ?? 0;
+        return codePoint != 0 && c.length == 2 && 0x1f1e6 <= codePoint && codePoint <= 0x1f1ff;
+    }
+
     public plainWithEmoji(text: string): (PlainPart | EmojiPart)[] {
-        const parts = [];
+        const parts: (PlainPart | EmojiPart)[] = [];
         let plainText = "";
 
         // We use lodash's grapheme splitter to avoid breaking apart compound emojis
@@ -634,6 +649,9 @@ export class PartCreator {
                     plainText = "";
                 }
                 parts.push(this.emoji(char));
+                if (PartCreator.isRegionalIndicator(text)) {
+                    parts.push(this.plain(REGIONAL_EMOJI_SEPARATOR));
+                }
             } else {
                 plainText += char;
             }

@@ -48,7 +48,7 @@ describe("<RoomSearchView/>", () => {
     beforeEach(async () => {
         stubClient();
         client = MatrixClientPeg.get();
-        client.supportsExperimentalThreads = jest.fn().mockReturnValue(true);
+        client.supportsThreads = jest.fn().mockReturnValue(true);
         room = new Room("!room:server", client, client.getUserId());
         mocked(client.getRoom).mockReturnValue(room);
         permalinkCreator = new RoomPermalinkCreator(room, room.roomId);

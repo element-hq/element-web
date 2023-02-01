@@ -225,7 +225,7 @@ describe("<Notifications />", () => {
         }),
         setAccountData: jest.fn(),
         sendReadReceipt: jest.fn(),
-        supportsExperimentalThreads: jest.fn().mockReturnValue(true),
+        supportsThreads: jest.fn().mockReturnValue(true),
     });
     mockClient.getPushRules.mockResolvedValue(pushRules);
 

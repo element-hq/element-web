@@ -33,6 +33,8 @@ const mockWysiwyg = {
     orderedList: jest.fn(),
     unorderedList: jest.fn(),
     quote: jest.fn(),
+    indent: jest.fn(),
+    unIndent: jest.fn(),
 } as unknown as FormattingFunctions;
 
 const openLinkModalSpy = jest.spyOn(LinkModal, "openLinkModal");
@@ -51,6 +53,8 @@ const testCases: Record<
     orderedList: { label: "Numbered list", mockFormatFn: mockWysiwyg.orderedList },
     unorderedList: { label: "Bulleted list", mockFormatFn: mockWysiwyg.unorderedList },
     quote: { label: "Quote", mockFormatFn: mockWysiwyg.quote },
+    indent: { label: "Indent increase", mockFormatFn: mockWysiwyg.indent },
+    unIndent: { label: "Indent decrease", mockFormatFn: mockWysiwyg.unIndent },
 };
 
 const createActionStates = (state: ActionState): AllActionStates => {

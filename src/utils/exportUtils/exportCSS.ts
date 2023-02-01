@@ -58,8 +58,8 @@ const getExportCSS = async (usedClasses: Set<string>): Promise<string> => {
 
     // If the light theme isn't loaded we will have to fetch & parse it manually
     if (!stylesheets.some(isLightTheme)) {
-        const href = document.querySelector<HTMLLinkElement>('link[rel="stylesheet"][href$="theme-light.css"]').href;
-        stylesheets.push(await getRulesFromCssFile(href));
+        const href = document.querySelector<HTMLLinkElement>('link[rel="stylesheet"][href$="theme-light.css"]')?.href;
+        if (href) stylesheets.push(await getRulesFromCssFile(href));
     }
 
     let css = "";

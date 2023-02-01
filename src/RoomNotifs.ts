@@ -1,6 +1,5 @@
 /*
-Copyright 2016 OpenMarket Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2016, 2019, 2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,18 +15,18 @@ limitations under the License.
 */
 
 import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
-import { NotificationCountType, Room } from "matrix-js-sdk/src/models/room";
-import {
-    ConditionKind,
-    IPushRule,
-    PushRuleActionName,
-    PushRuleKind,
-    TweakName,
-} from "matrix-js-sdk/src/@types/PushRules";
+import { NotificationCountType } from "matrix-js-sdk/src/models/room";
+import { ConditionKind, PushRuleActionName, PushRuleKind, TweakName } from "matrix-js-sdk/src/@types/PushRules";
 import { EventType } from "matrix-js-sdk/src/@types/event";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
+import type { IPushRule } from "matrix-js-sdk/src/@types/PushRules";
+import type { Room } from "matrix-js-sdk/src/models/room";
+import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { MatrixClientPeg } from "./MatrixClientPeg";
+import { NotificationColor } from "./stores/notifications/NotificationColor";
+import { getUnsentMessages } from "./components/structures/RoomStatusBar";
+import { doesRoomHaveUnreadMessages, doesRoomOrThreadHaveUnreadMessages } from "./Unread";
+import { EffectiveMembership, getEffectiveMembership } from "./utils/membership";
 
 export enum RoomNotifState {
     AllMessagesLoud = "all_messages_loud",
@@ -36,7 +35,7 @@ export enum RoomNotifState {
     Mute = "mute",
 }
 
-export function getRoomNotifsState(client: MatrixClient, roomId: string): RoomNotifState {
+export function getRoomNotifsState(client: MatrixClient, roomId: string): RoomNotifState | null {
     if (client.isGuest()) return RoomNotifState.AllMessages;
 
     // look through the override rules for a rule affecting this room:
@@ -177,7 +176,7 @@ function setRoomNotifsStateUnmuted(roomId: string, newState: RoomNotifState): Pr
     return Promise.all(promises);
 }
 
-function findOverrideMuteRule(roomId: string): IPushRule {
+function findOverrideMuteRule(roomId: string): IPushRule | null {
     const cli = MatrixClientPeg.get();
     if (!cli?.pushRules?.global?.override) {
         return null;
@@ -200,4 +199,49 @@ function isRuleForRoom(roomId: string, rule: IPushRule): boolean {
 
 function isMuteRule(rule: IPushRule): boolean {
     return rule.actions.length === 1 && rule.actions[0] === PushRuleActionName.DontNotify;
+}
+
+export function determineUnreadState(
+    room?: Room,
+    threadId?: string,
+): { color: NotificationColor; symbol: string | null; count: number } {
+    if (!room) {
+        return { symbol: null, count: 0, color: NotificationColor.None };
+    }
+
+    if (getUnsentMessages(room, threadId).length > 0) {
+        return { symbol: "!", count: 1, color: NotificationColor.Unsent };
+    }
+
+    if (getEffectiveMembership(room.getMyMembership()) === EffectiveMembership.Invite) {
+        return { symbol: "!", count: 1, color: NotificationColor.Red };
+    }
+
+    if (getRoomNotifsState(room.client, room.roomId) === RoomNotifState.Mute) {
+        return { symbol: null, count: 0, color: NotificationColor.None };
+    }
+
+    const redNotifs = getUnreadNotificationCount(room, NotificationCountType.Highlight, threadId);
+    const greyNotifs = getUnreadNotificationCount(room, NotificationCountType.Total, threadId);
+
+    const trueCount = greyNotifs || redNotifs;
+    if (redNotifs > 0) {
+        return { symbol: null, count: trueCount, color: NotificationColor.Red };
+    }
+
+    if (greyNotifs > 0) {
+        return { symbol: null, count: trueCount, color: NotificationColor.Grey };
+    }
+
+    // We don't have any notified messages, but we might have unread messages. Let's
+    // find out.
+    let hasUnread = false;
+    if (threadId) hasUnread = doesRoomOrThreadHaveUnreadMessages(room.getThread(threadId)!);
+    else hasUnread = doesRoomHaveUnreadMessages(room);
+
+    return {
+        symbol: null,
+        count: trueCount,
+        color: hasUnread ? NotificationColor.Bold : NotificationColor.None,
+    };
 }
