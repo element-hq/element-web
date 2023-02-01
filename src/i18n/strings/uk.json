@@ -3710,5 +3710,16 @@
     "Decrypted source unavailable": "Розшифроване джерело недоступне",
     "Connection error - Recording paused": "Помилка з'єднання - Запис призупинено",
     "%(senderName)s started a voice broadcast": "%(senderName)s розпочинає голосову трансляцію",
-    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)"
+    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)",
+    "Registration token": "Токен реєстрації",
+    "Enter a registration token provided by the homeserver administrator.": "Введіть реєстраційний токен, наданий адміністратором домашнього сервера.",
+    "Unable to play this voice broadcast": "Неможливо відтворити цю голосову трансляцію",
+    "Manage account": "Керувати обліковим записом",
+    "Your account details are managed separately at <code>%(hostname)s</code>.": "Ваші дані облікового запису керуються окремо за адресою <code>%(hostname)s</code>.",
+    "Enable MSC3946 (to support late-arriving room archives)": "Увімкнути MSC3946 (для підтримки архівів пізніх кімнат)",
+    "Dynamic room predecessors": "Попередники динамічної кімнати",
+    "All messages and invites from this user will be hidden. Are you sure you want to ignore them?": "Усі повідомлення та запрошення від цього користувача будуть приховані. Ви впевнені, що хочете їх нехтувати?",
+    "Ignore %(user)s": "Нехтувати %(user)s",
+    "Indent decrease": "Зменшення відступу",
+    "Indent increase": "Збільшення відступу"
 }
