@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import React from "react";
+import { render } from "@testing-library/react";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomHierarchy } from "matrix-js-sdk/src/room-hierarchy";
@@ -22,8 +24,17 @@ import { IHierarchyRoom } from "matrix-js-sdk/src/@types/spaces";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 import { mkStubRoom, stubClient } from "../../test-utils";
 import dispatcher from "../../../src/dispatcher/dispatcher";
-import { showRoom, toLocalRoom } from "../../../src/components/structures/SpaceHierarchy";
+import { HierarchyLevel, showRoom, toLocalRoom } from "../../../src/components/structures/SpaceHierarchy";
 import { Action } from "../../../src/dispatcher/actions";
+import MatrixClientContext from "../../../src/contexts/MatrixClientContext";
+import DMRoomMap from "../../../src/utils/DMRoomMap";
+
+// Fake random strings to give a predictable snapshot for checkbox IDs
+jest.mock("matrix-js-sdk/src/randomstring", () => {
+    return {
+        randomString: () => "abdefghi",
+    };
+});
 
 describe("SpaceHierarchy", () => {
     describe("showRoom", () => {
@@ -123,6 +134,79 @@ describe("SpaceHierarchy", () => {
             expect(localRoomV2.room_id).toEqual(roomV2.roomId);
             const localRoomV3 = toLocalRoom(client, { room_id: roomV3.roomId } as IHierarchyRoom, hierarchy);
             expect(localRoomV3.room_id).toEqual(roomV3.roomId);
+        });
+    });
+
+    describe("<HierarchyLevel />", () => {
+        let client: MatrixClient;
+        let dmRoomMap: DMRoomMap;
+
+        let root: Room;
+        let room1: Room;
+        let room2: Room;
+
+        let hierarchyRoot: IHierarchyRoom
+        let hierarchyRoom1: IHierarchyRoom
+        let hierarchyRoom2: IHierarchyRoom
+
+        let roomHierarchy: RoomHierarchy;
+
+        beforeEach(() => {
+            stubClient();
+            client = MatrixClientPeg.get();
+
+            dmRoomMap = {
+                getUserIdForRoomId: jest.fn()
+            } as unknown as DMRoomMap;
+            jest.spyOn(DMRoomMap, "shared").mockReturnValue(dmRoomMap);
+
+            root = mkStubRoom("room-id-1", "Room 1", client);
+            room1 = mkStubRoom("room-id-2", "Room 2", client);
+            room2 = mkStubRoom("room-id-3", "Room 3", client);
+
+            hierarchyRoot = {
+                room_id: root.roomId,
+                num_joined_members: 1,
+                children_state: [{
+                    state_key: room1.roomId,
+                    content: { order: "1" }
+                }, {
+                    state_key: room2.roomId,
+                    content: { order: "2" }
+                }]
+            } as IHierarchyRoom
+            hierarchyRoom1 = { room_id: room1.roomId, num_joined_members: 2 } as IHierarchyRoom
+            hierarchyRoom2 = { room_id: root.roomId, num_joined_members: 3 } as IHierarchyRoom
+
+            roomHierarchy = {
+                roomMap: new Map([
+                    [root.roomId, hierarchyRoot],
+                    [room1.roomId, hierarchyRoom1],
+                    [room2.roomId, hierarchyRoom2],
+                ]),
+                isSuggested: jest.fn()
+            } as unknown as RoomHierarchy;
+        });
+
+        it("renders", () => {
+            const defaultProps = {
+                root: hierarchyRoot,
+                roomSet: new Set([hierarchyRoom1, hierarchyRoom2]),
+                hierarchy: roomHierarchy,
+                parents: new Set<string>(),
+                selectedMap: new Map<string, Set<string>>(),
+                onViewRoomClick: jest.fn(),
+                onJoinRoomClick: jest.fn(),
+                onToggleClick: jest.fn(),
+            };
+            const getComponent = (props = {}): React.ReactElement => (
+                <MatrixClientContext.Provider value={client}>
+                    <HierarchyLevel {...defaultProps} {...props} />;
+                </MatrixClientContext.Provider>
+            );
+
+            const { container } = render(getComponent());
+            expect(container).toMatchSnapshot();
         });
     });
 });
