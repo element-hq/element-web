@@ -3719,5 +3719,6 @@
     "All messages and invites from this user will be hidden. Are you sure you want to ignore them?": "Alle Nachrichten und Einladungen der Person werden verborgen. Bist du sicher, dass du sie ignorieren möchtest?",
     "Ignore %(user)s": "%(user)s ignorieren",
     "Indent decrease": "Einrückung verringern",
-    "Indent increase": "Einrückung erhöhen"
+    "Indent increase": "Einrückung erhöhen",
+    "Unable to decrypt voice broadcast": "Entschlüsseln der Sprachübertragung nicht möglich"
 }
