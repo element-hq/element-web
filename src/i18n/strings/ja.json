@@ -2392,7 +2392,7 @@
     "Upload %(count)s other files|other": "あと%(count)s個のファイルをアップロード",
     "This file is <b>too large</b> to upload. The file size limit is %(limit)s but this file is %(sizeOfThisFile)s.": "アップロードしようとしているファイルのサイズが<b>大きすぎます</b>。最大のサイズは%(limit)sですが、ファイルのサイズは%(sizeOfThisFile)sです。",
     "Approve": "同意",
-    "Away": "退席中",
+    "Away": "離席中",
     "Categories": "カテゴリー",
     "Space": "スペース",
     "Disable": "無効にする",
