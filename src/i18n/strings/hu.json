@@ -3710,5 +3710,16 @@
     "Decrypted source unavailable": "A visszafejtett forrás nem érhető el",
     "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)",
     "Connection error - Recording paused": "Kapcsolódási hiba – Felvétel szüneteltetve",
-    "%(senderName)s started a voice broadcast": "%(senderName)s hangos közvetítést indított"
+    "%(senderName)s started a voice broadcast": "%(senderName)s hangos közvetítést indított",
+    "Unable to play this voice broadcast": "A hang közvetítés nem játszható le",
+    "Registration token": "Regisztrációs kulcs",
+    "Enter a registration token provided by the homeserver administrator.": "Adja meg a regisztrációs kulcsot amit a szolgáltató szerver adminisztrátora adott meg.",
+    "All messages and invites from this user will be hidden. Are you sure you want to ignore them?": "Minden üzenet és meghívó ettől a felhasználótól rejtve marad. Biztos, hogy figyelmen kívül hagyja?",
+    "Ignore %(user)s": "%(user)s figyelmen kívül hagyása",
+    "Manage account": "Fiók kezelése",
+    "Your account details are managed separately at <code>%(hostname)s</code>.": "A fiók adatok külön vannak kezelve itt: <code>%(hostname)s</code>.",
+    "Enable MSC3946 (to support late-arriving room archives)": "MSC3946 engedélyezése (a későn érkező szoba archívum támogatáshoz)",
+    "Dynamic room predecessors": "Dinamikus szoba előfutára",
+    "Indent decrease": "Behúzás csökkentés",
+    "Indent increase": "Behúzás növelés"
 }
