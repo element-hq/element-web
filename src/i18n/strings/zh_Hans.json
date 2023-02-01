@@ -3108,7 +3108,6 @@
     "Threads help keep your conversations on-topic and easy to track.": "消息列帮助保持你的对话切题并易于追踪。",
     "Reply to an ongoing thread or use “%(replyInThread)s” when hovering over a message to start a new one.": "回复进行中的消息列或当悬停在消息上时使用%(replyInThread)s来发起新的消息列。",
     "Can't create a thread from an event with an existing relation": "无法从既有关系的事件创建消息列",
-    "Threads are a beta feature": "消息列是beta功能",
     "Joining the beta will reload %(brand)s.": "加入beta会重载%(brand)s。",
     "Leaving the beta will reload %(brand)s.": "离开beta会重载%(brand)s。",
     "This is a beta feature": "这是beta功能",
