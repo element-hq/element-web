@@ -3203,7 +3203,6 @@
     "%(count)s participants|other": "%(count)s účastníkov",
     "New video room": "Nová video miestnosť",
     "New room": "Nová miestnosť",
-    "Threads are a beta feature": "Vlákna sú beta funkciou",
     "Threads help keep your conversations on-topic and easy to track.": "Vlákna pomáhajú udržiavať konverzácie v téme a uľahčujú ich sledovanie.",
     "%(featureName)s Beta feedback": "%(featureName)s Beta spätná väzba",
     "Beta feature. Click to learn more.": "Beta funkcia. Kliknutím sa dozviete viac.",
@@ -3718,5 +3717,7 @@
     "Your account details are managed separately at <code>%(hostname)s</code>.": "Údaje o vašom účte sú spravované samostatne na adrese <code>%(hostname)s</code>.",
     "Enable MSC3946 (to support late-arriving room archives)": "Zapnúť MSC3946 (na podporu neskorých archívov miestností)",
     "All messages and invites from this user will be hidden. Are you sure you want to ignore them?": "Všetky správy a pozvánky od tohto používateľa budú skryté. Ste si istí, že ich chcete ignorovať?",
-    "Ignore %(user)s": "Ignorovať %(user)s"
+    "Ignore %(user)s": "Ignorovať %(user)s",
+    "Indent decrease": "Zmenšenie odsadenia",
+    "Indent increase": "Zväčšenie odsadenia"
 }
