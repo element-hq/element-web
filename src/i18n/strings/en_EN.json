@@ -948,6 +948,8 @@
     "Use new room breadcrumbs": "Use new room breadcrumbs",
     "Right panel stays open": "Right panel stays open",
     "Defaults to room member list.": "Defaults to room member list.",
+    "Polls history": "Polls history",
+    "View a list of polls in a room. (Under active development)": "View a list of polls in a room. (Under active development)",
     "Jump to date (adds /jumptodate and jump to date headers)": "Jump to date (adds /jumptodate and jump to date headers)",
     "Send read receipts": "Send read receipts",
     "Sliding Sync mode": "Sliding Sync mode",

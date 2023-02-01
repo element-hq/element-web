@@ -23,7 +23,7 @@ import { useIsEncrypted } from "../../../hooks/useIsEncrypted";
 import BaseCard, { Group } from "./BaseCard";
 import { _t } from "../../../languageHandler";
 import RoomAvatar from "../avatars/RoomAvatar";
-import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
+import AccessibleButton, { ButtonEvent, IAccessibleButtonProps } from "../elements/AccessibleButton";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
 import Modal from "../../../Modal";
@@ -51,6 +51,7 @@ import ExportDialog from "../dialogs/ExportDialog";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import PosthogTrackers from "../../../PosthogTrackers";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
+import { PollHistoryDialog } from "../dialogs/polls/PollHistoryDialog";
 
 interface IProps {
     room: Room;
@@ -61,14 +62,15 @@ interface IAppsSectionProps {
     room: Room;
 }
 
-interface IButtonProps {
+interface IButtonProps extends IAccessibleButtonProps {
     className: string;
     onClick(ev: ButtonEvent): void;
 }
 
-const Button: React.FC<IButtonProps> = ({ children, className, onClick }) => {
+const Button: React.FC<IButtonProps> = ({ children, className, onClick, ...props }) => {
     return (
         <AccessibleButton
+            {...props}
             className={classNames("mx_BaseCard_Button mx_RoomSummaryCard_Button", className)}
             onClick={onClick}
         >
@@ -281,6 +283,12 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, onClose }) => {
         });
     };
 
+    const onRoomPollHistoryClick = (): void => {
+        Modal.createDialog(PollHistoryDialog, {
+            roomId: room.roomId,
+        });
+    };
+
     const isRoomEncrypted = useIsEncrypted(cli, room);
     const roomContext = useContext(RoomContext);
     const e2eStatus = roomContext.e2eStatus;
@@ -315,6 +323,8 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, onClose }) => {
     const pinningEnabled = useFeatureEnabled("feature_pinning");
     const pinCount = usePinnedEvents(pinningEnabled && room)?.length;
 
+    const isPollHistoryEnabled = useFeatureEnabled("feature_poll_history");
+
     return (
         <BaseCard header={header} className="mx_RoomSummaryCard" onClose={onClose}>
             <Group title={_t("About")} className="mx_RoomSummaryCard_aboutGroup">
@@ -325,6 +335,11 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, onClose }) => {
                 {!isVideoRoom && (
                     <Button className="mx_RoomSummaryCard_icon_files" onClick={onRoomFilesClick}>
                         {_t("Files")}
+                    </Button>
+                )}
+                {!isVideoRoom && isPollHistoryEnabled && (
+                    <Button className="mx_RoomSummaryCard_icon_poll" onClick={onRoomPollHistoryClick}>
+                        {_t("Polls history")}
                     </Button>
                 )}
                 {pinningEnabled && !isVideoRoom && (
