@@ -3719,5 +3719,7 @@
     "Manage account": "Fiók kezelése",
     "Your account details are managed separately at <code>%(hostname)s</code>.": "A fiók adatok külön vannak kezelve itt: <code>%(hostname)s</code>.",
     "Enable MSC3946 (to support late-arriving room archives)": "MSC3946 engedélyezése (a későn érkező szoba archívum támogatáshoz)",
-    "Dynamic room predecessors": "Dinamikus szoba előfutára"
+    "Dynamic room predecessors": "Dinamikus szoba előfutára",
+    "Indent decrease": "Behúzás csökkentés",
+    "Indent increase": "Behúzás növelés"
 }
