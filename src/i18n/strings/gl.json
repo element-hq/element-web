@@ -3172,7 +3172,6 @@
     "User is already invited to the space": "A usuaria xa está convidada ao espazo",
     "You do not have permission to invite people to this space.": "Non tes permiso para convidar persoas a este espazo.",
     "Failed to invite users to %(roomName)s": "Fallou o convite das usuarias para %(roomName)s",
-    "Threads are a beta feature": "Os fíos son unha ferramenta beta",
     "Threads help keep your conversations on-topic and easy to track.": "Os fíos axúdanche a manter as conversas no tema e facilitan o seguimento.",
     "An error occurred while stopping your live location, please try again": "Algo fallou ao deter a túa localización en directo, inténtao outra vez",
     "Create room": "Crear sala",

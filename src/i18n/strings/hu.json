@@ -3180,7 +3180,6 @@
     "Disinvite from space": "Meghívó visszavonása a térről",
     "An error (%(errcode)s) was returned while trying to validate your invite. You could try to pass this information on to the person who invited you.": "A meghívó ellenőrzésekor az alábbi hibát kaptuk: %(errcode)s. Ezt az információt megpróbálhatja eljuttatni a szoba gazdájának.",
     "Joining …": "Belépés…",
-    "Threads are a beta feature": "Az üzenetszálak béta funkció",
     "<b>Tip:</b> Use “%(replyInThread)s” when hovering over a message.": "<b>Tipp:</b> Használja a „%(replyInThread)s” lehetőséget a szöveg fölé navigálva.",
     "Threads help keep your conversations on-topic and easy to track.": "Az üzenetszálak segítenek a különböző témájú beszélgetések figyelemmel kísérésében.",
     "An error occurred while stopping your live location, please try again": "Élő pozíció megosztás befejezése közben hiba történt, kérjük próbálja újra",

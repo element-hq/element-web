@@ -3167,7 +3167,6 @@
     "Toggle Link": "Växla länk av/på",
     "Toggle Code Block": "Växla kodblock av/på",
     "Event ID: %(eventId)s": "Händelse-ID: %(eventId)s",
-    "Threads are a beta feature": "Trådar är en beta-funktion",
     "<b>Tip:</b> Use “%(replyInThread)s” when hovering over a message.": "<b>Tips:</b> Välj \"%(replyInThread)s\" när du håller över ett meddelande.",
     "Threads help keep your conversations on-topic and easy to track.": "Trådar underlättar för att hålla konversationer till ämnet och gör dem lättare att följa.",
     "Reply to an ongoing thread or use “%(replyInThread)s” when hovering over a message to start a new one.": "Svara i en pågående tråd eller använd \"%(replyInThread)s\" när du håller över ett meddelande för att starta en ny tråd.",

@@ -3197,7 +3197,6 @@
     "You do not have permission to invite people to this space.": "您無權邀請他人加入此空間。",
     "Failed to invite users to %(roomName)s": "未能邀請使用者加入 %(roomName)s",
     "An error occurred while stopping your live location, please try again": "停止您的即時位置時發生錯誤，請再試一次",
-    "Threads are a beta feature": "討論串是測試版功能",
     "Threads help keep your conversations on-topic and easy to track.": "討論串可讓您的對話不離題且易於追蹤。",
     "Create room": "建立聊天室",
     "Create video room": "建立視訊聊天室",
