@@ -3246,7 +3246,6 @@
     "You have been logged out of all devices and will no longer receive push notifications. To re-enable notifications, sign in again on each device.": "Du wurdest von allen Geräten abgemeldet und erhältst keine Push-Benachrichtigungen mehr. Um Benachrichtigungen wieder zu aktivieren, melde dich auf jedem Gerät erneut an.",
     "Resetting your password on this homeserver will cause all of your devices to be signed out. This will delete the message encryption keys stored on them, making encrypted chat history unreadable.": "Wenn du dein Passwort zurücksetzt, werden all deine anderen Geräte abgemeldet. Wenn auf diesen Ende-zu-Ende-Schlüssel gespeichert sind, kann der Verlauf deiner verschlüsselten Unterhaltungen verloren gehen.",
     "Event ID: %(eventId)s": "Event-ID: %(eventId)s",
-    "Threads are a beta feature": "Threads sind eine Betafunktion",
     "Threads help keep your conversations on-topic and easy to track.": "Threads helfen dabei, dass deine Konversationen beim Thema und leicht nachverfolgbar bleiben.",
     "Your message wasn't sent because this homeserver has been blocked by its administrator. Please <a>contact your service administrator</a> to continue using the service.": "Deine Nachricht wurde nicht gesendet, weil dieser Heim-Server von dessen Administration gesperrt wurde. Bitte <a>kontaktiere deine Dienstadministration</a>, um den Dienst weiterzunutzen.",
     "Video rooms": "Videoräume",
@@ -3719,6 +3718,6 @@
     "Enable MSC3946 (to support late-arriving room archives)": "MSC3946 aktivieren (zur Verknüpfung von Raumarchiven nach der Raumerstellung)",
     "All messages and invites from this user will be hidden. Are you sure you want to ignore them?": "Alle Nachrichten und Einladungen der Person werden verborgen. Bist du sicher, dass du sie ignorieren möchtest?",
     "Ignore %(user)s": "%(user)s ignorieren",
-    "Indent decrease": "Weniger einrücken",
-    "Indent increase": "Weiter einrücken"
+    "Indent decrease": "Einrückung verringern",
+    "Indent increase": "Einrückung erhöhen"
 }
