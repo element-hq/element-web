@@ -181,6 +181,15 @@ jobs:
               with:
                   name: cypress-junit
                   path: cypress/results
+
+            - name: Check Percy passed
+              if: needs.prepare.outputs.percy_enable
+              uses: lewagon/wait-on-check-action@v1.2.0
+              with:
+                  ref: ${{ github.event.workflow_run.head_sha }}
+                  repo-token: ${{ secrets.GITHUB_TOKEN }}
+                  wait-interval: 10
+                  check-name: percy/matrix-react-sdk
     report:
         name: Report results
         needs: tests
