@@ -3717,5 +3717,8 @@
     "Enable MSC3946 (to support late-arriving room archives)": "Aktifkan MSC3946 (untuk mendukung arsip ruangan yang datang terlambat)",
     "Dynamic room predecessors": "Pendahulu ruang dinamis",
     "All messages and invites from this user will be hidden. Are you sure you want to ignore them?": "Semua pesan dan undangan dari pengguna ini akan disembunyikan. Apakah Anda yakin ingin mengabaikan?",
-    "Ignore %(user)s": "Abaikan %(user)s"
+    "Ignore %(user)s": "Abaikan %(user)s",
+    "Indent increase": "Tambahkan indentasi",
+    "Indent decrease": "Kurangi indentasi",
+    "Unable to decrypt voice broadcast": "Tidak dapat mendekripsi siaran suara"
 }
