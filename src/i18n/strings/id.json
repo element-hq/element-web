@@ -3210,8 +3210,6 @@
     "Beta feature": "Fitur beta",
     "Threads help keep conversations on-topic and easy to track. <a>Learn more</a>.": "Utasan membantu membuat percakapan sesuai topik dan mudah untuk dilacak. <a>Pelajari lebih lanjut</a>.",
     "Keep discussions organised with threads.": "Buat diskusi tetap teratur dengan utasan.",
-    "<a>Give feedback</a>": "<a>Berikan masukan</a>",
-    "Threads are a beta feature": "Utasan adalah fitur beta",
     "sends hearts": "mengirim hati",
     "Sends the given message with hearts": "Kirim pesan dengan hati",
     "Confirm signing out these devices|one": "Konfirmasi mengeluarkan perangkat ini",
@@ -3710,5 +3708,17 @@
     "Decrypted source unavailable": "Sumber terdekripsi tidak tersedia",
     "Connection error - Recording paused": "Kesalahan koneksi - Perekaman dijeda",
     "%(senderName)s started a voice broadcast": "%(senderName)s memulai sebuah siaran suara",
-    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)"
+    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)",
+    "Registration token": "Token pendaftaran",
+    "Enter a registration token provided by the homeserver administrator.": "Masukkan token pendaftaran yang disediakan oleh administrator homeserver.",
+    "Unable to play this voice broadcast": "Tidak dapat memutar siaran suara ini",
+    "Manage account": "Kelola akun",
+    "Your account details are managed separately at <code>%(hostname)s</code>.": "Detail akun Anda dikelola secara terpisah di <code>%(hostname)s</code>.",
+    "Enable MSC3946 (to support late-arriving room archives)": "Aktifkan MSC3946 (untuk mendukung arsip ruangan yang datang terlambat)",
+    "Dynamic room predecessors": "Pendahulu ruang dinamis",
+    "All messages and invites from this user will be hidden. Are you sure you want to ignore them?": "Semua pesan dan undangan dari pengguna ini akan disembunyikan. Apakah Anda yakin ingin mengabaikan?",
+    "Ignore %(user)s": "Abaikan %(user)s",
+    "Indent increase": "Tambahkan indentasi",
+    "Indent decrease": "Kurangi indentasi",
+    "Unable to decrypt voice broadcast": "Tidak dapat mendekripsi siaran suara"
 }

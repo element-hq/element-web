@@ -3197,8 +3197,6 @@
     "You do not have permission to invite people to this space.": "您無權邀請他人加入此空間。",
     "Failed to invite users to %(roomName)s": "未能邀請使用者加入 %(roomName)s",
     "An error occurred while stopping your live location, please try again": "停止您的即時位置時發生錯誤，請再試一次",
-    "<a>Give feedback</a>": "<a>給予回饋</a>",
-    "Threads are a beta feature": "討論串是測試版功能",
     "Threads help keep your conversations on-topic and easy to track.": "討論串可讓您的對話不離題且易於追蹤。",
     "Create room": "建立聊天室",
     "Create video room": "建立視訊聊天室",
@@ -3710,5 +3708,16 @@
     "Bulleted list": "項目符號清單",
     "Connection error - Recording paused": "連線錯誤 - 紀錄已暫停",
     "%(senderName)s started a voice broadcast": "%(senderName)s 開始了語音廣播",
-    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)"
+    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)",
+    "Registration token": "註冊權杖",
+    "Enter a registration token provided by the homeserver administrator.": "輸入由家伺服器管理員提供的註冊權杖。",
+    "Manage account": "管理帳號",
+    "Your account details are managed separately at <code>%(hostname)s</code>.": "您的帳號詳細資訊在 <code>%(hostname)s</code> 中單獨管理。",
+    "Enable MSC3946 (to support late-arriving room archives)": "啟用 MSC3946（為了支援遲到聊天室存檔）",
+    "Dynamic room predecessors": "動態聊天室前身",
+    "Unable to play this voice broadcast": "無法播放此音訊廣播",
+    "All messages and invites from this user will be hidden. Are you sure you want to ignore them?": "來自該使用者的所有訊息與邀請都將被隱藏。您確定要忽略它們嗎？",
+    "Ignore %(user)s": "忽略 %(user)s",
+    "Indent decrease": "減少縮排",
+    "Indent increase": "增加縮排"
 }
