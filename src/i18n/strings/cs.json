@@ -3717,5 +3717,7 @@
     "Enable MSC3946 (to support late-arriving room archives)": "Povolit MSC3946 (podpora pozdních archivů místností)",
     "Dynamic room predecessors": "Předchůdci dynamické místnosti",
     "All messages and invites from this user will be hidden. Are you sure you want to ignore them?": "Všechny zprávy a pozvánky od tohoto uživatele budou skryty. Opravdu je chcete ignorovat?",
-    "Ignore %(user)s": "Ignorovat %(user)s"
+    "Ignore %(user)s": "Ignorovat %(user)s",
+    "Indent decrease": "Zmenšit odsazení",
+    "Indent increase": "Zvětšit odsazení"
 }
