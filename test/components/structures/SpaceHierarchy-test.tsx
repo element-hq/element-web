@@ -145,9 +145,9 @@ describe("SpaceHierarchy", () => {
         let room1: Room;
         let room2: Room;
 
-        let hierarchyRoot: IHierarchyRoom
-        let hierarchyRoom1: IHierarchyRoom
-        let hierarchyRoom2: IHierarchyRoom
+        let hierarchyRoot: IHierarchyRoom;
+        let hierarchyRoom1: IHierarchyRoom;
+        let hierarchyRoom2: IHierarchyRoom;
 
         let roomHierarchy: RoomHierarchy;
 
@@ -156,7 +156,7 @@ describe("SpaceHierarchy", () => {
             client = MatrixClientPeg.get();
 
             dmRoomMap = {
-                getUserIdForRoomId: jest.fn()
+                getUserIdForRoomId: jest.fn(),
             } as unknown as DMRoomMap;
             jest.spyOn(DMRoomMap, "shared").mockReturnValue(dmRoomMap);
 
@@ -167,16 +167,19 @@ describe("SpaceHierarchy", () => {
             hierarchyRoot = {
                 room_id: root.roomId,
                 num_joined_members: 1,
-                children_state: [{
-                    state_key: room1.roomId,
-                    content: { order: "1" }
-                }, {
-                    state_key: room2.roomId,
-                    content: { order: "2" }
-                }]
-            } as IHierarchyRoom
-            hierarchyRoom1 = { room_id: room1.roomId, num_joined_members: 2 } as IHierarchyRoom
-            hierarchyRoom2 = { room_id: root.roomId, num_joined_members: 3 } as IHierarchyRoom
+                children_state: [
+                    {
+                        state_key: room1.roomId,
+                        content: { order: "1" },
+                    },
+                    {
+                        state_key: room2.roomId,
+                        content: { order: "2" },
+                    },
+                ],
+            } as IHierarchyRoom;
+            hierarchyRoom1 = { room_id: room1.roomId, num_joined_members: 2 } as IHierarchyRoom;
+            hierarchyRoom2 = { room_id: root.roomId, num_joined_members: 3 } as IHierarchyRoom;
 
             roomHierarchy = {
                 roomMap: new Map([
@@ -184,7 +187,7 @@ describe("SpaceHierarchy", () => {
                     [room1.roomId, hierarchyRoom1],
                     [room2.roomId, hierarchyRoom2],
                 ]),
-                isSuggested: jest.fn()
+                isSuggested: jest.fn(),
             } as unknown as RoomHierarchy;
         });
 
