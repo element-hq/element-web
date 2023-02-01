@@ -3204,8 +3204,6 @@
     "%(count)s participants|other": "%(count)s учасників",
     "New video room": "Нова відеокімната",
     "New room": "Нова кімната",
-    "<a>Give feedback</a>": "<a>Залиште відгук</a>",
-    "Threads are a beta feature": "Гілки — бета-функція",
     "Threads help keep your conversations on-topic and easy to track.": "Гілки допомагають підтримувати розмови за темою та за ними легко стежити.",
     "%(featureName)s Beta feedback": "%(featureName)s — відгук про бетаверсію",
     "Beta feature. Click to learn more.": "Бетафункція. Натисніть, щоб дізнатися більше.",
@@ -3710,5 +3708,16 @@
     "Decrypted source unavailable": "Розшифроване джерело недоступне",
     "Connection error - Recording paused": "Помилка з'єднання - Запис призупинено",
     "%(senderName)s started a voice broadcast": "%(senderName)s розпочинає голосову трансляцію",
-    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)"
+    "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)",
+    "Registration token": "Токен реєстрації",
+    "Enter a registration token provided by the homeserver administrator.": "Введіть реєстраційний токен, наданий адміністратором домашнього сервера.",
+    "Unable to play this voice broadcast": "Неможливо відтворити цю голосову трансляцію",
+    "Manage account": "Керувати обліковим записом",
+    "Your account details are managed separately at <code>%(hostname)s</code>.": "Ваші дані облікового запису керуються окремо за адресою <code>%(hostname)s</code>.",
+    "Enable MSC3946 (to support late-arriving room archives)": "Увімкнути MSC3946 (для підтримки архівів пізніх кімнат)",
+    "Dynamic room predecessors": "Попередники динамічної кімнати",
+    "All messages and invites from this user will be hidden. Are you sure you want to ignore them?": "Усі повідомлення та запрошення від цього користувача будуть приховані. Ви впевнені, що хочете їх нехтувати?",
+    "Ignore %(user)s": "Нехтувати %(user)s",
+    "Indent decrease": "Зменшення відступу",
+    "Indent increase": "Збільшення відступу"
 }
