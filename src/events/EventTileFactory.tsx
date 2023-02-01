@@ -48,7 +48,11 @@ import ViewSourceEvent from "../components/views/messages/ViewSourceEvent";
 import { shouldDisplayAsBeaconTile } from "../utils/beacon/timeline";
 import { shouldDisplayAsVoiceBroadcastTile } from "../voice-broadcast/utils/shouldDisplayAsVoiceBroadcastTile";
 import { ElementCall } from "../models/Call";
-import { shouldDisplayAsVoiceBroadcastStoppedText, VoiceBroadcastChunkEventType } from "../voice-broadcast";
+import {
+    isRelatedToVoiceBroadcast,
+    shouldDisplayAsVoiceBroadcastStoppedText,
+    VoiceBroadcastChunkEventType,
+} from "../voice-broadcast";
 
 // Subset of EventTile's IProps plus some mixins
 export interface EventTileTypeProps {
@@ -74,13 +78,13 @@ export interface EventTileTypeProps {
 type FactoryProps = Omit<EventTileTypeProps, "ref">;
 type Factory<X = FactoryProps> = (ref: Optional<React.RefObject<any>>, props: X) => JSX.Element;
 
-const MessageEventFactory: Factory = (ref, props) => <MessageEvent ref={ref} {...props} />;
+export const MessageEventFactory: Factory = (ref, props) => <MessageEvent ref={ref} {...props} />;
 const KeyVerificationConclFactory: Factory = (ref, props) => <MKeyVerificationConclusion ref={ref} {...props} />;
 const LegacyCallEventFactory: Factory<FactoryProps & { callEventGrouper: LegacyCallEventGrouper }> = (ref, props) => (
     <LegacyCallEvent ref={ref} {...props} />
 );
 const CallEventFactory: Factory = (ref, props) => <CallEvent ref={ref} {...props} />;
-const TextualEventFactory: Factory = (ref, props) => <TextualEvent ref={ref} {...props} />;
+export const TextualEventFactory: Factory = (ref, props) => <TextualEvent ref={ref} {...props} />;
 const VerificationReqFactory: Factory = (ref, props) => <MKeyVerificationRequest ref={ref} {...props} />;
 const HiddenEventFactory: Factory = (ref, props) => <HiddenBody ref={ref} {...props} />;
 
@@ -257,6 +261,11 @@ export function pickFactory(
 
     if (mxEvent.getContent()[VoiceBroadcastChunkEventType]) {
         // hide voice broadcast chunks
+        return noEventFactoryFactory();
+    }
+
+    if (!showHiddenEvents && mxEvent.isDecryptionFailure() && isRelatedToVoiceBroadcast(mxEvent, cli)) {
+        // hide utd events related to a broadcast
         return noEventFactoryFactory();
     }
 

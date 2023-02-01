@@ -659,6 +659,7 @@
     "%(senderName)s ended a <a>voice broadcast</a>": "%(senderName)s ended a <a>voice broadcast</a>",
     "You ended a voice broadcast": "You ended a voice broadcast",
     "%(senderName)s ended a voice broadcast": "%(senderName)s ended a voice broadcast",
+    "Unable to decrypt voice broadcast": "Unable to decrypt voice broadcast",
     "Unable to play this voice broadcast": "Unable to play this voice broadcast",
     "Stop live broadcasting?": "Stop live broadcasting?",
     "Are you sure you want to stop your live broadcast?This will end the broadcast and the full recording will be available in the room.": "Are you sure you want to stop your live broadcast?This will end the broadcast and the full recording will be available in the room.",

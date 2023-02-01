@@ -82,6 +82,8 @@ export class VoiceBroadcastPlayback
 {
     private state = VoiceBroadcastPlaybackState.Stopped;
     private chunkEvents = new VoiceBroadcastChunkEvents();
+    /** @var Map: event Id → undecryptable event */
+    private utdChunkEvents: Map<string, MatrixEvent> = new Map();
     private playbacks = new Map<string, Playback>();
     private currentlyPlaying: MatrixEvent | null = null;
     /** @var total duration of all chunks in milliseconds */
@@ -154,13 +156,18 @@ export class VoiceBroadcastPlayback
     }
 
     private addChunkEvent = async (event: MatrixEvent): Promise<boolean> => {
-        if (event.getContent()?.msgtype !== MsgType.Audio) {
-            // skip non-audio event
+        if (!event.getId() && !event.getTxnId()) {
+            // skip events without id and txn id
             return false;
         }
 
-        if (!event.getId() && !event.getTxnId()) {
-            // skip events without id and txn id
+        if (event.isDecryptionFailure()) {
+            this.onChunkEventDecryptionFailure(event);
+            return false;
+        }
+
+        if (event.getContent()?.msgtype !== MsgType.Audio) {
+            // skip non-audio event
             return false;
         }
 
@@ -172,6 +179,45 @@ export class VoiceBroadcastPlayback
         }
 
         return true;
+    };
+
+    private onChunkEventDecryptionFailure = (event: MatrixEvent): void => {
+        const eventId = event.getId();
+
+        if (!eventId) {
+            // This should not happen, as the existence of the Id is checked before the call.
+            // Log anyway and return.
+            logger.warn("Broadcast chunk decryption failure for event without Id", {
+                broadcast: this.infoEvent.getId(),
+            });
+            return;
+        }
+
+        if (!this.utdChunkEvents.has(eventId)) {
+            event.once(MatrixEventEvent.Decrypted, this.onChunkEventDecrypted);
+        }
+
+        this.utdChunkEvents.set(eventId, event);
+        this.setError();
+    };
+
+    private onChunkEventDecrypted = async (event: MatrixEvent): Promise<void> => {
+        const eventId = event.getId();
+
+        if (!eventId) {
+            // This should not happen, as the existence of the Id is checked before the call.
+            // Log anyway and return.
+            logger.warn("Broadcast chunk decrypted for event without Id", { broadcast: this.infoEvent.getId() });
+            return;
+        }
+
+        this.utdChunkEvents.delete(eventId);
+        await this.addChunkEvent(event);
+
+        if (this.utdChunkEvents.size === 0) {
+            // no more UTD events, recover from error to paused
+            this.setState(VoiceBroadcastPlaybackState.Paused);
+        }
     };
 
     private startOrPlayNext = async (): Promise<void> => {
@@ -210,7 +256,7 @@ export class VoiceBroadcastPlayback
     private async tryLoadPlayback(chunkEvent: MatrixEvent): Promise<void> {
         try {
             return await this.loadPlayback(chunkEvent);
-        } catch (err) {
+        } catch (err: any) {
             logger.warn("Unable to load broadcast playback", {
                 message: err.message,
                 broadcastId: this.infoEvent.getId(),
@@ -332,7 +378,7 @@ export class VoiceBroadcastPlayback
     private async tryGetOrLoadPlaybackForEvent(event: MatrixEvent): Promise<Playback | undefined> {
         try {
             return await this.getOrLoadPlaybackForEvent(event);
-        } catch (err) {
+        } catch (err: any) {
             logger.warn("Unable to load broadcast playback", {
                 message: err.message,
                 broadcastId: this.infoEvent.getId(),
@@ -551,9 +597,6 @@ export class VoiceBroadcastPlayback
     }
 
     private setState(state: VoiceBroadcastPlaybackState): void {
-        // error is a final state
-        if (this.getState() === VoiceBroadcastPlaybackState.Error) return;
-
         if (this.state === state) {
             return;
         }
@@ -587,10 +630,18 @@ export class VoiceBroadcastPlayback
     }
 
     public get errorMessage(): string {
-        return this.getState() === VoiceBroadcastPlaybackState.Error ? _t("Unable to play this voice broadcast") : "";
+        if (this.getState() !== VoiceBroadcastPlaybackState.Error) return "";
+        if (this.utdChunkEvents.size) return _t("Unable to decrypt voice broadcast");
+        return _t("Unable to play this voice broadcast");
     }
 
     public destroy(): void {
+        for (const [, utdEvent] of this.utdChunkEvents) {
+            utdEvent.off(MatrixEventEvent.Decrypted, this.onChunkEventDecrypted);
+        }
+
+        this.utdChunkEvents.clear();
+
         this.chunkRelationHelper.destroy();
         this.infoRelationHelper.destroy();
         this.removeAllListeners();
