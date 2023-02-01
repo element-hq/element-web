@@ -3718,5 +3718,7 @@
     "Indent decrease": "Vähenda taandrida",
     "Indent increase": "Suurenda taandrida",
     "All messages and invites from this user will be hidden. Are you sure you want to ignore them?": "Kõik selle kasutaja sõnumid ja kutsed saava olema peidetud. Kas sa oled kindel, et soovid teda eirata?",
-    "Ignore %(user)s": "Eira kasutajat %(user)s"
+    "Ignore %(user)s": "Eira kasutajat %(user)s",
+    "Dynamic room predecessors": "Jututoa dünaamilised eellased",
+    "Unable to decrypt voice broadcast": "Ringhäälingukõne dekrüptimine ei õnnestu"
 }
