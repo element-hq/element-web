@@ -21,6 +21,7 @@ import userEvent from "@testing-library/user-event";
 
 import { WysiwygComposer } from "../../../../../../src/components/views/rooms/wysiwyg_composer/components/WysiwygComposer";
 import SettingsStore from "../../../../../../src/settings/SettingsStore";
+import { mockPlatformPeg } from "../../../../../test-utils";
 
 describe("WysiwygComposer", () => {
     const customRender = (
@@ -46,6 +47,7 @@ describe("WysiwygComposer", () => {
         const onChange = jest.fn();
         const onSend = jest.fn();
         beforeEach(async () => {
+            mockPlatformPeg({ overrideBrowserShortcuts: jest.fn().mockReturnValue(false) });
             customRender(onChange, onSend);
             await waitFor(() => expect(screen.getByRole("textbox")).toHaveAttribute("contentEditable", "true"));
         });

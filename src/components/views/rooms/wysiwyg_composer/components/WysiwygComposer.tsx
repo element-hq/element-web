@@ -47,7 +47,7 @@ export const WysiwygComposer = memo(function WysiwygComposer({
     rightComponent,
     children,
 }: WysiwygComposerProps) {
-    const inputEventProcessor = useInputEventProcessor(onSend);
+    const inputEventProcessor = useInputEventProcessor(onSend, initialContent);
 
     const { ref, isWysiwygReady, content, actionStates, wysiwyg } = useWysiwyg({ initialContent, inputEventProcessor });
 
