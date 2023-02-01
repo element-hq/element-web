@@ -3719,5 +3719,8 @@
     "All messages and invites from this user will be hidden. Are you sure you want to ignore them?": "Tous les messages et invitations de cette utilisateur seront cachés. Êtes-vous sûr de vouloir les ignorer ?",
     "Ignore %(user)s": "Ignorer %(user)s",
     "Indent decrease": "Réduire l’indentation",
-    "Indent increase": "Augmenter l’indentation"
+    "Indent increase": "Augmenter l’indentation",
+    "View a list of polls in a room. (Under active development)": "Voir une liste des sondages présents dans un salon. (En cours de développement)",
+    "Polls history": "Historique des sondages",
+    "Unable to decrypt voice broadcast": "Impossible de décrypter la diffusion audio"
 }
