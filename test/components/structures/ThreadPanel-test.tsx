@@ -26,53 +26,14 @@ import MatrixClientContext from "../../../src/contexts/MatrixClientContext";
 import RoomContext from "../../../src/contexts/RoomContext";
 import { _t } from "../../../src/languageHandler";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
-import { shouldShowFeedback } from "../../../src/utils/Feedback";
 import { RoomPermalinkCreator } from "../../../src/utils/permalinks/Permalinks";
 import ResizeNotifier from "../../../src/utils/ResizeNotifier";
-import { createTestClient, getRoomContext, mkStubRoom, mockPlatformPeg, stubClient } from "../../test-utils";
+import { getRoomContext, mockPlatformPeg, stubClient } from "../../test-utils";
 import { mkThread } from "../../test-utils/threads";
 
 jest.mock("../../../src/utils/Feedback");
 
 describe("ThreadPanel", () => {
-    describe("Feedback prompt", () => {
-        const cli = createTestClient();
-        const room = mkStubRoom("!room:server", "room", cli);
-        mocked(cli.getRoom).mockReturnValue(room);
-
-        it("should show feedback prompt if feedback is enabled", () => {
-            mocked(shouldShowFeedback).mockReturnValue(true);
-
-            render(
-                <MatrixClientContext.Provider value={cli}>
-                    <ThreadPanel
-                        roomId="!room:server"
-                        onClose={jest.fn()}
-                        resizeNotifier={new ResizeNotifier()}
-                        permalinkCreator={new RoomPermalinkCreator(room)}
-                    />
-                </MatrixClientContext.Provider>,
-            );
-            expect(screen.queryByText("Give feedback")).toBeTruthy();
-        });
-
-        it("should hide feedback prompt if feedback is disabled", () => {
-            mocked(shouldShowFeedback).mockReturnValue(false);
-
-            render(
-                <MatrixClientContext.Provider value={cli}>
-                    <ThreadPanel
-                        roomId="!room:server"
-                        onClose={jest.fn()}
-                        resizeNotifier={new ResizeNotifier()}
-                        permalinkCreator={new RoomPermalinkCreator(room)}
-                    />
-                </MatrixClientContext.Provider>,
-            );
-            expect(screen.queryByText("Give feedback")).toBeFalsy();
-        });
-    });
-
     describe("Header", () => {
         it("expect that All filter for ThreadPanelHeader properly renders Show: All threads", () => {
             const { asFragment } = render(

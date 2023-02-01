@@ -3449,8 +3449,6 @@
     "Threads help keep your conversations on-topic and easy to track.": "Threads help keep your conversations on-topic and easy to track.",
     "<b>Tip:</b> Use “%(replyInThread)s” when hovering over a message.": "<b>Tip:</b> Use “%(replyInThread)s” when hovering over a message.",
     "Keep discussions organised with threads": "Keep discussions organised with threads",
-    "Threads are a beta feature": "Threads are a beta feature",
-    "<a>Give feedback</a>": "<a>Give feedback</a>",
     "Thread": "Thread",
     "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.": "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.",
     "Tried to load a specific point in this room's timeline, but was unable to find it.": "Tried to load a specific point in this room's timeline, but was unable to find it.",
