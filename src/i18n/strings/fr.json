@@ -3164,7 +3164,6 @@
     "%(value)sm": "%(value)sm",
     "%(value)sh": "%(value)sh",
     "%(value)sd": "%(value)sd",
-    "<a>Give feedback</a>": "<a>Faire un commentaire</a>",
     "Threads are a beta feature": "Les fils de discussion sont une fonctionnalité bêta",
     "Threads help keep your conversations on-topic and easy to track.": "Les fils de discussion vous permettent de recentrer vos conversations et de les rendre facile à suivre.",
     "An error occurred while stopping your live location, please try again": "Une erreur s’est produite en arrêtant le partage de votre position, veuillez réessayer",

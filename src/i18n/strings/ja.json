@@ -3047,7 +3047,6 @@
     "Ban from room": "ルームからブロック",
     "Copy link": "リンクをコピー",
     "%(featureName)s Beta feedback": "%(featureName)sのベータ版のフィードバック",
-    "Threads are a beta feature": "スレッドはベータ版の機能です",
     "<a>Give feedback</a>": "<a>フィードバックを送信</a>",
     "Warning: Your personal data (including encryption keys) is still stored in this session. Clear it if you're finished using this session, or want to sign in to another account.": "警告：あなたの個人情報（暗号化の鍵を含む）が、このセッションに保存されています。このセッションの使用を終了するか、他のアカウントにログインしたい場合は、そのデータを消去してください。",
     "The user's homeserver does not support the version of the space.": "ユーザーのホームサーバーは、このバージョンのスペースをサポートしていません。",

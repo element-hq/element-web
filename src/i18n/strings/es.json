@@ -3164,7 +3164,6 @@
     "Send custom room account data event": "Enviar evento personalizado de cuenta de la sala",
     "Send custom timeline event": "Enviar evento personalizado de historial de mensajes",
     "Help us identify issues and improve %(analyticsOwner)s by sharing anonymous usage data. To understand how people use multiple devices, we'll generate a random identifier, shared by your devices.": "Ayúdanos a identificar problemas y a mejorar %(analyticsOwner)s. Comparte datos anónimos sobre cómo usas la aplicación para que entendamos mejor cómo usa la gente varios dispositivos. Generaremos un identificador aleatorio que usarán todos tus dispositivos.",
-    "<a>Give feedback</a>": "<a>Danos tu opinión</a>",
     "Threads are a beta feature": "Los hilos son una funcionalidad beta",
     "Create room": "Crear sala",
     "Create a video room": "Crear una sala de vídeo",

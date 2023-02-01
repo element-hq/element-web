@@ -3203,7 +3203,6 @@
     "%(count)s participants|other": "%(count)s účastníkov",
     "New video room": "Nová video miestnosť",
     "New room": "Nová miestnosť",
-    "<a>Give feedback</a>": "<a>Poskytnúť spätnú väzbu</a>",
     "Threads are a beta feature": "Vlákna sú beta funkciou",
     "Threads help keep your conversations on-topic and easy to track.": "Vlákna pomáhajú udržiavať konverzácie v téme a uľahčujú ich sledovanie.",
     "%(featureName)s Beta feedback": "%(featureName)s Beta spätná väzba",
