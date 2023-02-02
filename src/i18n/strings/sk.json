@@ -3720,6 +3720,7 @@
     "Indent decrease": "Zmenšenie odsadenia",
     "Indent increase": "Zväčšenie odsadenia",
     "Unable to decrypt voice broadcast": "Hlasové vysielanie sa nedá dešifrovať",
-    "View a list of polls in a room. (Under active development)": "",
-    "Polls history": ""
+    "View a list of polls in a room. (Under active development)": "Zobraziť zoznam ankiet v miestnosti. (V štádiu aktívneho vývoja)",
+    "Polls history": "História ankety",
+    "Use rich text instead of Markdown in the message composer.": "Použiť rozšírený text namiesto Markdown v správach."
 }
