@@ -3720,5 +3720,6 @@
     "Ignore %(user)s": "Eira kasutajat %(user)s",
     "Dynamic room predecessors": "Jututoa dünaamilised eellased",
     "Unable to decrypt voice broadcast": "Ringhäälingukõne dekrüptimine ei õnnestu",
-    "Polls history": "Küsitluste ajalugu"
+    "Polls history": "Küsitluste ajalugu",
+    "View a list of polls in a room. (Under active development)": ""
 }
