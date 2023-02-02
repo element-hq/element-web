@@ -3585,7 +3585,6 @@
     "Right panel stays open": "El panel derecho se mantiene abierto",
     "Currently experimental.": "Actualmente en fase experimental.",
     "New ways to ignore people": "Nuevas maneras de ignorar a otras personas",
-    "Use rich text instead of Markdown in the message composer. Plain text mode coming soon.": "Usar el editor de texto enriquecido en lugar de Markdown en la barra de escritura. El modo de texto plano estará disponible próximamente.",
     "Rich text editor": "Editor de texto enriquecido",
     "Threaded messages": "Hilos de mensajes",
     "In rooms that support moderation, the “Report” button will let you report abuse to room moderators.": "En las salas que sean compatible con la moderación, el botón de «Denunciar» avisará a los moderadores de la sala.",

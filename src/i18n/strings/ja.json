@@ -3438,7 +3438,6 @@
     "Hide notification dot (only display counters badges)": "通知のドットを非表示にする（カウンターのバッジのみを表示）",
     "Rust cryptography implementation": "Rustによる暗号の実装",
     "Right panel stays open": "右のパネルを開いたままにする",
-    "Use rich text instead of Markdown in the message composer. Plain text mode coming soon.": "メッセージの入力欄でマークダウンの代わりにリッチテキストを使用。プレーンテキストモードは近日公開。",
     "Toggle attribution": "属性を切り替える",
     "Buffering…": "バッファリングしています…",
     "Go live": "ライブ配信",

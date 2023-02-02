@@ -3637,7 +3637,6 @@
     "Right panel stays open": "右側面板維持開啟狀態",
     "Currently experimental.": "目前為實驗性。",
     "New ways to ignore people": "忽略人們的新方式",
-    "Use rich text instead of Markdown in the message composer. Plain text mode coming soon.": "在訊息編輯器中使用格式化文字而非 Markdown。純文字模式即將到來。",
     "Rich text editor": "格式化文字編輯器",
     "In rooms that support moderation, the “Report” button will let you report abuse to room moderators.": "在支援審核的聊天室中，「回報」按鈕讓您可以回報濫用行為給聊天室管理員。",
     "Report to moderators": "回報給管理員",

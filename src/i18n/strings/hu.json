@@ -3616,7 +3616,6 @@
     "For best security and privacy, it is recommended to use Matrix clients that support encryption.": "A biztonság és adatbiztonság érdekében javasolt olyan Matrix klienst használni ami támogatja a titkosítást.",
     "You won't be able to participate in rooms where encryption is enabled when using this session.": "Ezzel a munkamenettel olyan szobákban ahol a titkosítás be van kapcsolva nem tud részt venni.",
     "Feeling experimental? Try out our latest ideas in development. These features are not finalised; they may be unstable, may change, or may be dropped altogether. <a>Learn more</a>.": "Kísérletező kedvében van? Próbálja ki a legújabb fejlesztési ötleteinket. Ezek nem befejezettek; lehetnek instabilak, változhatnak vagy el is tűnhetnek. <a>Tudjon meg többet</a>.",
-    "Use rich text instead of Markdown in the message composer. Plain text mode coming soon.": "Szövegszerkesztő használata a Markdown helyett az üzenetek írásakor. Nemsokára érkezik az egyszerű szöveges mód.",
     "Rich text editor": "Szövegszerkesztő használata",
     "Sign in instead": "Bejelentkezés inkább",
     "Re-enter email address": "E-mail cím megadása újból",
