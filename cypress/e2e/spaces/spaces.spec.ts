@@ -77,7 +77,7 @@ describe("Spaces", () => {
         cy.stopHomeserver(homeserver);
     });
 
-    it.only("should allow user to create public space", () => {
+    it("should allow user to create public space", () => {
         openSpaceCreateMenu();
         cy.get("#mx_ContextualMenu_Container").percySnapshotElement("Space create menu");
         cy.get(".mx_SpaceCreateMenu_wrapper .mx_ContextualMenu").within(() => {
