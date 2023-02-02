@@ -81,19 +81,12 @@ describe("SpaceHierarchy", () => {
     });
 
     describe("toLocalRoom", () => {
-        let client: MatrixClient;
-        let roomV1: Room;
-        let roomV2: Room;
-        let roomV3: Room;
-
-        beforeEach(() => {
-            stubClient();
-            client = MatrixClientPeg.get();
-            roomV1 = mkStubRoom("room-id-1", "Room V1", client);
-            roomV2 = mkStubRoom("room-id-2", "Room V2", client);
-            roomV3 = mkStubRoom("room-id-3", "Room V3", client);
-            jest.spyOn(client, "getRoomUpgradeHistory").mockReturnValue([roomV1, roomV2, roomV3]);
-        });
+        stubClient();
+        let client = MatrixClientPeg.get();
+        let roomV1 = mkStubRoom("room-id-1", "Room V1", client);
+        let roomV2 = mkStubRoom("room-id-2", "Room V2", client);
+        let roomV3 = mkStubRoom("room-id-3", "Room V3", client);
+        jest.spyOn(client, "getRoomUpgradeHistory").mockReturnValue([roomV1, roomV2, roomV3]);
 
         it("grabs last room that is in hierarchy when latest version is in hierarchy", () => {
             const hierarchy = {
@@ -138,58 +131,43 @@ describe("SpaceHierarchy", () => {
     });
 
     describe("<HierarchyLevel />", () => {
-        let client: MatrixClient;
-        let dmRoomMap: DMRoomMap;
+        stubClient();
+        let client = MatrixClientPeg.get();
 
-        let root: Room;
-        let room1: Room;
-        let room2: Room;
+        let dmRoomMap = {
+            getUserIdForRoomId: jest.fn(),
+        } as unknown as DMRoomMap;
+        jest.spyOn(DMRoomMap, "shared").mockReturnValue(dmRoomMap);
 
-        let hierarchyRoot: IHierarchyRoom;
-        let hierarchyRoom1: IHierarchyRoom;
-        let hierarchyRoom2: IHierarchyRoom;
+        let root = mkStubRoom("room-id-1", "Room 1", client);
+        let room1 = mkStubRoom("room-id-2", "Room 2", client);
+        let room2 = mkStubRoom("room-id-3", "Room 3", client);
 
-        let roomHierarchy: RoomHierarchy;
+        let hierarchyRoot = {
+            room_id: root.roomId,
+            num_joined_members: 1,
+            children_state: [
+                {
+                    state_key: room1.roomId,
+                    content: { order: "1" },
+                },
+                {
+                    state_key: room2.roomId,
+                    content: { order: "2" },
+                },
+            ],
+        } as IHierarchyRoom;
+        let hierarchyRoom1 = { room_id: room1.roomId, num_joined_members: 2 } as IHierarchyRoom;
+        let hierarchyRoom2 = { room_id: root.roomId, num_joined_members: 3 } as IHierarchyRoom;
 
-        beforeEach(() => {
-            stubClient();
-            client = MatrixClientPeg.get();
-
-            dmRoomMap = {
-                getUserIdForRoomId: jest.fn(),
-            } as unknown as DMRoomMap;
-            jest.spyOn(DMRoomMap, "shared").mockReturnValue(dmRoomMap);
-
-            root = mkStubRoom("room-id-1", "Room 1", client);
-            room1 = mkStubRoom("room-id-2", "Room 2", client);
-            room2 = mkStubRoom("room-id-3", "Room 3", client);
-
-            hierarchyRoot = {
-                room_id: root.roomId,
-                num_joined_members: 1,
-                children_state: [
-                    {
-                        state_key: room1.roomId,
-                        content: { order: "1" },
-                    },
-                    {
-                        state_key: room2.roomId,
-                        content: { order: "2" },
-                    },
-                ],
-            } as IHierarchyRoom;
-            hierarchyRoom1 = { room_id: room1.roomId, num_joined_members: 2 } as IHierarchyRoom;
-            hierarchyRoom2 = { room_id: root.roomId, num_joined_members: 3 } as IHierarchyRoom;
-
-            roomHierarchy = {
-                roomMap: new Map([
-                    [root.roomId, hierarchyRoot],
-                    [room1.roomId, hierarchyRoom1],
-                    [room2.roomId, hierarchyRoom2],
-                ]),
-                isSuggested: jest.fn(),
-            } as unknown as RoomHierarchy;
-        });
+        let roomHierarchy = {
+            roomMap: new Map([
+                [root.roomId, hierarchyRoot],
+                [room1.roomId, hierarchyRoom1],
+                [room2.roomId, hierarchyRoom2],
+            ]),
+            isSuggested: jest.fn(),
+        } as unknown as RoomHierarchy;
 
         it("renders", () => {
             const defaultProps = {
