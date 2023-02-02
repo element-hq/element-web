@@ -28,11 +28,4 @@ export interface ViewUserPayload extends ActionPayload {
      * should be shown (hide whichever relevant components).
      */
     member?: RoomMember | User;
-
-    /**
-     * Should this event be pushed as a card into the right panel?
-     *
-     * @see RightPanelStore#pushCard
-     */
-    push?: boolean;
 }

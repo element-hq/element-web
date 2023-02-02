@@ -22,16 +22,22 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
         <span
           class="mx_BaseAvatar"
           role="presentation"
-          style="width: 54px; height: 54px;"
         >
           <span
             aria-hidden="true"
-            class="mx_BaseAvatar_image mx_BaseAvatar_initial"
-            data-testid="avatar-img"
-            style="background-color: rgb(13, 189, 139); width: 54px; height: 54px; font-size: 35.1px; line-height: 54px;"
+            class="mx_BaseAvatar_initial"
+            style="font-size: 35.1px; width: 54px; line-height: 54px;"
           >
             !
           </span>
+          <img
+            alt=""
+            aria-hidden="true"
+            class="mx_BaseAvatar_image"
+            data-testid="avatar-img"
+            src="data:image/png;base64,00"
+            style="width: 54px; height: 54px;"
+          />
         </span>
         <div
           class="mx_TextWithTooltip_target mx_RoomSummaryCard_e2ee"
