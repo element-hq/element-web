@@ -934,7 +934,7 @@
     "Keep discussions organised with threads.": "Keep discussions organised with threads.",
     "Threads help keep conversations on-topic and easy to track. <a>Learn more</a>.": "Threads help keep conversations on-topic and easy to track. <a>Learn more</a>.",
     "Rich text editor": "Rich text editor",
-    "Use rich text instead of Markdown in the message composer. Plain text mode coming soon.": "Use rich text instead of Markdown in the message composer. Plain text mode coming soon.",
+    "Use rich text instead of Markdown in the message composer.": "Use rich text instead of Markdown in the message composer.",
     "Render simple counters in room header": "Render simple counters in room header",
     "New ways to ignore people": "New ways to ignore people",
     "Currently experimental.": "Currently experimental.",

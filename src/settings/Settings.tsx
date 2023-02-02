@@ -291,7 +291,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         isFeature: true,
         labsGroup: LabGroup.Messaging,
         displayName: _td("Rich text editor"),
-        description: _td("Use rich text instead of Markdown in the message composer. Plain text mode coming soon."),
+        description: _td("Use rich text instead of Markdown in the message composer."),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
