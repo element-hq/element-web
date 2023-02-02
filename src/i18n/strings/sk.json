@@ -3719,5 +3719,7 @@
     "Ignore %(user)s": "Ignorovať %(user)s",
     "Indent decrease": "Zmenšenie odsadenia",
     "Indent increase": "Zväčšenie odsadenia",
-    "Unable to decrypt voice broadcast": "Hlasové vysielanie sa nedá dešifrovať"
+    "Unable to decrypt voice broadcast": "Hlasové vysielanie sa nedá dešifrovať",
+    "View a list of polls in a room. (Under active development)": "",
+    "Polls history": ""
 }
