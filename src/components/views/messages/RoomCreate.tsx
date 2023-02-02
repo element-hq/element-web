@@ -28,6 +28,7 @@ import EventTileBubble from "./EventTileBubble";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import RoomContext from "../../../contexts/RoomContext";
 import { useRoomState } from "../../../hooks/useRoomState";
+import SettingsStore from "../../../settings/SettingsStore";
 
 interface IProps {
     /** The m.room.create MatrixEvent that this tile represents */
@@ -40,6 +41,8 @@ interface IProps {
  * room.
  */
 export const RoomCreate: React.FC<IProps> = ({ mxEvent, timestamp }) => {
+    const msc3946ProcessDynamicPredecessor = SettingsStore.getValue("feature_dynamic_room_predecessors");
+
     // Note: we ask the room for its predecessor here, instead of directly using
     // the information inside mxEvent. This allows us the flexibility later to
     // use a different predecessor (e.g. through MSC3946) and still display it
@@ -47,7 +50,10 @@ export const RoomCreate: React.FC<IProps> = ({ mxEvent, timestamp }) => {
     const roomContext = useContext(RoomContext);
     const predecessor = useRoomState(
         roomContext.room,
-        useCallback((state) => state.findPredecessor(), []),
+        useCallback(
+            (state) => state.findPredecessor(msc3946ProcessDynamicPredecessor),
+            [msc3946ProcessDynamicPredecessor],
+        ),
     );
 
     const onLinkClicked = useCallback(
