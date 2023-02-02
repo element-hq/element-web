@@ -456,6 +456,8 @@ exports[`MPollBody renders a finished poll with no votes 1`] = `
 </div>
 `;
 
+exports[`MPollBody renders a loader while responses are still loading 1`] = `"Based on 4 votes<div class="mx_Spinner"><div class="mx_Spinner_icon" style="width: 16px; height: 16px;" aria-label="Loading..." role="progressbar" data-testid="spinner"></div></div>"`;
+
 exports[`MPollBody renders a poll that I have not voted in 1`] = `
 <div>
   <div
@@ -769,7 +771,6 @@ exports[`MPollBody renders a poll with local, non-local and invalid votes 1`] = 
           class="mx_StyledRadioButton mx_MPollBody_live-option mx_StyledRadioButton_enabled mx_StyledRadioButton_checked"
         >
           <input
-            checked=""
             name="poll_answer_select-$mypoll"
             type="radio"
             value="italian"
@@ -1224,7 +1225,6 @@ exports[`MPollBody renders a poll with only non-local votes 1`] = `
           class="mx_StyledRadioButton mx_MPollBody_live-option mx_StyledRadioButton_enabled mx_StyledRadioButton_checked"
         >
           <input
-            checked=""
             name="poll_answer_select-$mypoll"
             type="radio"
             value="wings"

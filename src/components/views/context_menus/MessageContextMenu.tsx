@@ -195,7 +195,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
         return (
             M_POLL_START.matches(mxEvent.getType()) &&
             this.state.canRedact &&
-            !isPollEnded(mxEvent, MatrixClientPeg.get(), this.props.getRelationsForEvent)
+            !isPollEnded(mxEvent, MatrixClientPeg.get())
         );
     }
 

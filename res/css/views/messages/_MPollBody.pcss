@@ -150,8 +150,16 @@ limitations under the License.
     }
 
     .mx_MPollBody_totalVotes {
+        display: flex;
+        flex-direction: inline;
+        justify-content: start;
         color: $secondary-content;
         font-size: $font-12px;
+
+        .mx_Spinner {
+            flex: 0;
+            margin-left: $spacing-8;
+        }
     }
 }
 
