@@ -18,7 +18,13 @@ import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { M_POLL_START, PollAnswer, M_POLL_KIND_DISCLOSED } from "matrix-js-sdk/src/@types/polls";
 import { M_TEXT } from "matrix-js-sdk/src/@types/extensible_events";
 
-export const makePollStartEvent = (question: string, sender: string, answers?: PollAnswer[]): MatrixEvent => {
+export const makePollStartEvent = (
+    question: string,
+    sender: string,
+    answers?: PollAnswer[],
+    ts?: number,
+    id?: string,
+): MatrixEvent => {
     if (!answers) {
         answers = [
             { id: "socks", [M_TEXT.name]: "Socks" },
@@ -27,7 +33,7 @@ export const makePollStartEvent = (question: string, sender: string, answers?: P
     }
 
     return new MatrixEvent({
-        event_id: "$mypoll",
+        event_id: id || "$mypoll",
         room_id: "#myroom:example.com",
         sender: sender,
         type: M_POLL_START.name,
@@ -41,5 +47,6 @@ export const makePollStartEvent = (question: string, sender: string, answers?: P
             },
             [M_TEXT.name]: `${question}: answers`,
         },
+        origin_server_ts: ts || 0,
     });
 };

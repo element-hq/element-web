@@ -92,6 +92,7 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
         </div>
         <div
           class="mx_AccessibleButton mx_BaseCard_Button mx_RoomSummaryCard_Button mx_RoomSummaryCard_icon_share"
+          data-testid="shareRoomButton"
           role="button"
           tabindex="0"
         >

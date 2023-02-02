@@ -15,19 +15,26 @@ limitations under the License.
 */
 
 import React from "react";
+import { MatrixClient } from "matrix-js-sdk/src/client";
 
 import { _t } from "../../../../languageHandler";
 import BaseDialog from "../BaseDialog";
 import { IDialogProps } from "../IDialogProps";
+import { PollHistoryList } from "./PollHistoryList";
+import { getPolls } from "./usePollHistory";
 
 type PollHistoryDialogProps = Pick<IDialogProps, "onFinished"> & {
     roomId: string;
+    matrixClient: MatrixClient;
 };
+export const PollHistoryDialog: React.FC<PollHistoryDialogProps> = ({ roomId, matrixClient, onFinished }) => {
+    const pollStartEvents = getPolls(roomId, matrixClient);
 
-export const PollHistoryDialog: React.FC<PollHistoryDialogProps> = ({ onFinished }) => {
     return (
         <BaseDialog title={_t("Polls history")} onFinished={onFinished}>
-            {/* @TODO(kerrya) to be implemented in PSG-906 */}
+            <div className="mx_PollHistoryDialog_content">
+                <PollHistoryList pollStartEvents={pollStartEvents} />
+            </div>
         </BaseDialog>
     );
 };

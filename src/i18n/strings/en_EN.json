@@ -3141,6 +3141,7 @@
     "<b>Warning</b>: You should only set up key backup from a trusted computer.": "<b>Warning</b>: You should only set up key backup from a trusted computer.",
     "Access your secure message history and set up secure messaging by entering your Security Key.": "Access your secure message history and set up secure messaging by entering your Security Key.",
     "If you've forgotten your Security Key you can <button>set up new recovery options</button>": "If you've forgotten your Security Key you can <button>set up new recovery options</button>",
+    "There are no polls in this room": "There are no polls in this room",
     "Send custom account data event": "Send custom account data event",
     "Send custom room account data event": "Send custom room account data event",
     "Event Type": "Event Type",

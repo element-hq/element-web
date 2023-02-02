@@ -286,6 +286,7 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, onClose }) => {
     const onRoomPollHistoryClick = (): void => {
         Modal.createDialog(PollHistoryDialog, {
             roomId: room.roomId,
+            matrixClient: cli,
         });
     };
 
@@ -353,7 +354,11 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, onClose }) => {
                         {_t("Export chat")}
                     </Button>
                 )}
-                <Button className="mx_RoomSummaryCard_icon_share" onClick={onShareRoomClick}>
+                <Button
+                    data-testid="shareRoomButton"
+                    className="mx_RoomSummaryCard_icon_share"
+                    onClick={onShareRoomClick}
+                >
                     {_t("Share room")}
                 </Button>
                 <Button className="mx_RoomSummaryCard_icon_settings" onClick={onRoomSettingsClick}>

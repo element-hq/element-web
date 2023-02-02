@@ -145,7 +145,7 @@ describe("<RoomSummaryCard />", () => {
 
             fireEvent.click(getByText("Polls history"));
 
-            expect(modalSpy).toHaveBeenCalledWith(PollHistoryDialog, { roomId });
+            expect(modalSpy).toHaveBeenCalledWith(PollHistoryDialog, { roomId, matrixClient: mockClient });
         });
     });
 

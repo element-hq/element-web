@@ -21,8 +21,9 @@ import {
     formatFullDateNoDayISO,
     formatTimeLeft,
     formatPreciseDuration,
+    formatLocalDateShort,
 } from "../../src/DateUtils";
-import { REPEATABLE_DATE } from "../test-utils";
+import { REPEATABLE_DATE, mockIntlDateTimeFormat, unmockIntlDateTimeFormat } from "../test-utils";
 
 describe("formatSeconds", () => {
     it("correctly formats time with hours", () => {
@@ -135,5 +136,24 @@ describe("formatTimeLeft", () => {
         [5 * 60 * 60 + 7 * 60 + 23, "5h 7m 23s left"],
     ])("should format %s to %s", (seconds: number, expected: string) => {
         expect(formatTimeLeft(seconds)).toBe(expected);
+    });
+});
+
+describe("formatLocalDateShort()", () => {
+    afterAll(() => {
+        unmockIntlDateTimeFormat();
+    });
+    const timestamp = new Date("Fri Dec 17 2021 09:09:00 GMT+0100 (Central European Standard Time)").getTime();
+    it("formats date correctly by locale", () => {
+        // format is DD/MM/YY
+        mockIntlDateTimeFormat("en-UK");
+        expect(formatLocalDateShort(timestamp)).toEqual("17/12/21");
+
+        // US date format is MM/DD/YY
+        mockIntlDateTimeFormat("en-US");
+        expect(formatLocalDateShort(timestamp)).toEqual("12/17/21");
+
+        mockIntlDateTimeFormat("de-DE");
+        expect(formatLocalDateShort(timestamp)).toEqual("17.12.21");
     });
 });
