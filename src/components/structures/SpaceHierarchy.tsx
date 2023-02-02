@@ -413,9 +413,18 @@ interface IHierarchyLevelProps {
     onToggleClick?(parentId: string, childId: string): void;
 }
 
-const toLocalRoom = (cli: MatrixClient, room: IHierarchyRoom): IHierarchyRoom => {
+export const toLocalRoom = (cli: MatrixClient, room: IHierarchyRoom, hierarchy: RoomHierarchy): IHierarchyRoom => {
     const history = cli.getRoomUpgradeHistory(room.room_id, true);
-    const cliRoom = history[history.length - 1];
+
+    // Pick latest room that is actually part of the hierarchy
+    let cliRoom = null;
+    for (let idx = history.length - 1; idx >= 0; --idx) {
+        if (hierarchy.roomMap.get(history[idx].roomId)) {
+            cliRoom = history[idx];
+            break;
+        }
+    }
+
     if (cliRoom) {
         return {
             ...room,
@@ -424,7 +433,7 @@ const toLocalRoom = (cli: MatrixClient, room: IHierarchyRoom): IHierarchyRoom =>
             name: cliRoom.name,
             topic: cliRoom.currentState.getStateEvents(EventType.RoomTopic, "")?.getContent().topic,
             avatar_url: cliRoom.getMxcAvatarUrl(),
-            canonical_alias: cliRoom.getCanonicalAlias(),
+            canonical_alias: cliRoom.getCanonicalAlias() ?? undefined,
             aliases: cliRoom.getAltAliases(),
             world_readable:
                 cliRoom.currentState.getStateEvents(EventType.RoomHistoryVisibility, "")?.getContent()
@@ -461,7 +470,7 @@ export const HierarchyLevel: React.FC<IHierarchyLevelProps> = ({
         (result, ev: IHierarchyRelation) => {
             const room = hierarchy.roomMap.get(ev.state_key);
             if (room && roomSet.has(room)) {
-                result[room.room_type === RoomType.Space ? 0 : 1].push(toLocalRoom(cli, room));
+                result[room.room_type === RoomType.Space ? 0 : 1].push(toLocalRoom(cli, room, hierarchy));
             }
             return result;
         },

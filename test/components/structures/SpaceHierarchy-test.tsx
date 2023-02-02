@@ -14,15 +14,27 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import React from "react";
+import { render } from "@testing-library/react";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomHierarchy } from "matrix-js-sdk/src/room-hierarchy";
+import { IHierarchyRoom } from "matrix-js-sdk/src/@types/spaces";
 
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
-import { stubClient } from "../../test-utils";
+import { mkStubRoom, stubClient } from "../../test-utils";
 import dispatcher from "../../../src/dispatcher/dispatcher";
-import { showRoom } from "../../../src/components/structures/SpaceHierarchy";
+import { HierarchyLevel, showRoom, toLocalRoom } from "../../../src/components/structures/SpaceHierarchy";
 import { Action } from "../../../src/dispatcher/actions";
+import MatrixClientContext from "../../../src/contexts/MatrixClientContext";
+import DMRoomMap from "../../../src/utils/DMRoomMap";
+
+// Fake random strings to give a predictable snapshot for checkbox IDs
+jest.mock("matrix-js-sdk/src/randomstring", () => {
+    return {
+        randomString: () => "abdefghi",
+    };
+});
 
 describe("SpaceHierarchy", () => {
     describe("showRoom", () => {
@@ -65,6 +77,117 @@ describe("SpaceHierarchy", () => {
                 roomType: undefined,
                 metricsTrigger: "RoomDirectory",
             });
+        });
+    });
+
+    describe("toLocalRoom", () => {
+        stubClient();
+        const client = MatrixClientPeg.get();
+        const roomV1 = mkStubRoom("room-id-1", "Room V1", client);
+        const roomV2 = mkStubRoom("room-id-2", "Room V2", client);
+        const roomV3 = mkStubRoom("room-id-3", "Room V3", client);
+        jest.spyOn(client, "getRoomUpgradeHistory").mockReturnValue([roomV1, roomV2, roomV3]);
+
+        it("grabs last room that is in hierarchy when latest version is in hierarchy", () => {
+            const hierarchy = {
+                roomMap: new Map([
+                    [roomV1.roomId, { room_id: roomV1.roomId } as IHierarchyRoom],
+                    [roomV2.roomId, { room_id: roomV2.roomId } as IHierarchyRoom],
+                    [roomV3.roomId, { room_id: roomV3.roomId } as IHierarchyRoom],
+                ]),
+            } as RoomHierarchy;
+            const localRoomV1 = toLocalRoom(client, { room_id: roomV1.roomId } as IHierarchyRoom, hierarchy);
+            expect(localRoomV1.room_id).toEqual(roomV3.roomId);
+            const localRoomV2 = toLocalRoom(client, { room_id: roomV2.roomId } as IHierarchyRoom, hierarchy);
+            expect(localRoomV2.room_id).toEqual(roomV3.roomId);
+            const localRoomV3 = toLocalRoom(client, { room_id: roomV3.roomId } as IHierarchyRoom, hierarchy);
+            expect(localRoomV3.room_id).toEqual(roomV3.roomId);
+        });
+
+        it("grabs last room that is in hierarchy when latest version is *not* in hierarchy", () => {
+            const hierarchy = {
+                roomMap: new Map([
+                    [roomV1.roomId, { room_id: roomV1.roomId } as IHierarchyRoom],
+                    [roomV2.roomId, { room_id: roomV2.roomId } as IHierarchyRoom],
+                ]),
+            } as RoomHierarchy;
+            const localRoomV1 = toLocalRoom(client, { room_id: roomV1.roomId } as IHierarchyRoom, hierarchy);
+            expect(localRoomV1.room_id).toEqual(roomV2.roomId);
+            const localRoomV2 = toLocalRoom(client, { room_id: roomV2.roomId } as IHierarchyRoom, hierarchy);
+            expect(localRoomV2.room_id).toEqual(roomV2.roomId);
+            const localRoomV3 = toLocalRoom(client, { room_id: roomV3.roomId } as IHierarchyRoom, hierarchy);
+            expect(localRoomV3.room_id).toEqual(roomV2.roomId);
+        });
+
+        it("returns specified room when none of the versions is in hierarchy", () => {
+            const hierarchy = { roomMap: new Map([]) } as RoomHierarchy;
+            const localRoomV1 = toLocalRoom(client, { room_id: roomV1.roomId } as IHierarchyRoom, hierarchy);
+            expect(localRoomV1.room_id).toEqual(roomV1.roomId);
+            const localRoomV2 = toLocalRoom(client, { room_id: roomV2.roomId } as IHierarchyRoom, hierarchy);
+            expect(localRoomV2.room_id).toEqual(roomV2.roomId);
+            const localRoomV3 = toLocalRoom(client, { room_id: roomV3.roomId } as IHierarchyRoom, hierarchy);
+            expect(localRoomV3.room_id).toEqual(roomV3.roomId);
+        });
+    });
+
+    describe("<HierarchyLevel />", () => {
+        stubClient();
+        const client = MatrixClientPeg.get();
+
+        const dmRoomMap = {
+            getUserIdForRoomId: jest.fn(),
+        } as unknown as DMRoomMap;
+        jest.spyOn(DMRoomMap, "shared").mockReturnValue(dmRoomMap);
+
+        const root = mkStubRoom("room-id-1", "Room 1", client);
+        const room1 = mkStubRoom("room-id-2", "Room 2", client);
+        const room2 = mkStubRoom("room-id-3", "Room 3", client);
+
+        const hierarchyRoot = {
+            room_id: root.roomId,
+            num_joined_members: 1,
+            children_state: [
+                {
+                    state_key: room1.roomId,
+                    content: { order: "1" },
+                },
+                {
+                    state_key: room2.roomId,
+                    content: { order: "2" },
+                },
+            ],
+        } as IHierarchyRoom;
+        const hierarchyRoom1 = { room_id: room1.roomId, num_joined_members: 2 } as IHierarchyRoom;
+        const hierarchyRoom2 = { room_id: root.roomId, num_joined_members: 3 } as IHierarchyRoom;
+
+        const roomHierarchy = {
+            roomMap: new Map([
+                [root.roomId, hierarchyRoot],
+                [room1.roomId, hierarchyRoom1],
+                [room2.roomId, hierarchyRoom2],
+            ]),
+            isSuggested: jest.fn(),
+        } as unknown as RoomHierarchy;
+
+        it("renders", () => {
+            const defaultProps = {
+                root: hierarchyRoot,
+                roomSet: new Set([hierarchyRoom1, hierarchyRoom2]),
+                hierarchy: roomHierarchy,
+                parents: new Set<string>(),
+                selectedMap: new Map<string, Set<string>>(),
+                onViewRoomClick: jest.fn(),
+                onJoinRoomClick: jest.fn(),
+                onToggleClick: jest.fn(),
+            };
+            const getComponent = (props = {}): React.ReactElement => (
+                <MatrixClientContext.Provider value={client}>
+                    <HierarchyLevel {...defaultProps} {...props} />;
+                </MatrixClientContext.Provider>
+            );
+
+            const { container } = render(getComponent());
+            expect(container).toMatchSnapshot();
         });
     });
 });

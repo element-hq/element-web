@@ -1,0 +1,159 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SpaceHierarchy <HierarchyLevel /> renders 1`] = `
+<div>
+  <li
+    class="mx_SpaceHierarchy_roomTileWrapper"
+    role="treeitem"
+  >
+    <div
+      class="mx_AccessibleButton mx_SpaceHierarchy_roomTile"
+      role="button"
+      tabindex="-1"
+    >
+      <div
+        class="mx_SpaceHierarchy_roomTile_item"
+      >
+        <div
+          class="mx_SpaceHierarchy_roomTile_avatar"
+        >
+          <img
+            alt=""
+            class="mx_BaseAvatar mx_BaseAvatar_image"
+            data-testid="avatar-img"
+            src="http://this.is.a.url/avatar.url/room.png"
+            style="width: 20px; height: 20px;"
+          />
+        </div>
+        <div
+          class="mx_SpaceHierarchy_roomTile_name"
+        >
+          Unnamed Room
+          <div
+            class="mx_SpaceHierarchy_roomTile_joined"
+          >
+            Joined
+          </div>
+        </div>
+        <div
+          class="mx_SpaceHierarchy_roomTile_info"
+        >
+          2 members
+           · 
+          <span
+            dir="auto"
+          />
+        </div>
+      </div>
+      <div
+        class="mx_SpaceHierarchy_actions"
+      >
+        <div
+          class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline"
+          role="button"
+          tabindex="-1"
+        >
+          View
+        </div>
+        <span
+          class="mx_Checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+        >
+          <input
+            id="checkbox_abdefghi"
+            tabindex="-1"
+            type="checkbox"
+          />
+          <label
+            for="checkbox_abdefghi"
+          >
+            <div
+              class="mx_Checkbox_background"
+            >
+              <div
+                class="mx_Checkbox_checkmark"
+              />
+            </div>
+          </label>
+        </span>
+      </div>
+    </div>
+  </li>
+  <li
+    class="mx_SpaceHierarchy_roomTileWrapper"
+    role="treeitem"
+  >
+    <div
+      class="mx_AccessibleButton mx_SpaceHierarchy_roomTile"
+      role="button"
+      tabindex="-1"
+    >
+      <div
+        class="mx_SpaceHierarchy_roomTile_item"
+      >
+        <div
+          class="mx_SpaceHierarchy_roomTile_avatar"
+        >
+          <img
+            alt=""
+            class="mx_BaseAvatar mx_BaseAvatar_image"
+            data-testid="avatar-img"
+            src="http://this.is.a.url/avatar.url/room.png"
+            style="width: 20px; height: 20px;"
+          />
+        </div>
+        <div
+          class="mx_SpaceHierarchy_roomTile_name"
+        >
+          Unnamed Room
+          <div
+            class="mx_SpaceHierarchy_roomTile_joined"
+          >
+            Joined
+          </div>
+        </div>
+        <div
+          class="mx_SpaceHierarchy_roomTile_info"
+        >
+          3 members
+           · 
+          <span
+            dir="auto"
+          />
+        </div>
+      </div>
+      <div
+        class="mx_SpaceHierarchy_actions"
+      >
+        <div
+          class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline"
+          role="button"
+          tabindex="-1"
+        >
+          View
+        </div>
+        <span
+          class="mx_Checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+        >
+          <input
+            id="checkbox_abdefghi"
+            tabindex="-1"
+            type="checkbox"
+          />
+          <label
+            for="checkbox_abdefghi"
+          >
+            <div
+              class="mx_Checkbox_background"
+            >
+              <div
+                class="mx_Checkbox_checkmark"
+              />
+            </div>
+          </label>
+        </span>
+      </div>
+    </div>
+  </li>
+  ;
+</div>
+`;
