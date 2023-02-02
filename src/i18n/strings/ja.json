@@ -1176,7 +1176,7 @@
     "Custom font size can only be between %(min)s pt and %(max)s pt": "カスタムフォントのサイズは%(min)s～%(max)s（単位：point）の間で指定できます",
     "Size must be a number": "サイズには数値を指定してください",
     "Disconnecting from your identity server will mean you won't be discoverable by other users and you won't be able to invite others by email or phone.": "IDサーバーから切断すると、他のユーザーから発見されたり、メールアドレスや電話番号で他のユーザーを招待したりできなくなります。",
-    "You are not currently using an identity server. To discover and be discoverable by existing contacts you know, add one below.": "現在、IDサーバーを使用していません。あなたの知っている連絡先を発見したり、その連絡先から発見されるようにするには、以下にIDサーバーを追加してください。",
+    "You are not currently using an identity server. To discover and be discoverable by existing contacts you know, add one below.": "現在、IDサーバーを使用していません。自分の連絡先を見つけたり、連絡先から見つけてもらったりするには、以下にIDサーバーを追加してください。",
     "If you don't want to use <server /> to discover and be discoverable by existing contacts you know, enter another identity server below.": "連絡先の検出に<server />ではなく他のIDサーバーを使いたい場合は以下に指定してください。",
     "You are currently using <server></server> to discover and be discoverable by existing contacts you know. You can change your identity server below.": "現在<server></server>を使用して、自分の連絡先を見つけたり、連絡先から見つけてもらったりできるようにしています。以下でIDサーバーを変更できます。",
     "We recommend that you remove your email addresses and phone numbers from the identity server before disconnecting.": "切断する前に、IDサーバーからメールアドレスと電話番号を削除することを推奨します。",
