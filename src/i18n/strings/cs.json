@@ -3721,5 +3721,6 @@
     "Indent increase": "Zvětšit odsazení",
     "View a list of polls in a room. (Under active development)": "Zobrazit seznam hlasování v místnosti. (V aktivním vývoji)",
     "Polls history": "Historie hlasování",
-    "Unable to decrypt voice broadcast": "Nelze dešifrovat hlasové vysílání"
+    "Unable to decrypt voice broadcast": "Nelze dešifrovat hlasové vysílání",
+    "Use rich text instead of Markdown in the message composer.": "V editoru zpráv použít formátovaný text namísto Markdown."
 }
