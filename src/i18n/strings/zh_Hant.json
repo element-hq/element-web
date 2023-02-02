@@ -3719,5 +3719,8 @@
     "All messages and invites from this user will be hidden. Are you sure you want to ignore them?": "來自該使用者的所有訊息與邀請都將被隱藏。您確定要忽略它們嗎？",
     "Ignore %(user)s": "忽略 %(user)s",
     "Indent decrease": "減少縮排",
-    "Indent increase": "增加縮排"
+    "Indent increase": "增加縮排",
+    "View a list of polls in a room. (Under active development)": "檢視聊天室中的投票清單。（積極開發中）",
+    "Polls history": "投票歷史紀錄",
+    "Unable to decrypt voice broadcast": "無法解密語音廣播"
 }
