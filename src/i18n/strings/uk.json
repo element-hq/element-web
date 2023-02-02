@@ -3721,5 +3721,6 @@
     "Indent increase": "Збільшення відступу",
     "Unable to decrypt voice broadcast": "Невдалося розшифрувати голосову трансляцію",
     "View a list of polls in a room. (Under active development)": "Перегляд списку опитувань у кімнаті (в активній розробці)",
-    "Polls history": "Історія опитувань"
+    "Polls history": "Історія опитувань",
+    "Use rich text instead of Markdown in the message composer.": "Використовувати розширений текст замість розмітки в редакторі повідомлень."
 }
