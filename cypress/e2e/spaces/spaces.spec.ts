@@ -77,7 +77,7 @@ describe("Spaces", () => {
         cy.stopHomeserver(homeserver);
     });
 
-    it.only("should allow user to create public space", () => {
+    it("should allow user to create public space", () => {
         openSpaceCreateMenu();
         cy.get("#mx_ContextualMenu_Container").percySnapshotElement("Space create menu");
         cy.get(".mx_SpaceCreateMenu_wrapper .mx_ContextualMenu").within(() => {
@@ -153,7 +153,10 @@ describe("Spaces", () => {
 
         openSpaceCreateMenu().within(() => {
             cy.get(".mx_SpaceCreateMenuType_private").click();
-            // We don't set an avatar here to get a Percy snapshot of the default avatar style for spaces
+            cy.get('.mx_SpaceBasicSettings_avatarContainer input[type="file"]').selectFile(
+                "cypress/fixtures/riot.png",
+                { force: true },
+            );
             cy.get('input[label="Address"]').should("not.exist");
             cy.get('textarea[label="Description"]').type("This is a personal space to mourn Riot.im...");
             cy.get('input[label="Name"]').type("This is my Riot{enter}");
@@ -166,7 +169,6 @@ describe("Spaces", () => {
 
         cy.contains(".mx_RoomList .mx_RoomTile", "Sample Room").should("exist");
         cy.contains(".mx_SpaceHierarchy_list .mx_SpaceHierarchy_roomTile", "Sample Room").should("exist");
-        cy.get(".mx_LeftPanel_outerWrapper").percySnapshotElement("Left panel with default avatar space");
     });
 
     it("should allow user to invite another to a space", () => {

@@ -58,6 +58,11 @@ limitations under the License.
             padding-inline-start: $spacing-28;
         }
 
+        /* Make list type disc to match rich text editor */
+        ul {
+            list-style-type: disc;
+        }
+
         blockquote {
             color: #777;
             border-left: 2px solid $blockquote-bar-color;
@@ -89,6 +94,11 @@ limitations under the License.
             border: 1px solid $inlinecode-border-color;
             border-radius: 4px;
             padding: $spacing-2;
+        }
+
+        code:empty {
+            border: unset;
+            padding: unset;
         }
     }
 

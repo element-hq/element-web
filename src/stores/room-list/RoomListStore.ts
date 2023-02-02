@@ -18,6 +18,7 @@ import { MatrixClient } from "matrix-js-sdk/src/client";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { logger } from "matrix-js-sdk/src/logger";
 import { EventType } from "matrix-js-sdk/src/@types/event";
+import { RoomState } from "matrix-js-sdk/src/matrix";
 
 import SettingsStore from "../../settings/SettingsStore";
 import { DefaultTagID, OrderedDefaultTagIDs, RoomUpdateCause, TagID } from "./models";
@@ -267,44 +268,55 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> implements 
             }
             this.updateFn.trigger();
         } else if (payload.action === "MatrixActions.Room.myMembership") {
-            const membershipPayload = <any>payload; // TODO: Type out the dispatcher types
-            const oldMembership = getEffectiveMembership(membershipPayload.oldMembership);
-            const newMembership = getEffectiveMembership(membershipPayload.membership);
-            if (oldMembership !== EffectiveMembership.Join && newMembership === EffectiveMembership.Join) {
-                // If we're joining an upgraded room, we'll want to make sure we don't proliferate
-                // the dead room in the list.
-                const createEvent = membershipPayload.room.currentState.getStateEvents(EventType.RoomCreate, "");
-                if (createEvent && createEvent.getContent()["predecessor"]) {
-                    const prevRoom = this.matrixClient.getRoom(createEvent.getContent()["predecessor"]["room_id"]);
-                    if (prevRoom) {
-                        const isSticky = this.algorithm.stickyRoom === prevRoom;
-                        if (isSticky) {
-                            this.algorithm.setStickyRoom(null);
-                        }
+            this.onDispatchMyMembership(<any>payload);
+            return;
+        }
+    }
 
-                        // Note: we hit the algorithm instead of our handleRoomUpdate() function to
-                        // avoid redundant updates.
-                        this.algorithm.handleRoomUpdate(prevRoom, RoomUpdateCause.RoomRemoved);
+    /**
+     * Handle a MatrixActions.Room.myMembership event from the dispatcher.
+     *
+     * Public for test.
+     */
+    public async onDispatchMyMembership(membershipPayload: any): Promise<void> {
+        // TODO: Type out the dispatcher types so membershipPayload is not any
+        const oldMembership = getEffectiveMembership(membershipPayload.oldMembership);
+        const newMembership = getEffectiveMembership(membershipPayload.membership);
+        if (oldMembership !== EffectiveMembership.Join && newMembership === EffectiveMembership.Join) {
+            // If we're joining an upgraded room, we'll want to make sure we don't proliferate
+            // the dead room in the list.
+            const roomState: RoomState = membershipPayload.room.currentState;
+            const createEvent = roomState.getStateEvents(EventType.RoomCreate, "");
+            if (createEvent && createEvent.getContent()["predecessor"]) {
+                const prevRoom = this.matrixClient.getRoom(createEvent.getContent()["predecessor"]["room_id"]);
+                if (prevRoom) {
+                    const isSticky = this.algorithm.stickyRoom === prevRoom;
+                    if (isSticky) {
+                        this.algorithm.setStickyRoom(null);
                     }
+
+                    // Note: we hit the algorithm instead of our handleRoomUpdate() function to
+                    // avoid redundant updates.
+                    this.algorithm.handleRoomUpdate(prevRoom, RoomUpdateCause.RoomRemoved);
                 }
-
-                await this.handleRoomUpdate(membershipPayload.room, RoomUpdateCause.NewRoom);
-                this.updateFn.trigger();
-                return;
             }
 
-            if (oldMembership !== EffectiveMembership.Invite && newMembership === EffectiveMembership.Invite) {
-                await this.handleRoomUpdate(membershipPayload.room, RoomUpdateCause.NewRoom);
-                this.updateFn.trigger();
-                return;
-            }
+            await this.handleRoomUpdate(membershipPayload.room, RoomUpdateCause.NewRoom);
+            this.updateFn.trigger();
+            return;
+        }
 
-            // If it's not a join, it's transitioning into a different list (possibly historical)
-            if (oldMembership !== newMembership) {
-                await this.handleRoomUpdate(membershipPayload.room, RoomUpdateCause.PossibleTagChange);
-                this.updateFn.trigger();
-                return;
-            }
+        if (oldMembership !== EffectiveMembership.Invite && newMembership === EffectiveMembership.Invite) {
+            await this.handleRoomUpdate(membershipPayload.room, RoomUpdateCause.NewRoom);
+            this.updateFn.trigger();
+            return;
+        }
+
+        // If it's not a join, it's transitioning into a different list (possibly historical)
+        if (oldMembership !== newMembership) {
+            await this.handleRoomUpdate(membershipPayload.room, RoomUpdateCause.PossibleTagChange);
+            this.updateFn.trigger();
+            return;
         }
     }
 
