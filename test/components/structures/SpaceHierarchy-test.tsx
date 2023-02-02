@@ -82,10 +82,10 @@ describe("SpaceHierarchy", () => {
 
     describe("toLocalRoom", () => {
         stubClient();
-        let client = MatrixClientPeg.get();
-        let roomV1 = mkStubRoom("room-id-1", "Room V1", client);
-        let roomV2 = mkStubRoom("room-id-2", "Room V2", client);
-        let roomV3 = mkStubRoom("room-id-3", "Room V3", client);
+        const client = MatrixClientPeg.get();
+        const roomV1 = mkStubRoom("room-id-1", "Room V1", client);
+        const roomV2 = mkStubRoom("room-id-2", "Room V2", client);
+        const roomV3 = mkStubRoom("room-id-3", "Room V3", client);
         jest.spyOn(client, "getRoomUpgradeHistory").mockReturnValue([roomV1, roomV2, roomV3]);
 
         it("grabs last room that is in hierarchy when latest version is in hierarchy", () => {
@@ -132,18 +132,18 @@ describe("SpaceHierarchy", () => {
 
     describe("<HierarchyLevel />", () => {
         stubClient();
-        let client = MatrixClientPeg.get();
+        const client = MatrixClientPeg.get();
 
-        let dmRoomMap = {
+        const dmRoomMap = {
             getUserIdForRoomId: jest.fn(),
         } as unknown as DMRoomMap;
         jest.spyOn(DMRoomMap, "shared").mockReturnValue(dmRoomMap);
 
-        let root = mkStubRoom("room-id-1", "Room 1", client);
-        let room1 = mkStubRoom("room-id-2", "Room 2", client);
-        let room2 = mkStubRoom("room-id-3", "Room 3", client);
+        const root = mkStubRoom("room-id-1", "Room 1", client);
+        const room1 = mkStubRoom("room-id-2", "Room 2", client);
+        const room2 = mkStubRoom("room-id-3", "Room 3", client);
 
-        let hierarchyRoot = {
+        const hierarchyRoot = {
             room_id: root.roomId,
             num_joined_members: 1,
             children_state: [
@@ -157,10 +157,10 @@ describe("SpaceHierarchy", () => {
                 },
             ],
         } as IHierarchyRoom;
-        let hierarchyRoom1 = { room_id: room1.roomId, num_joined_members: 2 } as IHierarchyRoom;
-        let hierarchyRoom2 = { room_id: root.roomId, num_joined_members: 3 } as IHierarchyRoom;
+        const hierarchyRoom1 = { room_id: room1.roomId, num_joined_members: 2 } as IHierarchyRoom;
+        const hierarchyRoom2 = { room_id: root.roomId, num_joined_members: 3 } as IHierarchyRoom;
 
-        let roomHierarchy = {
+        const roomHierarchy = {
             roomMap: new Map([
                 [root.roomId, hierarchyRoot],
                 [room1.roomId, hierarchyRoom1],
