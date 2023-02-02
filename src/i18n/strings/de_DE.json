@@ -3720,5 +3720,7 @@
     "Ignore %(user)s": "%(user)s ignorieren",
     "Indent decrease": "Einrückung verringern",
     "Indent increase": "Einrückung erhöhen",
-    "Unable to decrypt voice broadcast": "Entschlüsseln der Sprachübertragung nicht möglich"
+    "Unable to decrypt voice broadcast": "Entschlüsseln der Sprachübertragung nicht möglich",
+    "View a list of polls in a room. (Under active development)": "Betrachte Raumumfragen in Listenform. (In aktiver Entwicklung)",
+    "Polls history": "Umfrageverlauf"
 }
