@@ -404,6 +404,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
                                     label={_t("Security Key")}
                                     value={this.state.recoveryKey}
                                     onChange={this.onRecoveryKeyChange}
+                                    autoFocus={true}
                                     forceValidity={this.state.recoveryKeyCorrect}
                                     autoComplete="off"
                                 />
