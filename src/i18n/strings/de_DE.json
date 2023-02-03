@@ -1298,7 +1298,7 @@
     "Accepting…": "Annehmen…",
     "Start Verification": "Verifizierung starten",
     "Messages in this room are end-to-end encrypted.": "Nachrichten in diesem Raum sind Ende-zu-Ende verschlüsselt.",
-    "Your messages are secured and only you and the recipient have the unique keys to unlock them.": "Diese Nachrichten sind verschlüsselt und nur du und der Empfänger könnt sie lesen.",
+    "Your messages are secured and only you and the recipient have the unique keys to unlock them.": "Diese Nachricht ist verschlüsselt. Nur Sie und der Empfänger haben den Schlüssel, um die Nachricht zu entschlüsseln.",
     "In encrypted rooms, your messages are secured and only you and the recipient have the unique keys to unlock them.": "Nachrichten in verschlüsselten Räumen können nur von dir und vom Empfänger gelesen werden.",
     "Verify User": "Nutzer verifizieren",
     "For extra security, verify this user by checking a one-time code on both of your devices.": "Für zusätzliche Sicherheit, verifiziere diesen Nutzer, durch Vergleichen eines Einmal-Codes auf euren beiden Geräten.",
