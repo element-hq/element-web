@@ -3201,8 +3201,6 @@
     "Toggle Link": "Koppeling wisselen",
     "Accessibility": "Toegankelijkheid",
     "Event ID: %(eventId)s": "Gebeurtenis ID: %(eventId)s",
-    "<a>Give feedback</a>": "<a>Feedback geven</a>",
-    "Threads are a beta feature": "Threads zijn een bètafunctie",
     "Threads help keep your conversations on-topic and easy to track.": "Threads helpen jou gesprekken on-topic te houden en gemakkelijk bij te houden.",
     "Reply to an ongoing thread or use “%(replyInThread)s” when hovering over a message to start a new one.": "Reageer op een lopende thread of gebruik \"%(replyInThread)s\" wanneer je de muisaanwijzer op een bericht plaatst om een nieuwe te starten.",
     "We'll create rooms for each of them.": "We zullen kamers voor elk van hen maken.",
