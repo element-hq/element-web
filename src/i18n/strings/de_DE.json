@@ -3723,5 +3723,18 @@
     "View a list of polls in a room. (Under active development)": "Betrachte Raumumfragen in Listenform. (In aktiver Entwicklung)",
     "Polls history": "Umfrageverlauf",
     "Use rich text instead of Markdown in the message composer.": "Verwende Textverarbeitung (Rich-Text) statt Markdown im Eingabefeld.",
-    "There are no polls in this room": "In diesem Raum gibt es keine Umfragen"
+    "There are no polls in this room": "In diesem Raum gibt es keine Umfragen",
+    "Thread Id: ": "Thread-ID: ",
+    "Threads timeline": "Thread-Verlauf",
+    "Type: ": "Typ: ",
+    "ID: ": "ID: ",
+    "Last event:": "Neuestes Ereignis:",
+    "Total: ": "Insgesamt: ",
+    "Main timeline": "Hauptverlauf",
+    "not encrypted 🚨": "nicht verschlüsselt 🚨",
+    "encrypted ✅": "verschlüsselt ✅",
+    "Room status": "Raumstatus",
+    "unknown": "unbekannt",
+    "Red": "Rot",
+    "Grey": "Grau"
 }
