@@ -489,6 +489,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
                         e2eStatus={this.props.e2eStatus}
                         menuPosition={menuPosition}
                         placeholder={this.renderPlaceholderText()}
+                        eventRelation={this.props.relation}
                     />
                 );
             } else {

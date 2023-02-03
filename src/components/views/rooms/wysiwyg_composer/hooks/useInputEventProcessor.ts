@@ -30,7 +30,7 @@ import { ComposerContextState, useComposerContext } from "../ComposerContext";
 import EditorStateTransfer from "../../../../../utils/EditorStateTransfer";
 import { useMatrixClientContext } from "../../../../../contexts/MatrixClientContext";
 import { isCaretAtEnd, isCaretAtStart } from "../utils/selection";
-import { getEventsFromEditorStateTransfer } from "../utils/event";
+import { getEventsFromEditorStateTransfer, getEventsFromRoom } from "../utils/event";
 import { endEditing } from "../utils/editing";
 
 export function useInputEventProcessor(
@@ -87,7 +87,8 @@ function handleKeyboardEvent(
     mxClient: MatrixClient,
 ): KeyboardEvent | null {
     const { editorStateTransfer } = composerContext;
-    const isEditorModified = initialContent !== composer.content();
+    const isEditing = Boolean(editorStateTransfer);
+    const isEditorModified = isEditing ? initialContent !== composer.content() : composer.content().length !== 0;
     const action = getKeyBindingsManager().getMessageComposerAction(event);
 
     switch (action) {
@@ -95,14 +96,21 @@ function handleKeyboardEvent(
             send();
             return null;
         case KeyBindingAction.EditPrevMessage: {
-            // If not in edition
             // Or if the caret is not at the beginning of the editor
             // Or the editor is modified
-            if (!editorStateTransfer || !isCaretAtStart(editor) || isEditorModified) {
+            if (!isCaretAtStart(editor) || isEditorModified) {
                 break;
             }
 
-            const isDispatched = dispatchEditEvent(event, false, editorStateTransfer, roomContext, mxClient);
+            const isDispatched = dispatchEditEvent(
+                event,
+                false,
+                editorStateTransfer,
+                composerContext,
+                roomContext,
+                mxClient,
+            );
+
             if (isDispatched) {
                 return null;
             }
@@ -117,7 +125,14 @@ function handleKeyboardEvent(
                 break;
             }
 
-            const isDispatched = dispatchEditEvent(event, true, editorStateTransfer, roomContext, mxClient);
+            const isDispatched = dispatchEditEvent(
+                event,
+                true,
+                editorStateTransfer,
+                composerContext,
+                roomContext,
+                mxClient,
+            );
             if (!isDispatched) {
                 endEditing(roomContext);
                 event.preventDefault();
@@ -134,11 +149,14 @@ function handleKeyboardEvent(
 function dispatchEditEvent(
     event: KeyboardEvent,
     isForward: boolean,
-    editorStateTransfer: EditorStateTransfer,
+    editorStateTransfer: EditorStateTransfer | undefined,
+    composerContext: ComposerContextState,
     roomContext: IRoomState,
     mxClient: MatrixClient,
 ): boolean {
-    const foundEvents = getEventsFromEditorStateTransfer(editorStateTransfer, roomContext, mxClient);
+    const foundEvents = editorStateTransfer
+        ? getEventsFromEditorStateTransfer(editorStateTransfer, roomContext, mxClient)
+        : getEventsFromRoom(composerContext, roomContext);
     if (!foundEvents) {
         return false;
     }
@@ -146,7 +164,7 @@ function dispatchEditEvent(
     const newEvent = findEditableEvent({
         events: foundEvents,
         isForward,
-        fromEventId: editorStateTransfer.getEvent().getId(),
+        fromEventId: editorStateTransfer?.getEvent().getId(),
     });
     if (newEvent) {
         dis.dispatch({

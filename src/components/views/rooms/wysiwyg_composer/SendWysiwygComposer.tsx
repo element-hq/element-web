@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React, { ForwardedRef, forwardRef, MutableRefObject, useRef } from "react";
+import { IEventRelation } from "matrix-js-sdk/src/models/event";
 
 import { useWysiwygSendActionHandler } from "./hooks/useWysiwygSendActionHandler";
 import { WysiwygComposer } from "./components/WysiwygComposer";
@@ -48,6 +49,7 @@ interface SendWysiwygComposerProps {
     onChange: (content: string) => void;
     onSend: () => void;
     menuPosition: MenuProps;
+    eventRelation?: IEventRelation;
 }
 
 // Default needed for React.lazy
@@ -55,10 +57,11 @@ export default function SendWysiwygComposer({
     isRichTextEnabled,
     e2eStatus,
     menuPosition,
+    eventRelation,
     ...props
 }: SendWysiwygComposerProps): JSX.Element {
     const Composer = isRichTextEnabled ? WysiwygComposer : PlainTextComposer;
-    const defaultContextValue = useRef(getDefaultContextValue());
+    const defaultContextValue = useRef(getDefaultContextValue({ eventRelation }));
 
     return (
         <ComposerContext.Provider value={defaultContextValue.current}>

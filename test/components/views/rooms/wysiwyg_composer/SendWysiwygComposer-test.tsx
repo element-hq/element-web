@@ -22,12 +22,12 @@ import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext
 import RoomContext from "../../../../../src/contexts/RoomContext";
 import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../src/dispatcher/actions";
-import { IRoomState } from "../../../../../src/components/structures/RoomView";
-import { createTestClient, flushPromises, getRoomContext, mkEvent, mkStubRoom } from "../../../../test-utils";
+import { flushPromises } from "../../../../test-utils";
 import { SendWysiwygComposer } from "../../../../../src/components/views/rooms/wysiwyg_composer/";
 import { aboveLeftOf } from "../../../../../src/components/structures/ContextMenu";
 import { ComposerInsertPayload, ComposerType } from "../../../../../src/dispatcher/payloads/ComposerInsertPayload";
 import { setSelection } from "../../../../../src/components/views/rooms/wysiwyg_composer/utils/selection";
+import { createMocks } from "./utils";
 
 jest.mock("../../../../../src/components/views/rooms/EmojiButton", () => ({
     EmojiButton: ({ addEmoji }: { addEmoji: (emoji: string) => void }) => {
@@ -44,20 +44,7 @@ describe("SendWysiwygComposer", () => {
         jest.resetAllMocks();
     });
 
-    const mockClient = createTestClient();
-    const mockEvent = mkEvent({
-        type: "m.room.message",
-        room: "myfakeroom",
-        user: "myfakeuser",
-        content: { msgtype: "m.text", body: "Replying to this" },
-        event: true,
-    });
-    const mockRoom = mkStubRoom("myfakeroom", "myfakeroom", mockClient) as any;
-    mockRoom.findEventById = jest.fn((eventId) => {
-        return eventId === mockEvent.getId() ? mockEvent : null;
-    });
-
-    const defaultRoomContext: IRoomState = getRoomContext(mockRoom, {});
+    const { defaultRoomContext, mockClient } = createMocks();
 
     const registerId = defaultDispatcher.register((payload) => {
         switch (payload.action) {

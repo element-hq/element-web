@@ -33,7 +33,7 @@ function getFormattedContent(editorStateTransfer: EditorStateTransfer): string {
     );
 }
 
-function parseEditorStateTransfer(
+export function parseEditorStateTransfer(
     editorStateTransfer: EditorStateTransfer,
     room: Room,
     mxClient: MatrixClient,
@@ -64,7 +64,7 @@ function parseEditorStateTransfer(
     // this.saveStoredEditorState();
 }
 
-export function useInitialContent(editorStateTransfer: EditorStateTransfer): string {
+export function useInitialContent(editorStateTransfer: EditorStateTransfer): string | undefined {
     const roomContext = useRoomContext();
     const mxClient = useMatrixClientContext();
 

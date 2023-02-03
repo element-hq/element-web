@@ -44,15 +44,21 @@ export function isCaretAtStart(editor: HTMLElement): boolean {
     const selection = document.getSelection();
 
     // No selection or the caret is not at the beginning of the selected element
-    if (!selection || selection.anchorOffset !== 0) {
+    if (!selection) {
         return false;
+    }
+
+    // When we are pressing keyboard up in an empty main composer, the selection is on the editor with an anchorOffset at O or 1 (yes, this is strange)
+    const isOnFirstElement = selection.anchorNode === editor && selection.anchorOffset <= 1;
+    if (isOnFirstElement) {
+        return true;
     }
 
     // In case of nested html elements (list, code blocks), we are going through all the first child
     let child = editor.firstChild;
     do {
         if (child === selection.anchorNode) {
-            return true;
+            return selection.anchorOffset === 0;
         }
     } while ((child = child?.firstChild || null));
 

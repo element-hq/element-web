@@ -15,9 +15,11 @@ limitations under the License.
 */
 
 import { MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { THREAD_RELATION_TYPE } from "matrix-js-sdk/src/models/thread";
 
 import EditorStateTransfer from "../../../../../utils/EditorStateTransfer";
 import { IRoomState } from "../../../../structures/RoomView";
+import { ComposerContextState } from "../ComposerContext";
 
 // From EditMessageComposer private get events(): MatrixEvent[]
 export function getEventsFromEditorStateTransfer(
@@ -43,4 +45,15 @@ export function getEventsFromEditorStateTransfer(
     const pendingEvents = room.getPendingEvents();
     const isInThread = Boolean(editorStateTransfer.getEvent().getThread());
     return liveTimelineEvents.concat(isInThread ? [] : pendingEvents);
+}
+
+// From SendMessageComposer private onKeyDown = (event: KeyboardEvent): void
+export function getEventsFromRoom(
+    composerContext: ComposerContextState,
+    roomContext: IRoomState,
+): MatrixEvent[] | undefined {
+    const isReplyingToThread = composerContext.eventRelation?.key === THREAD_RELATION_TYPE.name;
+    return roomContext.liveTimeline
+        ?.getEvents()
+        .concat(isReplyingToThread ? [] : roomContext.room?.getPendingEvents() || []);
 }
