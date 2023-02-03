@@ -3658,7 +3658,7 @@
     "%(senderName)s ended a <a>voice broadcast</a>": "%(senderName)s ukončil(a) <a>hlasové vysílání</a>",
     "You ended a <a>voice broadcast</a>": "Ukončili jste <a>hlasové vysílání</a>",
     "Threaded messages": "Zprávy ve vláknech",
-    "Unable to decrypt message": "Nelze dešifrovat zprávu",
+    "Unable to decrypt message": "Nepodařilo se dešifrovat zprávu",
     "This message could not be decrypted": "Tuto zprávu se nepodařilo dešifrovat",
     "Resend key requests": "Opětovně odeslat žádosti o klíč",
     "Unfortunately, there are no other verified devices to request decryption keys from. Signing in and verifying other devices may help avoid this situation in the future.": "Bohužel neexistují žádná další ověřená zařízení, ze kterých by si bylo možné vyžádat dešifrovací klíče. Přihlášení a ověření dalších zařízení může pomoci této situaci v budoucnu předejít.",
