@@ -47,9 +47,9 @@ export function tooltipifyLinks(rootNodes: ArrayLike<Element>, ignoredNodes: Ele
         if (
             node.tagName === "A" &&
             node.getAttribute("href") &&
-            node.getAttribute("href") !== node.textContent.trim()
+            node.getAttribute("href") !== node.textContent?.trim()
         ) {
-            let href = node.getAttribute("href");
+            let href = node.getAttribute("href")!;
             try {
                 href = new URL(href, window.location.href).toString();
             } catch (e) {

@@ -45,7 +45,7 @@ export class PlaybackQueue {
     private playbacks = new Map<string, Playback>(); // keyed by event ID
     private clockStates = new Map<string, number>(); // keyed by event ID
     private playbackIdOrder: string[] = []; // event IDs, last == current
-    private currentPlaybackId: string; // event ID, broken out from above for ease of use
+    private currentPlaybackId: string | null = null; // event ID, broken out from above for ease of use
     private recentFullPlays = new Set<string>(); // event IDs
 
     public constructor(private room: Room) {
@@ -68,7 +68,7 @@ export class PlaybackQueue {
         const room = cli.getRoom(roomId);
         if (!room) throw new Error("Unknown room");
         if (PlaybackQueue.queues.has(room.roomId)) {
-            return PlaybackQueue.queues.get(room.roomId);
+            return PlaybackQueue.queues.get(room.roomId)!;
         }
         const queue = new PlaybackQueue(room);
         PlaybackQueue.queues.set(room.roomId, queue);
@@ -101,7 +101,7 @@ export class PlaybackQueue {
         const wasLastPlaying = this.currentPlaybackId === mxEvent.getId();
         if (newState === PlaybackState.Stopped && this.clockStates.has(mxEvent.getId()) && !wasLastPlaying) {
             // noinspection JSIgnoredPromiseFromCall
-            playback.skipTo(this.clockStates.get(mxEvent.getId()));
+            playback.skipTo(this.clockStates.get(mxEvent.getId())!);
         } else if (newState === PlaybackState.Stopped) {
             // Remove the now-useless clock for some space savings
             this.clockStates.delete(mxEvent.getId());

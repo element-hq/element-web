@@ -83,8 +83,8 @@ export class DecryptionFailureTracker {
     public trackedEvents: Set<string> = new Set();
 
     // Set to an interval ID when `start` is called
-    public checkInterval: number = null;
-    public trackInterval: number = null;
+    public checkInterval: number | null = null;
+    public trackInterval: number | null = null;
 
     // Spread the load on `Analytics` by tracking at a low frequency, `TRACK_INTERVAL_MS`.
     public static TRACK_INTERVAL_MS = 60000;

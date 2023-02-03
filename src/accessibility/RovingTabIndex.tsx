@@ -56,7 +56,7 @@ export function checkInputableElement(el: HTMLElement): boolean {
 }
 
 export interface IState {
-    activeRef: Ref;
+    activeRef?: Ref;
     refs: Ref[];
 }
 
@@ -67,7 +67,6 @@ interface IContext {
 
 export const RovingTabIndexContext = createContext<IContext>({
     state: {
-        activeRef: null,
         refs: [], // list of refs in DOM order
     },
     dispatch: () => {},
@@ -102,7 +101,7 @@ export const reducer: Reducer<IState, IAction> = (state: IState, action: IAction
                     return 0;
                 }
 
-                const position = a.current.compareDocumentPosition(b.current);
+                const position = a.current!.compareDocumentPosition(b.current!);
 
                 if (position & Node.DOCUMENT_POSITION_FOLLOWING || position & Node.DOCUMENT_POSITION_CONTAINED_BY) {
                     return -1;
@@ -167,7 +166,7 @@ export const findSiblingElement = (
     refs: RefObject<HTMLElement>[],
     startIndex: number,
     backwards = false,
-): RefObject<HTMLElement> => {
+): RefObject<HTMLElement> | undefined => {
     if (backwards) {
         for (let i = startIndex; i < refs.length && i >= 0; i--) {
             if (refs[i].current?.offsetParent !== null) {
@@ -191,7 +190,6 @@ export const RovingTabIndexProvider: React.FC<IProps> = ({
     onKeyDown,
 }) => {
     const [state, dispatch] = useReducer<Reducer<IState, IAction>>(reducer, {
-        activeRef: null,
         refs: [],
     });
 
@@ -208,7 +206,7 @@ export const RovingTabIndexProvider: React.FC<IProps> = ({
 
             let handled = false;
             const action = getKeyBindingsManager().getAccessibilityAction(ev);
-            let focusRef: RefObject<HTMLElement>;
+            let focusRef: RefObject<HTMLElement> | undefined;
             // Don't interfere with input default keydown behaviour
             // but allow people to move focus from it with Tab.
             if (checkInputableElement(ev.target as HTMLElement)) {
@@ -216,7 +214,7 @@ export const RovingTabIndexProvider: React.FC<IProps> = ({
                     case KeyBindingAction.Tab:
                         handled = true;
                         if (context.state.refs.length > 0) {
-                            const idx = context.state.refs.indexOf(context.state.activeRef);
+                            const idx = context.state.refs.indexOf(context.state.activeRef!);
                             focusRef = findSiblingElement(
                                 context.state.refs,
                                 idx + (ev.shiftKey ? -1 : 1),
@@ -252,7 +250,7 @@ export const RovingTabIndexProvider: React.FC<IProps> = ({
                         ) {
                             handled = true;
                             if (context.state.refs.length > 0) {
-                                const idx = context.state.refs.indexOf(context.state.activeRef);
+                                const idx = context.state.refs.indexOf(context.state.activeRef!);
                                 focusRef = findSiblingElement(context.state.refs, idx + 1);
                             }
                         }
@@ -266,7 +264,7 @@ export const RovingTabIndexProvider: React.FC<IProps> = ({
                         ) {
                             handled = true;
                             if (context.state.refs.length > 0) {
-                                const idx = context.state.refs.indexOf(context.state.activeRef);
+                                const idx = context.state.refs.indexOf(context.state.activeRef!);
                                 focusRef = findSiblingElement(context.state.refs, idx - 1, true);
                             }
                         }

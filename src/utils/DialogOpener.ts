@@ -62,7 +62,7 @@ export class DialogOpener {
                         roomId: payload.room_id || SdkContextClass.instance.roomViewStore.getRoomId(),
                         initialTabId: payload.initial_tab_id,
                     },
-                    /*className=*/ null,
+                    /*className=*/ undefined,
                     /*isPriority=*/ false,
                     /*isStatic=*/ true,
                 );
@@ -90,7 +90,7 @@ export class DialogOpener {
                         initialTabId: payload.initalTabId,
                         space: payload.space,
                     },
-                    null,
+                    undefined,
                     false,
                     true,
                 );
@@ -102,7 +102,7 @@ export class DialogOpener {
                         matrixClient: payload.space.client,
                         space: payload.space,
                     },
-                    /*className=*/ null,
+                    /*className=*/ undefined,
                     /*isPriority=*/ false,
                     /*isStatic=*/ true,
                 );

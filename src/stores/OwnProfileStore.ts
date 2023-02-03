@@ -50,8 +50,8 @@ export class OwnProfileStore extends AsyncStoreWithClient<IState> {
         // round-trip after the client is ready, and we often load widgets in that time, and we'd
         // and up passing them an incorrect display name
         super(defaultDispatcher, {
-            displayName: window.localStorage.getItem(KEY_DISPLAY_NAME),
-            avatarUrl: window.localStorage.getItem(KEY_AVATAR_URL),
+            displayName: window.localStorage.getItem(KEY_DISPLAY_NAME) || undefined,
+            avatarUrl: window.localStorage.getItem(KEY_AVATAR_URL) || undefined,
         });
     }
 

@@ -75,7 +75,7 @@ export class Media {
     /**
      * The HTTP URL for the source media.
      */
-    public get srcHttp(): string {
+    public get srcHttp(): string | null {
         // eslint-disable-next-line no-restricted-properties
         return this.client.mxcUrlToHttp(this.srcMxc);
     }
@@ -87,7 +87,7 @@ export class Media {
     public get thumbnailHttp(): string | undefined | null {
         if (!this.hasThumbnail) return null;
         // eslint-disable-next-line no-restricted-properties
-        return this.client.mxcUrlToHttp(this.thumbnailMxc);
+        return this.client.mxcUrlToHttp(this.thumbnailMxc!);
     }
 
     /**
@@ -98,13 +98,13 @@ export class Media {
      * @param {"scale"|"crop"} mode The desired thumbnailing mode. Defaults to scale.
      * @returns {string} The HTTP URL which points to the thumbnail.
      */
-    public getThumbnailHttp(width: number, height: number, mode: ResizeMethod = "scale"): string | null | undefined {
+    public getThumbnailHttp(width: number, height: number, mode: ResizeMethod = "scale"): string | null {
         if (!this.hasThumbnail) return null;
         // scale using the device pixel ratio to keep images clear
         width = Math.floor(width * window.devicePixelRatio);
         height = Math.floor(height * window.devicePixelRatio);
         // eslint-disable-next-line no-restricted-properties
-        return this.client.mxcUrlToHttp(this.thumbnailMxc, width, height, mode);
+        return this.client.mxcUrlToHttp(this.thumbnailMxc!, width, height, mode);
     }
 
     /**
@@ -114,7 +114,7 @@ export class Media {
      * @param {"scale"|"crop"} mode The desired thumbnailing mode. Defaults to scale.
      * @returns {string} The HTTP URL which points to the thumbnail.
      */
-    public getThumbnailOfSourceHttp(width: number, height: number, mode: ResizeMethod = "scale"): string {
+    public getThumbnailOfSourceHttp(width: number, height: number, mode: ResizeMethod = "scale"): string | null {
         // scale using the device pixel ratio to keep images clear
         width = Math.floor(width * window.devicePixelRatio);
         height = Math.floor(height * window.devicePixelRatio);
@@ -128,7 +128,7 @@ export class Media {
      * @param {number} dim The desired width and height.
      * @returns {string} An HTTP URL for the thumbnail.
      */
-    public getSquareThumbnailHttp(dim: number): string {
+    public getSquareThumbnailHttp(dim: number): string | null {
         dim = Math.floor(dim * window.devicePixelRatio); // scale using the device pixel ratio to keep images clear
         if (this.hasThumbnail) {
             return this.getThumbnailHttp(dim, dim, "crop");
@@ -161,6 +161,6 @@ export function mediaFromContent(content: Partial<IMediaEventContent>, client?: 
  * @param {MatrixClient} client? Optional client to use.
  * @returns {Media} The media object.
  */
-export function mediaFromMxc(mxc: string, client?: MatrixClient): Media {
+export function mediaFromMxc(mxc?: string, client?: MatrixClient): Media {
     return mediaFromContent({ url: mxc }, client);
 }

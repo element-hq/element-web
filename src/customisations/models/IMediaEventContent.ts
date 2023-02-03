@@ -72,7 +72,7 @@ export interface IMediaObject {
  * @throws Throws if the given content cannot be packaged into a prepared media object.
  */
 export function prepEventContentAsMedia(content: Partial<IMediaEventContent>): IPreparedMedia {
-    let thumbnail: IMediaObject = null;
+    let thumbnail: IMediaObject | undefined;
     if (content?.info?.thumbnail_url) {
         thumbnail = {
             mxc: content.info.thumbnail_url,

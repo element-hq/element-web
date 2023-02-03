@@ -51,7 +51,7 @@ export function longestBacktickSequence(text: string): number {
 }
 
 function isListChild(n: Node): boolean {
-    return LIST_TYPES.includes(n.parentNode?.nodeName);
+    return LIST_TYPES.includes(n.parentNode?.nodeName || "");
 }
 
 function parseAtRoomMentions(text: string, pc: PartCreator, opts: IParseOptions): Part[] {

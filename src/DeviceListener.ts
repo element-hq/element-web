@@ -58,12 +58,12 @@ export default class DeviceListener {
     private dismissedThisDeviceToast = false;
     // cache of the key backup info
     private keyBackupInfo: IKeyBackupInfo | null = null;
-    private keyBackupFetchedAt: number = null;
+    private keyBackupFetchedAt: number | null = null;
     private keyBackupStatusChecked = false;
     // We keep a list of our own device IDs so we can batch ones that were already
     // there the last time the app launched into a single toast, but display new
     // ones in their own toasts.
-    private ourDeviceIdsAtStart: Set<string> = null;
+    private ourDeviceIdsAtStart: Set<string> | null = null;
     // The set of device IDs we're currently displaying toasts for
     private displayingToastsForDeviceIds = new Set<string>();
     private running = false;
@@ -203,7 +203,7 @@ export default class DeviceListener {
         }
     };
 
-    private onSync = (state: SyncState, prevState?: SyncState): void => {
+    private onSync = (state: SyncState, prevState: SyncState | null): void => {
         if (state === "PREPARED" && prevState === null) {
             this.recheck();
         }

@@ -181,7 +181,7 @@ export function setCryptoInitialised(cryptoInited: boolean): void {
 /* Simple wrapper functions around IndexedDB.
  */
 
-let idb: IDBDatabase = null;
+let idb: IDBDatabase | null = null;
 
 async function idbInit(): Promise<void> {
     if (!indexedDB) {
@@ -206,7 +206,7 @@ export async function idbLoad(table: string, key: string | string[]): Promise<an
         await idbInit();
     }
     return new Promise((resolve, reject) => {
-        const txn = idb.transaction([table], "readonly");
+        const txn = idb!.transaction([table], "readonly");
         txn.onerror = reject;
 
         const objectStore = txn.objectStore(table);
@@ -223,7 +223,7 @@ export async function idbSave(table: string, key: string | string[], data: any):
         await idbInit();
     }
     return new Promise((resolve, reject) => {
-        const txn = idb.transaction([table], "readwrite");
+        const txn = idb!.transaction([table], "readwrite");
         txn.onerror = reject;
 
         const objectStore = txn.objectStore(table);
@@ -240,7 +240,7 @@ export async function idbDelete(table: string, key: string | string[]): Promise<
         await idbInit();
     }
     return new Promise((resolve, reject) => {
-        const txn = idb.transaction([table], "readwrite");
+        const txn = idb!.transaction([table], "readwrite");
         txn.onerror = reject;
 
         const objectStore = txn.objectStore(table);

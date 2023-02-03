@@ -87,7 +87,7 @@ export default class Autocompleter {
          to predict whether an action will actually do what is intended
         */
         // list of results from each provider, each being a list of completions or null if it times out
-        const completionsList: ICompletion[][] = await Promise.all(
+        const completionsList: Array<ICompletion[] | null> = await Promise.all(
             this.providers.map(async (provider): Promise<ICompletion[] | null> => {
                 return timeout(
                     provider.getCompletions(query, selection, force, limit),
@@ -113,6 +113,6 @@ export default class Autocompleter {
                     command: this.providers[i].getCurrentCommand(query, selection, force),
                 };
             })
-            .filter(Boolean);
+            .filter(Boolean) as IProviderCompletions[];
     }
 }

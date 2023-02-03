@@ -51,13 +51,13 @@ type ManualTransformCallback = () => Caret;
 export default class EditorModel {
     private _parts: Part[];
     private readonly _partCreator: PartCreator;
-    private activePartIdx: number = null;
-    private _autoComplete: AutocompleteWrapperModel = null;
-    private autoCompletePartIdx: number = null;
+    private activePartIdx: number | null = null;
+    private _autoComplete: AutocompleteWrapperModel | null = null;
+    private autoCompletePartIdx: number | null = null;
     private autoCompletePartCount = 0;
-    private transformCallback: TransformCallback = null;
+    private transformCallback: TransformCallback | null = null;
 
-    public constructor(parts: Part[], partCreator: PartCreator, private updateCallback: UpdateCallback = null) {
+    public constructor(parts: Part[], partCreator: PartCreator, private updateCallback: UpdateCallback | null = null) {
         this._parts = parts;
         this._partCreator = partCreator;
         this.transformCallback = null;

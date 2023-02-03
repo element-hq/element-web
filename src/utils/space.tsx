@@ -41,7 +41,7 @@ import { OpenAddExistingToSpaceDialogPayload } from "../dispatcher/payloads/Open
 import { SdkContextClass } from "../contexts/SDKContext";
 
 export const shouldShowSpaceSettings = (space: Room): boolean => {
-    const userId = space.client.getUserId();
+    const userId = space.client.getUserId()!;
     return (
         space.getMyMembership() === "join" &&
         (space.currentState.maySendStateEvent(EventType.RoomAvatar, userId) ||
@@ -88,7 +88,7 @@ export const showCreateNewRoom = async (space: Room, type?: RoomType): Promise<b
 };
 
 export const shouldShowSpaceInvite = (space: Room): boolean =>
-    ((space?.getMyMembership() === "join" && space.canInvite(space.client.getUserId())) ||
+    ((space?.getMyMembership() === "join" && space.canInvite(space.client.getUserId()!)) ||
         space.getJoinRule() === JoinRule.Public) &&
     shouldShowComponent(UIComponent.InviteUsers);
 
@@ -149,7 +149,7 @@ export const bulkSpaceBehaviour = async (
     children: Room[],
     fn: (room: Room) => Promise<unknown>,
 ): Promise<void> => {
-    const modal = Modal.createDialog(Spinner, null, "mx_Dialog_spinner");
+    const modal = Modal.createDialog(Spinner, undefined, "mx_Dialog_spinner");
     try {
         for (const room of children) {
             await fn(room);

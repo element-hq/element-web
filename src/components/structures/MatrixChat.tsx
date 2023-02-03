@@ -648,7 +648,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     onFinished: (confirm) => {
                         if (confirm) {
                             // FIXME: controller shouldn't be loading a view :(
-                            const modal = Modal.createDialog(Spinner, null, "mx_Dialog_spinner");
+                            const modal = Modal.createDialog(Spinner, undefined, "mx_Dialog_spinner");
 
                             MatrixClientPeg.get()
                                 .leave(payload.room_id)

@@ -31,7 +31,7 @@ export default class HistoryManager {
     private newlyTypedCharCount = 0;
     private currentIndex = -1;
     private changedSinceLastPush = false;
-    private lastCaret: Caret = null;
+    private lastCaret: Caret | null = null;
     private nonWordBoundarySinceLastPush = false;
     private addedSinceLastPush = false;
     private removedSinceLastPush = false;
@@ -65,7 +65,7 @@ export default class HistoryManager {
             // as long as you've only been adding or removing since the last push
             if (this.addedSinceLastPush !== this.removedSinceLastPush) {
                 // add steps by word boundary, up to MAX_STEP_LENGTH characters
-                const str = diff.added ? diff.added : diff.removed;
+                const str = diff.added ? diff.added : diff.removed!;
                 const isWordBoundary = str === " " || str === "\t" || str === "\n";
                 if (this.nonWordBoundarySinceLastPush && isWordBoundary) {
                     return true;

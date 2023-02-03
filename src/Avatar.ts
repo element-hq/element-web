@@ -31,7 +31,7 @@ export function avatarUrlForMember(
     height: number,
     resizeMethod: ResizeMethod,
 ): string {
-    let url: string;
+    let url: string | null | undefined;
     if (member?.getMxcAvatarUrl()) {
         url = mediaFromMxc(member.getMxcAvatarUrl()).getThumbnailOfSourceHttp(width, height, resizeMethod);
     }
@@ -118,7 +118,7 @@ export function defaultAvatarUrlForString(s: string): string {
  * @param {string} name
  * @return {string} the first letter
  */
-export function getInitialLetter(name: string): string {
+export function getInitialLetter(name: string): string | undefined {
     if (!name) {
         // XXX: We should find out what causes the name to sometimes be falsy.
         console.trace("`name` argument to `getInitialLetter` not supplied");
@@ -146,7 +146,7 @@ export function avatarUrlForRoom(
     if (!room) return null; // null-guard
 
     if (room.getMxcAvatarUrl()) {
-        return mediaFromMxc(room.getMxcAvatarUrl()).getThumbnailOfSourceHttp(width, height, resizeMethod);
+        return mediaFromMxc(room.getMxcAvatarUrl() || undefined).getThumbnailOfSourceHttp(width, height, resizeMethod);
     }
 
     // space rooms cannot be DMs so skip the rest

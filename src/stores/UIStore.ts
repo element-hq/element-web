@@ -21,7 +21,7 @@ export enum UI_EVENTS {
 }
 
 export default class UIStore extends EventEmitter {
-    private static _instance: UIStore = null;
+    private static _instance: UIStore | null = null;
 
     private resizeObserver: ResizeObserver;
 
@@ -58,7 +58,7 @@ export default class UIStore extends EventEmitter {
         }
     }
 
-    public getElementDimensions(name: string): DOMRectReadOnly {
+    public getElementDimensions(name: string): DOMRectReadOnly | undefined {
         return this.uiElementDimensions.get(name);
     }
 
@@ -68,7 +68,7 @@ export default class UIStore extends EventEmitter {
     }
 
     public stopTrackingElementDimensions(name: string): void {
-        let trackedElement: Element;
+        let trackedElement: Element | undefined;
         this.trackedUiElements.forEach((trackedElementName, element) => {
             if (trackedElementName === name) {
                 trackedElement = element;

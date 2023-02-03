@@ -31,7 +31,7 @@ export function abbreviateUrl(u: string): string {
 
     if (parsedUrl.path === "/") {
         // we ignore query / hash parts: these aren't relevant for IS server URLs
-        return parsedUrl.host;
+        return parsedUrl.host || "";
     }
 
     return u;

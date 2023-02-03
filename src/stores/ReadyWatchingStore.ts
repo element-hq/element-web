@@ -25,7 +25,7 @@ import { IDestroyable } from "../utils/IDestroyable";
 import { Action } from "../dispatcher/actions";
 
 export abstract class ReadyWatchingStore extends EventEmitter implements IDestroyable {
-    protected matrixClient: MatrixClient;
+    protected matrixClient: MatrixClient | null = null;
     private dispatcherRef: string | null = null;
 
     public constructor(protected readonly dispatcher: Dispatcher<ActionPayload>) {
@@ -42,7 +42,7 @@ export abstract class ReadyWatchingStore extends EventEmitter implements IDestro
         }
     }
 
-    public get mxClient(): MatrixClient {
+    public get mxClient(): MatrixClient | null {
         return this.matrixClient; // for external readonly access
     }
 

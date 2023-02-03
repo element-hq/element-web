@@ -79,14 +79,13 @@ const ANY_REGEX = /.*/;
 // the list and magically have the link work.
 
 export class RoomPermalinkCreator {
-    private room: Room;
     private roomId: string;
-    private highestPlUserId: string;
-    private populationMap: { [serverName: string]: number };
-    private bannedHostsRegexps: RegExp[];
-    private allowedHostsRegexps: RegExp[];
-    private _serverCandidates: string[];
-    private started: boolean;
+    private highestPlUserId: string | null = null;
+    private populationMap: { [serverName: string]: number } | null = null;
+    private bannedHostsRegexps: RegExp[] | null = null;
+    private allowedHostsRegexps: RegExp[] | null = null;
+    private _serverCandidates: string[] | null = null;
+    private started = false;
 
     // We support being given a roomId as a fallback in the event the `room` object
     // doesn't exist or is not healthy for us to rely on. For example, loading a
@@ -94,15 +93,8 @@ export class RoomPermalinkCreator {
     // Some of the tests done by this class are relatively expensive, so normally
     // throttled to not happen on every update. Pass false as the shouldThrottle
     // param to disable this behaviour, eg. for tests.
-    public constructor(room: Room, roomId: string | null = null, shouldThrottle = true) {
-        this.room = room;
-        this.roomId = room ? room.roomId : roomId;
-        this.highestPlUserId = null;
-        this.populationMap = null;
-        this.bannedHostsRegexps = null;
-        this.allowedHostsRegexps = null;
-        this._serverCandidates = null;
-        this.started = false;
+    public constructor(private room: Room, roomId: string | null = null, shouldThrottle = true) {
+        this.roomId = room ? room.roomId : roomId!;
 
         if (!this.roomId) {
             throw new Error("Failed to resolve a roomId for the permalink creator to use");
@@ -316,7 +308,7 @@ export function isPermalinkHost(host: string): boolean {
  * @param {string} entity The entity to transform.
  * @returns {string|null} The transformed permalink or null if unable.
  */
-export function tryTransformEntityToPermalink(entity: string): string {
+export function tryTransformEntityToPermalink(entity: string): string | null {
     if (!entity) return null;
 
     // Check to see if it is a bare entity for starters
@@ -391,7 +383,7 @@ export function tryTransformPermalinkToLocalHref(permalink: string): string {
     return permalink;
 }
 
-export function getPrimaryPermalinkEntity(permalink: string): string {
+export function getPrimaryPermalinkEntity(permalink: string): string | null {
     try {
         let permalinkParts = parsePermalink(permalink);
 
@@ -425,7 +417,7 @@ function getPermalinkConstructor(): PermalinkConstructor {
     return new MatrixToPermalinkConstructor();
 }
 
-export function parsePermalink(fullUrl: string): PermalinkParts {
+export function parsePermalink(fullUrl: string): PermalinkParts | null {
     try {
         const elementPrefix = SdkConfig.get("permalink_prefix");
         if (decodeURIComponent(fullUrl).startsWith(matrixtoBaseUrl)) {

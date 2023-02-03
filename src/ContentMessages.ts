@@ -372,7 +372,7 @@ export default class ContentMessages {
         const replyToEvent = SdkContextClass.instance.roomViewStore.getQuotingEvent();
         if (!this.mediaConfig) {
             // hot-path optimization to not flash a spinner if we don't need to
-            const modal = Modal.createDialog(Spinner, null, "mx_Dialog_spinner");
+            const modal = Modal.createDialog(Spinner, undefined, "mx_Dialog_spinner");
             await this.ensureMediaConfigFetched(matrixClient);
             modal.close();
         }

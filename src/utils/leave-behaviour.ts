@@ -39,7 +39,7 @@ import { SdkContextClass } from "../contexts/SDKContext";
 export async function leaveRoomBehaviour(roomId: string, retry = true, spinner = true): Promise<void> {
     let spinnerModal: IHandle<any>;
     if (spinner) {
-        spinnerModal = Modal.createDialog(Spinner, null, "mx_Dialog_spinner");
+        spinnerModal = Modal.createDialog(Spinner, undefined, "mx_Dialog_spinner");
     }
 
     const cli = MatrixClientPeg.get();

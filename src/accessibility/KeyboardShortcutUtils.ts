@@ -72,7 +72,7 @@ const getUIOnlyShortcuts = (): IKeyboardShortcuts => {
         },
     };
 
-    if (PlatformPeg.get().overrideBrowserShortcuts()) {
+    if (PlatformPeg.get()?.overrideBrowserShortcuts()) {
         // XXX: This keyboard shortcut isn't manually added to
         // KeyBindingDefaults as it can't be easily handled by the
         // KeyBindingManager
@@ -92,7 +92,7 @@ const getUIOnlyShortcuts = (): IKeyboardShortcuts => {
  * This function gets keyboard shortcuts that can be consumed by the KeyBindingDefaults.
  */
 export const getKeyboardShortcuts = (): IKeyboardShortcuts => {
-    const overrideBrowserShortcuts = PlatformPeg.get().overrideBrowserShortcuts();
+    const overrideBrowserShortcuts = PlatformPeg.get()?.overrideBrowserShortcuts();
 
     return Object.keys(KEYBOARD_SHORTCUTS)
         .filter((k: KeyBindingAction) => {
@@ -120,11 +120,11 @@ export const getKeyboardShortcutsForUI = (): IKeyboardShortcuts => {
     }, {} as IKeyboardShortcuts);
 };
 
-export const getKeyboardShortcutValue = (name: string): KeyCombo => {
+export const getKeyboardShortcutValue = (name: string): KeyCombo | undefined => {
     return getKeyboardShortcutsForUI()[name]?.default;
 };
 
-export const getKeyboardShortcutDisplayName = (name: string): string | null => {
+export const getKeyboardShortcutDisplayName = (name: string): string | undefined => {
     const keyboardShortcutDisplayName = getKeyboardShortcutsForUI()[name]?.displayName;
     return keyboardShortcutDisplayName && _t(keyboardShortcutDisplayName);
 };

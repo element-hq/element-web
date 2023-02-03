@@ -62,9 +62,9 @@ export async function upgradeRoom(
     progressCallback?: (progress: IProgress) => void,
 ): Promise<string> {
     const cli = room.client;
-    let spinnerModal: IHandle<any>;
+    let spinnerModal: IHandle<any> | undefined;
     if (!progressCallback) {
-        spinnerModal = Modal.createDialog(Spinner, null, "mx_Dialog_spinner");
+        spinnerModal = Modal.createDialog(Spinner, undefined, "mx_Dialog_spinner");
     }
 
     let toInvite: string[] = [];
@@ -78,7 +78,9 @@ export async function upgradeRoom(
     if (updateSpaces) {
         parentsToRelink = Array.from(SpaceStore.instance.getKnownParents(room.roomId))
             .map((roomId) => cli.getRoom(roomId))
-            .filter((parent) => parent?.currentState.maySendStateEvent(EventType.SpaceChild, cli.getUserId()));
+            .filter((parent) =>
+                parent?.currentState.maySendStateEvent(EventType.SpaceChild, cli.getUserId()!),
+            ) as Room[];
     }
 
     const progress: IProgress = {
@@ -117,7 +119,7 @@ export async function upgradeRoom(
     if (toInvite.length > 0) {
         // Errors are handled internally to this function
         await inviteUsersToRoom(newRoomId, toInvite, false, () => {
-            progress.inviteUsersProgress++;
+            progress.inviteUsersProgress!++;
             progressCallback?.(progress);
         });
     }
@@ -137,7 +139,7 @@ export async function upgradeRoom(
                 );
                 await cli.sendStateEvent(parent.roomId, EventType.SpaceChild, {}, room.roomId);
 
-                progress.updateSpacesProgress++;
+                progress.updateSpacesProgress!++;
                 progressCallback?.(progress);
             }
         } catch (e) {

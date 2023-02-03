@@ -37,12 +37,12 @@ function checkVersion(ver: string): boolean {
 }
 
 function installUpdate(): void {
-    PlatformPeg.get().installUpdate();
+    PlatformPeg.get()?.installUpdate();
 }
 
 export const showToast = (version: string, newVersion: string, releaseNotes?: string): void => {
     function onReject(): void {
-        PlatformPeg.get().deferUpdate(newVersion);
+        PlatformPeg.get()?.deferUpdate(newVersion);
     }
 
     let onAccept;
@@ -55,7 +55,7 @@ export const showToast = (version: string, newVersion: string, releaseNotes?: st
                 button: _t("Update"),
                 onFinished: (update) => {
                     if (update && PlatformPeg.get()) {
-                        PlatformPeg.get().installUpdate();
+                        PlatformPeg.get()!.installUpdate();
                     }
                 },
             });
@@ -67,7 +67,7 @@ export const showToast = (version: string, newVersion: string, releaseNotes?: st
                 newVersion,
                 onFinished: (update) => {
                     if (update && PlatformPeg.get()) {
-                        PlatformPeg.get().installUpdate();
+                        PlatformPeg.get()!.installUpdate();
                     }
                 },
             });

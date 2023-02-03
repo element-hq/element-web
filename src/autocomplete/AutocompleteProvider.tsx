@@ -70,7 +70,7 @@ export default abstract class AutocompleteProvider {
      * @param {boolean} force True if the user is forcing completion
      * @return {object} { command, range } where both objects fields are null if no match
      */
-    public getCurrentCommand(query: string, selection: ISelectionRange, force = false): ICommand {
+    public getCurrentCommand(query: string, selection: ISelectionRange, force = false): ICommand | null {
         let commandRegex = this.commandRegex;
 
         if (force && this.shouldForceComplete()) {
@@ -83,7 +83,7 @@ export default abstract class AutocompleteProvider {
 
         commandRegex.lastIndex = 0;
 
-        let match: RegExpExecArray;
+        let match: RegExpExecArray | null;
         while ((match = commandRegex.exec(query)) !== null) {
             const start = match.index;
             const end = start + match[0].length;

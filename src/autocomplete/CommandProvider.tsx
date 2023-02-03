@@ -56,10 +56,10 @@ export default class CommandProvider extends AutocompleteProvider {
         if (command[0] !== command[1]) {
             // The input looks like a command with arguments, perform exact match
             const name = command[1].slice(1); // strip leading `/`
-            if (CommandMap.has(name) && CommandMap.get(name).isEnabled()) {
+            if (CommandMap.has(name) && CommandMap.get(name)!.isEnabled()) {
                 // some commands, namely `me` don't suit having the usage shown whilst typing their arguments
-                if (CommandMap.get(name).hideCompletionAfterSpace) return [];
-                matches = [CommandMap.get(name)];
+                if (CommandMap.get(name)!.hideCompletionAfterSpace) return [];
+                matches = [CommandMap.get(name)!];
             }
         } else {
             if (query === "/") {

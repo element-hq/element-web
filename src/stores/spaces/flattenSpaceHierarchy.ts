@@ -66,7 +66,7 @@ export const flattenSpaceHierarchyWithCache =
         useCache = true,
     ): Set<string> => {
         if (useCache && cache.has(spaceId)) {
-            return cache.get(spaceId);
+            return cache.get(spaceId)!;
         }
         const result = flattenSpaceHierarchy(spaceEntityMap, spaceDescendantMap, spaceId);
         cache.set(spaceId, result);

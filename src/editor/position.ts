@@ -79,6 +79,8 @@ export default class DocumentPosition implements IPosition {
                 offset = 0;
             }
         }
+
+        return this; // impossible but Typescript doesn't believe us
     }
 
     public backwardsWhile(model: EditorModel, predicate: Predicate): DocumentPosition {
@@ -104,6 +106,8 @@ export default class DocumentPosition implements IPosition {
                 offset = parts[index].text.length;
             }
         }
+
+        return this; // impossible but Typescript doesn't believe us
     }
 
     public asOffset(model: EditorModel): DocumentOffset {

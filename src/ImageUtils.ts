@@ -28,7 +28,12 @@ limitations under the License.
  * consume in the timeline, when performing scroll offset calculations
  * (e.g. scroll locking)
  */
-export function thumbHeight(fullWidth: number, fullHeight: number, thumbWidth: number, thumbHeight: number): number {
+export function thumbHeight(
+    fullWidth: number,
+    fullHeight: number,
+    thumbWidth: number,
+    thumbHeight: number,
+): number | null {
     if (!fullWidth || !fullHeight) {
         // Cannot calculate thumbnail height for image: missing w/h in metadata. We can't even
         // log this because it's spammy

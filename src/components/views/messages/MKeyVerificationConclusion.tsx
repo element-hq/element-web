@@ -72,7 +72,7 @@ export default class MKeyVerificationConclusion extends React.Component<IProps> 
         this.forceUpdate();
     };
 
-    public static shouldRender(mxEvent: MatrixEvent, request: VerificationRequest): boolean {
+    public static shouldRender(mxEvent: MatrixEvent, request?: VerificationRequest): boolean {
         // normally should not happen
         if (!request) {
             return false;
@@ -99,9 +99,9 @@ export default class MKeyVerificationConclusion extends React.Component<IProps> 
         return true;
     }
 
-    public render(): JSX.Element {
+    public render(): JSX.Element | null {
         const { mxEvent } = this.props;
-        const request = mxEvent.verificationRequest;
+        const request = mxEvent.verificationRequest!;
 
         if (!MKeyVerificationConclusion.shouldRender(mxEvent, request)) {
             return null;
@@ -110,7 +110,7 @@ export default class MKeyVerificationConclusion extends React.Component<IProps> 
         const client = MatrixClientPeg.get();
         const myUserId = client.getUserId();
 
-        let title;
+        let title: string | undefined;
 
         if (request.done) {
             title = _t("You verified %(name)s", {

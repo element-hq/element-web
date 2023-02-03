@@ -268,7 +268,7 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
     }
 
     let modal;
-    if (opts.spinner) modal = Modal.createDialog(Spinner, null, "mx_Dialog_spinner");
+    if (opts.spinner) modal = Modal.createDialog(Spinner, undefined, "mx_Dialog_spinner");
 
     let roomId: string;
     let room: Promise<Room>;
@@ -417,9 +417,9 @@ export async function ensureVirtualRoomExists(
     client: MatrixClient,
     userId: string,
     nativeRoomId: string,
-): Promise<string> {
+): Promise<string | null> {
     const existingDMRoom = findDMForUser(client, userId);
-    let roomId;
+    let roomId: string | null;
     if (existingDMRoom) {
         roomId = existingDMRoom.roomId;
     } else {
@@ -440,13 +440,13 @@ export async function ensureVirtualRoomExists(
     return roomId;
 }
 
-export async function ensureDMExists(client: MatrixClient, userId: string): Promise<string> {
+export async function ensureDMExists(client: MatrixClient, userId: string): Promise<string | null> {
     const existingDMRoom = findDMForUser(client, userId);
-    let roomId;
+    let roomId: string | null;
     if (existingDMRoom) {
         roomId = existingDMRoom.roomId;
     } else {
-        let encryption: boolean = undefined;
+        let encryption: boolean | undefined;
         if (privateShouldBeEncrypted()) {
             encryption = await canEncryptToAllUsers(client, [userId]);
         }
