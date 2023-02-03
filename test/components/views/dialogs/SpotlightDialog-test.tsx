@@ -30,6 +30,8 @@ import { DirectoryMember, startDmOnFirstMessage } from "../../../../src/utils/di
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import { mkRoom, stubClient } from "../../../test-utils";
 import { shouldShowFeedback } from "../../../../src/utils/Feedback";
+import SettingsStore from "../../../../src/settings/SettingsStore";
+import { SettingLevel } from "../../../../src/settings/SettingLevel";
 
 jest.mock("../../../../src/utils/Feedback");
 
@@ -202,6 +204,26 @@ describe("Spotlight Dialog", () => {
         });
     });
 
+    describe("when MSC3946 dynamic room predecessors is enabled", () => {
+        beforeEach(() => {
+            SettingsStore.setValue("feature_dynamic_room_predecessors", null, SettingLevel.DEVICE, true);
+        });
+
+        afterEach(() => {
+            SettingsStore.setValue("feature_dynamic_room_predecessors", null, SettingLevel.DEVICE, null);
+        });
+
+        it("should call getVisibleRooms with MSC3946 dynamic room predecessors", async () => {
+            const wrapper = mount(<SpotlightDialog onFinished={() => null} />);
+            await act(async () => {
+                await sleep(1);
+            });
+            wrapper.update();
+            expect(mockedClient.getVisibleRooms).toHaveBeenCalledWith(true);
+            wrapper.unmount();
+        });
+    });
+
     describe("should apply manually selected filter", () => {
         it("with public rooms", async () => {
             const wrapper = mount(<SpotlightDialog onFinished={() => null} />);
@@ -223,6 +245,9 @@ describe("Spotlight Dialog", () => {
             const options = content.find("div.mx_SpotlightDialog_option");
             expect(options.length).toBe(1);
             expect(options.first().text()).toContain(testPublicRoom.name);
+
+            // assert that getVisibleRooms is called without MSC3946 dynamic room predecessors
+            expect(mockedClient.getVisibleRooms).toHaveBeenCalledWith(false);
 
             wrapper.unmount();
         });

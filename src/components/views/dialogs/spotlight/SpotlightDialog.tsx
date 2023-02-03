@@ -50,7 +50,6 @@ import { useDebouncedCallback } from "../../../../hooks/spotlight/useDebouncedCa
 import { useRecentSearches } from "../../../../hooks/spotlight/useRecentSearches";
 import { useProfileInfo } from "../../../../hooks/useProfileInfo";
 import { usePublicRoomDirectory } from "../../../../hooks/usePublicRoomDirectory";
-import { useFeatureEnabled } from "../../../../hooks/useSettings";
 import { useSpaceResults } from "../../../../hooks/useSpaceResults";
 import { useUserDirectory } from "../../../../hooks/useUserDirectory";
 import { getKeyBindingsManager } from "../../../../KeyBindingsManager";
@@ -93,6 +92,7 @@ import { TooltipOption } from "./TooltipOption";
 import { isLocalRoom } from "../../../../utils/localRoom/isLocalRoom";
 import { shouldShowFeedback } from "../../../../utils/Feedback";
 import RoomAvatar from "../../avatars/RoomAvatar";
+import { useFeatureEnabled } from "../../../../hooks/useSettings";
 
 const MAX_RECENT_SEARCHES = 10;
 const SECTION_LIMIT = 50; // only show 50 results per section for performance reasons
@@ -242,8 +242,8 @@ export const useWebSearchMetrics = (numResults: number, queryLength: number, via
     }, [numResults, queryLength, viaSpotlight]);
 };
 
-const findVisibleRooms = (cli: MatrixClient): Room[] => {
-    return cli.getVisibleRooms().filter((room) => {
+const findVisibleRooms = (cli: MatrixClient, msc3946ProcessDynamicPredecessor: boolean): Room[] => {
+    return cli.getVisibleRooms(msc3946ProcessDynamicPredecessor).filter((room) => {
         // Do not show local rooms
         if (isLocalRoom(room)) return false;
 
@@ -252,9 +252,13 @@ const findVisibleRooms = (cli: MatrixClient): Room[] => {
     });
 };
 
-const findVisibleRoomMembers = (cli: MatrixClient, filterDMs = true): RoomMember[] => {
+const findVisibleRoomMembers = (
+    cli: MatrixClient,
+    msc3946ProcessDynamicPredecessor: boolean,
+    filterDMs = true,
+): RoomMember[] => {
     return Object.values(
-        findVisibleRooms(cli)
+        findVisibleRooms(cli, msc3946ProcessDynamicPredecessor)
             .filter((room) => !filterDMs || !DMRoomMap.shared().getUserIdForRoomId(room.roomId))
             .reduce((members, room) => {
                 for (const member of room.getJoinedMembers()) {
@@ -304,6 +308,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
         const memberScores = buildMemberScores(cli);
         return compareMembers(activityScores, memberScores);
     }, [cli]);
+    const msc3946ProcessDynamicPredecessor = useFeatureEnabled("feature_dynamic_room_predecessors");
 
     const ownInviteLink = makeUserPermalink(cli.getUserId());
     const [inviteLinkCopied, setInviteLinkCopied] = useState<boolean>(false);
@@ -339,7 +344,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
 
     const possibleResults = useMemo<Result[]>(() => {
         const userResults: IMemberResult[] = [];
-        const roomResults = findVisibleRooms(cli).map(toRoomResult);
+        const roomResults = findVisibleRooms(cli, msc3946ProcessDynamicPredecessor).map(toRoomResult);
         // If we already have a DM with the user we're looking for, we will
         // show that DM instead of the user themselves
         const alreadyAddedUserIds = roomResults.reduce((userIds, result) => {
@@ -349,7 +354,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
             userIds.add(userId);
             return userIds;
         }, new Set<string>());
-        for (const user of [...findVisibleRoomMembers(cli), ...users]) {
+        for (const user of [...findVisibleRoomMembers(cli, msc3946ProcessDynamicPredecessor), ...users]) {
             // Make sure we don't have any user more than once
             if (alreadyAddedUserIds.has(user.userId)) continue;
             alreadyAddedUserIds.add(user.userId);
@@ -381,7 +386,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
             ),
             ...publicRooms.map(toPublicRoomResult),
         ].filter((result) => filter === null || result.filter.includes(filter));
-    }, [cli, users, profile, publicRooms, filter]);
+    }, [cli, users, profile, publicRooms, filter, msc3946ProcessDynamicPredecessor]);
 
     const results = useMemo<Record<Section, Result[]>>(() => {
         const results: Record<Section, Result[]> = {
