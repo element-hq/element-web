@@ -3721,5 +3721,7 @@
     "Indent increase": "Augmenter l’indentation",
     "View a list of polls in a room. (Under active development)": "Voir une liste des sondages présents dans un salon. (En cours de développement)",
     "Polls history": "Historique des sondages",
-    "Unable to decrypt voice broadcast": "Impossible de décrypter la diffusion audio"
+    "Unable to decrypt voice broadcast": "Impossible de décrypter la diffusion audio",
+    "There are no polls in this room": "Il n’y a aucun sondage dans ce salon",
+    "Use rich text instead of Markdown in the message composer.": "Utilise le texte formaté au lieu de Markdown dans le compositeur de message."
 }
