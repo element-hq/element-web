@@ -168,13 +168,15 @@ function handleInputEvent(event: InputEvent, send: Send, isCtrlEnterToSend: bool
         case "insertParagraph":
             if (!isCtrlEnterToSend) {
                 send();
+                return null;
             }
-            return null;
+            break;
         case "sendMessage":
             if (isCtrlEnterToSend) {
                 send();
+                return null;
             }
-            return null;
+            break;
     }
 
     return event;

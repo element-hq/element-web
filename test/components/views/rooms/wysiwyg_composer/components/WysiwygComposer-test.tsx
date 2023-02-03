@@ -149,8 +149,10 @@ describe("WysiwygComposer", () => {
 
         it("Should not call onSend when Enter is pressed", async () => {
             // When
+            const textbox = screen.getByRole("textbox");
+
             fireEvent(
-                screen.getByRole("textbox"),
+                textbox,
                 new InputEvent("input", {
                     inputType: "insertParagraph",
                 }),
@@ -158,6 +160,22 @@ describe("WysiwygComposer", () => {
 
             // Then it does not send a message
             await waitFor(() => expect(onSend).toBeCalledTimes(0));
+
+            fireEvent(
+                textbox,
+                new InputEvent("input", {
+                    inputType: "insertText",
+                    data: "other",
+                }),
+            );
+
+            // The focus is on the last text node
+            await waitFor(() => {
+                const selection = document.getSelection();
+                if (selection) {
+                    expect(selection.focusNode?.textContent).toEqual("other");
+                }
+            });
         });
 
         it("Should send a message when Ctrl+Enter is pressed", async () => {
