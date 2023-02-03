@@ -286,9 +286,9 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> implements 
             // If we're joining an upgraded room, we'll want to make sure we don't proliferate
             // the dead room in the list.
             const roomState: RoomState = membershipPayload.room.currentState;
-            const createEvent = roomState.getStateEvents(EventType.RoomCreate, "");
-            if (createEvent && createEvent.getContent()["predecessor"]) {
-                const prevRoom = this.matrixClient.getRoom(createEvent.getContent()["predecessor"]["room_id"]);
+            const predecessor = roomState.findPredecessor(SettingsStore.getValue("feature_dynamic_room_predecessors"));
+            if (predecessor) {
+                const prevRoom = this.matrixClient.getRoom(predecessor.roomId);
                 if (prevRoom) {
                     const isSticky = this.algorithm.stickyRoom === prevRoom;
                     if (isSticky) {
@@ -298,6 +298,8 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> implements 
                     // Note: we hit the algorithm instead of our handleRoomUpdate() function to
                     // avoid redundant updates.
                     this.algorithm.handleRoomUpdate(prevRoom, RoomUpdateCause.RoomRemoved);
+                } else {
+                    logger.warn(`Unable to find predecessor room with id ${predecessor.roomId}`);
                 }
             }
 
