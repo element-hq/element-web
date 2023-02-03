@@ -19,7 +19,7 @@ import { decode } from "html-entities";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { IPreviewUrlResponse } from "matrix-js-sdk/src/client";
 
-import { linkifyElement } from "../../../HtmlUtils";
+import { Linkify } from "../../../HtmlUtils";
 import SettingsStore from "../../../settings/SettingsStore";
 import Modal from "../../../Modal";
 import * as ImageUtils from "../../../ImageUtils";
@@ -35,20 +35,7 @@ interface IProps {
 }
 
 export default class LinkPreviewWidget extends React.Component<IProps> {
-    private readonly description = createRef<HTMLDivElement>();
     private image = createRef<HTMLImageElement>();
-
-    public componentDidMount(): void {
-        if (this.description.current) {
-            linkifyElement(this.description.current);
-        }
-    }
-
-    public componentDidUpdate(): void {
-        if (this.description.current) {
-            linkifyElement(this.description.current);
-        }
-    }
 
     private onImageClick = (ev): void => {
         const p = this.props.preview;
@@ -155,8 +142,8 @@ export default class LinkPreviewWidget extends React.Component<IProps> {
                                 <span className="mx_LinkPreviewWidget_siteName">{" - " + p["og:site_name"]}</span>
                             )}
                         </div>
-                        <div className="mx_LinkPreviewWidget_description" ref={this.description}>
-                            {description}
+                        <div className="mx_LinkPreviewWidget_description">
+                            <Linkify>{description}</Linkify>
                         </div>
                     </div>
                 </div>

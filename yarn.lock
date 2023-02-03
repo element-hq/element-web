@@ -6258,6 +6258,11 @@ linkify-element@4.0.0-beta.4:
   resolved "https://registry.yarnpkg.com/linkify-element/-/linkify-element-4.0.0-beta.4.tgz#31bb5dff7430c4debc34030466bd8f3e297793a7"
   integrity sha512-dsu5qxk6MhQHxXUlPjul33JknQPx7Iv/N8zisH4JtV31qVk0qZg/5gn10Hr76GlMuixcdcxVvGHNfVcvbut13w==
 
+linkify-react@4.0.0-beta.4:
+  version "4.0.0-beta.4"
+  resolved "https://registry.yarnpkg.com/linkify-react/-/linkify-react-4.0.0-beta.4.tgz#75311ade523a52d43054dd841d724d746d43f60d"
+  integrity sha512-o4vFe28vtk6i8a6tbtkLyusIyhLJSYoHC3gEpmJEVqi6Hy3aguVEenYmtaOjmAQehDrBYeHv9s4qcneZOf7SWQ==
+
 linkify-string@4.0.0-beta.4:
   version "4.0.0-beta.4"
   resolved "https://registry.yarnpkg.com/linkify-string/-/linkify-string-4.0.0-beta.4.tgz#0982509bc6ce81c554bff8d7121057193b84ea32"

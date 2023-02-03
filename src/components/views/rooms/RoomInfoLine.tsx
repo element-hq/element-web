@@ -37,7 +37,7 @@ const RoomInfoLine: FC<IProps> = ({ room }) => {
     const summary = useAsyncMemo(async (): Promise<Awaited<ReturnType<MatrixClient["getRoomSummary"]>> | null> => {
         if (room.getMyMembership() !== "invite") return null;
         try {
-            return room.client.getRoomSummary(room.roomId);
+            return await room.client.getRoomSummary(room.roomId);
         } catch (e) {
             return null;
         }

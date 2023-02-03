@@ -51,7 +51,7 @@ import TextWithTooltip from "../views/elements/TextWithTooltip";
 import { useStateToggle } from "../../hooks/useStateToggle";
 import { getChildOrder } from "../../stores/spaces/SpaceStore";
 import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
-import { linkifyElement, topicToHtml } from "../../HtmlUtils";
+import { Linkify, topicToHtml } from "../../HtmlUtils";
 import { useDispatcher } from "../../hooks/useDispatcher";
 import { Action } from "../../dispatcher/actions";
 import { IState, RovingTabIndexProvider, useRovingTabIndex } from "../../accessibility/RovingTabIndex";
@@ -210,6 +210,25 @@ const Tile: React.FC<ITileProps> = ({
         topic = room.topic;
     }
 
+    let topicSection: ReactNode | undefined;
+    if (topic) {
+        topicSection = (
+            <Linkify
+                options={{
+                    attributes: {
+                        onClick(ev: MouseEvent) {
+                            // prevent clicks on links from bubbling up to the room tile
+                            ev.stopPropagation();
+                        },
+                    },
+                }}
+            >
+                {" · "}
+                {topic}
+            </Linkify>
+        );
+    }
+
     let joinedSection: ReactElement | undefined;
     if (joinedRoom) {
         joinedSection = <div className="mx_SpaceHierarchy_roomTile_joined">{_t("Joined")}</div>;
@@ -231,19 +250,9 @@ const Tile: React.FC<ITileProps> = ({
                     {joinedSection}
                     {suggestedSection}
                 </div>
-                <div
-                    className="mx_SpaceHierarchy_roomTile_info"
-                    ref={(e) => e && linkifyElement(e)}
-                    onClick={(ev) => {
-                        // prevent clicks on links from bubbling up to the room tile
-                        if ((ev.target as HTMLElement).tagName === "A") {
-                            ev.stopPropagation();
-                        }
-                    }}
-                >
+                <div className="mx_SpaceHierarchy_roomTile_info">
                     {description}
-                    {topic && " · "}
-                    {topic}
+                    {topicSection}
                 </div>
             </div>
             <div className="mx_SpaceHierarchy_actions">

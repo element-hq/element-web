@@ -29,9 +29,8 @@ import InfoDialog from "../dialogs/InfoDialog";
 import { useDispatcher } from "../../../hooks/useDispatcher";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import AccessibleButton from "./AccessibleButton";
-import { Linkify } from "./Linkify";
 import TooltipTarget from "./TooltipTarget";
-import { topicToHtml } from "../../../HtmlUtils";
+import { Linkify, topicToHtml } from "../../../HtmlUtils";
 
 interface IProps extends React.HTMLProps<HTMLDivElement> {
     room?: Room;
@@ -71,12 +70,14 @@ export default function RoomTopic({ room, ...props }: IProps): JSX.Element {
                 description: (
                     <div>
                         <Linkify
-                            as="p"
-                            onClick={(ev: MouseEvent) => {
-                                if ((ev.target as HTMLElement).tagName.toUpperCase() === "A") {
-                                    modal.close();
-                                }
+                            options={{
+                                attributes: {
+                                    onClick() {
+                                        modal.close();
+                                    },
+                                },
                             }}
+                            as="p"
                         >
                             {body}
                         </Linkify>

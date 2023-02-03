@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import * as linkifyjs from "linkifyjs";
-import { registerCustomProtocol, registerPlugin } from "linkifyjs";
+import { Opts, registerCustomProtocol, registerPlugin } from "linkifyjs";
 import linkifyElement from "linkify-element";
 import linkifyString from "linkify-string";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
@@ -139,9 +139,9 @@ export const ELEMENT_URL_PATTERN =
     "(?:app|beta|staging|develop)\\.element\\.io/" +
     ")(#.*)";
 
-export const options = {
-    events: function (href: string, type: Type | string): Partial<GlobalEventHandlers> {
-        switch (type) {
+export const options: Opts = {
+    events: function (href: string, type: string): Partial<GlobalEventHandlers> {
+        switch (type as Type) {
             case Type.URL: {
                 // intercept local permalinks to users and show them like userids (in userinfo of current room)
                 try {

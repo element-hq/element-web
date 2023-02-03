@@ -17,6 +17,7 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import type { MatrixClient } from "matrix-js-sdk/src/client";
+import type { Preset } from "matrix-js-sdk/src/@types/partials";
 import type { ICreateRoomOpts } from "matrix-js-sdk/src/@types/requests";
 import { HomeserverInstance } from "../../plugins/utils/homeserver";
 import Chainable = Cypress.Chainable;
@@ -32,7 +33,7 @@ function openSpaceContextMenu(spaceName: string): Chainable<JQuery> {
     return cy.get(".mx_SpacePanel_contextMenu");
 }
 
-function spaceCreateOptions(spaceName: string): ICreateRoomOpts {
+function spaceCreateOptions(spaceName: string, roomIds: string[] = []): ICreateRoomOpts {
     return {
         creation_content: {
             type: "m.space",
@@ -44,6 +45,7 @@ function spaceCreateOptions(spaceName: string): ICreateRoomOpts {
                     name: spaceName,
                 },
             },
+            ...roomIds.map(spaceChildInitialState),
         ],
     };
 }
@@ -282,5 +284,30 @@ describe("Spaces", () => {
 
         cy.checkA11y(undefined, axeOptions);
         cy.get(".mx_SpacePanel").percySnapshotElement("Space panel expanded", { widths: [258] });
+    });
+
+    it("should not soft crash when joining a room from space hierarchy which has a link in its topic", () => {
+        cy.getBot(homeserver, { displayName: "BotBob" }).then({ timeout: 10000 }, async (bot) => {
+            const { room_id: roomId } = await bot.createRoom({
+                preset: "public_chat" as Preset,
+                name: "Test Room",
+                topic: "This is a topic https://github.com/matrix-org/matrix-react-sdk/pull/10060 with a link",
+            });
+            const { room_id: spaceId } = await bot.createRoom(spaceCreateOptions("Test Space", [roomId]));
+            await bot.invite(spaceId, user.userId);
+        });
+
+        cy.getSpacePanelButton("Test Space").should("exist");
+        cy.wait(500); // without this we can end up clicking too quickly and it ends up having no effect
+        cy.viewSpaceByName("Test Space");
+        cy.contains(".mx_AccessibleButton", "Accept").click();
+
+        cy.contains(".mx_SpaceHierarchy_roomTile.mx_AccessibleButton", "Test Room").within(() => {
+            cy.contains("Join").should("exist").realHover().click();
+            cy.contains("View", { timeout: 5000 }).should("exist").click();
+        });
+
+        // Assert we get shown the new room intro, and thus not the soft crash screen
+        cy.get(".mx_NewRoomIntro").should("exist");
     });
 });

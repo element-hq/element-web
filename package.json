@@ -86,6 +86,7 @@
         "jszip": "^3.7.0",
         "katex": "^0.16.0",
         "linkify-element": "4.0.0-beta.4",
+        "linkify-react": "4.0.0-beta.4",
         "linkify-string": "4.0.0-beta.4",
         "linkifyjs": "4.0.0-beta.4",
         "lodash": "^4.17.20",

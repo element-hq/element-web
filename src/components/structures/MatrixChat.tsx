@@ -136,9 +136,9 @@ import { SdkContextClass, SDKContext } from "../../contexts/SDKContext";
 import { viewUserDeviceSettings } from "../../actions/handlers/viewUserDeviceSettings";
 import { cleanUpBroadcasts, VoiceBroadcastResumer } from "../../voice-broadcast";
 import GenericToast from "../views/toasts/GenericToast";
-import { Linkify } from "../views/elements/Linkify";
 import RovingSpotlightDialog, { Filter } from "../views/dialogs/spotlight/SpotlightDialog";
 import { findDMForUser } from "../../utils/dm/findDMForUser";
+import { Linkify } from "../../HtmlUtils";
 
 // legacy export
 export { default as Views } from "../../Views";

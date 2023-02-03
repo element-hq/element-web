@@ -17,16 +17,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactNode } from "react";
+import React, { ReactElement, ReactNode } from "react";
 import sanitizeHtml from "sanitize-html";
 import cheerio from "cheerio";
 import classNames from "classnames";
 import EMOJIBASE_REGEX from "emojibase-regex";
-import { split } from "lodash";
+import { merge, split } from "lodash";
 import katex from "katex";
 import { decode } from "html-entities";
 import { IContent } from "matrix-js-sdk/src/models/event";
 import { Optional } from "matrix-events-sdk";
+import _Linkify from "linkify-react";
 
 import {
     _linkifyElement,
@@ -679,6 +680,15 @@ export function topicToHtml(
         <span ref={ref} dir="auto">
             {emojiBodyElements || topic}
         </span>
+    );
+}
+
+/* Wrapper around linkify-react merging in our default linkify options */
+export function Linkify({ as, options, children }: React.ComponentProps<typeof _Linkify>): ReactElement {
+    return (
+        <_Linkify as={as} options={merge({}, linkifyMatrixOptions, options)}>
+            {children}
+        </_Linkify>
     );
 }
 
