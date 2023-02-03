@@ -17,10 +17,10 @@ limitations under the License.
 import { mocked } from "jest-mock";
 import { PushRuleActionName, TweakName } from "matrix-js-sdk/src/@types/PushRules";
 import { NotificationCountType, Room } from "matrix-js-sdk/src/models/room";
-import { EventStatus, PendingEventOrdering } from "matrix-js-sdk/src/matrix";
+import { EventStatus, EventType, MatrixEvent, PendingEventOrdering } from "matrix-js-sdk/src/matrix";
 
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
-import { mkEvent, mkRoom, muteRoom, stubClient } from "./test-utils";
+import { mkEvent, mkRoom, muteRoom, stubClient, upsertRoomStateEvents } from "./test-utils";
 import {
     getRoomNotifsState,
     RoomNotifState,
@@ -28,6 +28,7 @@ import {
     determineUnreadState,
 } from "../src/RoomNotifs";
 import { NotificationColor } from "../src/stores/notifications/NotificationColor";
+import SettingsStore from "../src/settings/SettingsStore";
 
 describe("RoomNotifs test", () => {
     let client: jest.Mocked<MatrixClient>;
@@ -105,36 +106,111 @@ describe("RoomNotifs test", () => {
             expect(getUnreadNotificationCount(room, NotificationCountType.Highlight)).toBe(1);
         });
 
-        it("counts predecessor highlight", () => {
-            room.setUnreadNotificationCount(NotificationCountType.Total, 2);
-            room.setUnreadNotificationCount(NotificationCountType.Highlight, 1);
-
+        describe("when there is a room predecessor", () => {
             const OLD_ROOM_ID = "!oldRoomId:example.org";
-            const oldRoom = new Room(OLD_ROOM_ID, client, client.getUserId()!);
-            oldRoom.setUnreadNotificationCount(NotificationCountType.Total, 10);
-            oldRoom.setUnreadNotificationCount(NotificationCountType.Highlight, 6);
-
-            client.getRoom.mockReset().mockReturnValue(oldRoom);
-
-            const predecessorEvent = mkEvent({
-                event: true,
-                type: "m.room.create",
-                room: ROOM_ID,
-                user: client.getUserId()!,
-                content: {
-                    creator: client.getUserId(),
-                    room_version: "5",
-                    predecessor: {
-                        room_id: OLD_ROOM_ID,
-                        event_id: "$someevent",
+            const mkCreateEvent = (predecessorId?: string): MatrixEvent => {
+                return mkEvent({
+                    event: true,
+                    type: "m.room.create",
+                    room: ROOM_ID,
+                    user: client.getUserId()!,
+                    content: {
+                        ...(predecessorId ? { predecessor: { room_id: predecessorId, event_id: "$someevent" } } : {}),
+                        creator: client.getUserId(),
+                        room_version: "5",
                     },
-                },
-                ts: Date.now(),
-            });
-            room.addLiveEvents([predecessorEvent]);
+                    ts: Date.now(),
+                });
+            };
 
-            expect(getUnreadNotificationCount(room, NotificationCountType.Total)).toBe(8);
-            expect(getUnreadNotificationCount(room, NotificationCountType.Highlight)).toBe(7);
+            const mkPredecessorEvent = (predecessorId: string): MatrixEvent => {
+                return mkEvent({
+                    event: true,
+                    type: EventType.RoomPredecessor,
+                    room: ROOM_ID,
+                    user: client.getUserId()!,
+                    skey: "",
+                    content: {
+                        predecessor_room_id: predecessorId,
+                    },
+                    ts: Date.now(),
+                });
+            };
+
+            const itShouldCountPredecessorHighlightWhenThereIsAPredecessorInTheCreateEvent = (): void => {
+                it("and there is a predecessor in the create event, it should count predecessor highlight", () => {
+                    room.addLiveEvents([mkCreateEvent(OLD_ROOM_ID)]);
+
+                    expect(getUnreadNotificationCount(room, NotificationCountType.Total)).toBe(8);
+                    expect(getUnreadNotificationCount(room, NotificationCountType.Highlight)).toBe(7);
+                });
+            };
+
+            const itShouldCountPredecessorHighlightWhenThereIsAPredecessorEvent = (): void => {
+                it("and there is a predecessor event, it should count predecessor highlight", () => {
+                    client.getVisibleRooms();
+                    room.addLiveEvents([mkCreateEvent(OLD_ROOM_ID)]);
+                    upsertRoomStateEvents(room, [mkPredecessorEvent(OLD_ROOM_ID)]);
+
+                    expect(getUnreadNotificationCount(room, NotificationCountType.Total)).toBe(8);
+                    expect(getUnreadNotificationCount(room, NotificationCountType.Highlight)).toBe(7);
+                });
+            };
+
+            beforeEach(() => {
+                room.setUnreadNotificationCount(NotificationCountType.Total, 2);
+                room.setUnreadNotificationCount(NotificationCountType.Highlight, 1);
+
+                const oldRoom = new Room(OLD_ROOM_ID, client, client.getUserId()!);
+                oldRoom.setUnreadNotificationCount(NotificationCountType.Total, 10);
+                oldRoom.setUnreadNotificationCount(NotificationCountType.Highlight, 6);
+
+                client.getRoom.mockImplementation((roomId: string | undefined): Room | null => {
+                    if (roomId === room.roomId) return room;
+                    if (roomId === OLD_ROOM_ID) return oldRoom;
+                    return null;
+                });
+            });
+
+            describe("and dynamic room predecessors are disabled", () => {
+                itShouldCountPredecessorHighlightWhenThereIsAPredecessorInTheCreateEvent();
+                itShouldCountPredecessorHighlightWhenThereIsAPredecessorEvent();
+
+                it("and there is only a predecessor event, it should not count predecessor highlight", () => {
+                    room.addLiveEvents([mkCreateEvent()]);
+                    upsertRoomStateEvents(room, [mkPredecessorEvent(OLD_ROOM_ID)]);
+
+                    expect(getUnreadNotificationCount(room, NotificationCountType.Total)).toBe(2);
+                    expect(getUnreadNotificationCount(room, NotificationCountType.Highlight)).toBe(1);
+                });
+            });
+
+            describe("and dynamic room predecessors are enabled", () => {
+                beforeEach(() => {
+                    jest.spyOn(SettingsStore, "getValue").mockImplementation(
+                        (settingName) => settingName === "feature_dynamic_room_predecessors",
+                    );
+                });
+
+                itShouldCountPredecessorHighlightWhenThereIsAPredecessorInTheCreateEvent();
+                itShouldCountPredecessorHighlightWhenThereIsAPredecessorEvent();
+
+                it("and there is only a predecessor event, it should count predecessor highlight", () => {
+                    room.addLiveEvents([mkCreateEvent()]);
+                    upsertRoomStateEvents(room, [mkPredecessorEvent(OLD_ROOM_ID)]);
+
+                    expect(getUnreadNotificationCount(room, NotificationCountType.Total)).toBe(8);
+                    expect(getUnreadNotificationCount(room, NotificationCountType.Highlight)).toBe(7);
+                });
+
+                it("and there is an unknown room in the predecessor event, it should not count predecessor highlight", () => {
+                    room.addLiveEvents([mkCreateEvent()]);
+                    upsertRoomStateEvents(room, [mkPredecessorEvent("!unknon:example.com")]);
+
+                    expect(getUnreadNotificationCount(room, NotificationCountType.Total)).toBe(2);
+                    expect(getUnreadNotificationCount(room, NotificationCountType.Highlight)).toBe(1);
+                });
+            });
         });
 
         it("counts thread notification type", () => {
