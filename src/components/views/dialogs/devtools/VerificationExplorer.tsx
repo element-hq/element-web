@@ -25,7 +25,7 @@ import { CryptoEvent } from "matrix-js-sdk/src/crypto";
 import { useTypedEventEmitter, useTypedEventEmitterState } from "../../../../hooks/useEventEmitter";
 import { _t, _td } from "../../../../languageHandler";
 import MatrixClientContext from "../../../../contexts/MatrixClientContext";
-import BaseTool, { DevtoolsContext } from "./BaseTool";
+import BaseTool, { DevtoolsContext, IDevtoolsProps } from "./BaseTool";
 import { Tool } from "../DevtoolsDialog";
 
 const PHASE_MAP: Record<Phase, string> = {
@@ -81,7 +81,7 @@ const VerificationRequestExplorer: React.FC<{
     );
 };
 
-const VerificationExplorer: Tool = ({ onBack }) => {
+const VerificationExplorer: Tool = ({ onBack }: IDevtoolsProps) => {
     const cli = useContext(MatrixClientContext);
     const context = useContext(DevtoolsContext);
 

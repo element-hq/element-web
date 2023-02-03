@@ -33,6 +33,7 @@ import { SettingLevel } from "../../../settings/SettingLevel";
 import ServerInfo from "./devtools/ServerInfo";
 import { Features } from "../../../settings/Settings";
 import CopyableText from "../elements/CopyableText";
+import RoomNotifications from "./devtools/RoomNotifications";
 
 enum Category {
     Room,
@@ -44,13 +45,14 @@ const categoryLabels: Record<Category, string> = {
     [Category.Other]: _td("Other"),
 };
 
-export type Tool = React.FC<IDevtoolsProps>;
+export type Tool = React.FC<IDevtoolsProps> | ((props: IDevtoolsProps) => JSX.Element);
 const Tools: Record<Category, [label: string, tool: Tool][]> = {
     [Category.Room]: [
         [_td("Send custom timeline event"), TimelineEventEditor],
         [_td("Explore room state"), RoomStateExplorer],
         [_td("Explore room account data"), RoomAccountDataExplorer],
         [_td("View servers in room"), ServersInRoom],
+        [_td("Notifications debug"), RoomNotifications],
         [_td("Verification explorer"), VerificationExplorer],
         [_td("Active Widgets"), WidgetExplorer],
     ],
