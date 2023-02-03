@@ -451,5 +451,8 @@
     "Answered Elsewhere": "Answered Elsewhere",
     "The call could not be established": "The call could not be established",
     "The user you called is busy.": "The user you called is busy.",
-    "User Busy": "User Busy"
+    "User Busy": "User Busy",
+    "%(seconds)ss left": "%(seconds)ss left",
+    "%(minutes)sm %(seconds)ss left": "%(minutes)sm %(seconds)ss left",
+    "%(hours)sh %(minutes)sm %(seconds)ss left": "%(hours)sh %(minutes)sm %(seconds)ss left"
 }
