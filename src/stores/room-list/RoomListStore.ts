@@ -56,6 +56,8 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> implements 
     public static TEST_MODE = false;
 
     private initialListsGenerated = false;
+    private msc3946ProcessDynamicPredecessor: boolean;
+    private msc3946SettingWatcherRef: string;
     private algorithm = new Algorithm();
     private prefilterConditions: IFilterCondition[] = [];
     private updateFn = new MarkedExecution(() => {
@@ -69,6 +71,20 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> implements 
         super(dis);
         this.setMaxListeners(20); // RoomList + LeftPanel + 8xRoomSubList + spares
         this.algorithm.start();
+
+        this.msc3946ProcessDynamicPredecessor = SettingsStore.getValue("feature_dynamic_room_predecessors");
+        this.msc3946SettingWatcherRef = SettingsStore.watchSetting(
+            "feature_dynamic_room_predecessors",
+            null,
+            (_settingName, _roomId, _level, _newValAtLevel, newVal) => {
+                this.msc3946ProcessDynamicPredecessor = newVal;
+                this.regenerateAllLists({ trigger: true });
+            },
+        );
+    }
+
+    public componentWillUnmount(): void {
+        SettingsStore.unwatchSetting(this.msc3946SettingWatcherRef);
     }
 
     private setupWatchers(): void {
@@ -286,7 +302,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> implements 
             // If we're joining an upgraded room, we'll want to make sure we don't proliferate
             // the dead room in the list.
             const roomState: RoomState = membershipPayload.room.currentState;
-            const predecessor = roomState.findPredecessor(SettingsStore.getValue("feature_dynamic_room_predecessors"));
+            const predecessor = roomState.findPredecessor(this.msc3946ProcessDynamicPredecessor);
             if (predecessor) {
                 const prevRoom = this.matrixClient.getRoom(predecessor.roomId);
                 if (prevRoom) {
@@ -496,7 +512,8 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> implements 
     private getPlausibleRooms(): Room[] {
         if (!this.matrixClient) return [];
 
-        let rooms = this.matrixClient.getVisibleRooms().filter((r) => VisibilityProvider.instance.isRoomVisible(r));
+        let rooms = this.matrixClient.getVisibleRooms(this.msc3946ProcessDynamicPredecessor);
+        rooms = rooms.filter((r) => VisibilityProvider.instance.isRoomVisible(r));
 
         if (this.prefilterConditions.length > 0) {
             rooms = rooms.filter((r) => {
