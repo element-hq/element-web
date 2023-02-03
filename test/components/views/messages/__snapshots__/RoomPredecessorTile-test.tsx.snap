@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<RoomCreate /> Renders as expected 1`] = `
+exports[`<RoomPredecessorTile /> Renders as expected 1`] = `
 <DocumentFragment>
   <div
     class="mx_EventTileBubble mx_CreateEvent"

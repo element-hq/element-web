@@ -40,7 +40,7 @@ interface IProps {
  * A message tile showing that this room was created as an upgrade of a previous
  * room.
  */
-export const RoomCreate: React.FC<IProps> = ({ mxEvent, timestamp }) => {
+export const RoomPredecessorTile: React.FC<IProps> = ({ mxEvent, timestamp }) => {
     const msc3946ProcessDynamicPredecessor = SettingsStore.getValue("feature_dynamic_room_predecessors");
 
     // Note: we ask the room for its predecessor here, instead of directly using
@@ -74,13 +74,14 @@ export const RoomCreate: React.FC<IProps> = ({ mxEvent, timestamp }) => {
 
     if (!roomContext.room || roomContext.room.roomId !== mxEvent.getRoomId()) {
         logger.warn(
-            "RoomCreate unexpectedly used outside of the context of the room containing this m.room.create event.",
+            "RoomPredecessorTile unexpectedly used outside of the context of the" +
+                "room containing this m.room.create event.",
         );
         return <></>;
     }
 
     if (!predecessor) {
-        logger.warn("RoomCreate unexpectedly used in a room with no predecessor.");
+        logger.warn("RoomPredecessorTile unexpectedly used in a room with no predecessor.");
         return <div />;
     }
 

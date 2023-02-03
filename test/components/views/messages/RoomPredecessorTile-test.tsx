@@ -22,7 +22,7 @@ import { EventType, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 
 import dis from "../../../../src/dispatcher/dispatcher";
 import SettingsStore from "../../../../src/settings/SettingsStore";
-import { RoomCreate } from "../../../../src/components/views/messages/RoomCreate";
+import { RoomPredecessorTile } from "../../../../src/components/views/messages/RoomPredecessorTile";
 import { stubClient, upsertRoomStateEvents } from "../../../test-utils/test-utils";
 import { Action } from "../../../../src/dispatcher/actions";
 import RoomContext from "../../../../src/contexts/RoomContext";
@@ -31,7 +31,7 @@ import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 
 jest.mock("../../../../src/dispatcher/dispatcher");
 
-describe("<RoomCreate />", () => {
+describe("<RoomPredecessorTile />", () => {
     const userId = "@alice:server.org";
     const roomId = "!room:server.org";
     const createEvent = new MatrixEvent({
@@ -97,21 +97,21 @@ describe("<RoomCreate />", () => {
         jest.spyOn(SettingsStore, "setValue").mockRestore();
     });
 
-    function renderRoomCreate(room: Room) {
+    function renderTile(room: Room) {
         return render(
             <RoomContext.Provider value={getRoomContext(room, {})}>
-                <RoomCreate mxEvent={createEvent} />
+                <RoomPredecessorTile mxEvent={createEvent} />
             </RoomContext.Provider>,
         );
     }
 
     it("Renders as expected", () => {
-        const roomCreate = renderRoomCreate(roomJustCreate);
+        const roomCreate = renderTile(roomJustCreate);
         expect(roomCreate.asFragment()).toMatchSnapshot();
     });
 
     it("Links to the old version of the room", () => {
-        renderRoomCreate(roomJustCreate);
+        renderTile(roomJustCreate);
         expect(screen.getByText("Click here to see older messages.")).toHaveAttribute(
             "href",
             "https://matrix.to/#/old_room_id/tombstone_event_id",
@@ -119,12 +119,12 @@ describe("<RoomCreate />", () => {
     });
 
     it("Shows an empty div if there is no predecessor", () => {
-        renderRoomCreate(roomNoPredecessors);
+        renderTile(roomNoPredecessors);
         expect(screen.queryByText("Click here to see older messages.", { exact: false })).toBeNull();
     });
 
     it("Opens the old room on click", async () => {
-        renderRoomCreate(roomJustCreate);
+        renderTile(roomJustCreate);
         const link = screen.getByText("Click here to see older messages.");
 
         await act(() => userEvent.click(link));
@@ -142,7 +142,7 @@ describe("<RoomCreate />", () => {
     });
 
     it("Ignores m.predecessor if labs flag is off", () => {
-        renderRoomCreate(roomCreateAndPredecessor);
+        renderTile(roomCreateAndPredecessor);
         expect(screen.getByText("Click here to see older messages.")).toHaveAttribute(
             "href",
             "https://matrix.to/#/old_room_id/tombstone_event_id",
@@ -161,7 +161,7 @@ describe("<RoomCreate />", () => {
         });
 
         it("Uses the create event if there is no m.predecessor", () => {
-            renderRoomCreate(roomJustCreate);
+            renderTile(roomJustCreate);
             expect(screen.getByText("Click here to see older messages.")).toHaveAttribute(
                 "href",
                 "https://matrix.to/#/old_room_id/tombstone_event_id",
@@ -169,7 +169,7 @@ describe("<RoomCreate />", () => {
         });
 
         it("Uses m.predecessor when it's there", () => {
-            renderRoomCreate(roomCreateAndPredecessor);
+            renderTile(roomCreateAndPredecessor);
             expect(screen.getByText("Click here to see older messages.")).toHaveAttribute(
                 "href",
                 "https://matrix.to/#/old_room_id_from_predecessor",
@@ -177,7 +177,7 @@ describe("<RoomCreate />", () => {
         });
 
         it("Links to the event in the room if event ID is provided", () => {
-            renderRoomCreate(roomCreateAndPredecessorWithEventId);
+            renderTile(roomCreateAndPredecessorWithEventId);
             expect(screen.getByText("Click here to see older messages.")).toHaveAttribute(
                 "href",
                 "https://matrix.to/#/old_room_id_from_predecessor/tombstone_event_id_from_predecessor",
