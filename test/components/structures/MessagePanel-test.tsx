@@ -37,6 +37,7 @@ import {
 } from "../../test-utils";
 import ResizeNotifier from "../../../src/utils/ResizeNotifier";
 import { IRoomState } from "../../../src/components/structures/RoomView";
+import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 
 jest.mock("../../../src/utils/beacon", () => ({
     useBeacon: jest.fn(),
@@ -58,6 +59,7 @@ describe("MessagePanel", function () {
         getRoom: jest.fn(),
         getClientWellKnown: jest.fn().mockReturnValue({}),
     });
+    jest.spyOn(MatrixClientPeg, "get").mockReturnValue(client);
 
     const room = new Room(roomId, client, userId);
 
@@ -464,11 +466,12 @@ describe("MessagePanel", function () {
 
     it("should collapse creation events", function () {
         const events = mkCreationEvents();
-        TestUtilsMatrix.upsertRoomStateEvents(room, events);
-        const { container } = render(getComponent({ events }));
-
         const createEvent = events.find((event) => event.getType() === "m.room.create");
         const encryptionEvent = events.find((event) => event.getType() === "m.room.encryption");
+        client.getRoom.mockImplementation((id) => (id === createEvent!.getRoomId() ? room : null));
+        TestUtilsMatrix.upsertRoomStateEvents(room, events);
+
+        const { container } = render(getComponent({ events }));
 
         // we expect that
         // - the room creation event, the room encryption event, and Alice inviting Bob,
@@ -508,6 +511,8 @@ describe("MessagePanel", function () {
 
     it("should hide read-marker at the end of creation event summary", function () {
         const events = mkCreationEvents();
+        const createEvent = events.find((event) => event.getType() === "m.room.create");
+        client.getRoom.mockImplementation((id) => (id === createEvent!.getRoomId() ? room : null));
         TestUtilsMatrix.upsertRoomStateEvents(room, events);
 
         const { container } = render(

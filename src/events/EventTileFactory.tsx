@@ -22,6 +22,7 @@ import { M_POLL_START } from "matrix-js-sdk/src/@types/polls";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { GroupCallIntent } from "matrix-js-sdk/src/webrtc/groupCall";
 
+import SettingsStore from "../settings/SettingsStore";
 import EditorStateTransfer from "../utils/EditorStateTransfer";
 import { RoomPermalinkCreator } from "../utils/permalinks/Permalinks";
 import LegacyCallEventGrouper from "../components/structures/LegacyCallEventGrouper";
@@ -91,6 +92,7 @@ const HiddenEventFactory: Factory = (ref, props) => <HiddenBody ref={ref} {...pr
 // These factories are exported for reference comparison against pickFactory()
 export const JitsiEventFactory: Factory = (ref, props) => <MJitsiWidgetEvent ref={ref} {...props} />;
 export const JSONEventFactory: Factory = (ref, props) => <ViewSourceEvent ref={ref} {...props} />;
+export const RoomCreateEventFactory: Factory = (ref, props) => <RoomCreate {...props} />;
 
 const EVENT_TILE_TYPES = new Map<string, Factory>([
     [EventType.RoomMessage, MessageEventFactory], // note that verification requests are handled in pickFactory()
@@ -105,7 +107,7 @@ const EVENT_TILE_TYPES = new Map<string, Factory>([
 const STATE_EVENT_TILE_TYPES = new Map<string, Factory>([
     [EventType.RoomEncryption, (ref, props) => <EncryptionEvent ref={ref} {...props} />],
     [EventType.RoomCanonicalAlias, TextualEventFactory],
-    [EventType.RoomCreate, (_ref, props) => <RoomCreate {...props} />],
+    [EventType.RoomCreate, RoomCreateEventFactory],
     [EventType.RoomMember, TextualEventFactory],
     [EventType.RoomName, TextualEventFactory],
     [EventType.RoomAvatar, (ref, props) => <RoomAvatarEvent ref={ref} {...props} />],
@@ -209,6 +211,14 @@ export function pickFactory(
         // XXX: This is extremely a hack. Possibly these components should have an interface for
         // declining to render?
         if (!MKeyVerificationConclusion.shouldRender(mxEvent, mxEvent.verificationRequest)) {
+            return noEventFactoryFactory();
+        }
+    }
+
+    if (evType === EventType.RoomCreate) {
+        const dynamicPredecessorsEnabled = SettingsStore.getValue("feature_dynamic_room_predecessors");
+        const predecessor = cli.getRoom(mxEvent.getRoomId())?.findPredecessor(dynamicPredecessorsEnabled);
+        if (!predecessor) {
             return noEventFactoryFactory();
         }
     }
@@ -415,12 +425,15 @@ export function haveRendererForEvent(mxEvent: MatrixEvent, showHiddenEvents: boo
     // No tile for replacement events since they update the original tile
     if (mxEvent.isRelation(RelationType.Replace)) return false;
 
-    const handler = pickFactory(mxEvent, MatrixClientPeg.get(), showHiddenEvents);
+    const cli = MatrixClientPeg.get();
+    const handler = pickFactory(mxEvent, cli, showHiddenEvents);
     if (!handler) return false;
     if (handler === TextualEventFactory) {
         return hasText(mxEvent, showHiddenEvents);
     } else if (handler === STATE_EVENT_TILE_TYPES.get(EventType.RoomCreate)) {
-        return Boolean(mxEvent.getContent()["predecessor"]);
+        const dynamicPredecessorsEnabled = SettingsStore.getValue("feature_dynamic_room_predecessors");
+        const predecessor = cli.getRoom(mxEvent.getRoomId())?.findPredecessor(dynamicPredecessorsEnabled);
+        return Boolean(predecessor);
     } else if (
         ElementCall.CALL_EVENT_TYPE.names.some((eventType) => handler === STATE_EVENT_TILE_TYPES.get(eventType))
     ) {
