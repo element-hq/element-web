@@ -3721,5 +3721,7 @@
     "Indent increase": "增加縮排",
     "View a list of polls in a room. (Under active development)": "檢視聊天室中的投票清單。（積極開發中）",
     "Polls history": "投票歷史紀錄",
-    "Unable to decrypt voice broadcast": "無法解密語音廣播"
+    "Unable to decrypt voice broadcast": "無法解密語音廣播",
+    "There are no polls in this room": "此聊天室中沒有投票",
+    "Use rich text instead of Markdown in the message composer.": "在訊息編輯器中使用格式化文字而非 Markdown。"
 }
