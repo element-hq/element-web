@@ -441,7 +441,9 @@ export class VoiceBroadcastPlayback
     }
 
     public get timeLeftSeconds(): number {
-        return Math.round(this.durationSeconds) - this.timeSeconds;
+        // Sometimes the meta data and the audio files are a little bit out of sync.
+        // Be sure it never returns a negative value.
+        return Math.max(0, Math.round(this.durationSeconds) - this.timeSeconds);
     }
 
     public async skipTo(timeSeconds: number): Promise<void> {
