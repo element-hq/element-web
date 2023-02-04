@@ -6,7 +6,7 @@
     "Invalid configuration: no default server specified.": "不正な設定：デフォルトのサーバーが設定されていません。",
     "Sign In": "サインイン",
     "Create Account": "アカウントを作成",
-    "Explore rooms": "ルームを探索",
+    "Explore rooms": "ルームを探す",
     "The message from the parser is: %(message)s": "パーサーのメッセージ：%(message)s",
     "Invalid JSON": "不正なJSON",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "不正な設定：default_server_config、default_server_name、またはdefault_hs_urlのいずれか一つのみを指定できます。",
