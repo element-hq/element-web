@@ -68,6 +68,7 @@ export default class LocationViewDialog extends React.Component<IProps, IState> 
                     onError={this.onError}
                     interactive
                     className="mx_LocationViewDialog_map"
+                    allowGeolocate={true}
                 >
                     {({ map }) => (
                         <>

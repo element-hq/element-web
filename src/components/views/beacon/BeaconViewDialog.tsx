@@ -125,6 +125,9 @@ const BeaconViewDialog: React.FC<IProps> = ({ initialFocusedBeacon, roomId, matr
         setFocusedBeaconState({ beacon, ts: Date.now() });
     };
 
+    const hasOwnBeacon =
+        liveBeacons.filter((beacon) => beacon?.beaconInfoOwner === matrixClient.getUserId()).length > 0;
+
     return (
         <BaseDialog className="mx_BeaconViewDialog" onFinished={onFinished} fixedWidth={false}>
             <MatrixClientContext.Provider value={matrixClient}>
@@ -136,6 +139,7 @@ const BeaconViewDialog: React.FC<IProps> = ({ initialFocusedBeacon, roomId, matr
                         interactive
                         onError={setMapDisplayError}
                         className="mx_BeaconViewDialog_map"
+                        allowGeolocate={!hasOwnBeacon}
                     >
                         {({ map }: { map: maplibregl.Map }) => (
                             <>
