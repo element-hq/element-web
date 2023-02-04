@@ -2,6 +2,7 @@
 
 exports[`<LocationViewDialog /> renders map correctly 1`] = `
 <Map
+  allowGeolocate={true}
   centerGeoUri="geo:51.5076,-0.1276"
   className="mx_LocationViewDialog_map"
   id="mx_LocationViewDialog_$2"
@@ -29,8 +30,23 @@ exports[`<LocationViewDialog /> renders map correctly 1`] = `
                 MockAttributionControl {},
                 "top-right",
               ],
+              [
+                MockGeolocateControl {
+                  "_events": {
+                    "error": [Function],
+                  },
+                  "_eventsCount": 1,
+                  "_maxListeners": undefined,
+                  "trigger": [MockFunction],
+                  Symbol(kCapture): false,
+                },
+              ],
             ],
             "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
               {
                 "type": "return",
                 "value": undefined,
@@ -97,8 +113,23 @@ exports[`<LocationViewDialog /> renders map correctly 1`] = `
                 MockAttributionControl {},
                 "top-right",
               ],
+              [
+                MockGeolocateControl {
+                  "_events": {
+                    "error": [Function],
+                  },
+                  "_eventsCount": 1,
+                  "_maxListeners": undefined,
+                  "trigger": [MockFunction],
+                  Symbol(kCapture): false,
+                },
+              ],
             ],
             "results": [
+              {
+                "type": "return",
+                "value": undefined,
+              },
               {
                 "type": "return",
                 "value": undefined,
