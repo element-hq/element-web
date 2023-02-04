@@ -40,12 +40,12 @@ const useMapWithStyle = ({
 }: {
     id: string;
     centerGeoUri?: string;
-    onError(error: Error): void;
+    onError?(error: Error): void;
     interactive?: boolean;
     bounds?: Bounds;
-    allowGeolocate: boolean;
+    allowGeolocate?: boolean;
 }): {
-    map: maplibregl.Map;
+    map: maplibregl.Map | undefined;
     bodyId: string;
 } => {
     const bodyId = `mx_Map_${id}`;
@@ -122,7 +122,7 @@ const onGeolocateError = (e: GeolocationPositionError): void => {
     logger.error("Could not fetch location", e);
     Modal.createDialog(ErrorDialog, {
         title: _t("Could not fetch location"),
-        description: positionFailureMessage(e.code),
+        description: positionFailureMessage(e.code) ?? "",
     });
 };
 

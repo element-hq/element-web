@@ -17,7 +17,7 @@ limitations under the License.
 import { _t } from "../../languageHandler";
 import SdkConfig from "../../SdkConfig";
 
-export const positionFailureMessage = (code: number): string => {
+export const positionFailureMessage = (code: number): string | undefined => {
     const brand = SdkConfig.get().brand;
     switch (code) {
         case 1:
