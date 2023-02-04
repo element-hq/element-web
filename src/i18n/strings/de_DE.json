@@ -3736,5 +3736,15 @@
     "Room status": "Raumstatus",
     "unknown": "unbekannt",
     "Red": "Rot",
-    "Grey": "Grau"
+    "Grey": "Grau",
+    "Sender: ": "Absender: ",
+    "No receipt found": "Keine Bestätigung gefunden",
+    "User read up to: ": "Der Benutzer hat gelesen bis: ",
+    "Dot: ": "Punkt: ",
+    "Highlight: ": "Höhepunkt: ",
+    "Room is ": "Der Raum ist ",
+    "Notification state is": "Der Benachrichtigung-Status ist",
+    ", count:": ", Anzahl:",
+    "Room unread status: ": "Ungelesenstatus des Raumes: ",
+    "Notifications debug": "Debug-Modus für Benachrichtigungen"
 }
