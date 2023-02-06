@@ -515,9 +515,6 @@ Currently, the following UI feature flags are supported:
 -   `UIFeature.voip` - Whether or not VoIP is shown readily to the user. When disabled,
     Jitsi widgets will still work though they cannot easily be added.
 -   `UIFeature.widgets` - Whether or not widgets will be shown.
--   `UIFeature.flair` - Whether or not community flair is shown in rooms.
--   `UIFeature.communities` - Whether or not to show any UI related to communities. Implicitly
-    disables `UIFeature.flair` when disabled.
 -   `UIFeature.advancedSettings` - Whether or not sections titled "advanced" in room and
     user settings are shown to the user.
 -   `UIFeature.shareQrCode` - Whether or not the QR code on the share room/event dialog
