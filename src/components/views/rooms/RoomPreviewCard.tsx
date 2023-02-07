@@ -116,7 +116,7 @@ const RoomPreviewCard: FC<IProps> = ({ room, onJoinButtonClicked, onRejectButton
         joinButtons = (
             <>
                 <AccessibleButton
-                    kind="secondary"
+                    kind="primary_outline"
                     onClick={() => {
                         setBusy(true);
                         onRejectButtonClicked();

@@ -258,17 +258,16 @@ class PipContainerInner extends React.Component<IProps, IState> {
     }
 
     private createVoiceBroadcastPlaybackPipContent(voiceBroadcastPlayback: VoiceBroadcastPlayback): CreatePipChildren {
-        if (this.state.viewedRoomId === voiceBroadcastPlayback.infoEvent.getRoomId()) {
-            return ({ onStartMoving }) => (
-                <div onMouseDown={onStartMoving}>
-                    <VoiceBroadcastPlaybackBody playback={voiceBroadcastPlayback} pip={true} />
-                </div>
+        const content =
+            this.state.viewedRoomId === voiceBroadcastPlayback.infoEvent.getRoomId() ? (
+                <VoiceBroadcastPlaybackBody playback={voiceBroadcastPlayback} pip={true} />
+            ) : (
+                <VoiceBroadcastSmallPlaybackBody playback={voiceBroadcastPlayback} />
             );
-        }
 
         return ({ onStartMoving }) => (
-            <div onMouseDown={onStartMoving}>
-                <VoiceBroadcastSmallPlaybackBody playback={voiceBroadcastPlayback} />
+            <div key={voiceBroadcastPlayback.infoEvent.getId()} onMouseDown={onStartMoving}>
+                {content}
             </div>
         );
     }
