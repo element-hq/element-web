@@ -17,6 +17,11 @@ limitations under the License.
 import { _t } from "../../languageHandler";
 import SdkConfig from "../../SdkConfig";
 
+/**
+ * Get a localised error message for GeolocationPositionError error codes
+ * @param code - error code from GeolocationPositionError
+ * @returns
+ */
 export const positionFailureMessage = (code: number): string | undefined => {
     const brand = SdkConfig.get().brand;
     switch (code) {

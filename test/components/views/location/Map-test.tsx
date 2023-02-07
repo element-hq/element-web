@@ -16,15 +16,18 @@ limitations under the License.
 
 import React from "react";
 import { act } from "react-dom/test-utils";
+import { fireEvent, getByTestId, render } from "@testing-library/react";
 import * as maplibregl from "maplibre-gl";
 import { ClientEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
-import { fireEvent, getByTestId, render } from "@testing-library/react";
+import { mocked } from "jest-mock";
 
 import Map from "../../../../src/components/views/location/Map";
-import { getMockClientWithEventEmitter } from "../../../test-utils";
+import { getMockClientWithEventEmitter, getMockGeolocationPositionError } from "../../../test-utils";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import { TILE_SERVER_WK_KEY } from "../../../../src/utils/WellKnownUtils";
+import Modal from "../../../../src/Modal";
+import ErrorDialog from "../../../../src/components/views/dialogs/ErrorDialog";
 
 describe("<Map />", () => {
     const defaultProps = {
@@ -51,6 +54,11 @@ describe("<Map />", () => {
             [TILE_SERVER_WK_KEY.name]: { map_style_url: "maps.com" },
         });
 
+        jest.spyOn(logger, "error").mockRestore();
+        mocked(maplibregl.GeolocateControl).mockClear();
+    });
+
+    afterEach(() => {
         jest.spyOn(logger, "error").mockRestore();
     });
 
@@ -199,6 +207,72 @@ describe("<Map />", () => {
             });
 
             expect(onClick).toHaveBeenCalled();
+        });
+    });
+
+    describe("geolocate", () => {
+        it("does not add a geolocate control when allowGeolocate is falsy", () => {
+            getComponent({ allowGeolocate: false });
+
+            // didn't create a geolocation control
+            expect(maplibregl.GeolocateControl).not.toHaveBeenCalled();
+        });
+
+        it("creates a geolocate control and adds it to the map when allowGeolocate is truthy", () => {
+            getComponent({ allowGeolocate: true });
+
+            // didn't create a geolocation control
+            expect(maplibregl.GeolocateControl).toHaveBeenCalledWith({
+                positionOptions: {
+                    enableHighAccuracy: true,
+                },
+                trackUserLocation: false,
+            });
+
+            // mocked maplibregl shares mock for each mocked instance
+            // so we can assert the geolocate control was added using this static mock
+            const mockGeolocate = new maplibregl.GeolocateControl({});
+            expect(mockMap.addControl).toHaveBeenCalledWith(mockGeolocate);
+        });
+
+        it("logs and opens a dialog on a geolocation error", () => {
+            const mockGeolocate = new maplibregl.GeolocateControl({});
+            jest.spyOn(mockGeolocate, "on");
+            const logSpy = jest.spyOn(logger, "error").mockImplementation(() => {});
+            jest.spyOn(Modal, "createDialog");
+
+            const { rerender } = getComponent({ allowGeolocate: true });
+
+            // wait for component to settle
+            getComponent({ allowGeolocate: true }, rerender);
+            expect(mockGeolocate.on).toHaveBeenCalledWith("error", expect.any(Function));
+            const error = getMockGeolocationPositionError(1, "Test");
+
+            // @ts-ignore pretend to have geolocate emit an error
+            mockGeolocate.emit("error", error);
+
+            expect(logSpy).toHaveBeenCalledWith("Could not fetch location", error);
+
+            expect(Modal.createDialog).toHaveBeenCalledWith(ErrorDialog, {
+                title: "Could not fetch location",
+                description:
+                    "Element was denied permission to fetch your location. Please allow location access in your browser settings.",
+            });
+        });
+
+        it("unsubscribes from geolocate errors on destroy", () => {
+            const mockGeolocate = new maplibregl.GeolocateControl({});
+            jest.spyOn(mockGeolocate, "on");
+            jest.spyOn(mockGeolocate, "off");
+            jest.spyOn(Modal, "createDialog");
+
+            const { unmount } = getComponent({ allowGeolocate: true });
+
+            expect(mockGeolocate.on).toHaveBeenCalled();
+
+            unmount();
+
+            expect(mockGeolocate.off).toHaveBeenCalled();
         });
     });
 });
