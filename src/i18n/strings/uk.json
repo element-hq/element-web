@@ -3745,5 +3745,6 @@
     "Notifications debug": "Сповіщення зневадження",
     "unknown": "невідомо",
     "Red": "Черврний",
-    "Grey": "Сірий"
+    "Grey": "Сірий",
+    "Are you sure you want to stop your live broadcast? This will end the broadcast and the full recording will be available in the room.": "Ви впевнені, що хочете припинити пряму трансляцію? Це призведе до завершення трансляції, а повний запис буде доступний у кімнаті."
 }
