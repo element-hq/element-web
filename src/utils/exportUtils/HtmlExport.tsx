@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactNode } from "react";
+import React from "react";
 import ReactDOM from "react-dom";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
@@ -65,7 +65,7 @@ export default class HTMLExporter extends Exporter {
         this.threadsEnabled = SettingsStore.getValue("feature_threadenabled");
     }
 
-    protected async getRoomAvatar(): Promise<ReactNode> {
+    protected async getRoomAvatar(): Promise<string> {
         let blob: Blob | undefined = undefined;
         const avatarUrl = Avatar.avatarUrlForRoom(this.room, 32, 32, "crop");
         const avatarPath = "room.png";

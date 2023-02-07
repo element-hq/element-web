@@ -1,6 +1,9 @@
 module.exports = {
     plugins: ["matrix-org"],
     extends: ["plugin:matrix-org/babel", "plugin:matrix-org/react", "plugin:matrix-org/a11y"],
+    parserOptions: {
+        project: ["./tsconfig.json"],
+    },
     env: {
         browser: true,
         node: true,
@@ -166,6 +169,12 @@ module.exports = {
                 // We don't need super strict typing in test utilities
                 "@typescript-eslint/explicit-function-return-type": "off",
                 "@typescript-eslint/explicit-member-accessibility": "off",
+            },
+        },
+        {
+            files: ["cypress/**/*.ts"],
+            parserOptions: {
+                project: ["./cypress/tsconfig.json"],
             },
         },
     ],
