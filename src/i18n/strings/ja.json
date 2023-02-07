@@ -3643,5 +3643,7 @@
     "Ignore %(user)s": "%(user)sを無視",
     "Indent decrease": "インデントを減らす",
     "Indent increase": "インデントを増やす",
-    "Join the room to participate": "ルームに参加"
+    "Join the room to participate": "ルームに参加",
+    "Threads timeline": "スレッドのタイムライン",
+    "Are you sure you want to stop your live broadcast? This will end the broadcast and the full recording will be available in the room.": "ライブ配信を終了してよろしいですか？配信を終了し、録音をこのルームで利用できるよう設定します。"
 }
