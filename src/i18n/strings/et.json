@@ -3745,5 +3745,6 @@
     "Use rich text instead of Markdown in the message composer.": "Sõnumite kirjutamisel kasuta Markdown'i asemel täisfunktsionaalset küljendust.",
     "unknown": "teadmata",
     "Red": "Punane",
-    "Grey": "Hall"
+    "Grey": "Hall",
+    "Are you sure you want to stop your live broadcast? This will end the broadcast and the full recording will be available in the room.": "Kas sa oled kindel, et soovid otseeetri lõpetada? Sellega ringhäälingukõne salvestamine lõppeb ja salvestis on kättesaadav kõigile jututoas."
 }
