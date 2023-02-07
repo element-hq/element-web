@@ -3660,5 +3660,8 @@
     "unknown": "不明",
     "Red": "赤色",
     "Grey": "灰色",
-    "Unable to decrypt voice broadcast": "音声配信を復号化できません"
+    "Unable to decrypt voice broadcast": "音声配信を復号化できません",
+    "Sender: ": "送信者： ",
+    "Room status": "ルームの状態",
+    "There are no polls in this room": "このルームにアンケートはありません"
 }
