@@ -396,7 +396,11 @@ export class VoiceBroadcastPlayback
         }
 
         if (!this.playbacks.has(eventId)) {
+            // set to buffering while loading the chunk data
+            const currentState = this.getState();
+            this.setState(VoiceBroadcastPlaybackState.Buffering);
             await this.loadPlayback(event);
+            this.setState(currentState);
         }
 
         const playback = this.playbacks.get(eventId);
