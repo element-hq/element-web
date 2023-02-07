@@ -3555,7 +3555,6 @@
     "Browser": "Prehliadač",
     "Allow a QR code to be shown in session manager to sign in another device (requires compatible homeserver)": "Umožniť zobrazenie QR kódu v správcovi relácií na prihlásenie do iného zariadenia (vyžaduje kompatibilný domovský server)",
     "Yes, stop broadcast": "Áno, zastaviť vysielanie",
-    "Are you sure you want to stop your live broadcast?This will end the broadcast and the full recording will be available in the room.": "Určite chcete zastaviť vaše vysielanie naživo? Tým sa vysielanie ukončí a v miestnosti bude k dispozícii celý záznam.",
     "Stop live broadcasting?": "Zastaviť vysielanie naživo?",
     "Someone else is already recording a voice broadcast. Wait for their voice broadcast to end to start a new one.": "Niekto iný už nahráva hlasové vysielanie. Počkajte, kým sa skončí jeho hlasové vysielanie, a potom spustite nové.",
     "You don't have the required permissions to start a voice broadcast in this room. Contact a room administrator to upgrade your permissions.": "Nemáte požadované oprávnenia na spustenie hlasového vysielania v tejto miestnosti. Obráťte sa na správcu miestnosti, aby vám rozšíril oprávnenia.",

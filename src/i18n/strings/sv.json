@@ -3391,7 +3391,6 @@
     "resume voice broadcast": "återuppta röstsändning",
     "play voice broadcast": "spela röstsändning",
     "Yes, stop broadcast": "Ja, avsluta sändning",
-    "Are you sure you want to stop your live broadcast?This will end the broadcast and the full recording will be available in the room.": "Är du säker på att du vill avsluta din livesändning? Det här kommer att avsluta sändningen och den fulla inspelningen kommer att vara tillgänglig i rummet.",
     "Allow a QR code to be shown in session manager to sign in another device (requires compatible homeserver)": "Låt en QR-kod visas i sessionshanteraren för att logga in en annan enhet (kräver en kompatibel hemserver)",
     "Our new sessions manager provides better visibility of all your sessions, and greater control over them including the ability to remotely toggle push notifications.": "Vår nya sessionshanterare ger dig bättre insyn i alla dina sessioner, och större kontroll över dem, inklusive förmågan att växla pushnotiser på håll.",
     "Have greater visibility and control over all your sessions.": "Ha bättre insyn och kontroll över alla dina sessioner.",

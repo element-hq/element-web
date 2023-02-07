@@ -3555,7 +3555,6 @@
     "Browser": "瀏覽器",
     "Allow a QR code to be shown in session manager to sign in another device (requires compatible homeserver)": "允許在工作階段管理程式中顯示 QR code 以在另一台裝置上登入（需要相容的家伺服器）",
     "Yes, stop broadcast": "是的，停止廣播",
-    "Are you sure you want to stop your live broadcast?This will end the broadcast and the full recording will be available in the room.": "您確定您要停止您的即時廣播嗎？這將會結束廣播，聊天室內將會提供完整的錄製內容。",
     "Stop live broadcasting?": "停止即時廣播？",
     "Someone else is already recording a voice broadcast. Wait for their voice broadcast to end to start a new one.": "其他人已在錄製語音廣播。等待他們的語音廣播結束以開始新的語音廣播。",
     "You don't have the required permissions to start a voice broadcast in this room. Contact a room administrator to upgrade your permissions.": "您沒有在此聊天室內開始語音廣播所需的權限。請聯絡聊天室管理員升級您的權限。",

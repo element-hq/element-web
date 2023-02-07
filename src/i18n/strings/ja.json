@@ -3397,7 +3397,6 @@
     "Yes, end my recording": "はい、録音を終了してください",
     "If you start listening to this live broadcast, your current live broadcast recording will be ended.": "このライブ配信の視聴を開始すると、現在のライブ配信の録音は終了します。",
     "Listen to live broadcast?": "ライブ配信を視聴しますか？",
-    "Are you sure you want to stop your live broadcast?This will end the broadcast and the full recording will be available in the room.": "ライブ配信を終了してよろしいですか？配信を終了し、録音をこのルームで利用できるよう設定します。",
     "%(senderName)s ended a voice broadcast": "%(senderName)sが音声配信を終了しました",
     "You ended a voice broadcast": "音声配信を終了しました",
     "%(senderName)s ended a <a>voice broadcast</a>": "%(senderName)sが<a>音声配信</a>を終了しました",

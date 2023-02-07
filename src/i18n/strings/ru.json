@@ -3501,7 +3501,6 @@
     "resume voice broadcast": "продолжить голосовую трансляцию",
     "play voice broadcast": "проиграть голосовую трансляцию",
     "Yes, stop broadcast": "Да, остановить трансляцию",
-    "Are you sure you want to stop your live broadcast?This will end the broadcast and the full recording will be available in the room.": "Вы уверены в том, что хотите остановить голосовую трансляцию? Это закончит трансляцию и полная запись станет доступной в комнате.",
     "Stop live broadcasting?": "Закончить голосовую трансляцию?",
     "Someone else is already recording a voice broadcast. Wait for their voice broadcast to end to start a new one.": "Кто-то уже записывает голосовую трансляцию. Ждите окончания их голосовой трансляции, чтобы начать новую.",
     "You don't have the required permissions to start a voice broadcast in this room. Contact a room administrator to upgrade your permissions.": "У вас нет необходимых разрешений, чтобы начать голосовую трансляцию в этой комнате. Свяжитесь с администратором комнаты для получения разрешений.",

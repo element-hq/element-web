@@ -3556,7 +3556,6 @@
     "Allow a QR code to be shown in session manager to sign in another device (requires compatible homeserver)": "Perbolehkan sebuah kode QR untuk ditampilkan dalam pengelola sesi untuk masuk ke perangkat lain (membutuhkan homeserver yang kompatibel)",
     "play voice broadcast": "mainkan siaran suara",
     "Yes, stop broadcast": "Iya, hentikan siaran",
-    "Are you sure you want to stop your live broadcast?This will end the broadcast and the full recording will be available in the room.": "Apakah Anda yakin ingin menghentikan siaran langsung Anda? Ini akan mengakhiri siaran dan rekaman lengkap akan tersedia di ruangan.",
     "Stop live broadcasting?": "Hentikan siaran langsung?",
     "Someone else is already recording a voice broadcast. Wait for their voice broadcast to end to start a new one.": "Ada orang lain yang saat ini merekam sebuah siaran suara. Tunggu siaran suaranya berakhir untuk memulai yang baru.",
     "You don't have the required permissions to start a voice broadcast in this room. Contact a room administrator to upgrade your permissions.": "Anda tidak memiliki izin untuk memulai sebuah siaran suara di ruangan ini. Hubungi sebuah administrator ruangan untuk meningkatkan izin Anda.",

@@ -3533,7 +3533,6 @@
     "Browser": "Браузер",
     "Allow a QR code to be shown in session manager to sign in another device (requires compatible homeserver)": "Дозволити показ QR-коду в менеджері сеансів для входу на іншому пристрої (потрібен сумісний домашній сервер)",
     "Yes, stop broadcast": "Так, припинити трансляцію",
-    "Are you sure you want to stop your live broadcast?This will end the broadcast and the full recording will be available in the room.": "Ви впевнені, що хочете припинити голосову трансляцію? На цьому трансляція завершиться, і повний запис буде доступний у кімнаті.",
     "Stop live broadcasting?": "Припинити голосову трансляцію?",
     "Someone else is already recording a voice broadcast. Wait for their voice broadcast to end to start a new one.": "Хтось інший вже записує голосову трансляцію. Зачекайте, поки запис завершиться, щоб розпочати новий.",
     "You don't have the required permissions to start a voice broadcast in this room. Contact a room administrator to upgrade your permissions.": "Ви не маєте необхідних дозволів для початку голосової трансляції в цю кімнату. Зверніться до адміністратора кімнати, щоб оновити ваші дозволи.",
