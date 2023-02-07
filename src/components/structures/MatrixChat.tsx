@@ -139,6 +139,7 @@ import GenericToast from "../views/toasts/GenericToast";
 import RovingSpotlightDialog, { Filter } from "../views/dialogs/spotlight/SpotlightDialog";
 import { findDMForUser } from "../../utils/dm/findDMForUser";
 import { Linkify } from "../../HtmlUtils";
+import { NotificationColor } from "../../stores/notifications/NotificationColor";
 
 // legacy export
 export { default as Views } from "../../Views";
@@ -1961,6 +1962,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         }
         if (numUnreadRooms > 0) {
             this.subTitleStatus += `[${numUnreadRooms}]`;
+        } else if (notificationState.color >= NotificationColor.Bold) {
+            this.subTitleStatus += `*`;
         }
 
         this.setPageSubtitle();
