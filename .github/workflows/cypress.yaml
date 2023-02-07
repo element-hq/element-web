@@ -21,7 +21,6 @@ jobs:
             commit_message: ${{ steps.commit.outputs.message }}
             commit_author: ${{ steps.commit.outputs.author }}
             commit_email: ${{ steps.commit.outputs.email }}
-            percy_enable: ${{ steps.percy.outputs.value || '1' }}
             testrail_enable: ${{ steps.testrail.outputs.value || '1' }}
         steps:
             # We create the status here and then update it to success/failure in the `report` stage
@@ -55,14 +54,6 @@ jobs:
                       core.setOutput("message", response.data.message);
                       core.setOutput("author", response.data.author.name);
                       core.setOutput("email", response.data.author.email);
-
-            # Only run Percy when it is demanded or on develop
-            - name: Disable Percy if not needed
-              id: percy
-              if: |
-                  github.event.workflow_run.event == 'pull_request' &&
-                  !contains(fromJSON(steps.prdetails.outputs.data).labels.*.name, 'X-Needs-Percy')
-              run: echo "::set-output name=value::0"
 
             # Only run Testrail when it is demanded or on develop
             - name: Disable Testrail if not needed
@@ -156,7 +147,7 @@ jobs:
 
                   # pass the Percy token as an environment variable
                   PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
-                  PERCY_ENABLE: ${{ needs.prepare.outputs.percy_enable }}
+                  PERCY_ENABLE: 1
                   PERCY_BROWSER_EXECUTABLE: /usr/bin/chromium-browser
                   # tell Percy more details about the context of this run
                   PERCY_BRANCH: ${{ github.event.workflow_run.head_branch }}
