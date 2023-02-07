@@ -14,16 +14,25 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { M_POLL_START, PollAnswer, M_POLL_KIND_DISCLOSED } from "matrix-js-sdk/src/@types/polls";
+import { Mocked } from "jest-mock";
+import { MatrixClient } from "matrix-js-sdk/src/client";
+import { MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { M_POLL_START, PollAnswer, M_POLL_KIND_DISCLOSED, M_POLL_END } from "matrix-js-sdk/src/@types/polls";
 import { M_TEXT } from "matrix-js-sdk/src/@types/extensible_events";
+import { uuid4 } from "@sentry/utils";
 
+import { flushPromises } from "./utilities";
+
+type Options = {
+    roomId: string;
+    ts: number;
+    id: string;
+};
 export const makePollStartEvent = (
     question: string,
     sender: string,
     answers?: PollAnswer[],
-    ts?: number,
-    id?: string,
+    { roomId, ts, id }: Partial<Options> = {},
 ): MatrixEvent => {
     if (!answers) {
         answers = [
@@ -34,7 +43,7 @@ export const makePollStartEvent = (
 
     return new MatrixEvent({
         event_id: id || "$mypoll",
-        room_id: "#myroom:example.com",
+        room_id: roomId || "#myroom:example.com",
         sender: sender,
         type: M_POLL_START.name,
         content: {
@@ -49,4 +58,56 @@ export const makePollStartEvent = (
         },
         origin_server_ts: ts || 0,
     });
+};
+
+export const makePollEndEvent = (pollStartEventId: string, roomId: string, sender: string, ts = 0): MatrixEvent => {
+    return new MatrixEvent({
+        event_id: uuid4(),
+        room_id: roomId,
+        origin_server_ts: ts,
+        type: M_POLL_END.name,
+        sender: sender,
+        content: {
+            "m.relates_to": {
+                rel_type: "m.reference",
+                event_id: pollStartEventId,
+            },
+            [M_POLL_END.name]: {},
+            [M_TEXT.name]: "The poll has ended. Something.",
+        },
+    });
+};
+
+/**
+ * Creates a room with attached poll events
+ * Returns room from mockClient
+ * mocks relations api
+ * @param mxEvent - poll start event
+ * @param relationEvents - returned by relations api
+ * @param endEvents - returned by relations api
+ * @param mockClient - client in use
+ * @returns
+ */
+export const setupRoomWithPollEvents = async (
+    mxEvent: MatrixEvent,
+    relationEvents: Array<MatrixEvent>,
+    endEvents: Array<MatrixEvent> = [],
+    mockClient: Mocked<MatrixClient>,
+): Promise<Room> => {
+    const room = new Room(mxEvent.getRoomId()!, mockClient, mockClient.getSafeUserId());
+    room.processPollEvents([mxEvent, ...relationEvents, ...endEvents]);
+
+    // set redaction allowed for current user only
+    // poll end events are validated against this
+    jest.spyOn(room.currentState, "maySendRedactionForEvent").mockImplementation((_evt: MatrixEvent, id: string) => {
+        return id === mockClient.getSafeUserId();
+    });
+
+    // wait for events to process on room
+    await flushPromises();
+    mockClient.getRoom.mockReturnValue(room);
+    mockClient.relations.mockResolvedValue({
+        events: [...relationEvents, ...endEvents],
+    });
+    return room;
 };

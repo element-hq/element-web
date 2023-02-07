@@ -69,10 +69,10 @@ describe("<PollHistoryDialog />", () => {
         expect(getByText("There are no polls in this room")).toBeTruthy();
     });
 
-    it("renders a list of polls when there are polls in the timeline", () => {
-        const pollStart1 = makePollStartEvent("Question?", userId, undefined, 1675300825090, "$1");
-        const pollStart2 = makePollStartEvent("Where?", userId, undefined, 1675300725090, "$2");
-        const pollStart3 = makePollStartEvent("What?", userId, undefined, 1675200725090, "$3");
+    it("renders a list of polls when there are polls in the timeline", async () => {
+        const pollStart1 = makePollStartEvent("Question?", userId, undefined, { ts: 1675300825090, id: "$1" });
+        const pollStart2 = makePollStartEvent("Where?", userId, undefined, { ts: 1675300725090, id: "$2" });
+        const pollStart3 = makePollStartEvent("What?", userId, undefined, { ts: 1675200725090, id: "$3" });
         const message = new MatrixEvent({
             type: "m.room.message",
             content: {},

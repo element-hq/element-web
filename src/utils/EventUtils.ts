@@ -18,7 +18,7 @@ import { EventStatus, MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { EventType, EVENT_VISIBILITY_CHANGE_TYPE, MsgType, RelationType } from "matrix-js-sdk/src/@types/event";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { logger } from "matrix-js-sdk/src/logger";
-import { M_POLL_START } from "matrix-js-sdk/src/@types/polls";
+import { M_POLL_END, M_POLL_START } from "matrix-js-sdk/src/@types/polls";
 import { M_LOCATION } from "matrix-js-sdk/src/@types/location";
 import { M_BEACON_INFO } from "matrix-js-sdk/src/@types/beacon";
 import { THREAD_RELATION_TYPE } from "matrix-js-sdk/src/models/thread";
@@ -57,6 +57,7 @@ export function isContentActionable(mxEvent: MatrixEvent): boolean {
         } else if (
             mxEvent.getType() === "m.sticker" ||
             M_POLL_START.matches(mxEvent.getType()) ||
+            M_POLL_END.matches(mxEvent.getType()) ||
             M_BEACON_INFO.matches(mxEvent.getType()) ||
             (mxEvent.getType() === VoiceBroadcastInfoEventType &&
                 mxEvent.getContent()?.state === VoiceBroadcastInfoState.Started)

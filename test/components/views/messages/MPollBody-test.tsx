@@ -16,10 +16,9 @@ limitations under the License.
 
 import React from "react";
 import { fireEvent, render, RenderResult } from "@testing-library/react";
-import { MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { Relations } from "matrix-js-sdk/src/models/relations";
 import {
-    M_POLL_END,
     M_POLL_KIND_DISCLOSED,
     M_POLL_KIND_UNDISCLOSED,
     M_POLL_RESPONSE,
@@ -31,7 +30,13 @@ import { M_TEXT } from "matrix-js-sdk/src/@types/extensible_events";
 
 import { allVotes, findTopAnswer, isPollEnded } from "../../../../src/components/views/messages/MPollBody";
 import { IBodyProps } from "../../../../src/components/views/messages/IBodyProps";
-import { flushPromises, getMockClientWithEventEmitter, mockClientMethodsUser } from "../../../test-utils";
+import {
+    flushPromises,
+    getMockClientWithEventEmitter,
+    makePollEndEvent,
+    mockClientMethodsUser,
+    setupRoomWithPollEvents,
+} from "../../../test-utils";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import MPollBody from "../../../../src/components/views/messages/MPollBody";
 import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalinks";
@@ -112,7 +117,7 @@ describe("MPollBody", () => {
             responseEvent("@catrd:example.com", "poutine"),
             responseEvent("@dune2:example.com", "wings"),
         ];
-        const ends = [endEvent("@notallowed:example.com", 12)];
+        const ends = [newPollEndEvent("@notallowed:example.com", 12)];
         const renderResult = await newMPollBody(votes, ends);
 
         // Even though an end event was sent, we render the poll as unfinished
@@ -222,7 +227,7 @@ describe("MPollBody", () => {
             content: newPollStart(undefined, undefined, true),
         });
         const props = getMPollBodyPropsFromEvent(mxEvent);
-        const room = await setupRoomWithPollEvents(mxEvent, votes);
+        const room = await setupRoomWithPollEvents(mxEvent, votes, [], mockClient);
         const renderResult = renderMPollBodyWithWrapper(props);
         // wait for /relations promise to resolve
         await flushPromises();
@@ -250,7 +255,7 @@ describe("MPollBody", () => {
             content: newPollStart(undefined, undefined, true),
         });
         const props = getMPollBodyPropsFromEvent(mxEvent);
-        const room = await setupRoomWithPollEvents(mxEvent, votes);
+        const room = await setupRoomWithPollEvents(mxEvent, votes, [], mockClient);
         const renderResult = renderMPollBodyWithWrapper(props);
         // wait for /relations promise to resolve
         await flushPromises();
@@ -422,7 +427,7 @@ describe("MPollBody", () => {
             responseEvent("@catrd:example.com", "poutine"),
             responseEvent("@dune2:example.com", "wings"),
         ];
-        const ends = [endEvent("@me:example.com", 12)];
+        const ends = [newPollEndEvent("@me:example.com", 12)];
         const renderResult = await newMPollBody(votes, ends, undefined, false);
         expect(endedVotesCount(renderResult, "pizza")).toBe("3 votes");
         expect(endedVotesCount(renderResult, "poutine")).toBe("1 vote");
@@ -471,7 +476,7 @@ describe("MPollBody", () => {
     });
 
     it("sends no events when I click in an ended poll", async () => {
-        const ends = [endEvent("@me:example.com", 25)];
+        const ends = [newPollEndEvent("@me:example.com", 25)];
         const votes = [responseEvent("@uy:example.com", "wings", 15), responseEvent("@uy:example.com", "poutine", 15)];
         const renderResult = await newMPollBody(votes, ends);
         clickOption(renderResult, "wings");
@@ -509,7 +514,7 @@ describe("MPollBody", () => {
     });
 
     it("shows non-radio buttons if the poll is ended", async () => {
-        const events = [endEvent()];
+        const events = [newPollEndEvent()];
         const { container } = await newMPollBody([], events);
         expect(container.querySelector(".mx_StyledRadioButton")).not.toBeInTheDocument();
         expect(container.querySelector('input[type="radio"]')).not.toBeInTheDocument();
@@ -523,7 +528,7 @@ describe("MPollBody", () => {
             responseEvent("@qbert:example.com", "poutine", 16), // latest qbert
             responseEvent("@qbert:example.com", "wings", 15),
         ];
-        const ends = [endEvent("@me:example.com", 25)];
+        const ends = [newPollEndEvent("@me:example.com", 25)];
         const renderResult = await newMPollBody(votes, ends);
         expect(endedVotesCount(renderResult, "pizza")).toBe("0 votes");
         expect(endedVotesCount(renderResult, "poutine")).toBe("1 vote");
@@ -534,7 +539,7 @@ describe("MPollBody", () => {
 
     it("counts a single vote as normal if the poll is ended", async () => {
         const votes = [responseEvent("@qbert:example.com", "poutine", 16)];
-        const ends = [endEvent("@me:example.com", 25)];
+        const ends = [newPollEndEvent("@me:example.com", 25)];
         const renderResult = await newMPollBody(votes, ends);
         expect(endedVotesCount(renderResult, "pizza")).toBe("0 votes");
         expect(endedVotesCount(renderResult, "poutine")).toBe("1 vote");
@@ -551,7 +556,7 @@ describe("MPollBody", () => {
             responseEvent("@fg:example.com", "pizza", 15),
             responseEvent("@hi:example.com", "pizza", 15),
         ];
-        const ends = [endEvent("@me:example.com", 25)];
+        const ends = [newPollEndEvent("@me:example.com", 25)];
         const renderResult = await newMPollBody(votes, ends);
 
         expect(renderResult.container.querySelectorAll(".mx_StyledRadioButton")).toHaveLength(0);
@@ -573,7 +578,7 @@ describe("MPollBody", () => {
             responseEvent("@wf:example.com", "pizza", 15),
             responseEvent("@ld:example.com", "pizza", 15),
         ];
-        const ends = [endEvent("@me:example.com", 25)];
+        const ends = [newPollEndEvent("@me:example.com", 25)];
         const renderResult = await newMPollBody(votes, ends);
 
         expect(endedVotesCount(renderResult, "pizza")).toBe("2 votes");
@@ -594,8 +599,8 @@ describe("MPollBody", () => {
             responseEvent("@ld:example.com", "pizza", 15),
         ];
         const ends = [
-            endEvent("@unauthorised:example.com", 5), // Should be ignored
-            endEvent("@me:example.com", 25),
+            newPollEndEvent("@unauthorised:example.com", 5), // Should be ignored
+            newPollEndEvent("@me:example.com", 25),
         ];
         const renderResult = await newMPollBody(votes, ends);
 
@@ -620,9 +625,9 @@ describe("MPollBody", () => {
             responseEvent("@ld:example.com", "pizza", 15),
         ];
         const ends = [
-            endEvent("@me:example.com", 65),
-            endEvent("@me:example.com", 25),
-            endEvent("@me:example.com", 75),
+            newPollEndEvent("@me:example.com", 65),
+            newPollEndEvent("@me:example.com", 25),
+            newPollEndEvent("@me:example.com", 75),
         ];
         const renderResult = await newMPollBody(votes, ends);
 
@@ -640,7 +645,7 @@ describe("MPollBody", () => {
             responseEvent("@qb:example.com", "wings", 14),
             responseEvent("@xy:example.com", "wings", 15),
         ];
-        const ends = [endEvent("@me:example.com", 25)];
+        const ends = [newPollEndEvent("@me:example.com", 25)];
         const renderResult = await newMPollBody(votes, ends);
 
         // Then the winner is highlighted
@@ -658,7 +663,7 @@ describe("MPollBody", () => {
             responseEvent("@xy:example.com", "wings", 15),
             responseEvent("@fg:example.com", "poutine", 15),
         ];
-        const ends = [endEvent("@me:example.com", 25)];
+        const ends = [newPollEndEvent("@me:example.com", 25)];
         const renderResult = await newMPollBody(votes, ends);
 
         expect(endedVoteChecked(renderResult, "pizza")).toBe(true);
@@ -669,7 +674,7 @@ describe("MPollBody", () => {
     });
 
     it("highlights nothing if poll has no votes", async () => {
-        const ends = [endEvent("@me:example.com", 25)];
+        const ends = [newPollEndEvent("@me:example.com", 25)];
         const renderResult = await newMPollBody([], ends);
         expect(renderResult.container.getElementsByClassName("mx_MPollBody_option_checked")).toHaveLength(0);
     });
@@ -681,7 +686,7 @@ describe("MPollBody", () => {
     });
 
     it("says poll is ended if there is an end event", async () => {
-        const ends = [endEvent("@me:example.com", 25)];
+        const ends = [newPollEndEvent("@me:example.com", 25)];
         const result = await runIsPollEnded(ends);
         expect(result).toBe(true);
     });
@@ -693,9 +698,9 @@ describe("MPollBody", () => {
             room_id: "#myroom:example.com",
             content: newPollStart([]),
         });
-        const ends = [endEvent("@me:example.com", 25)];
+        const ends = [newPollEndEvent("@me:example.com", 25)];
 
-        await setupRoomWithPollEvents(pollEvent, [], ends);
+        await setupRoomWithPollEvents(pollEvent, [], ends, mockClient);
         const poll = mockClient.getRoom(pollEvent.getRoomId()!)!.polls.get(pollEvent.getId()!)!;
         // start fetching, dont await
         poll.getResponses();
@@ -793,7 +798,7 @@ describe("MPollBody", () => {
     });
 
     it("renders a finished poll with no votes", async () => {
-        const ends = [endEvent("@me:example.com", 25)];
+        const ends = [newPollEndEvent("@me:example.com", 25)];
         const { container } = await newMPollBody([], ends);
         expect(container).toMatchSnapshot();
     });
@@ -806,7 +811,7 @@ describe("MPollBody", () => {
             responseEvent("@yo:example.com", "wings", 15),
             responseEvent("@qr:example.com", "italian", 16),
         ];
-        const ends = [endEvent("@me:example.com", 25)];
+        const ends = [newPollEndEvent("@me:example.com", 25)];
         const { container } = await newMPollBody(votes, ends);
         expect(container).toMatchSnapshot();
     });
@@ -820,7 +825,7 @@ describe("MPollBody", () => {
             responseEvent("@th:example.com", "poutine", 13),
             responseEvent("@yh:example.com", "poutine", 14),
         ];
-        const ends = [endEvent("@me:example.com", 25)];
+        const ends = [newPollEndEvent("@me:example.com", 25)];
         const { container } = await newMPollBody(votes, ends);
         expect(container).toMatchSnapshot();
     });
@@ -848,7 +853,7 @@ describe("MPollBody", () => {
             responseEvent("@th:example.com", "poutine", 13),
             responseEvent("@yh:example.com", "poutine", 14),
         ];
-        const ends = [endEvent("@me:example.com", 25)];
+        const ends = [newPollEndEvent("@me:example.com", 25)];
         const { container } = await newMPollBody(votes, ends, undefined, false);
         expect(container).toMatchSnapshot();
     });
@@ -915,26 +920,9 @@ async function newMPollBodyFromEvent(
 ): Promise<RenderResult> {
     const props = getMPollBodyPropsFromEvent(mxEvent);
 
-    await setupRoomWithPollEvents(mxEvent, relationEvents, endEvents);
+    await setupRoomWithPollEvents(mxEvent, relationEvents, endEvents, mockClient);
 
     return renderMPollBodyWithWrapper(props);
-}
-
-async function setupRoomWithPollEvents(
-    mxEvent: MatrixEvent,
-    relationEvents: Array<MatrixEvent>,
-    endEvents: Array<MatrixEvent> = [],
-): Promise<Room> {
-    const room = new Room(mxEvent.getRoomId()!, mockClient, userId);
-    room.processPollEvents([mxEvent, ...relationEvents, ...endEvents]);
-    setRedactionAllowedForMeOnly(room);
-    // wait for events to process on room
-    await flushPromises();
-    mockClient.getRoom.mockReturnValue(room);
-    mockClient.relations.mockResolvedValue({
-        events: [...relationEvents, ...endEvents],
-    });
-    return room;
 }
 
 function clickOption({ getByTestId }: RenderResult, value: string) {
@@ -961,7 +949,7 @@ function endedVotesCount(renderResult: RenderResult, value: string): string {
     return votesCount(renderResult, value);
 }
 
-function newPollStart(answers?: PollAnswer[], question?: string, disclosed = true): PollStartEventContent {
+export function newPollStart(answers?: PollAnswer[], question?: string, disclosed = true): PollStartEventContent {
     if (!answers) {
         answers = [
             { id: "pizza", [M_TEXT.name]: "Pizza" },
@@ -1036,22 +1024,8 @@ function expectedResponseEventCall(answer: string) {
     return [roomId, eventType, content];
 }
 
-function endEvent(sender = "@me:example.com", ts = 0): MatrixEvent {
-    return new MatrixEvent({
-        event_id: nextId(),
-        room_id: "#myroom:example.com",
-        origin_server_ts: ts,
-        type: M_POLL_END.name,
-        sender: sender,
-        content: {
-            "m.relates_to": {
-                rel_type: "m.reference",
-                event_id: "$mypoll",
-            },
-            [M_POLL_END.name]: {},
-            [M_TEXT.name]: "The poll has ended. Something.",
-        },
-    });
+export function newPollEndEvent(sender = "@me:example.com", ts = 0): MatrixEvent {
+    return makePollEndEvent("$mypoll", "#myroom:example.com", sender, ts);
 }
 
 async function runIsPollEnded(ends: MatrixEvent[]) {
@@ -1062,7 +1036,7 @@ async function runIsPollEnded(ends: MatrixEvent[]) {
         content: newPollStart(),
     });
 
-    await setupRoomWithPollEvents(pollEvent, [], ends);
+    await setupRoomWithPollEvents(pollEvent, [], ends, mockClient);
 
     return isPollEnded(pollEvent, mockClient);
 }
@@ -1076,12 +1050,6 @@ function runFindTopAnswer(votes: MatrixEvent[]) {
     });
 
     return findTopAnswer(pollEvent, newVoteRelations(votes));
-}
-
-function setRedactionAllowedForMeOnly(room: Room) {
-    jest.spyOn(room.currentState, "maySendRedactionForEvent").mockImplementation((_evt: MatrixEvent, id: string) => {
-        return id === userId;
-    });
 }
 
 let EVENT_ID = 0;
