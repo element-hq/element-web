@@ -69,7 +69,7 @@ export function presentableTextForFile(
         // it since it is "ugly", users generally aren't aware what it
         // means and the type of the attachment can usually be inferred
         // from the file extension.
-        text += " (" + filesize(content.info.size) + ")";
+        text += " (" + <string>filesize(content.info.size) + ")";
     }
     return text;
 }

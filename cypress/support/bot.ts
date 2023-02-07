@@ -163,6 +163,8 @@ function setupBotClient(
                     }
                 })
                 .then(() => cli),
+            // extra timeout, as this sometimes takes a while
+            { timeout: 30_000 },
         );
     });
 }

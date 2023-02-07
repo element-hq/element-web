@@ -962,8 +962,6 @@
     "Tried to load a specific point in this room's timeline, but was unable to find it.": "ພະຍາຍາມໂຫຼດຈຸດສະເພາະໃນທາມລາຍຂອງຫ້ອງນີ້, ແຕ່ບໍ່ສາມາດຊອກຫາມັນໄດ້.",
     "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.": "ພະຍາຍາມໂຫຼດຈຸດສະເພາະຢູ່ໃນທາມລາຍຂອງຫ້ອງນີ້, ແຕ່ທ່ານບໍ່ໄດ້ຮັບອະນຸຍາດໃຫ້ເບິ່ງຂໍ້ຄວາມທີ່ເປັນຄໍາຖາມ.",
     "Thread": "ກະທູ້",
-    "<a>Give feedback</a>": "<a>ໃຫ້ຄໍາຄິດເຫັນ</a>",
-    "Threads are a beta feature": "ກະທູ້ແມ່ນຄຸນສົມບັດຂອງເບຕ້າ",
     "Keep discussions organised with threads": "ຮັກສາການສົນທະນາທີ່ມີການຈັດລະບຽບ",
     "<b>Tip:</b> Use “%(replyInThread)s” when hovering over a message.": "<b>ເຄັດລັບ:</b> ໃຊ້ “%(replyInThread)s” ເມື່ອເລື່ອນໃສ່ຂໍ້ຄວາມ.",
     "Threads help keep your conversations on-topic and easy to track.": "ກະທູ້ຊ່ວຍໃຫ້ການສົນທະນາຂອງທ່ານຢູ່ໃນຫົວຂໍ້ ແລະ ງ່າຍຕໍ່ການຕິດຕາມ.",

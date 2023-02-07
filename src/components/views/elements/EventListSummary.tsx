@@ -507,39 +507,36 @@ export default class EventListSummary extends React.Component<IProps> {
         eventsToRender.forEach((e, index) => {
             const type = e.getType();
 
-            let userId = e.getSender();
-            if (type === EventType.RoomMember) {
-                userId = e.getStateKey();
+            let userKey = e.getSender()!;
+            if (type === EventType.RoomThirdPartyInvite) {
+                userKey = e.getContent().display_name;
+            } else if (type === EventType.RoomMember) {
+                userKey = e.getStateKey();
             } else if (e.isRedacted()) {
-                userId = e.getUnsigned()?.redacted_because?.sender;
+                userKey = e.getUnsigned()?.redacted_because?.sender;
             }
 
             // Initialise a user's events
-            if (!userEvents[userId]) {
-                userEvents[userId] = [];
+            if (!userEvents[userKey]) {
+                userEvents[userKey] = [];
             }
 
-            let displayName = userId;
-            if (type === EventType.RoomThirdPartyInvite) {
-                displayName = e.getContent().display_name;
-                if (e.sender) {
-                    latestUserAvatarMember.set(userId, e.sender);
-                }
-            } else if (e.isRedacted()) {
-                const sender = this.context?.room.getMember(userId);
+            let displayName = userKey;
+            if (e.isRedacted()) {
+                const sender = this.context?.room?.getMember(userKey);
                 if (sender) {
                     displayName = sender.name;
-                    latestUserAvatarMember.set(userId, sender);
+                    latestUserAvatarMember.set(userKey, sender);
                 }
             } else if (e.target && TARGET_AS_DISPLAY_NAME_EVENTS.includes(type as EventType)) {
                 displayName = e.target.name;
-                latestUserAvatarMember.set(userId, e.target);
-            } else if (e.sender) {
+                latestUserAvatarMember.set(userKey, e.target);
+            } else if (e.sender && type !== EventType.RoomThirdPartyInvite) {
                 displayName = e.sender.name;
-                latestUserAvatarMember.set(userId, e.sender);
+                latestUserAvatarMember.set(userKey, e.sender);
             }
 
-            userEvents[userId].push({
+            userEvents[userKey].push({
                 mxEvent: e,
                 displayName,
                 index: index,

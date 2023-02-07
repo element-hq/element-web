@@ -260,7 +260,7 @@ export async function downloadBugReport(opts: IOpts = {}): Promise<void> {
                 reader.readAsArrayBuffer(value as Blob);
             });
         } else {
-            metadata += `${key} = ${value}\n`;
+            metadata += `${key} = ${value as string}\n`;
         }
     }
     tape.append("issue.txt", metadata);
