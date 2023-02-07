@@ -2458,7 +2458,6 @@
     "We're creating a room with %(names)s": "יצרנו חדר עם %(names)s",
     "Jump to the given date in the timeline": "קיפצו לתאריך הנתון בציר הזמן",
     "Thread": "שרשורים",
-    "Threads are a beta feature": "שרשורים הם תכונה ניסיונית",
     "Keep discussions organised with threads": "שימרו על דיונים מאורגנים בשרשורים",
     "<b>Tip:</b> Use “%(replyInThread)s” when hovering over a message.": "<b>טיפ:</b> השתמש ב-\"%(replyInThread)s\" כשאתם מרחפים מעל הודעה.",
     "Threads help keep your conversations on-topic and easy to track.": "שרשורים עוזרים לשמור על השיחות שלכם בנושא וקל למעקב.",
