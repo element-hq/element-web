@@ -52,6 +52,8 @@ const handleVerificationRequest = (request: VerificationRequest): Chainable<Emoj
             verifier.on("show_sas", onShowSas);
             verifier.verify();
         }),
+        // extra timeout, as this sometimes takes a while
+        { timeout: 30_000 },
     );
 };
 
@@ -111,9 +113,8 @@ describe("Decryption Failure Bar", () => {
                 })
                 .then(() => {
                     cy.botSendMessage(bot, roomId, "test");
-                    cy.wait(5000);
-                    cy.get(".mx_DecryptionFailureBar .mx_DecryptionFailureBar_message_headline").should(
-                        "have.text",
+                    cy.contains(
+                        ".mx_DecryptionFailureBar .mx_DecryptionFailureBar_message_headline",
                         "Verify this device to access all messages",
                     );
 
@@ -124,6 +125,7 @@ describe("Decryption Failure Bar", () => {
 
                     const verificationRequestPromise = waitForVerificationRequest(otherDevice);
                     cy.get(".mx_CompleteSecurity_actionRow .mx_AccessibleButton").click();
+                    cy.contains("To proceed, please accept the verification request on your other device.");
                     cy.wrap(verificationRequestPromise).then((verificationRequest: VerificationRequest) => {
                         cy.wrap(verificationRequest.accept());
                         handleVerificationRequest(verificationRequest).then((emojis) => {
@@ -170,9 +172,8 @@ describe("Decryption Failure Bar", () => {
             );
 
             cy.botSendMessage(bot, roomId, "test");
-            cy.wait(5000);
-            cy.get(".mx_DecryptionFailureBar .mx_DecryptionFailureBar_message_headline").should(
-                "have.text",
+            cy.contains(
+                ".mx_DecryptionFailureBar .mx_DecryptionFailureBar_message_headline",
                 "Reset your keys to prevent future decryption errors",
             );
 

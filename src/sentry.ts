@@ -116,7 +116,8 @@ function getEnabledLabs(): string {
 }
 
 async function getCryptoContext(client: MatrixClient): Promise<CryptoContext> {
-    if (!client.isCryptoEnabled()) {
+    // TODO: make this work with rust crypto
+    if (!client.isCryptoEnabled() || !client.crypto) {
         return {};
     }
     const keys = [`ed25519:${client.getDeviceEd25519Key()}`];

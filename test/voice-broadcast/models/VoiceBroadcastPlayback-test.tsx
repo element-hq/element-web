@@ -18,6 +18,7 @@ import { mocked } from "jest-mock";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MatrixClient, MatrixEvent, MatrixEventEvent, Room } from "matrix-js-sdk/src/matrix";
+import { defer } from "matrix-js-sdk/src/utils";
 
 import { Playback, PlaybackState } from "../../../src/audio/Playback";
 import { PlaybackManager } from "../../../src/audio/PlaybackManager";
@@ -31,9 +32,10 @@ import {
     VoiceBroadcastPlaybackState,
     VoiceBroadcastRecording,
 } from "../../../src/voice-broadcast";
-import { filterConsole, flushPromises, stubClient } from "../../test-utils";
+import { filterConsole, flushPromises, flushPromisesWithFakeTimers, stubClient } from "../../test-utils";
 import { createTestPlayback } from "../../test-utils/audio";
 import { mkVoiceBroadcastChunkEvent, mkVoiceBroadcastInfoStateEvent } from "../utils/test-utils";
+import { LazyValue } from "../../../src/utils/LazyValue";
 
 jest.mock("../../../src/utils/MediaEventHelper", () => ({
     MediaEventHelper: jest.fn(),
@@ -49,6 +51,7 @@ describe("VoiceBroadcastPlayback", () => {
     let playback: VoiceBroadcastPlayback;
     let onStateChanged: (state: VoiceBroadcastPlaybackState) => void;
     let chunk1Event: MatrixEvent;
+    let deplayedChunk1Event: MatrixEvent;
     let chunk2Event: MatrixEvent;
     let chunk2BEvent: MatrixEvent;
     let chunk3Event: MatrixEvent;
@@ -58,6 +61,7 @@ describe("VoiceBroadcastPlayback", () => {
     const chunk1Data = new ArrayBuffer(2);
     const chunk2Data = new ArrayBuffer(3);
     const chunk3Data = new ArrayBuffer(3);
+    let delayedChunk1Helper: MediaEventHelper;
     let chunk1Helper: MediaEventHelper;
     let chunk2Helper: MediaEventHelper;
     let chunk3Helper: MediaEventHelper;
@@ -97,8 +101,8 @@ describe("VoiceBroadcastPlayback", () => {
     };
 
     const startPlayback = () => {
-        beforeEach(async () => {
-            await playback.start();
+        beforeEach(() => {
+            playback.start();
         });
     };
 
@@ -127,11 +131,36 @@ describe("VoiceBroadcastPlayback", () => {
         };
     };
 
+    const mkDeplayedChunkHelper = (data: ArrayBuffer): MediaEventHelper => {
+        const deferred = defer<LazyValue<Blob>>();
+
+        setTimeout(() => {
+            deferred.resolve({
+                // @ts-ignore
+                arrayBuffer: jest.fn().mockResolvedValue(data),
+            });
+        }, 7500);
+
+        return {
+            sourceBlob: {
+                cachedValue: new Blob(),
+                done: false,
+                // @ts-ignore
+                value: deferred.promise,
+            },
+        };
+    };
+
+    const simulateFirstChunkArrived = async (): Promise<void> => {
+        jest.advanceTimersByTime(10000);
+        await flushPromisesWithFakeTimers();
+    };
+
     const mkInfoEvent = (state: VoiceBroadcastInfoState) => {
         return mkVoiceBroadcastInfoStateEvent(roomId, state, userId, deviceId);
     };
 
-    const mkPlayback = async () => {
+    const mkPlayback = async (fakeTimers = false): Promise<VoiceBroadcastPlayback> => {
         const playback = new VoiceBroadcastPlayback(
             infoEvent,
             client,
@@ -140,7 +169,7 @@ describe("VoiceBroadcastPlayback", () => {
         jest.spyOn(playback, "removeAllListeners");
         jest.spyOn(playback, "destroy");
         playback.on(VoiceBroadcastPlaybackEvent.StateChanged, onStateChanged);
-        await flushPromises();
+        fakeTimers ? await flushPromisesWithFakeTimers() : await flushPromises();
         return playback;
     };
 
@@ -152,6 +181,7 @@ describe("VoiceBroadcastPlayback", () => {
 
     const createChunkEvents = () => {
         chunk1Event = mkVoiceBroadcastChunkEvent(infoEvent.getId()!, userId, roomId, chunk1Length, 1);
+        deplayedChunk1Event = mkVoiceBroadcastChunkEvent(infoEvent.getId()!, userId, roomId, chunk1Length, 1);
         chunk2Event = mkVoiceBroadcastChunkEvent(infoEvent.getId()!, userId, roomId, chunk2Length, 2);
         chunk2Event.setTxnId("tx-id-1");
         chunk2BEvent = mkVoiceBroadcastChunkEvent(infoEvent.getId()!, userId, roomId, chunk2Length, 2);
@@ -159,6 +189,7 @@ describe("VoiceBroadcastPlayback", () => {
         chunk3Event = mkVoiceBroadcastChunkEvent(infoEvent.getId()!, userId, roomId, chunk3Length, 3);
 
         chunk1Helper = mkChunkHelper(chunk1Data);
+        delayedChunk1Helper = mkDeplayedChunkHelper(chunk1Data);
         chunk2Helper = mkChunkHelper(chunk2Data);
         chunk3Helper = mkChunkHelper(chunk3Data);
 
@@ -181,6 +212,7 @@ describe("VoiceBroadcastPlayback", () => {
 
         mocked(MediaEventHelper).mockImplementation((event: MatrixEvent): any => {
             if (event === chunk1Event) return chunk1Helper;
+            if (event === deplayedChunk1Event) return delayedChunk1Helper;
             if (event === chunk2Event) return chunk2Helper;
             if (event === chunk3Event) return chunk3Helper;
         });
@@ -488,11 +520,17 @@ describe("VoiceBroadcastPlayback", () => {
 
     describe("when there is a stopped voice broadcast", () => {
         beforeEach(async () => {
+            jest.useFakeTimers();
             infoEvent = mkInfoEvent(VoiceBroadcastInfoState.Stopped);
             createChunkEvents();
-            setUpChunkEvents([chunk2Event, chunk1Event, chunk3Event]);
-            room.addLiveEvents([infoEvent, chunk1Event, chunk2Event, chunk3Event]);
-            playback = await mkPlayback();
+            // use delayed first chunk here to simulate loading time
+            setUpChunkEvents([chunk2Event, deplayedChunk1Event, chunk3Event]);
+            room.addLiveEvents([infoEvent, deplayedChunk1Event, chunk2Event, chunk3Event]);
+            playback = await mkPlayback(true);
+        });
+
+        afterEach(() => {
+            jest.useRealTimers();
         });
 
         it("should expose the info event", () => {
@@ -504,166 +542,174 @@ describe("VoiceBroadcastPlayback", () => {
         describe("and calling start", () => {
             startPlayback();
 
-            itShouldSetTheStateTo(VoiceBroadcastPlaybackState.Playing);
+            itShouldSetTheStateTo(VoiceBroadcastPlaybackState.Buffering);
 
-            it("should play the chunks beginning with the first one", () => {
-                // assert that the first chunk is being played
-                expect(chunk1Playback.play).toHaveBeenCalled();
-                expect(chunk2Playback.play).not.toHaveBeenCalled();
-            });
-
-            describe("and calling start again", () => {
-                it("should not play the first chunk a second time", () => {
-                    expect(chunk1Playback.play).toHaveBeenCalledTimes(1);
-                });
-            });
-
-            describe("and the chunk playback progresses", () => {
-                beforeEach(() => {
-                    chunk1Playback.clockInfo.liveData.update([11]);
-                });
-
-                it("should update the time", () => {
-                    expect(playback.timeSeconds).toBe(11);
-                    expect(playback.timeLeftSeconds).toBe(2);
-                });
-            });
-
-            describe("and the chunk playback progresses across the actual time", () => {
-                // This can be the case if the meta data is out of sync with the actual audio data.
-
-                beforeEach(() => {
-                    chunk1Playback.clockInfo.liveData.update([15]);
-                });
-
-                it("should update the time", () => {
-                    expect(playback.timeSeconds).toBe(15);
-                    expect(playback.timeLeftSeconds).toBe(0);
-                });
-            });
-
-            describe("and skipping to the middle of the second chunk", () => {
-                const middleOfSecondChunk = (chunk1Length + chunk2Length / 2) / 1000;
-
+            describe("and the first chunk data has been loaded", () => {
                 beforeEach(async () => {
-                    await playback.skipTo(middleOfSecondChunk);
+                    await simulateFirstChunkArrived();
                 });
 
-                it("should play the second chunk", () => {
-                    expect(chunk1Playback.stop).toHaveBeenCalled();
-                    expect(chunk1Playback.destroy).toHaveBeenCalled();
-                    expect(chunk2Playback.play).toHaveBeenCalled();
+                itShouldSetTheStateTo(VoiceBroadcastPlaybackState.Playing);
+
+                it("should play the chunks beginning with the first one", () => {
+                    // assert that the first chunk is being played
+                    expect(chunk1Playback.play).toHaveBeenCalled();
+                    expect(chunk2Playback.play).not.toHaveBeenCalled();
                 });
 
-                it("should update the time", () => {
-                    expect(playback.timeSeconds).toBe(middleOfSecondChunk);
+                describe("and calling start again", () => {
+                    it("should not play the first chunk a second time", () => {
+                        expect(chunk1Playback.play).toHaveBeenCalledTimes(1);
+                    });
                 });
 
-                describe("and skipping to the start", () => {
-                    beforeEach(async () => {
-                        await playback.skipTo(0);
+                describe("and the chunk playback progresses", () => {
+                    beforeEach(() => {
+                        chunk1Playback.clockInfo.liveData.update([11]);
                     });
 
-                    it("should play the first chunk", () => {
+                    it("should update the time", () => {
+                        expect(playback.timeSeconds).toBe(11);
+                    });
+                });
+
+                describe("and the chunk playback progresses across the actual time", () => {
+                    // This can be the case if the meta data is out of sync with the actual audio data.
+
+                    beforeEach(() => {
+                        chunk1Playback.clockInfo.liveData.update([15]);
+                    });
+
+                    it("should update the time", () => {
+                        expect(playback.timeSeconds).toBe(15);
+                        expect(playback.timeLeftSeconds).toBe(0);
+                    });
+                });
+
+                describe("and skipping to the middle of the second chunk", () => {
+                    const middleOfSecondChunk = (chunk1Length + chunk2Length / 2) / 1000;
+
+                    beforeEach(async () => {
+                        await playback.skipTo(middleOfSecondChunk);
+                    });
+
+                    it("should play the second chunk", () => {
+                        expect(chunk1Playback.stop).toHaveBeenCalled();
+                        expect(chunk1Playback.destroy).toHaveBeenCalled();
+                        expect(chunk2Playback.play).toHaveBeenCalled();
+                    });
+
+                    it("should update the time", () => {
+                        expect(playback.timeSeconds).toBe(middleOfSecondChunk);
+                    });
+
+                    describe("and skipping to the start", () => {
+                        beforeEach(async () => {
+                            await playback.skipTo(0);
+                        });
+
+                        it("should play the first chunk", () => {
+                            expect(chunk2Playback.stop).toHaveBeenCalled();
+                            expect(chunk2Playback.destroy).toHaveBeenCalled();
+                            expect(chunk1Playback.play).toHaveBeenCalled();
+                        });
+
+                        it("should update the time", () => {
+                            expect(playback.timeSeconds).toBe(0);
+                        });
+                    });
+                });
+
+                describe("and skipping multiple times", () => {
+                    beforeEach(async () => {
+                        return Promise.all([
+                            playback.skipTo(middleOfSecondChunk),
+                            playback.skipTo(middleOfThirdChunk),
+                            playback.skipTo(0),
+                        ]);
+                    });
+
+                    it("should only skip to the first and last position", () => {
+                        expect(chunk1Playback.stop).toHaveBeenCalled();
+                        expect(chunk1Playback.destroy).toHaveBeenCalled();
+                        expect(chunk2Playback.play).toHaveBeenCalled();
+
+                        expect(chunk3Playback.play).not.toHaveBeenCalled();
+
                         expect(chunk2Playback.stop).toHaveBeenCalled();
                         expect(chunk2Playback.destroy).toHaveBeenCalled();
                         expect(chunk1Playback.play).toHaveBeenCalled();
                     });
-
-                    it("should update the time", () => {
-                        expect(playback.timeSeconds).toBe(0);
-                    });
-                });
-            });
-
-            describe("and skipping multiple times", () => {
-                beforeEach(async () => {
-                    return Promise.all([
-                        playback.skipTo(middleOfSecondChunk),
-                        playback.skipTo(middleOfThirdChunk),
-                        playback.skipTo(0),
-                    ]);
                 });
 
-                it("should only skip to the first and last position", () => {
-                    expect(chunk1Playback.stop).toHaveBeenCalled();
-                    expect(chunk1Playback.destroy).toHaveBeenCalled();
-                    expect(chunk2Playback.play).toHaveBeenCalled();
-
-                    expect(chunk3Playback.play).not.toHaveBeenCalled();
-
-                    expect(chunk2Playback.stop).toHaveBeenCalled();
-                    expect(chunk2Playback.destroy).toHaveBeenCalled();
-                    expect(chunk1Playback.play).toHaveBeenCalled();
-                });
-            });
-
-            describe("and the first chunk ends", () => {
-                beforeEach(() => {
-                    chunk1Playback.emit(PlaybackState.Stopped);
-                });
-
-                it("should play until the end", () => {
-                    // assert first chunk was unloaded
-                    expect(chunk1Playback.destroy).toHaveBeenCalled();
-
-                    // assert that the second chunk is being played
-                    expect(chunk2Playback.play).toHaveBeenCalled();
-
-                    // simulate end of second and third chunk
-                    chunk2Playback.emit(PlaybackState.Stopped);
-                    chunk3Playback.emit(PlaybackState.Stopped);
-
-                    // assert that the entire playback is now in stopped state
-                    expect(playback.getState()).toBe(VoiceBroadcastPlaybackState.Stopped);
-                });
-            });
-
-            describe("and calling pause", () => {
-                pausePlayback();
-                itShouldSetTheStateTo(VoiceBroadcastPlaybackState.Paused);
-                itShouldEmitAStateChangedEvent(VoiceBroadcastPlaybackState.Paused);
-            });
-
-            describe("and calling stop", () => {
-                stopPlayback();
-                itShouldSetTheStateTo(VoiceBroadcastPlaybackState.Stopped);
-
-                it("should stop the playback", () => {
-                    expect(chunk1Playback.stop).toHaveBeenCalled();
-                });
-
-                describe("and skipping to somewhere in the middle of the first chunk", () => {
-                    beforeEach(async () => {
-                        mocked(chunk1Playback.play).mockClear();
-                        await playback.skipTo(1);
+                describe("and the first chunk ends", () => {
+                    beforeEach(() => {
+                        chunk1Playback.emit(PlaybackState.Stopped);
                     });
 
-                    it("should not start the playback", () => {
-                        expect(chunk1Playback.play).not.toHaveBeenCalled();
+                    it("should play until the end", () => {
+                        // assert first chunk was unloaded
+                        expect(chunk1Playback.destroy).toHaveBeenCalled();
+
+                        // assert that the second chunk is being played
+                        expect(chunk2Playback.play).toHaveBeenCalled();
+
+                        // simulate end of second and third chunk
+                        chunk2Playback.emit(PlaybackState.Stopped);
+                        chunk3Playback.emit(PlaybackState.Stopped);
+
+                        // assert that the entire playback is now in stopped state
+                        expect(playback.getState()).toBe(VoiceBroadcastPlaybackState.Stopped);
                     });
                 });
-            });
 
-            describe("and calling destroy", () => {
-                beforeEach(() => {
-                    playback.destroy();
+                describe("and calling pause", () => {
+                    pausePlayback();
+                    itShouldSetTheStateTo(VoiceBroadcastPlaybackState.Paused);
+                    itShouldEmitAStateChangedEvent(VoiceBroadcastPlaybackState.Paused);
                 });
 
-                it("should call removeAllListeners", () => {
-                    expect(playback.removeAllListeners).toHaveBeenCalled();
+                describe("and calling stop", () => {
+                    stopPlayback();
+                    itShouldSetTheStateTo(VoiceBroadcastPlaybackState.Stopped);
+
+                    it("should stop the playback", () => {
+                        expect(chunk1Playback.stop).toHaveBeenCalled();
+                    });
+
+                    describe("and skipping to somewhere in the middle of the first chunk", () => {
+                        beforeEach(async () => {
+                            mocked(chunk1Playback.play).mockClear();
+                            await playback.skipTo(1);
+                        });
+
+                        it("should not start the playback", () => {
+                            expect(chunk1Playback.play).not.toHaveBeenCalled();
+                        });
+                    });
                 });
 
-                it("should call destroy on the playbacks", () => {
-                    expect(chunk1Playback.destroy).toHaveBeenCalled();
-                    expect(chunk2Playback.destroy).toHaveBeenCalled();
+                describe("and calling destroy", () => {
+                    beforeEach(() => {
+                        playback.destroy();
+                    });
+
+                    it("should call removeAllListeners", () => {
+                        expect(playback.removeAllListeners).toHaveBeenCalled();
+                    });
+
+                    it("should call destroy on the playbacks", () => {
+                        expect(chunk1Playback.destroy).toHaveBeenCalled();
+                        expect(chunk2Playback.destroy).toHaveBeenCalled();
+                    });
                 });
             });
         });
 
         describe("and calling toggle for the first time", () => {
             beforeEach(async () => {
-                await playback.toggle();
+                playback.toggle();
+                await simulateFirstChunkArrived();
             });
 
             itShouldSetTheStateTo(VoiceBroadcastPlaybackState.Playing);
@@ -693,7 +739,8 @@ describe("VoiceBroadcastPlayback", () => {
             describe("and calling toggle", () => {
                 beforeEach(async () => {
                     mocked(onStateChanged).mockReset();
-                    await playback.toggle();
+                    playback.toggle();
+                    await simulateFirstChunkArrived();
                 });
 
                 itShouldSetTheStateTo(VoiceBroadcastPlaybackState.Playing);

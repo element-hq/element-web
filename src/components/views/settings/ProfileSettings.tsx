@@ -185,6 +185,10 @@ export default class ProfileSettings extends React.Component<{}, IState> {
             withDisplayName: true,
         });
 
+        // False negative result from no-base-to-string rule, doesn't seem to account for Symbol.toStringTag
+        // eslint-disable-next-line @typescript-eslint/no-base-to-string
+        const avatarUrl = this.state.avatarUrl?.toString();
+
         return (
             <form onSubmit={this.saveProfile} autoComplete="off" noValidate={true} className="mx_ProfileSettings">
                 <input
@@ -216,7 +220,7 @@ export default class ProfileSettings extends React.Component<{}, IState> {
                         </p>
                     </div>
                     <AvatarSetting
-                        avatarUrl={this.state.avatarUrl?.toString()}
+                        avatarUrl={avatarUrl}
                         avatarName={this.state.displayName || this.state.userId}
                         avatarAltText={_t("Profile picture")}
                         uploadAvatar={this.uploadAvatar}

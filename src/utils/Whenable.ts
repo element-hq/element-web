@@ -19,7 +19,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { IDestroyable } from "./IDestroyable";
 import { arrayFastClone } from "./arrays";
 
-export type WhenFn<T> = (w: Whenable<T>) => void;
+export type WhenFn<T extends string | number> = (w: Whenable<T>) => void;
 
 /**
  * Whenables are a cheap way to have Observable patterns mixed with typical
@@ -27,7 +27,7 @@ export type WhenFn<T> = (w: Whenable<T>) => void;
  * are intended to be used when a condition will be met multiple times and
  * the consumer needs to know *when* that happens.
  */
-export abstract class Whenable<T> implements IDestroyable {
+export abstract class Whenable<T extends string | number> implements IDestroyable {
     private listeners: { condition: T | null; fn: WhenFn<T> }[] = [];
 
     /**

@@ -84,7 +84,8 @@ async function collectBugReport(opts: IOpts = {}, gzipLogs = true): Promise<Form
         body.append("user_id", client.credentials.userId);
         body.append("device_id", client.deviceId);
 
-        if (client.isCryptoEnabled()) {
+        // TODO: make this work with rust crypto
+        if (client.isCryptoEnabled() && client.crypto) {
             const keys = [`ed25519:${client.getDeviceEd25519Key()}`];
             if (client.getDeviceCurve25519Key) {
                 keys.push(`curve25519:${client.getDeviceCurve25519Key()}`);
@@ -259,7 +260,7 @@ export async function downloadBugReport(opts: IOpts = {}): Promise<void> {
                 reader.readAsArrayBuffer(value as Blob);
             });
         } else {
-            metadata += `${key} = ${value}\n`;
+            metadata += `${key} = ${value as string}\n`;
         }
     }
     tape.append("issue.txt", metadata);

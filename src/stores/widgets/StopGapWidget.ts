@@ -389,7 +389,7 @@ export class StopGapWidget extends EventEmitter {
                     // Now open the integration manager
                     // TODO: Spec this interaction.
                     const data = ev.detail.data;
-                    const integType = data?.integType;
+                    const integType = data?.integType as string;
                     const integId = <string>data?.integId;
 
                     // noinspection JSIgnoredPromiseFromCall
