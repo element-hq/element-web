@@ -91,26 +91,31 @@ const useMapWithStyle = ({
         }
     }, [map, bounds]);
 
-    const [geolocate] = useState(
-        allowGeolocate
-            ? new maplibregl.GeolocateControl({
-                  positionOptions: {
-                      enableHighAccuracy: true,
-                  },
-                  trackUserLocation: false,
-              })
-            : null,
-    );
+    const [geolocate, setGeolocate] = useState<maplibregl.GeolocateControl | null>(null);
 
     useEffect(() => {
-        if (map && geolocate) {
+        if (!map) {
+            return;
+        }
+        if (allowGeolocate && !geolocate) {
+            const geolocate = new maplibregl.GeolocateControl({
+                positionOptions: {
+                    enableHighAccuracy: true,
+                },
+                trackUserLocation: false,
+            });
+            setGeolocate(geolocate);
             map.addControl(geolocate);
             geolocate.on("error", onGeolocateError);
             return () => {
                 geolocate.off("error", onGeolocateError);
             };
         }
-    }, [map, geolocate]);
+        if (!allowGeolocate && geolocate) {
+            map.removeControl(geolocate);
+            setGeolocate(null);
+        }
+    }, [map, geolocate, allowGeolocate]);
 
     return {
         map,

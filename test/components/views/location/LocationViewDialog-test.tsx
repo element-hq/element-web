@@ -49,7 +49,7 @@ describe("<LocationViewDialog />", () => {
     it("renders marker correctly for self share", () => {
         const selfShareEvent = makeLocationEvent("geo:51.5076,-0.1276", LocationAssetType.Self);
         const member = new RoomMember(roomId, userId);
-        // @ts-ignore cheat assignment to property   
+        // @ts-ignore cheat assignment to property
         selfShareEvent.sender = member;
         const component = getComponent({ mxEvent: selfShareEvent });
         // @ts-ignore fix when moving to rtl
