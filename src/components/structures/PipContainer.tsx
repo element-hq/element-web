@@ -192,10 +192,7 @@ class PipContainerInner extends React.Component<IProps, IState> {
     };
 
     private onWidgetPersistence = (): void => {
-        this.updateShowWidgetInPip(
-            ActiveWidgetStore.instance.getPersistentWidgetId(),
-            ActiveWidgetStore.instance.getPersistentRoomId(),
-        );
+        this.updateShowWidgetInPip();
     };
 
     private onWidgetDockChanges = (): void => {
@@ -234,11 +231,10 @@ class PipContainerInner extends React.Component<IProps, IState> {
         }
     };
 
-    // Accepts a persistentWidgetId to be able to skip awaiting the setState for persistentWidgetId
-    public updateShowWidgetInPip(
-        persistentWidgetId = this.state.persistentWidgetId,
-        persistentRoomId = this.state.persistentRoomId,
-    ): void {
+    public updateShowWidgetInPip(): void {
+        const persistentWidgetId = ActiveWidgetStore.instance.getPersistentWidgetId();
+        const persistentRoomId = ActiveWidgetStore.instance.getPersistentRoomId();
+
         let fromAnotherRoom = false;
         let notDocked = false;
         // Sanity check the room - the widget may have been destroyed between render cycles, and
