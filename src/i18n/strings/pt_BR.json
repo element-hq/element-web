@@ -2846,7 +2846,6 @@
     "Fetching events...": "Buscando eventos...",
     "Starting export process...": "Iniciando processo de exportação...",
     "Yes, stop broadcast": "Sim, interromper a transmissão",
-    "Are you sure you want to stop your live broadcast?This will end the broadcast and the full recording will be available in the room.": "Tem certeza de que deseja interromper sua transmissão ao vivo? Isso encerrará a transmissão e a gravação completa estará disponível na sala.",
     "Stop live broadcasting?": "Parar a transmissão ao vivo?",
     "Someone else is already recording a voice broadcast. Wait for their voice broadcast to end to start a new one.": "Outra pessoa já está gravando uma transmissão de voz. Aguarde o término da transmissão de voz para iniciar uma nova.",
     "You don't have the required permissions to start a voice broadcast in this room. Contact a room administrator to upgrade your permissions.": "Você não tem as permissões necessárias para iniciar uma transmissão de voz nesta sala. Entre em contato com um administrador de sala para atualizar suas permissões.",
