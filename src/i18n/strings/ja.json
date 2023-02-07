@@ -3039,7 +3039,7 @@
     "%(value)sh": "%(value)s時",
     "%(value)sd": "%(value)s日",
     "Beta feature": "ベータ版の機能",
-    "Live location enabled": "位置情報が有効です",
+    "Live location enabled": "位置情報（ライブ）が有効です",
     "Jump to the given date in the timeline": "タイムラインの指定した日に移動",
     "Unban from space": "スペースからのブロックを解除",
     "Ban from space": "スペースからブロック",
