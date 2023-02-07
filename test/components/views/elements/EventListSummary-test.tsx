@@ -21,6 +21,7 @@ import { MatrixEvent, RoomMember } from "matrix-js-sdk/src/matrix";
 
 import {
     getMockClientWithEventEmitter,
+    mkEvent,
     mkMembership,
     mockClientMethodsUser,
     unmockClientPeg,
@@ -100,7 +101,7 @@ describe("EventListSummary", function () {
     // is created by replacing the first "$" in userIdTemplate with `i` for
     // `i = 0 .. n`.
     const generateEventsForUsers = (userIdTemplate, n, events) => {
-        let eventsForUsers = [];
+        let eventsForUsers: MatrixEvent[] = [];
         let userId = "";
         for (let i = 0; i < n; i++) {
             userId = userIdTemplate.replace("$", i);
@@ -655,5 +656,57 @@ describe("EventListSummary", function () {
         const summaryText = summary.text();
 
         expect(summaryText).toBe("user_0, user_1 and 18 others joined");
+    });
+
+    it("should not blindly group 3pid invites and treat them as distinct users instead", () => {
+        const events = [
+            mkEvent({
+                event: true,
+                skey: "randomstring1",
+                user: "@user1:server",
+                type: "m.room.third_party_invite",
+                content: {
+                    display_name: "n...@d...",
+                    key_validity_url: "https://blah",
+                    public_key: "public_key",
+                },
+            }),
+            mkEvent({
+                event: true,
+                skey: "randomstring2",
+                user: "@user1:server",
+                type: "m.room.third_party_invite",
+                content: {
+                    display_name: "n...@d...",
+                    key_validity_url: "https://blah",
+                    public_key: "public_key",
+                },
+            }),
+            mkEvent({
+                event: true,
+                skey: "randomstring3",
+                user: "@user1:server",
+                type: "m.room.third_party_invite",
+                content: {
+                    display_name: "d...@w...",
+                    key_validity_url: "https://blah",
+                    public_key: "public_key",
+                },
+            }),
+        ];
+
+        const props = {
+            events: events,
+            children: generateTiles(events),
+            summaryLength: 2,
+            avatarsMaxLength: 5,
+            threshold: 3,
+        };
+
+        const wrapper = renderComponent(props);
+        const summary = wrapper.find(".mx_GenericEventListSummary_summary");
+        const summaryText = summary.text();
+
+        expect(summaryText).toBe("n...@d... was invited 2 times, d...@w... was invited");
     });
 });
