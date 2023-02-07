@@ -3645,5 +3645,20 @@
     "Indent increase": "インデントを増やす",
     "Join the room to participate": "ルームに参加",
     "Threads timeline": "スレッドのタイムライン",
-    "Are you sure you want to stop your live broadcast? This will end the broadcast and the full recording will be available in the room.": "ライブ配信を終了してよろしいですか？配信を終了し、録音をこのルームで利用できるよう設定します。"
+    "Are you sure you want to stop your live broadcast? This will end the broadcast and the full recording will be available in the room.": "ライブ配信を終了してよろしいですか？配信を終了し、録音をこのルームで利用できるよう設定します。",
+    "Consult first": "初めに相談",
+    "Enable 'Manage Integrations' in Settings to do this.": "これを行うには設定から「インテグレーションを管理」を有効にしてください。",
+    "Notifications debug": "通知のデバッグ",
+    "Help us identify issues and improve %(analyticsOwner)s by sharing anonymous usage data. To understand how people use multiple devices, we'll generate a random identifier, shared by your devices.": "%(analyticsOwner)sの改善と課題抽出のために、匿名の使用状況データの送信をお願いします。複数の端末での使用を分析するために、あなたの全端末共通のランダムな識別子を生成します。",
+    "We'll help you get connected.": "みんなと繋がる手助けをいたします。",
+    "Who will you chat to the most?": "誰と最もよく会話しますか？",
+    "Share for %(duration)s": "%(duration)sの間共有",
+    "All messages and invites from this user will be hidden. Are you sure you want to ignore them?": "このユーザーのメッセージと招待を非表示にします。無視してよろしいですか？",
+    "Send your first message to invite <displayName/> to chat": "最初のメッセージを送信すると、<displayName/>を会話に招待",
+    "Consulting with %(transferTarget)s. <a>Transfer to %(transferee)s</a>": "%(transferTarget)sと相談しています。<a>%(transferee)sに転送</a>",
+    "Polls history": "アンケートの履歴",
+    "unknown": "不明",
+    "Red": "赤色",
+    "Grey": "灰色",
+    "Unable to decrypt voice broadcast": "音声配信を復号化できません"
 }
