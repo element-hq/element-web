@@ -1564,20 +1564,15 @@
   resolved "https://registry.yarnpkg.com/@matrix-org/analytics-events/-/analytics-events-0.4.0.tgz#ec75400ac41272cd2d47774da433437aba789bcf"
   integrity sha512-tLeak2pYiyxn431o7EdOJGwRjj2DApybOLZ0YtFMuhv87pBQhc3lz+IKCJ2c8NwV6e7kf4YNaTdXeygBvFPGFw==
 
-"@matrix-org/matrix-sdk-crypto-js@^0.1.0-alpha.2":
-  version "0.1.0-alpha.2"
-  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-js/-/matrix-sdk-crypto-js-0.1.0-alpha.2.tgz#a09d0fea858e817da971a3c9f904632ef7b49eb6"
-  integrity sha512-oVkBCh9YP7H9i4gAoQbZzswniczfo/aIptNa4dxRi4Ff9lSvUCFv6Hvzi7C+90c0/PWZLXjIDTIAWZYmwyd2fA==
-
 "@matrix-org/matrix-sdk-crypto-js@^0.1.0-alpha.3":
   version "0.1.0-alpha.4"
   resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-js/-/matrix-sdk-crypto-js-0.1.0-alpha.4.tgz#1b20294e0354c3dcc9c7dc810d883198a4042f04"
   integrity sha512-mdaDKrw3P5ZVCpq0ioW0pV6ihviDEbS8ZH36kpt9stLKHwwDSopPogE6CkQhi0B1jn1yBUtOYi32mBV/zcOR7g==
 
-"@matrix-org/matrix-wysiwyg@^0.22.0":
-  version "0.22.0"
-  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-wysiwyg/-/matrix-wysiwyg-0.22.0.tgz#53f1e80d9ae7be0940e0ca905a3952804b029b29"
-  integrity sha512-3b5jGMI56zcqZ2PktrSPMAbzfWmkdupuzcLeemWQ0fT8QuiG4dA72NUxdDyarlz+1eQ+Qm4fu9j/zsPlvNpy8g==
+"@matrix-org/matrix-wysiwyg@^0.23.0":
+  version "0.23.0"
+  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-wysiwyg/-/matrix-wysiwyg-0.23.0.tgz#32242b18ae9dbb28d920c31f50bbac87ff4317fe"
+  integrity sha512-wO5KYznlfsSIMo0R8tyZqfvZrPkQMaL1qBHzhaeKIsC4vK4MnJ9mj6JiS6+XiuHJyc9nqN+IdeUjKyJOnStHaA==
 
 "@matrix-org/olm@https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.12.tgz":
   version "3.2.12"
@@ -7918,6 +7913,11 @@ linkify-it@^3.0.1:
   dependencies:
     uc.micro "^1.0.1"
 
+linkify-react@4.0.0-beta.4:
+  version "4.0.0-beta.4"
+  resolved "https://registry.yarnpkg.com/linkify-react/-/linkify-react-4.0.0-beta.4.tgz#75311ade523a52d43054dd841d724d746d43f60d"
+  integrity sha512-o4vFe28vtk6i8a6tbtkLyusIyhLJSYoHC3gEpmJEVqi6Hy3aguVEenYmtaOjmAQehDrBYeHv9s4qcneZOf7SWQ==
+
 linkify-string@4.0.0-beta.4:
   version "4.0.0-beta.4"
   resolved "https://registry.yarnpkg.com/linkify-string/-/linkify-string-4.0.0-beta.4.tgz#0982509bc6ce81c554bff8d7121057193b84ea32"
@@ -8186,23 +8186,6 @@ matrix-js-sdk@23.3.0-rc.1:
     unhomoglyph "^1.0.6"
     uuid "9"
 
-"matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "23.2.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/1c26dc02339c6b7c67b030b1701248a2d68c24c0"
-  dependencies:
-    "@babel/runtime" "^7.12.5"
-    "@matrix-org/matrix-sdk-crypto-js" "^0.1.0-alpha.2"
-    another-json "^0.2.0"
-    bs58 "^5.0.0"
-    content-type "^1.0.4"
-    loglevel "^1.7.1"
-    matrix-events-sdk "0.0.1"
-    matrix-widget-api "^1.0.0"
-    p-retry "4"
-    sdp-transform "^2.14.1"
-    unhomoglyph "^1.0.6"
-    uuid "9"
-
 matrix-mock-request@^2.5.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/matrix-mock-request/-/matrix-mock-request-2.6.0.tgz#0855c10b250668ce542b697251087be2bcc23f92"
@@ -8210,13 +8193,14 @@ matrix-mock-request@^2.5.0:
   dependencies:
     expect "^28.1.0"
 
-"matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
-  version "3.65.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/e2af97c4defeb990a06231658f97825780e0a717"
+matrix-react-sdk@3.66.0-rc.1:
+  version "3.66.0-rc.1"
+  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.66.0-rc.1.tgz#c0bc5748a7f0bec91afce227095bbab2d405a652"
+  integrity sha512-5d4xwx/5Xp2IYJItzMmeX6QrGMtS8WzvqABRAp83gP317dREfEyvbvUjJhvdy7cwyZJ+D5lVk6nW0oFr2XDRmw==
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/analytics-events" "^0.4.0"
-    "@matrix-org/matrix-wysiwyg" "^0.22.0"
+    "@matrix-org/matrix-wysiwyg" "^0.23.0"
     "@matrix-org/react-sdk-module-api" "^0.0.3"
     "@sentry/browser" "^7.0.0"
     "@sentry/tracing" "^7.0.0"
@@ -8245,13 +8229,14 @@ matrix-mock-request@^2.5.0:
     jszip "^3.7.0"
     katex "^0.16.0"
     linkify-element "4.0.0-beta.4"
+    linkify-react "4.0.0-beta.4"
     linkify-string "4.0.0-beta.4"
     linkifyjs "4.0.0-beta.4"
     lodash "^4.17.20"
     maplibre-gl "^2.0.0"
     matrix-encrypt-attachment "^1.0.3"
     matrix-events-sdk "0.0.1"
-    matrix-js-sdk "github:matrix-org/matrix-js-sdk#develop"
+    matrix-js-sdk "23.3.0-rc.1"
     matrix-widget-api "^1.1.1"
     minimist "^1.2.5"
     opus-recorder "^8.0.3"
