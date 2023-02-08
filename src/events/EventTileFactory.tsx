@@ -18,7 +18,7 @@ import React from "react";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { EventType, MsgType, RelationType } from "matrix-js-sdk/src/@types/event";
 import { Optional } from "matrix-events-sdk";
-import { M_POLL_START } from "matrix-js-sdk/src/@types/polls";
+import { M_POLL_END, M_POLL_START } from "matrix-js-sdk/src/@types/polls";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { GroupCallIntent } from "matrix-js-sdk/src/webrtc/groupCall";
 
@@ -99,6 +99,8 @@ const EVENT_TILE_TYPES = new Map<string, Factory>([
     [EventType.Sticker, MessageEventFactory],
     [M_POLL_START.name, MessageEventFactory],
     [M_POLL_START.altName, MessageEventFactory],
+    [M_POLL_END.name, MessageEventFactory],
+    [M_POLL_END.altName, MessageEventFactory],
     [EventType.KeyVerificationCancel, KeyVerificationConclFactory],
     [EventType.KeyVerificationDone, KeyVerificationConclFactory],
     [EventType.CallInvite, LegacyCallEventFactory], // note that this requires a special factory type
@@ -412,7 +414,11 @@ export function renderReplyTile(
 // XXX: this'll eventually be dynamic based on the fields once we have extensible event types
 const messageTypes = [EventType.RoomMessage, EventType.Sticker];
 export function isMessageEvent(ev: MatrixEvent): boolean {
-    return messageTypes.includes(ev.getType() as EventType) || M_POLL_START.matches(ev.getType());
+    return (
+        messageTypes.includes(ev.getType() as EventType) ||
+        M_POLL_START.matches(ev.getType()) ||
+        M_POLL_END.matches(ev.getType())
+    );
 }
 
 export function haveRendererForEvent(mxEvent: MatrixEvent, showHiddenEvents: boolean): boolean {

@@ -1,5 +1,5 @@
 /*
- Copyright 2021 The Matrix.org Foundation C.I.C.
+ Copyright 2021 - 2023 The Matrix.org Foundation C.I.C.
  Copyright 2022 Arseny Uskov
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -65,7 +65,7 @@ export default class Hearts implements ICanvasEffect {
 
     private context: CanvasRenderingContext2D | null = null;
     private particles: Array<Heart> = [];
-    private lastAnimationTime: number;
+    private lastAnimationTime = 0;
 
     private colours = [
         "rgba(194,210,224,1)",
@@ -82,7 +82,7 @@ export default class Hearts implements ICanvasEffect {
         "rgba(252,116,183,1)",
     ];
 
-    public isRunning: boolean;
+    public isRunning = false;
 
     public start = async (canvas: HTMLCanvasElement, timeout = 3000): Promise<void> => {
         if (!canvas) {
