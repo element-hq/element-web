@@ -3745,5 +3745,6 @@
     "Notifications debug": "Débogage des notifications",
     "unknown": "inconnu",
     "Red": "Rouge",
-    "Grey": "Gris"
+    "Grey": "Gris",
+    "Are you sure you want to stop your live broadcast? This will end the broadcast and the full recording will be available in the room.": "Êtes-vous sûr de vouloir arrêter votre diffusion en direct ? Cela terminera la diffusion et l’enregistrement complet sera disponible dans le salon."
 }
