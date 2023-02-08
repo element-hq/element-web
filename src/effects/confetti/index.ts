@@ -1,6 +1,7 @@
 /*
  Copyright 2020 Nurjin Jafar
  Copyright 2020 Nordeck IT + Consulting GmbH.
+ Copyright 2023 The Matrix.org Foundation C.I.C.
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -86,7 +87,7 @@ export default class Confetti implements ICanvasEffect {
     private particles: Array<ConfettiParticle> = [];
     private waveAngle = 0;
 
-    public isRunning: boolean;
+    public isRunning = false;
 
     public start = async (canvas: HTMLCanvasElement, timeout = 3000): Promise<void> => {
         if (!canvas) {

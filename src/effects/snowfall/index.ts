@@ -1,5 +1,5 @@
 /*
- Copyright 2020 The Matrix.org Foundation C.I.C.
+ Copyright 2020 - 2023 The Matrix.org Foundation C.I.C.
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -57,9 +57,9 @@ export default class Snowfall implements ICanvasEffect {
 
     private context: CanvasRenderingContext2D | null = null;
     private particles: Array<Snowflake> = [];
-    private lastAnimationTime: number;
+    private lastAnimationTime = 0;
 
-    public isRunning: boolean;
+    public isRunning = false;
 
     public start = async (canvas: HTMLCanvasElement, timeout = 3000): Promise<void> => {
         if (!canvas) {
