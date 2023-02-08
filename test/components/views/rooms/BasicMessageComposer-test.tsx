@@ -24,33 +24,63 @@ import * as TestUtils from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import EditorModel from "../../../../src/editor/model";
 import { createPartCreator, createRenderer } from "../../../editor/mock";
+import SettingsStore from "../../../../src/settings/SettingsStore";
 
 describe("BasicMessageComposer", () => {
     const renderer = createRenderer();
     const pc = createPartCreator();
 
-    beforeEach(() => {
-        TestUtils.stubClient();
-    });
+    TestUtils.stubClient();
 
-    it("should allow a user to paste a URL without it being mangled", () => {
+    const client: MatrixClient = MatrixClientPeg.get();
+
+    const roomId = "!1234567890:domain";
+    const userId = client.getSafeUserId();
+    const room = new Room(roomId, client, userId);
+
+    it("should allow a user to paste a URL without it being mangled", async () => {
         const model = new EditorModel([], pc, renderer);
-        const client: MatrixClient = MatrixClientPeg.get();
-
-        const roomId = "!1234567890:domain";
-        const userId = client.getSafeUserId();
-
-        const room = new Room(roomId, client, userId);
-
+        render(<BasicMessageComposer model={model} room={room} />);
         const testUrl = "https://element.io";
         const mockDataTransfer = generateMockDataTransferForString(testUrl);
-
-        render(<BasicMessageComposer model={model} room={room} />);
-        userEvent.paste(mockDataTransfer);
+        await userEvent.paste(mockDataTransfer);
 
         expect(model.parts).toHaveLength(1);
         expect(model.parts[0].text).toBe(testUrl);
         expect(screen.getByText(testUrl)).toBeInTheDocument();
+    });
+
+    it("should replaceEmoticons properly", async () => {
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName: string) => {
+            return settingName === "MessageComposerInput.autoReplaceEmoji";
+        });
+        userEvent.setup();
+        const model = new EditorModel([], pc, renderer);
+        render(<BasicMessageComposer model={model} room={room} />);
+
+        const tranformations = [
+            { before: "4:3 video", after: "4:3 video" },
+            { before: "regexp 12345678", after: "regexp 12345678" },
+            { before: "--:--)", after: "--:--)" },
+
+            { before: "we <3 matrix", after: "we ❤️ matrix" },
+            { before: "hello world :-)", after: "hello world 🙂" },
+            { before: ":) hello world", after: "🙂 hello world" },
+            { before: ":D 4:3 video :)", after: "😄 4:3 video 🙂" },
+
+            { before: ":-D", after: "😄" },
+            { before: ":D", after: "😄" },
+            { before: ":3", after: "😽" },
+        ];
+        const input = screen.getByRole("textbox");
+
+        for (const { before, after } of tranformations) {
+            await userEvent.clear(input);
+            //add a space after the text to trigger the replacement
+            await userEvent.type(input, before + " ");
+            const transformedText = model.parts.map((part) => part.text).join("");
+            expect(transformedText).toBe(after + " ");
+        }
     });
 });
 
