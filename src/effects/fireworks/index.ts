@@ -1,6 +1,7 @@
 /*
  Copyright 2020 Nurjin Jafar
  Copyright 2020 Nordeck IT + Consulting GmbH.
+ Copyright 2023 The Matrix.org Foundation C.I.C.
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -69,7 +70,7 @@ export default class Fireworks implements ICanvasEffect {
     private context: CanvasRenderingContext2D | null = null;
     private supportsAnimationFrame = window.requestAnimationFrame;
     private particles: Array<FireworksParticle> = [];
-    public isRunning: boolean;
+    public isRunning = false;
 
     public start = async (canvas: HTMLCanvasElement, timeout = 3000): Promise<void> => {
         if (!canvas) {
@@ -94,7 +95,7 @@ export default class Fireworks implements ICanvasEffect {
         if (this.particles.length < this.options.maxCount && this.isRunning) {
             this.createFirework();
         }
-        const alive = [];
+        const alive: FireworksParticle[] = [];
         for (let i = 0; i < this.particles.length; i++) {
             if (this.move(this.particles[i])) {
                 alive.push(this.particles[i]);

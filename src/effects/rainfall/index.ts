@@ -1,5 +1,5 @@
 /*
- Copyright 2020 The Matrix.org Foundation C.I.C.
+ Copyright 2020 - 2023 The Matrix.org Foundation C.I.C.
  Copyright 2021 Josias Allestad
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -52,9 +52,9 @@ export default class Rainfall implements ICanvasEffect {
 
     private context: CanvasRenderingContext2D | null = null;
     private particles: Array<Raindrop> = [];
-    private lastAnimationTime: number;
+    private lastAnimationTime = 0;
 
-    public isRunning: boolean;
+    public isRunning = false;
 
     public start = async (canvas: HTMLCanvasElement, timeout = 3000): Promise<void> => {
         if (!canvas) {
