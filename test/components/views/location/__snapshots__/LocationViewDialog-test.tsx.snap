@@ -135,7 +135,7 @@ exports[`<LocationViewDialog /> renders map correctly 1`] = `
       >
         <AccessibleButton
           className="mx_ZoomButtons_button"
-          data-test-id="map-zoom-in-button"
+          data-testid="map-zoom-in-button"
           element="div"
           onClick={[Function]}
           role="button"
@@ -144,7 +144,7 @@ exports[`<LocationViewDialog /> renders map correctly 1`] = `
         >
           <div
             className="mx_AccessibleButton mx_ZoomButtons_button"
-            data-test-id="map-zoom-in-button"
+            data-testid="map-zoom-in-button"
             onClick={[Function]}
             onKeyDown={[Function]}
             onKeyUp={[Function]}
@@ -159,7 +159,7 @@ exports[`<LocationViewDialog /> renders map correctly 1`] = `
         </AccessibleButton>
         <AccessibleButton
           className="mx_ZoomButtons_button"
-          data-test-id="map-zoom-out-button"
+          data-testid="map-zoom-out-button"
           element="div"
           onClick={[Function]}
           role="button"
@@ -168,7 +168,7 @@ exports[`<LocationViewDialog /> renders map correctly 1`] = `
         >
           <div
             className="mx_AccessibleButton mx_ZoomButtons_button"
-            data-test-id="map-zoom-out-button"
+            data-testid="map-zoom-out-button"
             onClick={[Function]}
             onKeyDown={[Function]}
             onKeyUp={[Function]}
