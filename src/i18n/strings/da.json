@@ -83,7 +83,6 @@
     "%(brand)s was not given permission to send notifications - please try again": "%(brand)s fik ikke tilladelse til at sende notifikationer - Vær sød at prøve igen",
     "Unable to enable Notifications": "Kunne ikke slå Notifikationer til",
     "This email address was not found": "Denne emailadresse blev ikke fundet",
-    "Your email address does not appear to be associated with a Matrix ID on this Homeserver.": "Din emailadresse lader ikke til at være tilknyttet et Matrix ID på denne Homeserver.",
     "Restricted": "Begrænset",
     "Moderator": "Moderator",
     "Operation failed": "Operation mislykkedes",
