@@ -160,7 +160,6 @@
     "You must <a>register</a> to use this functionality": "Sinun pitää <a>rekisteröityä</a> käyttääksesi tätä toiminnallisuutta",
     "You need to be able to invite users to do that.": "Sinun pitää pystyä kutsua käyttäjiä voidaksesi tehdä tuon.",
     "You need to be logged in.": "Sinun pitää olla kirjautunut.",
-    "Your email address does not appear to be associated with a Matrix ID on this Homeserver.": "Sähköpostiosoitteesi ei vaikuta olevan liitetty mihinkään Matrix-tunnukseen tällä kotipalvelimella.",
     "Sun": "su",
     "Mon": "ma",
     "Tue": "ti",
