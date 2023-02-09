@@ -113,10 +113,10 @@ describe("RoomNotifs test", () => {
                     event: true,
                     type: "m.room.create",
                     room: ROOM_ID,
-                    user: client.getUserId()!,
+                    user: "@zoe:localhost",
                     content: {
                         ...(predecessorId ? { predecessor: { room_id: predecessorId, event_id: "$someevent" } } : {}),
-                        creator: client.getUserId(),
+                        creator: "@zoe:localhost",
                         room_version: "5",
                     },
                     ts: Date.now(),
@@ -128,7 +128,7 @@ describe("RoomNotifs test", () => {
                     event: true,
                     type: EventType.RoomPredecessor,
                     room: ROOM_ID,
-                    user: client.getUserId()!,
+                    user: "@zoe:localhost",
                     skey: "",
                     content: {
                         predecessor_room_id: predecessorId,
