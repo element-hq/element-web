@@ -34,7 +34,6 @@
     "%(brand)s was not given permission to send notifications - please try again": "%(brand)s non ten permiso para enviar notificacións: inténteo de novo",
     "Unable to enable Notifications": "Non se puideron activar as notificacións",
     "This email address was not found": "Non se atopou este enderezo de correo",
-    "Your email address does not appear to be associated with a Matrix ID on this Homeserver.": "O seu enderezo de correo semella non estar asociado a un ID Matrix neste servidor.",
     "Default": "Por defecto",
     "Restricted": "Restrinxido",
     "Moderator": "Moderador",

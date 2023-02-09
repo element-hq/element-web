@@ -245,7 +245,6 @@
     "File to import": "Failas, kurį importuoti",
     "Import": "Importuoti",
     "You do not have permission to start a conference call in this room": "Jūs neturite leidimo šiame kambaryje pradėti konferencinį pokalbį",
-    "Your email address does not appear to be associated with a Matrix ID on this Homeserver.": "Neatrodo, kad jūsų el. pašto adresas šiame serveryje būtų susietas su Matrix ID.",
     "Missing room_id in request": "Užklausoje trūksta room_id",
     "Missing user_id in request": "Užklausoje trūksta user_id",
     "%(senderDisplayName)s removed the room name.": "%(senderDisplayName)s pašalino kambario pavadinimą.",
