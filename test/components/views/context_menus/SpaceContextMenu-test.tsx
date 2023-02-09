@@ -15,16 +15,14 @@ limitations under the License.
 */
 
 import React from "react";
-// eslint-disable-next-line deprecate/import
-import { mount } from "enzyme";
-import { Room } from "matrix-js-sdk/src/matrix";
-import { mocked } from "jest-mock";
-import { act } from "react-dom/test-utils";
+import { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import { Mocked, mocked } from "jest-mock";
 import "focus-visible"; // to fix context menus
+import { prettyDOM, render, RenderResult, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 
 import SpaceContextMenu from "../../../../src/components/views/context_menus/SpaceContextMenu";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
-import { findByTestId } from "../../../test-utils";
 import {
     shouldShowSpaceSettings,
     showCreateNewRoom,
@@ -55,9 +53,11 @@ jest.mock("../../../../src/utils/leave-behaviour", () => ({
 
 describe("<SpaceContextMenu />", () => {
     const userId = "@test:server";
+
     const mockClient = {
         getUserId: jest.fn().mockReturnValue(userId),
-    };
+    } as unknown as Mocked<MatrixClient>;
+
     const makeMockSpace = (props = {}) =>
         ({
             name: "test space",
@@ -70,17 +70,18 @@ describe("<SpaceContextMenu />", () => {
             getMyMembership: jest.fn(),
             ...props,
         } as unknown as Room);
+
     const defaultProps = {
         space: makeMockSpace(),
         onFinished: jest.fn(),
     };
-    const getComponent = (props = {}) =>
-        mount(<SpaceContextMenu {...defaultProps} {...props} />, {
-            wrappingComponent: MatrixClientContext.Provider,
-            wrappingComponentProps: {
-                value: mockClient,
-            },
-        });
+
+    const renderComponent = (props = {}): RenderResult =>
+        render(
+            <MatrixClientContext.Provider value={mockClient}>
+                <SpaceContextMenu {...defaultProps} {...props} />
+            </MatrixClientContext.Provider>,
+        );
 
     beforeEach(() => {
         jest.resetAllMocks();
@@ -88,134 +89,135 @@ describe("<SpaceContextMenu />", () => {
     });
 
     it("renders menu correctly", () => {
-        const component = getComponent();
-        expect(component).toMatchSnapshot();
+        const { baseElement } = renderComponent();
+        expect(prettyDOM(baseElement)).toMatchSnapshot();
     });
 
     it("renders invite option when space is public", () => {
         const space = makeMockSpace({
             getJoinRule: jest.fn().mockReturnValue("public"),
         });
-        const component = getComponent({ space });
-        expect(findByTestId(component, "invite-option").length).toBeTruthy();
+        renderComponent({ space });
+        expect(screen.getByTestId("invite-option")).toBeInTheDocument();
     });
+
     it("renders invite option when user is has invite rights for space", () => {
         const space = makeMockSpace({
             canInvite: jest.fn().mockReturnValue(true),
         });
-        const component = getComponent({ space });
+        renderComponent({ space });
         expect(space.canInvite).toHaveBeenCalledWith(userId);
-        expect(findByTestId(component, "invite-option").length).toBeTruthy();
+        expect(screen.getByTestId("invite-option")).toBeInTheDocument();
     });
-    it("opens invite dialog when invite option is clicked", () => {
+
+    it("opens invite dialog when invite option is clicked", async () => {
         const space = makeMockSpace({
             getJoinRule: jest.fn().mockReturnValue("public"),
         });
         const onFinished = jest.fn();
-        const component = getComponent({ space, onFinished });
+        renderComponent({ space, onFinished });
 
-        act(() => {
-            findByTestId(component, "invite-option").at(0).simulate("click");
-        });
+        await userEvent.click(screen.getByTestId("invite-option"));
 
         expect(showSpaceInvite).toHaveBeenCalledWith(space);
         expect(onFinished).toHaveBeenCalled();
     });
+
     it("renders space settings option when user has rights", () => {
         mocked(shouldShowSpaceSettings).mockReturnValue(true);
-        const component = getComponent();
+        renderComponent();
         expect(shouldShowSpaceSettings).toHaveBeenCalledWith(defaultProps.space);
-        expect(findByTestId(component, "settings-option").length).toBeTruthy();
+        expect(screen.getByTestId("settings-option")).toBeInTheDocument();
     });
-    it("opens space settings when space settings option is clicked", () => {
+
+    it("opens space settings when space settings option is clicked", async () => {
         mocked(shouldShowSpaceSettings).mockReturnValue(true);
         const onFinished = jest.fn();
-        const component = getComponent({ onFinished });
+        renderComponent({ onFinished });
 
-        act(() => {
-            findByTestId(component, "settings-option").at(0).simulate("click");
-        });
+        await userEvent.click(screen.getByTestId("settings-option"));
 
         expect(showSpaceSettings).toHaveBeenCalledWith(defaultProps.space);
         expect(onFinished).toHaveBeenCalled();
     });
+
     it("renders leave option when user does not have rights to see space settings", () => {
-        const component = getComponent();
-        expect(findByTestId(component, "leave-option").length).toBeTruthy();
+        renderComponent();
+        expect(screen.getByTestId("leave-option")).toBeInTheDocument();
     });
-    it("leaves space when leave option is clicked", () => {
+
+    it("leaves space when leave option is clicked", async () => {
         const onFinished = jest.fn();
-        const component = getComponent({ onFinished });
-        act(() => {
-            findByTestId(component, "leave-option").at(0).simulate("click");
-        });
+        renderComponent({ onFinished });
+        await userEvent.click(screen.getByTestId("leave-option"));
         expect(leaveSpace).toHaveBeenCalledWith(defaultProps.space);
         expect(onFinished).toHaveBeenCalled();
     });
+
     describe("add children section", () => {
         const space = makeMockSpace();
+
         beforeEach(() => {
             // set space to allow adding children to space
             mocked(space.currentState.maySendStateEvent).mockReturnValue(true);
             mocked(shouldShowComponent).mockReturnValue(true);
         });
+
         it("does not render section when user does not have permission to add children", () => {
             mocked(space.currentState.maySendStateEvent).mockReturnValue(false);
-            const component = getComponent({ space });
+            renderComponent({ space });
 
-            expect(findByTestId(component, "add-to-space-header").length).toBeFalsy();
-            expect(findByTestId(component, "new-room-option").length).toBeFalsy();
-            expect(findByTestId(component, "new-subspace-option").length).toBeFalsy();
+            expect(screen.queryByTestId("add-to-space-header")).not.toBeInTheDocument();
+            expect(screen.queryByTestId("new-room-option")).not.toBeInTheDocument();
+            expect(screen.queryByTestId("new-subspace-option")).not.toBeInTheDocument();
         });
+
         it("does not render section when UIComponent customisations disable room and space creation", () => {
             mocked(shouldShowComponent).mockReturnValue(false);
-            const component = getComponent({ space });
+            renderComponent({ space });
 
             expect(shouldShowComponent).toHaveBeenCalledWith(UIComponent.CreateRooms);
             expect(shouldShowComponent).toHaveBeenCalledWith(UIComponent.CreateSpaces);
 
-            expect(findByTestId(component, "add-to-space-header").length).toBeFalsy();
-            expect(findByTestId(component, "new-room-option").length).toBeFalsy();
-            expect(findByTestId(component, "new-subspace-option").length).toBeFalsy();
+            expect(screen.queryByTestId("add-to-space-header")).not.toBeInTheDocument();
+            expect(screen.queryByTestId("new-room-option")).not.toBeInTheDocument();
+            expect(screen.queryByTestId("new-subspace-option")).not.toBeInTheDocument();
         });
 
         it("renders section with add room button when UIComponent customisation allows CreateRoom", () => {
             // only allow CreateRoom
             mocked(shouldShowComponent).mockImplementation((feature) => feature === UIComponent.CreateRooms);
-            const component = getComponent({ space });
+            renderComponent({ space });
 
-            expect(findByTestId(component, "add-to-space-header").length).toBeTruthy();
-            expect(findByTestId(component, "new-room-option").length).toBeTruthy();
-            expect(findByTestId(component, "new-subspace-option").length).toBeFalsy();
+            expect(screen.getByTestId("add-to-space-header")).toBeInTheDocument();
+            expect(screen.getByTestId("new-room-option")).toBeInTheDocument();
+            expect(screen.queryByTestId("new-subspace-option")).not.toBeInTheDocument();
         });
 
         it("renders section with add space button when UIComponent customisation allows CreateSpace", () => {
             // only allow CreateSpaces
             mocked(shouldShowComponent).mockImplementation((feature) => feature === UIComponent.CreateSpaces);
-            const component = getComponent({ space });
+            renderComponent({ space });
 
-            expect(findByTestId(component, "add-to-space-header").length).toBeTruthy();
-            expect(findByTestId(component, "new-room-option").length).toBeFalsy();
-            expect(findByTestId(component, "new-subspace-option").length).toBeTruthy();
+            expect(screen.getByTestId("add-to-space-header")).toBeInTheDocument();
+            expect(screen.queryByTestId("new-room-option")).not.toBeInTheDocument();
+            expect(screen.getByTestId("new-subspace-option")).toBeInTheDocument();
         });
 
-        it("opens create room dialog on add room button click", () => {
+        it("opens create room dialog on add room button click", async () => {
             const onFinished = jest.fn();
-            const component = getComponent({ space, onFinished });
+            renderComponent({ space, onFinished });
 
-            act(() => {
-                findByTestId(component, "new-room-option").at(0).simulate("click");
-            });
+            await userEvent.click(screen.getByTestId("new-room-option"));
             expect(showCreateNewRoom).toHaveBeenCalledWith(space);
             expect(onFinished).toHaveBeenCalled();
         });
-        it("opens create space dialog on add space button click", () => {
-            const onFinished = jest.fn();
-            const component = getComponent({ space, onFinished });
 
-            act(() => {
-                findByTestId(component, "new-subspace-option").at(0).simulate("click");
-            });
+        it("opens create space dialog on add space button click", async () => {
+            const onFinished = jest.fn();
+            renderComponent({ space, onFinished });
+
+            await userEvent.click(screen.getByTestId("new-subspace-option"));
             expect(showCreateNewSubspace).toHaveBeenCalledWith(space);
             expect(onFinished).toHaveBeenCalled();
         });
