@@ -36,7 +36,6 @@
     "%(brand)s was not given permission to send notifications - please try again": "%(brand)s ne ricevis permeson sendi sciigojn – bonvolu reprovi",
     "Unable to enable Notifications": "Ne povas ŝalti sciigojn",
     "This email address was not found": "Tiu ĉi retpoŝtadreso ne troviĝis",
-    "Your email address does not appear to be associated with a Matrix ID on this Homeserver.": "Via retpoŝtareso ŝajne ne ligiĝas al Matrix-identigilo sur tiu ĉi hejmservilo.",
     "Default": "Ordinara",
     "Restricted": "Limigita",
     "Moderator": "Ĉambrestro",
