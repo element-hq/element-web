@@ -3745,5 +3745,6 @@
     "Notifications debug": "Ladění oznámení",
     "unknown": "neznámé",
     "Red": "Červená",
-    "Grey": "Šedá"
+    "Grey": "Šedá",
+    "Are you sure you want to stop your live broadcast? This will end the broadcast and the full recording will be available in the room.": "Opravdu chcete ukončit živé vysílání? Tím se vysílání ukončí a v místnosti bude k dispozici celý záznam."
 }
