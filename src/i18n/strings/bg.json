@@ -62,7 +62,6 @@
     "%(brand)s was not given permission to send notifications - please try again": "%(brand)s не е получил разрешение да изпраща известия - моля опитайте отново",
     "Unable to enable Notifications": "Неупешно включване на известия",
     "This email address was not found": "Този имейл адрес не беше открит",
-    "Your email address does not appear to be associated with a Matrix ID on this Homeserver.": "Изглежда вашият имейл адрес не може да се асоциира с Matrix ID на този Home сървър.",
     "Default": "По подразбиране",
     "Restricted": "Ограничен",
     "Moderator": "Модератор",

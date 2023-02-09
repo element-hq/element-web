@@ -192,7 +192,6 @@
     "%(brand)s does not have permission to send you notifications - please check your browser settings": "%(brand)s-un sizə bildiriş göndərmək icazəsi yoxdur - brauzerinizin parametrlərini yoxlayın",
     "%(brand)s was not given permission to send notifications - please try again": "%(brand)s bildiriş göndərmək üçün icazə verilmədi - lütfən yenidən cəhd edin",
     "This email address was not found": "Bu e-poçt ünvanı tapılmadı",
-    "Your email address does not appear to be associated with a Matrix ID on this Homeserver.": "E-poçt adresiniz bu Ana serverdəki Matrix ID ilə əlaqəli görünmür.",
     "Restricted": "Məhduddur",
     "Failed to invite": "Dəvət alınmadı",
     "Unable to create widget.": "Widjet yaratmaq olmur.",

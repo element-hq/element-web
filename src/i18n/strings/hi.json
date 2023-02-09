@@ -40,7 +40,6 @@
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s",
     "Unable to enable Notifications": "अधिसूचनाएं सक्षम करने में असमर्थ",
     "This email address was not found": "यह ईमेल पता नहीं मिला था",
-    "Your email address does not appear to be associated with a Matrix ID on this Homeserver.": "आपका ईमेल पता इस होमसर्वर पर मैट्रिक्स आईडी से जुड़ा प्रतीत नहीं होता है।",
     "Register": "पंजीकरण करें",
     "Default": "डिफ़ॉल्ट",
     "Restricted": "वर्जित",

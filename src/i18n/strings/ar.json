@@ -101,7 +101,6 @@
     "%(brand)s was not given permission to send notifications - please try again": "لم تقدّم التصريح اللازم كي يُرسل %(brand)s التنبيهات. من فضلك أعِد المحاولة",
     "Unable to enable Notifications": "تعذر تفعيل التنبيهات",
     "This email address was not found": "لم يوجد عنوان البريد الإلكتروني هذا",
-    "Your email address does not appear to be associated with a Matrix ID on this Homeserver.": "لا يظهر بأن عنوان بريدك مرتبط بمعرّف «ماترِكس» على الخادوم المنزل هذا.",
     "Sign In or Create Account": "لِج أو أنشِئ حسابًا",
     "Use your account or create a new one to continue.": "استعمل حسابك أو أنشِئ واحدًا جديدًا للمواصلة.",
     "Create Account": "أنشِئ حسابًا",
