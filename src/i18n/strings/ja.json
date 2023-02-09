@@ -231,7 +231,7 @@
     "This event could not be displayed": "このイベントは表示できませんでした",
     "Options": "オプション",
     "Call Failed": "呼び出しに失敗しました",
-    "Automatically replace plain text Emoji": "自動的にプレーンテキスト絵文字を置き換える",
+    "Automatically replace plain text Emoji": "自動的にプレーンテキストの絵文字を置き換える",
     "Demote yourself?": "自身を降格しますか？",
     "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.": "あなたは自分自身を降格させようとしています。この変更は取り消せません。あなたがルームの中で最後の特権ユーザーである場合、特権を再取得することはできなくなります。",
     "Demote": "降格する",
