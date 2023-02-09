@@ -94,6 +94,8 @@ describe("RoomViewStore", function () {
         getDeviceId: jest.fn().mockReturnValue("ABC123"),
         sendStateEvent: jest.fn().mockResolvedValue({}),
         supportsThreads: jest.fn(),
+        isInitialSyncComplete: jest.fn(),
+        relations: jest.fn(),
     });
     const room = new Room(roomId, mockClient, userId);
     const room2 = new Room(roomId2, mockClient, userId);
