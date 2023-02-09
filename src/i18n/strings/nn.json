@@ -34,7 +34,6 @@
     "%(brand)s was not given permission to send notifications - please try again": "%(brand)s fekk ikkje tillating til å senda varsel - ver venleg og prøv igjen",
     "Unable to enable Notifications": "Klarte ikkje å skru på Varsel",
     "This email address was not found": "Denne epostadressa var ikkje funnen",
-    "Your email address does not appear to be associated with a Matrix ID on this Homeserver.": "Epostadressa di ser ikkje ut til å vera tilknytta ein Matrix-ID på denne heimtenaren.",
     "Default": "Opphavleg innstilling",
     "Restricted": "Avgrensa",
     "Moderator": "Moderator",

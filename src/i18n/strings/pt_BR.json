@@ -132,7 +132,6 @@
     "You cannot place a call with yourself.": "Você não pode iniciar uma chamada consigo mesmo.",
     "You need to be able to invite users to do that.": "Para fazer isso, precisa ter permissão para convidar outras pessoas.",
     "You need to be logged in.": "Você precisa estar logado.",
-    "Your email address does not appear to be associated with a Matrix ID on this Homeserver.": "O seu endereço de e-mail não parece estar associado a uma conta de usuária/o Matrix neste servidor.",
     "This server does not support authentication with a phone number.": "Este servidor não permite a autenticação através de números de telefone.",
     "Connectivity to the server has been lost.": "A conexão com o servidor foi perdida. Verifique sua conexão de internet.",
     "Sent messages will be stored until your connection has returned.": "Imagens enviadas ficarão armazenadas até que sua conexão seja reestabelecida.",
