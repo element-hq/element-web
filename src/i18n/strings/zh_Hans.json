@@ -334,7 +334,6 @@
     "Failed to remove tag %(tagName)s from room": "移除房间标签 %(tagName)s 失败",
     "Failed to add tag %(tagName)s to room": "无法为房间新增标签 %(tagName)s",
     "Submit debug logs": "提交调试日志",
-    "Your email address does not appear to be associated with a Matrix ID on this Homeserver.": "你的电子邮件地址似乎没有同此主服务器上的Matrix ID绑定。",
     "Restricted": "受限",
     "Stickerpack": "贴纸包",
     "You don't currently have any stickerpacks enabled": "你目前未启用任何贴纸包",
