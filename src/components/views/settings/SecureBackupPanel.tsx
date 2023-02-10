@@ -242,7 +242,7 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
             let restoreButtonCaption = _t("Restore from Backup");
 
             if (MatrixClientPeg.get().getKeyBackupEnabled()) {
-                statusDescription = <p>✅ {_t("This session is backing up your keys. ")}</p>;
+                statusDescription = <p>✅ {_t("This session is backing up your keys.")}</p>;
             } else {
                 statusDescription = (
                     <>
