@@ -151,7 +151,7 @@
         "postcss-simple-vars": "^5.0.2",
         "prettier": "2.8.0",
         "raw-loader": "^4.0.2",
-        "rimraf": "^3.0.2",
+        "rimraf": "^4.0.0",
         "semver": "^7.3.7",
         "simple-proxy-agent": "^1.1.0",
         "string-replace-loader": "3",
