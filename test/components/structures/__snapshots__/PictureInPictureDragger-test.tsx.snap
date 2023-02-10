@@ -30,3 +30,27 @@ exports[`PictureInPictureDragger when rendering the dragger with PiP content 1 a
   </aside>
 </div>
 `;
+
+exports[`PictureInPictureDragger when rendering the dragger with PiP content 1 and rerendering PiP content 1 should not change the PiP content: pip-content-1 1`] = `
+<div>
+  <aside
+    style="transform: translateX(680px) translateY(478px);"
+  >
+    <div>
+      content 1
+    </div>
+  </aside>
+</div>
+`;
+
+exports[`PictureInPictureDragger when rendering the dragger with PiP content 1 should render the PiP content: pip-content-1 1`] = `
+<div>
+  <aside
+    style="transform: translateX(680px) translateY(478px);"
+  >
+    <div>
+      content 1
+    </div>
+  </aside>
+</div>
+`;
