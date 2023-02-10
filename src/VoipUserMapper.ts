@@ -38,7 +38,7 @@ export default class VoipUserMapper {
         return window.mxVoipUserMapper;
     }
 
-    private async userToVirtualUser(userId: string): Promise<string> {
+    private async userToVirtualUser(userId: string): Promise<string | null> {
         const results = await LegacyCallHandler.instance.sipVirtualLookup(userId);
         if (results.length === 0 || !results[0].fields.lookup_success) return null;
         return results[0].userid;
@@ -59,11 +59,11 @@ export default class VoipUserMapper {
         if (!virtualUser) return null;
 
         const virtualRoomId = await ensureVirtualRoomExists(MatrixClientPeg.get(), virtualUser, roomId);
-        MatrixClientPeg.get().setRoomAccountData(virtualRoomId, VIRTUAL_ROOM_EVENT_TYPE, {
+        MatrixClientPeg.get().setRoomAccountData(virtualRoomId!, VIRTUAL_ROOM_EVENT_TYPE, {
             native_room: roomId,
         });
 
-        this.virtualToNativeRoomIdCache.set(virtualRoomId, roomId);
+        this.virtualToNativeRoomIdCache.set(virtualRoomId!, roomId);
 
         return virtualRoomId;
     }
@@ -121,8 +121,12 @@ export default class VoipUserMapper {
         if (!LegacyCallHandler.instance.getSupportsVirtualRooms()) return;
 
         const inviterId = invitedRoom.getDMInviter();
+        if (!inviterId) {
+            logger.error("Could not find DM inviter for room id: " + invitedRoom.roomId);
+        }
+
         logger.log(`Checking virtual-ness of room ID ${invitedRoom.roomId}, invited by ${inviterId}`);
-        const result = await LegacyCallHandler.instance.sipNativeLookup(inviterId);
+        const result = await LegacyCallHandler.instance.sipNativeLookup(inviterId!);
         if (result.length === 0) {
             return;
         }

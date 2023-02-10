@@ -182,11 +182,11 @@ export default class UserActivity {
         this.activeRecentlyTimeout.abort();
     };
 
-    private onUserActivity = (event: MouseEvent): void => {
+    private onUserActivity = (event: Event): void => {
         // ignore anything if the window isn't focused
         if (!this.document.hasFocus()) return;
 
-        if (event.screenX && event.type === "mousemove") {
+        if (event.type === "mousemove" && this.isMouseEvent(event)) {
             if (event.screenX === this.lastScreenX && event.screenY === this.lastScreenY) {
                 // mouse hasn't actually moved
                 return;
@@ -222,5 +222,9 @@ export default class UserActivity {
             /* aborted */
         }
         attachedTimers.forEach((t) => t.abort());
+    }
+
+    private isMouseEvent(event: Event): event is MouseEvent {
+        return event.type.startsWith("mouse");
     }
 }

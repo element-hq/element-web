@@ -21,11 +21,11 @@ import { MatrixClientPeg } from "./MatrixClientPeg";
 import { _t } from "./languageHandler";
 
 export function usersTypingApartFromMeAndIgnored(room: Room): RoomMember[] {
-    return usersTyping(room, [MatrixClientPeg.get().getUserId()].concat(MatrixClientPeg.get().getIgnoredUsers()));
+    return usersTyping(room, [MatrixClientPeg.get().getUserId()!].concat(MatrixClientPeg.get().getIgnoredUsers()));
 }
 
 export function usersTypingApartFromMe(room: Room): RoomMember[] {
-    return usersTyping(room, [MatrixClientPeg.get().getUserId()]);
+    return usersTyping(room, [MatrixClientPeg.get().getUserId()!]);
 }
 
 /**
@@ -36,7 +36,7 @@ export function usersTypingApartFromMe(room: Room): RoomMember[] {
  * @returns {RoomMember[]} list of user objects who are typing.
  */
 export function usersTyping(room: Room, exclude: string[] = []): RoomMember[] {
-    const whoIsTyping = [];
+    const whoIsTyping: RoomMember[] = [];
 
     const memberKeys = Object.keys(room.currentState.members);
     for (const userId of memberKeys) {
