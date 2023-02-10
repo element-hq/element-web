@@ -206,7 +206,6 @@
     "%(weekDayName)s %(time)s": "%(weekDayName)s %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s",
-    "Your email address does not appear to be associated with a Matrix ID on this Homeserver.": "Vaše e-mailová adresa zřejmě nepatří k žádnému Matrix ID na tomto domovském serveru.",
     "Failed to invite": "Pozvání se nezdařilo",
     "You need to be logged in.": "Musíte být přihlášeni.",
     "You are now ignoring %(userId)s": "Nyní ignorujete %(userId)s",
@@ -1258,7 +1257,6 @@
     "Manage": "Spravovat",
     "Securely cache encrypted messages locally for them to appear in search results.": "Bezpečně uchovávat zprávy na tomto zařízení aby se v nich dalo vyhledávat.",
     "Enable": "Povolit",
-    "This session is backing up your keys. ": "Tato relace zálohuje vaše klíče. ",
     "This session is <b>not backing up your keys</b>, but you do have an existing backup you can restore from and add to going forward.": "Tato relace <b>nezálohuje vaše klíče</b>, ale už máte zálohu ze které je můžete obnovit.",
     "Connect this session to key backup before signing out to avoid losing any keys that may only be on this session.": "Než se odhlásíte, připojte tuto relaci k záloze klíčů, abyste nepřišli o klíče, které mohou být jen v této relaci.",
     "Connect this session to Key Backup": "Připojit k zálohování klíčů",
@@ -3653,7 +3651,6 @@
     "You won't be able to participate in rooms where encryption is enabled when using this session.": "Při použití této relace se nebudete moci účastnit místností, kde je povoleno šifrování.",
     "This session doesn't support encryption and thus can't be verified.": "Tato relace nepodporuje šifrování, a proto ji nelze ověřit.",
     "For best security and privacy, it is recommended to use Matrix clients that support encryption.": "Pro co nejlepší zabezpečení a ochranu soukromí je doporučeno používat Matrix klienty, které podporují šifrování.",
-    "This session doesn't support encryption, so it can't be verified.": "Tato relace nepodporuje šifrování, takže ji nelze ověřit.",
     "%(senderName)s ended a <a>voice broadcast</a>": "%(senderName)s ukončil(a) <a>hlasové vysílání</a>",
     "You ended a <a>voice broadcast</a>": "Ukončili jste <a>hlasové vysílání</a>",
     "Threaded messages": "Zprávy ve vláknech",
@@ -3745,5 +3742,8 @@
     "Notifications debug": "Ladění oznámení",
     "unknown": "neznámé",
     "Red": "Červená",
-    "Grey": "Šedá"
+    "Grey": "Šedá",
+    "Are you sure you want to stop your live broadcast? This will end the broadcast and the full recording will be available in the room.": "Opravdu chcete ukončit živé vysílání? Tím se vysílání ukončí a v místnosti bude k dispozici celý záznam.",
+    "Your email address does not appear to be associated with a Matrix ID on this homeserver.": "Zdá se, že vaše e-mailová adresa není přiřazena k Matrix ID na tomto domovském serveru.",
+    "This session is backing up your keys.": "Tato relace zálohuje vaše klíče."
 }
