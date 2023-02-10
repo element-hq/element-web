@@ -195,7 +195,6 @@
     "You must <a>register</a> to use this functionality": "Bu işlevi kullanmak için <a> Kayıt Olun </a>",
     "You need to be able to invite users to do that.": "Bunu yapmak için kullanıcıları davet etmeye ihtiyacınız var.",
     "You need to be logged in.": "Oturum açmanız gerekiyor.",
-    "Your email address does not appear to be associated with a Matrix ID on this Homeserver.": "E-posta adresiniz bu Ana Sunucu'da ki Matrix ID'si ile ilişkili gözükmüyor.",
     "You seem to be in a call, are you sure you want to quit?": "Bir çağrıda gözüküyorsunuz , çıkmak istediğinizden emin misiniz ?",
     "You seem to be uploading files, are you sure you want to quit?": "Dosya yüklüyorsunuz gibi görünüyor , çıkmak istediğinizden emin misiniz ?",
     "You will not be able to undo this change as you are promoting the user to have the same power level as yourself.": "Kullanıcıyı sizinle aynı güç seviyesine yükseltirken , bu değişikliği geri alamazsınız.",

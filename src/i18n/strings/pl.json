@@ -235,7 +235,6 @@
     "You must <a>register</a> to use this functionality": "Musisz się <a>zarejestrować</a> aby móc używać tej funkcji",
     "You need to be able to invite users to do that.": "Aby to zrobić musisz mieć możliwość zapraszania użytkowników.",
     "You need to be logged in.": "Musisz być zalogowany.",
-    "Your email address does not appear to be associated with a Matrix ID on this Homeserver.": "Twój adres e-mail zdaje się nie być powiązany z żadnym Matrix ID na tym serwerze.",
     "You seem to be in a call, are you sure you want to quit?": "Wygląda na to, że prowadzisz z kimś rozmowę; jesteś pewien że chcesz wyjść?",
     "You seem to be uploading files, are you sure you want to quit?": "Wygląda na to, że jesteś w trakcie przesyłania plików; jesteś pewien, że chcesz wyjść?",
     "This server does not support authentication with a phone number.": "Ten serwer nie wspiera autentykacji za pomocą numeru telefonu.",

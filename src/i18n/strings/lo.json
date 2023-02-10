@@ -187,7 +187,6 @@
     "Afghanistan": "ອັຟການິສຖານ",
     "United States": "ສະຫະລັດອາເມລິກາ",
     "United Kingdom": "ປະເທດອັງກິດ",
-    "Your email address does not appear to be associated with a Matrix ID on this Homeserver.": "ທີ່ຢູ່ອີເມວຂອງທ່ານບໍ່ປະກົດວ່າກ່ຽວຂ້ອງກັບ Matrix ID ໃນ Homeserver ນີ້.",
     "This email address was not found": "ບໍ່ພົບທີ່ຢູ່ອີເມວນີ້",
     "Unable to enable Notifications": "ບໍ່ສາມາດເປີດໃຊ້ການແຈ້ງເຕືອນໄດ້",
     "%(brand)s was not given permission to send notifications - please try again": "%(brand)s ບໍ່ໄດ້ຮັບອະນຸຍາດໃຫ້ສົ່ງການແຈ້ງເຕືອນ - ກະລຸນາລອງໃໝ່ອີກຄັ້ງ",

@@ -33,7 +33,6 @@
     "%(brand)s was not given permission to send notifications - please try again": "Aplikácii %(brand)s nebolo udelené povolenie potrebné pre posielanie oznámení - prosím, skúste to znovu",
     "Unable to enable Notifications": "Nie je možné povoliť oznámenia",
     "This email address was not found": "Túto emailovú adresu sa nepodarilo nájsť",
-    "Your email address does not appear to be associated with a Matrix ID on this Homeserver.": "Zdá sa, že vaša emailová adresa nie je priradená k žiadnemu Matrix ID na tomto domovskom serveri.",
     "Default": "Predvolené",
     "Moderator": "Moderátor",
     "Admin": "Správca",
@@ -3652,7 +3651,6 @@
     "This session doesn't support encryption and thus can't be verified.": "Táto relácia nepodporuje šifrovanie, a preto ju nemožno overiť.",
     "For best security and privacy, it is recommended to use Matrix clients that support encryption.": "Pre čo najlepšie zabezpečenie a ochranu súkromia sa odporúča používať klientov Matrix, ktorí podporujú šifrovanie.",
     "You won't be able to participate in rooms where encryption is enabled when using this session.": "Pri používaní tejto relácie sa nebudete môcť zúčastňovať v miestnostiach, v ktorých je zapnuté šifrovanie.",
-    "This session doesn't support encryption, so it can't be verified.": "Táto relácia nepodporuje šifrovanie, a preto ju nemožno overiť.",
     "%(senderName)s ended a <a>voice broadcast</a>": "%(senderName)s ukončil/a <a>hlasové vysielanie</a>",
     "You ended a <a>voice broadcast</a>": "Ukončili ste <a>hlasové vysielanie</a>",
     "Defaults to room member list.": "Predvolené nastavenie je zoznam členov miestnosti.",
@@ -3746,5 +3744,6 @@
     "unknown": "neznáme",
     "Red": "Červená",
     "Grey": "Sivá",
-    "Are you sure you want to stop your live broadcast? This will end the broadcast and the full recording will be available in the room.": "Určite chcete zastaviť vysielanie naživo? Tým sa vysielanie ukončí a v miestnosti bude k dispozícii celý záznam."
+    "Are you sure you want to stop your live broadcast? This will end the broadcast and the full recording will be available in the room.": "Určite chcete zastaviť vysielanie naživo? Tým sa vysielanie ukončí a v miestnosti bude k dispozícii celý záznam.",
+    "Your email address does not appear to be associated with a Matrix ID on this homeserver.": "Zdá sa, že vaša emailová adresa nie je priradená k žiadnemu Matrix ID na tomto domovskom serveri."
 }
