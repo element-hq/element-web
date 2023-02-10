@@ -106,16 +106,21 @@ const useMapWithStyle = ({
             });
             setGeolocate(geolocate);
             map.addControl(geolocate);
-            geolocate.on("error", onGeolocateError);
-            return () => {
-                geolocate.off("error", onGeolocateError);
-            };
         }
         if (!allowGeolocate && geolocate) {
             map.removeControl(geolocate);
             setGeolocate(null);
         }
     }, [map, geolocate, allowGeolocate]);
+
+    useEffect(() => {
+        if (geolocate) {
+            geolocate.on("error", onGeolocateError);
+            return () => {
+                geolocate.off("error", onGeolocateError);
+            };
+        }
+    }, [geolocate]);
 
     return {
         map,
