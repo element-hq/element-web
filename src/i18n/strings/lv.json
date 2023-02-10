@@ -983,7 +983,6 @@
     "%(oneUser)smade no changes %(count)s times|other": "%(oneUser)sneveica nekādas izmaiņas %(count)s reizes",
     "%(severalUsers)smade no changes %(count)s times|one": "%(severalUsers)sneveica nekādas izmaiņas",
     "%(severalUsers)smade no changes %(count)s times|other": "%(severalUsers)sneveica nekādas izmaiņas %(count)s reizes",
-    "Declining …": "Noraida …",
     "Accepting …": "Akceptē …",
     "%(name)s cancelled": "%(name)s atcēla",
     "%(name)s cancelled verifying": "%(name)s atcēla verifikāciju",

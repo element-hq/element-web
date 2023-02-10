@@ -1356,7 +1356,6 @@
     "You cancelled": "Вы отменили",
     "%(name)s declined": "%(name)s отказал(а)",
     "%(name)s cancelled": "%(name)s отменил(а)",
-    "Accepting …": "Принимаем …",
     "Declining …": "Отказываем …",
     "%(name)s wants to verify": "%(name)s желает подтвердить",
     "You sent a verification request": "Вы отправили запрос подтверждения",

@@ -1321,7 +1321,6 @@
     "You cancelled": "你取消了",
     "%(name)s declined": "%(name)s 拒绝了",
     "%(name)s cancelled": "%(name)s 取消了",
-    "Accepting …": "正在接受…",
     "Declining …": "正在拒绝…",
     "%(name)s wants to verify": "%(name)s 想要验证",
     "You sent a verification request": "你发送了一个验证请求",

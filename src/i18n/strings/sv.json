@@ -1419,7 +1419,6 @@
     "The encryption used by this room isn't supported.": "Krypteringen som används i det här rummet stöds inte.",
     "You declined": "Du avslog",
     "%(name)s declined": "%(name)s avslog",
-    "Accepting …": "Accepterar …",
     "Declining …": "Avslår …",
     "Message deleted": "Meddelande raderat",
     "Message deleted by %(name)s": "Meddelande raderat av %(name)s",

@@ -1344,7 +1344,6 @@
     "Local Addresses": "Paikalliset osoitteet",
     "Set addresses for this room so users can find this room through your homeserver (%(localDomain)s)": "Aseta osoitteita tälle huoneelle, jotta käyttäjät löytävät tämän huoneen kotipalvelimeltasi (%(localDomain)s)",
     "Your messages are not secure": "Viestisi eivät ole turvassa",
-    "Accepting …": "Hyväksytään …",
     "Declining …": "Kieltäydytään …",
     "Enter a server name": "Syötä palvelimen nimi",
     "Looks good": "Hyvältä näyttää",

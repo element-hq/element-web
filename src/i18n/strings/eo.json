@@ -1352,7 +1352,6 @@
     "You have ignored this user, so their message is hidden. <a>Show anyways.</a>": "Vi malatentis ĉi tiun uzanton, ĝia mesaĝo estas do kaŝita. <a>Tamen montri.</a>",
     "You declined": "Vi rifuzis",
     "%(name)s declined": "%(name)s rifuzis",
-    "Accepting …": "Akceptante…",
     "Declining …": "Rifuzante…",
     "Any of the following data may be shared:": "Ĉiu el la jenaj datumoj povas kunhaviĝi:",
     "Using this widget may share data <helpIcon /> with %(widgetDomain)s.": "Uzo de tiu ĉi fenestraĵo eble havigos datumojn <helpIcon /> kun %(widgetDomain)s.",

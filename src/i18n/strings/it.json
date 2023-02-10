@@ -1390,7 +1390,6 @@
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "Per segnalare un problema di sicurezza relativo a Matrix, leggi la <a>Politica di divulgazione della sicurezza</a> di Matrix.org .",
     "Mark all as read": "Segna tutto come letto",
     "Accepting…": "Accettazione…",
-    "Accepting …": "Accettazione …",
     "Declining …": "Rifiuto …",
     "Not currently indexing messages for any room.": "Attualmente non si stanno indicizzando i messaggi di alcuna stanza.",
     "%(doneRooms)s out of %(totalRooms)s": "%(doneRooms)s di %(totalRooms)s",
