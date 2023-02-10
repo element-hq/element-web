@@ -3743,5 +3743,6 @@
     "Grey": "Sivá",
     "Are you sure you want to stop your live broadcast? This will end the broadcast and the full recording will be available in the room.": "Určite chcete zastaviť vysielanie naživo? Tým sa vysielanie ukončí a v miestnosti bude k dispozícii celý záznam.",
     "Your email address does not appear to be associated with a Matrix ID on this homeserver.": "Zdá sa, že vaša emailová adresa nie je priradená k žiadnemu Matrix ID na tomto domovskom serveri.",
-    "This session is backing up your keys.": "Táto relácia zálohuje vaše kľúče."
+    "This session is backing up your keys.": "Táto relácia zálohuje vaše kľúče.",
+    "Declining…": "Odmietanie …"
 }
