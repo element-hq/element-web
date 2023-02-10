@@ -3744,5 +3744,6 @@
     "unknown": "未知",
     "Red": "紅",
     "Grey": "灰",
-    "Are you sure you want to stop your live broadcast? This will end the broadcast and the full recording will be available in the room.": "您確定您想要停止您的直播嗎？這將會結束廣播，而完整的紀錄稍後將會在聊天室中提供。"
+    "Are you sure you want to stop your live broadcast? This will end the broadcast and the full recording will be available in the room.": "您確定您想要停止您的直播嗎？這將會結束廣播，而完整的紀錄稍後將會在聊天室中提供。",
+    "Your email address does not appear to be associated with a Matrix ID on this homeserver.": "您的電子郵件地址似乎並未與此家伺服器上的 Matrix ID 相關連。"
 }
