@@ -165,7 +165,6 @@
     "%(brand)s was not given permission to send notifications - please try again": "%(brand)s не має дозволу надсилати сповіщення — будь ласка, спробуйте ще раз",
     "Unable to enable Notifications": "Не вдалося увімкнути сповіщення",
     "This email address was not found": "Не знайдено адресу електронної пошти",
-    "Your email address does not appear to be associated with a Matrix ID on this Homeserver.": "Схоже, ваша адреса е-пошти не пов'язана з жодним Matrix ID на цьому домашньому сервері.",
     "Restricted": "Обмежено",
     "Moderator": "Модератор",
     "Failed to invite": "Не вдалося запросити",
@@ -1688,7 +1687,6 @@
     "Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Security Key.": "Резервне копіювання ключів шифрування з даними вашого облікового запису на випадок втрати доступу до сеансів. Ваші ключі будуть захищені унікальним ключем безпеки.",
     "Backup key stored:": "Резервну копію ключа розміщено:",
     "Backup key cached:": "Резервну копію ключа кешовано:",
-    "This session is backing up your keys. ": "Цей сеанс створює резервну копію ваших ключів. ",
     "Unable to load key backup status": "Не вдалося завантажити стан резервного копіювання ключа",
     "The operation could not be completed": "Неможливо завершити операцію",
     "Failed to save your profile": "Не вдалося зберегти ваш профіль",
@@ -3653,7 +3651,6 @@
     "This session doesn't support encryption and thus can't be verified.": "Цей сеанс не підтримує шифрування, і його не можна звірити.",
     "For best security and privacy, it is recommended to use Matrix clients that support encryption.": "Для найкращої безпеки та приватності радимо користуватися клієнтами Matrix, які підтримують шифрування.",
     "You won't be able to participate in rooms where encryption is enabled when using this session.": "Під час користування цим сеансом ви не зможете брати участь у кімнатах, де ввімкнено шифрування.",
-    "This session doesn't support encryption, so it can't be verified.": "Цей сеанс не підтримує шифрування, тож його не можна звірити.",
     "%(senderName)s ended a <a>voice broadcast</a>": "%(senderName)s завершує <a>голосову трансляцію</a>",
     "You ended a <a>voice broadcast</a>": "Ви завершили <a>голосову трансляцію</a>",
     "Threaded messages": "Повідомлення в гілках",
@@ -3746,5 +3743,6 @@
     "unknown": "невідомо",
     "Red": "Черврний",
     "Grey": "Сірий",
-    "Are you sure you want to stop your live broadcast? This will end the broadcast and the full recording will be available in the room.": "Ви впевнені, що хочете припинити пряму трансляцію? Це призведе до завершення трансляції, а повний запис буде доступний у кімнаті."
+    "Are you sure you want to stop your live broadcast? This will end the broadcast and the full recording will be available in the room.": "Ви впевнені, що хочете припинити пряму трансляцію? Це призведе до завершення трансляції, а повний запис буде доступний у кімнаті.",
+    "Your email address does not appear to be associated with a Matrix ID on this homeserver.": "Ваша електронна адреса не пов'язана з Matrix ID на цьому домашньому сервері."
 }
