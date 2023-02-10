@@ -73,7 +73,7 @@ const securityCardContent: Record<
         title: _t("Unverified session"),
         description: (
             <>
-                <p>{_t(`This session doesn't support encryption, so it can't be verified.`)}</p>
+                <p>{_t(`This session doesn't support encryption and thus can't be verified.`)}</p>
                 <p>
                     {_t(
                         `You won't be able to participate in rooms where encryption is enabled when using this session.`,

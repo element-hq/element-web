@@ -14,10 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { fireEvent, render, screen } from "@testing-library/react";
 import React from "react";
-// eslint-disable-next-line deprecate/import
-import { mount } from "enzyme";
-import { act } from "react-dom/test-utils";
 
 import LabelledCheckbox from "../../../../src/components/views/elements/LabelledCheckbox";
 
@@ -30,32 +28,18 @@ jest.mock("matrix-js-sdk/src/randomstring", () => {
 
 describe("<LabelledCheckbox />", () => {
     type CompProps = React.ComponentProps<typeof LabelledCheckbox>;
-    const getComponent = (props: CompProps) => mount(<LabelledCheckbox {...props} />);
-    type CompClass = ReturnType<typeof getComponent>;
+    const getComponent = (props: CompProps) => <LabelledCheckbox {...props} />;
+    const getCheckbox = (): HTMLInputElement => screen.getByRole("checkbox");
 
-    const getCheckbox = (component: CompClass) => component.find(`input[type="checkbox"]`);
-    const getLabel = (component: CompClass) => component.find(`.mx_LabelledCheckbox_label`);
-    const getByline = (component: CompClass) => component.find(`.mx_LabelledCheckbox_byline`);
-
-    const isChecked = (checkbox: ReturnType<typeof getCheckbox>) => checkbox.is(`[checked=true]`);
-    const isDisabled = (checkbox: ReturnType<typeof getCheckbox>) => checkbox.is(`[disabled=true]`);
-    const getText = (span: ReturnType<typeof getLabel>) => (span.length > 0 ? span.at(0).text() : null);
-
-    test.each([null, "this is a byline"])("should render with byline of %p", (byline) => {
+    it.each([undefined, "this is a byline"])("should render with byline of %p", (byline) => {
         const props: CompProps = {
             label: "Hello world",
             value: true,
             byline: byline,
             onChange: jest.fn(),
         };
-        const component = getComponent(props);
-        const checkbox = getCheckbox(component);
-
-        expect(component).toMatchSnapshot();
-        expect(isChecked(checkbox)).toBe(true);
-        expect(isDisabled(checkbox)).toBe(false);
-        expect(getText(getLabel(component))).toBe(props.label);
-        expect(getText(getByline(component))).toBe(byline);
+        const renderResult = render(getComponent(props));
+        expect(renderResult.asFragment()).toMatchSnapshot();
     });
 
     it("should support unchecked by default", () => {
@@ -64,9 +48,8 @@ describe("<LabelledCheckbox />", () => {
             value: false,
             onChange: jest.fn(),
         };
-        const component = getComponent(props);
-
-        expect(isChecked(getCheckbox(component))).toBe(false);
+        render(getComponent(props));
+        expect(getCheckbox()).not.toBeChecked();
     });
 
     it("should be possible to disable the checkbox", () => {
@@ -76,9 +59,8 @@ describe("<LabelledCheckbox />", () => {
             disabled: true,
             onChange: jest.fn(),
         };
-        const component = getComponent(props);
-
-        expect(isDisabled(getCheckbox(component))).toBe(true);
+        render(getComponent(props));
+        expect(getCheckbox()).toBeDisabled();
     });
 
     it("should emit onChange calls", () => {
@@ -87,15 +69,11 @@ describe("<LabelledCheckbox />", () => {
             value: false,
             onChange: jest.fn(),
         };
-        const component = getComponent(props);
+        render(getComponent(props));
 
         expect(props.onChange).not.toHaveBeenCalled();
-
-        act(() => {
-            getCheckbox(component).simulate("change");
-        });
-
-        expect(props.onChange).toHaveBeenCalledTimes(1);
+        fireEvent.click(getCheckbox());
+        expect(props.onChange).toHaveBeenCalledWith(true);
     });
 
     it("should react to value and disabled prop changes", () => {
@@ -104,16 +82,18 @@ describe("<LabelledCheckbox />", () => {
             value: false,
             onChange: jest.fn(),
         };
-        const component = getComponent(props);
-        let checkbox = getCheckbox(component);
+        const { rerender } = render(getComponent(props));
 
-        expect(isChecked(checkbox)).toBe(false);
-        expect(isDisabled(checkbox)).toBe(false);
+        let checkbox = getCheckbox();
+        expect(checkbox).not.toBeChecked();
+        expect(checkbox).not.toBeDisabled();
 
-        component.setProps({ value: true, disabled: true });
-        checkbox = getCheckbox(component); // refresh reference to checkbox
+        props.disabled = true;
+        props.value = true;
+        rerender(getComponent(props));
 
-        expect(isChecked(checkbox)).toBe(true);
-        expect(isDisabled(checkbox)).toBe(true);
+        checkbox = getCheckbox();
+        expect(checkbox).toBeChecked();
+        expect(checkbox).toBeDisabled();
     });
 });

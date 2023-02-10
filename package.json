@@ -152,7 +152,7 @@
         "@types/escape-html": "^1.0.1",
         "@types/file-saver": "^2.0.3",
         "@types/flux": "^3.1.9",
-        "@types/fs-extra": "^9.0.13",
+        "@types/fs-extra": "^11.0.0",
         "@types/geojson": "^7946.0.8",
         "@types/jest": "^29.2.1",
         "@types/katex": "^0.14.0",

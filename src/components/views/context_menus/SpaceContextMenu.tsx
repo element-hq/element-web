@@ -63,7 +63,7 @@ const SpaceContextMenu: React.FC<IProps> = ({ space, hideHeader, onFinished, ...
 
         inviteOption = (
             <IconizedContextMenuOption
-                data-test-id="invite-option"
+                data-testid="invite-option"
                 className="mx_SpacePanel_contextMenu_inviteButton"
                 iconClassName="mx_SpacePanel_iconInvite"
                 label={_t("Invite")}
@@ -85,7 +85,7 @@ const SpaceContextMenu: React.FC<IProps> = ({ space, hideHeader, onFinished, ...
 
         settingsOption = (
             <IconizedContextMenuOption
-                data-test-id="settings-option"
+                data-testid="settings-option"
                 iconClassName="mx_SpacePanel_iconSettings"
                 label={_t("Settings")}
                 onClick={onSettingsClick}
@@ -102,7 +102,7 @@ const SpaceContextMenu: React.FC<IProps> = ({ space, hideHeader, onFinished, ...
 
         leaveOption = (
             <IconizedContextMenuOption
-                data-test-id="leave-option"
+                data-testid="leave-option"
                 iconClassName="mx_SpacePanel_iconLeave"
                 className="mx_IconizedContextMenu_option_red"
                 label={_t("Leave space")}
@@ -172,12 +172,12 @@ const SpaceContextMenu: React.FC<IProps> = ({ space, hideHeader, onFinished, ...
 
         newRoomSection = (
             <>
-                <div data-test-id="add-to-space-header" className="mx_SpacePanel_contextMenu_separatorLabel">
+                <div data-testid="add-to-space-header" className="mx_SpacePanel_contextMenu_separatorLabel">
                     {_t("Add")}
                 </div>
                 {canAddRooms && (
                     <IconizedContextMenuOption
-                        data-test-id="new-room-option"
+                        data-testid="new-room-option"
                         iconClassName="mx_SpacePanel_iconPlus"
                         label={_t("Room")}
                         onClick={onNewRoomClick}
@@ -185,7 +185,7 @@ const SpaceContextMenu: React.FC<IProps> = ({ space, hideHeader, onFinished, ...
                 )}
                 {canAddVideoRooms && (
                     <IconizedContextMenuOption
-                        data-test-id="new-video-room-option"
+                        data-testid="new-video-room-option"
                         iconClassName="mx_SpacePanel_iconPlus"
                         label={_t("Video room")}
                         onClick={onNewVideoRoomClick}
@@ -195,7 +195,7 @@ const SpaceContextMenu: React.FC<IProps> = ({ space, hideHeader, onFinished, ...
                 )}
                 {canAddSubSpaces && (
                     <IconizedContextMenuOption
-                        data-test-id="new-subspace-option"
+                        data-testid="new-subspace-option"
                         iconClassName="mx_SpacePanel_iconPlus"
                         label={_t("Space")}
                         onClick={onNewSubspaceClick}
