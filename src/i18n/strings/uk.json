@@ -3742,5 +3742,7 @@
     "Red": "Черврний",
     "Grey": "Сірий",
     "Are you sure you want to stop your live broadcast? This will end the broadcast and the full recording will be available in the room.": "Ви впевнені, що хочете припинити пряму трансляцію? Це призведе до завершення трансляції, а повний запис буде доступний у кімнаті.",
-    "Your email address does not appear to be associated with a Matrix ID on this homeserver.": "Ваша електронна адреса не пов'язана з Matrix ID на цьому домашньому сервері."
+    "Your email address does not appear to be associated with a Matrix ID on this homeserver.": "Ваша електронна адреса не пов'язана з Matrix ID на цьому домашньому сервері.",
+    "Declining…": "Відхилення…",
+    "This session is backing up your keys.": "Під час цього сеансу створюється резервна копія ваших ключів."
 }
