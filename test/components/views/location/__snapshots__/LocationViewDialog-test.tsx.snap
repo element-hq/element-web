@@ -32,8 +32,10 @@ exports[`<LocationViewDialog /> renders map correctly 1`] = `
               ],
               [
                 MockGeolocateControl {
-                  "_events": {},
-                  "_eventsCount": 0,
+                  "_events": {
+                    "error": [Function],
+                  },
+                  "_eventsCount": 1,
                   "_maxListeners": undefined,
                   "trigger": [MockFunction],
                   Symbol(kCapture): false,
@@ -113,8 +115,10 @@ exports[`<LocationViewDialog /> renders map correctly 1`] = `
               ],
               [
                 MockGeolocateControl {
-                  "_events": {},
-                  "_eventsCount": 0,
+                  "_events": {
+                    "error": [Function],
+                  },
+                  "_eventsCount": 1,
                   "_maxListeners": undefined,
                   "trigger": [MockFunction],
                   Symbol(kCapture): false,
