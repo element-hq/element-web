@@ -319,7 +319,6 @@
     "Error decrypting video": "تعذر فك تشفير الفيديو",
     "You sent a verification request": "أنت أرسلت طلب تحقق",
     "%(name)s wants to verify": "%(name)s يريد التحقق",
-    "Accepting …": "جارٍ القبول …",
     "%(name)s cancelled": "%(name)s رفض",
     "%(name)s declined": "%(name)s رفض",
     "You cancelled": "أنت رفضت",

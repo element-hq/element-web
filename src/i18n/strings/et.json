@@ -208,7 +208,6 @@
     "You cancelled": "Sa tühistasid",
     "%(name)s declined": "%(name)s keeldus",
     "%(name)s cancelled": "%(name)s tühistas",
-    "Declining …": "Keeldun …",
     "%(name)s wants to verify": "%(name)s soovib verifitseerida",
     "You sent a verification request": "Sa saatsid verifitseerimispalve",
     "Error decrypting video": "Viga videovoo dekrüptimisel",

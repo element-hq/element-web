@@ -1410,7 +1410,6 @@
     "The encryption used by this room isn't supported.": "Шифроването използвано от тази стая не се поддържа.",
     "You declined": "Отказахте",
     "%(name)s declined": "%(name)s отказа",
-    "Declining …": "Отказване…",
     "Can't load this message": "Съобщението не може да се зареди",
     "Submit logs": "Изпрати логове",
     "Enter a server name": "Въведете име на сървър",

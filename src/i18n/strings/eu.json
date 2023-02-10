@@ -1366,7 +1366,6 @@
     "Verify by scanning": "Egiaztatu eskaneatuz",
     "You declined": "Ukatu egin duzu",
     "%(name)s declined": "%(name)s erabiltzaileak ukatu du",
-    "Declining …": "Ukatzen…",
     "Destroy cross-signing keys?": "Suntsitu zeharkako sinatzerako gakoak?",
     "Deleting cross-signing keys is permanent. Anyone you have verified with will see security alerts. You almost certainly don't want to do this, unless you've lost every device you can cross-sign from.": "Zeharkako sinatzerako gakoak ezabatzea behin betiko da. Egiaztatu dituzunak segurtasun abisu bat jasoko dute.  Ziur aski ez duzu hau egin nahi, zeharkako sinatzea ahalbidetzen dizun gailu oro galdu ez baduzu.",
     "Clear cross-signing keys": "Garbitu zeharkako sinatzerako gakoak",

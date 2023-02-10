@@ -1407,7 +1407,6 @@
     "Error decrypting video": "خطا در رمزگشایی ویدیو",
     "You sent a verification request": "شما یک درخواست تأیید هویت ارسال کرده‌اید",
     "%(name)s wants to verify": "%(name)s می‌خواهد تأیید هویت کند",
-    "Accepting …": "در حال پذیرش …",
     "%(name)s cancelled": "%(name)s لغو کرد",
     "%(name)s declined": "%(name)s رد کرد",
     "You cancelled": "شما لغو کردید",
