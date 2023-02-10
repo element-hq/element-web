@@ -223,6 +223,7 @@ export interface IRoomState {
     narrow: boolean;
     // List of undecryptable events currently visible on-screen
     visibleDecryptionFailures?: MatrixEvent[];
+    msc3946ProcessDynamicPredecessor: boolean;
 }
 
 interface LocalRoomViewProps {
@@ -416,6 +417,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             liveTimeline: undefined,
             narrow: false,
             visibleDecryptionFailures: [],
+            msc3946ProcessDynamicPredecessor: SettingsStore.getValue("feature_dynamic_room_predecessors"),
         };
 
         this.dispatcherRef = dis.register(this.onAction);
@@ -467,6 +469,9 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             ),
             SettingsStore.watchSetting("urlPreviewsEnabled", null, this.onUrlPreviewsEnabledChange),
             SettingsStore.watchSetting("urlPreviewsEnabled_e2ee", null, this.onUrlPreviewsEnabledChange),
+            SettingsStore.watchSetting("feature_dynamic_room_predecessors", null, (...[, , , value]) =>
+                this.setState({ msc3946ProcessDynamicPredecessor: value as boolean }),
+            ),
         ];
     }
 
@@ -1798,10 +1803,8 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     };
 
     private getOldRoom(): Room | null {
-        const createEvent = this.state.room.currentState.getStateEvents(EventType.RoomCreate, "");
-        if (!createEvent || !createEvent.getContent()["predecessor"]) return null;
-
-        return this.context.client.getRoom(createEvent.getContent()["predecessor"]["room_id"]);
+        const { roomId } = this.state.room?.findPredecessor(this.state.msc3946ProcessDynamicPredecessor) || {};
+        return this.context.client?.getRoom(roomId) || null;
     }
 
     public getHiddenHighlightCount(): number {

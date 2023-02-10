@@ -86,6 +86,7 @@ export function getRoomContext(room: Room, override: Partial<IRoomState>): IRoom
         resizing: false,
         narrow: false,
         activeCall: null,
+        msc3946ProcessDynamicPredecessor: false,
 
         ...override,
     };

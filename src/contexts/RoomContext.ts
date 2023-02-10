@@ -65,6 +65,7 @@ const RoomContext = createContext<IRoomState>({
     liveTimeline: undefined,
     narrow: false,
     activeCall: null,
+    msc3946ProcessDynamicPredecessor: false,
 });
 RoomContext.displayName = "RoomContext";
 export default RoomContext;
