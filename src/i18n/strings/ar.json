@@ -663,7 +663,6 @@
     "Connect this session to Key Backup": "اربط هذا الاتصال باحتياطي مفتاح",
     "Connect this session to key backup before signing out to avoid losing any keys that may only be on this session.": "اربط هذا الاتصال باحتياطي قبل تسجيل الخروج لتجنب فقدان أي مفاتيح قد تكون موجودة فقط في هذا الاتصال.",
     "This session is <b>not backing up your keys</b>, but you do have an existing backup you can restore from and add to going forward.": "هذا الاتصال <b>لم يعتمد الاحتياطي لمفاتيحك</b> لكن لديك احتياطي يمكنك الاتسرجاع منه والإضافة إليه فيما بعد.",
-    "This session is backing up your keys. ": "هذا الاتصال اعتمد الاحتياطي لمفاتيحك. ",
     "Restore from Backup": "استعادة من الاحتياطي",
     "Unable to load key backup status": "تعذر حمل حالة النسخ الاحتياطي للمفتاح",
     "Are you sure? You will lose your encrypted messages if your keys are not backed up properly.": "هل أنت واثق؟ ستفقد رسائلك المشفرة إذا لم يتم نسخ المفاتيح احتياطيًا بشكل صحيح.",

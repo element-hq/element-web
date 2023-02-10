@@ -1240,7 +1240,6 @@
     "Connect this session to Key Backup": "Hubungkan sesi ini ke Pencadangan Kunci",
     "Connect this session to key backup before signing out to avoid losing any keys that may only be on this session.": "Hubungkan sesi ini ke pencadangan kunci sebelum keluar untuk menghindari kehilangan kunci apa saja yang mungkin hanya ada di sesi ini.",
     "This session is <b>not backing up your keys</b>, but you do have an existing backup you can restore from and add to going forward.": "Sesi ini <b>tidak mencadangkan kunci Anda</b>, tetapi Anda memiliki cadangan yang ada yang dapat Anda pulihkan dan tambahkan untuk selanjutnya.",
-    "This session is backing up your keys. ": "Sesi ini mencadangkan kunci Anda. ",
     "Restore from Backup": "Pulihkan dari Cadangan",
     "Unable to load key backup status": "Tidak dapat memuat status pencadangan kunci",
     "Are you sure? You will lose your encrypted messages if your keys are not backed up properly.": "Apakah Anda yakin? Anda akan kehilangan pesan terenkripsi jika kunci Anda tidak dicadangkan dengan benar.",

@@ -849,7 +849,6 @@
     "More options": "他のオプション",
     "Manually verify all remote sessions": "全てのリモートセッションを手動で認証",
     "Individually verify each session used by a user to mark it as trusted, not trusting cross-signed devices.": "クロス署名された端末を信頼せず、ユーザーが使用する各セッションを個別に認証し、信頼済に設定。",
-    "This session is backing up your keys. ": "このセッションは鍵をバックアップしています。 ",
     "Show all": "全て表示",
     "Message deleted": "メッセージが削除されました",
     "Message deleted by %(name)s": "%(name)sによってメッセージが削除されました",

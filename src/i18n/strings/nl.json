@@ -1153,7 +1153,6 @@
     "Connecting to integration manager...": "Verbinding maken met de integratiebeheerder…",
     "Cannot connect to integration manager": "Kan geen verbinding maken met de integratiebeheerder",
     "The integration manager is offline or it cannot reach your homeserver.": "De integratiebeheerder is offline of kan je homeserver niet bereiken.",
-    "This session is backing up your keys. ": "Deze sessie maakt back-ups van je sleutels. ",
     "not stored": "niet opgeslagen",
     "Ignored/Blocked": "Genegeerd/geblokkeerd",
     "Error adding ignored user/server": "Fout bij het toevoegen van een genegeerde persoon/server",

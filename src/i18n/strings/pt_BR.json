@@ -975,7 +975,6 @@
     "Connecting to integration manager...": "Conectando ao gestor de integrações...",
     "Cannot connect to integration manager": "Não foi possível conectar ao gerenciador de integrações",
     "The integration manager is offline or it cannot reach your homeserver.": "Ou o gerenciador de integrações está indisponível, ou ele não conseguiu acessar o seu servidor.",
-    "This session is backing up your keys. ": "Esta sessão está fazendo backup das suas chaves. ",
     "This session is <b>not backing up your keys</b>, but you do have an existing backup you can restore from and add to going forward.": "Esta sessão <b>não está fazendo backup de suas chaves</b>, mas você tem um backup existente que pode restaurar para continuar.",
     "Connect this session to key backup before signing out to avoid losing any keys that may only be on this session.": "Autorize esta sessão a fazer o backup de chaves antes de se desconectar, para evitar perder chaves que possam estar apenas nesta sessão.",
     "Connect this session to Key Backup": "Autorize esta sessão a fazer o backup de chaves",

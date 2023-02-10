@@ -894,7 +894,6 @@
     "Use default": "Bruk standard",
     "Delete Backup": "Slett sikkerheitskopi",
     "Restore from Backup": "Gjenopprett frå sikkerheitskopi",
-    "This session is backing up your keys. ": "Denne økta har aktivert sikkerheitskopiering av nøklane dine ",
     "Encryption": "Kryptografi",
     "Use Ctrl + Enter to send a message": "Bruk Ctrl + Enter for å sende meldingar",
     "Set the name of a font installed on your system & %(brand)s will attempt to use it.": "Skriv  namnet på skrifttypen(fonten) og %(brand)s forsøka å henta den frå operativsystemet.",

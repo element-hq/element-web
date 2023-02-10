@@ -1301,7 +1301,6 @@
     "Your account has a cross-signing identity in secret storage, but it is not yet trusted by this session.": "A fiókodhoz tartozik egy eszköz-közti hitelesítési identitás, de ez a munkamenet még nem jelölte megbízhatónak.",
     "in memory": "memóriában",
     "Unable to load session list": "A munkamenet listát nem lehet betölteni",
-    "This session is backing up your keys. ": "Ez a munkamenet elmenti a kulcsaidat. ",
     "WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and session %(deviceId)s is \"%(fprint)s\" which does not match the provided key \"%(fingerprint)s\". This could mean your communications are being intercepted!": "FIGYELEM: KULCSELLENŐRZÉS SIKERTELEN! %(userId)s aláírási kulcsa és a %(deviceId)s munkamenet ujjlenyomata „%(fprint)s”, amely nem egyezik meg a megadott ujjlenyomattal: „%(fingerprint)s”. Ez azt is jelentheti, hogy a kommunikációt lehallgatják.",
     "The signing key you provided matches the signing key you received from %(userId)s's session %(deviceId)s. Session marked as verified.": "A megadott aláírási kulcs megegyezik %(userId)s felhasználótól kapott aláírási kulccsal ebben a munkamenetben: %(deviceId)s. A munkamenet ellenőrzöttnek lett jelölve.",
     "This session is <b>not backing up your keys</b>, but you do have an existing backup you can restore from and add to going forward.": "Ez az munkamenet <b>nem menti el a kulcsait</b>, de van létező mentése, amelyből vissza tud állni és amihez hozzá tud adni a továbbiakban.",

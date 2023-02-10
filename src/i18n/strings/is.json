@@ -1805,7 +1805,6 @@
     "Backup version:": "Útgáfa öryggisafrits:",
     "All keys backed up": "Allir lyklar öryggisafritaðir",
     "This session is <b>not backing up your keys</b>, but you do have an existing backup you can restore from and add to going forward.": "Þessi seta er <b>ekki að öryggisafrita dulritunarlyklana þína</b>, en þú ert með fyrirliggjandi öryggisafrit sem þú getur endurheimt úr og notað til að halda áfram.",
-    "This session is backing up your keys. ": "Þessi seta öryggisafritar dulritunarlyklana þína. ",
     "Unable to load key backup status": "Tókst ekki að hlaða inn stöðu öryggisafritunar dulritunarlykla",
     "Are you sure? You will lose your encrypted messages if your keys are not backed up properly.": "Ertu viss? Þú munt tapa dulrituðu skilaboðunum þínum ef dulritunarlyklarnir þínir eru ekki rétt öryggisafritaðir.",
     "You aren't signed into any other devices.": "Þú ert ekki skráð/ur inn í nein önnur tæki.",

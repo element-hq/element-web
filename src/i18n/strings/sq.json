@@ -1297,7 +1297,6 @@
     "Your account has a cross-signing identity in secret storage, but it is not yet trusted by this session.": "Llogaria juaj ka një identitet <em>cross-signing</em> në depozitë të fshehtë, por s’është ende i besuar në këtë sesion.",
     "in memory": "në kujtesë",
     "Unable to load session list": "S’arrihet të ngarkohet listë sesionesh",
-    "This session is backing up your keys. ": "Kjo sesion po bën kopjeruajtje të kyçeve tuaja. ",
     "This session is <b>not backing up your keys</b>, but you do have an existing backup you can restore from and add to going forward.": "Ky sesion <b>nuk po bën kopjeruajtje të kyçeve tuaja</b>, por keni një kopjeruajtje ekzistuese që mund ta përdorni për rimarrje dhe ta shtoni më tej.",
     "Connect this session to key backup before signing out to avoid losing any keys that may only be on this session.": "Lidheni këtë sesion kopjeruajtje kyçesh, përpara se të dilni, që të shmangni humbje të çfarëdo kyçi që mund të gjendet vetëm në këtë pajisje.",
     "Connect this session to Key Backup": "Lidhe këtë sesion me Kopjeruajtje Kyçesh",

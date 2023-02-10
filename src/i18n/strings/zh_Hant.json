@@ -1291,7 +1291,6 @@
     "Securely cache encrypted messages locally for them to appear in search results.": "將加密的訊息安全地在本機快取以出現在顯示結果中。",
     "Enable": "啟用",
     "%(brand)s is missing some components required for securely caching encrypted messages locally. If you'd like to experiment with this feature, build a custom %(brand)s Desktop with <nativeLink>search components added</nativeLink>.": "%(brand)s 缺少某些在本機快取已加密訊習所需的元件。如果您想要實驗此功能，請<nativeLink>加入搜尋元件</nativeLink>並自行建構 %(brand)s 桌面版。",
-    "This session is backing up your keys. ": "此工作階段正在備份您的金鑰。 ",
     "This session is <b>not backing up your keys</b>, but you do have an existing backup you can restore from and add to going forward.": "此工作階段<b>不會備份您的金鑰</b>，但您已有既有的備份，您可以從那邊復原，或是稍後再做。",
     "Connect this session to key backup before signing out to avoid losing any keys that may only be on this session.": "在登出前，請先將此工作階段連線到金鑰備份以避免遺失任何可能僅在此工作階段中的金鑰。",
     "Connect this session to Key Backup": "將此工作階段連線到金鑰備份",

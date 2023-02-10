@@ -1312,7 +1312,6 @@
     "Your account has a cross-signing identity in secret storage, but it is not yet trusted by this session.": "Votre compte a une identité de signature croisée dans le coffre secret, mais cette session ne lui fait pas encore confiance.",
     "in memory": "en mémoire",
     "Unable to load session list": "Impossible de charger la liste de sessions",
-    "This session is backing up your keys. ": "Cette session sauvegarde vos clés. ",
     "This session is <b>not backing up your keys</b>, but you do have an existing backup you can restore from and add to going forward.": "Cette session <b>ne sauvegarde pas vos clés</b>, mais vous n’avez pas de sauvegarde existante que vous pouvez restaurer ou compléter à l’avenir.",
     "Connect this session to key backup before signing out to avoid losing any keys that may only be on this session.": "Connectez cette session à la sauvegarde de clés avant de vous déconnecter pour éviter de perdre des clés qui seraient uniquement dans cette session.",
     "Connect this session to Key Backup": "Connecter cette session à la sauvegarde de clés",

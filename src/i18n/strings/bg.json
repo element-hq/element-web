@@ -1322,7 +1322,6 @@
     "Securely cache encrypted messages locally for them to appear in search results.": "Кеширай шифровани съобщения локално по сигурен начин за да се появяват в резултати от търсения.",
     "Enable": "Включи",
     "%(brand)s is missing some components required for securely caching encrypted messages locally. If you'd like to experiment with this feature, build a custom %(brand)s Desktop with <nativeLink>search components added</nativeLink>.": "Липсват задължителни компоненти в %(brand)s, за да могат да бъдат складирани локално и по сигурен начин шифровани съобщения. Ако искате да експериментирате с тази функция, \"компилирайте\" версия на %(brand)s Desktop с <nativeLink>добавени компоненти за търсене</nativeLink>.",
-    "This session is backing up your keys. ": "Тази сесия прави резервни копия на ключовете ви. ",
     "This session is <b>not backing up your keys</b>, but you do have an existing backup you can restore from and add to going forward.": "Тази сесия <b>не прави резервни копия на ключовете</b>, но имате съществуващо резервно копие, което да възстановите и към което да добавяте от тук нататък.",
     "Connect this session to key backup before signing out to avoid losing any keys that may only be on this session.": "Свържете тази сесия с резервно копие на ключове преди да се отпишете от нея, за да не загубите ключове, които може би съществуват единствено в тази сесия.",
     "Connect this session to Key Backup": "Свържи тази сесия с резервно копие на ключовете",

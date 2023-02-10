@@ -1977,7 +1977,6 @@
     "Connect this session to Key Backup": "Połącz tę sesję z kopią zapasową kluczy",
     "Connect this session to key backup before signing out to avoid losing any keys that may only be on this session.": "Połącz tę sesję z kopią zapasową kluczy przed wylogowaniem, aby uniknąć utraty kluczy które mogą istnieć tylko w tej sesji.",
     "This session is <b>not backing up your keys</b>, but you do have an existing backup you can restore from and add to going forward.": "Ta sesja <b>nie wykonuje kopii zapasowej twoich kluczy</b>, ale masz istniejącą kopię którą możesz przywrócić i uzupełniać w przyszłości.",
-    "This session is backing up your keys. ": "Ta sesja wykonuje kopię zapasową twoich kluczy. ",
     "There was an error loading your notification settings.": "Wystąpił błąd podczas wczytywania twoich ustawień powiadomień.",
     "Mentions & keywords": "Wzmianki i słowa kluczowe",
     "Global": "Globalne",

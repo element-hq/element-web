@@ -1225,7 +1225,6 @@
     "Connecting to integration manager...": "Подключение к менеджеру интеграций...",
     "Cannot connect to integration manager": "Не удалось подключиться к менеджеру интеграций",
     "The integration manager is offline or it cannot reach your homeserver.": "Менеджер интеграций не работает или не может подключиться к вашему домашнему серверу.",
-    "This session is backing up your keys. ": "Этот сеанс сохраняет резервную копию ваших ключей. ",
     "This session is <b>not backing up your keys</b>, but you do have an existing backup you can restore from and add to going forward.": "Это сеанс <b>не сохраняет ваши ключи</b>, но у вас есть резервная копия, из которой вы можете их восстановить.",
     "Connect this session to key backup before signing out to avoid losing any keys that may only be on this session.": "Подключите этот сеанс к резервированию ключей до выхода, чтобы избежать утраты доступных только в этом сеансе ключей.",
     "Connect this session to Key Backup": "Подключить этот сеанс к резервированию ключей",

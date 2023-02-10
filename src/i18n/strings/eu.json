@@ -1289,7 +1289,6 @@
     "Unable to load session list": "Ezin izan da saioen zerrenda kargatu",
     "Manage": "Kudeatu",
     "Enable": "Gaitu",
-    "This session is backing up your keys. ": "Saio honek zure gakoen babes-kopia egiten du. ",
     "This session is <b>not backing up your keys</b>, but you do have an existing backup you can restore from and add to going forward.": "Saio honek <b>ez du zure gakoen babes-kopia egiten</b>, baina badago berreskuratu eta gehitu deakezun aurreko babes-kopia bat.",
     "Connect this session to key backup before signing out to avoid losing any keys that may only be on this session.": "Konektatu saio hau gakoen babes-kopiara saioa amaitu aurretik saio honetan bakarrik dauden gakoak ez galtzeko.",
     "Connect this session to Key Backup": "Konektatu saio hau gakoen babes-kopiara",

@@ -1113,7 +1113,6 @@
     "Pin": "Şifre",
     "Your homeserver does not support cross-signing.": "Ana sunucunuz çapraz imzalamayı desteklemiyor.",
     "exists": "mevcut",
-    "This session is backing up your keys. ": "Bu oturum anahtarlarınızı yedekliyor. ",
     "Your keys are <b>not being backed up from this session</b>.": "Anahtarlarınız <b>bu oturum tarafından yedeklenmiyor</b>.",
     "Enable audible notifications for this session": "Bu oturum için sesli bildirimleri aktifleştir",
     "Change topic": "Başlığı değiştir",

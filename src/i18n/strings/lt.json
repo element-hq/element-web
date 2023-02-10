@@ -1044,7 +1044,6 @@
     "in account data": "paskyros duomenyse",
     "Homeserver feature support:": "Serverio funkcijų palaikymas:",
     "exists": "yra",
-    "This session is backing up your keys. ": "Šis seansas kuria atsargines jūsų raktų kopijas. ",
     "This session is <b>not backing up your keys</b>, but you do have an existing backup you can restore from and add to going forward.": "Šis seansas <b>nekuria atsarginių raktų kopijų</b>, bet jūs jau turite atsarginę kopiją iš kurios galite atkurti ir pridėti.",
     "All keys backed up": "Atsarginės kopijos sukurtos visiems raktams",
     "Backup has a <validity>valid</validity> signature from this user": "Atsarginė kopija turi <validity>galiojantį</validity> šio vartotojo parašą",

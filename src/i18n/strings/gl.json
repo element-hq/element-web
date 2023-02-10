@@ -909,7 +909,6 @@
     "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "As mensaxes cifradas están seguras con cifrado de extremo-a-extremo. Só ti e o correpondente(s) tedes as chaves para ler as mensaxes.",
     "Unable to load key backup status": "Non se puido cargar o estado das chaves de apoio",
     "Restore from Backup": "Restaurar desde copia de apoio",
-    "This session is backing up your keys. ": "Esta sesión está gardando as túas chaves. ",
     "This session is <b>not backing up your keys</b>, but you do have an existing backup you can restore from and add to going forward.": "Esta sesión <b>non está facendo copia das chaves</b>, pero tes unha copia de apoio existente que podes restablecer e engadir para seguir adiante.",
     "Connect this session to key backup before signing out to avoid losing any keys that may only be on this session.": "Conecta esta sesión ao gardado das chaves antes de desconectarte para evitar perder calquera chave que só puidese estar nesta sesión.",
     "Connect this session to Key Backup": "Conecta esta sesión a Copia de Apoio de chaves",

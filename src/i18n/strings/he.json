@@ -690,7 +690,6 @@
     "Connect this session to Key Backup": "חבר את התחברות הזו לגיבוי מפתח",
     "Connect this session to key backup before signing out to avoid losing any keys that may only be on this session.": "חבר את ההפעלה הזו לגיבוי המפתח לפני היציאה, כדי למנוע אובדן מפתחות שיכולים להיות רק בפגישה זו.",
     "This session is <b>not backing up your keys</b>, but you do have an existing backup you can restore from and add to going forward.": "הפעלה זו <b> אינה מגבה את המפתחות שלך </b>, אך יש לך גיבוי קיים ממנו תוכל לשחזר ולהוסיף להמשך.",
-    "This session is backing up your keys. ": "ההתחברות הזו תגבה את כל המפתחות שלכם. ",
     "Restore from Backup": "שחזר מגיבוי",
     "Unable to load key backup status": "לא ניתן לטעון את מצב גיבוי המפתח",
     "Are you sure? You will lose your encrypted messages if your keys are not backed up properly.": "האם אתה בטוח? תאבד את ההודעות המוצפנות שלך אם המפתחות שלך לא מגובים כראוי.",

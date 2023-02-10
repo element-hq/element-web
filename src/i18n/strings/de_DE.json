@@ -1055,7 +1055,6 @@
     "The signing key you provided matches the signing key you received from %(userId)s's session %(deviceId)s. Session marked as verified.": "Dein bereitgestellter Signaturschlüssel passt zum von der Sitzung %(deviceId)s von %(userId)s empfangendem Schlüssel. Sitzung wurde als verifiziert markiert.",
     "Match system theme": "An Systemdesign anpassen",
     "Unable to load session list": "Sitzungsliste kann nicht geladen werden",
-    "This session is backing up your keys. ": "Diese Sitzung sichert deine Schlüssel. ",
     "Connect this session to Key Backup": "Verbinde diese Sitzung mit einer Schlüsselsicherung",
     "Backup has a signature from <verify>unknown</verify> session with ID %(deviceId)s": "Die Sicherung hat eine Signatur von einer <verify>unbekannten</verify> Sitzung mit der ID %(deviceId)s",
     "Backup has a <validity>valid</validity> signature from this session": "Die Sicherung hat eine <validity>gültige</validity> Signatur von dieser Sitzung",

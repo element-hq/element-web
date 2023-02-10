@@ -1687,7 +1687,6 @@
     "Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Security Key.": "Резервне копіювання ключів шифрування з даними вашого облікового запису на випадок втрати доступу до сеансів. Ваші ключі будуть захищені унікальним ключем безпеки.",
     "Backup key stored:": "Резервну копію ключа розміщено:",
     "Backup key cached:": "Резервну копію ключа кешовано:",
-    "This session is backing up your keys. ": "Цей сеанс створює резервну копію ваших ключів. ",
     "Unable to load key backup status": "Не вдалося завантажити стан резервного копіювання ключа",
     "The operation could not be completed": "Неможливо завершити операцію",
     "Failed to save your profile": "Не вдалося зберегти ваш профіль",
