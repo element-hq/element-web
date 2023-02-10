@@ -212,7 +212,6 @@
     "You must <a>register</a> to use this functionality": "您必須<a>註冊</a>以使用此功能",
     "You need to be able to invite users to do that.": "您需要邀請使用者來做這件事。",
     "You need to be logged in.": "您需要登入。",
-    "Your email address does not appear to be associated with a Matrix ID on this Homeserver.": "您的電子郵件地址似乎未在此主伺服器上與 Matrix ID 關聯。",
     "You seem to be in a call, are you sure you want to quit?": "您似乎尚在通話中，您確定您想要結束通話嗎？",
     "You seem to be uploading files, are you sure you want to quit?": "您似乎正在上傳檔案，您確定您想要結束嗎？",
     "You will not be able to undo this change as you are promoting the user to have the same power level as yourself.": "您將無法復原此變更，因為您正在將其他使用者的權限等級提升到與您相同。",
@@ -1292,7 +1291,6 @@
     "Securely cache encrypted messages locally for them to appear in search results.": "將加密的訊息安全地在本機快取以出現在顯示結果中。",
     "Enable": "啟用",
     "%(brand)s is missing some components required for securely caching encrypted messages locally. If you'd like to experiment with this feature, build a custom %(brand)s Desktop with <nativeLink>search components added</nativeLink>.": "%(brand)s 缺少某些在本機快取已加密訊習所需的元件。如果您想要實驗此功能，請<nativeLink>加入搜尋元件</nativeLink>並自行建構 %(brand)s 桌面版。",
-    "This session is backing up your keys. ": "此工作階段正在備份您的金鑰。 ",
     "This session is <b>not backing up your keys</b>, but you do have an existing backup you can restore from and add to going forward.": "此工作階段<b>不會備份您的金鑰</b>，但您已有既有的備份，您可以從那邊復原，或是稍後再做。",
     "Connect this session to key backup before signing out to avoid losing any keys that may only be on this session.": "在登出前，請先將此工作階段連線到金鑰備份以避免遺失任何可能僅在此工作階段中的金鑰。",
     "Connect this session to Key Backup": "將此工作階段連線到金鑰備份",
@@ -1383,7 +1381,6 @@
     "exists": "存在",
     "Cancelling…": "正在取消……",
     "Accepting…": "正在接受……",
-    "Accepting …": "正在接受……",
     "Declining …": "正在拒絕……",
     "Sign In or Create Account": "登入或建立帳號",
     "Use your account or create a new one to continue.": "使用您的帳號或建立新的以繼續。",
@@ -3649,7 +3646,6 @@
     "This session doesn't support encryption and thus can't be verified.": "此工作階段不支援加密，因此無法驗證。",
     "For best security and privacy, it is recommended to use Matrix clients that support encryption.": "為獲得最佳安全性與隱私，建議使用支援加密的 Matrix 客戶端。",
     "You won't be able to participate in rooms where encryption is enabled when using this session.": "使用此工作階段時，您將無法參與啟用加密的聊天室。",
-    "This session doesn't support encryption, so it can't be verified.": "此工作階段不支援加密，因此無法驗證。",
     "Apply": "套用",
     "Search users in this room…": "搜尋此聊天室中的使用者……",
     "Give one or multiple users in this room more privileges": "給這個聊天室中的一個使用者或多個使用者更多的權限",
@@ -3745,5 +3741,7 @@
     "Notifications debug": "通知除錯",
     "unknown": "未知",
     "Red": "紅",
-    "Grey": "灰"
+    "Grey": "灰",
+    "Are you sure you want to stop your live broadcast? This will end the broadcast and the full recording will be available in the room.": "您確定您想要停止您的直播嗎？這將會結束廣播，而完整的紀錄稍後將會在聊天室中提供。",
+    "Your email address does not appear to be associated with a Matrix ID on this homeserver.": "您的電子郵件地址似乎並未與此家伺服器上的 Matrix ID 相關連。"
 }

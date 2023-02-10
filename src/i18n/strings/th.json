@@ -397,7 +397,6 @@
     "Afghanistan": "อัฟกานิสถาน",
     "United States": "สหรัฐอเมริกา",
     "United Kingdom": "สหราชอาณาจักร",
-    "Your email address does not appear to be associated with a Matrix ID on this Homeserver.": "ที่อยู่อีเมลของคุณไม่ได้เชื่อมโยงกับ Matrix ID บนโฮมเซิร์ฟเวอร์นี้",
     "%(name)s is requesting verification": "%(name)s กำลังขอการตรวจสอบ",
     "Empty room (was %(oldName)s)": "ห้องว่าง (เดิม %(oldName)s)",
     "Inviting %(user)s and %(count)s others|one": "เชิญ %(user)s และ 1 คนอื่นๆ",

@@ -74,7 +74,6 @@
     "%(brand)s was not given permission to send notifications - please try again": "Non è stata data a %(brand)s l'autorizzazione ad inviare notifiche - riprova",
     "Unable to enable Notifications": "Impossibile attivare le notifiche",
     "This email address was not found": "Indirizzo email non trovato",
-    "Your email address does not appear to be associated with a Matrix ID on this Homeserver.": "Il tuo indirizzo email sembra non essere associato ad un ID Matrix su questo Homeserver.",
     "Default": "Predefinito",
     "Restricted": "Limitato",
     "Moderator": "Moderatore",
@@ -1294,7 +1293,6 @@
     "Your account has a cross-signing identity in secret storage, but it is not yet trusted by this session.": "Il tuo account ha un'identità a firma incrociata nell'archivio segreto, ma non è ancora fidata da questa sessione.",
     "in memory": "in memoria",
     "Unable to load session list": "Impossibile caricare l'elenco sessioni",
-    "This session is backing up your keys. ": "Questa sessione sta facendo il backup delle tue chiavi. ",
     "This session is <b>not backing up your keys</b>, but you do have an existing backup you can restore from and add to going forward.": "Questa sessione <b>non sta facendo il backup delle tue chiavi</b>, ma hai un backup esistente dal quale puoi ripristinare e che puoi usare da ora in poi.",
     "Connect this session to key backup before signing out to avoid losing any keys that may only be on this session.": "Connetti questa sessione al backup chiavi prima di disconnetterti per non perdere eventuali chiavi che possono essere solo in questa sessione.",
     "Connect this session to Key Backup": "Connetti questa sessione al backup chiavi",
@@ -1392,7 +1390,6 @@
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "Per segnalare un problema di sicurezza relativo a Matrix, leggi la <a>Politica di divulgazione della sicurezza</a> di Matrix.org .",
     "Mark all as read": "Segna tutto come letto",
     "Accepting…": "Accettazione…",
-    "Accepting …": "Accettazione …",
     "Declining …": "Rifiuto …",
     "Not currently indexing messages for any room.": "Attualmente non si stanno indicizzando i messaggi di alcuna stanza.",
     "%(doneRooms)s out of %(totalRooms)s": "%(doneRooms)s di %(totalRooms)s",
@@ -3648,7 +3645,6 @@
     "This session doesn't support encryption and thus can't be verified.": "Questa sessione non supporta la crittografia, perciò non può essere verificata.",
     "For best security and privacy, it is recommended to use Matrix clients that support encryption.": "Per maggiore sicurezza e privacy, è consigliabile usare i client di Matrix che supportano la crittografia.",
     "You won't be able to participate in rooms where encryption is enabled when using this session.": "Non potrai partecipare in stanze dove la crittografia è attiva mentre usi questa sessione.",
-    "This session doesn't support encryption, so it can't be verified.": "Questa sessione non supporta la crittografia, perciò non può essere verificata.",
     "Apply": "Applica",
     "Search users in this room…": "Cerca utenti in questa stanza…",
     "Give one or multiple users in this room more privileges": "Dai più privilegi a uno o più utenti in questa stanza",
@@ -3745,5 +3741,7 @@
     "Notifications debug": "Debug notifiche",
     "unknown": "sconosciuto",
     "Red": "Rosso",
-    "Grey": "Grigio"
+    "Grey": "Grigio",
+    "Are you sure you want to stop your live broadcast? This will end the broadcast and the full recording will be available in the room.": "Vuoi davvero fermare la tua trasmissione in diretta? Verrà terminata la trasmissione e la registrazione completa sarà disponibile nella stanza.",
+    "Your email address does not appear to be associated with a Matrix ID on this homeserver.": "Il tuo indirizzo email non sembra associato a nessun ID utente registrato su questo homeserver."
 }
