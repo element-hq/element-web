@@ -17,7 +17,7 @@ into our repo (https://help.github.com/articles/using-pull-requests/)
 We use GitHub's pull request workflow to review the contribution, and either
 ask you to make any refinements needed or merge it and make them ourselves.
 
-Your PR should have a title that describes what the change is being made. This
+Your PR should have a title that describes what change is being made. This
 is used for the text in the Changelog entry by default (see below), so a good
 title will tell a user succinctly what change is being made. "Fix bug where
 cows had five legs" and, "Add support for miniature horses" are examples of good
