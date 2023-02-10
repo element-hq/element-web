@@ -138,9 +138,9 @@ export default class MKeyVerificationRequest extends React.Component<IProps> {
             } else if (request.cancelled) {
                 stateLabel = this.cancelledLabel(request.cancellingUserId);
             } else if (request.accepting) {
-                stateLabel = _t("Accepting …");
+                stateLabel = _t("Accepting…");
             } else if (request.declining) {
-                stateLabel = _t("Declining …");
+                stateLabel = _t("Declining…");
             }
             stateNode = <div className="mx_cryptoEvent_state">{stateLabel}</div>;
         }
