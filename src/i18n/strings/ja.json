@@ -3726,5 +3726,6 @@
     "%(sharerName)s is presenting": "%(sharerName)sが画面を共有しています",
     "You are presenting": "あなたが画面を共有しています",
     "Force 15s voice broadcast chunk length": "音声配信のチャンク長を15秒に強制",
-    "Make sure people know it’s really you": "相手に自分だと分かるようにしましょう"
+    "Make sure people know it’s really you": "相手に自分だと分かるようにしましょう",
+    "Your email address does not appear to be associated with a Matrix ID on this homeserver.": "あなたのメールアドレスは、このホームサーバーのMatrix IDに関連付けられていないようです。"
 }
