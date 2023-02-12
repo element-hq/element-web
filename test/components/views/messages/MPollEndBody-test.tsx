@@ -50,7 +50,7 @@ describe("<MPollEndBody />", () => {
 
     const setupRoomWithEventsTimeline = async (pollEnd: MatrixEvent, pollStart?: MatrixEvent): Promise<Room> => {
         if (pollStart) {
-            await setupRoomWithPollEvents(pollStart, [], [pollEnd], mockClient);
+            await setupRoomWithPollEvents([pollStart], [], [pollEnd], mockClient);
         }
         const room = mockClient.getRoom(roomId) || new Room(roomId, mockClient, userId);
 

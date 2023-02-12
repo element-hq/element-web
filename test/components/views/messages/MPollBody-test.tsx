@@ -227,7 +227,7 @@ describe("MPollBody", () => {
             content: newPollStart(undefined, undefined, true),
         });
         const props = getMPollBodyPropsFromEvent(mxEvent);
-        const room = await setupRoomWithPollEvents(mxEvent, votes, [], mockClient);
+        const room = await setupRoomWithPollEvents([mxEvent], votes, [], mockClient);
         const renderResult = renderMPollBodyWithWrapper(props);
         // wait for /relations promise to resolve
         await flushPromises();
@@ -255,7 +255,7 @@ describe("MPollBody", () => {
             content: newPollStart(undefined, undefined, true),
         });
         const props = getMPollBodyPropsFromEvent(mxEvent);
-        const room = await setupRoomWithPollEvents(mxEvent, votes, [], mockClient);
+        const room = await setupRoomWithPollEvents([mxEvent], votes, [], mockClient);
         const renderResult = renderMPollBodyWithWrapper(props);
         // wait for /relations promise to resolve
         await flushPromises();
@@ -700,7 +700,7 @@ describe("MPollBody", () => {
         });
         const ends = [newPollEndEvent("@me:example.com", 25)];
 
-        await setupRoomWithPollEvents(pollEvent, [], ends, mockClient);
+        await setupRoomWithPollEvents([pollEvent], [], ends, mockClient);
         const poll = mockClient.getRoom(pollEvent.getRoomId()!)!.polls.get(pollEvent.getId()!)!;
         // start fetching, dont await
         poll.getResponses();
@@ -920,7 +920,7 @@ async function newMPollBodyFromEvent(
 ): Promise<RenderResult> {
     const props = getMPollBodyPropsFromEvent(mxEvent);
 
-    await setupRoomWithPollEvents(mxEvent, relationEvents, endEvents, mockClient);
+    await setupRoomWithPollEvents([mxEvent], relationEvents, endEvents, mockClient);
 
     return renderMPollBodyWithWrapper(props);
 }
@@ -1036,7 +1036,7 @@ async function runIsPollEnded(ends: MatrixEvent[]) {
         content: newPollStart(),
     });
 
-    await setupRoomWithPollEvents(pollEvent, [], ends, mockClient);
+    await setupRoomWithPollEvents([pollEvent], [], ends, mockClient);
 
     return isPollEnded(pollEvent, mockClient);
 }
