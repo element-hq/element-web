@@ -3712,7 +3712,6 @@
     "Notification state is": "Gjendje njoftimesh është",
     ", count:": ", numër:",
     "Room status": "Gjendje dhome",
-    "There are no polls in this room": "S’ka pyetësorë në këtë dhomë",
     "Notifications debug": "Diagnostikim njoftimesh",
     "%(displayName)s (%(matrixId)s)": "%(displayName)s (%(matrixId)s)",
     "Indent decrease": "Zvogëlim shmangieje kryeradhe",

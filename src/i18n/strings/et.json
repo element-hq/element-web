@@ -3735,7 +3735,6 @@
     ", count:": ", kokku:",
     "Room unread status: ": "Jututoa lugemata sõnumite olek: ",
     "Room status": "Jututoa sõnumite olek",
-    "There are no polls in this room": "Selles jututoas pole küsitlusi",
     "Notifications debug": "Teavituste silumine",
     "Use rich text instead of Markdown in the message composer.": "Sõnumite kirjutamisel kasuta Markdown'i asemel täisfunktsionaalset küljendust.",
     "unknown": "teadmata",

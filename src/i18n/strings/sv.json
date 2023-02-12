@@ -3728,7 +3728,6 @@
     ", count:": ", antal:",
     "Room unread status: ": "Rummets oläststatus: ",
     "Room status": "Rumsstatus",
-    "There are no polls in this room": "Det finns inga omröstningar i det här rummet",
     "Notifications debug": "Aviseringsfelsökning",
     "All messages and invites from this user will be hidden. Are you sure you want to ignore them?": "Alla meddelanden och inbjudningar från den här användaren kommer att döljas. Är du säker på att du vill ignorera denne?",
     "Ignore %(user)s": "Ignorera %(user)s",

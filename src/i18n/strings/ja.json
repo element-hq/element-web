@@ -3658,7 +3658,6 @@
     "Unable to decrypt voice broadcast": "音声配信を復号化できません",
     "Sender: ": "送信者： ",
     "Room status": "ルームの状態",
-    "There are no polls in this room": "このルームにアンケートはありません",
     "Too many attempts in a short time. Retry after %(timeout)s.": "再試行の数が多すぎます。%(timeout)s後に再度試してください。",
     "Start at the sign in screen": "サインインの画面で開始",
     "Linking with this device is not supported.": "この端末とのリンクはサポートしていません。",

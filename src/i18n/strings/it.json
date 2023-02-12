@@ -3712,7 +3712,6 @@
     "Manage account": "Gestisci account",
     "Your account details are managed separately at <code>%(hostname)s</code>.": "I dettagli del tuo account sono gestiti separatamente su <code>%(hostname)s</code>.",
     "Enable MSC3946 (to support late-arriving room archives)": "Attiva MSC3946 (per supportare archivi della stanza arrivati in ritardo)",
-    "There are no polls in this room": "Non ci sono sondaggi in questa stanza",
     "Dynamic room predecessors": "Predecessori della stanza dinamici",
     "View a list of polls in a room. (Under active development)": "Vedi una lista di sondaggi in una stanza. (In sviluppo attivo)",
     "Polls history": "Cronologia sondaggi",
