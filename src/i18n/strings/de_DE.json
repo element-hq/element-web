@@ -88,7 +88,6 @@
     "Unable to enable Notifications": "Benachrichtigungen konnten nicht aktiviert werden",
     "Upload Failed": "Hochladen fehlgeschlagen",
     "You cannot place a call with yourself.": "Du kannst keinen Anruf mit dir selbst starten.",
-    "Your email address does not appear to be associated with a Matrix ID on this Homeserver.": "Deine E-Mail-Adresse scheint nicht mit einer Matrix-ID auf diesem Heim-Server verbunden zu sein.",
     "Sun": "So",
     "Mon": "Mo",
     "Tue": "Di",
@@ -1056,7 +1055,6 @@
     "The signing key you provided matches the signing key you received from %(userId)s's session %(deviceId)s. Session marked as verified.": "Dein bereitgestellter Signaturschlüssel passt zum von der Sitzung %(deviceId)s von %(userId)s empfangendem Schlüssel. Sitzung wurde als verifiziert markiert.",
     "Match system theme": "An Systemdesign anpassen",
     "Unable to load session list": "Sitzungsliste kann nicht geladen werden",
-    "This session is backing up your keys. ": "Diese Sitzung sichert deine Schlüssel. ",
     "Connect this session to Key Backup": "Verbinde diese Sitzung mit einer Schlüsselsicherung",
     "Backup has a signature from <verify>unknown</verify> session with ID %(deviceId)s": "Die Sicherung hat eine Signatur von einer <verify>unbekannten</verify> Sitzung mit der ID %(deviceId)s",
     "Backup has a <validity>valid</validity> signature from this session": "Die Sicherung hat eine <validity>gültige</validity> Signatur von dieser Sitzung",
@@ -1322,8 +1320,6 @@
     "You accepted": "Du hast angenommen",
     "You declined": "Du hast abgelehnt",
     "You cancelled": "Du brachst ab",
-    "Accepting …": "Annehmen …",
-    "Declining …": "Ablehnen …",
     "You sent a verification request": "Du hast eine Verifizierungsanfrage gesendet",
     "Show all": "Alles zeigen",
     "Reactions": "Reaktionen",
@@ -3653,7 +3649,6 @@
     "For best security and privacy, it is recommended to use Matrix clients that support encryption.": "Aus Sicherheits- und Datenschutzgründen, wird die Nutzung von verschlüsselungsfähigen Matrix-Anwendungen empfohlen.",
     "You won't be able to participate in rooms where encryption is enabled when using this session.": "Du wirst dich mit dieser Sitzung nicht an Unterhaltungen in Räumen mit aktivierter Verschlüsselung beteiligen können.",
     "This session doesn't support encryption and thus can't be verified.": "Diese Sitzung unterstützt keine Verschlüsselung und kann deshalb nicht verifiziert werden.",
-    "This session doesn't support encryption, so it can't be verified.": "Diese Sitzung unterstützt keine Verschlüsselung und kann deshalb nicht verifiziert werden.",
     "%(senderName)s ended a <a>voice broadcast</a>": "%(senderName)s beendete eine <a>Sprachübertragung</a>",
     "You ended a <a>voice broadcast</a>": "Du hast eine <a>Sprachübertragung</a> beendet",
     "Unable to decrypt message": "Nachrichten-Entschlüsselung nicht möglich",
@@ -3746,5 +3741,8 @@
     ", count:": ", Anzahl:",
     "Room unread status: ": "Ungelesenstatus des Raumes: ",
     "Notifications debug": "Debug-Modus für Benachrichtigungen",
-    "Are you sure you want to stop your live broadcast? This will end the broadcast and the full recording will be available in the room.": "Möchtest du deine Übertragung wirklich beenden? Dies wird die Übertragung abschließen und die vollständige Aufnahme im Raum bereitstellen."
+    "Are you sure you want to stop your live broadcast? This will end the broadcast and the full recording will be available in the room.": "Möchtest du deine Übertragung wirklich beenden? Dies wird die Übertragung abschließen und die vollständige Aufnahme im Raum bereitstellen.",
+    "Your email address does not appear to be associated with a Matrix ID on this homeserver.": "Deine E-Mail-Adresse scheint nicht mit einer Matrix-ID auf diesem Heim-Server verknüpft zu sein.",
+    "This session is backing up your keys.": "Diese Sitzung sichert deine Schlüssel.",
+    "Declining…": "Ablehnen …"
 }
