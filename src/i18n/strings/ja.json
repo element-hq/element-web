@@ -18,7 +18,7 @@
     "Failed to change password. Is your password correct?": "パスワードの変更に失敗しました。パスワードは正しいですか？",
     "Always show message timestamps": "メッセージの時刻を常に表示",
     "Filter room members": "ルームのメンバーを絞り込む",
-    "Show timestamps in 12 hour format (e.g. 2:30pm)": "発言時刻を12時間形式で表示（例：午後2:30）",
+    "Show timestamps in 12 hour format (e.g. 2:30pm)": "発言時刻を12時間形式で表示（例：2:30午後）",
     "Upload avatar": "アバターをアップロード",
     "Add": "追加",
     "No Microphones detected": "マイクが検出されません",
