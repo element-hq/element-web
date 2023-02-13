@@ -3734,5 +3734,10 @@
     "<b>Warning</b>: upgrading a room will <i>not automatically migrate room members to the new version of the room.</i> We'll post a link to the new room in the old version of the room - room members will have to click this link to join the new room.": "<b>警告</b>: ルームをアップグレードしても、<i>ルームのメンバーが新しいバージョンのルームに自動的に移行されることはありません。</i> 古いバージョンのルームに、新しいルームへのリンクを投稿します。ルームのメンバーは、そのリンクをクリックして新しいルームに参加する必要があります。",
     "We need to know it’s you before resetting your password. Click the link in the email we just sent to <b>%(email)s</b>": "パスワードを再設定する前に本人確認を行います。<b>%(email)s</b>に送信した電子メールにあるリンクをクリックしてください。",
     "Warning: your personal data (including encryption keys) is still stored in this session. Clear it if you're finished using this session, or want to sign in to another account.": "警告：あなたの個人データ（暗号化の鍵を含む）が、このセッションに保存されています。このセッションの使用を終了するか、他のアカウントにログインしたい場合は、そのデータを消去してください。",
-    "WARNING: session already verified, but keys do NOT MATCH!": "警告：このセッションは認証済ですが、鍵が一致しません！"
+    "WARNING: session already verified, but keys do NOT MATCH!": "警告：このセッションは認証済ですが、鍵が一致しません！",
+    "Enable MSC3946 (to support late-arriving room archives)": "MSC3946を有効にする（遅延ルームアーカイブのサポート）",
+    "Scan QR code": "QRコードをスキャン",
+    "Select '%(scanQRCode)s'": "「%(scanQRCode)s」を選択",
+    "Enable '%(manageIntegrations)s' in Settings to do this.": "これを行うには設定から「%(manageIntegrations)s」を有効にしてください。",
+    "Your personal ban list holds all the users/servers you personally don't want to see messages from. After ignoring your first user/server, a new room will show up in your room list named '%(myBanList)s' - stay in this room to keep the ban list in effect.": "個人用ブロックリストには、メッセージを表示しない全てのユーザーもしくはサーバーが記録されます。最初のユーザーまたはサーバーを無視すると、「%(myBanList)s」という名前の新しいルームがリストに表示されます。このルームから退出すると、ブロックリストは機能しなくなります。"
 }
