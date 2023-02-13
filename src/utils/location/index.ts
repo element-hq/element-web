@@ -20,3 +20,4 @@ export * from "./locationEventGeoUri";
 export * from "./LocationShareErrors";
 export * from "./map";
 export * from "./parseGeoUri";
+export * from "./positionFailureMessage";

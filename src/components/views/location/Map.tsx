@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactNode, useContext, useEffect } from "react";
+import React, { ReactNode, useContext, useEffect, useState } from "react";
 import classNames from "classnames";
 import * as maplibregl from "maplibre-gl";
 import { ClientEvent, IClientWellKnown } from "matrix-js-sdk/src/matrix";
@@ -22,10 +22,13 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { useEventEmitterState } from "../../../hooks/useEventEmitter";
-import { parseGeoUri } from "../../../utils/location";
+import { parseGeoUri, positionFailureMessage } from "../../../utils/location";
 import { tileServerFromWellKnown } from "../../../utils/WellKnownUtils";
 import { useMap } from "../../../utils/location/useMap";
 import { Bounds } from "../../../utils/beacon/bounds";
+import Modal from "../../../Modal";
+import ErrorDialog from "../dialogs/ErrorDialog";
+import { _t } from "../../../languageHandler";
 
 const useMapWithStyle = ({
     id,
@@ -33,14 +36,16 @@ const useMapWithStyle = ({
     onError,
     interactive,
     bounds,
+    allowGeolocate,
 }: {
     id: string;
     centerGeoUri?: string;
+    onError?(error: Error): void;
     interactive?: boolean;
     bounds?: Bounds;
-    onError(error: Error): void;
+    allowGeolocate?: boolean;
 }): {
-    map: maplibregl.Map;
+    map: maplibregl.Map | undefined;
     bodyId: string;
 } => {
     const bodyId = `mx_Map_${id}`;
@@ -86,10 +91,49 @@ const useMapWithStyle = ({
         }
     }, [map, bounds]);
 
+    const [geolocate, setGeolocate] = useState<maplibregl.GeolocateControl | null>(null);
+
+    useEffect(() => {
+        if (!map) {
+            return;
+        }
+        if (allowGeolocate && !geolocate) {
+            const geolocate = new maplibregl.GeolocateControl({
+                positionOptions: {
+                    enableHighAccuracy: true,
+                },
+                trackUserLocation: false,
+            });
+            setGeolocate(geolocate);
+            map.addControl(geolocate);
+        }
+        if (!allowGeolocate && geolocate) {
+            map.removeControl(geolocate);
+            setGeolocate(null);
+        }
+    }, [map, geolocate, allowGeolocate]);
+
+    useEffect(() => {
+        if (geolocate) {
+            geolocate.on("error", onGeolocateError);
+            return () => {
+                geolocate.off("error", onGeolocateError);
+            };
+        }
+    }, [geolocate]);
+
     return {
         map,
         bodyId,
     };
+};
+
+const onGeolocateError = (e: GeolocationPositionError): void => {
+    logger.error("Could not fetch location", e);
+    Modal.createDialog(ErrorDialog, {
+        title: _t("Could not fetch location"),
+        description: positionFailureMessage(e.code) ?? "",
+    });
 };
 
 interface MapProps {
@@ -105,13 +149,24 @@ interface MapProps {
     centerGeoUri?: string;
     bounds?: Bounds;
     className?: string;
+    allowGeolocate?: boolean;
     onClick?: () => void;
     onError?: (error: Error) => void;
     children?: (renderProps: { map: maplibregl.Map }) => ReactNode;
 }
 
-const Map: React.FC<MapProps> = ({ bounds, centerGeoUri, children, className, id, interactive, onError, onClick }) => {
-    const { map, bodyId } = useMapWithStyle({ centerGeoUri, onError, id, interactive, bounds });
+const Map: React.FC<MapProps> = ({
+    bounds,
+    centerGeoUri,
+    children,
+    className,
+    allowGeolocate,
+    id,
+    interactive,
+    onError,
+    onClick,
+}) => {
+    const { map, bodyId } = useMapWithStyle({ centerGeoUri, onError, id, interactive, bounds, allowGeolocate });
 
     const onMapClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
         // Eat click events when clicking the attribution button
