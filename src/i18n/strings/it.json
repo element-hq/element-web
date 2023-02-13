@@ -3736,5 +3736,13 @@
     "Red": "Rosso",
     "Grey": "Grigio",
     "Are you sure you want to stop your live broadcast? This will end the broadcast and the full recording will be available in the room.": "Vuoi davvero fermare la tua trasmissione in diretta? Verrà terminata la trasmissione e la registrazione completa sarà disponibile nella stanza.",
-    "Your email address does not appear to be associated with a Matrix ID on this homeserver.": "Il tuo indirizzo email non sembra associato a nessun ID utente registrato su questo homeserver."
+    "Your email address does not appear to be associated with a Matrix ID on this homeserver.": "Il tuo indirizzo email non sembra associato a nessun ID utente registrato su questo homeserver.",
+    "We need to know it’s you before resetting your password. Click the link in the email we just sent to <b>%(email)s</b>": "Dobbiamo sapere che sei tu prima di reimpostare la password. Clicca il link nell'email che abbiamo inviato a <b>%(email)s</b>",
+    "Warning: your personal data (including encryption keys) is still stored in this session. Clear it if you're finished using this session, or want to sign in to another account.": "Attenzione: i tuoi dati personali (incluse le chiavi di crittografia) sono ancora memorizzati in questa sessione. Cancellali se hai finito di usare questa sessione o se vuoi accedere ad un altro account.",
+    "There are no past polls in this room": "In questa stanza non ci sono sondaggi passati",
+    "There are no active polls in this room": "In questa stanza non ci sono sondaggi attivi",
+    "Declining…": "Rifiuto…",
+    "<b>Warning</b>: upgrading a room will <i>not automatically migrate room members to the new version of the room.</i> We'll post a link to the new room in the old version of the room - room members will have to click this link to join the new room.": "<b>Attenzione</b>: aggiornare una stanza <i>non migrerà automaticamente i membri della stanza alla nuova versione.</i> Inseriremo un link alla nuova stanza nella vecchia versione - i membri dovranno cliccare questo link per unirsi alla nuova stanza.",
+    "This session is backing up your keys.": "Questa sessione sta facendo il backup delle tue chiavi.",
+    "WARNING: session already verified, but keys do NOT MATCH!": "ATTENZIONE: sessione già verificata, ma le chiavi NON CORRISPONDONO!"
 }
