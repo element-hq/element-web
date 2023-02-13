@@ -3735,5 +3735,8 @@
     "Declining…": "拒否しています…",
     "Requester": "リクエストしたユーザー",
     "Enable %(brand)s as an additional calling option in this room": "%(brand)sをこのルームの追加の通話手段として有効にする",
-    "This session is backing up your keys.": "このセッションは鍵をバックアップしています。"
+    "This session is backing up your keys.": "このセッションは鍵をバックアップしています。",
+    "Keep ownership and control of community discussion.\nScale to support millions, with powerful moderation and interoperability.": "コミュニティーの会話の所有権とコントロールを維持しましょう。\n強力なモデレートと相互運用性で、数百万人のユーザーまでサポートできます。",
+    "There are no past polls in this room": "このルームに過去のアンケートはありません",
+    "There are no active polls in this room": "このルームに実施中のアンケートはありません"
 }
