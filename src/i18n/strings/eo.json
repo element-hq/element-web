@@ -2833,7 +2833,6 @@
     "The email address doesn't appear to be valid.": "La retpoŝtadreso ŝajnas ne valida.",
     "Sign in instead": "Aliĝu anstataŭe",
     "Verify your email to continue": "Kontrolu vian retpoŝtadreson por daŭrigi",
-    "We need to know it’s you before resetting your password.\n                    Click the link in the email we just sent to <b>%(email)s</b>": "Ni devas scii, ke ĝi estas vi antaŭ ol restarigi vian pasvorton.\n                     Alklaku la ligilon en la retpoŝto, kiun ni ĵus sendis al <b>%(email)s</b>",
     "Store your Security Key somewhere safe, like a password manager or a safe, as it's used to safeguard your encrypted data.": "Konservu vian Sekurecan ŝlosilon ie sekure, kiel pasvortadministranto aŭ monŝranko, ĉar ĝi estas uzata por protekti viajn ĉifritajn datumojn.",
     "We'll generate a Security Key for you to store somewhere safe, like a password manager or a safe.": "Ni generos Sekurecan ŝlosilon por ke vi stoku ie sekura, kiel pasvort-administranto aŭ monŝranko.",
     "Enter a security phrase only you know, as it's used to safeguard your data. To be secure, you shouldn't re-use your account password.": "Enigu sekurecan frazon nur vi konas, ĉar ĝi estas uzata por protekti viajn datumojn. Por esti sekura, vi ne devus reuzi vian konton pasvorton.",

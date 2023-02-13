@@ -3594,7 +3594,6 @@
     "Hide details": "Masquer les détails",
     "30s forward": "30s en avant",
     "30s backward": "30s en arrière",
-    "We need to know it’s you before resetting your password.\n                    Click the link in the email we just sent to <b>%(email)s</b>": "Nous avons besoin de savoir que c’est vous avant de réinitialiser votre mot de passe.\n                    Cliquer sur le lien dans l’e-mail que nous venons juste d’envoyer à <b>%(email)s</b>",
     "Verify your email to continue": "Vérifiez vos e-mail avant de continuer",
     "<b>%(homeserver)s</b> will send you a verification link to let you reset your password.": "<b>%(homeserver)s</b> va vous envoyer un lien de vérification vous permettant de réinitialiser votre mot de passe.",
     "Enter your email to reset password": "Entrez votre e-mail pour réinitialiser le mot de passe",

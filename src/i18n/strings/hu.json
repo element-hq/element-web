@@ -3589,7 +3589,6 @@
     "%(hours)sh %(minutes)sm %(seconds)ss left": "%(hours)só %(minutes)sp %(seconds)smp van vissza",
     "This means that you have all the keys needed to unlock your encrypted messages and confirm to other users that you trust this session.": "Ez azt jelenti, hogy a titkosított üzenetek visszafejtéséhez minden kulccsal rendelkezik valamint a többi felhasználó megbízhat ebben a munkamenetben.",
     "Verified sessions are anywhere you are using this account after entering your passphrase or confirming your identity with another verified session.": "Mindenhol ellenőrzött munkamenetek vannak ahol ezt a fiókot használja a jelmondattal vagy azonosította magát egy másik ellenőrzött munkamenetből.",
-    "We need to know it’s you before resetting your password.\n                    Click the link in the email we just sent to <b>%(email)s</b>": "Tudnunk kell, hogy Ön tényleg az akinek mondja magát mielőtt a jelszót beállíthatja.\n                         Kattintson a hivatkozásra az e-mailben amit éppen most küldtünk ide: <b>%(email)s</b>",
     "Verify your email to continue": "E-mail ellenőrzés a továbblépéshez",
     "<b>%(homeserver)s</b> will send you a verification link to let you reset your password.": "<b>%(homeserver)s</b> e-mailt küld a jelszó beállítási hivatkozással.",
     "Enter your email to reset password": "E-mail cím megadása a jelszó beállításhoz",

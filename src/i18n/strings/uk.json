@@ -3594,7 +3594,6 @@
     "Hide details": "Сховати подробиці",
     "30s forward": "Уперед на 30 с",
     "30s backward": "Назад на 30 с",
-    "We need to know it’s you before resetting your password.\n                    Click the link in the email we just sent to <b>%(email)s</b>": "Нам потрібно переконатися, що це ви, перш ніж скинути ваш пароль.\n                    Перейдіть за посиланням в електронному листі, який ми щойно надіслали на адресу <b>%(email)s</b>",
     "Verify your email to continue": "Підтвердьте свою електронну пошту, щоб продовжити",
     "<b>%(homeserver)s</b> will send you a verification link to let you reset your password.": "<b>%(homeserver)s</b> надішле вам посилання для підтвердження, за яким ви зможете скинути пароль.",
     "Enter your email to reset password": "Введіть свою електронну пошту для скидання пароля",

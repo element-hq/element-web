@@ -3594,7 +3594,6 @@
     "Hide details": "Skrýt podrobnosti",
     "30s forward": "30s vpřed",
     "30s backward": "30s zpět",
-    "We need to know it’s you before resetting your password.\n                    Click the link in the email we just sent to <b>%(email)s</b>": "Před obnovením hesla musíme vědět, že jste to vy.\n                    Klikněte na odkaz v e-mailu, který jsme právě odeslali na adresu <b>%(email)s</b>",
     "Verify your email to continue": "Pro pokračování ověřte svůj e-mail",
     "<b>%(homeserver)s</b> will send you a verification link to let you reset your password.": "<b>%(homeserver)s</b> vám zašle ověřovací odkaz, který vám umožní obnovit heslo.",
     "Enter your email to reset password": "Zadejte svůj e-mail pro obnovení hesla",

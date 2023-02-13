@@ -3590,7 +3590,6 @@
     "That e-mail address or phone number is already in use.": "Quell'indirizzo email o numero di telefono è già in uso.",
     "This means that you have all the keys needed to unlock your encrypted messages and confirm to other users that you trust this session.": "Ciò significa che hai tutte le chiavi necessarie per sbloccare i tuoi messaggi cifrati e che confermi agli altri utenti di fidarti di questa sessione.",
     "Verified sessions are anywhere you are using this account after entering your passphrase or confirming your identity with another verified session.": "Le sessioni verificate sono ovunque tu usi questo account dopo l'inserimento della frase di sicurezza o la conferma della tua identità con un'altra sessione verificata.",
-    "We need to know it’s you before resetting your password.\n                    Click the link in the email we just sent to <b>%(email)s</b>": "Dobbiamo sapere che sei tu prima di reimpostare la password.\n                    Clicca il link nell'email che abbiamo inviato a <b>%(email)s</b>",
     "Verify your email to continue": "Verifica l'email per continuare",
     "<b>%(homeserver)s</b> will send you a verification link to let you reset your password.": "<b>%(homeserver)s</b> ti invierà un link di verifica per farti reimpostare la password.",
     "Enter your email to reset password": "Inserisci la tua email per reimpostare la password",

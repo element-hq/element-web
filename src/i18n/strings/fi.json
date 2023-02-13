@@ -3332,7 +3332,6 @@
     "When enabled, the other party might be able to see your IP address": "Kun käytössä, toinen osapuoli voi mahdollisesti nähdä IP-osoitteesi",
     "30s forward": "30 s eteenpäin",
     "30s backward": "30 s taaksepäin",
-    "We need to know it’s you before resetting your password.\n                    Click the link in the email we just sent to <b>%(email)s</b>": "Meidän tulee varmistaa, että se olet sinä, ennen kuin salasanasi voidaan nollata.\n                    Napsauta osoitteeseen <b>%(email)s</b> lähetettyä linkkiä",
     "Verify your email to continue": "Vahvista sähköpostiosoitteesi jatkaaksesi",
     "<b>%(homeserver)s</b> will send you a verification link to let you reset your password.": "<b>%(homeserver)s</b> lähettää sinulle vahvistuslinkin, jotta voit nollata salasanasi.",
     "Enter your email to reset password": "Kirjoita sähköpostiosoitteesi nollataksesi salasanasi",

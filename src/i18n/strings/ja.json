@@ -3634,7 +3634,6 @@
     "Failed to get autodiscovery configuration from server": "自動発見の設定をサーバーから取得できませんでした",
     "Unable to query for supported registration methods.": "サポートしている登録方法を照会できません。",
     "Sign in instead": "サインイン",
-    "We need to know it’s you before resetting your password.\n                    Click the link in the email we just sent to <b>%(email)s</b>": "パスワードを再設定する前に本人確認を行います。\n                    <b>%(email)s</b>に送信した電子メールにあるリンクをクリックしてください。",
     "Ignore %(user)s": "%(user)sを無視",
     "Indent decrease": "インデントを減らす",
     "Indent increase": "インデントを増やす",

@@ -3594,7 +3594,6 @@
     "Hide details": "隱藏細節",
     "30s forward": "快轉30秒",
     "30s backward": "快退30秒",
-    "We need to know it’s you before resetting your password.\n                    Click the link in the email we just sent to <b>%(email)s</b>": "我們必須先確認你是誰，在你重新設定密碼前。\n                          請點擊我們剛剛所寄送到 <b>%(email)s</b> 信件中的連結。",
     "Verify your email to continue": "驗證你的郵件信箱以繼續",
     "<b>%(homeserver)s</b> will send you a verification link to let you reset your password.": "<b>%(homeserver)s</b> 將會寄送認證信件給你，讓你重新設定密碼。",
     "Enter your email to reset password": "輸入你的郵件信箱來重新設定密碼",

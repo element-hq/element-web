@@ -3560,7 +3560,6 @@
     "Show shortcut to welcome checklist above the room list": "Shhkurtoren e listës së hapave të mirëseardhjes shfaqe mbi listën e dhomave",
     "Allow a QR code to be shown in session manager to sign in another device (requires compatible homeserver)": "Lejoni shfaqjen e një kodi QR në përgjegjës sesioni, për hyrje në një pajisje tjetër (lyp shërbyes Home të përputhshëm)",
     "Our new sessions manager provides better visibility of all your sessions, and greater control over them including the ability to remotely toggle push notifications.": "Përgjegjësi ynë i ri i sesioneve furnizon dukshmëri më të mirë të krejt sesioneve tuaja dhe kontroll më të fortë mbi ta, përfshi aftësinë për aktivizim/çaktivizim së largëti të njoftimeve push.",
-    "We need to know it’s you before resetting your password.\n                    Click the link in the email we just sent to <b>%(email)s</b>": "Duhet të dimë se jeni ju, përpara ricaktimit të fjalëkalimt.\n                    Klikoni lidhjen te email-i që sapo ju dërguam te <b>%(email)s</b>",
     "Verify your email to continue": "Që të vazhdohet, verifikoni email-in tuaj",
     "<b>%(homeserver)s</b> will send you a verification link to let you reset your password.": "<b>%(homeserver)s</b> do t’ju dërgojë një lidhje verifikimi, që t’ju lejojë të ricaktoni fjalëkalimin tuaj.",
     "Enter your email to reset password": "Që të ricaktoni fjalëkalimin, jepni email-in tuaj",

@@ -3652,7 +3652,6 @@
     "%(senderName)s ended a voice broadcast": "%(senderName)s avslutade en röstsändning",
     "You ended a voice broadcast": "Du avslutade en röstsändning",
     "%(downloadButton)s or %(copyButton)s": "%(downloadButton)s eller %(copyButton)s",
-    "We need to know it’s you before resetting your password.\n                    Click the link in the email we just sent to <b>%(email)s</b>": "Vi behöver veta att det är du innan vi återställer ditt lösenord.\n                    Klicka på länken i e-brevet vi just skickade till <b>%(email)s</b>",
     "Verify your email to continue": "Verifiera din e-post för att fortsätta",
     "Sign in instead": "Logga in istället",
     "<b>%(homeserver)s</b> will send you a verification link to let you reset your password.": "<b>%(homeserver)s</b> kommer att skicka en verifieringslänk för att låta dig återställa ditt lösenord.",

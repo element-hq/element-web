@@ -3594,7 +3594,6 @@
     "Hide details": "Peida üksikasjalik teave",
     "30s forward": "30s edasi",
     "30s backward": "30s tagasi",
-    "We need to know it’s you before resetting your password.\n                    Click the link in the email we just sent to <b>%(email)s</b>": "Enne sinu salasõna lähtestamist soovime olla kindlad, et tegemist on sinuga.\n                    Palun klõpsi linki, mille just saatsime <b>%(email)s</b> e-posti aadressile",
     "Verify your email to continue": "Jätkamiseks kinnita oma e-posti aadress",
     "<b>%(homeserver)s</b> will send you a verification link to let you reset your password.": "Koduserver <b>%(homeserver)s</b> saadab sulle salasõna lähtestamiseks vajaliku verifitseerimislingi.",
     "Enter your email to reset password": "Salasõna lähtestamiseks sisesta oma e-posti aadress",
