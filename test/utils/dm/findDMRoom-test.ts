@@ -53,8 +53,8 @@ describe("findDMRoom", () => {
         expect(findDMRoom(mockClient, [member1])).toBe(room1);
     });
 
-    it("should return null for a single target without a room", () => {
-        mocked(findDMForUser).mockReturnValue(null);
+    it("should return undefined for a single target without a room", () => {
+        mocked(findDMForUser).mockReturnValue(undefined);
         expect(findDMRoom(mockClient, [member1])).toBeNull();
     });
 

@@ -192,6 +192,16 @@ export default class DMRoomMap {
             .reduce((obj, r) => (obj[r.userId] = r.room) && obj, {});
     }
 
+    /**
+     * @returns all room Ids from m.direct
+     */
+    public getRoomIds(): Set<string> {
+        return Object.values(this.mDirectEvent).reduce((prevRoomIds: Set<string>, roomIds: string[]): Set<string> => {
+            roomIds.forEach((roomId) => prevRoomIds.add(roomId));
+            return prevRoomIds;
+        }, new Set<string>());
+    }
+
     private getUserToRooms(): { [key: string]: string[] } {
         if (!this.userToRooms) {
             const userToRooms = this.mDirectEvent;
