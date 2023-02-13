@@ -44,7 +44,7 @@ jobs:
                       latest=${{ contains(github.ref_name, '-rc.') && 'false' || 'auto' }}
 
             - name: Build and push
-              uses: docker/build-push-action@v3
+              uses: docker/build-push-action@v4
               with:
                   context: .
                   push: true
