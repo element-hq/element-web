@@ -585,7 +585,6 @@
     "Change settings": "Canvia la configuració",
     "Use an identity server in Settings to receive invites directly in %(brand)s.": "Per rebre invitacions directament a %(brand)s, utilitza un servidor d'identitat a Configuració.",
     "Share this email in Settings to receive invites directly in %(brand)s.": "Per rebre invitacions directament a %(brand)s, comparteix aquest correu electrònic a Configuració.",
-    "Enable 'Manage Integrations' in Settings to do this.": "Per fer això, activa 'Gestió d'integracions' a Configuració.",
     "Go to Settings": "Ves a Configuració",
     "All settings": "Totes les configuracions",
     "Alternatively, you can try to use the public server at <code>turn.matrix.org</code>, but this will not be as reliable, and it will share your IP address with that server. You can also manage this in Settings.": "Com a alternativa, pots provar d'utilitzar el servidor públic a <code>turn.matrix.org</code>, però no serà tant fiable i compartirà la teva IP amb el servidor. També pots gestionar-ho a Configuració.",

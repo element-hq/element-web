@@ -1128,7 +1128,6 @@
     "Custom (%(level)s)": "맞춤 (%(level)s)",
     "Ignoring people is done through ban lists which contain rules for who to ban. Subscribing to a ban list means the users/servers blocked by that list will be hidden from you.": "차단당하는 사람은 규칙에 따라 차단 목록을 통해 무시됩니다. 차단 목록을 구독하면 그 목록에서 차단당한 사용자/서버를 당신으로부터 감추게됩니다.",
     "Personal ban list": "개인 차단 목록",
-    "Your personal ban list holds all the users/servers you personally don't want to see messages from. After ignoring your first user/server, a new room will show up in your room list named 'My Ban List' - stay in this room to keep the ban list in effect.": "개인 차단 목록은 개인적으로 보고 싶지 않은 메시지를 보낸 모든 사용자/서버를 담고 있습니다. 처음 사용자/서버를 무시했다면, 방 목록에 '나의 차단 목록'이라는 이름의 새 방이 나타납니다 - 차단 목록의 효력을 유지하려면 이 방을 그대로 두세요.",
     "Server or user ID to ignore": "무시할 서버 또는 사용자 ID",
     "eg: @bot:* or example.org": "예: @bot:* 또는 example.org",
     "Subscribed lists": "구독 목록",

@@ -1028,7 +1028,6 @@
     "Ignore": "تجاهل",
     "eg: @bot:* or example.org": "مثلاً: @bot:* أو example.org",
     "Server or user ID to ignore": "الخادم أو معرف المستخدم المطلوب تجاهله",
-    "Your personal ban list holds all the users/servers you personally don't want to see messages from. After ignoring your first user/server, a new room will show up in your room list named 'My Ban List' - stay in this room to keep the ban list in effect.": "تحتوي قائمتك للحظر على المستخدمين / الخوادم الذين لا تريد أن ترى رسائل منهم. بعد أول تجاهل لمستخدم / لخادم ، ستظهر غرفة جديدة في قائمة الغرف باسم \"My Ban List\" - ابق في هذه الغرفة للحفاظ على قائمة الحظر.",
     "Personal ban list": "قائمة الحظر الشخصية",
     "Safeguard against losing access to encrypted messages & data": "حماية ضد فقدان الوصول إلى الرسائل والبيانات المشفرة",
     "Verify": "تحقق",
