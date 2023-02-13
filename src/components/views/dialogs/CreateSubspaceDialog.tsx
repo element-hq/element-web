@@ -21,7 +21,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../languageHandler";
 import BaseDialog from "./BaseDialog";
-import AccessibleButton from "../elements/AccessibleButton";
+import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { BetaPill } from "../beta/BetaCard";
 import Field from "../elements/Field";
@@ -54,7 +54,7 @@ const CreateSubspaceDialog: React.FC<IProps> = ({ space, onAddExistingSpaceClick
     }
     const [joinRule, setJoinRule] = useState<JoinRule>(defaultJoinRule);
 
-    const onCreateSubspaceClick = async (e): Promise<void> => {
+    const onCreateSubspaceClick = async (e: ButtonEvent): Promise<void> => {
         e.preventDefault();
         if (busy) return;
 

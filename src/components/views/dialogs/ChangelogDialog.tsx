@@ -27,16 +27,26 @@ interface IProps {
     onFinished: (success: boolean) => void;
 }
 
-const REPOS = ["vector-im/element-web", "matrix-org/matrix-react-sdk", "matrix-org/matrix-js-sdk"];
+type State = Partial<Record<typeof REPOS[number], null | string | Commit[]>>;
 
-export default class ChangelogDialog extends React.Component<IProps> {
-    public constructor(props) {
+interface Commit {
+    sha: string;
+    html_url: string;
+    commit: {
+        message: string;
+    };
+}
+
+const REPOS = ["vector-im/element-web", "matrix-org/matrix-react-sdk", "matrix-org/matrix-js-sdk"] as const;
+
+export default class ChangelogDialog extends React.Component<IProps, State> {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {};
     }
 
-    private async fetchChanges(repo: string, oldVersion: string, newVersion: string): Promise<void> {
+    private async fetchChanges(repo: typeof REPOS[number], oldVersion: string, newVersion: string): Promise<void> {
         const url = `https://riot.im/github/repos/${repo}/compare/${oldVersion}...${newVersion}`;
 
         try {
@@ -66,7 +76,7 @@ export default class ChangelogDialog extends React.Component<IProps> {
         }
     }
 
-    private elementsForCommit(commit): JSX.Element {
+    private elementsForCommit(commit: Commit): JSX.Element {
         return (
             <li key={commit.sha} className="mx_ChangelogDialog_li">
                 <a href={commit.html_url} target="_blank" rel="noreferrer noopener">
@@ -86,7 +96,7 @@ export default class ChangelogDialog extends React.Component<IProps> {
                     msg: this.state[repo],
                 });
             } else {
-                content = this.state[repo].map(this.elementsForCommit);
+                content = (this.state[repo] as Commit[]).map(this.elementsForCommit);
             }
             return (
                 <div key={repo}>

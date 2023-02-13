@@ -15,6 +15,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { ReactElement, ReactNode } from "react";
+
 import { _t } from "../languageHandler";
 import { jsxJoin } from "./ReactUtils";
 
@@ -105,9 +107,9 @@ export function getUserNameColorClass(userId: string): string {
  * between each item, but with the last item appended as " and [lastItem]".
  */
 export function formatCommaSeparatedList(items: string[], itemLimit?: number): string;
-export function formatCommaSeparatedList(items: JSX.Element[], itemLimit?: number): JSX.Element;
-export function formatCommaSeparatedList(items: Array<JSX.Element | string>, itemLimit?: number): JSX.Element | string;
-export function formatCommaSeparatedList(items: Array<JSX.Element | string>, itemLimit?: number): JSX.Element | string {
+export function formatCommaSeparatedList(items: ReactElement[], itemLimit?: number): ReactElement;
+export function formatCommaSeparatedList(items: ReactNode[], itemLimit?: number): ReactNode;
+export function formatCommaSeparatedList(items: ReactNode[], itemLimit?: number): ReactNode {
     const remaining = itemLimit === undefined ? 0 : Math.max(items.length - itemLimit, 0);
     if (items.length === 0) {
         return "";

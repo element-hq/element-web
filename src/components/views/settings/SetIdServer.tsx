@@ -83,7 +83,7 @@ interface IState {
 export default class SetIdServer extends React.Component<IProps, IState> {
     private dispatcherRef: string;
 
-    public constructor(props) {
+    public constructor(props: IProps) {
         super(props);
 
         let defaultIdServer = "";
@@ -288,8 +288,8 @@ export default class SetIdServer extends React.Component<IProps, IState> {
         let message;
         let danger = false;
         const messageElements = {
-            idserver: (sub) => <b>{abbreviateUrl(currentClientIdServer)}</b>,
-            b: (sub) => <b>{sub}</b>,
+            idserver: (sub: string) => <b>{abbreviateUrl(currentClientIdServer)}</b>,
+            b: (sub: string) => <b>{sub}</b>,
         };
         if (!currentServerReachable) {
             message = (

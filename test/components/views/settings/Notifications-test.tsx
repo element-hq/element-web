@@ -22,6 +22,7 @@ import {
     MatrixEvent,
     Room,
     NotificationCountType,
+    PushRuleActionName,
 } from "matrix-js-sdk/src/matrix";
 import { IThreepid, ThreepidMedium } from "matrix-js-sdk/src/@types/threepids";
 import { act } from "react-dom/test-utils";
@@ -38,15 +39,14 @@ jest.mock("matrix-js-sdk/src/logger");
 // Avoid indirectly importing any eagerly created stores that would require extra setup
 jest.mock("../../../../src/Notifier");
 
-const masterRule = {
-    actions: ["dont_notify"],
+const masterRule: IPushRule = {
+    actions: [PushRuleActionName.DontNotify],
     conditions: [],
     default: true,
     enabled: false,
     rule_id: RuleId.Master,
 };
-// eslint-disable-next-line max-len
-const oneToOneRule = {
+const oneToOneRule: IPushRule = {
     conditions: [
         { kind: "room_member_count", is: "2" },
         { kind: "event_match", key: "type", pattern: "m.room.message" },
@@ -56,8 +56,7 @@ const oneToOneRule = {
     default: true,
     enabled: true,
 } as IPushRule;
-// eslint-disable-next-line max-len
-const encryptedOneToOneRule = {
+const encryptedOneToOneRule: IPushRule = {
     conditions: [
         { kind: "room_member_count", is: "2" },
         { kind: "event_match", key: "type", pattern: "m.room.encrypted" },
@@ -67,15 +66,13 @@ const encryptedOneToOneRule = {
     default: true,
     enabled: true,
 } as IPushRule;
-// eslint-disable-next-line max-len
-const encryptedGroupRule = {
+const encryptedGroupRule: IPushRule = {
     conditions: [{ kind: "event_match", key: "type", pattern: "m.room.encrypted" }],
     actions: ["dont_notify"],
     rule_id: ".m.rule.encrypted",
     default: true,
     enabled: true,
 } as IPushRule;
-// eslint-disable-next-line max-len
 const pushRules: IPushRules = {
     global: {
         underride: [
@@ -367,7 +364,7 @@ describe("<Notifications />", () => {
 
         it("toggles and sets settings correctly", async () => {
             await getComponentAndWait();
-            let audioNotifsToggle;
+            let audioNotifsToggle: HTMLDivElement;
 
             const update = () => {
                 audioNotifsToggle = screen

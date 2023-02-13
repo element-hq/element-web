@@ -43,7 +43,7 @@ describe("Permalinks", function () {
         serverACLContent?: { deny?: string[]; allow?: string[] },
     ): Room {
         members.forEach((m) => (m.membership = "join"));
-        const powerLevelsUsers = members.reduce((pl, member) => {
+        const powerLevelsUsers = members.reduce<Record<string, number>>((pl, member) => {
             if (Number.isFinite(member.powerLevel)) {
                 pl[member.userId] = member.powerLevel;
             }

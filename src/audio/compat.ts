@@ -69,7 +69,7 @@ export function decodeOgg(audioBuffer: ArrayBuffer): Promise<ArrayBuffer> {
                     command: "encode",
                     buffers: ev.data,
                 },
-                ev.data.map((b) => b.buffer),
+                ev.data.map((b: Float32Array) => b.buffer),
             );
         };
 

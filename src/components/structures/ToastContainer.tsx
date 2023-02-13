@@ -25,8 +25,8 @@ interface IState {
 }
 
 export default class ToastContainer extends React.Component<{}, IState> {
-    public constructor(props, context) {
-        super(props, context);
+    public constructor(props: {}) {
+        super(props);
         this.state = {
             toasts: ToastStore.sharedInstance().getToasts(),
             countSeen: ToastStore.sharedInstance().getCountSeen(),

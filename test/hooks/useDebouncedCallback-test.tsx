@@ -22,7 +22,7 @@ describe("useDebouncedCallback", () => {
     beforeAll(() => jest.useFakeTimers());
     afterAll(() => jest.useRealTimers());
 
-    function render(enabled: boolean, callback: (...params: any) => void, params: any) {
+    function render(enabled: boolean, callback: (...params: any[]) => void, params: any[]) {
         return renderHook(({ enabled, callback, params }) => useDebouncedCallback(enabled, callback, params), {
             initialProps: {
                 enabled,
@@ -34,7 +34,7 @@ describe("useDebouncedCallback", () => {
 
     it("should be able to handle empty parameters", async () => {
         // When
-        const params = [];
+        const params: any[] = [];
         const callback = jest.fn();
         render(true, callback, params);
         jest.advanceTimersByTime(1);

@@ -14,7 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { ChangeEvent } from "react";
+import { Room } from "matrix-js-sdk/src/models/room";
 
 import { _t } from "../../../../languageHandler";
 import SdkConfig from "../../../../SdkConfig";
@@ -27,6 +28,7 @@ import Field from "../../../../components/views/elements/Field";
 import BaseDialog from "../../../../components/views/dialogs/BaseDialog";
 import DialogButtons from "../../../../components/views/elements/DialogButtons";
 import { IDialogProps } from "../../../../components/views/dialogs/IDialogProps";
+import { IIndexStats } from "../../../../indexing/BaseEventIndexManager";
 
 interface IProps extends IDialogProps {}
 
@@ -43,7 +45,7 @@ interface IState {
  * Allows the user to introspect the event index state and disable it.
  */
 export default class ManageEventIndexDialog extends React.Component<IProps, IState> {
-    public constructor(props) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {
@@ -56,9 +58,9 @@ export default class ManageEventIndexDialog extends React.Component<IProps, ISta
         };
     }
 
-    public updateCurrentRoom = async (room): Promise<void> => {
+    public updateCurrentRoom = async (room: Room): Promise<void> => {
         const eventIndex = EventIndexPeg.get();
-        let stats;
+        let stats: IIndexStats;
 
         try {
             stats = await eventIndex.getStats();
@@ -136,8 +138,8 @@ export default class ManageEventIndexDialog extends React.Component<IProps, ISta
         Modal.createDialog(DisableEventIndexDialog, null, null, /* priority = */ false, /* static = */ true);
     };
 
-    private onCrawlerSleepTimeChange = (e): void => {
-        this.setState({ crawlerSleepTime: e.target.value });
+    private onCrawlerSleepTimeChange = (e: ChangeEvent<HTMLInputElement>): void => {
+        this.setState({ crawlerSleepTime: parseInt(e.target.value, 10) });
         SettingsStore.setValue("crawlerSleepTime", null, SettingLevel.DEVICE, e.target.value);
     };
 

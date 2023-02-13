@@ -16,6 +16,7 @@ limitations under the License.
 
 // eslint-disable-next-line deprecate/import
 import { mount } from "enzyme";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { sleep } from "matrix-js-sdk/src/utils";
 import React from "react";
 import { act } from "react-dom/test-utils";
@@ -24,7 +25,7 @@ import { usePublicRoomDirectory } from "../../src/hooks/usePublicRoomDirectory";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import { stubClient } from "../test-utils/test-utils";
 
-function PublicRoomComponent({ onClick }) {
+function PublicRoomComponent({ onClick }: { onClick(hook: ReturnType<typeof usePublicRoomDirectory>): void }) {
     const roomDirectory = usePublicRoomDirectory();
 
     const { ready, loading, publicRooms } = roomDirectory;
@@ -38,7 +39,7 @@ function PublicRoomComponent({ onClick }) {
 }
 
 describe("usePublicRoomDirectory", () => {
-    let cli;
+    let cli: MatrixClient;
 
     beforeEach(() => {
         stubClient();

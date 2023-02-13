@@ -33,6 +33,7 @@ import QuestionDialog from "../dialogs/QuestionDialog";
 const FIELD_OLD_PASSWORD = "field_old_password";
 const FIELD_NEW_PASSWORD = "field_new_password";
 const FIELD_NEW_PASSWORD_CONFIRM = "field_new_password_confirm";
+type FieldType = typeof FIELD_OLD_PASSWORD | typeof FIELD_NEW_PASSWORD | typeof FIELD_NEW_PASSWORD_CONFIRM;
 
 enum Phase {
     Edit = "edit",
@@ -59,7 +60,7 @@ interface IProps {
 }
 
 interface IState {
-    fieldValid: {};
+    fieldValid: Partial<Record<FieldType, boolean>>;
     phase: Phase;
     oldPassword: string;
     newPassword: string;
@@ -67,6 +68,10 @@ interface IState {
 }
 
 export default class ChangePassword extends React.Component<IProps, IState> {
+    private [FIELD_OLD_PASSWORD]: Field;
+    private [FIELD_NEW_PASSWORD]: Field;
+    private [FIELD_NEW_PASSWORD_CONFIRM]: Field;
+
     public static defaultProps: Partial<IProps> = {
         onFinished() {},
         onError() {},
@@ -221,7 +226,7 @@ export default class ChangePassword extends React.Component<IProps, IState> {
         );
     };
 
-    private markFieldValid(fieldID: string, valid: boolean): void {
+    private markFieldValid(fieldID: FieldType, valid: boolean): void {
         const { fieldValid } = this.state;
         fieldValid[fieldID] = valid;
         this.setState({
@@ -317,7 +322,11 @@ export default class ChangePassword extends React.Component<IProps, IState> {
             activeElement.blur();
         }
 
-        const fieldIDsInDisplayOrder = [FIELD_OLD_PASSWORD, FIELD_NEW_PASSWORD, FIELD_NEW_PASSWORD_CONFIRM];
+        const fieldIDsInDisplayOrder: FieldType[] = [
+            FIELD_OLD_PASSWORD,
+            FIELD_NEW_PASSWORD,
+            FIELD_NEW_PASSWORD_CONFIRM,
+        ];
 
         // Run all fields with stricter validation that no longer allows empty
         // values for required fields.
@@ -358,7 +367,7 @@ export default class ChangePassword extends React.Component<IProps, IState> {
         return Object.values(this.state.fieldValid).every(Boolean);
     }
 
-    private findFirstInvalidField(fieldIDs: string[]): Field {
+    private findFirstInvalidField(fieldIDs: FieldType[]): Field {
         for (const fieldID of fieldIDs) {
             if (!this.state.fieldValid[fieldID] && this[fieldID]) {
                 return this[fieldID];

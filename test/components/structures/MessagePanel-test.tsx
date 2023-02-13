@@ -18,7 +18,7 @@ limitations under the License.
 import React from "react";
 import ReactDOM from "react-dom";
 import { EventEmitter } from "events";
-import { Room, RoomMember } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent, Room, RoomMember } from "matrix-js-sdk/src/matrix";
 import FakeTimers from "@sinonjs/fake-timers";
 import { render } from "@testing-library/react";
 import { Thread } from "matrix-js-sdk/src/models/thread";
@@ -46,7 +46,7 @@ jest.mock("../../../src/utils/beacon", () => ({
 const roomId = "!roomId:server_name";
 
 describe("MessagePanel", function () {
-    let clock = null;
+    let clock: FakeTimers.InstalledClock | null = null;
     const realSetTimeout = window.setTimeout;
     const events = mkEvents();
     const userId = "@me:here";
@@ -79,7 +79,7 @@ describe("MessagePanel", function () {
         callEventGroupers: new Map(),
         room,
         className: "cls",
-        events: [],
+        events: [] as MatrixEvent[],
     };
 
     const defaultRoomContext = {
@@ -322,8 +322,8 @@ describe("MessagePanel", function () {
         ];
     }
 
-    function isReadMarkerVisible(rmContainer) {
-        return rmContainer && rmContainer.children.length > 0;
+    function isReadMarkerVisible(rmContainer?: Element) {
+        return rmContainer?.children.length > 0;
     }
 
     it("should show the events", function () {

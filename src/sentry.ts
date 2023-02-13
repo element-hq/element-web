@@ -68,7 +68,7 @@ type Contexts = {
 /* eslint-enable camelcase */
 
 async function getStorageContext(): Promise<StorageContext> {
-    const result = {};
+    const result: StorageContext = {};
 
     // add storage persistence/quota information
     if (navigator.storage && navigator.storage.persisted) {
@@ -87,7 +87,7 @@ async function getStorageContext(): Promise<StorageContext> {
             result["storageManager_quota"] = String(estimate.quota);
             result["storageManager_usage"] = String(estimate.usage);
             if (estimate.usageDetails) {
-                const usageDetails = [];
+                const usageDetails: string[] = [];
                 Object.keys(estimate.usageDetails).forEach((k) => {
                     usageDetails.push(`${k}: ${String(estimate.usageDetails[k])}`);
                 });
@@ -150,13 +150,15 @@ async function getCryptoContext(client: MatrixClient): Promise<CryptoContext> {
 }
 
 function getDeviceContext(client: MatrixClient): DeviceContext {
-    const result = {
+    const result: DeviceContext = {
         device_id: client?.deviceId,
         mx_local_settings: localStorage.getItem("mx_local_settings"),
     };
 
     if (window.Modernizr) {
-        const missingFeatures = Object.keys(window.Modernizr).filter((key) => window.Modernizr[key] === false);
+        const missingFeatures = Object.keys(window.Modernizr).filter(
+            (key) => window.Modernizr[key as keyof ModernizrStatic] === false,
+        );
         if (missingFeatures.length > 0) {
             result["modernizr_missing_features"] = missingFeatures.join(", ");
         }

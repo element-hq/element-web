@@ -33,6 +33,7 @@ import { UIFeature } from "../../../settings/UIFeature";
 import BaseDialog from "./BaseDialog";
 import { Action } from "../../../dispatcher/actions";
 import { VoipRoomSettingsTab } from "../settings/tabs/room/VoipRoomSettingsTab";
+import { ActionPayload } from "../../../dispatcher/payloads";
 
 export const ROOM_GENERAL_TAB = "ROOM_GENERAL_TAB";
 export const ROOM_VOIP_TAB = "ROOM_VOIP_TAB";
@@ -74,7 +75,7 @@ export default class RoomSettingsDialog extends React.Component<IProps, IState> 
         MatrixClientPeg.get().removeListener(RoomEvent.Name, this.onRoomName);
     }
 
-    private onAction = (payload): void => {
+    private onAction = (payload: ActionPayload): void => {
         // When view changes below us, close the room settings
         // whilst the modal is open this can only be triggered when someone hits Leave Room
         if (payload.action === Action.ViewHomePage) {

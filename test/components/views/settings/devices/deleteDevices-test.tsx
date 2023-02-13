@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { UIAFlow } from "matrix-js-sdk/src/matrix";
+
 import { deleteDevicesWithInteractiveAuth } from "../../../../../src/components/views/settings/devices/deleteDevices";
 import Modal from "../../../../../src/Modal";
 import { getMockClientWithEventEmitter, mockClientMethodsUser } from "../../../../test-utils";
@@ -28,7 +30,7 @@ describe("deleteDevices()", () => {
 
     const modalSpy = jest.spyOn(Modal, "createDialog");
 
-    const interactiveAuthError = { httpStatus: 401, data: { flows: [] } };
+    const interactiveAuthError = { httpStatus: 401, data: { flows: [] as UIAFlow[] } };
 
     beforeEach(() => {
         jest.clearAllMocks();

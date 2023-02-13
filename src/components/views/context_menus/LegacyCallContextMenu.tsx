@@ -26,7 +26,7 @@ interface IProps extends IContextMenuProps {
 }
 
 export default class LegacyCallContextMenu extends React.Component<IProps> {
-    public constructor(props) {
+    public constructor(props: IProps) {
         super(props);
     }
 

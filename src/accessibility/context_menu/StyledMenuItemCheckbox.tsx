@@ -25,7 +25,7 @@ import { getKeyBindingsManager } from "../../KeyBindingsManager";
 
 interface IProps extends React.ComponentProps<typeof StyledCheckbox> {
     label?: string;
-    onChange(); // we handle keyup/down ourselves so lose the ChangeEvent
+    onChange(): void; // we handle keyup/down ourselves so lose the ChangeEvent
     onClose(): void; // gets called after onChange on KeyBindingAction.ActivateSelectedButton
 }
 

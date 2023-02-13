@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from "react";
 // eslint-disable-next-line deprecate/import
-import { mount } from "enzyme";
+import { mount, ReactWrapper } from "enzyme";
 import { mocked } from "jest-mock";
 import { act } from "react-dom/test-utils";
 import { Room } from "matrix-js-sdk/src/matrix";
@@ -60,42 +60,43 @@ describe("<ExportDialog />", () => {
 
     const getComponent = (props = {}) => mount(<ExportDialog {...defaultProps} {...props} />);
 
-    const getSizeInput = (component) => component.find('input[id="size-limit"]');
-    const getExportTypeInput = (component) => component.find('select[id="export-type"]');
-    const getAttachmentsCheckbox = (component) => component.find('input[id="include-attachments"]');
-    const getMessageCountInput = (component) => component.find('input[id="message-count"]');
-    const getExportFormatInput = (component, format) => component.find(`input[id="exportFormat-${format}"]`);
-    const getPrimaryButton = (component) => component.find('[data-testid="dialog-primary-button"]');
-    const getSecondaryButton = (component) => component.find('[data-testid="dialog-cancel-button"]');
+    const getSizeInput = (component: ReactWrapper) => component.find('input[id="size-limit"]');
+    const getExportTypeInput = (component: ReactWrapper) => component.find('select[id="export-type"]');
+    const getAttachmentsCheckbox = (component: ReactWrapper) => component.find('input[id="include-attachments"]');
+    const getMessageCountInput = (component: ReactWrapper) => component.find('input[id="message-count"]');
+    const getExportFormatInput = (component: ReactWrapper, format: ExportFormat) =>
+        component.find(`input[id="exportFormat-${format}"]`);
+    const getPrimaryButton = (component: ReactWrapper) => component.find('[data-testid="dialog-primary-button"]');
+    const getSecondaryButton = (component: ReactWrapper) => component.find('[data-testid="dialog-cancel-button"]');
 
-    const submitForm = async (component) =>
+    const submitForm = async (component: ReactWrapper) =>
         act(async () => {
             getPrimaryButton(component).simulate("click");
             component.setProps({});
         });
-    const selectExportFormat = async (component, format: ExportFormat) =>
+    const selectExportFormat = async (component: ReactWrapper, format: ExportFormat) =>
         act(async () => {
             getExportFormatInput(component, format).simulate("change");
             component.setProps({});
         });
-    const selectExportType = async (component, type: ExportType) =>
+    const selectExportType = async (component: ReactWrapper, type: ExportType) =>
         act(async () => {
             getExportTypeInput(component).simulate("change", { target: { value: type } });
             component.setProps({});
         });
-    const setMessageCount = async (component, count: number) =>
+    const setMessageCount = async (component: ReactWrapper, count: number) =>
         act(async () => {
             getMessageCountInput(component).simulate("change", { target: { value: count } });
             component.setProps({});
         });
 
-    const setSizeLimit = async (component, limit: number) =>
+    const setSizeLimit = async (component: ReactWrapper, limit: number) =>
         act(async () => {
             getSizeInput(component).simulate("change", { target: { value: limit } });
             component.setProps({});
         });
 
-    const setIncludeAttachments = async (component, checked) =>
+    const setIncludeAttachments = async (component: ReactWrapper, checked: boolean) =>
         act(async () => {
             getAttachmentsCheckbox(component).simulate("change", { target: { checked } });
             component.setProps({});

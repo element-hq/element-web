@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { ComponentProps } from "react";
 // eslint-disable-next-line deprecate/import
 import { mount } from "enzyme";
 import { act } from "react-dom/test-utils";
@@ -63,7 +63,7 @@ describe("<MBeaconBody />", () => {
 
     const defaultEvent = makeBeaconInfoEvent(aliceId, roomId, { isLive: true }, "$alice-room1-1");
 
-    const defaultProps = {
+    const defaultProps: ComponentProps<typeof MBeaconBody> = {
         mxEvent: defaultEvent,
         highlights: [],
         highlightLink: "",
@@ -343,7 +343,7 @@ describe("<MBeaconBody />", () => {
 
         const redactionEvent = new MatrixEvent({ type: EventType.RoomRedaction, content: { reason: "test reason" } });
 
-        const setupRoomWithBeacon = (beaconInfoEvent, locationEvents: MatrixEvent[] = []) => {
+        const setupRoomWithBeacon = (beaconInfoEvent: MatrixEvent, locationEvents: MatrixEvent[] = []) => {
             const room = makeRoomWithStateEvents([beaconInfoEvent], { roomId, mockClient });
             const beaconInstance = room.currentState.beacons.get(getBeaconInfoIdentifier(beaconInfoEvent));
             beaconInstance.addLocations(locationEvents);

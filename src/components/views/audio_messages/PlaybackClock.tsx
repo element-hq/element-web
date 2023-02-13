@@ -39,7 +39,7 @@ interface IState {
  * A clock for a playback of a recording.
  */
 export default class PlaybackClock extends React.PureComponent<IProps, IState> {
-    public constructor(props) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {

@@ -46,7 +46,7 @@ export default class SeekBar extends React.PureComponent<IProps, IState> {
     // We use an animation frame request to avoid overly spamming prop updates, even if we aren't
     // really using anything demanding on the CSS front.
 
-    private animationFrameFn = new MarkedExecution(
+    private animationFrameFn: MarkedExecution = new MarkedExecution(
         () => this.doUpdate(),
         () => requestAnimationFrame(() => this.animationFrameFn.trigger()),
     );

@@ -927,7 +927,7 @@ describe("<SessionManagerTab />", () => {
                 // get a handle for resolving the delete call
                 // because promise flushing after the confirm modal is resolving this too
                 // and we want to test the loading state here
-                let resolveDeleteRequest;
+                let resolveDeleteRequest: (v?: IAuthData) => void;
                 mockClient.deleteMultipleDevices.mockImplementation(() => {
                     const promise = new Promise<IAuthData>((resolve) => {
                         resolveDeleteRequest = resolve;

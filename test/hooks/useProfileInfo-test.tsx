@@ -16,6 +16,7 @@ limitations under the License.
 
 // eslint-disable-next-line deprecate/import
 import { mount } from "enzyme";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { sleep } from "matrix-js-sdk/src/utils";
 import React from "react";
 import { act } from "react-dom/test-utils";
@@ -24,7 +25,7 @@ import { useProfileInfo } from "../../src/hooks/useProfileInfo";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import { stubClient } from "../test-utils/test-utils";
 
-function ProfileInfoComponent({ onClick }) {
+function ProfileInfoComponent({ onClick }: { onClick(hook: ReturnType<typeof useProfileInfo>): void }) {
     const profileInfo = useProfileInfo();
 
     const { ready, loading, profile } = profileInfo;
@@ -38,7 +39,7 @@ function ProfileInfoComponent({ onClick }) {
 }
 
 describe("useProfileInfo", () => {
-    let cli;
+    let cli: MatrixClient;
 
     beforeEach(() => {
         stubClient();
@@ -58,7 +59,6 @@ describe("useProfileInfo", () => {
             <ProfileInfoComponent
                 onClick={(hook) => {
                     hook.search({
-                        limit: 1,
                         query,
                     });
                 }}
@@ -79,7 +79,6 @@ describe("useProfileInfo", () => {
             <ProfileInfoComponent
                 onClick={(hook) => {
                     hook.search({
-                        limit: 1,
                         query: "",
                     });
                 }}
@@ -103,7 +102,6 @@ describe("useProfileInfo", () => {
                 <ProfileInfoComponent
                     onClick={(hook) => {
                         hook.search({
-                            limit: 1,
                             query,
                         });
                     }}
@@ -130,7 +128,6 @@ describe("useProfileInfo", () => {
             <ProfileInfoComponent
                 onClick={(hook) => {
                     hook.search({
-                        limit: 1,
                         query,
                     });
                 }}
@@ -153,7 +150,6 @@ describe("useProfileInfo", () => {
             <ProfileInfoComponent
                 onClick={(hook) => {
                     hook.search({
-                        limit: 1,
                         query,
                     });
                 }}

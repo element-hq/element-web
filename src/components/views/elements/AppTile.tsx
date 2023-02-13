@@ -18,7 +18,7 @@ limitations under the License.
 */
 
 import url from "url";
-import React, { ContextType, createRef, MutableRefObject, ReactNode } from "react";
+import React, { ContextType, createRef, CSSProperties, MutableRefObject, ReactNode } from "react";
 import classNames from "classnames";
 import { MatrixCapabilities } from "matrix-widget-api";
 import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
@@ -81,7 +81,7 @@ interface IProps {
     // Is this an instance of a user widget
     userWidget: boolean;
     // sets the pointer-events property on the iframe
-    pointerEvents?: string;
+    pointerEvents?: CSSProperties["pointerEvents"];
     widgetPageTitle?: string;
     showLayoutButtons?: boolean;
     // Handle to manually notify the PersistedElement that it needs to move
@@ -562,9 +562,9 @@ export default class AppTile extends React.Component<IProps, IState> {
             "microphone; camera; encrypted-media; autoplay; display-capture; clipboard-write; " + "clipboard-read;";
 
         const appTileBodyClass = "mx_AppTileBody" + (this.props.miniMode ? "_mini  " : " ");
-        const appTileBodyStyles = {};
+        const appTileBodyStyles: CSSProperties = {};
         if (this.props.pointerEvents) {
-            appTileBodyStyles["pointerEvents"] = this.props.pointerEvents;
+            appTileBodyStyles.pointerEvents = this.props.pointerEvents;
         }
 
         const loadingElement = (

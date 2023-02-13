@@ -137,7 +137,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
         });
     }
 
-    public componentDidUpdate(prevProps): void {
+    public componentDidUpdate(prevProps: IProps): void {
         if (prevProps.mxEvent !== this.props.mxEvent) {
             this.setupThread(this.props.mxEvent);
         }
@@ -316,7 +316,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
     };
 
     private get threadRelation(): IEventRelation {
-        const relation = {
+        const relation: IEventRelation = {
             rel_type: THREAD_RELATION_TYPE.name,
             event_id: this.state.thread?.id,
             is_falling_back: true,

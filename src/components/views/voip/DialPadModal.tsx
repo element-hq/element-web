@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import * as React from "react";
-import { createRef } from "react";
+import React, { ChangeEvent } from "react";
+import { createRef, SyntheticEvent } from "react";
 
 import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
 import Field from "../elements/Field";
@@ -24,7 +24,7 @@ import DialPadBackspaceButton from "../elements/DialPadBackspaceButton";
 import LegacyCallHandler from "../../../LegacyCallHandler";
 
 interface IProps {
-    onFinished: (boolean) => void;
+    onFinished: (dialled: boolean) => void;
 }
 
 interface IState {
@@ -34,7 +34,7 @@ interface IState {
 export default class DialpadModal extends React.PureComponent<IProps, IState> {
     private numberEntryFieldRef: React.RefObject<Field> = createRef();
 
-    public constructor(props) {
+    public constructor(props: IProps) {
         super(props);
         this.state = {
             value: "",
@@ -45,11 +45,11 @@ export default class DialpadModal extends React.PureComponent<IProps, IState> {
         this.props.onFinished(false);
     };
 
-    public onChange = (ev): void => {
+    public onChange = (ev: ChangeEvent<HTMLInputElement>): void => {
         this.setState({ value: ev.target.value });
     };
 
-    public onFormSubmit = (ev): void => {
+    public onFormSubmit = (ev: SyntheticEvent): void => {
         ev.preventDefault();
         this.onDialPress();
     };

@@ -28,10 +28,11 @@ import dis from "../../../dispatcher/dispatcher";
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { Action } from "../../../dispatcher/actions";
-import EntityTile, { PowerStatus } from "./EntityTile";
+import EntityTile, { PowerStatus, PresenceState } from "./EntityTile";
 import MemberAvatar from "./../avatars/MemberAvatar";
 import DisambiguatedProfile from "../messages/DisambiguatedProfile";
 import UserIdentifierCustomisations from "../../../customisations/UserIdentifier";
+import { E2EState } from "./E2EIcon";
 
 interface IProps {
     member: RoomMember;
@@ -40,7 +41,7 @@ interface IProps {
 
 interface IState {
     isRoomEncrypted: boolean;
-    e2eStatus: string;
+    e2eStatus: E2EState;
 }
 
 export default class MemberTile extends React.Component<IProps, IState> {
@@ -51,7 +52,7 @@ export default class MemberTile extends React.Component<IProps, IState> {
         showPresence: true,
     };
 
-    public constructor(props) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {
@@ -121,7 +122,7 @@ export default class MemberTile extends React.Component<IProps, IState> {
         const userTrust = cli.checkUserTrust(userId);
         if (!userTrust.isCrossSigningVerified()) {
             this.setState({
-                e2eStatus: userTrust.wasCrossSigningVerified() ? "warning" : "normal",
+                e2eStatus: userTrust.wasCrossSigningVerified() ? E2EState.Warning : E2EState.Normal,
             });
             return;
         }
@@ -138,7 +139,7 @@ export default class MemberTile extends React.Component<IProps, IState> {
             return isMe ? !deviceTrust.isCrossSigningVerified() : !deviceTrust.isVerified();
         });
         this.setState({
-            e2eStatus: anyDeviceUnverified ? "warning" : "verified",
+            e2eStatus: anyDeviceUnverified ? E2EState.Warning : E2EState.Verified,
         });
     }
 
@@ -186,7 +187,7 @@ export default class MemberTile extends React.Component<IProps, IState> {
     public render(): JSX.Element {
         const member = this.props.member;
         const name = this.getDisplayName();
-        const presenceState = member.user ? member.user.presence : null;
+        const presenceState = member.user?.presence ?? null;
 
         const av = <MemberAvatar member={member} width={36} height={36} aria-hidden="true" />;
 
@@ -211,7 +212,7 @@ export default class MemberTile extends React.Component<IProps, IState> {
 
         const powerStatus = powerStatusMap.get(powerLevel);
 
-        let e2eStatus;
+        let e2eStatus: E2EState | undefined;
         if (this.state.isRoomEncrypted) {
             e2eStatus = this.state.e2eStatus;
         }
@@ -221,7 +222,7 @@ export default class MemberTile extends React.Component<IProps, IState> {
         return (
             <EntityTile
                 {...this.props}
-                presenceState={presenceState}
+                presenceState={presenceState as PresenceState | null}
                 presenceLastActiveAgo={member.user ? member.user.lastActiveAgo : 0}
                 presenceLastTs={member.user ? member.user.lastPresenceTs : 0}
                 presenceCurrentlyActive={member.user ? member.user.currentlyActive : false}

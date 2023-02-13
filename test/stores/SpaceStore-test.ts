@@ -20,7 +20,7 @@ import { EventType } from "matrix-js-sdk/src/@types/event";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 import { defer } from "matrix-js-sdk/src/utils";
-import { ClientEvent, RoomEvent, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { ClientEvent, RoomEvent, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 
 import SpaceStore from "../../src/stores/spaces/SpaceStore";
 import {
@@ -68,7 +68,7 @@ const space2 = "!space2:server";
 const space3 = "!space3:server";
 const space4 = "!space4:server";
 
-const getUserIdForRoomId = jest.fn((roomId) => {
+const getUserIdForRoomId = jest.fn((roomId: string) => {
     return {
         [dm1]: dm1Partner.userId,
         [dm2]: dm2Partner.userId,
@@ -97,10 +97,10 @@ describe("SpaceStore", () => {
 
     const spyDispatcher = jest.spyOn(defaultDispatcher, "dispatch");
 
-    let rooms = [];
+    let rooms: Room[] = [];
     const mkRoom = (roomId: string) => testUtils.mkRoom(client, roomId, rooms);
     const mkSpace = (spaceId: string, children: string[] = []) => testUtils.mkSpace(client, spaceId, rooms, children);
-    const viewRoom = (roomId) => defaultDispatcher.dispatch({ action: Action.ViewRoom, room_id: roomId }, true);
+    const viewRoom = (roomId: string) => defaultDispatcher.dispatch({ action: Action.ViewRoom, room_id: roomId }, true);
 
     const run = async () => {
         mocked(client).getRoom.mockImplementation((roomId) => rooms.find((room) => room.roomId === roomId));
@@ -785,7 +785,7 @@ describe("SpaceStore", () => {
                 mkSpace(space1, [fav1, room1, space4]);
             });
 
-            const addChildRoom = (spaceId, childId) => {
+            const addChildRoom = (spaceId: string, childId: string) => {
                 const childEvent = mkEvent({
                     event: true,
                     type: EventType.SpaceChild,
@@ -803,7 +803,7 @@ describe("SpaceStore", () => {
                 client.emit(RoomStateEvent.Events, childEvent, spaceRoom.currentState, undefined);
             };
 
-            const addMember = (spaceId, user: RoomMember) => {
+            const addMember = (spaceId: string, user: RoomMember) => {
                 const memberEvent = mkEvent({
                     event: true,
                     type: EventType.RoomMember,
@@ -998,8 +998,8 @@ describe("SpaceStore", () => {
     });
 
     describe("context switching tests", () => {
-        let dispatcherRef;
-        let currentRoom = null;
+        let dispatcherRef: string;
+        let currentRoom: Room | null = null;
 
         beforeEach(async () => {
             [room1, room2, orphan1].forEach(mkRoom);

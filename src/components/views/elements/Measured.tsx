@@ -32,7 +32,7 @@ export default class Measured extends React.PureComponent<IProps> {
         breakpoint: 500,
     };
 
-    public constructor(props) {
+    public constructor(props: IProps) {
         super(props);
 
         this.instanceId = Measured.instanceCount++;

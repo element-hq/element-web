@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ComponentProps } from "react";
+import React, { ComponentProps, ReactNode } from "react";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { EventType } from "matrix-js-sdk/src/@types/event";
@@ -161,7 +161,15 @@ export default class EventListSummary extends React.Component<IProps> {
      * @returns {string[]} an array of transitions.
      */
     private static getCanonicalTransitions(transitions: TransitionType[]): TransitionType[] {
-        const modMap = {
+        const modMap: Partial<
+            Record<
+                TransitionType,
+                {
+                    after: TransitionType;
+                    newTransition: TransitionType;
+                }
+            >
+        > = {
             [TransitionType.Joined]: {
                 after: TransitionType.Left,
                 newTransition: TransitionType.JoinedAndLeft,
@@ -170,10 +178,6 @@ export default class EventListSummary extends React.Component<IProps> {
                 after: TransitionType.Joined,
                 newTransition: TransitionType.LeftAndJoined,
             },
-            // $currentTransition : {
-            //     'after' : $nextTransition,
-            //     'newTransition' : 'new_transition_type',
-            // },
         };
         const res: TransitionType[] = [];
 
@@ -237,15 +241,11 @@ export default class EventListSummary extends React.Component<IProps> {
      * @param {number} repeats the number of times the transition was repeated in a row.
      * @returns {string} the written Human Readable equivalent of the transition.
      */
-    private static getDescriptionForTransition(
-        t: TransitionType,
-        userCount: number,
-        count: number,
-    ): string | JSX.Element {
+    private static getDescriptionForTransition(t: TransitionType, userCount: number, count: number): ReactNode | null {
         // The empty interpolations 'severalUsers' and 'oneUser'
         // are there only to show translators to non-English languages
         // that the verb is conjugated to plural or singular Subject.
-        let res = null;
+        let res: ReactNode | undefined;
         switch (t) {
             case TransitionType.Joined:
                 res =
@@ -377,7 +377,7 @@ export default class EventListSummary extends React.Component<IProps> {
                 break;
         }
 
-        return res;
+        return res ?? null;
     }
 
     private static getTransitionSequence(events: IUserEvents[]): TransitionType[] {

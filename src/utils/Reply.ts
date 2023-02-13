@@ -69,7 +69,15 @@ export function getNestedReplyText(
 ): { body: string; html: string } | null {
     if (!ev) return null;
 
-    let { body, formatted_body: html, msgtype } = ev.getContent();
+    let {
+        body,
+        formatted_body: html,
+        msgtype,
+    } = ev.getContent<{
+        body: string;
+        msgtype?: string;
+        formatted_body?: string;
+    }>();
     if (getParentEventId(ev)) {
         if (body) body = stripPlainReply(body);
     }

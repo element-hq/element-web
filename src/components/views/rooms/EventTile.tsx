@@ -617,8 +617,8 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     }
 
     private propsEqual(objA: EventTileProps, objB: EventTileProps): boolean {
-        const keysA = Object.keys(objA);
-        const keysB = Object.keys(objB);
+        const keysA = Object.keys(objA) as Array<keyof EventTileProps>;
+        const keysB = Object.keys(objB) as Array<keyof EventTileProps>;
 
         if (keysA.length !== keysB.length) {
             return false;

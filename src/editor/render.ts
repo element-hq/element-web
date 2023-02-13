@@ -27,7 +27,7 @@ export function needsCaretNodeAfter(part: Part, isLastOfLine: boolean): boolean 
     return !part.acceptsCaret && isLastOfLine;
 }
 
-function insertAfter(node: HTMLElement, nodeToInsert: HTMLElement): void {
+function insertAfter(node: ChildNode, nodeToInsert: ChildNode): void {
     const next = node.nextSibling;
     if (next) {
         node.parentElement!.insertBefore(nodeToInsert, next);
@@ -51,7 +51,7 @@ function createCaretNode(): HTMLElement {
     return span;
 }
 
-function updateCaretNode(node: HTMLElement): void {
+function updateCaretNode(node: ChildNode): void {
     // ensure the caret node contains only a zero-width space
     if (node.textContent !== CARET_NODE_CHAR) {
         node.textContent = CARET_NODE_CHAR;
@@ -92,7 +92,7 @@ function reconcileLine(lineContainer: ChildNode, parts: Part[]): void {
         currentNode = isFirst ? lineContainer.firstChild : currentNode!.nextSibling;
 
         if (needsCaretNodeBefore(part, prevPart)) {
-            if (isCaretNode(currentNode)) {
+            if (isCaretNode(currentNode as Element)) {
                 updateCaretNode(currentNode);
                 currentNode = currentNode.nextSibling;
             } else {
@@ -115,7 +115,7 @@ function reconcileLine(lineContainer: ChildNode, parts: Part[]): void {
         }
 
         if (needsCaretNodeAfter(part, part === lastPart)) {
-            if (isCaretNode(currentNode?.nextSibling)) {
+            if (isCaretNode(currentNode?.nextSibling as Element)) {
                 currentNode = currentNode!.nextSibling;
                 updateCaretNode(currentNode as HTMLElement);
             } else {

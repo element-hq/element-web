@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactNode } from "react";
+import React, { ReactNode, SyntheticEvent } from "react";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { JoinRule } from "matrix-js-sdk/src/@types/partials";
 
@@ -53,7 +53,7 @@ export default class RoomUpgradeWarningDialog extends React.Component<IProps, IS
     private readonly isPrivate: boolean;
     private readonly currentVersion: string;
 
-    public constructor(props) {
+    public constructor(props: IProps) {
         super(props);
 
         const room = MatrixClientPeg.get().getRoom(this.props.roomId);
@@ -93,7 +93,7 @@ export default class RoomUpgradeWarningDialog extends React.Component<IProps, IS
         this.setState({ inviteUsersToNewRoom });
     };
 
-    private openBugReportDialog = (e): void => {
+    private openBugReportDialog = (e: SyntheticEvent): void => {
         e.preventDefault();
         e.stopPropagation();
 

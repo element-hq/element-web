@@ -16,7 +16,7 @@ limitations under the License.
 
 import { EventType, RoomType } from "matrix-js-sdk/src/@types/event";
 import { Room } from "matrix-js-sdk/src/models/room";
-import React, { ComponentType, createRef, ReactComponentElement, RefObject } from "react";
+import React, { ComponentType, createRef, ReactComponentElement, RefObject, SyntheticEvent } from "react";
 
 import { IState as IRovingTabIndexState, RovingTabIndexProvider } from "../../../accessibility/RovingTabIndex";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
@@ -102,10 +102,9 @@ interface ITagAesthetics {
     defaultHidden: boolean;
 }
 
-interface ITagAestheticsMap {
-    // @ts-ignore - TS wants this to be a string but we know better
-    [tagId: TagID]: ITagAesthetics;
-}
+type TagAestheticsMap = Partial<{
+    [tagId in TagID]: ITagAesthetics;
+}>;
 
 const auxButtonContextMenuPosition = (handle: RefObject<HTMLDivElement>): MenuProps => {
     const rect = handle.current.getBoundingClientRect();
@@ -380,7 +379,7 @@ const UntaggedAuxButton: React.FC<IAuxButtonProps> = ({ tabIndex }) => {
     );
 };
 
-const TAG_AESTHETICS: ITagAestheticsMap = {
+const TAG_AESTHETICS: TagAestheticsMap = {
     [DefaultTagID.Invite]: {
         sectionLabel: _td("Invites"),
         isInvite: true,
@@ -434,7 +433,7 @@ const TAG_AESTHETICS: ITagAestheticsMap = {
 };
 
 export default class RoomList extends React.PureComponent<IProps, IState> {
-    private dispatcherRef;
+    private dispatcherRef?: string;
     private treeRef = createRef<HTMLDivElement>();
     private favouriteMessageWatcher: string;
 
@@ -573,7 +572,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                     resizeMethod="crop"
                 />
             );
-            const viewRoom = (ev): void => {
+            const viewRoom = (ev: SyntheticEvent): void => {
                 defaultDispatcher.dispatch<ViewRoomPayload>({
                     action: Action.ViewRoom,
                     room_alias: room.canonical_alias || room.aliases?.[0],

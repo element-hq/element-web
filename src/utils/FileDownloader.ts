@@ -18,7 +18,7 @@ export type getIframeFn = () => HTMLIFrameElement; // eslint-disable-line @types
 
 export const DEFAULT_STYLES = {
     imgSrc: "",
-    imgStyle: null, // css props
+    imgStyle: null as string | null, // css props
     style: "",
     textContent: "",
 };

@@ -114,7 +114,7 @@ export default class CryptographyPanel extends React.Component<IProps, IState> {
         );
     };
 
-    private updateBlacklistDevicesFlag = (checked): void => {
+    private updateBlacklistDevicesFlag = (checked: boolean): void => {
         MatrixClientPeg.get().setGlobalBlacklistUnverifiedDevices(checked);
     };
 }

@@ -76,7 +76,7 @@ describe("<MessageActionBar />", () => {
     });
 
     const localStorageMock = (() => {
-        let store = {};
+        let store: Record<string, any> = {};
         return {
             getItem: jest.fn().mockImplementation((key) => store[key] ?? null),
             setItem: jest.fn().mockImplementation((key, value) => {

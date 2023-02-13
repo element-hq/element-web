@@ -50,7 +50,7 @@ interface IState {
 export default class UserSettingsDialog extends React.Component<IProps, IState> {
     private settingsWatchers: string[] = [];
 
-    public constructor(props) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {

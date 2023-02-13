@@ -228,7 +228,7 @@ const transformTags: IExtendedSanitizeOptions["transformTags"] = {
 
         // Sanitise and transform data-mx-color and data-mx-bg-color to their CSS
         // equivalents
-        const customCSSMapper = {
+        const customCSSMapper: Record<string, string> = {
             "data-mx-color": "color",
             "data-mx-bg-color": "background-color",
             // $customAttributeKey: $cssAttributeKey

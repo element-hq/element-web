@@ -68,7 +68,8 @@ interface IState {
 }
 
 export default class MemberList extends React.Component<IProps, IState> {
-    private showPresence = true;
+    // XXX: exported for tests
+    public showPresence = true;
     private mounted = false;
 
     public static contextType = SDKContext;
@@ -195,7 +196,8 @@ export default class MemberList extends React.Component<IProps, IState> {
         { leading: true, trailing: true },
     );
 
-    private async updateListNow(showLoadingSpinner: boolean): Promise<void> {
+    // XXX: exported for tests
+    public async updateListNow(showLoadingSpinner?: boolean): Promise<void> {
         if (!this.mounted) {
             return;
         }

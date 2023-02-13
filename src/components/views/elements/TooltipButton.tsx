@@ -24,7 +24,7 @@ interface IProps {
 }
 
 export default class TooltipButton extends React.Component<IProps> {
-    public constructor(props) {
+    public constructor(props: IProps) {
         super(props);
     }
 

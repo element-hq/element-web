@@ -31,7 +31,7 @@ export const RovingAccessibleTooltipButton: React.FC<IProps> = ({ inputRef, onFo
     return (
         <AccessibleTooltipButton
             {...props}
-            onFocus={(event) => {
+            onFocus={(event: React.FocusEvent) => {
                 onFocusInternal();
                 onFocus?.(event);
             }}

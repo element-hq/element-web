@@ -35,7 +35,6 @@ interface IProps {
 export default class PresenceLabel extends React.Component<IProps> {
     public static defaultProps = {
         activeAgo: -1,
-        presenceState: null,
     };
 
     // Return duration as a string using appropriate time units

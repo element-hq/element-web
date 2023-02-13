@@ -15,8 +15,9 @@ limitations under the License.
 */
 
 import React, { ChangeEvent, ContextType, createRef, SyntheticEvent } from "react";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { IContent, MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { logger } from "matrix-js-sdk/src/logger";
+import { EventType } from "matrix-js-sdk/src/@types/event";
 
 import EditableItemList from "../elements/EditableItemList";
 import { _t } from "../../../languageHandler";
@@ -52,7 +53,7 @@ class EditableAliasesList extends EditableItemList<IEditableAliasesListProps> {
     };
 
     protected renderNewItemField(): JSX.Element {
-        const onChange = (alias: string): void => this.onNewItemChanged({ target: { value: alias } });
+        const onChange = (alias: string): void => this.props.onNewItemChanged?.(alias);
         return (
             <form
                 onSubmit={this.onAliasAdded}
@@ -103,10 +104,10 @@ export default class AliasSettings extends React.Component<IProps, IState> {
         canSetCanonicalAlias: false,
     };
 
-    public constructor(props, context: ContextType<typeof MatrixClientContext>) {
+    public constructor(props: IProps, context: ContextType<typeof MatrixClientContext>) {
         super(props, context);
 
-        const state = {
+        const state: IState = {
             altAliases: [], // [ #alias:domain.tld, ... ]
             localAliases: [], // [ #alias:my-hs.tld, ... ]
             canonicalAlias: null, // #canonical:domain.tld
@@ -140,7 +141,7 @@ export default class AliasSettings extends React.Component<IProps, IState> {
         try {
             const mxClient = this.context;
 
-            let localAliases = [];
+            let localAliases: string[] = [];
             const response = await mxClient.getLocalAliases(this.props.roomId);
             if (Array.isArray(response?.aliases)) {
                 localAliases = response.aliases;
@@ -164,14 +165,14 @@ export default class AliasSettings extends React.Component<IProps, IState> {
             updatingCanonicalAlias: true,
         });
 
-        const eventContent = {
+        const eventContent: IContent = {
             alt_aliases: this.state.altAliases,
         };
 
         if (alias) eventContent["alias"] = alias;
 
         this.context
-            .sendStateEvent(this.props.roomId, "m.room.canonical_alias", eventContent, "")
+            .sendStateEvent(this.props.roomId, EventType.RoomCanonicalAlias, eventContent, "")
             .catch((err) => {
                 logger.error(err);
                 Modal.createDialog(ErrorDialog, {
@@ -195,7 +196,7 @@ export default class AliasSettings extends React.Component<IProps, IState> {
             updatingCanonicalAlias: true,
         });
 
-        const eventContent = {};
+        const eventContent: IContent = {};
 
         if (this.state.canonicalAlias) {
             eventContent["alias"] = this.state.canonicalAlias;
@@ -205,7 +206,7 @@ export default class AliasSettings extends React.Component<IProps, IState> {
         }
 
         this.context
-            .sendStateEvent(this.props.roomId, "m.room.canonical_alias", eventContent, "")
+            .sendStateEvent(this.props.roomId, EventType.RoomCanonicalAlias, eventContent, "")
             .then(() => {
                 this.setState({
                     altAliases,

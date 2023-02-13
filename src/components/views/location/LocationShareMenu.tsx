@@ -38,7 +38,7 @@ type Props = Omit<ILocationPickerProps, "onChoose" | "shareType"> & {
     relation?: IEventRelation;
 };
 
-const getEnabledShareTypes = (relation): LocationShareType[] => {
+const getEnabledShareTypes = (relation?: IEventRelation): LocationShareType[] => {
     const enabledShareTypes = [LocationShareType.Own];
 
     // live locations cannot have a relation

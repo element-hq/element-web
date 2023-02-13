@@ -77,7 +77,7 @@ import BaseAvatar from "../../avatars/BaseAvatar";
 import DecoratedRoomAvatar from "../../avatars/DecoratedRoomAvatar";
 import { SearchResultAvatar } from "../../avatars/SearchResultAvatar";
 import { NetworkDropdown } from "../../directory/NetworkDropdown";
-import AccessibleButton from "../../elements/AccessibleButton";
+import AccessibleButton, { ButtonEvent } from "../../elements/AccessibleButton";
 import LabelledCheckbox from "../../elements/LabelledCheckbox";
 import Spinner from "../../elements/Spinner";
 import NotificationBadge from "../../rooms/NotificationBadge";
@@ -625,7 +625,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                 const showViewButton =
                     clientRoom?.getMyMembership() === "join" || result.publicRoom.world_readable || cli.isGuest();
 
-                const listener = (ev): void => {
+                const listener = (ev: ButtonEvent): void => {
                     const { publicRoom } = result;
                     viewRoom(
                         {

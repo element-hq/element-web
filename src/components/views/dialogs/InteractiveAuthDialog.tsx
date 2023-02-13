@@ -18,7 +18,7 @@ limitations under the License.
 
 import React from "react";
 import { MatrixClient } from "matrix-js-sdk/src/client";
-import { IAuthData } from "matrix-js-sdk/src/interactive-auth";
+import { AuthType, IAuthData } from "matrix-js-sdk/src/interactive-auth";
 
 import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
@@ -27,8 +27,8 @@ import { SSOAuthEntry } from "../auth/InteractiveAuthEntryComponents";
 import BaseDialog from "./BaseDialog";
 import { IDialogProps } from "./IDialogProps";
 
-interface IDialogAesthetics {
-    [x: string]: {
+type DialogAesthetics = Partial<{
+    [x in AuthType]: {
         [x: number]: {
             title: string;
             body: string;
@@ -36,7 +36,7 @@ interface IDialogAesthetics {
             continueKind: string;
         };
     };
-}
+}>;
 
 export interface InteractiveAuthDialogProps extends IDialogProps {
     // matrix client to use for UI auth requests
@@ -71,15 +71,15 @@ export interface InteractiveAuthDialogProps extends IDialogProps {
     // }
     //
     // Default is defined in _getDefaultDialogAesthetics()
-    aestheticsForStagePhases?: IDialogAesthetics;
+    aestheticsForStagePhases?: DialogAesthetics;
 }
 
 interface IState {
     authError: Error;
 
     // See _onUpdateStagePhase()
-    uiaStage: number | string;
-    uiaStagePhase: number | string;
+    uiaStage: AuthType | null;
+    uiaStagePhase: number | null;
 }
 
 export default class InteractiveAuthDialog extends React.Component<InteractiveAuthDialogProps, IState> {
@@ -95,7 +95,7 @@ export default class InteractiveAuthDialog extends React.Component<InteractiveAu
         };
     }
 
-    private getDefaultDialogAesthetics(): IDialogAesthetics {
+    private getDefaultDialogAesthetics(): DialogAesthetics {
         const ssoAesthetics = {
             [SSOAuthEntry.PHASE_PREAUTH]: {
                 title: _t("Use Single Sign On to continue"),
@@ -125,13 +125,13 @@ export default class InteractiveAuthDialog extends React.Component<InteractiveAu
                 this.props.onFinished(false, null);
             } else {
                 this.setState({
-                    authError: result,
+                    authError: result as Error,
                 });
             }
         }
     };
 
-    private onUpdateStagePhase = (newStage: string | number, newPhase: string | number): void => {
+    private onUpdateStagePhase = (newStage: AuthType, newPhase: number): void => {
         // We copy the stage and stage phase params into state for title selection in render()
         this.setState({ uiaStage: newStage, uiaStagePhase: newPhase });
     };

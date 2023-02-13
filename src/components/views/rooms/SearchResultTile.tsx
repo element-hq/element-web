@@ -48,7 +48,7 @@ export default class SearchResultTile extends React.Component<IProps> {
     // A map of <callId, LegacyCallEventGrouper>
     private callEventGroupers = new Map<string, LegacyCallEventGrouper>();
 
-    public constructor(props, context) {
+    public constructor(props: IProps, context: React.ContextType<typeof RoomContext>) {
         super(props, context);
 
         this.buildLegacyCallEventGroupers(this.props.timeline);

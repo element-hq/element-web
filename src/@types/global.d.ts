@@ -218,7 +218,7 @@ declare global {
         processorCtor: (new (options?: AudioWorkletNodeOptions) => AudioWorkletProcessor) & {
             parameterDescriptors?: AudioParamDescriptor[];
         },
-    );
+    ): void;
 
     // eslint-disable-next-line no-var
     var grecaptcha:

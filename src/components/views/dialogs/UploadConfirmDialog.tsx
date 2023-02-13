@@ -39,7 +39,7 @@ export default class UploadConfirmDialog extends React.Component<IProps> {
         totalFiles: 1,
     };
 
-    public constructor(props) {
+    public constructor(props: IProps) {
         super(props);
 
         // Create a fresh `Blob` for previewing (even though `File` already is

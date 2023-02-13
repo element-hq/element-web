@@ -50,7 +50,7 @@ class ReactionPicker extends React.Component<IProps, IState> {
         this.addListeners();
     }
 
-    public componentDidUpdate(prevProps): void {
+    public componentDidUpdate(prevProps: IProps): void {
         if (prevProps.reactions !== this.props.reactions) {
             this.addListeners();
             this.onReactionsChange();
@@ -78,7 +78,7 @@ class ReactionPicker extends React.Component<IProps, IState> {
             return {};
         }
         const userId = MatrixClientPeg.get().getUserId();
-        const myAnnotations = this.props.reactions.getAnnotationsBySender()[userId] || [];
+        const myAnnotations = this.props.reactions.getAnnotationsBySender()[userId] || new Set<MatrixEvent>();
         return Object.fromEntries(
             [...myAnnotations]
                 .filter((event) => !event.isRedacted())

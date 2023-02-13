@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { ChangeEvent } from "react";
 
 import { _t } from "../../../../../languageHandler";
 import SdkConfig from "../../../../../SdkConfig";
@@ -116,7 +116,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                     <Field
                         className="mx_AppearanceUserSettingsTab_systemFont"
                         label={SettingsStore.getDisplayName("systemFont")}
-                        onChange={(value) => {
+                        onChange={(value: ChangeEvent<HTMLInputElement>) => {
                             this.setState({
                                 systemFont: value.target.value,
                             });

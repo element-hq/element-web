@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { createRef, ReactNode } from "react";
+import React, { createRef, ReactNode, SyntheticEvent } from "react";
 import classNames from "classnames";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { Room } from "matrix-js-sdk/src/models/room";
@@ -92,7 +92,7 @@ enum TabId {
 }
 
 class DMUserTile extends React.PureComponent<IDMUserTileProps> {
-    private onRemove = (e): void => {
+    private onRemove = (e: ButtonEvent): void => {
         // Stop the browser from highlighting text
         e.preventDefault();
         e.stopPropagation();
@@ -139,7 +139,7 @@ interface IDMRoomTileProps {
 }
 
 class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
-    private onClick = (e): void => {
+    private onClick = (e: ButtonEvent): void => {
         // Stop the browser from highlighting text
         e.preventDefault();
         e.stopPropagation();
@@ -271,6 +271,10 @@ interface InviteRoomProps extends BaseProps {
     roomId: string;
 }
 
+function isRoomInvite(props: Props): props is InviteRoomProps {
+    return props.kind === KIND_INVITE;
+}
+
 interface InviteCallProps extends BaseProps {
     kind: typeof KIND_CALL_TRANSFER;
 
@@ -311,7 +315,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
     private numberEntryFieldRef: React.RefObject<Field> = createRef();
     private unmounted = false;
 
-    public constructor(props) {
+    public constructor(props: Props) {
         super(props);
 
         if (props.kind === KIND_INVITE && !props.roomId) {
@@ -321,7 +325,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         }
 
         const alreadyInvited = new Set([MatrixClientPeg.get().getUserId(), SdkConfig.get("welcome_user_id")]);
-        if (props.roomId) {
+        if (isRoomInvite(props)) {
             const room = MatrixClientPeg.get().getRoom(props.roomId);
             if (!room) throw new Error("Room ID given to InviteDialog does not look like a room");
             room.getMembersWithMembership("invite").forEach((m) => alreadyInvited.add(m.userId));
@@ -361,7 +365,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         this.unmounted = true;
     }
 
-    private onConsultFirstChange = (ev): void => {
+    private onConsultFirstChange = (ev: React.ChangeEvent<HTMLInputElement>): void => {
         this.setState({ consultFirst: ev.target.checked });
     };
 
@@ -538,11 +542,11 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         this.props.onFinished(true);
     };
 
-    private onKeyDown = (e): void => {
+    private onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>): void => {
         if (this.state.busy) return;
 
         let handled = false;
-        const value = e.target.value.trim();
+        const value = e.currentTarget.value.trim();
         const action = getKeyBindingsManager().getAccessibilityAction(e);
 
         switch (action) {
@@ -692,7 +696,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         }
     };
 
-    private updateFilter = (e): void => {
+    private updateFilter = (e: React.ChangeEvent<HTMLInputElement>): void => {
         const term = e.target.value;
         this.setState({ filterText: term });
 
@@ -750,7 +754,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         }
     };
 
-    private onPaste = async (e): Promise<void> => {
+    private onPaste = async (e: React.ClipboardEvent): Promise<void> => {
         if (this.state.filterText) {
             // if the user has already typed something, just let them
             // paste normally.
@@ -825,7 +829,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         this.setState({ targets: [...this.state.targets, ...toAdd] });
     };
 
-    private onClickInputArea = (e): void => {
+    private onClickInputArea = (e: React.MouseEvent): void => {
         // Stop the browser from highlighting text
         e.preventDefault();
         e.stopPropagation();
@@ -835,7 +839,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         }
     };
 
-    private onUseDefaultIdentityServerClick = (e): void => {
+    private onUseDefaultIdentityServerClick = (e: ButtonEvent): void => {
         e.preventDefault();
 
         // Update the IS in account data. Actually using it may trigger terms.
@@ -844,7 +848,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         this.setState({ canUseIdentityServer: true, tryingIdentityServer: false });
     };
 
-    private onManageSettingsClick = (e): void => {
+    private onManageSettingsClick = (e: ButtonEvent): void => {
         e.preventDefault();
         dis.fire(Action.ViewUserSettings);
         this.props.onFinished(false);
@@ -864,8 +868,8 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         // Mix in the server results if we have any, but only if we're searching. We track the additional
         // members separately because we want to filter sourceMembers but trust the mixin arrays to have
         // the right members in them.
-        let priorityAdditionalMembers = []; // Shows up before our own suggestions, higher quality
-        let otherAdditionalMembers = []; // Shows up after our own suggestions, lower quality
+        let priorityAdditionalMembers: Result[] = []; // Shows up before our own suggestions, higher quality
+        let otherAdditionalMembers: Result[] = []; // Shows up after our own suggestions, lower quality
         const hasMixins = this.state.serverResultsMixin || this.state.threepidResultsMixin;
         if (this.state.filterText && hasMixins && kind === "suggestions") {
             // We don't want to duplicate members though, so just exclude anyone we've already seen.
@@ -1030,12 +1034,12 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         }
     }
 
-    private onDialFormSubmit = (ev): void => {
+    private onDialFormSubmit = (ev: SyntheticEvent): void => {
         ev.preventDefault();
         this.transferCall();
     };
 
-    private onDialChange = (ev): void => {
+    private onDialChange = (ev: React.ChangeEvent<HTMLInputElement>): void => {
         this.setState({ dialPadValue: ev.currentTarget.value });
     };
 
@@ -1066,9 +1070,9 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         this.setState({ currentTabId: tabId });
     };
 
-    private async onLinkClick(e): Promise<void> {
+    private async onLinkClick(e: React.MouseEvent<HTMLAnchorElement>): Promise<void> {
         e.preventDefault();
-        selectText(e.target);
+        selectText(e.currentTarget);
     }
 
     private get screenName(): ScreenName {

@@ -27,8 +27,8 @@ interface IState {
 }
 
 export default class NonUrgentToastContainer extends React.PureComponent<IProps, IState> {
-    public constructor(props, context) {
-        super(props, context);
+    public constructor(props: IProps) {
+        super(props);
 
         this.state = {
             toasts: NonUrgentToastStore.instance.components,

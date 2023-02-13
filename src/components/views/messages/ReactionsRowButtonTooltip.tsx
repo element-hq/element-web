@@ -35,6 +35,7 @@ interface IProps {
 
 export default class ReactionsRowButtonTooltip extends React.PureComponent<IProps> {
     public static contextType = MatrixClientContext;
+    public context!: React.ContextType<typeof MatrixClientContext>;
 
     public render(): JSX.Element {
         const { content, reactionEvents, mxEvent, visible } = this.props;
@@ -42,7 +43,7 @@ export default class ReactionsRowButtonTooltip extends React.PureComponent<IProp
         const room = this.context.getRoom(mxEvent.getRoomId());
         let tooltipLabel;
         if (room) {
-            const senders = [];
+            const senders: string[] = [];
             for (const reactionEvent of reactionEvents) {
                 const member = room.getMember(reactionEvent.getSender());
                 const name = member ? member.name : reactionEvent.getSender();

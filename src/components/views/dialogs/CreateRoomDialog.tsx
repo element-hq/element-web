@@ -62,7 +62,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
     private nameField = createRef<Field>();
     private aliasField = createRef<RoomAliasField>();
 
-    public constructor(props) {
+    public constructor(props: IProps) {
         super(props);
 
         this.supportsRestricted = !!this.props.parentSpace;

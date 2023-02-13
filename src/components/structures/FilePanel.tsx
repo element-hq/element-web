@@ -43,7 +43,7 @@ interface IProps {
 }
 
 interface IState {
-    timelineSet: EventTimelineSet;
+    timelineSet: EventTimelineSet | null;
     narrow: boolean;
 }
 
@@ -59,7 +59,7 @@ class FilePanel extends React.Component<IProps, IState> {
     public noRoom: boolean;
     private card = createRef<HTMLDivElement>();
 
-    public state = {
+    public state: IState = {
         timelineSet: null,
         narrow: false,
     };

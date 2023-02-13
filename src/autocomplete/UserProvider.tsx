@@ -110,17 +110,14 @@ export default class UserProvider extends AutocompleteProvider {
         // lazy-load user list into matcher
         if (!this.users) this.makeUsers();
 
-        let completions = [];
         const { command, range } = this.getCurrentCommand(rawQuery, selection, force);
 
-        if (!command) return completions;
-
-        const fullMatch = command[0];
+        const fullMatch = command?.[0];
         // Don't search if the query is a single "@"
         if (fullMatch && fullMatch !== "@") {
             // Don't include the '@' in our search query - it's only used as a way to trigger completion
             const query = fullMatch.startsWith("@") ? fullMatch.substring(1) : fullMatch;
-            completions = this.matcher.match(query, limit).map((user) => {
+            return this.matcher.match(query, limit).map((user) => {
                 const description = UserIdentifierCustomisations.getDisplayUserIdentifier(user.userId, {
                     roomId: this.room.roomId,
                     withDisplayName: true,
@@ -143,7 +140,7 @@ export default class UserProvider extends AutocompleteProvider {
                 };
             });
         }
-        return completions;
+        return [];
     }
 
     public getName(): string {
@@ -152,7 +149,7 @@ export default class UserProvider extends AutocompleteProvider {
 
     private makeUsers(): void {
         const events = this.room.getLiveTimeline().getEvents();
-        const lastSpoken = {};
+        const lastSpoken: Record<string, number> = {};
 
         for (const event of events) {
             lastSpoken[event.getSender()] = event.getTs();

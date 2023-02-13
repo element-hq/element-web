@@ -83,7 +83,7 @@ describe("ThreadView", () => {
         return renderResult;
     }
 
-    async function sendMessage(container, text): Promise<void> {
+    async function sendMessage(container: HTMLElement, text: string): Promise<void> {
         const composer = getByTestId(container, "basicmessagecomposer");
         await userEvent.click(composer);
         await userEvent.keyboard(text);
@@ -91,7 +91,7 @@ describe("ThreadView", () => {
         await userEvent.click(sendMessageBtn);
     }
 
-    function expectedMessageBody(rootEvent, message) {
+    function expectedMessageBody(rootEvent: MatrixEvent, message: string) {
         return {
             "body": message,
             "m.relates_to": {

@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { ComponentProps } from "react";
 import { fireEvent, render } from "@testing-library/react";
 import { PUSHER_ENABLED } from "matrix-js-sdk/src/@types/event";
 
@@ -28,11 +28,10 @@ describe("<DeviceDetails />", () => {
         isVerified: false,
         deviceType: DeviceType.Unknown,
     };
-    const defaultProps = {
+    const defaultProps: ComponentProps<typeof DeviceDetails> = {
         device: baseDevice,
         pusher: null,
         isSigningOut: false,
-        isLoading: false,
         onSignOutDevice: jest.fn(),
         saveDeviceName: jest.fn(),
         setPushNotifications: jest.fn(),

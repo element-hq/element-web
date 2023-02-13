@@ -131,7 +131,7 @@ interface IState {
     verifying: boolean;
     verifyError: string;
     verifyMsisdn: string;
-    addTask: any; // FIXME: When AddThreepid is TSfied
+    addTask: AddThreepid;
     continueDisabled: boolean;
     phoneCountry: string;
     newPhoneNumber: string;

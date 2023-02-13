@@ -29,7 +29,7 @@ const MXID1 = "@user1:server";
 const MXID2 = "@user2:server";
 const MXID3 = "@user3:server";
 
-const MXID_PROFILE_STATES = {
+const MXID_PROFILE_STATES: Record<string, Promise<any>> = {
     [MXID1]: Promise.resolve({}),
     [MXID2]: Promise.reject({ errcode: "M_FORBIDDEN" }),
     [MXID3]: Promise.reject({ errcode: "M_NOT_FOUND" }),

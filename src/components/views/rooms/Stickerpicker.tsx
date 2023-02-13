@@ -58,11 +58,11 @@ interface IState {
 }
 
 export default class Stickerpicker extends React.PureComponent<IProps, IState> {
-    public static defaultProps = {
+    public static defaultProps: Partial<IProps> = {
         threadId: null,
     };
 
-    public static currentWidget;
+    public static currentWidget?: IWidgetEvent;
 
     private dispatcherRef: string;
 

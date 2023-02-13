@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import url from "url";
+import { ComponentProps } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import type { Room } from "matrix-js-sdk/src/models/room";
@@ -76,7 +77,7 @@ export class IntegrationManagerInstance {
             return dialogTermsInteractionCallback(policyInfo, agreedUrls, "mx_TermsDialog_forIntegrationManager");
         });
 
-        const newProps = {};
+        const newProps: Partial<ComponentProps<typeof IntegrationManager>> = {};
         try {
             await client.connect();
             if (!client.hasCredentials()) {

@@ -40,7 +40,7 @@ describe("DateSeparator", () => {
     };
     const RealDate = global.Date;
     class MockDate extends Date {
-        constructor(date) {
+        constructor(date: string | number | Date) {
             super(date || now);
         }
     }

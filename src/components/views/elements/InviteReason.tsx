@@ -30,7 +30,7 @@ interface IState {
 }
 
 export default class InviteReason extends React.PureComponent<IProps, IState> {
-    public constructor(props) {
+    public constructor(props: IProps) {
         super(props);
         this.state = {
             // We hide the reason for invitation by default, since it can be a

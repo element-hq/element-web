@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from "react";
 // eslint-disable-next-line deprecate/import
-import { mount } from "enzyme";
+import { mount, ReactWrapper } from "enzyme";
 import { mocked } from "jest-mock";
 import { logger } from "matrix-js-sdk/src/logger";
 import { act } from "react-dom/test-utils";
@@ -71,7 +71,7 @@ describe("<RecordingPlayback />", () => {
         mocked(createAudioContext).mockReturnValue(mockAudioContext as unknown as AudioContext);
     });
 
-    const getPlayButton = (component) => findByTestId(component, "play-pause-button").at(0);
+    const getPlayButton = (component: ReactWrapper) => findByTestId(component, "play-pause-button").at(0);
 
     it("renders recording playback", () => {
         const playback = new Playback(new ArrayBuffer(8));

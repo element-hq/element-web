@@ -32,7 +32,7 @@ import {
 } from "../../../editor/operations";
 import { getCaretOffsetAndText, getRangeForSelection } from "../../../editor/dom";
 import Autocomplete, { generateCompletionDomId } from "../rooms/Autocomplete";
-import { getAutoCompleteCreator, Part, Type } from "../../../editor/parts";
+import { getAutoCompleteCreator, Part, SerializedPart, Type } from "../../../editor/parts";
 import { parseEvent, parsePlainTextMessage } from "../../../editor/deserialize";
 import { renderModel } from "../../../editor/render";
 import SettingsStore from "../../../settings/SettingsStore";
@@ -107,7 +107,7 @@ interface IProps {
     initialCaret?: DocumentOffset;
     disabled?: boolean;
 
-    onChange?();
+    onChange?(): void;
     onPaste?(event: ClipboardEvent<HTMLDivElement>, model: EditorModel): boolean;
 }
 
@@ -140,7 +140,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
     private readonly surroundWithHandle: string;
     private readonly historyManager = new HistoryManager();
 
-    public constructor(props) {
+    public constructor(props: IProps) {
         super(props);
         this.state = {
             showPillAvatar: SettingsStore.getValue("Pill.shouldShowPillAvatar"),
@@ -367,7 +367,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         let parts: Part[];
         if (partsText) {
             const serializedTextParts = JSON.parse(partsText);
-            parts = serializedTextParts.map((p) => partCreator.deserializePart(p));
+            parts = serializedTextParts.map((p: SerializedPart) => partCreator.deserializePart(p));
         } else {
             parts = parsePlainTextMessage(plainText, partCreator, { shouldEscape: false });
         }

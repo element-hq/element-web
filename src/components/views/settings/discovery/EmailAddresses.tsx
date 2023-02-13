@@ -22,7 +22,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { _t } from "../../../../languageHandler";
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import Modal from "../../../../Modal";
-import AddThreepid from "../../../../AddThreepid";
+import AddThreepid, { Binding } from "../../../../AddThreepid";
 import ErrorDialog from "../../dialogs/ErrorDialog";
 import AccessibleButton from "../../elements/AccessibleButton";
 
@@ -74,7 +74,7 @@ export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddr
         }
     }
 
-    private async changeBinding({ bind, label, errorTitle }): Promise<void> {
+    private async changeBinding({ bind, label, errorTitle }: Binding): Promise<void> {
         if (!(await MatrixClientPeg.get().doesServerSupportSeparateAddAndBind())) {
             return this.changeBindingTangledAddBind({ bind, label, errorTitle });
         }
@@ -111,7 +111,7 @@ export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddr
         }
     }
 
-    private async changeBindingTangledAddBind({ bind, label, errorTitle }): Promise<void> {
+    private async changeBindingTangledAddBind({ bind, label, errorTitle }: Binding): Promise<void> {
         const { medium, address } = this.props.email;
 
         const task = new AddThreepid();

@@ -16,7 +16,7 @@ limitations under the License.
 import { linkify, Type } from "../src/linkify-matrix";
 
 describe("linkify-matrix", () => {
-    const linkTypesByInitialCharacter = {
+    const linkTypesByInitialCharacter: Record<string, string> = {
         "#": "roomalias",
         "@": "userid",
     };

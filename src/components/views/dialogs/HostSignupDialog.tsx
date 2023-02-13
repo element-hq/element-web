@@ -155,7 +155,7 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
         });
     }
 
-    private onAccountDetailsDialogFinished = async (result): Promise<void> => {
+    private onAccountDetailsDialogFinished = async (result: boolean): Promise<void> => {
         if (result) {
             return this.sendAccountDetails();
         }

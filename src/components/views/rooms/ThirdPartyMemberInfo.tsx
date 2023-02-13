@@ -47,7 +47,7 @@ interface IState {
 export default class ThirdPartyMemberInfo extends React.Component<IProps, IState> {
     private room: Room;
 
-    public constructor(props) {
+    public constructor(props: IProps) {
         super(props);
 
         this.room = MatrixClientPeg.get().getRoom(this.props.event.getRoomId());
@@ -85,7 +85,7 @@ export default class ThirdPartyMemberInfo extends React.Component<IProps, IState
             const newDisplayName = ev.getContent().display_name;
             const isInvited = isValid3pidInvite(ev);
 
-            const newState = { invited: isInvited };
+            const newState = { invited: isInvited } as IState;
             if (newDisplayName) newState["displayName"] = newDisplayName;
             this.setState(newState);
         }

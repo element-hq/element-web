@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { ComponentProps } from "react";
 // eslint-disable-next-line deprecate/import
 import { mount } from "enzyme";
 import { LocationAssetType } from "matrix-js-sdk/src/@types/location";
@@ -46,7 +46,7 @@ describe("MLocationBody", () => {
             isGuest: jest.fn().mockReturnValue(false),
         });
         const defaultEvent = makeLocationEvent("geo:51.5076,-0.1276", LocationAssetType.Pin);
-        const defaultProps = {
+        const defaultProps: ComponentProps<typeof MLocationBody> = {
             mxEvent: defaultEvent,
             highlights: [],
             highlightLink: "",
@@ -79,7 +79,7 @@ describe("MLocationBody", () => {
         });
 
         describe("with error", () => {
-            let sdkConfigSpy;
+            let sdkConfigSpy: jest.SpyInstance<any>;
 
             beforeEach(() => {
                 // eat expected errors to keep console clean
@@ -171,7 +171,7 @@ describe("MLocationBody", () => {
                 const component = getComponent({ mxEvent: selfShareEvent });
 
                 // render self locations with user avatars
-                expect(component.find("SmartMarker").at(0).props()["roomMember"]).toEqual(member);
+                expect(component.find("SmartMarker").at(0).prop("roomMember")).toEqual(member);
             });
         });
     });

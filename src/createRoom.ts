@@ -29,7 +29,7 @@ import {
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { MatrixClientPeg } from "./MatrixClientPeg";
-import Modal from "./Modal";
+import Modal, { IHandle } from "./Modal";
 import { _t } from "./languageHandler";
 import dis from "./dispatcher/dispatcher";
 import * as Rooms from "./Rooms";
@@ -267,7 +267,7 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
         });
     }
 
-    let modal;
+    let modal: IHandle<any> | undefined;
     if (opts.spinner) modal = Modal.createDialog(Spinner, undefined, "mx_Dialog_spinner");
 
     let roomId: string;

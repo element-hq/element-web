@@ -83,7 +83,7 @@ describe("<PinnedMessagesCard />", () => {
     };
 
     const mountPins = async (room: Room): Promise<ReactWrapper<ComponentProps<typeof PinnedMessagesCard>>> => {
-        let pins;
+        let pins: ReactWrapper<ComponentProps<typeof PinnedMessagesCard>>;
         await act(async () => {
             pins = mount(
                 <PinnedMessagesCard
@@ -239,9 +239,9 @@ describe("<PinnedMessagesCard />", () => {
 
         const answers = (poll.unstableExtensibleEvent as PollStartEvent).answers;
         const responses = [
-            ["@alice:example.org", 0],
-            ["@bob:example.org", 0],
-            ["@eve:example.org", 1],
+            ["@alice:example.org", 0] as [string, number],
+            ["@bob:example.org", 0] as [string, number],
+            ["@eve:example.org", 1] as [string, number],
         ].map(([user, option], i) =>
             mkEvent({
                 ...PollResponseEvent.from([answers[option as number].id], poll.getId()!).serialize(),

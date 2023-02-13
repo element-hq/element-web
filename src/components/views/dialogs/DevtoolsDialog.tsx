@@ -91,7 +91,7 @@ const DevtoolsDialog: React.FC<IProps> = ({ roomId, onFinished }) => {
             <BaseTool onBack={onBack}>
                 {Object.entries(Tools).map(([category, tools]) => (
                     <div key={category}>
-                        <h3>{_t(categoryLabels[category])}</h3>
+                        <h3>{_t(categoryLabels[category as unknown as Category])}</h3>
                         {tools.map(([label, tool]) => {
                             const onClick = (): void => {
                                 setTool([label, tool]);

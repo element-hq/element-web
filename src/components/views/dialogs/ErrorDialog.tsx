@@ -46,9 +46,6 @@ interface IState {
 export default class ErrorDialog extends React.Component<IProps, IState> {
     public static defaultProps = {
         focus: true,
-        title: null,
-        description: null,
-        button: null,
     };
 
     private onClick = (): void => {

@@ -43,7 +43,7 @@ export default class NotificationPanel extends React.PureComponent<IProps, IStat
 
     private card = React.createRef<HTMLDivElement>();
 
-    public constructor(props) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {

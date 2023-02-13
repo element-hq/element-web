@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { ReactInstance } from "react";
 import ReactDom from "react-dom";
 
 interface IChildProps {
@@ -41,7 +41,7 @@ interface IProps {
  * automatic positional animation, look at react-shuffle or similar libraries.
  */
 export default class NodeAnimator extends React.Component<IProps> {
-    private nodes = {};
+    private nodes: Record<string, ReactInstance> = {};
     private children: { [key: string]: React.DetailedReactHTMLElement<any, HTMLElement> };
     public static defaultProps: Partial<IProps> = {
         startStyles: [],
@@ -65,7 +65,7 @@ export default class NodeAnimator extends React.Component<IProps> {
      */
     private applyStyles(node: HTMLElement, styles: React.CSSProperties): void {
         Object.entries(styles).forEach(([property, value]) => {
-            node.style[property] = value;
+            node.style[property as keyof Omit<CSSStyleDeclaration, "length" | "parentRule">] = value;
         });
     }
 

@@ -16,6 +16,7 @@ limitations under the License.
 
 // eslint-disable-next-line deprecate/import
 import { mount } from "enzyme";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { sleep } from "matrix-js-sdk/src/utils";
 import React from "react";
 import { act } from "react-dom/test-utils";
@@ -24,7 +25,7 @@ import { useUserDirectory } from "../../src/hooks/useUserDirectory";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import { stubClient } from "../test-utils";
 
-function UserDirectoryComponent({ onClick }) {
+function UserDirectoryComponent({ onClick }: { onClick(hook: ReturnType<typeof useUserDirectory>): void }) {
     const userDirectory = useUserDirectory();
 
     const { ready, loading, users } = userDirectory;
@@ -37,7 +38,7 @@ function UserDirectoryComponent({ onClick }) {
 }
 
 describe("useUserDirectory", () => {
-    let cli;
+    let cli: MatrixClient;
 
     beforeEach(() => {
         stubClient();
@@ -53,6 +54,7 @@ describe("useUserDirectory", () => {
                         display_name: query,
                     },
                 ],
+                limited: false,
             });
     });
 

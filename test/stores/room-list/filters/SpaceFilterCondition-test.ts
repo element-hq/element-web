@@ -20,7 +20,7 @@ import { Room } from "matrix-js-sdk/src/matrix";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import { FILTER_CHANGED } from "../../../../src/stores/room-list/filters/IFilterCondition";
 import { SpaceFilterCondition } from "../../../../src/stores/room-list/filters/SpaceFilterCondition";
-import { MetaSpace } from "../../../../src/stores/spaces";
+import { MetaSpace, SpaceKey } from "../../../../src/stores/spaces";
 import SpaceStore from "../../../../src/stores/spaces/SpaceStore";
 
 jest.mock("../../../../src/settings/SettingsStore");
@@ -50,8 +50,8 @@ describe("SpaceFilterCondition", () => {
     const user2Id = "@u2:server";
     const user3Id = "@u3:server";
     const makeMockGetValue =
-        (settings = {}) =>
-        (settingName, space) =>
+        (settings: Record<string, any> = {}) =>
+        (settingName: string, space: SpaceKey) =>
             settings[settingName]?.[space] || false;
 
     beforeEach(() => {
@@ -61,7 +61,7 @@ describe("SpaceFilterCondition", () => {
         SpaceStoreInstanceMock.isRoomInSpace.mockReturnValue(true);
     });
 
-    const initFilter = (space): SpaceFilterCondition => {
+    const initFilter = (space: SpaceKey): SpaceFilterCondition => {
         const filter = new SpaceFilterCondition();
         filter.updateSpace(space);
         jest.runOnlyPendingTimers();

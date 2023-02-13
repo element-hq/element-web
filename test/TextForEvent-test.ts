@@ -17,7 +17,7 @@ limitations under the License.
 import { EventType, MatrixClient, MatrixEvent, Room, RoomMember } from "matrix-js-sdk/src/matrix";
 import TestRenderer from "react-test-renderer";
 import { ReactElement } from "react";
-import { mocked } from "jest-mock";
+import { Mocked, mocked } from "jest-mock";
 
 import { textForEvent } from "../src/TextForEvent";
 import SettingsStore from "../src/settings/SettingsStore";
@@ -49,8 +49,14 @@ function mockPinnedEvent(pinnedMessageIds?: string[], prevPinnedMessageIds?: str
 // Helper function that renders a component to a plain text string.
 // Once snapshots are introduced in tests, this function will no longer be necessary,
 // and should be replaced with snapshots.
-function renderComponent(component): string {
-    const serializeObject = (object): string => {
+function renderComponent(component: TestRenderer.ReactTestRenderer): string {
+    const serializeObject = (
+        object:
+            | TestRenderer.ReactTestRendererJSON
+            | TestRenderer.ReactTestRendererJSON[]
+            | TestRenderer.ReactTestRendererNode
+            | TestRenderer.ReactTestRendererNode[],
+    ): string => {
         if (typeof object === "string") {
             return object === " " ? "" : object;
         }
@@ -59,7 +65,7 @@ function renderComponent(component): string {
             return object[0];
         }
 
-        if (object["type"] !== undefined && typeof object["children"] !== undefined) {
+        if (!Array.isArray(object) && object["type"] !== undefined && typeof object["children"] !== undefined) {
             return serializeObject(object.children);
         }
 
@@ -168,26 +174,26 @@ describe("TextForEvent", () => {
     });
 
     describe("textForPowerEvent()", () => {
-        let mockClient;
+        let mockClient: Mocked<MatrixClient>;
         const mockRoom = {
             getMember: jest.fn(),
-        };
+        } as unknown as Mocked<Room>;
 
         const userA = {
-            id: "@a",
+            userId: "@a",
             name: "Alice",
             rawDisplayName: "Alice",
-        };
+        } as RoomMember;
         const userB = {
-            id: "@b",
+            userId: "@b",
             name: "Bob (@b)",
             rawDisplayName: "Bob",
-        };
+        } as RoomMember;
         const userC = {
-            id: "@c",
+            userId: "@c",
             name: "Bob (@c)",
             rawDisplayName: "Bob",
-        };
+        } as RoomMember;
         interface PowerEventProps {
             usersDefault?: number;
             prevDefault?: number;
@@ -197,7 +203,7 @@ describe("TextForEvent", () => {
         const mockPowerEvent = ({ usersDefault, prevDefault, users, prevUsers }: PowerEventProps): MatrixEvent => {
             const mxEvent = new MatrixEvent({
                 type: EventType.RoomPowerLevels,
-                sender: userA.id,
+                sender: userA.userId,
                 state_key: "",
                 content: {
                     users_default: usersDefault,
@@ -218,7 +224,7 @@ describe("TextForEvent", () => {
             mockClient.getRoom.mockClear().mockReturnValue(mockRoom);
             mockRoom.getMember
                 .mockClear()
-                .mockImplementation((userId) => [userA, userB, userC].find((u) => u.id === userId));
+                .mockImplementation((userId) => [userA, userB, userC].find((u) => u.userId === userId));
             (SettingsStore.getValue as jest.Mock).mockReturnValue(true);
         });
 
@@ -231,10 +237,10 @@ describe("TextForEvent", () => {
         it("returns falsy when no users have changed power level", () => {
             const event = mockPowerEvent({
                 users: {
-                    [userA.id]: 100,
+                    [userA.userId]: 100,
                 },
                 prevUsers: {
-                    [userA.id]: 100,
+                    [userA.userId]: 100,
                 },
             });
             expect(textForEvent(event)).toBeFalsy();
@@ -245,10 +251,10 @@ describe("TextForEvent", () => {
                 usersDefault: 100,
                 prevDefault: 50,
                 users: {
-                    [userA.id]: 100,
+                    [userA.userId]: 100,
                 },
                 prevUsers: {
-                    [userA.id]: 50,
+                    [userA.userId]: 50,
                 },
             });
             expect(textForEvent(event)).toBeFalsy();
@@ -257,10 +263,10 @@ describe("TextForEvent", () => {
         it("returns correct message for a single user with changed power level", () => {
             const event = mockPowerEvent({
                 users: {
-                    [userB.id]: 100,
+                    [userB.userId]: 100,
                 },
                 prevUsers: {
-                    [userB.id]: 50,
+                    [userB.userId]: 50,
                 },
             });
             const expectedText = "Alice changed the power level of Bob (@b) from Moderator to Admin.";
@@ -272,10 +278,10 @@ describe("TextForEvent", () => {
                 usersDefault: 20,
                 prevDefault: 101,
                 users: {
-                    [userB.id]: 20,
+                    [userB.userId]: 20,
                 },
                 prevUsers: {
-                    [userB.id]: 50,
+                    [userB.userId]: 50,
                 },
             });
             const expectedText = "Alice changed the power level of Bob (@b) from Moderator to Default.";
@@ -285,10 +291,10 @@ describe("TextForEvent", () => {
         it("returns correct message for a single user with power level changed to a custom level", () => {
             const event = mockPowerEvent({
                 users: {
-                    [userB.id]: -1,
+                    [userB.userId]: -1,
                 },
                 prevUsers: {
-                    [userB.id]: 50,
+                    [userB.userId]: 50,
                 },
             });
             const expectedText = "Alice changed the power level of Bob (@b) from Moderator to Custom (-1).";
@@ -298,12 +304,12 @@ describe("TextForEvent", () => {
         it("returns correct message for a multiple power level changes", () => {
             const event = mockPowerEvent({
                 users: {
-                    [userB.id]: 100,
-                    [userC.id]: 50,
+                    [userB.userId]: 100,
+                    [userC.userId]: 50,
                 },
                 prevUsers: {
-                    [userB.id]: 50,
-                    [userC.id]: 101,
+                    [userB.userId]: 50,
+                    [userC.userId]: 101,
                 },
             });
             const expectedText =
@@ -315,7 +321,7 @@ describe("TextForEvent", () => {
 
     describe("textForCanonicalAliasEvent()", () => {
         const userA = {
-            id: "@a",
+            userId: "@a",
             name: "Alice",
         };
 
@@ -328,7 +334,7 @@ describe("TextForEvent", () => {
         const mockEvent = ({ alias, prevAlias, altAliases, prevAltAliases }: AliasEventProps): MatrixEvent =>
             new MatrixEvent({
                 type: EventType.RoomCanonicalAlias,
-                sender: userA.id,
+                sender: userA.userId,
                 state_key: "",
                 content: {
                     alias,
@@ -418,7 +424,7 @@ describe("TextForEvent", () => {
     });
 
     describe("textForPollStartEvent()", () => {
-        let pollEvent;
+        let pollEvent: MatrixEvent;
 
         beforeEach(() => {
             pollEvent = new MatrixEvent({
@@ -449,7 +455,7 @@ describe("TextForEvent", () => {
     });
 
     describe("textForMessageEvent()", () => {
-        let messageEvent;
+        let messageEvent: MatrixEvent;
 
         beforeEach(() => {
             messageEvent = new MatrixEvent({

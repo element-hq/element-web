@@ -143,7 +143,7 @@ export default class WidgetUtils {
         return new Promise((resolve, reject) => {
             // Tests an account data event, returning true if it's in the state
             // we're waiting for it to be in
-            function eventInIntendedState(ev): boolean {
+            function eventInIntendedState(ev: MatrixEvent): boolean {
                 if (!ev || !ev.getContent()) return false;
                 if (add) {
                     return ev.getContent()[widgetId] !== undefined;
@@ -158,7 +158,7 @@ export default class WidgetUtils {
                 return;
             }
 
-            function onAccountData(ev): void {
+            function onAccountData(ev: MatrixEvent): void {
                 const currentAccountDataEvent = MatrixClientPeg.get().getAccountData("m.widgets");
                 if (eventInIntendedState(currentAccountDataEvent)) {
                     MatrixClientPeg.get().removeListener(ClientEvent.AccountData, onAccountData);

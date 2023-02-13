@@ -14,7 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ComponentProps, RefObject, SyntheticEvent, KeyboardEvent, useContext, useRef, useState } from "react";
+import React, {
+    ComponentProps,
+    RefObject,
+    SyntheticEvent,
+    KeyboardEvent,
+    useContext,
+    useRef,
+    useState,
+    ChangeEvent,
+} from "react";
 import classNames from "classnames";
 import { RoomType } from "matrix-js-sdk/src/@types/event";
 import { ICreateRoomOpts } from "matrix-js-sdk/src/@types/requests";
@@ -190,7 +199,7 @@ export const SpaceCreateForm: React.FC<ISpaceCreateFormProps> = ({
                 label={_t("Name")}
                 autoFocus={true}
                 value={name}
-                onChange={(ev) => {
+                onChange={(ev: ChangeEvent<HTMLInputElement>) => {
                     const newName = ev.target.value;
                     if (!alias || alias === `#${nameToLocalpart(name)}:${domain}`) {
                         setAlias(`#${nameToLocalpart(newName)}:${domain}`);

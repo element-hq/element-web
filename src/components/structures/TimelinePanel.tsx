@@ -1316,7 +1316,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
      *
      * We pass it down to the scroll panel.
      */
-    public handleScrollKey = (ev: React.KeyboardEvent): void => {
+    public handleScrollKey = (ev: React.KeyboardEvent | KeyboardEvent): void => {
         if (!this.messagePanel.current) return;
 
         // jump to the live timeline on ctrl-end, rather than the end of the
@@ -1977,9 +1977,9 @@ class TimelinePanel extends React.Component<IProps, IState> {
  *
  * @return An event ID list for every timeline in every timelineSet
  */
-function serializeEventIdsFromTimelineSets(timelineSets): { [key: string]: string[] }[] {
+function serializeEventIdsFromTimelineSets(timelineSets: EventTimelineSet[]): { [key: string]: string[] }[] {
     const serializedEventIdsInTimelineSet = timelineSets.map((timelineSet) => {
-        const timelineMap = {};
+        const timelineMap: Record<string, string[]> = {};
 
         const timelines = timelineSet.getTimelines();
         const liveTimeline = timelineSet.getLiveTimeline();

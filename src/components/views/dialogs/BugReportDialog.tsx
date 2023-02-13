@@ -54,7 +54,7 @@ interface IState {
 export default class BugReportDialog extends React.Component<IProps, IState> {
     private unmounted: boolean;
 
-    public constructor(props) {
+    public constructor(props: IProps) {
         super(props);
         this.state = {
             sendLogs: true,

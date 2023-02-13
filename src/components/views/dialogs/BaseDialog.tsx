@@ -88,7 +88,7 @@ export default class BaseDialog extends React.Component<IProps> {
         fixedWidth: true,
     };
 
-    public constructor(props) {
+    public constructor(props: IProps) {
         super(props);
 
         this.matrixClient = MatrixClientPeg.get();
@@ -132,7 +132,7 @@ export default class BaseDialog extends React.Component<IProps> {
             headerImage = <img className="mx_Dialog_titleImage" src={this.props.headerImage} alt="" />;
         }
 
-        const lockProps = {
+        const lockProps: Record<string, any> = {
             "onKeyDown": this.onKeyDown,
             "role": "dialog",
             // This should point to a node describing the dialog.

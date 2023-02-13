@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { Optional } from "matrix-events-sdk";
-import { EventType, MatrixEvent, MsgType, RelationType, Room, RoomMember } from "matrix-js-sdk/src/matrix";
+import { EventType, IContent, MatrixEvent, MsgType, RelationType, Room, RoomMember } from "matrix-js-sdk/src/matrix";
 
 import { SdkContextClass } from "../../../src/contexts/SDKContext";
 import {
@@ -41,7 +41,7 @@ export const mkVoiceBroadcastInfoStateEvent = (
     startedInfoEvent?: MatrixEvent,
     lastChunkSequence?: number,
 ): MatrixEvent => {
-    const relationContent = {};
+    const relationContent: IContent = {};
 
     if (startedInfoEvent) {
         relationContent["m.relates_to"] = {

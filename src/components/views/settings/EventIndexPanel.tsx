@@ -35,7 +35,7 @@ interface IState {
 }
 
 export default class EventIndexPanel extends React.Component<{}, IState> {
-    public constructor(props) {
+    public constructor(props: {}) {
         super(props);
 
         this.state = {

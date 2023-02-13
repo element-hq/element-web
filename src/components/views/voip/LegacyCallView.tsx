@@ -311,7 +311,7 @@ export default class LegacyCallView extends React.Component<IProps, IState> {
     // we register global shortcuts here, they *must not conflict* with local shortcuts elsewhere or both will fire
     // Note that this assumes we always have a LegacyCallView on screen at any given time
     // LegacyCallHandler would probably be a better place for this
-    private onNativeKeyDown = (ev): void => {
+    private onNativeKeyDown = (ev: KeyboardEvent): void => {
         let handled = false;
 
         const callAction = getKeyBindingsManager().getCallAction(ev);

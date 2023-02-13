@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { fireEvent, render } from "@testing-library/react";
+import { fireEvent, render, RenderResult } from "@testing-library/react";
 
 import StyledRadioGroup from "../../../../src/components/views/elements/StyledRadioGroup";
 
@@ -44,8 +44,10 @@ describe("<StyledRadioGroup />", () => {
     };
     const getComponent = (props = {}) => render(<StyledRadioGroup {...defaultProps} {...props} />);
 
-    const getInputByValue = (component, value) => component.container.querySelector(`input[value="${value}"]`);
-    const getCheckedInput = (component) => component.container.querySelector("input[checked]");
+    const getInputByValue = (component: RenderResult, value: string) =>
+        component.container.querySelector<HTMLInputElement>(`input[value="${value}"]`);
+    const getCheckedInput = (component: RenderResult) =>
+        component.container.querySelector<HTMLInputElement>("input[checked]");
 
     it("renders radios correctly when no value is provided", () => {
         const component = getComponent();

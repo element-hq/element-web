@@ -54,7 +54,7 @@ export default class RoomListActions {
         oldIndex: number | null,
         newIndex: number | null,
     ): AsyncActionPayload {
-        let metaData = null;
+        let metaData: Parameters<MatrixClient["setRoomTag"]>[2] | null = null;
 
         // Is the tag ordered manually?
         const store = RoomListStore.instance;
@@ -81,7 +81,7 @@ export default class RoomListActions {
         return asyncAction(
             "RoomListActions.tagRoom",
             () => {
-                const promises = [];
+                const promises: Promise<any>[] = [];
                 const roomId = room.roomId;
 
                 // Evil hack to get DMs behaving
@@ -120,7 +120,7 @@ export default class RoomListActions {
                 if (newTag && newTag !== DefaultTagID.DM && (hasChangedSubLists || metaData)) {
                     // metaData is the body of the PUT to set the tag, so it must
                     // at least be an empty object.
-                    metaData = metaData || {};
+                    metaData = metaData || ({} as typeof metaData);
 
                     const promiseToAdd = matrixClient.setRoomTag(roomId, newTag, metaData).catch(function (err) {
                         logger.error("Failed to add tag " + newTag + " to room: " + err);

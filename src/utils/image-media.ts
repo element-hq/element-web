@@ -15,13 +15,13 @@ limitations under the License.
 */
 
 import { BlurhashEncoder } from "../BlurhashEncoder";
+import { IEncryptedFile } from "../customisations/models/IMediaEventContent";
 
 type ThumbnailableElement = HTMLImageElement | HTMLVideoElement;
 
 interface IThumbnail {
     info: {
-        // eslint-disable-next-line camelcase
-        thumbnail_info: {
+        thumbnail_info?: {
             w: number;
             h: number;
             mimetype: string;
@@ -30,6 +30,8 @@ interface IThumbnail {
         w: number;
         h: number;
         [BLURHASH_FIELD]: string;
+        thumbnail_url?: string;
+        thumbnail_file?: IEncryptedFile;
     };
     thumbnail: Blob;
 }

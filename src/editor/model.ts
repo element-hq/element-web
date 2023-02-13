@@ -272,11 +272,11 @@ export default class EditorModel {
     };
 
     private mergeAdjacentParts(): void {
-        let prevPart;
+        let prevPart: Part | undefined;
         for (let i = 0; i < this._parts.length; ++i) {
             let part = this._parts[i];
             const isEmpty = !part.text.length;
-            const isMerged = !isEmpty && prevPart && prevPart.merge(part);
+            const isMerged = !isEmpty && prevPart && prevPart.merge?.(part);
             if (isEmpty || isMerged) {
                 // remove empty or merged part
                 part = prevPart;

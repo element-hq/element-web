@@ -55,7 +55,7 @@ export default class AuxPanel extends React.Component<IProps, IState> {
         showApps: true,
     };
 
-    public constructor(props) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {
@@ -76,7 +76,7 @@ export default class AuxPanel extends React.Component<IProps, IState> {
         }
     }
 
-    public shouldComponentUpdate(nextProps, nextState): boolean {
+    public shouldComponentUpdate(nextProps: IProps, nextState: IState): boolean {
         return objectHasDiff(this.props, nextProps) || objectHasDiff(this.state, nextState);
     }
 
@@ -146,9 +146,9 @@ export default class AuxPanel extends React.Component<IProps, IState> {
             );
         }
 
-        let stateViews = null;
+        let stateViews: JSX.Element | null = null;
         if (this.state.counters && SettingsStore.getValue("feature_state_counters")) {
-            const counters = [];
+            const counters: JSX.Element[] = [];
 
             this.state.counters.forEach((counter, idx) => {
                 const title = counter.title;

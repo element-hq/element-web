@@ -24,7 +24,7 @@ import { mockPlatformPeg } from "../../../../../test-utils/platform";
 const PATH_TO_KEYBOARD_SHORTCUTS = "../../../../../../src/accessibility/KeyboardShortcuts";
 const PATH_TO_KEYBOARD_SHORTCUT_UTILS = "../../../../../../src/accessibility/KeyboardShortcutUtils";
 
-const mockKeyboardShortcuts = (override) => {
+const mockKeyboardShortcuts = (override: Record<string, any>) => {
     jest.doMock(PATH_TO_KEYBOARD_SHORTCUTS, () => {
         const original = jest.requireActual(PATH_TO_KEYBOARD_SHORTCUTS);
         return {
@@ -34,7 +34,7 @@ const mockKeyboardShortcuts = (override) => {
     });
 };
 
-const mockKeyboardShortcutUtils = (override) => {
+const mockKeyboardShortcutUtils = (override: Record<string, any>) => {
     jest.doMock(PATH_TO_KEYBOARD_SHORTCUT_UTILS, () => {
         const original = jest.requireActual(PATH_TO_KEYBOARD_SHORTCUT_UTILS);
         return {
@@ -68,7 +68,7 @@ describe("KeyboardUserSettingsTab", () => {
             },
         });
         mockKeyboardShortcutUtils({
-            getKeyboardShortcutValue: (name) => {
+            getKeyboardShortcutValue: (name: string) => {
                 switch (name) {
                     case "keybind1":
                         return {
@@ -88,7 +88,7 @@ describe("KeyboardUserSettingsTab", () => {
                     }
                 }
             },
-            getKeyboardShortcutDisplayName: (name) => {
+            getKeyboardShortcutDisplayName: (name: string) => {
                 switch (name) {
                     case "keybind1":
                         return "Cancel replying to a message";

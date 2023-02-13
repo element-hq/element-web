@@ -81,7 +81,7 @@ export default class MultiInviter {
      * @param {boolean} sendSharedHistoryKeys whether to share e2ee keys with the invitees if applicable.
      * @returns {Promise} Resolved when all invitations in the queue are complete
      */
-    public invite(addresses, reason?: string, sendSharedHistoryKeys = false): Promise<CompletionStates> {
+    public invite(addresses: string[], reason?: string, sendSharedHistoryKeys = false): Promise<CompletionStates> {
         if (this.addresses.length > 0) {
             throw new Error("Already inviting/invited");
         }

@@ -68,7 +68,7 @@ export default class Tooltip extends React.PureComponent<ITooltipProps, State> {
         alignment: Alignment.Natural,
     };
 
-    public constructor(props) {
+    public constructor(props: ITooltipProps) {
         super(props);
 
         this.state = {};
@@ -92,7 +92,7 @@ export default class Tooltip extends React.PureComponent<ITooltipProps, State> {
         this.updatePosition();
     }
 
-    public componentDidUpdate(prevProps): void {
+    public componentDidUpdate(prevProps: ITooltipProps): void {
         if (objectHasDiff(prevProps, this.props)) {
             this.updatePosition();
         }

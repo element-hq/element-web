@@ -104,7 +104,7 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
         onJoinClick() {},
     };
 
-    public constructor(props) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {
@@ -116,7 +116,7 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
         this.checkInvitedEmail();
     }
 
-    public componentDidUpdate(prevProps, prevState): void {
+    public componentDidUpdate(prevProps: IProps, prevState: IState): void {
         if (this.props.invitedEmail !== prevProps.invitedEmail || this.props.inviterName !== prevProps.inviterName) {
             this.checkInvitedEmail();
         }
@@ -474,7 +474,7 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
                 const avatar = <RoomAvatar room={this.props.room} oobData={this.props.oobData} />;
 
                 const inviteMember = this.getInviteMember();
-                let inviterElement;
+                let inviterElement: JSX.Element;
                 if (inviteMember) {
                     inviterElement = (
                         <span>

@@ -49,7 +49,7 @@ interface IState {
 export default class VerificationRequestToast extends React.PureComponent<IProps, IState> {
     private intervalHandle: number;
 
-    public constructor(props) {
+    public constructor(props: IProps) {
         super(props);
         this.state = { counter: Math.ceil(props.request.timeout / 1000) };
     }

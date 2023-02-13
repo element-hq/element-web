@@ -25,6 +25,7 @@ import React, {
     Reducer,
     Dispatch,
     RefObject,
+    ReactNode,
 } from "react";
 
 import { getKeyBindingsManager } from "../KeyBindingsManager";
@@ -158,8 +159,8 @@ interface IProps {
     handleHomeEnd?: boolean;
     handleUpDown?: boolean;
     handleLeftRight?: boolean;
-    children(renderProps: { onKeyDownHandler(ev: React.KeyboardEvent) });
-    onKeyDown?(ev: React.KeyboardEvent, state: IState);
+    children(renderProps: { onKeyDownHandler(ev: React.KeyboardEvent): void }): ReactNode;
+    onKeyDown?(ev: React.KeyboardEvent, state: IState): void;
 }
 
 export const findSiblingElement = (

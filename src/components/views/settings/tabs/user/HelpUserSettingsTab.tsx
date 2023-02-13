@@ -42,7 +42,7 @@ interface IState {
 }
 
 export default class HelpUserSettingsTab extends React.Component<IProps, IState> {
-    public constructor(props) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {
@@ -80,7 +80,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
         };
     }
 
-    private onClearCacheAndReload = (e): void => {
+    private onClearCacheAndReload = (): void => {
         if (!PlatformPeg.get()) return;
 
         // Dev note: please keep this log line, it's useful when troubleshooting a MatrixClient suddenly
@@ -94,11 +94,11 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
             });
     };
 
-    private onBugReport = (e): void => {
+    private onBugReport = (): void => {
         Modal.createDialog(BugReportDialog, {});
     };
 
-    private onStartBotChat = (e): void => {
+    private onStartBotChat = (): void => {
         this.props.closeSettingsFn();
         createRoom({
             dmUserId: SdkConfig.get("welcome_user_id"),

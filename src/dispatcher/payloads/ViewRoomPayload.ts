@@ -21,6 +21,7 @@ import { ActionPayload } from "../payloads";
 import { Action } from "../actions";
 import { IOOBData, IThreepidInvite } from "../../stores/ThreepidInviteStore";
 import { IOpts } from "../../createRoom";
+import { JoinRoomPayload } from "./JoinRoomPayload";
 
 /* eslint-disable camelcase */
 export interface ViewRoomPayload extends Pick<ActionPayload, "action"> {
@@ -48,6 +49,7 @@ export interface ViewRoomPayload extends Pick<ActionPayload, "action"> {
     show_room_tile?: boolean; // Whether to ensure that the room tile is visible in the room list
     clear_search?: boolean; // Whether to clear the room list search
     view_call?: boolean; // Whether to view the call or call lobby for the room
+    opts?: JoinRoomPayload["opts"];
 
     deferred_action?: ActionPayload; // Action to fire after MatrixChat handles this ViewRoom action
 

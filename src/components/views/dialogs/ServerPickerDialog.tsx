@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { createRef } from "react";
+import React, { ChangeEvent, createRef, SyntheticEvent } from "react";
 import { AutoDiscovery } from "matrix-js-sdk/src/autodiscovery";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -45,7 +45,7 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
     private readonly fieldRef = createRef<Field>();
     private validatedConf: ValidatedServerConfig;
 
-    public constructor(props) {
+    public constructor(props: IProps) {
         super(props);
 
         const config = SdkConfig.get();
@@ -75,7 +75,7 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
         this.setState({ defaultChosen: false });
     };
 
-    private onHomeserverChange = (ev): void => {
+    private onHomeserverChange = (ev: ChangeEvent<HTMLInputElement>): void => {
         this.setState({ otherHomeserver: ev.target.value });
     };
 
@@ -149,7 +149,7 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
 
     private onHomeserverValidate = (fieldState: IFieldState): Promise<IValidationResult> => this.validate(fieldState);
 
-    private onSubmit = async (ev): Promise<void> => {
+    private onSubmit = async (ev: SyntheticEvent): Promise<void> => {
         ev.preventDefault();
 
         const valid = await this.fieldRef.current.validate({ allowEmpty: false });

@@ -21,6 +21,7 @@ import { SERVICE_TYPES } from "matrix-js-sdk/src/service-types";
 import { _t, pickBestLanguage } from "../../../languageHandler";
 import DialogButtons from "../elements/DialogButtons";
 import BaseDialog from "./BaseDialog";
+import { ServicePolicyPair } from "../../../Terms";
 
 interface ITermsCheckboxProps {
     onChange: (url: string, checked: boolean) => void;
@@ -43,7 +44,7 @@ interface ITermsDialogProps {
      * Array of [Service, policies] pairs, where policies is the response from the
      * /terms endpoint for that service
      */
-    policiesAndServicePairs: any[];
+    policiesAndServicePairs: ServicePolicyPair[];
 
     /**
      * urls that the user has already agreed to
@@ -63,7 +64,7 @@ interface IState {
 }
 
 export default class TermsDialog extends React.PureComponent<ITermsDialogProps, IState> {
-    public constructor(props) {
+    public constructor(props: ITermsDialogProps) {
         super(props);
         this.state = {
             // url -> boolean

@@ -34,12 +34,12 @@ interface IState {
  */
 export default class LiveRecordingClock extends React.PureComponent<IProps, IState> {
     private seconds = 0;
-    private scheduledUpdate = new MarkedExecution(
+    private scheduledUpdate: MarkedExecution = new MarkedExecution(
         () => this.updateClock(),
         () => requestAnimationFrame(() => this.scheduledUpdate.trigger()),
     );
 
-    public constructor(props) {
+    public constructor(props: IProps) {
         super(props);
         this.state = {
             seconds: 0,

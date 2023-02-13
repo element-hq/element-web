@@ -35,7 +35,7 @@ interface IState {
 }
 
 export default class VerificationRequestDialog extends React.Component<IProps, IState> {
-    public constructor(props) {
+    public constructor(props: IProps) {
         super(props);
         this.state = {
             verificationRequest: this.props.verificationRequest,

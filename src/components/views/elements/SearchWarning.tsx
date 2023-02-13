@@ -23,7 +23,7 @@ import SdkConfig from "../../../SdkConfig";
 import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { UserTab } from "../dialogs/UserTab";
-import AccessibleButton from "./AccessibleButton";
+import AccessibleButton, { ButtonEvent } from "./AccessibleButton";
 
 export enum WarningKind {
     Files,
@@ -49,7 +49,7 @@ export default function SearchWarning({ isRoomEncrypted, kind }: IProps): JSX.El
                         a: (sub) => (
                             <AccessibleButton
                                 kind="link_inline"
-                                onClick={(evt) => {
+                                onClick={(evt: ButtonEvent) => {
                                     evt.preventDefault();
                                     dis.dispatch({
                                         action: Action.ViewUserSettings,

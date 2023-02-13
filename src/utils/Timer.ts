@@ -30,7 +30,7 @@ export default class Timer {
     private startTs?: number;
     private promise: Promise<void>;
     private resolve: () => void;
-    private reject: (Error) => void;
+    private reject: (err: Error) => void;
 
     public constructor(private timeout: number) {
         this.setNotStarted();

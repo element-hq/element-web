@@ -37,7 +37,7 @@ interface IState {
 }
 
 export default class TileErrorBoundary extends React.Component<IProps, IState> {
-    public constructor(props) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {

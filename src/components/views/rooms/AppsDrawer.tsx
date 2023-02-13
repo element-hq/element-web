@@ -45,8 +45,7 @@ interface IProps {
 }
 
 interface IState {
-    // @ts-ignore - TS wants a string key, but we know better
-    apps: { [id: Container]: IApp[] };
+    apps: Partial<{ [id in Container]: IApp[] }>;
     resizingVertical: boolean; // true when changing the height of the apps drawer
     resizingHorizontal: boolean; // true when changing the distribution of the width between widgets
     resizing: boolean;
@@ -203,10 +202,9 @@ export default class AppsDrawer extends React.Component<IProps, IState> {
                 break;
         }
     };
-    // @ts-ignore - TS wants a string key, but we know better
-    private getApps = (): { [id: Container]: IApp[] } => {
-        // @ts-ignore
-        const appsDict: { [id: Container]: IApp[] } = {};
+
+    private getApps = (): Partial<{ [id in Container]: IApp[] }> => {
+        const appsDict: Partial<{ [id in Container]: IApp[] }> = {};
         appsDict[Container.Top] = WidgetLayoutStore.instance.getContainerWidgets(this.props.room, Container.Top);
         appsDict[Container.Center] = WidgetLayoutStore.instance.getContainerWidgets(this.props.room, Container.Center);
         return appsDict;

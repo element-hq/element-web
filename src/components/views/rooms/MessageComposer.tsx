@@ -265,7 +265,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
         this.voiceRecording = null;
     }
 
-    private onTombstoneClick = (ev): void => {
+    private onTombstoneClick = (ev: ButtonEvent): void => {
         ev.preventDefault();
 
         const replacementRoomId = this.context.tombstone.getContent()["replacement_room"];
@@ -406,7 +406,7 @@ export class MessageComposer extends React.Component<IProps, IState> {
         });
     };
 
-    private onRecordingEndingSoon = ({ secondsLeft }): void => {
+    private onRecordingEndingSoon = ({ secondsLeft }: { secondsLeft: number }): void => {
         this.setState({ recordingTimeLeftSeconds: secondsLeft });
         window.setTimeout(() => this.setState({ recordingTimeLeftSeconds: null }), 3000);
     };

@@ -72,17 +72,15 @@ describe("IncompatibleController", () => {
     describe("getValueOverride()", () => {
         it("returns forced value when setting is incompatible", () => {
             settingsGetValueSpy.mockReturnValue(true);
-            const forcedValue = { key: null };
-            const controller = new IncompatibleController("feature_spotlight", forcedValue);
+            const controller = new IncompatibleController("feature_spotlight", { key: null });
             expect(
                 controller.getValueOverride(SettingLevel.ACCOUNT, "$room:server", true, SettingLevel.ACCOUNT),
-            ).toEqual(forcedValue);
+            ).toEqual({ key: null });
         });
 
         it("returns null when setting is not incompatible", () => {
             settingsGetValueSpy.mockReturnValue(false);
-            const forcedValue = { key: null };
-            const controller = new IncompatibleController("feature_spotlight", forcedValue);
+            const controller = new IncompatibleController("feature_spotlight", { key: null });
             expect(
                 controller.getValueOverride(SettingLevel.ACCOUNT, "$room:server", true, SettingLevel.ACCOUNT),
             ).toEqual(null);

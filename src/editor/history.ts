@@ -47,7 +47,7 @@ export default class HistoryManager {
         this.removedSinceLastPush = false;
     }
 
-    private shouldPush(inputType, diff): boolean {
+    private shouldPush(inputType: string, diff: IDiff): boolean {
         // right now we can only push a step after
         // the input has been applied to the model,
         // so we can't push the state before something happened.

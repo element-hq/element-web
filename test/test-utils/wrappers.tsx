@@ -26,7 +26,7 @@ type WrapperProps<T> = { wrappedRef?: RefCallback<ComponentType<T>> } & T;
 export function wrapInMatrixClientContext<T>(WrappedComponent: ComponentType<T>): ComponentType<WrapperProps<T>> {
     class Wrapper extends React.Component<WrapperProps<T>> {
         _matrixClient: MatrixClient;
-        constructor(props) {
+        constructor(props: WrapperProps<T>) {
             super(props);
 
             this._matrixClient = peg.get();

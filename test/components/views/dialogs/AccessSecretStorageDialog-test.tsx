@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { ComponentProps } from "react";
 import { IPassphraseInfo } from "matrix-js-sdk/src/crypto/api";
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -29,7 +29,7 @@ const securityKey = "EsTc WKmb ivvk jLS7 Y1NH 5CcQ mP1E JJwj B3Fd pFWm t4Dp dbyu
 describe("AccessSecretStorageDialog", () => {
     let mockClient: Mocked<MatrixClient>;
 
-    const defaultProps = {
+    const defaultProps: ComponentProps<typeof AccessSecretStorageDialog> = {
         onFinished: jest.fn(),
         checkPrivateKey: jest.fn(),
         keyInfo: undefined,

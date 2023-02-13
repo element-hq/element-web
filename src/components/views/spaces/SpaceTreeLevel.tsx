@@ -199,7 +199,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
 
     private buttonRef = createRef<HTMLDivElement>();
 
-    public constructor(props) {
+    public constructor(props: IItemProps) {
         super(props);
 
         const collapsed = SpaceTreeLevelLayoutStore.instance.getSpaceCollapsedState(

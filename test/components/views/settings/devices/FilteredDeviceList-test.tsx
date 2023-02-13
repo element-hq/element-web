@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { ComponentProps } from "react";
 import { act, fireEvent, render } from "@testing-library/react";
 
 import { FilteredDeviceList } from "../../../../../src/components/views/settings/devices/FilteredDeviceList";
@@ -59,13 +59,12 @@ describe("<FilteredDeviceList />", () => {
         last_seen_ts: Date.now() - MS_DAY * 100,
         deviceType: DeviceType.Unknown,
     };
-    const defaultProps = {
+    const defaultProps: ComponentProps<typeof FilteredDeviceList> = {
         onFilterChange: jest.fn(),
         onDeviceExpandToggle: jest.fn(),
         onSignOutDevices: jest.fn(),
         saveDeviceName: jest.fn(),
         setPushNotifications: jest.fn(),
-        setPusherEnabled: jest.fn(),
         setSelectedDeviceIds: jest.fn(),
         localNotificationSettings: new Map(),
         expandedDeviceIds: [],

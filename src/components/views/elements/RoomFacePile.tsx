@@ -42,7 +42,7 @@ const RoomFacePile: FC<IProps> = ({ room, onlyKnownUsers = true, numShown = DEFA
     const count = members.length;
 
     // sort users with an explicit avatar first
-    const iteratees = [(member) => (member.getMxcAvatarUrl() ? 0 : 1)];
+    const iteratees = [(member: RoomMember) => (member.getMxcAvatarUrl() ? 0 : 1)];
     if (onlyKnownUsers) {
         members = members.filter(isKnownMember);
     } else {

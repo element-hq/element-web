@@ -41,8 +41,8 @@ describe("isSelfLocation", () => {
             [M_TEXT.name]: "",
             [M_TIMESTAMP.name]: 0,
             // Note: no m.asset!
-        };
-        expect(isSelfLocation(content as ILocationContent)).toBe(true);
+        } as unknown as ILocationContent;
+        expect(isSelfLocation(content)).toBe(true);
     });
 
     it("Returns true for a missing m.asset type", () => {
@@ -56,8 +56,8 @@ describe("isSelfLocation", () => {
             [M_ASSET.name]: {
                 // Note: no type!
             },
-        };
-        expect(isSelfLocation(content as ILocationContent)).toBe(true);
+        } as unknown as ILocationContent;
+        expect(isSelfLocation(content)).toBe(true);
     });
 
     it("Returns false for an unknown asset type", () => {

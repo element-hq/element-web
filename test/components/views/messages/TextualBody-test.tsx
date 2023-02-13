@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { MockedObject } from "jest-mock";
 import { render } from "@testing-library/react";
 
@@ -38,9 +38,9 @@ describe("<TextualBody />", () => {
     beforeEach(() => {
         defaultMatrixClient = getMockClientWithEventEmitter({
             getRoom: () => defaultRoom,
-            getAccountData: () => undefined,
+            getAccountData: (): MatrixEvent | undefined => undefined,
             isGuest: () => false,
-            mxcUrlToHttp: (s) => s,
+            mxcUrlToHttp: (s: string) => s,
         });
     });
 
@@ -56,7 +56,7 @@ describe("<TextualBody />", () => {
     });
     const defaultProps = {
         mxEvent: defaultEvent,
-        highlights: [],
+        highlights: [] as string[],
         highlightLink: "",
         onMessageAllowed: jest.fn(),
         onHeightChanged: jest.fn(),
@@ -158,17 +158,17 @@ describe("<TextualBody />", () => {
     });
 
     describe("renders formatted m.text correctly", () => {
-        let matrixClient;
+        let matrixClient: MatrixClient;
         beforeEach(() => {
             matrixClient = getMockClientWithEventEmitter({
                 getRoom: () => mkStubRoom("room_id", "room name", undefined),
-                getAccountData: () => undefined,
+                getAccountData: (): MatrixEvent | undefined => undefined,
                 getUserId: () => "@me:my_server",
                 getHomeserverUrl: () => "https://my_server/",
-                on: () => undefined,
-                removeListener: () => undefined,
+                on: (): void => undefined,
+                removeListener: (): void => undefined,
                 isGuest: () => false,
-                mxcUrlToHttp: (s) => s,
+                mxcUrlToHttp: (s: string) => s,
             });
             DMRoomMap.makeShared();
         });
@@ -375,10 +375,10 @@ describe("<TextualBody />", () => {
 
         const matrixClient = getMockClientWithEventEmitter({
             getRoom: () => mkStubRoom("room_id", "room name", undefined),
-            getAccountData: () => undefined,
-            getUrlPreview: (url) => new Promise(() => {}),
+            getAccountData: (): MatrixClient | undefined => undefined,
+            getUrlPreview: (url: string) => new Promise(() => {}),
             isGuest: () => false,
-            mxcUrlToHttp: (s) => s,
+            mxcUrlToHttp: (s: string) => s,
         });
         DMRoomMap.makeShared();
 

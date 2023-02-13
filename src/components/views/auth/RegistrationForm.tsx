@@ -15,18 +15,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { BaseSyntheticEvent } from "react";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { logger } from "matrix-js-sdk/src/logger";
 import { MatrixError } from "matrix-js-sdk/src/matrix";
 
 import * as Email from "../../../email";
-import { looksValid as phoneNumberLooksValid } from "../../../phonenumber";
+import { looksValid as phoneNumberLooksValid, PhoneNumberCountryDefinition } from "../../../phonenumber";
 import Modal from "../../../Modal";
 import { _t, _td } from "../../../languageHandler";
 import SdkConfig from "../../../SdkConfig";
 import { SAFE_LOCALPART_REGEX } from "../../../Registration";
-import withValidation, { IValidationResult } from "../elements/Validation";
+import withValidation, { IFieldState, IValidationResult } from "../elements/Validation";
 import { ValidatedServerConfig } from "../../../utils/ValidatedServerConfig";
 import EmailField from "./EmailField";
 import PassphraseField from "./PassphraseField";
@@ -95,12 +95,18 @@ interface IState {
  * A pure UI component which displays a registration form.
  */
 export default class RegistrationForm extends React.PureComponent<IProps, IState> {
+    private [RegistrationField.Email]: Field;
+    private [RegistrationField.Password]: Field;
+    private [RegistrationField.PasswordConfirm]: Field;
+    private [RegistrationField.Username]: Field;
+    private [RegistrationField.PhoneNumber]: Field;
+
     public static defaultProps = {
         onValidationChange: logger.error,
         canSubmit: true,
     };
 
-    public constructor(props) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {
@@ -115,7 +121,9 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         };
     }
 
-    private onSubmit = async (ev): Promise<void> => {
+    private onSubmit = async (
+        ev: BaseSyntheticEvent<Event, EventTarget & HTMLFormElement, EventTarget & HTMLFormElement>,
+    ): Promise<void> => {
         ev.preventDefault();
         ev.persist();
 
@@ -152,7 +160,9 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         }
     };
 
-    private doSubmit(ev): void {
+    private doSubmit(
+        ev: BaseSyntheticEvent<Event, EventTarget & HTMLFormElement, EventTarget & HTMLFormElement>,
+    ): void {
         PosthogAnalytics.instance.setAuthenticationType("Password");
 
         const email = this.state.email.trim();
@@ -248,7 +258,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         });
     }
 
-    private onEmailChange = (ev): void => {
+    private onEmailChange = (ev: React.ChangeEvent<HTMLInputElement>): void => {
         this.setState({
             email: ev.target.value.trim(),
         });
@@ -277,7 +287,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         ],
     });
 
-    private onPasswordChange = (ev): void => {
+    private onPasswordChange = (ev: React.ChangeEvent<HTMLInputElement>): void => {
         this.setState({
             password: ev.target.value,
         });
@@ -287,7 +297,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         this.markFieldValid(RegistrationField.Password, result.valid);
     };
 
-    private onPasswordConfirmChange = (ev): void => {
+    private onPasswordConfirmChange = (ev: React.ChangeEvent<HTMLInputElement>): void => {
         this.setState({
             passwordConfirm: ev.target.value,
         });
@@ -297,19 +307,19 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         this.markFieldValid(RegistrationField.PasswordConfirm, result.valid);
     };
 
-    private onPhoneCountryChange = (newVal): void => {
+    private onPhoneCountryChange = (newVal: PhoneNumberCountryDefinition): void => {
         this.setState({
             phoneCountry: newVal.iso2,
         });
     };
 
-    private onPhoneNumberChange = (ev): void => {
+    private onPhoneNumberChange = (ev: React.ChangeEvent<HTMLInputElement>): void => {
         this.setState({
             phoneNumber: ev.target.value,
         });
     };
 
-    private onPhoneNumberValidate = async (fieldState): Promise<IValidationResult> => {
+    private onPhoneNumberValidate = async (fieldState: IFieldState): Promise<IValidationResult> => {
         const result = await this.validatePhoneNumberRules(fieldState);
         this.markFieldValid(RegistrationField.PhoneNumber, result.valid);
         return result;
@@ -334,13 +344,13 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         ],
     });
 
-    private onUsernameChange = (ev): void => {
+    private onUsernameChange = (ev: React.ChangeEvent<HTMLInputElement>): void => {
         this.setState({
             username: ev.target.value,
         });
     };
 
-    private onUsernameValidate = async (fieldState): Promise<IValidationResult> => {
+    private onUsernameValidate = async (fieldState: IFieldState): Promise<IValidationResult> => {
         const result = await this.validateUsernameRules(fieldState);
         this.markFieldValid(RegistrationField.Username, result.valid);
         return result;

@@ -17,7 +17,7 @@ limitations under the License.
 import React from "react";
 import * as maplibregl from "maplibre-gl";
 // eslint-disable-next-line deprecate/import
-import { mount } from "enzyme";
+import { mount, ReactWrapper } from "enzyme";
 import { act } from "react-dom/test-utils";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { MatrixClient } from "matrix-js-sdk/src/client";
@@ -239,11 +239,12 @@ describe("LocationPicker", () => {
             const shareType = LocationShareType.Live;
             testUserLocationShareTypes(shareType);
 
-            const getOption = (wrapper, timeout) => findById(wrapper, `live-duration__${timeout}`).at(0);
-            const getDropdown = (wrapper) => findByTestId(wrapper, "live-duration-dropdown");
-            const getSelectedOption = (wrapper) => findById(wrapper, "live-duration_value");
+            const getOption = (wrapper: ReactWrapper, timeout: number) =>
+                findById(wrapper, `live-duration__${timeout}`).at(0);
+            const getDropdown = (wrapper: ReactWrapper) => findByTestId(wrapper, "live-duration-dropdown");
+            const getSelectedOption = (wrapper: ReactWrapper) => findById(wrapper, "live-duration_value");
 
-            const openDropdown = (wrapper) =>
+            const openDropdown = (wrapper: ReactWrapper) =>
                 act(() => {
                     const dropdown = getDropdown(wrapper);
                     dropdown.find('[role="button"]').at(0).simulate("click");

@@ -27,6 +27,7 @@ import {
     KEYBOARD_SHORTCUTS,
     MAC_ONLY_SHORTCUTS,
 } from "./KeyboardShortcuts";
+import { IBaseSetting } from "../settings/Settings";
 
 /**
  * This function gets the keyboard shortcuts that should be presented in the UI
@@ -103,7 +104,7 @@ export const getKeyboardShortcuts = (): IKeyboardShortcuts => {
             return true;
         })
         .reduce((o, key) => {
-            o[key] = KEYBOARD_SHORTCUTS[key];
+            o[key as KeyBindingAction] = KEYBOARD_SHORTCUTS[key as KeyBindingAction];
             return o;
         }, {} as IKeyboardShortcuts);
 };
@@ -112,7 +113,10 @@ export const getKeyboardShortcuts = (): IKeyboardShortcuts => {
  * Gets keyboard shortcuts that should be presented to the user in the UI.
  */
 export const getKeyboardShortcutsForUI = (): IKeyboardShortcuts => {
-    const entries = [...Object.entries(getUIOnlyShortcuts()), ...Object.entries(getKeyboardShortcuts())];
+    const entries = [...Object.entries(getUIOnlyShortcuts()), ...Object.entries(getKeyboardShortcuts())] as [
+        KeyBindingAction,
+        IBaseSetting<KeyCombo>,
+    ][];
 
     return entries.reduce((acc, [key, value]) => {
         acc[key] = value;
@@ -120,11 +124,11 @@ export const getKeyboardShortcutsForUI = (): IKeyboardShortcuts => {
     }, {} as IKeyboardShortcuts);
 };
 
-export const getKeyboardShortcutValue = (name: string): KeyCombo | undefined => {
+export const getKeyboardShortcutValue = (name: KeyBindingAction): KeyCombo | undefined => {
     return getKeyboardShortcutsForUI()[name]?.default;
 };
 
-export const getKeyboardShortcutDisplayName = (name: string): string | undefined => {
+export const getKeyboardShortcutDisplayName = (name: KeyBindingAction): string | undefined => {
     const keyboardShortcutDisplayName = getKeyboardShortcutsForUI()[name]?.displayName;
-    return keyboardShortcutDisplayName && _t(keyboardShortcutDisplayName);
+    return keyboardShortcutDisplayName && _t(keyboardShortcutDisplayName as string);
 };

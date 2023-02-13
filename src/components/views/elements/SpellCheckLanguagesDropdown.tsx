@@ -33,7 +33,7 @@ function languageMatchesSearchQuery(query: string, language: Languages[0]): bool
 interface SpellCheckLanguagesDropdownIProps {
     className: string;
     value: string;
-    onOptionChange(language: string);
+    onOptionChange(language: string): void;
 }
 
 interface SpellCheckLanguagesDropdownIState {
@@ -45,7 +45,7 @@ export default class SpellCheckLanguagesDropdown extends React.Component<
     SpellCheckLanguagesDropdownIProps,
     SpellCheckLanguagesDropdownIState
 > {
-    public constructor(props) {
+    public constructor(props: SpellCheckLanguagesDropdownIProps) {
         super(props);
         this.onSearchChange = this.onSearchChange.bind(this);
 

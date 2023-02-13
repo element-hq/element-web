@@ -214,7 +214,7 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
 
     private async refreshRules(): Promise<Partial<IState>> {
         const ruleSets = await MatrixClientPeg.get().getPushRules();
-        const categories = {
+        const categories: Record<string, RuleClass> = {
             [RuleId.Master]: RuleClass.Master,
 
             [RuleId.DM]: RuleClass.VectorGlobal,

@@ -14,12 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { createRef, KeyboardEvent, ReactNode, TransitionEvent } from "react";
+import React, { createRef, ReactNode, TransitionEvent } from "react";
 import ReactDOM from "react-dom";
 import classNames from "classnames";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { EventType } from "matrix-js-sdk/src/@types/event";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { EventStatus, MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { logger } from "matrix-js-sdk/src/logger";
 import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 import { M_BEACON_INFO } from "matrix-js-sdk/src/@types/beacon";
@@ -34,7 +34,7 @@ import SettingsStore from "../../settings/SettingsStore";
 import RoomContext, { TimelineRenderingType } from "../../contexts/RoomContext";
 import { Layout } from "../../settings/enums/Layout";
 import { _t } from "../../languageHandler";
-import EventTile, { UnwrappedEventTile, GetRelationsForEvent, IReadReceiptProps } from "../views/rooms/EventTile";
+import EventTile, { GetRelationsForEvent, IReadReceiptProps, UnwrappedEventTile } from "../views/rooms/EventTile";
 import { hasText } from "../../TextForEvent";
 import IRCTimelineProfileResizer from "../views/elements/IRCTimelineProfileResizer";
 import DMRoomMap from "../../utils/DMRoomMap";
@@ -272,7 +272,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     // A map to allow groupers to maintain consistent keys even if their first event is uprooted due to back-pagination.
     public grouperKeyMap = new WeakMap<MatrixEvent, string>();
 
-    public constructor(props, context) {
+    public constructor(props: IProps, context: React.ContextType<typeof RoomContext>) {
         super(props, context);
 
         this.state = {
@@ -308,7 +308,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         SettingsStore.unwatchSetting(this.showTypingNotificationsWatcherRef);
     }
 
-    public componentDidUpdate(prevProps, prevState): void {
+    public componentDidUpdate(prevProps: IProps, prevState: IState): void {
         if (prevProps.layout !== this.props.layout) {
             this.calculateRoomMembersCount();
         }
@@ -410,17 +410,13 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     /* jump to the top of the content.
      */
     public scrollToTop(): void {
-        if (this.scrollPanel.current) {
-            this.scrollPanel.current.scrollToTop();
-        }
+        this.scrollPanel.current?.scrollToTop();
     }
 
     /* jump to the bottom of the content.
      */
     public scrollToBottom(): void {
-        if (this.scrollPanel.current) {
-            this.scrollPanel.current.scrollToBottom();
-        }
+        this.scrollPanel.current?.scrollToBottom();
     }
 
     /**
@@ -428,10 +424,8 @@ export default class MessagePanel extends React.Component<IProps, IState> {
      *
      * @param {KeyboardEvent} ev: the keyboard event to handle
      */
-    public handleScrollKey(ev: KeyboardEvent): void {
-        if (this.scrollPanel.current) {
-            this.scrollPanel.current.handleScrollKey(ev);
-        }
+    public handleScrollKey(ev: React.KeyboardEvent | KeyboardEvent): void {
+        this.scrollPanel.current?.handleScrollKey(ev);
     }
 
     /* jump to the given event id.
@@ -752,7 +746,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         const readReceipts = this.readReceiptsByEvent[eventId];
 
         let isLastSuccessful = false;
-        const isSentState = (s): boolean => !s || s === "sent";
+        const isSentState = (s: EventStatus): boolean => !s || s === EventStatus.SENT;
         const isSent = isSentState(mxEv.getAssociatedStatus());
         const hasNextEvent = nextEvent && this.shouldShowEvent(nextEvent);
         if (!hasNextEvent && isSent) {
@@ -869,8 +863,14 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     // should be shown next to that event. If a hidden event has read receipts,
     // they are folded into the receipts of the last shown event.
     private getReadReceiptsByShownEvent(): Record<string, IReadReceiptProps[]> {
-        const receiptsByEvent = {};
-        const receiptsByUserId = {};
+        const receiptsByEvent: Record<string, IReadReceiptProps[]> = {};
+        const receiptsByUserId: Record<
+            string,
+            {
+                lastShownEventId: string;
+                receipt: IReadReceiptProps;
+            }
+        > = {};
 
         let lastShownEventId;
         for (const event of this.props.events) {

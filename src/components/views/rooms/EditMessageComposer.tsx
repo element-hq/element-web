@@ -29,7 +29,7 @@ import { getCaretOffsetAndText } from "../../../editor/dom";
 import { htmlSerializeIfNeeded, textSerialize, containsEmote, stripEmoteCommand } from "../../../editor/serialize";
 import { findEditableEvent } from "../../../utils/EventUtils";
 import { parseEvent } from "../../../editor/deserialize";
-import { CommandPartCreator, Part, PartCreator } from "../../../editor/parts";
+import { CommandPartCreator, Part, PartCreator, SerializedPart } from "../../../editor/parts";
 import EditorStateTransfer from "../../../utils/EditorStateTransfer";
 import BasicMessageComposer, { REGEX_EMOTICON } from "./BasicMessageComposer";
 import { CommandCategories } from "../../../SlashCommands";
@@ -59,7 +59,7 @@ function getHtmlReplyFallback(mxEvent: MatrixEvent): string {
 }
 
 function getTextReplyFallback(mxEvent: MatrixEvent): string {
-    const body = mxEvent.getContent().body;
+    const body: string = mxEvent.getContent().body;
     const lines = body.split("\n").map((l) => l.trim());
     if (lines.length > 2 && lines[0].startsWith("> ") && lines[1].length === 0) {
         return `${lines[0]}\n\n`;
@@ -253,7 +253,7 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
         if (json) {
             try {
                 const { parts: serializedParts } = JSON.parse(json);
-                const parts: Part[] = serializedParts.map((p) => partCreator.deserializePart(p));
+                const parts: Part[] = serializedParts.map((p: SerializedPart) => partCreator.deserializePart(p));
                 return parts;
             } catch (e) {
                 logger.error("Error parsing editing state: ", e);

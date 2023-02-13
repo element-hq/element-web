@@ -118,10 +118,9 @@ export interface IBaseSetting<T extends SettingValueType = SettingValueType> {
     // Display name can also be an object for different levels.
     displayName?:
         | string
-        | {
-              // @ts-ignore - TS wants the key to be a string, but we know better
-              [level: SettingLevel]: string;
-          };
+        | Partial<{
+              [level in SettingLevel]: string;
+          }>;
 
     // Optional description which will be shown as microCopy under SettingsFlags
     description?: string | (() => ReactNode);

@@ -20,7 +20,7 @@ import FileSaver from "file-saver";
 import { logger } from "matrix-js-sdk/src/logger";
 import { IKeyBackupInfo } from "matrix-js-sdk/src/crypto/keybackup";
 import { TrustInfo } from "matrix-js-sdk/src/crypto/backup";
-import { CrossSigningKeys } from "matrix-js-sdk/src/matrix";
+import { CrossSigningKeys, UIAFlow } from "matrix-js-sdk/src/matrix";
 import { IRecoveryKey } from "matrix-js-sdk/src/crypto/api";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
 
@@ -206,7 +206,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                 logger.log("uploadDeviceSigningKeys advertised no flows!");
                 return;
             }
-            const canUploadKeysWithPasswordOnly = error.data.flows.some((f) => {
+            const canUploadKeysWithPasswordOnly = error.data.flows.some((f: UIAFlow) => {
                 return f.stages.length === 1 && f.stages[0] === "m.login.password";
             });
             this.setState({

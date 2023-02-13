@@ -318,7 +318,7 @@ const SpaceSetupFirstRooms: React.FC<{
                 label={_t("Room name")}
                 placeholder={placeholders[i]}
                 value={roomNames[i]}
-                onChange={(ev) => setRoomName(i, ev.target.value)}
+                onChange={(ev: React.ChangeEvent<HTMLInputElement>) => setRoomName(i, ev.target.value)}
                 autoFocus={i === 2}
                 disabled={busy}
                 autoComplete="off"

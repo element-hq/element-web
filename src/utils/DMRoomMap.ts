@@ -189,7 +189,7 @@ export default class DMRoomMap {
         return Object.keys(this.roomToUser)
             .map((r) => ({ userId: this.getUserIdForRoomId(r), room: this.matrixClient.getRoom(r) }))
             .filter((r) => r.userId && r.room && r.room.getInvitedAndJoinedMemberCount() === 2)
-            .reduce((obj, r) => (obj[r.userId] = r.room) && obj, {});
+            .reduce((obj, r) => (obj[r.userId] = r.room) && obj, {} as Record<string, Room>);
     }
 
     /**

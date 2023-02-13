@@ -125,8 +125,8 @@ describe("ForwardDialog", () => {
         const { container } = mountForwardDialog();
 
         // Make sendEvent require manual resolution so we can see the sending state
-        let finishSend;
-        let cancelSend;
+        let finishSend: (arg?: any) => void;
+        let cancelSend: () => void;
         mockClient.sendEvent.mockImplementation(
             <T extends {}>() =>
                 new Promise<T>((resolve, reject) => {
@@ -135,8 +135,8 @@ describe("ForwardDialog", () => {
                 }),
         );
 
-        let firstButton;
-        let secondButton;
+        let firstButton: Element;
+        let secondButton: Element;
         const update = () => {
             [firstButton, secondButton] = container.querySelectorAll(".mx_ForwardList_sendButton");
         };
@@ -253,7 +253,7 @@ describe("ForwardDialog", () => {
                 [M_ASSET.name]: { type: LocationAssetType.Pin },
                 [M_LOCATION.name]: {
                     uri: geoUri,
-                    description: undefined,
+                    description: undefined as string,
                 },
             };
             expect(mockClient.sendEvent).toHaveBeenCalledWith(
@@ -280,7 +280,7 @@ describe("ForwardDialog", () => {
                 [M_ASSET.name]: { type: LocationAssetType.Pin },
                 [M_LOCATION.name]: {
                     uri: geoUri,
-                    description: undefined,
+                    description: undefined as string,
                 },
             };
             expect(mockClient.sendEvent).toHaveBeenCalledWith(
@@ -301,7 +301,7 @@ describe("ForwardDialog", () => {
                 [M_ASSET.name]: { type: LocationAssetType.Pin },
                 [M_LOCATION.name]: {
                     uri: geoUri,
-                    description: undefined,
+                    description: undefined as string,
                 },
                 geo_uri: geoUri,
                 [M_TIMESTAMP.name]: timestamp,

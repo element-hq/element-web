@@ -61,7 +61,7 @@ const EMOJIBASE_GROUP_ID_TO_CATEGORY = [
     "flags",
 ];
 
-export const DATA_BY_CATEGORY = {
+export const DATA_BY_CATEGORY: Record<string, IEmoji[]> = {
     people: [],
     nature: [],
     foods: [],

@@ -40,7 +40,7 @@ interface IState {
 }
 
 class QuickReactions extends React.Component<IProps, IState> {
-    public constructor(props) {
+    public constructor(props: IProps) {
         super(props);
         this.state = {
             hover: null,

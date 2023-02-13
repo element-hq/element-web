@@ -80,7 +80,7 @@ interface IProps {
     // Called when the stage changes, or the stage's phase changes. First
     // argument is the stage, second is the phase. Some stages do not have
     // phases and will be counted as 0 (numeric).
-    onStagePhaseChange?(stage: string, phase: string | number): void;
+    onStagePhaseChange?(stage: AuthType, phase: number): void;
 }
 
 interface IState {
@@ -99,7 +99,7 @@ export default class InteractiveAuthComponent extends React.Component<IProps, IS
 
     private unmounted = false;
 
-    public constructor(props) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {

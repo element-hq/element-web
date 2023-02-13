@@ -42,7 +42,7 @@ describe("formatSeconds", () => {
 });
 
 describe("formatRelativeTime", () => {
-    let dateSpy;
+    let dateSpy: jest.SpyInstance<number, []>;
     beforeAll(() => {
         dateSpy = jest
             .spyOn(global.Date, "now")

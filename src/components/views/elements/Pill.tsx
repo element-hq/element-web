@@ -20,6 +20,7 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { logger } from "matrix-js-sdk/src/logger";
 import { MatrixClient } from "matrix-js-sdk/src/client";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 import dis from "../../../dispatcher/dispatcher";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -30,6 +31,7 @@ import Tooltip, { Alignment } from "./Tooltip";
 import RoomAvatar from "../avatars/RoomAvatar";
 import MemberAvatar from "../avatars/MemberAvatar";
 import { objectHasDiff } from "../../../utils/objects";
+import { ButtonEvent } from "./AccessibleButton";
 
 export enum PillType {
     UserMention = "TYPE_USER_MENTION",
@@ -180,7 +182,7 @@ export default class Pill extends React.Component<IProps, IState> {
         });
     };
 
-    private doProfileLookup(userId: string, member): void {
+    private doProfileLookup(userId: string, member: RoomMember): void {
         MatrixClientPeg.get()
             .getProfileInfo(userId)
             .then((resp) => {
@@ -196,7 +198,7 @@ export default class Pill extends React.Component<IProps, IState> {
                     getDirectionalContent: function () {
                         return this.getContent();
                     },
-                };
+                } as MatrixEvent;
                 this.setState({ member });
             })
             .catch((err) => {
@@ -204,7 +206,7 @@ export default class Pill extends React.Component<IProps, IState> {
             });
     }
 
-    private onUserPillClicked = (e): void => {
+    private onUserPillClicked = (e: ButtonEvent): void => {
         e.preventDefault();
         dis.dispatch({
             action: Action.ViewUser,

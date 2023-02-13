@@ -83,7 +83,7 @@ export const makeMapSiteLink = (coords: GeolocationCoordinates): string => {
 };
 
 export const createMapSiteLinkFromEvent = (event: MatrixEvent): string => {
-    const content: Object = event.getContent();
+    const content = event.getContent();
     const mLocation = content[M_LOCATION.name];
     if (mLocation !== undefined) {
         const uri = mLocation["uri"];

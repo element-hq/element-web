@@ -121,8 +121,8 @@ export default class MessageEditHistoryDialog extends React.PureComponent<IProps
     }
 
     private renderEdits(): JSX.Element[] {
-        const nodes = [];
-        let lastEvent;
+        const nodes: JSX.Element[] = [];
+        let lastEvent: MatrixEvent;
         let allEvents = this.state.events;
         // append original event when we've done last pagination
         if (this.state.originalEvent && !this.state.nextBatch) {

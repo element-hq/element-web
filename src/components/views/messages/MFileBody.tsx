@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { createRef } from "react";
+import React, { AllHTMLAttributes, createRef } from "react";
 import { filesize } from "filesize";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -30,7 +30,7 @@ import { FileDownloader } from "../../../utils/FileDownloader";
 import TextWithTooltip from "../elements/TextWithTooltip";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 
-export let DOWNLOAD_ICON_URL; // cached copy of the download.svg asset for the sandboxed iframe later on
+export let DOWNLOAD_ICON_URL: string; // cached copy of the download.svg asset for the sandboxed iframe later on
 
 async function cacheDownloadIcon(): Promise<void> {
     if (DOWNLOAD_ICON_URL) return; // cached already
@@ -155,7 +155,7 @@ export default class MFileBody extends React.Component<IProps, IState> {
         });
     }
 
-    public componentDidUpdate(prevProps, prevState): void {
+    public componentDidUpdate(prevProps: IProps, prevState: IState): void {
         if (this.props.onHeightChanged && !prevState.decryptedBlob && this.state.decryptedBlob) {
             this.props.onHeightChanged();
         }
@@ -295,7 +295,7 @@ export default class MFileBody extends React.Component<IProps, IState> {
                 </span>
             );
         } else if (contentUrl) {
-            const downloadProps = {
+            const downloadProps: AllHTMLAttributes<HTMLAnchorElement> = {
                 target: "_blank",
                 rel: "noreferrer noopener",
 

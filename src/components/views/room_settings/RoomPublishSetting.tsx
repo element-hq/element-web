@@ -33,15 +33,15 @@ interface IState {
 }
 
 export default class RoomPublishSetting extends React.PureComponent<IProps, IState> {
-    public constructor(props, context) {
-        super(props, context);
+    public constructor(props: IProps) {
+        super(props);
 
         this.state = {
             isRoomPublished: false,
         };
     }
 
-    private onRoomPublishChange = (e): void => {
+    private onRoomPublishChange = (): void => {
         const valueBefore = this.state.isRoomPublished;
         const newValue = !valueBefore;
         this.setState({ isRoomPublished: newValue });

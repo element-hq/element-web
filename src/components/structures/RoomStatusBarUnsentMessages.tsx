@@ -14,13 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactElement } from "react";
+import React, { ReactElement, ReactNode } from "react";
 
 import { StaticNotificationState } from "../../stores/notifications/StaticNotificationState";
 import NotificationBadge from "../views/rooms/NotificationBadge";
 
 interface RoomStatusBarUnsentMessagesProps {
-    title: string;
+    title: ReactNode;
     description?: string;
     notificationState: StaticNotificationState;
     buttons: ReactElement;

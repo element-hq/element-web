@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { mocked } from "jest-mock";
+import { Mocked, mocked } from "jest-mock";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { NotificationCountType, Room } from "matrix-js-sdk/src/models/room";
 import { ReceiptType } from "matrix-js-sdk/src/@types/read_receipts";
@@ -36,9 +36,9 @@ import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 jest.mock("../../src/settings/SettingsStore");
 
 describe("notifications", () => {
-    let accountDataStore = {};
-    let mockClient;
-    let accountDataEventKey;
+    let accountDataStore: Record<string, MatrixEvent> = {};
+    let mockClient: Mocked<MatrixClient>;
+    let accountDataEventKey: string;
 
     beforeEach(() => {
         jest.clearAllMocks();

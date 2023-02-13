@@ -419,7 +419,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         window.addEventListener("resize", this.onWindowResized);
     }
 
-    public componentDidUpdate(prevProps, prevState): void {
+    public componentDidUpdate(prevProps: IProps, prevState: IState): void {
         if (this.shouldTrackPageChange(prevState, this.state)) {
             const durationMs = this.stopPageChangeTimer();
             PosthogTrackers.instance.trackPageChange(this.state.view, this.state.page_type, durationMs);
@@ -544,12 +544,11 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         if (state.view === undefined) {
             throw new Error("setStateForNewView with no view!");
         }
-        const newState = {
-            currentUserId: null,
+        this.setState({
+            currentUserId: undefined,
             justRegistered: false,
-        };
-        Object.assign(newState, state);
-        this.setState(newState);
+            ...state,
+        } as IState);
     }
 
     private onAction = (payload: ActionPayload): void => {

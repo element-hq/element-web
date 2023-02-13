@@ -95,7 +95,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
         // Autocomplete delay (niche text box)
     ];
 
-    public constructor(props) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {

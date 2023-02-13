@@ -42,10 +42,7 @@ interface IState {
 export default class AsyncWrapper extends React.Component<IProps, IState> {
     private unmounted = false;
 
-    public state = {
-        component: null,
-        error: null,
-    };
+    public state: IState = {};
 
     public componentDidMount(): void {
         // XXX: temporary logging to try to diagnose

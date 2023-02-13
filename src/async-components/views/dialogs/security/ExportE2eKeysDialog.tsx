@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import FileSaver from "file-saver";
-import React from "react";
+import React, { ChangeEvent } from "react";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -163,7 +163,9 @@ export default class ExportE2eKeysDialog extends React.Component<IProps, IState>
                                 <Field
                                     label={_t("Enter passphrase")}
                                     value={this.state.passphrase1}
-                                    onChange={(e) => this.onPassphraseChange(e, "passphrase1")}
+                                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                                        this.onPassphraseChange(e, "passphrase1")
+                                    }
                                     autoFocus={true}
                                     size={64}
                                     type="password"
@@ -174,7 +176,9 @@ export default class ExportE2eKeysDialog extends React.Component<IProps, IState>
                                 <Field
                                     label={_t("Confirm passphrase")}
                                     value={this.state.passphrase2}
-                                    onChange={(e) => this.onPassphraseChange(e, "passphrase2")}
+                                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                                        this.onPassphraseChange(e, "passphrase2")
+                                    }
                                     size={64}
                                     type="password"
                                     disabled={disableForm}

@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { ComponentProps } from "react";
 // eslint-disable-next-line deprecate/import
 import { mount, ReactWrapper } from "enzyme";
 import { MatrixEvent, RoomMember } from "matrix-js-sdk/src/matrix";
@@ -60,7 +60,7 @@ describe("EventListSummary", function () {
      */
     interface MembershipEventParams {
         senderId?: string;
-        userId: string;
+        userId?: string;
         membership: string;
         prevMembership?: string;
     }
@@ -100,11 +100,11 @@ describe("EventListSummary", function () {
     // Generate the same sequence of `events` for `n` users, where each user ID
     // is created by replacing the first "$" in userIdTemplate with `i` for
     // `i = 0 .. n`.
-    const generateEventsForUsers = (userIdTemplate, n, events) => {
+    const generateEventsForUsers = (userIdTemplate: string, n: number, events: MembershipEventParams[]) => {
         let eventsForUsers: MatrixEvent[] = [];
         let userId = "";
         for (let i = 0; i < n; i++) {
-            userId = userIdTemplate.replace("$", i);
+            userId = userIdTemplate.replace("$", String(i));
             events.forEach((e) => {
                 e.userId = userId;
             });
@@ -117,7 +117,7 @@ describe("EventListSummary", function () {
         ...mockClientMethodsUser(),
     });
 
-    const defaultProps = {
+    const defaultProps: ComponentProps<typeof EventListSummary> = {
         layout: Layout.Bubble,
         events: [],
         children: [],

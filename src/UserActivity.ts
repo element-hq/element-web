@@ -168,7 +168,7 @@ export default class UserActivity {
         return this.activeRecentlyTimeout.isRunning();
     }
 
-    private onPageVisibilityChanged = (e): void => {
+    private onPageVisibilityChanged = (e: Event): void => {
         if (this.document.visibilityState === "hidden") {
             this.activeNowTimeout.abort();
             this.activeRecentlyTimeout.abort();
@@ -182,7 +182,8 @@ export default class UserActivity {
         this.activeRecentlyTimeout.abort();
     };
 
-    private onUserActivity = (event: Event): void => {
+    // XXX: exported for tests
+    public onUserActivity = (event: Event): void => {
         // ignore anything if the window isn't focused
         if (!this.document.hasFocus()) return;
 

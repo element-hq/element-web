@@ -100,7 +100,7 @@ interface IPasswordAuthEntryState {
 export class PasswordAuthEntry extends React.Component<IAuthEntryProps, IPasswordAuthEntryState> {
     public static LOGIN_TYPE = AuthType.Password;
 
-    public constructor(props) {
+    public constructor(props: IAuthEntryProps) {
         super(props);
 
         this.state = {
@@ -264,7 +264,7 @@ interface ITermsAuthEntryState {
 export class TermsAuthEntry extends React.Component<ITermsAuthEntryProps, ITermsAuthEntryState> {
     public static LOGIN_TYPE = AuthType.Terms;
 
-    public constructor(props) {
+    public constructor(props: ITermsAuthEntryProps) {
         super(props);
 
         // example stageParams:
@@ -288,8 +288,12 @@ export class TermsAuthEntry extends React.Component<ITermsAuthEntryProps, ITerms
 
         const allPolicies = this.props.stageParams.policies || {};
         const prefLang = SettingsStore.getValue("language");
-        const initToggles = {};
-        const pickedPolicies = [];
+        const initToggles: Record<string, boolean> = {};
+        const pickedPolicies: {
+            id: string;
+            name: string;
+            url: string;
+        }[] = [];
         for (const policyId of Object.keys(allPolicies)) {
             const policy = allPolicies[policyId];
 
@@ -325,7 +329,7 @@ export class TermsAuthEntry extends React.Component<ITermsAuthEntryProps, ITerms
     }
 
     private togglePolicy(policyId: string): void {
-        const newToggles = {};
+        const newToggles: Record<string, boolean> = {};
         for (const policy of this.state.policies) {
             let checked = this.state.toggledPolicies[policy.id];
             if (policy.id === policyId) checked = !checked;
@@ -484,7 +488,7 @@ export class EmailIdentityAuthEntry extends React.Component<
                                 {
                                     a: (text: string) => (
                                         <Fragment>
-                                            <AccessibleButton kind="link_inline" onClick={() => null} disabled>
+                                            <AccessibleButton kind="link_inline" onClick={null} disabled>
                                                 {text} <Spinner w={14} h={14} />
                                             </AccessibleButton>
                                         </Fragment>
@@ -555,7 +559,7 @@ export class MsisdnAuthEntry extends React.Component<IMsisdnAuthEntryProps, IMsi
     private sid: string;
     private msisdn: string;
 
-    public constructor(props) {
+    public constructor(props: IMsisdnAuthEntryProps) {
         super(props);
 
         this.state = {
@@ -908,7 +912,7 @@ export class FallbackAuthEntry extends React.Component<IAuthEntryProps> {
     private popupWindow: Window;
     private fallbackButton = createRef<HTMLButtonElement>();
 
-    public constructor(props) {
+    public constructor(props: IAuthEntryProps) {
         super(props);
 
         // we have to make the user click a button, as browsers will block

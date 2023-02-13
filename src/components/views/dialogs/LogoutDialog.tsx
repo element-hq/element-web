@@ -45,7 +45,7 @@ export default class LogoutDialog extends React.Component<IProps, IState> {
         onFinished: function () {},
     };
 
-    public constructor(props) {
+    public constructor(props: IProps) {
         super(props);
 
         const cli = MatrixClientPeg.get();

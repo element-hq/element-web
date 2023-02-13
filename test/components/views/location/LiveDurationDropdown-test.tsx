@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from "react";
 // eslint-disable-next-line deprecate/import
-import { mount } from "enzyme";
+import { mount, ReactWrapper } from "enzyme";
 import { act } from "react-dom/test-utils";
 
 import LiveDurationDropdown, {
@@ -33,9 +33,9 @@ describe("<LiveDurationDropdown />", () => {
     };
     const getComponent = (props = {}) => mount(<LiveDurationDropdown {...defaultProps} {...props} />);
 
-    const getOption = (wrapper, timeout) => findById(wrapper, `live-duration__${timeout}`).at(0);
-    const getSelectedOption = (wrapper) => findById(wrapper, "live-duration_value");
-    const openDropdown = (wrapper) =>
+    const getOption = (wrapper: ReactWrapper, timeout: number) => findById(wrapper, `live-duration__${timeout}`).at(0);
+    const getSelectedOption = (wrapper: ReactWrapper) => findById(wrapper, "live-duration_value");
+    const openDropdown = (wrapper: ReactWrapper) =>
         act(() => {
             wrapper.find('[role="button"]').at(0).simulate("click");
             wrapper.setProps({});

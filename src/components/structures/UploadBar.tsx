@@ -57,7 +57,7 @@ export default class UploadBar extends React.PureComponent<IProps, IState> {
     private dispatcherRef: Optional<string>;
     private mounted = false;
 
-    public constructor(props) {
+    public constructor(props: IProps) {
         super(props);
 
         // Set initial state to any available upload in this room - we might be mounting

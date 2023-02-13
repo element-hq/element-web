@@ -106,7 +106,7 @@ export function pillifyLinks(nodes: ArrayLike<Element>, mxEvent: MatrixEvent, pi
                         // we're adding now, since we've just inserted nodes into the structure
                         // we're iterating over.
                         // Note we've checked roomNotifTextNodes.length > 0 so we'll do this at least once
-                        node = roomNotifTextNode.nextSibling;
+                        node = roomNotifTextNode.nextSibling as Element;
 
                         const pillContainer = document.createElement("span");
                         const pill = (

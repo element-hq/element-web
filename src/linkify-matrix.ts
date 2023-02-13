@@ -230,7 +230,7 @@ export const options: Opts = {
 };
 
 // Run the plugins
-registerPlugin(Type.RoomAlias, ({ scanner, parser, utils }) => {
+registerPlugin(Type.RoomAlias, ({ scanner, parser, utils }: any) => {
     const token = scanner.tokens.POUND as "#";
     matrixOpaqueIdLinkifyParser({
         scanner,
@@ -241,7 +241,7 @@ registerPlugin(Type.RoomAlias, ({ scanner, parser, utils }) => {
     });
 });
 
-registerPlugin(Type.UserId, ({ scanner, parser, utils }) => {
+registerPlugin(Type.UserId, ({ scanner, parser, utils }: any) => {
     const token = scanner.tokens.AT as "@";
     matrixOpaqueIdLinkifyParser({
         scanner,

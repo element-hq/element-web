@@ -18,6 +18,7 @@ limitations under the License.
 import React from "react";
 import { CrossSigningKeys } from "matrix-js-sdk/src/client";
 import { logger } from "matrix-js-sdk/src/logger";
+import { UIAFlow } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import { _t } from "../../../../languageHandler";
@@ -82,7 +83,7 @@ export default class CreateCrossSigningDialog extends React.PureComponent<IProps
                 logger.log("uploadDeviceSigningKeys advertised no flows!");
                 return;
             }
-            const canUploadKeysWithPasswordOnly = error.data.flows.some((f) => {
+            const canUploadKeysWithPasswordOnly = error.data.flows.some((f: UIAFlow) => {
                 return f.stages.length === 1 && f.stages[0] === "m.login.password";
             });
             this.setState({

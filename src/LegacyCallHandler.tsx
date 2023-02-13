@@ -158,9 +158,9 @@ export default class LegacyCallHandler extends EventEmitter {
     private transferees = new Map<string, MatrixCall>(); // callId (target) -> call (transferee)
     private audioPromises = new Map<AudioID, Promise<void>>();
     private audioElementsWithListeners = new Map<HTMLMediaElement, boolean>();
-    private supportsPstnProtocol = null;
-    private pstnSupportPrefixed = null; // True if the server only support the prefixed pstn protocol
-    private supportsSipNativeVirtual = null; // im.vector.protocol.sip_virtual and im.vector.protocol.sip_native
+    private supportsPstnProtocol: boolean | null = null;
+    private pstnSupportPrefixed: boolean | null = null; // True if the server only support the prefixed pstn protocol
+    private supportsSipNativeVirtual: boolean | null = null; // im.vector.protocol.sip_virtual and im.vector.protocol.sip_native
 
     // Map of the asserted identity users after we've looked them up using the API.
     // We need to be be able to determine the mapped room synchronously, so we
@@ -187,7 +187,7 @@ export default class LegacyCallHandler extends EventEmitter {
         // check asserted identity: if we're not obeying asserted identity,
         // this map will never be populated, but we check anyway for sanity
         if (this.shouldObeyAssertedfIdentity()) {
-            const nativeUser = this.assertedIdentityNativeUsers[call.callId];
+            const nativeUser = this.assertedIdentityNativeUsers.get(call.callId);
             if (nativeUser) {
                 const room = findDMForUser(MatrixClientPeg.get(), nativeUser);
                 if (room) return room.roomId;
@@ -466,8 +466,8 @@ export default class LegacyCallHandler extends EventEmitter {
         return this.getAllActiveCallsNotInRoom(roomId);
     }
 
-    public getTransfereeForCallId(callId: string): MatrixCall {
-        return this.transferees[callId];
+    public getTransfereeForCallId(callId: string): MatrixCall | undefined {
+        return this.transferees.get(callId);
     }
 
     public play(audioId: AudioID): void {
@@ -621,7 +621,7 @@ export default class LegacyCallHandler extends EventEmitter {
             logger.log(`Asserted identity ${newAssertedIdentity} mapped to ${newNativeAssertedIdentity}`);
 
             if (newNativeAssertedIdentity) {
-                this.assertedIdentityNativeUsers[call.callId] = newNativeAssertedIdentity;
+                this.assertedIdentityNativeUsers.set(call.callId, newNativeAssertedIdentity);
 
                 // If we don't already have a room with this user, make one. This will be slightly odd
                 // if they called us because we'll be inviting them, but there's not much we can do about
@@ -917,7 +917,7 @@ export default class LegacyCallHandler extends EventEmitter {
             return;
         }
         if (transferee) {
-            this.transferees[call.callId] = transferee;
+            this.transferees.set(call.callId, transferee);
         }
 
         this.setCallListeners(call);

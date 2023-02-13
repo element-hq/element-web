@@ -156,10 +156,8 @@ export enum KeyBindingAction {
 
 type KeyboardShortcutSetting = IBaseSetting<KeyCombo>;
 
-export type IKeyboardShortcuts = {
-    // TODO: We should figure out what to do with the keyboard shortcuts that are not handled by KeybindingManager
-    [k in KeyBindingAction]?: KeyboardShortcutSetting;
-};
+// TODO: We should figure out what to do with the keyboard shortcuts that are not handled by KeybindingManager
+export type IKeyboardShortcuts = Partial<Record<KeyBindingAction, KeyboardShortcutSetting>>;
 
 export interface ICategory {
     categoryLabel?: string;

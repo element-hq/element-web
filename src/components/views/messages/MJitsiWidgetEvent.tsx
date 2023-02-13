@@ -29,7 +29,7 @@ interface IProps {
 }
 
 export default class MJitsiWidgetEvent extends React.PureComponent<IProps> {
-    public constructor(props) {
+    public constructor(props: IProps) {
         super(props);
     }
 

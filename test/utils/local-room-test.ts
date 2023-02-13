@@ -67,7 +67,7 @@ describe("local-room", () => {
         });
 
         describe("for a local room", () => {
-            let prom;
+            let prom: Promise<unknown>;
 
             beforeEach(() => {
                 jest.spyOn(defaultDispatcher, "dispatch");

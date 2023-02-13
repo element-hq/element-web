@@ -133,7 +133,7 @@ interface IProps {
 
 interface IState {
     verifying: boolean;
-    addTask: any; // FIXME: When AddThreepid is TSfied
+    addTask: AddThreepid;
     continueDisabled: boolean;
     newEmailAddress: string;
 }
@@ -150,7 +150,7 @@ export default class EmailAddresses extends React.Component<IProps, IState> {
         };
     }
 
-    private onRemoved = (address): void => {
+    private onRemoved = (address: IThreepid): void => {
         const emails = this.props.emails.filter((e) => e !== address);
         this.props.onEmailsChange(emails);
     };

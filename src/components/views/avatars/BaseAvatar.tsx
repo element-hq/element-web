@@ -48,7 +48,7 @@ interface IProps {
     tabIndex?: number;
 }
 
-const calculateUrls = (url: string, urls: string[], lowBandwidth: boolean): string[] => {
+const calculateUrls = (url?: string, urls?: string[], lowBandwidth = false): string[] => {
     // work out the full set of urls to try to load. This is formed like so:
     // imageUrls: [ props.url, ...props.urls ]
 
@@ -66,7 +66,7 @@ const calculateUrls = (url: string, urls: string[], lowBandwidth: boolean): stri
     return Array.from(new Set(_urls));
 };
 
-const useImageUrl = ({ url, urls }): [string, () => void] => {
+const useImageUrl = ({ url, urls }: { url?: string; urls?: string[] }): [string, () => void] => {
     // Since this is a hot code path and the settings store can be slow, we
     // use the cached lowBandwidth value from the room context if it exists
     const roomContext = useContext(RoomContext);

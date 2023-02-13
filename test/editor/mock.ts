@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Room, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { Room, MatrixClient, RoomMember } from "matrix-js-sdk/src/matrix";
 
 import AutocompleteWrapperModel, { UpdateCallback } from "../../src/editor/autocomplete";
 import { Caret } from "../../src/editor/caret";
@@ -63,7 +63,7 @@ class MockAutoComplete {
 // MockClient & MockRoom are only used for avatars in room and user pills,
 // which is not tested
 class MockRoom {
-    getMember() {
+    getMember(): RoomMember | null {
         return null;
     }
 }

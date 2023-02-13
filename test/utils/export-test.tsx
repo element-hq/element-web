@@ -291,7 +291,7 @@ describe("export", function () {
 
     it("tests the file extension splitter", function () {
         const exporter = new PlainTextExporter(mockRoom, ExportType.Beginning, mockExportOptions, null);
-        const fileNameWithExtensions = {
+        const fileNameWithExtensions: Record<string, [string, string]> = {
             "": ["", ""],
             "name": ["name", ""],
             "name.txt": ["name", ".txt"],

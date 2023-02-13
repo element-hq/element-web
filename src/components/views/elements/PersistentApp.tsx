@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ContextType, MutableRefObject } from "react";
+import React, { ContextType, CSSProperties, MutableRefObject } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
 
 import WidgetUtils from "../../../utils/WidgetUtils";
@@ -26,7 +26,7 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 interface IProps {
     persistentWidgetId: string;
     persistentRoomId: string;
-    pointerEvents?: string;
+    pointerEvents?: CSSProperties["pointerEvents"];
     movePersistedElement: MutableRefObject<(() => void) | undefined>;
 }
 

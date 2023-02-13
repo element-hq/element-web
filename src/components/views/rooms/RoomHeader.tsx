@@ -482,8 +482,7 @@ interface IState {
 }
 
 export default class RoomHeader extends React.Component<IProps, IState> {
-    public static defaultProps = {
-        editing: false,
+    public static defaultProps: Partial<IProps> = {
         inRoom: false,
         excludedRightPanelPhaseButtons: [],
         showButtons: true,

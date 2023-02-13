@@ -51,7 +51,7 @@ export default class WhoIsTypingTile extends React.Component<IProps, IState> {
         whoIsTypingLimit: 3,
     };
 
-    public state = {
+    public state: IState = {
         usersTyping: WhoIsTyping.usersTypingApartFromMe(this.props.room),
         delayedStopTypingTimers: {},
     };
@@ -61,7 +61,7 @@ export default class WhoIsTypingTile extends React.Component<IProps, IState> {
         MatrixClientPeg.get().on(RoomEvent.Timeline, this.onRoomTimeline);
     }
 
-    public componentDidUpdate(_, prevState): void {
+    public componentDidUpdate(prevProps: IProps, prevState: IState): void {
         const wasVisible = WhoIsTypingTile.isVisible(prevState);
         const isVisible = WhoIsTypingTile.isVisible(this.state);
         if (this.props.onShown && !wasVisible && isVisible) {
