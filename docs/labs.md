@@ -189,3 +189,9 @@ Enables users to bookmark a message or content for a later reference.
 ## Sign in another device by showing a QR code (`feature_qr_signin_reciprocate_show`)
 
 Add capability to the session/device manager screens to generate a QR code to sign in another device + set up E2EE. This requires the homeserver to have support for [MSC3882](https://github.com/matrix-org/matrix-spec-proposals/pull/3882) and [MSC3886](https://github.com/matrix-org/matrix-spec-proposals/pull/3886) enabled.
+
+## Use the Rust cryptography implementation (`feature_rust_crypto`) [In Development]
+
+Configures Element to use a new cryptography implementation based on the [matrix-rust-sdk](https://github.com/matrix-org/matrix-rust-sdk).
+
+This setting is (currently) _sticky_ to a user's session: it only takes effect when the user logs in to a new session. Likewise, even after disabling the setting in `config.json`, the Rust implemention will remain in use until users log out.
