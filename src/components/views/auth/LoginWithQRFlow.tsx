@@ -184,7 +184,11 @@ export default class LoginWithQRFlow extends React.Component<IProps> {
                             <p>{_t("Scan the QR code below with your device that's signed out.")}</p>
                             <ol>
                                 <li>{_t("Start at the sign in screen")}</li>
-                                <li>{_t("Select 'Scan QR code'")}</li>
+                                <li>
+                                    {_t("Select '%(scanQRCode)s'", {
+                                        scanQRCode: _t("Scan QR code"),
+                                    })}
+                                </li>
                                 <li>{_t("Review and approve the sign in")}</li>
                             </ol>
                             {code}
