@@ -20,6 +20,7 @@ import escapeHtml from "escape-html";
 import { THREAD_RELATION_TYPE } from "matrix-js-sdk/src/models/thread";
 import { MsgType } from "matrix-js-sdk/src/@types/event";
 import { M_BEACON_INFO } from "matrix-js-sdk/src/@types/beacon";
+import { M_POLL_END } from "matrix-js-sdk/src/@types/polls";
 
 import { PERMITTED_URL_SCHEMES } from "../HtmlUtils";
 import { makeUserPermalink, RoomPermalinkCreator } from "./permalinks/Permalinks";
@@ -107,6 +108,15 @@ export function getNestedReplyText(
                 `<mx-reply><blockquote><a href="${evLink}">In reply to</a> <a href="${userLink}">${mxid}</a>` +
                 `<br>shared ${aTheir} live location.</blockquote></mx-reply>`,
             body: `> <${mxid}> shared ${aTheir} live location.\n\n`,
+        };
+    }
+
+    if (M_POLL_END.matches(ev.getType())) {
+        return {
+            html:
+                `<mx-reply><blockquote><a href="${evLink}">In reply to</a> <a href="${userLink}">${mxid}</a>` +
+                `<br>Ended poll</blockquote></mx-reply>`,
+            body: `> <${mxid}>Ended poll\n\n`,
         };
     }
 

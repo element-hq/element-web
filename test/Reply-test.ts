@@ -17,6 +17,7 @@ limitations under the License.
 import { IContent, MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
 import { M_BEACON_INFO } from "matrix-js-sdk/src/@types/beacon";
 import { LocationAssetType, M_ASSET } from "matrix-js-sdk/src/@types/location";
+import { M_POLL_END } from "matrix-js-sdk/src/@types/polls";
 
 import {
     getNestedReplyText,
@@ -148,6 +149,14 @@ But this is not
 
                 expect(getNestedReplyText(event, mockPermalinkGenerator)).toMatchSnapshot();
             });
+        });
+
+        it("should create the expected fallback text for poll end events", () => {
+            const event = makeTestEvent(M_POLL_END.name, {
+                body: "body",
+            });
+
+            expect(getNestedReplyText(event, mockPermalinkGenerator)).toMatchSnapshot();
         });
     });
 
