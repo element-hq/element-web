@@ -3735,5 +3735,15 @@
     "Declining…": "Nekar…",
     "This session is backing up your keys.": "Den här sessionen säkerhetskopierar dina nycklar.",
     "Are you sure you want to stop your live broadcast? This will end the broadcast and the full recording will be available in the room.": "Är du säker på att du vill avsluta din direktsändning? Det här kommer att avsluta sändningen och den fulla inspelningen kommer att bli tillgänglig i rummet.",
-    "Your email address does not appear to be associated with a Matrix ID on this homeserver.": "Din e-postadress verkar inte vara associerad med ett Matrix-ID på den här hemservern."
+    "Your email address does not appear to be associated with a Matrix ID on this homeserver.": "Din e-postadress verkar inte vara associerad med ett Matrix-ID på den här hemservern.",
+    "We need to know it’s you before resetting your password. Click the link in the email we just sent to <b>%(email)s</b>": "Vi behöver veta att det är du innan vi återställer ditt lösenord. Klicka länken i e-brevet vi just skickade till <b>%(email)s</b>",
+    "Warning: your personal data (including encryption keys) is still stored in this session. Clear it if you're finished using this session, or want to sign in to another account.": "Varning: din personliga data (inklusive krypteringsnycklar) lagras i den här sessionen. Rensa den om du är färdig med den här sessionen, eller vill logga in i ett annat konto.",
+    "Scan QR code": "Skanna QR-kod",
+    "Select '%(scanQRCode)s'": "Välj '%(scanQRCode)s'",
+    "There are no past polls in this room": "Det finns inga gamla omröstningar i det här rummet",
+    "There are no active polls in this room": "Det finns inga aktiva omröstningar i det här rummet",
+    "Enable '%(manageIntegrations)s' in Settings to do this.": "Aktivera '%(manageIntegrations)s' i inställningarna för att göra detta.",
+    "<b>Warning</b>: upgrading a room will <i>not automatically migrate room members to the new version of the room.</i> We'll post a link to the new room in the old version of the room - room members will have to click this link to join the new room.": "<b>Varning</b>: att uppgradera ett rum kommer <i>inte automatiskt att migrerar rumsmedlemmar till den nya versionen av rummet.</i> Vi kommer att lägga in en länk i det nya rummet i den gamla versionen av rummet - rumsmedlemmar kommer behöva klicka på den här länken för att gå med i det nya rummet.",
+    "Your personal ban list holds all the users/servers you personally don't want to see messages from. After ignoring your first user/server, a new room will show up in your room list named '%(myBanList)s' - stay in this room to keep the ban list in effect.": "Din personliga bannlista innehåller alla de användare och servrar du personligen inte vill se meddelanden ifrån. Efter att du ignorerar din första användare eller server så visas ett nytt rum i din rumslista med namnet '%(myBanList)s' - stanna i det här rummet för att bannlistan ska fortsätta gälla.",
+    "WARNING: session already verified, but keys do NOT MATCH!": "VARNING: sessionen är redan verifierad, men nycklarna MATCHAR INTE!"
 }
