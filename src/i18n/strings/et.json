@@ -3740,5 +3740,9 @@
     "This session is backing up your keys.": "See sessioon varundab sinu krüptovõtmeid.",
     "Declining…": "Keeldumisel…",
     "There are no past polls in this room": "Selles jututoas pole varasemaid küsitlusi",
-    "There are no active polls in this room": "Selles jututoas pole käimasolevaid küsitlusi"
+    "There are no active polls in this room": "Selles jututoas pole käimasolevaid küsitlusi",
+    "We need to know it’s you before resetting your password. Click the link in the email we just sent to <b>%(email)s</b>": "Enne sinu salasõna lähtestamist soovime olla kindlad, et tegemist on sinuga. Palun klõpsi linki, mille just saatsime <b>%(email)s</b> e-posti aadressile",
+    "Warning: your personal data (including encryption keys) is still stored in this session. Clear it if you're finished using this session, or want to sign in to another account.": "Hoiatus: Sinu privaatsed andmed (sealhulgas krüptimisvõtmed) on jätkuvalt salvestatud selles sessioonis. Eemalda nad, kui oled lõpetanud selle sessiooni kasutamise või soovid sisse logida muu kasutajakontoga.",
+    "<b>Warning</b>: upgrading a room will <i>not automatically migrate room members to the new version of the room.</i> We'll post a link to the new room in the old version of the room - room members will have to click this link to join the new room.": "<b>Hoiatus</b>: Jututoa versiooni uuendamine <i>ei koli jututoa liikmeid automaatselt uude jututoa olekusse.</i> Vanas jututoa versioonis saab olema viide uuele versioonile ning kõik liikmed peavad jututoa uue versiooni kasutamiseks seda viidet klõpsama.",
+    "WARNING: session already verified, but keys do NOT MATCH!": "HOIATUS: Sessioon on juba verifitseeritud, aga võtmed ei klapi!"
 }
