@@ -3744,5 +3744,6 @@
     "This session is backing up your keys.": "Diese Sitzung sichert deine Schlüssel.",
     "Declining…": "Ablehnen …",
     "There are no past polls in this room": "In diesem Raum gibt es keine abgeschlossenen Umfragen",
-    "There are no active polls in this room": "In diesem Raum gibt es keine aktiven Umfragen"
+    "There are no active polls in this room": "In diesem Raum gibt es keine aktiven Umfragen",
+    "We need to know it’s you before resetting your password. Click the link in the email we just sent to <b>%(email)s</b>": "Wir müssen wissen, dass du es auch wirklich bist, bevor wir dein Passwort zurücksetzen. Klicke auf den Link in der E-Mail, die wir gerade an <b>%(email)s</b> gesendet haben"
 }
