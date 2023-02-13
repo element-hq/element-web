@@ -3743,5 +3743,7 @@
     "Are you sure you want to stop your live broadcast? This will end the broadcast and the full recording will be available in the room.": "Opravdu chcete ukončit živé vysílání? Tím se vysílání ukončí a v místnosti bude k dispozici celý záznam.",
     "Your email address does not appear to be associated with a Matrix ID on this homeserver.": "Zdá se, že vaše e-mailová adresa není přiřazena k Matrix ID na tomto domovském serveru.",
     "This session is backing up your keys.": "Tato relace zálohuje vaše klíče.",
-    "Declining…": "Odmítání…"
+    "Declining…": "Odmítání…",
+    "There are no past polls in this room": "V této místnosti nejsou žádná minulá hlasování",
+    "There are no active polls in this room": "V této místnosti nejsou žádná aktivní hlasování"
 }
