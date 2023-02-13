@@ -3741,5 +3741,8 @@
     "Declining…": "Ablehnen …",
     "There are no past polls in this room": "In diesem Raum gibt es keine abgeschlossenen Umfragen",
     "There are no active polls in this room": "In diesem Raum gibt es keine aktiven Umfragen",
-    "We need to know it’s you before resetting your password. Click the link in the email we just sent to <b>%(email)s</b>": "Wir müssen wissen, dass du es auch wirklich bist, bevor wir dein Passwort zurücksetzen. Klicke auf den Link in der E-Mail, die wir gerade an <b>%(email)s</b> gesendet haben"
+    "We need to know it’s you before resetting your password. Click the link in the email we just sent to <b>%(email)s</b>": "Wir müssen wissen, dass du es auch wirklich bist, bevor wir dein Passwort zurücksetzen. Klicke auf den Link in der E-Mail, die wir gerade an <b>%(email)s</b> gesendet haben",
+    "Warning: your personal data (including encryption keys) is still stored in this session. Clear it if you're finished using this session, or want to sign in to another account.": "Achtung: Deine persönlichen Daten (einschließlich Verschlüsselungs-Schlüssel) sind noch in dieser Sitzung gespeichert. Lösche diese Daten, wenn du diese Sitzung nicht mehr benötigst, oder dich mit einem anderen Konto anmelden möchtest.",
+    "<b>Warning</b>: upgrading a room will <i>not automatically migrate room members to the new version of the room.</i> We'll post a link to the new room in the old version of the room - room members will have to click this link to join the new room.": "<b>Achtung</b>: Eine Raumaktualisierung wird <i>Raummitglieder nicht automatisch in die neue Raumversion umziehen.</i> In der alten Raumversion wird ein Link zum neuen Raum veröffentlicht ­− Raummitglieder müssen auf diesen klicken, um den neuen Raum zu betreten.",
+    "WARNING: session already verified, but keys do NOT MATCH!": "ACHTUNG: Sitzung bereits verifiziert, aber die Schlüssel PASSEN NICHT!"
 }
