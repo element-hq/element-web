@@ -2778,7 +2778,7 @@
     "For maximum security, this should be different from your account password.": "Для максимальної безпеки фраза повинна відрізнятися від пароля вашого облікового запису.",
     "We'll store an encrypted copy of your keys on our server. Secure your backup with a Security Phrase.": "Ми збережемо зашифровану копію ваших ключів на нашому сервері. Захистіть свою резервну копію фразою безпеки.",
     "This homeserver would like to make sure you are not a robot.": "Домашній сервер бажає впевнитися, що ви не робот.",
-    "Away": "Відсутні",
+    "Away": "Не на зв'язку",
     "Deleting a widget removes it for all users in this room. Are you sure you want to delete this widget?": "Видалення віджету вилучить його в усіх користувачів кімнати. Точно видалити цей віджет?",
     "Take a picture": "Зробити знімок",
     "Unable to start audio streaming.": "Не вдалося почати аудіотрансляцію.",
@@ -3740,5 +3740,9 @@
     "Declining…": "Відхилення…",
     "This session is backing up your keys.": "Під час цього сеансу створюється резервна копія ваших ключів.",
     "There are no past polls in this room": "У цій кімнаті ще не проводилися опитувань",
-    "There are no active polls in this room": "У цій кімнаті немає активних опитувань"
+    "There are no active polls in this room": "У цій кімнаті немає активних опитувань",
+    "We need to know it’s you before resetting your password. Click the link in the email we just sent to <b>%(email)s</b>": "Ми повинні переконатися, що це ви, перш ніж скинути ваш пароль. Перейдіть за посиланням в електронному листі, який ми щойно надіслали на адресу <b>%(email)s</b>",
+    "Warning: your personal data (including encryption keys) is still stored in this session. Clear it if you're finished using this session, or want to sign in to another account.": "Попередження: ваші особисті дані ( включно з ключами шифрування) досі зберігаються в цьому сеансі. Очистьте їх, якщо ви завершили роботу в цьому сеансі або хочете увійти в інший обліковий запис.",
+    "<b>Warning</b>: upgrading a room will <i>not automatically migrate room members to the new version of the room.</i> We'll post a link to the new room in the old version of the room - room members will have to click this link to join the new room.": "<b>Попередження</b>: оновлення кімнати <i>не призведе до автоматичного перенесення учасників до нової версії кімнати.</i> Ми опублікуємо посилання на нову кімнату в старій версії кімнати - учасники кімнати повинні будуть натиснути на це посилання, щоб приєднатися до нової кімнати.",
+    "WARNING: session already verified, but keys do NOT MATCH!": "ПОПЕРЕДЖЕННЯ: сеанс вже звірено, але ключі НЕ ЗБІГАЮТЬСЯ!"
 }
