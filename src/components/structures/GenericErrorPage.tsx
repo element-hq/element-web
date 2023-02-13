@@ -22,7 +22,7 @@ interface IProps {
 }
 
 export default class GenericErrorPage extends React.PureComponent<IProps> {
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         return (
             <div className="mx_GenericErrorPage">
                 <div className="mx_GenericErrorPage_box">

@@ -100,7 +100,7 @@ class DMUserTile extends React.PureComponent<IDMUserTileProps> {
         this.props.onRemove(this.props.member);
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const avatarSize = 20;
         const avatar = <SearchResultAvatar user={this.props.member} size={avatarSize} />;
 
@@ -187,7 +187,7 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
         return result;
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         let timestamp = null;
         if (this.props.lastActiveTs) {
             const humanTs = humanizeTime(this.props.lastActiveTs);
@@ -1082,7 +1082,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         }
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         let spinner = null;
         if (this.state.busy) {
             spinner = <Spinner w={20} h={20} />;

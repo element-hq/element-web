@@ -33,17 +33,18 @@ describe("findRoomLiveVoiceBroadcastFromUserAndDevice", () => {
     const itShouldReturnNull = () => {
         it("should return null", () => {
             expect(
-                findRoomLiveVoiceBroadcastFromUserAndDevice(room, client.getUserId(), client.getDeviceId()),
+                findRoomLiveVoiceBroadcastFromUserAndDevice(room, client.getUserId()!, client.getDeviceId()!),
             ).toBeNull();
         });
     };
 
     beforeAll(() => {
         client = stubClient();
-        room = new Room(roomId, client, client.getUserId());
+        room = new Room(roomId, client, client.getUserId()!);
         jest.spyOn(room.currentState, "getStateEvents");
         mocked(client.getRoom).mockImplementation((getRoomId: string) => {
             if (getRoomId === roomId) return room;
+            return null;
         });
     });
 
@@ -58,7 +59,7 @@ describe("findRoomLiveVoiceBroadcastFromUserAndDevice", () => {
                     event: true,
                     type: VoiceBroadcastInfoEventType,
                     room: roomId,
-                    user: client.getUserId(),
+                    user: client.getUserId()!,
                     content: {},
                 }),
             ]);
@@ -73,7 +74,7 @@ describe("findRoomLiveVoiceBroadcastFromUserAndDevice", () => {
                 mkVoiceBroadcastInfoStateEvent(
                     roomId,
                     VoiceBroadcastInfoState.Stopped,
-                    client.getUserId(),
+                    client.getUserId()!,
                     client.getDeviceId(),
                 ),
             ]);
@@ -87,7 +88,7 @@ describe("findRoomLiveVoiceBroadcastFromUserAndDevice", () => {
             const event = mkVoiceBroadcastInfoStateEvent(
                 roomId,
                 VoiceBroadcastInfoState.Stopped,
-                client.getUserId(),
+                client.getUserId()!,
                 "JKL123",
             );
             room.currentState.setStateEvents([event]);
@@ -103,7 +104,7 @@ describe("findRoomLiveVoiceBroadcastFromUserAndDevice", () => {
             event = mkVoiceBroadcastInfoStateEvent(
                 roomId,
                 VoiceBroadcastInfoState.Started,
-                client.getUserId(),
+                client.getUserId()!,
                 client.getDeviceId(),
             );
             room.currentState.setStateEvents([event]);
@@ -112,10 +113,10 @@ describe("findRoomLiveVoiceBroadcastFromUserAndDevice", () => {
         it("should return this event", () => {
             expect(room.currentState.getStateEvents).toHaveBeenCalledWith(
                 VoiceBroadcastInfoEventType,
-                client.getUserId(),
+                client.getUserId()!,
             );
 
-            expect(findRoomLiveVoiceBroadcastFromUserAndDevice(room, client.getUserId(), client.getDeviceId())).toBe(
+            expect(findRoomLiveVoiceBroadcastFromUserAndDevice(room, client.getUserId()!, client.getDeviceId()!)).toBe(
                 event,
             );
         });

@@ -24,7 +24,7 @@ import { getKeyBindingsManager } from "../../KeyBindingsManager";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 
 interface IProps extends HTMLProps<HTMLInputElement> {
-    onSearch?: (query: string) => void;
+    onSearch: (query: string) => void;
     onCleared?: (source?: string) => void;
     onKeyDown?: (ev: React.KeyboardEvent) => void;
     onFocus?: (ev: React.FocusEvent) => void;
@@ -62,7 +62,7 @@ export default class SearchBox extends React.Component<IProps, IState> {
 
     private onSearch = throttle(
         (): void => {
-            this.props.onSearch(this.search.current.value);
+            this.props.onSearch(this.search.current?.value);
         },
         200,
         { trailing: true, leading: true },
@@ -101,7 +101,7 @@ export default class SearchBox extends React.Component<IProps, IState> {
         }
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         /* eslint @typescript-eslint/no-unused-vars: ["error", { "ignoreRestSiblings": true }] */
         const {
             onSearch,

@@ -139,7 +139,7 @@ export default class Markdown {
      */
     private repairLinks(parsed: commonmark.Node): commonmark.Node {
         const walker = parsed.walker();
-        let event: commonmark.NodeWalkingStep = null;
+        let event: commonmark.NodeWalkingStep | null = null;
         let text = "";
         let isInPara = false;
         let previousNode: commonmark.Node | null = null;
@@ -287,7 +287,7 @@ export default class Markdown {
             // However, if it's a blockquote, adds a p tag anyway
             // in order to avoid deviation to commonmark and unexpected
             // results when parsing the formatted HTML.
-            if (node.parent.type === "block_quote" || isMultiLine(node)) {
+            if (node.parent?.type === "block_quote" || isMultiLine(node)) {
                 realParagraph.call(this, node, entering);
             }
         };

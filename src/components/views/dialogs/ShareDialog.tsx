@@ -71,14 +71,14 @@ interface IProps extends IDialogProps {
 
 interface IState {
     linkSpecificEvent: boolean;
-    permalinkCreator: RoomPermalinkCreator;
+    permalinkCreator: RoomPermalinkCreator | null;
 }
 
 export default class ShareDialog extends React.PureComponent<IProps, IState> {
     public constructor(props: IProps) {
         super(props);
 
-        let permalinkCreator: RoomPermalinkCreator = null;
+        let permalinkCreator: RoomPermalinkCreator | null = null;
         if (props.target instanceof Room) {
             permalinkCreator = new RoomPermalinkCreator(props.target);
             permalinkCreator.load();
@@ -108,15 +108,15 @@ export default class ShareDialog extends React.PureComponent<IProps, IState> {
         if (this.props.target instanceof Room) {
             if (this.state.linkSpecificEvent) {
                 const events = this.props.target.getLiveTimeline().getEvents();
-                matrixToUrl = this.state.permalinkCreator.forEvent(events[events.length - 1].getId());
+                matrixToUrl = this.state.permalinkCreator!.forEvent(events[events.length - 1].getId()!);
             } else {
-                matrixToUrl = this.state.permalinkCreator.forShareableRoom();
+                matrixToUrl = this.state.permalinkCreator!.forShareableRoom();
             }
         } else if (this.props.target instanceof User || this.props.target instanceof RoomMember) {
             matrixToUrl = makeUserPermalink(this.props.target.userId);
         } else if (this.props.target instanceof MatrixEvent) {
             if (this.state.linkSpecificEvent) {
-                matrixToUrl = this.props.permalinkCreator.forEvent(this.props.target.getId());
+                matrixToUrl = this.props.permalinkCreator.forEvent(this.props.target.getId()!);
             } else {
                 matrixToUrl = this.props.permalinkCreator.forShareableRoom();
             }
@@ -124,7 +124,7 @@ export default class ShareDialog extends React.PureComponent<IProps, IState> {
         return matrixToUrl;
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         let title;
         let checkbox;
 

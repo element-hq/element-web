@@ -70,7 +70,7 @@ export default abstract class AutocompleteProvider {
      * @param {boolean} force True if the user is forcing completion
      * @return {object} { command, range } where both objects fields are null if no match
      */
-    public getCurrentCommand(query: string, selection: ISelectionRange, force = false): ICommand | null {
+    public getCurrentCommand(query: string, selection: ISelectionRange, force = false): Partial<ICommand> {
         let commandRegex = this.commandRegex;
 
         if (force && this.shouldForceComplete()) {
@@ -78,7 +78,7 @@ export default abstract class AutocompleteProvider {
         }
 
         if (!commandRegex) {
-            return null;
+            return {};
         }
 
         commandRegex.lastIndex = 0;

@@ -1879,7 +1879,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         );
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         if (this.state.room instanceof LocalRoom) {
             if (this.state.room.state === LocalRoomState.CREATING) {
                 return this.renderLocalRoomCreateLoader();

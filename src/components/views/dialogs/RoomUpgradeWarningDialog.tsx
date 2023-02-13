@@ -100,7 +100,7 @@ export default class RoomUpgradeWarningDialog extends React.Component<IProps, IS
         Modal.createDialog(BugReportDialog, {});
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const brand = SdkConfig.get().brand;
 
         let inviteToggle = null;

@@ -180,7 +180,7 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
         this.setState({ downloadProgress });
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         let error = null;
         if (this.state.err) {
             error = <div className="error">{this.state.err}</div>;

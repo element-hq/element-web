@@ -83,7 +83,7 @@ export default class ConfirmUserActionDialog extends React.Component<IProps, ISt
         });
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const confirmButtonClass = this.props.danger ? "danger" : "";
 
         let reasonBox;

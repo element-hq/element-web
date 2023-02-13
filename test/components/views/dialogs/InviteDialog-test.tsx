@@ -76,9 +76,9 @@ describe("InviteDialog", () => {
     });
 
     it("should label with space name", () => {
-        mockClient.getRoom(roomId).isSpaceRoom = jest.fn().mockReturnValue(true);
-        mockClient.getRoom(roomId).getType = jest.fn().mockReturnValue(RoomType.Space);
-        mockClient.getRoom(roomId).name = "Space";
+        mockClient.getRoom(roomId)!.isSpaceRoom = jest.fn().mockReturnValue(true);
+        mockClient.getRoom(roomId)!.getType = jest.fn().mockReturnValue(RoomType.Space);
+        mockClient.getRoom(roomId)!.name = "Space";
         render(<InviteDialog kind={KIND_INVITE} roomId={roomId} onFinished={jest.fn()} />);
 
         expect(screen.queryByText("Invite to Space")).toBeTruthy();

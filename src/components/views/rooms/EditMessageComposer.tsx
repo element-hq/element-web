@@ -446,7 +446,7 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
         }
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         return (
             <div className={classNames("mx_EditMessageComposer", this.props.className)} onKeyDown={this.onKeyDown}>
                 <BasicMessageComposer

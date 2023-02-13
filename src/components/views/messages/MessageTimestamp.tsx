@@ -28,7 +28,7 @@ interface IProps {
 }
 
 export default class MessageTimestamp extends React.Component<IProps> {
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const date = new Date(this.props.ts);
         let timestamp;
         if (this.props.showRelative) {

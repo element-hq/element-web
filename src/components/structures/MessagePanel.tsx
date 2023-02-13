@@ -982,7 +982,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         }
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         let topSpinner;
         let bottomSpinner;
         if (this.props.backPaginating) {

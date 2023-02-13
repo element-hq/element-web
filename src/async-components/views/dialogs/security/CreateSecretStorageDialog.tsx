@@ -842,7 +842,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
         }
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         let content;
         if (this.state.error) {
             content = (

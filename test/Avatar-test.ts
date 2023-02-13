@@ -83,7 +83,7 @@ describe("avatarUrlForRoom", () => {
 
     it("should return null if there is no other member in the room", () => {
         mocked(dmRoomMap).getUserIdForRoomId.mockReturnValue("@user:example.com");
-        mocked(room.getAvatarFallbackMember).mockReturnValue(null);
+        mocked(room.getAvatarFallbackMember).mockReturnValue(undefined);
         expect(avatarUrlForRoom(room, 128, 128)).toBeNull();
     });
 

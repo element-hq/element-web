@@ -414,7 +414,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         );
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const client = this.context;
         const room = client.getRoom(this.props.roomId);
         const isEncrypted = this.state.encrypted;

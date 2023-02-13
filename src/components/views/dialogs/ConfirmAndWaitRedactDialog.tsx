@@ -72,7 +72,7 @@ export default class ConfirmAndWaitRedactDialog extends React.PureComponent<IPro
         }
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         if (this.state.isRedacting) {
             if (this.state.redactionErrorCode) {
                 const code = this.state.redactionErrorCode;

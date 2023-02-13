@@ -494,7 +494,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
         );
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const plaf = PlatformPeg.get();
         const supportsMultiLanguageSpellCheck = plaf.supportsSpellCheckSettings();
 

@@ -101,7 +101,7 @@ async function getStorageContext(): Promise<StorageContext> {
 
 function getUserContext(client: MatrixClient): UserContext {
     return {
-        username: client.credentials.userId,
+        username: client.credentials.userId!,
         enabled_labs: getEnabledLabs(),
         low_bandwidth: SettingsStore.getValue("lowBandwidth") ? "enabled" : "disabled",
     };
@@ -135,7 +135,7 @@ async function getCryptoContext(client: MatrixClient): Promise<CryptoContext> {
         cross_signing_supported_by_hs: String(
             await client.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing"),
         ),
-        cross_signing_key: crossSigning.getId(),
+        cross_signing_key: crossSigning.getId()!,
         cross_signing_privkey_in_secret_storage: String(!!(await crossSigning.isStoredInSecretStorage(secretStorage))),
         cross_signing_master_privkey_cached: String(!!(pkCache && (await pkCache.getCrossSigningKeyCache("master")))),
         cross_signing_user_signing_privkey_cached: String(

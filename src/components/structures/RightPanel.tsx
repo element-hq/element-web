@@ -149,7 +149,7 @@ export default class RightPanel extends React.Component<IProps, IState> {
         this.setState({ searchQuery });
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         let card = <div />;
         const roomId = this.props.room?.roomId;
         const phase = this.props.overwriteCard?.phase ?? this.state.phase;

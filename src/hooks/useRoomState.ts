@@ -28,8 +28,8 @@ const defaultMapper: Mapper<RoomState> = (roomState: RoomState) => roomState;
 export const useRoomState = <T extends any = RoomState>(
     room?: Room,
     mapper: Mapper<T> = defaultMapper as Mapper<T>,
-): T => {
-    const [value, setValue] = useState<T>(room ? mapper(room.currentState) : undefined);
+): T | undefined => {
+    const [value, setValue] = useState<T | undefined>(room ? mapper(room.currentState) : undefined);
 
     const update = useCallback(() => {
         if (!room) return;

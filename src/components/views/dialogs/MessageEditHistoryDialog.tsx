@@ -152,7 +152,7 @@ export default class MessageEditHistoryDialog extends React.PureComponent<IProps
         return nodes;
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         let content;
         if (this.state.error) {
             const { error } = this.state;

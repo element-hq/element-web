@@ -136,7 +136,7 @@ export class PasswordAuthEntry extends React.Component<IAuthEntryProps, IPasswor
         });
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const passwordBoxClass = classNames({
             error: this.props.errorText,
         });
@@ -207,7 +207,7 @@ export class RecaptchaAuthEntry extends React.Component<IRecaptchaAuthEntryProps
         });
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         if (this.props.busy) {
             return <Spinner />;
         }
@@ -353,7 +353,7 @@ export class TermsAuthEntry extends React.Component<ITermsAuthEntryProps, ITerms
         }
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         if (this.props.busy) {
             return <Spinner />;
         }
@@ -442,7 +442,7 @@ export class EmailIdentityAuthEntry extends React.Component<
         this.props.onPhaseChange(DEFAULT_PHASE);
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         let errorSection;
         // ignore the error when errcode is M_UNAUTHORIZED as we expect that error until the link is clicked.
         if (this.props.errorText && this.props.errorCode !== "M_UNAUTHORIZED") {
@@ -650,7 +650,7 @@ export class MsisdnAuthEntry extends React.Component<IMsisdnAuthEntryProps, IMsi
         }
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         if (this.state.requestingToken) {
             return <Spinner />;
         } else {
@@ -733,7 +733,7 @@ export class RegistrationTokenAuthEntry extends React.Component<IAuthEntryProps,
         });
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const registrationTokenBoxClass = classNames({
             error: this.props.errorText,
         });
@@ -857,7 +857,7 @@ export class SSOAuthEntry extends React.Component<ISSOAuthEntryProps, ISSOAuthEn
         this.props.submitAuthDict({});
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         let continueButton = null;
         const cancelButton = (
             <AccessibleButton
@@ -952,7 +952,7 @@ export class FallbackAuthEntry extends React.Component<IAuthEntryProps> {
         }
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         let errorSection;
         if (this.props.errorText) {
             errorSection = (

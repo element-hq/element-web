@@ -268,7 +268,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
         }
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const hasPassphrase =
             this.props.keyInfo &&
             this.props.keyInfo.passphrase &&

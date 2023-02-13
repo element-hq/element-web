@@ -72,9 +72,9 @@ export default class VoipUserMapper {
      * Gets the ID of the virtual room for a room, or null if the room has no
      * virtual room
      */
-    public async getVirtualRoomForRoom(roomId: string): Promise<Room | null> {
+    public async getVirtualRoomForRoom(roomId: string): Promise<Room | undefined> {
         const virtualUser = await this.getVirtualUserForRoom(roomId);
-        if (!virtualUser) return null;
+        if (!virtualUser) return undefined;
 
         return findDMForUser(MatrixClientPeg.get(), virtualUser);
     }
@@ -145,11 +145,11 @@ export default class VoipUserMapper {
                 // (possibly we should only join if we've also joined the native room, then we'd also have
                 // to make sure we joined virtual rooms on joining a native one)
                 MatrixClientPeg.get().joinRoom(invitedRoom.roomId);
-            }
 
-            // also put this room in the virtual room ID cache so isVirtualRoom return the right answer
-            // in however long it takes for the echo of setAccountData to come down the sync
-            this.virtualToNativeRoomIdCache.set(invitedRoom.roomId, nativeRoom.roomId);
+                // also put this room in the virtual room ID cache so isVirtualRoom return the right answer
+                // in however long it takes for the echo of setAccountData to come down the sync
+                this.virtualToNativeRoomIdCache.set(invitedRoom.roomId, nativeRoom.roomId);
+            }
         }
     }
 }

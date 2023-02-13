@@ -184,7 +184,7 @@ export default class MemberTile extends React.Component<IProps, IState> {
         }).trim();
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const member = this.props.member;
         const name = this.getDisplayName();
         const presenceState = member.user?.presence ?? null;

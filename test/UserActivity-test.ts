@@ -45,9 +45,7 @@ describe("UserActivity", function () {
 
     afterEach(function () {
         userActivity.stop();
-        userActivity = null;
         clock.uninstall();
-        clock = null;
     });
 
     it("should return the same shared instance", function () {

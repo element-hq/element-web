@@ -37,7 +37,7 @@ export default class ReactionsRowButtonTooltip extends React.PureComponent<IProp
     public static contextType = MatrixClientContext;
     public context!: React.ContextType<typeof MatrixClientContext>;
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const { content, reactionEvents, mxEvent, visible } = this.props;
 
         const room = this.context.getRoom(mxEvent.getRoomId());

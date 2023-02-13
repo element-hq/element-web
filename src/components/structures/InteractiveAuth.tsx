@@ -249,7 +249,7 @@ export default class InteractiveAuthComponent extends React.Component<IProps, IS
         this.authLogic.setEmailSid(sid);
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const stage = this.state.authStage;
         if (!stage) {
             if (this.state.busy) {

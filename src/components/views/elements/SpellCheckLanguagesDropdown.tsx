@@ -91,7 +91,7 @@ export default class SpellCheckLanguagesDropdown extends React.Component<
         this.setState({ searchQuery });
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         if (this.state.languages === null) {
             return <Spinner />;
         }

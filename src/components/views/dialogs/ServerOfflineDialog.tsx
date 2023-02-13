@@ -88,7 +88,7 @@ export default class ServerOfflineDialog extends React.PureComponent<IProps> {
         });
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         let timeline = this.renderTimeline().filter((c) => !!c); // remove nulls for next check
         if (timeline.length === 0) {
             timeline = [<div key={1}>{_t("You're all caught up.")}</div>];

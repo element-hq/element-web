@@ -66,7 +66,7 @@ export function formatBytes(bytes: number, decimals = 2): string {
  * @return {string}
  */
 export function formatCryptoKey(key: string): string {
-    return key.match(/.{1,4}/g).join(" ");
+    return key.match(/.{1,4}/g)!.join(" ");
 }
 /**
  * calculates a numeric hash for a given string

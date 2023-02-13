@@ -148,7 +148,7 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
         }
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const { request } = this.props;
         let description;
         let detail;

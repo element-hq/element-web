@@ -55,7 +55,7 @@ export class Singleflight {
      * @param {string} key A string key relevant to that instance to namespace under.
      * @returns {SingleflightContext} Returns the context to execute the function.
      */
-    public static for(instance: Object, key: string): SingleflightContext {
+    public static for(instance?: Object | null, key?: string | null): SingleflightContext {
         if (!instance || !key) throw new Error("An instance and key must be supplied");
         return new SingleflightContext(instance, key);
     }

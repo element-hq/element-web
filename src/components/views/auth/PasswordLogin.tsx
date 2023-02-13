@@ -367,7 +367,7 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
         }
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         let forgotPasswordJsx;
 
         if (this.props.onForgotPasswordClick) {

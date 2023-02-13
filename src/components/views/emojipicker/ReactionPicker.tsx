@@ -130,7 +130,7 @@ class ReactionPicker extends React.Component<IProps, IState> {
         return true;
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         return (
             <EmojiPicker
                 onChoose={this.onChoose}

@@ -24,7 +24,7 @@ interface IProps {
 }
 
 export default class SyntaxHighlight extends React.PureComponent<IProps> {
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const { children: content, language } = this.props;
         const highlighted = language ? hljs.highlight(content, { language }) : hljs.highlightAuto(content);
 

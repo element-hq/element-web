@@ -573,7 +573,7 @@ export default class Registration extends React.Component<IProps, IState> {
         }
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         let errorText;
         const err = this.state.errorText;
         if (err) {

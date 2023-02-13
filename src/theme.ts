@@ -248,7 +248,7 @@ export async function setTheme(theme?: string): Promise<void> {
     const styleElements = new Map<string, HTMLLinkElement>();
     const themes = Array.from(document.querySelectorAll<HTMLLinkElement>("[data-mx-theme]"));
     themes.forEach((theme) => {
-        styleElements.set(theme.dataset.mxTheme.toLowerCase(), theme);
+        styleElements.set(theme.dataset.mxTheme!.toLowerCase(), theme);
     });
 
     if (!styleElements.has(stylesheetName)) {
@@ -266,7 +266,7 @@ export async function setTheme(theme?: string): Promise<void> {
     // having them interact badly... but this causes a flash of unstyled app
     // which is even uglier.  So we don't.
 
-    const styleSheet = styleElements.get(stylesheetName);
+    const styleSheet = styleElements.get(stylesheetName)!;
     styleSheet.disabled = false;
 
     return new Promise((resolve, reject) => {
@@ -282,7 +282,7 @@ export async function setTheme(theme?: string): Promise<void> {
             });
             const bodyStyles = global.getComputedStyle(document.body);
             if (bodyStyles.backgroundColor) {
-                const metaElement: HTMLMetaElement = document.querySelector('meta[name="theme-color"]');
+                const metaElement = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]')!;
                 metaElement.content = bodyStyles.backgroundColor;
             }
             resolve();
@@ -306,8 +306,8 @@ export async function setTheme(theme?: string): Promise<void> {
             const intervalId = window.setInterval(() => {
                 if (isStyleSheetLoaded()) {
                     clearInterval(intervalId);
-                    styleSheet.onload = undefined;
-                    styleSheet.onerror = undefined;
+                    styleSheet.onload = null;
+                    styleSheet.onerror = null;
                     switchTheme();
                 }
 

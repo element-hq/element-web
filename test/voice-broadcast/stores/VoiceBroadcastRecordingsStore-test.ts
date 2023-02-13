@@ -44,6 +44,7 @@ describe("VoiceBroadcastRecordingsStore", () => {
             if (roomId === room.roomId) {
                 return room;
             }
+            return null;
         });
         infoEvent = mkVoiceBroadcastInfoStateEvent(
             roomId,

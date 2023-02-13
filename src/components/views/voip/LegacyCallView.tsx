@@ -549,7 +549,7 @@ export default class LegacyCallView extends React.Component<IProps, IState> {
         }
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const { call, secondaryCall, pipMode, showApps, onMouseDownOnHeader } = this.props;
         const { sidebarShown, sidebarFeeds } = this.state;
 

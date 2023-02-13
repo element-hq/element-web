@@ -17,7 +17,7 @@ limitations under the License.
 import SdkConfig from "../SdkConfig";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 
-export function getHostingLink(campaign: string): string {
+export function getHostingLink(campaign: string): string | null {
     const hostingLink = SdkConfig.get().hosting_signup_link;
     if (!hostingLink) return null;
     if (!campaign) return hostingLink;

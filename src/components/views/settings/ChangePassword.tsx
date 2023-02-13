@@ -376,7 +376,7 @@ export default class ChangePassword extends React.Component<IProps, IState> {
         return null;
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const rowClassName = this.props.rowClassName;
         const buttonClassName = this.props.buttonClassName;
 

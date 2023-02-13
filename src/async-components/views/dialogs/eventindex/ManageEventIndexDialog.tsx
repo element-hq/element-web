@@ -143,7 +143,7 @@ export default class ManageEventIndexDialog extends React.Component<IProps, ISta
         SettingsStore.setValue("crawlerSleepTime", null, SettingLevel.DEVICE, e.target.value);
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const brand = SdkConfig.get().brand;
 
         let crawlerState;

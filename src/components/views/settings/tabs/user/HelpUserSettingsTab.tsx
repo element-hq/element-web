@@ -206,7 +206,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
         });
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const brand = SdkConfig.get().brand;
 
         let faqText = _t(

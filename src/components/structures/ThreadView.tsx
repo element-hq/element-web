@@ -343,7 +343,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
         );
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const highlightedEventId = this.props.isInitialEventHighlighted ? this.props.initialEvent?.getId() : null;
 
         const threadRelation = this.threadRelation;

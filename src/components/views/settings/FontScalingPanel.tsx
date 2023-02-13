@@ -105,7 +105,7 @@ export default class FontScalingPanel extends React.Component<IProps, IState> {
         return { valid: true, feedback: _t("Use between %(min)s pt and %(max)s pt", { min, max }) };
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         return (
             <div className="mx_SettingsTab_section mx_FontScalingPanel">
                 <span className="mx_SettingsTab_subheading">{_t("Font size")}</span>

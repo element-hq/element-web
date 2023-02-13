@@ -37,7 +37,7 @@ export const useMap = ({ interactive, bodyId, onError }: UseMapProps): MapLibreM
     useEffect(
         () => {
             try {
-                setMap(createMap(interactive, bodyId, onError));
+                setMap(createMap(!!interactive, bodyId, onError));
             } catch (error) {
                 onError(error);
             }

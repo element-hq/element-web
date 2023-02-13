@@ -194,7 +194,7 @@ export default class MFileBody extends React.Component<IProps, IState> {
         }
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const isEncrypted = this.props.mediaEventHelper?.media.isEncrypted;
         const contentUrl = this.getContentUrl();
         const fileSize = this.content.info ? this.content.info.size : null;

@@ -95,7 +95,7 @@ export default class CommandProvider extends AutocompleteProvider {
                             description={_t(result.description)}
                         />
                     ),
-                    range,
+                    range: range!,
                 };
             });
     }

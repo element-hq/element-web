@@ -103,7 +103,7 @@ export default class UploadBar extends React.PureComponent<IProps, IState> {
         ContentMessages.sharedInstance().cancelUpload(this.state.currentUpload!);
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         if (!this.state.currentFile) {
             return null;
         }

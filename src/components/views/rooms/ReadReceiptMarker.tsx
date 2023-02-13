@@ -197,7 +197,7 @@ export default class ReadReceiptMarker extends React.PureComponent<IProps, IStat
         });
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         if (this.state.suppressDisplay) {
             return <div ref={this.avatar as RefObject<HTMLDivElement>} />;
         }

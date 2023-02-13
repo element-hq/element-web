@@ -66,7 +66,7 @@ function renderComponent(component: TestRenderer.ReactTestRenderer): string {
         }
 
         if (!Array.isArray(object) && object["type"] !== undefined && typeof object["children"] !== undefined) {
-            return serializeObject(object.children);
+            return serializeObject(object.children!);
         }
 
         if (!Array.isArray(object)) {
@@ -80,7 +80,7 @@ function renderComponent(component: TestRenderer.ReactTestRenderer): string {
             .join("");
     };
 
-    return serializeObject(component.toJSON());
+    return serializeObject(component.toJSON()!);
 }
 
 describe("TextForEvent", () => {
@@ -219,12 +219,12 @@ describe("TextForEvent", () => {
         };
 
         beforeAll(() => {
-            mockClient = createTestClient();
+            mockClient = createTestClient() as Mocked<MatrixClient>;
             MatrixClientPeg.get = () => mockClient;
             mockClient.getRoom.mockClear().mockReturnValue(mockRoom);
             mockRoom.getMember
                 .mockClear()
-                .mockImplementation((userId) => [userA, userB, userC].find((u) => u.userId === userId));
+                .mockImplementation((userId) => [userA, userB, userC].find((u) => u.userId === userId) || null);
             (SettingsStore.getValue as jest.Mock).mockReturnValue(true);
         });
 

@@ -177,7 +177,7 @@ export default class VideoFeed extends React.PureComponent<IProps, IState> {
         }
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const { pipMode, primary, secondary, feed } = this.props;
 
         const wrapperClasses = classnames("mx_VideoFeed", {

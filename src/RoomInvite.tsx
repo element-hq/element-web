@@ -112,7 +112,7 @@ export function inviteUsersToRoom(
 ): Promise<void> {
     return inviteMultipleToRoom(roomId, userIds, sendSharedHistoryKeys, progressCallback)
         .then((result) => {
-            const room = MatrixClientPeg.get().getRoom(roomId);
+            const room = MatrixClientPeg.get().getRoom(roomId)!;
             showAnyInviteErrors(result.states, room, result.inviter);
         })
         .catch((err) => {
@@ -175,14 +175,14 @@ export function showAnyInviteErrors(
                                         <BaseAvatar
                                             url={avatarUrl ? mediaFromMxc(avatarUrl).getSquareThumbnailHttp(24) : null}
                                             name={name}
-                                            idName={user.userId}
+                                            idName={user?.userId}
                                             width={36}
                                             height={36}
                                         />
                                     </div>
                                     <div className="mx_InviteDialog_tile_nameStack">
                                         <span className="mx_InviteDialog_tile_nameStack_name">{name}</span>
-                                        <span className="mx_InviteDialog_tile_nameStack_userId">{user.userId}</span>
+                                        <span className="mx_InviteDialog_tile_nameStack_userId">{user?.userId}</span>
                                     </div>
                                     <div className="mx_InviteDialog_tile--inviterError_errorText">
                                         {inviter.getErrorText(addr)}

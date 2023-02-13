@@ -49,7 +49,7 @@ describe("<RoomSearchView/>", () => {
         stubClient();
         client = MatrixClientPeg.get();
         client.supportsThreads = jest.fn().mockReturnValue(true);
-        room = new Room("!room:server", client, client.getUserId());
+        room = new Room("!room:server", client, client.getUserId()!);
         mocked(client.getRoom).mockReturnValue(room);
         permalinkCreator = new RoomPermalinkCreator(room, room.roomId);
 
@@ -92,7 +92,7 @@ describe("<RoomSearchView/>", () => {
                                     result: {
                                         room_id: room.roomId,
                                         event_id: "$2",
-                                        sender: client.getUserId(),
+                                        sender: client.getUserId()!,
                                         origin_server_ts: 1,
                                         content: { body: "Foo Test Bar", msgtype: "m.text" },
                                         type: EventType.RoomMessage,
@@ -103,7 +103,7 @@ describe("<RoomSearchView/>", () => {
                                             {
                                                 room_id: room.roomId,
                                                 event_id: "$1",
-                                                sender: client.getUserId(),
+                                                sender: client.getUserId()!,
                                                 origin_server_ts: 1,
                                                 content: { body: "Before", msgtype: "m.text" },
                                                 type: EventType.RoomMessage,
@@ -113,7 +113,7 @@ describe("<RoomSearchView/>", () => {
                                             {
                                                 room_id: room.roomId,
                                                 event_id: "$3",
-                                                sender: client.getUserId(),
+                                                sender: client.getUserId()!,
                                                 origin_server_ts: 1,
                                                 content: { body: "After", msgtype: "m.text" },
                                                 type: EventType.RoomMessage,
@@ -154,7 +154,7 @@ describe("<RoomSearchView/>", () => {
                                     result: {
                                         room_id: room.roomId,
                                         event_id: "$2",
-                                        sender: client.getUserId(),
+                                        sender: client.getUserId()!,
                                         origin_server_ts: 1,
                                         content: { body: "Foo Test Bar", msgtype: "m.text" },
                                         type: EventType.RoomMessage,
@@ -192,7 +192,7 @@ describe("<RoomSearchView/>", () => {
                         result: {
                             room_id: room.roomId,
                             event_id: "$2",
-                            sender: client.getUserId(),
+                            sender: client.getUserId()!,
                             origin_server_ts: 1,
                             content: { body: "Foo Test Bar", msgtype: "m.text" },
                             type: EventType.RoomMessage,
@@ -221,7 +221,7 @@ describe("<RoomSearchView/>", () => {
                         result: {
                             room_id: room.roomId,
                             event_id: "$4",
-                            sender: client.getUserId(),
+                            sender: client.getUserId()!,
                             origin_server_ts: 4,
                             content: { body: "Potato", msgtype: "m.text" },
                             type: EventType.RoomMessage,

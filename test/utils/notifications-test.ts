@@ -53,7 +53,7 @@ describe("notifications", () => {
             }),
         });
         accountDataStore = {};
-        accountDataEventKey = getLocalNotificationAccountDataEventType(mockClient.deviceId);
+        accountDataEventKey = getLocalNotificationAccountDataEventType(mockClient.deviceId!);
         mocked(SettingsStore).getValue.mockReturnValue(false);
     });
 

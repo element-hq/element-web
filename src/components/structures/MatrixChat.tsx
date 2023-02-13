@@ -2021,7 +2021,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         return fragmentAfterLogin;
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const fragmentAfterLogin = this.getFragmentAfterLogin();
         let view = null;
 

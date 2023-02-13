@@ -232,7 +232,7 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
         return valid;
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         /* eslint @typescript-eslint/no-unused-vars: ["error", { "ignoreRestSiblings": true }] */
         const {
             element,

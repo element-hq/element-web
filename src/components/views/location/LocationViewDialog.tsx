@@ -54,7 +54,7 @@ export default class LocationViewDialog extends React.Component<IProps, IState> 
         this.setState({ error });
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const { mxEvent } = this.props;
 
         // only pass member to marker when should render avatar marker

@@ -1886,7 +1886,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         this.callEventGroupers = buildLegacyCallEventGroupers(this.callEventGroupers, events);
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         // just show a spinner while the timeline loads.
         //
         // put it in a div of the right class (mx_RoomView_messagePanel) so

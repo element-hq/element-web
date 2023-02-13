@@ -99,7 +99,7 @@ export class BannedUser extends React.Component<IBannedUserProps> {
             });
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         let unbanButton;
 
         if (this.props.canUnban) {
@@ -236,7 +236,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
         });
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const client = MatrixClientPeg.get();
         const room = client.getRoom(this.props.roomId);
         const isSpaceRoom = room.isSpaceRoom();

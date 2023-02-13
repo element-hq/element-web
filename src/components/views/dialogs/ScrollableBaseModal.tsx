@@ -73,7 +73,7 @@ export default abstract class ScrollableBaseModal<
     protected abstract submit(): void;
     protected abstract renderContent(): React.ReactNode;
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         return (
             <MatrixClientContext.Provider value={this.matrixClient}>
                 <FocusLock

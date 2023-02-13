@@ -157,7 +157,7 @@ export default class CrossSigningPanel extends React.PureComponent<{}, IState> {
         });
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const {
             error,
             crossSigningPublicKeysOnDevice,

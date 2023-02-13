@@ -84,9 +84,9 @@ describe("<RoomPreviewBar />", () => {
     const getActions = (wrapper: RenderResult) =>
         wrapper.container.querySelector<HTMLDivElement>(".mx_RoomPreviewBar_actions");
     const getPrimaryActionButton = (wrapper: RenderResult) =>
-        getActions(wrapper).querySelector(".mx_AccessibleButton_kind_primary");
+        getActions(wrapper)?.querySelector(".mx_AccessibleButton_kind_primary");
     const getSecondaryActionButton = (wrapper: RenderResult) =>
-        getActions(wrapper).querySelector(".mx_AccessibleButton_kind_secondary");
+        getActions(wrapper)?.querySelector(".mx_AccessibleButton_kind_secondary");
 
     beforeEach(() => {
         stubClient();
@@ -102,17 +102,17 @@ describe("<RoomPreviewBar />", () => {
         const component = getComponent({ joining: true });
 
         expect(isSpinnerRendered(component)).toBeTruthy();
-        expect(getMessage(component).textContent).toEqual("Joining …");
+        expect(getMessage(component)?.textContent).toEqual("Joining …");
     });
     it("renders rejecting message", () => {
         const component = getComponent({ rejecting: true });
         expect(isSpinnerRendered(component)).toBeTruthy();
-        expect(getMessage(component).textContent).toEqual("Rejecting invite …");
+        expect(getMessage(component)?.textContent).toEqual("Rejecting invite …");
     });
     it("renders loading message", () => {
         const component = getComponent({ loading: true });
         expect(isSpinnerRendered(component)).toBeTruthy();
-        expect(getMessage(component).textContent).toEqual("Loading …");
+        expect(getMessage(component)?.textContent).toEqual("Loading …");
     });
 
     it("renders not logged in message", () => {
@@ -120,7 +120,7 @@ describe("<RoomPreviewBar />", () => {
         const component = getComponent({ loading: true });
 
         expect(isSpinnerRendered(component)).toBeFalsy();
-        expect(getMessage(component).textContent).toEqual("Join the conversation with an account");
+        expect(getMessage(component)?.textContent).toEqual("Join the conversation with an account");
     });
 
     it("should send room oob data to start login", async () => {
@@ -136,8 +136,8 @@ describe("<RoomPreviewBar />", () => {
         const dispatcherSpy = jest.fn();
         const dispatcherRef = defaultDispatcher.register(dispatcherSpy);
 
-        expect(getMessage(component).textContent).toEqual("Join the conversation with an account");
-        fireEvent.click(getPrimaryActionButton(component));
+        expect(getMessage(component)?.textContent).toEqual("Join the conversation with an account");
+        fireEvent.click(getPrimaryActionButton(component)!);
 
         await waitFor(() =>
             expect(dispatcherSpy).toHaveBeenCalledWith(
@@ -268,14 +268,14 @@ describe("<RoomPreviewBar />", () => {
 
                 it("joins room on primary button click", () => {
                     const component = getComponent({ inviterName, room, onJoinClick, onRejectClick });
-                    fireEvent.click(getPrimaryActionButton(component));
+                    fireEvent.click(getPrimaryActionButton(component)!);
 
                     expect(onJoinClick).toHaveBeenCalled();
                 });
 
                 it("rejects invite on secondary button click", () => {
                     const component = getComponent({ inviterName, room, onJoinClick, onRejectClick });
-                    fireEvent.click(getSecondaryActionButton(component));
+                    fireEvent.click(getSecondaryActionButton(component)!);
 
                     expect(onRejectClick).toHaveBeenCalled();
                 });
@@ -331,7 +331,7 @@ describe("<RoomPreviewBar />", () => {
                 await new Promise(setImmediate);
                 expect(getPrimaryActionButton(component)).toBeTruthy();
                 expect(getSecondaryActionButton(component)).toBeFalsy();
-                fireEvent.click(getPrimaryActionButton(component));
+                fireEvent.click(getPrimaryActionButton(component)!);
                 expect(onJoinClick).toHaveBeenCalled();
             };
 

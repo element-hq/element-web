@@ -61,7 +61,7 @@ export default class PlaybackWaveform extends React.PureComponent<IProps, IState
         this.setState({ progress });
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         return <Waveform relHeights={this.state.heights} progress={this.state.progress} />;
     }
 }

@@ -62,7 +62,7 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
     }
 
     public get visible(): boolean {
-        return this.state.enabled && this.meetsRoomRequirement;
+        return !!this.state.enabled && this.meetsRoomRequirement;
     }
 
     public get meetsRoomRequirement(): boolean {

@@ -191,7 +191,7 @@ export default class PersistedElement extends React.Component<IProps> {
         });
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         return <div ref={this.collectChildContainer} />;
     }
 }

@@ -27,15 +27,11 @@ export interface ICollapseConfig extends IConfig {
 
 class CollapseItem extends ResizeItem<ICollapseConfig> {
     public notifyCollapsed(collapsed: boolean): void {
-        const callback = this.resizer.config.onCollapsed;
-        if (callback) {
-            callback(collapsed, this.id, this.domNode);
-        }
+        this.resizer.config?.onCollapsed?.(collapsed, this.id, this.domNode);
     }
 
     public get isCollapsed(): boolean {
-        const isItemCollapsed = this.resizer.config.isItemCollapsed;
-        return isItemCollapsed(this.domNode);
+        return this.resizer.config?.isItemCollapsed?.(this.domNode) ?? false;
     }
 }
 

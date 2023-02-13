@@ -20,7 +20,7 @@ import { IConfigOptions } from "../IConfigOptions";
 import { getEmbeddedPagesWellKnown } from "../utils/WellKnownUtils";
 import { SnakedObject } from "./SnakedObject";
 
-export function getHomePageUrl(appConfig: IConfigOptions): string | null {
+export function getHomePageUrl(appConfig: IConfigOptions): string | undefined {
     const config = new SnakedObject(appConfig);
 
     const pagesConfig = config.get("embedded_pages");

@@ -62,7 +62,7 @@ export default class RoomPublishSetting extends React.PureComponent<IProps, ISta
         });
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const client = MatrixClientPeg.get();
 
         const room = client.getRoom(this.props.roomId);

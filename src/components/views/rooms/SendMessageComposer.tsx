@@ -573,7 +573,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
         this.editorRef.current?.focus();
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const threadId =
             this.props.relation?.rel_type === THREAD_RELATION_TYPE.name ? this.props.relation.event_id : null;
         return (

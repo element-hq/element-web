@@ -619,7 +619,7 @@ class LoggedInView extends React.Component<IProps, IState> {
         this._roomView.current?.handleScrollKey(ev);
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         let pageElement;
 
         switch (this.props.page_type) {

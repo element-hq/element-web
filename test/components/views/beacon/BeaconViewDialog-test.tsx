@@ -101,7 +101,7 @@ describe("<BeaconViewDialog />", () => {
 
     it("renders a map with markers", () => {
         const room = setupRoom([defaultEvent]);
-        const beacon = room.currentState.beacons.get(getBeaconInfoIdentifier(defaultEvent));
+        const beacon = room.currentState.beacons.get(getBeaconInfoIdentifier(defaultEvent))!;
         beacon.addLocations([location1]);
         const component = getComponent();
         expect(component.find("Map").props()).toEqual(
@@ -116,7 +116,7 @@ describe("<BeaconViewDialog />", () => {
     it("does not render any own beacon status when user is not live sharing", () => {
         // default event belongs to alice, we are bob
         const room = setupRoom([defaultEvent]);
-        const beacon = room.currentState.beacons.get(getBeaconInfoIdentifier(defaultEvent));
+        const beacon = room.currentState.beacons.get(getBeaconInfoIdentifier(defaultEvent))!;
         beacon.addLocations([location1]);
         const component = getComponent();
         expect(component.find("DialogOwnBeaconStatus").html()).toBeNull();
@@ -125,7 +125,7 @@ describe("<BeaconViewDialog />", () => {
     it("renders own beacon status when user is live sharing", () => {
         // default event belongs to alice
         const room = setupRoom([defaultEvent]);
-        const beacon = room.currentState.beacons.get(getBeaconInfoIdentifier(defaultEvent));
+        const beacon = room.currentState.beacons.get(getBeaconInfoIdentifier(defaultEvent))!;
         beacon.addLocations([location1]);
         // mock own beacon store to show default event as alice's live beacon
         jest.spyOn(OwnBeaconStore.instance, "getLiveBeaconIds").mockReturnValue([beacon.identifier]);
@@ -141,7 +141,7 @@ describe("<BeaconViewDialog />", () => {
 
     it("updates markers on changes to beacons", () => {
         const room = setupRoom([defaultEvent]);
-        const beacon = room.currentState.beacons.get(getBeaconInfoIdentifier(defaultEvent));
+        const beacon = room.currentState.beacons.get(getBeaconInfoIdentifier(defaultEvent))!;
         beacon.addLocations([location1]);
         const component = getComponent();
         expect(component.find("BeaconMarker").length).toEqual(1);
@@ -161,7 +161,7 @@ describe("<BeaconViewDialog />", () => {
 
     it("does not update bounds or center on changing beacons", () => {
         const room = setupRoom([defaultEvent]);
-        const beacon = room.currentState.beacons.get(getBeaconInfoIdentifier(defaultEvent));
+        const beacon = room.currentState.beacons.get(getBeaconInfoIdentifier(defaultEvent))!;
         beacon.addLocations([location1]);
         const component = getComponent();
         expect(component.find("BeaconMarker").length).toEqual(1);
@@ -200,7 +200,7 @@ describe("<BeaconViewDialog />", () => {
     it("renders map without markers when no live beacons remain", () => {
         const onFinished = jest.fn();
         const room = setupRoom([defaultEvent]);
-        const beacon = room.currentState.beacons.get(getBeaconInfoIdentifier(defaultEvent));
+        const beacon = room.currentState.beacons.get(getBeaconInfoIdentifier(defaultEvent))!;
         beacon.addLocations([location1]);
         const component = getComponent({ onFinished });
         expect(component.find("BeaconMarker").length).toEqual(1);
@@ -233,7 +233,7 @@ describe("<BeaconViewDialog />", () => {
     describe("sidebar", () => {
         it("opens sidebar on view list button click", () => {
             const room = setupRoom([defaultEvent]);
-            const beacon = room.currentState.beacons.get(getBeaconInfoIdentifier(defaultEvent));
+            const beacon = room.currentState.beacons.get(getBeaconInfoIdentifier(defaultEvent))!;
             beacon.addLocations([location1]);
             const component = getComponent();
 
@@ -244,7 +244,7 @@ describe("<BeaconViewDialog />", () => {
 
         it("closes sidebar on close button click", () => {
             const room = setupRoom([defaultEvent]);
-            const beacon = room.currentState.beacons.get(getBeaconInfoIdentifier(defaultEvent));
+            const beacon = room.currentState.beacons.get(getBeaconInfoIdentifier(defaultEvent))!;
             beacon.addLocations([location1]);
             const component = getComponent();
 

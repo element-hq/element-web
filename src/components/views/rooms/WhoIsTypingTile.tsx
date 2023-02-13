@@ -199,7 +199,7 @@ export default class WhoIsTypingTile extends React.Component<IProps, IState> {
         return avatars;
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         let usersTyping = this.state.usersTyping;
         const stoppedUsersOnTimer = Object.keys(this.state.delayedStopTypingTimers).map((userId) =>
             this.props.room.getMember(userId),

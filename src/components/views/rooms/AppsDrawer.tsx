@@ -219,7 +219,7 @@ export default class AppsDrawer extends React.Component<IProps, IState> {
         });
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         if (!this.props.showApps) return <div />;
         const widgetIsMaxmised: boolean = this.centerApps().length > 0;
         const appsToDisplay = widgetIsMaxmised ? this.centerApps() : this.topApps();

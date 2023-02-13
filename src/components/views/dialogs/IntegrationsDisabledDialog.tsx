@@ -35,7 +35,7 @@ export default class IntegrationsDisabledDialog extends React.Component<IProps> 
         dis.fire(Action.ViewUserSettings);
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         return (
             <BaseDialog
                 className="mx_IntegrationsDisabledDialog"

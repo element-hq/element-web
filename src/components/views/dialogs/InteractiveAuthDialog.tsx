@@ -140,7 +140,7 @@ export default class InteractiveAuthDialog extends React.Component<InteractiveAu
         this.props.onFinished(false);
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         // Let's pick a title, body, and other params text that we'll show to the user. The order
         // is most specific first, so stagePhase > our props > defaults.
 

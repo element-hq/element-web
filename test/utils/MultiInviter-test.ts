@@ -47,7 +47,7 @@ jest.mock("../../src/settings/SettingsStore", () => ({
 
 const mockPromptBeforeInviteUnknownUsers = (value: boolean) => {
     mocked(SettingsStore.getValue).mockImplementation(
-        (settingName: string, roomId: string = null, _excludeDefault = false): any => {
+        (settingName: string, roomId: string, _excludeDefault = false): any => {
             if (settingName === "promptBeforeInviteUnknownUsers" && roomId === ROOMID) {
                 return value;
             }
@@ -57,7 +57,7 @@ const mockPromptBeforeInviteUnknownUsers = (value: boolean) => {
 
 const mockCreateTrackedDialog = (callbackName: "onInviteAnyways" | "onGiveUp") => {
     mocked(Modal.createDialog).mockImplementation((...rest: Parameters<ModalManager["createDialog"]>): any => {
-        rest[1][callbackName]();
+        rest[1]![callbackName]();
     });
 };
 

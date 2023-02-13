@@ -96,8 +96,8 @@ export function getNestedReplyText(
 
     // dev note: do not rely on `body` being safe for HTML usage below.
 
-    const evLink = permalinkCreator.forEvent(ev.getId());
-    const userLink = makeUserPermalink(ev.getSender());
+    const evLink = permalinkCreator.forEvent(ev.getId()!);
+    const userLink = makeUserPermalink(ev.getSender()!);
     const mxid = ev.getSender();
 
     if (M_BEACON_INFO.matches(ev.getType())) {
@@ -191,8 +191,8 @@ export function makeReplyMixIn(ev?: MatrixEvent): IEventRelation {
             // with those that do. They should set the m.in_reply_to part as usual, and then add on
             // "rel_type": "m.thread" and "event_id": "$thread_root", copying $thread_root from the replied-to event.
             const relation = ev.getRelation();
-            mixin.rel_type = relation.rel_type;
-            mixin.event_id = relation.event_id;
+            mixin.rel_type = relation?.rel_type;
+            mixin.event_id = relation?.event_id;
         }
     }
 

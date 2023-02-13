@@ -46,7 +46,7 @@ class Search extends React.PureComponent<IProps> {
         }
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         let rightButton;
         if (this.props.query) {
             rightButton = (

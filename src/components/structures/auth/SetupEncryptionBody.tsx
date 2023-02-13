@@ -141,7 +141,7 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
         this.props.onFinished();
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const { phase, lostKeys } = this.state;
 
         if (this.state.verificationRequest) {

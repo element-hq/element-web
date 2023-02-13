@@ -139,7 +139,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         );
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const brand = SdkConfig.get().brand;
 
         return (

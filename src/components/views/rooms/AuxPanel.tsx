@@ -125,7 +125,7 @@ export default class AuxPanel extends React.Component<IProps, IState> {
         return counters;
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const callView = (
             <LegacyCallViewForRoom
                 roomId={this.props.room.roomId}

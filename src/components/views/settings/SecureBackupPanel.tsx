@@ -216,7 +216,7 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
         this.loadBackupStatus();
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const {
             loading,
             error,

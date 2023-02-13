@@ -120,7 +120,7 @@ export default class ThirdPartyMemberInfo extends React.Component<IProps, IState
         this.setState({ invited: false });
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         let adminTools = null;
         if (this.state.canKick && this.state.invited) {
             adminTools = (

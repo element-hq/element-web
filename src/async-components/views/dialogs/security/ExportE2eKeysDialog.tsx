@@ -127,7 +127,7 @@ export default class ExportE2eKeysDialog extends React.Component<IProps, IState>
         } as Pick<IState, AnyPassphrase>);
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const disableForm = this.state.phase === Phase.Exporting;
 
         return (

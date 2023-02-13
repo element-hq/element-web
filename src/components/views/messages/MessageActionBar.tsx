@@ -440,7 +440,7 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
         );
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const toolbarOpts = [];
         if (canEditContent(this.props.mxEvent)) {
             toolbarOpts.push(

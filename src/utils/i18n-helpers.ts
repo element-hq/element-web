@@ -21,7 +21,7 @@ import { _t } from "../languageHandler";
 import DMRoomMap from "./DMRoomMap";
 
 export interface RoomContextDetails {
-    details: string;
+    details: string | null;
     ariaLabel?: string;
 }
 

@@ -814,7 +814,7 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
         }
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const rightPanel =
             this.state.showRightPanel && this.state.phase === Phase.Landing ? (
                 <RightPanel room={this.props.space} resizeNotifier={this.props.resizeNotifier} />

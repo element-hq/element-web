@@ -381,7 +381,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
         });
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const idServerUrl = this.state.currentClientIdServer;
         let sectionTitle;
         let bodyText;

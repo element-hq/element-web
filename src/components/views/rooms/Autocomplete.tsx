@@ -280,7 +280,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         }
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         let position = 1;
         const renderedCompletions = this.state.completions
             .map((completionResult, i) => {

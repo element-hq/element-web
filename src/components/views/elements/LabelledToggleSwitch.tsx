@@ -43,7 +43,7 @@ interface IProps {
 }
 
 export default class LabelledToggleSwitch extends React.PureComponent<IProps> {
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         // This is a minimal version of a SettingsFlag
         const { label, caption } = this.props;
         let firstPart = (

@@ -218,7 +218,7 @@ export default class DateSeparator extends React.Component<IProps, IState> {
         );
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const label = this.getLabel();
 
         let dateHeaderContent;

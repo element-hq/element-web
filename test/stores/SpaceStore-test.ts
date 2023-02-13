@@ -790,12 +790,12 @@ describe("SpaceStore", () => {
                     event: true,
                     type: EventType.SpaceChild,
                     room: spaceId,
-                    user: client.getUserId(),
+                    user: client.getUserId()!,
                     skey: childId,
                     content: { via: [], canonical: true },
                     ts: Date.now(),
                 });
-                const spaceRoom = client.getRoom(spaceId);
+                const spaceRoom = client.getRoom(spaceId)!;
                 mocked(spaceRoom.currentState).getStateEvents.mockImplementation(
                     testUtils.mockStateEventImplementation([childEvent]),
                 );
@@ -808,7 +808,7 @@ describe("SpaceStore", () => {
                     event: true,
                     type: EventType.RoomMember,
                     room: spaceId,
-                    user: client.getUserId(),
+                    user: client.getUserId()!,
                     skey: user.userId,
                     content: { membership: "join" },
                     ts: Date.now(),
@@ -1313,8 +1313,8 @@ describe("SpaceStore", () => {
             callback: (...args: any[]) => void,
         ): () => void {
             callback();
-            emitter.addListener(eventName, callback);
-            return () => emitter.removeListener(eventName, callback);
+            emitter?.addListener(eventName, callback);
+            return () => emitter?.removeListener(eventName, callback);
         }
 
         let metaSpaces;

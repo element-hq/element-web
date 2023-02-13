@@ -181,7 +181,7 @@ export default class RoomSettingsDialog extends React.Component<IProps, IState> 
         return tabs;
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const roomName = this.state.roomName;
         return (
             <BaseDialog

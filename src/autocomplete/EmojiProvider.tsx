@@ -94,7 +94,7 @@ export default class EmojiProvider extends AutocompleteProvider {
             shouldMatchWordsOnly: true,
         });
 
-        this.recentlyUsed = Array.from(new Set(recent.get().map(getEmojiFromUnicode).filter(Boolean)));
+        this.recentlyUsed = Array.from(new Set(recent.get().map(getEmojiFromUnicode).filter(Boolean))) as IEmoji[];
     }
 
     public async getCompletions(
@@ -152,7 +152,7 @@ export default class EmojiProvider extends AutocompleteProvider {
                         <span>{c.emoji.unicode}</span>
                     </PillCompletion>
                 ),
-                range,
+                range: range!,
             }));
         }
         return [];

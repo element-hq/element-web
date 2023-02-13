@@ -82,7 +82,7 @@ export default class SearchBar extends React.Component<IProps, IState> {
         this.props.onSearch(this.searchTerm.current.value, this.state.scope);
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const searchButtonClasses = classNames("mx_SearchBar_searchButton", {
             mx_SearchBar_searching: this.props.searchInProgress,
         });

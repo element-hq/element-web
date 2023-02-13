@@ -85,7 +85,7 @@ export default class ReactionsRowButton extends React.PureComponent<IProps, ISta
         });
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const { mxEvent, content, count, reactionEvents, myReactionEvent } = this.props;
 
         const classes = classNames({

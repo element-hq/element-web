@@ -114,7 +114,7 @@ export default class MKeyVerificationRequest extends React.Component<IProps> {
         }
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const { mxEvent } = this.props;
         const request = mxEvent.verificationRequest;
 

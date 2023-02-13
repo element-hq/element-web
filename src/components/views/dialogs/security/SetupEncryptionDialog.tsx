@@ -57,7 +57,7 @@ export default class SetupEncryptionDialog extends React.Component<IProps, IStat
         this.setState({ icon: iconFromPhase(this.store.phase) });
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         return (
             <BaseDialog
                 headerImage={this.state.icon}

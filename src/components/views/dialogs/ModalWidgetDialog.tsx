@@ -124,7 +124,7 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
         this.state.messaging.transport.reply(ev.detail, {} as IWidgetApiAcknowledgeResponseData);
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const templated = this.widget.getCompleteUrl({
             widgetRoomId: this.props.widgetRoomId,
             currentUserId: MatrixClientPeg.get().getUserId(),

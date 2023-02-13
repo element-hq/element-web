@@ -80,7 +80,10 @@ describe("<MBeaconBody />", () => {
             wrappingComponentProps: { value: mockClient },
         });
 
-    const modalSpy = jest.spyOn(Modal, "createDialog").mockReturnValue(undefined);
+    const modalSpy = jest.spyOn(Modal, "createDialog").mockReturnValue({
+        finished: Promise.resolve([true]),
+        close: () => {},
+    });
 
     beforeEach(() => {
         jest.clearAllMocks();
@@ -169,7 +172,7 @@ describe("<MBeaconBody />", () => {
             const room = makeRoomWithStateEvents([aliceBeaconInfo1], { roomId, mockClient });
             const component = getComponent({ mxEvent: aliceBeaconInfo1 });
 
-            const beaconInstance = room.currentState.beacons.get(getBeaconInfoIdentifier(aliceBeaconInfo1));
+            const beaconInstance = room.currentState.beacons.get(getBeaconInfoIdentifier(aliceBeaconInfo1))!;
             // update alice's beacon with a new edition
             // beacon instance emits
             act(() => {
@@ -190,7 +193,7 @@ describe("<MBeaconBody />", () => {
             const aliceBeaconInfo = makeBeaconInfoEvent(aliceId, roomId, { isLive: true }, "$alice-room1-1");
 
             const room = makeRoomWithStateEvents([aliceBeaconInfo], { roomId, mockClient });
-            const beaconInstance = room.currentState.beacons.get(getBeaconInfoIdentifier(aliceBeaconInfo));
+            const beaconInstance = room.currentState.beacons.get(getBeaconInfoIdentifier(aliceBeaconInfo))!;
             const component = getComponent({ mxEvent: aliceBeaconInfo });
 
             act(() => {
@@ -240,7 +243,7 @@ describe("<MBeaconBody />", () => {
 
         it("renders a live beacon with a location correctly", () => {
             const room = makeRoomWithStateEvents([aliceBeaconInfo], { roomId, mockClient });
-            const beaconInstance = room.currentState.beacons.get(getBeaconInfoIdentifier(aliceBeaconInfo));
+            const beaconInstance = room.currentState.beacons.get(getBeaconInfoIdentifier(aliceBeaconInfo))!;
             beaconInstance.addLocations([location1]);
             const component = getComponent({ mxEvent: aliceBeaconInfo });
 
@@ -249,7 +252,7 @@ describe("<MBeaconBody />", () => {
 
         it("opens maximised map view on click when beacon has a live location", () => {
             const room = makeRoomWithStateEvents([aliceBeaconInfo], { roomId, mockClient });
-            const beaconInstance = room.currentState.beacons.get(getBeaconInfoIdentifier(aliceBeaconInfo));
+            const beaconInstance = room.currentState.beacons.get(getBeaconInfoIdentifier(aliceBeaconInfo))!;
             beaconInstance.addLocations([location1]);
             const component = getComponent({ mxEvent: aliceBeaconInfo });
 
@@ -274,7 +277,7 @@ describe("<MBeaconBody />", () => {
 
         it("renders a live beacon with a location correctly", () => {
             const room = makeRoomWithStateEvents([aliceBeaconInfo], { roomId, mockClient });
-            const beaconInstance = room.currentState.beacons.get(getBeaconInfoIdentifier(aliceBeaconInfo));
+            const beaconInstance = room.currentState.beacons.get(getBeaconInfoIdentifier(aliceBeaconInfo))!;
             beaconInstance.addLocations([location1]);
             const component = getComponent({ mxEvent: aliceBeaconInfo });
 
@@ -283,7 +286,7 @@ describe("<MBeaconBody />", () => {
 
         it("opens maximised map view on click when beacon has a live location", () => {
             const room = makeRoomWithStateEvents([aliceBeaconInfo], { roomId, mockClient });
-            const beaconInstance = room.currentState.beacons.get(getBeaconInfoIdentifier(aliceBeaconInfo));
+            const beaconInstance = room.currentState.beacons.get(getBeaconInfoIdentifier(aliceBeaconInfo))!;
             beaconInstance.addLocations([location1]);
             const component = getComponent({ mxEvent: aliceBeaconInfo });
 
@@ -299,7 +302,7 @@ describe("<MBeaconBody />", () => {
             const room = makeRoomWithStateEvents([aliceBeaconInfo], { roomId, mockClient });
             const component = getComponent({ mxEvent: aliceBeaconInfo });
 
-            const beaconInstance = room.currentState.beacons.get(getBeaconInfoIdentifier(aliceBeaconInfo));
+            const beaconInstance = room.currentState.beacons.get(getBeaconInfoIdentifier(aliceBeaconInfo))!;
             act(() => {
                 beaconInstance.addLocations([location1]);
                 component.setProps({});
@@ -345,7 +348,7 @@ describe("<MBeaconBody />", () => {
 
         const setupRoomWithBeacon = (beaconInfoEvent: MatrixEvent, locationEvents: MatrixEvent[] = []) => {
             const room = makeRoomWithStateEvents([beaconInfoEvent], { roomId, mockClient });
-            const beaconInstance = room.currentState.beacons.get(getBeaconInfoIdentifier(beaconInfoEvent));
+            const beaconInstance = room.currentState.beacons.get(getBeaconInfoIdentifier(beaconInfoEvent))!;
             beaconInstance.addLocations(locationEvents);
         };
         const mockGetRelationsForEvent = (locationEvents: MatrixEvent[] = []) => {

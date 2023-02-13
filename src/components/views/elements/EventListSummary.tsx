@@ -495,7 +495,7 @@ export default class EventListSummary extends React.Component<IProps> {
         };
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const eventsToRender = this.props.events;
 
         // Map user IDs to latest Avatar Member. ES6 Maps are ordered by when the key was created,

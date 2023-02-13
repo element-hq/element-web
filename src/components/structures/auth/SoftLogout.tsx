@@ -326,7 +326,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
         );
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         return (
             <AuthPage>
                 <AuthHeader />

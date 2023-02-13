@@ -83,7 +83,7 @@ describe("<PinnedMessagesCard />", () => {
     };
 
     const mountPins = async (room: Room): Promise<ReactWrapper<ComponentProps<typeof PinnedMessagesCard>>> => {
-        let pins: ReactWrapper<ComponentProps<typeof PinnedMessagesCard>>;
+        let pins!: ReactWrapper<ComponentProps<typeof PinnedMessagesCard>>;
         await act(async () => {
             pins = mount(
                 <PinnedMessagesCard

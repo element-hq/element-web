@@ -44,7 +44,7 @@ export default class InfoDialog extends React.Component<IProps> {
         this.props.onFinished();
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         return (
             <BaseDialog
                 className="mx_InfoDialog"

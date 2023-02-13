@@ -63,7 +63,7 @@ export default class LiveRecordingWaveform extends React.PureComponent<IProps, I
         this.setState({ waveform: this.waveform });
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         return <Waveform relHeights={this.state.waveform} />;
     }
 }

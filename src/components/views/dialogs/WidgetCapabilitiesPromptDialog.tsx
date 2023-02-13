@@ -86,7 +86,7 @@ export default class WidgetCapabilitiesPromptDialog extends React.PureComponent<
         this.props.onFinished({ approved, remember: this.state.rememberSelection });
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         // We specifically order the timeline capabilities down to the bottom. The capability text
         // generation cares strongly about this.
         const orderedCapabilities = Object.entries(this.state.booleanStates).sort(([capA], [capB]) => {

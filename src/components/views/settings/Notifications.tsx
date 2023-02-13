@@ -758,7 +758,7 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
         );
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         if (this.state.phase === Phase.Loading) {
             // Ends up default centered
             return <Spinner />;

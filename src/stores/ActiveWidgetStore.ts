@@ -39,8 +39,8 @@ export enum ActiveWidgetStoreEvent {
  */
 export default class ActiveWidgetStore extends EventEmitter {
     private static internalInstance: ActiveWidgetStore;
-    private persistentWidgetId: string;
-    private persistentRoomId: string;
+    private persistentWidgetId: string | null;
+    private persistentRoomId: string | null;
     private dockedWidgetsByUid = new Map<string, number>();
 
     public static get instance(): ActiveWidgetStore {
@@ -65,7 +65,7 @@ export default class ActiveWidgetStore extends EventEmitter {
         // and keep itself up to date.
         // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
         if (ev.getType() === "im.vector.modular.widgets") {
-            this.destroyPersistentWidget(ev.getStateKey(), roomId);
+            this.destroyPersistentWidget(ev.getStateKey()!, roomId);
         }
     };
 
@@ -92,11 +92,11 @@ export default class ActiveWidgetStore extends EventEmitter {
         return this.persistentWidgetId === widgetId && this.persistentRoomId === roomId;
     }
 
-    public getPersistentWidgetId(): string {
+    public getPersistentWidgetId(): string | null {
         return this.persistentWidgetId;
     }
 
-    public getPersistentRoomId(): string {
+    public getPersistentRoomId(): string | null {
         return this.persistentRoomId;
     }
 

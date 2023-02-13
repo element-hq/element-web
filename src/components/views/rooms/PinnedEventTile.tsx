@@ -68,7 +68,7 @@ export default class PinnedEventTile extends React.Component<IProps> {
         }
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const sender = this.props.event.getSender();
 
         let unpinButton = null;

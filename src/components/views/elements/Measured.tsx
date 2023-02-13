@@ -64,7 +64,7 @@ export default class Measured extends React.PureComponent<IProps> {
         this.props.onMeasurement(entry.contentRect.width <= this.props.breakpoint);
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         return null;
     }
 }

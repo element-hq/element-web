@@ -59,6 +59,7 @@ describe("isRoomReady", () => {
             beforeEach(() => {
                 mocked(client.getRoom).mockImplementation((roomId: string) => {
                     if (roomId === room1.roomId) return room1;
+                    return null;
                 });
             });
 

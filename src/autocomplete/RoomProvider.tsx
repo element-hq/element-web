@@ -39,12 +39,12 @@ function canonicalScore(displayedAlias: string, room: Room): number {
 
 function matcherObject(
     room: Room,
-    displayedAlias: string | null,
+    displayedAlias: string,
     matchName = "",
 ): {
     room: Room;
     matchName: string;
-    displayedAlias: string | null;
+    displayedAlias: string;
 } {
     return {
         room,
@@ -81,7 +81,7 @@ export default class RoomProvider extends AutocompleteProvider {
             // the only reason we need to do this is because Fuse only matches on properties
             let matcherObjects = this.getRooms().reduce<ReturnType<typeof matcherObject>[]>((aliases, room) => {
                 if (room.getCanonicalAlias()) {
-                    aliases = aliases.concat(matcherObject(room, room.getCanonicalAlias(), room.name));
+                    aliases = aliases.concat(matcherObject(room, room.getCanonicalAlias()!, room.name));
                 }
                 if (room.getAltAliases().length) {
                     const altAliases = room.getAltAliases().map((alias) => matcherObject(room, alias));
@@ -122,7 +122,7 @@ export default class RoomProvider extends AutocompleteProvider {
                                 <RoomAvatar width={24} height={24} room={room.room} />
                             </PillCompletion>
                         ),
-                        range,
+                        range: range!,
                     }),
                 )
                 .filter((completion) => !!completion.completion && completion.completion.length > 0);

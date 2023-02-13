@@ -52,7 +52,7 @@ export default class LabsUserSettingsTab extends React.Component<{}, IState> {
         };
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const features = SettingsStore.getFeatureSettingNames();
         const [labs, betas] = features.reduce(
             (arr, f) => {

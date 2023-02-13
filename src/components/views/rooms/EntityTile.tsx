@@ -105,7 +105,7 @@ export default class EntityTile extends React.PureComponent<IProps, IState> {
         };
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const mainClassNames: Record<string, boolean> = {
             mx_EntityTile: true,
             mx_EntityTile_noHover: this.props.suppressOnHover,

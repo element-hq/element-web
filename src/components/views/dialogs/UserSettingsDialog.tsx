@@ -210,7 +210,7 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
         return tabs;
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         return (
             <BaseDialog
                 className="mx_UserSettingsDialog"

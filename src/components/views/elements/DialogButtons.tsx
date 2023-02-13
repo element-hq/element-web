@@ -71,7 +71,7 @@ export default class DialogButtons extends React.Component<IProps> {
         this.props.onCancel(event);
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         let primaryButtonClassName = "mx_Dialog_primary";
         if (this.props.primaryButtonClass) {
             primaryButtonClassName += " " + this.props.primaryButtonClass;

@@ -119,7 +119,7 @@ export default class WidgetUtils {
                 if (
                     testUrl.protocol === scalarUrl.protocol &&
                     testUrl.host === scalarUrl.host &&
-                    testUrl.pathname.startsWith(scalarUrl.pathname)
+                    testUrl.pathname?.startsWith(scalarUrl.pathname)
                 ) {
                     return true;
                 }
@@ -143,8 +143,8 @@ export default class WidgetUtils {
         return new Promise((resolve, reject) => {
             // Tests an account data event, returning true if it's in the state
             // we're waiting for it to be in
-            function eventInIntendedState(ev: MatrixEvent): boolean {
-                if (!ev || !ev.getContent()) return false;
+            function eventInIntendedState(ev?: MatrixEvent): boolean {
+                if (!ev) return false;
                 if (add) {
                     return ev.getContent()[widgetId] !== undefined;
                 } else {
@@ -190,12 +190,12 @@ export default class WidgetUtils {
         return new Promise((resolve, reject) => {
             // Tests a list of state events, returning true if it's in the state
             // we're waiting for it to be in
-            function eventsInIntendedState(evList: MatrixEvent[]): boolean {
-                const widgetPresent = evList.some((ev) => {
+            function eventsInIntendedState(evList?: MatrixEvent[]): boolean {
+                const widgetPresent = evList?.some((ev) => {
                     return ev.getContent() && ev.getContent()["id"] === widgetId;
                 });
                 if (add) {
-                    return widgetPresent;
+                    return !!widgetPresent;
                 } else {
                     return !widgetPresent;
                 }
@@ -203,7 +203,7 @@ export default class WidgetUtils {
 
             const room = MatrixClientPeg.get().getRoom(roomId);
             // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
-            const startingWidgetEvents = room.currentState.getStateEvents("im.vector.modular.widgets");
+            const startingWidgetEvents = room?.currentState.getStateEvents("im.vector.modular.widgets");
             if (eventsInIntendedState(startingWidgetEvents)) {
                 resolve();
                 return;
@@ -213,7 +213,7 @@ export default class WidgetUtils {
                 if (ev.getRoomId() !== roomId || ev.getType() !== "im.vector.modular.widgets") return;
 
                 // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
-                const currentWidgetEvents = room.currentState.getStateEvents("im.vector.modular.widgets");
+                const currentWidgetEvents = room?.currentState.getStateEvents("im.vector.modular.widgets");
 
                 if (eventsInIntendedState(currentWidgetEvents)) {
                     MatrixClientPeg.get().removeListener(RoomStateEvent.Events, onRoomStateEvents);
@@ -261,7 +261,7 @@ export default class WidgetUtils {
         if (addingWidget) {
             userWidgets[widgetId] = {
                 content: content,
-                sender: client.getUserId(),
+                sender: client.getUserId()!,
                 state_key: widgetId,
                 type: "m.widget",
                 id: widgetId,
@@ -299,7 +299,7 @@ export default class WidgetUtils {
             content = {
                 // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
                 // For now we'll send the legacy event type for compatibility with older apps/elements
-                type: widgetType.legacy,
+                type: widgetType?.legacy,
                 url: widgetUrl,
                 name: widgetName,
                 data: widgetData,
@@ -513,7 +513,7 @@ export default class WidgetUtils {
             "roomId=$matrix_room_id",
             "theme=$theme",
             "roomName=$roomName",
-            `supportsScreensharing=${PlatformPeg.get().supportsJitsiScreensharing()}`,
+            `supportsScreensharing=${PlatformPeg.get()?.supportsJitsiScreensharing()}`,
             "language=$org.matrix.msc2873.client_language",
         ];
         if (opts.auth) {

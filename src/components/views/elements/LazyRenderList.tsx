@@ -117,7 +117,7 @@ export default class LazyRenderList<T = any> extends React.Component<IProps<T>, 
         return new ItemRange(topCount, renderCount, bottomCount);
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const { itemHeight, items, renderItem } = this.props;
         const { renderRange } = this.state;
         const { topCount, renderCount, bottomCount } = renderRange;

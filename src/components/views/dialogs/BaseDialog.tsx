@@ -115,7 +115,7 @@ export default class BaseDialog extends React.Component<IProps> {
         this.props.onFinished(false);
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         let cancelButton;
         if (this.props.hasCancel) {
             cancelButton = (

@@ -45,7 +45,7 @@ export default class InviteReason extends React.PureComponent<IProps, IState> {
         });
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const classes = classNames({
             mx_InviteReason: true,
             mx_InviteReason_hidden: this.state.hidden,

@@ -217,7 +217,7 @@ export default class LegacyCallViewButtons extends React.Component<IProps, IStat
         this.setState({ showMoreMenu: false });
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const callControlsClasses = classNames("mx_LegacyCallViewButtons", {
             mx_LegacyCallViewButtons_hidden: !this.state.visible,
         });

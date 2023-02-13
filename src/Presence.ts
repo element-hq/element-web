@@ -33,9 +33,9 @@ enum State {
 }
 
 class Presence {
-    private unavailableTimer: Timer = null;
-    private dispatcherRef: string = null;
-    private state: State = null;
+    private unavailableTimer: Timer | null = null;
+    private dispatcherRef: string | null = null;
+    private state: State | null = null;
 
     /**
      * Start listening the user activity to evaluate his presence state.
@@ -73,14 +73,14 @@ class Presence {
      * Get the current presence state.
      * @returns {string} the presence state (see PRESENCE enum)
      */
-    public getState(): State {
+    public getState(): State | null {
         return this.state;
     }
 
     private onAction = (payload: ActionPayload): void => {
         if (payload.action === "user_activity") {
             this.setState(State.Online);
-            this.unavailableTimer.restart();
+            this.unavailableTimer?.restart();
         }
     };
 

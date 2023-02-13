@@ -94,7 +94,7 @@ export default class MAudioBody extends React.PureComponent<IBodyProps, IState> 
         );
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         if (this.state.error) {
             return (
                 <MediaProcessingError className="mx_MAudioBody">

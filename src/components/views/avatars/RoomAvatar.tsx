@@ -135,7 +135,7 @@ export default class RoomAvatar extends React.Component<IProps, IState> {
         return this.props.room?.roomId || this.props.oobData?.roomId;
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const { room, oobData, viewAvatarOnClick, onClick, className, ...otherProps } = this.props;
         const roomName = room?.name ?? oobData.name;
 

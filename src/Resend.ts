@@ -46,7 +46,7 @@ export default class Resend {
     }
 
     public static resend(event: MatrixEvent): Promise<void> {
-        const room = MatrixClientPeg.get().getRoom(event.getRoomId());
+        const room = MatrixClientPeg.get().getRoom(event.getRoomId())!;
         return MatrixClientPeg.get()
             .resendEvent(event, room)
             .then(

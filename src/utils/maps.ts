@@ -43,13 +43,13 @@ export class EnhancedMap<K, V> extends Map<K, V> {
 
     public getOrCreate(key: K, def: V): V {
         if (this.has(key)) {
-            return this.get(key);
+            return this.get(key)!;
         }
         this.set(key, def);
         return def;
     }
 
-    public remove(key: K): V {
+    public remove(key: K): V | undefined {
         const v = this.get(key);
         this.delete(key);
         return v;

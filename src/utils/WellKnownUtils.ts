@@ -50,12 +50,12 @@ export function getCallBehaviourWellKnown(): ICallBehaviourWellKnown {
     return clientWellKnown?.[CALL_BEHAVIOUR_WK_KEY];
 }
 
-export function getE2EEWellKnown(): IE2EEWellKnown {
+export function getE2EEWellKnown(): IE2EEWellKnown | null {
     const clientWellKnown = MatrixClientPeg.get().getClientWellKnown();
-    if (clientWellKnown && clientWellKnown[E2EE_WK_KEY]) {
+    if (clientWellKnown?.[E2EE_WK_KEY]) {
         return clientWellKnown[E2EE_WK_KEY];
     }
-    if (clientWellKnown && clientWellKnown[E2EE_WK_KEY_DEPRECATED]) {
+    if (clientWellKnown?.[E2EE_WK_KEY_DEPRECATED]) {
         return clientWellKnown[E2EE_WK_KEY_DEPRECATED];
     }
     return null;
@@ -78,8 +78,7 @@ export function embeddedPagesFromWellKnown(clientWellKnown?: IClientWellKnown): 
 }
 
 export function isSecureBackupRequired(): boolean {
-    const wellKnown = getE2EEWellKnown();
-    return wellKnown && wellKnown["secure_backup_required"] === true;
+    return getE2EEWellKnown()?.["secure_backup_required"] === true;
 }
 
 export enum SecureBackupSetupMethod {

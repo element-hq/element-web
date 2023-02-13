@@ -544,7 +544,7 @@ export default class AppTile extends React.Component<IProps, IState> {
         this.setState({ menuDisplayed: false });
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         let appTileBody;
 
         // Note that there is advice saying allow-scripts shouldn't be used with allow-same-origin

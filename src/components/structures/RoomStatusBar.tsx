@@ -213,7 +213,7 @@ export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
                 {},
                 {
                     consentLink: (sub) => (
-                        <a href={consentError.data && consentError.data.consent_uri} target="_blank">
+                        <a href={consentError!.data?.consent_uri} target="_blank">
                             {sub}
                         </a>
                     ),
@@ -272,7 +272,7 @@ export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
         );
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         if (this.shouldShowConnectionError()) {
             return (
                 <div className="mx_RoomStatusBar">

@@ -261,7 +261,7 @@ export default class LegacyCallEvent extends React.PureComponent<IProps, IState>
         );
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const event = this.props.mxEvent;
         const sender = event.sender ? event.sender.name : event.getSender();
         const isVoice = this.props.callEventGrouper.isVoice;

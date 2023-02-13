@@ -33,7 +33,7 @@ export default class MJitsiWidgetEvent extends React.PureComponent<IProps> {
         super(props);
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const url = this.props.mxEvent.getContent()["url"];
         const prevUrl = this.props.mxEvent.getPrevContent()["url"];
         const senderName = this.props.mxEvent.sender?.name || this.props.mxEvent.getSender();

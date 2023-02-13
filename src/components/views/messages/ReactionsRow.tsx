@@ -161,7 +161,7 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
         });
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const { mxEvent, reactions } = this.props;
         const { myReactions, showAll } = this.state;
 

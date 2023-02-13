@@ -31,10 +31,10 @@ import { determineCreateRoomEncryptionOption, Member } from "../../../src/utils/
  * @returns {Promise<LocalRoom>} Resolves to the new local room
  */
 export async function createDmLocalRoom(client: MatrixClient, targets: Member[]): Promise<LocalRoom> {
-    const userId = client.getUserId();
+    const userId = client.getUserId()!;
 
     const localRoom = new LocalRoom(LOCAL_ROOM_ID_PREFIX + client.makeTxnId(), client, userId);
-    const events = [];
+    const events: MatrixEvent[] = [];
 
     events.push(
         new MatrixEvent({
@@ -121,7 +121,7 @@ export async function createDmLocalRoom(client: MatrixClient, targets: Member[])
     localRoom.updateMyMembership("join");
     localRoom.addLiveEvents(events);
     localRoom.currentState.setStateEvents(events);
-    localRoom.name = localRoom.getDefaultRoomName(client.getUserId());
+    localRoom.name = localRoom.getDefaultRoomName(client.getUserId()!);
     client.store.storeRoom(localRoom);
 
     return localRoom;

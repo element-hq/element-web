@@ -163,7 +163,7 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
         this.props.onFinished(this.state.defaultChosen ? this.defaultServer : this.validatedConf);
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         let text;
         if (this.defaultServer.hsName === "matrix.org") {
             text = _t("Matrix.org is the biggest public homeserver in the world, so it's a good place for many.");

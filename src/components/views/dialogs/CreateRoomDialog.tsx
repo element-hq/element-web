@@ -216,7 +216,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
         ],
     });
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const isVideoRoom = this.props.type === RoomType.ElementVideo;
 
         let aliasField: JSX.Element;

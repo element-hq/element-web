@@ -74,7 +74,7 @@ class EmailField extends PureComponent<IProps> {
         return result;
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         return (
             <Field
                 id={this.props.id}

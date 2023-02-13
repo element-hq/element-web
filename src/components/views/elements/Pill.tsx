@@ -214,7 +214,7 @@ export default class Pill extends React.Component<IProps, IState> {
         });
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const resource = this.state.resourceId;
 
         let avatar = null;

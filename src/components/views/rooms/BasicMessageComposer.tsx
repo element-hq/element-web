@@ -749,7 +749,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         formatRange(range, action);
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         let autoComplete;
         if (this.state.autoComplete) {
             const query = this.state.query;

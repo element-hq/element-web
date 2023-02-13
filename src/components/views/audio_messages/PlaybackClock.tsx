@@ -65,7 +65,7 @@ export default class PlaybackClock extends React.PureComponent<IProps, IState> {
         this.setState({ seconds: time[0], durationSeconds: time[1] });
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         let seconds = this.state.seconds;
         if (this.state.playbackPhase === PlaybackState.Stopped) {
             if (Number.isFinite(this.props.defaultDisplaySeconds)) {

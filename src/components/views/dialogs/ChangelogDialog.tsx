@@ -86,7 +86,7 @@ export default class ChangelogDialog extends React.Component<IProps, State> {
         );
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const logs = REPOS.map((repo) => {
             let content;
             if (this.state[repo] == null) {

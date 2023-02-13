@@ -229,7 +229,7 @@ export default class LoginWithQR extends React.Component<IProps, IState> {
         }
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         return (
             <LoginWithQRFlow
                 onClick={this.onClick}

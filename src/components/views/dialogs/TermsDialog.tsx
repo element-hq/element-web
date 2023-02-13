@@ -34,7 +34,7 @@ class TermsCheckbox extends React.PureComponent<ITermsCheckboxProps> {
         this.props.onChange(this.props.url, ev.currentTarget.checked);
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         return <input type="checkbox" onChange={this.onChange} checked={this.props.checked} />;
     }
 }
@@ -126,7 +126,7 @@ export default class TermsDialog extends React.PureComponent<ITermsDialogProps, 
         });
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const rows = [];
         for (const policiesAndService of this.props.policiesAndServicePairs) {
             const parsedBaseUrl = url.parse(policiesAndService.service.baseUrl);

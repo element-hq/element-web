@@ -120,7 +120,7 @@ export default class NodeAnimator extends React.Component<IProps> {
         this.nodes[k] = node;
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         return <>{Object.values(this.children)}</>;
     }
 }

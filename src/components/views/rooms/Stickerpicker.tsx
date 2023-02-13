@@ -351,7 +351,7 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
             .open(this.props.room, `type_${WidgetType.STICKERPICKER.preferred}`, this.state.widgetId);
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         if (!this.props.isStickerPickerOpen) return null;
 
         return (

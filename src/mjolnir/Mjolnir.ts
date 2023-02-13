@@ -32,12 +32,12 @@ import { Action } from "../dispatcher/actions";
 // TODO: Move this and related files to the js-sdk or something once finalized.
 
 export class Mjolnir {
-    private static instance: Mjolnir = null;
+    private static instance: Mjolnir | null = null;
 
     private _lists: BanList[] = []; // eslint-disable-line @typescript-eslint/naming-convention
     private _roomIds: string[] = []; // eslint-disable-line @typescript-eslint/naming-convention
-    private mjolnirWatchRef: string = null;
-    private dispatcherRef: string = null;
+    private mjolnirWatchRef: string | null = null;
+    private dispatcherRef: string | null = null;
 
     public get roomIds(): string[] {
         return this._roomIds;
@@ -113,7 +113,7 @@ export class Mjolnir {
     }
 
     // get without creating the list
-    public getPersonalList(): BanList {
+    public getPersonalList(): BanList | null {
         const personalRoomId = SettingsStore.getValue("mjolnirPersonalRoom");
         if (!personalRoomId) return null;
 
@@ -139,7 +139,7 @@ export class Mjolnir {
 
     private onEvent = (event: MatrixEvent): void => {
         if (!MatrixClientPeg.get()) return;
-        if (!this._roomIds.includes(event.getRoomId())) return;
+        if (!this._roomIds.includes(event.getRoomId()!)) return;
         if (!ALL_RULE_TYPES.includes(event.getType())) return;
 
         this.updateLists(this._roomIds);

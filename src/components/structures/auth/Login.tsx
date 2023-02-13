@@ -563,7 +563,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
         );
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const loader =
             this.isBusy() && !this.state.busyLoggingIn ? (
                 <div className="mx_Login_loader">

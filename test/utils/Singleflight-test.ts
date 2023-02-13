@@ -22,7 +22,7 @@ describe("Singleflight", () => {
     });
 
     it("should throw for bad context variables", () => {
-        const permutations: [Object, string][] = [
+        const permutations: [Object | null, string | null][] = [
             [null, null],
             [{}, null],
             [null, "test"],

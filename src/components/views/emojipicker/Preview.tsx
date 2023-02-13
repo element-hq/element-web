@@ -24,7 +24,7 @@ interface IProps {
 }
 
 class Preview extends React.PureComponent<IProps> {
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const {
             unicode,
             label,

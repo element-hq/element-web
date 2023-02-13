@@ -51,7 +51,7 @@ export default class RoomAvatarEvent extends React.Component<IProps> {
         Modal.createDialog(ImageView, params, "mx_Dialog_lightbox", null, true);
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const ev = this.props.mxEvent;
         const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
 

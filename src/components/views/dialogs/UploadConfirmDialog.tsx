@@ -65,7 +65,7 @@ export default class UploadConfirmDialog extends React.Component<IProps> {
         this.props.onFinished(true, true);
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         let title: string;
         if (this.props.totalFiles > 1 && this.props.currentIndex !== undefined) {
             title = _t("Upload files (%(current)s of %(total)s)", {

@@ -52,7 +52,7 @@ export default class ErrorDialog extends React.Component<IProps, IState> {
         this.props.onFinished(true);
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         return (
             <BaseDialog
                 className="mx_ErrorDialog"

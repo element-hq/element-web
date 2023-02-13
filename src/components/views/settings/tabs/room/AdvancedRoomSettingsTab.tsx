@@ -96,7 +96,7 @@ export default class AdvancedRoomSettingsTab extends React.Component<IProps, ISt
         this.props.closeSettingsFn();
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const client = MatrixClientPeg.get();
         const room = client.getRoom(this.props.roomId);
         const isSpace = room.isSpaceRoom();

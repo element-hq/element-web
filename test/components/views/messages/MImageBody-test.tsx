@@ -69,7 +69,7 @@ describe("<MImageBody/>", () => {
     const props = {
         onHeightChanged: jest.fn(),
         onMessageAllowed: jest.fn(),
-        permalinkCreator: new RoomPermalinkCreator(new Room(encryptedMediaEvent.getRoomId(), cli, cli.getUserId())),
+        permalinkCreator: new RoomPermalinkCreator(new Room(encryptedMediaEvent.getRoomId()!, cli, cli.getUserId()!)),
     };
 
     it("should show error when encrypted media cannot be downloaded", async () => {

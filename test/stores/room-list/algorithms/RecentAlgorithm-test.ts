@@ -172,8 +172,8 @@ describe("RecentAlgorithm", () => {
                 room: room1.roomId,
                 event: true,
                 msg: `hello world`,
-                rootEventId: rootEvent.getId(),
-                replyToEventId: rootEvent.getId(),
+                rootEventId: rootEvent.getId()!,
+                replyToEventId: rootEvent.getId()!,
                 // replies are 1ms after each other
                 ts: 50,
             });

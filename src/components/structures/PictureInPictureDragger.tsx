@@ -245,7 +245,7 @@ export default class PictureInPictureDragger extends React.Component<IProps> {
         }
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const style = {
             transform: `translateX(${this.translationX}px) translateY(${this.translationY}px)`,
         };

@@ -336,7 +336,7 @@ export default class AliasSettings extends React.Component<IProps, IState> {
         return this.state.localAliases.filter((alias) => !altAliases.includes(alias));
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const mxClient = this.context;
         const localDomain = mxClient.getDomain();
         const isSpaceRoom = mxClient.getRoom(this.props.roomId)?.isSpaceRoom();

@@ -22,7 +22,7 @@ import { IBodyProps } from "./IBodyProps";
 import { isVoiceMessage } from "../../../utils/EventUtils";
 
 export default class MVoiceOrAudioBody extends React.PureComponent<IBodyProps> {
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         if (!this.props.forExport && isVoiceMessage(this.props.mxEvent)) {
             return <MVoiceMessageBody {...this.props} />;
         } else {

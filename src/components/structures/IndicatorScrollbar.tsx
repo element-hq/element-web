@@ -177,7 +177,7 @@ export default class IndicatorScrollbar<T extends keyof JSX.IntrinsicElements> e
         }
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { children, trackHorizontalOverflow, verticalScrollsHorizontally, ...otherProps } = this.props;
 

@@ -138,7 +138,7 @@ export function getInitialLetter(name: string): string | undefined {
 }
 
 export function avatarUrlForRoom(
-    room: Room,
+    room: Room | null,
     width: number,
     height: number,
     resizeMethod?: ResizeMethod,

@@ -174,7 +174,7 @@ export default class Tooltip extends React.PureComponent<ITooltipProps, State> {
         this.setState(style);
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const tooltipClasses = classNames("mx_Tooltip", this.props.tooltipClassName, {
             mx_Tooltip_visible: this.props.visible,
             mx_Tooltip_invisible: !this.props.visible,

@@ -142,7 +142,7 @@ export default class ViewSource extends React.Component<IProps, IState> {
         return room.currentState.mayClientSendStateEvent(mxEvent.getType(), cli);
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const mxEvent = this.props.mxEvent.replacingEvent() || this.props.mxEvent; // show the replacing event, not the original, if it is an edit
 
         const isEditing = this.state.isEditing;

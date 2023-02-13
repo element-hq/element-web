@@ -459,7 +459,7 @@ export default class CreateKeyBackupDialog extends React.PureComponent<IProps, I
         }
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         let content;
         if (this.state.error) {
             content = (

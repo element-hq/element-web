@@ -50,7 +50,7 @@ export default class ToastContainer extends React.Component<{}, IState> {
         });
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const totalCount = this.state.toasts.length;
         const isStacked = totalCount > 1;
         let toast;

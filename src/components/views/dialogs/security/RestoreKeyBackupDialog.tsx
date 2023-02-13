@@ -308,7 +308,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
         }
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const backupHasPassphrase =
             this.state.backupInfo &&
             this.state.backupInfo.auth_data &&

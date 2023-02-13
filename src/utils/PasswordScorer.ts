@@ -60,12 +60,12 @@ _td("Short keyboard patterns are easy to guess");
  * @param {string} password Password to score
  * @returns {object} Score result with `score` and `feedback` properties
  */
-export function scorePassword(password: string): zxcvbn.ZXCVBNResult {
+export function scorePassword(password: string): zxcvbn.ZXCVBNResult | null {
     if (password.length === 0) return null;
 
     const userInputs = ZXCVBN_USER_INPUTS.slice();
     if (MatrixClientPeg.get()) {
-        userInputs.push(MatrixClientPeg.get().getUserIdLocalpart());
+        userInputs.push(MatrixClientPeg.get().getUserIdLocalpart()!);
     }
 
     let zxcvbnResult = zxcvbn(password, userInputs);
