@@ -35,7 +35,7 @@ jobs:
                     fi
                   fi
             - name: Move issue
-              uses: alex-page/github-project-automation-plus@1f8873e97e3c8f58161a323b7c568c1f623a1c4d
+              uses: alex-page/github-project-automation-plus@7ffb872c64bd809d23563a130a0a97d01dfa8f43
               if: ${{ env.ALREADY_IN_BOARD == 'true' && env.SKIP_ACTION != 'true' }}
               with:
                   project: Issue triage
