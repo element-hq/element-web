@@ -239,7 +239,7 @@ export default class CreateKeyBackupDialog extends React.PureComponent<IProps, I
             <form onSubmit={this.onPassPhraseNextClick}>
                 <p>
                     {_t(
-                        "<b>Warning</b>: You should only set up key backup from a trusted computer.",
+                        "<b>Warning</b>: you should only set up key backup from a trusted computer.",
                         {},
                         { b: (sub) => <b>{sub}</b> },
                     )}

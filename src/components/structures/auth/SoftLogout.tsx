@@ -339,7 +339,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
                     <h2>{_t("Clear personal data")}</h2>
                     <p>
                         {_t(
-                            "Warning: Your personal data (including encryption keys) is still stored " +
+                            "Warning: your personal data (including encryption keys) is still stored " +
                                 "in this session. Clear it if you're finished using this session, or want to sign " +
                                 "in to another account.",
                         )}

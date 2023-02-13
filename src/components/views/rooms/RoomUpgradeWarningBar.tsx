@@ -81,7 +81,7 @@ export default class RoomUpgradeWarningBar extends React.PureComponent<IProps, I
                     </p>
                     <p>
                         {_t(
-                            "<b>Warning</b>: Upgrading a room will <i>not automatically migrate room members " +
+                            "<b>Warning</b>: upgrading a room will <i>not automatically migrate room members " +
                                 "to the new version of the room.</i> We'll post a link to the new room in the old " +
                                 "version of the room - room members will have to click this link to join the new room.",
                             {},

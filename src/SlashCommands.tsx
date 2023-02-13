@@ -1042,7 +1042,7 @@ export const Commands = [
                                     throw newTranslatableError("Session already verified!");
                                 } else {
                                     throw newTranslatableError(
-                                        "WARNING: Session already verified, but keys do NOT MATCH!",
+                                        "WARNING: session already verified, but keys do NOT MATCH!",
                                     );
                                 }
                             }

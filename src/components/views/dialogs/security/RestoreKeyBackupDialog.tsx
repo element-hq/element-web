@@ -480,7 +480,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
                 <div>
                     <p>
                         {_t(
-                            "<b>Warning</b>: You should only set up key backup " + "from a trusted computer.",
+                            "<b>Warning</b>: you should only set up key backup " + "from a trusted computer.",
                             {},
                             { b: (sub) => <b>{sub}</b> },
                         )}
