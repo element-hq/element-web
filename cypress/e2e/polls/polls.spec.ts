@@ -54,12 +54,12 @@ describe("Polls", () => {
     };
 
     const getPollOption = (pollId: string, optionText: string): Chainable<JQuery> => {
-        return getPollTile(pollId).contains(".mx_MPollBody_option .mx_StyledRadioButton", optionText);
+        return getPollTile(pollId).contains(".mx_PollOption .mx_StyledRadioButton", optionText);
     };
 
     const expectPollOptionVoteCount = (pollId: string, optionText: string, votes: number): void => {
         getPollOption(pollId, optionText).within(() => {
-            cy.get(".mx_MPollBody_optionVoteCount").should("contain", `${votes} vote`);
+            cy.get(".mx_PollOption_optionVoteCount").should("contain", `${votes} vote`);
         });
     };
 

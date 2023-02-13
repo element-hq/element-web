@@ -26,6 +26,9 @@ mockPlatformPeg();
 
 const MS_DAY = 86400000;
 describe("<FilteredDeviceList />", () => {
+    // 14.03.2022 16:15
+    const now = 1647270879403;
+    jest.spyOn(global.Date, "now").mockReturnValue(now);
     const newDevice = {
         device_id: "new",
         last_seen_ts: Date.now() - 500,
@@ -80,6 +83,10 @@ describe("<FilteredDeviceList />", () => {
     };
 
     const getComponent = (props = {}) => <FilteredDeviceList {...defaultProps} {...props} />;
+
+    afterAll(() => {
+        jest.spyOn(global.Date, "now").mockRestore();
+    });
 
     it("renders devices in correct order", () => {
         const { container } = render(getComponent());

@@ -14,129 +14,132 @@ exports[`MPollBody renders a finished poll 1`] = `
       class="mx_MPollBody_allOptions"
     >
       <div
-        class="mx_MPollBody_option mx_MPollBody_option_ended"
+        class="mx_PollOption mx_PollOption_ended"
         data-testid="pollOption-pizza"
       >
         <div
-          class="mx_MPollBody_endedOption"
+          class="mx_PollOption_endedOption"
           data-value="pizza"
         >
           <div
-            class="mx_MPollBody_optionDescription"
+            class="mx_PollOption_content"
           >
             <div
-              class="mx_MPollBody_optionText"
+              class="mx_PollOption_optionText"
             >
               Pizza
             </div>
             <div
-              class="mx_MPollBody_optionVoteCount"
+              class="mx_PollOption_optionVoteCount"
             >
               0 votes
             </div>
           </div>
         </div>
         <div
-          class="mx_MPollBody_popularityBackground"
+          class="mx_PollOption_popularityBackground"
         >
           <div
-            class="mx_MPollBody_popularityAmount"
+            class="mx_PollOption_popularityAmount"
             style="width: 0%;"
           />
         </div>
       </div>
       <div
-        class="mx_MPollBody_option mx_MPollBody_option_ended"
+        class="mx_PollOption mx_PollOption_ended"
         data-testid="pollOption-poutine"
       >
         <div
-          class="mx_MPollBody_endedOption"
+          class="mx_PollOption_endedOption"
           data-value="poutine"
         >
           <div
-            class="mx_MPollBody_optionDescription"
+            class="mx_PollOption_content"
           >
             <div
-              class="mx_MPollBody_optionText"
+              class="mx_PollOption_optionText"
             >
               Poutine
             </div>
             <div
-              class="mx_MPollBody_optionVoteCount"
+              class="mx_PollOption_optionVoteCount"
             >
               0 votes
             </div>
           </div>
         </div>
         <div
-          class="mx_MPollBody_popularityBackground"
+          class="mx_PollOption_popularityBackground"
         >
           <div
-            class="mx_MPollBody_popularityAmount"
+            class="mx_PollOption_popularityAmount"
             style="width: 0%;"
           />
         </div>
       </div>
       <div
-        class="mx_MPollBody_option mx_MPollBody_option_checked mx_MPollBody_option_ended"
+        class="mx_PollOption mx_PollOption_checked mx_PollOption_ended"
         data-testid="pollOption-italian"
       >
         <div
-          class="mx_MPollBody_endedOption mx_MPollBody_endedOptionWinner"
+          class="mx_PollOption_endedOption mx_PollOption_endedOptionWinner"
           data-value="italian"
         >
           <div
-            class="mx_MPollBody_optionDescription"
+            class="mx_PollOption_content"
           >
             <div
-              class="mx_MPollBody_optionText"
+              class="mx_PollOption_optionText"
             >
               Italian
             </div>
             <div
-              class="mx_MPollBody_optionVoteCount"
+              class="mx_PollOption_optionVoteCount"
             >
+              <div
+                class="mx_PollOption_winnerIcon"
+              />
               2 votes
             </div>
           </div>
         </div>
         <div
-          class="mx_MPollBody_popularityBackground"
+          class="mx_PollOption_popularityBackground"
         >
           <div
-            class="mx_MPollBody_popularityAmount"
+            class="mx_PollOption_popularityAmount"
             style="width: 67%;"
           />
         </div>
       </div>
       <div
-        class="mx_MPollBody_option mx_MPollBody_option_ended"
+        class="mx_PollOption mx_PollOption_ended"
         data-testid="pollOption-wings"
       >
         <div
-          class="mx_MPollBody_endedOption"
+          class="mx_PollOption_endedOption"
           data-value="wings"
         >
           <div
-            class="mx_MPollBody_optionDescription"
+            class="mx_PollOption_content"
           >
             <div
-              class="mx_MPollBody_optionText"
+              class="mx_PollOption_optionText"
             >
               Wings
             </div>
             <div
-              class="mx_MPollBody_optionVoteCount"
+              class="mx_PollOption_optionVoteCount"
             >
               1 vote
             </div>
           </div>
         </div>
         <div
-          class="mx_MPollBody_popularityBackground"
+          class="mx_PollOption_popularityBackground"
         >
           <div
-            class="mx_MPollBody_popularityAmount"
+            class="mx_PollOption_popularityAmount"
             style="width: 33%;"
           />
         </div>
@@ -166,129 +169,135 @@ exports[`MPollBody renders a finished poll with multiple winners 1`] = `
       class="mx_MPollBody_allOptions"
     >
       <div
-        class="mx_MPollBody_option mx_MPollBody_option_checked mx_MPollBody_option_ended"
+        class="mx_PollOption mx_PollOption_checked mx_PollOption_ended"
         data-testid="pollOption-pizza"
       >
         <div
-          class="mx_MPollBody_endedOption mx_MPollBody_endedOptionWinner"
+          class="mx_PollOption_endedOption mx_PollOption_endedOptionWinner"
           data-value="pizza"
         >
           <div
-            class="mx_MPollBody_optionDescription"
+            class="mx_PollOption_content"
           >
             <div
-              class="mx_MPollBody_optionText"
+              class="mx_PollOption_optionText"
             >
               Pizza
             </div>
             <div
-              class="mx_MPollBody_optionVoteCount"
+              class="mx_PollOption_optionVoteCount"
             >
+              <div
+                class="mx_PollOption_winnerIcon"
+              />
               2 votes
             </div>
           </div>
         </div>
         <div
-          class="mx_MPollBody_popularityBackground"
+          class="mx_PollOption_popularityBackground"
         >
           <div
-            class="mx_MPollBody_popularityAmount"
+            class="mx_PollOption_popularityAmount"
             style="width: 50%;"
           />
         </div>
       </div>
       <div
-        class="mx_MPollBody_option mx_MPollBody_option_ended"
+        class="mx_PollOption mx_PollOption_ended"
         data-testid="pollOption-poutine"
       >
         <div
-          class="mx_MPollBody_endedOption"
+          class="mx_PollOption_endedOption"
           data-value="poutine"
         >
           <div
-            class="mx_MPollBody_optionDescription"
+            class="mx_PollOption_content"
           >
             <div
-              class="mx_MPollBody_optionText"
+              class="mx_PollOption_optionText"
             >
               Poutine
             </div>
             <div
-              class="mx_MPollBody_optionVoteCount"
+              class="mx_PollOption_optionVoteCount"
             >
               0 votes
             </div>
           </div>
         </div>
         <div
-          class="mx_MPollBody_popularityBackground"
+          class="mx_PollOption_popularityBackground"
         >
           <div
-            class="mx_MPollBody_popularityAmount"
+            class="mx_PollOption_popularityAmount"
             style="width: 0%;"
           />
         </div>
       </div>
       <div
-        class="mx_MPollBody_option mx_MPollBody_option_ended"
+        class="mx_PollOption mx_PollOption_ended"
         data-testid="pollOption-italian"
       >
         <div
-          class="mx_MPollBody_endedOption"
+          class="mx_PollOption_endedOption"
           data-value="italian"
         >
           <div
-            class="mx_MPollBody_optionDescription"
+            class="mx_PollOption_content"
           >
             <div
-              class="mx_MPollBody_optionText"
+              class="mx_PollOption_optionText"
             >
               Italian
             </div>
             <div
-              class="mx_MPollBody_optionVoteCount"
+              class="mx_PollOption_optionVoteCount"
             >
               0 votes
             </div>
           </div>
         </div>
         <div
-          class="mx_MPollBody_popularityBackground"
+          class="mx_PollOption_popularityBackground"
         >
           <div
-            class="mx_MPollBody_popularityAmount"
+            class="mx_PollOption_popularityAmount"
             style="width: 0%;"
           />
         </div>
       </div>
       <div
-        class="mx_MPollBody_option mx_MPollBody_option_checked mx_MPollBody_option_ended"
+        class="mx_PollOption mx_PollOption_checked mx_PollOption_ended"
         data-testid="pollOption-wings"
       >
         <div
-          class="mx_MPollBody_endedOption mx_MPollBody_endedOptionWinner"
+          class="mx_PollOption_endedOption mx_PollOption_endedOptionWinner"
           data-value="wings"
         >
           <div
-            class="mx_MPollBody_optionDescription"
+            class="mx_PollOption_content"
           >
             <div
-              class="mx_MPollBody_optionText"
+              class="mx_PollOption_optionText"
             >
               Wings
             </div>
             <div
-              class="mx_MPollBody_optionVoteCount"
+              class="mx_PollOption_optionVoteCount"
             >
+              <div
+                class="mx_PollOption_winnerIcon"
+              />
               2 votes
             </div>
           </div>
         </div>
         <div
-          class="mx_MPollBody_popularityBackground"
+          class="mx_PollOption_popularityBackground"
         >
           <div
-            class="mx_MPollBody_popularityAmount"
+            class="mx_PollOption_popularityAmount"
             style="width: 50%;"
           />
         </div>
@@ -318,129 +327,129 @@ exports[`MPollBody renders a finished poll with no votes 1`] = `
       class="mx_MPollBody_allOptions"
     >
       <div
-        class="mx_MPollBody_option mx_MPollBody_option_ended"
+        class="mx_PollOption mx_PollOption_ended"
         data-testid="pollOption-pizza"
       >
         <div
-          class="mx_MPollBody_endedOption"
+          class="mx_PollOption_endedOption"
           data-value="pizza"
         >
           <div
-            class="mx_MPollBody_optionDescription"
+            class="mx_PollOption_content"
           >
             <div
-              class="mx_MPollBody_optionText"
+              class="mx_PollOption_optionText"
             >
               Pizza
             </div>
             <div
-              class="mx_MPollBody_optionVoteCount"
+              class="mx_PollOption_optionVoteCount"
             >
               0 votes
             </div>
           </div>
         </div>
         <div
-          class="mx_MPollBody_popularityBackground"
+          class="mx_PollOption_popularityBackground"
         >
           <div
-            class="mx_MPollBody_popularityAmount"
+            class="mx_PollOption_popularityAmount"
             style="width: 0%;"
           />
         </div>
       </div>
       <div
-        class="mx_MPollBody_option mx_MPollBody_option_ended"
+        class="mx_PollOption mx_PollOption_ended"
         data-testid="pollOption-poutine"
       >
         <div
-          class="mx_MPollBody_endedOption"
+          class="mx_PollOption_endedOption"
           data-value="poutine"
         >
           <div
-            class="mx_MPollBody_optionDescription"
+            class="mx_PollOption_content"
           >
             <div
-              class="mx_MPollBody_optionText"
+              class="mx_PollOption_optionText"
             >
               Poutine
             </div>
             <div
-              class="mx_MPollBody_optionVoteCount"
+              class="mx_PollOption_optionVoteCount"
             >
               0 votes
             </div>
           </div>
         </div>
         <div
-          class="mx_MPollBody_popularityBackground"
+          class="mx_PollOption_popularityBackground"
         >
           <div
-            class="mx_MPollBody_popularityAmount"
+            class="mx_PollOption_popularityAmount"
             style="width: 0%;"
           />
         </div>
       </div>
       <div
-        class="mx_MPollBody_option mx_MPollBody_option_ended"
+        class="mx_PollOption mx_PollOption_ended"
         data-testid="pollOption-italian"
       >
         <div
-          class="mx_MPollBody_endedOption"
+          class="mx_PollOption_endedOption"
           data-value="italian"
         >
           <div
-            class="mx_MPollBody_optionDescription"
+            class="mx_PollOption_content"
           >
             <div
-              class="mx_MPollBody_optionText"
+              class="mx_PollOption_optionText"
             >
               Italian
             </div>
             <div
-              class="mx_MPollBody_optionVoteCount"
+              class="mx_PollOption_optionVoteCount"
             >
               0 votes
             </div>
           </div>
         </div>
         <div
-          class="mx_MPollBody_popularityBackground"
+          class="mx_PollOption_popularityBackground"
         >
           <div
-            class="mx_MPollBody_popularityAmount"
+            class="mx_PollOption_popularityAmount"
             style="width: 0%;"
           />
         </div>
       </div>
       <div
-        class="mx_MPollBody_option mx_MPollBody_option_ended"
+        class="mx_PollOption mx_PollOption_ended"
         data-testid="pollOption-wings"
       >
         <div
-          class="mx_MPollBody_endedOption"
+          class="mx_PollOption_endedOption"
           data-value="wings"
         >
           <div
-            class="mx_MPollBody_optionDescription"
+            class="mx_PollOption_content"
           >
             <div
-              class="mx_MPollBody_optionText"
+              class="mx_PollOption_optionText"
             >
               Wings
             </div>
             <div
-              class="mx_MPollBody_optionVoteCount"
+              class="mx_PollOption_optionVoteCount"
             >
               0 votes
             </div>
           </div>
         </div>
         <div
-          class="mx_MPollBody_popularityBackground"
+          class="mx_PollOption_popularityBackground"
         >
           <div
-            class="mx_MPollBody_popularityAmount"
+            class="mx_PollOption_popularityAmount"
             style="width: 0%;"
           />
         </div>
@@ -472,11 +481,11 @@ exports[`MPollBody renders a poll that I have not voted in 1`] = `
       class="mx_MPollBody_allOptions"
     >
       <div
-        class="mx_MPollBody_option"
+        class="mx_PollOption"
         data-testid="pollOption-pizza"
       >
         <label
-          class="mx_StyledRadioButton mx_MPollBody_live-option mx_StyledRadioButton_enabled"
+          class="mx_StyledRadioButton mx_PollOption_live-option mx_StyledRadioButton_enabled"
         >
           <input
             name="poll_answer_select-$mypoll"
@@ -490,16 +499,18 @@ exports[`MPollBody renders a poll that I have not voted in 1`] = `
             class="mx_StyledRadioButton_content"
           >
             <div
-              class="mx_MPollBody_optionDescription"
+              class="mx_PollOption_content"
             >
               <div
-                class="mx_MPollBody_optionText"
+                class="mx_PollOption_optionText"
               >
                 Pizza
               </div>
               <div
-                class="mx_MPollBody_optionVoteCount"
-              />
+                class="mx_PollOption_optionVoteCount"
+              >
+                
+              </div>
             </div>
           </div>
           <div
@@ -507,20 +518,20 @@ exports[`MPollBody renders a poll that I have not voted in 1`] = `
           />
         </label>
         <div
-          class="mx_MPollBody_popularityBackground"
+          class="mx_PollOption_popularityBackground"
         >
           <div
-            class="mx_MPollBody_popularityAmount"
+            class="mx_PollOption_popularityAmount"
             style="width: 0%;"
           />
         </div>
       </div>
       <div
-        class="mx_MPollBody_option"
+        class="mx_PollOption"
         data-testid="pollOption-poutine"
       >
         <label
-          class="mx_StyledRadioButton mx_MPollBody_live-option mx_StyledRadioButton_enabled"
+          class="mx_StyledRadioButton mx_PollOption_live-option mx_StyledRadioButton_enabled"
         >
           <input
             name="poll_answer_select-$mypoll"
@@ -534,16 +545,18 @@ exports[`MPollBody renders a poll that I have not voted in 1`] = `
             class="mx_StyledRadioButton_content"
           >
             <div
-              class="mx_MPollBody_optionDescription"
+              class="mx_PollOption_content"
             >
               <div
-                class="mx_MPollBody_optionText"
+                class="mx_PollOption_optionText"
               >
                 Poutine
               </div>
               <div
-                class="mx_MPollBody_optionVoteCount"
-              />
+                class="mx_PollOption_optionVoteCount"
+              >
+                
+              </div>
             </div>
           </div>
           <div
@@ -551,20 +564,20 @@ exports[`MPollBody renders a poll that I have not voted in 1`] = `
           />
         </label>
         <div
-          class="mx_MPollBody_popularityBackground"
+          class="mx_PollOption_popularityBackground"
         >
           <div
-            class="mx_MPollBody_popularityAmount"
+            class="mx_PollOption_popularityAmount"
             style="width: 0%;"
           />
         </div>
       </div>
       <div
-        class="mx_MPollBody_option"
+        class="mx_PollOption"
         data-testid="pollOption-italian"
       >
         <label
-          class="mx_StyledRadioButton mx_MPollBody_live-option mx_StyledRadioButton_enabled"
+          class="mx_StyledRadioButton mx_PollOption_live-option mx_StyledRadioButton_enabled"
         >
           <input
             name="poll_answer_select-$mypoll"
@@ -578,16 +591,18 @@ exports[`MPollBody renders a poll that I have not voted in 1`] = `
             class="mx_StyledRadioButton_content"
           >
             <div
-              class="mx_MPollBody_optionDescription"
+              class="mx_PollOption_content"
             >
               <div
-                class="mx_MPollBody_optionText"
+                class="mx_PollOption_optionText"
               >
                 Italian
               </div>
               <div
-                class="mx_MPollBody_optionVoteCount"
-              />
+                class="mx_PollOption_optionVoteCount"
+              >
+                
+              </div>
             </div>
           </div>
           <div
@@ -595,20 +610,20 @@ exports[`MPollBody renders a poll that I have not voted in 1`] = `
           />
         </label>
         <div
-          class="mx_MPollBody_popularityBackground"
+          class="mx_PollOption_popularityBackground"
         >
           <div
-            class="mx_MPollBody_popularityAmount"
+            class="mx_PollOption_popularityAmount"
             style="width: 0%;"
           />
         </div>
       </div>
       <div
-        class="mx_MPollBody_option"
+        class="mx_PollOption"
         data-testid="pollOption-wings"
       >
         <label
-          class="mx_StyledRadioButton mx_MPollBody_live-option mx_StyledRadioButton_enabled"
+          class="mx_StyledRadioButton mx_PollOption_live-option mx_StyledRadioButton_enabled"
         >
           <input
             name="poll_answer_select-$mypoll"
@@ -622,16 +637,18 @@ exports[`MPollBody renders a poll that I have not voted in 1`] = `
             class="mx_StyledRadioButton_content"
           >
             <div
-              class="mx_MPollBody_optionDescription"
+              class="mx_PollOption_content"
             >
               <div
-                class="mx_MPollBody_optionText"
+                class="mx_PollOption_optionText"
               >
                 Wings
               </div>
               <div
-                class="mx_MPollBody_optionVoteCount"
-              />
+                class="mx_PollOption_optionVoteCount"
+              >
+                
+              </div>
             </div>
           </div>
           <div
@@ -639,10 +656,10 @@ exports[`MPollBody renders a poll that I have not voted in 1`] = `
           />
         </label>
         <div
-          class="mx_MPollBody_popularityBackground"
+          class="mx_PollOption_popularityBackground"
         >
           <div
-            class="mx_MPollBody_popularityAmount"
+            class="mx_PollOption_popularityAmount"
             style="width: 0%;"
           />
         </div>
@@ -672,11 +689,11 @@ exports[`MPollBody renders a poll with local, non-local and invalid votes 1`] = 
       class="mx_MPollBody_allOptions"
     >
       <div
-        class="mx_MPollBody_option"
+        class="mx_PollOption"
         data-testid="pollOption-pizza"
       >
         <label
-          class="mx_StyledRadioButton mx_MPollBody_live-option mx_StyledRadioButton_enabled"
+          class="mx_StyledRadioButton mx_PollOption_live-option mx_StyledRadioButton_enabled"
         >
           <input
             name="poll_answer_select-$mypoll"
@@ -690,15 +707,15 @@ exports[`MPollBody renders a poll with local, non-local and invalid votes 1`] = 
             class="mx_StyledRadioButton_content"
           >
             <div
-              class="mx_MPollBody_optionDescription"
+              class="mx_PollOption_content"
             >
               <div
-                class="mx_MPollBody_optionText"
+                class="mx_PollOption_optionText"
               >
                 Pizza
               </div>
               <div
-                class="mx_MPollBody_optionVoteCount"
+                class="mx_PollOption_optionVoteCount"
               >
                 1 vote
               </div>
@@ -709,20 +726,20 @@ exports[`MPollBody renders a poll with local, non-local and invalid votes 1`] = 
           />
         </label>
         <div
-          class="mx_MPollBody_popularityBackground"
+          class="mx_PollOption_popularityBackground"
         >
           <div
-            class="mx_MPollBody_popularityAmount"
+            class="mx_PollOption_popularityAmount"
             style="width: 20%;"
           />
         </div>
       </div>
       <div
-        class="mx_MPollBody_option"
+        class="mx_PollOption"
         data-testid="pollOption-poutine"
       >
         <label
-          class="mx_StyledRadioButton mx_MPollBody_live-option mx_StyledRadioButton_enabled"
+          class="mx_StyledRadioButton mx_PollOption_live-option mx_StyledRadioButton_enabled"
         >
           <input
             name="poll_answer_select-$mypoll"
@@ -736,15 +753,15 @@ exports[`MPollBody renders a poll with local, non-local and invalid votes 1`] = 
             class="mx_StyledRadioButton_content"
           >
             <div
-              class="mx_MPollBody_optionDescription"
+              class="mx_PollOption_content"
             >
               <div
-                class="mx_MPollBody_optionText"
+                class="mx_PollOption_optionText"
               >
                 Poutine
               </div>
               <div
-                class="mx_MPollBody_optionVoteCount"
+                class="mx_PollOption_optionVoteCount"
               >
                 0 votes
               </div>
@@ -755,20 +772,20 @@ exports[`MPollBody renders a poll with local, non-local and invalid votes 1`] = 
           />
         </label>
         <div
-          class="mx_MPollBody_popularityBackground"
+          class="mx_PollOption_popularityBackground"
         >
           <div
-            class="mx_MPollBody_popularityAmount"
+            class="mx_PollOption_popularityAmount"
             style="width: 0%;"
           />
         </div>
       </div>
       <div
-        class="mx_MPollBody_option mx_MPollBody_option_checked"
+        class="mx_PollOption mx_PollOption_checked"
         data-testid="pollOption-italian"
       >
         <label
-          class="mx_StyledRadioButton mx_MPollBody_live-option mx_StyledRadioButton_enabled mx_StyledRadioButton_checked"
+          class="mx_StyledRadioButton mx_PollOption_live-option mx_StyledRadioButton_enabled mx_StyledRadioButton_checked"
         >
           <input
             name="poll_answer_select-$mypoll"
@@ -782,15 +799,15 @@ exports[`MPollBody renders a poll with local, non-local and invalid votes 1`] = 
             class="mx_StyledRadioButton_content"
           >
             <div
-              class="mx_MPollBody_optionDescription"
+              class="mx_PollOption_content"
             >
               <div
-                class="mx_MPollBody_optionText"
+                class="mx_PollOption_optionText"
               >
                 Italian
               </div>
               <div
-                class="mx_MPollBody_optionVoteCount"
+                class="mx_PollOption_optionVoteCount"
               >
                 3 votes
               </div>
@@ -801,20 +818,20 @@ exports[`MPollBody renders a poll with local, non-local and invalid votes 1`] = 
           />
         </label>
         <div
-          class="mx_MPollBody_popularityBackground"
+          class="mx_PollOption_popularityBackground"
         >
           <div
-            class="mx_MPollBody_popularityAmount"
+            class="mx_PollOption_popularityAmount"
             style="width: 60%;"
           />
         </div>
       </div>
       <div
-        class="mx_MPollBody_option"
+        class="mx_PollOption"
         data-testid="pollOption-wings"
       >
         <label
-          class="mx_StyledRadioButton mx_MPollBody_live-option mx_StyledRadioButton_enabled"
+          class="mx_StyledRadioButton mx_PollOption_live-option mx_StyledRadioButton_enabled"
         >
           <input
             name="poll_answer_select-$mypoll"
@@ -828,15 +845,15 @@ exports[`MPollBody renders a poll with local, non-local and invalid votes 1`] = 
             class="mx_StyledRadioButton_content"
           >
             <div
-              class="mx_MPollBody_optionDescription"
+              class="mx_PollOption_content"
             >
               <div
-                class="mx_MPollBody_optionText"
+                class="mx_PollOption_optionText"
               >
                 Wings
               </div>
               <div
-                class="mx_MPollBody_optionVoteCount"
+                class="mx_PollOption_optionVoteCount"
               >
                 1 vote
               </div>
@@ -847,10 +864,10 @@ exports[`MPollBody renders a poll with local, non-local and invalid votes 1`] = 
           />
         </label>
         <div
-          class="mx_MPollBody_popularityBackground"
+          class="mx_PollOption_popularityBackground"
         >
           <div
-            class="mx_MPollBody_popularityAmount"
+            class="mx_PollOption_popularityAmount"
             style="width: 20%;"
           />
         </div>
@@ -880,11 +897,11 @@ exports[`MPollBody renders a poll with no votes 1`] = `
       class="mx_MPollBody_allOptions"
     >
       <div
-        class="mx_MPollBody_option"
+        class="mx_PollOption"
         data-testid="pollOption-pizza"
       >
         <label
-          class="mx_StyledRadioButton mx_MPollBody_live-option mx_StyledRadioButton_enabled"
+          class="mx_StyledRadioButton mx_PollOption_live-option mx_StyledRadioButton_enabled"
         >
           <input
             name="poll_answer_select-$mypoll"
@@ -898,16 +915,18 @@ exports[`MPollBody renders a poll with no votes 1`] = `
             class="mx_StyledRadioButton_content"
           >
             <div
-              class="mx_MPollBody_optionDescription"
+              class="mx_PollOption_content"
             >
               <div
-                class="mx_MPollBody_optionText"
+                class="mx_PollOption_optionText"
               >
                 Pizza
               </div>
               <div
-                class="mx_MPollBody_optionVoteCount"
-              />
+                class="mx_PollOption_optionVoteCount"
+              >
+                
+              </div>
             </div>
           </div>
           <div
@@ -915,20 +934,20 @@ exports[`MPollBody renders a poll with no votes 1`] = `
           />
         </label>
         <div
-          class="mx_MPollBody_popularityBackground"
+          class="mx_PollOption_popularityBackground"
         >
           <div
-            class="mx_MPollBody_popularityAmount"
+            class="mx_PollOption_popularityAmount"
             style="width: 0%;"
           />
         </div>
       </div>
       <div
-        class="mx_MPollBody_option"
+        class="mx_PollOption"
         data-testid="pollOption-poutine"
       >
         <label
-          class="mx_StyledRadioButton mx_MPollBody_live-option mx_StyledRadioButton_enabled"
+          class="mx_StyledRadioButton mx_PollOption_live-option mx_StyledRadioButton_enabled"
         >
           <input
             name="poll_answer_select-$mypoll"
@@ -942,16 +961,18 @@ exports[`MPollBody renders a poll with no votes 1`] = `
             class="mx_StyledRadioButton_content"
           >
             <div
-              class="mx_MPollBody_optionDescription"
+              class="mx_PollOption_content"
             >
               <div
-                class="mx_MPollBody_optionText"
+                class="mx_PollOption_optionText"
               >
                 Poutine
               </div>
               <div
-                class="mx_MPollBody_optionVoteCount"
-              />
+                class="mx_PollOption_optionVoteCount"
+              >
+                
+              </div>
             </div>
           </div>
           <div
@@ -959,20 +980,20 @@ exports[`MPollBody renders a poll with no votes 1`] = `
           />
         </label>
         <div
-          class="mx_MPollBody_popularityBackground"
+          class="mx_PollOption_popularityBackground"
         >
           <div
-            class="mx_MPollBody_popularityAmount"
+            class="mx_PollOption_popularityAmount"
             style="width: 0%;"
           />
         </div>
       </div>
       <div
-        class="mx_MPollBody_option"
+        class="mx_PollOption"
         data-testid="pollOption-italian"
       >
         <label
-          class="mx_StyledRadioButton mx_MPollBody_live-option mx_StyledRadioButton_enabled"
+          class="mx_StyledRadioButton mx_PollOption_live-option mx_StyledRadioButton_enabled"
         >
           <input
             name="poll_answer_select-$mypoll"
@@ -986,16 +1007,18 @@ exports[`MPollBody renders a poll with no votes 1`] = `
             class="mx_StyledRadioButton_content"
           >
             <div
-              class="mx_MPollBody_optionDescription"
+              class="mx_PollOption_content"
             >
               <div
-                class="mx_MPollBody_optionText"
+                class="mx_PollOption_optionText"
               >
                 Italian
               </div>
               <div
-                class="mx_MPollBody_optionVoteCount"
-              />
+                class="mx_PollOption_optionVoteCount"
+              >
+                
+              </div>
             </div>
           </div>
           <div
@@ -1003,20 +1026,20 @@ exports[`MPollBody renders a poll with no votes 1`] = `
           />
         </label>
         <div
-          class="mx_MPollBody_popularityBackground"
+          class="mx_PollOption_popularityBackground"
         >
           <div
-            class="mx_MPollBody_popularityAmount"
+            class="mx_PollOption_popularityAmount"
             style="width: 0%;"
           />
         </div>
       </div>
       <div
-        class="mx_MPollBody_option"
+        class="mx_PollOption"
         data-testid="pollOption-wings"
       >
         <label
-          class="mx_StyledRadioButton mx_MPollBody_live-option mx_StyledRadioButton_enabled"
+          class="mx_StyledRadioButton mx_PollOption_live-option mx_StyledRadioButton_enabled"
         >
           <input
             name="poll_answer_select-$mypoll"
@@ -1030,16 +1053,18 @@ exports[`MPollBody renders a poll with no votes 1`] = `
             class="mx_StyledRadioButton_content"
           >
             <div
-              class="mx_MPollBody_optionDescription"
+              class="mx_PollOption_content"
             >
               <div
-                class="mx_MPollBody_optionText"
+                class="mx_PollOption_optionText"
               >
                 Wings
               </div>
               <div
-                class="mx_MPollBody_optionVoteCount"
-              />
+                class="mx_PollOption_optionVoteCount"
+              >
+                
+              </div>
             </div>
           </div>
           <div
@@ -1047,10 +1072,10 @@ exports[`MPollBody renders a poll with no votes 1`] = `
           />
         </label>
         <div
-          class="mx_MPollBody_popularityBackground"
+          class="mx_PollOption_popularityBackground"
         >
           <div
-            class="mx_MPollBody_popularityAmount"
+            class="mx_PollOption_popularityAmount"
             style="width: 0%;"
           />
         </div>
@@ -1080,11 +1105,11 @@ exports[`MPollBody renders a poll with only non-local votes 1`] = `
       class="mx_MPollBody_allOptions"
     >
       <div
-        class="mx_MPollBody_option"
+        class="mx_PollOption"
         data-testid="pollOption-pizza"
       >
         <label
-          class="mx_StyledRadioButton mx_MPollBody_live-option mx_StyledRadioButton_enabled"
+          class="mx_StyledRadioButton mx_PollOption_live-option mx_StyledRadioButton_enabled"
         >
           <input
             name="poll_answer_select-$mypoll"
@@ -1098,15 +1123,15 @@ exports[`MPollBody renders a poll with only non-local votes 1`] = `
             class="mx_StyledRadioButton_content"
           >
             <div
-              class="mx_MPollBody_optionDescription"
+              class="mx_PollOption_content"
             >
               <div
-                class="mx_MPollBody_optionText"
+                class="mx_PollOption_optionText"
               >
                 Pizza
               </div>
               <div
-                class="mx_MPollBody_optionVoteCount"
+                class="mx_PollOption_optionVoteCount"
               >
                 0 votes
               </div>
@@ -1117,20 +1142,20 @@ exports[`MPollBody renders a poll with only non-local votes 1`] = `
           />
         </label>
         <div
-          class="mx_MPollBody_popularityBackground"
+          class="mx_PollOption_popularityBackground"
         >
           <div
-            class="mx_MPollBody_popularityAmount"
+            class="mx_PollOption_popularityAmount"
             style="width: 0%;"
           />
         </div>
       </div>
       <div
-        class="mx_MPollBody_option"
+        class="mx_PollOption"
         data-testid="pollOption-poutine"
       >
         <label
-          class="mx_StyledRadioButton mx_MPollBody_live-option mx_StyledRadioButton_enabled"
+          class="mx_StyledRadioButton mx_PollOption_live-option mx_StyledRadioButton_enabled"
         >
           <input
             name="poll_answer_select-$mypoll"
@@ -1144,15 +1169,15 @@ exports[`MPollBody renders a poll with only non-local votes 1`] = `
             class="mx_StyledRadioButton_content"
           >
             <div
-              class="mx_MPollBody_optionDescription"
+              class="mx_PollOption_content"
             >
               <div
-                class="mx_MPollBody_optionText"
+                class="mx_PollOption_optionText"
               >
                 Poutine
               </div>
               <div
-                class="mx_MPollBody_optionVoteCount"
+                class="mx_PollOption_optionVoteCount"
               >
                 0 votes
               </div>
@@ -1163,20 +1188,20 @@ exports[`MPollBody renders a poll with only non-local votes 1`] = `
           />
         </label>
         <div
-          class="mx_MPollBody_popularityBackground"
+          class="mx_PollOption_popularityBackground"
         >
           <div
-            class="mx_MPollBody_popularityAmount"
+            class="mx_PollOption_popularityAmount"
             style="width: 0%;"
           />
         </div>
       </div>
       <div
-        class="mx_MPollBody_option"
+        class="mx_PollOption"
         data-testid="pollOption-italian"
       >
         <label
-          class="mx_StyledRadioButton mx_MPollBody_live-option mx_StyledRadioButton_enabled"
+          class="mx_StyledRadioButton mx_PollOption_live-option mx_StyledRadioButton_enabled"
         >
           <input
             name="poll_answer_select-$mypoll"
@@ -1190,15 +1215,15 @@ exports[`MPollBody renders a poll with only non-local votes 1`] = `
             class="mx_StyledRadioButton_content"
           >
             <div
-              class="mx_MPollBody_optionDescription"
+              class="mx_PollOption_content"
             >
               <div
-                class="mx_MPollBody_optionText"
+                class="mx_PollOption_optionText"
               >
                 Italian
               </div>
               <div
-                class="mx_MPollBody_optionVoteCount"
+                class="mx_PollOption_optionVoteCount"
               >
                 2 votes
               </div>
@@ -1209,20 +1234,20 @@ exports[`MPollBody renders a poll with only non-local votes 1`] = `
           />
         </label>
         <div
-          class="mx_MPollBody_popularityBackground"
+          class="mx_PollOption_popularityBackground"
         >
           <div
-            class="mx_MPollBody_popularityAmount"
+            class="mx_PollOption_popularityAmount"
             style="width: 67%;"
           />
         </div>
       </div>
       <div
-        class="mx_MPollBody_option mx_MPollBody_option_checked"
+        class="mx_PollOption mx_PollOption_checked"
         data-testid="pollOption-wings"
       >
         <label
-          class="mx_StyledRadioButton mx_MPollBody_live-option mx_StyledRadioButton_enabled mx_StyledRadioButton_checked"
+          class="mx_StyledRadioButton mx_PollOption_live-option mx_StyledRadioButton_enabled mx_StyledRadioButton_checked"
         >
           <input
             name="poll_answer_select-$mypoll"
@@ -1236,15 +1261,15 @@ exports[`MPollBody renders a poll with only non-local votes 1`] = `
             class="mx_StyledRadioButton_content"
           >
             <div
-              class="mx_MPollBody_optionDescription"
+              class="mx_PollOption_content"
             >
               <div
-                class="mx_MPollBody_optionText"
+                class="mx_PollOption_optionText"
               >
                 Wings
               </div>
               <div
-                class="mx_MPollBody_optionVoteCount"
+                class="mx_PollOption_optionVoteCount"
               >
                 1 vote
               </div>
@@ -1255,10 +1280,10 @@ exports[`MPollBody renders a poll with only non-local votes 1`] = `
           />
         </label>
         <div
-          class="mx_MPollBody_popularityBackground"
+          class="mx_PollOption_popularityBackground"
         >
           <div
-            class="mx_MPollBody_popularityAmount"
+            class="mx_PollOption_popularityAmount"
             style="width: 33%;"
           />
         </div>
@@ -1288,129 +1313,135 @@ exports[`MPollBody renders an undisclosed, finished poll 1`] = `
       class="mx_MPollBody_allOptions"
     >
       <div
-        class="mx_MPollBody_option mx_MPollBody_option_checked mx_MPollBody_option_ended"
+        class="mx_PollOption mx_PollOption_checked mx_PollOption_ended"
         data-testid="pollOption-pizza"
       >
         <div
-          class="mx_MPollBody_endedOption mx_MPollBody_endedOptionWinner"
+          class="mx_PollOption_endedOption mx_PollOption_endedOptionWinner"
           data-value="pizza"
         >
           <div
-            class="mx_MPollBody_optionDescription"
+            class="mx_PollOption_content"
           >
             <div
-              class="mx_MPollBody_optionText"
+              class="mx_PollOption_optionText"
             >
               Pizza
             </div>
             <div
-              class="mx_MPollBody_optionVoteCount"
+              class="mx_PollOption_optionVoteCount"
             >
+              <div
+                class="mx_PollOption_winnerIcon"
+              />
               2 votes
             </div>
           </div>
         </div>
         <div
-          class="mx_MPollBody_popularityBackground"
+          class="mx_PollOption_popularityBackground"
         >
           <div
-            class="mx_MPollBody_popularityAmount"
+            class="mx_PollOption_popularityAmount"
             style="width: 50%;"
           />
         </div>
       </div>
       <div
-        class="mx_MPollBody_option mx_MPollBody_option_ended"
+        class="mx_PollOption mx_PollOption_ended"
         data-testid="pollOption-poutine"
       >
         <div
-          class="mx_MPollBody_endedOption"
+          class="mx_PollOption_endedOption"
           data-value="poutine"
         >
           <div
-            class="mx_MPollBody_optionDescription"
+            class="mx_PollOption_content"
           >
             <div
-              class="mx_MPollBody_optionText"
+              class="mx_PollOption_optionText"
             >
               Poutine
             </div>
             <div
-              class="mx_MPollBody_optionVoteCount"
+              class="mx_PollOption_optionVoteCount"
             >
               0 votes
             </div>
           </div>
         </div>
         <div
-          class="mx_MPollBody_popularityBackground"
+          class="mx_PollOption_popularityBackground"
         >
           <div
-            class="mx_MPollBody_popularityAmount"
+            class="mx_PollOption_popularityAmount"
             style="width: 0%;"
           />
         </div>
       </div>
       <div
-        class="mx_MPollBody_option mx_MPollBody_option_ended"
+        class="mx_PollOption mx_PollOption_ended"
         data-testid="pollOption-italian"
       >
         <div
-          class="mx_MPollBody_endedOption"
+          class="mx_PollOption_endedOption"
           data-value="italian"
         >
           <div
-            class="mx_MPollBody_optionDescription"
+            class="mx_PollOption_content"
           >
             <div
-              class="mx_MPollBody_optionText"
+              class="mx_PollOption_optionText"
             >
               Italian
             </div>
             <div
-              class="mx_MPollBody_optionVoteCount"
+              class="mx_PollOption_optionVoteCount"
             >
               0 votes
             </div>
           </div>
         </div>
         <div
-          class="mx_MPollBody_popularityBackground"
+          class="mx_PollOption_popularityBackground"
         >
           <div
-            class="mx_MPollBody_popularityAmount"
+            class="mx_PollOption_popularityAmount"
             style="width: 0%;"
           />
         </div>
       </div>
       <div
-        class="mx_MPollBody_option mx_MPollBody_option_checked mx_MPollBody_option_ended"
+        class="mx_PollOption mx_PollOption_checked mx_PollOption_ended"
         data-testid="pollOption-wings"
       >
         <div
-          class="mx_MPollBody_endedOption mx_MPollBody_endedOptionWinner"
+          class="mx_PollOption_endedOption mx_PollOption_endedOptionWinner"
           data-value="wings"
         >
           <div
-            class="mx_MPollBody_optionDescription"
+            class="mx_PollOption_content"
           >
             <div
-              class="mx_MPollBody_optionText"
+              class="mx_PollOption_optionText"
             >
               Wings
             </div>
             <div
-              class="mx_MPollBody_optionVoteCount"
+              class="mx_PollOption_optionVoteCount"
             >
+              <div
+                class="mx_PollOption_winnerIcon"
+              />
               2 votes
             </div>
           </div>
         </div>
         <div
-          class="mx_MPollBody_popularityBackground"
+          class="mx_PollOption_popularityBackground"
         >
           <div
-            class="mx_MPollBody_popularityAmount"
+            class="mx_PollOption_popularityAmount"
             style="width: 50%;"
           />
         </div>
@@ -1440,11 +1471,11 @@ exports[`MPollBody renders an undisclosed, unfinished poll 1`] = `
       class="mx_MPollBody_allOptions"
     >
       <div
-        class="mx_MPollBody_option"
+        class="mx_PollOption"
         data-testid="pollOption-pizza"
       >
         <label
-          class="mx_StyledRadioButton mx_MPollBody_live-option mx_StyledRadioButton_enabled"
+          class="mx_StyledRadioButton mx_PollOption_live-option mx_StyledRadioButton_enabled"
         >
           <input
             name="poll_answer_select-$mypoll"
@@ -1458,16 +1489,18 @@ exports[`MPollBody renders an undisclosed, unfinished poll 1`] = `
             class="mx_StyledRadioButton_content"
           >
             <div
-              class="mx_MPollBody_optionDescription"
+              class="mx_PollOption_content"
             >
               <div
-                class="mx_MPollBody_optionText"
+                class="mx_PollOption_optionText"
               >
                 Pizza
               </div>
               <div
-                class="mx_MPollBody_optionVoteCount"
-              />
+                class="mx_PollOption_optionVoteCount"
+              >
+                
+              </div>
             </div>
           </div>
           <div
@@ -1475,20 +1508,20 @@ exports[`MPollBody renders an undisclosed, unfinished poll 1`] = `
           />
         </label>
         <div
-          class="mx_MPollBody_popularityBackground"
+          class="mx_PollOption_popularityBackground"
         >
           <div
-            class="mx_MPollBody_popularityAmount"
+            class="mx_PollOption_popularityAmount"
             style="width: 0%;"
           />
         </div>
       </div>
       <div
-        class="mx_MPollBody_option"
+        class="mx_PollOption"
         data-testid="pollOption-poutine"
       >
         <label
-          class="mx_StyledRadioButton mx_MPollBody_live-option mx_StyledRadioButton_enabled"
+          class="mx_StyledRadioButton mx_PollOption_live-option mx_StyledRadioButton_enabled"
         >
           <input
             name="poll_answer_select-$mypoll"
@@ -1502,16 +1535,18 @@ exports[`MPollBody renders an undisclosed, unfinished poll 1`] = `
             class="mx_StyledRadioButton_content"
           >
             <div
-              class="mx_MPollBody_optionDescription"
+              class="mx_PollOption_content"
             >
               <div
-                class="mx_MPollBody_optionText"
+                class="mx_PollOption_optionText"
               >
                 Poutine
               </div>
               <div
-                class="mx_MPollBody_optionVoteCount"
-              />
+                class="mx_PollOption_optionVoteCount"
+              >
+                
+              </div>
             </div>
           </div>
           <div
@@ -1519,20 +1554,20 @@ exports[`MPollBody renders an undisclosed, unfinished poll 1`] = `
           />
         </label>
         <div
-          class="mx_MPollBody_popularityBackground"
+          class="mx_PollOption_popularityBackground"
         >
           <div
-            class="mx_MPollBody_popularityAmount"
+            class="mx_PollOption_popularityAmount"
             style="width: 0%;"
           />
         </div>
       </div>
       <div
-        class="mx_MPollBody_option"
+        class="mx_PollOption"
         data-testid="pollOption-italian"
       >
         <label
-          class="mx_StyledRadioButton mx_MPollBody_live-option mx_StyledRadioButton_enabled"
+          class="mx_StyledRadioButton mx_PollOption_live-option mx_StyledRadioButton_enabled"
         >
           <input
             name="poll_answer_select-$mypoll"
@@ -1546,16 +1581,18 @@ exports[`MPollBody renders an undisclosed, unfinished poll 1`] = `
             class="mx_StyledRadioButton_content"
           >
             <div
-              class="mx_MPollBody_optionDescription"
+              class="mx_PollOption_content"
             >
               <div
-                class="mx_MPollBody_optionText"
+                class="mx_PollOption_optionText"
               >
                 Italian
               </div>
               <div
-                class="mx_MPollBody_optionVoteCount"
-              />
+                class="mx_PollOption_optionVoteCount"
+              >
+                
+              </div>
             </div>
           </div>
           <div
@@ -1563,20 +1600,20 @@ exports[`MPollBody renders an undisclosed, unfinished poll 1`] = `
           />
         </label>
         <div
-          class="mx_MPollBody_popularityBackground"
+          class="mx_PollOption_popularityBackground"
         >
           <div
-            class="mx_MPollBody_popularityAmount"
+            class="mx_PollOption_popularityAmount"
             style="width: 0%;"
           />
         </div>
       </div>
       <div
-        class="mx_MPollBody_option"
+        class="mx_PollOption"
         data-testid="pollOption-wings"
       >
         <label
-          class="mx_StyledRadioButton mx_MPollBody_live-option mx_StyledRadioButton_enabled"
+          class="mx_StyledRadioButton mx_PollOption_live-option mx_StyledRadioButton_enabled"
         >
           <input
             name="poll_answer_select-$mypoll"
@@ -1590,16 +1627,18 @@ exports[`MPollBody renders an undisclosed, unfinished poll 1`] = `
             class="mx_StyledRadioButton_content"
           >
             <div
-              class="mx_MPollBody_optionDescription"
+              class="mx_PollOption_content"
             >
               <div
-                class="mx_MPollBody_optionText"
+                class="mx_PollOption_optionText"
               >
                 Wings
               </div>
               <div
-                class="mx_MPollBody_optionVoteCount"
-              />
+                class="mx_PollOption_optionVoteCount"
+              >
+                
+              </div>
             </div>
           </div>
           <div
@@ -1607,10 +1646,10 @@ exports[`MPollBody renders an undisclosed, unfinished poll 1`] = `
           />
         </label>
         <div
-          class="mx_MPollBody_popularityBackground"
+          class="mx_PollOption_popularityBackground"
         >
           <div
-            class="mx_MPollBody_popularityAmount"
+            class="mx_PollOption_popularityAmount"
             style="width: 0%;"
           />
         </div>

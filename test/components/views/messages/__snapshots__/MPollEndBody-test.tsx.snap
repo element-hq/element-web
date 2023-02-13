@@ -22,65 +22,65 @@ exports[`<MPollEndBody /> when poll start event exists in current timeline rende
       class="mx_MPollBody_allOptions"
     >
       <div
-        class="mx_MPollBody_option mx_MPollBody_option_ended"
+        class="mx_PollOption mx_PollOption_ended"
         data-testid="pollOption-socks"
       >
         <div
-          class="mx_MPollBody_endedOption"
+          class="mx_PollOption_endedOption"
           data-value="socks"
         >
           <div
-            class="mx_MPollBody_optionDescription"
+            class="mx_PollOption_content"
           >
             <div
-              class="mx_MPollBody_optionText"
+              class="mx_PollOption_optionText"
             >
               Socks
             </div>
             <div
-              class="mx_MPollBody_optionVoteCount"
+              class="mx_PollOption_optionVoteCount"
             >
               0 votes
             </div>
           </div>
         </div>
         <div
-          class="mx_MPollBody_popularityBackground"
+          class="mx_PollOption_popularityBackground"
         >
           <div
-            class="mx_MPollBody_popularityAmount"
+            class="mx_PollOption_popularityAmount"
             style="width: 0%;"
           />
         </div>
       </div>
       <div
-        class="mx_MPollBody_option mx_MPollBody_option_ended"
+        class="mx_PollOption mx_PollOption_ended"
         data-testid="pollOption-shoes"
       >
         <div
-          class="mx_MPollBody_endedOption"
+          class="mx_PollOption_endedOption"
           data-value="shoes"
         >
           <div
-            class="mx_MPollBody_optionDescription"
+            class="mx_PollOption_content"
           >
             <div
-              class="mx_MPollBody_optionText"
+              class="mx_PollOption_optionText"
             >
               Shoes
             </div>
             <div
-              class="mx_MPollBody_optionVoteCount"
+              class="mx_PollOption_optionVoteCount"
             >
               0 votes
             </div>
           </div>
         </div>
         <div
-          class="mx_MPollBody_popularityBackground"
+          class="mx_PollOption_popularityBackground"
         >
           <div
-            class="mx_MPollBody_popularityAmount"
+            class="mx_PollOption_popularityAmount"
             style="width: 0%;"
           />
         </div>

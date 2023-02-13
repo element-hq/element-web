@@ -287,8 +287,8 @@ describe("<PinnedMessagesCard />", () => {
         const pinTile = pins.find(MPollBody);
 
         expect(pinTile.length).toEqual(1);
-        expect(pinTile.find(".mx_MPollBody_option_ended").length).toEqual(2);
-        expect(pinTile.find(".mx_MPollBody_optionVoteCount").first().text()).toEqual("2 votes");
-        expect(pinTile.find(".mx_MPollBody_optionVoteCount").last().text()).toEqual("1 vote");
+        expect(pinTile.find(".mx_PollOption_ended").length).toEqual(2);
+        expect(pinTile.find(".mx_PollOption_optionVoteCount").first().text()).toEqual("2 votes");
+        expect(pinTile.find(".mx_PollOption_optionVoteCount").last().text()).toEqual("1 vote");
     });
 });
