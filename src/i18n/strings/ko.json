@@ -202,7 +202,6 @@
     "You must <a>register</a> to use this functionality": "이 기능을 쓰려면 <a>등록</a>해야 합니다",
     "You need to be able to invite users to do that.": "그러려면 사용자를 초대할 수 있어야 합니다.",
     "You need to be logged in.": "로그인을 해야 합니다.",
-    "Your email address does not appear to be associated with a Matrix ID on this Homeserver.": "이메일 주소가 이 홈서버의 Matrix ID와 관련이 없는 것 같습니다.",
     "You seem to be in a call, are you sure you want to quit?": "전화 중인데, 끊겠습니까?",
     "You seem to be uploading files, are you sure you want to quit?": "파일을 업로드 중인데, 그만두겠습니까?",
     "Sun": "일",
