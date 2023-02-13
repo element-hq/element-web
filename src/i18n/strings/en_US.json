@@ -371,7 +371,6 @@
     "The server does not support the room version specified.": "The server does not support the room version specified.",
     "Unable to load! Check your network connectivity and try again.": "Unable to load! Check your network connectivity and try again.",
     "Upgrades a room to a new version": "Upgrades a room to a new version",
-    "<b>Warning</b>: Upgrading a room will <i>not automatically migrate room members to the new version of the room.</i> We'll post a link to the new room in the old version of the room - room members will have to click this link to join the new room.": "<b>Warning</b>: Upgrading a room will <i>not automatically migrate room members to the new version of the room.</i> We'll post a link to the new room in the old version of the room - room members will have to click this link to join the new room.",
     "Changes your display nickname in the current room only": "Changes your display nickname in the current room only",
     "Changes your avatar in this current room only": "Changes your avatar in this current room only",
     "Gets or sets the room topic": "Gets or sets the room topic",

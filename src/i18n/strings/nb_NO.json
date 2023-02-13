@@ -123,7 +123,6 @@
     "Other": "Andre",
     "Prepends ¯\\_(ツ)_/¯ to a plain-text message": "Føyer til ¯\\_(ツ)_/¯ på en råtekstmelding",
     "You do not have the required permissions to use this command.": "Du har ikke de rette tilgangene til å bruke denne kommandoen.",
-    "<b>Warning</b>: Upgrading a room will <i>not automatically migrate room members to the new version of the room.</i> We'll post a link to the new room in the old version of the room - room members will have to click this link to join the new room.": "<b>Advarsel</b>: Oppgradering av et rom vil <i>ikke automatisk migrere rom medlemmer til den nye versjonen av rommet.</i> Vi legger ut en lenke til det nye rommet i den gamle versjonen av rommet - rom medlemmer må klikke på denne lenken for å bli med i det nye rommet.",
     "Changes your avatar in all rooms": "Endrer avataren din i alle rom",
     "Gets or sets the room topic": "Henter eller setter rommets overskrift",
     "This room has no topic.": "Dette rommet har ingen overskrift.",

@@ -982,7 +982,6 @@
     "Displays information about a user": "Приказује податке о кориснику",
     "Displays list of commands with usages and descriptions": "Приказује списак команди са употребом и описом",
     "Sends the given message coloured as a rainbow": "Шаље наведену поруку у дугиним бојама",
-    "WARNING: Session already verified, but keys do NOT MATCH!": "УПОЗОРЕЊЕ: Сесија је већ верификована али се кључеви НЕ ПОКЛАПАЈУ!",
     "Session already verified!": "Сесија је већ верификована!",
     "You cannot modify widgets in this room.": "Не можете мењати виџете у овој соби.",
     "Please supply a https:// or http:// widget URL": "Наведите https:// или http:// УРЛ виџета",

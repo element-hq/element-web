@@ -155,7 +155,6 @@
     "This room has no topic.": ".i na da skicu lerpoi le ve zilbe'i",
     "Could not find user in room": ".i le pilno na pagbu le se zilbe'i",
     "Session already verified!": ".i xa'o lacri le se samtcise'u",
-    "WARNING: Session already verified, but keys do NOT MATCH!": ".i ju'i zo'e xa'o lacri le se samtcise'u .i ku'i le'i ckiku ba'e na simxu le ka mapti",
     "%(senderDisplayName)s changed the room name from %(oldRoomName)s to %(newRoomName)s.": ".i gau la'o zoi. %(senderDisplayName)s .zoi zoi zoi. %(newRoomName)s .zoi basti zoi zoi. %(oldRoomName)s .zoi le ka cmene le se zilbe'i",
     "%(senderDisplayName)s made the room public to whoever knows the link.": ".i gau la'o zoi. %(senderDisplayName)s .zoi ro djuno be le du'u judri cu ka'e ziljmina le se zilbe'i",
     "%(senderDisplayName)s made the room invite only.": ".i ro da zo'u gau la'o zoi. %(senderDisplayName)s .zoi lo nu de friti le ka ziljmina le se zilbe'i kei da sarcu",

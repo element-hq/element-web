@@ -70,7 +70,6 @@
     "Usage": "Gebruuk",
     "Prepends ¯\\_(ツ)_/¯ to a plain-text message": "Plakt ¯\\_(ツ)_/¯ vóór e bericht zounder ipmoak",
     "Upgrades a room to a new version": "Actualiseert ’t gesprek tout e nieuwe versie",
-    "<b>Warning</b>: Upgrading a room will <i>not automatically migrate room members to the new version of the room.</i> We'll post a link to the new room in the old version of the room - room members will have to click this link to join the new room.": "<b>Let ip</b>: ’t ipwoardeern van e gesprek goa <i>gespreksleedn nie automatisch verplatsn noa de nieuwe versie van ’t gesprek</i>. We goan e koppelienge noa ’t nieuw gesprek in d’oude versie van ’t gesprek platsn - gespreksleedn goan ton ip deze koppeliengen moetn klikkn vo ’t nieuw gesprek toe te treedn.",
     "Changes your display nickname": "Verandert je weergavenoame",
     "Changes your display nickname in the current room only": "Stelt je weergavenoame alleene moa in ’t huudig gesprek in",
     "Changes your avatar in this current room only": "Verandert jen avatar alleene moa in ’t huudig gesprek",

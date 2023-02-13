@@ -2242,7 +2242,6 @@
     "Unable to find Matrix ID for phone number": "Gat ekki fundið Matrix-auðkenni fyrir símanúmer",
     "Opens chat with the given user": "Opnar spjall við viðkomandi notanda",
     "Send a bug report with logs": "Senda villuskýrslu með atvikaskrám",
-    "WARNING: Session already verified, but keys do NOT MATCH!": "AÐVÖRUN: Setan er þegar sannreynd, en lyklarnir SAMSVARA EKKI!",
     "Session already verified!": "Seta er þegar sannreynd!",
     "You cannot modify widgets in this room.": "Þú getur ekki sýslað með viðmótshluta á þessari spjallrás.",
     "Please supply a https:// or http:// widget URL": "Gefðu upp https:// eða http:// slóð á viðmótshluta",
