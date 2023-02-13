@@ -79,6 +79,12 @@ export function GenericDropdownMenuGroup<T extends Key>({
     );
 }
 
+function isGenericDropdownMenuGroupArray<T>(
+    items: readonly GenericDropdownMenuItem<T>[],
+): items is GenericDropdownMenuGroup<T>[] {
+    return isGenericDropdownMenuGroup(items[0]);
+}
+
 function isGenericDropdownMenuGroup<T>(item: GenericDropdownMenuItem<T>): item is GenericDropdownMenuGroup<T> {
     return "options" in item;
 }
@@ -123,19 +129,19 @@ export function GenericDropdownMenu<T>({
         .flatMap((it) => (isGenericDropdownMenuGroup(it) ? [it, ...it.options] : [it]))
         .find((option) => (toKey ? toKey(option.key) === toKey(value) : option.key === value));
     let contextMenuOptions: JSX.Element;
-    if (options && isGenericDropdownMenuGroup(options[0])) {
+    if (options && isGenericDropdownMenuGroupArray(options)) {
         contextMenuOptions = (
             <>
                 {options.map((group) => (
                     <GenericDropdownMenuGroup
-                        key={toKey?.(group.key) ?? group.key}
+                        key={toKey?.(group.key) ?? (group.key as Key)}
                         label={group.label}
                         description={group.description}
                         adornment={group.adornment}
                     >
                         {group.options.map((option) => (
                             <GenericDropdownMenuOption
-                                key={toKey?.(option.key) ?? option.key}
+                                key={toKey?.(option.key) ?? (option.key as Key)}
                                 label={option.label}
                                 description={option.description}
                                 onClick={(ev: ButtonEvent) => {
@@ -156,7 +162,7 @@ export function GenericDropdownMenu<T>({
             <>
                 {options.map((option) => (
                     <GenericDropdownMenuOption
-                        key={toKey?.(option.key) ?? option.key}
+                        key={toKey?.(option.key) ?? (option.key as Key)}
                         label={option.label}
                         description={option.description}
                         onClick={(ev: ButtonEvent) => {

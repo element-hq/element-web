@@ -65,7 +65,7 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
         disabledButtonIds: (this.props.widgetDefinition.buttons || []).filter((b) => b.disabled).map((b) => b.id),
     };
 
-    public constructor(props) {
+    public constructor(props: IProps) {
         super(props);
 
         this.widget = new ElementWidget({
@@ -124,7 +124,7 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
         this.state.messaging.transport.reply(ev.detail, {} as IWidgetApiAcknowledgeResponseData);
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const templated = this.widget.getCompleteUrl({
             widgetRoomId: this.props.widgetRoomId,
             currentUserId: MatrixClientPeg.get().getUserId(),

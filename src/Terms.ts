@@ -52,11 +52,13 @@ export type Policies = {
     [policy: string]: Policy;
 };
 
+export type ServicePolicyPair = {
+    policies: Policies;
+    service: Service;
+};
+
 export type TermsInteractionCallback = (
-    policiesAndServicePairs: {
-        service: Service;
-        policies: Policies;
-    }[],
+    policiesAndServicePairs: ServicePolicyPair[],
     agreedUrls: string[],
     extraClassNames?: string,
 ) => Promise<string[]>;
@@ -117,9 +119,9 @@ export async function startTermsFlow(
     // but then they'd assume they can un-check the boxes to un-agree to a policy,
     // but that is not a thing the API supports, so probably best to just show
     // things they've not agreed to yet.
-    const unagreedPoliciesAndServicePairs = [];
+    const unagreedPoliciesAndServicePairs: ServicePolicyPair[] = [];
     for (const { service, policies } of policiesAndServicePairs) {
-        const unagreedPolicies = {};
+        const unagreedPolicies: Policies = {};
         for (const [policyName, policy] of Object.entries(policies)) {
             let policyAgreed = false;
             for (const lang of Object.keys(policy)) {

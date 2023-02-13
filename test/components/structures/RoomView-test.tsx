@@ -55,6 +55,7 @@ const RoomView = wrapInMatrixClientContext(_RoomView);
 describe("RoomView", () => {
     let cli: MockedObject<MatrixClient>;
     let room: Room;
+    let rooms: Map<string, Room>;
     let roomCount = 0;
     let stores: SdkContextClass;
 
@@ -64,8 +65,11 @@ describe("RoomView", () => {
         cli = mocked(MatrixClientPeg.get());
 
         room = new Room(`!${roomCount++}:example.org`, cli, "@alice:example.org");
+        jest.spyOn(room, "findPredecessor");
         room.getPendingEvents = () => [];
-        cli.getRoom.mockImplementation(() => room);
+        rooms = new Map();
+        rooms.set(room.roomId, room);
+        cli.getRoom.mockImplementation((roomId: string | undefined) => rooms.get(roomId || "") || null);
         // Re-emit certain events on the mocked client
         room.on(RoomEvent.Timeline, (...args) => cli.emit(RoomEvent.Timeline, ...args));
         room.on(RoomEvent.TimelineReset, (...args) => cli.emit(RoomEvent.TimelineReset, ...args));
@@ -158,6 +162,42 @@ describe("RoomView", () => {
     const getRoomViewInstance = async (): Promise<_RoomView> =>
         (await mountRoomView()).find(_RoomView).instance() as _RoomView;
 
+    it("when there is no room predecessor, getHiddenHighlightCount should return 0", async () => {
+        const instance = await getRoomViewInstance();
+        expect(instance.getHiddenHighlightCount()).toBe(0);
+    });
+
+    describe("when there is an old room", () => {
+        let instance: _RoomView;
+        let oldRoom: Room;
+
+        beforeEach(async () => {
+            instance = await getRoomViewInstance();
+            oldRoom = new Room("!old:example.com", cli, cli.getSafeUserId());
+            rooms.set(oldRoom.roomId, oldRoom);
+            jest.spyOn(room, "findPredecessor").mockReturnValue({ roomId: oldRoom.roomId, eventId: null });
+        });
+
+        it("and it has 0 unreads, getHiddenHighlightCount should return 0", async () => {
+            jest.spyOn(oldRoom, "getUnreadNotificationCount").mockReturnValue(0);
+            expect(instance.getHiddenHighlightCount()).toBe(0);
+            // assert that msc3946ProcessDynamicPredecessor is false by default
+            expect(room.findPredecessor).toHaveBeenCalledWith(false);
+        });
+
+        it("and it has 23 unreads, getHiddenHighlightCount should return 23", async () => {
+            jest.spyOn(oldRoom, "getUnreadNotificationCount").mockReturnValue(23);
+            expect(instance.getHiddenHighlightCount()).toBe(23);
+        });
+
+        it("and feature_dynamic_room_predecessors is enabled it should pass the setting to findPredecessor", async () => {
+            SettingsStore.setValue("feature_dynamic_room_predecessors", null, SettingLevel.DEVICE, true);
+            expect(instance.getHiddenHighlightCount()).toBe(0);
+            expect(room.findPredecessor).toHaveBeenCalledWith(true);
+            SettingsStore.setValue("feature_dynamic_room_predecessors", null, SettingLevel.DEVICE, null);
+        });
+    });
+
     it("updates url preview visibility on encryption state change", async () => {
         // we should be starting unencrypted
         expect(cli.isCryptoEnabled()).toEqual(false);
@@ -248,6 +288,7 @@ describe("RoomView", () => {
 
         beforeEach(async () => {
             localRoom = room = await createDmLocalRoom(cli, [new DirectoryMember({ user_id: "@user:example.com" })]);
+            rooms.set(localRoom.roomId, localRoom);
             cli.store.storeRoom(room);
         });
 

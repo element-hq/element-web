@@ -332,7 +332,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
         );
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const { member, phase, request } = this.props;
 
         const displayName = (member as User).displayName || (member as RoomMember).name || member.userId;

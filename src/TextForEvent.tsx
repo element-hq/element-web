@@ -33,7 +33,7 @@ import { RightPanelPhases } from "./stores/right-panel/RightPanelStorePhases";
 import defaultDispatcher from "./dispatcher/dispatcher";
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import { ROOM_SECURITY_TAB } from "./components/views/dialogs/RoomSettingsDialog";
-import AccessibleButton from "./components/views/elements/AccessibleButton";
+import AccessibleButton, { ButtonEvent } from "./components/views/elements/AccessibleButton";
 import RightPanelStore from "./stores/right-panel/RightPanelStore";
 import { highlightEvent, isLocationEvent } from "./utils/EventUtils";
 import { ElementCall } from "./models/Call";
@@ -308,7 +308,7 @@ function textForServerACLEvent(ev: MatrixEvent): () => string | null {
         allow_ip_literals: prevContent.allow_ip_literals !== false,
     };
 
-    let getText = null;
+    let getText: () => string = null;
     if (prev.deny.length === 0 && prev.allow.length === 0) {
         getText = () => _t("%(senderDisplayName)s set the server ACLs for this room.", { senderDisplayName });
     } else {
@@ -360,8 +360,8 @@ function textForCanonicalAliasEvent(ev: MatrixEvent): () => string | null {
     const oldAltAliases = ev.getPrevContent().alt_aliases || [];
     const newAlias = ev.getContent().alias;
     const newAltAliases = ev.getContent().alt_aliases || [];
-    const removedAltAliases = oldAltAliases.filter((alias) => !newAltAliases.includes(alias));
-    const addedAltAliases = newAltAliases.filter((alias) => !oldAltAliases.includes(alias));
+    const removedAltAliases = oldAltAliases.filter((alias: string) => !newAltAliases.includes(alias));
+    const addedAltAliases = newAltAliases.filter((alias: string) => !oldAltAliases.includes(alias));
 
     if (!removedAltAliases.length && !addedAltAliases.length) {
         if (newAlias) {
@@ -533,8 +533,8 @@ function textForPinnedEvent(event: MatrixEvent, allowJSX: boolean): () => Render
     const senderName = getSenderName(event);
     const roomId = event.getRoomId();
 
-    const pinned = event.getContent().pinned ?? [];
-    const previouslyPinned = event.getPrevContent().pinned ?? [];
+    const pinned = event.getContent<{ pinned: string[] }>().pinned ?? [];
+    const previouslyPinned: string[] = event.getPrevContent().pinned ?? [];
     const newlyPinned = pinned.filter((item) => previouslyPinned.indexOf(item) < 0);
     const newlyUnpinned = previouslyPinned.filter((item) => pinned.indexOf(item) < 0);
 
@@ -550,7 +550,10 @@ function textForPinnedEvent(event: MatrixEvent, allowJSX: boolean): () => Render
                         { senderName },
                         {
                             a: (sub) => (
-                                <AccessibleButton kind="link_inline" onClick={(e) => highlightEvent(roomId, messageId)}>
+                                <AccessibleButton
+                                    kind="link_inline"
+                                    onClick={(e: ButtonEvent) => highlightEvent(roomId, messageId)}
+                                >
                                     {sub}
                                 </AccessibleButton>
                             ),
@@ -580,7 +583,10 @@ function textForPinnedEvent(event: MatrixEvent, allowJSX: boolean): () => Render
                         { senderName },
                         {
                             a: (sub) => (
-                                <AccessibleButton kind="link_inline" onClick={(e) => highlightEvent(roomId, messageId)}>
+                                <AccessibleButton
+                                    kind="link_inline"
+                                    onClick={(e: ButtonEvent) => highlightEvent(roomId, messageId)}
+                                >
                                     {sub}
                                 </AccessibleButton>
                             ),

@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { ChangeEvent, SyntheticEvent } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { Optional } from "matrix-events-sdk";
 import { ISSOFlow, LoginFlow, SSOAction } from "matrix-js-sdk/src/@types/auth";
@@ -44,7 +44,7 @@ enum LoginView {
     Unsupported,
 }
 
-const STATIC_FLOWS_TO_VIEWS = {
+const STATIC_FLOWS_TO_VIEWS: Record<string, LoginView> = {
     "m.login.password": LoginView.Password,
     "m.login.cas": LoginView.CAS,
     "m.login.sso": LoginView.SSO,
@@ -133,7 +133,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
         this.setState({ flows, loginView: chosenView });
     }
 
-    private onPasswordChange = (ev): void => {
+    private onPasswordChange = (ev: ChangeEvent<HTMLInputElement>): void => {
         this.setState({ password: ev.target.value });
     };
 
@@ -141,7 +141,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
         dis.dispatch({ action: "start_password_recovery" });
     };
 
-    private onPasswordLogin = async (ev): Promise<void> => {
+    private onPasswordLogin = async (ev: SyntheticEvent): Promise<void> => {
         ev.preventDefault();
         ev.stopPropagation();
 
@@ -326,7 +326,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
         );
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         return (
             <AuthPage>
                 <AuthHeader />
@@ -339,7 +339,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
                     <h2>{_t("Clear personal data")}</h2>
                     <p>
                         {_t(
-                            "Warning: Your personal data (including encryption keys) is still stored " +
+                            "Warning: your personal data (including encryption keys) is still stored " +
                                 "in this session. Clear it if you're finished using this session, or want to sign " +
                                 "in to another account.",
                         )}

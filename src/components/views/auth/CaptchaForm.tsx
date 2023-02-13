@@ -122,7 +122,7 @@ export default class CaptchaForm extends React.Component<ICaptchaFormProps, ICap
         }
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         let error = null;
         if (this.state.errorText) {
             error = <div className="error">{this.state.errorText}</div>;

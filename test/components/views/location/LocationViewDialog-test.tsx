@@ -52,7 +52,6 @@ describe("<LocationViewDialog />", () => {
         // @ts-ignore cheat assignment to property
         selfShareEvent.sender = member;
         const component = getComponent({ mxEvent: selfShareEvent });
-        // @ts-ignore fix when moving to rtl
-        expect(component.find("SmartMarker").props()["roomMember"]).toEqual(member);
+        expect(component.find("SmartMarker").prop("roomMember")).toEqual(member);
     });
 });

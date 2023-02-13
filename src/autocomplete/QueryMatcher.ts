@@ -88,7 +88,7 @@ export default class QueryMatcher<T extends {}> {
                 if (!this._items.has(key)) {
                     this._items.set(key, []);
                 }
-                this._items.get(key).push({
+                this._items.get(key)!.push({
                     keyWeight: Number(index),
                     object,
                 });
@@ -104,7 +104,11 @@ export default class QueryMatcher<T extends {}> {
         if (query.length === 0) {
             return [];
         }
-        const matches = [];
+        const matches: {
+            index: number;
+            object: T;
+            keyWeight: number;
+        }[] = [];
         // Iterate through the map & check each key.
         // ES6 Map iteration order is defined to be insertion order, so results
         // here will come out in the order they were put in.

@@ -207,7 +207,7 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
         this.props.onFinished();
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         if (this.state.error) {
             return (
                 <div className="mx_LocationPicker mx_LocationPicker_hasError">

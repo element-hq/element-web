@@ -91,7 +91,7 @@ const BetaCard: React.FC<IProps> = ({ title: titleOverride, featureId }) => {
         );
     }
 
-    let refreshWarning: string;
+    let refreshWarning: string | undefined;
     if (requiresRefresh) {
         const brand = SdkConfig.get().brand;
         refreshWarning = value

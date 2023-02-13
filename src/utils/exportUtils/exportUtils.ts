@@ -22,12 +22,16 @@ export enum ExportFormat {
     Json = "Json",
 }
 
+export type ExportFormatKey = "Html" | "PlainText" | "Json";
+
 export enum ExportType {
     Timeline = "Timeline",
     Beginning = "Beginning",
     LastNMessages = "LastNMessages",
     // START_DATE = "START_DATE",
 }
+
+export type ExportTypeKey = "Timeline" | "Beginning" | "LastNMessages";
 
 export const textForFormat = (format: ExportFormat): string => {
     switch (format) {

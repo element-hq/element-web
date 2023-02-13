@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import React, { ComponentProps } from "react";
+import { IContent, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { render, RenderResult } from "@testing-library/react";
 
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
@@ -43,7 +43,7 @@ describe("MVideoBody", () => {
 });
 
 function makeMVideoBody(w: number, h: number): RenderResult {
-    const content = {
+    const content: IContent = {
         info: {
             "w": w,
             "h": h,
@@ -66,7 +66,7 @@ function makeMVideoBody(w: number, h: number): RenderResult {
         content,
     });
 
-    const defaultProps = {
+    const defaultProps: ComponentProps<typeof MVideoBody> = {
         mxEvent: event,
         highlights: [],
         highlightLink: "",

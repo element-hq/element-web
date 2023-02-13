@@ -43,7 +43,7 @@ export default class NotificationPanel extends React.PureComponent<IProps, IStat
 
     private card = React.createRef<HTMLDivElement>();
 
-    public constructor(props) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {
@@ -55,7 +55,7 @@ export default class NotificationPanel extends React.PureComponent<IProps, IStat
         this.setState({ narrow });
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const emptyState = (
             <div className="mx_RightPanel_empty mx_NotificationPanel_empty">
                 <h2>{_t("You're all caught up")}</h2>

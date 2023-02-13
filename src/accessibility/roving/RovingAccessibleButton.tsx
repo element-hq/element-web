@@ -30,7 +30,7 @@ export const RovingAccessibleButton: React.FC<IProps> = ({ inputRef, onFocus, ..
     return (
         <AccessibleButton
             {...props}
-            onFocus={(event) => {
+            onFocus={(event: React.FocusEvent) => {
                 onFocusInternal();
                 onFocus?.(event);
             }}

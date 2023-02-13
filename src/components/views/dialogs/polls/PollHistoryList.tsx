@@ -19,13 +19,26 @@ import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import PollListItem from "./PollListItem";
 import { _t } from "../../../../languageHandler";
+import { FilterTabGroup } from "../../elements/FilterTabGroup";
+import { PollHistoryFilter } from "./types";
 
 type PollHistoryListProps = {
     pollStartEvents: MatrixEvent[];
+    filter: PollHistoryFilter;
+    onFilterChange: (filter: PollHistoryFilter) => void;
 };
-export const PollHistoryList: React.FC<PollHistoryListProps> = ({ pollStartEvents }) => {
+export const PollHistoryList: React.FC<PollHistoryListProps> = ({ pollStartEvents, filter, onFilterChange }) => {
     return (
         <div className="mx_PollHistoryList">
+            <FilterTabGroup<PollHistoryFilter>
+                name="PollHistoryDialog_filter"
+                value={filter}
+                onFilterChange={onFilterChange}
+                tabs={[
+                    { id: "ACTIVE", label: "Active polls" },
+                    { id: "ENDED", label: "Past polls" },
+                ]}
+            />
             {!!pollStartEvents.length ? (
                 <ol className="mx_PollHistoryList_list">
                     {pollStartEvents.map((pollStartEvent) => (
@@ -33,7 +46,11 @@ export const PollHistoryList: React.FC<PollHistoryListProps> = ({ pollStartEvent
                     ))}
                 </ol>
             ) : (
-                <span className="mx_PollHistoryList_noResults">{_t("There are no polls in this room")}</span>
+                <span className="mx_PollHistoryList_noResults">
+                    {filter === "ACTIVE"
+                        ? _t("There are no active polls in this room")
+                        : _t("There are no past polls in this room")}
+                </span>
             )}
         </div>
     );

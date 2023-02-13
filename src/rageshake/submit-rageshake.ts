@@ -173,7 +173,9 @@ async function collectBugReport(opts: IOpts = {}, gzipLogs = true): Promise<Form
     }
 
     if (window.Modernizr) {
-        const missingFeatures = Object.keys(window.Modernizr).filter((key) => window.Modernizr[key] === false);
+        const missingFeatures = Object.keys(window.Modernizr).filter(
+            (key: keyof ModernizrStatic) => window.Modernizr[key] === false,
+        );
         if (missingFeatures.length > 0) {
             body.append("modernizr_missing_features", missingFeatures.join(", "));
         }
@@ -276,7 +278,7 @@ export async function downloadBugReport(opts: IOpts = {}): Promise<void> {
 }
 
 // Source: https://github.com/beatgammit/tar-js/blob/master/examples/main.js
-function uint8ToString(buf: Buffer): string {
+function uint8ToString(buf: Uint8Array): string {
     let out = "";
     for (let i = 0; i < buf.length; i += 1) {
         out += String.fromCharCode(buf[i]);

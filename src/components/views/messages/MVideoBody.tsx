@@ -47,7 +47,7 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
     private videoRef = React.createRef<HTMLVideoElement>();
     private sizeWatcher: string;
 
-    public constructor(props) {
+    public constructor(props: IBodyProps) {
         super(props);
 
         this.state = {
@@ -232,7 +232,7 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
         return this.showFileBody && <MFileBody {...this.props} showGenericPlaceholder={false} />;
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const content = this.props.mxEvent.getContent();
         const autoplay = SettingsStore.getValue("autoplayVideo");
 

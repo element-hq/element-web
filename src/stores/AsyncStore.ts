@@ -106,5 +106,5 @@ export abstract class AsyncStore<T extends Object> extends EventEmitter {
      * Called when the dispatcher broadcasts a dispatch event.
      * @param {ActionPayload} payload The event being dispatched.
      */
-    protected abstract onDispatch(payload: ActionPayload);
+    protected abstract onDispatch(payload: ActionPayload): void;
 }

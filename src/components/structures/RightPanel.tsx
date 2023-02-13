@@ -63,7 +63,7 @@ export default class RightPanel extends React.Component<IProps, IState> {
     public static contextType = MatrixClientContext;
     public context!: React.ContextType<typeof MatrixClientContext>;
 
-    public constructor(props, context) {
+    public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
         super(props, context);
 
         this.state = {
@@ -149,7 +149,7 @@ export default class RightPanel extends React.Component<IProps, IState> {
         this.setState({ searchQuery });
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         let card = <div />;
         const roomId = this.props.room?.roomId;
         const phase = this.props.overwriteCard?.phase ?? this.state.phase;

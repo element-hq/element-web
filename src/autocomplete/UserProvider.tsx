@@ -44,7 +44,7 @@ const FORCED_USER_REGEX = /[^/,:; \t\n]\S*/g;
 
 export default class UserProvider extends AutocompleteProvider {
     public matcher: QueryMatcher<RoomMember>;
-    public users: RoomMember[];
+    public users: RoomMember[] | null;
     public room: Room;
 
     public constructor(room: Room, renderingType?: TimelineRenderingType) {
@@ -54,7 +54,7 @@ export default class UserProvider extends AutocompleteProvider {
             renderingType,
         });
         this.room = room;
-        this.matcher = new QueryMatcher([], {
+        this.matcher = new QueryMatcher<RoomMember>([], {
             keys: ["name"],
             funcs: [(obj) => obj.userId.slice(1)], // index by user id minus the leading '@'
             shouldMatchWordsOnly: false,
@@ -73,7 +73,7 @@ export default class UserProvider extends AutocompleteProvider {
 
     private onRoomTimeline = (
         ev: MatrixEvent,
-        room: Room | null,
+        room: Room | undefined,
         toStartOfTimeline: boolean,
         removed: boolean,
         data: IRoomTimelineData,
@@ -110,18 +110,15 @@ export default class UserProvider extends AutocompleteProvider {
         // lazy-load user list into matcher
         if (!this.users) this.makeUsers();
 
-        let completions = [];
         const { command, range } = this.getCurrentCommand(rawQuery, selection, force);
 
-        if (!command) return completions;
-
-        const fullMatch = command[0];
+        const fullMatch = command?.[0];
         // Don't search if the query is a single "@"
         if (fullMatch && fullMatch !== "@") {
             // Don't include the '@' in our search query - it's only used as a way to trigger completion
             const query = fullMatch.startsWith("@") ? fullMatch.substring(1) : fullMatch;
-            completions = this.matcher.match(query, limit).map((user) => {
-                const description = UserIdentifierCustomisations.getDisplayUserIdentifier(user.userId, {
+            return this.matcher.match(query, limit).map((user) => {
+                const description = UserIdentifierCustomisations.getDisplayUserIdentifier?.(user.userId, {
                     roomId: this.room.roomId,
                     withDisplayName: true,
                 });
@@ -132,18 +129,18 @@ export default class UserProvider extends AutocompleteProvider {
                     completion: user.rawDisplayName,
                     completionId: user.userId,
                     type: "user",
-                    suffix: selection.beginning && range.start === 0 ? ": " : " ",
+                    suffix: selection.beginning && range!.start === 0 ? ": " : " ",
                     href: makeUserPermalink(user.userId),
                     component: (
                         <PillCompletion title={displayName} description={description}>
                             <MemberAvatar member={user} width={24} height={24} />
                         </PillCompletion>
                     ),
-                    range,
+                    range: range!,
                 };
             });
         }
-        return completions;
+        return [];
     }
 
     public getName(): string {
@@ -152,10 +149,10 @@ export default class UserProvider extends AutocompleteProvider {
 
     private makeUsers(): void {
         const events = this.room.getLiveTimeline().getEvents();
-        const lastSpoken = {};
+        const lastSpoken: Record<string, number> = {};
 
         for (const event of events) {
-            lastSpoken[event.getSender()] = event.getTs();
+            lastSpoken[event.getSender()!] = event.getTs();
         }
 
         const currentUserId = MatrixClientPeg.get().credentials.userId;
@@ -167,7 +164,7 @@ export default class UserProvider extends AutocompleteProvider {
         this.matcher.setObjects(this.users);
     }
 
-    public onUserSpoke(user: RoomMember): void {
+    public onUserSpoke(user: RoomMember | null): void {
         if (!this.users) return;
         if (!user) return;
         if (user.userId === MatrixClientPeg.get().credentials.userId) return;

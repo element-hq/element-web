@@ -32,13 +32,13 @@ const EffectsOverlay: FunctionComponent<IProps> = ({ roomWidth }) => {
 
     const lazyLoadEffectModule = async (name: string): Promise<ICanvasEffect> => {
         if (!name) return null;
-        let effect: ICanvasEffect | null = effectsRef.current[name] || null;
+        let effect: ICanvasEffect | null = effectsRef.current.get(name) || null;
         if (effect === null) {
             const options = CHAT_EFFECTS.find((e) => e.command === name)?.options;
             try {
                 const { default: Effect } = await import(`../../../effects/${name}`);
                 effect = new Effect(options);
-                effectsRef.current[name] = effect;
+                effectsRef.current.set(name, effect);
             } catch (err) {
                 logger.warn(`Unable to load effect module at '../../../effects/${name}.`, err);
             }
@@ -70,7 +70,7 @@ const EffectsOverlay: FunctionComponent<IProps> = ({ roomWidth }) => {
             // eslint-disable-next-line react-hooks/exhaustive-deps
             const currentEffects = effectsRef.current; // this is not a react node ref, warning can be safely ignored
             for (const effect in currentEffects) {
-                const effectModule: ICanvasEffect = currentEffects[effect];
+                const effectModule: ICanvasEffect = currentEffects.get(effect);
                 if (effectModule && effectModule.isRunning) {
                     effectModule.stop();
                 }

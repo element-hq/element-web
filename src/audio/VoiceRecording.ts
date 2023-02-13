@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// @ts-ignore
 import Recorder from "opus-recorder/dist/recorder.min.js";
 import encoderPath from "opus-recorder/dist/encoderWorker.min.js";
 import { SimpleObservable } from "matrix-widget-api";
@@ -78,7 +77,7 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
     private targetMaxLength: number | null = TARGET_MAX_LENGTH;
     public amplitudes: number[] = []; // at each second mark, generated
     private liveWaveform = new FixedRollingArray(RECORDING_PLAYBACK_SAMPLES, 0);
-    public onDataAvailable: (data: ArrayBuffer) => void;
+    public onDataAvailable?: (data: ArrayBuffer) => void;
 
     public get contentType(): string {
         return "audio/ogg";
@@ -182,7 +181,7 @@ export class VoiceRecording extends EventEmitter implements IDestroyable {
             });
 
             // not using EventEmitter here because it leads to detached bufferes
-            this.recorder.ondataavailable = (data: ArrayBuffer) => this?.onDataAvailable(data);
+            this.recorder.ondataavailable = (data: ArrayBuffer) => this.onDataAvailable?.(data);
         } catch (e) {
             logger.error("Error starting recording: ", e);
             if (e instanceof DOMException) {

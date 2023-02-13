@@ -114,7 +114,7 @@ export default class MKeyVerificationRequest extends React.Component<IProps> {
         }
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const { mxEvent } = this.props;
         const request = mxEvent.verificationRequest;
 
@@ -122,9 +122,9 @@ export default class MKeyVerificationRequest extends React.Component<IProps> {
             return null;
         }
 
-        let title;
-        let subtitle;
-        let stateNode;
+        let title: string;
+        let subtitle: string;
+        let stateNode: JSX.Element;
 
         if (!request.canAccept) {
             let stateLabel;
@@ -138,9 +138,9 @@ export default class MKeyVerificationRequest extends React.Component<IProps> {
             } else if (request.cancelled) {
                 stateLabel = this.cancelledLabel(request.cancellingUserId);
             } else if (request.accepting) {
-                stateLabel = _t("Accepting …");
+                stateLabel = _t("Accepting…");
             } else if (request.declining) {
-                stateLabel = _t("Declining …");
+                stateLabel = _t("Declining…");
             }
             stateNode = <div className="mx_cryptoEvent_state">{stateLabel}</div>;
         }

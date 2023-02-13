@@ -35,7 +35,7 @@ interface IState {
 }
 
 export default class VerificationRequestDialog extends React.Component<IProps, IState> {
-    public constructor(props) {
+    public constructor(props: IProps) {
         super(props);
         this.state = {
             verificationRequest: this.props.verificationRequest,
@@ -47,7 +47,7 @@ export default class VerificationRequestDialog extends React.Component<IProps, I
         }
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const request = this.state.verificationRequest;
         const otherUserId = request && request.otherUserId;
         const member = this.props.member || (otherUserId && MatrixClientPeg.get().getUser(otherUserId));

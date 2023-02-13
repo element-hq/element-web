@@ -68,7 +68,7 @@ export default class RoomUpgradeDialog extends React.Component<IProps, IState> {
             });
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         let buttons;
         if (this.state.busy) {
             buttons = <Spinner />;

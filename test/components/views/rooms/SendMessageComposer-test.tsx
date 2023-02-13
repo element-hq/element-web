@@ -78,6 +78,7 @@ describe("<SendMessageComposer/>", () => {
         resizing: false,
         narrow: false,
         activeCall: null,
+        msc3946ProcessDynamicPredecessor: false,
     };
     describe("createMessageContent", () => {
         const permalinkCreator = jest.fn() as any;

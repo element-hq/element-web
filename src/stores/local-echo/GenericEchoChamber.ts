@@ -40,7 +40,7 @@ export abstract class GenericEchoChamber<C extends EchoContext, K, V> extends Ev
         this.onClientChanged(oldClient, client);
     }
 
-    protected abstract onClientChanged(oldClient: MatrixClient, newClient: MatrixClient);
+    protected abstract onClientChanged(oldClient: MatrixClient, newClient: MatrixClient): void;
 
     /**
      * Gets a value. If the key is in flight, the cached value will be returned. If

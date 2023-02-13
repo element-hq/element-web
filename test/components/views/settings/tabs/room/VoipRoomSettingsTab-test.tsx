@@ -46,7 +46,7 @@ describe("RolesRoomSettingsTab", () => {
     });
 
     describe("Element Call", () => {
-        const mockPowerLevels = (events): void => {
+        const mockPowerLevels = (events: Record<string, number>): void => {
             jest.spyOn(room.currentState, "getStateEvents").mockReturnValue({
                 getContent: () => ({
                     events,

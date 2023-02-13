@@ -34,7 +34,7 @@ interface IState {
 export default class DialpadContextMenu extends React.Component<IProps, IState> {
     private numberEntryFieldRef: React.RefObject<Field> = createRef();
 
-    public constructor(props) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {
@@ -58,18 +58,18 @@ export default class DialpadContextMenu extends React.Component<IProps, IState> 
         this.props.onFinished();
     };
 
-    public onKeyDown = (ev): void => {
+    public onKeyDown = (ev: React.KeyboardEvent): void => {
         // Prevent Backspace and Delete keys from functioning in the entry field
         if (ev.code === "Backspace" || ev.code === "Delete") {
             ev.preventDefault();
         }
     };
 
-    public onChange = (ev): void => {
+    public onChange = (ev: React.ChangeEvent<HTMLInputElement>): void => {
         this.setState({ value: ev.target.value });
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         return (
             <ContextMenu {...this.props}>
                 <div className="mx_DialPadContextMenuWrapper">

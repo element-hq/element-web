@@ -15,16 +15,15 @@ limitations under the License.
 */
 
 import React from "react";
-// eslint-disable-next-line deprecate/import
-import { mount } from "enzyme";
-import { act } from "react-dom/test-utils";
 import { mocked } from "jest-mock";
 import { Beacon } from "matrix-js-sdk/src/matrix";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 
 import OwnBeaconStatus from "../../../../src/components/views/beacon/OwnBeaconStatus";
 import { BeaconDisplayStatus } from "../../../../src/components/views/beacon/displayStatus";
 import { useOwnLiveBeacons } from "../../../../src/utils/beacon";
-import { findByTestId, makeBeaconInfoEvent } from "../../../test-utils";
+import { makeBeaconInfoEvent } from "../../../test-utils";
 
 jest.mock("../../../../src/utils/beacon/useOwnLiveBeacons", () => ({
     useOwnLiveBeacons: jest.fn(),
@@ -36,8 +35,11 @@ describe("<OwnBeaconStatus />", () => {
     };
     const userId = "@user:server";
     const roomId = "!room:server";
-    let defaultBeacon;
-    const getComponent = (props = {}) => mount(<OwnBeaconStatus {...defaultProps} {...props} />);
+    let defaultBeacon: Beacon;
+    const renderComponent = (props: Partial<React.ComponentProps<typeof OwnBeaconStatus>> = {}) =>
+        render(<OwnBeaconStatus {...defaultProps} {...props} />);
+    const getRetryButton = () => screen.getByRole("button", { name: "Retry" });
+    const getStopButton = () => screen.getByRole("button", { name: "Stop" });
 
     beforeEach(() => {
         jest.spyOn(global.Date, "now").mockReturnValue(123456789);
@@ -47,13 +49,8 @@ describe("<OwnBeaconStatus />", () => {
     });
 
     it("renders without a beacon instance", () => {
-        const component = getComponent();
-        expect(component).toMatchSnapshot();
-    });
-
-    it("renders loading state correctly", () => {
-        const component = getComponent();
-        expect(component.find("BeaconStatus").props()).toBeTruthy();
+        const { asFragment } = renderComponent();
+        expect(asFragment()).toMatchSnapshot();
     });
 
     describe("Active state", () => {
@@ -62,24 +59,19 @@ describe("<OwnBeaconStatus />", () => {
             mocked(useOwnLiveBeacons).mockReturnValue({
                 onStopSharing: jest.fn(),
             });
-            const component = getComponent({ displayStatus, beacon: defaultBeacon });
-            expect(component.text()).toContain("Live location enabled");
-
-            expect(findByTestId(component, "beacon-status-stop-beacon").length).toBeTruthy();
+            renderComponent({ displayStatus, beacon: defaultBeacon });
+            expect(screen.getByText("Live location enabled")).toBeInTheDocument();
+            expect(getStopButton()).toBeInTheDocument();
         });
 
-        it("stops sharing on stop button click", () => {
+        it("stops sharing on stop button click", async () => {
             const displayStatus = BeaconDisplayStatus.Active;
             const onStopSharing = jest.fn();
             mocked(useOwnLiveBeacons).mockReturnValue({
                 onStopSharing,
             });
-            const component = getComponent({ displayStatus, beacon: defaultBeacon });
-
-            act(() => {
-                findByTestId(component, "beacon-status-stop-beacon").at(0).simulate("click");
-            });
-
+            renderComponent({ displayStatus, beacon: defaultBeacon });
+            await userEvent.click(getStopButton());
             expect(onStopSharing).toHaveBeenCalled();
         });
     });
@@ -87,11 +79,11 @@ describe("<OwnBeaconStatus />", () => {
     describe("errors", () => {
         it("renders in error mode when displayStatus is error", () => {
             const displayStatus = BeaconDisplayStatus.Error;
-            const component = getComponent({ displayStatus });
-            expect(component.text()).toEqual("Live location error");
+            renderComponent({ displayStatus });
+            expect(screen.getByText("Live location error")).toBeInTheDocument();
 
             // no actions for plain error
-            expect(component.find("AccessibleButton").length).toBeFalsy();
+            expect(screen.queryByRole("button")).not.toBeInTheDocument();
         });
 
         describe("with location publish error", () => {
@@ -101,23 +93,21 @@ describe("<OwnBeaconStatus />", () => {
                     hasLocationPublishError: true,
                     onResetLocationPublishError: jest.fn(),
                 });
-                const component = getComponent({ displayStatus, beacon: defaultBeacon });
-                expect(component.text()).toContain("Live location error");
+                renderComponent({ displayStatus, beacon: defaultBeacon });
+                expect(screen.getByText("Live location error")).toBeInTheDocument();
                 // retry button
-                expect(findByTestId(component, "beacon-status-reset-wire-error").length).toBeTruthy();
+                expect(getRetryButton()).toBeInTheDocument();
             });
 
-            it("retry button resets location publish error", () => {
+            it("retry button resets location publish error", async () => {
                 const displayStatus = BeaconDisplayStatus.Active;
                 const onResetLocationPublishError = jest.fn();
                 mocked(useOwnLiveBeacons).mockReturnValue({
                     hasLocationPublishError: true,
                     onResetLocationPublishError,
                 });
-                const component = getComponent({ displayStatus, beacon: defaultBeacon });
-                act(() => {
-                    findByTestId(component, "beacon-status-reset-wire-error").at(0).simulate("click");
-                });
+                renderComponent({ displayStatus, beacon: defaultBeacon });
+                await userEvent.click(getRetryButton());
 
                 expect(onResetLocationPublishError).toHaveBeenCalled();
             });
@@ -131,23 +121,21 @@ describe("<OwnBeaconStatus />", () => {
                     hasStopSharingError: true,
                     onStopSharing: jest.fn(),
                 });
-                const component = getComponent({ displayStatus, beacon: defaultBeacon });
-                expect(component.text()).toContain("Live location error");
+                renderComponent({ displayStatus, beacon: defaultBeacon });
+                expect(screen.getByText("Live location error")).toBeInTheDocument();
                 // retry button
-                expect(findByTestId(component, "beacon-status-stop-beacon-retry").length).toBeTruthy();
+                expect(getRetryButton()).toBeInTheDocument();
             });
 
-            it("retry button retries stop sharing", () => {
+            it("retry button retries stop sharing", async () => {
                 const displayStatus = BeaconDisplayStatus.Active;
                 const onStopSharing = jest.fn();
                 mocked(useOwnLiveBeacons).mockReturnValue({
                     hasStopSharingError: true,
                     onStopSharing,
                 });
-                const component = getComponent({ displayStatus, beacon: defaultBeacon });
-                act(() => {
-                    findByTestId(component, "beacon-status-stop-beacon-retry").at(0).simulate("click");
-                });
+                renderComponent({ displayStatus, beacon: defaultBeacon });
+                await userEvent.click(getRetryButton());
 
                 expect(onStopSharing).toHaveBeenCalled();
             });
@@ -155,7 +143,7 @@ describe("<OwnBeaconStatus />", () => {
     });
 
     it("renders loading state correctly", () => {
-        const component = getComponent();
+        const component = renderComponent();
         expect(component).toBeTruthy();
     });
 });

@@ -40,7 +40,7 @@ interface IProps {
 
 // TODO: replace this, the composer buttons and the right panel buttons with a unified representation
 export default class HeaderButton extends React.Component<IProps> {
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const { isHighlighted, isUnread = false, onClick, name, title, ...props } = this.props;
 
         const classes = classNames({

@@ -120,7 +120,7 @@ function setRightPanel(state: IRightPanelCardState): void {
     }
 }
 
-export function pendingVerificationRequestForUser(user: User | RoomMember): VerificationRequest {
+export function pendingVerificationRequestForUser(user: User | RoomMember): VerificationRequest | undefined {
     const cli = MatrixClientPeg.get();
     const dmRoom = findDMForUser(cli, user.userId);
     if (dmRoom) {

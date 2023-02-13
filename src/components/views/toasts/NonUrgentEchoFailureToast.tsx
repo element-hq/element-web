@@ -26,7 +26,7 @@ export default class NonUrgentEchoFailureToast extends React.PureComponent {
         Modal.createDialog(ServerOfflineDialog, {});
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         return (
             <div className="mx_NonUrgentEchoFailureToast">
                 <span className="mx_NonUrgentEchoFailureToast_icon" />

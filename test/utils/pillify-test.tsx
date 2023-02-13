@@ -37,8 +37,8 @@ describe("pillify", () => {
     beforeEach(() => {
         stubClient();
         const cli = MatrixClientPeg.get();
-        (cli.getRoom as jest.Mock).mockReturnValue(new Room(roomId, cli, cli.getUserId()));
-        cli.pushRules.global = {
+        (cli.getRoom as jest.Mock).mockReturnValue(new Room(roomId, cli, cli.getUserId()!));
+        cli.pushRules!.global = {
             override: [
                 {
                     rule_id: ".m.rule.roomnotif",
@@ -79,7 +79,7 @@ describe("pillify", () => {
         const containers: Element[] = [];
         pillifyLinks([container], event, containers);
         expect(containers).toHaveLength(1);
-        expect(container.querySelector(".mx_Pill.mx_AtRoomPill").textContent).toBe("!@room");
+        expect(container.querySelector(".mx_Pill.mx_AtRoomPill")?.textContent).toBe("!@room");
     });
 
     it("should not double up pillification on repeated calls", () => {
@@ -90,6 +90,6 @@ describe("pillify", () => {
         pillifyLinks([container], event, containers);
         pillifyLinks([container], event, containers);
         expect(containers).toHaveLength(1);
-        expect(container.querySelector(".mx_Pill.mx_AtRoomPill").textContent).toBe("!@room");
+        expect(container.querySelector(".mx_Pill.mx_AtRoomPill")?.textContent).toBe("!@room");
     });
 });

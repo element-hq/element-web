@@ -48,7 +48,7 @@ export default class AskInviteAnywayDialog extends React.Component<IProps> {
         this.props.onFinished(false);
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const errorList = this.props.unknownProfileUsers.map((address) => (
             <li key={address.userId}>
                 {address.userId}: {address.errorText}

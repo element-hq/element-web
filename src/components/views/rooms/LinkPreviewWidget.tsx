@@ -37,7 +37,7 @@ interface IProps {
 export default class LinkPreviewWidget extends React.Component<IProps> {
     private image = createRef<HTMLImageElement>();
 
-    private onImageClick = (ev): void => {
+    private onImageClick = (ev: React.MouseEvent): void => {
         const p = this.props.preview;
         if (ev.button != 0 || ev.metaKey) return;
         ev.preventDefault();
@@ -70,7 +70,7 @@ export default class LinkPreviewWidget extends React.Component<IProps> {
         Modal.createDialog(ImageView, params, "mx_Dialog_lightbox", null, true);
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const p = this.props.preview;
         if (!p || Object.keys(p).length === 0) {
             return <div />;

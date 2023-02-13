@@ -61,7 +61,7 @@ const setupMainMenu = async (client: MatrixClient, testSpace: Room): Promise<Ren
 
     expect(wrapper.container.textContent).toBe("Test Space");
     act(() => {
-        wrapper.container.querySelector<HTMLElement>('[aria-label="Test Space menu"]').click();
+        wrapper.container.querySelector<HTMLElement>('[aria-label="Test Space menu"]')?.click();
     });
 
     return wrapper;
@@ -77,7 +77,7 @@ const setupPlusMenu = async (client: MatrixClient, testSpace: Room): Promise<Ren
 
     expect(wrapper.container.textContent).toBe("Test Space");
     act(() => {
-        wrapper.container.querySelector<HTMLElement>('[aria-label="Add"]').click();
+        wrapper.container.querySelector<HTMLElement>('[aria-label="Add"]')?.click();
     });
 
     return wrapper;
@@ -92,7 +92,7 @@ const checkMenuLabels = (items: NodeListOf<Element>, labelArray: Array<string>) 
     expect(items).toHaveLength(labelArray.length);
 
     const checkLabel = (item: Element, label: string) => {
-        expect(item.querySelector(".mx_IconizedContextMenu_label").textContent).toBe(label);
+        expect(item.querySelector(".mx_IconizedContextMenu_label")?.textContent).toBe(label);
     };
 
     labelArray.forEach((label, index) => {

@@ -132,8 +132,8 @@ export class PosthogAnalytics {
     private anonymity = Anonymity.Disabled;
     // set true during the constructor if posthog config is present, otherwise false
     private readonly enabled: boolean = false;
-    private static _instance = null;
-    private platformSuperProperties = {};
+    private static _instance: PosthogAnalytics | null = null;
+    private platformSuperProperties: Properties = {};
     public static readonly ANALYTICS_EVENT_TYPE = "im.vector.analytics";
     private propertiesForNextEvent: Partial<Record<"$set" | "$set_once", UserProperties>> = {};
     private userPropertyCache: UserProperties = {};

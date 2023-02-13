@@ -55,7 +55,7 @@ export default class AutoHideScrollbar<T extends keyof JSX.IntrinsicElements> ex
         }
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { element, className, onScroll, tabIndex, wrappedRef, children, ...otherProps } = this.props;
 

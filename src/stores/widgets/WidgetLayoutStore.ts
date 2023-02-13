@@ -96,14 +96,13 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
     private static internalInstance: WidgetLayoutStore;
 
     private byRoom: {
-        [roomId: string]: {
-            // @ts-ignore - TS wants a string key, but we know better
-            [container: Container]: {
+        [roomId: string]: Partial<{
+            [container in Container]: {
                 ordered: IApp[];
                 height?: number;
                 distributions?: number[];
             };
-        };
+        }>;
     } = {};
 
     private pinnedRef: string;
@@ -391,7 +390,7 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         if (numbers.length === 2) numbers.splice(1, 0, remaining);
         if (numbers.length === 1) numbers.push(remaining);
 
-        const localLayout = {};
+        const localLayout: Record<string, IStoredLayout> = {};
         widgets.forEach((w, i) => {
             localLayout[w.id] = {
                 container: container,
@@ -410,7 +409,7 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
     public setContainerHeight(room: Room, container: Container, height: number): void {
         const widgets = this.getContainerWidgets(room, container);
         const widths = this.byRoom[room.roomId]?.[container]?.distributions;
-        const localLayout = {};
+        const localLayout: Record<string, IStoredLayout> = {};
         widgets.forEach((w, i) => {
             localLayout[w.id] = {
                 container: container,
@@ -433,7 +432,7 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
 
         const widths = this.byRoom[room.roomId]?.[container]?.distributions;
         const height = this.byRoom[room.roomId]?.[container]?.height;
-        const localLayout = {};
+        const localLayout: Record<string, IStoredLayout> = {};
         widgets.forEach((w, i) => {
             localLayout[w.id] = {
                 container: container,
@@ -449,7 +448,7 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         const allWidgets = this.getAllWidgets(room);
         if (!allWidgets.some(([w]) => w.id === widget.id)) return; // invalid
         // Prepare other containers (potentially move widgets to obey the following rules)
-        const newLayout = {};
+        const newLayout: Record<string, IStoredLayout> = {};
         switch (toContainer) {
             case Container.Right:
                 // new "right" widget
@@ -516,11 +515,11 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         const containers = this.byRoom[room.roomId];
         if (!containers) return [];
 
-        const ret = [];
+        const ret: [IApp, Container][] = [];
         for (const container of Object.keys(containers)) {
-            const widgets = containers[container].ordered;
+            const widgets = containers[container as Container].ordered;
             for (const widget of widgets) {
-                ret.push([widget, container]);
+                ret.push([widget, container as Container]);
             }
         }
         return ret;

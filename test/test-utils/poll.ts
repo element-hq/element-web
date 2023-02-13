@@ -89,13 +89,14 @@ export const makePollEndEvent = (pollStartEventId: string, roomId: string, sende
  * @returns
  */
 export const setupRoomWithPollEvents = async (
-    mxEvent: MatrixEvent,
+    pollStartEvents: MatrixEvent[],
     relationEvents: Array<MatrixEvent>,
     endEvents: Array<MatrixEvent> = [],
     mockClient: Mocked<MatrixClient>,
+    existingRoom?: Room,
 ): Promise<Room> => {
-    const room = new Room(mxEvent.getRoomId()!, mockClient, mockClient.getSafeUserId());
-    room.processPollEvents([mxEvent, ...relationEvents, ...endEvents]);
+    const room = existingRoom || new Room(pollStartEvents[0].getRoomId()!, mockClient, mockClient.getSafeUserId());
+    room.processPollEvents([...pollStartEvents, ...relationEvents, ...endEvents]);
 
     // set redaction allowed for current user only
     // poll end events are validated against this
@@ -106,8 +107,10 @@ export const setupRoomWithPollEvents = async (
     // wait for events to process on room
     await flushPromises();
     mockClient.getRoom.mockReturnValue(room);
-    mockClient.relations.mockResolvedValue({
-        events: [...relationEvents, ...endEvents],
+    mockClient.relations.mockImplementation(async (_roomId: string, eventId: string) => {
+        return {
+            events: [...relationEvents, ...endEvents].filter((event) => event.getRelation()?.event_id === eventId),
+        };
     });
     return room;
 };

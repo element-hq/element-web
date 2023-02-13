@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { ComponentProps } from "react";
 import { render, fireEvent, RenderResult, waitFor } from "@testing-library/react";
 import { Room, RoomMember, MatrixError, IContent } from "matrix-js-sdk/src/matrix";
 
@@ -71,7 +71,7 @@ describe("<RoomPreviewBar />", () => {
     const inviterUserId = "@inviter:test.com";
     const otherUserId = "@othertester:test.com";
 
-    const getComponent = (props = {}) => {
+    const getComponent = (props: ComponentProps<typeof RoomPreviewBar> = {}) => {
         const defaultProps = {
             room: createRoom(roomId, userId),
         };
@@ -84,9 +84,9 @@ describe("<RoomPreviewBar />", () => {
     const getActions = (wrapper: RenderResult) =>
         wrapper.container.querySelector<HTMLDivElement>(".mx_RoomPreviewBar_actions");
     const getPrimaryActionButton = (wrapper: RenderResult) =>
-        getActions(wrapper).querySelector(".mx_AccessibleButton_kind_primary");
+        getActions(wrapper)?.querySelector(".mx_AccessibleButton_kind_primary");
     const getSecondaryActionButton = (wrapper: RenderResult) =>
-        getActions(wrapper).querySelector(".mx_AccessibleButton_kind_secondary");
+        getActions(wrapper)?.querySelector(".mx_AccessibleButton_kind_secondary");
 
     beforeEach(() => {
         stubClient();
@@ -102,17 +102,17 @@ describe("<RoomPreviewBar />", () => {
         const component = getComponent({ joining: true });
 
         expect(isSpinnerRendered(component)).toBeTruthy();
-        expect(getMessage(component).textContent).toEqual("Joining …");
+        expect(getMessage(component)?.textContent).toEqual("Joining …");
     });
     it("renders rejecting message", () => {
         const component = getComponent({ rejecting: true });
         expect(isSpinnerRendered(component)).toBeTruthy();
-        expect(getMessage(component).textContent).toEqual("Rejecting invite …");
+        expect(getMessage(component)?.textContent).toEqual("Rejecting invite …");
     });
     it("renders loading message", () => {
         const component = getComponent({ loading: true });
         expect(isSpinnerRendered(component)).toBeTruthy();
-        expect(getMessage(component).textContent).toEqual("Loading …");
+        expect(getMessage(component)?.textContent).toEqual("Loading …");
     });
 
     it("renders not logged in message", () => {
@@ -120,7 +120,7 @@ describe("<RoomPreviewBar />", () => {
         const component = getComponent({ loading: true });
 
         expect(isSpinnerRendered(component)).toBeFalsy();
-        expect(getMessage(component).textContent).toEqual("Join the conversation with an account");
+        expect(getMessage(component)?.textContent).toEqual("Join the conversation with an account");
     });
 
     it("should send room oob data to start login", async () => {
@@ -136,8 +136,8 @@ describe("<RoomPreviewBar />", () => {
         const dispatcherSpy = jest.fn();
         const dispatcherRef = defaultDispatcher.register(dispatcherSpy);
 
-        expect(getMessage(component).textContent).toEqual("Join the conversation with an account");
-        fireEvent.click(getPrimaryActionButton(component));
+        expect(getMessage(component)?.textContent).toEqual("Join the conversation with an account");
+        fireEvent.click(getPrimaryActionButton(component)!);
 
         await waitFor(() =>
             expect(dispatcherSpy).toHaveBeenCalledWith(
@@ -222,13 +222,13 @@ describe("<RoomPreviewBar />", () => {
         });
         describe("without an invited email", () => {
             describe("for a non-dm room", () => {
-                const mockGetMember = (id) => {
+                const mockGetMember = (id: string) => {
                     if (id === userId) return userMember;
                     return inviterMember;
                 };
                 const onJoinClick = jest.fn();
                 const onRejectClick = jest.fn();
-                let room;
+                let room: Room;
 
                 beforeEach(() => {
                     room = createRoom(roomId, userId);
@@ -268,27 +268,27 @@ describe("<RoomPreviewBar />", () => {
 
                 it("joins room on primary button click", () => {
                     const component = getComponent({ inviterName, room, onJoinClick, onRejectClick });
-                    fireEvent.click(getPrimaryActionButton(component));
+                    fireEvent.click(getPrimaryActionButton(component)!);
 
                     expect(onJoinClick).toHaveBeenCalled();
                 });
 
                 it("rejects invite on secondary button click", () => {
                     const component = getComponent({ inviterName, room, onJoinClick, onRejectClick });
-                    fireEvent.click(getSecondaryActionButton(component));
+                    fireEvent.click(getSecondaryActionButton(component)!);
 
                     expect(onRejectClick).toHaveBeenCalled();
                 });
             });
 
             describe("for a dm room", () => {
-                const mockGetMember = (id) => {
+                const mockGetMember = (id: string) => {
                     if (id === userId) return userMemberWithDmInvite;
                     return inviterMember;
                 };
                 const onJoinClick = jest.fn();
                 const onRejectClick = jest.fn();
-                let room;
+                let room: Room;
 
                 beforeEach(() => {
                     room = createRoom(roomId, userId);
@@ -324,14 +324,14 @@ describe("<RoomPreviewBar />", () => {
                 { medium: "not-email", address: "address 2" },
             ];
 
-            const testJoinButton = (props) => async () => {
+            const testJoinButton = (props: ComponentProps<typeof RoomPreviewBar>) => async () => {
                 const onJoinClick = jest.fn();
                 const onRejectClick = jest.fn();
                 const component = getComponent({ ...props, onJoinClick, onRejectClick });
                 await new Promise(setImmediate);
                 expect(getPrimaryActionButton(component)).toBeTruthy();
                 expect(getSecondaryActionButton(component)).toBeFalsy();
-                fireEvent.click(getPrimaryActionButton(component));
+                fireEvent.click(getPrimaryActionButton(component)!);
                 expect(onJoinClick).toHaveBeenCalled();
             };
 

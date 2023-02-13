@@ -40,7 +40,7 @@ interface IState {
 }
 
 class QuickReactions extends React.Component<IProps, IState> {
-    public constructor(props) {
+    public constructor(props: IProps) {
         super(props);
         this.state = {
             hover: null,
@@ -59,7 +59,7 @@ class QuickReactions extends React.Component<IProps, IState> {
         });
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         return (
             <section className="mx_EmojiPicker_footer mx_EmojiPicker_quick mx_EmojiPicker_category">
                 <h2 className="mx_EmojiPicker_quick_header mx_EmojiPicker_category_label">

@@ -34,7 +34,7 @@ interface IState {
  * catch exceptions during rendering in the component tree below them.
  */
 export default class ErrorBoundary extends React.PureComponent<{}, IState> {
-    public constructor(props) {
+    public constructor(props: {}) {
         super(props);
 
         this.state = {

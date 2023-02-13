@@ -40,12 +40,13 @@ export default class NotifProvider extends AutocompleteProvider {
     ): Promise<ICompletion[]> {
         const client = MatrixClientPeg.get();
 
-        if (!this.room.currentState.mayTriggerNotifOfType("room", client.credentials.userId)) return [];
+        if (!this.room.currentState.mayTriggerNotifOfType("room", client.credentials.userId!)) return [];
 
         const { command, range } = this.getCurrentCommand(query, selection, force);
         if (
-            command?.[0].length > 1 &&
-            ["@room", "@channel", "@everyone", "@here"].some((c) => c.startsWith(command[0]))
+            command?.[0] &&
+            command[0].length > 1 &&
+            ["@room", "@channel", "@everyone", "@here"].some((c) => c.startsWith(command![0]))
         ) {
             return [
                 {
@@ -58,7 +59,7 @@ export default class NotifProvider extends AutocompleteProvider {
                             <RoomAvatar width={24} height={24} room={this.room} />
                         </PillCompletion>
                     ),
-                    range,
+                    range: range!,
                 },
             ];
         }

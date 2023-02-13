@@ -15,13 +15,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { Component } from "react";
 import ReactTestUtils from "react-dom/test-utils";
 import ReactDOM from "react-dom";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { User } from "matrix-js-sdk/src/models/user";
 import { compare } from "matrix-js-sdk/src/utils";
+import { MatrixClient, RoomState } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import * as TestUtils from "../../../test-utils";
@@ -43,15 +44,15 @@ describe("MemberList", () => {
         return room;
     }
 
-    let parentDiv = null;
-    let client = null;
-    let root = null;
-    let memberListRoom;
-    let memberList = null;
+    let parentDiv: HTMLDivElement = null;
+    let client: MatrixClient = null;
+    let root: Component = null;
+    let memberListRoom: Room;
+    let memberList: MemberList = null;
 
-    let adminUsers = [];
-    let moderatorUsers = [];
-    let defaultUsers = [];
+    let adminUsers: RoomMember[] = [];
+    let moderatorUsers: RoomMember[] = [];
+    let defaultUsers: RoomMember[] = [];
 
     beforeEach(function () {
         TestUtils.stubClient();
@@ -109,13 +110,14 @@ describe("MemberList", () => {
         memberListRoom.currentState = {
             members: {},
             getMember: jest.fn(),
-            getStateEvents: (eventType, stateKey) => (stateKey === undefined ? [] : null), // ignore 3pid invites
-        };
+            getStateEvents: ((eventType, stateKey) =>
+                stateKey === undefined ? [] : null) as RoomState["getStateEvents"], // ignore 3pid invites
+        } as unknown as RoomState;
         for (const member of [...adminUsers, ...moderatorUsers, ...defaultUsers]) {
             memberListRoom.currentState.members[member.userId] = member;
         }
 
-        const gatherWrappedRef = (r) => {
+        const gatherWrappedRef = (r: MemberList) => {
             memberList = r;
         };
         const context = new TestSdkContext();
@@ -131,7 +133,7 @@ describe("MemberList", () => {
                 />
             </SDKContext.Provider>,
             parentDiv,
-        );
+        ) as unknown as Component;
     });
 
     afterEach((done) => {
@@ -144,7 +146,7 @@ describe("MemberList", () => {
         done();
     });
 
-    function expectOrderedByPresenceAndPowerLevel(memberTiles, isPresenceEnabled) {
+    function expectOrderedByPresenceAndPowerLevel(memberTiles: MemberTile[], isPresenceEnabled: boolean) {
         let prevMember = null;
         for (const tile of memberTiles) {
             const memberA = prevMember;
@@ -164,8 +166,8 @@ describe("MemberList", () => {
             let groupChange = false;
 
             if (isPresenceEnabled) {
-                const convertPresence = (p) => (p === "unavailable" ? "online" : p);
-                const presenceIndex = (p) => {
+                const convertPresence = (p: string) => (p === "unavailable" ? "online" : p);
+                const presenceIndex = (p: string) => {
                     const order = ["active", "online", "offline"];
                     const idx = order.indexOf(convertPresence(p));
                     return idx === -1 ? order.length : idx; // unknown states at the end
@@ -212,7 +214,7 @@ describe("MemberList", () => {
         }
     }
 
-    function itDoesOrderMembersCorrectly(enablePresence) {
+    function itDoesOrderMembersCorrectly(enablePresence: boolean) {
         describe("does order members correctly", () => {
             // Note: even if presence is disabled, we still expect that the presence
             // tests will pass. All expectOrderedByPresenceAndPowerLevel does is ensure
@@ -251,7 +253,7 @@ describe("MemberList", () => {
                 // We already have admin, moderator, and default users so leave them alone
 
                 // Bypass all the event listeners and skip to the good part
-                memberList._showPresence = enablePresence;
+                memberList.showPresence = enablePresence;
                 memberList.updateListNow();
 
                 const tiles = ReactTestUtils.scryRenderedComponentsWithType(root, MemberTile);

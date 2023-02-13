@@ -16,7 +16,7 @@ limitations under the License.
 
 import url from "url";
 import { logger } from "matrix-js-sdk/src/logger";
-import { ClientEvent, MatrixClient } from "matrix-js-sdk/src/client";
+import { ClientEvent, IClientWellKnown, MatrixClient } from "matrix-js-sdk/src/client";
 import { compare } from "matrix-js-sdk/src/utils";
 
 import type { MatrixEvent } from "matrix-js-sdk/src/models/event";
@@ -36,7 +36,7 @@ const KIND_PREFERENCE = [
 ];
 
 export class IntegrationManagers {
-    private static instance;
+    private static instance?: IntegrationManagers;
 
     private managers: IntegrationManagerInstance[] = [];
     private client: MatrixClient;
@@ -83,7 +83,7 @@ export class IntegrationManagers {
         }
     }
 
-    private setupHomeserverManagers = async (discoveryResponse): Promise<void> => {
+    private setupHomeserverManagers = async (discoveryResponse: IClientWellKnown): Promise<void> => {
         logger.log("Updating homeserver-configured integration managers...");
         if (discoveryResponse && discoveryResponse["m.integrations"]) {
             let managers = discoveryResponse["m.integrations"]["managers"];
@@ -202,7 +202,7 @@ export class IntegrationManagers {
             domainName = url.parse(domainName).host;
         }
 
-        let wkConfig: object;
+        let wkConfig: IClientWellKnown;
         try {
             const result = await fetch(`https://${domainName}/.well-known/matrix/integrations`);
             wkConfig = await result.json();

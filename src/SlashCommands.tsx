@@ -697,11 +697,8 @@ export const Commands = [
                     }
 
                     if (viaServers) {
-                        // For the join
-                        dispatch["opts"] = {
-                            // These are passed down to the js-sdk's /join call
-                            viaServers: viaServers,
-                        };
+                        // For the join, these are passed down to the js-sdk's /join call
+                        dispatch["opts"] = { viaServers };
 
                         // For if the join fails (rejoin button)
                         dispatch["via_servers"] = viaServers;
@@ -1042,7 +1039,7 @@ export const Commands = [
                                     throw newTranslatableError("Session already verified!");
                                 } else {
                                     throw newTranslatableError(
-                                        "WARNING: Session already verified, but keys do NOT MATCH!",
+                                        "WARNING: session already verified, but keys do NOT MATCH!",
                                     );
                                 }
                             }

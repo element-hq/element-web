@@ -39,11 +39,11 @@ describe("RolesRoomSettingsTab", () => {
     };
 
     const getVoiceBroadcastsSelect = (): HTMLElement => {
-        return renderTab().container.querySelector("select[label='Voice broadcasts']");
+        return renderTab().container.querySelector("select[label='Voice broadcasts']")!;
     };
 
     const getVoiceBroadcastsSelectedOption = (): HTMLElement => {
-        return renderTab().container.querySelector("select[label='Voice broadcasts'] option:checked");
+        return renderTab().container.querySelector("select[label='Voice broadcasts'] option:checked")!;
     };
 
     beforeEach(() => {
@@ -65,7 +65,7 @@ describe("RolesRoomSettingsTab", () => {
                     state_key: "",
                     content: {
                         users: {
-                            [cli.getUserId()]: 100,
+                            [cli.getUserId()!]: 100,
                             "@admin:server": 100,
                         },
                     },
@@ -108,19 +108,19 @@ describe("RolesRoomSettingsTab", () => {
         };
 
         const getStartCallSelect = (tab: RenderResult): HTMLElement => {
-            return tab.container.querySelector("select[label='Start Element Call calls']");
+            return tab.container.querySelector("select[label='Start Element Call calls']")!;
         };
 
         const getStartCallSelectedOption = (tab: RenderResult): HTMLElement => {
-            return tab.container.querySelector("select[label='Start Element Call calls'] option:checked");
+            return tab.container.querySelector("select[label='Start Element Call calls'] option:checked")!;
         };
 
         const getJoinCallSelect = (tab: RenderResult): HTMLElement => {
-            return tab.container.querySelector("select[label='Join Element Call calls']");
+            return tab.container.querySelector("select[label='Join Element Call calls']")!;
         };
 
         const getJoinCallSelectedOption = (tab: RenderResult): HTMLElement => {
-            return tab.container.querySelector("select[label='Join Element Call calls'] option:checked");
+            return tab.container.querySelector("select[label='Join Element Call calls'] option:checked")!;
         };
 
         describe("Element Call enabled", () => {

@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import { EventEmitter } from "events";
+import { MatrixClient, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 
 import { waitForMember } from "../../src/utils/membership";
 
@@ -22,14 +23,14 @@ import { waitForMember } from "../../src/utils/membership";
 const timeout = 30;
 
 describe("waitForMember", () => {
-    let client;
+    let client: EventEmitter;
 
     beforeEach(() => {
         client = new EventEmitter();
     });
 
     it("resolves with false if the timeout is reached", (done) => {
-        waitForMember(client, "", "", { timeout: 0 }).then((r) => {
+        waitForMember(<MatrixClient>client, "", "", { timeout: 0 }).then((r) => {
             expect(r).toBe(false);
             done();
         });
@@ -38,7 +39,7 @@ describe("waitForMember", () => {
     it("resolves with false if the timeout is reached, even if other RoomState.newMember events fire", (done) => {
         const roomId = "!roomId:domain";
         const userId = "@clientId:domain";
-        waitForMember(client, roomId, userId, { timeout }).then((r) => {
+        waitForMember(<MatrixClient>client, roomId, userId, { timeout }).then((r) => {
             expect(r).toBe(false);
             done();
         });
@@ -48,9 +49,9 @@ describe("waitForMember", () => {
     it("resolves with true if RoomState.newMember fires", (done) => {
         const roomId = "!roomId:domain";
         const userId = "@clientId:domain";
-        waitForMember(client, roomId, userId, { timeout }).then((r) => {
+        waitForMember(<MatrixClient>client, roomId, userId, { timeout }).then((r) => {
             expect(r).toBe(true);
-            expect(client.listeners("RoomState.newMember").length).toBe(0);
+            expect((<MatrixClient>client).listeners(RoomStateEvent.NewMember).length).toBe(0);
             done();
         });
         client.emit("RoomState.newMember", undefined, undefined, { roomId, userId });

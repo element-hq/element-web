@@ -25,7 +25,14 @@ import DialogButtons from "../elements/DialogButtons";
 import Field from "../elements/Field";
 import StyledRadioGroup from "../elements/StyledRadioGroup";
 import StyledCheckbox from "../elements/StyledCheckbox";
-import { ExportFormat, ExportType, textForFormat, textForType } from "../../../utils/exportUtils/exportUtils";
+import {
+    ExportFormat,
+    ExportFormatKey,
+    ExportType,
+    ExportTypeKey,
+    textForFormat,
+    textForType,
+} from "../../../utils/exportUtils/exportUtils";
 import withValidation, { IFieldState, IValidationResult } from "../elements/Validation";
 import HTMLExporter from "../../../utils/exportUtils/HtmlExport";
 import JSONExporter from "../../../utils/exportUtils/JSONExport";
@@ -237,15 +244,15 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
         setExporter(null);
     };
 
-    const exportFormatOptions = Object.keys(ExportFormat).map((format) => ({
-        value: ExportFormat[format],
-        label: textForFormat(ExportFormat[format]),
+    const exportFormatOptions = Object.values(ExportFormat).map((format) => ({
+        value: format,
+        label: textForFormat(format),
     }));
 
-    const exportTypeOptions = Object.keys(ExportType).map((type) => {
+    const exportTypeOptions = Object.values(ExportType).map((type) => {
         return (
-            <option key={type} value={ExportType[type]}>
-                {textForType(ExportType[type])}
+            <option key={ExportType[type]} value={type}>
+                {textForType(type)}
             </option>
         );
     });
@@ -332,7 +339,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                             <StyledRadioGroup
                                 name="exportFormat"
                                 value={exportFormat}
-                                onChange={(key) => setExportFormat(ExportFormat[key])}
+                                onChange={(key: ExportFormatKey) => setExportFormat(ExportFormat[key])}
                                 definitions={exportFormatOptions}
                             />
                         </>
@@ -347,7 +354,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                                 element="select"
                                 value={exportType}
                                 onChange={(e) => {
-                                    setExportType(ExportType[e.target.value]);
+                                    setExportType(ExportType[e.target.value as ExportTypeKey]);
                                 }}
                             >
                                 {exportTypeOptions}

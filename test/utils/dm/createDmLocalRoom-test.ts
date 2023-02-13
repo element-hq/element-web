@@ -44,9 +44,9 @@ function assertLocalRoom(room: LocalRoom, targets: Member[], encrypted: boolean)
     expect(roomCreateEvent.getContent()["room_version"]).toBe(KNOWN_SAFE_ROOM_VERSION);
 
     // check that the user and all targets are joined
-    expect(room.getMember("@userId:matrix.org").membership).toBe("join");
+    expect(room.getMember("@userId:matrix.org")?.membership).toBe("join");
     targets.forEach((target: Member) => {
-        expect(room.getMember(target.userId).membership).toBe("join");
+        expect(room.getMember(target.userId)?.membership).toBe("join");
     });
 
     if (encrypted) {

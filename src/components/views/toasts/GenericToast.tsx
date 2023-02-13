@@ -24,12 +24,12 @@ export interface IProps {
     detail?: ReactNode;
     acceptLabel: string;
 
-    onAccept();
+    onAccept(): void;
 }
 
 interface IPropsExtended extends IProps {
     rejectLabel: string;
-    onReject();
+    onReject(): void;
 }
 
 const GenericToast: React.FC<XOR<IPropsExtended, IProps>> = ({

@@ -73,9 +73,9 @@ export default class ImportE2eKeysDialog extends React.Component<IProps, IState>
     }
 
     private onFormChange = (): void => {
-        const files = this.file.current.files || [];
+        const files = this.file.current.files;
         this.setState({
-            enableSubmit: this.state.passphrase !== "" && files.length > 0,
+            enableSubmit: this.state.passphrase !== "" && !!files?.length,
         });
     };
 
@@ -127,7 +127,7 @@ export default class ImportE2eKeysDialog extends React.Component<IProps, IState>
         return false;
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const disableForm = this.state.phase !== Phase.Edit;
 
         return (

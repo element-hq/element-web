@@ -249,7 +249,7 @@ class EmojiPicker extends React.Component<IProps, IState> {
         return CATEGORY_HEADER_HEIGHT + Math.ceil(count / EMOJIS_PER_ROW) * EMOJI_HEIGHT;
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         let heightBefore = 0;
         return (
             <div className="mx_EmojiPicker" data-testid="mx_EmojiPicker">

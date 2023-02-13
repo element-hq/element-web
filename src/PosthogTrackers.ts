@@ -120,7 +120,7 @@ export class PosthogScreenTracker extends PureComponent<{ screenName: ScreenName
         PosthogTrackers.instance.clearOverride(this.props.screenName);
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         return null; // no need to render anything, we just need to hook into the React lifecycle
     }
 }

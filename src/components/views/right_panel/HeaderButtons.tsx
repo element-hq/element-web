@@ -26,6 +26,7 @@ import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePha
 import { IRightPanelCardState } from "../../../stores/right-panel/RightPanelStoreIPanelState";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import { NotificationColor } from "../../../stores/notifications/NotificationColor";
+import { ActionPayload } from "../../../dispatcher/payloads";
 
 export enum HeaderKind {
     Room = "room",
@@ -67,7 +68,7 @@ export default abstract class HeaderButtons<P = {}> extends React.Component<IPro
         if (this.dispatcherRef) dis.unregister(this.dispatcherRef);
     }
 
-    protected abstract onAction(payload);
+    protected abstract onAction(payload: ActionPayload): void;
 
     public setPhase(phase: RightPanelPhases, cardState?: Partial<IRightPanelCardState>): void {
         const rps = RightPanelStore.instance;
@@ -96,7 +97,7 @@ export default abstract class HeaderButtons<P = {}> extends React.Component<IPro
     // XXX: Make renderButtons a prop
     public abstract renderButtons(): JSX.Element;
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         return (
             <div className="mx_HeaderButtons" role="tablist">
                 {this.renderButtons()}

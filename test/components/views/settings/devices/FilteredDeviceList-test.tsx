@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { ComponentProps } from "react";
 import { act, fireEvent, render } from "@testing-library/react";
 
 import { FilteredDeviceList } from "../../../../../src/components/views/settings/devices/FilteredDeviceList";
@@ -26,6 +26,9 @@ mockPlatformPeg();
 
 const MS_DAY = 86400000;
 describe("<FilteredDeviceList />", () => {
+    // 14.03.2022 16:15
+    const now = 1647270879403;
+    jest.spyOn(global.Date, "now").mockReturnValue(now);
     const newDevice = {
         device_id: "new",
         last_seen_ts: Date.now() - 500,
@@ -56,13 +59,12 @@ describe("<FilteredDeviceList />", () => {
         last_seen_ts: Date.now() - MS_DAY * 100,
         deviceType: DeviceType.Unknown,
     };
-    const defaultProps = {
+    const defaultProps: ComponentProps<typeof FilteredDeviceList> = {
         onFilterChange: jest.fn(),
         onDeviceExpandToggle: jest.fn(),
         onSignOutDevices: jest.fn(),
         saveDeviceName: jest.fn(),
         setPushNotifications: jest.fn(),
-        setPusherEnabled: jest.fn(),
         setSelectedDeviceIds: jest.fn(),
         localNotificationSettings: new Map(),
         expandedDeviceIds: [],
@@ -80,6 +82,10 @@ describe("<FilteredDeviceList />", () => {
     };
 
     const getComponent = (props = {}) => <FilteredDeviceList {...defaultProps} {...props} />;
+
+    afterAll(() => {
+        jest.spyOn(global.Date, "now").mockRestore();
+    });
 
     it("renders devices in correct order", () => {
         const { container } = render(getComponent());

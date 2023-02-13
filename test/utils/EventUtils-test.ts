@@ -432,7 +432,7 @@ describe("EventUtils", () => {
             stubClient();
             client = MatrixClientPeg.get();
 
-            room = new Room(ROOM_ID, client, client.getUserId(), {
+            room = new Room(ROOM_ID, client, client.getUserId()!, {
                 pendingEventOrdering: PendingEventOrdering.Detached,
             });
 

@@ -45,7 +45,7 @@ export default class LogoutDialog extends React.Component<IProps, IState> {
         onFinished: function () {},
     };
 
-    public constructor(props) {
+    public constructor(props: IProps) {
         super(props);
 
         const cli = MatrixClientPeg.get();
@@ -127,7 +127,7 @@ export default class LogoutDialog extends React.Component<IProps, IState> {
         this.props.onFinished(true);
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         if (this.state.shouldLoadBackupStatus) {
             const description = (
                 <div>

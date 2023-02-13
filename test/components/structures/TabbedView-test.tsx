@@ -43,20 +43,20 @@ describe("<TabbedView />", () => {
 
     it("renders first tab as active tab when no initialTabId", () => {
         const { container } = render(getComponent());
-        expect(getActiveTab(container).textContent).toEqual(generalTab.label);
-        expect(getActiveTabBody(container).textContent).toEqual("general");
+        expect(getActiveTab(container)?.textContent).toEqual(generalTab.label);
+        expect(getActiveTabBody(container)?.textContent).toEqual("general");
     });
 
     it("renders first tab as active tab when initialTabId is not valid", () => {
         const { container } = render(getComponent({ initialTabId: "bad-tab-id" }));
-        expect(getActiveTab(container).textContent).toEqual(generalTab.label);
-        expect(getActiveTabBody(container).textContent).toEqual("general");
+        expect(getActiveTab(container)?.textContent).toEqual(generalTab.label);
+        expect(getActiveTabBody(container)?.textContent).toEqual("general");
     });
 
     it("renders initialTabId tab as active when valid", () => {
         const { container } = render(getComponent({ initialTabId: securityTab.id }));
-        expect(getActiveTab(container).textContent).toEqual(securityTab.label);
-        expect(getActiveTabBody(container).textContent).toEqual("security");
+        expect(getActiveTab(container)?.textContent).toEqual(securityTab.label);
+        expect(getActiveTabBody(container)?.textContent).toEqual("security");
     });
 
     it("renders without error when there are no tabs", () => {
@@ -71,8 +71,8 @@ describe("<TabbedView />", () => {
             fireEvent.click(getByTestId(getTabTestId(securityTab)));
         });
 
-        expect(getActiveTab(container).textContent).toEqual(securityTab.label);
-        expect(getActiveTabBody(container).textContent).toEqual("security");
+        expect(getActiveTab(container)?.textContent).toEqual(securityTab.label);
+        expect(getActiveTabBody(container)?.textContent).toEqual("security");
     });
 
     it("calls onchange on on tab click", () => {
@@ -90,29 +90,29 @@ describe("<TabbedView />", () => {
         // start with middle tab active
         const { container, rerender } = render(getComponent({ initialTabId: labsTab.id }));
 
-        expect(getActiveTab(container).textContent).toEqual(labsTab.label);
+        expect(getActiveTab(container)?.textContent).toEqual(labsTab.label);
 
         rerender(getComponent({ tabs: [labsTab, generalTab, securityTab] }));
 
         // labs tab still active
-        expect(getActiveTab(container).textContent).toEqual(labsTab.label);
+        expect(getActiveTab(container)?.textContent).toEqual(labsTab.label);
     });
 
     it("does not reactivate inititalTabId on rerender", () => {
         const { container, getByTestId, rerender } = render(getComponent());
 
-        expect(getActiveTab(container).textContent).toEqual(generalTab.label);
+        expect(getActiveTab(container)?.textContent).toEqual(generalTab.label);
 
         // make security tab active
         act(() => {
             fireEvent.click(getByTestId(getTabTestId(securityTab)));
         });
-        expect(getActiveTab(container).textContent).toEqual(securityTab.label);
+        expect(getActiveTab(container)?.textContent).toEqual(securityTab.label);
 
         // rerender with new tab location
         rerender(getComponent({ tabLocation: TabLocation.TOP }));
 
         // still security tab
-        expect(getActiveTab(container).textContent).toEqual(securityTab.label);
+        expect(getActiveTab(container)?.textContent).toEqual(securityTab.label);
     });
 });

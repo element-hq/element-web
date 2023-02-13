@@ -43,7 +43,11 @@ class MxVoiceWorklet extends AudioWorkletProcessor {
     private nextAmplitudeSecond = 0;
     private amplitudeIndex = 0;
 
-    public process(inputs, outputs, parameters): boolean {
+    public process(
+        inputs: Float32Array[][],
+        outputs: Float32Array[][],
+        parameters: Record<string, Float32Array>,
+    ): boolean {
         const currentSecond = roundTimeToTargetFreq(currentTime);
         // We special case the first ping because there's a fairly good chance that we'll miss the zeroth
         // update. Firefox for instance takes 0.06 seconds (roughly) to call this function for the first

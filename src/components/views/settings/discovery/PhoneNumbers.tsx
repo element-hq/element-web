@@ -22,7 +22,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { _t } from "../../../../languageHandler";
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import Modal from "../../../../Modal";
-import AddThreepid from "../../../../AddThreepid";
+import AddThreepid, { Binding } from "../../../../AddThreepid";
 import ErrorDialog from "../../dialogs/ErrorDialog";
 import Field from "../../elements/Field";
 import AccessibleButton from "../../elements/AccessibleButton";
@@ -70,7 +70,7 @@ export class PhoneNumber extends React.Component<IPhoneNumberProps, IPhoneNumber
         }
     }
 
-    private async changeBinding({ bind, label, errorTitle }): Promise<void> {
+    private async changeBinding({ bind, label, errorTitle }: Binding): Promise<void> {
         if (!(await MatrixClientPeg.get().doesServerSupportSeparateAddAndBind())) {
             return this.changeBindingTangledAddBind({ bind, label, errorTitle });
         }
@@ -111,7 +111,7 @@ export class PhoneNumber extends React.Component<IPhoneNumberProps, IPhoneNumber
         }
     }
 
-    private async changeBindingTangledAddBind({ bind, label, errorTitle }): Promise<void> {
+    private async changeBindingTangledAddBind({ bind, label, errorTitle }: Binding): Promise<void> {
         const { medium, address } = this.props.msisdn;
 
         const task = new AddThreepid();
@@ -205,7 +205,7 @@ export class PhoneNumber extends React.Component<IPhoneNumberProps, IPhoneNumber
         }
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const { address } = this.props.msisdn;
         const { verifying, bound } = this.state;
 
@@ -266,7 +266,7 @@ interface IProps {
 }
 
 export default class PhoneNumbers extends React.Component<IProps> {
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         let content;
         if (this.props.msisdns.length > 0) {
             content = this.props.msisdns.map((e) => {

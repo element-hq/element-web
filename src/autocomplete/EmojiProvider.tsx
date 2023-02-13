@@ -19,7 +19,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { uniq, sortBy } from "lodash";
+import { uniq, sortBy, ListIteratee } from "lodash";
 import EMOTICON_REGEX from "emojibase-regex/emoticon";
 import { Room } from "matrix-js-sdk/src/models/room";
 
@@ -55,7 +55,11 @@ const SORTED_EMOJI: ISortedEmoji[] = EMOJI.sort((a, b) => {
     _orderBy: index,
 }));
 
-function score(query: string, space: string): number {
+function score(query: string, space: string[] | string): number {
+    if (Array.isArray(space)) {
+        return Math.min(...space.map((s) => score(query, s)));
+    }
+
     const index = space.indexOf(query);
     if (index === -1) {
         return Infinity;
@@ -90,7 +94,7 @@ export default class EmojiProvider extends AutocompleteProvider {
             shouldMatchWordsOnly: true,
         });
 
-        this.recentlyUsed = Array.from(new Set(recent.get().map(getEmojiFromUnicode).filter(Boolean)));
+        this.recentlyUsed = Array.from(new Set(recent.get().map(getEmojiFromUnicode).filter(Boolean))) as IEmoji[];
     }
 
     public async getCompletions(
@@ -113,7 +117,7 @@ export default class EmojiProvider extends AutocompleteProvider {
             // Do second match with shouldMatchWordsOnly in order to match against 'name'
             completions = completions.concat(this.nameMatcher.match(matchedString));
 
-            let sorters = [];
+            let sorters: ListIteratee<ISortedEmoji>[] = [];
             // make sure that emoticons come first
             sorters.push((c) => score(matchedString, c.emoji.emoticon || ""));
 
@@ -148,7 +152,7 @@ export default class EmojiProvider extends AutocompleteProvider {
                         <span>{c.emoji.unicode}</span>
                     </PillCompletion>
                 ),
-                range,
+                range: range!,
             }));
         }
         return [];

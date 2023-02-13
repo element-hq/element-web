@@ -248,13 +248,12 @@ function createRoom(info: IRoomCreationInfo) {
 }
 
 function mountHeader(room: Room, propsOverride = {}, roomContext?: Partial<IRoomState>): ReactWrapper {
-    const props = {
+    const props: RoomHeaderProps = {
         room,
         inRoom: true,
         onSearchClick: () => {},
         onInviteClick: null,
         onForgetClick: () => {},
-        onCallPlaced: (_type) => {},
         onAppsClick: () => {},
         e2eStatus: E2EStatus.Normal,
         appsShown: true,
@@ -320,7 +319,7 @@ function mkJoinEvent(roomId: string, userId: string) {
 }
 
 function mkDirectEvent(roomId: string, userId: string, otherUsers: string[]): MatrixEvent {
-    const content = {};
+    const content: Record<string, string[]> = {};
     for (const otherUserId of otherUsers) {
         content[otherUserId] = [roomId];
     }

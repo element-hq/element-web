@@ -21,7 +21,7 @@ import SdkConfig from "../../../SdkConfig";
 import { _t } from "../../../languageHandler";
 import Dropdown from "../elements/Dropdown";
 
-const COUNTRIES_BY_ISO2 = {};
+const COUNTRIES_BY_ISO2: Record<string, PhoneNumberCountryDefinition> = {};
 for (const c of COUNTRIES) {
     COUNTRIES_BY_ISO2[c.iso2] = c;
 }

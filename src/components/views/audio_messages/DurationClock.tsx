@@ -31,7 +31,7 @@ interface IState {
  * A clock which shows a clip's maximum duration.
  */
 export default class DurationClock extends React.PureComponent<IProps, IState> {
-    public constructor(props) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {
@@ -48,7 +48,7 @@ export default class DurationClock extends React.PureComponent<IProps, IState> {
         this.setState({ durationSeconds: time[1] });
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         return <Clock seconds={this.state.durationSeconds} />;
     }
 }

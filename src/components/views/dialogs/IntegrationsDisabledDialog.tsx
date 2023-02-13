@@ -35,7 +35,7 @@ export default class IntegrationsDisabledDialog extends React.Component<IProps> 
         dis.fire(Action.ViewUserSettings);
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         return (
             <BaseDialog
                 className="mx_IntegrationsDisabledDialog"
@@ -44,7 +44,11 @@ export default class IntegrationsDisabledDialog extends React.Component<IProps> 
                 title={_t("Integrations are disabled")}
             >
                 <div className="mx_IntegrationsDisabledDialog_content">
-                    <p>{_t("Enable 'Manage Integrations' in Settings to do this.")}</p>
+                    <p>
+                        {_t("Enable '%(manageIntegrations)s' in Settings to do this.", {
+                            manageIntegrations: _t("Manage integrations"),
+                        })}
+                    </p>
                 </div>
                 <DialogButtons
                     primaryButton={_t("Settings")}

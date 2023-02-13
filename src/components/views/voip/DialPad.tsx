@@ -39,7 +39,7 @@ class DialPadButton extends React.PureComponent<IButtonProps> {
         this.props.onButtonPress(this.props.digit, ev);
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         switch (this.props.kind) {
             case DialPadButtonKind.Digit:
                 return (
@@ -68,7 +68,7 @@ interface IProps {
 }
 
 export default class Dialpad extends React.PureComponent<IProps> {
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const buttonNodes = [];
 
         for (let i = 0; i < BUTTONS.length; i++) {

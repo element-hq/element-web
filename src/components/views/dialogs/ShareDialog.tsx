@@ -36,12 +36,12 @@ const socials = [
     {
         name: "Facebook",
         img: require("../../../../res/img/social/facebook.png"),
-        url: (url) => `https://www.facebook.com/sharer/sharer.php?u=${url}`,
+        url: (url: String) => `https://www.facebook.com/sharer/sharer.php?u=${url}`,
     },
     {
         name: "Twitter",
         img: require("../../../../res/img/social/twitter-2.png"),
-        url: (url) => `https://twitter.com/home?status=${url}`,
+        url: (url: string) => `https://twitter.com/home?status=${url}`,
     },
     /* // icon missing
         name: 'Google Plus',
@@ -50,17 +50,17 @@ const socials = [
     },*/ {
         name: "LinkedIn",
         img: require("../../../../res/img/social/linkedin.png"),
-        url: (url) => `https://www.linkedin.com/shareArticle?mini=true&url=${url}`,
+        url: (url: string) => `https://www.linkedin.com/shareArticle?mini=true&url=${url}`,
     },
     {
         name: "Reddit",
         img: require("../../../../res/img/social/reddit.png"),
-        url: (url) => `https://www.reddit.com/submit?url=${url}`,
+        url: (url: string) => `https://www.reddit.com/submit?url=${url}`,
     },
     {
         name: "email",
         img: require("../../../../res/img/social/email-1.png"),
-        url: (url) => `mailto:?body=${url}`,
+        url: (url: string) => `mailto:?body=${url}`,
     },
 ];
 
@@ -71,14 +71,14 @@ interface IProps extends IDialogProps {
 
 interface IState {
     linkSpecificEvent: boolean;
-    permalinkCreator: RoomPermalinkCreator;
+    permalinkCreator: RoomPermalinkCreator | null;
 }
 
 export default class ShareDialog extends React.PureComponent<IProps, IState> {
-    public constructor(props) {
+    public constructor(props: IProps) {
         super(props);
 
-        let permalinkCreator: RoomPermalinkCreator = null;
+        let permalinkCreator: RoomPermalinkCreator | null = null;
         if (props.target instanceof Room) {
             permalinkCreator = new RoomPermalinkCreator(props.target);
             permalinkCreator.load();
@@ -91,9 +91,9 @@ export default class ShareDialog extends React.PureComponent<IProps, IState> {
         };
     }
 
-    public static onLinkClick(e): void {
+    public static onLinkClick(e: React.MouseEvent): void {
         e.preventDefault();
-        selectText(e.target);
+        selectText(e.currentTarget);
     }
 
     private onLinkSpecificEventCheckboxClick = (): void => {
@@ -108,15 +108,15 @@ export default class ShareDialog extends React.PureComponent<IProps, IState> {
         if (this.props.target instanceof Room) {
             if (this.state.linkSpecificEvent) {
                 const events = this.props.target.getLiveTimeline().getEvents();
-                matrixToUrl = this.state.permalinkCreator.forEvent(events[events.length - 1].getId());
+                matrixToUrl = this.state.permalinkCreator!.forEvent(events[events.length - 1].getId()!);
             } else {
-                matrixToUrl = this.state.permalinkCreator.forShareableRoom();
+                matrixToUrl = this.state.permalinkCreator!.forShareableRoom();
             }
         } else if (this.props.target instanceof User || this.props.target instanceof RoomMember) {
             matrixToUrl = makeUserPermalink(this.props.target.userId);
         } else if (this.props.target instanceof MatrixEvent) {
             if (this.state.linkSpecificEvent) {
-                matrixToUrl = this.props.permalinkCreator.forEvent(this.props.target.getId());
+                matrixToUrl = this.props.permalinkCreator.forEvent(this.props.target.getId()!);
             } else {
                 matrixToUrl = this.props.permalinkCreator.forShareableRoom();
             }
@@ -124,7 +124,7 @@ export default class ShareDialog extends React.PureComponent<IProps, IState> {
         return matrixToUrl;
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         let title;
         let checkbox;
 

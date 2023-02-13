@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { ChangeEvent } from "react";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -189,7 +189,7 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
     };
 
     // The user has written down a freeform description of the abuse.
-    private onReasonChange = ({ target: { value: reason } }): void => {
+    private onReasonChange = ({ target: { value: reason } }: ChangeEvent<HTMLTextAreaElement>): void => {
         this.setState({ reason });
     };
 
@@ -273,7 +273,7 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
         }
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         let error = null;
         if (this.state.err) {
             error = <div className="error">{this.state.err}</div>;

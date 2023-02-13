@@ -43,7 +43,7 @@ interface IState {
 export default class CrossSigningPanel extends React.PureComponent<{}, IState> {
     private unmounted = false;
 
-    public constructor(props) {
+    public constructor(props: {}) {
         super(props);
 
         this.state = {};
@@ -157,7 +157,7 @@ export default class CrossSigningPanel extends React.PureComponent<{}, IState> {
         });
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const {
             error,
             crossSigningPublicKeysOnDevice,

@@ -47,7 +47,7 @@ export default class MainSplit extends React.Component<IProps> {
     };
 
     private loadSidePanelSize(): { height: string | number; width: number } {
-        let rhsSize = parseInt(window.localStorage.getItem("mx_rhs_size"), 10);
+        let rhsSize = parseInt(window.localStorage.getItem("mx_rhs_size")!, 10);
 
         if (isNaN(rhsSize)) {
             rhsSize = 350;
@@ -59,7 +59,7 @@ export default class MainSplit extends React.Component<IProps> {
         };
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const bodyView = React.Children.only(this.props.children);
         const panelView = this.props.panel;
 

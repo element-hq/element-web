@@ -35,7 +35,7 @@ export default class MjolnirBody extends React.Component<IProps> {
         this.props.onMessageAllowed();
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         return (
             <div className="mx_MjolnirBody">
                 <i>

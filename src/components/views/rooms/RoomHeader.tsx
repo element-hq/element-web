@@ -482,8 +482,7 @@ interface IState {
 }
 
 export default class RoomHeader extends React.Component<IProps, IState> {
-    public static defaultProps = {
-        editing: false,
+    public static defaultProps: Partial<IProps> = {
         inRoom: false,
         excludedRightPanelPhaseButtons: [],
         showButtons: true,
@@ -716,7 +715,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
         return <div className="mx_RoomHeader_name mx_RoomHeader_name--textonly">{roomName}</div>;
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const isVideoRoom = SettingsStore.getValue("feature_video_rooms") && calcIsVideoRoom(this.props.room);
 
         let roomAvatar: JSX.Element | null = null;

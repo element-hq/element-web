@@ -280,7 +280,7 @@ const Tile: React.FC<ITileProps> = ({
         );
 
         if (showChildren) {
-            const onChildrenKeyDown = (e): void => {
+            const onChildrenKeyDown = (e: React.KeyboardEvent): void => {
                 const action = getKeyBindingsManager().getAccessibilityAction(e);
                 switch (action) {
                     case KeyBindingAction.ArrowLeft:

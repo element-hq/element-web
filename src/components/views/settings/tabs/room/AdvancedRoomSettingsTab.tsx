@@ -47,8 +47,8 @@ interface IState {
 }
 
 export default class AdvancedRoomSettingsTab extends React.Component<IProps, IState> {
-    public constructor(props: IProps, context: any) {
-        super(props, context);
+    public constructor(props: IProps) {
+        super(props);
 
         const msc3946ProcessDynamicPredecessor = SettingsStore.getValue("feature_dynamic_room_predecessors");
 
@@ -96,7 +96,7 @@ export default class AdvancedRoomSettingsTab extends React.Component<IProps, ISt
         this.props.closeSettingsFn();
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const client = MatrixClientPeg.get();
         const room = client.getRoom(this.props.roomId);
         const isSpace = room.isSpaceRoom();
@@ -113,7 +113,7 @@ export default class AdvancedRoomSettingsTab extends React.Component<IProps, ISt
                 <div>
                     <p className="mx_SettingsTab_warningText">
                         {_t(
-                            "<b>Warning</b>: Upgrading a room will <i>not automatically migrate room members " +
+                            "<b>Warning</b>: upgrading a room will <i>not automatically migrate room members " +
                                 "to the new version of the room.</i> We'll post a link to the new room in the old " +
                                 "version of the room - room members will have to click this link to join the new room.",
                             {},

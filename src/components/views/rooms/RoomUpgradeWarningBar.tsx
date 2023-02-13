@@ -37,7 +37,7 @@ export default class RoomUpgradeWarningBar extends React.PureComponent<IProps, I
     public static contextType = MatrixClientContext;
     public context!: React.ContextType<typeof MatrixClientContext>;
 
-    public constructor(props, context) {
+    public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
         super(props, context);
 
         const tombstone = this.props.room.currentState.getStateEvents("m.room.tombstone", "");
@@ -69,7 +69,7 @@ export default class RoomUpgradeWarningBar extends React.PureComponent<IProps, I
         Modal.createDialog(RoomUpgradeDialog, { room: this.props.room });
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         let doUpgradeWarnings = (
             <div>
                 <div className="mx_RoomUpgradeWarningBar_body">
@@ -81,7 +81,7 @@ export default class RoomUpgradeWarningBar extends React.PureComponent<IProps, I
                     </p>
                     <p>
                         {_t(
-                            "<b>Warning</b>: Upgrading a room will <i>not automatically migrate room members " +
+                            "<b>Warning</b>: upgrading a room will <i>not automatically migrate room members " +
                                 "to the new version of the room.</i> We'll post a link to the new room in the old " +
                                 "version of the room - room members will have to click this link to join the new room.",
                             {},

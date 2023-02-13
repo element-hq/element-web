@@ -33,7 +33,7 @@ export async function retry<T, E extends Error>(
     num: number,
     predicate?: (e: E) => boolean,
 ): Promise<T> {
-    let lastErr: E;
+    let lastErr!: E;
     for (let i = 0; i < num; i++) {
         try {
             const v = await fn();

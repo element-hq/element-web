@@ -68,7 +68,8 @@ interface IState {
 }
 
 export default class MemberList extends React.Component<IProps, IState> {
-    private showPresence = true;
+    // XXX: exported for tests
+    public showPresence = true;
     private mounted = false;
 
     public static contextType = SDKContext;
@@ -195,7 +196,8 @@ export default class MemberList extends React.Component<IProps, IState> {
         { leading: true, trailing: true },
     );
 
-    private async updateListNow(showLoadingSpinner: boolean): Promise<void> {
+    // XXX: exported for tests
+    public async updateListNow(showLoadingSpinner?: boolean): Promise<void> {
         if (!this.mounted) {
             return;
         }
@@ -359,7 +361,7 @@ export default class MemberList extends React.Component<IProps, IState> {
         return this.state.filteredInvitedMembers.length + (this.getPending3PidInvites() || []).length;
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         if (this.state.loading) {
             return (
                 <BaseCard className="mx_MemberList" onClose={this.props.onClose}>

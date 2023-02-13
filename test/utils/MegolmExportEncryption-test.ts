@@ -18,9 +18,11 @@ import { TextEncoder } from "util";
 import nodeCrypto from "crypto";
 import { Crypto } from "@peculiar/webcrypto";
 
+import type * as MegolmExportEncryptionExport from "../../src/utils/MegolmExportEncryption";
+
 const webCrypto = new Crypto();
 
-function getRandomValues<T extends ArrayBufferView>(buf: T): T {
+function getRandomValues<T extends ArrayBufferView | null>(buf: T): T {
     // @ts-ignore fussy generics
     return nodeCrypto.randomFillSync(buf);
 }
@@ -70,7 +72,7 @@ function stringToArray(s: string): ArrayBufferLike {
 }
 
 describe("MegolmExportEncryption", function () {
-    let MegolmExportEncryption;
+    let MegolmExportEncryption: typeof MegolmExportEncryptionExport;
 
     beforeEach(() => {
         window.crypto = {
@@ -131,7 +133,7 @@ cissyYBxjsfsAn
 
         // TODO find a subtlecrypto shim which doesn't break this test
         it.skip("should decrypt a range of inputs", function () {
-            function next(i) {
+            function next(i: number): Promise<string | undefined> | undefined {
                 if (i >= TEST_VECTORS.length) {
                     return;
                 }
@@ -142,7 +144,7 @@ cissyYBxjsfsAn
                     return next(i + 1);
                 });
             }
-            return next(0);
+            next(0);
         });
     });
 

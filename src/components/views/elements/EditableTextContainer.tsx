@@ -133,7 +133,7 @@ export default class EditableTextContainer extends React.Component<IProps, IStat
         );
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         if (this.state.busy) {
             return <Spinner />;
         } else if (this.state.errorString) {

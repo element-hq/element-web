@@ -44,7 +44,7 @@ describe("tooltipify", () => {
         expect(containers).toHaveLength(1);
         const anchor = root.querySelector("a");
         expect(anchor?.getAttribute("href")).toEqual("/foo");
-        const tooltip = anchor.querySelector(".mx_TextWithTooltip_target");
+        const tooltip = anchor!.querySelector(".mx_TextWithTooltip_target");
         expect(tooltip).toBeDefined();
     });
 
@@ -75,7 +75,7 @@ describe("tooltipify", () => {
         expect(containers).toHaveLength(1);
         const anchor = root.querySelector("a");
         expect(anchor?.getAttribute("href")).toEqual("/foo");
-        const tooltip = anchor.querySelector(".mx_TextWithTooltip_target");
+        const tooltip = anchor!.querySelector(".mx_TextWithTooltip_target");
         expect(tooltip).toBeDefined();
     });
 });

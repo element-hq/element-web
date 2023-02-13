@@ -35,7 +35,7 @@ export class NaturalAlgorithm extends OrderingAlgorithm {
         this.cachedOrderedRooms = sortRoomsWithAlgorithm(rooms, this.tagId, this.sortingAlgorithm);
     }
 
-    public handleRoomUpdate(room, cause): boolean {
+    public handleRoomUpdate(room: Room, cause: RoomUpdateCause): boolean {
         const isSplice = cause === RoomUpdateCause.NewRoom || cause === RoomUpdateCause.RoomRemoved;
         const isInPlace = cause === RoomUpdateCause.Timeline || cause === RoomUpdateCause.ReadReceipt;
         if (!isSplice && !isInPlace) {

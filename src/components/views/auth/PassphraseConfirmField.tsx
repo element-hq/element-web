@@ -30,8 +30,8 @@ interface IProps extends Omit<IInputProps, "onValidate"> {
     labelRequired?: string;
     labelInvalid?: string;
 
-    onChange(ev: React.FormEvent<HTMLElement>);
-    onValidate?(result: IValidationResult);
+    onChange(ev: React.FormEvent<HTMLElement>): void;
+    onValidate?(result: IValidationResult): void;
 }
 
 class PassphraseConfirmField extends PureComponent<IProps> {
@@ -65,7 +65,7 @@ class PassphraseConfirmField extends PureComponent<IProps> {
         return result;
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         return (
             <Field
                 id={this.props.id}

@@ -17,14 +17,14 @@ limitations under the License.
 import React from "react";
 
 import { _t } from "../../../languageHandler";
-import { CommandCategories, Commands } from "../../../SlashCommands";
+import { Command, CommandCategories, Commands } from "../../../SlashCommands";
 import { IDialogProps } from "./IDialogProps";
 import InfoDialog from "./InfoDialog";
 
 interface IProps extends IDialogProps {}
 
 const SlashCommandHelpDialog: React.FC<IProps> = ({ onFinished }) => {
-    const categories = {};
+    const categories: Record<string, Command[]> = {};
     Commands.forEach((cmd) => {
         if (!cmd.isEnabled()) return;
         if (!categories[cmd.category]) {

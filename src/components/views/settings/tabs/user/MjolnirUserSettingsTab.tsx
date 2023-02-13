@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { ChangeEvent, SyntheticEvent } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../../../languageHandler";
@@ -36,7 +36,7 @@ interface IState {
 }
 
 export default class MjolnirUserSettingsTab extends React.Component<{}, IState> {
-    public constructor(props) {
+    public constructor(props: {}) {
         super(props);
 
         this.state = {
@@ -46,15 +46,15 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
         };
     }
 
-    private onPersonalRuleChanged = (e): void => {
+    private onPersonalRuleChanged = (e: ChangeEvent<HTMLInputElement>): void => {
         this.setState({ newPersonalRule: e.target.value });
     };
 
-    private onNewListChanged = (e): void => {
+    private onNewListChanged = (e: ChangeEvent<HTMLInputElement>): void => {
         this.setState({ newList: e.target.value });
     };
 
-    private onAddPersonalRule = async (e): Promise<void> => {
+    private onAddPersonalRule = async (e: SyntheticEvent): Promise<void> => {
         e.preventDefault();
         e.stopPropagation();
 
@@ -80,7 +80,7 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
         }
     };
 
-    private onSubscribeList = async (e): Promise<void> => {
+    private onSubscribeList = async (e: SyntheticEvent): Promise<void> => {
         e.preventDefault();
         e.stopPropagation();
 
@@ -246,7 +246,7 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
         );
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const brand = SdkConfig.get().brand;
 
         return (
@@ -279,8 +279,11 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
                         {_t(
                             "Your personal ban list holds all the users/servers you personally don't " +
                                 "want to see messages from. After ignoring your first user/server, a new room " +
-                                "will show up in your room list named 'My Ban List' - stay in this room to keep " +
+                                "will show up in your room list named '%(myBanList)s' - stay in this room to keep " +
                                 "the ban list in effect.",
+                            {
+                                myBanList: _t("My Ban List"),
+                            },
                         )}
                     </div>
                     <div>{this.renderPersonalBanListRules()}</div>

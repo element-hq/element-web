@@ -38,7 +38,7 @@ export default class VoipUserMapper {
         return window.mxVoipUserMapper;
     }
 
-    private async userToVirtualUser(userId: string): Promise<string> {
+    private async userToVirtualUser(userId: string): Promise<string | null> {
         const results = await LegacyCallHandler.instance.sipVirtualLookup(userId);
         if (results.length === 0 || !results[0].fields.lookup_success) return null;
         return results[0].userid;
@@ -59,11 +59,11 @@ export default class VoipUserMapper {
         if (!virtualUser) return null;
 
         const virtualRoomId = await ensureVirtualRoomExists(MatrixClientPeg.get(), virtualUser, roomId);
-        MatrixClientPeg.get().setRoomAccountData(virtualRoomId, VIRTUAL_ROOM_EVENT_TYPE, {
+        MatrixClientPeg.get().setRoomAccountData(virtualRoomId!, VIRTUAL_ROOM_EVENT_TYPE, {
             native_room: roomId,
         });
 
-        this.virtualToNativeRoomIdCache.set(virtualRoomId, roomId);
+        this.virtualToNativeRoomIdCache.set(virtualRoomId!, roomId);
 
         return virtualRoomId;
     }
@@ -72,9 +72,9 @@ export default class VoipUserMapper {
      * Gets the ID of the virtual room for a room, or null if the room has no
      * virtual room
      */
-    public async getVirtualRoomForRoom(roomId: string): Promise<Room | null> {
+    public async getVirtualRoomForRoom(roomId: string): Promise<Room | undefined> {
         const virtualUser = await this.getVirtualUserForRoom(roomId);
-        if (!virtualUser) return null;
+        if (!virtualUser) return undefined;
 
         return findDMForUser(MatrixClientPeg.get(), virtualUser);
     }
@@ -121,8 +121,12 @@ export default class VoipUserMapper {
         if (!LegacyCallHandler.instance.getSupportsVirtualRooms()) return;
 
         const inviterId = invitedRoom.getDMInviter();
+        if (!inviterId) {
+            logger.error("Could not find DM inviter for room id: " + invitedRoom.roomId);
+        }
+
         logger.log(`Checking virtual-ness of room ID ${invitedRoom.roomId}, invited by ${inviterId}`);
-        const result = await LegacyCallHandler.instance.sipNativeLookup(inviterId);
+        const result = await LegacyCallHandler.instance.sipNativeLookup(inviterId!);
         if (result.length === 0) {
             return;
         }
@@ -141,11 +145,11 @@ export default class VoipUserMapper {
                 // (possibly we should only join if we've also joined the native room, then we'd also have
                 // to make sure we joined virtual rooms on joining a native one)
                 MatrixClientPeg.get().joinRoom(invitedRoom.roomId);
-            }
 
-            // also put this room in the virtual room ID cache so isVirtualRoom return the right answer
-            // in however long it takes for the echo of setAccountData to come down the sync
-            this.virtualToNativeRoomIdCache.set(invitedRoom.roomId, nativeRoom.roomId);
+                // also put this room in the virtual room ID cache so isVirtualRoom return the right answer
+                // in however long it takes for the echo of setAccountData to come down the sync
+                this.virtualToNativeRoomIdCache.set(invitedRoom.roomId, nativeRoom.roomId);
+            }
         }
     }
 }

@@ -26,11 +26,11 @@ import { Optional } from "matrix-events-sdk";
 import { useTypedEventEmitter } from "../useEventEmitter";
 
 export const getTopic = (room: Room): Optional<TopicState> => {
-    const content: MRoomTopicEventContent = room?.currentState?.getStateEvents(EventType.RoomTopic, "")?.getContent();
+    const content = room?.currentState?.getStateEvents(EventType.RoomTopic, "")?.getContent<MRoomTopicEventContent>();
     return !!content ? parseTopicContent(content) : null;
 };
 
-export function useTopic(room: Room): TopicState {
+export function useTopic(room: Room): Optional<TopicState> {
     const [topic, setTopic] = useState(getTopic(room));
     useTypedEventEmitter(room.currentState, RoomStateEvent.Events, (ev: MatrixEvent) => {
         if (ev.getType() !== EventType.RoomTopic) return;

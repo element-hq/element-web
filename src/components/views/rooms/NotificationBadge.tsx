@@ -44,7 +44,7 @@ interface IClickableProps extends IProps, React.InputHTMLAttributes<Element> {
     /**
      * If specified will return an AccessibleButton instead of a div.
      */
-    onClick?(ev: React.MouseEvent);
+    onClick?(ev: React.MouseEvent): void;
 }
 
 interface IState {

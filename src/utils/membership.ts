@@ -44,10 +44,9 @@ export enum EffectiveMembership {
     Leave = "LEAVE",
 }
 
-export interface MembershipSplit {
-    // @ts-ignore - TS wants this to be a string key, but we know better.
-    [state: EffectiveMembership]: Room[];
-}
+export type MembershipSplit = Partial<{
+    [state in EffectiveMembership]: Room[];
+}>;
 
 export function splitRoomsByMembership(rooms: Room[]): MembershipSplit {
     const split: MembershipSplit = {

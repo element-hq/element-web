@@ -20,10 +20,11 @@ import { _t, pickBestLanguage } from "../../../languageHandler";
 import { objectClone } from "../../../utils/objects";
 import StyledCheckbox from "../elements/StyledCheckbox";
 import AccessibleButton from "../elements/AccessibleButton";
+import { ServicePolicyPair } from "../../../Terms";
 
 interface IProps {
-    policiesAndServicePairs: any[];
-    onFinished: (string) => void;
+    policiesAndServicePairs: ServicePolicyPair[];
+    onFinished: (accepted: string[]) => void;
     agreedUrls: string[]; // array of URLs the user has accepted
     introElement: React.ReactNode;
 }

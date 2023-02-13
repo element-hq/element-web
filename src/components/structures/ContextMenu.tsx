@@ -99,9 +99,9 @@ export interface IProps extends MenuProps {
     closeOnInteraction?: boolean;
 
     // Function to be called on menu close
-    onFinished();
+    onFinished(): void;
     // on resize callback
-    windowResize?();
+    windowResize?(): void;
 }
 
 interface IState {
@@ -119,8 +119,8 @@ export default class ContextMenu extends React.PureComponent<IProps, IState> {
         managed: true,
     };
 
-    public constructor(props, context) {
-        super(props, context);
+    public constructor(props: IProps) {
+        super(props);
 
         this.state = {
             contextMenuElem: null,
@@ -387,13 +387,13 @@ export default class ContextMenu extends React.PureComponent<IProps, IState> {
             menuStyle["paddingRight"] = menuPaddingRight;
         }
 
-        const wrapperStyle = {};
+        const wrapperStyle: CSSProperties = {};
         if (!isNaN(Number(zIndex))) {
             menuStyle["zIndex"] = zIndex + 1;
             wrapperStyle["zIndex"] = zIndex;
         }
 
-        let background;
+        let background: JSX.Element;
         if (hasBackground) {
             background = (
                 <div
@@ -624,7 +624,7 @@ export function createMenu(
     ElementClass: typeof React.Component,
     props: Record<string, any>,
 ): { close: (...args: any[]) => void } {
-    const onFinished = function (...args): void {
+    const onFinished = function (...args: any[]): void {
         ReactDOM.unmountComponentAtNode(getOrCreateContainer());
         props?.onFinished?.apply(null, args);
     };

@@ -30,7 +30,7 @@ export default class InlineSpinner extends React.PureComponent<IProps> {
         h: 16,
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         return (
             <div className="mx_InlineSpinner">
                 <div

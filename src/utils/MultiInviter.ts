@@ -57,8 +57,8 @@ export default class MultiInviter {
     private _fatal = false;
     private completionStates: CompletionStates = {}; // State of each address (invited or error)
     private errors: Record<string, IError> = {}; // { address: {errorText, errcode} }
-    private deferred: IDeferred<CompletionStates> = null;
-    private reason: string = null;
+    private deferred: IDeferred<CompletionStates> | null = null;
+    private reason: string | undefined;
 
     /**
      * @param {string} roomId The ID of the room to invite to
@@ -81,7 +81,7 @@ export default class MultiInviter {
      * @param {boolean} sendSharedHistoryKeys whether to share e2ee keys with the invitees if applicable.
      * @returns {Promise} Resolved when all invitations in the queue are complete
      */
-    public invite(addresses, reason?: string, sendSharedHistoryKeys = false): Promise<CompletionStates> {
+    public invite(addresses: string[], reason?: string, sendSharedHistoryKeys = false): Promise<CompletionStates> {
         if (this.addresses.length > 0) {
             throw new Error("Already inviting/invited");
         }
@@ -134,7 +134,7 @@ export default class MultiInviter {
         if (!this.busy) return;
 
         this.canceled = true;
-        this.deferred.reject(new Error("canceled"));
+        this.deferred?.reject(new Error("canceled"));
     }
 
     public getCompletionState(addr: string): InviteState {
@@ -216,7 +216,7 @@ export default class MultiInviter {
 
                     const isSpace = this.roomId && this.matrixClient.getRoom(this.roomId)?.isSpaceRoom();
 
-                    let errorText: string;
+                    let errorText: string | undefined;
                     let fatal = false;
                     switch (err.errcode) {
                         case "M_FORBIDDEN":
@@ -310,7 +310,7 @@ export default class MultiInviter {
                 if (unknownProfileUsers.length > 0) {
                     const inviteUnknowns = (): void => {
                         const promises = unknownProfileUsers.map((u) => this.doInvite(u, true));
-                        Promise.all(promises).then(() => this.deferred.resolve(this.completionStates));
+                        Promise.all(promises).then(() => this.deferred?.resolve(this.completionStates));
                     };
 
                     if (!SettingsStore.getValue("promptBeforeInviteUnknownUsers", this.roomId)) {
@@ -330,13 +330,13 @@ export default class MultiInviter {
                             for (const addr of unknownProfileUsers) {
                                 this.completionStates[addr] = InviteState.Invited;
                             }
-                            this.deferred.resolve(this.completionStates);
+                            this.deferred?.resolve(this.completionStates);
                         },
                     });
                     return;
                 }
             }
-            this.deferred.resolve(this.completionStates);
+            this.deferred?.resolve(this.completionStates);
             return;
         }
 
@@ -361,6 +361,6 @@ export default class MultiInviter {
             .then(() => {
                 this.inviteMore(nextIndex + 1, ignoreProfile);
             })
-            .catch(() => this.deferred.resolve(this.completionStates));
+            .catch(() => this.deferred?.resolve(this.completionStates));
     }
 }

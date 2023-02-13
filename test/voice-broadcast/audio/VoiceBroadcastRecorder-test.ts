@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import { mocked } from "jest-mock";
+import { Optional } from "matrix-events-sdk";
 
 import { VoiceRecording } from "../../../src/audio/VoiceRecording";
 import SdkConfig from "../../../src/SdkConfig";
@@ -188,7 +189,7 @@ describe("VoiceBroadcastRecorder", () => {
             itShouldNotEmitAChunkRecordedEvent();
 
             describe("and calling stop", () => {
-                let stopPayload: ChunkRecordedPayload;
+                let stopPayload: Optional<ChunkRecordedPayload>;
 
                 beforeEach(async () => {
                     stopPayload = await voiceBroadcastRecorder.stop();
@@ -213,7 +214,7 @@ describe("VoiceBroadcastRecorder", () => {
             });
 
             describe("and calling stop() with recording.stop error)", () => {
-                let stopPayload: ChunkRecordedPayload;
+                let stopPayload: Optional<ChunkRecordedPayload>;
 
                 beforeEach(async () => {
                     mocked(voiceRecording.stop).mockRejectedValue("Error");

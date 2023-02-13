@@ -91,12 +91,12 @@ export default class Login {
     }
 
     public loginViaPassword(
-        username: string,
-        phoneCountry: string,
-        phoneNumber: string,
+        username: string | undefined,
+        phoneCountry: string | undefined,
+        phoneNumber: string | undefined,
         password: string,
     ): Promise<IMatrixClientCreds> {
-        const isEmail = username.indexOf("@") > 0;
+        const isEmail = username?.indexOf("@") > 0;
 
         let identifier;
         if (phoneCountry && phoneNumber) {

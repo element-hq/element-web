@@ -308,8 +308,8 @@ export default class InteractiveTooltip extends React.Component<IProps, IState> 
         side: Direction.Top,
     };
 
-    public constructor(props, context) {
-        super(props, context);
+    public constructor(props: IProps) {
+        super(props);
 
         this.state = {
             contentRect: null,

@@ -37,7 +37,7 @@ export enum MediaDeviceHandlerEvent {
 }
 
 export default class MediaDeviceHandler extends EventEmitter {
-    private static internalInstance;
+    private static internalInstance?: MediaDeviceHandler;
 
     public static get instance(): MediaDeviceHandler {
         if (!MediaDeviceHandler.internalInstance) {
@@ -67,7 +67,7 @@ export default class MediaDeviceHandler extends EventEmitter {
     public static async getDevices(): Promise<IMediaDevices> {
         try {
             const devices = await navigator.mediaDevices.enumerateDevices();
-            const output = {
+            const output: Record<MediaDeviceKindEnum, MediaDeviceInfo[]> = {
                 [MediaDeviceKindEnum.AudioOutput]: [],
                 [MediaDeviceKindEnum.AudioInput]: [],
                 [MediaDeviceKindEnum.VideoInput]: [],

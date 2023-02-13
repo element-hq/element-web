@@ -16,9 +16,10 @@ limitations under the License.
 
 import EditorModel from "../../src/editor/model";
 import { createPartCreator } from "./mock";
+import { Caret } from "../../src/editor/caret";
 
 function createRenderer() {
-    const render = (c) => {
+    const render = (c: Caret) => {
         render.caret = c;
         render.count += 1;
     };

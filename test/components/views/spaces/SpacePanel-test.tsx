@@ -21,7 +21,7 @@ import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import UnwrappedSpacePanel from "../../../../src/components/views/spaces/SpacePanel";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
-import { SpaceKey } from "../../../../src/stores/spaces";
+import { MetaSpace, SpaceKey } from "../../../../src/stores/spaces";
 import { shouldShowComponent } from "../../../../src/customisations/helpers/UIComponents";
 import { UIComponent } from "../../../../src/settings/UIFeature";
 import { wrapInSdkContext } from "../../../test-utils";
@@ -31,9 +31,9 @@ jest.mock("../../../../src/stores/spaces/SpaceStore", () => {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const EventEmitter = require("events");
     class MockSpaceStore extends EventEmitter {
-        invitedSpaces = [];
-        enabledMetaSpaces = [];
-        spacePanelSpaces = [];
+        invitedSpaces: SpaceKey[] = [];
+        enabledMetaSpaces: MetaSpace[] = [];
+        spacePanelSpaces: string[] = [];
         activeSpace: SpaceKey = "!space1";
     }
     return {

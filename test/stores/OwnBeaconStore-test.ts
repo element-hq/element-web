@@ -26,6 +26,7 @@ import {
 import { makeBeaconContent, makeBeaconInfoContent } from "matrix-js-sdk/src/content-helpers";
 import { M_BEACON } from "matrix-js-sdk/src/@types/beacon";
 import { logger } from "matrix-js-sdk/src/logger";
+import { Mocked } from "jest-mock";
 
 import { OwnBeaconStore, OwnBeaconStoreEvent } from "../../src/stores/OwnBeaconStore";
 import {
@@ -48,7 +49,7 @@ jest.mock("lodash", () => ({
 jest.useFakeTimers();
 
 describe("OwnBeaconStore", () => {
-    let geolocation;
+    let geolocation: Mocked<Geolocation>;
     // 14.03.2022 16:15
     const now = 1647270879403;
     const HOUR_MS = 3600000;
@@ -82,7 +83,7 @@ describe("OwnBeaconStore", () => {
 
     // make fresh rooms every time
     // as we update room state
-    const makeRoomsWithStateEvents = (stateEvents = []): [Room, Room] => {
+    const makeRoomsWithStateEvents = (stateEvents: MatrixEvent[] = []): [Room, Room] => {
         const room1 = new Room(room1Id, mockClient, aliceId);
         const room2 = new Room(room2Id, mockClient, aliceId);
 
@@ -100,7 +101,7 @@ describe("OwnBeaconStore", () => {
         return store;
     };
 
-    const expireBeaconAndEmit = (store, beaconInfoEvent: MatrixEvent): void => {
+    const expireBeaconAndEmit = (store: OwnBeaconStore, beaconInfoEvent: MatrixEvent): void => {
         const beacon = store.getBeaconById(getBeaconInfoIdentifier(beaconInfoEvent));
         // time travel until beacon is expired
         advanceDateAndTime(beacon.beaconInfo.timeout + 100);
@@ -112,7 +113,11 @@ describe("OwnBeaconStore", () => {
         mockClient.emit(BeaconEvent.LivenessChange, false, beacon);
     };
 
-    const updateBeaconLivenessAndEmit = (store, beaconInfoEvent: MatrixEvent, isLive: boolean): void => {
+    const updateBeaconLivenessAndEmit = (
+        store: OwnBeaconStore,
+        beaconInfoEvent: MatrixEvent,
+        isLive: boolean,
+    ): void => {
         const beacon = store.getBeaconById(getBeaconInfoIdentifier(beaconInfoEvent));
         // matches original state of event content
         // except for live property

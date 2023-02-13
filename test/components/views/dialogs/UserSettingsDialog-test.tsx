@@ -73,8 +73,9 @@ describe("<UserSettingsDialog />", () => {
         mockSdkConfig.get.mockReturnValue({ brand: "Test" });
     });
 
-    const getActiveTabLabel = (container) => container.querySelector(".mx_TabbedView_tabLabel_active").textContent;
-    const getActiveTabHeading = (container) => container.querySelector(".mx_SettingsTab_heading").textContent;
+    const getActiveTabLabel = (container: Element) =>
+        container.querySelector(".mx_TabbedView_tabLabel_active").textContent;
+    const getActiveTabHeading = (container: Element) => container.querySelector(".mx_SettingsTab_heading").textContent;
 
     it("should render general settings tab when no initialTabId", () => {
         const { container } = render(getComponent());

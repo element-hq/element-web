@@ -55,7 +55,7 @@ export default class LayoutSwitcher extends React.Component<IProps, IState> {
         this.props.onLayoutChanged(layout);
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const ircClasses = classNames("mx_LayoutSwitcher_RadioButton", {
             mx_LayoutSwitcher_RadioButton_selected: this.state.layout == Layout.IRC,
         });

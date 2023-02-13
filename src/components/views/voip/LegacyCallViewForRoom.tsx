@@ -83,7 +83,7 @@ export default class LegacyCallViewForRoom extends React.Component<IProps, IStat
         this.props.resizeNotifier.stopResizing();
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         if (!this.state.call) return null;
 
         return (

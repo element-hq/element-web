@@ -83,7 +83,7 @@ export default class LanguageDropdown extends React.Component<IProps, IState> {
         });
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         if (this.state.langs === null) {
             return <Spinner />;
         }

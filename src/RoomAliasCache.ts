@@ -30,6 +30,6 @@ export function storeRoomAliasInCache(alias: string, id: string): void {
     aliasToIDMap.set(alias, id);
 }
 
-export function getCachedRoomIDForAlias(alias: string): string {
+export function getCachedRoomIDForAlias(alias: string): string | undefined {
     return aliasToIDMap.get(alias);
 }

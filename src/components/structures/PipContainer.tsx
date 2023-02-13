@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { MutableRefObject, useContext, useRef } from "react";
+import React, { MutableRefObject, ReactNode, useContext, useRef } from "react";
 import { CallEvent, CallState, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from "matrix-js-sdk/src/logger";
 import { Optional } from "matrix-events-sdk";
@@ -288,7 +288,7 @@ class PipContainerInner extends React.Component<IProps, IState> {
         );
     }
 
-    public render(): JSX.Element {
+    public render(): ReactNode {
         const pipMode = true;
         let pipContent: Array<CreatePipChildren> = [];
 

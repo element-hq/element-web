@@ -238,7 +238,7 @@ describe("LegacyCallHandler", () => {
                     return [];
                 }
             },
-        } as DMRoomMap;
+        } as unknown as DMRoomMap;
         DMRoomMap.setShared(dmRoomMap);
 
         pstnLookup = null;

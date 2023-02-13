@@ -22,6 +22,7 @@ import React from "react";
 import { AccountAuthInfo } from "@matrix-org/react-sdk-module-api/lib/types/AccountAuthInfo";
 import { PlainSubstitution } from "@matrix-org/react-sdk-module-api/lib/types/translations";
 import * as Matrix from "matrix-js-sdk/src/matrix";
+import { IRegisterRequestParams } from "matrix-js-sdk/src/matrix";
 
 import Modal from "../Modal";
 import { _t } from "../languageHandler";
@@ -104,7 +105,7 @@ export class ProxiedModuleApi implements ModuleApi {
         const client = Matrix.createClient({ baseUrl: hsUrl });
         const deviceName =
             SdkConfig.get("default_device_display_name") || PlatformPeg.get().getDefaultDeviceDisplayName();
-        const req = {
+        const req: IRegisterRequestParams = {
             username,
             password,
             initial_device_display_name: deviceName,

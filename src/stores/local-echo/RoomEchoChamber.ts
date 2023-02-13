@@ -16,6 +16,7 @@ limitations under the License.
 
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { EventType } from "matrix-js-sdk/src/@types/event";
+import { ClientEvent, MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { GenericEchoChamber, implicitlyReverted, PROPERTY_UPDATED } from "./GenericEchoChamber";
 import { getRoomNotifsState, RoomNotifState, setRoomNotifsState } from "../../RoomNotifs";
@@ -33,14 +34,12 @@ export class RoomEchoChamber extends GenericEchoChamber<RoomEchoContext, CachedR
         super(context, (k) => this.properties.get(k));
     }
 
-    protected onClientChanged(oldClient, newClient): void {
+    protected onClientChanged(oldClient: MatrixClient, newClient: MatrixClient): void {
         this.properties.clear();
-        if (oldClient) {
-            oldClient.removeListener("accountData", this.onAccountData);
-        }
+        oldClient?.removeListener(ClientEvent.AccountData, this.onAccountData);
         if (newClient) {
             // Register the listeners first
-            newClient.on("accountData", this.onAccountData);
+            newClient.on(ClientEvent.AccountData, this.onAccountData);
 
             // Then populate the properties map
             this.updateNotificationVolume();

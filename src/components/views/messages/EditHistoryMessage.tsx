@@ -152,7 +152,7 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
         );
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const { mxEvent } = this.props;
         const content = getReplacedContent(mxEvent);
         let contentContainer;

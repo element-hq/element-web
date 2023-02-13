@@ -38,7 +38,7 @@ describe("WidgetPermissionStore", () => {
         type: "m.custom",
         url: "https://invalid.address.here",
     });
-    let settings = {}; // key value store
+    let settings: Record<string, any> = {}; // key value store
 
     beforeEach(() => {
         settings = {}; // clear settings

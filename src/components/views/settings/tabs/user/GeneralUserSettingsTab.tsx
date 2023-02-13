@@ -21,6 +21,7 @@ import { SERVICE_TYPES } from "matrix-js-sdk/src/service-types";
 import { IThreepid } from "matrix-js-sdk/src/@types/threepids";
 import { logger } from "matrix-js-sdk/src/logger";
 import { IDelegatedAuthConfig, M_AUTHENTICATION } from "matrix-js-sdk/src/matrix";
+import { MatrixError } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../../../languageHandler";
 import ProfileSettings from "../../ProfileSettings";
@@ -34,7 +35,7 @@ import PlatformPeg from "../../../../../PlatformPeg";
 import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
 import Modal from "../../../../../Modal";
 import dis from "../../../../../dispatcher/dispatcher";
-import { Policies, Service, startTermsFlow } from "../../../../../Terms";
+import { Service, ServicePolicyPair, startTermsFlow } from "../../../../../Terms";
 import IdentityAuthClient from "../../../../../IdentityAuthClient";
 import { abbreviateUrl } from "../../../../../utils/UrlUtils";
 import { getThreepidsWithBindStatus } from "../../../../../boundThreepids";
@@ -68,10 +69,7 @@ interface IState {
     requiredPolicyInfo: {
         // This object is passed along to a component for handling
         hasTerms: boolean;
-        policiesAndServices: {
-            service: Service;
-            policies: Policies;
-        }[]; // From the startTermsFlow callback
+        policiesAndServices: ServicePolicyPair[]; // From the startTermsFlow callback
         agreedUrls: string[]; // From the startTermsFlow callback
         resolve: (values: string[]) => void; // Promise resolve function for startTermsFlow callback
     };
@@ -258,7 +256,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
         PlatformPeg.get()?.setSpellCheckEnabled(spellCheckEnabled);
     };
 
-    private onPasswordChangeError = (err): void => {
+    private onPasswordChangeError = (err: { error: string } & MatrixError): void => {
         // TODO: Figure out a design that doesn't involve replacing the current dialog
         let errMsg = err.error || err.message || "";
         if (err.httpStatus === 403) {
@@ -496,7 +494,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
         );
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const plaf = PlatformPeg.get();
         const supportsMultiLanguageSpellCheck = plaf.supportsSpellCheckSettings();
 

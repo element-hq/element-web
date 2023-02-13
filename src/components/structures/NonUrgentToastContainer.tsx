@@ -27,8 +27,8 @@ interface IState {
 }
 
 export default class NonUrgentToastContainer extends React.PureComponent<IProps, IState> {
-    public constructor(props, context) {
-        super(props, context);
+    public constructor(props: IProps) {
+        super(props);
 
         this.state = {
             toasts: NonUrgentToastStore.instance.components,
@@ -45,7 +45,7 @@ export default class NonUrgentToastContainer extends React.PureComponent<IProps,
         this.setState({ toasts: NonUrgentToastStore.instance.components });
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const toasts = this.state.toasts.map((t, i) => {
             return (
                 <div className="mx_NonUrgentToastContainer_toast" key={`toast-${i}`}>

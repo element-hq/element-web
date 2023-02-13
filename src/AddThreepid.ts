@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { IRequestMsisdnTokenResponse, IRequestTokenResponse } from "matrix-js-sdk/src/matrix";
+import { IAuthData, IRequestMsisdnTokenResponse, IRequestTokenResponse } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import Modal from "./Modal";
@@ -28,6 +28,12 @@ import InteractiveAuthDialog from "./components/views/dialogs/InteractiveAuthDia
 function getIdServerDomain(): string {
     return MatrixClientPeg.get().idBaseUrl.split("://")[1];
 }
+
+export type Binding = {
+    bind: boolean;
+    label: string;
+    errorTitle: string;
+};
 
 /**
  * Allows a user to add a third party identifier to their homeserver and,
@@ -178,7 +184,7 @@ export default class AddThreepid {
      * with a "message" property which contains a human-readable message detailing why
      * the request failed.
      */
-    public async checkEmailLinkClicked(): Promise<any[]> {
+    public async checkEmailLinkClicked(): Promise<[boolean, IAuthData | Error | null]> {
         try {
             if (await MatrixClientPeg.get().doesServerSupportSeparateAddAndBind()) {
                 if (this.bind) {
@@ -220,16 +226,19 @@ export default class AddThreepid {
                                 continueKind: "primary",
                             },
                         };
-                        const { finished } = Modal.createDialog(InteractiveAuthDialog, {
-                            title: _t("Add Email Address"),
-                            matrixClient: MatrixClientPeg.get(),
-                            authData: e.data,
-                            makeRequest: this.makeAddThreepidOnlyRequest,
-                            aestheticsForStagePhases: {
-                                [SSOAuthEntry.LOGIN_TYPE]: dialogAesthetics,
-                                [SSOAuthEntry.UNSTABLE_LOGIN_TYPE]: dialogAesthetics,
+                        const { finished } = Modal.createDialog<[boolean, IAuthData | Error | null]>(
+                            InteractiveAuthDialog,
+                            {
+                                title: _t("Add Email Address"),
+                                matrixClient: MatrixClientPeg.get(),
+                                authData: e.data,
+                                makeRequest: this.makeAddThreepidOnlyRequest,
+                                aestheticsForStagePhases: {
+                                    [SSOAuthEntry.LOGIN_TYPE]: dialogAesthetics,
+                                    [SSOAuthEntry.UNSTABLE_LOGIN_TYPE]: dialogAesthetics,
+                                },
                             },
-                        });
+                        );
                         return finished;
                     }
                 }

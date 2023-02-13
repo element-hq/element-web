@@ -90,7 +90,7 @@ export class ExistingEmailAddress extends React.Component<IExistingEmailAddressP
             });
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         if (this.state.verifyRemove) {
             return (
                 <div className="mx_ExistingEmailAddress">
@@ -133,7 +133,7 @@ interface IProps {
 
 interface IState {
     verifying: boolean;
-    addTask: any; // FIXME: When AddThreepid is TSfied
+    addTask: AddThreepid;
     continueDisabled: boolean;
     newEmailAddress: string;
 }
@@ -150,7 +150,7 @@ export default class EmailAddresses extends React.Component<IProps, IState> {
         };
     }
 
-    private onRemoved = (address): void => {
+    private onRemoved = (address: IThreepid): void => {
         const emails = this.props.emails.filter((e) => e !== address);
         this.props.onEmailsChange(emails);
     };
@@ -236,7 +236,7 @@ export default class EmailAddresses extends React.Component<IProps, IState> {
             });
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const existingEmailElements = this.props.emails.map((e) => {
             return <ExistingEmailAddress email={e} onRemoved={this.onRemoved} key={e.address} />;
         });

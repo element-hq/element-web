@@ -43,6 +43,7 @@ const AVATAR_SIZE = 24;
 
 export default class PinnedEventTile extends React.Component<IProps> {
     public static contextType = MatrixClientContext;
+    public context!: React.ContextType<typeof MatrixClientContext>;
 
     private onTileClicked = (): void => {
         dis.dispatch<ViewRoomPayload>({
@@ -67,7 +68,7 @@ export default class PinnedEventTile extends React.Component<IProps> {
         }
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const sender = this.props.event.getSender();
 
         let unpinButton = null;

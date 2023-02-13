@@ -58,7 +58,7 @@ export default class QuestionDialog extends React.Component<IQuestionDialogProps
         this.props.onFinished(false);
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         let primaryButtonClass = "";
         if (this.props.danger) {
             primaryButtonClass = "danger";

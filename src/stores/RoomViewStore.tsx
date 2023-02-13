@@ -60,6 +60,7 @@ import {
 import { IRoomStateEventsActionPayload } from "../actions/MatrixActionCreators";
 import { showCantStartACallDialog } from "../voice-broadcast/utils/showCantStartACallDialog";
 import { pauseNonLiveBroadcastFromOtherRoom } from "../voice-broadcast/utils/pauseNonLiveBroadcastFromOtherRoom";
+import { ActionPayload } from "../dispatcher/payloads";
 
 const NUM_JOIN_RETRY = 5;
 
@@ -248,7 +249,7 @@ export class RoomViewStore extends EventEmitter {
         }
     }
 
-    private onDispatch(payload): void {
+    private onDispatch(payload: ActionPayload): void {
         // eslint-disable-line @typescript-eslint/naming-convention
         switch (payload.action) {
             // view_room:
@@ -258,10 +259,10 @@ export class RoomViewStore extends EventEmitter {
             //      - event_offset: 100
             //      - highlighted:  true
             case Action.ViewRoom:
-                this.viewRoom(payload);
+                this.viewRoom(payload as ViewRoomPayload);
                 break;
             case Action.ViewThread:
-                this.viewThread(payload);
+                this.viewThread(payload as ThreadPayload);
                 break;
             // for these events blank out the roomId as we are no longer in the RoomView
             case "view_welcome_page":
@@ -279,7 +280,7 @@ export class RoomViewStore extends EventEmitter {
                 this.onRoomStateEvents((payload as IRoomStateEventsActionPayload).event);
                 break;
             case Action.ViewRoomError:
-                this.viewRoomError(payload);
+                this.viewRoomError(payload as ViewRoomErrorPayload);
                 break;
             case "will_join":
                 this.setState({
@@ -294,10 +295,10 @@ export class RoomViewStore extends EventEmitter {
             // join_room:
             //      - opts: options for joinRoom
             case Action.JoinRoom:
-                this.joinRoom(payload);
+                this.joinRoom(payload as JoinRoomPayload);
                 break;
             case Action.JoinRoomError:
-                this.joinRoomError(payload);
+                this.joinRoomError(payload as JoinRoomErrorPayload);
                 break;
             case Action.JoinRoomReady: {
                 if (this.state.roomId === payload.roomId) {

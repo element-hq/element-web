@@ -15,6 +15,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { PushRuleAction } from "matrix-js-sdk/src/@types/PushRules";
+
 import { NotificationUtils } from "./NotificationUtils";
 
 const encodeActions = NotificationUtils.encodeActions;
@@ -26,5 +28,5 @@ export class StandardActions {
     public static ACTION_HIGHLIGHT = encodeActions({ notify: true, highlight: true });
     public static ACTION_HIGHLIGHT_DEFAULT_SOUND = encodeActions({ notify: true, sound: "default", highlight: true });
     public static ACTION_DONT_NOTIFY = encodeActions({ notify: false });
-    public static ACTION_DISABLED = null;
+    public static ACTION_DISABLED: PushRuleAction[] | null = null;
 }

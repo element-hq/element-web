@@ -37,14 +37,14 @@ export default class RecoveryMethodRemovedDialog extends React.PureComponent<IPr
         this.props.onFinished();
         Modal.createDialogAsync(
             import("./CreateKeyBackupDialog") as unknown as Promise<ComponentType<{}>>,
-            null,
+            undefined,
             null,
             /* priority = */ false,
             /* static = */ true,
         );
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const title = <span className="mx_KeyBackupFailedDialog_title">{_t("Recovery Method Removed")}</span>;
 
         return (

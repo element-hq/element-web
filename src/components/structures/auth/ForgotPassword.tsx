@@ -487,7 +487,7 @@ export default class ForgotPassword extends React.Component<Props, State> {
         );
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         let resetPasswordJsx: JSX.Element;
 
         switch (this.state.phase) {

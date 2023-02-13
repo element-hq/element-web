@@ -40,7 +40,7 @@ export default class ManualDeviceKeyVerificationDialog extends React.Component<I
         this.props.onFinished(confirm);
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         let text;
         if (MatrixClientPeg.get().getUserId() === this.props.userId) {
             text = _t("Confirm by comparing the following with the User Settings in your other session:");

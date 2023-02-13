@@ -35,8 +35,8 @@ export default class DMRoomMap {
     private static sharedInstance: DMRoomMap;
 
     // TODO: convert these to maps
-    private roomToUser: { [key: string]: string } = null;
-    private userToRooms: { [key: string]: string[] } = null;
+    private roomToUser: { [key: string]: string } | null = null;
+    private userToRooms: { [key: string]: string[] } | null = null;
     private hasSentOutPatchDirectAccountDataPatch: boolean;
     private mDirectEvent: { [key: string]: string[] };
 
@@ -98,7 +98,7 @@ export default class DMRoomMap {
      * modifying userToRooms
      */
     private patchUpSelfDMs(userToRooms: Record<string, string[]>): boolean {
-        const myUserId = this.matrixClient.getUserId();
+        const myUserId = this.matrixClient.getUserId()!;
         const selfRoomIds = userToRooms[myUserId];
         if (selfRoomIds) {
             // any self-chats that should not be self-chats?
@@ -112,7 +112,7 @@ export default class DMRoomMap {
                         }
                     }
                 })
-                .filter((ids) => !!ids); //filter out
+                .filter((ids) => !!ids) as { userId: string; roomId: string }[]; //filter out
             // these are actually all legit self-chats
             // bail out
             if (!guessedUserIdsThatChanged.length) {
@@ -132,6 +132,7 @@ export default class DMRoomMap {
             });
             return true;
         }
+        return false;
     }
 
     public getDMRoomsForUserId(userId: string): string[] {
@@ -145,7 +146,7 @@ export default class DMRoomMap {
      * @param {string[]} ids The identifiers (user IDs and email addresses) to look for.
      * @returns {Room} The DM room which all IDs given share, or falsy if no common room.
      */
-    public getDMRoomForIdentifiers(ids: string[]): Room {
+    public getDMRoomForIdentifiers(ids: string[]): Room | null {
         // TODO: [Canonical DMs] Handle lookups for email addresses.
         // For now we'll pretend we only get user IDs and end up returning nothing for email addresses
 
@@ -174,14 +175,14 @@ export default class DMRoomMap {
         }
         // Here, we return undefined if the room is not in the map:
         // the room ID you gave is not a DM room for any user.
-        if (this.roomToUser[roomId] === undefined) {
+        if (this.roomToUser![roomId] === undefined) {
             // no entry? if the room is an invite, look for the is_direct hint.
             const room = this.matrixClient.getRoom(roomId);
             if (room) {
                 return room.getDMInviter();
             }
         }
-        return this.roomToUser[roomId];
+        return this.roomToUser![roomId];
     }
 
     public getUniqueRoomsWithIndividuals(): { [userId: string]: Room } {
@@ -189,13 +190,23 @@ export default class DMRoomMap {
         return Object.keys(this.roomToUser)
             .map((r) => ({ userId: this.getUserIdForRoomId(r), room: this.matrixClient.getRoom(r) }))
             .filter((r) => r.userId && r.room && r.room.getInvitedAndJoinedMemberCount() === 2)
-            .reduce((obj, r) => (obj[r.userId] = r.room) && obj, {});
+            .reduce((obj, r) => (obj[r.userId] = r.room) && obj, {} as Record<string, Room>);
+    }
+
+    /**
+     * @returns all room Ids from m.direct
+     */
+    public getRoomIds(): Set<string> {
+        return Object.values(this.mDirectEvent).reduce((prevRoomIds: Set<string>, roomIds: string[]): Set<string> => {
+            roomIds.forEach((roomId) => prevRoomIds.add(roomId));
+            return prevRoomIds;
+        }, new Set<string>());
     }
 
     private getUserToRooms(): { [key: string]: string[] } {
         if (!this.userToRooms) {
             const userToRooms = this.mDirectEvent;
-            const myUserId = this.matrixClient.getUserId();
+            const myUserId = this.matrixClient.getUserId()!;
             const selfDMs = userToRooms[myUserId];
             if (selfDMs?.length) {
                 const neededPatching = this.patchUpSelfDMs(userToRooms);
@@ -218,7 +229,7 @@ export default class DMRoomMap {
     private populateRoomToUser(): void {
         this.roomToUser = {};
         for (const user of Object.keys(this.getUserToRooms())) {
-            for (const roomId of this.userToRooms[user]) {
+            for (const roomId of this.userToRooms![user]) {
                 this.roomToUser[roomId] = user;
             }
         }

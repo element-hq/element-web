@@ -34,7 +34,7 @@ export default class CryptographyPanel extends React.Component<IProps, IState> {
         super(props);
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const client = MatrixClientPeg.get();
         const deviceId = client.deviceId;
         let identityKey = client.getDeviceEd25519Key();
@@ -114,7 +114,7 @@ export default class CryptographyPanel extends React.Component<IProps, IState> {
         );
     };
 
-    private updateBlacklistDevicesFlag = (checked): void => {
+    private updateBlacklistDevicesFlag = (checked: boolean): void => {
         MatrixClientPeg.get().setGlobalBlacklistUnverifiedDevices(checked);
     };
 }

@@ -182,7 +182,7 @@ async function getSecretStorageKey({
 
 export async function getDehydrationKey(
     keyInfo: ISecretStorageKeyInfo,
-    checkFunc: (Uint8Array) => void,
+    checkFunc: (data: Uint8Array) => void,
 ): Promise<Uint8Array> {
     const keyFromCustomisations = SecurityCustomisations.getSecretStorageKey?.();
     if (keyFromCustomisations) {
@@ -196,7 +196,7 @@ export async function getDehydrationKey(
         /* props= */
         {
             keyInfo,
-            checkPrivateKey: async (input): Promise<boolean> => {
+            checkPrivateKey: async (input: KeyParams): Promise<boolean> => {
                 const key = await inputToKey(input);
                 try {
                     checkFunc(key);
@@ -290,7 +290,7 @@ export async function promptForBackupPassphrase(): Promise<Uint8Array> {
         RestoreKeyBackupDialog,
         {
             showSummary: false,
-            keyCallback: (k) => (key = k),
+            keyCallback: (k: Uint8Array) => (key = k),
         },
         null,
         /* priority = */ false,

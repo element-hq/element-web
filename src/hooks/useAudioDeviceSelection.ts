@@ -28,7 +28,7 @@ interface State {
 export const useAudioDeviceSelection = (
     onDeviceChanged?: (device: MediaDeviceInfo) => void,
 ): {
-    currentDevice: MediaDeviceInfo;
+    currentDevice: MediaDeviceInfo | null;
     currentDeviceLabel: string;
     devices: MediaDeviceInfo[];
     setDevice(device: MediaDeviceInfo): void;

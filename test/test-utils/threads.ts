@@ -69,12 +69,12 @@ export const makeThreadEvents = ({
         ts,
     });
 
-    const rootEventId = rootEvent.getId();
+    const rootEventId = rootEvent.getId()!;
     const events = [rootEvent];
 
     for (let i = 1; i < length; i++) {
         const prevEvent = events[i - 1];
-        const replyToEventId = prevEvent.getId();
+        const replyToEventId = prevEvent.getId()!;
         const user = participantUserIds[i % participantUserIds.length];
         events.push(
             makeThreadEvent({
@@ -95,7 +95,7 @@ export const makeThreadEvents = ({
             [RelationType.Thread]: {
                 latest_event: events[events.length - 1],
                 count: length,
-                current_user_participated: [...participantUserIds, authorId].includes(currentUserId),
+                current_user_participated: [...participantUserIds, authorId].includes(currentUserId!),
             },
         },
     });
@@ -126,7 +126,7 @@ export const mkThread = ({
         participantUserIds,
         length,
         ts,
-        currentUserId: client.getUserId(),
+        currentUserId: client.getUserId()!,
     });
     expect(rootEvent).toBeTruthy();
 
@@ -134,7 +134,7 @@ export const mkThread = ({
         room?.reEmitter.reEmit(evt, [MatrixEventEvent.BeforeRedaction]);
     }
 
-    const thread = room.createThread(rootEvent.getId(), rootEvent, events, true);
+    const thread = room.createThread(rootEvent.getId()!, rootEvent, events, true);
     // So that we do not have to mock the thread loading
     thread.initialEventsFetched = true;
 

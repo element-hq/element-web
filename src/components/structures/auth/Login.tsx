@@ -37,7 +37,7 @@ import SSOButtons from "../../views/elements/SSOButtons";
 import ServerPicker from "../../views/elements/ServerPicker";
 import AuthBody from "../../views/auth/AuthBody";
 import AuthHeader from "../../views/auth/AuthHeader";
-import AccessibleButton from "../../views/elements/AccessibleButton";
+import AccessibleButton, { ButtonEvent } from "../../views/elements/AccessibleButton";
 import { ValidatedServerConfig } from "../../../utils/ValidatedServerConfig";
 
 // These are used in several places, and come from the js-sdk's autodiscovery
@@ -101,6 +101,11 @@ interface IState {
     serverDeadError?: ReactNode;
 }
 
+type OnPasswordLogin = {
+    (username: string, phoneCountry: undefined, phoneNumber: undefined, password: string): Promise<void>;
+    (username: undefined, phoneCountry: string, phoneNumber: string, password: string): Promise<void>;
+};
+
 /*
  * A wire component which glues together login UI components and Login logic
  */
@@ -110,7 +115,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
 
     private readonly stepRendererMap: Record<string, () => ReactNode>;
 
-    public constructor(props) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {
@@ -152,7 +157,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
         this.unmounted = true;
     }
 
-    public componentDidUpdate(prevProps): void {
+    public componentDidUpdate(prevProps: IProps): void {
         if (
             prevProps.serverConfig.hsUrl !== this.props.serverConfig.hsUrl ||
             prevProps.serverConfig.isUrl !== this.props.serverConfig.isUrl
@@ -164,7 +169,12 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
 
     public isBusy = (): boolean => this.state.busy || this.props.busy;
 
-    public onPasswordLogin = async (username, phoneCountry, phoneNumber, password): Promise<void> => {
+    public onPasswordLogin: OnPasswordLogin = async (
+        username: string | undefined,
+        phoneCountry: string | undefined,
+        phoneNumber: string | undefined,
+        password: string,
+    ): Promise<void> => {
         if (!this.state.serverIsAlive) {
             this.setState({ busy: true });
             // Do a quick liveliness check on the URLs
@@ -207,10 +217,10 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
                 if (this.unmounted) {
                     return;
                 }
-                let errorText;
+                let errorText: ReactNode;
 
                 // Some error strings only apply for logging in
-                const usingEmail = username.indexOf("@") > 0;
+                const usingEmail = username?.indexOf("@") > 0;
                 if (error.httpStatus === 400 && usingEmail) {
                     errorText = _t("This homeserver does not support login using email address.");
                 } else if (error.errcode === "M_RESOURCE_LIMIT_EXCEEDED") {
@@ -264,11 +274,11 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
         );
     };
 
-    public onUsernameChanged = (username): void => {
-        this.setState({ username: username });
+    public onUsernameChanged = (username: string): void => {
+        this.setState({ username });
     };
 
-    public onUsernameBlur = async (username): Promise<void> => {
+    public onUsernameBlur = async (username: string): Promise<void> => {
         const doWellknownLookup = username[0] === "@";
         this.setState({
             username: username,
@@ -315,23 +325,21 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
         }
     };
 
-    public onPhoneCountryChanged = (phoneCountry): void => {
-        this.setState({ phoneCountry: phoneCountry });
+    public onPhoneCountryChanged = (phoneCountry: string): void => {
+        this.setState({ phoneCountry });
     };
 
-    public onPhoneNumberChanged = (phoneNumber): void => {
-        this.setState({
-            phoneNumber: phoneNumber,
-        });
+    public onPhoneNumberChanged = (phoneNumber: string): void => {
+        this.setState({ phoneNumber });
     };
 
-    public onRegisterClick = (ev): void => {
+    public onRegisterClick = (ev: ButtonEvent): void => {
         ev.preventDefault();
         ev.stopPropagation();
         this.props.onRegisterClick();
     };
 
-    public onTryRegisterClick = (ev): void => {
+    public onTryRegisterClick = (ev: ButtonEvent): void => {
         const hasPasswordFlow = this.state.flows?.find((flow) => flow.type === "m.login.password");
         const ssoFlow = this.state.flows?.find((flow) => flow.type === "m.login.sso" || flow.type === "m.login.cas");
         // If has no password flow but an SSO flow guess that the user wants to register with SSO.
@@ -540,7 +548,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
         );
     };
 
-    private renderSsoStep = (loginType): JSX.Element => {
+    private renderSsoStep = (loginType: "cas" | "sso"): JSX.Element => {
         const flow = this.state.flows.find((flow) => flow.type === "m.login." + loginType) as ISSOFlow;
 
         return (
@@ -555,7 +563,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
         );
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const loader =
             this.isBusy() && !this.state.busyLoggingIn ? (
                 <div className="mx_Login_loader">

@@ -170,7 +170,7 @@ export class VoiceBroadcastRecorder
             return;
         }
 
-        this.emit(VoiceBroadcastRecorderEvent.ChunkRecorded, this.extractChunk());
+        this.emit(VoiceBroadcastRecorderEvent.ChunkRecorded, this.extractChunk()!);
     }
 
     public destroy(): void {

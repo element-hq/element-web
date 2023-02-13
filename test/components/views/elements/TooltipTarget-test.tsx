@@ -61,7 +61,7 @@ describe("<TooltipTarget />", () => {
     });
 
     const alignmentKeys = Object.keys(Alignment).filter((o: any) => isNaN(o));
-    it.each(alignmentKeys)("displays %s aligned tooltip on mouseover", async (alignment) => {
+    it.each(alignmentKeys)("displays %s aligned tooltip on mouseover", async (alignment: any) => {
         const wrapper = getComponent({ alignment: Alignment[alignment] });
         act(() => {
             Simulate.mouseOver(wrapper);

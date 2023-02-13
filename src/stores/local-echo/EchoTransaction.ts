@@ -30,7 +30,7 @@ export class EchoTransaction extends Whenable<TransactionStatus> {
 
     public readonly startTime = new Date();
 
-    public constructor(public readonly auditName, public runFn: RunFn) {
+    public constructor(public readonly auditName: string, public runFn: RunFn) {
         super();
     }
 

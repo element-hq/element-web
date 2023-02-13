@@ -48,13 +48,13 @@ export default class NewRecoveryMethodDialog extends React.PureComponent<IProps>
             {
                 onFinished: this.props.onFinished,
             },
-            null,
+            undefined,
             /* priority = */ false,
             /* static = */ true,
         );
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const title = <span className="mx_KeyBackupFailedDialog_title">{_t("New Recovery Method")}</span>;
 
         const newMethodDetected = <p>{_t("A new Security Phrase and key for Secure Messages have been detected.")}</p>;

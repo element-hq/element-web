@@ -83,7 +83,7 @@ describe("<PinnedMessagesCard />", () => {
     };
 
     const mountPins = async (room: Room): Promise<ReactWrapper<ComponentProps<typeof PinnedMessagesCard>>> => {
-        let pins;
+        let pins!: ReactWrapper<ComponentProps<typeof PinnedMessagesCard>>;
         await act(async () => {
             pins = mount(
                 <PinnedMessagesCard
@@ -239,9 +239,9 @@ describe("<PinnedMessagesCard />", () => {
 
         const answers = (poll.unstableExtensibleEvent as PollStartEvent).answers;
         const responses = [
-            ["@alice:example.org", 0],
-            ["@bob:example.org", 0],
-            ["@eve:example.org", 1],
+            ["@alice:example.org", 0] as [string, number],
+            ["@bob:example.org", 0] as [string, number],
+            ["@eve:example.org", 1] as [string, number],
         ].map(([user, option], i) =>
             mkEvent({
                 ...PollResponseEvent.from([answers[option as number].id], poll.getId()!).serialize(),
@@ -287,8 +287,8 @@ describe("<PinnedMessagesCard />", () => {
         const pinTile = pins.find(MPollBody);
 
         expect(pinTile.length).toEqual(1);
-        expect(pinTile.find(".mx_MPollBody_option_ended").length).toEqual(2);
-        expect(pinTile.find(".mx_MPollBody_optionVoteCount").first().text()).toEqual("2 votes");
-        expect(pinTile.find(".mx_MPollBody_optionVoteCount").last().text()).toEqual("1 vote");
+        expect(pinTile.find(".mx_PollOption_ended").length).toEqual(2);
+        expect(pinTile.find(".mx_PollOption_optionVoteCount").first().text()).toEqual("2 votes");
+        expect(pinTile.find(".mx_PollOption_optionVoteCount").last().text()).toEqual("1 vote");
     });
 });

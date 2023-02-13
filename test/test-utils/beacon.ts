@@ -165,7 +165,7 @@ export const mockGeolocation = (): MockedObject<Geolocation> => {
  * See for error codes: https://developer.mozilla.org/en-US/docs/Web/API/GeolocationPositionError
  */
 export const watchPositionMockImplementation = (delays: number[], errorCodes: number[] = []) => {
-    return (callback: PositionCallback, error: PositionErrorCallback) => {
+    return (callback: PositionCallback, error: PositionErrorCallback): number => {
         const position = makeGeolocationPosition({});
 
         let totalDelay = 0;
@@ -180,6 +180,8 @@ export const watchPositionMockImplementation = (delays: number[], errorCodes: nu
             }, totalDelay);
             return timeout;
         });
+
+        return totalDelay;
     };
 };
 

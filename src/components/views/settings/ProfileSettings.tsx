@@ -160,7 +160,7 @@ export default class ProfileSettings extends React.Component<{}, IState> {
         reader.readAsDataURL(file);
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const hostingSignupLink = getHostingLink("user-settings");
         let hostingSignup = null;
         if (hostingSignupLink) {

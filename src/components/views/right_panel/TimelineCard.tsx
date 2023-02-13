@@ -198,7 +198,7 @@ export default class TimelineCard extends React.Component<IProps, IState> {
         );
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const highlightedEventId = this.state.isInitialEventHighlighted ? this.state.initialEventId : null;
 
         let jumpToBottom;

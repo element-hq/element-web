@@ -85,7 +85,7 @@ describe("shouldDisplayAsVoiceBroadcastTile", () => {
                 user: senderId,
                 content: {},
             });
-            event.getContent = () => undefined;
+            event.getContent = () => ({} as any);
         });
 
         itShouldReturnFalse();
@@ -119,7 +119,7 @@ describe("shouldDisplayAsVoiceBroadcastTile", () => {
                     redacted_because: {} as unknown as IEvent,
                 },
             });
-            event.getContent = () => undefined;
+            event.getContent = () => ({} as any);
         });
 
         itShouldReturnTrue();

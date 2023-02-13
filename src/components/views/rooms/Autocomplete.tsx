@@ -57,7 +57,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
 
     public static contextType = RoomContext;
 
-    public constructor(props) {
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {
@@ -280,7 +280,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         }
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         let position = 1;
         const renderedCompletions = this.state.completions
             .map((completionResult, i) => {

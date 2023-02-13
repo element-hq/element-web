@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<PollHistoryDialog /> renders a list of polls when there are polls in the timeline 1`] = `
+exports[`<PollHistoryDialog /> renders a list of active polls when there are polls in the timeline 1`] = `
 <div>
   <div
     data-focus-guard="true"
@@ -35,25 +35,38 @@ exports[`<PollHistoryDialog /> renders a list of polls when there are polls in t
       <div
         class="mx_PollHistoryList"
       >
+        <fieldset
+          class="mx_FilterTabGroup"
+        >
+          <label
+            data-testid="filter-tab-PollHistoryDialog_filter-ACTIVE"
+          >
+            <input
+              checked=""
+              name="PollHistoryDialog_filter"
+              type="radio"
+              value="ACTIVE"
+            />
+            <span>
+              Active polls
+            </span>
+          </label>
+          <label
+            data-testid="filter-tab-PollHistoryDialog_filter-ENDED"
+          >
+            <input
+              name="PollHistoryDialog_filter"
+              type="radio"
+              value="ENDED"
+            />
+            <span>
+              Past polls
+            </span>
+          </label>
+        </fieldset>
         <ol
           class="mx_PollHistoryList_list"
         >
-          <li
-            class="mx_PollListItem"
-            data-testid="pollListItem-$1"
-          >
-            <span>
-              02/02/23
-            </span>
-            <div
-              class="mx_PollListItem_icon"
-            />
-            <span
-              class="mx_PollListItem_question"
-            >
-              Question?
-            </span>
-          </li>
           <li
             class="mx_PollListItem"
             data-testid="pollListItem-$2"
@@ -72,10 +85,10 @@ exports[`<PollHistoryDialog /> renders a list of polls when there are polls in t
           </li>
           <li
             class="mx_PollListItem"
-            data-testid="pollListItem-$3"
+            data-testid="pollListItem-$1"
           >
             <span>
-              31/01/23
+              02/02/23
             </span>
             <div
               class="mx_PollListItem_icon"
@@ -83,7 +96,7 @@ exports[`<PollHistoryDialog /> renders a list of polls when there are polls in t
             <span
               class="mx_PollListItem_question"
             >
-              What?
+              Question?
             </span>
           </li>
         </ol>

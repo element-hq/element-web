@@ -39,12 +39,12 @@ export default class LiveRecordingWaveform extends React.PureComponent<IProps, I
     };
 
     private waveform: number[] = [];
-    private scheduledUpdate = new MarkedExecution(
+    private scheduledUpdate: MarkedExecution = new MarkedExecution(
         () => this.updateWaveform(),
         () => requestAnimationFrame(() => this.scheduledUpdate.trigger()),
     );
 
-    public constructor(props) {
+    public constructor(props: IProps) {
         super(props);
         this.state = {
             waveform: arraySeed(0, RECORDING_PLAYBACK_SAMPLES),
@@ -63,7 +63,7 @@ export default class LiveRecordingWaveform extends React.PureComponent<IProps, I
         this.setState({ waveform: this.waveform });
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         return <Waveform relHeights={this.state.waveform} />;
     }
 }

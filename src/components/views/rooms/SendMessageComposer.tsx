@@ -306,7 +306,8 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
 
                 // if we have already sent this reaction, don't redact but don't re-send
                 if (messageReactions) {
-                    const myReactionEvents = messageReactions.getAnnotationsBySender()[userId] || [];
+                    const myReactionEvents =
+                        messageReactions.getAnnotationsBySender()[userId] || new Set<MatrixEvent>();
                     const myReactionKeys = [...myReactionEvents]
                         .filter((event) => !event.isRedacted())
                         .map((event) => event.getRelation().key);
@@ -490,7 +491,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
         if (json) {
             try {
                 const { parts: serializedParts, replyEventId } = JSON.parse(json);
-                const parts: Part[] = serializedParts.map((p) => partCreator.deserializePart(p));
+                const parts: Part[] = serializedParts.map((p: SerializedPart) => partCreator.deserializePart(p));
                 if (replyEventId) {
                     dis.dispatch({
                         action: "reply_to_event",
@@ -572,7 +573,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
         this.editorRef.current?.focus();
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const threadId =
             this.props.relation?.rel_type === THREAD_RELATION_TYPE.name ? this.props.relation.event_id : null;
         return (

@@ -39,7 +39,7 @@ export const useProfileInfo = (): {
 
     const [loading, setLoading] = useState(false);
 
-    const [updateQuery, updateResult] = useLatestResult<string, IProfileInfo | null>(setProfile);
+    const [updateQuery, updateResult] = useLatestResult<string | undefined, IProfileInfo | null>(setProfile);
 
     const search = useCallback(
         async ({ query: term }: IProfileInfoOpts): Promise<boolean> => {

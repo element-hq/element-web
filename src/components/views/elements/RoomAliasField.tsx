@@ -44,7 +44,7 @@ export default class RoomAliasField extends React.PureComponent<IProps, IState> 
 
     private fieldRef = createRef<Field>();
 
-    public constructor(props, context) {
+    public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
         super(props, context);
 
         this.state = {
@@ -77,7 +77,7 @@ export default class RoomAliasField extends React.PureComponent<IProps, IState> 
         return { prefix, postfix, value, maxlength };
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const { prefix, postfix, value, maxlength } = this.domainProps;
         return (
             <Field

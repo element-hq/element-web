@@ -95,7 +95,7 @@ export default class EventIndex extends EventEmitter {
         const client = MatrixClientPeg.get();
         const rooms = client.getRooms();
 
-        const isRoomEncrypted = (room): boolean => {
+        const isRoomEncrypted = (room: Room): boolean => {
             return client.isRoomEncrypted(room.roomId);
         };
 

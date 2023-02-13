@@ -73,7 +73,7 @@ export default class AccessibleTooltipButton extends React.PureComponent<IProps,
         if (ev.relatedTarget) this.showTooltip();
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { title, tooltip, children, tooltipClassName, forceHide, alignment, onHideTooltip, ...props } =
             this.props;

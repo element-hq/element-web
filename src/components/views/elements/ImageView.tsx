@@ -91,7 +91,7 @@ interface IState {
 }
 
 export default class ImageView extends React.Component<IProps, IState> {
-    public constructor(props) {
+    public constructor(props: IProps) {
         super(props);
 
         const { thumbnailInfo } = this.props;
@@ -411,7 +411,7 @@ export default class ImageView extends React.Component<IProps, IState> {
         return <React.Fragment>{contextMenu}</React.Fragment>;
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const showEventMeta = !!this.props.mxEvent;
 
         let transitionClassName;

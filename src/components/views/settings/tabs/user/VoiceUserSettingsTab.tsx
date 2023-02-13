@@ -121,7 +121,7 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
         );
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         let requestButton = null;
         let speakerDropdown = null;
         let microphoneDropdown = null;

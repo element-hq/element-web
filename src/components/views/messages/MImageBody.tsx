@@ -562,7 +562,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         }
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const content = this.props.mxEvent.getContent<IMediaEventContent>();
 
         if (this.state.error) {
@@ -605,7 +605,7 @@ interface PlaceholderIProps {
 }
 
 export class HiddenImagePlaceholder extends React.PureComponent<PlaceholderIProps> {
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const maxWidth = this.props.maxWidth ? this.props.maxWidth + "px" : null;
         let className = "mx_HiddenImagePlaceholder";
         if (this.props.hover) className += " mx_HiddenImagePlaceholder_hover";

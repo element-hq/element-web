@@ -330,7 +330,7 @@ class PollButton extends React.PureComponent<IPollButtonProps> {
         }
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         // do not allow sending polls within threads at this time
         if (this.props.relation?.rel_type === THREAD_RELATION_TYPE.name) return null;
 

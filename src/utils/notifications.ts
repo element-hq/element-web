@@ -36,7 +36,7 @@ export async function createLocalNotificationSettingsIfNeeded(cli: MatrixClient)
     if (cli.isGuest()) {
         return;
     }
-    const eventType = getLocalNotificationAccountDataEventType(cli.deviceId);
+    const eventType = getLocalNotificationAccountDataEventType(cli.deviceId!);
     const event = cli.getAccountData(eventType);
     // New sessions will create an account data event to signify they support
     // remote toggling of push notifications on this device. Default `is_silenced=true`
@@ -54,7 +54,7 @@ export async function createLocalNotificationSettingsIfNeeded(cli: MatrixClient)
 }
 
 export function localNotificationsAreSilenced(cli: MatrixClient): boolean {
-    const eventType = getLocalNotificationAccountDataEventType(cli.deviceId);
+    const eventType = getLocalNotificationAccountDataEventType(cli.deviceId!);
     const event = cli.getAccountData(eventType);
     return event?.getContent<LocalNotificationSettings>()?.is_silenced ?? false;
 }

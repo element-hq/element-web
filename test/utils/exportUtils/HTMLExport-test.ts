@@ -104,7 +104,7 @@ describe("HTMLExport", () => {
     /** set a mock fetch response for an MXC */
     function mockMxc(mxc: string, body: string) {
         const media = mediaFromMxc(mxc, client);
-        fetchMock.get(media.srcHttp, body);
+        fetchMock.get(media.srcHttp!, body);
     }
 
     it("should have an SDK-branded destination file name", () => {
@@ -286,7 +286,7 @@ describe("HTMLExport", () => {
 
         // Ensure that the attachment is present
         const files = getFiles(exporter);
-        const file = files[Object.keys(files).find((k) => k.endsWith(".txt"))];
+        const file = files[Object.keys(files).find((k) => k.endsWith(".txt"))!];
         expect(file).not.toBeUndefined();
 
         // Ensure that the attachment has the expected content

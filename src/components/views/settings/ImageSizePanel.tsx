@@ -47,7 +47,7 @@ export default class ImageSizePanel extends React.Component<IProps, IState> {
         SettingsStore.setValue("Images.size", null, SettingLevel.ACCOUNT, newSize);
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         return (
             <div className="mx_SettingsTab_section mx_ImageSizePanel">
                 <span className="mx_SettingsTab_subheading">{_t("Image size in the timeline")}</span>

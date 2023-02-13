@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 
 import { _t } from "../../../../languageHandler";
 import Field from "../../elements/Field";
@@ -72,7 +72,7 @@ const FilteredList: React.FC<IProps> = ({ children, query, onChange }) => {
                 type="text"
                 autoComplete="off"
                 value={query}
-                onChange={(ev) => onChange(ev.target.value)}
+                onChange={(ev: ChangeEvent<HTMLInputElement>) => onChange(ev.target.value)}
                 className="mx_TextInputDialog_input mx_DevTools_RoomStateExplorer_query"
                 // force re-render so that autoFocus is applied when this component is re-used
                 key={children?.[0]?.key ?? ""}

@@ -35,7 +35,7 @@ interface IState {
 }
 
 export default class EventIndexPanel extends React.Component<{}, IState> {
-    public constructor(props) {
+    public constructor(props: {}) {
         super(props);
 
         this.state = {
@@ -145,7 +145,7 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
         });
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         let eventIndexingSettings = null;
         const brand = SdkConfig.get().brand;
 

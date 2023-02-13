@@ -241,7 +241,7 @@ export default class DevicesPanel extends React.Component<IProps, IState> {
         );
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const loadError = <div className={classNames(this.props.className, "error")}>{this.state.deviceLoadError}</div>;
 
         if (this.state.deviceLoadError !== undefined) {

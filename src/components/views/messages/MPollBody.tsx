@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import React, { ReactNode } from "react";
-import classNames from "classnames";
 import { logger } from "matrix-js-sdk/src/logger";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Relations } from "matrix-js-sdk/src/models/relations";
@@ -30,13 +29,13 @@ import { _t } from "../../../languageHandler";
 import Modal from "../../../Modal";
 import { IBodyProps } from "./IBodyProps";
 import { formatCommaSeparatedList } from "../../../utils/FormattingUtils";
-import StyledRadioButton from "../elements/StyledRadioButton";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import ErrorDialog from "../dialogs/ErrorDialog";
 import { GetRelationsForEvent } from "../rooms/EventTile";
 import PollCreateDialog from "../elements/PollCreateDialog";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import Spinner from "../elements/Spinner";
+import { PollOption } from "../polls/PollOption";
 
 interface IState {
     poll?: Poll;
@@ -230,10 +229,6 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
         this.setState({ selected: answerId });
     }
 
-    private onOptionSelected = (e: React.FormEvent<HTMLInputElement>): void => {
-        this.selectOption(e.currentTarget.value);
-    };
-
     /**
      * @returns userId -> UserVote
      */
@@ -329,47 +324,26 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
                 <div className="mx_MPollBody_allOptions">
                     {pollEvent.answers.map((answer: PollAnswerSubevent) => {
                         let answerVotes = 0;
-                        let votesText = "";
 
                         if (showResults) {
                             answerVotes = votes.get(answer.id) ?? 0;
-                            votesText = _t("%(count)s votes", { count: answerVotes });
                         }
 
                         const checked =
                             (!poll.isEnded && myVote === answer.id) || (poll.isEnded && answerVotes === winCount);
-                        const cls = classNames({
-                            mx_MPollBody_option: true,
-                            mx_MPollBody_option_checked: checked,
-                            mx_MPollBody_option_ended: poll.isEnded,
-                        });
 
-                        const answerPercent = totalVotes === 0 ? 0 : Math.round((100.0 * answerVotes) / totalVotes);
                         return (
-                            <div
-                                data-testid={`pollOption-${answer.id}`}
+                            <PollOption
                                 key={answer.id}
-                                className={cls}
-                                onClick={() => this.selectOption(answer.id)}
-                            >
-                                {poll.isEnded ? (
-                                    <EndedPollOption answer={answer} checked={checked} votesText={votesText} />
-                                ) : (
-                                    <LivePollOption
-                                        pollId={pollId}
-                                        answer={answer}
-                                        checked={checked}
-                                        votesText={votesText}
-                                        onOptionSelected={this.onOptionSelected}
-                                    />
-                                )}
-                                <div className="mx_MPollBody_popularityBackground">
-                                    <div
-                                        className="mx_MPollBody_popularityAmount"
-                                        style={{ width: `${answerPercent}%` }}
-                                    />
-                                </div>
-                            </div>
+                                pollId={pollId}
+                                answer={answer}
+                                isChecked={checked}
+                                isEnded={poll.isEnded}
+                                voteCount={answerVotes}
+                                totalVoteCount={totalVotes}
+                                displayVoteCount={showResults}
+                                onOptionSelected={this.selectOption.bind(this)}
+                            />
                         );
                     })}
                 </div>
@@ -381,53 +355,6 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
         );
     }
 }
-
-interface IEndedPollOptionProps {
-    answer: PollAnswerSubevent;
-    checked: boolean;
-    votesText: string;
-}
-
-function EndedPollOption(props: IEndedPollOptionProps): JSX.Element {
-    const cls = classNames({
-        mx_MPollBody_endedOption: true,
-        mx_MPollBody_endedOptionWinner: props.checked,
-    });
-    return (
-        <div className={cls} data-value={props.answer.id}>
-            <div className="mx_MPollBody_optionDescription">
-                <div className="mx_MPollBody_optionText">{props.answer.text}</div>
-                <div className="mx_MPollBody_optionVoteCount">{props.votesText}</div>
-            </div>
-        </div>
-    );
-}
-
-interface ILivePollOptionProps {
-    pollId: string;
-    answer: PollAnswerSubevent;
-    checked: boolean;
-    votesText: string;
-    onOptionSelected: (e: React.FormEvent<HTMLInputElement>) => void;
-}
-
-function LivePollOption(props: ILivePollOptionProps): JSX.Element {
-    return (
-        <StyledRadioButton
-            className="mx_MPollBody_live-option"
-            name={`poll_answer_select-${props.pollId}`}
-            value={props.answer.id}
-            checked={props.checked}
-            onChange={props.onOptionSelected}
-        >
-            <div className="mx_MPollBody_optionDescription">
-                <div className="mx_MPollBody_optionText">{props.answer.text}</div>
-                <div className="mx_MPollBody_optionVoteCount">{props.votesText}</div>
-            </div>
-        </StyledRadioButton>
-    );
-}
-
 export class UserVote {
     public constructor(public readonly ts: number, public readonly sender: string, public readonly answers: string[]) {}
 }

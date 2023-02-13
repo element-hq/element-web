@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactNode } from "react";
+import React, { ChangeEvent, ReactNode } from "react";
 import classNames from "classnames";
 
 import StyledRadioButton from "./StyledRadioButton";
@@ -47,8 +47,8 @@ function StyledRadioGroup<T extends string>({
     disabled,
     onChange,
 }: IProps<T>): JSX.Element {
-    const _onChange = (e): void => {
-        onChange(e.target.value);
+    const _onChange = (e: ChangeEvent<HTMLInputElement>): void => {
+        onChange(e.target.value as T);
     };
 
     return (

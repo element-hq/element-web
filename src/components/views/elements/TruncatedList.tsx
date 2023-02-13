@@ -40,7 +40,7 @@ interface IProps {
 export default class TruncatedList extends React.Component<IProps> {
     public static defaultProps = {
         truncateAt: 2,
-        createOverflowElement(overflowCount, totalCount) {
+        createOverflowElement(overflowCount: number, totalCount: number) {
             return <div>{_t("And %(count)s more...", { count: overflowCount })}</div>;
         },
     };
@@ -70,7 +70,7 @@ export default class TruncatedList extends React.Component<IProps> {
         }
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         let overflowNode = null;
 
         const totalChildren = this.getChildCount();

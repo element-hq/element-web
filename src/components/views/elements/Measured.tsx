@@ -32,7 +32,7 @@ export default class Measured extends React.PureComponent<IProps> {
         breakpoint: 500,
     };
 
-    public constructor(props) {
+    public constructor(props: IProps) {
         super(props);
 
         this.instanceId = Measured.instanceCount++;
@@ -64,7 +64,7 @@ export default class Measured extends React.PureComponent<IProps> {
         this.props.onMeasurement(entry.contentRect.width <= this.props.breakpoint);
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         return null;
     }
 }

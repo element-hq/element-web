@@ -21,7 +21,7 @@ import { createTestClient, mkEvent } from "../../test-utils";
 
 describe("getRoomFunctionalMembers", () => {
     const client = createTestClient();
-    const room = new Room("!room:example.com", client, client.getUserId());
+    const room = new Room("!room:example.com", client, client.getUserId()!);
 
     it("should return an empty array if no functional members state event exists", () => {
         expect(getFunctionalMembers(room)).toHaveLength(0);

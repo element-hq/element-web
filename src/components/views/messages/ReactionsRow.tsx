@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { SyntheticEvent } from "react";
 import classNames from "classnames";
 import { MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/models/event";
 import { Relations, RelationsEvent } from "matrix-js-sdk/src/models/relations";
@@ -52,7 +52,7 @@ const ReactButton: React.FC<IProps> = ({ mxEvent, reactions }) => {
                 })}
                 title={_t("Add reaction")}
                 onClick={openMenu}
-                onContextMenu={(e) => {
+                onContextMenu={(e: SyntheticEvent): void => {
                     e.preventDefault();
                     openMenu();
                 }}
@@ -161,7 +161,7 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
         });
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const { mxEvent, reactions } = this.props;
         const { myReactions, showAll } = this.state;
 

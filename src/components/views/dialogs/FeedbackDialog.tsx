@@ -97,7 +97,7 @@ const FeedbackDialog: React.FC<IProps> = (props: IProps) => {
         );
     }
 
-    let bugReports = null;
+    let bugReports: JSX.Element | null = null;
     if (rageshakeUrl) {
         bugReports = (
             <p className="mx_FeedbackDialog_section_microcopy">

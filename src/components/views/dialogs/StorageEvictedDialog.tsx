@@ -37,7 +37,7 @@ export default class StorageEvictedDialog extends React.Component<IProps> {
         this.props.onFinished(true);
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         let logRequest;
         if (SdkConfig.get().bug_report_endpoint_url) {
             logRequest = _t(

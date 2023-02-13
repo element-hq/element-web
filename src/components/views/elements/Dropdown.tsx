@@ -49,7 +49,7 @@ class MenuOption extends React.Component<IMenuOptionProps> {
         this.props.onClick(this.props.dropdownKey);
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const optClasses = classnames({
             mx_Dropdown_option: true,
             mx_Dropdown_option_highlight: this.props.highlighted,
@@ -327,7 +327,7 @@ export default class Dropdown extends React.Component<DropdownProps, IState> {
         return options;
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         let currentValue;
 
         const menuStyle: CSSProperties = {};
@@ -373,7 +373,7 @@ export default class Dropdown extends React.Component<DropdownProps, IState> {
             );
         }
 
-        const dropdownClasses = {
+        const dropdownClasses: Record<string, boolean> = {
             mx_Dropdown: true,
             mx_Dropdown_disabled: this.props.disabled,
         };

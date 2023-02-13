@@ -93,15 +93,15 @@ describe("<SpaceSettingsVisibilityTab />", () => {
     };
 
     const getByTestId = (container: Element, id: string) => container.querySelector(`[data-test-id=${id}]`);
-    const toggleGuestAccessSection = async (component) => {
+    const toggleGuestAccessSection = async (component: Element) => {
         const toggleButton = getByTestId(component, "toggle-guest-access-btn");
         await act(async () => {
             Simulate.click(toggleButton);
         });
     };
-    const getGuestAccessToggle = (component) => component.querySelector('[aria-label="Enable guest access"');
-    const getHistoryVisibilityToggle = (component) => component.querySelector('[aria-label="Preview Space"');
-    const getErrorMessage = (component) => getByTestId(component, "space-settings-error")?.textContent;
+    const getGuestAccessToggle = (component: Element) => component.querySelector('[aria-label="Enable guest access"');
+    const getHistoryVisibilityToggle = (component: Element) => component.querySelector('[aria-label="Preview Space"');
+    const getErrorMessage = (component: Element) => getByTestId(component, "space-settings-error")?.textContent;
 
     beforeEach(() => {
         (mockMatrixClient.sendStateEvent as jest.Mock).mockClear().mockResolvedValue({});

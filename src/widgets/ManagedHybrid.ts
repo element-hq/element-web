@@ -33,7 +33,7 @@ interface IManagedHybridWidgetData {
 }
 /* eslint-enable camelcase */
 
-function getWidgetBuildUrl(): string {
+function getWidgetBuildUrl(): string | undefined {
     if (SdkConfig.get().widget_build_url) {
         return SdkConfig.get().widget_build_url;
     }

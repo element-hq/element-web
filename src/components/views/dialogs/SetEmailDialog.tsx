@@ -138,7 +138,7 @@ export default class SetEmailDialog extends React.Component<IProps, IState> {
         );
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const emailInput = this.state.emailBusy ? (
             <Spinner />
         ) : (

@@ -55,7 +55,7 @@ export class ExistingSource extends React.Component<ExistingSourceIProps> {
         this.props.onSelect(this.props.source);
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const thumbnailClasses = classNames({
             mx_desktopCapturerSourcePicker_source_thumbnail: true,
             mx_desktopCapturerSourcePicker_source_thumbnail_selected: this.props.selected,
@@ -149,7 +149,7 @@ export default class DesktopCapturerSourcePicker extends React.Component<PickerI
         return new Tab(type, label, null, <div className="mx_desktopCapturerSourcePicker_tab">{sources}</div>);
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const tabs = [
             this.getTab("screen", _t("Share entire screen")),
             this.getTab("window", _t("Application window")),

@@ -22,14 +22,14 @@ import DMRoomMap from "../../src/utils/DMRoomMap";
 function mkClient(selfTrust = false) {
     return {
         getUserId: () => "@self:localhost",
-        checkUserTrust: (userId) => ({
+        checkUserTrust: (userId: string) => ({
             isCrossSigningVerified: () => userId[1] == "T",
             wasCrossSigningVerified: () => userId[1] == "T" || userId[1] == "W",
         }),
-        checkDeviceTrust: (userId, deviceId) => ({
+        checkDeviceTrust: (userId: string, deviceId: string) => ({
             isVerified: () => (userId === "@self:localhost" ? selfTrust : userId[2] == "T"),
         }),
-        getStoredDevicesForUser: (userId) => ["DEVICE"],
+        getStoredDevicesForUser: (userId: string) => ["DEVICE"],
     } as unknown as MatrixClient;
 }
 
@@ -61,7 +61,7 @@ describe("mkClient self-test", function () {
 describe("shieldStatusForMembership self-trust behaviour", function () {
     beforeAll(() => {
         const mockInstance = {
-            getUserIdForRoomId: (roomId) => (roomId === "DM" ? "@any:h" : null),
+            getUserIdForRoomId: (roomId: string) => (roomId === "DM" ? "@any:h" : null),
         } as unknown as DMRoomMap;
         jest.spyOn(DMRoomMap, "shared").mockReturnValue(mockInstance);
     });
@@ -164,7 +164,7 @@ describe("shieldStatusForMembership self-trust behaviour", function () {
 describe("shieldStatusForMembership other-trust behaviour", function () {
     beforeAll(() => {
         const mockInstance = {
-            getUserIdForRoomId: (roomId) => (roomId === "DM" ? "@any:h" : null),
+            getUserIdForRoomId: (roomId: string) => (roomId === "DM" ? "@any:h" : null),
         } as unknown as DMRoomMap;
         jest.spyOn(DMRoomMap, "shared").mockReturnValue(mockInstance);
     });

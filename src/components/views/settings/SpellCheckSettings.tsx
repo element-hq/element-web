@@ -17,17 +17,17 @@ limitations under the License.
 import React from "react";
 
 import SpellCheckLanguagesDropdown from "../../../components/views/elements/SpellCheckLanguagesDropdown";
-import AccessibleButton from "../../../components/views/elements/AccessibleButton";
+import AccessibleButton, { ButtonEvent } from "../../../components/views/elements/AccessibleButton";
 import { _t } from "../../../languageHandler";
 
 interface ExistingSpellCheckLanguageIProps {
     language: string;
-    onRemoved(language: string);
+    onRemoved(language: string): void;
 }
 
 interface SpellCheckLanguagesIProps {
     languages: Array<string>;
-    onLanguagesChange(languages: Array<string>);
+    onLanguagesChange(languages: Array<string>): void;
 }
 
 interface SpellCheckLanguagesIState {
@@ -35,14 +35,14 @@ interface SpellCheckLanguagesIState {
 }
 
 export class ExistingSpellCheckLanguage extends React.Component<ExistingSpellCheckLanguageIProps> {
-    private onRemove = (e): void => {
+    private onRemove = (e: ButtonEvent): void => {
         e.stopPropagation();
         e.preventDefault();
 
         return this.props.onRemoved(this.props.language);
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         return (
             <div className="mx_ExistingSpellCheckLanguage">
                 <span className="mx_ExistingSpellCheckLanguage_language">{this.props.language}</span>
@@ -55,7 +55,7 @@ export class ExistingSpellCheckLanguage extends React.Component<ExistingSpellChe
 }
 
 export default class SpellCheckLanguages extends React.Component<SpellCheckLanguagesIProps, SpellCheckLanguagesIState> {
-    public constructor(props) {
+    public constructor(props: SpellCheckLanguagesIProps) {
         super(props);
         this.state = {
             newLanguage: "",
@@ -67,7 +67,7 @@ export default class SpellCheckLanguages extends React.Component<SpellCheckLangu
         this.props.onLanguagesChange(languages);
     };
 
-    private onAddClick = (e): void => {
+    private onAddClick = (e: ButtonEvent): void => {
         e.stopPropagation();
         e.preventDefault();
 
@@ -86,7 +86,7 @@ export default class SpellCheckLanguages extends React.Component<SpellCheckLangu
         this.setState({ newLanguage: language });
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const existingSpellCheckLanguages = this.props.languages.map((e) => {
             return <ExistingSpellCheckLanguage language={e} onRemoved={this.onRemoved} key={e} />;
         });

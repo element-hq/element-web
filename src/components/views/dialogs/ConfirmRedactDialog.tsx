@@ -33,7 +33,7 @@ interface IProps {
  * A dialog for confirming a redaction.
  */
 export default class ConfirmRedactDialog extends React.Component<IProps> {
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         return (
             <TextInputDialog
                 onFinished={this.props.onFinished}

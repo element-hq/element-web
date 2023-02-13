@@ -36,8 +36,8 @@ interface IProps extends Omit<IInputProps, "onValidate"> {
     labelStrongPassword?: string;
     labelAllowedButUnsafe?: string;
 
-    onChange(ev: React.FormEvent<HTMLElement>);
-    onValidate?(result: IValidationResult);
+    onChange(ev: React.FormEvent<HTMLElement>): void;
+    onValidate?(result: IValidationResult): void;
 }
 
 class PassphraseField extends PureComponent<IProps> {
@@ -102,7 +102,7 @@ class PassphraseField extends PureComponent<IProps> {
         return result;
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         return (
             <Field
                 id={this.props.id}

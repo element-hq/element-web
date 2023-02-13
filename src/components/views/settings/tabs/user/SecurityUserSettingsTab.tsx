@@ -53,7 +53,7 @@ export class IgnoredUser extends React.Component<IIgnoredUserProps> {
         this.props.onUnignored(this.props.userId);
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const id = `mx_SecurityUserSettingsTab_ignoredUser_${this.props.userId}`;
         return (
             <div className="mx_SecurityUserSettingsTab_ignoredUser">
@@ -284,7 +284,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
         this.setState({ showLoginWithQR: null });
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const secureBackup = (
             <div className="mx_SettingsTab_section">
                 <span className="mx_SettingsTab_subheading">{_t("Secure Backup")}</span>

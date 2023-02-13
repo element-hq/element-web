@@ -67,7 +67,7 @@ export default class EndPollDialog extends React.Component<IProps> {
         this.props.onFinished(endPoll);
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         return (
             <QuestionDialog
                 title={_t("End Poll")}

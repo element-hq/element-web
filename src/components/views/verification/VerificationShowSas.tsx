@@ -69,7 +69,7 @@ export default class VerificationShowSas extends React.Component<IProps, IState>
         this.props.onCancel();
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         let sasDisplay;
         let sasCaption;
         if (this.props.sas.emoji) {

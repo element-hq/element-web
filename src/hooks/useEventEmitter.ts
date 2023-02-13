@@ -22,7 +22,7 @@ import type { EventEmitter } from "events";
 type Handler = (...args: any[]) => void;
 
 export function useTypedEventEmitter<Events extends string, Arguments extends ListenerMap<Events>>(
-    emitter: TypedEventEmitter<Events, Arguments>,
+    emitter: TypedEventEmitter<Events, Arguments> | undefined,
     eventName: Events,
     handler: Handler,
 ): void {
@@ -47,7 +47,7 @@ export function useEventEmitter(emitter: EventEmitter | undefined, eventName: st
             if (!emitter) return;
 
             // Create event listener that calls handler function stored in ref
-            const eventListener = (...args): void => savedHandler.current(...args);
+            const eventListener = (...args: any[]): void => savedHandler.current(...args);
 
             // Add event listener
             emitter.on(eventName, eventListener);

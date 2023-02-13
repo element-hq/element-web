@@ -14,14 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { ReactElement } from "react";
 
 import { useRovingTabIndex } from "../RovingTabIndex";
 import { FocusHandler, Ref } from "./types";
 
 interface IProps {
     inputRef?: Ref;
-    children(renderProps: { onFocus: FocusHandler; isActive: boolean; ref: Ref });
+    children(renderProps: { onFocus: FocusHandler; isActive: boolean; ref: Ref }): ReactElement<any, any>;
 }
 
 // Wrapper to allow use of useRovingTabIndex outside of React Functional Components.

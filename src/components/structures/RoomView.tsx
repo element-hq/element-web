@@ -33,6 +33,7 @@ import { CryptoEvent } from "matrix-js-sdk/src/crypto";
 import { THREAD_RELATION_TYPE } from "matrix-js-sdk/src/models/thread";
 import { HistoryVisibility } from "matrix-js-sdk/src/@types/partials";
 import { ISearchResults } from "matrix-js-sdk/src/@types/search";
+import { IRoomTimelineData } from "matrix-js-sdk/src/models/event-timeline-set";
 
 import shouldHideEvent from "../../shouldHideEvent";
 import { _t } from "../../languageHandler";
@@ -49,7 +50,7 @@ import RoomScrollStateStore, { ScrollState } from "../../stores/RoomScrollStateS
 import WidgetEchoStore from "../../stores/WidgetEchoStore";
 import SettingsStore from "../../settings/SettingsStore";
 import { Layout } from "../../settings/enums/Layout";
-import AccessibleButton from "../views/elements/AccessibleButton";
+import AccessibleButton, { ButtonEvent } from "../views/elements/AccessibleButton";
 import RoomContext, { TimelineRenderingType } from "../../contexts/RoomContext";
 import { E2EStatus, shieldStatusForRoom } from "../../utils/ShieldUtils";
 import { Action } from "../../dispatcher/actions";
@@ -223,6 +224,7 @@ export interface IRoomState {
     narrow: boolean;
     // List of undecryptable events currently visible on-screen
     visibleDecryptionFailures?: MatrixEvent[];
+    msc3946ProcessDynamicPredecessor: boolean;
 }
 
 interface LocalRoomViewProps {
@@ -416,6 +418,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             liveTimeline: undefined,
             narrow: false,
             visibleDecryptionFailures: [],
+            msc3946ProcessDynamicPredecessor: SettingsStore.getValue("feature_dynamic_room_predecessors"),
         };
 
         this.dispatcherRef = dis.register(this.onAction);
@@ -467,6 +470,9 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             ),
             SettingsStore.watchSetting("urlPreviewsEnabled", null, this.onUrlPreviewsEnabledChange),
             SettingsStore.watchSetting("urlPreviewsEnabled_e2ee", null, this.onUrlPreviewsEnabledChange),
+            SettingsStore.watchSetting("feature_dynamic_room_predecessors", null, (...[, , , value]) =>
+                this.setState({ msc3946ProcessDynamicPredecessor: value as boolean }),
+            ),
         ];
     }
 
@@ -851,7 +857,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         window.addEventListener("beforeunload", this.onPageUnload);
     }
 
-    public shouldComponentUpdate(nextProps, nextState): boolean {
+    public shouldComponentUpdate(nextProps: IRoomProps, nextState: IRoomState): boolean {
         const hasPropsDiff = objectHasDiff(this.props, nextProps);
 
         const { upgradeRecommendation, ...state } = this.state;
@@ -953,7 +959,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         });
     };
 
-    private onPageUnload = (event): string => {
+    private onPageUnload = (event: BeforeUnloadEvent): string => {
         if (ContentMessages.sharedInstance().getCurrentUploads().length > 0) {
             return (event.returnValue = _t("You seem to be uploading files, are you sure you want to quit?"));
         } else if (this.getCallForRoom() && this.state.callState !== "ended") {
@@ -961,7 +967,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         }
     };
 
-    private onReactKeyDown = (ev): void => {
+    private onReactKeyDown = (ev: React.KeyboardEvent): void => {
         let handled = false;
 
         const action = getKeyBindingsManager().getRoomAction(ev);
@@ -1125,7 +1131,13 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         createRoomFromLocalRoom(this.context.client, this.state.room as LocalRoom);
     }
 
-    private onRoomTimeline = (ev: MatrixEvent, room: Room | null, toStartOfTimeline: boolean, removed, data): void => {
+    private onRoomTimeline = (
+        ev: MatrixEvent,
+        room: Room | null,
+        toStartOfTimeline: boolean,
+        removed: boolean,
+        data?: IRoomTimelineData,
+    ): void => {
         if (this.unmounted) return;
 
         // ignore events for other rooms or the notification timeline set
@@ -1145,7 +1157,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
         // ignore anything but real-time updates at the end of the room:
         // updates from pagination will happen when the paginate completes.
-        if (toStartOfTimeline || !data || !data.liveEvent) return;
+        if (toStartOfTimeline || !data?.liveEvent) return;
 
         // no point handling anything while we're waiting for the join to finish:
         // we'll only be showing a spinner.
@@ -1697,7 +1709,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     };
 
     // update the read marker to match the read-receipt
-    private forgetReadMarker = (ev): void => {
+    private forgetReadMarker = (ev: ButtonEvent): void => {
         ev.stopPropagation();
         this.messagePanel.forgetReadMarker();
     };
@@ -1770,7 +1782,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
      *
      * We pass it down to the scroll panel.
      */
-    public handleScrollKey = (ev): void => {
+    public handleScrollKey = (ev: React.KeyboardEvent | KeyboardEvent): void => {
         let panel: ScrollPanel | TimelinePanel;
         if (this.searchResultsPanel.current) {
             panel = this.searchResultsPanel.current;
@@ -1793,15 +1805,13 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
     // this has to be a proper method rather than an unnamed function,
     // otherwise react calls it with null on each update.
-    private gatherTimelinePanelRef = (r): void => {
+    private gatherTimelinePanelRef = (r?: TimelinePanel): void => {
         this.messagePanel = r;
     };
 
     private getOldRoom(): Room | null {
-        const createEvent = this.state.room.currentState.getStateEvents(EventType.RoomCreate, "");
-        if (!createEvent || !createEvent.getContent()["predecessor"]) return null;
-
-        return this.context.client.getRoom(createEvent.getContent()["predecessor"]["room_id"]);
+        const { roomId } = this.state.room?.findPredecessor(this.state.msc3946ProcessDynamicPredecessor) || {};
+        return this.context.client?.getRoom(roomId) || null;
     }
 
     public getHiddenHighlightCount(): number {
@@ -1869,7 +1879,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         );
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         if (this.state.room instanceof LocalRoom) {
             if (this.state.room.state === LocalRoomState.CREATING) {
                 return this.renderLocalRoomCreateLoader();

@@ -68,7 +68,7 @@ interface IState {
 export default class LeftPanel extends React.Component<IProps, IState> {
     private listContainerRef = createRef<HTMLDivElement>();
     private roomListRef = createRef<RoomList>();
-    private focusedElement = null;
+    private focusedElement: Element = null;
     private isDoingStickyHeaders = false;
 
     public constructor(props: IProps) {

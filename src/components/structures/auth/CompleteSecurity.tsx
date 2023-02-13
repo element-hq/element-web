@@ -57,7 +57,7 @@ export default class CompleteSecurity extends React.Component<IProps, IState> {
         store.stop();
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const { phase, lostKeys } = this.state;
         let icon;
         let title;

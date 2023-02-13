@@ -15,8 +15,9 @@ limitations under the License.
 */
 
 import React, { ReactNode } from "react";
-import { AutoDiscovery } from "matrix-js-sdk/src/autodiscovery";
+import { AutoDiscovery, ClientConfig } from "matrix-js-sdk/src/autodiscovery";
 import { logger } from "matrix-js-sdk/src/logger";
+import { IClientWellKnown } from "matrix-js-sdk/src/matrix";
 
 import { _t, _td, newTranslatableError } from "../languageHandler";
 import { makeType } from "./TypeUtils";
@@ -149,7 +150,7 @@ export default class AutoDiscoveryUtils {
             throw newTranslatableError(_td("No homeserver URL provided"));
         }
 
-        const wellknownConfig = {
+        const wellknownConfig: IClientWellKnown = {
             "m.homeserver": {
                 base_url: homeserverUrl,
             },
@@ -190,7 +191,7 @@ export default class AutoDiscoveryUtils {
      */
     public static buildValidatedConfigFromDiscovery(
         serverName: string,
-        discoveryResult,
+        discoveryResult: ClientConfig,
         syntaxOnly = false,
         isSynthetic = false,
     ): ValidatedServerConfig {
@@ -219,8 +220,8 @@ export default class AutoDiscoveryUtils {
         } else if (isResult && isResult.state !== AutoDiscovery.PROMPT) {
             logger.error("Error determining preferred identity server URL:", isResult);
             if (isResult.state === AutoDiscovery.FAIL_ERROR) {
-                if (AutoDiscovery.ALL_ERRORS.indexOf(isResult.error) !== -1) {
-                    throw newTranslatableError(isResult.error);
+                if (AutoDiscovery.ALL_ERRORS.indexOf(isResult.error as string) !== -1) {
+                    throw newTranslatableError(isResult.error as string);
                 }
                 throw newTranslatableError(_td("Unexpected error resolving identity server configuration"));
             } // else the error is not related to syntax - continue anyways.
@@ -235,8 +236,8 @@ export default class AutoDiscoveryUtils {
         if (hsResult.state !== AutoDiscovery.SUCCESS) {
             logger.error("Error processing homeserver config:", hsResult);
             if (!syntaxOnly || !AutoDiscoveryUtils.isLivelinessError(hsResult.error)) {
-                if (AutoDiscovery.ALL_ERRORS.indexOf(hsResult.error) !== -1) {
-                    throw newTranslatableError(hsResult.error);
+                if (AutoDiscovery.ALL_ERRORS.indexOf(hsResult.error as string) !== -1) {
+                    throw newTranslatableError(hsResult.error as string);
                 }
                 throw newTranslatableError(_td("Unexpected error resolving homeserver configuration"));
             } // else the error is not related to syntax - continue anyways.

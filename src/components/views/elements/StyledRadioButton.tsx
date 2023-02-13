@@ -34,7 +34,7 @@ export default class StyledRadioButton extends React.PureComponent<IProps, IStat
         childrenInLabel: true,
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const { children, className, disabled, outlined, childrenInLabel, inputRef, ...otherProps } = this.props;
         const _className = classnames("mx_StyledRadioButton", className, {
             mx_StyledRadioButton_disabled: disabled,

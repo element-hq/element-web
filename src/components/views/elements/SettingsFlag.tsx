@@ -75,7 +75,7 @@ export default class SettingsFlag extends React.Component<IProps, IState> {
         );
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const canChange = SettingsStore.canSetValue(this.props.name, this.props.roomId, this.props.level);
 
         if (!canChange && this.props.hideIfCannotSet) return null;

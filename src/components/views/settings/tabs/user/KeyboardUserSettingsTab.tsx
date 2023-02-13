@@ -17,7 +17,7 @@ limitations under the License.
 
 import React from "react";
 
-import { ICategory, CATEGORIES, CategoryName } from "../../../../../accessibility/KeyboardShortcuts";
+import { ICategory, CATEGORIES, CategoryName, KeyBindingAction } from "../../../../../accessibility/KeyboardShortcuts";
 import SdkConfig from "../../../../../SdkConfig";
 import { _t } from "../../../../../languageHandler";
 import {
@@ -27,7 +27,7 @@ import {
 import { KeyboardShortcut } from "../../KeyboardShortcut";
 
 interface IKeyboardShortcutRowProps {
-    name: string;
+    name: KeyBindingAction;
 }
 
 // Filter out the labs section if labs aren't enabled.

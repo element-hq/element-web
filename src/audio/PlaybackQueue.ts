@@ -91,7 +91,7 @@ export class PlaybackQueue {
 
     public unsortedEnqueue(mxEvent: MatrixEvent, playback: Playback): void {
         // We don't ever detach our listeners: we expect the Playback to clean up for us
-        this.playbacks.set(mxEvent.getId(), playback);
+        this.playbacks.set(mxEvent.getId()!, playback);
         playback.on(UPDATE_EVENT, (state) => this.onPlaybackStateChange(playback, mxEvent, state));
         playback.clockInfo.liveData.onUpdate((clock) => this.onPlaybackClock(playback, mxEvent, clock));
     }
@@ -99,12 +99,12 @@ export class PlaybackQueue {
     private onPlaybackStateChange(playback: Playback, mxEvent: MatrixEvent, newState: PlaybackState): void {
         // Remember where the user got to in playback
         const wasLastPlaying = this.currentPlaybackId === mxEvent.getId();
-        if (newState === PlaybackState.Stopped && this.clockStates.has(mxEvent.getId()) && !wasLastPlaying) {
+        if (newState === PlaybackState.Stopped && this.clockStates.has(mxEvent.getId()!) && !wasLastPlaying) {
             // noinspection JSIgnoredPromiseFromCall
-            playback.skipTo(this.clockStates.get(mxEvent.getId())!);
+            playback.skipTo(this.clockStates.get(mxEvent.getId()!)!);
         } else if (newState === PlaybackState.Stopped) {
             // Remove the now-useless clock for some space savings
-            this.clockStates.delete(mxEvent.getId());
+            this.clockStates.delete(mxEvent.getId()!);
 
             if (wasLastPlaying) {
                 this.recentFullPlays.add(this.currentPlaybackId);
@@ -133,7 +133,7 @@ export class PlaybackQueue {
                         // timeline is already most recent last, so we can iterate down that.
                         const timeline = arrayFastClone(this.room.getLiveTimeline().getEvents());
                         let scanForVoiceMessage = false;
-                        let nextEv: MatrixEvent;
+                        let nextEv: MatrixEvent | undefined;
                         for (const event of timeline) {
                             if (event.getId() === mxEvent.getId()) {
                                 scanForVoiceMessage = true;
@@ -149,8 +149,8 @@ export class PlaybackQueue {
                                 break; // Stop automatic playback: next useful event is not a voice message
                             }
 
-                            const havePlayback = this.playbacks.has(event.getId());
-                            const isRecentlyCompleted = this.recentFullPlays.has(event.getId());
+                            const havePlayback = this.playbacks.has(event.getId()!);
+                            const isRecentlyCompleted = this.recentFullPlays.has(event.getId()!);
                             if (havePlayback && !isRecentlyCompleted) {
                                 nextEv = event;
                                 break;
@@ -164,7 +164,7 @@ export class PlaybackQueue {
                         } else {
                             this.playbackIdOrder = orderClone;
 
-                            const instance = this.playbacks.get(nextEv.getId());
+                            const instance = this.playbacks.get(nextEv.getId()!);
                             PlaybackManager.instance.pauseAllExcept(instance);
 
                             // This should cause a Play event, which will re-populate our playback order
@@ -196,7 +196,7 @@ export class PlaybackQueue {
                 }
             }
 
-            this.currentPlaybackId = mxEvent.getId();
+            this.currentPlaybackId = mxEvent.getId()!;
             if (order.length === 0 || order[order.length - 1] !== this.currentPlaybackId) {
                 order.push(this.currentPlaybackId);
             }
@@ -214,7 +214,7 @@ export class PlaybackQueue {
         if (playback.currentState === PlaybackState.Decoding) return; // ignore pre-ready values
 
         if (playback.currentState !== PlaybackState.Stopped) {
-            this.clockStates.set(mxEvent.getId(), clocks[0]); // [0] is the current seek position
+            this.clockStates.set(mxEvent.getId()!, clocks[0]); // [0] is the current seek position
         }
     }
 }

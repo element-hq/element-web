@@ -24,7 +24,7 @@ interface IProps extends IGenericToastProps {
     toastKey: string;
     numSeconds: number;
     dismissLabel: string;
-    onDismiss?();
+    onDismiss?(): void;
 }
 
 const SECOND = 1000;

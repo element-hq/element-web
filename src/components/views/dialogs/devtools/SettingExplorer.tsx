@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useContext, useMemo, useState } from "react";
+import React, { ChangeEvent, useContext, useMemo, useState } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../../languageHandler";
@@ -74,7 +74,7 @@ const CanEditLevelField: React.FC<ICanEditLevelFieldProps> = ({ setting, roomId,
 };
 
 function renderExplicitSettingValues(setting: string, roomId: string): string {
-    const vals = {};
+    const vals: Record<string, number | null> = {};
     for (const level of LEVEL_ORDER) {
         try {
             vals[level] = SettingsStore.getValueAt(level, setting, roomId, true, true);
@@ -283,7 +283,7 @@ const SettingsList: React.FC<ISettingsListProps> = ({ onBack, onView, onEdit }) 
                 type="text"
                 autoComplete="off"
                 value={query}
-                onChange={(ev) => setQuery(ev.target.value)}
+                onChange={(ev: ChangeEvent<HTMLInputElement>) => setQuery(ev.target.value)}
                 className="mx_TextInputDialog_input mx_DevTools_RoomStateExplorer_query"
             />
             <table>

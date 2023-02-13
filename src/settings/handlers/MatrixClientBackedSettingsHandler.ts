@@ -48,5 +48,5 @@ export default abstract class MatrixClientBackedSettingsHandler extends Settings
         return MatrixClientBackedSettingsHandler._matrixClient;
     }
 
-    protected abstract initMatrixClient(oldClient: MatrixClient, newClient: MatrixClient);
+    protected abstract initMatrixClient(oldClient: MatrixClient, newClient: MatrixClient): void;
 }

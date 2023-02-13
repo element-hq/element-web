@@ -30,8 +30,10 @@ const lv = {
 // de_DE.json
 // lv.json - mock version with few translations, used to test fallback translation
 
-function weblateToCounterpart(inTrs: object): object {
-    const outTrs = {};
+type Translations = Record<string, Record<string, string> | string>;
+
+function weblateToCounterpart(inTrs: Record<string, string>): Translations {
+    const outTrs: Translations = {};
 
     for (const key of Object.keys(inTrs)) {
         const keyParts = key.split("|", 2);

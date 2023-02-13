@@ -28,7 +28,7 @@ jest.mock("matrix-js-sdk/src/rendezvous/channels");
 
 const mockedFlow = jest.fn();
 
-jest.mock("../../../../../src/components/views/auth/LoginWithQRFlow", () => (props) => {
+jest.mock("../../../../../src/components/views/auth/LoginWithQRFlow", () => (props: Record<string, any>) => {
     mockedFlow(props);
     return <div />;
 });

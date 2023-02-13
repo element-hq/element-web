@@ -22,10 +22,10 @@ import { ActionPayload } from "../dispatcher/payloads";
 import { DoAfterSyncPreparedPayload } from "../dispatcher/payloads/DoAfterSyncPreparedPayload";
 
 interface IState {
-    deferredAction: any;
+    deferredAction: ActionPayload;
 }
 
-const INITIAL_STATE = {
+const INITIAL_STATE: IState = {
     deferredAction: null,
 };
 

@@ -54,7 +54,7 @@ interface IState {
 export default class BugReportDialog extends React.Component<IProps, IState> {
     private unmounted: boolean;
 
-    public constructor(props) {
+    public constructor(props: IProps) {
         super(props);
         this.state = {
             sendLogs: true,
@@ -180,7 +180,7 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
         this.setState({ downloadProgress });
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         let error = null;
         if (this.state.err) {
             error = <div className="error">{this.state.err}</div>;

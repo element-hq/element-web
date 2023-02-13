@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useContext, useMemo, useRef, useState } from "react";
+import React, { ChangeEvent, useContext, useMemo, useRef, useState } from "react";
 import { IContent, MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 import { _t, _td } from "../../../../languageHandler";
@@ -87,7 +87,7 @@ export const EventEditor: React.FC<IEventEditorProps> = ({ fieldDefs, defaultCon
             type="text"
             autoComplete="on"
             value={fieldData[i]}
-            onChange={(ev) =>
+            onChange={(ev: ChangeEvent<HTMLInputElement>) =>
                 setFieldData((data) => {
                     data[i] = ev.target.value;
                     return [...data];

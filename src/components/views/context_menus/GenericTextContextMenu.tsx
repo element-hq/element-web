@@ -21,7 +21,7 @@ interface IProps {
 }
 
 export default class GenericTextContextMenu extends React.Component<IProps> {
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         return (
             <div className="mx_Tooltip mx_Tooltip_visible" style={{ display: "block" }}>
                 {this.props.message}

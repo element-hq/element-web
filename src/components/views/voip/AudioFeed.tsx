@@ -118,7 +118,7 @@ export default class AudioFeed extends React.Component<IProps, IState> {
         this.playMedia();
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         // Do not render the audio element if there is no audio track
         if (this.state.audioMuted) return null;
 

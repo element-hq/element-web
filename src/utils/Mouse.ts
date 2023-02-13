@@ -20,29 +20,21 @@ limitations under the License.
  * @param {WheelEvent} event to normalize
  * @returns {WheelEvent} normalized event event
  */
-export function normalizeWheelEvent(event: WheelEvent): WheelEvent {
+export function normalizeWheelEvent({ deltaMode, deltaX, deltaY, deltaZ, ...event }: WheelEvent): WheelEvent {
     const LINE_HEIGHT = 18;
 
-    let deltaX;
-    let deltaY;
-    let deltaZ;
-
-    if (event.deltaMode === 1) {
+    if (deltaMode === 1) {
         // Units are lines
-        deltaX = event.deltaX * LINE_HEIGHT;
-        deltaY = event.deltaY * LINE_HEIGHT;
-        deltaZ = event.deltaZ * LINE_HEIGHT;
-    } else {
-        deltaX = event.deltaX;
-        deltaY = event.deltaY;
-        deltaZ = event.deltaZ;
+        deltaX *= LINE_HEIGHT;
+        deltaY *= LINE_HEIGHT;
+        deltaZ *= LINE_HEIGHT;
     }
 
     return new WheelEvent("syntheticWheel", {
         deltaMode: 0,
-        deltaY: deltaY,
-        deltaX: deltaX,
-        deltaZ: deltaZ,
+        deltaY,
+        deltaX,
+        deltaZ,
         ...event,
     });
 }

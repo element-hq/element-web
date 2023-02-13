@@ -18,7 +18,7 @@ export type getIframeFn = () => HTMLIFrameElement; // eslint-disable-line @types
 
 export const DEFAULT_STYLES = {
     imgSrc: "",
-    imgStyle: null, // css props
+    imgStyle: null as string | null, // css props
     style: "",
     textContent: "",
 };
@@ -68,14 +68,14 @@ function getManagedIframe(): { iframe: HTMLIFrameElement; onLoadPromise: Promise
  * additional control over the styling/position of the iframe itself.
  */
 export class FileDownloader {
-    private onLoadPromise: Promise<void>;
+    private onLoadPromise?: Promise<void>;
 
     /**
      * Creates a new file downloader
      * @param iframeFn Function to get a pre-configured iframe. Set to null to have the downloader
      * use a generic, hidden, iframe.
      */
-    public constructor(private iframeFn: getIframeFn = null) {}
+    public constructor(private iframeFn?: getIframeFn) {}
 
     private get iframe(): HTMLIFrameElement {
         const iframe = this.iframeFn?.();
@@ -84,14 +84,14 @@ export class FileDownloader {
             this.onLoadPromise = managed.onLoadPromise;
             return managed.iframe;
         }
-        this.onLoadPromise = null;
+        this.onLoadPromise = undefined;
         return iframe;
     }
 
     public async download({ blob, name, autoDownload = true, opts = DEFAULT_STYLES }: DownloadOptions): Promise<void> {
         const iframe = this.iframe; // get the iframe first just in case we need to await onload
         if (this.onLoadPromise) await this.onLoadPromise;
-        iframe.contentWindow.postMessage(
+        iframe.contentWindow?.postMessage(
             {
                 ...opts,
                 blob: blob,

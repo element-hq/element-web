@@ -58,7 +58,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
     public static contextType = MatrixClientContext;
     public context!: React.ContextType<typeof MatrixClientContext>;
 
-    public constructor(props, context) {
+    public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
         super(props, context);
 
         const state = context.getRoom(this.props.roomId).currentState;
@@ -414,7 +414,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         );
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const client = this.context;
         const room = client.getRoom(this.props.roomId);
         const isEncrypted = this.state.encrypted;

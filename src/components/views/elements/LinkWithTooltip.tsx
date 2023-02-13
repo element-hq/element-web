@@ -25,7 +25,7 @@ export default class LinkWithTooltip extends React.Component<IProps> {
         super(props);
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         const { children, tooltip, ...props } = this.props;
 
         return (

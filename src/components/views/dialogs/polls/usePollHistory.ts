@@ -14,27 +14,32 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { M_POLL_START } from "matrix-js-sdk/src/@types/polls";
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { Poll, PollEvent } from "matrix-js-sdk/src/matrix";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 
+import { useEventEmitterState } from "../../../../hooks/useEventEmitter";
+
 /**
- * Get poll start events in a rooms live timeline
+ * Get poll instances from a room
  * @param roomId - id of room to retrieve polls for
  * @param matrixClient - client
- * @returns {MatrixEvent[]} - array fo poll start events
+ * @returns {Map<string, Poll>} - Map of Poll instances
  */
-export const getPolls = (roomId: string, matrixClient: MatrixClient): MatrixEvent[] => {
+export const usePolls = (
+    roomId: string,
+    matrixClient: MatrixClient,
+): {
+    polls: Map<string, Poll>;
+} => {
     const room = matrixClient.getRoom(roomId);
 
     if (!room) {
         throw new Error("Cannot find room");
     }
 
-    // @TODO(kerrya) poll history will be actively fetched in PSG-1043
-    // for now, just display polls that are in the current timeline
-    const timelineEvents = room.getLiveTimeline().getEvents();
-    const pollStartEvents = timelineEvents.filter((event) => M_POLL_START.matches(event.getType()));
+    const polls = useEventEmitterState(room, PollEvent.New, () => room.polls);
 
-    return pollStartEvents;
+    // @TODO(kerrya) watch polls for end events, trigger refiltering
+
+    return { polls };
 };

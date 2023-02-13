@@ -91,7 +91,7 @@ export default class IRCTimelineProfileResizer extends React.Component<IProps, I
         }
     };
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         return <Draggable className="mx_ProfileResizer" dragFunc={this.dragFunc} onMouseUp={this.onMoueUp} />;
     }
 }

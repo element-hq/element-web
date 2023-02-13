@@ -49,7 +49,7 @@ describe("languageHandler", function () {
             { policyLink: () => "foo" },
             "Accept foo to continue:",
         ],
-        ["handles text in tags", textInTagSub, {}, { a: (sub) => `x${sub}x` }, "xUpgradex to your own domain"],
+        ["handles text in tags", textInTagSub, {}, { a: (sub: string) => `x${sub}x` }, "xUpgradex to your own domain"],
         [
             "handles variable substitution with React function component",
             variableSub,
@@ -82,7 +82,7 @@ describe("languageHandler", function () {
         ],
     ];
 
-    let oldNodeEnv;
+    let oldNodeEnv: string;
     beforeAll(() => {
         oldNodeEnv = process.env.NODE_ENV;
         process.env.NODE_ENV = "test";
@@ -138,7 +138,7 @@ describe("languageHandler", function () {
             // counterpart doesnt expose any way to restore default config
             // missingEntryGenerator is mocked in the root setup file
             // reset to default here
-            const counterpartDefaultMissingEntryGen = function (key) {
+            const counterpartDefaultMissingEntryGen = function (key: string) {
                 return "missing translation: " + key;
             };
             setMissingEntryGenerator(counterpartDefaultMissingEntryGen);

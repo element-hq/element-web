@@ -21,6 +21,7 @@ import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { EventTimeline } from "matrix-js-sdk/src/models/event-timeline";
 import { EventType } from "matrix-js-sdk/src/@types/event";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
@@ -42,7 +43,7 @@ const BulkRedactDialog: React.FC<IBulkRedactDialogProps> = (props) => {
     const [keepStateEvents, setKeepStateEvents] = useState(true);
 
     let timeline = room.getLiveTimeline();
-    let eventsToRedact = [];
+    let eventsToRedact: MatrixEvent[] = [];
     while (timeline) {
         eventsToRedact = [
             ...eventsToRedact,

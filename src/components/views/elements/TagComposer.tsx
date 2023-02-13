@@ -65,7 +65,7 @@ export default class TagComposer extends React.PureComponent<IProps, IState> {
         this.props.onRemove(tag);
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         return (
             <div className="mx_TagComposer">
                 <form className="mx_TagComposer_input" onSubmit={this.onAdd}>

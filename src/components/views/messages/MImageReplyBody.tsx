@@ -30,7 +30,7 @@ export default class MImageReplyBody extends MImageBody {
         return children;
     }
 
-    public render(): JSX.Element {
+    public render(): React.ReactNode {
         if (this.state.error) {
             return super.render();
         }
