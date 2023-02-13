@@ -3669,7 +3669,7 @@
     "Your area is experiencing difficulties connecting to the internet.": "インターネットに接続できません。",
     "The server (%(serverName)s) took too long to respond.": "サーバー（%(serverName)s）が時間内に応答しませんでした。",
     "These are likely ones other room admins are a part of.": "これらは、他のルームの管理者がいるスペースまたはルームです。",
-    "You will be removed from the identity server: your friends will no longer be able to find you with your email or phone number": "あなたはIDサーバーから削除されます。あなたの友達は、電子メールまたは電話番号であなたを検索することができなくなります",
+    "You will be removed from the identity server: your friends will no longer be able to find you with your email or phone number": "あなたの情報はIDサーバーから削除されます。あなたの友達は、電子メールまたは電話番号であなたを検索することができなくなります",
     "%(members)s and more": "%(members)s人とその他のメンバー",
     " in <strong>%(room)s</strong>": " <strong>%(room)s</strong>内で",
     "Failed to set pusher state": "プッシュサービスの設定に失敗しました",
@@ -3733,5 +3733,9 @@
     "This session is backing up your keys.": "このセッションは鍵をバックアップしています。",
     "Keep ownership and control of community discussion.\nScale to support millions, with powerful moderation and interoperability.": "コミュニティーの会話の所有権とコントロールを維持しましょう。\n強力なモデレートと相互運用性で、数百万人のユーザーまでサポートできます。",
     "There are no past polls in this room": "このルームに過去のアンケートはありません",
-    "There are no active polls in this room": "このルームに実施中のアンケートはありません"
+    "There are no active polls in this room": "このルームに実施中のアンケートはありません",
+    "<b>Warning</b>: upgrading a room will <i>not automatically migrate room members to the new version of the room.</i> We'll post a link to the new room in the old version of the room - room members will have to click this link to join the new room.": "<b>警告</b>: ルームをアップグレードしても、<i>ルームのメンバーが新しいバージョンのルームに自動的に移行されることはありません。</i> 古いバージョンのルームに、新しいルームへのリンクを投稿します。ルームのメンバーは、そのリンクをクリックして新しいルームに参加する必要があります。",
+    "We need to know it’s you before resetting your password. Click the link in the email we just sent to <b>%(email)s</b>": "パスワードを再設定する前に本人確認を行います。<b>%(email)s</b>に送信した電子メールにあるリンクをクリックしてください。",
+    "Warning: your personal data (including encryption keys) is still stored in this session. Clear it if you're finished using this session, or want to sign in to another account.": "警告：あなたの個人データ（暗号化の鍵を含む）が、このセッションに保存されています。このセッションの使用を終了するか、他のアカウントにログインしたい場合は、そのデータを消去してください。",
+    "WARNING: session already verified, but keys do NOT MATCH!": "警告：このセッションは認証済ですが、鍵が一致しません！"
 }
