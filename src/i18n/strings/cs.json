@@ -588,7 +588,7 @@
     "Start using Key Backup": "Začít používat zálohu klíčů",
     "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "Soubor '%(fileName)s' je větší než povoluje limit domovského serveru",
     "Unable to load! Check your network connectivity and try again.": "Stránku se nepovedlo načíst! Zkontrolujte prosím své připojení k internetu a zkuste to znovu.",
-    "Upgrades a room to a new version": "Aktualizuje na novou verzi",
+    "Upgrades a room to a new version": "Aktualizuje místnost na novou verzi",
     "This room has no topic.": "Tato místnost nemá žádné specifické téma.",
     "Sets the room name": "Nastaví název místnosti",
     "%(senderDisplayName)s upgraded this room.": "%(senderDisplayName)s aktualizoval(a) místnost.",
@@ -3740,5 +3740,6 @@
     "This session is backing up your keys.": "Tato relace zálohuje vaše klíče.",
     "Declining…": "Odmítání…",
     "There are no past polls in this room": "V této místnosti nejsou žádná minulá hlasování",
-    "There are no active polls in this room": "V této místnosti nejsou žádná aktivní hlasování"
+    "There are no active polls in this room": "V této místnosti nejsou žádná aktivní hlasování",
+    "WARNING: session already verified, but keys do NOT MATCH!": "VAROVÁNÍ: relace již byla ověřena, ale klíče se NESHODUJÍ!"
 }
