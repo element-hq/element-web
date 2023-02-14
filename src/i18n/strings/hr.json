@@ -82,7 +82,6 @@
     "Afghanistan": "Afganistan",
     "United States": "Sjedinjene Države",
     "United Kingdom": "Ujedinjeno Kraljevstvo",
-    "Your email address does not appear to be associated with a Matrix ID on this Homeserver.": "Čini se da Vaša email adresa nije povezana s Matrix ID-om na ovom kućnom poslužitelju.",
     "This email address was not found": "Ova email adresa nije pronađena",
     "Unable to enable Notifications": "Omogućavanje notifikacija nije uspjelo",
     "%(brand)s was not given permission to send notifications - please try again": "%(brand)s nema dopuštenje slati Vam notifikacije - molimo pokušajte ponovo",
