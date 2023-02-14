@@ -89,7 +89,7 @@ export default class IntegrationManager extends React.Component<IProps, IState> 
         if (this.props.loading) {
             return (
                 <div className="mx_IntegrationManager_loading">
-                    <Heading size="h3">{_t("Connecting to integration manager...")}</Heading>
+                    <Heading size="h3">{_t("Connecting to integration manager…")}</Heading>
                     <Spinner />
                 </div>
             );

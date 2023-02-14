@@ -36,7 +36,7 @@ export default class InlineSpinner extends React.PureComponent<IProps> {
                 <div
                     className="mx_InlineSpinner_icon mx_Spinner_icon"
                     style={{ width: this.props.w, height: this.props.h }}
-                    aria-label={_t("Loading...")}
+                    aria-label={_t("Loading…")}
                 >
                     {this.props.children}
                 </div>

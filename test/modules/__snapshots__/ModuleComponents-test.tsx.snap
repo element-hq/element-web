@@ -6,7 +6,7 @@ exports[`Module Components should override the factory for a ModuleSpinner 1`] =
     class="mx_Spinner"
   >
     <div
-      aria-label="Loading..."
+      aria-label="Loading…"
       class="mx_Spinner_icon"
       data-testid="spinner"
       role="progressbar"

@@ -95,7 +95,7 @@ exports[`<MPollEndBody /> when poll start event exists in current timeline rende
         class="mx_Spinner"
       >
         <div
-          aria-label="Loading..."
+          aria-label="Loading…"
           class="mx_Spinner_icon"
           data-testid="spinner"
           role="progressbar"

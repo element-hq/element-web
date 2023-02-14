@@ -366,7 +366,7 @@ const SpaceSetupFirstRooms: React.FC<{
     let buttonLabel = _t("Skip for now");
     if (roomNames.some((name) => name.trim())) {
         onClick = onNextClick;
-        buttonLabel = busy ? _t("Creating rooms...") : _t("Continue");
+        buttonLabel = busy ? _t("Creating rooms…") : _t("Continue");
     }
 
     return (
@@ -575,7 +575,7 @@ const SpaceSetupPrivateInvite: React.FC<{
     let buttonLabel = _t("Skip for now");
     if (emailAddresses.some((name) => name.trim())) {
         onClick = onNextClick;
-        buttonLabel = busy ? _t("Inviting...") : _t("Continue");
+        buttonLabel = busy ? _t("Inviting…") : _t("Continue");
     }
 
     return (

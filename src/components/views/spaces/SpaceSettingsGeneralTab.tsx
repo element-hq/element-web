@@ -123,7 +123,7 @@ const SpaceSettingsGeneralTab: React.FC<IProps> = ({ matrixClient: cli, space, o
                     {_t("Cancel")}
                 </AccessibleButton>
                 <AccessibleButton onClick={onSave} disabled={busy} kind="primary">
-                    {busy ? _t("Saving...") : _t("Save Changes")}
+                    {busy ? _t("Saving…") : _t("Save Changes")}
                 </AccessibleButton>
             </div>
 

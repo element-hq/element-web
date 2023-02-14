@@ -93,14 +93,14 @@ describe("Registration", function () {
 
     it("should show form when custom URLs disabled", async function () {
         const { container } = getComponent();
-        await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading..."));
+        await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));
         expect(container.querySelector("form")).toBeTruthy();
     });
 
     it("should show SSO options if those are available", async () => {
         mockClient.loginFlows.mockClear().mockResolvedValue({ flows: [{ type: "m.login.sso" }] });
         const { container } = getComponent();
-        await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading..."));
+        await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));
 
         const ssoButton = container.querySelector(".mx_SSOButton");
         expect(ssoButton).toBeTruthy();
@@ -116,7 +116,7 @@ describe("Registration", function () {
         });
 
         const { container, rerender } = render(getRawComponent());
-        await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading..."));
+        await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));
 
         fireEvent.click(container.querySelector(".mx_SSOButton"));
         expect(registerRequest.mock.instances[0].baseUrl).toBe("https://matrix.org");
@@ -126,7 +126,7 @@ describe("Registration", function () {
             versions: [],
         });
         rerender(getRawComponent("https://server2"));
-        await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading..."));
+        await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));
 
         fireEvent.click(container.querySelector(".mx_SSOButton"));
         expect(registerRequest.mock.instances[1].baseUrl).toBe("https://server2");

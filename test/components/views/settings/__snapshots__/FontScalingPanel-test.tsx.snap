@@ -17,7 +17,7 @@ exports[`FontScalingPanel renders the font scaling UI 1`] = `
         class="mx_Spinner"
       >
         <div
-          aria-label="Loading..."
+          aria-label="Loading…"
           class="mx_Spinner_icon"
           data-testid="spinner"
           role="progressbar"

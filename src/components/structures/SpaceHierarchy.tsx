@@ -654,7 +654,7 @@ const ManageButtons: React.FC<IManageButtonsProps> = ({ hierarchy, selected, set
         };
     }
 
-    let buttonText = _t("Saving...");
+    let buttonText = _t("Saving…");
     if (!saving) {
         buttonText = selectionAllSuggested ? _t("Mark as not suggested") : _t("Mark as suggested");
     }
@@ -694,7 +694,7 @@ const ManageButtons: React.FC<IManageButtonsProps> = ({ hierarchy, selected, set
                 kind="danger_outline"
                 disabled={disabled}
             >
-                {removing ? _t("Removing...") : _t("Remove")}
+                {removing ? _t("Removing…") : _t("Remove")}
             </Button>
             <Button
                 {...props}

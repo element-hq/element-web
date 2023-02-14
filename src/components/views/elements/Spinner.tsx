@@ -42,7 +42,7 @@ export default class Spinner extends React.PureComponent<IProps> {
                 <div
                     className="mx_Spinner_icon"
                     style={{ width: w, height: h }}
-                    aria-label={_t("Loading...")}
+                    aria-label={_t("Loading…")}
                     role="progressbar"
                     data-testid="spinner"
                 />

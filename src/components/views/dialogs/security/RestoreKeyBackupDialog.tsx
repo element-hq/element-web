@@ -321,12 +321,12 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
             title = _t("Restoring keys from backup");
             let details;
             if (this.state.progress.stage === ProgressState.Fetch) {
-                details = _t("Fetching keys from server...");
+                details = _t("Fetching keys from server…");
             } else if (this.state.progress.stage === ProgressState.LoadKeys) {
                 const { total, successes, failures } = this.state.progress;
                 details = _t("%(completed)s of %(total)s keys restored", { total, completed: successes + failures });
             } else if (this.state.progress.stage === ProgressState.PreFetch) {
-                details = _t("Fetching keys from server...");
+                details = _t("Fetching keys from server…");
             }
             content = (
                 <div>

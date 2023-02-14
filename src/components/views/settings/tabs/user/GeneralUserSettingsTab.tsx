@@ -345,7 +345,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
             threepidSection = <Spinner />;
         }
 
-        let passwordChangeText = _t("Set a new account password...");
+        let passwordChangeText = _t("Set a new account password…");
         if (!this.state.canChangePassword) {
             // Just don't show anything if you can't do anything.
             passwordChangeText = null;

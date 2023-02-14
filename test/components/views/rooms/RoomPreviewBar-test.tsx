@@ -102,17 +102,17 @@ describe("<RoomPreviewBar />", () => {
         const component = getComponent({ joining: true });
 
         expect(isSpinnerRendered(component)).toBeTruthy();
-        expect(getMessage(component)?.textContent).toEqual("Joining …");
+        expect(getMessage(component)?.textContent).toEqual("Joining…");
     });
     it("renders rejecting message", () => {
         const component = getComponent({ rejecting: true });
         expect(isSpinnerRendered(component)).toBeTruthy();
-        expect(getMessage(component)?.textContent).toEqual("Rejecting invite …");
+        expect(getMessage(component)?.textContent).toEqual("Rejecting invite…");
     });
     it("renders loading message", () => {
         const component = getComponent({ loading: true });
         expect(isSpinnerRendered(component)).toBeTruthy();
-        expect(getMessage(component)?.textContent).toEqual("Loading …");
+        expect(getMessage(component)?.textContent).toEqual("Loading…");
     });
 
     it("renders not logged in message", () => {

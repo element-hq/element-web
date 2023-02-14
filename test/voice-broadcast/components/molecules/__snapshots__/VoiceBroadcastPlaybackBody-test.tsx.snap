@@ -46,7 +46,7 @@ exports[`VoiceBroadcastPlaybackBody when rendering a buffering voice broadcast s
             class="mx_Spinner"
           >
             <div
-              aria-label="Loading..."
+              aria-label="Loading…"
               class="mx_Spinner_icon"
               data-testid="spinner"
               role="progressbar"

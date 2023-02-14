@@ -1520,9 +1520,9 @@ function SentReceipt({ messageState }: ISentReceiptProps): JSX.Element {
         nonCssBadge = <NotificationBadge notification={StaticNotificationState.RED_EXCLAMATION} />;
     }
 
-    let label = _t("Sending your message...");
+    let label = _t("Sending your message…");
     if (messageState === "encrypting") {
-        label = _t("Encrypting your message...");
+        label = _t("Encrypting your message…");
     } else if (isSent) {
         label = _t("Your message was sent");
     } else if (isFailed) {

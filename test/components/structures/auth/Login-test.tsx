@@ -86,7 +86,7 @@ describe("Login", function () {
             disable_custom_urls: false,
         });
         const { container } = getComponent();
-        await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading..."));
+        await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));
 
         expect(container.querySelector("form")).toBeTruthy();
 
@@ -95,7 +95,7 @@ describe("Login", function () {
 
     it("should show form without change server link when custom URLs disabled", async () => {
         const { container } = getComponent();
-        await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading..."));
+        await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));
 
         expect(container.querySelector("form")).toBeTruthy();
         expect(container.querySelectorAll(".mx_ServerPicker_change")).toHaveLength(0);
@@ -105,7 +105,7 @@ describe("Login", function () {
         mockClient.loginFlows.mockResolvedValue({ flows: [{ type: "m.login.sso" }] });
 
         const { container } = getComponent();
-        await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading..."));
+        await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));
 
         const ssoButton = container.querySelector(".mx_SSOButton");
         expect(ssoButton).toBeTruthy();
@@ -115,7 +115,7 @@ describe("Login", function () {
         mockClient.loginFlows.mockResolvedValue({ flows: [{ type: "m.login.password" }, { type: "m.login.sso" }] });
 
         const { container } = getComponent();
-        await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading..."));
+        await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));
 
         expect(container.querySelector("form")).toBeTruthy();
 
@@ -147,7 +147,7 @@ describe("Login", function () {
         });
 
         const { container } = getComponent();
-        await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading..."));
+        await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));
 
         const ssoButtons = container.querySelectorAll(".mx_SSOButton");
         expect(ssoButtons.length).toBe(3);
@@ -163,7 +163,7 @@ describe("Login", function () {
         });
 
         const { container } = getComponent();
-        await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading..."));
+        await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));
 
         const ssoButtons = container.querySelectorAll(".mx_SSOButton");
         expect(ssoButtons.length).toBe(1);
@@ -179,7 +179,7 @@ describe("Login", function () {
         });
 
         const { container, rerender } = render(getRawComponent());
-        await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading..."));
+        await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));
 
         fireEvent.click(container.querySelector(".mx_SSOButton"));
         expect(platform.startSingleSignOn.mock.calls[0][0].baseUrl).toBe("https://matrix.org");
@@ -208,7 +208,7 @@ describe("Login", function () {
         });
 
         const { container } = getComponent();
-        await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading..."));
+        await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));
 
         const ssoButtons = container.querySelectorAll(".mx_SSOButton");
 
@@ -242,7 +242,7 @@ describe("Login", function () {
         });
 
         const { container } = getComponent();
-        await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading..."));
+        await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));
 
         for (const idp of idpsWithIcons) {
             const ssoButton = container.querySelector(`.mx_SSOButton.mx_SSOButton_brand_${idp.brand}`);

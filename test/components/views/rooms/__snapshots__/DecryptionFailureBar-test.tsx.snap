@@ -35,7 +35,7 @@ exports[`<DecryptionFailureBar /> Displays a loading spinner 1`] = `
     class="mx_Spinner"
   >
     <div
-      aria-label="Loading..."
+      aria-label="Loading…"
       class="mx_Spinner_icon"
       data-testid="spinner"
       role="progressbar"
@@ -48,7 +48,7 @@ exports[`<DecryptionFailureBar /> Displays a loading spinner 1`] = `
     <div
       class="mx_DecryptionFailureBar_message_headline"
     >
-      Decrypting messages...
+      Decrypting messages…
     </div>
     <div
       class="mx_DecryptionFailureBar_message_body"

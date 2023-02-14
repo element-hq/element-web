@@ -48,7 +48,7 @@ exports[`<BeaconStatus /> renders loading state 1`] = `
       <span
         class="mx_BeaconStatus_description_status"
       >
-        Loading live location...
+        Loading live location…
       </span>
     </div>
   </div>

@@ -78,6 +78,6 @@ export function messageForSyncError(err: Error): ReactNode {
             </div>
         );
     } else {
-        return <div>{_t("Unable to connect to Homeserver. Retrying...")}</div>;
+        return <div>{_t("Unable to connect to Homeserver. Retrying…")}</div>;
     }
 }

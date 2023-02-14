@@ -208,7 +208,7 @@ export default class PollCreateDialog extends ScrollableBaseModal<IProps, IState
                     value={this.state.question}
                     maxLength={MAX_QUESTION_LENGTH}
                     label={_t("Question or topic")}
-                    placeholder={_t("Write something...")}
+                    placeholder={_t("Write something…")}
                     onChange={this.onQuestionChange}
                     usePlaceholderAsHint={true}
                     disabled={this.state.busy}

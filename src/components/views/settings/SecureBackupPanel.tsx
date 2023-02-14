@@ -273,7 +273,7 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
             } else if (sessionsRemaining > 0) {
                 uploadStatus = (
                     <div>
-                        {_t("Backing up %(sessionsRemaining)s keys...", { sessionsRemaining })} <br />
+                        {_t("Backing up %(sessionsRemaining)s keys…", { sessionsRemaining })} <br />
                     </div>
                 );
             } else {

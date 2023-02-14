@@ -290,21 +290,21 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
         switch (messageCase) {
             case MessageCase.Joining: {
                 if (this.props.oobData?.roomType || isSpace) {
-                    title = isSpace ? _t("Joining space …") : _t("Joining room …");
+                    title = isSpace ? _t("Joining space…") : _t("Joining room…");
                 } else {
-                    title = _t("Joining …");
+                    title = _t("Joining…");
                 }
 
                 showSpinner = true;
                 break;
             }
             case MessageCase.Loading: {
-                title = _t("Loading …");
+                title = _t("Loading…");
                 showSpinner = true;
                 break;
             }
             case MessageCase.Rejecting: {
-                title = _t("Rejecting invite …");
+                title = _t("Rejecting invite…");
                 showSpinner = true;
                 break;
             }

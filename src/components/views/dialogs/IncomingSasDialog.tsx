@@ -243,7 +243,7 @@ export default class IncomingSasDialog extends React.Component<IProps, IState> {
         return (
             <div>
                 <Spinner />
-                <p>{_t("Waiting for partner to confirm...")}</p>
+                <p>{_t("Waiting for partner to confirm…")}</p>
             </div>
         );
     }

@@ -79,7 +79,7 @@ exports[`RoomView for a local room in state CREATING should match the snapshot 1
           class="mx_Spinner"
         >
           <div
-            aria-label="Loading..."
+            aria-label="Loading…"
             class="mx_Spinner_icon"
             data-testid="spinner"
             role="progressbar"

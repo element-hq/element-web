@@ -35,11 +35,11 @@ function getStatusText(status: UpdateCheckStatus, errorDetail?: string): ReactNo
         case UpdateCheckStatus.Error:
             return _t("Error encountered (%(errorDetail)s).", { errorDetail });
         case UpdateCheckStatus.Checking:
-            return _t("Checking for an update...");
+            return _t("Checking for an update…");
         case UpdateCheckStatus.NotAvailable:
             return _t("No update available.");
         case UpdateCheckStatus.Downloading:
-            return _t("Downloading update...");
+            return _t("Downloading update…");
         case UpdateCheckStatus.Ready:
             return _t(
                 "New version available. <a>Update now.</a>",

@@ -151,7 +151,7 @@ export const DecryptionFailureBar: React.FC<IProps> = ({ failures }) => {
     let body: JSX.Element;
     let button = <React.Fragment />;
     if (waiting) {
-        headline = <React.Fragment>{_t("Decrypting messages...")}</React.Fragment>;
+        headline = <React.Fragment>{_t("Decrypting messages…")}</React.Fragment>;
         body = (
             <React.Fragment>
                 {_t("Please wait as we try to decrypt your messages. This may take a few moments.")}

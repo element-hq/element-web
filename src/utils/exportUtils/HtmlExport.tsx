@@ -413,7 +413,7 @@ export default class HTMLExporter extends Exporter {
     }
 
     public async export(): Promise<void> {
-        this.updateProgress(_t("Starting export..."));
+        this.updateProgress(_t("Starting export…"));
 
         const fetchStart = performance.now();
         const res = await this.getRequiredEvents();
@@ -428,7 +428,7 @@ export default class HTMLExporter extends Exporter {
             false,
         );
 
-        this.updateProgress(_t("Creating HTML..."));
+        this.updateProgress(_t("Creating HTML…"));
 
         const usedClasses = new Set<string>();
         for (let page = 0; page < res.length / 1000; page++) {

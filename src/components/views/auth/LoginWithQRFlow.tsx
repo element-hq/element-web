@@ -203,7 +203,7 @@ export default class LoginWithQRFlow extends React.Component<IProps> {
                 main = this.simpleSpinner();
                 break;
             case Phase.Connecting:
-                main = this.simpleSpinner(_t("Connecting..."));
+                main = this.simpleSpinner(_t("Connecting…"));
                 buttons = this.cancelButton();
                 break;
             case Phase.WaitingForDevice:

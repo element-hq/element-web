@@ -200,7 +200,7 @@ exports[`<VoiceBroadcastSmallPlaybackBody /> when rendering a buffering broadcas
               class="mx_Spinner"
             >
               <div
-                aria-label="Loading..."
+                aria-label="Loading…"
                 class="mx_Spinner_icon"
                 data-testid="spinner"
                 role="progressbar"

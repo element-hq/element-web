@@ -128,8 +128,8 @@ export default class PlainTextExporter extends Exporter {
     }
 
     public async export(): Promise<void> {
-        this.updateProgress(_t("Starting export process..."));
-        this.updateProgress(_t("Fetching events..."));
+        this.updateProgress(_t("Starting export process…"));
+        this.updateProgress(_t("Fetching events…"));
 
         const fetchStart = performance.now();
         const res = await this.getRequiredEvents();
@@ -137,7 +137,7 @@ export default class PlainTextExporter extends Exporter {
 
         logger.log(`Fetched ${res.length} events in ${(fetchEnd - fetchStart) / 1000}s`);
 
-        this.updateProgress(_t("Creating output..."));
+        this.updateProgress(_t("Creating output…"));
         const text = await this.createOutput(res);
 
         if (this.files.length) {

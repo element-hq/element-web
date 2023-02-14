@@ -61,7 +61,7 @@ const BeaconStatus: React.FC<Props & HTMLProps<HTMLDivElement>> = ({
             )}
             <div className="mx_BeaconStatus_description">
                 {displayStatus === BeaconDisplayStatus.Loading && (
-                    <span className="mx_BeaconStatus_description_status">{_t("Loading live location...")}</span>
+                    <span className="mx_BeaconStatus_description_status">{_t("Loading live location…")}</span>
                 )}
                 {displayStatus === BeaconDisplayStatus.Stopped && (
                     <span className="mx_BeaconStatus_description_status">{_t("Live location ended")}</span>

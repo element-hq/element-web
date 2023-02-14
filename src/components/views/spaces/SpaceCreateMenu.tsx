@@ -344,7 +344,7 @@ const SpaceCreateMenu: React.FC<{
                 />
 
                 <AccessibleButton kind="primary" onClick={onSpaceCreateClick} disabled={busy}>
-                    {busy ? _t("Creating...") : _t("Create")}
+                    {busy ? _t("Creating…") : _t("Create")}
                 </AccessibleButton>
             </React.Fragment>
         );
