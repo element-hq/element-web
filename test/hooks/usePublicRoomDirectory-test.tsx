@@ -14,28 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// eslint-disable-next-line deprecate/import
-import { mount } from "enzyme";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
-import { sleep } from "matrix-js-sdk/src/utils";
-import React from "react";
-import { act } from "react-dom/test-utils";
+import { waitFor } from "@testing-library/react";
+import { renderHook, act } from "@testing-library/react-hooks/dom";
+import { IRoomDirectoryOptions, MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { usePublicRoomDirectory } from "../../src/hooks/usePublicRoomDirectory";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import { stubClient } from "../test-utils/test-utils";
 
-function PublicRoomComponent({ onClick }: { onClick(hook: ReturnType<typeof usePublicRoomDirectory>): void }) {
-    const roomDirectory = usePublicRoomDirectory();
-
-    const { ready, loading, publicRooms } = roomDirectory;
-
-    return (
-        <div onClick={() => onClick(roomDirectory)}>
-            {(!ready || loading) && `ready: ${ready}, loading: ${loading}`}
-            {publicRooms[0] && `Name: ${publicRooms[0].name}`}
-        </div>
-    );
+function render() {
+    return renderHook(() => usePublicRoomDirectory());
 }
 
 describe("usePublicRoomDirectory", () => {
@@ -47,65 +35,62 @@ describe("usePublicRoomDirectory", () => {
 
         MatrixClientPeg.getHomeserverName = () => "matrix.org";
         cli.getThirdpartyProtocols = () => Promise.resolve({});
-        cli.publicRooms = ({ filter: { generic_search_term: query } }) =>
-            Promise.resolve({
-                chunk: [
-                    {
-                        room_id: "hello world!",
-                        name: query,
-                        world_readable: true,
-                        guest_can_join: true,
-                        num_joined_members: 1,
-                    },
-                ],
+        cli.publicRooms = ({ filter }: IRoomDirectoryOptions) => {
+            const chunk = filter?.generic_search_term
+                ? [
+                      {
+                          room_id: "hello world!",
+                          name: filter.generic_search_term,
+                          world_readable: true,
+                          guest_can_join: true,
+                          num_joined_members: 1,
+                      },
+                  ]
+                : [];
+            return Promise.resolve({
+                chunk,
                 total_room_count_estimate: 1,
             });
+        };
     });
 
     it("should display public rooms when searching", async () => {
         const query = "ROOM NAME";
+        const { result } = render();
 
-        const wrapper = mount(
-            <PublicRoomComponent
-                onClick={(hook) => {
-                    hook.search({
-                        limit: 1,
-                        query,
-                    });
-                }}
-            />,
-        );
+        expect(result.current.ready).toBe(false);
+        expect(result.current.loading).toBe(false);
 
-        expect(wrapper.text()).toBe("ready: false, loading: false");
-
-        await act(async () => {
-            await sleep(1);
-            wrapper.simulate("click");
-            return act(() => sleep(1));
+        act(() => {
+            result.current.search({
+                limit: 1,
+                query,
+            });
         });
 
-        expect(wrapper.text()).toContain(query);
+        await waitFor(() => {
+            expect(result.current.ready).toBe(true);
+        });
+
+        expect(result.current.publicRooms[0].name).toBe(query);
     });
 
     it("should work with empty queries", async () => {
-        const wrapper = mount(
-            <PublicRoomComponent
-                onClick={(hook) => {
-                    hook.search({
-                        limit: 1,
-                        query: "",
-                    });
-                }}
-            />,
-        );
+        const query = "ROOM NAME";
+        const { result } = render();
 
-        await act(async () => {
-            await sleep(1);
-            wrapper.simulate("click");
-            return act(() => sleep(1));
+        act(() => {
+            result.current.search({
+                limit: 1,
+                query,
+            });
         });
 
-        expect(wrapper.text()).toBe("");
+        await waitFor(() => {
+            expect(result.current.ready).toBe(true);
+        });
+
+        expect(result.current.publicRooms[0].name).toEqual(query);
     });
 
     it("should recover from a server exception", async () => {
@@ -114,22 +99,19 @@ describe("usePublicRoomDirectory", () => {
         };
         const query = "ROOM NAME";
 
-        const wrapper = mount(
-            <PublicRoomComponent
-                onClick={(hook) => {
-                    hook.search({
-                        limit: 1,
-                        query,
-                    });
-                }}
-            />,
-        );
-        await act(async () => {
-            await sleep(1);
-            wrapper.simulate("click");
-            return act(() => sleep(1));
+        const { result } = render();
+
+        act(() => {
+            result.current.search({
+                limit: 1,
+                query,
+            });
         });
 
-        expect(wrapper.text()).toBe("");
+        await waitFor(() => {
+            expect(result.current.ready).toBe(true);
+        });
+
+        expect(result.current.publicRooms).toEqual([]);
     });
 });
