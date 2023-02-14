@@ -445,5 +445,16 @@
     "You don't currently have any stickerpacks enabled": "ขณะนี้คุณไม่ได้เปิดใช้งานชุดสติกเกอร์ใดๆ",
     "Failed to connect to integration manager": "ไม่สามารถเชื่อมต่อกับตัวจัดการการรวม",
     "General failure": "ข้อผิดพลาดทั่วไป",
-    "General": "ทั่วไป"
+    "General": "ทั่วไป",
+    "Retry": "ลองใหม่",
+    "Download": "ดาวน์โหลด",
+    "Next": "ถัดไป",
+    "collapse": "ยุบ",
+    "Invite": "เชิญ",
+    "Ignore": "เพิกเฉย",
+    "Create": "สร้าง",
+    "Skip": "ข้าม",
+    "Offline": "ออฟไลน์",
+    "Idle": "ว่าง",
+    "Online": "ออนไลน์"
 }
