@@ -1823,7 +1823,6 @@
     "Help improve %(analyticsOwner)s": "Pomóż poprawić %(analyticsOwner)s",
     "Stop": "Stop",
     "That's fine": "To jest w porządku",
-    "Fetching events...": "Pobieranie wydarzeń...",
     "File Attached": "Plik załączony",
     "Exported %(count)s events in %(seconds)s seconds|one": "Wyeksportowano %(count)s wydarzenie w %(seconds)s sekund",
     "Exported %(count)s events in %(seconds)s seconds|other": "Wyeksportowano %(count)s wydarzeń w %(seconds)s sekund",

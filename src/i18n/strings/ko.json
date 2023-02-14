@@ -790,7 +790,6 @@
     "A text message has been sent to +%(msisdn)s. Please enter the verification code it contains.": "문자 메시지를 +%(msisdn)s(으)로 보냈습니다. 메시지에 있는 인증 코드를 입력해주세요.",
     "Phone Number": "전화번호",
     "Edit message": "메시지 편집",
-    "Loading …": "로딩 중 …",
     "Join the conversation with an account": "계정으로 대화에 참여",
     "Sign Up": "등록",
     "Sign In": "로그인",
