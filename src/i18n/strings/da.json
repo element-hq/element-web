@@ -150,7 +150,6 @@
     "Send logs": "Send logs",
     "All messages": "Alle beskeder",
     "Call invitation": "Opkalds invitation",
-    "Downloading update...": "Downloader opdatering...",
     "What's new?": "Hvad er nyt?",
     "View Source": "Se Kilde",
     "All Rooms": "Alle rum",
@@ -170,7 +169,6 @@
     "Developer Tools": "Udviklingsværktøjer",
     "Event Content": "Begivenhedsindhold",
     "Thank you!": "Tak!",
-    "Checking for an update...": "Checker om der er en opdatering...",
     "Logs sent": "Logfiler sendt",
     "Reply": "Besvar",
     "Failed to send logs: ": "Kunne ikke sende logfiler: ",
@@ -260,7 +258,6 @@
     "This homeserver has hit its Monthly Active User limit.": "Denne homeserver har nået sin begrænsning for antallet af aktive brugere per måned.",
     "This homeserver has exceeded one of its resource limits.": "Denne homeserver har overskredet en af dens ressourcegrænser.",
     "Please <a>contact your service administrator</a> to continue using the service.": "Venligst <a>kontakt din serveradministrator</a> for at fortsætte med at bruge tjenesten.",
-    "Unable to connect to Homeserver. Retrying...": "Kan ikke forbinde til homeserver. Forsøger igen...",
     "%(items)s and %(count)s others|other": "%(items)s og %(count)s andre",
     "%(items)s and %(count)s others|one": "%(items)s og en anden",
     "%(items)s and %(lastItem)s": "%(items)s og %(lastItem)s",
@@ -719,6 +716,5 @@
     "Your password was successfully changed.": "Din adgangskode blev ændret.",
     "New Password": "Ny adgangskode",
     "Set a new custom sound": "Sæt en ny brugerdefineret lyd",
-    "Set a new account password...": "Sæt en ny adgangskode...",
     "Empty room": "Tomt rum"
 }
