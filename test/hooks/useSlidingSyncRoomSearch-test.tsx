@@ -14,33 +14,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// eslint-disable-next-line deprecate/import
-import { mount } from "enzyme";
-import { sleep } from "matrix-js-sdk/src/utils";
-import React from "react";
-import { act } from "react-dom/test-utils";
+import { waitFor } from "@testing-library/react";
+import { renderHook, act } from "@testing-library/react-hooks/dom";
 import { mocked } from "jest-mock";
 import { SlidingSync } from "matrix-js-sdk/src/sliding-sync";
 import { Room } from "matrix-js-sdk/src/matrix";
 
-import { SlidingSyncRoomSearchOpts, useSlidingSyncRoomSearch } from "../../src/hooks/useSlidingSyncRoomSearch";
+import { useSlidingSyncRoomSearch } from "../../src/hooks/useSlidingSyncRoomSearch";
 import { MockEventEmitter, stubClient } from "../test-utils";
 import { SlidingSyncManager } from "../../src/SlidingSyncManager";
 
-type RoomSearchHook = {
-    loading: boolean;
-    rooms: Room[];
-    search(opts: SlidingSyncRoomSearchOpts): Promise<boolean>;
-};
-
-// hooks must be inside a React component else you get:
-// "Invalid hook call. Hooks can only be called inside of the body of a function component."
-function RoomSearchComponent(props: { onClick: (h: RoomSearchHook) => void }) {
-    const roomSearch = useSlidingSyncRoomSearch();
-    return <div onClick={() => props.onClick(roomSearch)} />;
-}
-
 describe("useSlidingSyncRoomSearch", () => {
+    afterAll(() => {
+        jest.restoreAllMocks();
+    });
+
     it("should display rooms when searching", async () => {
         const client = stubClient();
         const roomA = new Room("!a:localhost", client, client.getUserId()!);
@@ -72,40 +60,34 @@ describe("useSlidingSyncRoomSearch", () => {
             }
         });
 
-        // first check that everything is empty and then do the search
-        let executeHook = (roomSearch: RoomSearchHook) => {
-            expect(roomSearch.loading).toBe(false);
-            expect(roomSearch.rooms).toEqual([]);
-            roomSearch.search({
-                limit: 10,
-                query: "foo",
-            });
+        // first check that everything is empty
+        const { result } = renderHook(() => useSlidingSyncRoomSearch());
+        const query = {
+            limit: 10,
+            query: "foo",
         };
-        const wrapper = mount(
-            <RoomSearchComponent
-                onClick={(roomSearch: RoomSearchHook) => {
-                    executeHook(roomSearch);
-                }}
-            />,
-        );
+        expect(result.current.loading).toBe(false);
+        expect(result.current.rooms).toEqual([]);
 
         // run the query
-        await act(async () => {
-            await sleep(1);
-            wrapper.simulate("click");
-            return act(() => sleep(1));
+        act(() => {
+            result.current.search(query);
         });
-        // now we expect there to be rooms
-        executeHook = (roomSearch) => {
-            expect(roomSearch.loading).toBe(false);
-            expect(roomSearch.rooms).toEqual([roomA, roomB]);
-        };
 
-        // run the query
-        await act(async () => {
-            await sleep(1);
-            wrapper.simulate("click");
-            return act(() => sleep(1));
+        // wait for loading to finish
+        await waitFor(() => {
+            expect(result.current.loading).toBe(false);
+        });
+
+        // now we expect there to be rooms
+        expect(result.current.rooms).toEqual([roomA, roomB]);
+
+        // run the query again
+        act(() => {
+            result.current.search(query);
+        });
+        await waitFor(() => {
+            expect(result.current.loading).toBe(false);
         });
     });
 });
