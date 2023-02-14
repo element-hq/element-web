@@ -17,11 +17,11 @@ limitations under the License.
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { RoomType } from "matrix-js-sdk/src/@types/event";
+import { Room } from "matrix-js-sdk/src/matrix";
 
 import InviteDialog from "../../../../src/components/views/dialogs/InviteDialog";
-import { KIND_INVITE } from "../../../../src/components/views/dialogs/InviteDialogTypes";
-import { getMockClientWithEventEmitter, mkStubRoom } from "../../../test-utils";
-import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
+import { KIND_DM, KIND_INVITE } from "../../../../src/components/views/dialogs/InviteDialogTypes";
+import { getMockClientWithEventEmitter, mkMembership, mkMessage, mkRoomCreateEvent } from "../../../test-utils";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import SdkConfig from "../../../../src/SdkConfig";
 import { ValidatedServerConfig } from "../../../../src/utils/ValidatedServerConfig";
@@ -37,8 +37,11 @@ jest.mock("../../../../src/IdentityAuthClient", () =>
 describe("InviteDialog", () => {
     const roomId = "!111111111111111111:example.org";
     const aliceId = "@alice:example.org";
+    const aliceEmail = "foobar@email.com";
+    const bobId = "@bob:example.org";
     const mockClient = getMockClientWithEventEmitter({
-        getUserId: jest.fn().mockReturnValue(aliceId),
+        getUserId: jest.fn().mockReturnValue(bobId),
+        getSafeUserId: jest.fn().mockReturnValue(bobId),
         isGuest: jest.fn().mockReturnValue(false),
         getVisibleRooms: jest.fn().mockReturnValue([]),
         getRoom: jest.fn(),
@@ -58,27 +61,53 @@ describe("InviteDialog", () => {
         getOpenIdToken: jest.fn().mockResolvedValue({}),
         getIdentityAccount: jest.fn().mockResolvedValue({}),
         getTerms: jest.fn().mockResolvedValue({ policies: [] }),
+        supportsThreads: jest.fn().mockReturnValue(false),
+        isInitialSyncComplete: jest.fn().mockReturnValue(true),
     });
+    let room: Room;
 
     beforeEach(() => {
         SdkConfig.put({ validated_server_config: {} as ValidatedServerConfig } as IConfigOptions);
         DMRoomMap.makeShared();
         jest.clearAllMocks();
-        mockClient.getUserId.mockReturnValue("@bob:example.org");
+        mockClient.getUserId.mockReturnValue(bobId);
 
-        const room = mkStubRoom(roomId, "Room", mockClient);
+        room = new Room(roomId, mockClient, mockClient.getSafeUserId());
+        room.addLiveEvents([
+            mkMessage({
+                msg: "Hello",
+                relatesTo: undefined,
+                event: true,
+                room: roomId,
+                user: mockClient.getSafeUserId(),
+                ts: Date.now(),
+            }),
+        ]);
+        room.currentState.setStateEvents([
+            mkRoomCreateEvent(bobId, roomId),
+            mkMembership({
+                event: true,
+                room: roomId,
+                mship: "join",
+                user: aliceId,
+                skey: aliceId,
+            }),
+        ]);
+        jest.spyOn(DMRoomMap.shared(), "getUniqueRoomsWithIndividuals").mockReturnValue({
+            [aliceId]: room,
+        });
         mockClient.getRooms.mockReturnValue([room]);
         mockClient.getRoom.mockReturnValue(room);
     });
 
     afterAll(() => {
-        jest.spyOn(MatrixClientPeg, "get").mockRestore();
+        jest.restoreAllMocks();
     });
 
     it("should label with space name", () => {
-        mockClient.getRoom(roomId)!.isSpaceRoom = jest.fn().mockReturnValue(true);
-        mockClient.getRoom(roomId)!.getType = jest.fn().mockReturnValue(RoomType.Space);
-        mockClient.getRoom(roomId)!.name = "Space";
+        room.isSpaceRoom = jest.fn().mockReturnValue(true);
+        room.getType = jest.fn().mockReturnValue(RoomType.Space);
+        room.name = "Space";
         render(<InviteDialog kind={KIND_INVITE} roomId={roomId} onFinished={jest.fn()} />);
 
         expect(screen.queryByText("Invite to Space")).toBeTruthy();
@@ -86,8 +115,7 @@ describe("InviteDialog", () => {
 
     it("should label with room name", () => {
         render(<InviteDialog kind={KIND_INVITE} roomId={roomId} onFinished={jest.fn()} />);
-
-        expect(screen.queryByText("Invite to Room")).toBeTruthy();
+        expect(screen.getByText(`Invite to ${roomId}`)).toBeInTheDocument();
     });
 
     it("should suggest valid MXIDs even if unknown", async () => {
@@ -116,27 +144,37 @@ describe("InviteDialog", () => {
         expect(screen.queryByText("@localpart:server:tld")).toBeFalsy();
     });
 
-    it("should lookup inputs which look like email addresses", async () => {
-        mockClient.getIdentityServerUrl.mockReturnValue("https://identity-server");
-        mockClient.lookupThreePid.mockResolvedValue({
-            address: "foobar@email.com",
-            medium: "email",
-            mxid: "@foobar:server",
-        });
-        mockClient.getProfileInfo.mockResolvedValue({
-            displayname: "Mr. Foo",
-            avatar_url: "mxc://foo/bar",
-        });
+    it.each([[KIND_DM], [KIND_INVITE]] as [typeof KIND_DM | typeof KIND_INVITE][])(
+        "should lookup inputs which look like email addresses (%s)",
+        async (kind: typeof KIND_DM | typeof KIND_INVITE) => {
+            mockClient.getIdentityServerUrl.mockReturnValue("https://identity-server");
+            mockClient.lookupThreePid.mockResolvedValue({
+                address: aliceEmail,
+                medium: "email",
+                mxid: aliceId,
+            });
+            mockClient.getProfileInfo.mockResolvedValue({
+                displayname: "Mrs Alice",
+                avatar_url: "mxc://foo/bar",
+            });
 
-        render(
-            <InviteDialog kind={KIND_INVITE} roomId={roomId} onFinished={jest.fn()} initialText="foobar@email.com" />,
-        );
+            render(
+                <InviteDialog
+                    kind={kind}
+                    roomId={kind === KIND_INVITE ? roomId : ""}
+                    onFinished={jest.fn()}
+                    initialText={aliceEmail}
+                />,
+            );
 
-        await screen.findByText("Mr. Foo");
-        await screen.findByText("@foobar:server");
-        expect(mockClient.lookupThreePid).toHaveBeenCalledWith("email", "foobar@email.com", expect.anything());
-        expect(mockClient.getProfileInfo).toHaveBeenCalledWith("@foobar:server");
-    });
+            await screen.findByText("Mrs Alice");
+            // expect the email and MXID to be visible
+            await screen.findByText(aliceId);
+            await screen.findByText(aliceEmail);
+            expect(mockClient.lookupThreePid).toHaveBeenCalledWith("email", aliceEmail, expect.anything());
+            expect(mockClient.getProfileInfo).toHaveBeenCalledWith(aliceId);
+        },
+    );
 
     it("should suggest e-mail even if lookup fails", async () => {
         mockClient.getIdentityServerUrl.mockReturnValue("https://identity-server");

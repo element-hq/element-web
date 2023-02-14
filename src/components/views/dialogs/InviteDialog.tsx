@@ -684,7 +684,8 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                                 display_name: profile.displayname,
                                 avatar_url: profile.avatar_url,
                             }),
-                            userId: lookup.mxid,
+                            // Use the search term as identifier, so that it shows up in suggestions.
+                            userId: term,
                         },
                     ],
                 });
@@ -934,7 +935,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             <DMRoomTile
                 member={r.user}
                 lastActiveTs={lastActive(r)}
-                key={r.userId}
+                key={r.user.userId}
                 onToggle={this.toggleMember}
                 highlightWord={this.state.filterText}
                 isSelected={this.state.targets.some((t) => t.userId === r.userId)}
