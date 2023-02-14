@@ -285,7 +285,7 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
                     <p>
                         {_t(
                             "Please only proceed if you're sure you've lost all of your other " +
-                                "devices and your security key.",
+                                "devices and your Security Key.",
                         )}
                     </p>
 
