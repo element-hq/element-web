@@ -3703,5 +3703,7 @@
     "Enable '%(manageIntegrations)s' in Settings to do this.": "Aktifkan '%(manageIntegrations)s' di Pengaturan untuk melakukan ini.",
     "<b>Warning</b>: upgrading a room will <i>not automatically migrate room members to the new version of the room.</i> We'll post a link to the new room in the old version of the room - room members will have to click this link to join the new room.": "<b>Peringatan</b>: meningkatkan sebuah ruangan <i>tidak akan memindahkan anggota ruang ke versi baru ruangan secara otomatis.</i> Kami akan mengirimkan sebuah tautan ke ruangan yang baru di versi lama ruangan - anggota ruangan harus mengeklik tautan ini untuk bergabung dengan ruangan yang baru.",
     "Your personal ban list holds all the users/servers you personally don't want to see messages from. After ignoring your first user/server, a new room will show up in your room list named '%(myBanList)s' - stay in this room to keep the ban list in effect.": "Daftar larangan pribadi Anda menampung semua pengguna/server yang secara pribadi tidak ingin Anda lihat pesannya. Setelah mengabaikan pengguna/server pertama Anda, sebuah ruangan yang baru akan muncul di daftar ruangan Anda yang bernama '%(myBanList)s' - tetaplah di ruangan ini agar daftar larangan tetap berlaku.",
-    "WARNING: session already verified, but keys do NOT MATCH!": "PERINGATAN: sesi telah diverifikasi, tetapi kuncinya TIDAK COCOK!"
+    "WARNING: session already verified, but keys do NOT MATCH!": "PERINGATAN: sesi telah diverifikasi, tetapi kuncinya TIDAK COCOK!",
+    "Starting export…": "Memulai pengeksporan…",
+    "Unable to connect to Homeserver. Retrying…": "Tidak dapat menghubungkan ke Homeserver. Mencoba ulang…"
 }
