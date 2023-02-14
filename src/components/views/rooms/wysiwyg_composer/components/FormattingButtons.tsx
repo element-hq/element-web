@@ -88,6 +88,7 @@ interface FormattingButtonsProps {
 
 export function FormattingButtons({ composer, actionStates }: FormattingButtonsProps): JSX.Element {
     const composerContext = useComposerContext();
+    const isInList = actionStates.unorderedList === "reversed" || actionStates.orderedList === "reversed";
     return (
         <div className="mx_FormattingButtons">
             <Button
@@ -129,18 +130,22 @@ export function FormattingButtons({ composer, actionStates }: FormattingButtonsP
                 onClick={() => composer.orderedList()}
                 icon={<NumberedListIcon className="mx_FormattingButtons_Icon" />}
             />
-            <Button
-                actionState={actionStates.indent}
-                label={_td("Indent increase")}
-                onClick={() => composer.indent()}
-                icon={<IndentIcon className="mx_FormattingButtons_Icon" />}
-            />
-            <Button
-                actionState={actionStates.unIndent}
-                label={_td("Indent decrease")}
-                onClick={() => composer.unIndent()}
-                icon={<UnIndentIcon className="mx_FormattingButtons_Icon" />}
-            />
+            {isInList && (
+                <Button
+                    actionState={actionStates.indent}
+                    label={_td("Indent increase")}
+                    onClick={() => composer.indent()}
+                    icon={<IndentIcon className="mx_FormattingButtons_Icon" />}
+                />
+            )}
+            {isInList && (
+                <Button
+                    actionState={actionStates.unindent}
+                    label={_td("Indent decrease")}
+                    onClick={() => composer.unindent()}
+                    icon={<UnIndentIcon className="mx_FormattingButtons_Icon" />}
+                />
+            )}
             <Button
                 actionState={actionStates.quote}
                 label={_td("Quote")}
