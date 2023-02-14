@@ -3737,5 +3737,13 @@
     "This session is backing up your keys.": "Sesi ini mencadangkan kunci Anda.",
     "Declining…": "Menolak…",
     "There are no past polls in this room": "Tidak ada pemungutan suara sebelumnya di ruangan ini",
-    "There are no active polls in this room": "Tidak ada pemungutan suara yang aktif di ruangan ini"
+    "There are no active polls in this room": "Tidak ada pemungutan suara yang aktif di ruangan ini",
+    "We need to know it’s you before resetting your password. Click the link in the email we just sent to <b>%(email)s</b>": "Kami harus tahu bahwa itu Anda sebelum mengatur ulang kata sandi Anda. Klik tautan dalam email yang kami sudah kirim ke <b>%(email)s</b>",
+    "Warning: your personal data (including encryption keys) is still stored in this session. Clear it if you're finished using this session, or want to sign in to another account.": "Peringatan: Data personal Anda (termasuk kunci enkripsi) masih disimpan di sesi ini. Hapus jika Anda selesai menggunakan sesi ini, atau jika ingin masuk ke akun yang lain.",
+    "Scan QR code": "Pindai kode QR",
+    "Select '%(scanQRCode)s'": "Pilih '%(scanQRCode)s'",
+    "Enable '%(manageIntegrations)s' in Settings to do this.": "Aktifkan '%(manageIntegrations)s' di Pengaturan untuk melakukan ini.",
+    "<b>Warning</b>: upgrading a room will <i>not automatically migrate room members to the new version of the room.</i> We'll post a link to the new room in the old version of the room - room members will have to click this link to join the new room.": "<b>Peringatan</b>: meningkatkan sebuah ruangan <i>tidak akan memindahkan anggota ruang ke versi baru ruangan secara otomatis.</i> Kami akan mengirimkan sebuah tautan ke ruangan yang baru di versi lama ruangan - anggota ruangan harus mengeklik tautan ini untuk bergabung dengan ruangan yang baru.",
+    "Your personal ban list holds all the users/servers you personally don't want to see messages from. After ignoring your first user/server, a new room will show up in your room list named '%(myBanList)s' - stay in this room to keep the ban list in effect.": "Daftar larangan pribadi Anda menampung semua pengguna/server yang secara pribadi tidak ingin Anda lihat pesannya. Setelah mengabaikan pengguna/server pertama Anda, sebuah ruangan yang baru akan muncul di daftar ruangan Anda yang bernama '%(myBanList)s' - tetaplah di ruangan ini agar daftar larangan tetap berlaku.",
+    "WARNING: session already verified, but keys do NOT MATCH!": "PERINGATAN: sesi telah diverifikasi, tetapi kuncinya TIDAK COCOK!"
 }
