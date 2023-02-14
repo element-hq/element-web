@@ -2859,7 +2859,6 @@
     "Fetched %(count)s events out of %(total)s|other": "Laadisin %(count)s / %(total)s sündmust",
     "Generating a ZIP": "Pakin ZIP faili",
     "We were unable to understand the given date (%(inputDate)s). Try using the format YYYY-MM-DD.": "Me ei suutnud sellist kuupäeva mõista (%(inputDate)s). Pigem kasuta aaaa-kk-pp vormingut.",
-    "Starting export process...": "Alustame eksportimist...",
     "Exported %(count)s events in %(seconds)s seconds|one": "Eksporditud %(count)s sündmus %(seconds)s sekundiga",
     "Exported %(count)s events in %(seconds)s seconds|other": "Eksporditud %(count)s sündmust %(seconds)s sekundiga",
     "Export successful!": "Eksport õnnestus!",

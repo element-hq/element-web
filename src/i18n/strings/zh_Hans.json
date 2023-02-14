@@ -2856,7 +2856,6 @@
     "Fetched %(count)s events out of %(total)s|one": "已获取总共 %(total)s 事件中的 %(count)s 个",
     "This groups your chats with members of this space. Turning this off will hide those chats from your view of %(spaceName)s.": "将您与该空间的成员的聊天进行分组。关闭这个后你将无法在 %(spaceName)s 内看到这些聊天。",
     "Sections to show": "要显示的部分",
-    "Starting export process...": "开始导出过程 …",
     "Exported %(count)s events in %(seconds)s seconds|one": "在 %(seconds)s 秒内导出了 %(count)s 个事件",
     "Exported %(count)s events in %(seconds)s seconds|other": "在 %(seconds)s 秒内导出了 %(count)s 个事件",
     "Export successful!": "成功导出！",

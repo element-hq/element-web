@@ -2856,7 +2856,6 @@
     "Failed to load list of rooms.": "Caricamento dell'elenco di stanze fallito.",
     "This groups your chats with members of this space. Turning this off will hide those chats from your view of %(spaceName)s.": "Ciò raggruppa le tue chat con i membri di questo spazio. Se lo disattivi le chat verranno nascoste dalla tua vista di %(spaceName)s.",
     "Sections to show": "Sezioni da mostrare",
-    "Starting export process...": "Inizio processo di esportazione...",
     "Exported %(count)s events in %(seconds)s seconds|one": "Esportato %(count)s evento in %(seconds)s secondi",
     "Exported %(count)s events in %(seconds)s seconds|other": "Esportati %(count)s eventi in %(seconds)s secondi",
     "Export successful!": "Esportazione riuscita!",

@@ -2866,7 +2866,6 @@
     "Generating a ZIP": "Membuat sebuah ZIP",
     "This groups your chats with members of this space. Turning this off will hide those chats from your view of %(spaceName)s.": "Ini mengelompokkan obrolan Anda dengan anggota space ini. Menonaktifkan ini akan menyembunyikan obrolan dari tampilan %(spaceName)s Anda.",
     "Sections to show": "Bagian untuk ditampilkan",
-    "Starting export process...": "Memulai proses pengeksporan...",
     "Failed to load list of rooms.": "Gagal untuk memuat daftar ruangan.",
     "Open in OpenStreetMap": "Buka di OpenStreetMap",
     "toggle event": "alih peristiwa",

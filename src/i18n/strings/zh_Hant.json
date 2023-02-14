@@ -2856,7 +2856,6 @@
     "Failed to load list of rooms.": "無法載入聊天室清單。",
     "This groups your chats with members of this space. Turning this off will hide those chats from your view of %(spaceName)s.": "這會將您與此空間成員的聊天分組。關閉此功能將在您的 %(spaceName)s 檢視中隱藏那些聊天。",
     "Sections to show": "要顯示的部份",
-    "Starting export process...": "正在開始匯出流程……",
     "Exported %(count)s events in %(seconds)s seconds|one": "已在 %(seconds)s 秒內匯出 %(count)s 個事件",
     "Exported %(count)s events in %(seconds)s seconds|other": "已在 %(seconds)s 秒內匯出 %(count)s 個事件",
     "Export successful!": "匯出成功！",
