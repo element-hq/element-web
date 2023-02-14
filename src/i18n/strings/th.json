@@ -456,5 +456,11 @@
     "Skip": "ข้าม",
     "Offline": "ออฟไลน์",
     "Idle": "ว่าง",
-    "Online": "ออนไลน์"
+    "Online": "ออนไลน์",
+    "Delete": "ลบ",
+    "Upload": "อัปโหลด",
+    "Your email address does not appear to be associated with a Matrix ID on this homeserver.": "ที่อยู่อีเมลของคุณไม่ได้เชื่อมโยงกับ Matrix ID บนโฮมเซิร์ฟเวอร์นี้",
+    "Username": "ชื่อผู้ใช้",
+    "Join": "เข้าร่วม",
+    "Timeline": "เส้นเวลา"
 }
