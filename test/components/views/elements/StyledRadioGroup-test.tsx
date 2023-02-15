@@ -61,7 +61,7 @@ describe("<StyledRadioGroup />", () => {
             value: optionC.value,
         });
 
-        expect(getCheckedInput(component).value).toEqual(optionC.value);
+        expect(getCheckedInput(component)?.value).toEqual(optionC.value);
     });
 
     it("selects correct buttons when definitions have checked prop", () => {
@@ -99,7 +99,7 @@ describe("<StyledRadioGroup />", () => {
             onChange,
         });
 
-        fireEvent.click(getInputByValue(component, optionB.value));
+        fireEvent.click(getInputByValue(component, optionB.value)!);
 
         expect(onChange).toHaveBeenCalledWith(optionB.value);
     });

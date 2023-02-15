@@ -32,7 +32,7 @@ export default abstract class SettingsHandler {
      * @param {String} roomId The room ID to read from, may be null.
      * @returns {*} The setting value, or null if not found.
      */
-    public abstract getValue(settingName: string, roomId: string): any;
+    public abstract getValue(settingName: string, roomId: string | null): any;
 
     /**
      * Sets the value for a particular setting at this level for a particular room.
@@ -45,7 +45,7 @@ export default abstract class SettingsHandler {
      * @param {*} newValue The new value for the setting, may be null.
      * @returns {Promise} Resolves when the setting has been saved.
      */
-    public abstract setValue(settingName: string, roomId: string, newValue: any): Promise<void>;
+    public abstract setValue(settingName: string, roomId: string | null, newValue: any): Promise<void>;
 
     /**
      * Determines if the current user is able to set the value of the given setting
@@ -54,7 +54,7 @@ export default abstract class SettingsHandler {
      * @param {String} roomId The room ID to check in, may be null
      * @returns {boolean} True if the setting can be set by the user, false otherwise.
      */
-    public abstract canSetValue(settingName: string, roomId: string): boolean;
+    public abstract canSetValue(settingName: string, roomId: string | null): boolean;
 
     /**
      * Determines if this level is supported on this device.

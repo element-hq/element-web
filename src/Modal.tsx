@@ -33,7 +33,7 @@ export interface IModal<T extends any[]> {
     beforeClosePromise?: Promise<boolean>;
     closeReason?: string;
     onBeforeClose?(reason?: string): Promise<boolean>;
-    onFinished(...args: T): void;
+    onFinished?(...args: T): void;
     close(...args: T): void;
     hidden?: boolean;
 }
@@ -68,11 +68,11 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
     // The modal to prioritise over all others. If this is set, only show
     // this modal. Remove all other modals from the stack when this modal
     // is closed.
-    private priorityModal: IModal<any> = null;
+    private priorityModal: IModal<any> | null = null;
     // The modal to keep open underneath other modals if possible. Useful
     // for cases like Settings where the modal should remain open while the
     // user is prompted for more information/errors.
-    private staticModal: IModal<any> = null;
+    private staticModal: IModal<any> | null = null;
     // A list of the modals we have stacked up, with the most recent at [0]
     // Neither the static nor priority modal will be in this list.
     private modals: IModal<any>[] = [];
@@ -144,17 +144,14 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
         closeDialog: IHandle<T>["close"];
         onFinishedProm: IHandle<T>["finished"];
     } {
-        const modal: IModal<T> = {
-            onFinished: props ? props.onFinished : null,
-            onBeforeClose: options.onBeforeClose,
-            beforeClosePromise: null,
-            closeReason: null,
+        const modal = {
+            onFinished: props?.onFinished,
+            onBeforeClose: options?.onBeforeClose,
             className,
 
             // these will be set below but we need an object reference to pass to getCloseFn before we can do that
             elem: null,
-            close: null,
-        };
+        } as IModal<T>;
 
         // never call this from onFinished() otherwise it will loop
         const [closeDialog, onFinishedProm] = this.getCloseFn<T>(modal, props);
@@ -173,7 +170,7 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
 
     private getCloseFn<T extends any[]>(
         modal: IModal<T>,
-        props: IProps<T>,
+        props?: IProps<T>,
     ): [IHandle<T>["close"], IHandle<T>["finished"]] {
         const deferred = defer<T>();
         return [
@@ -183,13 +180,13 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
                 } else if (modal.onBeforeClose) {
                     modal.beforeClosePromise = modal.onBeforeClose(modal.closeReason);
                     const shouldClose = await modal.beforeClosePromise;
-                    modal.beforeClosePromise = null;
+                    modal.beforeClosePromise = undefined;
                     if (!shouldClose) {
                         return;
                     }
                 }
                 deferred.resolve(args);
-                if (props && props.onFinished) props.onFinished.apply(null, args);
+                if (props?.onFinished) props.onFinished.apply(null, args);
                 const i = this.modals.indexOf(modal);
                 if (i >= 0) {
                     this.modals.splice(i, 1);
@@ -317,7 +314,7 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
         // so, pass the reason to close through a member variable
         modal.closeReason = "backgroundClick";
         modal.close();
-        modal.closeReason = null;
+        modal.closeReason = undefined;
     };
 
     private getCurrentModal(): IModal<any> {

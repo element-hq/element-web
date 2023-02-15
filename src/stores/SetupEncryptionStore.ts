@@ -44,10 +44,12 @@ export enum Phase {
 export class SetupEncryptionStore extends EventEmitter {
     private started: boolean;
     public phase: Phase;
-    public verificationRequest: VerificationRequest;
-    public backupInfo: IKeyBackupInfo;
-    public keyId: string;
-    public keyInfo: ISecretStorageKeyInfo;
+    public verificationRequest: VerificationRequest | null = null;
+    public backupInfo: IKeyBackupInfo | null = null;
+    // ID of the key that the secrets we want are encrypted with
+    public keyId: string | null = null;
+    // Descriptor of the key that the secrets we want are encrypted with
+    public keyInfo: ISecretStorageKeyInfo | null = null;
     public hasDevicesToVerifyAgainst: boolean;
 
     public static sharedInstance(): SetupEncryptionStore {
@@ -61,19 +63,12 @@ export class SetupEncryptionStore extends EventEmitter {
         }
         this.started = true;
         this.phase = Phase.Loading;
-        this.verificationRequest = null;
-        this.backupInfo = null;
-
-        // ID of the key that the secrets we want are encrypted with
-        this.keyId = null;
-        // Descriptor of the key that the secrets we want are encrypted with
-        this.keyInfo = null;
 
         const cli = MatrixClientPeg.get();
         cli.on(CryptoEvent.VerificationRequest, this.onVerificationRequest);
         cli.on(CryptoEvent.UserTrustStatusChanged, this.onUserTrustStatusChanged);
 
-        const requestsInProgress = cli.getVerificationRequestsToDeviceInProgress(cli.getUserId());
+        const requestsInProgress = cli.getVerificationRequestsToDeviceInProgress(cli.getUserId()!);
         if (requestsInProgress.length) {
             // If there are multiple, we take the most recent. Equally if the user sends another request from
             // another device after this screen has been shown, we'll switch to the new one, so this
@@ -111,7 +106,7 @@ export class SetupEncryptionStore extends EventEmitter {
 
         // do we have any other verified devices which are E2EE which we can verify against?
         const dehydratedDevice = await cli.getDehydratedDevice();
-        const ownUserId = cli.getUserId();
+        const ownUserId = cli.getUserId()!;
         const crossSigningInfo = cli.getStoredCrossSigningForUser(ownUserId);
         this.hasDevicesToVerifyAgainst = cli
             .getStoredDevicesForUser(ownUserId)
@@ -119,7 +114,7 @@ export class SetupEncryptionStore extends EventEmitter {
                 (device) =>
                     device.getIdentityKey() &&
                     (!dehydratedDevice || device.deviceId != dehydratedDevice.device_id) &&
-                    crossSigningInfo.checkDeviceTrust(crossSigningInfo, device, false, true).isCrossSigningVerified(),
+                    crossSigningInfo?.checkDeviceTrust(crossSigningInfo, device, false, true).isCrossSigningVerified(),
             );
 
         this.phase = Phase.Intro;
@@ -183,11 +178,11 @@ export class SetupEncryptionStore extends EventEmitter {
     };
 
     public onVerificationRequestChange = (): void => {
-        if (this.verificationRequest.cancelled) {
+        if (this.verificationRequest?.cancelled) {
             this.verificationRequest.off(VerificationRequestEvent.Change, this.onVerificationRequestChange);
             this.verificationRequest = null;
             this.emit("update");
-        } else if (this.verificationRequest.phase === VERIF_PHASE_DONE) {
+        } else if (this.verificationRequest?.phase === VERIF_PHASE_DONE) {
             this.verificationRequest.off(VerificationRequestEvent.Change, this.onVerificationRequestChange);
             this.verificationRequest = null;
             // At this point, the verification has finished, we just need to wait for
@@ -259,7 +254,7 @@ export class SetupEncryptionStore extends EventEmitter {
         this.phase = Phase.Finished;
         this.emit("update");
         // async - ask other clients for keys, if necessary
-        MatrixClientPeg.get().crypto.cancelAndResendAllOutgoingKeyRequests();
+        MatrixClientPeg.get().crypto?.cancelAndResendAllOutgoingKeyRequests();
     }
 
     private async setActiveVerificationRequest(request: VerificationRequest): Promise<void> {

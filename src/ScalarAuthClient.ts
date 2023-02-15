@@ -32,8 +32,8 @@ const imApiVersion = "1.1";
 // TODO: Generify the name of this class and all components within - it's not just for Scalar.
 
 export default class ScalarAuthClient {
-    private scalarToken: string;
-    private termsInteractionCallback: TermsInteractionCallback;
+    private scalarToken: string | null;
+    private termsInteractionCallback?: TermsInteractionCallback;
     private isDefaultManager: boolean;
 
     public constructor(private apiUrl: string, private uiUrl: string) {
@@ -59,7 +59,7 @@ export default class ScalarAuthClient {
         }
     }
 
-    private readTokenFromStore(): string {
+    private readTokenFromStore(): string | null {
         let token = window.localStorage.getItem("mx_scalar_token_at_" + this.apiUrl);
         if (!token && this.isDefaultManager) {
             token = window.localStorage.getItem("mx_scalar_token");
@@ -67,7 +67,7 @@ export default class ScalarAuthClient {
         return token;
     }
 
-    private readToken(): string {
+    private readToken(): string | null {
         if (this.scalarToken) return this.scalarToken;
         return this.readTokenFromStore();
     }

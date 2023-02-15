@@ -52,7 +52,7 @@ describe("EncryptionEvent", () => {
         event = mkMessage({
             event: true,
             room: roomId,
-            user: client.getUserId(),
+            user: client.getUserId()!,
         });
         jest.spyOn(DMRoomMap, "shared").mockReturnValue({
             getUserIdForRoomId: jest.fn(),
@@ -61,9 +61,9 @@ describe("EncryptionEvent", () => {
 
     describe("for an encrypted room", () => {
         beforeEach(() => {
-            event.event.content.algorithm = algorithm;
+            event.event.content!.algorithm = algorithm;
             mocked(client.isRoomEncrypted).mockReturnValue(true);
-            const room = new Room(roomId, client, client.getUserId());
+            const room = new Room(roomId, client, client.getUserId()!);
             mocked(client.getRoom).mockReturnValue(room);
         });
 
@@ -91,7 +91,7 @@ describe("EncryptionEvent", () => {
 
         describe("with unknown algorithm", () => {
             beforeEach(() => {
-                event.event.content.algorithm = "unknown";
+                event.event.content!.algorithm = "unknown";
             });
 
             it("should show the expected texts", () => {
@@ -115,9 +115,9 @@ describe("EncryptionEvent", () => {
 
     describe("for an encrypted local room", () => {
         beforeEach(() => {
-            event.event.content.algorithm = algorithm;
+            event.event.content!.algorithm = algorithm;
             mocked(client.isRoomEncrypted).mockReturnValue(true);
-            const localRoom = new LocalRoom(roomId, client, client.getUserId());
+            const localRoom = new LocalRoom(roomId, client, client.getUserId()!);
             mocked(client.getRoom).mockReturnValue(localRoom);
             renderEncryptionEvent(client, event);
         });

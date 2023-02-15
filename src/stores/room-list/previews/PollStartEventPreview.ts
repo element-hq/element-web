@@ -29,7 +29,7 @@ export class PollStartEventPreview implements IPreview {
     public static contextType = MatrixClientContext;
     public context!: React.ContextType<typeof MatrixClientContext>;
 
-    public getTextFor(event: MatrixEvent, tagId?: TagID, isThread?: boolean): string {
+    public getTextFor(event: MatrixEvent, tagId?: TagID, isThread?: boolean): string | null {
         let eventContent = event.getContent();
 
         if (event.isRelation("m.replace")) {
@@ -51,7 +51,7 @@ export class PollStartEventPreview implements IPreview {
             let question = poll.question.text.trim();
             question = sanitizeForTranslation(question);
 
-            if (isThread || isSelf(event) || !shouldPrefixMessagesIn(event.getRoomId(), tagId)) {
+            if (isThread || isSelf(event) || !shouldPrefixMessagesIn(event.getRoomId()!, tagId)) {
                 return question;
             } else {
                 return _t("%(senderName)s: %(message)s", { senderName: getSenderName(event), message: question });

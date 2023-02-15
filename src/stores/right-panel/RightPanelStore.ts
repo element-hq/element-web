@@ -58,20 +58,20 @@ export default class RightPanelStore extends ReadyWatchingStore {
      * Resets the store. Intended for test usage only.
      */
     public reset(): void {
-        this.global = null;
+        this.global = undefined;
         this.byRoom = {};
         this.viewedRoomId = null;
     }
 
     protected async onReady(): Promise<any> {
         this.viewedRoomId = SdkContextClass.instance.roomViewStore.getRoomId();
-        this.matrixClient.on(CryptoEvent.VerificationRequest, this.onVerificationRequestUpdate);
+        this.matrixClient?.on(CryptoEvent.VerificationRequest, this.onVerificationRequestUpdate);
         this.loadCacheFromSettings();
         this.emitAndUpdateSettings();
     }
 
     protected async onNotReady(): Promise<any> {
-        this.matrixClient.off(CryptoEvent.VerificationRequest, this.onVerificationRequestUpdate);
+        this.matrixClient?.off(CryptoEvent.VerificationRequest, this.onVerificationRequestUpdate);
     }
 
     protected onDispatcherAction(payload: ActionPayload): void {
@@ -376,7 +376,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
         // the room member list.
         if (SettingsStore.getValue("feature_right_panel_default_open") && !this.byRoom[this.viewedRoomId]?.isOpen) {
             const history = [{ phase: RightPanelPhases.RoomMemberList }];
-            const room = this.viewedRoomId && this.mxClient?.getRoom(this.viewedRoomId);
+            const room = this.viewedRoomId ? this.mxClient?.getRoom(this.viewedRoomId) : undefined;
             if (!room?.isSpaceRoom()) {
                 history.unshift({ phase: RightPanelPhases.RoomSummary });
             }

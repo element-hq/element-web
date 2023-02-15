@@ -217,7 +217,7 @@ function createRoom(info: IRoomCreationInfo) {
     const client: MatrixClient = MatrixClientPeg.get();
 
     const roomId = "!1234567890:domain";
-    const userId = client.getUserId();
+    const userId = client.getUserId()!;
     if (info.isDm) {
         client.getAccountData = (eventType) => {
             expect(eventType).toEqual("m.direct");
@@ -231,7 +231,7 @@ function createRoom(info: IRoomCreationInfo) {
         pendingEventOrdering: PendingEventOrdering.Detached,
     });
 
-    const otherJoinEvents = [];
+    const otherJoinEvents: MatrixEvent[] = [];
     for (const otherUserId of info.userIds) {
         otherJoinEvents.push(mkJoinEvent(roomId, otherUserId));
     }

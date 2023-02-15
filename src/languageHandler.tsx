@@ -288,7 +288,7 @@ export function replaceByRegexes(text: string, mapping: Tags): React.ReactNode;
 export function replaceByRegexes(text: string, mapping: IVariables | Tags): string | React.ReactNode {
     // We initially store our output as an array of strings and objects (e.g. React components).
     // This will then be converted to a string or a <span> at the end
-    const output = [text];
+    const output: SubstitutionValue[] = [text];
 
     // If we insert any components we need to wrap the output in a span. React doesn't like just an array of components.
     let shouldWrapInSpan = false;
@@ -319,7 +319,7 @@ export function replaceByRegexes(text: string, mapping: IVariables | Tags): stri
             // The textual part before the first match
             const head = inputText.slice(0, match.index);
 
-            const parts = [];
+            const parts: SubstitutionValue[] = [];
             // keep track of prevMatch
             let prevMatch;
             while (match) {
@@ -327,7 +327,7 @@ export function replaceByRegexes(text: string, mapping: IVariables | Tags): stri
                 prevMatch = match;
                 const capturedGroups = match.slice(2);
 
-                let replaced;
+                let replaced: SubstitutionValue;
                 // If substitution is a function, call it
                 if (mapping[regexpString] instanceof Function) {
                     replaced = ((mapping as Tags)[regexpString] as Function)(...capturedGroups);
@@ -434,7 +434,7 @@ export function setLanguage(preferredLangs: string | string[]): Promise<void> {
 
             return getLanguageRetry(i18nFolder + availLangs[langToUse].fileName);
         })
-        .then(async (langData): Promise<ICounterpartTranslation> => {
+        .then(async (langData): Promise<ICounterpartTranslation | undefined> => {
             counterpart.registerTranslations(langToUse, langData);
             await registerCustomTranslations();
             counterpart.setLocale(langToUse);
@@ -664,7 +664,7 @@ export async function registerCustomTranslations(): Promise<void> {
     if (!lookupUrl) return; // easy - nothing to do
 
     try {
-        let json: ICustomTranslations;
+        let json: Optional<ICustomTranslations>;
         if (Date.now() >= cachedCustomTranslationsExpire) {
             json = CustomTranslationOptions.lookupFn
                 ? CustomTranslationOptions.lookupFn(lookupUrl)

@@ -94,13 +94,13 @@ describe("<SpaceSettingsVisibilityTab />", () => {
 
     const getByTestId = (container: Element, id: string) => container.querySelector(`[data-test-id=${id}]`);
     const toggleGuestAccessSection = async (component: Element) => {
-        const toggleButton = getByTestId(component, "toggle-guest-access-btn");
+        const toggleButton = getByTestId(component, "toggle-guest-access-btn")!;
         await act(async () => {
             Simulate.click(toggleButton);
         });
     };
-    const getGuestAccessToggle = (component: Element) => component.querySelector('[aria-label="Enable guest access"');
-    const getHistoryVisibilityToggle = (component: Element) => component.querySelector('[aria-label="Preview Space"');
+    const getGuestAccessToggle = (component: Element) => component.querySelector('[aria-label="Enable guest access"]');
+    const getHistoryVisibilityToggle = (component: Element) => component.querySelector('[aria-label="Preview Space"]');
     const getErrorMessage = (component: Element) => getByTestId(component, "space-settings-error")?.textContent;
 
     beforeEach(() => {
@@ -150,10 +150,10 @@ describe("<SpaceSettingsVisibilityTab />", () => {
                 await toggleGuestAccessSection(component);
                 const guestAccessInput = getGuestAccessToggle(component);
 
-                expect(guestAccessInput.getAttribute("aria-checked")).toEqual("true");
+                expect(guestAccessInput?.getAttribute("aria-checked")).toEqual("true");
 
                 await act(async () => {
-                    Simulate.click(guestAccessInput);
+                    Simulate.click(guestAccessInput!);
                 });
 
                 expect(mockMatrixClient.sendStateEvent).toHaveBeenCalledWith(
@@ -165,7 +165,7 @@ describe("<SpaceSettingsVisibilityTab />", () => {
                 );
 
                 // toggled off
-                expect(guestAccessInput.getAttribute("aria-checked")).toEqual("false");
+                expect(guestAccessInput?.getAttribute("aria-checked")).toEqual("false");
             });
 
             it("renders error message when update fails", async () => {
@@ -174,7 +174,7 @@ describe("<SpaceSettingsVisibilityTab />", () => {
                 const component = getComponent({ space });
                 await toggleGuestAccessSection(component);
                 await act(async () => {
-                    Simulate.click(getGuestAccessToggle(component));
+                    Simulate.click(getGuestAccessToggle(component)!);
                 });
 
                 expect(getErrorMessage(component)).toEqual("Failed to update the guest access of this space");
@@ -187,7 +187,7 @@ describe("<SpaceSettingsVisibilityTab />", () => {
 
                 await toggleGuestAccessSection(component);
 
-                expect(getGuestAccessToggle(component).getAttribute("aria-disabled")).toEqual("true");
+                expect(getGuestAccessToggle(component)?.getAttribute("aria-disabled")).toEqual("true");
             });
         });
 
@@ -197,7 +197,7 @@ describe("<SpaceSettingsVisibilityTab />", () => {
                 const component = getComponent({ space });
 
                 // toggle off because space settings is != WorldReadable
-                expect(getHistoryVisibilityToggle(component).getAttribute("aria-checked")).toEqual("false");
+                expect(getHistoryVisibilityToggle(component)?.getAttribute("aria-checked")).toEqual("false");
             });
 
             it("updates history visibility on toggle", async () => {
@@ -205,10 +205,10 @@ describe("<SpaceSettingsVisibilityTab />", () => {
                 const component = getComponent({ space });
 
                 // toggle off because space settings is != WorldReadable
-                expect(getHistoryVisibilityToggle(component).getAttribute("aria-checked")).toEqual("false");
+                expect(getHistoryVisibilityToggle(component)?.getAttribute("aria-checked")).toEqual("false");
 
                 await act(async () => {
-                    Simulate.click(getHistoryVisibilityToggle(component));
+                    Simulate.click(getHistoryVisibilityToggle(component)!);
                 });
 
                 expect(mockMatrixClient.sendStateEvent).toHaveBeenCalledWith(
@@ -218,7 +218,7 @@ describe("<SpaceSettingsVisibilityTab />", () => {
                     "",
                 );
 
-                expect(getHistoryVisibilityToggle(component).getAttribute("aria-checked")).toEqual("true");
+                expect(getHistoryVisibilityToggle(component)?.getAttribute("aria-checked")).toEqual("true");
             });
 
             it("renders error message when history update fails", async () => {
@@ -227,7 +227,7 @@ describe("<SpaceSettingsVisibilityTab />", () => {
                 const component = getComponent({ space });
 
                 await act(async () => {
-                    Simulate.click(getHistoryVisibilityToggle(component));
+                    Simulate.click(getHistoryVisibilityToggle(component)!);
                 });
 
                 expect(getErrorMessage(component)).toEqual("Failed to update the history visibility of this space");
@@ -237,7 +237,7 @@ describe("<SpaceSettingsVisibilityTab />", () => {
                 const space = makeMockSpace(mockMatrixClient, joinRule, guestRule, historyRule);
                 (space.currentState.maySendStateEvent as jest.Mock).mockReturnValue(false);
                 const component = getComponent({ space });
-                expect(getHistoryVisibilityToggle(component).getAttribute("aria-disabled")).toEqual("true");
+                expect(getHistoryVisibilityToggle(component)?.getAttribute("aria-disabled")).toEqual("true");
             });
         });
 

@@ -62,7 +62,7 @@ export class PushRuleVectorState {
      * category or in PushRuleVectorState.LOUD, regardless of its enabled
      * state. Returns null if it does not match these categories.
      */
-    public static contentRuleVectorStateKind(rule: IPushRule): VectorState {
+    public static contentRuleVectorStateKind(rule: IPushRule): VectorState | null {
         const decoded = NotificationUtils.decodeActions(rule.actions);
 
         if (!decoded) {
@@ -77,7 +77,7 @@ export class PushRuleVectorState {
         if (decoded.highlight) {
             tweaks++;
         }
-        let stateKind = null;
+        let stateKind: VectorState | null = null;
         switch (tweaks) {
             case 0:
                 stateKind = VectorState.On;

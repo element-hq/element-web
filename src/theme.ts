@@ -133,7 +133,7 @@ function generateCustomFontFaceCSS(faces: IFontFaces[]): string {
         .map((face) => {
             const src = face.src
                 ?.map((srcElement) => {
-                    let format: string;
+                    let format = "";
                     if (srcElement.format) {
                         format = `format("${srcElement.format}")`;
                     }

@@ -116,7 +116,7 @@ export class Algorithm extends EventEmitter {
      * Awaitable version of the sticky room setter.
      * @param val The new room to sticky.
      */
-    public setStickyRoom(val: Room): void {
+    public setStickyRoom(val: Room | null): void {
         try {
             this.updateStickyRoom(val);
         } catch (e) {

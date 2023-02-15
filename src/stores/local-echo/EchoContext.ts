@@ -37,7 +37,7 @@ export abstract class EchoContext extends Whenable<ContextTransactionState> impl
         return this._state;
     }
 
-    public get firstFailedTime(): Date {
+    public get firstFailedTime(): Date | null {
         const failedTxn = this.transactions.find((t) => t.didPreviouslyFail || t.status === TransactionStatus.Error);
         if (failedTxn) return failedTxn.startTime;
         return null;

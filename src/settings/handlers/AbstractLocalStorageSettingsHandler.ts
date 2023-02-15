@@ -22,7 +22,7 @@ import SettingsHandler from "./SettingsHandler";
  */
 export default abstract class AbstractLocalStorageSettingsHandler extends SettingsHandler {
     // Shared cache between all subclass instances
-    private static itemCache = new Map<string, string>();
+    private static itemCache = new Map<string, string | null>();
     private static objectCache = new Map<string, object>();
     private static storageListenerBound = false;
 
@@ -51,14 +51,14 @@ export default abstract class AbstractLocalStorageSettingsHandler extends Settin
         }
     }
 
-    protected getItem(key: string): string {
+    protected getItem(key: string): string | null {
         if (!AbstractLocalStorageSettingsHandler.itemCache.has(key)) {
             const value = localStorage.getItem(key);
             AbstractLocalStorageSettingsHandler.itemCache.set(key, value);
             return value;
         }
 
-        return AbstractLocalStorageSettingsHandler.itemCache.get(key);
+        return AbstractLocalStorageSettingsHandler.itemCache.get(key)!;
     }
 
     protected getBoolean(key: string): boolean | null {
@@ -72,7 +72,7 @@ export default abstract class AbstractLocalStorageSettingsHandler extends Settin
     protected getObject<T extends object>(key: string): T | null {
         if (!AbstractLocalStorageSettingsHandler.objectCache.has(key)) {
             try {
-                const value = JSON.parse(localStorage.getItem(key));
+                const value = JSON.parse(localStorage.getItem(key)!);
                 AbstractLocalStorageSettingsHandler.objectCache.set(key, value);
                 return value;
             } catch (err) {

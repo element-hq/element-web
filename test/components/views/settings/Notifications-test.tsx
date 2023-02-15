@@ -310,11 +310,8 @@ describe("<Notifications />", () => {
             it("enables email notification when toggling on", async () => {
                 await getComponentAndWait();
 
-                const emailToggle = screen.getByTestId("notif-email-switch").querySelector('div[role="switch"]');
-
-                await act(async () => {
-                    fireEvent.click(emailToggle);
-                });
+                const emailToggle = screen.getByTestId("notif-email-switch").querySelector('div[role="switch"]')!;
+                fireEvent.click(emailToggle);
 
                 expect(mockClient.setPusher).toHaveBeenCalledWith(
                     expect.objectContaining({
@@ -332,11 +329,8 @@ describe("<Notifications />", () => {
                 mockClient.setPusher.mockRejectedValue({});
                 await getComponentAndWait();
 
-                const emailToggle = screen.getByTestId("notif-email-switch").querySelector('div[role="switch"]');
-
-                await act(async () => {
-                    fireEvent.click(emailToggle);
-                });
+                const emailToggle = screen.getByTestId("notif-email-switch").querySelector('div[role="switch"]')!;
+                fireEvent.click(emailToggle);
 
                 // force render
                 await flushPromises();
@@ -349,11 +343,8 @@ describe("<Notifications />", () => {
                 mockClient.getPushers.mockResolvedValue({ pushers: [testPusher] });
                 await getComponentAndWait();
 
-                const emailToggle = screen.getByTestId("notif-email-switch").querySelector('div[role="switch"]');
-
-                await act(async () => {
-                    fireEvent.click(emailToggle);
-                });
+                const emailToggle = screen.getByTestId("notif-email-switch").querySelector('div[role="switch"]')!;
+                fireEvent.click(emailToggle);
 
                 expect(mockClient.setPusher).toHaveBeenCalledWith({
                     ...testPusher,
@@ -364,21 +355,19 @@ describe("<Notifications />", () => {
 
         it("toggles and sets settings correctly", async () => {
             await getComponentAndWait();
-            let audioNotifsToggle: HTMLDivElement;
+            let audioNotifsToggle!: HTMLDivElement;
 
             const update = () => {
                 audioNotifsToggle = screen
                     .getByTestId("notif-setting-audioNotificationsEnabled")
-                    .querySelector('div[role="switch"]');
+                    .querySelector('div[role="switch"]')!;
             };
             update();
 
             expect(audioNotifsToggle.getAttribute("aria-checked")).toEqual("true");
             expect(SettingsStore.getValue("audioNotificationsEnabled")).toEqual(true);
 
-            act(() => {
-                fireEvent.click(audioNotifsToggle);
-            });
+            fireEvent.click(audioNotifsToggle);
             update();
 
             expect(audioNotifsToggle.getAttribute("aria-checked")).toEqual("false");
@@ -422,7 +411,7 @@ describe("<Notifications />", () => {
             const oneToOneRuleElement = screen.getByTestId(section + oneToOneRule.rule_id);
 
             await act(async () => {
-                const offToggle = oneToOneRuleElement.querySelector('input[type="radio"]');
+                const offToggle = oneToOneRuleElement.querySelector('input[type="radio"]')!;
                 fireEvent.click(offToggle);
             });
 

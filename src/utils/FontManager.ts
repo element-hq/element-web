@@ -69,7 +69,7 @@ async function isColrFontSupported(): Promise<boolean> {
 
     try {
         const canvas = document.createElement("canvas");
-        const context = canvas.getContext("2d");
+        const context = canvas.getContext("2d")!;
         const img = new Image();
         // eslint-disable-next-line
         const fontCOLR =

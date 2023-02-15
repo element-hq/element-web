@@ -66,7 +66,7 @@ interface Props {
 
 export function IncomingCallToast({ callEvent }: Props): JSX.Element {
     const roomId = callEvent.getRoomId()!;
-    const room = MatrixClientPeg.get().getRoom(roomId);
+    const room = MatrixClientPeg.get().getRoom(roomId) ?? undefined;
     const call = useCall(roomId);
 
     const dismissToast = useCallback((): void => {
@@ -107,7 +107,7 @@ export function IncomingCallToast({ callEvent }: Props): JSX.Element {
 
             defaultDispatcher.dispatch<ViewRoomPayload>({
                 action: Action.ViewRoom,
-                room_id: room.roomId,
+                room_id: room?.roomId,
                 view_call: true,
                 metricsTrigger: undefined,
             });

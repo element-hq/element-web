@@ -92,7 +92,7 @@ function mockClient({
             (it) =>
                 !searchTerm ||
                 it.user_id.toLowerCase().includes(searchTerm) ||
-                it.display_name.toLowerCase().includes(searchTerm),
+                it.display_name?.toLowerCase().includes(searchTerm),
         );
         return Promise.resolve({
             results: results.slice(0, limit ?? +Infinity),
@@ -138,7 +138,7 @@ describe("Spotlight Dialog", () => {
         mockedClient = mockClient({ rooms: [testPublicRoom], users: [testPerson] });
         testRoom = mkRoom(mockedClient, "!test23:example.com");
         mocked(testRoom.getMyMembership).mockReturnValue("join");
-        testLocalRoom = new LocalRoom(LOCAL_ROOM_ID_PREFIX + "test23", mockedClient, mockedClient.getUserId());
+        testLocalRoom = new LocalRoom(LOCAL_ROOM_ID_PREFIX + "test23", mockedClient, mockedClient.getUserId()!);
         testLocalRoom.updateMyMembership("join");
         mocked(mockedClient.getVisibleRooms).mockReturnValue([testRoom, testLocalRoom]);
 
@@ -149,7 +149,7 @@ describe("Spotlight Dialog", () => {
 
     describe("should apply filters supplied via props", () => {
         it("without filter", async () => {
-            const wrapper = mount(<SpotlightDialog initialFilter={null} onFinished={() => null} />);
+            const wrapper = mount(<SpotlightDialog onFinished={() => null} />);
             await act(async () => {
                 await sleep(200);
             });

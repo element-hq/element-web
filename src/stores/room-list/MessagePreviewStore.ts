@@ -123,7 +123,7 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
      * @param inTagId The tag ID in which the room resides
      * @returns The preview, or null if none present.
      */
-    public async getPreviewForRoom(room: Room, inTagId: TagID): Promise<string> {
+    public async getPreviewForRoom(room: Room, inTagId: TagID): Promise<string | null> {
         if (!room) return null; // invalid room, just return nothing
 
         if (!this.previews.has(room.roomId)) await this.generatePreview(room, inTagId);
@@ -132,14 +132,14 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
         if (!previews) return null;
 
         if (!previews.has(inTagId)) {
-            return previews.get(TAG_ANY);
+            return previews.get(TAG_ANY)!;
         }
-        return previews.get(inTagId);
+        return previews.get(inTagId) ?? null;
     }
 
     public generatePreviewForEvent(event: MatrixEvent): string {
         const previewDef = PREVIEWS[event.getType()];
-        return previewDef?.previewer.getTextFor(event, null, true) ?? "";
+        return previewDef?.previewer.getTextFor(event, undefined, true) ?? "";
     }
 
     private async generatePreview(room: Room, tagId?: TagID): Promise<void> {
@@ -171,7 +171,7 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
             if (!previewDef) continue;
             if (previewDef.isState && isNullOrUndefined(event.getStateKey())) continue;
 
-            const anyPreview = previewDef.previewer.getTextFor(event, null);
+            const anyPreview = previewDef.previewer.getTextFor(event);
             if (!anyPreview) continue; // not previewable for some reason
 
             changed = changed || anyPreview !== map.get(TAG_ANY);
@@ -179,7 +179,7 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
 
             const tagsToGenerate = Array.from(map.keys()).filter((t) => t !== TAG_ANY); // we did the any tag above
             for (const genTagId of tagsToGenerate) {
-                const realTagId: TagID = genTagId === TAG_ANY ? null : genTagId;
+                const realTagId = genTagId === TAG_ANY ? undefined : genTagId;
                 const preview = previewDef.previewer.getTextFor(event, realTagId);
                 if (preview === anyPreview) {
                     changed = changed || anyPreview !== map.get(genTagId);

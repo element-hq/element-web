@@ -50,19 +50,19 @@ describe("SlidingSyncManager", () => {
         });
         it("adds a custom subscription for a lazy-loadable room", async () => {
             const roomId = "!lazy:id";
-            const room = new Room(roomId, client, client.getUserId());
+            const room = new Room(roomId, client, client.getUserId()!);
             room.getLiveTimeline().initialiseState([
                 new MatrixEvent({
                     type: "m.room.create",
                     state_key: "",
                     event_id: "$abc123",
-                    sender: client.getUserId(),
+                    sender: client.getUserId()!,
                     content: {
                         creator: client.getUserId(),
                     },
                 }),
             ]);
-            mocked(client.getRoom).mockImplementation((r: string): Room => {
+            mocked(client.getRoom).mockImplementation((r: string): Room | null => {
                 if (roomId === r) {
                     return room;
                 }

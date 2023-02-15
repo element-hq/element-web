@@ -28,5 +28,5 @@ export class StandardActions {
     public static ACTION_HIGHLIGHT = encodeActions({ notify: true, highlight: true });
     public static ACTION_HIGHLIGHT_DEFAULT_SOUND = encodeActions({ notify: true, sound: "default", highlight: true });
     public static ACTION_DONT_NOTIFY = encodeActions({ notify: false });
-    public static ACTION_DISABLED: PushRuleAction[] | null = null;
+    public static ACTION_DISABLED: PushRuleAction[] | undefined = undefined;
 }

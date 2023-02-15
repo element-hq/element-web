@@ -45,7 +45,7 @@ async function getRulesFromCssFile(path: string): Promise<CSSStyleSheet> {
     // the style will only be parsed once it is added to a document
     doc.body.appendChild(styleElement);
 
-    return styleElement.sheet;
+    return styleElement.sheet!;
 }
 
 // naively culls unused css rules based on which classes are present in the html,

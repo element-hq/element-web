@@ -68,7 +68,7 @@ Override both the content body and the TextForEvent handler for specific msgtype
 This is useful when the content body contains fallback text that would explain that the client can't handle a particular
 type of tile.
 */
-const msgTypeHandlers: Record<string, (event: MatrixEvent) => string> = {
+const msgTypeHandlers: Record<string, (event: MatrixEvent) => string | null> = {
     [MsgType.KeyVerificationRequest]: (event: MatrixEvent) => {
         const name = (event.sender || {}).name;
         return _t("%(name)s is requesting verification", { name });
@@ -156,7 +156,7 @@ class NotifierClass {
             msg = "";
         }
 
-        let avatarUrl = null;
+        let avatarUrl: string | null = null;
         if (ev.sender && !SettingsStore.getValue("lowBandwidth")) {
             avatarUrl = Avatar.avatarUrlForMember(ev.sender, 40, 40, "crop");
         }
@@ -166,8 +166,8 @@ class NotifierClass {
         // if displayNotification returns non-null,  the platform supports
         // clearing notifications later, so keep track of this.
         if (notif) {
-            if (this.notifsByRoom[ev.getRoomId()] === undefined) this.notifsByRoom[ev.getRoomId()] = [];
-            this.notifsByRoom[ev.getRoomId()].push(notif);
+            if (this.notifsByRoom[ev.getRoomId()!] === undefined) this.notifsByRoom[ev.getRoomId()!] = [];
+            this.notifsByRoom[ev.getRoomId()!].push(notif);
         }
     }
 
@@ -219,7 +219,7 @@ class NotifierClass {
                 sound ? `audio[src='${sound.url}']` : "#messageAudio",
             );
             let audioElement = selector;
-            if (!selector) {
+            if (!audioElement) {
                 if (!sound) {
                     logger.error("No audio element or sound to play for notification");
                     return;
@@ -378,11 +378,11 @@ class NotifierClass {
             return global.localStorage.getItem("notifications_hidden") === "true";
         }
 
-        return this.toolbarHidden;
+        return !!this.toolbarHidden;
     }
 
     // XXX: Exported for tests
-    public onSyncStateChange = (state: SyncState, prevState?: SyncState, data?: ISyncStateData): void => {
+    public onSyncStateChange = (state: SyncState, prevState: SyncState | null, data?: ISyncStateData): void => {
         if (state === SyncState.Syncing) {
             this.isSyncing = true;
         } else if (state === SyncState.Stopped || state === SyncState.Error) {
@@ -411,7 +411,7 @@ class NotifierClass {
         // If it's an encrypted event and the type is still 'm.room.encrypted',
         // it hasn't yet been decrypted, so wait until it is.
         if (ev.isBeingDecrypted() || ev.isDecryptionFailure()) {
-            this.pendingEncryptedEventIds.push(ev.getId());
+            this.pendingEncryptedEventIds.push(ev.getId()!);
             // don't let the list fill up indefinitely
             while (this.pendingEncryptedEventIds.length > MAX_PENDING_ENCRYPTED) {
                 this.pendingEncryptedEventIds.shift();
@@ -427,7 +427,7 @@ class NotifierClass {
         // in which case it might decrypt soon if the keys arrive
         if (ev.isDecryptionFailure()) return;
 
-        const idx = this.pendingEncryptedEventIds.indexOf(ev.getId());
+        const idx = this.pendingEncryptedEventIds.indexOf(ev.getId()!);
         if (idx === -1) return;
 
         this.pendingEncryptedEventIds.splice(idx, 1);
@@ -456,7 +456,7 @@ class NotifierClass {
     public evaluateEvent(ev: MatrixEvent): void {
         // Mute notifications for broadcast info events
         if (ev.getType() === VoiceBroadcastInfoEventType) return;
-        let roomId = ev.getRoomId();
+        let roomId = ev.getRoomId()!;
         if (LegacyCallHandler.instance.getSupportsVirtualRooms()) {
             // Attempt to translate a virtual room to a native one
             const nativeRoomId = VoipUserMapper.sharedInstance().nativeRoomForVirtualRoom(roomId);
@@ -492,7 +492,7 @@ class NotifierClass {
                 this.displayPopupNotification(ev, room);
             }
             if (actions.tweaks.sound && this.isAudioEnabled()) {
-                PlatformPeg.get().loudNotification(ev, room);
+                PlatformPeg.get()?.loudNotification(ev, room);
                 this.playAudioNotification(ev, room);
             }
         }
@@ -504,7 +504,7 @@ class NotifierClass {
     private performCustomEventHandling(ev: MatrixEvent): void {
         if (ElementCall.CALL_EVENT_TYPE.names.includes(ev.getType()) && SettingsStore.getValue("feature_group_calls")) {
             ToastStore.sharedInstance().addOrReplaceToast({
-                key: getIncomingCallToastKey(ev.getStateKey()),
+                key: getIncomingCallToastKey(ev.getStateKey()!),
                 priority: 100,
                 component: IncomingCallToast,
                 bodyClassName: "mx_IncomingCallToast",

@@ -53,7 +53,7 @@ describe("shareLocation", () => {
             },
         );
 
-        shareLocationFn = shareLocation(client, roomId, shareType, null, () => {});
+        shareLocationFn = shareLocation(client, roomId, shareType, undefined, () => {});
     });
 
     it("should forward the call to doMaybeLocalRoomAction", () => {

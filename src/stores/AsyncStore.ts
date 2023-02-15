@@ -92,7 +92,7 @@ export abstract class AsyncStore<T extends Object> extends EventEmitter {
      * @param {T|*} newState The new state of the store.
      * @param {boolean} quiet If true, the function will not raise an UPDATE_EVENT.
      */
-    protected async reset(newState: T | Object = null, quiet = false): Promise<void> {
+    protected async reset(newState: T | Object | null = null, quiet = false): Promise<void> {
         await this.lock.acquireAsync();
         try {
             this.storeState = Object.freeze(<T>(newState || {}));

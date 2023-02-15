@@ -238,11 +238,11 @@ export class PosthogAnalytics {
         }
     }
 
-    private static async getPlatformProperties(): Promise<PlatformProperties> {
+    private static async getPlatformProperties(): Promise<Partial<PlatformProperties>> {
         const platform = PlatformPeg.get();
-        let appVersion: string;
+        let appVersion: string | undefined;
         try {
-            appVersion = await platform.getAppVersion();
+            appVersion = await platform?.getAppVersion();
         } catch (e) {
             // this happens if no version is set i.e. in dev
             appVersion = "unknown";
@@ -250,7 +250,7 @@ export class PosthogAnalytics {
 
         return {
             appVersion,
-            appPlatform: platform.getHumanReadableName(),
+            appPlatform: platform?.getHumanReadableName(),
         };
     }
 
@@ -411,7 +411,7 @@ export class PosthogAnalytics {
         // All other scenarios should not track a user before they have given
         // explicit consent that they are ok with their analytics data being collected
         const options: IPostHogEventOptions = {};
-        const registrationTime = parseInt(window.localStorage.getItem("mx_registration_time"), 10);
+        const registrationTime = parseInt(window.localStorage.getItem("mx_registration_time")!, 10);
         if (!isNaN(registrationTime)) {
             options.timestamp = new Date(registrationTime);
         }

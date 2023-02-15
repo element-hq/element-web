@@ -55,10 +55,10 @@ export class NotificationUtils {
     //   "highlight: true/false,
     // }
     // If the actions couldn't be decoded then returns null.
-    public static decodeActions(actions: PushRuleAction[]): IEncodedActions {
+    public static decodeActions(actions: PushRuleAction[]): IEncodedActions | null {
         let notify = false;
-        let sound = null;
-        let highlight = false;
+        let sound: string | undefined;
+        let highlight: boolean | undefined = false;
 
         for (let i = 0; i < actions.length; ++i) {
             const action = actions[i];
@@ -87,7 +87,7 @@ export class NotificationUtils {
         }
 
         const result: IEncodedActions = { notify, highlight };
-        if (sound !== null) {
+        if (sound !== undefined) {
             result.sound = sound;
         }
         return result;

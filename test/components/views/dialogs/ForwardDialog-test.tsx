@@ -74,13 +74,13 @@ describe("ForwardDialog", () => {
 
     const mountForwardDialog = (message = defaultMessage, rooms = defaultRooms) => {
         mockClient.getVisibleRooms.mockReturnValue(rooms);
-        mockClient.getRoom.mockImplementation((roomId) => rooms.find((room) => room.roomId === roomId));
+        mockClient.getRoom.mockImplementation((roomId) => rooms.find((room) => room.roomId === roomId) || null);
 
         const wrapper: RenderResult = render(
             <ForwardDialog
                 matrixClient={mockClient}
                 event={message}
-                permalinkCreator={new RoomPermalinkCreator(undefined, sourceRoom)}
+                permalinkCreator={new RoomPermalinkCreator(undefined!, sourceRoom)}
                 onFinished={jest.fn()}
             />,
         );
@@ -135,8 +135,8 @@ describe("ForwardDialog", () => {
                 }),
         );
 
-        let firstButton: Element;
-        let secondButton: Element;
+        let firstButton!: Element;
+        let secondButton!: Element;
         const update = () => {
             [firstButton, secondButton] = container.querySelectorAll(".mx_ForwardList_sendButton");
         };
@@ -253,7 +253,6 @@ describe("ForwardDialog", () => {
                 [M_ASSET.name]: { type: LocationAssetType.Pin },
                 [M_LOCATION.name]: {
                     uri: geoUri,
-                    description: undefined as string,
                 },
             };
             expect(mockClient.sendEvent).toHaveBeenCalledWith(
@@ -269,7 +268,7 @@ describe("ForwardDialog", () => {
             expect(container.querySelector(".mx_MLocationBody")).toBeTruthy();
             sendToFirstRoom(container);
 
-            const timestamp = M_TIMESTAMP.findIn<number>(modernLocationEvent.getContent());
+            const timestamp = M_TIMESTAMP.findIn<number>(modernLocationEvent.getContent())!;
             // text and description from original event are removed
             // text gets new default message from event values
             const text = `Location ${geoUri} at ${new Date(timestamp).toISOString()}`;
@@ -280,7 +279,6 @@ describe("ForwardDialog", () => {
                 [M_ASSET.name]: { type: LocationAssetType.Pin },
                 [M_LOCATION.name]: {
                     uri: geoUri,
-                    description: undefined as string,
                 },
             };
             expect(mockClient.sendEvent).toHaveBeenCalledWith(
@@ -301,7 +299,6 @@ describe("ForwardDialog", () => {
                 [M_ASSET.name]: { type: LocationAssetType.Pin },
                 [M_LOCATION.name]: {
                     uri: geoUri,
-                    description: undefined as string,
                 },
                 geo_uri: geoUri,
                 [M_TIMESTAMP.name]: timestamp,

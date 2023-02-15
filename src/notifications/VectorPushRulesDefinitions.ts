@@ -41,7 +41,7 @@ class VectorPushRuleDefinition {
     }
 
     // Translate the rule actions and its enabled value into vector state
-    public ruleToVectorState(rule: IAnnotatedPushRule): VectorState {
+    public ruleToVectorState(rule: IAnnotatedPushRule): VectorState | undefined {
         let enabled = false;
         if (rule) {
             enabled = rule.enabled;

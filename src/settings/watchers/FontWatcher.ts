@@ -30,7 +30,7 @@ export class FontWatcher implements IWatcher {
     // Externally we tell the user the font is size 15. Internally we use 10.
     public static readonly SIZE_DIFF = 5;
 
-    private dispatcherRef: string;
+    private dispatcherRef: string | null;
 
     public constructor() {
         this.dispatcherRef = null;
@@ -42,6 +42,7 @@ export class FontWatcher implements IWatcher {
     }
 
     public stop(): void {
+        if (!this.dispatcherRef) return;
         dis.unregister(this.dispatcherRef);
     }
 
@@ -77,7 +78,7 @@ export class FontWatcher implements IWatcher {
         if (fontSize !== size) {
             SettingsStore.setValue("baseFontSize", null, SettingLevel.DEVICE, fontSize);
         }
-        document.querySelector<HTMLElement>(":root").style.fontSize = toPx(fontSize);
+        document.querySelector<HTMLElement>(":root")!.style.fontSize = toPx(fontSize);
     };
 
     private setSystemFont = ({

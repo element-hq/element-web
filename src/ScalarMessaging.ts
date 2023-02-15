@@ -358,7 +358,7 @@ function inviteUser(event: MessageEvent<any>, roomId: string, userId: string): v
     if (room) {
         // if they are already invited or joined we can resolve immediately.
         const member = room.getMember(userId);
-        if (member && ["join", "invite"].includes(member.membership)) {
+        if (member && ["join", "invite"].includes(member.membership!)) {
             sendResponse(event, {
                 success: true,
             });
@@ -389,7 +389,7 @@ function kickUser(event: MessageEvent<any>, roomId: string, userId: string): voi
     if (room) {
         // if they are already not in the room we can resolve immediately.
         const member = room.getMember(userId);
-        if (!member || getEffectiveMembership(member.membership) === EffectiveMembership.Leave) {
+        if (!member || getEffectiveMembership(member.membership!) === EffectiveMembership.Leave) {
             sendResponse(event, {
                 success: true,
             });
@@ -472,7 +472,7 @@ function setWidget(event: MessageEvent<any>, roomId: string | null): void {
     } else {
         // Room widget
         if (!roomId) {
-            sendError(event, _t("Missing roomId."), null);
+            sendError(event, _t("Missing roomId."));
             return;
         }
         WidgetUtils.setRoomWidget(
@@ -675,7 +675,7 @@ function canSendEvent(event: MessageEvent<any>, roomId: string): void {
         sendError(event, _t("You are not in this room."));
         return;
     }
-    const me = client.credentials.userId;
+    const me = client.credentials.userId!;
 
     let canSend = false;
     if (isState) {

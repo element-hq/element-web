@@ -102,7 +102,7 @@ export abstract class Member {
      * Gets the MXC URL of this Member's avatar. For users this should be their profile's
      * avatar MXC URL or null if none set. For 3PIDs this should always be null.
      */
-    public abstract getMxcAvatarUrl(): string;
+    public abstract getMxcAvatarUrl(): string | null;
 }
 
 export class DirectoryMember extends Member {
@@ -127,8 +127,8 @@ export class DirectoryMember extends Member {
         return this._userId;
     }
 
-    public getMxcAvatarUrl(): string {
-        return this.avatarUrl;
+    public getMxcAvatarUrl(): string | null {
+        return this.avatarUrl ?? null;
     }
 }
 
@@ -156,7 +156,7 @@ export class ThreepidMember extends Member {
         return this.id;
     }
 
-    public getMxcAvatarUrl(): string {
+    public getMxcAvatarUrl(): string | null {
         return null;
     }
 }

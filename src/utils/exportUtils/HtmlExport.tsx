@@ -217,10 +217,10 @@ export default class HTMLExporter extends Exporter {
         </html>`;
     }
 
-    protected getAvatarURL(event: MatrixEvent): string | undefined {
+    protected getAvatarURL(event: MatrixEvent): string | null {
         const member = event.sender;
         const avatarUrl = member?.getMxcAvatarUrl();
-        return avatarUrl ? mediaFromMxc(avatarUrl).getThumbnailOfSourceHttp(30, 30, "crop") : undefined;
+        return avatarUrl ? mediaFromMxc(avatarUrl).getThumbnailOfSourceHttp(30, 30, "crop") : null;
     }
 
     protected async saveAvatarIfNeeded(event: MatrixEvent): Promise<void> {
@@ -386,7 +386,7 @@ export default class HTMLExporter extends Exporter {
 
     protected async createHTML(events: MatrixEvent[], start: number): Promise<string> {
         let content = "";
-        let prevEvent = null;
+        let prevEvent: MatrixEvent | null = null;
         for (let i = start; i < Math.min(start + 1000, events.length); i++) {
             const event = events[i];
             this.updateProgress(

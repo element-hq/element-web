@@ -90,7 +90,7 @@ export default class DevicesPanelEntry extends React.Component<IProps, IState> {
         Modal.createDialog(
             LogoutDialog,
             /* props= */ {},
-            /* className= */ null,
+            /* className= */ undefined,
             /* isPriority= */ false,
             /* isStatic= */ true,
         );

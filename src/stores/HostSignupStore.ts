@@ -19,7 +19,7 @@ import { AsyncStore } from "./AsyncStore";
 import { ActionPayload } from "../dispatcher/payloads";
 
 interface IState {
-    hostSignupActive?: boolean;
+    hostSignupActive: boolean;
 }
 
 export class HostSignupStore extends AsyncStore<IState> {

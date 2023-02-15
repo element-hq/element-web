@@ -44,7 +44,7 @@ export default class RoomSettingsHandler extends MatrixClientBackedSettingsHandl
     }
 
     private onEvent = (event: MatrixEvent, state: RoomState, prevEvent: MatrixEvent): void => {
-        const roomId = event.getRoomId();
+        const roomId = event.getRoomId()!;
         const room = this.client.getRoom(roomId);
 
         // Note: in tests and during the encryption setup on initial load we might not have
@@ -124,7 +124,7 @@ export default class RoomSettingsHandler extends MatrixClientBackedSettingsHandl
         let eventType = DEFAULT_SETTINGS_EVENT_TYPE;
         if (settingName === "urlPreviewsEnabled") eventType = "org.matrix.room.preview_urls";
 
-        return room?.currentState.maySendStateEvent(eventType, this.client.getUserId()) ?? false;
+        return room?.currentState.maySendStateEvent(eventType, this.client.getUserId()!) ?? false;
     }
 
     public isSupported(): boolean {

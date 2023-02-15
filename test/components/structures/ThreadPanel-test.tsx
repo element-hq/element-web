@@ -68,7 +68,7 @@ describe("ThreadPanel", () => {
             const found = container.querySelector(".mx_ThreadPanel_dropdown");
             expect(found).toBeTruthy();
             expect(screen.queryByRole("menu")).toBeFalsy();
-            fireEvent.click(found);
+            fireEvent.click(found!);
             expect(screen.queryByRole("menu")).toBeTruthy();
         });
 
@@ -80,11 +80,13 @@ describe("ThreadPanel", () => {
                     setFilterOption={() => undefined}
                 />,
             );
-            fireEvent.click(container.querySelector(".mx_ThreadPanel_dropdown"));
+            fireEvent.click(container.querySelector(".mx_ThreadPanel_dropdown")!);
             const found = screen.queryAllByRole("menuitemradio");
             expect(found).toHaveLength(2);
             const foundButton = screen.queryByRole("menuitemradio", { checked: true });
-            expect(foundButton.textContent).toEqual(`${_t("All threads")}${_t("Shows all threads from current room")}`);
+            expect(foundButton?.textContent).toEqual(
+                `${_t("All threads")}${_t("Shows all threads from current room")}`,
+            );
             expect(foundButton).toMatchSnapshot();
         });
     });

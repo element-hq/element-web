@@ -142,7 +142,7 @@ export function showAnyInviteErrors(
         });
         return false;
     } else {
-        const errorList = [];
+        const errorList: string[] = [];
         for (const addr of failedUsers) {
             if (states[addr] === "error") {
                 const reason = inviter.getErrorText(addr);
@@ -173,8 +173,11 @@ export function showAnyInviteErrors(
                                 <div key={addr} className="mx_InviteDialog_tile mx_InviteDialog_tile--inviterError">
                                     <div className="mx_InviteDialog_tile_avatarStack">
                                         <BaseAvatar
-                                            url={avatarUrl ? mediaFromMxc(avatarUrl).getSquareThumbnailHttp(24) : null}
-                                            name={name}
+                                            url={
+                                                (avatarUrl && mediaFromMxc(avatarUrl).getSquareThumbnailHttp(24)) ??
+                                                undefined
+                                            }
+                                            name={name!}
                                             idName={user?.userId}
                                             width={36}
                                             height={36}

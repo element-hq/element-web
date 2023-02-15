@@ -34,7 +34,7 @@ export class RoomEchoChamber extends GenericEchoChamber<RoomEchoContext, CachedR
         super(context, (k) => this.properties.get(k));
     }
 
-    protected onClientChanged(oldClient: MatrixClient, newClient: MatrixClient): void {
+    protected onClientChanged(oldClient: MatrixClient | null, newClient: MatrixClient | null): void {
         this.properties.clear();
         oldClient?.removeListener(ClientEvent.AccountData, this.onAccountData);
         if (newClient) {
@@ -57,7 +57,7 @@ export class RoomEchoChamber extends GenericEchoChamber<RoomEchoContext, CachedR
     };
 
     private updateNotificationVolume(): void {
-        const state = getRoomNotifsState(this.matrixClient, this.context.room.roomId);
+        const state = this.matrixClient ? getRoomNotifsState(this.matrixClient, this.context.room.roomId) : null;
         if (state) this.properties.set(CachedRoomKey.NotificationVolume, state);
         else this.properties.delete(CachedRoomKey.NotificationVolume);
         this.markEchoReceived(CachedRoomKey.NotificationVolume);

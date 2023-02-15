@@ -345,7 +345,7 @@ describe("Notifier", () => {
                 tweaks: {},
             });
             Notifier.start();
-            Notifier.onSyncStateChange(SyncState.Syncing);
+            Notifier.onSyncStateChange(SyncState.Syncing, null);
         });
 
         afterEach(() => {

@@ -236,9 +236,7 @@ describe("<MessageActionBar />", () => {
 
         it("opens message context menu on click", () => {
             const { getByTestId, queryByLabelText } = getComponent({ mxEvent: alicesMessageEvent });
-            act(() => {
-                fireEvent.click(queryByLabelText("Options"));
-            });
+            fireEvent.click(queryByLabelText("Options")!);
             expect(getByTestId("mx_MessageContextMenu")).toBeTruthy();
         });
     });
@@ -269,9 +267,7 @@ describe("<MessageActionBar />", () => {
         it("dispatches reply event on click", () => {
             const { queryByLabelText } = getComponent({ mxEvent: alicesMessageEvent });
 
-            act(() => {
-                fireEvent.click(queryByLabelText("Reply"));
-            });
+            fireEvent.click(queryByLabelText("Reply")!);
 
             expect(dispatcher.dispatch).toHaveBeenCalledWith({
                 action: "reply_to_event",
@@ -306,9 +302,7 @@ describe("<MessageActionBar />", () => {
 
         it("opens reaction picker on click", () => {
             const { queryByLabelText, getByTestId } = getComponent({ mxEvent: alicesMessageEvent });
-            act(() => {
-                fireEvent.click(queryByLabelText("React"));
-            });
+            fireEvent.click(queryByLabelText("React")!);
             expect(getByTestId("mx_EmojiPicker")).toBeTruthy();
         });
     });
@@ -421,9 +415,7 @@ describe("<MessageActionBar />", () => {
                 jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
                 const { getByLabelText } = getComponent({ mxEvent: alicesMessageEvent });
 
-                act(() => {
-                    fireEvent.click(getByLabelText("Reply in thread"));
-                });
+                fireEvent.click(getByLabelText("Reply in thread"));
 
                 expect(dispatcher.dispatch).toHaveBeenCalledWith({
                     action: Action.ViewUserSettings,
@@ -453,9 +445,7 @@ describe("<MessageActionBar />", () => {
             it("opens thread on click", () => {
                 const { getByLabelText } = getComponent({ mxEvent: alicesMessageEvent });
 
-                act(() => {
-                    fireEvent.click(getByLabelText("Reply in thread"));
-                });
+                fireEvent.click(getByLabelText("Reply in thread"));
 
                 expect(dispatcher.dispatch).toHaveBeenCalledWith({
                     action: Action.ShowThread,
@@ -482,9 +472,7 @@ describe("<MessageActionBar />", () => {
                 } as unknown as Thread);
                 const { getByLabelText } = getComponent({ mxEvent: threadReplyEvent });
 
-                act(() => {
-                    fireEvent.click(getByLabelText("Reply in thread"));
-                });
+                fireEvent.click(getByLabelText("Reply in thread"));
 
                 expect(dispatcher.dispatch).toHaveBeenCalledWith({
                     action: Action.ShowThread,
@@ -501,7 +489,7 @@ describe("<MessageActionBar />", () => {
     describe("favourite button", () => {
         //for multiple event usecase
         const favButton = (evt: MatrixEvent) => {
-            return getComponent({ mxEvent: evt }).getByTestId(evt.getId());
+            return getComponent({ mxEvent: evt }).getByTestId(evt.getId()!);
         };
 
         describe("when favourite_messages feature is enabled", () => {
@@ -538,9 +526,7 @@ describe("<MessageActionBar />", () => {
                 expect(localStorageMock.getItem("io_element_favouriteMessages")).toBeNull();
 
                 //if only alice's event is fired
-                act(() => {
-                    fireEvent.click(alicesAction);
-                });
+                fireEvent.click(alicesAction);
 
                 expect(alicesAction.classList).toContain("mx_MessageActionBar_favouriteButton_fillstar");
                 expect(bobsAction.classList).not.toContain("mx_MessageActionBar_favouriteButton_fillstar");
@@ -550,9 +536,7 @@ describe("<MessageActionBar />", () => {
                 );
 
                 //when bob's event is fired,both should be styled and stored in localStorage
-                act(() => {
-                    fireEvent.click(bobsAction);
-                });
+                fireEvent.click(bobsAction);
 
                 expect(alicesAction.classList).toContain("mx_MessageActionBar_favouriteButton_fillstar");
                 expect(bobsAction.classList).toContain("mx_MessageActionBar_favouriteButton_fillstar");
@@ -567,9 +551,7 @@ describe("<MessageActionBar />", () => {
                 );
 
                 //if decided to unfavourite bob's event by clicking again
-                act(() => {
-                    fireEvent.click(bobsAction);
-                });
+                fireEvent.click(bobsAction);
                 expect(bobsAction.classList).not.toContain("mx_MessageActionBar_favouriteButton_fillstar");
                 expect(alicesAction.classList).toContain("mx_MessageActionBar_favouriteButton_fillstar");
                 expect(localStorageMock.getItem("io_element_favouriteMessages")).toEqual('["$alices_message"]');
@@ -599,9 +581,7 @@ describe("<MessageActionBar />", () => {
             event.preventDefault = jest.fn();
 
             const { queryByTestId, queryByLabelText } = getComponent({ mxEvent: alicesMessageEvent });
-            act(() => {
-                fireEvent(queryByLabelText(buttonLabel), event);
-            });
+            fireEvent(queryByLabelText(buttonLabel)!, event);
             expect(event.stopPropagation).toHaveBeenCalled();
             expect(event.preventDefault).toHaveBeenCalled();
             expect(queryByTestId("mx_MessageContextMenu")).toBeFalsy();
@@ -610,9 +590,7 @@ describe("<MessageActionBar />", () => {
 
     it("does shows context menu when right-clicking options", () => {
         const { queryByTestId, queryByLabelText } = getComponent({ mxEvent: alicesMessageEvent });
-        act(() => {
-            fireEvent.contextMenu(queryByLabelText("Options"));
-        });
+        fireEvent.contextMenu(queryByLabelText("Options")!);
         expect(queryByTestId("mx_MessageContextMenu")).toBeTruthy();
     });
 });

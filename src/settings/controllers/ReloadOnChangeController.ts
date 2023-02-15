@@ -20,6 +20,6 @@ import { SettingLevel } from "../SettingLevel";
 
 export default class ReloadOnChangeController extends SettingController {
     public onChange(level: SettingLevel, roomId: string, newValue: any): void {
-        PlatformPeg.get().reload();
+        PlatformPeg.get()?.reload();
     }
 }

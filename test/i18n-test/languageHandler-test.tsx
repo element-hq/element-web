@@ -34,7 +34,7 @@ describe("languageHandler", function () {
     const plurals = "and %(count)s others...";
     const variableSub = "You are now ignoring %(userId)s";
 
-    type TestCase = [string, string, Record<string, unknown>, Record<string, unknown>, TranslatedString];
+    type TestCase = [string, string, Record<string, unknown>, Record<string, unknown> | undefined, TranslatedString];
     const testCasesEn: TestCase[] = [
         // description of the test case, translationString, variables, tags, expected result
         ["translates a basic string", basicString, {}, undefined, "Rooms"],
@@ -82,7 +82,7 @@ describe("languageHandler", function () {
         ],
     ];
 
-    let oldNodeEnv: string;
+    let oldNodeEnv: string | undefined;
     beforeAll(() => {
         oldNodeEnv = process.env.NODE_ENV;
         process.env.NODE_ENV = "test";
@@ -110,7 +110,7 @@ describe("languageHandler", function () {
         });
 
         it.each(testCasesEn)("%s", (_d, translationString, variables, tags, result) => {
-            expect(_t(translationString, variables, tags)).toEqual(result);
+            expect(_t(translationString, variables, tags!)).toEqual(result);
         });
 
         it("replacements in the wrong order", function () {
@@ -168,25 +168,25 @@ describe("languageHandler", function () {
 
             describe("_t", () => {
                 it("translated correctly when plural string exists for count", () => {
-                    expect(_t(lvExistingPlural, { count: 1, filename: "test.txt" }, undefined)).toEqual(
+                    expect(_t(lvExistingPlural, { count: 1, filename: "test.txt" })).toEqual(
                         "Качване на test.txt и 1 друг",
                     );
                 });
                 it.each(pluralCases)("%s", (_d, translationString, variables, tags, result) => {
-                    expect(_t(translationString, variables, tags)).toEqual(result);
+                    expect(_t(translationString, variables, tags!)).toEqual(result);
                 });
             });
 
             describe("_tDom()", () => {
                 it("translated correctly when plural string exists for count", () => {
-                    expect(_tDom(lvExistingPlural, { count: 1, filename: "test.txt" }, undefined)).toEqual(
+                    expect(_tDom(lvExistingPlural, { count: 1, filename: "test.txt" })).toEqual(
                         "Качване на test.txt и 1 друг",
                     );
                 });
                 it.each(pluralCases)(
                     "%s and translates with fallback locale, attributes fallback locale",
                     (_d, translationString, variables, tags, result) => {
-                        expect(_tDom(translationString, variables, tags)).toEqual(<span lang="en">{result}</span>);
+                        expect(_tDom(translationString, variables, tags!)).toEqual(<span lang="en">{result}</span>);
                     },
                 );
             });
@@ -197,7 +197,7 @@ describe("languageHandler", function () {
                 it.each(testCasesEn)(
                     "%s and translates with fallback locale",
                     (_d, translationString, variables, tags, result) => {
-                        expect(_t(translationString, variables, tags)).toEqual(result);
+                        expect(_t(translationString, variables, tags!)).toEqual(result);
                     },
                 );
             });
@@ -206,7 +206,7 @@ describe("languageHandler", function () {
                 it.each(testCasesEn)(
                     "%s and translates with fallback locale, attributes fallback locale",
                     (_d, translationString, variables, tags, result) => {
-                        expect(_tDom(translationString, variables, tags)).toEqual(<span lang="en">{result}</span>);
+                        expect(_tDom(translationString, variables, tags!)).toEqual(<span lang="en">{result}</span>);
                     },
                 );
             });
@@ -216,12 +216,12 @@ describe("languageHandler", function () {
     describe("when languages dont load", () => {
         it("_t", () => {
             const STRING_NOT_IN_THE_DICTIONARY = "a string that isn't in the translations dictionary";
-            expect(_t(STRING_NOT_IN_THE_DICTIONARY, {}, undefined)).toEqual(STRING_NOT_IN_THE_DICTIONARY);
+            expect(_t(STRING_NOT_IN_THE_DICTIONARY, {})).toEqual(STRING_NOT_IN_THE_DICTIONARY);
         });
 
         it("_tDom", () => {
             const STRING_NOT_IN_THE_DICTIONARY = "a string that isn't in the translations dictionary";
-            expect(_tDom(STRING_NOT_IN_THE_DICTIONARY, {}, undefined)).toEqual(
+            expect(_tDom(STRING_NOT_IN_THE_DICTIONARY, {})).toEqual(
                 <span lang="en">{STRING_NOT_IN_THE_DICTIONARY}</span>,
             );
         });

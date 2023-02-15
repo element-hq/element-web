@@ -44,11 +44,11 @@ describe("MemberList", () => {
         return room;
     }
 
-    let parentDiv: HTMLDivElement = null;
-    let client: MatrixClient = null;
-    let root: Component = null;
+    let parentDiv: HTMLDivElement;
+    let client: MatrixClient;
+    let root: Component;
     let memberListRoom: Room;
-    let memberList: MemberList = null;
+    let memberList: MemberList;
 
     let adminUsers: RoomMember[] = [];
     let moderatorUsers: RoomMember[] = [];
@@ -140,14 +140,13 @@ describe("MemberList", () => {
         if (parentDiv) {
             ReactDOM.unmountComponentAtNode(parentDiv);
             parentDiv.remove();
-            parentDiv = null;
         }
 
         done();
     });
 
     function expectOrderedByPresenceAndPowerLevel(memberTiles: MemberTile[], isPresenceEnabled: boolean) {
-        let prevMember = null;
+        let prevMember: RoomMember | undefined;
         for (const tile of memberTiles) {
             const memberA = prevMember;
             const memberB = tile.props.member;
@@ -160,8 +159,8 @@ describe("MemberList", () => {
             console.log(memberList.memberString(memberA));
             console.log(memberList.memberString(memberB));
 
-            const userA = memberA.user;
-            const userB = memberB.user;
+            const userA = memberA.user!;
+            const userB = memberB.user!;
 
             let groupChange = false;
 
@@ -229,16 +228,16 @@ describe("MemberList", () => {
                 const onlineUsers = [adminUsers[0]];
                 const offlineUsers = [...moderatorUsers, ...adminUsers.slice(1), ...defaultUsers.slice(1)];
                 activeUsers.forEach((u) => {
-                    u.user.currentlyActive = true;
-                    u.user.presence = "online";
+                    u.user!.currentlyActive = true;
+                    u.user!.presence = "online";
                 });
                 onlineUsers.forEach((u) => {
-                    u.user.currentlyActive = false;
-                    u.user.presence = "online";
+                    u.user!.currentlyActive = false;
+                    u.user!.presence = "online";
                 });
                 offlineUsers.forEach((u) => {
-                    u.user.currentlyActive = false;
-                    u.user.presence = "offline";
+                    u.user!.currentlyActive = false;
+                    u.user!.presence = "offline";
                 });
 
                 // Bypass all the event listeners and skip to the good part
@@ -268,18 +267,18 @@ describe("MemberList", () => {
                 const inactiveUsers = [...moderatorUsers, ...adminUsers.slice(1), ...defaultUsers.slice(1)];
                 activeUsers.forEach((u) => {
                     u.powerLevel = 100; // set everyone to the same PL to avoid running that check
-                    u.user.lastPresenceTs = 1000;
-                    u.user.lastActiveAgo = 0;
+                    u.user!.lastPresenceTs = 1000;
+                    u.user!.lastActiveAgo = 0;
                 });
                 semiActiveUsers.forEach((u) => {
                     u.powerLevel = 100;
-                    u.user.lastPresenceTs = 1000;
-                    u.user.lastActiveAgo = 50;
+                    u.user!.lastPresenceTs = 1000;
+                    u.user!.lastActiveAgo = 50;
                 });
                 inactiveUsers.forEach((u) => {
                     u.powerLevel = 100;
-                    u.user.lastPresenceTs = 1000;
-                    u.user.lastActiveAgo = 100;
+                    u.user!.lastPresenceTs = 1000;
+                    u.user!.lastActiveAgo = 100;
                 });
 
                 // Bypass all the event listeners and skip to the good part
@@ -294,10 +293,10 @@ describe("MemberList", () => {
                 // Intentionally put everyone on the same level to force a name comparison
                 const allUsers = [...adminUsers, ...moderatorUsers, ...defaultUsers];
                 allUsers.forEach((u) => {
-                    u.user.currentlyActive = true;
-                    u.user.presence = "online";
-                    u.user.lastPresenceTs = 1000;
-                    u.user.lastActiveAgo = 0;
+                    u.user!.currentlyActive = true;
+                    u.user!.presence = "online";
+                    u.user!.lastPresenceTs = 1000;
+                    u.user!.lastActiveAgo = 0;
                     u.powerLevel = 100;
                 });
 

@@ -73,16 +73,16 @@ describe("EmojiProvider", function () {
         add("😘"); //kissing_heart
         add("😘");
         add("😚"); //kissing_closed_eyes
-        const emojiProvider = new EmojiProvider(null);
+        const emojiProvider = new EmojiProvider(null!);
 
         let completionsList = await emojiProvider.getCompletions(":kis", { beginning: true, end: 3, start: 3 });
-        expect(completionsList[0].component.props.title).toEqual(":kissing_heart:");
-        expect(completionsList[1].component.props.title).toEqual(":kissing_closed_eyes:");
+        expect(completionsList[0].component!.props.title).toEqual(":kissing_heart:");
+        expect(completionsList[1].component!.props.title).toEqual(":kissing_closed_eyes:");
 
         completionsList = await emojiProvider.getCompletions(":kissing_c", { beginning: true, end: 3, start: 3 });
-        expect(completionsList[0].component.props.title).toEqual(":kissing_closed_eyes:");
+        expect(completionsList[0].component!.props.title).toEqual(":kissing_closed_eyes:");
 
         completionsList = await emojiProvider.getCompletions(":so", { beginning: true, end: 2, start: 2 });
-        expect(completionsList[0].component.props.title).toEqual(":sob:");
+        expect(completionsList[0].component!.props.title).toEqual(":sob:");
     });
 });

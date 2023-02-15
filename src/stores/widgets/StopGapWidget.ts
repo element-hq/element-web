@@ -33,6 +33,7 @@ import {
     WidgetApiFromWidgetAction,
     WidgetKind,
 } from "matrix-widget-api";
+import { Optional } from "matrix-events-sdk";
 import { EventEmitter } from "events";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/models/event";
@@ -156,7 +157,7 @@ export class ElementWidget extends Widget {
 
 export class StopGapWidget extends EventEmitter {
     private client: MatrixClient;
-    private messaging: ClientWidgetApi;
+    private messaging: ClientWidgetApi | null;
     private mockWidget: ElementWidget;
     private scalarToken: string;
     private roomId?: string;
@@ -172,7 +173,7 @@ export class StopGapWidget extends EventEmitter {
         // Backwards compatibility: not all old widgets have a creatorUserId
         if (!app.creatorUserId) {
             app = objectShallowClone(app); // clone to prevent accidental mutation
-            app.creatorUserId = this.client.getUserId();
+            app.creatorUserId = this.client.getUserId()!;
         }
 
         this.mockWidget = new ElementWidget(app);
@@ -181,7 +182,7 @@ export class StopGapWidget extends EventEmitter {
         this.virtual = app.eventId === undefined;
     }
 
-    private get eventListenerRoomId(): string {
+    private get eventListenerRoomId(): Optional<string> {
         // When widgets are listening to events, we need to make sure they're only
         // receiving events for the right room. In particular, room widgets get locked
         // to the room they were added in while account widgets listen to the currently
@@ -192,7 +193,7 @@ export class StopGapWidget extends EventEmitter {
         return SdkContextClass.instance.roomViewStore.getRoomId();
     }
 
-    public get widgetApi(): ClientWidgetApi {
+    public get widgetApi(): ClientWidgetApi | null {
         return this.messaging;
     }
 
@@ -214,7 +215,7 @@ export class StopGapWidget extends EventEmitter {
         const fromCustomisation = WidgetVariableCustomisations?.provideVariables?.() ?? {};
         const defaults: ITemplateParams = {
             widgetRoomId: this.roomId,
-            currentUserId: this.client.getUserId(),
+            currentUserId: this.client.getUserId()!,
             userDisplayName: OwnProfileStore.instance.displayName,
             userHttpAvatarUrl: OwnProfileStore.instance.getHttpAvatarUrl(),
             clientId: ELEMENT_CLIENT_ID,
@@ -256,9 +257,9 @@ export class StopGapWidget extends EventEmitter {
         ev.preventDefault();
         if (ModalWidgetStore.instance.canOpenModalWidget()) {
             ModalWidgetStore.instance.openModalWidget(ev.detail.data, this.mockWidget, this.roomId);
-            this.messaging.transport.reply(ev.detail, {}); // ack
+            this.messaging?.transport.reply(ev.detail, {}); // ack
         } else {
-            this.messaging.transport.reply(ev.detail, {
+            this.messaging?.transport.reply(ev.detail, {
                 error: {
                     message: "Unable to open modal at this time",
                 },
@@ -301,14 +302,14 @@ export class StopGapWidget extends EventEmitter {
             // Check up front if this is even a valid request
             const targetRoomId = (ev.detail.data || {}).room_id;
             if (!targetRoomId) {
-                return this.messaging.transport.reply(ev.detail, <IWidgetApiErrorResponseData>{
+                return this.messaging?.transport.reply(ev.detail, <IWidgetApiErrorResponseData>{
                     error: { message: "Room ID not supplied." },
                 });
             }
 
             // Check the widget's permission
-            if (!this.messaging.hasCapability(ElementWidgetCapabilities.CanChangeViewedRoom)) {
-                return this.messaging.transport.reply(ev.detail, <IWidgetApiErrorResponseData>{
+            if (!this.messaging?.hasCapability(ElementWidgetCapabilities.CanChangeViewedRoom)) {
+                return this.messaging?.transport.reply(ev.detail, <IWidgetApiErrorResponseData>{
                     error: { message: "This widget does not have permission for this action (denied)." },
                 });
             }
@@ -332,7 +333,7 @@ export class StopGapWidget extends EventEmitter {
             const events = room.getLiveTimeline()?.getEvents() || [];
             const roomEvent = events[events.length - 1];
             if (!roomEvent) continue; // force later code to think the room is fresh
-            this.readUpToMap[room.roomId] = roomEvent.getId();
+            this.readUpToMap[room.roomId] = roomEvent.getId()!;
         }
 
         // Attach listeners for feeding events - the underlying widget classes handle permissions for us
@@ -343,7 +344,7 @@ export class StopGapWidget extends EventEmitter {
         this.messaging.on(
             `action:${WidgetApiFromWidgetAction.UpdateAlwaysOnScreen}`,
             (ev: CustomEvent<IStickyActionRequest>) => {
-                if (this.messaging.hasCapability(MatrixCapabilities.AlwaysOnScreen)) {
+                if (this.messaging?.hasCapability(MatrixCapabilities.AlwaysOnScreen)) {
                     ActiveWidgetStore.instance.setWidgetPersistence(
                         this.mockWidget.id,
                         this.roomId,
@@ -360,7 +361,7 @@ export class StopGapWidget extends EventEmitter {
         this.messaging.on(
             `action:${WidgetApiFromWidgetAction.SendSticker}`,
             (ev: CustomEvent<IStickerActionRequest>) => {
-                if (this.messaging.hasCapability(MatrixCapabilities.StickerSending)) {
+                if (this.messaging?.hasCapability(MatrixCapabilities.StickerSending)) {
                     // Acknowledge first
                     ev.preventDefault();
                     this.messaging.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{});
@@ -381,7 +382,7 @@ export class StopGapWidget extends EventEmitter {
                 (ev: CustomEvent<IWidgetApiRequest>) => {
                     // Acknowledge first
                     ev.preventDefault();
-                    this.messaging.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{});
+                    this.messaging?.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{});
 
                     // First close the stickerpicker
                     defaultDispatcher.dispatch({ action: "stickerpicker_close" });
@@ -415,7 +416,7 @@ export class StopGapWidget extends EventEmitter {
                         }),
                     });
                 }
-                this.messaging.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{});
+                this.messaging?.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{});
             });
         }
     }
@@ -478,7 +479,7 @@ export class StopGapWidget extends EventEmitter {
     private onToDeviceEvent = async (ev: MatrixEvent): Promise<void> => {
         await this.client.decryptEventIfNeeded(ev);
         if (ev.isDecryptionFailure()) return;
-        await this.messaging.feedToDevice(ev.getEffectiveEvent() as IRoomEvent, ev.isEncrypted());
+        await this.messaging?.feedToDevice(ev.getEffectiveEvent() as IRoomEvent, ev.isEncrypted());
     };
 
     private feedEvent(ev: MatrixEvent): void {
@@ -490,7 +491,7 @@ export class StopGapWidget extends EventEmitter {
         //
         // This approach of "read up to" prevents widgets receiving decryption spam from startup or
         // receiving out-of-order events from backfill and such.
-        const upToEventId = this.readUpToMap[ev.getRoomId()];
+        const upToEventId = this.readUpToMap[ev.getRoomId()!];
         if (upToEventId) {
             // Small optimization for exact match (prevent search)
             if (upToEventId === ev.getId()) {
@@ -501,7 +502,7 @@ export class StopGapWidget extends EventEmitter {
 
             // Timelines are most recent last, so reverse the order and limit ourselves to 100 events
             // to avoid overusing the CPU.
-            const timeline = this.client.getRoom(ev.getRoomId()).getLiveTimeline();
+            const timeline = this.client.getRoom(ev.getRoomId()!).getLiveTimeline();
             const events = arrayFastClone(timeline.getEvents()).reverse().slice(0, 100);
 
             for (const timelineEvent of events) {

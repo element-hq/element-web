@@ -53,7 +53,7 @@ export default abstract class SettingController {
      * @param {*} newValue The new value for the setting, may be null.
      * @return {boolean} Whether the settings change should be accepted.
      */
-    public async beforeChange(level: SettingLevel, roomId: string, newValue: any): Promise<boolean> {
+    public async beforeChange(level: SettingLevel, roomId: string | null, newValue: any): Promise<boolean> {
         return true;
     }
 
@@ -63,7 +63,7 @@ export default abstract class SettingController {
      * @param {String} roomId The room ID, may be null.
      * @param {*} newValue The new value for the setting, may be null.
      */
-    public onChange(level: SettingLevel, roomId: string, newValue: any): void {
+    public onChange(level: SettingLevel, roomId: string | null, newValue: any): void {
         // do nothing by default
     }
 

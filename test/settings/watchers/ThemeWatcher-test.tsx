@@ -37,12 +37,12 @@ function makeMatchMedia(values: any) {
     }
 
     return function matchMedia(query: string) {
-        return new FakeMediaQueryList(query);
+        return new FakeMediaQueryList(query) as unknown as MediaQueryList;
     };
 }
 
 function makeGetValue(values: any) {
-    return function getValue<T = any>(settingName: string, _roomId: string = null, _excludeDefault = false): T {
+    return function getValue<T = any>(settingName: string, _roomId: string | null = null, _excludeDefault = false): T {
         return values[settingName];
     };
 }
@@ -51,7 +51,7 @@ function makeGetValueAt(values: any) {
     return function getValueAt(
         _level: SettingLevel,
         settingName: string,
-        _roomId: string = null,
+        _roomId: string | null = null,
         _explicit = false,
         _excludeDefault = false,
     ): any {

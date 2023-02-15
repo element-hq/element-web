@@ -37,13 +37,13 @@ describe("NotificationBadge", () => {
                 />,
             );
 
-            fireEvent.click(container.firstChild);
+            fireEvent.click(container.firstChild!);
             expect(cb).toHaveBeenCalledTimes(1);
 
-            fireEvent.mouseEnter(container.firstChild);
+            fireEvent.mouseEnter(container.firstChild!);
             expect(cb).toHaveBeenCalledTimes(2);
 
-            fireEvent.mouseLeave(container.firstChild);
+            fireEvent.mouseLeave(container.firstChild!);
             expect(cb).toHaveBeenCalledTimes(3);
         });
 

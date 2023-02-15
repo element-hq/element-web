@@ -871,7 +871,7 @@ export class ElementCall extends Call {
     private onScreenshareRequest = async (ev: CustomEvent<IWidgetApiRequest>): Promise<void> => {
         ev.preventDefault();
 
-        if (PlatformPeg.get().supportsDesktopCapturer()) {
+        if (PlatformPeg.get()?.supportsDesktopCapturer()) {
             await this.messaging!.transport.reply(ev.detail, { pending: true });
 
             const { finished } = Modal.createDialog(DesktopCapturerSourcePicker);

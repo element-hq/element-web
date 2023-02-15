@@ -62,7 +62,7 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<IState> {
      */
     public getListState(tagId: TagID): ListNotificationState {
         if (this.listMap.has(tagId)) {
-            return this.listMap.get(tagId);
+            return this.listMap.get(tagId)!;
         }
 
         // TODO: Update if/when invites move out of the room list.
@@ -86,14 +86,14 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<IState> {
         if (!this.roomMap.has(room)) {
             this.roomMap.set(room, new RoomNotificationState(room));
         }
-        return this.roomMap.get(room);
+        return this.roomMap.get(room)!;
     }
 
     public static get instance(): RoomNotificationStateStore {
         return RoomNotificationStateStore.internalInstance;
     }
 
-    private onSync = (state: SyncState, prevState?: SyncState, data?: ISyncStateData): void => {
+    private onSync = (state: SyncState, prevState: SyncState | null, data?: ISyncStateData): void => {
         // Only count visible rooms to not torment the user with notification counts in rooms they can't see.
         // This will include highlights from the previous version of the room internally
         const globalState = new SummarizedNotificationState();

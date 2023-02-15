@@ -109,7 +109,7 @@ async function getSecretStorageKey({
         if (!keyInfo) {
             // if the default key is not available, pretend the default key
             // isn't set
-            keyId = undefined;
+            keyId = null;
         }
     }
     if (!keyId) {
@@ -156,7 +156,7 @@ async function getSecretStorageKey({
                 return MatrixClientPeg.get().checkSecretStorageKey(key, keyInfo);
             },
         },
-        /* className= */ null,
+        /* className= */ undefined,
         /* isPriorityModal= */ false,
         /* isStaticModal= */ false,
         /* options= */ {
@@ -206,7 +206,7 @@ export async function getDehydrationKey(
                 }
             },
         },
-        /* className= */ null,
+        /* className= */ undefined,
         /* isPriorityModal= */ false,
         /* isStaticModal= */ false,
         /* options= */ {
@@ -243,7 +243,7 @@ async function onSecretRequested(
     requestId: string,
     name: string,
     deviceTrust: DeviceTrustLevel,
-): Promise<string> {
+): Promise<string | undefined> {
     logger.log("onSecretRequested", userId, deviceId, requestId, name, deviceTrust);
     const client = MatrixClientPeg.get();
     if (userId !== client.getUserId()) {
@@ -259,19 +259,19 @@ async function onSecretRequested(
         name === "m.cross_signing.user_signing"
     ) {
         const callbacks = client.getCrossSigningCacheCallbacks();
-        if (!callbacks.getCrossSigningKeyCache) return;
+        if (!callbacks?.getCrossSigningKeyCache) return;
         const keyId = name.replace("m.cross_signing.", "");
         const key = await callbacks.getCrossSigningKeyCache(keyId);
         if (!key) {
             logger.log(`${keyId} requested by ${deviceId}, but not found in cache`);
         }
-        return key && encodeBase64(key);
+        return key ? encodeBase64(key) : undefined;
     } else if (name === "m.megolm_backup.v1") {
-        const key = await client.crypto.getSessionBackupPrivateKey();
+        const key = await client.crypto?.getSessionBackupPrivateKey();
         if (!key) {
             logger.log(`session backup key requested by ${deviceId}, but not found in cache`);
         }
-        return key && encodeBase64(key);
+        return key ? encodeBase64(key) : undefined;
     }
     logger.warn("onSecretRequested didn't recognise the secret named ", name);
 }
@@ -284,7 +284,7 @@ export const crossSigningCallbacks: ICryptoCallbacks = {
 };
 
 export async function promptForBackupPassphrase(): Promise<Uint8Array> {
-    let key: Uint8Array;
+    let key!: Uint8Array;
 
     const { finished } = Modal.createDialog(
         RestoreKeyBackupDialog,
@@ -292,7 +292,7 @@ export async function promptForBackupPassphrase(): Promise<Uint8Array> {
             showSummary: false,
             keyCallback: (k: Uint8Array) => (key = k),
         },
-        null,
+        undefined,
         /* priority = */ false,
         /* static = */ true,
     );
@@ -338,7 +338,7 @@ export async function accessSecretStorage(func = async (): Promise<void> => {}, 
                 {
                     forceReset,
                 },
-                null,
+                undefined,
                 /* priority = */ false,
                 /* static = */ true,
                 /* options = */ {
