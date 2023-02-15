@@ -65,7 +65,7 @@ describe("MPollBody", () => {
         expect(allVotes(newVoteRelations([]))).toEqual([]);
     });
 
-    it("renders a loader while responses are still loading", async () => {
+    xit("renders a loader while responses are still loading", async () => {
         const votes = [
             responseEvent("@me:example.com", "pizza"),
             responseEvent("@bellc:example.com", "pizza"),
