@@ -180,6 +180,7 @@ export function createTestClient(): MatrixClient {
         getPushRules: jest.fn().mockResolvedValue(undefined),
         getPushers: jest.fn().mockResolvedValue({ pushers: [] }),
         getThreePids: jest.fn().mockResolvedValue({ threepids: [] }),
+        bulkLookupThreePids: jest.fn().mockResolvedValue({ threepids: [] }),
         setPusher: jest.fn().mockResolvedValue(undefined),
         setPushRuleEnabled: jest.fn().mockResolvedValue(undefined),
         setPushRuleActions: jest.fn().mockResolvedValue(undefined),

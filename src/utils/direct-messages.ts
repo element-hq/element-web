@@ -28,9 +28,19 @@ import { findDMRoom } from "./dm/findDMRoom";
 import { privateShouldBeEncrypted } from "./rooms";
 import { createDmLocalRoom } from "./dm/createDmLocalRoom";
 import { startDm } from "./dm/startDm";
+import { resolveThreePids } from "./threepids";
 
 export async function startDmOnFirstMessage(client: MatrixClient, targets: Member[]): Promise<Room> {
-    const existingRoom = findDMRoom(client, targets);
+    let resolvedTargets = targets;
+
+    try {
+        resolvedTargets = await resolveThreePids(targets, client);
+    } catch (e) {
+        logger.warn("Error resolving 3rd-party members", e);
+    }
+
+    const existingRoom = findDMRoom(client, resolvedTargets);
+
     if (existingRoom) {
         dis.dispatch<ViewRoomPayload>({
             action: Action.ViewRoom,
@@ -42,12 +52,12 @@ export async function startDmOnFirstMessage(client: MatrixClient, targets: Membe
         return existingRoom;
     }
 
-    const room = await createDmLocalRoom(client, targets);
+    const room = await createDmLocalRoom(client, resolvedTargets);
     dis.dispatch({
         action: Action.ViewRoom,
         room_id: room.roomId,
         joining: false,
-        targets,
+        targets: resolvedTargets,
     });
     return room;
 }
