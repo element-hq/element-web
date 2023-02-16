@@ -10,7 +10,6 @@
         "https://scalar-staging.vector.im/api",
         "https://scalar-staging.riot.im/scalar/api"
     ],
-    "hosting_signup_link": "https://element.io/matrix-services?utm_source=element-web&utm_medium=web",
     "bug_report_endpoint_url": "https://element.io/bugreports/submit",
     "uisi_autorageshake_app": "element-auto-uisi",
     "showLabsSettings": true,
@@ -31,14 +30,6 @@
             "text": "Cookie Policy"
         }
     ],
-    "hostSignup": {
-        "brand": "Element Home",
-        "cookiePolicyUrl": "https://element.io/cookie-policy",
-        "domains": ["matrix.org"],
-        "privacyPolicyUrl": "https://element.io/privacy",
-        "termsOfServiceUrl": "https://element.io/terms-of-service",
-        "url": "https://ems.element.io/element-home/in-app-loader"
-    },
     "sentry": {
         "dsn": "https://029a0eb289f942508ae0fb17935bd8c5@sentry.matrix.org/6",
         "environment": "develop"
