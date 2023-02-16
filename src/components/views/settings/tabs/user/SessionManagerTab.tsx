@@ -34,6 +34,7 @@ import { deleteDevicesWithInteractiveAuth } from "../../devices/deleteDevices";
 import SettingsTab from "../SettingsTab";
 import LoginWithQRSection from "../../devices/LoginWithQRSection";
 import LoginWithQR, { Mode } from "../../../auth/LoginWithQR";
+import SettingsStore from "../../../../../settings/SettingsStore";
 import { useAsyncMemo } from "../../../../../hooks/useAsyncMemo";
 import QuestionDialog from "../../../dialogs/QuestionDialog";
 import { FilterVariation } from "../../devices/filter";
@@ -211,6 +212,8 @@ const SessionManagerTab: React.FC = () => {
 
     const [signInWithQrMode, setSignInWithQrMode] = useState<Mode | null>();
 
+    const showQrCodeEnabled = SettingsStore.getValue("feature_qr_signin_reciprocate_show");
+
     const onQrFinish = useCallback(() => {
         setSignInWithQrMode(null);
     }, [setSignInWithQrMode]);
@@ -219,7 +222,7 @@ const SessionManagerTab: React.FC = () => {
         setSignInWithQrMode(Mode.Show);
     }, [setSignInWithQrMode]);
 
-    if (signInWithQrMode) {
+    if (showQrCodeEnabled && signInWithQrMode) {
         return <LoginWithQR mode={signInWithQrMode} onFinished={onQrFinish} client={matrixClient} />;
     }
 
@@ -279,7 +282,7 @@ const SessionManagerTab: React.FC = () => {
                     />
                 </SettingsSubsection>
             )}
-            <LoginWithQRSection onShowQr={onShowQrClicked} versions={clientVersions} />
+            {showQrCodeEnabled ? <LoginWithQRSection onShowQr={onShowQrClicked} versions={clientVersions} /> : null}
         </SettingsTab>
     );
 };
