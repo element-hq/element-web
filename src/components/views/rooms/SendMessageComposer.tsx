@@ -385,9 +385,15 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                 } else {
                     shouldSend = false;
                 }
-            } else if (!(await shouldSendAnyway(commandText))) {
+            } else {
+                const sendAnyway = await shouldSendAnyway(commandText);
+                // re-focus the composer after QuestionDialog is closed
+                dis.dispatch({
+                    action: Action.FocusAComposer,
+                    context: this.context.timelineRenderingType,
+                });
                 // if !sendAnyway bail to let the user edit the composer and try again
-                return;
+                if (!sendAnyway) return;
             }
         }
 
