@@ -13,6 +13,7 @@ jobs:
             contains(github.event.issue.labels.*.name, 'A-Message-Pinning') ||
             contains(github.event.issue.labels.*.name, 'A-Location-Sharing') ||
             contains(github.event.issue.labels.*.name, 'Z-IA') ||
+            contains(github.event.issue.labels.*.name, 'A-Jump-To-Date ') ||
             contains(github.event.issue.labels.*.name, 'A-Themes-Custom') ||
             contains(github.event.issue.labels.*.name, 'A-E2EE-Dehydration') ||
             contains(github.event.issue.labels.*.name, 'A-Tags') ||
