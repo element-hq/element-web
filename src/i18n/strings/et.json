@@ -3741,5 +3741,6 @@
     "Starting export process…": "Alustame eksportimist…",
     "Creating HTML…": "Loon HTML-faile…",
     "Starting export…": "Alustame eksportimist…",
-    "Unable to connect to Homeserver. Retrying…": "Ei saa ühendust koduserveriga. Proovin uuesti…"
+    "Unable to connect to Homeserver. Retrying…": "Ei saa ühendust koduserveriga. Proovin uuesti…",
+    "Allow a QR code to be shown in session manager to sign in another device (requires compatible homeserver)": "Näita sessioonihalduris QR-koodi, mille abil saad mõne muu seadmega võrku logida (eeldab, et koduserver toetab sellistfunktsionaalsust)"
 }
