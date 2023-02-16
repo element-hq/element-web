@@ -107,7 +107,7 @@ const setUpClientRoomAndStores = (): {
             content,
         });
         room.addLiveEvents([event]);
-        return { event_id: event.getId() };
+        return { event_id: event.getId()! };
     });
 
     setupAsyncStoreWithClient(WidgetStore.instance, client);

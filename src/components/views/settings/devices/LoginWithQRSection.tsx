@@ -23,7 +23,7 @@ import SettingsSubsection from "../shared/SettingsSubsection";
 
 interface IProps {
     onShowQr: () => void;
-    versions: IServerVersions;
+    versions?: IServerVersions;
 }
 
 export default class LoginWithQRSection extends React.Component<IProps> {

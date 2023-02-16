@@ -61,15 +61,14 @@ export default class GeneralRoomSettingsTab extends React.Component<IProps, ISta
         const room = client.getRoom(this.props.roomId);
 
         const canSetAliases = true; // Previously, we arbitrarily only allowed admins to do this
-        const canSetCanonical = room.currentState.mayClientSendStateEvent("m.room.canonical_alias", client);
-        const canonicalAliasEv = room.currentState.getStateEvents("m.room.canonical_alias", "");
+        const canSetCanonical = room?.currentState.mayClientSendStateEvent("m.room.canonical_alias", client);
+        const canonicalAliasEv = room?.currentState.getStateEvents("m.room.canonical_alias", "") ?? undefined;
 
-        const urlPreviewSettings = SettingsStore.getValue(UIFeature.URLPreviews) ? (
-            <UrlPreviewSettings room={room} />
-        ) : null;
+        const urlPreviewSettings =
+            room && SettingsStore.getValue(UIFeature.URLPreviews) ? <UrlPreviewSettings room={room} /> : null;
 
         let leaveSection;
-        if (room.getMyMembership() === "join") {
+        if (room?.getMyMembership() === "join") {
             leaveSection = (
                 <>
                     <span className="mx_SettingsTab_subheading">{_t("Leave room")}</span>

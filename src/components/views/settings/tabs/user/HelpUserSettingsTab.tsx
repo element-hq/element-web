@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { ReactNode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import AccessibleButton from "../../../elements/AccessibleButton";
@@ -37,7 +37,7 @@ interface IProps {
 }
 
 interface IState {
-    appVersion: string;
+    appVersion: string | null;
     canUpdate: boolean;
 }
 
@@ -53,13 +53,13 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
 
     public componentDidMount(): void {
         PlatformPeg.get()
-            .getAppVersion()
+            ?.getAppVersion()
             .then((ver) => this.setState({ appVersion: ver }))
             .catch((e) => {
                 logger.error("Error getting vector version: ", e);
             });
         PlatformPeg.get()
-            .canSelfUpdate()
+            ?.canSelfUpdate()
             .then((v) => this.setState({ canUpdate: v }))
             .catch((e) => {
                 logger.error("Error getting self updatability: ", e);
@@ -90,7 +90,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
         MatrixClientPeg.get()
             .store.deleteAllData()
             .then(() => {
-                PlatformPeg.get().reload();
+                PlatformPeg.get()?.reload();
             });
     };
 
@@ -106,11 +106,11 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
         });
     };
 
-    private renderLegal(): JSX.Element {
+    private renderLegal(): ReactNode {
         const tocLinks = SdkConfig.get().terms_and_conditions_links;
         if (!tocLinks) return null;
 
-        const legalLinks = [];
+        const legalLinks: JSX.Element[] = [];
         for (const tocEntry of tocLinks) {
             legalLinks.push(
                 <div key={tocEntry.url}>
@@ -248,7 +248,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
             );
         }
 
-        let updateButton = null;
+        let updateButton: JSX.Element | undefined;
         if (this.state.canUpdate) {
             updateButton = <UpdateCheckButton />;
         }

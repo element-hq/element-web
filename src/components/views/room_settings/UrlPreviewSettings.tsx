@@ -17,7 +17,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { ReactNode } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
 
 import { _t, _td } from "../../../languageHandler";
@@ -41,12 +41,12 @@ export default class UrlPreviewSettings extends React.Component<IProps> {
         dis.fire(Action.ViewUserSettings);
     };
 
-    public render(): React.ReactNode {
+    public render(): ReactNode {
         const roomId = this.props.room.roomId;
         const isEncrypted = MatrixClientPeg.get().isRoomEncrypted(roomId);
 
-        let previewsForAccount = null;
-        let previewsForRoom = null;
+        let previewsForAccount: ReactNode | undefined;
+        let previewsForRoom: ReactNode | undefined;
 
         if (!isEncrypted) {
             // Only show account setting state and room state setting state in non-e2ee rooms where they apply

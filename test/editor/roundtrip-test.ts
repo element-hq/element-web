@@ -38,7 +38,7 @@ async function md2html(markdown: string): Promise<string> {
     const pc = createPartCreator();
     const oldModel = new EditorModel([], pc, () => {});
     await oldModel.update(markdown, "insertText", new DocumentOffset(markdown.length, false));
-    return htmlSerializeIfNeeded(oldModel, { forceHTML: true });
+    return htmlSerializeIfNeeded(oldModel, { forceHTML: true })!;
 }
 
 function html2md(html: string): string {

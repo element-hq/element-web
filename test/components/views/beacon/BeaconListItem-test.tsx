@@ -84,7 +84,7 @@ describe("<BeaconListItem />", () => {
 
         const member = new RoomMember(roomId, aliceId);
         member.name = `Alice`;
-        const room = mockClient.getRoom(roomId);
+        const room = mockClient.getRoom(roomId)!;
         jest.spyOn(room, "getMember").mockReturnValue(member);
 
         return beacons;
@@ -185,7 +185,7 @@ describe("<BeaconListItem />", () => {
                 const { container } = getComponent({ beacon, onClick });
 
                 // click the beacon name
-                fireEvent.click(container.querySelector(".mx_BeaconStatus_description"));
+                fireEvent.click(container.querySelector(".mx_BeaconStatus_description")!);
                 expect(onClick).toHaveBeenCalled();
             });
         });

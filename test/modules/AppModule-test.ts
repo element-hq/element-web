@@ -20,7 +20,7 @@ import { AppModule } from "../../src/modules/AppModule";
 describe("AppModule", () => {
     describe("constructor", () => {
         it("should call the factory immediately", () => {
-            let module: MockModule;
+            let module: MockModule | undefined;
             const appModule = new AppModule((api) => {
                 if (module) {
                     throw new Error("State machine error: Factory called twice");

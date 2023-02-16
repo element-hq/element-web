@@ -190,6 +190,8 @@ function getTextAndOffsetToNode(editor: HTMLDivElement, selectionNode: Node): { 
 // get text value of text node, ignoring ZWS if it's a caret node
 function getTextNodeValue(node: Node): string {
     const nodeText = node.nodeValue;
+    if (!nodeText) return "";
+
     // filter out ZWS for caret nodes
     if (isCaretNode(node.parentElement)) {
         // typed in the caret node, so there is now something more in it than the ZWS
@@ -200,9 +202,9 @@ function getTextNodeValue(node: Node): string {
             // only contains ZWS, which is ignored, so return empty string
             return "";
         }
-    } else {
-        return nodeText;
     }
+
+    return nodeText;
 }
 
 export function getRangeForSelection(editor: HTMLDivElement, model: EditorModel, selection: Selection): Range {

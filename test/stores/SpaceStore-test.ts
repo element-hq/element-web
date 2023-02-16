@@ -800,7 +800,7 @@ describe("SpaceStore", () => {
                     testUtils.mockStateEventImplementation([childEvent]),
                 );
 
-                client.emit(RoomStateEvent.Events, childEvent, spaceRoom.currentState, undefined);
+                client.emit(RoomStateEvent.Events, childEvent, spaceRoom.currentState, null);
             };
 
             const addMember = (spaceId: string, user: RoomMember) => {
@@ -964,7 +964,7 @@ describe("SpaceStore", () => {
                 }
             });
 
-            client.emit(RoomStateEvent.Members, event, null, null);
+            client.emit(RoomStateEvent.Members, event, space.currentState, dm1Partner);
             return deferred.resolve(true) as unknown as Promise<boolean>;
         });
 
@@ -1279,7 +1279,7 @@ describe("SpaceStore", () => {
             user: dm1Partner.userId,
             room: space1,
         });
-        client.emit(RoomStateEvent.Members, memberEvent, undefined, undefined);
+        client.emit(RoomStateEvent.Members, memberEvent, rootSpace.currentState, dm1Partner);
         jest.runOnlyPendingTimers();
         expect(SpaceStore.instance.getSpaceFilteredUserIds(space1).has(dm1Partner.userId)).toBeTruthy();
         const dm1Room = mkRoom(dm1);

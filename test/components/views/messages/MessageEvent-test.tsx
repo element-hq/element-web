@@ -63,7 +63,7 @@ describe("MessageEvent", () => {
             event = mkEvent({
                 event: true,
                 type: VoiceBroadcastInfoEventType,
-                user: client.getUserId(),
+                user: client.getUserId()!,
                 room: room.roomId,
                 content: {
                     state: VoiceBroadcastInfoState.Started,

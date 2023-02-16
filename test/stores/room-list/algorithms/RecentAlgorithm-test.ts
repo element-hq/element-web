@@ -68,6 +68,7 @@ describe("RecentAlgorithm", () => {
 
         it("returns a fake ts for rooms without a timeline", () => {
             const room = mkRoom(cli, "!new:example.org");
+            // @ts-ignore
             room.timeline = undefined;
             expect(algorithm.getLastTs(room, "@john:matrix.org")).toBe(Number.MAX_SAFE_INTEGER);
         });

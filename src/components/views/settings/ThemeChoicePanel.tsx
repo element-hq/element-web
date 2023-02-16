@@ -162,7 +162,7 @@ export default class ThemeChoicePanel extends React.Component<IProps, IState> {
         this.setState({ customThemeUrl: e.target.value });
     };
 
-    private renderHighContrastCheckbox(): React.ReactElement<HTMLDivElement> {
+    private renderHighContrastCheckbox(): React.ReactElement<HTMLDivElement> | undefined {
         if (
             !this.state.useSystemTheme &&
             (findHighContrastTheme(this.state.theme) || isHighContrastTheme(this.state.theme))
@@ -181,7 +181,7 @@ export default class ThemeChoicePanel extends React.Component<IProps, IState> {
     }
 
     private highContrastThemeChanged(checked: boolean): void {
-        let newTheme: string;
+        let newTheme: string | undefined;
         if (checked) {
             newTheme = findHighContrastTheme(this.state.theme);
         } else {
@@ -194,7 +194,7 @@ export default class ThemeChoicePanel extends React.Component<IProps, IState> {
 
     public render(): React.ReactElement<HTMLDivElement> {
         const themeWatcher = new ThemeWatcher();
-        let systemThemeSection: JSX.Element;
+        let systemThemeSection: JSX.Element | undefined;
         if (themeWatcher.isSystemThemeSupported()) {
             systemThemeSection = (
                 <div>
@@ -208,9 +208,9 @@ export default class ThemeChoicePanel extends React.Component<IProps, IState> {
             );
         }
 
-        let customThemeForm: JSX.Element;
+        let customThemeForm: JSX.Element | undefined;
         if (SettingsStore.getValue("feature_custom_themes")) {
-            let messageElement = null;
+            let messageElement: JSX.Element | undefined;
             if (this.state.customThemeMessage.text) {
                 if (this.state.customThemeMessage.isError) {
                     messageElement = <div className="text-error">{this.state.customThemeMessage.text}</div>;
@@ -268,7 +268,7 @@ export default class ThemeChoicePanel extends React.Component<IProps, IState> {
         );
     }
 
-    public apparentSelectedThemeId(): string {
+    public apparentSelectedThemeId(): string | undefined {
         if (this.state.useSystemTheme) {
             return undefined;
         }

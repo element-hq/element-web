@@ -105,7 +105,7 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
         this.setState({ busy: true });
         try {
             const list = Mjolnir.sharedInstance().getPersonalList();
-            await list.unbanEntity(rule.kind, rule.entity);
+            await list!.unbanEntity(rule.kind, rule.entity);
         } catch (e) {
             logger.error(e);
 
@@ -142,7 +142,7 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
         const renderRules = (rules: ListRule[]): JSX.Element => {
             if (rules.length === 0) return <i>{_t("None")}</i>;
 
-            const tiles = [];
+            const tiles: JSX.Element[] = [];
             for (const rule of rules) {
                 tiles.push(
                     <li key={rule.kind + rule.entity}>
@@ -173,7 +173,7 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
         const rules = list ? [...list.userRules, ...list.serverRules] : [];
         if (!list || rules.length <= 0) return <i>{_t("You have not ignored anyone.")}</i>;
 
-        const tiles = [];
+        const tiles: JSX.Element[] = [];
         for (const rule of rules) {
             tiles.push(
                 <li key={rule.entity} className="mx_MjolnirUserSettingsTab_listItem">
@@ -205,7 +205,7 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
         });
         if (!lists || lists.length <= 0) return <i>{_t("You are not subscribed to any lists")}</i>;
 
-        const tiles = [];
+        const tiles: JSX.Element[] = [];
         for (const list of lists) {
             const room = MatrixClientPeg.get().getRoom(list.roomId);
             const name = room ? (

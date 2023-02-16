@@ -57,7 +57,7 @@ export function UserOnboardingTask({ task, completed = false }: Props): JSX.Elem
                     kind="primary_outline"
                     href={task.action.href}
                     target="_blank"
-                    onClick={task.action.onClick}
+                    onClick={task.action.onClick ?? null}
                 >
                     {task.action.label}
                 </AccessibleButton>

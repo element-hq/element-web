@@ -424,7 +424,7 @@ class RoomPillPart extends PillPart {
         let initialLetter = "";
         let avatarUrl = Avatar.avatarUrlForRoom(this.room, 16, 16, "crop");
         if (!avatarUrl) {
-            initialLetter = Avatar.getInitialLetter(this.room?.name || this.resourceId);
+            initialLetter = Avatar.getInitialLetter(this.room?.name || this.resourceId) ?? "";
             avatarUrl = Avatar.defaultAvatarUrlForString(this.room?.roomId ?? this.resourceId);
         }
         this.setAvatarVars(node, avatarUrl, initialLetter);
@@ -478,7 +478,7 @@ class UserPillPart extends PillPart {
         const avatarUrl = Avatar.avatarUrlForMember(this.member, 16, 16, "crop");
         let initialLetter = "";
         if (avatarUrl === defaultAvatarUrl) {
-            initialLetter = Avatar.getInitialLetter(name);
+            initialLetter = Avatar.getInitialLetter(name) ?? "";
         }
         this.setAvatarVars(node, avatarUrl, initialLetter);
     }

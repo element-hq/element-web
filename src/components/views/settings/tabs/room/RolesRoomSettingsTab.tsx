@@ -239,13 +239,13 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
     public render(): React.ReactNode {
         const client = MatrixClientPeg.get();
         const room = client.getRoom(this.props.roomId);
-        const isSpaceRoom = room.isSpaceRoom();
+        const isSpaceRoom = room?.isSpaceRoom();
 
-        const plEvent = room.currentState.getStateEvents(EventType.RoomPowerLevels, "");
+        const plEvent = room?.currentState.getStateEvents(EventType.RoomPowerLevels, "");
         const plContent = plEvent ? plEvent.getContent() || {} : {};
-        const canChangeLevels = room.currentState.mayClientSendStateEvent(EventType.RoomPowerLevels, client);
+        const canChangeLevels = room?.currentState.mayClientSendStateEvent(EventType.RoomPowerLevels, client);
 
-        const plEventsToLabels: Record<EventType | string, string> = {
+        const plEventsToLabels: Record<EventType | string, string | null> = {
             // These will be translated for us later.
             [EventType.RoomAvatar]: isSpaceRoom ? _td("Change space avatar") : _td("Change room avatar"),
             [EventType.RoomName]: isSpaceRoom ? _td("Change space name") : _td("Change room name"),
@@ -322,7 +322,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
             powerLevelDescriptors.users_default.defaultValue,
         );
 
-        let currentUserLevel = userLevels[client.getUserId()];
+        let currentUserLevel = userLevels[client.getUserId()!];
         if (currentUserLevel === undefined) {
             currentUserLevel = defaultUserLevel;
         }
@@ -391,16 +391,16 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
             }
         }
 
-        const banned = room.getMembersWithMembership("ban");
-        let bannedUsersSection;
-        if (banned.length) {
+        const banned = room?.getMembersWithMembership("ban");
+        let bannedUsersSection: JSX.Element | undefined;
+        if (banned?.length) {
             const canBanUsers = currentUserLevel >= banLevel;
             bannedUsersSection = (
                 <SettingsFieldset legend={_t("Banned users")}>
                     <ul>
                         {banned.map((member) => {
-                            const banEvent = member.events.member.getContent();
-                            const sender = room.getMember(member.events.member.getSender());
+                            const banEvent = member.events.member?.getContent();
+                            const sender = room?.getMember(member.events.member.getSender());
                             let bannedBy = member.events.member.getSender(); // start by falling back to mxid
                             if (sender) bannedBy = sender.name;
                             return (

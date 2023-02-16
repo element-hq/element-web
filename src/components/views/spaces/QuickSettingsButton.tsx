@@ -46,8 +46,8 @@ const QuickSettingsButton: React.FC<{
     const { [MetaSpace.Favourites]: favouritesEnabled, [MetaSpace.People]: peopleEnabled } =
         useSettingValue<Record<MetaSpace, boolean>>("Spaces.enabledMetaSpaces");
 
-    let contextMenu: JSX.Element;
-    if (menuDisplayed) {
+    let contextMenu: JSX.Element | undefined;
+    if (menuDisplayed && handle.current) {
         contextMenu = (
             <ContextMenu
                 {...alwaysAboveRightOf(handle.current.getBoundingClientRect(), ChevronFace.None, 16)}

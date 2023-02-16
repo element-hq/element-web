@@ -47,7 +47,7 @@ const SpaceSettingsVisibilityTab: React.FC<IProps> = ({ matrixClient: cli, space
         false,
     );
 
-    const userId = cli.getUserId();
+    const userId = cli.getUserId()!;
 
     const joinRule = useRoomState(space, (state) => state.getJoinRule());
     const [guestAccessEnabled, setGuestAccessEnabled] = useLocalEcho<boolean>(
@@ -120,7 +120,7 @@ const SpaceSettingsVisibilityTab: React.FC<IProps> = ({ matrixClient: cli, space
         );
     }
 
-    let addressesSection;
+    let addressesSection: JSX.Element | undefined;
     if (space.getJoinRule() === JoinRule.Public) {
         addressesSection = (
             <>
@@ -129,7 +129,7 @@ const SpaceSettingsVisibilityTab: React.FC<IProps> = ({ matrixClient: cli, space
                     roomId={space.roomId}
                     canSetCanonicalAlias={canSetCanonical}
                     canSetAliases={true}
-                    canonicalAliasEvent={canonicalAliasEv}
+                    canonicalAliasEvent={canonicalAliasEv ?? undefined}
                     hidePublishSetting={!serverSupportsExploringSpaces}
                 />
             </>

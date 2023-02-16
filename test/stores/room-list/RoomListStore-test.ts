@@ -216,7 +216,7 @@ describe("RoomListStore", () => {
 
         // But when we update the feature flag
         featureFlagValue = true;
-        watchCallback(
+        watchCallback!(
             "feature_dynamic_room_predecessors",
             "",
             SettingLevel.DEFAULT,

@@ -112,8 +112,8 @@ export interface INativeOnChangeInputProps extends IProps, InputHTMLAttributes<H
 type PropShapes = IInputProps | ISelectProps | ITextareaProps | INativeOnChangeInputProps;
 
 interface IState {
-    valid: boolean;
-    feedback: React.ReactNode;
+    valid?: boolean;
+    feedback?: React.ReactNode;
     feedbackVisible: boolean;
     focused: boolean;
 }
@@ -148,8 +148,6 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
     public constructor(props: PropShapes) {
         super(props);
         this.state = {
-            valid: undefined,
-            feedback: undefined,
             feedbackVisible: false,
             focused: false,
         };
@@ -199,7 +197,7 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
         this.props.onBlur?.(ev);
     };
 
-    public async validate({ focused, allowEmpty = true }: IValidateOpts): Promise<boolean> {
+    public async validate({ focused, allowEmpty = true }: IValidateOpts): Promise<boolean | undefined> {
         if (!this.props.onValidate) {
             return;
         }
@@ -268,11 +266,11 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
 
         const fieldInput = React.createElement(this.props.element, inputProps_, children);
 
-        let prefixContainer = null;
+        let prefixContainer: JSX.Element | undefined;
         if (prefixComponent) {
             prefixContainer = <span className="mx_Field_prefix">{prefixComponent}</span>;
         }
-        let postfixContainer = null;
+        let postfixContainer: JSX.Element | undefined;
         if (postfixComponent) {
             postfixContainer = <span className="mx_Field_postfix">{postfixComponent}</span>;
         }

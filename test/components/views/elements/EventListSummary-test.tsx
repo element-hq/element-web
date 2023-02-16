@@ -66,11 +66,11 @@ describe("EventListSummary", function () {
     }
     const generateMembershipEvent = (
         eventId: string,
-        { senderId, userId, membership, prevMembership }: MembershipEventParams,
+        { senderId, userId, membership, prevMembership }: MembershipEventParams & { userId: string },
     ): MatrixEvent => {
         const member = new RoomMember(roomId, userId);
         // Use localpart as display name;
-        member.name = userId.match(/@([^:]*):/)[1];
+        member.name = userId.match(/@([^:]*):/)![1];
         jest.spyOn(member, "getAvatarUrl").mockReturnValue("avatar.jpeg");
         jest.spyOn(member, "getMxcAvatarUrl").mockReturnValue("mxc://avatar.url/image.png");
         const e = mkMembership({
@@ -89,8 +89,8 @@ describe("EventListSummary", function () {
     };
 
     // Generate mock MatrixEvents from the array of parameters
-    const generateEvents = (parameters: MembershipEventParams[]) => {
-        const res = [];
+    const generateEvents = (parameters: Array<MembershipEventParams & { userId: string }>) => {
+        const res: MatrixEvent[] = [];
         for (let i = 0; i < parameters.length; i++) {
             res.push(generateMembershipEvent(`event${i}`, parameters[i]));
         }
@@ -108,7 +108,9 @@ describe("EventListSummary", function () {
             events.forEach((e) => {
                 e.userId = userId;
             });
-            eventsForUsers = eventsForUsers.concat(generateEvents(events));
+            eventsForUsers = eventsForUsers.concat(
+                generateEvents(events as Array<MembershipEventParams & { userId: string }>),
+            );
         }
         return eventsForUsers;
     };

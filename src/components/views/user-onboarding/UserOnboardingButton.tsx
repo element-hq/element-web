@@ -39,7 +39,7 @@ export function UserOnboardingButton({ selected, minimized }: Props): JSX.Elemen
     const visible = useSettingValue<boolean>("FTUE.userOnboardingButton");
 
     if (!visible || minimized || !showUserOnboardingPage(useCase)) {
-        return null;
+        return <></>;
     }
 
     return <UserOnboardingButtonInternal selected={selected} minimized={minimized} />;

@@ -77,7 +77,7 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
             const device = await cli.getDevice(request.channel.deviceId);
             const ip = device.last_seen_ip;
             this.setState({
-                device: cli.getStoredDevice(cli.getUserId(), request.channel.deviceId),
+                device: cli.getStoredDevice(cli.getUserId()!, request.channel.deviceId),
                 ip,
             });
         }
@@ -137,7 +137,7 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
                             request.cancel();
                         },
                     },
-                    null,
+                    undefined,
                     /* priority = */ false,
                     /* static = */ true,
                 );

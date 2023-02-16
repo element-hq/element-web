@@ -28,10 +28,10 @@ import { SettingLevel } from "../../../settings/SettingLevel";
 
 interface IProps {
     userId?: string;
-    displayName: string;
-    avatarUrl: string;
+    displayName?: string;
+    avatarUrl?: string;
     messagePreviewText: string;
-    onLayoutChanged?: (layout: Layout) => void;
+    onLayoutChanged: (layout: Layout) => void;
 }
 
 interface IState {

@@ -223,7 +223,7 @@ describe("SlashCommands", () => {
             const command = getCommand("/part #foo:bar");
             expect(command.cmd).toBeDefined();
             expect(command.args).toBeDefined();
-            await command.cmd!.run("room-id", null, command.args);
+            await command.cmd!.run("room-id", null, command.args!);
             expect(client.leaveRoomChain).toHaveBeenCalledWith("room-id", expect.anything());
         });
     });
@@ -232,7 +232,7 @@ describe("SlashCommands", () => {
         const command = findCommand(commandName)!;
 
         it("should return usage if no args", () => {
-            expect(command.run(roomId, null).error).toBe(command.getUsage());
+            expect(command.run(roomId, null, undefined).error).toBe(command.getUsage());
         });
 
         it("should make things rainbowy", () => {

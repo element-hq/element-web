@@ -575,7 +575,7 @@ function createMenu(
 
     return mount(
         <RoomContext.Provider value={context as IRoomState}>
-            <MessageContextMenu chevronFace={null} mxEvent={mxEvent} onFinished={jest.fn()} {...props} />
+            <MessageContextMenu mxEvent={mxEvent} onFinished={jest.fn()} {...props} />
         </RoomContext.Provider>,
     );
 }

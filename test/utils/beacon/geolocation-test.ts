@@ -196,7 +196,7 @@ describe("geolocation utilities", () => {
             // suppress expected errors from test log
             jest.spyOn(logger, "error").mockImplementation(() => {});
             geolocation.watchPosition.mockImplementation((_callback, error) => {
-                error(getMockGeolocationPositionError(1, "message"));
+                error!(getMockGeolocationPositionError(1, "message"));
                 return -1;
             });
             const positionHandler = jest.fn();
@@ -224,7 +224,7 @@ describe("geolocation utilities", () => {
             jest.spyOn(logger, "error").mockImplementation(() => {});
 
             const timeoutError = getMockGeolocationPositionError(3, "message");
-            geolocation.getCurrentPosition.mockImplementation((callback, error) => error(timeoutError));
+            geolocation.getCurrentPosition.mockImplementation((callback, error) => error!(timeoutError));
 
             await expect(() => getCurrentPosition()).rejects.toThrow(GeolocationError.Timeout);
         });

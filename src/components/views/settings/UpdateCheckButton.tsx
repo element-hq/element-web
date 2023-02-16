@@ -27,7 +27,7 @@ import AccessibleButton from "../../../components/views/elements/AccessibleButto
 import { CheckUpdatesPayload } from "../../../dispatcher/payloads/CheckUpdatesPayload";
 
 function installUpdate(): void {
-    PlatformPeg.get().installUpdate();
+    PlatformPeg.get()?.installUpdate();
 }
 
 function getStatusText(status: UpdateCheckStatus, errorDetail?: string): ReactNode {
@@ -58,11 +58,11 @@ function getStatusText(status: UpdateCheckStatus, errorDetail?: string): ReactNo
 const doneStatuses = [UpdateCheckStatus.Ready, UpdateCheckStatus.Error, UpdateCheckStatus.NotAvailable];
 
 const UpdateCheckButton: React.FC = () => {
-    const [state, setState] = useState<CheckUpdatesPayload>(null);
+    const [state, setState] = useState<CheckUpdatesPayload | null>(null);
 
     const onCheckForUpdateClick = (): void => {
         setState(null);
-        PlatformPeg.get().startUpdateCheck();
+        PlatformPeg.get()?.startUpdateCheck();
     };
 
     useDispatcher(dis, ({ action, ...params }) => {
@@ -71,9 +71,9 @@ const UpdateCheckButton: React.FC = () => {
         }
     });
 
-    const busy = state && !doneStatuses.includes(state.status);
+    const busy = !!state && !doneStatuses.includes(state.status);
 
-    let suffix;
+    let suffix: JSX.Element | undefined;
     if (state) {
         suffix = (
             <span className="mx_UpdateCheckButton_summary">

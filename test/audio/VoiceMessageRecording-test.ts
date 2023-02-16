@@ -125,7 +125,7 @@ describe("VoiceMessageRecording", () => {
         const encryptedFile = {} as unknown as IEncryptedFile;
 
         beforeEach(() => {
-            voiceRecording.onDataAvailable(testBuf);
+            voiceRecording.onDataAvailable!(testBuf);
         });
 
         it("contentLength should return the buffer length", () => {
@@ -143,9 +143,9 @@ describe("VoiceMessageRecording", () => {
         });
 
         describe("upload", () => {
-            let uploadFileClient: MatrixClient;
-            let uploadFileRoomId: string;
-            let uploadBlob: Blob;
+            let uploadFileClient: MatrixClient | null;
+            let uploadFileRoomId: string | null;
+            let uploadBlob: Blob | null;
 
             beforeEach(() => {
                 uploadFileClient = null;
@@ -182,8 +182,8 @@ describe("VoiceMessageRecording", () => {
                 expect(mocked(uploadFile)).toHaveBeenCalled();
                 expect(uploadFileClient).toBe(client);
                 expect(uploadFileRoomId).toBe(roomId);
-                expect(uploadBlob.type).toBe(contentType);
-                const blobArray = await uploadBlob.arrayBuffer();
+                expect(uploadBlob?.type).toBe(contentType);
+                const blobArray = await uploadBlob!.arrayBuffer();
                 expect(new Uint8Array(blobArray)).toEqual(testBuf);
             });
 

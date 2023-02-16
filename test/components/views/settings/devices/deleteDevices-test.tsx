@@ -92,7 +92,7 @@ describe("deleteDevices()", () => {
         // opened modal
         expect(modalSpy).toHaveBeenCalled();
 
-        const [, { title, authData, aestheticsForStagePhases }] = modalSpy.mock.calls[0];
+        const { title, authData, aestheticsForStagePhases } = modalSpy.mock.calls[0][1]!;
 
         // modal opened as expected
         expect(title).toEqual("Authentication");

@@ -38,9 +38,9 @@ const SpaceSettingsGeneralTab: React.FC<IProps> = ({ matrixClient: cli, space, o
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState("");
 
-    const userId = cli.getUserId();
+    const userId = cli.getUserId()!;
 
-    const [newAvatar, setNewAvatar] = useState<File>(null); // undefined means to remove avatar
+    const [newAvatar, setNewAvatar] = useState<File | null | undefined>(null); // undefined means to remove avatar
     const canSetAvatar = space.currentState.maySendStateEvent(EventType.RoomAvatar, userId);
     const avatarChanged = newAvatar !== null;
 
@@ -48,8 +48,8 @@ const SpaceSettingsGeneralTab: React.FC<IProps> = ({ matrixClient: cli, space, o
     const canSetName = space.currentState.maySendStateEvent(EventType.RoomName, userId);
     const nameChanged = name !== space.name;
 
-    const currentTopic = getTopic(space)?.text;
-    const [topic, setTopic] = useState<string>(currentTopic);
+    const currentTopic = getTopic(space)?.text ?? "";
+    const [topic, setTopic] = useState(currentTopic);
     const canSetTopic = space.currentState.maySendStateEvent(EventType.RoomTopic, userId);
     const topicChanged = topic !== currentTopic;
 
@@ -104,7 +104,7 @@ const SpaceSettingsGeneralTab: React.FC<IProps> = ({ matrixClient: cli, space, o
 
             <div className="mx_SettingsTab_section">
                 <SpaceBasicSettings
-                    avatarUrl={avatarUrlForRoom(space, 80, 80, "crop")}
+                    avatarUrl={avatarUrlForRoom(space, 80, 80, "crop") ?? undefined}
                     avatarDisabled={busy || !canSetAvatar}
                     setAvatar={setNewAvatar}
                     name={name}

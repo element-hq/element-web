@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, ReactNode } from "react";
 
 import { _t } from "../../../../../languageHandler";
 import SdkConfig from "../../../../../SdkConfig";
@@ -41,8 +41,8 @@ interface IState {
     layout: Layout;
     // User profile data for the message preview
     userId?: string;
-    displayName: string;
-    avatarUrl: string;
+    displayName?: string;
+    avatarUrl?: string;
 }
 
 export default class AppearanceUserSettingsTab extends React.Component<IProps, IState> {
@@ -58,16 +58,13 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
             systemFont: SettingsStore.getValue("systemFont"),
             showAdvanced: false,
             layout: SettingsStore.getValue("layout"),
-            userId: null,
-            displayName: null,
-            avatarUrl: null,
         };
     }
 
     public async componentDidMount(): Promise<void> {
         // Fetch the current user profile for the message preview
         const client = MatrixClientPeg.get();
-        const userId = client.getUserId();
+        const userId = client.getUserId()!;
         const profileInfo = await client.getProfileInfo(userId);
         if (this.unmounted) return;
 
@@ -86,7 +83,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         this.setState({ layout: layout });
     };
 
-    private renderAdvancedSection(): JSX.Element {
+    private renderAdvancedSection(): ReactNode {
         if (!SettingsStore.getValue(UIFeature.AdvancedSettings)) return null;
 
         const brand = SdkConfig.get().brand;
@@ -115,7 +112,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                     />
                     <Field
                         className="mx_AppearanceUserSettingsTab_systemFont"
-                        label={SettingsStore.getDisplayName("systemFont")}
+                        label={SettingsStore.getDisplayName("systemFont")!}
                         onChange={(value: ChangeEvent<HTMLInputElement>) => {
                             this.setState({
                                 systemFont: value.target.value,

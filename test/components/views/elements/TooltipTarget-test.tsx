@@ -36,7 +36,7 @@ describe("<TooltipTarget />", () => {
         // clean up renderer tooltips
         const wrapper = document.querySelector(".mx_Tooltip_wrapper");
         while (wrapper?.firstChild) {
-            wrapper.removeChild(wrapper.lastChild);
+            wrapper.removeChild(wrapper.lastChild!);
         }
     });
 

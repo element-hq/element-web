@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { ReactNode } from "react";
 
 import { _t } from "../../../../../languageHandler";
 import MediaDeviceHandler, { IMediaDevices, MediaDeviceKindEnum } from "../../../../../MediaDeviceHandler";
@@ -28,10 +28,10 @@ import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
 import { requestMediaPermissions } from "../../../../../utils/media/requestMediaPermissions";
 
 interface IState {
-    mediaDevices: IMediaDevices;
-    [MediaDeviceKindEnum.AudioOutput]: string;
-    [MediaDeviceKindEnum.AudioInput]: string;
-    [MediaDeviceKindEnum.VideoInput]: string;
+    mediaDevices: IMediaDevices | null;
+    [MediaDeviceKindEnum.AudioOutput]: string | null;
+    [MediaDeviceKindEnum.AudioInput]: string | null;
+    [MediaDeviceKindEnum.VideoInput]: string | null;
     audioAutoGainControl: boolean;
     audioEchoCancellation: boolean;
     audioNoiseSuppression: boolean;
@@ -104,7 +104,7 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
         });
     }
 
-    private renderDropdown(kind: MediaDeviceKindEnum, label: string): JSX.Element {
+    private renderDropdown(kind: MediaDeviceKindEnum, label: string): ReactNode {
         const devices = this.state.mediaDevices[kind].slice(0);
         if (devices.length === 0) return null;
 
@@ -121,11 +121,11 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
         );
     }
 
-    public render(): React.ReactNode {
-        let requestButton = null;
-        let speakerDropdown = null;
-        let microphoneDropdown = null;
-        let webcamDropdown = null;
+    public render(): ReactNode {
+        let requestButton: ReactNode | undefined;
+        let speakerDropdown: ReactNode | undefined;
+        let microphoneDropdown: ReactNode | undefined;
+        let webcamDropdown: ReactNode | undefined;
         if (!this.state.mediaDevices) {
             requestButton = (
                 <div className="mx_VoiceUserSettingsTab_missingMediaPermissions">

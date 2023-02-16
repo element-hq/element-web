@@ -79,7 +79,7 @@ describe("RoomView", () => {
         stores.client = cli;
         stores.rightPanelStore.useUnitTestClient(cli);
 
-        jest.spyOn(VoipUserMapper.sharedInstance(), "getVirtualRoomForRoom").mockResolvedValue(null);
+        jest.spyOn(VoipUserMapper.sharedInstance(), "getVirtualRoomForRoom").mockResolvedValue(undefined);
     });
 
     afterEach(async () => {
@@ -175,7 +175,7 @@ describe("RoomView", () => {
             instance = await getRoomViewInstance();
             oldRoom = new Room("!old:example.com", cli, cli.getSafeUserId());
             rooms.set(oldRoom.roomId, oldRoom);
-            jest.spyOn(room, "findPredecessor").mockReturnValue({ roomId: oldRoom.roomId, eventId: null });
+            jest.spyOn(room, "findPredecessor").mockReturnValue({ roomId: oldRoom.roomId });
         });
 
         it("and it has 0 unreads, getHiddenHighlightCount should return 0", async () => {

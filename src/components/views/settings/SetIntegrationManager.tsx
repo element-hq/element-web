@@ -27,7 +27,7 @@ import ToggleSwitch from "../elements/ToggleSwitch";
 interface IProps {}
 
 interface IState {
-    currentManager: IntegrationManagerInstance;
+    currentManager: IntegrationManagerInstance | null;
     provisioningEnabled: boolean;
 }
 

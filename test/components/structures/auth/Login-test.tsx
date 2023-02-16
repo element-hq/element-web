@@ -181,7 +181,7 @@ describe("Login", function () {
         const { container, rerender } = render(getRawComponent());
         await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));
 
-        fireEvent.click(container.querySelector(".mx_SSOButton"));
+        fireEvent.click(container.querySelector(".mx_SSOButton")!);
         expect(platform.startSingleSignOn.mock.calls[0][0].baseUrl).toBe("https://matrix.org");
 
         fetchMock.get("https://server2/_matrix/client/versions", {
@@ -190,7 +190,7 @@ describe("Login", function () {
         });
         rerender(getRawComponent("https://server2"));
 
-        fireEvent.click(container.querySelector(".mx_SSOButton"));
+        fireEvent.click(container.querySelector(".mx_SSOButton")!);
         expect(platform.startSingleSignOn.mock.calls[1][0].baseUrl).toBe("https://server2");
     });
 

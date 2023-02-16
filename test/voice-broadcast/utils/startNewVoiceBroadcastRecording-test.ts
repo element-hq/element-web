@@ -161,7 +161,7 @@ describe("startNewVoiceBroadcastRecording", () => {
                         device_id: client.getDeviceId(),
                         state: VoiceBroadcastInfoState.Started,
                     },
-                    client.getUserId(),
+                    client.getUserId()!,
                 );
                 expect(recording!.infoEvent).toBe(infoEvent);
                 expect(recording!.start).toHaveBeenCalled();

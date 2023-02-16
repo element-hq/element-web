@@ -150,7 +150,7 @@ export const Lobby: FC<LobbyProps> = ({ room, joinCallButtonDisabledTooltip, con
     }, [videoMuted, setVideoMuted]);
 
     const [videoStream, audioInputs, videoInputs] = useAsyncMemo(
-        async (): Promise<[MediaStream, MediaDeviceInfo[], MediaDeviceInfo[]]> => {
+        async (): Promise<[MediaStream | null, MediaDeviceInfo[], MediaDeviceInfo[]]> => {
             let devices = await MediaDeviceHandler.getDevices();
 
             // We get the preview stream before requesting devices: this is because
@@ -335,7 +335,7 @@ const StartCallView: FC<StartCallViewProps> = ({ room, resizing, call, setStarti
                 <AppTile
                     app={call.widget}
                     room={room}
-                    userId={cli.credentials.userId}
+                    userId={cli.credentials.userId!}
                     creatorUserId={call.widget.creatorUserId}
                     waitForIframeLoad={call.widget.waitForIframeLoad}
                     showMenubar={false}
@@ -402,7 +402,7 @@ const JoinCallView: FC<JoinCallViewProps> = ({ room, resizing, call }) => {
             <AppTile
                 app={call.widget}
                 room={room}
-                userId={cli.credentials.userId}
+                userId={cli.credentials.userId!}
                 creatorUserId={call.widget.creatorUserId}
                 waitForIframeLoad={call.widget.waitForIframeLoad}
                 showMenubar={false}

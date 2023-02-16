@@ -87,7 +87,7 @@ export function _td(s: string): string {
  * for this reason, force fallbackLocale === locale in the first call to translate
  * and fallback 'manually' so we can mark fallback strings appropriately
  * */
-const translateWithFallback = (text: string, options?: IVariables): { translated?: string; isFallback?: boolean } => {
+const translateWithFallback = (text: string, options?: IVariables): { translated: string; isFallback?: boolean } => {
     const translated = counterpart.translate(text, { ...options, fallbackLocale: counterpart.getLocale() });
     if (!translated || translated.startsWith("missing translation:")) {
         const fallbackTranslated = counterpart.translate(text, { ...options, locale: FALLBACK_LOCALE });
@@ -117,7 +117,7 @@ const translateWithFallback = (text: string, options?: IVariables): { translated
 
 // Wrapper for counterpart's translation function so that it handles nulls and undefineds properly
 // Takes the same arguments as counterpart.translate()
-function safeCounterpartTranslate(text: string, variables?: IVariables): { translated?: string; isFallback?: boolean } {
+function safeCounterpartTranslate(text: string, variables?: IVariables): { translated: string; isFallback?: boolean } {
     // Don't do substitutions in counterpart. We handle it ourselves so we can replace with React components
     // However, still pass the variables to counterpart so that it can choose the correct plural if count is given
     // It is enough to pass the count variable, but in the future counterpart might make use of other information too
@@ -251,7 +251,7 @@ export function sanitizeForTranslation(text: string): string {
  * @return a React <span> component if any non-strings were used in substitutions, otherwise a string
  */
 export function substitute(text: string, variables?: IVariables): string;
-export function substitute(text: string, variables: IVariables, tags: Tags): string;
+export function substitute(text: string, variables: IVariables | undefined, tags: Tags | undefined): string;
 export function substitute(text: string, variables?: IVariables, tags?: Tags): string | React.ReactNode {
     let result: React.ReactNode | string = text;
 
@@ -619,7 +619,7 @@ let cachedCustomTranslationsExpire = 0; // zero to trigger expiration right away
 // This awkward class exists so the test runner can get at the function. It is
 // not intended for practical or realistic usage.
 export class CustomTranslationOptions {
-    public static lookupFn: (url: string) => ICustomTranslations;
+    public static lookupFn?: (url: string) => ICustomTranslations;
 
     private constructor() {
         // static access for tests only

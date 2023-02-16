@@ -53,7 +53,7 @@ describe("ScalarAuthClient", function () {
         client.getOpenIdToken = jest.fn().mockResolvedValue(tokenObject);
 
         sac.exchangeForScalarToken = jest.fn((arg) => {
-            if (arg === tokenObject) return Promise.resolve("wokentoken");
+            return Promise.resolve(arg === tokenObject ? "wokentoken" : "othertoken");
         });
 
         await sac.connect();

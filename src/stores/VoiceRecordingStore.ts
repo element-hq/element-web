@@ -74,7 +74,7 @@ export class VoiceRecordingStore extends AsyncStoreWithClient<IState> {
      * @param {string} voiceRecordingId The room ID (with optionally the thread ID if in one) to start recording in.
      * @returns {VoiceRecording} The recording.
      */
-    public startRecording(voiceRecordingId: string): VoiceMessageRecording {
+    public startRecording(voiceRecordingId?: string): VoiceMessageRecording {
         if (!this.matrixClient) throw new Error("Cannot start a recording without a MatrixClient");
         if (!voiceRecordingId) throw new Error("Recording must be associated with a room");
         if (this.state[voiceRecordingId]) throw new Error("A recording is already in progress");

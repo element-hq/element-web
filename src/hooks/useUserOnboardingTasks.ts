@@ -37,7 +37,7 @@ interface UserOnboardingTask {
     relevant?: UseCase[];
     action?: {
         label: string;
-        onClick?: (ev?: ButtonEvent) => void;
+        onClick?: (ev: ButtonEvent) => void;
         href?: string;
         hideOnComplete?: boolean;
     };

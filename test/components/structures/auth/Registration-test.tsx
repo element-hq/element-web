@@ -118,7 +118,7 @@ describe("Registration", function () {
         const { container, rerender } = render(getRawComponent());
         await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));
 
-        fireEvent.click(container.querySelector(".mx_SSOButton"));
+        fireEvent.click(container.querySelector(".mx_SSOButton")!);
         expect(registerRequest.mock.instances[0].baseUrl).toBe("https://matrix.org");
 
         fetchMock.get("https://server2/_matrix/client/versions", {
@@ -128,7 +128,7 @@ describe("Registration", function () {
         rerender(getRawComponent("https://server2"));
         await waitForElementToBeRemoved(() => screen.queryAllByLabelText("Loading…"));
 
-        fireEvent.click(container.querySelector(".mx_SSOButton"));
+        fireEvent.click(container.querySelector(".mx_SSOButton")!);
         expect(registerRequest.mock.instances[1].baseUrl).toBe("https://server2");
     });
 });

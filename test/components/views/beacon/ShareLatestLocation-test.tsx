@@ -47,7 +47,7 @@ describe("<ShareLatestLocation />", () => {
         const { container, asFragment } = getComponent();
         expect(asFragment()).toMatchSnapshot();
 
-        fireEvent.click(container.querySelector(".mx_CopyableText_copyButton"));
+        fireEvent.click(container.querySelector(".mx_CopyableText_copyButton")!);
         await flushPromises();
 
         expect(copyPlaintext).toHaveBeenCalledWith("51,42");

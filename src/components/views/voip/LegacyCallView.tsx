@@ -180,7 +180,7 @@ export default class LegacyCallView extends React.Component<IProps, IState> {
         }
     };
 
-    private updateCallListeners(oldCall: MatrixCall, newCall: MatrixCall): void {
+    private updateCallListeners(oldCall: MatrixCall, newCall: MatrixCall | null): void {
         if (oldCall === newCall) return;
 
         if (oldCall) {
@@ -430,7 +430,7 @@ export default class LegacyCallView extends React.Component<IProps, IState> {
         const { pipMode, call, onResize } = this.props;
         const { isLocalOnHold, isRemoteOnHold, sidebarShown, primaryFeed, secondaryFeed, sidebarFeeds } = this.state;
 
-        const callRoom = MatrixClientPeg.get().getRoom(call.roomId);
+        const callRoom = MatrixClientPeg.get().getRoom(call.roomId) ?? undefined;
         const avatarSize = pipMode ? 76 : 160;
         const transfereeCall = LegacyCallHandler.instance.getTransfereeForCallId(call.callId);
         const isOnHold = isLocalOnHold || isRemoteOnHold;

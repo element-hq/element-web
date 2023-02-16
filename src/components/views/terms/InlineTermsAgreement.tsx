@@ -83,7 +83,7 @@ export default class InlineTermsAgreement extends React.Component<IProps, IState
     };
 
     private renderCheckboxes(): React.ReactNode[] {
-        const rendered = [];
+        const rendered: JSX.Element[] = [];
         for (let i = 0; i < this.state.policies.length; i++) {
             const policy = this.state.policies[i];
             const introText = _t(

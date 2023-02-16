@@ -58,7 +58,7 @@ describe("SlidingSyncManager", () => {
                     event_id: "$abc123",
                     sender: client.getUserId()!,
                     content: {
-                        creator: client.getUserId(),
+                        creator: client.getUserId()!,
                     },
                 }),
             ]);

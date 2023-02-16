@@ -135,7 +135,7 @@ export class CapabilityText {
         // First see if we have a super simple line of text to provide back
         if (CapabilityText.simpleCaps[capability]) {
             const textForKind = CapabilityText.simpleCaps[capability];
-            if (textForKind[kind]) return { primary: _t(textForKind[kind]) };
+            if (textForKind[kind]) return { primary: _t(textForKind[kind]!) };
             if (textForKind[GENERIC_WIDGET_KIND]) return { primary: _t(textForKind[GENERIC_WIDGET_KIND]) };
 
             // ... we'll fall through to the generic capability processing at the end of this
@@ -195,8 +195,8 @@ export class CapabilityText {
                     : CapabilityText.nonStateSendRecvCaps;
             if (evSendRecv[eventCap.eventType]) {
                 const textForKind = evSendRecv[eventCap.eventType];
-                const textForDirection = textForKind[kind] || textForKind[GENERIC_WIDGET_KIND];
-                if (textForDirection && textForDirection[eventCap.direction]) {
+                const textForDirection = textForKind?.[kind] || textForKind?.[GENERIC_WIDGET_KIND];
+                if (textForDirection?.[eventCap.direction]) {
                     return {
                         primary: _t(textForDirection[eventCap.direction]),
                         // no byline because we would have already represented the event properly

@@ -53,7 +53,7 @@ describe("<SelectableDeviceTile />", () => {
         const { container } = render(getComponent({ onSelect }));
 
         act(() => {
-            fireEvent.click(container.querySelector(`#device-tile-checkbox-${device.device_id}`));
+            fireEvent.click(container.querySelector(`#device-tile-checkbox-${device.device_id}`)!);
         });
 
         expect(onSelect).toHaveBeenCalled();

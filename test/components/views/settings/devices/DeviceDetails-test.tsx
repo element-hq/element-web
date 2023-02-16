@@ -30,7 +30,6 @@ describe("<DeviceDetails />", () => {
     };
     const defaultProps: ComponentProps<typeof DeviceDetails> = {
         device: baseDevice,
-        pusher: null,
         isSigningOut: false,
         onSignOutDevice: jest.fn(),
         saveDeviceName: jest.fn(),

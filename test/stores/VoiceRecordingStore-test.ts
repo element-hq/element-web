@@ -21,7 +21,7 @@ import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import { flushPromises } from "../test-utils";
 import { VoiceMessageRecording } from "../../src/audio/VoiceMessageRecording";
 
-const stubClient = {} as undefined as MatrixClient;
+const stubClient = {} as unknown as MatrixClient;
 jest.spyOn(MatrixClientPeg, "get").mockReturnValue(stubClient);
 
 describe("VoiceRecordingStore", () => {

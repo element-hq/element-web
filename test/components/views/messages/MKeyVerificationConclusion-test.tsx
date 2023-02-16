@@ -50,10 +50,10 @@ describe("MKeyVerificationConclusion", () => {
     }) => {
         class MockVerificationRequest extends EventEmitter {
             constructor(
-                public readonly pending: boolean,
-                public readonly cancelled: boolean,
-                public readonly done: boolean,
-                public readonly otherUserId: string,
+                public readonly pending?: boolean,
+                public readonly cancelled?: boolean,
+                public readonly done?: boolean,
+                public readonly otherUserId?: string,
             ) {
                 super();
             }

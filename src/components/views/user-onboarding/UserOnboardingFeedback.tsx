@@ -26,7 +26,7 @@ import { shouldShowFeedback } from "../../../utils/Feedback";
 
 export function UserOnboardingFeedback(): JSX.Element {
     if (!shouldShowFeedback()) {
-        return null;
+        return <></>;
     }
 
     return (

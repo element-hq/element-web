@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { ReactNode } from "react";
 import { GuestAccess, HistoryVisibility, JoinRule } from "matrix-js-sdk/src/@types/partials";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
@@ -61,16 +61,16 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
     public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
         super(props, context);
 
-        const state = context.getRoom(this.props.roomId).currentState;
+        const state = context.getRoom(this.props.roomId)?.currentState;
 
         this.state = {
             guestAccess: this.pullContentPropertyFromEvent<GuestAccess>(
-                state.getStateEvents(EventType.RoomGuestAccess, ""),
+                state?.getStateEvents(EventType.RoomGuestAccess, ""),
                 "guest_access",
                 GuestAccess.Forbidden,
             ),
             history: this.pullContentPropertyFromEvent<HistoryVisibility>(
-                state.getStateEvents(EventType.RoomHistoryVisibility, ""),
+                state?.getStateEvents(EventType.RoomHistoryVisibility, ""),
                 "history_visibility",
                 HistoryVisibility.Shared,
             ),
@@ -85,7 +85,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         this.hasAliases().then((hasAliases) => this.setState({ hasAliases }));
     }
 
-    private pullContentPropertyFromEvent<T>(event: MatrixEvent, key: string, defaultValue: T): T {
+    private pullContentPropertyFromEvent<T>(event: MatrixEvent | null | undefined, key: string, defaultValue: T): T {
         return event?.getContent()[key] || defaultValue;
     }
 
@@ -117,7 +117,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                                     "You'll get none of the benefits of encryption, and you won't be able to turn it " +
                                     "off later. Encrypting messages in a public room will make receiving and sending " +
                                     "messages slower.",
-                                null,
+                                undefined,
                                 { b: (sub) => <b>{sub}</b> },
                             )}{" "}
                         </p>
@@ -126,7 +126,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                             {_t(
                                 "To avoid these issues, create a <a>new encrypted room</a> for " +
                                     "the conversation you plan to have.",
-                                null,
+                                undefined,
                                 {
                                     a: (sub) => (
                                         <AccessibleButton
@@ -236,7 +236,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
     };
 
     private updateBlacklistDevicesFlag = (checked: boolean): void => {
-        this.context.getRoom(this.props.roomId).setBlacklistUnverifiedDevices(checked);
+        this.context.getRoom(this.props.roomId)?.setBlacklistUnverifiedDevices(checked);
     };
 
     private async hasAliases(): Promise<boolean> {
@@ -250,8 +250,8 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         const client = this.context;
         const room = client.getRoom(this.props.roomId);
 
-        let aliasWarning = null;
-        if (room.getJoinRule() === JoinRule.Public && !this.state.hasAliases) {
+        let aliasWarning: JSX.Element | undefined;
+        if (room?.getJoinRule() === JoinRule.Public && !this.state.hasAliases) {
             aliasWarning = (
                 <div className="mx_SecurityRoomSettingsTab_warning">
                     <WarningIcon width={15} height={15} />
@@ -297,7 +297,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                                     "It will mean anyone can find and join the room, so anyone can read messages. " +
                                     "You'll get none of the benefits of encryption. Encrypting messages in a public " +
                                     "room will make receiving and sending messages slower.",
-                                null,
+                                undefined,
                                 { b: (sub) => <b>{sub}</b> },
                             )}{" "}
                         </p>
@@ -306,7 +306,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                             {_t(
                                 "To avoid these issues, create a <a>new public room</a> for the conversation " +
                                     "you plan to have.",
-                                null,
+                                undefined,
                                 {
                                     a: (sub) => (
                                         <AccessibleButton
@@ -335,15 +335,15 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         return true;
     };
 
-    private renderHistory(): JSX.Element {
+    private renderHistory(): ReactNode {
         if (!SettingsStore.getValue(UIFeature.RoomHistorySettings)) {
             return null;
         }
 
         const client = this.context;
         const history = this.state.history;
-        const state = client.getRoom(this.props.roomId).currentState;
-        const canChangeHistory = state.mayClientSendStateEvent(EventType.RoomHistoryVisibility, client);
+        const state = client.getRoom(this.props.roomId)?.currentState;
+        const canChangeHistory = state?.mayClientSendStateEvent(EventType.RoomHistoryVisibility, client);
 
         const options = [
             {
@@ -393,8 +393,8 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
     private renderAdvanced(): JSX.Element {
         const client = this.context;
         const guestAccess = this.state.guestAccess;
-        const state = client.getRoom(this.props.roomId).currentState;
-        const canSetGuestAccess = state.mayClientSendStateEvent(EventType.RoomGuestAccess, client);
+        const state = client.getRoom(this.props.roomId)?.currentState;
+        const canSetGuestAccess = state?.mayClientSendStateEvent(EventType.RoomGuestAccess, client);
 
         return (
             <>
@@ -418,10 +418,10 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         const client = this.context;
         const room = client.getRoom(this.props.roomId);
         const isEncrypted = this.state.encrypted;
-        const hasEncryptionPermission = room.currentState.mayClientSendStateEvent(EventType.RoomEncryption, client);
+        const hasEncryptionPermission = room?.currentState.mayClientSendStateEvent(EventType.RoomEncryption, client);
         const canEnableEncryption = !isEncrypted && hasEncryptionPermission;
 
-        let encryptionSettings = null;
+        let encryptionSettings: JSX.Element | undefined;
         if (isEncrypted && SettingsStore.isEnabled("blacklistUnverifiedDevices")) {
             encryptionSettings = (
                 <SettingsFlag
@@ -435,8 +435,8 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
 
         const historySection = this.renderHistory();
 
-        let advanced;
-        if (room.getJoinRule() === JoinRule.Public) {
+        let advanced: JSX.Element | undefined;
+        if (room?.getJoinRule() === JoinRule.Public) {
             advanced = (
                 <div className="mx_SettingsTab_section">
                     <AccessibleButton

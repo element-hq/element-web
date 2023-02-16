@@ -18,7 +18,9 @@ import { useState, useEffect, DependencyList } from "react";
 
 type Fn<T> = () => Promise<T>;
 
-export const useAsyncMemo = <T>(fn: Fn<T>, deps: DependencyList, initialValue?: T): T | undefined => {
+export function useAsyncMemo<T>(fn: Fn<T>, deps: DependencyList, initialValue: T): T;
+export function useAsyncMemo<T>(fn: Fn<T>, deps: DependencyList, initialValue?: T): T | undefined;
+export function useAsyncMemo<T>(fn: Fn<T>, deps: DependencyList, initialValue?: T): T | undefined {
     const [value, setValue] = useState<T | undefined>(initialValue);
     useEffect(() => {
         let discard = false;
@@ -32,4 +34,4 @@ export const useAsyncMemo = <T>(fn: Fn<T>, deps: DependencyList, initialValue?: 
         };
     }, deps); // eslint-disable-line react-hooks/exhaustive-deps
     return value;
-};
+}

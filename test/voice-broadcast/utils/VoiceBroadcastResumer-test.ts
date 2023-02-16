@@ -54,7 +54,7 @@ describe("VoiceBroadcastResumer", () => {
                         event_id: startedInfoEvent.getId(),
                     },
                 } as VoiceBroadcastInfoEventContent,
-                client.getUserId(),
+                client.getUserId()!,
             );
         });
     };

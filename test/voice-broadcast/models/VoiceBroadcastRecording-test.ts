@@ -135,7 +135,7 @@ describe("VoiceBroadcastRecording", () => {
                         event_id: infoEvent.getId(),
                     },
                 } as VoiceBroadcastInfoEventContent,
-                client.getUserId(),
+                client.getUserId()!,
             );
         });
     };

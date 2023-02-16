@@ -108,7 +108,7 @@ describe("<PinnedMessagesCard />", () => {
         const room = pins.props().room;
         const pinListener = mocked(room.currentState).on.mock.calls.find(
             ([eventName, listener]) => eventName === RoomStateEvent.Events,
-        )[1];
+        )![1];
 
         await act(async () => {
             // Emit the update

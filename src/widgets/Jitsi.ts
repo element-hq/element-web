@@ -87,7 +87,7 @@ export class Jitsi {
      * @param {string} url The URL to parse.
      * @returns {JitsiWidgetData} The widget data if eligible, otherwise null.
      */
-    public parsePreferredConferenceUrl(url: string): JitsiWidgetData {
+    public parsePreferredConferenceUrl(url: string): JitsiWidgetData | null {
         const parsed = new URL(url);
         if (parsed.hostname !== this.preferredDomain) return null; // invalid
         return {

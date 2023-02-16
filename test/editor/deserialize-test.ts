@@ -54,7 +54,7 @@ function textMessageReply(body: string, msgtype = "m.text") {
 function mergeAdjacentParts(parts: Part[]) {
     let prevPart: Part | undefined;
     for (let i = 0; i < parts.length; ++i) {
-        let part = parts[i];
+        let part: Part | undefined = parts[i];
         const isEmpty = !part.text.length;
         const isMerged = !isEmpty && prevPart && prevPart.merge?.(part);
         if (isEmpty || isMerged) {

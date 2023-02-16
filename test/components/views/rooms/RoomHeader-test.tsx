@@ -377,7 +377,7 @@ describe("RoomHeader (React Testing Library)", () => {
                 content,
             });
             room.addLiveEvents([event]);
-            return { event_id: event.getId() };
+            return { event_id: event.getId()! };
         });
 
         alice = mkRoomMember(room.roomId, "@alice:example.org");

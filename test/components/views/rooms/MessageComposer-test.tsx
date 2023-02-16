@@ -370,7 +370,7 @@ describe("MessageComposer", () => {
                 replyToEvent = mkEvent({
                     event: true,
                     type: EventType.RoomMessage,
-                    user: cli.getUserId(),
+                    user: cli.getUserId()!,
                     content: {},
                 });
 
