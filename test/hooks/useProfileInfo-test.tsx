@@ -14,28 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// eslint-disable-next-line deprecate/import
-import { mount } from "enzyme";
+import { waitFor } from "@testing-library/react";
+import { renderHook, act } from "@testing-library/react-hooks/dom";
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
-import { sleep } from "matrix-js-sdk/src/utils";
-import React from "react";
-import { act } from "react-dom/test-utils";
 
 import { useProfileInfo } from "../../src/hooks/useProfileInfo";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import { stubClient } from "../test-utils/test-utils";
 
-function ProfileInfoComponent({ onClick }: { onClick(hook: ReturnType<typeof useProfileInfo>): void }) {
-    const profileInfo = useProfileInfo();
-
-    const { ready, loading, profile } = profileInfo;
-
-    return (
-        <div onClick={() => onClick(profileInfo)}>
-            {(!ready || loading) && `ready: ${ready}, loading: ${loading}`}
-            {profile && `Name: ${profile.display_name}`}
-        </div>
-    );
+function render() {
+    return renderHook(() => useProfileInfo());
 }
 
 describe("useProfileInfo", () => {
@@ -55,66 +43,44 @@ describe("useProfileInfo", () => {
     it("should display user profile when searching", async () => {
         const query = "@user:home.server";
 
-        const wrapper = mount(
-            <ProfileInfoComponent
-                onClick={(hook) => {
-                    hook.search({
-                        query,
-                    });
-                }}
-            />,
-        );
+        const { result } = render();
 
-        await act(async () => {
-            await sleep(1);
-            wrapper.simulate("click");
-            return act(() => sleep(1));
+        act(() => {
+            result.current.search({ query });
         });
 
-        expect(wrapper.text()).toContain(query);
+        await waitFor(() => expect(result.current.ready).toBe(true));
+
+        expect(result.current.profile?.display_name).toBe(query);
     });
 
     it("should work with empty queries", async () => {
-        const wrapper = mount(
-            <ProfileInfoComponent
-                onClick={(hook) => {
-                    hook.search({
-                        query: "",
-                    });
-                }}
-            />,
-        );
+        const query = "";
 
-        await act(async () => {
-            await sleep(1);
-            wrapper.simulate("click");
-            return act(() => sleep(1));
+        const { result } = render();
+
+        act(() => {
+            result.current.search({ query });
         });
 
-        expect(wrapper.text()).toBe("");
+        await waitFor(() => expect(result.current.ready).toBe(true));
+
+        expect(result.current.profile).toBeNull();
     });
 
     it("should treat invalid mxids as empty queries", async () => {
         const queries = ["@user", "user@home.server"];
 
         for (const query of queries) {
-            const wrapper = mount(
-                <ProfileInfoComponent
-                    onClick={(hook) => {
-                        hook.search({
-                            query,
-                        });
-                    }}
-                />,
-            );
+            const { result } = render();
 
-            await act(async () => {
-                await sleep(1);
-                wrapper.simulate("click");
-                return act(() => sleep(1));
+            act(() => {
+                result.current.search({ query });
             });
 
-            expect(wrapper.text()).toBe("");
+            await waitFor(() => expect(result.current.ready).toBe(true));
+
+            expect(result.current.profile).toBeNull();
         }
     });
 
@@ -124,43 +90,29 @@ describe("useProfileInfo", () => {
         };
         const query = "@user:home.server";
 
-        const wrapper = mount(
-            <ProfileInfoComponent
-                onClick={(hook) => {
-                    hook.search({
-                        query,
-                    });
-                }}
-            />,
-        );
-        await act(async () => {
-            await sleep(1);
-            wrapper.simulate("click");
-            return act(() => sleep(1));
+        const { result } = render();
+
+        act(() => {
+            result.current.search({ query });
         });
 
-        expect(wrapper.text()).toBe("");
+        await waitFor(() => expect(result.current.ready).toBe(true));
+
+        expect(result.current.profile).toBeNull();
     });
 
     it("should be able to handle an empty result", async () => {
         cli.getProfileInfo = () => null as unknown as Promise<{}>;
         const query = "@user:home.server";
 
-        const wrapper = mount(
-            <ProfileInfoComponent
-                onClick={(hook) => {
-                    hook.search({
-                        query,
-                    });
-                }}
-            />,
-        );
-        await act(async () => {
-            await sleep(1);
-            wrapper.simulate("click");
-            return act(() => sleep(1));
+        const { result } = render();
+
+        act(() => {
+            result.current.search({ query });
         });
 
-        expect(wrapper.text()).toBe("");
+        await waitFor(() => expect(result.current.ready).toBe(true));
+
+        expect(result.current.profile?.display_name).toBeUndefined();
     });
 });
