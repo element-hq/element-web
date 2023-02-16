@@ -465,8 +465,6 @@ exports[`MPollBody renders a finished poll with no votes 1`] = `
 </div>
 `;
 
-exports[`MPollBody renders a loader while responses are still loading 1`] = `"Based on 4 votes<div class="mx_Spinner"><div class="mx_Spinner_icon" style="width: 16px; height: 16px;" aria-label="Loading…" role="progressbar" data-testid="spinner"></div></div>"`;
-
 exports[`MPollBody renders a poll that I have not voted in 1`] = `
 <div>
   <div
