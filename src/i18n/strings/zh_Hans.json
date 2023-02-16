@@ -825,7 +825,7 @@
     "Try using turn.matrix.org": "尝试使用 turn.matrix.org",
     "Your %(brand)s is misconfigured": "你的 %(brand)s 配置有错误",
     "Use Single Sign On to continue": "使用单点登录继续",
-    "Confirm adding this email address by using Single Sign On to prove your identity.": "通过使用单点登录来证明你的身份，并确认添加此邮箱地址。",
+    "Confirm adding this email address by using Single Sign On to prove your identity.": "使用 SSO 单点登录来验证身份，以确认添加此邮箱地址。",
     "Single Sign On": "单点登录",
     "Confirm adding email": "确认添加邮箱",
     "Click the button below to confirm adding this email address.": "点击下面的按钮，以确认添加此邮箱地址。",
