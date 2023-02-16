@@ -74,7 +74,7 @@ describe("<DevicesPanel />", () => {
 
         const toggleDeviceSelection = (container: HTMLElement, deviceId: string) =>
             act(() => {
-                const checkbox = container.querySelector(`#device-tile-checkbox-${deviceId}`);
+                const checkbox = container.querySelector(`#device-tile-checkbox-${deviceId}`)!;
                 fireEvent.click(checkbox);
             });
 
@@ -204,7 +204,7 @@ describe("<DevicesPanel />", () => {
 
             // close the modal without submission
             act(() => {
-                const modalCloseButton = document.querySelector('[aria-label="Close dialog"]');
+                const modalCloseButton = document.querySelector('[aria-label="Close dialog"]')!;
                 fireEvent.click(modalCloseButton);
             });
 

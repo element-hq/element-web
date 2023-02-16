@@ -40,7 +40,7 @@ export class IntegrationManagers {
 
     private managers: IntegrationManagerInstance[] = [];
     private client: MatrixClient;
-    private primaryManager: IntegrationManagerInstance;
+    private primaryManager: IntegrationManagerInstance | null;
 
     public static sharedInstance(): IntegrationManagers {
         if (!IntegrationManagers.instance) {
@@ -146,7 +146,7 @@ export class IntegrationManagers {
     }
 
     public getOrderedManagers(): IntegrationManagerInstance[] {
-        const ordered = [];
+        const ordered: IntegrationManagerInstance[] = [];
         for (const kind of KIND_PREFERENCE) {
             const managers = this.managers.filter((m) => m.kind === kind);
             if (!managers || !managers.length) continue;
@@ -161,7 +161,7 @@ export class IntegrationManagers {
         return ordered;
     }
 
-    public getPrimaryManager(): IntegrationManagerInstance {
+    public getPrimaryManager(): IntegrationManagerInstance | null {
         if (this.hasManager()) {
             if (this.primaryManager) return this.primaryManager;
 
@@ -195,7 +195,7 @@ export class IntegrationManagers {
      * @returns {Promise<IntegrationManagerInstance>} Resolves to an integration manager instance,
      * or null if none was found.
      */
-    public async tryDiscoverManager(domainName: string): Promise<IntegrationManagerInstance> {
+    public async tryDiscoverManager(domainName: string): Promise<IntegrationManagerInstance | null> {
         logger.log("Looking up integration manager via .well-known");
         if (domainName.startsWith("http:") || domainName.startsWith("https:")) {
             // trim off the scheme and just use the domain

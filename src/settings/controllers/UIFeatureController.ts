@@ -34,7 +34,7 @@ export default class UIFeatureController extends SettingController {
         level: SettingLevel,
         roomId: string,
         calculatedValue: any,
-        calculatedAtLevel: SettingLevel,
+        calculatedAtLevel: SettingLevel | null,
     ): any {
         if (this.settingDisabled) {
             // per the docs: we force a disabled state when the feature isn't active

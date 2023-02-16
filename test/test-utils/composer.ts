@@ -31,7 +31,7 @@ export const addTextToComposer = (container: HTMLElement, text: string) =>
                 getData: (type: string) => (type === "text/plain" ? text : undefined),
             } as unknown as DataTransfer,
         };
-        fireEvent.paste(container.querySelector('[role="textbox"]'), pasteEvent);
+        fireEvent.paste(container.querySelector('[role="textbox"]')!, pasteEvent);
     });
 
 export const addTextToComposerEnzyme = (wrapper: ReactWrapper, text: string) =>

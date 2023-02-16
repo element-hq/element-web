@@ -101,10 +101,10 @@ export class ProxiedModuleApi implements ModuleApi {
         password: string,
         displayName?: string,
     ): Promise<AccountAuthInfo> {
-        const hsUrl = SdkConfig.get("validated_server_config").hsUrl;
+        const hsUrl = SdkConfig.get("validated_server_config")?.hsUrl;
         const client = Matrix.createClient({ baseUrl: hsUrl });
         const deviceName =
-            SdkConfig.get("default_device_display_name") || PlatformPeg.get().getDefaultDeviceDisplayName();
+            SdkConfig.get("default_device_display_name") || PlatformPeg.get()?.getDefaultDeviceDisplayName();
         const req: IRegisterRequestParams = {
             username,
             password,
@@ -134,9 +134,9 @@ export class ProxiedModuleApi implements ModuleApi {
 
         return {
             homeserverUrl: hsUrl,
-            userId: creds.user_id,
-            deviceId: creds.device_id,
-            accessToken: creds.access_token,
+            userId: creds.user_id!,
+            deviceId: creds.device_id!,
+            accessToken: creds.access_token!,
         };
     }
 
@@ -163,8 +163,8 @@ export class ProxiedModuleApi implements ModuleApi {
         navigateToPermalink(uri);
 
         const parts = parsePermalink(uri);
-        if (parts.roomIdOrAlias && andJoin) {
-            let roomId = parts.roomIdOrAlias;
+        if (parts?.roomIdOrAlias && andJoin) {
+            let roomId: string | undefined = parts.roomIdOrAlias;
             let servers = parts.viaServers;
             if (roomId.startsWith("#")) {
                 roomId = getCachedRoomIDForAlias(parts.roomIdOrAlias);

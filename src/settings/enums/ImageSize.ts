@@ -22,7 +22,7 @@ const SIZE_LARGE = { w: 800, h: 600 };
 const SIZE_NORMAL_LANDSCAPE = { w: 324, h: 324 }; // for w > h
 const SIZE_NORMAL_PORTRAIT = { w: Math.ceil(324 * (9 / 16)), h: 324 }; // for h > w
 
-type Dimensions = { w: number; h: number };
+type Dimensions = { w?: number; h?: number };
 
 export enum ImageSize {
     Normal = "normal",
@@ -36,7 +36,7 @@ export enum ImageSize {
  * @returns {Dimensions} The suggested maximum dimensions for the image
  */
 export function suggestedSize(size: ImageSize, contentSize: Dimensions, maxHeight?: number): Dimensions {
-    const aspectRatio = contentSize.w / contentSize.h;
+    const aspectRatio = contentSize.w! / contentSize.h!;
     const portrait = aspectRatio < 1;
 
     const maxSize = size === ImageSize.Large ? SIZE_LARGE : portrait ? SIZE_NORMAL_PORTRAIT : SIZE_NORMAL_LANDSCAPE;

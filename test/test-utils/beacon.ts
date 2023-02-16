@@ -197,7 +197,7 @@ export const makeRoomWithBeacons = (
     locationEvents?: MatrixEvent[],
 ): Beacon[] => {
     const room = makeRoomWithStateEvents(beaconInfoEvents, { roomId, mockClient });
-    const beacons = beaconInfoEvents.map((event) => room.currentState.beacons.get(getBeaconInfoIdentifier(event)));
+    const beacons = beaconInfoEvents.map((event) => room.currentState.beacons.get(getBeaconInfoIdentifier(event))!);
     if (locationEvents) {
         beacons.forEach((beacon) => {
             // this filtering happens in roomState, which is bypassed here

@@ -134,12 +134,14 @@ But this is not
             expect(getNestedReplyText(event, mockPermalinkGenerator)).toMatchSnapshot();
         });
 
-        [
-            ["m.room.message", MsgType.Location, LocationAssetType.Pin],
-            ["m.room.message", MsgType.Location, LocationAssetType.Self],
-            [M_BEACON_INFO.name, undefined, LocationAssetType.Pin],
-            [M_BEACON_INFO.name, undefined, LocationAssetType.Self],
-        ].forEach(([type, msgType, assetType]) => {
+        (
+            [
+                ["m.room.message", MsgType.Location, LocationAssetType.Pin],
+                ["m.room.message", MsgType.Location, LocationAssetType.Self],
+                [M_BEACON_INFO.name, undefined, LocationAssetType.Pin],
+                [M_BEACON_INFO.name, undefined, LocationAssetType.Self],
+            ] as const
+        ).forEach(([type, msgType, assetType]) => {
             it(`should create the expected fallback text for ${assetType} ${type}/${msgType}`, () => {
                 const event = makeTestEvent(type, {
                     body: "body",

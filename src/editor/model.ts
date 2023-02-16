@@ -127,7 +127,7 @@ export default class EditorModel {
         return this._parts;
     }
 
-    public get autoComplete(): AutocompleteWrapperModel {
+    public get autoComplete(): AutocompleteWrapperModel | null {
         if (this.activePartIdx === this.autoCompletePartIdx) {
             return this._autoComplete;
         }
@@ -212,12 +212,12 @@ export default class EditorModel {
             const transformAddedLen = this.getTransformAddedLen(newPosition, inputType, diff);
             newPosition = this.positionForOffset(caretOffset + transformAddedLen, true);
         }
-        this.updateCallback(newPosition, inputType, diff);
+        this.updateCallback?.(newPosition, inputType, diff);
         return acPromise;
     }
 
     private getTransformAddedLen(newPosition: DocumentPosition, inputType: string, diff: IDiff): number {
-        const result = this.transformCallback(newPosition, inputType, diff);
+        const result = this.transformCallback?.(newPosition, inputType, diff);
         return Number.isFinite(result) ? (result as number) : 0;
     }
 
@@ -268,13 +268,13 @@ export default class EditorModel {
         // rerender even if editor contents didn't change
         // to make sure the MessageEditor checks
         // model.autoComplete being empty and closes it
-        this.updateCallback(pos);
+        this.updateCallback?.(pos);
     };
 
     private mergeAdjacentParts(): void {
         let prevPart: Part | undefined;
         for (let i = 0; i < this._parts.length; ++i) {
-            let part = this._parts[i];
+            let part: Part | undefined = this._parts[i];
             const isEmpty = !part.text.length;
             const isMerged = !isEmpty && prevPart && prevPart.merge?.(part);
             if (isEmpty || isMerged) {
@@ -452,13 +452,13 @@ export default class EditorModel {
      */
     public transform(callback: ManualTransformCallback): Promise<void> {
         const pos = callback();
-        let acPromise: Promise<void> = null;
+        let acPromise: Promise<void> | null = null;
         if (!(pos instanceof Range)) {
             acPromise = this.setActivePart(pos, true);
         } else {
             acPromise = Promise.resolve();
         }
-        this.updateCallback(pos);
+        this.updateCallback?.(pos);
         return acPromise;
     }
 }

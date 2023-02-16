@@ -31,7 +31,7 @@ export const useTimeout = (handler: Handler, timeoutMs: number): void => {
     // Set up timer
     useEffect(() => {
         const timeoutID = window.setTimeout(() => {
-            savedHandler.current();
+            savedHandler.current?.();
         }, timeoutMs);
         return () => clearTimeout(timeoutID);
     }, [timeoutMs]);
@@ -50,7 +50,7 @@ export const useInterval = (handler: Handler, intervalMs: number): void => {
     // Set up timer
     useEffect(() => {
         const intervalID = window.setInterval(() => {
-            savedHandler.current();
+            savedHandler.current?.();
         }, intervalMs);
         return () => clearInterval(intervalID);
     }, [intervalMs]);

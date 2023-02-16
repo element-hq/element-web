@@ -138,7 +138,7 @@ export class DecryptionFailureTracker {
             return;
         }
         if (err) {
-            this.addDecryptionFailure(new DecryptionFailure(e.getId(), err.code));
+            this.addDecryptionFailure(new DecryptionFailure(e.getId()!, err.code));
         } else {
             // Could be an event in the failures, remove it
             this.removeDecryptionFailuresForEvent(e);
@@ -146,7 +146,7 @@ export class DecryptionFailureTracker {
     }
 
     public addVisibleEvent(e: MatrixEvent): void {
-        const eventId = e.getId();
+        const eventId = e.getId()!;
 
         if (this.trackedEvents.has(eventId)) {
             return;
@@ -154,7 +154,7 @@ export class DecryptionFailureTracker {
 
         this.visibleEvents.add(eventId);
         if (this.failures.has(eventId) && !this.visibleFailures.has(eventId)) {
-            this.visibleFailures.set(eventId, this.failures.get(eventId));
+            this.visibleFailures.set(eventId, this.failures.get(eventId)!);
         }
     }
 
@@ -172,7 +172,7 @@ export class DecryptionFailureTracker {
     }
 
     public removeDecryptionFailuresForEvent(e: MatrixEvent): void {
-        const eventId = e.getId();
+        const eventId = e.getId()!;
         this.failures.delete(eventId);
         this.visibleFailures.delete(eventId);
     }
@@ -193,8 +193,8 @@ export class DecryptionFailureTracker {
      * Clear state and stop checking for and tracking failures.
      */
     public stop(): void {
-        clearInterval(this.checkInterval);
-        clearInterval(this.trackInterval);
+        if (this.checkInterval) clearInterval(this.checkInterval);
+        if (this.trackInterval) clearInterval(this.trackInterval);
 
         this.failures = new Map();
         this.visibleEvents = new Set();

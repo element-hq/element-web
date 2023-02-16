@@ -102,9 +102,9 @@ describe("OwnBeaconStore", () => {
     };
 
     const expireBeaconAndEmit = (store: OwnBeaconStore, beaconInfoEvent: MatrixEvent): void => {
-        const beacon = store.getBeaconById(getBeaconInfoIdentifier(beaconInfoEvent));
+        const beacon = store.getBeaconById(getBeaconInfoIdentifier(beaconInfoEvent))!;
         // time travel until beacon is expired
-        advanceDateAndTime(beacon.beaconInfo.timeout + 100);
+        advanceDateAndTime(beacon.beaconInfo!.timeout + 100);
 
         // force an update on the beacon
         // @ts-ignore
@@ -118,13 +118,13 @@ describe("OwnBeaconStore", () => {
         beaconInfoEvent: MatrixEvent,
         isLive: boolean,
     ): void => {
-        const beacon = store.getBeaconById(getBeaconInfoIdentifier(beaconInfoEvent));
+        const beacon = store.getBeaconById(getBeaconInfoIdentifier(beaconInfoEvent))!;
         // matches original state of event content
         // except for live property
         const updateEvent = makeBeaconInfoEvent(
-            beaconInfoEvent.getSender(),
-            beaconInfoEvent.getRoomId(),
-            { isLive, timeout: beacon.beaconInfo.timeout },
+            beaconInfoEvent.getSender()!,
+            beaconInfoEvent.getRoomId()!,
+            { isLive, timeout: beacon.beaconInfo!.timeout },
             "update-event-id",
         );
         beacon.update(updateEvent);
@@ -236,12 +236,12 @@ describe("OwnBeaconStore", () => {
             expect(mockClient.sendEvent).toHaveBeenCalledWith(
                 room1Id,
                 M_BEACON.name,
-                makeBeaconContent(defaultLocationUri, now, alicesRoom1BeaconInfo.getId()),
+                makeBeaconContent(defaultLocationUri, now, alicesRoom1BeaconInfo.getId()!),
             );
             expect(mockClient.sendEvent).toHaveBeenCalledWith(
                 room2Id,
                 M_BEACON.name,
-                makeBeaconContent(defaultLocationUri, now, alicesRoom2BeaconInfo.getId()),
+                makeBeaconContent(defaultLocationUri, now, alicesRoom2BeaconInfo.getId()!),
             );
         });
     });
@@ -263,7 +263,7 @@ describe("OwnBeaconStore", () => {
         it("destroys beacons", async () => {
             const [room1] = makeRoomsWithStateEvents([alicesRoom1BeaconInfo]);
             const store = await makeOwnBeaconStore();
-            const beacon = room1.currentState.beacons.get(getBeaconInfoIdentifier(alicesRoom1BeaconInfo));
+            const beacon = room1.currentState.beacons.get(getBeaconInfoIdentifier(alicesRoom1BeaconInfo))!;
             const destroySpy = jest.spyOn(beacon, "destroy");
             // @ts-ignore
             store.onNotReady();
@@ -559,7 +559,7 @@ describe("OwnBeaconStore", () => {
 
             const [room1] = makeRoomsWithStateEvents([alicesRoom1BeaconInfo, alicesRoom2BeaconInfo]);
             const store = await makeOwnBeaconStore();
-            const room1BeaconInstance = store.beacons.get(getBeaconInfoIdentifier(alicesRoom1BeaconInfo));
+            const room1BeaconInstance = store.beacons.get(getBeaconInfoIdentifier(alicesRoom1BeaconInfo))!;
             const beaconDestroySpy = jest.spyOn(room1BeaconInstance, "destroy");
             const emitSpy = jest.spyOn(store, "emit");
 
@@ -610,7 +610,7 @@ describe("OwnBeaconStore", () => {
             expect(store.hasLiveBeacons()).toBe(true);
             const emitSpy = jest.spyOn(store, "emit");
 
-            const beacon = store.getBeaconById(getBeaconInfoIdentifier(alicesRoom1BeaconInfo));
+            const beacon = store.getBeaconById(getBeaconInfoIdentifier(alicesRoom1BeaconInfo))!;
 
             beacon.destroy();
             mockClient.emit(BeaconEvent.Destroy, beacon.identifier);

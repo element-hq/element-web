@@ -26,7 +26,7 @@ export default class ThemeController extends SettingController {
         level: SettingLevel,
         roomId: string,
         calculatedValue: any,
-        calculatedAtLevel: SettingLevel,
+        calculatedAtLevel: SettingLevel | null,
     ): any {
         if (!calculatedValue) return null; // Don't override null themes
 

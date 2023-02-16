@@ -92,7 +92,7 @@ export async function createDmLocalRoom(client: MatrixClient, targets: Member[])
                 type: EventType.RoomMember,
                 content: {
                     displayname: target.name,
-                    avatar_url: target.getMxcAvatarUrl(),
+                    avatar_url: target.getMxcAvatarUrl() ?? undefined,
                     membership: "invite",
                     isDirect: true,
                 },
@@ -107,7 +107,7 @@ export async function createDmLocalRoom(client: MatrixClient, targets: Member[])
                 type: EventType.RoomMember,
                 content: {
                     displayname: target.name,
-                    avatar_url: target.getMxcAvatarUrl(),
+                    avatar_url: target.getMxcAvatarUrl() ?? undefined,
                     membership: "join",
                 },
                 state_key: target.userId,

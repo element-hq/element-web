@@ -30,7 +30,7 @@ const onClickSendDm = (ev: ButtonEvent): void => {
 };
 
 interface Props {
-    useCase: UseCase;
+    useCase: UseCase | null;
 }
 
 export function UserOnboardingHeader({ useCase }: Props): JSX.Element {

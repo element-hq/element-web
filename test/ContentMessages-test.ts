@@ -57,7 +57,7 @@ describe("ContentMessages", () => {
             uploadContent: jest.fn().mockResolvedValue({ content_uri: "mxc://server/file" }),
         } as unknown as MatrixClient;
         contentMessages = new ContentMessages();
-        prom = Promise.resolve(null);
+        prom = Promise.resolve<ISendEventResponse>({ event_id: "$event_id" });
     });
 
     describe("sendStickerContentToRoom", () => {
@@ -98,7 +98,7 @@ describe("ContentMessages", () => {
             mocked(doMaybeLocalRoomAction).mockImplementation(
                 <T>(roomId: string, fn: (actualRoomId: string) => Promise<T>) => fn(roomId),
             );
-            mocked(BlurhashEncoder.instance.getBlurhash).mockResolvedValue(undefined);
+            mocked(BlurhashEncoder.instance.getBlurhash).mockResolvedValue("blurhashstring");
         });
 
         it("should use m.image for image files", async () => {
@@ -134,7 +134,7 @@ describe("ContentMessages", () => {
                 const element = createElement(tagName);
                 if (tagName === "video") {
                     (<HTMLVideoElement>element).load = jest.fn();
-                    (<HTMLVideoElement>element).play = () => element.onloadeddata(new Event("loadeddata"));
+                    (<HTMLVideoElement>element).play = () => element.onloadeddata!(new Event("loadeddata"));
                     (<HTMLVideoElement>element).pause = jest.fn();
                     Object.defineProperty(element, "videoHeight", {
                         get() {
@@ -200,8 +200,8 @@ describe("ContentMessages", () => {
 
             expect(upload.loaded).toBe(0);
             expect(upload.total).toBe(file.size);
-            const { progressHandler } = mocked(client.uploadContent).mock.calls[0][1];
-            progressHandler({ loaded: 123, total: 1234 });
+            const { progressHandler } = mocked(client.uploadContent).mock.calls[0][1]!;
+            progressHandler!({ loaded: 123, total: 1234 });
             expect(upload.loaded).toBe(123);
             expect(upload.total).toBe(1234);
             await prom;
@@ -256,11 +256,11 @@ describe("ContentMessages", () => {
             mocked(client.uploadContent).mockReturnValue(deferred.promise);
             const file1 = new File([], "file1");
             const prom = contentMessages.sendContentToRoom(file1, roomId, undefined, client, undefined);
-            const { abortController } = mocked(client.uploadContent).mock.calls[0][1];
-            expect(abortController.signal.aborted).toBeFalsy();
+            const { abortController } = mocked(client.uploadContent).mock.calls[0][1]!;
+            expect(abortController!.signal.aborted).toBeFalsy();
             const [upload] = contentMessages.getCurrentUploads();
             contentMessages.cancelUpload(upload);
-            expect(abortController.signal.aborted).toBeTruthy();
+            expect(abortController!.signal.aborted).toBeTruthy();
             deferred.resolve({} as UploadResponse);
             await prom;
         });
@@ -325,7 +325,7 @@ describe("uploadFile", () => {
         const file = new Blob([]);
 
         const prom = uploadFile(client, "!roomId:server", file);
-        mocked(client.uploadContent).mock.calls[0][1].abortController.abort();
+        mocked(client.uploadContent).mock.calls[0][1]!.abortController!.abort();
         deferred.resolve({ content_uri: "mxc://foo/bar" });
         await expect(prom).rejects.toThrowError(UploadCanceledError);
     });

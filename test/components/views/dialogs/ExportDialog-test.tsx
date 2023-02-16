@@ -109,7 +109,7 @@ describe("<ExportDialog />", () => {
         plainTextExporterInstance.export.mockClear();
 
         // default setting value
-        ChatExportMock.getForceChatExportParameters.mockClear().mockReturnValue({});
+        mocked(ChatExportMock.getForceChatExportParameters!).mockClear().mockReturnValue({});
     });
 
     it("renders export dialog", () => {
@@ -145,7 +145,7 @@ describe("<ExportDialog />", () => {
     });
 
     it("exports room using values set from ForceRoomExportParameters", async () => {
-        ChatExportMock.getForceChatExportParameters.mockReturnValue({
+        mocked(ChatExportMock.getForceChatExportParameters!).mockReturnValue({
             format: ExportFormat.PlainText,
             range: ExportType.Beginning,
             sizeMb: 7000,
@@ -198,7 +198,7 @@ describe("<ExportDialog />", () => {
         });
 
         it("does not render export format when set in ForceRoomExportParameters", () => {
-            ChatExportMock.getForceChatExportParameters.mockReturnValue({
+            mocked(ChatExportMock.getForceChatExportParameters!).mockReturnValue({
                 format: ExportFormat.PlainText,
             });
             const component = getComponent();
@@ -219,7 +219,7 @@ describe("<ExportDialog />", () => {
         });
 
         it("does not render export type when set in ForceRoomExportParameters", () => {
-            ChatExportMock.getForceChatExportParameters.mockReturnValue({
+            mocked(ChatExportMock.getForceChatExportParameters!).mockReturnValue({
                 range: ExportType.Beginning,
             });
             const component = getComponent();
@@ -310,7 +310,7 @@ describe("<ExportDialog />", () => {
         });
 
         it("does not render size limit input when set in ForceRoomExportParameters", () => {
-            ChatExportMock.getForceChatExportParameters.mockReturnValue({
+            mocked(ChatExportMock.getForceChatExportParameters!).mockReturnValue({
                 sizeMb: 10000,
             });
             const component = getComponent();
@@ -321,7 +321,7 @@ describe("<ExportDialog />", () => {
          * 2000mb size limit does not apply when higher limit is configured in config
          */
         it("exports when size limit set in ForceRoomExportParameters is larger than 2000", async () => {
-            ChatExportMock.getForceChatExportParameters.mockReturnValue({
+            mocked(ChatExportMock.getForceChatExportParameters!).mockReturnValue({
                 sizeMb: 10000,
             });
             const component = getComponent();
@@ -344,7 +344,7 @@ describe("<ExportDialog />", () => {
         });
 
         it("does not render input when set in ForceRoomExportParameters", () => {
-            ChatExportMock.getForceChatExportParameters.mockReturnValue({
+            mocked(ChatExportMock.getForceChatExportParameters!).mockReturnValue({
                 includeAttachments: false,
             });
             const component = getComponent();

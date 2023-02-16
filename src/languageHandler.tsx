@@ -194,7 +194,7 @@ const annotateStrings = (result: TranslatedString, translationKey: string): Tran
  */
 // eslint-next-line @typescript-eslint/naming-convention
 export function _t(text: string, variables?: IVariables): string;
-export function _t(text: string, variables: IVariables, tags: Tags): React.ReactNode;
+export function _t(text: string, variables: IVariables | undefined, tags: Tags): React.ReactNode;
 export function _t(text: string, variables?: IVariables, tags?: Tags): TranslatedString {
     // The translation returns text so there's no XSS vector here (no unsafe HTML, no code execution)
     const { translated } = safeCounterpartTranslate(text, variables);

@@ -24,14 +24,17 @@ import SettingsStore from "../../../settings/SettingsStore";
 import DMRoomMap from "../../../utils/DMRoomMap";
 
 export class ReactionEventPreview implements IPreview {
-    public getTextFor(event: MatrixEvent, tagId?: TagID, isThread?: boolean): string {
+    public getTextFor(event: MatrixEvent, tagId?: TagID, isThread?: boolean): string | null {
         const showDms = SettingsStore.getValue("feature_roomlist_preview_reactions_dms");
         const showAll = SettingsStore.getValue("feature_roomlist_preview_reactions_all");
+
+        const roomId = event.getRoomId();
+        if (!roomId) return null; // not a room event
 
         // If we're not showing all reactions, see if we're showing DMs instead
         if (!showAll) {
             // If we're not showing reactions on DMs, or we are and the room isn't a DM, skip
-            if (!(showDms && DMRoomMap.shared().getUserIdForRoomId(event.getRoomId()))) {
+            if (!(showDms && DMRoomMap.shared().getUserIdForRoomId(roomId))) {
                 return null;
             }
         }
@@ -42,7 +45,7 @@ export class ReactionEventPreview implements IPreview {
         const reaction = relation.key;
         if (!reaction) return null; // invalid reaction (unknown format)
 
-        if (isThread || isSelf(event) || !shouldPrefixMessagesIn(event.getRoomId(), tagId)) {
+        if (isThread || isSelf(event) || !shouldPrefixMessagesIn(roomId, tagId)) {
             return reaction;
         } else {
             return _t("%(senderName)s: %(reaction)s", { senderName: getSenderName(event), reaction });

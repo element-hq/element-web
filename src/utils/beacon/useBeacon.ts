@@ -29,7 +29,7 @@ export const useBeacon = (beaconInfoEvent: MatrixEvent): Beacon | undefined => {
         const beaconIdentifier = getBeaconInfoIdentifier(beaconInfoEvent);
 
         const room = matrixClient.getRoom(roomId);
-        const beaconInstance = room.currentState.beacons.get(beaconIdentifier);
+        const beaconInstance = room?.currentState.beacons.get(beaconIdentifier);
 
         // TODO could this be less stupid?
 

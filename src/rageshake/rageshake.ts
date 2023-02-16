@@ -76,7 +76,7 @@ export class ConsoleLogger {
     }
 
     public bypassRageshake(fnName: LogFunctionName, ...args: (Error | DOMException | object | string)[]): void {
-        this.originalFunctions[fnName](...args);
+        this.originalFunctions[fnName]?.(...args);
     }
 
     public log(level: string, ...args: (Error | DOMException | object | string)[]): void {
@@ -152,7 +152,7 @@ export class IndexedDBLogStore {
             };
 
             req.onerror = () => {
-                const err = "Failed to open log database: " + req.error.name;
+                const err = "Failed to open log database: " + req.error?.name;
                 logger.error(err);
                 reject(new Error(err));
             };
@@ -234,7 +234,7 @@ export class IndexedDBLogStore {
             };
             txn.onerror = () => {
                 logger.error("Failed to flush logs : ", txn.error);
-                reject(new Error("Failed to write logs: " + txn.error.message));
+                reject(new Error("Failed to write logs: " + txn.error?.message));
             };
             objStore.add(this.generateLogEntry(lines));
             const lastModStore = txn.objectStore("logslastmod");
@@ -267,7 +267,7 @@ export class IndexedDBLogStore {
                 const query = objectStore.index("id").openCursor(IDBKeyRange.only(id), "prev");
                 let lines = "";
                 query.onerror = () => {
-                    reject(new Error("Query failed: " + query.error.message));
+                    reject(new Error("Query failed: " + query.error?.message));
                 };
                 query.onsuccess = () => {
                     const cursor = query.result;
@@ -322,7 +322,7 @@ export class IndexedDBLogStore {
                     resolve();
                 };
                 txn.onerror = () => {
-                    reject(new Error("Failed to delete logs for " + `'${id}' : ${query.error.message}`));
+                    reject(new Error("Failed to delete logs for " + `'${id}' : ${query.error?.message}`));
                 };
                 // delete last modified entries
                 const lastModStore = txn.objectStore("logslastmod");
@@ -401,14 +401,14 @@ export class IndexedDBLogStore {
  */
 function selectQuery<T>(
     store: IDBIndex | IDBObjectStore,
-    keyRange: IDBKeyRange,
+    keyRange: IDBKeyRange | undefined,
     resultMapper: (cursor: IDBCursorWithValue) => T,
 ): Promise<T[]> {
     const query = store.openCursor(keyRange);
     return new Promise((resolve, reject) => {
         const results: T[] = [];
         query.onerror = () => {
-            reject(new Error("Query failed: " + query.error.message));
+            reject(new Error("Query failed: " + query.error?.message));
         };
         // collect results
         query.onsuccess = () => {

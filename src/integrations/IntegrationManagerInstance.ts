@@ -33,18 +33,13 @@ export enum Kind {
 }
 
 export class IntegrationManagerInstance {
-    public readonly apiUrl: string;
-    public readonly uiUrl: string;
-    public readonly kind: string;
-    public readonly id: string; // only applicable in some cases
-
     // Per the spec: UI URL is optional.
-    public constructor(kind: string, apiUrl: string, uiUrl: string = apiUrl, id?: string) {
-        this.kind = kind;
-        this.apiUrl = apiUrl;
-        this.uiUrl = uiUrl;
-        this.id = id;
-    }
+    public constructor(
+        public readonly kind: string,
+        public readonly apiUrl: string,
+        public readonly uiUrl: string = apiUrl,
+        public readonly id?: string, // only applicable in some cases
+    ) {}
 
     public get name(): string {
         const parsed = url.parse(this.uiUrl);
@@ -62,7 +57,7 @@ export class IntegrationManagerInstance {
         return new ScalarAuthClient(this.apiUrl, this.uiUrl);
     }
 
-    public async open(room: Room = null, screen: string = null, integrationId: string = null): Promise<void> {
+    public async open(room: Room, screen?: string, integrationId?: string): Promise<void> {
         if (!SettingsStore.getValue("integrationProvisioning")) {
             return IntegrationManagers.sharedInstance().showDisabledDialog();
         }

@@ -23,7 +23,7 @@ import { SlidingSyncManager } from "../SlidingSyncManager";
 
 export interface SlidingSyncRoomSearchOpts {
     limit: number;
-    query?: string;
+    query: string;
 }
 
 export const useSlidingSyncRoomSearch = (): {
@@ -55,7 +55,7 @@ export const useSlidingSyncRoomSearch = (): {
                         room_name_like: term,
                     },
                 });
-                const rooms = [];
+                const rooms: Room[] = [];
                 const { roomIndexToRoomId } = SlidingSyncManager.instance.slidingSync.getListData(
                     SlidingSyncManager.ListSearch,
                 )!;

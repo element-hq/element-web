@@ -712,7 +712,7 @@ export class RoomViewStore extends EventEmitter {
     }
 
     // The mxEvent if one is currently being replied to/quoted
-    public getQuotingEvent(): Optional<MatrixEvent> {
+    public getQuotingEvent(): MatrixEvent | null {
         return this.state.replyingToEvent;
     }
 

@@ -80,8 +80,8 @@ describe("StopGapWidget", () => {
         beforeEach(() => {
             voiceBroadcastInfoEvent = mkEvent({
                 event: true,
-                room: client.getRoom("x").roomId,
-                user: client.getUserId(),
+                room: client.getRoom("x")?.roomId,
+                user: client.getUserId()!,
                 type: VoiceBroadcastInfoEventType,
                 content: {},
             });

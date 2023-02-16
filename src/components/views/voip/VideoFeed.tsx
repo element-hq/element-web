@@ -95,7 +95,7 @@ export default class VideoFeed extends React.PureComponent<IProps, IState> {
         element.addEventListener("resize", this.onResize);
     };
 
-    private updateFeed(oldFeed: CallFeed, newFeed: CallFeed): void {
+    private updateFeed(oldFeed: CallFeed | null, newFeed: CallFeed | null): void {
         if (oldFeed === newFeed) return;
 
         if (oldFeed) {

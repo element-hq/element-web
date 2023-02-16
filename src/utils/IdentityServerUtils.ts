@@ -19,6 +19,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import SdkConfig from "../SdkConfig";
 import { MatrixClientPeg } from "../MatrixClientPeg";
+import { Policies } from "../Terms";
 
 export function getDefaultIdentityServerUrl(): string {
     return SdkConfig.get("validated_server_config").isUrl;
@@ -33,7 +34,7 @@ export function setToDefaultIdentityServer(): void {
 }
 
 export async function doesIdentityServerHaveTerms(fullUrl: string): Promise<boolean> {
-    let terms;
+    let terms: { policies?: Policies } | null;
     try {
         terms = await MatrixClientPeg.get().getTerms(SERVICE_TYPES.IS, fullUrl);
     } catch (e) {
@@ -45,7 +46,7 @@ export async function doesIdentityServerHaveTerms(fullUrl: string): Promise<bool
         }
     }
 
-    return terms && terms["policies"] && Object.keys(terms["policies"]).length > 0;
+    return !!terms?.["policies"] && Object.keys(terms["policies"]).length > 0;
 }
 
 export function doesAccountDataHaveIdentityServer(): boolean {

@@ -93,8 +93,8 @@ function reconcileLine(lineContainer: ChildNode, parts: Part[]): void {
 
         if (needsCaretNodeBefore(part, prevPart)) {
             if (isCaretNode(currentNode as Element)) {
-                updateCaretNode(currentNode);
-                currentNode = currentNode.nextSibling;
+                updateCaretNode(currentNode!);
+                currentNode = currentNode!.nextSibling;
             } else {
                 lineContainer.insertBefore(createCaretNode(), currentNode);
             }

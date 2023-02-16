@@ -51,7 +51,7 @@ import { isBulkUnverifiedDeviceReminderSnoozed } from "./utils/device/snoozeBulk
 const KEY_BACKUP_POLL_INTERVAL = 5 * 60 * 1000;
 
 export default class DeviceListener {
-    private dispatcherRef: string;
+    private dispatcherRef: string | null;
     // device IDs for which the user has dismissed the verify toast ('Later')
     private dismissed = new Set<string>();
     // has the user dismissed any of the various nag toasts to setup encryption on this device?
@@ -152,7 +152,7 @@ export default class DeviceListener {
     private ensureDeviceIdsAtStartPopulated(): void {
         if (this.ourDeviceIdsAtStart === null) {
             const cli = MatrixClientPeg.get();
-            this.ourDeviceIdsAtStart = new Set(cli.getStoredDevicesForUser(cli.getUserId()).map((d) => d.deviceId));
+            this.ourDeviceIdsAtStart = new Set(cli.getStoredDevicesForUser(cli.getUserId()!).map((d) => d.deviceId));
         }
     }
 
@@ -162,7 +162,7 @@ export default class DeviceListener {
         // devicesAtStart list to the devices that we see after the fetch.
         if (initialFetch) return;
 
-        const myUserId = MatrixClientPeg.get().getUserId();
+        const myUserId = MatrixClientPeg.get().getUserId()!;
         if (users.includes(myUserId)) this.ensureDeviceIdsAtStartPopulated();
 
         // No need to do a recheck here: we just need to get a snapshot of our devices
@@ -170,7 +170,7 @@ export default class DeviceListener {
     };
 
     private onDevicesUpdated = (users: string[]): void => {
-        if (!users.includes(MatrixClientPeg.get().getUserId())) return;
+        if (!users.includes(MatrixClientPeg.get().getUserId()!)) return;
         this.recheck();
     };
 
@@ -225,7 +225,7 @@ export default class DeviceListener {
 
     // The server doesn't tell us when key backup is set up, so we poll
     // & cache the result
-    private async getKeyBackupInfo(): Promise<IKeyBackupInfo> {
+    private async getKeyBackupInfo(): Promise<IKeyBackupInfo | null> {
         const now = new Date().getTime();
         if (!this.keyBackupInfo || this.keyBackupFetchedAt < now - KEY_BACKUP_POLL_INTERVAL) {
             this.keyBackupInfo = await MatrixClientPeg.get().getKeyBackupVersion();
@@ -265,10 +265,10 @@ export default class DeviceListener {
             this.checkKeyBackupStatus();
         } else if (this.shouldShowSetupEncryptionToast()) {
             // make sure our keys are finished downloading
-            await cli.downloadKeys([cli.getUserId()]);
+            await cli.downloadKeys([cli.getUserId()!]);
             // cross signing isn't enabled - nag to enable it
             // There are 3 different toasts for:
-            if (!cli.getCrossSigningId() && cli.getStoredCrossSigningForUser(cli.getUserId())) {
+            if (!cli.getCrossSigningId() && cli.getStoredCrossSigningForUser(cli.getUserId()!)) {
                 // Cross-signing on account but this device doesn't trust the master key (verify this session)
                 showSetupEncryptionToast(SetupKind.VERIFY_THIS_SESSION);
                 this.checkKeyBackupStatus();
@@ -310,13 +310,13 @@ export default class DeviceListener {
         // as long as cross-signing isn't ready,
         // you can't see or dismiss any device toasts
         if (crossSigningReady) {
-            const devices = cli.getStoredDevicesForUser(cli.getUserId());
+            const devices = cli.getStoredDevicesForUser(cli.getUserId()!);
             for (const device of devices) {
                 if (device.deviceId === cli.deviceId) continue;
 
                 const deviceTrust = await cli.checkDeviceTrust(cli.getUserId()!, device.deviceId!);
                 if (!deviceTrust.isCrossSigningVerified() && !this.dismissed.has(device.deviceId)) {
-                    if (this.ourDeviceIdsAtStart.has(device.deviceId)) {
+                    if (this.ourDeviceIdsAtStart?.has(device.deviceId)) {
                         oldUnverifiedDeviceIds.add(device.deviceId);
                     } else {
                         newUnverifiedDeviceIds.add(device.deviceId);

@@ -477,7 +477,7 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         this.updateUserLayout(room, newLayout);
     }
 
-    public hasMaximisedWidget(room: Room): boolean {
+    public hasMaximisedWidget(room?: Room): boolean {
         return this.getContainerWidgets(room, Container.Center).length > 0;
     }
 

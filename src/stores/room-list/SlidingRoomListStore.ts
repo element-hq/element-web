@@ -17,6 +17,7 @@ limitations under the License.
 import { Room } from "matrix-js-sdk/src/models/room";
 import { logger } from "matrix-js-sdk/src/logger";
 import { MSC3575Filter, SlidingSyncEvent } from "matrix-js-sdk/src/sliding-sync";
+import { Optional } from "matrix-events-sdk";
 
 import { RoomUpdateCause, TagID, OrderedDefaultTagIDs, DefaultTagID } from "./models";
 import { ITagMap, ListAlgorithm, SortAlgorithm } from "./algorithms/models";
@@ -79,12 +80,11 @@ export class SlidingRoomListStoreClass extends AsyncStoreWithClient<IState> impl
     private tagIdToSortAlgo: Record<TagID, SortAlgorithm> = {};
     private tagMap: ITagMap = {};
     private counts: Record<TagID, number> = {};
-    private stickyRoomId: string | null;
+    private stickyRoomId: Optional<string>;
 
     public constructor(dis: MatrixDispatcher, private readonly context: SdkContextClass) {
         super(dis);
         this.setMaxListeners(20); // RoomList + LeftPanel + 8xRoomSubList + spares
-        this.stickyRoomId = null;
     }
 
     public async setTagSorting(tagId: TagID, sort: SortAlgorithm): Promise<void> {

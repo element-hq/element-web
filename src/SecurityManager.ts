@@ -102,7 +102,7 @@ async function getSecretStorageKey({
 }): Promise<[string, Uint8Array]> {
     const cli = MatrixClientPeg.get();
     let keyId = await cli.getDefaultSecretStorageKeyId();
-    let keyInfo: ISecretStorageKeyInfo;
+    let keyInfo!: ISecretStorageKeyInfo;
     if (keyId) {
         // use the default SSSS key if set
         keyInfo = keyInfos[keyId];

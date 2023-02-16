@@ -105,7 +105,7 @@ export interface IProps extends MenuProps {
 }
 
 interface IState {
-    contextMenuElem: HTMLDivElement;
+    contextMenuElem?: HTMLDivElement;
 }
 
 // Generic ContextMenu Portal wrapper
@@ -122,9 +122,7 @@ export default class ContextMenu extends React.PureComponent<IProps, IState> {
     public constructor(props: IProps) {
         super(props);
 
-        this.state = {
-            contextMenuElem: null,
-        };
+        this.state = {};
 
         // persist what had focus when we got initialized so we can return it after
         this.initialFocus = document.activeElement as HTMLElement;
@@ -181,7 +179,7 @@ export default class ContextMenu extends React.PureComponent<IProps, IState> {
                     button: 0, // Left
                     relatedTarget: null,
                 });
-                document.elementFromPoint(x, y).dispatchEvent(clickEvent);
+                document.elementFromPoint(x, y)?.dispatchEvent(clickEvent);
             });
         }
     };
@@ -239,7 +237,7 @@ export default class ContextMenu extends React.PureComponent<IProps, IState> {
                 // MessageActionBar), we should close any ContextMenu that is open.
                 KeyBindingAction.ArrowLeft,
                 KeyBindingAction.ArrowRight,
-            ].includes(action)
+            ].includes(action!)
         ) {
             this.props.onFinished();
         }
@@ -312,12 +310,12 @@ export default class ContextMenu extends React.PureComponent<IProps, IState> {
                 position.top = Math.min(position.top, maxTop);
                 // Adjust the chevron if necessary
                 if (chevronOffset.top !== undefined) {
-                    chevronOffset.top = propsChevronOffset + top - position.top;
+                    chevronOffset.top = propsChevronOffset! + top! - position.top;
                 }
             } else if (position.bottom !== undefined) {
                 position.bottom = Math.min(position.bottom, windowHeight - contextMenuRect.height - WINDOW_PADDING);
                 if (chevronOffset.top !== undefined) {
-                    chevronOffset.top = propsChevronOffset + position.bottom - bottom;
+                    chevronOffset.top = propsChevronOffset! + position.bottom - bottom!;
                 }
             }
             if (position.left !== undefined) {
@@ -327,12 +325,12 @@ export default class ContextMenu extends React.PureComponent<IProps, IState> {
                 }
                 position.left = Math.min(position.left, maxLeft);
                 if (chevronOffset.left !== undefined) {
-                    chevronOffset.left = propsChevronOffset + left - position.left;
+                    chevronOffset.left = propsChevronOffset! + left! - position.left;
                 }
             } else if (position.right !== undefined) {
                 position.right = Math.min(position.right, windowWidth - contextMenuRect.width - WINDOW_PADDING);
                 if (chevronOffset.left !== undefined) {
-                    chevronOffset.left = propsChevronOffset + position.right - right;
+                    chevronOffset.left = propsChevronOffset! + position.right - right!;
                 }
             }
         }
@@ -389,7 +387,7 @@ export default class ContextMenu extends React.PureComponent<IProps, IState> {
 
         const wrapperStyle: CSSProperties = {};
         if (!isNaN(Number(zIndex))) {
-            menuStyle["zIndex"] = zIndex + 1;
+            menuStyle["zIndex"] = zIndex! + 1;
             wrapperStyle["zIndex"] = zIndex;
         }
 

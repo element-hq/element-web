@@ -82,6 +82,7 @@ const singleMxcUpload = async (): Promise<string | null> => {
         fileSelector.setAttribute("type", "file");
         fileSelector.onchange = (ev: HTMLInputEvent) => {
             const file = ev.target.files?.[0];
+            if (!file) return;
 
             Modal.createDialog(UploadConfirmDialog, {
                 file,
@@ -304,7 +305,7 @@ export const Commands = [
             if (args) {
                 const cli = MatrixClientPeg.get();
                 const room = cli.getRoom(roomId);
-                if (!room.currentState.mayClientSendStateEvent("m.room.tombstone", cli)) {
+                if (!room?.currentState.mayClientSendStateEvent("m.room.tombstone", cli)) {
                     return reject(
                         newTranslatableError("You do not have the required permissions to use this command."),
                     );
@@ -313,7 +314,7 @@ export const Commands = [
                 const { finished } = Modal.createDialog(
                     RoomUpgradeWarningDialog,
                     { roomId: roomId, targetVersion: args },
-                    /*className=*/ null,
+                    /*className=*/ undefined,
                     /*isPriority=*/ false,
                     /*isStatic=*/ true,
                 );
@@ -1199,7 +1200,7 @@ export const Commands = [
         description: _td("Switches to this room's virtual room, if it has one"),
         category: CommandCategories.advanced,
         isEnabled(): boolean {
-            return LegacyCallHandler.instance.getSupportsVirtualRooms() && !isCurrentLocalRoom();
+            return !!LegacyCallHandler.instance.getSupportsVirtualRooms() && !isCurrentLocalRoom();
         },
         runFn: (roomId) => {
             return success(
@@ -1389,7 +1390,7 @@ export function parseCommandString(input: string): { cmd?: string; args?: string
 
     const bits = input.match(/^(\S+?)(?:[ \n]+((.|\n)*))?$/);
     let cmd: string;
-    let args: string;
+    let args: string | undefined;
     if (bits) {
         cmd = bits[1].substring(1).toLowerCase();
         args = bits[2];
@@ -1414,7 +1415,7 @@ interface ICmd {
 export function getCommand(input: string): ICmd {
     const { cmd, args } = parseCommandString(input);
 
-    if (CommandMap.has(cmd) && CommandMap.get(cmd)!.isEnabled()) {
+    if (cmd && CommandMap.has(cmd) && CommandMap.get(cmd)!.isEnabled()) {
         return {
             cmd: CommandMap.get(cmd),
             args,

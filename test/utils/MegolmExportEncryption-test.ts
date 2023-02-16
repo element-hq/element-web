@@ -85,10 +85,6 @@ describe("MegolmExportEncryption", function () {
         MegolmExportEncryption = require("../../src/utils/MegolmExportEncryption");
     });
 
-    afterAll(() => {
-        window.crypto = undefined;
-    });
-
     describe("decrypt", function () {
         it("should handle missing header", function () {
             const input = stringToArray(`-----`);

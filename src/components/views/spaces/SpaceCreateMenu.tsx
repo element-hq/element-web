@@ -245,14 +245,14 @@ export const SpaceCreateForm: React.FC<ISpaceCreateFormProps> = ({
 const SpaceCreateMenu: React.FC<{
     onFinished(): void;
 }> = ({ onFinished }) => {
-    const [visibility, setVisibility] = useState<Visibility>(null);
+    const [visibility, setVisibility] = useState<Visibility | null>(null);
     const [busy, setBusy] = useState<boolean>(false);
 
     const [name, setName] = useState("");
     const spaceNameField = useRef<Field>();
     const [alias, setAlias] = useState("");
     const spaceAliasField = useRef<RoomAliasField>();
-    const [avatar, setAvatar] = useState<File>(null);
+    const [avatar, setAvatar] = useState<File | undefined>(undefined);
     const [topic, setTopic] = useState<string>("");
 
     const onSpaceCreateClick = async (e: ButtonEvent): Promise<void> => {

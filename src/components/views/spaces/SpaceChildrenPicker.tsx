@@ -53,7 +53,7 @@ const SpecificChildrenPicker: React.FC<ISpecificChildrenPickerProps> = ({
 
         const matcher = new QueryMatcher<Room>(rooms, {
             keys: ["name"],
-            funcs: [(r) => [r.getCanonicalAlias(), ...r.getAltAliases()].filter(Boolean)],
+            funcs: [(r) => [r.getCanonicalAlias(), ...r.getAltAliases()].filter(Boolean) as string[]],
             shouldMatchWordsOnly: false,
         });
 

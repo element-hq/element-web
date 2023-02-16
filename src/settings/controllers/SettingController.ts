@@ -41,7 +41,7 @@ export default abstract class SettingController {
         level: SettingLevel,
         roomId: string | null,
         calculatedValue: any,
-        calculatedAtLevel: SettingLevel,
+        calculatedAtLevel: SettingLevel | null,
     ): any {
         return null; // no override
     }

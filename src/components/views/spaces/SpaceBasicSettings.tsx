@@ -24,11 +24,11 @@ import { chromeFileInputFix } from "../../../utils/BrowserWorkarounds";
 interface IProps {
     avatarUrl?: string;
     avatarDisabled?: boolean;
-    name?: string;
+    name: string;
     nameDisabled?: boolean;
     topic?: string;
     topicDisabled?: boolean;
-    setAvatar(avatar: File): void;
+    setAvatar(avatar?: File): void;
     setName(name: string): void;
     setTopic(topic: string): void;
 }
@@ -102,7 +102,7 @@ export const SpaceAvatar: React.FC<Pick<IProps, "avatarUrl" | "avatarDisabled" |
                     setAvatar(file);
                     const reader = new FileReader();
                     reader.onload = (ev) => {
-                        setAvatarDataUrl(ev.target.result as string);
+                        setAvatarDataUrl(ev.target?.result as string);
                     };
                     reader.readAsDataURL(file);
                 }}

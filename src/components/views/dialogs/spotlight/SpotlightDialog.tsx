@@ -179,7 +179,7 @@ const toPublicRoomResult = (publicRoom: IPublicRoomsChunkRoom): IPublicRoomResul
         publicRoom.name?.toLowerCase(),
         sanitizeHtml(publicRoom.topic?.toLowerCase() ?? "", { allowedTags: [] }),
         ...(publicRoom.aliases?.map((it) => it.toLowerCase()) || []),
-    ].filter(Boolean),
+    ].filter(Boolean) as string[],
 });
 
 const toRoomResult = (room: Room): IRoomResult => {
@@ -310,7 +310,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
     }, [cli]);
     const msc3946ProcessDynamicPredecessor = useFeatureEnabled("feature_dynamic_room_predecessors");
 
-    const ownInviteLink = makeUserPermalink(cli.getUserId());
+    const ownInviteLink = makeUserPermalink(cli.getUserId()!);
     const [inviteLinkCopied, setInviteLinkCopied] = useState<boolean>(false);
     const trimmedQuery = useMemo(() => query.trim(), [query]);
 
@@ -465,7 +465,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
     useWebSearchMetrics(numResults, query.length, true);
 
     const activeSpace = SpaceStore.instance.activeSpaceRoom;
-    const [spaceResults, spaceResultsLoading] = useSpaceResults(activeSpace, query);
+    const [spaceResults, spaceResultsLoading] = useSpaceResults(activeSpace ?? undefined, query);
 
     const setQuery = (e: ChangeEvent<HTMLInputElement>): void => {
         const newQuery = e.currentTarget.value;
@@ -473,7 +473,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
     };
     useEffect(() => {
         setImmediate(() => {
-            let ref: Ref;
+            let ref: Ref | undefined;
             if (rovingContext.state.refs) {
                 ref = rovingContext.state.refs[0];
             }
@@ -521,7 +521,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
         onFinished();
     };
 
-    let otherSearchesSection: JSX.Element;
+    let otherSearchesSection: JSX.Element | undefined;
     if (trimmedQuery || filter !== Filter.PublicRooms) {
         otherSearchesSection = (
             <div
@@ -693,7 +693,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
             );
         };
 
-        let peopleSection: JSX.Element;
+        let peopleSection: JSX.Element | undefined;
         if (results[Section.People].length) {
             peopleSection = (
                 <div
@@ -707,7 +707,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
             );
         }
 
-        let suggestionsSection: JSX.Element;
+        let suggestionsSection: JSX.Element | undefined;
         if (results[Section.Suggestions].length && filter === Filter.People) {
             suggestionsSection = (
                 <div
@@ -721,7 +721,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
             );
         }
 
-        let roomsSection: JSX.Element;
+        let roomsSection: JSX.Element | undefined;
         if (results[Section.Rooms].length) {
             roomsSection = (
                 <div
@@ -735,7 +735,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
             );
         }
 
-        let spacesSection: JSX.Element;
+        let spacesSection: JSX.Element | undefined;
         if (results[Section.Spaces].length) {
             spacesSection = (
                 <div
@@ -749,7 +749,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
             );
         }
 
-        let publicRoomsSection: JSX.Element;
+        let publicRoomsSection: JSX.Element | undefined;
         if (filter === Filter.PublicRooms) {
             publicRoomsSection = (
                 <div
@@ -791,7 +791,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
             );
         }
 
-        let spaceRoomsSection: JSX.Element;
+        let spaceRoomsSection: JSX.Element | undefined;
         if (spaceResults.length && activeSpace && filter === null) {
             spaceRoomsSection = (
                 <div
@@ -836,7 +836,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
             );
         }
 
-        let joinRoomSection: JSX.Element;
+        let joinRoomSection: JSX.Element | undefined;
         if (
             trimmedQuery.startsWith("#") &&
             trimmedQuery.includes(":") &&
@@ -868,7 +868,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
             );
         }
 
-        let hiddenResultsSection: JSX.Element;
+        let hiddenResultsSection: JSX.Element | undefined;
         if (filter === Filter.People) {
             hiddenResultsSection = (
                 <div className="mx_SpotlightDialog_section mx_SpotlightDialog_hiddenResults" role="group">
@@ -921,7 +921,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
             );
         }
 
-        let groupChatSection: JSX.Element;
+        let groupChatSection: JSX.Element | undefined;
         if (filter === Filter.People) {
             groupChatSection = (
                 <div
@@ -941,7 +941,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
             );
         }
 
-        let messageSearchSection: JSX.Element;
+        let messageSearchSection: JSX.Element | undefined;
         if (filter === null) {
             messageSearchSection = (
                 <div
@@ -977,7 +977,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
             </>
         );
     } else {
-        let recentSearchesSection: JSX.Element;
+        let recentSearchesSection: JSX.Element | undefined;
         if (recentSearches.length) {
             recentSearchesSection = (
                 <div
@@ -1075,7 +1075,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                 break;
         }
 
-        let ref: RefObject<HTMLElement>;
+        let ref: RefObject<HTMLElement> | undefined;
         const accessibilityAction = getKeyBindingsManager().getAccessibilityAction(ev);
         switch (accessibilityAction) {
             case KeyBindingAction.Escape:

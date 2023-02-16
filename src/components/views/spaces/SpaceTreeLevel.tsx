@@ -121,11 +121,11 @@ export const SpaceButton = forwardRef<HTMLElement, IButtonProps>(
             );
         }
 
-        let contextMenu: JSX.Element;
-        if (menuDisplayed && ContextMenuComponent) {
+        let contextMenu: JSX.Element | undefined;
+        if (menuDisplayed && handle.current && ContextMenuComponent) {
             contextMenu = (
                 <ContextMenuComponent
-                    {...toRightOf(handle.current?.getBoundingClientRect(), 0)}
+                    {...toRightOf(handle.current.getBoundingClientRect(), 0)}
                     space={space}
                     onFinished={closeMenu}
                 />
@@ -242,7 +242,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
     }
 
     private get isCollapsed(): boolean {
-        return this.state.collapsed || this.props.isPanelCollapsed;
+        return this.state.collapsed || !!this.props.isPanelCollapsed;
     }
 
     private toggleCollapse = (evt: ButtonEvent): void => {

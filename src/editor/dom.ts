@@ -32,7 +32,7 @@ export function walkDOMDepthFirst(rootNode: Node, enterNodeCallback: Predicate, 
         } else if (node.nextSibling) {
             node = node.nextSibling;
         } else {
-            while (!node.nextSibling && node !== rootNode) {
+            while (node && !node.nextSibling && node !== rootNode) {
                 node = node.parentElement;
                 if (node !== rootNode) {
                     leaveNodeCallback(node);

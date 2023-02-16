@@ -76,7 +76,7 @@ interface IState {
     sidebarShown: boolean;
 }
 
-function getFullScreenElement(): Element | undefined {
+function getFullScreenElement(): Element | null {
     return (
         document.fullscreenElement ||
         // moz omitted because firefox supports this unprefixed now (webkit here for safari)
@@ -180,7 +180,7 @@ export default class LegacyCallView extends React.Component<IProps, IState> {
         }
     };
 
-    private updateCallListeners(oldCall: MatrixCall, newCall: MatrixCall | null): void {
+    private updateCallListeners(oldCall: MatrixCall | null, newCall: MatrixCall | null): void {
         if (oldCall === newCall) return;
 
         if (oldCall) {
@@ -245,7 +245,7 @@ export default class LegacyCallView extends React.Component<IProps, IState> {
             };
         }
 
-        let primary: CallFeed;
+        let primary: CallFeed | undefined;
 
         // Try to use a screensharing as primary, a remote one if possible
         const screensharingFeeds = feeds.filter((feed) => feed.purpose === SDPStreamMetadataPurpose.Screenshare);
@@ -289,7 +289,7 @@ export default class LegacyCallView extends React.Component<IProps, IState> {
         if (this.state.screensharing) {
             isScreensharing = await this.props.call.setScreensharingEnabled(false);
         } else {
-            if (PlatformPeg.get().supportsDesktopCapturer()) {
+            if (PlatformPeg.get()?.supportsDesktopCapturer()) {
                 const { finished } = Modal.createDialog<[string]>(DesktopCapturerSourcePicker);
                 const [source] = await finished;
                 if (!source) return;
@@ -403,7 +403,7 @@ export default class LegacyCallView extends React.Component<IProps, IState> {
         );
     }
 
-    private renderToast(): JSX.Element {
+    private renderToast(): JSX.Element | null {
         const { call } = this.props;
         const someoneIsScreensharing = call.getFeeds().some((feed) => {
             return feed.purpose === SDPStreamMetadataPurpose.Screenshare;
@@ -413,8 +413,8 @@ export default class LegacyCallView extends React.Component<IProps, IState> {
 
         const isScreensharing = call.isScreensharing();
         const { primaryFeed, sidebarShown } = this.state;
-        const sharerName = primaryFeed?.getMember().name;
-        if (!sharerName) return;
+        const sharerName = primaryFeed?.getMember()?.name;
+        if (!sharerName) return null;
 
         let text = isScreensharing ? _t("You are presenting") : _t("%(sharerName)s is presenting", { sharerName });
         if (!sidebarShown) {
@@ -495,7 +495,7 @@ export default class LegacyCallView extends React.Component<IProps, IState> {
                     );
                 } else if (isLocalOnHold) {
                     onHoldText = _t("%(peerName)s held the call", {
-                        peerName: call.getOpponentMember().name,
+                        peerName: call.getOpponentMember()?.name,
                     });
                 }
 
@@ -556,8 +556,8 @@ export default class LegacyCallView extends React.Component<IProps, IState> {
         const client = MatrixClientPeg.get();
         const callRoomId = LegacyCallHandler.instance.roomIdForCall(call);
         const secondaryCallRoomId = LegacyCallHandler.instance.roomIdForCall(secondaryCall);
-        const callRoom = client.getRoom(callRoomId);
-        const secCallRoom = secondaryCall ? client.getRoom(secondaryCallRoomId) : null;
+        const callRoom = callRoomId ? client.getRoom(callRoomId) : null;
+        const secCallRoom = secondaryCallRoomId ? client.getRoom(secondaryCallRoomId) : null;
 
         const callViewClasses = classNames({
             mx_LegacyCallView: true,

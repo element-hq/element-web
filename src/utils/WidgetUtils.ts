@@ -96,7 +96,7 @@ export default class WidgetUtils {
      * @param  {[type]}  testUrlString URL to check
      * @return {Boolean} True if specified URL is a scalar URL
      */
-    public static isScalarUrl(testUrlString: string): boolean {
+    public static isScalarUrl(testUrlString?: string): boolean {
         if (!testUrlString) {
             logger.error("Scalar URL check failed. No URL specified");
             return false;
@@ -554,7 +554,7 @@ export default class WidgetUtils {
         // noinspection JSIgnoredPromiseFromCall
         IntegrationManagers.sharedInstance()
             .getPrimaryManager()
-            .open(room, "type_" + app.type, app.id);
+            ?.open(room, "type_" + app.type, app.id);
     }
 
     public static isManagedByManager(app: IApp): boolean {
@@ -563,7 +563,7 @@ export default class WidgetUtils {
             if (managers.hasManager()) {
                 // TODO: Pick the right manager for the widget
                 const defaultManager = managers.getPrimaryManager();
-                return WidgetUtils.isScalarUrl(defaultManager.apiUrl);
+                return WidgetUtils.isScalarUrl(defaultManager?.apiUrl);
             }
         }
         return false;

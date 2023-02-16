@@ -53,7 +53,7 @@ export class NotificationsEnabledController extends SettingController {
         level: SettingLevel,
         roomId: string,
         calculatedValue: any,
-        calculatedAtLevel: SettingLevel,
+        calculatedAtLevel: SettingLevel | null,
     ): any {
         if (!getNotifier().isPossible()) return false;
 

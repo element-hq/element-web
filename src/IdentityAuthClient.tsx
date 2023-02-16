@@ -67,7 +67,7 @@ export default class IdentityAuthClient {
         window.localStorage.setItem("mx_is_access_token", this.accessToken);
     }
 
-    private readToken(): string {
+    private readToken(): string | null {
         if (this.tempClient) return null; // temporary client: ignore
         return window.localStorage.getItem("mx_is_access_token");
     }
@@ -77,13 +77,13 @@ export default class IdentityAuthClient {
     }
 
     // Returns a promise that resolves to the access_token string from the IS
-    public async getAccessToken({ check = true } = {}): Promise<string> {
+    public async getAccessToken({ check = true } = {}): Promise<string | null> {
         if (!this.authEnabled) {
             // The current IS doesn't support authentication
             return null;
         }
 
-        let token = this.accessToken;
+        let token: string | null = this.accessToken;
         if (!token) {
             token = this.readToken();
         }

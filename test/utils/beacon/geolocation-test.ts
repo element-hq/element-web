@@ -62,8 +62,6 @@ describe("geolocation utilities", () => {
             const pos: GenericPosition = {
                 latitude: 43.2,
                 longitude: 12.4,
-                altitude: null,
-                accuracy: null,
 
                 timestamp: 12334,
             };

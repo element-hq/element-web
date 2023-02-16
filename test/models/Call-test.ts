@@ -923,7 +923,7 @@ describe("ElementCall", () => {
                 jest.spyOn(Modal, "createDialog").mockReturnValue({
                     finished: new Promise((r) => r([sourceId])),
                 } as IHandle<any[]>);
-                jest.spyOn(PlatformPeg.get(), "supportsDesktopCapturer").mockReturnValue(true);
+                jest.spyOn(PlatformPeg.get()!, "supportsDesktopCapturer").mockReturnValue(true);
 
                 await call.connect();
 
@@ -951,7 +951,7 @@ describe("ElementCall", () => {
                 jest.spyOn(Modal, "createDialog").mockReturnValue({
                     finished: new Promise((r) => r([null])),
                 } as IHandle<any[]>);
-                jest.spyOn(PlatformPeg.get(), "supportsDesktopCapturer").mockReturnValue(true);
+                jest.spyOn(PlatformPeg.get()!, "supportsDesktopCapturer").mockReturnValue(true);
 
                 await call.connect();
 
@@ -976,7 +976,7 @@ describe("ElementCall", () => {
             });
 
             it("replies with pending: false if we don't support desktop capturer", async () => {
-                jest.spyOn(PlatformPeg.get(), "supportsDesktopCapturer").mockReturnValue(false);
+                jest.spyOn(PlatformPeg.get()!, "supportsDesktopCapturer").mockReturnValue(false);
 
                 await call.connect();
 

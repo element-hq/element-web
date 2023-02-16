@@ -27,7 +27,7 @@ export function isSelf(event: MatrixEvent): boolean {
     return event.getSender() === selfUserId;
 }
 
-export function shouldPrefixMessagesIn(roomId: string, tagId: TagID): boolean {
+export function shouldPrefixMessagesIn(roomId: string, tagId?: TagID): boolean {
     if (tagId !== DefaultTagID.DM) return true;
 
     // We don't prefix anything in 1:1s

@@ -49,6 +49,7 @@ describe("PreferencesUserSettingsTab", () => {
             const client = MatrixClientPeg.get();
             jest.spyOn(client, "isVersionSupported").mockImplementation(async (version: string) => {
                 if (version === "v1.4") return val;
+                return false;
             });
         };
 
@@ -61,8 +62,12 @@ describe("PreferencesUserSettingsTab", () => {
             };
         };
 
-        const expectSetValueToHaveBeenCalled = (name: string, roomId: string, level: SettingLevel, value: boolean) =>
-            expect(SettingsStore.setValue).toHaveBeenCalledWith(name, roomId, level, value);
+        const expectSetValueToHaveBeenCalled = (
+            name: string,
+            roomId: string | undefined,
+            level: SettingLevel,
+            value: boolean,
+        ) => expect(SettingsStore.setValue).toHaveBeenCalledWith(name, roomId, level, value);
 
         describe("with server support", () => {
             beforeEach(() => {

@@ -181,7 +181,7 @@ export default class LegacyCallHandler extends EventEmitter {
      * Gets the user-facing room associated with a call (call.roomId may be the call "virtual room"
      * if a voip_mxid_translate_pattern is set in the config)
      */
-    public roomIdForCall(call: MatrixCall): string {
+    public roomIdForCall(call?: MatrixCall): string | null {
         if (!call) return null;
 
         // check asserted identity: if we're not obeying asserted identity,
@@ -194,7 +194,7 @@ export default class LegacyCallHandler extends EventEmitter {
             }
         }
 
-        return VoipUserMapper.sharedInstance().nativeRoomForVirtualRoom(call.roomId) || call.roomId;
+        return VoipUserMapper.sharedInstance().nativeRoomForVirtualRoom(call.roomId) ?? call.roomId ?? null;
     }
 
     public start(): void {
@@ -282,7 +282,7 @@ export default class LegacyCallHandler extends EventEmitter {
     }
 
     public unSilenceCall(callId: string): void {
-        if (this.isForcedSilent) return;
+        if (this.isForcedSilent()) return;
         this.silencedCalls.delete(callId);
         this.emit(LegacyCallHandlerEvent.SilencedCallsChanged, this.silencedCalls);
         this.play(AudioID.Ring);
@@ -341,14 +341,14 @@ export default class LegacyCallHandler extends EventEmitter {
     }
 
     private shouldObeyAssertedfIdentity(): boolean {
-        return SdkConfig.getObject("voip")?.get("obey_asserted_identity");
+        return !!SdkConfig.getObject("voip")?.get("obey_asserted_identity");
     }
 
-    public getSupportsPstnProtocol(): boolean {
+    public getSupportsPstnProtocol(): boolean | null {
         return this.supportsPstnProtocol;
     }
 
-    public getSupportsVirtualRooms(): boolean {
+    public getSupportsVirtualRooms(): boolean | null {
         return this.supportsSipNativeVirtual;
     }
 
@@ -414,7 +414,7 @@ export default class LegacyCallHandler extends EventEmitter {
         cli.prepareToEncrypt(cli.getRoom(call.roomId));
     };
 
-    public getCallById(callId: string): MatrixCall {
+    public getCallById(callId: string): MatrixCall | null {
         for (const call of this.calls.values()) {
             if (call.callId === callId) return call;
         }
@@ -435,7 +435,7 @@ export default class LegacyCallHandler extends EventEmitter {
     }
 
     public getAllActiveCalls(): MatrixCall[] {
-        const activeCalls = [];
+        const activeCalls: MatrixCall[] = [];
 
         for (const call of this.calls.values()) {
             if (call.state !== CallState.Ended && call.state !== CallState.Ringing) {
@@ -446,7 +446,7 @@ export default class LegacyCallHandler extends EventEmitter {
     }
 
     public getAllActiveCallsNotInRoom(notInThisRoomId: string): MatrixCall[] {
-        const callsNotInThatRoom = [];
+        const callsNotInThatRoom: MatrixCall[] = [];
 
         for (const [roomId, call] of this.calls.entries()) {
             if (roomId !== notInThisRoomId && call.state !== CallState.Ended) {
@@ -547,7 +547,7 @@ export default class LegacyCallHandler extends EventEmitter {
         const mappedRoomId = this.roomIdForCall(call);
 
         const callForThisRoom = this.getCallForRoom(mappedRoomId);
-        return callForThisRoom && call.callId === callForThisRoom.callId;
+        return !!callForThisRoom && call.callId === callForThisRoom.callId;
     }
 
     private setCallListeners(call: MatrixCall): void {
@@ -610,7 +610,7 @@ export default class LegacyCallHandler extends EventEmitter {
                 return;
             }
 
-            const newAssertedIdentity = call.getRemoteAssertedIdentity().id;
+            const newAssertedIdentity = call.getRemoteAssertedIdentity()?.id;
             let newNativeAssertedIdentity = newAssertedIdentity;
             if (newAssertedIdentity) {
                 const response = await this.sipNativeLookup(newAssertedIdentity);
@@ -642,7 +642,7 @@ export default class LegacyCallHandler extends EventEmitter {
         });
     }
 
-    private onCallStateChanged = (newState: CallState, oldState: CallState, call: MatrixCall): void => {
+    private onCallStateChanged = (newState: CallState, oldState: CallState | null, call: MatrixCall): void => {
         if (!this.matchesCallForThisRoom(call)) return;
 
         const mappedRoomId = this.roomIdForCall(call);
@@ -830,7 +830,7 @@ export default class LegacyCallHandler extends EventEmitter {
                                     "<code>turn.matrix.org</code>, but this will not be as reliable, and " +
                                     "it will share your IP address with that server. You can also manage " +
                                     "this in Settings.",
-                                null,
+                                undefined,
                                 { code },
                             )}
                         </p>
@@ -843,7 +843,7 @@ export default class LegacyCallHandler extends EventEmitter {
                     cli.setFallbackICEServerAllowed(allow);
                 },
             },
-            null,
+            undefined,
             true,
         );
     }
@@ -882,7 +882,7 @@ export default class LegacyCallHandler extends EventEmitter {
                 title,
                 description,
             },
-            null,
+            undefined,
             true,
         );
     }

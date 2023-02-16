@@ -99,10 +99,10 @@ describe("ThreadView", () => {
                 "is_falling_back": true,
                 "m.in_reply_to": {
                     event_id: rootEvent
-                        .getThread()
+                        .getThread()!
                         .lastReply((ev: MatrixEvent) => {
                             return ev.isRelation(THREAD_RELATION_TYPE.name);
-                        })
+                        })!
                         .getId(),
                 },
                 "rel_type": RelationType.Thread,
@@ -126,8 +126,8 @@ describe("ThreadView", () => {
         const res = mkThread({
             room,
             client: mockClient,
-            authorId: mockClient.getUserId(),
-            participantUserIds: [mockClient.getUserId()],
+            authorId: mockClient.getUserId()!,
+            participantUserIds: [mockClient.getUserId()!],
         });
 
         rootEvent = res.rootEvent;
@@ -154,8 +154,8 @@ describe("ThreadView", () => {
         const { rootEvent: rootEvent2 } = mkThread({
             room,
             client: mockClient,
-            authorId: mockClient.getUserId(),
-            participantUserIds: [mockClient.getUserId()],
+            authorId: mockClient.getUserId()!,
+            participantUserIds: [mockClient.getUserId()!],
         });
 
         act(() => {

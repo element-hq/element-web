@@ -89,7 +89,7 @@ async function loadImageElement(imageFile: File): Promise<{
 
     // check for hi-dpi PNGs and fudge display resolution as needed.
     // this is mainly needed for macOS screencaps
-    let parsePromise: Promise<boolean>;
+    let parsePromise = Promise.resolve(false);
     if (imageFile.type === "image/png") {
         // in practice macOS happens to order the chunks so they fall in
         // the first 0x1000 bytes (thanks to a massive ICC header).
@@ -101,7 +101,7 @@ async function loadImageElement(imageFile: File): Promise<{
             const chunks = extractPngChunks(buffer);
             for (const chunk of chunks) {
                 if (chunk.name === "pHYs") {
-                    if (chunk.data.byteLength !== PHYS_HIDPI.length) return;
+                    if (chunk.data.byteLength !== PHYS_HIDPI.length) return false;
                     return chunk.data.every((val, i) => val === PHYS_HIDPI[i]);
                 }
             }
@@ -199,10 +199,10 @@ function loadVideoElement(videoFile: File): Promise<HTMLVideoElement> {
                 reject(e);
             };
 
-            let dataUrl = ev.target.result as string;
+            let dataUrl = ev.target?.result as string;
             // Chrome chokes on quicktime but likes mp4, and `file.type` is
             // read only, so do this horrible hack to unbreak quicktime
-            if (dataUrl.startsWith("data:video/quicktime;")) {
+            if (dataUrl?.startsWith("data:video/quicktime;")) {
                 dataUrl = dataUrl.replace("data:video/quicktime;", "data:video/mp4;");
             }
 
@@ -258,7 +258,7 @@ function readFileAsArrayBuffer(file: File | Blob): Promise<ArrayBuffer> {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = function (e): void {
-            resolve(e.target.result as ArrayBuffer);
+            resolve(e.target?.result as ArrayBuffer);
         };
         reader.onerror = function (e): void {
             reject(e);
@@ -329,7 +329,7 @@ export async function uploadFile(
 
 export default class ContentMessages {
     private inprogress: RoomUpload[] = [];
-    private mediaConfig: IMediaConfig = null;
+    private mediaConfig: IMediaConfig | null = null;
 
     public sendStickerContentToRoom(
         url: string,
@@ -377,8 +377,8 @@ export default class ContentMessages {
             modal.close();
         }
 
-        const tooBigFiles = [];
-        const okFiles = [];
+        const tooBigFiles: File[] = [];
+        const okFiles: File[] = [];
 
         for (const file of files) {
             if (this.isFileSizeAcceptable(file)) {
@@ -420,7 +420,14 @@ export default class ContentMessages {
             }
 
             promBefore = doMaybeLocalRoomAction(roomId, (actualRoomId) =>
-                this.sendContentToRoom(file, actualRoomId, relation, matrixClient, replyToEvent, loopPromiseBefore),
+                this.sendContentToRoom(
+                    file,
+                    actualRoomId,
+                    relation,
+                    matrixClient,
+                    replyToEvent ?? undefined,
+                    loopPromiseBefore,
+                ),
             );
         }
 
@@ -584,7 +591,7 @@ export default class ContentMessages {
     }
 
     private ensureMediaConfigFetched(matrixClient: MatrixClient): Promise<void> {
-        if (this.mediaConfig !== null) return;
+        if (this.mediaConfig !== null) return Promise.resolve();
 
         logger.log("[Media Config] Fetching");
         return matrixClient

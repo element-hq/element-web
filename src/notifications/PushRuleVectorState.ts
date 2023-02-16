@@ -53,6 +53,7 @@ export class PushRuleVectorState {
         } else if (pushRuleVectorState === VectorState.Loud) {
             return StandardActions.ACTION_HIGHLIGHT_DEFAULT_SOUND;
         }
+        return [];
     }
 
     /**

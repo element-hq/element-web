@@ -19,7 +19,7 @@ import { useEffect, useState } from "react";
 import SettingsStore from "../settings/SettingsStore";
 
 // Hook to fetch the value of a setting and dynamically update when it changes
-export const useSettingValue = <T>(settingName: string, roomId: string = null, excludeDefault = false): T => {
+export const useSettingValue = <T>(settingName: string, roomId: string | null = null, excludeDefault = false): T => {
     const [value, setValue] = useState(SettingsStore.getValue<T>(settingName, roomId, excludeDefault));
 
     useEffect(() => {
@@ -36,7 +36,7 @@ export const useSettingValue = <T>(settingName: string, roomId: string = null, e
 };
 
 // Hook to fetch whether a feature is enabled and dynamically update when that changes
-export const useFeatureEnabled = (featureName: string, roomId: string = null): boolean => {
+export const useFeatureEnabled = (featureName: string, roomId: string | null = null): boolean => {
     const [enabled, setEnabled] = useState(SettingsStore.getValue<boolean>(featureName, roomId));
 
     useEffect(() => {

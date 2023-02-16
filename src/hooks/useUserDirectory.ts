@@ -22,7 +22,7 @@ import { useLatestResult } from "./useLatestResult";
 
 export interface IUserDirectoryOpts {
     limit: number;
-    query?: string;
+    query: string;
 }
 
 export const useUserDirectory = (): {

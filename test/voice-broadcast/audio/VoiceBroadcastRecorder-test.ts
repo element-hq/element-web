@@ -83,15 +83,15 @@ describe("VoiceBroadcastRecorder", () => {
 
         const simulateFirstChunk = (): void => {
             // send headers in wrong order and multiple times to test robustness for that
-            voiceRecording.onDataAvailable(headers2);
-            voiceRecording.onDataAvailable(headers1);
-            voiceRecording.onDataAvailable(headers1);
-            voiceRecording.onDataAvailable(headers2);
+            voiceRecording.onDataAvailable!(headers2);
+            voiceRecording.onDataAvailable!(headers1);
+            voiceRecording.onDataAvailable!(headers1);
+            voiceRecording.onDataAvailable!(headers2);
             // set recorder seconds to something greater than the test chunk length of 30
             // @ts-ignore
             voiceRecording.recorderSeconds = 42;
-            voiceRecording.onDataAvailable(chunk1);
-            voiceRecording.onDataAvailable(headers1);
+            voiceRecording.onDataAvailable!(chunk1);
+            voiceRecording.onDataAvailable!(headers1);
         };
 
         const expectOnFirstChunkRecorded = (): void => {
@@ -164,7 +164,7 @@ describe("VoiceBroadcastRecorder", () => {
 
         describe("when the first header from recorder has been received", () => {
             beforeEach(() => {
-                voiceRecording.onDataAvailable(headers1);
+                voiceRecording.onDataAvailable!(headers1);
             });
 
             itShouldNotEmitAChunkRecordedEvent();
@@ -172,8 +172,8 @@ describe("VoiceBroadcastRecorder", () => {
 
         describe("when the second header from recorder has been received", () => {
             beforeEach(() => {
-                voiceRecording.onDataAvailable(headers1);
-                voiceRecording.onDataAvailable(headers2);
+                voiceRecording.onDataAvailable!(headers1);
+                voiceRecording.onDataAvailable!(headers2);
             });
 
             itShouldNotEmitAChunkRecordedEvent();
@@ -181,9 +181,9 @@ describe("VoiceBroadcastRecorder", () => {
 
         describe("when a third page from recorder has been received", () => {
             beforeEach(() => {
-                voiceRecording.onDataAvailable(headers1);
-                voiceRecording.onDataAvailable(headers2);
-                voiceRecording.onDataAvailable(chunk1);
+                voiceRecording.onDataAvailable!(headers1);
+                voiceRecording.onDataAvailable!(headers2);
+                voiceRecording.onDataAvailable!(chunk1);
             });
 
             itShouldNotEmitAChunkRecordedEvent();
@@ -235,15 +235,15 @@ describe("VoiceBroadcastRecorder", () => {
                 simulateFirstChunk();
 
                 // simulate a second chunk
-                voiceRecording.onDataAvailable(chunk2a);
+                voiceRecording.onDataAvailable!(chunk2a);
 
                 // send headers again to test robustness for that
-                voiceRecording.onDataAvailable(headers2);
+                voiceRecording.onDataAvailable!(headers2);
 
                 // add another 30 seconds for the next chunk
                 // @ts-ignore
                 voiceRecording.recorderSeconds = 72;
-                voiceRecording.onDataAvailable(chunk2b);
+                voiceRecording.onDataAvailable!(chunk2b);
             });
 
             it("should emit ChunkRecorded events", () => {

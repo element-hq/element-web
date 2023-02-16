@@ -49,7 +49,7 @@ describe("Terms", function () {
 
     beforeEach(function () {
         jest.clearAllMocks();
-        mockClient.getAccountData.mockReturnValue(null);
+        mockClient.getAccountData.mockReturnValue(undefined);
         mockClient.getTerms.mockResolvedValue(null);
         mockClient.setAccountData.mockResolvedValue({});
     });
@@ -59,7 +59,7 @@ describe("Terms", function () {
     });
 
     it("should prompt for all terms & services if no account data", async function () {
-        mockClient.getAccountData.mockReturnValue(null);
+        mockClient.getAccountData.mockReturnValue(undefined);
         mockClient.getTerms.mockResolvedValue({
             policies: {
                 policy_the_first: POLICY_ONE,

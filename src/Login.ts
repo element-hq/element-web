@@ -29,20 +29,17 @@ interface ILoginOptions {
 }
 
 export default class Login {
-    private hsUrl: string;
-    private isUrl: string;
-    private fallbackHsUrl: string;
-    private flows: Array<LoginFlow>;
-    private defaultDeviceDisplayName: string;
-    private tempClient: MatrixClient;
+    private flows: Array<LoginFlow> = [];
+    private readonly defaultDeviceDisplayName?: string;
+    private tempClient: MatrixClient | null = null; // memoize
 
-    public constructor(hsUrl: string, isUrl: string, fallbackHsUrl?: string, opts?: ILoginOptions) {
-        this.hsUrl = hsUrl;
-        this.isUrl = isUrl;
-        this.fallbackHsUrl = fallbackHsUrl;
-        this.flows = [];
+    public constructor(
+        private hsUrl: string,
+        private isUrl: string,
+        private fallbackHsUrl: string | null,
+        opts: ILoginOptions,
+    ) {
         this.defaultDeviceDisplayName = opts.defaultDeviceDisplayName;
-        this.tempClient = null; // memoize
     }
 
     public getHomeserverUrl(): string {
@@ -96,7 +93,7 @@ export default class Login {
         phoneNumber: string | undefined,
         password: string,
     ): Promise<IMatrixClientCreds> {
-        const isEmail = username?.indexOf("@") > 0;
+        const isEmail = !!username && username.indexOf("@") > 0;
 
         let identifier;
         if (phoneCountry && phoneNumber) {
@@ -127,7 +124,7 @@ export default class Login {
         };
 
         const tryFallbackHs = (originalError: Error): Promise<IMatrixClientCreds> => {
-            return sendLoginRequest(this.fallbackHsUrl, this.isUrl, "m.login.password", loginParams).catch(
+            return sendLoginRequest(this.fallbackHsUrl!, this.isUrl, "m.login.password", loginParams).catch(
                 (fallbackError) => {
                     logger.log("fallback HS login failed", fallbackError);
                     // throw the original error
@@ -136,13 +133,13 @@ export default class Login {
             );
         };
 
-        let originalLoginError = null;
+        let originalLoginError: Error | null = null;
         return sendLoginRequest(this.hsUrl, this.isUrl, "m.login.password", loginParams)
             .catch((error) => {
                 originalLoginError = error;
                 if (error.httpStatus === 403) {
                     if (this.fallbackHsUrl) {
-                        return tryFallbackHs(originalLoginError);
+                        return tryFallbackHs(originalLoginError!);
                     }
                 }
                 throw originalLoginError;

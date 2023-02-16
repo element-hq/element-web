@@ -256,7 +256,7 @@ export default class ScalarAuthClient {
         }
     }
 
-    public getScalarInterfaceUrlForRoom(room: Room, screen: string, id: string): string {
+    public getScalarInterfaceUrlForRoom(room: Room, screen?: string, id?: string): string {
         const roomId = room.roomId;
         const roomName = room.name;
         let url = this.uiUrl;

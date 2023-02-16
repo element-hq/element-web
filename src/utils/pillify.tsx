@@ -38,7 +38,7 @@ import { parsePermalink } from "./permalinks/Permalinks";
  *   The initial caller should pass in an empty array to seed the accumulator.
  */
 export function pillifyLinks(nodes: ArrayLike<Element>, mxEvent: MatrixEvent, pills: Element[]): void {
-    const room = MatrixClientPeg.get().getRoom(mxEvent.getRoomId());
+    const room = MatrixClientPeg.get().getRoom(mxEvent.getRoomId()) ?? undefined;
     const shouldShowPillAvatar = SettingsStore.getValue("Pill.shouldShowPillAvatar");
     let node = nodes[0];
     while (node) {
@@ -49,7 +49,7 @@ export function pillifyLinks(nodes: ArrayLike<Element>, mxEvent: MatrixEvent, pi
             node = node.nextSibling as Element;
             continue;
         } else if (node.tagName === "A" && node.getAttribute("href")) {
-            const href = node.getAttribute("href");
+            const href = node.getAttribute("href")!;
             const parts = parsePermalink(href);
             // If the link is a (localised) matrix.to link, replace it with a pill
             // We don't want to pill event permalinks, so those are ignored.

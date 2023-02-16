@@ -37,7 +37,7 @@ import { bulkSpaceBehaviour } from "./space";
 import { SdkContextClass } from "../contexts/SDKContext";
 
 export async function leaveRoomBehaviour(roomId: string, retry = true, spinner = true): Promise<void> {
-    let spinnerModal: IHandle<any>;
+    let spinnerModal: IHandle<any> | undefined;
     if (spinner) {
         spinnerModal = Modal.createDialog(Spinner, undefined, "mx_Dialog_spinner");
     }
@@ -60,7 +60,7 @@ export async function leaveRoomBehaviour(roomId: string, retry = true, spinner =
         room
             .getPendingEvents()
             .filter((ev) => {
-                return [EventStatus.QUEUED, EventStatus.ENCRYPTING, EventStatus.SENDING].includes(ev.status);
+                return [EventStatus.QUEUED, EventStatus.ENCRYPTING, EventStatus.SENDING].includes(ev.status!);
             })
             .map(
                 (ev) =>

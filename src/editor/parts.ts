@@ -422,7 +422,7 @@ class RoomPillPart extends PillPart {
 
     protected setAvatar(node: HTMLElement): void {
         let initialLetter = "";
-        let avatarUrl = Avatar.avatarUrlForRoom(this.room, 16, 16, "crop");
+        let avatarUrl = Avatar.avatarUrlForRoom(this.room ?? null, 16, 16, "crop");
         if (!avatarUrl) {
             initialLetter = Avatar.getInitialLetter(this.room?.name || this.resourceId) ?? "";
             avatarUrl = Avatar.defaultAvatarUrlForString(this.room?.roomId ?? this.resourceId);
@@ -541,7 +541,7 @@ export class PartCreator {
     public constructor(
         private readonly room: Room,
         private readonly client: MatrixClient,
-        autoCompleteCreator: AutoCompleteCreator = null,
+        autoCompleteCreator: AutoCompleteCreator | null = null,
     ) {
         // pre-create the creator as an object even without callback so it can already be passed
         // to PillCandidatePart (e.g. while deserializing) and set later on
@@ -574,7 +574,7 @@ export class PartCreator {
         return this.plain(text);
     }
 
-    public deserializePart(part: SerializedPart): Part {
+    public deserializePart(part: SerializedPart): Part | undefined {
         switch (part.type) {
             case Type.Plain:
                 return this.plain(part.text);
@@ -612,7 +612,7 @@ export class PartCreator {
     public roomPill(alias: string, roomId?: string): RoomPillPart {
         let room: Room | undefined;
         if (roomId || alias[0] !== "#") {
-            room = this.client.getRoom(roomId || alias);
+            room = this.client.getRoom(roomId || alias) ?? undefined;
         } else {
             room = this.client.getRooms().find((r) => {
                 return r.getCanonicalAlias() === alias || r.getAltAliases().includes(alias);
@@ -691,7 +691,7 @@ export class CommandPartCreator extends PartCreator {
         return new CommandPart(text, this.autoCompleteCreator);
     }
 
-    public deserializePart(part: SerializedPart): Part {
+    public deserializePart(part: SerializedPart): Part | undefined {
         if (part.type === Type.Command) {
             return this.command(part.text);
         } else {

@@ -58,7 +58,7 @@ describe("theme", () => {
             // When
             await new Promise((resolve) => {
                 setTheme("light").then(resolve);
-                lightTheme.onload(void 0);
+                lightTheme.onload!({} as Event);
             });
 
             // Then
@@ -72,7 +72,7 @@ describe("theme", () => {
             return expect(
                 new Promise((resolve) => {
                     setTheme("light").catch((e) => resolve(e));
-                    lightTheme.onerror("call onerror");
+                    lightTheme.onerror!("call onerror");
                 }),
             ).resolves.toBe("call onerror");
         });

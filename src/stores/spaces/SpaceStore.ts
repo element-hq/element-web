@@ -137,7 +137,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         userIdsBySpace: new Map<Room["roomId"], Set<string>>(),
     };
     // The space currently selected in the Space Panel
-    private _activeSpace?: SpaceKey = MetaSpace.Home; // set properly by onReady
+    private _activeSpace: SpaceKey = MetaSpace.Home; // set properly by onReady
     private _suggestedRooms: ISuggestedRoom[] = [];
     private _invitedSpaces = new Set<Room>();
     private spaceOrderLocalEchoMap = new Map<string, string>();
@@ -812,13 +812,13 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         const spaceDiff = mapDiff(prevChildSpacesBySpace, this.childSpacesBySpace);
         // filter out keys which changed by reference only by checking whether the sets differ
         const roomsChanged = roomDiff.changed.filter((k) => {
-            return setHasDiff(prevRoomsBySpace.get(k), this.roomIdsBySpace.get(k));
+            return setHasDiff(prevRoomsBySpace.get(k)!, this.roomIdsBySpace.get(k)!);
         });
         const usersChanged = userDiff.changed.filter((k) => {
-            return setHasDiff(prevUsersBySpace.get(k), this.userIdsBySpace.get(k));
+            return setHasDiff(prevUsersBySpace.get(k)!, this.userIdsBySpace.get(k)!);
         });
         const spacesChanged = spaceDiff.changed.filter((k) => {
-            return setHasDiff(prevChildSpacesBySpace.get(k), this.childSpacesBySpace.get(k));
+            return setHasDiff(prevChildSpacesBySpace.get(k)!, this.childSpacesBySpace.get(k)!);
         });
 
         const changeSet = new Set([
@@ -1142,9 +1142,8 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         // restore selected state from last session if any and still valid
         const lastSpaceId = window.localStorage.getItem(ACTIVE_SPACE_LS_KEY);
         const valid =
-            lastSpaceId && !isMetaSpace(lastSpaceId)
-                ? this.matrixClient.getRoom(lastSpaceId)
-                : enabledMetaSpaces[lastSpaceId];
+            lastSpaceId &&
+            (!isMetaSpace(lastSpaceId) ? this.matrixClient.getRoom(lastSpaceId) : enabledMetaSpaces[lastSpaceId]);
         if (valid) {
             // don't context switch here as it may break permalinks
             this.setActiveSpace(lastSpaceId, false);
@@ -1285,7 +1284,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
 
     public getNotificationState(key: SpaceKey): SpaceNotificationState {
         if (this.notificationStateMap.has(key)) {
-            return this.notificationStateMap.get(key);
+            return this.notificationStateMap.get(key)!;
         }
 
         const state = new SpaceNotificationState(getRoomFn);

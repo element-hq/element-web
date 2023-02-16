@@ -84,7 +84,7 @@ export class Media {
      * The HTTP URL for the thumbnail media (without any specified width, height, etc). Null/undefined
      * if no thumbnail media recorded.
      */
-    public get thumbnailHttp(): string | undefined | null {
+    public get thumbnailHttp(): string | null {
         if (!this.hasThumbnail) return null;
         // eslint-disable-next-line no-restricted-properties
         return this.client.mxcUrlToHttp(this.thumbnailMxc!);

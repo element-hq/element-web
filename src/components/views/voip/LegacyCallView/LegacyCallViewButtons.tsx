@@ -104,9 +104,9 @@ const LegacyCallViewDropdownButton: React.FC<IDropdownButtonProps> = ({ state, d
                 onHover={(hovering) => setHoveringDropdown(hovering)}
                 state={state}
             />
-            {menuDisplayed && (
+            {menuDisplayed && buttonRef.current && (
                 <DeviceContextMenu
-                    {...alwaysAboveRightOf(buttonRef.current?.getBoundingClientRect())}
+                    {...alwaysAboveRightOf(buttonRef.current.getBoundingClientRect())}
                     onFinished={closeMenu}
                     deviceKinds={deviceKinds}
                 />
@@ -117,7 +117,7 @@ const LegacyCallViewDropdownButton: React.FC<IDropdownButtonProps> = ({ state, d
 
 interface IProps {
     call: MatrixCall;
-    pipMode: boolean;
+    pipMode?: boolean;
     handlers: {
         onHangupClick: () => void;
         onScreenshareClick: () => void;
@@ -150,7 +150,7 @@ interface IState {
 export default class LegacyCallViewButtons extends React.Component<IProps, IState> {
     private dialpadButton = createRef<HTMLDivElement>();
     private contextMenuButton = createRef<HTMLDivElement>();
-    private controlsHideTimer: number = null;
+    private controlsHideTimer: number | null = null;
 
     public constructor(props: IProps) {
         super(props);
@@ -223,7 +223,7 @@ export default class LegacyCallViewButtons extends React.Component<IProps, IStat
         });
 
         let dialPad;
-        if (this.state.showDialpad) {
+        if (this.state.showDialpad && this.dialpadButton.current) {
             dialPad = (
                 <DialpadContextMenu
                     {...alwaysMenuProps(
@@ -231,7 +231,7 @@ export default class LegacyCallViewButtons extends React.Component<IProps, IStat
                         ChevronFace.None,
                         CONTEXT_MENU_VPADDING,
                     )}
-                    // We mount the context menus as a as a child typically in order to include the
+                    // We mount the context menus as a child typically in order to include the
                     // context menus when fullscreening the call content.
                     // However, this does not work as well when the call is embedded in a
                     // picture-in-picture frame. Thus, only mount as child when we are *not* in PiP.
@@ -243,7 +243,7 @@ export default class LegacyCallViewButtons extends React.Component<IProps, IStat
         }
 
         let contextMenu;
-        if (this.state.showMoreMenu) {
+        if (this.state.showMoreMenu && this.contextMenuButton.current) {
             contextMenu = (
                 <LegacyCallContextMenu
                     {...alwaysMenuProps(

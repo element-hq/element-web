@@ -63,7 +63,7 @@ interface ISerializeOpts {
 export function htmlSerializeIfNeeded(
     model: EditorModel,
     { forceHTML = false, useMarkdown = true }: ISerializeOpts = {},
-): string {
+): string | undefined {
     if (!useMarkdown) {
         return escapeHtml(textSerialize(model)).replace(/\n/g, "<br/>");
     }
@@ -72,7 +72,7 @@ export function htmlSerializeIfNeeded(
     return htmlSerializeFromMdIfNeeded(md, { forceHTML });
 }
 
-export function htmlSerializeFromMdIfNeeded(md: string, { forceHTML = false } = {}): string {
+export function htmlSerializeFromMdIfNeeded(md: string, { forceHTML = false } = {}): string | undefined {
     // copy of raw input to remove unwanted math later
     const orig = md;
 

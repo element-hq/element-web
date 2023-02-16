@@ -120,20 +120,20 @@ function textForMemberEvent(ev: MatrixEvent, allowJSX: boolean, showHiddenEvents
                             // We're taking the display namke directly from the event content here so we need
                             // to strip direction override chars which the js-sdk would normally do when
                             // calculating the display name
-                            oldDisplayName: removeDirectionOverrideChars(prevContent.displayname),
-                            displayName: removeDirectionOverrideChars(content.displayname),
+                            oldDisplayName: removeDirectionOverrideChars(prevContent.displayname!),
+                            displayName: removeDirectionOverrideChars(content.displayname!),
                         });
                 } else if (!prevContent.displayname && content.displayname) {
                     return () =>
                         _t("%(senderName)s set their display name to %(displayName)s", {
                             senderName: ev.getSender(),
-                            displayName: removeDirectionOverrideChars(content.displayname),
+                            displayName: removeDirectionOverrideChars(content.displayname!),
                         });
                 } else if (prevContent.displayname && !content.displayname) {
                     return () =>
                         _t("%(senderName)s removed their display name (%(oldDisplayName)s)", {
                             senderName,
-                            oldDisplayName: removeDirectionOverrideChars(prevContent.displayname),
+                            oldDisplayName: removeDirectionOverrideChars(prevContent.displayname!),
                         });
                 } else if (prevContent.avatar_url && !content.avatar_url) {
                     return () => _t("%(senderName)s removed their profile picture", { senderName });
@@ -545,7 +545,7 @@ function textForPinnedEvent(event: MatrixEvent, allowJSX: boolean): (() => Rende
     if (newlyPinned.length === 1 && newlyUnpinned.length === 0) {
         // A single message was pinned, include a link to that message.
         if (allowJSX) {
-            const messageId = newlyPinned.pop();
+            const messageId = newlyPinned.pop()!;
 
             return () => (
                 <span>
@@ -578,7 +578,7 @@ function textForPinnedEvent(event: MatrixEvent, allowJSX: boolean): (() => Rende
     if (newlyUnpinned.length === 1 && newlyPinned.length === 0) {
         // A single message was unpinned, include a link to that message.
         if (allowJSX) {
-            const messageId = newlyUnpinned.pop();
+            const messageId = newlyUnpinned.pop()!;
 
             return () => (
                 <span>

@@ -38,7 +38,7 @@ export class RoomScrollStateStore {
     //        from the focussedEvent.
     private scrollStateMap = new Map<string, ScrollState>();
 
-    public getScrollState(roomId: string): ScrollState {
+    public getScrollState(roomId: string): ScrollState | undefined {
         return this.scrollStateMap.get(roomId);
     }
 

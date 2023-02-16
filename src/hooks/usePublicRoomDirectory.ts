@@ -139,7 +139,7 @@ export const usePublicRoomDirectory = (): {
             SdkConfig.getObject("room_directory")?.get("servers")?.includes(lsRoomServer) ||
             SettingsStore.getValue("room_directory_servers")?.includes(lsRoomServer)
         ) {
-            roomServer = lsRoomServer;
+            roomServer = lsRoomServer!;
         }
 
         let instanceId: string | undefined = undefined;
