@@ -1,12 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<LoginWithQRSection /> should not render feature enabled 1`] = `<div />`;
-
 exports[`<LoginWithQRSection /> should not render no support at all 1`] = `<div />`;
 
-exports[`<LoginWithQRSection /> should not render only feature + MSC3882 enabled 1`] = `<div />`;
+exports[`<LoginWithQRSection /> should not render only MSC3882 enabled 1`] = `<div />`;
 
-exports[`<LoginWithQRSection /> should render panel enabled by feature + MSC3882 + MSC3886 1`] = `
+exports[`<LoginWithQRSection /> should render panel MSC3882 + MSC3886 1`] = `
 <div>
   <div
     class="mx_SettingsSubsection"
