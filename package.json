@@ -135,7 +135,7 @@
         "matrix-web-i18n": "^1.3.0",
         "mini-css-extract-plugin": "^1",
         "minimist": "^1.2.6",
-        "mkdirp": "^1.0.4",
+        "mkdirp": "^2.0.0",
         "modernizr": "^3.12.0",
         "node-fetch": "^2.6.7",
         "optimize-css-assets-webpack-plugin": "^6.0.0",
