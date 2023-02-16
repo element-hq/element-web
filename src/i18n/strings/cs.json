@@ -3507,7 +3507,6 @@
     "You can use this device to sign in a new device with a QR code. You will need to scan the QR code shown on this device with your device that's signed out.": "Toto zařízení můžete použít k přihlášení nového zařízení pomocí QR kódu. QR kód zobrazený na tomto zařízení musíte naskenovat pomocí odhlášeného zařízení.",
     "Sign in with QR code": "Přihlásit se pomocí QR kódu",
     "Browser": "Prohlížeč",
-    "Allow a QR code to be shown in session manager to sign in another device (requires compatible homeserver)": "Povolit zobrazení QR kódu ve správci relací pro přihlášení do jiného zařízení (vyžaduje kompatibilní domovský server)",
     "play voice broadcast": "přehrát hlasové vysílání",
     "Are you sure you want to sign out of %(count)s sessions?|other": "Opravdu se chcete odhlásit z %(count)s relací?",
     "Are you sure you want to sign out of %(count)s sessions?|one": "Opravdu se chcete odhlásit z %(count)s relace?",

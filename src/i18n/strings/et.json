@@ -3501,7 +3501,6 @@
     "Sign in with QR code": "Logi sisse QR-koodi abil",
     "Browser": "Brauser",
     "You can use this device to sign in a new device with a QR code. You will need to scan the QR code shown on this device with your device that's signed out.": "Sa saad kasutada seda seadet mõne muu seadme logimiseks Matrix'i võrku QR-koodi alusel. Selleks skaneeri võrgust väljalogitud seadmega seda QR-koodi.",
-    "Allow a QR code to be shown in session manager to sign in another device (requires compatible homeserver)": "Teise seadme sisselogimiseks luba QR-koodi kuvamine sessioonihalduris (eeldab, et koduserver sellist võimalust toetab)",
     "Yes, stop broadcast": "Jah, lõpeta",
     "Stop live broadcasting?": "Kas lõpetame otseeetri?",
     "Someone else is already recording a voice broadcast. Wait for their voice broadcast to end to start a new one.": "Keegi juba salvestab ringhäälingukõnet. Uue ringhäälingukõne salvestamiseks palun oota, kuni see teine ringhäälingukõne on lõppenud.",

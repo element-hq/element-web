@@ -3501,7 +3501,6 @@
     "You can use this device to sign in a new device with a QR code. You will need to scan the QR code shown on this device with your device that's signed out.": "您可以使用此裝置透過 QR code 登入新裝置。您將需要使用已登出的裝置掃描此裝置上顯示的 QR code。",
     "Sign in with QR code": "使用 QR code 登入",
     "Browser": "瀏覽器",
-    "Allow a QR code to be shown in session manager to sign in another device (requires compatible homeserver)": "允許在工作階段管理程式中顯示 QR code 以在另一台裝置上登入（需要相容的家伺服器）",
     "Yes, stop broadcast": "是的，停止廣播",
     "Stop live broadcasting?": "停止即時廣播？",
     "Someone else is already recording a voice broadcast. Wait for their voice broadcast to end to start a new one.": "其他人已在錄製語音廣播。等待他們的語音廣播結束以開始新的語音廣播。",

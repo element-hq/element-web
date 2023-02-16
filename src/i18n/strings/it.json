@@ -3506,7 +3506,6 @@
     "You can use this device to sign in a new device with a QR code. You will need to scan the QR code shown on this device with your device that's signed out.": "Puoi usare questo dispositivo per accedere in un altro con un codice QR. Dovrai scansionare il codice QR mostrato in questo dispositivo con l'altro.",
     "Sign in with QR code": "Accedi con codice QR",
     "Browser": "Browser",
-    "Allow a QR code to be shown in session manager to sign in another device (requires compatible homeserver)": "Permetti la visualizzazione di un codice QR nel gestore di sessioni per accedere in un altro dispositivo (richiede homeserver compatibile)",
     "play voice broadcast": "avvia trasmissione vocale",
     "Someone else is already recording a voice broadcast. Wait for their voice broadcast to end to start a new one.": "Qualcun altro sta già registrando una trasmissione vocale. Aspetta che finisca prima di iniziarne una nuova.",
     "Are you sure you want to sign out of %(count)s sessions?|one": "Vuoi davvero disconnetterti da %(count)s sessione?",

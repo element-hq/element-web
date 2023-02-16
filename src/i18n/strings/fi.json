@@ -3195,7 +3195,6 @@
     "Spaces are a new way to group rooms and people. What kind of Space do you want to create? You can change this later.": "Avaruudet ovat uusi tapa ryhmitellä huoneita ja ihmisiä. Minkälaisen avaruuden sinä haluat luoda? Voit muuttaa tätä asetusta myöhemmin.",
     "Automatically send debug logs on decryption errors": "Lähetä vianjäljityslokit automaattisesti salauksen purkuun liittyvien virheiden tapahtuessa",
     "Automatically send debug logs on any error": "Lähetä vianjäljityslokit automaattisesti minkä tahansa virheen tapahtuessa",
-    "Allow a QR code to be shown in session manager to sign in another device (requires compatible homeserver)": "Salli QR-koodi näytettäväksi istuntohallinnassa, jotta uusia laitteita on mahdollista kirjata sisään (vaatii yhteensopivan kotipalvelimen)",
     "Have greater visibility and control over all your sessions.": "Aiempaa parempi näkyvyys ja hallittavuus kaikkiin istuntoihisi.",
     "Use new session manager": "Käytä uutta istuntohallintaa",
     "New group call experience": "Uusi ryhmäpuhelukokemus",

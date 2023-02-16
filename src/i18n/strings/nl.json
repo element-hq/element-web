@@ -3497,7 +3497,6 @@
     "Fill screen": "Scherm vullen",
     "Sorry — this call is currently full": "Sorry — dit gesprek is momenteel vol",
     "Record the client name, version, and url to recognise sessions more easily in session manager": "Noteer de naam, versie en url van de applicatie om sessies gemakkelijker te herkennen in sessiebeheer",
-    "Allow a QR code to be shown in session manager to sign in another device (requires compatible homeserver)": "Toestaan dat een QR-code wordt weergegeven in sessiebeheer om in te loggen op een ander apparaat (compatibele server vereist)",
     "Our new sessions manager provides better visibility of all your sessions, and greater control over them including the ability to remotely toggle push notifications.": "Onze nieuwe sessiemanager biedt een betere zichtbaarheid van al uw sessies en meer controle erover, inclusief de mogelijkheid om op afstand pushmeldingen in te schakelen.",
     "Have greater visibility and control over all your sessions.": "Meer zichtbaarheid en controle over al uw sessies.",
     "New session manager": "Nieuwe sessiemanager",

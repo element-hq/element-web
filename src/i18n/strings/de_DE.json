@@ -3483,7 +3483,6 @@
     "Stop live broadcasting?": "Live-Übertragung beenden?",
     "Sign in with QR code": "Mit QR-Code anmelden",
     "Browser": "Browser",
-    "Allow a QR code to be shown in session manager to sign in another device (requires compatible homeserver)": "Erlaube es andere Geräte mittels QR-Code in der Sitzungsverwaltung anzumelden (kompatibler Heim-Server benötigt)",
     "Completing set up of your new device": "Schließe Anmeldung deines neuen Gerätes ab",
     "Waiting for device to sign in": "Warte auf Anmeldung des Gerätes",
     "Review and approve the sign in": "Überprüfe und genehmige die Anmeldung",

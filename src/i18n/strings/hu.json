@@ -3507,7 +3507,6 @@
     "Yes, stop broadcast": "Igen, közvetítés megállítása",
     "Review and approve the sign in": "Belépés áttekintése és engedélyezés",
     "You can use this device to sign in a new device with a QR code. You will need to scan the QR code shown on this device with your device that's signed out.": "Ennek az eszköznek a felhasználásával és a QR kóddal beléptethet egy másik eszközt. Be kell olvasni a QR kódot azon az eszközön ami még nincs belépve.",
-    "Allow a QR code to be shown in session manager to sign in another device (requires compatible homeserver)": "QR kód megjelenítésének engedélyezése a munkamenet kezelőben, hogy másik eszközzel bejelentkezhessen vele (kompatibilis matrix szervert igényel)",
     "play voice broadcast": "hang közvetítés lejátszása",
     "Are you sure you want to sign out of %(count)s sessions?|one": "Biztos, hogy ki szeretne lépni %(count)s munkamenetből?",
     "Are you sure you want to sign out of %(count)s sessions?|other": "Biztos, hogy ki szeretne lépni %(count)s munkamenetből?",

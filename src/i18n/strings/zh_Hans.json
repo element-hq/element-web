@@ -3480,7 +3480,6 @@
     "Low bandwidth mode": "低带宽模式",
     "Automatic gain control": "自动获得控制权",
     "Hide notification dot (only display counters badges)": "隐藏通知的点标记（仅显示计数标记）",
-    "Allow a QR code to be shown in session manager to sign in another device (requires compatible homeserver)": "允许在会话管理器中显示二维码以登录另一台设备（需要兼容的主服务器）",
     "Use new session manager": "使用新的会话管理器",
     "Under active development.": "积极开发中。",
     "Rename session": "重命名会话",

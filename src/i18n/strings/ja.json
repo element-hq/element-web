@@ -3376,7 +3376,6 @@
     "You won't be able to participate in rooms where encryption is enabled when using this session.": "このセッションでは、暗号化が有効になっているルームに参加することができません。",
     "Under active development.": "開発中。",
     "Under active development. Can currently only be enabled via config.json": "開発中。現在はconfig.jsonでのみ有効にできます。",
-    "Allow a QR code to be shown in session manager to sign in another device (requires compatible homeserver)": "QRコードをセッションマネージャーに表示し、他の端末でサインインすることを許可（互換性のあるホームサーバーが必要）",
     "Sends the given message with hearts": "メッセージをハートと共に送信",
     "Don’t miss a reply or important message": "返信または重要なメッセージを見逃さないようにしましょう",
     "Only applies if your homeserver does not offer one. Your IP address would be shared during a call.": "あなたのホームサーバーがアシストサーバーを提供していない場合にのみ適用。IPアドレスが通話中に共有されます。",

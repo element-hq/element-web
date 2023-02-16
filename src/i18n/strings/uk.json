@@ -3481,7 +3481,6 @@
     "Notifications silenced": "Сповіщення стишено",
     "Sign in with QR code": "Увійти за допомогою QR-коду",
     "Browser": "Браузер",
-    "Allow a QR code to be shown in session manager to sign in another device (requires compatible homeserver)": "Дозволити показ QR-коду в менеджері сеансів для входу на іншому пристрої (потрібен сумісний домашній сервер)",
     "Yes, stop broadcast": "Так, припинити трансляцію",
     "Stop live broadcasting?": "Припинити голосову трансляцію?",
     "Someone else is already recording a voice broadcast. Wait for their voice broadcast to end to start a new one.": "Хтось інший вже записує голосову трансляцію. Зачекайте, поки запис завершиться, щоб розпочати новий.",

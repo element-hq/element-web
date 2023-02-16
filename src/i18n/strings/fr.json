@@ -3498,7 +3498,6 @@
     "Sign in new device": "Connecter le nouvel appareil",
     "Show QR code": "Afficher le QR code",
     "You can use this device to sign in a new device with a QR code. You will need to scan the QR code shown on this device with your device that's signed out.": "Vous pouvez utiliser cet appareil pour vous connecter sur un autre appareil avec un QR code. Vous devrez scanner le QR code affiché sur cet appareil avec votre autre appareil qui n’est pas connecté.",
-    "Allow a QR code to be shown in session manager to sign in another device (requires compatible homeserver)": "Permet l’affichage d’un QR code dans le gestionnaire de sessions pour connecter un autre appareil (nécessite un serveur d’accueil compatible)",
     "Sign in with QR code": "Se connecter avec un QR code",
     "Browser": "Navigateur",
     "Notifications silenced": "Notifications silencieuses",

@@ -3501,7 +3501,6 @@
     "You can use this device to sign in a new device with a QR code. You will need to scan the QR code shown on this device with your device that's signed out.": "Anda dapat menggunakan perangkat ini untuk masuk ke perangkat yang baru dengan sebuah kode QR. Anda harus memindai kode QR yang ditampilkan di perangkat ini dengan perangkat Anda yang telah keluar dari akun.",
     "Sign in with QR code": "Masuk dengan kode QR",
     "Browser": "Peramban",
-    "Allow a QR code to be shown in session manager to sign in another device (requires compatible homeserver)": "Perbolehkan sebuah kode QR untuk ditampilkan dalam pengelola sesi untuk masuk ke perangkat lain (membutuhkan homeserver yang kompatibel)",
     "play voice broadcast": "mainkan siaran suara",
     "Yes, stop broadcast": "Iya, hentikan siaran",
     "Stop live broadcasting?": "Hentikan siaran langsung?",

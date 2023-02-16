@@ -3501,7 +3501,6 @@
     "You can use this device to sign in a new device with a QR code. You will need to scan the QR code shown on this device with your device that's signed out.": "Toto zariadenie môžete použiť na prihlásenie nového zariadenia pomocou QR kódu. QR kód zobrazený na tomto zariadení musíte naskenovať pomocou zariadenia, ktoré je odhlásené.",
     "Sign in with QR code": "Prihlásiť sa pomocou QR kódu",
     "Browser": "Prehliadač",
-    "Allow a QR code to be shown in session manager to sign in another device (requires compatible homeserver)": "Umožniť zobrazenie QR kódu v správcovi relácií na prihlásenie do iného zariadenia (vyžaduje kompatibilný domovský server)",
     "Yes, stop broadcast": "Áno, zastaviť vysielanie",
     "Stop live broadcasting?": "Zastaviť vysielanie naživo?",
     "Someone else is already recording a voice broadcast. Wait for their voice broadcast to end to start a new one.": "Niekto iný už nahráva hlasové vysielanie. Počkajte, kým sa skončí jeho hlasové vysielanie, a potom spustite nové.",
