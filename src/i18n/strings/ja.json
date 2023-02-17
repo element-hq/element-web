@@ -3735,5 +3735,6 @@
     "Starting export process…": "エクスポートのプロセスを開始しています…",
     "Creating HTML…": "HTMLファイルを作成しています…",
     "Starting export…": "エクスポートを開始しています…",
-    "Unable to connect to Homeserver. Retrying…": "ホームサーバーに接続できません。 再試行しています…"
+    "Unable to connect to Homeserver. Retrying…": "ホームサーバーに接続できません。 再試行しています…",
+    "Allow a QR code to be shown in session manager to sign in another device (requires compatible homeserver)": "QRコードをセッションマネージャーに表示し、別の端末でサインインすることを許可（互換性のあるホームサーバーが必要）"
 }
