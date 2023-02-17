@@ -3741,5 +3741,6 @@
     "Starting export process…": "開始匯出流程……",
     "Creating HTML…": "建立 HTML……",
     "Starting export…": "開始匯入……",
-    "Unable to connect to Homeserver. Retrying…": "無法連線至家伺服器。正在重試……"
+    "Unable to connect to Homeserver. Retrying…": "無法連線至家伺服器。正在重試……",
+    "Allow a QR code to be shown in session manager to sign in another device (requires compatible homeserver)": "允許在工作階段管理程式中顯示 QR code 以登入另一台裝置（需要相容的家伺服器）"
 }
