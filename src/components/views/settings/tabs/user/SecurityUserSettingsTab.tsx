@@ -381,7 +381,6 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
         }
 
         const useNewSessionManager = SettingsStore.getValue("feature_new_device_manager");
-        const showQrCodeEnabled = SettingsStore.getValue("feature_qr_signin_reciprocate_show");
         const devicesSection = useNewSessionManager ? null : (
             <>
                 <div className="mx_SettingsTab_heading">{_t("Where you're signed in")}</div>
@@ -394,15 +393,13 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
                     </span>
                     <DevicesPanel />
                 </div>
-                {showQrCodeEnabled ? (
-                    <LoginWithQRSection onShowQr={this.onShowQRClicked} versions={this.state.versions} />
-                ) : null}
+                <LoginWithQRSection onShowQr={this.onShowQRClicked} versions={this.state.versions} />
             </>
         );
 
         const client = MatrixClientPeg.get();
 
-        if (showQrCodeEnabled && this.state.showLoginWithQR) {
+        if (this.state.showLoginWithQR) {
             return (
                 <div className="mx_SettingsTab mx_SecurityUserSettingsTab">
                     <LoginWithQR

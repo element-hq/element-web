@@ -79,17 +79,7 @@ describe("<SecurityUserSettingsTab />", () => {
         expect(queryByTestId("devices-section")).toBeFalsy();
     });
 
-    it("does not render qr code login section when disabled", () => {
-        settingsValueSpy.mockReturnValue(false);
-        const { queryByText } = render(getComponent());
-
-        expect(settingsValueSpy).toHaveBeenCalledWith("feature_qr_signin_reciprocate_show");
-
-        expect(queryByText("Sign in with QR code")).toBeFalsy();
-    });
-
-    it("renders qr code login section when enabled", async () => {
-        settingsValueSpy.mockImplementation((settingName) => settingName === "feature_qr_signin_reciprocate_show");
+    it("renders qr code login section", async () => {
         const { getByText } = render(getComponent());
 
         // wait for versions call to settle
@@ -99,7 +89,6 @@ describe("<SecurityUserSettingsTab />", () => {
     });
 
     it("enters qr code login section when show QR code button clicked", async () => {
-        settingsValueSpy.mockImplementation((settingName) => settingName === "feature_qr_signin_reciprocate_show");
         const { getByText, getByTestId } = render(getComponent());
         // wait for versions call to settle
         await flushPromises();
