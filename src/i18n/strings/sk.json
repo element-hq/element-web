@@ -3741,5 +3741,7 @@
     "Creating HTML…": "Vytváranie HTML…",
     "Starting export…": "Začína sa exportovanie…",
     "Unable to connect to Homeserver. Retrying…": "Nie je možné sa pripojiť k domovskému serveru. Prebieha pokus o opätovné pripojenie…",
-    "WARNING: session already verified, but keys do NOT MATCH!": "VAROVANIE: Relácia je už overená, ale kľúče sa NEZHODUJÚ!"
+    "WARNING: session already verified, but keys do NOT MATCH!": "VAROVANIE: Relácia je už overená, ale kľúče sa NEZHODUJÚ!",
+    "Secure Backup successful": "Bezpečné zálohovanie bolo úspešné",
+    "Your keys are now being backed up from this device.": "Kľúče sa teraz zálohujú z tohto zariadenia."
 }
