@@ -23,6 +23,7 @@ import { TrustInfo } from "matrix-js-sdk/src/crypto/backup";
 import { CrossSigningKeys, UIAFlow } from "matrix-js-sdk/src/matrix";
 import { IRecoveryKey } from "matrix-js-sdk/src/crypto/api";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
+import classNames from "classnames";
 
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import { _t, _td } from "../../../../languageHandler";
@@ -48,6 +49,7 @@ import BaseDialog from "../../../../components/views/dialogs/BaseDialog";
 import Spinner from "../../../../components/views/elements/Spinner";
 import InteractiveAuthDialog from "../../../../components/views/dialogs/InteractiveAuthDialog";
 import { IValidationResult } from "../../../../components/views/elements/Validation";
+import { Icon as CheckmarkIcon } from "../../../../../res/img/element-icons/check.svg";
 
 // I made a mistake while converting this and it has to be fixed!
 enum Phase {
@@ -59,6 +61,7 @@ enum Phase {
     PassphraseConfirm = "passphrase_confirm",
     ShowKey = "show_key",
     Storing = "storing",
+    Stored = "stored",
     ConfirmSkip = "confirm_skip",
 }
 
@@ -361,7 +364,10 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                     },
                 });
             }
-            this.props.onFinished(true);
+
+            this.setState({
+                phase: Phase.Stored,
+            });
         } catch (e) {
             if (this.state.canUploadKeysWithPasswordOnly && e.httpStatus === 401 && e.data.flows) {
                 this.setState({
@@ -785,6 +791,19 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
         );
     }
 
+    private renderStoredPhase(): JSX.Element {
+        return (
+            <>
+                <p className="mx_Dialog_content">{_t("Your keys are now being backed up from this device.")}</p>
+                <DialogButtons
+                    primaryButton={_t("Done")}
+                    onPrimaryButtonClick={() => this.props.onFinished(true)}
+                    hasCancel={false}
+                />
+            </>
+        );
+    }
+
     private renderPhaseLoadError(): JSX.Element {
         return (
             <div>
@@ -837,9 +856,25 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                 return _t("Save your Security Key");
             case Phase.Storing:
                 return _t("Setting up keys");
+            case Phase.Stored:
+                return _t("Secure Backup successful");
             default:
                 return "";
         }
+    }
+
+    private get topComponent(): React.ReactNode | null {
+        if (this.state.phase === Phase.Stored) {
+            return <CheckmarkIcon className="mx_Icon mx_Icon_circle-40 mx_Icon_accent mx_Icon_bg-accent-light" />;
+        }
+
+        return null;
+    }
+
+    private get classNames(): string {
+        return classNames("mx_CreateSecretStorageDialog", {
+            mx_SuccessDialog: this.state.phase === Phase.Stored,
+        });
     }
 
     public render(): React.ReactNode {
@@ -884,6 +919,9 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                 case Phase.Storing:
                     content = this.renderBusyPhase();
                     break;
+                case Phase.Stored:
+                    content = this.renderStoredPhase();
+                    break;
                 case Phase.ConfirmSkip:
                     content = this.renderPhaseSkipConfirm();
                     break;
@@ -912,8 +950,9 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
 
         return (
             <BaseDialog
-                className="mx_CreateSecretStorageDialog"
+                className={this.classNames}
                 onFinished={this.props.onFinished}
+                top={this.topComponent}
                 title={this.titleForPhase(this.state.phase)}
                 titleClass={titleClass}
                 hasCancel={this.props.hasCancel && [Phase.Passphrase].includes(this.state.phase)}

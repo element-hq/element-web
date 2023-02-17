@@ -181,12 +181,14 @@ describe("Decryption Failure Bar", () => {
 
             cy.contains(".mx_DecryptionFailureBar_button", "Reset").click();
 
+            // Set up key backup
             cy.get(".mx_Dialog").within(() => {
                 cy.contains(".mx_Dialog_primary", "Continue").click();
                 cy.get(".mx_CreateSecretStorageDialog_recoveryKey code").invoke("text").as("securityKey");
                 // Clicking download instead of Copy because of https://github.com/cypress-io/cypress/issues/2851
                 cy.contains(".mx_AccessibleButton", "Download").click();
                 cy.contains(".mx_Dialog_primary:not([disabled])", "Continue").click();
+                cy.contains("Done").click();
             });
 
             cy.get(".mx_DecryptionFailureBar .mx_DecryptionFailureBar_message_headline").should(

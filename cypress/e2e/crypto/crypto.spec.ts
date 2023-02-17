@@ -183,6 +183,10 @@ describe("Cryptography", function () {
             cy.contains(".mx_Dialog_primary:not([disabled])", "Continue").click();
             cy.contains(".mx_Dialog_title", "Setting up keys").should("exist");
             cy.contains(".mx_Dialog_title", "Setting up keys").should("not.exist");
+
+            cy.contains("Secure Backup successful").should("exist");
+            cy.contains("Done").click();
+            cy.contains("Secure Backup successful").should("not.exist");
         });
         return;
     });
