@@ -3741,5 +3741,7 @@
     "Starting export process…": "Початок процесу експорту…",
     "Creating HTML…": "Створення HTML…",
     "Starting export…": "Початок експорту…",
-    "Unable to connect to Homeserver. Retrying…": "Не вдалося під'єднатися до домашнього сервера. Повторна спроба…"
+    "Unable to connect to Homeserver. Retrying…": "Не вдалося під'єднатися до домашнього сервера. Повторна спроба…",
+    "Secure Backup successful": "Безпечне резервне копіювання виконано успішно",
+    "Your keys are now being backed up from this device.": "На цьому пристрої створюється резервна копія ваших ключів."
 }
