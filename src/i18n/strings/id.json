@@ -3741,6 +3741,5 @@
     "Fetching events…": "Mendapatkan peristiwa…",
     "Starting export process…": "Memulai proses pengeksporan…",
     "Creating HTML…": "Membuat HTML…",
-    "Enter a Security Phrase only you know, as it's used to safeguard your data. To be secure, you shouldn't re-use your account password.": "Masukkan frasa keamanan yang hanya Anda tahu, yang digunakan untuk mengamankan data Anda. Supaya aman, jangan menggunakan ulang kata sandi akun Anda.",
-    "Allow a QR code to be shown in session manager to sign in another device (requires compatible homeserver)": "Perbolehkan sebuah kode QR untuk ditampilkan dalam pengelola sesi untuk masuk ke perangkat lain (membutuhkan homeserver yang kompatibel)"
+    "Enter a Security Phrase only you know, as it's used to safeguard your data. To be secure, you shouldn't re-use your account password.": "Masukkan frasa keamanan yang hanya Anda tahu, yang digunakan untuk mengamankan data Anda. Supaya aman, jangan menggunakan ulang kata sandi akun Anda."
 }

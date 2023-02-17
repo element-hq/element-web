@@ -3741,6 +3741,5 @@
     "Starting export process…": "Початок процесу експорту…",
     "Creating HTML…": "Створення HTML…",
     "Starting export…": "Початок експорту…",
-    "Unable to connect to Homeserver. Retrying…": "Не вдалося під'єднатися до домашнього сервера. Повторна спроба…",
-    "Allow a QR code to be shown in session manager to sign in another device (requires compatible homeserver)": "Дозволити показ QR-коду в менеджері сеансів для входу на іншому пристрої (потрібен сумісний домашній сервер)"
+    "Unable to connect to Homeserver. Retrying…": "Не вдалося під'єднатися до домашнього сервера. Повторна спроба…"
 }

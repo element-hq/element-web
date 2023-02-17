@@ -3741,6 +3741,5 @@
     "Starting export…": "Beginne Export …",
     "Unable to connect to Homeserver. Retrying…": "Verbindung mit Heim-Server fehlgeschlagen. Versuche es erneut …",
     "Enter a Security Phrase only you know, as it's used to safeguard your data. To be secure, you shouldn't re-use your account password.": "Gib eine nur dir bekannte Sicherheitsphrase ein, die dem Schutz deiner Daten dient. Um die Sicherheit zu gewährleisten, sollte dies nicht dein Kontopasswort sein.",
-    "Please only proceed if you're sure you've lost all of your other devices and your Security Key.": "Bitte fahre nur fort, wenn du sicher bist, dass du alle anderen Geräte und deinen Sicherheitsschlüssel verloren hast.",
-    "Allow a QR code to be shown in session manager to sign in another device (requires compatible homeserver)": "Erlaube die Anzeige eines QR-Code in der Sitzungsverwaltung, um ein anderes Gerät anzumelden (kompatibler Heim-Server benötigt)"
+    "Please only proceed if you're sure you've lost all of your other devices and your Security Key.": "Bitte fahre nur fort, wenn du sicher bist, dass du alle anderen Geräte und deinen Sicherheitsschlüssel verloren hast."
 }

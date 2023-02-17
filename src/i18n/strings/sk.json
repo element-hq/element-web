@@ -3741,6 +3741,5 @@
     "Creating HTML…": "Vytváranie HTML…",
     "Starting export…": "Začína sa exportovanie…",
     "Unable to connect to Homeserver. Retrying…": "Nie je možné sa pripojiť k domovskému serveru. Prebieha pokus o opätovné pripojenie…",
-    "WARNING: session already verified, but keys do NOT MATCH!": "VAROVANIE: Relácia je už overená, ale kľúče sa NEZHODUJÚ!",
-    "Allow a QR code to be shown in session manager to sign in another device (requires compatible homeserver)": "Umožniť zobrazenie QR kódu v správcovi relácií na prihlásenie do iného zariadenia (vyžaduje kompatibilný domovský server)"
+    "WARNING: session already verified, but keys do NOT MATCH!": "VAROVANIE: Relácia je už overená, ale kľúče sa NEZHODUJÚ!"
 }

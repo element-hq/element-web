@@ -3741,6 +3741,5 @@
     "Starting export…": "Zahájení exportu…",
     "Unable to connect to Homeserver. Retrying…": "Nelze se připojit k domovskému serveru. Opakovaný pokus…",
     "Enter a Security Phrase only you know, as it's used to safeguard your data. To be secure, you shouldn't re-use your account password.": "Zadejte bezpečnostní frázi, kterou znáte jen vy, protože slouží k ochraně vašich dat. V zájmu bezpečnosti byste neměli heslo k účtu používat opakovaně.",
-    "Please only proceed if you're sure you've lost all of your other devices and your Security Key.": "Pokračujte pouze v případě, že jste si jisti, že jste ztratili všechna ostatní zařízení a bezpečnostní klíč.",
-    "Allow a QR code to be shown in session manager to sign in another device (requires compatible homeserver)": "Povolit zobrazení QR kódu ve správci relací pro přihlášení na jiném zařízení (vyžaduje kompatibilní domovský server)"
+    "Please only proceed if you're sure you've lost all of your other devices and your Security Key.": "Pokračujte pouze v případě, že jste si jisti, že jste ztratili všechna ostatní zařízení a bezpečnostní klíč."
 }
