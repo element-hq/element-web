@@ -1985,5 +1985,6 @@
     "Click the button below to confirm signing out these devices.|other": "Bu cihazların oturumunu kapatmak için aşağıdaki butona tıkla.",
     "Confirm signing out these devices|one": "Bu cihazın oturumunu kapatmayı onayla",
     "Confirm signing out these devices|other": "Şu cihazlardan oturumu kapatmayı onayla",
-    "Current session": "Şimdiki oturum"
+    "Current session": "Şimdiki oturum",
+    "Search (must be enabled)": "Arama (etkinleştirilmeli)"
 }
