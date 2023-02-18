@@ -3741,5 +3741,7 @@
     "Starting export process…": "Alustame eksportimist…",
     "Creating HTML…": "Loon HTML-faile…",
     "Starting export…": "Alustame eksportimist…",
-    "Unable to connect to Homeserver. Retrying…": "Ei saa ühendust koduserveriga. Proovin uuesti…"
+    "Unable to connect to Homeserver. Retrying…": "Ei saa ühendust koduserveriga. Proovin uuesti…",
+    "Secure Backup successful": "Krüptovõtmete varundus õnnestus",
+    "Your keys are now being backed up from this device.": "Sinu krüptovõtmed on parasjagu sellest seadmest varundamisel."
 }
