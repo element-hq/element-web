@@ -3741,5 +3741,7 @@
     "Starting export process…": "Démarrage du processus d’export…",
     "Creating HTML…": "Création de l’HTML…",
     "Starting export…": "Démarrage de l’export…",
-    "Unable to connect to Homeserver. Retrying…": "Impossible de se connecter au serveur d’accueil. Reconnexion…"
+    "Unable to connect to Homeserver. Retrying…": "Impossible de se connecter au serveur d’accueil. Reconnexion…",
+    "Secure Backup successful": "Sauvegarde sécurisée réalisée avec succès",
+    "Your keys are now being backed up from this device.": "Vos clés sont maintenant sauvegardées depuis cet appareil."
 }
