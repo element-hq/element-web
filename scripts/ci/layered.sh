@@ -16,6 +16,7 @@ set -ex
 # Set up the js-sdk first
 scripts/fetchdep.sh matrix-org matrix-js-sdk
 pushd matrix-js-sdk
+[ -n "$JS_SDK_GITHUB_BASE_REF" ] && git fetch --depth 1 origin $JS_SDK_GITHUB_BASE_REF && git checkout $JS_SDK_GITHUB_BASE_REF
 yarn link
 yarn install --pure-lockfile
 popd

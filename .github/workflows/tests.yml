@@ -5,6 +5,12 @@ on:
         branches: [develop, master]
     repository_dispatch:
         types: [upstream-sdk-notify]
+    workflow_call:
+        inputs:
+            matrix-js-sdk-sha:
+                type: string
+                required: false
+                description: "The matrix-js-sdk SHA to use"
 env:
     # These must be set for fetchdep.sh to get the right branch
     REPOSITORY: ${{ github.repository }}
@@ -16,6 +22,8 @@ jobs:
         steps:
             - name: Checkout code
               uses: actions/checkout@v3
+              with:
+                  repository: ${{ inputs.matrix-js-sdk-sha && 'matrix-org/matrix-react-sdk' || github.repository }}
 
             - name: Yarn cache
               uses: actions/setup-node@v3
@@ -24,6 +32,8 @@ jobs:
 
             - name: Install Deps
               run: "./scripts/ci/install-deps.sh --ignore-scripts"
+              env:
+                  JS_SDK_GITHUB_BASE_REF: ${{ inputs.matrix-js-sdk-sha }}
 
             - name: Get number of CPU cores
               id: cpu-cores
@@ -38,6 +48,7 @@ jobs:
               run: "yarn coverage --ci --reporters github-actions --max-workers ${{ steps.cpu-cores.outputs.count }}"
 
             - name: Upload Artifact
+              if: inputs.matrix-js-sdk-sha == ''
               uses: actions/upload-artifact@v3
               with:
                   name: coverage
@@ -50,6 +61,8 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v3
+              with:
+                  repository: ${{ inputs.matrix-js-sdk-sha && 'matrix-org/matrix-react-sdk' || github.repository }}
 
             - uses: actions/setup-node@v3
               with:
@@ -57,3 +70,5 @@ jobs:
 
             - name: Run tests
               run: "./scripts/ci/app-tests.sh"
+              env:
+                  JS_SDK_GITHUB_BASE_REF: ${{ inputs.matrix-js-sdk-sha }}
