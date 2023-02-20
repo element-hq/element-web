@@ -3734,5 +3734,6 @@
     "Creating HTML…": "Membuat HTML…",
     "Enter a Security Phrase only you know, as it's used to safeguard your data. To be secure, you shouldn't re-use your account password.": "Masukkan frasa keamanan yang hanya Anda tahu, yang digunakan untuk mengamankan data Anda. Supaya aman, jangan menggunakan ulang kata sandi akun Anda.",
     "Secure Backup successful": "Pencadangan Aman berhasil",
-    "Your keys are now being backed up from this device.": "Kunci Anda sekarang dicadangkan dari perangkat ini."
+    "Your keys are now being backed up from this device.": "Kunci Anda sekarang dicadangkan dari perangkat ini.",
+    "Loading polls": "Memuat pemungutan suara"
 }
