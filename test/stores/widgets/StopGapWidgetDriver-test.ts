@@ -17,13 +17,14 @@ limitations under the License.
 import { mocked, MockedObject } from "jest-mock";
 import { MatrixClient, ClientEvent, ITurnServer as IClientTurnServer } from "matrix-js-sdk/src/client";
 import { DeviceInfo } from "matrix-js-sdk/src/crypto/deviceinfo";
-import { Direction, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { Direction, EventType, MatrixEvent, MsgType, RelationType } from "matrix-js-sdk/src/matrix";
 import { Widget, MatrixWidgetType, WidgetKind, WidgetDriver, ITurnServer } from "matrix-widget-api";
 
 import { SdkContextClass } from "../../../src/contexts/SDKContext";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 import { StopGapWidgetDriver } from "../../../src/stores/widgets/StopGapWidgetDriver";
 import { stubClient } from "../../test-utils";
+import dis from "../../../src/dispatcher/dispatcher";
 
 describe("StopGapWidgetDriver", () => {
     let client: MockedObject<MatrixClient>;
@@ -270,6 +271,46 @@ describe("StopGapWidgetDriver", () => {
                 to: "to-token",
                 dir: Direction.Forward,
             });
+        });
+    });
+
+    describe("chat effects", () => {
+        let driver: WidgetDriver;
+        // let client: MatrixClient;
+
+        beforeEach(() => {
+            stubClient();
+            driver = mkDefaultDriver();
+            jest.spyOn(dis, "dispatch").mockReset();
+        });
+
+        it("sends chat effects", async () => {
+            await driver.sendEvent(
+                EventType.RoomMessage,
+                {
+                    msgtype: MsgType.Text,
+                    body: "🎉",
+                },
+                null,
+            );
+
+            expect(dis.dispatch).toHaveBeenCalled();
+        });
+
+        it("does not send chat effects in threads", async () => {
+            await driver.sendEvent(
+                EventType.RoomMessage,
+                {
+                    "body": "🎉",
+                    "m.relates_to": {
+                        rel_type: RelationType.Thread,
+                        event_id: "$123",
+                    },
+                },
+                null,
+            );
+
+            expect(dis.dispatch).not.toHaveBeenCalled();
         });
     });
 });

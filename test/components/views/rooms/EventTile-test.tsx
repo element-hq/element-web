@@ -1,5 +1,5 @@
 /*
-Copyright 2022 The Matrix.org Foundation C.I.C.
+Copyright 2022 - 2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -28,7 +28,6 @@ import EventTile, { EventTileProps } from "../../../../src/components/views/room
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import RoomContext, { TimelineRenderingType } from "../../../../src/contexts/RoomContext";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
-import SettingsStore from "../../../../src/settings/SettingsStore";
 import { getRoomContext, mkEncryptedEvent, mkEvent, mkMessage, stubClient } from "../../../test-utils";
 import { mkThread } from "../../../test-utils/threads";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
@@ -80,7 +79,6 @@ describe("EventTile", () => {
 
         jest.spyOn(client, "getRoom").mockReturnValue(room);
         jest.spyOn(client, "decryptEventIfNeeded").mockResolvedValue();
-        jest.spyOn(SettingsStore, "getValue").mockImplementation((name) => name === "feature_threadenabled");
 
         mxEvent = mkMessage({
             room: room.roomId,

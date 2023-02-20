@@ -2,7 +2,7 @@
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
 Copyright 2018, 2019 New Vector Ltd
-Copyright 2019 - 2022 The Matrix.org Foundation C.I.C.
+Copyright 2019 - 2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -1194,7 +1194,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         CHAT_EFFECTS.forEach((effect) => {
             if (containsEmoji(ev.getContent(), effect.emojis) || ev.getContent().msgtype === effect.msgType) {
                 // For initial threads launch, chat effects are disabled see #19731
-                if (!SettingsStore.getValue("feature_threadenabled") || !ev.isRelation(THREAD_RELATION_TYPE.name)) {
+                if (!ev.isRelation(THREAD_RELATION_TYPE.name)) {
                     dis.dispatch({ action: `effects.${effect.command}` });
                 }
             }

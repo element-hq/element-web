@@ -1,5 +1,5 @@
 /*
-Copyright 2022 The Matrix.org Foundation C.I.C.
+Copyright 2022 - 2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -32,9 +32,6 @@ import { IRoomState } from "../../../../src/components/structures/RoomView";
 import dispatcher from "../../../../src/dispatcher/dispatcher";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import { Action } from "../../../../src/dispatcher/actions";
-import { UserTab } from "../../../../src/components/views/dialogs/UserTab";
-import { mkVoiceBroadcastInfoStateEvent } from "../../../voice-broadcast/utils/test-utils";
-import { VoiceBroadcastInfoState } from "../../../../src/voice-broadcast";
 
 jest.mock("../../../../src/dispatcher/dispatcher");
 
@@ -380,57 +377,7 @@ describe("<MessageActionBar />", () => {
             Thread.setServerSideSupport(FeatureSupport.Stable);
         });
 
-        describe("when threads feature is not enabled", () => {
-            beforeEach(() => {
-                jest.spyOn(SettingsStore, "getValue").mockImplementation(
-                    (setting) => setting !== "feature_threadenabled",
-                );
-            });
-
-            it("does not render thread button when threads does not have server support", () => {
-                jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
-                Thread.setServerSideSupport(FeatureSupport.None);
-                const { queryByLabelText } = getComponent({ mxEvent: alicesMessageEvent });
-                expect(queryByLabelText("Reply in thread")).toBeFalsy();
-            });
-
-            it("renders thread button when threads has server support", () => {
-                jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
-                const { queryByLabelText } = getComponent({ mxEvent: alicesMessageEvent });
-                expect(queryByLabelText("Reply in thread")).toBeTruthy();
-            });
-
-            it("does not render thread button for a voice broadcast", () => {
-                const broadcastEvent = mkVoiceBroadcastInfoStateEvent(
-                    roomId,
-                    VoiceBroadcastInfoState.Started,
-                    userId,
-                    "ABC123",
-                );
-                const { queryByLabelText } = getComponent({ mxEvent: broadcastEvent });
-                expect(queryByLabelText("Reply in thread")).not.toBeInTheDocument();
-            });
-
-            it("opens user settings on click", () => {
-                jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
-                const { getByLabelText } = getComponent({ mxEvent: alicesMessageEvent });
-
-                fireEvent.click(getByLabelText("Reply in thread"));
-
-                expect(dispatcher.dispatch).toHaveBeenCalledWith({
-                    action: Action.ViewUserSettings,
-                    initialTabId: UserTab.Labs,
-                });
-            });
-        });
-
         describe("when threads feature is enabled", () => {
-            beforeEach(() => {
-                jest.spyOn(SettingsStore, "getValue").mockImplementation(
-                    (setting) => setting === "feature_threadenabled",
-                );
-            });
-
             it("renders thread button on own actionable event", () => {
                 const { queryByLabelText } = getComponent({ mxEvent: alicesMessageEvent });
                 expect(queryByLabelText("Reply in thread")).toBeTruthy();

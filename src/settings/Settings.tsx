@@ -1,6 +1,6 @@
 /*
 Copyright 2017 Travis Ralston
-Copyright 2018 - 2021 The Matrix.org Foundation C.I.C.
+Copyright 2018 - 2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -42,7 +42,6 @@ import { ImageSize } from "./enums/ImageSize";
 import { MetaSpace } from "../stores/spaces";
 import SdkConfig from "../SdkConfig";
 import SlidingSyncController from "./controllers/SlidingSyncController";
-import ThreadBetaController from "./controllers/ThreadBetaController";
 import { FontWatcher } from "./watchers/FontWatcher";
 import RustCryptoSdkController from "./controllers/RustCryptoSdkController";
 
@@ -255,36 +254,6 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         displayName: _td("Message Pinning"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
-    },
-    "feature_threadenabled": {
-        isFeature: true,
-        labsGroup: LabGroup.Messaging,
-        controller: new ThreadBetaController(),
-        displayName: _td("Threaded messages"),
-        supportedLevels: LEVELS_FEATURE,
-        default: true,
-        betaInfo: {
-            title: _td("Threaded messages"),
-            caption: () => (
-                <>
-                    <p>{_t("Keep discussions organised with threads.")}</p>
-                    <p>
-                        {_t(
-                            "Threads help keep conversations on-topic and easy to track. <a>Learn more</a>.",
-                            {},
-                            {
-                                a: (sub) => (
-                                    <a href="https://element.io/help#threads" rel="noreferrer noopener" target="_blank">
-                                        {sub}
-                                    </a>
-                                ),
-                            },
-                        )}
-                    </p>
-                </>
-            ),
-            requiresRefresh: true,
-        },
     },
     "feature_wysiwyg_composer": {
         isFeature: true,

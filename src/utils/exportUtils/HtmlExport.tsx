@@ -1,5 +1,5 @@
 /*
-Copyright 2021, 2023 The Matrix.org Foundation C.I.C.
+Copyright 2021 - 2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,7 +23,6 @@ import { EventType, MsgType } from "matrix-js-sdk/src/@types/event";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import Exporter from "./Exporter";
-import SettingsStore from "../../settings/SettingsStore";
 import { mediaFromMxc } from "../../customisations/Media";
 import { Layout } from "../../settings/enums/Layout";
 import { shouldFormContinuation } from "../../components/structures/MessagePanel";
@@ -47,7 +46,6 @@ export default class HTMLExporter extends Exporter {
     protected permalinkCreator: RoomPermalinkCreator;
     protected totalSize: number;
     protected mediaOmitText: string;
-    private threadsEnabled: boolean;
 
     public constructor(
         room: Room,
@@ -62,7 +60,6 @@ export default class HTMLExporter extends Exporter {
         this.mediaOmitText = !this.exportOptions.attachmentsIncluded
             ? _t("Media omitted")
             : _t("Media omitted - file size limit exceeded");
-        this.threadsEnabled = SettingsStore.getValue("feature_threadenabled");
     }
 
     protected async getRoomAvatar(): Promise<string> {
@@ -402,8 +399,7 @@ export default class HTMLExporter extends Exporter {
 
             content += this.needsDateSeparator(event, prevEvent) ? this.getDateSeparator(event) : "";
             const shouldBeJoined =
-                !this.needsDateSeparator(event, prevEvent) &&
-                shouldFormContinuation(prevEvent, event, false, this.threadsEnabled);
+                !this.needsDateSeparator(event, prevEvent) && shouldFormContinuation(prevEvent, event, false);
             const body = await this.createMessageBody(event, shouldBeJoined);
             this.totalSize += Buffer.byteLength(body);
             content += body;

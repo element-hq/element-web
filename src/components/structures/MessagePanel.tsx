@@ -1,5 +1,5 @@
 /*
-Copyright 2016 - 2022 The Matrix.org Foundation C.I.C.
+Copyright 2016 - 2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -75,7 +75,6 @@ export function shouldFormContinuation(
     prevEvent: MatrixEvent | null,
     mxEvent: MatrixEvent,
     showHiddenEvents: boolean,
-    threadsEnabled: boolean,
     timelineRenderingType?: TimelineRenderingType,
 ): boolean {
     if (timelineRenderingType === TimelineRenderingType.ThreadsList) return false;
@@ -105,7 +104,6 @@ export function shouldFormContinuation(
 
     // Thread summaries in the main timeline should break up a continuation on both sides
     if (
-        threadsEnabled &&
         (hasThreadSummary(mxEvent) || hasThreadSummary(prevEvent)) &&
         timelineRenderingType !== TimelineRenderingType.Thread
     ) {
@@ -259,7 +257,6 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     private readReceiptsByUserId: Record<string, IReadReceiptForUser> = {};
 
     private readonly _showHiddenEvents: boolean;
-    private readonly threadsEnabled: boolean;
     private isMounted = false;
 
     private readMarkerNode = createRef<HTMLLIElement>();
@@ -287,7 +284,6 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         // and we check this in a hot code path. This is also cached in our
         // RoomContext, however we still need a fallback for roomless MessagePanels.
         this._showHiddenEvents = SettingsStore.getValue("showHiddenEventsInTimeline");
-        this.threadsEnabled = SettingsStore.getValue("feature_threadenabled");
 
         this.showTypingNotificationsWatcherRef = SettingsStore.watchSetting(
             "showTypingNotifications",
@@ -464,7 +460,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 
     // TODO: Implement granular (per-room) hide options
     public shouldShowEvent(mxEv: MatrixEvent, forceHideEvents = false): boolean {
-        if (this.props.hideThreadedMessages && this.threadsEnabled && this.props.room) {
+        if (this.props.hideThreadedMessages && this.props.room) {
             const { shouldLiveInRoom } = this.props.room.eventShouldLiveIn(mxEv, this.props.events);
             if (!shouldLiveInRoom) {
                 return false;
@@ -720,25 +716,13 @@ export default class MessagePanel extends React.Component<IProps, IState> {
                 willWantDateSeparator ||
                 mxEv.getSender() !== nextEv.getSender() ||
                 getEventDisplayInfo(nextEv, this.showHiddenEvents).isInfoMessage ||
-                !shouldFormContinuation(
-                    mxEv,
-                    nextEv,
-                    this.showHiddenEvents,
-                    this.threadsEnabled,
-                    this.context.timelineRenderingType,
-                );
+                !shouldFormContinuation(mxEv, nextEv, this.showHiddenEvents, this.context.timelineRenderingType);
         }
 
         // is this a continuation of the previous message?
         const continuation =
             !wantsDateSeparator &&
-            shouldFormContinuation(
-                prevEvent,
-                mxEv,
-                this.showHiddenEvents,
-                this.threadsEnabled,
-                this.context.timelineRenderingType,
-            );
+            shouldFormContinuation(prevEvent, mxEv, this.showHiddenEvents, this.context.timelineRenderingType);
 
         const eventId = mxEv.getId();
         const highlight = eventId === this.props.highlightedEventId;

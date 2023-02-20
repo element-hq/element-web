@@ -57,7 +57,6 @@ import { IReadReceiptInfo } from "./ReadReceiptMarker";
 import MessageActionBar from "../messages/MessageActionBar";
 import ReactionsRow from "../messages/ReactionsRow";
 import { getEventDisplayInfo } from "../../../utils/EventRenderingUtils";
-import SettingsStore from "../../../settings/SettingsStore";
 import { MessagePreviewStore } from "../../../stores/room-list/MessagePreviewStore";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
@@ -381,9 +380,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             }
         }
 
-        if (SettingsStore.getValue("feature_threadenabled")) {
-            this.props.mxEvent.on(ThreadEvent.Update, this.updateThread);
-        }
+        this.props.mxEvent.on(ThreadEvent.Update, this.updateThread);
 
         client.decryptEventIfNeeded(this.props.mxEvent);
 
@@ -420,9 +417,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         if (this.props.showReactions) {
             this.props.mxEvent.removeListener(MatrixEventEvent.RelationsCreated, this.onReactionsCreated);
         }
-        if (SettingsStore.getValue("feature_threadenabled")) {
-            this.props.mxEvent.off(ThreadEvent.Update, this.updateThread);
-        }
+        this.props.mxEvent.off(ThreadEvent.Update, this.updateThread);
     }
 
     public componentDidUpdate(prevProps: Readonly<EventTileProps>, prevState: Readonly<IState>): void {
@@ -450,10 +445,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     };
 
     private get thread(): Thread | null {
-        if (!SettingsStore.getValue("feature_threadenabled")) {
-            return null;
-        }
-
         let thread = this.props.mxEvent.getThread();
         /**
          * Accessing the threads value through the room due to a race condition

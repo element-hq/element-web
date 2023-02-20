@@ -58,6 +58,7 @@ describe("MessagePanel", function () {
         isRoomEncrypted: jest.fn().mockReturnValue(false),
         getRoom: jest.fn(),
         getClientWellKnown: jest.fn().mockReturnValue({}),
+        supportsThreads: jest.fn().mockReturnValue(true),
     });
     jest.spyOn(MatrixClientPeg, "get").mockReturnValue(client);
 
@@ -713,16 +714,16 @@ describe("shouldFormContinuation", () => {
             msg: "And here's another message in the main timeline after the thread root",
         });
 
-        expect(shouldFormContinuation(message1, message2, false, true)).toEqual(true);
-        expect(shouldFormContinuation(message2, threadRoot, false, true)).toEqual(true);
-        expect(shouldFormContinuation(threadRoot, message3, false, true)).toEqual(true);
+        expect(shouldFormContinuation(message1, message2, false)).toEqual(true);
+        expect(shouldFormContinuation(message2, threadRoot, false)).toEqual(true);
+        expect(shouldFormContinuation(threadRoot, message3, false)).toEqual(true);
 
         const thread = {
             length: 1,
             replyToEvent: {},
         } as unknown as Thread;
         jest.spyOn(threadRoot, "getThread").mockReturnValue(thread);
-        expect(shouldFormContinuation(message2, threadRoot, false, true)).toEqual(false);
-        expect(shouldFormContinuation(threadRoot, message3, false, true)).toEqual(false);
+        expect(shouldFormContinuation(message2, threadRoot, false)).toEqual(false);
+        expect(shouldFormContinuation(threadRoot, message3, false)).toEqual(false);
     });
 });

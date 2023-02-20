@@ -1,5 +1,5 @@
 /*
-Copyright 2015 - 2022 The Matrix.org Foundation C.I.C.
+Copyright 2015 - 2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -34,7 +34,6 @@ import ResizeNotifier from "../../utils/ResizeNotifier";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import RoomContext from "../../contexts/RoomContext";
-import SettingsStore from "../../settings/SettingsStore";
 
 const DEBUG = false;
 let debuglog = function (msg: string): void {};
@@ -100,23 +99,19 @@ export const RoomSearchView = forwardRef<ScrollPanel, Props>(
                                 return b.length - a.length;
                             });
 
-                            if (SettingsStore.getValue("feature_threadenabled")) {
-                                // Process all thread roots returned in this batch of search results
-                                // XXX: This won't work for results coming from Seshat which won't include the bundled relationship
-                                for (const result of results.results) {
-                                    for (const event of result.context.getTimeline()) {
-                                        const bundledRelationship =
-                                            event.getServerAggregatedRelation<IThreadBundledRelationship>(
-                                                THREAD_RELATION_TYPE.name,
-                                            );
-                                        if (!bundledRelationship || event.getThread()) continue;
-                                        const room = client.getRoom(event.getRoomId());
-                                        const thread = room?.findThreadForEvent(event);
-                                        if (thread) {
-                                            event.setThread(thread);
-                                        } else {
-                                            room?.createThread(event.getId()!, event, [], true);
-                                        }
+                            for (const result of results.results) {
+                                for (const event of result.context.getTimeline()) {
+                                    const bundledRelationship =
+                                        event.getServerAggregatedRelation<IThreadBundledRelationship>(
+                                            THREAD_RELATION_TYPE.name,
+                                        );
+                                    if (!bundledRelationship || event.getThread()) continue;
+                                    const room = client.getRoom(event.getRoomId());
+                                    const thread = room?.findThreadForEvent(event);
+                                    if (thread) {
+                                        event.setThread(thread);
+                                    } else {
+                                        room?.createThread(event.getId()!, event, [], true);
                                     }
                                 }
                             }

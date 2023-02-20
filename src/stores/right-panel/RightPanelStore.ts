@@ -1,5 +1,5 @@
 /*
-Copyright 2019-2022 The Matrix.org Foundation C.I.C.
+Copyright 2019-2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -277,11 +277,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
         // or potentially other errors.
         // (A nicer fix could be to indicate, that the right panel is loading if there is missing state data and re-emit if the data is available)
         switch (card.phase) {
-            case RightPanelPhases.ThreadPanel:
-                if (!SettingsStore.getValue("feature_threadenabled")) return false;
-                break;
             case RightPanelPhases.ThreadView:
-                if (!SettingsStore.getValue("feature_threadenabled")) return false;
                 if (!card.state.threadHeadEvent) {
                     logger.warn("removed card from right panel because of missing threadHeadEvent in card state");
                 }

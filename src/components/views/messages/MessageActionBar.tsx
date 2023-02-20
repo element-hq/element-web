@@ -1,7 +1,7 @@
 /*
 Copyright 2019 New Vector Ltd
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
-Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
+Copyright 2019 - 2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import React, { ReactElement, useCallback, useContext, useEffect } from "react";
 import { EventStatus, MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/models/event";
 import classNames from "classnames";
 import { MsgType, RelationType } from "matrix-js-sdk/src/@types/event";
-import { Thread } from "matrix-js-sdk/src/models/thread";
 import { M_BEACON_INFO } from "matrix-js-sdk/src/@types/beacon";
 
 import { Icon as ContextMenuIcon } from "../../../../res/img/element-icons/context-menu.svg";
@@ -54,7 +53,6 @@ import { CardContext } from "../right_panel/context";
 import { shouldDisplayReply } from "../../../utils/Reply";
 import { Key } from "../../../Keyboard";
 import { ALTERNATE_KEY_NAME } from "../../../accessibility/KeyboardShortcuts";
-import { UserTab } from "../dialogs/UserTab";
 import { Action } from "../../../dispatcher/actions";
 import { ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";
 import useFavouriteMessages from "../../../hooks/useFavouriteMessages";
@@ -204,24 +202,13 @@ const ReplyInThreadButton: React.FC<IReplyInThreadButton> = ({ mxEvent }) => {
 
     const relationType = mxEvent?.getRelation()?.rel_type;
     const hasARelation = !!relationType && relationType !== RelationType.Thread;
-    const threadsEnabled = SettingsStore.getValue("feature_threadenabled");
-
-    if (!threadsEnabled && !Thread.hasServerSideSupport) {
-        // hide the prompt if the user would only have degraded mode
-        return null;
-    }
 
     const onClick = (e: React.MouseEvent): void => {
         // Don't open the regular browser or our context menu on right-click
         e.preventDefault();
         e.stopPropagation();
 
-        if (!SettingsStore.getValue("feature_threadenabled")) {
-            dis.dispatch({
-                action: Action.ViewUserSettings,
-                initialTabId: UserTab.Labs,
-            });
-        } else if (mxEvent.getThread() && !mxEvent.isThreadRoot) {
+        if (mxEvent.getThread() && !mxEvent.isThreadRoot) {
             defaultDispatcher.dispatch<ShowThreadPayload>({
                 action: Action.ShowThread,
                 rootEvent: mxEvent.getThread().rootEvent,
@@ -250,13 +237,6 @@ const ReplyInThreadButton: React.FC<IReplyInThreadButton> = ({ mxEvent }) => {
                             ? _t("Reply in thread")
                             : _t("Can't create a thread from an event with an existing relation")}
                     </div>
-                    {!hasARelation && (
-                        <div className="mx_Tooltip_sub">
-                            {SettingsStore.getValue("feature_threadenabled")
-                                ? _t("Beta feature")
-                                : _t("Beta feature. Click to learn more.")}
-                        </div>
-                    )}
                 </>
             }
             title={
@@ -548,7 +528,6 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
                     );
                 }
             } else if (
-                SettingsStore.getValue("feature_threadenabled") &&
                 // Show thread icon even for deleted messages, but only within main timeline
                 this.context.timelineRenderingType === TimelineRenderingType.Room &&
                 this.props.mxEvent.getThread()

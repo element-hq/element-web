@@ -37,6 +37,7 @@ import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalink
 import { mockPlatformPeg } from "../../../test-utils/platform";
 import { doMaybeLocalRoomAction } from "../../../../src/utils/local-room";
 import { addTextToComposer } from "../../../test-utils/composer";
+import dis from "../../../../src/dispatcher/dispatcher";
 
 jest.mock("../../../../src/utils/local-room", () => ({
     doMaybeLocalRoomAction: jest.fn(),
@@ -295,6 +296,54 @@ describe("<SendMessageComposer/>", () => {
                 body: "test message",
                 msgtype: MsgType.Text,
             });
+        });
+
+        it("shows chat effects on message sending", () => {
+            mocked(doMaybeLocalRoomAction).mockImplementation(
+                <T extends {}>(roomId: string, fn: (actualRoomId: string) => Promise<T>, _client?: MatrixClient) => {
+                    return fn(roomId);
+                },
+            );
+
+            mockPlatformPeg({ overrideBrowserShortcuts: jest.fn().mockReturnValue(false) });
+            const { container } = getComponent();
+
+            addTextToComposer(container, "🎉");
+            fireEvent.keyDown(container.querySelector(".mx_SendMessageComposer")!, { key: "Enter" });
+
+            expect(mockClient.sendMessage).toHaveBeenCalledWith("myfakeroom", null, {
+                body: "test message",
+                msgtype: MsgType.Text,
+            });
+
+            expect(dis.dispatch).toHaveBeenCalledWith({ action: `effects.confetti` });
+        });
+
+        it("not to send chat effects on message sending for threads", () => {
+            mocked(doMaybeLocalRoomAction).mockImplementation(
+                <T extends {}>(roomId: string, fn: (actualRoomId: string) => Promise<T>, _client?: MatrixClient) => {
+                    return fn(roomId);
+                },
+            );
+
+            mockPlatformPeg({ overrideBrowserShortcuts: jest.fn().mockReturnValue(false) });
+            const { container } = getComponent({
+                relation: {
+                    rel_type: "m.thread",
+                    event_id: "$yolo",
+                    is_falling_back: true,
+                },
+            });
+
+            addTextToComposer(container, "🎉");
+            fireEvent.keyDown(container.querySelector(".mx_SendMessageComposer")!, { key: "Enter" });
+
+            expect(mockClient.sendMessage).toHaveBeenCalledWith("myfakeroom", null, {
+                body: "test message",
+                msgtype: MsgType.Text,
+            });
+
+            expect(dis.dispatch).not.toHaveBeenCalledWith({ action: `effects.confetti` });
         });
     });
 

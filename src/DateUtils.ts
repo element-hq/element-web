@@ -175,7 +175,10 @@ function withinCurrentYear(prevDate: Date, nextDate: Date): boolean {
     return prevDate.getFullYear() === nextDate.getFullYear();
 }
 
-export function wantsDateSeparator(prevEventDate: Date | undefined, nextEventDate: Date | undefined): boolean {
+export function wantsDateSeparator(
+    prevEventDate: Date | null | undefined,
+    nextEventDate: Date | null | undefined,
+): boolean {
     if (!nextEventDate || !prevEventDate) {
         return false;
     }

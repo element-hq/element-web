@@ -1,18 +1,19 @@
 /*
-Copyright 2021 Šimon Brandner <simon.bra.ag@gmail.com>
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-*/
+ * Copyright 2021 Šimon Brandner <simon.bra.ag@gmail.com>
+ * Copyright 2023 The Matrix.org Foundation C.I.C.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 import { IContent, IEventRelation, MatrixEvent } from "matrix-js-sdk/src/models/event";
 import sanitizeHtml from "sanitize-html";
@@ -24,7 +25,6 @@ import { M_POLL_END } from "matrix-js-sdk/src/@types/polls";
 
 import { PERMITTED_URL_SCHEMES } from "../HtmlUtils";
 import { makeUserPermalink, RoomPermalinkCreator } from "./permalinks/Permalinks";
-import SettingsStore from "../settings/SettingsStore";
 import { isSelfLocation } from "./location";
 
 export function getParentEventId(ev?: MatrixEvent): string | undefined {
@@ -194,16 +194,7 @@ export function makeReplyMixIn(ev?: MatrixEvent): IEventRelation {
     };
 
     if (ev.threadRootId) {
-        if (SettingsStore.getValue("feature_threadenabled")) {
-            mixin.is_falling_back = false;
-        } else {
-            // Clients that do not offer a threading UI should behave as follows when replying, for best interaction
-            // with those that do. They should set the m.in_reply_to part as usual, and then add on
-            // "rel_type": "m.thread" and "event_id": "$thread_root", copying $thread_root from the replied-to event.
-            const relation = ev.getRelation();
-            mixin.rel_type = relation?.rel_type;
-            mixin.event_id = relation?.event_id;
-        }
+        mixin.is_falling_back = false;
     }
 
     return mixin;
@@ -220,11 +211,7 @@ export function shouldDisplayReply(event: MatrixEvent): boolean {
     }
 
     const relation = event.getRelation();
-    if (
-        SettingsStore.getValue("feature_threadenabled") &&
-        relation?.rel_type === THREAD_RELATION_TYPE.name &&
-        relation?.is_falling_back
-    ) {
+    if (relation?.rel_type === THREAD_RELATION_TYPE.name && relation?.is_falling_back) {
         return false;
     }
 

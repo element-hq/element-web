@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 - 2022 The Matrix.org Foundation C.I.C.
+ * Copyright 2020 - 2023 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,7 +52,6 @@ import { WidgetType } from "../../widgets/WidgetType";
 import { CHAT_EFFECTS } from "../../effects";
 import { containsEmoji } from "../../effects/utils";
 import dis from "../../dispatcher/dispatcher";
-import SettingsStore from "../../settings/SettingsStore";
 import { ElementWidgetCapabilities } from "./ElementWidgetCapabilities";
 import { navigateToPermalink } from "../../utils/permalinks/navigator";
 import { SdkContextClass } from "../../contexts/SDKContext";
@@ -218,7 +217,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
     public async sendEvent(
         eventType: string,
         content: IContent,
-        stateKey?: string,
+        stateKey?: string | null,
         targetRoomId?: string,
     ): Promise<ISendEventDetails> {
         const client = MatrixClientPeg.get();
@@ -243,7 +242,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
                         // For initial threads launch, chat effects are disabled
                         // see #19731
                         const isNotThread = content["m.relates_to"]?.rel_type !== THREAD_RELATION_TYPE.name;
-                        if (!SettingsStore.getValue("feature_threadenabled") || isNotThread) {
+                        if (isNotThread) {
                             dis.dispatch({ action: `effects.${effect.command}` });
                         }
                     }

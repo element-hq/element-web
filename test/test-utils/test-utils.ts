@@ -216,6 +216,15 @@ export function createTestClient(): MatrixClient {
         createMessagesRequest: jest.fn().mockResolvedValue({
             chunk: [],
         }),
+        sendEvent: jest.fn().mockImplementation((roomId, type, content) => {
+            return new MatrixEvent({
+                type,
+                sender: "@me:localhost",
+                content,
+                event_id: "$9999999999999999999999999999999999999999999",
+                room_id: roomId,
+            });
+        }),
     } as unknown as MatrixClient;
 
     client.reEmitter = new ReEmitter(client);
