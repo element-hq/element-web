@@ -3741,5 +3741,7 @@
     "Starting export process…": "開始匯出流程……",
     "Creating HTML…": "建立 HTML……",
     "Starting export…": "開始匯入……",
-    "Unable to connect to Homeserver. Retrying…": "無法連線至家伺服器。正在重試……"
+    "Unable to connect to Homeserver. Retrying…": "無法連線至家伺服器。正在重試……",
+    "Secure Backup successful": "安全備份成功",
+    "Your keys are now being backed up from this device.": "您的金鑰已從此裝置備份。"
 }
