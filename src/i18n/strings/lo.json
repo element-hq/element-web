@@ -2161,7 +2161,6 @@
     "Uploading logs": "ກຳລັງບັນທຶກການອັບໂຫຼດ",
     "Collecting logs": "ການເກັບກໍາຂໍ້ມູນບັນທຶກ",
     "Collecting app version information": "ກຳລັງເກັບກຳຂໍ້ມູນເວີຊັນແອັບ",
-    "Partial Support for Threads": "ສະຫນັບສະຫນູນບາງສ່ວນສໍາລັບກະທູ້",
     "Automatically send debug logs when key backup is not functioning": "ສົ່ງບັນທຶກການດີບັ໊ກໂດຍອັດຕະໂນມັດເມື່ອການສຳຮອງຂໍ້ມູນກະແຈບໍ່ເຮັດວຽກ",
     "Automatically send debug logs on decryption errors": "ສົ່ງບັນທຶກການດີບັ໊ກໂດຍອັດຕະໂນມັດໃນຄວາມຜິດພາດການຖອດລະຫັດ",
     "Automatically send debug logs on any error": "ສົ່ງບັນທຶກ ບັນຫາບັກ ໂດຍອັດຕະໂນມັດກ່ຽວກັບຂໍ້ຜິດພາດໃດໆ",

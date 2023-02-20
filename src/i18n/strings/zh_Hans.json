@@ -3033,7 +3033,6 @@
     "%(count)s people joined|one": "%(count)s个人已加入",
     "%(count)s people joined|other": "%(count)s个人已加入",
     "Dial": "拨号",
-    "Partial Support for Threads": "部分支持消息列",
     "Enable hardware acceleration": "启用硬件加速",
     "Automatically send debug logs when key backup is not functioning": "当密钥备份无法运作时自动发送debug日志",
     "Automatically send debug logs on decryption errors": "自动发送有关解密错误的debug日志",

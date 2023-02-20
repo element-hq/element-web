@@ -3023,7 +3023,6 @@
     "Create video room": "ビデオ通話ルームを作成",
     "Create room": "ルームを作成",
     "Threads help keep your conversations on-topic and easy to track.": "スレッド機能を使うと、会話のテーマを維持したり、会話を簡単に追跡したりすることができます。",
-    "Partial Support for Threads": "スレッド機能の部分的サポート",
     "Confirm this user's session by comparing the following with their User Settings:": "ユーザー設定画面で以下を比較し、このユーザーのセッションを承認してください：",
     "Confirm by comparing the following with the User Settings in your other session:": "他のセッションのユーザー設定で、以下を比較して承認してください：",
     "This room is dedicated to illegal or toxic content or the moderators fail to moderate illegal or toxic content.\nThis will be reported to the administrators of %(homeserver)s. The administrators will NOT be able to read the encrypted content of this room.": "不法なコンテンツの投稿が行われ、モデレーターによる適切な管理がなされていない。\nこのルームを%(homeserver)sの管理者に報告します。ただし、管理者がこのルームの暗号化されたコンテンツを読み取ることはできません。",

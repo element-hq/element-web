@@ -3179,7 +3179,6 @@
     "Confirm signing out these devices|other": "Conferma la disconnessione da questi dispositivi",
     "sends hearts": "invia cuori",
     "Sends the given message with hearts": "Invia il messaggio con cuori",
-    "Partial Support for Threads": "Supporto parziale per i messaggi in conversazioni",
     "Start messages with <code>/plain</code> to send without markdown and <code>/md</code> to send with.": "Inizia i messaggi con <code>/plain</code> per inviarli senza markdown e <code>/md</code> per inviarli con.",
     "Enable Markdown": "Attiva markdown",
     "Jump to the given date in the timeline": "Salta alla data scelta nella linea temporale",

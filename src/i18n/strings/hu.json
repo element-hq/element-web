@@ -3184,7 +3184,6 @@
     "Audio devices": "Hang eszközök",
     "sends hearts": "szívecskék küldése",
     "Sends the given message with hearts": "Az üzenet elküldése szívecskékkel",
-    "Partial Support for Threads": "Üzenetszálak részleges támogatása",
     "Start messages with <code>/plain</code> to send without markdown and <code>/md</code> to send with.": "Üzenet kezdése <code>/plain</code>-nel markdown formázás nélkül és <code>/md</code>-vel a markdown formázással való küldéshez.",
     "Enable Markdown": "Markdown engedélyezése",
     "Failed to join": "Csatlakozás sikertelen",

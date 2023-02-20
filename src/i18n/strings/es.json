@@ -3163,7 +3163,6 @@
     "Confirm signing out these devices|other": "Confirma el cierre de sesión en estos dispositivos",
     "Sends the given message with hearts": "Envía corazones junto al mensaje",
     "sends hearts": "envía corazones",
-    "Partial Support for Threads": "Compatibilidad parcial con los hilos",
     "Failed to join": "No ha sido posible unirse",
     "You do not have permission to invite people to this space.": "No tienes permiso para invitar gente a este espacio.",
     "<b>Tip:</b> Use “%(replyInThread)s” when hovering over a message.": "<b>Consejo:</b> Usa «%(replyInThread)s» mientras pasas el ratón sobre un mensaje.",
