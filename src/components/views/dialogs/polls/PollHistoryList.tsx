@@ -15,19 +15,22 @@ limitations under the License.
 */
 
 import React from "react";
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import classNames from "classnames";
+import { MatrixEvent, Poll } from "matrix-js-sdk/src/matrix";
 
-import PollListItem from "./PollListItem";
 import { _t } from "../../../../languageHandler";
-import { FilterTabGroup } from "../../elements/FilterTabGroup";
 import { PollHistoryFilter } from "./types";
+import { PollListItem } from "./PollListItem";
+import { PollListItemEnded } from "./PollListItemEnded";
+import { FilterTabGroup } from "../../elements/FilterTabGroup";
 
 type PollHistoryListProps = {
     pollStartEvents: MatrixEvent[];
+    polls: Map<string, Poll>;
     filter: PollHistoryFilter;
     onFilterChange: (filter: PollHistoryFilter) => void;
 };
-export const PollHistoryList: React.FC<PollHistoryListProps> = ({ pollStartEvents, filter, onFilterChange }) => {
+export const PollHistoryList: React.FC<PollHistoryListProps> = ({ pollStartEvents, polls, filter, onFilterChange }) => {
     return (
         <div className="mx_PollHistoryList">
             <FilterTabGroup<PollHistoryFilter>
@@ -40,10 +43,18 @@ export const PollHistoryList: React.FC<PollHistoryListProps> = ({ pollStartEvent
                 ]}
             />
             {!!pollStartEvents.length ? (
-                <ol className="mx_PollHistoryList_list">
-                    {pollStartEvents.map((pollStartEvent) => (
-                        <PollListItem key={pollStartEvent.getId()!} event={pollStartEvent} />
-                    ))}
+                <ol className={classNames("mx_PollHistoryList_list", `mx_PollHistoryList_list_${filter}`)}>
+                    {pollStartEvents.map((pollStartEvent) =>
+                        filter === "ACTIVE" ? (
+                            <PollListItem key={pollStartEvent.getId()!} event={pollStartEvent} />
+                        ) : (
+                            <PollListItemEnded
+                                key={pollStartEvent.getId()!}
+                                event={pollStartEvent}
+                                poll={polls.get(pollStartEvent.getId()!)!}
+                            />
+                        ),
+                    )}
                 </ol>
             ) : (
                 <span className="mx_PollHistoryList_noResults">

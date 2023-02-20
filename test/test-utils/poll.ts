@@ -17,7 +17,13 @@ limitations under the License.
 import { Mocked } from "jest-mock";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
-import { M_POLL_START, PollAnswer, M_POLL_KIND_DISCLOSED, M_POLL_END } from "matrix-js-sdk/src/@types/polls";
+import {
+    M_POLL_START,
+    PollAnswer,
+    M_POLL_KIND_DISCLOSED,
+    M_POLL_END,
+    M_POLL_RESPONSE,
+} from "matrix-js-sdk/src/@types/polls";
 import { M_TEXT } from "matrix-js-sdk/src/@types/extensible_events";
 import { uuid4 } from "@sentry/utils";
 
@@ -77,6 +83,30 @@ export const makePollEndEvent = (pollStartEventId: string, roomId: string, sende
         },
     });
 };
+
+export const makePollResponseEvent = (
+    pollId: string,
+    answerIds: string[],
+    sender: string,
+    roomId: string,
+    ts = 0,
+): MatrixEvent =>
+    new MatrixEvent({
+        event_id: uuid4(),
+        room_id: roomId,
+        origin_server_ts: ts,
+        type: M_POLL_RESPONSE.name,
+        sender,
+        content: {
+            "m.relates_to": {
+                rel_type: "m.reference",
+                event_id: pollId,
+            },
+            [M_POLL_RESPONSE.name]: {
+                answers: answerIds,
+            },
+        },
+    });
 
 /**
  * Creates a room with attached poll events

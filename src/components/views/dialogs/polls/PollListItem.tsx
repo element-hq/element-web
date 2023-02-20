@@ -25,7 +25,7 @@ interface Props {
     event: MatrixEvent;
 }
 
-const PollListItem: React.FC<Props> = ({ event }) => {
+export const PollListItem: React.FC<Props> = ({ event }) => {
     const pollEvent = event.unstableExtensibleEvent as unknown as PollStartEvent;
     if (!pollEvent) {
         return null;
@@ -39,5 +39,3 @@ const PollListItem: React.FC<Props> = ({ event }) => {
         </li>
     );
 };
-
-export default PollListItem;

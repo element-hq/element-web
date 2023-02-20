@@ -54,7 +54,12 @@ export const PollHistoryDialog: React.FC<PollHistoryDialogProps> = ({ roomId, ma
     return (
         <BaseDialog title={_t("Polls history")} onFinished={onFinished}>
             <div className="mx_PollHistoryDialog_content">
-                <PollHistoryList pollStartEvents={pollStartEvents} filter={filter} onFilterChange={setFilter} />
+                <PollHistoryList
+                    pollStartEvents={pollStartEvents}
+                    polls={polls}
+                    filter={filter}
+                    onFilterChange={setFilter}
+                />
             </div>
         </BaseDialog>
     );
