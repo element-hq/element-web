@@ -231,7 +231,7 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
                             <LiveDurationDropdown onChange={this.onTimeoutChange} timeout={this.state.timeout} />
                         )}
                         <AccessibleButton
-                            data-test-id="location-picker-submit-button"
+                            data-testid="location-picker-submit-button"
                             type="submit"
                             element="button"
                             kind="primary"

@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-// eslint-disable-next-line deprecate/import
-import { mount } from "enzyme";
+import { render, RenderResult } from "@testing-library/react";
 import { RoomMember } from "matrix-js-sdk/src/matrix";
 import { LocationAssetType } from "matrix-js-sdk/src/@types/location";
 
@@ -39,11 +38,11 @@ describe("<LocationViewDialog />", () => {
         mxEvent: defaultEvent,
         onFinished: jest.fn(),
     };
-    const getComponent = (props = {}) => mount(<LocationViewDialog {...defaultProps} {...props} />);
+    const getComponent = (props = {}): RenderResult => render(<LocationViewDialog {...defaultProps} {...props} />);
 
     it("renders map correctly", () => {
-        const component = getComponent();
-        expect(component.find("Map")).toMatchSnapshot();
+        const { container } = getComponent();
+        expect(container.querySelector(".mx_Map")).toMatchSnapshot();
     });
 
     it("renders marker correctly for self share", () => {
@@ -51,7 +50,7 @@ describe("<LocationViewDialog />", () => {
         const member = new RoomMember(roomId, userId);
         // @ts-ignore cheat assignment to property
         selfShareEvent.sender = member;
-        const component = getComponent({ mxEvent: selfShareEvent });
-        expect(component.find("SmartMarker").prop("roomMember")).toEqual(member);
+        const { container } = getComponent({ mxEvent: selfShareEvent });
+        expect(container.querySelector(".mx_BaseAvatar_image").getAttribute("title")).toEqual(userId);
     });
 });

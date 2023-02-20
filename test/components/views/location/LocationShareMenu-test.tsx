@@ -15,8 +15,6 @@ limitations under the License.
 */
 
 import React from "react";
-// eslint-disable-next-line deprecate/import
-import { mount, ReactWrapper } from "enzyme";
 import { mocked } from "jest-mock";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { MatrixClient } from "matrix-js-sdk/src/client";
@@ -24,6 +22,8 @@ import { RelationType } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { M_ASSET, LocationAssetType } from "matrix-js-sdk/src/@types/location";
 import { act } from "react-dom/test-utils";
+import { fireEvent, render, RenderResult } from "@testing-library/react";
+import * as maplibregl from "maplibre-gl";
 
 import LocationShareMenu from "../../../../src/components/views/location/LocationShareMenu";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
@@ -32,8 +32,6 @@ import SettingsStore from "../../../../src/settings/SettingsStore";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import { LocationShareType } from "../../../../src/components/views/location/shareLocation";
 import {
-    findByTagAndTestId,
-    findByTestId,
     flushPromisesWithFakeTimers,
     getMockClientWithEventEmitter,
     setupAsyncStoreWithClient,
@@ -99,6 +97,12 @@ describe("<LocationShareMenu />", () => {
         sender: new RoomMember("!room:server.org", userId),
     };
 
+    const mockGeolocate = new maplibregl.GeolocateControl({});
+    jest.spyOn(mockGeolocate, "on");
+    const mapOptions = { container: {} as unknown as HTMLElement, style: "" };
+    const mockMap = new maplibregl.Map(mapOptions);
+    jest.spyOn(mockMap, "on");
+
     const position = {
         coords: {
             latitude: -36.24484561954707,
@@ -116,10 +120,11 @@ describe("<LocationShareMenu />", () => {
         return store;
     };
 
-    const getComponent = (props = {}) =>
-        mount(<LocationShareMenu {...defaultProps} {...props} />, {
-            wrappingComponent: MatrixClientContext.Provider,
-            wrappingComponentProps: { value: mockClient },
+    const getComponent = (props = {}): RenderResult =>
+        render(<LocationShareMenu {...defaultProps} {...props} />, {
+            wrapper: ({ children }) => (
+                <MatrixClientContext.Provider value={mockClient}>{children}</MatrixClientContext.Provider>
+            ),
         });
 
     beforeEach(async () => {
@@ -135,74 +140,74 @@ describe("<LocationShareMenu />", () => {
         await makeOwnBeaconStore();
     });
 
-    const getShareTypeOption = (component: ReactWrapper, shareType: LocationShareType) =>
-        findByTagAndTestId(component, `share-location-option-${shareType}`, "button");
+    const getBackButton = (getByLabelText: RenderResult["getByLabelText"]) => getByLabelText("Back");
 
-    const getBackButton = (component: ReactWrapper) =>
-        findByTagAndTestId(component, "share-dialog-buttons-back", "button");
+    const getCancelButton = (getByLabelText: RenderResult["getByLabelText"]) => getByLabelText("Close");
 
-    const getCancelButton = (component: ReactWrapper) =>
-        findByTagAndTestId(component, "share-dialog-buttons-cancel", "button");
+    const setLocationGeolocate = () => {
+        // get the callback LocationShareMenu registered for geolocate
+        expect(mocked(mockGeolocate.on)).toHaveBeenCalledWith("geolocate", expect.any(Function));
+        const [, onGeolocateCallback] = mocked(mockGeolocate.on).mock.calls.find(([event]) => event === "geolocate");
 
-    const getSubmitButton = (component: ReactWrapper) =>
-        findByTagAndTestId(component, "location-picker-submit-button", "button");
-
-    const setLocation = (component: ReactWrapper) => {
         // set the location
-        const locationPickerInstance = component.find("LocationPicker").instance();
-        act(() => {
-            // @ts-ignore
-            locationPickerInstance.onGeolocate(position);
-            // make sure button gets enabled
-            component.setProps({});
-        });
+        onGeolocateCallback(position);
     };
 
-    const setShareType = (component: ReactWrapper, shareType: LocationShareType) =>
-        act(() => {
-            getShareTypeOption(component, shareType).at(0).simulate("click");
-            component.setProps({});
-        });
+    const setLocationClick = () => {
+        // get the callback LocationShareMenu registered for geolocate
+        expect(mocked(mockMap.on)).toHaveBeenCalledWith("click", expect.any(Function));
+        const [, onMapClickCallback] = mocked(mockMap.on).mock.calls.find(([event]) => event === "click");
+
+        const event = {
+            lngLat: { lng: position.coords.longitude, lat: position.coords.latitude },
+        } as unknown as maplibregl.MapMouseEvent;
+        // set the location
+        onMapClickCallback(event);
+    };
+
+    const shareTypeLabels: Record<LocationShareType, string> = {
+        [LocationShareType.Own]: "My current location",
+        [LocationShareType.Live]: "My live location",
+        [LocationShareType.Pin]: "Drop a Pin",
+    };
+    const setShareType = (getByText: RenderResult["getByText"], shareType: LocationShareType) => {
+        fireEvent.click(getByText(shareTypeLabels[shareType]));
+    };
 
     describe("when only Own share type is enabled", () => {
         beforeEach(() => enableSettings([]));
 
         it("renders own and live location options", () => {
-            const component = getComponent();
-            expect(getShareTypeOption(component, LocationShareType.Own).length).toBe(1);
-            expect(getShareTypeOption(component, LocationShareType.Live).length).toBe(1);
+            const { getByText } = getComponent();
+            expect(getByText(shareTypeLabels[LocationShareType.Own])).toBeInTheDocument();
+            expect(getByText(shareTypeLabels[LocationShareType.Live])).toBeInTheDocument();
         });
 
         it("renders back button from location picker screen", () => {
-            const component = getComponent();
-            setShareType(component, LocationShareType.Own);
+            const { getByText, getByLabelText } = getComponent();
+            setShareType(getByText, LocationShareType.Own);
 
-            expect(getBackButton(component).length).toBe(1);
+            expect(getBackButton(getByLabelText)).toBeInTheDocument();
         });
 
         it("clicking cancel button from location picker closes dialog", () => {
             const onFinished = jest.fn();
-            const component = getComponent({ onFinished });
+            const { getByLabelText } = getComponent({ onFinished });
 
-            act(() => {
-                getCancelButton(component).at(0).simulate("click");
-            });
+            fireEvent.click(getCancelButton(getByLabelText));
 
             expect(onFinished).toHaveBeenCalled();
         });
 
         it("creates static own location share event on submission", () => {
             const onFinished = jest.fn();
-            const component = getComponent({ onFinished });
+            const { getByText } = getComponent({ onFinished });
 
-            setShareType(component, LocationShareType.Own);
+            setShareType(getByText, LocationShareType.Own);
 
-            setLocation(component);
+            setLocationGeolocate();
 
-            act(() => {
-                getSubmitButton(component).at(0).simulate("click");
-                component.setProps({});
-            });
+            fireEvent.click(getByText("Share location"));
 
             expect(onFinished).toHaveBeenCalled();
             const [messageRoomId, relation, messageBody] = mockClient.sendMessage.mock.calls[0];
@@ -220,68 +225,60 @@ describe("<LocationShareMenu />", () => {
 
     describe("with pin drop share type enabled", () => {
         it("renders share type switch with own and pin drop options", () => {
-            const component = getComponent();
-            expect(component.find("LocationPicker").length).toBe(0);
+            const { getByText } = getComponent();
+            expect(document.querySelector(".mx_LocationPicker")).not.toBeInTheDocument();
 
-            expect(getShareTypeOption(component, LocationShareType.Own).length).toBe(1);
-            expect(getShareTypeOption(component, LocationShareType.Pin).length).toBe(1);
+            expect(getByText(shareTypeLabels[LocationShareType.Own])).toBeInTheDocument();
+            expect(getByText(shareTypeLabels[LocationShareType.Pin])).toBeInTheDocument();
         });
 
         it("does not render back button on share type screen", () => {
-            const component = getComponent();
-            expect(getBackButton(component).length).toBe(0);
+            const { queryByLabelText } = getComponent();
+            expect(queryByLabelText("Back")).not.toBeInTheDocument();
         });
 
         it("clicking cancel button from share type screen closes dialog", () => {
             const onFinished = jest.fn();
-            const component = getComponent({ onFinished });
+            const { getByLabelText } = getComponent({ onFinished });
 
-            act(() => {
-                getCancelButton(component).at(0).simulate("click");
-            });
+            fireEvent.click(getCancelButton(getByLabelText));
 
             expect(onFinished).toHaveBeenCalled();
         });
 
         it("selecting own location share type advances to location picker", () => {
-            const component = getComponent();
+            const { getByText } = getComponent();
 
-            setShareType(component, LocationShareType.Own);
+            setShareType(getByText, LocationShareType.Own);
 
-            expect(component.find("LocationPicker").length).toBe(1);
+            expect(document.querySelector(".mx_LocationPicker")).toBeInTheDocument();
         });
 
         it("clicking back button from location picker screen goes back to share screen", () => {
             const onFinished = jest.fn();
-            const component = getComponent({ onFinished });
+            const { getByText, getByLabelText } = getComponent({ onFinished });
 
             // advance to location picker
-            setShareType(component, LocationShareType.Own);
+            setShareType(getByText, LocationShareType.Own);
 
-            expect(component.find("LocationPicker").length).toBe(1);
+            expect(document.querySelector(".mx_LocationPicker")).toBeInTheDocument();
 
-            act(() => {
-                getBackButton(component).at(0).simulate("click");
-                component.setProps({});
-            });
+            fireEvent.click(getBackButton(getByLabelText));
 
             // back to share type
-            expect(component.find("ShareType").length).toBe(1);
+            expect(getByText("What location type do you want to share?")).toBeInTheDocument();
         });
 
         it("creates pin drop location share event on submission", () => {
             const onFinished = jest.fn();
-            const component = getComponent({ onFinished });
+            const { getByText } = getComponent({ onFinished });
 
             // advance to location picker
-            setShareType(component, LocationShareType.Pin);
+            setShareType(getByText, LocationShareType.Pin);
 
-            setLocation(component);
+            setLocationClick();
 
-            act(() => {
-                getSubmitButton(component).at(0).simulate("click");
-                component.setProps({});
-            });
+            fireEvent.click(getByText("Share location"));
 
             expect(onFinished).toHaveBeenCalled();
             const [messageRoomId, relation, messageBody] = mockClient.sendMessage.mock.calls[0];
@@ -300,53 +297,41 @@ describe("<LocationShareMenu />", () => {
     describe("with live location disabled", () => {
         beforeEach(() => enableSettings([]));
 
-        const getToggle = (component: ReactWrapper) =>
-            findByTestId(component, "enable-live-share-toggle").find('[role="switch"]').at(0);
-        const getSubmitEnableButton = (component: ReactWrapper) =>
-            findByTestId(component, "enable-live-share-submit").at(0);
-
         it("goes to labs flag screen after live options is clicked", () => {
             const onFinished = jest.fn();
-            const component = getComponent({ onFinished });
+            const { getByText, getByTestId } = getComponent({ onFinished });
 
-            setShareType(component, LocationShareType.Live);
+            setShareType(getByText, LocationShareType.Live);
 
-            expect(findByTestId(component, "location-picker-enable-live-share")).toMatchSnapshot();
+            expect(getByTestId("location-picker-enable-live-share")).toMatchSnapshot();
         });
 
         it("disables OK button when labs flag is not enabled", () => {
-            const component = getComponent();
+            const { getByText } = getComponent();
 
-            setShareType(component, LocationShareType.Live);
+            setShareType(getByText, LocationShareType.Live);
 
-            expect(getSubmitEnableButton(component).props()["disabled"]).toBeTruthy();
+            expect(getByText("OK").hasAttribute("disabled")).toBeTruthy();
         });
 
         it("enables OK button when labs flag is toggled to enabled", () => {
-            const component = getComponent();
+            const { getByText, getByLabelText } = getComponent();
 
-            setShareType(component, LocationShareType.Live);
+            setShareType(getByText, LocationShareType.Live);
 
-            act(() => {
-                getToggle(component).simulate("click");
-                component.setProps({});
-            });
-            expect(getSubmitEnableButton(component).props()["disabled"]).toBeFalsy();
+            fireEvent.click(getByLabelText("Enable live location sharing"));
+
+            expect(getByText("OK").hasAttribute("disabled")).toBeFalsy();
         });
 
         it("enables live share setting on ok button submit", () => {
-            const component = getComponent();
+            const { getByText, getByLabelText } = getComponent();
 
-            setShareType(component, LocationShareType.Live);
+            setShareType(getByText, LocationShareType.Live);
 
-            act(() => {
-                getToggle(component).simulate("click");
-                component.setProps({});
-            });
+            fireEvent.click(getByLabelText("Enable live location sharing"));
 
-            act(() => {
-                getSubmitEnableButton(component).simulate("click");
-            });
+            fireEvent.click(getByText("OK"));
 
             expect(SettingsStore.setValue).toHaveBeenCalledWith(
                 "feature_location_share_live",
@@ -365,12 +350,12 @@ describe("<LocationShareMenu />", () => {
                 }, 1000);
             });
             mocked(SettingsStore.getValue).mockReturnValue(false);
-            const component = getComponent();
+            const { getByText, getByLabelText } = getComponent();
 
-            setShareType(component, LocationShareType.Live);
+            setShareType(getByText, LocationShareType.Live);
 
             // we're on enable live share screen
-            expect(findByTestId(component, "location-picker-enable-live-share").length).toBeTruthy();
+            expect(getByLabelText("Enable live location sharing")).toBeInTheDocument();
 
             act(() => {
                 mocked(SettingsStore.getValue).mockReturnValue(true);
@@ -378,10 +363,8 @@ describe("<LocationShareMenu />", () => {
                 jest.runAllTimers();
             });
 
-            component.setProps({});
-
             // advanced to location picker
-            expect(component.find("LocationPicker").length).toBeTruthy();
+            expect(document.querySelector(".mx_LocationPicker")).toBeInTheDocument();
         });
     });
 
@@ -393,23 +376,20 @@ describe("<LocationShareMenu />", () => {
                 rel_type: RelationType.Thread,
                 event_id: "12345",
             };
-            const component = getComponent({ relation });
+            const { queryByText } = getComponent({ relation });
 
-            expect(getShareTypeOption(component, LocationShareType.Live).length).toBeFalsy();
+            expect(queryByText(shareTypeLabels[LocationShareType.Live])).not.toBeInTheDocument();
         });
 
         it("creates beacon info event on submission", async () => {
             const onFinished = jest.fn();
-            const component = getComponent({ onFinished });
+            const { getByText } = getComponent({ onFinished });
 
             // advance to location picker
-            setShareType(component, LocationShareType.Live);
-            setLocation(component);
+            setShareType(getByText, LocationShareType.Live);
+            setLocationGeolocate();
 
-            act(() => {
-                getSubmitButton(component).at(0).simulate("click");
-                component.setProps({});
-            });
+            fireEvent.click(getByText("Share location"));
 
             // flush stopping existing beacons promises
             await flushPromisesWithFakeTimers();
@@ -435,16 +415,13 @@ describe("<LocationShareMenu />", () => {
             const logSpy = jest.spyOn(logger, "error").mockReturnValue(undefined);
             const error = new Error("oh no");
             mockClient.unstable_createLiveBeacon.mockRejectedValue(error);
-            const component = getComponent();
+            const { getByText } = getComponent();
 
             // advance to location picker
-            setShareType(component, LocationShareType.Live);
-            setLocation(component);
+            setShareType(getByText, LocationShareType.Live);
+            setLocationGeolocate();
 
-            act(() => {
-                getSubmitButton(component).at(0).simulate("click");
-                component.setProps({});
-            });
+            fireEvent.click(getByText("Share location"));
 
             await flushPromisesWithFakeTimers();
             await flushPromisesWithFakeTimers();
@@ -467,16 +444,13 @@ describe("<LocationShareMenu />", () => {
             const logSpy = jest.spyOn(logger, "error").mockReturnValue(undefined);
             const error = { errcode: "M_FORBIDDEN" } as unknown as Error;
             mockClient.unstable_createLiveBeacon.mockRejectedValue(error);
-            const component = getComponent();
+            const { getByText } = getComponent();
 
             // advance to location picker
-            setShareType(component, LocationShareType.Live);
-            setLocation(component);
+            setShareType(getByText, LocationShareType.Live);
+            setLocationGeolocate();
 
-            act(() => {
-                getSubmitButton(component).at(0).simulate("click");
-                component.setProps({});
-            });
+            fireEvent.click(getByText("Share location"));
 
             await flushPromisesWithFakeTimers();
             await flushPromisesWithFakeTimers();

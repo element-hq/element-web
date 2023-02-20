@@ -4,7 +4,7 @@ exports[`<MapError /> applies class when isMinimised is truthy 1`] = `
 <div>
   <div
     class="mx_MapError test mx_MapError_isMinimised"
-    data-test-id="map-rendering-error"
+    data-testid="map-rendering-error"
   >
     <div
       class="mx_MapError_icon"
@@ -34,7 +34,7 @@ exports[`<MapError /> renders correctly for MapStyleUrlNotConfigured 1`] = `
 <div>
   <div
     class="mx_MapError test"
-    data-test-id="map-rendering-error"
+    data-testid="map-rendering-error"
   >
     <div
       class="mx_MapError_icon"
@@ -64,7 +64,7 @@ exports[`<MapError /> renders correctly for MapStyleUrlNotReachable 1`] = `
 <div>
   <div
     class="mx_MapError test"
-    data-test-id="map-rendering-error"
+    data-testid="map-rendering-error"
   >
     <div
       class="mx_MapError_icon"

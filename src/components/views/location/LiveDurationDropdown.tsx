@@ -62,7 +62,7 @@ const LiveDurationDropdown: React.FC<Props> = ({ timeout, onChange }) => {
     return (
         <Dropdown
             id="live-duration"
-            data-test-id="live-duration-dropdown"
+            data-testid="live-duration-dropdown"
             label={getLabel(timeout)}
             value={timeout.toString()}
             onOptionChange={onOptionChange}

@@ -27,7 +27,7 @@ describe("Location sharing", () => {
     };
 
     const submitShareLocation = (): void => {
-        cy.get('[data-test-id="location-picker-submit-button"]').click();
+        cy.get('[data-testid="location-picker-submit-button"]').click();
     };
 
     beforeEach(() => {

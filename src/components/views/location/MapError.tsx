@@ -33,7 +33,7 @@ export interface MapErrorProps {
 
 export const MapError: React.FC<MapErrorProps> = ({ error, isMinimised, className, onFinished, onClick }) => (
     <div
-        data-test-id="map-rendering-error"
+        data-testid="map-rendering-error"
         className={classNames("mx_MapError", className, { mx_MapError_isMinimised: isMinimised })}
         onClick={onClick}
     >
