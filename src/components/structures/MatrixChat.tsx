@@ -1149,8 +1149,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     <span className="warning" key="last_admin_warning">
                         { ' '/* Whitespace, otherwise the sentences get smashed together */ }
                         { _t("You are the sole person with the highest role in this room. " +
-                        "If you leave, the room could become unmoderable. Consider giving " +
-                        "another user your role.") }
+                        "If you leave, the room might not be able to be moderated anymore. " +
+                        "Consider giving another user your role.") }
                     </span>
                 ));
             }
