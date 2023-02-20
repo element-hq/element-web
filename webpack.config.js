@@ -676,6 +676,9 @@ module.exports = (env, argv) => {
             filename: "bundles/[hash]/[name].js",
             chunkFilename: "bundles/[hash]/[name].js",
             webassemblyModuleFilename: "bundles/[hash]/[modulehash].wasm",
+
+            // Avoid ERR_OSSL_EVP_UNSUPPORTED
+            hashFunction: "sha256",
         },
 
         // configuration for the webpack-dev-server
