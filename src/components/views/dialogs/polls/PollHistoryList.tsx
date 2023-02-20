@@ -19,18 +19,37 @@ import classNames from "classnames";
 import { MatrixEvent, Poll } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../../languageHandler";
+import { FilterTabGroup } from "../../elements/FilterTabGroup";
+import InlineSpinner from "../../elements/InlineSpinner";
 import { PollHistoryFilter } from "./types";
 import { PollListItem } from "./PollListItem";
 import { PollListItemEnded } from "./PollListItemEnded";
-import { FilterTabGroup } from "../../elements/FilterTabGroup";
+
+const LoadingPolls: React.FC<{ noResultsYet?: boolean }> = ({ noResultsYet }) => (
+    <div
+        className={classNames("mx_PollHistoryList_loading", {
+            mx_PollHistoryList_noResultsYet: noResultsYet,
+        })}
+    >
+        <InlineSpinner />
+        {_t("Loading polls")}
+    </div>
+);
 
 type PollHistoryListProps = {
     pollStartEvents: MatrixEvent[];
     polls: Map<string, Poll>;
     filter: PollHistoryFilter;
     onFilterChange: (filter: PollHistoryFilter) => void;
+    isLoading?: boolean;
 };
-export const PollHistoryList: React.FC<PollHistoryListProps> = ({ pollStartEvents, polls, filter, onFilterChange }) => {
+export const PollHistoryList: React.FC<PollHistoryListProps> = ({
+    pollStartEvents,
+    polls,
+    filter,
+    isLoading,
+    onFilterChange,
+}) => {
     return (
         <div className="mx_PollHistoryList">
             <FilterTabGroup<PollHistoryFilter>
@@ -42,7 +61,7 @@ export const PollHistoryList: React.FC<PollHistoryListProps> = ({ pollStartEvent
                     { id: "ENDED", label: "Past polls" },
                 ]}
             />
-            {!!pollStartEvents.length ? (
+            {!!pollStartEvents.length && (
                 <ol className={classNames("mx_PollHistoryList_list", `mx_PollHistoryList_list_${filter}`)}>
                     {pollStartEvents.map((pollStartEvent) =>
                         filter === "ACTIVE" ? (
@@ -55,14 +74,17 @@ export const PollHistoryList: React.FC<PollHistoryListProps> = ({ pollStartEvent
                             />
                         ),
                     )}
+                    {isLoading && <LoadingPolls />}
                 </ol>
-            ) : (
+            )}
+            {!pollStartEvents.length && !isLoading && (
                 <span className="mx_PollHistoryList_noResults">
                     {filter === "ACTIVE"
                         ? _t("There are no active polls in this room")
                         : _t("There are no past polls in this room")}
                 </span>
             )}
+            {!pollStartEvents.length && isLoading && <LoadingPolls noResultsYet />}
         </div>
     );
 };

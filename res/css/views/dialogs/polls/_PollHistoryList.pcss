@@ -46,3 +46,14 @@ limitations under the License.
     justify-content: center;
     color: $secondary-content;
 }
+
+.mx_PollHistoryList_loading {
+    color: $secondary-content;
+    text-align: center;
+
+    // center in all free space
+    // when there are no results
+    &.mx_PollHistoryList_noResultsYet {
+        margin: auto auto;
+    }
+}

@@ -3131,6 +3131,7 @@
     "Not a valid Security Key": "Not a valid Security Key",
     "Access your secure message history and set up secure messaging by entering your Security Key.": "Access your secure message history and set up secure messaging by entering your Security Key.",
     "If you've forgotten your Security Key you can <button>set up new recovery options</button>": "If you've forgotten your Security Key you can <button>set up new recovery options</button>",
+    "Loading polls": "Loading polls",
     "There are no active polls in this room": "There are no active polls in this room",
     "There are no past polls in this room": "There are no past polls in this room",
     "Send custom account data event": "Send custom account data event",
