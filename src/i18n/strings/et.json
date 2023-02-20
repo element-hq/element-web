@@ -3734,5 +3734,6 @@
     "Starting export…": "Alustame eksportimist…",
     "Unable to connect to Homeserver. Retrying…": "Ei saa ühendust koduserveriga. Proovin uuesti…",
     "Secure Backup successful": "Krüptovõtmete varundus õnnestus",
-    "Your keys are now being backed up from this device.": "Sinu krüptovõtmed on parasjagu sellest seadmest varundamisel."
+    "Your keys are now being backed up from this device.": "Sinu krüptovõtmed on parasjagu sellest seadmest varundamisel.",
+    "Loading polls": "Laadin küsitlusi"
 }
