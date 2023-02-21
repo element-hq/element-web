@@ -1,3 +1,31 @@
+Changes in [1.11.24-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.11.24-rc.1) (2023-02-21)
+===========================================================================================================
+
+## ✨ Features
+ * Poll history: fetch last 30 days of polls ([\#10157](https://github.com/matrix-org/matrix-react-sdk/pull/10157)). Contributed by @kerryarchibald.
+ * Poll history - ended polls list items ([\#10119](https://github.com/matrix-org/matrix-react-sdk/pull/10119)). Contributed by @kerryarchibald.
+ * Remove threads labs flag and the ability to disable threads ([\#9878](https://github.com/matrix-org/matrix-react-sdk/pull/9878)). Fixes #24365.
+ * Show a success dialog after setting up the key backup ([\#10177](https://github.com/matrix-org/matrix-react-sdk/pull/10177)). Fixes #24487.
+ * Release Sign in with QR out of labs ([\#10182](https://github.com/matrix-org/matrix-react-sdk/pull/10182)). Contributed by @hughns.
+ * Release Sign in with QR out of labs ([\#10066](https://github.com/matrix-org/matrix-react-sdk/pull/10066)). Contributed by @hughns.
+ * Hide indent button in rte ([\#10149](https://github.com/matrix-org/matrix-react-sdk/pull/10149)). Contributed by @alunturner.
+ * Add option to find own location in map views ([\#10083](https://github.com/matrix-org/matrix-react-sdk/pull/10083)).
+ * Render poll end events in timeline ([\#10027](https://github.com/matrix-org/matrix-react-sdk/pull/10027)). Contributed by @kerryarchibald.
+
+## 🐛 Bug Fixes
+ * Fix accidentally inverted condition for room ordering ([\#10178](https://github.com/matrix-org/matrix-react-sdk/pull/10178)). Fixes #24527. Contributed by @justjanne.
+ * Re-focus the composer on dialogue quit ([\#10007](https://github.com/matrix-org/matrix-react-sdk/pull/10007)). Fixes #22832. Contributed by @Ashu999.
+ * Try to resolve emails before creating a DM ([\#10164](https://github.com/matrix-org/matrix-react-sdk/pull/10164)).
+ * Disable poll response loading test ([\#10168](https://github.com/matrix-org/matrix-react-sdk/pull/10168)). Contributed by @justjanne.
+ * Fix email lookup in invite dialog ([\#10150](https://github.com/matrix-org/matrix-react-sdk/pull/10150)). Fixes #23353.
+ * Remove duplicate white space characters from translation keys ([\#10152](https://github.com/matrix-org/matrix-react-sdk/pull/10152)). Contributed by @luixxiul.
+ * Fix the caption of new sessions manager on Labs settings page for localization ([\#10143](https://github.com/matrix-org/matrix-react-sdk/pull/10143)). Contributed by @luixxiul.
+ * Prevent start another DM with a user if one already exists ([\#10127](https://github.com/matrix-org/matrix-react-sdk/pull/10127)). Fixes #23138.
+ * Remove white space characters before the horizontal ellipsis ([\#10130](https://github.com/matrix-org/matrix-react-sdk/pull/10130)). Contributed by @luixxiul.
+ * Fix Selectable Text on 'Delete All' and 'Retry All' Buttons ([\#10128](https://github.com/matrix-org/matrix-react-sdk/pull/10128)). Fixes #23232. Contributed by @akshattchhabra.
+ * Correctly Identify emoticons ([\#10108](https://github.com/matrix-org/matrix-react-sdk/pull/10108)). Fixes #19472. Contributed by @adarsh-sgh.
+ * Remove a redundant white space ([\#10129](https://github.com/matrix-org/matrix-react-sdk/pull/10129)). Contributed by @luixxiul.
+
 Changes in [1.11.23](https://github.com/vector-im/element-web/releases/tag/v1.11.23) (2023-02-14)
 =================================================================================================
 
