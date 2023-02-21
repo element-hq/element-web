@@ -3734,5 +3734,6 @@
     "Starting export…": "Démarrage de l’export…",
     "Unable to connect to Homeserver. Retrying…": "Impossible de se connecter au serveur d’accueil. Reconnexion…",
     "Secure Backup successful": "Sauvegarde sécurisée réalisée avec succès",
-    "Your keys are now being backed up from this device.": "Vos clés sont maintenant sauvegardées depuis cet appareil."
+    "Your keys are now being backed up from this device.": "Vos clés sont maintenant sauvegardées depuis cet appareil.",
+    "Loading polls": "Chargement des sondages"
 }
