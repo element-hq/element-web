@@ -26,5 +26,7 @@
     "Powered by Matrix": "מופעל על ידי מטריקס",
     "The message from the parser is: %(message)s": "ההודעה מהמנתח היא: %(message)s",
     "Use %(brand)s on mobile": "השתמש ב-%(brand)s במכשיר הנייד",
-    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "צ'אט מבוזר ומוצפן &amp; מופעל בשיתוף פעולה ע\"י $matrixLogo"
+    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "צ'אט מבוזר ומוצפן &amp; מופעל בשיתוף פעולה ע\"י $matrixLogo",
+    "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s: %(browserName)s עַל %(osName)s",
+    "%(brand)s Desktop: %(platformName)s": "%(brand)s שולחן עבודה: %(platformName)s"
 }
