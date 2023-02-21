@@ -6,7 +6,5 @@ concurrency: ${{ github.workflow }}-${{ github.event.pull_request.head.ref }}
 jobs:
     action:
         uses: matrix-org/matrix-js-sdk/.github/workflows/pull_request.yaml@develop
-        with:
-            labels: "T-Defect,T-Enhancement,T-Task"
         secrets:
             ELEMENT_BOT_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
