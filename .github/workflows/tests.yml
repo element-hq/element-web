@@ -7,6 +7,10 @@ on:
         types: [upstream-sdk-notify]
     workflow_call:
         inputs:
+            disable_coverage:
+                type: boolean
+                required: false
+                description: "Specify true to skip generating and uploading coverage for tests"
             matrix-js-sdk-sha:
                 type: string
                 required: false
