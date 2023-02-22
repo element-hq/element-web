@@ -1,1 +1,4 @@
-* @vector-im/element-web
+*                         @vector-im/element-web
+/.github/workflows/**     @vector-im/element-web-app-team
+/package.json             @vector-im/element-web-app-team
+/yarn.lock                @vector-im/element-web-app-team

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Runs package.sh, passing DIST_VERSION determined by git
 

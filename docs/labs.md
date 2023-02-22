@@ -4,6 +4,9 @@ If Labs is enabled in the [Element config](config.md), you can enable some of th
 to `Settings->Labs`. This list is non-exhaustive and subject to change, chat in
 [#element-web:matrix.org](https://matrix.to/#/#element-web:matrix.org) for more information.
 
+If a labs features gets more stable, it _may_ be promoted to a beta feature
+(see [Betas](https://github.com/vector-im/element-web/blob/develop/docs/betas.md)).
+
 **Be warned! Labs features are not finalised, they may be fragile, they may change, they may be
 dropped. Ask in the room if you are unclear about any details here.**
 
@@ -34,18 +37,6 @@ date from the calendar.
 
 Also adds the `/jumptodate 2022-01-31` slash command.
 
-## Custom status (`feature_custom_status`)
-
-An experimental approach for supporting custom status messages across DMs. To set a status, click on
-your avatar next to the message composer.
-
-## Custom tags (`feature_custom_tags`)
-
-An experimental approach for dealing with custom tags. Custom tags will appear in the bottom portion
-of the community filter panel.
-
-Setting custom tags is not supported by Element.
-
 ## Render simple counters in room header (`feature_state_counters`)
 
 Allows rendering of labelled counters above the message list.
@@ -68,10 +59,6 @@ Once enabled, send a custom state event to a room to set values:
 ```
 
 That's it. Now should see your new counter under the header.
-
-## Multiple integration managers (`feature_many_integration_managers`)
-
-Exposes a way to access all the integration managers known to Element. This is an implementation of [MSC1957](https://github.com/matrix-org/matrix-doc/pull/1957).
 
 ## New ways to ignore people (`feature_mjolnir`)
 
@@ -115,29 +102,14 @@ For some sample themes, check out [aaronraimist/element-themes](https://github.c
 
 ## Message preview tweaks
 
-To enable message previews for reactions in all rooms, enable `feature_roomlist_preview_reactions_all`.
-To enable message previews for reactions in DMs, enable `feature_roomlist_preview_reactions_dms`, ignored when it is enabled for all rooms.
+To enable message previews in the left panel for reactions in all rooms, enable `feature_roomlist_preview_reactions_all`.
 
-## Communities v2 prototyping (`feature_communities_v2_prototypes`) [In Development]
-
-**This is a highly experimental implementation for parts of the communities v2 experience.** It does not
-represent what communities v2 will look/feel like and can/will change without notice. Due to the early
-stages this feature is in and the requirement for a compatible homeserver, we will not be accepting issues
-or feedback for this functionality at this time.
+To enable message previews for reactions in DMs only, enable `feature_roomlist_preview_reactions_dms`. This is ignored when it is enabled for all rooms.
 
 ## Dehydrated devices (`feature_dehydration`)
 
 Allows users to receive encrypted messages by creating a device that is stored
 encrypted on the server, as described in [MSC2697](https://github.com/matrix-org/matrix-doc/pull/2697).
-
-## Do not disturb (`feature_dnd`)
-
-Enables UI for turning on "do not disturb" mode for the current device. When DND mode is engaged, popups
-and notification noises are suppressed. Not perfect, but can help reduce noise.
-
-## Hidden read receipts (`feature_hidden_read_receipts`)
-
-Enables sending hidden read receipts as per [MSC2285](https://github.com/matrix-org/matrix-doc/pull/2285)
 
 ## Breadcrumbs v2 (`feature_breadcrumbs_v2`)
 
@@ -150,7 +122,7 @@ Switches to a new room search experience.
 
 ## Extensible events rendering (`feature_extensible_events`) [In Development]
 
-*Intended for developer use only at the moment.*
+_Intended for developer use only at the moment._
 
 Extensible Events are a [new event format](https://github.com/matrix-org/matrix-doc/pull/1767) which
 supports graceful fallback in unknown event types. Instead of rendering nothing or a blank space, events
@@ -173,10 +145,45 @@ If no right panel state is known for the room or it was closed on the last room
 visit, it will default to the room member list. Otherwise, the saved card last
 used in that room is shown.
 
-## Show current profile of users on historical messages (`feature_use_only_current_profiles`)
+## Live location sharing (`feature_location_share_live`) [In Development]
 
-An experimental flag to determine how the app would behave if a user's current display
-name and avatar (profile) were shown on historical messages instead of the profile details
-at the time when the message was sent.
+Enables sharing your current location to the timeline, with live updates.
 
-When enabled, historical messages will use the current profile for the sender.
+## Video rooms (`feature_video_rooms`)
+
+Enables support for creating and joining video rooms, which are persistent video chats that users can jump in and out of.
+
+## Element Call video rooms (`feature_element_call_video_rooms`) [In Development]
+
+Enables support for video rooms that use Element Call rather than Jitsi, and causes the 'New video room' option to create Element Call video rooms rather than Jitsi ones.
+
+This flag will not have any effect unless `feature_video_rooms` is also enabled.
+
+## New group call experience (`feature_group_calls`) [In Development]
+
+This feature allows users to place and join native [MSC3401](https://github.com/matrix-org/matrix-spec-proposals/pull/3401) group calls in compatible rooms, using Element Call.
+
+If you're enabling this at the deployment level, you may also want to reference the docs for the `element_call` config section.
+
+## Rich text in room topics (`feature_html_topic`) [In Development]
+
+Enables rendering of MD / HTML in room topics.
+
+## Exploring public spaces (`feature_exploring_public_spaces`)
+
+Enables exploring public spaces in the new search dialog. Requires the server to
+have [MSC3827](https://github.com/matrix-org/matrix-spec-proposals/pull/3827) enabled.
+
+## Favourite Messages (`feature_favourite_messages`) [In Development]
+
+Enables users to bookmark a message or content for a later reference.
+
+## Sign in another device by showing a QR code (`feature_qr_signin_reciprocate_show`)
+
+Add capability to the session/device manager screens to generate a QR code to sign in another device + set up E2EE. This requires the homeserver to have support for [MSC3882](https://github.com/matrix-org/matrix-spec-proposals/pull/3882) and [MSC3886](https://github.com/matrix-org/matrix-spec-proposals/pull/3886) enabled.
+
+## Use the Rust cryptography implementation (`feature_rust_crypto`) [In Development]
+
+Configures Element to use a new cryptography implementation based on the [matrix-rust-sdk](https://github.com/matrix-org/matrix-rust-sdk).
+
+This setting is (currently) _sticky_ to a user's session: it only takes effect when the user logs in to a new session. Likewise, even after disabling the setting in `config.json`, the Rust implemention will remain in use until users log out.

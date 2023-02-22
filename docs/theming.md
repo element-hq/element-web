@@ -1,31 +1,29 @@
-Theming Element
-============
+# Theming Element
 
 Themes are a very basic way of providing simple alternative look & feels to the
 Element app via CSS & custom imagery.
 
-They are *NOT* co be confused with 'skins', which describe apps which sit on top
+They are _NOT_ co be confused with 'skins', which describe apps which sit on top
 of matrix-react-sdk - e.g. in theory Element itself is a react-sdk skin.
-As of Jan 2017, skins are not fully supported; Element is the only available skin.
+As of March 2022, skins are not fully supported; Element is the only available skin.
 
 To define a theme for Element:
 
- 1. Pick a name, e.g. `teal`. at time of writing we have `light` and `dark`.
- 2. Fork `src/skins/vector/css/themes/dark.scss` to be `teal.scss`
- 3. Fork `src/skins/vector/css/themes/_base.scss` to be `_teal.scss`
- 4. Override variables in `_teal.scss` as desired. You may wish to delete ones
-    which don't differ from `_base.scss`, to make it clear which are being
-    overridden. If every single colour is being changed (as per `_dark.scss`)
+1.  Pick a name, e.g. `teal`. at time of writing we have `light` and `dark`.
+2.  Fork `src/skins/vector/css/themes/dark.pcss` to be `teal.pcss`
+3.  Fork `src/skins/vector/css/themes/_base.pcss` to be `_teal.pcss`
+4.  Override variables in `_teal.pcss` as desired. You may wish to delete ones
+    which don't differ from `_base.pcss`, to make it clear which are being
+    overridden. If every single colour is being changed (as per `_dark.pcss`)
     then you might as well keep them all.
- 5. Add the theme to the list of entrypoints in webpack.config.js
- 6. Add the theme to the list of themes in matrix-react-sdk's UserSettings.js
- 7. Sit back and admire your handywork.
+5.  Add the theme to the list of entrypoints in webpack.config.js
+6.  Add the theme to the list of themes in matrix-react-sdk's UserSettings.js
+7.  Sit back and admire your handywork.
 
 In future, the assets for a theme will probably be gathered together into a
 single directory tree.
 
-Custom Themes
-=============
+# Custom Themes
 
 Themes derived from the built in themes may also be defined in settings.
 
@@ -36,7 +34,7 @@ default theme, you would use `default_theme: "custom-Electric Blue"`.
 eg. in config.json:
 
 ```
-"settingDefaults": {
+"setting_defaults": {
         "custom_themes": [
             {
                 "name": "Electric Blue",

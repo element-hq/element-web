@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Converts an svg logo into the various image resources required by
 # the various platforms deployments.
@@ -12,8 +12,7 @@ then
     exit
 fi
 
-set -e
-set -x
+set -ex
 
 tmpdir=`mktemp -d 2>/dev/null || mktemp -d -t 'icontmp'`
 

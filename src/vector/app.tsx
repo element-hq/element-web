@@ -18,80 +18,33 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import * as sdk from 'matrix-react-sdk';
-import PlatformPeg from 'matrix-react-sdk/src/PlatformPeg';
-import { _td, newTranslatableError } from 'matrix-react-sdk/src/languageHandler';
-import AutoDiscoveryUtils from 'matrix-react-sdk/src/utils/AutoDiscoveryUtils';
+// To ensure we load the browser-matrix version first
+import "matrix-js-sdk/src/browser-index";
+
+import React, { ReactElement } from "react";
+import PlatformPeg from "matrix-react-sdk/src/PlatformPeg";
+import { _td, newTranslatableError } from "matrix-react-sdk/src/languageHandler";
+import AutoDiscoveryUtils from "matrix-react-sdk/src/utils/AutoDiscoveryUtils";
 import { AutoDiscovery } from "matrix-js-sdk/src/autodiscovery";
 import * as Lifecycle from "matrix-react-sdk/src/Lifecycle";
 import SdkConfig, { parseSsoRedirectOptions } from "matrix-react-sdk/src/SdkConfig";
+import { IConfigOptions } from "matrix-react-sdk/src/IConfigOptions";
 import { logger } from "matrix-js-sdk/src/logger";
 import { createClient } from "matrix-js-sdk/src/matrix";
+import { SnakedObject } from "matrix-react-sdk/src/utils/SnakedObject";
+import MatrixChat from "matrix-react-sdk/src/components/structures/MatrixChat";
 
-import type MatrixChatType from "matrix-react-sdk/src/components/structures/MatrixChat";
-import { parseQs, parseQsFromFragment } from './url_utils';
+import { parseQs } from "./url_utils";
 import VectorBasePlatform from "./platform/VectorBasePlatform";
+import { getScreenFromLocation, init as initRouting, onNewScreen } from "./routing";
 
 // add React and ReactPerf to the global namespace, to make them easier to access via the console
 // this incidentally means we can forget our React imports in JSX files without penalty.
 window.React = React;
 
-let lastLocationHashSet: string = null;
-
 logger.log(`Application is running in ${process.env.NODE_ENV} mode`);
 
 window.matrixLogger = logger;
-
-// Parse the given window.location and return parameters that can be used when calling
-// MatrixChat.showScreen(screen, params)
-function getScreenFromLocation(location: Location) {
-    const fragparts = parseQsFromFragment(location);
-    return {
-        screen: fragparts.location.substring(1),
-        params: fragparts.params,
-    };
-}
-
-// Here, we do some crude URL analysis to allow
-// deep-linking.
-function routeUrl(location: Location) {
-    if (!window.matrixChat) return;
-
-    logger.log("Routing URL ", location.href);
-    const s = getScreenFromLocation(location);
-    (window.matrixChat as MatrixChatType).showScreen(s.screen, s.params);
-}
-
-function onHashChange(ev: HashChangeEvent) {
-    if (decodeURIComponent(window.location.hash) === lastLocationHashSet) {
-        // we just set this: no need to route it!
-        return;
-    }
-    routeUrl(window.location);
-}
-
-// This will be called whenever the SDK changes screens,
-// so a web page can update the URL bar appropriately.
-function onNewScreen(screen: string, replaceLast = false) {
-    logger.log("newscreen " + screen);
-    const hash = '#/' + screen;
-    lastLocationHashSet = hash;
-
-    // if the new hash is a substring of the old one then we are stripping fields e.g `via` so replace history
-    if (screen.startsWith("room/") &&
-        window.location.hash.includes("/$") === hash.includes("/$") && // only if both did or didn't contain event link
-        window.location.hash.startsWith(hash)
-    ) {
-        replaceLast = true;
-    }
-
-    if (replaceLast) {
-        window.location.replace(hash);
-    } else {
-        window.location.assign(hash);
-    }
-}
 
 // We use this to work out what URL the SDK should
 // pass through when registering to allow the user to
@@ -102,33 +55,28 @@ function onNewScreen(screen: string, replaceLast = false) {
 // If we're in electron, we should never pass through a file:// URL otherwise
 // the identity server will try to 302 the browser to it, which breaks horribly.
 // so in that instance, hardcode to use app.element.io for now instead.
-function makeRegistrationUrl(params: object) {
+function makeRegistrationUrl(params: object): string {
     let url;
     if (window.location.protocol === "vector:") {
-        url = 'https://app.element.io/#/register';
+        url = "https://app.element.io/#/register";
     } else {
-        url = (
-            window.location.protocol + '//' +
-            window.location.host +
-            window.location.pathname +
-            '#/register'
-        );
+        url = window.location.protocol + "//" + window.location.host + window.location.pathname + "#/register";
     }
 
     const keys = Object.keys(params);
     for (let i = 0; i < keys.length; ++i) {
         if (i === 0) {
-            url += '?';
+            url += "?";
         } else {
-            url += '&';
+            url += "&";
         }
         const k = keys[i];
-        url += k + '=' + encodeURIComponent(params[k]);
+        url += k + "=" + encodeURIComponent(params[k]);
     }
     return url;
 }
 
-function onTokenLoginCompleted() {
+function onTokenLoginCompleted(): void {
     // if we did a token login, we're now left with the token, hs and is
     // url as query params in the url; a little nasty but let's redirect to
     // clear them.
@@ -140,20 +88,20 @@ function onTokenLoginCompleted() {
     window.history.replaceState(null, "", url.href);
 }
 
-export async function loadApp(fragParams: {}) {
-    window.addEventListener('hashchange', onHashChange);
-
+export async function loadApp(fragParams: {}): Promise<ReactElement> {
+    initRouting();
     const platform = PlatformPeg.get();
 
     const params = parseQs(window.location);
 
-    const urlWithoutQuery = window.location.protocol + '//' + window.location.host + window.location.pathname;
+    const urlWithoutQuery = window.location.protocol + "//" + window.location.host + window.location.pathname;
     logger.log("Vector starting at " + urlWithoutQuery);
 
     (platform as VectorBasePlatform).startUpdater();
 
     // Don't bother loading the app until the config is verified
     const config = await verifyServerConfig();
+    const snakedConfig = new SnakedObject<IConfigOptions>(config);
 
     // Before we continue, let's see if we're supposed to do an SSO redirect
     const [userId] = await Lifecycle.getStoredSessionOwner();
@@ -162,15 +110,15 @@ export async function loadApp(fragParams: {}) {
     const ssoRedirects = parseSsoRedirectOptions(config);
     let autoRedirect = ssoRedirects.immediate === true;
     // XXX: This path matching is a bit brittle, but better to do it early instead of in the app code.
-    const isWelcomeOrLanding = window.location.hash === '#/welcome' || window.location.hash === '#';
+    const isWelcomeOrLanding = window.location.hash === "#/welcome" || window.location.hash === "#";
     if (!autoRedirect && ssoRedirects.on_welcome_page && isWelcomeOrLanding) {
         autoRedirect = true;
     }
     if (!hasPossibleToken && !isReturningFromSso && autoRedirect) {
         logger.log("Bypassing app load to redirect to SSO");
         const tempCli = createClient({
-            baseUrl: config['validated_server_config'].hsUrl,
-            idBaseUrl: config['validated_server_config'].isUrl,
+            baseUrl: config.validated_server_config.hsUrl,
+            idBaseUrl: config.validated_server_config.isUrl,
         });
         PlatformPeg.get().startSingleSignOn(tempCli, "sso", `/${getScreenFromLocation(window.location).screen}`);
 
@@ -180,23 +128,24 @@ export async function loadApp(fragParams: {}) {
         return;
     }
 
-    const defaultDeviceName = config['defaultDeviceDisplayName'] ?? platform.getDefaultDeviceDisplayName();
+    const defaultDeviceName = snakedConfig.get("default_device_display_name") ?? platform.getDefaultDeviceDisplayName();
 
-    const MatrixChat = sdk.getComponent('structures.MatrixChat');
-    return <MatrixChat
-        onNewScreen={onNewScreen}
-        makeRegistrationUrl={makeRegistrationUrl}
-        config={config}
-        realQueryParams={params}
-        startingFragmentQueryParams={fragParams}
-        enableGuest={!config.disable_guests}
-        onTokenLoginCompleted={onTokenLoginCompleted}
-        initialScreenAfterLogin={getScreenFromLocation(window.location)}
-        defaultDeviceDisplayName={defaultDeviceName}
-    />;
+    return (
+        <MatrixChat
+            onNewScreen={onNewScreen}
+            makeRegistrationUrl={makeRegistrationUrl}
+            config={config}
+            realQueryParams={params}
+            startingFragmentQueryParams={fragParams}
+            enableGuest={!config.disable_guests}
+            onTokenLoginCompleted={onTokenLoginCompleted}
+            initialScreenAfterLogin={getScreenFromLocation(window.location)}
+            defaultDeviceDisplayName={defaultDeviceName}
+        />
+    );
 }
 
-async function verifyServerConfig() {
+async function verifyServerConfig(): Promise<IConfigOptions> {
     let validatedConfig;
     try {
         logger.log("Verifying homeserver configuration");
@@ -211,18 +160,20 @@ async function verifyServerConfig() {
         // validators for that purpose.
 
         const config = SdkConfig.get();
-        let wkConfig = config['default_server_config']; // overwritten later under some conditions
-        const serverName = config['default_server_name'];
-        const hsUrl = config['default_hs_url'];
-        const isUrl = config['default_is_url'];
+        let wkConfig = config["default_server_config"]; // overwritten later under some conditions
+        const serverName = config["default_server_name"];
+        const hsUrl = config["default_hs_url"];
+        const isUrl = config["default_is_url"];
 
-        const incompatibleOptions = [wkConfig, serverName, hsUrl].filter(i => !!i);
+        const incompatibleOptions = [wkConfig, serverName, hsUrl].filter((i) => !!i);
         if (incompatibleOptions.length > 1) {
             // noinspection ExceptionCaughtLocallyJS
-            throw newTranslatableError(_td(
-                "Invalid configuration: can only specify one of default_server_config, default_server_name, " +
-                "or default_hs_url.",
-            ));
+            throw newTranslatableError(
+                _td(
+                    "Invalid configuration: can only specify one of default_server_config, default_server_name, " +
+                        "or default_hs_url.",
+                ),
+            );
         }
         if (incompatibleOptions.length < 1) {
             // noinspection ExceptionCaughtLocallyJS
@@ -233,17 +184,17 @@ async function verifyServerConfig() {
             logger.log("Config uses a default_hs_url - constructing a default_server_config using this information");
             logger.warn(
                 "DEPRECATED CONFIG OPTION: In the future, default_hs_url will not be accepted. Please use " +
-                "default_server_config instead.",
+                    "default_server_config instead.",
             );
 
             wkConfig = {
                 "m.homeserver": {
-                    "base_url": hsUrl,
+                    base_url: hsUrl,
                 },
             };
             if (isUrl) {
                 wkConfig["m.identity_server"] = {
-                    "base_url": isUrl,
+                    base_url: isUrl,
                 };
             }
         }
@@ -258,7 +209,7 @@ async function verifyServerConfig() {
             logger.log("Config uses a default_server_name - doing .well-known lookup");
             logger.warn(
                 "DEPRECATED CONFIG OPTION: In the future, default_server_name will not be accepted. Please " +
-                "use default_server_config instead.",
+                    "use default_server_config instead.",
             );
             discoveryResult = await AutoDiscovery.findClientConfig(serverName);
         }
@@ -285,7 +236,7 @@ async function verifyServerConfig() {
 
     // Add the newly built config to the actual config for use by the app
     logger.log("Updating SdkConfig with validated discovery information");
-    SdkConfig.add({ "validated_server_config": validatedConfig });
+    SdkConfig.add({ validated_server_config: validatedConfig });
 
     return SdkConfig.get();
 }
