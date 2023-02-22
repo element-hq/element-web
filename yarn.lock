@@ -6520,7 +6520,7 @@ htmlparser2@^6.0.0, htmlparser2@^6.1.0:
     domutils "^2.5.2"
     entities "^2.0.0"
 
-htmlparser2@^8.0.1:
+htmlparser2@^8.0.0, htmlparser2@^8.0.1:
   version "8.0.1"
   resolved "https://registry.yarnpkg.com/htmlparser2/-/htmlparser2-8.0.1.tgz#abaa985474fcefe269bc761a779b544d7196d010"
   integrity sha512-4lVbmc1diZC7GUJQtRQ5yBAeUCL1exyMwmForWkRLnwyzWBFxN633SALPMGYaWZvKe9j1pRZJpauvmxENSp/EA==
@@ -8252,24 +8252,6 @@ matrix-events-sdk@0.0.1:
   resolved "https://registry.yarnpkg.com/matrix-events-sdk/-/matrix-events-sdk-0.0.1.tgz#c8c38911e2cb29023b0bbac8d6f32e0de2c957dd"
   integrity sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==
 
-matrix-js-sdk@23.4.0-rc.1:
-  version "23.4.0-rc.1"
-  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-23.4.0-rc.1.tgz#df5054c4d5d9f2a7cab46f4e5c575ef6a7c09e56"
-  integrity sha512-s1Vxd7/CFsUJlt+9BgWSR4nAiYHPvqhoOjYFHm9TR1dPbSKVqv4yDYp23fLcMH0/x5M7grN4L6oMq1EE/pfqlQ==
-  dependencies:
-    "@babel/runtime" "^7.12.5"
-    "@matrix-org/matrix-sdk-crypto-js" "^0.1.0-alpha.3"
-    another-json "^0.2.0"
-    bs58 "^5.0.0"
-    content-type "^1.0.4"
-    loglevel "^1.7.1"
-    matrix-events-sdk "0.0.1"
-    matrix-widget-api "^1.0.0"
-    p-retry "4"
-    sdp-transform "^2.14.1"
-    unhomoglyph "^1.0.6"
-    uuid "9"
-
 matrix-js-sdk@23.4.0-rc.2:
   version "23.4.0-rc.2"
   resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-23.4.0-rc.2.tgz#9cbeba760d8b01efa20c3cc45506866741081d4f"
@@ -8295,10 +8277,10 @@ matrix-mock-request@^2.5.0:
   dependencies:
     expect "^28.1.0"
 
-matrix-react-sdk@3.67.0-rc.1:
-  version "3.67.0-rc.1"
-  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.67.0-rc.1.tgz#68a4dda3743aa64b7c1cc77ba31f9b717f1fdf63"
-  integrity sha512-KQ9+4gmxWoE3WOop+tPA85cUUK5zwfbnTvkU8uIkW0s5u0rT/yKGj/3jumFAq9znh9/Oth7YrK2fEdtQP0OMGg==
+matrix-react-sdk@3.67.0-rc.2:
+  version "3.67.0-rc.2"
+  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.67.0-rc.2.tgz#663cb1227281a65d07d872a96c5e33c49eb80b17"
+  integrity sha512-YGy5U0Mw9sJsP0GwtYkJWtmVp4HQqzJiNmb4kZHUqqflDDh598yzgBNnm6w/uYwG4+rIJYFvbnsI3lAuODMoXA==
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/analytics-events" "^0.4.0"
@@ -8338,7 +8320,7 @@ matrix-react-sdk@3.67.0-rc.1:
     maplibre-gl "^2.0.0"
     matrix-encrypt-attachment "^1.0.3"
     matrix-events-sdk "0.0.1"
-    matrix-js-sdk "23.4.0-rc.1"
+    matrix-js-sdk "23.4.0-rc.2"
     matrix-widget-api "^1.1.1"
     minimist "^1.2.5"
     opus-recorder "^8.0.3"
@@ -8356,7 +8338,7 @@ matrix-react-sdk@3.67.0-rc.1:
     react-transition-group "^4.4.1"
     rfc4648 "^1.4.0"
     sanitize-filename "^1.6.3"
-    sanitize-html "^2.3.2"
+    sanitize-html "2.8.0"
     tar-js "^0.3.0"
     ua-parser-js "^1.0.2"
     url "^0.11.0"
@@ -11031,6 +11013,18 @@ sanitize-filename@^1.6.3:
   integrity sha512-y/52Mcy7aw3gRm7IrcGDFx/bCk4AhRh2eI9luHOQM86nZsqwiRkkq2GekHXBBD+SmPidc8i2PqtYZl+pWJ8Oeg==
   dependencies:
     truncate-utf8-bytes "^1.0.0"
+
+sanitize-html@2.8.0:
+  version "2.8.0"
+  resolved "https://registry.yarnpkg.com/sanitize-html/-/sanitize-html-2.8.0.tgz#651d1d0e5b2d61b4ec6147cc46f6d6680eef98ce"
+  integrity sha512-ZsGyc6avnqgvEm3eMKrcy8xa7WM1MrGrfkGsUgQee2CU+vg3PCfNCexXwBDF/6dEPvaQ4k/QqRjnYKHL8xgNjg==
+  dependencies:
+    deepmerge "^4.2.2"
+    escape-string-regexp "^4.0.0"
+    htmlparser2 "^8.0.0"
+    is-plain-object "^5.0.0"
+    parse-srcset "^1.0.2"
+    postcss "^8.3.11"
 
 sanitize-html@^2.3.2:
   version "2.7.3"
