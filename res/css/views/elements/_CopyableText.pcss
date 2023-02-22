@@ -38,9 +38,12 @@ limitations under the License.
         cursor: pointer;
         margin-left: 20px;
         display: block;
+        /* If the copy button is used within a scrollable div, make it stick to the right while scrolling */
+        position: sticky;
+        right: 0;
         /* center to first line */
-        position: relative;
         top: 0.15em;
+        background-color: $background;
 
         &::before {
             content: "";

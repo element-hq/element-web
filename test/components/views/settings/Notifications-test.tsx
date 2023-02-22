@@ -25,8 +25,7 @@ import {
     PushRuleActionName,
 } from "matrix-js-sdk/src/matrix";
 import { IThreepid, ThreepidMedium } from "matrix-js-sdk/src/@types/threepids";
-import { act } from "react-dom/test-utils";
-import { fireEvent, getByTestId, render, screen, waitFor } from "@testing-library/react";
+import { act, fireEvent, getByTestId, render, screen, waitFor } from "@testing-library/react";
 
 import Notifications from "../../../../src/components/views/settings/Notifications";
 import SettingsStore from "../../../../src/settings/SettingsStore";

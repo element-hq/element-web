@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import React, { ComponentProps } from "react";
-import { fireEvent, render } from "@testing-library/react";
-import { act } from "react-dom/test-utils";
+import { act, fireEvent, render } from "@testing-library/react";
 
 import DialogSidebar from "../../../../src/components/views/beacon/DialogSidebar";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";

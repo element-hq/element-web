@@ -16,7 +16,6 @@ limitations under the License.
 */
 
 import React from "react";
-import ReactDOM from "react-dom";
 import { EventEmitter } from "events";
 import { MatrixEvent, Room, RoomMember } from "matrix-js-sdk/src/matrix";
 import FakeTimers from "@sinonjs/fake-timers";
@@ -358,7 +357,7 @@ describe("MessagePanel", function () {
         const [rm] = container.getElementsByClassName("mx_RoomView_myReadMarker_container");
 
         // it should follow the <li> which wraps the event tile for event 4
-        const eventContainer = ReactDOM.findDOMNode(tiles[4]);
+        const eventContainer = tiles[4];
         expect(rm.previousSibling).toEqual(eventContainer);
     });
 

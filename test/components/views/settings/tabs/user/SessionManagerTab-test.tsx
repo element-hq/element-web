@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { fireEvent, render, RenderResult } from "@testing-library/react";
-import { act } from "react-dom/test-utils";
+import { act, fireEvent, render, RenderResult } from "@testing-library/react";
 import { DeviceInfo } from "matrix-js-sdk/src/crypto/deviceinfo";
 import { logger } from "matrix-js-sdk/src/logger";
 import { DeviceTrustLevel } from "matrix-js-sdk/src/crypto/CrossSigning";

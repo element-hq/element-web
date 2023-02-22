@@ -35,7 +35,7 @@ import { Layout } from "../../../settings/enums/Layout";
 import { formatTime } from "../../../DateUtils";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import DecryptionFailureBody from "../messages/DecryptionFailureBody";
+import { DecryptionFailureBody } from "../messages/DecryptionFailureBody";
 import { E2EState } from "./E2EIcon";
 import RoomAvatar from "../avatars/RoomAvatar";
 import MessageContextMenu from "../context_menus/MessageContextMenu";
@@ -1270,7 +1270,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                                 {this.props.mxEvent.isRedacted() ? (
                                     <RedactedBody mxEvent={this.props.mxEvent} />
                                 ) : this.props.mxEvent.isDecryptionFailure() ? (
-                                    <DecryptionFailureBody />
+                                    <DecryptionFailureBody mxEvent={this.props.mxEvent} />
                                 ) : (
                                     MessagePreviewStore.instance.generatePreviewForEvent(this.props.mxEvent)
                                 )}

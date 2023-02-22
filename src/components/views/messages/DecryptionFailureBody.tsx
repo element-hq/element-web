@@ -14,14 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactNode } from "react";
+import React from "react";
+import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../languageHandler";
 import { IBodyProps } from "./IBodyProps";
 
+function getErrorMessage(mxEvent?: MatrixEvent): string {
+    return mxEvent?.isEncryptedDisabledForUnverifiedDevices
+        ? _t("The sender has blocked you from receiving this message")
+        : _t("Unable to decrypt message");
+}
+
 // A placeholder element for messages that could not be decrypted
-export default class DecryptionFailureBody extends React.Component<Partial<IBodyProps>> {
-    public render(): ReactNode {
-        return <div className="mx_DecryptionFailureBody mx_EventTile_content">{_t("Unable to decrypt message")}</div>;
-    }
+export function DecryptionFailureBody({ mxEvent }: Partial<IBodyProps>): JSX.Element {
+    return <div className="mx_DecryptionFailureBody mx_EventTile_content">{getErrorMessage(mxEvent)}</div>;
 }

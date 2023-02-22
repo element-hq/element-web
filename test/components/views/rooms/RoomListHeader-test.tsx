@@ -18,9 +18,8 @@ import React from "react";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { Room } from "matrix-js-sdk/src/matrix";
 import { EventType } from "matrix-js-sdk/src/@types/event";
-import { act } from "react-dom/test-utils";
 import { mocked } from "jest-mock";
-import { render, screen, fireEvent, RenderResult } from "@testing-library/react";
+import { act, render, screen, fireEvent, RenderResult } from "@testing-library/react";
 
 import SpaceStore from "../../../../src/stores/spaces/SpaceStore";
 import { MetaSpace } from "../../../../src/stores/spaces";

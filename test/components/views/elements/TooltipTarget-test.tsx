@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { renderIntoDocument, Simulate } from "react-dom/test-utils";
-import { act } from "react-dom/test-utils";
+import { act, renderIntoDocument, Simulate } from "react-dom/test-utils";
 
 import { Alignment } from "../../../../src/components/views/elements/Tooltip";
 import TooltipTarget from "../../../../src/components/views/elements/TooltipTarget";

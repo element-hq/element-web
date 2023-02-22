@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { fireEvent, render } from "@testing-library/react";
-import { act } from "react-dom/test-utils";
+import { act, fireEvent, render } from "@testing-library/react";
 
 import TabbedView, { Tab, TabLocation } from "../../../src/components/structures/TabbedView";
 

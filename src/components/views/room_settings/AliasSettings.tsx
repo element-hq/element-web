@@ -399,7 +399,7 @@ export default class AliasSettings extends React.Component<IProps, IState> {
         return (
             <div className="mx_AliasSettings">
                 <SettingsFieldset
-                    data-test-id="published-address-fieldset"
+                    data-testid="published-address-fieldset"
                     legend={_t("Published Addresses")}
                     description={
                         <>
@@ -450,7 +450,7 @@ export default class AliasSettings extends React.Component<IProps, IState> {
                     />
                 </SettingsFieldset>
                 <SettingsFieldset
-                    data-test-id="local-address-fieldset"
+                    data-testid="local-address-fieldset"
                     legend={_t("Local Addresses")}
                     description={
                         isSpaceRoom

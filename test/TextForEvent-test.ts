@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { EventType, MatrixClient, MatrixEvent, Room, RoomMember } from "matrix-js-sdk/src/matrix";
-import TestRenderer from "react-test-renderer";
+import { render } from "@testing-library/react";
 import { ReactElement } from "react";
 import { Mocked, mocked } from "jest-mock";
 
@@ -46,43 +46,6 @@ function mockPinnedEvent(pinnedMessageIds?: string[], prevPinnedMessageIds?: str
     });
 }
 
-// Helper function that renders a component to a plain text string.
-// Once snapshots are introduced in tests, this function will no longer be necessary,
-// and should be replaced with snapshots.
-function renderComponent(component: TestRenderer.ReactTestRenderer): string {
-    const serializeObject = (
-        object:
-            | TestRenderer.ReactTestRendererJSON
-            | TestRenderer.ReactTestRendererJSON[]
-            | TestRenderer.ReactTestRendererNode
-            | TestRenderer.ReactTestRendererNode[],
-    ): string => {
-        if (typeof object === "string") {
-            return object === " " ? "" : object;
-        }
-
-        if (Array.isArray(object) && object.length === 1 && typeof object[0] === "string") {
-            return object[0];
-        }
-
-        if (!Array.isArray(object) && object["type"] !== undefined && typeof object["children"] !== undefined) {
-            return serializeObject(object.children!);
-        }
-
-        if (!Array.isArray(object)) {
-            return "";
-        }
-
-        return object
-            .map((child) => {
-                return serializeObject(child);
-            })
-            .join("");
-    };
-
-    return serializeObject(component.toJSON()!);
-}
-
 describe("TextForEvent", () => {
     describe("getSenderName()", () => {
         it("Prefers sender.name", () => {
@@ -105,71 +68,71 @@ describe("TextForEvent", () => {
         it("mentions message when a single message was pinned, with no previously pinned messages", () => {
             const event = mockPinnedEvent(["message-1"]);
             const plainText = textForEvent(event);
-            const component = TestRenderer.create(textForEvent(event, true) as ReactElement);
+            const component = render(textForEvent(event, true) as ReactElement);
 
             const expectedText = "@foo:example.com pinned a message to this room. See all pinned messages.";
             expect(plainText).toBe(expectedText);
-            expect(renderComponent(component)).toBe(expectedText);
+            expect(component.container).toHaveTextContent(expectedText);
         });
 
         it("mentions message when a single message was pinned, with multiple previously pinned messages", () => {
             const event = mockPinnedEvent(["message-1", "message-2", "message-3"], ["message-1", "message-2"]);
             const plainText = textForEvent(event);
-            const component = TestRenderer.create(textForEvent(event, true) as ReactElement);
+            const component = render(textForEvent(event, true) as ReactElement);
 
             const expectedText = "@foo:example.com pinned a message to this room. See all pinned messages.";
             expect(plainText).toBe(expectedText);
-            expect(renderComponent(component)).toBe(expectedText);
+            expect(component.container).toHaveTextContent(expectedText);
         });
 
         it("mentions message when a single message was unpinned, with a single message previously pinned", () => {
             const event = mockPinnedEvent([], ["message-1"]);
             const plainText = textForEvent(event);
-            const component = TestRenderer.create(textForEvent(event, true) as ReactElement);
+            const component = render(textForEvent(event, true) as ReactElement);
 
             const expectedText = "@foo:example.com unpinned a message from this room. See all pinned messages.";
             expect(plainText).toBe(expectedText);
-            expect(renderComponent(component)).toBe(expectedText);
+            expect(component.container).toHaveTextContent(expectedText);
         });
 
         it("mentions message when a single message was unpinned, with multiple previously pinned messages", () => {
             const event = mockPinnedEvent(["message-2"], ["message-1", "message-2"]);
             const plainText = textForEvent(event);
-            const component = TestRenderer.create(textForEvent(event, true) as ReactElement);
+            const component = render(textForEvent(event, true) as ReactElement);
 
             const expectedText = "@foo:example.com unpinned a message from this room. See all pinned messages.";
             expect(plainText).toBe(expectedText);
-            expect(renderComponent(component)).toBe(expectedText);
+            expect(component.container).toHaveTextContent(expectedText);
         });
 
         it("shows generic text when multiple messages were pinned", () => {
             const event = mockPinnedEvent(["message-1", "message-2", "message-3"], ["message-1"]);
             const plainText = textForEvent(event);
-            const component = TestRenderer.create(textForEvent(event, true) as ReactElement);
+            const component = render(textForEvent(event, true) as ReactElement);
 
             const expectedText = "@foo:example.com changed the pinned messages for the room.";
             expect(plainText).toBe(expectedText);
-            expect(renderComponent(component)).toBe(expectedText);
+            expect(component.container).toHaveTextContent(expectedText);
         });
 
         it("shows generic text when multiple messages were unpinned", () => {
             const event = mockPinnedEvent(["message-3"], ["message-1", "message-2", "message-3"]);
             const plainText = textForEvent(event);
-            const component = TestRenderer.create(textForEvent(event, true) as ReactElement);
+            const component = render(textForEvent(event, true) as ReactElement);
 
             const expectedText = "@foo:example.com changed the pinned messages for the room.";
             expect(plainText).toBe(expectedText);
-            expect(renderComponent(component)).toBe(expectedText);
+            expect(component.container).toHaveTextContent(expectedText);
         });
 
         it("shows generic text when one message was pinned, and another unpinned", () => {
             const event = mockPinnedEvent(["message-2"], ["message-1"]);
             const plainText = textForEvent(event);
-            const component = TestRenderer.create(textForEvent(event, true) as ReactElement);
+            const component = render(textForEvent(event, true) as ReactElement);
 
             const expectedText = "@foo:example.com changed the pinned messages for the room.";
             expect(plainText).toBe(expectedText);
-            expect(renderComponent(component)).toBe(expectedText);
+            expect(component.container).toHaveTextContent(expectedText);
         });
     });
 

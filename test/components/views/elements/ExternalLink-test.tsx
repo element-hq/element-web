@@ -12,8 +12,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { render } from "@testing-library/react";
 import React from "react";
-import { renderIntoDocument } from "react-dom/test-utils";
 
 import ExternalLink from "../../../../src/components/views/elements/ExternalLink";
 
@@ -22,15 +22,10 @@ describe("<ExternalLink />", () => {
         "href": "test.com",
         "onClick": jest.fn(),
         "className": "myCustomClass",
-        "data-test-id": "test",
+        "data-testid": "test",
     };
     const getComponent = (props = {}) => {
-        const wrapper = renderIntoDocument<HTMLDivElement>(
-            <div>
-                <ExternalLink {...defaultProps} {...props} />
-            </div>,
-        ) as HTMLDivElement;
-        return wrapper.children[0];
+        return render(<ExternalLink {...defaultProps} {...props} />);
     };
 
     it("renders link correctly", () => {
@@ -39,18 +34,19 @@ describe("<ExternalLink />", () => {
                 react element <b>children</b>
             </span>
         );
-        expect(getComponent({ children, target: "_self", rel: "noopener" })).toMatchSnapshot();
+        expect(getComponent({ children, target: "_self", rel: "noopener" }).asFragment()).toMatchSnapshot();
     });
 
     it("defaults target and rel", () => {
         const children = "test";
-        const component = getComponent({ children });
-        expect(component.getAttribute("rel")).toEqual("noreferrer noopener");
-        expect(component.getAttribute("target")).toEqual("_blank");
+        const { getByTestId } = getComponent({ children });
+        const container = getByTestId("test");
+        expect(container.getAttribute("rel")).toEqual("noreferrer noopener");
+        expect(container.getAttribute("target")).toEqual("_blank");
     });
 
     it("renders plain text link correctly", () => {
         const children = "test";
-        expect(getComponent({ children })).toMatchSnapshot();
+        expect(getComponent({ children }).asFragment()).toMatchSnapshot();
     });
 });

@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { act } from "react-dom/test-utils";
-import { fireEvent, getByTestId, render } from "@testing-library/react";
+import { act, fireEvent, getByTestId, render } from "@testing-library/react";
 import * as maplibregl from "maplibre-gl";
 import { ClientEvent } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
