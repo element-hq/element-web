@@ -21,7 +21,7 @@ import { mocked, MockedObject } from "jest-mock";
 import { ClientEvent, MatrixClient } from "matrix-js-sdk/src/client";
 import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { EventType } from "matrix-js-sdk/src/matrix";
+import { EventType, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 import { MEGOLM_ALGORITHM } from "matrix-js-sdk/src/crypto/olmlib";
 import { fireEvent, render } from "@testing-library/react";
 
@@ -31,6 +31,9 @@ import {
     unmockPlatformPeg,
     wrapInMatrixClientContext,
     flushPromises,
+    mkEvent,
+    setupAsyncStoreWithClient,
+    filterConsole,
 } from "../../test-utils";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 import { Action } from "../../../src/dispatcher/actions";
@@ -49,6 +52,9 @@ import { createDmLocalRoom } from "../../../src/utils/dm/createDmLocalRoom";
 import { UPDATE_EVENT } from "../../../src/stores/AsyncStore";
 import { SdkContextClass, SDKContext } from "../../../src/contexts/SDKContext";
 import VoipUserMapper from "../../../src/VoipUserMapper";
+import WidgetUtils from "../../../src/utils/WidgetUtils";
+import { WidgetType } from "../../../src/widgets/WidgetType";
+import WidgetStore from "../../../src/stores/WidgetStore";
 
 const RoomView = wrapInMatrixClientContext(_RoomView);
 
@@ -58,6 +64,9 @@ describe("RoomView", () => {
     let rooms: Map<string, Room>;
     let roomCount = 0;
     let stores: SdkContextClass;
+
+    // mute some noise
+    filterConsole("RVS update", "does not have an m.room.create event", "Current version: 1", "Version capability");
 
     beforeEach(async () => {
         mockPlatformPeg({ reload: () => {} });
@@ -356,6 +365,92 @@ describe("RoomView", () => {
                     action: "local_room_event",
                     roomId: room.roomId,
                 });
+            });
+        });
+    });
+
+    describe("when there is a RoomView", () => {
+        const widget1Id = "widget1";
+        const widget2Id = "widget2";
+        const otherUserId = "@other:example.com";
+
+        const addJitsiWidget = async (id: string, user: string, ts?: number): Promise<void> => {
+            const widgetEvent = mkEvent({
+                event: true,
+                room: room.roomId,
+                user,
+                type: "im.vector.modular.widgets",
+                content: {
+                    id,
+                    name: "Jitsi",
+                    type: WidgetType.JITSI.preferred,
+                    url: "https://example.com",
+                },
+                skey: id,
+                ts,
+            });
+            room.addLiveEvents([widgetEvent]);
+            room.currentState.setStateEvents([widgetEvent]);
+            cli.emit(RoomStateEvent.Events, widgetEvent, room.currentState, null);
+            await flushPromises();
+        };
+
+        beforeEach(async () => {
+            jest.spyOn(WidgetUtils, "setRoomWidget");
+            const widgetStore = WidgetStore.instance;
+            await setupAsyncStoreWithClient(widgetStore, cli);
+            getRoomViewInstance();
+        });
+
+        const itShouldNotRemoveTheLastWidget = (): void => {
+            it("should not remove the last widget", (): void => {
+                expect(WidgetUtils.setRoomWidget).not.toHaveBeenCalledWith(room.roomId, widget2Id);
+            });
+        };
+
+        describe("and there is a Jitsi widget from another user", () => {
+            beforeEach(async () => {
+                await addJitsiWidget(widget1Id, otherUserId, 10_000);
+            });
+
+            describe("and the current user adds a Jitsi widget after 10s", () => {
+                beforeEach(async () => {
+                    await addJitsiWidget(widget2Id, cli.getSafeUserId(), 20_000);
+                });
+
+                it("the last Jitsi widget should be removed", () => {
+                    expect(WidgetUtils.setRoomWidget).toHaveBeenCalledWith(room.roomId, widget2Id);
+                });
+            });
+
+            describe("and the current user adds a Jitsi widget after two minutes", () => {
+                beforeEach(async () => {
+                    await addJitsiWidget(widget2Id, cli.getSafeUserId(), 130_000);
+                });
+
+                itShouldNotRemoveTheLastWidget();
+            });
+
+            describe("and the current user adds a Jitsi widget without timestamp", () => {
+                beforeEach(async () => {
+                    await addJitsiWidget(widget2Id, cli.getSafeUserId());
+                });
+
+                itShouldNotRemoveTheLastWidget();
+            });
+        });
+
+        describe("and there is a Jitsi widget from another user without timestamp", () => {
+            beforeEach(async () => {
+                await addJitsiWidget(widget1Id, otherUserId);
+            });
+
+            describe("and the current user adds a Jitsi widget", () => {
+                beforeEach(async () => {
+                    await addJitsiWidget(widget2Id, cli.getSafeUserId(), 10_000);
+                });
+
+                itShouldNotRemoveTheLastWidget();
             });
         });
     });
