@@ -182,12 +182,14 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
     private addListeners(): void {
         this.state.poll?.on(PollEvent.Responses, this.onResponsesChange);
         this.state.poll?.on(PollEvent.End, this.onRelationsChange);
+        this.state.poll?.on(PollEvent.UndecryptableRelations, this.render.bind(this));
     }
 
     private removeListeners(): void {
         if (this.state.poll) {
             this.state.poll.off(PollEvent.Responses, this.onResponsesChange);
             this.state.poll.off(PollEvent.End, this.onRelationsChange);
+            this.state.poll.off(PollEvent.UndecryptableRelations, this.render.bind(this));
         }
     }
 
@@ -297,7 +299,9 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
         const showResults = poll.isEnded || (disclosed && myVote !== undefined);
 
         let totalText: string;
-        if (poll.isEnded) {
+        if (showResults && poll.undecryptableRelationsCount) {
+            totalText = _t("Due to decryption errors, some votes may not be counted");
+        } else if (poll.isEnded) {
             totalText = _t("Final result based on %(count)s votes", { count: totalVotes });
         } else if (!disclosed) {
             totalText = _t("Results will be visible when the poll is ended");

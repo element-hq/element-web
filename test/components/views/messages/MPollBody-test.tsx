@@ -765,6 +765,20 @@ describe("MPollBody", () => {
         expect(container).toMatchSnapshot();
     });
 
+    it("renders a warning message when poll has undecryptable relations", async () => {
+        const votes = [
+            responseEvent("@op:example.com", "pizza", 12),
+            responseEvent("@op:example.com", [], 13),
+            responseEvent("@op:example.com", "italian", 14),
+            responseEvent("@me:example.com", "wings", 15),
+            responseEvent("@qr:example.com", "italian", 16),
+        ];
+
+        jest.spyOn(votes[1], "isDecryptionFailure").mockReturnValue(true);
+        const { getByText } = await newMPollBody(votes);
+        expect(getByText("Due to decryption errors, some votes may not be counted")).toBeInTheDocument();
+    });
+
     it("renders a poll with local, non-local and invalid votes", async () => {
         const votes = [
             responseEvent("@a:example.com", "pizza", 12),

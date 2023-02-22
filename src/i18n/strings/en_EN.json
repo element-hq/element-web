@@ -2405,6 +2405,7 @@
     "Sorry, you can't edit a poll after votes have been cast.": "Sorry, you can't edit a poll after votes have been cast.",
     "Vote not registered": "Vote not registered",
     "Sorry, your vote was not registered. Please try again.": "Sorry, your vote was not registered. Please try again.",
+    "Due to decryption errors, some votes may not be counted": "Due to decryption errors, some votes may not be counted",
     "Final result based on %(count)s votes|other": "Final result based on %(count)s votes",
     "Final result based on %(count)s votes|one": "Final result based on %(count)s vote",
     "Results will be visible when the poll is ended": "Results will be visible when the poll is ended",
