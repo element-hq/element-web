@@ -3738,5 +3738,6 @@
     "Loading polls": "Lade Umfragen",
     "The sender has blocked you from receiving this message": "Der Absender hat dich vom Erhalt dieser Nachricht ausgeschlossen",
     "Room directory": "Raumverzeichnis",
-    "Show NSFW content": "NSFW-Inhalte anzeigen"
+    "Show NSFW content": "NSFW-Inhalte anzeigen",
+    "Due to decryption errors, some votes may not be counted": "Evtl. werden infolge von Entschlüsselungsfehlern einige Stimmen nicht gezählt"
 }
