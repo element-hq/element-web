@@ -35,7 +35,7 @@ const CONNECTING_STATES = [
     CallState.CreateAnswer,
 ];
 
-const SUPPORTED_STATES = [CallState.Connected, CallState.Ringing];
+const SUPPORTED_STATES = [CallState.Connected, CallState.Ringing, CallState.Ended];
 
 export enum CustomCallState {
     Missed = "missed",
