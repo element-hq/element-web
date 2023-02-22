@@ -3735,5 +3735,8 @@
     "Please only proceed if you're sure you've lost all of your other devices and your Security Key.": "Bitte fahre nur fort, wenn du sicher bist, dass du alle anderen Geräte und deinen Sicherheitsschlüssel verloren hast.",
     "Secure Backup successful": "Verschlüsselte Sicherung erfolgreich",
     "Your keys are now being backed up from this device.": "Deine Schlüssel werden nun von dieser Sitzung gesichert.",
-    "Loading polls": "Lade Umfragen"
+    "Loading polls": "Lade Umfragen",
+    "The sender has blocked you from receiving this message": "Der Absender hat dich vom Erhalt dieser Nachricht ausgeschlossen",
+    "Room directory": "Raumverzeichnis",
+    "Show NSFW content": "NSFW-Inhalte anzeigen"
 }
