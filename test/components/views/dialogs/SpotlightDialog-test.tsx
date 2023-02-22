@@ -367,4 +367,67 @@ describe("Spotlight Dialog", () => {
             expect(screen.queryByText("give feedback")).not.toBeInTheDocument();
         });
     });
+
+    describe("nsfw public rooms filter", () => {
+        const nsfwNameRoom: IPublicRoomsChunkRoom = {
+            room_id: "@room1:matrix.org",
+            name: "Room 1 [NSFW]",
+            topic: undefined,
+            world_readable: false,
+            num_joined_members: 1,
+            guest_can_join: false,
+        };
+
+        const nsfwTopicRoom: IPublicRoomsChunkRoom = {
+            room_id: "@room2:matrix.org",
+            name: "Room 2",
+            topic: "A room with a topic that includes nsfw",
+            world_readable: false,
+            num_joined_members: 1,
+            guest_can_join: false,
+        };
+
+        const potatoRoom: IPublicRoomsChunkRoom = {
+            room_id: "@room3:matrix.org",
+            name: "Potato Room 3",
+            topic: "Room where we discuss potatoes",
+            world_readable: false,
+            num_joined_members: 1,
+            guest_can_join: false,
+        };
+
+        beforeEach(() => {
+            mockedClient = mockClient({ rooms: [nsfwNameRoom, nsfwTopicRoom, potatoRoom], users: [testPerson] });
+            SettingsStore.setValue("SpotlightSearch.showNsfwPublicRooms", null, SettingLevel.DEVICE, false);
+        });
+
+        afterAll(() => {
+            SettingsStore.setValue("SpotlightSearch.showNsfwPublicRooms", null, SettingLevel.DEVICE, false);
+        });
+
+        it("does not display rooms with nsfw keywords in results when showNsfwPublicRooms is falsy", async () => {
+            render(<SpotlightDialog initialFilter={Filter.PublicRooms} onFinished={() => null} />);
+
+            // search is debounced
+            jest.advanceTimersByTime(200);
+            await flushPromisesWithFakeTimers();
+
+            expect(screen.getByText(potatoRoom.name)).toBeInTheDocument();
+            expect(screen.queryByText(nsfwTopicRoom.name)).not.toBeInTheDocument();
+            expect(screen.queryByText(nsfwTopicRoom.name)).not.toBeInTheDocument();
+        });
+
+        it("displays rooms with nsfw keywords in results when showNsfwPublicRooms is truthy", async () => {
+            SettingsStore.setValue("SpotlightSearch.showNsfwPublicRooms", null, SettingLevel.DEVICE, true);
+            render(<SpotlightDialog initialFilter={Filter.PublicRooms} onFinished={() => null} />);
+
+            // search is debounced
+            jest.advanceTimersByTime(200);
+            await flushPromisesWithFakeTimers();
+
+            expect(screen.getByText(nsfwTopicRoom.name)).toBeInTheDocument();
+            expect(screen.getByText(nsfwNameRoom.name)).toBeInTheDocument();
+            expect(screen.getByText(potatoRoom.name)).toBeInTheDocument();
+        });
+    });
 });
