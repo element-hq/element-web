@@ -1,3 +1,16 @@
+Changes in [1.11.24-rc.2](https://github.com/vector-im/element-web/releases/tag/v1.11.24-rc.2) (2023-02-22)
+===========================================================================================================
+
+## ✨ Features
+ * Polls: show warning about undecryptable relations ([\#10179](https://github.com/matrix-org/matrix-react-sdk/pull/10179)). Contributed by @kerryarchibald.
+ * Display "The sender has blocked you from receiving this message" error message instead of "Unable to decrypt message" ([\#10202](https://github.com/matrix-org/matrix-react-sdk/pull/10202)). Contributed by @florianduros.
+ * Filter NSFW content in room directory ([\#10196](https://github.com/matrix-org/matrix-react-sdk/pull/10196)). Contributed by @kerryarchibald.
+
+## 🐛 Bug Fixes
+ * Add link to next file in the export ([\#10190](https://github.com/matrix-org/matrix-react-sdk/pull/10190)). Fixes #20272. Contributed by @grimhilt.
+ * Stop access token overflowing the box ([\#10069](https://github.com/matrix-org/matrix-react-sdk/pull/10069)). Fixes #24023. Contributed by @sbjaj33.
+ * Ended poll tiles: add ended the poll message ([\#10193](https://github.com/matrix-org/matrix-react-sdk/pull/10193)). Fixes #24579. Contributed by @kerryarchibald.
+
 Changes in [1.11.24-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.11.24-rc.1) (2023-02-21)
 ===========================================================================================================
 
