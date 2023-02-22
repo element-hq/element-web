@@ -166,7 +166,6 @@
     "Email": "E-poçt",
     "Profile": "Profil",
     "Account": "Hesab",
-    "Homeserver is": "Ev serveri bu",
     "A new password must be entered.": "Yeni parolu daxil edin.",
     "New passwords must match each other.": "Yeni şifrələr uyğun olmalıdır.",
     "Return to login screen": "Girişin ekranına qayıtmaq",
@@ -256,6 +255,5 @@
     "Create Account": "Hesab Aç",
     "Explore rooms": "Otaqları kəşf edin",
     "Sign In": "Daxil ol",
-    "Identity server is": "Eyniləşdirmənin serveri bu",
     "Identity server": "Eyniləşdirmənin serveri"
 }
