@@ -16,7 +16,7 @@ limitations under the License.
 
 import { parseQsFromFragment, parseQs } from "../../../src/vector/url_utils";
 
-describe("url_utils.ts", function() {
+describe("url_utils.ts", function () {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const location: Location = {
@@ -24,28 +24,28 @@ describe("url_utils.ts", function() {
         search: "",
     };
 
-    it("parseQsFromFragment", function() {
+    it("parseQsFromFragment", function () {
         location.hash = "/home?foo=bar";
         expect(parseQsFromFragment(location)).toEqual({
             location: "home",
             params: {
-                "foo": "bar",
+                foo: "bar",
             },
         });
     });
 
-    describe("parseQs", function() {
+    describe("parseQs", function () {
         location.search = "?foo=bar";
         expect(parseQs(location)).toEqual({
-            "foo": "bar",
+            foo: "bar",
         });
     });
 
-    describe("parseQs with arrays", function() {
+    describe("parseQs with arrays", function () {
         location.search = "?via=s1&via=s2&via=s2&foo=bar";
         expect(parseQs(location)).toEqual({
-            "via": ["s1", "s2", "s2"],
-            "foo": "bar",
+            via: ["s1", "s2", "s2"],
+            foo: "bar",
         });
     });
 });

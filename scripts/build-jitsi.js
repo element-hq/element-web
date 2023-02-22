@@ -21,11 +21,13 @@ if (process.env.HTTPS_PROXY) {
     options.agent = new ProxyAgent(process.env.HTTPS_PROXY, { tunnel: true });
 }
 
-fetch("https://meet.element.io/libs/external_api.min.js", options).then(res => {
-    const stream = fs.createWriteStream(fname);
-    return new Promise((resolve, reject) => {
-        res.body.pipe(stream);
-        res.body.on('error', err => reject(err));
-        res.body.on('finish', () => resolve());
-    });
-}).then(() => console.log('Done with Jitsi download'));
+fetch("https://meet.element.io/libs/external_api.min.js", options)
+    .then((res) => {
+        const stream = fs.createWriteStream(fname);
+        return new Promise((resolve, reject) => {
+            res.body.pipe(stream);
+            res.body.on("error", (err) => reject(err));
+            res.body.on("finish", () => resolve());
+        });
+    })
+    .then(() => console.log("Done with Jitsi download"));

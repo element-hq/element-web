@@ -15,8 +15,6 @@
     "Unsupported browser": "Nicht unterstützter Browser",
     "Go to element.io": "Gehe zu element.io",
     "Failed to start": "Start fehlgeschlagen",
-    "%(brand)s Desktop (%(platformName)s)": "%(brand)s Desktop (%(platformName)s)",
-    "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Bitte installiere <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink> oder <safariLink>Safari</safariLink> für das beste Erlebnis.",
     "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Du kannst deinen aktuellen Browser weiterhin verwenden. Es ist aber möglich, dass nicht alles richtig funktioniert oder das Aussehen der App inkorrekt ist.",
     "I understand the risks and wish to continue": "Ich verstehe die Risiken und möchte fortfahren",

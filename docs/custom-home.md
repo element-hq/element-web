@@ -26,7 +26,6 @@ The home page can be overridden in `config.json` to provide all users of an elem
 }
 ```
 
-
 ## `home.html` Example
 
 The following is a simple example for a custom `home.html`:
@@ -62,4 +61,3 @@ It may be needed to set CORS headers for the `home.html` to enable element-deskt
 ```
 add_header Access-Control-Allow-Origin *;
 ```
-

@@ -1,7 +1,6 @@
 {
     "Dismiss": "ഒഴിവാക്കുക",
     "Unknown device": "അപരിചിത ഡിവൈസ്",
-    "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s%(browserName)s%(osName)s",
     "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "ദയവായി <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, അല്ലെങ്കിൽ <safariLink>Safari</safariLink> ഇൻസ്റ്റാൾ ചെയ്യുക.",
     "Your Element is misconfigured": "നിങ്ങളുടെ Element തെറ്റായിട്ടാണ് കോൺഫിഗർ ചെയ്തിരിക്കുന്നത്",
     "Invalid configuration: no default server specified.": "അസാധുവായ കോൺഫിഗറേഷൻ: സ്ഥിര സെർവർ ഒന്നും വ്യക്തമാക്കിയില്ല.",

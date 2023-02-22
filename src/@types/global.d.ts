@@ -19,20 +19,20 @@ import type { Renderer } from "react-dom";
 import type { logger } from "matrix-js-sdk/src/logger";
 
 type ElectronChannel =
-    "app_onAction" |
-    "before-quit" |
-    "check_updates" |
-    "install_update" |
-    "ipcCall" |
-    "ipcReply" |
-    "loudNotification" |
-    "preferences" |
-    "seshat" |
-    "seshatReply" |
-    "setBadgeCount" |
-    "update-downloaded" |
-    "userDownloadCompleted" |
-    "userDownloadAction";
+    | "app_onAction"
+    | "before-quit"
+    | "check_updates"
+    | "install_update"
+    | "ipcCall"
+    | "ipcReply"
+    | "loudNotification"
+    | "preferences"
+    | "seshat"
+    | "seshatReply"
+    | "setBadgeCount"
+    | "update-downloaded"
+    | "userDownloadCompleted"
+    | "userDownloadAction";
 
 declare global {
     interface Window {

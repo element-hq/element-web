@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { KJUR } from 'jsrsasign';
+import { KJUR } from "jsrsasign";
 import {
     IOpenIDCredentials,
     IWidgetApiRequest,
@@ -28,13 +28,14 @@ import { ElementWidgetActions } from "matrix-react-sdk/src/stores/widgets/Elemen
 import { logger } from "matrix-js-sdk/src/logger";
 import { IConfigOptions } from "matrix-react-sdk/src/IConfigOptions";
 import { SnakedObject } from "matrix-react-sdk/src/utils/SnakedObject";
+import { ElementWidgetCapabilities } from "matrix-react-sdk/src/stores/widgets/ElementWidgetCapabilities";
 
 import { getVectorConfig } from "../getconfig";
 
 // We have to trick webpack into loading our CSS for us.
 require("./index.pcss");
 
-const JITSI_OPENIDTOKEN_JWT_AUTH = 'openidtoken-jwt';
+const JITSI_OPENIDTOKEN_JWT_AUTH = "openidtoken-jwt";
 
 // Dev note: we use raw JS without many dependencies to reduce bundle size.
 // We do not need all of React to render a Jitsi conference.
@@ -61,7 +62,7 @@ let widgetApi: WidgetApi;
 let meetApi: any; // JitsiMeetExternalAPI
 let skipOurWelcomeScreen = false;
 
-const setupCompleted = (async () => {
+const setupCompleted = (async (): Promise<string | void> => {
     try {
         // Queue a config.json lookup asap, so we can use it later on. We want this to be concurrent with
         // other setup work and therefore do not block.
@@ -82,9 +83,9 @@ const setupCompleted = (async () => {
         // If we have these params, expect a widget API to be available (ie. to be in an iframe
         // inside a matrix client). Otherwise, assume we're on our own, eg. have been popped
         // out into a browser.
-        const parentUrl = qsParam('parentUrl', true);
-        const widgetId = qsParam('widgetId', true);
-        const theme = qsParam('theme', true);
+        const parentUrl = qsParam("parentUrl", true);
+        const widgetId = qsParam("widgetId", true);
+        const theme = qsParam("theme", true);
 
         if (theme) {
             document.body.classList.add(`theme-${theme.replace(" ", "_")}`);
@@ -93,16 +94,23 @@ const setupCompleted = (async () => {
         // Set this up as early as possible because Element will be hitting it almost immediately.
         let widgetApiReady: Promise<void>;
         if (parentUrl && widgetId) {
-            const parentOrigin = new URL(qsParam('parentUrl')).origin;
+            const parentOrigin = new URL(qsParam("parentUrl")).origin;
             widgetApi = new WidgetApi(qsParam("widgetId"), parentOrigin);
 
-            widgetApiReady = new Promise<void>(resolve => widgetApi.once("ready", resolve));
+            widgetApiReady = new Promise<void>((resolve) => widgetApi.once("ready", resolve));
             widgetApi.requestCapabilities(VideoConferenceCapabilities);
+
+            // jitsi cannot work in a popup if auth token is provided because widgetApi is not available there
+            // so check the token and request the 'requires_client' capability to hide the popup icon in the Element
+            if (qsParam("auth", true) === "openidtoken-jwt") {
+                widgetApi.requestCapability(ElementWidgetCapabilities.RequiresClient);
+            }
+
             widgetApi.start();
 
             const handleAction = (
                 action: WidgetApiAction,
-                handler: (request: IWidgetApiRequestData) => void,
+                handler: (request: IWidgetApiRequestData) => Promise<void>,
             ): void => {
                 widgetApi.on(`action:${action}`, async (ev: CustomEvent<IWidgetApiRequest>) => {
                     ev.preventDefault();
@@ -134,39 +142,39 @@ const setupCompleted = (async () => {
                     meetApi = null;
                     closeConference();
                 } else {
-                    meetApi?.executeCommand('hangup');
+                    meetApi?.executeCommand("hangup");
                 }
             });
             handleAction(ElementWidgetActions.MuteAudio, async () => {
-                if (meetApi && !await meetApi.isAudioMuted()) {
-                    meetApi.executeCommand('toggleAudio');
+                if (meetApi && !(await meetApi.isAudioMuted())) {
+                    meetApi.executeCommand("toggleAudio");
                 }
             });
             handleAction(ElementWidgetActions.UnmuteAudio, async () => {
-                if (meetApi && await meetApi.isAudioMuted()) {
-                    meetApi.executeCommand('toggleAudio');
+                if (meetApi && (await meetApi.isAudioMuted())) {
+                    meetApi.executeCommand("toggleAudio");
                 }
             });
             handleAction(ElementWidgetActions.MuteVideo, async () => {
-                if (meetApi && !await meetApi.isVideoMuted()) {
-                    meetApi.executeCommand('toggleVideo');
+                if (meetApi && !(await meetApi.isVideoMuted())) {
+                    meetApi.executeCommand("toggleVideo");
                 }
             });
             handleAction(ElementWidgetActions.UnmuteVideo, async () => {
-                if (meetApi && await meetApi.isVideoMuted()) {
-                    meetApi.executeCommand('toggleVideo');
+                if (meetApi && (await meetApi.isVideoMuted())) {
+                    meetApi.executeCommand("toggleVideo");
                 }
             });
             handleAction(ElementWidgetActions.TileLayout, async () => {
-                meetApi?.executeCommand('setTileView', true);
+                meetApi?.executeCommand("setTileView", true);
             });
             handleAction(ElementWidgetActions.SpotlightLayout, async () => {
-                meetApi?.executeCommand('setTileView', false);
+                meetApi?.executeCommand("setTileView", false);
             });
             handleAction(ElementWidgetActions.StartLiveStream, async ({ rtmpStreamKey }) => {
                 if (!meetApi) throw new Error("Conference not joined");
-                meetApi.executeCommand('startRecording', {
-                    mode: 'stream',
+                meetApi.executeCommand("startRecording", {
+                    mode: "stream",
                     // this looks like it should be rtmpStreamKey but we may be on too old
                     // a version of jitsi meet
                     //rtmpStreamKey,
@@ -178,23 +186,23 @@ const setupCompleted = (async () => {
         }
 
         // Populate the Jitsi params now
-        jitsiDomain = qsParam('conferenceDomain');
-        conferenceId = qsParam('conferenceId');
-        displayName = qsParam('displayName', true);
-        avatarUrl = qsParam('avatarUrl', true); // http not mxc
-        userId = qsParam('userId');
-        jitsiAuth = qsParam('auth', true);
-        roomId = qsParam('roomId', true);
-        roomName = qsParam('roomName', true);
-        startAudioOnly = qsParam('isAudioOnly', true) === "true";
-        isVideoChannel = qsParam('isVideoChannel', true) === "true";
-        supportsScreensharing = qsParam('supportsScreensharing', true) === "true";
+        jitsiDomain = qsParam("conferenceDomain");
+        conferenceId = qsParam("conferenceId");
+        displayName = qsParam("displayName", true);
+        avatarUrl = qsParam("avatarUrl", true); // http not mxc
+        userId = qsParam("userId");
+        jitsiAuth = qsParam("auth", true);
+        roomId = qsParam("roomId", true);
+        roomName = qsParam("roomName", true);
+        startAudioOnly = qsParam("isAudioOnly", true) === "true";
+        isVideoChannel = qsParam("isVideoChannel", true) === "true";
+        supportsScreensharing = qsParam("supportsScreensharing", true) === "true";
 
         // We've reached the point where we have to wait for the config, so do that then parse it.
         const instanceConfig = new SnakedObject<IConfigOptions>((await configPromise) ?? <IConfigOptions>{});
         const jitsiConfig = instanceConfig.get("jitsi_widget") ?? {};
-        skipOurWelcomeScreen = (new SnakedObject<IConfigOptions["jitsi_widget"]>(jitsiConfig))
-            .get("skip_built_in_welcome_screen") ?? false;
+        skipOurWelcomeScreen =
+            new SnakedObject<IConfigOptions["jitsi_widget"]>(jitsiConfig).get("skip_built_in_welcome_screen") ?? false;
 
         // Either reveal the prejoin screen, or skip straight to Jitsi depending on the config.
         // We don't set up the call yet though as this might lead to failure without the widget API.
@@ -223,11 +231,11 @@ const setupCompleted = (async () => {
     }
 })();
 
-function enableJoinButton() {
-    document.getElementById("joinButton").onclick = () => joinConference();
+function enableJoinButton(): void {
+    document.getElementById("joinButton").onclick = (): void => joinConference();
 }
 
-function switchVisibleContainers() {
+function switchVisibleContainers(): void {
     inConference = !inConference;
 
     // Our welcome screen is managed by other code, so just don't switch to it ever
@@ -237,14 +245,14 @@ function switchVisibleContainers() {
     }
 }
 
-function toggleConferenceVisibility(inConference: boolean) {
-    document.getElementById("jitsiContainer").style.visibility = inConference ? 'unset' : 'hidden';
+function toggleConferenceVisibility(inConference: boolean): void {
+    document.getElementById("jitsiContainer").style.visibility = inConference ? "unset" : "hidden";
     // Video rooms have a separate UI for joining, so they should never show our join button
     document.getElementById("joinButtonContainer").style.visibility =
-        (inConference || isVideoChannel) ? 'hidden' : 'unset';
+        inConference || isVideoChannel ? "hidden" : "unset";
 }
 
-function skipToJitsiSplashScreen() {
+function skipToJitsiSplashScreen(): void {
     // really just a function alias for self-documenting code
     joinConference();
 }
@@ -254,9 +262,9 @@ function skipToJitsiSplashScreen() {
  *
  * See https://github.com/matrix-org/prosody-mod-auth-matrix-user-verification
  */
-function createJWTToken() {
+function createJWTToken(): string {
     // Header
-    const header = { alg: 'HS256', typ: 'JWT' };
+    const header = { alg: "HS256", typ: "JWT" };
     // Payload
     const payload = {
         // As per Jitsi token auth, `iss` needs to be set to something agreed between
@@ -281,15 +289,10 @@ function createJWTToken() {
     // Sign JWT
     // The secret string here is irrelevant, we're only using the JWT
     // to transport data to Prosody in the Jitsi stack.
-    return KJUR.jws.JWS.sign(
-        'HS256',
-        JSON.stringify(header),
-        JSON.stringify(payload),
-        'notused',
-    );
+    return KJUR.jws.JWS.sign("HS256", JSON.stringify(header), JSON.stringify(payload), "notused");
 }
 
-async function notifyHangup(errorMessage?: string) {
+async function notifyHangup(errorMessage?: string): Promise<void> {
     if (widgetApi) {
         // We send the hangup event before setAlwaysOnScreen, because the latter
         // can cause the receiving side to instantly stop listening.
@@ -301,7 +304,7 @@ async function notifyHangup(errorMessage?: string) {
     }
 }
 
-function closeConference() {
+function closeConference(): void {
     switchVisibleContainers();
     document.getElementById("jitsiContainer").innerHTML = "";
 
@@ -315,12 +318,13 @@ function closeConference() {
 // audio input it can find, while an input of null instructs it to start muted,
 // and a non-nullish input specifies the label of a specific device to use.
 // Same for video inputs.
-function joinConference(audioInput?: string | null, videoInput?: string | null) {
+function joinConference(audioInput?: string | null, videoInput?: string | null): void {
     let jwt;
     if (jitsiAuth === JITSI_OPENIDTOKEN_JWT_AUTH) {
-        if (!openIdToken?.access_token) { // eslint-disable-line camelcase
+        if (!openIdToken?.access_token) {
+            // eslint-disable-line camelcase
             // We've failing to get a token, don't try to init conference
-            logger.warn('Expected to have an OpenID credential, cannot initialize widget.');
+            logger.warn("Expected to have an OpenID credential, cannot initialize widget.");
             document.getElementById("widgetActionContainer").innerText = "Failed to load Jitsi widget";
             return;
         }
@@ -331,8 +335,8 @@ function joinConference(audioInput?: string | null, videoInput?: string | null) 
 
     logger.warn(
         "[Jitsi Widget] The next few errors about failing to parse URL parameters are fine if " +
-        "they mention 'external_api' or 'jitsi' in the stack. They're just Jitsi Meet trying to parse " +
-        "our fragment values and not recognizing the options.",
+            "they mention 'external_api' or 'jitsi' in the stack. They're just Jitsi Meet trying to parse " +
+            "our fragment values and not recognizing the options.",
     );
 
     const options = {
@@ -400,7 +404,7 @@ function joinConference(audioInput?: string | null, videoInput?: string | null) 
     meetApi.on("audioMuteStatusChanged", onAudioMuteStatusChanged);
     meetApi.on("videoMuteStatusChanged", onVideoMuteStatusChanged);
 
-    ["videoConferenceJoined", "participantJoined", "participantLeft"].forEach(event => {
+    ["videoConferenceJoined", "participantJoined", "participantLeft"].forEach((event) => {
         meetApi.on(event, updateParticipants);
     });
 
@@ -408,7 +412,7 @@ function joinConference(audioInput?: string | null, videoInput?: string | null) 
     meetApi.on("log", onLog);
 }
 
-const onVideoConferenceJoined = () => {
+const onVideoConferenceJoined = (): void => {
     // Although we set our displayName with the userInfo option above, that
     // option has a bug where it causes the name to be the HTML encoding of
     // what was actually intended. So, we use the displayName command to at
@@ -432,12 +436,12 @@ const onVideoConferenceJoined = () => {
     if (isVideoChannel) meetApi.executeCommand("setTileView", true);
 };
 
-const onVideoConferenceLeft = () => {
+const onVideoConferenceLeft = (): void => {
     notifyHangup();
     meetApi = null;
 };
 
-const onErrorOccurred = ({ error }) => {
+const onErrorOccurred = ({ error }): void => {
     if (error.isFatal) {
         // We got disconnected. Since Jitsi Meet might send us back to the
         // prejoin screen, we're forced to act as if we hung up entirely.
@@ -447,12 +451,12 @@ const onErrorOccurred = ({ error }) => {
     }
 };
 
-const onAudioMuteStatusChanged = ({ muted }) => {
+const onAudioMuteStatusChanged = ({ muted }): void => {
     const action = muted ? ElementWidgetActions.MuteAudio : ElementWidgetActions.UnmuteAudio;
     widgetApi?.transport.send(action, {});
 };
 
-const onVideoMuteStatusChanged = ({ muted }) => {
+const onVideoMuteStatusChanged = ({ muted }): void => {
     if (muted) {
         // Jitsi Meet always sends a "video muted" event directly before
         // hanging up, which we need to ignore by padding the timeout here,
@@ -466,11 +470,10 @@ const onVideoMuteStatusChanged = ({ muted }) => {
     }
 };
 
-const updateParticipants = () => {
+const updateParticipants = (): void => {
     widgetApi?.transport.send(ElementWidgetActions.CallParticipants, {
         participants: meetApi.getParticipantsInfo(),
     });
 };
 
-const onLog = ({ logLevel, args }) =>
-    (parent as unknown as typeof global).mx_rage_logger?.log(logLevel, ...args);
+const onLog = ({ logLevel, args }): void => (parent as unknown as typeof global).mx_rage_logger?.log(logLevel, ...args);

@@ -20,13 +20,13 @@
     "Your browser can't run %(brand)s": "உங்கள் உலாவியில் %(brand)s ஐ இயக்க முடியாது",
     "Unsupported browser": "ஆதரிக்கப்படாத உலாவி",
     "Use %(brand)s on mobile": "%(brand)s ஐ திறன்பேசியில் பயன்படுத்தவும்",
-    "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "Go to your browser to complete Sign In": "உள்நுழைவை முடிவுசெய்ய உங்கள் உலாவிக்குச் செல்லவும்",
-    "%(brand)s Desktop (%(platformName)s)": "%(brand)s திரைமுகப்பு (%(platformName)s)",
     "Open": "திற",
     "Download Completed": "பதிவிறக்கம் முடிவடைந்தது",
     "Unable to load config file: please refresh the page to try again.": "கட்டமைப்பு கோப்பை ஏற்ற முடியவில்லை: மீண்டும் முயற்சிக்க பக்கத்தைப் புதுப்பிக்கவும்.",
     "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "உங்கள் எலிமெண்ட் உள்ளமைவில் தவறான JSON உள்ளது. தயவுசெய்து இதை சரிசெய்து பக்கத்தை மீண்டும் ஏற்றவும்.",
     "Your Element is misconfigured": "உங்கள் எலிமெண்ட் தவறாக உள்ளமைக்கப்பட்டுள்ளது",
-    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "மேட்ரிக்ஸ் இனால் செயற்படுத்தபடுகின்ற பரவலாக்கப்பட்ட, மறைகுறியாக்கப்பட்ட , உரையாடல் மற்றும் ஒத்துழைப்பு பயன்பாட்டை"
+    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "மேட்ரிக்ஸ் இனால் செயற்படுத்தபடுகின்ற பரவலாக்கப்பட்ட, மறைகுறியாக்கப்பட்ட , உரையாடல் மற்றும் ஒத்துழைப்பு பயன்பாட்டை",
+    "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s: %(browserName)s இல் %(osName)s",
+    "%(brand)s Desktop: %(platformName)s": "%(brand)s டெஸ்க்டாப்: %(platformName)s"
 }

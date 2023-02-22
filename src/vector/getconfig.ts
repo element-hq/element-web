@@ -18,8 +18,8 @@ import type { IConfigOptions } from "matrix-react-sdk/src/IConfigOptions";
 
 // Load the config file. First try to load up a domain-specific config of the
 // form "config.$domain.json" and if that fails, fall back to config.json.
-export async function getVectorConfig(relativeLocation=''): Promise<IConfigOptions> {
-    if (relativeLocation !== '' && !relativeLocation.endsWith('/')) relativeLocation += '/';
+export async function getVectorConfig(relativeLocation = ""): Promise<IConfigOptions> {
+    if (relativeLocation !== "" && !relativeLocation.endsWith("/")) relativeLocation += "/";
 
     const specificConfigPromise = getConfig(`${relativeLocation}config.${document.domain}.json`);
     const generalConfigPromise = getConfig(relativeLocation + "config.json");

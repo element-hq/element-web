@@ -7,37 +7,34 @@
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=element-web&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=element-web)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=element-web&metric=bugs)](https://sonarcloud.io/summary/new_code?id=element-web)
 
-Element
-=======
+# Element
 
 Element (formerly known as Vector and Riot) is a Matrix web client built using the [Matrix
 React SDK](https://github.com/matrix-org/matrix-react-sdk).
 
-Supported Environments
-======================
+# Supported Environments
 
 Element has several tiers of support for different environments:
 
-* Supported
-  * Definition: Issues **actively triaged**, regressions **block** the release
-  * Last 2 major versions of Chrome, Firefox, Safari, and Edge on desktop OSes
-  * Latest release of official Element Desktop app on desktop OSes
-  * Desktop OSes means macOS, Windows, and Linux versions for desktop devices
-    that are actively supported by the OS vendor and receive security updates
-* Experimental
-  * Definition: Issues **accepted**, regressions **do not block** the release
-  * Element as an installed PWA via current stable version of Chrome, Firefox, and Safari
-  * Mobile web for current stable version of Chrome, Firefox, and Safari on Android, iOS, and iPadOS
-* Not supported
-  * Definition: Issues only affecting unsupported environments are **closed**
-  * Everything else
+-   Supported
+    -   Definition: Issues **actively triaged**, regressions **block** the release
+    -   Last 2 major versions of Chrome, Firefox, Safari, and Edge on desktop OSes
+    -   Latest release of official Element Desktop app on desktop OSes
+    -   Desktop OSes means macOS, Windows, and Linux versions for desktop devices
+        that are actively supported by the OS vendor and receive security updates
+-   Experimental
+    -   Definition: Issues **accepted**, regressions **do not block** the release
+    -   Element as an installed PWA via current stable version of Chrome, Firefox, and Safari
+    -   Mobile web for current stable version of Chrome, Firefox, and Safari on Android, iOS, and iPadOS
+-   Not supported
+    -   Definition: Issues only affecting unsupported environments are **closed**
+    -   Everything else
 
 For accessing Element on an Android or iOS device, we currently recommend the
 native apps [element-android](https://github.com/vector-im/element-android)
 and [element-ios](https://github.com/vector-im/element-ios).
 
-Getting Started
-===============
+# Getting Started
 
 The easiest way to test Element is to just use the hosted copy at <https://app.element.io>.
 The `develop` branch is continuously deployed to <https://develop.element.io>
@@ -67,47 +64,39 @@ and thus allowed.
 To install Element as a desktop application, see [Running as a desktop
 app](#running-as-a-desktop-app) below.
 
-Important Security Notes
-========================
+# Important Security Notes
 
-Separate domains
-----------------
+## Separate domains
 
 We do not recommend running Element from the same domain name as your Matrix
-homeserver.  The reason is the risk of XSS (cross-site-scripting)
+homeserver. The reason is the risk of XSS (cross-site-scripting)
 vulnerabilities that could occur if someone caused Element to load and render
 malicious user generated content from a Matrix API which then had trusted
 access to Element (or other apps) due to sharing the same domain.
 
 We have put some coarse mitigations into place to try to protect against this
-situation, but it's still not good practice to do it in the first place.  See
+situation, but it's still not good practice to do it in the first place. See
 <https://github.com/vector-im/element-web/issues/1977> for more details.
 
-Configuration best practices
-----------------------------
+## Configuration best practices
 
 Unless you have special requirements, you will want to add the following to
 your web server configuration when hosting Element Web:
 
-* The `X-Frame-Options: SAMEORIGIN` header, to prevent Element Web from being
-  framed and protect from [clickjacking][owasp-clickjacking].
-* The `frame-ancestors 'none'` directive to your `Content-Security-Policy`
-  header, as the modern replacement for `X-Frame-Options` (though both should be
-  included since not all browsers support it yet, see
-  [this][owasp-clickjacking-csp]).
-* The `X-Content-Type-Options: nosniff` header, to [disable MIME
-  sniffing][mime-sniffing].
-* The `X-XSS-Protection: 1; mode=block;` header, for basic XSS protection in
-  legacy browsers.
+-   The `X-Frame-Options: SAMEORIGIN` header, to prevent Element Web from being
+    framed and protect from [clickjacking][owasp-clickjacking].
+-   The `frame-ancestors 'none'` directive to your `Content-Security-Policy`
+    header, as the modern replacement for `X-Frame-Options` (though both should be
+    included since not all browsers support it yet, see
+    [this][owasp-clickjacking-csp]).
+-   The `X-Content-Type-Options: nosniff` header, to [disable MIME
+    sniffing][mime-sniffing].
+-   The `X-XSS-Protection: 1; mode=block;` header, for basic XSS protection in
+    legacy browsers.
 
-[mime-sniffing]:
-<https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types#mime_sniffing>
-
-[owasp-clickjacking-csp]:
-<https://cheatsheetseries.owasp.org/cheatsheets/Clickjacking_Defense_Cheat_Sheet.html#content-security-policy-frame-ancestors-examples>
-
-[owasp-clickjacking]:
-<https://cheatsheetseries.owasp.org/cheatsheets/Clickjacking_Defense_Cheat_Sheet.html>
+[mime-sniffing]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types#mime_sniffing
+[owasp-clickjacking-csp]: https://cheatsheetseries.owasp.org/cheatsheets/Clickjacking_Defense_Cheat_Sheet.html#content-security-policy-frame-ancestors-examples
+[owasp-clickjacking]: https://cheatsheetseries.owasp.org/cheatsheets/Clickjacking_Defense_Cheat_Sheet.html
 
 If you are using nginx, this would look something like the following:
 
@@ -117,7 +106,9 @@ add_header X-Content-Type-Options nosniff;
 add_header X-XSS-Protection "1; mode=block";
 add_header Content-Security-Policy "frame-ancestors 'none'";
 ```
+
 For Apache, the configuration looks like:
+
 ```
 Header set X-Frame-Options SAMEORIGIN
 Header set X-Content-Type-Options nosniff
@@ -129,8 +120,7 @@ Note: In case you are already setting a `Content-Security-Policy` header
 elsewhere, you should modify it to include the `frame-ancestors` directive
 instead of adding that last line.
 
-Building From Source
-====================
+# Building From Source
 
 Element is a modular webapp built with modern ES6 and uses a Node.js build system.
 Ensure you have the latest LTS version of Node.js installed.
@@ -143,7 +133,7 @@ guide](https://classic.yarnpkg.com/en/docs/install) if you do not have it alread
 1. Clone the repo: `git clone https://github.com/vector-im/element-web.git`.
 1. Switch to the element-web directory: `cd element-web`.
 1. Install the prerequisites: `yarn install`.
-   * If you're using the `develop` branch, then it is recommended to set up a
+    - If you're using the `develop` branch, then it is recommended to set up a
       proper development environment (see [Setting up a dev
       environment](#setting-up-a-dev-environment) below). Alternatively, you
       can use <https://develop.element.io> - the continuous integration release of
@@ -160,8 +150,7 @@ will not appear in Settings without using the dist script. You can then mount th
 `webapp` directory on your web server to actually serve up the app, which is
 entirely static content.
 
-Running as a Desktop app
-========================
+# Running as a Desktop app
 
 Element can also be run as a desktop app, wrapped in Electron. You can download a
 pre-built version from <https://element.io/get-started> or, if you prefer,
@@ -173,7 +162,7 @@ Many thanks to @aviraldg for the initial work on the Electron integration.
 
 Other options for running as a desktop app:
 
-* @asdf:matrix.org points out that you can use nativefier and it just works(tm)
+-   @asdf:matrix.org points out that you can use nativefier and it just works(tm)
 
 ```bash
 yarn global add nativefier
@@ -183,8 +172,7 @@ nativefier https://app.element.io/
 The [configuration docs](docs/config.md#desktop-app-configuration) show how to
 override the desktop app's default settings if desired.
 
-Running from Docker
-===================
+# Running from Docker
 
 The Docker image can be used to serve element-web as a web server. The easiest way to use
 it is to use the prebuilt image:
@@ -223,26 +211,22 @@ docker build -t \
     .
 ```
 
-Running in Kubernetes
-=====================
+# Running in Kubernetes
 
 The provided element-web docker image can also be run from within a Kubernetes cluster.
 See the [Kubernetes example](docs/kubernetes.md) for more details.
 
-config.json
-===========
+# config.json
 
 Element supports a variety of settings to configure default servers, behaviour, themes, etc.
 See the [configuration docs](docs/config.md) for more details.
 
-Labs Features
-=============
+# Labs Features
 
 Some features of Element may be enabled by flags in the `Labs` section of the settings.
 Some of these features are described in [labs.md](https://github.com/vector-im/element-web/blob/develop/docs/labs.md).
 
-Caching requirements
-====================
+# Caching requirements
 
 Element requires the following URLs not to be cached, when/if you are serving Element from your own webserver:
 
@@ -259,8 +243,7 @@ webserver to return `Cache-Control: no-cache` for `/`. This ensures the browser 
 the next page load after it's been deployed. Note that this is already configured for you in the nginx config of our
 Dockerfile.
 
-Development
-===========
+# Development
 
 Before attempting to develop on Element you **must** read the [developer guide
 for `matrix-react-sdk`](https://github.com/matrix-org/matrix-react-sdk#developer-guide), which
@@ -282,7 +265,7 @@ higher and lower level React components useful for building Matrix communication
 apps using React.
 
 Please note that Element is intended to run correctly without access to the public
-internet.  So please don't depend on resources (JS libs, CSS, images, fonts)
+internet. So please don't depend on resources (JS libs, CSS, images, fonts)
 hosted by external CDNs or servers but instead please package all dependencies
 into Element itself.
 
@@ -290,8 +273,7 @@ CSS hot-reload is available as an opt-in development feature. You can enable it
 by defining a `CSS_HOT_RELOAD` environment variable, in a `.env` file in the root
 of the repository. See `.env.example` for documentation and an example.
 
-Setting up a dev environment
-============================
+# Setting up a dev environment
 
 Much of the functionality in Element is actually in the `matrix-react-sdk` and
 `matrix-js-sdk` modules. It is possible to set these up in a way that makes it
@@ -300,7 +282,7 @@ having to manually rebuild each time.
 
 First clone and build `matrix-js-sdk`:
 
-``` bash
+```bash
 git clone https://github.com/matrix-org/matrix-js-sdk.git
 pushd matrix-js-sdk
 yarn link
@@ -347,9 +329,9 @@ Wait a few seconds for the initial build to finish; you should see something lik
 [element-js] ℹ ｢wdm｣: Compiled successfully.
 ```
 
-   Remember, the command will not terminate since it runs the web server
-   and rebuilds source files when they change. This development server also
-   disables caching, so do NOT use it in production.
+Remember, the command will not terminate since it runs the web server
+and rebuilds source files when they change. This development server also
+disables caching, so do NOT use it in production.
 
 Open <http://127.0.0.1:8080/> in your browser to see your newly built Element.
 
@@ -377,7 +359,7 @@ echo fs.inotify.max_user_instances=512 | sudo tee -a /etc/sysctl.conf
 sudo sysctl -p
 ```
 
-___
+---
 
 When you make changes to `matrix-react-sdk` or `matrix-js-sdk` they should be
 automatically picked up by webpack and built.
@@ -386,8 +368,7 @@ If any of these steps error with, `file table overflow`, you are probably on a m
 which has a very low limit on max open files. Run `ulimit -Sn 1024` and try again.
 You'll need to do this in each new terminal you open before building Element.
 
-Running the tests
------------------
+## Running the tests
 
 There are a number of application-level tests in the `tests` directory; these
 are designed to run with Jest and JSDOM. To run them
@@ -400,8 +381,7 @@ yarn test
 
 See [matrix-react-sdk](https://github.com/matrix-org/matrix-react-sdk/#end-to-end-tests) for how to run the end-to-end tests.
 
-Translations
-============
+# Translations
 
 To add a new translation, head to the [translating doc](docs/translating.md).
 
@@ -409,8 +389,7 @@ For a developer guide, see the [translating dev doc](docs/translating-dev.md).
 
 [<img src="https://translate.element.io/widgets/element-web/-/multi-auto.svg" alt="translationsstatus" width="340">](https://translate.element.io/engage/element-web/?utm_source=widget)
 
-Triaging issues
-===============
+# Triaging issues
 
 Issues are triaged by community members and the Web App Team, following the [triage process](https://github.com/vector-im/element-meta/wiki/Triage-process).
 

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Echoes a version based on the git hashes of the element-web, react-sdk & js-sdk checkouts, for the case where
 # these dependencies are git checkouts.

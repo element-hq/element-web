@@ -1,175 +1,173 @@
 <style type="text/css">
-
-/* we deliberately inline style here to avoid flash-of-CSS problems, and to avoid
+    /* we deliberately inline style here to avoid flash-of-CSS problems, and to avoid
  * voodoo where we have to set display: none by default
  */
 
-h1::after {
-    content: "!";
-}
+    h1::after {
+        content: "!";
+    }
 
-.mx_Parent {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -webkit-flex-direction: column;
-    -ms-flex-direction: column;
-    flex-direction: column;
-    -webkit-box-pack: center;
-    -webkit-justify-content: center;
-    -ms-flex-pack: center;
-    justify-content: center;
-    -webkit-box-align: center;
-    -webkit-align-items: center;
-    -ms-flex-align: center;
-    align-items: center;
-    text-align: center;
-    padding: 25px 35px;
-    color: #2e2f32;
-}
+    .mx_Parent {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        -webkit-box-pack: center;
+        -webkit-justify-content: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        -webkit-align-items: center;
+        -ms-flex-align: center;
+        align-items: center;
+        text-align: center;
+        padding: 25px 35px;
+        color: #2e2f32;
+    }
 
-.mx_Logo {
-    height: 54px;
-    margin-top: 2px;
-}
+    .mx_Logo {
+        height: 54px;
+        margin-top: 2px;
+    }
 
-.mx_ButtonGroup {
-    margin-top: 10px;
-}
+    .mx_ButtonGroup {
+        margin-top: 10px;
+    }
 
-.mx_ButtonRow {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-justify-content: space-around;
-    -ms-flex-pack: distribute;
-    -webkit-box-align: center;
-    -webkit-align-items: center;
-    -ms-flex-align: center;
-    align-items: center;
-    justify-content: space-between;
-    box-sizing: border-box;
-    margin: 12px 0 0;
-}
+    .mx_ButtonRow {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-justify-content: space-around;
+        -ms-flex-pack: distribute;
+        -webkit-box-align: center;
+        -webkit-align-items: center;
+        -ms-flex-align: center;
+        align-items: center;
+        justify-content: space-between;
+        box-sizing: border-box;
+        margin: 12px 0 0;
+    }
 
-.mx_ButtonRow > * {
-    margin: 0 10px;
-}
+    .mx_ButtonRow > * {
+        margin: 0 10px;
+    }
 
-.mx_ButtonRow > *:first-child {
-    margin-left: 0;
-}
+    .mx_ButtonRow > *:first-child {
+        margin-left: 0;
+    }
 
-.mx_ButtonRow > *:last-child {
-    margin-right: 0;
-}
+    .mx_ButtonRow > *:last-child {
+        margin-right: 0;
+    }
 
-.mx_ButtonParent {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-    padding: 10px 20px;
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: normal;
-    -webkit-flex-direction: row;
-    -ms-flex-direction: row;
-    flex-direction: row;
-    -webkit-box-pack: center;
-    -webkit-justify-content: center;
-    -ms-flex-pack: center;
-    justify-content: center;
-    -webkit-box-align: center;
-    -webkit-align-items: center;
-    -ms-flex-align: center;
-    align-items: center;
-    border-radius: 4px;
-    width: 150px;
-    background-repeat: no-repeat;
-    background-position: 10px center;
-    text-decoration: none;
-    color: #2e2f32 !important;
-}
+    .mx_ButtonParent {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        padding: 10px 20px;
+        -webkit-box-orient: horizontal;
+        -webkit-box-direction: normal;
+        -webkit-flex-direction: row;
+        -ms-flex-direction: row;
+        flex-direction: row;
+        -webkit-box-pack: center;
+        -webkit-justify-content: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        -webkit-align-items: center;
+        -ms-flex-align: center;
+        align-items: center;
+        border-radius: 4px;
+        width: 150px;
+        background-repeat: no-repeat;
+        background-position: 10px center;
+        text-decoration: none;
+        color: #2e2f32 !important;
+    }
 
-.mx_ButtonLabel {
-    margin-left: 20px;
-}
+    .mx_ButtonLabel {
+        margin-left: 20px;
+    }
 
-.mx_Header_title {
-    font-size: 24px;
-    font-weight: 600;
-    margin: 20px 0 0;
-}
+    .mx_Header_title {
+        font-size: 24px;
+        font-weight: 600;
+        margin: 20px 0 0;
+    }
 
-.mx_Header_subtitle {
-    font-size: 12px;
-    font-weight: normal;
-    margin: 8px 0 0;
-}
+    .mx_Header_subtitle {
+        font-size: 12px;
+        font-weight: normal;
+        margin: 8px 0 0;
+    }
 
-.mx_ButtonSignIn {
-    background-color: #368BD6;
-    color: white !important;
-}
+    .mx_ButtonSignIn {
+        background-color: #368bd6;
+        color: white !important;
+    }
 
-.mx_ButtonCreateAccount {
-    background-color: #0DBD8B;
-    color: white !important;
-}
+    .mx_ButtonCreateAccount {
+        background-color: #0dbd8b;
+        color: white !important;
+    }
 
-.mx_SecondaryButton {
-    background-color: #FFFFFF;
-    color: #2E2F32;
-}
+    .mx_SecondaryButton {
+        background-color: #ffffff;
+        color: #2e2f32;
+    }
 
-.mx_Button_iconSignIn {
-    background-image: url('welcome/images/icon-sign-in.svg');
-}
-.mx_Button_iconCreateAccount {
-    background-image: url('welcome/images/icon-create-account.svg');
-}
-.mx_Button_iconHelp {
-    background-image: url('welcome/images/icon-help.svg');
-}
-.mx_Button_iconRoomDirectory {
-    background-image: url('welcome/images/icon-room-directory.svg');
-}
+    .mx_Button_iconSignIn {
+        background-image: url("welcome/images/icon-sign-in.svg");
+    }
+    .mx_Button_iconCreateAccount {
+        background-image: url("welcome/images/icon-create-account.svg");
+    }
+    .mx_Button_iconHelp {
+        background-image: url("welcome/images/icon-help.svg");
+    }
+    .mx_Button_iconRoomDirectory {
+        background-image: url("welcome/images/icon-room-directory.svg");
+    }
 
-/*
+    /*
 .mx_WelcomePage_loggedIn is applied by EmbeddedPage from the Welcome component
 If it is set on the page, we should show the buttons. Otherwise, we have to assume
 we don't have an account and should hide them. No account == no guest account either.
  */
-.mx_WelcomePage:not(.mx_WelcomePage_loggedIn) .mx_WelcomePage_guestFunctions {
-    display: none;
-}
-
-.mx_ButtonRow.mx_WelcomePage_guestFunctions {
-    margin-top: 20px;
-}
-.mx_ButtonRow.mx_WelcomePage_guestFunctions > div {
-    margin: 0 auto;
-}
-
-@media only screen and (max-width: 480px) {
-    .mx_ButtonRow {
-        flex-direction: column;
+    .mx_WelcomePage:not(.mx_WelcomePage_loggedIn) .mx_WelcomePage_guestFunctions {
+        display: none;
     }
 
-    .mx_ButtonRow > * {
-        margin: 0 0 10px 0;
+    .mx_ButtonRow.mx_WelcomePage_guestFunctions {
+        margin-top: 20px;
     }
-}
+    .mx_ButtonRow.mx_WelcomePage_guestFunctions > div {
+        margin: 0 auto;
+    }
 
+    @media only screen and (max-width: 480px) {
+        .mx_ButtonRow {
+            flex-direction: column;
+        }
+
+        .mx_ButtonRow > * {
+            margin: 0 0 10px 0;
+        }
+    }
 </style>
 
 <div class="mx_Parent">
     <a href="https://element.io" target="_blank" rel="noopener">
-        <img src="welcome/images/logo.svg" alt="" class="mx_Logo"/>
+        <img src="welcome/images/logo.svg" alt="" class="mx_Logo" />
     </a>
     <h1 class="mx_Header_title">_t("Welcome to Element")</h1>
     <!-- XXX: Our translations system isn't smart enough to recognize variables in the HTML, so we manually do it -->

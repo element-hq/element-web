@@ -1,9 +1,7 @@
 {
     "Invalid JSON": "JSON armeɣtu",
-    "%(brand)s Desktop (%(platformName)s)": "%(brand)s n tnarit (%(platformName)s)",
     "Go to your browser to complete Sign In": "Ddu ɣer iminig akken ad tkemleḍ ajerred",
     "Unknown device": "Ibenk arussin",
-    "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "Create Account": "Rnu amiḍan",
     "Dismiss": "Agwi",
     "Sign In": "Kcem",

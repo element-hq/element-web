@@ -1,0 +1,18 @@
+{
+    "applinks": {
+        "apps": [],
+        "details": [
+            {
+                "appID": "7J4U792NQT.im.vector.app",
+                "paths": [
+                    "*"
+                ]
+            }
+        ]
+    },
+    "webcredentials": {
+        "apps": [
+            "7J4U792NQT.im.vector.app"
+        ]
+    }
+}
