@@ -15,9 +15,8 @@ limitations under the License.
 */
 
 import React from "react";
-import { fireEvent, render, RenderResult } from "@testing-library/react";
+import { act, fireEvent, render, RenderResult } from "@testing-library/react";
 import * as maplibregl from "maplibre-gl";
-import { act } from "react-dom/test-utils";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { mocked } from "jest-mock";

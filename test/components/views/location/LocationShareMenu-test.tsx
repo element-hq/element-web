@@ -21,8 +21,7 @@ import { MatrixClient } from "matrix-js-sdk/src/client";
 import { RelationType } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 import { M_ASSET, LocationAssetType } from "matrix-js-sdk/src/@types/location";
-import { act } from "react-dom/test-utils";
-import { fireEvent, render, RenderResult } from "@testing-library/react";
+import { act, fireEvent, render, RenderResult } from "@testing-library/react";
 import * as maplibregl from "maplibre-gl";
 
 import LocationShareMenu from "../../../../src/components/views/location/LocationShareMenu";

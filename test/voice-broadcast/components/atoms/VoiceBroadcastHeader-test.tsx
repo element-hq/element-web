@@ -12,7 +12,6 @@ limitations under the License.
 */
 
 import React from "react";
-import { Container } from "react-dom";
 import { MatrixClient, Room, RoomMember } from "matrix-js-sdk/src/matrix";
 import { render, RenderResult } from "@testing-library/react";
 
@@ -33,7 +32,7 @@ describe("VoiceBroadcastHeader", () => {
     let client: MatrixClient;
     let room: Room;
     const sender = new RoomMember(roomId, userId);
-    let container: Container;
+    let container: RenderResult["container"];
 
     const renderHeader = (live: VoiceBroadcastLiveness, showBroadcast?: boolean, buffering?: boolean): RenderResult => {
         return render(
