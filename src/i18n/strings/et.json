@@ -3735,5 +3735,9 @@
     "Unable to connect to Homeserver. Retrying…": "Ei saa ühendust koduserveriga. Proovin uuesti…",
     "Secure Backup successful": "Krüptovõtmete varundus õnnestus",
     "Your keys are now being backed up from this device.": "Sinu krüptovõtmed on parasjagu sellest seadmest varundamisel.",
-    "Loading polls": "Laadin küsitlusi"
+    "Loading polls": "Laadin küsitlusi",
+    "Due to decryption errors, some votes may not be counted": "Dekrüptimisvigade tõttu jääb osa hääli lugemata",
+    "The sender has blocked you from receiving this message": "Sõnumi saatja on keelanud sul selle sõnumi saamise",
+    "Room directory": "Jututubade loend",
+    "Show NSFW content": "Näita töökeskkonnas mittesobilikku sisu"
 }
