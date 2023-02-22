@@ -3732,5 +3732,8 @@
     "Starting export process…": "Inizio processo di esportazione…",
     "Creating HTML…": "Creazione HTML…",
     "Starting export…": "Inizio esportazione…",
-    "Unable to connect to Homeserver. Retrying…": "Impossibile connettersi all'homeserver. Riprovo…"
+    "Unable to connect to Homeserver. Retrying…": "Impossibile connettersi all'homeserver. Riprovo…",
+    "Secure Backup successful": "Backup Sicuro completato",
+    "Your keys are now being backed up from this device.": "Viene ora fatto il backup delle tue chiavi da questo dispositivo.",
+    "Loading polls": "Caricamento sondaggi"
 }

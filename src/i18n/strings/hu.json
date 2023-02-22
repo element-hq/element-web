@@ -3734,5 +3734,6 @@
     "Starting export process…": "Exportálási folyamat indítása…",
     "Creating HTML…": "HTML létrehozása…",
     "Starting export…": "Exportálás kezdése…",
-    "Unable to connect to Homeserver. Retrying…": "A Matrix szerverrel nem lehet felvenni a kapcsolatot. Újrapróbálkozás…"
+    "Unable to connect to Homeserver. Retrying…": "A Matrix szerverrel nem lehet felvenni a kapcsolatot. Újrapróbálkozás…",
+    "Loading polls": "Szavazások betöltése"
 }
