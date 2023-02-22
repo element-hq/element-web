@@ -3737,5 +3737,7 @@
     "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>|other": "Lugemata sõnumite olek jututoas: <strong>%(status)s</strong>, kokku: <strong>%(count)s</strong>",
     "Ended a poll": "Lõpetas küsitluse",
     "Identity server is <code>%(identityServerUrl)s</code>": "Isikutuvastusserveri aadress <code>%(identityServerUrl)s</code>",
-    "Homeserver is <code>%(homeserverUrl)s</code>": "Koduserveri aadress <code>%(homeserverUrl)s</code>"
+    "Homeserver is <code>%(homeserverUrl)s</code>": "Koduserveri aadress <code>%(homeserverUrl)s</code>",
+    "Room is <strong>not encrypted 🚨</strong>": "Jututuba on <strong>krüptimata 🚨</strong>",
+    "Room is <strong>encrypted ✅</strong>": "Jututuba on <strong>krüptitud ✅</strong>"
 }
