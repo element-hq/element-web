@@ -77,7 +77,6 @@
     "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s จาก %(fromPowerLevel)s ไปเป็น %(toPowerLevel)s",
     "Hangup": "วางสาย",
     "Historical": "ประวัติแชทเก่า",
-    "Homeserver is": "เซิร์ฟเวอร์บ้านคือ",
     "Import": "นำเข้า",
     "Incorrect username and/or password.": "ชื่อผู้ใช้และ/หรือรหัสผ่านไม่ถูกต้อง",
     "Incorrect verification code": "รหัสยืนยันไม่ถูกต้อง",

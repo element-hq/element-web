@@ -1263,7 +1263,6 @@
     "FAQ": "Korduma kippuvad küsimused",
     "Versions": "Versioonid",
     "%(brand)s version:": "%(brand)s'i versioon:",
-    "Homeserver is": "Koduserver on",
     "Labs": "Katsed",
     "Ignored/Blocked": "Eiratud või ligipääs blokeeritud",
     "Error adding ignored user/server": "Viga eiratud kasutaja või serveri lisamisel",
@@ -2449,7 +2448,6 @@
     "Integration manager": "Lõiminguhaldur",
     "Your %(brand)s doesn't allow you to use an integration manager to do this. Please contact an admin.": "Sinu %(brand)s ei võimalda selle tegevuse jaoks kasutada lõiminguhaldurit. Palun küsi lisateavet serveri haldajalt.",
     "Using this widget may share data <helpIcon /> with %(widgetDomain)s & your integration manager.": "Selle vidina kasutamisel võidakse jagada andmeid <helpIcon /> %(widgetDomain)s saitidega ning sinu lõiminguhalduriga.",
-    "Identity server is": "Isikutuvastusserver on",
     "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "Lõiminguhalduritel on laiad volitused - nad võivad sinu nimel lugeda seadistusi, kohandada vidinaid, saata jututubade kutseid ning määrata õigusi.",
     "Use an integration manager to manage bots, widgets, and sticker packs.": "Robotite, vidinate ja kleepsupakkide seadistamiseks kasuta lõiminguhaldurit.",
     "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "Robotite, vidinate ja kleepsupakkide jaoks kasuta lõiminguhaldurit <b>(%(serverName)s)</b>.",
@@ -3668,11 +3666,8 @@
     "Highlight: ": "Esiletõstetud: ",
     "Total: ": "Kokku: ",
     "Main timeline": "Peamine ajajoon",
-    "not encrypted 🚨": "krüptimata 🚨",
     "encrypted ✅": "krüptitud ✅",
-    "Room is ": "Jututuba on ",
     "Notification state is": "Teavituste olek on",
-    ", count:": ", kokku:",
     "Room unread status: ": "Jututoa lugemata sõnumite olek: ",
     "Room status": "Jututoa sõnumite olek",
     "Notifications debug": "Teavituste silumine",
@@ -3735,5 +3730,9 @@
     "Unable to connect to Homeserver. Retrying…": "Ei saa ühendust koduserveriga. Proovin uuesti…",
     "Secure Backup successful": "Krüptovõtmete varundus õnnestus",
     "Your keys are now being backed up from this device.": "Sinu krüptovõtmed on parasjagu sellest seadmest varundamisel.",
-    "Loading polls": "Laadin küsitlusi"
+    "Loading polls": "Laadin küsitlusi",
+    "Due to decryption errors, some votes may not be counted": "Dekrüptimisvigade tõttu jääb osa hääli lugemata",
+    "The sender has blocked you from receiving this message": "Sõnumi saatja on keelanud sul selle sõnumi saamise",
+    "Room directory": "Jututubade loend",
+    "Show NSFW content": "Näita töökeskkonnas mittesobilikku sisu"
 }
