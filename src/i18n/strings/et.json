@@ -3666,9 +3666,6 @@
     "Highlight: ": "Esiletõstetud: ",
     "Total: ": "Kokku: ",
     "Main timeline": "Peamine ajajoon",
-    "encrypted ✅": "krüptitud ✅",
-    "Notification state is": "Teavituste olek on",
-    "Room unread status: ": "Jututoa lugemata sõnumite olek: ",
     "Room status": "Jututoa sõnumite olek",
     "Notifications debug": "Teavituste silumine",
     "Use rich text instead of Markdown in the message composer.": "Sõnumite kirjutamisel kasuta Markdown'i asemel täisfunktsionaalset küljendust.",
@@ -3734,5 +3731,11 @@
     "Due to decryption errors, some votes may not be counted": "Dekrüptimisvigade tõttu jääb osa hääli lugemata",
     "The sender has blocked you from receiving this message": "Sõnumi saatja on keelanud sul selle sõnumi saamise",
     "Room directory": "Jututubade loend",
-    "Show NSFW content": "Näita töökeskkonnas mittesobilikku sisu"
+    "Show NSFW content": "Näita töökeskkonnas mittesobilikku sisu",
+    "Notification state is <strong>%(notificationState)s</strong>": "Teavituste olek: <strong>%(notificationState)s</strong>",
+    "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>|zero": "Lugemata sõnumite olek jututoas: <strong>%(status)s</strong>",
+    "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>|other": "Lugemata sõnumite olek jututoas: <strong>%(status)s</strong>, kokku: <strong>%(count)s</strong>",
+    "Ended a poll": "Lõpetas küsitluse",
+    "Identity server is <code>%(identityServerUrl)s</code>": "Isikutuvastusserveri aadress <code>%(identityServerUrl)s</code>",
+    "Homeserver is <code>%(homeserverUrl)s</code>": "Koduserveri aadress <code>%(homeserverUrl)s</code>"
 }
