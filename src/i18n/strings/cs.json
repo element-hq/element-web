@@ -3737,5 +3737,6 @@
     "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>|other": "Stav nepřečtení místnosti: <strong>%(status)s</strong>, počet: <strong>%(count)s</strong>",
     "Due to decryption errors, some votes may not be counted": "Kvůli chybám v dešifrování nemusí být některé hlasy započítány",
     "Identity server is <code>%(identityServerUrl)s</code>": "Server identit je <code>%(identityServerUrl)s</code>",
-    "Homeserver is <code>%(homeserverUrl)s</code>": "Domovský server je <code>%(homeserverUrl)s</code>"
+    "Homeserver is <code>%(homeserverUrl)s</code>": "Domovský server je <code>%(homeserverUrl)s</code>",
+    "Room is <strong>not encrypted 🚨</strong>": "Místnost <strong>není šifrovaná 🚨</strong>"
 }
