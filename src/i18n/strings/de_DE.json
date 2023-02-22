@@ -31,5 +31,5 @@
     "%(brand)s Desktop: %(platformName)s": "%(brand)s Desktop: %(platformName)s",
     "Failed to load Jitsi widget": "Das Jitsi Widget konnte nicht geladen werden",
     "Jitsi Video Conference": "Videokonferenz",
-    "Join Conference": "Videokonferenz beitreten",
+    "Join Conference": "Videokonferenz beitreten"
 }
