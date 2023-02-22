@@ -327,10 +327,26 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                     <span className="mx_SettingsTab_subheading">{_t("Advanced")}</span>
                     <div className="mx_SettingsTab_subsectionText">
                         <div>
-                            {_t("Homeserver is")} <code>{MatrixClientPeg.get().getHomeserverUrl()}</code>
+                            {_t(
+                                "Homeserver is <code>%(homeserverUrl)s</code>",
+                                {
+                                    homeserverUrl: MatrixClientPeg.get().getHomeserverUrl(),
+                                },
+                                {
+                                    code: (sub) => <code>{sub}</code>,
+                                },
+                            )}
                         </div>
                         <div>
-                            {_t("Identity server is")} <code>{MatrixClientPeg.get().getIdentityServerUrl()}</code>
+                            {_t(
+                                "Identity server is <code>%(identityServerUrl)s</code>",
+                                {
+                                    identityServerUrl: MatrixClientPeg.get().getIdentityServerUrl(),
+                                },
+                                {
+                                    code: (sub) => <code>{sub}</code>,
+                                },
+                            )}
                         </div>
                         <details>
                             <summary>{_t("Access Token")}</summary>

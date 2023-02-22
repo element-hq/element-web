@@ -20,7 +20,7 @@ import React, { useContext } from "react";
 
 import MatrixClientContext from "../../../../contexts/MatrixClientContext";
 import { useNotificationState } from "../../../../hooks/useRoomNotificationState";
-import { _t } from "../../../../languageHandler";
+import { _t, _td } from "../../../../languageHandler";
 import { determineUnreadState } from "../../../../RoomNotifs";
 import { humanReadableNotificationColor } from "../../../../stores/notifications/NotificationColor";
 import { doesRoomOrThreadHaveUnreadMessages } from "../../../../Unread";
@@ -39,22 +39,38 @@ export default function RoomNotifications({ onBack }: IDevtoolsProps): JSX.Eleme
                 <h2>{_t("Room status")}</h2>
                 <ul>
                     <li>
-                        {_t("Room unread status: ")}
-                        <strong>{humanReadableNotificationColor(color)}</strong>
-                        {count > 0 && (
-                            <>
-                                {_t(", count:")} <strong>{count}</strong>
-                            </>
+                        {_t(
+                            "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>",
+                            {
+                                status: humanReadableNotificationColor(color),
+                                count,
+                            },
+                            {
+                                strong: (sub) => <strong>{sub}</strong>,
+                            },
                         )}
                     </li>
                     <li>
-                        {_t("Notification state is")} <strong>{notificationState}</strong>
+                        {_t(
+                            "Notification state is <strong>%(notificationState)s</strong>",
+                            {
+                                notificationState,
+                            },
+                            {
+                                strong: (sub) => <strong>{sub}</strong>,
+                            },
+                        )}
                     </li>
                     <li>
-                        {_t("Room is ")}
-                        <strong>
-                            {cli.isRoomEncrypted(room.roomId!) ? _t("encrypted ✅") : _t("not encrypted 🚨")}
-                        </strong>
+                        {_t(
+                            cli.isRoomEncrypted(room.roomId!)
+                                ? _td("Room is <strong>encrypted ✅</strong>")
+                                : _td("Room is <strong>not encrypted 🚨</strong>"),
+                            {},
+                            {
+                                strong: (sub) => <strong>{sub}</strong>,
+                            },
+                        )}
                     </li>
                 </ul>
             </section>
