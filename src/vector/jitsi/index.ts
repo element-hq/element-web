@@ -57,6 +57,7 @@ let roomName: string;
 let startAudioOnly: boolean;
 let isVideoChannel: boolean;
 let supportsScreensharing: boolean;
+let language: string;
 
 let widgetApi: WidgetApi;
 let meetApi: any; // JitsiMeetExternalAPI
@@ -86,6 +87,7 @@ const setupCompleted = (async (): Promise<string | void> => {
         const parentUrl = qsParam("parentUrl", true);
         const widgetId = qsParam("widgetId", true);
         const theme = qsParam("theme", true);
+        language = qsParam("language", true) ?? "en";
 
         if (theme) {
             document.body.classList.add(`theme-${theme.replace(" ", "_")}`);
@@ -371,6 +373,7 @@ function joinConference(audioInput?: string | null, videoInput?: string | null):
             apiLogLevels: ["warn", "error"],
         } as any,
         jwt: jwt,
+        lang: language,
     };
 
     // Video channel widgets need some more tailored config options
