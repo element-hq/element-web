@@ -33,19 +33,19 @@ someone to add something.
 When you're looking through the list, here are some things that might make an
 issue a **GOOD** choice:
 
-* It is a problem or feature you care about.
-* It concerns a type of code you know a little about.
-* You think you can understand what's needed.
-* It already has approval from Element Web's designers (look for comments from
-  members of the
-  [Product](https://github.com/orgs/vector-im/teams/product/members) or
-  [Design](https://github.com/orgs/vector-im/teams/design/members) teams).
+-   It is a problem or feature you care about.
+-   It concerns a type of code you know a little about.
+-   You think you can understand what's needed.
+-   It already has approval from Element Web's designers (look for comments from
+    members of the
+    [Product](https://github.com/orgs/vector-im/teams/product/members) or
+    [Design](https://github.com/orgs/vector-im/teams/design/members) teams).
 
 Here are some things that might make it a **BAD** choice:
 
-* You don't understand it (maybe add a comment asking a clarifying question).
-* It sounds difficult, or is part of a larger change you don't know about.
-* **It is tagged with `X-Needs-Design` or `X-Needs-Product`.**
+-   You don't understand it (maybe add a comment asking a clarifying question).
+-   It sounds difficult, or is part of a larger change you don't know about.
+-   **It is tagged with `X-Needs-Design` or `X-Needs-Product`.**
 
 **Element Web's Design and Product teams tend to be very busy**, so if you make
 changes that require approval from one of those teams, you will probably have

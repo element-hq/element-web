@@ -18,8 +18,6 @@
     "Unsupported browser": "Peramban tidak didukung",
     "Use %(brand)s on mobile": "Gunakan %(brand)s di ponsel",
     "Powered by Matrix": "Diberdayakan oleh Matrix",
-    "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
-    "%(brand)s Desktop (%(platformName)s)": "%(brand)s Desktop (%(platformName)s)",
     "Open": "Buka",
     "Download Completed": "Unduhan Selesai",
     "Unexpected error preparing the app. See console for details.": "Kesalahan tak terduga saat menyiapkan aplikasi. Lihat konsol untuk detail.",
@@ -28,5 +26,7 @@
     "The message from the parser is: %(message)s": "Pesan dari pengurai adalah: %(message)s",
     "Your Element is misconfigured": "Anda salah mengatur Element",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Konfigurasi tidak absah: hanya bisa menentukan satu dari default_server_config, default_server_name, atau default_hs_url.",
-    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Obrolan &amp; kolaborasi terdesentralisasi dan terenkripsi diberdayakan oleh $matrixLogo"
+    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Obrolan &amp; kolaborasi terdesentralisasi dan terenkripsi diberdayakan oleh $matrixLogo",
+    "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s: %(browserName)s di %(osName)s",
+    "%(brand)s Desktop: %(platformName)s": "%(brand)s Desktop: %(platformName)s"
 }

@@ -14,12 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { defer, IDeferred } from 'matrix-js-sdk/src/utils';
+import { defer, IDeferred } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { ElectronChannel } from "../../@types/global";
-
-const electron = window.electron;
 
 interface IPCPayload {
     id?: number;
@@ -35,7 +33,7 @@ export class IPCManager {
         private readonly sendChannel: ElectronChannel = "ipcCall",
         private readonly recvChannel: ElectronChannel = "ipcReply",
     ) {
-        electron.on(this.recvChannel, this.onIpcReply);
+        window.electron.on(this.recvChannel, this.onIpcReply);
     }
 
     public async call(name: string, ...args: any[]): Promise<any> {

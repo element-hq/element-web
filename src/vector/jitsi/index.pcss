@@ -17,10 +17,10 @@ limitations under the License.
 /* TODO: Match the user's theme: https://github.com/vector-im/element-web/issues/12794 */
 
 @font-face {
-    font-family: 'Nunito';
+    font-family: "Nunito";
     font-style: normal;
     font-weight: 400;
-    src: url('~matrix-react-sdk/res/fonts/Nunito/Nunito-Regular.ttf') format('truetype');
+    src: url("~matrix-react-sdk/res/fonts/Nunito/Nunito-Regular.ttf") format("truetype");
 }
 
 $dark-fg: #edf3ff;
@@ -38,7 +38,8 @@ body.theme-light {
     color: $light-fg;
 }
 
-body, html {
+body,
+html {
     padding: 0;
     margin: 0;
 }
@@ -92,7 +93,7 @@ body, html {
     margin-top: -$icon-size; /* to visually center the form */
 
     &::before {
-        content: '';
+        content: "";
         background-size: contain;
         background-color: $dark-fg;
         mask-repeat: no-repeat;

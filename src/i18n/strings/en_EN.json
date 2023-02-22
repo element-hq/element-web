@@ -10,13 +10,10 @@
     "Download Completed": "Download Completed",
     "Open": "Open",
     "Dismiss": "Dismiss",
-    "%(brand)s Desktop (%(platformName)s)": "%(brand)s Desktop (%(platformName)s)",
+    "%(brand)s Desktop: %(platformName)s": "%(brand)s Desktop: %(platformName)s",
     "Go to your browser to complete Sign In": "Go to your browser to complete Sign In",
     "Unknown device": "Unknown device",
-    "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
-    "Failed to load Jitsi widget": "Failed to load Jitsi widget",
-    "Join Conference": "Join Conference",
-    "Jitsi Video Conference": "Jitsi Video Conference",
+    "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s: %(browserName)s on %(osName)s",
     "Powered by Matrix": "Powered by Matrix",
     "Use %(brand)s on mobile": "Use %(brand)s on mobile",
     "Unsupported browser": "Unsupported browser",
@@ -31,5 +28,8 @@
     "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo",
     "Sign In": "Sign In",
     "Create Account": "Create Account",
-    "Explore rooms": "Explore rooms"
+    "Explore rooms": "Explore rooms",   
+    "Failed to load Jitsi widget": "Failed to load Jitsi widget",
+    "Join Conference": "Join Conference",
+    "Jitsi Video Conference": "Jitsi Video Conference"
 }
