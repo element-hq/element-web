@@ -89,7 +89,7 @@ export default class HTMLExporter extends Exporter {
         return renderToStaticMarkup(avatar);
     }
 
-    protected async wrapHTML(content: string): Promise<string> {
+    protected async wrapHTML(content: string, currentPage: number, nbPages: number): Promise<string> {
         const roomAvatar = await this.getRoomAvatar();
         const exportDate = formatFullDateNoDayNoTime(new Date());
         const creator = this.room.currentState.getStateEvents(EventType.RoomCreate, "")?.getSender();
@@ -128,6 +128,29 @@ export default class HTMLExporter extends Exporter {
         );
 
         const topicText = topic ? _t("Topic: %(topic)s", { topic }) : "";
+        const previousMessagesLink = renderToStaticMarkup(
+            currentPage !== 0 ? (
+                <div style={{ textAlign: "center" }}>
+                    <a href={`./messages${currentPage === 1 ? "" : currentPage}.html`} style={{ fontWeight: "bold" }}>
+                        Previous group of messages
+                    </a>
+                </div>
+            ) : (
+                <></>
+            ),
+        );
+
+        const nextMessagesLink = renderToStaticMarkup(
+            currentPage < nbPages - 1 ? (
+                <div style={{ textAlign: "center", margin: "10px" }}>
+                    <a href={"./messages" + (currentPage + 2) + ".html"} style={{ fontWeight: "bold" }}>
+                        Next group of messages
+                    </a>
+                </div>
+            ) : (
+                <></>
+            ),
+        );
 
         return `
           <!DOCTYPE html>
@@ -168,6 +191,7 @@ export default class HTMLExporter extends Exporter {
                             <div class="mx_RoomHeader_topic" dir="auto"> ${topic} </div>
                         </div>
                         </div>
+                        ${previousMessagesLink}
                         <div class="mx_MainSplit">
                         <div class="mx_RoomView_body">
                             <div
@@ -186,13 +210,17 @@ export default class HTMLExporter extends Exporter {
                                     aria-live="polite"
                                     role="list"
                                 >
-                                <div class="mx_NewRoomIntro">
-                                    ${roomAvatar}
-                                    <h2> ${this.room.name} </h2>
-                                    <p> ${createdText} <br/><br/> ${exportedText} </p>
-                                    <br/>
-                                    <p> ${topicText} </p>
-                                </div>
+                                ${
+                                    currentPage == 0
+                                        ? `<div class="mx_NewRoomIntro">
+                                        ${roomAvatar}
+                                        <h2> ${this.room.name} </h2>
+                                        <p> ${createdText} <br/><br/> ${exportedText} </p>
+                                        <br/>
+                                        <p> ${topicText} </p>
+                                    </div>`
+                                        : ""
+                                }
                                 ${content}
                                 </ol>
                                 </div>
@@ -205,6 +233,7 @@ export default class HTMLExporter extends Exporter {
                             </div>
                         </div>
                         </div>
+                        ${nextMessagesLink}
                     </main>
                     </div>
                 </div>
@@ -381,7 +410,12 @@ export default class HTMLExporter extends Exporter {
         return eventTile;
     }
 
-    protected async createHTML(events: MatrixEvent[], start: number): Promise<string> {
+    protected async createHTML(
+        events: MatrixEvent[],
+        start: number,
+        currentPage: number,
+        nbPages: number,
+    ): Promise<string> {
         let content = "";
         let prevEvent: MatrixEvent | null = null;
         for (let i = start; i < Math.min(start + 1000, events.length); i++) {
@@ -405,7 +439,7 @@ export default class HTMLExporter extends Exporter {
             content += body;
             prevEvent = event;
         }
-        return this.wrapHTML(content);
+        return this.wrapHTML(content, currentPage, nbPages);
     }
 
     public async export(): Promise<void> {
@@ -428,7 +462,7 @@ export default class HTMLExporter extends Exporter {
 
         const usedClasses = new Set<string>();
         for (let page = 0; page < res.length / 1000; page++) {
-            const html = await this.createHTML(res, page * 1000);
+            const html = await this.createHTML(res, page * 1000, page, res.length / 1000);
             const document = new DOMParser().parseFromString(html, "text/html");
             document.querySelectorAll("*").forEach((element) => {
                 element.classList.forEach((c) => usedClasses.add(c));
