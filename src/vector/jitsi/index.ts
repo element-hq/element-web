@@ -236,14 +236,14 @@ const setupCompleted = (async (): Promise<string | void> => {
     }
 })();
 
-async function applyTranslation(language: string) {
+async function applyTranslation(language: string): Promise<void> {
     await setLanguage(language);
 
     document.getElementById("joinButton").textContent = _t("Join Conference");
     document.querySelector(".joinConferencePrompt > h2").textContent = _t("Jitsi Video Conference");
 }
 
-function enableJoinButton() {
+function enableJoinButton(): void {
     document.getElementById("joinButton").onclick = (): void => joinConference();
 }
 
