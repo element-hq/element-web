@@ -315,6 +315,31 @@ function closeConference(): void {
     }
 }
 
+// Converts from IETF language tags used by Element (en-US) to the format used
+// by Jitsi (enUS)
+function normalizeLanguage(language: string): string {
+    const [lang, variant] = language.replace("_", "-").split("-");
+
+    if (!variant || lang === variant) {
+        return lang;
+    }
+
+    return lang + variant.toUpperCase();
+}
+
+function mapLanguage(language: string): string {
+    // Element and Jitsi don't agree how to interpret en, so we go with Elements
+    // interpretation to stay consistent
+    switch (language) {
+        case "en":
+            return "enGB";
+        case "enUS":
+            return "en";
+        default:
+            return language;
+    }
+}
+
 // event handler bound in HTML
 // An audio input of undefined instructs Jitsi to start unmuted with whatever
 // audio input it can find, while an input of null instructs it to start muted,
@@ -373,7 +398,7 @@ function joinConference(audioInput?: string | null, videoInput?: string | null):
             apiLogLevels: ["warn", "error"],
         } as any,
         jwt: jwt,
-        lang: language,
+        lang: mapLanguage(normalizeLanguage(language)),
     };
 
     // Video channel widgets need some more tailored config options
