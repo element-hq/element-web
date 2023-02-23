@@ -3667,9 +3667,6 @@
     "Highlight: ": "Nejdůležitější: ",
     "Total: ": "Celkem: ",
     "Main timeline": "Hlavní časová osa",
-    "encrypted ✅": "šifrovaná ✅",
-    "Notification state is": "Stav oznámení je",
-    "Room unread status: ": "Stav nepřečtené místnosti: ",
     "Room status": "Stav místnosti",
     "Notifications debug": "Ladění oznámení",
     "unknown": "neznámé",
@@ -3733,5 +3730,13 @@
     "Loading polls": "Načítání hlasování",
     "The sender has blocked you from receiving this message": "Odesílatel vám zablokoval přijetí této zprávy",
     "Room directory": "Adresář místností",
-    "Show NSFW content": "Zobrazit NSFW obsah"
+    "Show NSFW content": "Zobrazit NSFW obsah",
+    "Room is <strong>encrypted ✅</strong>": "Místnost je <strong>šifrovaná ✅</strong>",
+    "Notification state is <strong>%(notificationState)s</strong>": "Stav oznámení je <strong>%(notificationState)s</strong>",
+    "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>|zero": "Stav nepřečtení místnosti: <strong>%(status)s</strong>",
+    "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>|other": "Stav nepřečtení místnosti: <strong>%(status)s</strong>, počet: <strong>%(count)s</strong>",
+    "Due to decryption errors, some votes may not be counted": "Kvůli chybám v dešifrování nemusí být některé hlasy započítány",
+    "Identity server is <code>%(identityServerUrl)s</code>": "Server identit je <code>%(identityServerUrl)s</code>",
+    "Homeserver is <code>%(homeserverUrl)s</code>": "Domovský server je <code>%(homeserverUrl)s</code>",
+    "Room is <strong>not encrypted 🚨</strong>": "Místnost <strong>není šifrovaná 🚨</strong>"
 }
