@@ -3729,5 +3729,14 @@
     "Loading polls": "Chargement des sondages",
     "Identity server is <code>%(identityServerUrl)s</code>": "Le serveur d’identité est <code>%(identityServerUrl)s</code>",
     "Homeserver is <code>%(homeserverUrl)s</code>": "Le serveur d’accueil est <code>%(homeserverUrl)s</code>",
-    "Show NSFW content": "Afficher le contenu sensible (NSFW)"
+    "Show NSFW content": "Afficher le contenu sensible (NSFW)",
+    "Room is <strong>not encrypted 🚨</strong>": "",
+    "Room is <strong>encrypted ✅</strong>": "",
+    "Notification state is <strong>%(notificationState)s</strong>": "",
+    "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>|zero": "",
+    "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>|other": "",
+    "Ended a poll": "",
+    "Due to decryption errors, some votes may not be counted": "",
+    "The sender has blocked you from receiving this message": "",
+    "Room directory": ""
 }
