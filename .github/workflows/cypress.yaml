@@ -165,8 +165,9 @@ jobs:
                   PERCY_BRANCH: ${{ github.event.workflow_run.head_branch }}
                   PERCY_COMMIT: ${{ github.event.workflow_run.head_sha }}
                   PERCY_PULL_REQUEST: ${{ needs.prepare.outputs.pr_id }}
-                  PERCY_PARALLEL_TOTAL: ${{ strategy.job-total }}
                   PERCY_PARALLEL_NONCE: ${{ needs.prepare.outputs.uuid }}
+                  # We manually finalize the build in the report stage
+                  PERCY_PARALLEL_TOTAL: -1
 
             - name: Upload Artifact
               if: failure()
@@ -184,14 +185,23 @@ jobs:
               with:
                   name: cypress-junit
                   path: cypress/results
+
     report:
         name: Report results
-        needs: tests
+        needs:
+            - prepare
+            - tests
         runs-on: ubuntu-latest
         if: always()
         permissions:
             statuses: write
         steps:
+            - name: Finalize Percy
+              if: needs.prepare.outputs.percy_enable == '1'
+              run: npx -p @percy/cli percy build:finalize
+              env:
+                  PERCY_PARALLEL_NONCE: ${{ needs.prepare.outputs.uuid }}
+
             - uses: Sibz/github-status-action@v1
               with:
                   authToken: ${{ secrets.GITHUB_TOKEN }}
@@ -199,6 +209,7 @@ jobs:
                   context: ${{ github.workflow }} / cypress (${{ github.event.workflow_run.event }} => ${{ github.event_name }})
                   sha: ${{ github.event.workflow_run.head_sha }}
                   target_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
     testrail:
         name: Report results to testrail
         needs:
