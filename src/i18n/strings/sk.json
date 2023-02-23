@@ -3667,8 +3667,6 @@
     "Highlight: ": "Zvýraznené: ",
     "Total: ": "Celkom: ",
     "Main timeline": "Hlavná časová os",
-    "encrypted ✅": "zašifrovaná ✅",
-    "Notification state is": "Stav oznámenia je",
     "Room status": "Stav miestnosti",
     "Notifications debug": "Ladenie oznámení",
     "unknown": "neznáme",
@@ -3729,5 +3727,17 @@
     "WARNING: session already verified, but keys do NOT MATCH!": "VAROVANIE: Relácia je už overená, ale kľúče sa NEZHODUJÚ!",
     "Secure Backup successful": "Bezpečné zálohovanie bolo úspešné",
     "Your keys are now being backed up from this device.": "Kľúče sa teraz zálohujú z tohto zariadenia.",
-    "Loading polls": "Načítavanie ankiet"
+    "Loading polls": "Načítavanie ankiet",
+    "Room is <strong>not encrypted 🚨</strong>": "Miestnosť <strong>nie je šifrovaná 🚨</strong>",
+    "Room is <strong>encrypted ✅</strong>": "Miestnosť je <strong>šifrovaná ✅</strong>",
+    "Notification state is <strong>%(notificationState)s</strong>": "Stav oznámenia je <strong>%(notificationState)s</strong>",
+    "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>|zero": "Stav neprečítaných v miestnosti: <strong>%(status)s</strong>",
+    "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>|other": "Stav neprečítaných v miestnosti: <strong>%(status)s</strong>, počet: <strong>%(count)s</strong>",
+    "Ended a poll": "Ukončil anketu",
+    "Due to decryption errors, some votes may not be counted": "Z dôvodu chýb v dešifrovaní sa niektoré hlasy nemusia započítať",
+    "The sender has blocked you from receiving this message": "Odosielateľ vám zablokoval príjem tejto správy",
+    "Room directory": "Adresár miestností",
+    "Identity server is <code>%(identityServerUrl)s</code>": "Server identity je <code>%(identityServerUrl)s</code>",
+    "Homeserver is <code>%(homeserverUrl)s</code>": "Domovský server je <code>%(homeserverUrl)s</code>",
+    "Show NSFW content": "Zobraziť obsah NSFW"
 }
