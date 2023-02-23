@@ -3727,13 +3727,17 @@
     "Secure Backup successful": "Pencadangan Aman berhasil",
     "Your keys are now being backed up from this device.": "Kunci Anda sekarang dicadangkan dari perangkat ini.",
     "Loading polls": "Memuat pemungutan suara",
-    "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>|zero": "Keadaan belum dibaca ruangan:",
-    "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>|other": "Keadaan belum dibaca ruangan: <strong>%(status)s</strong>, jumlah:",
+    "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>|zero": "Keadaan belum dibaca ruangan: <strong>%(status)s</strong>",
+    "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>|other": "Keadaan belum dibaca ruangan: <strong>%(status)s</strong>, jumlah: <strong>%(count)s</strong>",
     "Ended a poll": "Mengakhiri sebuah pemungutan suara",
     "Due to decryption errors, some votes may not be counted": "Karena kesalahan pendekripsian, beberapa suara tidak dihitung",
     "The sender has blocked you from receiving this message": "Pengirim telah memblokir Anda supaya tidak menerima pesan ini",
     "Room directory": "Direktori ruangan",
-    "Identity server is <code>%(identityServerUrl)s</code>": "Server identitas adalah <code>",
-    "Homeserver is <code>%(homeserverUrl)s</code>": "Homeserver adalah",
-    "Show NSFW content": "Tampilkan konten NSFW"
+    "Identity server is <code>%(identityServerUrl)s</code>": "Server identitas adalah <code>%(identityServerUrl)s</code>",
+    "Homeserver is <code>%(homeserverUrl)s</code>": "Homeserver adalah <code>%(homeserverUrl)s</code>",
+    "Show NSFW content": "Tampilkan konten NSFW",
+    "Room is <strong>not encrypted 🚨</strong>": "Ruangan <strong>tidak terenkripsi 🚨</strong>",
+    "Room is <strong>encrypted ✅</strong>": "Ruangan <strong>terenkripsi ✅</strong>",
+    "Notification state is <strong>%(notificationState)s</strong>": "Keadaan notifikasi adalah <strong>%(notificationState)s</strong>",
+    "Yes, it was me": "Ya, itu saya"
 }
