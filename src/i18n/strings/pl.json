@@ -1808,7 +1808,6 @@
     "Threads": "Wątki",
     "* %(senderName)s %(emote)s": "* %(senderName)s %(emote)s",
     "Other rooms": "Inne pokoje",
-    "Check your devices": "Sprawdź swoje urządzenia",
     "%(deviceId)s from %(ip)s": "%(deviceId)s z %(ip)s",
     "Other users may not trust it": "Inni użytkownicy mogą temu nie ufać",
     "Use app": "Użyj aplikacji",
