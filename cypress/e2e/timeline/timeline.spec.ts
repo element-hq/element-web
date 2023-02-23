@@ -159,8 +159,8 @@ describe("Timeline", () => {
                     ".mx_GenericEventListSummary_summary",
                 "created and configured the room.",
             ).should("exist");
-            cy.get(".mx_Spinner").should("not.exist");
-            cy.percySnapshot("Configured room on IRC layout");
+
+            cy.get(".mx_MainSplit").percySnapshotElement("Configured room on IRC layout");
         });
 
         it("should add inline start margin to an event line on IRC layout", () => {
@@ -185,11 +185,12 @@ describe("Timeline", () => {
                 .should("have.css", "margin-inline-start", "104px")
                 .should("have.css", "inset-inline-start", "0px");
 
-            cy.get(".mx_Spinner").should("not.exist");
             // Exclude timestamp from snapshot
             const percyCSS =
-                ".mx_RoomView_body .mx_EventTile_info .mx_MessageTimestamp " + "{ visibility: hidden !important; }";
-            cy.percySnapshot("Event line with inline start margin on IRC layout", { percyCSS });
+                ".mx_RoomView_body .mx_EventTile_info .mx_MessageTimestamp { visibility: hidden !important; }";
+            cy.get(".mx_MainSplit").percySnapshotElement("Event line with inline start margin on IRC layout", {
+                percyCSS,
+            });
             cy.checkA11y();
         });
 
@@ -213,8 +214,7 @@ describe("Timeline", () => {
             cy.get(".mx_RoomView_body .mx_EventTile_info .mx_MessageTimestamp").click();
 
             // Exclude timestamp from snapshot
-            const percyCSS =
-                ".mx_RoomView_body .mx_EventTile .mx_MessageTimestamp " + "{ visibility: hidden !important; }";
+            const percyCSS = ".mx_RoomView_body .mx_EventTile .mx_MessageTimestamp { visibility: hidden !important; }";
 
             // should not add inline start padding to a hidden event line on IRC layout
             cy.setSettingValue("layout", null, SettingLevel.DEVICE, Layout.IRC);
@@ -223,14 +223,20 @@ describe("Timeline", () => {
                 "padding-inline-start",
                 "0px",
             );
-            cy.percySnapshot("Hidden event line with zero padding on IRC layout", { percyCSS });
+
+            cy.get(".mx_MainSplit").percySnapshotElement("Hidden event line with zero padding on IRC layout", {
+                percyCSS,
+            });
 
             // should add inline start padding to a hidden event line on modern layout
             cy.setSettingValue("layout", null, SettingLevel.DEVICE, Layout.Group);
             cy.get(".mx_EventTile[data-layout=group].mx_EventTile_info .mx_EventTile_line")
                 // calc(var(--EventTile_group_line-spacing-inline-start) + 20px) = 64 + 20 = 84px
                 .should("have.css", "padding-inline-start", "84px");
-            cy.percySnapshot("Hidden event line with padding on modern layout", { percyCSS });
+
+            cy.get(".mx_MainSplit").percySnapshotElement("Hidden event line with padding on modern layout", {
+                percyCSS,
+            });
         });
 
         it("should click top left of view source event toggle", () => {
@@ -329,7 +335,12 @@ describe("Timeline", () => {
             cy.wait("@mxc");
 
             cy.checkA11y();
+
+            // Exclude timestamp from snapshot
+            const percyCSS =
+                ".mx_RoomView_body .mx_EventTile_info .mx_MessageTimestamp { visibility: hidden !important; }";
             cy.get(".mx_EventTile_last").percySnapshotElement("URL Preview", {
+                percyCSS,
                 widths: [800, 400],
             });
         });
