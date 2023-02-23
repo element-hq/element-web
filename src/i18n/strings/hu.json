@@ -3738,5 +3738,6 @@
     "Room directory": "Szobák listája",
     "Identity server is <code>%(identityServerUrl)s</code>": "Azonosítási szerver: <code>%(identityServerUrl)s</code>",
     "Homeserver is <code>%(homeserverUrl)s</code>": "Matrix szerver: <code>%(homeserverUrl)s</code>",
-    "Show NSFW content": "Felnőtt tartalmak megjelenítése"
+    "Show NSFW content": "Felnőtt tartalmak megjelenítése",
+    "Yes, it was me": "Igen, én voltam"
 }
