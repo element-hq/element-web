@@ -3727,5 +3727,14 @@
     "Enter a Security Phrase only you know, as it's used to safeguard your data. To be secure, you shouldn't re-use your account password.": "Masukkan frasa keamanan yang hanya Anda tahu, yang digunakan untuk mengamankan data Anda. Supaya aman, jangan menggunakan ulang kata sandi akun Anda.",
     "Secure Backup successful": "Pencadangan Aman berhasil",
     "Your keys are now being backed up from this device.": "Kunci Anda sekarang dicadangkan dari perangkat ini.",
-    "Loading polls": "Memuat pemungutan suara"
+    "Loading polls": "Memuat pemungutan suara",
+    "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>|zero": "Keadaan belum dibaca ruangan:",
+    "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>|other": "Keadaan belum dibaca ruangan: <strong>%(status)s</strong>, jumlah:",
+    "Ended a poll": "Mengakhiri sebuah pemungutan suara",
+    "Due to decryption errors, some votes may not be counted": "Karena kesalahan pendekripsian, beberapa suara tidak dihitung",
+    "The sender has blocked you from receiving this message": "Pengirim telah memblokir Anda supaya tidak menerima pesan ini",
+    "Room directory": "Direktori ruangan",
+    "Identity server is <code>%(identityServerUrl)s</code>": "Server identitas adalah <code>",
+    "Homeserver is <code>%(homeserverUrl)s</code>": "Homeserver adalah",
+    "Show NSFW content": "Tampilkan konten NSFW"
 }
