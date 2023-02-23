@@ -24,7 +24,7 @@ Element has several tiers of support for different environments:
         that are actively supported by the OS vendor and receive security updates
 -   Experimental
     -   Definition: Issues **accepted**, regressions **do not block** the release
-    -   Element as an installed PWA via current stable version of Chrome, Firefox, and Safari
+    -   Element as an installed PWA via current stable version of Chrome
     -   Mobile web for current stable version of Chrome, Firefox, and Safari on Android, iOS, and iPadOS
 -   Not supported
     -   Definition: Issues only affecting unsupported environments are **closed**
