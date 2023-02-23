@@ -226,8 +226,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
     private screenAfterLogin?: IScreen;
     private tokenLogin?: boolean;
-    private accountPassword?: string;
-    private accountPasswordTimer?: number;
     private focusComposer: boolean;
     private subTitleStatus: string;
     private prevWindowWidth: number;
@@ -295,9 +293,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             // logout page.
             Lifecycle.loadSession();
         }
-
-        this.accountPassword = null;
-        this.accountPasswordTimer = null;
 
         this.dispatcherRef = dis.register(this.onAction);
 
@@ -439,7 +434,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.state.resizeNotifier.removeListener("middlePanelResized", this.dispatchTimelineResize);
         window.removeEventListener("resize", this.onWindowResized);
 
-        if (this.accountPasswordTimer !== null) clearTimeout(this.accountPasswordTimer);
+        this.stores.accountPasswordStore.clearPassword();
         if (this.voiceBroadcastResumer) this.voiceBroadcastResumer.destroy();
     }
 
@@ -1987,13 +1982,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
      * this, as they instead jump straight into the app after `attemptTokenLogin`.
      */
     private onUserCompletedLoginFlow = async (credentials: IMatrixClientCreds, password: string): Promise<void> => {
-        this.accountPassword = password;
-        // self-destruct the password after 5mins
-        if (this.accountPasswordTimer !== null) clearTimeout(this.accountPasswordTimer);
-        this.accountPasswordTimer = window.setTimeout(() => {
-            this.accountPassword = null;
-            this.accountPasswordTimer = null;
-        }, 60 * 5 * 1000);
+        this.stores.accountPasswordStore.setPassword(password);
 
         // Create and start the client
         await Lifecycle.setLoggedIn(credentials);
@@ -2037,7 +2026,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             view = (
                 <E2eSetup
                     onFinished={this.onCompleteSecurityE2eSetupFinished}
-                    accountPassword={this.accountPassword}
+                    accountPassword={this.stores.accountPasswordStore.getPassword()}
                     tokenLogin={!!this.tokenLogin}
                 />
             );
