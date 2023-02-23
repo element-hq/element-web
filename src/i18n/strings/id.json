@@ -1486,7 +1486,6 @@
     "%(senderName)s joined the call": "%(senderName)s bergabung dengan panggilan saat ini",
     "Please contact your homeserver administrator.": "Mohon hubungi administrator homeserver Anda.",
     "New version of %(brand)s is available": "Sebuah versi %(brand)s yang baru telah tersedia",
-    "Check your devices": "Periksa perangkat Anda",
     "%(deviceId)s from %(ip)s": "%(deviceId)s dari %(ip)s",
     "New login. Was this you?": "Login baru. Apakah itu Anda?",
     "Other users may not trust it": "Pengguna yang lain mungkin tidak mempercayainya",
