@@ -82,7 +82,7 @@ interface IProps {
     alwaysVisible?: boolean;
     forceExpanded?: boolean;
     resizeNotifier: ResizeNotifier;
-    extraTiles?: ReactComponentElement<typeof ExtraTile>[];
+    extraTiles?: ReactComponentElement<typeof ExtraTile>[] | null;
     onListCollapse?: (isExpanded: boolean) => void;
 }
 
@@ -170,7 +170,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         return RoomSublist.calcNumTiles(this.state.rooms, this.extraTiles);
     }
 
-    private static calcNumTiles(rooms: Room[], extraTiles: any[]): number {
+    private static calcNumTiles(rooms: Room[], extraTiles?: any[] | null): number {
         return (rooms || []).length + (extraTiles || []).length;
     }
 
