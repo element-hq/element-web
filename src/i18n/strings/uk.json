@@ -3667,9 +3667,6 @@
     "Highlight: ": "Виділене: ",
     "Total: ": "Загалом: ",
     "Main timeline": "Основна стрічка",
-    "encrypted ✅": "зашифрована ✅",
-    "Notification state is": "Стан сповіщення",
-    "Room unread status: ": "Статус непрочитаного в кімнаті: ",
     "Room status": "Статус кімнати",
     "Notifications debug": "Сповіщення зневадження",
     "unknown": "невідомо",
@@ -3730,5 +3727,17 @@
     "Unable to connect to Homeserver. Retrying…": "Не вдалося під'єднатися до домашнього сервера. Повторна спроба…",
     "Secure Backup successful": "Безпечне резервне копіювання виконано успішно",
     "Your keys are now being backed up from this device.": "На цьому пристрої створюється резервна копія ваших ключів.",
-    "Loading polls": "Завантаження опитувань"
+    "Loading polls": "Завантаження опитувань",
+    "Room is <strong>not encrypted 🚨</strong>": "Кімната <strong>не зашифрована 🚨</strong>",
+    "Room is <strong>encrypted ✅</strong>": "Кімната <strong>зашифрована ✅</strong>",
+    "Notification state is <strong>%(notificationState)s</strong>": "Стан сповіщень <strong>%(notificationState)s</strong>",
+    "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>|zero": "Стан непрочитаного в кімнаті: <strong>%(status)s</strong>",
+    "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>|other": "Стан непрочитаного в кімнаті: <strong>%(status)s</strong>, кількість: <strong>%(count)s</strong>",
+    "Ended a poll": "Завершує опитування",
+    "Due to decryption errors, some votes may not be counted": "Через помилки розшифрування деякі голоси можуть бути не враховані",
+    "The sender has blocked you from receiving this message": "Відправник заблокував вам отримання цього повідомлення",
+    "Room directory": "Каталог кімнат",
+    "Identity server is <code>%(identityServerUrl)s</code>": "Сервер ідентифікації <code>%(identityServerUrl)s</code>",
+    "Homeserver is <code>%(homeserverUrl)s</code>": "Домашній сервер <code>%(homeserverUrl)s</code>",
+    "Show NSFW content": "Показати матеріали NSFW"
 }
