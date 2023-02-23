@@ -3727,5 +3727,17 @@
     "Unable to connect to Homeserver. Retrying…": "無法連線至家伺服器。正在重試……",
     "Secure Backup successful": "安全備份成功",
     "Your keys are now being backed up from this device.": "您的金鑰已從此裝置備份。",
-    "Loading polls": "正在載入投票"
+    "Loading polls": "正在載入投票",
+    "Room is <strong>not encrypted 🚨</strong>": "聊天室<strong>未加密 🚨</strong>",
+    "Room is <strong>encrypted ✅</strong>": "聊天室<strong>已加密 ✅</strong>",
+    "Notification state is <strong>%(notificationState)s</strong>": "通知狀態為 <strong>%(notificationState)s</strong>",
+    "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>|zero": "聊天室未讀狀態：<strong>%(status)s</strong>",
+    "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>|other": "聊天室未讀狀態：<strong>%(status)s</strong>，數量：<strong>%(count)s</strong>",
+    "Ended a poll": "結束投票",
+    "Due to decryption errors, some votes may not be counted": "因為解密錯誤，不會計算部份投票",
+    "The sender has blocked you from receiving this message": "傳送者已封鎖您，因此無法接收此訊息",
+    "Room directory": "聊天室目錄",
+    "Identity server is <code>%(identityServerUrl)s</code>": "身份識別伺服器為 <code>%(identityServerUrl)s</code>",
+    "Homeserver is <code>%(homeserverUrl)s</code>": "家伺服器為 <code>%(homeserverUrl)s</code>",
+    "Show NSFW content": "顯示 NSFW 內容"
 }
