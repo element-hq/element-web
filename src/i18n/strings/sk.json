@@ -3738,5 +3738,6 @@
     "Room directory": "Adresár miestností",
     "Identity server is <code>%(identityServerUrl)s</code>": "Server identity je <code>%(identityServerUrl)s</code>",
     "Homeserver is <code>%(homeserverUrl)s</code>": "Domovský server je <code>%(homeserverUrl)s</code>",
-    "Show NSFW content": "Zobraziť obsah NSFW"
+    "Show NSFW content": "Zobraziť obsah NSFW",
+    "Yes, it was me": "Áno, bol som to ja"
 }
