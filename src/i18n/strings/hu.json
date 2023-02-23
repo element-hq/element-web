@@ -3727,5 +3727,17 @@
     "Creating HTML…": "HTML létrehozása…",
     "Starting export…": "Exportálás kezdése…",
     "Unable to connect to Homeserver. Retrying…": "A Matrix szerverrel nem lehet felvenni a kapcsolatot. Újrapróbálkozás…",
-    "Loading polls": "Szavazások betöltése"
+    "Loading polls": "Szavazások betöltése",
+    "Room is <strong>not encrypted 🚨</strong>": "A szoba <strong>nincs titkosítva 🚨</strong>",
+    "Room is <strong>encrypted ✅</strong>": "A szoba <strong>titkosított ✅</strong>",
+    "Notification state is <strong>%(notificationState)s</strong>": "Értesítés állapot: <strong>%(notificationState)s</strong>",
+    "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>|zero": "Szoba olvasatlan állapot: <strong>%(status)s</strong>",
+    "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>|other": "Szoba olvasatlan státusz: <strong>%(status)s</strong>, darabszám: <strong>%(count)s</strong>",
+    "Ended a poll": "Lezárta a szavazást",
+    "Due to decryption errors, some votes may not be counted": "Visszafejtési hibák miatt néhány szavazat nem kerül beszámításra",
+    "The sender has blocked you from receiving this message": "A feladó megtagadta az Ön hozzáférését ehhez az üzenethez",
+    "Room directory": "Szobák listája",
+    "Identity server is <code>%(identityServerUrl)s</code>": "Azonosítási szerver: <code>%(identityServerUrl)s</code>",
+    "Homeserver is <code>%(homeserverUrl)s</code>": "Matrix szerver: <code>%(homeserverUrl)s</code>",
+    "Show NSFW content": "Felnőtt tartalmak megjelenítése"
 }
