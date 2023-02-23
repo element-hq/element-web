@@ -73,6 +73,7 @@ describe("<RoomPreviewBar />", () => {
 
     const getComponent = (props: ComponentProps<typeof RoomPreviewBar> = {}) => {
         const defaultProps = {
+            roomId,
             room: createRoom(roomId, userId),
         };
         return render(<RoomPreviewBar {...defaultProps} {...props} />);

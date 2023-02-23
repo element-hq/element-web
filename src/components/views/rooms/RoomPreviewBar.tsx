@@ -76,6 +76,12 @@ interface IProps {
 
     canPreview?: boolean;
     previewLoading?: boolean;
+
+    // The id of the room to be previewed, if it is known.
+    // (It may be unknown if we are waiting for an alias to be resolved.)
+    roomId?: string;
+
+    // A `Room` object for the room to be previewed, if we have one.
     room?: Room;
 
     loading?: boolean;
@@ -310,18 +316,14 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
             }
             case MessageCase.NotLoggedIn: {
                 const opts: RoomPreviewOpts = { canJoin: false };
-                if (this.props.room?.roomId) {
-                    ModuleRunner.instance.invoke(
-                        RoomViewLifecycle.PreviewRoomNotLoggedIn,
-                        opts,
-                        this.props.room.roomId,
-                    );
+                if (this.props.roomId) {
+                    ModuleRunner.instance.invoke(RoomViewLifecycle.PreviewRoomNotLoggedIn, opts, this.props.roomId);
                 }
                 if (opts.canJoin) {
                     title = _t("Join the room to participate");
                     primaryActionLabel = _t("Join");
                     primaryActionHandler = () => {
-                        ModuleRunner.instance.invoke(RoomViewLifecycle.JoinFromRoomPreview, this.props.room.roomId);
+                        ModuleRunner.instance.invoke(RoomViewLifecycle.JoinFromRoomPreview, this.props.roomId);
                     };
                 } else {
                     title = _t("Join the conversation with an account");

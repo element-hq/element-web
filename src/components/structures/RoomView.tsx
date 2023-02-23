@@ -1957,6 +1957,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                                 loading={loading}
                                 joining={this.state.joining}
                                 oobData={this.props.oobData}
+                                roomId={this.state.roomId}
                             />
                         </ErrorBoundary>
                     </div>
@@ -1986,7 +1987,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                                 invitedEmail={invitedEmail}
                                 oobData={this.props.oobData}
                                 signUrl={this.props.threepidInvite?.signUrl}
-                                room={this.state.room}
+                                roomId={this.state.roomId}
                             />
                         </ErrorBoundary>
                     </div>
@@ -2023,6 +2024,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                             error={this.state.roomLoadError}
                             joining={this.state.joining}
                             rejecting={this.state.rejecting}
+                            roomId={this.state.roomId}
                         />
                     </ErrorBoundary>
                 );
@@ -2052,6 +2054,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                                 canPreview={false}
                                 joining={this.state.joining}
                                 room={this.state.room}
+                                roomId={this.state.roomId}
                             />
                         </ErrorBoundary>
                     </div>
@@ -2144,6 +2147,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                     oobData={this.props.oobData}
                     canPreview={this.state.canPeek}
                     room={this.state.room}
+                    roomId={this.state.roomId}
                 />
             );
             if (!this.state.canPeek && !this.state.room?.isSpaceRoom()) {
