@@ -40,7 +40,7 @@ import { E2EStatus } from "../../../utils/ShieldUtils";
 import RoomContext from "../../../contexts/RoomContext";
 import { UIComponent, UIFeature } from "../../../settings/UIFeature";
 import { ChevronFace, ContextMenuTooltipButton, useContextMenu } from "../../structures/ContextMenu";
-import WidgetContextMenu from "../context_menus/WidgetContextMenu";
+import { WidgetContextMenu } from "../context_menus/WidgetContextMenu";
 import { useRoomMemberCount } from "../../../hooks/useRoomMembers";
 import { useFeatureEnabled } from "../../../hooks/useSettings";
 import { usePinnedEvents } from "./PinnedMessagesCard";

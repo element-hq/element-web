@@ -133,6 +133,7 @@ describe("Stickers", () => {
                     type: "m.stickerpicker",
                     name: STICKER_PICKER_WIDGET_NAME,
                     url: stickerPickerUrl,
+                    creatorUserId: "@userId",
                 },
                 id: STICKER_PICKER_WIDGET_ID,
             },

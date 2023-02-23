@@ -17,6 +17,7 @@ limitations under the License.
 import React, { useContext } from "react";
 import { MatrixCapabilities } from "matrix-widget-api";
 import { logger } from "matrix-js-sdk/src/logger";
+import { ApprovalOpts, WidgetLifecycle } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WidgetLifecycle";
 
 import IconizedContextMenu, { IconizedContextMenuOption, IconizedContextMenuOptionList } from "./IconizedContextMenu";
 import { ChevronFace } from "../../structures/ContextMenu";
@@ -34,6 +35,8 @@ import { WidgetType } from "../../../widgets/WidgetType";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
 import { getConfigLivestreamUrl, startJitsiAudioLivestream } from "../../../Livestream";
+import { ModuleRunner } from "../../../modules/ModuleRunner";
+import { ElementWidget } from "../../../stores/widgets/StopGapWidget";
 
 interface IProps extends React.ComponentProps<typeof IconizedContextMenu> {
     app: IApp;
@@ -45,7 +48,7 @@ interface IProps extends React.ComponentProps<typeof IconizedContextMenu> {
     onEditClick?(): void;
 }
 
-const WidgetContextMenu: React.FC<IProps> = ({
+export const WidgetContextMenu: React.FC<IProps> = ({
     onFinished,
     app,
     userWidget,
@@ -158,24 +161,31 @@ const WidgetContextMenu: React.FC<IProps> = ({
     const isLocalWidget = WidgetType.JITSI.matches(app.type);
     let revokeButton;
     if (!userWidget && !isLocalWidget && isAllowedWidget) {
-        const onRevokeClick = (): void => {
-            logger.info("Revoking permission for widget to load: " + app.eventId);
-            const current = SettingsStore.getValue("allowedWidgets", roomId);
-            if (app.eventId !== undefined) current[app.eventId] = false;
-            const level = SettingsStore.firstSupportedLevel("allowedWidgets");
-            SettingsStore.setValue("allowedWidgets", roomId, level, current).catch((err) => {
-                logger.error(err);
-                // We don't really need to do anything about this - the user will just hit the button again.
-            });
-            onFinished();
-        };
+        const opts: ApprovalOpts = { approved: undefined };
+        ModuleRunner.instance.invoke(WidgetLifecycle.PreLoadRequest, opts, new ElementWidget(app));
 
-        revokeButton = <IconizedContextMenuOption onClick={onRevokeClick} label={_t("Revoke permissions")} />;
+        if (!opts.approved) {
+            const onRevokeClick = (): void => {
+                logger.info("Revoking permission for widget to load: " + app.eventId);
+                const current = SettingsStore.getValue("allowedWidgets", roomId);
+                if (app.eventId !== undefined) current[app.eventId] = false;
+                const level = SettingsStore.firstSupportedLevel("allowedWidgets");
+                if (!level) throw new Error("level must be defined");
+                SettingsStore.setValue("allowedWidgets", roomId ?? null, level, current).catch((err) => {
+                    logger.error(err);
+                    // We don't really need to do anything about this - the user will just hit the button again.
+                });
+                onFinished();
+            };
+
+            revokeButton = <IconizedContextMenuOption onClick={onRevokeClick} label={_t("Revoke permissions")} />;
+        }
     }
 
     let moveLeftButton;
     if (showUnpin && widgetIndex > 0) {
         const onClick = (): void => {
+            if (!room) throw new Error("room must be defined");
             WidgetLayoutStore.instance.moveWithinContainer(room, Container.Top, app, -1);
             onFinished();
         };
@@ -207,5 +217,3 @@ const WidgetContextMenu: React.FC<IProps> = ({
         </IconizedContextMenu>
     );
 };
-
-export default WidgetContextMenu;

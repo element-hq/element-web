@@ -58,7 +58,7 @@
         "@babel/runtime": "^7.12.5",
         "@matrix-org/analytics-events": "^0.4.0",
         "@matrix-org/matrix-wysiwyg": "^1.1.1",
-        "@matrix-org/react-sdk-module-api": "^0.0.3",
+        "@matrix-org/react-sdk-module-api": "^0.0.4",
         "@sentry/browser": "^7.0.0",
         "@sentry/tracing": "^7.0.0",
         "@testing-library/react-hooks": "^8.0.1",

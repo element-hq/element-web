@@ -24,7 +24,7 @@ import AppTile from "../elements/AppTile";
 import { _t } from "../../../languageHandler";
 import { useWidgets } from "./RoomSummaryCard";
 import { ChevronFace, ContextMenuButton, useContextMenu } from "../../structures/ContextMenu";
-import WidgetContextMenu from "../context_menus/WidgetContextMenu";
+import { WidgetContextMenu } from "../context_menus/WidgetContextMenu";
 import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
 import UIStore from "../../../stores/UIStore";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
