@@ -3727,5 +3727,8 @@
     "Unable to connect to Homeserver. Retrying…": "Impossible de se connecter au serveur d’accueil. Reconnexion…",
     "Secure Backup successful": "Sauvegarde sécurisée réalisée avec succès",
     "Your keys are now being backed up from this device.": "Vos clés sont maintenant sauvegardées depuis cet appareil.",
-    "Loading polls": "Chargement des sondages"
+    "Loading polls": "Chargement des sondages",
+    "Identity server is <code>%(identityServerUrl)s</code>": "Le serveur d’identité est <code>%(identityServerUrl)s</code>",
+    "Homeserver is <code>%(homeserverUrl)s</code>": "Le serveur d’accueil est <code>%(homeserverUrl)s</code>",
+    "Show NSFW content": "Afficher le contenu sensible (NSFW)"
 }
