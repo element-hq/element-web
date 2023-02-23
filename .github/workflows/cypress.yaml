@@ -200,6 +200,7 @@ jobs:
               if: needs.prepare.outputs.percy_enable == '1'
               run: npx -p @percy/cli percy build:finalize
               env:
+                  PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
                   PERCY_PARALLEL_NONCE: ${{ needs.prepare.outputs.uuid }}
 
             - uses: Sibz/github-status-action@v1
