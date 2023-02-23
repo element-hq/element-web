@@ -203,6 +203,17 @@ jobs:
                   PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
                   PERCY_PARALLEL_NONCE: ${{ needs.prepare.outputs.uuid }}
 
+            - name: Skip Percy required check
+              if: needs.prepare.outputs.percy_enable != '1'
+              uses: Sibz/github-status-action@v1
+              with:
+                  authToken: ${{ secrets.GITHUB_TOKEN }}
+                  state: success
+                  description: Percy skipped
+                  context: percy/matrix-react-sdk
+                  sha: ${{ github.event.workflow_run.head_sha }}
+                  target_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
             - uses: Sibz/github-status-action@v1
               with:
                   authToken: ${{ secrets.GITHUB_TOKEN }}
