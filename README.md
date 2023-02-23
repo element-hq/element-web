@@ -104,7 +104,7 @@ If you are using nginx, this would look something like the following:
 add_header X-Frame-Options SAMEORIGIN;
 add_header X-Content-Type-Options nosniff;
 add_header X-XSS-Protection "1; mode=block";
-add_header Content-Security-Policy "frame-ancestors 'none'";
+add_header Content-Security-Policy "frame-ancestors 'self'";
 ```
 
 For Apache, the configuration looks like:
