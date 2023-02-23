@@ -3738,5 +3738,6 @@
     "Room directory": "Каталог кімнат",
     "Identity server is <code>%(identityServerUrl)s</code>": "Сервер ідентифікації <code>%(identityServerUrl)s</code>",
     "Homeserver is <code>%(homeserverUrl)s</code>": "Домашній сервер <code>%(homeserverUrl)s</code>",
-    "Show NSFW content": "Показати матеріали NSFW"
+    "Show NSFW content": "Показати матеріали NSFW",
+    "Yes, it was me": "Так, це я"
 }
