@@ -3731,5 +3731,13 @@
     "Room directory": "Raumverzeichnis",
     "Show NSFW content": "NSFW-Inhalte anzeigen",
     "Due to decryption errors, some votes may not be counted": "Evtl. werden infolge von Entschlüsselungsfehlern einige Stimmen nicht gezählt",
-    "Ended a poll": "Eine Umfrage beendet"
+    "Ended a poll": "Eine Umfrage beendet",
+    "Room is <strong>not encrypted 🚨</strong>": "Raum ist <strong>nicht verschlüsselt 🚨</strong>",
+    "Room is <strong>encrypted ✅</strong>": "Raum ist <strong>verschlüsselt ✅</strong>",
+    "Notification state is <strong>%(notificationState)s</strong>": "Benachrichtigungsstand ist <strong>%(notificationState)s</strong>",
+    "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>|zero": "Ungelesen-Status im Raum: <strong>%(status)s</strong>",
+    "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>|other": "Ungelesen-Status im Raum: <strong>%(status)s</strong>, Anzahl: <strong>%(count)s</strong>",
+    "Identity server is <code>%(identityServerUrl)s</code>": "Identitäts-Server ist <code>%(identityServerUrl)s</code>",
+    "Homeserver is <code>%(homeserverUrl)s</code>": "Heim-Server ist <code>%(homeserverUrl)s</code>",
+    "Yes, it was me": "Ja, das war ich"
 }
