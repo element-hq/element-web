@@ -1,5 +1,6 @@
 /*
 Copyright 2019 New Vector Ltd
+Copyright 2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,14 +15,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { useCallback } from "react";
 
 import { _t } from "../../../languageHandler";
 import SettingsStore from "../../../settings/SettingsStore";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import BaseDialog from "./BaseDialog";
 
-interface IProps {
+export interface AskInviteAnywayDialogProps {
     unknownProfileUsers: Array<{
         userId: string;
         errorText: string;
@@ -31,57 +32,58 @@ interface IProps {
     onFinished: (success: boolean) => void;
 }
 
-export default class AskInviteAnywayDialog extends React.Component<IProps> {
-    private onInviteClicked = (): void => {
-        this.props.onInviteAnyways();
-        this.props.onFinished(true);
-    };
+export default function AskInviteAnywayDialog({
+    onFinished,
+    onGiveUp,
+    onInviteAnyways,
+    unknownProfileUsers,
+}: AskInviteAnywayDialogProps): JSX.Element {
+    const onInviteClicked = useCallback((): void => {
+        onInviteAnyways();
+        onFinished(true);
+    }, [onInviteAnyways, onFinished]);
 
-    private onInviteNeverWarnClicked = (): void => {
+    const onInviteNeverWarnClicked = useCallback((): void => {
         SettingsStore.setValue("promptBeforeInviteUnknownUsers", null, SettingLevel.ACCOUNT, false);
-        this.props.onInviteAnyways();
-        this.props.onFinished(true);
-    };
+        onInviteAnyways();
+        onFinished(true);
+    }, [onInviteAnyways, onFinished]);
 
-    private onGiveUpClicked = (): void => {
-        this.props.onGiveUp();
-        this.props.onFinished(false);
-    };
+    const onGiveUpClicked = useCallback((): void => {
+        onGiveUp();
+        onFinished(false);
+    }, [onGiveUp, onFinished]);
 
-    public render(): React.ReactNode {
-        const errorList = this.props.unknownProfileUsers.map((address) => (
-            <li key={address.userId}>
-                {address.userId}: {address.errorText}
-            </li>
-        ));
+    const errorList = unknownProfileUsers.map((address) => (
+        <li key={address.userId}>
+            {address.userId}: {address.errorText}
+        </li>
+    ));
 
-        return (
-            <BaseDialog
-                className="mx_RetryInvitesDialog"
-                onFinished={this.onGiveUpClicked}
-                title={_t("The following users may not exist")}
-                contentId="mx_Dialog_content"
-            >
-                <div id="mx_Dialog_content">
-                    <p>
-                        {_t(
-                            "Unable to find profiles for the Matrix IDs listed below - " +
-                                "would you like to invite them anyway?",
-                        )}
-                    </p>
-                    <ul>{errorList}</ul>
-                </div>
+    return (
+        <BaseDialog
+            className="mx_RetryInvitesDialog"
+            onFinished={onGiveUpClicked}
+            title={_t("The following users may not exist")}
+            contentId="mx_Dialog_content"
+        >
+            <div id="mx_Dialog_content">
+                <p>
+                    {_t(
+                        "Unable to find profiles for the Matrix IDs listed below - " +
+                            "would you like to invite them anyway?",
+                    )}
+                </p>
+                <ul>{errorList}</ul>
+            </div>
 
-                <div className="mx_Dialog_buttons">
-                    <button onClick={this.onGiveUpClicked}>{_t("Close")}</button>
-                    <button onClick={this.onInviteNeverWarnClicked}>
-                        {_t("Invite anyway and never warn me again")}
-                    </button>
-                    <button onClick={this.onInviteClicked} autoFocus={true}>
-                        {_t("Invite anyway")}
-                    </button>
-                </div>
-            </BaseDialog>
-        );
-    }
+            <div className="mx_Dialog_buttons">
+                <button onClick={onGiveUpClicked}>{_t("Close")}</button>
+                <button onClick={onInviteNeverWarnClicked}>{_t("Invite anyway and never warn me again")}</button>
+                <button onClick={onInviteClicked} autoFocus={true}>
+                    {_t("Invite anyway")}
+                </button>
+            </div>
+        </BaseDialog>
+    );
 }
