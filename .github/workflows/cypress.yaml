@@ -6,7 +6,7 @@ on:
         types:
             - completed
 concurrency:
-    group: ${{ github.workflow }}-${{ github.ref }}
+    group: ${{ github.workflow }}-${{ github.event.workflow_run.head_branch || github.ref }}
     cancel-in-progress: ${{ github.event.workflow_run.event == 'pull_request' }}
 jobs:
     prepare:
