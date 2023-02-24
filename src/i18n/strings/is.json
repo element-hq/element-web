@@ -1517,7 +1517,6 @@
     "%(senderName)s joined the call": "%(senderName)s kom inn í símtalið",
     "You joined the call": "Þú komst inn í símtalið",
     "Update %(brand)s": "Uppfæra %(brand)s",
-    "Check your devices": "Athugaðu tækin þín",
     "%(deviceId)s from %(ip)s": "%(deviceId)s frá %(ip)s",
     "New login. Was this you?": "Ný innskráning. Varst þetta þú?",
     "Other users may not trust it": "Aðrir notendur gætu ekki treyst því",

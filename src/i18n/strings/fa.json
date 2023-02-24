@@ -2203,7 +2203,6 @@
     "Please contact your homeserver administrator.": "لطفاً با مدیر سرور خود تماس بگیرید.",
     "New version of %(brand)s is available": "نسخه‌ی جدید %(brand)s وجود است",
     "Update %(brand)s": "%(brand)s را به‌روزرسانی کنید",
-    "Check your devices": "دستگاه های خود را بررسی کنید",
     "%(deviceId)s from %(ip)s": "%(deviceId)s از %(ip)s",
     "New login. Was this you?": "ورود جدید. آیا شما بودید؟",
     "Other users may not trust it": "ممکن است سایر کاربران به آن اعتماد نکنند",
