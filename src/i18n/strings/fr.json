@@ -3730,13 +3730,14 @@
     "Identity server is <code>%(identityServerUrl)s</code>": "Le serveur d’identité est <code>%(identityServerUrl)s</code>",
     "Homeserver is <code>%(homeserverUrl)s</code>": "Le serveur d’accueil est <code>%(homeserverUrl)s</code>",
     "Show NSFW content": "Afficher le contenu sensible (NSFW)",
-    "Room is <strong>not encrypted 🚨</strong>": "",
-    "Room is <strong>encrypted ✅</strong>": "",
-    "Notification state is <strong>%(notificationState)s</strong>": "",
-    "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>|zero": "",
-    "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>|other": "",
-    "Ended a poll": "",
-    "Due to decryption errors, some votes may not be counted": "",
-    "The sender has blocked you from receiving this message": "",
-    "Room directory": ""
+    "Room is <strong>not encrypted 🚨</strong>": "Le salon <strong>n’est pas chiffré 🚨</strong>",
+    "Room is <strong>encrypted ✅</strong>": "Le salon est <strong>chiffré ✅</strong>",
+    "Notification state is <strong>%(notificationState)s</strong>": "L’état des notifications est <strong>%(notificationState)s</strong>",
+    "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>|zero": "Statut non-lus du salon : <strong>%(status)s</strong>",
+    "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>|other": "Statut non-lus du salon : <strong>%(status)s</strong>, total : <strong>%(count)s</strong>",
+    "Ended a poll": "Sondage terminé",
+    "Due to decryption errors, some votes may not be counted": "À cause d’erreurs de déchiffrement, certains votes pourraient ne pas avoir été pris en compte",
+    "The sender has blocked you from receiving this message": "L’expéditeur a bloqué la réception de votre message",
+    "Room directory": "Répertoire des salons",
+    "Yes, it was me": "Oui, c’était moi"
 }
