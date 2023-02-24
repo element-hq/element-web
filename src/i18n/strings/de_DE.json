@@ -3739,5 +3739,8 @@
     "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>|other": "Ungelesen-Status im Raum: <strong>%(status)s</strong>, Anzahl: <strong>%(count)s</strong>",
     "Identity server is <code>%(identityServerUrl)s</code>": "Identitäts-Server ist <code>%(identityServerUrl)s</code>",
     "Homeserver is <code>%(homeserverUrl)s</code>": "Heim-Server ist <code>%(homeserverUrl)s</code>",
-    "Yes, it was me": "Ja, das war ich"
+    "Yes, it was me": "Ja, das war ich",
+    "Answered elsewhere": "Anderswo beantwortet",
+    "If you know a room address, try joining through that instead.": "Falls du eine Adresse kennst, versuche den Raum mit dieser zu betreten.",
+    "You attempted to join using a room ID without providing a list of servers to join through. Room IDs are internal identifiers and cannot be used to join a room without additional information.": "Du hast versucht einen Raum via Raum-ID, aber ohne Angabe von Servern zu betreten. Raum-IDs sind interne Kennungen und können nicht ohne weitere Informationen zum Betreten von Räumen genutzt werden."
 }
