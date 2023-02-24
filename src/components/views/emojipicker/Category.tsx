@@ -38,7 +38,7 @@ interface IProps {
     id: string;
     name: string;
     emojis: IEmoji[];
-    selectedEmojis: Set<string>;
+    selectedEmojis?: Set<string>;
     heightBefore: number;
     viewportHeight: number;
     scrollTop: number;

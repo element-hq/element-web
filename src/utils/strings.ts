@@ -37,7 +37,7 @@ export async function copyPlaintext(text: string): Promise<boolean> {
             textArea.style.position = "fixed";
 
             document.body.appendChild(textArea);
-            const selection = document.getSelection();
+            const selection = document.getSelection()!;
             const range = document.createRange();
             // range.selectNodeContents(textArea);
             range.selectNode(textArea);
@@ -59,7 +59,7 @@ export function selectText(target: Element): void {
     const range = document.createRange();
     range.selectNodeContents(target);
 
-    const selection = window.getSelection();
+    const selection = window.getSelection()!;
     selection.removeAllRanges();
     selection.addRange(range);
 }
@@ -80,5 +80,5 @@ export function copyNode(ref: Element): boolean {
  * @returns the selected text
  */
 export function getSelectedText(): string {
-    return window.getSelection().toString();
+    return window.getSelection()!.toString();
 }

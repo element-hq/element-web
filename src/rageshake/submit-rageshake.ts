@@ -40,15 +40,12 @@ async function collectBugReport(opts: IOpts = {}, gzipLogs = true): Promise<Form
     const progressCallback = opts.progressCallback || ((): void => {});
 
     progressCallback(_t("Collecting app version information"));
-    let version = "UNKNOWN";
+    let version: string | undefined;
     try {
-        version = await PlatformPeg.get().getAppVersion();
+        version = await PlatformPeg.get()?.getAppVersion();
     } catch (err) {} // PlatformPeg already logs this.
 
-    let userAgent = "UNKNOWN";
-    if (window.navigator && window.navigator.userAgent) {
-        userAgent = window.navigator.userAgent;
-    }
+    const userAgent = window.navigator?.userAgent ?? "UNKNOWN";
 
     let installedPWA = "UNKNOWN";
     try {
@@ -69,7 +66,7 @@ async function collectBugReport(opts: IOpts = {}, gzipLogs = true): Promise<Form
     const body = new FormData();
     body.append("text", opts.userText || "User did not supply any additional text.");
     body.append("app", opts.customApp || "element-web");
-    body.append("version", version);
+    body.append("version", version ?? "UNKNOWN");
     body.append("user_agent", userAgent);
     body.append("installed_pwa", installedPWA);
     body.append("touch_input", touchInput);

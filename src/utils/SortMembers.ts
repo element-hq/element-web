@@ -64,7 +64,7 @@ interface IActivityScore {
 // We do this by checking every room to see who has sent a message in the last few hours, and giving them
 // a score which correlates to the freshness of their message. In theory, this results in suggestions
 // which are closer to "continue this conversation" rather than "this person exists".
-export function buildActivityScores(cli: MatrixClient): { [key: string]: IActivityScore } {
+export function buildActivityScores(cli: MatrixClient): { [key: string]: IActivityScore | undefined } {
     const now = new Date().getTime();
     const earliestAgeConsidered = now - 60 * 60 * 1000; // 1 hour ago
     const maxMessagesConsidered = 50; // so we don't iterate over a huge amount of traffic
@@ -73,7 +73,8 @@ export function buildActivityScores(cli: MatrixClient): { [key: string]: IActivi
         .filter((ev) => ev.getTs() > earliestAgeConsidered);
     const senderEvents = groupBy(events, (ev) => ev.getSender());
     return mapValues(senderEvents, (events) => {
-        const lastEvent = maxBy(events, (ev) => ev.getTs());
+        if (!events.length) return;
+        const lastEvent = maxBy(events, (ev) => ev.getTs())!;
         const distanceFromNow = Math.abs(now - lastEvent.getTs()); // abs to account for slight future messages
         const inverseTime = now - earliestAgeConsidered - distanceFromNow;
         return {
@@ -92,7 +93,7 @@ interface IMemberScore {
     numRooms: number;
 }
 
-export function buildMemberScores(cli: MatrixClient): { [key: string]: IMemberScore } {
+export function buildMemberScores(cli: MatrixClient): { [key: string]: IMemberScore | undefined } {
     const maxConsideredMembers = 200;
     const consideredRooms = joinedRooms(cli).filter((room) => room.getJoinedMemberCount() < maxConsideredMembers);
     const memberPeerEntries = consideredRooms.flatMap((room) =>
@@ -100,10 +101,11 @@ export function buildMemberScores(cli: MatrixClient): { [key: string]: IMemberSc
     );
     const userMeta = groupBy(memberPeerEntries, ({ member }) => member.userId);
     return mapValues(userMeta, (roomMemberships) => {
+        if (!roomMemberships.length) return;
         const maximumPeers = maxConsideredMembers * roomMemberships.length;
         const totalPeers = sumBy(roomMemberships, (entry) => entry.roomSize);
         return {
-            member: minBy(roomMemberships, (entry) => entry.roomSize).member,
+            member: minBy(roomMemberships, (entry) => entry.roomSize)!.member,
             numRooms: roomMemberships.length,
             score: Math.max(0, Math.pow(1 - totalPeers / maximumPeers, 5)),
         };

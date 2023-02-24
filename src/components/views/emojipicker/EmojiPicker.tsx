@@ -26,6 +26,7 @@ import Search from "./Search";
 import Preview from "./Preview";
 import QuickReactions from "./QuickReactions";
 import Category, { ICategory, CategoryKey } from "./Category";
+import { filterBoolean } from "../../../utils/arrays";
 
 export const CATEGORY_HEADER_HEIGHT = 20;
 export const EMOJI_HEIGHT = 35;
@@ -62,13 +63,12 @@ class EmojiPicker extends React.Component<IProps, IState> {
 
         this.state = {
             filter: "",
-            previewEmoji: null,
             scrollTop: 0,
             viewportHeight: 280,
         };
 
         // Convert recent emoji characters to emoji data, removing unknowns and duplicates
-        this.recentlyUsed = Array.from(new Set(recent.get().map(getEmojiFromUnicode).filter(Boolean)));
+        this.recentlyUsed = Array.from(new Set(filterBoolean(recent.get().map(getEmojiFromUnicode))));
         this.memoizedDataByCategory = {
             recent: this.recentlyUsed,
             ...DATA_BY_CATEGORY,
@@ -230,9 +230,9 @@ class EmojiPicker extends React.Component<IProps, IState> {
         });
     };
 
-    private onHoverEmojiEnd = (emoji: IEmoji): void => {
+    private onHoverEmojiEnd = (): void => {
         this.setState({
-            previewEmoji: null,
+            previewEmoji: undefined,
         });
     };
 

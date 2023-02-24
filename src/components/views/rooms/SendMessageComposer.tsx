@@ -368,7 +368,12 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                     this.props.relation?.rel_type === THREAD_RELATION_TYPE.name ? this.props.relation?.event_id : null;
 
                 let commandSuccessful: boolean;
-                [content, commandSuccessful] = await runSlashCommand(cmd, args, this.props.room.roomId, threadId);
+                [content, commandSuccessful] = await runSlashCommand(
+                    cmd,
+                    args,
+                    this.props.room.roomId,
+                    threadId ?? null,
+                );
                 if (!commandSuccessful) {
                     return; // errored
                 }
@@ -425,7 +430,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
 
             const prom = doMaybeLocalRoomAction(
                 roomId,
-                (actualRoomId: string) => this.props.mxClient.sendMessage(actualRoomId, threadId, content),
+                (actualRoomId: string) => this.props.mxClient.sendMessage(actualRoomId, threadId ?? null, content!),
                 this.props.mxClient,
             );
             if (replyToEvent) {
@@ -439,7 +444,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
             }
             dis.dispatch({ action: "message_sent" });
             CHAT_EFFECTS.forEach((effect) => {
-                if (containsEmoji(content, effect.emojis)) {
+                if (containsEmoji(content!, effect.emojis)) {
                     // For initial threads launch, chat effects are disabled
                     // see #19731
                     const isNotThread = this.props.relation?.rel_type !== THREAD_RELATION_TYPE.name;

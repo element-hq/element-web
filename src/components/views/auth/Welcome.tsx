@@ -34,7 +34,7 @@ interface IProps {}
 export default class Welcome extends React.PureComponent<IProps> {
     public render(): React.ReactNode {
         const pagesConfig = SdkConfig.getObject("embedded_pages");
-        let pageUrl = null;
+        let pageUrl!: string;
         if (pagesConfig) {
             pageUrl = pagesConfig.get("welcome_url");
         }

@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { ReactNode } from "react";
 import { SERVICE_TYPES } from "matrix-js-sdk/src/service-types";
 import { IThreepid } from "matrix-js-sdk/src/@types/threepids";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -64,20 +64,20 @@ interface IState {
     spellCheckEnabled: boolean;
     spellCheckLanguages: string[];
     haveIdServer: boolean;
-    serverSupportsSeparateAddAndBind: boolean;
+    serverSupportsSeparateAddAndBind?: boolean;
     idServerHasUnsignedTerms: boolean;
     requiredPolicyInfo: {
         // This object is passed along to a component for handling
         hasTerms: boolean;
-        policiesAndServices: ServicePolicyPair[]; // From the startTermsFlow callback
-        agreedUrls: string[]; // From the startTermsFlow callback
-        resolve: (values: string[]) => void; // Promise resolve function for startTermsFlow callback
+        policiesAndServices: ServicePolicyPair[] | null; // From the startTermsFlow callback
+        agreedUrls: string[] | null; // From the startTermsFlow callback
+        resolve: ((values: string[]) => void) | null; // Promise resolve function for startTermsFlow callback
     };
     emails: IThreepid[];
     msisdns: IThreepid[];
     loading3pids: boolean; // whether or not the emails and msisdns have been loaded
     canChangePassword: boolean;
-    idServerName: string;
+    idServerName?: string;
     externalAccountManagementUrl?: string;
 }
 
@@ -92,7 +92,6 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
             spellCheckEnabled: false,
             spellCheckLanguages: [],
             haveIdServer: Boolean(MatrixClientPeg.get().getIdentityServerUrl()),
-            serverSupportsSeparateAddAndBind: null,
             idServerHasUnsignedTerms: false,
             requiredPolicyInfo: {
                 // This object is passed along to a component for handling
@@ -105,8 +104,6 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
             msisdns: [],
             loading3pids: true, // whether or not the emails and msisdns have been loaded
             canChangePassword: false,
-            idServerName: null,
-            externalAccountManagementUrl: undefined,
         };
 
         this.dispatcherRef = dis.register(this.onAction);
@@ -118,8 +115,8 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
     public async componentDidMount(): Promise<void> {
         const plat = PlatformPeg.get();
         const [spellCheckEnabled, spellCheckLanguages] = await Promise.all([
-            plat.getSpellCheckEnabled(),
-            plat.getSpellCheckLanguages(),
+            plat?.getSpellCheckEnabled(),
+            plat?.getSpellCheckLanguages(),
         ]);
 
         if (spellCheckLanguages) {
@@ -301,7 +298,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
     }
 
     private renderAccountSection(): JSX.Element {
-        let passwordChangeForm = (
+        let passwordChangeForm: ReactNode = (
             <ChangePassword
                 className="mx_GeneralUserSettingsTab_changePassword"
                 rowClassName=""
@@ -311,7 +308,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
             />
         );
 
-        let threepidSection = null;
+        let threepidSection: ReactNode = null;
 
         // For older homeservers without separate 3PID add and bind methods (MSC2290),
         // we use a combo add with bind option API which requires an identity server to
@@ -345,7 +342,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
             threepidSection = <Spinner />;
         }
 
-        let passwordChangeText = _t("Set a new account password…");
+        let passwordChangeText: ReactNode = _t("Set a new account password…");
         if (!this.state.canChangePassword) {
             // Just don't show anything if you can't do anything.
             passwordChangeText = null;
@@ -483,7 +480,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
         );
     }
 
-    private renderIntegrationManagerSection(): JSX.Element {
+    private renderIntegrationManagerSection(): ReactNode {
         if (!SettingsStore.getValue(UIFeature.Widgets)) return null;
 
         return (
@@ -496,7 +493,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
 
     public render(): React.ReactNode {
         const plaf = PlatformPeg.get();
-        const supportsMultiLanguageSpellCheck = plaf.supportsSpellCheckSettings();
+        const supportsMultiLanguageSpellCheck = plaf?.supportsSpellCheckSettings();
 
         const discoWarning = this.state.requiredPolicyInfo.hasTerms ? (
             <img
@@ -508,7 +505,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
             />
         ) : null;
 
-        let accountManagementSection;
+        let accountManagementSection: JSX.Element | undefined;
         if (SettingsStore.getValue(UIFeature.Deactivate)) {
             accountManagementSection = (
                 <>

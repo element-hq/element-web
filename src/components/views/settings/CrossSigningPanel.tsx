@@ -75,7 +75,7 @@ export default class CrossSigningPanel extends React.PureComponent<{}, IState> {
 
     private onBootstrapClick = (): void => {
         if (this.state.crossSigningPrivateKeysInStorage) {
-            Modal.createDialog(SetupEncryptionDialog, {}, null, /* priority = */ false, /* static = */ true);
+            Modal.createDialog(SetupEncryptionDialog, {}, undefined, /* priority = */ false, /* static = */ true);
         } else {
             // Trigger the flow to set up secure backup, which is what this will do when in
             // the appropriate state.
@@ -90,8 +90,8 @@ export default class CrossSigningPanel extends React.PureComponent<{}, IState> {
     private async getUpdatedStatus(): Promise<void> {
         const cli = MatrixClientPeg.get();
         const pkCache = cli.getCrossSigningCacheCallbacks();
-        const crossSigning = cli.crypto.crossSigningInfo;
-        const secretStorage = cli.crypto.secretStorage;
+        const crossSigning = cli.crypto!.crossSigningInfo;
+        const secretStorage = cli.crypto!.secretStorage;
         const crossSigningPublicKeysOnDevice = Boolean(crossSigning.getId());
         const crossSigningPrivateKeysInStorage = Boolean(await crossSigning.isStoredInSecretStorage(secretStorage));
         const masterPrivateKeyCached = !!(pkCache && (await pkCache.getCrossSigningKeyCache("master")));
@@ -209,7 +209,7 @@ export default class CrossSigningPanel extends React.PureComponent<{}, IState> {
             selfSigningPrivateKeyCached &&
             userSigningPrivateKeyCached;
 
-        const actions = [];
+        const actions: JSX.Element[] = [];
 
         // TODO: determine how better to expose this to users in addition to prompts at login/toast
         if (!keysExistEverywhere && homeserverSupportsCrossSigning) {

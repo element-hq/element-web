@@ -32,7 +32,7 @@ class Search extends React.PureComponent<IProps> {
 
     public componentDidMount(): void {
         // For some reason, neither the autoFocus nor just calling focus() here worked, so here's a window.setTimeout
-        window.setTimeout(() => this.inputRef.current.focus(), 0);
+        window.setTimeout(() => this.inputRef.current?.focus(), 0);
     }
 
     private onKeyDown = (ev: React.KeyboardEvent): void => {

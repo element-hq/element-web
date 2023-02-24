@@ -168,7 +168,7 @@ export default class ReplyTile extends React.PureComponent<IProps> {
                             ...this.props,
 
                             // overrides
-                            ref: null,
+                            ref: undefined,
                             showUrlPreview: false,
                             overrideBodyTypes: msgtypeOverrides,
                             overrideEventTypes: evOverrides,

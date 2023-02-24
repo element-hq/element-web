@@ -27,6 +27,7 @@ import { timeout } from "../utils/promise";
 import AutocompleteProvider, { ICommand } from "./AutocompleteProvider";
 import SpaceProvider from "./SpaceProvider";
 import { TimelineRenderingType } from "../contexts/RoomContext";
+import { filterBoolean } from "../utils/arrays";
 
 export interface ISelectionRange {
     beginning?: boolean; // whether the selection is in the first block of the editor or not
@@ -55,7 +56,7 @@ const PROVIDER_COMPLETION_TIMEOUT = 3000;
 export interface IProviderCompletions {
     completions: ICompletion[];
     provider: AutocompleteProvider;
-    command: ICommand;
+    command: Partial<ICommand>;
 }
 
 export default class Autocompleter {
@@ -98,8 +99,8 @@ export default class Autocompleter {
         );
 
         // map then filter to maintain the index for the map-operation, for this.providers to line up
-        return completionsList
-            .map((completions, i) => {
+        return filterBoolean(
+            completionsList.map((completions, i) => {
                 if (!completions || !completions.length) return;
 
                 return {
@@ -112,7 +113,7 @@ export default class Autocompleter {
                      */
                     command: this.providers[i].getCurrentCommand(query, selection, force),
                 };
-            })
-            .filter(Boolean) as IProviderCompletions[];
+            }),
+        );
     }
 }

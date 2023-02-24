@@ -28,7 +28,7 @@ describe("ReadReceiptGroup", () => {
             expect(readReceiptTooltip(["Alice", "Bob", "Charlie"], true)).toEqual("Alice, Bob, Charlie and more");
             expect(readReceiptTooltip(["Alice", "Bob"], true)).toEqual("Alice, Bob and more");
             expect(readReceiptTooltip(["Alice"], true)).toEqual("Alice and more");
-            expect(readReceiptTooltip([], false)).toEqual(null);
+            expect(readReceiptTooltip([], false)).toBeUndefined();
         });
         it("returns a pretty list without hasMore", () => {
             expect(readReceiptTooltip(["Alice", "Bob", "Charlie", "Dan", "Eve"], false)).toEqual(
@@ -40,7 +40,7 @@ describe("ReadReceiptGroup", () => {
             expect(readReceiptTooltip(["Alice", "Bob", "Charlie"], false)).toEqual("Alice, Bob and Charlie");
             expect(readReceiptTooltip(["Alice", "Bob"], false)).toEqual("Alice and Bob");
             expect(readReceiptTooltip(["Alice"], false)).toEqual("Alice");
-            expect(readReceiptTooltip([], false)).toEqual(null);
+            expect(readReceiptTooltip([], false)).toBeUndefined();
         });
     });
     describe("AvatarPosition", () => {

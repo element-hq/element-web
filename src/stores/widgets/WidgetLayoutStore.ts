@@ -99,7 +99,7 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         [roomId: string]: Partial<{
             [container in Container]: {
                 ordered: IApp[];
-                height?: number;
+                height?: number | null;
                 distributions?: number[];
             };
         }>;
@@ -402,11 +402,11 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         this.updateUserLayout(room, localLayout);
     }
 
-    public getContainerHeight(room: Room, container: Container): number {
-        return this.byRoom[room.roomId]?.[container]?.height; // let the default get returned if needed
+    public getContainerHeight(room: Room, container: Container): number | null {
+        return this.byRoom[room.roomId]?.[container]?.height ?? null; // let the default get returned if needed
     }
 
-    public setContainerHeight(room: Room, container: Container, height: number): void {
+    public setContainerHeight(room: Room, container: Container, height?: number): void {
         const widgets = this.getContainerWidgets(room, container);
         const widths = this.byRoom[room.roomId]?.[container]?.distributions;
         const localLayout: Record<string, IStoredLayout> = {};
@@ -502,8 +502,8 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
                 const height = this.byRoom[room.roomId]?.[container]?.height;
                 evContent.widgets[widget.id] = {
                     ...evContent.widgets[widget.id],
-                    height: height ? Math.round(height) : null,
-                    width: widths[idx] ? Math.round(widths[idx]) : null,
+                    height: height ? Math.round(height) : undefined,
+                    width: widths?.[idx] ? Math.round(widths[idx]) : undefined,
                     index: idx,
                 };
             }

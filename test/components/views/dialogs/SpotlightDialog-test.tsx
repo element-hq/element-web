@@ -97,7 +97,7 @@ function mockClient({
         );
         return Promise.resolve({
             results: results.slice(0, limit ?? +Infinity),
-            limited: limit && limit < results.length,
+            limited: !!limit && limit < results.length,
         });
     });
     cli.getProfileInfo = jest.fn(async (userId) => {

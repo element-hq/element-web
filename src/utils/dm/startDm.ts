@@ -39,7 +39,7 @@ export async function startDm(client: MatrixClient, targets: Member[], showSpinn
     if (targetIds.length === 1) {
         existingRoom = findDMForUser(client, targetIds[0]);
     } else {
-        existingRoom = DMRoomMap.shared().getDMRoomForIdentifiers(targetIds);
+        existingRoom = DMRoomMap.shared().getDMRoomForIdentifiers(targetIds) ?? undefined;
     }
     if (existingRoom && !isLocalRoom(existingRoom)) {
         dis.dispatch<ViewRoomPayload>({

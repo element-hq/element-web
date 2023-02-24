@@ -49,7 +49,7 @@ export type Binding = {
  */
 export default class AddThreepid {
     private sessionId: string;
-    private submitUrl: string;
+    private submitUrl?: string;
     private clientSecret: string;
     private bind: boolean;
 
@@ -93,7 +93,7 @@ export default class AddThreepid {
         if (await MatrixClientPeg.get().doesServerSupportSeparateAddAndBind()) {
             // For separate bind, request a token directly from the IS.
             const authClient = new IdentityAuthClient();
-            const identityAccessToken = await authClient.getAccessToken();
+            const identityAccessToken = (await authClient.getAccessToken()) ?? undefined;
             return MatrixClientPeg.get()
                 .requestEmailToken(emailAddress, this.clientSecret, 1, undefined, identityAccessToken)
                 .then(
@@ -155,7 +155,7 @@ export default class AddThreepid {
         if (await MatrixClientPeg.get().doesServerSupportSeparateAddAndBind()) {
             // For separate bind, request a token directly from the IS.
             const authClient = new IdentityAuthClient();
-            const identityAccessToken = await authClient.getAccessToken();
+            const identityAccessToken = (await authClient.getAccessToken()) ?? undefined;
             return MatrixClientPeg.get()
                 .requestMsisdnToken(phoneCountry, phoneNumber, this.clientSecret, 1, undefined, identityAccessToken)
                 .then(
@@ -184,7 +184,7 @@ export default class AddThreepid {
      * with a "message" property which contains a human-readable message detailing why
      * the request failed.
      */
-    public async checkEmailLinkClicked(): Promise<[boolean, IAuthData | Error | null]> {
+    public async checkEmailLinkClicked(): Promise<[boolean, IAuthData | Error | null] | undefined> {
         try {
             if (await MatrixClientPeg.get().doesServerSupportSeparateAddAndBind()) {
                 if (this.bind) {
@@ -282,7 +282,7 @@ export default class AddThreepid {
      * with a "message" property which contains a human-readable message detailing why
      * the request failed.
      */
-    public async haveMsisdnToken(msisdnToken: string): Promise<any[]> {
+    public async haveMsisdnToken(msisdnToken: string): Promise<any[] | undefined> {
         const authClient = new IdentityAuthClient();
         const supportsSeparateAddAndBind = await MatrixClientPeg.get().doesServerSupportSeparateAddAndBind();
 

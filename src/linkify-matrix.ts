@@ -172,16 +172,16 @@ export const options: Opts = {
                 return {
                     // @ts-ignore see https://linkify.js.org/docs/options.html
                     click: function (e: MouseEvent) {
-                        const userId = parsePermalink(href).userId;
-                        onUserClick(e, userId);
+                        const userId = parsePermalink(href)?.userId;
+                        if (userId) onUserClick(e, userId);
                     },
                 };
             case Type.RoomAlias:
                 return {
                     // @ts-ignore see https://linkify.js.org/docs/options.html
                     click: function (e: MouseEvent) {
-                        const alias = parsePermalink(href).roomIdOrAlias;
-                        onAliasClick(e, alias);
+                        const alias = parsePermalink(href)?.roomIdOrAlias;
+                        if (alias) onAliasClick(e, alias);
                     },
                 };
         }

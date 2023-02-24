@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { ReactNode } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import EventIndexPeg from "../../../indexing/EventIndexPeg";
@@ -31,13 +31,13 @@ export enum WarningKind {
 }
 
 interface IProps {
-    isRoomEncrypted: boolean;
+    isRoomEncrypted?: boolean;
     kind: WarningKind;
 }
 
 export default function SearchWarning({ isRoomEncrypted, kind }: IProps): JSX.Element {
-    if (!isRoomEncrypted) return null;
-    if (EventIndexPeg.get()) return null;
+    if (!isRoomEncrypted) return <></>;
+    if (EventIndexPeg.get()) return <></>;
 
     if (EventIndexPeg.error) {
         return (
@@ -69,8 +69,8 @@ export default function SearchWarning({ isRoomEncrypted, kind }: IProps): JSX.El
     const brand = SdkConfig.get("brand");
     const desktopBuilds = SdkConfig.getObject("desktop_builds");
 
-    let text = null;
-    let logo = null;
+    let text: ReactNode | undefined;
+    let logo: JSX.Element | undefined;
     if (desktopBuilds.get("available")) {
         logo = <img src={desktopBuilds.get("logo")} />;
         const buildUrl = desktopBuilds.get("url");
@@ -116,7 +116,7 @@ export default function SearchWarning({ isRoomEncrypted, kind }: IProps): JSX.El
     // for safety
     if (!text) {
         logger.warn("Unknown desktop builds warning kind: ", kind);
-        return null;
+        return <></>;
     }
 
     return (

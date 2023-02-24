@@ -42,9 +42,7 @@ interface IState {
 class QuickReactions extends React.Component<IProps, IState> {
     public constructor(props: IProps) {
         super(props);
-        this.state = {
-            hover: null,
-        };
+        this.state = {};
     }
 
     private onMouseEnter = (emoji: IEmoji): void => {
@@ -55,7 +53,7 @@ class QuickReactions extends React.Component<IProps, IState> {
 
     private onMouseLeave = (): void => {
         this.setState({
-            hover: null,
+            hover: undefined,
         });
     };
 

@@ -23,7 +23,7 @@ import { MatrixClient, MatrixEvent, getBeaconInfoIdentifier } from "matrix-js-sd
  */
 export const getShareableLocationEventForBeacon = (event: MatrixEvent, cli: MatrixClient): MatrixEvent | null => {
     const room = cli.getRoom(event.getRoomId());
-    const beacon = room.currentState.beacons?.get(getBeaconInfoIdentifier(event));
+    const beacon = room?.currentState.beacons?.get(getBeaconInfoIdentifier(event));
     const latestLocationEvent = beacon?.latestLocationEvent;
 
     if (beacon?.isLive && latestLocationEvent) {

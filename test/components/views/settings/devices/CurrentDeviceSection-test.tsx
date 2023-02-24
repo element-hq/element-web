@@ -42,6 +42,7 @@ describe("<CurrentDeviceSection />", () => {
         isLoading: false,
         isSigningOut: false,
         otherSessionsCount: 1,
+        setPushNotifications: jest.fn(),
     };
 
     const getComponent = (props = {}): React.ReactElement => <CurrentDeviceSection {...defaultProps} {...props} />;

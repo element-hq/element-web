@@ -78,22 +78,16 @@ describe("createRoom", () => {
         const createCallSpy = jest.spyOn(ElementCall, "create");
         const roomId = await createRoom({ roomType: RoomType.UnstableCall });
 
-        const [
-            [
-                {
-                    power_level_content_override: {
-                        users: { [userId]: userPower },
-                        events: {
-                            [ElementCall.CALL_EVENT_TYPE.name]: callPower,
-                            [ElementCall.MEMBER_EVENT_TYPE.name]: callMemberPower,
-                        },
-                    },
-                },
-            ],
-        ] = client.createRoom.mock.calls;
+        const userPower = client.createRoom.mock.calls[0][0].power_level_content_override?.users?.[userId];
+        const callPower =
+            client.createRoom.mock.calls[0][0].power_level_content_override?.events?.[ElementCall.CALL_EVENT_TYPE.name];
+        const callMemberPower =
+            client.createRoom.mock.calls[0][0].power_level_content_override?.events?.[
+                ElementCall.MEMBER_EVENT_TYPE.name
+            ];
 
         // We should have had enough power to be able to set up the call
-        expect(userPower).toBeGreaterThanOrEqual(callPower);
+        expect(userPower).toBeGreaterThanOrEqual(callPower!);
         // and should have actually set it up
         expect(createCallSpy).toHaveBeenCalled();
 
@@ -122,18 +116,12 @@ describe("createRoom", () => {
 
         await createRoom({});
 
-        const [
-            [
-                {
-                    power_level_content_override: {
-                        events: {
-                            [ElementCall.CALL_EVENT_TYPE.name]: callPower,
-                            [ElementCall.MEMBER_EVENT_TYPE.name]: callMemberPower,
-                        },
-                    },
-                },
-            ],
-        ] = client.createRoom.mock.calls;
+        const callPower =
+            client.createRoom.mock.calls[0][0].power_level_content_override?.events?.[ElementCall.CALL_EVENT_TYPE.name];
+        const callMemberPower =
+            client.createRoom.mock.calls[0][0].power_level_content_override?.events?.[
+                ElementCall.MEMBER_EVENT_TYPE.name
+            ];
 
         expect(callPower).toBe(100);
         expect(callMemberPower).toBe(100);

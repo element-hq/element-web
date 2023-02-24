@@ -287,7 +287,7 @@ export function handleInvalidStoreError(e: InvalidStoreError): Promise<void> {
                 return MatrixClientPeg.get().store.deleteAllData();
             })
             .then(() => {
-                PlatformPeg.get().reload();
+                PlatformPeg.get()?.reload();
             });
     }
 }
@@ -519,7 +519,7 @@ export async function setLoggedIn(credentials: IMatrixClientCreds): Promise<Matr
     stopMatrixClient();
     const pickleKey =
         credentials.userId && credentials.deviceId
-            ? await PlatformPeg.get().createPickleKey(credentials.userId, credentials.deviceId)
+            ? await PlatformPeg.get()?.createPickleKey(credentials.userId, credentials.deviceId)
             : null;
 
     if (pickleKey) {

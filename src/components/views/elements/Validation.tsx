@@ -26,7 +26,7 @@ interface IResult {
     text: string;
 }
 
-interface IRule<T, D = void> {
+interface IRule<T, D = undefined> {
     key: string;
     final?: boolean;
     skip?(this: T, data: Data, derivedData: D): boolean;
@@ -90,14 +90,12 @@ export default function withValidation<T = void, D = void>({
         { value, focused, allowEmpty = true }: IFieldState,
     ): Promise<IValidationResult> {
         if (!value && allowEmpty) {
-            return {
-                valid: null,
-                feedback: null,
-            };
+            return {};
         }
 
         const data = { value, allowEmpty };
-        const derivedData: D | undefined = deriveData ? await deriveData.call(this, data) : undefined;
+        // We know that if deriveData is set then D will not be undefined
+        const derivedData: D = (await deriveData?.call(this, data)) as D;
 
         const results: IResult[] = [];
         let valid = true;
@@ -149,10 +147,7 @@ export default function withValidation<T = void, D = void>({
 
         // Hide feedback when not focused
         if (!focused) {
-            return {
-                valid,
-                feedback: null,
-            };
+            return { valid };
         }
 
         let details;

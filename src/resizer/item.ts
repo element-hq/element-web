@@ -19,7 +19,7 @@ import Sizer from "./sizer";
 
 export default class ResizeItem<C extends IConfig = IConfig> {
     public readonly domNode: HTMLElement;
-    protected readonly id: string;
+    protected readonly id: string | null;
     protected reverse: boolean;
 
     public constructor(

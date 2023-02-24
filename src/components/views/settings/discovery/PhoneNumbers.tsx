@@ -41,10 +41,10 @@ interface IPhoneNumberProps {
 interface IPhoneNumberState {
     verifying: boolean;
     verificationCode: string;
-    addTask: any; // FIXME: When AddThreepid is TSfied
+    addTask: AddThreepid | null;
     continueDisabled: boolean;
-    bound: boolean;
-    verifyError: string;
+    bound?: boolean;
+    verifyError: string | null;
 }
 
 export class PhoneNumber extends React.Component<IPhoneNumberProps, IPhoneNumberState> {
@@ -89,6 +89,7 @@ export class PhoneNumber extends React.Component<IPhoneNumberProps, IPhoneNumber
                 // a leading plus sign to a number in E.164 format (which the 3PID
                 // address is), but this goes against the spec.
                 // See https://github.com/matrix-org/matrix-doc/issues/2222
+                // @ts-ignore
                 await task.bindMsisdn(null, `+${address}`);
                 this.setState({
                     continueDisabled: false,
@@ -128,8 +129,10 @@ export class PhoneNumber extends React.Component<IPhoneNumberProps, IPhoneNumber
             // address is), but this goes against the spec.
             // See https://github.com/matrix-org/matrix-doc/issues/2222
             if (bind) {
+                // @ts-ignore
                 await task.bindMsisdn(null, `+${address}`);
             } else {
+                // @ts-ignore
                 await task.addMsisdn(null, `+${address}`);
             }
             this.setState({
@@ -183,7 +186,7 @@ export class PhoneNumber extends React.Component<IPhoneNumberProps, IPhoneNumber
         this.setState({ continueDisabled: true });
         const token = this.state.verificationCode;
         try {
-            await this.state.addTask.haveMsisdnToken(token);
+            await this.state.addTask?.haveMsisdnToken(token);
             this.setState({
                 addTask: null,
                 continueDisabled: false,

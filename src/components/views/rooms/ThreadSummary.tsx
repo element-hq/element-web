@@ -77,18 +77,18 @@ interface IPreviewProps {
 export const ThreadMessagePreview: React.FC<IPreviewProps> = ({ thread, showDisplayname = false }) => {
     const cli = useContext(MatrixClientContext);
 
-    const lastReply = useTypedEventEmitterState(thread, ThreadEvent.Update, () => thread.replyToEvent);
+    const lastReply = useTypedEventEmitterState(thread, ThreadEvent.Update, () => thread.replyToEvent) ?? undefined;
     // track the content as a means to regenerate the thread message preview upon edits & decryption
-    const [content, setContent] = useState<IContent>(lastReply?.getContent());
+    const [content, setContent] = useState<IContent | undefined>(lastReply?.getContent());
     useTypedEventEmitter(lastReply, MatrixEventEvent.Replaced, () => {
-        setContent(lastReply.getContent());
+        setContent(lastReply!.getContent());
     });
     const awaitDecryption = lastReply?.shouldAttemptDecryption() || lastReply?.isBeingDecrypted();
-    useTypedEventEmitter(awaitDecryption ? lastReply : null, MatrixEventEvent.Decrypted, () => {
-        setContent(lastReply.getContent());
+    useTypedEventEmitter(awaitDecryption ? lastReply : undefined, MatrixEventEvent.Decrypted, () => {
+        setContent(lastReply!.getContent());
     });
 
-    const preview = useAsyncMemo(async (): Promise<string> => {
+    const preview = useAsyncMemo(async (): Promise<string | undefined> => {
         if (!lastReply) return;
         await cli.decryptEventIfNeeded(lastReply);
         return MessagePreviewStore.instance.generatePreviewForEvent(lastReply);

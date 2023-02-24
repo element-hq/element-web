@@ -113,7 +113,7 @@ const SSOButton: React.FC<ISSOButtonProps> = ({
         brandClass = `mx_SSOButton_brand_${brandName}`;
         icon = <img src={brandIcon} height="24" width="24" alt={brandName} />;
     } else if (typeof idp?.icon === "string" && idp.icon.startsWith("mxc://")) {
-        const src = mediaFromMxc(idp.icon, matrixClient).getSquareThumbnailHttp(24);
+        const src = mediaFromMxc(idp.icon, matrixClient).getSquareThumbnailHttp(24) ?? undefined;
         icon = <img src={src} height="24" width="24" alt={idp.name} />;
     }
 

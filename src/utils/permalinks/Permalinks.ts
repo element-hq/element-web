@@ -84,7 +84,7 @@ export class RoomPermalinkCreator {
     private populationMap: { [serverName: string]: number } | null = null;
     private bannedHostsRegexps: RegExp[] | null = null;
     private allowedHostsRegexps: RegExp[] | null = null;
-    private _serverCandidates: string[] | null = null;
+    private _serverCandidates?: string[];
     private started = false;
 
     // We support being given a roomId as a fallback in the event the `room` object
@@ -124,7 +124,7 @@ export class RoomPermalinkCreator {
         this.started = false;
     }
 
-    public get serverCandidates(): string[] {
+    public get serverCandidates(): string[] | undefined {
         return this._serverCandidates;
     }
 

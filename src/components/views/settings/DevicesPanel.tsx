@@ -64,7 +64,7 @@ export default class DevicesPanel extends React.Component<IProps, IState> {
     }
 
     private onDevicesUpdated = (users: string[]): void => {
-        if (!users.includes(this.context.getUserId())) return;
+        if (!users.includes(this.context.getUserId()!)) return;
         this.loadDevices();
     };
 
@@ -252,9 +252,9 @@ export default class DevicesPanel extends React.Component<IProps, IState> {
         const otherDevices = devices.filter((device) => device.device_id !== myDeviceId);
         otherDevices.sort(this.deviceCompare);
 
-        const verifiedDevices = [];
-        const unverifiedDevices = [];
-        const nonCryptoDevices = [];
+        const verifiedDevices: IMyDevice[] = [];
+        const unverifiedDevices: IMyDevice[] = [];
+        const nonCryptoDevices: IMyDevice[] = [];
         for (const device of otherDevices) {
             const verified = this.isDeviceVerified(device);
             if (verified === true) {
@@ -271,7 +271,7 @@ export default class DevicesPanel extends React.Component<IProps, IState> {
                 return <React.Fragment />;
             }
 
-            let selectButton: JSX.Element;
+            let selectButton: JSX.Element | undefined;
             if (deviceList.length > 1) {
                 const anySelected = deviceList.some((device) => this.state.selectedDevices.includes(device.device_id));
                 const buttonAction = anySelected

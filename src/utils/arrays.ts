@@ -323,3 +323,7 @@ export async function asyncEvery<T>(values: T[], predicate: (value: T) => Promis
     }
     return true;
 }
+
+export function filterBoolean<T>(values: Array<T | null | undefined>): T[] {
+    return values.filter(Boolean) as T[];
+}

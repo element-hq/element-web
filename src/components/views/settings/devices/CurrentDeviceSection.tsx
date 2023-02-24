@@ -33,11 +33,11 @@ interface Props {
     device?: ExtendedDevice;
     isLoading: boolean;
     isSigningOut: boolean;
-    localNotificationSettings?: LocalNotificationSettings | undefined;
+    localNotificationSettings?: LocalNotificationSettings;
     // number of other sessions the user has
     // excludes current session
     otherSessionsCount: number;
-    setPushNotifications?: (deviceId: string, enabled: boolean) => Promise<void> | undefined;
+    setPushNotifications: (deviceId: string, enabled: boolean) => Promise<void>;
     onVerifyCurrentDevice: () => void;
     onSignOutCurrentDevice: () => void;
     signOutAllOtherSessions?: () => void;

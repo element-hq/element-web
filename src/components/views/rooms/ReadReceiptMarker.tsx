@@ -133,7 +133,7 @@ export default class ReadReceiptMarker extends React.PureComponent<IProps, IStat
 
             target.top = 0;
             target.right = 0;
-            target.parent = null;
+            target.parent = undefined;
             return target;
         }
         // this is the mx_ReadReceiptsGroup
@@ -146,7 +146,7 @@ export default class ReadReceiptMarker extends React.PureComponent<IProps, IStat
 
             target.top = 0;
             target.right = 0;
-            target.parent = null;
+            target.parent = undefined;
             return target;
         }
 
@@ -179,7 +179,7 @@ export default class ReadReceiptMarker extends React.PureComponent<IProps, IStat
             : // treat new RRs as though they were off the top of the screen
               -READ_AVATAR_SIZE;
 
-        const startStyles = [];
+        const startStyles: IReadReceiptMarkerStyle[] = [];
         if (oldInfo?.right) {
             startStyles.push({
                 top: oldPosition - newPosition,
@@ -210,7 +210,7 @@ export default class ReadReceiptMarker extends React.PureComponent<IProps, IStat
         return (
             <NodeAnimator startStyles={this.state.startStyles}>
                 <MemberAvatar
-                    member={this.props.member}
+                    member={this.props.member ?? null}
                     fallbackUserId={this.props.fallbackUserId}
                     aria-hidden="true"
                     aria-live="off"

@@ -185,7 +185,6 @@ describe("RovingTabIndex", () => {
             const ref4 = React.createRef<HTMLElement>();
 
             let state: IState = {
-                activeRef: null,
                 refs: [ref1, ref2, ref3, ref4],
             };
 
@@ -196,7 +195,6 @@ describe("RovingTabIndex", () => {
                 },
             });
             expect(state).toStrictEqual({
-                activeRef: null,
                 refs: [ref1, ref3, ref4],
             });
 
@@ -207,7 +205,6 @@ describe("RovingTabIndex", () => {
                 },
             });
             expect(state).toStrictEqual({
-                activeRef: null,
                 refs: [ref1, ref4],
             });
 
@@ -218,7 +215,6 @@ describe("RovingTabIndex", () => {
                 },
             });
             expect(state).toStrictEqual({
-                activeRef: null,
                 refs: [ref1],
             });
 
@@ -229,7 +225,6 @@ describe("RovingTabIndex", () => {
                 },
             });
             expect(state).toStrictEqual({
-                activeRef: null,
                 refs: [],
             });
         });
@@ -250,7 +245,6 @@ describe("RovingTabIndex", () => {
             );
 
             let state: IState = {
-                activeRef: null,
                 refs: [],
             };
 

@@ -51,7 +51,7 @@ export default class RoomListLayoutStore extends AsyncStoreWithClient<IState> {
         if (!this.layoutMap.has(tagId)) {
             this.layoutMap.set(tagId, new ListLayout(tagId));
         }
-        return this.layoutMap.get(tagId);
+        return this.layoutMap.get(tagId)!;
     }
 
     // Note: this primarily exists for debugging, and isn't really intended to be used by anything.

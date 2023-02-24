@@ -64,7 +64,7 @@ export default class MediaDeviceHandler extends EventEmitter {
      *
      * @return Promise<IMediaDevices> The available media devices
      */
-    public static async getDevices(): Promise<IMediaDevices> {
+    public static async getDevices(): Promise<IMediaDevices | undefined> {
         try {
             const devices = await navigator.mediaDevices.enumerateDevices();
             const output: Record<MediaDeviceKindEnum, MediaDeviceInfo[]> = {
