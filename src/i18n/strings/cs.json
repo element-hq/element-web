@@ -3737,5 +3737,7 @@
     "Due to decryption errors, some votes may not be counted": "Kvůli chybám v dešifrování nemusí být některé hlasy započítány",
     "Identity server is <code>%(identityServerUrl)s</code>": "Server identit je <code>%(identityServerUrl)s</code>",
     "Homeserver is <code>%(homeserverUrl)s</code>": "Domovský server je <code>%(homeserverUrl)s</code>",
-    "Room is <strong>not encrypted 🚨</strong>": "Místnost <strong>není šifrovaná 🚨</strong>"
+    "Room is <strong>not encrypted 🚨</strong>": "Místnost <strong>není šifrovaná 🚨</strong>",
+    "Ended a poll": "Ukončil hlasování",
+    "Yes, it was me": "Ano, to jsem byl já"
 }
