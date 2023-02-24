@@ -878,6 +878,8 @@
     "Please contact your homeserver administrator.": "Please contact your homeserver administrator.",
     "The person who invited you has already left.": "The person who invited you has already left.",
     "The person who invited you has already left, or their server is offline.": "The person who invited you has already left, or their server is offline.",
+    "You attempted to join using a room ID without providing a list of servers to join through. Room IDs are internal identifiers and cannot be used to join a room without additional information.": "You attempted to join using a room ID without providing a list of servers to join through. Room IDs are internal identifiers and cannot be used to join a room without additional information.",
+    "If you know a room address, try joining through that instead.": "If you know a room address, try joining through that instead.",
     "Failed to join": "Failed to join",
     "Connection lost": "Connection lost",
     "You were disconnected from the call. (Error: %(message)s)": "You were disconnected from the call. (Error: %(message)s)",

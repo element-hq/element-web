@@ -593,7 +593,7 @@ export class RoomViewStore extends EventEmitter {
             );
         } else if (err.httpStatus === 404) {
             const invitingUserId = this.getInvitingUserId(roomId);
-            // only provide a better error message for invites
+            // provide a better error message for invites
             if (invitingUserId) {
                 // if the inviting user is on the same HS, there can only be one cause: they left.
                 if (invitingUserId.endsWith(`:${MatrixClientPeg.get().getDomain()}`)) {
@@ -601,6 +601,23 @@ export class RoomViewStore extends EventEmitter {
                 } else {
                     description = _t("The person who invited you has already left, or their server is offline.");
                 }
+            }
+
+            // provide a more detailed error than "No known servers" when attempting to
+            // join using a room ID and no via servers
+            if (roomId === this.state.roomId && this.state.viaServers.length === 0) {
+                description = (
+                    <div>
+                        {_t(
+                            "You attempted to join using a room ID without providing a list " +
+                                "of servers to join through. Room IDs are internal identifiers and " +
+                                "cannot be used to join a room without additional information.",
+                        )}
+                        <br />
+                        <br />
+                        {_t("If you know a room address, try joining through that instead.")}
+                    </div>
+                );
             }
         }
 
@@ -615,7 +632,9 @@ export class RoomViewStore extends EventEmitter {
             joining: false,
             joinError: payload.err,
         });
-        this.showJoinRoomError(payload.err, payload.roomId);
+        if (payload.err) {
+            this.showJoinRoomError(payload.err, payload.roomId);
+        }
     }
 
     public reset(): void {

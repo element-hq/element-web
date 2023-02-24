@@ -14,7 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Room } from "matrix-js-sdk/src/matrix";
+import { mocked } from "jest-mock";
+import { MatrixError, Room } from "matrix-js-sdk/src/matrix";
 import { sleep } from "matrix-js-sdk/src/utils";
 
 import { RoomViewStore } from "../../src/stores/RoomViewStore";
@@ -282,6 +283,29 @@ describe("RoomViewStore", function () {
 
     it("when viewing a call without a broadcast, it should not raise an error", async () => {
         await viewCall();
+    });
+
+    it("should display an error message when the room is unreachable via the roomId", async () => {
+        // When
+        // View and wait for the room
+        dis.dispatch({ action: Action.ViewRoom, room_id: roomId });
+        await untilDispatch(Action.ActiveRoomChanged, dis);
+        // Generate error to display the expected error message
+        const error = new MatrixError(undefined, 404);
+        roomViewStore.showJoinRoomError(error, roomId);
+
+        // Check the modal props
+        expect(mocked(Modal).createDialog.mock.calls[0][1]).toMatchSnapshot();
+    });
+
+    it("should display the generic error message when the roomId doesnt match", async () => {
+        // When
+        // Generate error to display the expected error message
+        const error = new MatrixError({ error: "my 404 error" }, 404);
+        roomViewStore.showJoinRoomError(error, roomId);
+
+        // Check the modal props
+        expect(mocked(Modal).createDialog.mock.calls[0][1]).toMatchSnapshot();
     });
 
     describe("when listening to a voice broadcast", () => {
