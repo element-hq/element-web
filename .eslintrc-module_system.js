@@ -1,25 +1,12 @@
 module.exports = {
     plugins: ["matrix-org"],
-    extends: ["plugin:matrix-org/babel", "plugin:matrix-org/react"],
+    extends: ["./.eslintrc.js"],
     parserOptions: {
-        project: ["./tsconfig.json"],
-    },
-    env: {
-        browser: true,
-        node: true,
-    },
-    rules: {
-        // Things we do that break the ideal style
-        quotes: "off",
-    },
-    settings: {
-        react: {
-            version: "detect",
-        },
+        project: ["./tsconfig.module_system.json"],
     },
     overrides: [
         {
-            files: ["src/**/*.{ts,tsx}", "test/**/*.{ts,tsx}"],
+            files: ["module_system/**/*.{ts,tsx}"],
             extends: ["plugin:matrix-org/typescript", "plugin:matrix-org/react"],
             // NOTE: These rules are frozen and new rules should not be added here.
             // New changes belong in https://github.com/matrix-org/eslint-plugin-matrix-org/
@@ -79,14 +66,6 @@ module.exports = {
                         ],
                     },
                 ],
-            },
-        },
-        {
-            files: ["test/**/*.{ts,tsx}"],
-            rules: {
-                // We don't need super strict typing in test utilities
-                "@typescript-eslint/explicit-function-return-type": "off",
-                "@typescript-eslint/explicit-member-accessibility": "off",
             },
         },
     ],
