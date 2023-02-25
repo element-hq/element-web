@@ -3739,5 +3739,8 @@
     "Identity server is <code>%(identityServerUrl)s</code>": "Server identity je <code>%(identityServerUrl)s</code>",
     "Homeserver is <code>%(homeserverUrl)s</code>": "Domovský server je <code>%(homeserverUrl)s</code>",
     "Show NSFW content": "Zobraziť obsah NSFW",
-    "Yes, it was me": "Áno, bol som to ja"
+    "Yes, it was me": "Áno, bol som to ja",
+    "Answered elsewhere": "Hovor prijatý inde",
+    "If you know a room address, try joining through that instead.": "Ak poznáte adresu miestnosti, skúste sa pripojiť prostredníctvom nej.",
+    "You attempted to join using a room ID without providing a list of servers to join through. Room IDs are internal identifiers and cannot be used to join a room without additional information.": "Pokúsili ste sa pripojiť pomocou ID miestnosti bez uvedenia zoznamu serverov, cez ktoré sa môžete pripojiť. ID miestností sú interné identifikátory a bez ďalších informácií ich nemožno použiť na pripojenie k miestnosti."
 }
