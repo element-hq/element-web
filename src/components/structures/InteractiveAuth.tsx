@@ -33,7 +33,7 @@ export const ERROR_USER_CANCELLED = new Error("User cancelled auth session");
 
 type InteractiveAuthCallbackSuccess = (
     success: true,
-    response: IAuthData,
+    response?: IAuthData,
     extra?: { emailSid?: string; clientSecret?: string },
 ) => void;
 type InteractiveAuthCallbackFailure = (success: false, response: IAuthData | Error) => void;
@@ -94,7 +94,7 @@ interface IState {
 
 export default class InteractiveAuthComponent extends React.Component<IProps, IState> {
     private readonly authLogic: InteractiveAuth;
-    private readonly intervalId: number = null;
+    private readonly intervalId: number | null = null;
     private readonly stageComponent = createRef<IStageComponent>();
 
     private unmounted = false;
@@ -103,10 +103,7 @@ export default class InteractiveAuthComponent extends React.Component<IProps, IS
         super(props);
 
         this.state = {
-            authStage: null,
             busy: false,
-            errorText: null,
-            errorCode: null,
             submitButtonEnabled: false,
         };
 
@@ -213,8 +210,8 @@ export default class InteractiveAuthComponent extends React.Component<IProps, IS
         if (busy) {
             this.setState({
                 busy: true,
-                errorText: null,
-                errorCode: null,
+                errorText: undefined,
+                errorCode: undefined,
             });
         }
         // The JS SDK eagerly reports itself as "not busy" right after any

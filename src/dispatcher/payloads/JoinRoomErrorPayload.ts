@@ -23,5 +23,5 @@ export interface JoinRoomErrorPayload extends Pick<ActionPayload, "action"> {
     action: Action.JoinRoomError;
 
     roomId: string;
-    err?: MatrixError;
+    err: MatrixError;
 }

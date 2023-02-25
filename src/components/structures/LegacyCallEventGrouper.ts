@@ -35,7 +35,7 @@ const CONNECTING_STATES = [
     CallState.CreateAnswer,
 ];
 
-const SUPPORTED_STATES = [CallState.Connected, CallState.Ringing];
+const SUPPORTED_STATES = [CallState.Connected, CallState.Ringing, CallState.Ended];
 
 export enum CustomCallState {
     Missed = "missed",
@@ -72,7 +72,7 @@ export function buildLegacyCallEventGroupers(
 
 export default class LegacyCallEventGrouper extends EventEmitter {
     private events: Set<MatrixEvent> = new Set<MatrixEvent>();
-    private call: MatrixCall;
+    private call: MatrixCall | null = null;
     public state: CallState | CustomCallState;
 
     public constructor() {
@@ -111,7 +111,7 @@ export default class LegacyCallEventGrouper extends EventEmitter {
     }
 
     public get hangupReason(): string | null {
-        return this.hangup?.getContent()?.reason;
+        return this.call?.hangupReason ?? this.hangup?.getContent()?.reason ?? null;
     }
 
     public get rejectParty(): string {

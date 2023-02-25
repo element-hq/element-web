@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ExtraTile renders 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_AccessibleButton mx_ExtraTile mx_RoomTile"
+    role="treeitem"
+    tabindex="-1"
+  >
+    <div
+      class="mx_RoomTile_avatarContainer"
+    />
+    <div
+      class="mx_RoomTile_details"
+    >
+      <div
+        class="mx_RoomTile_primaryDetails"
+      >
+        <div
+          class="mx_RoomTile_titleContainer"
+        >
+          <div
+            class="mx_RoomTile_title"
+            dir="auto"
+            tabindex="-1"
+            title="test"
+          >
+            test
+          </div>
+        </div>
+        <div
+          class="mx_RoomTile_badgeContainer"
+        />
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

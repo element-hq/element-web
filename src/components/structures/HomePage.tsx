@@ -56,15 +56,15 @@ const getOwnProfile = (
     userId: string,
 ): {
     displayName: string;
-    avatarUrl: string;
+    avatarUrl?: string;
 } => ({
     displayName: OwnProfileStore.instance.displayName || userId,
-    avatarUrl: OwnProfileStore.instance.getHttpAvatarUrl(AVATAR_SIZE),
+    avatarUrl: OwnProfileStore.instance.getHttpAvatarUrl(AVATAR_SIZE) ?? undefined,
 });
 
 const UserWelcomeTop: React.FC = () => {
     const cli = useContext(MatrixClientContext);
-    const userId = cli.getUserId();
+    const userId = cli.getUserId()!;
     const [ownProfile, setOwnProfile] = useState(getOwnProfile(userId));
     useEventEmitter(OwnProfileStore.instance, UPDATE_EVENT, () => {
         setOwnProfile(getOwnProfile(userId));

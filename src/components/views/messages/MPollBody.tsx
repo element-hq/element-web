@@ -182,12 +182,14 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
     private addListeners(): void {
         this.state.poll?.on(PollEvent.Responses, this.onResponsesChange);
         this.state.poll?.on(PollEvent.End, this.onRelationsChange);
+        this.state.poll?.on(PollEvent.UndecryptableRelations, this.render.bind(this));
     }
 
     private removeListeners(): void {
         if (this.state.poll) {
             this.state.poll.off(PollEvent.Responses, this.onResponsesChange);
             this.state.poll.off(PollEvent.End, this.onRelationsChange);
+            this.state.poll.off(PollEvent.UndecryptableRelations, this.render.bind(this));
         }
     }
 
@@ -297,7 +299,9 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
         const showResults = poll.isEnded || (disclosed && myVote !== undefined);
 
         let totalText: string;
-        if (poll.isEnded) {
+        if (showResults && poll.undecryptableRelationsCount) {
+            totalText = _t("Due to decryption errors, some votes may not be counted");
+        } else if (poll.isEnded) {
             totalText = _t("Final result based on %(count)s votes", { count: totalVotes });
         } else if (!disclosed) {
             totalText = _t("Results will be visible when the poll is ended");
@@ -384,7 +388,7 @@ export function allVotes(voteRelations: Relations): Array<UserVote> {
  * @param {string?} selected Local echo selected option for the userId
  * @returns a Map of user ID to their vote info
  */
-function collectUserVotes(
+export function collectUserVotes(
     userResponses: Array<UserVote>,
     userId?: string | null | undefined,
     selected?: string | null | undefined,
@@ -405,7 +409,7 @@ function collectUserVotes(
     return userVotes;
 }
 
-function countVotes(userVotes: Map<string, UserVote>, pollStart: PollStartEvent): Map<string, number> {
+export function countVotes(userVotes: Map<string, UserVote>, pollStart: PollStartEvent): Map<string, number> {
     const collected = new Map<string, number>();
 
     for (const response of userVotes.values()) {

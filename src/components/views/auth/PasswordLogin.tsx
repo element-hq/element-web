@@ -36,7 +36,7 @@ interface IProps {
     phoneNumber: string;
 
     serverConfig: ValidatedServerConfig;
-    loginIncorrect?: boolean;
+    loginIncorrect: boolean;
     disableSubmit?: boolean;
     busy?: boolean;
 
@@ -67,9 +67,9 @@ const enum LoginField {
  * The email/username/phone fields are fully-controlled, the password field is not.
  */
 export default class PasswordLogin extends React.PureComponent<IProps, IState> {
-    private [LoginField.Email]: Field;
-    private [LoginField.Phone]: Field;
-    private [LoginField.MatrixId]: Field;
+    private [LoginField.Email]: Field | null;
+    private [LoginField.Phone]: Field | null;
+    private [LoginField.MatrixId]: Field | null;
 
     public static defaultProps = {
         onUsernameChanged: function () {},
@@ -93,7 +93,7 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
     private onForgotPasswordClick = (ev: ButtonEvent): void => {
         ev.preventDefault();
         ev.stopPropagation();
-        this.props.onForgotPasswordClick();
+        this.props.onForgotPasswordClick?.();
     };
 
     private onSubmitForm = async (ev: SyntheticEvent): Promise<void> => {
@@ -116,25 +116,25 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
     };
 
     private onUsernameChanged = (ev: React.ChangeEvent<HTMLInputElement>): void => {
-        this.props.onUsernameChanged(ev.target.value);
+        this.props.onUsernameChanged?.(ev.target.value);
     };
 
     private onUsernameBlur = (ev: React.FocusEvent<HTMLInputElement>): void => {
-        this.props.onUsernameBlur(ev.target.value);
+        this.props.onUsernameBlur?.(ev.target.value);
     };
 
     private onLoginTypeChange = (ev: React.ChangeEvent<HTMLSelectElement>): void => {
         const loginType = ev.target.value as IState["loginType"];
         this.setState({ loginType });
-        this.props.onUsernameChanged(""); // Reset because email and username use the same state
+        this.props.onUsernameChanged?.(""); // Reset because email and username use the same state
     };
 
     private onPhoneCountryChanged = (country: PhoneNumberCountryDefinition): void => {
-        this.props.onPhoneCountryChanged(country.iso2);
+        this.props.onPhoneCountryChanged?.(country.iso2);
     };
 
     private onPhoneNumberChanged = (ev: React.ChangeEvent<HTMLInputElement>): void => {
-        this.props.onPhoneNumberChanged(ev.target.value);
+        this.props.onPhoneNumberChanged?.(ev.target.value);
     };
 
     private onPasswordChanged = (ev: React.ChangeEvent<HTMLInputElement>): void => {
@@ -199,7 +199,7 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
         return null;
     }
 
-    private markFieldValid(fieldID: LoginField, valid: boolean): void {
+    private markFieldValid(fieldID: LoginField, valid?: boolean): void {
         const { fieldValid } = this.state;
         fieldValid[fieldID] = valid;
         this.setState({
@@ -368,7 +368,7 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
     }
 
     public render(): React.ReactNode {
-        let forgotPasswordJsx;
+        let forgotPasswordJsx: JSX.Element | undefined;
 
         if (this.props.onForgotPasswordClick) {
             forgotPasswordJsx = (

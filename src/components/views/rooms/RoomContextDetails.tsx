@@ -37,5 +37,5 @@ export function RoomContextDetails<T extends keyof ReactHTML>({ room, component,
         );
     }
 
-    return null;
+    return <></>;
 }

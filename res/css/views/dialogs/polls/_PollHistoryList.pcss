@@ -32,6 +32,10 @@ limitations under the License.
     grid-gap: $spacing-20;
     padding-right: $spacing-64;
     margin: $spacing-32 0;
+
+    &.mx_PollHistoryList_list_ENDED {
+        grid-gap: $spacing-32;
+    }
 }
 
 .mx_PollHistoryList_noResults {
@@ -41,4 +45,15 @@ limitations under the License.
     align-items: center;
     justify-content: center;
     color: $secondary-content;
+}
+
+.mx_PollHistoryList_loading {
+    color: $secondary-content;
+    text-align: center;
+
+    // center in all free space
+    // when there are no results
+    &.mx_PollHistoryList_noResultsYet {
+        margin: auto auto;
+    }
 }

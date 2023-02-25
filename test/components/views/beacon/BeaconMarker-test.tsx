@@ -15,9 +15,8 @@ limitations under the License.
 */
 
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import * as maplibregl from "maplibre-gl";
-import { act } from "react-dom/test-utils";
 import { Beacon, Room, RoomMember, MatrixEvent, getBeaconInfoIdentifier } from "matrix-js-sdk/src/matrix";
 
 import BeaconMarker from "../../../../src/components/views/beacon/BeaconMarker";

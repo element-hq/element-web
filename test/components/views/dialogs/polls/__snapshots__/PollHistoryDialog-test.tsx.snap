@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<PollHistoryDialog /> renders a list of active polls when there are polls in the timeline 1`] = `
+exports[`<PollHistoryDialog /> renders a list of active polls when there are polls in the room 1`] = `
 <div>
   <div
     data-focus-guard="true"
@@ -65,7 +65,7 @@ exports[`<PollHistoryDialog /> renders a list of active polls when there are pol
           </label>
         </fieldset>
         <ol
-          class="mx_PollHistoryList_list"
+          class="mx_PollHistoryList_list mx_PollHistoryList_list_ACTIVE"
         >
           <li
             class="mx_PollListItem"

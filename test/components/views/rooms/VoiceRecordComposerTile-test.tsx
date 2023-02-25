@@ -25,6 +25,7 @@ import { VoiceRecording } from "../../../../src/audio/VoiceRecording";
 import { doMaybeLocalRoomAction } from "../../../../src/utils/local-room";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import { IUpload } from "../../../../src/audio/VoiceMessageRecording";
+import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalinks";
 
 jest.mock("../../../../src/utils/local-room", () => ({
     doMaybeLocalRoomAction: jest.fn(),
@@ -43,10 +44,12 @@ describe("<VoiceRecordComposerTile/>", () => {
         } as unknown as MatrixClient;
         MatrixClientPeg.get = () => mockClient;
 
+        const room = {
+            roomId,
+        } as unknown as Room;
         const props = {
-            room: {
-                roomId,
-            } as unknown as Room,
+            room,
+            permalinkCreator: new RoomPermalinkCreator(room),
         };
         mockUpload = {
             mxc: "mxc://example.com/voice",
@@ -66,7 +69,7 @@ describe("<VoiceRecordComposerTile/>", () => {
         });
 
         mocked(doMaybeLocalRoomAction).mockImplementation(
-            <T extends {}>(roomId: string, fn: (actualRoomId: string) => Promise<T>, _client?: MatrixClient) => {
+            <T,>(roomId: string, fn: (actualRoomId: string) => Promise<T>, _client?: MatrixClient) => {
                 return fn(roomId);
             },
         );

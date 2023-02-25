@@ -21,7 +21,7 @@ import { Direction } from "matrix-js-sdk/src/matrix";
 /* eslint-disable camelcase */
 export interface ICrawlerCheckpoint {
     roomId: string;
-    token: string;
+    token: string | null;
     fullCrawl?: boolean;
     direction: Direction;
 }

@@ -19,6 +19,7 @@ import React from "react";
 import AccessibleButton from "../elements/AccessibleButton";
 import { Icon as BackIcon } from "../../../../res/img/element-icons/caret-left.svg";
 import { Icon as CloseIcon } from "../../../../res/img/element-icons/cancel-rounded.svg";
+import { _t } from "../../../languageHandler";
 
 interface Props {
     onCancel: () => void;
@@ -32,7 +33,8 @@ const ShareDialogButtons: React.FC<Props> = ({ onBack, onCancel, displayBack }) 
             {displayBack && (
                 <AccessibleButton
                     className="mx_ShareDialogButtons_button left"
-                    data-test-id="share-dialog-buttons-back"
+                    data-testid="share-dialog-buttons-back"
+                    aria-label={_t("Back")}
                     onClick={onBack}
                     element="button"
                 >
@@ -41,7 +43,8 @@ const ShareDialogButtons: React.FC<Props> = ({ onBack, onCancel, displayBack }) 
             )}
             <AccessibleButton
                 className="mx_ShareDialogButtons_button right"
-                data-test-id="share-dialog-buttons-cancel"
+                data-testid="share-dialog-buttons-cancel"
+                aria-label={_t("Close")}
                 onClick={onCancel}
                 element="button"
             >

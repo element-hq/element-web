@@ -9,7 +9,7 @@ exports[`<MBeaconBody /> when map display is not configured renders maps unavail
 >
   <div
     className="mx_MapError mx_MBeaconBody_mapError mx_MBeaconBody_mapErrorInteractive mx_MapError_isMinimised"
-    data-test-id="map-rendering-error"
+    data-testid="map-rendering-error"
     onClick={[Function]}
   >
     <div

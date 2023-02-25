@@ -41,7 +41,7 @@ import { MPollEndBody } from "./MPollEndBody";
 import MLocationBody from "./MLocationBody";
 import MjolnirBody from "./MjolnirBody";
 import MBeaconBody from "./MBeaconBody";
-import DecryptionFailureBody from "./DecryptionFailureBody";
+import { DecryptionFailureBody } from "./DecryptionFailureBody";
 import { GetRelationsForEvent, IEventTileOps } from "../rooms/EventTile";
 import { VoiceBroadcastBody, VoiceBroadcastInfoEventType, VoiceBroadcastInfoState } from "../../../voice-broadcast";
 

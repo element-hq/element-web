@@ -39,7 +39,7 @@ describe("InteractiveAuthDialog", function () {
 
     beforeEach(function () {
         jest.clearAllMocks();
-        mockClient.credentials = null;
+        mockClient.credentials = { userId: null };
     });
 
     afterAll(() => {

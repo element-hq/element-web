@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { MatrixEvent, Poll } from "matrix-js-sdk/src/matrix";
 
@@ -23,7 +23,8 @@ import BaseDialog from "../BaseDialog";
 import { IDialogProps } from "../IDialogProps";
 import { PollHistoryList } from "./PollHistoryList";
 import { PollHistoryFilter } from "./types";
-import { usePolls } from "./usePollHistory";
+import { usePollsWithRelations } from "./usePollHistory";
+import { useFetchPastPolls } from "./fetchPastPolls";
 
 type PollHistoryDialogProps = Pick<IDialogProps, "onFinished"> & {
     roomId: string;
@@ -34,7 +35,10 @@ const sortEventsByLatest = (left: MatrixEvent, right: MatrixEvent): number => ri
 const filterPolls =
     (filter: PollHistoryFilter) =>
     (poll: Poll): boolean =>
-        (filter === "ACTIVE") !== poll.isEnded;
+        // exclude polls while they are still loading
+        // to avoid jitter in list
+        !poll.isFetchingResponses && (filter === "ACTIVE") !== poll.isEnded;
+
 const filterAndSortPolls = (polls: Map<string, Poll>, filter: PollHistoryFilter): MatrixEvent[] => {
     return [...polls.values()]
         .filter(filterPolls(filter))
@@ -43,18 +47,24 @@ const filterAndSortPolls = (polls: Map<string, Poll>, filter: PollHistoryFilter)
 };
 
 export const PollHistoryDialog: React.FC<PollHistoryDialogProps> = ({ roomId, matrixClient, onFinished }) => {
-    const { polls } = usePolls(roomId, matrixClient);
+    const room = matrixClient.getRoom(roomId)!;
+    const { isLoading } = useFetchPastPolls(room, matrixClient);
+    const { polls } = usePollsWithRelations(roomId, matrixClient);
     const [filter, setFilter] = useState<PollHistoryFilter>("ACTIVE");
-    const [pollStartEvents, setPollStartEvents] = useState(filterAndSortPolls(polls, filter));
 
-    useEffect(() => {
-        setPollStartEvents(filterAndSortPolls(polls, filter));
-    }, [filter, polls]);
+    const pollStartEvents = filterAndSortPolls(polls, filter);
+    const isLoadingPollResponses = [...polls.values()].some((poll) => poll.isFetchingResponses);
 
     return (
         <BaseDialog title={_t("Polls history")} onFinished={onFinished}>
             <div className="mx_PollHistoryDialog_content">
-                <PollHistoryList pollStartEvents={pollStartEvents} filter={filter} onFilterChange={setFilter} />
+                <PollHistoryList
+                    pollStartEvents={pollStartEvents}
+                    isLoading={isLoading || isLoadingPollResponses}
+                    polls={polls}
+                    filter={filter}
+                    onFilterChange={setFilter}
+                />
             </div>
         </BaseDialog>
     );

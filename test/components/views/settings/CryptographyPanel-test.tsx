@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactElement } from "react";
-import ReactDOM from "react-dom";
+import React from "react";
+import { render } from "@testing-library/react";
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
@@ -37,16 +37,9 @@ describe("CryptographyPanel", () => {
         const rendered = render(<CryptographyPanel />);
 
         // Then it displays info about the user's session
-        const codes = rendered.querySelectorAll("code");
+        const codes = rendered.container.querySelectorAll("code");
         expect(codes.length).toEqual(2);
         expect(codes[0].innerHTML).toEqual(sessionId);
         expect(codes[1].innerHTML).toEqual(sessionKeyFormatted);
     });
 });
-
-function render(component: ReactElement<CryptographyPanel>): HTMLDivElement {
-    const parentDiv = document.createElement("div");
-    document.body.appendChild(parentDiv);
-    ReactDOM.render(component, parentDiv);
-    return parentDiv;
-}

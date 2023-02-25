@@ -33,14 +33,14 @@ import { accessSecretStorage } from "../../../SecurityManager";
 
 interface IState {
     loading: boolean;
-    error: null;
-    backupKeyStored: boolean;
-    backupKeyCached: boolean;
-    backupKeyWellFormed: boolean;
-    secretStorageKeyInAccount: boolean;
-    secretStorageReady: boolean;
-    backupInfo: IKeyBackupInfo;
-    backupSigStatus: TrustInfo;
+    error: Error | null;
+    backupKeyStored: boolean | null;
+    backupKeyCached: boolean | null;
+    backupKeyWellFormed: boolean | null;
+    secretStorageKeyInAccount: boolean | null;
+    secretStorageReady: boolean | null;
+    backupInfo: IKeyBackupInfo | null;
+    backupSigStatus: TrustInfo | null;
     sessionsRemaining: number;
 }
 
@@ -144,10 +144,10 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
 
     private async getUpdatedDiagnostics(): Promise<void> {
         const cli = MatrixClientPeg.get();
-        const secretStorage = cli.crypto.secretStorage;
+        const secretStorage = cli.crypto!.secretStorage;
 
         const backupKeyStored = !!(await cli.isKeyBackupKeyStored());
-        const backupKeyFromCache = await cli.crypto.getSessionBackupPrivateKey();
+        const backupKeyFromCache = await cli.crypto!.getSessionBackupPrivateKey();
         const backupKeyCached = !!backupKeyFromCache;
         const backupKeyWellFormed = backupKeyFromCache instanceof Uint8Array;
         const secretStorageKeyInAccount = await secretStorage.hasKey();
@@ -173,7 +173,7 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
                     this.loadBackupStatus();
                 },
             },
-            null,
+            undefined,
             /* priority = */ false,
             /* static = */ true,
         );
@@ -200,7 +200,7 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
     };
 
     private restoreBackup = async (): Promise<void> => {
-        Modal.createDialog(RestoreKeyBackupDialog, null, null, /* priority = */ false, /* static = */ true);
+        Modal.createDialog(RestoreKeyBackupDialog, undefined, undefined, /* priority = */ false, /* static = */ true);
     };
 
     private resetSecretStorage = async (): Promise<void> => {
@@ -233,7 +233,7 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
         let statusDescription;
         let extraDetailsTableRows;
         let extraDetails;
-        const actions = [];
+        const actions: JSX.Element[] = [];
         if (error) {
             statusDescription = <div className="error">{_t("Unable to load key backup status")}</div>;
         } else if (loading) {

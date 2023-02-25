@@ -160,7 +160,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
         }
     }
 
-    public setCards(cards: IRightPanelCard[], allowClose = true, roomId: string = null): void {
+    public setCards(cards: IRightPanelCard[], allowClose = true, roomId: string | null = null): void {
         // This function sets the history of the right panel and shows the right panel if not already visible.
         const rId = roomId ?? this.viewedRoomId;
         const history = cards.map((c) => ({ phase: c.phase, state: c.state ?? {} }));
@@ -170,7 +170,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
     }
 
     // Appends a card to the history and shows the right panel if not already visible
-    public pushCard(card: IRightPanelCard, allowClose = true, roomId: string = null): void {
+    public pushCard(card: IRightPanelCard, allowClose = true, roomId: string | null = null): void {
         const rId = roomId ?? this.viewedRoomId;
         const redirect = this.getVerificationRedirect(card);
         const targetPhase = redirect?.phase ?? card.phase;
@@ -196,7 +196,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
         this.emitAndUpdateSettings();
     }
 
-    public popCard(roomId: string = null): IRightPanelCard {
+    public popCard(roomId: string | null = null): IRightPanelCard | undefined {
         const rId = roomId ?? this.viewedRoomId;
         if (!this.byRoom[rId]) return;
 
@@ -304,7 +304,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
         return true;
     }
 
-    private getVerificationRedirect(card: IRightPanelCard): IRightPanelCard {
+    private getVerificationRedirect(card: IRightPanelCard): IRightPanelCard | null {
         if (card.phase === RightPanelPhases.RoomMemberInfo && card.state) {
             // RightPanelPhases.RoomMemberInfo -> needs to be changed to RightPanelPhases.EncryptionPanel if there is a pending verification request
             const { member } = card.state;
@@ -322,8 +322,8 @@ export default class RightPanelStore extends ReadyWatchingStore {
         return null;
     }
 
-    private isPhaseValid(targetPhase: RightPanelPhases, isViewingRoom: boolean): boolean {
-        if (!RightPanelPhases[targetPhase]) {
+    private isPhaseValid(targetPhase: RightPanelPhases | null, isViewingRoom: boolean): boolean {
+        if (!targetPhase || !RightPanelPhases[targetPhase]) {
             logger.warn(`Tried to switch right panel to unknown phase: ${targetPhase}`);
             return false;
         }

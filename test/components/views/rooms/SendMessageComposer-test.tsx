@@ -281,7 +281,7 @@ describe("<SendMessageComposer/>", () => {
 
         it("correctly sends a message", () => {
             mocked(doMaybeLocalRoomAction).mockImplementation(
-                <T extends {}>(roomId: string, fn: (actualRoomId: string) => Promise<T>, _client?: MatrixClient) => {
+                <T,>(roomId: string, fn: (actualRoomId: string) => Promise<T>, _client?: MatrixClient) => {
                     return fn(roomId);
                 },
             );
@@ -300,7 +300,7 @@ describe("<SendMessageComposer/>", () => {
 
         it("shows chat effects on message sending", () => {
             mocked(doMaybeLocalRoomAction).mockImplementation(
-                <T extends {}>(roomId: string, fn: (actualRoomId: string) => Promise<T>, _client?: MatrixClient) => {
+                <T,>(roomId: string, fn: (actualRoomId: string) => Promise<T>, _client?: MatrixClient) => {
                     return fn(roomId);
                 },
             );
@@ -321,7 +321,7 @@ describe("<SendMessageComposer/>", () => {
 
         it("not to send chat effects on message sending for threads", () => {
             mocked(doMaybeLocalRoomAction).mockImplementation(
-                <T extends {}>(roomId: string, fn: (actualRoomId: string) => Promise<T>, _client?: MatrixClient) => {
+                <T,>(roomId: string, fn: (actualRoomId: string) => Promise<T>, _client?: MatrixClient) => {
                     return fn(roomId);
                 },
             );

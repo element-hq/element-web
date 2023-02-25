@@ -73,7 +73,7 @@ export default class DateSeparator extends React.Component<IProps, IState> {
     }
 
     public componentWillUnmount(): void {
-        SettingsStore.unwatchSetting(this.settingWatcherRef);
+        if (this.settingWatcherRef) SettingsStore.unwatchSetting(this.settingWatcherRef);
     }
 
     private onContextMenuOpenClick = (e: React.MouseEvent): void => {
@@ -89,7 +89,7 @@ export default class DateSeparator extends React.Component<IProps, IState> {
 
     private closeMenu = (): void => {
         this.setState({
-            contextMenuPosition: null,
+            contextMenuPosition: undefined,
         });
     };
 
@@ -181,7 +181,7 @@ export default class DateSeparator extends React.Component<IProps, IState> {
     };
 
     private renderJumpToDateMenu(): React.ReactElement {
-        let contextMenu: JSX.Element;
+        let contextMenu: JSX.Element | undefined;
         if (this.state.contextMenuPosition) {
             contextMenu = (
                 <IconizedContextMenu

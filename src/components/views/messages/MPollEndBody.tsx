@@ -21,7 +21,9 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import { Icon as PollIcon } from "../../../../res/img/element-icons/room/composer/poll.svg";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import { _t } from "../../../languageHandler";
 import { textForEvent } from "../../../TextForEvent";
+import { Caption } from "../typography/Caption";
 import { IBodyProps } from "./IBodyProps";
 import MPollBody from "./MPollBody";
 
@@ -105,5 +107,10 @@ export const MPollEndBody = React.forwardRef<any, IBodyProps>(({ mxEvent, ...pro
         );
     }
 
-    return <MPollBody mxEvent={pollStartEvent} {...props} />;
+    return (
+        <div>
+            <Caption>{_t("Ended a poll")}</Caption>
+            <MPollBody mxEvent={pollStartEvent} {...props} />
+        </div>
+    );
 });

@@ -218,17 +218,20 @@ export function shouldDisplayReply(event: MatrixEvent): boolean {
     return !!inReplyTo.event_id;
 }
 
-interface IAddReplyOpts {
+interface AddReplyOpts {
     permalinkCreator?: RoomPermalinkCreator;
-    includeLegacyFallback?: boolean;
+    includeLegacyFallback: false;
+}
+
+interface IncludeLegacyFeedbackOpts {
+    permalinkCreator: RoomPermalinkCreator;
+    includeLegacyFallback: true;
 }
 
 export function addReplyToMessageContent(
     content: IContent,
     replyToEvent: MatrixEvent,
-    opts: IAddReplyOpts = {
-        includeLegacyFallback: true,
-    },
+    opts: AddReplyOpts | IncludeLegacyFeedbackOpts,
 ): void {
     content["m.relates_to"] = {
         ...(content["m.relates_to"] || {}),

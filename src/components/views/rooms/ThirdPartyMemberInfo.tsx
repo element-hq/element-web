@@ -45,19 +45,19 @@ interface IState {
 }
 
 export default class ThirdPartyMemberInfo extends React.Component<IProps, IState> {
-    private room: Room;
+    private readonly room: Room | null;
 
     public constructor(props: IProps) {
         super(props);
 
         this.room = MatrixClientPeg.get().getRoom(this.props.event.getRoomId());
-        const me = this.room.getMember(MatrixClientPeg.get().getUserId());
-        const powerLevels = this.room.currentState.getStateEvents("m.room.power_levels", "");
+        const me = this.room?.getMember(MatrixClientPeg.get().getUserId()!);
+        const powerLevels = this.room?.currentState.getStateEvents("m.room.power_levels", "");
 
         let kickLevel = powerLevels ? powerLevels.getContent().kick : 50;
         if (typeof kickLevel !== "number") kickLevel = 50;
 
-        const sender = this.room.getMember(this.props.event.getSender());
+        const sender = this.room?.getMember(this.props.event.getSender());
 
         this.state = {
             stateKey: this.props.event.getStateKey(),
@@ -121,7 +121,7 @@ export default class ThirdPartyMemberInfo extends React.Component<IProps, IState
     };
 
     public render(): React.ReactNode {
-        let adminTools = null;
+        let adminTools: JSX.Element | undefined;
         if (this.state.canKick && this.state.invited) {
             adminTools = (
                 <div className="mx_MemberInfo_container">
@@ -135,8 +135,8 @@ export default class ThirdPartyMemberInfo extends React.Component<IProps, IState
             );
         }
 
-        let scopeHeader;
-        if (this.room.isSpaceRoom()) {
+        let scopeHeader: JSX.Element | undefined;
+        if (this.room?.isSpaceRoom()) {
             scopeHeader = (
                 <div className="mx_RightPanel_scopeHeader">
                     <RoomAvatar room={this.room} height={32} width={32} />

@@ -45,7 +45,7 @@ import { Caret } from "./caret";
  */
 
 type TransformCallback = (caretPosition: DocumentPosition, inputType: string, diff: IDiff) => number | void;
-type UpdateCallback = (caret: Caret, inputType?: string, diff?: IDiff) => void;
+type UpdateCallback = (caret?: Caret, inputType?: string, diff?: IDiff) => void;
 type ManualTransformCallback = () => Caret;
 
 export default class EditorModel {
@@ -252,7 +252,7 @@ export default class EditorModel {
     }
 
     private onAutoComplete = ({ replaceParts, close }: ICallback): void => {
-        let pos;
+        let pos: DocumentPosition | undefined;
         if (replaceParts) {
             this._parts.splice(this.autoCompletePartIdx, this.autoCompletePartCount, ...replaceParts);
             this.autoCompletePartCount = replaceParts.length;
@@ -380,13 +380,15 @@ export default class EditorModel {
             // reset it to insert as first part
             index = 0;
         }
-        while (str) {
-            const newPart = this._partCreator.createPartForInput(str, index, inputType);
-            const oldStr = str;
-            str = newPart.appendUntilRejected(str, inputType);
-            if (str === oldStr) {
+
+        let it: string | undefined = str;
+        while (it) {
+            const newPart = this._partCreator.createPartForInput(it, index, inputType);
+            const oldStr = it;
+            it = newPart.appendUntilRejected(it, inputType);
+            if (it === oldStr) {
                 // nothing changed, break out of this infinite loop and log an error
-                console.error(`Failed to update model for input (str ${str}) (type ${inputType})`);
+                console.error(`Failed to update model for input (str ${it}) (type ${inputType})`);
                 break;
             }
             this.insertPart(index, newPart);

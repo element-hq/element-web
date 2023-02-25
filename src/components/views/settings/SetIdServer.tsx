@@ -97,7 +97,6 @@ export default class SetIdServer extends React.Component<IProps, IState> {
             defaultIdServer,
             currentClientIdServer: MatrixClientPeg.get().getIdentityServerUrl(),
             idServer: "",
-            error: null,
             busy: false,
             disconnectBusy: false,
             checking: false,

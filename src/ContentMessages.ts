@@ -546,7 +546,7 @@ export default class ContentMessages {
             if (upload.cancelled) throw new UploadCanceledError();
             const threadId = relation?.rel_type === THREAD_RELATION_TYPE.name ? relation.event_id : null;
 
-            const response = await matrixClient.sendMessage(roomId, threadId, content);
+            const response = await matrixClient.sendMessage(roomId, threadId ?? null, content);
 
             if (SettingsStore.getValue("Performance.addSendMessageTimingMetadata")) {
                 sendRoundTripMetric(matrixClient, roomId, response.event_id);

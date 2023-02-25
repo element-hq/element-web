@@ -133,7 +133,7 @@ interface IProps {
 
 interface IState {
     verifying: boolean;
-    addTask: AddThreepid;
+    addTask: AddThreepid | null;
     continueDisabled: boolean;
     newEmailAddress: string;
 }
@@ -201,7 +201,7 @@ export default class EmailAddresses extends React.Component<IProps, IState> {
 
         this.setState({ continueDisabled: true });
         this.state.addTask
-            .checkEmailLinkClicked()
+            ?.checkEmailLinkClicked()
             .then(([finished]) => {
                 let newEmailAddress = this.state.newEmailAddress;
                 if (finished) {

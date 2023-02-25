@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DecryptionFailureBody Should display "The sender has blocked you from receiving this message" 1`] = `
+<div>
+  <div
+    class="mx_DecryptionFailureBody mx_EventTile_content"
+  >
+    The sender has blocked you from receiving this message
+  </div>
+</div>
+`;
+
+exports[`DecryptionFailureBody Should display "Unable to decrypt message" 1`] = `
+<div>
+  <div
+    class="mx_DecryptionFailureBody mx_EventTile_content"
+  >
+    Unable to decrypt message
+  </div>
+</div>
+`;

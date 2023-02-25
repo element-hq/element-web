@@ -14,24 +14,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// eslint-disable-next-line deprecate/import
-import { mount, ReactWrapper } from "enzyme";
+import React from "react";
 import { mocked } from "jest-mock";
 import { IProtocol, IPublicRoomsChunkRoom, MatrixClient, Room, RoomMember } from "matrix-js-sdk/src/matrix";
-import { sleep } from "matrix-js-sdk/src/utils";
-import React from "react";
-import { act } from "react-dom/test-utils";
 import sanitizeHtml from "sanitize-html";
+import { fireEvent, render, screen } from "@testing-library/react";
 
 import SpotlightDialog, { Filter } from "../../../../src/components/views/dialogs/spotlight/SpotlightDialog";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import { LocalRoom, LOCAL_ROOM_ID_PREFIX } from "../../../../src/models/LocalRoom";
 import { DirectoryMember, startDmOnFirstMessage } from "../../../../src/utils/direct-messages";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
-import { mkRoom, stubClient } from "../../../test-utils";
+import { flushPromisesWithFakeTimers, mkRoom, stubClient } from "../../../test-utils";
 import { shouldShowFeedback } from "../../../../src/utils/Feedback";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
+
+jest.useFakeTimers();
 
 jest.mock("../../../../src/utils/Feedback");
 
@@ -77,7 +76,9 @@ function mockClient({
                 !searchTerm ||
                 it.room_id.toLowerCase().includes(searchTerm) ||
                 it.name?.toLowerCase().includes(searchTerm) ||
-                sanitizeHtml(it?.topic, { allowedTags: [] }).toLowerCase().includes(searchTerm) ||
+                sanitizeHtml(it?.topic || "", { allowedTags: [] })
+                    .toLowerCase()
+                    .includes(searchTerm) ||
                 it.canonical_alias?.toLowerCase().includes(searchTerm) ||
                 it.aliases?.find((alias) => alias.toLowerCase().includes(searchTerm)),
         );
@@ -96,7 +97,7 @@ function mockClient({
         );
         return Promise.resolve({
             results: results.slice(0, limit ?? +Infinity),
-            limited: limit && limit < results.length,
+            limited: !!limit && limit < results.length,
         });
     });
     cli.getProfileInfo = jest.fn(async (userId) => {
@@ -149,58 +150,49 @@ describe("Spotlight Dialog", () => {
 
     describe("should apply filters supplied via props", () => {
         it("without filter", async () => {
-            const wrapper = mount(<SpotlightDialog onFinished={() => null} />);
-            await act(async () => {
-                await sleep(200);
-            });
-            wrapper.update();
+            render(<SpotlightDialog onFinished={() => null} />);
 
-            const filterChip = wrapper.find("div.mx_SpotlightDialog_filter");
-            expect(filterChip.exists()).toBeFalsy();
-
-            wrapper.unmount();
+            const filterChip = document.querySelector("div.mx_SpotlightDialog_filter");
+            expect(filterChip).not.toBeInTheDocument();
         });
+
         it("with public room filter", async () => {
-            const wrapper = mount(<SpotlightDialog initialFilter={Filter.PublicRooms} onFinished={() => null} />);
-            await act(async () => {
-                await sleep(200);
-            });
-            wrapper.update();
+            render(<SpotlightDialog initialFilter={Filter.PublicRooms} onFinished={() => null} />);
 
-            const filterChip = wrapper.find("div.mx_SpotlightDialog_filter");
-            expect(filterChip.exists()).toBeTruthy();
-            expect(filterChip.text()).toEqual("Public rooms");
+            // search is debounced
+            jest.advanceTimersByTime(200);
+            await flushPromisesWithFakeTimers();
 
-            const content = wrapper.find("#mx_SpotlightDialog_content");
-            const options = content.find("div.mx_SpotlightDialog_option");
+            const filterChip = document.querySelector("div.mx_SpotlightDialog_filter")!;
+            expect(filterChip).toBeInTheDocument();
+            expect(filterChip.innerHTML).toContain("Public rooms");
+
+            const content = document.querySelector("#mx_SpotlightDialog_content")!;
+            const options = content.querySelectorAll("div.mx_SpotlightDialog_option");
             expect(options.length).toBe(1);
-            expect(options.first().text()).toContain(testPublicRoom.name);
-
-            wrapper.unmount();
+            expect(options[0].innerHTML).toContain(testPublicRoom.name);
         });
+
         it("with people filter", async () => {
-            const wrapper = mount(
+            render(
                 <SpotlightDialog
                     initialFilter={Filter.People}
                     initialText={testPerson.display_name}
                     onFinished={() => null}
                 />,
             );
-            await act(async () => {
-                await sleep(200);
-            });
-            wrapper.update();
+            // search is debounced
+            jest.advanceTimersByTime(200);
+            await flushPromisesWithFakeTimers();
 
-            const filterChip = wrapper.find("div.mx_SpotlightDialog_filter");
-            expect(filterChip.exists()).toBeTruthy();
-            expect(filterChip.text()).toEqual("People");
+            const filterChip = document.querySelector("div.mx_SpotlightDialog_filter")!;
+            expect(filterChip).toBeInTheDocument();
+            expect(filterChip.innerHTML).toContain("People");
 
-            const content = wrapper.find("#mx_SpotlightDialog_content");
-            const options = content.find("div.mx_SpotlightDialog_option");
+            const content = document.querySelector("#mx_SpotlightDialog_content")!;
+            const options = content.querySelectorAll("div.mx_SpotlightDialog_option");
             expect(options.length).toBeGreaterThanOrEqual(1);
-            expect(options.first().text()).toContain(testPerson.display_name);
-
-            wrapper.unmount();
+            expect(options[0]!.innerHTML).toContain(testPerson.display_name);
         });
     });
 
@@ -214,153 +206,128 @@ describe("Spotlight Dialog", () => {
         });
 
         it("should call getVisibleRooms with MSC3946 dynamic room predecessors", async () => {
-            const wrapper = mount(<SpotlightDialog onFinished={() => null} />);
-            await act(async () => {
-                await sleep(1);
-            });
-            wrapper.update();
+            render(<SpotlightDialog onFinished={() => null} />);
+            jest.advanceTimersByTime(200);
+            await flushPromisesWithFakeTimers();
             expect(mockedClient.getVisibleRooms).toHaveBeenCalledWith(true);
-            wrapper.unmount();
         });
     });
 
     describe("should apply manually selected filter", () => {
         it("with public rooms", async () => {
-            const wrapper = mount(<SpotlightDialog onFinished={() => null} />);
-            await act(async () => {
-                await sleep(1);
-            });
-            wrapper.update();
-            wrapper.find("#mx_SpotlightDialog_button_explorePublicRooms").first().simulate("click");
-            await act(async () => {
-                await sleep(200);
-            });
-            wrapper.update();
+            render(<SpotlightDialog onFinished={() => null} />);
+            jest.advanceTimersByTime(200);
+            await flushPromisesWithFakeTimers();
 
-            const filterChip = wrapper.find("div.mx_SpotlightDialog_filter");
-            expect(filterChip.exists()).toBeTruthy();
-            expect(filterChip.text()).toEqual("Public rooms");
+            fireEvent.click(screen.getByText("Public rooms"));
+            // wrapper.find("#mx_SpotlightDialog_button_explorePublicRooms").first().simulate("click");
+            // search is debounced
+            jest.advanceTimersByTime(200);
+            await flushPromisesWithFakeTimers();
 
-            const content = wrapper.find("#mx_SpotlightDialog_content");
-            const options = content.find("div.mx_SpotlightDialog_option");
+            const filterChip = document.querySelector("div.mx_SpotlightDialog_filter")!;
+            expect(filterChip).toBeInTheDocument();
+            expect(filterChip.innerHTML).toContain("Public rooms");
+
+            const content = document.querySelector("#mx_SpotlightDialog_content")!;
+            const options = content.querySelectorAll("div.mx_SpotlightDialog_option");
             expect(options.length).toBe(1);
-            expect(options.first().text()).toContain(testPublicRoom.name);
+            expect(options[0]!.innerHTML).toContain(testPublicRoom.name);
 
             // assert that getVisibleRooms is called without MSC3946 dynamic room predecessors
             expect(mockedClient.getVisibleRooms).toHaveBeenCalledWith(false);
-
-            wrapper.unmount();
         });
         it("with people", async () => {
-            const wrapper = mount(<SpotlightDialog initialText={testPerson.display_name} onFinished={() => null} />);
-            await act(async () => {
-                await sleep(1);
-            });
-            wrapper.update();
-            wrapper.find("#mx_SpotlightDialog_button_startChat").first().simulate("click");
-            await act(async () => {
-                await sleep(200);
-            });
-            wrapper.update();
+            render(<SpotlightDialog initialText={testPerson.display_name} onFinished={() => null} />);
+            jest.advanceTimersByTime(200);
+            await flushPromisesWithFakeTimers();
 
-            const filterChip = wrapper.find("div.mx_SpotlightDialog_filter");
-            expect(filterChip.exists()).toBeTruthy();
-            expect(filterChip.text()).toEqual("People");
+            fireEvent.click(screen.getByText("People"));
 
-            const content = wrapper.find("#mx_SpotlightDialog_content");
-            const options = content.find("div.mx_SpotlightDialog_option");
+            // search is debounced
+            jest.advanceTimersByTime(200);
+            await flushPromisesWithFakeTimers();
+
+            const filterChip = document.querySelector("div.mx_SpotlightDialog_filter")!;
+            expect(filterChip).toBeInTheDocument();
+            expect(filterChip.innerHTML).toContain("People");
+
+            const content = document.querySelector("#mx_SpotlightDialog_content")!;
+            const options = content.querySelectorAll("div.mx_SpotlightDialog_option");
             expect(options.length).toBeGreaterThanOrEqual(1);
-            expect(options.first().text()).toContain(testPerson.display_name);
-
-            wrapper.unmount();
+            expect(options[0]!.innerHTML).toContain(testPerson.display_name);
         });
     });
 
     describe("should allow clearing filter manually", () => {
         it("with public room filter", async () => {
-            const wrapper = mount(<SpotlightDialog initialFilter={Filter.PublicRooms} onFinished={() => null} />);
-            await act(async () => {
-                await sleep(200);
-            });
-            wrapper.update();
+            render(<SpotlightDialog initialFilter={Filter.PublicRooms} onFinished={() => null} />);
+            // search is debounced
+            jest.advanceTimersByTime(200);
+            await flushPromisesWithFakeTimers();
 
-            let filterChip = wrapper.find("div.mx_SpotlightDialog_filter");
-            expect(filterChip.exists()).toBeTruthy();
-            expect(filterChip.text()).toEqual("Public rooms");
+            let filterChip = document.querySelector("div.mx_SpotlightDialog_filter")!;
+            expect(filterChip).toBeInTheDocument();
+            expect(filterChip.innerHTML).toContain("Public rooms");
 
-            filterChip.find("div.mx_SpotlightDialog_filter--close").simulate("click");
-            await act(async () => {
-                await sleep(1);
-            });
-            wrapper.update();
+            fireEvent.click(filterChip.querySelector("div.mx_SpotlightDialog_filter--close")!);
+            jest.advanceTimersByTime(200);
+            await flushPromisesWithFakeTimers();
 
-            filterChip = wrapper.find("div.mx_SpotlightDialog_filter");
-            expect(filterChip.exists()).toBeFalsy();
-
-            wrapper.unmount();
+            filterChip = document.querySelector("div.mx_SpotlightDialog_filter")!;
+            expect(filterChip).not.toBeInTheDocument();
         });
         it("with people filter", async () => {
-            const wrapper = mount(
+            render(
                 <SpotlightDialog
                     initialFilter={Filter.People}
                     initialText={testPerson.display_name}
                     onFinished={() => null}
                 />,
             );
-            await act(async () => {
-                await sleep(200);
-            });
-            wrapper.update();
+            // search is debounced
+            jest.advanceTimersByTime(200);
+            await flushPromisesWithFakeTimers();
 
-            let filterChip = wrapper.find("div.mx_SpotlightDialog_filter");
-            expect(filterChip.exists()).toBeTruthy();
-            expect(filterChip.text()).toEqual("People");
+            let filterChip = document.querySelector("div.mx_SpotlightDialog_filter");
+            expect(filterChip).toBeInTheDocument();
+            expect(filterChip!.innerHTML).toContain("People");
 
-            filterChip.find("div.mx_SpotlightDialog_filter--close").simulate("click");
-            await act(async () => {
-                await sleep(1);
-            });
-            wrapper.update();
+            fireEvent.click(filterChip!.querySelector("div.mx_SpotlightDialog_filter--close")!);
+            jest.advanceTimersByTime(1);
+            await flushPromisesWithFakeTimers();
 
-            filterChip = wrapper.find("div.mx_SpotlightDialog_filter");
-            expect(filterChip.exists()).toBeFalsy();
-
-            wrapper.unmount();
+            filterChip = document.querySelector("div.mx_SpotlightDialog_filter");
+            expect(filterChip).not.toBeInTheDocument();
         });
     });
 
     describe("searching for rooms", () => {
-        let wrapper: ReactWrapper;
-        let options: ReactWrapper;
+        let options: NodeListOf<Element>;
 
         beforeAll(async () => {
-            wrapper = mount(<SpotlightDialog initialText="test23" onFinished={() => null} />);
-            await act(async () => {
-                await sleep(200);
-            });
-            wrapper.update();
+            render(<SpotlightDialog initialText="test23" onFinished={() => null} />);
+            // search is debounced
+            jest.advanceTimersByTime(200);
+            await flushPromisesWithFakeTimers();
 
-            const content = wrapper.find("#mx_SpotlightDialog_content");
-            options = content.find("div.mx_SpotlightDialog_option");
-        });
-
-        afterAll(() => {
-            wrapper.unmount();
+            const content = document.querySelector("#mx_SpotlightDialog_content")!;
+            options = content.querySelectorAll("div.mx_SpotlightDialog_option");
         });
 
         it("should find Rooms", () => {
             expect(options.length).toBe(3);
-            expect(options.first().text()).toContain(testRoom.name);
+            expect(options[0]!.innerHTML).toContain(testRoom.name);
         });
 
         it("should not find LocalRooms", () => {
             expect(options.length).toBe(3);
-            expect(options.first().text()).not.toContain(testLocalRoom.name);
+            expect(options[0]!.innerHTML).not.toContain(testLocalRoom.name);
         });
     });
 
     it("should start a DM when clicking a person", async () => {
-        const wrapper = mount(
+        render(
             <SpotlightDialog
                 initialFilter={Filter.People}
                 initialText={testPerson.display_name}
@@ -368,46 +335,99 @@ describe("Spotlight Dialog", () => {
             />,
         );
 
-        await act(async () => {
-            await sleep(200);
-        });
-        wrapper.update();
+        jest.advanceTimersByTime(200);
+        await flushPromisesWithFakeTimers();
 
-        const options = wrapper.find("div.mx_SpotlightDialog_option");
+        const options = document.querySelectorAll("div.mx_SpotlightDialog_option");
         expect(options.length).toBeGreaterThanOrEqual(1);
-        expect(options.first().text()).toContain(testPerson.display_name);
+        expect(options[0]!.innerHTML).toContain(testPerson.display_name);
 
-        options.first().simulate("click");
+        fireEvent.click(options[0]!);
         expect(startDmOnFirstMessage).toHaveBeenCalledWith(mockedClient, [new DirectoryMember(testPerson)]);
-
-        wrapper.unmount();
     });
 
     describe("Feedback prompt", () => {
         it("should show feedback prompt if feedback is enabled", async () => {
             mocked(shouldShowFeedback).mockReturnValue(true);
 
-            const wrapper = mount(<SpotlightDialog initialText="test23" onFinished={() => null} />);
-            await act(async () => {
-                await sleep(200);
-            });
-            wrapper.update();
+            render(<SpotlightDialog initialText="test23" onFinished={() => null} />);
+            jest.advanceTimersByTime(200);
+            await flushPromisesWithFakeTimers();
 
-            const content = wrapper.find(".mx_SpotlightDialog_footer");
-            expect(content.childAt(0).text()).toBe("Results not as expected? Please give feedback.");
+            expect(screen.getByText("give feedback")).toBeInTheDocument();
         });
 
         it("should hide feedback prompt if feedback is disabled", async () => {
             mocked(shouldShowFeedback).mockReturnValue(false);
 
-            const wrapper = mount(<SpotlightDialog initialText="test23" onFinished={() => null} />);
-            await act(async () => {
-                await sleep(200);
-            });
-            wrapper.update();
+            render(<SpotlightDialog initialText="test23" onFinished={() => null} />);
+            jest.advanceTimersByTime(200);
+            await flushPromisesWithFakeTimers();
 
-            const content = wrapper.find(".mx_SpotlightDialog_footer");
-            expect(content.text()).toBeFalsy();
+            expect(screen.queryByText("give feedback")).not.toBeInTheDocument();
+        });
+    });
+
+    describe("nsfw public rooms filter", () => {
+        const nsfwNameRoom: IPublicRoomsChunkRoom = {
+            room_id: "@room1:matrix.org",
+            name: "Room 1 [NSFW]",
+            topic: undefined,
+            world_readable: false,
+            num_joined_members: 1,
+            guest_can_join: false,
+        };
+
+        const nsfwTopicRoom: IPublicRoomsChunkRoom = {
+            room_id: "@room2:matrix.org",
+            name: "Room 2",
+            topic: "A room with a topic that includes nsfw",
+            world_readable: false,
+            num_joined_members: 1,
+            guest_can_join: false,
+        };
+
+        const potatoRoom: IPublicRoomsChunkRoom = {
+            room_id: "@room3:matrix.org",
+            name: "Potato Room 3",
+            topic: "Room where we discuss potatoes",
+            world_readable: false,
+            num_joined_members: 1,
+            guest_can_join: false,
+        };
+
+        beforeEach(() => {
+            mockedClient = mockClient({ rooms: [nsfwNameRoom, nsfwTopicRoom, potatoRoom], users: [testPerson] });
+            SettingsStore.setValue("SpotlightSearch.showNsfwPublicRooms", null, SettingLevel.DEVICE, false);
+        });
+
+        afterAll(() => {
+            SettingsStore.setValue("SpotlightSearch.showNsfwPublicRooms", null, SettingLevel.DEVICE, false);
+        });
+
+        it("does not display rooms with nsfw keywords in results when showNsfwPublicRooms is falsy", async () => {
+            render(<SpotlightDialog initialFilter={Filter.PublicRooms} onFinished={() => null} />);
+
+            // search is debounced
+            jest.advanceTimersByTime(200);
+            await flushPromisesWithFakeTimers();
+
+            expect(screen.getByText(potatoRoom.name)).toBeInTheDocument();
+            expect(screen.queryByText(nsfwTopicRoom.name)).not.toBeInTheDocument();
+            expect(screen.queryByText(nsfwTopicRoom.name)).not.toBeInTheDocument();
+        });
+
+        it("displays rooms with nsfw keywords in results when showNsfwPublicRooms is truthy", async () => {
+            SettingsStore.setValue("SpotlightSearch.showNsfwPublicRooms", null, SettingLevel.DEVICE, true);
+            render(<SpotlightDialog initialFilter={Filter.PublicRooms} onFinished={() => null} />);
+
+            // search is debounced
+            jest.advanceTimersByTime(200);
+            await flushPromisesWithFakeTimers();
+
+            expect(screen.getByText(nsfwTopicRoom.name)).toBeInTheDocument();
+            expect(screen.getByText(nsfwNameRoom.name)).toBeInTheDocument();
+            expect(screen.getByText(potatoRoom.name)).toBeInTheDocument();
         });
     });
 });

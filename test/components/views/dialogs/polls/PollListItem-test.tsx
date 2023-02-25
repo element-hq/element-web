@@ -18,7 +18,7 @@ import React from "react";
 import { render } from "@testing-library/react";
 import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 
-import PollListItem from "../../../../../src/components/views/dialogs/polls/PollListItem";
+import { PollListItem } from "../../../../../src/components/views/dialogs/polls/PollListItem";
 import { makePollStartEvent, mockIntlDateTimeFormat, unmockIntlDateTimeFormat } from "../../../../test-utils";
 
 describe("<PollListItem />", () => {

@@ -54,7 +54,7 @@ export function midPointsBetweenStrings(
 
 interface IEntry {
     index: number;
-    order: string;
+    order?: string;
 }
 
 export const reorderLexicographically = (
@@ -82,12 +82,12 @@ export const reorderLexicographically = (
     let canMoveLeft = true;
     const nextBase =
         newOrder[toIndex + 1]?.order !== undefined
-            ? stringToBase(newOrder[toIndex + 1].order)
+            ? stringToBase(newOrder[toIndex + 1].order!)
             : BigInt(Number.MAX_VALUE);
 
     // check how far left we would have to mutate to fit in that direction
     for (let i = toIndex - 1, j = 1; i >= 0; i--, j++) {
-        if (newOrder[i]?.order !== undefined && nextBase - stringToBase(newOrder[i].order) > j) break;
+        if (newOrder[i]?.order !== undefined && nextBase - stringToBase(newOrder[i].order!) > j) break;
         leftBoundIdx = i;
     }
 
@@ -108,12 +108,12 @@ export const reorderLexicographically = (
     if (canDisplaceRight) {
         const prevBase =
             newOrder[toIndex - 1]?.order !== undefined
-                ? stringToBase(newOrder[toIndex - 1]?.order)
+                ? stringToBase(newOrder[toIndex - 1].order!)
                 : BigInt(Number.MIN_VALUE);
 
         // check how far right we would have to mutate to fit in that direction
         for (let i = toIndex + 1, j = 1; i < newOrder.length; i++, j++) {
-            if (newOrder[i]?.order === undefined || stringToBase(newOrder[i].order) - prevBase > j) break;
+            if (newOrder[i]?.order === undefined || stringToBase(newOrder[i].order!) - prevBase > j) break;
             rightBoundIdx = i;
         }
 

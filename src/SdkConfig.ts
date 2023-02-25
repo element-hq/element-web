@@ -26,7 +26,6 @@ export const DEFAULTS: IConfigOptions = {
     brand: "Element",
     integrations_ui_url: "https://scalar.vector.im/",
     integrations_rest_url: "https://scalar.vector.im/api",
-    bug_report_endpoint_url: null,
     uisi_autorageshake_app: "element-auto-uisi",
 
     jitsi: {

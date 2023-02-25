@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import TestRenderer from "react-test-renderer";
+import { render } from "@testing-library/react";
 import { EventEmitter } from "events";
 import { MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
@@ -72,29 +72,29 @@ describe("MKeyVerificationConclusion", () => {
 
     it("shouldn't render if there's no verificationRequest", () => {
         const event = new MatrixEvent({});
-        const renderer = TestRenderer.create(<MKeyVerificationConclusion mxEvent={event} />);
-        expect(renderer.toJSON()).toBeNull();
+        const { container } = render(<MKeyVerificationConclusion mxEvent={event} />);
+        expect(container).toBeEmpty();
     });
 
     it("shouldn't render if the verificationRequest is pending", () => {
         const event = new MatrixEvent({});
         event.verificationRequest = getMockVerificationRequest({ pending: true });
-        const renderer = TestRenderer.create(<MKeyVerificationConclusion mxEvent={event} />);
-        expect(renderer.toJSON()).toBeNull();
+        const { container } = render(<MKeyVerificationConclusion mxEvent={event} />);
+        expect(container).toBeEmpty();
     });
 
     it("shouldn't render if the event type is cancel but the request type isn't", () => {
         const event = new MatrixEvent({ type: EventType.KeyVerificationCancel });
         event.verificationRequest = getMockVerificationRequest({ cancelled: false });
-        const renderer = TestRenderer.create(<MKeyVerificationConclusion mxEvent={event} />);
-        expect(renderer.toJSON()).toBeNull();
+        const { container } = render(<MKeyVerificationConclusion mxEvent={event} />);
+        expect(container).toBeEmpty();
     });
 
     it("shouldn't render if the event type is done but the request type isn't", () => {
         const event = new MatrixEvent({ type: "m.key.verification.done" });
         event.verificationRequest = getMockVerificationRequest({ done: false });
-        const renderer = TestRenderer.create(<MKeyVerificationConclusion mxEvent={event} />);
-        expect(renderer.toJSON()).toBeNull();
+        const { container } = render(<MKeyVerificationConclusion mxEvent={event} />);
+        expect(container).toBeEmpty();
     });
 
     it("shouldn't render if the user isn't actually trusted", () => {
@@ -102,8 +102,8 @@ describe("MKeyVerificationConclusion", () => {
 
         const event = new MatrixEvent({ type: "m.key.verification.done" });
         event.verificationRequest = getMockVerificationRequest({ done: true });
-        const renderer = TestRenderer.create(<MKeyVerificationConclusion mxEvent={event} />);
-        expect(renderer.toJSON()).toBeNull();
+        const { container } = render(<MKeyVerificationConclusion mxEvent={event} />);
+        expect(container).toBeEmpty();
     });
 
     it("should rerender appropriately if user trust status changes", () => {
@@ -111,8 +111,8 @@ describe("MKeyVerificationConclusion", () => {
 
         const event = new MatrixEvent({ type: "m.key.verification.done" });
         event.verificationRequest = getMockVerificationRequest({ done: true, otherUserId: "@someuser:domain" });
-        const renderer = TestRenderer.create(<MKeyVerificationConclusion mxEvent={event} />);
-        expect(renderer.toJSON()).toBeNull();
+        const { container } = render(<MKeyVerificationConclusion mxEvent={event} />);
+        expect(container).toBeEmpty();
 
         mockClient.checkUserTrust.mockReturnValue(trustworthy);
 
@@ -122,7 +122,7 @@ describe("MKeyVerificationConclusion", () => {
             "@anotheruser:domain",
             new UserTrustLevel(true, true, true),
         );
-        expect(renderer.toJSON()).toBeNull();
+        expect(container).toBeEmpty();
 
         /* But when our user changes, we do rerender */
         mockClient.emit(
@@ -130,6 +130,6 @@ describe("MKeyVerificationConclusion", () => {
             event.verificationRequest.otherUserId,
             new UserTrustLevel(true, true, true),
         );
-        expect(renderer.toJSON()).not.toBeNull();
+        expect(container).not.toBeEmpty();
     });
 });

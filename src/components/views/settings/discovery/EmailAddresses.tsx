@@ -48,9 +48,9 @@ interface IEmailAddressProps {
 
 interface IEmailAddressState {
     verifying: boolean;
-    addTask: any; // FIXME: When AddThreepid is TSfied
+    addTask: AddThreepid | null;
     continueDisabled: boolean;
-    bound: boolean;
+    bound?: boolean;
 }
 
 export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddressState> {
@@ -172,7 +172,7 @@ export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddr
 
         this.setState({ continueDisabled: true });
         try {
-            await this.state.addTask.checkEmailLinkClicked();
+            await this.state.addTask?.checkEmailLinkClicked();
             this.setState({
                 addTask: null,
                 continueDisabled: false,

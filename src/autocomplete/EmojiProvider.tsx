@@ -32,6 +32,7 @@ import SettingsStore from "../settings/SettingsStore";
 import { EMOJI, IEmoji, getEmojiFromUnicode } from "../emoji";
 import { TimelineRenderingType } from "../contexts/RoomContext";
 import * as recent from "../emojipicker/recent";
+import { filterBoolean } from "../utils/arrays";
 
 const LIMIT = 20;
 
@@ -94,7 +95,7 @@ export default class EmojiProvider extends AutocompleteProvider {
             shouldMatchWordsOnly: true,
         });
 
-        this.recentlyUsed = Array.from(new Set(recent.get().map(getEmojiFromUnicode).filter(Boolean))) as IEmoji[];
+        this.recentlyUsed = Array.from(new Set(filterBoolean(recent.get().map(getEmojiFromUnicode))));
     }
 
     public async getCompletions(

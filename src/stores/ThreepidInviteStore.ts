@@ -82,7 +82,7 @@ export default class ThreepidInviteStore extends EventEmitter {
         const results: IPersistedThreepidInvite[] = [];
         for (let i = 0; i < localStorage.length; i++) {
             const keyName = localStorage.key(i);
-            if (!keyName.startsWith(STORAGE_PREFIX)) continue;
+            if (!keyName?.startsWith(STORAGE_PREFIX)) continue;
             results.push(JSON.parse(localStorage.getItem(keyName)) as IPersistedThreepidInvite);
         }
         return results;

@@ -23,6 +23,7 @@ import QueryMatcher from "../../../autocomplete/QueryMatcher";
 import SearchBox from "../../structures/SearchBox";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import { Entry } from "../dialogs/AddExistingToSpaceDialog";
+import { filterBoolean } from "../../../utils/arrays";
 
 enum Target {
     All = "All",
@@ -53,7 +54,7 @@ const SpecificChildrenPicker: React.FC<ISpecificChildrenPickerProps> = ({
 
         const matcher = new QueryMatcher<Room>(rooms, {
             keys: ["name"],
-            funcs: [(r) => [r.getCanonicalAlias(), ...r.getAltAliases()].filter(Boolean) as string[]],
+            funcs: [(r) => filterBoolean([r.getCanonicalAlias(), ...r.getAltAliases()])],
             shouldMatchWordsOnly: false,
         });
 

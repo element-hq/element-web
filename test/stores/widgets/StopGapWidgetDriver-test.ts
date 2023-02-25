@@ -18,12 +18,27 @@ import { mocked, MockedObject } from "jest-mock";
 import { MatrixClient, ClientEvent, ITurnServer as IClientTurnServer } from "matrix-js-sdk/src/client";
 import { DeviceInfo } from "matrix-js-sdk/src/crypto/deviceinfo";
 import { Direction, EventType, MatrixEvent, MsgType, RelationType } from "matrix-js-sdk/src/matrix";
-import { Widget, MatrixWidgetType, WidgetKind, WidgetDriver, ITurnServer } from "matrix-widget-api";
+import {
+    Widget,
+    MatrixWidgetType,
+    WidgetKind,
+    WidgetDriver,
+    ITurnServer,
+    SimpleObservable,
+    OpenIDRequestState,
+    IOpenIDUpdate,
+} from "matrix-widget-api";
+import {
+    ApprovalOpts,
+    CapabilitiesOpts,
+    WidgetLifecycle,
+} from "@matrix-org/react-sdk-module-api/lib/lifecycles/WidgetLifecycle";
 
 import { SdkContextClass } from "../../../src/contexts/SDKContext";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 import { StopGapWidgetDriver } from "../../../src/stores/widgets/StopGapWidgetDriver";
 import { stubClient } from "../../test-utils";
+import { ModuleRunner } from "../../../src/modules/ModuleRunner";
 import dis from "../../../src/dispatcher/dispatcher";
 
 describe("StopGapWidgetDriver", () => {
@@ -99,6 +114,44 @@ describe("StopGapWidgetDriver", () => {
         // As long as this resolves, we'll know that it didn't try to pop up a modal
         const approvedCapabilities = await driver.validateCapabilities(requestedCapabilities);
         expect(approvedCapabilities).toEqual(requestedCapabilities);
+    });
+
+    it("approves capabilities via module api", async () => {
+        const driver = mkDefaultDriver();
+
+        const requestedCapabilities = new Set(["org.matrix.msc2931.navigate", "org.matrix.msc2762.timeline:*"]);
+
+        jest.spyOn(ModuleRunner.instance, "invoke").mockImplementation(
+            (lifecycleEvent, opts, widgetInfo, requested) => {
+                if (lifecycleEvent === WidgetLifecycle.CapabilitiesRequest) {
+                    (opts as CapabilitiesOpts).approvedCapabilities = requested;
+                }
+            },
+        );
+
+        const approvedCapabilities = await driver.validateCapabilities(requestedCapabilities);
+        expect(approvedCapabilities).toEqual(requestedCapabilities);
+    });
+
+    it("approves identity via module api", async () => {
+        const driver = mkDefaultDriver();
+
+        jest.spyOn(ModuleRunner.instance, "invoke").mockImplementation((lifecycleEvent, opts, widgetInfo) => {
+            if (lifecycleEvent === WidgetLifecycle.IdentityRequest) {
+                (opts as ApprovalOpts).approved = true;
+            }
+        });
+
+        const listener = jest.fn();
+        const observer = new SimpleObservable<IOpenIDUpdate>();
+        observer.onUpdate(listener);
+        await driver.askOpenID(observer);
+
+        const openIdUpdate: IOpenIDUpdate = {
+            state: OpenIDRequestState.Allowed,
+            token: await client.getOpenIdToken(),
+        };
+        expect(listener).toBeCalledWith(openIdUpdate);
     });
 
     describe("sendToDevice", () => {

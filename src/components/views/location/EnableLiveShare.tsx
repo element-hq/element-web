@@ -29,7 +29,7 @@ interface Props {
 export const EnableLiveShare: React.FC<Props> = ({ onSubmit }) => {
     const [isEnabled, setEnabled] = useState(false);
     return (
-        <div data-test-id="location-picker-enable-live-share" className="mx_EnableLiveShare">
+        <div data-testid="location-picker-enable-live-share" className="mx_EnableLiveShare">
             <StyledLiveBeaconIcon className="mx_EnableLiveShare_icon" />
             <Heading className="mx_EnableLiveShare_heading" size="h3">
                 {_t("Live location sharing")}
@@ -43,13 +43,13 @@ export const EnableLiveShare: React.FC<Props> = ({ onSubmit }) => {
                 )}
             </p>
             <LabelledToggleSwitch
-                data-test-id="enable-live-share-toggle"
+                data-testid="enable-live-share-toggle"
                 value={isEnabled}
                 onChange={setEnabled}
                 label={_t("Enable live location sharing")}
             />
             <AccessibleButton
-                data-test-id="enable-live-share-submit"
+                data-testid="enable-live-share-submit"
                 className="mx_EnableLiveShare_button"
                 element="button"
                 kind="primary"

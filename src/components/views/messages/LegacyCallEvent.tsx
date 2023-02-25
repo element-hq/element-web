@@ -191,6 +191,13 @@ export default class LegacyCallEvent extends React.PureComponent<IProps, IState>
                         {this.props.timestamp}
                     </div>
                 );
+            } else if (hangupReason === CallErrorCode.AnsweredElsewhere) {
+                return (
+                    <div className="mx_LegacyCallEvent_content">
+                        {_t("Answered elsewhere")}
+                        {this.props.timestamp}
+                    </div>
+                );
             }
 
             let reason;

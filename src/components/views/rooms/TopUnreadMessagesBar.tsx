@@ -20,8 +20,8 @@ import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
 
 interface IProps {
-    onScrollUpClick?: (e: React.MouseEvent) => void;
-    onCloseClick?: (e: React.MouseEvent) => void;
+    onScrollUpClick: (e: React.MouseEvent) => void;
+    onCloseClick: (e: React.MouseEvent) => void;
 }
 
 export default class TopUnreadMessagesBar extends React.PureComponent<IProps> {

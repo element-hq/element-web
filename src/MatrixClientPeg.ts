@@ -166,7 +166,7 @@ class MatrixClientPegClass implements IMatrixClientPeg {
         }
 
         try {
-            const registrationTime = parseInt(window.localStorage.getItem("mx_registration_time"), 10);
+            const registrationTime = parseInt(window.localStorage.getItem("mx_registration_time")!, 10);
             const diff = Date.now() - registrationTime;
             return diff / 36e5 <= hours;
         } catch (e) {
@@ -176,7 +176,7 @@ class MatrixClientPegClass implements IMatrixClientPeg {
 
     public userRegisteredAfter(timestamp: Date): boolean {
         try {
-            const registrationTime = parseInt(window.localStorage.getItem("mx_registration_time"), 10);
+            const registrationTime = parseInt(window.localStorage.getItem("mx_registration_time")!, 10);
             return timestamp.getTime() <= registrationTime;
         } catch (e) {
             return false;
@@ -292,7 +292,7 @@ class MatrixClientPegClass implements IMatrixClientPeg {
     }
 
     public getCredentials(): IMatrixClientCreds {
-        let copiedCredentials = this.currentClientCreds;
+        let copiedCredentials: IMatrixClientCreds | null = this.currentClientCreds;
         if (this.currentClientCreds?.userId !== this.matrixClient?.credentials?.userId) {
             // cached credentials belong to a different user - don't use them
             copiedCredentials = null;

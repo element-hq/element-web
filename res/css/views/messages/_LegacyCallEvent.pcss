@@ -160,6 +160,7 @@ limitations under the License.
             flex-wrap: wrap;
             align-items: center;
             color: $secondary-content;
+            font-size: $font-12px;
             gap: $spacing-12; /* See mx_IncomingLegacyCallToast_buttons */
             margin-inline-start: 42px; /* avatar (32px) + mx_LegacyCallEvent_info_basic margin (10px) */
             word-break: break-word;
@@ -168,6 +169,7 @@ limitations under the License.
             .mx_LegacyCallEvent_content_button {
                 @mixin LegacyCallButton;
                 padding: 0 $spacing-12;
+                font-size: inherit;
 
                 span::before {
                     mask-size: 16px;

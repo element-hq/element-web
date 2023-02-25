@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-// eslint-disable-next-line deprecate/import
-import { mount } from "enzyme";
+import { render } from "@testing-library/react";
 import { mocked } from "jest-mock";
 import * as maplibregl from "maplibre-gl";
 
@@ -35,17 +34,15 @@ describe("<SmartMarker />", () => {
         map: mockMap,
         geoUri: "geo:43.2,54.6",
     };
-    const getComponent = (props = {}) => mount(<SmartMarker {...defaultProps} {...props} />);
+    const getComponent = (props = {}): JSX.Element => <SmartMarker {...defaultProps} {...props} />;
 
     beforeEach(() => {
         jest.clearAllMocks();
     });
 
     it("creates a marker on mount", () => {
-        const component = getComponent();
-        expect(component).toMatchSnapshot();
-
-        component.setProps({});
+        const { container } = render(getComponent());
+        expect(container).toMatchSnapshot();
 
         // marker added only once
         expect(maplibregl.Marker).toHaveBeenCalledTimes(1);
@@ -56,10 +53,10 @@ describe("<SmartMarker />", () => {
     });
 
     it("updates marker position on change", () => {
-        const component = getComponent({ geoUri: "geo:40,50" });
+        const { rerender } = render(getComponent({ geoUri: "geo:40,50" }));
 
-        component.setProps({ geoUri: "geo:41,51" });
-        component.setProps({ geoUri: "geo:42,52" });
+        rerender(getComponent({ geoUri: "geo:41,51" }));
+        rerender(getComponent({ geoUri: "geo:42,52" }));
 
         // marker added only once
         expect(maplibregl.Marker).toHaveBeenCalledTimes(1);
@@ -70,12 +67,10 @@ describe("<SmartMarker />", () => {
     });
 
     it("removes marker on unmount", () => {
-        const component = getComponent();
-        expect(component).toMatchSnapshot();
+        const { unmount, container } = render(getComponent());
+        expect(container).toMatchSnapshot();
 
-        component.setProps({});
-
-        component.unmount();
+        unmount();
         expect(mockMarker.remove).toHaveBeenCalled();
     });
 });

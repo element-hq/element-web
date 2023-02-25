@@ -48,7 +48,7 @@ import { createVoiceMessageContent } from "../../../utils/createVoiceMessageCont
 
 interface IProps {
     room: Room;
-    permalinkCreator?: RoomPermalinkCreator;
+    permalinkCreator: RoomPermalinkCreator;
     relation?: IEventRelation;
     replyToEvent?: MatrixEvent;
 }
@@ -70,9 +70,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
     public constructor(props: IProps) {
         super(props);
 
-        this.state = {
-            recorder: null, // no recording started by default
-        };
+        this.state = {};
 
         this.voiceRecordingId = VoiceRecordingStore.getVoiceRecordingId(this.props.room, this.props.relation);
     }
@@ -163,7 +161,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         await VoiceRecordingStore.instance.disposeRecording(this.voiceRecordingId);
 
         // Reset back to no recording, which means no phase (ie: restart component entirely)
-        this.setState({ recorder: null, recordingPhase: null, didUploadFail: false });
+        this.setState({ recorder: undefined, recordingPhase: undefined, didUploadFail: false });
     }
 
     private onCancel = async (): Promise<void> => {
@@ -220,7 +218,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
 
         try {
             // stop any noises which might be happening
-            PlaybackManager.instance.pauseAllExcept(null);
+            PlaybackManager.instance.pauseAllExcept();
             const recorder = VoiceRecordingStore.instance.startRecording(this.voiceRecordingId);
             await recorder.start();
 

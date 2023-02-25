@@ -743,6 +743,11 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         supportedLevels: [SettingLevel.ACCOUNT],
         default: [], // list of room IDs, most recent first
     },
+    "SpotlightSearch.showNsfwPublicRooms": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td("Show NSFW content"),
+        default: false,
+    },
     "room_directory_servers": {
         supportedLevels: [SettingLevel.ACCOUNT],
         default: [],

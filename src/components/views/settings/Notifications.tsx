@@ -328,7 +328,7 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
         this.setState({ phase: Phase.Persisting });
 
         try {
-            const masterRule = this.state.masterPushRule;
+            const masterRule = this.state.masterPushRule!;
             await MatrixClientPeg.get().setPushRuleEnabled("global", masterRule.kind, masterRule.rule_id, !checked);
             await this.refreshFromServer();
         } catch (e) {
@@ -396,8 +396,8 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
             if (rule.ruleId === KEYWORD_RULE_ID) {
                 // Update all the keywords
                 for (const rule of this.state.vectorKeywordRuleInfo.rules) {
-                    let enabled: boolean;
-                    let actions: PushRuleAction[];
+                    let enabled: boolean | undefined;
+                    let actions: PushRuleAction[] | undefined;
                     if (checkedState === VectorState.On) {
                         if (rule.actions.length !== 1) {
                             // XXX: Magic number
