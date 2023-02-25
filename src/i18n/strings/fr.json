@@ -3739,5 +3739,8 @@
     "Due to decryption errors, some votes may not be counted": "À cause d’erreurs de déchiffrement, certains votes pourraient ne pas avoir été pris en compte",
     "The sender has blocked you from receiving this message": "L’expéditeur a bloqué la réception de votre message",
     "Room directory": "Répertoire des salons",
-    "Yes, it was me": "Oui, c’était moi"
+    "Yes, it was me": "Oui, c’était moi",
+    "Answered elsewhere": "Répondu autre part",
+    "If you know a room address, try joining through that instead.": "Si vous connaissez l’adresse d’un salon, essayez de l’utiliser à la place pour rejoindre ce salon.",
+    "You attempted to join using a room ID without providing a list of servers to join through. Room IDs are internal identifiers and cannot be used to join a room without additional information.": "Vous avez essayé de rejoindre à l’aide de l’ID du salon sans fournir une liste de serveurs pour l’atteindre. Les IDs de salons sont des identifiants internes et ne peuvent être utilisés pour rejoindre un salon sans informations complémentaires."
 }
