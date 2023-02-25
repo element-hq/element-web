@@ -3739,5 +3739,6 @@
     "Identity server is <code>%(identityServerUrl)s</code>": "Azonosítási szerver: <code>%(identityServerUrl)s</code>",
     "Homeserver is <code>%(homeserverUrl)s</code>": "Matrix szerver: <code>%(homeserverUrl)s</code>",
     "Show NSFW content": "Felnőtt tartalmak megjelenítése",
-    "Yes, it was me": "Igen, én voltam"
+    "Yes, it was me": "Igen, én voltam",
+    "Answered elsewhere": "Máshol lett felvéve"
 }
