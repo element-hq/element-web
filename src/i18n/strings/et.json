@@ -3739,5 +3739,8 @@
     "Homeserver is <code>%(homeserverUrl)s</code>": "Koduserveri aadress <code>%(homeserverUrl)s</code>",
     "Room is <strong>not encrypted 🚨</strong>": "Jututuba on <strong>krüptimata 🚨</strong>",
     "Room is <strong>encrypted ✅</strong>": "Jututuba on <strong>krüptitud ✅</strong>",
-    "Yes, it was me": "Jah, see olin mina"
+    "Yes, it was me": "Jah, see olin mina",
+    "Answered elsewhere": "Vastatud mujal",
+    "If you know a room address, try joining through that instead.": "Kui sa tead jututoa aadressi, siis proovi liitumiseks seda kasutada.",
+    "You attempted to join using a room ID without providing a list of servers to join through. Room IDs are internal identifiers and cannot be used to join a room without additional information.": "Sa proovisid liituda jututoaga tema tunnuse alusel nii, et serveri nime polnud näidatud. Jututoa tunnused on sisemised identifikaatorid ja ilma lisateabeta neid liitumiseks kasutada ei saa."
 }
