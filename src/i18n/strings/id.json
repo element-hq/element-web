@@ -3739,5 +3739,8 @@
     "Room is <strong>not encrypted 🚨</strong>": "Ruangan <strong>tidak terenkripsi 🚨</strong>",
     "Room is <strong>encrypted ✅</strong>": "Ruangan <strong>terenkripsi ✅</strong>",
     "Notification state is <strong>%(notificationState)s</strong>": "Keadaan notifikasi adalah <strong>%(notificationState)s</strong>",
-    "Yes, it was me": "Ya, itu saya"
+    "Yes, it was me": "Ya, itu saya",
+    "Answered elsewhere": "Dijawab di tempat lain",
+    "If you know a room address, try joining through that instead.": "Jika Anda tahu sebuah alamat ruangan, coba bergabung melalui itu saja.",
+    "You attempted to join using a room ID without providing a list of servers to join through. Room IDs are internal identifiers and cannot be used to join a room without additional information.": "Anda mencoba untuk bergabung menggunakan sebuah ID ruangan tanpa menyediakan daftar server untuk bergabung melalui server. ID ruangan adalah pengenal internal dan tidak dapat digunakan untuk bergabung dengan sebuah ruangan tanpa informasi tambahan."
 }
