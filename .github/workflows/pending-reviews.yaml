@@ -1,0 +1,70 @@
+name: Pending reviews automation
+on:
+    # TODO update this to _target
+    pull_request:
+        types:
+            - opened
+            - closed
+            - ready_for_review
+            - review_requested
+            - review_request_removed
+    pull_request_review:
+        types:
+            - submitted
+            - edited
+            - dismissed
+concurrency: ${{ github.workflow }}
+jobs:
+    bot:
+        name: Pending reviews bot
+        runs-on: ubuntu-latest
+        environment: Matrix
+        env:
+            URL: "https://github.com/pulls?q=is%3Apr+is%3Aopen+repo%3Amatrix-org%2Fmatrix-js-sdk+repo%3Amatrix-org%2Fmatrix-react-sdk+repo%3Avector-im%2Felement-web+repo%3Avector-im%2Felement-desktop+review-requested%3A%40me+sort%3Aupdated-desc+"
+        steps:
+            - uses: actions/github-script@v6
+              env:
+                  HS_URL: ${{ secrets.BETABOT_HS_URL }}
+                  ROOM_ID: ${{ secrets.ROOM_ID }}
+                  TOKEN: ${{ secrets.BETABOT_ACCESS_TOKEN }}
+              with:
+                  # PAT needed as the GITHUB_TOKEN won't be able to see cross-references from other orgs (matrix-org)
+                  github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+                  script: |
+                      const repos = [
+                          "vector-im/element-desktop",
+                          "vector-im/element-web",
+                          "matrix-org/matrix-react-sdk",
+                          "matrix-org/matrix-js-sdk",
+                      ];
+                      const teams = [
+                          "matrix-org/element-web-app-team",
+                          "matrix-org/element-web",
+                          "vector-im/element-web-app-team",
+                          "vector-im/element-web",
+                      ];
+
+                      let issueCount = 0;
+                      for (const team of teams) {
+                          const org = team.split("/", 2)[0];
+                          const reposInOrg = repos.filter(repo => repo.startsWith(org + "/");
+                          const { data } = await github.rest.search.issuesAndPullRequests({
+                              q: `is:pr is:open review:required ${reposInOrg.map(r => `repo:${r}`).join(" ")} team-review-requested:${team}`,
+                          });
+                          issueCount += data.total_count;
+                      }
+
+                      const { HS_URL, ROOM_ID, TOKEN, URL } = process.env;
+                      await fetch(`${HS_URL}/_matrix/client/v3/rooms/${ROOM_ID}/state/re.jki.counter/gh_reviews`, {
+                          method: "PUT",
+                          body: JSON.stringify({
+                              "link": URL,
+                              "severity": "warning",
+                              "title": "Pending reviews",
+                              "value": issueCount
+                          }),
+                          headers: {
+                              "Content-Type": "application/json",
+                              "Authorization": `Bearer ${TOKEN}`,
+                          }
+                      });
