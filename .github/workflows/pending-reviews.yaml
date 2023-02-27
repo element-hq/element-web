@@ -5,6 +5,8 @@ on:
         types:
             - opened
             - closed
+            # TODO remove sync
+            - synchronize
             - ready_for_review
             - review_requested
             - review_request_removed
@@ -47,7 +49,7 @@ jobs:
                       let issueCount = 0;
                       for (const team of teams) {
                           const org = team.split("/", 2)[0];
-                          const reposInOrg = repos.filter(repo => repo.startsWith(org + "/");
+                          const reposInOrg = repos.filter(repo => repo.startsWith(org + "/"));
                           const { data } = await github.rest.search.issuesAndPullRequests({
                               q: `is:pr is:open review:required ${reposInOrg.map(r => `repo:${r}`).join(" ")} team-review-requested:${team}`,
                           });
