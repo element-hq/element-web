@@ -1,5 +1,47 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`<PollHistoryDialog /> Poll detail displays poll detail on active poll list item click 1`] = `
+<h2
+  data-testid="pollQuestion"
+>
+  Question?
+</h2>
+`;
+
+exports[`<PollHistoryDialog /> Poll detail displays poll detail on past poll list item click 1`] = `
+<h2
+  data-testid="pollQuestion"
+>
+  What?
+</h2>
+`;
+
+exports[`<PollHistoryDialog /> Poll detail navigates back to poll list from detail view on header click 1`] = `
+<div
+  class="mx_AccessibleButton mx_PollDetailHeader mx_AccessibleButton_hasKind mx_AccessibleButton_kind_content_inline"
+  role="button"
+  tabindex="0"
+>
+  <div
+    class="mx_PollDetailHeader_icon"
+  />
+  Active polls
+</div>
+`;
+
+exports[`<PollHistoryDialog /> Poll detail navigates back to poll list from detail view on header click 2`] = `
+<div
+  class="mx_AccessibleButton mx_PollDetailHeader mx_AccessibleButton_hasKind mx_AccessibleButton_kind_content_inline"
+  role="button"
+  tabindex="0"
+>
+  <div
+    class="mx_PollDetailHeader_icon"
+  />
+  Active polls
+</div>
+`;
+
 exports[`<PollHistoryDialog /> renders a list of active polls when there are polls in the room 1`] = `
 <div>
   <div
@@ -71,33 +113,49 @@ exports[`<PollHistoryDialog /> renders a list of active polls when there are pol
             class="mx_PollListItem"
             data-testid="pollListItem-$2"
           >
-            <span>
-              02/02/23
-            </span>
             <div
-              class="mx_PollListItem_icon"
-            />
-            <span
-              class="mx_PollListItem_question"
+              tabindex="0"
             >
-              Where?
-            </span>
+              <div
+                class="mx_PollListItem_content"
+              >
+                <span>
+                  02/02/23
+                </span>
+                <div
+                  class="mx_PollListItem_icon"
+                />
+                <span
+                  class="mx_PollListItem_question"
+                >
+                  Where?
+                </span>
+              </div>
+            </div>
           </li>
           <li
             class="mx_PollListItem"
             data-testid="pollListItem-$1"
           >
-            <span>
-              02/02/23
-            </span>
             <div
-              class="mx_PollListItem_icon"
-            />
-            <span
-              class="mx_PollListItem_question"
+              tabindex="0"
             >
-              Question?
-            </span>
+              <div
+                class="mx_PollListItem_content"
+              >
+                <span>
+                  02/02/23
+                </span>
+                <div
+                  class="mx_PollListItem_icon"
+                />
+                <span
+                  class="mx_PollListItem_question"
+                >
+                  Question?
+                </span>
+              </div>
+            </div>
           </li>
         </ol>
       </div>

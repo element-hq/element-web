@@ -40,8 +40,9 @@ type PollHistoryListProps = {
     pollStartEvents: MatrixEvent[];
     polls: Map<string, Poll>;
     filter: PollHistoryFilter;
-    onFilterChange: (filter: PollHistoryFilter) => void;
     isLoading?: boolean;
+    onFilterChange: (filter: PollHistoryFilter) => void;
+    onItemClick: (pollId: string) => void;
 };
 export const PollHistoryList: React.FC<PollHistoryListProps> = ({
     pollStartEvents,
@@ -49,6 +50,7 @@ export const PollHistoryList: React.FC<PollHistoryListProps> = ({
     filter,
     isLoading,
     onFilterChange,
+    onItemClick,
 }) => {
     return (
         <div className="mx_PollHistoryList">
@@ -65,12 +67,17 @@ export const PollHistoryList: React.FC<PollHistoryListProps> = ({
                 <ol className={classNames("mx_PollHistoryList_list", `mx_PollHistoryList_list_${filter}`)}>
                     {pollStartEvents.map((pollStartEvent) =>
                         filter === "ACTIVE" ? (
-                            <PollListItem key={pollStartEvent.getId()!} event={pollStartEvent} />
+                            <PollListItem
+                                key={pollStartEvent.getId()!}
+                                event={pollStartEvent}
+                                onClick={() => onItemClick(pollStartEvent.getId()!)}
+                            />
                         ) : (
                             <PollListItemEnded
                                 key={pollStartEvent.getId()!}
                                 event={pollStartEvent}
                                 poll={polls.get(pollStartEvent.getId()!)!}
+                                onClick={() => onItemClick(pollStartEvent.getId()!)}
                             />
                         ),
                     )}

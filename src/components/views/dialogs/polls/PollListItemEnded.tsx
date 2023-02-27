@@ -25,10 +25,13 @@ import { formatLocalDateShort } from "../../../../DateUtils";
 import { allVotes, collectUserVotes, countVotes } from "../../messages/MPollBody";
 import { PollOption } from "../../polls/PollOption";
 import { Caption } from "../../typography/Caption";
+import TooltipTarget from "../../elements/TooltipTarget";
+import { Alignment } from "../../elements/Tooltip";
 
 interface Props {
     event: MatrixEvent;
     poll: Poll;
+    onClick: () => void;
 }
 
 type EndedPollState = {
@@ -88,7 +91,7 @@ const usePollVotes = (poll: Poll): Partial<EndedPollState> => {
  * @param event - the poll start MatrixEvent
  * @param poll - Poll instance
  */
-export const PollListItemEnded: React.FC<Props> = ({ event, poll }) => {
+export const PollListItemEnded: React.FC<Props> = ({ event, poll, onClick }) => {
     const pollEvent = poll.pollEvent;
     const { winningAnswers, totalVoteCount } = usePollVotes(poll);
     if (!pollEvent) {
@@ -97,31 +100,35 @@ export const PollListItemEnded: React.FC<Props> = ({ event, poll }) => {
     const formattedDate = formatLocalDateShort(event.getTs());
 
     return (
-        <li data-testid={`pollListItem-${event.getId()!}`} className="mx_PollListItemEnded">
-            <div className="mx_PollListItemEnded_title">
-                <PollIcon className="mx_PollListItemEnded_icon" />
-                <span className="mx_PollListItemEnded_question">{pollEvent.question.text}</span>
-                <Caption>{formattedDate}</Caption>
-            </div>
-            {!!winningAnswers?.length && (
-                <div className="mx_PollListItemEnded_answers">
-                    {winningAnswers?.map(({ answer, voteCount }) => (
-                        <PollOption
-                            key={answer.id}
-                            answer={answer}
-                            voteCount={voteCount}
-                            totalVoteCount={totalVoteCount!}
-                            pollId={poll.pollId}
-                            displayVoteCount
-                            isChecked
-                            isEnded
-                        />
-                    ))}
+        <li data-testid={`pollListItem-${event.getId()!}`} className="mx_PollListItemEnded" onClick={onClick}>
+            <TooltipTarget label={_t("View poll")} alignment={Alignment.Top}>
+                <div className="mx_PollListItemEnded_content">
+                    <div className="mx_PollListItemEnded_title">
+                        <PollIcon className="mx_PollListItemEnded_icon" />
+                        <span className="mx_PollListItemEnded_question">{pollEvent.question.text}</span>
+                        <Caption>{formattedDate}</Caption>
+                    </div>
+                    {!!winningAnswers?.length && (
+                        <div className="mx_PollListItemEnded_answers">
+                            {winningAnswers?.map(({ answer, voteCount }) => (
+                                <PollOption
+                                    key={answer.id}
+                                    answer={answer}
+                                    voteCount={voteCount}
+                                    totalVoteCount={totalVoteCount!}
+                                    pollId={poll.pollId}
+                                    displayVoteCount
+                                    isChecked
+                                    isEnded
+                                />
+                            ))}
+                        </div>
+                    )}
+                    <div className="mx_PollListItemEnded_voteCount">
+                        <Caption>{_t("Final result based on %(count)s votes", { count: totalVoteCount })}</Caption>
+                    </div>
                 </div>
-            )}
-            <div className="mx_PollListItemEnded_voteCount">
-                <Caption>{_t("Final result based on %(count)s votes", { count: totalVoteCount })}</Caption>
-            </div>
+            </TooltipTarget>
         </li>
     );
 };

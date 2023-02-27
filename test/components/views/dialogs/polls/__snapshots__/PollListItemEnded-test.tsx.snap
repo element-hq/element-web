@@ -7,30 +7,38 @@ exports[`<PollListItemEnded /> renders a poll with no responses 1`] = `
     data-testid="pollListItem-1"
   >
     <div
-      class="mx_PollListItemEnded_title"
+      tabindex="0"
     >
       <div
-        class="mx_PollListItemEnded_icon"
-      />
-      <span
-        class="mx_PollListItemEnded_question"
+        class="mx_PollListItemEnded_content"
       >
-        Question?
-      </span>
-      <span
-        class="mx_Caption"
-      >
-        02/02/23
-      </span>
-    </div>
-    <div
-      class="mx_PollListItemEnded_voteCount"
-    >
-      <span
-        class="mx_Caption"
-      >
-        Final result based on 0 votes
-      </span>
+        <div
+          class="mx_PollListItemEnded_title"
+        >
+          <div
+            class="mx_PollListItemEnded_icon"
+          />
+          <span
+            class="mx_PollListItemEnded_question"
+          >
+            Question?
+          </span>
+          <span
+            class="mx_Caption"
+          >
+            02/02/23
+          </span>
+        </div>
+        <div
+          class="mx_PollListItemEnded_voteCount"
+        >
+          <span
+            class="mx_Caption"
+          >
+            Final result based on 0 votes
+          </span>
+        </div>
+      </div>
     </div>
   </li>
 </div>

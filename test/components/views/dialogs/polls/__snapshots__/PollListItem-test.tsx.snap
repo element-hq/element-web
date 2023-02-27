@@ -6,17 +6,25 @@ exports[`<PollListItem /> renders a poll 1`] = `
     class="mx_PollListItem"
     data-testid="pollListItem-$mypoll"
   >
-    <span>
-      01/01/70
-    </span>
     <div
-      class="mx_PollListItem_icon"
-    />
-    <span
-      class="mx_PollListItem_question"
+      tabindex="0"
     >
-      Question?
-    </span>
+      <div
+        class="mx_PollListItem_content"
+      >
+        <span>
+          01/01/70
+        </span>
+        <div
+          class="mx_PollListItem_icon"
+        />
+        <span
+          class="mx_PollListItem_question"
+        >
+          Question?
+        </span>
+      </div>
+    </div>
   </li>
 </div>
 `;

@@ -14,32 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_PollListItem {
-    width: 100%;
+.mx_PollDetailHeader {
+    // override accessiblebutton style
+    font-size: $font-15px !important;
 }
 
-.mx_PollListItem_content {
-    width: 100%;
-    display: grid;
-    justify-content: left;
-    align-items: center;
-    grid-gap: $spacing-8;
-    grid-template-columns: auto auto auto;
-    grid-template-rows: auto;
-    cursor: pointer;
-
-    color: $primary-content;
-}
-
-.mx_PollListItem_icon {
-    height: 14px;
-    width: 14px;
-    color: $quaternary-content;
-    padding-left: $spacing-8;
-}
-
-.mx_PollListItem_question {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.mx_PollDetailHeader_icon {
+    height: 15px;
+    width: 15px;
+    margin-right: $spacing-8;
+    vertical-align: middle;
 }
