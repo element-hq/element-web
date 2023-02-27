@@ -737,7 +737,7 @@ export default class LegacyCallHandler extends EventEmitter {
         );
         if (!stats) {
             logger.debug(
-                "Call statistics are undefined. The call has " + "probably failed before a peerConn was established",
+                "Call statistics are undefined. The call has probably failed before a peerConn was established",
             );
             return;
         }

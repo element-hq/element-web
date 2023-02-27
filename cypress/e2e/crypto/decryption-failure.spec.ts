@@ -164,7 +164,7 @@ describe("Decryption Failure Bar", () => {
             cy.contains(".mx_DecryptionFailureBar_button", "Resend key requests").should("not.exist");
 
             cy.get(".mx_DecryptionFailureBar").percySnapshotElement(
-                "DecryptionFailureBar prompts user to open another device, " + "without Resend Key Requests button",
+                "DecryptionFailureBar prompts user to open another device, without Resend Key Requests button",
                 {
                     widths: [320, 640],
                 },

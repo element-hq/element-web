@@ -93,7 +93,7 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
 
             this.map.on("error", (e) => {
                 logger.error(
-                    "Failed to load map: check map_style_url in config.json " + "has a valid URL and API key",
+                    "Failed to load map: check map_style_url in config.json has a valid URL and API key",
                     e.error,
                 );
                 this.setState({ error: LocationShareError.MapStyleUrlNotReachable });

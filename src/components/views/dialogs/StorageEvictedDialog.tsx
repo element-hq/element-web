@@ -70,7 +70,7 @@ export default class StorageEvictedDialog extends React.Component<IProps> {
                         )}
                     </p>
                     <p>
-                        {_t("Your browser likely removed this data when running low on " + "disk space.")} {logRequest}
+                        {_t("Your browser likely removed this data when running low on disk space.")} {logRequest}
                     </p>
                 </div>
                 <DialogButtons

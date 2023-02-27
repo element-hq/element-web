@@ -1473,9 +1473,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
                         "do not have permission to view the message in question.",
                 );
             } else {
-                description = _t(
-                    "Tried to load a specific point in this room's timeline, but was " + "unable to find it.",
-                );
+                description = _t("Tried to load a specific point in this room's timeline, but was unable to find it.");
             }
 
             Modal.createDialog(ErrorDialog, {

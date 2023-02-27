@@ -157,11 +157,9 @@ export default class ManageEventIndexDialog extends React.Component<IProps, ISta
 
         const eventIndexingSettings = (
             <div>
-                {_t(
-                    "%(brand)s is securely caching encrypted messages locally for them " +
-                        "to appear in search results:",
-                    { brand },
-                )}
+                {_t("%(brand)s is securely caching encrypted messages locally for them to appear in search results:", {
+                    brand,
+                })}
                 <div className="mx_SettingsTab_subsectionText">
                     {crawlerState}
                     <br />

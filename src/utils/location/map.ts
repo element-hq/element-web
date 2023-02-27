@@ -50,10 +50,7 @@ export const createMap = (interactive: boolean, bodyId: string, onError?: (error
         map.addControl(new maplibregl.AttributionControl(), "top-right");
 
         map.on("error", (e) => {
-            logger.error(
-                "Failed to load map: check map_style_url in config.json has a " + "valid URL and API key",
-                e.error,
-            );
+            logger.error("Failed to load map: check map_style_url in config.json has a valid URL and API key", e.error);
             onError?.(new Error(LocationShareError.MapStyleUrlNotReachable));
         });
 

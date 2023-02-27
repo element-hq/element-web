@@ -567,9 +567,7 @@ describe("EventListSummary", function () {
         const summary = wrapper.find(".mx_GenericEventListSummary_summary");
         const summaryText = summary.text();
 
-        expect(summaryText).toBe(
-            "user_1 and one other rejected their invitations and " + "had their invitations withdrawn",
-        );
+        expect(summaryText).toBe("user_1 and one other rejected their invitations and had their invitations withdrawn");
     });
 
     it("handles invitation plurals correctly when there are multiple invites", function () {

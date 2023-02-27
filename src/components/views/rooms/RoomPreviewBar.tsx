@@ -435,7 +435,7 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
                 }
 
                 subTitle = _t(
-                    "Link this email with your account in Settings to receive invites " + "directly in %(brand)s.",
+                    "Link this email with your account in Settings to receive invites directly in %(brand)s.",
                     { brand },
                 );
                 primaryActionLabel = _t("Join the discussion");

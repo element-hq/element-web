@@ -183,7 +183,7 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
         Modal.createDialog(QuestionDialog, {
             title: _t("Delete Backup"),
             description: _t(
-                "Are you sure? You will lose your encrypted messages if your " + "keys are not backed up properly.",
+                "Are you sure? You will lose your encrypted messages if your keys are not backed up properly.",
             ),
             button: _t("Delete Backup"),
             danger: true,
