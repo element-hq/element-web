@@ -3739,5 +3739,8 @@
     "Homeserver is <code>%(homeserverUrl)s</code>": "Domovský server je <code>%(homeserverUrl)s</code>",
     "Room is <strong>not encrypted 🚨</strong>": "Místnost <strong>není šifrovaná 🚨</strong>",
     "Ended a poll": "Ukončil hlasování",
-    "Yes, it was me": "Ano, to jsem byl já"
+    "Yes, it was me": "Ano, to jsem byl já",
+    "Answered elsewhere": "Hovor přijat jinde",
+    "If you know a room address, try joining through that instead.": "Pokud znáte adresu místnosti, zkuste se pomocí ní připojit.",
+    "You attempted to join using a room ID without providing a list of servers to join through. Room IDs are internal identifiers and cannot be used to join a room without additional information.": "Pokusili jste se připojit pomocí ID místnosti, aniž byste zadali seznam serverů, přes které se chcete připojit. ID místnosti jsou interní identifikátory a nelze je použít k připojení k místnosti bez dalších informací."
 }
