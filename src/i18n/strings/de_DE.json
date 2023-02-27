@@ -2274,7 +2274,6 @@
     "Space options": "Space-Optionen",
     "Manage & explore rooms": "Räume erkunden und verwalten",
     "unknown person": "unbekannte Person",
-    "Check your devices": "Überprüfe deine Sitzungen",
     "%(deviceId)s from %(ip)s": "%(deviceId)s von %(ip)s",
     "Review to ensure your account is safe": "Überprüfe sie, um ein sicheres Konto gewährleisten zu können",
     "Support": "Unterstützung",
@@ -3671,7 +3670,6 @@
     "User read up to: ": "Der Benutzer hat gelesen bis: ",
     "Dot: ": "Punkt: ",
     "Highlight: ": "Höhepunkt: ",
-    "Room unread status: ": "Ungelesenstatus des Raumes: ",
     "Notifications debug": "Debug-Modus für Benachrichtigungen",
     "Are you sure you want to stop your live broadcast? This will end the broadcast and the full recording will be available in the room.": "Möchtest du deine Übertragung wirklich beenden? Dies wird die Übertragung abschließen und die vollständige Aufnahme im Raum bereitstellen.",
     "Your email address does not appear to be associated with a Matrix ID on this homeserver.": "Deine E-Mail-Adresse scheint nicht mit einer Matrix-ID auf diesem Heim-Server verknüpft zu sein.",
@@ -3733,5 +3731,16 @@
     "Room directory": "Raumverzeichnis",
     "Show NSFW content": "NSFW-Inhalte anzeigen",
     "Due to decryption errors, some votes may not be counted": "Evtl. werden infolge von Entschlüsselungsfehlern einige Stimmen nicht gezählt",
-    "Ended a poll": "Eine Umfrage beendet"
+    "Ended a poll": "Eine Umfrage beendet",
+    "Room is <strong>not encrypted 🚨</strong>": "Raum ist <strong>nicht verschlüsselt 🚨</strong>",
+    "Room is <strong>encrypted ✅</strong>": "Raum ist <strong>verschlüsselt ✅</strong>",
+    "Notification state is <strong>%(notificationState)s</strong>": "Benachrichtigungsstand ist <strong>%(notificationState)s</strong>",
+    "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>|zero": "Ungelesen-Status im Raum: <strong>%(status)s</strong>",
+    "Room unread status: <strong>%(status)s</strong>, count: <strong>%(count)s</strong>|other": "Ungelesen-Status im Raum: <strong>%(status)s</strong>, Anzahl: <strong>%(count)s</strong>",
+    "Identity server is <code>%(identityServerUrl)s</code>": "Identitäts-Server ist <code>%(identityServerUrl)s</code>",
+    "Homeserver is <code>%(homeserverUrl)s</code>": "Heim-Server ist <code>%(homeserverUrl)s</code>",
+    "Yes, it was me": "Ja, das war ich",
+    "Answered elsewhere": "Anderswo beantwortet",
+    "If you know a room address, try joining through that instead.": "Falls du eine Adresse kennst, versuche den Raum mit dieser zu betreten.",
+    "You attempted to join using a room ID without providing a list of servers to join through. Room IDs are internal identifiers and cannot be used to join a room without additional information.": "Du hast versucht einen Raum via Raum-ID, aber ohne Angabe von Servern zu betreten. Raum-IDs sind interne Kennungen und können nicht ohne weitere Informationen zum Betreten von Räumen genutzt werden."
 }
