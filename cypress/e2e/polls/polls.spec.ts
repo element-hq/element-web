@@ -20,7 +20,7 @@ import { HomeserverInstance } from "../../plugins/utils/homeserver";
 import { MatrixClient } from "../../global";
 import Chainable = Cypress.Chainable;
 
-const hideTimestampCSS = ".mx_MessageTimestamp { visibility: hidden !important; }";
+const hidePercyCSS = ".mx_MessageTimestamp, .mx_RoomView_myReadMarker { visibility: hidden !important; }";
 
 describe("Polls", () => {
     let homeserver: HomeserverInstance;
@@ -133,7 +133,7 @@ describe("Polls", () => {
             .as("pollId");
 
         cy.get<string>("@pollId").then((pollId) => {
-            getPollTile(pollId).percySnapshotElement("Polls Timeline tile - no votes", { percyCSS: hideTimestampCSS });
+            getPollTile(pollId).percySnapshotElement("Polls Timeline tile - no votes", { percyCSS: hidePercyCSS });
 
             // Bot votes 'Maybe' in the poll
             botVoteForOption(bot, roomId, pollId, pollParams.options[2]);
