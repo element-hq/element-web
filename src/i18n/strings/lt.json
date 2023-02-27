@@ -2180,7 +2180,6 @@
     "The person who invited you has already left.": "Jus pakvietęs asmuo jau išėjo.",
     "Sorry, your homeserver is too old to participate here.": "Atsiprašome, bet jūsų namų serveris yra per senas, kad galėtumėte čia dalyvauti.",
     "There was an error joining.": "Įvyko klaida prisijungiant.",
-    "Check your devices": "Patikrinkite savo įrenginius",
     "%(deviceId)s from %(ip)s": "%(deviceId)s iš %(ip)s",
     "Use app": "Naudoti programėlę",
     "%(brand)s is experimental on a mobile web browser. For a better experience and the latest features, use our free native app.": "%(brand)s yra eksperimentinis mobiliojoje žiniatinklio naršyklėje. Jei norite geresnės patirties ir naujausių funkcijų, naudokitės nemokama vietine programėle.",
