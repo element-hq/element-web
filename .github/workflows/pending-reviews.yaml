@@ -1,12 +1,9 @@
 name: Pending reviews automation
 on:
-    # TODO update this to _target
-    pull_request:
+    pull_request_target:
         types:
             - opened
             - closed
-            # TODO remove sync
-            - synchronize
             - ready_for_review
             - review_requested
             - review_request_removed
