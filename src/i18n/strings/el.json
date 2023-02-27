@@ -1178,7 +1178,6 @@
     "Please contact your homeserver administrator.": "Επικοινωνήστε με τον διαχειριστή του κεντρικού σας διακομιστή.",
     "New version of %(brand)s is available": "Διατίθεται νέα έκδοση του %(brand)s",
     "Update %(brand)s": "Ενημέρωση %(brand)s",
-    "Check your devices": "Ελέγξτε τις συσκευές σας",
     "%(deviceId)s from %(ip)s": "%(deviceId)s από %(ip)s",
     "New login. Was this you?": "Νέα σύνδεση. Ήσουν εσύ;",
     "Other users may not trust it": "Άλλοι χρήστες μπορεί να μην το εμπιστεύονται",
