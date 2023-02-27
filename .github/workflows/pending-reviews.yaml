@@ -57,7 +57,24 @@ jobs:
                       }
 
                       const { HS_URL, ROOM_ID, TOKEN, URL } = process.env;
-                      await fetch(`${HS_URL}/_matrix/client/v3/rooms/${ROOM_ID}/state/re.jki.counter/gh_reviews`, {
+                      const apiUrl = `${HS_URL}/_matrix/client/v3/rooms/${ROOM_ID}/state/re.jki.counter/gh_reviews`;
+                      const headers = {
+                          "Content-Type": "application/json",
+                          "Authorization": `Bearer ${TOKEN}`,
+                      };
+                      const res = await fetch(apiUrl, {
+                          method: "GET",
+                          headers,
+                      });
+
+                      const data = await res.json();
+
+                      if (data.value === issueCount) {
+                          console.log("Pending review count already correct");
+                          return;
+                      }
+
+                      await fetch(apiUrl, {
                           method: "PUT",
                           body: JSON.stringify({
                               "link": URL,
@@ -65,8 +82,5 @@ jobs:
                               "title": "Pending reviews",
                               "value": issueCount
                           }),
-                          headers: {
-                              "Content-Type": "application/json",
-                              "Authorization": `Bearer ${TOKEN}`,
-                          }
+                          headers,
                       });
