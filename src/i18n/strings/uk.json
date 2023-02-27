@@ -3742,5 +3742,9 @@
     "Yes, it was me": "Так, це я",
     "Answered elsewhere": "Відповіли деінде",
     "If you know a room address, try joining through that instead.": "Якщо ви знаєте адресу кімнати, спробуйте приєднатися через неї.",
-    "You attempted to join using a room ID without providing a list of servers to join through. Room IDs are internal identifiers and cannot be used to join a room without additional information.": "Ви спробували приєднатися, за допомогою ID кімнати, не вказавши список серверів, через які ви хочете приєднатися. ID кімнати — це внутрішній ідентифікатор і він не може бути використаний для приєднання до кімнати без додаткової інформації."
+    "You attempted to join using a room ID without providing a list of servers to join through. Room IDs are internal identifiers and cannot be used to join a room without additional information.": "Ви спробували приєднатися, за допомогою ID кімнати, не вказавши список серверів, через які ви хочете приєднатися. ID кімнати — це внутрішній ідентифікатор і він не може бути використаний для приєднання до кімнати без додаткової інформації.",
+    "View poll": "Переглянути опитування",
+    "Past polls": "Минулі опитування",
+    "Active polls": "Активні опитування",
+    "View poll in timeline": "Переглянути опитування у стрічці"
 }
