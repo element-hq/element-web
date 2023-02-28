@@ -54,6 +54,9 @@
         "coverage": "yarn test --coverage",
         "analyse:unused-exports": "node ./scripts/analyse_unused_exports.js"
     },
+    "resolutions": {
+        "@types/react-dom": "17.0.19"
+    },
     "dependencies": {
         "@matrix-org/olm": "https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.12.tgz",
         "@matrix-org/react-sdk-module-api": "^0.0.3",
