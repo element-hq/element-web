@@ -52,7 +52,6 @@ let avatarUrl: string;
 let userId: string;
 let jitsiAuth: string;
 let roomId: string;
-let openIdToken: IOpenIDCredentials;
 let roomName: string;
 let startAudioOnly: boolean;
 let isVideoChannel: boolean;
@@ -253,11 +252,11 @@ function skipToJitsiSplashScreen(): void {
 }
 
 /**
- * Create a JWT token fot jitsi openidtoken-jwt auth
+ * Create a JWT token for jitsi openidtoken-jwt auth
  *
  * See https://github.com/matrix-org/prosody-mod-auth-matrix-user-verification
  */
-function createJWTToken(): string {
+function createJWTToken(openIdToken: IOpenIDCredentials): string {
     // Header
     const header = { alg: "HS256", typ: "JWT" };
     // Payload
@@ -341,8 +340,8 @@ function mapLanguage(language: string): string {
 async function joinConference(audioInput?: string | null, videoInput?: string | null): Promise<void> {
     let jwt;
     if (jitsiAuth === JITSI_OPENIDTOKEN_JWT_AUTH) {
-        // Request credentials, give callback to continue when received
-        openIdToken = await widgetApi.requestOpenIDConnectToken();
+        // See https://github.com/matrix-org/prosody-mod-auth-matrix-user-verification
+        const openIdToken: IOpenIDCredentials = await widgetApi.requestOpenIDConnectToken();
         logger.log("Got OpenID Connect token");
 
         if (!openIdToken?.access_token) {
@@ -352,7 +351,7 @@ async function joinConference(audioInput?: string | null, videoInput?: string | 
             document.getElementById("widgetActionContainer").innerText = "Failed to load Jitsi widget";
             return;
         }
-        jwt = createJWTToken();
+        jwt = createJWTToken(openIdToken);
     }
 
     switchVisibleContainers();
