@@ -96,7 +96,7 @@ export function createTestClient(): MatrixClient {
         getUserId: jest.fn().mockReturnValue("@userId:matrix.org"),
         getSafeUserId: jest.fn().mockReturnValue("@userId:matrix.org"),
         getUserIdLocalpart: jest.fn().mockResolvedValue("userId"),
-        getUser: jest.fn().mockReturnValue({ on: jest.fn() }),
+        getUser: jest.fn().mockReturnValue({ on: jest.fn(), off: jest.fn() }),
         getDevice: jest.fn(),
         getDeviceId: jest.fn().mockReturnValue("ABCDEFGHI"),
         getStoredCrossSigningForUser: jest.fn(),
@@ -455,6 +455,7 @@ export function mkRoomMember(roomId: string, userId: string, membership = "join"
         getAvatarUrl: () => {},
         getMxcAvatarUrl: () => {},
         getDMInviter: () => {},
+        off: () => {},
     } as unknown as RoomMember;
 }
 

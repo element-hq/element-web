@@ -18,6 +18,7 @@ import React from "react";
 // eslint-disable-next-line deprecate/import
 import { mount, ReactWrapper } from "enzyme";
 import { mocked } from "jest-mock";
+// eslint-disable-next-line deprecate/import
 import { act } from "react-dom/test-utils";
 import { Room } from "matrix-js-sdk/src/matrix";
 

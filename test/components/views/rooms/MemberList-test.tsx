@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 import React, { Component } from "react";
+// eslint-disable-next-line deprecate/import
 import ReactTestUtils from "react-dom/test-utils";
 import ReactDOM from "react-dom";
 import { Room } from "matrix-js-sdk/src/models/room";

@@ -30,7 +30,7 @@ describe("DMRoomMap", () => {
         "user@example.com": [roomId1, roomId2],
         "@user:example.com": [roomId1, roomId3, roomId4],
         "@user2:example.com": [] as string[],
-    } satisfies IContent;
+    } as IContent;
 
     let client: Mocked<MatrixClient>;
     let dmRoomMap: DMRoomMap;

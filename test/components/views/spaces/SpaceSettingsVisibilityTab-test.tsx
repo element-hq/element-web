@@ -16,8 +16,7 @@ limitations under the License.
 
 import React from "react";
 import { mocked } from "jest-mock";
-import { act, Simulate } from "react-dom/test-utils";
-import { fireEvent, render, RenderResult } from "@testing-library/react";
+import { act, fireEvent, render, RenderResult } from "@testing-library/react";
 import { EventType, MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 import { GuestAccess, HistoryVisibility, JoinRule } from "matrix-js-sdk/src/@types/partials";
 
@@ -163,8 +162,8 @@ describe("<SpaceSettingsVisibilityTab />", () => {
                 (mockMatrixClient.sendStateEvent as jest.Mock).mockRejectedValue({});
                 const component = getComponent({ space });
                 await toggleGuestAccessSection(component);
-                await act(async () => {
-                    Simulate.click(getGuestAccessToggle(component)!);
+                await act(() => {
+                    fireEvent.click(getGuestAccessToggle(component)!);
                 });
 
                 expect(getErrorMessage(component)).toEqual("Failed to update the guest access of this space");
@@ -213,14 +212,14 @@ describe("<SpaceSettingsVisibilityTab />", () => {
                 (mockMatrixClient.sendStateEvent as jest.Mock).mockRejectedValue({});
                 const component = getComponent({ space });
 
-                await act(async () => {
-                    Simulate.click(getHistoryVisibilityToggle(component)!);
+                await act(() => {
+                    fireEvent.click(getHistoryVisibilityToggle(component)!);
                 });
 
                 expect(getErrorMessage(component)).toEqual("Failed to update the history visibility of this space");
             });
 
-            it("disables room preview toggle when history visability changes are not allowed", () => {
+            it("disables room preview toggle when history visibility changes are not allowed", () => {
                 const space = makeMockSpace(mockMatrixClient, joinRule, guestRule, historyRule);
                 (space.currentState.maySendStateEvent as jest.Mock).mockReturnValue(false);
                 const component = getComponent({ space });
