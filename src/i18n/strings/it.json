@@ -3742,5 +3742,16 @@
     "Show NSFW content": "Mostra contenuti per adulti",
     "If you know a room address, try joining through that instead.": "Se conosci un indirizzo della stanza, prova ad entrare tramite quello.",
     "You attempted to join using a room ID without providing a list of servers to join through. Room IDs are internal identifiers and cannot be used to join a room without additional information.": "Hai provato ad entrare usando un ID stanza senza fornire una lista di server attraverso cui entrare. Gli ID stanza sono identificativi interni e non possono essere usati per entrare in una stanza senza informazioni aggiuntive.",
-    "Yes, it was me": "Sì, ero io"
+    "Yes, it was me": "Sì, ero io",
+    "View poll": "Vedi sondaggio",
+    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months|one": "Non ci sono sondaggi passati nell'ultimo giorno. Carica più sondaggi per vedere quelli dei mesi precedenti",
+    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months|other": "Non ci sono sondaggi passati negli ultimi %(count)s giorni. Carica più sondaggi per vedere quelli dei mesi precedenti",
+    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months|one": "Non ci sono sondaggi attivi nell'ultimo giorno. Carica più sondaggi per vedere quelli dei mesi precedenti",
+    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months|other": "Non ci sono sondaggi attivi negli ultimi %(count)s giorni. Carica più sondaggi per vedere quelli dei mesi precedenti",
+    "There are no past polls. Load more polls to view polls for previous months": "Non ci sono sondaggi passati. Carica più sondaggi per vedere quelli dei mesi precedenti",
+    "There are no active polls. Load more polls to view polls for previous months": "Non ci sono sondaggi attivi. Carica più sondaggi per vedere quelli dei mesi precedenti",
+    "Load more polls": "Carica più sondaggi",
+    "Past polls": "Sondaggi passati",
+    "Active polls": "Sondaggi attivi",
+    "View poll in timeline": "Vedi sondaggio nella linea temporale"
 }
