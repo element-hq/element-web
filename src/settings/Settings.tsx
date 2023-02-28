@@ -126,7 +126,7 @@ export interface IBaseSetting<T extends SettingValueType = SettingValueType> {
 
     // The supported levels are required. Preferably, use the preset arrays
     // at the top of this file to define this rather than a custom array.
-    supportedLevels?: SettingLevel[];
+    supportedLevels: SettingLevel[];
 
     // Required. Can be any data type. The value specified here should match
     // the data being stored (ie: if a boolean is used, the setting should

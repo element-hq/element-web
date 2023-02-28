@@ -29,7 +29,7 @@ export default class SlidingSyncController extends SettingController {
     }
 
     public async onChange(): Promise<void> {
-        PlatformPeg.get().reload();
+        PlatformPeg.get()?.reload();
     }
 
     public get settingDisabled(): boolean {
