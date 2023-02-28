@@ -70,6 +70,9 @@ const useMapWithStyle = ({
         if (map && centerGeoUri) {
             try {
                 const coords = parseGeoUri(centerGeoUri);
+                if (!coords) {
+                    throw new Error("Invalid geo URI");
+                }
                 map.setCenter({ lon: coords.longitude, lat: coords.latitude });
             } catch (_error) {
                 logger.error("Could not set map center");

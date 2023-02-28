@@ -33,6 +33,7 @@ import { LocationShareType } from "../../../../src/components/views/location/sha
 import {
     flushPromisesWithFakeTimers,
     getMockClientWithEventEmitter,
+    mockClientMethodsUser,
     setupAsyncStoreWithClient,
 } from "../../../test-utils";
 import Modal from "../../../../src/Modal";
@@ -74,7 +75,7 @@ jest.mock("../../../../src/Modal", () => ({
 describe("<LocationShareMenu />", () => {
     const userId = "@ernie:server.org";
     const mockClient = getMockClientWithEventEmitter({
-        getUserId: jest.fn().mockReturnValue(userId),
+        ...mockClientMethodsUser(userId),
         getClientWellKnown: jest.fn().mockResolvedValue({
             map_style_url: "maps.com",
         }),
@@ -334,7 +335,7 @@ describe("<LocationShareMenu />", () => {
 
             expect(SettingsStore.setValue).toHaveBeenCalledWith(
                 "feature_location_share_live",
-                undefined,
+                null,
                 SettingLevel.DEVICE,
                 true,
             );

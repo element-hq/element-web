@@ -32,7 +32,7 @@ import { toPx } from "../../../utils/units";
 import { _t } from "../../../languageHandler";
 
 interface IProps {
-    name: string; // The name (first initial used as default)
+    name?: string; // The name (first initial used as default)
     idName?: string; // ID for generating hash colours
     title?: string; // onHover title text
     url?: string; // highest priority of them all, shortcut to set in urls[0]

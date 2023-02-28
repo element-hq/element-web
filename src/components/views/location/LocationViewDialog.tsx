@@ -31,7 +31,7 @@ interface IProps extends IDialogProps {
 }
 
 interface IState {
-    error: Error;
+    error?: Error;
 }
 
 /**
@@ -58,7 +58,7 @@ export default class LocationViewDialog extends React.Component<IProps, IState> 
         const { mxEvent } = this.props;
 
         // only pass member to marker when should render avatar marker
-        const markerRoomMember = isSelfLocation(mxEvent.getContent()) ? mxEvent.sender : undefined;
+        const markerRoomMember = (isSelfLocation(mxEvent.getContent()) && mxEvent.sender) || undefined;
         const geoUri = locationEventGeoUri(mxEvent);
         return (
             <BaseDialog className="mx_LocationViewDialog" onFinished={this.props.onFinished} fixedWidth={false}>

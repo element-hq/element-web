@@ -432,7 +432,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
     public render(): React.ReactNode {
         const avatarSize = 32; // should match border-radius of the avatar
 
-        const userId = MatrixClientPeg.get().getUserId();
+        const userId = MatrixClientPeg.get().getSafeUserId();
         const displayName = OwnProfileStore.instance.displayName || userId;
         const avatarUrl = OwnProfileStore.instance.getHttpAvatarUrl(avatarSize);
 
