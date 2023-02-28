@@ -38,7 +38,7 @@ interface IProps {
 
 interface IState {
     phase: Phase;
-    errStr: string;
+    errStr: string | null;
     passphrase1: string;
     passphrase2: string;
 }

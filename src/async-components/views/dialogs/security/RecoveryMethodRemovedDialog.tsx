@@ -39,7 +39,7 @@ export default class RecoveryMethodRemovedDialog extends React.PureComponent<IPr
         Modal.createDialogAsync(
             import("./CreateKeyBackupDialog") as unknown as Promise<ComponentType<{}>>,
             undefined,
-            null,
+            undefined,
             /* priority = */ false,
             /* static = */ true,
         );
