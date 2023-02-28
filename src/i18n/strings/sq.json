@@ -3728,5 +3728,16 @@
     "Favourite Messages": "Vëruni Shenjë Mesazheve Si të Parapëlqyer",
     "If you know a room address, try joining through that instead.": "Nëse e dini një adresë dhome, provoni të hyni përmes saj, më miër.",
     "You attempted to join using a room ID without providing a list of servers to join through. Room IDs are internal identifiers and cannot be used to join a room without additional information.": "U rrekët të hyni duke përdorur një ID dhome pa dhënë një listë shërbyesish përmes të cilëve të hyhet. ID-të e dhomave janë identifikues të brendshëm dhe s’mund të përdoren për të hyrë në një dhomë pa hollësi shtesë.",
-    "Yes, it was me": "Po, unë qeshë"
+    "Yes, it was me": "Po, unë qeshë",
+    "View poll": "Shiheni pyetësorin",
+    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months|one": "S’ka pyetësorë të kaluar për ditën e shkuar. Që të shihni pyetësorët për muajt e kaluar, ngarkoni më tepër pyetësorë",
+    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months|other": "S’ka pyetësorë të kaluar për %(count)s ditët e shkuara. Që të shihni pyetësorët për muajt e kaluar, ngarkoni më tepër pyetësorë",
+    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months|one": "S’ka pyetësorë aktivë për ditën e shkuar. Që të shihni pyetësorët për muajt e kaluar, ngarkoni më tepër pyetësorë",
+    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months|other": "S’ka pyetësorë aktivë për %(count)s ditët e shkuara. Që të shihni pyetësorët për muajt e kaluar, ngarkoni më tepër pyetësorë",
+    "There are no past polls. Load more polls to view polls for previous months": "S’ka pyetësorë të kaluar. Që të shihni pyetësorët për muajt e kaluar, ngarkoni më tepër pyetësorë",
+    "There are no active polls. Load more polls to view polls for previous months": "S’ka pyetësorë aktivë. Që të shihni pyetësorët për muajt e kaluar, ngarkoni më tepër pyetësorë",
+    "Load more polls": "Ngarkoni më tepër pyetësorë",
+    "Past polls": "Pyetësorë të kaluar",
+    "Active polls": "Pyetësorë aktivë",
+    "View poll in timeline": "Shiheni pyetësorin në rrjedhë kohore"
 }
