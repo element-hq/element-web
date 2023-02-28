@@ -26,7 +26,6 @@ import { accessSecretStorage } from "../../../../SecurityManager";
 import AccessibleButton from "../../../../components/views/elements/AccessibleButton";
 import { copyNode } from "../../../../utils/strings";
 import PassphraseField from "../../../../components/views/auth/PassphraseField";
-import { IDialogProps } from "../../../../components/views/dialogs/IDialogProps";
 import Field from "../../../../components/views/elements/Field";
 import Spinner from "../../../../components/views/elements/Spinner";
 import BaseDialog from "../../../../components/views/dialogs/BaseDialog";
@@ -45,7 +44,9 @@ enum Phase {
 
 const PASSWORD_MIN_SCORE = 4; // So secure, many characters, much complex, wow, etc, etc.
 
-interface IProps extends IDialogProps {}
+interface IProps {
+    onFinished(done?: boolean): void;
+}
 
 interface IState {
     secureSecretStorage: boolean;

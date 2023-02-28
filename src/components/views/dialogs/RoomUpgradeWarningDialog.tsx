@@ -23,7 +23,6 @@ import SdkConfig from "../../../SdkConfig";
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import Modal from "../../../Modal";
-import { IDialogProps } from "./IDialogProps";
 import BugReportDialog from "./BugReportDialog";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
@@ -35,11 +34,12 @@ export interface IFinishedOpts {
     invite: boolean;
 }
 
-interface IProps extends IDialogProps {
+interface IProps {
     roomId: string;
     targetVersion: string;
     description?: ReactNode;
     doUpgrade?(opts: IFinishedOpts, fn: (progressText: string, progress: number, total: number) => void): Promise<void>;
+    onFinished(opts?: IFinishedOpts): void;
 }
 
 interface IState {
@@ -70,19 +70,14 @@ export default class RoomUpgradeWarningDialog extends React.Component<IProps, IS
         this.setState({ progressText, progress, total });
     };
 
-    private onContinue = (): void => {
+    private onContinue = async (): Promise<void> => {
         const opts = {
             continue: true,
             invite: this.isPrivate && this.state.inviteUsersToNewRoom,
         };
 
-        if (this.props.doUpgrade) {
-            this.props.doUpgrade(opts, this.onProgressCallback).then(() => {
-                this.props.onFinished(opts);
-            });
-        } else {
-            this.props.onFinished(opts);
-        }
+        await this.props.doUpgrade?.(opts, this.onProgressCallback);
+        this.props.onFinished(opts);
     };
 
     private onCancel = (): void => {

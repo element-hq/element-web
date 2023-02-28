@@ -21,13 +21,13 @@ import { mocked } from "jest-mock";
 import { Room, User, MatrixClient, RoomMember, MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
 import { Phase, VerificationRequest } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 import { DeviceTrustLevel, UserTrustLevel } from "matrix-js-sdk/src/crypto/CrossSigning";
+import { DeviceInfo } from "matrix-js-sdk/src/crypto/deviceinfo";
 
 import UserInfo, {
     BanToggleButton,
     DeviceItem,
     disambiguateDevices,
     getPowerLevels,
-    IDevice,
     isMuted,
     PowerLevelEditor,
     RoomAdminToolsContainer,
@@ -68,6 +68,22 @@ const mockRoom = mocked({
     roomId: "!fkfk",
     getType: jest.fn().mockReturnValue(undefined),
     isSpaceRoom: jest.fn().mockReturnValue(false),
+    getMember: jest.fn().mockReturnValue(undefined),
+    getMxcAvatarUrl: jest.fn().mockReturnValue("mock-avatar-url"),
+    name: "test room",
+    on: jest.fn(),
+    off: jest.fn(),
+    currentState: {
+        getStateEvents: jest.fn(),
+        on: jest.fn(),
+    },
+    getEventReadUpTo: jest.fn(),
+} as unknown as Room);
+
+const mockSpace = mocked({
+    roomId: "!fkfk",
+    getType: jest.fn().mockReturnValue("m.space"),
+    isSpaceRoom: jest.fn().mockReturnValue(true),
     getMember: jest.fn().mockReturnValue(undefined),
     getMxcAvatarUrl: jest.fn().mockReturnValue("mock-avatar-url"),
     name: "test room",
@@ -258,7 +274,7 @@ describe("<UserInfoHeader />", () => {
 });
 
 describe("<DeviceItem />", () => {
-    const device: IDevice = { deviceId: "deviceId", getDisplayName: () => "deviceName" };
+    const device = { deviceId: "deviceId", getDisplayName: () => "deviceName" } as DeviceInfo;
     const defaultProps = {
         userId: defaultUserId,
         device,
@@ -722,14 +738,14 @@ describe("<RoomKickButton />", () => {
     it("clicking the kick button calls Modal.createDialog with the correct arguments", async () => {
         createDialogSpy.mockReturnValueOnce({ finished: Promise.resolve([]), close: jest.fn() });
 
-        renderComponent({ member: memberWithInviteMembership });
+        renderComponent({ room: mockSpace, member: memberWithInviteMembership });
         await userEvent.click(screen.getByText(/disinvite from/i));
 
         // check the last call arguments and the presence of the spaceChildFilter callback
         expect(createDialogSpy).toHaveBeenLastCalledWith(
             expect.any(Function),
             expect.objectContaining({ spaceChildFilter: expect.any(Function) }),
-            undefined,
+            "mx_ConfirmSpaceUserActionDialog_wrapper",
         );
 
         // test the spaceChildFilter callback
@@ -806,14 +822,14 @@ describe("<BanToggleButton />", () => {
     it("clicking the ban or unban button calls Modal.createDialog with the correct arguments if user is not banned", async () => {
         createDialogSpy.mockReturnValueOnce({ finished: Promise.resolve([]), close: jest.fn() });
 
-        renderComponent();
+        renderComponent({ room: mockSpace });
         await userEvent.click(screen.getByText(/ban from/i));
 
         // check the last call arguments and the presence of the spaceChildFilter callback
         expect(createDialogSpy).toHaveBeenLastCalledWith(
             expect.any(Function),
             expect.objectContaining({ spaceChildFilter: expect.any(Function) }),
-            undefined,
+            "mx_ConfirmSpaceUserActionDialog_wrapper",
         );
 
         // test the spaceChildFilter callback
@@ -844,14 +860,14 @@ describe("<BanToggleButton />", () => {
     it("clicking the ban or unban button calls Modal.createDialog with the correct arguments if user _is_ banned", async () => {
         createDialogSpy.mockReturnValueOnce({ finished: Promise.resolve([]), close: jest.fn() });
 
-        renderComponent({ member: memberWithBanMembership });
+        renderComponent({ room: mockSpace, member: memberWithBanMembership });
         await userEvent.click(screen.getByText(/ban from/i));
 
         // check the last call arguments and the presence of the spaceChildFilter callback
         expect(createDialogSpy).toHaveBeenLastCalledWith(
             expect.any(Function),
             expect.objectContaining({ spaceChildFilter: expect.any(Function) }),
-            undefined,
+            "mx_ConfirmSpaceUserActionDialog_wrapper",
         );
 
         // test the spaceChildFilter callback
@@ -955,9 +971,9 @@ describe("<RoomAdminToolsContainer />", () => {
 describe("disambiguateDevices", () => {
     it("does not add ambiguous key to unique names", () => {
         const initialDevices = [
-            { deviceId: "id1", getDisplayName: () => "name1" },
-            { deviceId: "id2", getDisplayName: () => "name2" },
-            { deviceId: "id3", getDisplayName: () => "name3" },
+            { deviceId: "id1", getDisplayName: () => "name1" } as DeviceInfo,
+            { deviceId: "id2", getDisplayName: () => "name2" } as DeviceInfo,
+            { deviceId: "id3", getDisplayName: () => "name3" } as DeviceInfo,
         ];
         disambiguateDevices(initialDevices);
 
@@ -969,14 +985,14 @@ describe("disambiguateDevices", () => {
 
     it("adds ambiguous key to all ids with non-unique names", () => {
         const uniqueNameDevices = [
-            { deviceId: "id3", getDisplayName: () => "name3" },
-            { deviceId: "id4", getDisplayName: () => "name4" },
-            { deviceId: "id6", getDisplayName: () => "name6" },
+            { deviceId: "id3", getDisplayName: () => "name3" } as DeviceInfo,
+            { deviceId: "id4", getDisplayName: () => "name4" } as DeviceInfo,
+            { deviceId: "id6", getDisplayName: () => "name6" } as DeviceInfo,
         ];
         const nonUniqueNameDevices = [
-            { deviceId: "id1", getDisplayName: () => "nonUnique" },
-            { deviceId: "id2", getDisplayName: () => "nonUnique" },
-            { deviceId: "id5", getDisplayName: () => "nonUnique" },
+            { deviceId: "id1", getDisplayName: () => "nonUnique" } as DeviceInfo,
+            { deviceId: "id2", getDisplayName: () => "nonUnique" } as DeviceInfo,
+            { deviceId: "id5", getDisplayName: () => "nonUnique" } as DeviceInfo,
         ];
         const initialDevices = [...uniqueNameDevices, ...nonUniqueNameDevices];
         disambiguateDevices(initialDevices);

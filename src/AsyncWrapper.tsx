@@ -18,16 +18,16 @@ import React, { ComponentType } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "./languageHandler";
-import { IDialogProps } from "./components/views/dialogs/IDialogProps";
 import BaseDialog from "./components/views/dialogs/BaseDialog";
 import DialogButtons from "./components/views/elements/DialogButtons";
 import Spinner from "./components/views/elements/Spinner";
 
 type AsyncImport<T> = { default: T };
 
-interface IProps extends IDialogProps {
+interface IProps {
     // A promise which resolves with the real component
-    prom: Promise<ComponentType | AsyncImport<ComponentType>>;
+    prom: Promise<ComponentType<any> | AsyncImport<ComponentType<any>>>;
+    onFinished(): void;
 }
 
 interface IState {
@@ -71,7 +71,7 @@ export default class AsyncWrapper extends React.Component<IProps, IState> {
     }
 
     private onWrapperCancelClick = (): void => {
-        this.props.onFinished(false);
+        this.props.onFinished();
     };
 
     public render(): React.ReactNode {

@@ -27,7 +27,6 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { IPartialEvent } from "matrix-js-sdk/src/@types/extensible_events";
 
 import ScrollableBaseModal, { IScrollableBaseState } from "../dialogs/ScrollableBaseModal";
-import { IDialogProps } from "../dialogs/IDialogProps";
 import QuestionDialog from "../dialogs/QuestionDialog";
 import Modal from "../../../Modal";
 import { _t } from "../../../languageHandler";
@@ -37,10 +36,11 @@ import AccessibleButton from "./AccessibleButton";
 import Spinner from "./Spinner";
 import { doMaybeLocalRoomAction } from "../../../utils/local-room";
 
-interface IProps extends IDialogProps {
+interface IProps {
     room: Room;
     threadId?: string;
     editingMxEvent?: MatrixEvent; // Truthy if we are editing an existing poll
+    onFinished(pollCreated?: boolean): void;
 }
 
 enum FocusTarget {

@@ -45,7 +45,7 @@ export const ROOM_ADVANCED_TAB = "ROOM_ADVANCED_TAB";
 
 interface IProps {
     roomId: string;
-    onFinished: (success: boolean) => void;
+    onFinished: (success?: boolean) => void;
     initialTabId?: string;
 }
 

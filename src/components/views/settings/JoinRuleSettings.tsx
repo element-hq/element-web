@@ -24,7 +24,6 @@ import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
 import RoomAvatar from "../avatars/RoomAvatar";
 import SpaceStore from "../../../stores/spaces/SpaceStore";
-import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import Modal from "../../../Modal";
 import ManageRestrictedJoinRuleDialog from "../dialogs/ManageRestrictedJoinRuleDialog";
 import RoomUpgradeWarningDialog, { IFinishedOpts } from "../dialogs/RoomUpgradeWarningDialog";
@@ -80,11 +79,9 @@ const JoinRuleSettings: React.FC<IProps> = ({
             selected = [SpaceStore.instance.activeSpaceRoom.roomId];
         }
 
-        const matrixClient = MatrixClientPeg.get();
-        const { finished } = Modal.createDialog<[string[]]>(
+        const { finished } = Modal.createDialog(
             ManageRestrictedJoinRuleDialog,
             {
-                matrixClient,
                 room,
                 selected,
             },

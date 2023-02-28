@@ -18,10 +18,11 @@ import { mocked } from "jest-mock";
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
-import Modal, { ModalManager } from "../../src/Modal";
+import Modal, { ComponentType, ComponentProps } from "../../src/Modal";
 import SettingsStore from "../../src/settings/SettingsStore";
 import MultiInviter, { CompletionStates } from "../../src/utils/MultiInviter";
 import * as TestUtilsMatrix from "../test-utils";
+import AskInviteAnywayDialog from "../../src/components/views/dialogs/AskInviteAnywayDialog";
 
 const ROOMID = "!room:server";
 
@@ -56,9 +57,11 @@ const mockPromptBeforeInviteUnknownUsers = (value: boolean) => {
 };
 
 const mockCreateTrackedDialog = (callbackName: "onInviteAnyways" | "onGiveUp") => {
-    mocked(Modal.createDialog).mockImplementation((...rest: Parameters<ModalManager["createDialog"]>): any => {
-        rest[1]![callbackName]();
-    });
+    mocked(Modal.createDialog).mockImplementation(
+        (Element: ComponentType, props?: ComponentProps<ComponentType>): any => {
+            (props as ComponentProps<typeof AskInviteAnywayDialog>)[callbackName]();
+        },
+    );
 };
 
 const expectAllInvitedResult = (result: CompletionStates) => {

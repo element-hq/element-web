@@ -23,7 +23,7 @@ import { _t } from "../../../languageHandler";
 import Modal from "../../../Modal";
 
 interface Props {
-    onFinished: (confirmed: boolean) => void;
+    onFinished: (confirmed?: boolean) => void;
 }
 
 export const ConfirmListenBroadcastStopCurrentDialog: React.FC<Props> = ({ onFinished }) => {

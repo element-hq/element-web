@@ -184,7 +184,7 @@ export default class AddThreepid {
      * with a "message" property which contains a human-readable message detailing why
      * the request failed.
      */
-    public async checkEmailLinkClicked(): Promise<[boolean, IAuthData | Error | null] | undefined> {
+    public async checkEmailLinkClicked(): Promise<[success?: boolean, result?: IAuthData | Error | null]> {
         try {
             if (await MatrixClientPeg.get().doesServerSupportSeparateAddAndBind()) {
                 if (this.bind) {
@@ -202,7 +202,7 @@ export default class AddThreepid {
 
                         // The spec has always required this to use UI auth but synapse briefly
                         // implemented it without, so this may just succeed and that's OK.
-                        return;
+                        return [true];
                     } catch (e) {
                         if (e.httpStatus !== 401 || !e.data || !e.data.flows) {
                             // doesn't look like an interactive-auth failure
@@ -225,19 +225,16 @@ export default class AddThreepid {
                                 continueKind: "primary",
                             },
                         };
-                        const { finished } = Modal.createDialog<[boolean, IAuthData | Error | null]>(
-                            InteractiveAuthDialog,
-                            {
-                                title: _t("Add Email Address"),
-                                matrixClient: MatrixClientPeg.get(),
-                                authData: e.data,
-                                makeRequest: this.makeAddThreepidOnlyRequest,
-                                aestheticsForStagePhases: {
-                                    [SSOAuthEntry.LOGIN_TYPE]: dialogAesthetics,
-                                    [SSOAuthEntry.UNSTABLE_LOGIN_TYPE]: dialogAesthetics,
-                                },
+                        const { finished } = Modal.createDialog(InteractiveAuthDialog, {
+                            title: _t("Add Email Address"),
+                            matrixClient: MatrixClientPeg.get(),
+                            authData: e.data,
+                            makeRequest: this.makeAddThreepidOnlyRequest,
+                            aestheticsForStagePhases: {
+                                [SSOAuthEntry.LOGIN_TYPE]: dialogAesthetics,
+                                [SSOAuthEntry.UNSTABLE_LOGIN_TYPE]: dialogAesthetics,
                             },
-                        );
+                        });
                         return finished;
                     }
                 }
@@ -259,6 +256,7 @@ export default class AddThreepid {
             }
             throw err;
         }
+        return [];
     }
 
     /**

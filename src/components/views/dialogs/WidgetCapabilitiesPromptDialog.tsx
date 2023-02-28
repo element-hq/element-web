@@ -20,17 +20,17 @@ import { lexicographicCompare } from "matrix-js-sdk/src/utils";
 
 import BaseDialog from "./BaseDialog";
 import { _t } from "../../../languageHandler";
-import { IDialogProps } from "./IDialogProps";
 import { objectShallowClone } from "../../../utils/objects";
 import StyledCheckbox from "../elements/StyledCheckbox";
 import DialogButtons from "../elements/DialogButtons";
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import { CapabilityText } from "../../../widgets/CapabilityText";
 
-interface IProps extends IDialogProps {
+interface IProps {
     requestedCapabilities: Set<Capability>;
     widget: Widget;
     widgetKind: WidgetKind; // TODO: Refactor into the Widget class
+    onFinished(result?: { approved: Capability[]; remember: boolean }): void;
 }
 
 type BooleanStates = Partial<{

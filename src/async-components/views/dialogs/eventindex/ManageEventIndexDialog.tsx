@@ -27,10 +27,11 @@ import { SettingLevel } from "../../../../settings/SettingLevel";
 import Field from "../../../../components/views/elements/Field";
 import BaseDialog from "../../../../components/views/dialogs/BaseDialog";
 import DialogButtons from "../../../../components/views/elements/DialogButtons";
-import { IDialogProps } from "../../../../components/views/dialogs/IDialogProps";
 import { IIndexStats } from "../../../../indexing/BaseEventIndexManager";
 
-interface IProps extends IDialogProps {}
+interface IProps {
+    onFinished(): void;
+}
 
 interface IState {
     eventIndexSize: number;

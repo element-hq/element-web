@@ -389,7 +389,7 @@ export default class ContentMessages {
         }
 
         if (tooBigFiles.length > 0) {
-            const { finished } = Modal.createDialog<[boolean]>(UploadFailureDialog, {
+            const { finished } = Modal.createDialog(UploadFailureDialog, {
                 badFiles: tooBigFiles,
                 totalFiles: files.length,
                 contentMessages: this,
@@ -407,7 +407,7 @@ export default class ContentMessages {
             const loopPromiseBefore = promBefore;
 
             if (!uploadAll) {
-                const { finished } = Modal.createDialog<[boolean, boolean]>(UploadConfirmDialog, {
+                const { finished } = Modal.createDialog(UploadConfirmDialog, {
                     file,
                     currentIndex: i,
                     totalFiles: okFiles.length,

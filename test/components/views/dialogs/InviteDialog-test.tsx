@@ -21,7 +21,7 @@ import { RoomType } from "matrix-js-sdk/src/@types/event";
 import { Room } from "matrix-js-sdk/src/matrix";
 
 import InviteDialog from "../../../../src/components/views/dialogs/InviteDialog";
-import { KIND_DM, KIND_INVITE } from "../../../../src/components/views/dialogs/InviteDialogTypes";
+import { InviteKind } from "../../../../src/components/views/dialogs/InviteDialogTypes";
 import { getMockClientWithEventEmitter, mkMembership, mkMessage, mkRoomCreateEvent } from "../../../test-utils";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import SdkConfig from "../../../../src/SdkConfig";
@@ -109,20 +109,20 @@ describe("InviteDialog", () => {
         room.isSpaceRoom = jest.fn().mockReturnValue(true);
         room.getType = jest.fn().mockReturnValue(RoomType.Space);
         room.name = "Space";
-        render(<InviteDialog kind={KIND_INVITE} roomId={roomId} onFinished={jest.fn()} />);
+        render(<InviteDialog kind={InviteKind.Invite} roomId={roomId} onFinished={jest.fn()} />);
 
         expect(screen.queryByText("Invite to Space")).toBeTruthy();
     });
 
     it("should label with room name", () => {
-        render(<InviteDialog kind={KIND_INVITE} roomId={roomId} onFinished={jest.fn()} />);
+        render(<InviteDialog kind={InviteKind.Invite} roomId={roomId} onFinished={jest.fn()} />);
         expect(screen.getByText(`Invite to ${roomId}`)).toBeInTheDocument();
     });
 
     it("should suggest valid MXIDs even if unknown", async () => {
         render(
             <InviteDialog
-                kind={KIND_INVITE}
+                kind={InviteKind.Invite}
                 roomId={roomId}
                 onFinished={jest.fn()}
                 initialText="@localpart:server.tld"
@@ -135,7 +135,7 @@ describe("InviteDialog", () => {
     it("should not suggest invalid MXIDs", () => {
         render(
             <InviteDialog
-                kind={KIND_INVITE}
+                kind={InviteKind.Invite}
                 roomId={roomId}
                 onFinished={jest.fn()}
                 initialText="@localpart:server:tld"
@@ -145,9 +145,9 @@ describe("InviteDialog", () => {
         expect(screen.queryByText("@localpart:server:tld")).toBeFalsy();
     });
 
-    it.each([[KIND_DM], [KIND_INVITE]] as [typeof KIND_DM | typeof KIND_INVITE][])(
+    it.each([[InviteKind.Dm], [InviteKind.Invite]] as [typeof InviteKind.Dm | typeof InviteKind.Invite][])(
         "should lookup inputs which look like email addresses (%s)",
-        async (kind: typeof KIND_DM | typeof KIND_INVITE) => {
+        async (kind: typeof InviteKind.Dm | typeof InviteKind.Invite) => {
             mockClient.getIdentityServerUrl.mockReturnValue("https://identity-server");
             mockClient.lookupThreePid.mockResolvedValue({
                 address: aliceEmail,
@@ -162,7 +162,7 @@ describe("InviteDialog", () => {
             render(
                 <InviteDialog
                     kind={kind}
-                    roomId={kind === KIND_INVITE ? roomId : ""}
+                    roomId={kind === InviteKind.Invite ? roomId : ""}
                     onFinished={jest.fn()}
                     initialText={aliceEmail}
                 />,
@@ -182,7 +182,12 @@ describe("InviteDialog", () => {
         mockClient.lookupThreePid.mockResolvedValue({});
 
         render(
-            <InviteDialog kind={KIND_INVITE} roomId={roomId} onFinished={jest.fn()} initialText="foobar@email.com" />,
+            <InviteDialog
+                kind={InviteKind.Invite}
+                roomId={roomId}
+                onFinished={jest.fn()}
+                initialText="foobar@email.com"
+            />,
         );
 
         await screen.findByText("foobar@email.com");
@@ -193,7 +198,7 @@ describe("InviteDialog", () => {
         mockClient.getIdentityServerUrl.mockReturnValue("https://identity-server");
         mockClient.lookupThreePid.mockResolvedValue({});
 
-        render(<InviteDialog kind={KIND_INVITE} roomId={roomId} onFinished={jest.fn()} />);
+        render(<InviteDialog kind={InviteKind.Invite} roomId={roomId} onFinished={jest.fn()} />);
 
         const input = screen.getByTestId("invite-dialog-input");
         input.focus();

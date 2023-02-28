@@ -88,7 +88,7 @@ export class ProxiedModuleApi implements ModuleApi {
                 },
                 "mx_CompoundDialog",
             ).finished.then(([didOkOrSubmit, model]) => {
-                resolve({ didOkOrSubmit, model });
+                resolve({ didOkOrSubmit, model: model as M });
             });
         });
     }

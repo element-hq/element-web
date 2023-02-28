@@ -197,14 +197,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
         let rememberApproved = false;
         if (missing.size > 0) {
             try {
-                const [result] = await Modal.createDialog<
-                    [
-                        {
-                            approved: Capability[];
-                            remember: boolean;
-                        },
-                    ]
-                >(WidgetCapabilitiesPromptDialog, {
+                const [result] = await Modal.createDialog(WidgetCapabilitiesPromptDialog, {
                     requestedCapabilities: missing,
                     widget: this.forWidget,
                     widgetKind: this.forWidgetKind,

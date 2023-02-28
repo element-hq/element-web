@@ -83,7 +83,6 @@ import Spinner from "../../elements/Spinner";
 import NotificationBadge from "../../rooms/NotificationBadge";
 import BaseDialog from "../BaseDialog";
 import FeedbackDialog from "../FeedbackDialog";
-import { IDialogProps } from "../IDialogProps";
 import { Option } from "./Option";
 import { PublicRoomResultDetails } from "./PublicRoomResultDetails";
 import { RoomResultContextMenus } from "./RoomResultContextMenus";
@@ -99,9 +98,10 @@ const MAX_RECENT_SEARCHES = 10;
 const SECTION_LIMIT = 50; // only show 50 results per section for performance reasons
 const AVATAR_SIZE = 24;
 
-interface IProps extends IDialogProps {
+interface IProps {
     initialText?: string;
     initialFilter?: Filter;
+    onFinished(): void;
 }
 
 function refIsForRecentlyViewed(ref: RefObject<HTMLElement>): boolean {

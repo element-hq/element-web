@@ -24,12 +24,12 @@ import { _t } from "../../../../languageHandler";
 import Modal from "../../../../Modal";
 import RestoreKeyBackupDialog from "../../../../components/views/dialogs/security/RestoreKeyBackupDialog";
 import { Action } from "../../../../dispatcher/actions";
-import { IDialogProps } from "../../../../components/views/dialogs/IDialogProps";
 import DialogButtons from "../../../../components/views/elements/DialogButtons";
 import BaseDialog from "../../../../components/views/dialogs/BaseDialog";
 
-interface IProps extends IDialogProps {
+interface IProps {
     newVersionInfo: IKeyBackupInfo;
+    onFinished(): void;
 }
 
 export default class NewRecoveryMethodDialog extends React.PureComponent<IProps> {

@@ -43,7 +43,6 @@ import {
     SecureBackupSetupMethod,
 } from "../../../../utils/WellKnownUtils";
 import SecurityCustomisations from "../../../../customisations/Security";
-import { IDialogProps } from "../../../../components/views/dialogs/IDialogProps";
 import Field from "../../../../components/views/elements/Field";
 import BaseDialog from "../../../../components/views/dialogs/BaseDialog";
 import Spinner from "../../../../components/views/elements/Spinner";
@@ -67,10 +66,11 @@ enum Phase {
 
 const PASSWORD_MIN_SCORE = 4; // So secure, many characters, much complex, wow, etc, etc.
 
-interface IProps extends IDialogProps {
-    hasCancel: boolean;
-    accountPassword: string;
-    forceReset: boolean;
+interface IProps {
+    hasCancel?: boolean;
+    accountPassword?: string;
+    forceReset?: boolean;
+    onFinished(ok?: boolean): void;
 }
 
 interface IState {

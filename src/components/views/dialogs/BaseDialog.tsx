@@ -21,17 +21,16 @@ import FocusLock from "react-focus-lock";
 import classNames from "classnames";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 
-import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
+import AccessibleButton from "../elements/AccessibleButton";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { _t } from "../../../languageHandler";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import Heading from "../typography/Heading";
-import { IDialogProps } from "./IDialogProps";
 import { PosthogScreenTracker, ScreenName } from "../../../PosthogTrackers";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 
-interface IProps extends IDialogProps {
+interface IProps {
     // Whether the dialog should have a 'close' button that will
     // cause the dialog to be cancelled. This should only be set
     // to false if there is nothing the app can sensibly do if the
@@ -75,6 +74,7 @@ interface IProps extends IDialogProps {
 
     // optional Posthog ScreenName to supply during the lifetime of this dialog
     "screenName"?: ScreenName;
+    onFinished(): void;
 }
 
 /*
@@ -86,7 +86,7 @@ interface IProps extends IDialogProps {
 export default class BaseDialog extends React.Component<IProps> {
     private matrixClient: MatrixClient;
 
-    public static defaultProps = {
+    public static defaultProps: Partial<IProps> = {
         hasCancel: true,
         fixedWidth: true,
     };
@@ -98,9 +98,7 @@ export default class BaseDialog extends React.Component<IProps> {
     }
 
     private onKeyDown = (e: KeyboardEvent | React.KeyboardEvent): void => {
-        if (this.props.onKeyDown) {
-            this.props.onKeyDown(e);
-        }
+        this.props.onKeyDown?.(e);
 
         const action = getKeyBindingsManager().getAccessibilityAction(e);
         switch (action) {
@@ -109,13 +107,13 @@ export default class BaseDialog extends React.Component<IProps> {
 
                 e.stopPropagation();
                 e.preventDefault();
-                this.props.onFinished(false);
+                this.props.onFinished();
                 break;
         }
     };
 
-    private onCancelClick = (e: ButtonEvent): void => {
-        this.props.onFinished(false);
+    private onCancelClick = (): void => {
+        this.props.onFinished();
     };
 
     public render(): React.ReactNode {

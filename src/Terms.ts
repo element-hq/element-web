@@ -191,7 +191,7 @@ export async function dialogTermsInteractionCallback(
 ): Promise<string[]> {
     logger.log("Terms that need agreement", policiesAndServicePairs);
 
-    const { finished } = Modal.createDialog<[boolean, string[]]>(
+    const { finished } = Modal.createDialog(
         TermsDialog,
         {
             policiesAndServicePairs,

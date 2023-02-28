@@ -20,7 +20,6 @@ import { MatrixEvent, Poll, Room } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../../languageHandler";
 import BaseDialog from "../BaseDialog";
-import { IDialogProps } from "../IDialogProps";
 import { PollHistoryList } from "./PollHistoryList";
 import { PollHistoryFilter } from "./types";
 import { PollDetailHeader } from "./PollDetailHeader";
@@ -29,10 +28,11 @@ import { RoomPermalinkCreator } from "../../../../utils/permalinks/Permalinks";
 import { usePollsWithRelations } from "./usePollHistory";
 import { useFetchPastPolls } from "./fetchPastPolls";
 
-type PollHistoryDialogProps = Pick<IDialogProps, "onFinished"> & {
+type PollHistoryDialogProps = {
     room: Room;
     matrixClient: MatrixClient;
     permalinkCreator: RoomPermalinkCreator;
+    onFinished(): void;
 };
 
 const sortEventsByLatest = (left: MatrixEvent, right: MatrixEvent): number => right.getTs() - left.getTs();

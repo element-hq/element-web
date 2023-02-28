@@ -18,10 +18,11 @@ import React from "react";
 
 import { _t } from "../../../languageHandler";
 import { Command, CommandCategories, Commands } from "../../../SlashCommands";
-import { IDialogProps } from "./IDialogProps";
 import InfoDialog from "./InfoDialog";
 
-interface IProps extends IDialogProps {}
+interface IProps {
+    onFinished(): void;
+}
 
 const SlashCommandHelpDialog: React.FC<IProps> = ({ onFinished }) => {
     const categories: Record<string, Command[]> = {};

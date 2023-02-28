@@ -15,9 +15,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ComponentType } from "react";
+import React from "react";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 
+import type ExportE2eKeysDialog from "../../../async-components/views/dialogs/security/ExportE2eKeysDialog";
 import Field from "../elements/Field";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import AccessibleButton from "../elements/AccessibleButton";
@@ -100,7 +101,7 @@ export default class ChangePassword extends React.Component<IProps, IState> {
 
         if (userHasOtherDevices && !serverSupportsControlOfDevicesLogout && this.props.confirm) {
             // warn about logging out all devices
-            const { finished } = Modal.createDialog<[boolean]>(QuestionDialog, {
+            const { finished } = Modal.createDialog(QuestionDialog, {
                 title: _t("Warning!"),
                 description: (
                     <div>
@@ -218,7 +219,7 @@ export default class ChangePassword extends React.Component<IProps, IState> {
     private onExportE2eKeysClicked = (): void => {
         Modal.createDialogAsync(
             import("../../../async-components/views/dialogs/security/ExportE2eKeysDialog") as unknown as Promise<
-                ComponentType<{}>
+                typeof ExportE2eKeysDialog
             >,
             {
                 matrixClient: MatrixClientPeg.get(),

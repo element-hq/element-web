@@ -21,9 +21,10 @@ import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
-import { IDialogProps } from "./IDialogProps";
 
-interface IProps extends IDialogProps {}
+interface IProps {
+    onFinished(): void;
+}
 
 export default class IntegrationsDisabledDialog extends React.Component<IProps> {
     private onAcknowledgeClick = (): void => {

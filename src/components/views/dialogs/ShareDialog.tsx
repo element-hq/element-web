@@ -26,7 +26,6 @@ import QRCode from "../elements/QRCode";
 import { RoomPermalinkCreator, makeUserPermalink } from "../../../utils/permalinks/Permalinks";
 import { selectText } from "../../../utils/strings";
 import StyledCheckbox from "../elements/StyledCheckbox";
-import { IDialogProps } from "./IDialogProps";
 import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
 import BaseDialog from "./BaseDialog";
@@ -64,9 +63,10 @@ const socials = [
     },
 ];
 
-interface IProps extends IDialogProps {
+interface IProps {
     target: Room | User | RoomMember | MatrixEvent;
-    permalinkCreator: RoomPermalinkCreator;
+    permalinkCreator?: RoomPermalinkCreator;
+    onFinished(): void;
 }
 
 interface IState {

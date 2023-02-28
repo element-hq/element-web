@@ -14,8 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ComponentType } from "react";
+import React from "react";
 
+import type ExportE2eKeysDialog from "../../../async-components/views/dialogs/security/ExportE2eKeysDialog";
+import type ImportE2eKeysDialog from "../../../async-components/views/dialogs/security/ImportE2eKeysDialog";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { _t } from "../../../languageHandler";
 import Modal from "../../../Modal";
@@ -44,7 +46,7 @@ export default class CryptographyPanel extends React.Component<IProps, IState> {
             identityKey = FormattingUtils.formatCryptoKey(identityKey);
         }
 
-        let importExportButtons = null;
+        let importExportButtons: JSX.Element | undefined;
         if (client.isCryptoEnabled()) {
             importExportButtons = (
                 <div className="mx_CryptographyPanel_importExportButtons">
@@ -58,7 +60,7 @@ export default class CryptographyPanel extends React.Component<IProps, IState> {
             );
         }
 
-        let noSendUnverifiedSetting;
+        let noSendUnverifiedSetting: JSX.Element | undefined;
         if (SettingsStore.isEnabled("blacklistUnverifiedDevices")) {
             noSendUnverifiedSetting = (
                 <SettingsFlag
@@ -99,7 +101,7 @@ export default class CryptographyPanel extends React.Component<IProps, IState> {
     private onExportE2eKeysClicked = (): void => {
         Modal.createDialogAsync(
             import("../../../async-components/views/dialogs/security/ExportE2eKeysDialog") as unknown as Promise<
-                ComponentType<{}>
+                typeof ExportE2eKeysDialog
             >,
             { matrixClient: MatrixClientPeg.get() },
         );
@@ -108,7 +110,7 @@ export default class CryptographyPanel extends React.Component<IProps, IState> {
     private onImportE2eKeysClicked = (): void => {
         Modal.createDialogAsync(
             import("../../../async-components/views/dialogs/security/ImportE2eKeysDialog") as unknown as Promise<
-                ComponentType<{}>
+                typeof ImportE2eKeysDialog
             >,
             { matrixClient: MatrixClientPeg.get() },
         );

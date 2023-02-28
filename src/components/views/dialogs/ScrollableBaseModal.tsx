@@ -19,7 +19,6 @@ import { MatrixClient } from "matrix-js-sdk/src/client";
 import FocusLock from "react-focus-lock";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import { IDialogProps } from "./IDialogProps";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
@@ -36,7 +35,7 @@ export interface IScrollableBaseState {
  * Scrollable dialog base from Compound (Web Components).
  */
 export default abstract class ScrollableBaseModal<
-    TProps extends IDialogProps,
+    TProps extends { onFinished?: (...args: any[]) => void },
     TState extends IScrollableBaseState,
 > extends React.PureComponent<TProps, TState> {
     protected constructor(props: TProps) {

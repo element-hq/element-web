@@ -290,7 +290,7 @@ export default class LegacyCallView extends React.Component<IProps, IState> {
             isScreensharing = await this.props.call.setScreensharingEnabled(false);
         } else {
             if (PlatformPeg.get()?.supportsDesktopCapturer()) {
-                const { finished } = Modal.createDialog<[string]>(DesktopCapturerSourcePicker);
+                const { finished } = Modal.createDialog(DesktopCapturerSourcePicker);
                 const [source] = await finished;
                 if (!source) return;
 
