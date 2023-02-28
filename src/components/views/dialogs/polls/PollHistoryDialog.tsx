@@ -57,9 +57,9 @@ export const PollHistoryDialog: React.FC<PollHistoryDialogProps> = ({
     onFinished,
 }) => {
     const { polls } = usePollsWithRelations(room.roomId, matrixClient);
+    const { isLoading, loadMorePolls, oldestEventTimestamp } = useFetchPastPolls(room, matrixClient);
     const [filter, setFilter] = useState<PollHistoryFilter>("ACTIVE");
     const [focusedPollId, setFocusedPollId] = useState<string | null>(null);
-    const { isLoading } = useFetchPastPolls(room, matrixClient);
 
     const pollStartEvents = filterAndSortPolls(polls, filter);
     const isLoadingPollResponses = [...polls.values()].some((poll) => poll.isFetchingResponses);
@@ -78,12 +78,14 @@ export const PollHistoryDialog: React.FC<PollHistoryDialogProps> = ({
                     <PollDetail poll={focusedPoll} permalinkCreator={permalinkCreator} requestModalClose={onFinished} />
                 ) : (
                     <PollHistoryList
+                        onItemClick={setFocusedPollId}
                         pollStartEvents={pollStartEvents}
                         isLoading={isLoading || isLoadingPollResponses}
+                        oldestFetchedEventTimestamp={oldestEventTimestamp}
                         polls={polls}
                         filter={filter}
                         onFilterChange={setFilter}
-                        onItemClick={setFocusedPollId}
+                        loadMorePolls={loadMorePolls}
                     />
                 )}
             </div>

@@ -168,3 +168,32 @@ exports[`<PollHistoryDialog /> renders a list of active polls when there are pol
   />
 </div>
 `;
+
+exports[`<PollHistoryDialog /> renders a no polls message and a load more button when not at end of timeline 1`] = `
+<div
+  class="mx_AccessibleButton mx_PollHistoryList_loadMorePolls mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+  role="button"
+  tabindex="0"
+>
+  Load more polls
+  <div
+    class="mx_InlineSpinner"
+  >
+    <div
+      aria-label="Loading…"
+      class="mx_InlineSpinner_icon mx_Spinner_icon"
+      style="width: 16px; height: 16px;"
+    />
+  </div>
+</div>
+`;
+
+exports[`<PollHistoryDialog /> renders a no polls message and a load more button when not at end of timeline 2`] = `
+<div
+  class="mx_AccessibleButton mx_PollHistoryList_loadMorePolls mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+  role="button"
+  tabindex="0"
+>
+  Load more polls
+</div>
+`;

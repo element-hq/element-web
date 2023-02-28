@@ -176,12 +176,20 @@ describe("<PollHistoryDialog />", () => {
         expect(mockClient.paginateEventTimeline).toHaveBeenCalledTimes(1);
     });
 
-    it("displays loader and list while paging timeline", async () => {
+    it("renders a no polls message when there are no active polls in the room", async () => {
+        const { getByText } = getComponent();
+        await flushPromises();
+
+        expect(getByText("There are no active polls in this room")).toBeTruthy();
+    });
+
+    it("renders a no polls message and a load more button when not at end of timeline", async () => {
         const timelineSet = room.getOrCreateFilteredTimelineSet(expectedFilter);
         const liveTimeline = timelineSet.getLiveTimeline();
-        const tenDaysAgoTs = now - 60000 * 60 * 24 * 10;
+        const fourtyDaysAgoTs = now - 60000 * 60 * 24 * 40;
+        const pollStart = makePollStartEvent("Question?", userId, undefined, { ts: fourtyDaysAgoTs, id: "1" });
 
-        jest.spyOn(liveTimeline, "getEvents").mockReset().mockReturnValue([]);
+        jest.spyOn(liveTimeline, "getEvents").mockReset().mockReturnValueOnce([]).mockReturnValueOnce([pollStart]);
 
         // mock three pages of timeline history
         jest.spyOn(liveTimeline, "getPaginationToken")
@@ -189,57 +197,24 @@ describe("<PollHistoryDialog />", () => {
             .mockReturnValueOnce("test-pagination-token-2")
             .mockReturnValueOnce("test-pagination-token-3");
 
-        // reference to pagination resolve, so we can assert between pages
-        let resolvePagination1: (value: boolean) => void | undefined;
-        let resolvePagination2: (value: boolean) => void | undefined;
-        mockClient.paginateEventTimeline
-            .mockImplementationOnce(async (_p) => {
-                const pollStart = makePollStartEvent("Question?", userId, undefined, { ts: now, id: "1" });
-                jest.spyOn(liveTimeline, "getEvents").mockReturnValue([pollStart]);
-                room.processPollEvents([pollStart]);
-                return new Promise((resolve) => (resolvePagination1 = resolve));
-            })
-            .mockImplementationOnce(async (_p) => {
-                const pollStart = makePollStartEvent("Older question?", userId, undefined, {
-                    ts: tenDaysAgoTs,
-                    id: "2",
-                });
-                jest.spyOn(liveTimeline, "getEvents").mockReturnValue([pollStart]);
-                room.processPollEvents([pollStart]);
-                return new Promise((resolve) => (resolvePagination2 = resolve));
-            });
-
-        const { getByText, queryByText } = getComponent();
-
+        const { getByText } = getComponent();
         await flushPromises();
 
         expect(mockClient.paginateEventTimeline).toHaveBeenCalledTimes(1);
 
-        resolvePagination1!(true);
+        expect(getByText("There are no active polls. Load more polls to view polls for previous months")).toBeTruthy();
+
+        fireEvent.click(getByText("Load more polls"));
+
+        // paged again
+        expect(mockClient.paginateEventTimeline).toHaveBeenCalledTimes(2);
+        // load more polls button still in UI, with loader
+        expect(getByText("Load more polls")).toMatchSnapshot();
+
         await flushPromises();
 
-        // first page has results, display immediately
-        expect(getByText("Question?")).toBeInTheDocument();
-        // but we are still fetching history, diaply loader
-        expect(getByText("Loading polls")).toBeInTheDocument();
-
-        resolvePagination2!(true);
-        await flushPromises();
-
-        // additional results addeds
-        expect(getByText("Older question?")).toBeInTheDocument();
-        expect(getByText("Question?")).toBeInTheDocument();
-        // finished paging
-        expect(queryByText("Loading polls")).not.toBeInTheDocument();
-
-        expect(mockClient.paginateEventTimeline).toHaveBeenCalledTimes(3);
-    });
-
-    it("renders a no polls message when there are no active polls in the room", async () => {
-        const { getByText } = getComponent();
-        await flushPromises();
-
-        expect(getByText("There are no active polls in this room")).toBeTruthy();
+        // no more spinner
+        expect(getByText("Load more polls")).toMatchSnapshot();
     });
 
     it("renders a no past polls message when there are no past polls in the room", async () => {
