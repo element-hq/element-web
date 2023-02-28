@@ -30,13 +30,14 @@ import DMRoomMap from "../../../utils/DMRoomMap";
 import { mediaFromMxc } from "../../../customisations/Media";
 import { IOOBData } from "../../../stores/ThreepidInviteStore";
 import { LocalRoom } from "../../../models/LocalRoom";
+import { filterBoolean } from "../../../utils/arrays";
 
 interface IProps extends Omit<ComponentProps<typeof BaseAvatar>, "name" | "idName" | "url" | "onClick"> {
     // Room may be left unset here, but if it is,
     // oobData.avatarUrl should be set (else there
     // would be nowhere to get the avatar from)
     room?: Room;
-    oobData?: IOOBData & {
+    oobData: IOOBData & {
         roomId?: string;
     };
     viewAvatarOnClick?: boolean;
@@ -86,7 +87,7 @@ export default class RoomAvatar extends React.Component<IProps, IState> {
     };
 
     private static getImageUrls(props: IProps): string[] {
-        let oobAvatar = null;
+        let oobAvatar: string | null = null;
         if (props.oobData.avatarUrl) {
             oobAvatar = mediaFromMxc(props.oobData.avatarUrl).getThumbnailOfSourceHttp(
                 props.width,
@@ -94,28 +95,27 @@ export default class RoomAvatar extends React.Component<IProps, IState> {
                 props.resizeMethod,
             );
         }
-        return [
+
+        return filterBoolean([
             oobAvatar, // highest priority
             RoomAvatar.getRoomAvatarUrl(props),
-        ].filter(function (url) {
-            return url !== null && url !== "";
-        });
+        ]);
     }
 
-    private static getRoomAvatarUrl(props: IProps): string {
+    private static getRoomAvatarUrl(props: IProps): string | null {
         if (!props.room) return null;
 
         return Avatar.avatarUrlForRoom(props.room, props.width, props.height, props.resizeMethod);
     }
 
     private onRoomAvatarClick = (): void => {
-        const avatarUrl = Avatar.avatarUrlForRoom(this.props.room, null, null, null);
+        const avatarUrl = Avatar.avatarUrlForRoom(this.props.room ?? null, undefined, undefined, undefined);
         const params = {
             src: avatarUrl,
-            name: this.props.room.name,
+            name: this.props.room?.name,
         };
 
-        Modal.createDialog(ImageView, params, "mx_Dialog_lightbox", null, true);
+        Modal.createDialog(ImageView, params, "mx_Dialog_lightbox", undefined, true);
     };
 
     private get roomIdName(): string | undefined {
@@ -137,7 +137,7 @@ export default class RoomAvatar extends React.Component<IProps, IState> {
 
     public render(): React.ReactNode {
         const { room, oobData, viewAvatarOnClick, onClick, className, ...otherProps } = this.props;
-        const roomName = room?.name ?? oobData.name;
+        const roomName = room?.name ?? oobData.name ?? "?";
 
         return (
             <BaseAvatar
