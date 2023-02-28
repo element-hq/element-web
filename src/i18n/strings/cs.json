@@ -3742,5 +3742,16 @@
     "Yes, it was me": "Ano, to jsem byl já",
     "Answered elsewhere": "Hovor přijat jinde",
     "If you know a room address, try joining through that instead.": "Pokud znáte adresu místnosti, zkuste se pomocí ní připojit.",
-    "You attempted to join using a room ID without providing a list of servers to join through. Room IDs are internal identifiers and cannot be used to join a room without additional information.": "Pokusili jste se připojit pomocí ID místnosti, aniž byste zadali seznam serverů, přes které se chcete připojit. ID místnosti jsou interní identifikátory a nelze je použít k připojení k místnosti bez dalších informací."
+    "You attempted to join using a room ID without providing a list of servers to join through. Room IDs are internal identifiers and cannot be used to join a room without additional information.": "Pokusili jste se připojit pomocí ID místnosti, aniž byste zadali seznam serverů, přes které se chcete připojit. ID místnosti jsou interní identifikátory a nelze je použít k připojení k místnosti bez dalších informací.",
+    "View poll": "Zobrazit hlasování",
+    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months|one": "Za uplynulý den nejsou k dispozici žádná hlasování. Pro zobrazení hlasování z předchozích měsíců načtěte další hlasování",
+    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months|one": "Za poslední den nejsou k dispozici žádná aktivní hlasování. Pro zobrazení hlasování z předchozích měsíců načtěte další hlasování",
+    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months|other": "Za posledních %(count)s dní nejsou k dispozici žádná minulá hlasování. Pro zobrazení hlasování z předchozích měsíců načtěte další hlasování",
+    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months|other": "Za posledních %(count)s dní nejsou žádná aktivní hlasování. Pro zobrazení hlasování z předchozích měsíců načtěte další hlasování",
+    "There are no past polls. Load more polls to view polls for previous months": "Nejsou k dispozici žádná minulá hlasování. Pro zobrazení hlasování z předchozích měsíců načtěte další hlasování",
+    "There are no active polls. Load more polls to view polls for previous months": "Nejsou zde žádná aktivní hlasování. Pro zobrazení hlasování z předchozích měsíců načtěte další hlasování",
+    "Load more polls": "Načíst další hlasování",
+    "Past polls": "Minulá hlasování",
+    "Active polls": "Aktivní hlasování",
+    "View poll in timeline": "Zobrazit hlasování na časové ose"
 }
