@@ -16,6 +16,7 @@ limitations under the License.
 
 import React from "react";
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { RoomType } from "matrix-js-sdk/src/@types/event";
 import { Room } from "matrix-js-sdk/src/matrix";
 
@@ -186,5 +187,20 @@ describe("InviteDialog", () => {
 
         await screen.findByText("foobar@email.com");
         await screen.findByText("Invite by email");
+    });
+
+    it("should add pasted values", async () => {
+        mockClient.getIdentityServerUrl.mockReturnValue("https://identity-server");
+        mockClient.lookupThreePid.mockResolvedValue({});
+
+        render(<InviteDialog kind={KIND_INVITE} roomId={roomId} onFinished={jest.fn()} />);
+
+        const input = screen.getByTestId("invite-dialog-input");
+        input.focus();
+        await userEvent.paste(`${bobId} ${aliceEmail}`);
+
+        await screen.findByText(bobId);
+        await screen.findByText(aliceEmail);
+        expect(input).toHaveValue("");
     });
 });

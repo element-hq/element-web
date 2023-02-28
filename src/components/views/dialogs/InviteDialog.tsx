@@ -657,7 +657,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             this.setState({ tryingIdentityServer: true });
             return;
         }
-        if (term.indexOf("@") > 0 && Email.looksValid(term) && SettingsStore.getValue(UIFeature.IdentityServer)) {
+        if (Email.looksValid(term) && SettingsStore.getValue(UIFeature.IdentityServer)) {
             // Start off by suggesting the plain email while we try and resolve it
             // to a real account.
             this.setState({
@@ -796,7 +796,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                 continue;
             }
 
-            if (address.indexOf("@") > 0 && Email.looksValid(address)) {
+            if (Email.looksValid(address)) {
                 toAdd.push(new ThreepidMember(address));
                 continue;
             }
