@@ -3742,5 +3742,16 @@
     "Yes, it was me": "Oui, c’était moi",
     "Answered elsewhere": "Répondu autre part",
     "If you know a room address, try joining through that instead.": "Si vous connaissez l’adresse d’un salon, essayez de l’utiliser à la place pour rejoindre ce salon.",
-    "You attempted to join using a room ID without providing a list of servers to join through. Room IDs are internal identifiers and cannot be used to join a room without additional information.": "Vous avez essayé de rejoindre à l’aide de l’ID du salon sans fournir une liste de serveurs pour l’atteindre. Les IDs de salons sont des identifiants internes et ne peuvent être utilisés pour rejoindre un salon sans informations complémentaires."
+    "You attempted to join using a room ID without providing a list of servers to join through. Room IDs are internal identifiers and cannot be used to join a room without additional information.": "Vous avez essayé de rejoindre à l’aide de l’ID du salon sans fournir une liste de serveurs pour l’atteindre. Les IDs de salons sont des identifiants internes et ne peuvent être utilisés pour rejoindre un salon sans informations complémentaires.",
+    "View poll": "Voir le sondage",
+    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months|one": "Il n'y a pas d’ancien sondage depuis hier. Veuillez charger plus de sondages pour consulter les sondages des mois antérieurs",
+    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months|other": "Il n'y a pas d’ancien sondage sur les %(count)s derniers jours. Veuillez charger plus de sondages pour consulter les sondages des mois antérieurs",
+    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months|one": "Il n’y a aucun sondage actif depuis hier. Veuillez charger plus de sondages pour consulter les sondages des mois antérieurs",
+    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months|other": "Il n'y a pas de sondage en cours sur les %(count)s derniers jours. Veuillez charger plus de sondages pour consulter les sondages des mois antérieurs",
+    "There are no past polls. Load more polls to view polls for previous months": "Il n'y a pas d’ancien sondage. Veuillez charger plus de sondages pour consulter les sondages des mois antérieurs",
+    "There are no active polls. Load more polls to view polls for previous months": "Il n'y a pas de sondage en cours. Veuillez charger plus de sondages pour consulter les sondages des mois antérieurs",
+    "Load more polls": "Charger plus de sondages",
+    "Past polls": "Anciens sondages",
+    "Active polls": "Sondages en cours",
+    "View poll in timeline": "Consulter la chronologie des sondages"
 }
