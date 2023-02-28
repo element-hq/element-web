@@ -3746,5 +3746,12 @@
     "View poll": "Переглянути опитування",
     "Past polls": "Минулі опитування",
     "Active polls": "Активні опитування",
-    "View poll in timeline": "Переглянути опитування у стрічці"
+    "View poll in timeline": "Переглянути опитування у стрічці",
+    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months|one": "За попередній день немає минулих опитувань. Завантажте більше опитувань, щоб переглянути опитування за попередні місяці",
+    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months|other": "За останні %(count)s днів немає минулих опитувань. Завантажте більше опитувань, щоб переглянути опитування за попередні місяці",
+    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months|one": "За попередній день немає активних опитувань. Завантажте більше опитувань, щоб переглянути опитування за попередні місяці",
+    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months|other": "За останні %(count)s днів немає активних опитувань. Завантажте більше опитувань, щоб переглянути опитування за попередні місяці",
+    "There are no past polls. Load more polls to view polls for previous months": "Немає минулих опитувань. Завантажте більше опитувань, щоб переглянути опитування за попередні місяці",
+    "There are no active polls. Load more polls to view polls for previous months": "Немає активних опитувань. Завантажте більше опитувань, щоб переглянути опитування за попередні місяці",
+    "Load more polls": "Завантажити більше опитувань"
 }
