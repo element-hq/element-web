@@ -3742,5 +3742,16 @@
     "Yes, it was me": "Áno, bol som to ja",
     "Answered elsewhere": "Hovor prijatý inde",
     "If you know a room address, try joining through that instead.": "Ak poznáte adresu miestnosti, skúste sa pripojiť prostredníctvom nej.",
-    "You attempted to join using a room ID without providing a list of servers to join through. Room IDs are internal identifiers and cannot be used to join a room without additional information.": "Pokúsili ste sa pripojiť pomocou ID miestnosti bez uvedenia zoznamu serverov, cez ktoré sa môžete pripojiť. ID miestností sú interné identifikátory a bez ďalších informácií ich nemožno použiť na pripojenie k miestnosti."
+    "You attempted to join using a room ID without providing a list of servers to join through. Room IDs are internal identifiers and cannot be used to join a room without additional information.": "Pokúsili ste sa pripojiť pomocou ID miestnosti bez uvedenia zoznamu serverov, cez ktoré sa môžete pripojiť. ID miestností sú interné identifikátory a bez ďalších informácií ich nemožno použiť na pripojenie k miestnosti.",
+    "View poll": "Zobraziť anketu",
+    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months|one": "Za posledný deň nie sú k dispozícii žiadne minulé ankety. Načítaním ďalších ankiet zobrazíte ankety za predchádzajúce mesiace",
+    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months|other": "Za posledných %(count)s dní nie sú žiadne predchádzajúce ankety. Načítaním ďalších ankiet zobrazíte ankety za predchádzajúce mesiace",
+    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months|one": "Za uplynulý deň nie sú žiadne aktívne ankety. Načítaním ďalších ankiet zobrazíte ankety za predchádzajúce mesiace",
+    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months|other": "Za posledných %(count)s dní nie sú aktívne žiadne ankety. Načítaním ďalších ankiet zobrazíte ankety za predchádzajúce mesiace",
+    "There are no past polls. Load more polls to view polls for previous months": "Nie sú žiadne predchádzajúce ankety. Načítaním ďalších ankiet zobrazíte ankety za predchádzajúce mesiace",
+    "There are no active polls. Load more polls to view polls for previous months": "Nie sú aktívne žiadne ankety. Načítaním ďalších ankiet zobrazíte ankety za predchádzajúce mesiace",
+    "Load more polls": "Načítať ďalšie ankety",
+    "Past polls": "Predchádzajúce ankety",
+    "Active polls": "Aktívne ankety",
+    "View poll in timeline": "Zobraziť anketu na časovej osi"
 }
