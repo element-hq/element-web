@@ -1625,10 +1625,10 @@
   resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-js/-/matrix-sdk-crypto-js-0.1.0-alpha.4.tgz#1b20294e0354c3dcc9c7dc810d883198a4042f04"
   integrity sha512-mdaDKrw3P5ZVCpq0ioW0pV6ihviDEbS8ZH36kpt9stLKHwwDSopPogE6CkQhi0B1jn1yBUtOYi32mBV/zcOR7g==
 
-"@matrix-org/matrix-wysiwyg@^0.23.0":
-  version "0.23.0"
-  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-wysiwyg/-/matrix-wysiwyg-0.23.0.tgz#32242b18ae9dbb28d920c31f50bbac87ff4317fe"
-  integrity sha512-wO5KYznlfsSIMo0R8tyZqfvZrPkQMaL1qBHzhaeKIsC4vK4MnJ9mj6JiS6+XiuHJyc9nqN+IdeUjKyJOnStHaA==
+"@matrix-org/matrix-wysiwyg@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-wysiwyg/-/matrix-wysiwyg-1.1.1.tgz#a07b13097e72a9bae220a647527d6418c5423827"
+  integrity sha512-pp7poyd3vfC/P34ZRj6u2oyLJuex77egeSsIA1MPowBqtrIAmHkji9xviBdXPcDss2zEI4EZuX77JWXtAfaz7Q==
 
 "@matrix-org/olm@https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.12.tgz":
   version "3.2.12"
@@ -1638,6 +1638,13 @@
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/@matrix-org/react-sdk-module-api/-/react-sdk-module-api-0.0.3.tgz#a7ac1b18a72d18d08290b81fa33b0d8d00a77d2b"
   integrity sha512-jQmLhVIanuX0g7Jx1OIqlzs0kp72PfSpv3umi55qVPYcAPQmO252AUs0vncatK8O4e013vohdnNhly19a/kmLQ==
+  dependencies:
+    "@babel/runtime" "^7.17.9"
+
+"@matrix-org/react-sdk-module-api@^0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@matrix-org/react-sdk-module-api/-/react-sdk-module-api-0.0.4.tgz#da71fc2e4c8143e87b5c2bc067ccbc0c146816fe"
+  integrity sha512-4gcgef3Ne9+Ae0bAErK1Swo9FxTZBDEogX/Iu2kcLWWROOKMjmeWL2PkM83ylsxZ32YY6a6ndRqV/SwRmDeJxg==
   dependencies:
     "@babel/runtime" "^7.17.9"
 
@@ -2684,6 +2691,11 @@ ajv-errors@^1.0.0:
   resolved "https://registry.yarnpkg.com/ajv-errors/-/ajv-errors-1.0.1.tgz#f35986aceb91afadec4102fbd85014950cefa64d"
   integrity sha512-DCRfO/4nQ+89p/RK43i8Ezd41EqdGIU4ld7nGF8OQ14oc/we5rEntLCUa7+jrn3nn83BosfwZA0wb4pon2o8iQ==
 
+ajv-errors@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/ajv-errors/-/ajv-errors-3.0.0.tgz#e54f299f3a3d30fe144161e5f0d8d51196c527bc"
+  integrity sha512-V3wD15YHfHz6y0KdhYFjyy9vWtEVALT9UrxfN3zqlI6dMioHnJrqOYfyPKol3oqrnCM9uwkcdCwkJ0WUcbLMTQ==
+
 ajv-keywords@^3.1.0, ajv-keywords@^3.4.1, ajv-keywords@^3.5.2:
   version "3.5.2"
   resolved "https://registry.yarnpkg.com/ajv-keywords/-/ajv-keywords-3.5.2.tgz#31f29da5ab6e00d1c2d329acf7b5929614d5014d"
@@ -2703,6 +2715,16 @@ ajv@^8.0.1:
   version "8.11.2"
   resolved "https://registry.yarnpkg.com/ajv/-/ajv-8.11.2.tgz#aecb20b50607acf2569b6382167b65a96008bb78"
   integrity sha512-E4bfmKAhGiSTvMfL1Myyycaub+cUEU2/IvpylXkUu7CHBkBj1f/ikdzbD7YQ6FKUbixDxeYvB/xY4fvyroDlQg==
+  dependencies:
+    fast-deep-equal "^3.1.1"
+    json-schema-traverse "^1.0.0"
+    require-from-string "^2.0.2"
+    uri-js "^4.2.2"
+
+ajv@^8.11.2:
+  version "8.12.0"
+  resolved "https://registry.yarnpkg.com/ajv/-/ajv-8.12.0.tgz#d1a0527323e22f53562c567c00991577dfbe19d1"
+  integrity sha512-sRu1kpcO9yLtYxBKvqfTeh9KzZEwO3STyX1HT+4CaDzC6HpTGYhIhPIzj9XuKU7KYDwnaeh5hcOwjy1QuJzBPA==
   dependencies:
     fast-deep-equal "^3.1.1"
     json-schema-traverse "^1.0.0"
@@ -8336,9 +8358,17 @@ matrix-events-sdk@0.0.1:
   resolved "https://registry.yarnpkg.com/matrix-events-sdk/-/matrix-events-sdk-0.0.1.tgz#c8c38911e2cb29023b0bbac8d6f32e0de2c957dd"
   integrity sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==
 
+matrix-events-sdk@2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/matrix-events-sdk/-/matrix-events-sdk-2.0.0.tgz#f5f8dafbe4eae07fdbb628627f430ca5b1fd8c7a"
+  integrity sha512-UZbifYIO2o9+sNn4YuGjhMof/88TG68PyecKnH/pt8V3MFq0RZsbBUe+3/k5ZeVcEtr0pQLmcKB7d8aQVsVO/w==
+  dependencies:
+    ajv "^8.11.2"
+    ajv-errors "^3.0.0"
+
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "23.3.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/108f1573249b733870d287e11ce38531a73e15b0"
+  version "23.4.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/437128d11b7043c1b71371f201af6f7c5f451589"
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/matrix-sdk-crypto-js" "^0.1.0-alpha.3"
@@ -8361,13 +8391,13 @@ matrix-mock-request@^2.5.0:
     expect "^28.1.0"
 
 "matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
-  version "3.66.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/49e0228fa025f48034c24e7d9d3fd413575c8acc"
+  version "3.67.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/5a3d9d682f58056c2cb88f74c4286be2bd13cdf7"
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/analytics-events" "^0.4.0"
-    "@matrix-org/matrix-wysiwyg" "^0.23.0"
-    "@matrix-org/react-sdk-module-api" "^0.0.3"
+    "@matrix-org/matrix-wysiwyg" "^1.1.1"
+    "@matrix-org/react-sdk-module-api" "^0.0.4"
     "@sentry/browser" "^7.0.0"
     "@sentry/tracing" "^7.0.0"
     "@testing-library/react-hooks" "^8.0.1"
@@ -8401,7 +8431,7 @@ matrix-mock-request@^2.5.0:
     lodash "^4.17.20"
     maplibre-gl "^2.0.0"
     matrix-encrypt-attachment "^1.0.3"
-    matrix-events-sdk "0.0.1"
+    matrix-events-sdk "2.0.0"
     matrix-js-sdk "github:matrix-org/matrix-js-sdk#develop"
     matrix-widget-api "^1.1.1"
     minimist "^1.2.5"
@@ -8420,7 +8450,7 @@ matrix-mock-request@^2.5.0:
     react-transition-group "^4.4.1"
     rfc4648 "^1.4.0"
     sanitize-filename "^1.6.3"
-    sanitize-html "^2.3.2"
+    sanitize-html "2.8.0"
     tar-js "^0.3.0"
     ua-parser-js "^1.0.2"
     url "^0.11.0"
@@ -11104,6 +11134,18 @@ sanitize-filename@^1.6.3:
   integrity sha512-y/52Mcy7aw3gRm7IrcGDFx/bCk4AhRh2eI9luHOQM86nZsqwiRkkq2GekHXBBD+SmPidc8i2PqtYZl+pWJ8Oeg==
   dependencies:
     truncate-utf8-bytes "^1.0.0"
+
+sanitize-html@2.8.0:
+  version "2.8.0"
+  resolved "https://registry.yarnpkg.com/sanitize-html/-/sanitize-html-2.8.0.tgz#651d1d0e5b2d61b4ec6147cc46f6d6680eef98ce"
+  integrity sha512-ZsGyc6avnqgvEm3eMKrcy8xa7WM1MrGrfkGsUgQee2CU+vg3PCfNCexXwBDF/6dEPvaQ4k/QqRjnYKHL8xgNjg==
+  dependencies:
+    deepmerge "^4.2.2"
+    escape-string-regexp "^4.0.0"
+    htmlparser2 "^8.0.0"
+    is-plain-object "^5.0.0"
+    parse-srcset "^1.0.2"
+    postcss "^8.3.11"
 
 sanitize-html@^2.3.2:
   version "2.7.3"
