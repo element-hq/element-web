@@ -6583,8 +6583,8 @@ matrix-events-sdk@2.0.0:
     ajv-errors "^3.0.0"
 
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "23.3.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/108f1573249b733870d287e11ce38531a73e15b0"
+  version "23.4.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/437128d11b7043c1b71371f201af6f7c5f451589"
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/matrix-sdk-crypto-js" "^0.1.0-alpha.3"
