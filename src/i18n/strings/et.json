@@ -3746,5 +3746,12 @@
     "Load more polls": "Laadi veel küsitlusi",
     "Past polls": "Varasemad küsitlused",
     "Active polls": "Käimasolevad küsitlused",
-    "View poll in timeline": "Näita küsitlust ajajoonel"
+    "View poll in timeline": "Näita küsitlust ajajoonel",
+    "View poll": "Vaata küsitlust",
+    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months|one": "Tänasest ja eilsest pole ühtegi toimunud küsitlust. Varasemate kuude vaatamiseks laadi veel küsitlusi",
+    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months|other": "Möödunud %(count)s päeva jooksul polnud ühtegi toimumas olnud küsitlust. Varasemate kuude vaatamiseks laadi veel küsitlusi",
+    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months|one": "Tänasest ja eilsest pole ühtegi käimas küsitlust. Varasemate kuude vaatamiseks laadi veel küsitlusi",
+    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months|other": "Möödunud %(count)s päeva jooksul polnud ühtegi küsitlust. Varasemate päevade vaatamiseks laadi veel küsitlusi",
+    "There are no past polls. Load more polls to view polls for previous months": "Pole ühtegi hiljutist küsitlust. Varasemate kuude vaatamiseks laadi veel küsitlusi",
+    "There are no active polls. Load more polls to view polls for previous months": "Pole ühtegi käimas küsitlust. Varasemate kuude vaatamiseks laadi veel küsitlusi"
 }
