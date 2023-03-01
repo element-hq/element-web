@@ -1503,13 +1503,6 @@
   version "3.2.12"
   resolved "https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.12.tgz#0bce3c86f9d36a4984d3c3e07df1c3fb4c679bd9"
 
-"@matrix-org/react-sdk-module-api@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@matrix-org/react-sdk-module-api/-/react-sdk-module-api-0.0.3.tgz#a7ac1b18a72d18d08290b81fa33b0d8d00a77d2b"
-  integrity sha512-jQmLhVIanuX0g7Jx1OIqlzs0kp72PfSpv3umi55qVPYcAPQmO252AUs0vncatK8O4e013vohdnNhly19a/kmLQ==
-  dependencies:
-    "@babel/runtime" "^7.17.9"
-
 "@matrix-org/react-sdk-module-api@^0.0.4":
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/@matrix-org/react-sdk-module-api/-/react-sdk-module-api-0.0.4.tgz#da71fc2e4c8143e87b5c2bc067ccbc0c146816fe"
@@ -8110,7 +8103,7 @@ matrix-mock-request@^2.5.0:
 
 "matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
   version "3.67.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/da2fcdd3462bfcc3ee0033f2d5303942521e1df5"
+  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/4f1e5a71dec65258f5295f7d60d2e733391d304c"
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/analytics-events" "^0.4.0"
