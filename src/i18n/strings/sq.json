@@ -3738,5 +3738,7 @@
     "Load more polls": "Ngarkoni më tepër pyetësorë",
     "Past polls": "Pyetësorë të kaluar",
     "Active polls": "Pyetësorë aktivë",
-    "View poll in timeline": "Shiheni pyetësorin në rrjedhë kohore"
+    "View poll in timeline": "Shiheni pyetësorin në rrjedhë kohore",
+    "Verify Session": "Verifiko Sesion",
+    "Ignore (%(counter)s)": "Shpërfill (%(counter)s)"
 }
