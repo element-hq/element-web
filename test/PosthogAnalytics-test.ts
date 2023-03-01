@@ -35,7 +35,7 @@ const getFakePosthog = (): PostHog =>
         register: jest.fn(),
     } as unknown as PostHog);
 
-export interface ITestEvent extends IPosthogEvent {
+interface ITestEvent extends IPosthogEvent {
     eventName: "JestTestEvents";
     foo?: string;
 }

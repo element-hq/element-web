@@ -156,7 +156,7 @@ describe("EventListSummary", function () {
         expect(children[0]).toHaveTextContent("Expanded membership");
     });
 
-    it("renders expanded events if there are less than props.threshold", function () {
+    it("renders expanded events if there are less than props.threshold for join and leave", function () {
         const events = generateEvents([
             { userId: "@user_1:some.domain", prevMembership: "leave", membership: "join" },
             { userId: "@user_1:some.domain", prevMembership: "join", membership: "leave" },

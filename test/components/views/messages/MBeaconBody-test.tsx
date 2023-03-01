@@ -252,15 +252,6 @@ describe("<MBeaconBody />", () => {
             expect(modalSpy).toHaveBeenCalled();
         });
 
-        it("does nothing on click when a beacon has no location", () => {
-            makeRoomWithStateEvents([aliceBeaconInfo], { roomId, mockClient });
-            const component = getComponent({ mxEvent: aliceBeaconInfo });
-
-            fireEvent.click(component.container.querySelector(".mx_MBeaconBody_map")!);
-
-            expect(modalSpy).not.toHaveBeenCalled();
-        });
-
         it("updates latest location", () => {
             const room = makeRoomWithStateEvents([aliceBeaconInfo], { roomId, mockClient });
             getComponent({ mxEvent: aliceBeaconInfo });

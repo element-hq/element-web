@@ -290,7 +290,7 @@ describe("export", function () {
         ],
     ];
     it.each(invalidExportOptions)("%s", (_d, options) => {
-        expect(() => new PlainTextExporter(mockRoom, ExportType.Beginning, options, setProgressText)).toThrowError(
+        expect(() => new PlainTextExporter(mockRoom, ExportType.Beginning, options, setProgressText)).toThrow(
             "Invalid export options",
         );
     });

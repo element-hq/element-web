@@ -58,7 +58,7 @@ describe("ScalarAuthClient", function () {
 
         await sac.connect();
 
-        expect(sac.exchangeForScalarToken).toBeCalledWith(tokenObject);
+        expect(sac.exchangeForScalarToken).toHaveBeenCalledWith(tokenObject);
         expect(sac.hasCredentials).toBeTruthy();
         // @ts-ignore private property
         expect(sac.scalarToken).toEqual("wokentoken");

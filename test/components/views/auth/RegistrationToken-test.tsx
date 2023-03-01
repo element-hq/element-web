@@ -84,7 +84,7 @@ describe("InteractiveAuthComponent", function () {
         await flushPromises();
 
         expect(makeRequest).toHaveBeenCalledTimes(1);
-        expect(makeRequest).toBeCalledWith(
+        expect(makeRequest).toHaveBeenCalledWith(
             expect.objectContaining({
                 session: "sess",
                 type: "m.login.registration_token",
@@ -92,8 +92,8 @@ describe("InteractiveAuthComponent", function () {
             }),
         );
 
-        expect(onAuthFinished).toBeCalledTimes(1);
-        expect(onAuthFinished).toBeCalledWith(
+        expect(onAuthFinished).toHaveBeenCalledTimes(1);
+        expect(onAuthFinished).toHaveBeenCalledWith(
             true,
             { a: 1 },
             { clientSecret: "t35tcl1Ent5ECr3T", emailSid: undefined },

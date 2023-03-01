@@ -84,7 +84,7 @@ describe("LinkModal", () => {
         // Then
         await waitFor(() => {
             expect(selectionSpy).toHaveBeenCalledWith(defaultValue);
-            expect(onFinished).toBeCalledTimes(1);
+            expect(onFinished).toHaveBeenCalledTimes(1);
         });
 
         // Then
@@ -127,7 +127,7 @@ describe("LinkModal", () => {
         // Then
         await waitFor(() => {
             expect(selectionSpy).toHaveBeenCalledWith(defaultValue);
-            expect(onFinished).toBeCalledTimes(1);
+            expect(onFinished).toHaveBeenCalledTimes(1);
         });
 
         // Then
@@ -142,7 +142,7 @@ describe("LinkModal", () => {
 
         // Then
         expect(formattingFunctions.removeLinks).toHaveBeenCalledTimes(1);
-        expect(onFinished).toBeCalledTimes(1);
+        expect(onFinished).toHaveBeenCalledTimes(1);
     });
 
     it("Should display the link in editing", async () => {

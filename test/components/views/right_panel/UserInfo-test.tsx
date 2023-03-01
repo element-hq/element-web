@@ -420,7 +420,7 @@ describe("<UserOptionsSection />", () => {
         expect(screen.getByRole("button", { name: /share link to user/i })).toBeInTheDocument();
     });
 
-    it("does not show ignore or direct message buttons when member userId matches client userId ", () => {
+    it("does not show ignore or direct message buttons when member userId matches client userId", () => {
         mockClient.getUserId.mockReturnValueOnce(member.userId);
         renderComponent();
 
@@ -428,7 +428,7 @@ describe("<UserOptionsSection />", () => {
         expect(screen.queryByRole("button", { name: /message/i })).not.toBeInTheDocument();
     });
 
-    it("shows ignore, direct message and mention buttons when member userId does not match client userId ", () => {
+    it("shows ignore, direct message and mention buttons when member userId does not match client userId", () => {
         // call to client.getUserId returns undefined, which will not match member.userId
         renderComponent();
 

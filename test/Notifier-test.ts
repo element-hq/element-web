@@ -302,7 +302,7 @@ describe("Notifier", () => {
             );
         });
 
-        it("should display the expected notification for a broadcast chunk with sequence = 1", () => {
+        it("should display the expected notification for a broadcast chunk with sequence = 2", () => {
             const audioEvent = mkAudioEvent({ sequence: 2 });
             Notifier.displayPopupNotification(audioEvent, testRoom);
             expect(MockPlatform.displayNotification).not.toHaveBeenCalled();

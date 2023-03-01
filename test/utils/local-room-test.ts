@@ -120,16 +120,14 @@ describe("local-room", () => {
                 mocked(isRoomReady).mockReturnValue(false);
             });
 
-            it("should invoke the callbacks, set the room state to created and return the actual room id", (done) => {
+            it("should invoke the callbacks, set the room state to created and return the actual room id", async () => {
                 const prom = localRoomModule.waitForRoomReadyAndApplyAfterCreateCallbacks(client, localRoom);
                 jest.advanceTimersByTime(5000);
-                prom.then((roomId: string) => {
-                    expect(localRoom.state).toBe(LocalRoomState.CREATED);
-                    expect(localRoomCallbackRoomId).toBe(room1.roomId);
-                    expect(roomId).toBe(room1.roomId);
-                    expect(jest.getTimerCount()).toBe(0);
-                    done();
-                });
+                const roomId = await prom;
+                expect(localRoom.state).toBe(LocalRoomState.CREATED);
+                expect(localRoomCallbackRoomId).toBe(room1.roomId);
+                expect(roomId).toBe(room1.roomId);
+                expect(jest.getTimerCount()).toBe(0);
             });
         });
 
@@ -138,17 +136,15 @@ describe("local-room", () => {
                 mocked(isRoomReady).mockReturnValue(false);
             });
 
-            it("should invoke the callbacks, set the room state to created and return the actual room id", (done) => {
+            it("should invoke the callbacks, set the room state to created and return the actual room id", async () => {
                 const prom = localRoomModule.waitForRoomReadyAndApplyAfterCreateCallbacks(client, localRoom);
                 mocked(isRoomReady).mockReturnValue(true);
                 jest.advanceTimersByTime(500);
-                prom.then((roomId: string) => {
-                    expect(localRoom.state).toBe(LocalRoomState.CREATED);
-                    expect(localRoomCallbackRoomId).toBe(room1.roomId);
-                    expect(roomId).toBe(room1.roomId);
-                    expect(jest.getTimerCount()).toBe(0);
-                    done();
-                });
+                const roomId = await prom;
+                expect(localRoom.state).toBe(LocalRoomState.CREATED);
+                expect(localRoomCallbackRoomId).toBe(room1.roomId);
+                expect(roomId).toBe(room1.roomId);
+                expect(jest.getTimerCount()).toBe(0);
             });
         });
     });

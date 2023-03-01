@@ -137,13 +137,11 @@ describe("MemberList", () => {
         ) as unknown as Component;
     });
 
-    afterEach((done) => {
+    afterEach(() => {
         if (parentDiv) {
             ReactDOM.unmountComponentAtNode(parentDiv);
             parentDiv.remove();
         }
-
-        done();
     });
 
     function expectOrderedByPresenceAndPowerLevel(memberTiles: MemberTile[], isPresenceEnabled: boolean) {

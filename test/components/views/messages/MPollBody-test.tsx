@@ -958,7 +958,7 @@ function endedVotesCount(renderResult: RenderResult, value: string): string {
     return votesCount(renderResult, value);
 }
 
-export function newPollStart(answers?: PollAnswer[], question?: string, disclosed = true): PollStartEventContent {
+function newPollStart(answers?: PollAnswer[], question?: string, disclosed = true): PollStartEventContent {
     if (!answers) {
         answers = [
             { id: "pizza", [M_TEXT.name]: "Pizza" },
@@ -1033,7 +1033,7 @@ function expectedResponseEventCall(answer: string) {
     return [roomId, eventType, content];
 }
 
-export function newPollEndEvent(sender = "@me:example.com", ts = 0): MatrixEvent {
+function newPollEndEvent(sender = "@me:example.com", ts = 0): MatrixEvent {
     return makePollEndEvent("$mypoll", "#myroom:example.com", sender, ts);
 }
 

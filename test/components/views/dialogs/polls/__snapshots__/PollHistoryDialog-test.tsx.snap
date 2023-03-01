@@ -29,19 +29,6 @@ exports[`<PollHistoryDialog /> Poll detail navigates back to poll list from deta
 </div>
 `;
 
-exports[`<PollHistoryDialog /> Poll detail navigates back to poll list from detail view on header click 2`] = `
-<div
-  class="mx_AccessibleButton mx_PollDetailHeader mx_AccessibleButton_hasKind mx_AccessibleButton_kind_content_inline"
-  role="button"
-  tabindex="0"
->
-  <div
-    class="mx_PollDetailHeader_icon"
-  />
-  Active polls
-</div>
-`;
-
 exports[`<PollHistoryDialog /> renders a list of active polls when there are polls in the room 1`] = `
 <div>
   <div

@@ -431,30 +431,5 @@ describe("<PollHistoryDialog />", () => {
                 `https://matrix.to/#/!room:domain.org/${pollEnd3.getId()!}`,
             );
         });
-
-        it("navigates back to poll list from detail view on header click", async () => {
-            await setupRoomWithPollEvents([pollStart1, pollStart2, pollStart3], [], [pollEnd3], mockClient, room);
-
-            const { getByText, queryByText, getByTestId, container } = getComponent();
-            await flushPromises();
-
-            fireEvent.click(getByText("Question?"));
-
-            // detail view
-            expect(getByText("Question?")).toBeInTheDocument();
-
-            // header not shown
-            expect(queryByText("Polls history")).not.toBeInTheDocument();
-
-            expect(getByText("Active polls")).toMatchSnapshot();
-            fireEvent.click(getByText("Active polls"));
-
-            // main list header displayed again
-            expect(getByText("Polls history")).toBeInTheDocument();
-            // active filter still active
-            expect(getByTestId("filter-tab-PollHistoryDialog_filter-ACTIVE").firstElementChild).toBeChecked();
-            // list displayed
-            expect(container.getElementsByClassName("mx_PollHistoryList_list").length).toBeTruthy();
-        });
     });
 });

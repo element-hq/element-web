@@ -163,13 +163,13 @@ describe("SlidingRoomListStore", () => {
     it("setTagSorting alters the 'sort' option in the list", async () => {
         const tagId: TagID = "foo";
         await store.setTagSorting(tagId, SortAlgorithm.Alphabetic);
-        expect(context._SlidingSyncManager!.ensureListRegistered).toBeCalledWith(tagId, {
+        expect(context._SlidingSyncManager!.ensureListRegistered).toHaveBeenCalledWith(tagId, {
             sort: SlidingSyncSortToFilter[SortAlgorithm.Alphabetic],
         });
         expect(store.getTagSorting(tagId)).toEqual(SortAlgorithm.Alphabetic);
 
         await store.setTagSorting(tagId, SortAlgorithm.Recent);
-        expect(context._SlidingSyncManager!.ensureListRegistered).toBeCalledWith(tagId, {
+        expect(context._SlidingSyncManager!.ensureListRegistered).toHaveBeenCalledWith(tagId, {
             sort: SlidingSyncSortToFilter[SortAlgorithm.Recent],
         });
         expect(store.getTagSorting(tagId)).toEqual(SortAlgorithm.Recent);

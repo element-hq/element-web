@@ -269,7 +269,7 @@ describe("VoiceBroadcastRecording", () => {
         it("should raise an error when creating a broadcast", () => {
             expect(() => {
                 setUpVoiceBroadcastRecording();
-            }).toThrowError("Cannot create broadcast for info event without Id.");
+            }).toThrow("Cannot create broadcast for info event without Id.");
         });
     });
 
@@ -285,7 +285,7 @@ describe("VoiceBroadcastRecording", () => {
         it("should raise an error when creating a broadcast", () => {
             expect(() => {
                 setUpVoiceBroadcastRecording();
-            }).toThrowError(`Cannot create broadcast for unknown room (info event ${infoEvent.getId()})`);
+            }).toThrow(`Cannot create broadcast for unknown room (info event ${infoEvent.getId()})`);
         });
     });
 

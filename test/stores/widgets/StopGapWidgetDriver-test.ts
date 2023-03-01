@@ -151,7 +151,7 @@ describe("StopGapWidgetDriver", () => {
             state: OpenIDRequestState.Allowed,
             token: await client.getOpenIdToken(),
         };
-        expect(listener).toBeCalledWith(openIdUpdate);
+        expect(listener).toHaveBeenCalledWith(openIdUpdate);
     });
 
     describe("sendToDevice", () => {
@@ -276,7 +276,7 @@ describe("StopGapWidgetDriver", () => {
                 prevBatch: undefined,
             });
 
-            expect(client.relations).toBeCalledWith("!this-room-id", "$event", null, null, {});
+            expect(client.relations).toHaveBeenCalledWith("!this-room-id", "$event", null, null, {});
         });
 
         it("reads related events from a selected room", async () => {
@@ -292,7 +292,7 @@ describe("StopGapWidgetDriver", () => {
                 prevBatch: undefined,
             });
 
-            expect(client.relations).toBeCalledWith("!room-id", "$event", null, null, {});
+            expect(client.relations).toHaveBeenCalledWith("!room-id", "$event", null, null, {});
         });
 
         it("reads related events with custom parameters", async () => {
@@ -318,7 +318,7 @@ describe("StopGapWidgetDriver", () => {
                 prevBatch: undefined,
             });
 
-            expect(client.relations).toBeCalledWith("!room-id", "$event", "m.reference", "m.room.message", {
+            expect(client.relations).toHaveBeenCalledWith("!room-id", "$event", "m.reference", "m.room.message", {
                 limit: 25,
                 from: "from-token",
                 to: "to-token",

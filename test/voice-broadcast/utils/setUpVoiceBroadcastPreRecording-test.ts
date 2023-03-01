@@ -67,11 +67,7 @@ describe("setUpVoiceBroadcastPreRecording", () => {
 
     beforeEach(() => {
         client = stubClient();
-
-        const clientUserId = client.getUserId();
-        if (!clientUserId) fail("empty userId");
-        userId = clientUserId;
-
+        userId = client.getSafeUserId();
         room = new Room(roomId, client, userId);
         infoEvent = mkVoiceBroadcastInfoStateEvent(
             roomId,

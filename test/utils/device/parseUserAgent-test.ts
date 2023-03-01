@@ -130,8 +130,8 @@ describe("parseUserAgent()", () => {
     const testPlatform = (platform: string, userAgents: string[], results: ExtendedDeviceInformation[]): void => {
         const testCases: TestCase[] = userAgents.map((userAgent, index) => [userAgent, results[index]]);
 
-        describe(platform, () => {
-            it.each(testCases)("Parses user agent correctly -  %s", (userAgent, expectedResult) => {
+        describe(`on platform ${platform}`, () => {
+            it.each(testCases)("should parse the user agent correctly -  %s", (userAgent, expectedResult) => {
                 expect(parseUserAgent(userAgent)).toEqual(expectedResult);
             });
         });
