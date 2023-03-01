@@ -68,8 +68,7 @@ interface IState {
 }
 
 export default class MemberList extends React.Component<IProps, IState> {
-    // XXX: exported for tests
-    public showPresence = true;
+    private readonly showPresence: boolean;
     private mounted = false;
 
     public static contextType = SDKContext;
@@ -259,32 +258,6 @@ export default class MemberList extends React.Component<IProps, IState> {
             truncateAtInvited: this.state.truncateAtInvited + SHOW_MORE_INCREMENT,
         });
     };
-
-    /**
-     * SHOULD ONLY BE USED BY TESTS
-     */
-    public memberString(member: RoomMember): string {
-        if (!member) {
-            return "(null)";
-        } else {
-            const u = member.user;
-            return (
-                "(" +
-                member.name +
-                ", " +
-                member.powerLevel +
-                ", " +
-                (u ? u.lastActiveAgo : "<null>") +
-                ", " +
-                (u ? u.getLastActiveTs() : "<null>") +
-                ", " +
-                (u ? u.currentlyActive : "<null>") +
-                ", " +
-                (u ? u.presence : "<null>") +
-                ")"
-            );
-        }
-    }
 
     public componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>, snapshot?: any): void {
         if (prevProps.searchQuery !== this.props.searchQuery) {
