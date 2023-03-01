@@ -5040,10 +5040,10 @@ eslint-plugin-import@^2.25.4:
     semver "^6.3.0"
     tsconfig-paths "^3.14.1"
 
-eslint-plugin-matrix-org@^0.9.0:
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-matrix-org/-/eslint-plugin-matrix-org-0.9.0.tgz#b2a5186052ddbfa7dc9878779bafa5d68681c7b4"
-  integrity sha512-+j6JuMnFH421Z2vOxc+0YMt5Su5vD76RSatviy3zHBaZpgd+sOeAWoCLBHD5E7mMz5oKae3Y3wewCt9LRzq2Nw==
+eslint-plugin-matrix-org@^1.0.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-matrix-org/-/eslint-plugin-matrix-org-1.1.0.tgz#cb3c313b58aa84ee0dd52c57f4a614a1795e8744"
+  integrity sha512-UArLqthBuaCljVajS2TtlPQLXNMZZAPKRt+gA8D0ayzcAj+Ghl50amwGtvLHMzISGv3sqNDBFBMD9cElntE1zA==
 
 eslint-plugin-react-hooks@^4.3.0:
   version "4.6.0"
