@@ -3752,5 +3752,7 @@
     "Load more polls": "Načítať ďalšie ankety",
     "Past polls": "Predchádzajúce ankety",
     "Active polls": "Aktívne ankety",
-    "View poll in timeline": "Zobraziť anketu na časovej osi"
+    "View poll in timeline": "Zobraziť anketu na časovej osi",
+    "Verify Session": "Overiť reláciu",
+    "Ignore (%(counter)s)": "Ignorovať (%(counter)s)"
 }
