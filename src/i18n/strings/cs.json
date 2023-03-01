@@ -3752,5 +3752,7 @@
     "Load more polls": "Načíst další hlasování",
     "Past polls": "Minulá hlasování",
     "Active polls": "Aktivní hlasování",
-    "View poll in timeline": "Zobrazit hlasování na časové ose"
+    "View poll in timeline": "Zobrazit hlasování na časové ose",
+    "Verify Session": "Ověřit relaci",
+    "Ignore (%(counter)s)": "Ignorovat (%(counter)s)"
 }
