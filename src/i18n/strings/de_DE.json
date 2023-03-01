@@ -3752,5 +3752,7 @@
     "Load more polls": "Weitere Umfragen laden",
     "Past polls": "Vergangene Umfragen",
     "Active polls": "Aktive Umfragen",
-    "View poll in timeline": "Umfrage im Verlauf anzeigen"
+    "View poll in timeline": "Umfrage im Verlauf anzeigen",
+    "Verify Session": "Sitzung verifizieren",
+    "Ignore (%(counter)s)": "Ignorieren (%(counter)s)"
 }
