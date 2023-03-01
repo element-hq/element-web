@@ -3738,5 +3738,20 @@
     "Room directory": "聊天室目錄",
     "Identity server is <code>%(identityServerUrl)s</code>": "身份識別伺服器為 <code>%(identityServerUrl)s</code>",
     "Homeserver is <code>%(homeserverUrl)s</code>": "家伺服器為 <code>%(homeserverUrl)s</code>",
-    "Show NSFW content": "顯示 NSFW 內容"
+    "Show NSFW content": "顯示 NSFW 內容",
+    "View poll": "檢視投票",
+    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months|one": "過去一天沒有過去的投票。載入更多投票以檢視前幾個月的投票",
+    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months|other": "過去 %(count)s 天沒有過去的投票。載入更多投票以檢視前幾個月的投票",
+    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months|one": "過去一天沒有活躍的投票。載入更多投票以檢視前幾個月的投票",
+    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months|other": "過去 %(count)s 天沒有活躍的投票。載入更多投票以檢視前幾個月的投票",
+    "There are no past polls. Load more polls to view polls for previous months": "沒有過去的投票。載入更多投票以檢視前幾個月的投票",
+    "There are no active polls. Load more polls to view polls for previous months": "沒有活躍的投票。載入更多投票以檢視前幾個月的投票",
+    "Load more polls": "載入更多投票",
+    "Past polls": "過去的投票",
+    "Active polls": "活躍的投票",
+    "View poll in timeline": "在時間軸中檢視投票",
+    "Answered elsewhere": "在別處回答",
+    "If you know a room address, try joining through that instead.": "若您知道聊天室地址，請嘗試透過該地址加入。",
+    "You attempted to join using a room ID without providing a list of servers to join through. Room IDs are internal identifiers and cannot be used to join a room without additional information.": "您嘗試使用聊天室 ID 加入，但未提供要加入的伺服器清單。聊天室 ID 是內部識別字串，不能用於在沒有附加資訊的情況下加入聊天室。",
+    "Yes, it was me": "是的，是我"
 }
