@@ -941,7 +941,6 @@
     "Decline All": "Noraidīt visu",
     "%(name)s declined": "%(name)s noraidīja",
     "You declined": "Jūs noraidījāt",
-    "Decline (%(counter)s)": "Noraidīt (%(counter)s)",
     "Incoming Verification Request": "Ienākošais veifikācijas pieprasījums",
     "%(name)s is requesting verification": "%(name)s pieprasa verifikāciju",
     "Verification Request": "Verifikācijas pieprasījums",

@@ -873,7 +873,6 @@
     "Pin": "Prisegti",
     "Other users may not trust it": "Kiti vartotojai gali nepasitikėti",
     "Upgrade": "Atnaujinti",
-    "Decline (%(counter)s)": "Atsisakyti (%(counter)s)",
     "Accept <policyLink /> to continue:": "Sutikite su <policyLink />, kad tęstumėte:",
     "Upload": "Įkelti",
     "Your homeserver does not support cross-signing.": "Jūsų serveris nepalaiko kryžminio pasirašymo.",

@@ -789,7 +789,6 @@
     "This bridge is managed by <user />.": "هذا الجسر يديره <user />.",
     "Upload": "رفع",
     "Accept <policyLink /> to continue:": "قبول <policyLink /> للمتابعة:",
-    "Decline (%(counter)s)": "رفض (%(counter)s)",
     "Your server isn't responding to some <a>requests</a>.": "خادمك لا يتجاوب مع بعض <a>الطلبات</a>.",
     "Dog": "كلب",
     "To be secure, do this in person or use a trusted way to communicate.": "لتكون آمنًا ، افعل ذلك شخصيًا أو استخدم طريقة موثوقة للتواصل.",

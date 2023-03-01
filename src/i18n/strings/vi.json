@@ -1744,7 +1744,6 @@
     "Delete": "Xoá",
     "Delete avatar": "Xoá ảnh đại diện",
     "Accept <policyLink /> to continue:": "Chấp nhận <policyLink /> để tiếp tục:",
-    "Decline (%(counter)s)": "Từ chối (%(counter)s)",
     "Your server isn't responding to some <a>requests</a>.": "Máy chủ của bạn không phản hồi một số yêu cầu <a>requests</a>.",
     "Pin": "Ghim",
     "Folder": "Thư mục",

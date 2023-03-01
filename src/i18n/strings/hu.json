@@ -1146,7 +1146,6 @@
     "Widgets do not use message encryption.": "A kisalkalmazások nem használnak üzenettitkosítást.",
     "Integrations are disabled": "Az integrációk le vannak tiltva",
     "Integrations not allowed": "Az integrációk nem engedélyezettek",
-    "Decline (%(counter)s)": "Elutasítás (%(counter)s)",
     "Manage integrations": "Integrációk kezelése",
     "Verification Request": "Ellenőrzési kérés",
     "%(senderName)s placed a voice call.": "%(senderName)s hanghívást indított.",

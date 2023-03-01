@@ -1119,7 +1119,6 @@
     "Verify": "Verifiëren",
     "Later": "Later",
     "Review": "Controleer",
-    "Decline (%(counter)s)": "Afwijzen (%(counter)s)",
     "This bridge was provisioned by <user />.": "Dank aan <user /> voor de brug.",
     "This bridge is managed by <user />.": "Brug onderhouden door <user />.",
     "Show less": "Minder tonen",

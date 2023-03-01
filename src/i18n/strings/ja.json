@@ -1197,7 +1197,6 @@
     "Workspace: <networkLink/>": "ワークスペース：<networkLink/>",
     "This bridge is managed by <user />.": "このブリッジは<user />により管理されています。",
     "This bridge was provisioned by <user />.": "このブリッジは<user />により提供されました。",
-    "Decline (%(counter)s)": "拒否（%(counter)s）",
     "Your server isn't responding to some <a>requests</a>.": "あなたのサーバーはいくつかの<a>リクエスト</a>に応答しません。",
     "Pin": "ピン",
     "Folder": "フォルダー",

@@ -1362,7 +1362,6 @@
     "Search %(spaceName)s": "Cari %(spaceName)s",
     "Delete avatar": "Hapus avatar",
     "Accept <policyLink /> to continue:": "Terima <policyLink /> untuk melanjutkan:",
-    "Decline (%(counter)s)": "Tolak (%(counter)s)",
     "Your server isn't responding to some <a>requests</a>.": "Server Anda tidak menanggapi beberapa <a>permintaan</a>.",
     "Prompt before sending invites to potentially invalid matrix IDs": "Tanyakan sebelum mengirim undangan ke ID Matrix yang mungkin tidak absah",
     "Update %(brand)s": "Perbarui %(brand)s",

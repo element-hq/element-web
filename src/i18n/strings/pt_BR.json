@@ -933,7 +933,6 @@
     "They don't match": "Elas não são correspondentes",
     "To be secure, do this in person or use a trusted way to communicate.": "Para sua segurança, faça isso pessoalmente ou use uma forma confiável de comunicação.",
     "Lock": "Cadeado",
-    "Decline (%(counter)s)": "Recusar (%(counter)s)",
     "Accept <policyLink /> to continue:": "Aceitar <policyLink /> para continuar:",
     "Upload": "Enviar",
     "This bridge was provisioned by <user />.": "Esta integração foi disponibilizada por <user />.",

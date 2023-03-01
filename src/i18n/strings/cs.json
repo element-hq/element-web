@@ -1117,7 +1117,6 @@
     "Match system theme": "Nastavit podle vzhledu systému",
     "My Ban List": "Můj seznam zablokovaných",
     "This is your list of users/servers you have blocked - don't leave the room!": "Toto je váš seznam blokovaných uživatelů/serverů - neopouštějte tuto místnost!",
-    "Decline (%(counter)s)": "Odmítnout (%(counter)s)",
     "Cannot connect to integration manager": "Nepovedlo se připojení ke správci integrací",
     "The integration manager is offline or it cannot reach your homeserver.": "Správce integrací neběží nebo se nemůže připojit k vašemu domovskému serveru.",
     "Manage integrations": "Správa integrací",

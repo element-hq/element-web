@@ -982,7 +982,6 @@
     "To be secure, do this in person or use a trusted way to communicate.": "为了安全，请当面完成或使用信任的方法交流。",
     "Lock": "锁",
     "Your server isn't responding to some <a>requests</a>.": "你的服务器没有响应一些<a>请求</a>。",
-    "Decline (%(counter)s)": "拒绝 (%(counter)s)",
     "Accept <policyLink /> to continue:": "接受 <policyLink /> 以继续：",
     "Upload": "上传",
     "Show less": "显示更少",

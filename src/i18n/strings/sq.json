@@ -1135,7 +1135,6 @@
     "Using this widget may share data <helpIcon /> with %(widgetDomain)s.": "Përdorimi i këtij widget-i mund të sjellë ndarje të dhënash <helpIcon /> me %(widgetDomain)s.",
     "Widget added by": "Widget i shtuar nga",
     "This widget may use cookies.": "Ky <em>widget</em> mund të përdorë <em>cookies</em>.",
-    "Decline (%(counter)s)": "Hidhe poshtë (%(counter)s)",
     "Cannot connect to integration manager": "S’lidhet dot te përgjegjës integrimesh",
     "The integration manager is offline or it cannot reach your homeserver.": "Përgjegjësi i integrimeve s’është në linjë ose s’kap dot shërbyesin tuaj Home.",
     "Manage integrations": "Administroni integrime",

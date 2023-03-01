@@ -745,7 +745,6 @@
     "This bridge was provisioned by <user />.": "הגשר הזה נוצר על ידי משתמש <user />.",
     "Upload": "העלאה",
     "Accept <policyLink /> to continue:": "קבל <policyLink /> להמשך:",
-    "Decline (%(counter)s)": "סרב %(counter)s",
     "Your server isn't responding to some <a>requests</a>.": "השרת שלכם אינו מגיב לבקשות מסויימות <a>בקשות</a>.",
     "Pin": "נעץ",
     "Folder": "תקיה",

@@ -1151,7 +1151,6 @@
     "Verify": "Подтвердить",
     "Later": "Позже",
     "Review": "Обзор",
-    "Decline (%(counter)s)": "Отклонить (%(counter)s)",
     "This bridge was provisioned by <user />.": "Этот мост был подготовлен пользователем <user />.",
     "This bridge is managed by <user />.": "Этот мост управляется <user />.",
     "Show less": "Показать меньше",

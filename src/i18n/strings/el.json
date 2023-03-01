@@ -1426,7 +1426,6 @@
     "All settings": "Όλες οι ρυθμίσεις",
     "Quick settings": "Γρήγορες ρυθμίσεις",
     "Accept <policyLink /> to continue:": "Αποδεχτείτε το <policyLink /> για να συνεχίσετε:",
-    "Decline (%(counter)s)": "Απόρριψη (%(counter)s)",
     "Your server isn't responding to some <a>requests</a>.": "Ο διακομιστής σας δεν ανταποκρίνεται σε ορισμένα <a>αιτήματα</a>.",
     "Pin": "Καρφίτσα",
     "Folder": "Φάκελος",

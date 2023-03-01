@@ -903,7 +903,6 @@
     "%(senderName)s removed the rule banning rooms matching %(glob)s": "%(senderName)s tog bort regeln som bannar rum som matchar %(glob)s",
     "%(senderName)s removed the rule banning servers matching %(glob)s": "%(senderName)s tog bort regeln som bannar servrar som matchar %(glob)s",
     "Match system theme": "Matcha systemtema",
-    "Decline (%(counter)s)": "Avvisa (%(counter)s)",
     "not found": "hittades inte",
     "Cannot connect to integration manager": "Kan inte ansluta till integrationshanteraren",
     "The integration manager is offline or it cannot reach your homeserver.": "Integrationshanteraren är offline eller kan inte nå din hemserver.",
