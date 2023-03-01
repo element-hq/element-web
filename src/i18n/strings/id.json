@@ -3752,5 +3752,7 @@
     "Load more polls": "Muat lebih banyak pemungutan suara",
     "Past polls": "Pemungutan suara sebelumnya",
     "Active polls": "Pemungutan suara yang aktif",
-    "View poll in timeline": "Tampilkan pemungutan suara di lini masa"
+    "View poll in timeline": "Tampilkan pemungutan suara di lini masa",
+    "Verify Session": "Verifikasi Sesi",
+    "Ignore (%(counter)s)": "Abaikan (%(counter)s)"
 }
