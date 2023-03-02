@@ -3752,5 +3752,7 @@
     "Answered elsewhere": "在別處回答",
     "If you know a room address, try joining through that instead.": "若您知道聊天室地址，請嘗試透過該地址加入。",
     "You attempted to join using a room ID without providing a list of servers to join through. Room IDs are internal identifiers and cannot be used to join a room without additional information.": "您嘗試使用聊天室 ID 加入，但未提供要加入的伺服器清單。聊天室 ID 是內部識別字串，不能用於在沒有附加資訊的情況下加入聊天室。",
-    "Yes, it was me": "是的，是我"
+    "Yes, it was me": "是的，是我",
+    "Verify Session": "驗證工作階段",
+    "Ignore (%(counter)s)": "忽略（%(counter)s）"
 }
