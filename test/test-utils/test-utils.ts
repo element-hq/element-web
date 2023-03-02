@@ -691,6 +691,19 @@ export const mkRoomMemberJoinEvent = (user: string, room: string): MatrixEvent =
     });
 };
 
+export const mkThirdPartyInviteEvent = (user: string, displayName: string, room: string): MatrixEvent => {
+    return mkEvent({
+        event: true,
+        type: EventType.RoomThirdPartyInvite,
+        content: {
+            display_name: displayName,
+        },
+        skey: "test" + Math.random(),
+        user,
+        room,
+    });
+};
+
 export const mkPusher = (extra: Partial<IPusher> = {}): IPusher => ({
     app_display_name: "app",
     app_id: "123",
