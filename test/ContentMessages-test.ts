@@ -327,6 +327,6 @@ describe("uploadFile", () => {
         const prom = uploadFile(client, "!roomId:server", file);
         mocked(client.uploadContent).mock.calls[0][1]!.abortController!.abort();
         deferred.resolve({ content_uri: "mxc://foo/bar" });
-        await expect(prom).rejects.toThrowError(UploadCanceledError);
+        await expect(prom).rejects.toThrow(UploadCanceledError);
     });
 });

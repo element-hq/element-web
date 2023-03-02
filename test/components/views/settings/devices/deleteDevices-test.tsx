@@ -28,7 +28,7 @@ describe("deleteDevices()", () => {
         deleteMultipleDevices: jest.fn(),
     });
 
-    const modalSpy = jest.spyOn(Modal, "createDialog");
+    const modalSpy = jest.spyOn(Modal, "createDialog") as jest.SpyInstance;
 
     const interactiveAuthError = { httpStatus: 401, data: { flows: [] as UIAFlow[] } };
 

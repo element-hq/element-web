@@ -66,8 +66,8 @@ describe("message", () => {
             await sendMessage("", true, { roomContext: defaultRoomContext, mxClient: mockClient, permalinkCreator });
 
             // Then
-            expect(mockClient.sendMessage).toBeCalledTimes(0);
-            expect(spyDispatcher).toBeCalledTimes(0);
+            expect(mockClient.sendMessage).toHaveBeenCalledTimes(0);
+            expect(spyDispatcher).toHaveBeenCalledTimes(0);
         });
 
         it("Should not send message when there is no roomId", async () => {
@@ -82,8 +82,8 @@ describe("message", () => {
             });
 
             // Then
-            expect(mockClient.sendMessage).toBeCalledTimes(0);
-            expect(spyDispatcher).toBeCalledTimes(0);
+            expect(mockClient.sendMessage).toHaveBeenCalledTimes(0);
+            expect(spyDispatcher).toHaveBeenCalledTimes(0);
         });
 
         describe("calls client.sendMessage with", () => {
@@ -108,7 +108,7 @@ describe("message", () => {
                 });
 
                 // Then
-                expect(mockClient.sendMessage).toBeCalledWith(expect.anything(), null, expect.anything());
+                expect(mockClient.sendMessage).toHaveBeenCalledWith(expect.anything(), null, expect.anything());
             });
             it("a null argument if SendMessageParams has relation but rel_type does not match THREAD_RELATION_TYPE.name", async () => {
                 // When
@@ -123,7 +123,7 @@ describe("message", () => {
                 });
 
                 // Then
-                expect(mockClient.sendMessage).toBeCalledWith(expect.anything(), null, expect.anything());
+                expect(mockClient.sendMessage).toHaveBeenCalledWith(expect.anything(), null, expect.anything());
             });
 
             it("the event_id if SendMessageParams has relation and rel_type matches THREAD_RELATION_TYPE.name", async () => {
@@ -139,7 +139,7 @@ describe("message", () => {
                 });
 
                 // Then
-                expect(mockClient.sendMessage).toBeCalledWith(expect.anything(), "valid_id", expect.anything());
+                expect(mockClient.sendMessage).toHaveBeenCalledWith(expect.anything(), "valid_id", expect.anything());
             });
         });
 
@@ -158,8 +158,8 @@ describe("message", () => {
                 formatted_body: "<i><b>hello</b> world</i>",
                 msgtype: "m.text",
             };
-            expect(mockClient.sendMessage).toBeCalledWith("myfakeroom", null, expectedContent);
-            expect(spyDispatcher).toBeCalledWith({ action: "message_sent" });
+            expect(mockClient.sendMessage).toHaveBeenCalledWith("myfakeroom", null, expectedContent);
+            expect(spyDispatcher).toHaveBeenCalledWith({ action: "message_sent" });
         });
 
         it("Should send reply to html message", async () => {
@@ -180,7 +180,7 @@ describe("message", () => {
             });
 
             // Then
-            expect(spyDispatcher).toBeCalledWith({
+            expect(spyDispatcher).toHaveBeenCalledWith({
                 action: "reply_to_event",
                 event: null,
                 context: defaultRoomContext.timelineRenderingType,
@@ -200,7 +200,7 @@ describe("message", () => {
                     },
                 },
             };
-            expect(mockClient.sendMessage).toBeCalledWith("myfakeroom", null, expectedContent);
+            expect(mockClient.sendMessage).toHaveBeenCalledWith("myfakeroom", null, expectedContent);
         });
 
         it("Should scroll to bottom after sending a html message", async () => {
@@ -213,7 +213,7 @@ describe("message", () => {
             });
 
             // Then
-            expect(spyDispatcher).toBeCalledWith({
+            expect(spyDispatcher).toHaveBeenCalledWith({
                 action: "scroll_to_bottom",
                 timelineRenderingType: defaultRoomContext.timelineRenderingType,
             });
@@ -224,7 +224,7 @@ describe("message", () => {
             await sendMessage("🎉", false, { roomContext: defaultRoomContext, mxClient: mockClient, permalinkCreator });
 
             // Then
-            expect(spyDispatcher).toBeCalledWith({ action: "effects.confetti" });
+            expect(spyDispatcher).toHaveBeenCalledWith({ action: "effects.confetti" });
         });
     });
 
@@ -256,10 +256,10 @@ describe("message", () => {
             await editMessage("", { roomContext: defaultRoomContext, mxClient: mockClient, editorStateTransfer });
 
             // Then
-            expect(mockClient.sendMessage).toBeCalledTimes(0);
-            expect(mockClient.cancelPendingEvent).toBeCalledTimes(1);
-            expect(mockCreateRedactEventDialog).toBeCalledTimes(1);
-            expect(spyDispatcher).toBeCalledTimes(0);
+            expect(mockClient.sendMessage).toHaveBeenCalledTimes(0);
+            expect(mockClient.cancelPendingEvent).toHaveBeenCalledTimes(1);
+            expect(mockCreateRedactEventDialog).toHaveBeenCalledTimes(1);
+            expect(spyDispatcher).toHaveBeenCalledTimes(0);
         });
 
         it("Should do nothing if the content is unmodified", async () => {
@@ -271,7 +271,7 @@ describe("message", () => {
             });
 
             // Then
-            expect(mockClient.sendMessage).toBeCalledTimes(0);
+            expect(mockClient.sendMessage).toHaveBeenCalledTimes(0);
         });
 
         it("Should send a message when the content is modified", async () => {
@@ -301,8 +301,8 @@ describe("message", () => {
                 msgtype,
                 format,
             };
-            expect(mockClient.sendMessage).toBeCalledWith(mockEvent.getRoomId(), null, expectedContent);
-            expect(spyDispatcher).toBeCalledWith({ action: "message_sent" });
+            expect(mockClient.sendMessage).toHaveBeenCalledWith(mockEvent.getRoomId(), null, expectedContent);
+            expect(spyDispatcher).toHaveBeenCalledWith({ action: "message_sent" });
         });
     });
 });

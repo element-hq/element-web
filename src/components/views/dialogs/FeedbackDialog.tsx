@@ -24,7 +24,6 @@ import SdkConfig from "../../../SdkConfig";
 import Modal from "../../../Modal";
 import BugReportDialog from "./BugReportDialog";
 import InfoDialog from "./InfoDialog";
-import { IDialogProps } from "./IDialogProps";
 import { submitFeedback } from "../../../rageshake/submit-rageshake";
 import { useStateToggle } from "../../../hooks/useStateToggle";
 import StyledCheckbox from "../elements/StyledCheckbox";
@@ -33,8 +32,9 @@ const existingIssuesUrl =
     "https://github.com/vector-im/element-web/issues" + "?q=is%3Aopen+is%3Aissue+sort%3Areactions-%2B1-desc";
 const newIssueUrl = "https://github.com/vector-im/element-web/issues/new/choose";
 
-interface IProps extends IDialogProps {
+interface IProps {
     feature?: string;
+    onFinished(): void;
 }
 
 const FeedbackDialog: React.FC<IProps> = (props: IProps) => {

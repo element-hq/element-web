@@ -356,7 +356,7 @@ describe("Sliding Sync", () => {
     });
 
     // Regression test for https://github.com/vector-im/element-web/issues/21462
-    it("should not cancel replies when permalinks are clicked ", () => {
+    it("should not cancel replies when permalinks are clicked", () => {
         cy.get<string>("@roomId").then((roomId) => {
             // we require a first message as you cannot click the permalink text with the avatar in the way
             return cy

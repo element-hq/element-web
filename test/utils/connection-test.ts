@@ -35,7 +35,7 @@ describe("createReconnectedListener", () => {
     ].forEach(([from, to]) => {
         it(`should invoke the callback on a transition from ${from} to ${to}`, () => {
             reconnectedListener(to, from);
-            expect(onReconnect).toBeCalled();
+            expect(onReconnect).toHaveBeenCalled();
         });
     });
 
@@ -46,7 +46,7 @@ describe("createReconnectedListener", () => {
     ].forEach(([from, to]) => {
         it(`should not invoke the callback on a transition from ${from} to ${to}`, () => {
             reconnectedListener(to, from);
-            expect(onReconnect).not.toBeCalled();
+            expect(onReconnect).not.toHaveBeenCalled();
         });
     });
 });

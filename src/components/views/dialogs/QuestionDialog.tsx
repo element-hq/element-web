@@ -19,11 +19,10 @@ import React from "react";
 import classNames from "classnames";
 
 import { _t } from "../../../languageHandler";
-import { IDialogProps } from "./IDialogProps";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
 
-export interface IQuestionDialogProps extends IDialogProps {
+export interface IQuestionDialogProps {
     title?: string;
     description?: React.ReactNode;
     extraButtons?: React.ReactNode;
@@ -37,6 +36,7 @@ export interface IQuestionDialogProps extends IDialogProps {
     className?: string;
     hasCancelButton?: boolean;
     cancelButton?: React.ReactNode;
+    onFinished(ok?: boolean): void;
 }
 
 export default class QuestionDialog extends React.Component<IQuestionDialogProps> {

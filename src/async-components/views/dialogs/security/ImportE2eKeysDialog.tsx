@@ -21,7 +21,6 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import * as MegolmExportEncryption from "../../../../utils/MegolmExportEncryption";
 import { _t } from "../../../../languageHandler";
-import { IDialogProps } from "../../../../components/views/dialogs/IDialogProps";
 import BaseDialog from "../../../../components/views/dialogs/BaseDialog";
 import Field from "../../../../components/views/elements/Field";
 
@@ -29,7 +28,11 @@ function readFileAsArrayBuffer(file: File): Promise<ArrayBuffer> {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = (e) => {
-            resolve(e.target.result as ArrayBuffer);
+            if (e.target?.result) {
+                resolve(e.target.result as ArrayBuffer);
+            } else {
+                reject(new Error("Failed to read file due to unknown error"));
+            }
         };
         reader.onerror = reject;
 
@@ -42,14 +45,15 @@ enum Phase {
     Importing = "importing",
 }
 
-interface IProps extends IDialogProps {
+interface IProps {
     matrixClient: MatrixClient;
+    onFinished(imported?: boolean): void;
 }
 
 interface IState {
     enableSubmit: boolean;
     phase: Phase;
-    errStr: string;
+    errStr: string | null;
     passphrase: string;
 }
 
@@ -73,7 +77,7 @@ export default class ImportE2eKeysDialog extends React.Component<IProps, IState>
     }
 
     private onFormChange = (): void => {
-        const files = this.file.current.files;
+        const files = this.file.current?.files;
         this.setState({
             enableSubmit: this.state.passphrase !== "" && !!files?.length,
         });
@@ -87,7 +91,10 @@ export default class ImportE2eKeysDialog extends React.Component<IProps, IState>
     private onFormSubmit = (ev: React.FormEvent): boolean => {
         ev.preventDefault();
         // noinspection JSIgnoredPromiseFromCall
-        this.startImport(this.file.current.files[0], this.state.passphrase);
+        const file = this.file.current?.files?.[0];
+        if (file) {
+            this.startImport(file, this.state.passphrase);
+        }
         return false;
     };
 

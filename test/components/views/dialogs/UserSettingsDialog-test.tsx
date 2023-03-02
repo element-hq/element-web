@@ -22,7 +22,6 @@ import SettingsStore, { CallbackFn } from "../../../../src/settings/SettingsStor
 import SdkConfig from "../../../../src/SdkConfig";
 import { UserTab } from "../../../../src/components/views/dialogs/UserTab";
 import UserSettingsDialog from "../../../../src/components/views/dialogs/UserSettingsDialog";
-import { IDialogProps } from "../../../../src/components/views/dialogs/IDialogProps";
 import {
     getMockClientWithEventEmitter,
     mockClientMethodsUser,
@@ -62,7 +61,7 @@ describe("<UserSettingsDialog />", () => {
     });
 
     const defaultProps = { onFinished: jest.fn() };
-    const getComponent = (props: Partial<IDialogProps & { initialTabId?: UserTab }> = {}): ReactElement => (
+    const getComponent = (props: Partial<typeof defaultProps & { initialTabId?: UserTab }> = {}): ReactElement => (
         <UserSettingsDialog {...defaultProps} {...props} />
     );
 

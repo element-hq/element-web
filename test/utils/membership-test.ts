@@ -29,31 +29,32 @@ describe("waitForMember", () => {
         client = new EventEmitter();
     });
 
-    it("resolves with false if the timeout is reached", (done) => {
-        waitForMember(<MatrixClient>client, "", "", { timeout: 0 }).then((r) => {
-            expect(r).toBe(false);
-            done();
-        });
+    afterEach(() => {
+        jest.useRealTimers();
     });
 
-    it("resolves with false if the timeout is reached, even if other RoomState.newMember events fire", (done) => {
+    it("resolves with false if the timeout is reached", async () => {
+        const result = await waitForMember(<MatrixClient>client, "", "", { timeout: 0 });
+        expect(result).toBe(false);
+    });
+
+    it("resolves with false if the timeout is reached, even if other RoomState.newMember events fire", async () => {
+        jest.useFakeTimers();
         const roomId = "!roomId:domain";
         const userId = "@clientId:domain";
-        waitForMember(<MatrixClient>client, roomId, userId, { timeout }).then((r) => {
-            expect(r).toBe(false);
-            done();
-        });
+        const resultProm = waitForMember(<MatrixClient>client, roomId, userId, { timeout });
+        jest.advanceTimersByTime(50);
+        expect(await resultProm).toBe(false);
         client.emit("RoomState.newMember", undefined, undefined, { roomId, userId: "@anotherClient:domain" });
+        jest.useRealTimers();
     });
 
-    it("resolves with true if RoomState.newMember fires", (done) => {
+    it("resolves with true if RoomState.newMember fires", async () => {
         const roomId = "!roomId:domain";
         const userId = "@clientId:domain";
-        waitForMember(<MatrixClient>client, roomId, userId, { timeout }).then((r) => {
-            expect(r).toBe(true);
-            expect((<MatrixClient>client).listeners(RoomStateEvent.NewMember).length).toBe(0);
-            done();
-        });
+        expect((<MatrixClient>client).listeners(RoomStateEvent.NewMember).length).toBe(0);
+        const resultProm = waitForMember(<MatrixClient>client, roomId, userId, { timeout });
         client.emit("RoomState.newMember", undefined, undefined, { roomId, userId });
+        expect(await resultProm).toBe(true);
     });
 });

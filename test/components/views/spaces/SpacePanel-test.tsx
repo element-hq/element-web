@@ -48,6 +48,7 @@ jest.mock("../../../../src/customisations/helpers/UIComponents", () => ({
 describe("<SpacePanel />", () => {
     const mockClient = {
         getUserId: jest.fn().mockReturnValue("@test:test"),
+        getSafeUserId: jest.fn().mockReturnValue("@test:test"),
         isGuest: jest.fn(),
         getAccountData: jest.fn(),
     } as unknown as MatrixClient;

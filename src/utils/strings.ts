@@ -70,7 +70,8 @@ export function selectText(target: Element): void {
  * In certain browsers it may only work if triggered by a user action or may ask user for permissions
  * @param ref pointer to the node to copy
  */
-export function copyNode(ref: Element): boolean {
+export function copyNode(ref?: Element | null): boolean {
+    if (!ref) return false;
     selectText(ref);
     return document.execCommand("copy");
 }

@@ -30,6 +30,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
 import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 import { UserTrustLevel } from "matrix-js-sdk/src/crypto/CrossSigning";
+import { DeviceInfo } from "matrix-js-sdk/src/crypto/deviceinfo";
 
 import dis from "../../../dispatcher/dispatcher";
 import Modal from "../../../Modal";
@@ -79,10 +80,8 @@ import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { DirectoryMember, startDmOnFirstMessage } from "../../../utils/direct-messages";
 import { SdkContextClass } from "../../../contexts/SDKContext";
 
-export interface IDevice {
-    deviceId: string;
+export interface IDevice extends DeviceInfo {
     ambiguous?: boolean;
-    getDisplayName(): string;
 }
 
 export const disambiguateDevices = (devices: IDevice[]): void => {
@@ -239,8 +238,8 @@ function DevicesSection({
     const isMe = userId === cli.getUserId();
     const deviceTrusts = devices.map((d) => cli.checkDeviceTrust(userId, d.deviceId));
 
-    let expandSectionDevices = [];
-    const unverifiedDevices = [];
+    let expandSectionDevices: IDevice[] = [];
+    const unverifiedDevices: IDevice[] = [];
 
     let expandCountCaption;
     let expandHideCaption;
@@ -487,7 +486,7 @@ export const UserOptionsSection: React.FC<{
 };
 
 const warnSelfDemote = async (isSpace: boolean): Promise<boolean> => {
-    const { finished } = Modal.createDialog<[boolean]>(QuestionDialog, {
+    const { finished } = Modal.createDialog(QuestionDialog, {
         title: _t("Demote yourself?"),
         description: (
             <div>
@@ -592,43 +591,52 @@ export const RoomKickButton = ({
     if (member.membership !== "invite" && member.membership !== "join") return null;
 
     const onKick = async (): Promise<void> => {
-        const { finished } = Modal.createDialog(
-            room.isSpaceRoom() ? ConfirmSpaceUserActionDialog : ConfirmUserActionDialog,
-            {
-                member,
-                action: room.isSpaceRoom()
-                    ? member.membership === "invite"
-                        ? _t("Disinvite from space")
-                        : _t("Remove from space")
-                    : member.membership === "invite"
-                    ? _t("Disinvite from room")
-                    : _t("Remove from room"),
-                title:
-                    member.membership === "invite"
-                        ? _t("Disinvite from %(roomName)s", { roomName: room.name })
-                        : _t("Remove from %(roomName)s", { roomName: room.name }),
-                askReason: member.membership === "join",
-                danger: true,
-                // space-specific props
-                space: room,
-                spaceChildFilter: (child: Room) => {
-                    // Return true if the target member is not banned and we have sufficient PL to ban them
-                    const myMember = child.getMember(cli.credentials.userId || "");
-                    const theirMember = child.getMember(member.userId);
-                    return (
-                        myMember &&
-                        theirMember &&
-                        theirMember.membership === member.membership &&
-                        myMember.powerLevel > theirMember.powerLevel &&
-                        child.currentState.hasSufficientPowerLevelFor("kick", myMember.powerLevel)
-                    );
+        const commonProps = {
+            member,
+            action: room.isSpaceRoom()
+                ? member.membership === "invite"
+                    ? _t("Disinvite from space")
+                    : _t("Remove from space")
+                : member.membership === "invite"
+                ? _t("Disinvite from room")
+                : _t("Remove from room"),
+            title:
+                member.membership === "invite"
+                    ? _t("Disinvite from %(roomName)s", { roomName: room.name })
+                    : _t("Remove from %(roomName)s", { roomName: room.name }),
+            askReason: member.membership === "join",
+            danger: true,
+        };
+
+        let finished: Promise<[success?: boolean, reason?: string, rooms?: Room[]]>;
+
+        if (room.isSpaceRoom()) {
+            ({ finished } = Modal.createDialog(
+                ConfirmSpaceUserActionDialog,
+                {
+                    ...commonProps,
+                    space: room,
+                    spaceChildFilter: (child: Room) => {
+                        // Return true if the target member is not banned and we have sufficient PL to ban them
+                        const myMember = child.getMember(cli.credentials.userId || "");
+                        const theirMember = child.getMember(member.userId);
+                        return (
+                            myMember &&
+                            theirMember &&
+                            theirMember.membership === member.membership &&
+                            myMember.powerLevel > theirMember.powerLevel &&
+                            child.currentState.hasSufficientPowerLevelFor("kick", myMember.powerLevel)
+                        );
+                    },
+                    allLabel: _t("Remove them from everything I'm able to"),
+                    specificLabel: _t("Remove them from specific things I'm able to"),
+                    warningMessage: _t("They'll still be able to access whatever you're not an admin of."),
                 },
-                allLabel: _t("Remove them from everything I'm able to"),
-                specificLabel: _t("Remove them from specific things I'm able to"),
-                warningMessage: _t("They'll still be able to access whatever you're not an admin of."),
-            },
-            room.isSpaceRoom() ? "mx_ConfirmSpaceUserActionDialog_wrapper" : undefined,
-        );
+                "mx_ConfirmSpaceUserActionDialog_wrapper",
+            ));
+        } else {
+            ({ finished } = Modal.createDialog(ConfirmUserActionDialog, commonProps));
+        }
 
         const [proceed, reason, rooms = []] = await finished;
         if (!proceed) return;
@@ -705,61 +713,70 @@ export const BanToggleButton = ({
 
     const isBanned = member.membership === "ban";
     const onBanOrUnban = async (): Promise<void> => {
-        const { finished } = Modal.createDialog(
-            room.isSpaceRoom() ? ConfirmSpaceUserActionDialog : ConfirmUserActionDialog,
-            {
-                member,
-                action: room.isSpaceRoom()
-                    ? isBanned
-                        ? _t("Unban from space")
-                        : _t("Ban from space")
-                    : isBanned
-                    ? _t("Unban from room")
-                    : _t("Ban from room"),
-                title: isBanned
-                    ? _t("Unban from %(roomName)s", { roomName: room.name })
-                    : _t("Ban from %(roomName)s", { roomName: room.name }),
-                askReason: !isBanned,
-                danger: !isBanned,
-                // space-specific props
-                space: room,
-                spaceChildFilter: isBanned
-                    ? (child: Room) => {
-                          // Return true if the target member is banned and we have sufficient PL to unban
-                          const myMember = child.getMember(cli.credentials.userId || "");
-                          const theirMember = child.getMember(member.userId);
-                          return (
-                              myMember &&
-                              theirMember &&
-                              theirMember.membership === "ban" &&
-                              myMember.powerLevel > theirMember.powerLevel &&
-                              child.currentState.hasSufficientPowerLevelFor("ban", myMember.powerLevel)
-                          );
-                      }
-                    : (child: Room) => {
-                          // Return true if the target member isn't banned and we have sufficient PL to ban
-                          const myMember = child.getMember(cli.credentials.userId || "");
-                          const theirMember = child.getMember(member.userId);
-                          return (
-                              myMember &&
-                              theirMember &&
-                              theirMember.membership !== "ban" &&
-                              myMember.powerLevel > theirMember.powerLevel &&
-                              child.currentState.hasSufficientPowerLevelFor("ban", myMember.powerLevel)
-                          );
-                      },
-                allLabel: isBanned
-                    ? _t("Unban them from everything I'm able to")
-                    : _t("Ban them from everything I'm able to"),
-                specificLabel: isBanned
-                    ? _t("Unban them from specific things I'm able to")
-                    : _t("Ban them from specific things I'm able to"),
-                warningMessage: isBanned
-                    ? _t("They won't be able to access whatever you're not an admin of.")
-                    : _t("They'll still be able to access whatever you're not an admin of."),
-            },
-            room.isSpaceRoom() ? "mx_ConfirmSpaceUserActionDialog_wrapper" : undefined,
-        );
+        const commonProps = {
+            member,
+            action: room.isSpaceRoom()
+                ? isBanned
+                    ? _t("Unban from space")
+                    : _t("Ban from space")
+                : isBanned
+                ? _t("Unban from room")
+                : _t("Ban from room"),
+            title: isBanned
+                ? _t("Unban from %(roomName)s", { roomName: room.name })
+                : _t("Ban from %(roomName)s", { roomName: room.name }),
+            askReason: !isBanned,
+            danger: !isBanned,
+        };
+
+        let finished: Promise<[success?: boolean, reason?: string, rooms?: Room[]]>;
+
+        if (room.isSpaceRoom()) {
+            ({ finished } = Modal.createDialog(
+                ConfirmSpaceUserActionDialog,
+                {
+                    ...commonProps,
+                    space: room,
+                    spaceChildFilter: isBanned
+                        ? (child: Room) => {
+                              // Return true if the target member is banned and we have sufficient PL to unban
+                              const myMember = child.getMember(cli.credentials.userId || "");
+                              const theirMember = child.getMember(member.userId);
+                              return (
+                                  myMember &&
+                                  theirMember &&
+                                  theirMember.membership === "ban" &&
+                                  myMember.powerLevel > theirMember.powerLevel &&
+                                  child.currentState.hasSufficientPowerLevelFor("ban", myMember.powerLevel)
+                              );
+                          }
+                        : (child: Room) => {
+                              // Return true if the target member isn't banned and we have sufficient PL to ban
+                              const myMember = child.getMember(cli.credentials.userId || "");
+                              const theirMember = child.getMember(member.userId);
+                              return (
+                                  myMember &&
+                                  theirMember &&
+                                  theirMember.membership !== "ban" &&
+                                  myMember.powerLevel > theirMember.powerLevel &&
+                                  child.currentState.hasSufficientPowerLevelFor("ban", myMember.powerLevel)
+                              );
+                          },
+                    allLabel: isBanned
+                        ? _t("Unban them from everything I'm able to")
+                        : _t("Ban them from everything I'm able to"),
+                    specificLabel: isBanned
+                        ? _t("Unban them from specific things I'm able to")
+                        : _t("Ban them from specific things I'm able to"),
+                    warningMessage: isBanned
+                        ? _t("They won't be able to access whatever you're not an admin of.")
+                        : _t("They'll still be able to access whatever you're not an admin of."),
+                },
+                "mx_ConfirmSpaceUserActionDialog_wrapper",
+            ));
+        } else {
+            ({ finished } = Modal.createDialog(ConfirmUserActionDialog, commonProps));
+        }
 
         const [proceed, reason, rooms = []] = await finished;
         if (!proceed) return;
@@ -1173,8 +1190,8 @@ export const useDevices = (userId: string): IDevice[] | undefined | null => {
                     return;
                 }
 
-                disambiguateDevices(devices as IDevice[]);
-                setDevices(devices as IDevice[]);
+                disambiguateDevices(devices);
+                setDevices(devices);
             } catch (err) {
                 setDevices(null);
             }
@@ -1193,7 +1210,7 @@ export const useDevices = (userId: string): IDevice[] | undefined | null => {
         const updateDevices = async (): Promise<void> => {
             const newDevices = cli.getStoredDevicesForUser(userId);
             if (cancel) return;
-            setDevices(newDevices as IDevice[]);
+            setDevices(newDevices);
         };
         const onDevicesUpdated = (users: string[]): void => {
             if (!users.includes(userId)) return;
@@ -1603,7 +1620,7 @@ const UserInfo: React.FC<IProps> = ({ user, room, onClose, phase = RightPanelPha
         RightPanelStore.instance.popCard();
     };
 
-    let content;
+    let content: JSX.Element | undefined;
     switch (phase) {
         case RightPanelPhases.RoomMemberInfo:
         case RightPanelPhases.SpaceMemberInfo:
@@ -1611,7 +1628,7 @@ const UserInfo: React.FC<IProps> = ({ user, room, onClose, phase = RightPanelPha
                 <BasicUserInfo
                     room={room as Room}
                     member={member as User}
-                    devices={devices as IDevice[]}
+                    devices={devices}
                     isRoomEncrypted={Boolean(isRoomEncrypted)}
                 />
             );

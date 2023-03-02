@@ -32,13 +32,13 @@ import { toPx } from "../../../utils/units";
 import { _t } from "../../../languageHandler";
 
 interface IProps {
-    name: string; // The name (first initial used as default)
+    name?: string; // The name (first initial used as default)
     idName?: string; // ID for generating hash colours
     title?: string; // onHover title text
-    url?: string; // highest priority of them all, shortcut to set in urls[0]
+    url?: string | null; // highest priority of them all, shortcut to set in urls[0]
     urls?: string[]; // [highest_priority, ... , lowest_priority]
-    width?: number;
-    height?: number;
+    width: number;
+    height: number;
     // XXX: resizeMethod not actually used.
     resizeMethod?: ResizeMethod;
     defaultToInitialLetter?: boolean; // true to add default url
@@ -48,7 +48,7 @@ interface IProps {
     tabIndex?: number;
 }
 
-const calculateUrls = (url?: string, urls?: string[], lowBandwidth = false): string[] => {
+const calculateUrls = (url?: string | null, urls?: string[], lowBandwidth = false): string[] => {
     // work out the full set of urls to try to load. This is formed like so:
     // imageUrls: [ props.url, ...props.urls ]
 
@@ -66,7 +66,7 @@ const calculateUrls = (url?: string, urls?: string[], lowBandwidth = false): str
     return Array.from(new Set(_urls));
 };
 
-const useImageUrl = ({ url, urls }: { url?: string; urls?: string[] }): [string, () => void] => {
+const useImageUrl = ({ url, urls }: { url?: string | null; urls?: string[] }): [string, () => void] => {
     // Since this is a hot code path and the settings store can be slow, we
     // use the cached lowBandwidth value from the room context if it exists
     const roomContext = useContext(RoomContext);

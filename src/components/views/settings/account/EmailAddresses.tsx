@@ -223,7 +223,7 @@ export default class EmailAddresses extends React.Component<IProps, IState> {
                     Modal.createDialog(ErrorDialog, {
                         title: _t("Your email address hasn't been verified yet"),
                         description: _t(
-                            "Click the link in the email you received to verify " + "and then click continue again.",
+                            "Click the link in the email you received to verify and then click continue again.",
                         ),
                     });
                 } else {

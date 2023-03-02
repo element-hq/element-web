@@ -43,7 +43,7 @@ export function wrapRequestWithDialog<R, A = any>(
                         makeRequest: (authData?: IAuthData) => boundFunction(authData, ...args),
                         onFinished: (success, result) => {
                             if (success) {
-                                resolve(result);
+                                resolve(result as R);
                             } else {
                                 reject(result);
                             }

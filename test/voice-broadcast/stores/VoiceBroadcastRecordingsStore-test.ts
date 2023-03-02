@@ -74,7 +74,7 @@ describe("VoiceBroadcastRecordingsStore", () => {
         infoEvent.event.event_id = undefined;
         expect(() => {
             recordings.setCurrent(recording);
-        }).toThrowError("Got broadcast info event without Id");
+        }).toThrow("Got broadcast info event without Id");
     });
 
     describe("when setting a current Voice Broadcast recording", () => {

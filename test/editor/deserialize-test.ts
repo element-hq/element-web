@@ -215,7 +215,7 @@ describe("editor/deserialize", function () {
             expect(parts[4]).toStrictEqual({ type: "plain", text: "```" });
         });
         // failing likely because of https://github.com/vector-im/element-web/issues/10316
-        xit("code block with no trailing text and no newlines", function () {
+        it.skip("code block with no trailing text and no newlines", function () {
             const html = "<pre><code>0xDEADBEEF</code></pre>";
             const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
             expect(parts.length).toBe(5);
@@ -412,7 +412,7 @@ describe("editor/deserialize", function () {
                 text: "> <del>no formatting here</del>",
             });
         });
-        it("it strips plaintext replies", () => {
+        it("strips plaintext replies", () => {
             const body = "> Sender: foo\n\nMessage";
             const parts = normalize(parseEvent(textMessageReply(body), createPartCreator(), { shouldEscape: false }));
             expect(parts.length).toBe(1);

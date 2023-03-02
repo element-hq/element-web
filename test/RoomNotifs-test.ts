@@ -218,7 +218,7 @@ describe("RoomNotifs test", () => {
             expect(getUnreadNotificationCount(room, NotificationCountType.Highlight, THREAD_ID)).toBe(0);
         });
 
-        it("counts notifications type", () => {
+        it("counts thread notifications type", () => {
             room.setThreadUnreadNotificationCount(THREAD_ID, NotificationCountType.Total, 2);
             room.setThreadUnreadNotificationCount(THREAD_ID, NotificationCountType.Highlight, 1);
 

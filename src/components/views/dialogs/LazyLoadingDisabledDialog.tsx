@@ -20,10 +20,10 @@ import React from "react";
 import QuestionDialog from "./QuestionDialog";
 import { _t } from "../../../languageHandler";
 import SdkConfig from "../../../SdkConfig";
-import { IDialogProps } from "./IDialogProps";
 
-interface IProps extends IDialogProps {
+interface IProps {
     host: string;
+    onFinished(): void;
 }
 
 const LazyLoadingDisabledDialog: React.FC<IProps> = (props) => {

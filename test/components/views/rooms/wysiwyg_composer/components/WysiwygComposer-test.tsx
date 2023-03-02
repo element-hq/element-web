@@ -88,10 +88,10 @@ describe("WysiwygComposer", () => {
             });
 
             // Then
-            await waitFor(() => expect(onChange).toBeCalledWith("foo bar"));
+            await waitFor(() => expect(onChange).toHaveBeenCalledWith("foo bar"));
         });
 
-        it("Should call onSend when Enter is pressed ", async () => {
+        it("Should call onSend when Enter is pressed", async () => {
             //When
             fireEvent(
                 screen.getByRole("textbox"),
@@ -101,18 +101,18 @@ describe("WysiwygComposer", () => {
             );
 
             // Then it sends a message
-            await waitFor(() => expect(onSend).toBeCalledTimes(1));
+            await waitFor(() => expect(onSend).toHaveBeenCalledTimes(1));
         });
 
-        it("Should not call onSend when Shift+Enter is pressed ", async () => {
+        it("Should not call onSend when Shift+Enter is pressed", async () => {
             //When
             await userEvent.type(screen.getByRole("textbox"), "{shift>}{enter}");
 
             // Then it sends a message
-            await waitFor(() => expect(onSend).toBeCalledTimes(0));
+            await waitFor(() => expect(onSend).toHaveBeenCalledTimes(0));
         });
 
-        it("Should not call onSend when ctrl+Enter is pressed ", async () => {
+        it("Should not call onSend when ctrl+Enter is pressed", async () => {
             //When
             // Using userEvent.type or .keyboard wasn't working as expected in the case of ctrl+enter
             fireEvent(
@@ -124,23 +124,23 @@ describe("WysiwygComposer", () => {
             );
 
             // Then it sends a message
-            await waitFor(() => expect(onSend).toBeCalledTimes(0));
+            await waitFor(() => expect(onSend).toHaveBeenCalledTimes(0));
         });
 
-        it("Should not call onSend when alt+Enter is pressed ", async () => {
+        it("Should not call onSend when alt+Enter is pressed", async () => {
             //When
             await userEvent.type(screen.getByRole("textbox"), "{alt>}{enter}");
 
             // Then it sends a message
-            await waitFor(() => expect(onSend).toBeCalledTimes(0));
+            await waitFor(() => expect(onSend).toHaveBeenCalledTimes(0));
         });
 
-        it("Should not call onSend when meta+Enter is pressed ", async () => {
+        it("Should not call onSend when meta+Enter is pressed", async () => {
             //When
             await userEvent.type(screen.getByRole("textbox"), "{meta>}{enter}");
 
             // Then it sends a message
-            await waitFor(() => expect(onSend).toBeCalledTimes(0));
+            await waitFor(() => expect(onSend).toHaveBeenCalledTimes(0));
         });
     });
 
@@ -172,7 +172,7 @@ describe("WysiwygComposer", () => {
             );
 
             // Then it does not send a message
-            await waitFor(() => expect(onSend).toBeCalledTimes(0));
+            await waitFor(() => expect(onSend).toHaveBeenCalledTimes(0));
 
             fireEvent(
                 textbox,
@@ -201,7 +201,7 @@ describe("WysiwygComposer", () => {
             );
 
             // Then it sends a message
-            await waitFor(() => expect(onSend).toBeCalledTimes(1));
+            await waitFor(() => expect(onSend).toHaveBeenCalledTimes(1));
         });
     });
 
@@ -269,7 +269,7 @@ describe("WysiwygComposer", () => {
                 });
 
                 // Then
-                expect(spyDispatcher).toBeCalledTimes(0);
+                expect(spyDispatcher).toHaveBeenCalledTimes(0);
             });
 
             it("Should moving when the composer is empty", async () => {
@@ -281,7 +281,7 @@ describe("WysiwygComposer", () => {
                 });
 
                 // Then
-                expect(spyDispatcher).toBeCalledWith({
+                expect(spyDispatcher).toHaveBeenCalledWith({
                     action: Action.EditEvent,
                     event: mockEvent,
                     timelineRenderingType: defaultRoomContext.timelineRenderingType,
@@ -316,7 +316,7 @@ describe("WysiwygComposer", () => {
                     });
 
                     // Then
-                    expect(spyDispatcher).toBeCalledTimes(0);
+                    expect(spyDispatcher).toHaveBeenCalledTimes(0);
                 });
 
                 it("Should not moving when the content has changed", async () => {
@@ -340,7 +340,7 @@ describe("WysiwygComposer", () => {
                     });
 
                     // Then
-                    expect(spyDispatcher).toBeCalledTimes(0);
+                    expect(spyDispatcher).toHaveBeenCalledTimes(0);
                 });
 
                 it("Should moving up", async () => {
@@ -366,7 +366,7 @@ describe("WysiwygComposer", () => {
 
                     // Then
                     await waitFor(() =>
-                        expect(spyDispatcher).toBeCalledWith({
+                        expect(spyDispatcher).toHaveBeenCalledWith({
                             action: Action.EditEvent,
                             event: mockEvent,
                             timelineRenderingType: defaultRoomContext.timelineRenderingType,
@@ -401,7 +401,7 @@ describe("WysiwygComposer", () => {
                     });
 
                     // Then
-                    expect(spyDispatcher).toBeCalledWith({
+                    expect(spyDispatcher).toHaveBeenCalledWith({
                         action: Action.EditEvent,
                         event: mockEvent,
                         timelineRenderingType: defaultRoomContext.timelineRenderingType,
@@ -427,7 +427,7 @@ describe("WysiwygComposer", () => {
                     });
 
                     // Then
-                    expect(spyDispatcher).toBeCalledTimes(0);
+                    expect(spyDispatcher).toHaveBeenCalledTimes(0);
                 });
 
                 it("Should not moving when the content has changed", async () => {
@@ -451,7 +451,7 @@ describe("WysiwygComposer", () => {
                     });
 
                     // Then
-                    expect(spyDispatcher).toBeCalledTimes(0);
+                    expect(spyDispatcher).toHaveBeenCalledTimes(0);
                 });
 
                 it("Should moving down", async () => {
@@ -479,7 +479,7 @@ describe("WysiwygComposer", () => {
 
                     // Then
                     await waitFor(() =>
-                        expect(spyDispatcher).toBeCalledWith({
+                        expect(spyDispatcher).toHaveBeenCalledWith({
                             action: Action.EditEvent,
                             event: mockEvent,
                             timelineRenderingType: defaultRoomContext.timelineRenderingType,
@@ -516,7 +516,7 @@ describe("WysiwygComposer", () => {
                     });
 
                     // Then
-                    expect(spyDispatcher).toBeCalledWith({
+                    expect(spyDispatcher).toHaveBeenCalledWith({
                         action: Action.EditEvent,
                         event: mockEvent,
                         timelineRenderingType: defaultRoomContext.timelineRenderingType,
@@ -549,7 +549,7 @@ describe("WysiwygComposer", () => {
 
                     // Then
                     await waitFor(() =>
-                        expect(spyDispatcher).toBeCalledWith({
+                        expect(spyDispatcher).toHaveBeenCalledWith({
                             action: Action.EditEvent,
                             event: null,
                             timelineRenderingType: defaultRoomContext.timelineRenderingType,

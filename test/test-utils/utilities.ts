@@ -14,8 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// eslint-disable-next-line deprecate/import
-import { ReactWrapper } from "enzyme";
 import EventEmitter from "events";
 
 import { ActionPayload } from "../../src/dispatcher/payloads";
@@ -127,17 +125,6 @@ export function untilEmission(
         emitter.on(eventName, callback);
     });
 }
-
-export const findByAttr = (attr: string) => (component: ReactWrapper, value: string) =>
-    component.find(`[${attr}="${value}"]`);
-export const findByTestId = findByAttr("data-test-id");
-export const findById = findByAttr("id");
-export const findByAriaLabel = findByAttr("aria-label");
-
-const findByTagAndAttr = (attr: string) => (component: ReactWrapper, value: string, tag: string) =>
-    component.find(`${tag}[${attr}="${value}"]`);
-
-export const findByTagAndTestId = findByTagAndAttr("data-test-id");
 
 export const flushPromises = async () => await new Promise((resolve) => window.setTimeout(resolve));
 

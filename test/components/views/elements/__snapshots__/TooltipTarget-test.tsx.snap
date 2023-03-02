@@ -95,7 +95,7 @@ exports[`<TooltipTarget /> renders container 1`] = `
 <div
   aria-describedby="test id"
   class="test tooltipTargetClassName"
-  data-test-id="test"
+  data-testid="test"
   tabindex="0"
 >
   <span>

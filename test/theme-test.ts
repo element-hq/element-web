@@ -63,7 +63,7 @@ describe("theme", () => {
 
             // Then
             expect(spyQuerySelectorAll).toHaveBeenCalledWith("[data-mx-theme]");
-            expect(spyQuerySelectorAll).toBeCalledTimes(1);
+            expect(spyQuerySelectorAll).toHaveBeenCalledTimes(1);
             expect(lightTheme.disabled).toBe(false);
             expect(darkTheme.disabled).toBe(true);
         });

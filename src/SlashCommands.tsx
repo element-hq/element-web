@@ -551,7 +551,7 @@ export const Commands = [
                     ) {
                         const defaultIdentityServerUrl = getDefaultIdentityServerUrl();
                         if (defaultIdentityServerUrl) {
-                            const { finished } = Modal.createDialog<[boolean]>(QuestionDialog, {
+                            const { finished } = Modal.createDialog(QuestionDialog, {
                                 title: _t("Use an identity server"),
                                 description: (
                                     <p>

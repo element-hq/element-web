@@ -35,7 +35,7 @@ export class ModalWidgetStore extends AsyncStoreWithClient<IState> {
         instance.start();
         return instance;
     })();
-    private modalInstance: IHandle<void[]> | null = null;
+    private modalInstance: IHandle<typeof ModalWidgetDialog> | null = null;
     private openSourceWidgetId: string | null = null;
     private openSourceWidgetRoomId: string | null = null;
 

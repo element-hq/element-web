@@ -39,7 +39,7 @@ type DialogAesthetics = Partial<{
 }>;
 
 interface IProps {
-    onFinished: (success: boolean) => void;
+    onFinished: (success?: boolean) => void;
 }
 
 interface IState {

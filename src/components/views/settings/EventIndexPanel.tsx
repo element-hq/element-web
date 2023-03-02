@@ -177,7 +177,7 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
             eventIndexingSettings = (
                 <div>
                     <div className="mx_SettingsTab_subsectionText">
-                        {_t("Securely cache encrypted messages locally for them to " + "appear in search results.")}
+                        {_t("Securely cache encrypted messages locally for them to appear in search results.")}
                     </div>
                     <div>
                         <AccessibleButton kind="primary" disabled={this.state.enabling} onClick={this.onEnable}>

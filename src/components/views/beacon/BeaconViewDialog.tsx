@@ -23,7 +23,6 @@ import { Icon as LiveLocationIcon } from "../../../../res/img/location/live-loca
 import { useLiveBeacons } from "../../../utils/beacon/useLiveBeacons";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import BaseDialog from "../dialogs/BaseDialog";
-import { IDialogProps } from "../dialogs/IDialogProps";
 import Map from "../location/Map";
 import ZoomButtons from "../location/ZoomButtons";
 import BeaconMarker from "./BeaconMarker";
@@ -38,11 +37,12 @@ import MapFallback from "../location/MapFallback";
 import { MapError } from "../location/MapError";
 import { LocationShareError } from "../../../utils/location";
 
-interface IProps extends IDialogProps {
+interface IProps {
     roomId: Room["roomId"];
     matrixClient: MatrixClient;
     // open the map centered on this beacon's location
     initialFocusedBeacon?: Beacon;
+    onFinished(): void;
 }
 
 // track the 'focused time' as ts
@@ -54,7 +54,7 @@ interface FocusedBeaconState {
     beacon?: Beacon;
 }
 
-const getBoundsCenter = (bounds: Bounds): string | undefined => {
+const getBoundsCenter = (bounds?: Bounds): string | undefined => {
     if (!bounds) {
         return;
     }
@@ -70,10 +70,10 @@ const useMapPosition = (
     { beacon, ts }: FocusedBeaconState,
 ): {
     bounds?: Bounds;
-    centerGeoUri: string;
+    centerGeoUri?: string;
 } => {
     const [bounds, setBounds] = useState<Bounds | undefined>(getBeaconBounds(liveBeacons));
-    const [centerGeoUri, setCenterGeoUri] = useState<string>(
+    const [centerGeoUri, setCenterGeoUri] = useState<string | undefined>(
         beacon?.latestLocationState?.uri || getBoundsCenter(bounds),
     );
 

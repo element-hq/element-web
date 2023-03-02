@@ -265,7 +265,7 @@ export function handleInvalidStoreError(e: InvalidStoreError): Promise<void> {
             .then(() => {
                 const lazyLoadEnabled = e.value;
                 if (lazyLoadEnabled) {
-                    return new Promise((resolve) => {
+                    return new Promise<void>((resolve) => {
                         Modal.createDialog(LazyLoadingResyncDialog, {
                             onFinished: resolve,
                         });
@@ -275,7 +275,7 @@ export function handleInvalidStoreError(e: InvalidStoreError): Promise<void> {
                     // between LL/non-LL version on same host.
                     // as disabling LL when previously enabled
                     // is a strong indicator of this (/develop & /app)
-                    return new Promise((resolve) => {
+                    return new Promise<void>((resolve) => {
                         Modal.createDialog(LazyLoadingDisabledDialog, {
                             onFinished: resolve,
                             host: window.location.host,

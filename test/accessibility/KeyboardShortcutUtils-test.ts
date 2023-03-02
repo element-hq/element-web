@@ -59,7 +59,7 @@ describe("KeyboardShortcutUtils", () => {
     });
 
     describe("correctly filters shortcuts", () => {
-        it("when on web and not on macOS ", async () => {
+        it("when on web and not on macOS", async () => {
             mockKeyboardShortcuts({
                 KEYBOARD_SHORTCUTS: {
                     Keybind1: {},

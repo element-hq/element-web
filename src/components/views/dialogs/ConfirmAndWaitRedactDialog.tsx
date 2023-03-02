@@ -24,7 +24,7 @@ import Spinner from "../elements/Spinner";
 
 interface IProps {
     redact: () => Promise<void>;
-    onFinished: (success: boolean) => void;
+    onFinished: (success?: boolean) => void;
 }
 
 interface IState {

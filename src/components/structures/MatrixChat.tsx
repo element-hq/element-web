@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ComponentType, createRef } from "react";
+import React, { createRef } from "react";
 import {
     ClientEvent,
     createClient,
@@ -38,6 +38,8 @@ import "focus-visible";
 // what-input helps improve keyboard accessibility
 import "what-input";
 
+import type NewRecoveryMethodDialog from "../../async-components/views/dialogs/security/NewRecoveryMethodDialog";
+import type RecoveryMethodRemovedDialog from "../../async-components/views/dialogs/security/RecoveryMethodRemovedDialog";
 import PosthogTrackers from "../../PosthogTrackers";
 import { DecryptionFailureTracker } from "../../DecryptionFailureTracker";
 import { IMatrixClientCreds, MatrixClientPeg } from "../../MatrixClientPeg";
@@ -140,6 +142,7 @@ import RovingSpotlightDialog, { Filter } from "../views/dialogs/spotlight/Spotli
 import { findDMForUser } from "../../utils/dm/findDMForUser";
 import { Linkify } from "../../HtmlUtils";
 import { NotificationColor } from "../../stores/notifications/NotificationColor";
+import { UserTab } from "../views/dialogs/UserTab";
 
 // legacy export
 export { default as Views } from "../../Views";
@@ -705,7 +708,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 const tabPayload = payload as OpenToTabPayload;
                 Modal.createDialog(
                     UserSettingsDialog,
-                    { initialTabId: tabPayload.initialTabId },
+                    { initialTabId: tabPayload.initialTabId as UserTab },
                     /*className=*/ null,
                     /*isPriority=*/ false,
                     /*isStatic=*/ true,
@@ -1629,14 +1632,14 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 Modal.createDialogAsync(
                     import(
                         "../../async-components/views/dialogs/security/NewRecoveryMethodDialog"
-                    ) as unknown as Promise<ComponentType<{}>>,
+                    ) as unknown as Promise<typeof NewRecoveryMethodDialog>,
                     { newVersionInfo },
                 );
             } else {
                 Modal.createDialogAsync(
                     import(
                         "../../async-components/views/dialogs/security/RecoveryMethodRemovedDialog"
-                    ) as unknown as Promise<ComponentType<{}>>,
+                    ) as unknown as Promise<typeof RecoveryMethodRemovedDialog>,
                 );
             }
         });

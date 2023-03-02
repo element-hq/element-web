@@ -31,7 +31,7 @@ import { _t } from "../../../languageHandler";
 import BaseDialog from "./BaseDialog";
 
 interface IProps {
-    onFinished: (success: boolean) => void;
+    onFinished: (success?: boolean) => void;
     title?: string;
     description?: React.ReactNode;
     button?: string;
@@ -44,7 +44,7 @@ interface IState {
 }
 
 export default class ErrorDialog extends React.Component<IProps, IState> {
-    public static defaultProps = {
+    public static defaultProps: Partial<IProps> = {
         focus: true,
     };
 

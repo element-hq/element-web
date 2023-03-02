@@ -33,9 +33,11 @@ const useMapMarker = (
                 return;
             }
             const coords = parseGeoUri(geoUri);
-            const newMarker = createMarker(coords, element);
-            newMarker.addTo(map);
-            setMarker(newMarker);
+            if (coords) {
+                const newMarker = createMarker(coords, element);
+                newMarker.addTo(map);
+                setMarker(newMarker);
+            }
         },
         [marker, geoUri, map],
     );
@@ -43,7 +45,9 @@ const useMapMarker = (
     useEffect(() => {
         if (marker) {
             const coords = parseGeoUri(geoUri);
-            marker.setLngLat({ lon: coords.longitude, lat: coords.latitude });
+            if (coords) {
+                marker.setLngLat({ lon: coords.longitude, lat: coords.latitude });
+            }
         }
     }, [marker, geoUri]);
 

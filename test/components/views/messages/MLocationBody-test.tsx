@@ -21,6 +21,7 @@ import { LocationAssetType } from "matrix-js-sdk/src/@types/location";
 import { ClientEvent, RoomMember } from "matrix-js-sdk/src/matrix";
 import * as maplibregl from "maplibre-gl";
 import { logger } from "matrix-js-sdk/src/logger";
+// eslint-disable-next-line deprecate/import
 import { act } from "react-dom/test-utils";
 import { SyncState } from "matrix-js-sdk/src/sync";
 

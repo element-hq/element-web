@@ -23,11 +23,11 @@ import { sortBeaconsByLatestExpiry } from "./duration";
 
 type LiveBeaconsState = {
     beacon?: Beacon;
-    onStopSharing?: () => void;
-    onResetLocationPublishError?: () => void;
-    stoppingInProgress?: boolean;
-    hasStopSharingError?: boolean;
-    hasLocationPublishError?: boolean;
+    onStopSharing: () => void;
+    onResetLocationPublishError: () => void;
+    stoppingInProgress: boolean;
+    hasStopSharingError: boolean;
+    hasLocationPublishError: boolean;
 };
 
 /**

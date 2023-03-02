@@ -30,6 +30,7 @@ import RightPanelStore from "../../../../src/stores/right-panel/RightPanelStore"
 import { RightPanelPhases } from "../../../../src/stores/right-panel/RightPanelStorePhases";
 import { getMockClientWithEventEmitter, mockClientMethodsUser } from "../../../test-utils";
 import { PollHistoryDialog } from "../../../../src/components/views/dialogs/polls/PollHistoryDialog";
+import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalinks";
 
 describe("<RoomSummaryCard />", () => {
     const userId = "@alice:domain.org";
@@ -54,6 +55,7 @@ describe("<RoomSummaryCard />", () => {
     const defaultProps = {
         room,
         onClose: jest.fn(),
+        permalinkCreator: new RoomPermalinkCreator(room),
     };
     const getComponent = (props = {}) =>
         render(<RoomSummaryCard {...defaultProps} {...props} />, {
@@ -145,7 +147,11 @@ describe("<RoomSummaryCard />", () => {
 
             fireEvent.click(getByText("Polls history"));
 
-            expect(modalSpy).toHaveBeenCalledWith(PollHistoryDialog, { roomId, matrixClient: mockClient });
+            expect(modalSpy).toHaveBeenCalledWith(PollHistoryDialog, {
+                room,
+                matrixClient: mockClient,
+                permalinkCreator: defaultProps.permalinkCreator,
+            });
         });
     });
 

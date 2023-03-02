@@ -95,7 +95,7 @@ describe("RelationsHelper", () => {
 
             expect(() => {
                 new RelationsHelper(event, RelationType.Reference, EventType.RoomMessage, client);
-            }).toThrowError("unable to create RelationsHelper: missing event ID");
+            }).toThrow("unable to create RelationsHelper: missing event ID");
         });
     });
 
@@ -105,7 +105,7 @@ describe("RelationsHelper", () => {
 
             expect(() => {
                 new RelationsHelper(event, RelationType.Reference, EventType.RoomMessage, client);
-            }).toThrowError("unable to create RelationsHelper: missing room ID");
+            }).toThrow("unable to create RelationsHelper: missing room ID");
         });
     });
 

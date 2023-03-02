@@ -27,11 +27,11 @@ interface Props {
     beacon: Beacon;
 }
 
-const useBeaconName = (beacon: Beacon): string => {
+const useBeaconName = (beacon: Beacon): string | undefined => {
     const matrixClient = useContext(MatrixClientContext);
 
-    if (beacon.beaconInfo.assetType !== LocationAssetType.Self) {
-        return beacon.beaconInfo.description;
+    if (beacon.beaconInfo?.assetType !== LocationAssetType.Self) {
+        return beacon.beaconInfo?.description;
     }
     const room = matrixClient.getRoom(beacon.roomId);
     const member = room?.getMember(beacon.beaconInfoOwner);

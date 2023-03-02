@@ -74,7 +74,7 @@ describe("PlainTextComposer", () => {
         await userEvent.type(screen.getByRole("textbox"), content);
 
         // Then
-        expect(onChange).toBeCalledWith(content);
+        expect(onChange).toHaveBeenCalledWith(content);
     });
 
     it("Should call onSend when Enter is pressed when ctrlEnterToSend is false", async () => {
@@ -84,7 +84,7 @@ describe("PlainTextComposer", () => {
         await userEvent.type(screen.getByRole("textbox"), "{enter}");
 
         // Then it sends a message
-        expect(onSend).toBeCalledTimes(1);
+        expect(onSend).toHaveBeenCalledTimes(1);
     });
 
     it("Should not call onSend when Enter is pressed when ctrlEnterToSend is true", async () => {
@@ -95,7 +95,7 @@ describe("PlainTextComposer", () => {
         await userEvent.type(screen.getByRole("textbox"), "{enter}");
 
         // Then it does not send a message
-        expect(onSend).toBeCalledTimes(0);
+        expect(onSend).toHaveBeenCalledTimes(0);
     });
 
     it("Should only call onSend when ctrl+enter is pressed when ctrlEnterToSend is true on windows", async () => {
@@ -109,15 +109,15 @@ describe("PlainTextComposer", () => {
 
         // Then it does NOT send a message on enter
         await userEvent.type(textBox, "{enter}");
-        expect(onSend).toBeCalledTimes(0);
+        expect(onSend).toHaveBeenCalledTimes(0);
 
         // Then it does NOT send a message on windows+enter
         await userEvent.type(textBox, "{meta>}{enter}{meta/}");
-        expect(onSend).toBeCalledTimes(0);
+        expect(onSend).toHaveBeenCalledTimes(0);
 
         // Then it does send a message on ctrl+enter
         await userEvent.type(textBox, "{control>}{enter}{control/}");
-        expect(onSend).toBeCalledTimes(1);
+        expect(onSend).toHaveBeenCalledTimes(1);
     });
 
     it("Should only call onSend when cmd+enter is pressed when ctrlEnterToSend is true on mac", async () => {
@@ -132,15 +132,15 @@ describe("PlainTextComposer", () => {
 
         // Then it does NOT send a message on enter
         await userEvent.type(textBox, "{enter}");
-        expect(onSend).toBeCalledTimes(0);
+        expect(onSend).toHaveBeenCalledTimes(0);
 
         // Then it does NOT send a message on ctrl+enter
         await userEvent.type(textBox, "{control>}{enter}{control/}");
-        expect(onSend).toBeCalledTimes(0);
+        expect(onSend).toHaveBeenCalledTimes(0);
 
         // Then it does send a message on cmd+enter
         await userEvent.type(textBox, "{meta>}{enter}{meta/}");
-        expect(onSend).toBeCalledTimes(1);
+        expect(onSend).toHaveBeenCalledTimes(1);
     });
 
     it("Should insert a newline character when shift enter is pressed when ctrlEnterToSend is false", async () => {
@@ -155,7 +155,7 @@ describe("PlainTextComposer", () => {
         await userEvent.type(textBox, inputWithShiftEnter);
 
         // Then it does not send a message, but inserts a newline character
-        expect(onSend).toBeCalledTimes(0);
+        expect(onSend).toHaveBeenCalledTimes(0);
         expect(textBox.innerHTML).toBe(expectedInnerHtml);
     });
 
@@ -172,7 +172,7 @@ describe("PlainTextComposer", () => {
         await userEvent.type(textBox, keyboardInput);
 
         // Then it does not send a message, but inserts a newline character
-        expect(onSend).toBeCalledTimes(0);
+        expect(onSend).toHaveBeenCalledTimes(0);
         expect(textBox.innerHTML).toBe(expectedInnerHtml);
     });
 
@@ -188,7 +188,7 @@ describe("PlainTextComposer", () => {
         await userEvent.type(textBox, "{enter}hello");
 
         // Then it does not send a message, but inserts a newline character
-        expect(onSend).toBeCalledTimes(0);
+        expect(onSend).toHaveBeenCalledTimes(0);
         expect(textBox).not.toContainHTML(enterThenTypeHtml);
     });
 
@@ -204,7 +204,7 @@ describe("PlainTextComposer", () => {
         await userEvent.type(textBox, "{enter}");
 
         // Then it does not send a message, but inserts a newline character
-        expect(onSend).toBeCalledTimes(0);
+        expect(onSend).toHaveBeenCalledTimes(0);
         expect(textBox).not.toContainHTML(defaultEnterHtml);
     });
 

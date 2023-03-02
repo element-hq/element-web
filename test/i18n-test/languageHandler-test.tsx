@@ -93,20 +93,17 @@ describe("languageHandler", function () {
     });
 
     describe("when translations exist in language", () => {
-        beforeEach(function (done) {
+        beforeEach(function () {
             stubClient();
 
-            setLanguage("en").then(done);
+            setLanguage("en");
             setMissingEntryGenerator((key) => key.split("|", 2)[1]);
         });
 
-        it("translates a string to german", function (done) {
-            setLanguage("de")
-                .then(function () {
-                    const translated = _t(basicString);
-                    expect(translated).toBe("Räume");
-                })
-                .then(done);
+        it("translates a string to german", async () => {
+            await setLanguage("de");
+            const translated = _t(basicString);
+            expect(translated).toBe("Räume");
         });
 
         it.each(testCasesEn)("%s", (_d, translationString, variables, tags, result) => {

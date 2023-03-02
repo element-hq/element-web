@@ -45,12 +45,12 @@ const DialogOwnBeaconStatus: React.FC<Props> = ({ roomId }) => {
     const matrixClient = useContext(MatrixClientContext);
     const room = matrixClient.getRoom(roomId);
 
-    if (!beacon?.isLive) {
+    if (!beacon?.isLive || !room) {
         return null;
     }
 
-    const isSelfLocation = beacon.beaconInfo.assetType === LocationAssetType.Self;
-    const beaconMember = isSelfLocation ? room.getMember(beacon.beaconInfoOwner) : undefined;
+    const isSelfLocation = beacon.beaconInfo?.assetType === LocationAssetType.Self;
+    const beaconMember = isSelfLocation ? room.getMember(beacon.beaconInfoOwner) : null;
 
     return (
         <div className="mx_DialogOwnBeaconStatus">

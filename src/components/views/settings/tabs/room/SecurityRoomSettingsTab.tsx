@@ -32,7 +32,7 @@ import SettingsStore from "../../../../../settings/SettingsStore";
 import { UIFeature } from "../../../../../settings/UIFeature";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import SettingsFlag from "../../../elements/SettingsFlag";
-import createRoom, { IOpts } from "../../../../../createRoom";
+import createRoom from "../../../../../createRoom";
 import CreateRoomDialog from "../../../dialogs/CreateRoomDialog";
 import JoinRuleSettings from "../../JoinRuleSettings";
 import ErrorDialog from "../../../dialogs/ErrorDialog";
@@ -204,7 +204,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
     };
 
     private createNewRoom = async (defaultPublic: boolean, defaultEncrypted: boolean): Promise<boolean> => {
-        const modal = Modal.createDialog<[boolean, IOpts]>(CreateRoomDialog, { defaultPublic, defaultEncrypted });
+        const modal = Modal.createDialog(CreateRoomDialog, { defaultPublic, defaultEncrypted });
 
         PosthogTrackers.trackInteraction("WebRoomSettingsSecurityTabCreateNewRoomButton");
 

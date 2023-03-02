@@ -208,17 +208,6 @@ describe("<SessionManagerTab />", () => {
     });
 
     it("removes spinner when device fetch fails", async () => {
-        mockClient.getDevices.mockRejectedValue({ httpStatus: 404 });
-        const { container } = render(getComponent());
-        expect(mockClient.getDevices).toHaveBeenCalled();
-
-        await act(async () => {
-            await flushPromises();
-        });
-        expect(container.getElementsByClassName("mx_Spinner").length).toBeFalsy();
-    });
-
-    it("removes spinner when device fetch fails", async () => {
         // eat the expected error log
         jest.spyOn(logger, "error").mockImplementation(() => {});
         mockClient.getDevices.mockRejectedValue({ httpStatus: 404 });
@@ -760,7 +749,7 @@ describe("<SessionManagerTab />", () => {
                 expect(mockClient.getDevices).toHaveBeenCalled();
             });
 
-            it("deletes a device when interactive auth is not required", async () => {
+            it("does not delete a device when interactive auth is not required", async () => {
                 const { getByTestId } = render(getComponent());
 
                 await act(async () => {

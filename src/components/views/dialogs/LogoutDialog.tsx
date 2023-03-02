@@ -15,10 +15,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ComponentType } from "react";
+import React from "react";
 import { IKeyBackupInfo } from "matrix-js-sdk/src/crypto/keybackup";
 import { logger } from "matrix-js-sdk/src/logger";
 
+import type CreateKeyBackupDialog from "../../../async-components/views/dialogs/security/CreateKeyBackupDialog";
+import type ExportE2eKeysDialog from "../../../async-components/views/dialogs/security/ExportE2eKeysDialog";
 import Modal from "../../../Modal";
 import dis from "../../../dispatcher/dispatcher";
 import { _t } from "../../../languageHandler";
@@ -81,7 +83,7 @@ export default class LogoutDialog extends React.Component<IProps, IState> {
     private onExportE2eKeysClicked = (): void => {
         Modal.createDialogAsync(
             import("../../../async-components/views/dialogs/security/ExportE2eKeysDialog") as unknown as Promise<
-                ComponentType<{}>
+                typeof ExportE2eKeysDialog
             >,
             {
                 matrixClient: MatrixClientPeg.get(),
@@ -89,7 +91,7 @@ export default class LogoutDialog extends React.Component<IProps, IState> {
         );
     };
 
-    private onFinished = (confirmed: boolean): void => {
+    private onFinished = (confirmed?: boolean): void => {
         if (confirmed) {
             dis.dispatch({ action: "logout" });
         }
@@ -112,7 +114,7 @@ export default class LogoutDialog extends React.Component<IProps, IState> {
         } else {
             Modal.createDialogAsync(
                 import("../../../async-components/views/dialogs/security/CreateKeyBackupDialog") as unknown as Promise<
-                    ComponentType<{}>
+                    typeof CreateKeyBackupDialog
                 >,
                 undefined,
                 undefined,

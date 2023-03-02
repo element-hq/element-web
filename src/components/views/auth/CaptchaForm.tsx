@@ -91,7 +91,7 @@ export default class CaptchaForm extends React.Component<ICaptchaFormProps, ICap
         const publicKey = this.props.sitePublicKey;
         if (!publicKey) {
             logger.error("No public key for recaptcha!");
-            throw new Error("This server has not supplied enough information for Recaptcha " + "authentication");
+            throw new Error("This server has not supplied enough information for Recaptcha authentication");
         }
 
         logger.info("Rendering to %s", divId);

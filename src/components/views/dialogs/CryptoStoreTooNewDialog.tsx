@@ -24,9 +24,10 @@ import Modal from "../../../Modal";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
 import QuestionDialog from "./QuestionDialog";
-import { IDialogProps } from "./IDialogProps";
 
-interface IProps extends IDialogProps {}
+interface IProps {
+    onFinished(logout?: boolean): void;
+}
 
 const CryptoStoreTooNewDialog: React.FC<IProps> = (props: IProps) => {
     const brand = SdkConfig.get().brand;
@@ -72,7 +73,7 @@ const CryptoStoreTooNewDialog: React.FC<IProps> = (props: IProps) => {
             <DialogButtons
                 primaryButton={_t("Continue With Encryption Disabled")}
                 hasCancel={false}
-                onPrimaryButtonClick={props.onFinished}
+                onPrimaryButtonClick={() => props.onFinished(false)}
             >
                 <button onClick={_onLogoutClicked}>{_t("Sign out")}</button>
             </DialogButtons>

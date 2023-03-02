@@ -1179,34 +1179,34 @@ describe("SpaceStore", () => {
             const fn = jest.fn();
             store.traverseSpace("!b:server", fn);
 
-            expect(fn).toBeCalledTimes(3);
-            expect(fn).toBeCalledWith("!a:server");
-            expect(fn).toBeCalledWith("!b:server");
-            expect(fn).toBeCalledWith("!c:server");
+            expect(fn).toHaveBeenCalledTimes(3);
+            expect(fn).toHaveBeenCalledWith("!a:server");
+            expect(fn).toHaveBeenCalledWith("!b:server");
+            expect(fn).toHaveBeenCalledWith("!c:server");
         });
 
         it("including rooms", () => {
             const fn = jest.fn();
             store.traverseSpace("!b:server", fn, true);
 
-            expect(fn).toBeCalledTimes(8); // twice for shared-child
-            expect(fn).toBeCalledWith("!a:server");
-            expect(fn).toBeCalledWith("!a-child:server");
-            expect(fn).toBeCalledWith("!b:server");
-            expect(fn).toBeCalledWith("!b-child:server");
-            expect(fn).toBeCalledWith("!c:server");
-            expect(fn).toBeCalledWith("!c-child:server");
-            expect(fn).toBeCalledWith("!shared-child:server");
+            expect(fn).toHaveBeenCalledTimes(8); // twice for shared-child
+            expect(fn).toHaveBeenCalledWith("!a:server");
+            expect(fn).toHaveBeenCalledWith("!a-child:server");
+            expect(fn).toHaveBeenCalledWith("!b:server");
+            expect(fn).toHaveBeenCalledWith("!b-child:server");
+            expect(fn).toHaveBeenCalledWith("!c:server");
+            expect(fn).toHaveBeenCalledWith("!c-child:server");
+            expect(fn).toHaveBeenCalledWith("!shared-child:server");
         });
 
         it("excluding rooms", () => {
             const fn = jest.fn();
             store.traverseSpace("!b:server", fn, false);
 
-            expect(fn).toBeCalledTimes(3);
-            expect(fn).toBeCalledWith("!a:server");
-            expect(fn).toBeCalledWith("!b:server");
-            expect(fn).toBeCalledWith("!c:server");
+            expect(fn).toHaveBeenCalledTimes(3);
+            expect(fn).toHaveBeenCalledWith("!a:server");
+            expect(fn).toHaveBeenCalledWith("!b:server");
+            expect(fn).toHaveBeenCalledWith("!c:server");
         });
     });
 

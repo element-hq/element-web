@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { ReactNode } from "react";
 
 import { _t } from "../../../../languageHandler";
 import AccessibleButton from "../../../views/elements/AccessibleButton";
@@ -26,7 +26,8 @@ import { ErrorMessage } from "../../ErrorMessage";
 
 interface Props {
     email: string;
-    errorText: string | null;
+    errorText: ReactNode | null;
+    onFinished(): void; // This modal is weird in that the way you close it signals intent
     onCloseClick: () => void;
     onReEnterEmailClick: () => void;
     onResendClick: () => Promise<boolean>;

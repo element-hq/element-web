@@ -34,6 +34,7 @@ import {
 import { _t } from "../../../../languageHandler";
 import DeviceContextMenu from "../../context_menus/DeviceContextMenu";
 import { MediaDeviceKindEnum } from "../../../../MediaDeviceHandler";
+import { ButtonEvent } from "../../elements/AccessibleButton";
 
 // Height of the header duplicated from CSS because we need to subtract it from our max
 // height to get the max height of the video
@@ -46,7 +47,6 @@ interface IButtonProps extends Omit<React.ComponentProps<typeof AccessibleToolti
     className: string;
     onLabel?: string;
     offLabel?: string;
-    onClick: (event: React.MouseEvent) => void;
 }
 
 const LegacyCallViewToggleButton: React.FC<IButtonProps> = ({
@@ -86,7 +86,7 @@ const LegacyCallViewDropdownButton: React.FC<IDropdownButtonProps> = ({ state, d
         mx_LegacyCallViewButtons_dropdownButton_collapsed: !menuDisplayed,
     });
 
-    const onClick = (event: React.MouseEvent): void => {
+    const onClick = (event: ButtonEvent): void => {
         event.stopPropagation();
         openMenu();
     };

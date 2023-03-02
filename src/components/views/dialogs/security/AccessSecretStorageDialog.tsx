@@ -24,7 +24,6 @@ import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import Field from "../../elements/Field";
 import AccessibleButton from "../../elements/AccessibleButton";
 import { _t } from "../../../../languageHandler";
-import { IDialogProps } from "../IDialogProps";
 import { accessSecretStorage } from "../../../../SecurityManager";
 import Modal from "../../../../Modal";
 import InteractiveAuthDialog from "../InteractiveAuthDialog";
@@ -40,9 +39,12 @@ const KEY_FILE_MAX_SIZE = 128;
 // Don't shout at the user that their key is invalid every time they type a key: wait a short time
 const VALIDATION_THROTTLE_MS = 200;
 
-interface IProps extends IDialogProps {
+export type KeyParams = { passphrase?: string; recoveryKey?: string };
+
+interface IProps {
     keyInfo?: ISecretStorageKeyInfo;
-    checkPrivateKey: (k: { passphrase?: string; recoveryKey?: string }) => boolean;
+    checkPrivateKey: (k: KeyParams) => Promise<boolean>;
+    onFinished(result?: false | KeyParams): void;
 }
 
 interface IState {
@@ -246,7 +248,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
 
                 // Now we can indicate that the user is done pressing buttons, finally.
                 // Upstream flows will detect the new secret storage, key backup, etc and use it.
-                this.props.onFinished(true);
+                this.props.onFinished({});
             }, true);
         } catch (e) {
             logger.error(e);

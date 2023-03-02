@@ -174,13 +174,13 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
             }
         }
         const declineLabel =
-            this.state.counter === 0 ? _t("Decline") : _t("Decline (%(counter)s)", { counter: this.state.counter });
+            this.state.counter === 0 ? _t("Ignore") : _t("Ignore (%(counter)s)", { counter: this.state.counter });
 
         return (
             <GenericToast
                 description={description}
                 detail={detail}
-                acceptLabel={_t("Accept")}
+                acceptLabel={_t("Verify Session")}
                 onAccept={this.accept}
                 rejectLabel={declineLabel}
                 onReject={this.cancel}

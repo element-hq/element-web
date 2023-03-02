@@ -41,7 +41,7 @@ interface IProps {
     defaultName?: string;
     parentSpace?: Room;
     defaultEncrypted?: boolean;
-    onFinished(proceed: boolean, opts?: IOpts): void;
+    onFinished(proceed?: boolean, opts?: IOpts): void;
 }
 
 interface IState {

@@ -70,7 +70,7 @@ import {
     startDmOnFirstMessage,
     ThreepidMember,
 } from "../../../utils/direct-messages";
-import { KIND_CALL_TRANSFER, KIND_DM, KIND_INVITE } from "./InviteDialogTypes";
+import { InviteKind } from "./InviteDialogTypes";
 import Modal from "../../../Modal";
 import dis from "../../../dispatcher/dispatcher";
 
@@ -253,32 +253,32 @@ interface BaseProps {
     // Takes a boolean which is true if a user / users were invited /
     // a call transfer was initiated or false if the dialog was cancelled
     // with no action taken.
-    onFinished: (success: boolean) => void;
+    onFinished: (success?: boolean) => void;
 
     // Initial value to populate the filter with
     initialText?: string;
 }
 
 interface InviteDMProps extends BaseProps {
-    // The kind of invite being performed. Assumed to be KIND_DM if not provided.
-    kind?: typeof KIND_DM;
+    // The kind of invite being performed. Assumed to be InviteKind.Dm if not provided.
+    kind?: InviteKind.Dm;
 }
 
 interface InviteRoomProps extends BaseProps {
-    kind: typeof KIND_INVITE;
+    kind: InviteKind.Invite;
 
-    // The room ID this dialog is for. Only required for KIND_INVITE.
+    // The room ID this dialog is for. Only required for InviteKind.Invite.
     roomId: string;
 }
 
 function isRoomInvite(props: Props): props is InviteRoomProps {
-    return props.kind === KIND_INVITE;
+    return props.kind === InviteKind.Invite;
 }
 
 interface InviteCallProps extends BaseProps {
-    kind: typeof KIND_CALL_TRANSFER;
+    kind: InviteKind.CallTransfer;
 
-    // The call to transfer. Only required for KIND_CALL_TRANSFER.
+    // The call to transfer. Only required for InviteKind.CallTransfer.
     call: MatrixCall;
 }
 
@@ -305,8 +305,8 @@ interface IInviteDialogState {
 }
 
 export default class InviteDialog extends React.PureComponent<Props, IInviteDialogState> {
-    public static defaultProps = {
-        kind: KIND_DM,
+    public static defaultProps: Partial<Props> = {
+        kind: InviteKind.Dm,
         initialText: "",
     };
 
@@ -318,10 +318,10 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
     public constructor(props: Props) {
         super(props);
 
-        if (props.kind === KIND_INVITE && !props.roomId) {
-            throw new Error("When using KIND_INVITE a roomId is required for an InviteDialog");
-        } else if (props.kind === KIND_CALL_TRANSFER && !props.call) {
-            throw new Error("When using KIND_CALL_TRANSFER a call is required for an InviteDialog");
+        if (props.kind === InviteKind.Invite && !props.roomId) {
+            throw new Error("When using InviteKind.Invite a roomId is required for an InviteDialog");
+        } else if (props.kind === InviteKind.CallTransfer && !props.call) {
+            throw new Error("When using InviteKind.CallTransfer a call is required for an InviteDialog");
         }
 
         const alreadyInvited = new Set([MatrixClientPeg.get().getUserId()!, SdkConfig.get("welcome_user_id")]);
@@ -493,7 +493,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
     };
 
     private inviteUsers = async (): Promise<void> => {
-        if (this.props.kind !== KIND_INVITE) return;
+        if (this.props.kind !== InviteKind.Invite) return;
         this.setState({ busy: true });
         this.convertFilter();
         const targets = this.convertFilter();
@@ -528,7 +528,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
     };
 
     private transferCall = async (): Promise<void> => {
-        if (this.props.kind !== KIND_CALL_TRANSFER) return;
+        if (this.props.kind !== InviteKind.CallTransfer) return;
         if (this.state.currentTabId == TabId.UserDirectory) {
             this.convertFilter();
             const targets = this.convertFilter();
@@ -657,7 +657,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             this.setState({ tryingIdentityServer: true });
             return;
         }
-        if (term.indexOf("@") > 0 && Email.looksValid(term) && SettingsStore.getValue(UIFeature.IdentityServer)) {
+        if (Email.looksValid(term) && SettingsStore.getValue(UIFeature.IdentityServer)) {
             // Start off by suggesting the plain email while we try and resolve it
             // to a real account.
             this.setState({
@@ -737,7 +737,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             if (idx >= 0) {
                 targets.splice(idx, 1);
             } else {
-                if (this.props.kind === KIND_CALL_TRANSFER && targets.length > 0) {
+                if (this.props.kind === InviteKind.CallTransfer && targets.length > 0) {
                     targets = [];
                 }
                 targets.push(member);
@@ -796,7 +796,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                 continue;
             }
 
-            if (address.indexOf("@") > 0 && Email.looksValid(address)) {
+            if (Email.looksValid(address)) {
                 toAdd.push(new ThreepidMember(address));
                 continue;
             }
@@ -869,7 +869,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         const lastActive = (m: Result): number | undefined => (kind === "recents" ? m.lastActive : undefined);
         let sectionName = kind === "recents" ? _t("Recent Conversations") : _t("Suggestions");
 
-        if (this.props.kind === KIND_INVITE) {
+        if (this.props.kind === InviteKind.Invite) {
             sectionName = kind === "recents" ? _t("Recently Direct Messaged") : _t("Suggestions");
         }
 
@@ -959,7 +959,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
 
     private renderEditor(): JSX.Element {
         const hasPlaceholder =
-            this.props.kind == KIND_CALL_TRANSFER &&
+            this.props.kind == InviteKind.CallTransfer &&
             this.state.targets.length === 0 &&
             this.state.filterText.length === 0;
         const targets = this.state.targets.map((t) => (
@@ -974,7 +974,9 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                 ref={this.editorRef}
                 onPaste={this.onPaste}
                 autoFocus={true}
-                disabled={this.state.busy || (this.props.kind == KIND_CALL_TRANSFER && this.state.targets.length > 0)}
+                disabled={
+                    this.state.busy || (this.props.kind == InviteKind.CallTransfer && this.state.targets.length > 0)
+                }
                 autoComplete="off"
                 placeholder={hasPlaceholder ? _t("Search") : undefined}
                 data-testid="invite-dialog-input"
@@ -1085,7 +1087,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
 
     private get screenName(): ScreenName | undefined {
         switch (this.props.kind) {
-            case KIND_DM:
+            case InviteKind.Dm:
                 return "StartChat";
         }
     }
@@ -1112,7 +1114,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
 
         const cli = MatrixClientPeg.get();
         const userId = cli.getUserId()!;
-        if (this.props.kind === KIND_DM) {
+        if (this.props.kind === InviteKind.Dm) {
             title = _t("Direct Messages");
 
             if (identityServersEnabled) {
@@ -1164,7 +1166,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                     </CopyableText>
                 </div>
             );
-        } else if (this.props.kind === KIND_INVITE) {
+        } else if (this.props.kind === InviteKind.Invite) {
             const roomId = this.props.roomId;
             const room = MatrixClientPeg.get()?.getRoom(roomId);
             const isSpace = room?.isSpaceRoom();
@@ -1235,7 +1237,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                     );
                 }
             }
-        } else if (this.props.kind === KIND_CALL_TRANSFER) {
+        } else if (this.props.kind === InviteKind.CallTransfer) {
             title = _t("Transfer");
 
             consultConnectSection = (
@@ -1264,7 +1266,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         }
 
         const goButton =
-            this.props.kind == KIND_CALL_TRANSFER ? null : (
+            this.props.kind == InviteKind.CallTransfer ? null : (
                 <AccessibleButton
                     kind="primary"
                     onClick={goButtonFn}
@@ -1298,7 +1300,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         );
 
         let dialogContent;
-        if (this.props.kind === KIND_CALL_TRANSFER) {
+        if (this.props.kind === InviteKind.CallTransfer) {
             const tabs: Tab[] = [];
             tabs.push(
                 new Tab(TabId.UserDirectory, _td("User Directory"), "mx_InviteDialog_userDirectoryIcon", usersSection),
@@ -1363,8 +1365,8 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         return (
             <BaseDialog
                 className={classNames({
-                    mx_InviteDialog_transfer: this.props.kind === KIND_CALL_TRANSFER,
-                    mx_InviteDialog_other: this.props.kind !== KIND_CALL_TRANSFER,
+                    mx_InviteDialog_transfer: this.props.kind === InviteKind.CallTransfer,
+                    mx_InviteDialog_other: this.props.kind !== InviteKind.CallTransfer,
                     mx_InviteDialog_hasFooter: !!footer,
                 })}
                 hasCancel={true}

@@ -23,7 +23,7 @@ import { User } from "matrix-js-sdk/src/models/user";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import RoomContext from "../../../contexts/RoomContext";
 import DMRoomMap from "../../../utils/DMRoomMap";
-import { _t } from "../../../languageHandler";
+import { _t, _td } from "../../../languageHandler";
 import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
 import MiniAvatarUploader, { AVATAR_SIZE } from "../elements/MiniAvatarUploader";
 import RoomAvatar from "../avatars/RoomAvatar";
@@ -55,11 +55,11 @@ const NewRoomIntro: React.FC = () => {
 
     let body: JSX.Element;
     if (dmPartner) {
-        let introMessage = _t("This is the beginning of your direct message history with <displayName/>.");
+        let introMessage = _td("This is the beginning of your direct message history with <displayName/>.");
         let caption: string | undefined;
 
         if (isLocalRoom) {
-            introMessage = _t("Send your first message to invite <displayName/> to chat");
+            introMessage = _td("Send your first message to invite <displayName/> to chat");
         } else if (room.getJoinedMemberCount() + room.getInvitedMemberCount() === 2) {
             caption = _t("Only the two of you are in this conversation, unless either of you invites anyone to join.");
         }

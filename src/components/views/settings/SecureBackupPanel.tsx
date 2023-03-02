@@ -15,12 +15,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ComponentType } from "react";
+import React from "react";
 import { IKeyBackupInfo } from "matrix-js-sdk/src/crypto/keybackup";
 import { TrustInfo } from "matrix-js-sdk/src/crypto/backup";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
 import { logger } from "matrix-js-sdk/src/logger";
 
+import type CreateKeyBackupDialog from "../../../async-components/views/dialogs/security/CreateKeyBackupDialog";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { _t } from "../../../languageHandler";
 import Modal from "../../../Modal";
@@ -166,7 +167,7 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
     private startNewBackup = (): void => {
         Modal.createDialogAsync(
             import("../../../async-components/views/dialogs/security/CreateKeyBackupDialog") as unknown as Promise<
-                ComponentType<{}>
+                typeof CreateKeyBackupDialog
             >,
             {
                 onFinished: () => {
@@ -183,7 +184,7 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
         Modal.createDialog(QuestionDialog, {
             title: _t("Delete Backup"),
             description: _t(
-                "Are you sure? You will lose your encrypted messages if your " + "keys are not backed up properly.",
+                "Are you sure? You will lose your encrypted messages if your keys are not backed up properly.",
             ),
             button: _t("Delete Backup"),
             danger: true,

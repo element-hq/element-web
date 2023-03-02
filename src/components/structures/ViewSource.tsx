@@ -23,15 +23,15 @@ import { _t } from "../../languageHandler";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import { canEditContent } from "../../utils/EventUtils";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
-import { IDialogProps } from "../views/dialogs/IDialogProps";
 import BaseDialog from "../views/dialogs/BaseDialog";
 import { DevtoolsContext } from "../views/dialogs/devtools/BaseTool";
 import { StateEventEditor } from "../views/dialogs/devtools/RoomState";
 import { stringify, TimelineEventEditor } from "../views/dialogs/devtools/Event";
 import CopyableText from "../views/elements/CopyableText";
 
-interface IProps extends IDialogProps {
+interface IProps {
     mxEvent: MatrixEvent; // the MatrixEvent associated with the context menu
+    onFinished(): void;
 }
 
 interface IState {

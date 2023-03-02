@@ -454,7 +454,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
         }
 
         let errorText: ReactNode =
-            _t("There was a problem communicating with the homeserver, " + "please try again later.") +
+            _t("There was a problem communicating with the homeserver, please try again later.") +
             (errCode ? " (" + errCode + ")" : "");
 
         if (err instanceof ConnectionError) {

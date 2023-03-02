@@ -52,9 +52,9 @@ const isSharingOwnLocation = (shareType: LocationShareType): boolean =>
 class LocationPicker extends React.Component<ILocationPickerProps, IState> {
     public static contextType = MatrixClientContext;
     public context!: React.ContextType<typeof MatrixClientContext>;
-    private map?: maplibregl.Map = null;
-    private geolocate?: maplibregl.GeolocateControl = null;
-    private marker?: maplibregl.Marker = null;
+    private map?: maplibregl.Map;
+    private geolocate?: maplibregl.GeolocateControl;
+    private marker?: maplibregl.Marker;
 
     public constructor(props: ILocationPickerProps) {
         super(props);
@@ -93,14 +93,14 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
 
             this.map.on("error", (e) => {
                 logger.error(
-                    "Failed to load map: check map_style_url in config.json " + "has a valid URL and API key",
+                    "Failed to load map: check map_style_url in config.json has a valid URL and API key",
                     e.error,
                 );
                 this.setState({ error: LocationShareError.MapStyleUrlNotReachable });
             });
 
             this.map.on("load", () => {
-                this.geolocate.trigger();
+                this.geolocate?.trigger();
             });
 
             this.geolocate.on("error", this.onGeolocateError);
@@ -120,7 +120,7 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
         } catch (e) {
             logger.error("Failed to render map", e);
             const errorType =
-                e?.message === LocationShareError.MapStyleUrlNotConfigured
+                (e as Error)?.message === LocationShareError.MapStyleUrlNotConfigured
                     ? LocationShareError.MapStyleUrlNotConfigured
                     : LocationShareError.Default;
             this.setState({ error: errorType });
@@ -141,7 +141,7 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
             offset: [0, -1],
         })
             .setLngLat(new maplibregl.LngLat(0, 0))
-            .addTo(this.map);
+            .addTo(this.map!);
     };
 
     private updateStyleUrl = (clientWellKnown: IClientWellKnown): void => {

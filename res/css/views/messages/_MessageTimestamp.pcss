@@ -16,8 +16,9 @@ limitations under the License.
 
 .mx_MessageTimestamp {
     --MessageTimestamp-max-width: 80px;
+    --MessageTimestamp-color: $event-timestamp-color;
 
-    color: $event-timestamp-color;
+    color: var(--MessageTimestamp-color);
     font-size: $font-10px;
     font-variant-numeric: tabular-nums;
     display: block; /* enable the width setting below */

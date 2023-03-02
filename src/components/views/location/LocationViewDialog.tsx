@@ -19,19 +19,19 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 
 import BaseDialog from "../dialogs/BaseDialog";
-import { IDialogProps } from "../dialogs/IDialogProps";
 import { locationEventGeoUri, isSelfLocation } from "../../../utils/location";
 import Map from "./Map";
 import SmartMarker from "./SmartMarker";
 import ZoomButtons from "./ZoomButtons";
 
-interface IProps extends IDialogProps {
+interface IProps {
     matrixClient: MatrixClient;
     mxEvent: MatrixEvent;
+    onFinished(): void;
 }
 
 interface IState {
-    error: Error;
+    error?: Error;
 }
 
 /**
@@ -58,7 +58,7 @@ export default class LocationViewDialog extends React.Component<IProps, IState> 
         const { mxEvent } = this.props;
 
         // only pass member to marker when should render avatar marker
-        const markerRoomMember = isSelfLocation(mxEvent.getContent()) ? mxEvent.sender : undefined;
+        const markerRoomMember = (isSelfLocation(mxEvent.getContent()) && mxEvent.sender) || undefined;
         const geoUri = locationEventGeoUri(mxEvent);
         return (
             <BaseDialog className="mx_LocationViewDialog" onFinished={this.props.onFinished} fixedWidth={false}>

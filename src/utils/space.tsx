@@ -23,7 +23,7 @@ import { ICreateRoomStateEvent } from "matrix-js-sdk/src/matrix";
 import { calculateRoomVia } from "./permalinks/Permalinks";
 import Modal from "../Modal";
 import CreateRoomDialog from "../components/views/dialogs/CreateRoomDialog";
-import createRoom, { IOpts } from "../createRoom";
+import createRoom from "../createRoom";
 import { _t } from "../languageHandler";
 import SpacePublicShare from "../components/views/spaces/SpacePublicShare";
 import InfoDialog from "../components/views/dialogs/InfoDialog";
@@ -75,7 +75,7 @@ export const showAddExistingRooms = (space: Room): void => {
 };
 
 export const showCreateNewRoom = async (space: Room, type?: RoomType): Promise<boolean> => {
-    const modal = Modal.createDialog<[boolean, IOpts]>(CreateRoomDialog, {
+    const modal = Modal.createDialog(CreateRoomDialog, {
         type,
         defaultPublic: space.getJoinRule() === JoinRule.Public,
         parentSpace: space,

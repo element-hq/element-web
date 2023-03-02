@@ -177,12 +177,12 @@ describe("EditWysiwygComposer", () => {
             screen.getByText("Cancel").click();
 
             // Then
-            expect(spyDispatcher).toBeCalledWith({
+            expect(spyDispatcher).toHaveBeenCalledWith({
                 action: Action.EditEvent,
                 event: null,
                 timelineRenderingType: defaultRoomContext.timelineRenderingType,
             });
-            expect(spyDispatcher).toBeCalledWith({
+            expect(spyDispatcher).toHaveBeenCalledWith({
                 action: Action.FocusSendMessageComposer,
                 context: defaultRoomContext.timelineRenderingType,
             });
@@ -215,10 +215,10 @@ describe("EditWysiwygComposer", () => {
                 "msgtype": "m.text",
             };
             await waitFor(() =>
-                expect(mockClient.sendMessage).toBeCalledWith(mockEvent.getRoomId(), null, expectedContent),
+                expect(mockClient.sendMessage).toHaveBeenCalledWith(mockEvent.getRoomId(), null, expectedContent),
             );
 
-            expect(spyDispatcher).toBeCalledWith({ action: "message_sent" });
+            expect(spyDispatcher).toHaveBeenCalledWith({ action: "message_sent" });
         });
     });
 

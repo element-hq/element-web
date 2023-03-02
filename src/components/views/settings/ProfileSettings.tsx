@@ -20,14 +20,12 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import Field from "../elements/Field";
-import { getHostingLink } from "../../../utils/HostingLink";
 import { OwnProfileStore } from "../../../stores/OwnProfileStore";
 import Modal from "../../../Modal";
 import ErrorDialog from "../dialogs/ErrorDialog";
 import { mediaFromMxc } from "../../../customisations/Media";
 import AccessibleButton from "../elements/AccessibleButton";
 import AvatarSetting from "./AvatarSetting";
-import ExternalLink from "../elements/ExternalLink";
 import UserIdentifierCustomisations from "../../../customisations/UserIdentifier";
 import { chromeFileInputFix } from "../../../utils/BrowserWorkarounds";
 import PosthogTrackers from "../../../PosthogTrackers";
@@ -161,26 +159,6 @@ export default class ProfileSettings extends React.Component<{}, IState> {
     };
 
     public render(): React.ReactNode {
-        const hostingSignupLink = getHostingLink("user-settings");
-        let hostingSignup: JSX.Element | undefined;
-        if (hostingSignupLink) {
-            hostingSignup = (
-                <span>
-                    {_t(
-                        "<a>Upgrade</a> to your own domain",
-                        {},
-                        {
-                            a: (sub) => (
-                                <ExternalLink href={hostingSignupLink} target="_blank" rel="noreferrer noopener">
-                                    {sub}
-                                </ExternalLink>
-                            ),
-                        },
-                    )}
-                </span>
-            );
-        }
-
         const userIdentifier = UserIdentifierCustomisations.getDisplayUserIdentifier(this.state.userId, {
             withDisplayName: true,
         });
@@ -216,7 +194,6 @@ export default class ProfileSettings extends React.Component<{}, IState> {
                             {userIdentifier && (
                                 <span className="mx_ProfileSettings_profile_controls_userId">{userIdentifier}</span>
                             )}
-                            {hostingSignup}
                         </p>
                     </div>
                     <AvatarSetting

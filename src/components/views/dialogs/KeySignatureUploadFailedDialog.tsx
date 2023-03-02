@@ -21,9 +21,8 @@ import SdkConfig from "../../../SdkConfig";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
 import Spinner from "../elements/Spinner";
-import { IDialogProps } from "./IDialogProps";
 
-interface IProps extends IDialogProps {
+interface IProps {
     failures: Record<
         string,
         Record<
@@ -35,7 +34,8 @@ interface IProps extends IDialogProps {
         >
     >;
     source: string;
-    continuation: () => Promise<void>;
+    continuation: (opts: { shouldEmit: boolean }) => Promise<void>;
+    onFinished(): void;
 }
 
 const KeySignatureUploadFailedDialog: React.FC<IProps> = ({ failures, source, continuation, onFinished }) => {
@@ -61,7 +61,7 @@ const KeySignatureUploadFailedDialog: React.FC<IProps> = ({ failures, source, co
             }).finally(() => {
                 setCancelled(true);
             });
-            await Promise.race([continuation(), cancel]);
+            await Promise.race([continuation({ shouldEmit: false }), cancel]);
             setSuccess(true);
         } catch (e) {
             setRetry((r) => r - 1);

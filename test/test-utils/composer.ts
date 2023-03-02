@@ -14,10 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// eslint-disable-next-line deprecate/import
-import { ReactWrapper } from "enzyme";
-import { act } from "react-dom/test-utils";
-import { act as actRTL, fireEvent, RenderResult } from "@testing-library/react";
+import { act, fireEvent, RenderResult } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 export const addTextToComposer = (container: HTMLElement, text: string) =>
@@ -34,23 +31,8 @@ export const addTextToComposer = (container: HTMLElement, text: string) =>
         fireEvent.paste(container.querySelector('[role="textbox"]')!, pasteEvent);
     });
 
-export const addTextToComposerEnzyme = (wrapper: ReactWrapper, text: string) =>
-    act(() => {
-        // couldn't get input event on contenteditable to work
-        // paste works without illegal private method access
-        const pasteEvent: Partial<ClipboardEvent> = {
-            clipboardData: {
-                types: [],
-                files: [],
-                getData: (type: string) => (type === "text/plain" ? text : undefined),
-            } as unknown as DataTransfer,
-        };
-        wrapper.find('[role="textbox"]').simulate("paste", pasteEvent);
-        wrapper.update();
-    });
-
 export const addTextToComposerRTL = async (renderResult: RenderResult, text: string): Promise<void> => {
-    await actRTL(async () => {
+    await act(async () => {
         await userEvent.click(renderResult.getByLabelText("Send a message…"));
         await userEvent.keyboard(text);
     });

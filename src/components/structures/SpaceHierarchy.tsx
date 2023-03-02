@@ -332,6 +332,7 @@ const Tile: React.FC<ITileProps> = ({
         <li
             className="mx_SpaceHierarchy_roomTileWrapper"
             role="treeitem"
+            aria-selected={selected}
             aria-expanded={children ? showChildren : undefined}
         >
             <AccessibleButton
