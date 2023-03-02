@@ -43,7 +43,6 @@ import IconizedContextMenu, {
     IconizedContextMenuOptionList,
 } from "../views/context_menus/IconizedContextMenu";
 import { UIFeature } from "../../settings/UIFeature";
-import HostSignupAction from "./HostSignupAction";
 import SpaceStore from "../../stores/spaces/SpaceStore";
 import { UPDATE_SELECTED_SPACE } from "../../stores/spaces";
 import UserIdentifierCustomisations from "../../customisations/UserIdentifier";
@@ -290,7 +289,6 @@ export default class UserMenu extends React.Component<IProps, IState> {
         if (!this.state.contextMenuPosition) return null;
 
         let topSection;
-        const hostSignupConfig = SdkConfig.getObject("host_signup");
         if (MatrixClientPeg.get().isGuest()) {
             topSection = (
                 <div className="mx_UserMenu_contextMenu_header mx_UserMenu_contextMenu_guestPrompts">
@@ -318,15 +316,6 @@ export default class UserMenu extends React.Component<IProps, IState> {
                     )}
                 </div>
             );
-        } else if (hostSignupConfig?.get("url")) {
-            // If hostSignup.domains is set to a non-empty array, only show
-            // dialog if the user is on the domain or a subdomain.
-            const hostSignupDomains = hostSignupConfig.get("domains") || [];
-            const mxDomain = MatrixClientPeg.get().getDomain();
-            const validDomains = hostSignupDomains.filter((d) => d === mxDomain || mxDomain.endsWith(`.${d}`));
-            if (!hostSignupConfig.get("domains") || validDomains.length > 0) {
-                topSection = <HostSignupAction onClick={this.onCloseMenu} />;
-            }
         }
 
         let homeButton = null;
