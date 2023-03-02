@@ -81,7 +81,7 @@ jobs:
                   AWS_SECRET_ACCESS_KEY: ${{ secrets.CF_R2_TOKEN }}
 
             - name: Wait for other steps to succeed
-              uses: lewagon/wait-on-check-action@v1.2.0
+              uses: lewagon/wait-on-check-action@v1.3.1
               with:
                   ref: ${{ github.sha }}
                   running-workflow-name: "Build & Deploy develop.element.io"
