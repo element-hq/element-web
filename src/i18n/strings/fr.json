@@ -3752,5 +3752,7 @@
     "Load more polls": "Charger plus de sondages",
     "Past polls": "Anciens sondages",
     "Active polls": "Sondages en cours",
-    "View poll in timeline": "Consulter la chronologie des sondages"
+    "View poll in timeline": "Consulter la chronologie des sondages",
+    "Verify Session": "Vérifier la session",
+    "Ignore (%(counter)s)": "Ignorer (%(counter)s)"
 }
