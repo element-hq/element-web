@@ -42,7 +42,7 @@ const OwnBeaconStatus: React.FC<Props & HTMLProps<HTMLDivElement>> = ({ beacon, 
         stoppingInProgress,
         onStopSharing,
         onResetLocationPublishError,
-    } = useOwnLiveBeacons([beacon?.identifier]);
+    } = useOwnLiveBeacons(beacon?.identifier ? [beacon?.identifier] : []);
 
     // combine display status with errors that only occur for user's own beacons
     const ownDisplayStatus = hasLocationPublishError || hasStopSharingError ? BeaconDisplayStatus.Error : displayStatus;

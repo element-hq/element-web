@@ -54,7 +54,7 @@ interface FocusedBeaconState {
     beacon?: Beacon;
 }
 
-const getBoundsCenter = (bounds: Bounds): string | undefined => {
+const getBoundsCenter = (bounds?: Bounds): string | undefined => {
     if (!bounds) {
         return;
     }
@@ -70,10 +70,10 @@ const useMapPosition = (
     { beacon, ts }: FocusedBeaconState,
 ): {
     bounds?: Bounds;
-    centerGeoUri: string;
+    centerGeoUri?: string;
 } => {
     const [bounds, setBounds] = useState<Bounds | undefined>(getBeaconBounds(liveBeacons));
-    const [centerGeoUri, setCenterGeoUri] = useState<string>(
+    const [centerGeoUri, setCenterGeoUri] = useState<string | undefined>(
         beacon?.latestLocationState?.uri || getBoundsCenter(bounds),
     );
 
