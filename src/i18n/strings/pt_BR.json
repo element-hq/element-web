@@ -2163,7 +2163,6 @@
     "Your homeserver rejected your log in attempt. This could be due to things just taking too long. Please try again. If this continues, please contact your homeserver administrator.": "Seu servidor local recusou a sua tentativa de login. Isso pode ocorrer quando a conexão de internet estiver demorando muito. Por favor, tente novamente. Se o problema continuar, entre em contato com o administrador do seu servidor local.",
     "Your homeserver was unreachable and was not able to log you in. Please try again. If this continues, please contact your homeserver administrator.": "O seu servidor local está inacessível e não foi possível fazer o seu login. Tente novamente. Se o problema continuar, entre em contato com o administrador do seu servidor local.",
     "We asked the browser to remember which homeserver you use to let you sign in, but unfortunately your browser has forgotten it. Go to the sign in page and try again.": "Anteriormente, pedimos ao seu navegador para lembrar qual servidor local você usa para fazer login, mas infelizmente o navegador se esqueceu disso. Vá para a página de login e tente novamente.",
-    "Failed to connect to your homeserver. Please close this dialog and try again.": "Falha ao se conectar ao seu servidor local. Feche esta caixa de diálogo e tente novamente.",
     "Values at explicit levels in this room:": "Valores em níveis explícitos nessa sala:",
     "Values at explicit levels:": "Valores em níveis explícitos:",
     "Value in this room:": "Valor nessa sala:",

@@ -1973,7 +1973,6 @@
     "Add some details to help people recognise it.": "添加一些细节，以便人们辨识你的社群。",
     "Open space for anyone, best for communities": "适合每一个人的开放空间，社群的理想选择",
     "New version of %(brand)s is available": "%(brand)s 有新版本可用",
-    "Are you sure you wish to abort creation of the host? The process cannot be continued.": "你确定要放弃创建主机吗？被放弃的创建流程将无法再继续。",
     "Please view <existingIssuesLink>existing bugs on Github</existingIssuesLink> first. No match? <newIssueLink>Start a new one</newIssueLink>.": "请先查找一下 <existingIssuesLink>Github 上已有的问题</existingIssuesLink>，以免重复。找不到重复问题？<newIssueLink>发起一个吧</newIssueLink>。",
     "PRO TIP: If you start a bug, please submit <debugLogsLink>debug logs</debugLogsLink> to help us track down the problem.": "专业建议：如果你要发起新问题，请一并提交<debugLogsLink>调试日志</debugLogsLink>，以便我们找出问题根源。",
     "Values at explicit levels": "各层级的值",

@@ -2154,7 +2154,6 @@
     "See <b>%(msgtype)s</b> messages posted to this room": "Ver mensajes de tipo <b>%(msgtype)s</b> enviados a esta sala",
     "Show chat effects (animations when receiving e.g. confetti)": "Mostrar efectos de chat (animaciones al recibir ciertos mensajes, como confeti)",
     "Expand code blocks by default": "Expandir bloques de ćodigo por defecto",
-    "%(hostSignupBrand)s Setup": "Configuración de %(hostSignupBrand)s",
     "Show line numbers in code blocks": "Mostrar números de línea en bloques de ćodigo",
     "This is the beginning of your direct message history with <displayName/>.": "Este es el inicio de tu historial de mensajes directos con <displayName/>.",
     "Recently visited rooms": "Salas visitadas recientemente",

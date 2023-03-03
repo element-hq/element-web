@@ -796,7 +796,6 @@
     "Verifying this user will mark their session as trusted, and also mark your session as trusted to them.": "با تأیید این کاربر ، نشست وی به عنوان مورد اعتماد علامت‌گذاری شده و همچنین نشست شما به عنوان مورد اعتماد برای وی علامت‌گذاری خواهد شد.",
     "Verify this user to mark them as trusted. Trusting users gives you extra peace of mind when using end-to-end encrypted messages.": "این کاربر را تأیید کنید تا به عنوان کاربر مورد اعتماد علامت‌گذاری شود. اعتماد به کاربران آرامش و اطمینان بیشتری به شما در استفاده از رمزنگاری سرتاسر می‌دهد.",
     "Terms of Service": "شرایط استفاده از خدمات",
-    "Continuing temporarily allows the %(hostSignupBrand)s setup process to access your account to fetch verified email addresses. This data is not stored.": "ادامه‌ی موقت به فرآیند راه‌اندازی%(hostSignupBrand)s اجازه می‌دهد به حساب کاربری شما برای تائید آدرس‌های ایمیلتان دسترسی داشته باشد. این داده‌ها ذخیره نمی‌شوند.",
     "Confirm abort of host creation": "لغو ایجاد هاست را تأیید کنید",
     "Please view <existingIssuesLink>existing bugs on Github</existingIssuesLink> first. No match? <newIssueLink>Start a new one</newIssueLink>.": "لطفاً ابتدا اشکالات موجود را در <existingIssuesLink>گیتهاب برنامه</existingIssuesLink> را مشاهده کنید. با اشکال شما مطابقتی وجود ندارد؟<newIssueLink> مورد جدیدی را ثبت کنید</newIssueLink>.",
     "Report a bug": "گزارش اشکال",

@@ -2826,7 +2826,6 @@
     "Transfer": "Переадресація",
     "Recent Conversations": "Недавні бесіди",
     "A call can only be transferred to a single user.": "Виклик можна переадресувати лише на одного користувача.",
-    "Are you sure you wish to abort creation of the host? The process cannot be continued.": "Ви впевнені, що хочете перервати створення хосту? Процес не можна буде продовжити.",
     "Search for rooms or people": "Пошук кімнат або людей",
     "Exported %(count)s events in %(seconds)s seconds|one": "Експортовано %(count)s подій за %(seconds)s секунд",
     "Exported %(count)s events in %(seconds)s seconds|other": "Експортовано %(count)s подій за %(seconds)s секунд",
