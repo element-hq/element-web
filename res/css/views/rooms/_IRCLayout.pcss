@@ -159,7 +159,8 @@ $irc-line-height: $font-18px;
 
     .mx_EventTile_emote {
         .mx_EventTile_avatar {
-            margin-left: calc(var(--name-width) + var(--icon-width) + var(--right-padding));
+            /* add --right-padding value of MessageTimestamp only */
+            margin-left: calc(var(--name-width) + var(--icon-width) + 1 * var(--right-padding));
         }
     }
 
