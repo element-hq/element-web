@@ -962,7 +962,6 @@
     "%(senderName)s has ended a poll": "%(senderName)s har avslutta ei røysting",
     "%(senderName)s has started a poll - %(pollQuestion)s": "%(senderName)s har starta ei røysting - %(pollQuestion)s",
     "Are you sure you want to end this poll? This will show the final results of the poll and stop people from being able to vote.": "Er du sikker på at du vil avslutta denne røystinga ? Dette vil gjelde for alle, og dei endelege resultata vil bli presentert.",
-    "Privacy Policy": "Personvern",
     "New keyword": "Nytt nøkkelord",
     "Keyword": "Nøkkelord",
     "Messages containing keywords": "Meldingar som inneheld nøkkelord",
