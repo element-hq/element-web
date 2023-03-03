@@ -27,9 +27,9 @@ import RoomSettingsHandler from "./handlers/RoomSettingsHandler";
 import ConfigSettingsHandler from "./handlers/ConfigSettingsHandler";
 import { _t } from "../languageHandler";
 import dis from "../dispatcher/dispatcher";
-import { IFeature, ISetting, LabGroup, SETTINGS } from "./Settings";
+import { IFeature, ISetting, LabGroup, SETTINGS, defaultWatchManager } from "./Settings";
 import LocalEchoWrapper from "./handlers/LocalEchoWrapper";
-import { CallbackFn as WatchCallbackFn, WatchManager } from "./WatchManager";
+import { CallbackFn as WatchCallbackFn } from "./WatchManager";
 import { SettingLevel } from "./SettingLevel";
 import SettingsHandler from "./handlers/SettingsHandler";
 import { SettingUpdatedPayload } from "../dispatcher/payloads/SettingUpdatedPayload";
@@ -38,8 +38,6 @@ import PlatformSettingsHandler from "./handlers/PlatformSettingsHandler";
 import dispatcher from "../dispatcher/dispatcher";
 import { ActionPayload } from "../dispatcher/payloads";
 import { MatrixClientPeg } from "../MatrixClientPeg";
-
-const defaultWatchManager = new WatchManager();
 
 // Convert the settings to easier to manage objects for the handlers
 const defaultSettings: Record<string, any> = {};

@@ -40,6 +40,7 @@ import { SlidingSyncManager } from "./SlidingSyncManager";
 import CryptoStoreTooNewDialog from "./components/views/dialogs/CryptoStoreTooNewDialog";
 import { _t } from "./languageHandler";
 import { SettingLevel } from "./settings/SettingLevel";
+import MatrixClientBackedController from "./settings/controllers/MatrixClientBackedController";
 
 export interface IMatrixClientCreds {
     homeserverUrl: string;
@@ -237,6 +238,7 @@ class MatrixClientPegClass implements IMatrixClientPeg {
         // Connect the matrix client to the dispatcher and setting handlers
         MatrixActionCreators.start(this.matrixClient);
         MatrixClientBackedSettingsHandler.matrixClient = this.matrixClient;
+        MatrixClientBackedController.matrixClient = this.matrixClient;
 
         return opts;
     }

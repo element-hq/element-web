@@ -509,6 +509,7 @@ export function mkStubRoom(
     return {
         canInvite: jest.fn(),
         client,
+        findThreadForEvent: jest.fn(),
         createThreadsTimelineSets: jest.fn().mockReturnValue(new Promise(() => {})),
         currentState: {
             getStateEvents: jest.fn((_type, key) => (key === undefined ? [] : null)),

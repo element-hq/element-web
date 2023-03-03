@@ -44,6 +44,10 @@ import SdkConfig from "../SdkConfig";
 import SlidingSyncController from "./controllers/SlidingSyncController";
 import { FontWatcher } from "./watchers/FontWatcher";
 import RustCryptoSdkController from "./controllers/RustCryptoSdkController";
+import ServerSupportUnstableFeatureController from "./controllers/ServerSupportUnstableFeatureController";
+import { WatchManager } from "./WatchManager";
+
+export const defaultWatchManager = new WatchManager();
 
 // These are just a bunch of helper arrays to avoid copy/pasting a bunch of times
 const LEVELS_ROOM_SETTINGS = [
@@ -218,9 +222,14 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         },
     },
     "feature_exploring_public_spaces": {
+        isFeature: true,
+        labsGroup: LabGroup.Spaces,
         displayName: _td("Explore public spaces in the new search dialog"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
+        controller: new ServerSupportUnstableFeatureController("feature_exploring_public_spaces", defaultWatchManager, [
+            "org.matrix.msc3827.stable",
+        ]),
     },
     "feature_msc3531_hide_messages_pending_moderation": {
         isFeature: true,
@@ -359,13 +368,14 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         default: false,
     },
     "feature_jump_to_date": {
-        // We purposely leave out `isFeature: true` so it doesn't show in Labs
-        // by default. We will conditionally show it depending on whether we can
-        // detect MSC3030 support (see LabUserSettingsTab.tsx).
-        // labsGroup: LabGroup.Messaging,
+        isFeature: true,
+        labsGroup: LabGroup.Messaging,
         displayName: _td("Jump to date (adds /jumptodate and jump to date headers)"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
+        controller: new ServerSupportUnstableFeatureController("feature_jump_to_date", defaultWatchManager, [
+            "org.matrix.msc3030",
+        ]),
     },
     "RoomList.backgroundImage": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
@@ -387,6 +397,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         controller: new SlidingSyncController(),
     },
     "feature_sliding_sync_proxy_url": {
+        // This is not a distinct feature, it is a setting for feature_sliding_sync above
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
         default: "",
     },
