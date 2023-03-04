@@ -44,7 +44,7 @@
         "start": "yarn build:module_system && concurrently --kill-others-on-fail --prefix \"{time} [{name}]\" -n res,element-js \"yarn start:res\" \"yarn start:js\"",
         "start:https": "concurrently --kill-others-on-fail --prefix \"{time} [{name}]\" -n res,element-js \"yarn start:res\" \"yarn start:js --https\"",
         "start:res": "yarn build:jitsi && node scripts/copy-res.js -w",
-        "start:js": "webpack-dev-server --host=0.0.0.0 --output-filename=bundles/_dev_/[name].js --output-chunk-filename=bundles/_dev_/[name].js -w --mode development --disable-host-check --hot",
+        "start:js": "webpack-dev-server --output-filename=bundles/_dev_/[name].js --output-chunk-filename=bundles/_dev_/[name].js -w --mode development --disable-host-check --hot",
         "lint": "yarn lint:types && yarn lint:js && yarn lint:style",
         "lint:js": "yarn lint:js:src && yarn lint:js:module_system",
         "lint:js:src": "eslint --max-warnings 0 src test && prettier --check .",
