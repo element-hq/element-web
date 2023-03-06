@@ -3738,5 +3738,7 @@
     "Load more polls": "Carica più sondaggi",
     "Past polls": "Sondaggi passati",
     "Active polls": "Sondaggi attivi",
-    "View poll in timeline": "Vedi sondaggio nella linea temporale"
+    "View poll in timeline": "Vedi sondaggio nella linea temporale",
+    "Verify Session": "Verifica sessione",
+    "Ignore (%(counter)s)": "Ignora (%(counter)s)"
 }
