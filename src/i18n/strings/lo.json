@@ -1829,7 +1829,6 @@
     "Other rooms in %(spaceName)s": "ຫ້ອງອື່ນໆ%(spaceName)s",
     "Spaces you're in": "ຊ່ອງທີ່ທ່ານຢູ່",
     "Settings - %(spaceName)s": "ການຕັ້ງຄ່າ - %(spaceName)s",
-    "Space settings": "ການຕັ້ງຄ່າພື້ນທີ່",
     "This groups your chats with members of this space. Turning this off will hide those chats from your view of %(spaceName)s.": "ຈັດກຸ່ມການສົນທະນາຂອງທ່ານກັບສະມາຊິກຂອງຊ່ອງນີ້. ການປິດອັນນີ້ຈະເຊື່ອງການສົນທະນາເຫຼົ່ານັ້ນຈາກການເບິ່ງເຫັນ %(spaceName)s ຂອງທ່ານ.",
     "Sections to show": "ພາກສ່ວນທີ່ຈະສະແດງ",
     "Command Help": "ຄໍາສັ່ງຊ່ວຍເຫຼືອ",

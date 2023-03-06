@@ -996,7 +996,6 @@
     "Missing session data": "Thiếu dữ liệu phiên",
     "To help us prevent this in future, please <a>send us logs</a>.": "Để giúp chúng tôi ngăn chặn điều này trong tương lai, vui lòng gửi nhật ký cho chúng tôi <a>send us logs</a>.",
     "Settings - %(spaceName)s": "Cài đặt - %(spaceName)s",
-    "Space settings": "Cài đặt space",
     "Command Help": "Lệnh Trợ giúp",
     "Link to selected message": "Liên kết đến tin nhắn đã chọn",
     "Share Room Message": "Chia sẻ tin nhắn trong phòng",

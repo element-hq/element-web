@@ -2384,7 +2384,6 @@
     "Use <arrows/> to scroll": "Notaðu <arrows/> til að skruna",
     "Spaces you're in": "Svæði sem þú tilheyrir",
     "Settings - %(spaceName)s": "Stillingar - %(spaceName)s",
-    "Space settings": "Stillingar svæðis",
     "Unable to upload": "Ekki tókst að senda inn",
     "Room ID: %(roomId)s": "Auðkenni spjallrásar: %(roomId)s",
     "Server info": "Upplýsingar um þjón",

@@ -2187,7 +2187,6 @@
     "Save Changes": "Сохранить изменения",
     "Leave Space": "Покинуть пространство",
     "Edit settings relating to your space.": "Редактировать настройки, относящиеся к вашему пространству.",
-    "Space settings": "Настройки пространства",
     "Failed to save space settings.": "Не удалось сохранить настройки пространства.",
     "This usually only affects how the room is processed on the server. If you're having problems with your %(brand)s, please report a bug.": "Обычно это только влияет на то, как комната обрабатывается на сервере. Если у вас проблемы с вашим %(brand)s, сообщите об ошибке.",
     "Invite someone using their name, email address, username (like <userId/>) or <a>share this space</a>.": "Пригласите кого-нибудь, используя их имя, адрес электронной почты, имя пользователя (например, <userId/>) или <a>поделитесь этим пространством</a>.",

@@ -2248,7 +2248,6 @@
     "Mark as suggested": "Als vorgeschlagen markieren",
     "You don't have permission": "Du hast dazu keine Berechtigung",
     "This space is not public. You will not be able to rejoin without an invite.": "Du wirst diesen privaten Space nur mit einer Einladung wieder betreten können.",
-    "Space settings": "Space-Einstellungen",
     "Failed to save space settings.": "Spaceeinstellungen konnten nicht gespeichert werden.",
     "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the space it will be impossible to regain privileges.": "Das Entfernen von Rechten kann nicht rückgängig gemacht werden. Falls sie dir niemand anderer zurückgeben kann, kannst du sie nie wieder erhalten.",
     "You do not have permissions to add rooms to this space": "Du hast keine Berechtigung, Räume zu diesem Space hinzuzufügen",

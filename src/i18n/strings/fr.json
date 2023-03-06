@@ -2205,7 +2205,6 @@
     "Save Changes": "Enregistrer les modifications",
     "Leave Space": "Quitter l’espace",
     "Edit settings relating to your space.": "Modifiez les paramètres de votre espace.",
-    "Space settings": "Paramètres de l’espace",
     "Failed to save space settings.": "Échec de l’enregistrement des paramètres.",
     "Unnamed Space": "Espace sans nom",
     "Invite to %(spaceName)s": "Inviter à %(spaceName)s",
