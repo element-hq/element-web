@@ -3726,5 +3726,8 @@
     "Active polls": "Pyetësorë aktivë",
     "View poll in timeline": "Shiheni pyetësorin në rrjedhë kohore",
     "Verify Session": "Verifiko Sesion",
-    "Ignore (%(counter)s)": "Shpërfill (%(counter)s)"
+    "Ignore (%(counter)s)": "Shpërfill (%(counter)s)",
+    "Once invited users have joined Element, you will be able to chat and the room will be end-to-end encrypted": "Pasi përdoruesit e ftuar të jenë bërë pjesë e Element-it, do të jeni në gjendje të fjaloseni dhe dhoma do të jetë e fshehtëzuar skaj-më-skaj",
+    "Waiting for users to join Element": "Po pritet që përdoruesit të bëhen pjesë e Element-ti",
+    "Once everyone has joined, you’ll be able to chat": "Pasi të ketë ardhur gjithkush, do të jeni në gjendje të fjaloseni"
 }
