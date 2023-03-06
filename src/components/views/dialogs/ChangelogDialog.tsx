@@ -27,7 +27,7 @@ interface IProps {
     onFinished: (success: boolean) => void;
 }
 
-type State = Partial<Record<typeof REPOS[number], null | string | Commit[]>>;
+type State = Partial<Record<(typeof REPOS)[number], null | string | Commit[]>>;
 
 interface Commit {
     sha: string;
@@ -46,7 +46,7 @@ export default class ChangelogDialog extends React.Component<IProps, State> {
         this.state = {};
     }
 
-    private async fetchChanges(repo: typeof REPOS[number], oldVersion: string, newVersion: string): Promise<void> {
+    private async fetchChanges(repo: (typeof REPOS)[number], oldVersion: string, newVersion: string): Promise<void> {
         const url = `https://riot.im/github/repos/${repo}/compare/${oldVersion}...${newVersion}`;
 
         try {

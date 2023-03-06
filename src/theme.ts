@@ -26,7 +26,7 @@ const HIGH_CONTRAST_THEMES: Record<string, string> = {
     light: "light-high-contrast",
 };
 
-interface IFontFaces extends Omit<Record<typeof allowedFontFaceProps[number], string>, "src"> {
+interface IFontFaces extends Omit<Record<(typeof allowedFontFaceProps)[number], string>, "src"> {
     src: {
         format: string;
         url: string;
@@ -145,9 +145,9 @@ function generateCustomFontFaceCSS(faces: IFontFaces[]): string {
                     return "";
                 })
                 .join(", ");
-            const props = Object.keys(face).filter((prop: typeof allowedFontFaceProps[number]) =>
+            const props = Object.keys(face).filter((prop: (typeof allowedFontFaceProps)[number]) =>
                 allowedFontFaceProps.includes(prop),
-            ) as Array<typeof allowedFontFaceProps[number]>;
+            ) as Array<(typeof allowedFontFaceProps)[number]>;
             const body = props
                 .map((prop) => {
                     let value: string;
