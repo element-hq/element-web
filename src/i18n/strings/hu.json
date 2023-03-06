@@ -3725,5 +3725,16 @@
     "Homeserver is <code>%(homeserverUrl)s</code>": "Matrix szerver: <code>%(homeserverUrl)s</code>",
     "Show NSFW content": "Felnőtt tartalmak megjelenítése",
     "Yes, it was me": "Igen, én voltam",
-    "Answered elsewhere": "Máshol lett felvéve"
+    "Answered elsewhere": "Máshol lett felvéve",
+    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months|other": "%(count)s napja nincs aktív szavazás. További szavazások betöltése az előző havi szavazások megjelenítéséhez",
+    "There are no past polls. Load more polls to view polls for previous months": "Nincs régebbi szavazás. További szavazások betöltése az előző havi szavazások megjelenítéséhez",
+    "There are no active polls. Load more polls to view polls for previous months": "Nincs aktív szavazás. További szavazások betöltése az előző havi szavazások megjelenítéséhez",
+    "Load more polls": "Még több szavazás betöltése",
+    "Past polls": "Régi szavazások",
+    "Active polls": "Aktív szavazások",
+    "View poll in timeline": "Szavazás megjelenítése az idővonalon",
+    "Once everyone has joined, you’ll be able to chat": "Amint mindenki belépett lekezdheti a beszélgetést",
+    "Verify Session": "Munkamenet ellenőrzése",
+    "Ignore (%(counter)s)": "Figyelmen kívül hagy (%(counter)s)",
+    "If you know a room address, try joining through that instead.": "Ha ismeri a szoba címét próbáljon inkább azzal belépni."
 }
