@@ -3739,5 +3739,9 @@
     "Active polls": "Aktivní hlasování",
     "View poll in timeline": "Zobrazit hlasování na časové ose",
     "Verify Session": "Ověřit relaci",
-    "Ignore (%(counter)s)": "Ignorovat (%(counter)s)"
+    "Ignore (%(counter)s)": "Ignorovat (%(counter)s)",
+    "Once invited users have joined Element, you will be able to chat and the room will be end-to-end encrypted": "Jakmile se pozvaní uživatelé připojí, budete moci konverzovat a místnost bude koncově šifrovaná",
+    "Waiting for users to join Element": "Čekání na připojení uživatelů",
+    "Invites by email can only be sent one at a time": "Pozvánky e-mailem lze zasílat pouze po jedné",
+    "Once everyone has joined, you’ll be able to chat": "Jakmile se všichni připojí, budete moci konverzovat"
 }
