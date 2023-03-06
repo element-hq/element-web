@@ -14,16 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
-// eslint-disable-next-line deprecate/import
-import { mount, ReactWrapper } from "enzyme";
+import React, { createRef, RefObject } from "react";
 import { mocked, MockedObject } from "jest-mock";
 import { ClientEvent, MatrixClient } from "matrix-js-sdk/src/client";
 import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { EventType, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 import { MEGOLM_ALGORITHM } from "matrix-js-sdk/src/crypto/olmlib";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, RenderResult } from "@testing-library/react";
 
 import {
     stubClient,
@@ -98,7 +96,7 @@ describe("RoomView", () => {
         jest.restoreAllMocks();
     });
 
-    const mountRoomView = async (): Promise<ReactWrapper> => {
+    const mountRoomView = async (ref?: RefObject<_RoomView>): Promise<RenderResult> => {
         if (stores.roomViewStore.getRoomId() !== room.roomId) {
             const switchedRoom = new Promise<void>((resolve) => {
                 const subFn = () => {
@@ -119,7 +117,7 @@ describe("RoomView", () => {
             await switchedRoom;
         }
 
-        const roomView = mount(
+        const roomView = render(
             <SDKContext.Provider value={stores}>
                 <RoomView
                     // threepidInvite should be optional on RoomView props
@@ -127,6 +125,7 @@ describe("RoomView", () => {
                     threepidInvite={undefined as any}
                     resizeNotifier={new ResizeNotifier()}
                     forceTimeline={false}
+                    wrappedRef={ref as any}
                 />
             </SDKContext.Provider>,
         );
@@ -170,8 +169,11 @@ describe("RoomView", () => {
         await flushPromises();
         return roomView;
     };
-    const getRoomViewInstance = async (): Promise<_RoomView> =>
-        (await mountRoomView()).find(_RoomView).instance() as _RoomView;
+    const getRoomViewInstance = async (): Promise<_RoomView> => {
+        const ref = createRef<_RoomView>();
+        await mountRoomView(ref);
+        return ref.current!;
+    };
 
     it("when there is no room predecessor, getHiddenHighlightCount should return 0", async () => {
         const instance = await getRoomViewInstance();
