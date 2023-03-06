@@ -151,7 +151,6 @@
         "@types/counterpart": "^0.18.1",
         "@types/css-font-loading-module": "^0.0.7",
         "@types/diff-match-patch": "^1.0.32",
-        "@types/enzyme": "^3.10.9",
         "@types/escape-html": "^1.0.1",
         "@types/file-saver": "^2.0.3",
         "@types/flux": "^3.1.9",
@@ -177,7 +176,6 @@
         "@types/zxcvbn": "^4.4.0",
         "@typescript-eslint/eslint-plugin": "^5.35.1",
         "@typescript-eslint/parser": "^5.6.0",
-        "@wojtekmaj/enzyme-adapter-react-17": "^0.8.0",
         "allchange": "^1.1.0",
         "axe-core": "4.4.3",
         "babel-jest": "^29.0.0",
@@ -187,8 +185,6 @@
         "cypress-axe": "^1.0.0",
         "cypress-multi-reporters": "^1.6.1",
         "cypress-real-events": "^1.7.1",
-        "enzyme": "^3.11.0",
-        "enzyme-to-json": "^3.6.2",
         "eslint": "8.28.0",
         "eslint-config-google": "^0.14.0",
         "eslint-config-prettier": "^8.5.0",
@@ -224,9 +220,6 @@
         "walk": "^2.3.14"
     },
     "jest": {
-        "snapshotSerializers": [
-            "enzyme-to-json/serializer"
-        ],
         "testEnvironment": "jsdom",
         "testMatch": [
             "<rootDir>/test/**/*-test.[jt]s?(x)"

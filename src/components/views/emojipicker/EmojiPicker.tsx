@@ -186,7 +186,7 @@ class EmojiPicker extends React.Component<IProps, IState> {
     private onChangeFilter = (filter: string): void => {
         const lcFilter = filter.toLowerCase().trim(); // filter is case insensitive
         for (const cat of this.categories) {
-            let emojis;
+            let emojis: IEmoji[];
             // If the new filter string includes the old filter string, we don't have to re-filter the whole dataset.
             if (lcFilter.includes(this.state.filter)) {
                 emojis = this.memoizedDataByCategory[cat.id];
