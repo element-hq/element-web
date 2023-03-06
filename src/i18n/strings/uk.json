@@ -3740,5 +3740,8 @@
     "There are no active polls. Load more polls to view polls for previous months": "Немає активних опитувань. Завантажте більше опитувань, щоб переглянути опитування за попередні місяці",
     "Load more polls": "Завантажити більше опитувань",
     "Verify Session": "Звірити сеанс",
-    "Ignore (%(counter)s)": "Ігнорувати (%(counter)s)"
+    "Ignore (%(counter)s)": "Ігнорувати (%(counter)s)",
+    "Once invited users have joined Element, you will be able to chat and the room will be end-to-end encrypted": "Після того, як запрошені користувачі приєднаються до Element, ви зможете спілкуватися з ними, а кімната буде захищена наскрізним шифруванням",
+    "Waiting for users to join Element": "Очікування коли користувачі приєднаються до Element",
+    "Once everyone has joined, you’ll be able to chat": "Коли хтось приєднається, ви зможете спілкуватись"
 }
