@@ -18,6 +18,7 @@ import PermalinkConstructor, { PermalinkParts } from "./PermalinkConstructor";
 
 export const host = "matrix.to";
 export const baseUrl = `https://${host}`;
+export const baseUrlPattern = `^(?:https?://)?${host.replace(".", "\\.")}/#/(.*)`;
 
 /**
  * Generates matrix.to permalinks
@@ -55,11 +56,17 @@ export default class MatrixToPermalinkConstructor extends PermalinkConstructor {
     // Heavily inspired by/borrowed from the matrix-bot-sdk (with permission):
     // https://github.com/turt2live/matrix-js-bot-sdk/blob/7c4665c9a25c2c8e0fe4e509f2616505b5b66a1c/src/Permalinks.ts#L33-L61
     public parsePermalink(fullUrl: string): PermalinkParts {
-        if (!fullUrl || !fullUrl.startsWith(baseUrl)) {
+        if (!fullUrl) {
             throw new Error("Does not appear to be a permalink");
         }
 
-        const parts = fullUrl.substring(`${baseUrl}/#/`.length).split("/");
+        const matches = [...fullUrl.matchAll(new RegExp(baseUrlPattern, "gi"))][0];
+
+        if (!matches || matches.length < 2) {
+            throw new Error("Does not appear to be a permalink");
+        }
+
+        const parts = matches[1].split("/");
 
         const entity = parts[0];
         if (entity[0] === "@") {

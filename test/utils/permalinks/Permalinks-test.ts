@@ -15,6 +15,7 @@ limitations under the License.
 import { Room, RoomMember, EventType, MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
+import { PermalinkParts } from "../../../src/utils/permalinks/PermalinkConstructor";
 import {
     makeRoomPermalink,
     makeUserPermalink,
@@ -367,24 +368,38 @@ describe("Permalinks", function () {
         expect(result).toBe("https://matrix.to/#/@someone:example.org");
     });
 
-    it("should correctly parse room permalinks with a via argument", () => {
-        const result = parsePermalink("https://matrix.to/#/!room_id:server?via=some.org");
-        expect(result?.roomIdOrAlias).toBe("!room_id:server");
-        expect(result?.viaServers).toEqual(["some.org"]);
-    });
+    describe("parsePermalink", () => {
+        it("should correctly parse room permalinks with a via argument", () => {
+            const result = parsePermalink("https://matrix.to/#/!room_id:server?via=some.org");
+            expect(result?.roomIdOrAlias).toBe("!room_id:server");
+            expect(result?.viaServers).toEqual(["some.org"]);
+        });
 
-    it("should correctly parse room permalink via arguments", () => {
-        const result = parsePermalink("https://matrix.to/#/!room_id:server?via=foo.bar&via=bar.foo");
-        expect(result?.roomIdOrAlias).toBe("!room_id:server");
-        expect(result?.viaServers).toEqual(["foo.bar", "bar.foo"]);
-    });
+        it("should correctly parse room permalink via arguments", () => {
+            const result = parsePermalink("https://matrix.to/#/!room_id:server?via=foo.bar&via=bar.foo");
+            expect(result?.roomIdOrAlias).toBe("!room_id:server");
+            expect(result?.viaServers).toEqual(["foo.bar", "bar.foo"]);
+        });
 
-    it("should correctly parse event permalink via arguments", () => {
-        const result = parsePermalink(
-            "https://matrix.to/#/!room_id:server/$event_id/some_thing_here/foobar" + "?via=m1.org&via=m2.org",
-        );
-        expect(result?.eventId).toBe("$event_id/some_thing_here/foobar");
-        expect(result?.roomIdOrAlias).toBe("!room_id:server");
-        expect(result?.viaServers).toEqual(["m1.org", "m2.org"]);
+        it("should correctly parse event permalink via arguments", () => {
+            const result = parsePermalink(
+                "https://matrix.to/#/!room_id:server/$event_id/some_thing_here/foobar" + "?via=m1.org&via=m2.org",
+            );
+            expect(result?.eventId).toBe("$event_id/some_thing_here/foobar");
+            expect(result?.roomIdOrAlias).toBe("!room_id:server");
+            expect(result?.viaServers).toEqual(["m1.org", "m2.org"]);
+        });
+
+        it("should correctly parse permalinks with http protocol", () => {
+            expect(parsePermalink("http://matrix.to/#/@user:example.com")).toEqual(
+                new PermalinkParts(null, null, "@user:example.com", null),
+            );
+        });
+
+        it("should correctly parse permalinks without protocol", () => {
+            expect(parsePermalink("matrix.to/#/@user:example.com")).toEqual(
+                new PermalinkParts(null, null, "@user:example.com", null),
+            );
+        });
     });
 });

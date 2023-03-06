@@ -48,10 +48,10 @@ export default class PermalinkConstructor {
 // https://github.com/turt2live/matrix-js-bot-sdk/blob/7c4665c9a25c2c8e0fe4e509f2616505b5b66a1c/src/Permalinks.ts#L1-L6
 export class PermalinkParts {
     public constructor(
-        public readonly roomIdOrAlias: string,
-        public readonly eventId: string,
-        public readonly userId: string,
-        public readonly viaServers: string[],
+        public readonly roomIdOrAlias: string | null,
+        public readonly eventId: string | null,
+        public readonly userId: string | null,
+        public readonly viaServers: string[] | null,
     ) {}
 
     public static forUser(userId: string): PermalinkParts {
@@ -66,11 +66,11 @@ export class PermalinkParts {
         return new PermalinkParts(roomId, eventId, null, viaServers);
     }
 
-    public get primaryEntityId(): string {
+    public get primaryEntityId(): string | null {
         return this.roomIdOrAlias || this.userId;
     }
 
     public get sigil(): string {
-        return this.primaryEntityId[0];
+        return this.primaryEntityId?.[0] || "?";
     }
 }

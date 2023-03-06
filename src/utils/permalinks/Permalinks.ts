@@ -22,7 +22,10 @@ import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 
 import { MatrixClientPeg } from "../../MatrixClientPeg";
-import MatrixToPermalinkConstructor, { baseUrl as matrixtoBaseUrl } from "./MatrixToPermalinkConstructor";
+import MatrixToPermalinkConstructor, {
+    baseUrl as matrixtoBaseUrl,
+    baseUrlPattern as matrixToBaseUrlPattern,
+} from "./MatrixToPermalinkConstructor";
 import PermalinkConstructor, { PermalinkParts } from "./PermalinkConstructor";
 import ElementPermalinkConstructor from "./ElementPermalinkConstructor";
 import SdkConfig from "../../SdkConfig";
@@ -420,8 +423,9 @@ function getPermalinkConstructor(): PermalinkConstructor {
 export function parsePermalink(fullUrl: string): PermalinkParts | null {
     try {
         const elementPrefix = SdkConfig.get("permalink_prefix");
-        if (decodeURIComponent(fullUrl).startsWith(matrixtoBaseUrl)) {
-            return new MatrixToPermalinkConstructor().parsePermalink(decodeURIComponent(fullUrl));
+        const decodedUrl = decodeURIComponent(fullUrl);
+        if (new RegExp(matrixToBaseUrlPattern, "i").test(decodedUrl)) {
+            return new MatrixToPermalinkConstructor().parsePermalink(decodedUrl);
         } else if (fullUrl.startsWith("matrix:")) {
             return new MatrixSchemePermalinkConstructor().parsePermalink(fullUrl);
         } else if (elementPrefix && fullUrl.startsWith(elementPrefix)) {
