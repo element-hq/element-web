@@ -3014,7 +3014,6 @@
     "Proxy URL": "Proxy URL",
     "Sections to show": "Sections to show",
     "This groups your chats with members of this space. Turning this off will hide those chats from your view of %(spaceName)s.": "This groups your chats with members of this space. Turning this off will hide those chats from your view of %(spaceName)s.",
-    "Space settings": "Space settings",
     "Settings - %(spaceName)s": "Settings - %(spaceName)s",
     "To help us prevent this in future, please <a>send us logs</a>.": "To help us prevent this in future, please <a>send us logs</a>.",
     "Missing session data": "Missing session data",

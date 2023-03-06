@@ -84,17 +84,13 @@ const SpaceSettingsDialog: React.FC<IProps> = ({ matrixClient: cli, space, onFin
 
     return (
         <BaseDialog
-            title={_t("Space settings")}
+            title={_t("Settings - %(spaceName)s", { spaceName: space.name || _t("Unnamed Space") })}
             className="mx_SpaceSettingsDialog"
             contentId="mx_SpaceSettingsDialog"
             onFinished={onFinished}
             fixedWidth={false}
         >
-            <div
-                className="mx_SpaceSettingsDialog_content"
-                id="mx_SpaceSettingsDialog"
-                title={_t("Settings - %(spaceName)s", { spaceName: space.name })}
-            >
+            <div className="mx_SpaceSettingsDialog_content" id="mx_SpaceSettingsDialog">
                 <TabbedView tabs={tabs} />
             </div>
         </BaseDialog>
