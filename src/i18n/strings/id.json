@@ -3740,5 +3740,8 @@
     "Active polls": "Pemungutan suara yang aktif",
     "View poll in timeline": "Tampilkan pemungutan suara di lini masa",
     "Verify Session": "Verifikasi Sesi",
-    "Ignore (%(counter)s)": "Abaikan (%(counter)s)"
+    "Ignore (%(counter)s)": "Abaikan (%(counter)s)",
+    "Once invited users have joined Element, you will be able to chat and the room will be end-to-end encrypted": "Setelah pengguna yang diundang telah bergabung Element, Anda akan dapat mengobrol dan ruangannya akan terenkripsi secara ujung ke ujung",
+    "Waiting for users to join Element": "Menunggu pengguna untuk bergabung dengan Element",
+    "Once everyone has joined, you’ll be able to chat": "Setelah semuanya bergabung, Anda akan dapat mengobrol"
 }
