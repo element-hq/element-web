@@ -351,6 +351,9 @@ describe("Timeline", () => {
             // 1. clickability of top left of view source event toggle
             // 2. clickability of view source toggle on IRC layout
 
+            // Exclude timestamp from snapshot
+            const percyCSS = ".mx_MessageTimestamp { visibility: hidden !important; }";
+
             sendEvent(roomId);
             cy.visit("/#/room/" + roomId);
             cy.setSettingValue("showHiddenEventsInTimeline", null, SettingLevel.DEVICE, true);
@@ -376,25 +379,28 @@ describe("Timeline", () => {
                     cy.get(".mx_ViewSourceEvent_toggle").click("topLeft", { force: false });
                 });
 
-            // Make sure the expand toggle worked
-            cy.get(".mx_EventTile .mx_ViewSourceEvent_expanded").should("be.visible");
-
-            // Click again to collapse the source
-            cy.get(".mx_EventTile_last[data-layout=group] .mx_ViewSourceEvent")
-                .should("exist")
+            // Make sure the expand toggle works
+            cy.get(".mx_EventTile_last[data-layout=group] .mx_ViewSourceEvent_expanded")
+                .should("be.visible")
                 .realHover()
                 .within(() => {
-                    cy.get(".mx_ViewSourceEvent_toggle").click("topLeft", { force: false });
+                    cy.get(".mx_ViewSourceEvent_toggle")
+                        // Check size and position of toggle on expanded view source event
+                        // See: _ViewSourceEvent.pcss
+                        .should("have.css", "height", "12px") // --ViewSourceEvent_toggle-size
+                        .should("have.css", "align-self", "flex-end")
+
+                        // Click again to collapse the source
+                        .click("topLeft", { force: false });
                 });
-            cy.get(".mx_EventTile .mx_ViewSourceEvent_expanded").should("not.exist");
+
+            // Make sure the collapse toggle works
+            cy.get(".mx_EventTile_last[data-layout=group] .mx_ViewSourceEvent_expanded").should("not.exist");
 
             // 2. clickability of view source toggle on IRC layout
 
             // Enable IRC layout
             cy.setSettingValue("layout", null, SettingLevel.DEVICE, Layout.IRC);
-
-            // Exclude timestamp from snapshot
-            const percyCSS = ".mx_MessageTimestamp { visibility: hidden !important; }";
 
             // Hover the view source toggle on IRC layout
             cy.get(".mx_GenericEventListSummary[data-layout=irc] .mx_EventTile .mx_ViewSourceEvent")

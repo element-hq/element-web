@@ -29,32 +29,34 @@ limitations under the License.
 
     pre {
         line-height: 1.2;
-        margin: 3.5px 0;
+        margin: 3.5px 0; /* TODO: use a variable */
     }
 
     .mx_ViewSourceEvent_toggle {
+        --ViewSourceEvent_toggle-size: 12px;
+
         visibility: hidden;
         /* override styles from AccessibleButton */
         border-radius: 0;
         /* icon */
         mask-repeat: no-repeat;
         mask-position: 0 center;
-        mask-size: auto 12px;
-        width: 12px;
-        min-width: 12px;
+        mask-size: auto var(--ViewSourceEvent_toggle-size);
+        width: var(--ViewSourceEvent_toggle-size);
+        min-width: var(--ViewSourceEvent_toggle-size);
         background-color: $accent;
         mask-image: url("$(res)/img/element-icons/maximise-expand.svg");
+
+        .mx_EventTile:hover & {
+            visibility: visible;
+        }
     }
 
     &.mx_ViewSourceEvent_expanded .mx_ViewSourceEvent_toggle {
+        align-self: flex-end;
+        height: var(--ViewSourceEvent_toggle-size);
         mask-position: 0 bottom;
-        margin-bottom: 5px;
+        margin-bottom: 5px; /* TODO: use a variable */
         mask-image: url("$(res)/img/element-icons/minimise-collapse.svg");
-    }
-}
-
-.mx_EventTile:hover {
-    .mx_ViewSourceEvent_toggle {
-        visibility: visible;
     }
 }
