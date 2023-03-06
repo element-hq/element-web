@@ -20,13 +20,12 @@ import { render, screen } from "@testing-library/react";
 import { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 
 import { LocalRoom } from "../../../../src/models/LocalRoom";
-import { createTestClient } from "../../../test-utils";
+import { filterConsole, mkRoomMemberJoinEvent, mkThirdPartyInviteEvent, stubClient } from "../../../test-utils";
 import RoomContext from "../../../../src/contexts/RoomContext";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import NewRoomIntro from "../../../../src/components/views/rooms/NewRoomIntro";
 import { IRoomState } from "../../../../src/components/structures/RoomView";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
-import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import { DirectoryMember } from "../../../../src/utils/direct-messages";
 
 const renderNewRoomIntro = (client: MatrixClient, room: Room | LocalRoom) => {
@@ -44,9 +43,10 @@ describe("NewRoomIntro", () => {
     const roomId = "!room:example.com";
     const userId = "@user:example.com";
 
-    beforeEach(() => {
-        client = createTestClient();
-        jest.spyOn(MatrixClientPeg, "get").mockReturnValue(client);
+    filterConsole("Room !room:example.com does not have an m.room.create event");
+
+    beforeAll(() => {
+        client = stubClient();
         DMRoomMap.makeShared();
     });
 
@@ -62,6 +62,24 @@ describe("NewRoomIntro", () => {
             const expected = `This is the beginning of your direct message history with test_room.`;
             screen.getByText((id, element) => element?.tagName === "SPAN" && element?.textContent === expected);
         });
+    });
+
+    it("should render as expected for a DM room with a single third-party invite", () => {
+        const room = new Room(roomId, client, client.getSafeUserId());
+        room.currentState.setStateEvents([
+            mkRoomMemberJoinEvent(client.getSafeUserId(), room.roomId),
+            mkThirdPartyInviteEvent(client.getSafeUserId(), "user@example.com", room.roomId),
+        ]);
+        jest.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(userId);
+        jest.spyOn(DMRoomMap.shared(), "getRoomIds").mockReturnValue(new Set([room.roomId]));
+        renderNewRoomIntro(client, room);
+
+        expect(screen.getByText("Once everyone has joined, you’ll be able to chat")).toBeInTheDocument();
+        expect(
+            screen.queryByText(
+                "Only the two of you are in this conversation, unless either of you invites anyone to join.",
+            ),
+        ).not.toBeInTheDocument();
     });
 
     describe("for a DM LocalRoom", () => {

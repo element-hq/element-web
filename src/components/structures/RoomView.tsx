@@ -116,6 +116,8 @@ import VoipUserMapper from "../../VoipUserMapper";
 import { isCallEvent } from "./LegacyCallEventGrouper";
 import { WidgetType } from "../../widgets/WidgetType";
 import WidgetUtils from "../../utils/WidgetUtils";
+import { shouldEncryptRoomWithSingle3rdPartyInvite } from "../../utils/room/shouldEncryptRoomWithSingle3rdPartyInvite";
+import { WaitingForThirdPartyRoomView } from "./WaitingForThirdPartyRoomView";
 
 const DEBUG = false;
 const PREVENT_MULTIPLE_JITSI_WITHIN = 30_000;
@@ -231,6 +233,7 @@ export interface IRoomState {
 }
 
 interface LocalRoomViewProps {
+    localRoom: LocalRoom;
     resizeNotifier: ResizeNotifier;
     permalinkCreator: RoomPermalinkCreator;
     roomView: RefObject<HTMLElement>;
@@ -246,7 +249,7 @@ interface LocalRoomViewProps {
 function LocalRoomView(props: LocalRoomViewProps): ReactElement {
     const context = useContext(RoomContext);
     const room = context.room as LocalRoom;
-    const encryptionEvent = context.room.currentState.getStateEvents(EventType.RoomEncryption)[0];
+    const encryptionEvent = props.localRoom.currentState.getStateEvents(EventType.RoomEncryption)[0];
     let encryptionTile: ReactNode;
 
     if (encryptionEvent) {
@@ -261,8 +264,8 @@ function LocalRoomView(props: LocalRoomViewProps): ReactElement {
         });
     };
 
-    let statusBar: ReactElement;
-    let composer: ReactElement;
+    let statusBar: ReactElement | null = null;
+    let composer: ReactElement | null = null;
 
     if (room.isError) {
         const buttons = (
@@ -281,7 +284,7 @@ function LocalRoomView(props: LocalRoomViewProps): ReactElement {
     } else {
         composer = (
             <MessageComposer
-                room={context.room}
+                room={props.localRoom}
                 resizeNotifier={props.resizeNotifier}
                 permalinkCreator={props.permalinkCreator}
             />
@@ -293,7 +296,7 @@ function LocalRoomView(props: LocalRoomViewProps): ReactElement {
             <ErrorBoundary>
                 <RoomHeader
                     room={context.room}
-                    searchInfo={null}
+                    searchInfo={undefined}
                     inRoom={true}
                     onSearchClick={null}
                     onInviteClick={null}
@@ -342,7 +345,7 @@ function LocalRoomCreateLoader(props: ILocalRoomCreateLoaderProps): ReactElement
             <ErrorBoundary>
                 <RoomHeader
                     room={context.room}
-                    searchInfo={null}
+                    searchInfo={undefined}
                     inRoom={true}
                     onSearchClick={null}
                     onInviteClick={null}
@@ -373,7 +376,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
     private roomView = createRef<HTMLElement>();
     private searchResultsPanel = createRef<ScrollPanel>();
-    private messagePanel: TimelinePanel;
+    private messagePanel?: TimelinePanel;
     private roomViewBody = createRef<HTMLDivElement>();
 
     public static contextType = SDKContext;
@@ -382,15 +385,19 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     public constructor(props: IRoomProps, context: React.ContextType<typeof SDKContext>) {
         super(props, context);
 
+        if (!context.client) {
+            throw new Error("Unable to create RoomView without MatrixClient");
+        }
+
         const llMembers = context.client.hasLazyLoadMembersEnabled();
         this.state = {
-            roomId: null,
+            roomId: undefined,
             roomLoading: true,
             peekLoading: false,
             shouldPeek: true,
             membersLoaded: !llMembers,
             numUnreadMessages: 0,
-            callState: null,
+            callState: undefined,
             activeCall: null,
             canPeek: false,
             canSelfRedact: false,
@@ -1920,14 +1927,27 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         );
     }
 
-    private renderLocalRoomView(): ReactElement {
+    private renderLocalRoomView(localRoom: LocalRoom): ReactElement {
         return (
             <RoomContext.Provider value={this.state}>
                 <LocalRoomView
+                    localRoom={localRoom}
                     resizeNotifier={this.props.resizeNotifier}
                     permalinkCreator={this.permalinkCreator}
                     roomView={this.roomView}
                     onFileDrop={this.onFileDrop}
+                />
+            </RoomContext.Provider>
+        );
+    }
+
+    private renderWaitingForThirdPartyRoomView(inviteEvent: MatrixEvent): ReactElement {
+        return (
+            <RoomContext.Provider value={this.state}>
+                <WaitingForThirdPartyRoomView
+                    resizeNotifier={this.props.resizeNotifier}
+                    roomView={this.roomView}
+                    inviteEvent={inviteEvent}
                 />
             </RoomContext.Provider>
         );
@@ -1939,7 +1959,15 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 return this.renderLocalRoomCreateLoader();
             }
 
-            return this.renderLocalRoomView();
+            return this.renderLocalRoomView(this.state.room);
+        }
+
+        if (this.state.room) {
+            const { shouldEncrypt, inviteEvent } = shouldEncryptRoomWithSingle3rdPartyInvite(this.state.room);
+
+            if (shouldEncrypt) {
+                return this.renderWaitingForThirdPartyRoomView(inviteEvent);
+            }
         }
 
         if (!this.state.room) {

@@ -70,10 +70,10 @@ describe("createDmLocalRoom", () => {
             mocked(privateShouldBeEncrypted).mockReturnValue(true);
         });
 
-        it("should create an unencrypted room for 3PID targets", async () => {
+        it("should create an encrytped room for 3PID targets", async () => {
             const room = await createDmLocalRoom(mockClient, [member2]);
             expect(mockClient.store.storeRoom).toHaveBeenCalledWith(room);
-            assertLocalRoom(room, [member2], false);
+            assertLocalRoom(room, [member2], true);
         });
 
         describe("for MXID targets with encryption available", () => {

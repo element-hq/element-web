@@ -23,7 +23,7 @@ import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { EventType, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 import { MEGOLM_ALGORITHM } from "matrix-js-sdk/src/crypto/olmlib";
-import { fireEvent, render } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 
 import {
     stubClient,
@@ -34,6 +34,8 @@ import {
     mkEvent,
     setupAsyncStoreWithClient,
     filterConsole,
+    mkRoomMemberJoinEvent,
+    mkThirdPartyInviteEvent,
 } from "../../test-utils";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 import { Action } from "../../../src/dispatcher/actions";
@@ -68,7 +70,7 @@ describe("RoomView", () => {
     // mute some noise
     filterConsole("RVS update", "does not have an m.room.create event", "Current version: 1", "Version capability");
 
-    beforeEach(async () => {
+    beforeEach(() => {
         mockPlatformPeg({ reload: () => {} });
         stubClient();
         cli = mocked(MatrixClientPeg.get());
@@ -91,7 +93,7 @@ describe("RoomView", () => {
         jest.spyOn(VoipUserMapper.sharedInstance(), "getVirtualRoomForRoom").mockResolvedValue(undefined);
     });
 
-    afterEach(async () => {
+    afterEach(() => {
         unmockPlatformPeg();
         jest.restoreAllMocks();
     });
@@ -366,6 +368,32 @@ describe("RoomView", () => {
                     roomId: room.roomId,
                 });
             });
+        });
+    });
+
+    describe("when rendering a DM room with a single third-party invite", () => {
+        beforeEach(async () => {
+            room.currentState.setStateEvents([
+                mkRoomMemberJoinEvent(cli.getSafeUserId(), room.roomId),
+                mkThirdPartyInviteEvent(cli.getSafeUserId(), "user@example.com", room.roomId),
+            ]);
+            jest.spyOn(DMRoomMap.shared(), "getUserIdForRoomId").mockReturnValue(cli.getSafeUserId());
+            jest.spyOn(DMRoomMap.shared(), "getRoomIds").mockReturnValue(new Set([room.roomId]));
+            mocked(cli).isRoomEncrypted.mockReturnValue(true);
+            await renderRoomView();
+        });
+
+        it("should render the »waiting for third-party« view", () => {
+            expect(screen.getByText("Waiting for users to join Element")).toBeInTheDocument();
+            expect(
+                screen.getByText(
+                    "Once invited users have joined Element, you will be able to chat and the room will be end-to-end encrypted",
+                ),
+            ).toBeInTheDocument();
+
+            // no message composer
+            expect(screen.queryByText("Send an encrypted message…")).not.toBeInTheDocument();
+            expect(screen.queryByText("Send a message…")).not.toBeInTheDocument();
         });
     });
 
