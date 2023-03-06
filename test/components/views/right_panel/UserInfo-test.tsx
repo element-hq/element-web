@@ -15,13 +15,14 @@ limitations under the License.
 */
 
 import React from "react";
-import { fireEvent, render, screen, waitFor, cleanup } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, cleanup, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mocked } from "jest-mock";
 import { Room, User, MatrixClient, RoomMember, MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
 import { Phase, VerificationRequest } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 import { DeviceTrustLevel, UserTrustLevel } from "matrix-js-sdk/src/crypto/CrossSigning";
 import { DeviceInfo } from "matrix-js-sdk/src/crypto/deviceinfo";
+import { defer } from "matrix-js-sdk/src/utils";
 
 import UserInfo, {
     BanToggleButton,
@@ -44,6 +45,7 @@ import * as mockVerification from "../../../../src/verification";
 import Modal from "../../../../src/Modal";
 import { E2EStatus } from "../../../../src/utils/ShieldUtils";
 import { DirectoryMember, startDmOnFirstMessage } from "../../../../src/utils/direct-messages";
+import { flushPromises } from "../../../test-utils";
 
 jest.mock("../../../../src/utils/direct-messages", () => ({
     ...jest.requireActual("../../../../src/utils/direct-messages"),
@@ -608,8 +610,15 @@ describe("<UserOptionsSection />", () => {
     ])(
         "clicking »message« %s should start a DM",
         async (test: string, member: RoomMember | User, expectedAvatarUrl: string | undefined) => {
+            const deferred = defer<string>();
+            mocked(startDmOnFirstMessage).mockReturnValue(deferred.promise);
+
             renderComponent({ member });
             await userEvent.click(screen.getByText("Message"));
+
+            // Checking the attribute, because the button is a DIV and toBeDisabled() does not work.
+            expect(screen.getByText("Message")).toHaveAttribute("disabled");
+
             expect(startDmOnFirstMessage).toHaveBeenCalledWith(mockClient, [
                 new DirectoryMember({
                     user_id: member.userId,
@@ -617,6 +626,14 @@ describe("<UserOptionsSection />", () => {
                     avatar_url: expectedAvatarUrl,
                 }),
             ]);
+
+            await act(async () => {
+                deferred.resolve("!dm:example.com");
+                await flushPromises();
+            });
+
+            // Checking the attribute, because the button is a DIV and toBeDisabled() does not work.
+            expect(screen.getByText("Message")).not.toHaveAttribute("disabled");
         },
     );
 });

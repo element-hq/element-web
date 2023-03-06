@@ -131,7 +131,7 @@ async function openDmForUser(matrixClient: MatrixClient, user: Member): Promise<
         display_name: user.rawDisplayName,
         avatar_url: avatarUrl,
     });
-    startDmOnFirstMessage(matrixClient, [startDmUser]);
+    await startDmOnFirstMessage(matrixClient, [startDmUser]);
 }
 
 type SetUpdating = (updating: boolean) => void;
