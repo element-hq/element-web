@@ -858,8 +858,7 @@ async function readEvents(
 
 const onMessage = function (event: MessageEvent<any>): void {
     if (!event.origin) {
-        // stupid chrome
-        // @ts-ignore
+        // @ts-ignore - stupid chrome
         event.origin = event.originalEvent.origin;
     }
 
@@ -867,10 +866,10 @@ const onMessage = function (event: MessageEvent<any>): void {
     // This means the URL could contain a path (like /develop) and still be used
     // to validate event origins, which do not specify paths.
     // (See https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage)
-    let configUrl;
+    let configUrl: URL | undefined;
     try {
-        if (!openManagerUrl) openManagerUrl = IntegrationManagers.sharedInstance().getPrimaryManager().uiUrl;
-        configUrl = new URL(openManagerUrl);
+        if (!openManagerUrl) openManagerUrl = IntegrationManagers.sharedInstance().getPrimaryManager()?.uiUrl;
+        configUrl = new URL(openManagerUrl!);
     } catch (e) {
         // No integrations UI URL, ignore silently.
         return;
@@ -987,7 +986,7 @@ const onMessage = function (event: MessageEvent<any>): void {
 };
 
 let listenerCount = 0;
-let openManagerUrl: string | null = null;
+let openManagerUrl: string | undefined;
 
 export function startListening(): void {
     if (listenerCount === 0) {

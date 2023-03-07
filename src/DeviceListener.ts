@@ -227,7 +227,11 @@ export default class DeviceListener {
     // & cache the result
     private async getKeyBackupInfo(): Promise<IKeyBackupInfo | null> {
         const now = new Date().getTime();
-        if (!this.keyBackupInfo || this.keyBackupFetchedAt < now - KEY_BACKUP_POLL_INTERVAL) {
+        if (
+            !this.keyBackupInfo ||
+            !this.keyBackupFetchedAt ||
+            this.keyBackupFetchedAt < now - KEY_BACKUP_POLL_INTERVAL
+        ) {
             this.keyBackupInfo = await MatrixClientPeg.get().getKeyBackupVersion();
             this.keyBackupFetchedAt = now;
         }
@@ -392,7 +396,7 @@ export default class DeviceListener {
     private updateClientInformation = async (): Promise<void> => {
         try {
             if (this.shouldRecordClientInformation) {
-                await recordClientInformation(MatrixClientPeg.get(), SdkConfig.get(), PlatformPeg.get());
+                await recordClientInformation(MatrixClientPeg.get(), SdkConfig.get(), PlatformPeg.get() ?? undefined);
             } else {
                 await removeClientInformation(MatrixClientPeg.get());
             }

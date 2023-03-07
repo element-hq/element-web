@@ -201,7 +201,7 @@ export async function dialogTermsInteractionCallback(
     );
 
     const [done, _agreedUrls] = await finished;
-    if (!done) {
+    if (!done || !_agreedUrls) {
         throw new TermsNotSignedError();
     }
     return _agreedUrls;

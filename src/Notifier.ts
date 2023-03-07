@@ -106,9 +106,10 @@ class NotifierClass {
     private toolbarHidden?: boolean;
     private isSyncing?: boolean;
 
-    public notificationMessageForEvent(ev: MatrixEvent): string {
-        if (msgTypeHandlers.hasOwnProperty(ev.getContent().msgtype)) {
-            return msgTypeHandlers[ev.getContent().msgtype](ev);
+    public notificationMessageForEvent(ev: MatrixEvent): string | null {
+        const msgType = ev.getContent().msgtype;
+        if (msgType && msgTypeHandlers.hasOwnProperty(msgType)) {
+            return msgTypeHandlers[msgType](ev);
         }
         return TextForEvent.textForEvent(ev);
     }
@@ -134,9 +135,9 @@ class NotifierClass {
         let title;
         if (!ev.sender || room.name === ev.sender.name) {
             title = room.name;
-            // notificationMessageForEvent includes sender,
-            // but we already have the sender here
-            if (ev.getContent().body && !msgTypeHandlers.hasOwnProperty(ev.getContent().msgtype)) {
+            // notificationMessageForEvent includes sender, but we already have the sender here
+            const msgType = ev.getContent().msgtype;
+            if (ev.getContent().body && (!msgType || !msgTypeHandlers.hasOwnProperty(msgType))) {
                 msg = ev.getContent().body;
             }
         } else if (ev.getType() === "m.room.member") {
@@ -145,9 +146,9 @@ class NotifierClass {
             title = room.name;
         } else if (ev.sender) {
             title = ev.sender.name + " (" + room.name + ")";
-            // notificationMessageForEvent includes sender,
-            // but we've just out sender in the title
-            if (ev.getContent().body && !msgTypeHandlers.hasOwnProperty(ev.getContent().msgtype)) {
+            // notificationMessageForEvent includes sender, but we've just out sender in the title
+            const msgType = ev.getContent().msgtype;
+            if (ev.getContent().body && (!msgType || !msgTypeHandlers.hasOwnProperty(msgType))) {
                 msg = ev.getContent().body;
             }
         }
@@ -161,7 +162,7 @@ class NotifierClass {
             avatarUrl = Avatar.avatarUrlForMember(ev.sender, 40, 40, "crop");
         }
 
-        const notif = plaf.displayNotification(title, msg, avatarUrl, room, ev);
+        const notif = plaf.displayNotification(title, msg!, avatarUrl, room, ev);
 
         // if displayNotification returns non-null,  the platform supports
         // clearing notifications later, so keep track of this.

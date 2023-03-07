@@ -412,9 +412,9 @@ describe("Spotlight Dialog", () => {
             jest.advanceTimersByTime(200);
             await flushPromisesWithFakeTimers();
 
-            expect(screen.getByText(potatoRoom.name)).toBeInTheDocument();
-            expect(screen.queryByText(nsfwTopicRoom.name)).not.toBeInTheDocument();
-            expect(screen.queryByText(nsfwTopicRoom.name)).not.toBeInTheDocument();
+            expect(screen.getByText(potatoRoom.name!)).toBeInTheDocument();
+            expect(screen.queryByText(nsfwTopicRoom.name!)).not.toBeInTheDocument();
+            expect(screen.queryByText(nsfwTopicRoom.name!)).not.toBeInTheDocument();
         });
 
         it("displays rooms with nsfw keywords in results when showNsfwPublicRooms is truthy", async () => {
@@ -425,9 +425,9 @@ describe("Spotlight Dialog", () => {
             jest.advanceTimersByTime(200);
             await flushPromisesWithFakeTimers();
 
-            expect(screen.getByText(nsfwTopicRoom.name)).toBeInTheDocument();
-            expect(screen.getByText(nsfwNameRoom.name)).toBeInTheDocument();
-            expect(screen.getByText(potatoRoom.name)).toBeInTheDocument();
+            expect(screen.getByText(nsfwTopicRoom.name!)).toBeInTheDocument();
+            expect(screen.getByText(nsfwNameRoom.name!)).toBeInTheDocument();
+            expect(screen.getByText(potatoRoom.name!)).toBeInTheDocument();
         });
     });
 });

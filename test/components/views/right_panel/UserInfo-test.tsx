@@ -328,7 +328,7 @@ describe("<DeviceItem />", () => {
     it("with unverified user and device, displays button without a label", () => {
         renderComponent();
 
-        expect(screen.getByRole("button", { name: device.getDisplayName() })).toBeInTheDocument;
+        expect(screen.getByRole("button", { name: device.getDisplayName()! })).toBeInTheDocument;
         expect(screen.queryByText(/trusted/i)).not.toBeInTheDocument();
     });
 
@@ -343,7 +343,7 @@ describe("<DeviceItem />", () => {
         setMockDeviceTrust(true);
         renderComponent();
 
-        expect(screen.getByText(device.getDisplayName())).toBeInTheDocument();
+        expect(screen.getByText(device.getDisplayName()!)).toBeInTheDocument();
         expect(screen.queryByText(/trusted/)).not.toBeInTheDocument();
     });
 
@@ -356,7 +356,7 @@ describe("<DeviceItem />", () => {
 
         // expect to see no button in this case
         expect(screen.queryByRole("button")).not.toBeInTheDocument;
-        expect(screen.getByText(device.getDisplayName())).toBeInTheDocument();
+        expect(screen.getByText(device.getDisplayName()!)).toBeInTheDocument();
     });
 
     it("with verified user and device, displays no button and a 'Trusted' label", () => {
@@ -365,7 +365,7 @@ describe("<DeviceItem />", () => {
         renderComponent();
 
         expect(screen.queryByRole("button")).not.toBeInTheDocument;
-        expect(screen.getByText(device.getDisplayName())).toBeInTheDocument();
+        expect(screen.getByText(device.getDisplayName()!)).toBeInTheDocument();
         expect(screen.getByText("Trusted")).toBeInTheDocument();
     });
 
@@ -373,7 +373,7 @@ describe("<DeviceItem />", () => {
         mockClient.getUser.mockReturnValueOnce(null);
         renderComponent();
 
-        const button = screen.getByRole("button", { name: device.getDisplayName() });
+        const button = screen.getByRole("button", { name: device.getDisplayName()! });
         expect(button).toBeInTheDocument;
         await userEvent.click(button);
 
@@ -387,7 +387,7 @@ describe("<DeviceItem />", () => {
         mockClient.isGuest.mockReturnValueOnce(true);
         renderComponent();
 
-        const button = screen.getByRole("button", { name: device.getDisplayName() });
+        const button = screen.getByRole("button", { name: device.getDisplayName()! });
         expect(button).toBeInTheDocument;
         await userEvent.click(button);
 

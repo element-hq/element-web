@@ -21,7 +21,7 @@ import { MatrixGlob } from "../utils/MatrixGlob";
 export const RECOMMENDATION_BAN = "m.ban";
 export const RECOMMENDATION_BAN_TYPES = [RECOMMENDATION_BAN, "org.matrix.mjolnir.ban"];
 
-export function recommendationToStable(recommendation: string, unstable = true): string {
+export function recommendationToStable(recommendation: string, unstable = true): string | null {
     if (RECOMMENDATION_BAN_TYPES.includes(recommendation)) {
         return unstable ? RECOMMENDATION_BAN_TYPES[RECOMMENDATION_BAN_TYPES.length - 1] : RECOMMENDATION_BAN;
     }
@@ -31,7 +31,7 @@ export function recommendationToStable(recommendation: string, unstable = true):
 export class ListRule {
     private _glob: MatrixGlob;
     private readonly _entity: string;
-    private readonly _action: string;
+    private readonly _action: string | null;
     private readonly _reason: string;
     private readonly _kind: string;
 
@@ -55,7 +55,7 @@ export class ListRule {
         return this._kind;
     }
 
-    public get recommendation(): string {
+    public get recommendation(): string | null {
         return this._action;
     }
 

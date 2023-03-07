@@ -152,7 +152,7 @@ async function infoForImageFile(
     // For lesser supported image types, always include the thumbnail even if it is larger
     if (!ALWAYS_INCLUDE_THUMBNAIL.includes(imageFile.type)) {
         // we do all sizing checks here because we still rely on thumbnail generation for making a blurhash from.
-        const sizeDifference = imageFile.size - imageInfo.thumbnail_info.size;
+        const sizeDifference = imageFile.size - imageInfo.thumbnail_info!.size;
         if (
             // image is small enough already
             imageFile.size <= IMAGE_SIZE_THRESHOLD_THUMBNAIL ||

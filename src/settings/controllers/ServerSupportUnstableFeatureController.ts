@@ -45,6 +45,7 @@ export default class ServerSupportUnstableFeatureController extends MatrixClient
         if (!v === this.enabled) return;
         this.enabled = !v;
         const level = SettingsStore.firstSupportedLevel(this.settingName);
+        if (!level) return;
         const settingValue = SettingsStore.getValue(this.settingName, null);
         this.watchers.notifyUpdate(this.settingName, null, level, settingValue);
     }
@@ -61,7 +62,7 @@ export default class ServerSupportUnstableFeatureController extends MatrixClient
 
     public getValueOverride(
         level: SettingLevel,
-        roomId: string,
+        roomId: string | null,
         calculatedValue: any,
         calculatedAtLevel: SettingLevel | null,
     ): any {

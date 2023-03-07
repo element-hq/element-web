@@ -88,7 +88,7 @@ export class ProxiedModuleApi implements ModuleApi {
                 },
                 "mx_CompoundDialog",
             ).finished.then(([didOkOrSubmit, model]) => {
-                resolve({ didOkOrSubmit, model: model as M });
+                resolve({ didOkOrSubmit: !!didOkOrSubmit, model: model as M });
             });
         });
     }
@@ -102,6 +102,7 @@ export class ProxiedModuleApi implements ModuleApi {
         displayName?: string,
     ): Promise<AccountAuthInfo> {
         const hsUrl = SdkConfig.get("validated_server_config")?.hsUrl;
+        if (!hsUrl) throw new Error("Could not get homeserver url");
         const client = Matrix.createClient({ baseUrl: hsUrl });
         const deviceName =
             SdkConfig.get("default_device_display_name") || PlatformPeg.get()?.getDefaultDeviceDisplayName();

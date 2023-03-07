@@ -87,9 +87,10 @@ function makeInputToKey(keyInfo: ISecretStorageKeyInfo): (keyParams: KeyParams) 
     return async ({ passphrase, recoveryKey }): Promise<Uint8Array> => {
         if (passphrase) {
             return deriveKey(passphrase, keyInfo.passphrase.salt, keyInfo.passphrase.iterations);
-        } else {
+        } else if (recoveryKey) {
             return decodeRecoveryKey(recoveryKey);
         }
+        throw new Error("Invalid input, passphrase or recoveryKey need to be provided");
     };
 }
 

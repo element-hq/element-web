@@ -16,6 +16,7 @@ limitations under the License.
 
 import { Room } from "matrix-js-sdk/src/models/room";
 import { EventType } from "matrix-js-sdk/src/@types/event";
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import AliasCustomisations from "./customisations/Alias";
@@ -109,8 +110,8 @@ export async function setDMRoom(roomId: string, userId: string | null): Promise<
  * @returns {string} User ID of the user that the room is probably a DM with
  */
 function guessDMRoomTargetId(room: Room, myUserId: string): string {
-    let oldestTs;
-    let oldestUser;
+    let oldestTs: number | undefined;
+    let oldestUser: RoomMember | undefined;
 
     // Pick the joined user who's been here longest (and isn't us),
     for (const user of room.getJoinedMembers()) {

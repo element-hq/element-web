@@ -107,8 +107,8 @@ export class ContentRules {
         };
 
         for (const kind in rulesets.global) {
-            for (let i = 0; i < Object.keys(rulesets.global[kind as keyof PushRuleSet]).length; ++i) {
-                const r = rulesets.global[kind as keyof PushRuleSet][i] as IAnnotatedPushRule;
+            for (let i = 0; i < Object.keys(rulesets.global[kind as keyof PushRuleSet]!).length; ++i) {
+                const r = rulesets.global[kind as keyof PushRuleSet]![i] as IAnnotatedPushRule;
 
                 // check it's not a default rule
                 if (r.rule_id[0] === "." || kind !== PushRuleKind.ContentSpecific) {

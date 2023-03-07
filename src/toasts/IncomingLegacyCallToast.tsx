@@ -39,8 +39,16 @@ interface IState {
 }
 
 export default class IncomingLegacyCallToast extends React.Component<IProps, IState> {
+    private readonly roomId: string;
+
     public constructor(props: IProps) {
         super(props);
+
+        const roomId = LegacyCallHandler.instance.roomIdForCall(this.props.call);
+        if (!roomId) {
+            throw new Error("Unable to find room for incoming call");
+        }
+        this.roomId = roomId;
 
         this.state = {
             silenced: LegacyCallHandler.instance.isCallSilenced(this.props.call.callId),
@@ -67,12 +75,12 @@ export default class IncomingLegacyCallToast extends React.Component<IProps, ISt
 
     private onAnswerClick = (e: React.MouseEvent): void => {
         e.stopPropagation();
-        LegacyCallHandler.instance.answerCall(LegacyCallHandler.instance.roomIdForCall(this.props.call));
+        LegacyCallHandler.instance.answerCall(this.roomId);
     };
 
     private onRejectClick = (e: React.MouseEvent): void => {
         e.stopPropagation();
-        LegacyCallHandler.instance.hangupOrReject(LegacyCallHandler.instance.roomIdForCall(this.props.call), true);
+        LegacyCallHandler.instance.hangupOrReject(this.roomId, true);
     };
 
     private onSilenceClick = (e: React.MouseEvent): void => {
@@ -84,9 +92,8 @@ export default class IncomingLegacyCallToast extends React.Component<IProps, ISt
     };
 
     public render(): React.ReactNode {
-        const call = this.props.call;
-        const room = MatrixClientPeg.get().getRoom(LegacyCallHandler.instance.roomIdForCall(call));
-        const isVoice = call.type === CallType.Voice;
+        const room = MatrixClientPeg.get().getRoom(this.roomId);
+        const isVoice = this.props.call.type === CallType.Voice;
         const callForcedSilent = LegacyCallHandler.instance.isForcedSilent();
 
         let silenceButtonTooltip = this.state.silenced ? _t("Sound on") : _t("Silence call");

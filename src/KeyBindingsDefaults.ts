@@ -23,7 +23,7 @@ import { CATEGORIES, CategoryName, KeyBindingAction } from "./accessibility/Keyb
 import { getKeyboardShortcuts } from "./accessibility/KeyboardShortcutUtils";
 
 export const getBindingsByCategory = (category: CategoryName): KeyBinding[] => {
-    return CATEGORIES[category].settingNames.reduce((bindings, action) => {
+    return CATEGORIES[category].settingNames.reduce<KeyBinding[]>((bindings, action) => {
         const keyCombo = getKeyboardShortcuts()[action]?.default;
         if (keyCombo) {
             bindings.push({ action, keyCombo });

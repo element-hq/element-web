@@ -89,7 +89,7 @@ async function getStorageContext(): Promise<StorageContext> {
             if (estimate.usageDetails) {
                 const usageDetails: string[] = [];
                 Object.keys(estimate.usageDetails).forEach((k) => {
-                    usageDetails.push(`${k}: ${String(estimate.usageDetails[k])}`);
+                    usageDetails.push(`${k}: ${String(estimate.usageDetails![k])}`);
                 });
                 result[`storageManager_usage`] = usageDetails.join(", ");
             }
@@ -137,9 +137,9 @@ async function getCryptoContext(client: MatrixClient): Promise<CryptoContext> {
         ),
         cross_signing_key: crossSigning.getId()!,
         cross_signing_privkey_in_secret_storage: String(!!(await crossSigning.isStoredInSecretStorage(secretStorage))),
-        cross_signing_master_privkey_cached: String(!!(pkCache && (await pkCache.getCrossSigningKeyCache("master")))),
+        cross_signing_master_privkey_cached: String(!!(pkCache && (await pkCache.getCrossSigningKeyCache?.("master")))),
         cross_signing_user_signing_privkey_cached: String(
-            !!(pkCache && (await pkCache.getCrossSigningKeyCache("user_signing"))),
+            !!(pkCache && (await pkCache.getCrossSigningKeyCache?.("user_signing"))),
         ),
         secret_storage_ready: String(await client.isSecretStorageReady()),
         secret_storage_key_in_account: String(!!(await secretStorage.hasKey())),
@@ -151,7 +151,7 @@ async function getCryptoContext(client: MatrixClient): Promise<CryptoContext> {
 
 function getDeviceContext(client: MatrixClient): DeviceContext {
     const result: DeviceContext = {
-        device_id: client?.deviceId,
+        device_id: client?.deviceId ?? undefined,
         mx_local_settings: localStorage.getItem("mx_local_settings"),
     };
 

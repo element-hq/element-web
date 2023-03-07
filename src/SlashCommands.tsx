@@ -208,7 +208,10 @@ function successSync(value: any): RunResult {
 
 const isCurrentLocalRoom = (): boolean => {
     const cli = MatrixClientPeg.get();
-    const room = cli.getRoom(SdkContextClass.instance.roomViewStore.getRoomId());
+    const roomId = SdkContextClass.instance.roomViewStore.getRoomId();
+    if (!roomId) return false;
+    const room = cli.getRoom(roomId);
+    if (!room) return false;
     return isLocalRoom(room);
 };
 
@@ -873,7 +876,9 @@ export const Commands = [
         description: _td("Define the power level of a user"),
         isEnabled(): boolean {
             const cli = MatrixClientPeg.get();
-            const room = cli.getRoom(SdkContextClass.instance.roomViewStore.getRoomId());
+            const roomId = SdkContextClass.instance.roomViewStore.getRoomId();
+            if (!roomId) return false;
+            const room = cli.getRoom(roomId);
             return (
                 !!room?.currentState.maySendStateEvent(EventType.RoomPowerLevels, cli.getUserId()!) &&
                 !isLocalRoom(room)
@@ -897,7 +902,10 @@ export const Commands = [
                             );
                         }
                         const member = room.getMember(userId);
-                        if (!member || getEffectiveMembership(member.membership) === EffectiveMembership.Leave) {
+                        if (
+                            !member?.membership ||
+                            getEffectiveMembership(member.membership) === EffectiveMembership.Leave
+                        ) {
                             return reject(newTranslatableError("Could not find user in room"));
                         }
                         const powerLevelEvent = room.currentState.getStateEvents("m.room.power_levels", "");
@@ -916,7 +924,9 @@ export const Commands = [
         description: _td("Deops user with given id"),
         isEnabled(): boolean {
             const cli = MatrixClientPeg.get();
-            const room = cli.getRoom(SdkContextClass.instance.roomViewStore.getRoomId());
+            const roomId = SdkContextClass.instance.roomViewStore.getRoomId();
+            if (!roomId) return false;
+            const room = cli.getRoom(roomId);
             return (
                 !!room?.currentState.maySendStateEvent(EventType.RoomPowerLevels, cli.getUserId()!) &&
                 !isLocalRoom(room)
@@ -973,11 +983,12 @@ export const Commands = [
                 // We use parse5, which doesn't render/create a DOM node. It instead runs
                 // some superfast regex over the text so we don't have to.
                 const embed = parseHtml(widgetUrl);
-                if (embed && embed.childNodes && embed.childNodes.length === 1) {
+                if (embed?.childNodes?.length === 1) {
                     const iframe = embed.childNodes[0] as ChildElement;
                     if (iframe.tagName.toLowerCase() === "iframe" && iframe.attrs) {
                         const srcAttr = iframe.attrs.find((a) => a.name === "src");
                         logger.log("Pulling URL out of iframe (embed code)");
+                        if (!srcAttr) return reject(newTranslatableError("iframe has no src attribute"));
                         widgetUrl = srcAttr.value;
                     }
                 }
@@ -1240,6 +1251,7 @@ export const Commands = [
                     }
 
                     const roomId = await ensureDMExists(MatrixClientPeg.get(), userId);
+                    if (!roomId) throw new Error("Failed to ensure DM exists");
 
                     dis.dispatch<ViewRoomPayload>({
                         action: Action.ViewRoom,
@@ -1267,6 +1279,8 @@ export const Commands = [
                             (async (): Promise<void> => {
                                 const cli = MatrixClientPeg.get();
                                 const roomId = await ensureDMExists(cli, userId);
+                                if (!roomId) throw new Error("Failed to ensure DM exists");
+
                                 dis.dispatch<ViewRoomPayload>({
                                     action: Action.ViewRoom,
                                     room_id: roomId,
@@ -1323,6 +1337,7 @@ export const Commands = [
         isEnabled: () => !isCurrentLocalRoom(),
         runFn: function (roomId, args) {
             const room = MatrixClientPeg.get().getRoom(roomId);
+            if (!room) return reject(newTranslatableError("Could not find room"));
             return success(guessAndSetDMRoom(room, true));
         },
         renderingTypes: [TimelineRenderingType.Room],
@@ -1334,6 +1349,7 @@ export const Commands = [
         isEnabled: () => !isCurrentLocalRoom(),
         runFn: function (roomId, args) {
             const room = MatrixClientPeg.get().getRoom(roomId);
+            if (!room) return reject(newTranslatableError("Could not find room"));
             return success(guessAndSetDMRoom(room, false));
         },
         renderingTypes: [TimelineRenderingType.Room],

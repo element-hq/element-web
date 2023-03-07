@@ -452,6 +452,7 @@ export async function ensureDMExists(client: MatrixClient, userId: string): Prom
         }
 
         roomId = await createRoom({ encryption, dmUserId: userId, spinner: false, andView: false });
+        if (!roomId) return null;
         await waitForMember(client, roomId, userId);
     }
     return roomId;

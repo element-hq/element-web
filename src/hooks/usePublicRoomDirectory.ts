@@ -143,8 +143,9 @@ export const usePublicRoomDirectory = (): {
 
         let roomServer: string = myHomeserver;
         if (
-            SdkConfig.getObject("room_directory")?.get("servers")?.includes(lsRoomServer) ||
-            SettingsStore.getValue("room_directory_servers")?.includes(lsRoomServer)
+            lsRoomServer &&
+            (SdkConfig.getObject("room_directory")?.get("servers")?.includes(lsRoomServer) ||
+                SettingsStore.getValue("room_directory_servers")?.includes(lsRoomServer))
         ) {
             roomServer = lsRoomServer!;
         }

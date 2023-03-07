@@ -50,11 +50,11 @@ export const getClientInformationEventType = (deviceId: string): string => `${cl
 export const recordClientInformation = async (
     matrixClient: MatrixClient,
     sdkConfig: IConfigOptions,
-    platform: BasePlatform,
+    platform?: BasePlatform,
 ): Promise<void> => {
     const deviceId = matrixClient.getDeviceId()!;
     const { brand } = sdkConfig;
-    const version = await platform.getAppVersion();
+    const version = await platform?.getAppVersion();
     const type = getClientInformationEventType(deviceId);
     const url = formatUrl();
 

@@ -68,7 +68,7 @@ export class Jitsi {
         this.update(cli.getClientWellKnown());
     }
 
-    private update = async (discoveryResponse: IClientWellKnown): Promise<any> => {
+    private update = async (discoveryResponse?: IClientWellKnown): Promise<any> => {
         // Start with a default of the config's domain
         let domain = SdkConfig.getObject("jitsi")?.get("preferred_domain") || "meet.element.io";
 

@@ -170,7 +170,7 @@ export class PlaybackQueue {
                             // This should cause a Play event, which will re-populate our playback order
                             // and update our current playback ID.
                             // noinspection JSIgnoredPromiseFromCall
-                            instance.play();
+                            instance?.play();
                         }
                     }
                 } else {
