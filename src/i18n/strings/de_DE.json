@@ -3672,7 +3672,7 @@
     "Creating rooms…": "Erstelle Räume …",
     "Keep going…": "Fortfahren …",
     "Connecting…": "Verbinde …",
-    "Scan QR code": "QR-Code scannen",
+    "Scan QR code": "QR-Code einlesen",
     "Select '%(scanQRCode)s'": "Wähle „%(scanQRCode)s“",
     "Loading live location…": "Lade Live-Standort …",
     "Fetching keys from server…": "Lade Schlüssel vom Server …",
