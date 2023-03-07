@@ -2506,7 +2506,6 @@
     "Private (invite only)": "Privato (solo a invito)",
     "This upgrade will allow members of selected spaces access to this room without an invite.": "Questo aggiornamento permetterà ai membri di spazi selezionati di accedere alla stanza senza invito.",
     "Message bubbles": "Messaggi",
-    "Search for rooms or spaces": "Cerca stanze o spazi",
     "Add space": "Aggiungi spazio",
     "Leave %(spaceName)s": "Esci da %(spaceName)s",
     "You're the only admin of some of the rooms or spaces you wish to leave. Leaving them will leave them without any admins.": "Sei l'unico amministratore di alcune delle stanze o spazi che vuoi abbandonare. Se esci li lascerai senza amministratori.",
