@@ -3739,5 +3739,8 @@
     "There are no active polls. Load more polls to view polls for previous months": "Pole ühtegi käimas küsitlust. Varasemate kuude vaatamiseks laadi veel küsitlusi",
     "Verify Session": "Verifitseeri sessioon",
     "Ignore (%(counter)s)": "Eira (%(counter)s)",
-    "Once everyone has joined, you’ll be able to chat": "Te saate vestelda, kui kõik on liitunud"
+    "Once everyone has joined, you’ll be able to chat": "Te saate vestelda, kui kõik on liitunud",
+    "Once invited users have joined Element, you will be able to chat and the room will be end-to-end encrypted": "Kui kutse saanud kasutajad on liitunud, siis saad sa nendega suhelda ja jututuba on läbivalt krüptitud",
+    "Waiting for users to join Element": "Kasutajate liitumise ootel",
+    "Invites by email can only be sent one at a time": "Kutseid saad e-posti teel saata vaid ükshaaval"
 }
