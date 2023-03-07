@@ -61,8 +61,8 @@
         "analyse:unused-exports": "node ./scripts/analyse_unused_exports.js"
     },
     "resolutions": {
-        "@types/react-dom": "17.0.19",
-        "@types/react": "17.0.53"
+        "@types/react-dom": "18.0.11",
+        "@types/react": "18.0.28"
     },
     "dependencies": {
         "@matrix-org/olm": "https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.12.tgz",
@@ -73,8 +73,8 @@
         "matrix-js-sdk": "github:matrix-org/matrix-js-sdk#develop",
         "matrix-react-sdk": "github:matrix-org/matrix-react-sdk#develop",
         "matrix-widget-api": "^1.1.1",
-        "react": "17.0.2",
-        "react-dom": "17.0.2",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
         "sanitize-html": "^2.3.2",
         "ua-parser-js": "^1.0.0"
     },
@@ -99,14 +99,13 @@
         "@principalstudio/html-webpack-inject-preload": "^1.2.7",
         "@sentry/webpack-plugin": "^1.18.1",
         "@svgr/webpack": "^5.5.0",
-        "@testing-library/react": "^12.1.5",
-        "@types/flux": "^3.1.9",
+        "@testing-library/react": "^14",
         "@types/jest": "^29.0.0",
         "@types/jsrsasign": "^10.5.4",
         "@types/modernizr": "^3.5.3",
         "@types/node": "^16",
-        "@types/react": "17.0.53",
-        "@types/react-dom": "17.0.19",
+        "@types/react": "18.0.28",
+        "@types/react-dom": "18.0.11",
         "@types/sanitize-html": "^2.3.1",
         "@types/ua-parser-js": "^0.7.36",
         "@typescript-eslint/eslint-plugin": "^5.45.0",
