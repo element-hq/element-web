@@ -76,7 +76,7 @@ export interface InteractiveAuthDialogProps {
 }
 
 interface IState {
-    authError: Error;
+    authError: Error | null;
 
     // See _onUpdateStagePhase()
     uiaStage: AuthType | null;
@@ -147,16 +147,22 @@ export default class InteractiveAuthDialog extends React.Component<InteractiveAu
 
         let title = this.state.authError ? "Error" : this.props.title || _t("Authentication");
         let body = this.state.authError ? null : this.props.body;
-        let continueText = null;
-        let continueKind = null;
+        let continueText: string | undefined;
+        let continueKind: string | undefined;
         const dialogAesthetics = this.props.aestheticsForStagePhases || this.getDefaultDialogAesthetics();
         if (!this.state.authError && dialogAesthetics) {
-            if (dialogAesthetics[this.state.uiaStage]) {
-                const aesthetics = dialogAesthetics[this.state.uiaStage][this.state.uiaStagePhase];
-                if (aesthetics?.title) title = aesthetics.title;
-                if (aesthetics?.body) body = aesthetics.body;
-                if (aesthetics?.continueText) continueText = aesthetics.continueText;
-                if (aesthetics?.continueKind) continueKind = aesthetics.continueKind;
+            if (
+                this.state.uiaStage !== null &&
+                this.state.uiaStagePhase !== null &&
+                dialogAesthetics[this.state.uiaStage]
+            ) {
+                const aesthetics = dialogAesthetics[this.state.uiaStage]![this.state.uiaStagePhase];
+                if (aesthetics) {
+                    if (aesthetics.title) title = aesthetics.title;
+                    if (aesthetics.body) body = aesthetics.body;
+                    if (aesthetics.continueText) continueText = aesthetics.continueText;
+                    if (aesthetics.continueKind) continueKind = aesthetics.continueKind;
+                }
             }
         }
 

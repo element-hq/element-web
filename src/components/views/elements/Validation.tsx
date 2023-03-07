@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { ReactNode } from "react";
 import classNames from "classnames";
 
 type Data = Pick<IFieldState, "value" | "allowEmpty">;
@@ -31,13 +31,13 @@ interface IRule<T, D = undefined> {
     final?: boolean;
     skip?(this: T, data: Data, derivedData: D): boolean;
     test(this: T, data: Data, derivedData: D): boolean | Promise<boolean>;
-    valid?(this: T, derivedData: D): string;
-    invalid?(this: T, derivedData: D): string;
+    valid?(this: T, derivedData: D): string | null;
+    invalid?(this: T, derivedData: D): string | null;
 }
 
 interface IArgs<T, D = void> {
     rules: IRule<T, D>[];
-    description?(this: T, derivedData: D, results: IResult[]): React.ReactChild;
+    description?(this: T, derivedData: D, results: IResult[]): ReactNode;
     hideDescriptionIfValid?: boolean;
     deriveData?(data: Data): Promise<D>;
 }

@@ -44,15 +44,15 @@ interface IProps {
 
 interface IState {
     shouldErase: boolean;
-    errStr: string;
+    errStr: string | null;
     authData: any; // for UIA
     authEnabled: boolean; // see usages for information
 
     // A few strings that are passed to InteractiveAuth for design or are displayed
     // next to the InteractiveAuth component.
-    bodyText: string;
-    continueText: string;
-    continueKind: string;
+    bodyText?: string;
+    continueText?: string;
+    continueKind?: string;
 }
 
 export default class DeactivateAccountDialog extends React.Component<IProps, IState> {
@@ -64,12 +64,6 @@ export default class DeactivateAccountDialog extends React.Component<IProps, ISt
             errStr: null,
             authData: null, // for UIA
             authEnabled: true, // see usages for information
-
-            // A few strings that are passed to InteractiveAuth for design or are displayed
-            // next to the InteractiveAuth component.
-            bodyText: null,
-            continueText: null,
-            continueKind: null,
         };
 
         this.initAuth(/* shouldErase= */ false);
@@ -101,14 +95,16 @@ export default class DeactivateAccountDialog extends React.Component<IProps, ISt
         };
 
         const aesthetics = DEACTIVATE_AESTHETICS[stage];
-        let bodyText = null;
-        let continueText = null;
-        let continueKind = null;
+        let bodyText: string | undefined;
+        let continueText: string | undefined;
+        let continueKind: string | undefined;
         if (aesthetics) {
             const phaseAesthetics = aesthetics[phase];
-            if (phaseAesthetics?.body) bodyText = phaseAesthetics.body;
-            if (phaseAesthetics?.continueText) continueText = phaseAesthetics.continueText;
-            if (phaseAesthetics?.continueKind) continueKind = phaseAesthetics.continueKind;
+            if (phaseAesthetics) {
+                if (phaseAesthetics.body) bodyText = phaseAesthetics.body;
+                if (phaseAesthetics.continueText) continueText = phaseAesthetics.continueText;
+                if (phaseAesthetics.continueKind) continueKind = phaseAesthetics.continueKind;
+            }
         }
         this.setState({ bodyText, continueText, continueKind });
     };
@@ -183,7 +179,7 @@ export default class DeactivateAccountDialog extends React.Component<IProps, ISt
     }
 
     public render(): React.ReactNode {
-        let error = null;
+        let error: JSX.Element | undefined;
         if (this.state.errStr) {
             error = <div className="error">{this.state.errStr}</div>;
         }

@@ -80,7 +80,7 @@ interface IProps {
     // Called when the stage changes, or the stage's phase changes. First
     // argument is the stage, second is the phase. Some stages do not have
     // phases and will be counted as 0 (numeric).
-    onStagePhaseChange?(stage: AuthType, phase: number): void;
+    onStagePhaseChange?(stage: AuthType | null, phase: number): void;
 }
 
 interface IState {
@@ -170,7 +170,8 @@ export default class InteractiveAuthComponent extends React.Component<IProps, IS
             busy: true,
         });
         try {
-            return await this.props.requestEmailToken(email, secret, attempt, session);
+            // We know this method only gets called on flows where requestEmailToken is passed but types don't
+            return await this.props.requestEmailToken!(email, secret, attempt, session);
         } finally {
             this.setState({
                 busy: false,
@@ -231,7 +232,7 @@ export default class InteractiveAuthComponent extends React.Component<IProps, IS
     };
 
     private onPhaseChange = (newPhase: number): void => {
-        this.props.onStagePhaseChange?.(this.state.authStage, newPhase || 0);
+        this.props.onStagePhaseChange?.(this.state.authStage ?? null, newPhase || 0);
     };
 
     private onStageCancel = (): void => {

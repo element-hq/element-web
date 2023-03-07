@@ -2015,7 +2015,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
     public render(): React.ReactNode {
         const fragmentAfterLogin = this.getFragmentAfterLogin();
-        let view = null;
+        let view: JSX.Element;
 
         if (this.state.view === Views.LOADING) {
             view = (
@@ -2132,6 +2132,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             view = <UseCaseSelection onFinished={(useCase): Promise<void> => this.onShowPostLoginScreen(useCase)} />;
         } else {
             logger.error(`Unknown view ${this.state.view}`);
+            return null;
         }
 
         return (

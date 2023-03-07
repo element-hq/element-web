@@ -48,16 +48,6 @@ export type RecursivePartial<T> = {
         : T[P];
 };
 
-// Inspired by https://stackoverflow.com/a/60206860
-export type KeysWithObjectShape<Input> = {
-    [P in keyof Input]: Input[P] extends object
-        ? // Arrays are counted as objects - exclude them
-          Input[P] extends Array<unknown>
-            ? never
-            : P
-        : never;
-}[keyof Input];
-
 export type KeysStartingWith<Input extends object, Str extends string> = {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     [P in keyof Input]: P extends `${Str}${infer _X}` ? P : never; // we don't use _X
