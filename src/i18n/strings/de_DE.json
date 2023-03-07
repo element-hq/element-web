@@ -3742,5 +3742,7 @@
     "Once invited users have joined Element, you will be able to chat and the room will be end-to-end encrypted": "Sobald eingeladene Benutzer Element beigetreten sind, werdet ihr euch unterhalten können und der Raum Ende-zu-Ende-verschlüsselt sein",
     "Waiting for users to join Element": "Warte darauf, dass Benutzer Element beitreten",
     "Invites by email can only be sent one at a time": "E-Mail-Einladungen können nur nacheinander gesendet werden",
-    "Once everyone has joined, you’ll be able to chat": "Sobald alle den Raum betreten hat, könnt ihr euch unterhalten"
+    "Once everyone has joined, you’ll be able to chat": "Sobald alle den Raum betreten hat, könnt ihr euch unterhalten",
+    "Could not find room": "Konnte Raum nicht finden",
+    "iframe has no src attribute": "iFrame hat kein src-Attribut"
 }
