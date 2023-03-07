@@ -168,8 +168,10 @@ describe("SlidingSyncManager", () => {
             expect(slidingSync.setListRanges).toHaveBeenCalledTimes(wantWindows.length - 1);
             wantWindows.forEach((range, i) => {
                 if (i === 0) {
+                    // eslint-disable-next-line jest/no-conditional-expect
                     expect(slidingSync.setList).toHaveBeenCalledWith(
                         SlidingSyncManager.ListSearch,
+                        // eslint-disable-next-line jest/no-conditional-expect
                         expect.objectContaining({
                             ranges: [[0, batchSize - 1], range],
                         }),

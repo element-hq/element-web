@@ -56,8 +56,10 @@ describe("FixedRollingArray", () => {
             expect(previous - current).toBe(1);
 
             if (i === 1) {
+                // eslint-disable-next-line jest/no-conditional-expect
                 expect(previous).toBe(maxValue);
             } else if (i === width) {
+                // eslint-disable-next-line jest/no-conditional-expect
                 expect(current).toBe(minValue);
             }
         }

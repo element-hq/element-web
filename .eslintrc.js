@@ -179,9 +179,6 @@ module.exports = {
                 // TODO: There are many tests with invalid expects that should be fixed,
                 // https://github.com/vector-im/element-web/issues/24709
                 "jest/valid-expect": "off",
-                // TODO: There are many cases to refactor away,
-                // https://github.com/vector-im/element-web/issues/24710
-                "jest/no-conditional-expect": "off",
                 // Also treat "oldBackendOnly" as a test function.
                 // Used in some crypto tests.
                 "jest/no-standalone-expect": [

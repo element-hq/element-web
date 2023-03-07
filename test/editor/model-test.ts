@@ -15,9 +15,10 @@ limitations under the License.
 */
 
 import EditorModel from "../../src/editor/model";
-import { createPartCreator, createRenderer, isDocumentPosition } from "./mock";
+import { createPartCreator, createRenderer } from "./mock";
 import DocumentOffset from "../../src/editor/offset";
 import { PillPart } from "../../src/editor/parts";
+import DocumentPosition from "../../src/editor/position";
 
 describe("editor/model", function () {
     describe("plain text manipulation", function () {
@@ -26,10 +27,8 @@ describe("editor/model", function () {
             const model = new EditorModel([], createPartCreator(), renderer);
             model.update("hello", "insertText", new DocumentOffset(5, true));
             expect(renderer.count).toBe(1);
-            if (isDocumentPosition(renderer.caret)) {
-                expect(renderer.caret.index).toBe(0);
-                expect(renderer.caret.offset).toBe(5);
-            }
+            expect((renderer.caret as DocumentPosition).index).toBe(0);
+            expect((renderer.caret as DocumentPosition).offset).toBe(5);
             expect(model.parts.length).toBe(1);
             expect(model.parts[0].type).toBe("plain");
             expect(model.parts[0].text).toBe("hello");
@@ -40,10 +39,8 @@ describe("editor/model", function () {
             const model = new EditorModel([pc.plain("hello")], pc, renderer);
             model.update("hello world", "insertText", new DocumentOffset(11, true));
             expect(renderer.count).toBe(1);
-            if (isDocumentPosition(renderer.caret)) {
-                expect(renderer.caret.index).toBe(0);
-                expect(renderer.caret.offset).toBe(11);
-            }
+            expect((renderer.caret as DocumentPosition).index).toBe(0);
+            expect((renderer.caret as DocumentPosition).offset).toBe(11);
             expect(model.parts.length).toBe(1);
             expect(model.parts[0].type).toBe("plain");
             expect(model.parts[0].text).toBe("hello world");
@@ -54,10 +51,8 @@ describe("editor/model", function () {
             const model = new EditorModel([pc.plain("world")], pc, renderer);
             model.update("hello world", "insertText", new DocumentOffset(6, false));
             expect(renderer.count).toBe(1);
-            if (isDocumentPosition(renderer.caret)) {
-                expect(renderer.caret.index).toBe(0);
-                expect(renderer.caret.offset).toBe(6);
-            }
+            expect((renderer.caret as DocumentPosition).index).toBe(0);
+            expect((renderer.caret as DocumentPosition).offset).toBe(6);
             expect(model.parts.length).toBe(1);
             expect(model.parts[0].type).toBe("plain");
             expect(model.parts[0].text).toBe("hello world");
@@ -70,10 +65,8 @@ describe("editor/model", function () {
             const model = new EditorModel([pc.plain("hello")], pc, renderer);
             model.update("hello\n", "insertText", new DocumentOffset(6, true));
             expect(renderer.count).toBe(1);
-            if (isDocumentPosition(renderer.caret)) {
-                expect(renderer.caret.index).toBe(1);
-                expect(renderer.caret.offset).toBe(1);
-            }
+            expect((renderer.caret as DocumentPosition).index).toBe(1);
+            expect((renderer.caret as DocumentPosition).offset).toBe(1);
             expect(model.parts.length).toBe(2);
             expect(model.parts[0].type).toBe("plain");
             expect(model.parts[0].text).toBe("hello");
@@ -86,10 +79,8 @@ describe("editor/model", function () {
             const model = new EditorModel([pc.plain("hello")], pc, renderer);
             model.update("hello\n\n\nworld!", "insertText", new DocumentOffset(14, true));
             expect(renderer.count).toBe(1);
-            if (isDocumentPosition(renderer.caret)) {
-                expect(renderer.caret.index).toBe(4);
-                expect(renderer.caret.offset).toBe(6);
-            }
+            expect((renderer.caret as DocumentPosition).index).toBe(4);
+            expect((renderer.caret as DocumentPosition).offset).toBe(6);
             expect(model.parts.length).toBe(5);
             expect(model.parts[0].type).toBe("plain");
             expect(model.parts[0].text).toBe("hello");
@@ -112,10 +103,8 @@ describe("editor/model", function () {
             );
             model.update("hello\nwarm\nworld", "insertText", new DocumentOffset(10, true));
             expect(renderer.count).toBe(1);
-            if (isDocumentPosition(renderer.caret)) {
-                expect(renderer.caret.index).toBe(2);
-                expect(renderer.caret.offset).toBe(4);
-            }
+            expect((renderer.caret as DocumentPosition).index).toBe(2);
+            expect((renderer.caret as DocumentPosition).offset).toBe(4);
             expect(model.parts.length).toBe(5);
             expect(model.parts[0].type).toBe("plain");
             expect(model.parts[0].text).toBe("hello");
@@ -135,10 +124,8 @@ describe("editor/model", function () {
             const pc = createPartCreator();
             const model = new EditorModel([pc.plain("try "), pc.roomPill("#someroom")], pc, renderer);
             model.update("try foo#someroom", "insertText", new DocumentOffset(7, false));
-            if (isDocumentPosition(renderer.caret)) {
-                expect(renderer.caret.index).toBe(0);
-                expect(renderer.caret.offset).toBe(7);
-            }
+            expect((renderer.caret as DocumentPosition).index).toBe(0);
+            expect((renderer.caret as DocumentPosition).offset).toBe(7);
             expect(model.parts.length).toBe(2);
             expect(model.parts[0].type).toBe("plain");
             expect(model.parts[0].text).toBe("try foo");
@@ -150,10 +137,8 @@ describe("editor/model", function () {
             const pc = createPartCreator();
             const model = new EditorModel([pc.plain("try "), pc.roomPill("#someroom"), pc.plain("?")], pc, renderer);
             model.update("try #some perhapsroom?", "insertText", new DocumentOffset(17, false));
-            if (isDocumentPosition(renderer.caret)) {
-                expect(renderer.caret.index).toBe(2);
-                expect(renderer.caret.offset).toBe(8);
-            }
+            expect((renderer.caret as DocumentPosition).index).toBe(2);
+            expect((renderer.caret as DocumentPosition).offset).toBe(8);
             expect(model.parts.length).toBe(3);
             expect(model.parts[0].type).toBe("plain");
             expect(model.parts[0].text).toBe("try ");
@@ -168,10 +153,8 @@ describe("editor/model", function () {
             const model = new EditorModel([pc.roomPill("#someroom")], pc, renderer);
             model.update("#someroo", "deleteContentBackward", new DocumentOffset(8, true));
             expect(renderer.count).toBe(1);
-            if (isDocumentPosition(renderer.caret)) {
-                expect(renderer.caret.index).toBe(-1);
-                expect(renderer.caret.offset).toBe(0);
-            }
+            expect((renderer.caret as DocumentPosition).index).toBe(-1);
+            expect((renderer.caret as DocumentPosition).offset).toBe(0);
             expect(model.parts.length).toBe(0);
         });
         it("remove non-editable part with delete", function () {
@@ -180,10 +163,8 @@ describe("editor/model", function () {
             const model = new EditorModel([pc.roomPill("#someroom")], pc, renderer);
             model.update("someroom", "deleteContentForward", new DocumentOffset(0, false));
             expect(renderer.count).toBe(1);
-            if (isDocumentPosition(renderer.caret)) {
-                expect(renderer.caret.index).toBe(-1);
-                expect(renderer.caret.offset).toBe(0);
-            }
+            expect((renderer.caret as DocumentPosition).index).toBe(-1);
+            expect((renderer.caret as DocumentPosition).offset).toBe(0);
             expect(model.parts.length).toBe(0);
         });
     });
@@ -196,10 +177,8 @@ describe("editor/model", function () {
             model.update("hello @a", "insertText", new DocumentOffset(8, true));
 
             expect(renderer.count).toBe(1);
-            if (isDocumentPosition(renderer.caret)) {
-                expect(renderer.caret.index).toBe(1);
-                expect(renderer.caret.offset).toBe(2);
-            }
+            expect((renderer.caret as DocumentPosition).index).toBe(1);
+            expect((renderer.caret as DocumentPosition).offset).toBe(2);
             expect(model.parts.length).toBe(2);
             expect(model.parts[0].type).toBe("plain");
             expect(model.parts[0].text).toBe("hello ");
@@ -211,10 +190,8 @@ describe("editor/model", function () {
             model.autoComplete.tryComplete(); // see MockAutoComplete
 
             expect(renderer.count).toBe(2);
-            if (isDocumentPosition(renderer.caret)) {
-                expect(renderer.caret.index).toBe(1);
-                expect(renderer.caret.offset).toBe(5);
-            }
+            expect((renderer.caret as DocumentPosition).index).toBe(1);
+            expect((renderer.caret as DocumentPosition).offset).toBe(5);
             expect(model.parts.length).toBe(2);
             expect(model.parts[0].type).toBe("plain");
             expect(model.parts[0].text).toBe("hello ");
@@ -230,10 +207,8 @@ describe("editor/model", function () {
             model.update("hello #r", "insertText", new DocumentOffset(8, true));
 
             expect(renderer.count).toBe(1);
-            if (isDocumentPosition(renderer.caret)) {
-                expect(renderer.caret.index).toBe(1);
-                expect(renderer.caret.offset).toBe(2);
-            }
+            expect((renderer.caret as DocumentPosition).index).toBe(1);
+            expect((renderer.caret as DocumentPosition).offset).toBe(2);
             expect(model.parts.length).toBe(2);
             expect(model.parts[0].type).toBe("plain");
             expect(model.parts[0].text).toBe("hello ");
@@ -245,10 +220,8 @@ describe("editor/model", function () {
             model.autoComplete.tryComplete(); // see MockAutoComplete
 
             expect(renderer.count).toBe(2);
-            if (isDocumentPosition(renderer.caret)) {
-                expect(renderer.caret.index).toBe(1);
-                expect(renderer.caret.offset).toBe(9);
-            }
+            expect((renderer.caret as DocumentPosition).index).toBe(1);
+            expect((renderer.caret as DocumentPosition).offset).toBe(9);
             expect(model.parts.length).toBe(2);
             expect(model.parts[0].type).toBe("plain");
             expect(model.parts[0].text).toBe("hello ");
@@ -268,10 +241,8 @@ describe("editor/model", function () {
             model.update("hello #riot-dev!!", "insertText", new DocumentOffset(17, true));
 
             expect(renderer.count).toBe(3);
-            if (isDocumentPosition(renderer.caret)) {
-                expect(renderer.caret.index).toBe(2);
-                expect(renderer.caret.offset).toBe(2);
-            }
+            expect((renderer.caret as DocumentPosition).index).toBe(2);
+            expect((renderer.caret as DocumentPosition).offset).toBe(2);
             expect(model.parts.length).toBe(3);
             expect(model.parts[0].type).toBe("plain");
             expect(model.parts[0].text).toBe("hello ");
@@ -289,10 +260,8 @@ describe("editor/model", function () {
             model.update("try #define", "insertFromPaste", new DocumentOffset(11, true));
 
             expect(model.autoComplete).toBeFalsy();
-            if (isDocumentPosition(renderer.caret)) {
-                expect(renderer.caret.index).toBe(0);
-                expect(renderer.caret.offset).toBe(11);
-            }
+            expect((renderer.caret as DocumentPosition).index).toBe(0);
+            expect((renderer.caret as DocumentPosition).offset).toBe(11);
             expect(model.parts.length).toBe(1);
             expect(model.parts[0].type).toBe("plain");
             expect(model.parts[0].text).toBe("try #define");
@@ -306,10 +275,8 @@ describe("editor/model", function () {
             model.update("try #define", "insertFromDrop", new DocumentOffset(11, true));
 
             expect(model.autoComplete).toBeFalsy();
-            if (isDocumentPosition(renderer.caret)) {
-                expect(renderer.caret.index).toBe(0);
-                expect(renderer.caret.offset).toBe(11);
-            }
+            expect((renderer.caret as DocumentPosition).index).toBe(0);
+            expect((renderer.caret as DocumentPosition).offset).toBe(11);
             expect(model.parts.length).toBe(1);
             expect(model.parts[0].type).toBe("plain");
             expect(model.parts[0].text).toBe("try #define");

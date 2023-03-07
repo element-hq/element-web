@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import EditorModel from "../../src/editor/model";
-import { createPartCreator, createRenderer, isDocumentPosition } from "./mock";
+import { createPartCreator, createRenderer } from "./mock";
 import {
     formatRange,
     formatRangeAsCode,
@@ -25,6 +25,7 @@ import {
 } from "../../src/editor/operations";
 import { Formatting } from "../../src/components/views/rooms/MessageComposerFormatBar";
 import { longestBacktickSequence } from "../../src/editor/deserialize";
+import DocumentPosition from "../../src/editor/position";
 
 const SERIALIZED_NEWLINE = { text: "\n", type: "newline" };
 
@@ -86,9 +87,7 @@ describe("editor/operations: formatting operations", () => {
 
             expect(range.parts[0].text).toBe(input);
             formatRangeAsLink(range, text);
-            if (isDocumentPosition(renderer.caret)) {
-                expect(renderer.caret.offset).toBe(4 + expectation.indexOf("|"));
-            }
+            expect((renderer.caret as DocumentPosition).offset).toBe(4 + expectation.indexOf("|"));
             expect(model.parts[0].text).toBe("foo " + expectation.replace("|", "") + " bar");
         });
     });
