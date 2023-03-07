@@ -568,7 +568,7 @@ export async function hydrateSession(credentials: IMatrixClientCreds): Promise<M
 }
 
 /**
- * fires on_logging_in, optionally clears localstorage, persists new credentials
+ * optionally clears localstorage, persists new credentials
  * to localstorage, starts the new client.
  *
  * @param {IMatrixClientCreds} credentials
@@ -594,15 +594,6 @@ async function doSetLoggedIn(credentials: IMatrixClientCreds, clearStorageEnable
             softLogout,
         " freshLogin: " + credentials.freshLogin,
     );
-
-    // This is dispatched to indicate that the user is still in the process of logging in
-    // because async code may take some time to resolve, breaking the assumption that
-    // `setLoggedIn` takes an "instant" to complete, and dispatch `on_logged_in` a few ms
-    // later than MatrixChat might assume.
-    //
-    // we fire it *synchronously* to make sure it fires before on_logged_in.
-    // (dis.dispatch uses `window.setTimeout`, which does not guarantee ordering.)
-    dis.dispatch({ action: "on_logging_in" }, true);
 
     if (clearStorageEnabled) {
         await clearStorage();

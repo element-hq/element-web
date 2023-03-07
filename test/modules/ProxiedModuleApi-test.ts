@@ -15,12 +15,15 @@ limitations under the License.
 */
 
 import { TranslationStringsObject } from "@matrix-org/react-sdk-module-api/lib/types/translations";
+import { AccountAuthInfo } from "@matrix-org/react-sdk-module-api/lib/types/AccountAuthInfo";
 
 import { ProxiedModuleApi } from "../../src/modules/ProxiedModuleApi";
 import { stubClient } from "../test-utils";
 import { setLanguage } from "../../src/languageHandler";
 import { ModuleRunner } from "../../src/modules/ModuleRunner";
 import { registerMockModule } from "./MockModule";
+import defaultDispatcher from "../../src/dispatcher/dispatcher";
+import { Action } from "../../src/dispatcher/actions";
 
 describe("ProxiedApiModule", () => {
     afterEach(() => {
@@ -42,6 +45,29 @@ describe("ProxiedApiModule", () => {
             };
             api.registerTranslations(translations);
             expect(api.translations).toBe(translations);
+        });
+
+        it("should overwriteAccountAuth", async () => {
+            const dispatchSpy = jest.spyOn(defaultDispatcher, "dispatch");
+
+            const api = new ProxiedModuleApi();
+            const accountInfo = {} as unknown as AccountAuthInfo;
+            const promise = api.overwriteAccountAuth(accountInfo);
+
+            expect(dispatchSpy).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    action: Action.OverwriteLogin,
+                    credentials: {
+                        ...accountInfo,
+                        guest: false,
+                    },
+                }),
+                expect.anything(),
+            );
+
+            defaultDispatcher.fire(Action.OnLoggedIn);
+
+            await expect(promise).resolves.toBeUndefined();
         });
 
         describe("integration", () => {
