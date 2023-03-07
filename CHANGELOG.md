@@ -1,3 +1,45 @@
+Changes in [3.68.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.68.0-rc.1) (2023-03-07)
+===============================================================================================================
+
+## ✨ Features
+ * Only allow to start a DM with one email if encryption by default is enabled ([\#10253](https://github.com/matrix-org/matrix-react-sdk/pull/10253)). Fixes vector-im/element-web#23133.
+ * DM rooms are now encrypted if encryption by default is enabled and only inviting a single email address. Any action in the result DM room will be blocked until the other has joined. ([\#10229](https://github.com/matrix-org/matrix-react-sdk/pull/10229)).
+ * Reduce bottom margin of ReplyChain on compact modern layout ([\#8972](https://github.com/matrix-org/matrix-react-sdk/pull/8972)). Fixes vector-im/element-web#22748. Contributed by @luixxiul.
+ * Support for v2 of MSC3903 ([\#10165](https://github.com/matrix-org/matrix-react-sdk/pull/10165)). Contributed by @hughns.
+ * When starting a DM, existing rooms with pending third-party invites will be reused. ([\#10256](https://github.com/matrix-org/matrix-react-sdk/pull/10256)). Fixes vector-im/element-web#23139.
+ * Polls push rules: synchronise poll rules with message rules ([\#10263](https://github.com/matrix-org/matrix-react-sdk/pull/10263)). Contributed by @kerryarchibald.
+ * New verification request toast button labels ([\#10259](https://github.com/matrix-org/matrix-react-sdk/pull/10259)).
+ * Remove padding around integration manager iframe ([\#10148](https://github.com/matrix-org/matrix-react-sdk/pull/10148)).
+ * Fix block code styling in rich text editor ([\#10246](https://github.com/matrix-org/matrix-react-sdk/pull/10246)). Contributed by @alunturner.
+ * Poll history: fetch more poll history ([\#10235](https://github.com/matrix-org/matrix-react-sdk/pull/10235)). Contributed by @kerryarchibald.
+ * Sort short/exact emoji matches before longer incomplete matches ([\#10212](https://github.com/matrix-org/matrix-react-sdk/pull/10212)). Fixes vector-im/element-web#23210. Contributed by @grimhilt.
+ * Poll history: detail screen ([\#10172](https://github.com/matrix-org/matrix-react-sdk/pull/10172)). Contributed by @kerryarchibald.
+ * Provide a more detailed error message than "No known servers" ([\#6048](https://github.com/matrix-org/matrix-react-sdk/pull/6048)). Fixes vector-im/element-web#13247. Contributed by @aaronraimist.
+ * Say when a call was answered from a different device ([\#10224](https://github.com/matrix-org/matrix-react-sdk/pull/10224)).
+ * Widget permissions customizations using module api ([\#10121](https://github.com/matrix-org/matrix-react-sdk/pull/10121)). Contributed by @maheichyk.
+ * Fix copy button icon overlapping with copyable text ([\#10227](https://github.com/matrix-org/matrix-react-sdk/pull/10227)). Contributed by @Adesh-Pandey.
+ * Support joining non-peekable rooms via the module API ([\#10154](https://github.com/matrix-org/matrix-react-sdk/pull/10154)). Contributed by @maheichyk.
+ * The "new login" toast does now display the same device information as in the settings. "No" does now open the device settings. "Yes, it was me" dismisses the toast. ([\#10200](https://github.com/matrix-org/matrix-react-sdk/pull/10200)).
+ * Do not prompt for a password when doing a „reset all“ after login ([\#10208](https://github.com/matrix-org/matrix-react-sdk/pull/10208)).
+
+## 🐛 Bug Fixes
+ * Fix incorrect copy in space creation flow ([\#10296](https://github.com/matrix-org/matrix-react-sdk/pull/10296)). Fixes vector-im/element-web#24741.
+ * Fix space settings dialog having rogue title tooltip ([\#10293](https://github.com/matrix-org/matrix-react-sdk/pull/10293)). Fixes vector-im/element-web#24740.
+ * Show spinner when starting a DM from the user profile (right panel) ([\#10290](https://github.com/matrix-org/matrix-react-sdk/pull/10290)).
+ * Reduce height of toggle on expanded view source event ([\#10283](https://github.com/matrix-org/matrix-react-sdk/pull/10283)). Fixes vector-im/element-web#22873. Contributed by @luixxiul.
+ * Pillify http and non-prefixed matrix.to links ([\#10277](https://github.com/matrix-org/matrix-react-sdk/pull/10277)). Fixes vector-im/element-web#20844.
+ * Fix some features not being configurable via `features` ([\#10276](https://github.com/matrix-org/matrix-react-sdk/pull/10276)).
+ * Fix starting a DM from the right panel in some cases ([\#10278](https://github.com/matrix-org/matrix-react-sdk/pull/10278)). Fixes vector-im/element-web#24722.
+ * Align info EventTile and normal EventTile on IRC layout ([\#10197](https://github.com/matrix-org/matrix-react-sdk/pull/10197)). Fixes vector-im/element-web#22782. Contributed by @luixxiul.
+ * Fix blowout of waveform of the voice message player on narrow UI ([\#8861](https://github.com/matrix-org/matrix-react-sdk/pull/8861)). Fixes vector-im/element-web#22604. Contributed by @luixxiul.
+ * Directly convert Matrix and room Ids to pills ([\#10267](https://github.com/matrix-org/matrix-react-sdk/pull/10267)). Fixes vector-im/element-web#21867.
+ * Fix the hidden view source toggle on IRC layout ([\#10266](https://github.com/matrix-org/matrix-react-sdk/pull/10266)). Fixes vector-im/element-web#22872. Contributed by @luixxiul.
+ * Fix buttons on the room header being compressed due to long room name ([\#10155](https://github.com/matrix-org/matrix-react-sdk/pull/10155)). Contributed by @luixxiul.
+ * Use the room avatar as a placeholder in calls ([\#10231](https://github.com/matrix-org/matrix-react-sdk/pull/10231)).
+ * Fix calls showing as 'connecting' after hangup ([\#10223](https://github.com/matrix-org/matrix-react-sdk/pull/10223)).
+ * Prevent multiple Jitsi calls started at the same time ([\#10183](https://github.com/matrix-org/matrix-react-sdk/pull/10183)). Fixes vector-im/element-web#23009.
+ * Make localization keys compatible with agglutinative and/or SOV type languages ([\#10159](https://github.com/matrix-org/matrix-react-sdk/pull/10159)). Contributed by @luixxiul.
+
 Changes in [3.67.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.67.0) (2023-02-28)
 =====================================================================================================
 
