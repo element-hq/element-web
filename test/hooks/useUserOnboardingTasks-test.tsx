@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { renderHook } from "@testing-library/react-hooks";
-import { waitFor } from "@testing-library/react";
+import { renderHook, waitFor } from "@testing-library/react";
 
 import { useUserOnboardingTasks } from "../../src/hooks/useUserOnboardingTasks";
 import { useUserOnboardingContext } from "../../src/hooks/useUserOnboardingContext";

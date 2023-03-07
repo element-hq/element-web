@@ -429,7 +429,7 @@ describe("InviteDialog", () => {
 
         describe("when clicking »Start DM anyway«", () => {
             beforeEach(async () => {
-                await userEvent.click(screen.getByRole("button", { name: "Start DM anyway", exact: true }));
+                await userEvent.click(screen.getByRole("button", { name: "Start DM anyway" }));
             });
 
             it("should start the DM", () => {

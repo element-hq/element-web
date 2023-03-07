@@ -14,8 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { waitFor } from "@testing-library/react";
-import { renderHook, act } from "@testing-library/react-hooks/dom";
+import { waitFor, renderHook, act } from "@testing-library/react";
 import { IRoomDirectoryOptions, MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { usePublicRoomDirectory } from "../../src/hooks/usePublicRoomDirectory";

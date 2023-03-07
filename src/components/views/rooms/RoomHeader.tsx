@@ -116,7 +116,10 @@ export default function RoomHeader({
 
     const askToJoinEnabled = useFeatureEnabled("feature_ask_to_join");
 
-    const videoClick = useCallback((ev) => videoCallClick(ev, callOptions[0]), [callOptions, videoCallClick]);
+    const videoClick = useCallback(
+        (ev: React.MouseEvent) => videoCallClick(ev, callOptions[0]),
+        [callOptions, videoCallClick],
+    );
 
     const toggleCallButton = (
         <Tooltip label={isViewingCall ? _t("voip|minimise_call") : _t("voip|maximise_call")}>

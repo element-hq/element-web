@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { renderHook, RenderHookResult } from "@testing-library/react-hooks/dom";
+import { renderHook, RenderHookResult } from "@testing-library/react";
 
 import { useLatestResult } from "../../src/hooks/useLatestResult";
 
@@ -28,7 +28,7 @@ beforeEach(() => {
 });
 
 function simulateRequest(
-    hookResult: RenderHookResult<typeof useLatestResult, ReturnType<typeof useLatestResult>>["result"],
+    hookResult: RenderHookResult<ReturnType<typeof useLatestResult>, typeof useLatestResult>["result"],
     { id, delayInMs, result }: { id: string; delayInMs: number; result: string },
 ) {
     const [setQuery, setResult] = hookResult.current;

@@ -118,6 +118,9 @@ describe("ProxiedApiModule", () => {
     describe("openDialog", () => {
         it("should open dialog with a custom title and default options", async () => {
             class MyDialogContent extends DialogContent {
+                public constructor(props: DialogProps) {
+                    super(props);
+                }
                 trySubmit = async () => ({ result: true });
                 render = () => <p>This is my example content.</p>;
             }
@@ -147,6 +150,9 @@ describe("ProxiedApiModule", () => {
 
         it("should open dialog with custom options", async () => {
             class MyDialogContent extends DialogContent {
+                public constructor(props: DialogProps) {
+                    super(props);
+                }
                 trySubmit = async () => ({ result: true });
                 render = () => <p>This is my example content.</p>;
             }
@@ -178,6 +184,9 @@ describe("ProxiedApiModule", () => {
 
         it("should update the options from the opened dialog", async () => {
             class MyDialogContent extends DialogContent {
+                public constructor(props: DialogProps) {
+                    super(props);
+                }
                 trySubmit = async () => ({ result: true });
                 render = () => {
                     const onClick = () => {
@@ -231,6 +240,9 @@ describe("ProxiedApiModule", () => {
 
         it("should cancel the dialog from within the dialog", async () => {
             class MyDialogContent extends DialogContent {
+                public constructor(props: DialogProps) {
+                    super(props);
+                }
                 trySubmit = async () => ({ result: true });
                 render = () => (
                     <button type="button" onClick={this.props.cancel}>

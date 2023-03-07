@@ -14,8 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { act } from "@testing-library/react";
-import { renderHook } from "@testing-library/react-hooks/dom";
+import { act, renderHook, waitFor } from "@testing-library/react";
 import { IPushRules, MatrixClient, PushRuleKind, RuleId } from "matrix-js-sdk/src/matrix";
 
 import { useNotificationSettings } from "../../src/hooks/useNotificationSettings";
@@ -69,10 +68,9 @@ describe("useNotificationSettings", () => {
 
     it("correctly parses model", async () => {
         await act(async () => {
-            const { result, waitForNextUpdate } = renderHook(() => useNotificationSettings(cli));
+            const { result } = renderHook(() => useNotificationSettings(cli));
             expect(result.current.model).toEqual(null);
-            await waitForNextUpdate();
-            expect(result.current.model).toEqual(expectedModel);
+            await waitFor(() => expect(result.current.model).toEqual(expectedModel));
             expect(result.current.hasPendingChanges).toBeFalsy();
         });
     });
@@ -88,14 +86,12 @@ describe("useNotificationSettings", () => {
             const setPushRuleActions = jest.fn(cli.setPushRuleActions);
             cli.setPushRuleActions = setPushRuleActions;
 
-            const { result, waitForNextUpdate } = renderHook(() => useNotificationSettings(cli));
+            const { result } = renderHook(() => useNotificationSettings(cli));
             expect(result.current.model).toEqual(null);
-            await waitForNextUpdate();
-            expect(result.current.model).toEqual(expectedModel);
+            await waitFor(() => expect(result.current.model).toEqual(expectedModel));
             expect(result.current.hasPendingChanges).toBeFalsy();
             await result.current.reconcile(DefaultNotificationSettings);
-            await waitForNextUpdate();
-            expect(result.current.hasPendingChanges).toBeFalsy();
+            await waitFor(() => expect(result.current.hasPendingChanges).toBeFalsy());
             expect(addPushRule).toHaveBeenCalledTimes(0);
             expect(deletePushRule).toHaveBeenCalledTimes(9);
             expect(deletePushRule).toHaveBeenCalledWith("global", PushRuleKind.ContentSpecific, "justjann3");

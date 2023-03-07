@@ -45,7 +45,7 @@ const QuickSettingsButton: React.FC<{
         useSettingValue<Record<MetaSpace, boolean>>("Spaces.enabledMetaSpaces");
 
     const currentRoomId = SdkContextClass.instance.roomViewStore.getRoomId();
-    const developerModeEnabled = useSettingValue("developerMode");
+    const developerModeEnabled = useSettingValue<boolean>("developerMode");
 
     let contextMenu: JSX.Element | undefined;
     if (menuDisplayed && handle.current) {

@@ -117,7 +117,7 @@ export const ThreadPanelHeader: React.FC<{
     ) : null;
 
     const onMarkAllThreadsReadClick = React.useCallback(
-        (e) => {
+        (e: React.MouseEvent) => {
             PosthogTrackers.trackInteraction("WebThreadsMarkAllReadButton", e);
             if (!roomContext.room) {
                 logger.error("No room in context to mark all threads read");

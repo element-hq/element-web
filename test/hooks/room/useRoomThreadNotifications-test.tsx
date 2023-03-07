@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { renderHook } from "@testing-library/react-hooks/dom";
+import { renderHook } from "@testing-library/react";
 import { MatrixClient, NotificationCountType, Room } from "matrix-js-sdk/src/matrix";
 
 import { useRoomThreadNotifications } from "../../../src/hooks/room/useRoomThreadNotifications";

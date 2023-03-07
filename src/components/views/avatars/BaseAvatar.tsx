@@ -19,7 +19,7 @@ limitations under the License.
 
 import React, { forwardRef, useCallback, useContext, useEffect, useState } from "react";
 import classNames from "classnames";
-import { ClientEvent } from "matrix-js-sdk/src/matrix";
+import { ClientEvent, SyncState } from "matrix-js-sdk/src/matrix";
 import { Avatar } from "@vector-im/compound-web";
 
 import SettingsStore from "../../../settings/SettingsStore";
@@ -80,7 +80,7 @@ const useImageUrl = ({ url, urls }: { url?: string | null; urls?: string[] }): [
     }, [url, JSON.stringify(urls)]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const cli = useContext(MatrixClientContext);
-    const onClientSync = useCallback((syncState, prevState) => {
+    const onClientSync = useCallback((syncState: SyncState, prevState: SyncState | null) => {
         // Consider the client reconnected if there is no error with syncing.
         // This means the state could be RECONNECTING, SYNCING, PREPARED or CATCHUP.
         const reconnected = syncState !== "ERROR" && prevState !== syncState;

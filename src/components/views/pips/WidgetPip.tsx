@@ -34,6 +34,7 @@ import { WidgetType } from "../../../widgets/WidgetType";
 import { WidgetMessagingStore } from "../../../stores/widgets/WidgetMessagingStore";
 import WidgetUtils from "../../../utils/WidgetUtils";
 import { ElementWidgetActions } from "../../../stores/widgets/ElementWidgetActions";
+import { ButtonEvent } from "../elements/AccessibleButton";
 
 interface Props {
     widgetId: string;
@@ -62,7 +63,7 @@ export const WidgetPip: FC<Props> = ({ widgetId, room, viewingRoom, onStartMovin
     const call = useCallForWidget(widgetId, room.roomId);
 
     const onBackClick = useCallback(
-        (ev) => {
+        (ev: ButtonEvent) => {
             ev.preventDefault();
             ev.stopPropagation();
 
@@ -87,7 +88,7 @@ export const WidgetPip: FC<Props> = ({ widgetId, room, viewingRoom, onStartMovin
     );
 
     const onLeaveClick = useCallback(
-        (ev) => {
+        (ev: ButtonEvent) => {
             ev.preventDefault();
             ev.stopPropagation();
 
