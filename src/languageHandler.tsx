@@ -27,7 +27,6 @@ import {
     _tDom as react_tDom,
     Tags,
     UserFriendlyError as ReactUserFriendlyError,
-    ErrorOptions,
 } from "matrix-react-sdk/src/languageHandler";
 import { Leaves } from "matrix-react-sdk/src/@types/common";
 
@@ -42,8 +41,8 @@ import type EN from "./i18n/strings/en_EN.json";
 export type TranslationKey = Leaves<typeof EN & typeof ReactEN, "|", string | { other: string }, 4>;
 
 export class UserFriendlyError extends ReactUserFriendlyError {
-    public constructor(message: TranslationKey, substitutionVariablesAndCause?: IVariables & ErrorOptions) {
-        super(message as ReactTranslationKey, substitutionVariablesAndCause);
+    public constructor(message: TranslationKey, cause?: Error | unknown, substitutionVariables?: IVariables) {
+        super(message as ReactTranslationKey, cause, substitutionVariables);
     }
 }
 

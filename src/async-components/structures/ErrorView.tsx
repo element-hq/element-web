@@ -34,6 +34,7 @@ interface IProps {
     title: string;
     messages?: string[];
     footer?: ReactNode;
+    children?: ReactNode;
 }
 
 export const ErrorView: React.FC<IProps> = ({ title, messages, footer, children }) => {

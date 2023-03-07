@@ -67,8 +67,8 @@
         "update:jitsi": "curl -s https://meet.element.io/libs/external_api.min.js > ./res/jitsi_external_api.min.js"
     },
     "resolutions": {
-        "@types/react-dom": "17.0.25",
-        "@types/react": "17.0.80",
+        "@types/react-dom": "18.3.0",
+        "@types/react": "18.3.3",
         "@vector-im/compound-design-tokens": "1.7.0",
         "@vector-im/compound-web": "5.5.0",
         "@floating-ui/react": "0.26.11",
@@ -85,8 +85,8 @@
         "matrix-js-sdk": "github:matrix-org/matrix-js-sdk#develop",
         "matrix-react-sdk": "github:matrix-org/matrix-react-sdk#develop",
         "matrix-widget-api": "^1.3.1",
-        "react": "17.0.2",
-        "react-dom": "17.0.2",
+        "react": "^18.3.1",
+        "react-dom": "^18.3.1",
         "ua-parser-js": "^1.0.0"
     },
     "devDependencies": {
@@ -113,7 +113,7 @@
         "@principalstudio/html-webpack-inject-preload": "^1.2.7",
         "@sentry/webpack-plugin": "^2.7.1",
         "@svgr/webpack": "^8.0.0",
-        "@testing-library/react": "^12.1.5",
+        "@testing-library/react": "^14",
         "@types/commonmark": "^0.27.9",
         "@types/content-type": "^1.1.8",
         "@types/counterpart": "^0.18.4",
@@ -132,9 +132,9 @@
         "@types/node-fetch": "^2.6.4",
         "@types/pako": "^2.0.3",
         "@types/qrcode": "^1.5.5",
-        "@types/react": "17.0.80",
+        "@types/react": "18.3.3",
         "@types/react-beautiful-dnd": "^13.1.7",
-        "@types/react-dom": "17.0.25",
+        "@types/react-dom": "18.3.0",
         "@types/react-transition-group": "^4.4.9",
         "@types/sanitize-html": "^2.9.5",
         "@types/sdp-transform": "^2.4.9",
