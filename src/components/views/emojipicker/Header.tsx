@@ -29,7 +29,7 @@ interface IProps {
 }
 
 class Header extends React.PureComponent<IProps> {
-    private findNearestEnabled(index: number, delta: number): number {
+    private findNearestEnabled(index: number, delta: number): number | undefined {
         index += this.props.categories.length;
         const cats = [...this.props.categories, ...this.props.categories, ...this.props.categories];
 
@@ -45,10 +45,10 @@ class Header extends React.PureComponent<IProps> {
     }
 
     private changeCategoryAbsolute(index: number, delta = 1): void {
-        const category = this.props.categories[this.findNearestEnabled(index, delta)];
+        const category = this.props.categories[this.findNearestEnabled(index, delta)!];
         if (category) {
             this.props.onAnchorClick(category.id);
-            category.ref.current.focus();
+            category.ref.current?.focus();
         }
     }
 

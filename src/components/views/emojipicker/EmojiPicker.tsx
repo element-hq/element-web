@@ -36,7 +36,6 @@ const ZERO_WIDTH_JOINER = "\u200D";
 
 interface IProps {
     selectedEmojis?: Set<string>;
-    showQuickReactions?: boolean;
     onChoose(unicode: string): boolean;
     isEmojiDisabled?: (unicode: string) => boolean;
 }
@@ -143,6 +142,7 @@ class EmojiPicker extends React.Component<IProps, IState> {
 
     private onScroll = (): void => {
         const body = this.scrollRef.current?.containerRef.current;
+        if (!body) return;
         this.setState({
             scrollTop: body.scrollTop,
             viewportHeight: body.clientHeight,
@@ -152,12 +152,13 @@ class EmojiPicker extends React.Component<IProps, IState> {
 
     private updateVisibility = (): void => {
         const body = this.scrollRef.current?.containerRef.current;
+        if (!body) return;
         const rect = body.getBoundingClientRect();
         for (const cat of this.categories) {
             const elem = body.querySelector(`[data-category-id="${cat.id}"]`);
             if (!elem) {
                 cat.visible = false;
-                cat.ref.current.classList.remove("mx_EmojiPicker_anchor_visible");
+                cat.ref.current?.classList.remove("mx_EmojiPicker_anchor_visible");
                 continue;
             }
             const elemRect = elem.getBoundingClientRect();
@@ -165,6 +166,7 @@ class EmojiPicker extends React.Component<IProps, IState> {
             const yEnd = elemRect.y + elemRect.height - rect.y;
             cat.visible = y < rect.height && yEnd > 0;
             // We update this here instead of through React to avoid re-render on scroll.
+            if (!cat.ref.current) continue;
             if (cat.visible) {
                 cat.ref.current.classList.add("mx_EmojiPicker_anchor_visible");
                 cat.ref.current.setAttribute("aria-selected", "true");
@@ -180,7 +182,7 @@ class EmojiPicker extends React.Component<IProps, IState> {
     private scrollToCategory = (category: string): void => {
         this.scrollRef.current?.containerRef.current
             ?.querySelector(`[data-category-id="${category}"]`)
-            .scrollIntoView();
+            ?.scrollIntoView();
     };
 
     private onChangeFilter = (filter: string): void => {
@@ -299,7 +301,7 @@ class EmojiPicker extends React.Component<IProps, IState> {
                         return categoryElement;
                     })}
                 </AutoHideScrollbar>
-                {this.state.previewEmoji || !this.props.showQuickReactions ? (
+                {this.state.previewEmoji ? (
                     <Preview emoji={this.state.previewEmoji} />
                 ) : (
                     <QuickReactions onClick={this.onClickEmoji} selectedEmojis={this.props.selectedEmojis} />

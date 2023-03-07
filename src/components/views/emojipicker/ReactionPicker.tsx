@@ -82,7 +82,7 @@ class ReactionPicker extends React.Component<IProps, IState> {
         return Object.fromEntries(
             [...myAnnotations]
                 .filter((event) => !event.isRedacted())
-                .map((event) => [event.getRelation().key, event.getId()]),
+                .map((event) => [event.getRelation()?.key, event.getId()]),
         );
     }
 
@@ -136,7 +136,6 @@ class ReactionPicker extends React.Component<IProps, IState> {
                 onChoose={this.onChoose}
                 isEmojiDisabled={this.isEmojiDisabled}
                 selectedEmojis={this.state.selectedEmojis}
-                showQuickReactions={true}
             />
         );
     }

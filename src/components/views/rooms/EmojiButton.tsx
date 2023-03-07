@@ -46,7 +46,7 @@ export function EmojiButton({ addEmoji, menuPosition, className }: IEmojiButtonP
                 }}
                 managed={false}
             >
-                <EmojiPicker onChoose={addEmoji} showQuickReactions={true} />
+                <EmojiPicker onChoose={addEmoji} />
             </ContextMenu>
         );
     }
