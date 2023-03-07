@@ -3739,5 +3739,6 @@
     "There are no past polls. Load more polls to view polls for previous months": "Pole ühtegi hiljutist küsitlust. Varasemate kuude vaatamiseks laadi veel küsitlusi",
     "There are no active polls. Load more polls to view polls for previous months": "Pole ühtegi käimas küsitlust. Varasemate kuude vaatamiseks laadi veel küsitlusi",
     "Verify Session": "Verifitseeri sessioon",
-    "Ignore (%(counter)s)": "Eira (%(counter)s)"
+    "Ignore (%(counter)s)": "Eira (%(counter)s)",
+    "Once everyone has joined, you’ll be able to chat": "Te saate vestelda, kui kõik on liitunud"
 }
