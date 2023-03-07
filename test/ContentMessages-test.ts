@@ -115,9 +115,24 @@ describe("ContentMessages", () => {
             );
         });
 
-        it("should fall back to m.file for invalid image files", async () => {
+        it("should use m.image for PNG files which cannot be parsed but successfully thumbnail", async () => {
             mocked(client.uploadContent).mockResolvedValue({ content_uri: "mxc://server/file" });
             const file = new File([], "fileName", { type: "image/png" });
+            await contentMessages.sendContentToRoom(file, roomId, undefined, client, undefined);
+            expect(client.sendMessage).toHaveBeenCalledWith(
+                roomId,
+                null,
+                expect.objectContaining({
+                    url: "mxc://server/file",
+                    msgtype: "m.image",
+                }),
+            );
+        });
+
+        it("should fall back to m.file for invalid image files", async () => {
+            mocked(client.uploadContent).mockResolvedValue({ content_uri: "mxc://server/file" });
+            const file = new File([], "fileName", { type: "image/jpeg" });
+            mocked(BlurhashEncoder.instance.getBlurhash).mockRejectedValue("NOT_AN_IMAGE");
             await contentMessages.sendContentToRoom(file, roomId, undefined, client, undefined);
             expect(client.sendMessage).toHaveBeenCalledWith(
                 roomId,
