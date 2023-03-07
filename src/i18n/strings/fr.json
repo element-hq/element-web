@@ -3739,5 +3739,9 @@
     "Active polls": "Sondages en cours",
     "View poll in timeline": "Consulter la chronologie des sondages",
     "Verify Session": "Vérifier la session",
-    "Ignore (%(counter)s)": "Ignorer (%(counter)s)"
+    "Ignore (%(counter)s)": "Ignorer (%(counter)s)",
+    "Once invited users have joined Element, you will be able to chat and the room will be end-to-end encrypted": "Une fois que les utilisateurs invités seront connectés sur Element, vous pourrez discuter et le salon sera chiffré de bout en bout",
+    "Waiting for users to join Element": "En attente de connexion des utilisateurs à Element",
+    "Invites by email can only be sent one at a time": "Les invitations par e-mail ne peuvent être envoyées qu’une par une",
+    "Once everyone has joined, you’ll be able to chat": "Quand tout le monde sera présent, vous pourrez discuter"
 }
