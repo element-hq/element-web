@@ -40,6 +40,7 @@ import { SlidingSyncManager } from "./SlidingSyncManager";
 import CryptoStoreTooNewDialog from "./components/views/dialogs/CryptoStoreTooNewDialog";
 import { _t } from "./languageHandler";
 import { SettingLevel } from "./settings/SettingLevel";
+import MatrixClientBackedController from "./settings/controllers/MatrixClientBackedController";
 
 export interface IMatrixClientCreds {
     homeserverUrl: string;
@@ -166,7 +167,7 @@ class MatrixClientPegClass implements IMatrixClientPeg {
         }
 
         try {
-            const registrationTime = parseInt(window.localStorage.getItem("mx_registration_time"), 10);
+            const registrationTime = parseInt(window.localStorage.getItem("mx_registration_time")!, 10);
             const diff = Date.now() - registrationTime;
             return diff / 36e5 <= hours;
         } catch (e) {
@@ -176,7 +177,7 @@ class MatrixClientPegClass implements IMatrixClientPeg {
 
     public userRegisteredAfter(timestamp: Date): boolean {
         try {
-            const registrationTime = parseInt(window.localStorage.getItem("mx_registration_time"), 10);
+            const registrationTime = parseInt(window.localStorage.getItem("mx_registration_time")!, 10);
             return timestamp.getTime() <= registrationTime;
         } catch (e) {
             return false;
@@ -237,6 +238,7 @@ class MatrixClientPegClass implements IMatrixClientPeg {
         // Connect the matrix client to the dispatcher and setting handlers
         MatrixActionCreators.start(this.matrixClient);
         MatrixClientBackedSettingsHandler.matrixClient = this.matrixClient;
+        MatrixClientBackedController.matrixClient = this.matrixClient;
 
         return opts;
     }
@@ -292,7 +294,7 @@ class MatrixClientPegClass implements IMatrixClientPeg {
     }
 
     public getCredentials(): IMatrixClientCreds {
-        let copiedCredentials = this.currentClientCreds;
+        let copiedCredentials: IMatrixClientCreds | null = this.currentClientCreds;
         if (this.currentClientCreds?.userId !== this.matrixClient?.credentials?.userId) {
             // cached credentials belong to a different user - don't use them
             copiedCredentials = null;

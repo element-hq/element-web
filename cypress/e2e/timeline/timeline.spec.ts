@@ -159,8 +159,8 @@ describe("Timeline", () => {
                     ".mx_GenericEventListSummary_summary",
                 "created and configured the room.",
             ).should("exist");
-            cy.get(".mx_Spinner").should("not.exist");
-            cy.percySnapshot("Configured room on IRC layout");
+
+            cy.get(".mx_MainSplit").percySnapshotElement("Configured room on IRC layout");
         });
 
         it("should add inline start margin to an event line on IRC layout", () => {
@@ -179,18 +179,126 @@ describe("Timeline", () => {
             // Check the event line has margin instead of inset property
             // cf. _EventTile.pcss
             //  --EventTile_irc_line_info-margin-inline-start
-            //  = calc(var(--name-width) + 10px + var(--icon-width))
-            //  = 80 + 10 + 14 = 104px
+            //  = calc(var(--name-width) + var(--icon-width) + 1 * var(--right-padding))
+            //  = 80 + 14 + 5 = 99px
+
             cy.get(".mx_EventTile[data-layout=irc].mx_EventTile_info:first-of-type .mx_EventTile_line")
-                .should("have.css", "margin-inline-start", "104px")
+                .should("have.css", "margin-inline-start", "99px")
                 .should("have.css", "inset-inline-start", "0px");
 
-            cy.get(".mx_Spinner").should("not.exist");
-            // Exclude timestamp from snapshot
-            const percyCSS =
-                ".mx_RoomView_body .mx_EventTile_info .mx_MessageTimestamp " + "{ visibility: hidden !important; }";
-            cy.percySnapshot("Event line with inline start margin on IRC layout", { percyCSS });
+            // Exclude timestamp and read marker from snapshot
+            const percyCSS = ".mx_MessageTimestamp, .mx_RoomView_myReadMarker { visibility: hidden !important; }";
+            cy.get(".mx_MainSplit").percySnapshotElement("Event line with inline start margin on IRC layout", {
+                percyCSS,
+            });
             cy.checkA11y();
+        });
+
+        it("should align generic event list summary with messages and emote on IRC layout", () => {
+            // This test aims to check:
+            // 1. Alignment of collapsed GELS (generic event list summary) and messages
+            // 2. Alignment of expanded GELS and messages
+            // 3. Alignment of expanded GELS and placeholder of deleted message
+            // 4. Alignment of expanded GELS, placeholder of deleted message, and emote
+
+            // Exclude timestamp from snapshot of mx_MainSplit
+            const percyCSS = ".mx_MainSplit .mx_MessageTimestamp { visibility: hidden !important; }";
+
+            cy.visit("/#/room/" + roomId);
+            cy.setSettingValue("layout", null, SettingLevel.DEVICE, Layout.IRC);
+
+            // Wait until configuration is finished
+            cy.contains(
+                ".mx_RoomView_body .mx_GenericEventListSummary .mx_GenericEventListSummary_summary",
+                "created and configured the room.",
+            ).should("exist");
+
+            // Send messages
+            cy.get(".mx_RoomView_body .mx_BasicMessageComposer_input").type("Hello Mr. Bot{enter}");
+            cy.get(".mx_RoomView_body .mx_BasicMessageComposer_input").type("Hello again, Mr. Bot{enter}");
+            // Make sure the second message was sent
+            cy.get(".mx_RoomView_MessageList > .mx_EventTile_last .mx_EventTile_receiptSent").should("be.visible");
+
+            // 1. Alignment of collapsed GELS (generic event list summary) and messages
+            // Check inline start spacing of collapsed GELS
+            // See: _EventTile.pcss
+            // .mx_GenericEventListSummary[data-layout="irc"] > .mx_EventTile_line
+            //  = var(--name-width) + var(--icon-width) + $MessageTimestamp_width + 2 * var(--right-padding)
+            //  = 80 + 14 + 46 + 2 * 5
+            //  = 150px
+            cy.get(".mx_GenericEventListSummary[data-layout=irc] > .mx_EventTile_line").should(
+                "have.css",
+                "padding-inline-start",
+                "150px",
+            );
+            // Check width and spacing values of elements in .mx_EventTile, which should be equal to 150px
+            // --right-padding should be applied
+            cy.get(".mx_EventTile > *").should("have.css", "margin-right", "5px");
+            // --name-width width zero inline end margin should be applied
+            cy.get(".mx_EventTile .mx_DisambiguatedProfile")
+                .should("have.css", "width", "80px")
+                .should("have.css", "margin-inline-end", "0px");
+            // --icon-width should be applied
+            cy.get(".mx_EventTile .mx_EventTile_avatar > .mx_BaseAvatar").should("have.css", "width", "14px");
+            // $MessageTimestamp_width should be applied
+            cy.get(".mx_EventTile > a").should("have.css", "min-width", "46px");
+            // Record alignment of collapsed GELS and messages on messagePanel
+            cy.get(".mx_MainSplit").percySnapshotElement("Collapsed GELS and messages on IRC layout", { percyCSS });
+
+            // 2. Alignment of expanded GELS and messages
+            // Click "expand" link button
+            cy.get(".mx_GenericEventListSummary_toggle[aria-expanded=false]").click();
+            // Check inline start spacing of info line on expanded GELS
+            cy.get(".mx_EventTile[data-layout=irc].mx_EventTile_info:first-of-type .mx_EventTile_line")
+                // See: _EventTile.pcss
+                // --EventTile_irc_line_info-margin-inline-start
+                // = 80 + 14 + 1 * 5
+                .should("have.css", "margin-inline-start", "99px");
+            // Record alignment of expanded GELS and messages on messagePanel
+            cy.get(".mx_MainSplit").percySnapshotElement("Expanded GELS and messages on IRC layout", { percyCSS });
+
+            // 3. Alignment of expanded GELS and placeholder of deleted message
+            // Delete the second (last) message
+            cy.get(".mx_RoomView_MessageList > .mx_EventTile_last").realHover();
+            cy.get(".mx_RoomView_MessageList > .mx_EventTile_last .mx_MessageActionBar_optionsButton", {
+                timeout: 1000,
+            })
+                .should("exist")
+                .realHover()
+                .click({ force: false });
+            cy.get(".mx_IconizedContextMenu_item[aria-label=Remove]").should("be.visible").click({ force: false });
+            // Confirm deletion
+            cy.get(".mx_Dialog_buttons button[data-testid=dialog-primary-button]")
+                .should("have.text", "Remove")
+                .click({ force: false });
+            // Make sure the dialog was closed and the second (last) message was redacted
+            cy.get(".mx_Dialog").should("not.exist");
+            cy.get(".mx_GenericEventListSummary .mx_EventTile_last .mx_RedactedBody").should("be.visible");
+            cy.get(".mx_GenericEventListSummary .mx_EventTile_last .mx_EventTile_receiptSent").should("be.visible");
+            // Record alignment of expanded GELS and placeholder of deleted message on messagePanel
+            cy.get(".mx_MainSplit").percySnapshotElement("Expanded GELS and with placeholder of deleted message", {
+                percyCSS,
+            });
+
+            // 4. Alignment of expanded GELS, placeholder of deleted message, and emote
+            // Send a emote
+            cy.get(".mx_RoomView_body .mx_BasicMessageComposer_input").type("/me says hello to Mr. Bot{enter}");
+            // Check inline start margin of its avatar
+            // Here --right-padding is for the avatar on the message line
+            // See: _IRCLayout.pcss
+            // .mx_IRCLayout .mx_EventTile_emote .mx_EventTile_avatar
+            // = calc(var(--name-width) + var(--icon-width) + 1 * var(--right-padding))
+            // = 80 + 14 + 1 * 5
+            cy.get(".mx_EventTile_emote .mx_EventTile_avatar").should("have.css", "margin-left", "99px");
+            // Make sure emote was sent
+            cy.get(".mx_EventTile_last.mx_EventTile_emote .mx_EventTile_receiptSent").should("be.visible");
+            // Record alignment of expanded GELS, placeholder of deleted message, and emote
+            cy.get(".mx_MainSplit").percySnapshotElement(
+                "Expanded GELS and with emote and placeholder of deleted message",
+                {
+                    percyCSS,
+                },
+            );
         });
 
         it("should set inline start padding to a hidden event line", () => {
@@ -212,9 +320,8 @@ describe("Timeline", () => {
             // Click timestamp to highlight hidden event line
             cy.get(".mx_RoomView_body .mx_EventTile_info .mx_MessageTimestamp").click();
 
-            // Exclude timestamp from snapshot
-            const percyCSS =
-                ".mx_RoomView_body .mx_EventTile .mx_MessageTimestamp " + "{ visibility: hidden !important; }";
+            // Exclude timestamp and read marker from snapshot
+            const percyCSS = ".mx_MessageTimestamp, .mx_RoomView_myReadMarker { visibility: hidden !important; }";
 
             // should not add inline start padding to a hidden event line on IRC layout
             cy.setSettingValue("layout", null, SettingLevel.DEVICE, Layout.IRC);
@@ -223,17 +330,30 @@ describe("Timeline", () => {
                 "padding-inline-start",
                 "0px",
             );
-            cy.percySnapshot("Hidden event line with zero padding on IRC layout", { percyCSS });
+
+            cy.get(".mx_MainSplit").percySnapshotElement("Hidden event line with zero padding on IRC layout", {
+                percyCSS,
+            });
 
             // should add inline start padding to a hidden event line on modern layout
             cy.setSettingValue("layout", null, SettingLevel.DEVICE, Layout.Group);
             cy.get(".mx_EventTile[data-layout=group].mx_EventTile_info .mx_EventTile_line")
                 // calc(var(--EventTile_group_line-spacing-inline-start) + 20px) = 64 + 20 = 84px
                 .should("have.css", "padding-inline-start", "84px");
-            cy.percySnapshot("Hidden event line with padding on modern layout", { percyCSS });
+
+            cy.get(".mx_MainSplit").percySnapshotElement("Hidden event line with padding on modern layout", {
+                percyCSS,
+            });
         });
 
-        it("should click top left of view source event toggle", () => {
+        it("should click view source event toggle", () => {
+            // This test checks:
+            // 1. clickability of top left of view source event toggle
+            // 2. clickability of view source toggle on IRC layout
+
+            // Exclude timestamp from snapshot
+            const percyCSS = ".mx_MessageTimestamp { visibility: hidden !important; }";
+
             sendEvent(roomId);
             cy.visit("/#/room/" + roomId);
             cy.setSettingValue("showHiddenEventsInTimeline", null, SettingLevel.DEVICE, true);
@@ -249,8 +369,47 @@ describe("Timeline", () => {
             });
             cy.contains(".mx_RoomView_body .mx_EventTile[data-scroll-tokens]", "MessageEdit").should("exist");
 
+            // 1. clickability of top left of view source event toggle
+
             // Click top left of the event toggle, which should not be covered by MessageActionBar's safe area
-            cy.get(".mx_EventTile:not(:first-child) .mx_ViewSourceEvent")
+            cy.get(".mx_EventTile_last[data-layout=group] .mx_ViewSourceEvent")
+                .should("exist")
+                .realHover()
+                .within(() => {
+                    cy.get(".mx_ViewSourceEvent_toggle").click("topLeft", { force: false });
+                });
+
+            // Make sure the expand toggle works
+            cy.get(".mx_EventTile_last[data-layout=group] .mx_ViewSourceEvent_expanded")
+                .should("be.visible")
+                .realHover()
+                .within(() => {
+                    cy.get(".mx_ViewSourceEvent_toggle")
+                        // Check size and position of toggle on expanded view source event
+                        // See: _ViewSourceEvent.pcss
+                        .should("have.css", "height", "12px") // --ViewSourceEvent_toggle-size
+                        .should("have.css", "align-self", "flex-end")
+
+                        // Click again to collapse the source
+                        .click("topLeft", { force: false });
+                });
+
+            // Make sure the collapse toggle works
+            cy.get(".mx_EventTile_last[data-layout=group] .mx_ViewSourceEvent_expanded").should("not.exist");
+
+            // 2. clickability of view source toggle on IRC layout
+
+            // Enable IRC layout
+            cy.setSettingValue("layout", null, SettingLevel.DEVICE, Layout.IRC);
+
+            // Hover the view source toggle on IRC layout
+            cy.get(".mx_GenericEventListSummary[data-layout=irc] .mx_EventTile .mx_ViewSourceEvent")
+                .should("exist")
+                .realHover()
+                .percySnapshotElement("Hovered hidden event line on IRC layout", { percyCSS });
+
+            // Click view source event toggle
+            cy.get(".mx_GenericEventListSummary[data-layout=irc] .mx_EventTile .mx_ViewSourceEvent")
                 .should("exist")
                 .realHover()
                 .within(() => {
@@ -258,7 +417,7 @@ describe("Timeline", () => {
                 });
 
             // Make sure the expand toggle worked
-            cy.get(".mx_EventTile .mx_ViewSourceEvent_expanded .mx_ViewSourceEvent_toggle").should("be.visible");
+            cy.get(".mx_EventTile[data-layout=irc] .mx_ViewSourceEvent_expanded").should("be.visible");
         });
 
         it("should click 'collapse' link button on the first hovered info event line on bubble layout", () => {
@@ -329,7 +488,11 @@ describe("Timeline", () => {
             cy.wait("@mxc");
 
             cy.checkA11y();
+
+            // Exclude timestamp and read marker from snapshot
+            const percyCSS = ".mx_MessageTimestamp, .mx_RoomView_myReadMarker { visibility: hidden !important; }";
             cy.get(".mx_EventTile_last").percySnapshotElement("URL Preview", {
+                percyCSS,
                 widths: [800, 400],
             });
         });

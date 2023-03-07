@@ -22,7 +22,6 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../../languageHandler";
 import * as MegolmExportEncryption from "../../../../utils/MegolmExportEncryption";
-import { IDialogProps } from "../../../../components/views/dialogs/IDialogProps";
 import BaseDialog from "../../../../components/views/dialogs/BaseDialog";
 import Field from "../../../../components/views/elements/Field";
 import { KeysStartingWith } from "../../../../@types/common";
@@ -32,13 +31,14 @@ enum Phase {
     Exporting = "exporting",
 }
 
-interface IProps extends IDialogProps {
+interface IProps {
     matrixClient: MatrixClient;
+    onFinished(doExport?: boolean): void;
 }
 
 interface IState {
     phase: Phase;
-    errStr: string;
+    errStr: string | null;
     passphrase1: string;
     passphrase2: string;
 }

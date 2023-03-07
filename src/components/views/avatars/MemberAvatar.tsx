@@ -65,7 +65,7 @@ export default function MemberAvatar({
 
     const name = member?.name ?? fallbackUserId;
     let title: string | undefined = props.title;
-    let imageUrl: string | undefined;
+    let imageUrl: string | null | undefined;
     if (member?.name) {
         if (member.getMxcAvatarUrl()) {
             imageUrl = mediaFromMxc(member.getMxcAvatarUrl() ?? "").getThumbnailOfSourceHttp(

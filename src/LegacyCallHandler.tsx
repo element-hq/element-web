@@ -58,7 +58,7 @@ import IncomingLegacyCallToast, { getIncomingLegacyCallToastKey } from "./toasts
 import ToastStore from "./stores/ToastStore";
 import Resend from "./Resend";
 import { ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
-import { KIND_CALL_TRANSFER } from "./components/views/dialogs/InviteDialogTypes";
+import { InviteKind } from "./components/views/dialogs/InviteDialogTypes";
 import { OpenInviteDialogPayload } from "./dispatcher/payloads/OpenInviteDialogPayload";
 import { findDMForUser } from "./utils/dm/findDMForUser";
 import { getJoinedNonFunctionalMembers } from "./utils/room/getJoinedNonFunctionalMembers";
@@ -737,7 +737,7 @@ export default class LegacyCallHandler extends EventEmitter {
         );
         if (!stats) {
             logger.debug(
-                "Call statistics are undefined. The call has " + "probably failed before a peerConn was established",
+                "Call statistics are undefined. The call has probably failed before a peerConn was established",
             );
             return;
         }
@@ -1024,12 +1024,11 @@ export default class LegacyCallHandler extends EventEmitter {
     }
 
     public answerCall(roomId: string): void {
-        const call = this.calls.get(roomId);
-
-        this.stopRingingIfPossible(call.callId);
-
         // no call to answer
         if (!this.calls.has(roomId)) return;
+
+        const call = this.calls.get(roomId)!;
+        this.stopRingingIfPossible(call.callId);
 
         if (this.getAllActiveCalls().length > 1) {
             Modal.createDialog(ErrorDialog, {
@@ -1215,7 +1214,7 @@ export default class LegacyCallHandler extends EventEmitter {
         call.setRemoteOnHold(true);
         dis.dispatch<OpenInviteDialogPayload>({
             action: Action.OpenInviteDialog,
-            kind: KIND_CALL_TRANSFER,
+            kind: InviteKind.CallTransfer,
             call,
             analyticsName: "Transfer Call",
             className: "mx_InviteDialog_transferWrapper",

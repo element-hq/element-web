@@ -22,6 +22,7 @@ interface IProps {
     w?: number;
     h?: number;
     message?: string;
+    onFinished: any; // XXX: Spinner pretends to be a dialog so it must accept an onFinished, but it never calls it
 }
 
 export default class Spinner extends React.PureComponent<IProps> {

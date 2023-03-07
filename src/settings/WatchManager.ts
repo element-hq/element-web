@@ -39,7 +39,7 @@ export class WatchManager {
     public unwatchSetting(cb: CallbackFn): void {
         this.watchers.forEach((map) => {
             map.forEach((callbacks) => {
-                let idx;
+                let idx: number;
                 while ((idx = callbacks.indexOf(cb)) !== -1) {
                     callbacks.splice(idx, 1);
                 }

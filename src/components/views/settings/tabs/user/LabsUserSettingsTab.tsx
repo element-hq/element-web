@@ -23,38 +23,41 @@ import { SettingLevel } from "../../../../../settings/SettingLevel";
 import SdkConfig from "../../../../../SdkConfig";
 import BetaCard from "../../../beta/BetaCard";
 import SettingsFlag from "../../../elements/SettingsFlag";
-import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
-import { LabGroup, labGroupNames } from "../../../../../settings/Settings";
+import { defaultWatchManager, LabGroup, labGroupNames } from "../../../../../settings/Settings";
 import { EnhancedMap } from "../../../../../utils/maps";
+import { arrayHasDiff } from "../../../../../utils/arrays";
 
-interface IState {
-    showJumpToDate: boolean;
-    showExploringPublicSpaces: boolean;
+interface State {
+    labs: string[];
+    betas: string[];
 }
 
-export default class LabsUserSettingsTab extends React.Component<{}, IState> {
+export default class LabsUserSettingsTab extends React.Component<{}, State> {
+    private readonly features = SettingsStore.getFeatureSettingNames();
+
     public constructor(props: {}) {
         super(props);
 
-        const cli = MatrixClientPeg.get();
-
-        cli.doesServerSupportUnstableFeature("org.matrix.msc3030").then((showJumpToDate) => {
-            this.setState({ showJumpToDate });
-        });
-
-        cli.doesServerSupportUnstableFeature("org.matrix.msc3827.stable").then((showExploringPublicSpaces) => {
-            this.setState({ showExploringPublicSpaces });
-        });
-
         this.state = {
-            showJumpToDate: false,
-            showExploringPublicSpaces: false,
+            betas: [],
+            labs: [],
         };
     }
 
-    public render(): React.ReactNode {
-        const features = SettingsStore.getFeatureSettingNames();
-        const [labs, betas] = features.reduce(
+    public componentDidMount(): void {
+        this.features.forEach((feature) => {
+            defaultWatchManager.watchSetting(feature, null, this.onChange);
+        });
+        this.onChange();
+    }
+
+    public componentWillUnmount(): void {
+        defaultWatchManager.unwatchSetting(this.onChange);
+    }
+
+    private onChange = (): void => {
+        const features = SettingsStore.getFeatureSettingNames().filter((f) => SettingsStore.isEnabled(f));
+        const [_labs, betas] = features.reduce(
             (arr, f) => {
                 arr[SettingsStore.getBetaInfo(f) ? 1 : 0].push(f);
                 return arr;
@@ -62,21 +65,28 @@ export default class LabsUserSettingsTab extends React.Component<{}, IState> {
             [[], []] as [string[], string[]],
         );
 
-        let betaSection;
-        if (betas.length) {
+        const labs = SdkConfig.get("show_labs_settings") ? _labs : [];
+        if (arrayHasDiff(labs, this.state.labs) || arrayHasDiff(betas, this.state.betas)) {
+            this.setState({ labs, betas });
+        }
+    };
+
+    public render(): React.ReactNode {
+        let betaSection: JSX.Element | undefined;
+        if (this.state.betas.length) {
             betaSection = (
                 <div data-testid="labs-beta-section" className="mx_SettingsTab_section">
-                    {betas.map((f) => (
+                    {this.state.betas.map((f) => (
                         <BetaCard key={f} featureId={f} />
                     ))}
                 </div>
             );
         }
 
-        let labsSections;
-        if (SdkConfig.get("show_labs_settings")) {
+        let labsSections: JSX.Element | undefined;
+        if (this.state.labs.length) {
             const groups = new EnhancedMap<LabGroup, JSX.Element[]>();
-            labs.forEach((f) => {
+            this.state.labs.forEach((f) => {
                 groups
                     .getOrCreate(SettingsStore.getLabGroup(f), [])
                     .push(<SettingsFlag level={SettingLevel.DEVICE} name={f} key={f} />);
@@ -100,30 +110,6 @@ export default class LabsUserSettingsTab extends React.Component<{}, IState> {
                         level={SettingLevel.DEVICE}
                     />,
                 );
-
-            if (this.state.showJumpToDate) {
-                groups
-                    .getOrCreate(LabGroup.Messaging, [])
-                    .push(
-                        <SettingsFlag
-                            key="feature_jump_to_date"
-                            name="feature_jump_to_date"
-                            level={SettingLevel.DEVICE}
-                        />,
-                    );
-            }
-
-            if (this.state.showExploringPublicSpaces) {
-                groups
-                    .getOrCreate(LabGroup.Spaces, [])
-                    .push(
-                        <SettingsFlag
-                            key="feature_exploring_public_spaces"
-                            name="feature_exploring_public_spaces"
-                            level={SettingLevel.DEVICE}
-                        />,
-                    );
-            }
 
             labsSections = (
                 <>

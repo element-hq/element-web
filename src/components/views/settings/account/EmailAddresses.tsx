@@ -133,7 +133,7 @@ interface IProps {
 
 interface IState {
     verifying: boolean;
-    addTask: AddThreepid;
+    addTask: AddThreepid | null;
     continueDisabled: boolean;
     newEmailAddress: string;
 }
@@ -201,7 +201,7 @@ export default class EmailAddresses extends React.Component<IProps, IState> {
 
         this.setState({ continueDisabled: true });
         this.state.addTask
-            .checkEmailLinkClicked()
+            ?.checkEmailLinkClicked()
             .then(([finished]) => {
                 let newEmailAddress = this.state.newEmailAddress;
                 if (finished) {
@@ -223,7 +223,7 @@ export default class EmailAddresses extends React.Component<IProps, IState> {
                     Modal.createDialog(ErrorDialog, {
                         title: _t("Your email address hasn't been verified yet"),
                         description: _t(
-                            "Click the link in the email you received to verify " + "and then click continue again.",
+                            "Click the link in the email you received to verify and then click continue again.",
                         ),
                     });
                 } else {

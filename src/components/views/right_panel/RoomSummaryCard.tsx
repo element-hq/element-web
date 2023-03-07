@@ -37,10 +37,11 @@ import WidgetAvatar from "../avatars/WidgetAvatar";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import WidgetStore, { IApp } from "../../../stores/WidgetStore";
 import { E2EStatus } from "../../../utils/ShieldUtils";
+import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import RoomContext from "../../../contexts/RoomContext";
 import { UIComponent, UIFeature } from "../../../settings/UIFeature";
 import { ChevronFace, ContextMenuTooltipButton, useContextMenu } from "../../structures/ContextMenu";
-import WidgetContextMenu from "../context_menus/WidgetContextMenu";
+import { WidgetContextMenu } from "../context_menus/WidgetContextMenu";
 import { useRoomMemberCount } from "../../../hooks/useRoomMembers";
 import { useFeatureEnabled } from "../../../hooks/useSettings";
 import { usePinnedEvents } from "./PinnedMessagesCard";
@@ -55,6 +56,7 @@ import { PollHistoryDialog } from "../dialogs/polls/PollHistoryDialog";
 
 interface IProps {
     room: Room;
+    permalinkCreator: RoomPermalinkCreator;
     onClose(): void;
 }
 
@@ -268,7 +270,7 @@ const onRoomSettingsClick = (ev: ButtonEvent): void => {
     PosthogTrackers.trackInteraction("WebRightPanelRoomInfoSettingsButton", ev);
 };
 
-const RoomSummaryCard: React.FC<IProps> = ({ room, onClose }) => {
+const RoomSummaryCard: React.FC<IProps> = ({ room, permalinkCreator, onClose }) => {
     const cli = useContext(MatrixClientContext);
 
     const onShareRoomClick = (): void => {
@@ -285,8 +287,9 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, onClose }) => {
 
     const onRoomPollHistoryClick = (): void => {
         Modal.createDialog(PollHistoryDialog, {
-            roomId: room.roomId,
+            room,
             matrixClient: cli,
+            permalinkCreator,
         });
     };
 

@@ -75,7 +75,6 @@
     "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s",
     "Hangup": "Hangup",
     "Historical": "Historical",
-    "Homeserver is": "Homeserver is",
     "Import": "Import",
     "Import E2E room keys": "Import E2E room keys",
     "Incorrect username and/or password.": "Incorrect username and/or password.",

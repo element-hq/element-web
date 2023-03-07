@@ -32,7 +32,7 @@ interface IProps {
 
     /* callback to update the value. Called with a single argument: the new
      * value. */
-    onSubmit?: (value: string) => Promise<{} | void>;
+    onSubmit: (value: string) => Promise<{} | void>;
 
     /* should the input submit when focus is lost? */
     blurToSubmit?: boolean;
@@ -40,7 +40,7 @@ interface IProps {
 
 interface IState {
     busy: boolean;
-    errorString: string;
+    errorString: string | null;
     value: string;
 }
 
@@ -72,7 +72,7 @@ export default class EditableTextContainer extends React.Component<IProps, IStat
         this.state = {
             busy: false,
             errorString: null,
-            value: props.initialValue,
+            value: props.initialValue ?? "",
         };
     }
 

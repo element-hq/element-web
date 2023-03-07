@@ -39,6 +39,7 @@ import AuthBody from "../../views/auth/AuthBody";
 import AuthHeader from "../../views/auth/AuthHeader";
 import AccessibleButton, { ButtonEvent } from "../../views/elements/AccessibleButton";
 import { ValidatedServerConfig } from "../../../utils/ValidatedServerConfig";
+import { filterBoolean } from "../../../utils/arrays";
 
 // These are used in several places, and come from the js-sdk's autodiscovery
 // stuff. We define them here so that they'll be picked up by i18n.
@@ -120,15 +121,11 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
 
         this.state = {
             busy: false,
-            busyLoggingIn: null,
             errorText: null,
             loginIncorrect: false,
             canTryLogin: true,
 
-            flows: null,
-
             username: props.defaultUsername ? props.defaultUsername : "",
-            phoneCountry: null,
             phoneNumber: "",
 
             serverIsAlive: true,
@@ -167,7 +164,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
         }
     }
 
-    public isBusy = (): boolean => this.state.busy || this.props.busy;
+    public isBusy = (): boolean => !!this.state.busy || !!this.props.busy;
 
     public onPasswordLogin: OnPasswordLogin = async (
         username: string | undefined,
@@ -349,7 +346,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
             ev.preventDefault();
             ev.stopPropagation();
             const ssoKind = ssoFlow.type === "m.login.sso" ? "sso" : "cas";
-            PlatformPeg.get().startSingleSignOn(
+            PlatformPeg.get()?.startSingleSignOn(
                 this.loginLogic.createTemporaryClient(),
                 ssoKind,
                 this.props.fragmentAfterLogin,
@@ -457,7 +454,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
         }
 
         let errorText: ReactNode =
-            _t("There was a problem communicating with the homeserver, " + "please try again later.") +
+            _t("There was a problem communicating with the homeserver, please try again later.") +
             (errCode ? " (" + errCode + ")" : "");
 
         if (err instanceof ConnectionError) {
@@ -511,13 +508,13 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
         return errorText;
     }
 
-    public renderLoginComponentForFlows(): JSX.Element {
+    public renderLoginComponentForFlows(): ReactNode {
         if (!this.state.flows) return null;
 
         // this is the ideal order we want to show the flows in
         const order = ["m.login.password", "m.login.sso"];
 
-        const flows = order.map((type) => this.state.flows.find((flow) => flow.type === type)).filter(Boolean);
+        const flows = filterBoolean(order.map((type) => this.state.flows.find((flow) => flow.type === type)));
         return (
             <React.Fragment>
                 {flows.map((flow) => {

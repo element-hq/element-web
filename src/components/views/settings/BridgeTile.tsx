@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { ReactNode } from "react";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -79,13 +79,13 @@ export default class BridgeTile extends React.PureComponent<IProps> {
                 `Bridge info event ${this.props.ev.getId()} does not provide a 'bridgebot' key which` +
                     "is deprecated behaviour. Using sender for now.",
             );
-            content.bridgebot = this.props.ev.getSender();
+            content.bridgebot = this.props.ev.getSender()!;
         }
         const { channel, network, protocol } = content;
         const protocolName = protocol.displayname || protocol.id;
         const channelName = channel.displayname || channel.id;
 
-        let creator = null;
+        let creator: JSX.Element | undefined;
         if (content.creator) {
             creator = (
                 <li>
@@ -129,7 +129,7 @@ export default class BridgeTile extends React.PureComponent<IProps> {
         let networkIcon;
 
         if (protocol.avatar_url) {
-            const avatarUrl = mediaFromMxc(protocol.avatar_url).getSquareThumbnailHttp(64);
+            const avatarUrl = mediaFromMxc(protocol.avatar_url).getSquareThumbnailHttp(64) ?? undefined;
 
             networkIcon = (
                 <BaseAvatar
@@ -145,7 +145,7 @@ export default class BridgeTile extends React.PureComponent<IProps> {
         } else {
             networkIcon = <div className="mx_RoomSettingsDialog_noProtocolIcon" />;
         }
-        let networkItem = null;
+        let networkItem: ReactNode | undefined;
         if (network) {
             const networkName = network.displayname || network.id;
             let networkLink = <span>{networkName}</span>;

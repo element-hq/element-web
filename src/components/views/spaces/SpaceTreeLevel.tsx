@@ -185,7 +185,7 @@ interface IItemProps extends InputHTMLAttributes<HTMLLIElement> {
     onExpand?: Function;
     parents?: Set<string>;
     innerRef?: LegacyRef<HTMLLIElement>;
-    dragHandleProps?: DraggableProvidedDragHandleProps;
+    dragHandleProps?: DraggableProvidedDragHandleProps | null;
 }
 
 interface IItemState {

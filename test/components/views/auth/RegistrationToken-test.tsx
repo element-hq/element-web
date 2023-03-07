@@ -17,9 +17,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { act } from "react-dom/test-utils";
-// eslint-disable-next-line deprecate/import
-import { mount, ReactWrapper } from "enzyme";
+import { fireEvent, render, RenderResult } from "@testing-library/react";
 
 import InteractiveAuthComponent from "../../../../src/components/structures/InteractiveAuth";
 import { flushPromises, getMockClientWithEventEmitter, unmockClientPeg } from "../../../test-utils";
@@ -34,7 +32,7 @@ describe("InteractiveAuthComponent", function () {
         makeRequest: jest.fn().mockResolvedValue(undefined),
         onAuthFinished: jest.fn(),
     };
-    const getComponent = (props = {}) => mount(<InteractiveAuthComponent {...defaultProps} {...props} />);
+    const getComponent = (props = {}) => render(<InteractiveAuthComponent {...defaultProps} {...props} />);
 
     beforeEach(function () {
         jest.clearAllMocks();
@@ -44,9 +42,10 @@ describe("InteractiveAuthComponent", function () {
         unmockClientPeg();
     });
 
-    const getSubmitButton = (wrapper: ReactWrapper) => wrapper.find('AccessibleButton[kind="primary"]').at(0);
-    const getRegistrationTokenInput = (wrapper: ReactWrapper) =>
-        wrapper.find('input[name="registrationTokenField"]').at(0);
+    const getSubmitButton = ({ container }: RenderResult) =>
+        container.querySelector(".mx_AccessibleButton_kind_primary");
+    const getRegistrationTokenInput = ({ container }: RenderResult) =>
+        container.querySelector('input[name="registrationTokenField"]');
 
     it("Should successfully complete a registration token flow", async () => {
         const onAuthFinished = jest.fn();
@@ -61,34 +60,31 @@ describe("InteractiveAuthComponent", function () {
 
         const registrationTokenNode = getRegistrationTokenInput(wrapper);
         const submitNode = getSubmitButton(wrapper);
-        const formNode = wrapper.find("form").at(0);
+        const formNode = wrapper.container.querySelector("form");
 
         expect(registrationTokenNode).toBeTruthy();
         expect(submitNode).toBeTruthy();
         expect(formNode).toBeTruthy();
 
         // submit should be disabled
-        expect(submitNode.props().disabled).toBe(true);
+        expect(submitNode).toHaveAttribute("disabled");
+        expect(submitNode).toHaveAttribute("aria-disabled", "true");
 
         // put something in the registration token box
-        act(() => {
-            registrationTokenNode.simulate("change", { target: { value: "s3kr3t" } });
-            wrapper.setProps({});
-        });
+        fireEvent.change(registrationTokenNode!, { target: { value: "s3kr3t" } });
 
-        expect(getRegistrationTokenInput(wrapper).props().value).toEqual("s3kr3t");
-        expect(getSubmitButton(wrapper).props().disabled).toBe(false);
+        expect(getRegistrationTokenInput(wrapper)).toHaveValue("s3kr3t");
+        expect(submitNode).not.toHaveAttribute("disabled");
+        expect(submitNode).not.toHaveAttribute("aria-disabled", "true");
 
         // hit enter; that should trigger a request
-        act(() => {
-            formNode.simulate("submit");
-        });
+        fireEvent.submit(formNode!);
 
         // wait for auth request to resolve
         await flushPromises();
 
         expect(makeRequest).toHaveBeenCalledTimes(1);
-        expect(makeRequest).toBeCalledWith(
+        expect(makeRequest).toHaveBeenCalledWith(
             expect.objectContaining({
                 session: "sess",
                 type: "m.login.registration_token",
@@ -96,8 +92,8 @@ describe("InteractiveAuthComponent", function () {
             }),
         );
 
-        expect(onAuthFinished).toBeCalledTimes(1);
-        expect(onAuthFinished).toBeCalledWith(
+        expect(onAuthFinished).toHaveBeenCalledTimes(1);
+        expect(onAuthFinished).toHaveBeenCalledWith(
             true,
             { a: 1 },
             { clientSecret: "t35tcl1Ent5ECr3T", emailSid: undefined },

@@ -23,7 +23,9 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { SDPStreamMetadataPurpose } from "matrix-js-sdk/src/webrtc/callEventTypes";
 
 import SettingsStore from "../../../settings/SettingsStore";
-import MemberAvatar from "../avatars/MemberAvatar";
+import LegacyCallHandler from "../../../LegacyCallHandler";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import RoomAvatar from "../avatars/RoomAvatar";
 
 interface IProps {
     call: MatrixCall;
@@ -197,7 +199,8 @@ export default class VideoFeed extends React.PureComponent<IProps, IState> {
 
         let content;
         if (this.state.videoMuted) {
-            const member = this.props.feed.getMember();
+            const callRoomId = LegacyCallHandler.instance.roomIdForCall(this.props.call);
+            const callRoom = (callRoomId ? MatrixClientPeg.get().getRoom(callRoomId) : undefined) ?? undefined;
 
             let avatarSize;
             if (pipMode && primary) avatarSize = 76;
@@ -205,7 +208,7 @@ export default class VideoFeed extends React.PureComponent<IProps, IState> {
             else if (!pipMode && primary) avatarSize = 160;
             else; // TBD
 
-            content = <MemberAvatar member={member} height={avatarSize} width={avatarSize} />;
+            content = <RoomAvatar room={callRoom} height={avatarSize} width={avatarSize} />;
         } else {
             const videoClasses = classnames("mx_VideoFeed_video", {
                 mx_VideoFeed_video_mirror:

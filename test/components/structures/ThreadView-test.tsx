@@ -147,7 +147,7 @@ describe("ThreadView", () => {
         );
     });
 
-    it("sends a message with the correct fallback", async () => {
+    it("sends a thread message with the correct fallback", async () => {
         const { container } = await getComponent();
 
         const { rootEvent: rootEvent2 } = mkThread({

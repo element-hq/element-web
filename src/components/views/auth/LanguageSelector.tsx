@@ -26,7 +26,7 @@ import LanguageDropdown from "../elements/LanguageDropdown";
 function onChange(newLang: string): void {
     if (getCurrentLanguage() !== newLang) {
         SettingsStore.setValue("language", null, SettingLevel.DEVICE, newLang);
-        PlatformPeg.get().reload();
+        PlatformPeg.get()?.reload();
     }
 }
 

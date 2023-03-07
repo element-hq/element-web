@@ -67,7 +67,7 @@ type Mapper<T> = (...args: any[]) => T;
  * {@link useEventEmitterState}
  */
 export function useTypedEventEmitterState<T, Events extends string, Arguments extends ListenerMap<Events>>(
-    emitter: TypedEventEmitter<Events, Arguments>,
+    emitter: TypedEventEmitter<Events, Arguments> | undefined,
     eventName: Events,
     fn: Mapper<T>,
 ): T {

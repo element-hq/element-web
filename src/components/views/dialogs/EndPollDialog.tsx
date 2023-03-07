@@ -20,17 +20,16 @@ import { MatrixClient } from "matrix-js-sdk/src/client";
 import { PollEndEvent } from "matrix-js-sdk/src/extensible_events_v1/PollEndEvent";
 
 import { _t } from "../../../languageHandler";
-import { IDialogProps } from "./IDialogProps";
 import QuestionDialog from "./QuestionDialog";
 import { findTopAnswer } from "../messages/MPollBody";
 import Modal from "../../../Modal";
 import ErrorDialog from "./ErrorDialog";
 import { GetRelationsForEvent } from "../rooms/EventTile";
 
-interface IProps extends IDialogProps {
+interface IProps {
     matrixClient: MatrixClient;
     event: MatrixEvent;
-    onFinished: (success: boolean) => void;
+    onFinished: (success?: boolean) => void;
     getRelationsForEvent?: GetRelationsForEvent;
 }
 

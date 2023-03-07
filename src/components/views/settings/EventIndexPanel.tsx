@@ -26,6 +26,7 @@ import EventIndexPeg from "../../../indexing/EventIndexPeg";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import SeshatResetDialog from "../dialogs/SeshatResetDialog";
 import InlineSpinner from "../elements/InlineSpinner";
+import { IIndexStats } from "../../../indexing/BaseEventIndexManager";
 
 interface IState {
     enabling: boolean;
@@ -48,10 +49,10 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
 
     public updateCurrentRoom = async (): Promise<void> => {
         const eventIndex = EventIndexPeg.get();
-        let stats;
+        let stats: IIndexStats | undefined;
 
         try {
-            stats = await eventIndex.getStats();
+            stats = await eventIndex?.getStats();
         } catch {
             // This call may fail if sporadically, not a huge issue as we will
             // try later again and probably succeed.
@@ -126,8 +127,8 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
         });
 
         await EventIndexPeg.initEventIndex();
-        await EventIndexPeg.get().addInitialCheckpoints();
-        EventIndexPeg.get().startCrawler();
+        await EventIndexPeg.get()?.addInitialCheckpoints();
+        EventIndexPeg.get()?.startCrawler();
         await SettingsStore.setValue("enableEventIndexing", null, SettingLevel.DEVICE, true);
         await this.updateState();
     };
@@ -146,7 +147,7 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
     };
 
     public render(): React.ReactNode {
-        let eventIndexingSettings = null;
+        let eventIndexingSettings: JSX.Element | undefined;
         const brand = SdkConfig.get().brand;
 
         if (EventIndexPeg.get() !== null) {
@@ -176,7 +177,7 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
             eventIndexingSettings = (
                 <div>
                     <div className="mx_SettingsTab_subsectionText">
-                        {_t("Securely cache encrypted messages locally for them to " + "appear in search results.")}
+                        {_t("Securely cache encrypted messages locally for them to appear in search results.")}
                     </div>
                     <div>
                         <AccessibleButton kind="primary" disabled={this.state.enabling} onClick={this.onEnable}>

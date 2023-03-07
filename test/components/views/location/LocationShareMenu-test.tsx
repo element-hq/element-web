@@ -33,6 +33,7 @@ import { LocationShareType } from "../../../../src/components/views/location/sha
 import {
     flushPromisesWithFakeTimers,
     getMockClientWithEventEmitter,
+    mockClientMethodsUser,
     setupAsyncStoreWithClient,
 } from "../../../test-utils";
 import Modal from "../../../../src/Modal";
@@ -74,7 +75,7 @@ jest.mock("../../../../src/Modal", () => ({
 describe("<LocationShareMenu />", () => {
     const userId = "@ernie:server.org";
     const mockClient = getMockClientWithEventEmitter({
-        getUserId: jest.fn().mockReturnValue(userId),
+        ...mockClientMethodsUser(userId),
         getClientWellKnown: jest.fn().mockResolvedValue({
             map_style_url: "maps.com",
         }),
@@ -146,7 +147,7 @@ describe("<LocationShareMenu />", () => {
     const setLocationGeolocate = () => {
         // get the callback LocationShareMenu registered for geolocate
         expect(mocked(mockGeolocate.on)).toHaveBeenCalledWith("geolocate", expect.any(Function));
-        const [, onGeolocateCallback] = mocked(mockGeolocate.on).mock.calls.find(([event]) => event === "geolocate");
+        const [, onGeolocateCallback] = mocked(mockGeolocate.on).mock.calls.find(([event]) => event === "geolocate")!;
 
         // set the location
         onGeolocateCallback(position);
@@ -155,7 +156,7 @@ describe("<LocationShareMenu />", () => {
     const setLocationClick = () => {
         // get the callback LocationShareMenu registered for geolocate
         expect(mocked(mockMap.on)).toHaveBeenCalledWith("click", expect.any(Function));
-        const [, onMapClickCallback] = mocked(mockMap.on).mock.calls.find(([event]) => event === "click");
+        const [, onMapClickCallback] = mocked(mockMap.on).mock.calls.find(([event]) => event === "click")!;
 
         const event = {
             lngLat: { lng: position.coords.longitude, lat: position.coords.latitude },
@@ -334,7 +335,7 @@ describe("<LocationShareMenu />", () => {
 
             expect(SettingsStore.setValue).toHaveBeenCalledWith(
                 "feature_location_share_live",
-                undefined,
+                null,
                 SettingLevel.DEVICE,
                 true,
             );

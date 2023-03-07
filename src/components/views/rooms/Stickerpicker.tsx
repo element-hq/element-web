@@ -52,9 +52,9 @@ interface IProps {
 }
 
 interface IState {
-    imError: string;
-    stickerpickerWidget: IWidgetEvent;
-    widgetId: string;
+    imError: string | null;
+    stickerpickerWidget: IWidgetEvent | null;
+    widgetId: string | null;
 }
 
 export default class Stickerpicker extends React.PureComponent<IProps, IState> {
@@ -71,7 +71,7 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
     private popoverWidth = 300;
     private popoverHeight = 300;
     // This is loaded by _acquireScalarClient on an as-needed basis.
-    private scalarClient: ScalarAuthClient = null;
+    private scalarClient: ScalarAuthClient | null = null;
 
     public constructor(props: IProps) {
         super(props);
@@ -82,13 +82,13 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
         };
     }
 
-    private acquireScalarClient(): Promise<void | ScalarAuthClient> {
+    private async acquireScalarClient(): Promise<void | undefined | null | ScalarAuthClient> {
         if (this.scalarClient) return Promise.resolve(this.scalarClient);
         // TODO: Pick the right manager for the widget
         if (IntegrationManagers.sharedInstance().hasManager()) {
-            this.scalarClient = IntegrationManagers.sharedInstance().getPrimaryManager().getScalarClient();
+            this.scalarClient = IntegrationManagers.sharedInstance().getPrimaryManager()?.getScalarClient() ?? null;
             return this.scalarClient
-                .connect()
+                ?.connect()
                 .then(() => {
                     this.forceUpdate();
                     return this.scalarClient;
@@ -170,21 +170,14 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
     private updateWidget = (): void => {
         const stickerpickerWidget = WidgetUtils.getStickerpickerWidgets()[0];
         if (!stickerpickerWidget) {
-            Stickerpicker.currentWidget = null;
+            Stickerpicker.currentWidget = undefined;
             this.setState({ stickerpickerWidget: null, widgetId: null });
             return;
         }
 
         const currentWidget = Stickerpicker.currentWidget;
-        let currentUrl = null;
-        if (currentWidget && currentWidget.content && currentWidget.content.url) {
-            currentUrl = currentWidget.content.url;
-        }
-
-        let newUrl = null;
-        if (stickerpickerWidget && stickerpickerWidget.content && stickerpickerWidget.content.url) {
-            newUrl = stickerpickerWidget.content.url;
-        }
+        const currentUrl = currentWidget?.content?.url ?? null;
+        const newUrl = stickerpickerWidget?.content?.url ?? null;
 
         if (newUrl !== currentUrl) {
             // Destroy the existing frame so a new one can be created
@@ -238,7 +231,7 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
     private sendVisibilityToWidget(visible: boolean): void {
         if (!this.state.stickerpickerWidget) return;
         const messaging = WidgetMessagingStore.instance.getMessagingForUid(
-            WidgetUtils.calcWidgetUid(this.state.stickerpickerWidget.id, null),
+            WidgetUtils.calcWidgetUid(this.state.stickerpickerWidget.id),
         );
         if (messaging && visible !== this.prevSentVisibility) {
             messaging.updateVisibility(visible).catch((err) => {
@@ -300,8 +293,8 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
                                 room={this.props.room}
                                 threadId={this.props.threadId}
                                 fullWidth={true}
-                                userId={MatrixClientPeg.get().credentials.userId}
-                                creatorUserId={stickerpickerWidget.sender || MatrixClientPeg.get().credentials.userId}
+                                userId={MatrixClientPeg.get().credentials.userId!}
+                                creatorUserId={stickerpickerWidget.sender || MatrixClientPeg.get().credentials.userId!}
                                 waitForIframeLoad={true}
                                 showMenubar={true}
                                 onEditClick={this.launchManageIntegrations}
@@ -347,8 +340,8 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
     private launchManageIntegrations = (): void => {
         // noinspection JSIgnoredPromiseFromCall
         IntegrationManagers.sharedInstance()
-            .getPrimaryManager()
-            .open(this.props.room, `type_${WidgetType.STICKERPICKER.preferred}`, this.state.widgetId);
+            ?.getPrimaryManager()
+            ?.open(this.props.room, `type_${WidgetType.STICKERPICKER.preferred}`, this.state.widgetId ?? undefined);
     };
 
     public render(): React.ReactNode {

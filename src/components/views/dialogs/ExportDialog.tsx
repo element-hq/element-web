@@ -19,7 +19,6 @@ import { Room } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../languageHandler";
-import { IDialogProps } from "./IDialogProps";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
 import Field from "../elements/Field";
@@ -44,8 +43,9 @@ import InfoDialog from "./InfoDialog";
 import ChatExport from "../../../customisations/ChatExport";
 import { validateNumberInRange } from "../../../utils/validate";
 
-interface IProps extends IDialogProps {
+interface IProps {
     room: Room;
+    onFinished(doExport?: boolean): void;
 }
 
 interface ExportConfig {
@@ -110,11 +110,14 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
     const [displayCancel, setCancelWarning] = useState(false);
     const [exportCancelled, setExportCancelled] = useState(false);
     const [exportSuccessful, setExportSuccessful] = useState(false);
-    const [exporter, setExporter] = useStateCallback<Exporter>(null, async (exporter: Exporter): Promise<void> => {
-        await exporter?.export().then(() => {
-            if (!exportCancelled) setExportSuccessful(true);
-        });
-    });
+    const [exporter, setExporter] = useStateCallback<Exporter | null>(
+        null,
+        async (exporter: Exporter | null): Promise<void> => {
+            await exporter?.export().then(() => {
+                if (!exportCancelled) setExportSuccessful(true);
+            });
+        },
+    );
 
     const startExport = async (): Promise<void> => {
         const exportOptions = {

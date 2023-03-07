@@ -15,8 +15,8 @@ limitations under the License.
 */
 
 .mx_BetaCard {
-    margin-bottom: 20px;
-    padding: 24px;
+    margin-bottom: $spacing-20;
+    padding: $spacing-24;
     background-color: $system;
     border-radius: 8px;
     box-sizing: border-box;
@@ -25,7 +25,7 @@ limitations under the License.
     .mx_BetaCard_columns {
         display: flex;
         flex-flow: wrap;
-        gap: 20px;
+        gap: $spacing-20;
         justify-content: center;
 
         .mx_BetaCard_columns_description {
@@ -36,11 +36,11 @@ limitations under the License.
                 font-size: $font-18px;
                 line-height: $font-22px;
                 color: $primary-content;
-                margin: 4px 0 14px;
+                margin: $spacing-4 0 14px; // TODO: use a spacing variable
 
                 display: flex;
                 align-items: center;
-                column-gap: 12px;
+                column-gap: $spacing-12;
             }
 
             .mx_BetaCard_caption {
@@ -78,7 +78,7 @@ limitations under the License.
                 line-height: $font-15px;
 
                 > h4 {
-                    margin: 12px 0 0;
+                    margin: $spacing-12 0 0;
                 }
 
                 > p {
@@ -102,13 +102,13 @@ limitations under the License.
 
     .mx_BetaCard_relatedSettings {
         .mx_SettingsFlag {
-            margin: 16px 0 0;
+            margin: $spacing-16 0 0;
             font-size: $font-15px;
             line-height: $font-24px;
             color: $primary-content;
 
             .mx_SettingsFlag_microcopy {
-                margin-top: 4px;
+                margin-top: $spacing-4;
                 font-size: $font-12px;
                 line-height: $font-15px;
             }
@@ -122,10 +122,10 @@ limitations under the License.
 
 .mx_BetaCard_betaPill {
     background-color: $accent-alt;
-    padding: 4px 10px;
+    padding: $spacing-4 10px; // TODO: use a spacing variable
     border-radius: 8px;
     text-transform: uppercase;
-    font-size: 12px;
+    font-size: $font-12px;
     font-weight: $font-semi-bold;
     line-height: 15px;
     color: $button-primary-fg-color;
@@ -135,66 +135,5 @@ limitations under the License.
 
     &.mx_AccessibleButton {
         cursor: pointer;
-    }
-}
-
-$pulse-color: $accent-alt;
-$dot-size: 12px;
-
-.mx_BetaDot {
-    border-radius: 50%;
-    margin: 10px;
-    height: $dot-size;
-    width: $dot-size;
-    transform: scale(1);
-    background: rgba($pulse-color, 1);
-    animation: mx_Beta_bluePulse 2s infinite;
-    animation-iteration-count: 20;
-    position: relative;
-    pointer-events: none;
-
-    &::after {
-        content: "";
-        position: absolute;
-        width: inherit;
-        height: inherit;
-        top: 0;
-        left: 0;
-        transform: scale(1);
-        transform-origin: center center;
-        animation-name: mx_Beta_bluePulse_shadow;
-        animation-duration: inherit;
-        animation-iteration-count: inherit;
-        border-radius: 50%;
-        background: rgba($pulse-color, 1);
-    }
-}
-
-@keyframes mx_Beta_bluePulse {
-    0% {
-        transform: scale(0.95);
-    }
-
-    70% {
-        transform: scale(1);
-    }
-
-    100% {
-        transform: scale(0.95);
-    }
-}
-
-@keyframes mx_Beta_bluePulse_shadow {
-    0% {
-        opacity: 0.7;
-    }
-
-    70% {
-        transform: scale(2.2);
-        opacity: 0;
-    }
-
-    100% {
-        opacity: 0;
     }
 }

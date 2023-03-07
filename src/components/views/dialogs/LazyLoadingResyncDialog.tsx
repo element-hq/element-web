@@ -20,9 +20,10 @@ import React from "react";
 import QuestionDialog from "./QuestionDialog";
 import { _t } from "../../../languageHandler";
 import SdkConfig from "../../../SdkConfig";
-import { IDialogProps } from "./IDialogProps";
 
-interface IProps extends IDialogProps {}
+interface IProps {
+    onFinished(): void;
+}
 
 const LazyLoadingResyncDialog: React.FC<IProps> = (props) => {
     const brand = SdkConfig.get().brand;

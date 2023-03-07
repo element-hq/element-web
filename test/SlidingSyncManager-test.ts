@@ -46,7 +46,7 @@ describe("SlidingSyncManager", () => {
             mocked(slidingSync.getRoomSubscriptions).mockReturnValue(subs);
             mocked(slidingSync.modifyRoomSubscriptions).mockResolvedValue("yep");
             await manager.setRoomVisible(roomId, true);
-            expect(slidingSync.modifyRoomSubscriptions).toBeCalledWith(new Set<string>([roomId]));
+            expect(slidingSync.modifyRoomSubscriptions).toHaveBeenCalledWith(new Set<string>([roomId]));
         });
         it("adds a custom subscription for a lazy-loadable room", async () => {
             const roomId = "!lazy:id";
@@ -72,9 +72,9 @@ describe("SlidingSyncManager", () => {
             mocked(slidingSync.getRoomSubscriptions).mockReturnValue(subs);
             mocked(slidingSync.modifyRoomSubscriptions).mockResolvedValue("yep");
             await manager.setRoomVisible(roomId, true);
-            expect(slidingSync.modifyRoomSubscriptions).toBeCalledWith(new Set<string>([roomId]));
+            expect(slidingSync.modifyRoomSubscriptions).toHaveBeenCalledWith(new Set<string>([roomId]));
             // we aren't prescriptive about what the sub name is.
-            expect(slidingSync.useCustomSubscription).toBeCalledWith(roomId, expect.anything());
+            expect(slidingSync.useCustomSubscription).toHaveBeenCalledWith(roomId, expect.anything());
         });
     });
 
@@ -86,7 +86,7 @@ describe("SlidingSyncManager", () => {
             await manager.ensureListRegistered(listKey, {
                 sort: ["by_recency"],
             });
-            expect(slidingSync.setList).toBeCalledWith(
+            expect(slidingSync.setList).toHaveBeenCalledWith(
                 listKey,
                 expect.objectContaining({
                     sort: ["by_recency"],
@@ -103,7 +103,7 @@ describe("SlidingSyncManager", () => {
             await manager.ensureListRegistered(listKey, {
                 sort: ["by_recency"],
             });
-            expect(slidingSync.setList).toBeCalledWith(
+            expect(slidingSync.setList).toHaveBeenCalledWith(
                 listKey,
                 expect.objectContaining({
                     sort: ["by_recency"],
@@ -121,8 +121,8 @@ describe("SlidingSyncManager", () => {
             await manager.ensureListRegistered(listKey, {
                 ranges: [[0, 52]],
             });
-            expect(slidingSync.setList).not.toBeCalled();
-            expect(slidingSync.setListRanges).toBeCalledWith(listKey, [[0, 52]]);
+            expect(slidingSync.setList).not.toHaveBeenCalled();
+            expect(slidingSync.setListRanges).toHaveBeenCalledWith(listKey, [[0, 52]]);
         });
 
         it("no-ops for idential changes", async () => {
@@ -136,8 +136,8 @@ describe("SlidingSyncManager", () => {
                 ranges: [[0, 42]],
                 sort: ["by_recency"],
             });
-            expect(slidingSync.setList).not.toBeCalled();
-            expect(slidingSync.setListRanges).not.toBeCalled();
+            expect(slidingSync.setList).not.toHaveBeenCalled();
+            expect(slidingSync.setListRanges).not.toHaveBeenCalled();
         });
     });
 
@@ -163,12 +163,12 @@ describe("SlidingSyncManager", () => {
                 [50, 59],
                 [60, 69],
             ];
-            expect(slidingSync.getListData).toBeCalledTimes(wantWindows.length);
-            expect(slidingSync.setList).toBeCalledTimes(1);
-            expect(slidingSync.setListRanges).toBeCalledTimes(wantWindows.length - 1);
+            expect(slidingSync.getListData).toHaveBeenCalledTimes(wantWindows.length);
+            expect(slidingSync.setList).toHaveBeenCalledTimes(1);
+            expect(slidingSync.setListRanges).toHaveBeenCalledTimes(wantWindows.length - 1);
             wantWindows.forEach((range, i) => {
                 if (i === 0) {
-                    expect(slidingSync.setList).toBeCalledWith(
+                    expect(slidingSync.setList).toHaveBeenCalledWith(
                         SlidingSyncManager.ListSearch,
                         expect.objectContaining({
                             ranges: [[0, batchSize - 1], range],
@@ -176,7 +176,7 @@ describe("SlidingSyncManager", () => {
                     );
                     return;
                 }
-                expect(slidingSync.setListRanges).toBeCalledWith(SlidingSyncManager.ListSearch, [
+                expect(slidingSync.setListRanges).toHaveBeenCalledWith(SlidingSyncManager.ListSearch, [
                     [0, batchSize - 1],
                     range,
                 ]);
@@ -193,9 +193,9 @@ describe("SlidingSyncManager", () => {
                 };
             });
             await manager.startSpidering(batchSize, gapMs);
-            expect(slidingSync.getListData).toBeCalledTimes(1);
-            expect(slidingSync.setList).toBeCalledTimes(1);
-            expect(slidingSync.setList).toBeCalledWith(
+            expect(slidingSync.getListData).toHaveBeenCalledTimes(1);
+            expect(slidingSync.setList).toHaveBeenCalledTimes(1);
+            expect(slidingSync.setList).toHaveBeenCalledWith(
                 SlidingSyncManager.ListSearch,
                 expect.objectContaining({
                     ranges: [
@@ -216,9 +216,9 @@ describe("SlidingSyncManager", () => {
                 };
             });
             await manager.startSpidering(batchSize, gapMs);
-            expect(slidingSync.getListData).toBeCalledTimes(1);
-            expect(slidingSync.setList).toBeCalledTimes(1);
-            expect(slidingSync.setList).toBeCalledWith(
+            expect(slidingSync.getListData).toHaveBeenCalledTimes(1);
+            expect(slidingSync.setList).toHaveBeenCalledTimes(1);
+            expect(slidingSync.setList).toHaveBeenCalledWith(
                 SlidingSyncManager.ListSearch,
                 expect.objectContaining({
                     ranges: [

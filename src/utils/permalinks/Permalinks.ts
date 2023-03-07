@@ -22,7 +22,10 @@ import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 
 import { MatrixClientPeg } from "../../MatrixClientPeg";
-import MatrixToPermalinkConstructor, { baseUrl as matrixtoBaseUrl } from "./MatrixToPermalinkConstructor";
+import MatrixToPermalinkConstructor, {
+    baseUrl as matrixtoBaseUrl,
+    baseUrlPattern as matrixToBaseUrlPattern,
+} from "./MatrixToPermalinkConstructor";
 import PermalinkConstructor, { PermalinkParts } from "./PermalinkConstructor";
 import ElementPermalinkConstructor from "./ElementPermalinkConstructor";
 import SdkConfig from "../../SdkConfig";
@@ -84,7 +87,7 @@ export class RoomPermalinkCreator {
     private populationMap: { [serverName: string]: number } | null = null;
     private bannedHostsRegexps: RegExp[] | null = null;
     private allowedHostsRegexps: RegExp[] | null = null;
-    private _serverCandidates: string[] | null = null;
+    private _serverCandidates?: string[];
     private started = false;
 
     // We support being given a roomId as a fallback in the event the `room` object
@@ -124,7 +127,7 @@ export class RoomPermalinkCreator {
         this.started = false;
     }
 
-    public get serverCandidates(): string[] {
+    public get serverCandidates(): string[] | undefined {
         return this._serverCandidates;
     }
 
@@ -420,8 +423,9 @@ function getPermalinkConstructor(): PermalinkConstructor {
 export function parsePermalink(fullUrl: string): PermalinkParts | null {
     try {
         const elementPrefix = SdkConfig.get("permalink_prefix");
-        if (decodeURIComponent(fullUrl).startsWith(matrixtoBaseUrl)) {
-            return new MatrixToPermalinkConstructor().parsePermalink(decodeURIComponent(fullUrl));
+        const decodedUrl = decodeURIComponent(fullUrl);
+        if (new RegExp(matrixToBaseUrlPattern, "i").test(decodedUrl)) {
+            return new MatrixToPermalinkConstructor().parsePermalink(decodedUrl);
         } else if (fullUrl.startsWith("matrix:")) {
             return new MatrixSchemePermalinkConstructor().parsePermalink(fullUrl);
         } else if (elementPrefix && fullUrl.startsWith(elementPrefix)) {

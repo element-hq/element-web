@@ -36,7 +36,7 @@ import { DefaultTagID } from "../room-list/models";
 import { EnhancedMap, mapDiff } from "../../utils/maps";
 import { setDiff, setHasDiff } from "../../utils/sets";
 import { Action } from "../../dispatcher/actions";
-import { arrayHasDiff, arrayHasOrderChange } from "../../utils/arrays";
+import { arrayHasDiff, arrayHasOrderChange, filterBoolean } from "../../utils/arrays";
 import { reorderLexicographically } from "../../utils/stringOrderField";
 import { TAG_ORDER } from "../../components/views/rooms/RoomList";
 import { SettingUpdatedPayload } from "../../dispatcher/payloads/SettingUpdatedPayload";
@@ -373,31 +373,29 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
     public getParents(roomId: string, canonicalOnly = false): Room[] {
         const userId = this.matrixClient?.getUserId();
         const room = this.matrixClient?.getRoom(roomId);
-        return (
-            (room?.currentState
-                .getStateEvents(EventType.SpaceParent)
-                .map((ev) => {
-                    const content = ev.getContent();
-                    if (!Array.isArray(content.via) || (canonicalOnly && !content.canonical)) {
-                        return; // skip
-                    }
+        const events = room?.currentState.getStateEvents(EventType.SpaceParent) ?? [];
+        return filterBoolean(
+            events.map((ev) => {
+                const content = ev.getContent();
+                if (!Array.isArray(content.via) || (canonicalOnly && !content.canonical)) {
+                    return; // skip
+                }
 
-                    // only respect the relationship if the sender has sufficient permissions in the parent to set
-                    // child relations, as per MSC1772.
-                    // https://github.com/matrix-org/matrix-doc/blob/main/proposals/1772-groups-as-rooms.md#relationship-between-rooms-and-spaces
-                    const parent = this.matrixClient.getRoom(ev.getStateKey());
-                    const relation = parent?.currentState.getStateEvents(EventType.SpaceChild, roomId);
-                    if (
-                        !parent?.currentState.maySendStateEvent(EventType.SpaceChild, userId) ||
-                        // also skip this relation if the parent had this child added but then since removed it
-                        (relation && !Array.isArray(relation.getContent().via))
-                    ) {
-                        return; // skip
-                    }
+                // only respect the relationship if the sender has sufficient permissions in the parent to set
+                // child relations, as per MSC1772.
+                // https://github.com/matrix-org/matrix-doc/blob/main/proposals/1772-groups-as-rooms.md#relationship-between-rooms-and-spaces
+                const parent = this.matrixClient.getRoom(ev.getStateKey());
+                const relation = parent?.currentState.getStateEvents(EventType.SpaceChild, roomId);
+                if (
+                    !parent?.currentState.maySendStateEvent(EventType.SpaceChild, userId) ||
+                    // also skip this relation if the parent had this child added but then since removed it
+                    (relation && !Array.isArray(relation.getContent().via))
+                ) {
+                    return; // skip
+                }
 
-                    return parent;
-                })
-                .filter(Boolean) as Room[]) || []
+                return parent;
+            }),
         );
     }
 

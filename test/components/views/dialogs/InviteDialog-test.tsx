@@ -16,11 +16,12 @@ limitations under the License.
 
 import React from "react";
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { RoomType } from "matrix-js-sdk/src/@types/event";
 import { Room } from "matrix-js-sdk/src/matrix";
 
 import InviteDialog from "../../../../src/components/views/dialogs/InviteDialog";
-import { KIND_DM, KIND_INVITE } from "../../../../src/components/views/dialogs/InviteDialogTypes";
+import { InviteKind } from "../../../../src/components/views/dialogs/InviteDialogTypes";
 import { getMockClientWithEventEmitter, mkMembership, mkMessage, mkRoomCreateEvent } from "../../../test-utils";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import SdkConfig from "../../../../src/SdkConfig";
@@ -34,11 +35,37 @@ jest.mock("../../../../src/IdentityAuthClient", () =>
     })),
 );
 
+const getSearchField = () => screen.getByTestId("invite-dialog-input");
+
+const enterIntoSearchField = async (value: string) => {
+    const searchField = getSearchField();
+    await userEvent.clear(searchField);
+    await userEvent.type(searchField, value + "{enter}");
+};
+
+const pasteIntoSearchField = async (value: string) => {
+    const searchField = getSearchField();
+    await userEvent.clear(searchField);
+    searchField.focus();
+    await userEvent.paste(value);
+};
+
+const expectPill = (value: string) => {
+    expect(screen.getByText(value)).toBeInTheDocument();
+    expect(getSearchField()).toHaveValue("");
+};
+
+const expectNoPill = (value: string) => {
+    expect(screen.queryByText(value)).not.toBeInTheDocument();
+    expect(getSearchField()).toHaveValue(value);
+};
+
 describe("InviteDialog", () => {
     const roomId = "!111111111111111111:example.org";
     const aliceId = "@alice:example.org";
     const aliceEmail = "foobar@email.com";
     const bobId = "@bob:example.org";
+    const bobEmail = "bobbob@example.com"; // bob@example.com is already used as an example in the invite dialog
     const mockClient = getMockClientWithEventEmitter({
         getUserId: jest.fn().mockReturnValue(bobId),
         getSafeUserId: jest.fn().mockReturnValue(bobId),
@@ -63,6 +90,7 @@ describe("InviteDialog", () => {
         getTerms: jest.fn().mockResolvedValue({ policies: [] }),
         supportsThreads: jest.fn().mockReturnValue(false),
         isInitialSyncComplete: jest.fn().mockReturnValue(true),
+        getClientWellKnown: jest.fn(),
     });
     let room: Room;
 
@@ -71,6 +99,7 @@ describe("InviteDialog", () => {
         DMRoomMap.makeShared();
         jest.clearAllMocks();
         mockClient.getUserId.mockReturnValue(bobId);
+        mockClient.getClientWellKnown.mockReturnValue({});
 
         room = new Room(roomId, mockClient, mockClient.getSafeUserId());
         room.addLiveEvents([
@@ -108,20 +137,20 @@ describe("InviteDialog", () => {
         room.isSpaceRoom = jest.fn().mockReturnValue(true);
         room.getType = jest.fn().mockReturnValue(RoomType.Space);
         room.name = "Space";
-        render(<InviteDialog kind={KIND_INVITE} roomId={roomId} onFinished={jest.fn()} />);
+        render(<InviteDialog kind={InviteKind.Invite} roomId={roomId} onFinished={jest.fn()} />);
 
         expect(screen.queryByText("Invite to Space")).toBeTruthy();
     });
 
     it("should label with room name", () => {
-        render(<InviteDialog kind={KIND_INVITE} roomId={roomId} onFinished={jest.fn()} />);
+        render(<InviteDialog kind={InviteKind.Invite} roomId={roomId} onFinished={jest.fn()} />);
         expect(screen.getByText(`Invite to ${roomId}`)).toBeInTheDocument();
     });
 
     it("should suggest valid MXIDs even if unknown", async () => {
         render(
             <InviteDialog
-                kind={KIND_INVITE}
+                kind={InviteKind.Invite}
                 roomId={roomId}
                 onFinished={jest.fn()}
                 initialText="@localpart:server.tld"
@@ -134,7 +163,7 @@ describe("InviteDialog", () => {
     it("should not suggest invalid MXIDs", () => {
         render(
             <InviteDialog
-                kind={KIND_INVITE}
+                kind={InviteKind.Invite}
                 roomId={roomId}
                 onFinished={jest.fn()}
                 initialText="@localpart:server:tld"
@@ -144,9 +173,9 @@ describe("InviteDialog", () => {
         expect(screen.queryByText("@localpart:server:tld")).toBeFalsy();
     });
 
-    it.each([[KIND_DM], [KIND_INVITE]] as [typeof KIND_DM | typeof KIND_INVITE][])(
+    it.each([[InviteKind.Dm], [InviteKind.Invite]] as [typeof InviteKind.Dm | typeof InviteKind.Invite][])(
         "should lookup inputs which look like email addresses (%s)",
-        async (kind: typeof KIND_DM | typeof KIND_INVITE) => {
+        async (kind: typeof InviteKind.Dm | typeof InviteKind.Invite) => {
             mockClient.getIdentityServerUrl.mockReturnValue("https://identity-server");
             mockClient.lookupThreePid.mockResolvedValue({
                 address: aliceEmail,
@@ -161,7 +190,7 @@ describe("InviteDialog", () => {
             render(
                 <InviteDialog
                     kind={kind}
-                    roomId={kind === KIND_INVITE ? roomId : ""}
+                    roomId={kind === InviteKind.Invite ? roomId : ""}
                     onFinished={jest.fn()}
                     initialText={aliceEmail}
                 />,
@@ -181,10 +210,94 @@ describe("InviteDialog", () => {
         mockClient.lookupThreePid.mockResolvedValue({});
 
         render(
-            <InviteDialog kind={KIND_INVITE} roomId={roomId} onFinished={jest.fn()} initialText="foobar@email.com" />,
+            <InviteDialog
+                kind={InviteKind.Invite}
+                roomId={roomId}
+                onFinished={jest.fn()}
+                initialText="foobar@email.com"
+            />,
         );
 
         await screen.findByText("foobar@email.com");
         await screen.findByText("Invite by email");
+    });
+
+    it("should add pasted values", async () => {
+        mockClient.getIdentityServerUrl.mockReturnValue("https://identity-server");
+        mockClient.lookupThreePid.mockResolvedValue({});
+
+        render(<InviteDialog kind={InviteKind.Invite} roomId={roomId} onFinished={jest.fn()} />);
+
+        const input = screen.getByTestId("invite-dialog-input");
+        input.focus();
+        await userEvent.paste(`${bobId} ${aliceEmail}`);
+
+        await screen.findByText(bobId);
+        await screen.findByText(aliceEmail);
+        expect(input).toHaveValue("");
+    });
+
+    it("should allow to invite multiple emails to a room", async () => {
+        render(<InviteDialog kind={InviteKind.Invite} roomId={roomId} onFinished={jest.fn()} />);
+
+        await enterIntoSearchField(aliceEmail);
+        expectPill(aliceEmail);
+
+        await enterIntoSearchField(bobEmail);
+        expectPill(bobEmail);
+    });
+
+    describe("when encryption by default is disabled", () => {
+        beforeEach(() => {
+            mockClient.getClientWellKnown.mockReturnValue({
+                "io.element.e2ee": {
+                    default: false,
+                },
+            });
+        });
+
+        it("should allow to invite more than one email to a DM", async () => {
+            render(<InviteDialog kind={InviteKind.Dm} onFinished={jest.fn()} />);
+
+            await enterIntoSearchField(aliceEmail);
+            expectPill(aliceEmail);
+
+            await enterIntoSearchField(bobEmail);
+            expectPill(bobEmail);
+        });
+    });
+
+    it("should not allow to invite more than one email to a DM", async () => {
+        render(<InviteDialog kind={InviteKind.Dm} onFinished={jest.fn()} />);
+
+        // Start with an email → should convert to a pill
+        await enterIntoSearchField(aliceEmail);
+        expect(screen.getByText("Invites by email can only be sent one at a time")).toBeInTheDocument();
+        expectPill(aliceEmail);
+
+        // Everything else from now on should not convert to a pill
+
+        await enterIntoSearchField(bobEmail);
+        expectNoPill(bobEmail);
+
+        await enterIntoSearchField(aliceId);
+        expectNoPill(aliceId);
+
+        await pasteIntoSearchField(bobEmail);
+        expectNoPill(bobEmail);
+    });
+
+    it("should not allow to invite a MXID and an email to a DM", async () => {
+        render(<InviteDialog kind={InviteKind.Dm} onFinished={jest.fn()} />);
+
+        // Start with a MXID → should convert to a pill
+        await enterIntoSearchField("@carol:example.com");
+        expect(screen.queryByText("Invites by email can only be sent one at a time")).not.toBeInTheDocument();
+        expectPill("@carol:example.com");
+
+        // Add an email → should not convert to a pill
+        await enterIntoSearchField(bobEmail);
+        expect(screen.getByText("Invites by email can only be sent one at a time")).toBeInTheDocument();
+        expectNoPill(bobEmail);
     });
 });

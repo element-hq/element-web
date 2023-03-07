@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactElement, SyntheticEvent, useContext } from "react";
+import React, { ReactNode, SyntheticEvent, useContext } from "react";
 import classNames from "classnames";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { IEventRelation } from "matrix-js-sdk/src/models/event";
@@ -41,9 +41,9 @@ export const LocationButton: React.FC<IProps> = ({ roomId, sender, menuPosition,
         overflowMenuCloser?.();
     };
 
-    let contextMenu: ReactElement;
+    let contextMenu: ReactNode = null;
     if (menuDisplayed) {
-        const position = menuPosition ?? aboveLeftOf(button.current.getBoundingClientRect());
+        const position = menuPosition ?? (button.current && aboveLeftOf(button.current.getBoundingClientRect())) ?? {};
 
         contextMenu = (
             <LocationShareMenu

@@ -33,7 +33,7 @@ export const ERROR_USER_CANCELLED = new Error("User cancelled auth session");
 
 type InteractiveAuthCallbackSuccess = (
     success: true,
-    response: IAuthData,
+    response?: IAuthData,
     extra?: { emailSid?: string; clientSecret?: string },
 ) => void;
 type InteractiveAuthCallbackFailure = (success: false, response: IAuthData | Error) => void;
@@ -80,7 +80,7 @@ interface IProps {
     // Called when the stage changes, or the stage's phase changes. First
     // argument is the stage, second is the phase. Some stages do not have
     // phases and will be counted as 0 (numeric).
-    onStagePhaseChange?(stage: AuthType, phase: number): void;
+    onStagePhaseChange?(stage: AuthType | null, phase: number): void;
 }
 
 interface IState {
@@ -94,7 +94,7 @@ interface IState {
 
 export default class InteractiveAuthComponent extends React.Component<IProps, IState> {
     private readonly authLogic: InteractiveAuth;
-    private readonly intervalId: number = null;
+    private readonly intervalId: number | null = null;
     private readonly stageComponent = createRef<IStageComponent>();
 
     private unmounted = false;
@@ -103,10 +103,7 @@ export default class InteractiveAuthComponent extends React.Component<IProps, IS
         super(props);
 
         this.state = {
-            authStage: null,
             busy: false,
-            errorText: null,
-            errorCode: null,
             submitButtonEnabled: false,
         };
 
@@ -173,7 +170,8 @@ export default class InteractiveAuthComponent extends React.Component<IProps, IS
             busy: true,
         });
         try {
-            return await this.props.requestEmailToken(email, secret, attempt, session);
+            // We know this method only gets called on flows where requestEmailToken is passed but types don't
+            return await this.props.requestEmailToken!(email, secret, attempt, session);
         } finally {
             this.setState({
                 busy: false,
@@ -213,8 +211,8 @@ export default class InteractiveAuthComponent extends React.Component<IProps, IS
         if (busy) {
             this.setState({
                 busy: true,
-                errorText: null,
-                errorCode: null,
+                errorText: undefined,
+                errorCode: undefined,
             });
         }
         // The JS SDK eagerly reports itself as "not busy" right after any
@@ -234,7 +232,7 @@ export default class InteractiveAuthComponent extends React.Component<IProps, IS
     };
 
     private onPhaseChange = (newPhase: number): void => {
-        this.props.onStagePhaseChange?.(this.state.authStage, newPhase || 0);
+        this.props.onStagePhaseChange?.(this.state.authStage ?? null, newPhase || 0);
     };
 
     private onStageCancel = (): void => {

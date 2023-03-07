@@ -26,7 +26,7 @@ import DialogButtons from "../elements/DialogButtons";
 
 interface IProps {
     file: File;
-    currentIndex: number;
+    currentIndex?: number;
     totalFiles?: number;
     onFinished: (uploadConfirmed: boolean, uploadAll?: boolean) => void;
 }
@@ -35,7 +35,7 @@ export default class UploadConfirmDialog extends React.Component<IProps> {
     private readonly objectUrl: string;
     private readonly mimeType: string;
 
-    public static defaultProps = {
+    public static defaultProps: Partial<IProps> = {
         totalFiles: 1,
     };
 

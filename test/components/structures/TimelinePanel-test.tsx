@@ -15,8 +15,6 @@ limitations under the License.
 */
 
 import { render, waitFor, screen } from "@testing-library/react";
-// eslint-disable-next-line deprecate/import
-import { mount, ReactWrapper } from "enzyme";
 import { ReceiptType } from "matrix-js-sdk/src/@types/read_receipts";
 import {
     EventTimelineSet,
@@ -38,7 +36,7 @@ import {
     ThreadEvent,
     ThreadFilterType,
 } from "matrix-js-sdk/src/models/thread";
-import React from "react";
+import React, { createRef } from "react";
 
 import TimelinePanel from "../../../src/components/structures/TimelinePanel";
 import MatrixClientContext from "../../../src/contexts/MatrixClientContext";
@@ -137,15 +135,17 @@ describe("TimelinePanel", () => {
             // Create a TimelinePanel with ev0 already present
             const timelineSet = new EventTimelineSet(room, {});
             timelineSet.addLiveEvent(ev0);
-            const component: ReactWrapper<TimelinePanel> = mount(
+            const ref = createRef<TimelinePanel>();
+            render(
                 <TimelinePanel
                     timelineSet={timelineSet}
                     manageReadMarkers={true}
                     manageReadReceipts={true}
                     eventId={ev0.getId()}
+                    ref={ref}
                 />,
             );
-            const timelinePanel = component.instance() as TimelinePanel;
+            const timelinePanel = ref.current!;
 
             // An event arrived, and we read it
             timelineSet.addLiveEvent(ev1);

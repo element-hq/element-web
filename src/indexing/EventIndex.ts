@@ -56,6 +56,7 @@ export default class EventIndex extends EventEmitter {
 
     public async init(): Promise<void> {
         const indexManager = PlatformPeg.get()?.getEventIndexingManager();
+        if (!indexManager) return;
 
         this.crawlerCheckpoints = await indexManager.loadCheckpoints();
         logger.log("EventIndex: Loaded checkpoints", this.crawlerCheckpoints);
@@ -93,6 +94,7 @@ export default class EventIndex extends EventEmitter {
      */
     public async addInitialCheckpoints(): Promise<void> {
         const indexManager = PlatformPeg.get()?.getEventIndexingManager();
+        if (!indexManager) return;
         const client = MatrixClientPeg.get();
         const rooms = client.getRooms();
 
@@ -160,6 +162,7 @@ export default class EventIndex extends EventEmitter {
      */
     private onSync = async (state: SyncState, prevState: SyncState | null, data?: ISyncStateData): Promise<void> => {
         const indexManager = PlatformPeg.get()?.getEventIndexingManager();
+        if (!indexManager) return;
 
         if (prevState === "PREPARED" && state === "SYNCING") {
             // If our indexer is empty we're most likely running Element the
@@ -230,6 +233,7 @@ export default class EventIndex extends EventEmitter {
      */
     private redactEvent = async (ev: MatrixEvent): Promise<void> => {
         const indexManager = PlatformPeg.get()?.getEventIndexingManager();
+        if (!indexManager) return;
 
         try {
             await indexManager.deleteEvent(ev.getAssociatedId());
@@ -355,6 +359,7 @@ export default class EventIndex extends EventEmitter {
 
     private async addRoomCheckpoint(roomId: string, fullCrawl = false): Promise<void> {
         const indexManager = PlatformPeg.get()?.getEventIndexingManager();
+        if (!indexManager) return;
         const client = MatrixClientPeg.get();
         const room = client.getRoom(roomId);
 
@@ -403,6 +408,7 @@ export default class EventIndex extends EventEmitter {
 
         const client = MatrixClientPeg.get();
         const indexManager = PlatformPeg.get()?.getEventIndexingManager();
+        if (!indexManager) return;
 
         this.crawler = {
             cancel: () => {
@@ -653,7 +659,7 @@ export default class EventIndex extends EventEmitter {
         const indexManager = PlatformPeg.get()?.getEventIndexingManager();
         this.removeListeners();
         this.stopCrawler();
-        await indexManager.closeEventIndex();
+        await indexManager?.closeEventIndex();
     }
 
     /**
@@ -665,9 +671,9 @@ export default class EventIndex extends EventEmitter {
      * @return {Promise<IResultRoomEvents[]>} A promise that will resolve to an array
      * of search results once the search is done.
      */
-    public async search(searchArgs: ISearchArgs): Promise<IResultRoomEvents> {
+    public async search(searchArgs: ISearchArgs): Promise<IResultRoomEvents | undefined> {
         const indexManager = PlatformPeg.get()?.getEventIndexingManager();
-        return indexManager.searchEventIndex(searchArgs);
+        return indexManager?.searchEventIndex(searchArgs);
     }
 
     /**
@@ -699,6 +705,7 @@ export default class EventIndex extends EventEmitter {
     ): Promise<MatrixEvent[]> {
         const client = MatrixClientPeg.get();
         const indexManager = PlatformPeg.get()?.getEventIndexingManager();
+        if (!indexManager) return [];
 
         const loadArgs: ILoadArgs = {
             roomId: room.roomId,

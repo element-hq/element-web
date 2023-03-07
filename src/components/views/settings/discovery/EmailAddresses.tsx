@@ -48,9 +48,9 @@ interface IEmailAddressProps {
 
 interface IEmailAddressState {
     verifying: boolean;
-    addTask: any; // FIXME: When AddThreepid is TSfied
+    addTask: AddThreepid | null;
     continueDisabled: boolean;
-    bound: boolean;
+    bound?: boolean;
 }
 
 export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddressState> {
@@ -172,7 +172,7 @@ export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddr
 
         this.setState({ continueDisabled: true });
         try {
-            await this.state.addTask.checkEmailLinkClicked();
+            await this.state.addTask?.checkEmailLinkClicked();
             this.setState({
                 addTask: null,
                 continueDisabled: false,
@@ -184,7 +184,7 @@ export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddr
                 Modal.createDialog(ErrorDialog, {
                     title: _t("Your email address hasn't been verified yet"),
                     description: _t(
-                        "Click the link in the email you received to verify " + "and then click continue again.",
+                        "Click the link in the email you received to verify and then click continue again.",
                     ),
                 });
             } else {

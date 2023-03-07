@@ -25,10 +25,10 @@ import QuestionDialog from "./QuestionDialog";
 import BugReportDialog from "./BugReportDialog";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
-import { IDialogProps } from "./IDialogProps";
 
-interface IProps extends IDialogProps {
+interface IProps {
     error: Error;
+    onFinished(clear?: boolean): void;
 }
 
 export default class SessionRestoreErrorDialog extends React.Component<IProps> {

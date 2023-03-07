@@ -15,20 +15,16 @@ limitations under the License.
 */
 
 import React from "react";
-// eslint-disable-next-line deprecate/import
-import { mount, ReactWrapper } from "enzyme";
 import { mocked } from "jest-mock";
 import { logger } from "matrix-js-sdk/src/logger";
-import { act } from "react-dom/test-utils";
+import { fireEvent, render, RenderResult } from "@testing-library/react";
 
 import RecordingPlayback, { PlaybackLayout } from "../../../../src/components/views/audio_messages/RecordingPlayback";
 import { Playback } from "../../../../src/audio/Playback";
 import RoomContext, { TimelineRenderingType } from "../../../../src/contexts/RoomContext";
 import { createAudioContext } from "../../../../src/audio/compat";
-import { findByTestId, flushPromises } from "../../../test-utils";
-import PlaybackWaveform from "../../../../src/components/views/audio_messages/PlaybackWaveform";
-import SeekBar from "../../../../src/components/views/audio_messages/SeekBar";
-import PlaybackClock from "../../../../src/components/views/audio_messages/PlaybackClock";
+import { flushPromises } from "../../../test-utils";
+import { IRoomState } from "../../../../src/components/structures/RoomView";
 
 jest.mock("../../../../src/audio/compat", () => ({
     createAudioContext: jest.fn(),
@@ -57,12 +53,13 @@ describe("<RecordingPlayback />", () => {
 
     const mockChannelData = new Float32Array();
 
-    const defaultRoom = { roomId: "!room:server.org", timelineRenderingType: TimelineRenderingType.File };
+    const defaultRoom = { roomId: "!room:server.org", timelineRenderingType: TimelineRenderingType.File } as IRoomState;
     const getComponent = (props: React.ComponentProps<typeof RecordingPlayback>, room = defaultRoom) =>
-        mount(<RecordingPlayback {...props} />, {
-            wrappingComponent: RoomContext.Provider,
-            wrappingComponentProps: { value: room },
-        });
+        render(
+            <RoomContext.Provider value={room}>
+                <RecordingPlayback {...props} />
+            </RoomContext.Provider>,
+        );
 
     beforeEach(() => {
         jest.spyOn(logger, "error").mockRestore();
@@ -71,7 +68,7 @@ describe("<RecordingPlayback />", () => {
         mocked(createAudioContext).mockReturnValue(mockAudioContext as unknown as AudioContext);
     });
 
-    const getPlayButton = (component: ReactWrapper) => findByTestId(component, "play-pause-button").at(0);
+    const getPlayButton = (component: RenderResult) => component.getByTestId("play-pause-button");
 
     it("renders recording playback", () => {
         const playback = new Playback(new ArrayBuffer(8));
@@ -82,15 +79,16 @@ describe("<RecordingPlayback />", () => {
     it("disables play button while playback is decoding", async () => {
         const playback = new Playback(new ArrayBuffer(8));
         const component = getComponent({ playback });
-        expect(getPlayButton(component).props().disabled).toBeTruthy();
+        expect(getPlayButton(component)).toHaveAttribute("disabled");
+        expect(getPlayButton(component)).toHaveAttribute("aria-disabled", "true");
     });
 
     it("enables play button when playback is finished decoding", async () => {
         const playback = new Playback(new ArrayBuffer(8));
         const component = getComponent({ playback });
         await flushPromises();
-        component.setProps({});
-        expect(getPlayButton(component).props().disabled).toBeFalsy();
+        expect(getPlayButton(component)).not.toHaveAttribute("disabled");
+        expect(getPlayButton(component)).not.toHaveAttribute("aria-disabled", "true");
     });
 
     it("displays error when playback decoding fails", async () => {
@@ -101,7 +99,7 @@ describe("<RecordingPlayback />", () => {
         const playback = new Playback(new ArrayBuffer(8));
         const component = getComponent({ playback });
         await flushPromises();
-        expect(component.find(".text-warning").length).toBeFalsy();
+        expect(component.container.querySelector(".text-warning")).toBeDefined();
     });
 
     it("displays pre-prepared playback with correct playback phase", async () => {
@@ -109,8 +107,9 @@ describe("<RecordingPlayback />", () => {
         await playback.prepare();
         const component = getComponent({ playback });
         // playback already decoded, button is not disabled
-        expect(getPlayButton(component).props().disabled).toBeFalsy();
-        expect(component.find(".text-warning").length).toBeFalsy();
+        expect(getPlayButton(component)).not.toHaveAttribute("disabled");
+        expect(getPlayButton(component)).not.toHaveAttribute("aria-disabled", "true");
+        expect(component.container.querySelector(".text-warning")).toBeFalsy();
     });
 
     it("toggles playback on play pause button click", async () => {
@@ -119,9 +118,7 @@ describe("<RecordingPlayback />", () => {
         await playback.prepare();
         const component = getComponent({ playback });
 
-        act(() => {
-            getPlayButton(component).simulate("click");
-        });
+        fireEvent.click(getPlayButton(component));
 
         expect(playback.toggle).toHaveBeenCalled();
     });
@@ -131,9 +128,9 @@ describe("<RecordingPlayback />", () => {
             const playback = new Playback(new ArrayBuffer(8));
             const component = getComponent({ playback, layout: PlaybackLayout.Composer });
 
-            expect(component.find(PlaybackClock).length).toBeTruthy();
-            expect(component.find(PlaybackWaveform).length).toBeTruthy();
-            expect(component.find(SeekBar).length).toBeFalsy();
+            expect(component.container.querySelector(".mx_Clock")).toBeDefined();
+            expect(component.container.querySelector(".mx_Waveform")).toBeDefined();
+            expect(component.container.querySelector(".mx_SeekBar")).toBeFalsy();
         });
     });
 
@@ -142,18 +139,18 @@ describe("<RecordingPlayback />", () => {
             const playback = new Playback(new ArrayBuffer(8));
             const component = getComponent({ playback, layout: PlaybackLayout.Timeline });
 
-            expect(component.find(PlaybackClock).length).toBeTruthy();
-            expect(component.find(PlaybackWaveform).length).toBeTruthy();
-            expect(component.find(SeekBar).length).toBeTruthy();
+            expect(component.container.querySelector(".mx_Clock")).toBeDefined();
+            expect(component.container.querySelector(".mx_Waveform")).toBeDefined();
+            expect(component.container.querySelector(".mx_SeekBar")).toBeDefined();
         });
 
         it("should be the default", () => {
             const playback = new Playback(new ArrayBuffer(8));
             const component = getComponent({ playback }); // no layout set for test
 
-            expect(component.find(PlaybackClock).length).toBeTruthy();
-            expect(component.find(PlaybackWaveform).length).toBeTruthy();
-            expect(component.find(SeekBar).length).toBeTruthy();
+            expect(component.container.querySelector(".mx_Clock")).toBeDefined();
+            expect(component.container.querySelector(".mx_Waveform")).toBeDefined();
+            expect(component.container.querySelector(".mx_SeekBar")).toBeDefined();
         });
     });
 });

@@ -51,6 +51,6 @@ describe("<LocationViewDialog />", () => {
         // @ts-ignore cheat assignment to property
         selfShareEvent.sender = member;
         const { container } = getComponent({ mxEvent: selfShareEvent });
-        expect(container.querySelector(".mx_BaseAvatar_image").getAttribute("title")).toEqual(userId);
+        expect(container.querySelector(".mx_BaseAvatar_image")?.getAttribute("title")).toEqual(userId);
     });
 });

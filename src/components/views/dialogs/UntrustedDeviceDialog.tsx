@@ -22,12 +22,12 @@ import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import E2EIcon, { E2EState } from "../rooms/E2EIcon";
 import AccessibleButton from "../elements/AccessibleButton";
 import BaseDialog from "./BaseDialog";
-import { IDialogProps } from "./IDialogProps";
 import { IDevice } from "../right_panel/UserInfo";
 
-interface IProps extends IDialogProps {
+interface IProps {
     user: User;
     device: IDevice;
+    onFinished(mode?: "legacy" | "sas" | false): void;
 }
 
 const UntrustedDeviceDialog: React.FC<IProps> = ({ device, user, onFinished }) => {

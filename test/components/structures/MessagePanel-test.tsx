@@ -46,7 +46,6 @@ const roomId = "!roomId:server_name";
 
 describe("MessagePanel", function () {
     let clock: FakeTimers.InstalledClock;
-    const realSetTimeout = window.setTimeout;
     const events = mkEvents();
     const userId = "@me:here";
     const client = getMockClientWithEventEmitter({
@@ -404,7 +403,7 @@ describe("MessagePanel", function () {
         expect(isReadMarkerVisible(rm)).toBeFalsy();
     });
 
-    it("shows a ghost read-marker when the read-marker moves", function (done) {
+    it("shows a ghost read-marker when the read-marker moves", function () {
         // fake the clock so that we can test the velocity animation.
         clock = FakeTimers.install();
 
@@ -446,19 +445,9 @@ describe("MessagePanel", function () {
         // the second should be the real thing
         expect(readMarkers[1].previousSibling).toEqual(tiles[6]);
 
-        // advance the clock, and then let the browser run an animation frame,
-        // to let the animation start
+        // advance the clock, and then let the browser run an animation frame to let the animation start
         clock.tick(1500);
-
-        realSetTimeout(() => {
-            // then advance it again to let it complete
-            clock.tick(1000);
-            realSetTimeout(() => {
-                // the ghost should now have finished
-                expect(hr.style.opacity).toEqual("0");
-                done();
-            }, 100);
-        }, 100);
+        expect(hr.style.opacity).toEqual("0");
     });
 
     it("should collapse creation events", function () {

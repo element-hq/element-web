@@ -31,10 +31,10 @@ interface IProps extends Omit<IInputProps, "onValidate"> {
     value: string;
     fieldRef?: RefCallback<Field> | RefObject<Field>;
 
-    label?: string;
-    labelEnterPassword?: string;
-    labelStrongPassword?: string;
-    labelAllowedButUnsafe?: string;
+    label: string;
+    labelEnterPassword: string;
+    labelStrongPassword: string;
+    labelAllowedButUnsafe: string;
 
     onChange(ev: React.FormEvent<HTMLElement>): void;
     onValidate?(result: IValidationResult): void;
@@ -48,12 +48,12 @@ class PassphraseField extends PureComponent<IProps> {
         labelAllowedButUnsafe: _td("Password is allowed, but unsafe"),
     };
 
-    public readonly validate = withValidation<this, zxcvbn.ZXCVBNResult>({
+    public readonly validate = withValidation<this, zxcvbn.ZXCVBNResult | null>({
         description: function (complexity) {
             const score = complexity ? complexity.score : 0;
             return <progress className="mx_PassphraseField_progress" max={4} value={score} />;
         },
-        deriveData: async ({ value }): Promise<zxcvbn.ZXCVBNResult> => {
+        deriveData: async ({ value }): Promise<zxcvbn.ZXCVBNResult | null> => {
             if (!value) return null;
             const { scorePassword } = await import("../../../utils/PasswordScorer");
             return scorePassword(value);
@@ -67,7 +67,7 @@ class PassphraseField extends PureComponent<IProps> {
             {
                 key: "complexity",
                 test: async function ({ value }, complexity): Promise<boolean> {
-                    if (!value) {
+                    if (!value || !complexity) {
                         return false;
                     }
                     const safe = complexity.score >= this.props.minScore;
@@ -78,7 +78,7 @@ class PassphraseField extends PureComponent<IProps> {
                     // Unsafe passwords that are valid are only possible through a
                     // configuration flag. We'll print some helper text to signal
                     // to the user that their password is allowed, but unsafe.
-                    if (complexity.score >= this.props.minScore) {
+                    if (complexity && complexity.score >= this.props.minScore) {
                         return _t(this.props.labelStrongPassword);
                     }
                     return _t(this.props.labelAllowedButUnsafe);

@@ -24,6 +24,7 @@ import InlineSpinner from "../../elements/InlineSpinner";
 import { PollHistoryFilter } from "./types";
 import { PollListItem } from "./PollListItem";
 import { PollListItemEnded } from "./PollListItemEnded";
+import AccessibleButton from "../../elements/AccessibleButton";
 
 const LoadingPolls: React.FC<{ noResultsYet?: boolean }> = ({ noResultsYet }) => (
     <div
@@ -36,11 +37,83 @@ const LoadingPolls: React.FC<{ noResultsYet?: boolean }> = ({ noResultsYet }) =>
     </div>
 );
 
+const LoadMorePolls: React.FC<{ loadMorePolls?: () => void; isLoading?: boolean }> = ({ isLoading, loadMorePolls }) =>
+    loadMorePolls ? (
+        <AccessibleButton
+            className="mx_PollHistoryList_loadMorePolls"
+            kind="link_inline"
+            onClick={() => loadMorePolls()}
+        >
+            {_t("Load more polls")}
+            {isLoading && <InlineSpinner />}
+        </AccessibleButton>
+    ) : null;
+
+const ONE_DAY_MS = 60000 * 60 * 24;
+const getNoResultsMessage = (
+    filter: PollHistoryFilter,
+    oldestEventTimestamp?: number,
+    loadMorePolls?: () => void,
+): string => {
+    if (!loadMorePolls) {
+        return filter === "ACTIVE"
+            ? _t("There are no active polls in this room")
+            : _t("There are no past polls in this room");
+    }
+
+    // we don't know how much history has been fetched
+    if (!oldestEventTimestamp) {
+        return filter === "ACTIVE"
+            ? _t("There are no active polls. Load more polls to view polls for previous months")
+            : _t("There are no past polls. Load more polls to view polls for previous months");
+    }
+
+    const fetchedHistoryDaysCount = Math.ceil((Date.now() - oldestEventTimestamp) / ONE_DAY_MS);
+    return filter === "ACTIVE"
+        ? _t(
+              "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months",
+              { count: fetchedHistoryDaysCount },
+          )
+        : _t("There are no past polls for the past %(count)s days. Load more polls to view polls for previous months", {
+              count: fetchedHistoryDaysCount,
+          });
+};
+
+const NoResults: React.FC<{
+    filter: PollHistoryFilter;
+    oldestFetchedEventTimestamp?: number;
+    loadMorePolls?: () => void;
+    isLoading?: boolean;
+}> = ({ filter, isLoading, oldestFetchedEventTimestamp, loadMorePolls }) => {
+    // we can't page the timeline anymore
+    // just use plain loader
+    if (!loadMorePolls && isLoading) {
+        return <LoadingPolls noResultsYet />;
+    }
+
+    return (
+        <span className="mx_PollHistoryList_noResults">
+            {getNoResultsMessage(filter, oldestFetchedEventTimestamp, loadMorePolls)}
+
+            {!!loadMorePolls && <LoadMorePolls loadMorePolls={loadMorePolls} isLoading={isLoading} />}
+        </span>
+    );
+};
+
 type PollHistoryListProps = {
     pollStartEvents: MatrixEvent[];
     polls: Map<string, Poll>;
     filter: PollHistoryFilter;
+    /**
+     * server ts of the oldest fetched poll
+     * ignoring filter
+     * used to render no results in last x days message
+     * undefined when no polls are found
+     */
+    oldestFetchedEventTimestamp?: number;
     onFilterChange: (filter: PollHistoryFilter) => void;
+    onItemClick: (pollId: string) => void;
+    loadMorePolls?: () => void;
     isLoading?: boolean;
 };
 export const PollHistoryList: React.FC<PollHistoryListProps> = ({
@@ -48,7 +121,10 @@ export const PollHistoryList: React.FC<PollHistoryListProps> = ({
     polls,
     filter,
     isLoading,
+    oldestFetchedEventTimestamp,
     onFilterChange,
+    loadMorePolls,
+    onItemClick,
 }) => {
     return (
         <div className="mx_PollHistoryList">
@@ -65,26 +141,32 @@ export const PollHistoryList: React.FC<PollHistoryListProps> = ({
                 <ol className={classNames("mx_PollHistoryList_list", `mx_PollHistoryList_list_${filter}`)}>
                     {pollStartEvents.map((pollStartEvent) =>
                         filter === "ACTIVE" ? (
-                            <PollListItem key={pollStartEvent.getId()!} event={pollStartEvent} />
+                            <PollListItem
+                                key={pollStartEvent.getId()!}
+                                event={pollStartEvent}
+                                onClick={() => onItemClick(pollStartEvent.getId()!)}
+                            />
                         ) : (
                             <PollListItemEnded
                                 key={pollStartEvent.getId()!}
                                 event={pollStartEvent}
                                 poll={polls.get(pollStartEvent.getId()!)!}
+                                onClick={() => onItemClick(pollStartEvent.getId()!)}
                             />
                         ),
                     )}
-                    {isLoading && <LoadingPolls />}
+                    {isLoading && !loadMorePolls && <LoadingPolls />}
+                    {!!loadMorePolls && <LoadMorePolls loadMorePolls={loadMorePolls} isLoading={isLoading} />}
                 </ol>
             )}
-            {!pollStartEvents.length && !isLoading && (
-                <span className="mx_PollHistoryList_noResults">
-                    {filter === "ACTIVE"
-                        ? _t("There are no active polls in this room")
-                        : _t("There are no past polls in this room")}
-                </span>
+            {!pollStartEvents.length && (
+                <NoResults
+                    oldestFetchedEventTimestamp={oldestFetchedEventTimestamp}
+                    isLoading={isLoading}
+                    filter={filter}
+                    loadMorePolls={loadMorePolls}
+                />
             )}
-            {!pollStartEvents.length && isLoading && <LoadingPolls noResultsYet />}
         </div>
     );
 };

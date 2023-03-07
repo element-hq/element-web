@@ -18,6 +18,8 @@ limitations under the License.
 
 import { HomeserverInstance } from "../../plugins/utils/homeserver";
 import { MatrixClient } from "../../global";
+import { SettingLevel } from "../../../src/settings/SettingLevel";
+import { Layout } from "../../../src/settings/enums/Layout";
 
 describe("Threads", () => {
     let homeserver: HomeserverInstance;
@@ -54,8 +56,24 @@ describe("Threads", () => {
             cy.visit("/#/room/" + roomId);
         });
 
+        // Around 200 characters
+        const MessageLong =
+            "Hello there. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt " +
+            "ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi";
+
+        // --MessageTimestamp-color = #acacac = rgb(172, 172, 172)
+        // See: _MessageTimestamp.pcss
+        const MessageTimestampColor = "rgb(172, 172, 172)";
+
         // User sends message
         cy.get(".mx_RoomView_body .mx_BasicMessageComposer_input").type("Hello Mr. Bot{enter}");
+
+        // Check the colour of timestamp on the main timeline
+        cy.get(".mx_RoomView_body .mx_EventTile_last .mx_EventTile_line .mx_MessageTimestamp").should(
+            "have.css",
+            "color",
+            MessageTimestampColor,
+        );
 
         // Wait for message to send, get its ID and save as @threadId
         cy.contains(".mx_RoomView_body .mx_EventTile[data-scroll-tokens]", "Hello Mr. Bot")
@@ -65,7 +83,8 @@ describe("Threads", () => {
         // Bot starts thread
         cy.get<string>("@threadId").then((threadId) => {
             bot.sendMessage(roomId, threadId, {
-                body: "Hello there",
+                // Send a message long enough to be wrapped to check if avatars inside the ReadReceiptGroup are visible
+                body: MessageLong,
                 msgtype: "m.text",
             });
         });
@@ -75,8 +94,40 @@ describe("Threads", () => {
         cy.get(".mx_RoomView_body .mx_ThreadSummary .mx_ThreadSummary_content").should("contain", "Hello there");
         cy.get(".mx_RoomView_body .mx_ThreadSummary").click();
 
+        cy.get(".mx_ThreadView .mx_EventTile[data-layout='group'].mx_EventTile_last").within(() => {
+            // Wait until the messages are rendered
+            cy.get(".mx_EventTile_line .mx_MTextBody").should("have.text", MessageLong);
+
+            // Make sure the avatar inside ReadReceiptGroup is visible on the group layout
+            cy.get(".mx_ReadReceiptGroup .mx_BaseAvatar_image").should("be.visible");
+        });
+
+        // Enable the bubble layout
+        cy.setSettingValue("layout", null, SettingLevel.DEVICE, Layout.Bubble);
+
+        cy.get(".mx_ThreadView .mx_EventTile[data-layout='bubble'].mx_EventTile_last").within(() => {
+            // TODO: remove this after fixing the issue of ReadReceiptGroup being hidden on the bubble layout
+            // See: https://github.com/vector-im/element-web/issues/23569
+            cy.get(".mx_ReadReceiptGroup .mx_BaseAvatar_image").should("exist");
+
+            // Make sure the avatar inside ReadReceiptGroup is visible on bubble layout
+            // TODO: enable this after fixing the issue of ReadReceiptGroup being hidden on the bubble layout
+            // See: https://github.com/vector-im/element-web/issues/23569
+            // cy.get(".mx_ReadReceiptGroup .mx_BaseAvatar_image").should("be.visible");
+        });
+
+        // Re-enable the group layout
+        cy.setSettingValue("layout", null, SettingLevel.DEVICE, Layout.Group);
+
         // User responds in thread
         cy.get(".mx_ThreadView .mx_BasicMessageComposer_input").type("Test{enter}");
+
+        // Check the colour of timestamp on EventTile in a thread (mx_ThreadView)
+        cy.get(".mx_ThreadView .mx_EventTile_last[data-layout='group'] .mx_EventTile_line .mx_MessageTimestamp").should(
+            "have.css",
+            "color",
+            MessageTimestampColor,
+        );
 
         // User asserts summary was updated correctly
         cy.get(".mx_RoomView_body .mx_ThreadSummary .mx_ThreadSummary_sender").should("contain", "Tom");
@@ -130,6 +181,10 @@ describe("Threads", () => {
         cy.get(".mx_ThreadPanel .mx_EventTile_last").within(() => {
             cy.get(".mx_EventTile_body").should("contain", "Hello Mr. Bot");
             cy.get(".mx_ThreadSummary_content").should("contain", "How are things?");
+
+            // Check the colour of timestamp on thread list
+            cy.get(".mx_EventTile_details .mx_MessageTimestamp").should("have.css", "color", MessageTimestampColor);
+
             // User opens thread via threads list
             cy.get(".mx_EventTile_line").click();
         });

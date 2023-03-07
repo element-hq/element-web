@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import classnames from "classnames";
+import { ComponentProps } from "react";
 
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { ActionPayload } from "../dispatcher/payloads";
@@ -114,7 +115,7 @@ export class DialogOpener {
                         kind: payload.kind,
                         call: payload.call,
                         roomId: payload.roomId,
-                    },
+                    } as Omit<ComponentProps<typeof InviteDialog>, "onFinished">,
                     classnames("mx_InviteDialog_flexWrapper", payload.className),
                     false,
                     true,

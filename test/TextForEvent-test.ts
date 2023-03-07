@@ -471,7 +471,7 @@ describe("TextForEvent", () => {
                 expect(textForEvent(callEvent)).toEqual("Video call started in Test room.");
             });
 
-            it("returns correct message for call event when supported", () => {
+            it("returns correct message for call event when not supported", () => {
                 mocked(mockClient).supportsVoip.mockReturnValue(false);
 
                 expect(textForEvent(callEvent)).toEqual(

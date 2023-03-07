@@ -103,7 +103,7 @@ export default class DevicesPanelEntry extends React.Component<IProps, IState> {
             });
         } else {
             const cli = MatrixClientPeg.get();
-            const userId = cli.getUserId();
+            const userId = cli.getUserId()!;
             const verificationRequestPromise = cli.requestVerification(userId, [this.props.device.device_id]);
             Modal.createDialog(VerificationRequestDialog, {
                 verificationRequestPromise,
@@ -119,7 +119,7 @@ export default class DevicesPanelEntry extends React.Component<IProps, IState> {
 
     public render(): React.ReactNode {
         let iconClass = "";
-        let verifyButton: JSX.Element;
+        let verifyButton: JSX.Element | undefined;
         if (this.props.verified !== null) {
             iconClass = this.props.verified ? "mx_E2EIcon_verified" : "mx_E2EIcon_warning";
             if (!this.props.verified && this.props.canBeVerified) {
@@ -131,7 +131,7 @@ export default class DevicesPanelEntry extends React.Component<IProps, IState> {
             }
         }
 
-        let signOutButton: JSX.Element;
+        let signOutButton: JSX.Element | undefined;
         if (this.props.isOwnDevice) {
             signOutButton = (
                 <AccessibleButton kind="danger_outline" onClick={this.onOwnDeviceSignOut}>

@@ -20,7 +20,7 @@ import { useTypedEventEmitterState } from "../../hooks/useEventEmitter";
 export const useCurrentVoiceBroadcastRecording = (
     voiceBroadcastRecordingsStore: VoiceBroadcastRecordingsStore,
 ): {
-    currentVoiceBroadcastRecording: VoiceBroadcastRecording;
+    currentVoiceBroadcastRecording: VoiceBroadcastRecording | null;
 } => {
     const currentVoiceBroadcastRecording = useTypedEventEmitterState(
         voiceBroadcastRecordingsStore,

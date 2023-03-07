@@ -74,7 +74,8 @@ describe("AutoRageshakeStore", () => {
             });
 
             it("should send a rageshake", () => {
-                expect(mocked(client).sendToDevice.mock.calls).toMatchInlineSnapshot(`
+                expect(mocked(client).sendToDevice.mock.calls).toMatchInlineSnapshot(
+                    `
                     [
                       [
                         "im.vector.auto_rs_request",
@@ -82,7 +83,7 @@ describe("AutoRageshakeStore", () => {
                           "@userId:matrix.org": {
                             "undefined": {
                               "device_id": undefined,
-                              "event_id": "${utdEvent.getId()}",
+                              "event_id": "utd_event_id",
                               "recipient_rageshake": undefined,
                               "room_id": "!room:example.com",
                               "sender_key": undefined,
@@ -93,7 +94,8 @@ describe("AutoRageshakeStore", () => {
                         },
                       ],
                     ]
-                `);
+                `.replace("utd_event_id", utdEvent.getId()!),
+                );
             });
         });
     });

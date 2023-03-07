@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { sleep } from "matrix-js-sdk/src/utils";
-import React from "react";
+import React, { ReactNode } from "react";
 import { EventStatus } from "matrix-js-sdk/src/models/event-status";
 import { MatrixEventEvent } from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/models/room";
@@ -110,7 +110,7 @@ export async function leaveRoomBehaviour(roomId: string, retry = true, spinner =
 
     const errors = Object.entries(results).filter((r) => !!r[1]);
     if (errors.length > 0) {
-        const messages = [];
+        const messages: ReactNode[] = [];
         for (const roomErr of errors) {
             const err = roomErr[1]; // [0] is the roomId
             let message = _t("Unexpected server error trying to leave the room");

@@ -39,6 +39,12 @@ jobs:
               env:
                   JS_SDK_GITHUB_BASE_REF: ${{ inputs.matrix-js-sdk-sha }}
 
+            - name: Jest Cache
+              uses: actions/cache@v3
+              with:
+                  path: /tmp/jest_cache
+                  key: ${{ hashFiles('**/yarn.lock') }}
+
             - name: Get number of CPU cores
               id: cpu-cores
               uses: SimenB/github-actions-cpu-cores@v1
@@ -54,7 +60,8 @@ jobs:
                   yarn ${{ inputs.disable_coverage != 'true' && 'coverage' || 'test' }} \
                       --ci \
                       --reporters github-actions ${{ steps.metrics.outputs.extra-reporter }} \
-                      --max-workers ${{ steps.cpu-cores.outputs.count }}
+                      --max-workers ${{ steps.cpu-cores.outputs.count }} \
+                      --cacheDirectory /tmp/jest_cache
 
             - name: Upload Artifact
               if: inputs.disable_coverage != 'true'

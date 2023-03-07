@@ -19,14 +19,12 @@ import { Optional } from "matrix-events-sdk";
 
 import { SnakedObject } from "./utils/SnakedObject";
 import { IConfigOptions, ISsoRedirectOptions } from "./IConfigOptions";
-import { KeysWithObjectShape } from "./@types/common";
 
 // see element-web config.md for docs, or the IConfigOptions interface for dev docs
 export const DEFAULTS: IConfigOptions = {
     brand: "Element",
     integrations_ui_url: "https://scalar.vector.im/",
     integrations_rest_url: "https://scalar.vector.im/api",
-    bug_report_endpoint_url: null,
     uisi_autorageshake_app: "element-auto-uisi",
 
     jitsi: {
@@ -79,10 +77,10 @@ export default class SdkConfig {
         return SdkConfig.fallback.get(key, altCaseName);
     }
 
-    public static getObject<K extends KeysWithObjectShape<IConfigOptions>>(
+    public static getObject<K extends keyof IConfigOptions>(
         key: K,
         altCaseName?: string,
-    ): Optional<SnakedObject<IConfigOptions[K]>> {
+    ): Optional<SnakedObject<NonNullable<IConfigOptions[K]>>> {
         const val = SdkConfig.get(key, altCaseName);
         if (val !== null && val !== undefined) {
             return new SnakedObject(val);

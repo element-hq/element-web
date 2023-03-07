@@ -14,25 +14,36 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
-// eslint-disable-next-line deprecate/import
-import { mount, ReactWrapper } from "enzyme";
+import React, { createRef, RefObject } from "react";
+import { render } from "@testing-library/react";
 import { MatrixClient, MsgType, Room } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
 
 import VoiceRecordComposerTile from "../../../../src/components/views/rooms/VoiceRecordComposerTile";
-import { VoiceRecording } from "../../../../src/audio/VoiceRecording";
 import { doMaybeLocalRoomAction } from "../../../../src/utils/local-room";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
-import { IUpload } from "../../../../src/audio/VoiceMessageRecording";
+import { IUpload, VoiceMessageRecording } from "../../../../src/audio/VoiceMessageRecording";
+import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalinks";
+import { VoiceRecordingStore } from "../../../../src/stores/VoiceRecordingStore";
+import { PlaybackClock } from "../../../../src/audio/PlaybackClock";
 
 jest.mock("../../../../src/utils/local-room", () => ({
     doMaybeLocalRoomAction: jest.fn(),
 }));
 
+jest.mock("../../../../src/stores/VoiceRecordingStore", () => ({
+    VoiceRecordingStore: {
+        getVoiceRecordingId: jest.fn().mockReturnValue("voice-recording-id"),
+        instance: {
+            getActiveRecording: jest.fn(),
+            disposeRecording: jest.fn(),
+        },
+    },
+}));
+
 describe("<VoiceRecordComposerTile/>", () => {
-    let voiceRecordComposerTile: ReactWrapper<VoiceRecordComposerTile>;
-    let mockRecorder: VoiceRecording;
+    let voiceRecordComposerTile: RefObject<VoiceRecordComposerTile>;
+    let mockRecorder: VoiceMessageRecording;
     let mockUpload: IUpload;
     let mockClient: MatrixClient;
     const roomId = "!room:example.com";
@@ -43,30 +54,48 @@ describe("<VoiceRecordComposerTile/>", () => {
         } as unknown as MatrixClient;
         MatrixClientPeg.get = () => mockClient;
 
+        const room = {
+            roomId,
+        } as unknown as Room;
+
+        voiceRecordComposerTile = createRef();
         const props = {
-            room: {
-                roomId,
-            } as unknown as Room,
+            room,
+            ref: voiceRecordComposerTile,
+            permalinkCreator: new RoomPermalinkCreator(room),
         };
         mockUpload = {
             mxc: "mxc://example.com/voice",
         };
         mockRecorder = {
+            on: jest.fn(),
+            off: jest.fn(),
             stop: jest.fn(),
             upload: () => Promise.resolve(mockUpload),
             durationSeconds: 1337,
             contentType: "audio/ogg",
             getPlayback: () => ({
+                on: jest.fn(),
+                off: jest.fn(),
+                prepare: jest.fn().mockResolvedValue(void 0),
+                clockInfo: {
+                    timeSeconds: 0,
+                    liveData: {
+                        onUpdate: jest.fn(),
+                    },
+                } as unknown as PlaybackClock,
+                waveform: [1.4, 2.5, 3.6],
+                waveformData: {
+                    onUpdate: jest.fn(),
+                },
                 thumbnailWaveform: [1.4, 2.5, 3.6],
             }),
-        } as unknown as VoiceRecording;
-        voiceRecordComposerTile = mount(<VoiceRecordComposerTile {...props} />);
-        voiceRecordComposerTile.setState({
-            recorder: mockRecorder,
-        });
+        } as unknown as VoiceMessageRecording;
+        mocked(VoiceRecordingStore.instance.getActiveRecording).mockReturnValue(mockRecorder);
+        render(<VoiceRecordComposerTile {...props} />);
 
         mocked(doMaybeLocalRoomAction).mockImplementation(
-            <T extends {}>(roomId: string, fn: (actualRoomId: string) => Promise<T>, _client?: MatrixClient) => {
+            <T,>(roomId: string, fn: (actualRoomId: string) => Promise<T>, _client?: MatrixClient) => {
                 return fn(roomId);
             },
         );
@@ -74,7 +103,7 @@ describe("<VoiceRecordComposerTile/>", () => {
 
     describe("send", () => {
         it("should send the voice recording", async () => {
-            await (voiceRecordComposerTile.instance() as VoiceRecordComposerTile).send();
+            await voiceRecordComposerTile.current!.send();
             expect(mockClient.sendMessage).toHaveBeenCalledWith(roomId, {
                 "body": "Voice message",
                 "file": undefined,

@@ -24,7 +24,7 @@ import Timeoutable = Cypress.Timeoutable;
 import Withinable = Cypress.Withinable;
 import Shadow = Cypress.Shadow;
 
-export enum Filter {
+enum Filter {
     People = "people",
     PublicRooms = "public_rooms",
 }
@@ -297,27 +297,28 @@ describe("Spotlight", () => {
 
     // TODO: We currently can’t test finding rooms on other homeservers/other protocols
     // We obviously don’t have federation or bridges in cypress tests
-    /*
-    const room3Name = "Matrix HQ";
-    const room3Id = "#matrix:matrix.org";
-
-    it("should find unknown public rooms on other homeservers", () => {
-        cy.openSpotlightDialog().within(() => {
-            cy.spotlightFilter(Filter.PublicRooms);
-            cy.spotlightSearch().clear().type(room3Name);
-            cy.get("[aria-haspopup=true][role=button]").click();
-        }).then(() => {
-            cy.contains(".mx_GenericDropdownMenu_Option--header", "matrix.org")
-                .next("[role=menuitemradio]")
-                .click();
-            cy.wait(3_600_000);
-        }).then(() => cy.spotlightDialog().within(() => {
-            cy.spotlightResults().should("have.length", 1);
-            cy.spotlightResults().eq(0).should("contain", room3Name);
-            cy.spotlightResults().eq(0).should("contain", room3Id);
-        }));
+    it.skip("should find unknown public rooms on other homeservers", () => {
+        cy.openSpotlightDialog()
+            .within(() => {
+                cy.spotlightFilter(Filter.PublicRooms);
+                cy.spotlightSearch().clear().type(room3Name);
+                cy.get("[aria-haspopup=true][role=button]").click();
+            })
+            .then(() => {
+                cy.contains(".mx_GenericDropdownMenu_Option--header", "matrix.org")
+                    .next("[role=menuitemradio]")
+                    .click();
+                cy.wait(3_600_000);
+            })
+            .then(() =>
+                cy.spotlightDialog().within(() => {
+                    cy.spotlightResults().should("have.length", 1);
+                    cy.spotlightResults().eq(0).should("contain", room3Name);
+                    cy.spotlightResults().eq(0).should("contain", room3Id);
+                }),
+            );
     });
-    */
+
     it("should find known people", () => {
         cy.openSpotlightDialog()
             .within(() => {

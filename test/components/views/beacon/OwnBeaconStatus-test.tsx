@@ -29,6 +29,14 @@ jest.mock("../../../../src/utils/beacon/useOwnLiveBeacons", () => ({
     useOwnLiveBeacons: jest.fn(),
 }));
 
+const defaultLiveBeaconsState = {
+    onStopSharing: jest.fn(),
+    onResetLocationPublishError: jest.fn(),
+    stoppingInProgress: false,
+    hasStopSharingError: false,
+    hasLocationPublishError: false,
+};
+
 describe("<OwnBeaconStatus />", () => {
     const defaultProps = {
         displayStatus: BeaconDisplayStatus.Loading,
@@ -43,7 +51,7 @@ describe("<OwnBeaconStatus />", () => {
 
     beforeEach(() => {
         jest.spyOn(global.Date, "now").mockReturnValue(123456789);
-        mocked(useOwnLiveBeacons).mockClear().mockReturnValue({});
+        mocked(useOwnLiveBeacons).mockClear().mockReturnValue(defaultLiveBeaconsState);
 
         defaultBeacon = new Beacon(makeBeaconInfoEvent(userId, roomId));
     });
@@ -57,6 +65,7 @@ describe("<OwnBeaconStatus />", () => {
         it("renders stop button", () => {
             const displayStatus = BeaconDisplayStatus.Active;
             mocked(useOwnLiveBeacons).mockReturnValue({
+                ...defaultLiveBeaconsState,
                 onStopSharing: jest.fn(),
             });
             renderComponent({ displayStatus, beacon: defaultBeacon });
@@ -68,6 +77,7 @@ describe("<OwnBeaconStatus />", () => {
             const displayStatus = BeaconDisplayStatus.Active;
             const onStopSharing = jest.fn();
             mocked(useOwnLiveBeacons).mockReturnValue({
+                ...defaultLiveBeaconsState,
                 onStopSharing,
             });
             renderComponent({ displayStatus, beacon: defaultBeacon });
@@ -90,6 +100,7 @@ describe("<OwnBeaconStatus />", () => {
             it("renders in error mode", () => {
                 const displayStatus = BeaconDisplayStatus.Active;
                 mocked(useOwnLiveBeacons).mockReturnValue({
+                    ...defaultLiveBeaconsState,
                     hasLocationPublishError: true,
                     onResetLocationPublishError: jest.fn(),
                 });
@@ -103,6 +114,7 @@ describe("<OwnBeaconStatus />", () => {
                 const displayStatus = BeaconDisplayStatus.Active;
                 const onResetLocationPublishError = jest.fn();
                 mocked(useOwnLiveBeacons).mockReturnValue({
+                    ...defaultLiveBeaconsState,
                     hasLocationPublishError: true,
                     onResetLocationPublishError,
                 });
@@ -117,6 +129,7 @@ describe("<OwnBeaconStatus />", () => {
             it("renders in error mode", () => {
                 const displayStatus = BeaconDisplayStatus.Active;
                 mocked(useOwnLiveBeacons).mockReturnValue({
+                    ...defaultLiveBeaconsState,
                     hasLocationPublishError: false,
                     hasStopSharingError: true,
                     onStopSharing: jest.fn(),
@@ -131,6 +144,7 @@ describe("<OwnBeaconStatus />", () => {
                 const displayStatus = BeaconDisplayStatus.Active;
                 const onStopSharing = jest.fn();
                 mocked(useOwnLiveBeacons).mockReturnValue({
+                    ...defaultLiveBeaconsState,
                     hasStopSharingError: true,
                     onStopSharing,
                 });

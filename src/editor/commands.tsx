@@ -59,7 +59,7 @@ export function getSlashCommand(model: EditorModel): [Command | undefined, strin
 
 export async function runSlashCommand(
     cmd: Command,
-    args: string,
+    args: string | undefined,
     roomId: string,
     threadId: string | null,
 ): Promise<[content: IContent | null, success: boolean]> {

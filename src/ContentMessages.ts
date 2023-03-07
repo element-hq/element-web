@@ -389,7 +389,7 @@ export default class ContentMessages {
         }
 
         if (tooBigFiles.length > 0) {
-            const { finished } = Modal.createDialog<[boolean]>(UploadFailureDialog, {
+            const { finished } = Modal.createDialog(UploadFailureDialog, {
                 badFiles: tooBigFiles,
                 totalFiles: files.length,
                 contentMessages: this,
@@ -407,7 +407,7 @@ export default class ContentMessages {
             const loopPromiseBefore = promBefore;
 
             if (!uploadAll) {
-                const { finished } = Modal.createDialog<[boolean, boolean]>(UploadConfirmDialog, {
+                const { finished } = Modal.createDialog(UploadConfirmDialog, {
                     file,
                     currentIndex: i,
                     totalFiles: okFiles.length,
@@ -546,7 +546,7 @@ export default class ContentMessages {
             if (upload.cancelled) throw new UploadCanceledError();
             const threadId = relation?.rel_type === THREAD_RELATION_TYPE.name ? relation.event_id : null;
 
-            const response = await matrixClient.sendMessage(roomId, threadId, content);
+            const response = await matrixClient.sendMessage(roomId, threadId ?? null, content);
 
             if (SettingsStore.getValue("Performance.addSendMessageTimingMetadata")) {
                 sendRoundTripMetric(matrixClient, roomId, response.event_id);

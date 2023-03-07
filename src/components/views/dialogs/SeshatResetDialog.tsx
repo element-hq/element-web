@@ -19,9 +19,12 @@ import React from "react";
 import { _t } from "../../../languageHandler";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
-import { IDialogProps } from "./IDialogProps";
 
-export default class SeshatResetDialog extends React.PureComponent<IDialogProps> {
+interface Props {
+    onFinished(reset?: boolean): void;
+}
+
+export default class SeshatResetDialog extends React.PureComponent<Props> {
     public render(): React.ReactNode {
         return (
             <BaseDialog

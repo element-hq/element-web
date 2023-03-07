@@ -25,14 +25,14 @@ import InteractiveAuthDialog from "../../dialogs/InteractiveAuthDialog";
 
 const makeDeleteRequest =
     (matrixClient: MatrixClient, deviceIds: string[]) =>
-    async (auth?: IAuthData): Promise<void> => {
-        await matrixClient.deleteMultipleDevices(deviceIds, auth);
+    async (auth?: IAuthData): Promise<IAuthData> => {
+        return matrixClient.deleteMultipleDevices(deviceIds, auth);
     };
 
 export const deleteDevicesWithInteractiveAuth = async (
     matrixClient: MatrixClient,
     deviceIds: string[],
-    onFinished?: InteractiveAuthCallback,
+    onFinished: InteractiveAuthCallback,
 ): Promise<void> => {
     if (!deviceIds.length) {
         return;

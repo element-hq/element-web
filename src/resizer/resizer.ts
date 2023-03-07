@@ -34,7 +34,7 @@ interface IClassNames {
 export interface IConfig {
     onResizeStart?(): void;
     onResizeStop?(): void;
-    onResized?(size: number, id: string, element: HTMLElement): void;
+    onResized?(size: number | null, id: string | null, element: HTMLElement): void;
     handler?: HTMLDivElement;
 }
 
@@ -51,7 +51,7 @@ export default class Resizer<C extends IConfig = IConfig> {
                 resizeHandle: HTMLDivElement,
                 resizer: Resizer,
                 sizer: Sizer,
-                container: HTMLElement,
+                container?: HTMLElement,
             ): ResizeItem;
             createSizer(containerElement: HTMLElement, vertical: boolean, reverse: boolean): Sizer;
         },

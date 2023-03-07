@@ -267,10 +267,18 @@ $left-gutter: 64px;
         .mx_EventTileBubble {
             margin-inline: auto;
         }
+
+        .mx_ReplyChain {
+            margin-bottom: $spacing-8;
+        }
     }
 
     &[data-layout="irc"] {
-        --EventTile_irc_line_info-margin-inline-start: calc(var(--name-width) + 10px + var(--icon-width));
+        /* add --right-padding value of MessageTimestamp only */
+        /* stylelint-disable-next-line declaration-colon-space-after */
+        --EventTile_irc_line_info-margin-inline-start: calc(
+            var(--name-width) + var(--icon-width) + 1 * var(--right-padding)
+        );
 
         .mx_EventTile_msgOption {
             .mx_ReadReceiptGroup {
@@ -289,6 +297,10 @@ $left-gutter: 64px;
             &.mx_cryptoEvent {
                 left: unset;
             }
+        }
+
+        .mx_ReplyChain {
+            margin: 0;
         }
 
         .mx_ReplyTile .mx_EventTileBubble {
@@ -483,20 +495,12 @@ $left-gutter: 64px;
     }
 
     &[data-layout="irc"] {
-        .mx_EventTile_line .mx_RedactedBody {
-            padding-left: 24px; /* 25px - 1px */
-
-            &::before {
-                left: var(--right-padding);
-            }
-        }
-
         /* Apply only collapsed events block */
         > .mx_EventTile_line {
-            /* 15 px of padding */
+            /* add --right-padding value of MessageTimestamp and avatar only */
             /* stylelint-disable-next-line declaration-colon-space-after */
             padding-left: calc(
-                var(--name-width) + var(--icon-width) + $MessageTimestamp_width + 3 * var(--right-padding)
+                var(--name-width) + var(--icon-width) + $MessageTimestamp_width + 2 * var(--right-padding)
             );
         }
     }
@@ -1246,6 +1250,10 @@ $left-gutter: 64px;
             .mx_EventTile_line,
             .mx_EventTile_reply {
                 padding-block: var(--MatrixChat_useCompactLayout_line-spacing-block);
+            }
+
+            .mx_ReplyChain {
+                margin-bottom: $spacing-4;
             }
 
             &.mx_EventTile_info {

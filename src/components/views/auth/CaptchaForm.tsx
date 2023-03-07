@@ -65,7 +65,7 @@ export default class CaptchaForm extends React.Component<ICaptchaFormProps, ICap
                 "src",
                 `https://www.recaptcha.net/recaptcha/api.js?onload=mxOnRecaptchaLoaded&render=explicit`,
             );
-            this.recaptchaContainer.current.appendChild(scriptTag);
+            this.recaptchaContainer.current?.appendChild(scriptTag);
         }
     }
 
@@ -91,11 +91,11 @@ export default class CaptchaForm extends React.Component<ICaptchaFormProps, ICap
         const publicKey = this.props.sitePublicKey;
         if (!publicKey) {
             logger.error("No public key for recaptcha!");
-            throw new Error("This server has not supplied enough information for Recaptcha " + "authentication");
+            throw new Error("This server has not supplied enough information for Recaptcha authentication");
         }
 
         logger.info("Rendering to %s", divId);
-        this.captchaWidgetId = global.grecaptcha.render(divId, {
+        this.captchaWidgetId = global.grecaptcha?.render(divId, {
             sitekey: publicKey,
             callback: this.props.onCaptchaResponse,
         });
@@ -113,7 +113,7 @@ export default class CaptchaForm extends React.Component<ICaptchaFormProps, ICap
             this.renderRecaptcha(DIV_ID);
             // clear error if re-rendered
             this.setState({
-                errorText: null,
+                errorText: undefined,
             });
         } catch (e) {
             this.setState({
@@ -123,7 +123,7 @@ export default class CaptchaForm extends React.Component<ICaptchaFormProps, ICap
     }
 
     public render(): React.ReactNode {
-        let error = null;
+        let error: JSX.Element | undefined;
         if (this.state.errorText) {
             error = <div className="error">{this.state.errorText}</div>;
         }

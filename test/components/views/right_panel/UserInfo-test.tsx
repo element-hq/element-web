@@ -15,19 +15,20 @@ limitations under the License.
 */
 
 import React from "react";
-import { fireEvent, render, screen, waitFor, cleanup } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, cleanup, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mocked } from "jest-mock";
 import { Room, User, MatrixClient, RoomMember, MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
 import { Phase, VerificationRequest } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 import { DeviceTrustLevel, UserTrustLevel } from "matrix-js-sdk/src/crypto/CrossSigning";
+import { DeviceInfo } from "matrix-js-sdk/src/crypto/deviceinfo";
+import { defer } from "matrix-js-sdk/src/utils";
 
 import UserInfo, {
     BanToggleButton,
     DeviceItem,
     disambiguateDevices,
     getPowerLevels,
-    IDevice,
     isMuted,
     PowerLevelEditor,
     RoomAdminToolsContainer,
@@ -43,6 +44,13 @@ import MultiInviter from "../../../../src/utils/MultiInviter";
 import * as mockVerification from "../../../../src/verification";
 import Modal from "../../../../src/Modal";
 import { E2EStatus } from "../../../../src/utils/ShieldUtils";
+import { DirectoryMember, startDmOnFirstMessage } from "../../../../src/utils/direct-messages";
+import { flushPromises } from "../../../test-utils";
+
+jest.mock("../../../../src/utils/direct-messages", () => ({
+    ...jest.requireActual("../../../../src/utils/direct-messages"),
+    startDmOnFirstMessage: jest.fn(),
+}));
 
 jest.mock("../../../../src/dispatcher/dispatcher");
 
@@ -80,6 +88,22 @@ const mockRoom = mocked({
     getEventReadUpTo: jest.fn(),
 } as unknown as Room);
 
+const mockSpace = mocked({
+    roomId: "!fkfk",
+    getType: jest.fn().mockReturnValue("m.space"),
+    isSpaceRoom: jest.fn().mockReturnValue(true),
+    getMember: jest.fn().mockReturnValue(undefined),
+    getMxcAvatarUrl: jest.fn().mockReturnValue("mock-avatar-url"),
+    name: "test room",
+    on: jest.fn(),
+    off: jest.fn(),
+    currentState: {
+        getStateEvents: jest.fn(),
+        on: jest.fn(),
+    },
+    getEventReadUpTo: jest.fn(),
+} as unknown as Room);
+
 const mockClient = mocked({
     getUser: jest.fn(),
     isGuest: jest.fn().mockReturnValue(false),
@@ -105,7 +129,7 @@ const mockClient = mocked({
     setPowerLevel: jest.fn(),
 } as unknown as MatrixClient);
 
-const defaultUserId = "@test:test";
+const defaultUserId = "@user:example.com";
 const defaultUser = new User(defaultUserId);
 
 beforeEach(() => {
@@ -258,7 +282,7 @@ describe("<UserInfoHeader />", () => {
 });
 
 describe("<DeviceItem />", () => {
-    const device: IDevice = { deviceId: "deviceId", getDisplayName: () => "deviceName" };
+    const device = { deviceId: "deviceId", getDisplayName: () => "deviceName" } as DeviceInfo;
     const defaultProps = {
         userId: defaultUserId,
         device,
@@ -404,7 +428,7 @@ describe("<UserOptionsSection />", () => {
         expect(screen.getByRole("button", { name: /share link to user/i })).toBeInTheDocument();
     });
 
-    it("does not show ignore or direct message buttons when member userId matches client userId ", () => {
+    it("does not show ignore or direct message buttons when member userId matches client userId", () => {
         mockClient.getUserId.mockReturnValueOnce(member.userId);
         renderComponent();
 
@@ -412,7 +436,7 @@ describe("<UserOptionsSection />", () => {
         expect(screen.queryByRole("button", { name: /message/i })).not.toBeInTheDocument();
     });
 
-    it("shows ignore, direct message and mention buttons when member userId does not match client userId ", () => {
+    it("shows ignore, direct message and mention buttons when member userId does not match client userId", () => {
         // call to client.getUserId returns undefined, which will not match member.userId
         renderComponent();
 
@@ -534,23 +558,6 @@ describe("<UserOptionsSection />", () => {
         });
     });
 
-    it("calling .invite with a null roomId still calls .invite and shows default error message", async () => {
-        inviteSpy.mockRejectedValue({ this: "could be anything" });
-
-        // render the component and click the button
-        renderComponent({ canInvite: true, member: { ...member, roomId: null } });
-        const inviteButton = screen.getByRole("button", { name: /invite/i });
-        expect(inviteButton).toBeInTheDocument();
-        await userEvent.click(inviteButton);
-
-        expect(inviteSpy).toHaveBeenCalledTimes(1);
-
-        // check that the default test error message is displayed
-        await waitFor(() => {
-            expect(screen.getByText(/operation failed/i)).toBeInTheDocument();
-        });
-    });
-
     it("shows a modal before ignoring the user", async () => {
         const originalCreateDialog = Modal.createDialog;
         const modalSpy = (Modal.createDialog = jest.fn().mockReturnValue({
@@ -596,6 +603,39 @@ describe("<UserOptionsSection />", () => {
         await userEvent.click(screen.getByRole("button", { name: "Unignore" }));
         expect(mockClient.setIgnoredUsers).toHaveBeenCalledWith([]);
     });
+
+    it.each([
+        ["for a RoomMember", member, member.getMxcAvatarUrl()],
+        ["for a User", defaultUser, defaultUser.avatarUrl],
+    ])(
+        "clicking »message« %s should start a DM",
+        async (test: string, member: RoomMember | User, expectedAvatarUrl: string | undefined) => {
+            const deferred = defer<string>();
+            mocked(startDmOnFirstMessage).mockReturnValue(deferred.promise);
+
+            renderComponent({ member });
+            await userEvent.click(screen.getByText("Message"));
+
+            // Checking the attribute, because the button is a DIV and toBeDisabled() does not work.
+            expect(screen.getByText("Message")).toHaveAttribute("disabled");
+
+            expect(startDmOnFirstMessage).toHaveBeenCalledWith(mockClient, [
+                new DirectoryMember({
+                    user_id: member.userId,
+                    display_name: member.rawDisplayName,
+                    avatar_url: expectedAvatarUrl,
+                }),
+            ]);
+
+            await act(async () => {
+                deferred.resolve("!dm:example.com");
+                await flushPromises();
+            });
+
+            // Checking the attribute, because the button is a DIV and toBeDisabled() does not work.
+            expect(screen.getByText("Message")).not.toHaveAttribute("disabled");
+        },
+    );
 });
 
 describe("<PowerLevelEditor />", () => {
@@ -722,14 +762,14 @@ describe("<RoomKickButton />", () => {
     it("clicking the kick button calls Modal.createDialog with the correct arguments", async () => {
         createDialogSpy.mockReturnValueOnce({ finished: Promise.resolve([]), close: jest.fn() });
 
-        renderComponent({ member: memberWithInviteMembership });
+        renderComponent({ room: mockSpace, member: memberWithInviteMembership });
         await userEvent.click(screen.getByText(/disinvite from/i));
 
         // check the last call arguments and the presence of the spaceChildFilter callback
         expect(createDialogSpy).toHaveBeenLastCalledWith(
             expect.any(Function),
             expect.objectContaining({ spaceChildFilter: expect.any(Function) }),
-            undefined,
+            "mx_ConfirmSpaceUserActionDialog_wrapper",
         );
 
         // test the spaceChildFilter callback
@@ -806,14 +846,14 @@ describe("<BanToggleButton />", () => {
     it("clicking the ban or unban button calls Modal.createDialog with the correct arguments if user is not banned", async () => {
         createDialogSpy.mockReturnValueOnce({ finished: Promise.resolve([]), close: jest.fn() });
 
-        renderComponent();
+        renderComponent({ room: mockSpace });
         await userEvent.click(screen.getByText(/ban from/i));
 
         // check the last call arguments and the presence of the spaceChildFilter callback
         expect(createDialogSpy).toHaveBeenLastCalledWith(
             expect.any(Function),
             expect.objectContaining({ spaceChildFilter: expect.any(Function) }),
-            undefined,
+            "mx_ConfirmSpaceUserActionDialog_wrapper",
         );
 
         // test the spaceChildFilter callback
@@ -844,14 +884,14 @@ describe("<BanToggleButton />", () => {
     it("clicking the ban or unban button calls Modal.createDialog with the correct arguments if user _is_ banned", async () => {
         createDialogSpy.mockReturnValueOnce({ finished: Promise.resolve([]), close: jest.fn() });
 
-        renderComponent({ member: memberWithBanMembership });
+        renderComponent({ room: mockSpace, member: memberWithBanMembership });
         await userEvent.click(screen.getByText(/ban from/i));
 
         // check the last call arguments and the presence of the spaceChildFilter callback
         expect(createDialogSpy).toHaveBeenLastCalledWith(
             expect.any(Function),
             expect.objectContaining({ spaceChildFilter: expect.any(Function) }),
-            undefined,
+            "mx_ConfirmSpaceUserActionDialog_wrapper",
         );
 
         // test the spaceChildFilter callback
@@ -955,9 +995,9 @@ describe("<RoomAdminToolsContainer />", () => {
 describe("disambiguateDevices", () => {
     it("does not add ambiguous key to unique names", () => {
         const initialDevices = [
-            { deviceId: "id1", getDisplayName: () => "name1" },
-            { deviceId: "id2", getDisplayName: () => "name2" },
-            { deviceId: "id3", getDisplayName: () => "name3" },
+            { deviceId: "id1", getDisplayName: () => "name1" } as DeviceInfo,
+            { deviceId: "id2", getDisplayName: () => "name2" } as DeviceInfo,
+            { deviceId: "id3", getDisplayName: () => "name3" } as DeviceInfo,
         ];
         disambiguateDevices(initialDevices);
 
@@ -969,14 +1009,14 @@ describe("disambiguateDevices", () => {
 
     it("adds ambiguous key to all ids with non-unique names", () => {
         const uniqueNameDevices = [
-            { deviceId: "id3", getDisplayName: () => "name3" },
-            { deviceId: "id4", getDisplayName: () => "name4" },
-            { deviceId: "id6", getDisplayName: () => "name6" },
+            { deviceId: "id3", getDisplayName: () => "name3" } as DeviceInfo,
+            { deviceId: "id4", getDisplayName: () => "name4" } as DeviceInfo,
+            { deviceId: "id6", getDisplayName: () => "name6" } as DeviceInfo,
         ];
         const nonUniqueNameDevices = [
-            { deviceId: "id1", getDisplayName: () => "nonUnique" },
-            { deviceId: "id2", getDisplayName: () => "nonUnique" },
-            { deviceId: "id5", getDisplayName: () => "nonUnique" },
+            { deviceId: "id1", getDisplayName: () => "nonUnique" } as DeviceInfo,
+            { deviceId: "id2", getDisplayName: () => "nonUnique" } as DeviceInfo,
+            { deviceId: "id5", getDisplayName: () => "nonUnique" } as DeviceInfo,
         ];
         const initialDevices = [...uniqueNameDevices, ...nonUniqueNameDevices];
         disambiguateDevices(initialDevices);

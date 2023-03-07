@@ -43,6 +43,8 @@ interface IState {
 export default class MLocationBody extends React.Component<IBodyProps, IState> {
     public static contextType = MatrixClientContext;
     public context!: React.ContextType<typeof MatrixClientContext>;
+
+    private unmounted = false;
     private mapId: string;
     private reconnectedListener: ClientEventHandlerMap[ClientEvent.Sync];
 
@@ -80,11 +82,15 @@ export default class MLocationBody extends React.Component<IBodyProps, IState> {
     };
 
     private onError = (error: Error): void => {
+        if (this.unmounted) return;
         this.setState({ error });
+        // Unregister first in case we already had it registered
+        this.context.off(ClientEvent.Sync, this.reconnectedListener);
         this.context.on(ClientEvent.Sync, this.reconnectedListener);
     };
 
     public componentWillUnmount(): void {
+        this.unmounted = true;
         this.context.off(ClientEvent.Sync, this.reconnectedListener);
     }
 

@@ -28,9 +28,10 @@ import Spinner from "../elements/Spinner";
 import AccessibleButton from "../elements/AccessibleButton";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import { IDialogProps } from "./IDialogProps";
 
-interface IProps extends IDialogProps {}
+interface IProps {
+    onFinished(): void;
+}
 
 export default class ServerOfflineDialog extends React.PureComponent<IProps> {
     public componentDidMount(): void {

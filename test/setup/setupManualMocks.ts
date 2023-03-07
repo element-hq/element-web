@@ -85,6 +85,7 @@ window.HTMLElement.prototype.scrollIntoView = jest.fn();
 fetchMock.config.overwriteRoutes = false;
 fetchMock.catch("");
 fetchMock.get("/image-file-stub", "image file stub");
+fetchMock.get("/_matrix/client/versions", {});
 // @ts-ignore
 window.fetch = fetchMock.sandbox();
 

@@ -128,7 +128,7 @@ describe("notifications", () => {
 
         it("sends a request even if everything has been read", () => {
             clearRoomNotification(room, client);
-            expect(sendReadReceiptSpy).not.toBeCalled();
+            expect(sendReadReceiptSpy).not.toHaveBeenCalled();
         });
 
         it("marks the room as read even if the receipt failed", async () => {
@@ -163,7 +163,7 @@ describe("notifications", () => {
 
         it("does not send any requests if everything has been read", () => {
             clearAllNotifications(client);
-            expect(sendReadReceiptSpy).not.toBeCalled();
+            expect(sendReadReceiptSpy).not.toHaveBeenCalled();
         });
 
         it("sends unthreaded receipt requests", () => {
@@ -178,7 +178,7 @@ describe("notifications", () => {
 
             clearAllNotifications(client);
 
-            expect(sendReadReceiptSpy).toBeCalledWith(message, ReceiptType.Read, true);
+            expect(sendReadReceiptSpy).toHaveBeenCalledWith(message, ReceiptType.Read, true);
         });
 
         it("sends private read receipts", () => {
@@ -195,7 +195,7 @@ describe("notifications", () => {
 
             clearAllNotifications(client);
 
-            expect(sendReadReceiptSpy).toBeCalledWith(message, ReceiptType.ReadPrivate, true);
+            expect(sendReadReceiptSpy).toHaveBeenCalledWith(message, ReceiptType.ReadPrivate, true);
         });
     });
 });

@@ -26,19 +26,19 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
-import { IDialogProps } from "./IDialogProps";
 import BaseDialog from "../dialogs/BaseDialog";
 import InfoDialog from "../dialogs/InfoDialog";
 import DialogButtons from "../elements/DialogButtons";
 import StyledCheckbox from "../elements/StyledCheckbox";
 
-interface IBulkRedactDialogProps extends IDialogProps {
+interface Props {
     matrixClient: MatrixClient;
     room: Room;
     member: RoomMember;
+    onFinished(redact?: boolean): void;
 }
 
-const BulkRedactDialog: React.FC<IBulkRedactDialogProps> = (props) => {
+const BulkRedactDialog: React.FC<Props> = (props) => {
     const { matrixClient: cli, room, member, onFinished } = props;
     const [keepStateEvents, setKeepStateEvents] = useState(true);
 

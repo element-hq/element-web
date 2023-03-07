@@ -24,7 +24,6 @@ import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
 import RoomAvatar from "../avatars/RoomAvatar";
 import SpaceStore from "../../../stores/spaces/SpaceStore";
-import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import Modal from "../../../Modal";
 import ManageRestrictedJoinRuleDialog from "../dialogs/ManageRestrictedJoinRuleDialog";
 import RoomUpgradeWarningDialog, { IFinishedOpts } from "../dialogs/RoomUpgradeWarningDialog";
@@ -74,17 +73,15 @@ const JoinRuleSettings: React.FC<IProps> = ({
             ? content.allow?.filter((o) => o.type === RestrictedAllowType.RoomMembership).map((o) => o.room_id)
             : undefined;
 
-    const editRestrictedRoomIds = async (): Promise<string[] | undefined> => {
+    const editRestrictedRoomIds = async (): Promise<string[]> => {
         let selected = restrictedAllowRoomIds;
         if (!selected?.length && SpaceStore.instance.activeSpaceRoom) {
             selected = [SpaceStore.instance.activeSpaceRoom.roomId];
         }
 
-        const matrixClient = MatrixClientPeg.get();
         const { finished } = Modal.createDialog(
             ManageRestrictedJoinRuleDialog,
             {
-                matrixClient,
                 room,
                 selected,
             },
@@ -127,7 +124,7 @@ const JoinRuleSettings: React.FC<IProps> = ({
             const shownSpaces = restrictedAllowRoomIds
                 .map((roomId) => cli.getRoom(roomId))
                 .filter((room) => room?.isSpaceRoom())
-                .slice(0, 4);
+                .slice(0, 4) as Room[];
 
             let moreText;
             if (shownSpaces.length < restrictedAllowRoomIds.length) {
@@ -234,7 +231,7 @@ const JoinRuleSettings: React.FC<IProps> = ({
     const onChange = async (joinRule: JoinRule): Promise<void> => {
         const beforeJoinRule = content.join_rule;
 
-        let restrictedAllowRoomIds: string[];
+        let restrictedAllowRoomIds: string[] | undefined;
         if (joinRule === JoinRule.Restricted) {
             if (beforeJoinRule === JoinRule.Restricted || roomSupportsRestricted) {
                 // Have the user pick which spaces to allow joins from
@@ -244,8 +241,8 @@ const JoinRuleSettings: React.FC<IProps> = ({
                 // Block this action on a room upgrade otherwise it'd make their room unjoinable
                 const targetVersion = preferredRestrictionVersion;
 
-                let warning: JSX.Element;
-                const userId = cli.getUserId();
+                let warning: JSX.Element | undefined;
+                const userId = cli.getUserId()!;
                 const unableToUpdateSomeParents = Array.from(SpaceStore.instance.getKnownParents(room.roomId)).some(
                     (roomId) => !cli.getRoom(roomId)?.currentState.maySendStateEvent(EventType.SpaceChild, userId),
                 );
@@ -332,7 +329,7 @@ const JoinRuleSettings: React.FC<IProps> = ({
             }
 
             // when setting to 0 allowed rooms/spaces set to invite only instead as per the note
-            if (!restrictedAllowRoomIds.length) {
+            if (!restrictedAllowRoomIds?.length) {
                 joinRule = JoinRule.Invite;
             }
         }
@@ -346,7 +343,7 @@ const JoinRuleSettings: React.FC<IProps> = ({
 
         // pre-set the accepted spaces with the currently viewed one as per the microcopy
         if (joinRule === JoinRule.Restricted) {
-            newContent.allow = restrictedAllowRoomIds.map((roomId) => ({
+            newContent.allow = restrictedAllowRoomIds?.map((roomId) => ({
                 type: RestrictedAllowType.RoomMembership,
                 room_id: roomId,
             }));

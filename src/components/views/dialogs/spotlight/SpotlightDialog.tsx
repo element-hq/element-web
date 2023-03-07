@@ -83,7 +83,6 @@ import Spinner from "../../elements/Spinner";
 import NotificationBadge from "../../rooms/NotificationBadge";
 import BaseDialog from "../BaseDialog";
 import FeedbackDialog from "../FeedbackDialog";
-import { IDialogProps } from "../IDialogProps";
 import { Option } from "./Option";
 import { PublicRoomResultDetails } from "./PublicRoomResultDetails";
 import { RoomResultContextMenus } from "./RoomResultContextMenus";
@@ -93,14 +92,16 @@ import { isLocalRoom } from "../../../../utils/localRoom/isLocalRoom";
 import { shouldShowFeedback } from "../../../../utils/Feedback";
 import RoomAvatar from "../../avatars/RoomAvatar";
 import { useFeatureEnabled } from "../../../../hooks/useSettings";
+import { filterBoolean } from "../../../../utils/arrays";
 
 const MAX_RECENT_SEARCHES = 10;
 const SECTION_LIMIT = 50; // only show 50 results per section for performance reasons
 const AVATAR_SIZE = 24;
 
-interface IProps extends IDialogProps {
+interface IProps {
     initialText?: string;
     initialFilter?: Filter;
+    onFinished(): void;
 }
 
 function refIsForRecentlyViewed(ref: RefObject<HTMLElement>): boolean {
@@ -173,13 +174,13 @@ const toPublicRoomResult = (publicRoom: IPublicRoomsChunkRoom): IPublicRoomResul
     publicRoom,
     section: Section.PublicRooms,
     filter: [Filter.PublicRooms],
-    query: [
+    query: filterBoolean([
         publicRoom.room_id.toLowerCase(),
         publicRoom.canonical_alias?.toLowerCase(),
         publicRoom.name?.toLowerCase(),
         sanitizeHtml(publicRoom.topic?.toLowerCase() ?? "", { allowedTags: [] }),
         ...(publicRoom.aliases?.map((it) => it.toLowerCase()) || []),
-    ].filter(Boolean) as string[],
+    ]),
 });
 
 const toRoomResult = (room: Room): IRoomResult => {

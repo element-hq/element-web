@@ -11,20 +11,26 @@ exports[`<RoomNotifications /> should render 1`] = `
       </h2>
       <ul>
         <li>
-          Room unread status: 
-          <strong>
-            None
-          </strong>
+          <span>
+            Room unread status: 
+            <strong>
+              None
+            </strong>
+          </span>
         </li>
         <li>
-          Notification state is 
-          <strong />
+          <span>
+            Notification state is 
+            <strong />
+          </span>
         </li>
         <li>
-          Room is 
-          <strong>
-            not encrypted 🚨
-          </strong>
+          <span>
+            Room is 
+            <strong>
+              not encrypted 🚨
+            </strong>
+          </span>
         </li>
       </ul>
     </section>

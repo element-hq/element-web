@@ -29,7 +29,6 @@ import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
 import { useSettingValue } from "../../../hooks/useSettings";
 import { Layout } from "../../../settings/enums/Layout";
-import { IDialogProps } from "./IDialogProps";
 import BaseDialog from "./BaseDialog";
 import { avatarUrlForUser } from "../../../Avatar";
 import EventTile from "../rooms/EventTile";
@@ -55,13 +54,14 @@ import { RoomContextDetails } from "../rooms/RoomContextDetails";
 
 const AVATAR_SIZE = 30;
 
-interface IProps extends IDialogProps {
+interface IProps {
     matrixClient: MatrixClient;
     // The event to forward
     event: MatrixEvent;
     // We need a permalink creator for the source room to pass through to EventTile
     // in case the event is a reply (even though the user can't get at the link)
     permalinkCreator: RoomPermalinkCreator;
+    onFinished(): void;
 }
 
 interface IEntryProps {

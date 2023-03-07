@@ -20,15 +20,16 @@ import Field, { IInputProps } from "../elements/Field";
 import withValidation, { IFieldState, IValidationResult } from "../elements/Validation";
 import { _t, _td } from "../../../languageHandler";
 
-interface IProps extends Omit<IInputProps, "onValidate"> {
+interface IProps extends Omit<IInputProps, "onValidate" | "label"> {
     id?: string;
     fieldRef?: RefCallback<Field> | RefObject<Field>;
     autoComplete?: string;
     value: string;
     password: string; // The password we're confirming
 
-    labelRequired?: string;
-    labelInvalid?: string;
+    label: string;
+    labelRequired: string;
+    labelInvalid: string;
 
     onChange(ev: React.FormEvent<HTMLElement>): void;
     onValidate?(result: IValidationResult): void;

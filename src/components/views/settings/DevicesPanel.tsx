@@ -1,5 +1,5 @@
 /*
-Copyright 2016 - 2021 The Matrix.org Foundation C.I.C.
+Copyright 2016 - 2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ import React from "react";
 import classNames from "classnames";
 import { IMyDevice } from "matrix-js-sdk/src/client";
 import { logger } from "matrix-js-sdk/src/logger";
-import { CrossSigningInfo } from "matrix-js-sdk/src/crypto/CrossSigning";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
 
 import { _t } from "../../../languageHandler";
@@ -27,6 +26,7 @@ import Spinner from "../elements/Spinner";
 import AccessibleButton from "../elements/AccessibleButton";
 import { deleteDevicesWithInteractiveAuth } from "./devices/deleteDevices";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import { isDeviceVerified } from "../../../utils/device/isDeviceVerified";
 
 interface IProps {
     className?: string;
@@ -34,7 +34,6 @@ interface IProps {
 
 interface IState {
     devices: IMyDevice[];
-    crossSigningInfo?: CrossSigningInfo;
     deviceLoadError?: string;
     selectedDevices: string[];
     deleting?: boolean;
@@ -65,7 +64,7 @@ export default class DevicesPanel extends React.Component<IProps, IState> {
     }
 
     private onDevicesUpdated = (users: string[]): void => {
-        if (!users.includes(this.context.getUserId())) return;
+        if (!users.includes(this.context.getUserId()!)) return;
         this.loadDevices();
     };
 
@@ -77,14 +76,12 @@ export default class DevicesPanel extends React.Component<IProps, IState> {
                     return;
                 }
 
-                const crossSigningInfo = cli.getStoredCrossSigningForUser(cli.getUserId());
                 this.setState((state, props) => {
                     const deviceIds = resp.devices.map((device) => device.device_id);
                     const selectedDevices = state.selectedDevices.filter((deviceId) => deviceIds.includes(deviceId));
                     return {
                         devices: resp.devices || [],
                         selectedDevices,
-                        crossSigningInfo: crossSigningInfo,
                     };
                 });
             },
@@ -123,16 +120,7 @@ export default class DevicesPanel extends React.Component<IProps, IState> {
     }
 
     private isDeviceVerified(device: IMyDevice): boolean | null {
-        try {
-            const cli = this.context;
-            const deviceInfo = cli.getStoredDevice(cli.getUserId(), device.device_id);
-            return this.state.crossSigningInfo
-                .checkDeviceTrust(this.state.crossSigningInfo, deviceInfo, false, true)
-                .isCrossSigningVerified();
-        } catch (e) {
-            console.error("Error getting device cross-signing info", e);
-            return null;
-        }
+        return isDeviceVerified(device, this.context);
     }
 
     private onDeviceSelectionToggled = (device: IMyDevice): void => {
@@ -264,9 +252,9 @@ export default class DevicesPanel extends React.Component<IProps, IState> {
         const otherDevices = devices.filter((device) => device.device_id !== myDeviceId);
         otherDevices.sort(this.deviceCompare);
 
-        const verifiedDevices = [];
-        const unverifiedDevices = [];
-        const nonCryptoDevices = [];
+        const verifiedDevices: IMyDevice[] = [];
+        const unverifiedDevices: IMyDevice[] = [];
+        const nonCryptoDevices: IMyDevice[] = [];
         for (const device of otherDevices) {
             const verified = this.isDeviceVerified(device);
             if (verified === true) {
@@ -283,7 +271,7 @@ export default class DevicesPanel extends React.Component<IProps, IState> {
                 return <React.Fragment />;
             }
 
-            let selectButton: JSX.Element;
+            let selectButton: JSX.Element | undefined;
             if (deviceList.length > 1) {
                 const anySelected = deviceList.some((device) => this.state.selectedDevices.includes(device.device_id));
                 const buttonAction = anySelected

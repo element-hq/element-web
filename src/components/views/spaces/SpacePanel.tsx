@@ -233,6 +233,7 @@ const CreateSpaceButton: React.FC<Pick<IInnerSpacePanelProps, "isPanelCollapsed"
                 collapsed: isPanelCollapsed,
             })}
             role="treeitem"
+            aria-selected={false}
         >
             <SpaceButton
                 data-testid="create-space-button"

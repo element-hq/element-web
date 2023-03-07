@@ -18,7 +18,6 @@ import React, { useMemo, useState } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
 
 import { _t } from "../../../languageHandler";
-import { IDialogProps } from "./IDialogProps";
 import BaseDialog from "./BaseDialog";
 import SearchBox from "../../structures/SearchBox";
 import SpaceStore from "../../../stores/spaces/SpaceStore";
@@ -28,9 +27,10 @@ import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import StyledCheckbox from "../elements/StyledCheckbox";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
-interface IProps extends IDialogProps {
+interface IProps {
     room: Room;
     selected?: string[];
+    onFinished(rooms?: string[]): void;
 }
 
 const Entry: React.FC<{

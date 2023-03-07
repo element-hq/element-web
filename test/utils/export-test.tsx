@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { renderToString } from "react-dom/server";
+import { render } from "@testing-library/react";
 import {
     IContent,
     MatrixClient,
@@ -227,6 +227,10 @@ describe("export", function () {
         return matrixEvents;
     }
 
+    function renderToString(elem: JSX.Element): string {
+        return render(elem).container.outerHTML;
+    }
+
     it("checks if the export format is valid", function () {
         function isValidFormat(format: string): boolean {
             const options: string[] = Object.values(ExportFormat);
@@ -255,7 +259,7 @@ describe("export", function () {
             },
             setProgressText,
         );
-        const imageRegex = /<img.+ src="mxc:\/\/test.org" alt="image.png"\/>/;
+        const imageRegex = /<img.+ src="mxc:\/\/test.org" alt="image\.png"\/?>/;
         expect(imageRegex.test(renderToString(exporter.getEventTile(mkImageEvent(), true)))).toBeTruthy();
     });
 
@@ -286,7 +290,7 @@ describe("export", function () {
         ],
     ];
     it.each(invalidExportOptions)("%s", (_d, options) => {
-        expect(() => new PlainTextExporter(mockRoom, ExportType.Beginning, options, setProgressText)).toThrowError(
+        expect(() => new PlainTextExporter(mockRoom, ExportType.Beginning, options, setProgressText)).toThrow(
             "Invalid export options",
         );
     });

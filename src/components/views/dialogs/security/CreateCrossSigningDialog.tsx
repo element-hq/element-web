@@ -32,7 +32,7 @@ import InteractiveAuthDialog from "../InteractiveAuthDialog";
 interface IProps {
     accountPassword?: string;
     tokenLogin?: boolean;
-    onFinished?: (success: boolean) => void;
+    onFinished?: (success?: boolean) => void;
 }
 
 interface IState {

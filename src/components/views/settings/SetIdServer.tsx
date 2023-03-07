@@ -97,7 +97,6 @@ export default class SetIdServer extends React.Component<IProps, IState> {
             defaultIdServer,
             currentClientIdServer: MatrixClientPeg.get().getIdentityServerUrl(),
             idServer: "",
-            error: null,
             busy: false,
             disconnectBusy: false,
             checking: false,
@@ -128,7 +127,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
         this.setState({ idServer: u });
     };
 
-    private getTooltip = (): JSX.Element => {
+    private getTooltip = (): ReactNode => {
         if (this.state.checking) {
             return (
                 <div>
@@ -154,7 +153,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
         });
         this.setState({
             busy: false,
-            error: null,
+            error: undefined,
             currentClientIdServer: fullUrl,
             idServer: "",
         });
@@ -164,7 +163,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
         e.preventDefault();
         const { idServer, currentClientIdServer } = this.state;
 
-        this.setState({ busy: true, checking: true, error: null });
+        this.setState({ busy: true, checking: true, error: undefined });
 
         const fullUrl = unabbreviateUrl(idServer);
 
@@ -184,7 +183,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
                 const hasTerms = await doesIdentityServerHaveTerms(fullUrl);
                 if (!hasTerms) {
                     const [confirmed] = await this.showNoTermsWarning(fullUrl);
-                    save = confirmed;
+                    save = !!confirmed;
                 }
 
                 // Show a general warning, possibly with details about any bound
@@ -193,7 +192,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
                     const [confirmed] = await this.showServerChangeWarning({
                         title: _t("Change identity server"),
                         unboundMessage: _t(
-                            "Disconnect from the identity server <current /> and " + "connect to <new /> instead?",
+                            "Disconnect from the identity server <current /> and connect to <new /> instead?",
                             {},
                             {
                                 current: (sub) => <b>{abbreviateUrl(currentClientIdServer)}</b>,
@@ -202,7 +201,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
                         ),
                         button: _t("Continue"),
                     });
-                    save = confirmed;
+                    save = !!confirmed;
                 }
 
                 if (save) {
@@ -216,13 +215,13 @@ export default class SetIdServer extends React.Component<IProps, IState> {
         this.setState({
             busy: false,
             checking: false,
-            error: errStr,
+            error: errStr ?? undefined,
             currentClientIdServer: MatrixClientPeg.get().getIdentityServerUrl(),
         });
     };
 
-    private showNoTermsWarning(fullUrl: string): Promise<[boolean]> {
-        const { finished } = Modal.createDialog<[boolean]>(QuestionDialog, {
+    private showNoTermsWarning(fullUrl: string): Promise<[ok?: boolean]> {
+        const { finished } = Modal.createDialog(QuestionDialog, {
             title: _t("Identity server has no terms of service"),
             description: (
                 <div>
@@ -265,7 +264,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
         title: string;
         unboundMessage: ReactNode;
         button: string;
-    }): Promise<[boolean]> {
+    }): Promise<[ok?: boolean]> {
         const { currentClientIdServer } = this.state;
 
         let threepids: IThreepid[] = [];
@@ -331,7 +330,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
                 <div>
                     <p>
                         {_t(
-                            "You are still <b>sharing your personal data</b> on the identity " + "server <idserver />.",
+                            "You are still <b>sharing your personal data</b> on the identity server <idserver />.",
                             {},
                             messageElements,
                         )}
@@ -350,7 +349,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
             message = unboundMessage;
         }
 
-        const { finished } = Modal.createDialog<[boolean]>(QuestionDialog, {
+        const { finished } = Modal.createDialog(QuestionDialog, {
             title,
             description: message,
             button,
@@ -375,7 +374,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
 
         this.setState({
             busy: false,
-            error: null,
+            error: undefined,
             currentClientIdServer: MatrixClientPeg.get().getIdentityServerUrl(),
             idServer: newFieldVal,
         });
@@ -453,7 +452,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
                     tooltipContent={this.getTooltip()}
                     tooltipClassName="mx_SetIdServer_tooltip"
                     disabled={this.state.busy}
-                    forceValidity={this.state.error ? false : null}
+                    forceValidity={this.state.error ? false : undefined}
                 />
                 <AccessibleButton
                     type="submit"

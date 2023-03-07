@@ -22,10 +22,11 @@ import { _t } from "../../../languageHandler";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
 import BugReportDialog from "./BugReportDialog";
-import { IDialogProps } from "./IDialogProps";
 import AccessibleButton from "../elements/AccessibleButton";
 
-interface IProps extends IDialogProps {}
+interface IProps {
+    onFinished(signOut?: boolean): void;
+}
 
 export default class StorageEvictedDialog extends React.Component<IProps> {
     private sendBugReport = (ev: React.MouseEvent): void => {
@@ -70,7 +71,7 @@ export default class StorageEvictedDialog extends React.Component<IProps> {
                         )}
                     </p>
                     <p>
-                        {_t("Your browser likely removed this data when running low on " + "disk space.")} {logRequest}
+                        {_t("Your browser likely removed this data when running low on disk space.")} {logRequest}
                     </p>
                 </div>
                 <DialogButtons

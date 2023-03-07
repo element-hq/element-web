@@ -198,7 +198,7 @@ function reject(error?: any): RunResult {
     return { error };
 }
 
-function success(promise?: Promise<any>): RunResult {
+function success(promise: Promise<any> = Promise.resolve()): RunResult {
     return { promise };
 }
 
@@ -221,7 +221,7 @@ export const Commands = [
         command: "spoiler",
         args: "<message>",
         description: _td("Sends the given message as a spoiler"),
-        runFn: function (roomId, message) {
+        runFn: function (roomId, message = "") {
             return successSync(ContentHelpers.makeHtmlMessage(message, `<span data-mx-spoiler>${message}</span>`));
         },
         category: CommandCategories.messages,
@@ -282,7 +282,7 @@ export const Commands = [
         command: "plain",
         args: "<message>",
         description: _td("Sends a message as plain text, without interpreting it as markdown"),
-        runFn: function (roomId, messages) {
+        runFn: function (roomId, messages = "") {
             return successSync(ContentHelpers.makeTextMessage(messages));
         },
         category: CommandCategories.messages,
@@ -291,7 +291,7 @@ export const Commands = [
         command: "html",
         args: "<message>",
         description: _td("Sends a message as html, without interpreting it as markdown"),
-        runFn: function (roomId, messages) {
+        runFn: function (roomId, messages = "") {
             return successSync(ContentHelpers.makeHtmlMessage(messages, messages));
         },
         category: CommandCategories.messages,
@@ -551,7 +551,7 @@ export const Commands = [
                     ) {
                         const defaultIdentityServerUrl = getDefaultIdentityServerUrl();
                         if (defaultIdentityServerUrl) {
-                            const { finished } = Modal.createDialog<[boolean]>(QuestionDialog, {
+                            const { finished } = Modal.createDialog(QuestionDialog, {
                                 title: _t("Use an identity server"),
                                 description: (
                                     <p>

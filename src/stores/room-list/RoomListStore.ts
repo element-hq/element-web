@@ -404,7 +404,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> implements 
         localStorage.setItem(`mx_tagSort_${tagId}`, sort);
     }
 
-    public getTagSorting(tagId: TagID): SortAlgorithm {
+    public getTagSorting(tagId: TagID): SortAlgorithm | null {
         return this.algorithm.getTagSorting(tagId);
     }
 
@@ -443,7 +443,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> implements 
         localStorage.setItem(`mx_listOrder_${tagId}`, order);
     }
 
-    public getListOrder(tagId: TagID): ListAlgorithm {
+    public getListOrder(tagId: TagID): ListAlgorithm | null {
         return this.algorithm.getListOrdering(tagId);
     }
 

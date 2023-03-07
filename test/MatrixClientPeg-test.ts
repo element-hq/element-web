@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
+import fetchMockJest from "fetch-mock-jest";
 
 import { advanceDateAndTime, stubClient } from "./test-utils";
 import { IMatrixClientPeg, MatrixClientPeg as peg } from "../src/MatrixClientPeg";
@@ -68,6 +69,7 @@ describe("MatrixClientPeg", () => {
             // instantiate a MatrixClientPegClass instance, with a new MatrixClient
             const PegClass = Object.getPrototypeOf(peg).constructor;
             testPeg = new PegClass();
+            fetchMockJest.get("http://example.com/_matrix/client/versions", {});
             testPeg.replaceUsingCreds({
                 accessToken: "SEKRET",
                 homeserverUrl: "http://example.com",

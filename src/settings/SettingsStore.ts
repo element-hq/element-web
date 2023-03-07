@@ -27,9 +27,9 @@ import RoomSettingsHandler from "./handlers/RoomSettingsHandler";
 import ConfigSettingsHandler from "./handlers/ConfigSettingsHandler";
 import { _t } from "../languageHandler";
 import dis from "../dispatcher/dispatcher";
-import { IFeature, ISetting, LabGroup, SETTINGS } from "./Settings";
+import { IFeature, ISetting, LabGroup, SETTINGS, defaultWatchManager } from "./Settings";
 import LocalEchoWrapper from "./handlers/LocalEchoWrapper";
-import { CallbackFn as WatchCallbackFn, WatchManager } from "./WatchManager";
+import { CallbackFn as WatchCallbackFn } from "./WatchManager";
 import { SettingLevel } from "./SettingLevel";
 import SettingsHandler from "./handlers/SettingsHandler";
 import { SettingUpdatedPayload } from "../dispatcher/payloads/SettingUpdatedPayload";
@@ -39,19 +39,17 @@ import dispatcher from "../dispatcher/dispatcher";
 import { ActionPayload } from "../dispatcher/payloads";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 
-const defaultWatchManager = new WatchManager();
-
 // Convert the settings to easier to manage objects for the handlers
 const defaultSettings: Record<string, any> = {};
 const invertedDefaultSettings: Record<string, boolean> = {};
 const featureNames: string[] = [];
-for (const key of Object.keys(SETTINGS)) {
-    defaultSettings[key] = SETTINGS[key].default;
-    if (SETTINGS[key].isFeature) featureNames.push(key);
-    if (SETTINGS[key].invertedSettingName) {
-        // Invert now so that the rest of the system will invert it back
-        // to what was intended.
-        invertedDefaultSettings[SETTINGS[key].invertedSettingName] = !SETTINGS[key].default;
+for (const key in SETTINGS) {
+    const setting = SETTINGS[key];
+    defaultSettings[key] = setting.default;
+    if (setting.isFeature) featureNames.push(key);
+    if (setting.invertedSettingName) {
+        // Invert now so that the rest of the system will invert it back to what was intended.
+        invertedDefaultSettings[setting.invertedSettingName] = !setting.default;
     }
 }
 
@@ -250,7 +248,7 @@ export default class SettingsStore {
             if (roomId === null) {
                 // Unregister all existing watchers and register the new one
                 rooms.forEach((roomId) => {
-                    SettingsStore.unwatchSetting(this.monitors.get(settingName)!.get(roomId));
+                    SettingsStore.unwatchSetting(this.monitors.get(settingName)!.get(roomId)!);
                 });
                 this.monitors.get(settingName)!.clear();
                 registerWatcher();

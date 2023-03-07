@@ -22,13 +22,13 @@ import { decodeRecoveryKey } from "matrix-js-sdk/src/crypto/recoverykey";
 import { encodeBase64 } from "matrix-js-sdk/src/crypto/olmlib";
 import { DeviceTrustLevel } from "matrix-js-sdk/src/crypto/CrossSigning";
 import { logger } from "matrix-js-sdk/src/logger";
-import { ComponentType } from "react";
 
+import type CreateSecretStorageDialog from "./async-components/views/dialogs/security/CreateSecretStorageDialog";
 import Modal from "./Modal";
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import { _t } from "./languageHandler";
 import { isSecureBackupRequired } from "./utils/WellKnownUtils";
-import AccessSecretStorageDialog from "./components/views/dialogs/security/AccessSecretStorageDialog";
+import AccessSecretStorageDialog, { KeyParams } from "./components/views/dialogs/security/AccessSecretStorageDialog";
 import RestoreKeyBackupDialog from "./components/views/dialogs/security/RestoreKeyBackupDialog";
 import SettingsStore from "./settings/SettingsStore";
 import SecurityCustomisations from "./customisations/Security";
@@ -82,8 +82,6 @@ async function confirmToDismiss(): Promise<boolean> {
     }).finished;
     return !sure;
 }
-
-type KeyParams = { passphrase: string; recoveryKey: string };
 
 function makeInputToKey(keyInfo: ISecretStorageKeyInfo): (keyParams: KeyParams) => Promise<Uint8Array> {
     return async ({ passphrase, recoveryKey }): Promise<Uint8Array> => {
@@ -333,7 +331,7 @@ export async function accessSecretStorage(func = async (): Promise<void> => {}, 
             // passphrase creation.
             const { finished } = Modal.createDialogAsync(
                 import("./async-components/views/dialogs/security/CreateSecretStorageDialog") as unknown as Promise<
-                    ComponentType<{}>
+                    typeof CreateSecretStorageDialog
                 >,
                 {
                     forceReset,

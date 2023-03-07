@@ -46,7 +46,7 @@ interface IProps {
     widgetDefinition: IModalWidgetOpenRequestData;
     widgetRoomId?: string;
     sourceWidgetId: string;
-    onFinished(success: boolean, data?: IModalWidgetReturnData): void;
+    onFinished(success?: boolean, data?: IModalWidgetReturnData): void;
 }
 
 interface IState {

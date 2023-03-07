@@ -24,17 +24,16 @@ import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
 import SpaceBasicSettings from "./SpaceBasicSettings";
 import { avatarUrlForRoom } from "../../../Avatar";
-import { IDialogProps } from "../dialogs/IDialogProps";
 import { htmlSerializeFromMdIfNeeded } from "../../../editor/serialize";
 import { leaveSpace } from "../../../utils/leave-behaviour";
 import { getTopic } from "../../../hooks/room/useTopic";
 
-interface IProps extends IDialogProps {
+interface IProps {
     matrixClient: MatrixClient;
     space: Room;
 }
 
-const SpaceSettingsGeneralTab: React.FC<IProps> = ({ matrixClient: cli, space, onFinished }) => {
+const SpaceSettingsGeneralTab: React.FC<IProps> = ({ matrixClient: cli, space }) => {
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState("");
 

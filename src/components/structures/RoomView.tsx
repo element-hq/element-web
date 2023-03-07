@@ -114,8 +114,13 @@ import { RoomSearchView } from "./RoomSearchView";
 import eventSearch from "../../Searching";
 import VoipUserMapper from "../../VoipUserMapper";
 import { isCallEvent } from "./LegacyCallEventGrouper";
+import { WidgetType } from "../../widgets/WidgetType";
+import WidgetUtils from "../../utils/WidgetUtils";
+import { shouldEncryptRoomWithSingle3rdPartyInvite } from "../../utils/room/shouldEncryptRoomWithSingle3rdPartyInvite";
+import { WaitingForThirdPartyRoomView } from "./WaitingForThirdPartyRoomView";
 
 const DEBUG = false;
+const PREVENT_MULTIPLE_JITSI_WITHIN = 30_000;
 let debuglog = function (msg: string): void {};
 
 const BROWSER_SUPPORTS_SANDBOX = "sandbox" in document.createElement("iframe");
@@ -228,6 +233,7 @@ export interface IRoomState {
 }
 
 interface LocalRoomViewProps {
+    localRoom: LocalRoom;
     resizeNotifier: ResizeNotifier;
     permalinkCreator: RoomPermalinkCreator;
     roomView: RefObject<HTMLElement>;
@@ -243,7 +249,7 @@ interface LocalRoomViewProps {
 function LocalRoomView(props: LocalRoomViewProps): ReactElement {
     const context = useContext(RoomContext);
     const room = context.room as LocalRoom;
-    const encryptionEvent = context.room.currentState.getStateEvents(EventType.RoomEncryption)[0];
+    const encryptionEvent = props.localRoom.currentState.getStateEvents(EventType.RoomEncryption)[0];
     let encryptionTile: ReactNode;
 
     if (encryptionEvent) {
@@ -258,8 +264,8 @@ function LocalRoomView(props: LocalRoomViewProps): ReactElement {
         });
     };
 
-    let statusBar: ReactElement;
-    let composer: ReactElement;
+    let statusBar: ReactElement | null = null;
+    let composer: ReactElement | null = null;
 
     if (room.isError) {
         const buttons = (
@@ -278,7 +284,7 @@ function LocalRoomView(props: LocalRoomViewProps): ReactElement {
     } else {
         composer = (
             <MessageComposer
-                room={context.room}
+                room={props.localRoom}
                 resizeNotifier={props.resizeNotifier}
                 permalinkCreator={props.permalinkCreator}
             />
@@ -290,7 +296,7 @@ function LocalRoomView(props: LocalRoomViewProps): ReactElement {
             <ErrorBoundary>
                 <RoomHeader
                     room={context.room}
-                    searchInfo={null}
+                    searchInfo={undefined}
                     inRoom={true}
                     onSearchClick={null}
                     onInviteClick={null}
@@ -339,7 +345,7 @@ function LocalRoomCreateLoader(props: ILocalRoomCreateLoaderProps): ReactElement
             <ErrorBoundary>
                 <RoomHeader
                     room={context.room}
-                    searchInfo={null}
+                    searchInfo={undefined}
                     inRoom={true}
                     onSearchClick={null}
                     onInviteClick={null}
@@ -370,7 +376,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
     private roomView = createRef<HTMLElement>();
     private searchResultsPanel = createRef<ScrollPanel>();
-    private messagePanel: TimelinePanel;
+    private messagePanel?: TimelinePanel;
     private roomViewBody = createRef<HTMLDivElement>();
 
     public static contextType = SDKContext;
@@ -379,15 +385,19 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     public constructor(props: IRoomProps, context: React.ContextType<typeof SDKContext>) {
         super(props, context);
 
+        if (!context.client) {
+            throw new Error("Unable to create RoomView without MatrixClient");
+        }
+
         const llMembers = context.client.hasLazyLoadMembersEnabled();
         this.state = {
-            roomId: null,
+            roomId: undefined,
             roomLoading: true,
             peekLoading: false,
             shouldPeek: true,
             membersLoaded: !llMembers,
             numUnreadMessages: 0,
-            callState: null,
+            callState: undefined,
             activeCall: null,
             canPeek: false,
             canSelfRedact: false,
@@ -483,6 +493,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     private onWidgetStoreUpdate = (): void => {
         if (!this.state.room) return;
         this.checkWidgets(this.state.room);
+        this.doMaybeRemoveOwnJitsiWidget();
     };
 
     private onWidgetEchoStoreUpdate = (): void => {
@@ -502,6 +513,56 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         }
         this.checkWidgets(this.state.room);
     };
+
+    /**
+     * Removes the Jitsi widget from the current user if
+     * - Multiple Jitsi widgets have been added within {@link PREVENT_MULTIPLE_JITSI_WITHIN}
+     * - The last (server timestamp) of these widgets is from the currrent user
+     * This solves the issue if some people decide to start a conference and click the call button at the same time.
+     */
+    private doMaybeRemoveOwnJitsiWidget(): void {
+        if (!this.state.roomId || !this.state.room || !this.context.client) return;
+
+        const apps = this.context.widgetStore.getApps(this.state.roomId);
+        const jitsiApps = apps.filter((app) => app.eventId && WidgetType.JITSI.matches(app.type));
+
+        // less than two Jitsi widgets → nothing to do
+        if (jitsiApps.length < 2) return;
+
+        const currentUserId = this.context.client.getSafeUserId();
+        const createdByCurrentUser = jitsiApps.find((apps) => apps.creatorUserId === currentUserId);
+
+        // no Jitsi widget from current user → nothing to do
+        if (!createdByCurrentUser) return;
+
+        const createdByCurrentUserEvent = this.state.room.findEventById(createdByCurrentUser.eventId!);
+
+        // widget event not found → nothing can be done
+        if (!createdByCurrentUserEvent) return;
+
+        const createdByCurrentUserTs = createdByCurrentUserEvent.getTs();
+
+        // widget timestamp is empty → nothing can be done
+        if (!createdByCurrentUserTs) return;
+
+        const lastCreatedByOtherTs = jitsiApps.reduce((maxByNow: number, app) => {
+            if (app.eventId === createdByCurrentUser.eventId) return maxByNow;
+
+            const appCreateTs = this.state.room!.findEventById(app.eventId!)?.getTs() || 0;
+            return Math.max(maxByNow, appCreateTs);
+        }, 0);
+
+        // last widget timestamp from other is empty → nothing can be done
+        if (!lastCreatedByOtherTs) return;
+
+        if (
+            createdByCurrentUserTs > lastCreatedByOtherTs &&
+            createdByCurrentUserTs - lastCreatedByOtherTs < PREVENT_MULTIPLE_JITSI_WITHIN
+        ) {
+            // more than one Jitsi widget with the last one from the current user → remove it
+            WidgetUtils.setRoomWidget(this.state.roomId, createdByCurrentUser.id);
+        }
+    }
 
     private checkWidgets = (room: Room): void => {
         this.setState({
@@ -1866,14 +1927,27 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         );
     }
 
-    private renderLocalRoomView(): ReactElement {
+    private renderLocalRoomView(localRoom: LocalRoom): ReactElement {
         return (
             <RoomContext.Provider value={this.state}>
                 <LocalRoomView
+                    localRoom={localRoom}
                     resizeNotifier={this.props.resizeNotifier}
                     permalinkCreator={this.permalinkCreator}
                     roomView={this.roomView}
                     onFileDrop={this.onFileDrop}
+                />
+            </RoomContext.Provider>
+        );
+    }
+
+    private renderWaitingForThirdPartyRoomView(inviteEvent: MatrixEvent): ReactElement {
+        return (
+            <RoomContext.Provider value={this.state}>
+                <WaitingForThirdPartyRoomView
+                    resizeNotifier={this.props.resizeNotifier}
+                    roomView={this.roomView}
+                    inviteEvent={inviteEvent}
                 />
             </RoomContext.Provider>
         );
@@ -1885,7 +1959,15 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 return this.renderLocalRoomCreateLoader();
             }
 
-            return this.renderLocalRoomView();
+            return this.renderLocalRoomView(this.state.room);
+        }
+
+        if (this.state.room) {
+            const { shouldEncrypt, inviteEvent } = shouldEncryptRoomWithSingle3rdPartyInvite(this.state.room);
+
+            if (shouldEncrypt) {
+                return this.renderWaitingForThirdPartyRoomView(inviteEvent);
+            }
         }
 
         if (!this.state.room) {
@@ -1903,6 +1985,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                                 loading={loading}
                                 joining={this.state.joining}
                                 oobData={this.props.oobData}
+                                roomId={this.state.roomId}
                             />
                         </ErrorBoundary>
                     </div>
@@ -1932,7 +2015,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                                 invitedEmail={invitedEmail}
                                 oobData={this.props.oobData}
                                 signUrl={this.props.threepidInvite?.signUrl}
-                                room={this.state.room}
+                                roomId={this.state.roomId}
                             />
                         </ErrorBoundary>
                     </div>
@@ -1969,6 +2052,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                             error={this.state.roomLoadError}
                             joining={this.state.joining}
                             rejecting={this.state.rejecting}
+                            roomId={this.state.roomId}
                         />
                     </ErrorBoundary>
                 );
@@ -1998,6 +2082,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                                 canPreview={false}
                                 joining={this.state.joining}
                                 room={this.state.room}
+                                roomId={this.state.roomId}
                             />
                         </ErrorBoundary>
                     </div>
@@ -2090,6 +2175,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                     oobData={this.props.oobData}
                     canPreview={this.state.canPeek}
                     room={this.state.room}
+                    roomId={this.state.roomId}
                 />
             );
             if (!this.state.canPeek && !this.state.room?.isSpaceRoom()) {

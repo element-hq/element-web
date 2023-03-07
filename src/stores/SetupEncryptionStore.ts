@@ -30,6 +30,7 @@ import { AccessCancelledError, accessSecretStorage } from "../SecurityManager";
 import Modal from "../Modal";
 import InteractiveAuthDialog from "../components/views/dialogs/InteractiveAuthDialog";
 import { _t } from "../languageHandler";
+import { SdkContextClass } from "../contexts/SDKContext";
 
 export enum Phase {
     Loading = 0,
@@ -224,6 +225,21 @@ export class SetupEncryptionStore extends EventEmitter {
                 const cli = MatrixClientPeg.get();
                 await cli.bootstrapCrossSigning({
                     authUploadDeviceSigningKeys: async (makeRequest): Promise<void> => {
+                        const cachedPassword = SdkContextClass.instance.accountPasswordStore.getPassword();
+
+                        if (cachedPassword) {
+                            await makeRequest({
+                                type: "m.login.password",
+                                identifier: {
+                                    type: "m.id.user",
+                                    user: cli.getUserId(),
+                                },
+                                user: cli.getUserId(),
+                                password: cachedPassword,
+                            });
+                            return;
+                        }
+
                         const { finished } = Modal.createDialog(InteractiveAuthDialog, {
                             title: _t("Setting up keys"),
                             matrixClient: cli,

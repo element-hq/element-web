@@ -139,14 +139,18 @@ export function getInitialLetter(name: string): string | undefined {
 
 export function avatarUrlForRoom(
     room: Room | null,
-    width: number,
-    height: number,
+    width?: number,
+    height?: number,
     resizeMethod?: ResizeMethod,
 ): string | null {
     if (!room) return null; // null-guard
 
     if (room.getMxcAvatarUrl()) {
-        return mediaFromMxc(room.getMxcAvatarUrl() || undefined).getThumbnailOfSourceHttp(width, height, resizeMethod);
+        const media = mediaFromMxc(room.getMxcAvatarUrl() ?? undefined);
+        if (width !== undefined && height !== undefined) {
+            return media.getThumbnailOfSourceHttp(width, height, resizeMethod);
+        }
+        return media.srcHttp;
     }
 
     // space rooms cannot be DMs so skip the rest
@@ -160,7 +164,11 @@ export function avatarUrlForRoom(
     // If there are only two members in the DM use the avatar of the other member
     const otherMember = room.getAvatarFallbackMember();
     if (otherMember?.getMxcAvatarUrl()) {
-        return mediaFromMxc(otherMember.getMxcAvatarUrl()).getThumbnailOfSourceHttp(width, height, resizeMethod);
+        const media = mediaFromMxc(otherMember.getMxcAvatarUrl());
+        if (width !== undefined && height !== undefined) {
+            return media.getThumbnailOfSourceHttp(width, height, resizeMethod);
+        }
+        return media.srcHttp;
     }
     return null;
 }

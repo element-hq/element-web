@@ -2,17 +2,6 @@ Changes in [3.67.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/
 =====================================================================================================
 
 ## ✨ Features
- * Fix block code styling in rich text editor ([\#10246](https://github.com/matrix-org/matrix-react-sdk/pull/10246)). Contributed by @alunturner.
- * Poll history: fetch more poll history ([\#10235](https://github.com/matrix-org/matrix-react-sdk/pull/10235)). Contributed by @kerryarchibald.
- * Sort short/exact emoji matches before longer incomplete matches ([\#10212](https://github.com/matrix-org/matrix-react-sdk/pull/10212)). Fixes vector-im/element-web#23210. Contributed by @grimhilt.
- * Poll history: detail screen ([\#10172](https://github.com/matrix-org/matrix-react-sdk/pull/10172)). Contributed by @kerryarchibald.
- * Provide a more detailed error message than "No known servers" ([\#6048](https://github.com/matrix-org/matrix-react-sdk/pull/6048)). Fixes vector-im/element-web#13247. Contributed by @aaronraimist.
- * Say when a call was answered from a different device ([\#10224](https://github.com/matrix-org/matrix-react-sdk/pull/10224)).
- * Widget permissions customizations using module api ([\#10121](https://github.com/matrix-org/matrix-react-sdk/pull/10121)). Contributed by @maheichyk.
- * Fix copy button icon overlapping with copyable text ([\#10227](https://github.com/matrix-org/matrix-react-sdk/pull/10227)). Contributed by @Adesh-Pandey.
- * Support joining non-peekable rooms via the module API ([\#10154](https://github.com/matrix-org/matrix-react-sdk/pull/10154)). Contributed by @maheichyk.
- * The "new login" toast does now display the same device information as in the settings. "No" does now open the device settings. "Yes, it was me" dismisses the toast. ([\#10200](https://github.com/matrix-org/matrix-react-sdk/pull/10200)).
- * Do not prompt for a password when doing a „reset all“ after login ([\#10208](https://github.com/matrix-org/matrix-react-sdk/pull/10208)).
  * Display "The sender has blocked you from receiving this message" error message instead of "Unable to decrypt message" ([\#10202](https://github.com/matrix-org/matrix-react-sdk/pull/10202)). Contributed by @florianduros.
  * Polls: show warning about undecryptable relations ([\#10179](https://github.com/matrix-org/matrix-react-sdk/pull/10179)). Contributed by @kerryarchibald.
  * Poll history: fetch last 30 days of polls ([\#10157](https://github.com/matrix-org/matrix-react-sdk/pull/10157)). Contributed by @kerryarchibald.
@@ -25,11 +14,7 @@ Changes in [3.67.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/
  * Render poll end events in timeline ([\#10027](https://github.com/matrix-org/matrix-react-sdk/pull/10027)). Contributed by @kerryarchibald.
 
 ## 🐛 Bug Fixes
- * Use the room avatar as a placeholder in calls ([\#10231](https://github.com/matrix-org/matrix-react-sdk/pull/10231)).
- * Fix calls showing as 'connecting' after hangup ([\#10223](https://github.com/matrix-org/matrix-react-sdk/pull/10223)).
  * Stop access token overflowing the box ([\#10069](https://github.com/matrix-org/matrix-react-sdk/pull/10069)). Fixes vector-im/element-web#24023. Contributed by @sbjaj33.
- * Prevent multiple Jitsi calls started at the same time ([\#10183](https://github.com/matrix-org/matrix-react-sdk/pull/10183)). Fixes vector-im/element-web#23009.
- * Make localization keys compatible with agglutinative and/or SOV type languages ([\#10159](https://github.com/matrix-org/matrix-react-sdk/pull/10159)). Contributed by @luixxiul.
  * Add link to next file in the export ([\#10190](https://github.com/matrix-org/matrix-react-sdk/pull/10190)). Fixes vector-im/element-web#20272. Contributed by @grimhilt.
  * Ended poll tiles: add ended the poll message ([\#10193](https://github.com/matrix-org/matrix-react-sdk/pull/10193)). Fixes vector-im/element-web#24579. Contributed by @kerryarchibald.
  * Fix accidentally inverted condition for room ordering ([\#10178](https://github.com/matrix-org/matrix-react-sdk/pull/10178)). Fixes vector-im/element-web#24527. Contributed by @justjanne.

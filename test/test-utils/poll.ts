@@ -66,9 +66,15 @@ export const makePollStartEvent = (
     });
 };
 
-export const makePollEndEvent = (pollStartEventId: string, roomId: string, sender: string, ts = 0): MatrixEvent => {
+export const makePollEndEvent = (
+    pollStartEventId: string,
+    roomId: string,
+    sender: string,
+    ts = 0,
+    id?: string,
+): MatrixEvent => {
     return new MatrixEvent({
-        event_id: uuid4(),
+        event_id: id || uuid4(),
         room_id: roomId,
         origin_server_ts: ts,
         type: M_POLL_END.name,

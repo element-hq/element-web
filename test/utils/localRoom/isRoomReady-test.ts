@@ -51,7 +51,7 @@ describe("isRoomReady", () => {
             mocked(client.getRoom).mockReturnValue(null);
         });
 
-        it("it should return false", () => {
+        it("should return false", () => {
             expect(isRoomReady(client, localRoom)).toBe(false);
         });
 
@@ -63,7 +63,7 @@ describe("isRoomReady", () => {
                 });
             });
 
-            it("it should return false", () => {
+            it("should return false", () => {
                 expect(isRoomReady(client, localRoom)).toBe(false);
             });
 
@@ -75,7 +75,7 @@ describe("isRoomReady", () => {
                     ]);
                 });
 
-                it("it should return false", () => {
+                it("should return false", () => {
                     expect(isRoomReady(client, localRoom)).toBe(false);
                 });
 
@@ -92,7 +92,7 @@ describe("isRoomReady", () => {
                         ]);
                     });
 
-                    it("it should return true", () => {
+                    it("should return true", () => {
                         expect(isRoomReady(client, localRoom)).toBe(true);
                     });
 
@@ -101,7 +101,7 @@ describe("isRoomReady", () => {
                             localRoom.encrypted = true;
                         });
 
-                        it("it should return false", () => {
+                        it("should return false", () => {
                             expect(isRoomReady(client, localRoom)).toBe(false);
                         });
 
@@ -118,7 +118,7 @@ describe("isRoomReady", () => {
                                 ]);
                             });
 
-                            it("it should return true", () => {
+                            it("should return true", () => {
                                 expect(isRoomReady(client, localRoom)).toBe(true);
                             });
                         });

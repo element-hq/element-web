@@ -25,13 +25,16 @@ import AccessibleButton from "../elements/AccessibleButton";
 import QRCode from "../elements/QRCode";
 import Heading from "../typography/Heading";
 import BaseDialog from "./BaseDialog";
-import { IDialogProps } from "./IDialogProps";
 
 const fallbackAppStore = "https://apps.apple.com/app/vector/id1083446067";
 const fallbackGooglePlay = "https://play.google.com/store/apps/details?id=im.vector.app";
 const fallbackFDroid = "https://f-droid.org/repository/browse/?fdid=im.vector.app";
 
-export const AppDownloadDialog: FC<IDialogProps> = ({ onFinished }: IDialogProps) => {
+interface Props {
+    onFinished(): void;
+}
+
+export const AppDownloadDialog: FC<Props> = ({ onFinished }) => {
     const brand = SdkConfig.get("brand");
     const desktopBuilds = SdkConfig.getObject("desktop_builds");
     const mobileBuilds = SdkConfig.getObject("mobile_builds");

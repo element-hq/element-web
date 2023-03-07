@@ -40,7 +40,5 @@ export const getBeaconDisplayStatus = (
     if (!latestLocationState) {
         return BeaconDisplayStatus.Loading;
     }
-    if (latestLocationState) {
-        return BeaconDisplayStatus.Active;
-    }
+    return BeaconDisplayStatus.Active;
 };

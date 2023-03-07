@@ -116,11 +116,11 @@ describe("direct-messages", () => {
             it("should create a local room and dispatch a view room event", async () => {
                 mocked(createDmLocalRoom).mockResolvedValue(localRoom);
                 const members = [member1];
-                const room = await dmModule.startDmOnFirstMessage(mockClient, members);
-                expect(room).toBe(localRoom);
+                const roomId = await dmModule.startDmOnFirstMessage(mockClient, members);
+                expect(roomId).toBe(localRoom.roomId);
                 expect(dis.dispatch).toHaveBeenCalledWith({
                     action: Action.ViewRoom,
-                    room_id: room.roomId,
+                    room_id: roomId,
                     joining: false,
                     targets: [member1],
                 });
@@ -135,8 +135,8 @@ describe("direct-messages", () => {
 
                 mocked(createDmLocalRoom).mockResolvedValue(localRoom);
                 const members = [member1];
-                const room = await dmModule.startDmOnFirstMessage(mockClient, members);
-                expect(room).toBe(localRoom);
+                const roomId = await dmModule.startDmOnFirstMessage(mockClient, members);
+                expect(roomId).toBe(localRoom.roomId);
 
                 // ensure that startDmOnFirstMessage tries to resolve 3rd-party IDs
                 expect(resolveThreePids).toHaveBeenCalledWith(members, mockClient);
@@ -152,8 +152,8 @@ describe("direct-messages", () => {
             });
 
             it("should return the room and dispatch a view room event", async () => {
-                const room = await dmModule.startDmOnFirstMessage(mockClient, [member1]);
-                expect(room).toBe(room1);
+                const roomId = await dmModule.startDmOnFirstMessage(mockClient, [member1]);
+                expect(roomId).toBe(room1.roomId);
                 expect(dis.dispatch).toHaveBeenCalledWith({
                     action: Action.ViewRoom,
                     room_id: room1.roomId,

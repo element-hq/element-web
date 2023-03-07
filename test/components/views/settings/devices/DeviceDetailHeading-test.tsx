@@ -47,7 +47,7 @@ describe("<DeviceDetailHeading />", () => {
         expect({ container }).toMatchSnapshot();
     });
 
-    it("renders device id as fallback when device has no display name ", () => {
+    it("renders device id as fallback when device has no display name", () => {
         const { getByText } = render(
             getComponent({
                 device: { ...device, display_name: undefined },

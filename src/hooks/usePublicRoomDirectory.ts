@@ -107,7 +107,7 @@ export const usePublicRoomDirectory = (): {
                         "org.matrix.msc3827.stable",
                     ))
                         ? Array.from<RoomType | null>(roomTypes)
-                        : null,
+                        : undefined,
                 };
             }
 

@@ -23,7 +23,7 @@ import { _t } from "../../../languageHandler";
 
 export class LegacyCallAnswerEventPreview implements IPreview {
     public getTextFor(event: MatrixEvent, tagId?: TagID): string {
-        if (shouldPrefixMessagesIn(event.getRoomId(), tagId)) {
+        if (shouldPrefixMessagesIn(event.getRoomId()!, tagId)) {
             if (isSelf(event)) {
                 return _t("You joined the call");
             } else {

@@ -31,19 +31,19 @@ const %%ComponentName%%: React.FC<Props> = () => {
 export default %%ComponentName%%;
 `,
     TEST: `
-import React from 'react';
-import { mount } from 'enzyme';
+import React from "react";
+import { render } from "@testing-library/react";
 
 import %%ComponentName%% from '%%RelativeComponentPath%%';
 
-describe('<%%ComponentName%% />', () => {
+describe("<%%ComponentName%% />", () => {
     const defaultProps = {};
     const getComponent = (props = {}) =>
-        mount(<%%ComponentName%% {...defaultProps} {...props} />);
+        render(<%%ComponentName%% {...defaultProps} {...props} />);
 
-    it('renders', () => {
-        const component = getComponent();
-        expect(component).toBeTruthy();
+    it("matches snapshot", () => {
+        const { asFragment } = getComponent();
+        expect(asFragment()).toMatchSnapshot()();
     });
 });
 `,

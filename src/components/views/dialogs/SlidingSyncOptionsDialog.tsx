@@ -19,7 +19,6 @@ import { MatrixClient, Method } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../languageHandler";
-import { IDialogProps } from "./IDialogProps";
 import SettingsStore from "../../../settings/SettingsStore";
 import TextInputDialog from "./TextInputDialog";
 import withValidation from "../elements/Validation";
@@ -63,7 +62,7 @@ async function proxyHealthCheck(endpoint: string, hsUrl?: string): Promise<void>
     logger.info("sliding sync proxy is OK");
 }
 
-export const SlidingSyncOptionsDialog: React.FC<IDialogProps> = ({ onFinished }) => {
+export const SlidingSyncOptionsDialog: React.FC<{ onFinished(enabled: boolean): void }> = ({ onFinished }) => {
     const cli = MatrixClientPeg.get();
     const currentProxy = SettingsStore.getValue("feature_sliding_sync_proxy_url");
     const hasNativeSupport = useAsyncMemo(

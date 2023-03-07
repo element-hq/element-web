@@ -77,8 +77,8 @@ class ReactionPicker extends React.Component<IProps, IState> {
         if (!this.props.reactions) {
             return {};
         }
-        const userId = MatrixClientPeg.get().getUserId();
-        const myAnnotations = this.props.reactions.getAnnotationsBySender()[userId] || new Set<MatrixEvent>();
+        const userId = MatrixClientPeg.get().getUserId()!;
+        const myAnnotations = this.props.reactions.getAnnotationsBySender()?.[userId] ?? new Set<MatrixEvent>();
         return Object.fromEntries(
             [...myAnnotations]
                 .filter((event) => !event.isRedacted())
@@ -97,9 +97,9 @@ class ReactionPicker extends React.Component<IProps, IState> {
         this.props.onFinished();
         const myReactions = this.getReactions();
         if (myReactions.hasOwnProperty(reaction)) {
-            if (this.props.mxEvent.isRedacted() || !this.context.canSelfRedact) return;
+            if (this.props.mxEvent.isRedacted() || !this.context.canSelfRedact) return false;
 
-            MatrixClientPeg.get().redactEvent(this.props.mxEvent.getRoomId(), myReactions[reaction]);
+            MatrixClientPeg.get().redactEvent(this.props.mxEvent.getRoomId()!, myReactions[reaction]);
             dis.dispatch<FocusComposerPayload>({
                 action: Action.FocusAComposer,
                 context: this.context.timelineRenderingType,
@@ -107,7 +107,7 @@ class ReactionPicker extends React.Component<IProps, IState> {
             // Tell the emoji picker not to bump this in the more frequently used list.
             return false;
         } else {
-            MatrixClientPeg.get().sendEvent(this.props.mxEvent.getRoomId(), EventType.Reaction, {
+            MatrixClientPeg.get().sendEvent(this.props.mxEvent.getRoomId()!, EventType.Reaction, {
                 "m.relates_to": {
                     rel_type: RelationType.Annotation,
                     event_id: this.props.mxEvent.getId(),

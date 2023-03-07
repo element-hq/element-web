@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { IAnnotatedPushRule, PushRuleAction } from "matrix-js-sdk/src/@types/PushRules";
+import { IAnnotatedPushRule, PushRuleAction, RuleId } from "matrix-js-sdk/src/@types/PushRules";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _td } from "../languageHandler";
@@ -29,15 +29,22 @@ type StateToActionsMap = {
 interface IVectorPushRuleDefinition {
     description: string;
     vectorStateToActions: StateToActionsMap;
+    /**
+     * Rules that should be updated to be kept in sync
+     * when this rule changes
+     */
+    syncedRuleIds?: (RuleId | string)[];
 }
 
 class VectorPushRuleDefinition {
     public readonly description: string;
     public readonly vectorStateToActions: StateToActionsMap;
+    public readonly syncedRuleIds?: (RuleId | string)[];
 
     public constructor(opts: IVectorPushRuleDefinition) {
         this.description = opts.description;
         this.vectorStateToActions = opts.vectorStateToActions;
+        this.syncedRuleIds = opts.syncedRuleIds;
     }
 
     // Translate the rule actions and its enabled value into vector state
@@ -125,6 +132,12 @@ export const VectorPushRulesDefinitions: Record<string, VectorPushRuleDefinition
             [VectorState.Loud]: StandardActions.ACTION_NOTIFY_DEFAULT_SOUND,
             [VectorState.Off]: StandardActions.ACTION_DONT_NOTIFY,
         },
+        syncedRuleIds: [
+            RuleId.PollStartOneToOne,
+            RuleId.PollStartOneToOneUnstable,
+            RuleId.PollEndOneToOne,
+            RuleId.PollEndOneToOneUnstable,
+        ],
     }),
 
     // Encrypted messages just sent to the user in a 1:1 room
@@ -147,6 +160,7 @@ export const VectorPushRulesDefinitions: Record<string, VectorPushRuleDefinition
             [VectorState.Loud]: StandardActions.ACTION_NOTIFY_DEFAULT_SOUND,
             [VectorState.Off]: StandardActions.ACTION_DONT_NOTIFY,
         },
+        syncedRuleIds: [RuleId.PollStart, RuleId.PollStartUnstable, RuleId.PollEnd, RuleId.PollEndUnstable],
     }),
 
     // Encrypted messages just sent to a group chat room

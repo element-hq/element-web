@@ -53,8 +53,8 @@ type CryptoContext = {
 };
 
 type DeviceContext = {
-    device_id: string;
-    mx_local_settings: string;
+    device_id?: string;
+    mx_local_settings: string | null;
     modernizr_missing_features?: string;
 };
 

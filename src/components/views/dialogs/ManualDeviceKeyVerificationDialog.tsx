@@ -25,11 +25,11 @@ import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import * as FormattingUtils from "../../../utils/FormattingUtils";
 import { _t } from "../../../languageHandler";
 import QuestionDialog from "./QuestionDialog";
-import { IDialogProps } from "./IDialogProps";
 
-interface IProps extends IDialogProps {
+interface IProps {
     userId: string;
     device: DeviceInfo;
+    onFinished(confirm?: boolean): void;
 }
 
 export default class ManualDeviceKeyVerificationDialog extends React.Component<IProps> {

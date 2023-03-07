@@ -112,7 +112,7 @@ exports[`<MessageEditHistory /> should match the snapshot 1`] = `
 </div>
 `;
 
-exports[`<MessageEditHistory /> should support events with  1`] = `
+exports[`<MessageEditHistory /> should support events with 1`] = `
 <div>
   <div
     data-focus-guard="true"

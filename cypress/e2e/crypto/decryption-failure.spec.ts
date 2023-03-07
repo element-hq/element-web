@@ -118,7 +118,12 @@ describe("Decryption Failure Bar", () => {
                         "Verify this device to access all messages",
                     );
 
-                    cy.percySnapshot("DecryptionFailureBar prompts user to verify");
+                    cy.get(".mx_DecryptionFailureBar").percySnapshotElement(
+                        "DecryptionFailureBar prompts user to verify",
+                        {
+                            widths: [320, 640],
+                        },
+                    );
 
                     cy.contains(".mx_DecryptionFailureBar_button", "Resend key requests").should("not.exist");
                     cy.contains(".mx_DecryptionFailureBar_button", "Verify").click();
@@ -146,8 +151,11 @@ describe("Decryption Failure Bar", () => {
                 "Open another device to load encrypted messages",
             );
 
-            cy.percySnapshot(
+            cy.get(".mx_DecryptionFailureBar").percySnapshotElement(
                 "DecryptionFailureBar prompts user to open another device, with Resend Key Requests button",
+                {
+                    widths: [320, 640],
+                },
             );
 
             cy.intercept("/_matrix/client/r0/sendToDevice/m.room_key_request/*").as("keyRequest");
@@ -155,8 +163,11 @@ describe("Decryption Failure Bar", () => {
             cy.wait("@keyRequest");
             cy.contains(".mx_DecryptionFailureBar_button", "Resend key requests").should("not.exist");
 
-            cy.percySnapshot(
-                "DecryptionFailureBar prompts user to open another device, " + "without Resend Key Requests button",
+            cy.get(".mx_DecryptionFailureBar").percySnapshotElement(
+                "DecryptionFailureBar prompts user to open another device, without Resend Key Requests button",
+                {
+                    widths: [320, 640],
+                },
             );
         },
     );
@@ -177,7 +188,9 @@ describe("Decryption Failure Bar", () => {
                 "Reset your keys to prevent future decryption errors",
             );
 
-            cy.percySnapshot("DecryptionFailureBar prompts user to reset keys");
+            cy.get(".mx_DecryptionFailureBar").percySnapshotElement("DecryptionFailureBar prompts user to reset keys", {
+                widths: [320, 640],
+            });
 
             cy.contains(".mx_DecryptionFailureBar_button", "Reset").click();
 
@@ -196,7 +209,12 @@ describe("Decryption Failure Bar", () => {
                 "Some messages could not be decrypted",
             );
 
-            cy.percySnapshot("DecryptionFailureBar displays general message with no call to action");
+            cy.get(".mx_DecryptionFailureBar").percySnapshotElement(
+                "DecryptionFailureBar displays general message with no call to action",
+                {
+                    widths: [320, 640],
+                },
+            );
         },
     );
 
@@ -210,7 +228,10 @@ describe("Decryption Failure Bar", () => {
         cy.get(".mx_DecryptionFailureBar").should("exist");
         cy.get(".mx_DecryptionFailureBar .mx_Spinner").should("exist");
 
-        cy.percySnapshot("DecryptionFailureBar displays loading spinner");
+        cy.get(".mx_DecryptionFailureBar").percySnapshotElement("DecryptionFailureBar displays loading spinner", {
+            allowSpinners: true,
+            widths: [320, 640],
+        });
 
         cy.wait(5000);
         cy.get(".mx_DecryptionFailureBar .mx_Spinner").should("not.exist");

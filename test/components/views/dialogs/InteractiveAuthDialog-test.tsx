@@ -39,7 +39,7 @@ describe("InteractiveAuthDialog", function () {
 
     beforeEach(function () {
         jest.clearAllMocks();
-        mockClient.credentials = null;
+        mockClient.credentials = { userId: null };
     });
 
     afterAll(() => {
@@ -79,7 +79,7 @@ describe("InteractiveAuthDialog", function () {
         await flushPromises();
 
         expect(makeRequest).toHaveBeenCalledTimes(1);
-        expect(makeRequest).toBeCalledWith(
+        expect(makeRequest).toHaveBeenCalledWith(
             expect.objectContaining({
                 session: "sess",
                 type: "m.login.password",
@@ -91,7 +91,7 @@ describe("InteractiveAuthDialog", function () {
             }),
         );
 
-        expect(onFinished).toBeCalledTimes(1);
-        expect(onFinished).toBeCalledWith(true, { a: 1 });
+        expect(onFinished).toHaveBeenCalledTimes(1);
+        expect(onFinished).toHaveBeenCalledWith(true, { a: 1 });
     });
 });

@@ -24,8 +24,8 @@ export default class ChangeDisplayName extends React.Component {
     private getDisplayName = async (): Promise<string> => {
         const cli = MatrixClientPeg.get();
         try {
-            const res = await cli.getProfileInfo(cli.getUserId());
-            return res.displayname;
+            const res = await cli.getProfileInfo(cli.getUserId()!);
+            return res.displayname ?? "";
         } catch (e) {
             throw new Error("Failed to fetch display name");
         }

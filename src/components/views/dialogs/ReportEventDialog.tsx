@@ -21,7 +21,6 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../languageHandler";
 import { ensureDMExists } from "../../../createRoom";
-import { IDialogProps } from "./IDialogProps";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import SdkConfig from "../../../SdkConfig";
 import Markdown from "../../../Markdown";
@@ -33,8 +32,9 @@ import Field from "../elements/Field";
 import Spinner from "../elements/Spinner";
 import LabelledCheckbox from "../elements/LabelledCheckbox";
 
-interface IProps extends IDialogProps {
+interface IProps {
     mxEvent: MatrixEvent;
+    onFinished(report?: boolean): void;
 }
 
 interface IState {

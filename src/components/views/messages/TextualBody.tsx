@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { createRef, SyntheticEvent, MouseEvent, ReactNode } from "react";
+import React, { createRef, SyntheticEvent, MouseEvent } from "react";
 import ReactDOM from "react-dom";
 import highlight from "highlight.js";
 import { MsgType } from "matrix-js-sdk/src/@types/event";
@@ -86,21 +86,21 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
     }
 
     private applyFormatting(): void {
-        const showLineNumbers = SettingsStore.getValue("showCodeLineNumbers");
-        this.activateSpoilers([this.contentRef.current]);
+        // Function is only called from render / componentDidMount → contentRef is set
+        const content = this.contentRef.current!;
 
-        // pillifyLinks BEFORE linkifyElement because plain room/user URLs in the composer
-        // are still sent as plaintext URLs. If these are ever pillified in the composer,
-        // we should be pillify them here by doing the linkifying BEFORE the pillifying.
-        pillifyLinks([this.contentRef.current], this.props.mxEvent, this.pills);
-        HtmlUtils.linkifyElement(this.contentRef.current);
+        const showLineNumbers = SettingsStore.getValue("showCodeLineNumbers");
+        this.activateSpoilers([content]);
+
+        HtmlUtils.linkifyElement(content);
+        pillifyLinks([content], this.props.mxEvent, this.pills);
 
         this.calculateUrlPreview();
 
         // tooltipifyLinks AFTER calculateUrlPreview because the DOM inside the tooltip
         // container is empty before the internal component has mounted so calculateUrlPreview
         // won't find any anchors
-        tooltipifyLinks([this.contentRef.current], this.pills, this.tooltips);
+        tooltipifyLinks([content], this.pills, this.tooltips);
 
         if (this.props.mxEvent.getContent().format === "org.matrix.custom.html") {
             // Handle expansion and add buttons
@@ -578,18 +578,16 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
 
         // only strip reply if this is the original replying event, edits thereafter do not have the fallback
         const stripReply = !mxEvent.replacingEvent() && !!getParentEventId(mxEvent);
-        let body: ReactNode;
-        if (!body) {
-            isEmote = content.msgtype === MsgType.Emote;
-            isNotice = content.msgtype === MsgType.Notice;
-            body = HtmlUtils.bodyToHtml(content, this.props.highlights, {
-                disableBigEmoji: isEmote || !SettingsStore.getValue<boolean>("TextualBody.enableBigEmoji"),
-                // Part of Replies fallback support
-                stripReplyFallback: stripReply,
-                ref: this.contentRef,
-                returnString: false,
-            });
-        }
+        isEmote = content.msgtype === MsgType.Emote;
+        isNotice = content.msgtype === MsgType.Notice;
+        let body = HtmlUtils.bodyToHtml(content, this.props.highlights, {
+            disableBigEmoji: isEmote || !SettingsStore.getValue<boolean>("TextualBody.enableBigEmoji"),
+            // Part of Replies fallback support
+            stripReplyFallback: stripReply,
+            ref: this.contentRef,
+            returnString: false,
+        });
+
         if (this.props.replacingEventId) {
             body = (
                 <>

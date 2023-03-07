@@ -38,7 +38,15 @@ function extractSuitableRoom(rooms: Room[], userId: string): Room | undefined {
                     (m) => !functionalUsers.includes(m.userId) && m.membership && isJoinedOrNearlyJoined(m.membership),
                 );
                 const otherMember = joinedMembers.find((m) => m.userId === userId);
-                return otherMember && joinedMembers.length === 2;
+
+                if (otherMember && joinedMembers.length === 2) {
+                    return true;
+                }
+
+                const thirdPartyInvites = r.currentState.getStateEvents("m.room.third_party_invite") || [];
+
+                // match room with pending third-party invite
+                return joinedMembers.length === 1 && thirdPartyInvites.length === 1;
             }
             return false;
         })

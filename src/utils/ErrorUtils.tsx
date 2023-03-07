@@ -34,12 +34,12 @@ import { _t, _td, Tags, TranslatedString } from "../languageHandler";
  * @returns {*} Translated string or react component
  */
 export function messageForResourceLimitError(
-    limitType: string,
+    limitType: string | undefined,
     adminContact: string | undefined,
     strings: Record<string, string>,
     extraTranslations?: Tags,
 ): TranslatedString {
-    let errString = strings[limitType];
+    let errString = limitType ? strings[limitType] : undefined;
     if (errString === undefined) errString = strings[""];
 
     const linkSub = (sub: string): ReactNode => {

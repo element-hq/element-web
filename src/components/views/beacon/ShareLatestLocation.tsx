@@ -28,9 +28,9 @@ interface Props {
 }
 
 const ShareLatestLocation: React.FC<Props> = ({ latestLocationState }) => {
-    const [coords, setCoords] = useState(null);
+    const [coords, setCoords] = useState<GeolocationCoordinates | undefined>();
     useEffect(() => {
-        if (!latestLocationState) {
+        if (!latestLocationState?.uri) {
             return;
         }
         const coords = parseGeoUri(latestLocationState.uri);

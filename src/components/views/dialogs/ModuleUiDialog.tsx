@@ -19,13 +19,13 @@ import { DialogContent, DialogProps } from "@matrix-org/react-sdk-module-api/lib
 import { logger } from "matrix-js-sdk/src/logger";
 
 import ScrollableBaseModal, { IScrollableBaseState } from "./ScrollableBaseModal";
-import { IDialogProps } from "./IDialogProps";
 import { _t } from "../../../languageHandler";
 
-interface IProps extends IDialogProps {
-    contentFactory: (props: DialogProps, ref: React.Ref<DialogContent>) => React.ReactNode;
+interface IProps<C extends React.Component = React.Component> {
+    contentFactory: (props: DialogProps, ref: React.Ref<C>) => React.ReactNode;
     contentProps: DialogProps;
     title: string;
+    onFinished(ok?: boolean, model?: Awaited<ReturnType<DialogContent["trySubmit"]>>): void;
 }
 
 interface IState extends IScrollableBaseState {

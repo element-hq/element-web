@@ -38,7 +38,7 @@ export function StatelessNotificationBadge({ symbol, count, color, ...props }: P
 
     // Don't show a badge if we don't need to
     if (color === NotificationColor.None || (hideBold && color == NotificationColor.Bold)) {
-        return null;
+        return <></>;
     }
 
     const hasUnreadCount = color >= NotificationColor.Grey && (!!count || !!symbol);
@@ -54,8 +54,8 @@ export function StatelessNotificationBadge({ symbol, count, color, ...props }: P
         mx_NotificationBadge_visible: isEmptyBadge ? true : hasUnreadCount,
         mx_NotificationBadge_highlighted: color >= NotificationColor.Red,
         mx_NotificationBadge_dot: isEmptyBadge,
-        mx_NotificationBadge_2char: symbol?.length > 0 && symbol?.length < 3,
-        mx_NotificationBadge_3char: symbol?.length > 2,
+        mx_NotificationBadge_2char: symbol && symbol.length > 0 && symbol.length < 3,
+        mx_NotificationBadge_3char: symbol && symbol.length > 2,
     });
 
     if (props.onClick) {

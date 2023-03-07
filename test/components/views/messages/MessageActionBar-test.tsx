@@ -195,7 +195,7 @@ describe("<MessageActionBar />", () => {
         // because beforeRedaction event is fired... before redaction
         // event is unchanged at point when this component updates
         // TODO file bug
-        xit("updates component on before redaction event", () => {
+        it.skip("updates component on before redaction event", () => {
             const event = new MatrixEvent({
                 type: EventType.RoomMessage,
                 sender: userId,

@@ -69,20 +69,30 @@ describe("EmojiProvider", function () {
         },
     );
 
-    it("Returns correct autocompletion based on recently used emoji", async function () {
+    it("Recently used emojis are correctly sorted", async function () {
         add("😘"); //kissing_heart
-        add("😘");
-        add("😚"); //kissing_closed_eyes
-        const emojiProvider = new EmojiProvider(null!);
+        add("💗"); //heartpulse
+        add("💗"); //heartpulse
+        add("😍"); //heart_eyes
 
-        let completionsList = await emojiProvider.getCompletions(":kis", { beginning: true, end: 3, start: 3 });
-        expect(completionsList[0].component!.props.title).toEqual(":kissing_heart:");
-        expect(completionsList[1].component!.props.title).toEqual(":kissing_closed_eyes:");
+        const ep = new EmojiProvider(testRoom);
+        const completionsList = await ep.getCompletions(":heart", { beginning: true, start: 0, end: 6 });
+        expect(completionsList[0]?.component?.props.title).toEqual(":heartpulse:");
+        expect(completionsList[1]?.component?.props.title).toEqual(":heart_eyes:");
+    });
 
-        completionsList = await emojiProvider.getCompletions(":kissing_c", { beginning: true, end: 3, start: 3 });
-        expect(completionsList[0].component!.props.title).toEqual(":kissing_closed_eyes:");
+    it("Exact match in recently used takes the lead", async function () {
+        add("😘"); //kissing_heart
+        add("💗"); //heartpulse
+        add("💗"); //heartpulse
+        add("😍"); //heart_eyes
 
-        completionsList = await emojiProvider.getCompletions(":so", { beginning: true, end: 2, start: 2 });
-        expect(completionsList[0].component!.props.title).toEqual(":sob:");
+        add("❤️"); //heart
+        const ep = new EmojiProvider(testRoom);
+        const completionsList = await ep.getCompletions(":heart", { beginning: true, start: 0, end: 6 });
+
+        expect(completionsList[0]?.component?.props.title).toEqual(":heart:");
+        expect(completionsList[1]?.component?.props.title).toEqual(":heartpulse:");
+        expect(completionsList[2]?.component?.props.title).toEqual(":heart_eyes:");
     });
 });

@@ -137,12 +137,10 @@ const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
         }
     }, [closeMainMenu, canShowMainMenu, mainMenuDisplayed]);
 
-    const spaceName = useTypedEventEmitterState(activeSpace, RoomEvent.Name, () => activeSpace?.name);
+    const spaceName = useTypedEventEmitterState(activeSpace ?? undefined, RoomEvent.Name, () => activeSpace?.name);
 
     useEffect(() => {
-        if (onVisibilityChange) {
-            onVisibilityChange();
-        }
+        onVisibilityChange?.();
     }, [onVisibilityChange]);
 
     const canExploreRooms = shouldShowComponent(UIComponent.ExploreRooms);
@@ -151,7 +149,7 @@ const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
 
     const hasPermissionToAddSpaceChild = activeSpace?.currentState?.maySendStateEvent(
         EventType.SpaceChild,
-        cli.getUserId(),
+        cli.getUserId()!,
     );
     const canAddSubRooms = hasPermissionToAddSpaceChild && canCreateRooms;
     const canAddSubSpaces = hasPermissionToAddSpaceChild && canCreateSpaces;
@@ -161,7 +159,7 @@ const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
     // communities and spaces, but is at risk of no options on the Home tab.
     const canShowPlusMenu = canCreateRooms || canExploreRooms || canCreateSpaces || activeSpace;
 
-    let contextMenu: JSX.Element;
+    let contextMenu: JSX.Element | undefined;
     if (mainMenuDisplayed && mainMenuHandle.current) {
         let ContextMenuComponent;
         if (activeSpace) {
@@ -179,7 +177,7 @@ const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
             />
         );
     } else if (plusMenuDisplayed && activeSpace) {
-        let inviteOption: JSX.Element;
+        let inviteOption: JSX.Element | undefined;
         if (shouldShowSpaceInvite(activeSpace)) {
             inviteOption = (
                 <IconizedContextMenuOption
@@ -195,8 +193,8 @@ const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
             );
         }
 
-        let newRoomOptions: JSX.Element;
-        if (activeSpace?.currentState.maySendStateEvent(EventType.RoomAvatar, cli.getUserId())) {
+        let newRoomOptions: JSX.Element | undefined;
+        if (activeSpace?.currentState.maySendStateEvent(EventType.RoomAvatar, cli.getUserId()!)) {
             newRoomOptions = (
                 <>
                     <IconizedContextMenuOption
@@ -265,7 +263,9 @@ const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
                             closePlusMenu();
                         }}
                         disabled={!canAddSubRooms}
-                        tooltip={!canAddSubRooms && _t("You do not have permissions to add rooms to this space")}
+                        tooltip={
+                            !canAddSubRooms ? _t("You do not have permissions to add rooms to this space") : undefined
+                        }
                     />
                     {canCreateSpaces && (
                         <IconizedContextMenuOption
@@ -278,7 +278,11 @@ const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
                                 closePlusMenu();
                             }}
                             disabled={!canAddSubSpaces}
-                            tooltip={!canAddSubSpaces && _t("You do not have permissions to add spaces to this space")}
+                            tooltip={
+                                !canAddSubSpaces
+                                    ? _t("You do not have permissions to add spaces to this space")
+                                    : undefined
+                            }
                         >
                             <BetaPill />
                         </IconizedContextMenuOption>
@@ -287,8 +291,8 @@ const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
             </IconizedContextMenu>
         );
     } else if (plusMenuDisplayed) {
-        let newRoomOpts: JSX.Element;
-        let joinRoomOpt: JSX.Element;
+        let newRoomOpts: JSX.Element | undefined;
+        let joinRoomOpt: JSX.Element | undefined;
 
         if (canCreateRooms) {
             newRoomOpts = (
@@ -366,7 +370,7 @@ const RoomListHeader: React.FC<IProps> = ({ onVisibilityChange }) => {
     }
 
     let title: string;
-    if (activeSpace) {
+    if (activeSpace && spaceName) {
         title = spaceName;
     } else {
         title = getMetaSpaceName(spaceKey as MetaSpace, allRoomsInHome);
