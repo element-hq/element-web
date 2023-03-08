@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { ReactNode } from "react";
 import { lexicographicCompare } from "matrix-js-sdk/src/utils";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { throttle } from "lodash";
@@ -36,6 +36,7 @@ interface IProps {
     userId: string;
     showApps: boolean; // Render apps
     resizeNotifier: ResizeNotifier;
+    children?: ReactNode;
 }
 
 interface Counter {

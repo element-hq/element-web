@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { ReactNode } from "react";
 
 import { _t } from "../../../languageHandler";
 
@@ -35,6 +35,7 @@ interface IProps {
     // A function which will be invoked when an overflow element is required.
     // This will be inserted after the children.
     createOverflowElement?: (overflowCount: number, totalCount: number) => React.ReactNode;
+    children?: ReactNode;
 }
 
 export default class TruncatedList extends React.Component<IProps> {

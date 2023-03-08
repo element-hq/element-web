@@ -81,6 +81,7 @@ interface ITileProps {
     selected?: boolean;
     numChildRooms?: number;
     hasPermissions?: boolean;
+    children?: ReactNode;
     onViewRoomClick(): void;
     onJoinRoomClick(): Promise<unknown>;
     onToggleClick?(): void;

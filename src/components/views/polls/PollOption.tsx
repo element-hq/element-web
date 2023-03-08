@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { ReactNode } from "react";
 import classNames from "classnames";
 import { PollAnswerSubevent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
 
@@ -47,6 +47,7 @@ interface PollOptionProps extends PollOptionContentProps {
     isEnded?: boolean;
     isChecked?: boolean;
     onOptionSelected?: (id: string) => void;
+    children?: ReactNode;
 }
 
 const EndedPollOption: React.FC<Omit<PollOptionProps, "voteCount" | "totalVoteCount">> = ({

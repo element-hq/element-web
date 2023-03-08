@@ -74,6 +74,7 @@ interface IProps {
      * of the wrapper
      */
     fixedChildren?: ReactNode;
+    children?: ReactNode;
 
     /* onFillRequest(backwards): a callback which is called on scroll when
      * the user nears the start (backwards = true) or end (backwards =

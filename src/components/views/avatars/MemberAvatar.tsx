@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useContext } from "react";
+import React, { ReactNode, useContext } from "react";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { ResizeMethod } from "matrix-js-sdk/src/@types/partials";
 
@@ -42,6 +42,7 @@ interface IProps extends Omit<React.ComponentProps<typeof BaseAvatar>, "name" | 
     style?: any;
     forceHistorical?: boolean; // true to deny `useOnlyCurrentProfiles` usage. Default false.
     hideTitle?: boolean;
+    children?: ReactNode;
 }
 
 export default function MemberAvatar({

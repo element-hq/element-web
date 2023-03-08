@@ -30,6 +30,7 @@ import { Layout } from "../../../settings/enums/Layout";
 interface IProps {
     mxEvent: MatrixEvent;
     layout: Layout;
+    children: ReactNode;
 }
 
 interface IState {

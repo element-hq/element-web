@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { MouseEvent } from "react";
+import React, { MouseEvent, ReactNode } from "react";
 import classNames from "classnames";
 
 import { formatCount } from "../../../../utils/FormattingUtils";
@@ -29,7 +29,7 @@ interface Props {
     onClick?: (ev: MouseEvent) => void;
     onMouseOver?: (ev: MouseEvent) => void;
     onMouseLeave?: (ev: MouseEvent) => void;
-    children?: React.ReactChildren | JSX.Element;
+    children?: ReactNode;
     label?: string;
 }
 

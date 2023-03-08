@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { ReactNode } from "react";
 
 import { _t } from "../../../languageHandler";
 
@@ -53,9 +53,10 @@ interface IProps {
     primaryDisabled?: boolean;
 
     // something to stick next to the buttons, optionally
-    additive?: React.ReactNode;
+    additive?: ReactNode;
 
     primaryButtonClass?: string;
+    children?: ReactNode;
 }
 
 /**

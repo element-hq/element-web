@@ -51,7 +51,9 @@ describe("<ContextMenu />", () => {
                 onFinished={onFinished}
                 chevronFace={ChevronFace.Left}
                 chevronOffset={targetChevronOffset}
-            />,
+            >
+                <React.Fragment />
+            </ContextMenu>,
         );
         const chevron = document.querySelector<HTMLElement>(".mx_ContextualMenu_chevron_left")!;
 
@@ -78,7 +80,9 @@ describe("<ContextMenu />", () => {
                 left={targetX}
                 chevronFace={ChevronFace.Top}
                 chevronOffset={targetChevronOffset}
-            />,
+            >
+                <React.Fragment />
+            </ContextMenu>,
         );
         const chevron = document.querySelector<HTMLElement>(".mx_ContextualMenu_chevron_top")!;
 
@@ -104,7 +108,9 @@ describe("<ContextMenu />", () => {
                 onFinished={onFinished}
                 chevronFace={ChevronFace.Right}
                 chevronOffset={targetChevronOffset}
-            />,
+            >
+                <React.Fragment />
+            </ContextMenu>,
         );
         const chevron = document.querySelector<HTMLElement>(".mx_ContextualMenu_chevron_right")!;
 
@@ -130,7 +136,9 @@ describe("<ContextMenu />", () => {
                 chevronFace={ChevronFace.Bottom}
                 onFinished={onFinished}
                 chevronOffset={targetChevronOffset}
-            />,
+            >
+                <React.Fragment />
+            </ContextMenu>,
         );
         const chevron = document.querySelector<HTMLElement>(".mx_ContextualMenu_chevron_bottom")!;
 
@@ -157,7 +165,9 @@ describe("<ContextMenu />", () => {
                 chevronFace={ChevronFace.Bottom}
                 onFinished={onFinished}
                 chevronOffset={targetChevronOffset}
-            />,
+            >
+                <React.Fragment />
+            </ContextMenu>,
         );
 
         expect(onFinished).not.toHaveBeenCalled();
@@ -177,7 +187,9 @@ describe("<ContextMenu />", () => {
                 chevronFace={ChevronFace.Bottom}
                 onFinished={onFinished}
                 chevronOffset={targetChevronOffset}
-            />,
+            >
+                <React.Fragment />
+            </ContextMenu>,
         );
 
         expect(onFinished).not.toHaveBeenCalled();

@@ -14,9 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { ReactNode } from "react";
 
-export default class CompleteSecurityBody extends React.PureComponent {
+export default class CompleteSecurityBody extends React.PureComponent<{ children: ReactNode }> {
     public render(): React.ReactNode {
         return <div className="mx_CompleteSecurityBody">{this.props.children}</div>;
     }

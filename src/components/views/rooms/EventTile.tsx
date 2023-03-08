@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { createRef, forwardRef, MouseEvent, RefObject } from "react";
+import React, { createRef, forwardRef, MouseEvent, ReactNode, RefObject } from "react";
 import classNames from "classnames";
 import { EventType, MsgType, RelationType } from "matrix-js-sdk/src/@types/event";
 import { EventStatus, MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/models/event";
@@ -840,7 +840,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         return false;
     }
 
-    private renderContextMenu(): React.ReactFragment {
+    private renderContextMenu(): ReactNode {
         if (!this.state.contextMenu) return null;
 
         const tile = this.getTile();
@@ -864,7 +864,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         );
     }
 
-    public render(): React.ReactNode {
+    public render(): ReactNode {
         const msgtype = this.props.mxEvent.getContent().msgtype;
         const eventType = this.props.mxEvent.getType();
         const {

@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { ReactNode } from "react";
 import classNames from "classnames";
 
 import { Alignment } from "./Tooltip";
@@ -32,6 +32,7 @@ interface ITooltipProps {
     className?: string;
     tooltipClassName?: string;
     kind?: InfoTooltipKind;
+    children?: ReactNode;
 }
 
 export default class InfoTooltip extends React.PureComponent<ITooltipProps> {

@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { MutableRefObject } from "react";
+import React, { MutableRefObject, ReactNode } from "react";
 import ReactDOM from "react-dom";
 import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 
@@ -58,6 +58,7 @@ interface IProps {
 
     // Handle to manually notify this PersistedElement that it needs to move
     moveRef?: MutableRefObject<(() => void) | undefined>;
+    children: ReactNode;
 }
 
 /**

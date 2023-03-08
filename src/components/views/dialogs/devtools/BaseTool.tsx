@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { createContext, useState } from "react";
+import React, { createContext, ReactNode, useState } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
 import classNames from "classnames";
 
@@ -29,6 +29,7 @@ export interface IDevtoolsProps {
 
 interface IMinProps extends Pick<IDevtoolsProps, "onBack"> {
     className?: string;
+    children?: ReactNode;
 }
 
 interface IProps extends IMinProps {

@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useState } from "react";
+import React, { ReactNode, useState } from "react";
 
 import QuestionDialog from "./QuestionDialog";
 import { _t } from "../../../languageHandler";
@@ -30,6 +30,7 @@ interface IProps {
     subheading: string;
     rageshakeLabel: string;
     rageshakeData?: Record<string, string>;
+    children?: ReactNode;
     onFinished(sendFeedback?: boolean): void;
 }
 

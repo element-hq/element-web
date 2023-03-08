@@ -35,11 +35,13 @@ interface IProps {
     onKeyDown?(ev: KeyboardEvent): void;
     cardState?: any;
     ref?: Ref<HTMLDivElement>;
+    children: ReactNode;
 }
 
 interface IGroupProps {
     className?: string;
     title: string;
+    children: ReactNode;
 }
 
 export const Group: React.FC<IGroupProps> = ({ className, title, children }) => {

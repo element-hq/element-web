@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useContext } from "react";
+import React, { ComponentProps, useContext } from "react";
 import { MatrixCapabilities } from "matrix-widget-api";
 import { logger } from "matrix-js-sdk/src/logger";
 import { ApprovalOpts, WidgetLifecycle } from "@matrix-org/react-sdk-module-api/lib/lifecycles/WidgetLifecycle";
@@ -38,7 +38,7 @@ import { getConfigLivestreamUrl, startJitsiAudioLivestream } from "../../../Live
 import { ModuleRunner } from "../../../modules/ModuleRunner";
 import { ElementWidget } from "../../../stores/widgets/StopGapWidget";
 
-interface IProps extends React.ComponentProps<typeof IconizedContextMenu> {
+interface IProps extends Omit<ComponentProps<typeof IconizedContextMenu>, "children"> {
     app: IApp;
     userWidget?: boolean;
     showUnpin?: boolean;

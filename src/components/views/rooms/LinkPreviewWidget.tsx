@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ComponentProps, createRef } from "react";
+import React, { ComponentProps, createRef, ReactNode } from "react";
 import { decode } from "html-entities";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { IPreviewUrlResponse } from "matrix-js-sdk/src/client";
@@ -32,6 +32,7 @@ interface IProps {
     link: string;
     preview: IPreviewUrlResponse;
     mxEvent: MatrixEvent; // the Event associated with the preview
+    children?: ReactNode;
 }
 
 export default class LinkPreviewWidget extends React.Component<IProps> {

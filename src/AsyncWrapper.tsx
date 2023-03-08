@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ComponentType } from "react";
+import React, { ComponentType, PropsWithChildren } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "./languageHandler";
@@ -31,7 +31,7 @@ interface IProps {
 }
 
 interface IState {
-    component?: ComponentType;
+    component?: ComponentType<PropsWithChildren<any>>;
     error?: Error;
 }
 

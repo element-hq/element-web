@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { ReactNode } from "react";
 import { NumberSize, Resizable } from "re-resizable";
 import { Direction } from "re-resizable/lib/resizer";
 
@@ -25,6 +25,7 @@ interface IProps {
     resizeNotifier: ResizeNotifier;
     collapsedRhs?: boolean;
     panel?: JSX.Element;
+    children: ReactNode;
 }
 
 export default class MainSplit extends React.Component<IProps> {
