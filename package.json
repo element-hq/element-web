@@ -167,7 +167,6 @@
         "string-replace-loader": "3",
         "style-loader": "2",
         "stylelint": "^15.0.0",
-        "stylelint-config-prettier": "^9.0.4",
         "stylelint-config-standard": "^30.0.0",
         "stylelint-scss": "^4.2.0",
         "terser-webpack-plugin": "^4.0.0",
