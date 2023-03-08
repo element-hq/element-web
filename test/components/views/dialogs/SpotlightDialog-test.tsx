@@ -198,11 +198,17 @@ describe("Spotlight Dialog", () => {
 
     describe("when MSC3946 dynamic room predecessors is enabled", () => {
         beforeEach(() => {
-            SettingsStore.setValue("feature_dynamic_room_predecessors", null, SettingLevel.DEVICE, true);
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((settingName, roomId, excludeDefault) => {
+                if (settingName === "feature_dynamic_room_predecessors") {
+                    return true;
+                } else {
+                    return []; // SpotlightSearch.recentSearches
+                }
+            });
         });
 
         afterEach(() => {
-            SettingsStore.setValue("feature_dynamic_room_predecessors", null, SettingLevel.DEVICE, null);
+            jest.restoreAllMocks();
         });
 
         it("should call getVisibleRooms with MSC3946 dynamic room predecessors", async () => {

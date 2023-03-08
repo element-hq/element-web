@@ -203,11 +203,19 @@ describe("RoomView", () => {
             expect(instance.getHiddenHighlightCount()).toBe(23);
         });
 
-        it("and feature_dynamic_room_predecessors is enabled it should pass the setting to findPredecessor", async () => {
-            SettingsStore.setValue("feature_dynamic_room_predecessors", null, SettingLevel.DEVICE, true);
-            expect(instance.getHiddenHighlightCount()).toBe(0);
-            expect(room.findPredecessor).toHaveBeenCalledWith(true);
-            SettingsStore.setValue("feature_dynamic_room_predecessors", null, SettingLevel.DEVICE, null);
+        describe("and feature_dynamic_room_predecessors is enabled", () => {
+            beforeEach(() => {
+                instance.setState({ msc3946ProcessDynamicPredecessor: true });
+            });
+
+            afterEach(() => {
+                instance.setState({ msc3946ProcessDynamicPredecessor: false });
+            });
+
+            it("should pass the setting to findPredecessor", async () => {
+                expect(instance.getHiddenHighlightCount()).toBe(0);
+                expect(room.findPredecessor).toHaveBeenCalledWith(true);
+            });
         });
     });
 
