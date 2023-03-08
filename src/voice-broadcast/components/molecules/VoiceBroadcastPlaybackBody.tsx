@@ -25,8 +25,8 @@ import {
     VoiceBroadcastPlaybackState,
 } from "../..";
 import { useVoiceBroadcastPlayback } from "../../hooks/useVoiceBroadcastPlayback";
-import { Icon as Back30sIcon } from "../../../../res/img/element-icons/Back30s.svg";
-import { Icon as Forward30sIcon } from "../../../../res/img/element-icons/Forward30s.svg";
+import { Icon as Back30sIcon } from "../../../../res/img/compound/back-30s-24px.svg";
+import { Icon as Forward30sIcon } from "../../../../res/img/compound/forward-30s-24px.svg";
 import { _t } from "../../../languageHandler";
 import Clock from "../../../components/views/audio_messages/Clock";
 import SeekBar from "../../../components/views/audio_messages/SeekBar";

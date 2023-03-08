@@ -19,7 +19,7 @@ import { render, RenderResult, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import { VoiceBroadcastControl } from "../../../../src/voice-broadcast";
-import { Icon as StopIcon } from "../../../../res/img/element-icons/Stop.svg";
+import { Icon as StopIcon } from "../../../../res/img/compound/stop-16.svg";
 
 describe("VoiceBroadcastControl", () => {
     let result: RenderResult;
@@ -31,7 +31,8 @@ describe("VoiceBroadcastControl", () => {
 
     describe("when rendering it", () => {
         beforeEach(() => {
-            result = render(<VoiceBroadcastControl onClick={onClick} label="test label" icon={StopIcon} />);
+            const stopIcon = <StopIcon className="mx_Icon mx_Icon_16" />;
+            result = render(<VoiceBroadcastControl onClick={onClick} label="test label" icon={stopIcon} />);
         });
 
         it("should render as expected", () => {

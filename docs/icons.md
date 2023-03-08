@@ -9,7 +9,8 @@ Icons have `role="presentation"` and `aria-hidden` automatically applied. These 
 SVG file recommendations:
 
 -   Colours should not be defined absolutely. Use `currentColor` instead.
--   There should not be a padding in SVG files. It should be added by CSS.
+-   SVG files should be taken from the design compound as they are. Some icons contain special padding.
+    This means that there should be icons for each size, e.g. warning-16px and warning-32px.
 
 Example usage:
 

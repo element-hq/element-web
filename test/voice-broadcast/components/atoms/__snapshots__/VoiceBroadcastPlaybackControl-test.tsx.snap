@@ -9,7 +9,7 @@ exports[`<VoiceBroadcastPlaybackControl /> should render state buffering as expe
     tabindex="0"
   >
     <div
-      class="mx_Icon mx_Icon_16"
+      class="mx_Icon mx_Icon_12"
     />
   </div>
 </div>
@@ -39,7 +39,7 @@ exports[`<VoiceBroadcastPlaybackControl /> should render state playing as expect
     tabindex="0"
   >
     <div
-      class="mx_Icon mx_Icon_16"
+      class="mx_Icon mx_Icon_12"
     />
   </div>
 </div>

@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from "react";
 
-import { Icon as WarningIcon } from "../../../../res/img/element-icons/warning.svg";
+import { Icon as WarningIcon } from "../../../../res/img/compound/error-16px.svg";
 
 interface Props {
     message: string;

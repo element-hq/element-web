@@ -18,7 +18,7 @@ import React, { ReactNode } from "react";
 
 import AccessibleButton from "../../../views/elements/AccessibleButton";
 import { Icon as EMailPromptIcon } from "../../../../../res/img/element-icons/email-prompt.svg";
-import { Icon as RetryIcon } from "../../../../../res/img/element-icons/retry.svg";
+import { Icon as RetryIcon } from "../../../../../res/img/compound/retry-16px.svg";
 import { _t } from "../../../../languageHandler";
 import Tooltip, { Alignment } from "../../../views/elements/Tooltip";
 import { useTimeoutToggle } from "../../../../hooks/useTimeoutToggle";

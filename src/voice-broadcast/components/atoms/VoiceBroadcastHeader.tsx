@@ -16,13 +16,13 @@ import { Room } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 
 import { LiveBadge, VoiceBroadcastLiveness } from "../..";
-import { Icon as LiveIcon } from "../../../../res/img/element-icons/live.svg";
-import { Icon as MicrophoneIcon } from "../../../../res/img/element-icons/mic.svg";
-import { Icon as TimerIcon } from "../../../../res/img/element-icons/Timer.svg";
+import { Icon as LiveIcon } from "../../../../res/img/compound/live-16px.svg";
+import { Icon as MicrophoneIcon } from "../../../../res/img/compound/mic-16px.svg";
+import { Icon as TimerIcon } from "../../../../res/img/compound/timer-16px.svg";
+import { Icon as XIcon } from "../../../../res/img/compound/close-16px.svg";
 import { _t } from "../../../languageHandler";
 import RoomAvatar from "../../../components/views/avatars/RoomAvatar";
 import AccessibleButton, { ButtonEvent } from "../../../components/views/elements/AccessibleButton";
-import { Icon as XIcon } from "../../../../res/img/element-icons/cancel-rounded.svg";
 import Clock from "../../../components/views/audio_messages/Clock";
 import { formatTimeLeft } from "../../../DateUtils";
 import Spinner from "../../../components/views/elements/Spinner";

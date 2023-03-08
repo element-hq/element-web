@@ -25,10 +25,10 @@ import {
 } from "../..";
 import { useVoiceBroadcastRecording } from "../../hooks/useVoiceBroadcastRecording";
 import { VoiceBroadcastHeader } from "../atoms/VoiceBroadcastHeader";
-import { Icon as StopIcon } from "../../../../res/img/element-icons/Stop.svg";
-import { Icon as PauseIcon } from "../../../../res/img/element-icons/pause.svg";
-import { Icon as RecordIcon } from "../../../../res/img/element-icons/Record.svg";
-import { Icon as MicrophoneIcon } from "../../../../res/img/element-icons/mic.svg";
+import { Icon as StopIcon } from "../../../../res/img/compound/stop-16.svg";
+import { Icon as PauseIcon } from "../../../../res/img/compound/pause-12.svg";
+import { Icon as RecordIcon } from "../../../../res/img/compound/record-10px.svg";
+import { Icon as MicrophoneIcon } from "../../../../res/img/compound/mic-16px.svg";
 import { _t } from "../../../languageHandler";
 import { useAudioDeviceSelection } from "../../../hooks/useAudioDeviceSelection";
 import { DevicesContextMenu } from "../../../components/views/audio_messages/DevicesContextMenu";
@@ -75,11 +75,15 @@ export const VoiceBroadcastRecordingPip: React.FC<VoiceBroadcastRecordingPipProp
             <VoiceBroadcastControl
                 className="mx_VoiceBroadcastControl-recording"
                 onClick={toggleRecording}
-                icon={RecordIcon}
+                icon={<RecordIcon className="mx_Icon mx_Icon_12" />}
                 label={_t("resume voice broadcast")}
             />
         ) : (
-            <VoiceBroadcastControl onClick={toggleRecording} icon={PauseIcon} label={_t("pause voice broadcast")} />
+            <VoiceBroadcastControl
+                onClick={toggleRecording}
+                icon={<PauseIcon className="mx_Icon mx_Icon_12" />}
+                label={_t("pause voice broadcast")}
+            />
         );
 
     const controls =
@@ -94,7 +98,11 @@ export const VoiceBroadcastRecordingPip: React.FC<VoiceBroadcastRecordingPipProp
                 >
                     <MicrophoneIcon className="mx_Icon mx_Icon_16 mx_Icon_alert" />
                 </AccessibleTooltipButton>
-                <VoiceBroadcastControl icon={StopIcon} label="Stop Recording" onClick={stopRecording} />
+                <VoiceBroadcastControl
+                    icon={<StopIcon className="mx_Icon mx_Icon_16" />}
+                    label="Stop Recording"
+                    onClick={stopRecording}
+                />
             </div>
         );
 

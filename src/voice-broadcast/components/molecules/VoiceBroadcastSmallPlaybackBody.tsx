@@ -24,7 +24,7 @@ import {
 } from "../..";
 import AccessibleButton from "../../../components/views/elements/AccessibleButton";
 import { useVoiceBroadcastPlayback } from "../../hooks/useVoiceBroadcastPlayback";
-import { Icon as XIcon } from "../../../../res/img/element-icons/cancel-rounded.svg";
+import { Icon as XIcon } from "../../../../res/img/compound/close-8px.svg";
 
 interface VoiceBroadcastSmallPlaybackBodyProps {
     playback: VoiceBroadcastPlayback;

@@ -73,7 +73,7 @@ exports[`VoiceBroadcastRecordingPip when rendering a paused recording should ren
         tabindex="0"
       >
         <div
-          class="mx_Icon mx_Icon_16"
+          class="mx_Icon mx_Icon_12"
         />
       </div>
       <div
@@ -174,7 +174,7 @@ exports[`VoiceBroadcastRecordingPip when rendering a started recording should re
         tabindex="0"
       >
         <div
-          class="mx_Icon mx_Icon_16"
+          class="mx_Icon mx_Icon_12"
         />
       </div>
       <div

@@ -85,7 +85,7 @@ exports[`VoiceBroadcastPlaybackBody when rendering a buffering voice broadcast s
         tabindex="0"
       >
         <div
-          class="mx_Icon mx_Icon_16"
+          class="mx_Icon mx_Icon_12"
         />
       </div>
       <div
@@ -319,7 +319,7 @@ exports[`VoiceBroadcastPlaybackBody when rendering a playing broadcast in pip mo
         tabindex="0"
       >
         <div
-          class="mx_Icon mx_Icon_16"
+          class="mx_Icon mx_Icon_12"
         />
       </div>
       <div
@@ -430,7 +430,7 @@ exports[`VoiceBroadcastPlaybackBody when rendering a playing broadcast should re
         tabindex="0"
       >
         <div
-          class="mx_Icon mx_Icon_16"
+          class="mx_Icon mx_Icon_12"
         />
       </div>
       <div
@@ -549,7 +549,7 @@ exports[`VoiceBroadcastPlaybackBody when rendering a playing/live broadcast shou
         tabindex="0"
       >
         <div
-          class="mx_Icon mx_Icon_16"
+          class="mx_Icon mx_Icon_12"
         />
       </div>
       <div
