@@ -99,7 +99,7 @@ interface IState {
     hasPermissionToLoad: boolean;
     // Wait for user profile load to display correct name
     isUserProfileReady: boolean;
-    error: Error;
+    error: Error | null;
     menuDisplayed: boolean;
     requiresClient: boolean;
 }
@@ -124,7 +124,7 @@ export default class AppTile extends React.Component<IProps, IState> {
     private iframe: HTMLIFrameElement; // ref to the iframe (callback style)
     private allowedWidgetsWatchRef: string;
     private persistKey: string;
-    private sgWidget: StopGapWidget;
+    private sgWidget: StopGapWidget | null;
     private dispatcherRef: string;
     private unmounted: boolean;
 
@@ -202,7 +202,7 @@ export default class AppTile extends React.Component<IProps, IState> {
     private determineInitialRequiresClientState(): boolean {
         try {
             const mockWidget = new ElementWidget(this.props.app);
-            const widgetApi = WidgetMessagingStore.instance.getMessaging(mockWidget, this.props.room.roomId);
+            const widgetApi = WidgetMessagingStore.instance.getMessaging(mockWidget, this.props.room?.roomId);
             if (widgetApi) {
                 // Load value from existing API to prevent resetting the requiresClient value on layout changes.
                 return widgetApi.hasCapability(ElementWidgetCapabilities.RequiresClient);
@@ -310,9 +310,9 @@ export default class AppTile extends React.Component<IProps, IState> {
     }
 
     private setupSgListeners(): void {
-        this.sgWidget.on("preparing", this.onWidgetPreparing);
+        this.sgWidget?.on("preparing", this.onWidgetPreparing);
         // emits when the capabilities have been set up or changed
-        this.sgWidget.on("capabilitiesNotified", this.onWidgetCapabilitiesNotified);
+        this.sgWidget?.on("capabilitiesNotified", this.onWidgetCapabilitiesNotified);
     }
 
     private stopSgListeners(): void {
@@ -336,7 +336,7 @@ export default class AppTile extends React.Component<IProps, IState> {
     }
 
     private startWidget(): void {
-        this.sgWidget.prepare().then(() => {
+        this.sgWidget?.prepare().then(() => {
             if (this.unmounted) return;
             this.setState({ initialising: false });
         });
@@ -406,7 +406,7 @@ export default class AppTile extends React.Component<IProps, IState> {
 
     private onWidgetCapabilitiesNotified = (): void => {
         this.setState({
-            requiresClient: this.sgWidget.widgetApi.hasCapability(ElementWidgetCapabilities.RequiresClient),
+            requiresClient: !!this.sgWidget?.widgetApi?.hasCapability(ElementWidgetCapabilities.RequiresClient),
         });
     };
 
@@ -415,7 +415,7 @@ export default class AppTile extends React.Component<IProps, IState> {
             case "m.sticker":
                 if (
                     payload.widgetId === this.props.app.id &&
-                    this.sgWidget.widgetApi.hasCapability(MatrixCapabilities.StickerSending)
+                    this.sgWidget?.widgetApi?.hasCapability(MatrixCapabilities.StickerSending)
                 ) {
                     dis.dispatch({
                         action: "post_sticker_message",
@@ -444,8 +444,8 @@ export default class AppTile extends React.Component<IProps, IState> {
         logger.info("Granting permission for widget to load: " + this.props.app.eventId);
         const current = SettingsStore.getValue("allowedWidgets", roomId);
         if (this.props.app.eventId !== undefined) current[this.props.app.eventId] = true;
-        const level = SettingsStore.firstSupportedLevel("allowedWidgets");
-        SettingsStore.setValue("allowedWidgets", roomId, level, current)
+        const level = SettingsStore.firstSupportedLevel("allowedWidgets")!;
+        SettingsStore.setValue("allowedWidgets", roomId ?? null, level, current)
             .then(() => {
                 this.setState({ hasPermissionToLoad: true });
 
@@ -501,7 +501,7 @@ export default class AppTile extends React.Component<IProps, IState> {
             this.resetWidget(this.props);
             this.startMessaging();
 
-            if (this.iframe) {
+            if (this.iframe && this.sgWidget) {
                 // Reload iframe
                 this.iframe.src = this.sgWidget.embedUrl;
             }
@@ -519,7 +519,7 @@ export default class AppTile extends React.Component<IProps, IState> {
         // window.open(this._getPopoutUrl(), '_blank', 'noopener=yes');
         Object.assign(document.createElement("a"), {
             target: "_blank",
-            href: this.sgWidget.popoutUrl,
+            href: this.sgWidget?.popoutUrl,
             rel: "noreferrer noopener",
         }).click();
     };
@@ -676,7 +676,7 @@ export default class AppTile extends React.Component<IProps, IState> {
         if (this.state.menuDisplayed) {
             contextMenu = (
                 <WidgetContextMenu
-                    {...aboveLeftOf(this.contextMenuButton.current.getBoundingClientRect(), null)}
+                    {...aboveLeftOf(this.contextMenuButton.current.getBoundingClientRect())}
                     app={this.props.app}
                     onFinished={this.closeContextMenu}
                     showUnpin={!this.props.userWidget}

@@ -75,7 +75,7 @@ export default class ActiveWidgetStore extends EventEmitter {
         this.setWidgetPersistence(widgetId, roomId, false);
     }
 
-    public setWidgetPersistence(widgetId: string, roomId: string, val: boolean): void {
+    public setWidgetPersistence(widgetId: string, roomId: string | null, val: boolean): void {
         const isPersisted = this.getWidgetPersistence(widgetId, roomId);
 
         if (isPersisted && !val) {
@@ -88,7 +88,7 @@ export default class ActiveWidgetStore extends EventEmitter {
         this.emit(ActiveWidgetStoreEvent.Persistence);
     }
 
-    public getWidgetPersistence(widgetId: string, roomId: string): boolean {
+    public getWidgetPersistence(widgetId: string, roomId: string | null): boolean {
         return this.persistentWidgetId === widgetId && this.persistentRoomId === roomId;
     }
 

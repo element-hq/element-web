@@ -67,7 +67,7 @@ export const WidgetContextMenu: React.FC<IProps> = ({
     if (getConfigLivestreamUrl() && WidgetType.JITSI.matches(app.type)) {
         const onStreamAudioClick = async (): Promise<void> => {
             try {
-                await startJitsiAudioLivestream(widgetMessaging, roomId);
+                await startJitsiAudioLivestream(widgetMessaging!, roomId);
             } catch (err) {
                 logger.error("Failed to start livestream", err);
                 // XXX: won't i18n well, but looks like widget api only support 'message'?
@@ -84,7 +84,7 @@ export const WidgetContextMenu: React.FC<IProps> = ({
         );
     }
 
-    const pinnedWidgets = WidgetLayoutStore.instance.getContainerWidgets(room, Container.Top);
+    const pinnedWidgets = room ? WidgetLayoutStore.instance.getContainerWidgets(room, Container.Top) : [];
     const widgetIndex = pinnedWidgets.findIndex((widget) => widget.id === app.id);
 
     let editButton;
@@ -196,6 +196,7 @@ export const WidgetContextMenu: React.FC<IProps> = ({
     let moveRightButton;
     if (showUnpin && widgetIndex < pinnedWidgets.length - 1) {
         const onClick = (): void => {
+            if (!room) throw new Error("room must be defined");
             WidgetLayoutStore.instance.moveWithinContainer(room, Container.Top, app, 1);
             onFinished();
         };

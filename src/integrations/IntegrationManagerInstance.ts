@@ -43,7 +43,7 @@ export class IntegrationManagerInstance {
 
     public get name(): string {
         const parsed = url.parse(this.uiUrl);
-        return parsed.host;
+        return parsed.host ?? "";
     }
 
     public get trimmedApiUrl(): string {

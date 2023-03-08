@@ -541,7 +541,7 @@ describe("RoomHeader", () => {
 
         await withCall(async (call) => {
             await call.connect();
-            const messaging = WidgetMessagingStore.instance.getMessagingForUid(WidgetUtils.getWidgetUid(call.widget));
+            const messaging = WidgetMessagingStore.instance.getMessagingForUid(WidgetUtils.getWidgetUid(call.widget))!;
             renderHeader({ viewingCall: true, activeCall: call });
 
             // Should start with Freedom selected

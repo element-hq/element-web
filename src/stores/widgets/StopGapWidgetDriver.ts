@@ -113,7 +113,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
             this.allowedCapabilities.add("visibility");
         } else if (
             virtual &&
-            new URL(SdkConfig.get("element_call").url ?? DEFAULTS.element_call.url).origin === this.forWidget.origin
+            new URL(SdkConfig.get("element_call").url ?? DEFAULTS.element_call.url!).origin === this.forWidget.origin
         ) {
             // This is a trusted Element Call widget that we control
             this.allowedCapabilities.add(MatrixCapabilities.AlwaysOnScreen);
@@ -202,8 +202,8 @@ export class StopGapWidgetDriver extends WidgetDriver {
                     widget: this.forWidget,
                     widgetKind: this.forWidgetKind,
                 }).finished;
-                (result.approved || []).forEach((cap) => allowedSoFar.add(cap));
-                rememberApproved = result.remember;
+                result?.approved?.forEach((cap) => allowedSoFar.add(cap));
+                rememberApproved = !!result?.remember;
             } catch (e) {
                 logger.error("Non-fatal error getting capabilities: ", e);
             }
@@ -267,7 +267,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
         const client = MatrixClientPeg.get();
 
         if (encrypted) {
-            const deviceInfoMap = await client.crypto.deviceList.downloadKeys(Object.keys(contentMap), false);
+            const deviceInfoMap = await client.crypto!.deviceList.downloadKeys(Object.keys(contentMap), false);
 
             await Promise.all(
                 Object.entries(contentMap).flatMap(([userId, userContentMap]) =>
@@ -313,7 +313,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
             ? roomIds.includes(Symbols.AnyRoom)
                 ? client.getVisibleRooms()
                 : roomIds.map((r) => client.getRoom(r))
-            : [client.getRoom(SdkContextClass.instance.roomViewStore.getRoomId())];
+            : [client.getRoom(SdkContextClass.instance.roomViewStore.getRoomId()!)];
         return targetRooms.filter((r) => !!r) as Room[];
     }
 
@@ -356,7 +356,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
         const allResults: IRoomEvent[] = [];
         for (const room of rooms) {
             const results: MatrixEvent[] = [];
-            const state: Map<string, MatrixEvent> = room.currentState.events.get(eventType);
+            const state = room.currentState.events.get(eventType);
             if (state) {
                 if (stateKey === "" || !!stateKey) {
                     const forKey = state.get(stateKey);

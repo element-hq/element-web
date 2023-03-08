@@ -58,7 +58,7 @@ export class WidgetMessagingStore extends AsyncStoreWithClient<{}> {
         this.widgetMap.clear();
     }
 
-    public storeMessaging(widget: Widget, roomId: string, widgetApi: ClientWidgetApi): void {
+    public storeMessaging(widget: Widget, roomId: string | undefined, widgetApi: ClientWidgetApi): void {
         this.stopMessaging(widget, roomId);
         const uid = WidgetUtils.calcWidgetUid(widget.id, roomId);
         this.widgetMap.set(uid, widgetApi);
@@ -66,11 +66,11 @@ export class WidgetMessagingStore extends AsyncStoreWithClient<{}> {
         this.emit(WidgetMessagingStoreEvent.StoreMessaging, uid, widgetApi);
     }
 
-    public stopMessaging(widget: Widget, roomId: string): void {
+    public stopMessaging(widget: Widget, roomId: string | undefined): void {
         this.stopMessagingByUid(WidgetUtils.calcWidgetUid(widget.id, roomId));
     }
 
-    public getMessaging(widget: Widget, roomId: string): ClientWidgetApi {
+    public getMessaging(widget: Widget, roomId: string | undefined): ClientWidgetApi | undefined {
         return this.widgetMap.get(WidgetUtils.calcWidgetUid(widget.id, roomId));
     }
 
@@ -88,7 +88,7 @@ export class WidgetMessagingStore extends AsyncStoreWithClient<{}> {
      * @param {string} widgetUid The widget UID.
      * @returns {ClientWidgetApi} The widget API, or a falsy value if not found.
      */
-    public getMessagingForUid(widgetUid: string): ClientWidgetApi {
+    public getMessagingForUid(widgetUid: string): ClientWidgetApi | undefined {
         return this.widgetMap.get(widgetUid);
     }
 }
