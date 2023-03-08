@@ -91,6 +91,7 @@ exports[`<TextualBody /> renders formatted m.text correctly pills get injected c
     <bdi>
       <a
         class="mx_Pill mx_UserPill"
+        href="https://matrix.to/#/@user:server"
       >
         <img
           alt=""

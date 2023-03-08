@@ -1,5 +1,5 @@
 /*
-Copyright 2017 - 2021 The Matrix.org Foundation C.I.C.
+Copyright 2017 - 2023 The Matrix.org Foundation C.I.C.
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,7 +30,7 @@ import { getUserNameColorClass } from "../../../utils/FormattingUtils";
 import { Action } from "../../../dispatcher/actions";
 import Spinner from "./Spinner";
 import ReplyTile from "../rooms/ReplyTile";
-import Pill, { PillType } from "./Pill";
+import { Pill, PillType } from "./Pill";
 import AccessibleButton, { ButtonEvent } from "./AccessibleButton";
 import { getParentEventId, shouldDisplayReply } from "../../../utils/Reply";
 import RoomContext from "../../../contexts/RoomContext";
