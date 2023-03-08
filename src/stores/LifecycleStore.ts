@@ -14,12 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Store } from "flux/utils";
-
 import { Action } from "../dispatcher/actions";
 import dis from "../dispatcher/dispatcher";
 import { ActionPayload } from "../dispatcher/payloads";
 import { DoAfterSyncPreparedPayload } from "../dispatcher/payloads/DoAfterSyncPreparedPayload";
+import { AsyncStore } from "./AsyncStore";
 
 interface IState {
     deferredAction: ActionPayload | null;
@@ -30,32 +29,24 @@ const INITIAL_STATE: IState = {
 };
 
 /**
- * A class for storing application state to do with authentication. This is a simple flux
+ * A class for storing application state to do with authentication. This is a simple
  * store that listens for actions and updates its state accordingly, informing any
  * listeners (views) of state changes.
  */
-class LifecycleStore extends Store<ActionPayload> {
-    private state: IState = INITIAL_STATE;
-
+class LifecycleStore extends AsyncStore<IState> {
     public constructor() {
-        super(dis);
+        super(dis, INITIAL_STATE);
     }
 
-    private setState(newState: Partial<IState>): void {
-        this.state = Object.assign(this.state, newState);
-        this.__emitChange();
-    }
-
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    protected __onDispatch(payload: ActionPayload | DoAfterSyncPreparedPayload<ActionPayload>): void {
+    protected onDispatch(payload: ActionPayload | DoAfterSyncPreparedPayload<ActionPayload>): void {
         switch (payload.action) {
             case Action.DoAfterSyncPrepared:
-                this.setState({
+                this.updateState({
                     deferredAction: payload.deferred_action,
                 });
                 break;
             case "cancel_after_sync_prepared":
-                this.setState({
+                this.updateState({
                     deferredAction: null,
                 });
                 break;
@@ -65,7 +56,7 @@ class LifecycleStore extends Store<ActionPayload> {
                 }
                 if (!this.state.deferredAction) break;
                 const deferredAction = Object.assign({}, this.state.deferredAction);
-                this.setState({
+                this.updateState({
                     deferredAction: null,
                 });
                 dis.dispatch(deferredAction);
@@ -76,10 +67,6 @@ class LifecycleStore extends Store<ActionPayload> {
                 this.reset();
                 break;
         }
-    }
-
-    private reset(): void {
-        this.state = Object.assign({}, INITIAL_STATE);
     }
 }
 

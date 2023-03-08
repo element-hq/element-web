@@ -16,9 +16,9 @@ limitations under the License.
 
 import { EventEmitter } from "events";
 import AwaitLock from "await-lock";
-import { Dispatcher } from "flux";
 
 import { ActionPayload } from "../dispatcher/payloads";
+import { MatrixDispatcher } from "../dispatcher/dispatcher";
 
 /**
  * The event/channel to listen for in an AsyncStore.
@@ -52,7 +52,7 @@ export abstract class AsyncStore<T extends Object> extends EventEmitter {
      * @param {Dispatcher<ActionPayload>} dispatcher The dispatcher to rely upon.
      * @param {T} initialState The initial state for the store.
      */
-    protected constructor(private dispatcher: Dispatcher<ActionPayload>, initialState: T = <T>{}) {
+    protected constructor(private dispatcher: MatrixDispatcher, initialState: T = <T>{}) {
         super();
 
         this.dispatcherRef = dispatcher.register(this.onDispatch.bind(this));

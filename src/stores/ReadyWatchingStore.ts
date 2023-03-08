@@ -16,19 +16,19 @@
 
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { SyncState } from "matrix-js-sdk/src/sync";
-import { Dispatcher } from "flux";
 import { EventEmitter } from "events";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { ActionPayload } from "../dispatcher/payloads";
 import { IDestroyable } from "../utils/IDestroyable";
 import { Action } from "../dispatcher/actions";
+import { MatrixDispatcher } from "../dispatcher/dispatcher";
 
 export abstract class ReadyWatchingStore extends EventEmitter implements IDestroyable {
     protected matrixClient: MatrixClient | null = null;
     private dispatcherRef: string | null = null;
 
-    public constructor(protected readonly dispatcher: Dispatcher<ActionPayload>) {
+    public constructor(protected readonly dispatcher: MatrixDispatcher) {
         super();
     }
 

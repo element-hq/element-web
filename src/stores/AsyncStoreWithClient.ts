@@ -15,16 +15,16 @@ limitations under the License.
 */
 
 import { MatrixClient } from "matrix-js-sdk/src/client";
-import { Dispatcher } from "flux";
 
 import { AsyncStore } from "./AsyncStore";
 import { ActionPayload } from "../dispatcher/payloads";
 import { ReadyWatchingStore } from "./ReadyWatchingStore";
+import { MatrixDispatcher } from "../dispatcher/dispatcher";
 
 export abstract class AsyncStoreWithClient<T extends Object> extends AsyncStore<T> {
     protected readyStore: ReadyWatchingStore;
 
-    protected constructor(dispatcher: Dispatcher<ActionPayload>, initialState: T = <T>{}) {
+    protected constructor(dispatcher: MatrixDispatcher, initialState: T = <T>{}) {
         super(dispatcher, initialState);
 
         // Create an anonymous class to avoid code duplication

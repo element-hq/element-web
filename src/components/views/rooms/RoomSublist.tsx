@@ -18,7 +18,6 @@ limitations under the License.
 
 import { Room } from "matrix-js-sdk/src/models/room";
 import classNames from "classnames";
-import { Dispatcher } from "flux";
 import { Enable, Resizable } from "re-resizable";
 import { Direction } from "re-resizable/lib/resizer";
 import * as React from "react";
@@ -28,7 +27,7 @@ import { polyfillTouchEvent } from "../../../@types/polyfill";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { RovingAccessibleButton, RovingTabIndexWrapper } from "../../../accessibility/RovingTabIndex";
 import { Action } from "../../../dispatcher/actions";
-import defaultDispatcher from "../../../dispatcher/dispatcher";
+import defaultDispatcher, { MatrixDispatcher } from "../../../dispatcher/dispatcher";
 import { ActionPayload } from "../../../dispatcher/payloads";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
@@ -68,7 +67,7 @@ polyfillTouchEvent();
 
 export interface IAuxButtonProps {
     tabIndex: number;
-    dispatcher?: Dispatcher<ActionPayload>;
+    dispatcher?: MatrixDispatcher;
 }
 
 interface IProps {
