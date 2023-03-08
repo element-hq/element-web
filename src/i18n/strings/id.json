@@ -3742,5 +3742,7 @@
     "Once invited users have joined Element, you will be able to chat and the room will be end-to-end encrypted": "Setelah pengguna yang diundang telah bergabung Element, Anda akan dapat mengobrol dan ruangannya akan terenkripsi secara ujung ke ujung",
     "Waiting for users to join Element": "Menunggu pengguna untuk bergabung dengan Element",
     "Once everyone has joined, you’ll be able to chat": "Setelah semuanya bergabung, Anda akan dapat mengobrol",
-    "Invites by email can only be sent one at a time": "Undangan lewat surel hanya dapat dikirim satu-satu"
+    "Invites by email can only be sent one at a time": "Undangan lewat surel hanya dapat dikirim satu-satu",
+    "Could not find room": "Tidak dapat mencari ruangan",
+    "iframe has no src attribute": "iframe tidak memiliki atribut src"
 }
