@@ -1986,19 +1986,6 @@
   resolved "https://registry.yarnpkg.com/@types/events/-/events-3.0.0.tgz#2862f3f58a9a7f7c3e78d79f130dd4d71c25c2a7"
   integrity sha512-EaObqwIvayI5a8dCzhFrjKzVwKLxjoG9T6Ppd5CEo07LRKfQ8Yokw54r5+Wq7FaBQ+yXRvQAYPrHwya1/UFt9g==
 
-"@types/fbemitter@*":
-  version "2.0.32"
-  resolved "https://registry.yarnpkg.com/@types/fbemitter/-/fbemitter-2.0.32.tgz#8ed204da0f54e9c8eaec31b1eec91e25132d082c"
-  integrity sha512-Hwq28bBlbmfCgLnNJvjl5ssTrbZCTSblI4vqPpqZrbbEL8vn5l2UivxhlMYfUY7a4SR8UB6RKoLjOZfljqAa6g==
-
-"@types/flux@^3.1.9":
-  version "3.1.11"
-  resolved "https://registry.yarnpkg.com/@types/flux/-/flux-3.1.11.tgz#e030d61e6c7fd6187dfa0e7e3dfcc8036c511581"
-  integrity sha512-Aq4UB1ZqAKcPbhB0GpgMw2sntvOh71he9tjz53TLKrI7rw3Y3LxCW5pTYY9IV455hQapm4pmxFjpqlWOs308Yg==
-  dependencies:
-    "@types/fbemitter" "*"
-    "@types/react" "*"
-
 "@types/geojson@*", "@types/geojson@^7946.0.10":
   version "7946.0.10"
   resolved "https://registry.yarnpkg.com/@types/geojson/-/geojson-7946.0.10.tgz#6dfbf5ea17142f7f9a043809f1cd4c448cb68249"
