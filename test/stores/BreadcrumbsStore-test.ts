@@ -16,7 +16,6 @@ limitations under the License.
 
 import { mocked } from "jest-mock";
 import { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
-import { act } from "react-dom/test-utils";
 
 import { createTestClient, flushPromises, setupAsyncStoreWithClient } from "../test-utils";
 import SettingsStore from "../../src/settings/SettingsStore";
@@ -185,9 +184,7 @@ describe("BreadcrumbsStore", () => {
         );
 
         // Wait for event dispatch to happen
-        await act(async () => {
-            await flushPromises();
-        });
+        await flushPromises();
     }
 
     /**
