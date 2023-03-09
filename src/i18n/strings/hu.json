@@ -3734,5 +3734,7 @@
     "Once everyone has joined, you’ll be able to chat": "Amint mindenki belépett lekezdheti a beszélgetést",
     "Verify Session": "Munkamenet ellenőrzése",
     "Ignore (%(counter)s)": "Figyelmen kívül hagy (%(counter)s)",
-    "If you know a room address, try joining through that instead.": "Ha ismeri a szoba címét próbáljon inkább azzal belépni."
+    "If you know a room address, try joining through that instead.": "Ha ismeri a szoba címét próbáljon inkább azzal belépni.",
+    "Could not find room": "A szoba nem található",
+    "iframe has no src attribute": "az iframe-nek nincs src attribútuma"
 }
