@@ -3742,5 +3742,7 @@
     "Once invited users have joined Element, you will be able to chat and the room will be end-to-end encrypted": "被邀請的使用者加入 Element 後，您就可以聊天，聊天室將會進行端到端加密",
     "Waiting for users to join Element": "等待使用者加入 Element",
     "Invites by email can only be sent one at a time": "透過電子郵件傳送的邀請一次只能傳送一個",
-    "Once everyone has joined, you’ll be able to chat": "所有人都加入後，您就可以聊天了"
+    "Once everyone has joined, you’ll be able to chat": "所有人都加入後，您就可以聊天了",
+    "Could not find room": "找不到聊天室",
+    "iframe has no src attribute": "iframe 沒有 src 屬性"
 }
