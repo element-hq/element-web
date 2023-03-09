@@ -40,6 +40,7 @@ import { StopGapWidgetDriver } from "../../../src/stores/widgets/StopGapWidgetDr
 import { stubClient } from "../../test-utils";
 import { ModuleRunner } from "../../../src/modules/ModuleRunner";
 import dis from "../../../src/dispatcher/dispatcher";
+import SettingsStore from "../../../src/settings/SettingsStore";
 
 describe("StopGapWidgetDriver", () => {
     let client: MockedObject<MatrixClient>;
@@ -364,6 +365,33 @@ describe("StopGapWidgetDriver", () => {
             );
 
             expect(dis.dispatch).not.toHaveBeenCalled();
+        });
+    });
+
+    describe("If the feature_dynamic_room_predecessors feature is not enabled", () => {
+        beforeEach(() => {
+            jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
+        });
+
+        it("passes the flag through to getVisibleRooms", () => {
+            const driver = mkDefaultDriver();
+            driver.readRoomEvents(EventType.CallAnswer, "", 0, ["*"]);
+            expect(client.getVisibleRooms).toHaveBeenCalledWith(false);
+        });
+    });
+
+    describe("If the feature_dynamic_room_predecessors is enabled", () => {
+        beforeEach(() => {
+            // Turn on feature_dynamic_room_predecessors setting
+            jest.spyOn(SettingsStore, "getValue").mockImplementation(
+                (settingName) => settingName === "feature_dynamic_room_predecessors",
+            );
+        });
+
+        it("passes the flag through to getVisibleRooms", () => {
+            const driver = mkDefaultDriver();
+            driver.readRoomEvents(EventType.CallAnswer, "", 0, ["*"]);
+            expect(client.getVisibleRooms).toHaveBeenCalledWith(true);
         });
     });
 });

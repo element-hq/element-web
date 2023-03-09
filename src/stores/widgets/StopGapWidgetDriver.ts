@@ -61,6 +61,7 @@ import { ElementWidgetCapabilities } from "./ElementWidgetCapabilities";
 import { navigateToPermalink } from "../../utils/permalinks/navigator";
 import { SdkContextClass } from "../../contexts/SDKContext";
 import { ModuleRunner } from "../../modules/ModuleRunner";
+import SettingsStore from "../../settings/SettingsStore";
 
 // TODO: Purge this from the universe
 
@@ -311,7 +312,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
 
         const targetRooms = roomIds
             ? roomIds.includes(Symbols.AnyRoom)
-                ? client.getVisibleRooms()
+                ? client.getVisibleRooms(SettingsStore.getValue("feature_dynamic_room_predecessors"))
                 : roomIds.map((r) => client.getRoom(r))
             : [client.getRoom(SdkContextClass.instance.roomViewStore.getRoomId()!)];
         return targetRooms.filter((r) => !!r) as Room[];
