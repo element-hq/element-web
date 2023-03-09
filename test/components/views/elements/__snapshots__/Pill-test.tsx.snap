@@ -1,5 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`<Pill> should not render a non-permalink 1`] = `<DocumentFragment />`;
+
 exports[`<Pill> should not render an avatar or link when called with inMessage = false and shouldShowPillAvatar = false 1`] = `
 <DocumentFragment>
   <bdi>
@@ -85,6 +87,44 @@ exports[`<Pill> should render the expected pill for a room alias 1`] = `
         class="mx_Pill_linkText"
       >
         Room 1
+      </span>
+    </a>
+  </bdi>
+</DocumentFragment>
+`;
+
+exports[`<Pill> should render the expected pill for a space 1`] = `
+<DocumentFragment>
+  <bdi>
+    <a
+      class="mx_Pill mx_RoomPill"
+      href="https://matrix.to/#/!space1:example.com"
+    >
+      <span
+        aria-hidden="true"
+        class="mx_BaseAvatar"
+        role="presentation"
+      >
+        <span
+          aria-hidden="true"
+          class="mx_BaseAvatar_initial"
+          style="font-size: 10.4px; width: 16px; line-height: 16px;"
+        >
+          S
+        </span>
+        <img
+          alt=""
+          aria-hidden="true"
+          class="mx_BaseAvatar_image"
+          data-testid="avatar-img"
+          src="data:image/png;base64,00"
+          style="width: 16px; height: 16px;"
+        />
+      </span>
+      <span
+        class="mx_Pill_linkText"
+      >
+        Space 1
       </span>
     </a>
   </bdi>

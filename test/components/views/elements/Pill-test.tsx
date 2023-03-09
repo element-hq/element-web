@@ -38,6 +38,8 @@ describe("<Pill>", () => {
     const room1Alias = "#room1:example.com";
     const room1Id = "!room1:example.com";
     let room1: Room;
+    const space1Id = "!space1:example.com";
+    let space1: Room;
     const user1Id = "@user1:example.com";
     const user2Id = "@user2:example.com";
     let renderResult: RenderResult;
@@ -70,9 +72,13 @@ describe("<Pill>", () => {
         ]);
         room1.getMember(user1Id)!.setMembershipEvent(user1JoinRoom1Event);
 
-        client.getRooms.mockReturnValue([room1]);
+        space1 = new Room(space1Id, client, client.getSafeUserId());
+        space1.name = "Space 1";
+
+        client.getRooms.mockReturnValue([room1, space1]);
         client.getRoom.mockImplementation((roomId: string) => {
             if (roomId === room1.roomId) return room1;
+            if (roomId === space1.roomId) return space1;
             return null;
         });
 
@@ -114,6 +120,20 @@ describe("<Pill>", () => {
                 });
             });
         });
+    });
+
+    it("should not render a non-permalink", () => {
+        renderPill({
+            url: "https://example.com/hello",
+        });
+        expect(renderResult.asFragment()).toMatchSnapshot();
+    });
+
+    it("should render the expected pill for a space", () => {
+        renderPill({
+            url: permalinkPrefix + space1Id,
+        });
+        expect(renderResult.asFragment()).toMatchSnapshot();
     });
 
     it("should render the expected pill for a room alias", () => {

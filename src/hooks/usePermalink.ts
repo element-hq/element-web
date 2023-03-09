@@ -16,7 +16,7 @@ limitations under the License.
 
 import { logger } from "matrix-js-sdk/src/logger";
 import { MatrixEvent, Room, RoomMember } from "matrix-js-sdk/src/matrix";
-import React, { ReactElement, useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 import { ButtonEvent } from "../components/views/elements/AccessibleButton";
 import { PillType } from "../components/views/elements/Pill";
@@ -24,8 +24,6 @@ import { MatrixClientPeg } from "../MatrixClientPeg";
 import { parsePermalink } from "../utils/permalinks/Permalinks";
 import dis from "../dispatcher/dispatcher";
 import { Action } from "../dispatcher/actions";
-import RoomAvatar from "../components/views/avatars/RoomAvatar";
-import MemberAvatar from "../components/views/avatars/MemberAvatar";
 
 interface Args {
     /** Room in which the permalink should be displayed. */
@@ -37,13 +35,38 @@ interface Args {
 }
 
 interface HookResult {
-    /** Avatar of the permalinked resource. */
-    avatar: ReactElement | null;
-    /** Displayable text of the permalink resource. Can for instance be a user or room name. */
+    /**
+     * Room member of a user mention permalink.
+     * null for other links, if the profile was not found or not yet loaded.
+     * This can change, for instance, from null to a RoomMember after the profile lookup completed.
+     */
+    member: RoomMember | null;
+    /**
+     * Displayable text of the permalink resource. Can for instance be a user or room name.
+     * null here means that there is nothing to display. Most likely if the URL was not a permalink.
+     */
     text: string | null;
-    onClick: ((e: ButtonEvent) => void) | null;
-    /** This can be for instance a user or room Id. */
+    /**
+     * Should be used for click actions on the permalink.
+     * In case of a user permalink, a view profile action is dispatched.
+     */
+    onClick: (e: ButtonEvent) => void;
+    /**
+     * This can be for instance a user or room Id.
+     * null here means that the resource cannot be detected. Most likely if the URL was not a permalink.
+     */
     resourceId: string | null;
+    /**
+     * Target room of the permalink:
+     * For an @room mention, this is the room where the permalink should be displayed.
+     * For a room permalink, it is the room from the permalink.
+     * null for other links or if the room cannot be found.
+     */
+    targetRoom: Room | null;
+    /**
+     * Type of the pill plus "space" for spaces.
+     * null here means that the type cannot be detected. Most likely if the URL was not a permalink.
+     */
     type: PillType | "space" | null;
 }
 
@@ -53,7 +76,7 @@ interface HookResult {
 export const usePermalink: (args: Args) => HookResult = ({ room, type: argType, url }): HookResult => {
     const [member, setMember] = useState<RoomMember | null>(null);
     // room of the entity this pill points to
-    const [targetRoom, setTargetRoom] = useState<Room | undefined | null>(room);
+    const [targetRoom, setTargetRoom] = useState<Room | null>(room ?? null);
 
     let resourceId: string | null = null;
 
@@ -101,9 +124,6 @@ export const usePermalink: (args: Args) => HookResult = ({ room, type: argType, 
 
     useMemo(() => {
         switch (type) {
-            case PillType.AtRoomMention:
-                setTargetRoom(room);
-                break;
             case PillType.UserMention:
                 {
                     if (resourceId) {
@@ -131,23 +151,20 @@ export const usePermalink: (args: Args) => HookResult = ({ room, type: argType, 
                                           );
                                       })
                                 : MatrixClientPeg.get().getRoom(resourceId);
-                        setTargetRoom(newRoom);
+                        setTargetRoom(newRoom || null);
                     }
                 }
                 break;
         }
     }, [doProfileLookup, type, resourceId, room]);
 
-    let onClick: ((e: ButtonEvent) => void) | null = null;
-    let avatar: ReactElement | null = null;
+    let onClick: (e: ButtonEvent) => void = () => {};
     let text = resourceId;
 
     if (type === PillType.AtRoomMention && room) {
         text = "@room";
-        avatar = <RoomAvatar room={room} width={16} height={16} aria-hidden="true" />;
     } else if (type === PillType.UserMention && member) {
         text = member.name || resourceId;
-        avatar = <MemberAvatar member={member} width={16} height={16} aria-hidden="true" hideTitle />;
         onClick = (e: ButtonEvent): void => {
             e.preventDefault();
             dis.dispatch({
@@ -158,15 +175,15 @@ export const usePermalink: (args: Args) => HookResult = ({ room, type: argType, 
     } else if (type === PillType.RoomMention) {
         if (targetRoom) {
             text = targetRoom.name || resourceId;
-            avatar = <RoomAvatar room={targetRoom} width={16} height={16} aria-hidden="true" />;
         }
     }
 
     return {
-        avatar,
-        text,
+        member,
         onClick,
         resourceId,
+        targetRoom,
+        text,
         type,
     };
 };
