@@ -81,7 +81,7 @@ jobs:
                   AWS_SECRET_ACCESS_KEY: ${{ secrets.CF_R2_TOKEN }}
 
             - name: Wait for other steps to succeed
-              uses: lewagon/wait-on-check-action@v1.3.1
+              uses: lewagon/wait-on-check-action@e106e5c43e8ca1edea6383a39a01c5ca495fd812 # v1.3.1
               with:
                   ref: ${{ github.sha }}
                   running-workflow-name: "Build & Deploy develop.element.io"
@@ -102,7 +102,7 @@ jobs:
 
             - name: Deploy to Cloudflare Pages
               id: cfp
-              uses: cloudflare/pages-action@1
+              uses: cloudflare/pages-action@1631a1483b9131d13c61c8c9e6db68f7c7f5d0ee # v1
               with:
                   apiToken: ${{ secrets.CF_PAGES_TOKEN }}
                   accountId: ${{ secrets.CF_PAGES_ACCOUNT_ID }}
