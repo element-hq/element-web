@@ -44,7 +44,7 @@ export function stripPlainReply(body: string): string {
     return lines.join("\n");
 }
 
-// Part of Replies fallback support
+// Part of Replies fallback support - MUST NOT BE RENDERED DIRECTLY - UNSAFE HTML
 export function stripHTMLReply(html: string): string {
     // Sanitize the original HTML for inclusion in <mx-reply>.  We allow
     // any HTML, since the original sender could use special tags that we
@@ -56,6 +56,7 @@ export function stripHTMLReply(html: string): string {
     return sanitizeHtml(html, {
         allowedTags: false, // false means allow everything
         allowedAttributes: false,
+        allowVulnerableTags: false, // silence xss warning, we won't be rendering directly this, so it is safe to do
         // we somehow can't allow all schemes, so we allow all that we
         // know of and mxc (for img tags)
         allowedSchemes: [...PERMITTED_URL_SCHEMES, "mxc"],
