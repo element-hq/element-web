@@ -15,18 +15,10 @@ limitations under the License.
 */
 
 import React, { ReactNode } from "react";
-import {
-    IAnnotatedPushRule,
-    IPusher,
-    PushRuleAction,
-    IPushRule,
-    PushRuleKind,
-    RuleId,
-} from "matrix-js-sdk/src/@types/PushRules";
+import { IAnnotatedPushRule, IPusher, PushRuleAction, PushRuleKind, RuleId } from "matrix-js-sdk/src/@types/PushRules";
 import { IThreepid, ThreepidMedium } from "matrix-js-sdk/src/@types/threepids";
 import { logger } from "matrix-js-sdk/src/logger";
 import { LocalNotificationSettings } from "matrix-js-sdk/src/@types/local_notifications";
-import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
 
 import Spinner from "../elements/Spinner";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -51,6 +43,10 @@ import TagComposer from "../elements/TagComposer";
 import { objectClone } from "../../../utils/objects";
 import { arrayDiff } from "../../../utils/arrays";
 import { clearAllNotifications, getLocalNotificationAccountDataEventType } from "../../../utils/notifications";
+import {
+    updateExistingPushRulesWithActions,
+    updatePushRuleActions,
+} from "../../../utils/pushRules/updatePushRuleActions";
 
 // TODO: this "view" component still has far too much application logic in it,
 // which should be factored out to other files.
@@ -187,7 +183,6 @@ const maximumVectorState = (
 
 export default class Notifications extends React.PureComponent<IProps, IState> {
     private settingWatchers: string[];
-    private pushProcessor: PushProcessor;
 
     public constructor(props: IProps) {
         super(props);
@@ -215,8 +210,6 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
                 this.setState({ audioNotifications: value as boolean }),
             ),
         ];
-
-        this.pushProcessor = new PushProcessor(MatrixClientPeg.get());
     }
 
     private get isInhibited(): boolean {
@@ -461,43 +454,6 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
         await SettingsStore.setValue("audioNotificationsEnabled", null, SettingLevel.DEVICE, checked);
     };
 
-    private setPushRuleActions = async (
-        ruleId: IPushRule["rule_id"],
-        kind: PushRuleKind,
-        actions?: PushRuleAction[],
-    ): Promise<void> => {
-        const cli = MatrixClientPeg.get();
-        if (!actions) {
-            await cli.setPushRuleEnabled("global", kind, ruleId, false);
-        } else {
-            await cli.setPushRuleActions("global", kind, ruleId, actions);
-            await cli.setPushRuleEnabled("global", kind, ruleId, true);
-        }
-    };
-
-    /**
-     * Updated syncedRuleIds from rule definition
-     * If a rule does not exist it is ignored
-     * Synced rules are updated sequentially
-     * and stop at first error
-     */
-    private updateSyncedRules = async (
-        syncedRuleIds: VectorPushRuleDefinition["syncedRuleIds"],
-        actions?: PushRuleAction[],
-    ): Promise<void> => {
-        // get synced rules that exist for user
-        const syncedRules: ReturnType<PushProcessor["getPushRuleAndKindById"]>[] = syncedRuleIds
-            ?.map((ruleId) => this.pushProcessor.getPushRuleAndKindById(ruleId))
-            .filter(Boolean);
-
-        if (!syncedRules?.length) {
-            return;
-        }
-        for (const { kind, rule: syncedRule } of syncedRules) {
-            await this.setPushRuleActions(syncedRule.rule_id, kind, actions);
-        }
-    };
-
     private onRadioChecked = async (rule: IVectorPushRule, checkedState: VectorState): Promise<void> => {
         this.setState({ phase: Phase.Persisting });
 
@@ -538,8 +494,13 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
             } else {
                 const definition: VectorPushRuleDefinition = VectorPushRulesDefinitions[rule.ruleId];
                 const actions = definition.vectorStateToActions[checkedState];
-                await this.setPushRuleActions(rule.rule.rule_id, rule.rule.kind, actions);
-                await this.updateSyncedRules(definition.syncedRuleIds, actions);
+                // we should not encounter this
+                // satisfies types
+                if (!rule.rule) {
+                    throw new Error("Cannot update rule: push rule data is incomplete.");
+                }
+                await updatePushRuleActions(cli, rule.rule.rule_id, rule.rule.kind, actions);
+                await updateExistingPushRulesWithActions(cli, definition.syncedRuleIds, actions);
             }
 
             await this.refreshFromServer();
