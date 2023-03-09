@@ -67,7 +67,8 @@ function getTextReplyFallback(mxEvent: MatrixEvent): string {
     return "";
 }
 
-function createEditContent(model: EditorModel, editedEvent: MatrixEvent): IContent {
+// exported for tests
+export function createEditContent(model: EditorModel, editedEvent: MatrixEvent): IContent {
     const isEmote = containsEmote(model);
     if (isEmote) {
         model = stripEmoteCommand(model);
@@ -103,15 +104,16 @@ function createEditContent(model: EditorModel, editedEvent: MatrixEvent): IConte
         contentBody.formatted_body = `${htmlPrefix} * ${formattedBody}`;
     }
 
-    const relation = {
-        "m.new_content": newContent,
-        "m.relates_to": {
-            rel_type: "m.replace",
-            event_id: editedEvent.getId(),
+    return Object.assign(
+        {
+            "m.new_content": newContent,
+            "m.relates_to": {
+                rel_type: "m.replace",
+                event_id: editedEvent.getId(),
+            },
         },
-    };
-
-    return Object.assign(relation, contentBody);
+        contentBody,
+    );
 }
 
 interface IEditMessageComposerProps extends MatrixClientProps {

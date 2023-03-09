@@ -26,7 +26,7 @@ import SendMessageComposer, {
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import RoomContext, { TimelineRenderingType } from "../../../../src/contexts/RoomContext";
 import EditorModel from "../../../../src/editor/model";
-import { createPartCreator, createRenderer } from "../../../editor/mock";
+import { createPartCreator } from "../../../editor/mock";
 import { createTestClient, mkEvent, mkStubRoom } from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
@@ -85,7 +85,7 @@ describe("<SendMessageComposer/>", () => {
         const permalinkCreator = jest.fn() as any;
 
         it("sends plaintext messages correctly", () => {
-            const model = new EditorModel([], createPartCreator(), createRenderer());
+            const model = new EditorModel([], createPartCreator());
             const documentOffset = new DocumentOffset(11, true);
             model.update("hello world", "insertText", documentOffset);
 
@@ -98,7 +98,7 @@ describe("<SendMessageComposer/>", () => {
         });
 
         it("sends markdown messages correctly", () => {
-            const model = new EditorModel([], createPartCreator(), createRenderer());
+            const model = new EditorModel([], createPartCreator());
             const documentOffset = new DocumentOffset(13, true);
             model.update("hello *world*", "insertText", documentOffset);
 
@@ -113,7 +113,7 @@ describe("<SendMessageComposer/>", () => {
         });
 
         it("strips /me from messages and marks them as m.emote accordingly", () => {
-            const model = new EditorModel([], createPartCreator(), createRenderer());
+            const model = new EditorModel([], createPartCreator());
             const documentOffset = new DocumentOffset(22, true);
             model.update("/me blinks __quickly__", "insertText", documentOffset);
 
@@ -128,7 +128,7 @@ describe("<SendMessageComposer/>", () => {
         });
 
         it("allows emoting with non-text parts", () => {
-            const model = new EditorModel([], createPartCreator(), createRenderer());
+            const model = new EditorModel([], createPartCreator());
             const documentOffset = new DocumentOffset(16, true);
             model.update("/me ✨sparkles✨", "insertText", documentOffset);
             expect(model.parts.length).toEqual(4); // Emoji count as non-text
@@ -142,7 +142,7 @@ describe("<SendMessageComposer/>", () => {
         });
 
         it("allows sending double-slash escaped slash commands correctly", () => {
-            const model = new EditorModel([], createPartCreator(), createRenderer());
+            const model = new EditorModel([], createPartCreator());
             const documentOffset = new DocumentOffset(32, true);
 
             model.update("//dev/null is my favourite place", "insertText", documentOffset);
@@ -349,7 +349,7 @@ describe("<SendMessageComposer/>", () => {
 
     describe("isQuickReaction", () => {
         it("correctly detects quick reaction", () => {
-            const model = new EditorModel([], createPartCreator(), createRenderer());
+            const model = new EditorModel([], createPartCreator());
             model.update("+😊", "insertText", new DocumentOffset(3, true));
 
             const isReaction = isQuickReaction(model);
@@ -358,7 +358,7 @@ describe("<SendMessageComposer/>", () => {
         });
 
         it("correctly detects quick reaction with space", () => {
-            const model = new EditorModel([], createPartCreator(), createRenderer());
+            const model = new EditorModel([], createPartCreator());
             model.update("+ 😊", "insertText", new DocumentOffset(4, true));
 
             const isReaction = isQuickReaction(model);
@@ -367,10 +367,10 @@ describe("<SendMessageComposer/>", () => {
         });
 
         it("correctly rejects quick reaction with extra text", () => {
-            const model = new EditorModel([], createPartCreator(), createRenderer());
-            const model2 = new EditorModel([], createPartCreator(), createRenderer());
-            const model3 = new EditorModel([], createPartCreator(), createRenderer());
-            const model4 = new EditorModel([], createPartCreator(), createRenderer());
+            const model = new EditorModel([], createPartCreator());
+            const model2 = new EditorModel([], createPartCreator());
+            const model3 = new EditorModel([], createPartCreator());
+            const model4 = new EditorModel([], createPartCreator());
             model.update("+😊hello", "insertText", new DocumentOffset(8, true));
             model2.update(" +😊", "insertText", new DocumentOffset(4, true));
             model3.update("+ 😊😊", "insertText", new DocumentOffset(6, true));
