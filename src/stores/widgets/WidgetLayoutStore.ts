@@ -104,8 +104,9 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         }>;
     } = {};
 
-    private pinnedRef: string;
-    private layoutRef: string;
+    private pinnedRef: string | undefined;
+    private layoutRef: string | undefined;
+    private dynamicRef: string | undefined;
 
     private constructor() {
         super(defaultDispatcher);
@@ -133,6 +134,11 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         this.matrixClient?.on(RoomStateEvent.Events, this.updateRoomFromState);
         this.pinnedRef = SettingsStore.watchSetting("Widgets.pinned", null, this.updateFromSettings);
         this.layoutRef = SettingsStore.watchSetting("Widgets.layout", null, this.updateFromSettings);
+        this.dynamicRef = SettingsStore.watchSetting(
+            "feature_dynamic_room_predecessors",
+            null,
+            this.updateFromSettings,
+        );
         WidgetStore.instance.on(UPDATE_EVENT, this.updateFromWidgetStore);
     }
 
@@ -140,15 +146,17 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         this.byRoom = {};
 
         this.matrixClient?.off(RoomStateEvent.Events, this.updateRoomFromState);
-        SettingsStore.unwatchSetting(this.pinnedRef);
-        SettingsStore.unwatchSetting(this.layoutRef);
+        if (this.pinnedRef) SettingsStore.unwatchSetting(this.pinnedRef);
+        if (this.layoutRef) SettingsStore.unwatchSetting(this.layoutRef);
+        if (this.dynamicRef) SettingsStore.unwatchSetting(this.dynamicRef);
         WidgetStore.instance.off(UPDATE_EVENT, this.updateFromWidgetStore);
     }
 
     private updateAllRooms = (): void => {
+        const msc3946ProcessDynamicPredecessor = SettingsStore.getValue("feature_dynamic_room_predecessors");
         if (!this.matrixClient) return;
         this.byRoom = {};
-        for (const room of this.matrixClient.getVisibleRooms()) {
+        for (const room of this.matrixClient.getVisibleRooms(msc3946ProcessDynamicPredecessor)) {
             this.recalculateRoom(room);
         }
     };
@@ -168,7 +176,13 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         if (room) this.recalculateRoom(room);
     };
 
-    private updateFromSettings = (settingName: string, roomId: string /* and other stuff */): void => {
+    private updateFromSettings = (
+        _settingName: string,
+        roomId: string | null,
+        _atLevel: SettingLevel,
+        _newValAtLevel: any,
+        _newVal: any,
+    ): void => {
         if (roomId) {
             const room = this.matrixClient?.getRoom(roomId);
             if (room) this.recalculateRoom(room);
