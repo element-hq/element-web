@@ -29,6 +29,7 @@ import DMRoomMap from "../../src/utils/DMRoomMap";
 import SpaceStore from "../../src/stores/spaces/SpaceStore";
 import { MetaSpace } from "../../src/stores/spaces";
 import { ActionPayload } from "../../src/dispatcher/payloads";
+import SettingsStore from "../../src/settings/SettingsStore";
 
 describe("leaveRoomBehaviour", () => {
     SdkContextClass.instance.constructEagerStores(); // Initialize RoomViewStore
@@ -126,6 +127,31 @@ describe("leaveRoomBehaviour", () => {
             action: Action.ViewRoom,
             room_id: space.roomId,
             metricsTrigger: undefined,
+        });
+    });
+
+    describe("If the feature_dynamic_room_predecessors is not enabled", () => {
+        beforeEach(() => {
+            jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
+        });
+
+        it("Passes through the dynamic predecessor setting", async () => {
+            await leaveRoomBehaviour(room.roomId);
+            expect(client.getRoomUpgradeHistory).toHaveBeenCalledWith(room.roomId, false, false);
+        });
+    });
+
+    describe("If the feature_dynamic_room_predecessors is enabled", () => {
+        beforeEach(() => {
+            // Turn on feature_dynamic_room_predecessors setting
+            jest.spyOn(SettingsStore, "getValue").mockImplementation(
+                (settingName) => settingName === "feature_dynamic_room_predecessors",
+            );
+        });
+
+        it("Passes through the dynamic predecessor setting", async () => {
+            await leaveRoomBehaviour(room.roomId);
+            expect(client.getRoomUpgradeHistory).toHaveBeenCalledWith(room.roomId, false, true);
         });
     });
 });

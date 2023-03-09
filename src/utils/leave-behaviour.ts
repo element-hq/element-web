@@ -35,6 +35,7 @@ import LeaveSpaceDialog from "../components/views/dialogs/LeaveSpaceDialog";
 import { AfterLeaveRoomPayload } from "../dispatcher/payloads/AfterLeaveRoomPayload";
 import { bulkSpaceBehaviour } from "./space";
 import { SdkContextClass } from "../contexts/SDKContext";
+import SettingsStore from "../settings/SettingsStore";
 
 export async function leaveRoomBehaviour(roomId: string, retry = true, spinner = true): Promise<void> {
     let spinnerModal: IHandle<any> | undefined;
@@ -44,7 +45,11 @@ export async function leaveRoomBehaviour(roomId: string, retry = true, spinner =
 
     const cli = MatrixClientPeg.get();
     let leavingAllVersions = true;
-    const history = cli.getRoomUpgradeHistory(roomId);
+    const history = cli.getRoomUpgradeHistory(
+        roomId,
+        false,
+        SettingsStore.getValue("feature_dynamic_room_predecessors"),
+    );
     if (history && history.length > 0) {
         const currentRoom = history[history.length - 1];
         if (currentRoom.roomId !== roomId) {
