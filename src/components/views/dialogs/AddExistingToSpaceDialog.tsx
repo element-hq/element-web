@@ -39,6 +39,7 @@ import ProgressBar from "../elements/ProgressBar";
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
 import QueryMatcher from "../../../autocomplete/QueryMatcher";
 import LazyRenderList from "../elements/LazyRenderList";
+import { useSettingValue } from "../../../hooks/useSettings";
 
 // These values match CSS
 const ROW_HEIGHT = 32 + 12;
@@ -135,7 +136,11 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
     onFinished,
 }) => {
     const cli = useContext(MatrixClientContext);
-    const visibleRooms = useMemo(() => cli.getVisibleRooms().filter((r) => r.getMyMembership() === "join"), [cli]);
+    const msc3946ProcessDynamicPredecessor = useSettingValue<boolean>("feature_dynamic_room_predecessors");
+    const visibleRooms = useMemo(
+        () => cli.getVisibleRooms(msc3946ProcessDynamicPredecessor).filter((r) => r.getMyMembership() === "join"),
+        [cli, msc3946ProcessDynamicPredecessor],
+    );
 
     const scrollRef = useRef<AutoHideScrollbar<"div">>();
     const [scrollState, setScrollState] = useState<IScrollState>({
