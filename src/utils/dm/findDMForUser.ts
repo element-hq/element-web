@@ -21,7 +21,20 @@ import { isLocalRoom } from "../localRoom/isLocalRoom";
 import { isJoinedOrNearlyJoined } from "../membership";
 import { getFunctionalMembers } from "../room/getFunctionalMembers";
 
-function extractSuitableRoom(rooms: Room[], userId: string): Room | undefined {
+/**
+ * Iterates the rooms and tries to find a DM room with the user identified by UserId.
+ * A DM room is assumed if one of the following matches:
+ * - Has two members and contains a membership for the user identified by userId
+ * - findRoomWithThirdpartyInvites is true and has one member and a third pending third party invite
+ *
+ * If multiple rooms match it will return the one with the most recent event.
+ *
+ * @param rooms - Rooms to iterate
+ * @param userId - User Id of the other user
+ * @param [findRoomWithThirdpartyInvites] - Whether to find a DM for a pending thirdparty invite
+ * @returns DM room if found or undefined if not
+ */
+function extractSuitableRoom(rooms: Room[], userId: string, findRoomWithThirdpartyInvites: boolean): Room | undefined {
     const suitableRooms = rooms
         .filter((r) => {
             // Validate that we are joined and the other person is also joined. We'll also make sure
@@ -46,7 +59,7 @@ function extractSuitableRoom(rooms: Room[], userId: string): Room | undefined {
                 const thirdPartyInvites = r.currentState.getStateEvents("m.room.third_party_invite") || [];
 
                 // match room with pending third-party invite
-                return joinedMembers.length === 1 && thirdPartyInvites.length === 1;
+                return findRoomWithThirdpartyInvites && joinedMembers.length === 1 && thirdPartyInvites.length === 1;
             }
             return false;
         })
@@ -71,7 +84,10 @@ function extractSuitableRoom(rooms: Room[], userId: string): Room | undefined {
 export function findDMForUser(client: MatrixClient, userId: string): Room | undefined {
     const roomIdsForUserId = DMRoomMap.shared().getDMRoomsForUserId(userId);
     const roomsForUserId = roomIdsForUserId.map((id) => client.getRoom(id)).filter((r): r is Room => r !== null);
-    const suitableRoomForUserId = extractSuitableRoom(roomsForUserId, userId);
+    // Call with findRoomWithThirdpartyInvites = true to also include rooms with pending thirdparty invites.
+    // roomsForUserId can only contain rooms with the other user here,
+    // because they have been queried by getDMRoomsForUserId().
+    const suitableRoomForUserId = extractSuitableRoom(roomsForUserId, userId, true);
 
     if (suitableRoomForUserId) {
         return suitableRoomForUserId;
@@ -82,5 +98,5 @@ export function findDMForUser(client: MatrixClient, userId: string): Room | unde
     const allRooms = Array.from(allRoomIds)
         .map((id) => client.getRoom(id))
         .filter((r): r is Room => r !== null);
-    return extractSuitableRoom(allRooms, userId);
+    return extractSuitableRoom(allRooms, userId, false);
 }
