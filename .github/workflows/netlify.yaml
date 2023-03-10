@@ -13,7 +13,7 @@ jobs:
         environment: Netlify
         steps:
             - name: 📝 Create Deployment
-              uses: bobheadxi/deployments@v1
+              uses: bobheadxi/deployments@88ce5600046c82542f8246ac287d0a53c461bca3 # v1
               id: deployment
               with:
                   step: start
@@ -33,7 +33,7 @@ jobs:
             # There's a 'download artifact' action, but it hasn't been updated for the workflow_run action
             # (https://github.com/actions/download-artifact/issues/60) so instead we get this mess:
             - name: 📥 Download artifact
-              uses: dawidd6/action-download-artifact@v2
+              uses: dawidd6/action-download-artifact@5e780fc7bbd0cac69fc73271ed86edf5dcb72d67 # v2
               with:
                   run_id: ${{ github.event.workflow_run.id }}
                   name: previewbuild
@@ -41,7 +41,7 @@ jobs:
 
             - name: ☁️ Deploy to Netlify
               id: netlify
-              uses: nwtgck/actions-netlify@v2.0
+              uses: nwtgck/actions-netlify@5da65c9f74c7961c5501a3ba329b8d0912f39c03 # v2.0
               with:
                   publish-dir: webapp
                   deploy-message: "Deploy from GitHub Actions"
@@ -55,7 +55,7 @@ jobs:
               timeout-minutes: 1
 
             - name: 🚦 Update deployment status
-              uses: bobheadxi/deployments@v1
+              uses: bobheadxi/deployments@88ce5600046c82542f8246ac287d0a53c461bca3 # v1
               if: always()
               with:
                   step: finish

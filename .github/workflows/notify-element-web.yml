@@ -12,7 +12,7 @@ jobs:
         if: github.repository == 'matrix-org/matrix-react-sdk'
         steps:
             - name: Notify element-web repo that a new SDK build is on develop
-              uses: peter-evans/repository-dispatch@v2
+              uses: peter-evans/repository-dispatch@26b39ed245ab8f31526069329e112ab2fb224588 # v2
               with:
                   token: ${{ secrets.ELEMENT_BOT_TOKEN }}
                   repository: vector-im/element-web

@@ -29,7 +29,7 @@ jobs:
         steps:
             # We create the status here and then update it to success/failure in the `report` stage
             # This provides an easy link to this workflow_run from the PR before Cypress is done.
-            - uses: Sibz/github-status-action@v1
+            - uses: Sibz/github-status-action@faaa4d96fecf273bd762985e0e7f9f933c774918 # v1
               with:
                   authToken: ${{ secrets.GITHUB_TOKEN }}
                   state: pending
@@ -97,7 +97,7 @@ jobs:
             - uses: browser-actions/setup-chrome@latest
             - run: echo "BROWSER_PATH=$(which chrome)" >> $GITHUB_ENV
 
-            - uses: tecolicom/actions-use-apt-tools@v1
+            - uses: tecolicom/actions-use-apt-tools@ceaf289fdbc6169fd2406a0f0365a584ffba003b # v1
               with:
                   # Our test suite includes some screenshot tests with unusual diacritics, which are
                   # supposed to be covered by STIXGeneral.
@@ -115,7 +115,7 @@ jobs:
             # There's a 'download artifact' action, but it hasn't been updated for the workflow_run action
             # (https://github.com/actions/download-artifact/issues/60) so instead we get this mess:
             - name: 📥 Download artifact
-              uses: dawidd6/action-download-artifact@v2
+              uses: dawidd6/action-download-artifact@5e780fc7bbd0cac69fc73271ed86edf5dcb72d67 # v2
               with:
                   run_id: ${{ github.event.workflow_run.id }}
                   name: previewbuild
@@ -205,7 +205,7 @@ jobs:
 
             - name: Skip Percy required check
               if: needs.prepare.outputs.percy_enable != '1'
-              uses: Sibz/github-status-action@v1
+              uses: Sibz/github-status-action@faaa4d96fecf273bd762985e0e7f9f933c774918 # v1
               with:
                   authToken: ${{ secrets.GITHUB_TOKEN }}
                   state: success
@@ -214,7 +214,7 @@ jobs:
                   sha: ${{ github.event.workflow_run.head_sha }}
                   target_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
-            - uses: Sibz/github-status-action@v1
+            - uses: Sibz/github-status-action@faaa4d96fecf273bd762985e0e7f9f933c774918 # v1
               with:
                   authToken: ${{ secrets.GITHUB_TOKEN }}
                   state: ${{ needs.tests.result == 'success' && 'success' || 'failure' }}

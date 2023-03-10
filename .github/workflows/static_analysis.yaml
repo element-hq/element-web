@@ -60,13 +60,13 @@ jobs:
 
             - name: Get diff lines
               id: diff
-              uses: Equip-Collaboration/diff-line-numbers@v1.0.0
+              uses: Equip-Collaboration/diff-line-numbers@df70b4b83e05105c15f20dc6cc61f1463411b2a6 # v1.0.0
               with:
                   include: '["\\.tsx?$"]'
 
             - name: Detecting files changed
               id: files
-              uses: futuratrepadeira/changed-files@v4.0.0
+              uses: futuratrepadeira/changed-files@96d5fd702a6479d573287ef07381ad59acc390ed # v4.0.0
               with:
                   repo-token: ${{ secrets.GITHUB_TOKEN }}
                   pattern: '^.*\.tsx?$'
