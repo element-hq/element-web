@@ -561,14 +561,29 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         });
     };
 
-    private getNextEventInfo(arr: MatrixEvent[], i: number): { nextEvent: MatrixEvent; nextTile: MatrixEvent } {
-        const nextEvent = i < arr.length - 1 ? arr[i + 1] : null;
+    /**
+     * Find the next event in the list, and the next visible event in the list.
+     *
+     * @param event      - the list of events to look in and whether they are shown
+     * @param i          - where in the list we are now
+     *
+     * @returns { nextEvent, nextTile }
+     *
+     * nextEvent is the event after i in the supplied array.
+     *
+     * nextTile is the first event in the array after i that we will show a tile
+     * for. It is used to to determine the 'last successful' flag when rendering
+     * the tile.
+     */
+    private getNextEventInfo(
+        events: EventAndShouldShow[],
+        i: number,
+    ): { nextEvent: MatrixEvent | null; nextTile: MatrixEvent | null } {
+        // WARNING: this method is on a hot path.
 
-        // The next event with tile is used to to determine the 'last successful' flag
-        // when rendering the tile. The shouldShowEvent function is pretty quick at what
-        // it does, so this should have no significant cost even when a room is used for
-        // not-chat purposes.
-        const nextTile = arr.slice(i + 1).find((e) => this.shouldShowEvent(e));
+        const nextEvent = i < events.length - 1 ? events[i + 1].event : null;
+
+        const nextTile = findFirstShownAfter(i, events);
 
         return { nextEvent, nextTile };
     }
@@ -587,20 +602,21 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     }
 
     private getEventTiles(): ReactNode[] {
-        let i;
-
         // first figure out which is the last event in the list which we're
         // actually going to show; this allows us to behave slightly
         // differently for the last event in the list. (eg show timestamp)
         //
         // we also need to figure out which is the last event we show which isn't
         // a local echo, to manage the read-marker.
-        let lastShownEvent;
+        let lastShownEvent: MatrixEvent | undefined;
+        const events: EventAndShouldShow[] = this.props.events.map((event) => {
+            return { event, shouldShow: this.shouldShowEvent(event) };
+        });
 
         let lastShownNonLocalEchoIndex = -1;
-        for (i = this.props.events.length - 1; i >= 0; i--) {
-            const mxEv = this.props.events[i];
-            if (!this.shouldShowEvent(mxEv)) {
+        for (let i = events.length - 1; i >= 0; i--) {
+            const { event: mxEv, shouldShow } = events[i];
+            if (!shouldShow) {
                 continue;
             }
 
@@ -631,11 +647,11 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 
         let grouper: BaseGrouper = null;
 
-        for (i = 0; i < this.props.events.length; i++) {
-            const mxEv = this.props.events[i];
+        for (let i = 0; i < events.length; i++) {
+            const { event: mxEv, shouldShow } = events[i];
             const eventId = mxEv.getId();
             const last = mxEv === lastShownEvent;
-            const { nextEvent, nextTile } = this.getNextEventInfo(this.props.events, i);
+            const { nextEvent, nextTile } = this.getNextEventInfo(events, i);
 
             if (grouper) {
                 if (grouper.shouldGroup(mxEv)) {
@@ -658,7 +674,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
             }
 
             if (!grouper) {
-                if (this.shouldShowEvent(mxEv)) {
+                if (shouldShow) {
                     // make sure we unpack the array returned by getTilesForEvent,
                     // otherwise React will auto-generate keys, and we will end up
                     // replacing all the DOM elements every time we paginate.
@@ -1040,6 +1056,15 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     }
 }
 
+/**
+ * Holds on to an event, caching the information about whether it should be
+ * shown. Avoids calling shouldShowEvent more times than we need to.
+ */
+interface EventAndShouldShow {
+    event: MatrixEvent;
+    shouldShow: boolean;
+}
+
 abstract class BaseGrouper {
     public static canStartGroup = (panel: MessagePanel, ev: MatrixEvent): boolean => true;
 
@@ -1369,3 +1394,17 @@ class MainGrouper extends BaseGrouper {
 
 // all the grouper classes that we use, ordered by priority
 const groupers = [CreationGrouper, MainGrouper];
+
+/**
+ * Look through the supplied list of EventAndShouldShow, and return the first
+ * event that is >start items through the list, and is shown.
+ */
+function findFirstShownAfter(start: number, events: EventAndShouldShow[]): MatrixEvent | null {
+    for (let n = start + 1; n < events.length; n++) {
+        const { event, shouldShow } = events[n];
+        if (shouldShow) {
+            return event;
+        }
+    }
+    return null;
+}

@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MessagePanel should handle large numbers of hidden events quickly 1`] = `
+<DocumentFragment>
+  <div
+    class="mx_AutoHideScrollbar mx_ScrollPanel cls"
+    tabindex="-1"
+  >
+    <div
+      class="mx_RoomView_messageListWrapper"
+    >
+      <ol
+        aria-live="polite"
+        class="mx_RoomView_MessageList"
+        style="height: 400px;"
+      />
+    </div>
+  </div>
+  );
+</DocumentFragment>
+`;
