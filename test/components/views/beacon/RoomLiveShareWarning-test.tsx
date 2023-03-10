@@ -44,6 +44,7 @@ describe("<RoomLiveShareWarning />", () => {
         getUserId: jest.fn().mockReturnValue(aliceId),
         unstable_setLiveBeacon: jest.fn().mockResolvedValue({ event_id: "1" }),
         sendEvent: jest.fn(),
+        isGuest: jest.fn().mockReturnValue(false),
     });
 
     // 14.03.2022 16:15
