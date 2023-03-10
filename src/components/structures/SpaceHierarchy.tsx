@@ -67,6 +67,7 @@ import { Alignment } from "../views/elements/Tooltip";
 import { getTopic } from "../../hooks/room/useTopic";
 import { SdkContextClass } from "../../contexts/SDKContext";
 import { getDisplayAliasForAliasSet } from "../../Rooms";
+import SettingsStore from "../../settings/SettingsStore";
 
 interface IProps {
     space: Room;
@@ -425,7 +426,11 @@ interface IHierarchyLevelProps {
 }
 
 export const toLocalRoom = (cli: MatrixClient, room: IHierarchyRoom, hierarchy: RoomHierarchy): IHierarchyRoom => {
-    const history = cli.getRoomUpgradeHistory(room.room_id, true);
+    const history = cli.getRoomUpgradeHistory(
+        room.room_id,
+        true,
+        SettingsStore.getValue("feature_dynamic_room_predecessors"),
+    );
 
     // Pick latest room that is actually part of the hierarchy
     let cliRoom = null;

@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
+import { mocked } from "jest-mock";
 import { render } from "@testing-library/react";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { Room } from "matrix-js-sdk/src/models/room";
@@ -28,6 +29,7 @@ import { HierarchyLevel, showRoom, toLocalRoom } from "../../../src/components/s
 import { Action } from "../../../src/dispatcher/actions";
 import MatrixClientContext from "../../../src/contexts/MatrixClientContext";
 import DMRoomMap from "../../../src/utils/DMRoomMap";
+import SettingsStore from "../../../src/settings/SettingsStore";
 
 // Fake random strings to give a predictable snapshot for checkbox IDs
 jest.mock("matrix-js-sdk/src/randomstring", () => {
@@ -127,6 +129,34 @@ describe("SpaceHierarchy", () => {
             expect(localRoomV2.room_id).toEqual(roomV2.roomId);
             const localRoomV3 = toLocalRoom(client, { room_id: roomV3.roomId } as IHierarchyRoom, hierarchy);
             expect(localRoomV3.room_id).toEqual(roomV3.roomId);
+        });
+
+        describe("If the feature_dynamic_room_predecessors is not enabled", () => {
+            beforeEach(() => {
+                jest.spyOn(SettingsStore, "getValue").mockReturnValue(false);
+            });
+            it("Passes through the dynamic predecessor setting", async () => {
+                mocked(client.getRoomUpgradeHistory).mockClear();
+                const hierarchy = { roomMap: new Map([]) } as RoomHierarchy;
+                toLocalRoom(client, { room_id: roomV1.roomId } as IHierarchyRoom, hierarchy);
+                expect(client.getRoomUpgradeHistory).toHaveBeenCalledWith(roomV1.roomId, true, false);
+            });
+        });
+
+        describe("If the feature_dynamic_room_predecessors is enabled", () => {
+            beforeEach(() => {
+                // Turn on feature_dynamic_room_predecessors setting
+                jest.spyOn(SettingsStore, "getValue").mockImplementation(
+                    (settingName) => settingName === "feature_dynamic_room_predecessors",
+                );
+            });
+
+            it("Passes through the dynamic predecessor setting", async () => {
+                mocked(client.getRoomUpgradeHistory).mockClear();
+                const hierarchy = { roomMap: new Map([]) } as RoomHierarchy;
+                toLocalRoom(client, { room_id: roomV1.roomId } as IHierarchyRoom, hierarchy);
+                expect(client.getRoomUpgradeHistory).toHaveBeenCalledWith(roomV1.roomId, true, true);
+            });
         });
     });
 
