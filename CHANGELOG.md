@@ -1,3 +1,9 @@
+Changes in [3.68.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.68.0-rc.2) (2023-03-10)
+===============================================================================================================
+
+## 🐛 Bug Fixes
+ * Fix start DM with pending third party invite ([\#10347](https://github.com/matrix-org/matrix-react-sdk/pull/10347)). Fixes vector-im/element-web#24781.
+
 Changes in [3.68.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.68.0-rc.1) (2023-03-07)
 ===============================================================================================================
 
