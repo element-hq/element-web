@@ -135,6 +135,10 @@ describe("findDMForUser", () => {
                 return [room1.roomId, room2.roomId, room3.roomId, room4.roomId, room5.roomId, unknownRoomId];
             }
 
+            if (userId === thirdPartyId) {
+                return [room7.roomId];
+            }
+
             return [];
         });
     });
@@ -173,5 +177,9 @@ describe("findDMForUser", () => {
 
     it("should find a room with a pending third-party invite", () => {
         expect(findDMForUser(mockClient, thirdPartyId)).toBe(room7);
+    });
+
+    it("should not find a room for an unknown Id", () => {
+        expect(findDMForUser(mockClient, "@unknown:example.com")).toBe(undefined);
     });
 });
