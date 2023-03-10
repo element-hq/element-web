@@ -1,3 +1,9 @@
+Changes in [1.11.25-rc.2](https://github.com/vector-im/element-web/releases/tag/v1.11.25-rc.2) (2023-03-10)
+===========================================================================================================
+
+## 🐛 Bug Fixes
+ * Fix start DM with pending third party invite ([\#10347](https://github.com/matrix-org/matrix-react-sdk/pull/10347)). Fixes #24781.
+
 Changes in [1.11.25-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.11.25-rc.1) (2023-03-07)
 ===========================================================================================================
 
