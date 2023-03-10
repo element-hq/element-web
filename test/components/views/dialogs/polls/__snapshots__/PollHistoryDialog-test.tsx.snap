@@ -38,7 +38,7 @@ exports[`<PollHistoryDialog /> renders a list of active polls when there are pol
   />
   <div
     aria-labelledby="mx_BaseDialog_title"
-    class="undefined mx_Dialog_fixedWidth"
+    class="mx_Dialog_fixedWidth"
     data-focus-lock-disabled="false"
     role="dialog"
   >

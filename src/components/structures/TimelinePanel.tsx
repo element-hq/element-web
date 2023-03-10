@@ -200,7 +200,7 @@ interface IState {
     forwardPaginating: boolean;
 
     // cache of matrixClient.getSyncState() (but from the 'sync' event)
-    clientSyncState: SyncState;
+    clientSyncState: SyncState | null;
 
     // should the event tiles have twelve hour times
     isTwelveHour: boolean;
@@ -268,7 +268,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         // but for now we just do it per room for simplicity.
         let initialReadMarker: string | null = null;
         if (this.props.manageReadMarkers) {
-            const readmarker = this.props.timelineSet.room.getAccountData("m.fully_read");
+            const readmarker = this.props.timelineSet.room?.getAccountData("m.fully_read");
             if (readmarker) {
                 initialReadMarker = readmarker.getContent().event_id;
             } else {
@@ -414,7 +414,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         // Get the list of actually rendered events seen in the DOM.
         // This is useful to know for sure what's being shown on screen.
         // And we can suss out any corrupted React `key` problems.
-        let renderedEventIds: string[];
+        let renderedEventIds: string[] | undefined;
         try {
             const messagePanel = this.messagePanel.current;
             if (messagePanel) {
@@ -422,7 +422,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
                 if (messagePanelNode) {
                     const actuallyRenderedEvents = messagePanelNode.querySelectorAll("[data-event-id]");
                     renderedEventIds = [...actuallyRenderedEvents].map((renderedEvent) => {
-                        return renderedEvent.getAttribute("data-event-id");
+                        return renderedEvent.getAttribute("data-event-id")!;
                     });
                 }
             }
@@ -432,8 +432,8 @@ class TimelinePanel extends React.Component<IProps, IState> {
 
         // Get the list of events and threads for the room as seen by the
         // matrix-js-sdk.
-        let serializedEventIdsFromTimelineSets: { [key: string]: string[] }[];
-        let serializedEventIdsFromThreadsTimelineSets: { [key: string]: string[] }[];
+        let serializedEventIdsFromTimelineSets: { [key: string]: string[] }[] | undefined;
+        let serializedEventIdsFromThreadsTimelineSets: { [key: string]: string[] }[] | undefined;
         const serializedThreadsMap: { [key: string]: any } = {};
         if (room) {
             const timelineSets = room.getTimelineSets();
@@ -469,15 +469,15 @@ class TimelinePanel extends React.Component<IProps, IState> {
             }
         }
 
-        let timelineWindowEventIds: string[];
+        let timelineWindowEventIds: string[] | undefined;
         try {
-            timelineWindowEventIds = this.timelineWindow.getEvents().map((ev) => ev.getId());
+            timelineWindowEventIds = this.timelineWindow?.getEvents().map((ev) => ev.getId()!);
         } catch (err) {
             logger.error(`onDumpDebugLogs: Failed to get event IDs from the timelineWindow`, err);
         }
-        let pendingEventIds: string[];
+        let pendingEventIds: string[] | undefined;
         try {
-            pendingEventIds = this.props.timelineSet.getPendingEvents().map((ev) => ev.getId());
+            pendingEventIds = this.props.timelineSet.getPendingEvents().map((ev) => ev.getId()!);
         } catch (err) {
             logger.error(`onDumpDebugLogs: Failed to get pending event IDs`, err);
         }
@@ -491,10 +491,10 @@ class TimelinePanel extends React.Component<IProps, IState> {
                 `\tserializedEventIdsFromThreadsTimelineSets=` +
                 `${JSON.stringify(serializedEventIdsFromThreadsTimelineSets)}\n` +
                 `\tserializedThreadsMap=${JSON.stringify(serializedThreadsMap)}\n` +
-                `\ttimelineWindowEventIds(${timelineWindowEventIds.length})=${JSON.stringify(
+                `\ttimelineWindowEventIds(${timelineWindowEventIds?.length})=${JSON.stringify(
                     timelineWindowEventIds,
                 )}\n` +
-                `\tpendingEventIds(${pendingEventIds.length})=${JSON.stringify(pendingEventIds)}`,
+                `\tpendingEventIds(${pendingEventIds?.length})=${JSON.stringify(pendingEventIds)}`,
         );
     };
 
@@ -560,7 +560,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
             return Promise.resolve(false);
         }
 
-        if (!this.timelineWindow.canPaginate(dir)) {
+        if (!this.timelineWindow?.canPaginate(dir)) {
             debuglog("can't", dir, "paginate any further");
             this.setState<null>({ [canPaginateKey]: false });
             return Promise.resolve(false);
@@ -576,7 +576,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
 
         return this.onPaginationRequest(this.timelineWindow, dir, PAGINATE_SIZE).then((r) => {
             if (this.unmounted) {
-                return;
+                return false;
             }
 
             debuglog("paginate complete backwards:" + backwards + "; success:" + r);
@@ -595,7 +595,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
             // paginate in the other where we previously could not.
             const otherDirection = backwards ? EventTimeline.FORWARDS : EventTimeline.BACKWARDS;
             const canPaginateOtherWayKey = backwards ? "canForwardPaginate" : "canBackPaginate";
-            if (!this.state[canPaginateOtherWayKey] && this.timelineWindow.canPaginate(otherDirection)) {
+            if (!this.state[canPaginateOtherWayKey] && this.timelineWindow?.canPaginate(otherDirection)) {
                 debuglog("can now", otherDirection, "paginate again");
                 newState[canPaginateOtherWayKey] = true;
             }
@@ -666,7 +666,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
 
     private onRoomTimeline = (
         ev: MatrixEvent,
-        room: Room | null,
+        room: Room | undefined,
         toStartOfTimeline: boolean,
         removed: boolean,
         data: IRoomTimelineData,
@@ -1008,7 +1008,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         if (
             currentRREventId &&
             currentRREventIndex === null &&
-            this.timelineWindow.canPaginate(EventTimeline.FORWARDS)
+            this.timelineWindow?.canPaginate(EventTimeline.FORWARDS)
         ) {
             shouldSendRR = false;
         }
@@ -1149,7 +1149,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         const events = this.timelineWindow.getEvents();
 
         // first find where the current RM is
-        let i;
+        let i: number;
         for (i = 0; i < events.length; i++) {
             if (events[i].getId() == this.state.readMarkerEventId) {
                 break;
@@ -1182,7 +1182,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         //
         // Otherwise, reload the timeline rather than trying to paginate
         // through all of space-time.
-        if (this.timelineWindow.canPaginate(EventTimeline.FORWARDS)) {
+        if (this.timelineWindow?.canPaginate(EventTimeline.FORWARDS)) {
             this.loadTimeline();
         } else {
             this.messagePanel.current?.scrollToBottom();
@@ -1231,7 +1231,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
 
         // Look up the timestamp if we can find it
         const tl = this.props.timelineSet.getTimelineForEvent(rmId ?? "");
-        let rmTs: number;
+        let rmTs: number | undefined;
         if (tl) {
             const event = tl.getEvents().find((e) => {
                 return e.getId() == rmId;
@@ -1264,7 +1264,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
      *
      * returns null if we are not mounted.
      */
-    public getScrollState = (): IScrollState => {
+    public getScrollState = (): IScrollState | null => {
         if (!this.messagePanel.current) {
             return null;
         }
@@ -1277,7 +1277,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
     //  -1: read marker is above the window
     //   0: read marker is visible
     //  +1: read marker is below the window
-    public getReadMarkerPosition = (): number => {
+    public getReadMarkerPosition = (): number | null => {
         if (!this.props.manageReadMarkers) return null;
         if (!this.messagePanel.current) return null;
 
@@ -1449,7 +1449,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
             this.setState({ timelineLoading: false });
             logger.error(`Error loading timeline panel at ${this.props.timelineSet.room?.roomId}/${eventId}`, error);
 
-            let onFinished: () => void;
+            let onFinished: (() => void) | undefined;
 
             // if we were given an event ID, then when the user closes the
             // dialog, let's jump to the end of the timeline. If we weren't,
@@ -1745,7 +1745,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         const wrapperRect = messagePanelNode.getBoundingClientRect();
         const myUserId = MatrixClientPeg.get().credentials.userId;
 
-        const isNodeInView = (node: HTMLElement): boolean => {
+        const isNodeInView = (node?: HTMLElement): boolean => {
             if (node) {
                 const boundingRect = node.getBoundingClientRect();
                 if (
@@ -1828,7 +1828,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
             return null;
         }
 
-        const myUserId = client.credentials.userId;
+        const myUserId = client.getSafeUserId();
         const receiptStore: ReadReceipt<any, any> = this.props.timelineSet.thread ?? this.props.timelineSet.room;
         return receiptStore?.getEventReadUpTo(myUserId, ignoreSynthesized);
     }
@@ -1943,7 +1943,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
                 canBackPaginate={this.state.canBackPaginate && this.state.firstVisibleEventIndex === 0}
                 showUrlPreview={this.props.showUrlPreview}
                 showReadReceipts={this.props.showReadReceipts}
-                ourUserId={MatrixClientPeg.get().credentials.userId}
+                ourUserId={MatrixClientPeg.get().getSafeUserId()}
                 stickyBottom={stickyBottom}
                 onScroll={this.onMessageListScroll}
                 onFillRequest={this.onMessageListFillRequest}

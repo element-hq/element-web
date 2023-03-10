@@ -29,7 +29,7 @@ export type IProps<T extends keyof JSX.IntrinsicElements> = Omit<DynamicHtmlElem
     onWheel?: (event: WheelEvent) => void;
     style?: React.CSSProperties;
     tabIndex?: number;
-    wrappedRef?: (ref: HTMLDivElement) => void;
+    wrappedRef?: (ref: HTMLDivElement | null) => void;
     children: ReactNode;
 };
 

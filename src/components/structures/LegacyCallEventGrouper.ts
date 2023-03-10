@@ -85,23 +85,23 @@ export default class LegacyCallEventGrouper extends EventEmitter {
         );
     }
 
-    private get invite(): MatrixEvent {
+    private get invite(): MatrixEvent | undefined {
         return [...this.events].find((event) => event.getType() === EventType.CallInvite);
     }
 
-    private get hangup(): MatrixEvent {
+    private get hangup(): MatrixEvent | undefined {
         return [...this.events].find((event) => event.getType() === EventType.CallHangup);
     }
 
-    private get reject(): MatrixEvent {
+    private get reject(): MatrixEvent | undefined {
         return [...this.events].find((event) => event.getType() === EventType.CallReject);
     }
 
-    private get selectAnswer(): MatrixEvent {
+    private get selectAnswer(): MatrixEvent | undefined {
         return [...this.events].find((event) => event.getType() === EventType.CallSelectAnswer);
     }
 
-    public get isVoice(): boolean {
+    public get isVoice(): boolean | undefined {
         const invite = this.invite;
         if (!invite) return;
 
@@ -114,7 +114,7 @@ export default class LegacyCallEventGrouper extends EventEmitter {
         return this.call?.hangupReason ?? this.hangup?.getContent()?.reason ?? null;
     }
 
-    public get rejectParty(): string {
+    public get rejectParty(): string | undefined {
         return this.reject?.getSender();
     }
 

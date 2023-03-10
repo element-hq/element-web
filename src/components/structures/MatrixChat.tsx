@@ -187,9 +187,9 @@ interface IState {
     // The ID of the room we're viewing. This is either populated directly
     // in the case where we view a room by ID or by RoomView when it resolves
     // what ID an alias points at.
-    currentRoomId?: string;
+    currentRoomId: string | null;
     // If we're trying to just view a user ID (i.e. /user URL), this is it
-    currentUserId?: string;
+    currentUserId: string | null;
     // this is persisted as mx_lhs_size, loaded in LoggedInView
     collapseLhs: boolean;
     // Parameters used in the registration dance with the IS
@@ -202,7 +202,7 @@ interface IState {
     // When showing Modal dialogs we need to set aria-hidden on the root app element
     // and disable it when there are no dialogs
     hideToSRUsers: boolean;
-    syncError?: Error;
+    syncError: Error | null;
     resizeNotifier: ResizeNotifier;
     serverConfig?: ValidatedServerConfig;
     ready: boolean;
@@ -248,6 +248,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.state = {
             view: Views.LOADING,
             collapseLhs: false,
+            currentRoomId: null,
+            currentUserId: null,
 
             hideToSRUsers: false,
 
@@ -469,9 +471,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         );
     }, 1000);
 
-    private getFallbackHsUrl(): string {
+    private getFallbackHsUrl(): string | null {
         if (this.props.serverConfig?.isDefault) {
-            return this.props.config.fallback_hs_url;
+            return this.props.config.fallback_hs_url ?? null;
         } else {
             return null;
         }
@@ -480,7 +482,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     private getServerProperties(): { serverConfig: ValidatedServerConfig } {
         let props = this.state.serverConfig;
         if (!props) props = this.props.serverConfig; // for unit tests
-        if (!props) props = SdkConfig.get("validated_server_config");
+        if (!props) props = SdkConfig.get("validated_server_config")!;
         return { serverConfig: props };
     }
 
@@ -709,7 +711,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 Modal.createDialog(
                     UserSettingsDialog,
                     { initialTabId: tabPayload.initialTabId as UserTab },
-                    /*className=*/ null,
+                    /*className=*/ undefined,
                     /*isPriority=*/ false,
                     /*isStatic=*/ true,
                 );
@@ -978,7 +980,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.setState(
             {
                 view: Views.LOGGED_IN,
-                currentRoomId: roomInfo.room_id || null,
+                currentRoomId: roomInfo.room_id ?? null,
                 page_type: PageType.RoomView,
                 threepidInvite: roomInfo.threepid_invite,
                 roomOobData: roomInfo.oob_data,
@@ -1063,7 +1065,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         const [shouldCreate, opts] = await modal.finished;
         if (shouldCreate) {
-            createRoom(opts);
+            createRoom(opts!);
         }
     }
 
@@ -1122,7 +1124,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         // Show a warning if there are additional complications.
         const warnings: JSX.Element[] = [];
 
-        const memberCount = roomToLeave.currentState.getJoinedMemberCount();
+        const memberCount = roomToLeave?.currentState.getJoinedMemberCount();
         if (memberCount === 1) {
             warnings.push(
                 <span className="warning" key="only_member_warning">
@@ -1137,7 +1139,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             return warnings;
         }
 
-        const joinRules = roomToLeave.currentState.getStateEvents("m.room.join_rules", "");
+        const joinRules = roomToLeave?.currentState.getStateEvents("m.room.join_rules", "");
         if (joinRules) {
             const rule = joinRules.getContent().join_rule;
             if (rule !== "public") {
@@ -1165,9 +1167,11 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 <span>
                     {isSpace
                         ? _t("Are you sure you want to leave the space '%(spaceName)s'?", {
-                              spaceName: roomToLeave.name,
+                              spaceName: roomToLeave?.name ?? _t("Unnamed Space"),
                           })
-                        : _t("Are you sure you want to leave the room '%(roomName)s'?", { roomName: roomToLeave.name })}
+                        : _t("Are you sure you want to leave the room '%(roomName)s'?", {
+                              roomName: roomToLeave?.name ?? _t("Unnamed Room"),
+                          })}
                     {warnings}
                 </span>
             ),
@@ -1311,9 +1315,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.setStateForNewView({ view: Views.LOGGED_IN });
         // If a specific screen is set to be shown after login, show that above
         // all else, as it probably means the user clicked on something already.
-        if (this.screenAfterLogin && this.screenAfterLogin.screen) {
+        if (this.screenAfterLogin?.screen) {
             this.showScreen(this.screenAfterLogin.screen, this.screenAfterLogin.params);
-            this.screenAfterLogin = null;
+            this.screenAfterLogin = undefined;
         } else if (MatrixClientPeg.currentUserIsJustRegistered()) {
             MatrixClientPeg.setJustRegisteredUserId(null);
 
@@ -1403,7 +1407,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         // result in view_home_page, _user_settings or _room_directory
         if (this.screenAfterLogin && this.screenAfterLogin.screen) {
             this.showScreen(this.screenAfterLogin.screen, this.screenAfterLogin.params);
-            this.screenAfterLogin = null;
+            this.screenAfterLogin = undefined;
         } else if (localStorage && localStorage.getItem("mx_last_room_id")) {
             // Before defaulting to directory, show the last viewed room
             this.viewLastRoom();
@@ -1419,7 +1423,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     private viewLastRoom(): void {
         dis.dispatch<ViewRoomPayload>({
             action: Action.ViewRoom,
-            room_id: localStorage.getItem("mx_last_room_id"),
+            room_id: localStorage.getItem("mx_last_room_id") ?? undefined,
             metricsTrigger: undefined, // other
         });
     }
@@ -1486,12 +1490,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             return this.loggedInView.current.canResetTimelineInRoom(roomId);
         });
 
-        cli.on(ClientEvent.Sync, (state: SyncState, prevState?: SyncState, data?: ISyncStateData) => {
+        cli.on(ClientEvent.Sync, (state: SyncState, prevState: SyncState | null, data?: ISyncStateData) => {
             if (state === SyncState.Error || state === SyncState.Reconnecting) {
-                if (data.error instanceof InvalidStoreError) {
+                if (data?.error instanceof InvalidStoreError) {
                     Lifecycle.handleInvalidStoreError(data.error);
                 }
-                this.setState({ syncError: data.error });
+                this.setState({ syncError: data?.error ?? null });
             } else if (this.state.syncError) {
                 this.setState({ syncError: null });
             }
@@ -1559,12 +1563,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     cancelButton: _t("Dismiss"),
                     onFinished: (confirmed) => {
                         if (confirmed) {
-                            const wnd = window.open(consentUri, "_blank");
+                            const wnd = window.open(consentUri, "_blank")!;
                             wnd.opener = null;
                         }
                     },
                 },
-                null,
+                undefined,
                 true,
             );
         });
@@ -1655,7 +1659,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     {
                         verifier: request.verifier,
                     },
-                    null,
+                    undefined,
                     /* priority = */ false,
                     /* static = */ true,
                 );
@@ -1774,7 +1778,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             }
 
             const type = screen === "start_sso" ? "sso" : "cas";
-            PlatformPeg.get().startSingleSignOn(cli, type, this.getFragmentAfterLogin());
+            PlatformPeg.get()?.startSingleSignOn(cli, type, this.getFragmentAfterLogin());
         } else if (screen.indexOf("room/") === 0) {
             // Rooms can have the following formats:
             // #room_alias:domain or !opaque_id:domain
@@ -1786,7 +1790,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 eventOffset = domainOffset + room.substring(domainOffset).indexOf("/");
             }
             const roomString = room.substring(0, eventOffset);
-            let eventId = room.substring(eventOffset + 1); // empty string if no event id given
+            let eventId: string | undefined = room.substring(eventOffset + 1); // empty string if no event id given
 
             // Previously we pulled the eventID from the segments in such a way
             // where if there was no eventId then we'd get undefined. However, we
@@ -1797,9 +1801,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
             // TODO: Handle encoded room/event IDs: https://github.com/vector-im/element-web/issues/9149
 
-            let threepidInvite: IThreepidInvite;
+            let threepidInvite: IThreepidInvite | undefined;
             // if we landed here from a 3PID invite, persist it
-            if (params.signurl && params.email) {
+            if (params?.signurl && params?.email) {
                 threepidInvite = ThreepidInviteStore.instance.storeInvite(
                     roomString,
                     params as IThreepidInviteWireFormat,
@@ -1816,8 +1820,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             // to other levels. If there's just one ?via= then params.via is a
             // single string. If someone does something like ?via=one.com&via=two.com
             // then params.via is an array of strings.
-            let via = [];
-            if (params.via) {
+            let via: string[] = [];
+            if (params?.via) {
                 if (typeof params.via === "string") via = [params.via];
                 else via = params.via;
             }
@@ -1855,7 +1859,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             dis.dispatch({
                 action: "view_user_info",
                 userId: userId,
-                subAction: params.action,
+                subAction: params?.action,
             });
         } else {
             logger.info("Ignoring showScreen for '%s'", screen);
@@ -1949,8 +1953,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         const numUnreadRooms = notificationState.numUnreadStates; // we know that states === rooms here
 
         if (PlatformPeg.get()) {
-            PlatformPeg.get().setErrorStatus(state === SyncState.Error);
-            PlatformPeg.get().setNotificationCount(numUnreadRooms);
+            PlatformPeg.get()!.setErrorStatus(state === SyncState.Error);
+            PlatformPeg.get()!.setNotificationCount(numUnreadRooms);
         }
 
         this.subTitleStatus = "";
@@ -1971,7 +1975,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     };
 
     private makeRegistrationUrl = (params: QueryDict): string => {
-        if (this.props.startingFragmentQueryParams.referrer) {
+        if (this.props.startingFragmentQueryParams?.referrer) {
             params.referrer = this.props.startingFragmentQueryParams.referrer;
         }
         return this.props.makeRegistrationUrl(params);

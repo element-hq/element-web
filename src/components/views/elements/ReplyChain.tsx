@@ -63,7 +63,7 @@ interface IState {
     // The loaded events to be rendered as linear-replies
     events: MatrixEvent[];
     // The latest loaded event which has not yet been shown
-    loadedEv: MatrixEvent;
+    loadedEv: MatrixEvent | null;
     // Whether the component is still loading more events
     loading: boolean;
     // Whether as error was encountered fetching a replied to event.
@@ -145,7 +145,7 @@ export default class ReplyChain extends React.Component<IProps, IState> {
         }
     }
 
-    private async getNextEvent(ev: MatrixEvent): Promise<MatrixEvent> {
+    private async getNextEvent(ev: MatrixEvent): Promise<MatrixEvent | null> {
         try {
             const inReplyToEventId = getParentEventId(ev);
             return await this.getEvent(inReplyToEventId);
@@ -154,7 +154,7 @@ export default class ReplyChain extends React.Component<IProps, IState> {
         }
     }
 
-    private async getEvent(eventId: string): Promise<MatrixEvent> {
+    private async getEvent(eventId: string): Promise<MatrixEvent | null> {
         if (!eventId) return null;
         const event = this.room.findEventById(eventId);
         if (event) return event;
@@ -168,7 +168,7 @@ export default class ReplyChain extends React.Component<IProps, IState> {
             // Return null as it is falsy and thus should be treated as an error (as the event cannot be resolved).
             return null;
         }
-        return this.room.findEventById(eventId);
+        return this.room.findEventById(eventId) ?? null;
     }
 
     public canCollapse = (): boolean => {
@@ -182,7 +182,7 @@ export default class ReplyChain extends React.Component<IProps, IState> {
     private onQuoteClick = async (event: ButtonEvent): Promise<void> => {
         const events = [this.state.loadedEv, ...this.state.events];
 
-        let loadedEv = null;
+        let loadedEv: MatrixEvent | null = null;
         if (events.length > 0) {
             loadedEv = await this.getNextEvent(events[0]);
         }
@@ -200,7 +200,7 @@ export default class ReplyChain extends React.Component<IProps, IState> {
     }
 
     public render(): React.ReactNode {
-        let header = null;
+        let header: JSX.Element | undefined;
         if (this.state.err) {
             header = (
                 <blockquote className="mx_ReplyChain mx_ReplyChain_error">

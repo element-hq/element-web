@@ -25,7 +25,7 @@ import { objectHasDiff } from "../../../utils/objects";
 
 const CUSTOM_VALUE = "SELECT_VALUE_CUSTOM";
 
-interface IProps {
+interface Props<K extends undefined | string> {
     value: number;
     // The maximum value that can be set with the power selector
     maxValue: number;
@@ -35,13 +35,14 @@ interface IProps {
 
     // should the user be able to change the value? false by default.
     disabled?: boolean;
-    onChange?: (value: number, powerLevelKey: string) => void;
-
-    // Optional key to pass as the second argument to `onChange`
-    powerLevelKey?: string;
 
     // The name to annotate the selector with
     label?: string;
+
+    onChange(value: number, powerLevelKey: K extends undefined ? void : K): void;
+
+    // Optional key to pass as the second argument to `onChange`
+    powerLevelKey: K extends undefined ? void : K;
 }
 
 interface IState {
@@ -54,13 +55,13 @@ interface IState {
     custom?: boolean;
 }
 
-export default class PowerSelector extends React.Component<IProps, IState> {
-    public static defaultProps: Partial<IProps> = {
+export default class PowerSelector<K extends undefined | string> extends React.Component<Props<K>, IState> {
+    public static defaultProps: Partial<Props<any>> = {
         maxValue: Infinity,
         usersDefault: 0,
     };
 
-    public constructor(props: IProps) {
+    public constructor(props: Props<K>) {
         super(props);
 
         this.state = {
@@ -77,7 +78,7 @@ export default class PowerSelector extends React.Component<IProps, IState> {
         this.initStateFromProps();
     }
 
-    public componentDidUpdate(prevProps: Readonly<IProps>): void {
+    public componentDidUpdate(prevProps: Readonly<Props<K>>): void {
         if (objectHasDiff(this.props, prevProps)) {
             this.initStateFromProps();
         }

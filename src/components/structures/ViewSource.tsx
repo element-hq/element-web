@@ -68,7 +68,7 @@ export default class ViewSource extends React.Component<IProps, IState> {
         };
         if (isEncrypted) {
             const copyDecryptedFunc = (): string => {
-                return stringify(decryptedEventSource);
+                return stringify(decryptedEventSource || {});
             };
             return (
                 <>
@@ -117,7 +117,7 @@ export default class ViewSource extends React.Component<IProps, IState> {
             return (
                 <MatrixClientContext.Consumer>
                     {(cli) => (
-                        <DevtoolsContext.Provider value={{ room: cli.getRoom(roomId) }}>
+                        <DevtoolsContext.Provider value={{ room: cli.getRoom(roomId)! }}>
                             <StateEventEditor onBack={this.onBack} mxEvent={mxEvent} />
                         </DevtoolsContext.Provider>
                     )}
@@ -128,7 +128,7 @@ export default class ViewSource extends React.Component<IProps, IState> {
         return (
             <MatrixClientContext.Consumer>
                 {(cli) => (
-                    <DevtoolsContext.Provider value={{ room: cli.getRoom(roomId) }}>
+                    <DevtoolsContext.Provider value={{ room: cli.getRoom(roomId)! }}>
                         <TimelineEventEditor onBack={this.onBack} mxEvent={mxEvent} />
                     </DevtoolsContext.Provider>
                 )}

@@ -39,7 +39,7 @@ export default class PresenceLabel extends React.Component<IProps> {
 
     // Return duration as a string using appropriate time units
     // XXX: This would be better handled using a culture-aware library, but we don't use one yet.
-    private getDuration(time: number): string {
+    private getDuration(time: number): string | undefined {
         if (!time) return;
         const t = Math.round(time / 1000);
         const s = t % 60;
@@ -61,11 +61,11 @@ export default class PresenceLabel extends React.Component<IProps> {
         return _t("%(duration)sd", { duration: d });
     }
 
-    private getPrettyPresence(presence: string, activeAgo: number, currentlyActive: boolean): string {
+    private getPrettyPresence(presence?: string, activeAgo?: number, currentlyActive?: boolean): string {
         // for busy presence, we ignore the 'currentlyActive' flag: they're busy whether
         // they're active or not. It can be set while the user is active in which case
         // the 'active ago' ends up being 0.
-        if (BUSY_PRESENCE_NAME.matches(presence)) return _t("Busy");
+        if (presence && BUSY_PRESENCE_NAME.matches(presence)) return _t("Busy");
 
         if (!currentlyActive && activeAgo !== undefined && activeAgo > 0) {
             const duration = this.getDuration(activeAgo);

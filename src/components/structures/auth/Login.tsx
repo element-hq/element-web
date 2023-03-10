@@ -368,7 +368,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
             isDefaultServer = true;
         }
 
-        const fallbackHsUrl = isDefaultServer ? this.props.fallbackHsUrl : null;
+        const fallbackHsUrl = isDefaultServer ? this.props.fallbackHsUrl! : null;
 
         const loginLogic = new Login(hsUrl, isUrl, fallbackHsUrl, {
             defaultDeviceDisplayName: this.props.defaultDeviceDisplayName,
@@ -514,7 +514,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
         // this is the ideal order we want to show the flows in
         const order = ["m.login.password", "m.login.sso"];
 
-        const flows = filterBoolean(order.map((type) => this.state.flows.find((flow) => flow.type === type)));
+        const flows = filterBoolean(order.map((type) => this.state.flows?.find((flow) => flow.type === type)));
         return (
             <React.Fragment>
                 {flows.map((flow) => {
@@ -546,7 +546,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
     };
 
     private renderSsoStep = (loginType: "cas" | "sso"): JSX.Element => {
-        const flow = this.state.flows.find((flow) => flow.type === "m.login." + loginType) as ISSOFlow;
+        const flow = this.state.flows?.find((flow) => flow.type === "m.login." + loginType) as ISSOFlow;
 
         return (
             <SSOButtons
@@ -554,7 +554,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
                 flow={flow}
                 loginType={loginType}
                 fragmentAfterLogin={this.props.fragmentAfterLogin}
-                primary={!this.state.flows.find((flow) => flow.type === "m.login.password")}
+                primary={!this.state.flows?.find((flow) => flow.type === "m.login.password")}
                 action={SSOAction.LOGIN}
             />
         );

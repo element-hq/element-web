@@ -88,7 +88,7 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
 
     private onVerifyClick = (): void => {
         const cli = MatrixClientPeg.get();
-        const userId = cli.getUserId();
+        const userId = cli.getSafeUserId();
         const requestPromise = cli.requestVerification(userId);
 
         // We need to call onFinished now to close this dialog, and
@@ -212,7 +212,7 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
                             {useRecoveryKeyButton}
                         </div>
                         <div className="mx_SetupEncryptionBody_reset">
-                            {_t("Forgotten or lost all recovery methods? <a>Reset all</a>", null, {
+                            {_t("Forgotten or lost all recovery methods? <a>Reset all</a>", undefined, {
                                 a: (sub) => (
                                     <AccessibleButton
                                         kind="link_inline"
@@ -228,7 +228,7 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
                 );
             }
         } else if (phase === Phase.Done) {
-            let message;
+            let message: JSX.Element;
             if (this.state.backupInfo) {
                 message = (
                     <p>

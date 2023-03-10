@@ -23,7 +23,7 @@ import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
 import * as Lifecycle from "../../../Lifecycle";
 import Modal from "../../../Modal";
-import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { IMatrixClientCreds, MatrixClientPeg } from "../../../MatrixClientPeg";
 import { sendLoginRequest } from "../../../Login";
 import AuthPage from "../../views/auth/AuthPage";
 import { SSO_HOMESERVER_URL_KEY, SSO_ID_SERVER_URL_KEY } from "../../../BasePlatform";
@@ -159,7 +159,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
             device_id: MatrixClientPeg.get().getDeviceId(),
         };
 
-        let credentials = null;
+        let credentials: IMatrixClientCreds;
         try {
             credentials = await sendLoginRequest(hsUrl, isUrl, loginType, loginParams);
         } catch (e) {
@@ -192,7 +192,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
             device_id: MatrixClientPeg.get().getDeviceId(),
         };
 
-        let credentials = null;
+        let credentials: IMatrixClientCreds;
         try {
             credentials = await sendLoginRequest(hsUrl, isUrl, loginType, loginParams);
         } catch (e) {
@@ -212,7 +212,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
     }
 
     private renderPasswordForm(introText: Optional<string>): JSX.Element {
-        let error: JSX.Element = null;
+        let error: JSX.Element | undefined;
         if (this.state.errorText) {
             error = <span className="mx_Login_error">{this.state.errorText}</span>;
         }
@@ -267,7 +267,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
             return <Spinner />;
         }
 
-        let introText = null; // null is translated to something area specific in this function
+        let introText: string | null = null; // null is translated to something area specific in this function
         if (this.state.keyBackupNeeded) {
             introText = _t(
                 "Regain access to your account and recover encryption keys stored in this session. " +

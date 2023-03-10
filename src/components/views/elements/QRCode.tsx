@@ -31,7 +31,7 @@ const defaultOptions: QRCodeToDataURLOptions = {
 };
 
 const QRCode: React.FC<IProps> = ({ data, className, ...options }) => {
-    const [dataUri, setUri] = React.useState<string>(null);
+    const [dataUri, setUri] = React.useState<string | null>(null);
     React.useEffect(() => {
         let cancelled = false;
         toDataURL(data, { ...defaultOptions, ...options }).then((uri) => {

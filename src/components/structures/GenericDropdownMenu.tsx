@@ -177,19 +177,20 @@ export function GenericDropdownMenu<T>({
             </>
         );
     }
-    const contextMenu = menuDisplayed ? (
-        <ContextMenu
-            onFinished={closeMenu}
-            chevronFace={ChevronFace.Top}
-            wrapperClassName={classNames("mx_GenericDropdownMenu_wrapper", className)}
-            {...aboveLeftOf(button.current.getBoundingClientRect())}
-        >
-            {contextMenuOptions}
-            {AdditionalOptions && (
-                <AdditionalOptions menuDisplayed={menuDisplayed} openMenu={openMenu} closeMenu={closeMenu} />
-            )}
-        </ContextMenu>
-    ) : null;
+    const contextMenu =
+        menuDisplayed && button.current ? (
+            <ContextMenu
+                onFinished={closeMenu}
+                chevronFace={ChevronFace.Top}
+                wrapperClassName={classNames("mx_GenericDropdownMenu_wrapper", className)}
+                {...aboveLeftOf(button.current.getBoundingClientRect())}
+            >
+                {contextMenuOptions}
+                {AdditionalOptions && (
+                    <AdditionalOptions menuDisplayed={menuDisplayed} openMenu={openMenu} closeMenu={closeMenu} />
+                )}
+            </ContextMenu>
+        ) : null;
     return (
         <>
             <ContextMenuButton

@@ -325,7 +325,7 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, permalinkCreator, onClose }) 
 
     const memberCount = useRoomMemberCount(room);
     const pinningEnabled = useFeatureEnabled("feature_pinning");
-    const pinCount = usePinnedEvents(pinningEnabled && room)?.length;
+    const pinCount = usePinnedEvents(pinningEnabled ? room : undefined)?.length;
 
     const isPollHistoryEnabled = useFeatureEnabled("feature_poll_history");
 

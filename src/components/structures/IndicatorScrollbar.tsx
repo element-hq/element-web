@@ -44,7 +44,7 @@ export default class IndicatorScrollbar<T extends keyof JSX.IntrinsicElements> e
 > {
     private autoHideScrollbar = createRef<AutoHideScrollbar<any>>();
     private scrollElement: HTMLDivElement;
-    private likelyTrackpadUser: boolean = null;
+    private likelyTrackpadUser: boolean | null = null;
     private checkAgainForTrackpad = 0; // ts in milliseconds to recheck this._likelyTrackpadUser
 
     public constructor(props: IProps<T>) {

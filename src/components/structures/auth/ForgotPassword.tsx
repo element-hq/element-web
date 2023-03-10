@@ -395,7 +395,7 @@ export default class ForgotPassword extends React.Component<Props, State> {
             button: _t("Continue"),
         });
         const [confirmed] = await finished;
-        return confirmed;
+        return !!confirmed;
     }
 
     public renderCheckEmail(): JSX.Element {

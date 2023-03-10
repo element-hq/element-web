@@ -190,8 +190,8 @@ describe("BreadcrumbsStore", () => {
     /**
      * Create as many fake rooms in an array as you ask for.
      */
-    function fakeRooms(howMany: number): Array<Room> {
-        const ret = [];
+    function fakeRooms(howMany: number): Room[] {
+        const ret: Room[] = [];
         for (let i = 0; i < howMany; i++) {
             ret.push(fakeRoom());
         }

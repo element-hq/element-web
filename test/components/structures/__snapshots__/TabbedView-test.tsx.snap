@@ -69,15 +69,3 @@ exports[`<TabbedView /> renders tabs 1`] = `
   </div>
 </div>
 `;
-
-exports[`<TabbedView /> renders without error when there are no tabs 1`] = `
-<div>
-  <div
-    class="mx_TabbedView mx_TabbedView_tabsOnLeft"
-  >
-    <div
-      class="mx_TabbedView_tabLabels"
-    />
-  </div>
-</div>
-`;

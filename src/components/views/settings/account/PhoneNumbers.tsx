@@ -129,9 +129,9 @@ interface IProps {
 
 interface IState {
     verifying: boolean;
-    verifyError: string;
+    verifyError: string | null;
     verifyMsisdn: string;
-    addTask: AddThreepid;
+    addTask: AddThreepid | null;
     continueDisabled: boolean;
     phoneCountry: string;
     newPhoneNumber: string;
@@ -205,7 +205,7 @@ export default class PhoneNumbers extends React.Component<IProps, IState> {
         const token = this.state.newPhoneNumberCode;
         const address = this.state.verifyMsisdn;
         this.state.addTask
-            .haveMsisdnToken(token)
+            ?.haveMsisdnToken(token)
             .then(([finished]) => {
                 let newPhoneNumber = this.state.newPhoneNumber;
                 if (finished) {

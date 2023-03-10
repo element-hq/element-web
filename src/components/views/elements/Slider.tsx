@@ -81,7 +81,7 @@ export default class Slider extends React.Component<IProps> {
             />
         ));
 
-        let selection = null;
+        let selection: JSX.Element | undefined;
 
         if (!this.props.disabled) {
             const offset = this.offset(this.props.values, this.props.value);

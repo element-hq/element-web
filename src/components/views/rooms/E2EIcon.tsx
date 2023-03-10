@@ -44,7 +44,7 @@ const crossSigningRoomTitles: { [key in E2EState]?: string } = {
 
 interface IProps {
     isUser?: boolean;
-    status?: E2EState | E2EStatus;
+    status: E2EState | E2EStatus;
     className?: string;
     size?: number;
     onClick?: () => void;
@@ -76,7 +76,7 @@ const E2EIcon: React.FC<IProps> = ({
         className,
     );
 
-    let e2eTitle;
+    let e2eTitle: string | undefined;
     if (isUser) {
         e2eTitle = crossSigningUserTitles[status];
     } else {

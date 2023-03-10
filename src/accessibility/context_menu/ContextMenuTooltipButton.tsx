@@ -37,7 +37,7 @@ export const ContextMenuTooltipButton: React.FC<IProps> = ({
         <AccessibleTooltipButton
             {...props}
             onClick={onClick}
-            onContextMenu={onContextMenu || onClick}
+            onContextMenu={onContextMenu ?? onClick ?? undefined}
             aria-haspopup={true}
             aria-expanded={isExpanded}
             forceHide={isExpanded}

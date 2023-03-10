@@ -26,7 +26,11 @@ import { SSOAuthEntry } from "./components/views/auth/InteractiveAuthEntryCompon
 import InteractiveAuthDialog from "./components/views/dialogs/InteractiveAuthDialog";
 
 function getIdServerDomain(): string {
-    return MatrixClientPeg.get().idBaseUrl.split("://")[1];
+    const idBaseUrl = MatrixClientPeg.get().idBaseUrl;
+    if (!idBaseUrl) {
+        throw new Error("Identity server not set");
+    }
+    return idBaseUrl.split("://")[1];
 }
 
 export type Binding = {
@@ -190,6 +194,9 @@ export default class AddThreepid {
                 if (this.bind) {
                     const authClient = new IdentityAuthClient();
                     const identityAccessToken = await authClient.getAccessToken();
+                    if (!identityAccessToken) {
+                        throw new Error("No identity access token found");
+                    }
                     await MatrixClientPeg.get().bindThreePid({
                         sid: this.sessionId,
                         client_secret: this.clientSecret,
@@ -279,7 +286,9 @@ export default class AddThreepid {
      * with a "message" property which contains a human-readable message detailing why
      * the request failed.
      */
-    public async haveMsisdnToken(msisdnToken: string): Promise<any[] | undefined> {
+    public async haveMsisdnToken(
+        msisdnToken: string,
+    ): Promise<[success?: boolean, result?: IAuthData | Error | null] | undefined> {
         const authClient = new IdentityAuthClient();
         const supportsSeparateAddAndBind = await MatrixClientPeg.get().doesServerSupportSeparateAddAndBind();
 

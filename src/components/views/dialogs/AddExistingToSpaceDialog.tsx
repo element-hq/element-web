@@ -40,6 +40,7 @@ import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
 import QueryMatcher from "../../../autocomplete/QueryMatcher";
 import LazyRenderList from "../elements/LazyRenderList";
 import { useSettingValue } from "../../../hooks/useSettings";
+import { filterBoolean } from "../../../utils/arrays";
 
 // These values match CSS
 const ROW_HEIGHT = 32 + 12;
@@ -56,7 +57,7 @@ interface IProps {
 export const Entry: React.FC<{
     room: Room;
     checked: boolean;
-    onChange(value: boolean): void;
+    onChange?(value: boolean): void;
 }> = ({ room, checked, onChange }) => {
     return (
         <label className="mx_AddExistingToSpace_entry">
@@ -67,7 +68,7 @@ export const Entry: React.FC<{
             )}
             <span className="mx_AddExistingToSpace_entry_name">{room.name}</span>
             <StyledCheckbox
-                onChange={onChange ? (e) => onChange(e.currentTarget.checked) : null}
+                onChange={onChange ? (e) => onChange(e.currentTarget.checked) : undefined}
                 checked={checked}
                 disabled={!onChange}
             />
@@ -150,8 +151,8 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
     });
 
     const [selectedToAdd, setSelectedToAdd] = useState(new Set<Room>());
-    const [progress, setProgress] = useState<number>(null);
-    const [error, setError] = useState<Error>(null);
+    const [progress, setProgress] = useState<number | null>(null);
+    const [error, setError] = useState<Error | null>(null);
     const [query, setQuery] = useState("");
     const lcQuery = query.toLowerCase().trim();
 
@@ -164,7 +165,7 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
         if (lcQuery) {
             const matcher = new QueryMatcher<Room>(visibleRooms, {
                 keys: ["name"],
-                funcs: [(r) => [r.getCanonicalAlias(), ...r.getAltAliases()].filter(Boolean)],
+                funcs: [(r) => filterBoolean([r.getCanonicalAlias(), ...r.getAltAliases()])],
                 shouldMatchWordsOnly: false,
             });
 
@@ -172,7 +173,7 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
         }
 
         const joinRule = space.getJoinRule();
-        return sortRooms(rooms).reduce(
+        return sortRooms(rooms).reduce<[spaces: Room[], rooms: Room[], dms: Room[]]>(
             (arr, room) => {
                 if (room.isSpaceRoom()) {
                     if (room !== space && !existingSubspacesSet.has(room)) {
@@ -289,7 +290,7 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
                   }
                   setSelectedToAdd(new Set(selectedToAdd));
               }
-            : null;
+            : undefined;
 
     // only count spaces when alone as they're shown on a separate modal all on their own
     const numSpaces = spacesRenderer && !dmsRenderer && !roomsRenderer ? spaces.length : 0;
@@ -373,7 +374,7 @@ const defaultRendererFactory =
                                     ? (checked: boolean) => {
                                           onChange(checked, room);
                                       }
-                                    : null
+                                    : undefined
                             }
                         />
                     )}
@@ -397,7 +398,7 @@ export const SubspaceSelector: React.FC<ISubspaceSelectorProps> = ({ title, spac
         return [
             space,
             ...SpaceStore.instance.getChildSpaces(space.roomId).filter((space) => {
-                return space.currentState.maySendStateEvent(EventType.SpaceChild, space.client.credentials.userId);
+                return space.currentState.maySendStateEvent(EventType.SpaceChild, space.client.getSafeUserId());
             }),
         ];
     }, [space]);

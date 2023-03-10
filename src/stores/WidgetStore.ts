@@ -113,7 +113,7 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
         });
     }
 
-    private loadRoomWidgets(room: Room): void {
+    private loadRoomWidgets(room: Room | null): void {
         if (!room) return;
         const roomInfo = this.roomMap.get(room.roomId) || <IRoomWidgets>{};
         roomInfo.widgets = [];

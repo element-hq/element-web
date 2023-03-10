@@ -145,7 +145,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         } else {
             const theme = SettingsStore.getValue("theme");
             if (theme.startsWith("custom-")) {
-                return getCustomTheme(theme.substring("custom-".length)).is_dark;
+                return !!getCustomTheme(theme.substring("custom-".length)).is_dark;
             }
             return theme === "dark";
         }
@@ -236,7 +236,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         SettingsStore.setValue("theme", null, SettingLevel.DEVICE, newTheme); // set at same level as Appearance tab
     };
 
-    private onSettingsOpen = (ev: ButtonEvent, tabId: string): void => {
+    private onSettingsOpen = (ev: ButtonEvent, tabId?: string): void => {
         ev.preventDefault();
         ev.stopPropagation();
 
@@ -319,7 +319,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
             );
         }
 
-        let homeButton = null;
+        let homeButton: JSX.Element | undefined;
         if (this.hasHomePage) {
             homeButton = (
                 <IconizedContextMenuOption
@@ -330,7 +330,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
             );
         }
 
-        let feedbackButton;
+        let feedbackButton: JSX.Element | undefined;
         if (SettingsStore.getValue(UIFeature.Feedback)) {
             feedbackButton = (
                 <IconizedContextMenuOption
@@ -357,7 +357,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
                 <IconizedContextMenuOption
                     iconClassName="mx_UserMenu_iconSettings"
                     label={_t("All settings")}
-                    onClick={(e) => this.onSettingsOpen(e, null)}
+                    onClick={(e) => this.onSettingsOpen(e)}
                 />
                 {feedbackButton}
                 <IconizedContextMenuOption
@@ -376,7 +376,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
                     <IconizedContextMenuOption
                         iconClassName="mx_UserMenu_iconSettings"
                         label={_t("Settings")}
-                        onClick={(e) => this.onSettingsOpen(e, null)}
+                        onClick={(e) => this.onSettingsOpen(e)}
                     />
                     {feedbackButton}
                 </IconizedContextMenuOptionList>
@@ -395,9 +395,12 @@ export default class UserMenu extends React.Component<IProps, IState> {
                             {OwnProfileStore.instance.displayName}
                         </span>
                         <span className="mx_UserMenu_contextMenu_userId">
-                            {UserIdentifierCustomisations.getDisplayUserIdentifier(MatrixClientPeg.get().getUserId(), {
-                                withDisplayName: true,
-                            })}
+                            {UserIdentifierCustomisations.getDisplayUserIdentifier(
+                                MatrixClientPeg.get().getSafeUserId(),
+                                {
+                                    withDisplayName: true,
+                                },
+                            )}
                         </span>
                     </div>
 
@@ -426,7 +429,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         const displayName = OwnProfileStore.instance.displayName || userId;
         const avatarUrl = OwnProfileStore.instance.getHttpAvatarUrl(avatarSize);
 
-        let name: JSX.Element;
+        let name: JSX.Element | undefined;
         if (!this.props.isPanelCollapsed) {
             name = <div className="mx_UserMenu_name">{displayName}</div>;
         }

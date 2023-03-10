@@ -34,6 +34,7 @@ import BaseDialog from "./BaseDialog";
 import { Action } from "../../../dispatcher/actions";
 import { VoipRoomSettingsTab } from "../settings/tabs/room/VoipRoomSettingsTab";
 import { ActionPayload } from "../../../dispatcher/payloads";
+import { NonEmptyArray } from "../../../@types/common";
 
 export const ROOM_GENERAL_TAB = "ROOM_GENERAL_TAB";
 export const ROOM_VOIP_TAB = "ROOM_VOIP_TAB";
@@ -85,11 +86,11 @@ export default class RoomSettingsDialog extends React.Component<IProps, IState> 
 
     private onRoomName = (): void => {
         this.setState({
-            roomName: MatrixClientPeg.get().getRoom(this.props.roomId).name,
+            roomName: MatrixClientPeg.get().getRoom(this.props.roomId)?.name ?? "",
         });
     };
 
-    private getTabs(): Tab[] {
+    private getTabs(): NonEmptyArray<Tab> {
         const tabs: Tab[] = [];
 
         tabs.push(
@@ -178,7 +179,7 @@ export default class RoomSettingsDialog extends React.Component<IProps, IState> 
             );
         }
 
-        return tabs;
+        return tabs as NonEmptyArray<Tab>;
     }
 
     public render(): React.ReactNode {

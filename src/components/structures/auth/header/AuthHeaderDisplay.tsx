@@ -27,7 +27,7 @@ interface Props {
 export function AuthHeaderDisplay({ title, icon, serverPicker, children }: PropsWithChildren<Props>): JSX.Element {
     const context = useContext(AuthHeaderContext);
     if (!context) {
-        return null;
+        return <></>;
     }
     const current = context.state.length ? context.state[0] : null;
     return (

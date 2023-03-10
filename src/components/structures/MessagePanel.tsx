@@ -163,7 +163,7 @@ interface IProps {
     stickyBottom?: boolean;
 
     // className for the panel
-    className: string;
+    className?: string;
 
     // show twelve hour timestamps
     isTwelveHour?: boolean;
@@ -177,7 +177,7 @@ interface IProps {
     // which layout to use
     layout?: Layout;
 
-    resizeNotifier: ResizeNotifier;
+    resizeNotifier?: ResizeNotifier;
     permalinkCreator?: RoomPermalinkCreator;
     editState?: EditorStateTransfer;
 
@@ -345,12 +345,12 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     };
 
     /* get the DOM node representing the given event */
-    public getNodeForEventId(eventId: string): HTMLElement {
+    public getNodeForEventId(eventId: string): HTMLElement | undefined {
         if (!this.eventTiles) {
             return undefined;
         }
 
-        return this.eventTiles[eventId]?.ref?.current;
+        return this.eventTiles[eventId]?.ref?.current ?? undefined;
     }
 
     public getTileForEventId(eventId?: string): UnwrappedEventTile | undefined {
@@ -362,7 +362,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 
     /* return true if the content is fully scrolled down right now; else false.
      */
-    public isAtBottom(): boolean {
+    public isAtBottom(): boolean | undefined {
         return this.scrollPanel.current?.isAtBottom();
     }
 
@@ -371,7 +371,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
      *
      * returns null if we are not mounted.
      */
-    public getScrollState(): IScrollState {
+    public getScrollState(): IScrollState | null {
         return this.scrollPanel.current?.getScrollState() ?? null;
     }
 
@@ -381,7 +381,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     //  -1: read marker is above the window
     //   0: read marker is within the window
     //  +1: read marker is below the window
-    public getReadMarkerPosition(): number {
+    public getReadMarkerPosition(): number | null {
         const readMarker = this.readMarkerNode.current;
         const messageWrapper = this.scrollPanel.current;
 
@@ -633,9 +633,8 @@ export default class MessagePanel extends React.Component<IProps, IState> {
             break;
         }
 
-        const ret = [];
-
-        let prevEvent = null; // the last event we showed
+        const ret: ReactNode[] = [];
+        let prevEvent: MatrixEvent | null = null; // the last event we showed
 
         // Note: the EventTile might still render a "sent/sending receipt" independent of
         // this information. When not providing read receipt information, the tile is likely
@@ -645,7 +644,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
             this.readReceiptsByEvent = this.getReadReceiptsByShownEvent();
         }
 
-        let grouper: BaseGrouper = null;
+        let grouper: BaseGrouper | null = null;
 
         for (let i = 0; i < events.length; i++) {
             const { event: mxEv, shouldShow } = events[i];
@@ -695,14 +694,14 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     }
 
     public getTilesForEvent(
-        prevEvent: MatrixEvent,
+        prevEvent: MatrixEvent | null,
         mxEv: MatrixEvent,
         last = false,
         isGrouped = false,
         nextEvent?: MatrixEvent,
         nextEventWithTile?: MatrixEvent,
     ): ReactNode[] {
-        const ret = [];
+        const ret: ReactNode[] = [];
 
         const isEditing = this.props.editState?.getEvent().getId() === mxEv.getId();
         // local echoes have a fake date, which could even be yesterday. Treat them as 'today' for the date separators.
@@ -806,7 +805,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         return ret;
     }
 
-    public wantsDateSeparator(prevEvent: MatrixEvent, nextEventDate: Date): boolean {
+    public wantsDateSeparator(prevEvent: MatrixEvent | null, nextEventDate: Date): boolean {
         if (this.context.timelineRenderingType === TimelineRenderingType.ThreadsList) {
             return false;
         }
@@ -820,7 +819,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 
     // Get a list of read receipts that should be shown next to this event
     // Receipts are objects which have a 'userId', 'roomMember' and 'ts'.
-    private getReadReceiptsForEvent(event: MatrixEvent): IReadReceiptProps[] {
+    private getReadReceiptsForEvent(event: MatrixEvent): IReadReceiptProps[] | null {
         const myUserId = MatrixClientPeg.get().credentials.userId;
 
         // get list of read receipts, sorted most recent first
@@ -939,7 +938,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     private onTypingShown = (): void => {
         const scrollPanel = this.scrollPanel.current;
         // this will make the timeline grow, so checkScroll
-        scrollPanel.checkScroll();
+        scrollPanel?.checkScroll();
         if (scrollPanel && scrollPanel.getScrollState().stuckAtBottom) {
             scrollPanel.preventShrinking();
         }
@@ -1018,7 +1017,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
             );
         }
 
-        let ircResizer = null;
+        let ircResizer: JSX.Element | undefined;
         if (this.props.layout == Layout.IRC) {
             ircResizer = (
                 <IRCTimelineProfileResizer
@@ -1076,7 +1075,7 @@ abstract class BaseGrouper {
     public constructor(
         public readonly panel: MessagePanel,
         public readonly event: MatrixEvent,
-        public readonly prevEvent: MatrixEvent,
+        public readonly prevEvent: MatrixEvent | null,
         public readonly lastShownEvent: MatrixEvent,
         public readonly nextEvent?: MatrixEvent,
         public readonly nextEventTile?: MatrixEvent,
@@ -1261,7 +1260,7 @@ class MainGrouper extends BaseGrouper {
     public constructor(
         public readonly panel: MessagePanel,
         public readonly event: MatrixEvent,
-        public readonly prevEvent: MatrixEvent,
+        public readonly prevEvent: MatrixEvent | null,
         public readonly lastShownEvent: MatrixEvent,
         nextEvent: MatrixEvent,
         nextEventTile: MatrixEvent,
@@ -1341,7 +1340,7 @@ class MainGrouper extends BaseGrouper {
         }
 
         let highlightInSummary = false;
-        let eventTiles = this.events
+        let eventTiles: ReactNode[] | null = this.events
             .map((e, i) => {
                 if (e.getId() === panel.props.highlightedEventId) {
                     highlightInSummary = true;

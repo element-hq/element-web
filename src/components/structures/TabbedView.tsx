@@ -24,6 +24,7 @@ import { _t } from "../../languageHandler";
 import AutoHideScrollbar from "./AutoHideScrollbar";
 import AccessibleButton from "../views/elements/AccessibleButton";
 import { PosthogScreenTracker, ScreenName } from "../../PosthogTrackers";
+import { NonEmptyArray } from "../../@types/common";
 
 /**
  * Represents a tab for the TabbedView.
@@ -40,7 +41,7 @@ export class Tab {
     public constructor(
         public readonly id: string,
         public readonly label: string,
-        public readonly icon: string,
+        public readonly icon: string | null,
         public readonly body: React.ReactNode,
         public readonly screenName?: ScreenName,
     ) {}
@@ -52,7 +53,7 @@ export enum TabLocation {
 }
 
 interface IProps {
-    tabs: Tab[];
+    tabs: NonEmptyArray<Tab>;
     initialTabId?: string;
     tabLocation: TabLocation;
     onChange?: (tabId: string) => void;
@@ -69,7 +70,7 @@ export default class TabbedView extends React.Component<IProps, IState> {
 
         const initialTabIdIsValid = props.tabs.find((tab) => tab.id === props.initialTabId);
         this.state = {
-            activeTabId: initialTabIdIsValid ? props.initialTabId : props.tabs[0]?.id,
+            activeTabId: initialTabIdIsValid ? props.initialTabId! : props.tabs[0].id,
         };
     }
 
@@ -101,7 +102,7 @@ export default class TabbedView extends React.Component<IProps, IState> {
 
         if (this.state.activeTabId === tab.id) classes += "mx_TabbedView_tabLabel_active";
 
-        let tabIcon = null;
+        let tabIcon: JSX.Element | undefined;
         if (tab.icon) {
             tabIcon = <span className={`mx_TabbedView_maskedIcon ${tab.icon}`} />;
         }
@@ -141,9 +142,11 @@ export default class TabbedView extends React.Component<IProps, IState> {
             mx_TabbedView_tabsOnTop: this.props.tabLocation == TabLocation.TOP,
         });
 
+        const screenName = tab?.screenName ?? this.props.screenName;
+
         return (
             <div className={tabbedViewClasses}>
-                <PosthogScreenTracker screenName={tab?.screenName ?? this.props.screenName} />
+                {screenName && <PosthogScreenTracker screenName={screenName} />}
                 <div className="mx_TabbedView_tabLabels">{labels}</div>
                 {panel}
             </div>

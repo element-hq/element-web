@@ -21,6 +21,7 @@ import { RoomState, RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 import { logger } from "matrix-js-sdk/src/logger";
 import { throttle, get } from "lodash";
 import { compare } from "matrix-js-sdk/src/utils";
+import { IContent } from "matrix-js-sdk/src/models/event";
 
 import { _t, _td } from "../../../../../languageHandler";
 import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
@@ -171,8 +172,8 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
     private onPowerLevelsChanged = (value: number, powerLevelKey: string): void => {
         const client = MatrixClientPeg.get();
         const room = client.getRoom(this.props.roomId);
-        const plEvent = room.currentState.getStateEvents(EventType.RoomPowerLevels, "");
-        let plContent = plEvent ? plEvent.getContent() || {} : {};
+        const plEvent = room?.currentState.getStateEvents(EventType.RoomPowerLevels, "");
+        let plContent = plEvent?.getContent() ?? {};
 
         // Clone the power levels just in case
         plContent = Object.assign({}, plContent);
@@ -185,7 +186,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
             plContent["events"][powerLevelKey.slice(eventsLevelPrefix.length)] = value;
         } else {
             const keyPath = powerLevelKey.split(".");
-            let parentObj;
+            let parentObj: IContent | undefined;
             let currentObj = plContent;
             for (const key of keyPath) {
                 if (!currentObj[key]) {
@@ -213,8 +214,8 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
     private onUserPowerLevelChanged = (value: number, powerLevelKey: string): void => {
         const client = MatrixClientPeg.get();
         const room = client.getRoom(this.props.roomId);
-        const plEvent = room.currentState.getStateEvents(EventType.RoomPowerLevels, "");
-        let plContent = plEvent ? plEvent.getContent() || {} : {};
+        const plEvent = room?.currentState.getStateEvents(EventType.RoomPowerLevels, "");
+        let plContent = plEvent?.getContent() ?? {};
 
         // Clone the power levels just in case
         plContent = Object.assign({}, plContent);

@@ -153,12 +153,11 @@ export default class BaseDialog extends React.Component<IProps> {
 
         return (
             <MatrixClientContext.Provider value={this.matrixClient}>
-                <PosthogScreenTracker screenName={this.props.screenName} />
+                {this.props.screenName && <PosthogScreenTracker screenName={this.props.screenName} />}
                 <FocusLock
                     returnFocus={true}
                     lockProps={lockProps}
-                    className={classNames({
-                        [this.props.className]: true,
+                    className={classNames(this.props.className, {
                         mx_Dialog_fixedWidth: this.props.fixedWidth,
                     })}
                 >

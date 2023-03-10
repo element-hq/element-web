@@ -43,7 +43,7 @@ const PRESENCE_CLASS: Record<PresenceState, string> = {
     unavailable: "mx_EntityTile_unavailable",
 };
 
-function presenceClassForMember(presenceState: PresenceState, lastActiveAgo: number, showPresence: boolean): string {
+function presenceClassForMember(presenceState?: PresenceState, lastActiveAgo?: number, showPresence?: boolean): string {
     if (showPresence === false) {
         return "mx_EntityTile_online_beenactive";
     }
@@ -74,7 +74,7 @@ interface IProps {
     presenceLastTs?: number;
     presenceCurrentlyActive?: boolean;
     showInviteButton?: boolean;
-    onClick?(): void;
+    onClick(): void;
     suppressOnHover?: boolean;
     showPresence?: boolean;
     subtextLabel?: string;
@@ -108,7 +108,7 @@ export default class EntityTile extends React.PureComponent<IProps, IState> {
     public render(): React.ReactNode {
         const mainClassNames: Record<string, boolean> = {
             mx_EntityTile: true,
-            mx_EntityTile_noHover: this.props.suppressOnHover,
+            mx_EntityTile_noHover: !!this.props.suppressOnHover,
         };
         if (this.props.className) mainClassNames[this.props.className] = true;
 
@@ -127,7 +127,7 @@ export default class EntityTile extends React.PureComponent<IProps, IState> {
                 ? Date.now() - (this.props.presenceLastTs - this.props.presenceLastActiveAgo)
                 : -1;
 
-            let presenceLabel = null;
+            let presenceLabel: JSX.Element | undefined;
             if (this.props.showPresence) {
                 presenceLabel = (
                     <PresenceLabel

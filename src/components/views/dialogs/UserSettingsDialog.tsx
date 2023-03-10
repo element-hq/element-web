@@ -36,6 +36,7 @@ import SidebarUserSettingsTab from "../settings/tabs/user/SidebarUserSettingsTab
 import KeyboardUserSettingsTab from "../settings/tabs/user/KeyboardUserSettingsTab";
 import SessionManagerTab from "../settings/tabs/user/SessionManagerTab";
 import { UserTab } from "./UserTab";
+import { NonEmptyArray } from "../../../@types/common";
 
 interface IProps {
     initialTabId?: UserTab;
@@ -80,7 +81,7 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
         this.setState({ newSessionManagerEnabled: newValue });
     };
 
-    private getTabs(): Tab[] {
+    private getTabs(): NonEmptyArray<Tab> {
         const tabs: Tab[] = [];
 
         tabs.push(
@@ -207,7 +208,7 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
             ),
         );
 
-        return tabs;
+        return tabs as NonEmptyArray<Tab>;
     }
 
     public render(): React.ReactNode {

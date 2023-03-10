@@ -37,6 +37,7 @@ import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContex
 import { ReadPinsEventId } from "./types";
 import Heading from "../typography/Heading";
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
+import { filterBoolean } from "../../../utils/arrays";
 
 interface IProps {
     room: Room;
@@ -44,7 +45,7 @@ interface IProps {
     onClose(): void;
 }
 
-export const usePinnedEvents = (room: Room): string[] => {
+export const usePinnedEvents = (room?: Room): string[] => {
     const [pinnedEvents, setPinnedEvents] = useState<string[]>([]);
 
     const update = useCallback(
@@ -173,8 +174,7 @@ const PinnedMessagesCard: React.FC<IProps> = ({ room, onClose, permalinkCreator 
         };
 
         // show them in reverse, with latest pinned at the top
-        content = pinnedEvents
-            .filter(Boolean)
+        content = filterBoolean(pinnedEvents)
             .reverse()
             .map((ev) => (
                 <PinnedEventTile

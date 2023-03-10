@@ -26,6 +26,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import RoomName from "../elements/RoomName";
 import { SpacePreferenceTab } from "../../../dispatcher/payloads/OpenSpacePreferencesPayload";
+import { NonEmptyArray } from "../../../@types/common";
 
 interface IProps {
     space: Room;
@@ -69,7 +70,7 @@ const SpacePreferencesAppearanceTab: React.FC<Pick<IProps, "space">> = ({ space 
 };
 
 const SpacePreferencesDialog: React.FC<IProps> = ({ space, initialTabId, onFinished }) => {
-    const tabs = [
+    const tabs: NonEmptyArray<Tab> = [
         new Tab(
             SpacePreferenceTab.Appearance,
             _td("Appearance"),

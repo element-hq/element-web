@@ -23,6 +23,7 @@ import DialogButtons from "./DialogButtons";
 import AccessibleButton from "./AccessibleButton";
 import TabbedView, { Tab, TabLocation } from "../../structures/TabbedView";
 import PlatformPeg from "../../../PlatformPeg";
+import { NonEmptyArray } from "../../../@types/common";
 
 export function getDesktopCapturerSources(): Promise<Array<DesktopCapturerSource>> {
     const options: GetSourcesOptions = {
@@ -80,7 +81,7 @@ export interface PickerIState {
     selectedSource: DesktopCapturerSource | null;
 }
 export interface PickerIProps {
-    onFinished(sourceId: string): void;
+    onFinished(sourceId?: string): void;
 }
 
 export default class DesktopCapturerSourcePicker extends React.Component<PickerIProps, PickerIState> {
@@ -129,7 +130,7 @@ export default class DesktopCapturerSourcePicker extends React.Component<PickerI
     };
 
     private onCloseClick = (): void => {
-        this.props.onFinished(null);
+        this.props.onFinished();
     };
 
     private getTab(type: "screen" | "window", label: string): Tab {
@@ -150,7 +151,7 @@ export default class DesktopCapturerSourcePicker extends React.Component<PickerI
     }
 
     public render(): React.ReactNode {
-        const tabs = [
+        const tabs: NonEmptyArray<Tab> = [
             this.getTab("screen", _t("Share entire screen")),
             this.getTab("window", _t("Application window")),
         ];

@@ -74,6 +74,7 @@ import { InviteKind } from "./InviteDialogTypes";
 import Modal from "../../../Modal";
 import dis from "../../../dispatcher/dispatcher";
 import { privateShouldBeEncrypted } from "../../../utils/rooms";
+import { NonEmptyArray } from "../../../@types/common";
 
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
 /* eslint-disable camelcase */
@@ -1421,10 +1422,9 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
 
         let dialogContent;
         if (this.props.kind === InviteKind.CallTransfer) {
-            const tabs: Tab[] = [];
-            tabs.push(
+            const tabs: NonEmptyArray<Tab> = [
                 new Tab(TabId.UserDirectory, _td("User Directory"), "mx_InviteDialog_userDirectoryIcon", usersSection),
-            );
+            ];
 
             const backspaceButton = <DialPadBackspaceButton onBackspacePress={this.onDeletePress} />;
 

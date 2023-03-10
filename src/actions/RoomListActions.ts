@@ -26,7 +26,7 @@ import { _t } from "../languageHandler";
 import { AsyncActionPayload } from "../dispatcher/payloads";
 import RoomListStore from "../stores/room-list/RoomListStore";
 import { SortAlgorithm } from "../stores/room-list/algorithms/models";
-import { DefaultTagID } from "../stores/room-list/models";
+import { DefaultTagID, TagID } from "../stores/room-list/models";
 import ErrorDialog from "../components/views/dialogs/ErrorDialog";
 
 export default class RoomListActions {
@@ -49,10 +49,10 @@ export default class RoomListActions {
     public static tagRoom(
         matrixClient: MatrixClient,
         room: Room,
-        oldTag: string,
-        newTag: string,
-        oldIndex: number | null,
-        newIndex: number | null,
+        oldTag: TagID | null,
+        newTag: TagID | null,
+        oldIndex?: number,
+        newIndex?: number,
     ): AsyncActionPayload {
         let metaData: Parameters<MatrixClient["setRoomTag"]>[2] | null = null;
 

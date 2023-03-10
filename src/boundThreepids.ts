@@ -35,6 +35,9 @@ export async function getThreepidsWithBindStatus(
         try {
             const authClient = new IdentityAuthClient();
             const identityAccessToken = await authClient.getAccessToken({ check: false });
+            if (!identityAccessToken) {
+                throw new Error("No identity access token found");
+            }
 
             // Restructure for lookup query
             const query = threepids.map(({ medium, address }): [string, string] => [medium, address]);
