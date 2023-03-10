@@ -1154,7 +1154,7 @@
     "Error upgrading room": "升級聊天室時遇到錯誤",
     "Double check that your server supports the room version chosen and try again.": "仔細檢查您的伺服器是否支援選定的聊天室版本，然後再試一次。",
     "Unencrypted": "未加密",
-    "Upgrade private room": "升級私密聊天室",
+    "Upgrade private room": "升級私人聊天室",
     "Upgrade public room": "升級公開聊天室",
     "Upgrading a room is an advanced action and is usually recommended when a room is unstable due to bugs, missing features or security vulnerabilities.": "升級聊天室為進階動作，通常建議在聊天室因為錯誤而不穩定、缺少功能或安全漏洞等才升級。",
     "This usually only affects how the room is processed on the server. If you're having problems with your %(brand)s, please <a>report a bug</a>.": "這通常僅影響如何在伺服器上處理聊天室的方式。如果您遇到與 %(brand)s 相關的問題，請<a>回報錯誤</a>。",
@@ -3742,5 +3742,7 @@
     "Once invited users have joined Element, you will be able to chat and the room will be end-to-end encrypted": "被邀請的使用者加入 Element 後，您就可以聊天，聊天室將會進行端到端加密",
     "Waiting for users to join Element": "等待使用者加入 Element",
     "Invites by email can only be sent one at a time": "透過電子郵件傳送的邀請一次只能傳送一個",
-    "Once everyone has joined, you’ll be able to chat": "所有人都加入後，您就可以聊天了"
+    "Once everyone has joined, you’ll be able to chat": "所有人都加入後，您就可以聊天了",
+    "Could not find room": "找不到聊天室",
+    "iframe has no src attribute": "iframe 沒有 src 屬性"
 }
