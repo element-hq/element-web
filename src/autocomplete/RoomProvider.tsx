@@ -1,7 +1,7 @@
 /*
 Copyright 2016 Aviral Dasgupta
 Copyright 2018 Michael Telatynski <7t3chguy@gmail.com>
-Copyright 2017, 2018, 2021 The Matrix.org Foundation C.I.C.
+Copyright 2017-2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ import { makeRoomPermalink } from "../utils/permalinks/Permalinks";
 import { ICompletion, ISelectionRange } from "./Autocompleter";
 import RoomAvatar from "../components/views/avatars/RoomAvatar";
 import { TimelineRenderingType } from "../contexts/RoomContext";
+import SettingsStore from "../settings/SettingsStore";
 
 const ROOM_REGEX = /\B#\S*/g;
 
@@ -67,7 +68,9 @@ export default class RoomProvider extends AutocompleteProvider {
         const cli = MatrixClientPeg.get();
 
         // filter out spaces here as they get their own autocomplete provider
-        return cli.getVisibleRooms().filter((r) => !r.isSpaceRoom());
+        return cli
+            .getVisibleRooms(SettingsStore.getValue("feature_dynamic_room_predecessors"))
+            .filter((r) => !r.isSpaceRoom());
     }
 
     public async getCompletions(
