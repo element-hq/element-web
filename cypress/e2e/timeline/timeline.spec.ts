@@ -670,5 +670,90 @@ describe("Timeline", () => {
                 percyCSS,
             });
         });
+
+        it("should send, reply, and display long strings without overflowing", () => {
+            // Max 256 characters for display name
+            const LONG_STRING =
+                "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut " +
+                "et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut " +
+                "aliquip";
+
+            // Create a bot with a long display name
+            let bot: MatrixClient;
+            cy.getBot(homeserver, {
+                displayName: LONG_STRING,
+                autoAcceptInvites: false,
+            }).then((_bot) => {
+                bot = _bot;
+            });
+
+            // Create another room with a long name, invite the bot, and open the room
+            cy.createRoom({ name: LONG_STRING })
+                .as("testRoomId")
+                .then((_roomId) => {
+                    roomId = _roomId;
+                    cy.inviteUser(roomId, bot.getUserId());
+                    bot.joinRoom(roomId);
+                    cy.visit("/#/room/" + roomId);
+                });
+
+            // Wait until configuration is finished
+            cy.contains(
+                ".mx_RoomView_body .mx_GenericEventListSummary .mx_GenericEventListSummary_summary",
+                "created and configured the room.",
+            ).should("exist");
+
+            // Set the display name to "LONG_STRING 2" in order to avoid a warning in Percy tests from being triggered
+            // due to the generated random mxid being displayed inside the GELS summary.
+            cy.setDisplayName(`${LONG_STRING} 2`);
+
+            // Have the bot send a long message
+            cy.get<string>("@testRoomId").then((roomId) => {
+                bot.sendMessage(roomId, {
+                    body: LONG_STRING,
+                    msgtype: "m.text",
+                });
+            });
+
+            // Wait until the message is rendered
+            cy.get(".mx_EventTile_last .mx_MTextBody .mx_EventTile_body").should("have.text", LONG_STRING);
+
+            // Reply to the message
+            cy.get(".mx_EventTile_last")
+                .realHover()
+                .within(() => {
+                    cy.get('[aria-label="Reply"]').click({ force: false });
+                });
+            cy.getComposer().type(`${reply}{enter}`);
+
+            // Make sure the reply tile and the reply are displayed
+            cy.get(".mx_EventTile_last").within(() => {
+                cy.get(".mx_ReplyTile .mx_MTextBody").should("have.text", LONG_STRING);
+                cy.get(".mx_EventTile_line > .mx_MTextBody").should("have.text", reply);
+            });
+
+            // Exclude timestamp and read marker from snapshots
+            const percyCSS = ".mx_MessageTimestamp, .mx_RoomView_myReadMarker { visibility: hidden !important; }";
+
+            // Make sure the strings do not overflow on IRC layout
+            cy.setSettingValue("layout", null, SettingLevel.DEVICE, Layout.IRC);
+            cy.get(".mx_MainSplit").percySnapshotElement("Long strings with a reply on IRC layout", { percyCSS });
+
+            // Make sure the strings do not overflow on modern layout
+            cy.setSettingValue("layout", null, SettingLevel.DEVICE, Layout.Group);
+            cy.get(".mx_EventTile_last[data-layout='group'] .mx_EventTile_line > .mx_MTextBody").should(
+                "have.text",
+                reply,
+            );
+            cy.get(".mx_MainSplit").percySnapshotElement("Long strings with a reply on modern layout", { percyCSS });
+
+            // Make sure the strings do not overflow on bubble layout
+            cy.setSettingValue("layout", null, SettingLevel.DEVICE, Layout.Bubble);
+            cy.get(".mx_EventTile_last[data-layout='bubble'] .mx_EventTile_line > .mx_MTextBody").should(
+                "have.text",
+                reply,
+            );
+            cy.get(".mx_MainSplit").percySnapshotElement("Long strings with a reply on bubble layout", { percyCSS });
+        });
     });
 });
