@@ -227,11 +227,16 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
     const lcQuery = query.toLowerCase();
 
     const previewLayout = useSettingValue<Layout>("layout");
+    const msc3946DynamicRoomPredecessors = useSettingValue<boolean>("feature_dynamic_room_predecessors");
 
     let rooms = useMemo(
         () =>
-            sortRooms(cli.getVisibleRooms().filter((room) => room.getMyMembership() === "join" && !room.isSpaceRoom())),
-        [cli],
+            sortRooms(
+                cli
+                    .getVisibleRooms(msc3946DynamicRoomPredecessors)
+                    .filter((room) => room.getMyMembership() === "join" && !room.isSpaceRoom()),
+            ),
+        [cli, msc3946DynamicRoomPredecessors],
     );
 
     if (lcQuery) {
