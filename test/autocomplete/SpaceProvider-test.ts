@@ -17,65 +17,65 @@ limitations under the License.
 import { mocked } from "jest-mock";
 import { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 
-import RoomProvider from "../../src/autocomplete/RoomProvider";
+import SpaceProvider from "../../src/autocomplete/SpaceProvider";
 import SettingsStore from "../../src/settings/SettingsStore";
 import { mkRoom, mkSpace, stubClient } from "../test-utils";
 
-describe("RoomProvider", () => {
-    it("suggests a room whose alias matches a prefix", async () => {
-        // Given a room
+describe("SpaceProvider", () => {
+    it("suggests a space whose alias matches a prefix", async () => {
+        // Given a space
         const client = stubClient();
-        const room = makeRoom(client, "room:e.com");
-        mocked(client.getVisibleRooms).mockReturnValue([room]);
+        const space = makeSpace(client, "space:e.com");
+        mocked(client.getVisibleRooms).mockReturnValue([space]);
 
-        // When we search for rooms starting with its prefix
-        const roomProvider = new RoomProvider(room);
-        const completions = await roomProvider.getCompletions("#ro", { beginning: true, start: 0, end: 3 });
+        // When we search for spaces starting with its prefix
+        const spaceProvider = new SpaceProvider(space);
+        const completions = await spaceProvider.getCompletions("#sp", { beginning: true, start: 0, end: 3 });
 
         // Then we find it
         expect(completions).toStrictEqual([
             {
                 type: "room",
-                completion: room.getCanonicalAlias(),
-                completionId: room.roomId,
+                completion: space.getCanonicalAlias(),
+                completionId: space.roomId,
                 component: expect.anything(),
-                href: "https://matrix.to/#/#room:e.com",
+                href: "https://matrix.to/#/#space:e.com",
                 range: { start: 0, end: 3 },
                 suffix: " ",
             },
         ]);
     });
 
-    it("suggests only rooms matching a prefix", async () => {
-        // Given some rooms with different names
+    it("suggests only spaces matching a prefix", async () => {
+        // Given some spaces with different names
         const client = stubClient();
-        const room1 = makeRoom(client, "room1:e.com");
-        const room2 = makeRoom(client, "room2:e.com");
-        const other = makeRoom(client, "other:e.com");
-        const space = makeSpace(client, "room3:e.com");
-        mocked(client.getVisibleRooms).mockReturnValue([room1, room2, other, space]);
+        const space1 = makeSpace(client, "space1:e.com");
+        const space2 = makeSpace(client, "space2:e.com");
+        const other = makeSpace(client, "other:e.com");
+        const room = makeRoom(client, "space3:e.com");
+        mocked(client.getVisibleRooms).mockReturnValue([space1, space2, other, room]);
 
-        // When we search for rooms starting with a prefix
-        const roomProvider = new RoomProvider(room1);
-        const completions = await roomProvider.getCompletions("#ro", { beginning: true, start: 0, end: 3 });
+        // When we search for spaces starting with a prefix
+        const spaceProvider = new SpaceProvider(space1);
+        const completions = await spaceProvider.getCompletions("#sp", { beginning: true, start: 0, end: 3 });
 
-        // Then we find the two rooms with that prefix, but not the other one
+        // Then we find the two spaces with that prefix, but not the other one
         expect(completions).toStrictEqual([
             {
                 type: "room",
-                completion: room1.getCanonicalAlias(),
-                completionId: room1.roomId,
+                completion: space1.getCanonicalAlias(),
+                completionId: space1.roomId,
                 component: expect.anything(),
-                href: "https://matrix.to/#/#room1:e.com",
+                href: "https://matrix.to/#/#space1:e.com",
                 range: { start: 0, end: 3 },
                 suffix: " ",
             },
             {
                 type: "room",
-                completion: room2.getCanonicalAlias(),
-                completionId: room2.roomId,
+                completion: space2.getCanonicalAlias(),
+                completionId: space2.roomId,
                 component: expect.anything(),
-                href: "https://matrix.to/#/#room2:e.com",
+                href: "https://matrix.to/#/#space2:e.com",
                 range: { start: 0, end: 3 },
                 suffix: " ",
             },
@@ -89,12 +89,12 @@ describe("RoomProvider", () => {
 
         it("Passes through the dynamic predecessor setting", async () => {
             const client = stubClient();
-            const room = makeRoom(client, "room:e.com");
-            mocked(client.getVisibleRooms).mockReturnValue([room]);
+            const space = makeSpace(client, "space:e.com");
+            mocked(client.getVisibleRooms).mockReturnValue([space]);
             mocked(client.getVisibleRooms).mockClear();
 
-            const roomProvider = new RoomProvider(room);
-            await roomProvider.getCompletions("#ro", { beginning: true, start: 0, end: 3 });
+            const spaceProvider = new SpaceProvider(space);
+            await spaceProvider.getCompletions("#ro", { beginning: true, start: 0, end: 3 });
 
             expect(client.getVisibleRooms).toHaveBeenCalledWith(false);
         });
@@ -102,7 +102,7 @@ describe("RoomProvider", () => {
 
     describe("If the feature_dynamic_room_predecessors is enabled", () => {
         beforeEach(() => {
-            // Turn on feature_dynamic_room_predecessors setting
+            // Turn on feature_dynamic_space_predecessors setting
             jest.spyOn(SettingsStore, "getValue").mockImplementation(
                 (settingName) => settingName === "feature_dynamic_room_predecessors",
             );
@@ -110,12 +110,12 @@ describe("RoomProvider", () => {
 
         it("Passes through the dynamic predecessor setting", async () => {
             const client = stubClient();
-            const room = makeRoom(client, "room:e.com");
-            mocked(client.getVisibleRooms).mockReturnValue([room]);
+            const space = makeSpace(client, "space:e.com");
+            mocked(client.getVisibleRooms).mockReturnValue([space]);
             mocked(client.getVisibleRooms).mockClear();
 
-            const roomProvider = new RoomProvider(room);
-            await roomProvider.getCompletions("#ro", { beginning: true, start: 0, end: 3 });
+            const spaceProvider = new SpaceProvider(space);
+            await spaceProvider.getCompletions("#ro", { beginning: true, start: 0, end: 3 });
 
             expect(client.getVisibleRooms).toHaveBeenCalledWith(true);
         });
