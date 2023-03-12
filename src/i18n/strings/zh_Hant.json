@@ -1171,7 +1171,7 @@
     "%(senderName)s updated the rule banning users matching %(glob)s for %(reason)s": "%(senderName)s 更新了封鎖符合 %(glob)s 的使用者規則，因為 %(reason)s",
     "%(senderName)s updated the rule banning rooms matching %(glob)s for %(reason)s": "因為 %(reason)s ， %(senderName)s 更新了封鎖符合 %(glob)s 聊天室的規則",
     "%(senderName)s updated the rule banning servers matching %(glob)s for %(reason)s": "%(senderName)s 更新了封鎖符合 %(glob)s 伺服器的規則，因為 %(reason)s",
-    "%(senderName)s updated a ban rule matching %(glob)s for %(reason)s": "因為 %(reason)s ，%(senderName)s 更新了封鎖符合 %(glob)s 的規則",
+    "%(senderName)s updated a ban rule matching %(glob)s for %(reason)s": "因為 %(reason)s% ， (senderName)s 更新了封鎖符合 %(glob)s 的規則",
     "%(senderName)s created a rule banning users matching %(glob)s for %(reason)s": "%(senderName)s 建立了封鎖符合 %(glob)s 的使用者規則，因為 %(reason)s",
     "%(senderName)s created a rule banning rooms matching %(glob)s for %(reason)s": "%(senderName)s 建立了封鎖符合 %(glob)s 聊天室的規則，因為 %(reason)s",
     "%(senderName)s created a rule banning servers matching %(glob)s for %(reason)s": "%(senderName)s 建立了封鎖符合 %(glob)s 伺服器的規則，因為 %(reason)s",
@@ -3742,5 +3742,7 @@
     "Once invited users have joined Element, you will be able to chat and the room will be end-to-end encrypted": "被邀請的使用者加入 Element 後，您就可以聊天，聊天室將會進行端到端加密",
     "Waiting for users to join Element": "等待使用者加入 Element",
     "Invites by email can only be sent one at a time": "透過電子郵件傳送的邀請一次只能傳送一個",
-    "Once everyone has joined, you’ll be able to chat": "所有人都加入後，您就可以聊天了"
+    "Once everyone has joined, you’ll be able to chat": "所有人都加入後，您就可以聊天了",
+    "Could not find room": "找不到聊天室",
+    "iframe has no src attribute": "iframe 沒有 src 屬性"
 }
