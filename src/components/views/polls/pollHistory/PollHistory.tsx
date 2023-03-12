@@ -19,7 +19,6 @@ import { MatrixClient } from "matrix-js-sdk/src/client";
 import { MatrixEvent, Poll, Room } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../../languageHandler";
-import BaseDialog from "../BaseDialog";
 import { PollHistoryList } from "./PollHistoryList";
 import { PollHistoryFilter } from "./types";
 import { PollDetailHeader } from "./PollDetailHeader";
@@ -27,8 +26,9 @@ import { PollDetail } from "./PollDetail";
 import { RoomPermalinkCreator } from "../../../../utils/permalinks/Permalinks";
 import { usePollsWithRelations } from "./usePollHistory";
 import { useFetchPastPolls } from "./fetchPastPolls";
+import Heading from "../../typography/Heading";
 
-type PollHistoryDialogProps = {
+type PollHistoryProps = {
     room: Room;
     matrixClient: MatrixClient;
     permalinkCreator: RoomPermalinkCreator;
@@ -50,12 +50,7 @@ const filterAndSortPolls = (polls: Map<string, Poll>, filter: PollHistoryFilter)
         .sort(sortEventsByLatest);
 };
 
-export const PollHistoryDialog: React.FC<PollHistoryDialogProps> = ({
-    room,
-    matrixClient,
-    permalinkCreator,
-    onFinished,
-}) => {
+export const PollHistory: React.FC<PollHistoryProps> = ({ room, matrixClient, permalinkCreator, onFinished }) => {
     const { polls } = usePollsWithRelations(room.roomId, matrixClient);
     const { isLoading, loadMorePolls, oldestEventTimestamp } = useFetchPastPolls(room, matrixClient);
     const [filter, setFilter] = useState<PollHistoryFilter>("ACTIVE");
@@ -72,23 +67,25 @@ export const PollHistoryDialog: React.FC<PollHistoryDialogProps> = ({
     );
 
     return (
-        <BaseDialog title={title} onFinished={onFinished}>
-            <div className="mx_PollHistoryDialog_content">
-                {focusedPoll ? (
-                    <PollDetail poll={focusedPoll} permalinkCreator={permalinkCreator} requestModalClose={onFinished} />
-                ) : (
-                    <PollHistoryList
-                        onItemClick={setFocusedPollId}
-                        pollStartEvents={pollStartEvents}
-                        isLoading={isLoading || isLoadingPollResponses}
-                        oldestFetchedEventTimestamp={oldestEventTimestamp}
-                        polls={polls}
-                        filter={filter}
-                        onFilterChange={setFilter}
-                        loadMorePolls={loadMorePolls}
-                    />
-                )}
-            </div>
-        </BaseDialog>
+        <div className="mx_PollHistory_content">
+            {/* @TODO this probably needs some style */}
+            <Heading className="mx_PollHistory_header" size="h2">
+                {title}
+            </Heading>
+            {focusedPoll ? (
+                <PollDetail poll={focusedPoll} permalinkCreator={permalinkCreator} requestModalClose={onFinished} />
+            ) : (
+                <PollHistoryList
+                    onItemClick={setFocusedPollId}
+                    pollStartEvents={pollStartEvents}
+                    isLoading={isLoading || isLoadingPollResponses}
+                    oldestFetchedEventTimestamp={oldestEventTimestamp}
+                    polls={polls}
+                    filter={filter}
+                    onFilterChange={setFilter}
+                    loadMorePolls={loadMorePolls}
+                />
+            )}
+        </div>
     );
 };

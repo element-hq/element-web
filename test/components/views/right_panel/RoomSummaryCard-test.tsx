@@ -29,7 +29,7 @@ import Modal from "../../../../src/Modal";
 import RightPanelStore from "../../../../src/stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../../../src/stores/right-panel/RightPanelStorePhases";
 import { getMockClientWithEventEmitter, mockClientMethodsUser } from "../../../test-utils";
-import { PollHistoryDialog } from "../../../../src/components/views/dialogs/polls/PollHistoryDialog";
+import { PollHistoryDialog } from "../../../../src/components/views/dialogs/PollHistoryDialog";
 import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalinks";
 
 describe("<RoomSummaryCard />", () => {

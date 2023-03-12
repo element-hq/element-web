@@ -129,7 +129,7 @@ export const PollHistoryList: React.FC<PollHistoryListProps> = ({
     return (
         <div className="mx_PollHistoryList">
             <FilterTabGroup<PollHistoryFilter>
-                name="PollHistoryDialog_filter"
+                name="PollHistory_filter"
                 value={filter}
                 onFilterChange={onFilterChange}
                 tabs={[

@@ -52,7 +52,7 @@ import ExportDialog from "../dialogs/ExportDialog";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import PosthogTrackers from "../../../PosthogTrackers";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
-import { PollHistoryDialog } from "../dialogs/polls/PollHistoryDialog";
+import { PollHistoryDialog } from "../dialogs/PollHistoryDialog";
 
 interface IProps {
     room: Room;

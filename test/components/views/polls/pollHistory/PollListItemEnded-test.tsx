@@ -19,7 +19,7 @@ import { render } from "@testing-library/react";
 import { MatrixEvent, Poll, Room } from "matrix-js-sdk/src/matrix";
 import { M_TEXT } from "matrix-js-sdk/src/@types/extensible_events";
 
-import { PollListItemEnded } from "../../../../../src/components/views/dialogs/polls/PollListItemEnded";
+import { PollListItemEnded } from "../../../../../src/components/views/polls/pollHistory/PollListItemEnded";
 import {
     flushPromises,
     getMockClientWithEventEmitter,
