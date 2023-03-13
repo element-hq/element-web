@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { MouseEvent } from "react";
+import React, { MouseEvent, ReactNode } from "react";
 
 import SettingsStore from "../../../settings/SettingsStore";
 import { XOR } from "../../../@types/common";
@@ -71,7 +71,7 @@ export default class NotificationBadge extends React.PureComponent<XOR<IProps, I
         );
     }
 
-    private get roomId(): string {
+    private get roomId(): string | null {
         // We should convert this to null for safety with the SettingsStore
         return this.props.roomId || null;
     }
@@ -110,7 +110,7 @@ export default class NotificationBadge extends React.PureComponent<XOR<IProps, I
         });
     };
 
-    public render(): React.ReactElement {
+    public render(): ReactNode {
         /* eslint @typescript-eslint/no-unused-vars: ["error", { "ignoreRestSiblings": true }] */
         const { notification, showUnsentTooltip, forceCount, onClick } = this.props;
 
@@ -119,8 +119,8 @@ export default class NotificationBadge extends React.PureComponent<XOR<IProps, I
             if (!notification.hasUnreadCount) return null; // Can't render a badge
         }
 
-        let label: string;
-        let tooltip: JSX.Element;
+        let label: string | undefined;
+        let tooltip: JSX.Element | undefined;
         if (showUnsentTooltip && this.state.showTooltip && notification.color === NotificationColor.Unsent) {
             label = _t("Message didn't send. Click for info.");
             tooltip = <Tooltip className="mx_RoleButton_tooltip" label={label} />;

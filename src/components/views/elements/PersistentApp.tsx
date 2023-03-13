@@ -50,7 +50,7 @@ export default class PersistentApp extends React.Component<IProps> {
                 app={app}
                 fullWidth={true}
                 room={this.room}
-                userId={this.context.credentials.userId}
+                userId={this.context.getSafeUserId()}
                 creatorUserId={app.creatorUserId}
                 widgetPageTitle={WidgetUtils.getWidgetDataTitle(app)}
                 waitForIframeLoad={app.waitForIframeLoad}

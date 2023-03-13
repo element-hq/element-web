@@ -23,7 +23,7 @@ import withValidation, { IFieldState, IValidationResult } from "../elements/Vali
 import { _t, _td } from "../../../languageHandler";
 import Field, { IInputProps } from "../elements/Field";
 
-interface IProps extends Omit<IInputProps, "onValidate"> {
+interface IProps extends Omit<IInputProps, "onValidate" | "element"> {
     autoFocus?: boolean;
     id?: string;
     className?: string;

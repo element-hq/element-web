@@ -33,7 +33,7 @@ interface IProps {
 }
 
 const showPickerDialog = (
-    title: string,
+    title: string | undefined,
     serverConfig: ValidatedServerConfig,
     onFinished: (config: ValidatedServerConfig) => void,
 ): void => {

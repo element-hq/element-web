@@ -43,7 +43,7 @@ interface IArgs<T, D = void> {
 }
 
 export interface IFieldState {
-    value: string;
+    value: string | null;
     focused: boolean;
     allowEmpty?: boolean;
 }

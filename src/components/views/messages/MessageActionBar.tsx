@@ -63,7 +63,7 @@ interface IOptionsButtonProps {
     mxEvent: MatrixEvent;
     // TODO: Types
     getTile: () => any | null;
-    getReplyChain: () => ReplyChain;
+    getReplyChain: () => ReplyChain | null;
     permalinkCreator: RoomPermalinkCreator;
     onFocusChange: (menuDisplayed: boolean) => void;
     getRelationsForEvent?: GetRelationsForEvent;
@@ -97,10 +97,10 @@ const OptionsButton: React.FC<IOptionsButtonProps> = ({
         [openMenu, onFocus],
     );
 
-    let contextMenu: ReactElement | null;
-    if (menuDisplayed) {
+    let contextMenu: ReactElement | undefined;
+    if (menuDisplayed && button.current) {
         const tile = getTile && getTile();
-        const replyChain = getReplyChain && getReplyChain();
+        const replyChain = getReplyChain();
 
         const buttonRect = button.current.getBoundingClientRect();
         contextMenu = (
@@ -109,7 +109,7 @@ const OptionsButton: React.FC<IOptionsButtonProps> = ({
                 mxEvent={mxEvent}
                 permalinkCreator={permalinkCreator}
                 eventTileOps={tile && tile.getEventTileOps ? tile.getEventTileOps() : undefined}
-                collapseReplyChain={replyChain && replyChain.canCollapse() ? replyChain.collapse : undefined}
+                collapseReplyChain={replyChain?.canCollapse() ? replyChain.collapse : undefined}
                 onFinished={closeMenu}
                 getRelationsForEvent={getRelationsForEvent}
             />
@@ -148,8 +148,8 @@ const ReactButton: React.FC<IReactButtonProps> = ({ mxEvent, reactions, onFocusC
         onFocusChange(menuDisplayed);
     }, [onFocusChange, menuDisplayed]);
 
-    let contextMenu;
-    if (menuDisplayed) {
+    let contextMenu: JSX.Element | undefined;
+    if (menuDisplayed && button.current) {
         const buttonRect = button.current.getBoundingClientRect();
         contextMenu = (
             <ContextMenu {...aboveLeftOf(buttonRect)} onFinished={closeMenu} managed={false}>
@@ -211,7 +211,7 @@ const ReplyInThreadButton: React.FC<IReplyInThreadButton> = ({ mxEvent }) => {
         if (mxEvent.getThread() && !mxEvent.isThreadRoot) {
             defaultDispatcher.dispatch<ShowThreadPayload>({
                 action: Action.ShowThread,
-                rootEvent: mxEvent.getThread().rootEvent,
+                rootEvent: mxEvent.getThread()!.rootEvent,
                 initialEvent: mxEvent,
                 scroll_into_view: true,
                 highlighted: true,
@@ -293,7 +293,7 @@ interface IMessageActionBarProps {
     reactions?: Relations | null | undefined;
     // TODO: Types
     getTile: () => any | null;
-    getReplyChain: () => ReplyChain | undefined;
+    getReplyChain: () => ReplyChain | null;
     permalinkCreator?: RoomPermalinkCreator;
     onFocusChange?: (menuDisplayed: boolean) => void;
     toggleThreadExpanded: () => void;
@@ -421,7 +421,7 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
     };
 
     public render(): React.ReactNode {
-        const toolbarOpts = [];
+        const toolbarOpts: JSX.Element[] = [];
         if (canEditContent(this.props.mxEvent)) {
             toolbarOpts.push(
                 <RovingAccessibleTooltipButton
@@ -452,8 +452,8 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
 
         // We show a different toolbar for failed events, so detect that first.
         const mxEvent = this.props.mxEvent;
-        const editStatus = mxEvent.replacingEvent() && mxEvent.replacingEvent().status;
-        const redactStatus = mxEvent.localRedactionEvent() && mxEvent.localRedactionEvent().status;
+        const editStatus = mxEvent.replacingEvent()?.status;
+        const redactStatus = mxEvent.localRedactionEvent()?.status;
         const allowCancel = canCancel(mxEvent.status) || canCancel(editStatus) || canCancel(redactStatus);
         const isFailed = [mxEvent.status, editStatus, redactStatus].includes(EventStatus.NOT_SENT);
         if (allowCancel && isFailed) {

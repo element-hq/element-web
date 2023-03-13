@@ -76,7 +76,7 @@ interface IProps<T> {
 }
 
 interface IState {
-    renderRange: ItemRange;
+    renderRange: ItemRange | null;
 }
 
 export default class LazyRenderList<T = any> extends React.Component<IProps<T>, IState> {
@@ -93,7 +93,7 @@ export default class LazyRenderList<T = any> extends React.Component<IProps<T>, 
         };
     }
 
-    public static getDerivedStateFromProps(props: IProps<unknown>, state: IState): Partial<IState> {
+    public static getDerivedStateFromProps(props: IProps<unknown>, state: IState): Partial<IState> | null {
         const range = LazyRenderList.getVisibleRangeFromProps(props);
         const intersectRange = range.expand(props.overflowMargin);
         const renderRange = range.expand(props.overflowItems);

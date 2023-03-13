@@ -20,7 +20,7 @@ import Field, { IInputProps } from "../elements/Field";
 import withValidation, { IFieldState, IValidationResult } from "../elements/Validation";
 import { _t, _td } from "../../../languageHandler";
 
-interface IProps extends Omit<IInputProps, "onValidate" | "label"> {
+interface IProps extends Omit<IInputProps, "onValidate" | "label" | "element"> {
     id?: string;
     fieldRef?: RefCallback<Field> | RefObject<Field>;
     autoComplete?: string;

@@ -24,11 +24,11 @@ import { _t } from "../../../languageHandler";
 const HistoryTile: React.FC = () => {
     const { room } = useContext(RoomContext);
 
-    const oldState = room.getLiveTimeline().getState(EventTimeline.BACKWARDS);
-    const encryptionState = oldState.getStateEvents("m.room.encryption")[0];
-    const historyState = oldState.getStateEvents("m.room.history_visibility")[0]?.getContent().history_visibility;
+    const oldState = room?.getLiveTimeline().getState(EventTimeline.BACKWARDS);
+    const encryptionState = oldState?.getStateEvents("m.room.encryption")[0];
+    const historyState = oldState?.getStateEvents("m.room.history_visibility")[0]?.getContent().history_visibility;
 
-    let subtitle;
+    let subtitle: string | undefined;
     if (historyState == "invited") {
         subtitle = _t("You don't have permission to view messages from before you were invited.");
     } else if (historyState == "joined") {

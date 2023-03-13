@@ -22,7 +22,7 @@ import { RovingAccessibleButton, useRovingTabIndex } from "../../../accessibilit
 
 interface IProps {
     ts: number;
-    onDatePicked?: (dateString: string) => void;
+    onDatePicked: (dateString: string) => void;
 }
 
 const JumpToDatePicker: React.FC<IProps> = ({ ts, onDatePicked }: IProps) => {

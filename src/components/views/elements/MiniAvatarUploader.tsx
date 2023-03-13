@@ -64,7 +64,8 @@ const MiniAvatarUploader: React.FC<IProps> = ({
     const label = hasAvatar || busy ? hasAvatarLabel : noAvatarLabel;
 
     const { room } = useContext(RoomContext);
-    const canSetAvatar = isUserAvatar || room?.currentState?.maySendStateEvent(EventType.RoomAvatar, cli.getUserId());
+    const canSetAvatar =
+        isUserAvatar || room?.currentState?.maySendStateEvent(EventType.RoomAvatar, cli.getSafeUserId());
     if (!canSetAvatar) return <React.Fragment>{children}</React.Fragment>;
 
     const visible = !!label && (hover || show);

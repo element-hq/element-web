@@ -117,7 +117,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
                 // Hide the autocomplete box
                 hide: true,
             });
-            return Promise.resolve(null);
+            return Promise.resolve();
         }
         let autocompleteDelay = SettingsStore.getValue("autocompleteDelay");
 
@@ -204,7 +204,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         this.setSelection(1 + index);
     }
 
-    public onEscape(e: KeyboardEvent): boolean {
+    public onEscape(e: KeyboardEvent): boolean | undefined {
         const completionCount = this.countCompletions();
         if (completionCount === 0) {
             // autocomplete is already empty, so don't preventDefault

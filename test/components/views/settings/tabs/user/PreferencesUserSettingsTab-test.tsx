@@ -80,7 +80,7 @@ describe("PreferencesUserSettingsTab", () => {
 
                 await waitFor(() => expect(toggle).toHaveAttribute("aria-disabled", "false"));
                 fireEvent.click(toggle);
-                expectSetValueToHaveBeenCalled("sendReadReceipts", undefined, SettingLevel.ACCOUNT, true);
+                expectSetValueToHaveBeenCalled("sendReadReceipts", null, SettingLevel.ACCOUNT, true);
             });
 
             it("can be disabled", async () => {
@@ -89,7 +89,7 @@ describe("PreferencesUserSettingsTab", () => {
 
                 await waitFor(() => expect(toggle).toHaveAttribute("aria-disabled", "false"));
                 fireEvent.click(toggle);
-                expectSetValueToHaveBeenCalled("sendReadReceipts", undefined, SettingLevel.ACCOUNT, false);
+                expectSetValueToHaveBeenCalled("sendReadReceipts", null, SettingLevel.ACCOUNT, false);
             });
         });
 
@@ -104,7 +104,7 @@ describe("PreferencesUserSettingsTab", () => {
 
                 await waitFor(() => expect(toggle).toHaveAttribute("aria-disabled", "false"));
                 fireEvent.click(toggle);
-                expectSetValueToHaveBeenCalled("sendReadReceipts", undefined, SettingLevel.ACCOUNT, true);
+                expectSetValueToHaveBeenCalled("sendReadReceipts", null, SettingLevel.ACCOUNT, true);
             });
 
             it("cannot be disabled", async () => {

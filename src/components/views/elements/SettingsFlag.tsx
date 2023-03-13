@@ -69,14 +69,14 @@ export default class SettingsFlag extends React.Component<IProps, IState> {
     private save = async (val?: boolean): Promise<void> => {
         await SettingsStore.setValue(
             this.props.name,
-            this.props.roomId,
+            this.props.roomId ?? null,
             this.props.level,
             val !== undefined ? val : this.state.value,
         );
     };
 
     public render(): React.ReactNode {
-        const canChange = SettingsStore.canSetValue(this.props.name, this.props.roomId, this.props.level);
+        const canChange = SettingsStore.canSetValue(this.props.name, this.props.roomId ?? null, this.props.level);
 
         if (!canChange && this.props.hideIfCannotSet) return null;
 

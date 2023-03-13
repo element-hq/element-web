@@ -79,7 +79,7 @@ export interface IInputProps extends IProps, InputHTMLAttributes<HTMLInputElemen
     // The ref pass through to the input
     inputRef?: RefObject<HTMLInputElement>;
     // The element to create. Defaults to "input".
-    element?: "input";
+    element: "input";
     // The input's value. This is a controlled component, so the value is required.
     value: string;
 }
@@ -204,7 +204,7 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
         const value = this.inputRef.current?.value ?? null;
         const { valid, feedback } = await this.props.onValidate({
             value,
-            focused,
+            focused: !!focused,
             allowEmpty,
         });
 

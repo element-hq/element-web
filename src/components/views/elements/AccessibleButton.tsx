@@ -14,7 +14,7 @@
  limitations under the License.
  */
 
-import React, { HTMLAttributes, InputHTMLAttributes, ReactHTML, ReactNode } from "react";
+import React, { HTMLAttributes, InputHTMLAttributes, ReactNode } from "react";
 import classnames from "classnames";
 
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
@@ -91,7 +91,7 @@ export interface IAccessibleButtonProps extends React.InputHTMLAttributes<Elemen
  * @returns {Object} rendered react
  */
 export default function AccessibleButton<T extends keyof JSX.IntrinsicElements>({
-    element,
+    element = "div" as T,
     onClick,
     children,
     kind,
@@ -169,7 +169,6 @@ export default function AccessibleButton<T extends keyof JSX.IntrinsicElements>(
 }
 
 AccessibleButton.defaultProps = {
-    element: "div" as keyof ReactHTML,
     role: "button",
     tabIndex: 0,
 };

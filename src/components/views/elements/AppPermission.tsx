@@ -61,8 +61,6 @@ export default class AppPermission extends React.Component<IProps, IState> {
 
         // Set all this into the initial state
         this.state = {
-            widgetDomain: null,
-            isWrapped: null,
             roomMember,
             ...urlInfo,
         };

@@ -113,7 +113,7 @@ export default class EventListSummary extends React.Component<IProps> {
     private generateSummary(
         eventAggregates: Record<string, string[]>,
         orderedTransitionSequences: string[],
-    ): string | JSX.Element {
+    ): ReactNode {
         const summaries = orderedTransitionSequences.map((transitions) => {
             const userNames = eventAggregates[transitions];
             const nameList = this.renderNameList(userNames);
@@ -392,7 +392,7 @@ export default class EventListSummary extends React.Component<IProps> {
      * @returns {string?} the transition type given to this event. This defaults to `null`
      * if a transition is not recognised.
      */
-    private static getTransition(e: IUserEvents): TransitionType {
+    private static getTransition(e: IUserEvents): TransitionType | null {
         if (e.mxEvent.isRedacted()) {
             return TransitionType.MessageRemoved;
         }

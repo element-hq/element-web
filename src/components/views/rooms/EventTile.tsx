@@ -274,8 +274,6 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             verified: null,
             // The Relations model from the JS SDK for reactions to `mxEvent`
             reactions: this.getReactions(),
-            // Context menu position
-            contextMenu: null,
 
             hover: false,
 
@@ -697,13 +695,13 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         });
     };
 
-    private renderE2EPadlock(): JSX.Element {
+    private renderE2EPadlock(): ReactNode {
         // if the event was edited, show the verification info for the edit, not
         // the original
         const ev = this.props.mxEvent.replacingEvent() ?? this.props.mxEvent;
 
         // no icon for local rooms
-        if (isLocalRoom(ev.getRoomId()!)) return;
+        if (isLocalRoom(ev.getRoomId()!)) return null;
 
         // event could not be decrypted
         if (ev.isDecryptionFailure()) {
@@ -713,9 +711,9 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         // event is encrypted and not redacted, display padlock corresponding to whether or not it is verified
         if (ev.isEncrypted() && !ev.isRedacted()) {
             if (this.state.verified === E2EState.Normal) {
-                return; // no icon if we've not even cross-signed the user
+                return null; // no icon if we've not even cross-signed the user
             } else if (this.state.verified === E2EState.Verified) {
-                return; // no icon for verified
+                return null; // no icon for verified
             } else if (this.state.verified === E2EState.Unauthenticated) {
                 return <E2ePadlockUnauthenticated />;
             } else if (this.state.verified === E2EState.Unknown) {
@@ -729,16 +727,16 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             // else if room is encrypted
             // and event is being encrypted or is not_sent (Unknown Devices/Network Error)
             if (ev.status === EventStatus.ENCRYPTING) {
-                return;
+                return null;
             }
             if (ev.status === EventStatus.NOT_SENT) {
-                return;
+                return null;
             }
             if (ev.isState()) {
-                return; // we expect this to be unencrypted
+                return null; // we expect this to be unencrypted
             }
             if (ev.isRedacted()) {
-                return; // we expect this to be unencrypted
+                return null; // we expect this to be unencrypted
             }
             // if the event is not encrypted, but it's an e2e room, show the open padlock
             return <E2ePadlockUnencrypted />;
@@ -752,16 +750,16 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         this.setState({ actionBarFocused });
     };
 
-    private getTile: () => IEventTileType = () => this.tile.current;
+    private getTile: () => IEventTileType | null = () => this.tile.current;
 
-    private getReplyChain = (): ReplyChain => this.replyChain.current;
+    private getReplyChain = (): ReplyChain | null => this.replyChain.current;
 
-    private getReactions = (): Relations => {
+    private getReactions = (): Relations | null => {
         if (!this.props.showReactions || !this.props.getRelationsForEvent) {
             return null;
         }
         const eventId = this.props.mxEvent.getId();
-        return this.props.getRelationsForEvent(eventId, "m.annotation", "m.reaction");
+        return this.props.getRelationsForEvent(eventId, "m.annotation", "m.reaction") ?? null;
     };
 
     private onReactionsCreated = (relationType: string, eventType: string): void => {
@@ -795,7 +793,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         // Return if we're in a browser and click either an a tag or we have
         // selected text, as in those cases we want to use the native browser
         // menu
-        if (!PlatformPeg.get().allowOverridingNativeContextMenus() && (getSelectedText() || anchorElement)) return;
+        if (!PlatformPeg.get()?.allowOverridingNativeContextMenus() && (getSelectedText() || anchorElement)) return;
 
         // We don't want to show the menu when editing a message
         if (this.props.editState) return;
@@ -817,7 +815,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
     private onCloseMenu = (): void => {
         this.setState({
-            contextMenu: null,
+            contextMenu: undefined,
             actionBarFocused: false,
         });
     };
@@ -901,7 +899,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
                 this.props.mxEvent.getContent().msgtype === MsgType.Emote,
         });
 
-        const isSending = ["sending", "queued", "encrypting"].indexOf(this.props.eventSendStatus) !== -1;
+        const isSending = ["sending", "queued", "encrypting"].includes(this.props.eventSendStatus!);
         const isRedacted = isMessageEvent(this.props.mxEvent) && this.props.isRedacted;
         const isEncryptionFailure = this.props.mxEvent.isDecryptionFailure();
 
@@ -1110,7 +1108,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         const groupPadlock = !useIRCLayout && !isBubbleMessage && this.renderE2EPadlock();
         const ircPadlock = useIRCLayout && !isBubbleMessage && this.renderE2EPadlock();
 
-        let msgOption;
+        let msgOption: JSX.Element | undefined;
         if (this.props.showReadReceipts) {
             if (this.shouldShowSentReceipt || this.shouldShowSendingReceipt) {
                 msgOption = <SentReceipt messageState={this.props.mxEvent.getAssociatedStatus()} />;
@@ -1127,7 +1125,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             }
         }
 
-        let replyChain;
+        let replyChain: JSX.Element | undefined;
         if (
             haveRendererForEvent(this.props.mxEvent, this.context.showHiddenEvents) &&
             shouldDisplayReply(this.props.mxEvent)
@@ -1480,7 +1478,7 @@ class E2ePadlock extends React.Component<IE2ePadlockProps, IE2ePadlockState> {
     };
 
     public render(): React.ReactNode {
-        let tooltip = null;
+        let tooltip: JSX.Element | undefined;
         if (this.state.hover) {
             tooltip = <Tooltip className="mx_EventTile_e2eIcon_tooltip" label={this.props.title} />;
         }
@@ -1506,7 +1504,7 @@ function SentReceipt({ messageState }: ISentReceiptProps): JSX.Element {
         mx_EventTile_receiptSending: !isSent && !isFailed,
     });
 
-    let nonCssBadge = null;
+    let nonCssBadge: JSX.Element | undefined;
     if (isFailed) {
         nonCssBadge = <NotificationBadge notification={StaticNotificationState.RED_EXCLAMATION} />;
     }

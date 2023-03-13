@@ -47,6 +47,7 @@ import { getSlashCommand, isSlashCommand, runSlashCommand, shouldSendAnyway } fr
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { PosthogAnalytics } from "../../../PosthogAnalytics";
 import { editorRoomKey, editorStateKey } from "../../../Editing";
+import DocumentOffset from "../../../editor/offset";
 
 function getHtmlReplyFallback(mxEvent: MatrixEvent): string {
     const html = mxEvent.getContent().formatted_body;
@@ -130,7 +131,7 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
 
     private readonly editorRef = createRef<BasicMessageComposer>();
     private readonly dispatcherRef: string;
-    private model: EditorModel = null;
+    private model: EditorModel;
 
     public constructor(props: IEditMessageComposerProps, context: React.ContextType<typeof RoomContext>) {
         super(props);
@@ -250,7 +251,7 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
         return localStorage.getItem(this.editorRoomKey) !== null;
     }
 
-    private restoreStoredEditorState(partCreator: PartCreator): Part[] {
+    private restoreStoredEditorState(partCreator: PartCreator): Part[] | undefined {
         const json = localStorage.getItem(this.editorStateKey);
         if (json) {
             try {
@@ -382,7 +383,7 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
         // editorstate so it can be restored when the remote echo event tile gets rendered
         // in case we're currently editing a pending event
         const sel = document.getSelection();
-        let caret;
+        let caret: DocumentOffset | undefined;
         if (sel.focusNode) {
             caret = getCaretOffsetAndText(this.editorRef.current?.editorRef.current, sel).caret;
         }
@@ -390,7 +391,7 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
         // if caret is undefined because for some reason there isn't a valid selection,
         // then when mounting the editor again with the same editor state,
         // it will set the cursor at the end.
-        this.props.editState.setEditorState(caret, parts);
+        this.props.editState.setEditorState(caret ?? null, parts);
         window.removeEventListener("beforeunload", this.saveStoredEditorState);
         if (this.shouldSaveStoredEditorState) {
             this.saveStoredEditorState();
@@ -462,7 +463,7 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
                     model={this.model}
                     room={this.getRoom()}
                     threadId={this.props.editState?.getEvent()?.getThread()?.id}
-                    initialCaret={this.props.editState.getCaret()}
+                    initialCaret={this.props.editState.getCaret() ?? undefined}
                     label={_t("Edit message")}
                     onChange={this.onChange}
                 />

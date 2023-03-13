@@ -64,7 +64,7 @@ interface ICanEditLevelFieldProps {
 }
 
 const CanEditLevelField: React.FC<ICanEditLevelFieldProps> = ({ setting, roomId, level }) => {
-    const canEdit = SettingsStore.canSetValue(setting, roomId, level);
+    const canEdit = SettingsStore.canSetValue(setting, roomId ?? null, level);
     const className = canEdit ? "mx_DevTools_SettingsExplorer_mutable" : "mx_DevTools_SettingsExplorer_immutable";
     return (
         <td className={className}>

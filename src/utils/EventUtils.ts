@@ -263,7 +263,7 @@ export function editEvent(
     }
 }
 
-export function canCancel(status: EventStatus): boolean {
+export function canCancel(status?: EventStatus | null): boolean {
     return status === EventStatus.QUEUED || status === EventStatus.NOT_SENT || status === EventStatus.ENCRYPTING;
 }
 

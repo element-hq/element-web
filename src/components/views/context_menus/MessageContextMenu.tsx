@@ -179,7 +179,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
 
     private isPinned(): boolean {
         const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
-        const pinnedEvent = room.currentState.getStateEvents(EventType.RoomPinnedEvents, "");
+        const pinnedEvent = room?.currentState.getStateEvents(EventType.RoomPinnedEvents, "");
         if (!pinnedEvent) return false;
         const content = pinnedEvent.getContent();
         return content.pinned && Array.isArray(content.pinned) && content.pinned.includes(this.props.mxEvent.getId());
@@ -389,7 +389,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             timelineRenderingType === TimelineRenderingType.ThreadsList;
         const isThreadRootEvent = isThread && mxEvent?.getThread()?.rootEvent === mxEvent;
 
-        let resendReactionsButton: JSX.Element;
+        let resendReactionsButton: JSX.Element | undefined;
         if (!mxEvent.isRedacted() && unsentReactionsCount !== 0) {
             resendReactionsButton = (
                 <IconizedContextMenuOption
@@ -400,7 +400,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             );
         }
 
-        let redactButton: JSX.Element;
+        let redactButton: JSX.Element | undefined;
         if (isSent && this.state.canRedact) {
             redactButton = (
                 <IconizedContextMenuOption
@@ -411,7 +411,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             );
         }
 
-        let openInMapSiteButton: JSX.Element;
+        let openInMapSiteButton: JSX.Element | undefined;
         const shareableLocationEvent = getShareableLocationEvent(mxEvent, cli);
         if (shareableLocationEvent) {
             const mapSiteLink = createMapSiteLinkFromEvent(shareableLocationEvent);
@@ -430,7 +430,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             );
         }
 
-        let forwardButton: JSX.Element;
+        let forwardButton: JSX.Element | undefined;
         const forwardableEvent = getForwardableEvent(mxEvent, cli);
         if (contentActionable && forwardableEvent) {
             forwardButton = (
@@ -442,7 +442,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             );
         }
 
-        let pinButton: JSX.Element;
+        let pinButton: JSX.Element | undefined;
         if (contentActionable && this.state.canPin) {
             pinButton = (
                 <IconizedContextMenuOption
@@ -462,7 +462,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             />
         );
 
-        let unhidePreviewButton: JSX.Element;
+        let unhidePreviewButton: JSX.Element | undefined;
         if (eventTileOps?.isWidgetHidden()) {
             unhidePreviewButton = (
                 <IconizedContextMenuOption
@@ -473,7 +473,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             );
         }
 
-        let permalinkButton: JSX.Element;
+        let permalinkButton: JSX.Element | undefined;
         if (permalink) {
             permalinkButton = (
                 <IconizedContextMenuOption
@@ -493,7 +493,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             );
         }
 
-        let endPollButton: JSX.Element;
+        let endPollButton: JSX.Element | undefined;
         if (this.canEndPoll(mxEvent)) {
             endPollButton = (
                 <IconizedContextMenuOption
@@ -504,7 +504,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             );
         }
 
-        let quoteButton: JSX.Element;
+        let quoteButton: JSX.Element | undefined;
         if (eventTileOps && canSendMessages) {
             // this event is rendered using TextualBody
             quoteButton = (
@@ -517,7 +517,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
         }
 
         // Bridges can provide a 'external_url' to link back to the source.
-        let externalURLButton: JSX.Element;
+        let externalURLButton: JSX.Element | undefined;
         if (
             typeof mxEvent.getContent().external_url === "string" &&
             isUrlPermitted(mxEvent.getContent().external_url)
@@ -540,7 +540,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             );
         }
 
-        let collapseReplyChainButton: JSX.Element;
+        let collapseReplyChainButton: JSX.Element | undefined;
         if (collapseReplyChain) {
             collapseReplyChainButton = (
                 <IconizedContextMenuOption
@@ -551,7 +551,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             );
         }
 
-        let jumpToRelatedEventButton: JSX.Element;
+        let jumpToRelatedEventButton: JSX.Element | undefined;
         const relatedEventId = mxEvent.getWireContent()?.["m.relates_to"]?.event_id;
         if (relatedEventId && SettingsStore.getValue("developerMode")) {
             jumpToRelatedEventButton = (
@@ -563,7 +563,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             );
         }
 
-        let reportEventButton: JSX.Element;
+        let reportEventButton: JSX.Element | undefined;
         if (mxEvent.getSender() !== me) {
             reportEventButton = (
                 <IconizedContextMenuOption
@@ -574,7 +574,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             );
         }
 
-        let copyLinkButton: JSX.Element;
+        let copyLinkButton: JSX.Element | undefined;
         if (link) {
             copyLinkButton = (
                 <IconizedContextMenuOption
@@ -594,7 +594,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             );
         }
 
-        let copyButton: JSX.Element;
+        let copyButton: JSX.Element | undefined;
         if (rightClick && getSelectedText()) {
             copyButton = (
                 <IconizedContextMenuOption
@@ -606,7 +606,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             );
         }
 
-        let editButton: JSX.Element;
+        let editButton: JSX.Element | undefined;
         if (rightClick && canEditContent(mxEvent)) {
             editButton = (
                 <IconizedContextMenuOption
@@ -617,7 +617,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             );
         }
 
-        let replyButton: JSX.Element;
+        let replyButton: JSX.Element | undefined;
         if (rightClick && contentActionable && canSendMessages) {
             replyButton = (
                 <IconizedContextMenuOption
@@ -628,7 +628,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             );
         }
 
-        let replyInThreadButton: JSX.Element;
+        let replyInThreadButton: JSX.Element | undefined;
         if (
             rightClick &&
             contentActionable &&
@@ -639,7 +639,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             replyInThreadButton = <ReplyInThreadButton mxEvent={mxEvent} closeMenu={this.closeMenu} />;
         }
 
-        let reactButton;
+        let reactButton: JSX.Element | undefined;
         if (rightClick && contentActionable && canReact) {
             reactButton = (
                 <IconizedContextMenuOption
@@ -651,7 +651,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             );
         }
 
-        let viewInRoomButton: JSX.Element;
+        let viewInRoomButton: JSX.Element | undefined;
         if (isThreadRootEvent) {
             viewInRoomButton = (
                 <IconizedContextMenuOption
@@ -662,7 +662,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             );
         }
 
-        let nativeItemsList: JSX.Element;
+        let nativeItemsList: JSX.Element | undefined;
         if (copyButton || copyLinkButton) {
             nativeItemsList = (
                 <IconizedContextMenuOptionList>
@@ -672,7 +672,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             );
         }
 
-        let quickItemsList: JSX.Element;
+        let quickItemsList: JSX.Element | undefined;
         if (editButton || replyButton || reactButton) {
             quickItemsList = (
                 <IconizedContextMenuOptionList>
@@ -703,12 +703,12 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             </IconizedContextMenuOptionList>
         );
 
-        let redactItemList: JSX.Element;
+        let redactItemList: JSX.Element | undefined;
         if (redactButton) {
             redactItemList = <IconizedContextMenuOptionList red>{redactButton}</IconizedContextMenuOptionList>;
         }
 
-        let reactionPicker: JSX.Element;
+        let reactionPicker: JSX.Element | undefined;
         if (this.state.reactionPickerDisplayed) {
             const buttonRect = (this.reactButtonRef.current as HTMLElement)?.getBoundingClientRect();
             reactionPicker = (

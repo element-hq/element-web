@@ -165,7 +165,7 @@ export default class LegacyCallEvent extends React.PureComponent<IProps, IState>
                         {this.props.timestamp}
                     </div>
                 );
-            } else if ([CallErrorCode.UserHangup, "user hangup"].includes(hangupReason) || !hangupReason) {
+            } else if (!hangupReason || [CallErrorCode.UserHangup, "user hangup"].includes(hangupReason)) {
                 // workaround for https://github.com/vector-im/element-web/issues/5178
                 // it seems Android randomly sets a reason of "user hangup" which is
                 // interpreted as an error code :(

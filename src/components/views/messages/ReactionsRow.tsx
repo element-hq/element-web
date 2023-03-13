@@ -142,7 +142,7 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
         this.forceUpdate();
     };
 
-    private getMyReactions(): MatrixEvent[] {
+    private getMyReactions(): MatrixEvent[] | null {
         const reactions = this.props.reactions;
         if (!reactions) {
             return null;
@@ -206,7 +206,7 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
         // Show the first MAX_ITEMS if there are MAX_ITEMS + 1 or more items.
         // The "+ 1" ensure that the "show all" reveals something that takes up
         // more space than the button itself.
-        let showAllButton: JSX.Element;
+        let showAllButton: JSX.Element | undefined;
         if (items.length > MAX_ITEMS_WHEN_LIMITED + 1 && !showAll) {
             items = items.slice(0, MAX_ITEMS_WHEN_LIMITED);
             showAllButton = (

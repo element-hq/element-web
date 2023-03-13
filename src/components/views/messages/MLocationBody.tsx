@@ -37,7 +37,7 @@ import { IBodyProps } from "./IBodyProps";
 import { createReconnectedListener } from "../../../utils/connection";
 
 interface IState {
-    error: Error;
+    error?: Error;
 }
 
 export default class MLocationBody extends React.Component<IBodyProps, IState> {
@@ -58,9 +58,7 @@ export default class MLocationBody extends React.Component<IBodyProps, IState> {
 
         this.reconnectedListener = createReconnectedListener(this.clearError);
 
-        this.state = {
-            error: undefined,
-        };
+        this.state = {};
     }
 
     private onClick = (): void => {
@@ -149,7 +147,12 @@ export const LocationBodyContent: React.FC<LocationBodyContentProps> = ({
     const mapElement = (
         <Map id={mapId} centerGeoUri={geoUri} onClick={onClick} onError={onError} className="mx_MLocationBody_map">
             {({ map }) => (
-                <SmartMarker map={map} id={`${mapId}-marker`} geoUri={geoUri} roomMember={markerRoomMember} />
+                <SmartMarker
+                    map={map}
+                    id={`${mapId}-marker`}
+                    geoUri={geoUri}
+                    roomMember={markerRoomMember ?? undefined}
+                />
             )}
         </Map>
     );

@@ -48,7 +48,7 @@ interface IProps {
     parentEv?: MatrixEvent;
     // called when the ReplyChain contents has changed, including EventTiles thereof
     onHeightChanged: () => void;
-    permalinkCreator: RoomPermalinkCreator;
+    permalinkCreator?: RoomPermalinkCreator;
     // Specifies which layout to use.
     layout?: Layout;
     // Whether to always show a timestamp

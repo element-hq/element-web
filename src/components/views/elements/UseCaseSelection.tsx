@@ -40,7 +40,7 @@ export function UseCaseSelection({ onFinished }: Props): JSX.Element {
                 onFinished(selection);
             }, TIMEOUT);
             return () => {
-                clearTimeout(handler);
+                if (handler !== null) clearTimeout(handler);
                 handler = null;
             };
         }

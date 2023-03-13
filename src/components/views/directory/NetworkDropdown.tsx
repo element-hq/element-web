@@ -44,7 +44,7 @@ const validServer = withValidation<undefined, { error?: MatrixError }>({
             // check if we can successfully load this server's room directory
             await MatrixClientPeg.get().publicRooms({
                 limit: 1,
-                server: value,
+                server: value ?? undefined,
             });
             return {};
         } catch (error) {

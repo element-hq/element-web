@@ -29,7 +29,7 @@ interface IProps {
 
 interface IState {
     width: number;
-    IRCLayoutRoot: HTMLElement;
+    IRCLayoutRoot: HTMLElement | null;
 }
 
 export default class IRCTimelineProfileResizer extends React.Component<IProps, IState> {
@@ -77,7 +77,7 @@ export default class IRCTimelineProfileResizer extends React.Component<IProps, I
     };
 
     private updateCSSWidth(newWidth: number): void {
-        this.state.IRCLayoutRoot.style.setProperty("--name-width", newWidth + "px");
+        this.state.IRCLayoutRoot?.style.setProperty("--name-width", newWidth + "px");
     }
 
     private onMoueUp = (): void => {

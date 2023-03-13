@@ -172,7 +172,7 @@ export const UploadButtonContext = createContext<UploadButtonFn | null>(null);
 
 interface IUploadButtonProps {
     roomId: string;
-    relation?: IEventRelation | null;
+    relation?: IEventRelation;
     children: ReactNode;
 }
 
@@ -197,11 +197,11 @@ const UploadButtonContextProvider: React.FC<IUploadButtonProps> = ({ roomId, rel
     });
 
     const onUploadFileInputChange = (ev: React.ChangeEvent<HTMLInputElement>): void => {
-        if (ev.target.files.length === 0) return;
+        if (ev.target.files?.length === 0) return;
 
         // Take a copy, so we can safely reset the value of the form control
         ContentMessages.sharedInstance().sendContentListToRoom(
-            Array.from(ev.target.files),
+            Array.from(ev.target.files!),
             roomId,
             relation,
             cli,
@@ -316,7 +316,7 @@ class PollButton extends React.PureComponent<IPollButtonProps> {
             });
         } else {
             const threadId =
-                this.props.relation?.rel_type === THREAD_RELATION_TYPE.name ? this.props.relation.event_id : null;
+                this.props.relation?.rel_type === THREAD_RELATION_TYPE.name ? this.props.relation.event_id : undefined;
 
             Modal.createDialog(
                 PollCreateDialog,

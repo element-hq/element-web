@@ -128,7 +128,7 @@ export function launchPollEditor(mxEvent: MatrixEvent, getRelationsForEvent?: Ge
             PollCreateDialog,
             {
                 room: MatrixClientPeg.get().getRoom(mxEvent.getRoomId()),
-                threadId: mxEvent.getThread()?.id ?? null,
+                threadId: mxEvent.getThread()?.id,
                 editingMxEvent: mxEvent,
             },
             "mx_CompoundDialog",

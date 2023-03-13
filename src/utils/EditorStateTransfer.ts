@@ -30,7 +30,7 @@ export default class EditorStateTransfer {
 
     public constructor(private readonly event: MatrixEvent) {}
 
-    public setEditorState(caret: DocumentOffset, serializedParts: SerializedPart[]): void {
+    public setEditorState(caret: DocumentOffset | null, serializedParts: SerializedPart[]): void {
         this.caret = caret;
         this.serializedParts = serializedParts;
     }

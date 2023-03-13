@@ -342,7 +342,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
             if (node.tagName === "SPAN" && typeof node.getAttribute("data-mx-spoiler") === "string") {
                 const spoilerContainer = document.createElement("span");
 
-                const reason = node.getAttribute("data-mx-spoiler");
+                const reason = node.getAttribute("data-mx-spoiler") ?? undefined;
                 node.removeAttribute("data-mx-spoiler"); // we don't want to recurse
                 const spoiler = <Spoiler reason={reason} contentHtml={node.outerHTML} />;
 
@@ -367,7 +367,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
             const node = nodes[i];
             if (node.tagName === "A" && node.getAttribute("href")) {
                 if (this.isLinkPreviewable(node)) {
-                    links.push(node.getAttribute("href"));
+                    links.push(node.getAttribute("href")!);
                 }
             } else if (node.tagName === "PRE" || node.tagName === "CODE" || node.tagName === "BLOCKQUOTE") {
                 continue;
@@ -380,7 +380,8 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
 
     private isLinkPreviewable(node: Element): boolean {
         // don't try to preview relative links
-        if (!node.getAttribute("href").startsWith("http://") && !node.getAttribute("href").startsWith("https://")) {
+        const href = node.getAttribute("href") ?? "";
+        if (!href.startsWith("http://") && !href.startsWith("https://")) {
             return false;
         }
 
@@ -389,24 +390,24 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         // or from a full foo.bar/baz style schemeless URL) - or be a markdown-style
         // link, in which case we check the target text differs from the link value.
         // TODO: make this configurable?
-        if (node.textContent.indexOf("/") > -1) {
+        if (node.textContent?.includes("/")) {
             return true;
+        }
+
+        const url = node.getAttribute("href");
+        const host = url.match(/^https?:\/\/(.*?)(\/|$)/)[1];
+
+        // never preview permalinks (if anything we should give a smart
+        // preview of the room/user they point to: nobody needs to be reminded
+        // what the matrix.to site looks like).
+        if (isPermalinkHost(host)) return false;
+
+        if (node.textContent?.toLowerCase().trim().startsWith(host.toLowerCase())) {
+            // it's a "foo.pl" style link
+            return false;
         } else {
-            const url = node.getAttribute("href");
-            const host = url.match(/^https?:\/\/(.*?)(\/|$)/)[1];
-
-            // never preview permalinks (if anything we should give a smart
-            // preview of the room/user they point to: nobody needs to be reminded
-            // what the matrix.to site looks like).
-            if (isPermalinkHost(host)) return false;
-
-            if (node.textContent.toLowerCase().trim().startsWith(host.toLowerCase())) {
-                // it's a "foo.pl" style link
-                return false;
-            } else {
-                // it's a [foo bar](http://foo.com) style link
-                return true;
-            }
+            // it's a [foo bar](http://foo.com) style link
+            return true;
         }
     }
 
@@ -434,7 +435,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
      * to start with (e.g. pills, links in the content).
      */
     private onBodyLinkClick = (e: MouseEvent): void => {
-        let target = e.target as HTMLLinkElement;
+        let target: HTMLLinkElement | null = e.target as HTMLLinkElement;
         // links processed by linkifyjs have their own handler so don't handle those here
         if (target.classList.contains(linkifyOpts.className as string)) return;
         if (target.nodeName !== "A") {

@@ -123,7 +123,9 @@ export default class MemberList extends React.Component<IProps, IState> {
         const cli = MatrixClientPeg.get();
         const room = cli.getRoom(this.props.roomId);
 
-        return room?.canInvite(cli.getUserId()) || (room?.isSpaceRoom() && room.getJoinRule() === JoinRule.Public);
+        return (
+            !!room?.canInvite(cli.getSafeUserId()) || !!(room?.isSpaceRoom() && room.getJoinRule() === JoinRule.Public)
+        );
     }
 
     private getMembersState(invitedMembers: Array<RoomMember>, joinedMembers: Array<RoomMember>): IState {
@@ -276,7 +278,7 @@ export default class MemberList extends React.Component<IProps, IState> {
         });
     };
 
-    private getPending3PidInvites(): Array<MatrixEvent> {
+    private getPending3PidInvites(): MatrixEvent[] | undefined {
         // include 3pid invites (m.room.third_party_invite) state events.
         // The HS may have already converted these into m.room.member invites so
         // we shouldn't add them if the 3pid invite state key (token) is in the

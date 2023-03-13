@@ -132,7 +132,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
 
     private _isCaretAtEnd: boolean;
     private lastCaret: DocumentOffset;
-    private lastSelection: ReturnType<typeof cloneSelection>;
+    private lastSelection: ReturnType<typeof cloneSelection> | null;
 
     private readonly useMarkdownHandle: string;
     private readonly emoticonSettingHandle: string;
@@ -188,7 +188,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         }
     }
 
-    public replaceEmoticon(caretPosition: DocumentPosition, regex: RegExp): number {
+    public replaceEmoticon(caretPosition: DocumentPosition, regex: RegExp): number | undefined {
         const { model } = this.props;
         const range = model.startRange(caretPosition);
         // expand range max 9 characters backwards from caretPosition,
@@ -352,7 +352,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         this.onCutCopy(event, "cut");
     };
 
-    private onPaste = (event: ClipboardEvent<HTMLDivElement>): boolean => {
+    private onPaste = (event: ClipboardEvent<HTMLDivElement>): boolean | undefined => {
         event.preventDefault(); // we always handle the paste ourselves
         if (this.props.onPaste?.(event, this.props.model)) {
             // to prevent double handling, allow props.onPaste to skip internal onPaste
@@ -415,7 +415,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         this.lastSelection = cloneSelection(document.getSelection());
     }
 
-    private refreshLastCaretIfNeeded(): DocumentOffset {
+    private refreshLastCaretIfNeeded(): DocumentOffset | undefined {
         // XXX: needed when going up and down in editing messages ... not sure why yet
         // because the editors should stop doing this when when blurred ...
         // maybe it's on focus and the _editorRef isn't available yet or something.
@@ -441,7 +441,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
     }
 
     public isSelectionCollapsed(): boolean {
-        return !this.lastSelection || this.lastSelection.isCollapsed;
+        return !this.lastSelection || !!this.lastSelection.isCollapsed;
     }
 
     public isCaretAtStart(): boolean {
@@ -537,7 +537,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
             // there is no current autocomplete window, try to open it
             this.tabCompleteName();
             handled = true;
-        } else if ([KeyBindingAction.Delete, KeyBindingAction.Backspace].includes(accessibilityAction)) {
+        } else if ([KeyBindingAction.Delete, KeyBindingAction.Backspace].includes(accessibilityAction!)) {
             this.formatBarRef.current.hide();
         }
 
@@ -750,7 +750,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
     };
 
     public render(): React.ReactNode {
-        let autoComplete;
+        let autoComplete: JSX.Element | undefined;
         if (this.state.autoComplete) {
             const query = this.state.query;
             const queryLen = query.length;
@@ -785,7 +785,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
 
         const { completionIndex } = this.state;
         const hasAutocomplete = Boolean(this.state.autoComplete);
-        let activeDescendant: string;
+        let activeDescendant: string | undefined;
         if (hasAutocomplete && completionIndex >= 0) {
             activeDescendant = generateCompletionDomId(completionIndex);
         }
@@ -800,7 +800,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
                 />
                 <div
                     className={classes}
-                    contentEditable={this.props.disabled ? null : true}
+                    contentEditable={this.props.disabled ? undefined : true}
                     tabIndex={0}
                     onBlur={this.onBlur}
                     onFocus={this.onFocus}

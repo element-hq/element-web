@@ -30,7 +30,7 @@ interface Props {
 }
 
 interface IState {
-    error: Error;
+    error?: Error;
 }
 
 /**
@@ -41,9 +41,7 @@ export default class ErrorBoundary extends React.PureComponent<Props, IState> {
     public constructor(props: Props) {
         super(props);
 
-        this.state = {
-            error: null,
-        };
+        this.state = {};
     }
 
     public static getDerivedStateFromError(error: Error): Partial<IState> {
@@ -66,7 +64,7 @@ export default class ErrorBoundary extends React.PureComponent<Props, IState> {
         MatrixClientPeg.get()
             .store.deleteAllData()
             .then(() => {
-                PlatformPeg.get().reload();
+                PlatformPeg.get()?.reload();
             });
     };
 
@@ -121,7 +119,7 @@ export default class ErrorBoundary extends React.PureComponent<Props, IState> {
                 );
             }
 
-            let clearCacheButton: JSX.Element;
+            let clearCacheButton: JSX.Element | undefined;
             // we only show this button if there is an initialised MatrixClient otherwise we can't clear the cache
             if (MatrixClientPeg.get()) {
                 clearCacheButton = (

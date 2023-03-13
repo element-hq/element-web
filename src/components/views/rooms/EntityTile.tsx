@@ -69,14 +69,14 @@ interface IProps {
     title?: string;
     avatarJsx?: JSX.Element; // <BaseAvatar />
     className?: string;
-    presenceState?: PresenceState;
-    presenceLastActiveAgo?: number;
-    presenceLastTs?: number;
+    presenceState: PresenceState;
+    presenceLastActiveAgo: number;
+    presenceLastTs: number;
     presenceCurrentlyActive?: boolean;
-    showInviteButton?: boolean;
+    showInviteButton: boolean;
     onClick(): void;
-    suppressOnHover?: boolean;
-    showPresence?: boolean;
+    suppressOnHover: boolean;
+    showPresence: boolean;
     subtextLabel?: string;
     e2eStatus?: E2EState;
     powerStatus?: PowerStatus;

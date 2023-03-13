@@ -33,7 +33,8 @@ export function getDesktopCapturerSources(): Promise<Array<DesktopCapturerSource
         },
         types: ["screen", "window"],
     };
-    return PlatformPeg.get().getDesktopCapturerSources(options);
+    const plaf = PlatformPeg.get();
+    return plaf ? plaf?.getDesktopCapturerSources(options) : Promise.resolve<DesktopCapturerSource[]>([]);
 }
 
 export enum Tabs {

@@ -43,5 +43,7 @@ export default function SenderProfile({ mxEvent, onClick, withTooltip }: IProps)
             emphasizeDisplayName={true}
             withTooltip={withTooltip}
         />
-    ) : null;
+    ) : (
+        <></>
+    );
 }

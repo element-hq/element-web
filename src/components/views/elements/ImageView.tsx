@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { createRef } from "react";
+import React, { createRef, CSSProperties } from "react";
 import FocusLock from "react-focus-lock";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
@@ -395,7 +395,7 @@ export default class ImageView extends React.Component<IProps, IState> {
     };
 
     private renderContextMenu(): JSX.Element {
-        let contextMenu = null;
+        let contextMenu: JSX.Element | undefined;
         if (this.state.contextMenuDisplayed) {
             contextMenu = (
                 <MessageContextMenu
@@ -419,11 +419,6 @@ export default class ImageView extends React.Component<IProps, IState> {
         else if (this.state.moving || !this.imageIsLoaded) transitionClassName = "";
         else transitionClassName = "mx_ImageView_image_animating";
 
-        let cursor;
-        if (this.state.moving) cursor = "grabbing";
-        else if (this.state.zoom === this.state.minZoom) cursor = "zoom-in";
-        else cursor = "zoom-out";
-
         const rotationDegrees = this.state.rotation + "deg";
         const zoom = this.state.zoom;
         const translatePixelsX = this.state.translationX + "px";
@@ -432,15 +427,18 @@ export default class ImageView extends React.Component<IProps, IState> {
         // First, we translate and only then we rotate, otherwise
         // we would apply the translation to an already rotated
         // image causing it translate in the wrong direction.
-        const style = {
-            cursor: cursor,
+        const style: CSSProperties = {
             transform: `translateX(${translatePixelsX})
                         translateY(${translatePixelsY})
                         scale(${zoom})
                         rotate(${rotationDegrees})`,
         };
 
-        let info;
+        if (this.state.moving) style.cursor = "grabbing";
+        else if (this.state.zoom === this.state.minZoom) style.cursor = "zoom-in";
+        else style.cursor = "zoom-out";
+
+        let info: JSX.Element | undefined;
         if (showEventMeta) {
             const mxEvent = this.props.mxEvent;
             const showTwelveHour = SettingsStore.getValue("showTwelveHourTimestamps");
@@ -449,7 +447,7 @@ export default class ImageView extends React.Component<IProps, IState> {
                 permalink = this.props.permalinkCreator.forEvent(this.props.mxEvent.getId());
             }
 
-            const senderName = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
+            const senderName = mxEvent.sender?.name ?? mxEvent.getSender();
             const sender = <div className="mx_ImageView_info_sender">{senderName}</div>;
             const messageTimestamp = (
                 <a
@@ -491,7 +489,7 @@ export default class ImageView extends React.Component<IProps, IState> {
             info = <div />;
         }
 
-        let contextMenuButton;
+        let contextMenuButton: JSX.Element | undefined;
         if (this.props.mxEvent) {
             contextMenuButton = (
                 <ContextMenuTooltipButton
@@ -519,7 +517,7 @@ export default class ImageView extends React.Component<IProps, IState> {
             />
         );
 
-        let title: JSX.Element;
+        let title: JSX.Element | undefined;
         if (this.props.mxEvent?.getContent()) {
             title = (
                 <div className="mx_ImageView_title">

@@ -36,7 +36,7 @@ interface IProps {
     // The list of room members for which to show avatars next to the summary
     "summaryMembers"?: RoomMember[];
     // The text to show as the summary of this event list
-    "summaryText"?: string | JSX.Element;
+    "summaryText"?: ReactNode;
     // An array of EventTiles to render when expanded
     "children": ReactNode[];
     // Called when the event list expansion is toggled

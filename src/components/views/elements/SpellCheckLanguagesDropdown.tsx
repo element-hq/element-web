@@ -38,7 +38,7 @@ interface SpellCheckLanguagesDropdownIProps {
 
 interface SpellCheckLanguagesDropdownIState {
     searchQuery: string;
-    languages: Languages;
+    languages?: Languages;
 }
 
 export default class SpellCheckLanguagesDropdown extends React.Component<
@@ -51,7 +51,6 @@ export default class SpellCheckLanguagesDropdown extends React.Component<
 
         this.state = {
             searchQuery: "",
-            languages: null,
         };
     }
 
@@ -59,7 +58,7 @@ export default class SpellCheckLanguagesDropdown extends React.Component<
         const plaf = PlatformPeg.get();
         if (plaf) {
             plaf.getAvailableSpellCheckLanguages()
-                .then((languages) => {
+                ?.then((languages) => {
                     languages.sort(function (a, b) {
                         if (a < b) return -1;
                         if (a > b) return 1;
@@ -92,11 +91,11 @@ export default class SpellCheckLanguagesDropdown extends React.Component<
     }
 
     public render(): React.ReactNode {
-        if (this.state.languages === null) {
+        if (!this.state.languages) {
             return <Spinner />;
         }
 
-        let displayedLanguages;
+        let displayedLanguages: Languages;
         if (this.state.searchQuery) {
             displayedLanguages = this.state.languages.filter((lang) => {
                 return languageMatchesSearchQuery(this.state.searchQuery, lang);
@@ -111,8 +110,8 @@ export default class SpellCheckLanguagesDropdown extends React.Component<
 
         // default value here too, otherwise we need to handle null / undefined;
         // values between mounting and the initial value propagating
-        let language = SettingsStore.getValue("language", null, /*excludeDefault:*/ true);
-        let value = null;
+        let language = SettingsStore.getValue<string | undefined>("language", null, /*excludeDefault:*/ true);
+        let value: string | undefined;
         if (language) {
             value = this.props.value || language;
         } else {

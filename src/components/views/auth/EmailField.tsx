@@ -21,7 +21,7 @@ import { _t, _td } from "../../../languageHandler";
 import withValidation, { IFieldState, IValidationResult } from "../elements/Validation";
 import * as Email from "../../../email";
 
-interface IProps extends Omit<IInputProps, "onValidate"> {
+interface IProps extends Omit<IInputProps, "onValidate" | "element"> {
     id?: string;
     fieldRef?: RefCallback<Field> | RefObject<Field>;
     value: string;

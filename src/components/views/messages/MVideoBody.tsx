@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { ReactNode } from "react";
 import { decode } from "blurhash";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -31,13 +31,13 @@ import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContex
 import MediaProcessingError from "./shared/MediaProcessingError";
 
 interface IState {
-    decryptedUrl?: string;
-    decryptedThumbnailUrl?: string;
-    decryptedBlob?: Blob;
+    decryptedUrl: string | null;
+    decryptedThumbnailUrl: string | null;
+    decryptedBlob: Blob | null;
     error?: any;
     fetchingData: boolean;
     posterLoading: boolean;
-    blurhashUrl: string;
+    blurhashUrl: string | null;
 }
 
 export default class MVideoBody extends React.PureComponent<IBodyProps, IState> {
@@ -61,21 +61,21 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
         };
     }
 
-    private getContentUrl(): string | null {
+    private getContentUrl(): string | undefined {
         const content = this.props.mxEvent.getContent<IMediaEventContent>();
         // During export, the content url will point to the MSC, which will later point to a local url
-        if (this.props.forExport) return content.file?.url || content.url;
+        if (this.props.forExport) return content.file?.url ?? content.url;
         const media = mediaFromContent(content);
         if (media.isEncrypted) {
-            return this.state.decryptedUrl;
+            return this.state.decryptedUrl ?? undefined;
         } else {
-            return media.srcHttp;
+            return media.srcHttp ?? undefined;
         }
     }
 
     private hasContentUrl(): boolean {
         const url = this.getContentUrl();
-        return url && !url.startsWith("data:");
+        return !!url && !url.startsWith("data:");
     }
 
     private getThumbUrl(): string | null {
@@ -227,7 +227,7 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
         );
     }
 
-    private getFileBody = (): JSX.Element => {
+    private getFileBody = (): ReactNode => {
         if (this.props.forExport) return null;
         return this.showFileBody && <MFileBody {...this.props} showGenericPlaceholder={false} />;
     };
@@ -271,7 +271,7 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
 
         const contentUrl = this.getContentUrl();
         const thumbUrl = this.getThumbUrl();
-        let poster = null;
+        let poster: string | undefined;
         let preload = "metadata";
         if (content.info && thumbUrl) {
             poster = thumbUrl;

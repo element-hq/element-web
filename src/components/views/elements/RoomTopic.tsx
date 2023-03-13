@@ -33,7 +33,7 @@ import TooltipTarget from "./TooltipTarget";
 import { Linkify, topicToHtml } from "../../../HtmlUtils";
 
 interface IProps extends React.HTMLProps<HTMLDivElement> {
-    room?: Room;
+    room: Room;
 }
 
 export default function RoomTopic({ room, ...props }: IProps): JSX.Element {
@@ -62,7 +62,7 @@ export default function RoomTopic({ room, ...props }: IProps): JSX.Element {
 
     useDispatcher(dis, (payload) => {
         if (payload.action === Action.ShowRoomTopic) {
-            const canSetTopic = room.currentState.maySendStateEvent(EventType.RoomTopic, client.getUserId());
+            const canSetTopic = room.currentState.maySendStateEvent(EventType.RoomTopic, client.getSafeUserId());
             const body = topicToHtml(topic?.text, topic?.html, ref, true);
 
             const modal = Modal.createDialog(InfoDialog, {

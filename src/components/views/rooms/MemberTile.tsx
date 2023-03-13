@@ -41,7 +41,7 @@ interface IProps {
 
 interface IState {
     isRoomEncrypted: boolean;
-    e2eStatus: E2EState;
+    e2eStatus?: E2EState;
 }
 
 export default class MemberTile extends React.Component<IProps, IState> {
@@ -57,7 +57,6 @@ export default class MemberTile extends React.Component<IProps, IState> {
 
         this.state = {
             isRoomEncrypted: false,
-            e2eStatus: null,
         };
     }
 
@@ -187,7 +186,7 @@ export default class MemberTile extends React.Component<IProps, IState> {
     public render(): React.ReactNode {
         const member = this.props.member;
         const name = this.getDisplayName();
-        const presenceState = member.user?.presence ?? null;
+        const presenceState = member.user?.presence as PresenceState | undefined;
 
         const av = <MemberAvatar member={member} width={36} height={36} aria-hidden="true" />;
 
@@ -222,7 +221,7 @@ export default class MemberTile extends React.Component<IProps, IState> {
         return (
             <EntityTile
                 {...this.props}
-                presenceState={presenceState as PresenceState | null}
+                presenceState={presenceState}
                 presenceLastActiveAgo={member.user ? member.user.lastActiveAgo : 0}
                 presenceLastTs={member.user ? member.user.lastPresenceTs : 0}
                 presenceCurrentlyActive={member.user ? member.user.currentlyActive : false}

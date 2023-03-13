@@ -124,7 +124,7 @@ export default class MKeyVerificationRequest extends React.Component<IProps> {
 
         let title: string;
         let subtitle: string;
-        let stateNode: JSX.Element;
+        let stateNode: JSX.Element | undefined;
 
         if (!request.canAccept) {
             let stateLabel;

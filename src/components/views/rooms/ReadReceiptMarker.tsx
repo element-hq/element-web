@@ -48,7 +48,7 @@ interface IProps {
     suppressAnimation?: boolean;
 
     // an opaque object for storing information about this user's RR in this room
-    readReceiptInfo: IReadReceiptInfo;
+    readReceiptInfo?: IReadReceiptInfo;
 
     // A function which is used to check if the parent panel is being
     // unmounted, to avoid unnecessary work. Should return true if we
