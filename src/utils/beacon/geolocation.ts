@@ -93,7 +93,7 @@ export const genericPositionFromGeolocation = (geoPosition: GeolocationPosition)
         timestamp: Date.now(),
         latitude,
         longitude,
-        altitude,
+        altitude: altitude ?? undefined,
         accuracy,
     };
 };

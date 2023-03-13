@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { M_TIMESTAMP } from "matrix-js-sdk/src/@types/location";
 import { Beacon } from "matrix-js-sdk/src/matrix";
 
 import { msUntilExpiry, sortBeaconsByLatestExpiry, sortBeaconsByLatestCreation } from "../../../src/utils/beacon";
@@ -68,8 +69,24 @@ describe("beacon utils", () => {
             makeBeaconInfoEvent(aliceId, roomId, { timeout: HOUR_MS + 1, timestamp: now - HOUR_MS }, "$3"),
         );
 
+        const noTimestampEvent = makeBeaconInfoEvent(
+            aliceId,
+            roomId,
+            { timeout: HOUR_MS + 1, timestamp: undefined },
+            "$3",
+        );
+        // beacon info helper defaults to date when timestamp is falsy
+        // hard set it to undefined
+        // @ts-ignore
+        noTimestampEvent.event.content[M_TIMESTAMP.name] = undefined;
+        const beaconNoTimestamp = new Beacon(noTimestampEvent);
+
         it("sorts beacons by descending expiry time", () => {
             expect([beacon2, beacon3, beacon1].sort(sortBeaconsByLatestExpiry)).toEqual([beacon1, beacon2, beacon3]);
+        });
+
+        it("sorts beacons with timestamps before beacons without", () => {
+            expect([beaconNoTimestamp, beacon3].sort(sortBeaconsByLatestExpiry)).toEqual([beacon3, beaconNoTimestamp]);
         });
     });
 

@@ -28,21 +28,24 @@ export const msUntilExpiry = (startTimestamp: number, durationMs: number): numbe
     Math.max(0, startTimestamp + durationMs - Date.now());
 
 export const getBeaconMsUntilExpiry = (beaconInfo: BeaconInfoState): number =>
-    msUntilExpiry(beaconInfo.timestamp, beaconInfo.timeout);
+    msUntilExpiry(beaconInfo.timestamp || 0, beaconInfo.timeout);
 
 export const getBeaconExpiryTimestamp = (beacon: Beacon): number =>
-    beacon.beaconInfo.timestamp + beacon.beaconInfo.timeout;
+    (beacon.beaconInfo.timestamp || 0) + beacon.beaconInfo.timeout;
 
 export const sortBeaconsByLatestExpiry = (left: Beacon, right: Beacon): number =>
     getBeaconExpiryTimestamp(right) - getBeaconExpiryTimestamp(left);
 
 // aka sort by timestamp descending
 export const sortBeaconsByLatestCreation = (left: Beacon, right: Beacon): number =>
-    right.beaconInfo.timestamp - left.beaconInfo.timestamp;
+    (right.beaconInfo.timestamp || 0) - (left.beaconInfo.timestamp || 0);
 
 // a beacon's starting timestamp can be in the future
 // (either from small deviations in system clock times, or on purpose from another client)
 // a beacon is only live between its start timestamp and expiry
 // detect when a beacon is waiting to become live
 export const isBeaconWaitingToStart = (beacon: Beacon): boolean =>
-    !beacon.isLive && beacon.beaconInfo.timestamp > Date.now() && getBeaconExpiryTimestamp(beacon) > Date.now();
+    !beacon.isLive &&
+    !!beacon.beaconInfo.timestamp &&
+    beacon.beaconInfo.timestamp > Date.now() &&
+    getBeaconExpiryTimestamp(beacon) > Date.now();

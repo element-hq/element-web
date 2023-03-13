@@ -26,8 +26,13 @@ import { useEventEmitterState } from "../../hooks/useEventEmitter";
 export const useLiveBeacons = (roomId: Room["roomId"], matrixClient: MatrixClient): Beacon[] => {
     const room = matrixClient.getRoom(roomId);
 
-    const liveBeacons = useEventEmitterState(room?.currentState, RoomStateEvent.BeaconLiveness, () =>
-        room?.currentState?.liveBeaconIds.map((beaconIdentifier) => room.currentState.beacons.get(beaconIdentifier)),
+    const liveBeacons = useEventEmitterState(
+        room?.currentState,
+        RoomStateEvent.BeaconLiveness,
+        () =>
+            room?.currentState?.liveBeaconIds.map(
+                (beaconIdentifier) => room.currentState.beacons.get(beaconIdentifier)!,
+            ) || [],
     );
 
     return liveBeacons;
