@@ -31,6 +31,7 @@ import {
 } from "../../../test-utils";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import { Action } from "../../../../src/dispatcher/actions";
+import { ButtonEvent } from "../../../../src/components/views/elements/AccessibleButton";
 
 describe("<Pill>", () => {
     let client: Mocked<MatrixClient>;
@@ -43,6 +44,7 @@ describe("<Pill>", () => {
     const user1Id = "@user1:example.com";
     const user2Id = "@user2:example.com";
     let renderResult: RenderResult;
+    let pillParentClickHandler: (e: ButtonEvent) => void;
 
     const renderPill = (props: PillProps): void => {
         const withDefault = {
@@ -50,7 +52,12 @@ describe("<Pill>", () => {
             shouldShowPillAvatar: true,
             ...props,
         } as PillProps;
-        renderResult = render(<Pill {...withDefault} />);
+        // wrap Pill with a div to allow testing of event bubbling
+        renderResult = render(
+            <div onClick={pillParentClickHandler}>
+                <Pill {...withDefault} />
+            </div>,
+        );
     };
 
     filterConsole(
@@ -88,6 +95,7 @@ describe("<Pill>", () => {
         });
 
         jest.spyOn(dis, "dispatch");
+        pillParentClickHandler = jest.fn();
     });
 
     describe("when rendering a pill for a room", () => {
@@ -168,11 +176,13 @@ describe("<Pill>", () => {
                 await userEvent.click(screen.getByText("User 1"));
             });
 
-            it("should dipsatch a view user action", () => {
+            it("should dipsatch a view user action and prevent event bubbling", () => {
                 expect(dis.dispatch).toHaveBeenCalledWith({
                     action: Action.ViewUser,
                     member: room1.getMember(user1Id),
                 });
+
+                expect(pillParentClickHandler).not.toHaveBeenCalled();
             });
         });
     });
@@ -195,7 +205,11 @@ describe("<Pill>", () => {
         renderPill({
             url: permalinkPrefix,
         });
-        expect(renderResult.asFragment()).toMatchInlineSnapshot(`<DocumentFragment />`);
+        expect(renderResult.asFragment()).toMatchInlineSnapshot(`
+            <DocumentFragment>
+              <div />
+            </DocumentFragment>
+        `);
     });
 
     it("should not render an avatar or link when called with inMessage = false and shouldShowPillAvatar = false", () => {

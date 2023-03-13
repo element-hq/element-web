@@ -167,6 +167,7 @@ export const usePermalink: (args: Args) => HookResult = ({ room, type: argType, 
         text = member.name || resourceId;
         onClick = (e: ButtonEvent): void => {
             e.preventDefault();
+            e.stopPropagation();
             dis.dispatch({
                 action: Action.ViewUser,
                 member: member,
