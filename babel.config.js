@@ -19,8 +19,8 @@ module.exports = {
                 ],
             },
         ],
-        "@babel/preset-react",
         ["@babel/preset-typescript", { allowDeclareFields: true }],
+        "@babel/preset-react",
     ],
     plugins: [
         "@babel/plugin-proposal-export-default-from",
