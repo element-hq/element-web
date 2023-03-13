@@ -61,6 +61,14 @@ limitations under the License.
     font-size: $font-12px;
     font-weight: $font-semi-bold;
 }
+.mx_UserNotifSettings_gridRowError {
+    // occupy full row
+    grid-column: 1/-1;
+    justify-self: start;
+    padding-right: 30%;
+    // collapse half of the grid-gap
+    margin-top: -$spacing-4;
+}
 
 .mx_UserNotifSettings {
     color: $primary-content; /* override from default settings page styles */

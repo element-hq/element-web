@@ -31,6 +31,11 @@ describe("<Caption />", () => {
         expect({ container }).toMatchSnapshot();
     });
 
+    it("renders an error message", () => {
+        const { container } = render(getComponent({ isError: true }));
+        expect({ container }).toMatchSnapshot();
+    });
+
     it("renders react children", () => {
         const children = (
             <>

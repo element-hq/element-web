@@ -28,7 +28,7 @@ import {
     IPushRuleCondition,
 } from "matrix-js-sdk/src/matrix";
 import { IThreepid, ThreepidMedium } from "matrix-js-sdk/src/@types/threepids";
-import { act, fireEvent, getByTestId, render, screen, waitFor } from "@testing-library/react";
+import { act, fireEvent, getByTestId, render, screen, waitFor, within } from "@testing-library/react";
 
 import Notifications from "../../../../src/components/views/settings/Notifications";
 import SettingsStore from "../../../../src/settings/SettingsStore";
@@ -90,6 +90,15 @@ const encryptedGroupRule: IPushRule = {
     default: true,
     enabled: true,
 } as IPushRule;
+
+const bananaRule = {
+    actions: [PushRuleActionName.Notify, { set_tweak: TweakName.Highlight, value: false }],
+    pattern: "banana",
+    rule_id: "banana",
+    default: false,
+    enabled: true,
+} as IPushRule;
+
 const pushRules: IPushRules = {
     global: {
         underride: [
@@ -130,13 +139,7 @@ const pushRules: IPushRules = {
             },
         ],
         content: [
-            {
-                actions: [PushRuleActionName.Notify, { set_tweak: TweakName.Highlight, value: false }],
-                pattern: "banana",
-                rule_id: "banana",
-                default: false,
-                enabled: true,
-            },
+            bananaRule,
             {
                 actions: [
                     PushRuleActionName.Notify,
@@ -272,7 +275,7 @@ describe("<Notifications />", () => {
         mockClient.getPushers.mockClear().mockResolvedValue({ pushers: [] });
         mockClient.getThreePids.mockClear().mockResolvedValue({ threepids: [] });
         mockClient.setPusher.mockClear().mockResolvedValue({});
-        mockClient.setPushRuleActions.mockClear().mockResolvedValue({});
+        mockClient.setPushRuleActions.mockReset().mockResolvedValue({});
         mockClient.pushRules = pushRules;
     });
 
@@ -395,6 +398,18 @@ describe("<Notifications />", () => {
             });
         });
 
+        it("toggles master switch correctly", async () => {
+            await getComponentAndWait();
+
+            // master switch is on
+            expect(screen.getByLabelText("Enable notifications for this account")).toBeChecked();
+            fireEvent.click(screen.getByLabelText("Enable notifications for this account"));
+
+            await flushPromises();
+
+            expect(mockClient.setPushRuleEnabled).toHaveBeenCalledWith("global", "override", ".m.rule.master", true);
+        });
+
         it("toggles and sets settings correctly", async () => {
             await getComponentAndWait();
             let audioNotifsToggle!: HTMLDivElement;
@@ -471,6 +486,73 @@ describe("<Notifications />", () => {
                 oneToOneRule.rule_id,
                 StandardActions.ACTION_DONT_NOTIFY,
             );
+        });
+
+        it("adds an error message when updating notification level fails", async () => {
+            await getComponentAndWait();
+            const section = "vector_global";
+
+            const error = new Error("oups");
+            mockClient.setPushRuleEnabled.mockRejectedValue(error);
+
+            // oneToOneRule is set to 'on'
+            // and is kind: 'underride'
+            const offToggle = screen.getByTestId(section + oneToOneRule.rule_id).querySelector('input[type="radio"]')!;
+            fireEvent.click(offToggle);
+
+            await flushPromises();
+
+            // error message attached to oneToOne rule
+            const oneToOneRuleElement = screen.getByTestId(section + oneToOneRule.rule_id);
+            // old value still shown as selected
+            expect(within(oneToOneRuleElement).getByLabelText("On")).toBeChecked();
+            expect(
+                within(oneToOneRuleElement).getByText(
+                    "An error occurred when updating your notification preferences. Please try to toggle your option again.",
+                ),
+            ).toBeInTheDocument();
+        });
+
+        it("clears error message for notification rule on retry", async () => {
+            await getComponentAndWait();
+            const section = "vector_global";
+
+            const error = new Error("oups");
+            mockClient.setPushRuleEnabled.mockRejectedValueOnce(error).mockResolvedValue({});
+
+            // oneToOneRule is set to 'on'
+            // and is kind: 'underride'
+            const offToggle = screen.getByTestId(section + oneToOneRule.rule_id).querySelector('input[type="radio"]')!;
+            fireEvent.click(offToggle);
+
+            await flushPromises();
+
+            // error message attached to oneToOne rule
+            const oneToOneRuleElement = screen.getByTestId(section + oneToOneRule.rule_id);
+            expect(
+                within(oneToOneRuleElement).getByText(
+                    "An error occurred when updating your notification preferences. Please try to toggle your option again.",
+                ),
+            ).toBeInTheDocument();
+
+            // retry
+            fireEvent.click(offToggle);
+
+            // error removed as soon as we start request
+            expect(
+                within(oneToOneRuleElement).queryByText(
+                    "An error occurred when updating your notification preferences. Please try to toggle your option again.",
+                ),
+            ).not.toBeInTheDocument();
+
+            await flushPromises();
+
+            // no error after after successful change
+            expect(
+                within(oneToOneRuleElement).queryByText(
+                    "An error occurred when updating your notification preferences. Please try to toggle your option again.",
+                ),
+            ).not.toBeInTheDocument();
         });
 
         describe("synced rules", () => {
@@ -554,7 +636,11 @@ describe("<Notifications />", () => {
                 expect(mockClient.setPushRuleActions).toHaveBeenCalledTimes(1);
 
                 // no error
-                expect(screen.queryByTestId("error-message")).not.toBeInTheDocument();
+                expect(
+                    within(oneToOneRuleElement).queryByText(
+                        "An error occurred when updating your notification preferences. Please try to toggle your option again.",
+                    ),
+                ).not.toBeInTheDocument();
             });
 
             it("updates synced rules when they exist for user", async () => {
@@ -585,7 +671,11 @@ describe("<Notifications />", () => {
                 expect(mockClient.setPushRuleActions).toHaveBeenCalledTimes(2);
 
                 // no error
-                expect(screen.queryByTestId("error-message")).not.toBeInTheDocument();
+                expect(
+                    within(oneToOneRuleElement).queryByText(
+                        "An error occurred when updating your notification preferences. Please try to toggle your option again.",
+                    ),
+                ).not.toBeInTheDocument();
             });
 
             it("does not update synced rules when main rule update fails", async () => {
@@ -610,7 +700,11 @@ describe("<Notifications />", () => {
                 // only called for parent rule
                 expect(mockClient.setPushRuleActions).toHaveBeenCalledTimes(1);
 
-                expect(screen.queryByTestId("error-message")).toBeInTheDocument();
+                expect(
+                    within(oneToOneRuleElement).getByText(
+                        "An error occurred when updating your notification preferences. Please try to toggle your option again.",
+                    ),
+                ).toBeInTheDocument();
             });
 
             it("sets the UI toggle to rule value when no synced rule exist for the user", async () => {
@@ -661,6 +755,47 @@ describe("<Notifications />", () => {
                     expectedActions,
                 );
             });
+        });
+    });
+
+    describe("keywords", () => {
+        // keywords rule is not a real rule, but controls actions on keywords content rules
+        const keywordsRuleId = "_keywords";
+        it("updates individual keywords content rules when keywords rule is toggled", async () => {
+            await getComponentAndWait();
+            const section = "vector_mentions";
+
+            fireEvent.click(within(screen.getByTestId(section + keywordsRuleId)).getByLabelText("Off"));
+
+            expect(mockClient.setPushRuleEnabled).toHaveBeenCalledWith("global", "content", bananaRule.rule_id, false);
+
+            fireEvent.click(within(screen.getByTestId(section + keywordsRuleId)).getByLabelText("Noisy"));
+
+            expect(mockClient.setPushRuleActions).toHaveBeenCalledWith(
+                "global",
+                "content",
+                bananaRule.rule_id,
+                StandardActions.ACTION_HIGHLIGHT_DEFAULT_SOUND,
+            );
+        });
+
+        it("renders an error when updating keywords fails", async () => {
+            await getComponentAndWait();
+            const section = "vector_mentions";
+
+            mockClient.setPushRuleEnabled.mockRejectedValueOnce("oups");
+
+            fireEvent.click(within(screen.getByTestId(section + keywordsRuleId)).getByLabelText("Off"));
+
+            await flushPromises();
+
+            const rule = screen.getByTestId(section + keywordsRuleId);
+
+            expect(
+                within(rule).getByText(
+                    "An error occurred when updating your notification preferences. Please try to toggle your option again.",
+                ),
+            ).toBeInTheDocument();
         });
     });
 

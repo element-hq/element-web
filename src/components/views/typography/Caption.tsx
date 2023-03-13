@@ -14,15 +14,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import classNames from "classnames";
 import React, { HTMLAttributes } from "react";
 
 interface Props extends Omit<HTMLAttributes<HTMLSpanElement>, "className"> {
     children: React.ReactNode;
+    isError?: boolean;
 }
 
-export const Caption: React.FC<Props> = ({ children, ...rest }) => {
+export const Caption: React.FC<Props> = ({ children, isError, ...rest }) => {
     return (
-        <span className="mx_Caption" {...rest}>
+        <span
+            className={classNames("mx_Caption", {
+                mx_Caption_error: isError,
+            })}
+            {...rest}
+        >
             {children}
         </span>
     );

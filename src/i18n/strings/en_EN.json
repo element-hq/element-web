@@ -1443,6 +1443,7 @@
     "On": "On",
     "Off": "Off",
     "Noisy": "Noisy",
+    "An error occurred when updating your notification preferences. Please try to toggle your option again.": "An error occurred when updating your notification preferences. Please try to toggle your option again.",
     "Global": "Global",
     "Mentions & keywords": "Mentions & keywords",
     "Notification targets": "Notification targets",
