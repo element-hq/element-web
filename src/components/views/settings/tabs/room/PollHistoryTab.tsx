@@ -1,0 +1,46 @@
+/*
+Copyright 2023 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+import React, { useContext } from "react";
+
+import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
+import { PollHistory } from "../../../polls/pollHistory/PollHistory";
+import { RoomPermalinkCreator } from "../../../../../utils/permalinks/Permalinks";
+
+interface IProps {
+    roomId: string;
+    onFinished: () => void;
+}
+
+export const PollHistoryTab: React.FC<IProps> = ({ roomId, onFinished }) => {
+    const matrixClient = useContext(MatrixClientContext);
+    const room = matrixClient.getRoom(roomId);
+    if (!room) {
+        return null;
+    }
+    const permalinkCreator = new RoomPermalinkCreator(room, roomId);
+
+    return (
+        <div className="mx_SettingsTab">
+            <PollHistory
+                room={room}
+                permalinkCreator={permalinkCreator}
+                matrixClient={matrixClient}
+                onFinished={onFinished}
+            />
+        </div>
+    );
+};

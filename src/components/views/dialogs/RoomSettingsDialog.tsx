@@ -35,6 +35,7 @@ import { Action } from "../../../dispatcher/actions";
 import { VoipRoomSettingsTab } from "../settings/tabs/room/VoipRoomSettingsTab";
 import { ActionPayload } from "../../../dispatcher/payloads";
 import { NonEmptyArray } from "../../../@types/common";
+import { PollHistoryTab } from "../settings/tabs/room/PollHistoryTab";
 
 export const ROOM_GENERAL_TAB = "ROOM_GENERAL_TAB";
 export const ROOM_VOIP_TAB = "ROOM_VOIP_TAB";
@@ -43,6 +44,7 @@ export const ROOM_ROLES_TAB = "ROOM_ROLES_TAB";
 export const ROOM_NOTIFICATIONS_TAB = "ROOM_NOTIFICATIONS_TAB";
 export const ROOM_BRIDGES_TAB = "ROOM_BRIDGES_TAB";
 export const ROOM_ADVANCED_TAB = "ROOM_ADVANCED_TAB";
+export const ROOM_POLL_HISTORY_TAB = "ROOM_POLL_HISTORY_TAB";
 
 interface IProps {
     roomId: string;
@@ -158,6 +160,17 @@ export default class RoomSettingsDialog extends React.Component<IProps, IState> 
                     "mx_RoomSettingsDialog_bridgesIcon",
                     <BridgeSettingsTab roomId={this.props.roomId} />,
                     "RoomSettingsBridges",
+                ),
+            );
+        }
+
+        if (SettingsStore.getValue("feature_poll_history")) {
+            tabs.push(
+                new Tab(
+                    ROOM_POLL_HISTORY_TAB,
+                    _td("Polls history"),
+                    "mx_RoomSettingsDialog_pollsIcon",
+                    <PollHistoryTab roomId={this.props.roomId} onFinished={() => this.props.onFinished(true)} />,
                 ),
             );
         }

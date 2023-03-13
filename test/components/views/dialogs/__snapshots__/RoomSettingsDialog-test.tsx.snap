@@ -1,0 +1,129 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<RoomSettingsDialog /> Settings tabs renders default tabs correctly 1`] = `
+NodeList [
+  <div
+    class="mx_AccessibleButton mx_TabbedView_tabLabel mx_TabbedView_tabLabel_active"
+    data-testid="settings-tab-ROOM_GENERAL_TAB"
+    role="button"
+    tabindex="0"
+  >
+    <span
+      class="mx_TabbedView_maskedIcon mx_RoomSettingsDialog_settingsIcon"
+    />
+    <span
+      class="mx_TabbedView_tabLabel_text"
+    >
+      General
+    </span>
+  </div>,
+  <div
+    class="mx_AccessibleButton mx_TabbedView_tabLabel "
+    data-testid="settings-tab-ROOM_SECURITY_TAB"
+    role="button"
+    tabindex="0"
+  >
+    <span
+      class="mx_TabbedView_maskedIcon mx_RoomSettingsDialog_securityIcon"
+    />
+    <span
+      class="mx_TabbedView_tabLabel_text"
+    >
+      Security & Privacy
+    </span>
+  </div>,
+  <div
+    class="mx_AccessibleButton mx_TabbedView_tabLabel "
+    data-testid="settings-tab-ROOM_ROLES_TAB"
+    role="button"
+    tabindex="0"
+  >
+    <span
+      class="mx_TabbedView_maskedIcon mx_RoomSettingsDialog_rolesIcon"
+    />
+    <span
+      class="mx_TabbedView_tabLabel_text"
+    >
+      Roles & Permissions
+    </span>
+  </div>,
+  <div
+    class="mx_AccessibleButton mx_TabbedView_tabLabel "
+    data-testid="settings-tab-ROOM_NOTIFICATIONS_TAB"
+    role="button"
+    tabindex="0"
+  >
+    <span
+      class="mx_TabbedView_maskedIcon mx_RoomSettingsDialog_notificationsIcon"
+    />
+    <span
+      class="mx_TabbedView_tabLabel_text"
+    >
+      Notifications
+    </span>
+  </div>,
+]
+`;
+
+exports[`<RoomSettingsDialog /> poll history displays poll history when tab clicked 1`] = `
+<div
+  class="mx_SettingsTab"
+>
+  <div
+    class="mx_PollHistory_content"
+  >
+    <h2
+      class="mx_Heading_h2 mx_PollHistory_header"
+    >
+      Polls history
+    </h2>
+    <div
+      class="mx_PollHistoryList"
+    >
+      <fieldset
+        class="mx_FilterTabGroup"
+      >
+        <label
+          data-testid="filter-tab-PollHistory_filter-ACTIVE"
+        >
+          <input
+            checked=""
+            name="PollHistory_filter"
+            type="radio"
+            value="ACTIVE"
+          />
+          <span>
+            Active polls
+          </span>
+        </label>
+        <label
+          data-testid="filter-tab-PollHistory_filter-ENDED"
+        >
+          <input
+            name="PollHistory_filter"
+            type="radio"
+            value="ENDED"
+          />
+          <span>
+            Past polls
+          </span>
+        </label>
+      </fieldset>
+      <div
+        class="mx_PollHistoryList_loading mx_PollHistoryList_noResultsYet"
+      >
+        <div
+          class="mx_InlineSpinner"
+        >
+          <div
+            aria-label="Loading…"
+            class="mx_InlineSpinner_icon mx_Spinner_icon"
+            style="width: 16px; height: 16px;"
+          />
+        </div>
+        Loading polls
+      </div>
+    </div>
+  </div>
+</div>
+`;
