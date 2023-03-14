@@ -3744,5 +3744,6 @@
     "Invites by email can only be sent one at a time": "透過電子郵件傳送的邀請一次只能傳送一個",
     "Once everyone has joined, you’ll be able to chat": "所有人都加入後，您就可以聊天了",
     "Could not find room": "找不到聊天室",
-    "iframe has no src attribute": "iframe 沒有 src 屬性"
+    "iframe has no src attribute": "iframe 沒有 src 屬性",
+    "An error occurred when updating your notification preferences. Please try to toggle your option again.": "更新您的通知偏好設定時發生錯誤。請嘗試再次切換選項。"
 }
