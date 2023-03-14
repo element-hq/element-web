@@ -3744,5 +3744,6 @@
     "Invites by email can only be sent one at a time": "Les invitations par e-mail ne peuvent être envoyées qu’une par une",
     "Once everyone has joined, you’ll be able to chat": "Quand tout le monde sera présent, vous pourrez discuter",
     "Could not find room": "Impossible de trouver le salon",
-    "iframe has no src attribute": "L’iframe n’a pas d’attribut src"
+    "iframe has no src attribute": "L’iframe n’a pas d’attribut src",
+    "An error occurred when updating your notification preferences. Please try to toggle your option again.": "Nous avons rencontré une erreur lors de la mise-à-jour de vos préférences de notification. Veuillez essayer de réactiver l’option."
 }
