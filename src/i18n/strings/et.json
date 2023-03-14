@@ -3745,5 +3745,6 @@
     "Invites by email can only be sent one at a time": "Kutseid saad e-posti teel saata vaid ükshaaval",
     "Could not find room": "Jututuba ei õnnestunud leida",
     "iframe has no src attribute": "iframe elemendil puudub src atribuut",
-    "An error occurred when updating your notification preferences. Please try to toggle your option again.": "Teavituste eelistuste muutmisel tekkis viga. Palun proovi sama valikut uuesti sisse/välja lülitada."
+    "An error occurred when updating your notification preferences. Please try to toggle your option again.": "Teavituste eelistuste muutmisel tekkis viga. Palun proovi sama valikut uuesti sisse/välja lülitada.",
+    "Use your account to continue.": "Jätkamaks kasuta oma kontot."
 }
