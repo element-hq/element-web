@@ -55,6 +55,8 @@ let roomId: string;
 let openIdToken: IOpenIDCredentials;
 let roomName: string;
 let startAudioOnly: boolean;
+let startWithAudioMuted: boolean | undefined;
+let startWithVideoMuted: boolean | undefined;
 let isVideoChannel: boolean;
 let supportsScreensharing: boolean;
 let language: string;
@@ -79,6 +81,13 @@ const setupCompleted = (async (): Promise<string | void> => {
                 throw new Error(`Expected singular ${name} in query string`);
             }
             return vals[0];
+        };
+        const parseBooleanOrUndefined = (value: string | undefined): boolean | undefined => {
+            if (value === undefined) {
+                return undefined;
+            }
+
+            return value === "true";
         };
 
         // If we have these params, expect a widget API to be available (ie. to be in an iframe
@@ -197,6 +206,8 @@ const setupCompleted = (async (): Promise<string | void> => {
         roomId = qsParam("roomId", true);
         roomName = qsParam("roomName", true);
         startAudioOnly = qsParam("isAudioOnly", true) === "true";
+        startWithAudioMuted = parseBooleanOrUndefined(qsParam("isStartWithAudioMuted", true));
+        startWithVideoMuted = parseBooleanOrUndefined(qsParam("isStartWithVideoMuted", true));
         isVideoChannel = qsParam("isVideoChannel", true) === "true";
         supportsScreensharing = qsParam("supportsScreensharing", true) === "true";
 
@@ -388,8 +399,8 @@ function joinConference(audioInput?: string | null, videoInput?: string | null):
         configOverwrite: {
             subject: roomName,
             startAudioOnly,
-            startWithAudioMuted: audioInput === null,
-            startWithVideoMuted: videoInput === null,
+            startWithAudioMuted: audioInput === null ? true : startWithAudioMuted,
+            startWithVideoMuted: videoInput === null ? true : startWithVideoMuted,
             // Request some log levels for inclusion in rageshakes
             // Ideally we would capture all possible log levels, but this can
             // cause Jitsi Meet to try to post various circular data structures
