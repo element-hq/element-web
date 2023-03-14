@@ -3744,5 +3744,7 @@
     "Once everyone has joined, you’ll be able to chat": "Коли хтось приєднається, ви зможете спілкуватись",
     "Invites by email can only be sent one at a time": "Запрошення електронною поштою можна надсилати лише одне за раз",
     "Could not find room": "Не вдалося знайти кімнату",
-    "iframe has no src attribute": "iframe не має атрибуту src"
+    "iframe has no src attribute": "iframe не має атрибуту src",
+    "An error occurred when updating your notification preferences. Please try to toggle your option again.": "Сталася помилка під час оновлення налаштувань сповіщень. Спробуйте змінити налаштування ще раз.",
+    "Use your account to continue.": "Скористайтесь обліковим записом, щоб продовжити."
 }
