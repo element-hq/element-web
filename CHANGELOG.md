@@ -1,3 +1,9 @@
+Changes in [1.11.25-rc.3](https://github.com/vector-im/element-web/releases/tag/v1.11.25-rc.3) (2023-03-14)
+===========================================================================================================
+
+## 🐛 Bug Fixes
+ * Revert MXID and room pillification (#10370). Fixes vector-im/element-web#24817.
+
 Changes in [1.11.25-rc.2](https://github.com/vector-im/element-web/releases/tag/v1.11.25-rc.2) (2023-03-10)
 ===========================================================================================================
 
