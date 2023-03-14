@@ -23,14 +23,14 @@ import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
 
 interface IProps {
-    title?: string;
-    description?: React.ReactNode;
-    value?: string;
+    title: string;
+    description: React.ReactNode;
+    value: string;
     placeholder?: string;
     button?: string;
-    busyMessage?: string; // pass _td string
-    focus?: boolean;
-    hasCancel?: boolean;
+    busyMessage: string; // pass _td string
+    focus: boolean;
+    hasCancel: boolean;
     validator?: (fieldState: IFieldState) => Promise<IValidationResult>; // result of withValidation
     fixedWidth?: boolean;
     onFinished(ok?: boolean, text?: string): void;
@@ -68,12 +68,13 @@ export default class TextInputDialog extends React.Component<IProps, IState> {
         if (this.props.focus) {
             // Set the cursor at the end of the text input
             // this._field.current.value = this.props.value;
-            this.field.current.focus();
+            this.field.current?.focus();
         }
     }
 
     private onOk = async (ev: React.FormEvent): Promise<void> => {
         ev.preventDefault();
+        if (!this.field.current) return;
         if (this.props.validator) {
             this.setState({ busy: true });
             await this.field.current.validate({ allowEmpty: false });
@@ -101,7 +102,7 @@ export default class TextInputDialog extends React.Component<IProps, IState> {
     private onValidate = async (fieldState: IFieldState): Promise<IValidationResult> => {
         const result = await this.props.validator(fieldState);
         this.setState({
-            valid: result.valid,
+            valid: !!result.valid,
         });
         return result;
     };

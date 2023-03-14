@@ -96,7 +96,7 @@ export default class LogoutDialog extends React.Component<IProps, IState> {
             dis.dispatch({ action: "logout" });
         }
         // close dialog
-        this.props.onFinished(confirmed);
+        this.props.onFinished(!!confirmed);
     };
 
     private onSetRecoveryMethodClick = (): void => {

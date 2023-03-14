@@ -141,7 +141,7 @@ function useHasCrossSigningKeys(
     member: User,
     canVerify: boolean,
     setUpdating: SetUpdating,
-): boolean {
+): boolean | undefined {
     return useAsyncMemo(async () => {
         if (!canVerify) {
             return undefined;
@@ -196,7 +196,7 @@ export function DeviceItem({ userId, device }: { userId: string; device: IDevice
             : device.getDisplayName();
     }
 
-    let trustedLabel = null;
+    let trustedLabel: string | undefined;
     if (userTrust.isVerified()) trustedLabel = isVerified ? _t("Trusted") : _t("Not trusted");
 
     if (isVerified) {
@@ -343,13 +343,12 @@ export const UserOptionsSection: React.FC<{
 }> = ({ member, isIgnored, canInvite, isSpace }) => {
     const cli = useContext(MatrixClientContext);
 
-    let ignoreButton = null;
-    let insertPillButton = null;
-    let inviteUserButton = null;
-    let readReceiptButton = null;
+    let ignoreButton: JSX.Element | undefined;
+    let insertPillButton: JSX.Element | undefined;
+    let inviteUserButton: JSX.Element | undefined;
+    let readReceiptButton: JSX.Element | undefined;
 
     const isMe = member.userId === cli.getUserId();
-
     const onShareUserClick = (): void => {
         Modal.createDialog(ShareDialog, {
             target: member,
@@ -517,7 +516,7 @@ const warnSelfDemote = async (isSpace: boolean): Promise<boolean> => {
     });
 
     const [confirmed] = await finished;
-    return confirmed;
+    return !!confirmed;
 };
 
 const GenericAdminToolsContainer: React.FC<{
@@ -600,7 +599,7 @@ export const RoomKickButton = ({
     const cli = useContext(MatrixClientContext);
 
     // check if user can be kicked/disinvited
-    if (member.membership !== "invite" && member.membership !== "join") return null;
+    if (member.membership !== "invite" && member.membership !== "join") return <></>;
 
     const onKick = async (): Promise<void> => {
         const commonProps = {
@@ -633,8 +632,8 @@ export const RoomKickButton = ({
                         const myMember = child.getMember(cli.credentials.userId || "");
                         const theirMember = child.getMember(member.userId);
                         return (
-                            myMember &&
-                            theirMember &&
+                            !!myMember &&
+                            !!theirMember &&
                             theirMember.membership === member.membership &&
                             myMember.powerLevel > theirMember.powerLevel &&
                             child.currentState.hasSufficientPowerLevelFor("kick", myMember.powerLevel)
@@ -755,8 +754,8 @@ export const BanToggleButton = ({
                               const myMember = child.getMember(cli.credentials.userId || "");
                               const theirMember = child.getMember(member.userId);
                               return (
-                                  myMember &&
-                                  theirMember &&
+                                  !!myMember &&
+                                  !!theirMember &&
                                   theirMember.membership === "ban" &&
                                   myMember.powerLevel > theirMember.powerLevel &&
                                   child.currentState.hasSufficientPowerLevelFor("ban", myMember.powerLevel)
@@ -1555,7 +1554,7 @@ export const UserInfoHeader: React.FC<{
         showPresence = enablePresenceByHsUrl[cli.baseUrl];
     }
 
-    let presenceLabel = null;
+    let presenceLabel: JSX.Element | undefined;
     if (showPresence) {
         presenceLabel = (
             <PresenceLabel
@@ -1614,7 +1613,7 @@ const UserInfo: React.FC<IProps> = ({ user, room, onClose, phase = RightPanelPha
     const isRoomEncrypted = useIsEncrypted(cli, room);
     const devices = useDevices(user.userId);
 
-    let e2eStatus;
+    let e2eStatus: E2EStatus | undefined;
     if (isRoomEncrypted && devices) {
         e2eStatus = getE2EStatus(cli, user.userId, devices);
     }
@@ -1659,7 +1658,7 @@ const UserInfo: React.FC<IProps> = ({ user, room, onClose, phase = RightPanelPha
             break;
     }
 
-    let closeLabel = undefined;
+    let closeLabel: string | undefined;
     if (phase === RightPanelPhases.EncryptionPanel) {
         const verificationRequest = (props as React.ComponentProps<typeof EncryptionPanel>).verificationRequest;
         if (verificationRequest && verificationRequest.pending) {

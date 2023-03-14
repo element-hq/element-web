@@ -73,7 +73,7 @@ const useExportFormState = (): ExportConfig => {
     const [exportType, setExportType] = useState(config.range ?? ExportType.Timeline);
     const [includeAttachments, setAttachments] = useState(config.includeAttachments ?? false);
     const [numberOfMessages, setNumberOfMessages] = useState<number>(config.numberOfMessages ?? 100);
-    const [sizeLimit, setSizeLimit] = useState<number | null>(config.sizeMb ?? 8);
+    const [sizeLimit, setSizeLimit] = useState<number>(config.sizeMb ?? 8);
 
     return {
         exportFormat,
@@ -260,7 +260,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
         );
     });
 
-    let messageCount = null;
+    let messageCount: JSX.Element | undefined;
     if (exportType === ExportType.LastNMessages && setNumberOfMessages) {
         messageCount = (
             <Field

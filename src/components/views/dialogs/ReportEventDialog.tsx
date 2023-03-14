@@ -99,8 +99,8 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
     public constructor(props: IProps) {
         super(props);
 
-        let moderatedByRoomId = null;
-        let moderatedByUserId = null;
+        let moderatedByRoomId: string | null = null;
+        let moderatedByUserId: string | null = null;
 
         if (SettingsStore.getValue("feature_report_to_moderators")) {
             // The client supports reporting to moderators.
@@ -111,7 +111,7 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
             const room = client.getRoom(props.mxEvent.getRoomId());
 
             for (const stateEventType of MODERATED_BY_STATE_EVENT_TYPE) {
-                const stateEvent = room.currentState.getStateEvents(stateEventType, stateEventType);
+                const stateEvent = room?.currentState.getStateEvents(stateEventType, stateEventType);
                 if (!stateEvent) {
                     continue;
                 }
@@ -177,9 +177,9 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
             // A free-form text describing the abuse.
             reason: "",
             busy: false,
-            err: null,
+            err: undefined,
             // If specified, the nature of the abuse, as specified by MSC3215.
-            nature: null,
+            nature: undefined,
             ignoreUserToo: false, // default false, for now. Could easily be argued as default true
         };
     }
@@ -233,14 +233,14 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
 
         this.setState({
             busy: true,
-            err: null,
+            err: undefined,
         });
 
         try {
             const client = MatrixClientPeg.get();
             const ev = this.props.mxEvent;
             if (this.moderation && this.state.nature !== NonStandardValue.Admin) {
-                const nature: Nature = this.state.nature;
+                const nature = this.state.nature;
 
                 // Report to moderators through to the dedicated bot,
                 // as configured in the room's state events.
@@ -274,12 +274,12 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
     };
 
     public render(): React.ReactNode {
-        let error = null;
+        let error: JSX.Element | undefined;
         if (this.state.err) {
             error = <div className="error">{this.state.err}</div>;
         }
 
-        let progress = null;
+        let progress: JSX.Element | undefined;
         if (this.state.busy) {
             progress = (
                 <div className="progress">
@@ -299,7 +299,7 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
         );
 
         const adminMessageMD = SdkConfig.getObject("report_event")?.get("admin_message_md", "adminMessageMD");
-        let adminMessage;
+        let adminMessage: JSX.Element | undefined;
         if (adminMessageMD) {
             const html = new Markdown(adminMessageMD).toHTML({ externalLinks: true });
             adminMessage = <p dangerouslySetInnerHTML={{ __html: html }} />;

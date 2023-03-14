@@ -61,7 +61,7 @@ export const SpaceAvatar: React.FC<Pick<IProps, "avatarUrl" | "avatarDisabled" |
                     />
                     <AccessibleButton
                         onClick={() => {
-                            avatarUploadRef.current.value = "";
+                            if (avatarUploadRef.current) avatarUploadRef.current.value = "";
                             setAvatarDataUrl(undefined);
                             setAvatar(undefined);
                         }}

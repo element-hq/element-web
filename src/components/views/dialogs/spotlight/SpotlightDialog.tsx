@@ -685,7 +685,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                 <Option
                     id={`mx_SpotlightDialog_button_result_${result.name}`}
                     key={`${Section[result.section]}-${result.name}`}
-                    onClick={result.onClick}
+                    onClick={result.onClick ?? null}
                 >
                     {result.avatar}
                     {result.name}

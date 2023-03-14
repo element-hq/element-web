@@ -32,8 +32,19 @@ export type ComponentType = React.ComponentType<{
     onFinished?(...args: any): void;
 }>;
 
+type Defaultize<P, D> = P extends any
+    ? string extends keyof P
+        ? P
+        : Pick<P, Exclude<keyof P, keyof D>> &
+              Partial<Pick<P, Extract<keyof P, keyof D>>> &
+              Partial<Pick<D, Exclude<keyof D, keyof P>>>
+    : never;
+
 // Generic type which returns the props of the Modal component with the onFinished being optional.
-export type ComponentProps<C extends ComponentType> = Omit<React.ComponentProps<C>, "onFinished"> &
+export type ComponentProps<C extends ComponentType> = Defaultize<
+    Omit<React.ComponentProps<C>, "onFinished">,
+    C["defaultProps"]
+> &
     Partial<Pick<React.ComponentProps<C>, "onFinished">>;
 
 export interface IModal<C extends ComponentType> {

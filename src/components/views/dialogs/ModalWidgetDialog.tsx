@@ -70,7 +70,7 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
 
         this.widget = new ElementWidget({
             ...this.props.widgetDefinition,
-            creatorUserId: MatrixClientPeg.get().getUserId(),
+            creatorUserId: MatrixClientPeg.get().getSafeUserId(),
             id: `modal_${this.props.sourceWidgetId}`,
         });
         this.possibleButtons = (this.props.widgetDefinition.buttons || []).map((b) => b.id);
@@ -78,21 +78,23 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
 
     public componentDidMount(): void {
         const driver = new StopGapWidgetDriver([], this.widget, WidgetKind.Modal, false);
-        const messaging = new ClientWidgetApi(this.widget, this.appFrame.current, driver);
+        const messaging = new ClientWidgetApi(this.widget, this.appFrame.current!, driver);
         this.setState({ messaging });
     }
 
     public componentWillUnmount(): void {
+        if (!this.state.messaging) return;
         this.state.messaging.off("ready", this.onReady);
         this.state.messaging.off(`action:${WidgetApiFromWidgetAction.CloseModalWidget}`, this.onWidgetClose);
         this.state.messaging.stop();
     }
 
     private onReady = (): void => {
-        this.state.messaging.sendWidgetConfig(this.props.widgetDefinition);
+        this.state.messaging?.sendWidgetConfig(this.props.widgetDefinition);
     };
 
     private onLoad = (): void => {
+        if (!this.state.messaging) return;
         this.state.messaging.once("ready", this.onReady);
         this.state.messaging.on(`action:${WidgetApiFromWidgetAction.CloseModalWidget}`, this.onWidgetClose);
         this.state.messaging.on(`action:${WidgetApiFromWidgetAction.SetModalButtonEnabled}`, this.onButtonEnableToggle);
@@ -106,7 +108,7 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
         ev.preventDefault();
         const isClose = ev.detail.data.button === BuiltInModalButtonID.Close;
         if (isClose || !this.possibleButtons.includes(ev.detail.data.button)) {
-            return this.state.messaging.transport.reply(ev.detail, {
+            return this.state.messaging?.transport.reply(ev.detail, {
                 error: { message: "Invalid button" },
             } as IWidgetApiErrorResponseData);
         }
@@ -121,15 +123,15 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
             buttonIds = Array.from(tempSet);
         }
         this.setState({ disabledButtonIds: buttonIds });
-        this.state.messaging.transport.reply(ev.detail, {} as IWidgetApiAcknowledgeResponseData);
+        this.state.messaging?.transport.reply(ev.detail, {} as IWidgetApiAcknowledgeResponseData);
     };
 
     public render(): React.ReactNode {
         const templated = this.widget.getCompleteUrl({
             widgetRoomId: this.props.widgetRoomId,
-            currentUserId: MatrixClientPeg.get().getUserId(),
-            userDisplayName: OwnProfileStore.instance.displayName,
-            userHttpAvatarUrl: OwnProfileStore.instance.getHttpAvatarUrl(),
+            currentUserId: MatrixClientPeg.get().getSafeUserId(),
+            userDisplayName: OwnProfileStore.instance.displayName ?? undefined,
+            userHttpAvatarUrl: OwnProfileStore.instance.getHttpAvatarUrl() ?? undefined,
             clientId: ELEMENT_CLIENT_ID,
             clientTheme: SettingsStore.getValue("theme"),
             clientLanguage: getUserLanguage(),
@@ -168,7 +170,7 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
                     }
 
                     const onClick = (): void => {
-                        this.state.messaging.notifyModalWidgetButtonClicked(def.id);
+                        this.state.messaging?.notifyModalWidgetButtonClicked(def.id);
                     };
 
                     const isDisabled = this.state.disabledButtonIds.includes(def.id);
@@ -201,7 +203,7 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
                 </div>
                 <div>
                     <iframe
-                        title={this.widget.name}
+                        title={this.widget.name ?? undefined}
                         ref={this.appFrame}
                         sandbox="allow-forms allow-scripts allow-same-origin"
                         src={widgetUrl}

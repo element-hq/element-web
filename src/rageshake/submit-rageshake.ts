@@ -214,7 +214,7 @@ async function collectBugReport(opts: IOpts = {}, gzipLogs = true): Promise<Form
  *
  * @return {Promise<string>} URL returned by the rageshake server
  */
-export default async function sendBugReport(bugReportEndpoint: string, opts: IOpts = {}): Promise<string> {
+export default async function sendBugReport(bugReportEndpoint?: string, opts: IOpts = {}): Promise<string> {
     if (!bugReportEndpoint) {
         throw new Error("No bug report endpoint has been set.");
     }

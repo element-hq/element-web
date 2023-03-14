@@ -126,7 +126,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
 
     public componentDidMount(): void {
         // move focus to first field when showing dialog
-        this.nameField.current.focus();
+        this.nameField.current?.focus();
     }
 
     private onKeyDown = (event: KeyboardEvent): void => {
@@ -141,10 +141,9 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
     };
 
     private onOk = async (): Promise<void> => {
+        if (!this.nameField.current) return;
         const activeElement = document.activeElement as HTMLElement;
-        if (activeElement) {
-            activeElement.blur();
-        }
+        activeElement?.blur();
         await this.nameField.current.validate({ allowEmpty: false });
         if (this.aliasField.current) {
             await this.aliasField.current.validate({ allowEmpty: false });
@@ -155,7 +154,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
         if (this.state.nameIsValid && (!this.aliasField.current || this.aliasField.current.isValid)) {
             this.props.onFinished(true, this.roomCreateOptions());
         } else {
-            let field;
+            let field: RoomAliasField | Field | null = null;
             if (!this.state.nameIsValid) {
                 field = this.nameField.current;
             } else if (this.aliasField.current && !this.aliasField.current.isValid) {
@@ -163,7 +162,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
             }
             if (field) {
                 field.focus();
-                field.validate({ allowEmpty: false, focused: true });
+                await field.validate({ allowEmpty: false, focused: true });
             }
         }
     };
@@ -202,7 +201,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
 
     private onNameValidate = async (fieldState: IFieldState): Promise<IValidationResult> => {
         const result = await CreateRoomDialog.validateRoomName(fieldState);
-        this.setState({ nameIsValid: result.valid });
+        this.setState({ nameIsValid: !!result.valid });
         return result;
     };
 
@@ -219,9 +218,9 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
     public render(): React.ReactNode {
         const isVideoRoom = this.props.type === RoomType.ElementVideo;
 
-        let aliasField: JSX.Element;
+        let aliasField: JSX.Element | undefined;
         if (this.state.joinRule === JoinRule.Public) {
-            const domain = MatrixClientPeg.get().getDomain();
+            const domain = MatrixClientPeg.get().getDomain()!;
             aliasField = (
                 <div className="mx_CreateRoomDialog_aliasContainer">
                     <RoomAliasField
@@ -234,7 +233,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
             );
         }
 
-        let publicPrivateLabel: JSX.Element;
+        let publicPrivateLabel: JSX.Element | undefined;
         if (this.state.joinRule === JoinRule.Restricted) {
             publicPrivateLabel = (
                 <p>
@@ -242,7 +241,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
                         "Everyone in <SpaceName/> will be able to find and join this room.",
                         {},
                         {
-                            SpaceName: () => <b>{this.props.parentSpace.name}</b>,
+                            SpaceName: () => <b>{this.props.parentSpace?.name ?? _t("Unnamed Space")}</b>,
                         },
                     )}
                     &nbsp;
@@ -256,7 +255,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
                         "Anyone will be able to find and join this room, not just members of <SpaceName/>.",
                         {},
                         {
-                            SpaceName: () => <b>{this.props.parentSpace.name}</b>,
+                            SpaceName: () => <b>{this.props.parentSpace?.name ?? _t("Unnamed Space")}</b>,
                         },
                     )}
                     &nbsp;
@@ -281,7 +280,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
             );
         }
 
-        let e2eeSection: JSX.Element;
+        let e2eeSection: JSX.Element | undefined;
         if (this.state.joinRule !== JoinRule.Public) {
             let microcopy: string;
             if (privateShouldBeEncrypted()) {

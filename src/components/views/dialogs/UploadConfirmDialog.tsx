@@ -26,8 +26,8 @@ import DialogButtons from "../elements/DialogButtons";
 
 interface IProps {
     file: File;
-    currentIndex?: number;
-    totalFiles?: number;
+    currentIndex: number;
+    totalFiles: number;
     onFinished: (uploadConfirmed: boolean, uploadAll?: boolean) => void;
 }
 
@@ -37,6 +37,7 @@ export default class UploadConfirmDialog extends React.Component<IProps> {
 
     public static defaultProps: Partial<IProps> = {
         totalFiles: 1,
+        currentIndex: 0,
     };
 
     public constructor(props: IProps) {
@@ -77,8 +78,8 @@ export default class UploadConfirmDialog extends React.Component<IProps> {
         }
 
         const fileId = `mx-uploadconfirmdialog-${this.props.file.name}`;
-        let preview: JSX.Element;
-        let placeholder: JSX.Element;
+        let preview: JSX.Element | undefined;
+        let placeholder: JSX.Element | undefined;
         if (this.mimeType.startsWith("image/")) {
             preview = (
                 <img className="mx_UploadConfirmDialog_imagePreview" src={this.objectUrl} aria-labelledby={fileId} />
@@ -96,7 +97,7 @@ export default class UploadConfirmDialog extends React.Component<IProps> {
             placeholder = <FileIcon className="mx_UploadConfirmDialog_fileIcon" height={18} width={18} />;
         }
 
-        let uploadAllButton;
+        let uploadAllButton: JSX.Element | undefined;
         if (this.props.currentIndex + 1 < this.props.totalFiles) {
             uploadAllButton = <button onClick={this.onUploadAllClick}>{_t("Upload all")}</button>;
         }

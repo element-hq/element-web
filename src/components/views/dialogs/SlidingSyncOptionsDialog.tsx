@@ -96,7 +96,7 @@ export const SlidingSyncOptionsDialog: React.FC<{ onFinished(enabled: boolean): 
         rules: [
             {
                 key: "required",
-                test: async ({ value }) => !!value || hasNativeSupport,
+                test: async ({ value }) => !!value || !!hasNativeSupport,
                 invalid: () => _t("Your server lacks native support, you must specify a proxy"),
             },
             {
@@ -104,7 +104,7 @@ export const SlidingSyncOptionsDialog: React.FC<{ onFinished(enabled: boolean): 
                 final: true,
                 test: async (_, { error }) => !error,
                 valid: () => _t("Looks good"),
-                invalid: ({ error }) => error?.message,
+                invalid: ({ error }) => error?.message ?? null,
             },
         ],
     });

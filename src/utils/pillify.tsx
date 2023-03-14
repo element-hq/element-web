@@ -76,14 +76,14 @@ export function pillifyLinks(nodes: ArrayLike<Element>, mxEvent: MatrixEvent, pi
             // to clear the pills from the last run of pillifyLinks
             !node.parentElement.classList.contains("mx_AtRoomPill")
         ) {
-            let currentTextNode = node as Node as Text;
+            let currentTextNode = node as Node as Text | null;
             const roomNotifTextNodes = [];
 
             // Take a textNode and break it up to make all the instances of @room their
             // own textNode, adding those nodes to roomNotifTextNodes
             while (currentTextNode !== null) {
                 const roomNotifPos = pillRoomNotifPos(currentTextNode.textContent);
-                let nextTextNode = null;
+                let nextTextNode: Text | null = null;
                 if (roomNotifPos > -1) {
                     let roomTextNode = currentTextNode;
 

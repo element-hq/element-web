@@ -42,7 +42,7 @@ const getForceChatExportParameters = (): ForceChatExportParameters => {
 // them all as optional. This allows customisers to only define and export the
 // customisations they need while still maintaining type safety.
 export interface IChatExportCustomisations {
-    getForceChatExportParameters?: typeof getForceChatExportParameters;
+    getForceChatExportParameters: typeof getForceChatExportParameters;
 }
 
 // A real customisation module will define and export one or more of the

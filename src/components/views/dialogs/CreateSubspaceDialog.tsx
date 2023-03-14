@@ -44,7 +44,7 @@ const CreateSubspaceDialog: React.FC<IProps> = ({ space, onAddExistingSpaceClick
     const spaceNameField = useRef<Field>();
     const [alias, setAlias] = useState("");
     const spaceAliasField = useRef<RoomAliasField>();
-    const [avatar, setAvatar] = useState<File>(null);
+    const [avatar, setAvatar] = useState<File | undefined>();
     const [topic, setTopic] = useState<string>("");
 
     const spaceJoinRule = space.getJoinRule();
@@ -56,7 +56,7 @@ const CreateSubspaceDialog: React.FC<IProps> = ({ space, onAddExistingSpaceClick
 
     const onCreateSubspaceClick = async (e: ButtonEvent): Promise<void> => {
         e.preventDefault();
-        if (busy) return;
+        if (busy || !spaceNameField.current || !spaceAliasField.current) return;
 
         setBusy(true);
         // require & validate the space name field
@@ -83,7 +83,7 @@ const CreateSubspaceDialog: React.FC<IProps> = ({ space, onAddExistingSpaceClick
         }
     };
 
-    let joinRuleMicrocopy: JSX.Element;
+    let joinRuleMicrocopy: JSX.Element | undefined;
     if (joinRule === JoinRule.Restricted) {
         joinRuleMicrocopy = (
             <p>
