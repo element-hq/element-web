@@ -1,3 +1,9 @@
+Changes in [3.68.0-rc.3](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.68.0-rc.3) (2023-03-14)
+===============================================================================================================
+
+## 🐛 Bug Fixes
+ * Revert MXID and room pillification (#10370). Fixes vector-im/element-web#24817.
+
 Changes in [3.68.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.68.0-rc.2) (2023-03-10)
 ===============================================================================================================
 
