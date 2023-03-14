@@ -3730,5 +3730,6 @@
     "Once everyone has joined, you’ll be able to chat": "Pasi të ketë ardhur gjithkush, do të jeni në gjendje të fjaloseni",
     "Invites by email can only be sent one at a time": "Ftesat me email mund të dërgohen vetëm një në herë",
     "Could not find room": "S’u gjet dot dhomë",
-    "iframe has no src attribute": "iframe s’ka atribut src"
+    "iframe has no src attribute": "iframe s’ka atribut src",
+    "An error occurred when updating your notification preferences. Please try to toggle your option again.": "Ndodhi një gabim teksa përditësoheshin parapëlqimet tuaja për njoftime. Ju lutemi, provoni ta riaktivizoni mundësinë tuaj."
 }
