@@ -73,7 +73,7 @@ const ReplyInThreadButton: React.FC<IReplyInThreadButton> = ({ mxEvent, closeMen
         if (mxEvent.getThread() && !mxEvent.isThreadRoot) {
             dis.dispatch<ShowThreadPayload>({
                 action: Action.ShowThread,
-                rootEvent: mxEvent.getThread().rootEvent,
+                rootEvent: mxEvent.getThread()!.rootEvent!,
                 initialEvent: mxEvent,
                 scroll_into_view: true,
                 highlighted: true,
@@ -163,12 +163,12 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
         // to obliterate the room - https://github.com/matrix-org/synapse/issues/4042
         // Similarly for encryption events, since redacting them "breaks everything"
         const canRedact =
-            room.currentState.maySendRedactionForEvent(this.props.mxEvent, cli.credentials.userId) &&
+            !!room?.currentState.maySendRedactionForEvent(this.props.mxEvent, cli.getSafeUserId()) &&
             this.props.mxEvent.getType() !== EventType.RoomServerAcl &&
             this.props.mxEvent.getType() !== EventType.RoomEncryption;
 
         let canPin =
-            room.currentState.mayClientSendStateEvent(EventType.RoomPinnedEvents, cli) &&
+            !!room?.currentState.mayClientSendStateEvent(EventType.RoomPinnedEvents, cli) &&
             canPinEvent(this.props.mxEvent);
 
         // HACK: Intentionally say we can't pin if the user doesn't want to use the functionality
@@ -249,9 +249,10 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
     private onPinClick = (): void => {
         const cli = MatrixClientPeg.get();
         const room = cli.getRoom(this.props.mxEvent.getRoomId());
+        if (!room) return;
         const eventId = this.props.mxEvent.getId();
 
-        const pinnedIds = room?.currentState?.getStateEvents(EventType.RoomPinnedEvents, "")?.getContent().pinned || [];
+        const pinnedIds = room.currentState?.getStateEvents(EventType.RoomPinnedEvents, "")?.getContent().pinned || [];
 
         if (pinnedIds.includes(eventId)) {
             pinnedIds.splice(pinnedIds.indexOf(eventId), 1);
@@ -261,7 +262,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
                 event_ids: [...(room.getAccountData(ReadPinsEventId)?.getContent()?.event_ids || []), eventId],
             });
         }
-        cli.sendStateEvent(this.props.mxEvent.getRoomId(), EventType.RoomPinnedEvents, { pinned: pinnedIds }, "");
+        cli.sendStateEvent(room.roomId, EventType.RoomPinnedEvents, { pinned: pinnedIds }, "");
         this.closeMenu();
     };
 
@@ -294,12 +295,13 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
 
     private onCopyLinkClick = (e: ButtonEvent): void => {
         e.preventDefault(); // So that we don't open the permalink
+        if (!this.props.link) return;
         copyPlaintext(this.props.link);
         this.closeMenu();
     };
 
     private onCollapseReplyChainClick = (): void => {
-        this.props.collapseReplyChain();
+        this.props.collapseReplyChain?.();
         this.closeMenu();
     };
 
@@ -349,10 +351,12 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
         const cli = MatrixClientPeg.get();
         const room = cli.getRoom(this.props.mxEvent.getRoomId());
         const eventId = this.props.mxEvent.getId();
-        return room.getPendingEvents().filter((e) => {
-            const relation = e.getRelation();
-            return relation?.rel_type === RelationType.Annotation && relation.event_id === eventId && filter(e);
-        });
+        return (
+            room?.getPendingEvents().filter((e) => {
+                const relation = e.getRelation();
+                return relation?.rel_type === RelationType.Annotation && relation.event_id === eventId && filter(e);
+            }) ?? []
+        );
     }
 
     private getUnsentReactions(): MatrixEvent[] {
@@ -380,7 +384,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
         const eventStatus = mxEvent.status;
         const unsentReactionsCount = this.getUnsentReactions().length;
         const contentActionable = isContentActionable(mxEvent);
-        const permalink = this.props.permalinkCreator?.forEvent(this.props.mxEvent.getId());
+        const permalink = this.props.permalinkCreator?.forEvent(this.props.mxEvent.getId()!);
         // status is SENT before remote-echo, null after
         const isSent = !eventStatus || eventStatus === EventStatus.SENT;
         const { timelineRenderingType, canReact, canSendMessages } = this.context;

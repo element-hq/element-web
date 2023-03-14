@@ -48,7 +48,7 @@ export const KebabContextMenu: React.FC<KebabContextMenuProps> = ({ options, tit
                     compact
                     rightAligned
                     closeOnInteraction
-                    {...contextMenuBelow(button.current.getBoundingClientRect())}
+                    {...contextMenuBelow(button.current!.getBoundingClientRect())}
                 >
                     <IconizedContextMenuOptionList>{options}</IconizedContextMenuOptionList>
                 </IconizedContextMenu>

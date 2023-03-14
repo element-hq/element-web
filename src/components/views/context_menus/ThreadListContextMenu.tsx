@@ -72,7 +72,7 @@ const ThreadListContextMenu: React.FC<ThreadListContextMenuProps> = ({
             if (permalinkCreator) {
                 evt?.preventDefault();
                 evt?.stopPropagation();
-                const matrixToUrl = permalinkCreator.forEvent(mxEvent.getId());
+                const matrixToUrl = permalinkCreator.forEvent(mxEvent.getId()!);
                 await copyPlaintext(matrixToUrl);
                 closeThreadOptions();
             }
@@ -84,9 +84,8 @@ const ThreadListContextMenu: React.FC<ThreadListContextMenuProps> = ({
         onMenuToggle?.(menuDisplayed);
     }, [menuDisplayed, onMenuToggle]);
 
-    const isMainSplitTimelineShown = !WidgetLayoutStore.instance.hasMaximisedWidget(
-        MatrixClientPeg.get().getRoom(mxEvent.getRoomId()),
-    );
+    const room = MatrixClientPeg.get().getRoom(mxEvent.getRoomId());
+    const isMainSplitTimelineShown = !!room && !WidgetLayoutStore.instance.hasMaximisedWidget(room);
     return (
         <React.Fragment>
             <ContextMenuTooltipButton
@@ -104,7 +103,7 @@ const ThreadListContextMenu: React.FC<ThreadListContextMenuProps> = ({
                     className="mx_RoomTile_contextMenu"
                     compact
                     rightAligned
-                    {...contextMenuBelow(button.current.getBoundingClientRect())}
+                    {...contextMenuBelow(button.current!.getBoundingClientRect())}
                 >
                     <IconizedContextMenuOptionList>
                         {isMainSplitTimelineShown && (

@@ -54,7 +54,7 @@ const DeviceContextMenuSection: React.FC<IDeviceContextMenuSectionProps> = ({ de
 
     useEffect(() => {
         const getDevices = async (): Promise<void> => {
-            return setDevices((await MediaDeviceHandler.getDevices())[deviceKind]);
+            return setDevices((await MediaDeviceHandler.getDevices())?.[deviceKind] ?? []);
         };
         getDevices();
     }, [deviceKind]);

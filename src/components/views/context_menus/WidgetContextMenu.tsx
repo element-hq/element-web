@@ -63,8 +63,8 @@ export const WidgetContextMenu: React.FC<IProps> = ({
     const widgetMessaging = WidgetMessagingStore.instance.getMessagingForUid(WidgetUtils.getWidgetUid(app));
     const canModify = userWidget || WidgetUtils.canUserModifyWidgets(roomId);
 
-    let streamAudioStreamButton;
-    if (getConfigLivestreamUrl() && WidgetType.JITSI.matches(app.type)) {
+    let streamAudioStreamButton: JSX.Element | undefined;
+    if (roomId && getConfigLivestreamUrl() && WidgetType.JITSI.matches(app.type)) {
         const onStreamAudioClick = async (): Promise<void> => {
             try {
                 await startJitsiAudioLivestream(widgetMessaging!, roomId);
@@ -87,12 +87,12 @@ export const WidgetContextMenu: React.FC<IProps> = ({
     const pinnedWidgets = room ? WidgetLayoutStore.instance.getContainerWidgets(room, Container.Top) : [];
     const widgetIndex = pinnedWidgets.findIndex((widget) => widget.id === app.id);
 
-    let editButton;
+    let editButton: JSX.Element | undefined;
     if (canModify && WidgetUtils.isManagedByManager(app)) {
         const _onEditClick = (): void => {
             if (onEditClick) {
                 onEditClick();
-            } else {
+            } else if (room) {
                 WidgetUtils.editWidget(room, app);
             }
             onFinished();
@@ -101,7 +101,7 @@ export const WidgetContextMenu: React.FC<IProps> = ({
         editButton = <IconizedContextMenuOption onClick={_onEditClick} label={_t("Edit")} />;
     }
 
-    let snapshotButton;
+    let snapshotButton: JSX.Element | undefined;
     const screenshotsEnabled = SettingsStore.getValue("enableWidgetScreenshots");
     if (screenshotsEnabled && widgetMessaging?.hasCapability(MatrixCapabilities.Screenshots)) {
         const onSnapshotClick = (): void => {
@@ -122,12 +122,12 @@ export const WidgetContextMenu: React.FC<IProps> = ({
         snapshotButton = <IconizedContextMenuOption onClick={onSnapshotClick} label={_t("Take a picture")} />;
     }
 
-    let deleteButton;
+    let deleteButton: JSX.Element | undefined;
     if (onDeleteClick || canModify) {
         const _onDeleteClick = (): void => {
             if (onDeleteClick) {
                 onDeleteClick();
-            } else {
+            } else if (roomId) {
                 // Show delete confirmation dialog
                 Modal.createDialog(QuestionDialog, {
                     title: _t("Delete Widget"),
@@ -159,7 +159,7 @@ export const WidgetContextMenu: React.FC<IProps> = ({
         app.creatorUserId === cli.getUserId();
 
     const isLocalWidget = WidgetType.JITSI.matches(app.type);
-    let revokeButton;
+    let revokeButton: JSX.Element | undefined;
     if (!userWidget && !isLocalWidget && isAllowedWidget) {
         const opts: ApprovalOpts = { approved: undefined };
         ModuleRunner.instance.invoke(WidgetLifecycle.PreLoadRequest, opts, new ElementWidget(app));
@@ -182,7 +182,7 @@ export const WidgetContextMenu: React.FC<IProps> = ({
         }
     }
 
-    let moveLeftButton;
+    let moveLeftButton: JSX.Element | undefined;
     if (showUnpin && widgetIndex > 0) {
         const onClick = (): void => {
             if (!room) throw new Error("room must be defined");
@@ -193,7 +193,7 @@ export const WidgetContextMenu: React.FC<IProps> = ({
         moveLeftButton = <IconizedContextMenuOption onClick={onClick} label={_t("Move left")} />;
     }
 
-    let moveRightButton;
+    let moveRightButton: JSX.Element | undefined;
     if (showUnpin && widgetIndex < pinnedWidgets.length - 1) {
         const onClick = (): void => {
             if (!room) throw new Error("room must be defined");
