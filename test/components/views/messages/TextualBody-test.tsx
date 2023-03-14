@@ -147,21 +147,21 @@ describe("<TextualBody />", () => {
             );
         });
 
-        it("pillification of MXIDs get applied correctly into the DOM", () => {
+        it("should not pillify MXIDs", () => {
             const ev = mkRoomTextMessage("Chat with @user:example.com");
             const { container } = getComponent({ mxEvent: ev });
             const content = container.querySelector(".mx_EventTile_body");
             expect(content.innerHTML).toMatchInlineSnapshot(
-                `"Chat with <span><bdi><a class="mx_Pill mx_UserPill mx_UserPill_me" href="https://matrix.to/#/@user:example.com"><img class="mx_BaseAvatar mx_BaseAvatar_image" src="mxc://avatar.url/image.png" style="width: 16px; height: 16px;" alt="" data-testid="avatar-img" aria-hidden="true"><span class="mx_Pill_linkText">Member</span></a></bdi></span>"`,
+                `"Chat with <a href="https://matrix.to/#/@user:example.com" class="linkified" rel="noreferrer noopener">@user:example.com</a>"`,
             );
         });
 
-        it("pillification of room aliases get applied correctly into the DOM", () => {
+        it("should not pillify room aliases", () => {
             const ev = mkRoomTextMessage("Visit #room:example.com");
             const { container } = getComponent({ mxEvent: ev });
             const content = container.querySelector(".mx_EventTile_body");
             expect(content.innerHTML).toMatchInlineSnapshot(
-                `"Visit <span><bdi><a class="mx_Pill mx_RoomPill" href="https://matrix.to/#/#room:example.com"><span class="mx_Pill_linkText">#room:example.com</span></a></bdi></span>"`,
+                `"Visit <a href="https://matrix.to/#/#room:example.com" class="linkified" rel="noreferrer noopener">#room:example.com</a>"`,
             );
         });
     });
