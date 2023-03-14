@@ -3744,5 +3744,6 @@
     "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months|other": "%(count)s napja nincs aktív szavazás. További szavazások betöltése az előző havi szavazások megjelenítéséhez",
     "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months|one": "Nincs aktív szavazás az elmúlt napokból. További szavazások betöltése az előző havi szavazások megjelenítéséhez",
     "Invites by email can only be sent one at a time": "E-mail meghívóból egyszerre csak egy küldhető el",
-    "You attempted to join using a room ID without providing a list of servers to join through. Room IDs are internal identifiers and cannot be used to join a room without additional information.": "A belépéshez csak az szoba azonosítóját adta meg a szerver nélkül. A szoba azonosító (ID) egy belső azonosító amivel további információk nélkül nem lehet belépni szobába."
+    "You attempted to join using a room ID without providing a list of servers to join through. Room IDs are internal identifiers and cannot be used to join a room without additional information.": "A belépéshez csak az szoba azonosítóját adta meg a szerver nélkül. A szoba azonosító (ID) egy belső azonosító amivel további információk nélkül nem lehet belépni szobába.",
+    "An error occurred when updating your notification preferences. Please try to toggle your option again.": "Az értesítési beállítások frissítésénél hiba történt. Próbálja meg az opciót újra átkapcsolni."
 }
