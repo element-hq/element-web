@@ -50,6 +50,8 @@ export default class MStickerBody extends MImageBody {
         if (this.props.mxEvent.getContent().info?.[BLURHASH_FIELD]) return super.getPlaceholder(width, height);
         return (
             <img
+                aria-hidden
+                alt=""
                 className="mx_MStickerBody_placeholder"
                 src={require("../../../../res/img/icons-show-stickers.svg").default}
                 width="80"

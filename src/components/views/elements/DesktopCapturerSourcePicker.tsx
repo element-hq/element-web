@@ -69,7 +69,7 @@ export class ExistingSource extends React.Component<ExistingSourceIProps> {
                 title={this.props.source.name}
                 onClick={this.onClick}
             >
-                <img className={thumbnailClasses} src={this.props.source.thumbnailURL} />
+                <img alt={this.props.source.name} className={thumbnailClasses} src={this.props.source.thumbnailURL} />
                 <span className="mx_desktopCapturerSourcePicker_source_name">{this.props.source.name}</span>
             </AccessibleButton>
         );
