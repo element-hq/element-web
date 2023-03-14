@@ -161,6 +161,9 @@ describe("Timeline", () => {
                 "created and configured the room.",
             ).should("exist");
 
+            // Check room name line-height is reset
+            cy.get(".mx_IRCLayout .mx_NewRoomIntro h2").should("have.css", "line-height", "normal");
+
             cy.get(".mx_MainSplit").percySnapshotElement("Configured room on IRC layout");
         });
 

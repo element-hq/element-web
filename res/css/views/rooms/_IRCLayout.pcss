@@ -23,6 +23,12 @@ $irc-line-height: $font-18px;
 
     line-height: $irc-line-height !important;
 
+    .mx_NewRoomIntro {
+        > h2 {
+            line-height: initial; /* Cancel $irc-line-height */
+        }
+    }
+
     .mx_EventTile {
         --EventTile_irc_line-padding-block: 1px;
 
