@@ -3744,5 +3744,6 @@
     "Invites by email can only be sent one at a time": "Pozvánky e-mailem lze zasílat pouze po jedné",
     "Once everyone has joined, you’ll be able to chat": "Jakmile se všichni připojí, budete moci konverzovat",
     "Could not find room": "Nepodařilo se najít místnost",
-    "iframe has no src attribute": "iframe nemá atribut src"
+    "iframe has no src attribute": "iframe nemá atribut src",
+    "An error occurred when updating your notification preferences. Please try to toggle your option again.": "Při aktualizaci předvoleb oznámení došlo k chybě. Zkuste prosím přepnout volbu znovu."
 }
