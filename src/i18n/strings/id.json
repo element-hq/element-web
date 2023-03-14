@@ -3745,5 +3745,6 @@
     "Invites by email can only be sent one at a time": "Undangan lewat surel hanya dapat dikirim satu-satu",
     "Could not find room": "Tidak dapat mencari ruangan",
     "iframe has no src attribute": "iframe tidak memiliki atribut src",
-    "An error occurred when updating your notification preferences. Please try to toggle your option again.": "Sebuah kesalahan terjadi saat memperbarui preferensi notifikasi Anda. Silakan coba mengubah opsi Anda lagi."
+    "An error occurred when updating your notification preferences. Please try to toggle your option again.": "Sebuah kesalahan terjadi saat memperbarui preferensi notifikasi Anda. Silakan coba mengubah opsi Anda lagi.",
+    "Use your account to continue.": "Gunakan akun Anda untuk melanjutkan."
 }
