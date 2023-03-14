@@ -8148,10 +8148,10 @@ matrix-mock-request@^2.5.0:
   dependencies:
     expect "^28.1.0"
 
-matrix-react-sdk@3.68.0-rc.2:
-  version "3.68.0-rc.2"
-  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.68.0-rc.2.tgz#b792027103e39cc15da58ebebb58c61b53a8442e"
-  integrity sha512-ZatfDtMwU5Hzk33TuGE4kbyFOCNgzV0G7Z+YgyojuO5uzlKyCKdOtxtfmiB31lrlISEkE4EZLw49ZWsIn9Uwbw==
+matrix-react-sdk@3.68.0-rc.3:
+  version "3.68.0-rc.3"
+  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.68.0-rc.3.tgz#7aacc59897fdc51b39356ffe5f75eb909eaed388"
+  integrity sha512-nuoF3QHH4Naj2sGK2Gl+bQPXuc+TSIK84xLUVGgtrEisV6tCMHAZsAC4zpcz+5bfUL9sCgHRG/Zbsr/Epvx49A==
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/analytics-events" "^0.5.0"
