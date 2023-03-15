@@ -3746,5 +3746,6 @@
     "Could not find room": "Konnte Raum nicht finden",
     "iframe has no src attribute": "iFrame hat kein src-Attribut",
     "An error occurred when updating your notification preferences. Please try to toggle your option again.": "Ein Fehler ist während der Aktualisierung deiner Benachrichtigungseinstellungen aufgetreten. Bitte versuche die Option erneut umzuschalten.",
-    "Use your account to continue.": "Nutze dein Konto, um fortzufahren."
+    "Use your account to continue.": "Nutze dein Konto, um fortzufahren.",
+    "Desktop app logo": "Desktop-App-Logo"
 }
