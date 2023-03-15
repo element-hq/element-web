@@ -32,6 +32,8 @@ export default class ServerSupportUnstableFeatureController extends MatrixClient
         private readonly settingName: string,
         private readonly watchers: WatchManager,
         private readonly unstableFeatures: string[],
+        private readonly stableVersion?: string,
+        private readonly disabledMessage?: string,
         private readonly forcedValue: any = false,
     ) {
         super();
@@ -53,10 +55,16 @@ export default class ServerSupportUnstableFeatureController extends MatrixClient
     protected async initMatrixClient(oldClient: MatrixClient, newClient: MatrixClient): Promise<void> {
         this.disabled = true;
         let supported = true;
+
+        if (this.stableVersion && (await this.client.isVersionSupported(this.stableVersion))) {
+            this.disabled = false;
+            return;
+        }
         for (const feature of this.unstableFeatures) {
             supported = await this.client.doesServerSupportUnstableFeature(feature);
             if (!supported) break;
         }
+
         this.disabled = !supported;
     }
 
@@ -72,7 +80,10 @@ export default class ServerSupportUnstableFeatureController extends MatrixClient
         return null; // no override
     }
 
-    public get settingDisabled(): boolean {
-        return this.disabled;
+    public get settingDisabled(): boolean | string {
+        if (this.disabled) {
+            return this.disabledMessage ?? true;
+        }
+        return false;
     }
 }

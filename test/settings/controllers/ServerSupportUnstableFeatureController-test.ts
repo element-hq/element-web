@@ -56,6 +56,8 @@ describe("ServerSupportUnstableFeatureController", () => {
                 setting,
                 watchers,
                 ["feature"],
+                undefined,
+                undefined,
                 "other_value",
             );
             await prepareSetting(cli, controller);

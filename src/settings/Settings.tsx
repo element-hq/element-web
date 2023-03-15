@@ -227,9 +227,13 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         displayName: _td("Explore public spaces in the new search dialog"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
-        controller: new ServerSupportUnstableFeatureController("feature_exploring_public_spaces", defaultWatchManager, [
-            "org.matrix.msc3827.stable",
-        ]),
+        controller: new ServerSupportUnstableFeatureController(
+            "feature_exploring_public_spaces",
+            defaultWatchManager,
+            ["org.matrix.msc3827.stable"],
+            undefined,
+            _td("Requires your server to support the stable version of MSC3827"),
+        ),
     },
     "feature_msc3531_hide_messages_pending_moderation": {
         isFeature: true,
@@ -373,9 +377,13 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         displayName: _td("Jump to date (adds /jumptodate and jump to date headers)"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
-        controller: new ServerSupportUnstableFeatureController("feature_jump_to_date", defaultWatchManager, [
-            "org.matrix.msc3030",
-        ]),
+        controller: new ServerSupportUnstableFeatureController(
+            "feature_jump_to_date",
+            defaultWatchManager,
+            ["org.matrix.msc3030"],
+            undefined,
+            _td("Requires your server to support MSC3030"),
+        ),
     },
     "RoomList.backgroundImage": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
@@ -385,6 +393,14 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td("Send read receipts"),
         default: true,
+        controller: new ServerSupportUnstableFeatureController(
+            "sendReadReceipts",
+            defaultWatchManager,
+            ["org.matrix.msc2285.stable"],
+            "v1.4",
+            _td("Your server doesn't support disabling sending read receipts."),
+            true,
+        ),
     },
     "feature_sliding_sync": {
         isFeature: true,
@@ -482,7 +498,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         labsGroup: LabGroup.Developer,
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
         displayName: _td("Rust cryptography implementation"),
-        description: _td("Under active development. Can currently only be enabled via config.json"),
+        description: _td("Under active development."),
         // shouldWarn: true,
         default: false,
         controller: new RustCryptoSdkController(),

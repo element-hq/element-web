@@ -284,7 +284,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
         this.closeMenu();
     };
 
-    private onShareClick = (e: React.MouseEvent): void => {
+    private onShareClick = (e: ButtonEvent): void => {
         e.preventDefault();
         Modal.createDialog(ShareDialog, {
             target: this.props.mxEvent,

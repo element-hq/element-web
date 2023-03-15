@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<SecurityUserSettingsTab /> renders settings marked as beta as beta cards 1`] = `
+exports[`<LabsUserSettingsTab /> renders settings marked as beta as beta cards 1`] = `
 <div
   class="mx_SettingsTab_section"
   data-testid="labs-beta-section"

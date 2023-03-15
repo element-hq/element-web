@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { render } from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
 import { defer } from "matrix-js-sdk/src/utils";
 
 import LabsUserSettingsTab from "../../../../../../src/components/views/settings/tabs/user/LabsUserSettingsTab";
@@ -28,7 +28,7 @@ import {
 import SdkConfig from "../../../../../../src/SdkConfig";
 import MatrixClientBackedController from "../../../../../../src/settings/controllers/MatrixClientBackedController";
 
-describe("<SecurityUserSettingsTab />", () => {
+describe("<LabsUserSettingsTab />", () => {
     const sdkConfigSpy = jest.spyOn(SdkConfig, "get");
 
     const defaultProps = {
@@ -70,10 +70,10 @@ describe("<SecurityUserSettingsTab />", () => {
         const { container } = render(getComponent());
 
         const labsSections = container.getElementsByClassName("mx_SettingsTab_section");
-        expect(labsSections.length).toEqual(11);
+        expect(labsSections).toHaveLength(12);
     });
 
-    it("renders a labs flag which requires unstable support once support is confirmed", async () => {
+    it("allow setting a labs flag which requires unstable support once support is confirmed", async () => {
         // enable labs
         sdkConfigSpy.mockImplementation((configName) => configName === "show_labs_settings");
 
@@ -83,10 +83,20 @@ describe("<SecurityUserSettingsTab />", () => {
         });
         MatrixClientBackedController.matrixClient = cli;
 
-        const { queryByText, findByText } = render(getComponent());
+        const { queryByText } = render(getComponent());
 
-        expect(queryByText("Explore public spaces in the new search dialog")).toBeFalsy();
+        expect(
+            queryByText("Explore public spaces in the new search dialog")!
+                .closest(".mx_SettingsFlag")!
+                .querySelector(".mx_AccessibleButton"),
+        ).toHaveAttribute("aria-disabled", "true");
         deferred.resolve(true);
-        await expect(findByText("Explore public spaces in the new search dialog")).resolves.toBeDefined();
+        await waitFor(() => {
+            expect(
+                queryByText("Explore public spaces in the new search dialog")!
+                    .closest(".mx_SettingsFlag")!
+                    .querySelector(".mx_AccessibleButton"),
+            ).toHaveAttribute("aria-disabled", "false");
+        });
     });
 });

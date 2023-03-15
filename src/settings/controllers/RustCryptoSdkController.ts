@@ -14,12 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { _t } from "../../languageHandler";
 import SettingController from "./SettingController";
 
 export default class RustCryptoSdkController extends SettingController {
-    public get settingDisabled(): boolean {
+    public get settingDisabled(): boolean | string {
         // Currently this can only be changed via config.json. In future, we'll allow the user to *enable* this setting
         // via labs, which will migrate their existing device to the rust-sdk implementation.
-        return true;
+        return _t("Can currently only be enabled via config.json");
     }
 }

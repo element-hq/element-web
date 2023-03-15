@@ -69,8 +69,9 @@ export default abstract class SettingController {
 
     /**
      * Gets whether the setting has been disabled due to this controller.
+     * Can also return a string with the reason the setting is disabled.
      */
-    public get settingDisabled(): boolean {
+    public get settingDisabled(): boolean | string {
         return false;
     }
 }

@@ -22,6 +22,7 @@ import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";
 import { mockPlatformPeg, stubClient } from "../../../../../test-utils";
 import SettingsStore from "../../../../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../../../../../src/settings/SettingLevel";
+import MatrixClientBackedController from "../../../../../../src/settings/controllers/MatrixClientBackedController";
 
 describe("PreferencesUserSettingsTab", () => {
     beforeEach(() => {
@@ -36,6 +37,7 @@ describe("PreferencesUserSettingsTab", () => {
         beforeEach(() => {
             stubClient();
             jest.spyOn(SettingsStore, "setValue");
+            jest.spyOn(SettingsStore, "canSetValue").mockReturnValue(true);
             jest.spyOn(window, "matchMedia").mockReturnValue({ matches: false } as MediaQueryList);
         });
 
@@ -47,10 +49,12 @@ describe("PreferencesUserSettingsTab", () => {
 
         const mockIsVersionSupported = (val: boolean) => {
             const client = MatrixClientPeg.get();
+            jest.spyOn(client, "doesServerSupportUnstableFeature").mockResolvedValue(false);
             jest.spyOn(client, "isVersionSupported").mockImplementation(async (version: string) => {
                 if (version === "v1.4") return val;
                 return false;
             });
+            MatrixClientBackedController.matrixClient = client;
         };
 
         const mockGetValue = (val: boolean) => {
@@ -98,13 +102,12 @@ describe("PreferencesUserSettingsTab", () => {
                 mockIsVersionSupported(false);
             });
 
-            it("can be enabled", async () => {
-                mockGetValue(false);
+            it("is forcibly enabled", async () => {
                 const toggle = getToggle();
-
-                await waitFor(() => expect(toggle).toHaveAttribute("aria-disabled", "false"));
-                fireEvent.click(toggle);
-                expectSetValueToHaveBeenCalled("sendReadReceipts", null, SettingLevel.ACCOUNT, true);
+                await waitFor(() => {
+                    expect(toggle).toHaveAttribute("aria-checked", "true");
+                    expect(toggle).toHaveAttribute("aria-disabled", "true");
+                });
             });
 
             it("cannot be disabled", async () => {
