@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { render, act, RenderResult } from "@testing-library/react";
+import { render, act, RenderResult, fireEvent, waitForElementToBeRemoved, screen } from "@testing-library/react";
 import { mocked } from "jest-mock";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { EventType, RelationType, MsgType } from "matrix-js-sdk/src/@types/event";
@@ -240,7 +240,7 @@ describe("<PinnedMessagesCard />", () => {
                 ...PollResponseEvent.from([answers[option as number].id], poll.getId()!).serialize(),
                 event: true,
                 room: "!room:example.org",
-                user: user as string,
+                user,
             }),
         );
 
@@ -283,5 +283,29 @@ describe("<PinnedMessagesCard />", () => {
         expect(pinTile[0].querySelectorAll(".mx_PollOption_ended")).toHaveLength(2);
         expect(pinTile[0].querySelectorAll(".mx_PollOption_optionVoteCount")[0]).toHaveTextContent("2 votes");
         expect([...pinTile[0].querySelectorAll(".mx_PollOption_optionVoteCount")].at(-1)).toHaveTextContent("1 vote");
+    });
+
+    it("should allow admins to unpin messages", async () => {
+        const nonLocalPins = [pin1];
+        const room = mkRoom([], nonLocalPins);
+        jest.spyOn(room.currentState, "mayClientSendStateEvent").mockReturnValue(true);
+        const sendStateEvent = jest.spyOn(cli, "sendStateEvent");
+
+        const pins = await mountPins(room);
+        const pinTile = pins.container.querySelectorAll(".mx_PinnedEventTile");
+        expect(pinTile).toHaveLength(1);
+
+        fireEvent.click(pinTile[0].querySelector(".mx_PinnedEventTile_unpinButton")!);
+        expect(sendStateEvent).toHaveBeenCalledWith(room.roomId, "m.room.pinned_events", { pinned: [] }, "");
+
+        nonLocalPins.pop();
+        await Promise.all([waitForElementToBeRemoved(pinTile[0]), emitPinUpdates(room)]);
+    });
+
+    it("should show spinner whilst loading", async () => {
+        const room = mkRoom([], [pin1]);
+        mountPins(room);
+        const spinner = await screen.findByTestId("spinner");
+        await waitForElementToBeRemoved(spinner);
     });
 });
