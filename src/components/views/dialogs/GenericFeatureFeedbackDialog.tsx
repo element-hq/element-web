@@ -29,7 +29,7 @@ interface IProps {
     title: string;
     subheading: string;
     rageshakeLabel: string;
-    rageshakeData?: Record<string, string>;
+    rageshakeData?: Record<string, any>;
     children?: ReactNode;
     onFinished(sendFeedback?: boolean): void;
 }

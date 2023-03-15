@@ -288,7 +288,7 @@ export async function submitFeedback(
     label: string,
     comment: string,
     canContact = false,
-    extraData: Record<string, string> = {},
+    extraData: Record<string, any> = {},
 ): Promise<void> {
     let version: string | undefined;
     try {

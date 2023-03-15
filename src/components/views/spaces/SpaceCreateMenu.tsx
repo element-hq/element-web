@@ -140,7 +140,7 @@ export const SpaceFeedbackPrompt: React.FC<{
                         rageshakeData: Object.fromEntries(
                             ["Spaces.allRoomsInHome", "Spaces.enabledMetaSpaces"].map((k) => [
                                 k,
-                                String(SettingsStore.getValue(k)),
+                                SettingsStore.getValue(k),
                             ]),
                         ),
                     });
