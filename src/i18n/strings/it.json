@@ -3743,5 +3743,12 @@
     "Invites by email can only be sent one at a time": "Gli inviti per email possono essere inviati uno per volta",
     "Once everyone has joined, you’ll be able to chat": "Una volta che tutti si saranno uniti, potrete scrivervi",
     "Could not find room": "Stanza non trovata",
-    "iframe has no src attribute": "L'iframe non ha l'attributo src"
+    "iframe has no src attribute": "L'iframe non ha l'attributo src",
+    "Desktop app logo": "Logo app desktop",
+    "An error occurred when updating your notification preferences. Please try to toggle your option again.": "Si è verificato un errore aggiornando le tue preferenze di notifica. Prova ad attivare/disattivare di nuovo l'opzione.",
+    "Log out and back in to disable": "Disconnettiti e riconnettiti per disattivare",
+    "Can currently only be enabled via config.json": "Attualmente può essere attivato solo via config.json",
+    "Requires your server to support MSC3030": "Richiede che il tuo server supporti MSC3030",
+    "Requires your server to support the stable version of MSC3827": "Richiede che il tuo server supporti la versione stabile di MSC3827",
+    "Use your account to continue.": "Usa il tuo account per continuare."
 }
