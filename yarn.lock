@@ -1504,10 +1504,10 @@
   resolved "https://registry.yarnpkg.com/@mapbox/whoots-js/-/whoots-js-3.1.0.tgz#497c67a1cef50d1a2459ba60f315e448d2ad87fe"
   integrity sha512-Es6WcD0nO5l+2BOQS4uLfNPYQaNDfbot3X1XUoloz+x0mPDS3eeORZJl06HXjwBG1fOGwCRnzK88LMdxKRrd6Q==
 
-"@matrix-org/analytics-events@^0.4.0":
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/@matrix-org/analytics-events/-/analytics-events-0.4.0.tgz#ec75400ac41272cd2d47774da433437aba789bcf"
-  integrity sha512-tLeak2pYiyxn431o7EdOJGwRjj2DApybOLZ0YtFMuhv87pBQhc3lz+IKCJ2c8NwV6e7kf4YNaTdXeygBvFPGFw==
+"@matrix-org/analytics-events@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@matrix-org/analytics-events/-/analytics-events-0.5.0.tgz#38b69c4e29d243944c5712cca7b674a3432056e6"
+  integrity sha512-uL5kf7MqC+GxsGJtimPVbFliyaFinohTHSzohz31JTysktHsjRR2SC+vV7sy2/dstTWVdG9EGOnohyPsB+oi3A==
 
 "@matrix-org/matrix-sdk-crypto-js@^0.1.0-alpha.3":
   version "0.1.0-alpha.4"
@@ -1744,7 +1744,7 @@
     "@sentry/utils" "7.39.0"
     tslib "^1.9.3"
 
-"@sentry/types@7.39.0", "@sentry/types@^7.2.0":
+"@sentry/types@7.39.0":
   version "7.39.0"
   resolved "https://registry.yarnpkg.com/@sentry/types/-/types-7.39.0.tgz#06c51d94ebb3446615f109352648d4b8c0b35ad0"
   integrity sha512-5Y83Y8O3dT5zT2jTKEIPMcpn5lUm05KRMaCXuw0sRsv4r9TbBUKeqiSU1LjowT8rB/XNy8m7DHav8+NmogPaJw==
@@ -5644,10 +5644,10 @@ filename-regex@^2.0.0:
   resolved "https://registry.yarnpkg.com/filename-regex/-/filename-regex-2.0.1.tgz#c1c4b9bee3e09725ddb106b75c1e301fe2f18b26"
   integrity sha512-BTCqyBaWBTsauvnHiE8i562+EdJj+oUpkqWp2R1iCoR8f6oo8STRu3of7WJJ0TqWtxN50a5YFpzYK4Jj9esYfQ==
 
-filesize@10.0.5:
-  version "10.0.5"
-  resolved "https://registry.yarnpkg.com/filesize/-/filesize-10.0.5.tgz#d77553eb00a525f4cc7983047d2197cda6fff321"
-  integrity sha512-qrzyt8gLh86nsyYiC3ibI5KyIYRCWg2yqIklYrWF4a0qNfekik4OQfn7AoPJG2hRrPMSlH6fET4VEITweZAzjA==
+filesize@10.0.6:
+  version "10.0.6"
+  resolved "https://registry.yarnpkg.com/filesize/-/filesize-10.0.6.tgz#5f4cd2721664cd925db3a7a5a87bbfd6ab5ebb1a"
+  integrity sha512-rzpOZ4C9vMFDqOa6dNpog92CoLYjD79dnjLk2TYDDtImRIyLTOzqojCb05Opd1WuiWjs+fshhCgTd8cl7y5t+g==
 
 fill-range@^2.1.0:
   version "2.2.4"
@@ -8110,9 +8110,10 @@ matrix-events-sdk@0.0.1:
   resolved "https://registry.yarnpkg.com/matrix-events-sdk/-/matrix-events-sdk-0.0.1.tgz#c8c38911e2cb29023b0bbac8d6f32e0de2c957dd"
   integrity sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==
 
-"matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "23.4.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/437128d11b7043c1b71371f201af6f7c5f451589"
+matrix-js-sdk@23.5.0:
+  version "23.5.0"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-23.5.0.tgz#644a1546340160bfc3de44df30030373e7cc2fc9"
+  integrity sha512-jkHJBxXcLqzz0aZ4+Hjbx7hvgryIy+DZPOxvNfM2jJM0sc803Yyu4JMZLEdx/JLwFG1KE7bFZGiXP26g5yu6Mw==
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/matrix-sdk-crypto-js" "^0.1.0-alpha.3"
@@ -8134,12 +8135,13 @@ matrix-mock-request@^2.5.0:
   dependencies:
     expect "^28.1.0"
 
-"matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
-  version "3.67.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/da2fcdd3462bfcc3ee0033f2d5303942521e1df5"
+matrix-react-sdk@3.68.0:
+  version "3.68.0"
+  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.68.0.tgz#792435db0211377376509145dca2166ad5bb5a07"
+  integrity sha512-h+QSxVW8cz3GbJDAkcMq/jgXNzMjI1+mbttRtc0pVmzckjVDHyU6d5hzyzFakgvgFrv6LnRrtalU/mmMurrg2Q==
   dependencies:
     "@babel/runtime" "^7.12.5"
-    "@matrix-org/analytics-events" "^0.4.0"
+    "@matrix-org/analytics-events" "^0.5.0"
     "@matrix-org/matrix-wysiwyg" "^1.1.1"
     "@matrix-org/react-sdk-module-api" "^0.0.4"
     "@sentry/browser" "^7.0.0"
@@ -8158,7 +8160,7 @@ matrix-mock-request@^2.5.0:
     emojibase-regex "6.0.1"
     escape-html "^1.0.3"
     file-saver "^2.0.5"
-    filesize "10.0.5"
+    filesize "10.0.6"
     flux "4.0.3"
     focus-visible "^5.2.0"
     gfm.css "^1.1.2"
@@ -8176,25 +8178,25 @@ matrix-mock-request@^2.5.0:
     maplibre-gl "^2.0.0"
     matrix-encrypt-attachment "^1.0.3"
     matrix-events-sdk "0.0.1"
-    matrix-js-sdk "github:matrix-org/matrix-js-sdk#develop"
+    matrix-js-sdk "23.5.0"
     matrix-widget-api "^1.1.1"
     minimist "^1.2.5"
     opus-recorder "^8.0.3"
     pako "^2.0.3"
     parse5 "^6.0.1"
     png-chunks-extract "^1.0.0"
-    posthog-js "1.36.0"
+    posthog-js "1.50.3"
     qrcode "1.5.1"
     re-resizable "^6.9.0"
     react "17.0.2"
     react-beautiful-dnd "^13.1.0"
-    react-blurhash "^0.2.0"
+    react-blurhash "^0.3.0"
     react-dom "17.0.2"
     react-focus-lock "^2.5.1"
     react-transition-group "^4.4.1"
     rfc4648 "^1.4.0"
     sanitize-filename "^1.6.3"
-    sanitize-html "2.8.0"
+    sanitize-html "2.10.0"
     tar-js "^0.3.0"
     ua-parser-js "^1.0.2"
     url "^0.11.0"
@@ -10026,12 +10028,11 @@ postcss@^8.2.1, postcss@^8.3.11, postcss@^8.4.16, postcss@^8.4.21:
     picocolors "^1.0.0"
     source-map-js "^1.0.2"
 
-posthog-js@1.36.0:
-  version "1.36.0"
-  resolved "https://registry.yarnpkg.com/posthog-js/-/posthog-js-1.36.0.tgz#cbefa031a1e7ee6ff25dae29b8aa77bd741adbba"
-  integrity sha512-LL9lbJxN46GbckRKSFZxX7fwNAvKUbi5nLFF0hMkmKY9o9zoz58oA0DJBZkqyEXK+15XzNoyLxF+wnxSPNwn3g==
+posthog-js@1.50.3:
+  version "1.50.3"
+  resolved "https://registry.yarnpkg.com/posthog-js/-/posthog-js-1.50.3.tgz#b89e0a41ba6e34d804490664c0854f3e37f3acbf"
+  integrity sha512-QWEQ1bvKKsHUBLYGGIgwC2t9Lsivoi5gkQ/QgzAQrK9bMHQgexAx5CCTgdQ2ael9o88i9eIExWQId6+/RpALsw==
   dependencies:
-    "@sentry/types" "^7.2.0"
     fflate "^0.4.1"
     rrweb-snapshot "^1.1.14"
 
@@ -10347,10 +10348,10 @@ react-beautiful-dnd@^13.1.0:
     redux "^4.0.4"
     use-memo-one "^1.1.1"
 
-react-blurhash@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/react-blurhash/-/react-blurhash-0.2.0.tgz#5c62ab827eaebddb3f9dcda695c7c7cf784c7f37"
-  integrity sha512-MfhPLfFTNCX3MCJ8nM5t+T5qAixBUv8QHVcHORs5iVaqdpg+IW/e4lpOphc0bm6AvKz//4MuHESIeKKoxi3wnA==
+react-blurhash@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/react-blurhash/-/react-blurhash-0.3.0.tgz#f125801d052644f74420c79b05981691d17c9705"
+  integrity sha512-XlKr4Ns1iYFRnk6DkAblNbAwN/bTJvxTVoxMvmTcURdc5oLoXZwqAF9N3LZUh/HT+QFlq5n6IS6VsDGsviYAiQ==
 
 react-clientside-effect@^1.2.6:
   version "1.2.6"
@@ -10848,19 +10849,7 @@ sanitize-filename@^1.6.3:
   dependencies:
     truncate-utf8-bytes "^1.0.0"
 
-sanitize-html@2.8.0:
-  version "2.8.0"
-  resolved "https://registry.yarnpkg.com/sanitize-html/-/sanitize-html-2.8.0.tgz#651d1d0e5b2d61b4ec6147cc46f6d6680eef98ce"
-  integrity sha512-ZsGyc6avnqgvEm3eMKrcy8xa7WM1MrGrfkGsUgQee2CU+vg3PCfNCexXwBDF/6dEPvaQ4k/QqRjnYKHL8xgNjg==
-  dependencies:
-    deepmerge "^4.2.2"
-    escape-string-regexp "^4.0.0"
-    htmlparser2 "^8.0.0"
-    is-plain-object "^5.0.0"
-    parse-srcset "^1.0.2"
-    postcss "^8.3.11"
-
-sanitize-html@^2.3.2:
+sanitize-html@2.10.0, sanitize-html@^2.3.2:
   version "2.10.0"
   resolved "https://registry.yarnpkg.com/sanitize-html/-/sanitize-html-2.10.0.tgz#74d28848dfcf72c39693139131895c78900ab452"
   integrity sha512-JqdovUd81dG4k87vZt6uA6YhDfWkUGruUu/aPmXLxXi45gZExnt9Bnw/qeQU8oGf82vPyaE0vO4aH0PbobB9JQ==
