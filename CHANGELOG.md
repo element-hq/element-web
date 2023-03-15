@@ -1,17 +1,5 @@
-Changes in [3.68.0-rc.3](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.68.0-rc.3) (2023-03-14)
-===============================================================================================================
-
-## 🐛 Bug Fixes
- * Revert MXID and room pillification (#10370). Fixes vector-im/element-web#24817.
-
-Changes in [3.68.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.68.0-rc.2) (2023-03-10)
-===============================================================================================================
-
-## 🐛 Bug Fixes
- * Fix start DM with pending third party invite ([\#10347](https://github.com/matrix-org/matrix-react-sdk/pull/10347)). Fixes vector-im/element-web#24781.
-
-Changes in [3.68.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.68.0-rc.1) (2023-03-07)
-===============================================================================================================
+Changes in [3.68.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.68.0) (2023-03-15)
+=====================================================================================================
 
 ## ✨ Features
  * Only allow to start a DM with one email if encryption by default is enabled ([\#10253](https://github.com/matrix-org/matrix-react-sdk/pull/10253)). Fixes vector-im/element-web#23133.
@@ -44,7 +32,6 @@ Changes in [3.68.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases
  * Fix starting a DM from the right panel in some cases ([\#10278](https://github.com/matrix-org/matrix-react-sdk/pull/10278)). Fixes vector-im/element-web#24722.
  * Align info EventTile and normal EventTile on IRC layout ([\#10197](https://github.com/matrix-org/matrix-react-sdk/pull/10197)). Fixes vector-im/element-web#22782. Contributed by @luixxiul.
  * Fix blowout of waveform of the voice message player on narrow UI ([\#8861](https://github.com/matrix-org/matrix-react-sdk/pull/8861)). Fixes vector-im/element-web#22604. Contributed by @luixxiul.
- * Directly convert Matrix and room Ids to pills ([\#10267](https://github.com/matrix-org/matrix-react-sdk/pull/10267)). Fixes vector-im/element-web#21867.
  * Fix the hidden view source toggle on IRC layout ([\#10266](https://github.com/matrix-org/matrix-react-sdk/pull/10266)). Fixes vector-im/element-web#22872. Contributed by @luixxiul.
  * Fix buttons on the room header being compressed due to long room name ([\#10155](https://github.com/matrix-org/matrix-react-sdk/pull/10155)). Contributed by @luixxiul.
  * Use the room avatar as a placeholder in calls ([\#10231](https://github.com/matrix-org/matrix-react-sdk/pull/10231)).
