@@ -3745,5 +3745,10 @@
     "Could not find room": "Не вдалося знайти кімнату",
     "iframe has no src attribute": "iframe не має атрибуту src",
     "An error occurred when updating your notification preferences. Please try to toggle your option again.": "Сталася помилка під час оновлення налаштувань сповіщень. Спробуйте змінити налаштування ще раз.",
-    "Use your account to continue.": "Скористайтесь обліковим записом, щоб продовжити."
+    "Use your account to continue.": "Скористайтесь обліковим записом, щоб продовжити.",
+    "Desktop app logo": "Логотип комп'ютерного застосунку",
+    "Log out and back in to disable": "Вийдіть і знову увійдіть, щоб вимкнути",
+    "Can currently only be enabled via config.json": "Наразі можна ввімкнути лише через config.json",
+    "Requires your server to support MSC3030": "Потрібно, щоб ваш сервер підтримував MSC3030",
+    "Requires your server to support the stable version of MSC3827": "Потрібно, щоб ваш сервер підтримував стабільну версію MSC3827"
 }
