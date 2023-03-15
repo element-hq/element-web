@@ -3745,5 +3745,10 @@
     "Could not find room": "Jututuba ei õnnestunud leida",
     "iframe has no src attribute": "iframe elemendil puudub src atribuut",
     "An error occurred when updating your notification preferences. Please try to toggle your option again.": "Teavituste eelistuste muutmisel tekkis viga. Palun proovi sama valikut uuesti sisse/välja lülitada.",
-    "Use your account to continue.": "Jätkamaks kasuta oma kontot."
+    "Use your account to continue.": "Jätkamaks kasuta oma kontot.",
+    "Desktop app logo": "Töölauarakenduse logo",
+    "Log out and back in to disable": "Väljalülitamiseks logi Matrix'i võrgust välja ja seejärel tagasi",
+    "Can currently only be enabled via config.json": "Seda võimalust saab hetkel sisse lülitada vaid config.json failist",
+    "Requires your server to support MSC3030": "Eeldab, et sinu koduserver toetab MSC3030 spetsifikatsiooni",
+    "Requires your server to support the stable version of MSC3827": "Eeldab, et sinu koduserver toetab MSC3827 stabiilset versiooni"
 }
