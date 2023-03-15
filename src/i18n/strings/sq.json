@@ -3730,5 +3730,7 @@
     "Invites by email can only be sent one at a time": "Ftesat me email mund të dërgohen vetëm një në herë",
     "Could not find room": "S’u gjet dot dhomë",
     "iframe has no src attribute": "iframe s’ka atribut src",
-    "An error occurred when updating your notification preferences. Please try to toggle your option again.": "Ndodhi një gabim teksa përditësoheshin parapëlqimet tuaja për njoftime. Ju lutemi, provoni ta riaktivizoni mundësinë tuaj."
+    "An error occurred when updating your notification preferences. Please try to toggle your option again.": "Ndodhi një gabim teksa përditësoheshin parapëlqimet tuaja për njoftime. Ju lutemi, provoni ta riaktivizoni mundësinë tuaj.",
+    "Desktop app logo": "Stemë aplikacioni Desktop",
+    "Use your account to continue.": "Që të vazhdohet, përdorni llogarinë tuaj."
 }
