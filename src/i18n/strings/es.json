@@ -3554,7 +3554,6 @@
     "Requires compatible homeserver.": "Es necesario que el servidor base sea compatible.",
     "Low bandwidth mode": "Modo de bajo ancho de banda",
     "Hide notification dot (only display counters badges)": "Ocultar el punto indicador de notificaciones (solo mostrar un indicador con número)",
-    "Under active development. Can currently only be enabled via config.json": "Actulamente en desarrollo. Solo se puede activar editando config.json",
     "Rust cryptography implementation": "Implementación de la criptografía en Rust",
     "Under active development.": "Funcionalidad en desarrollo.",
     "Favourite Messages": "Mensajes favoritos",
