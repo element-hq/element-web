@@ -3746,5 +3746,9 @@
     "iframe has no src attribute": "iframe neobsahuje src atribút",
     "An error occurred when updating your notification preferences. Please try to toggle your option again.": "Pri aktualizácii vašich predvolieb oznámení došlo k chybe. Skúste prosím prepnúť možnosť znova.",
     "Desktop app logo": "Logo aplikácie pre stolové počítače",
-    "Use your account to continue.": "Ak chcete pokračovať, použite svoje konto."
+    "Use your account to continue.": "Ak chcete pokračovať, použite svoje konto.",
+    "Log out and back in to disable": "Odhláste sa a znova sa prihláste, aby sa to vyplo",
+    "Can currently only be enabled via config.json": "V súčasnosti sa dá povoliť len prostredníctvom súboru config.json",
+    "Requires your server to support MSC3030": "Vyžaduje, aby váš server podporoval MSC3030",
+    "Requires your server to support the stable version of MSC3827": "Vyžaduje, aby váš server podporoval stabilnú verziu MSC3827"
 }
