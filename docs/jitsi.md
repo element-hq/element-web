@@ -19,6 +19,10 @@ _Hash/fragment (formatted as a query string)_:
 -   `conferenceId`: The room or conference ID to connect Jitsi Meet to.
 -   `isAudioOnly`: Boolean for whether this is a voice-only conference. May not
     be present, should default to `false`.
+-   `startWithAudioMuted`: Boolean for whether the calls start with audio
+    muted. May not be present.
+-   `startWithVideoMuted`: Boolean for whether the calls start with video
+    muted. May not be present.
 -   `displayName`: The display name of the user viewing the widget. May not
     be present or could be null.
 -   `avatarUrl`: The HTTP(S) URL for the avatar of the user viewing the widget. May

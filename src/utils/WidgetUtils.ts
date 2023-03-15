@@ -506,6 +506,8 @@ export default class WidgetUtils {
             "conferenceDomain=$domain",
             "conferenceId=$conferenceId",
             "isAudioOnly=$isAudioOnly",
+            "startWithAudioMuted=$startWithAudioMuted",
+            "startWithVideoMuted=$startWithVideoMuted",
             "isVideoChannel=$isVideoChannel",
             "displayName=$matrix_display_name",
             "avatarUrl=$matrix_avatar_url",
