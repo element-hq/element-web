@@ -3588,7 +3588,6 @@
     "Please wait as we try to decrypt your messages. This may take a few moments.": "Počkejte prosím, zatímco se snažíme dešifrovat vaše zprávy. Může to chvíli trvat.",
     "%(senderName)s ended a voice broadcast": "%(senderName)s ukončil(a) hlasové vysílání",
     "You ended a voice broadcast": "Ukončili jste hlasové vysílání",
-    "Under active development. Can currently only be enabled via config.json": "V aktivním vývoji. V současné době lze povolit pouze prostřednictvím config.json",
     "Rust cryptography implementation": "Implementace kryptografie v jazyce Rust",
     "Improve your account security by following these recommendations.": "Zlepšete zabezpečení svého účtu dodržováním těchto doporučení.",
     "%(count)s sessions selected|one": "%(count)s vybraná relace",
@@ -3742,5 +3741,8 @@
     "Once invited users have joined Element, you will be able to chat and the room will be end-to-end encrypted": "Jakmile se pozvaní uživatelé připojí, budete moci konverzovat a místnost bude koncově šifrovaná",
     "Waiting for users to join Element": "Čekání na připojení uživatelů",
     "Invites by email can only be sent one at a time": "Pozvánky e-mailem lze zasílat pouze po jedné",
-    "Once everyone has joined, you’ll be able to chat": "Jakmile se všichni připojí, budete moci konverzovat"
+    "Once everyone has joined, you’ll be able to chat": "Jakmile se všichni připojí, budete moci konverzovat",
+    "Could not find room": "Nepodařilo se najít místnost",
+    "iframe has no src attribute": "iframe nemá atribut src",
+    "An error occurred when updating your notification preferences. Please try to toggle your option again.": "Při aktualizaci předvoleb oznámení došlo k chybě. Zkuste prosím přepnout volbu znovu."
 }
