@@ -389,4 +389,11 @@ export default class ElectronPlatform extends VectorBasePlatform {
             await this.ipc.call("destroyPickleKey", userId, deviceId);
         } catch (e) {}
     }
+
+    public async clearStorage(): Promise<void> {
+        try {
+            await super.clearStorage();
+            await this.ipc.call("clearStorage");
+        } catch (e) {}
+    }
 }
