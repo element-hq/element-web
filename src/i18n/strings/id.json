@@ -3586,7 +3586,6 @@
     "This device was unable to decrypt some messages because it has not been verified yet.": "Perangkat ini tidak dapat mendekripsi beberapa pesan karena belum diverifikasi.",
     "Verify this device to access all messages": "Verifikasi perangkat ini untuk mengakses semua pesan",
     "Please wait as we try to decrypt your messages. This may take a few moments.": "Mohon tunggu saat kami mencoba untuk mendekripsi pesan Anda. Ini mungkin membutuhkan beberapa waktu.",
-    "Under active development. Can currently only be enabled via config.json": "Dalam pengembangan aktif. Hanya dapat diaktifkan melalui config.json",
     "Rust cryptography implementation": "Implementasi kriptografi Rust",
     "%(senderName)s ended a voice broadcast": "%(senderName)s mdngakhiri sebuah siaran suara",
     "You ended a voice broadcast": "Anda mengakhiri sebuah siaran suara",
@@ -3742,5 +3741,10 @@
     "Once invited users have joined Element, you will be able to chat and the room will be end-to-end encrypted": "Setelah pengguna yang diundang telah bergabung Element, Anda akan dapat mengobrol dan ruangannya akan terenkripsi secara ujung ke ujung",
     "Waiting for users to join Element": "Menunggu pengguna untuk bergabung dengan Element",
     "Once everyone has joined, you’ll be able to chat": "Setelah semuanya bergabung, Anda akan dapat mengobrol",
-    "Invites by email can only be sent one at a time": "Undangan lewat surel hanya dapat dikirim satu-satu"
+    "Invites by email can only be sent one at a time": "Undangan lewat surel hanya dapat dikirim satu-satu",
+    "Could not find room": "Tidak dapat mencari ruangan",
+    "iframe has no src attribute": "iframe tidak memiliki atribut src",
+    "An error occurred when updating your notification preferences. Please try to toggle your option again.": "Sebuah kesalahan terjadi saat memperbarui preferensi notifikasi Anda. Silakan coba mengubah opsi Anda lagi.",
+    "Use your account to continue.": "Gunakan akun Anda untuk melanjutkan.",
+    "Desktop app logo": "Logo aplikasi desktop"
 }

@@ -3586,7 +3586,6 @@
     "This device was unable to decrypt some messages because it has not been verified yet.": "Az eszköz nem tud minden üzenetet visszafejteni mert nincs ellenőrizve.",
     "Verify this device to access all messages": "Eszköz ellenőrzése az üzenetekhez való hozzáféréshez",
     "Please wait as we try to decrypt your messages. This may take a few moments.": "Kérjük várj amíg az üzeneteket visszafejtjük. Ez eltarthat egy darabig.",
-    "Under active development. Can currently only be enabled via config.json": "Aktív fejlesztés alatt. Csak config.json-ban lehet bekapcsolni",
     "Rust cryptography implementation": "Rust titkosítás implementáció",
     "%(senderName)s ended a voice broadcast": "%(senderName)s befejezte a hang közvetítést",
     "You ended a voice broadcast": "A hang közvetítés befejeződött",
@@ -3734,5 +3733,16 @@
     "Once everyone has joined, you’ll be able to chat": "Amint mindenki belépett lekezdheti a beszélgetést",
     "Verify Session": "Munkamenet ellenőrzése",
     "Ignore (%(counter)s)": "Figyelmen kívül hagy (%(counter)s)",
-    "If you know a room address, try joining through that instead.": "Ha ismeri a szoba címét próbáljon inkább azzal belépni."
+    "If you know a room address, try joining through that instead.": "Ha ismeri a szoba címét próbáljon inkább azzal belépni.",
+    "Could not find room": "A szoba nem található",
+    "iframe has no src attribute": "az iframe-nek nincs src attribútuma",
+    "Once invited users have joined Element, you will be able to chat and the room will be end-to-end encrypted": "Miután a meghívott felhasználók csatlakoztak az Elementhez beszélhet velük és a szoba végpontok között titkosítva lesz",
+    "Waiting for users to join Element": "Elementhez csatlakozó felhasználókra várakozás",
+    "View poll": "Szavazás megtekintése",
+    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months|one": "Nincs aktív szavazás az elmúlt napokból. További szavazások betöltése az előző havi szavazások megjelenítéséhez",
+    "There are no past polls for the past %(count)s days. Load more polls to view polls for previous months|other": "%(count)s napja nincs aktív szavazás. További szavazások betöltése az előző havi szavazások megjelenítéséhez",
+    "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months|one": "Nincs aktív szavazás az elmúlt napokból. További szavazások betöltése az előző havi szavazások megjelenítéséhez",
+    "Invites by email can only be sent one at a time": "E-mail meghívóból egyszerre csak egy küldhető el",
+    "You attempted to join using a room ID without providing a list of servers to join through. Room IDs are internal identifiers and cannot be used to join a room without additional information.": "A belépéshez csak az szoba azonosítóját adta meg a szerver nélkül. A szoba azonosító (ID) egy belső azonosító amivel további információk nélkül nem lehet belépni szobába.",
+    "An error occurred when updating your notification preferences. Please try to toggle your option again.": "Az értesítési beállítások frissítésénél hiba történt. Próbálja meg az opciót újra átkapcsolni."
 }
