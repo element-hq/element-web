@@ -84,8 +84,7 @@ export default class ImportE2eKeysDialog extends React.Component<IProps, IState>
     };
 
     private onPassphraseChange = (ev: React.ChangeEvent<HTMLInputElement>): void => {
-        this.setState({ passphrase: ev.target.value });
-        this.onFormChange(); // update general form state too
+        this.setState({ passphrase: ev.target.value }, this.onFormChange); // update general form state too
     };
 
     private onFormSubmit = (ev: React.FormEvent): boolean => {
