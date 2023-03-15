@@ -3746,5 +3746,9 @@
     "iframe has no src attribute": "iFrame hat kein src-Attribut",
     "An error occurred when updating your notification preferences. Please try to toggle your option again.": "Ein Fehler ist während der Aktualisierung deiner Benachrichtigungseinstellungen aufgetreten. Bitte versuche die Option erneut umzuschalten.",
     "Use your account to continue.": "Nutze dein Konto, um fortzufahren.",
-    "Desktop app logo": "Desktop-App-Logo"
+    "Desktop app logo": "Desktop-App-Logo",
+    "Log out and back in to disable": "Zum Deaktivieren, melde dich ab und erneut an",
+    "Can currently only be enabled via config.json": "Dies kann aktuell nur per config.json aktiviert werden",
+    "Requires your server to support MSC3030": "Dafür muss dein Server MSC3030 unterstützen",
+    "Requires your server to support the stable version of MSC3827": "Dafür muss dein Server die fertige Fassung der MSC3827 unterstützen"
 }
