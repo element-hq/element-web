@@ -3588,7 +3588,6 @@
     "Please wait as we try to decrypt your messages. This may take a few moments.": "Počkajte, prosím, kým sa pokúsime dešifrovať vaše správy. Môže to chvíľu trvať.",
     "%(senderName)s ended a voice broadcast": "%(senderName)s ukončil/a hlasové vysielanie",
     "You ended a voice broadcast": "Ukončili ste hlasové vysielanie",
-    "Under active development. Can currently only be enabled via config.json": "V aktívnom vývoji. V súčasnosti sa dá povoliť len cez config.json",
     "Rust cryptography implementation": "Implementácia kryptografie Rust",
     "You can’t start a call as you are currently recording a live broadcast. Please end your live broadcast in order to start a call.": "Nemôžete spustiť hovor, pretože práve nahrávate živé vysielanie. Ukončite živé vysielanie, aby ste mohli začať hovor.",
     "Can’t start a call": "Nie je možné začať hovor",

@@ -3591,7 +3591,6 @@
     "Improve your account security by following these recommendations.": "Migliora la sicurezza del tuo account seguendo questi consigli.",
     "%(count)s sessions selected|one": "%(count)s sessione selezionata",
     "%(count)s sessions selected|other": "%(count)s sessioni selezionate",
-    "Under active development. Can currently only be enabled via config.json": "In sviluppo attivo. Attualmente può essere attivato solo via config.json",
     "Rust cryptography implementation": "Implementazione crittografia Rust",
     "You can’t start a call as you are currently recording a live broadcast. Please end your live broadcast in order to start a call.": "Non puoi avviare una chiamata perché stai registrando una trasmissione in diretta. Termina la trasmissione per potere iniziare una chiamata.",
     "Can’t start a call": "Impossibile avviare una chiamata",

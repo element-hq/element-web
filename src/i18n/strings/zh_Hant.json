@@ -3586,7 +3586,6 @@
     "This device was unable to decrypt some messages because it has not been verified yet.": "此裝置無法解密某些訊息，因為其尚未被驗證。",
     "Verify this device to access all messages": "驗證此裝置以存取所有訊息",
     "Please wait as we try to decrypt your messages. This may take a few moments.": "請在我們嘗試解密您的訊息時稍候。這可能需要一點時間。",
-    "Under active development. Can currently only be enabled via config.json": "正在積極開發中。目前只能透過 config.json 啟用",
     "Rust cryptography implementation": "Rust 密碼學實作",
     "%(senderName)s ended a voice broadcast": "%(senderName)s 已結束語音廣播",
     "You ended a voice broadcast": "您結束了語音廣播",

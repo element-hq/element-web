@@ -3586,7 +3586,6 @@
     "This device was unable to decrypt some messages because it has not been verified yet.": "Kuna osa või kõik verifitseerimistest on tegemata, siis see seade ei suutnud kõiki sõnumeid dekrüptida.",
     "Verify this device to access all messages": "Kõikide sõnumite lugemiseks palun verifitseeri see seade",
     "Please wait as we try to decrypt your messages. This may take a few moments.": "Palun oota hetke kuni me dekrüptime sõnumeid. Natuke võib kuluda aega.",
-    "Under active development. Can currently only be enabled via config.json": "Aktiivselt arendamisel. Hetkel saab muuta vaid config.json failist",
     "Rust cryptography implementation": "Rust'is teostatud krüptolahendus",
     "%(senderName)s ended a voice broadcast": "%(senderName)s lõpetas ringhäälingukõne",
     "You ended a voice broadcast": "Sa lõpetasid ringhäälingukõne",

@@ -3586,7 +3586,6 @@
     "This device was unable to decrypt some messages because it has not been verified yet.": "Az eszköz nem tud minden üzenetet visszafejteni mert nincs ellenőrizve.",
     "Verify this device to access all messages": "Eszköz ellenőrzése az üzenetekhez való hozzáféréshez",
     "Please wait as we try to decrypt your messages. This may take a few moments.": "Kérjük várj amíg az üzeneteket visszafejtjük. Ez eltarthat egy darabig.",
-    "Under active development. Can currently only be enabled via config.json": "Aktív fejlesztés alatt. Csak config.json-ban lehet bekapcsolni",
     "Rust cryptography implementation": "Rust titkosítás implementáció",
     "%(senderName)s ended a voice broadcast": "%(senderName)s befejezte a hang közvetítést",
     "You ended a voice broadcast": "A hang közvetítés befejeződött",

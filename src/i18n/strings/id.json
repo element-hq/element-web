@@ -3586,7 +3586,6 @@
     "This device was unable to decrypt some messages because it has not been verified yet.": "Perangkat ini tidak dapat mendekripsi beberapa pesan karena belum diverifikasi.",
     "Verify this device to access all messages": "Verifikasi perangkat ini untuk mengakses semua pesan",
     "Please wait as we try to decrypt your messages. This may take a few moments.": "Mohon tunggu saat kami mencoba untuk mendekripsi pesan Anda. Ini mungkin membutuhkan beberapa waktu.",
-    "Under active development. Can currently only be enabled via config.json": "Dalam pengembangan aktif. Hanya dapat diaktifkan melalui config.json",
     "Rust cryptography implementation": "Implementasi kriptografi Rust",
     "%(senderName)s ended a voice broadcast": "%(senderName)s mdngakhiri sebuah siaran suara",
     "You ended a voice broadcast": "Anda mengakhiri sebuah siaran suara",

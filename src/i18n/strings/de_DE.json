@@ -3586,7 +3586,6 @@
     "This device was unable to decrypt some messages because it has not been verified yet.": "Dieses Gerät konnte einige Nachrichten nicht entschlüsseln, da es noch nicht verifiziert wurde.",
     "Verify this device to access all messages": "Verifiziere dieses Gerät, um auf alle Nachrichten zugreifen zu können",
     "Please wait as we try to decrypt your messages. This may take a few moments.": "Bitte warte, während wir versuchen, deine Nachrichten zu entschlüsseln. Das könnte ein wenig dauern.",
-    "Under active development. Can currently only be enabled via config.json": "In aktiver Entwicklung. Kann im Moment nur per config.json aktiviert werden",
     "Rust cryptography implementation": "Rust-Verschlüsselungsumsetzung",
     "%(senderName)s ended a voice broadcast": "%(senderName)s beendete eine Sprachübertragung",
     "You ended a voice broadcast": "Du hast eine Sprachübertragung beendet",

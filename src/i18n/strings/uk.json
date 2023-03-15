@@ -3588,7 +3588,6 @@
     "Please wait as we try to decrypt your messages. This may take a few moments.": "Будь ласка, зачекайте, поки ми намагаємося розшифрувати ваші повідомлення. Це може тривати кілька хвилин.",
     "%(senderName)s ended a voice broadcast": "%(senderName)s завершує голосову трансляцію",
     "You ended a voice broadcast": "Ви завершили голосову трансляцію",
-    "Under active development. Can currently only be enabled via config.json": "В активній розробці. На разі може бути ввімкнено лише через config.json",
     "Rust cryptography implementation": "Реалізація криптографії Rust",
     "You can’t start a call as you are currently recording a live broadcast. Please end your live broadcast in order to start a call.": "Ви не можете розпочати виклик, оскільки зараз ведеться запис прямої трансляції. Будь ласка, заверште її, щоб розпочати виклик.",
     "Can’t start a call": "Не вдалося розпочати виклик",
