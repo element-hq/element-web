@@ -89,10 +89,6 @@ describe("<RoomSettingsDialog />", () => {
 
     describe("poll history", () => {
         beforeEach(() => {
-            jest.spyOn(SettingsStore, "getValue").mockImplementation(
-                (settingName) => settingName === "feature_poll_history",
-            );
-
             mockClient.getOrCreateFilter.mockResolvedValue("filterId");
         });
         it("renders poll history tab", () => {

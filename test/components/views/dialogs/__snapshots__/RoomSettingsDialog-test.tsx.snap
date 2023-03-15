@@ -62,6 +62,21 @@ NodeList [
       Notifications
     </span>
   </div>,
+  <div
+    class="mx_AccessibleButton mx_TabbedView_tabLabel "
+    data-testid="settings-tab-ROOM_POLL_HISTORY_TAB"
+    role="button"
+    tabindex="0"
+  >
+    <span
+      class="mx_TabbedView_maskedIcon mx_RoomSettingsDialog_pollsIcon"
+    />
+    <span
+      class="mx_TabbedView_tabLabel_text"
+    >
+      Polls history
+    </span>
+  </div>,
 ]
 `;
 

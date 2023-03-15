@@ -327,8 +327,6 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, permalinkCreator, onClose }) 
     const pinningEnabled = useFeatureEnabled("feature_pinning");
     const pinCount = usePinnedEvents(pinningEnabled ? room : undefined)?.length;
 
-    const isPollHistoryEnabled = useFeatureEnabled("feature_poll_history");
-
     return (
         <BaseCard header={header} className="mx_RoomSummaryCard" onClose={onClose}>
             <Group title={_t("About")} className="mx_RoomSummaryCard_aboutGroup">
@@ -341,7 +339,7 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, permalinkCreator, onClose }) 
                         {_t("Files")}
                     </Button>
                 )}
-                {!isVideoRoom && isPollHistoryEnabled && (
+                {!isVideoRoom && (
                     <Button className="mx_RoomSummaryCard_icon_poll" onClick={onRoomPollHistoryClick}>
                         {_t("Polls history")}
                     </Button>

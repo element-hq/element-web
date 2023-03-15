@@ -363,14 +363,6 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         description: _td("Defaults to room member list."),
         default: false,
     },
-    "feature_poll_history": {
-        isFeature: true,
-        labsGroup: LabGroup.Rooms,
-        supportedLevels: LEVELS_FEATURE,
-        displayName: _td("Polls history"),
-        description: _td("View a list of polls in a room. (Under active development)"),
-        default: false,
-    },
     "feature_jump_to_date": {
         isFeature: true,
         labsGroup: LabGroup.Messaging,

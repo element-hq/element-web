@@ -164,16 +164,14 @@ export default class RoomSettingsDialog extends React.Component<IProps, IState> 
             );
         }
 
-        if (SettingsStore.getValue("feature_poll_history")) {
-            tabs.push(
-                new Tab(
-                    ROOM_POLL_HISTORY_TAB,
-                    _td("Polls history"),
-                    "mx_RoomSettingsDialog_pollsIcon",
-                    <PollHistoryTab roomId={this.props.roomId} onFinished={() => this.props.onFinished(true)} />,
-                ),
-            );
-        }
+        tabs.push(
+            new Tab(
+                ROOM_POLL_HISTORY_TAB,
+                _td("Polls history"),
+                "mx_RoomSettingsDialog_pollsIcon",
+                <PollHistoryTab roomId={this.props.roomId} onFinished={() => this.props.onFinished(true)} />,
+            ),
+        );
 
         if (SettingsStore.getValue(UIFeature.AdvancedSettings)) {
             tabs.push(

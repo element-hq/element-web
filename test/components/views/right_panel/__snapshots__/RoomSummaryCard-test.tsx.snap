@@ -84,6 +84,13 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
           Files
         </div>
         <div
+          class="mx_AccessibleButton mx_BaseCard_Button mx_RoomSummaryCard_Button mx_RoomSummaryCard_icon_poll"
+          role="button"
+          tabindex="0"
+        >
+          Polls history
+        </div>
+        <div
           class="mx_AccessibleButton mx_BaseCard_Button mx_RoomSummaryCard_Button mx_RoomSummaryCard_icon_export"
           role="button"
           tabindex="0"

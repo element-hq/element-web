@@ -88,8 +88,6 @@ describe("Poll history", () => {
         cy.startHomeserver("default").then((data) => {
             homeserver = data;
 
-            cy.enableLabsFeature("feature_poll_history");
-
             cy.initTestUser(homeserver, "Tom");
         });
     });
