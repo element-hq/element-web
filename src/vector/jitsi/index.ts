@@ -206,8 +206,8 @@ const setupCompleted = (async (): Promise<string | void> => {
         roomId = qsParam("roomId", true);
         roomName = qsParam("roomName", true);
         startAudioOnly = qsParam("isAudioOnly", true) === "true";
-        startWithAudioMuted = parseBooleanOrUndefined(qsParam("isStartWithAudioMuted", true));
-        startWithVideoMuted = parseBooleanOrUndefined(qsParam("isStartWithVideoMuted", true));
+        startWithAudioMuted = parseBooleanOrUndefined(qsParam("startWithAudioMuted", true));
+        startWithVideoMuted = parseBooleanOrUndefined(qsParam("startWithVideoMuted", true));
         isVideoChannel = qsParam("isVideoChannel", true) === "true";
         supportsScreensharing = qsParam("supportsScreensharing", true) === "true";
 
