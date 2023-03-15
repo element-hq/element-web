@@ -442,4 +442,12 @@ export default abstract class BasePlatform {
             logger.error("idbDelete failed in destroyPickleKey", e);
         }
     }
+
+    /**
+     * Clear app storage, called when logging out to perform data clean up.
+     */
+    public async clearStorage(): Promise<void> {
+        window.sessionStorage.clear();
+        window.localStorage.clear();
+    }
 }

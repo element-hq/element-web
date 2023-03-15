@@ -862,6 +862,7 @@ export async function onLoggedOut(): Promise<void> {
     stopMatrixClient();
     await clearStorage({ deleteEverything: true });
     LifecycleCustomisations.onLoggedOutAndStorageCleared?.();
+    await PlatformPeg.get()?.clearStorage();
 
     // Do this last, so we can make sure all storage has been cleared and all
     // customisations got the memo.
