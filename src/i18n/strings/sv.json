@@ -3646,7 +3646,6 @@
     "Ignore %(user)s": "Ignorera %(user)s",
     "Indent decrease": "Minska indrag",
     "Indent increase": "Öka indrad",
-    "View a list of polls in a room. (Under active development)": "Visa lista över omröstningar i ett rum. (Under aktiv utveckling)",
     "Polls history": "Omröstningshistorik",
     "Use rich text instead of Markdown in the message composer.": "Använd rik text istället för Markdown i meddelanderedigeraren.",
     "unknown": "okänd",

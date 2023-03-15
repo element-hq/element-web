@@ -3623,7 +3623,6 @@
     "This UI does NOT check the types of the values. Use at your own risk.": "このユーザーインターフェースは、値の種類を確認しません。自己責任で使用してください。",
     "The widget will verify your user ID, but won't be able to perform actions for you:": "ウィジェットはあなたのユーザーIDを認証しますが、操作を行うことはできません：",
     "Sliding Sync mode": "スライド式同期モード",
-    "View a list of polls in a room. (Under active development)": "ルーム内のアンケートのリストを表示（開発中）",
     "Use rich text instead of Markdown in the message composer.": "メッセージ入力欄でマークダウンの代わりにリッチテキストを使用。",
     "In %(spaceName)s and %(count)s other spaces.|zero": "スペース %(spaceName)s内。",
     "In %(spaceName)s and %(count)s other spaces.|other": "スペース %(spaceName)s と他%(count)s個のスペース内。",

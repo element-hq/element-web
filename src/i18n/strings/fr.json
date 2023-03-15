@@ -3632,7 +3632,6 @@
     "Ignore %(user)s": "Ignorer %(user)s",
     "Indent decrease": "Réduire l’indentation",
     "Indent increase": "Augmenter l’indentation",
-    "View a list of polls in a room. (Under active development)": "Voir une liste des sondages présents dans un salon. (En cours de développement)",
     "Polls history": "Historique des sondages",
     "Unable to decrypt voice broadcast": "Impossible de décrypter la diffusion audio",
     "Use rich text instead of Markdown in the message composer.": "Utilise le texte formaté au lieu de Markdown dans le compositeur de message.",
