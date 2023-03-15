@@ -64,15 +64,17 @@ export class ConsoleLogger {
             warn: "W",
             error: "E",
         } as const;
-        Object.keys(consoleFunctionsToLevels).forEach((fnName: keyof typeof consoleFunctionsToLevels) => {
-            const level = consoleFunctionsToLevels[fnName];
-            const originalFn = consoleObj[fnName].bind(consoleObj);
-            this.originalFunctions[fnName] = originalFn;
-            consoleObj[fnName] = (...args) => {
-                this.log(level, ...args);
-                originalFn(...args);
-            };
-        });
+        (Object.keys(consoleFunctionsToLevels) as [keyof typeof consoleFunctionsToLevels]).forEach(
+            (fnName: keyof typeof consoleFunctionsToLevels) => {
+                const level = consoleFunctionsToLevels[fnName];
+                const originalFn = consoleObj[fnName].bind(consoleObj);
+                this.originalFunctions[fnName] = originalFn;
+                consoleObj[fnName] = (...args) => {
+                    this.log(level, ...args);
+                    originalFn(...args);
+                };
+            },
+        );
     }
 
     public bypassRageshake(fnName: LogFunctionName, ...args: (Error | DOMException | object | string)[]): void {
@@ -261,6 +263,8 @@ export class IndexedDBLogStore {
         // Returns: a string representing the concatenated logs for this ID.
         // Stops adding log fragments when the size exceeds maxSize
         function fetchLogs(id: string, maxSize: number): Promise<string> {
+            if (!db) return Promise.reject("DB unavailable");
+
             const objectStore = db.transaction("logs", "readonly").objectStore("logs");
 
             return new Promise((resolve, reject) => {
@@ -287,6 +291,8 @@ export class IndexedDBLogStore {
 
         // Returns: A sorted array of log IDs. (newest first)
         function fetchLogIds(): Promise<string[]> {
+            if (!db) return Promise.reject("DB unavailable");
+
             // To gather all the log IDs, query for all records in logslastmod.
             const o = db.transaction("logslastmod", "readonly").objectStore("logslastmod");
             return selectQuery(o, undefined, (cursor) => {
@@ -305,6 +311,8 @@ export class IndexedDBLogStore {
         }
 
         function deleteLogs(id: string): Promise<void> {
+            if (!db) return Promise.reject("DB unavailable");
+
             return new Promise<void>((resolve, reject) => {
                 const txn = db.transaction(["logs", "logslastmod"], "readwrite");
                 const o = txn.objectStore("logs");
