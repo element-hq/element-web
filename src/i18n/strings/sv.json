@@ -3568,7 +3568,6 @@
     "This device was unable to decrypt some messages because it has not been verified yet.": "Den här enheten kunde inte avkryptera vissa meddelanden eftersom att den inte har verifierats än.",
     "Verify this device to access all messages": "Verifiera den här enheten för att komma åt alla meddelanden",
     "Please wait as we try to decrypt your messages. This may take a few moments.": "Vänligen vänta medan vi försöker avkryptera dina meddelanden. Det här kan ta en stund.",
-    "Under active development. Can currently only be enabled via config.json": "Under aktiv utveckling. Kan för närvarande endast aktiveras via config.json",
     "Rust cryptography implementation": "Kryptografiimplementering i Rust",
     "%(senderName)s ended a voice broadcast": "%(senderName)s avslutade en röstsändning",
     "You ended a voice broadcast": "Du avslutade en röstsändning",
