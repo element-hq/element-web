@@ -21,7 +21,7 @@ import Sizer from "../sizer";
 
 export interface ICollapseConfig extends IConfig {
     toggleSize: number;
-    onCollapsed?(collapsed: boolean, id: string, element: HTMLElement): void;
+    onCollapsed?(collapsed: boolean, id: string | null, element: HTMLElement): void;
     isItemCollapsed(element: HTMLElement): boolean;
 }
 
@@ -45,7 +45,7 @@ export default class CollapseDistributor extends FixedDistributor<ICollapseConfi
         return new CollapseItem(resizeHandle, resizer, sizer, container);
     }
 
-    private readonly toggleSize: number;
+    private readonly toggleSize: number | undefined;
     private isCollapsed: boolean;
 
     public constructor(item: CollapseItem) {
@@ -55,7 +55,7 @@ export default class CollapseDistributor extends FixedDistributor<ICollapseConfi
     }
 
     public resize(newSize: number): void {
-        const isCollapsedSize = newSize < this.toggleSize;
+        const isCollapsedSize = !!this.toggleSize && newSize < this.toggleSize;
         if (isCollapsedSize !== this.isCollapsed) {
             this.isCollapsed = isCollapsedSize;
             this.item.notifyCollapsed(isCollapsedSize);

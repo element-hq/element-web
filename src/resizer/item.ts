@@ -44,14 +44,16 @@ export default class ResizeItem<C extends IConfig = IConfig> {
 
     private advance(forwards: boolean): ResizeItem | undefined {
         // opposite direction from fromResizeHandle to get back to handle
-        let handle = this.reverse ? this.domNode.previousElementSibling : this.domNode.nextElementSibling;
+        let handle: Element | null | undefined = this.reverse
+            ? this.domNode.previousElementSibling
+            : this.domNode.nextElementSibling;
         const moveNext = forwards !== this.reverse; // xor
         // iterate at least once to avoid infinite loop
         do {
             if (moveNext) {
-                handle = handle.nextElementSibling;
+                handle = handle?.nextElementSibling;
             } else {
-                handle = handle.previousElementSibling;
+                handle = handle?.previousElementSibling;
             }
         } while (handle && !this.resizer.isResizeHandle(<HTMLElement>handle));
 
@@ -105,6 +107,9 @@ export default class ResizeItem<C extends IConfig = IConfig> {
     }
 
     public first(): ResizeItem | undefined {
+        if (!this.domNode.parentElement?.children) {
+            return;
+        }
         const firstHandle = Array.from(this.domNode.parentElement.children).find((el) => {
             return this.resizer.isResizeHandle(<HTMLElement>el);
         });
@@ -114,6 +119,9 @@ export default class ResizeItem<C extends IConfig = IConfig> {
     }
 
     public last(): ResizeItem | undefined {
+        if (!this.domNode.parentElement?.children) {
+            return;
+        }
         const lastHandle = Array.from(this.domNode.parentElement.children)
             .reverse()
             .find((el) => {

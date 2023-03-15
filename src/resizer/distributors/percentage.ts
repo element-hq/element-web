@@ -21,9 +21,9 @@ import { IConfig } from "../resizer";
 class PercentageSizer extends Sizer {
     public start(item: HTMLElement): void {
         if (this.vertical) {
-            item.style.minHeight = null;
+            item.style.minHeight = "";
         } else {
-            item.style.minWidth = null;
+            item.style.minWidth = "";
         }
     }
 
