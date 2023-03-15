@@ -3591,7 +3591,6 @@
     "Improve your account security by following these recommendations.": "Migliora la sicurezza del tuo account seguendo questi consigli.",
     "%(count)s sessions selected|one": "%(count)s sessione selezionata",
     "%(count)s sessions selected|other": "%(count)s sessioni selezionate",
-    "Under active development. Can currently only be enabled via config.json": "In sviluppo attivo. Attualmente può essere attivato solo via config.json",
     "Rust cryptography implementation": "Implementazione crittografia Rust",
     "You can’t start a call as you are currently recording a live broadcast. Please end your live broadcast in order to start a call.": "Non puoi avviare una chiamata perché stai registrando una trasmissione in diretta. Termina la trasmissione per potere iniziare una chiamata.",
     "Can’t start a call": "Impossibile avviare una chiamata",
@@ -3738,5 +3737,11 @@
     "Active polls": "Sondaggi attivi",
     "View poll in timeline": "Vedi sondaggio nella linea temporale",
     "Verify Session": "Verifica sessione",
-    "Ignore (%(counter)s)": "Ignora (%(counter)s)"
+    "Ignore (%(counter)s)": "Ignora (%(counter)s)",
+    "Once invited users have joined Element, you will be able to chat and the room will be end-to-end encrypted": "Una volta che gli utenti si saranno uniti a Element, potrete scrivervi e la stanza sarà crittografata end-to-end",
+    "Waiting for users to join Element": "In attesa che gli utenti si uniscano a Element",
+    "Invites by email can only be sent one at a time": "Gli inviti per email possono essere inviati uno per volta",
+    "Once everyone has joined, you’ll be able to chat": "Una volta che tutti si saranno uniti, potrete scrivervi",
+    "Could not find room": "Stanza non trovata",
+    "iframe has no src attribute": "L'iframe non ha l'attributo src"
 }

@@ -3586,7 +3586,6 @@
     "This device was unable to decrypt some messages because it has not been verified yet.": "Cet appareil n’a pas pu déchiffrer certains messages parce qu’il n’a pas encore été vérifié.",
     "Verify this device to access all messages": "Vérifier cet appareil pour accéder à tous les messages",
     "Please wait as we try to decrypt your messages. This may take a few moments.": "Veuillez patienter pendant que nous essayons de déchiffrer vos messages. Cela peut prendre un peu de temps.",
-    "Under active development. Can currently only be enabled via config.json": "En cours de développement. Ne peut pour l’instant être activé que via config.json",
     "Rust cryptography implementation": "Implémentation cryptographique en Rust",
     "%(senderName)s ended a voice broadcast": "%(senderName)s a terminé une diffusion audio",
     "You ended a voice broadcast": "Vous avez terminé une diffusion audio",
@@ -3742,5 +3741,10 @@
     "Once invited users have joined Element, you will be able to chat and the room will be end-to-end encrypted": "Une fois que les utilisateurs invités seront connectés sur Element, vous pourrez discuter et le salon sera chiffré de bout en bout",
     "Waiting for users to join Element": "En attente de connexion des utilisateurs à Element",
     "Invites by email can only be sent one at a time": "Les invitations par e-mail ne peuvent être envoyées qu’une par une",
-    "Once everyone has joined, you’ll be able to chat": "Quand tout le monde sera présent, vous pourrez discuter"
+    "Once everyone has joined, you’ll be able to chat": "Quand tout le monde sera présent, vous pourrez discuter",
+    "Could not find room": "Impossible de trouver le salon",
+    "iframe has no src attribute": "L’iframe n’a pas d’attribut src",
+    "An error occurred when updating your notification preferences. Please try to toggle your option again.": "Nous avons rencontré une erreur lors de la mise-à-jour de vos préférences de notification. Veuillez essayer de réactiver l’option.",
+    "Desktop app logo": "",
+    "Use your account to continue.": ""
 }
