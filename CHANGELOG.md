@@ -1,17 +1,5 @@
-Changes in [1.11.25-rc.3](https://github.com/vector-im/element-web/releases/tag/v1.11.25-rc.3) (2023-03-14)
-===========================================================================================================
-
-## 🐛 Bug Fixes
- * Revert MXID and room pillification (#10370). Fixes vector-im/element-web#24817.
-
-Changes in [1.11.25-rc.2](https://github.com/vector-im/element-web/releases/tag/v1.11.25-rc.2) (2023-03-10)
-===========================================================================================================
-
-## 🐛 Bug Fixes
- * Fix start DM with pending third party invite ([\#10347](https://github.com/matrix-org/matrix-react-sdk/pull/10347)). Fixes #24781.
-
-Changes in [1.11.25-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.11.25-rc.1) (2023-03-07)
-===========================================================================================================
+Changes in [1.11.25](https://github.com/vector-im/element-web/releases/tag/v1.11.25) (2023-03-15)
+=================================================================================================
 
 ## ✨ Features
  * Remove experimental PWA support for Firefox and Safari ([\#24630](https://github.com/vector-im/element-web/pull/24630)).
@@ -45,7 +33,6 @@ Changes in [1.11.25-rc.1](https://github.com/vector-im/element-web/releases/tag/
  * Fix starting a DM from the right panel in some cases ([\#10278](https://github.com/matrix-org/matrix-react-sdk/pull/10278)). Fixes #24722.
  * Align info EventTile and normal EventTile on IRC layout ([\#10197](https://github.com/matrix-org/matrix-react-sdk/pull/10197)). Fixes #22782. Contributed by @luixxiul.
  * Fix blowout of waveform of the voice message player on narrow UI ([\#8861](https://github.com/matrix-org/matrix-react-sdk/pull/8861)). Fixes #22604. Contributed by @luixxiul.
- * Directly convert Matrix and room Ids to pills ([\#10267](https://github.com/matrix-org/matrix-react-sdk/pull/10267)). Fixes #21867.
  * Fix the hidden view source toggle on IRC layout ([\#10266](https://github.com/matrix-org/matrix-react-sdk/pull/10266)). Fixes #22872. Contributed by @luixxiul.
  * Fix buttons on the room header being compressed due to long room name ([\#10155](https://github.com/matrix-org/matrix-react-sdk/pull/10155)). Contributed by @luixxiul.
  * Use the room avatar as a placeholder in calls ([\#10231](https://github.com/matrix-org/matrix-react-sdk/pull/10231)).
