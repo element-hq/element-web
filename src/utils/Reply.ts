@@ -56,7 +56,7 @@ export function stripHTMLReply(html: string): string {
     return sanitizeHtml(html, {
         allowedTags: false, // false means allow everything
         allowedAttributes: false,
-        allowVulnerableTags: false, // silence xss warning, we won't be rendering directly this, so it is safe to do
+        allowVulnerableTags: true, // silence xss warning, we won't be rendering directly this, so it is safe to do
         // we somehow can't allow all schemes, so we allow all that we
         // know of and mxc (for img tags)
         allowedSchemes: [...PERMITTED_URL_SCHEMES, "mxc"],
