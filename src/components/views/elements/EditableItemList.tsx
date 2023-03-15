@@ -21,7 +21,7 @@ import Field from "./Field";
 import AccessibleButton, { ButtonEvent } from "./AccessibleButton";
 
 interface IItemProps {
-    index?: number;
+    index: number;
     value?: string;
     onRemove?(index: number): void;
 }
@@ -99,7 +99,7 @@ interface IProps {
     canEdit?: boolean;
     canRemove?: boolean;
     suggestionsListId?: string;
-    onItemAdded?(item: string): void;
+    onItemAdded?(item?: string): void;
     onItemRemoved?(index: number): void;
     onNewItemChanged?(item: string): void;
 }

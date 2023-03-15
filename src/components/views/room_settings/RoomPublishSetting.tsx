@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { Visibility } from "matrix-js-sdk/src/@types/partials";
+import { JoinRule, Visibility } from "matrix-js-sdk/src/@types/partials";
 
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import { _t } from "../../../languageHandler";
@@ -66,7 +66,7 @@ export default class RoomPublishSetting extends React.PureComponent<IProps, ISta
         const client = MatrixClientPeg.get();
 
         const room = client.getRoom(this.props.roomId);
-        const isRoomPublishable = room.getJoinRule() !== "invite";
+        const isRoomPublishable = room && room.getJoinRule() !== JoinRule.Invite;
 
         const enabled =
             (DirectoryCustomisations.requireCanonicalAliasAccessToPublish?.() === false ||
