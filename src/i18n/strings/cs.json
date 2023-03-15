@@ -3744,5 +3744,11 @@
     "Once everyone has joined, you’ll be able to chat": "Jakmile se všichni připojí, budete moci konverzovat",
     "Could not find room": "Nepodařilo se najít místnost",
     "iframe has no src attribute": "iframe nemá atribut src",
-    "An error occurred when updating your notification preferences. Please try to toggle your option again.": "Při aktualizaci předvoleb oznámení došlo k chybě. Zkuste prosím přepnout volbu znovu."
+    "An error occurred when updating your notification preferences. Please try to toggle your option again.": "Při aktualizaci předvoleb oznámení došlo k chybě. Zkuste prosím přepnout volbu znovu.",
+    "Desktop app logo": "Logo desktopové aplikace",
+    "Log out and back in to disable": "Pro vypnutí se odhlaste a znovu přihlaste",
+    "Can currently only be enabled via config.json": "Aktuálně lze povolit pouze v souboru config.json",
+    "Requires your server to support MSC3030": "Vyžaduje, aby váš server podporoval MSC3030",
+    "Requires your server to support the stable version of MSC3827": "Vyžaduje, aby váš server podporoval stabilní verzi MSC3827",
+    "Use your account to continue.": "Pro pokračování použijte svůj účet."
 }
