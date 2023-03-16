@@ -3745,5 +3745,9 @@
     "iframe has no src attribute": "iframe tidak memiliki atribut src",
     "An error occurred when updating your notification preferences. Please try to toggle your option again.": "Sebuah kesalahan terjadi saat memperbarui preferensi notifikasi Anda. Silakan coba mengubah opsi Anda lagi.",
     "Use your account to continue.": "Gunakan akun Anda untuk melanjutkan.",
-    "Desktop app logo": "Logo aplikasi desktop"
+    "Desktop app logo": "Logo aplikasi desktop",
+    "Log out and back in to disable": "Keluar dan masuk kembali ke akun untuk menonaktifkan",
+    "Can currently only be enabled via config.json": "Saat ini hanya dapat diaktifkan melalui config.json",
+    "Requires your server to support MSC3030": "Mengharuslkan server Anda mendukung MSC3030",
+    "Requires your server to support the stable version of MSC3827": "Mengharuslkan server Anda mendukung versi MSC3827 yang stabil"
 }
