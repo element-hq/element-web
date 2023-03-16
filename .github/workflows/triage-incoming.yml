@@ -1,0 +1,15 @@
+name: Move new issues into Issue triage board
+
+on:
+    issues:
+        types: [opened]
+
+jobs:
+    automate-project-columns:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: alex-page/github-project-automation-plus@7ffb872c64bd809d23563a130a0a97d01dfa8f43
+              with:
+                  project: Issue triage
+                  column: Incoming
+                  repo-token: ${{ secrets.ELEMENT_BOT_TOKEN }}

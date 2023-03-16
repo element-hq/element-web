@@ -1,0 +1,76 @@
+name: Bug report for the Element desktop app (not in a browser)
+description: File a bug report if you are using the desktop Element application.
+labels: [T-Defect]
+body:
+    - type: markdown
+      attributes:
+          value: |
+              Thanks for taking the time to fill out this bug report!
+
+              Please report security issues by email to security@matrix.org
+    - type: textarea
+      id: reproduction-steps
+      attributes:
+          label: Steps to reproduce
+          description: Please attach screenshots, videos or logs if you can.
+          placeholder: Tell us what you see!
+          value: |
+              1. Where are you starting? What can you see?
+              2. What do you click?
+              3. More steps…
+      validations:
+          required: true
+    - type: textarea
+      id: result
+      attributes:
+          label: Outcome
+          placeholder: Tell us what went wrong
+          value: |
+              #### What did you expect?
+
+              #### What happened instead?
+      validations:
+          required: true
+    - type: input
+      id: os
+      attributes:
+          label: Operating system
+          placeholder: Windows, macOS, Ubuntu, Arch Linux…
+      validations:
+          required: false
+    - type: input
+      id: version
+      attributes:
+          label: Application version
+          description: You can find the version information in Settings -> Help & About.
+          placeholder: e.g. Element version 1.7.34, olm version 3.2.3
+      validations:
+          required: false
+    - type: input
+      id: source
+      attributes:
+          label: How did you install the app?
+          description: Where did you install the app from? Please give a link or a description.
+          placeholder: e.g. From https://element.io/get-started
+      validations:
+          required: false
+    - type: input
+      id: homeserver
+      attributes:
+          label: Homeserver
+          description: |
+              Which server is your account registered on? If it is a local or non-public homeserver, please tell us what is the homeserver implementation (ex: Synapse/Dendrite/etc.) and the version.
+          placeholder: e.g. matrix.org or Synapse 1.50.0rc1
+      validations:
+          required: false
+    - type: dropdown
+      id: rageshake
+      attributes:
+          label: Will you send logs?
+          description: |
+              Did you know that you can send a /rageshake command from your application to submit logs for this issue? Trigger the defect, then type `/rageshake` into the message input area followed by a description of the problem and send the command. You will be able to add a link to this defect report and submit anonymous logs to the developers.
+          options:
+              - "Yes"
+              - "No"
+      validations:
+          required: true

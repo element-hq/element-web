@@ -2,7 +2,7 @@
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
-Copyright 2018 - 2021 New Vector Ltd
+Copyright 2018 - 2022 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,52 +19,60 @@ limitations under the License.
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import olmWasmPath from "olm/olm.wasm";
-import Olm from 'olm';
+import olmWasmPath from "@matrix-org/olm/olm.wasm";
+import Olm from "@matrix-org/olm";
 import * as ReactDOM from "react-dom";
 import * as React from "react";
-
 import * as languageHandler from "matrix-react-sdk/src/languageHandler";
 import SettingsStore from "matrix-react-sdk/src/settings/SettingsStore";
+import PlatformPeg from "matrix-react-sdk/src/PlatformPeg";
+import SdkConfig from "matrix-react-sdk/src/SdkConfig";
+import { setTheme } from "matrix-react-sdk/src/theme";
+import { logger } from "matrix-js-sdk/src/logger";
+import { ModuleRunner } from "matrix-react-sdk/src/modules/ModuleRunner";
+
 import ElectronPlatform from "./platform/ElectronPlatform";
 import PWAPlatform from "./platform/PWAPlatform";
 import WebPlatform from "./platform/WebPlatform";
-import PlatformPeg from "matrix-react-sdk/src/PlatformPeg";
-import SdkConfig from "matrix-react-sdk/src/SdkConfig";
-import {setTheme} from "matrix-react-sdk/src/theme";
-
-import {initRageshake, initRageshakeStore} from "./rageshakesetup";
-
+import { initRageshake, initRageshakeStore } from "./rageshakesetup";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore - this path is created at runtime and therefore won't exist at typecheck time
+import { INSTALLED_MODULES } from "../modules";
 
 export const rageshakePromise = initRageshake();
 
-export function preparePlatform() {
+export function preparePlatform(): void {
     if (window.electron) {
-        console.log("Using Electron platform");
+        logger.log("Using Electron platform");
         PlatformPeg.set(new ElectronPlatform());
-    } else if (window.matchMedia('(display-mode: standalone)').matches) {
-        console.log("Using PWA platform");
+    } else if (window.matchMedia("(display-mode: standalone)").matches) {
+        logger.log("Using PWA platform");
         PlatformPeg.set(new PWAPlatform());
     } else {
-        console.log("Using Web platform");
+        logger.log("Using Web platform");
         PlatformPeg.set(new WebPlatform());
     }
 }
 
-export function setupLogStorage() {
+export function setupLogStorage(): Promise<void> {
     if (SdkConfig.get().bug_report_endpoint_url) {
         return initRageshakeStore();
     }
-    console.warn("No bug report endpoint set - logs will not be persisted");
+    logger.warn("No bug report endpoint set - logs will not be persisted");
     return Promise.resolve();
 }
 
-export async function loadConfig() {
+export async function loadConfig(): Promise<void> {
     // XXX: We call this twice, once here and once in MatrixChat as a prop. We call it here to ensure
     // granular settings are loaded correctly and to avoid duplicating the override logic for the theme.
     //
     // Note: this isn't called twice for some wrappers, like the Jitsi wrapper.
-    SdkConfig.put(await PlatformPeg.get().getConfig() || {});
+    const platformConfig = await PlatformPeg.get().getConfig();
+    if (platformConfig) {
+        SdkConfig.put(platformConfig);
+    } else {
+        SdkConfig.unset(); // clears the config (sets to empty object)
+    }
 }
 
 export function loadOlm(): Promise<void> {
@@ -82,30 +90,35 @@ export function loadOlm(): Promise<void> {
      */
     return Olm.init({
         locateFile: () => olmWasmPath,
-    }).then(() => {
-        console.log("Using WebAssembly Olm");
-    }).catch((e) => {
-        console.log("Failed to load Olm: trying legacy version", e);
-        return new Promise((resolve, reject) => {
-            const s = document.createElement('script');
-            s.src = 'olm_legacy.js'; // XXX: This should be cache-busted too
-            s.onload = resolve;
-            s.onerror = reject;
-            document.body.appendChild(s);
-        }).then(() => {
-            // Init window.Olm, ie. the one just loaded by the script tag,
-            // not 'Olm' which is still the failed wasm version.
-            return window.Olm.init();
-        }).then(() => {
-            console.log("Using legacy Olm");
-        }).catch((e) => {
-            console.log("Both WebAssembly and asm.js Olm failed!", e);
+    })
+        .then(() => {
+            logger.log("Using WebAssembly Olm");
+        })
+        .catch((wasmLoadError) => {
+            logger.log("Failed to load Olm: trying legacy version", wasmLoadError);
+            return new Promise((resolve, reject) => {
+                const s = document.createElement("script");
+                s.src = "olm_legacy.js"; // XXX: This should be cache-busted too
+                s.onload = resolve;
+                s.onerror = reject;
+                document.body.appendChild(s);
+            })
+                .then(() => {
+                    // Init window.Olm, ie. the one just loaded by the script tag,
+                    // not 'Olm' which is still the failed wasm version.
+                    return window.Olm.init();
+                })
+                .then(() => {
+                    logger.log("Using legacy Olm");
+                })
+                .catch((legacyLoadError) => {
+                    logger.log("Both WebAssembly and asm.js Olm failed!", legacyLoadError);
+                });
         });
-    });
 }
 
-export async function loadLanguage() {
-    const prefLang = SettingsStore.getValue("language", null, /*excludeDefault=*/true);
+export async function loadLanguage(): Promise<void> {
+    const prefLang = SettingsStore.getValue("language", null, /*excludeDefault=*/ true);
     let langs = [];
 
     if (!prefLang) {
@@ -119,59 +132,56 @@ export async function loadLanguage() {
         await languageHandler.setLanguage(langs);
         document.documentElement.setAttribute("lang", languageHandler.getCurrentLanguage());
     } catch (e) {
-        console.error("Unable to set language", e);
+        logger.error("Unable to set language", e);
     }
 }
 
-export async function loadSkin() {
-    // Ensure the skin is the very first thing to load for the react-sdk. We don't even want to reference
-    // the SDK until we have to in imports.
-    console.log("Loading skin...");
-    // load these async so that its code is not executed immediately and we can catch any exceptions
-    const [sdk, skin] = await Promise.all([
-        import(
-            /* webpackChunkName: "matrix-react-sdk" */
-            /* webpackPreload: true */
-            "matrix-react-sdk"),
-        import(
-            /* webpackChunkName: "element-web-component-index" */
-            /* webpackPreload: true */
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore - this module is generated so may fail lint
-            "../component-index"),
-    ]);
-    sdk.loadSkin(skin);
-    console.log("Skin loaded!");
-}
-
-export async function loadTheme() {
+export async function loadTheme(): Promise<void> {
     setTheme();
 }
 
-export async function loadApp(fragParams: {}) {
+export async function loadApp(fragParams: {}): Promise<void> {
     // load app.js async so that its code is not executed immediately and we can catch any exceptions
     const module = await import(
         /* webpackChunkName: "element-web-app" */
         /* webpackPreload: true */
-        "./app");
-    window.matrixChat = ReactDOM.render(await module.loadApp(fragParams),
-        document.getElementById('matrixchat'));
+        "./app"
+    );
+    window.matrixChat = ReactDOM.render(await module.loadApp(fragParams), document.getElementById("matrixchat"));
 }
 
-export async function showError(title: string, messages?: string[]) {
-    const ErrorView = (await import(
-        /* webpackChunkName: "error-view" */
-        "../async-components/structures/ErrorView")).default;
-    window.matrixChat = ReactDOM.render(<ErrorView title={title} messages={messages} />,
-        document.getElementById('matrixchat'));
+export async function showError(title: string, messages?: string[]): Promise<void> {
+    const ErrorView = (
+        await import(
+            /* webpackChunkName: "error-view" */
+            "../async-components/structures/ErrorView"
+        )
+    ).default;
+    window.matrixChat = ReactDOM.render(
+        <ErrorView title={title} messages={messages} />,
+        document.getElementById("matrixchat"),
+    );
 }
 
-export async function showIncompatibleBrowser(onAccept) {
-    const CompatibilityView = (await import(
-        /* webpackChunkName: "compatibility-view" */
-        "../async-components/structures/CompatibilityView")).default;
-    window.matrixChat = ReactDOM.render(<CompatibilityView onAccept={onAccept} />,
-        document.getElementById('matrixchat'));
+export async function showIncompatibleBrowser(onAccept): Promise<void> {
+    const CompatibilityView = (
+        await import(
+            /* webpackChunkName: "compatibility-view" */
+            "../async-components/structures/CompatibilityView"
+        )
+    ).default;
+    window.matrixChat = ReactDOM.render(
+        <CompatibilityView onAccept={onAccept} />,
+        document.getElementById("matrixchat"),
+    );
+}
+
+export async function loadModules(): Promise<void> {
+    for (const InstalledModule of INSTALLED_MODULES) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore - we know the constructor exists even if TypeScript can't be convinced of that
+        ModuleRunner.instance.registerModule((api) => new InstalledModule(api));
+    }
 }
 
 export const _t = languageHandler._t;

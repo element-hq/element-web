@@ -1,30 +1,22 @@
 {
-  "compilerOptions": {
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "target": "es2016",
-    "noImplicitAny": false,
-    "sourceMap": false,
-    "outDir": "./lib",
-    "declaration": true,
-    "jsx": "react",
-    "types": [
-      "node",
-      "react",
-      "flux"
-    ],
-    "lib": [
-      "es2019",
-      "dom",
-      "dom.iterable"
-    ]
-  },
-  "include": [
-    "./src/**/*.ts",
-    "./src/**/*.tsx"
-  ]
+    "compilerOptions": {
+        "experimentalDecorators": false,
+        "emitDecoratorMetadata": false,
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "target": "es2016",
+        "noImplicitAny": false,
+        "noUnusedLocals": true,
+        "sourceMap": false,
+        "outDir": "./lib",
+        "declaration": true,
+        "jsx": "react",
+        "lib": ["es2019", "dom", "dom.iterable"],
+        "alwaysStrict": true,
+        "strictBindCallApply": true,
+        "noImplicitThis": true
+    },
+    "include": ["./src/**/*.ts", "./src/**/*.tsx", "./test/**/*.ts", "./test/**/*.tsx"]
 }

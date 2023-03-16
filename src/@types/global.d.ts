@@ -15,27 +15,29 @@ limitations under the License.
 */
 
 import "matrix-react-sdk/src/@types/global"; // load matrix-react-sdk's type extensions first
-import type {Renderer} from "react-dom";
+import type { Renderer } from "react-dom";
+import type { logger } from "matrix-js-sdk/src/logger";
 
 type ElectronChannel =
-    "app_onAction" |
-    "before-quit" |
-    "check_updates" |
-    "install_update" |
-    "ipcCall" |
-    "ipcReply" |
-    "loudNotification" |
-    "preferences" |
-    "seshat" |
-    "seshatReply" |
-    "setBadgeCount" |
-    "update-downloaded" |
-    "userDownloadCompleted" |
-    "userDownloadOpen";
+    | "app_onAction"
+    | "before-quit"
+    | "check_updates"
+    | "install_update"
+    | "ipcCall"
+    | "ipcReply"
+    | "loudNotification"
+    | "preferences"
+    | "seshat"
+    | "seshatReply"
+    | "setBadgeCount"
+    | "update-downloaded"
+    | "userDownloadCompleted"
+    | "userDownloadAction";
 
 declare global {
     interface Window {
         mxSendRageshake: (text: string, withLogs?: boolean) => void;
+        matrixLogger: typeof logger;
         matrixChat: ReturnType<Renderer>;
 
         // electron-only

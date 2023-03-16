@@ -17,10 +17,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import BasePlatform from 'matrix-react-sdk/src/BasePlatform';
-import {_t} from 'matrix-react-sdk/src/languageHandler';
-import {getVectorConfig} from "../getconfig";
+import BasePlatform from "matrix-react-sdk/src/BasePlatform";
+import { _t } from "matrix-react-sdk/src/languageHandler";
 
+import type { IConfigOptions } from "matrix-react-sdk/src/IConfigOptions";
+import { getVectorConfig } from "../getconfig";
 import Favicon from "../../favicon";
 
 /**
@@ -29,12 +30,12 @@ import Favicon from "../../favicon";
 export default abstract class VectorBasePlatform extends BasePlatform {
     protected _favicon: Favicon;
 
-    async getConfig(): Promise<{}> {
+    public async getConfig(): Promise<IConfigOptions> {
         return getVectorConfig();
     }
 
-    getHumanReadableName(): string {
-        return 'Vector Base Platform'; // no translation required: only used for analytics
+    public getHumanReadableName(): string {
+        return "Vector Base Platform"; // no translation required: only used for analytics
     }
 
     /**
@@ -42,14 +43,15 @@ export default abstract class VectorBasePlatform extends BasePlatform {
      * it uses canvas, which can trigger a permission prompt in Firefox's resist fingerprinting mode.
      * See https://github.com/vector-im/element-web/issues/9605.
      */
-    get favicon() {
+    public get favicon(): Favicon {
         if (this._favicon) {
             return this._favicon;
         }
-        return this._favicon = new Favicon();
+        this._favicon = new Favicon();
+        return this._favicon;
     }
 
-    _updateFavicon() {
+    private updateFavicon(): void {
         let bgColor = "#d00";
         let notif: string | number = this.notificationCount;
 
@@ -61,29 +63,28 @@ export default abstract class VectorBasePlatform extends BasePlatform {
         this.favicon.badge(notif, { bgColor });
     }
 
-    setNotificationCount(count: number) {
+    public setNotificationCount(count: number): void {
         if (this.notificationCount === count) return;
         super.setNotificationCount(count);
-        this._updateFavicon();
+        this.updateFavicon();
     }
 
-    setErrorStatus(errorDidOccur: boolean) {
+    public setErrorStatus(errorDidOccur: boolean): void {
         if (this.errorDidOccur === errorDidOccur) return;
         super.setErrorStatus(errorDidOccur);
-        this._updateFavicon();
+        this.updateFavicon();
     }
 
     /**
      * Begin update polling, if applicable
      */
-    startUpdater() {
-    }
+    public startUpdater(): void {}
 
     /**
      * Get a sensible default display name for the
      * device Vector is running on
      */
-    getDefaultDeviceDisplayName(): string {
+    public getDefaultDeviceDisplayName(): string {
         return _t("Unknown device");
     }
 }

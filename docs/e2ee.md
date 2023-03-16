@@ -10,9 +10,9 @@ Set the following on your homeserver's
 
 ```json
 {
-  "io.element.e2ee": {
-    "default": false
-  }
+    "io.element.e2ee": {
+        "default": false
+    }
 }
 ```
 
@@ -29,9 +29,9 @@ following on your homeserver's `/.well-known/matrix/client` config:
 
 ```json
 {
-  "io.element.e2ee": {
-    "secure_backup_required": true
-  }
+    "io.element.e2ee": {
+        "secure_backup_required": true
+    }
 }
 ```
 
@@ -44,9 +44,9 @@ only offer one of these, you can signal this via the
 
 ```json
 {
-  "io.element.e2ee": {
-    "secure_backup_setup_methods": ["passphrase"]
-  }
+    "io.element.e2ee": {
+        "secure_backup_setup_methods": ["passphrase"]
+    }
 }
 ```
 
