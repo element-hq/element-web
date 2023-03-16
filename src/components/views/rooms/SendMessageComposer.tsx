@@ -227,12 +227,14 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                 // selection must be collapsed and caret at start
                 if (this.editorRef.current?.isSelectionCollapsed() && this.editorRef.current?.isCaretAtStart()) {
                     const events = this.context.liveTimeline
-                        .getEvents()
+                        ?.getEvents()
                         .concat(replyingToThread ? [] : this.props.room.getPendingEvents());
-                    const editEvent = findEditableEvent({
-                        events,
-                        isForward: false,
-                    });
+                    const editEvent = events
+                        ? findEditableEvent({
+                              events,
+                              isForward: false,
+                          })
+                        : undefined;
                     if (editEvent) {
                         // We're selecting history, so prevent the key event from doing anything else
                         event.preventDefault();
@@ -297,7 +299,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
             if (events[i].getType() === EventType.RoomMessage) {
                 let shouldReact = true;
                 const lastMessage = events[i];
-                const userId = MatrixClientPeg.get().getUserId();
+                const userId = MatrixClientPeg.get().getSafeUserId();
                 const messageReactions = this.props.room.relations.getChildEventsForEvent(
                     lastMessage.getId()!,
                     RelationType.Annotation,
@@ -307,10 +309,10 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                 // if we have already sent this reaction, don't redact but don't re-send
                 if (messageReactions) {
                     const myReactionEvents =
-                        messageReactions.getAnnotationsBySender()[userId] || new Set<MatrixEvent>();
+                        messageReactions.getAnnotationsBySender()?.[userId] || new Set<MatrixEvent>();
                     const myReactionKeys = [...myReactionEvents]
                         .filter((event) => !event.isRedacted())
-                        .map((event) => event.getRelation().key);
+                        .map((event) => event.getRelation()?.key);
                     shouldReact = !myReactionKeys.includes(reaction);
                 }
                 if (shouldReact) {

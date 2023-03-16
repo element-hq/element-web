@@ -47,7 +47,7 @@ export default class HistoryManager {
         this.removedSinceLastPush = false;
     }
 
-    private shouldPush(inputType: string, diff: IDiff): boolean {
+    private shouldPush(inputType?: string, diff?: IDiff): boolean {
         // right now we can only push a step after
         // the input has been applied to the model,
         // so we can't push the state before something happened.
@@ -102,7 +102,7 @@ export default class HistoryManager {
     }
 
     // needs to persist parts and caret position
-    public tryPush(model: EditorModel, caret: Caret, inputType: string, diff: IDiff): boolean {
+    public tryPush(model: EditorModel, caret: Caret, inputType?: string, diff?: IDiff): boolean {
         // ignore state restoration echos.
         // these respect the inputType values of the input event,
         // but are actually passed in from MessageEditor calling model.reset()

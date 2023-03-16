@@ -32,7 +32,7 @@ export * from "./components/atoms/VoiceBroadcastHeader";
 export * from "./components/atoms/VoiceBroadcastPlaybackControl";
 export * from "./components/atoms/VoiceBroadcastRecordingConnectionError";
 export * from "./components/atoms/VoiceBroadcastRoomSubtitle";
-export * from "./components/molecules/ConfirmListeBroadcastStopCurrent";
+export * from "./components/molecules/ConfirmListenBroadcastStopCurrent";
 export * from "./components/molecules/VoiceBroadcastPlaybackBody";
 export * from "./components/molecules/VoiceBroadcastSmallPlaybackBody";
 export * from "./components/molecules/VoiceBroadcastPreRecordingPip";

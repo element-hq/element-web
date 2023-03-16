@@ -149,7 +149,7 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
         this.dispatcherRef = dis.register(this.onAction);
     }
 
-    private getRoom(): Room {
+    private getRoom(): Room | null {
         return this.props.mxClient.getRoom(this.props.editState.getEvent().getRoomId());
     }
 
@@ -237,10 +237,10 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
     }
 
     private get events(): MatrixEvent[] {
-        const liveTimelineEvents = this.context.liveTimeline.getEvents();
-        const pendingEvents = this.getRoom().getPendingEvents();
+        const liveTimelineEvents = this.context.liveTimeline?.getEvents();
+        const pendingEvents = this.getRoom()?.getPendingEvents();
         const isInThread = Boolean(this.props.editState.getEvent().getThread());
-        return liveTimelineEvents.concat(isInThread ? [] : pendingEvents);
+        return liveTimelineEvents?.concat(isInThread ? [] : pendingEvents) ?? [];
     }
 
     private cancelEdit = (): void => {
@@ -304,10 +304,10 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
         });
 
         // Replace emoticon at the end of the message
-        if (SettingsStore.getValue("MessageComposerInput.autoReplaceEmoji")) {
-            const caret = this.editorRef.current?.getCaret();
+        if (SettingsStore.getValue("MessageComposerInput.autoReplaceEmoji") && this.editorRef.current) {
+            const caret = this.editorRef.current.getCaret();
             const position = this.model.positionForOffset(caret.offset, caret.atNodeEnd);
-            this.editorRef.current?.replaceEmoticon(position, REGEX_EMOTICON);
+            this.editorRef.current.replaceEmoticon(position, REGEX_EMOTICON);
         }
         const editContent = createEditContent(this.model, editedEvent);
         const newContent = editContent["m.new_content"];
@@ -382,7 +382,7 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
         // store caret and serialized parts in the
         // editorstate so it can be restored when the remote echo event tile gets rendered
         // in case we're currently editing a pending event
-        const sel = document.getSelection();
+        const sel = document.getSelection()!;
         let caret: DocumentOffset | undefined;
         if (sel.focusNode) {
             caret = getCaretOffsetAndText(this.editorRef.current?.editorRef.current, sel).caret;

@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { defer } from "matrix-js-sdk/src/utils";
 import React from "react";
 
 import BaseDialog from "../../../components/views/dialogs/BaseDialog";
@@ -46,11 +45,7 @@ export const ConfirmListenBroadcastStopCurrentDialog: React.FC<Props> = ({ onFin
 };
 
 export const showConfirmListenBroadcastStopCurrentDialog = async (): Promise<boolean> => {
-    const { promise, resolve } = defer<boolean>();
-
-    Modal.createDialog(ConfirmListenBroadcastStopCurrentDialog, {
-        onFinished: resolve,
-    });
-
-    return promise;
+    const { finished } = Modal.createDialog(ConfirmListenBroadcastStopCurrentDialog);
+    const [confirmed] = await finished;
+    return !!confirmed;
 };

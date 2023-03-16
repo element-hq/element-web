@@ -576,7 +576,7 @@ async function combinedPagination(searchResult: ISeshatSearchResults): Promise<I
     const newSlice = result.results.slice(Math.max(result.results.length - newResultCount, 0));
     restoreEncryptionInfo(newSlice);
 
-    searchResult.pendingRequest = null;
+    searchResult.pendingRequest = undefined;
 
     return result;
 }

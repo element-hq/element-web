@@ -35,7 +35,7 @@ export const useVoiceBroadcastPlayback = (
         position: number;
         timeLeft: number;
     };
-    sender: RoomMember;
+    sender: RoomMember | null;
     liveness: VoiceBroadcastLiveness;
     playbackState: VoiceBroadcastPlaybackState;
     toggle(): void;

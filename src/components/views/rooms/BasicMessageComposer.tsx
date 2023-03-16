@@ -252,10 +252,10 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
             }
         }
         if (isEmpty) {
-            this.formatBarRef.current.hide();
+            this.formatBarRef.current?.hide();
         }
         this.setState({
-            autoComplete: this.props.model.autoComplete,
+            autoComplete: this.props.model.autoComplete ?? undefined,
             // if a change is happening then clear the showVisualBell
             showVisualBell: diff ? false : this.state.showVisualBell,
         });
@@ -266,12 +266,16 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         // If the user is entering a command, only consider them typing if it is one which sends a message into the room
         if (isTyping && this.props.model.parts[0].type === "command") {
             const { cmd } = parseCommandString(this.props.model.parts[0].text);
-            const command = CommandMap.get(cmd);
-            if (!command || !command.isEnabled() || command.category !== CommandCategories.messages) {
+            const command = CommandMap.get(cmd!);
+            if (!command?.isEnabled() || command.category !== CommandCategories.messages) {
                 isTyping = false;
             }
         }
-        SdkContextClass.instance.typingStore.setSelfTyping(this.props.room.roomId, this.props.threadId, isTyping);
+        SdkContextClass.instance.typingStore.setSelfTyping(
+            this.props.room.roomId,
+            this.props.threadId ?? null,
+            isTyping,
+        );
 
         if (this.props.onChange) {
             this.props.onChange();
@@ -280,14 +284,14 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
 
     private showPlaceholder(): void {
         // escape single quotes
-        const placeholder = this.props.placeholder.replace(/'/g, "\\'");
-        this.editorRef.current.style.setProperty("--placeholder", `'${placeholder}'`);
-        this.editorRef.current.classList.add("mx_BasicMessageComposer_inputEmpty");
+        const placeholder = this.props.placeholder?.replace(/'/g, "\\'");
+        this.editorRef.current?.style.setProperty("--placeholder", `'${placeholder}'`);
+        this.editorRef.current?.classList.add("mx_BasicMessageComposer_inputEmpty");
     }
 
     private hidePlaceholder(): void {
-        this.editorRef.current.classList.remove("mx_BasicMessageComposer_inputEmpty");
-        this.editorRef.current.style.removeProperty("--placeholder");
+        this.editorRef.current?.classList.remove("mx_BasicMessageComposer_inputEmpty");
+        this.editorRef.current?.style.removeProperty("--placeholder");
     }
 
     private onCompositionStart = (): void => {
@@ -327,9 +331,9 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
     }
 
     private onCutCopy = (event: ClipboardEvent, type: string): void => {
-        const selection = document.getSelection();
+        const selection = document.getSelection()!;
         const text = selection.toString();
-        if (text) {
+        if (text && this.editorRef.current) {
             const { model } = this.props;
             const range = getRangeForSelection(this.editorRef.current, model, selection);
             const selectedParts = range.parts.map((p) => p.serialize());
@@ -412,7 +416,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         const { model } = this.props;
         this._isCaretAtEnd = position.isAtEnd(model);
         this.lastCaret = position.asOffset(model);
-        this.lastSelection = cloneSelection(document.getSelection());
+        this.lastSelection = cloneSelection(document.getSelection()!);
     }
 
     private refreshLastCaretIfNeeded(): DocumentOffset | undefined {
@@ -422,7 +426,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         if (!this.editorRef.current) {
             return;
         }
-        const selection = document.getSelection();
+        const selection = document.getSelection()!;
         if (!this.lastSelection || !selectionEquals(this.lastSelection, selection)) {
             this.lastSelection = cloneSelection(selection);
             const { caret, text } = getCaretOffsetAndText(this.editorRef.current, selection);
@@ -467,7 +471,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         const { isEmpty } = this.props.model;
 
         this.refreshLastCaretIfNeeded();
-        const selection = document.getSelection();
+        const selection = document.getSelection()!;
         if (this.hasTextSelected && selection.isCollapsed) {
             this.hasTextSelected = false;
             this.formatBarRef.current?.hide();
@@ -485,7 +489,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         const model = this.props.model;
         let handled = false;
 
-        if (this.state.surroundWith && document.getSelection().type !== "Caret") {
+        if (this.state.surroundWith && document.getSelection()!.type !== "Caret") {
             // This surrounds the selected text with a character. This is
             // intentionally left out of the keybinding manager as the keybinds
             // here shouldn't be changeable
@@ -538,7 +542,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
             this.tabCompleteName();
             handled = true;
         } else if ([KeyBindingAction.Delete, KeyBindingAction.Backspace].includes(accessibilityAction!)) {
-            this.formatBarRef.current.hide();
+            this.formatBarRef.current?.hide();
         }
 
         if (handled) {
@@ -654,7 +658,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
 
     private onAutoCompleteConfirm = (completion: ICompletion): void => {
         this.modifiedFlag = true;
-        this.props.model.autoComplete.onComponentConfirm(completion);
+        this.props.model.autoComplete?.onComponentConfirm(completion);
     };
 
     private onAutoCompleteSelectionChange = (completionIndex: number): void => {
@@ -691,9 +695,9 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
 
     public componentWillUnmount(): void {
         document.removeEventListener("selectionchange", this.onSelectionChange);
-        this.editorRef.current.removeEventListener("input", this.onInput, true);
-        this.editorRef.current.removeEventListener("compositionstart", this.onCompositionStart, true);
-        this.editorRef.current.removeEventListener("compositionend", this.onCompositionEnd, true);
+        this.editorRef.current?.removeEventListener("input", this.onInput, true);
+        this.editorRef.current?.removeEventListener("compositionstart", this.onCompositionStart, true);
+        this.editorRef.current?.removeEventListener("compositionend", this.onCompositionEnd, true);
         SettingsStore.unwatchSetting(this.useMarkdownHandle);
         SettingsStore.unwatchSetting(this.emoticonSettingHandle);
         SettingsStore.unwatchSetting(this.shouldShowPillAvatarSettingHandle);
@@ -716,10 +720,10 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         this.updateEditorState(this.getInitialCaretPosition());
         // attach input listener by hand so React doesn't proxy the events,
         // as the proxied event doesn't support inputType, which we need.
-        this.editorRef.current.addEventListener("input", this.onInput, true);
-        this.editorRef.current.addEventListener("compositionstart", this.onCompositionStart, true);
-        this.editorRef.current.addEventListener("compositionend", this.onCompositionEnd, true);
-        this.editorRef.current.focus();
+        this.editorRef.current?.addEventListener("input", this.onInput, true);
+        this.editorRef.current?.addEventListener("compositionstart", this.onCompositionStart, true);
+        this.editorRef.current?.addEventListener("compositionend", this.onCompositionEnd, true);
+        this.editorRef.current?.focus();
     }
 
     private getInitialCaretPosition(): DocumentPosition {
@@ -826,7 +830,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
     }
 
     public focus(): void {
-        this.editorRef.current.focus();
+        this.editorRef.current?.focus();
     }
 
     public insertMention(userId: string): void {

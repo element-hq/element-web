@@ -50,6 +50,7 @@ import { ElementWidgetCapabilities } from "../../../../src/stores/widgets/Elemen
 import { ElementWidget } from "../../../../src/stores/widgets/StopGapWidget";
 import { WidgetMessagingStore } from "../../../../src/stores/widgets/WidgetMessagingStore";
 import { ModuleRunner } from "../../../../src/modules/ModuleRunner";
+import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalinks";
 
 describe("AppTile", () => {
     let cli: MatrixClient;
@@ -153,7 +154,11 @@ describe("AppTile", () => {
         // Run initial render with room 1, and also running lifecycle methods
         const renderResult = render(
             <MatrixClientContext.Provider value={cli}>
-                <RightPanel room={r1} resizeNotifier={resizeNotifier} />
+                <RightPanel
+                    room={r1}
+                    resizeNotifier={resizeNotifier}
+                    permalinkCreator={new RoomPermalinkCreator(r1, r1.roomId)}
+                />
             </MatrixClientContext.Provider>,
         );
         // Wait for RPS room 1 updates to fire
@@ -178,7 +183,11 @@ describe("AppTile", () => {
 
         renderResult.rerender(
             <MatrixClientContext.Provider value={cli}>
-                <RightPanel room={r2} resizeNotifier={resizeNotifier} />
+                <RightPanel
+                    room={r2}
+                    resizeNotifier={resizeNotifier}
+                    permalinkCreator={new RoomPermalinkCreator(r2, r2.roomId)}
+                />
             </MatrixClientContext.Provider>,
         );
 
@@ -214,7 +223,11 @@ describe("AppTile", () => {
         // Run initial render with room 1, and also running lifecycle methods
         const renderResult = render(
             <MatrixClientContext.Provider value={cli}>
-                <RightPanel room={r1} resizeNotifier={resizeNotifier} />
+                <RightPanel
+                    room={r1}
+                    resizeNotifier={resizeNotifier}
+                    permalinkCreator={new RoomPermalinkCreator(r1, r1.roomId)}
+                />
             </MatrixClientContext.Provider>,
         );
         // Wait for RPS room 1 updates to fire
@@ -256,7 +269,11 @@ describe("AppTile", () => {
         });
         renderResult.rerender(
             <MatrixClientContext.Provider value={cli}>
-                <RightPanel room={r2} resizeNotifier={resizeNotifier} />
+                <RightPanel
+                    room={r2}
+                    resizeNotifier={resizeNotifier}
+                    permalinkCreator={new RoomPermalinkCreator(r2, r2.roomId)}
+                />
             </MatrixClientContext.Provider>,
         );
         await rpsUpdated2;

@@ -46,7 +46,7 @@ interface IKeyboardShortcutProps {
 export const KeyboardShortcut: React.FC<IKeyboardShortcutProps> = ({ value, className = "mx_KeyboardShortcut" }) => {
     if (!value) return null;
 
-    const modifiersElement = [];
+    const modifiersElement: JSX.Element[] = [];
     if (value.ctrlOrCmdKey) {
         modifiersElement.push(<KeyboardKey key="ctrlOrCmdKey" name={IS_MAC ? Key.META : Key.CONTROL} />);
     } else if (value.ctrlKey) {

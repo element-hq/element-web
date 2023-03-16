@@ -133,13 +133,13 @@ export default class ImageView extends React.Component<IProps, IState> {
         // We want to recalculate zoom whenever the window's size changes
         window.addEventListener("resize", this.recalculateZoom);
         // After the image loads for the first time we want to calculate the zoom
-        this.image.current.addEventListener("load", this.imageLoaded);
+        this.image.current?.addEventListener("load", this.imageLoaded);
     }
 
     public componentWillUnmount(): void {
         this.focusLock.current.removeEventListener("wheel", this.onWheel);
         window.removeEventListener("resize", this.recalculateZoom);
-        this.image.current.removeEventListener("load", this.imageLoaded);
+        this.image.current?.removeEventListener("load", this.imageLoaded);
     }
 
     private imageLoaded = (): void => {
@@ -171,6 +171,7 @@ export default class ImageView extends React.Component<IProps, IState> {
     private setZoomAndRotation = (inputRotation?: number): void => {
         const image = this.image.current;
         const imageWrapper = this.imageWrapper.current;
+        if (!image || !imageWrapper) return;
 
         const rotation = inputRotation ?? this.state.rotation;
 
@@ -236,8 +237,8 @@ export default class ImageView extends React.Component<IProps, IState> {
             // Zoom relative to the given point on the image.
             // First we need to figure out the offset of the anchor point
             // relative to the center of the image, accounting for rotation.
-            let offsetX;
-            let offsetY;
+            let offsetX: number | undefined;
+            let offsetY: number | undefined;
             // The modulo operator can return negative values for some
             // rotations, so we have to do some extra work to normalize it
             switch (((this.state.rotation % 360) + 360) % 360) {
@@ -310,7 +311,7 @@ export default class ImageView extends React.Component<IProps, IState> {
     private onDownloadClick = (): void => {
         const a = document.createElement("a");
         a.href = this.props.src;
-        a.download = this.props.name;
+        if (this.props.name) a.download = this.props.name;
         a.target = "_blank";
         a.rel = "noreferrer noopener";
         a.click();
@@ -334,9 +335,9 @@ export default class ImageView extends React.Component<IProps, IState> {
         ev.preventDefault();
         dis.dispatch<ViewRoomPayload>({
             action: Action.ViewRoom,
-            event_id: this.props.mxEvent.getId(),
+            event_id: this.props.mxEvent?.getId(),
             highlighted: true,
-            room_id: this.props.mxEvent.getRoomId(),
+            room_id: this.props.mxEvent?.getRoomId(),
             metricsTrigger: undefined, // room doesn't change
         });
         this.props.onFinished();
@@ -440,11 +441,11 @@ export default class ImageView extends React.Component<IProps, IState> {
 
         let info: JSX.Element | undefined;
         if (showEventMeta) {
-            const mxEvent = this.props.mxEvent;
+            const mxEvent = this.props.mxEvent!;
             const showTwelveHour = SettingsStore.getValue("showTwelveHourTimestamps");
             let permalink = "#";
             if (this.props.permalinkCreator) {
-                permalink = this.props.permalinkCreator.forEvent(this.props.mxEvent.getId());
+                permalink = this.props.permalinkCreator.forEvent(mxEvent.getId());
             }
 
             const senderName = mxEvent.sender?.name ?? mxEvent.getSender();
@@ -453,7 +454,7 @@ export default class ImageView extends React.Component<IProps, IState> {
                 <a
                     href={permalink}
                     onClick={this.onPermalinkClicked}
-                    aria-label={formatFullDate(new Date(this.props.mxEvent.getTs()), showTwelveHour, false)}
+                    aria-label={formatFullDate(new Date(mxEvent.getTs()), showTwelveHour, false)}
                 >
                     <MessageTimestamp
                         showFullDate={true}

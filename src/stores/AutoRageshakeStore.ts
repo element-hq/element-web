@@ -119,7 +119,7 @@ export default class AutoRageshakeStore extends AsyncStoreWithClient<IState> {
                 room_id: ev.getRoomId(),
                 session_id: sessionId,
                 device_id: wireContent.device_id,
-                user_id: ev.getSender(),
+                user_id: ev.getSender()!,
                 sender_key: wireContent.sender_key,
             };
 

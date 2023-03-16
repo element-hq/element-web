@@ -395,7 +395,6 @@ export class RoomViewStore extends EventEmitter {
                     roomId: payload.room_id,
                     initialEventId: null,
                     initialEventPixelOffset: null,
-                    isInitialEventHighlighted: null,
                     initialEventScrollIntoView: true,
                     roomAlias: null,
                     roomLoading: true,
@@ -567,13 +566,13 @@ export class RoomViewStore extends EventEmitter {
         }
     }
 
-    private getInvitingUserId(roomId: string): string {
+    private getInvitingUserId(roomId: string): string | undefined {
         const cli = MatrixClientPeg.get();
         const room = cli.getRoom(roomId);
         if (room?.getMyMembership() === "invite") {
-            const myMember = room.getMember(cli.getUserId());
+            const myMember = room.getMember(cli.getSafeUserId());
             const inviteEvent = myMember ? myMember.events.member : null;
-            return inviteEvent && inviteEvent.getSender();
+            return inviteEvent?.getSender();
         }
     }
 

@@ -278,28 +278,28 @@ export default class RightPanelStore extends ReadyWatchingStore {
         // (A nicer fix could be to indicate, that the right panel is loading if there is missing state data and re-emit if the data is available)
         switch (card.phase) {
             case RightPanelPhases.ThreadView:
-                if (!card.state.threadHeadEvent) {
+                if (!card.state?.threadHeadEvent) {
                     logger.warn("removed card from right panel because of missing threadHeadEvent in card state");
                 }
-                return !!card.state.threadHeadEvent;
+                return !!card.state?.threadHeadEvent;
             case RightPanelPhases.RoomMemberInfo:
             case RightPanelPhases.SpaceMemberInfo:
             case RightPanelPhases.EncryptionPanel:
-                if (!card.state.member) {
+                if (!card.state?.member) {
                     logger.warn("removed card from right panel because of missing member in card state");
                 }
-                return !!card.state.member;
+                return !!card.state?.member;
             case RightPanelPhases.Room3pidMemberInfo:
             case RightPanelPhases.Space3pidMemberInfo:
-                if (!card.state.memberInfoEvent) {
+                if (!card.state?.memberInfoEvent) {
                     logger.warn("removed card from right panel because of missing memberInfoEvent in card state");
                 }
-                return !!card.state.memberInfoEvent;
+                return !!card.state?.memberInfoEvent;
             case RightPanelPhases.Widget:
-                if (!card.state.widgetId) {
+                if (!card.state?.widgetId) {
                     logger.warn("removed card from right panel because of missing widgetId in card state");
                 }
-                return !!card.state.widgetId;
+                return !!card.state?.widgetId;
         }
         return true;
     }

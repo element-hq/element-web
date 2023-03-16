@@ -61,7 +61,7 @@ interface IProps {
 
 interface IState {
     language: string;
-    spellCheckEnabled: boolean;
+    spellCheckEnabled?: boolean;
     spellCheckLanguages: string[];
     haveIdServer: boolean;
     serverSupportsSeparateAddAndBind?: boolean;
@@ -406,7 +406,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
             <div className="mx_SettingsTab_section mx_SettingsTab_section_spellcheck">
                 <span className="mx_SettingsTab_subheading">
                     {_t("Spell check")}
-                    <ToggleSwitch checked={this.state.spellCheckEnabled} onChange={this.onSpellCheckEnabledChange} />
+                    <ToggleSwitch checked={!!this.state.spellCheckEnabled} onChange={this.onSpellCheckEnabledChange} />
                 </span>
                 {this.state.spellCheckEnabled && !IS_MAC && (
                     <SpellCheckSettings

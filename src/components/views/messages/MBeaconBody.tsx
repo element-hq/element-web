@@ -183,7 +183,7 @@ const MBeaconBody: React.FC<IBodyProps> = React.forwardRef(({ mxEvent, getRelati
                     <SmartMarker
                         map={map}
                         id={`${mapId}-marker`}
-                        geoUri={latestLocationState.uri}
+                        geoUri={latestLocationState?.uri}
                         roomMember={markerRoomMember ?? undefined}
                         useMemberColor
                     />

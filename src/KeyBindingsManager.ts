@@ -25,7 +25,7 @@ import { IS_MAC } from "./Keyboard";
  * The combo is evaluated strictly, i.e. the KeyboardEvent must match exactly what is specified in the KeyCombo.
  */
 export type KeyCombo = {
-    key?: string;
+    key: string;
 
     /** On PC: ctrl is pressed; on Mac: meta is pressed */
     ctrlOrCmdKey?: boolean;

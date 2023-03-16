@@ -171,7 +171,7 @@ export default class EditorModel {
             this._autoComplete = null;
             this.autoCompletePartIdx = null;
         }
-        this.updateCallback(caret, inputType);
+        this.updateCallback?.(caret, inputType);
     }
 
     /**

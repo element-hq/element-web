@@ -77,7 +77,7 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
             const device = await cli.getDevice(request.channel.deviceId);
             const ip = device.last_seen_ip;
             this.setState({
-                device: cli.getStoredDevice(cli.getUserId()!, request.channel.deviceId),
+                device: cli.getStoredDevice(cli.getUserId()!, request.channel.deviceId) ?? undefined,
                 ip,
             });
         }
@@ -118,7 +118,7 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
                     should_peek: false,
                     metricsTrigger: "VerificationRequest",
                 });
-                const member = cli.getUser(request.otherUserId);
+                const member = cli.getUser(request.otherUserId) ?? undefined;
                 RightPanelStore.instance.setCards(
                     [
                         { phase: RightPanelPhases.RoomSummary },

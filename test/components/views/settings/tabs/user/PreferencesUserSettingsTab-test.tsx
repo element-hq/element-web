@@ -68,7 +68,7 @@ describe("PreferencesUserSettingsTab", () => {
 
         const expectSetValueToHaveBeenCalled = (
             name: string,
-            roomId: string | undefined,
+            roomId: string | null,
             level: SettingLevel,
             value: boolean,
         ) => expect(SettingsStore.setValue).toHaveBeenCalledWith(name, roomId, level, value);

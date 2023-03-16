@@ -72,7 +72,7 @@ interface IProps {
 
 interface IState {
     defaultIdServer?: string;
-    currentClientIdServer: string;
+    currentClientIdServer?: string;
     idServer?: string;
     error?: string;
     busy: boolean;

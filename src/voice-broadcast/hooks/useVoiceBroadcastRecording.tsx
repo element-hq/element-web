@@ -44,7 +44,7 @@ const showStopBroadcastingDialog = async (): Promise<boolean> => {
         button: _t("Yes, stop broadcast"),
     });
     const [confirmed] = await finished;
-    return confirmed;
+    return !!confirmed;
 };
 
 export const useVoiceBroadcastRecording = (
@@ -54,7 +54,7 @@ export const useVoiceBroadcastRecording = (
     timeLeft: number;
     recordingState: VoiceBroadcastRecordingState;
     room: Room;
-    sender: RoomMember;
+    sender: RoomMember | null;
     stopRecording(): void;
     toggleRecording(): void;
 } => {

@@ -168,7 +168,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         return this.rootSpaces;
     }
 
-    public get activeSpace(): SpaceKey | undefined {
+    public get activeSpace(): SpaceKey {
         return this._activeSpace;
     }
 
@@ -1018,7 +1018,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
     private onRoomStateMembers = (ev: MatrixEvent): void => {
         const room = this.matrixClient.getRoom(ev.getRoomId());
 
-        const userId = ev.getStateKey();
+        const userId = ev.getStateKey()!;
         if (
             room?.isSpaceRoom() && // only consider space rooms
             DMRoomMap.shared().getDMRoomsForUserId(userId).length > 0 && // only consider members we have a DM with
@@ -1049,9 +1049,9 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
     private onRoomFavouriteChange(room: Room): void {
         if (this.enabledMetaSpaces.includes(MetaSpace.Favourites)) {
             if (room.tags[DefaultTagID.Favourite]) {
-                this.roomIdsBySpace.get(MetaSpace.Favourites).add(room.roomId);
+                this.roomIdsBySpace.get(MetaSpace.Favourites)?.add(room.roomId);
             } else {
-                this.roomIdsBySpace.get(MetaSpace.Favourites).delete(room.roomId);
+                this.roomIdsBySpace.get(MetaSpace.Favourites)?.delete(room.roomId);
             }
             this.emit(MetaSpace.Favourites);
         }
@@ -1064,7 +1064,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
             const homeRooms = this.roomIdsBySpace.get(MetaSpace.Home);
             if (this.showInHomeSpace(room)) {
                 homeRooms?.add(room.roomId);
-            } else if (!this.roomIdsBySpace.get(MetaSpace.Orphans).has(room.roomId)) {
+            } else if (!this.roomIdsBySpace.get(MetaSpace.Orphans)?.has(room.roomId)) {
                 this.roomIdsBySpace.get(MetaSpace.Home)?.delete(room.roomId);
             }
 
@@ -1076,7 +1076,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         }
 
         if (enabledMetaSpaces.has(MetaSpace.Orphans) || enabledMetaSpaces.has(MetaSpace.Home)) {
-            if (isDm && this.roomIdsBySpace.get(MetaSpace.Orphans).delete(room.roomId)) {
+            if (isDm && this.roomIdsBySpace.get(MetaSpace.Orphans)?.delete(room.roomId)) {
                 this.emit(MetaSpace.Orphans);
                 this.emit(MetaSpace.Home);
             }

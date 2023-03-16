@@ -306,7 +306,7 @@ class MatrixClientPegClass implements IMatrixClientPeg {
             homeserverUrl: this.matrixClient.baseUrl,
             identityServerUrl: this.matrixClient.idBaseUrl,
             userId: this.matrixClient.credentials.userId,
-            deviceId: this.matrixClient.getDeviceId(),
+            deviceId: this.matrixClient.getDeviceId() ?? undefined,
             accessToken: this.matrixClient.getAccessToken(),
             guest: this.matrixClient.isGuest(),
         };

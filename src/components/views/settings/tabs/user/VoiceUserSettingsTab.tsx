@@ -61,7 +61,7 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
 
     private refreshMediaDevices = async (stream?: MediaStream): Promise<void> => {
         this.setState({
-            mediaDevices: await MediaDeviceHandler.getDevices(),
+            mediaDevices: (await MediaDeviceHandler.getDevices()) ?? null,
             [MediaDeviceKindEnum.AudioOutput]: MediaDeviceHandler.getAudioOutput(),
             [MediaDeviceKindEnum.AudioInput]: MediaDeviceHandler.getAudioInput(),
             [MediaDeviceKindEnum.VideoInput]: MediaDeviceHandler.getVideoInput(),
@@ -105,8 +105,8 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
     }
 
     private renderDropdown(kind: MediaDeviceKindEnum, label: string): ReactNode {
-        const devices = this.state.mediaDevices[kind].slice(0);
-        if (devices.length === 0) return null;
+        const devices = this.state.mediaDevices?.[kind].slice(0);
+        if (!devices?.length) return null;
 
         const defaultDevice = MediaDeviceHandler.getDefaultDevice(devices);
         return (

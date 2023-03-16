@@ -69,8 +69,9 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
         const showQR: boolean = request.otherPartySupportsMethod(SCAN_QR_CODE_METHOD);
         const brand = SdkConfig.get().brand;
 
-        const noCommonMethodError: JSX.Element =
-            !showSAS && !showQR ? (
+        let noCommonMethodError: JSX.Element | undefined;
+        if (!showSAS && !showQR) {
+            noCommonMethodError = (
                 <p>
                     {_t(
                         "The device you are trying to verify doesn't support scanning a " +
@@ -79,12 +80,13 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
                         { brand },
                     )}
                 </p>
-            ) : null;
+            );
+        }
 
         if (this.props.layout === "dialog") {
             // HACK: This is a terrible idea.
-            let qrBlockDialog: JSX.Element;
-            let sasBlockDialog: JSX.Element;
+            let qrBlockDialog: JSX.Element | undefined;
+            let sasBlockDialog: JSX.Element | undefined;
             if (showQR) {
                 qrBlockDialog = (
                     <div className="mx_VerificationPanel_QRPhase_startOption">
@@ -132,7 +134,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
             );
         }
 
-        let qrBlock: JSX.Element;
+        let qrBlock: JSX.Element | undefined;
         if (showQR) {
             qrBlock = (
                 <div className="mx_UserInfo_container">
@@ -150,7 +152,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
             );
         }
 
-        let sasBlock: JSX.Element;
+        let sasBlock: JSX.Element | undefined;
         if (showSAS) {
             const disabled = this.state.emojiButtonClicked;
             const sasLabel = showQR
@@ -189,18 +191,20 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
     }
 
     private onReciprocateYesClick = (): void => {
+        if (!this.state.reciprocateQREvent) return;
         this.setState({ reciprocateButtonClicked: true });
         this.state.reciprocateQREvent.confirm();
     };
 
     private onReciprocateNoClick = (): void => {
+        if (!this.state.reciprocateQREvent) return;
         this.setState({ reciprocateButtonClicked: true });
         this.state.reciprocateQREvent.cancel();
     };
 
-    private getDevice(): DeviceInfo {
-        const deviceId = this.props.request && this.props.request.channel.deviceId;
-        return MatrixClientPeg.get().getStoredDevice(MatrixClientPeg.get().getUserId(), deviceId);
+    private getDevice(): DeviceInfo | null {
+        const cli = MatrixClientPeg.get();
+        return cli.getStoredDevice(cli.getSafeUserId(), this.props.request?.channel.deviceId);
     }
 
     private renderQRReciprocatePhase(): JSX.Element {
@@ -253,7 +257,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
     private renderVerifiedPhase(): JSX.Element {
         const { member, request } = this.props;
 
-        let text: string;
+        let text: string | undefined;
         if (!request.isSelfVerification) {
             if (this.props.isRoomEncrypted) {
                 text = _t("Verify all users in a room to ensure it's secure.");
@@ -348,7 +352,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
                         const emojis = this.state.sasEvent ? (
                             <VerificationShowSas
                                 displayName={displayName}
-                                device={this.getDevice()}
+                                device={this.getDevice() ?? undefined}
                                 sas={this.state.sasEvent.sas}
                                 onCancel={this.onSasMismatchesClick}
                                 onDone={this.onSasMatchesClick}
@@ -383,11 +387,11 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
     };
 
     private onSasMatchesClick = (): void => {
-        this.state.sasEvent.confirm();
+        this.state.sasEvent?.confirm();
     };
 
     private onSasMismatchesClick = (): void => {
-        this.state.sasEvent.mismatch();
+        this.state.sasEvent?.mismatch();
     };
 
     private updateVerifierState = (): void => {

@@ -56,7 +56,7 @@ const confirmSignOut = async (sessionsToSignOutCount: number): Promise<boolean> 
     });
     const [confirmed] = await finished;
 
-    return confirmed;
+    return !!confirmed;
 };
 
 const useSignOut = (

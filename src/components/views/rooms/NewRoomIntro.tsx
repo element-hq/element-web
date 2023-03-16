@@ -164,7 +164,7 @@ const NewRoomIntro: React.FC = () => {
         }
 
         const creator = room.currentState.getStateEvents(EventType.RoomCreate, "")?.getSender();
-        const creatorName = room?.getMember(creator)?.rawDisplayName || creator;
+        const creatorName = (creator && room?.getMember(creator)?.rawDisplayName) || creator;
 
         let createdText: string;
         if (creator === cli.getUserId()) {
@@ -178,7 +178,7 @@ const NewRoomIntro: React.FC = () => {
         let parentSpace: Room | undefined;
         if (
             SpaceStore.instance.activeSpaceRoom?.canInvite(cli.getSafeUserId()) &&
-            SpaceStore.instance.isRoomInSpace(SpaceStore.instance.activeSpace, room.roomId)
+            SpaceStore.instance.isRoomInSpace(SpaceStore.instance.activeSpace!, room.roomId)
         ) {
             parentSpace = SpaceStore.instance.activeSpaceRoom;
         }

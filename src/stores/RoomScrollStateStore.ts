@@ -50,4 +50,4 @@ export class RoomScrollStateStore {
 if (window.mxRoomScrollStateStore === undefined) {
     window.mxRoomScrollStateStore = new RoomScrollStateStore();
 }
-export default window.mxRoomScrollStateStore;
+export default window.mxRoomScrollStateStore!;

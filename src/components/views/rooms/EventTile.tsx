@@ -238,7 +238,7 @@ interface IState {
 
     isQuoteExpanded?: boolean;
 
-    thread: Thread;
+    thread: Thread | null;
     threadNotification?: NotificationCountType;
 }
 
@@ -438,12 +438,12 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         if (thread.id === this.props.mxEvent.getId()) {
             this.updateThread(thread);
             const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
-            room.off(ThreadEvent.New, this.onNewThread);
+            room?.off(ThreadEvent.New, this.onNewThread);
         }
     };
 
     private get thread(): Thread | null {
-        let thread = this.props.mxEvent.getThread();
+        let thread: Thread | undefined = this.props.mxEvent.getThread();
         /**
          * Accessing the threads value through the room due to a race condition
          * that will be solved when there are proper backend support for threads
@@ -452,7 +452,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
          */
         if (!thread) {
             const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
-            thread = room?.findThreadForEvent(this.props.mxEvent);
+            thread = room?.findThreadForEvent(this.props.mxEvent) ?? undefined;
         }
         return thread ?? null;
     }
@@ -471,7 +471,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
     }
 
     private renderThreadInfo(): React.ReactNode {
-        if (this.state.thread?.id === this.props.mxEvent.getId()) {
+        if (this.state.thread && this.state.thread.id === this.props.mxEvent.getId()) {
             return (
                 <ThreadSummary mxEvent={this.props.mxEvent} thread={this.state.thread} data-testid="thread-summary" />
             );
@@ -506,7 +506,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         evt.preventDefault();
         evt.stopPropagation();
         const { permalinkCreator, mxEvent } = this.props;
-        const matrixToUrl = permalinkCreator.forEvent(mxEvent.getId());
+        const matrixToUrl = permalinkCreator.forEvent(mxEvent.getId()!);
         await copyPlaintext(matrixToUrl);
     };
 
@@ -1104,7 +1104,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         const useIRCLayout = this.props.layout === Layout.IRC;
         const groupTimestamp = !useIRCLayout ? linkedTimestamp : null;
         const ircTimestamp = useIRCLayout ? linkedTimestamp : null;
-        const bubbleTimestamp = this.props.layout === Layout.Bubble ? messageTimestamp : null;
+        const bubbleTimestamp = this.props.layout === Layout.Bubble ? messageTimestamp : undefined;
         const groupPadlock = !useIRCLayout && !isBubbleMessage && this.renderE2EPadlock();
         const ircPadlock = useIRCLayout && !isBubbleMessage && this.renderE2EPadlock();
 
@@ -1493,7 +1493,7 @@ class E2ePadlock extends React.Component<IE2ePadlockProps, IE2ePadlockState> {
 }
 
 interface ISentReceiptProps {
-    messageState: string; // TODO: Types for message sending state
+    messageState: EventStatus | null;
 }
 
 function SentReceipt({ messageState }: ISentReceiptProps): JSX.Element {

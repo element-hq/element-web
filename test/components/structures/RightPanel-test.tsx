@@ -35,6 +35,7 @@ import RightPanelStore from "../../../src/stores/right-panel/RightPanelStore";
 import { UPDATE_EVENT } from "../../../src/stores/AsyncStore";
 import { WidgetLayoutStore } from "../../../src/stores/widgets/WidgetLayoutStore";
 import { SdkContextClass } from "../../../src/contexts/SDKContext";
+import { RoomPermalinkCreator } from "../../../src/utils/permalinks/Permalinks";
 
 const RightPanelBase = wrapInMatrixClientContext(_RightPanel);
 
@@ -110,7 +111,13 @@ describe("RightPanel", () => {
         });
         await viewedRoom;
 
-        const { container } = render(<RightPanel room={r1} resizeNotifier={resizeNotifier} />);
+        const { container } = render(
+            <RightPanel
+                room={r1}
+                resizeNotifier={resizeNotifier}
+                permalinkCreator={new RoomPermalinkCreator(r1, r1.roomId)}
+            />,
+        );
         expect(container.getElementsByClassName("mx_RoomSummaryCard")).toHaveLength(1);
 
         const switchedPhases = waitForRpsUpdate();
@@ -152,7 +159,13 @@ describe("RightPanel", () => {
         await spinUpStores();
 
         // Run initial render with room 1, and also running lifecycle methods
-        const { container, rerender } = render(<RightPanel room={r1} resizeNotifier={resizeNotifier} />);
+        const { container, rerender } = render(
+            <RightPanel
+                room={r1}
+                resizeNotifier={resizeNotifier}
+                permalinkCreator={new RoomPermalinkCreator(r1, r1.roomId)}
+            />,
+        );
         // Wait for RPS room 1 updates to fire
         const rpsUpdated = waitForRpsUpdate();
         dis.dispatch({
@@ -172,7 +185,13 @@ describe("RightPanel", () => {
             room_id: "r2",
         });
         await _rpsUpdated;
-        rerender(<RightPanel room={r2} resizeNotifier={resizeNotifier} />);
+        rerender(
+            <RightPanel
+                room={r2}
+                resizeNotifier={resizeNotifier}
+                permalinkCreator={new RoomPermalinkCreator(r2, r2.roomId)}
+            />,
+        );
 
         // After all that setup, now to the interesting part...
         // We want to verify that as we change to room 2, we should always have

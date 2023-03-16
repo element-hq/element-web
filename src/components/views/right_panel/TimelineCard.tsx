@@ -47,10 +47,10 @@ interface IProps {
     room: Room;
     onClose: () => void;
     resizeNotifier: ResizeNotifier;
-    permalinkCreator?: RoomPermalinkCreator;
+    permalinkCreator: RoomPermalinkCreator;
     e2eStatus?: E2EStatus;
     classNames?: string;
-    timelineSet?: EventTimelineSet;
+    timelineSet: EventTimelineSet;
     timelineRenderingType?: TimelineRenderingType;
     showComposer?: boolean;
     composerRelation?: IEventRelation;
@@ -77,7 +77,7 @@ export default class TimelineCard extends React.Component<IProps, IState> {
     private layoutWatcherRef: string;
     private timelinePanel = React.createRef<TimelinePanel>();
     private card = React.createRef<HTMLDivElement>();
-    private readReceiptsSettingWatcher: string;
+    private readReceiptsSettingWatcher: string | undefined;
 
     public constructor(props: IProps) {
         super(props);
@@ -87,7 +87,6 @@ export default class TimelineCard extends React.Component<IProps, IState> {
             atEndOfLiveTimeline: true,
             narrow: false,
         };
-        this.readReceiptsSettingWatcher = null;
     }
 
     public componentDidMount(): void {
@@ -129,7 +128,7 @@ export default class TimelineCard extends React.Component<IProps, IState> {
             case Action.EditEvent:
                 this.setState(
                     {
-                        editState: payload.event ? new EditorStateTransfer(payload.event) : null,
+                        editState: payload.event ? new EditorStateTransfer(payload.event) : undefined,
                     },
                     () => {
                         if (payload.event) {
@@ -199,7 +198,7 @@ export default class TimelineCard extends React.Component<IProps, IState> {
     };
 
     public render(): React.ReactNode {
-        const highlightedEventId = this.state.isInitialEventHighlighted ? this.state.initialEventId : null;
+        const highlightedEventId = this.state.isInitialEventHighlighted ? this.state.initialEventId : undefined;
 
         let jumpToBottom;
         if (!this.state.atEndOfLiveTimeline) {
@@ -232,7 +231,7 @@ export default class TimelineCard extends React.Component<IProps, IState> {
                     header={this.renderTimelineCardHeader()}
                     ref={this.card}
                 >
-                    <Measured sensor={this.card.current} onMeasurement={this.onMeasurement} />
+                    {this.card.current && <Measured sensor={this.card.current} onMeasurement={this.onMeasurement} />}
                     <div className="mx_TimelineCard_timeline">
                         {jumpToBottom}
                         <TimelinePanel
