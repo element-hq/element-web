@@ -209,7 +209,7 @@
     "You have <a>disabled</a> URL previews by default.": "您已預設<a>停用</a> URL 預覽。",
     "You have <a>enabled</a> URL previews by default.": "您已預設<a>啟用</a> URL 預覽。",
     "You must <a>register</a> to use this functionality": "您必須<a>註冊</a>以使用此功能",
-    "You need to be able to invite users to do that.": "您需要邀請使用者來做這件事。",
+    "You need to be able to invite users to do that.": "您需要擁有邀請使用者的權限才能做這件事。",
     "You need to be logged in.": "您需要登入。",
     "You seem to be in a call, are you sure you want to quit?": "您似乎尚在通話中，您確定您想要結束通話嗎？",
     "You seem to be uploading files, are you sure you want to quit?": "您似乎正在上傳檔案，您確定您想要結束嗎？",
