@@ -3744,6 +3744,10 @@
     "Could not find room": "Impossible de trouver le salon",
     "iframe has no src attribute": "L’iframe n’a pas d’attribut src",
     "An error occurred when updating your notification preferences. Please try to toggle your option again.": "Nous avons rencontré une erreur lors de la mise-à-jour de vos préférences de notification. Veuillez essayer de réactiver l’option.",
-    "Desktop app logo": "",
-    "Use your account to continue.": ""
+    "Desktop app logo": "Logo de l’application de bureau",
+    "Use your account to continue.": "Utilisez votre compte pour continuer.",
+    "Log out and back in to disable": "Déconnectez et revenez pour désactiver",
+    "Can currently only be enabled via config.json": "Ne peut pour l’instant être activé que dans config.json",
+    "Requires your server to support MSC3030": "Requiert la prise en charge par le serveur du MSC3030",
+    "Requires your server to support the stable version of MSC3827": "Requiert la prise en charge par le serveur de la version stable du MSC3827"
 }
