@@ -84,7 +84,7 @@ export const showCreateNewRoom = async (space: Room, type?: RoomType): Promise<b
     if (shouldCreate) {
         await createRoom(opts);
     }
-    return shouldCreate;
+    return !!shouldCreate;
 };
 
 export const shouldShowSpaceInvite = (space: Room): boolean =>

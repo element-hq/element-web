@@ -450,7 +450,7 @@ export default class WidgetUtils {
         oobRoomName?: string,
     ): Promise<void> {
         const domain = Jitsi.getInstance().preferredDomain;
-        const auth = await Jitsi.getInstance().getJitsiAuth();
+        const auth = (await Jitsi.getInstance().getJitsiAuth()) ?? undefined;
         const widgetId = randomString(24); // Must be globally unique
 
         let confId;

@@ -19,6 +19,7 @@ import React, { ReactNode } from "react";
 import { EventStatus } from "matrix-js-sdk/src/models/event-status";
 import { MatrixEventEvent } from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/models/room";
+import { MatrixError } from "matrix-js-sdk/src/matrix";
 
 import Modal, { IHandle } from "../Modal";
 import Spinner from "../components/views/elements/Spinner";
@@ -87,7 +88,7 @@ export async function leaveRoomBehaviour(roomId: string, retry = true, spinner =
             ),
     );
 
-    let results: { [roomId: string]: Error & { errcode?: string; message: string; data?: Record<string, any> } } = {};
+    let results: { [roomId: string]: Error | MatrixError | null } = {};
     if (!leavingAllVersions) {
         try {
             await cli.leave(roomId);
@@ -104,7 +105,9 @@ export async function leaveRoomBehaviour(roomId: string, retry = true, spinner =
     }
 
     if (retry) {
-        const limitExceededError = Object.values(results).find((e) => e?.errcode === "M_LIMIT_EXCEEDED");
+        const limitExceededError = Object.values(results).find(
+            (e) => (e as MatrixError)?.errcode === "M_LIMIT_EXCEEDED",
+        ) as MatrixError;
         if (limitExceededError) {
             await sleep(limitExceededError.data.retry_after_ms ?? 100);
             return leaveRoomBehaviour(roomId, false, false);
@@ -117,9 +120,9 @@ export async function leaveRoomBehaviour(roomId: string, retry = true, spinner =
     if (errors.length > 0) {
         const messages: ReactNode[] = [];
         for (const roomErr of errors) {
-            const err = roomErr[1]; // [0] is the roomId
+            const err = roomErr[1] as MatrixError; // [0] is the roomId
             let message = _t("Unexpected server error trying to leave the room");
-            if (err.errcode && err.message) {
+            if (err?.errcode && err.message) {
                 if (err.errcode === "M_CANNOT_LEAVE_SERVER_NOTICE_ROOM") {
                     Modal.createDialog(ErrorDialog, {
                         title: _t("Can't leave Server Notices room"),
@@ -130,7 +133,7 @@ export async function leaveRoomBehaviour(roomId: string, retry = true, spinner =
                     });
                     return;
                 }
-                message = results[roomId].message;
+                message = results[roomId]!.message;
             }
             messages.push(message, React.createElement("BR")); // createElement to avoid using a tsx file in utils
         }

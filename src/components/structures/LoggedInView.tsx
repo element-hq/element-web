@@ -259,7 +259,7 @@ class LoggedInView extends React.Component<IProps, IState> {
             isItemCollapsed: (domNode) => {
                 return domNode.classList.contains("mx_LeftPanel_minimized");
             },
-            handler: this.resizeHandler.current,
+            handler: this.resizeHandler.current ?? undefined,
         };
         const resizer = new Resizer(this._resizeContainer.current, CollapseDistributor, collapseConfig);
         resizer.setClassNames({

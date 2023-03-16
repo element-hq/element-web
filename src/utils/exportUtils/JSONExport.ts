@@ -45,7 +45,7 @@ export default class JSONExporter extends Exporter {
     protected createJSONString(): string {
         const exportDate = formatFullDateNoDayNoTime(new Date());
         const creator = this.room.currentState.getStateEvents(EventType.RoomCreate, "")?.getSender();
-        const creatorName = this.room?.getMember(creator)?.rawDisplayName || creator;
+        const creatorName = (creator && this.room?.getMember(creator)?.rawDisplayName) || creator;
         const topic = this.room.currentState.getStateEvents(EventType.RoomTopic, "")?.getContent()?.topic || "";
         const exporter = this.client.getUserId()!;
         const exporterName = this.room?.getMember(exporter)?.rawDisplayName || exporter;

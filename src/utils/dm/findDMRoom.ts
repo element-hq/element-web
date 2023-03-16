@@ -29,14 +29,11 @@ import { findDMForUser } from "./findDMForUser";
  */
 export function findDMRoom(client: MatrixClient, targets: Member[]): Room | null {
     const targetIds = targets.map((t) => t.userId);
-    let existingRoom: Room | undefined;
+    let existingRoom: Room | null;
     if (targetIds.length === 1) {
-        existingRoom = findDMForUser(client, targetIds[0]);
+        existingRoom = findDMForUser(client, targetIds[0]) ?? null;
     } else {
         existingRoom = DMRoomMap.shared().getDMRoomForIdentifiers(targetIds);
     }
-    if (existingRoom) {
-        return existingRoom;
-    }
-    return null;
+    return existingRoom;
 }

@@ -37,7 +37,7 @@ export function abbreviateUrl(u: string): string {
     return u;
 }
 
-export function unabbreviateUrl(u: string): string {
+export function unabbreviateUrl(u?: string): string {
     if (!u) return "";
 
     let longUrl = u;

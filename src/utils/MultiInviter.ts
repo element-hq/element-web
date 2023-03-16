@@ -141,8 +141,8 @@ export default class MultiInviter {
         return this.completionStates[addr];
     }
 
-    public getErrorText(addr: string): string {
-        return this.errors[addr] ? this.errors[addr].errorText : null;
+    public getErrorText(addr: string): string | null {
+        return this.errors[addr]?.errorText ?? null;
     }
 
     private async inviteToRoom(roomId: string, addr: string, ignoreProfile = false): Promise<{}> {

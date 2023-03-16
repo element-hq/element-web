@@ -79,7 +79,7 @@ export const makeMapSiteLink = (coords: GeolocationCoordinates): string => {
     );
 };
 
-export const createMapSiteLinkFromEvent = (event: MatrixEvent): string => {
+export const createMapSiteLinkFromEvent = (event: MatrixEvent): string | null => {
     const content = event.getContent();
     const mLocation = content[M_LOCATION.name];
     if (mLocation !== undefined) {

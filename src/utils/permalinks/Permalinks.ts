@@ -192,7 +192,7 @@ export class RoomPermalinkCreator {
                             isHostInRegex(domain, this.allowedHostsRegexps)
                         );
                     });
-                    const maxEntry = allowedEntries.reduce(
+                    const maxEntry = allowedEntries.reduce<[string | null, number]>(
                         (max, entry) => {
                             return entry[1] > max[1] ? entry : max;
                         },
@@ -329,7 +329,7 @@ export function tryTransformEntityToPermalink(entity: string): string | null {
                 if (permalinkParts.roomIdOrAlias) {
                     const eventIdPart = permalinkParts.eventId ? `/${permalinkParts.eventId}` : "";
                     let pl = matrixtoBaseUrl + `/#/${permalinkParts.roomIdOrAlias}${eventIdPart}`;
-                    if (permalinkParts.viaServers.length > 0) {
+                    if (permalinkParts.viaServers?.length) {
                         pl += new MatrixToPermalinkConstructor().encodeServerCandidates(permalinkParts.viaServers);
                     }
                     return pl;
@@ -376,7 +376,7 @@ export function tryTransformPermalinkToLocalHref(permalink: string): string {
             if (permalinkParts.roomIdOrAlias) {
                 const eventIdPart = permalinkParts.eventId ? `/${permalinkParts.eventId}` : "";
                 permalink = `#/room/${permalinkParts.roomIdOrAlias}${eventIdPart}`;
-                if (permalinkParts.viaServers.length > 0) {
+                if (permalinkParts.viaServers?.length) {
                     permalink += new MatrixToPermalinkConstructor().encodeServerCandidates(permalinkParts.viaServers);
                 }
             } else if (permalinkParts.userId) {
@@ -475,7 +475,7 @@ function isHostnameIpAddress(hostname: string): boolean {
     return isIp(hostname);
 }
 
-export const calculateRoomVia = (room: Room): string[] => {
+export const calculateRoomVia = (room: Room): string[] | undefined => {
     const permalinkCreator = new RoomPermalinkCreator(room);
     permalinkCreator.load();
     return permalinkCreator.serverCandidates;
