@@ -378,8 +378,13 @@ export default class ContentMessages {
         if (!this.mediaConfig) {
             // hot-path optimization to not flash a spinner if we don't need to
             const modal = Modal.createDialog(Spinner, undefined, "mx_Dialog_spinner");
-            await this.ensureMediaConfigFetched(matrixClient);
-            modal.close();
+            await Promise.race([this.ensureMediaConfigFetched(matrixClient), modal.finished]);
+            if (!this.mediaConfig) {
+                // User cancelled by clicking away on the spinner
+                return;
+            } else {
+                modal.close();
+            }
         }
 
         const tooBigFiles: File[] = [];
