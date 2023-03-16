@@ -53,3 +53,12 @@ exports[`Reply getNestedReplyText should create the expected fallback text for p
   "html": "<mx-reply><blockquote><a href="$$permalink$$">In reply to</a> <a href="https://matrix.to/#/@user1:server">@user1:server</a><br>Ended poll</blockquote></mx-reply>",
 }
 `;
+
+exports[`Reply getNestedReplyText should create the expected fallback text for poll start events 1`] = `
+{
+  "body": "> <@user:server.org> started poll: Will this test pass?
+
+",
+  "html": "<mx-reply><blockquote><a href="$$permalink$$">In reply to</a> <a href="https://matrix.to/#/@user:server.org">@user:server.org</a><br>Poll: Will this test pass?</blockquote></mx-reply>",
+}
+`;

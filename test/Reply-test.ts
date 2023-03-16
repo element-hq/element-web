@@ -26,7 +26,7 @@ import {
     stripHTMLReply,
     stripPlainReply,
 } from "../src/utils/Reply";
-import { mkEvent } from "./test-utils";
+import { makePollStartEvent, mkEvent } from "./test-utils";
 import { RoomPermalinkCreator } from "../src/utils/permalinks/Permalinks";
 
 function makeTestEvent(type: string, content: IContent): MatrixEvent {
@@ -157,6 +157,12 @@ But this is not
             const event = makeTestEvent(M_POLL_END.name, {
                 body: "body",
             });
+
+            expect(getNestedReplyText(event, mockPermalinkGenerator)).toMatchSnapshot();
+        });
+
+        it("should create the expected fallback text for poll start events", () => {
+            const event = makePollStartEvent("Will this test pass?", "@user:server.org");
 
             expect(getNestedReplyText(event, mockPermalinkGenerator)).toMatchSnapshot();
         });

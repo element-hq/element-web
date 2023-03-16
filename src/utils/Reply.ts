@@ -21,7 +21,8 @@ import escapeHtml from "escape-html";
 import { THREAD_RELATION_TYPE } from "matrix-js-sdk/src/models/thread";
 import { MsgType } from "matrix-js-sdk/src/@types/event";
 import { M_BEACON_INFO } from "matrix-js-sdk/src/@types/beacon";
-import { M_POLL_END } from "matrix-js-sdk/src/@types/polls";
+import { M_POLL_END, M_POLL_START } from "matrix-js-sdk/src/@types/polls";
+import { PollStartEvent } from "matrix-js-sdk/src/extensible_events_v1/PollStartEvent";
 
 import { PERMITTED_URL_SCHEMES } from "../HtmlUtils";
 import { makeUserPermalink, RoomPermalinkCreator } from "./permalinks/Permalinks";
@@ -112,6 +113,16 @@ export function getNestedReplyText(
         };
     }
 
+    if (M_POLL_START.matches(ev.getType())) {
+        const extensibleEvent = ev.unstableExtensibleEvent as PollStartEvent;
+        const question = extensibleEvent?.question?.text;
+        return {
+            html:
+                `<mx-reply><blockquote><a href="${evLink}">In reply to</a> <a href="${userLink}">${mxid}</a>` +
+                `<br>Poll: ${question}</blockquote></mx-reply>`,
+            body: `> <${mxid}> started poll: ${question}\n\n`,
+        };
+    }
     if (M_POLL_END.matches(ev.getType())) {
         return {
             html:
