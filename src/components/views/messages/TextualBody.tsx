@@ -92,11 +92,8 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         const showLineNumbers = SettingsStore.getValue("showCodeLineNumbers");
         this.activateSpoilers([content]);
 
-        // pillifyLinks BEFORE linkifyElement because plain room/user URLs in the composer
-        // are still sent as plaintext URLs. If these are ever pillified in the composer,
-        // we should be pillify them here by doing the linkifying BEFORE the pillifying.
-        pillifyLinks([content], this.props.mxEvent, this.pills);
         HtmlUtils.linkifyElement(content);
+        pillifyLinks([content], this.props.mxEvent, this.pills);
 
         this.calculateUrlPreview();
 

@@ -41,6 +41,37 @@ exports[`<TextualBody /> renders formatted m.text correctly linkification is not
 </span>
 `;
 
+exports[`<TextualBody /> renders formatted m.text correctly pills appear for an MXID permalink 1`] = `
+<span
+  class="mx_EventTile_body markdown-body"
+  dir="auto"
+>
+  Chat with 
+  <span>
+    <bdi>
+      <a
+        class="mx_Pill mx_UserPill"
+        href="https://matrix.to/#/@user:example.com"
+      >
+        <img
+          alt=""
+          aria-hidden="true"
+          class="mx_BaseAvatar mx_BaseAvatar_image"
+          data-testid="avatar-img"
+          src="mxc://avatar.url/image.png"
+          style="width: 16px; height: 16px;"
+        />
+        <span
+          class="mx_Pill_linkText"
+        >
+          Member
+        </span>
+      </a>
+    </bdi>
+  </span>
+</span>
+`;
+
 exports[`<TextualBody /> renders formatted m.text correctly pills do not appear in code blocks 1`] = `
 <span
   class="mx_EventTile_body markdown-body"

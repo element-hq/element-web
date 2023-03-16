@@ -23,6 +23,25 @@ import { MatrixClientPeg } from "../MatrixClientPeg";
 import SettingsStore from "../settings/SettingsStore";
 import { Pill, PillType, pillRoomNotifLen, pillRoomNotifPos } from "../components/views/elements/Pill";
 import { parsePermalink } from "./permalinks/Permalinks";
+import { PermalinkParts } from "./permalinks/PermalinkConstructor";
+
+/**
+ * A node here is an A element with a href attribute tag.
+ *
+ * It should not be pillified if the permalink parser result contains an event Id.
+ *
+ * It should be pillified if the permalink parser returns a result and one of the following conditions match:
+ * - Text content equals href. This is the case when sending a plain permalink inside a message.
+ * - The link does not have the "linkified" class.
+ *   Composer completions already create an A tag.
+ *   Linkify will not linkify things again. → There won't be a "linkified" class.
+ */
+const shouldBePillified = (node: Element, href: string, parts: PermalinkParts | null): boolean => {
+    if (!parts || parts.eventId) return false;
+
+    const textContent = node.textContent;
+    return href === textContent || !node.classList.contains("linkified");
+};
 
 /**
  * Recurses depth-first through a DOM tree, converting matrix.to links
@@ -51,9 +70,8 @@ export function pillifyLinks(nodes: ArrayLike<Element>, mxEvent: MatrixEvent, pi
         } else if (node.tagName === "A" && node.getAttribute("href")) {
             const href = node.getAttribute("href")!;
             const parts = parsePermalink(href);
-            // If the link is a (localised) matrix.to link, replace it with a pill
-            // We don't want to pill event permalinks, so those are ignored.
-            if (parts && !parts.eventId) {
+
+            if (shouldBePillified(node, href, parts)) {
                 const pillContainer = document.createElement("span");
 
                 const pill = (
