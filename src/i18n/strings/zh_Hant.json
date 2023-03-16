@@ -3745,5 +3745,9 @@
     "iframe has no src attribute": "iframe 沒有 src 屬性",
     "An error occurred when updating your notification preferences. Please try to toggle your option again.": "更新您的通知偏好設定時發生錯誤。請再試一次。",
     "Desktop app logo": "桌面應用程式標誌",
-    "Use your account to continue.": "使用您的帳號繼續。"
+    "Use your account to continue.": "使用您的帳號繼續。",
+    "Log out and back in to disable": "登出並重新登入以停用",
+    "Can currently only be enabled via config.json": "目前僅能透過 config.json 啟用",
+    "Requires your server to support MSC3030": "您的伺服器必須支援 MSC3030",
+    "Requires your server to support the stable version of MSC3827": "您的伺服器必須支援穩定版本的 MSC3827"
 }
