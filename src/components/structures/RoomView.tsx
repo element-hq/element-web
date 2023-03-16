@@ -301,7 +301,7 @@ function LocalRoomView(props: LocalRoomViewProps): ReactElement {
                     onSearchClick={null}
                     onInviteClick={null}
                     onForgetClick={null}
-                    e2eStatus={E2EStatus.Normal}
+                    e2eStatus={room.encrypted ? E2EStatus.Normal : undefined}
                     onAppsClick={null}
                     appsShown={false}
                     excludedRightPanelPhaseButtons={[]}
@@ -327,6 +327,7 @@ function LocalRoomView(props: LocalRoomViewProps): ReactElement {
 }
 
 interface ILocalRoomCreateLoaderProps {
+    localRoom: LocalRoom;
     names: string;
     resizeNotifier: ResizeNotifier;
 }
@@ -350,7 +351,7 @@ function LocalRoomCreateLoader(props: ILocalRoomCreateLoaderProps): ReactElement
                     onSearchClick={null}
                     onInviteClick={null}
                     onForgetClick={null}
-                    e2eStatus={E2EStatus.Normal}
+                    e2eStatus={props.localRoom.encrypted ? E2EStatus.Normal : undefined}
                     onAppsClick={null}
                     appsShown={false}
                     excludedRightPanelPhaseButtons={[]}
@@ -1918,11 +1919,11 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         return this.getPermalinkCreatorForRoom(this.state.room);
     }
 
-    private renderLocalRoomCreateLoader(): ReactElement {
+    private renderLocalRoomCreateLoader(localRoom: LocalRoom): ReactElement {
         const names = this.state.room.getDefaultRoomName(this.context.client.getUserId());
         return (
             <RoomContext.Provider value={this.state}>
-                <LocalRoomCreateLoader names={names} resizeNotifier={this.props.resizeNotifier} />
+                <LocalRoomCreateLoader localRoom={localRoom} names={names} resizeNotifier={this.props.resizeNotifier} />
             </RoomContext.Provider>
         );
     }
@@ -1956,7 +1957,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     public render(): React.ReactNode {
         if (this.state.room instanceof LocalRoom) {
             if (this.state.room.state === LocalRoomState.CREATING) {
-                return this.renderLocalRoomCreateLoader();
+                return this.renderLocalRoomCreateLoader(this.state.room);
             }
 
             return this.renderLocalRoomView(this.state.room);

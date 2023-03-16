@@ -40,9 +40,6 @@ exports[`RoomView for a local room in state CREATING should match the snapshot 1
           </div>
         </div>
         <div
-          class="mx_E2EIcon mx_E2EIcon_normal mx_RoomHeader_icon"
-        />
-        <div
           class="mx_RoomHeader_name mx_RoomHeader_name--textonly"
         >
           <div
@@ -136,9 +133,6 @@ exports[`RoomView for a local room in state ERROR should match the snapshot 1`] 
             </span>
           </div>
         </div>
-        <div
-          class="mx_E2EIcon mx_E2EIcon_normal mx_RoomHeader_icon"
-        />
         <div
           class="mx_RoomHeader_name mx_RoomHeader_name--textonly"
         >
@@ -329,9 +323,6 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
             </span>
           </div>
         </div>
-        <div
-          class="mx_E2EIcon mx_E2EIcon_normal mx_RoomHeader_icon"
-        />
         <div
           class="mx_RoomHeader_name mx_RoomHeader_name--textonly"
         >
