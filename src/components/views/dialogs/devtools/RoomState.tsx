@@ -1,5 +1,6 @@
 /*
 Copyright 2022 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

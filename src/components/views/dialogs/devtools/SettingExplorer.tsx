@@ -1,6 +1,6 @@
 /*
 Copyright 2022 Michael Telatynski <7t3chguy@gmail.com>
-Copyright 2018-2021 The Matrix.org Foundation C.I.C.
+Copyright 2018-2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ import { SETTINGS } from "../../../../settings/Settings";
 import Field from "../../elements/Field";
 
 const SettingExplorer: React.FC<IDevtoolsProps> = ({ onBack }) => {
-    const [setting, setSetting] = useState<string>(null);
+    const [setting, setSetting] = useState<string | null>(null);
     const [editing, setEditing] = useState(false);
 
     if (setting && editing) {
@@ -73,7 +73,7 @@ const CanEditLevelField: React.FC<ICanEditLevelFieldProps> = ({ setting, roomId,
     );
 };
 
-function renderExplicitSettingValues(setting: string, roomId: string): string {
+function renderExplicitSettingValues(setting: string, roomId?: string): string {
     const vals: Record<string, number | null> = {};
     for (const level of LEVEL_ORDER) {
         try {
@@ -94,12 +94,12 @@ interface IEditSettingProps extends Pick<IDevtoolsProps, "onBack"> {
 
 const EditSetting: React.FC<IEditSettingProps> = ({ setting, onBack }) => {
     const context = useContext(DevtoolsContext);
-    const [explicitValue, setExplicitValue] = useState(renderExplicitSettingValues(setting, null));
+    const [explicitValue, setExplicitValue] = useState(renderExplicitSettingValues(setting));
     const [explicitRoomValue, setExplicitRoomValue] = useState(
         renderExplicitSettingValues(setting, context.room.roomId),
     );
 
-    const onSave = async (): Promise<string> => {
+    const onSave = async (): Promise<string | undefined> => {
         try {
             const parsedExplicit = JSON.parse(explicitValue);
             const parsedExplicitRoom = JSON.parse(explicitRoomValue);
@@ -232,7 +232,7 @@ const ViewSetting: React.FC<IViewSettingProps> = ({ setting, onEdit, onBack }) =
             <div>
                 {_t("Values at explicit levels:")}
                 <pre>
-                    <code>{renderExplicitSettingValues(setting, null)}</code>
+                    <code>{renderExplicitSettingValues(setting)}</code>
                 </pre>
             </div>
 
