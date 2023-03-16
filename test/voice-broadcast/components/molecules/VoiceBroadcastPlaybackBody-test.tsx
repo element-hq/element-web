@@ -1,5 +1,5 @@
 /*
-Copyright 2022 The Matrix.org Foundation C.I.C.
+Copyright 2022-2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -233,15 +233,25 @@ describe("VoiceBroadcastPlaybackBody", () => {
     describe.each([
         [VoiceBroadcastPlaybackState.Paused, "not-live"],
         [VoiceBroadcastPlaybackState.Playing, "live"],
-    ])("when rendering a %s/%s broadcast", (state: VoiceBroadcastPlaybackState, liveness: VoiceBroadcastLiveness) => {
-        beforeEach(() => {
-            mocked(playback.getState).mockReturnValue(state);
-            mocked(playback.getLiveness).mockReturnValue(liveness);
-            renderResult = render(<VoiceBroadcastPlaybackBody playback={playback} />);
-        });
+    ] satisfies [VoiceBroadcastPlaybackState, VoiceBroadcastLiveness][])(
+        "when rendering a %s/%s broadcast",
+        (state: VoiceBroadcastPlaybackState, liveness: VoiceBroadcastLiveness) => {
+            beforeEach(() => {
+                mocked(playback.getState).mockReturnValue(state);
+                mocked(playback.getLiveness).mockReturnValue(liveness);
+                renderResult = render(<VoiceBroadcastPlaybackBody playback={playback} />);
+            });
 
-        it("should render as expected", () => {
-            expect(renderResult.container).toMatchSnapshot();
-        });
+            it("should render as expected", () => {
+                expect(renderResult.container).toMatchSnapshot();
+            });
+        },
+    );
+
+    it("when there is a broadcast without sender, it should raise an error", () => {
+        infoEvent.sender = null;
+        expect(() => {
+            render(<VoiceBroadcastPlaybackBody playback={playback} />);
+        }).toThrow(`Voice Broadcast sender not found (event ${playback.infoEvent.getId()})`);
     });
 });
