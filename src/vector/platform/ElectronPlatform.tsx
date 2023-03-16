@@ -48,6 +48,13 @@ import VectorBasePlatform from "./VectorBasePlatform";
 import { SeshatIndexManager } from "./SeshatIndexManager";
 import { IPCManager } from "./IPCManager";
 
+interface SquirrelUpdate {
+    releaseNotes: string;
+    releaseName: string;
+    releaseDate: Date;
+    updateURL: string;
+}
+
 const isMac = navigator.platform.toUpperCase().includes("MAC");
 
 function platformFriendlyName(): string {
@@ -177,7 +184,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         this.ipc.call("breadcrumbs", rooms);
     };
 
-    private onUpdateDownloaded = async (ev, { releaseNotes, releaseName }): Promise<void> => {
+    private onUpdateDownloaded = async (ev: Event, { releaseNotes, releaseName }: SquirrelUpdate): Promise<void> => {
         dis.dispatch<CheckUpdatesPayload>({
             action: Action.CheckUpdates,
             status: UpdateCheckStatus.Ready,
