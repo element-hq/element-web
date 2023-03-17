@@ -26,12 +26,21 @@ import SettingsStore from "../SettingsStore";
  * When a setting gets disabled or enabled from this controller it notifies the given WatchManager
  */
 export default class ServerSupportUnstableFeatureController extends MatrixClientBackedController {
+    // Starts off as `undefined` so when we first compare the `newDisabledValue`, it sees
+    // it as a change and updates the watchers.
     private enabled: boolean | undefined;
 
+    /**
+     * Construct a new ServerSupportUnstableFeatureController.
+     *
+     * @param unstableFeatureGroups - If any one of the feature groups is satisfied,
+     * then the setting is considered enabled. A feature group is satisfied if all of
+     * the features in the group are supported (all features in a group are required).
+     */
     public constructor(
         private readonly settingName: string,
         private readonly watchers: WatchManager,
-        private readonly unstableFeatures: string[],
+        private readonly unstableFeatureGroups: string[][],
         private readonly stableVersion?: string,
         private readonly disabledMessage?: string,
         private readonly forcedValue: any = false,
@@ -43,9 +52,9 @@ export default class ServerSupportUnstableFeatureController extends MatrixClient
         return !this.enabled;
     }
 
-    public set disabled(v: boolean) {
-        if (!v === this.enabled) return;
-        this.enabled = !v;
+    public set disabled(newDisabledValue: boolean) {
+        if (!newDisabledValue === this.enabled) return;
+        this.enabled = !newDisabledValue;
         const level = SettingsStore.firstSupportedLevel(this.settingName);
         if (!level) return;
         const settingValue = SettingsStore.getValue(this.settingName, null);
@@ -53,19 +62,33 @@ export default class ServerSupportUnstableFeatureController extends MatrixClient
     }
 
     protected async initMatrixClient(oldClient: MatrixClient, newClient: MatrixClient): Promise<void> {
-        this.disabled = true;
-        let supported = true;
-
+        // Check for stable version support first
         if (this.stableVersion && (await this.client.isVersionSupported(this.stableVersion))) {
             this.disabled = false;
             return;
         }
-        for (const feature of this.unstableFeatures) {
-            supported = await this.client.doesServerSupportUnstableFeature(feature);
-            if (!supported) break;
+
+        // Otherwise, only one of the unstable feature groups needs to be satisfied in
+        // order for this setting overall to be enabled
+        let isEnabled = false;
+        for (const featureGroup of this.unstableFeatureGroups) {
+            const featureSupportList = await Promise.all(
+                featureGroup.map(async (feature) => {
+                    const isFeatureSupported = await this.client.doesServerSupportUnstableFeature(feature);
+                    return isFeatureSupported;
+                }),
+            );
+
+            // Every feature in a feature group is required in order
+            // for this setting overall to be enabled.
+            const isFeatureGroupSatisfied = featureSupportList.every((isFeatureSupported) => isFeatureSupported);
+            if (isFeatureGroupSatisfied) {
+                isEnabled = true;
+                break;
+            }
         }
 
-        this.disabled = !supported;
+        this.disabled = !isEnabled;
     }
 
     public getValueOverride(

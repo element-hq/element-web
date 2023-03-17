@@ -55,7 +55,7 @@ describe("ServerSupportUnstableFeatureController", () => {
             const controller = new ServerSupportUnstableFeatureController(
                 setting,
                 watchers,
-                ["feature"],
+                [["feature"]],
                 undefined,
                 undefined,
                 "other_value",
@@ -74,7 +74,7 @@ describe("ServerSupportUnstableFeatureController", () => {
             const controller = new ServerSupportUnstableFeatureController(
                 setting,
                 watchers,
-                ["feature"],
+                [["feature"]],
                 "other_value",
             );
             await prepareSetting(cli, controller);
@@ -84,38 +84,65 @@ describe("ServerSupportUnstableFeatureController", () => {
     });
 
     describe("settingDisabled()", () => {
-        it("returns true if there is no matrix client", () => {
-            const controller = new ServerSupportUnstableFeatureController(setting, watchers, ["org.matrix.msc3030"]);
+        it("considered disabled if there is no matrix client", () => {
+            const controller = new ServerSupportUnstableFeatureController(setting, watchers, [["org.matrix.msc3030"]]);
             expect(controller.settingDisabled).toEqual(true);
         });
 
-        it("returns true if not all required features are supported", async () => {
+        it("considered disabled if not all required features in the only feature group are supported", async () => {
             const cli = stubClient();
             cli.doesServerSupportUnstableFeature = jest.fn(async (featureName) => {
                 return featureName === "org.matrix.msc3827.stable";
             });
 
             const controller = new ServerSupportUnstableFeatureController(setting, watchers, [
-                "org.matrix.msc3827.stable",
-                "org.matrix.msc3030",
+                ["org.matrix.msc3827.stable", "org.matrix.msc3030"],
             ]);
             await prepareSetting(cli, controller);
 
             expect(controller.settingDisabled).toEqual(true);
         });
 
-        it("returns false if all required features are supported", async () => {
+        it("considered enabled if all required features in the only feature group are supported", async () => {
             const cli = stubClient();
             cli.doesServerSupportUnstableFeature = jest.fn(async (featureName) => {
                 return featureName === "org.matrix.msc3827.stable" || featureName === "org.matrix.msc3030";
             });
             const controller = new ServerSupportUnstableFeatureController(setting, watchers, [
-                "org.matrix.msc3827.stable",
-                "org.matrix.msc3030",
+                ["org.matrix.msc3827.stable", "org.matrix.msc3030"],
             ]);
             await prepareSetting(cli, controller);
 
             expect(controller.settingDisabled).toEqual(false);
+        });
+
+        it("considered enabled if all required features in one of the feature groups are supported", async () => {
+            const cli = stubClient();
+            cli.doesServerSupportUnstableFeature = jest.fn(async (featureName) => {
+                return featureName === "org.matrix.msc3827.stable" || featureName === "org.matrix.msc3030";
+            });
+            const controller = new ServerSupportUnstableFeatureController(setting, watchers, [
+                ["foo-unsupported", "bar-unsupported"],
+                ["org.matrix.msc3827.stable", "org.matrix.msc3030"],
+            ]);
+            await prepareSetting(cli, controller);
+
+            expect(controller.settingDisabled).toEqual(false);
+        });
+
+        it("considered disabled if not all required features in one of the feature groups are supported", async () => {
+            const cli = stubClient();
+            cli.doesServerSupportUnstableFeature = jest.fn(async (featureName) => {
+                return featureName === "org.matrix.msc3827.stable";
+            });
+
+            const controller = new ServerSupportUnstableFeatureController(setting, watchers, [
+                ["foo-unsupported", "bar-unsupported"],
+                ["org.matrix.msc3827.stable", "org.matrix.msc3030"],
+            ]);
+            await prepareSetting(cli, controller);
+
+            expect(controller.settingDisabled).toEqual(true);
         });
     });
 });
