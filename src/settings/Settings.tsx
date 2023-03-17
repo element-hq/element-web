@@ -373,7 +373,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
             "feature_jump_to_date",
             defaultWatchManager,
             ["org.matrix.msc3030"],
-            undefined,
+            "v1.6",
             _td("Requires your server to support MSC3030"),
         ),
     },
