@@ -206,12 +206,14 @@ export default class DateSeparator extends React.Component<IProps, IState> {
 
         return (
             <ContextMenuTooltipButton
-                className="mx_DateSeparator_jumpToDateMenu"
+                className="mx_DateSeparator_jumpToDateMenu mx_DateSeparator_dateContent"
                 onClick={this.onContextMenuOpenClick}
                 isExpanded={!!this.state.contextMenuPosition}
                 title={_t("Jump to date")}
             >
-                <h2 aria-hidden="true">{this.getLabel()}</h2>
+                <h2 className="mx_DateSeparator_dateHeading" aria-hidden="true">
+                    {this.getLabel()}
+                </h2>
                 <div className="mx_DateSeparator_chevron" />
                 {contextMenu}
             </ContextMenuTooltipButton>
@@ -225,7 +227,13 @@ export default class DateSeparator extends React.Component<IProps, IState> {
         if (this.state.jumpToDateEnabled) {
             dateHeaderContent = this.renderJumpToDateMenu();
         } else {
-            dateHeaderContent = <h2 aria-hidden="true">{label}</h2>;
+            dateHeaderContent = (
+                <div className="mx_DateSeparator_dateContent">
+                    <h2 className="mx_DateSeparator_dateHeading" aria-hidden="true">
+                        {label}
+                    </h2>
+                </div>
+            );
         }
 
         // ARIA treats <hr/>s as separators, here we abuse them slightly so manually treat this entire thing as one
