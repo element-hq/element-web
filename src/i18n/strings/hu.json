@@ -3743,5 +3743,11 @@
     "There are no active polls for the past %(count)s days. Load more polls to view polls for previous months|one": "Nincs aktív szavazás az elmúlt napokból. További szavazások betöltése az előző havi szavazások megjelenítéséhez",
     "Invites by email can only be sent one at a time": "E-mail meghívóból egyszerre csak egy küldhető el",
     "You attempted to join using a room ID without providing a list of servers to join through. Room IDs are internal identifiers and cannot be used to join a room without additional information.": "A belépéshez csak az szoba azonosítóját adta meg a szerver nélkül. A szoba azonosító (ID) egy belső azonosító amivel további információk nélkül nem lehet belépni szobába.",
-    "An error occurred when updating your notification preferences. Please try to toggle your option again.": "Az értesítési beállítások frissítésénél hiba történt. Próbálja meg az opciót újra átkapcsolni."
+    "An error occurred when updating your notification preferences. Please try to toggle your option again.": "Az értesítési beállítások frissítésénél hiba történt. Próbálja meg az opciót újra átkapcsolni.",
+    "Desktop app logo": "Asztali alkalmazás profilkép",
+    "Log out and back in to disable": "A kikapcsoláshoz ki-, és bejelentkezésre van szükség",
+    "Can currently only be enabled via config.json": "Jelenleg csak a config.json-ban lehet bekapcsolni",
+    "Requires your server to support MSC3030": "A matrix szervernek támogatnia kell az MSC3030-at",
+    "Requires your server to support the stable version of MSC3827": "A matrix szervernek támogatnia kell a stabil MSC3827-et",
+    "Use your account to continue.": "Használja a fiókját a továbblépéshez."
 }
