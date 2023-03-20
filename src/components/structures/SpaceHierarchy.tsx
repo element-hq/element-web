@@ -199,7 +199,7 @@ const Tile: React.FC<ITileProps> = ({
         );
     }
 
-    let description = _t("%(count)s members", { count: room.num_joined_members });
+    let description = _t("%(count)s members", { count: room.num_joined_members ?? 0 });
     if (numChildRooms !== undefined) {
         description += " · " + _t("%(count)s rooms", { count: numChildRooms });
     }
