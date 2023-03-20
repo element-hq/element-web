@@ -773,7 +773,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
     private onRoomTimelineReset = (room: Room, timelineSet: EventTimelineSet): void => {
         if (timelineSet !== this.props.timelineSet) return;
 
-        if (this.messagePanel.current && this.messagePanel.current.isAtBottom()) {
+        if (this.canResetTimeline()) {
             this.loadTimeline();
         }
     };
