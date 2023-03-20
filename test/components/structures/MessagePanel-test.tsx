@@ -690,6 +690,56 @@ describe("MessagePanel", function () {
         const { asFragment } = render(getComponent({ events }, { showHiddenEvents: false }));
         expect(asFragment()).toMatchSnapshot();
     });
+
+    it("should handle lots of room creation events quickly", () => {
+        // Increase the length of the loop here to test performance issues with
+        // rendering
+
+        const events = [TestUtilsMatrix.mkRoomCreateEvent("@user:id", "!room:id")];
+        for (let i = 0; i < 100; i++) {
+            events.push(
+                TestUtilsMatrix.mkMembership({
+                    mship: "join",
+                    prevMship: "join",
+                    room: "!room:id",
+                    user: "@user:id",
+                    event: true,
+                    skey: "123",
+                }),
+            );
+        }
+        const { asFragment } = render(getComponent({ events }, { showHiddenEvents: false }));
+        expect(asFragment()).toMatchSnapshot();
+    });
+
+    it("should handle lots of membership events quickly", () => {
+        // Increase the length of the loop here to test performance issues with
+        // rendering
+
+        const events = [];
+        for (let i = 0; i < 100; i++) {
+            events.push(
+                TestUtilsMatrix.mkMembership({
+                    mship: "join",
+                    prevMship: "join",
+                    room: "!room:id",
+                    user: "@user:id",
+                    event: true,
+                    skey: "123",
+                }),
+            );
+        }
+        const { asFragment } = render(getComponent({ events }, { showHiddenEvents: true }));
+        const cpt = asFragment();
+
+        // Ignore properties that change every time
+        cpt.querySelectorAll("li").forEach((li) => {
+            li.setAttribute("data-scroll-tokens", "__scroll_tokens__");
+            li.setAttribute("data-testid", "__testid__");
+        });
+
+        expect(cpt).toMatchSnapshot();
+    });
 });
 
 describe("shouldFormContinuation", () => {
