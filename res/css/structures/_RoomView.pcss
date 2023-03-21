@@ -14,6 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+:root {
+    --RoomView_MessageList-padding: 18px; /* TODO: use a variable */
+}
+
 .mx_RoomView_wrapper {
     display: flex;
     flex-direction: column;
@@ -176,7 +180,7 @@ limitations under the License.
 
 .mx_RoomView_MessageList {
     list-style-type: none;
-    padding: 18px;
+    padding: var(--RoomView_MessageList-padding); /* mx_ProfileResizer depends on this value */
     margin: 0;
     /* needed as min-height is set to clientHeight in ScrollPanel
     to prevent shrinking when WhoIsTypingTile is hidden */
