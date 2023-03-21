@@ -3748,5 +3748,9 @@
     "Can currently only be enabled via config.json": "Attualmente può essere attivato solo via config.json",
     "Requires your server to support MSC3030": "Richiede che il tuo server supporti MSC3030",
     "Requires your server to support the stable version of MSC3827": "Richiede che il tuo server supporti la versione stabile di MSC3827",
-    "Use your account to continue.": "Usa il tuo account per continuare."
+    "Use your account to continue.": "Usa il tuo account per continuare.",
+    "Message from": "Messaggio da",
+    "Message in": "Messaggio in",
+    "User": "Utente",
+    "Show avatars in user, room and event mentions": "Mostra gli avatar nelle menzioni di utenti, stanze ed eventi"
 }
