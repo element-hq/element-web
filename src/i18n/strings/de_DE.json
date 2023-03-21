@@ -3748,5 +3748,9 @@
     "Log out and back in to disable": "Zum Deaktivieren, melde dich ab und erneut an",
     "Can currently only be enabled via config.json": "Dies kann aktuell nur per config.json aktiviert werden",
     "Requires your server to support MSC3030": "Dafür muss dein Server MSC3030 unterstützen",
-    "Requires your server to support the stable version of MSC3827": "Dafür muss dein Server die fertige Fassung der MSC3827 unterstützen"
+    "Requires your server to support the stable version of MSC3827": "Dafür muss dein Server die fertige Fassung der MSC3827 unterstützen",
+    "Message from": "Nachricht von",
+    "Message in": "Nachricht in",
+    "User": "Benutzer",
+    "Show avatars in user, room and event mentions": "Profilbilder in Benutzer-, Raum- und Ereigniserwähnungen anzeigen"
 }
