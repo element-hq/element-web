@@ -393,7 +393,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         return (
             <div className={containerClasses}>
                 <div className="mx_LeftPanel_roomListContainer">
-                    {this.renderSearchDialExplore()}
+                    {shouldShowComponent(UIComponent.FilterContainer) && this.renderSearchDialExplore()}
                     {this.renderBreadcrumbs()}
                     {!this.props.isMinimized && <RoomListHeader onVisibilityChange={this.refreshStickyHeaders} />}
                     <UserOnboardingButton
