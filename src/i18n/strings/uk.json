@@ -779,7 +779,6 @@
     "Show avatar changes": "Показувати зміни личини",
     "Show display name changes": "Показувати зміни видимого імені",
     "Show read receipts sent by other users": "Показувати мітки прочитання, надіслані іншими користувачами",
-    "Show avatars in user and room mentions": "Показувати личини у згадках користувачів та кімнат",
     "Never send encrypted messages to unverified sessions from this session": "Ніколи не надсилати зашифровані повідомлення до незвірених сеансів з цього сеансу",
     "Never send encrypted messages to unverified sessions in this room from this session": "Ніколи не надсилати зашифровані повідомлення до незвірених сеансів у цій кімнаті з цього сеансу",
     "Enable message search in encrypted rooms": "Увімкнути шукання повідомлень у зашифрованих кімнатах",

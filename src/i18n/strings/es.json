@@ -578,7 +578,6 @@
     "Show a placeholder for removed messages": "Dejar un indicador cuando se borre un mensaje",
     "Show avatar changes": "Mostrar cambios de avatar",
     "Show display name changes": "Muestra cambios en los nombres",
-    "Show avatars in user and room mentions": "Mostrar avatares en menciones a usuarios y salas",
     "Enable big emoji in chat": "Activar emojis grandes en el chat",
     "Send typing notifications": "Enviar notificaciones de tecleo",
     "Prompt before sending invites to potentially invalid matrix IDs": "Preguntarme antes de enviar invitaciones a IDs de matrix que no parezcan válidas",

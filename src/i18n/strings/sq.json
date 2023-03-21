@@ -606,7 +606,6 @@
     "Show a placeholder for removed messages": "Shfaq një vendmbajtëse për mesazhe të hequr",
     "Show avatar changes": "Shfaq ndryshime avatarësh",
     "Show display name changes": "Shfaq ndryshime emrash ekrani",
-    "Show avatars in user and room mentions": "Shfaq avatarët në përmendje përdoruesish dhe dhomash",
     "Enable big emoji in chat": "Aktivizo emoji-t e mëdhenj në fjalosje",
     "Send typing notifications": "Dërgo njoftime shtypjesh",
     "Messages containing my username": "Mesazhe që përmbajnë emrin tim të përdoruesit",

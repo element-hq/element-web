@@ -725,7 +725,6 @@
     "Render simple counters in room header": "Wyświetl proste liczniki w nagłówku pokoju",
     "Show a placeholder for removed messages": "Pokaż symbol zastępczy dla usuniętych wiadomości",
     "Show read receipts sent by other users": "Pokaż potwierdzenia odczytania wysyłane przez innych użytkowników",
-    "Show avatars in user and room mentions": "Pokaż awatary we wzmiankach o użytkowniku lub pokoju",
     "Enable big emoji in chat": "Aktywuj duże emoji na czacie",
     "Prompt before sending invites to potentially invalid matrix IDs": "Powiadamiaj przed wysłaniem zaproszenia do potencjalnie nieprawidłowych ID matrix",
     "Show hidden events in timeline": "Pokaż ukryte wydarzenia na linii czasowej",

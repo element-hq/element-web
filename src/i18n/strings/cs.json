@@ -544,7 +544,6 @@
     "Timeline": "Časová osa",
     "Autocomplete delay (ms)": "Zpožnění našeptávače (ms)",
     "Enable big emoji in chat": "Povolit velké emoji",
-    "Show avatars in user and room mentions": "U zmínek uživatelů a místností zobrazovat jejich avatary",
     "Prompt before sending invites to potentially invalid matrix IDs": "Potvrdit odeslání pozvánky potenciálně neplatným Matrix ID",
     "Show avatar changes": "Zobrazovat změny avatarů",
     "Show a placeholder for removed messages": "Zobrazovat smazané zprávy",

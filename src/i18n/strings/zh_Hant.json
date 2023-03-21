@@ -608,7 +608,6 @@
     "Show a placeholder for removed messages": "幫已刪除的訊息保留位置",
     "Show avatar changes": "顯示大頭照變更",
     "Show display name changes": "顯示名稱變更",
-    "Show avatars in user and room mentions": "在使用者與聊天室提及中顯示大頭照",
     "Enable big emoji in chat": "在聊天中啟用大型表情符號",
     "Send typing notifications": "傳送正在打字通知",
     "Messages containing my username": "包含我使用者名稱的訊息",

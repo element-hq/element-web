@@ -610,7 +610,6 @@
     "Show a placeholder for removed messages": "Helykitöltő megjelenítése a törölt szövegek helyett",
     "Show avatar changes": "Profilképváltozás megjelenítése",
     "Show display name changes": "Megjelenítendő nevek változásának megjelenítése",
-    "Show avatars in user and room mentions": "Profilkép megjelenítése a felhasználók és szobák megemlítésekor",
     "Enable big emoji in chat": "Nagy emodzsik engedélyezése a csevegésekben",
     "Send typing notifications": "Gépelési visszajelzés küldése",
     "Messages containing my username": "Üzenetek amik a nevemet tartalmazzák",

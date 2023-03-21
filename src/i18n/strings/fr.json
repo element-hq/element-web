@@ -610,7 +610,6 @@
     "Show a placeholder for removed messages": "Afficher les messages supprimés",
     "Show avatar changes": "Afficher les changements d’avatar",
     "Show display name changes": "Afficher les changements de nom d’affichage",
-    "Show avatars in user and room mentions": "Afficher les avatars dans les mentions d’utilisateur et de salon",
     "Enable big emoji in chat": "Activer les gros émojis dans les discussions",
     "Send typing notifications": "Envoyer des notifications de saisie",
     "Messages containing my username": "Messages contenant mon nom d’utilisateur",
