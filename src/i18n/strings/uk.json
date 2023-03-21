@@ -776,7 +776,7 @@
     "Upgrade this session to allow it to verify other sessions, granting them access to encrypted messages and marking them as trusted for other users.": "Поліпшіть цей сеанс, щоб уможливити звірення інших сеансів, надаючи їм доступ до зашифрованих повідомлень та позначаючи їх довіреними для інших користувачів.",
     "Upgrade your encryption": "Поліпшити ваше шифрування",
     "Show a placeholder for removed messages": "Показувати замісну позначку замість видалених повідомлень",
-    "Show avatar changes": "Показувати зміни личини",
+    "Show avatar changes": "Показувати зміни аватара",
     "Show display name changes": "Показувати зміни видимого імені",
     "Show read receipts sent by other users": "Показувати мітки прочитання, надіслані іншими користувачами",
     "Never send encrypted messages to unverified sessions from this session": "Ніколи не надсилати зашифровані повідомлення до незвірених сеансів з цього сеансу",
@@ -3748,5 +3748,9 @@
     "Log out and back in to disable": "Вийдіть і знову увійдіть, щоб вимкнути",
     "Can currently only be enabled via config.json": "Наразі можна ввімкнути лише через config.json",
     "Requires your server to support MSC3030": "Потрібно, щоб ваш сервер підтримував MSC3030",
-    "Requires your server to support the stable version of MSC3827": "Потрібно, щоб ваш сервер підтримував стабільну версію MSC3827"
+    "Requires your server to support the stable version of MSC3827": "Потрібно, щоб ваш сервер підтримував стабільну версію MSC3827",
+    "Message from": "Повідомлення від",
+    "Message in": "Повідомлення в",
+    "User": "Користувач",
+    "Show avatars in user, room and event mentions": "Показувати аватари у згадках користувачів, кімнат і подій"
 }
