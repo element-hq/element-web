@@ -14,7 +14,7 @@ exports[`<Pill> should not render an avatar or link when called with inMessage =
         class="mx_Pill mx_RoomPill"
       >
         <span
-          class="mx_Pill_linkText"
+          class="mx_Pill_text"
         >
           Room 1
         </span>
@@ -53,11 +53,93 @@ exports[`<Pill> should render the expected pill for @room 1`] = `
           />
         </span>
         <span
-          class="mx_Pill_linkText"
+          class="mx_Pill_text"
         >
           @room
         </span>
       </span>
+    </bdi>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<Pill> should render the expected pill for a message in another room 1`] = `
+<DocumentFragment>
+  <div>
+    <bdi>
+      <a
+        class="mx_Pill mx_EventPill"
+        href="https://matrix.to/#/!room1:example.com/$123-456"
+      >
+        Message in
+        <span
+          aria-hidden="true"
+          class="mx_BaseAvatar"
+          role="presentation"
+        >
+          <span
+            aria-hidden="true"
+            class="mx_BaseAvatar_initial"
+            style="font-size: 10.4px; width: 16px; line-height: 16px;"
+          >
+            R
+          </span>
+          <img
+            alt=""
+            aria-hidden="true"
+            class="mx_BaseAvatar_image"
+            data-testid="avatar-img"
+            src="data:image/png;base64,00"
+            style="width: 16px; height: 16px;"
+          />
+        </span>
+        <span
+          class="mx_Pill_text"
+        >
+          Room 1
+        </span>
+      </a>
+    </bdi>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`<Pill> should render the expected pill for a message in the same room 1`] = `
+<DocumentFragment>
+  <div>
+    <bdi>
+      <a
+        class="mx_Pill mx_EventPill"
+        href="https://matrix.to/#/!room1:example.com/$123-456"
+      >
+        Message from
+        <span
+          aria-hidden="true"
+          class="mx_BaseAvatar"
+          role="presentation"
+        >
+          <span
+            aria-hidden="true"
+            class="mx_BaseAvatar_initial"
+            style="font-size: 10.4px; width: 16px; line-height: 16px;"
+          >
+            U
+          </span>
+          <img
+            alt=""
+            aria-hidden="true"
+            class="mx_BaseAvatar_image"
+            data-testid="avatar-img"
+            src="data:image/png;base64,00"
+            style="width: 16px; height: 16px;"
+          />
+        </span>
+        <span
+          class="mx_Pill_text"
+        >
+          User 1
+        </span>
+      </a>
     </bdi>
   </div>
 </DocumentFragment>
@@ -93,7 +175,7 @@ exports[`<Pill> should render the expected pill for a room alias 1`] = `
           />
         </span>
         <span
-          class="mx_Pill_linkText"
+          class="mx_Pill_text"
         >
           Room 1
         </span>
@@ -133,7 +215,7 @@ exports[`<Pill> should render the expected pill for a space 1`] = `
           />
         </span>
         <span
-          class="mx_Pill_linkText"
+          class="mx_Pill_text"
         >
           Space 1
         </span>
@@ -173,7 +255,7 @@ exports[`<Pill> should render the expected pill for a user not in the room 1`] =
           />
         </span>
         <span
-          class="mx_Pill_linkText"
+          class="mx_Pill_text"
         >
           User 2
         </span>
@@ -213,7 +295,7 @@ exports[`<Pill> when rendering a pill for a room should render the expected pill
           />
         </span>
         <span
-          class="mx_Pill_linkText"
+          class="mx_Pill_text"
         >
           Room 1
         </span>
@@ -253,7 +335,7 @@ exports[`<Pill> when rendering a pill for a user in the room should render as ex
           />
         </span>
         <span
-          class="mx_Pill_linkText"
+          class="mx_Pill_text"
         >
           User 1
         </span>

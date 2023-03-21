@@ -63,6 +63,9 @@ describe("<TextualBody />", () => {
             isGuest: () => false,
             mxcUrlToHttp: (s: string) => s,
             getUserId: () => "@user:example.com",
+            fetchRoomEvent: () => {
+                throw new Error("MockClient event not found");
+            },
         });
     });
 
@@ -172,7 +175,7 @@ describe("<TextualBody />", () => {
             const { container } = getComponent({ mxEvent: ev });
             const content = container.querySelector(".mx_EventTile_body");
             expect(content.innerHTML).toMatchInlineSnapshot(
-                `"Chat with <span><bdi><a class="mx_Pill mx_UserPill mx_UserPill_me" href="https://matrix.to/#/@user:example.com"><img class="mx_BaseAvatar mx_BaseAvatar_image" src="mxc://avatar.url/image.png" style="width: 16px; height: 16px;" alt="" data-testid="avatar-img" aria-hidden="true"><span class="mx_Pill_linkText">Member</span></a></bdi></span>"`,
+                `"Chat with <span><bdi><a class="mx_Pill mx_UserPill mx_UserPill_me" href="https://matrix.to/#/@user:example.com"><img class="mx_BaseAvatar mx_BaseAvatar_image" src="mxc://avatar.url/image.png" style="width: 16px; height: 16px;" alt="" data-testid="avatar-img" aria-hidden="true"><span class="mx_Pill_text">Member</span></a></bdi></span>"`,
             );
         });
 
@@ -190,7 +193,7 @@ describe("<TextualBody />", () => {
             const { container } = getComponent({ mxEvent: ev });
             const content = container.querySelector(".mx_EventTile_body");
             expect(content.innerHTML).toMatchInlineSnapshot(
-                `"Visit <span><bdi><a class="mx_Pill mx_RoomPill" href="https://matrix.to/#/#room:example.com"><span class="mx_Pill_linkText">#room:example.com</span></a></bdi></span>"`,
+                `"Visit <span><bdi><a class="mx_Pill mx_RoomPill" href="https://matrix.to/#/#room:example.com"><div class="mx_Pill_LinkIcon mx_BaseAvatar mx_BaseAvatar_image"></div><span class="mx_Pill_text">#room:example.com</span></a></bdi></span>"`,
             );
         });
     });
@@ -275,23 +278,26 @@ describe("<TextualBody />", () => {
             expect(content).toMatchSnapshot();
         });
 
-        it("pills do not appear for event permalinks", () => {
+        it("pills do not appear for event permalinks with a custom label", () => {
             const ev = mkFormattedMessage(
                 "An [event link](https://matrix.to/#/!ZxbRYPQXDXKGmDnJNg:example.com/" +
                     "$16085560162aNpaH:example.com?via=example.com) with text",
-
                 'An <a href="https://matrix.to/#/!ZxbRYPQXDXKGmDnJNg:example.com/' +
                     '$16085560162aNpaH:example.com?via=example.com">event link</a> with text',
             );
-            const { container } = getComponent({ mxEvent: ev }, matrixClient);
+            const { asFragment, container } = getComponent({ mxEvent: ev }, matrixClient);
             expect(container).toHaveTextContent("An event link with text");
-            const content = container.querySelector(".mx_EventTile_body");
-            expect(content).toContainHTML(
-                '<span class="mx_EventTile_body markdown-body" dir="auto">' +
-                    'An <a href="https://matrix.to/#/!ZxbRYPQXDXKGmDnJNg:example.com/' +
-                    '$16085560162aNpaH:example.com?via=example.com" ' +
-                    'rel="noreferrer noopener">event link</a> with text</span>',
+            expect(asFragment()).toMatchSnapshot();
+        });
+
+        it("pills appear for event permalinks without a custom label", () => {
+            const ev = mkFormattedMessage(
+                "See this message https://matrix.to/#/!ZxbRYPQXDXKGmDnJNg:example.com/$16085560162aNpaH:example.com?via=example.com",
+                'See this message <a href="https://matrix.to/#/!ZxbRYPQXDXKGmDnJNg:example.com/$16085560162aNpaH:example.com?via=example.com">' +
+                    "https://matrix.to/#/!ZxbRYPQXDXKGmDnJNg:example.com/$16085560162aNpaH:example.com?via=example.com</a>",
             );
+            const { asFragment } = getComponent({ mxEvent: ev }, matrixClient);
+            expect(asFragment()).toMatchSnapshot();
         });
 
         it("pills appear for room links with vias", () => {
@@ -301,19 +307,9 @@ describe("<TextualBody />", () => {
                 'A <a href="https://matrix.to/#/!ZxbRYPQXDXKGmDnJNg:example.com' +
                     '?via=example.com&amp;via=bob.com">room link</a> with vias',
             );
-            const { container } = getComponent({ mxEvent: ev }, matrixClient);
+            const { asFragment, container } = getComponent({ mxEvent: ev }, matrixClient);
             expect(container).toHaveTextContent("A room name with vias");
-            const content = container.querySelector(".mx_EventTile_body");
-            expect(content).toContainHTML(
-                '<span class="mx_EventTile_body markdown-body" dir="auto">' +
-                    'A <span><bdi><a class="mx_Pill mx_RoomPill" ' +
-                    'href="https://matrix.to/#/!ZxbRYPQXDXKGmDnJNg:example.com' +
-                    '?via=example.com&amp;via=bob.com"' +
-                    '><img class="mx_BaseAvatar mx_BaseAvatar_image" ' +
-                    'src="mxc://avatar.url/room.png" ' +
-                    'style="width: 16px; height: 16px;" alt="" data-testid="avatar-img" aria-hidden="true">' +
-                    '<span class="mx_Pill_linkText">room name</span></a></bdi></span> with vias</span>',
-            );
+            expect(asFragment()).toMatchSnapshot();
         });
 
         it("pills appear for an MXID permalink", () => {

@@ -67,7 +67,7 @@ describe("Pills", () => {
 
                 // go back to the message room and try to click on the pill text, as a user would
                 cy.viewRoomByName(messageRoom);
-                cy.get(".mx_EventTile_body .mx_Pill .mx_Pill_linkText")
+                cy.get(".mx_EventTile_body .mx_Pill .mx_Pill_text")
                     .should("have.css", "pointer-events", "none")
                     .click({ force: true }); // force is to ensure we bypass pointer-events
                 cy.url().should("contain", localUrl);

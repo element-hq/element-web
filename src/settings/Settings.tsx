@@ -618,7 +618,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
     },
     "Pill.shouldShowPillAvatar": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td("Show avatars in user and room mentions"),
+        displayName: _td("Show avatars in user, room and event mentions"),
         default: true,
         invertedSettingName: "Pill.shouldHidePillAvatar",
     },

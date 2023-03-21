@@ -18,13 +18,14 @@ import React from "react";
 import { act, render, RenderResult, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mocked, Mocked } from "jest-mock";
-import { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 
 import dis from "../../../../src/dispatcher/dispatcher";
 import { Pill, PillProps, PillType } from "../../../../src/components/views/elements/Pill";
 import {
     filterConsole,
     flushPromises,
+    mkMessage,
     mkRoomCanonicalAliasEvent,
     mkRoomMemberJoinEvent,
     stubClient,
@@ -39,6 +40,9 @@ describe("<Pill>", () => {
     const room1Alias = "#room1:example.com";
     const room1Id = "!room1:example.com";
     let room1: Room;
+    let room1Message: MatrixEvent;
+    const room2Id = "!room2:example.com";
+    let room2: Room;
     const space1Id = "!space1:example.com";
     let space1: Room;
     const user1Id = "@user1:example.com";
@@ -63,21 +67,33 @@ describe("<Pill>", () => {
     filterConsole(
         "Failed to parse permalink Error: Unknown entity type in permalink",
         "Room !room1:example.com does not have an m.room.create event",
+        "Room !space1:example.com does not have an m.room.create event",
     );
 
     beforeEach(() => {
         client = mocked(stubClient());
         DMRoomMap.makeShared();
-        room1 = new Room(room1Id, client, client.getSafeUserId());
+        room1 = new Room(room1Id, client, user1Id);
         room1.name = "Room 1";
         const user1JoinRoom1Event = mkRoomMemberJoinEvent(user1Id, room1Id, {
             displayname: "User 1",
         });
         room1.currentState.setStateEvents([
-            mkRoomCanonicalAliasEvent(client.getSafeUserId(), room1Id, room1Alias),
+            mkRoomCanonicalAliasEvent(user1Id, room1Id, room1Alias),
             user1JoinRoom1Event,
         ]);
         room1.getMember(user1Id)!.setMembershipEvent(user1JoinRoom1Event);
+        room1Message = mkMessage({
+            id: "$123-456",
+            event: true,
+            user: user1Id,
+            room: room1Id,
+            msg: "Room 1 Message",
+        });
+        room1.addLiveEvents([room1Message]);
+
+        room2 = new Room(room2Id, client, user1Id);
+        room2.name = "Room 2";
 
         space1 = new Room(space1Id, client, client.getSafeUserId());
         space1.name = "Space 1";
@@ -85,6 +101,7 @@ describe("<Pill>", () => {
         client.getRooms.mockReturnValue([room1, space1]);
         client.getRoom.mockImplementation((roomId: string) => {
             if (roomId === room1.roomId) return room1;
+            if (roomId === room2.roomId) return room2;
             if (roomId === space1.roomId) return space1;
             return null;
         });
@@ -219,5 +236,30 @@ describe("<Pill>", () => {
             url: permalinkPrefix + room1Id,
         });
         expect(renderResult.asFragment()).toMatchSnapshot();
+    });
+    it("should render the expected pill for a message in the same room", () => {
+        renderPill({
+            room: room1,
+            url: `${permalinkPrefix}${room1Id}/${room1Message.getId()}`,
+        });
+        expect(renderResult.asFragment()).toMatchSnapshot();
+    });
+
+    it("should render the expected pill for a message in another room", () => {
+        renderPill({
+            room: room2,
+            url: `${permalinkPrefix}${room1Id}/${room1Message.getId()}`,
+        });
+        expect(renderResult.asFragment()).toMatchSnapshot();
+    });
+
+    it("should not render a pill with an unknown type", () => {
+        // @ts-ignore
+        renderPill({ type: "unknown" });
+        expect(renderResult.asFragment()).toMatchInlineSnapshot(`
+            <DocumentFragment>
+              <div />
+            </DocumentFragment>
+        `);
     });
 });

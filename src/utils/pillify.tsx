@@ -28,8 +28,6 @@ import { PermalinkParts } from "./permalinks/PermalinkConstructor";
 /**
  * A node here is an A element with a href attribute tag.
  *
- * It should not be pillified if the permalink parser result contains an event Id.
- *
  * It should be pillified if the permalink parser returns a result and one of the following conditions match:
  * - Text content equals href. This is the case when sending a plain permalink inside a message.
  * - The link does not have the "linkified" class.
@@ -37,9 +35,14 @@ import { PermalinkParts } from "./permalinks/PermalinkConstructor";
  *   Linkify will not linkify things again. → There won't be a "linkified" class.
  */
 const shouldBePillified = (node: Element, href: string, parts: PermalinkParts | null): boolean => {
-    if (!parts || parts.eventId) return false;
+    // permalink parser didn't return any parts
+    if (!parts) return false;
 
     const textContent = node.textContent;
+
+    // event permalink with custom label
+    if (parts.eventId && href !== textContent) return false;
+
     return href === textContent || !node.classList.contains("linkified");
 };
 
