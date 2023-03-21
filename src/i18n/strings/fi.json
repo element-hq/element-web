@@ -697,7 +697,6 @@
     "Show a placeholder for removed messages": "Näytä paikanpitäjä poistetuille viesteille",
     "Show avatar changes": "Näytä profiilikuvien muutokset",
     "Show read receipts sent by other users": "Näytä muiden käyttäjien lukukuittaukset",
-    "Show avatars in user and room mentions": "Näytä profiilikuvat käyttäjä- ja huonemaininnoissa",
     "Got It": "Ymmärretty",
     "Scissors": "Sakset",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s %(day)s. %(monthName)s %(fullYear)s",
