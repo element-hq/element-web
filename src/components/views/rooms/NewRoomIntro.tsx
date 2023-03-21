@@ -141,7 +141,7 @@ const NewRoomIntro: React.FC = () => {
                 { topic },
                 {
                     a: (sub) => (
-                        <AccessibleButton kind="link_inline" onClick={onTopicClick}>
+                        <AccessibleButton element="a" kind="link_inline" onClick={onTopicClick}>
                             {sub}
                         </AccessibleButton>
                     ),
@@ -155,7 +155,7 @@ const NewRoomIntro: React.FC = () => {
                 {},
                 {
                     a: (sub) => (
-                        <AccessibleButton kind="link_inline" onClick={onTopicClick}>
+                        <AccessibleButton element="a" kind="link_inline" onClick={onTopicClick}>
                             {sub}
                         </AccessibleButton>
                     ),
