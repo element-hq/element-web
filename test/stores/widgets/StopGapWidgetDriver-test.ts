@@ -394,4 +394,40 @@ describe("StopGapWidgetDriver", () => {
             expect(client.getVisibleRooms).toHaveBeenCalledWith(true);
         });
     });
+
+    describe("searchUserDirectory", () => {
+        let driver: WidgetDriver;
+
+        beforeEach(() => {
+            driver = mkDefaultDriver();
+        });
+
+        it("searches for users in the user directory", async () => {
+            client.searchUserDirectory.mockResolvedValue({
+                limited: false,
+                results: [{ user_id: "@user", display_name: "Name", avatar_url: "mxc://" }],
+            });
+
+            await expect(driver.searchUserDirectory("foo")).resolves.toEqual({
+                limited: false,
+                results: [{ userId: "@user", displayName: "Name", avatarUrl: "mxc://" }],
+            });
+
+            expect(client.searchUserDirectory).toHaveBeenCalledWith({ term: "foo", limit: undefined });
+        });
+
+        it("searches for users with a custom limit", async () => {
+            client.searchUserDirectory.mockResolvedValue({
+                limited: true,
+                results: [],
+            });
+
+            await expect(driver.searchUserDirectory("foo", 25)).resolves.toEqual({
+                limited: true,
+                results: [],
+            });
+
+            expect(client.searchUserDirectory).toHaveBeenCalledWith({ term: "foo", limit: 25 });
+        });
+    });
 });

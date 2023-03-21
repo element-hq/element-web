@@ -231,6 +231,8 @@ export function createTestClient(): MatrixClient {
                 room_id: roomId,
             });
         }),
+
+        searchUserDirectory: jest.fn().mockResolvedValue({ limited: false, results: [] }),
     } as unknown as MatrixClient;
 
     client.reEmitter = new ReEmitter(client);

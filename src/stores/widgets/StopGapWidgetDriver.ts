@@ -31,6 +31,7 @@ import {
     WidgetDriver,
     WidgetEventCapability,
     WidgetKind,
+    ISearchUserDirectoryResult,
 } from "matrix-widget-api";
 import { ClientEvent, ITurnServer as IClientTurnServer } from "matrix-js-sdk/src/client";
 import { EventType } from "matrix-js-sdk/src/@types/event";
@@ -484,6 +485,21 @@ export class StopGapWidgetDriver extends WidgetDriver {
             chunk: events.map((e) => e.getEffectiveEvent() as IRoomEvent),
             nextBatch: nextBatch ?? undefined,
             prevBatch: prevBatch ?? undefined,
+        };
+    }
+
+    public async searchUserDirectory(searchTerm: string, limit?: number): Promise<ISearchUserDirectoryResult> {
+        const client = MatrixClientPeg.get();
+
+        const { limited, results } = await client.searchUserDirectory({ term: searchTerm, limit });
+
+        return {
+            limited,
+            results: results.map((r) => ({
+                userId: r.user_id,
+                displayName: r.display_name,
+                avatarUrl: r.avatar_url,
+            })),
         };
     }
 }
