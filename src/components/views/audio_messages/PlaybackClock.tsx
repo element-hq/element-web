@@ -1,5 +1,5 @@
 /*
-Copyright 2021 The Matrix.org Foundation C.I.C.
+Copyright 2021 - 2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -69,7 +69,7 @@ export default class PlaybackClock extends React.PureComponent<IProps, IState> {
         let seconds = this.state.seconds;
         if (this.state.playbackPhase === PlaybackState.Stopped) {
             if (Number.isFinite(this.props.defaultDisplaySeconds)) {
-                seconds = this.props.defaultDisplaySeconds;
+                seconds = this.props.defaultDisplaySeconds ?? this.props.playback.durationSeconds;
             } else {
                 seconds = this.state.durationSeconds;
             }
