@@ -92,7 +92,8 @@ describe("Room Directory", () => {
 
         cy.get('.mx_SpotlightDialog [aria-label="Search"]').type("{selectAll}{backspace}test1234");
         cy.contains(".mx_SpotlightDialog .mx_SpotlightDialog_result_publicRoomName", name).should("exist");
-        cy.get(".mx_SpotlightDialog_wrapper").percySnapshotElement("Room Directory - filtered one result");
+        // Disabled because flaky - see https://github.com/vector-im/element-web/issues/24881
+        //cy.get(".mx_SpotlightDialog_wrapper").percySnapshotElement("Room Directory - filtered one result");
         cy.get(".mx_SpotlightDialog .mx_SpotlightDialog_option").find(".mx_AccessibleButton").contains("Join").click();
 
         cy.url().should("contain", `/#/room/#test1234:localhost`);

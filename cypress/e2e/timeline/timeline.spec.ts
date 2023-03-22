@@ -770,9 +770,10 @@ describe("Timeline", () => {
             cy.get(".mx_EventTile_last[data-layout='irc'] .mx_ReplyChain").should("have.css", "margin", "0px");
 
             // Take a snapshot on IRC layout
-            cy.get(".mx_EventTile_last").percySnapshotElement("EventTile with reply chains on IRC layout", {
+            // Disabled because flaky - see https://github.com/vector-im/element-web/issues/24881
+            /*cy.get(".mx_EventTile_last").percySnapshotElement("EventTile with reply chains on IRC layout", {
                 percyCSS,
-            });
+            });*/
 
             // Check the margin value of ReplyChains of EventTile at the bottom on group/modern layout
             cy.setSettingValue("layout", null, SettingLevel.DEVICE, Layout.Group);
@@ -788,9 +789,10 @@ describe("Timeline", () => {
             cy.get(".mx_EventTile_last[data-layout='group'] .mx_ReplyChain").should("have.css", "margin-bottom", "4px");
 
             // Take a snapshot on compact modern layout
-            cy.get(".mx_EventTile_last").percySnapshotElement("EventTile with reply chains on compact modern layout", {
+            // Disabled because flaky - see https://github.com/vector-im/element-web/issues/24881
+            /*cy.get(".mx_EventTile_last").percySnapshotElement("EventTile with reply chains on compact modern layout", {
                 percyCSS,
-            });
+            });*/
 
             // Check the margin value of ReplyChains of EventTile at the bottom on bubble layout
             cy.setSettingValue("layout", null, SettingLevel.DEVICE, Layout.Bubble);
@@ -801,9 +803,10 @@ describe("Timeline", () => {
             );
 
             // Take a snapshot on bubble layout
-            cy.get(".mx_EventTile_last").percySnapshotElement("EventTile with reply chains on bubble layout", {
+            // Disabled because flaky - see https://github.com/vector-im/element-web/issues/24881
+            /*cy.get(".mx_EventTile_last").percySnapshotElement("EventTile with reply chains on bubble layout", {
                 percyCSS,
-            });
+            });*/
         });
 
         it("should send, reply, and display long strings without overflowing", () => {
