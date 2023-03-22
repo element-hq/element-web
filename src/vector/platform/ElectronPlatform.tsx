@@ -161,9 +161,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
         this.ipc.call("startSSOFlow", this.ssoID);
 
-        if (isMac) {
-            BreadcrumbsStore.instance.on(UPDATE_EVENT, this.onBreadcrumbsUpdate);
-        }
+        BreadcrumbsStore.instance.on(UPDATE_EVENT, this.onBreadcrumbsUpdate);
     }
 
     public async getConfig(): Promise<IConfigOptions> {

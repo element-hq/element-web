@@ -20,6 +20,7 @@ import { UpdateCheckStatus } from "matrix-react-sdk/src/BasePlatform";
 import { Action } from "matrix-react-sdk/src/dispatcher/actions";
 import dispatcher from "matrix-react-sdk/src/dispatcher/dispatcher";
 import * as rageshake from "matrix-react-sdk/src/rageshake/rageshake";
+import { BreadcrumbsStore } from "matrix-react-sdk/src/stores/BreadcrumbsStore";
 
 import ElectronPlatform from "../../../../src/vector/platform/ElectronPlatform";
 
@@ -43,7 +44,6 @@ describe("ElectronPlatform", () => {
     const userId = "@alice:server.org";
     const deviceId = "device-id";
 
-    window.electron = mockElectron;
     beforeEach(() => {
         window.electron = mockElectron;
         jest.clearAllMocks();
@@ -258,6 +258,22 @@ describe("ElectronPlatform", () => {
             platform.installUpdate();
 
             expect(mockElectron.send).toHaveBeenCalledWith("install_update");
+        });
+    });
+
+    describe("breacrumbs", () => {
+        it("should send breadcrumb updates over the IPC", () => {
+            const spy = jest.spyOn(BreadcrumbsStore.instance, "on");
+            new ElectronPlatform();
+            const cb = spy.mock.calls[0][1];
+            cb();
+
+            expect(mockElectron.send).toHaveBeenCalledWith(
+                "ipcCall",
+                expect.objectContaining({
+                    name: "breadcrumbs",
+                }),
+            );
         });
     });
 });
