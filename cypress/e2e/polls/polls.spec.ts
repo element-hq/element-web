@@ -118,7 +118,8 @@ describe("Polls", () => {
             cy.get('[aria-label="Poll"]').click();
         });
 
-        cy.get(".mx_CompoundDialog").percySnapshotElement("Polls Composer");
+        // Disabled because flaky - see https://github.com/vector-im/element-web/issues/24688
+        //cy.get(".mx_CompoundDialog").percySnapshotElement("Polls Composer");
 
         const pollParams = {
             title: "Does the polls feature work?",
