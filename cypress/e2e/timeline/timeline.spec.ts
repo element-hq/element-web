@@ -864,34 +864,50 @@ describe("Timeline", () => {
                 });
             cy.getComposer().type(`${reply}{enter}`);
 
-            // Make sure the reply tile and the reply are displayed
+            // Make sure the reply tile is rendered
             cy.get(".mx_EventTile_last").within(() => {
                 cy.get(".mx_ReplyTile .mx_MTextBody").should("have.text", LONG_STRING);
                 cy.get(".mx_EventTile_line > .mx_MTextBody").should("have.text", reply);
             });
+
+            // Change the viewport size
+            cy.viewport(1600, 1200);
 
             // Exclude timestamp and read marker from snapshots
             const percyCSS = ".mx_MessageTimestamp, .mx_RoomView_myReadMarker { visibility: hidden !important; }";
 
             // Make sure the strings do not overflow on IRC layout
             cy.setSettingValue("layout", null, SettingLevel.DEVICE, Layout.IRC);
-            cy.get(".mx_MainSplit").percySnapshotElement("Long strings with a reply on IRC layout", { percyCSS });
+            // Scroll to the bottom to have Percy take a snapshot of the whole viewport
+            cy.get(".mx_ScrollPanel").scrollTo("bottom", { ensureScrollable: false });
+            // Assert that both avatar in the introduction and the last message are visible at the same time
+            cy.get(".mx_NewRoomIntro .mx_BaseAvatar").should("be.visible");
+            cy.get(".mx_EventTile_last[data-layout='irc']").within(() => {
+                cy.get(".mx_MTextBody").should("be.visible");
+                cy.get(".mx_EventTile_receiptSent").should("be.visible"); // rendered at the bottom of EventTile
+            });
+            // Take a snapshot in IRC layout
+            cy.get(".mx_ScrollPanel").percySnapshotElement("Long strings with a reply on IRC layout", { percyCSS });
 
             // Make sure the strings do not overflow on modern layout
             cy.setSettingValue("layout", null, SettingLevel.DEVICE, Layout.Group);
-            cy.get(".mx_EventTile_last[data-layout='group'] .mx_EventTile_line > .mx_MTextBody").should(
-                "have.text",
-                reply,
-            );
-            cy.get(".mx_MainSplit").percySnapshotElement("Long strings with a reply on modern layout", { percyCSS });
+            cy.get(".mx_ScrollPanel").scrollTo("bottom", { ensureScrollable: false }); // Scroll again in case
+            cy.get(".mx_NewRoomIntro .mx_BaseAvatar").should("be.visible");
+            cy.get(".mx_EventTile_last[data-layout='group']").within(() => {
+                cy.get(".mx_MTextBody").should("be.visible");
+                cy.get(".mx_EventTile_receiptSent").should("be.visible");
+            });
+            cy.get(".mx_ScrollPanel").percySnapshotElement("Long strings with a reply on modern layout", { percyCSS });
 
             // Make sure the strings do not overflow on bubble layout
             cy.setSettingValue("layout", null, SettingLevel.DEVICE, Layout.Bubble);
-            cy.get(".mx_EventTile_last[data-layout='bubble'] .mx_EventTile_line > .mx_MTextBody").should(
-                "have.text",
-                reply,
-            );
-            cy.get(".mx_MainSplit").percySnapshotElement("Long strings with a reply on bubble layout", { percyCSS });
+            cy.get(".mx_ScrollPanel").scrollTo("bottom", { ensureScrollable: false }); // Scroll again in case
+            cy.get(".mx_NewRoomIntro .mx_BaseAvatar").should("be.visible");
+            cy.get(".mx_EventTile_last[data-layout='bubble']").within(() => {
+                cy.get(".mx_MTextBody").should("be.visible");
+                cy.get(".mx_EventTile_receiptSent").should("be.visible");
+            });
+            cy.get(".mx_ScrollPanel").percySnapshotElement("Long strings with a reply on bubble layout", { percyCSS });
         });
     });
 });
