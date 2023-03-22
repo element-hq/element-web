@@ -3730,5 +3730,13 @@
     "iframe has no src attribute": "iframe s’ka atribut src",
     "An error occurred when updating your notification preferences. Please try to toggle your option again.": "Ndodhi një gabim teksa përditësoheshin parapëlqimet tuaja për njoftime. Ju lutemi, provoni ta riaktivizoni mundësinë tuaj.",
     "Desktop app logo": "Stemë aplikacioni Desktop",
-    "Use your account to continue.": "Që të vazhdohet, përdorni llogarinë tuaj."
+    "Use your account to continue.": "Që të vazhdohet, përdorni llogarinë tuaj.",
+    "Message from %(user)s": "Mesazh nga %(user)s",
+    "Message in %(room)s": "Mesazh në %(room)s",
+    "User": "Përdorues",
+    "Log out and back in to disable": "Që të çaktivizohet, dilni dhe rihyni në llogari",
+    "Can currently only be enabled via config.json": "Aktualisht mund të aktivizohet vetëm përmes config.json-it",
+    "Show avatars in user, room and event mentions": "Shfaq avatarë në përmendje përdoruesish, dhomash dhe aktesh",
+    "Requires your server to support MSC3030": "Lyp që shërbyesi juaj të mbulojë MSC3030",
+    "Requires your server to support the stable version of MSC3827": "Lyp që shërbyesi juaj të mbulojë versionin e qëndrueshëm të MSC3827"
 }
