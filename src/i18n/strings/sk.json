@@ -3749,7 +3749,6 @@
     "Can currently only be enabled via config.json": "V súčasnosti sa dá povoliť len prostredníctvom súboru config.json",
     "Requires your server to support MSC3030": "Vyžaduje, aby váš server podporoval MSC3030",
     "Requires your server to support the stable version of MSC3827": "Vyžaduje, aby váš server podporoval stabilnú verziu MSC3827",
-    "Message from": "Správa od",
     "Message in": "Správa v",
     "User": "Používateľ",
     "Show avatars in user, room and event mentions": "Zobraziť obrázky profilov v zmienkach o používateľoch, miestnostiach a udalostiach"

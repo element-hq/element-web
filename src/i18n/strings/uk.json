@@ -3749,7 +3749,6 @@
     "Can currently only be enabled via config.json": "Наразі можна ввімкнути лише через config.json",
     "Requires your server to support MSC3030": "Потрібно, щоб ваш сервер підтримував MSC3030",
     "Requires your server to support the stable version of MSC3827": "Потрібно, щоб ваш сервер підтримував стабільну версію MSC3827",
-    "Message from": "Повідомлення від",
     "Message in": "Повідомлення в",
     "User": "Користувач",
     "Show avatars in user, room and event mentions": "Показувати аватари у згадках користувачів, кімнат і подій"
