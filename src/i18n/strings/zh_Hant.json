@@ -3749,7 +3749,6 @@
     "Can currently only be enabled via config.json": "目前僅能透過 config.json 啟用",
     "Requires your server to support MSC3030": "您的伺服器必須支援 MSC3030",
     "Requires your server to support the stable version of MSC3827": "您的伺服器必須支援穩定版本的 MSC3827",
-    "Message in": "下列位置的訊息",
     "User": "使用者",
     "Show avatars in user, room and event mentions": "在使用者、聊天室與事件提及中顯示大頭貼"
 }

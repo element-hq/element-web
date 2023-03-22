@@ -3749,7 +3749,6 @@
     "Can currently only be enabled via config.json": "Seda võimalust saab hetkel sisse lülitada vaid config.json failist",
     "Requires your server to support MSC3030": "Eeldab, et sinu koduserver toetab MSC3030 spetsifikatsiooni",
     "Requires your server to support the stable version of MSC3827": "Eeldab, et sinu koduserver toetab MSC3827 stabiilset versiooni",
-    "Message from": "Sõnum kasutajalt",
     "User": "Kasutaja",
     "Show avatars in user, room and event mentions": "Näita tunnuspilte kasutajate, jututubade ja sündmuste mainimistes"
 }

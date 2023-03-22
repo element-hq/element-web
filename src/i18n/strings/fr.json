@@ -3749,7 +3749,6 @@
     "Can currently only be enabled via config.json": "Ne peut pour l’instant être activé que dans config.json",
     "Requires your server to support MSC3030": "Requiert la prise en charge par le serveur du MSC3030",
     "Requires your server to support the stable version of MSC3827": "Requiert la prise en charge par le serveur de la version stable du MSC3827",
-    "Message in": "Message dans",
     "User": "Utilisateur",
     "Show avatars in user, room and event mentions": "Afficher les avatars dans les mentions d'utilisateur, de salon et d’évènements"
 }
