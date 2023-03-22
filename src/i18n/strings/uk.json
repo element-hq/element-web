@@ -3750,5 +3750,7 @@
     "Requires your server to support MSC3030": "Потрібно, щоб ваш сервер підтримував MSC3030",
     "Requires your server to support the stable version of MSC3827": "Потрібно, щоб ваш сервер підтримував стабільну версію MSC3827",
     "User": "Користувач",
-    "Show avatars in user, room and event mentions": "Показувати аватари у згадках користувачів, кімнат і подій"
+    "Show avatars in user, room and event mentions": "Показувати аватари у згадках користувачів, кімнат і подій",
+    "Message from %(user)s": "Повідомлення від %(user)s",
+    "Message in %(room)s": "Повідомлення в %(room)s"
 }
