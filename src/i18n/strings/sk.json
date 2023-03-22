@@ -3750,5 +3750,7 @@
     "Requires your server to support MSC3030": "Vyžaduje, aby váš server podporoval MSC3030",
     "Requires your server to support the stable version of MSC3827": "Vyžaduje, aby váš server podporoval stabilnú verziu MSC3827",
     "User": "Používateľ",
-    "Show avatars in user, room and event mentions": "Zobraziť obrázky profilov v zmienkach o používateľoch, miestnostiach a udalostiach"
+    "Show avatars in user, room and event mentions": "Zobraziť obrázky profilov v zmienkach o používateľoch, miestnostiach a udalostiach",
+    "Message from %(user)s": "Správa od %(user)s",
+    "Message in %(room)s": "Správa v %(room)s"
 }
