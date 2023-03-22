@@ -610,7 +610,6 @@
     "Show a placeholder for removed messages": "Показвай индикатор на позицията на изтритите съобщения",
     "Show avatar changes": "Показвай промените по профилни снимки",
     "Show display name changes": "Показвай промените в имената",
-    "Show avatars in user and room mentions": "Показвай профилни снимки при споменаването на хора и стаи",
     "Enable big emoji in chat": "Включи големи емоджита в чатовете",
     "Send typing notifications": "Изпращай индикация, че пиша",
     "Messages containing my username": "Съобщения съдържащи потребителското ми име",
