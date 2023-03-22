@@ -19,6 +19,7 @@ import {
     formatRelativeTime,
     formatDuration,
     formatFullDateNoDayISO,
+    formatDateForInput,
     formatTimeLeft,
     formatPreciseDuration,
     formatLocalDateShort,
@@ -124,6 +125,15 @@ describe("formatFullDateNoDayISO", () => {
     it("should return ISO format", () => {
         expect(formatFullDateNoDayISO(REPEATABLE_DATE)).toEqual("2022-11-17T16:58:32.517Z");
     });
+});
+
+describe("formatDateForInput", () => {
+    it.each([["1993-11-01"], ["1066-10-14"], ["0571-04-22"], ["0062-02-05"]])(
+        "should format %s",
+        (dateString: string) => {
+            expect(formatDateForInput(new Date(dateString))).toBe(dateString);
+        },
+    );
 });
 
 describe("formatTimeLeft", () => {
