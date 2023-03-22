@@ -40,10 +40,20 @@ import ToastStore from "matrix-react-sdk/src/stores/ToastStore";
 import GenericExpiringToast from "matrix-react-sdk/src/components/views/toasts/GenericExpiringToast";
 import { logger } from "matrix-js-sdk/src/logger";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { BreadcrumbsStore } from "matrix-react-sdk/src/stores/BreadcrumbsStore";
+import { UPDATE_EVENT } from "matrix-react-sdk/src/stores/AsyncStore";
+import { avatarUrlForRoom, getInitialLetter } from "matrix-react-sdk/src/Avatar";
 
 import VectorBasePlatform from "./VectorBasePlatform";
 import { SeshatIndexManager } from "./SeshatIndexManager";
 import { IPCManager } from "./IPCManager";
+
+interface SquirrelUpdate {
+    releaseNotes: string;
+    releaseName: string;
+    releaseDate: Date;
+    updateURL: string;
+}
 
 const isMac = navigator.platform.toUpperCase().includes("MAC");
 
@@ -150,13 +160,29 @@ export default class ElectronPlatform extends VectorBasePlatform {
         });
 
         this.ipc.call("startSSOFlow", this.ssoID);
+
+        BreadcrumbsStore.instance.on(UPDATE_EVENT, this.onBreadcrumbsUpdate);
     }
 
     public async getConfig(): Promise<IConfigOptions> {
         return this.ipc.call("getConfig");
     }
 
-    private onUpdateDownloaded = async (ev, { releaseNotes, releaseName }): Promise<void> => {
+    private onBreadcrumbsUpdate = (): void => {
+        const rooms = BreadcrumbsStore.instance.rooms.slice(0, 7).map((r) => ({
+            roomId: r.roomId,
+            avatarUrl: avatarUrlForRoom(
+                r,
+                Math.floor(60 * window.devicePixelRatio),
+                Math.floor(60 * window.devicePixelRatio),
+                "crop",
+            ),
+            initial: getInitialLetter(r.name),
+        }));
+        this.ipc.call("breadcrumbs", rooms);
+    };
+
+    private onUpdateDownloaded = async (ev: Event, { releaseNotes, releaseName }: SquirrelUpdate): Promise<void> => {
         dis.dispatch<CheckUpdatesPayload>({
             action: Action.CheckUpdates,
             status: UpdateCheckStatus.Ready,
