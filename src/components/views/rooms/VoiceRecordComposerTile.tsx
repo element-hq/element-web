@@ -48,7 +48,7 @@ import { createVoiceMessageContent } from "../../../utils/createVoiceMessageCont
 
 interface IProps {
     room: Room;
-    permalinkCreator: RoomPermalinkCreator;
+    permalinkCreator?: RoomPermalinkCreator;
     relation?: IEventRelation;
     replyToEvent?: MatrixEvent;
 }

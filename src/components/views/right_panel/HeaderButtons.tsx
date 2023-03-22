@@ -34,7 +34,7 @@ export enum HeaderKind {
 
 interface IState {
     headerKind: HeaderKind;
-    phase: RightPanelPhases;
+    phase: RightPanelPhases | null;
     threadNotificationColor: NotificationColor;
     globalNotificationColor: NotificationColor;
 }
@@ -43,7 +43,7 @@ interface IProps {}
 
 export default abstract class HeaderButtons<P = {}> extends React.Component<IProps & P, IState> {
     private unmounted = false;
-    private dispatcherRef: string;
+    private dispatcherRef?: string = undefined;
 
     public constructor(props: IProps & P, kind: HeaderKind) {
         super(props);
@@ -83,7 +83,7 @@ export default abstract class HeaderButtons<P = {}> extends React.Component<IPro
     public isPhase(phases: string | string[]): boolean {
         if (!RightPanelStore.instance.isOpen) return false;
         if (Array.isArray(phases)) {
-            return phases.includes(this.state.phase);
+            return !!this.state.phase && phases.includes(this.state.phase);
         } else {
             return phases === this.state.phase;
         }

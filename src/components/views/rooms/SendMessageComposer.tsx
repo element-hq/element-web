@@ -75,7 +75,7 @@ export function createMessageContent(
     model: EditorModel,
     replyToEvent: MatrixEvent | undefined,
     relation: IEventRelation | undefined,
-    permalinkCreator: RoomPermalinkCreator,
+    permalinkCreator?: RoomPermalinkCreator,
     includeReplyLegacyFallback = true,
 ): IContent {
     const isEmote = containsEmote(model);
@@ -133,7 +133,7 @@ export function isQuickReaction(model: EditorModel): boolean {
 interface ISendMessageComposerProps extends MatrixClientProps {
     room: Room;
     placeholder?: string;
-    permalinkCreator: RoomPermalinkCreator;
+    permalinkCreator?: RoomPermalinkCreator;
     relation?: IEventRelation;
     replyToEvent?: MatrixEvent;
     disabled?: boolean;

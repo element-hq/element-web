@@ -68,7 +68,7 @@ const EncryptionPanel: React.FC<IProps> = (props: IProps) => {
             const requestFromPromise = await verificationRequestPromise;
             setRequesting(false);
             setRequest(requestFromPromise);
-            setPhase(requestFromPromise.phase);
+            setPhase(requestFromPromise?.phase);
         }
         if (verificationRequestPromise) {
             awaitPromise();
@@ -109,6 +109,9 @@ const EncryptionPanel: React.FC<IProps> = (props: IProps) => {
         let verificationRequest_: VerificationRequest;
         try {
             const roomId = await ensureDMExists(cli, member.userId);
+            if (!roomId) {
+                throw new Error("Unable to create Room for verification");
+            }
             verificationRequest_ = await cli.requestVerificationDM(member.userId, roomId);
         } catch (e) {
             console.error("Error starting verification", e);
@@ -133,15 +136,15 @@ const EncryptionPanel: React.FC<IProps> = (props: IProps) => {
         if (!RightPanelStore.instance.isOpen) RightPanelStore.instance.togglePanel(null);
     }, [member]);
 
-    const requested =
+    const requested: boolean =
         (!request && isRequesting) ||
-        (request && (phase === PHASE_REQUESTED || phase === PHASE_UNSENT || phase === undefined));
+        (!!request && (phase === PHASE_REQUESTED || phase === PHASE_UNSENT || phase === undefined));
     const isSelfVerification = request
         ? request.isSelfVerification
         : member.userId === MatrixClientPeg.get().getUserId();
 
     if (!request || requested) {
-        const initiatedByMe = (!request && isRequesting) || (request && request.initiatedByMe);
+        const initiatedByMe = (!request && isRequesting) || (!!request && request.initiatedByMe);
         return (
             <EncryptionInfo
                 isRoomEncrypted={isRoomEncrypted}

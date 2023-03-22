@@ -57,12 +57,14 @@ const WidgetCard: React.FC<IProps> = ({ room, widgetId, onClose }) => {
 
     let contextMenu: JSX.Element | undefined;
     if (menuDisplayed) {
-        const rect = handle.current!.getBoundingClientRect();
+        const rect = handle.current?.getBoundingClientRect();
+        const rightMargin = rect ? rect.right : 0;
+        const bottomMargin = rect ? rect.bottom : 0;
         contextMenu = (
             <WidgetContextMenu
                 chevronFace={ChevronFace.None}
-                right={UIStore.instance.windowWidth - rect.right - 12}
-                top={rect.bottom + 12}
+                right={UIStore.instance.windowWidth - rightMargin - 12}
+                top={bottomMargin + 12}
                 onFinished={closeMenu}
                 app={app}
             />

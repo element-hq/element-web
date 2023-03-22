@@ -87,7 +87,7 @@ export interface IDevice extends DeviceInfo {
 export const disambiguateDevices = (devices: IDevice[]): void => {
     const names = Object.create(null);
     for (let i = 0; i < devices.length; i++) {
-        const name = devices[i].getDisplayName();
+        const name = devices[i].getDisplayName() ?? "";
         const indexList = names[name] || [];
         indexList.push(i);
         names[name] = indexList;
@@ -595,7 +595,7 @@ export const RoomKickButton = ({
     member,
     startUpdating,
     stopUpdating,
-}: Omit<IBaseRoomProps, "powerLevels">): JSX.Element => {
+}: Omit<IBaseRoomProps, "powerLevels">): JSX.Element | null => {
     const cli = useContext(MatrixClientContext);
 
     // check if user can be kicked/disinvited
@@ -1611,7 +1611,7 @@ const UserInfo: React.FC<IProps> = ({ user, room, onClose, phase = RightPanelPha
     const member = useMemo(() => (room ? room.getMember(user.userId) || user : user), [room, user]);
 
     const isRoomEncrypted = useIsEncrypted(cli, room);
-    const devices = useDevices(user.userId);
+    const devices = useDevices(user.userId) ?? [];
 
     let e2eStatus: E2EStatus | undefined;
     if (isRoomEncrypted && devices) {

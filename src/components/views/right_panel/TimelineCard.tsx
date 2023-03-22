@@ -73,8 +73,8 @@ interface IState {
 export default class TimelineCard extends React.Component<IProps, IState> {
     public static contextType = RoomContext;
 
-    private dispatcherRef: string;
-    private layoutWatcherRef: string;
+    private dispatcherRef?: string;
+    private layoutWatcherRef?: string;
     private timelinePanel = React.createRef<TimelinePanel>();
     private card = React.createRef<HTMLDivElement>();
     private readReceiptsSettingWatcher: string | undefined;
@@ -110,10 +110,10 @@ export default class TimelineCard extends React.Component<IProps, IState> {
             SettingsStore.unwatchSetting(this.layoutWatcherRef);
         }
 
-        dis.unregister(this.dispatcherRef);
+        if (this.dispatcherRef) dis.unregister(this.dispatcherRef);
     }
 
-    private onRoomViewStoreUpdate = async (initial?: boolean): Promise<void> => {
+    private onRoomViewStoreUpdate = async (_initial?: boolean): Promise<void> => {
         const newState: Pick<IState, any> = {
             initialEventId: SdkContextClass.instance.roomViewStore.getInitialEventId(),
             isInitialEventHighlighted: SdkContextClass.instance.roomViewStore.isInitialEventHighlighted(),
@@ -220,7 +220,7 @@ export default class TimelineCard extends React.Component<IProps, IState> {
                 value={{
                     ...this.context,
                     timelineRenderingType: this.props.timelineRenderingType ?? this.context.timelineRenderingType,
-                    liveTimeline: this.props.timelineSet.getLiveTimeline(),
+                    liveTimeline: this.props.timelineSet?.getLiveTimeline(),
                     narrow: this.state.narrow,
                 }}
             >

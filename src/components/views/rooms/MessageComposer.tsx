@@ -82,7 +82,7 @@ function SendButton(props: ISendButtonProps): JSX.Element {
 interface IProps extends MatrixClientProps {
     room: Room;
     resizeNotifier: ResizeNotifier;
-    permalinkCreator: RoomPermalinkCreator;
+    permalinkCreator?: RoomPermalinkCreator;
     replyToEvent?: MatrixEvent;
     relation?: IEventRelation;
     e2eStatus?: E2EStatus;

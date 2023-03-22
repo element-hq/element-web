@@ -130,12 +130,14 @@ const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
     const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<HTMLDivElement>();
     let contextMenu;
     if (menuDisplayed) {
-        const rect = handle.current.getBoundingClientRect();
+        const rect = handle.current?.getBoundingClientRect();
+        const rightMargin = rect?.right ?? 0;
+        const topMargin = rect?.top ?? 0;
         contextMenu = (
             <WidgetContextMenu
                 chevronFace={ChevronFace.None}
-                right={UIStore.instance.windowWidth - rect.right}
-                bottom={UIStore.instance.windowHeight - rect.top}
+                right={UIStore.instance.windowWidth - rightMargin}
+                bottom={UIStore.instance.windowHeight - topMargin}
                 onFinished={closeMenu}
                 app={app}
             />
@@ -226,7 +228,7 @@ const AppsSection: React.FC<IAppsSectionProps> = ({ room }) => {
             managers.openNoManagerDialog();
         } else {
             // noinspection JSIgnoredPromiseFromCall
-            managers.getPrimaryManager().open(room);
+            managers.getPrimaryManager()?.open(room);
         }
     };
 

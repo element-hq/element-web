@@ -231,7 +231,7 @@ export default class RoomHeaderButtons extends HeaderButtons<IProps> {
     private onRoomSummaryClicked = (): void => {
         // use roomPanelPhase rather than this.state.phase as it remembers the latest one if we close
         const currentPhase = RightPanelStore.instance.currentCard.phase;
-        if (ROOM_INFO_PHASES.includes(currentPhase)) {
+        if (currentPhase && ROOM_INFO_PHASES.includes(currentPhase)) {
             if (this.state.phase === currentPhase) {
                 this.setPhase(currentPhase);
             } else {
@@ -257,7 +257,7 @@ export default class RoomHeaderButtons extends HeaderButtons<IProps> {
     };
 
     private onThreadsPanelClicked = (ev: ButtonEvent): void => {
-        if (RoomHeaderButtons.THREAD_PHASES.includes(this.state.phase)) {
+        if (this.state.phase && RoomHeaderButtons.THREAD_PHASES.includes(this.state.phase)) {
             RightPanelStore.instance.togglePanel(this.props.room?.roomId ?? null);
         } else {
             showThreadPanel();

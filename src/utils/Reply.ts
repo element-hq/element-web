@@ -68,7 +68,7 @@ export function stripHTMLReply(html: string): string {
 // Part of Replies fallback support
 export function getNestedReplyText(
     ev: MatrixEvent,
-    permalinkCreator: RoomPermalinkCreator,
+    permalinkCreator?: RoomPermalinkCreator,
 ): { body: string; html: string } | null {
     if (!ev) return null;
 
@@ -99,7 +99,7 @@ export function getNestedReplyText(
 
     // dev note: do not rely on `body` being safe for HTML usage below.
 
-    const evLink = permalinkCreator.forEvent(ev.getId()!);
+    const evLink = permalinkCreator?.forEvent(ev.getId()!);
     const userLink = makeUserPermalink(ev.getSender()!);
     const mxid = ev.getSender();
 
@@ -236,7 +236,7 @@ interface AddReplyOpts {
 }
 
 interface IncludeLegacyFeedbackOpts {
-    permalinkCreator: RoomPermalinkCreator;
+    permalinkCreator?: RoomPermalinkCreator;
     includeLegacyFallback: true;
 }
 

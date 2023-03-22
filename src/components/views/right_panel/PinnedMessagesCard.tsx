@@ -139,9 +139,10 @@ const PinnedMessagesCard: React.FC<IProps> = ({ room, onClose, permalinkCreator 
                     }
                     await room.processPollEvents([event]);
 
-                    if (event && PinningUtils.isPinnable(event)) {
+                    const senderUserId = event.getSender();
+                    if (senderUserId && PinningUtils.isPinnable(event)) {
                         // Inject sender information
-                        event.sender = room.getMember(event.getSender());
+                        event.sender = room.getMember(senderUserId);
                         // Also inject any edits we've found
                         if (edit) event.makeReplaced(edit);
 
