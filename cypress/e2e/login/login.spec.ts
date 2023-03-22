@@ -45,7 +45,8 @@ describe("Login", () => {
             cy.injectAxe();
 
             cy.get("#mx_LoginForm_username", { timeout: 15000 }).should("be.visible");
-            cy.percySnapshot("Login");
+            // Disabled because flaky - see https://github.com/vector-im/element-web/issues/24688
+            //cy.percySnapshot("Login");
             cy.checkA11y();
 
             cy.get(".mx_ServerPicker_change").click();
