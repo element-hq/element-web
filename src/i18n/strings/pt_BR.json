@@ -619,7 +619,6 @@
     "%(names)s and %(count)s others are typing …|one": "%(names)s e outra pessoa estão digitando…",
     "%(names)s and %(lastPerson)s are typing …": "%(names)s e %(lastPerson)s estão digitando…",
     "Show read receipts sent by other users": "Mostrar confirmações de leitura dos outros usuários",
-    "Show avatars in user and room mentions": "Mostrar fotos de perfil em menções de usuários e de salas",
     "Enable big emoji in chat": "Ativar emojis grandes no bate-papo",
     "Send typing notifications": "Permitir que saibam quando eu estiver digitando",
     "Messages containing my username": "Mensagens contendo meu nome de usuário",
