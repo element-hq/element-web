@@ -3750,5 +3750,7 @@
     "Requires your server to support MSC3030": "Eeldab, et sinu koduserver toetab MSC3030 spetsifikatsiooni",
     "Requires your server to support the stable version of MSC3827": "Eeldab, et sinu koduserver toetab MSC3827 stabiilset versiooni",
     "User": "Kasutaja",
-    "Show avatars in user, room and event mentions": "Näita tunnuspilte kasutajate, jututubade ja sündmuste mainimistes"
+    "Show avatars in user, room and event mentions": "Näita tunnuspilte kasutajate, jututubade ja sündmuste mainimistes",
+    "Message from %(user)s": "Sõnum kasutajalt %(user)s",
+    "Message in %(room)s": "Sõnum jututoas %(room)s"
 }
