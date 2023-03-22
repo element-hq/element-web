@@ -16,8 +16,9 @@ limitations under the License.
 
 import React from "react";
 import { MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
-import { MockedObject } from "jest-mock";
+import { mocked, MockedObject } from "jest-mock";
 import { render } from "@testing-library/react";
+import * as prettier from "prettier";
 
 import { getMockClientWithEventEmitter, mkEvent, mkMessage, mkStubRoom } from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
@@ -28,10 +29,18 @@ import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalinks";
 import { MediaEventHelper } from "../../../../src/utils/MediaEventHelper";
 
-const mkRoomTextMessage = (body: string): MatrixEvent => {
+const room1Id = "!room1:example.com";
+const room2Id = "!room2:example.com";
+const room2Name = "Room 2";
+
+interface MkRoomTextMessageOpts {
+    roomId?: string;
+}
+
+const mkRoomTextMessage = (body: string, mkRoomTextMessageOpts?: MkRoomTextMessageOpts): MatrixEvent => {
     return mkMessage({
         msg: body,
-        room: "room_id",
+        room: mkRoomTextMessageOpts?.roomId ?? room1Id,
         user: "sender",
         event: true,
     });
@@ -42,7 +51,7 @@ const mkFormattedMessage = (body: string, formattedBody: string): MatrixEvent =>
         msg: body,
         formattedMsg: formattedBody,
         format: "org.matrix.custom.html",
-        room: "room_id",
+        room: room1Id,
         user: "sender",
         event: true,
     });
@@ -53,12 +62,29 @@ describe("<TextualBody />", () => {
         jest.spyOn(MatrixClientPeg, "get").mockRestore();
     });
 
-    const defaultRoom = mkStubRoom("room_id", "test room", undefined);
+    const defaultRoom = mkStubRoom(room1Id, "test room", undefined);
+    const otherRoom = mkStubRoom(room2Id, room2Name, undefined);
     let defaultMatrixClient: MockedObject<MatrixClient>;
+
+    const defaultEvent = mkEvent({
+        type: "m.room.message",
+        room: room1Id,
+        user: "sender",
+        content: {
+            body: "winks",
+            msgtype: "m.emote",
+        },
+        event: true,
+    });
+
     beforeEach(() => {
         defaultMatrixClient = getMockClientWithEventEmitter({
-            getRoom: () => defaultRoom,
-            getRooms: () => [defaultRoom],
+            getRoom: (roomId: string | undefined) => {
+                if (roomId === room1Id) return defaultRoom;
+                if (roomId === room2Id) return otherRoom;
+                return null;
+            },
+            getRooms: () => [defaultRoom, otherRoom],
             getAccountData: (): MatrixEvent | undefined => undefined,
             isGuest: () => false,
             mxcUrlToHttp: (s: string) => s,
@@ -67,18 +93,13 @@ describe("<TextualBody />", () => {
                 throw new Error("MockClient event not found");
             },
         });
+
+        mocked(defaultRoom).findEventById.mockImplementation((eventId: string) => {
+            if (eventId === defaultEvent.getId()) return defaultEvent;
+            return undefined;
+        });
     });
 
-    const defaultEvent = mkEvent({
-        type: "m.room.message",
-        room: "room_id",
-        user: "sender",
-        content: {
-            body: "winks",
-            msgtype: "m.emote",
-        },
-        event: true,
-    });
     const defaultProps = {
         mxEvent: defaultEvent,
         highlights: [] as string[],
@@ -88,6 +109,7 @@ describe("<TextualBody />", () => {
         permalinkCreator: new RoomPermalinkCreator(defaultRoom),
         mediaEventHelper: {} as MediaEventHelper,
     };
+
     const getComponent = (props = {}, matrixClient: MatrixClient = defaultMatrixClient, renderingFn?: any) =>
         (renderingFn ?? render)(
             <MatrixClientContext.Provider value={matrixClient}>
@@ -100,7 +122,7 @@ describe("<TextualBody />", () => {
 
         const ev = mkEvent({
             type: "m.room.message",
-            room: "room_id",
+            room: room1Id,
             user: "sender",
             content: {
                 body: "winks",
@@ -120,7 +142,7 @@ describe("<TextualBody />", () => {
 
         const ev = mkEvent({
             type: "m.room.message",
-            room: "room_id",
+            room: room1Id,
             user: "bot_sender",
             content: {
                 body: "this is a notice, probably from a bot",
@@ -196,13 +218,42 @@ describe("<TextualBody />", () => {
                 `"Visit <span><bdi><a class="mx_Pill mx_RoomPill" href="https://matrix.to/#/#room:example.com"><div class="mx_Pill_LinkIcon mx_BaseAvatar mx_BaseAvatar_image"></div><span class="mx_Pill_text">#room:example.com</span></a></bdi></span>"`,
             );
         });
+
+        it("should pillify a permalink to a message in the same room with the label »Message from Member«", () => {
+            const ev = mkRoomTextMessage(`Visit https://matrix.to/#/${room1Id}/${defaultEvent.getId()}`);
+            const { container } = getComponent({ mxEvent: ev });
+            const content = container.querySelector(".mx_EventTile_body");
+            expect(
+                prettier.format(content.innerHTML.replace(defaultEvent.getId(), "%event_id%"), {
+                    parser: "html",
+                }),
+            ).toMatchSnapshot();
+        });
+
+        it("should pillify a permalink to an unknown message in the same room with the label »Message«", () => {
+            const ev = mkRoomTextMessage(`Visit https://matrix.to/#/${room1Id}/!abc123`);
+            const { container } = getComponent({ mxEvent: ev });
+            const content = container.querySelector(".mx_EventTile_body");
+            expect(content).toMatchSnapshot();
+        });
+
+        it("should pillify a permalink to an event in another room with the label »Message in Room 2«", () => {
+            const ev = mkRoomTextMessage(`Visit https://matrix.to/#/${room2Id}/${defaultEvent.getId()}`);
+            const { container } = getComponent({ mxEvent: ev });
+            const content = container.querySelector(".mx_EventTile_body");
+            expect(
+                prettier.format(content.innerHTML.replace(defaultEvent.getId(), "%event_id%"), {
+                    parser: "html",
+                }),
+            ).toMatchSnapshot();
+        });
     });
 
     describe("renders formatted m.text correctly", () => {
         let matrixClient: MatrixClient;
         beforeEach(() => {
             matrixClient = getMockClientWithEventEmitter({
-                getRoom: () => mkStubRoom("room_id", "room name", undefined),
+                getRoom: () => mkStubRoom(room1Id, "room name", undefined),
                 getAccountData: (): MatrixEvent | undefined => undefined,
                 getUserId: () => "@me:my_server",
                 getHomeserverUrl: () => "https://my_server/",

@@ -71,7 +71,6 @@ exports[`<Pill> should render the expected pill for a message in another room 1`
         class="mx_Pill mx_EventPill"
         href="https://matrix.to/#/!room1:example.com/$123-456"
       >
-        Message in
         <span
           aria-hidden="true"
           class="mx_BaseAvatar"
@@ -96,7 +95,7 @@ exports[`<Pill> should render the expected pill for a message in another room 1`
         <span
           class="mx_Pill_text"
         >
-          Room 1
+          Message in Room 1
         </span>
       </a>
     </bdi>
@@ -112,7 +111,6 @@ exports[`<Pill> should render the expected pill for a message in the same room 1
         class="mx_Pill mx_EventPill"
         href="https://matrix.to/#/!room1:example.com/$123-456"
       >
-        Message from
         <span
           aria-hidden="true"
           class="mx_BaseAvatar"
@@ -137,7 +135,7 @@ exports[`<Pill> should render the expected pill for a message in the same room 1
         <span
           class="mx_Pill_text"
         >
-          User 1
+          Message from User 1
         </span>
       </a>
     </bdi>

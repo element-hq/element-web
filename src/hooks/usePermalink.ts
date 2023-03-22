@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Room, RoomMember } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent, Room, RoomMember } from "matrix-js-sdk/src/matrix";
 
 import { ButtonEvent } from "../components/views/elements/AccessibleButton";
 import { PillType } from "../components/views/elements/Pill";
@@ -70,6 +70,11 @@ interface HookResult {
      * null here means that the type cannot be detected. Most likely if the URL was not a permalink.
      */
     type: PillType | "space" | null;
+    /**
+     * Target event of the permalink.
+     * Null if unable to load the event.
+     */
+    event: MatrixEvent | null;
 }
 
 /**
@@ -166,6 +171,7 @@ export const usePermalink: (args: Args) => HookResult = ({
     }
 
     return {
+        event,
         member,
         onClick,
         resourceId,

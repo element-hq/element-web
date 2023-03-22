@@ -537,7 +537,7 @@ export function mkStubRoom(
         } as unknown as RoomState,
         eventShouldLiveIn: jest.fn().mockReturnValue({}),
         fetchRoomThreads: jest.fn().mockReturnValue(Promise.resolve()),
-        findEventById: (_: string) => undefined as MatrixEvent | undefined,
+        findEventById: jest.fn().mockReturnValue(undefined),
         findPredecessor: jest.fn().mockReturnValue({ roomId: "", eventId: null }),
         getAccountData: (_: EventType | string) => undefined as MatrixEvent | undefined,
         getAltAliases: jest.fn().mockReturnValue([]),
