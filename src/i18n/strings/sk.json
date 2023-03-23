@@ -3752,5 +3752,6 @@
     "User": "Používateľ",
     "Show avatars in user, room and event mentions": "Zobraziť obrázky profilov v zmienkach o používateľoch, miestnostiach a udalostiach",
     "Message from %(user)s": "Správa od %(user)s",
-    "Message in %(room)s": "Správa v %(room)s"
+    "Message in %(room)s": "Správa v %(room)s",
+    "Enable intentional mentions": "Povoliť úmyselné zmienky"
 }
