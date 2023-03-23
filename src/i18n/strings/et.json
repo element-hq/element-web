@@ -3752,5 +3752,6 @@
     "User": "Kasutaja",
     "Show avatars in user, room and event mentions": "Näita tunnuspilte kasutajate, jututubade ja sündmuste mainimistes",
     "Message from %(user)s": "Sõnum kasutajalt %(user)s",
-    "Message in %(room)s": "Sõnum jututoas %(room)s"
+    "Message in %(room)s": "Sõnum jututoas %(room)s",
+    "Enable intentional mentions": "Võta kasutusele tahtlikud mainimised"
 }
