@@ -134,7 +134,10 @@ describe("FilePanel", () => {
                 });
 
                 // Exclude timestamps and read markers from snapshot
-                const percyCSS = ".mx_MessageTimestamp, .mx_RoomView_myReadMarker { visibility: hidden !important; }";
+                // FIXME: hide mx_SeekBar because flaky - see https://github.com/vector-im/element-web/issues/24897
+                //   Remove this once https://github.com/vector-im/element-web/issues/24898 is fixed.
+                const percyCSS =
+                    ".mx_MessageTimestamp, .mx_RoomView_myReadMarker, .mx_SeekBar { visibility: hidden !important; }";
                 cy.get(".mx_RoomView_MessageList").percySnapshotElement("File tiles on FilePanel", { percyCSS });
             });
         });
