@@ -26,6 +26,8 @@ import { IUpload, VoiceMessageRecording } from "../../../../src/audio/VoiceMessa
 import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalinks";
 import { VoiceRecordingStore } from "../../../../src/stores/VoiceRecordingStore";
 import { PlaybackClock } from "../../../../src/audio/PlaybackClock";
+import { mkEvent } from "../../../test-utils";
+import SettingsStore from "../../../../src/settings/SettingsStore";
 
 jest.mock("../../../../src/utils/local-room", () => ({
     doMaybeLocalRoomAction: jest.fn(),
@@ -50,6 +52,7 @@ describe("<VoiceRecordComposerTile/>", () => {
 
     beforeEach(() => {
         mockClient = {
+            getSafeUserId: jest.fn().mockReturnValue("@alice:example.com"),
             sendMessage: jest.fn(),
         } as unknown as MatrixClient;
         MatrixClientPeg.get = () => mockClient;
@@ -99,6 +102,10 @@ describe("<VoiceRecordComposerTile/>", () => {
                 return fn(roomId);
             },
         );
+
+        jest.spyOn(SettingsStore, "getValue").mockImplementation(
+            (settingName) => settingName === "feature_intentional_mentions",
+        );
     });
 
     describe("send", () => {
@@ -127,6 +134,61 @@ describe("<VoiceRecordComposerTile/>", () => {
                 "org.matrix.msc1767.text": "Voice message",
                 "org.matrix.msc3245.voice": {},
                 "url": "mxc://example.com/voice",
+                "org.matrix.msc3952.mentions": {},
+            });
+        });
+
+        it("reply with voice recording", async () => {
+            const room = {
+                roomId,
+            } as unknown as Room;
+
+            const replyToEvent = mkEvent({
+                type: "m.room.message",
+                user: "@bob:test",
+                room: roomId,
+                content: {},
+                event: true,
+            });
+
+            const props = {
+                room,
+                ref: voiceRecordComposerTile,
+                permalinkCreator: new RoomPermalinkCreator(room),
+                replyToEvent,
+            };
+            render(<VoiceRecordComposerTile {...props} />);
+
+            await voiceRecordComposerTile.current!.send();
+            expect(mockClient.sendMessage).toHaveBeenCalledWith(roomId, {
+                "body": "Voice message",
+                "file": undefined,
+                "info": {
+                    duration: 1337000,
+                    mimetype: "audio/ogg",
+                    size: undefined,
+                },
+                "msgtype": MsgType.Audio,
+                "org.matrix.msc1767.audio": {
+                    duration: 1337000,
+                    waveform: [1434, 2560, 3686],
+                },
+                "org.matrix.msc1767.file": {
+                    file: undefined,
+                    mimetype: "audio/ogg",
+                    name: "Voice message.ogg",
+                    size: undefined,
+                    url: "mxc://example.com/voice",
+                },
+                "org.matrix.msc1767.text": "Voice message",
+                "org.matrix.msc3245.voice": {},
+                "url": "mxc://example.com/voice",
+                "m.relates_to": {
+                    "m.in_reply_to": {
+                        event_id: replyToEvent.getId(),
+                    },
+                },
+                "org.matrix.msc3952.mentions": { user_ids: ["@bob:test"] },
             });
         });
     });

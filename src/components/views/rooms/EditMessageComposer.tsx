@@ -48,6 +48,7 @@ import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { PosthogAnalytics } from "../../../PosthogAnalytics";
 import { editorRoomKey, editorStateKey } from "../../../Editing";
 import DocumentOffset from "../../../editor/offset";
+import { attachMentions, attachRelation } from "./SendMessageComposer";
 
 function getHtmlReplyFallback(mxEvent: MatrixEvent): string {
     const html = mxEvent.getContent().formatted_body;
@@ -90,8 +91,9 @@ export function createEditContent(model: EditorModel, editedEvent: MatrixEvent):
         body: body,
     };
     const contentBody: IContent = {
-        msgtype: newContent.msgtype,
-        body: `${plainPrefix} * ${body}`,
+        "msgtype": newContent.msgtype,
+        "body": `${plainPrefix} * ${body}`,
+        "m.new_content": newContent,
     };
 
     const formattedBody = htmlSerializeIfNeeded(model, {
@@ -105,16 +107,15 @@ export function createEditContent(model: EditorModel, editedEvent: MatrixEvent):
         contentBody.formatted_body = `${htmlPrefix} * ${formattedBody}`;
     }
 
-    return Object.assign(
-        {
-            "m.new_content": newContent,
-            "m.relates_to": {
-                rel_type: "m.replace",
-                event_id: editedEvent.getId(),
-            },
-        },
-        contentBody,
-    );
+    // Build the mentions properties for both the content and new_content.
+    //
+    // TODO If this is a reply we need to include all the users from it.
+    if (SettingsStore.getValue("feature_intentional_mentions")) {
+        attachMentions(editedEvent.sender!.userId, contentBody, model, undefined, editedEvent.getContent());
+    }
+    attachRelation(contentBody, { rel_type: "m.replace", event_id: editedEvent.getId() });
+
+    return contentBody;
 }
 
 interface IEditMessageComposerProps extends MatrixClientProps {

@@ -48,7 +48,7 @@ import ErrorDialog from "./components/views/dialogs/ErrorDialog";
 import UploadFailureDialog from "./components/views/dialogs/UploadFailureDialog";
 import UploadConfirmDialog from "./components/views/dialogs/UploadConfirmDialog";
 import { createThumbnail } from "./utils/image-media";
-import { attachRelation } from "./components/views/rooms/SendMessageComposer";
+import { attachMentions, attachRelation } from "./components/views/rooms/SendMessageComposer";
 import { doMaybeLocalRoomAction } from "./utils/local-room";
 import { SdkContextClass } from "./contexts/SDKContext";
 
@@ -492,6 +492,8 @@ export default class ContentMessages {
             msgtype: MsgType.File, // set more specifically later
         };
 
+        // Attach mentions, which really only applies if there's a replyToEvent.
+        attachMentions(matrixClient.getSafeUserId(), content, null, replyToEvent);
         attachRelation(content, relation);
         if (replyToEvent) {
             addReplyToMessageContent(content, replyToEvent, {
