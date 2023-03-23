@@ -118,7 +118,7 @@ export default class Range {
             const serializedPart = part.serialize();
             serializedPart.text = part.text.substring(startIdx, endIdx);
             const newPart = this.model.partCreator.deserializePart(serializedPart);
-            parts.push(newPart);
+            if (newPart) parts.push(newPart);
         });
         return parts;
     }

@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import HistoryManager, { MAX_STEP_LENGTH } from "../../src/editor/history";
+import HistoryManager, { IHistory, MAX_STEP_LENGTH } from "../../src/editor/history";
 import EditorModel from "../../src/editor/model";
 import DocumentPosition from "../../src/editor/position";
 
@@ -29,7 +29,7 @@ describe("editor/history", function () {
         parts[0] = "hello world";
         history.tryPush(model, new DocumentPosition(0, 0), "insertText", {});
         expect(history.canUndo()).toEqual(true);
-        const undoState = history.undo(model);
+        const undoState = history.undo(model) as IHistory;
         expect(undoState.caret).toBe(caret1);
         expect(undoState.parts).toEqual(["hello"]);
         expect(history.canUndo()).toEqual(false);
@@ -44,7 +44,7 @@ describe("editor/history", function () {
         history.tryPush(model, caret2, "insertText", {});
         history.undo(model);
         expect(history.canRedo()).toEqual(true);
-        const redoState = history.redo();
+        const redoState = history.redo() as IHistory;
         expect(redoState.caret).toBe(caret2);
         expect(redoState.parts).toEqual(["hello world"]);
         expect(history.canRedo()).toEqual(false);
@@ -74,7 +74,7 @@ describe("editor/history", function () {
             parts[0] = parts[0] + diff.added;
             keystrokeCount += 1;
         } while (!history.tryPush(model, new DocumentPosition(0, 0), "insertText", diff));
-        const undoState = history.undo(model);
+        const undoState = history.undo(model) as IHistory;
         expect(undoState.caret).toBe(firstCaret);
         expect(undoState.parts).toEqual(["hello"]);
         expect(history.canUndo()).toEqual(false);
@@ -104,7 +104,7 @@ describe("editor/history", function () {
         parts[0] = "hi you";
 
         expect(history.canUndo()).toEqual(true);
-        const undoResult = history.undo(model);
+        const undoResult = history.undo(model) as IHistory;
         expect(undoResult.caret).toEqual(spaceCaret);
         expect(undoResult.parts).toEqual(["hi "]);
     });
@@ -118,7 +118,7 @@ describe("editor/history", function () {
         const result = history.tryPush(model, new DocumentPosition(0, 0), "insertText", { added: "o" });
         expect(result).toEqual(false);
         expect(history.canUndo()).toEqual(true);
-        const undoState = history.undo(model);
+        const undoState = history.undo(model) as IHistory;
         expect(undoState.caret).toEqual(firstCaret);
         expect(undoState.parts).toEqual(["hello"]);
     });
@@ -132,7 +132,7 @@ describe("editor/history", function () {
         history.tryPush(model, caret, "insertText", { added: "o" });
         history.undo(model);
         expect(history.canRedo()).toEqual(true);
-        const redoState = history.redo();
+        const redoState = history.redo() as IHistory;
         expect(redoState.caret).toBe(caret);
         expect(redoState.parts).toEqual(["helloo"]);
     });

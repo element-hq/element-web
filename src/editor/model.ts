@@ -91,16 +91,18 @@ export default class EditorModel {
     }
 
     public clone(): EditorModel {
-        const clonedParts = this.parts.map((p) => this.partCreator.deserializePart(p.serialize()));
+        const clonedParts = this.parts
+            .map((p) => this.partCreator.deserializePart(p.serialize()))
+            .filter((p): p is Part => Boolean(p));
         return new EditorModel(clonedParts, this._partCreator, this.updateCallback);
     }
 
     private insertPart(index: number, part: Part): void {
         this._parts.splice(index, 0, part);
-        if (this.activePartIdx >= index) {
+        if (this.activePartIdx && this.activePartIdx >= index) {
             ++this.activePartIdx;
         }
-        if (this.autoCompletePartIdx >= index) {
+        if (this.autoCompletePartIdx && this.autoCompletePartIdx >= index) {
             ++this.autoCompletePartIdx;
         }
     }
@@ -109,12 +111,12 @@ export default class EditorModel {
         this._parts.splice(index, 1);
         if (index === this.activePartIdx) {
             this.activePartIdx = null;
-        } else if (this.activePartIdx > index) {
+        } else if (this.activePartIdx && this.activePartIdx > index) {
             --this.activePartIdx;
         }
         if (index === this.autoCompletePartIdx) {
             this.autoCompletePartIdx = null;
-        } else if (this.autoCompletePartIdx > index) {
+        } else if (this.autoCompletePartIdx && this.autoCompletePartIdx > index) {
             --this.autoCompletePartIdx;
         }
     }
@@ -160,7 +162,9 @@ export default class EditorModel {
     }
 
     public reset(serializedParts: SerializedPart[], caret?: Caret, inputType?: string): void {
-        this._parts = serializedParts.map((p) => this._partCreator.deserializePart(p));
+        this._parts = serializedParts
+            .map((p) => this._partCreator.deserializePart(p))
+            .filter((p): p is Part => Boolean(p));
         if (!caret) {
             caret = this.getPositionAtEnd();
         }
@@ -194,7 +198,7 @@ export default class EditorModel {
 
     public update(newValue: string, inputType: string, caret: DocumentOffset): Promise<void> {
         const diff = this.diff(newValue, inputType, caret);
-        const position = this.positionForOffset(diff.at, caret.atNodeEnd);
+        const position = this.positionForOffset(diff.at || 0, caret.atNodeEnd);
         let removedOffsetDecrease = 0;
         if (diff.removed) {
             removedOffsetDecrease = this.removeText(position, diff.removed.length);
@@ -204,7 +208,7 @@ export default class EditorModel {
             addedLen = this.addText(position, diff.added, inputType);
         }
         this.mergeAdjacentParts();
-        const caretOffset = diff.at - removedOffsetDecrease + addedLen;
+        const caretOffset = (diff.at || 0) - removedOffsetDecrease + addedLen;
         let newPosition = this.positionForOffset(caretOffset, true);
         const canOpenAutoComplete = inputType !== "insertFromPaste" && inputType !== "insertFromDrop";
         const acPromise = this.setActivePart(newPosition, canOpenAutoComplete);
@@ -254,10 +258,11 @@ export default class EditorModel {
     private onAutoComplete = ({ replaceParts, close }: ICallback): void => {
         let pos: DocumentPosition | undefined;
         if (replaceParts) {
-            this._parts.splice(this.autoCompletePartIdx, this.autoCompletePartCount, ...replaceParts);
+            const autoCompletePartIdx = this.autoCompletePartIdx || 0;
+            this._parts.splice(autoCompletePartIdx, this.autoCompletePartCount, ...replaceParts);
             this.autoCompletePartCount = replaceParts.length;
             const lastPart = replaceParts[replaceParts.length - 1];
-            const lastPartIndex = this.autoCompletePartIdx + replaceParts.length - 1;
+            const lastPartIndex = autoCompletePartIdx + replaceParts.length - 1;
             pos = new DocumentPosition(lastPartIndex, lastPart.text.length);
         }
         if (close) {
@@ -360,10 +365,13 @@ export default class EditorModel {
         const { offset } = pos;
         let addLen = str.length;
         const part = this._parts[index];
+
+        let it: string | undefined = str;
+
         if (part) {
             if (part.canEdit) {
                 if (part.validateAndInsert(offset, str, inputType)) {
-                    str = null;
+                    it = undefined;
                 } else {
                     const splitPart = part.split(offset);
                     index += 1;
@@ -381,7 +389,6 @@ export default class EditorModel {
             index = 0;
         }
 
-        let it: string | undefined = str;
         while (it) {
             const newPart = this._partCreator.createPartForInput(it, index, inputType);
             const oldStr = it;

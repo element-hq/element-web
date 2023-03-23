@@ -137,5 +137,5 @@ export async function shouldSendAnyway(commandText: string): Promise<boolean> {
         button: _t("Send as message"),
     });
     const [sendAnyway] = await finished;
-    return sendAnyway;
+    return sendAnyway || false;
 }

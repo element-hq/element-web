@@ -241,7 +241,7 @@ export function toggleInlineFormat(range: Range, prefix: string, suffix = prefix
     const { partCreator } = model;
 
     // compute paragraph [start, end] indexes
-    const paragraphIndexes = [];
+    const paragraphIndexes: [number, number][] = [];
     let startIndex = 0;
 
     // start at i=2 because we look at i and up to two parts behind to detect paragraph breaks at their end
@@ -285,12 +285,18 @@ export function toggleInlineFormat(range: Range, prefix: string, suffix = prefix
             // remove prefix and suffix formatting string
             const partWithoutPrefix = parts[base].serialize();
             partWithoutPrefix.text = partWithoutPrefix.text.slice(prefix.length);
-            parts[base] = partCreator.deserializePart(partWithoutPrefix);
+            let deserializedPart = partCreator.deserializePart(partWithoutPrefix);
+            if (deserializedPart) {
+                parts[base] = deserializedPart;
+            }
 
             const partWithoutSuffix = parts[index - 1].serialize();
             const suffixPartText = partWithoutSuffix.text;
             partWithoutSuffix.text = suffixPartText.substring(0, suffixPartText.length - suffix.length);
-            parts[index - 1] = partCreator.deserializePart(partWithoutSuffix);
+            deserializedPart = partCreator.deserializePart(partWithoutSuffix);
+            if (deserializedPart) {
+                parts[index - 1] = deserializedPart;
+            }
         } else {
             parts.splice(index, 0, partCreator.plain(suffix)); // splice in the later one first to not change offset
             parts.splice(base, 0, partCreator.plain(prefix));

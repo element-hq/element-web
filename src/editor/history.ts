@@ -19,7 +19,7 @@ import { IDiff } from "./diff";
 import { SerializedPart } from "./parts";
 import { Caret } from "./caret";
 
-interface IHistory {
+export interface IHistory {
     parts: SerializedPart[];
     caret: Caret;
 }
@@ -121,7 +121,7 @@ export default class HistoryManager {
     }
 
     public ensureLastChangesPushed(model: EditorModel): void {
-        if (this.changedSinceLastPush) {
+        if (this.changedSinceLastPush && this.lastCaret) {
             this.pushState(model, this.lastCaret);
         }
     }
@@ -135,7 +135,7 @@ export default class HistoryManager {
     }
 
     // returns state that should be applied to model
-    public undo(model: EditorModel): IHistory {
+    public undo(model: EditorModel): IHistory | void {
         if (this.canUndo()) {
             this.ensureLastChangesPushed(model);
             this.currentIndex -= 1;
@@ -144,7 +144,7 @@ export default class HistoryManager {
     }
 
     // returns state that should be applied to model
-    public redo(): IHistory {
+    public redo(): IHistory | void {
         if (this.canRedo()) {
             this.changedSinceLastPush = false;
             this.currentIndex += 1;

@@ -573,24 +573,28 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
                 this.onFormatAction(Formatting.InsertLink);
                 handled = true;
                 break;
-            case KeyBindingAction.EditRedo:
-                if (this.historyManager.canRedo()) {
-                    const { parts, caret } = this.historyManager.redo();
+            case KeyBindingAction.EditRedo: {
+                const history = this.historyManager.redo();
+                if (history) {
+                    const { parts, caret } = history;
                     // pass matching inputType so historyManager doesn't push echo
                     // when invoked from rerender callback.
                     model.reset(parts, caret, "historyRedo");
                 }
                 handled = true;
                 break;
-            case KeyBindingAction.EditUndo:
-                if (this.historyManager.canUndo()) {
-                    const { parts, caret } = this.historyManager.undo(this.props.model);
+            }
+            case KeyBindingAction.EditUndo: {
+                const history = this.historyManager.undo(this.props.model);
+                if (history) {
+                    const { parts, caret } = history;
                     // pass matching inputType so historyManager doesn't push echo
                     // when invoked from rerender callback.
                     model.reset(parts, caret, "historyUndo");
                 }
                 handled = true;
                 break;
+            }
             case KeyBindingAction.NewLine:
                 this.insertText("\n");
                 handled = true;

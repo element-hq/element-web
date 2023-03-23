@@ -78,7 +78,7 @@ function parseLink(n: Node, pc: PartCreator, opts: IParseOptions): Part[] {
 
     switch (resourceId?.[0]) {
         case "@":
-            return [pc.userPill(n.textContent, resourceId)];
+            return [pc.userPill(n.textContent || "", resourceId)];
         case "#":
             return [pc.roomPill(resourceId)];
     }
@@ -97,6 +97,8 @@ function parseImage(n: Node, pc: PartCreator, opts: IParseOptions): Part[] {
 }
 
 function parseCodeBlock(n: Node, pc: PartCreator, opts: IParseOptions): Part[] {
+    if (!n.textContent) return [];
+
     let language = "";
     if (n.firstChild?.nodeName === "CODE") {
         for (const className of (n.firstChild as HTMLElement).classList) {
@@ -170,7 +172,7 @@ function parseNode(n: Node, pc: PartCreator, opts: IParseOptions, mkListItem?: (
 
     switch (n.nodeType) {
         case Node.TEXT_NODE:
-            return parseAtRoomMentions(n.nodeValue, pc, opts);
+            return parseAtRoomMentions(n.nodeValue || "", pc, opts);
         case Node.ELEMENT_NODE:
             switch (n.nodeName) {
                 case "H1":
@@ -204,7 +206,7 @@ function parseNode(n: Node, pc: PartCreator, opts: IParseOptions, mkListItem?: (
                     return parseCodeBlock(n, pc, opts);
                 case "CODE": {
                     // Escape backticks by using multiple backticks for the fence if necessary
-                    const fence = "`".repeat(longestBacktickSequence(n.textContent) + 1);
+                    const fence = "`".repeat(longestBacktickSequence(n.textContent || "") + 1);
                     return pc.plainWithEmoji(`${fence}${n.textContent}${fence}`);
                 }
                 case "BLOCKQUOTE": {
