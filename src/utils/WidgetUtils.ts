@@ -236,13 +236,6 @@ export default class WidgetUtils {
         widgetName: string,
         widgetData: IWidgetData,
     ): Promise<void> {
-        const content = {
-            type: widgetType.preferred,
-            url: widgetUrl,
-            name: widgetName,
-            data: widgetData,
-        };
-
         const client = MatrixClientPeg.get();
         // Get the current widgets and clone them before we modify them, otherwise
         // we'll modify the content of the old event.
@@ -257,11 +250,21 @@ export default class WidgetUtils {
 
         const addingWidget = Boolean(widgetUrl);
 
+        const userId = client.getSafeUserId();
+
+        const content = {
+            type: widgetType.preferred,
+            url: widgetUrl,
+            name: widgetName,
+            data: widgetData,
+            creatorUserId: userId,
+        };
+
         // Add new widget / update
         if (addingWidget) {
             userWidgets[widgetId] = {
                 content: content,
-                sender: client.getUserId()!,
+                sender: userId,
                 state_key: widgetId,
                 type: "m.widget",
                 id: widgetId,

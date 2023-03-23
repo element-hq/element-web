@@ -273,7 +273,7 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
                 roomId: stickerpickerWidget.content.roomId,
                 eventId: stickerpickerWidget.content.eventId,
                 avatar_url: stickerpickerWidget.content.avatar_url,
-                creatorUserId: stickerpickerWidget.content.creatorUserId,
+                creatorUserId: stickerpickerWidget.content.creatorUserId || stickerpickerWidget.sender,
             };
 
             stickersContent = (
