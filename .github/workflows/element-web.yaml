@@ -3,6 +3,8 @@
 # as an artifact and run integration tests.
 name: Element Web - Build
 on:
+    schedule:
+        - cron: "17 4 * * *" # every day at 04:17 UTC
     pull_request: {}
     push:
         branches: [develop, master]
