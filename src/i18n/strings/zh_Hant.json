@@ -3750,5 +3750,7 @@
     "Requires your server to support MSC3030": "您的伺服器必須支援 MSC3030",
     "Requires your server to support the stable version of MSC3827": "您的伺服器必須支援穩定版本的 MSC3827",
     "User": "使用者",
-    "Show avatars in user, room and event mentions": "在使用者、聊天室與事件提及中顯示大頭貼"
+    "Show avatars in user, room and event mentions": "在使用者、聊天室與事件提及中顯示大頭貼",
+    "Message from %(user)s": "來自 %(user)s 的訊息",
+    "Message in %(room)s": "%(room)s 中的訊息"
 }
