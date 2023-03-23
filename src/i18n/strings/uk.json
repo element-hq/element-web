@@ -3752,5 +3752,6 @@
     "User": "Користувач",
     "Show avatars in user, room and event mentions": "Показувати аватари у згадках користувачів, кімнат і подій",
     "Message from %(user)s": "Повідомлення від %(user)s",
-    "Message in %(room)s": "Повідомлення в %(room)s"
+    "Message in %(room)s": "Повідомлення в %(room)s",
+    "Enable intentional mentions": "Увімкнути навмисні згадки"
 }
