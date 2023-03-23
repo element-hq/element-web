@@ -3752,5 +3752,6 @@
     "Message from %(user)s": "Pesan dari %(user)s",
     "Message in %(room)s": "Pesan dalam %(room)s",
     "User": "Pengguna",
-    "Show avatars in user, room and event mentions": "Tampilkan avatar di sebutan pengguna, ruangan, dan peristiwa"
+    "Show avatars in user, room and event mentions": "Tampilkan avatar di sebutan pengguna, ruangan, dan peristiwa",
+    "Enable intentional mentions": "Aktifkan penyebutan sengaja"
 }
