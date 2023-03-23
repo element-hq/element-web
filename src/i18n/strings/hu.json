@@ -3748,5 +3748,9 @@
     "Can currently only be enabled via config.json": "Jelenleg csak a config.json-ban lehet bekapcsolni",
     "Requires your server to support MSC3030": "A matrix szervernek támogatnia kell az MSC3030-at",
     "Requires your server to support the stable version of MSC3827": "A matrix szervernek támogatnia kell a stabil MSC3827-et",
-    "Use your account to continue.": "Használja a fiókját a továbblépéshez."
+    "Use your account to continue.": "Használja a fiókját a továbblépéshez.",
+    "Message from %(user)s": "Üzenet tőle: %(user)s",
+    "Message in %(room)s": "Üzenet itt: %(room)s",
+    "User": "Felhasználó",
+    "Show avatars in user, room and event mentions": "Profilkép mutatása a felhasználó, szoba és esemény említéseknél"
 }
