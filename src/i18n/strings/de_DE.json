@@ -3752,5 +3752,6 @@
     "User": "Benutzer",
     "Show avatars in user, room and event mentions": "Profilbilder in Benutzer-, Raum- und Ereigniserwähnungen anzeigen",
     "Message from %(user)s": "Nachricht von %(user)s",
-    "Message in %(room)s": "Nachricht in %(room)s"
+    "Message in %(room)s": "Nachricht in %(room)s",
+    "Enable intentional mentions": "Beabsichtigte Erwähnungen aktivieren"
 }
