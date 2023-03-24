@@ -2953,7 +2953,6 @@
     "The beginning of the room": "A szoba indulása",
     "Last month": "Előző hónap",
     "Last week": "Előző hét",
-    "Unable to find event at that date. (%(code)s)": "Az esemény az adott időpontból nem található. (%(code)s)",
     "Group all your rooms that aren't part of a space in one place.": "Téren kívüli szobák csoportosítása egy helyre.",
     "Spaces are ways to group rooms and people. Alongside the spaces you're in, you can use some pre-built ones too.": "Tér használható szobák és emberek csoportosítására. Azokon kívül amikben benne van használhat előre definiáltakat is.",
     "Jump to date (adds /jumptodate and jump to date headers)": "Időpontra ugrás („/jumptodate”-et és ugrás időpontra fejlécet ad hozzá)",

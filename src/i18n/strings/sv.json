@@ -2836,7 +2836,6 @@
     "The beginning of the room": "Början av rummet",
     "Last month": "Senaste månaden",
     "Last week": "Senaste veckan",
-    "Unable to find event at that date. (%(code)s)": "Kunde inte hitta en händelse vid det datumet. (%(code)s)",
     "You cancelled verification on your other device.": "Du avbröt verifiering på din andra enhet.",
     "Almost there! Is your other device showing the same shield?": "Nästan klar! Visar din andra enhet samma sköld?",
     "Verify this device by completing one of the following:": "Verifiera den här enheten genom att slutföra ett av följande:",

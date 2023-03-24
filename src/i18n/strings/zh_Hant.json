@@ -2955,7 +2955,6 @@
     "The beginning of the room": "聊天室開頭",
     "Last month": "上個月",
     "Last week": "上週",
-    "Unable to find event at that date. (%(code)s)": "找不到該日期的活動。(%(code)s)",
     "Jump to date (adds /jumptodate and jump to date headers)": "跳至日期（新增 /jumptodate 並跳至日期標頭）",
     "If you know what you're doing, Element is open-source, be sure to check out our GitHub (https://github.com/vector-im/element-web/) and contribute!": "如果您知道您在做些什麼，Element 為開放原始碼，請看看我們的 GitHub (https://github.com/vector-im/element-web/) 並貢獻！",
     "If someone told you to copy/paste something here, there is a high likelihood you're being scammed!": "若某人告訴您在此處複製／貼上一些東西，那麼您很有可能被騙了！",

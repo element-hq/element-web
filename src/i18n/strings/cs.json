@@ -2955,7 +2955,6 @@
     "The beginning of the room": "Začátek místnosti",
     "Last month": "Minulý měsíc",
     "Last week": "Minulý týden",
-    "Unable to find event at that date. (%(code)s)": "Nepodařilo se najít událost k uvedenému datu. (%(code)s)",
     "Jump to date (adds /jumptodate and jump to date headers)": "Přejít na datum (přidá /jumptodate a umožní přejít na záhlaví data)",
     "If you know what you're doing, Element is open-source, be sure to check out our GitHub (https://github.com/vector-im/element-web/) and contribute!": "Pokud víte, co děláte, Element je open-source, určitě se podívejte na náš GitHub (https://github.com/vector-im/element-web/) a zapojte se!",
     "If someone told you to copy/paste something here, there is a high likelihood you're being scammed!": "Pokud vám někdo řekl, abyste sem něco zkopírovali/vložili, je vysoká pravděpodobnost, že vás někdo oklamal!",

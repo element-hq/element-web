@@ -2949,7 +2949,6 @@
     "The beginning of the room": "Fillimi i dhomës",
     "Last month": "Muajin e kaluar",
     "Last week": "Javën e kaluar",
-    "Unable to find event at that date. (%(code)s)": "S’arrihet të gjendet veprimtari më atë datë. (%(code)s)",
     "Jump to date (adds /jumptodate and jump to date headers)": "Kalo te datë (shton /jumptodate dhe kalon te krye date)",
     "Force complete": "Detyro plotësimin",
     "This address does not point at this room": "Kjo adresë nuk shpie te kjo dhomë",

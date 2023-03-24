@@ -2192,7 +2192,6 @@
     "The beginning of the room": "Η αρχή του δωματίου",
     "Last month": "Προηγούμενο μήνα",
     "Last week": "Προηγούμενη εβδομάδα",
-    "Unable to find event at that date. (%(code)s)": "Δεν είναι δυνατή η εύρεση συμβάντος για εκείνη την ημερομηνία.( %(code)s)",
     "The call is in an unknown state!": "Η κλήση βρίσκεται σε άγνωστη κατάσταση!",
     "Missed call": "Αναπάντητη κλήση",
     "Retry": "Προσπάθεια ξανά",

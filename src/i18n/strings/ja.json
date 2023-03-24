@@ -2703,7 +2703,6 @@
     "Timed out trying to fetch your location. Please try again later.": "位置情報を取得する際にタイムアウトしました。後でもう一度やり直してください。",
     "Unknown error fetching location. Please try again later.": "位置情報を取得する際に不明なエラーが発生しました。後でもう一度やり直してください。",
     "Remove from %(roomName)s": "%(roomName)sから追放",
-    "Unable to find event at that date. (%(code)s)": "その日のイベントを発見できません。（%(code)s）",
     "Wait!": "お待ちください！",
     "If someone told you to copy/paste something here, there is a high likelihood you're being scammed!": "ここでコピーペーストを行うように伝えられた場合は、あなたが詐欺の対象となっている可能性が非常に高いです！",
     "You don't have permission to view messages from before you joined.": "参加する前のメッセージを表示する権限がありません。",

@@ -2807,7 +2807,6 @@
     "The beginning of the room": "Начало комнаты",
     "Last month": "Прошлый месяц",
     "Last week": "Прошлая неделя",
-    "Unable to find event at that date. (%(code)s)": "Не удалось найти событие на эту дату. (%(code)s)",
     "You cancelled verification on your other device.": "Вы отменили проверку на другом устройстве.",
     "In encrypted rooms, verify all users to ensure it's secure.": "В зашифрованных комнатах, проверьте всех пользователей, чтобы убедиться в их безопасности.",
     "Almost there! Is your other device showing the same shield?": "Почти готово! Ваше другое устройство показывает такой же щит?",

@@ -2955,7 +2955,6 @@
     "The beginning of the room": "Awalan ruangan",
     "Last month": "Bulan kemarin",
     "Last week": "Minggu kemarin",
-    "Unable to find event at that date. (%(code)s)": "Tidak dapat menemukan peristiwa pada tanggal itu. (%(code)s)",
     "Jump to date (adds /jumptodate and jump to date headers)": "Pergi ke tanggal (menambahkan /jumptodate dan pergi ke tajukan tanggal)",
     "If you know what you're doing, Element is open-source, be sure to check out our GitHub (https://github.com/vector-im/element-web/) and contribute!": "Jika Anda tahu apa yang Anda lakukan, Element itu sumber-terbuka, pastikan untuk mengunjungi GitHub kami (https://github.com/vector-im/element-web/) dan berkontribusi!",
     "If someone told you to copy/paste something here, there is a high likelihood you're being scammed!": "Jika seseorang membilangi Anda untuk salin/tempel sesuatu di sini, mungkin saja Anda sedang ditipu!",

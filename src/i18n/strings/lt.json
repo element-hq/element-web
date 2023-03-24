@@ -1869,7 +1869,6 @@
     "The beginning of the room": "Kambario pradžia",
     "Last month": "Paskutinis mėnuo",
     "Last week": "Paskutinė savaitė",
-    "Unable to find event at that date. (%(code)s)": "Nepavyko rasti tos datos įvykio. (%(code)s)",
     "You cancelled verification on your other device.": "Atšaukėte patvirtinimą kitame įrenginyje.",
     "In encrypted rooms, verify all users to ensure it's secure.": "Užšifruotuose kambariuose patvirtinkite visus naudotojus, kad įsitikintumėte, jog jie yra saugūs.",
     "Almost there! Is your other device showing the same shield?": "Jau beveik! Ar kitas jūsų įrenginys rodo tą patį skydą?",

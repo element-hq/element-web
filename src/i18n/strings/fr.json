@@ -2955,7 +2955,6 @@
     "The beginning of the room": "Le début de ce salon",
     "Last month": "Le mois dernier",
     "Last week": "La semaine dernière",
-    "Unable to find event at that date. (%(code)s)": "Impossible de trouver un événement à cette date. (%(code)s)",
     "Jump to date (adds /jumptodate and jump to date headers)": "Aller à la date (ajoute /jumptodate et va sur les en-têtes de date)",
     "If you know what you're doing, Element is open-source, be sure to check out our GitHub (https://github.com/vector-im/element-web/) and contribute!": "Si vous savez ce que vous faites, Element est un logiciel libre, n'hésitez pas à consulter notre GitHub (https://github.com/vector-im/element-web/) et à contribuer !",
     "If someone told you to copy/paste something here, there is a high likelihood you're being scammed!": "Si quelqu'un vous a dit de copier/coller quelque chose ici, il y a de fortes chances que vous soyez victime d'une escroquerie !",

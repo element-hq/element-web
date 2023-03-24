@@ -2954,7 +2954,6 @@
     "The beginning of the room": "Jututoa algus",
     "Last month": "Eelmine kuu",
     "Last week": "Eelmine nädal",
-    "Unable to find event at that date. (%(code)s)": "Sellel kuupäeval ei leidu sõnumeid. (%(code)s)",
     "If you know what you're doing, Element is open-source, be sure to check out our GitHub (https://github.com/vector-im/element-web/) and contribute!": "Kui sa tead, mida ja kuidas teed, siis osale meie arenduses - Element on avatud lähtekoodiga tarkvara, mille leiad GitHub'ist (https://github.com/vector-im/element-web/)!",
     "If someone told you to copy/paste something here, there is a high likelihood you're being scammed!": "Kui keegi palus sul siia midagi kopeerida või asetada, siis suure tõenäosusega on tegemist pettusekatsega!",
     "Wait!": "Palun oota!",

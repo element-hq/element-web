@@ -2993,7 +2993,6 @@
     "We couldn't send your location": "No hemos podido enviar tu ubicación",
     "Results will be visible when the poll is ended": "Los resultados podrán verse cuando la encuesta termine",
     "Sorry, you can't edit a poll after votes have been cast.": "Lo siento, no puedes editar una encuesta después de que alguien haya votado en ella.",
-    "Unable to find event at that date. (%(code)s)": "No se ha podido encontrar un evento en esa fecha. (%(code)s)",
     "Can't edit poll": "Encuesta no editable",
     "Open thread": "Abrir hilo",
     "Remove messages sent by me": "Borrar los mensajes enviados por mi",

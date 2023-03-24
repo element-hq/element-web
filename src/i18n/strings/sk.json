@@ -2578,7 +2578,6 @@
     "Undo edit": "Zrušiť úpravu",
     "Redo edit": "Znovu upraviť",
     "Jump to date (adds /jumptodate and jump to date headers)": "Prejsť na dátum (pridá /jumptodate a hlavičky na prechod na dátum)",
-    "Unable to find event at that date. (%(code)s)": "Nie je možné nájsť udalosť k tomuto dátumu. (%(code)s)",
     "Last week": "Minulý týždeň",
     "Last month": "Minulý mesiac",
     "The beginning of the room": "Začiatok miestnosti",

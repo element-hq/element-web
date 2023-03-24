@@ -3108,7 +3108,6 @@
     "The beginning of the room": "房间的开头",
     "Last month": "上个月",
     "Last week": "上个星期",
-    "Unable to find event at that date. (%(code)s)": "无法找到那个日期的事件。（%(code)s）",
     "You cancelled verification on your other device.": "你在其他设备上取消了验证。",
     "Almost there! Is your other device showing the same shield?": "快完成了！你的其他设备显示相同盾牌吗？",
     "Verify this device by completing one of the following:": "完成以下操作之一来验证此设备：",

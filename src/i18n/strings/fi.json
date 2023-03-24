@@ -2698,7 +2698,6 @@
     "%(brand)s was denied permission to fetch your location. Please allow location access in your browser settings.": "%(brand)s ei saanut lupaa noutaa sijaintiasi. Salli sijainnin käyttäminen selaimen asetuksista.",
     "Unable to load map": "Kartan lataaminen ei onnistu",
     "Expand map": "Laajenna kartta",
-    "Unable to find event at that date. (%(code)s)": "Päivämäärän kohdalta ei löydy tapahtumaa. (%(code)s)",
     "Are you sure you're at the right place?": "Oletko varma, että olet oikeassa paikassa?",
     "There's no preview, would you like to join?": "Esikatselua ei ole. Haluaisitko liittyä?",
     "This invite was sent to %(email)s": "Tämä kutsu lähetettiin osoitteeseen %(email)s",

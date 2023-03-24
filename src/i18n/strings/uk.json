@@ -2955,7 +2955,6 @@
     "The beginning of the room": "Початок кімнати",
     "Last month": "Останній місяць",
     "Last week": "Останній тиждень",
-    "Unable to find event at that date. (%(code)s)": "Не вдалося знайти подію на цю дату. (%(code)s)",
     "Jump to date (adds /jumptodate and jump to date headers)": "Перейти до дати (додає /jumptodate і переходить до заголовків дати)",
     "This address does not point at this room": "Ця адреса не вказує на цю кімнату",
     "If you know what you're doing, Element is open-source, be sure to check out our GitHub (https://github.com/vector-im/element-web/) and contribute!": "Якщо ви знаєте, що ви робите, Element — це відкрите програмне забезпечення, обов'язково перегляньте наш GitHub (https://github.com/vector-im/element-web/) та зробіть внесок!",
