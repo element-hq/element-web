@@ -3752,5 +3752,13 @@
     "Show avatars in user, room and event mentions": "Profilbilder in Benutzer-, Raum- und Ereigniserwähnungen anzeigen",
     "Message from %(user)s": "Nachricht von %(user)s",
     "Message in %(room)s": "Nachricht in %(room)s",
-    "Enable intentional mentions": "Beabsichtigte Erwähnungen aktivieren"
+    "Enable intentional mentions": "Beabsichtigte Erwähnungen aktivieren",
+    "Error details": "Fehlerdetails",
+    "Unable to find event at that date": "Wir konnten kein Ereignis für diesen Zeitpunkt finden",
+    "Please submit <debugLogsLink>debug logs</debugLogsLink> to help us track down the problem.": "Bitte übermittel <debugLogsLink>Debug-Protokolle</debugLogsLink>, um uns beim Finden des Problems zu helfen.",
+    "unavailable": "Nicht verfügbar",
+    "unknown status code": "Unbekannter Statuscode",
+    "Server returned %(statusCode)s with error code %(errorCode)s": "Der Server gab %(statusCode)s mit dem Fehlercode %(errorCode)s zurück",
+    "We were unable to find an event looking forwards from %(dateString)s. Try choosing an earlier date.": "Wir konnten kein Ereignis nach dem %(dateString)s finden. Versuche, einen früheren Zeitpunkt zu wählen.",
+    "A network error occurred while trying to find and jump to the given date. Your homeserver might be down or there was just a temporary problem with your internet connection. Please try again. If this continues, please contact your homeserver administrator.": "Während des Versuchs, zum Datum zu springen, trat ein Netzwerkfehler auf. Möglicherweise ist dein Heim-Server nicht erreichbar oder es liegt ein temporäres Problem mit deiner Internetverbindung vor. Bitte versuche es erneut. Falls dieser Fehler weiterhin auftritt, kontaktiere bitte deine Heim-Server-Administration."
 }
