@@ -3752,5 +3752,13 @@
     "Show avatars in user, room and event mentions": "Zobraziť obrázky profilov v zmienkach o používateľoch, miestnostiach a udalostiach",
     "Message from %(user)s": "Správa od %(user)s",
     "Message in %(room)s": "Správa v %(room)s",
-    "Enable intentional mentions": "Povoliť úmyselné zmienky"
+    "Enable intentional mentions": "Povoliť úmyselné zmienky",
+    "Error details": "Podrobnosti o chybe",
+    "Unable to find event at that date": "Nie je možné nájsť udalosť k danému dátumu",
+    "Please submit <debugLogsLink>debug logs</debugLogsLink> to help us track down the problem.": "Odošlite prosím <debugLogsLink>ladiace záznamy</debugLogsLink>, aby ste nám pomohli nájsť problém.",
+    "unavailable": "nedostupný",
+    "unknown status code": "neznámy kód stavu",
+    "Server returned %(statusCode)s with error code %(errorCode)s": "Server vrátil %(statusCode)s s kódom chyby %(errorCode)s",
+    "We were unable to find an event looking forwards from %(dateString)s. Try choosing an earlier date.": "Nepodarilo sa nám nájsť udalosť od dátumu %(dateString)s. Skúste vybrať skorší dátum.",
+    "A network error occurred while trying to find and jump to the given date. Your homeserver might be down or there was just a temporary problem with your internet connection. Please try again. If this continues, please contact your homeserver administrator.": "Pri pokuse nájsť a prejsť na daný dátum došlo k sieťovej chybe. Váš domovský server môže byť vypnutý alebo sa vyskytol len dočasný problém s internetovým pripojením. Skúste to prosím znova. Ak to bude pokračovať, obráťte sa na správcu domovského servera."
 }
