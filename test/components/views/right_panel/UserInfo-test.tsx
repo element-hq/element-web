@@ -45,7 +45,7 @@ import * as mockVerification from "../../../../src/verification";
 import Modal from "../../../../src/Modal";
 import { E2EStatus } from "../../../../src/utils/ShieldUtils";
 import { DirectoryMember, startDmOnFirstMessage } from "../../../../src/utils/direct-messages";
-import { flushPromises } from "../../../test-utils";
+import { clearAllModals, flushPromises } from "../../../test-utils";
 
 jest.mock("../../../../src/utils/direct-messages", () => ({
     ...jest.requireActual("../../../../src/utils/direct-messages"),
@@ -417,7 +417,9 @@ describe("<UserOptionsSection />", () => {
         mockClient.setIgnoredUsers.mockClear();
     });
 
-    afterEach(() => Modal.closeCurrentModal("End of test"));
+    afterEach(async () => {
+        await clearAllModals();
+    });
 
     afterAll(() => {
         inviteSpy.mockRestore();

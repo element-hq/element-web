@@ -31,6 +31,7 @@ import {
     IAuthData,
 } from "matrix-js-sdk/src/matrix";
 
+import { clearAllModals } from "../../../../../test-utils";
 import SessionManagerTab from "../../../../../../src/components/views/settings/tabs/user/SessionManagerTab";
 import MatrixClientContext from "../../../../../../src/contexts/MatrixClientContext";
 import {
@@ -161,7 +162,7 @@ describe("<SessionManagerTab />", () => {
         await flushPromises();
     };
 
-    beforeEach(() => {
+    beforeEach(async () => {
         jest.clearAllMocks();
         jest.spyOn(logger, "error").mockRestore();
         mockClient.getStoredDevice.mockImplementation((_userId, id) => {
@@ -199,7 +200,7 @@ describe("<SessionManagerTab />", () => {
 
         // sometimes a verification modal is in modal state when these tests run
         // make sure the coast is clear
-        Modal.closeCurrentModal("");
+        await clearAllModals();
     });
 
     it("renders spinner while devices load", () => {

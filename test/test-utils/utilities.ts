@@ -19,6 +19,7 @@ import EventEmitter from "events";
 import { ActionPayload } from "../../src/dispatcher/payloads";
 import defaultDispatcher from "../../src/dispatcher/dispatcher";
 import { DispatcherAction } from "../../src/dispatcher/actions";
+import Modal from "../../src/Modal";
 
 export const emitPromise = (e: EventEmitter, k: string | symbol) => new Promise((r) => e.once(k, r));
 
@@ -173,4 +174,43 @@ export function waitForUpdate(inst: React.Component, updates = 1): Promise<void>
 export const advanceDateAndTime = (ms: number) => {
     jest.spyOn(global.Date, "now").mockReturnValue(Date.now() + ms);
     jest.advanceTimersByTime(ms);
+};
+
+/**
+ * A horrible hack necessary to wait enough time to ensure any modal is shown after a
+ * `Modal.createDialog(...)` call. We have to contend with the Modal code which renders
+ * things asyncronhously and has weird sleeps which we should strive to remove.
+ */
+export const waitEnoughCyclesForModal = async ({
+    useFakeTimers = false,
+}: {
+    useFakeTimers?: boolean;
+} = {}): Promise<void> => {
+    // XXX: Maybe in the future with Jest 29.5.0+, we could use `runAllTimersAsync` instead.
+    const flushFunc = useFakeTimers ? flushPromisesWithFakeTimers : flushPromises;
+
+    await flushFunc();
+    await flushFunc();
+    await flushFunc();
+};
+
+/**
+ * A horrible hack necessary to make sure modals don't leak and pollute tests.
+ * `@testing-library/react` automatic cleanup function does not pick up the async modal
+ * rendering and the modals don't unmount when the component unmounts. We should strive
+ * to fix this.
+ */
+export const clearAllModals = async (): Promise<void> => {
+    // Prevent modals from leaking and polluting other tests
+    let keepClosingModals = true;
+    while (keepClosingModals) {
+        keepClosingModals = Modal.closeCurrentModal("End of test (clean-up)");
+
+        // Then wait for the screen to update (probably React rerender and async/await).
+        // Important for tests using Jest fake timers to not get into an infinite loop
+        // of removing the same modal because the promises don't flush otherwise.
+        //
+        // XXX: Maybe in the future with Jest 29.5.0+, we could use `runAllTimersAsync` instead.
+        await flushPromisesWithFakeTimers();
+    }
 };

@@ -149,13 +149,18 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
         return this.appendDialogAsync<C>(Promise.resolve(Element), props, className);
     }
 
-    public closeCurrentModal(reason: string): void {
+    /**
+     * @param reason either "backgroundClick" or undefined
+     * @return whether a modal was closed
+     */
+    public closeCurrentModal(reason?: string): boolean {
         const modal = this.getCurrentModal();
         if (!modal) {
-            return;
+            return false;
         }
         modal.closeReason = reason;
         modal.close();
+        return true;
     }
 
     private buildModal<C extends ComponentType>(
@@ -346,6 +351,8 @@ export class ModalManager extends TypedEventEmitter<ModalManagerEvent, HandlerMa
     }
 
     private async reRender(): Promise<void> {
+        // TODO: We should figure out how to remove this weird sleep. It also makes testing harder
+        //
         // await next tick because sometimes ReactDOM can race with itself and cause the modal to wrongly stick around
         await sleep(0);
 

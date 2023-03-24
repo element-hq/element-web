@@ -21,6 +21,7 @@ import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import {
+    clearAllModals,
     createTestClient,
     filterConsole,
     flushPromises,
@@ -28,6 +29,7 @@ import {
     mkStubRoom,
     mockPlatformPeg,
     stubClient,
+    waitEnoughCyclesForModal,
 } from "../../../test-utils";
 import MessageComposer from "../../../../src/components/views/rooms/MessageComposer";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
@@ -48,7 +50,6 @@ import { Action } from "../../../../src/dispatcher/actions";
 import { VoiceBroadcastInfoState, VoiceBroadcastRecording } from "../../../../src/voice-broadcast";
 import { mkVoiceBroadcastInfoStateEvent } from "../../../voice-broadcast/utils/test-utils";
 import { SdkContextClass } from "../../../../src/contexts/SDKContext";
-import Modal from "../../../../src/Modal";
 
 jest.mock("../../../../src/components/views/rooms/wysiwyg_composer", () => ({
     SendWysiwygComposer: jest.fn().mockImplementation(() => <div data-testid="wysiwyg-composer" />),
@@ -77,15 +78,9 @@ const setCurrentBroadcastRecording = (room: Room, state: VoiceBroadcastInfoState
     SdkContextClass.instance.voiceBroadcastRecordingsStore.setCurrent(recording);
 };
 
-const waitForModal = async (): Promise<void> => {
-    await flushPromises();
-    await flushPromises();
-};
-
 const shouldClearModal = async (): Promise<void> => {
     afterEach(async () => {
-        Modal.closeCurrentModal("force");
-        await waitForModal();
+        await clearAllModals();
     });
 };
 
@@ -434,7 +429,7 @@ describe("MessageComposer", () => {
                 setCurrentBroadcastRecording(room, VoiceBroadcastInfoState.Started);
                 wrapAndRender({ room });
                 await startVoiceMessage();
-                await waitForModal();
+                await waitEnoughCyclesForModal();
             });
 
             shouldClearModal();
@@ -450,7 +445,7 @@ describe("MessageComposer", () => {
                 setCurrentBroadcastRecording(room, VoiceBroadcastInfoState.Stopped);
                 wrapAndRender({ room });
                 await startVoiceMessage();
-                await waitForModal();
+                await waitEnoughCyclesForModal();
             });
 
             shouldClearModal();

@@ -22,8 +22,13 @@ import { MatrixClient, createClient } from "matrix-js-sdk/src/matrix";
 
 import ForgotPassword from "../../../../src/components/structures/auth/ForgotPassword";
 import { ValidatedServerConfig } from "../../../../src/utils/ValidatedServerConfig";
-import { filterConsole, flushPromisesWithFakeTimers, stubClient } from "../../../test-utils";
-import Modal from "../../../../src/Modal";
+import {
+    clearAllModals,
+    filterConsole,
+    flushPromisesWithFakeTimers,
+    stubClient,
+    waitEnoughCyclesForModal,
+} from "../../../test-utils";
 import AutoDiscoveryUtils from "../../../../src/utils/AutoDiscoveryUtils";
 
 jest.mock("matrix-js-sdk/src/matrix", () => ({
@@ -55,11 +60,6 @@ describe("<ForgotPassword>", () => {
         });
     };
 
-    const waitForDialog = async (): Promise<void> => {
-        await flushPromisesWithFakeTimers();
-        await flushPromisesWithFakeTimers();
-    };
-
     const itShouldCloseTheDialogAndShowThePasswordInput = (): void => {
         it("should close the dialog and show the password input", () => {
             expect(screen.queryByText("Verify your email to continue")).not.toBeInTheDocument();
@@ -88,9 +88,9 @@ describe("<ForgotPassword>", () => {
         jest.spyOn(AutoDiscoveryUtils, "authComponentStateForError");
     });
 
-    afterEach(() => {
+    afterEach(async () => {
         // clean up modals
-        Modal.closeCurrentModal("force");
+        await clearAllModals();
     });
 
     beforeAll(() => {
@@ -322,7 +322,9 @@ describe("<ForgotPassword>", () => {
                     describe("and submitting it", () => {
                         beforeEach(async () => {
                             await click(screen.getByText("Reset password"));
-                            await waitForDialog();
+                            await waitEnoughCyclesForModal({
+                                useFakeTimers: true,
+                            });
                         });
 
                         it("should send the new password and show the click validation link dialog", () => {
@@ -350,7 +352,9 @@ describe("<ForgotPassword>", () => {
                                 await act(async () => {
                                     await userEvent.click(screen.getByTestId("dialog-background"), { delay: null });
                                 });
-                                await waitForDialog();
+                                await waitEnoughCyclesForModal({
+                                    useFakeTimers: true,
+                                });
                             });
 
                             itShouldCloseTheDialogAndShowThePasswordInput();
@@ -359,7 +363,9 @@ describe("<ForgotPassword>", () => {
                         describe("and dismissing the dialog", () => {
                             beforeEach(async () => {
                                 await click(screen.getByLabelText("Close dialog"));
-                                await waitForDialog();
+                                await waitEnoughCyclesForModal({
+                                    useFakeTimers: true,
+                                });
                             });
 
                             itShouldCloseTheDialogAndShowThePasswordInput();
@@ -368,7 +374,9 @@ describe("<ForgotPassword>", () => {
                         describe("and clicking »Re-enter email address«", () => {
                             beforeEach(async () => {
                                 await click(screen.getByText("Re-enter email address"));
-                                await waitForDialog();
+                                await waitEnoughCyclesForModal({
+                                    useFakeTimers: true,
+                                });
                             });
 
                             it("should close the dialog and go back to the email input", () => {
@@ -400,7 +408,9 @@ describe("<ForgotPassword>", () => {
                         beforeEach(async () => {
                             await click(screen.getByText("Sign out of all devices"));
                             await click(screen.getByText("Reset password"));
-                            await waitForDialog();
+                            await waitEnoughCyclesForModal({
+                                useFakeTimers: true,
+                            });
                         });
 
                         it("should show the sign out warning dialog", async () => {
