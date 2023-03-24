@@ -1191,7 +1191,6 @@
     "Support adding custom themes": "Özel tema eklemeyi destekle",
     "Show read receipts sent by other users": "Diğer kullanıcılar tarafından gönderilen okundu bilgisini göster",
     "Enable automatic language detection for syntax highlighting": "Sözdizimi vurgularken otomatik dil algılamayı etkinleştir",
-    "Show avatars in user and room mentions": "Kullanıcı veya odadan bahsedilirken avatarlarını göster",
     "Automatically replace plain text Emoji": "Düz metini otomatik olarak emoji ile değiştir",
     "Never send encrypted messages to unverified sessions from this session": "Şifreli mesajları asla bu oturumdaki doğrulanmamış oturumlara iletme",
     "Never send encrypted messages to unverified sessions in this room from this session": "Şifreli mesajları asla oturumdaki bu odadaki doğrulanmamış oturumlara iletme",
