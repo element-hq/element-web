@@ -3752,5 +3752,13 @@
     "Show avatars in user, room and event mentions": "Показувати аватари у згадках користувачів, кімнат і подій",
     "Message from %(user)s": "Повідомлення від %(user)s",
     "Message in %(room)s": "Повідомлення в %(room)s",
-    "Enable intentional mentions": "Увімкнути навмисні згадки"
+    "Enable intentional mentions": "Увімкнути навмисні згадки",
+    "Error details": "Подробиці помилки",
+    "Unable to find event at that date": "Не вдалося знайти подію на цю дату",
+    "Please submit <debugLogsLink>debug logs</debugLogsLink> to help us track down the problem.": "Надішліть <debugLogsLink>журнал зневадження</debugLogsLink>, щоб допомогти нам відстежити проблему.",
+    "unavailable": "недоступний",
+    "unknown status code": "невідомий код стану",
+    "Server returned %(statusCode)s with error code %(errorCode)s": "Сервер повернув %(statusCode)s з кодом помилки %(errorCode)s",
+    "We were unable to find an event looking forwards from %(dateString)s. Try choosing an earlier date.": "Ми не змогли знайти подію, після %(dateString)s. Спробуйте вибрати ранішу дату.",
+    "A network error occurred while trying to find and jump to the given date. Your homeserver might be down or there was just a temporary problem with your internet connection. Please try again. If this continues, please contact your homeserver administrator.": "Виникла помилка мережі під час спроби знайти та перейти до вказаної дати. Можливо, ваш домашній сервер не працює або виникли тимчасові проблеми з інтернет-з'єднанням. Повторіть спробу ще раз. Якщо це не допоможе, зверніться до адміністратора вашого домашнього сервера."
 }
