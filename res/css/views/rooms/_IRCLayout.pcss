@@ -20,8 +20,9 @@ $irc-line-height: $font-18px;
     --name-width: 80px; // cf. ircDisplayNameWidth on Settings.tsx
     --icon-width: 14px;
     --right-padding: 5px;
+    --line-height: $irc-line-height;
 
-    line-height: $irc-line-height !important;
+    line-height: var(--line-height) !important;
 
     .mx_NewRoomIntro {
         > h2 {

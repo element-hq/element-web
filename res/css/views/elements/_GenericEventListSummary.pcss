@@ -21,6 +21,16 @@ limitations under the License.
         margin-right: $spacing-8;
     }
 
+    .mx_GenericEventListSummary_spacer {
+        border-bottom: 1px solid $primary-hairline-color;
+        margin-left: 63px; /* TODO: Use a variable */
+        line-height: $font-30px; /* TODO: Use a variable */
+
+        .mx_IRCLayout & {
+            line-height: var(--line-height);
+        }
+    }
+
     &[data-layout="irc"],
     &[data-layout="group"] {
         .mx_GenericEventListSummary_toggle {
@@ -51,7 +61,7 @@ limitations under the License.
             }
         }
 
-        .mx_GenericEventListSummary_line {
+        .mx_GenericEventListSummary_spacer {
             display: none;
         }
 
@@ -88,7 +98,7 @@ limitations under the License.
             line-height: $font-20px;
         }
 
-        .mx_GenericEventListSummary_line {
+        .mx_GenericEventListSummary_spacer {
             line-height: $font-22px;
         }
 
@@ -116,10 +126,4 @@ limitations under the License.
         margin-right: -4px;
         cursor: pointer;
     }
-}
-
-.mx_GenericEventListSummary_line {
-    border-bottom: 1px solid $primary-hairline-color;
-    margin-left: 63px;
-    line-height: $font-30px;
 }

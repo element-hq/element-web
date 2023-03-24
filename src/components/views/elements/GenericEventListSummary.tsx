@@ -86,7 +86,7 @@ const GenericEventListSummary: React.FC<IProps> = ({
     if (expanded) {
         body = (
             <React.Fragment>
-                <div className="mx_GenericEventListSummary_line">&nbsp;</div>
+                <div className="mx_GenericEventListSummary_spacer">&nbsp;</div>
                 <ol className="mx_GenericEventListSummary_unstyledList">{children}</ol>
             </React.Fragment>
         );
