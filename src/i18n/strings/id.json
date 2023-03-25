@@ -3752,5 +3752,13 @@
     "Message in %(room)s": "Pesan dalam %(room)s",
     "User": "Pengguna",
     "Show avatars in user, room and event mentions": "Tampilkan avatar di sebutan pengguna, ruangan, dan peristiwa",
-    "Enable intentional mentions": "Aktifkan penyebutan sengaja"
+    "Enable intentional mentions": "Aktifkan penyebutan sengaja",
+    "Error details": "Detail kesalahan",
+    "Unable to find event at that date": "Tidak dapat menemukan peristiwa di tanggal itu",
+    "Please submit <debugLogsLink>debug logs</debugLogsLink> to help us track down the problem.": "Silakan kirim <debugLogsLink>catatan pengawakutu</debugLogsLink> untuk membantu kami melacak masalah.",
+    "unavailable": "tidak tersedia",
+    "unknown status code": "kode keadaan tidak diketahui",
+    "Server returned %(statusCode)s with error code %(errorCode)s": "Server merespons dengan %(statusCode)s dengan kode kesalahan %(errorCode)s",
+    "We were unable to find an event looking forwards from %(dateString)s. Try choosing an earlier date.": "Kami tidak dapat menemukan peristiwa sebelumnya dari %(dateString)s. Coba pilih tanggal yang lebih awal.",
+    "A network error occurred while trying to find and jump to the given date. Your homeserver might be down or there was just a temporary problem with your internet connection. Please try again. If this continues, please contact your homeserver administrator.": "Sebuah kesalahan jaringan terjadi saat mencari dan menuju ke tanggal yang diberikan. Homeserver Anda mungkin tidak tersedia atau ada masalah sementara dengan koneksi internet Anda. Silakan coba lagi. Jika ini masih berlanjut, silakan hubungi administrator homeserver Anda."
 }
