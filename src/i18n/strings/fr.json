@@ -3752,5 +3752,13 @@
     "Show avatars in user, room and event mentions": "Afficher les avatars dans les mentions d'utilisateur, de salon et d’évènements",
     "Message from %(user)s": "Message de %(user)s",
     "Message in %(room)s": "Message dans %(room)s",
-    "Enable intentional mentions": "Activer les mentions intentionnelles"
+    "Enable intentional mentions": "Activer les mentions intentionnelles",
+    "Error details": "Détails de l’erreur",
+    "Unable to find event at that date": "Impossible de trouver un évènement à cette date",
+    "Please submit <debugLogsLink>debug logs</debugLogsLink> to help us track down the problem.": "Merci d’envoyer <debugLogsLink>les journaux de débogage</debugLogsLink> pour nous aider à identifier le problème.",
+    "unavailable": "indisponible",
+    "unknown status code": "code de statut inconnu",
+    "Server returned %(statusCode)s with error code %(errorCode)s": "Le serveur a renvoyé %(statusCode)s avec le code d’erreur %(errorCode)s",
+    "We were unable to find an event looking forwards from %(dateString)s. Try choosing an earlier date.": "Nous n’avons pas pu trouver d’événement à partir du %(dateString)s. Essayez avec une date antérieure.",
+    "A network error occurred while trying to find and jump to the given date. Your homeserver might be down or there was just a temporary problem with your internet connection. Please try again. If this continues, please contact your homeserver administrator.": "Une erreur réseau s’est produite en tentant de chercher et d’aller à la date choisie. Votre serveur d’accueil est peut-être hors-ligne, ou bien c’est un problème temporaire avec connexion Internet. Veuillez réessayer. Si cela persiste, veuillez contacter l’administrateur de votre serveur d’accueil."
 }
