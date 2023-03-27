@@ -23,6 +23,7 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Optional } from "matrix-events-sdk";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";
+import { filterValidMDirect } from "./dm/filterValidMDirect";
 
 /**
  * Class that takes a Matrix Client and flips the m.direct map
@@ -44,8 +45,8 @@ export default class DMRoomMap {
         // see onAccountData
         this.hasSentOutPatchDirectAccountDataPatch = false;
 
-        const mDirectEvent = matrixClient.getAccountData(EventType.Direct)?.getContent() ?? {};
-        this.mDirectEvent = { ...mDirectEvent }; // copy as we will mutate
+        const mDirectRawContent = matrixClient.getAccountData(EventType.Direct)?.getContent() ?? {};
+        this.setMDirectFromContent(mDirectRawContent);
     }
 
     /**
@@ -84,9 +85,28 @@ export default class DMRoomMap {
         this.matrixClient.removeListener(ClientEvent.AccountData, this.onAccountData);
     }
 
+    /**
+     * Filter m.direct content to contain only valid data and then sets it.
+     * Logs if invalid m.direct content occurs.
+     * {@link filterValidMDirect}
+     *
+     * @param content - Raw m.direct content
+     */
+    private setMDirectFromContent(content: unknown): void {
+        const { valid, filteredContent } = filterValidMDirect(content);
+
+        if (!valid) {
+            logger.warn("Invalid m.direct content occurred", content);
+        }
+
+        this.mDirectEvent = filteredContent;
+    }
+
     private onAccountData = (ev: MatrixEvent): void => {
+        console.log("onAccountData");
+
         if (ev.getType() == EventType.Direct) {
-            this.mDirectEvent = { ...ev.getContent() }; // copy as we will mutate
+            this.setMDirectFromContent(ev.getContent());
             this.userToRooms = null;
             this.roomToUser = null;
         }
