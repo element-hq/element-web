@@ -29,6 +29,8 @@ import { flushPromisesWithFakeTimers, mkRoom, stubClient } from "../../../test-u
 import { shouldShowFeedback } from "../../../../src/utils/Feedback";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
+import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
+import SdkConfig from "../../../../src/SdkConfig";
 
 jest.useFakeTimers();
 
@@ -38,6 +40,11 @@ jest.mock("../../../../src/utils/direct-messages", () => ({
     // @ts-ignore
     ...jest.requireActual("../../../../src/utils/direct-messages"),
     startDmOnFirstMessage: jest.fn(),
+}));
+
+jest.mock("../../../../src/dispatcher/dispatcher", () => ({
+    register: jest.fn(),
+    dispatch: jest.fn(),
 }));
 
 interface IUserChunkMember {
@@ -122,7 +129,7 @@ describe("Spotlight Dialog", () => {
     };
 
     const testPublicRoom: IPublicRoomsChunkRoom = {
-        room_id: "@room247:matrix.org",
+        room_id: "!room247:matrix.org",
         name: "Room #247",
         topic: "We hope you'll have a <b>shining</b> experience!",
         world_readable: false,
@@ -350,6 +357,34 @@ describe("Spotlight Dialog", () => {
 
         fireEvent.click(options[0]!);
         expect(startDmOnFirstMessage).toHaveBeenCalledWith(mockedClient, [new DirectoryMember(testPerson)]);
+    });
+
+    it("should pass via of the server being explored when joining room from directory", async () => {
+        SdkConfig.put({
+            room_directory: {
+                servers: ["example.tld"],
+            },
+        });
+        localStorage.setItem("mx_last_room_directory_server", "example.tld");
+
+        render(<SpotlightDialog initialFilter={Filter.PublicRooms} onFinished={() => null} />);
+
+        jest.advanceTimersByTime(200);
+        await flushPromisesWithFakeTimers();
+
+        const content = document.querySelector("#mx_SpotlightDialog_content")!;
+        const options = content.querySelectorAll("div.mx_SpotlightDialog_option");
+        expect(options.length).toBe(1);
+        expect(options[0].innerHTML).toContain(testPublicRoom.name);
+
+        fireEvent.click(options[0]!);
+        expect(defaultDispatcher.dispatch).toHaveBeenCalledWith(
+            expect.objectContaining({
+                action: "view_room",
+                room_id: testPublicRoom.room_id,
+                via_servers: ["example.tld"],
+            }),
+        );
     });
 
     describe("Feedback prompt", () => {
