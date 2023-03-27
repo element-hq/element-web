@@ -37,8 +37,8 @@ export enum PillType {
     EventInOtherRoom = "TYPE_EVENT_IN_OTHER_ROOM",
 }
 
-export const pillRoomNotifPos = (text: string): number => {
-    return text.indexOf("@room");
+export const pillRoomNotifPos = (text: string | null): number => {
+    return text?.indexOf("@room") ?? -1;
 };
 
 export const pillRoomNotifLen = (): number => {
