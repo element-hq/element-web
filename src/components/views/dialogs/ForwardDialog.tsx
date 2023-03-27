@@ -51,6 +51,7 @@ import { ButtonEvent } from "../elements/AccessibleButton";
 import { isLocationEvent } from "../../../utils/EventUtils";
 import { isSelfLocation, locationEventGeoUri } from "../../../utils/location";
 import { RoomContextDetails } from "../rooms/RoomContextDetails";
+import { filterBoolean } from "../../../utils/arrays";
 
 const AVATAR_SIZE = 30;
 
@@ -194,7 +195,7 @@ const transformEvent = (event: MatrixEvent): { type: string; content: IContent }
 };
 
 const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCreator, onFinished }) => {
-    const userId = cli.getUserId();
+    const userId = cli.getSafeUserId();
     const [profileInfo, setProfileInfo] = useState<any>({});
     useEffect(() => {
         cli.getProfileInfo(userId).then((info) => setProfileInfo(info));
@@ -242,7 +243,7 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
     if (lcQuery) {
         rooms = new QueryMatcher<Room>(rooms, {
             keys: ["name"],
-            funcs: [(r) => [r.getCanonicalAlias(), ...r.getAltAliases()].filter(Boolean)],
+            funcs: [(r) => filterBoolean([r.getCanonicalAlias(), ...r.getAltAliases()])],
             shouldMatchWordsOnly: false,
         }).match(lcQuery);
     }

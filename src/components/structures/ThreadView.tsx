@@ -171,7 +171,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
                 if (payload.event && !payload.event.getThread()) return;
                 this.setState(
                     {
-                        editState: payload.event ? new EditorStateTransfer(payload.event) : null,
+                        editState: payload.event ? new EditorStateTransfer(payload.event) : undefined,
                     },
                     () => {
                         if (payload.event) {
@@ -213,9 +213,11 @@ export default class ThreadView extends React.Component<IProps, IState> {
     };
 
     private get threadLastReply(): MatrixEvent | undefined {
-        return this.state.thread?.lastReply((ev: MatrixEvent) => {
-            return ev.isRelation(THREAD_RELATION_TYPE.name) && !ev.status;
-        });
+        return (
+            this.state.thread?.lastReply((ev: MatrixEvent) => {
+                return ev.isRelation(THREAD_RELATION_TYPE.name) && !ev.status;
+            }) ?? undefined
+        );
     }
 
     private updateThread = (thread?: Thread): void => {
@@ -245,7 +247,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
 
     private setupThreadListeners(thread?: Thread | undefined, oldThread?: Thread | undefined): void {
         if (oldThread) {
-            this.state.thread.off(ThreadEvent.NewReply, this.updateThreadRelation);
+            this.state.thread?.off(ThreadEvent.NewReply, this.updateThreadRelation);
             this.props.room.off(RoomEvent.LocalEchoUpdated, this.updateThreadRelation);
         }
         if (thread) {
@@ -344,7 +346,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
     };
 
     public render(): React.ReactNode {
-        const highlightedEventId = this.props.isInitialEventHighlighted ? this.props.initialEvent?.getId() : null;
+        const highlightedEventId = this.props.isInitialEventHighlighted ? this.props.initialEvent?.getId() : undefined;
 
         const threadRelation = this.threadRelation;
 

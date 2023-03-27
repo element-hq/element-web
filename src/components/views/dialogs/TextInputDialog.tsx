@@ -100,7 +100,7 @@ export default class TextInputDialog extends React.Component<IProps, IState> {
     };
 
     private onValidate = async (fieldState: IFieldState): Promise<IValidationResult> => {
-        const result = await this.props.validator(fieldState);
+        const result = await this.props.validator!(fieldState);
         this.setState({
             valid: !!result.valid,
         });

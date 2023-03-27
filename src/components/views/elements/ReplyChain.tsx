@@ -148,6 +148,7 @@ export default class ReplyChain extends React.Component<IProps, IState> {
     private async getNextEvent(ev: MatrixEvent): Promise<MatrixEvent | null> {
         try {
             const inReplyToEventId = getParentEventId(ev);
+            if (!inReplyToEventId) return null;
             return await this.getEvent(inReplyToEventId);
         } catch (e) {
             return null;
@@ -196,7 +197,7 @@ export default class ReplyChain extends React.Component<IProps, IState> {
     };
 
     private getReplyChainColorClass(ev: MatrixEvent): string {
-        return getUserNameColorClass(ev.getSender()).replace("Username", "ReplyChain");
+        return getUserNameColorClass(ev.getSender()!).replace("Username", "ReplyChain");
     }
 
     public render(): React.ReactNode {
@@ -231,8 +232,8 @@ export default class ReplyChain extends React.Component<IProps, IState> {
                             pill: (
                                 <Pill
                                     type={PillType.UserMention}
-                                    room={room}
-                                    url={makeUserPermalink(ev.getSender())}
+                                    room={room ?? undefined}
+                                    url={makeUserPermalink(ev.getSender()!)}
                                     shouldShowPillAvatar={SettingsStore.getValue("Pill.shouldShowPillAvatar")}
                                 />
                             ),

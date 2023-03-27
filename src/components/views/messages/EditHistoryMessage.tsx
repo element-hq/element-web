@@ -63,7 +63,7 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
         const event = this.props.mxEvent;
         const room = cli.getRoom(event.getRoomId());
         event.localRedactionEvent()?.on(MatrixEventEvent.Status, this.onAssociatedStatusChanged);
-        const canRedact = room.currentState.maySendRedactionForEvent(event, userId);
+        const canRedact = room?.currentState.maySendRedactionForEvent(event, userId) ?? false;
         this.state = { canRedact, sendStatus: event.getAssociatedStatus() };
     }
 

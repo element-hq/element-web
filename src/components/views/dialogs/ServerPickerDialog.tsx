@@ -141,7 +141,7 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
                     return !error;
                 },
                 invalid: function ({ error }) {
-                    return error;
+                    return error ?? null;
                 },
             },
         ],

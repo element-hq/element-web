@@ -377,7 +377,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
     private roomView = createRef<HTMLElement>();
     private searchResultsPanel = createRef<ScrollPanel>();
-    private messagePanel?: TimelinePanel;
+    private messagePanel: TimelinePanel | null = null;
     private roomViewBody = createRef<HTMLDivElement>();
 
     public static contextType = SDKContext;
@@ -611,11 +611,11 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
         const newState: Partial<IRoomState> = {
             roomId: roomId ?? undefined,
-            roomAlias: this.context.roomViewStore.getRoomAlias(),
+            roomAlias: this.context.roomViewStore.getRoomAlias() ?? undefined,
             roomLoading: this.context.roomViewStore.isRoomLoading(),
-            roomLoadError: this.context.roomViewStore.getRoomLoadError(),
+            roomLoadError: this.context.roomViewStore.getRoomLoadError() ?? undefined,
             joining: this.context.roomViewStore.isJoining(),
-            replyToEvent: this.context.roomViewStore.getQuotingEvent(),
+            replyToEvent: this.context.roomViewStore.getQuotingEvent() ?? undefined,
             // we should only peek once we have a ready client
             shouldPeek: this.state.matrixClientIsReady && this.context.roomViewStore.shouldPeek(),
             showReadReceipts: SettingsStore.getValue("showReadReceipts", roomId),
@@ -654,7 +654,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             // and the root event.
             // The rest will be lost for now, until the aggregation API on the server
             // becomes available to fetch a whole thread
-            if (!initialEvent) {
+            if (!initialEvent && this.context.client) {
                 initialEvent = (await fetchInitialEvent(this.context.client, roomId, initialEventId)) ?? undefined;
             }
 
@@ -848,7 +848,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                     isPeeking: true, // this will change to false if peeking fails
                 });
                 this.context.client
-                    .peekInRoom(roomId)
+                    ?.peekInRoom(roomId)
                     .then((room) => {
                         if (this.unmounted) {
                             return;
@@ -883,7 +883,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                     });
             } else if (room) {
                 // Stop peeking because we have joined this room previously
-                this.context.client.stopPeeking();
+                this.context.client?.stopPeeking();
                 this.setState({ isPeeking: false });
             }
         }
@@ -909,9 +909,9 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         this.onRoomViewStoreUpdate(true);
 
         const call = this.getCallForRoom();
-        const callState = call ? call.state : null;
+        const callState = call?.state;
         this.setState({
-            callState: callState,
+            callState,
         });
 
         this.context.legacyCallHandler.on(LegacyCallHandlerEvent.CallState, this.onCallState);
@@ -959,7 +959,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         }
 
         if (this.state.shouldPeek) {
-            this.context.client.stopPeeking();
+            this.context.client?.stopPeeking();
         }
 
         // stop tracking room changes to format permalinks
@@ -1010,7 +1010,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
         if (this.viewsLocalRoom) {
             // clean up if this was a local room
-            this.context.client.store.removeRoom(this.state.room.roomId);
+            this.context.client?.store.removeRoom(this.state.room.roomId);
         }
     }
 
@@ -1469,7 +1469,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
     private updatePermissions(room: Room): void {
         if (room) {
-            const me = this.context.client.getUserId();
+            const me = this.context.client.getSafeUserId();
             const canReact =
                 room.getMyMembership() === "join" && room.currentState.maySendEvent(EventType.Reaction, me);
             const canSendMessages = room.maySendMessage();
@@ -1866,7 +1866,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
     // this has to be a proper method rather than an unnamed function,
     // otherwise react calls it with null on each update.
-    private gatherTimelinePanelRef = (r?: TimelinePanel): void => {
+    private gatherTimelinePanelRef = (r: TimelinePanel | null): void => {
         this.messagePanel = r;
     };
 

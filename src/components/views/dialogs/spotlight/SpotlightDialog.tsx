@@ -440,7 +440,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
 
         // Sort results by most recent activity
 
-        const myUserId = cli.getUserId();
+        const myUserId = cli.getSafeUserId();
         for (const resultArray of Object.values(results)) {
             resultArray.sort((a: Result, b: Result) => {
                 if (isRoomResult(a) || isRoomResult(b)) {

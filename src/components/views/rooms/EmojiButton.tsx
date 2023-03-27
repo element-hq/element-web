@@ -25,7 +25,7 @@ import { OverflowMenuContext } from "./MessageComposerButtons";
 
 interface IEmojiButtonProps {
     addEmoji: (unicode: string) => boolean;
-    menuPosition: MenuProps;
+    menuPosition?: MenuProps;
     className?: string;
 }
 

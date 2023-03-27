@@ -38,7 +38,7 @@ export function RoomResultContextMenus({ room }: Props): JSX.Element {
     const [generalMenuPosition, setGeneralMenuPosition] = useState<DOMRect | null>(null);
     const [notificationMenuPosition, setNotificationMenuPosition] = useState<DOMRect | null>(null);
 
-    let generalMenu: JSX.Element;
+    let generalMenu: JSX.Element | undefined;
     if (generalMenuPosition !== null) {
         if (room.isSpaceRoom()) {
             generalMenu = (
@@ -59,7 +59,7 @@ export function RoomResultContextMenus({ room }: Props): JSX.Element {
         }
     }
 
-    let notificationMenu: JSX.Element;
+    let notificationMenu: JSX.Element | undefined;
     if (notificationMenuPosition !== null) {
         notificationMenu = (
             <RoomNotificationContextMenu

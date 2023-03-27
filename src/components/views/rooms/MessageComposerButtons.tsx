@@ -73,8 +73,8 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
         return null;
     }
 
-    let mainButtons: ReactElement[];
-    let moreButtons: ReactElement[];
+    let mainButtons: ReactNode[];
+    let moreButtons: ReactNode[];
     if (narrow) {
         mainButtons = [
             isWysiwygLabEnabled ? (

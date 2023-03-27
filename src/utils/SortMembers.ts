@@ -22,7 +22,10 @@ import { Member } from "./direct-messages";
 import DMRoomMap from "./DMRoomMap";
 
 export const compareMembers =
-    (activityScores: Record<string, IActivityScore>, memberScores: Record<string, IMemberScore>) =>
+    (
+        activityScores: Record<string, IActivityScore | undefined>,
+        memberScores: Record<string, IMemberScore | undefined>,
+    ) =>
     (a: Member | RoomMember, b: Member | RoomMember): number => {
         const aActivityScore = activityScores[a.userId]?.score ?? 0;
         const aMemberScore = memberScores[a.userId]?.score ?? 0;

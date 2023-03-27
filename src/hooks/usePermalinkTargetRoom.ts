@@ -83,7 +83,7 @@ const findRoom = (roomIdOrAlias: string): Room | null => {
 export const usePermalinkTargetRoom = (
     type: PillType | null,
     parseResult: PermalinkParts | null,
-    permalinkRoom: Room | null,
+    permalinkRoom: Room | undefined,
 ): Room | null => {
     // The listed permalink types require a room.
     // If it cannot be initially determined, it will be looked up later by a memo hook.

@@ -42,7 +42,7 @@ const BulkRedactDialog: React.FC<Props> = (props) => {
     const { matrixClient: cli, room, member, onFinished } = props;
     const [keepStateEvents, setKeepStateEvents] = useState(true);
 
-    let timeline = room.getLiveTimeline();
+    let timeline: EventTimeline | null = room.getLiveTimeline();
     let eventsToRedact: MatrixEvent[] = [];
     while (timeline) {
         eventsToRedact = [
@@ -93,7 +93,7 @@ const BulkRedactDialog: React.FC<Props> = (props) => {
             await Promise.all(
                 eventsToRedact.reverse().map(async (event): Promise<void> => {
                     try {
-                        await cli.redactEvent(room.roomId, event.getId());
+                        await cli.redactEvent(room.roomId, event.getId()!);
                     } catch (err) {
                         // log and swallow errors
                         logger.error("Could not redact", event.getId());

@@ -49,7 +49,7 @@ interface ITermsDialogProps {
     /**
      * urls that the user has already agreed to
      */
-    agreedUrls?: string[];
+    agreedUrls: string[];
 
     /**
      * Called with:
@@ -127,7 +127,7 @@ export default class TermsDialog extends React.PureComponent<ITermsDialogProps, 
     };
 
     public render(): React.ReactNode {
-        const rows = [];
+        const rows: JSX.Element[] = [];
         for (const policiesAndService of this.props.policiesAndServicePairs) {
             const parsedBaseUrl = url.parse(policiesAndService.service.baseUrl);
 
@@ -135,8 +135,8 @@ export default class TermsDialog extends React.PureComponent<ITermsDialogProps, 
             for (let i = 0; i < policyValues.length; ++i) {
                 const termDoc = policyValues[i];
                 const termsLang = pickBestLanguage(Object.keys(termDoc).filter((k) => k !== "version"));
-                let serviceName;
-                let summary;
+                let serviceName: JSX.Element | undefined;
+                let summary: JSX.Element | undefined;
                 if (i === 0) {
                     serviceName = this.nameForServiceType(policiesAndService.service.serviceType, parsedBaseUrl.host);
                     summary = this.summaryForServiceType(policiesAndService.service.serviceType);

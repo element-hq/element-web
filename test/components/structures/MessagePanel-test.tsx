@@ -716,7 +716,7 @@ describe("MessagePanel", function () {
         // Increase the length of the loop here to test performance issues with
         // rendering
 
-        const events = [];
+        const events: MatrixEvent[] = [];
         for (let i = 0; i < 100; i++) {
             events.push(
                 TestUtilsMatrix.mkMembership({

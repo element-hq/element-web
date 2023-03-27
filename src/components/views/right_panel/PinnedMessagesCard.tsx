@@ -71,7 +71,7 @@ export const usePinnedEvents = (room?: Room): string[] => {
 };
 
 function getReadPinnedEventIds(room?: Room): Set<string> {
-    return new Set(room.getAccountData(ReadPinsEventId)?.getContent()?.event_ids ?? []);
+    return new Set(room?.getAccountData(ReadPinsEventId)?.getContent()?.event_ids ?? []);
 }
 
 export const useReadPinnedEvents = (room?: Room): Set<string> => {

@@ -187,8 +187,8 @@ export default class EventListSummary extends React.Component<IProps> {
 
             let transition = t;
 
-            if (i < transitions.length - 1 && modMap[t] && modMap[t].after === t2) {
-                transition = modMap[t].newTransition;
+            if (i < transitions.length - 1 && modMap[t] && modMap[t]!.after === t2) {
+                transition = modMap[t]!.newTransition;
                 i++;
             }
 
@@ -380,7 +380,7 @@ export default class EventListSummary extends React.Component<IProps> {
         return res ?? null;
     }
 
-    private static getTransitionSequence(events: IUserEvents[]): TransitionType[] {
+    private static getTransitionSequence(events: IUserEvents[]): Array<TransitionType | null> {
         return events.map(EventListSummary.getTransition);
     }
 

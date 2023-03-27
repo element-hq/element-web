@@ -79,7 +79,7 @@ interface IProps {
     // representing.  This may or may not have a room, depending on what it's
     // a timeline representing.  If it has a room, we maintain RRs etc for
     // that room.
-    timelineSet?: EventTimelineSet;
+    timelineSet: EventTimelineSet;
     // overlay events from a second timelineset on the main timeline
     // added to support virtual rooms
     // events from the overlay timeline set will be added by localTimestamp

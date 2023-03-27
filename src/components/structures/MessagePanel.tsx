@@ -24,8 +24,6 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 import { M_BEACON_INFO } from "matrix-js-sdk/src/@types/beacon";
 import { isSupportedReceiptType } from "matrix-js-sdk/src/utils";
-import { ReadReceipt } from "matrix-js-sdk/src/models/read-receipt";
-import { ListenerMap } from "matrix-js-sdk/src/models/typed-event-emitter";
 
 import shouldHideEvent from "../../shouldHideEvent";
 import { wantsDateSeparator } from "../../DateUtils";
@@ -543,7 +541,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         return null;
     }
 
-    private collectGhostReadMarker = (node: HTMLElement): void => {
+    private collectGhostReadMarker = (node: HTMLElement | null): void => {
         if (node) {
             // now the element has appeared, change the style which will trigger the CSS transition
             requestAnimationFrame(() => {
@@ -788,13 +786,13 @@ export default class MessagePanel extends React.Component<IProps, IState> {
                 continuation={continuation}
                 isRedacted={mxEv.isRedacted()}
                 replacingEventId={mxEv.replacingEventId()}
-                editState={isEditing && this.props.editState}
+                editState={isEditing ? this.props.editState : undefined}
                 onHeightChanged={this.onHeightChanged}
                 readReceipts={readReceipts}
                 readReceiptMap={this.readReceiptMap}
                 showUrlPreview={this.props.showUrlPreview}
                 checkUnmounting={this.isUnmounting}
-                eventSendStatus={mxEv.getAssociatedStatus()}
+                eventSendStatus={mxEv.getAssociatedStatus() ?? undefined}
                 isTwelveHour={this.props.isTwelveHour}
                 permalinkCreator={this.props.permalinkCreator}
                 last={last}
@@ -836,9 +834,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
             return null;
         }
 
-        const receiptDestination: ReadReceipt<string, ListenerMap<string>> = this.context.threadId
-            ? room.getThread(this.context.threadId)
-            : room;
+        const receiptDestination = this.context.threadId ? room.getThread(this.context.threadId) : room;
 
         const receipts: IReadReceiptProps[] = [];
 
@@ -1215,7 +1211,7 @@ class CreationGrouper extends BaseGrouper {
 
         let summaryText: string;
         const roomId = ev.getRoomId();
-        const creator = ev.sender ? ev.sender.name : ev.getSender();
+        const creator = ev.sender?.name ?? ev.getSender();
         if (DMRoomMap.shared().getUserIdForRoomId(roomId)) {
             summaryText = _t("%(creator)s created this DM.", { creator });
         } else {

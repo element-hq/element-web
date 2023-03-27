@@ -54,6 +54,7 @@ describe("ForwardDialog", () => {
     });
     const mockClient = getMockClientWithEventEmitter({
         getUserId: jest.fn().mockReturnValue(aliceId),
+        getSafeUserId: jest.fn().mockReturnValue(aliceId),
         isGuest: jest.fn().mockReturnValue(false),
         getVisibleRooms: jest.fn().mockReturnValue([]),
         getRoom: jest.fn(),
@@ -92,6 +93,7 @@ describe("ForwardDialog", () => {
         DMRoomMap.makeShared();
         jest.clearAllMocks();
         mockClient.getUserId.mockReturnValue("@bob:example.org");
+        mockClient.getSafeUserId.mockReturnValue("@bob:example.org");
         mockClient.sendEvent.mockReset();
     });
 

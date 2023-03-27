@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import React from "react";
-import { Optional } from "matrix-events-sdk";
 
 import { _t } from "../languageHandler";
 import SdkConfig from "../SdkConfig";
@@ -75,7 +74,7 @@ const onLearnMorePreviouslyOptedIn = (): void => {
 
 const TOAST_KEY = "analytics";
 
-export function getPolicyUrl(): Optional<string> {
+export function getPolicyUrl(): string | undefined {
     return SdkConfig.get("privacy_policy_url");
 }
 

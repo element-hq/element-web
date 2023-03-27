@@ -33,6 +33,7 @@ interface IProps {
 
 const BetaFeedbackDialog: React.FC<IProps> = ({ featureId, onFinished }) => {
     const info = SettingsStore.getBetaInfo(featureId);
+    if (!info) return null;
 
     return (
         <GenericFeatureFeedbackDialog
