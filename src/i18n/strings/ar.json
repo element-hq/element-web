@@ -846,7 +846,6 @@
     "Show typing notifications": "إظهار إشعار الكتابة",
     "Send typing notifications": "إرسال إشعار بالكتابة",
     "Enable big emoji in chat": "تفعيل الرموز التعبيرية الكبيرة في المحادثة",
-    "Show avatars in user and room mentions": "إظهار الصورة الرمزية عند ذكر مستخدم أو غرفة",
     "Enable automatic language detection for syntax highlighting": "تمكين التعرف التلقائي للغة لتلوين الجمل",
     "Always show message timestamps": "اعرض دائمًا الطوابع الزمنية للرسالة",
     "Show timestamps in 12 hour format (e.g. 2:30pm)": "عرض الطوابع الزمنية بتنسيق 12 ساعة (على سبيل المثال 2:30pm)",
