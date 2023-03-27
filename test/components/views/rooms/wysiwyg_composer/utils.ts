@@ -16,12 +16,12 @@ limitations under the License.
 
 import { EventTimeline, MatrixEvent } from "matrix-js-sdk/src/matrix";
 
-import { getRoomContext, mkEvent, mkStubRoom, stubClient } from "../../../../test-utils";
+import { createTestClient, getRoomContext, mkEvent, mkStubRoom } from "../../../../test-utils";
 import { IRoomState } from "../../../../../src/components/structures/RoomView";
 import EditorStateTransfer from "../../../../../src/utils/EditorStateTransfer";
 
 export function createMocks(eventContent = "Replying <strong>to</strong> this new content") {
-    const mockClient = stubClient();
+    const mockClient = createTestClient();
     const mockEvent = mkEvent({
         type: "m.room.message",
         room: "myfakeroom",

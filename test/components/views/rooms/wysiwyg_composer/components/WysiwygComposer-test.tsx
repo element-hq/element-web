@@ -21,7 +21,7 @@ import userEvent from "@testing-library/user-event";
 
 import { WysiwygComposer } from "../../../../../../src/components/views/rooms/wysiwyg_composer/components/WysiwygComposer";
 import SettingsStore from "../../../../../../src/settings/SettingsStore";
-import { flushPromises, mockPlatformPeg, stubClient, mkStubRoom } from "../../../../../test-utils";
+import { createTestClient, flushPromises, mockPlatformPeg } from "../../../../../test-utils";
 import defaultDispatcher from "../../../../../../src/dispatcher/dispatcher";
 import * as EventUtils from "../../../../../../src/utils/EventUtils";
 import { Action } from "../../../../../../src/dispatcher/actions";
@@ -36,25 +36,11 @@ import EditorStateTransfer from "../../../../../../src/utils/EditorStateTransfer
 import { SubSelection } from "../../../../../../src/components/views/rooms/wysiwyg_composer/types";
 import { setSelection } from "../../../../../../src/components/views/rooms/wysiwyg_composer/utils/selection";
 import { parseEditorStateTransfer } from "../../../../../../src/components/views/rooms/wysiwyg_composer/hooks/useInitialContent";
-import Autocompleter, { ICompletion } from "../../../../../../src/autocomplete/Autocompleter";
-import AutocompleteProvider from "../../../../../../src/autocomplete/AutocompleteProvider";
-import * as Permalinks from "../../../../../../src/utils/permalinks/Permalinks";
-import { PermalinkParts } from "../../../../../../src/utils/permalinks/PermalinkConstructor";
 
 describe("WysiwygComposer", () => {
     const customRender = (onChange = jest.fn(), onSend = jest.fn(), disabled = false, initialContent?: string) => {
-        const { mockClient, defaultRoomContext } = createMocks();
         return render(
-            <MatrixClientContext.Provider value={mockClient}>
-                <RoomContext.Provider value={defaultRoomContext}>
-                    <WysiwygComposer
-                        onChange={onChange}
-                        onSend={onSend}
-                        disabled={disabled}
-                        initialContent={initialContent}
-                    />
-                </RoomContext.Provider>
-            </MatrixClientContext.Provider>,
+            <WysiwygComposer onChange={onChange} onSend={onSend} disabled={disabled} initialContent={initialContent} />,
         );
     };
 
@@ -62,12 +48,12 @@ describe("WysiwygComposer", () => {
         jest.resetAllMocks();
     });
 
-    it("Should have contentEditable at false when disabled", async () => {
+    it("Should have contentEditable at false when disabled", () => {
         // When
         customRender(jest.fn(), jest.fn(), true);
 
         // Then
-        await waitFor(() => expect(screen.getByRole("textbox")).toHaveAttribute("contentEditable", "false"));
+        expect(screen.getByRole("textbox")).toHaveAttribute("contentEditable", "false");
     });
 
     describe("Standard behavior", () => {
@@ -155,199 +141,6 @@ describe("WysiwygComposer", () => {
 
             // Then it sends a message
             await waitFor(() => expect(onSend).toHaveBeenCalledTimes(0));
-        });
-    });
-
-    describe("Mentions", () => {
-        const dispatchSpy = jest.spyOn(defaultDispatcher, "dispatch");
-
-        const mockCompletions: ICompletion[] = [
-            {
-                type: "user",
-                href: "www.user1.com",
-                completion: "user_1",
-                completionId: "@user_1:host.local",
-                range: { start: 1, end: 1 },
-                component: <div>user_1</div>,
-            },
-            {
-                type: "user",
-                href: "www.user2.com",
-                completion: "user_2",
-                completionId: "@user_2:host.local",
-                range: { start: 1, end: 1 },
-                component: <div>user_2</div>,
-            },
-            {
-                // no href user
-                type: "user",
-                completion: "user_without_href",
-                completionId: "@user_3:host.local",
-                range: { start: 1, end: 1 },
-                component: <div>user_without_href</div>,
-            },
-            {
-                type: "room",
-                href: "www.room1.com",
-                completion: "#room_with_completion_id",
-                completionId: "@room_1:host.local",
-                range: { start: 1, end: 1 },
-                component: <div>room_with_completion_id</div>,
-            },
-            {
-                type: "room",
-                href: "www.room2.com",
-                completion: "#room_without_completion_id",
-                range: { start: 1, end: 1 },
-                component: <div>room_without_completion_id</div>,
-            },
-        ];
-
-        const constructMockProvider = (data: ICompletion[]) =>
-            ({
-                getCompletions: jest.fn().mockImplementation(async () => data),
-                getName: jest.fn().mockReturnValue("test provider"),
-                renderCompletions: jest.fn().mockImplementation((components) => components),
-            } as unknown as AutocompleteProvider);
-
-        // for each test we will insert input simulating a user mention
-        const insertMentionInput = async () => {
-            fireEvent.input(screen.getByRole("textbox"), {
-                data: "@abc",
-                inputType: "insertText",
-            });
-
-            // the autocomplete suggestions container has the presentation role, wait for it to be present
-            expect(await screen.findByRole("presentation")).toBeInTheDocument();
-        };
-
-        beforeEach(async () => {
-            // setup the required spies
-            jest.spyOn(Autocompleter.prototype, "getCompletions").mockResolvedValue([
-                {
-                    completions: mockCompletions,
-                    provider: constructMockProvider(mockCompletions),
-                    command: { command: ["truthy"] as RegExpExecArray }, // needed for us to unhide the autocomplete when testing
-                },
-            ]);
-            jest.spyOn(Permalinks, "parsePermalink").mockReturnValue({
-                userId: "mockParsedUserId",
-            } as unknown as PermalinkParts);
-
-            // then render the component and wait for the composer to be ready
-            customRender();
-            await waitFor(() => expect(screen.getByRole("textbox")).toHaveAttribute("contentEditable", "true"));
-        });
-
-        afterEach(() => {
-            jest.clearAllMocks();
-        });
-
-        it("shows the autocomplete when text has @ prefix and autoselects the first item", async () => {
-            await insertMentionInput();
-            expect(screen.getByText(mockCompletions[0].completion)).toHaveAttribute("aria-selected", "true");
-        });
-
-        it("pressing up and down arrows allows us to change the autocomplete selection", async () => {
-            await insertMentionInput();
-
-            // press the down arrow - nb using .keyboard allows us to not have to specify a node, which
-            // means that we know the autocomplete is correctly catching the event
-            await userEvent.keyboard("{ArrowDown}");
-            expect(screen.getByText(mockCompletions[0].completion)).toHaveAttribute("aria-selected", "false");
-            expect(screen.getByText(mockCompletions[1].completion)).toHaveAttribute("aria-selected", "true");
-
-            // reverse the process and check again
-            await userEvent.keyboard("{ArrowUp}");
-            expect(screen.getByText(mockCompletions[0].completion)).toHaveAttribute("aria-selected", "true");
-            expect(screen.getByText(mockCompletions[1].completion)).toHaveAttribute("aria-selected", "false");
-        });
-
-        it("pressing enter selects the mention and inserts it into the composer as a link", async () => {
-            await insertMentionInput();
-
-            // press enter
-            await userEvent.keyboard("{Enter}");
-
-            // check that it closes the autocomplete
-            await waitFor(() => {
-                expect(screen.queryByRole("presentation")).not.toBeInTheDocument();
-            });
-
-            // check that it inserts the completion text as a link
-            expect(screen.getByRole("link", { name: mockCompletions[0].completion })).toBeInTheDocument();
-        });
-
-        it("clicking on a mention in the composer dispatches the correct action", async () => {
-            await insertMentionInput();
-
-            // press enter
-            await userEvent.keyboard("{Enter}");
-
-            // check that it closes the autocomplete
-            await waitFor(() => {
-                expect(screen.queryByRole("presentation")).not.toBeInTheDocument();
-            });
-
-            // click on the user mention link that has been inserted
-            await userEvent.click(screen.getByRole("link", { name: mockCompletions[0].completion }));
-            expect(dispatchSpy).toHaveBeenCalledTimes(1);
-
-            // this relies on the output from the mock function in mkStubRoom
-            expect(dispatchSpy).toHaveBeenCalledWith(
-                expect.objectContaining({
-                    action: Action.ViewUser,
-                    member: expect.objectContaining({
-                        userId: mkStubRoom(undefined, undefined, undefined).getMember("any")?.userId,
-                    }),
-                }),
-            );
-        });
-
-        it("selecting a mention without a href closes the autocomplete but does not insert a mention", async () => {
-            await insertMentionInput();
-
-            // select the relevant user by clicking
-            await userEvent.click(screen.getByText("user_without_href"));
-
-            // check that it closes the autocomplete
-            await waitFor(() => {
-                expect(screen.queryByRole("presentation")).not.toBeInTheDocument();
-            });
-
-            // check that it has not inserted a link
-            expect(screen.queryByRole("link", { name: "user_without_href" })).not.toBeInTheDocument();
-        });
-
-        it("selecting a room mention with a completionId uses client.getRoom", async () => {
-            await insertMentionInput();
-
-            // select the room suggestion by clicking
-            await userEvent.click(screen.getByText("room_with_completion_id"));
-
-            // check that it closes the autocomplete
-            await waitFor(() => {
-                expect(screen.queryByRole("presentation")).not.toBeInTheDocument();
-            });
-
-            // check that it has inserted a link and looked up the name from the mock client
-            // which will always return 'My room'
-            expect(screen.getByRole("link", { name: "My room" })).toBeInTheDocument();
-        });
-
-        it("selecting a room mention without a completionId uses client.getRooms", async () => {
-            await insertMentionInput();
-
-            // select the room suggestion
-            await userEvent.click(screen.getByText("room_without_completion_id"));
-
-            // check that it closes the autocomplete
-            await waitFor(() => {
-                expect(screen.queryByRole("presentation")).not.toBeInTheDocument();
-            });
-
-            // check that it has inserted a link and falls back to the completion text
-            expect(screen.getByRole("link", { name: "#room_without_completion_id" })).toBeInTheDocument();
         });
     });
 
@@ -448,11 +241,10 @@ describe("WysiwygComposer", () => {
 
         const setup = async (
             editorState?: EditorStateTransfer,
-            client = stubClient(),
+            client = createTestClient(),
             roomContext = defaultRoomContext,
         ) => {
             const spyDispatcher = jest.spyOn(defaultDispatcher, "dispatch");
-
             customRender(client, roomContext, editorState);
             await waitFor(() => expect(screen.getByRole("textbox")).toHaveAttribute("contentEditable", "true"));
             return { textbox: screen.getByRole("textbox"), spyDispatcher };
