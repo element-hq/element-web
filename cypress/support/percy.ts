@@ -44,6 +44,8 @@ Cypress.Commands.add("percySnapshotElement", { prevSubject: "element" }, (subjec
         cy.get(".mx_Spinner", { log: false }).should("not.exist");
         // But like really no more spinners please
         cy.get(".mx_Spinner", { log: false }).should("not.exist");
+        // Await inline spinners to vanish
+        cy.get(".mx_InlineSpinner", { log: false }).should("not.exist");
     }
     cy.percySnapshot(name, {
         domTransformation: (documentClone) => scope(documentClone, subject.selector),
