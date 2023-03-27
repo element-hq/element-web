@@ -377,7 +377,6 @@
     "Show timestamps in 12 hour format (e.g. 2:30pm)": "Vis tidsstempler i 12-timersformat (f.eks. 2:30pm)",
     "Always show message timestamps": "Alltid vis meldingenes tidsstempler",
     "Enable automatic language detection for syntax highlighting": "Skru på automatisk kodespråkoppdagelse for syntaksfremheving",
-    "Show avatars in user and room mentions": "Vis avatarer i bruker- og romnevninger",
     "Enable big emoji in chat": "Skru på store emojier i chatrom",
     "Send typing notifications": "Send varsler om at du skriver",
     "Show typing notifications": "Vis varsler om at det skrives",
