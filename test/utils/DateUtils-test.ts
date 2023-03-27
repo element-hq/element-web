@@ -55,9 +55,16 @@ describe("formatRelativeTime", () => {
         dateSpy.mockRestore();
     });
 
-    it("returns hour format for events created less than 24 hours ago", () => {
+    it("returns hour format for events created in the same day", () => {
+        // Tuesday, 2 November 2021 11:01:00 UTC
         const date = new Date(2021, 10, 2, 11, 1, 23, 0);
         expect(formatRelativeTime(date)).toBe("11:01");
+    });
+
+    it("returns month and day for events created less than 24h ago but on a different day", () => {
+        // Monday, 1 November 2021 23:01:00 UTC
+        const date = new Date(2021, 10, 1, 23, 1, 23, 0);
+        expect(formatRelativeTime(date)).toBe("Nov 1");
     });
 
     it("honours the hour format setting", () => {
