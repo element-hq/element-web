@@ -14,13 +14,28 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { logger } from "matrix-js-sdk/src/logger";
-import { MatrixEvent, Room, RoomMember } from "matrix-js-sdk/src/matrix";
+import { IMatrixProfile, MatrixEvent, Room, RoomMember } from "matrix-js-sdk/src/matrix";
 import { useEffect, useState } from "react";
 
 import { PillType } from "../components/views/elements/Pill";
-import { MatrixClientPeg } from "../MatrixClientPeg";
+import { SdkContextClass } from "../contexts/SDKContext";
 import { PermalinkParts } from "../utils/permalinks/PermalinkConstructor";
+
+const createMemberFromProfile = (userId: string, profile: IMatrixProfile): RoomMember => {
+    const member = new RoomMember("", userId);
+    member.name = profile.displayname ?? userId;
+    member.rawDisplayName = member.name;
+    member.events.member = {
+        getContent: () => {
+            return { avatar_url: profile.avatar_url };
+        },
+        getDirectionalContent: function () {
+            // eslint-disable-next-line
+            return this.getContent();
+        },
+    } as MatrixEvent;
+    return member;
+};
 
 /**
  * Tries to determine the user Id of a permalink.
@@ -50,6 +65,29 @@ const determineUserId = (
 };
 
 /**
+ * Tries to determine a RoomMember.
+ *
+ * @param userId - User Id to get the member for
+ * @param targetRoom - permalink target room
+ * @returns RoomMember of the target room if it exists.
+ *          If sharing at least one room with the user, then the result will be the profile fetched via API.
+ *          null in all other cases.
+ */
+const determineMember = (userId: string, targetRoom: Room): RoomMember | null => {
+    const targetRoomMember = targetRoom.getMember(userId);
+
+    if (targetRoomMember) return targetRoomMember;
+
+    const knownProfile = SdkContextClass.instance.userProfilesStore.getOnlyKnownProfile(userId);
+
+    if (knownProfile) {
+        return createMemberFromProfile(userId, knownProfile);
+    }
+
+    return null;
+};
+
+/**
  * Hook to get the permalink member
  *
  * @param type - Permalink type
@@ -71,7 +109,7 @@ export const usePermalinkMember = (
     // If it cannot be initially determined, it will be looked up later by a memo hook.
     const shouldLookUpUser = type && [PillType.UserMention, PillType.EventInSameRoom].includes(type);
     const userId = determineUserId(type, parseResult, event);
-    const userInRoom = shouldLookUpUser && userId && targetRoom ? targetRoom.getMember(userId) : null;
+    const userInRoom = shouldLookUpUser && userId && targetRoom ? determineMember(userId, targetRoom) : null;
     const [member, setMember] = useState<RoomMember | null>(userInRoom);
 
     useEffect(() => {
@@ -80,31 +118,16 @@ export const usePermalinkMember = (
             return;
         }
 
-        const doProfileLookup = (userId: string): void => {
-            MatrixClientPeg.get()
-                .getProfileInfo(userId)
-                .then((resp) => {
-                    const newMember = new RoomMember("", userId);
-                    newMember.name = resp.displayname || userId;
-                    newMember.rawDisplayName = resp.displayname || userId;
-                    newMember.getMxcAvatarUrl();
-                    newMember.events.member = {
-                        getContent: () => {
-                            return { avatar_url: resp.avatar_url };
-                        },
-                        getDirectionalContent: function () {
-                            // eslint-disable-next-line
-                            return this.getContent();
-                        },
-                    } as MatrixEvent;
-                    setMember(newMember);
-                })
-                .catch((err) => {
-                    logger.error("Could not retrieve profile data for " + userId + ":", err);
-                });
+        const doProfileLookup = async (): Promise<void> => {
+            const fetchedProfile = await SdkContextClass.instance.userProfilesStore.fetchOnlyKnownProfile(userId);
+
+            if (fetchedProfile) {
+                const newMember = createMemberFromProfile(userId, fetchedProfile);
+                setMember(newMember);
+            }
         };
 
-        doProfileLookup(userId);
+        doProfileLookup();
     }, [member, shouldLookUpUser, targetRoom, userId]);
 
     return member;

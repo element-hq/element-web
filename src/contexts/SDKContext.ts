@@ -28,6 +28,7 @@ import RightPanelStore from "../stores/right-panel/RightPanelStore";
 import { RoomViewStore } from "../stores/RoomViewStore";
 import SpaceStore, { SpaceStoreClass } from "../stores/spaces/SpaceStore";
 import TypingStore from "../stores/TypingStore";
+import { UserProfilesStore } from "../stores/UserProfilesStore";
 import { WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
 import { WidgetPermissionStore } from "../stores/widgets/WidgetPermissionStore";
 import WidgetStore from "../stores/WidgetStore";
@@ -75,6 +76,7 @@ export class SdkContextClass {
     protected _VoiceBroadcastPreRecordingStore?: VoiceBroadcastPreRecordingStore;
     protected _VoiceBroadcastPlaybacksStore?: VoiceBroadcastPlaybacksStore;
     protected _AccountPasswordStore?: AccountPasswordStore;
+    protected _UserProfilesStore?: UserProfilesStore;
 
     /**
      * Automatically construct stores which need to be created eagerly so they can register with
@@ -184,5 +186,21 @@ export class SdkContextClass {
             this._AccountPasswordStore = new AccountPasswordStore();
         }
         return this._AccountPasswordStore;
+    }
+
+    public get userProfilesStore(): UserProfilesStore {
+        if (!this.client) {
+            throw new Error("Unable to create UserProfilesStore without a client");
+        }
+
+        if (!this._UserProfilesStore) {
+            this._UserProfilesStore = new UserProfilesStore(this.client);
+        }
+
+        return this._UserProfilesStore;
+    }
+
+    public onLoggedOut(): void {
+        this._UserProfilesStore = undefined;
     }
 }

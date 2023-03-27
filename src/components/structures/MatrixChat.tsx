@@ -1439,6 +1439,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         });
         this.subTitleStatus = "";
         this.setPageSubtitle();
+        this.stores.onLoggedOut();
     }
 
     /**
