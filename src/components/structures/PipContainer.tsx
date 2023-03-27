@@ -262,7 +262,7 @@ class PipContainerInner extends React.Component<IProps, IState> {
             );
 
         return ({ onStartMoving }) => (
-            <div key={voiceBroadcastPlayback.infoEvent.getId()} onMouseDown={onStartMoving}>
+            <div key={`vb-playback-${voiceBroadcastPlayback.infoEvent.getId()}`} onMouseDown={onStartMoving}>
                 {content}
             </div>
         );
@@ -272,7 +272,7 @@ class PipContainerInner extends React.Component<IProps, IState> {
         voiceBroadcastPreRecording: VoiceBroadcastPreRecording,
     ): CreatePipChildren {
         return ({ onStartMoving }) => (
-            <div onMouseDown={onStartMoving}>
+            <div key="vb-pre-recording" onMouseDown={onStartMoving}>
                 <VoiceBroadcastPreRecordingPip voiceBroadcastPreRecording={voiceBroadcastPreRecording} />
             </div>
         );
@@ -282,7 +282,7 @@ class PipContainerInner extends React.Component<IProps, IState> {
         voiceBroadcastRecording: VoiceBroadcastRecording,
     ): CreatePipChildren {
         return ({ onStartMoving }) => (
-            <div onMouseDown={onStartMoving}>
+            <div key={`vb-recording-${voiceBroadcastRecording.infoEvent.getId()}`} onMouseDown={onStartMoving}>
                 <VoiceBroadcastRecordingPip recording={voiceBroadcastRecording} />
             </div>
         );
