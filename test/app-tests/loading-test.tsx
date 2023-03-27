@@ -25,7 +25,6 @@ import { MatrixClientPeg } from "matrix-react-sdk/src/MatrixClientPeg";
 import MatrixChat from "matrix-react-sdk/src/components/structures/MatrixChat";
 import dis from "matrix-react-sdk/src/dispatcher/dispatcher";
 import MockHttpBackend from "matrix-mock-request";
-import { makeType } from "matrix-react-sdk/src/utils/TypeUtils";
 import { ValidatedServerConfig } from "matrix-react-sdk/src/utils/ValidatedServerConfig";
 import { IndexedDBCryptoStore } from "matrix-js-sdk/src/crypto/store/indexeddb-crypto-store";
 import { QueryDict, sleep } from "matrix-js-sdk/src/utils";
@@ -117,12 +116,12 @@ describe("loading:", function () {
             {
                 default_hs_url: DEFAULT_HS_URL,
                 default_is_url: DEFAULT_IS_URL,
-                validated_server_config: makeType(ValidatedServerConfig, {
+                validated_server_config: {
                     hsUrl: DEFAULT_HS_URL,
                     hsName: "TEST_ENVIRONMENT",
                     hsNameIsDifferent: false, // yes, we lie
                     isUrl: DEFAULT_IS_URL,
-                }),
+                } as ValidatedServerConfig,
                 embeddedPages: {
                     homeUrl: "data:text/html;charset=utf-8;base64,PGh0bWw+PC9odG1sPg==",
                 },
