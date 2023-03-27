@@ -389,8 +389,11 @@ describe("Timeline", () => {
         });
 
         it("should render EventTiles on IRC, modern (group), and bubble layout", () => {
-            // Exclude timestamp and read marker from snapshots
-            const percyCSS = ".mx_MessageTimestamp, .mx_RoomView_myReadMarker { visibility: hidden !important; }";
+            const percyCSS =
+                // Hide because flaky - See https://github.com/vector-im/element-web/issues/24957
+                ".mx_TopUnreadMessagesBar, " +
+                // Exclude timestamp and read marker from snapshots
+                ".mx_MessageTimestamp, .mx_RoomView_myReadMarker { visibility: hidden !important; }";
 
             sendEvent(roomId);
             sendEvent(roomId); // check continuation
