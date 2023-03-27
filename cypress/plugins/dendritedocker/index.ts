@@ -32,14 +32,16 @@ import { HomeserverConfig, HomeserverInstance } from "../utils/homeserver";
 
 const dendrites = new Map<string, HomeserverInstance>();
 
+const dockerConfigDir = "/etc/dendrite/";
+const dendriteConfigFile = "dendrite.yaml";
+
 function randB64Bytes(numBytes: number): string {
     return crypto.randomBytes(numBytes).toString("base64").replace(/=*$/, "");
 }
 
-async function cfgDirFromTemplate(template: string): Promise<HomeserverConfig> {
+async function cfgDirFromTemplate(template: string, dendriteImage: string): Promise<HomeserverConfig> {
     template = "default";
     const templateDir = path.join(__dirname, "templates", template);
-    const configFile = "dendrite.yaml";
 
     const stats = await fse.stat(templateDir);
     if (!stats?.isDirectory) {
@@ -49,7 +51,7 @@ async function cfgDirFromTemplate(template: string): Promise<HomeserverConfig> {
 
     // copy the contents of the template dir, omitting homeserver.yaml as we'll template that
     console.log(`Copy ${templateDir} -> ${tempDir}`);
-    await fse.copy(templateDir, tempDir, { filter: (f) => path.basename(f) !== configFile });
+    await fse.copy(templateDir, tempDir, { filter: (f) => path.basename(f) !== dendriteConfigFile });
 
     const registrationSecret = randB64Bytes(16);
 
@@ -57,13 +59,13 @@ async function cfgDirFromTemplate(template: string): Promise<HomeserverConfig> {
     const baseUrl = `http://localhost:${port}`;
 
     // now copy homeserver.yaml, applying substitutions
-    console.log(`Gen ${path.join(templateDir, configFile)}`);
-    let hsYaml = await fse.readFile(path.join(templateDir, configFile), "utf8");
+    console.log(`Gen ${path.join(templateDir, dendriteConfigFile)}`);
+    let hsYaml = await fse.readFile(path.join(templateDir, dendriteConfigFile), "utf8");
     hsYaml = hsYaml.replace(/{{REGISTRATION_SECRET}}/g, registrationSecret);
-    await fse.writeFile(path.join(tempDir, configFile), hsYaml);
+    await fse.writeFile(path.join(tempDir, dendriteConfigFile), hsYaml);
 
     await dockerRun({
-        image: "matrixdotorg/dendrite-monolith:main",
+        image: dendriteImage,
         params: ["--rm", "--entrypoint=", "-v", `${tempDir}:/mnt`],
         containerName: `react-sdk-cypress-dendrite-keygen`,
         cmd: ["/usr/bin/generate-keys", "-private-key", "/mnt/matrix_key.pem"],
@@ -81,23 +83,40 @@ async function cfgDirFromTemplate(template: string): Promise<HomeserverConfig> {
 // one of the templates in the cypress/plugins/dendritedocker/templates
 // directory
 async function dendriteStart(template: string): Promise<HomeserverInstance> {
-    const denCfg = await cfgDirFromTemplate(template);
+    return containerStart(template, false);
+}
+
+// Start a dendrite instance using pinecone routing: the template must be the name of
+// one of the templates in the cypress/plugins/dendritedocker/templates
+// directory
+async function dendritePineconeStart(template: string): Promise<HomeserverInstance> {
+    return containerStart(template, true);
+}
+
+async function containerStart(template: string, usePinecone: boolean): Promise<HomeserverInstance> {
+    let dendriteImage = "matrixdotorg/dendrite-monolith:main";
+    let dendriteEntrypoint = "/usr/bin/dendrite-monolith-server";
+    if (usePinecone) {
+        dendriteImage = "matrixdotorg/dendrite-demo-pinecone:main";
+        dendriteEntrypoint = "/usr/bin/dendrite-demo-pinecone";
+    }
+    const denCfg = await cfgDirFromTemplate(template, dendriteImage);
 
     console.log(`Starting dendrite with config dir ${denCfg.configDir}...`);
 
     const dendriteId = await dockerRun({
-        image: "matrixdotorg/dendrite-monolith:main",
+        image: dendriteImage,
         params: [
             "--rm",
             "-v",
-            `${denCfg.configDir}:/etc/dendrite`,
+            `${denCfg.configDir}:` + dockerConfigDir,
             "-p",
             `${denCfg.port}:8008/tcp`,
             "--entrypoint",
-            "/usr/bin/dendrite-monolith-server",
+            dendriteEntrypoint,
         ],
         containerName: `react-sdk-cypress-dendrite`,
-        cmd: ["--really-enable-open-registration", "true", "run"],
+        cmd: ["--config", dockerConfigDir + dendriteConfigFile, "--really-enable-open-registration", "true", "run"],
     });
 
     console.log(`Started dendrite with id ${dendriteId} on port ${denCfg.port}.`);
@@ -152,6 +171,10 @@ async function dendriteStop(id: string): Promise<void> {
     return null;
 }
 
+async function dendritePineconeStop(id: string): Promise<void> {
+    return dendriteStop(id);
+}
+
 /**
  * @type {Cypress.PluginConfig}
  */
@@ -159,6 +182,8 @@ export function dendriteDocker(on: PluginEvents, config: PluginConfigOptions) {
     on("task", {
         dendriteStart,
         dendriteStop,
+        dendritePineconeStart,
+        dendritePineconeStop,
     });
 
     on("after:spec", async (spec) => {

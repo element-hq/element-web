@@ -346,6 +346,10 @@ key_server:
     database:
         connection_string: file:dendrite-keyserverapi.db
 
+relay_api:
+    database:
+        connection_string: file:dendrite-relayapi.db
+
 # Configuration for Opentracing.
 # See https://github.com/matrix-org/dendrite/tree/master/docs/tracing for information on
 # how this works and how to set it up.
