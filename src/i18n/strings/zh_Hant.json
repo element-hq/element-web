@@ -3752,5 +3752,13 @@
     "Show avatars in user, room and event mentions": "在使用者、聊天室與事件提及中顯示大頭貼",
     "Message from %(user)s": "來自 %(user)s 的訊息",
     "Message in %(room)s": "%(room)s 中的訊息",
-    "Enable intentional mentions": "開啟刻意提及功能"
+    "Enable intentional mentions": "開啟刻意提及功能",
+    "Error details": "錯誤詳細資訊",
+    "Unable to find event at that date": "找不到該日期的事件",
+    "Please submit <debugLogsLink>debug logs</debugLogsLink> to help us track down the problem.": "請遞交<debugLogsLink>除錯紀錄檔</debugLogsLink>以協助我們追蹤問題。",
+    "unavailable": "無法使用",
+    "unknown status code": "未知狀態代碼",
+    "Server returned %(statusCode)s with error code %(errorCode)s": "伺服器回傳 %(statusCode)s，錯誤代碼為 %(errorCode)s",
+    "We were unable to find an event looking forwards from %(dateString)s. Try choosing an earlier date.": "我們無法從 %(dateString)s 中找到期待的事件。嘗試選擇一個較早的日期。",
+    "A network error occurred while trying to find and jump to the given date. Your homeserver might be down or there was just a temporary problem with your internet connection. Please try again. If this continues, please contact your homeserver administrator.": "嘗試尋找並前往指定日期時發生網路錯誤。您的家伺服器可能已關閉，或者您的網際網路連線只是暫時出現問題。請再試一次。如果這種情況繼續存在，請聯絡您的家伺服器管理員。"
 }
