@@ -45,6 +45,14 @@ $timeline-image-border-radius: 8px;
     --MessageTimestamp-width: $MessageTimestamp_width;
 }
 
+@media only percy {
+    :root {
+        --percy-color-avatar: $username-variant2-color;
+        --percy-color-displayName: $username-variant1-color;
+        --percy-color-replyChain-border: $username-variant1-color;
+    }
+}
+
 @media (prefers-reduced-motion) {
     :root {
         --transition-short: 0;

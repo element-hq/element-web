@@ -848,41 +848,41 @@ describe("Timeline", () => {
             clickButtonReply();
             cy.getComposer().type(`${reply2}{enter}`);
 
-            // Make sure 'reply2' was sent
+            // Assert that 'reply2' was sent
             cy.contains(".mx_RoomView_MessageList .mx_EventTile_last", reply2).should("exist");
+            cy.get(".mx_EventTile_last .mx_EventTile_receiptSent").should("be.visible");
 
             // Exclude timestamp and read marker from snapshot
-            //const percyCSS = ".mx_MessageTimestamp, .mx_RoomView_myReadMarker { visibility: hidden !important; }";
+            const percyCSS = ".mx_MessageTimestamp, .mx_RoomView_myReadMarker { visibility: hidden !important; }";
 
             // Check the margin value of ReplyChains of EventTile at the bottom on IRC layout
             cy.setSettingValue("layout", null, SettingLevel.DEVICE, Layout.IRC);
             cy.get(".mx_EventTile_last[data-layout='irc'] .mx_ReplyChain").should("have.css", "margin", "0px");
 
             // Take a snapshot on IRC layout
-            // Disabled because flaky - see https://github.com/vector-im/element-web/issues/24881
-            /*cy.get(".mx_EventTile_last").percySnapshotElement("EventTile with reply chains on IRC layout", {
+            // Note that because zero margin is applied to mx_ReplyChain, the left borders of two mx_ReplyChain
+            // components may seem to be connected to one.
+            cy.get(".mx_EventTile_last").percySnapshotElement("EventTile with reply chains on IRC layout", {
                 percyCSS,
-            });*/
+            });
 
             // Check the margin value of ReplyChains of EventTile at the bottom on group/modern layout
             cy.setSettingValue("layout", null, SettingLevel.DEVICE, Layout.Group);
             cy.get(".mx_EventTile_last[data-layout='group'] .mx_ReplyChain").should("have.css", "margin-bottom", "8px");
 
             // Take a snapshot on modern layout
-            // Disabled because flaky - see https://github.com/vector-im/element-web/issues/24881
-            /*cy.get(".mx_EventTile_last").percySnapshotElement("EventTile with reply chains on modern layout", {
+            cy.get(".mx_EventTile_last").percySnapshotElement("EventTile with reply chains on modern layout", {
                 percyCSS,
-            });*/
+            });
 
             // Check the margin value of ReplyChains of EventTile at the bottom on group/modern compact layout
             cy.setSettingValue("useCompactLayout", null, SettingLevel.DEVICE, true);
             cy.get(".mx_EventTile_last[data-layout='group'] .mx_ReplyChain").should("have.css", "margin-bottom", "4px");
 
             // Take a snapshot on compact modern layout
-            // Disabled because flaky - see https://github.com/vector-im/element-web/issues/24881
-            /*cy.get(".mx_EventTile_last").percySnapshotElement("EventTile with reply chains on compact modern layout", {
+            cy.get(".mx_EventTile_last").percySnapshotElement("EventTile with reply chains on compact modern layout", {
                 percyCSS,
-            });*/
+            });
 
             // Check the margin value of ReplyChains of EventTile at the bottom on bubble layout
             cy.setSettingValue("layout", null, SettingLevel.DEVICE, Layout.Bubble);
@@ -893,10 +893,9 @@ describe("Timeline", () => {
             );
 
             // Take a snapshot on bubble layout
-            // Disabled because flaky - see https://github.com/vector-im/element-web/issues/24881
-            /*cy.get(".mx_EventTile_last").percySnapshotElement("EventTile with reply chains on bubble layout", {
+            cy.get(".mx_EventTile_last").percySnapshotElement("EventTile with reply chains on bubble layout", {
                 percyCSS,
-            });*/
+            });
         });
 
         it("should send, reply, and display long strings without overflowing", () => {
