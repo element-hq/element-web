@@ -166,9 +166,10 @@ export const usePublicRoomDirectory = (): {
     }, [protocols]);
 
     useEffect(() => {
-        localStorage.setItem(LAST_SERVER_KEY, config?.roomServer);
-        if (config?.instanceId) {
-            localStorage.setItem(LAST_INSTANCE_KEY, config?.instanceId);
+        if (!config) return;
+        localStorage.setItem(LAST_SERVER_KEY, config.roomServer);
+        if (config.instanceId) {
+            localStorage.setItem(LAST_INSTANCE_KEY, config.instanceId);
         } else {
             localStorage.removeItem(LAST_INSTANCE_KEY);
         }
