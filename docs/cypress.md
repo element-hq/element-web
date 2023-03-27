@@ -186,12 +186,30 @@ already familiar with Cypress.
 This is a small selection - the Cypress best practices guide, linked above, has more good advice, and we
 should generally try to adhere to them.
 
-## Percy Visual Testing
+## Screenshot testing with Percy
 
-We also support visual testing via Percy, this extracts the DOM from Cypress and renders it using custom renderers
-for Safari, Firefox, Chrome & Edge, allowing us to spot visual regressions before they become release regressions.
-Each `cy.percySnapshot()` call results in 8 screenshots (4 browsers, 2 sizes) this can quickly be exhausted and
-so we only run Percy testing on `develop` and PRs which are labelled `X-Needs-Percy`.
+We also support visual testing via [Percy](https://percy.io). Within many of our
+Cypress tests you can see lines calling `cy.percySnapshot()`. This creates a
+screenshot and uses Percy to check whether it has changed from the last time
+this test was run.
 
-To record a snapshot use `cy.percySnapshot()`, you may have to pass `percyCSS` into the 2nd argument to hide certain
-elements which contain dynamic/generated data to avoid them cause false positives in the Percy screenshot diffs.
+It can help to pass `percyCSS` in as the 2nd argument to `percySnapshot` to hide
+elements that vary (e.g. timestamps). See the existing code for examples of
+this. (Note: it is also possible for team members to mark certain parts of a
+screenshot to be ignored. This is done within the Percy UI.)
+
+Percy screenshots are created using custom renderers based on Safari, Firefox,
+Chrome and Edge. Each `percySnapshot` actually creates 8 screenshots (4
+browsers, 2 sizes). Since we have a limited budget for Percy screenshots, by
+default we only run Percy once per day against the `develop` branch, based on a
+nightly build at approximately 04:00 UTC every day. (The schedule is defined in
+[element-web.yaml](../.github/workflows/element-web.yaml) and the Percy tests are
+enabled/disabled in [cypress.yaml](../.github/workflows/cypress.yaml).)
+
+If your pull request makes visual changes, you are encouraged to request Percy
+to run by adding the label `X-Needs-Percy` to the PR. This will help us find any
+visual bugs or validate visual changes at the time they are made, instead of
+having to figure it out later after the nightly build. If you don't have
+permission to add a label, please ask your reviewer to do it. Note: it's best to
+add this label when the change is nearly ready, because the screenshots will be
+re-created every time you make a change to your PR.
