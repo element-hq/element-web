@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { fireEvent, getByLabelText, render } from "@testing-library/react";
+import { fireEvent, getByLabelText, render, screen } from "@testing-library/react";
 import { mocked } from "jest-mock";
 import { ReceiptType } from "matrix-js-sdk/src/@types/read_receipts";
 import { MatrixClient, PendingEventOrdering } from "matrix-js-sdk/src/client";
@@ -32,6 +32,12 @@ import { DefaultTagID } from "../../../../src/stores/room-list/models";
 import RoomListStore from "../../../../src/stores/room-list/RoomListStore";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import { mkMessage, stubClient } from "../../../test-utils/test-utils";
+import { shouldShowComponent } from "../../../../src/customisations/helpers/UIComponents";
+import { UIComponent } from "../../../../src/settings/UIFeature";
+
+jest.mock("../../../../src/customisations/helpers/UIComponents", () => ({
+    shouldShowComponent: jest.fn(),
+}));
 
 describe("RoomGeneralContextMenu", () => {
     const ROOM_ID = "!123:matrix.org";
@@ -91,6 +97,28 @@ describe("RoomGeneralContextMenu", () => {
     it("renders the default context menu", async () => {
         const { container } = getComponent({});
         expect(container).toMatchSnapshot();
+    });
+
+    it("does not render invite menu item when UIComponent customisations disable room invite", () => {
+        room.updateMyMembership("join");
+        jest.spyOn(room, "canInvite").mockReturnValue(true);
+        mocked(shouldShowComponent).mockReturnValue(false);
+
+        getComponent({});
+
+        expect(shouldShowComponent).toHaveBeenCalledWith(UIComponent.InviteUsers);
+        expect(screen.queryByRole("menuitem", { name: "Invite" })).not.toBeInTheDocument();
+    });
+
+    it("renders invite menu item when UIComponent customisations enables room invite", () => {
+        room.updateMyMembership("join");
+        jest.spyOn(room, "canInvite").mockReturnValue(true);
+        mocked(shouldShowComponent).mockReturnValue(true);
+
+        getComponent({});
+
+        expect(shouldShowComponent).toHaveBeenCalledWith(UIComponent.InviteUsers);
+        expect(screen.getByRole("menuitem", { name: "Invite" })).toBeInTheDocument();
     });
 
     it("marks the room as read", async () => {
