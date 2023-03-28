@@ -260,7 +260,6 @@
     "Show a placeholder for removed messages": "हटाए गए संदेशों के लिए एक प्लेसहोल्डर दिखाएँ",
     "Show avatar changes": "अवतार परिवर्तन दिखाएं",
     "Show display name changes": "प्रदर्शन नाम परिवर्तन दिखाएं",
-    "Show avatars in user and room mentions": "उपयोगकर्ता और कक्ष उल्लेख में अवतार दिखाएँ",
     "Enable big emoji in chat": "चैट में बड़े इमोजी सक्षम करें",
     "Send typing notifications": "टाइपिंग सूचनाएं भेजें",
     "Prompt before sending invites to potentially invalid matrix IDs": "संभावित अवैध मैट्रिक्स आईडी को निमंत्रण भेजने से पहले सूचित करें",
