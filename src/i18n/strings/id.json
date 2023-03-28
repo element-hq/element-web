@@ -3759,5 +3759,6 @@
     "unknown status code": "kode keadaan tidak diketahui",
     "Server returned %(statusCode)s with error code %(errorCode)s": "Server merespons dengan %(statusCode)s dengan kode kesalahan %(errorCode)s",
     "We were unable to find an event looking forwards from %(dateString)s. Try choosing an earlier date.": "Kami tidak dapat menemukan peristiwa sebelumnya dari %(dateString)s. Coba pilih tanggal yang lebih awal.",
-    "A network error occurred while trying to find and jump to the given date. Your homeserver might be down or there was just a temporary problem with your internet connection. Please try again. If this continues, please contact your homeserver administrator.": "Sebuah kesalahan jaringan terjadi saat mencari dan menuju ke tanggal yang diberikan. Homeserver Anda mungkin tidak tersedia atau ada masalah sementara dengan koneksi internet Anda. Silakan coba lagi. Jika ini masih berlanjut, silakan hubungi administrator homeserver Anda."
+    "A network error occurred while trying to find and jump to the given date. Your homeserver might be down or there was just a temporary problem with your internet connection. Please try again. If this continues, please contact your homeserver administrator.": "Sebuah kesalahan jaringan terjadi saat mencari dan menuju ke tanggal yang diberikan. Homeserver Anda mungkin tidak tersedia atau ada masalah sementara dengan koneksi internet Anda. Silakan coba lagi. Jika ini masih berlanjut, silakan hubungi administrator homeserver Anda.",
+    "Poll history": "Riwayat pemungutan suara"
 }
