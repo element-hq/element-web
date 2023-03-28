@@ -79,9 +79,9 @@ describe("AutoRageshakeStore", () => {
                     [
                       [
                         "im.vector.auto_rs_request",
-                        {
-                          "@userId:matrix.org": {
-                            "undefined": {
+                        Map {
+                          "messageContent.user_id" => Map {
+                            undefined => {
                               "device_id": undefined,
                               "event_id": "utd_event_id",
                               "recipient_rageshake": undefined,

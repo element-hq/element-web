@@ -71,7 +71,7 @@ export const recordClientInformation = async (
  *                      client information for devices NOT in this list will be removed
  */
 export const pruneClientInformation = (validDeviceIds: string[], matrixClient: MatrixClient): void => {
-    Object.values(matrixClient.store.accountData).forEach((event) => {
+    Array.from(matrixClient.store.accountData.values()).forEach((event) => {
         if (!event.getType().startsWith(clientInformationEventPrefix)) {
             return;
         }

@@ -15,6 +15,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { safeSet } from "matrix-js-sdk/src/utils";
+
 import { SettingLevel } from "../SettingLevel";
 import { WatchManager } from "../WatchManager";
 import AbstractLocalStorageSettingsHandler from "./AbstractLocalStorageSettingsHandler";
@@ -48,7 +50,7 @@ export default class RoomDeviceSettingsHandler extends AbstractLocalStorageSetti
             let value = this.read("mx_local_settings");
             if (!value) value = {};
             if (!value["blacklistUnverifiedDevicesPerRoom"]) value["blacklistUnverifiedDevicesPerRoom"] = {};
-            value["blacklistUnverifiedDevicesPerRoom"][roomId] = newValue;
+            safeSet(value["blacklistUnverifiedDevicesPerRoom"], roomId, newValue);
             this.setObject("mx_local_settings", value);
             this.watchers.notifyUpdate(settingName, roomId, SettingLevel.ROOM_DEVICE, newValue);
             return Promise.resolve();

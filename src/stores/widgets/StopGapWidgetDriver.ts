@@ -275,7 +275,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
                         if (deviceId === "*") {
                             // Send the message to all devices we have keys for
                             await client.encryptAndSendToDevices(
-                                Object.values(deviceInfoMap[userId]).map((deviceInfo) => ({
+                                Array.from(deviceInfoMap.get(userId).values()).map((deviceInfo) => ({
                                     userId,
                                     deviceInfo,
                                 })),
@@ -284,7 +284,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
                         } else {
                             // Send the message to a specific device
                             await client.encryptAndSendToDevices(
-                                [{ userId, deviceInfo: deviceInfoMap[userId][deviceId] }],
+                                [{ userId, deviceInfo: deviceInfoMap.get(userId).get(deviceId) }],
                                 content,
                             );
                         }

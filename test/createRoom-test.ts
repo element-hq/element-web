@@ -16,7 +16,7 @@ limitations under the License.
 
 import { mocked, Mocked } from "jest-mock";
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
-import { IDevice } from "matrix-js-sdk/src/crypto/deviceinfo";
+import { DeviceInfo } from "matrix-js-sdk/src/crypto/deviceinfo";
 import { RoomType } from "matrix-js-sdk/src/@types/event";
 
 import { stubClient, setupAsyncStoreWithClient, mockPlatformPeg } from "./test-utils";
@@ -147,12 +147,16 @@ describe("createRoom", () => {
 });
 
 describe("canEncryptToAllUsers", () => {
-    const trueUser = {
-        "@goodUser:localhost": {
-            DEV1: {} as unknown as IDevice,
-            DEV2: {} as unknown as IDevice,
-        },
-    };
+    const trueUser = new Map([
+        [
+            "@goodUser:localhost",
+            new Map([
+                ["DEV1", {} as unknown as DeviceInfo],
+                ["DEV2", {} as unknown as DeviceInfo],
+            ]),
+        ],
+    ]);
+
     const falseUser = {
         "@badUser:localhost": {},
     };

@@ -21,6 +21,7 @@ import counterpart from "counterpart";
 import React from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { Optional } from "matrix-events-sdk";
+import { MapWithDefault, safeSet } from "matrix-js-sdk/src/utils";
 
 import SettingsStore from "./settings/SettingsStore";
 import PlatformPeg from "./PlatformPeg";
@@ -629,21 +630,16 @@ export class CustomTranslationOptions {
 function doRegisterTranslations(customTranslations: ICustomTranslations): void {
     // We convert the operator-friendly version into something counterpart can
     // consume.
-    const langs: {
-        // same structure, just flipped key order
-        [lang: string]: {
-            [str: string]: string;
-        };
-    } = {};
+    // Map: lang → Record: string → translation
+    const langs: MapWithDefault<string, Record<string, string>> = new MapWithDefault(() => ({}));
     for (const [str, translations] of Object.entries(customTranslations)) {
         for (const [lang, newStr] of Object.entries(translations)) {
-            if (!langs[lang]) langs[lang] = {};
-            langs[lang][str] = newStr;
+            safeSet(langs.getOrCreate(lang), str, newStr);
         }
     }
 
     // Finally, tell counterpart about our translations
-    for (const [lang, translations] of Object.entries(langs)) {
+    for (const [lang, translations] of langs) {
         counterpart.registerTranslations(lang, translations);
     }
 }

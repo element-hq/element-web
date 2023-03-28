@@ -135,9 +135,10 @@ export default class AutoRageshakeStore extends AsyncStoreWithClient<IState> {
                 ...eventInfo,
                 recipient_rageshake: rageshakeURL,
             };
-            this.matrixClient.sendToDevice(AUTO_RS_REQUEST, {
-                [messageContent.user_id]: { [messageContent.device_id]: messageContent },
-            });
+            this.matrixClient.sendToDevice(
+                AUTO_RS_REQUEST,
+                new Map([["messageContent.user_id", new Map([[messageContent.device_id, messageContent]])]]),
+            );
         }
     }
 

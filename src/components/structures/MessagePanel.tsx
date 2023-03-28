@@ -235,7 +235,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     // This is recomputed on each render. It's only stored on the component
     // for ease of passing the data around since it's computed in one pass
     // over all events.
-    private readReceiptsByEvent: Record<string, IReadReceiptProps[]> = {};
+    private readReceiptsByEvent: Map<string, IReadReceiptProps[]> = new Map();
 
     // Track read receipts by user ID. For each user ID we've ever shown a
     // a read receipt for, we store an object:
@@ -254,7 +254,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     // This is recomputed on each render, using the data from the previous
     // render as our fallback for any user IDs we can't match a receipt to a
     // displayed event in the current render cycle.
-    private readReceiptsByUserId: Record<string, IReadReceiptForUser> = {};
+    private readReceiptsByUserId: Map<string, IReadReceiptForUser> = new Map();
 
     private readonly _showHiddenEvents: boolean;
     private isMounted = false;
@@ -624,7 +624,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         // Note: the EventTile might still render a "sent/sending receipt" independent of
         // this information. When not providing read receipt information, the tile is likely
         // to assume that sent receipts are to be shown more often.
-        this.readReceiptsByEvent = {};
+        this.readReceiptsByEvent = new Map();
         if (this.props.showReadReceipts) {
             this.readReceiptsByEvent = this.getReadReceiptsByShownEvent();
         }
@@ -727,7 +727,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         const eventId = mxEv.getId();
         const highlight = eventId === this.props.highlightedEventId;
 
-        const readReceipts = this.readReceiptsByEvent[eventId];
+        const readReceipts = this.readReceiptsByEvent.get(eventId);
 
         let isLastSuccessful = false;
         const isSentState = (s: EventStatus): boolean => !s || s === EventStatus.SENT;
@@ -846,17 +846,11 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     // Get an object that maps from event ID to a list of read receipts that
     // should be shown next to that event. If a hidden event has read receipts,
     // they are folded into the receipts of the last shown event.
-    private getReadReceiptsByShownEvent(): Record<string, IReadReceiptProps[]> {
-        const receiptsByEvent: Record<string, IReadReceiptProps[]> = {};
-        const receiptsByUserId: Record<
-            string,
-            {
-                lastShownEventId: string;
-                receipt: IReadReceiptProps;
-            }
-        > = {};
+    private getReadReceiptsByShownEvent(): Map<string, IReadReceiptProps[]> {
+        const receiptsByEvent: Map<string, IReadReceiptProps[]> = new Map();
+        const receiptsByUserId: Map<string, IReadReceiptForUser> = new Map();
 
-        let lastShownEventId;
+        let lastShownEventId: string;
         for (const event of this.props.events) {
             if (this.shouldShowEvent(event)) {
                 lastShownEventId = event.getId();
@@ -865,9 +859,9 @@ export default class MessagePanel extends React.Component<IProps, IState> {
                 continue;
             }
 
-            const existingReceipts = receiptsByEvent[lastShownEventId] || [];
+            const existingReceipts = receiptsByEvent.get(lastShownEventId) || [];
             const newReceipts = this.getReadReceiptsForEvent(event);
-            receiptsByEvent[lastShownEventId] = existingReceipts.concat(newReceipts);
+            receiptsByEvent.set(lastShownEventId, existingReceipts.concat(newReceipts));
 
             // Record these receipts along with their last shown event ID for
             // each associated user ID.
@@ -885,21 +879,21 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         // someone which had one in the last. By looking through our previous
         // mapping of receipts by user ID, we can cover recover any receipts
         // that would have been lost by using the same event ID from last time.
-        for (const userId in this.readReceiptsByUserId) {
-            if (receiptsByUserId[userId]) {
+        for (const userId of this.readReceiptsByUserId.keys()) {
+            if (receiptsByUserId.get(userId)) {
                 continue;
             }
-            const { lastShownEventId, receipt } = this.readReceiptsByUserId[userId];
-            const existingReceipts = receiptsByEvent[lastShownEventId] || [];
-            receiptsByEvent[lastShownEventId] = existingReceipts.concat(receipt);
-            receiptsByUserId[userId] = { lastShownEventId, receipt };
+            const { lastShownEventId, receipt } = this.readReceiptsByUserId.get(userId);
+            const existingReceipts = receiptsByEvent.get(lastShownEventId) || [];
+            receiptsByEvent.set(lastShownEventId, existingReceipts.concat(receipt));
+            receiptsByUserId.set(userId, { lastShownEventId, receipt });
         }
         this.readReceiptsByUserId = receiptsByUserId;
 
         // After grouping receipts by shown events, do another pass to sort each
         // receipt list.
-        for (const eventId in receiptsByEvent) {
-            receiptsByEvent[eventId].sort((r1, r2) => {
+        for (const receipts of receiptsByEvent.values()) {
+            receipts.sort((r1, r2) => {
                 return r2.ts - r1.ts;
             });
         }
