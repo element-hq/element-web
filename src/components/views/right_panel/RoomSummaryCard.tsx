@@ -343,7 +343,7 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, permalinkCreator, onClose }) 
                 )}
                 {!isVideoRoom && (
                     <Button className="mx_RoomSummaryCard_icon_poll" onClick={onRoomPollHistoryClick}>
-                        {_t("Polls history")}
+                        {_t("Poll history")}
                     </Button>
                 )}
                 {pinningEnabled && !isVideoRoom && (

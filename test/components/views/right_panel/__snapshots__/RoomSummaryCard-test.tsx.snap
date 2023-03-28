@@ -88,7 +88,7 @@ exports[`<RoomSummaryCard /> renders the room summary 1`] = `
           role="button"
           tabindex="0"
         >
-          Polls history
+          Poll history
         </div>
         <div
           class="mx_AccessibleButton mx_BaseCard_Button mx_RoomSummaryCard_Button mx_RoomSummaryCard_icon_export"

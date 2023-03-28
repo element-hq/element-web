@@ -99,7 +99,7 @@ describe("<RoomSettingsDialog />", () => {
         it("displays poll history when tab clicked", () => {
             const { container } = getComponent();
 
-            fireEvent.click(screen.getByText("Polls history"));
+            fireEvent.click(screen.getByText("Poll history"));
 
             expect(container.querySelector(".mx_SettingsTab")).toMatchSnapshot();
         });

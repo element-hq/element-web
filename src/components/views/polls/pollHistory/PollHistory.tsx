@@ -63,7 +63,7 @@ export const PollHistory: React.FC<PollHistoryProps> = ({ room, matrixClient, pe
     const title = focusedPoll ? (
         <PollDetailHeader filter={filter} onNavigateBack={() => setFocusedPollId(null)} />
     ) : (
-        _t("Polls history")
+        _t("Poll history")
     );
 
     return (

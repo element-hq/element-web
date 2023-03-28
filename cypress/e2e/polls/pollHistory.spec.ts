@@ -77,7 +77,7 @@ describe("Poll history", () => {
     function openPollHistory(): void {
         cy.get('.mx_HeaderButtons [aria-label="Room info"]').click();
         cy.get(".mx_RoomSummaryCard").within(() => {
-            cy.contains("Polls history").click();
+            cy.contains("Poll history").click();
         });
     }
 
