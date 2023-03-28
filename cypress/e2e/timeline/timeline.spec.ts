@@ -244,6 +244,46 @@ describe("Timeline", () => {
             cy.get(".mx_MainSplit").percySnapshotElement("Expanded GELS on modern layout", { percyCSS });
         });
 
+        it("should click 'collapse' on the first hovered info event line inside GELS on bubble layout", () => {
+            // This test checks clickability of the "Collapse" link button, which had been covered with
+            // MessageActionBar's safe area - https://github.com/vector-im/element-web/issues/22864
+
+            cy.visit("/#/room/" + roomId);
+            cy.setSettingValue("layout", null, SettingLevel.DEVICE, Layout.Bubble);
+            cy.contains(
+                ".mx_RoomView_body .mx_GenericEventListSummary[data-layout=bubble] " +
+                    ".mx_GenericEventListSummary_summary",
+                "created and configured the room.",
+            ).should("exist");
+
+            // Click "expand" link button
+            cy.get(".mx_GenericEventListSummary_toggle[aria-expanded=false]").click();
+
+            // Make sure the "expand" link button worked
+            cy.get(".mx_GenericEventListSummary_toggle[aria-expanded=true]").should("exist");
+
+            // Make sure spacer is not visible on bubble layout
+            cy.get(".mx_GenericEventListSummary[data-layout=bubble] .mx_GenericEventListSummary_spacer").should(
+                "not.be.visible", // See: _GenericEventListSummary.pcss
+            );
+
+            // Exclude timestamp from snapshot
+            const percyCSS = ".mx_MessageTimestamp { visibility: hidden !important; }";
+
+            // Save snapshot of expanded generic event list summary on bubble layout
+            cy.get(".mx_MainSplit").percySnapshotElement("Expanded GELS on bubble layout", { percyCSS });
+
+            // Click "collapse" link button on the first hovered info event line
+            cy.get(".mx_GenericEventListSummary_unstyledList .mx_EventTile_info:first-of-type").realHover();
+            cy.get(".mx_GenericEventListSummary_toggle[aria-expanded=true]").click({ force: false });
+
+            // Make sure "collapse" link button worked
+            cy.get(".mx_GenericEventListSummary_toggle[aria-expanded=false]").should("exist");
+
+            // Save snapshot of collapsed generic event list summary on bubble layout
+            cy.get(".mx_MainSplit").percySnapshotElement("Collapsed GELS on bubble layout", { percyCSS });
+        });
+
         it("should add inline start margin to an event line on IRC layout", () => {
             cy.visit("/#/room/" + roomId);
             cy.setSettingValue("layout", null, SettingLevel.DEVICE, Layout.IRC);
@@ -626,43 +666,6 @@ describe("Timeline", () => {
 
             // Make sure the expand toggle worked
             cy.get(".mx_EventTile[data-layout=irc] .mx_ViewSourceEvent_expanded").should("be.visible");
-        });
-
-        it("should click 'collapse' link button on the first hovered info event line on bubble layout", () => {
-            cy.visit("/#/room/" + roomId);
-            cy.setSettingValue("layout", null, SettingLevel.DEVICE, Layout.Bubble);
-            cy.contains(
-                ".mx_RoomView_body .mx_GenericEventListSummary[data-layout=bubble] " +
-                    ".mx_GenericEventListSummary_summary",
-                "created and configured the room.",
-            ).should("exist");
-
-            // Click "expand" link button
-            cy.get(".mx_GenericEventListSummary_toggle[aria-expanded=false]").click();
-
-            // Make sure the "expand" link button worked
-            cy.get(".mx_GenericEventListSummary_toggle[aria-expanded=true]").should("exist");
-
-            // Make sure spacer is not visible on bubble layout
-            cy.get(".mx_GenericEventListSummary[data-layout=bubble] .mx_GenericEventListSummary_spacer").should(
-                "not.be.visible", // See: _GenericEventListSummary.pcss
-            );
-
-            // Exclude timestamp from snapshot
-            const percyCSS = ".mx_MessageTimestamp { visibility: hidden !important; }";
-
-            // Save snapshot of expanded generic event list summary on bubble layout
-            cy.get(".mx_MainSplit").percySnapshotElement("Expanded GELS on bubble layout", { percyCSS });
-
-            // Click "collapse" link button on the first hovered info event line
-            cy.get(".mx_GenericEventListSummary_unstyledList .mx_EventTile_info:first-of-type").realHover();
-            cy.get(".mx_GenericEventListSummary_toggle[aria-expanded=true]").click({ force: false });
-
-            // Make sure "collapse" link button worked
-            cy.get(".mx_GenericEventListSummary_toggle[aria-expanded=false]").should("exist");
-
-            // Save snapshot of collapsed generic event list summary on bubble layout
-            cy.get(".mx_MainSplit").percySnapshotElement("Collapsed GELS on bubble layout", { percyCSS });
         });
 
         it("should highlight search result words regardless of formatting", () => {
