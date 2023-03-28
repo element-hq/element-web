@@ -168,7 +168,7 @@ export const CallEvent = forwardRef<any, CallEventProps>(({ mxEvent }, ref) => {
         .getRoom(mxEvent.getRoomId())!
         .currentState.getStateEvents(mxEvent.getType(), mxEvent.getStateKey()!)!;
 
-    if ("m.terminated" in latestEvent.getContent()) {
+    if ("m.terminated" in latestEvent.getContent() || latestEvent.isRedacted()) {
         // The call is terminated
         return (
             <div className="mx_CallEvent_wrapper" ref={ref}>

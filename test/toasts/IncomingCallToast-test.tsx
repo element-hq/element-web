@@ -21,6 +21,7 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 import { ClientWidgetApi, Widget } from "matrix-widget-api";
+import { MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/models/event";
 
 import type { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import {
@@ -171,6 +172,17 @@ describe("IncomingCallEvent", () => {
             room_id: room.roomId,
             view_call: true,
         });
+
+        await waitFor(() =>
+            expect(toastStore.dismissToast).toHaveBeenCalledWith(getIncomingCallToastKey(call.event.getStateKey()!)),
+        );
+    });
+
+    it("closes toast when the call event is redacted", async () => {
+        renderToast();
+
+        const event = room.currentState.getStateEvents(MockedCall.EVENT_TYPE, "1")!;
+        event.emit(MatrixEventEvent.BeforeRedaction, event, {} as unknown as MatrixEvent);
 
         await waitFor(() =>
             expect(toastStore.dismissToast).toHaveBeenCalledWith(getIncomingCallToastKey(call.event.getStateKey()!)),

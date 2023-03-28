@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { useCallback, useEffect } from "react";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/models/event";
 
 import { _t } from "../languageHandler";
 import RoomAvatar from "../components/views/avatars/RoomAvatar";
@@ -36,6 +36,7 @@ import { ButtonEvent } from "../components/views/elements/AccessibleButton";
 import { useDispatcher } from "../hooks/useDispatcher";
 import { ActionPayload } from "../dispatcher/payloads";
 import { Call } from "../models/Call";
+import { useTypedEventEmitter } from "../hooks/useEventEmitter";
 
 export const getIncomingCallToastKey = (stateKey: string): string => `call_${stateKey}`;
 
@@ -88,6 +89,8 @@ export function IncomingCallToast({ callEvent }: Props): JSX.Element {
             dismissToast();
         }
     }, [latestEvent, dismissToast]);
+
+    useTypedEventEmitter(latestEvent, MatrixEventEvent.BeforeRedaction, dismissToast);
 
     useDispatcher(
         defaultDispatcher,
