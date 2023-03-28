@@ -3570,7 +3570,6 @@
     "All messages and invites from this user will be hidden. Are you sure you want to ignore them?": "このユーザーのメッセージと招待を非表示にします。無視してよろしいですか？",
     "Send your first message to invite <displayName/> to chat": "最初のメッセージを送信すると、<displayName/>を会話に招待",
     "Consulting with %(transferTarget)s. <a>Transfer to %(transferee)s</a>": "%(transferTarget)sと相談しています。<a>%(transferee)sに転送</a>",
-    "Polls history": "アンケートの履歴",
     "unknown": "不明",
     "Red": "赤色",
     "Grey": "灰色",
