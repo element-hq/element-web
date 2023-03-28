@@ -1,3 +1,10 @@
+Changes in [3.69.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.69.0) (2023-03-28)
+=====================================================================================================
+
+## 🐛 Bug Fixes
+ * Changes for matrix-js-sdk v24.0.0
+ * Changes for matrix-react-sdk v3.69.0
+
 Changes in [3.68.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.68.0) (2023-03-15)
 =====================================================================================================
 
