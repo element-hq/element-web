@@ -191,7 +191,6 @@
     "Show timestamps in 12 hour format (e.g. 2:30pm)": "Hiển thị thời gian theo mẫu 12 giờ (ví dụ 2:30pm)",
     "Always show message timestamps": "Luôn hiện mốc thời gian",
     "Enable automatic language detection for syntax highlighting": "Bật chức năng tự động xác định ngôn ngữ đẻ hiển thị quy tắc",
-    "Show avatars in user and room mentions": "Hiện hình đại diện ở phòng và người dùng được đề cập",
     "Enable big emoji in chat": "Bật chức năng emoji lớn ở tin nhắn",
     "Send typing notifications": "Gửi thông báo đang gõ tin nhắn",
     "Automatically replace plain text Emoji": "Tự động thay thế hình biểu tượng",
