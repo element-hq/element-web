@@ -1,5 +1,5 @@
 # Builder
-FROM --platform=$BUILDPLATFORM node:16-buster as builder
+FROM --platform=$BUILDPLATFORM node:16-bullseye as builder
 
 # Support custom branches of the react-sdk and js-sdk. This also helps us build
 # images of element-web develop.
@@ -23,7 +23,7 @@ RUN dos2unix /src/scripts/docker-package.sh && bash /src/scripts/docker-package.
 RUN cp /src/config.sample.json /src/webapp/config.json
 
 # App
-FROM nginx:alpine
+FROM nginx:alpine-slim
 
 COPY --from=builder /src/webapp /app
 
