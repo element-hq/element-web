@@ -1,9 +1,9 @@
 Changes in [1.11.26](https://github.com/vector-im/element-web/releases/tag/v1.11.26) (2023-03-28)
 =================================================================================================
 
-## 🐛 Bug Fixes
- * Changes for matrix-js-sdk v24.0.0
- * Changes for matrix-react-sdk v3.69.0
+## 🔒 Security
+ * Fixes for [CVE-2023-28427](https://cve.mitre.org/cgi-bin/cvekey.cgi?keyword=CVE-2023-28427) / GHSA-mwq8-fjpf-c2gr
+ * Fixes for [CVE-2023-28103](https://cve.mitre.org/cgi-bin/cvekey.cgi?keyword=CVE-2023-28103) / GHSA-6g43-88cp-w5gv
 
 Changes in [1.11.25](https://github.com/vector-im/element-web/releases/tag/v1.11.25) (2023-03-15)
 =================================================================================================
