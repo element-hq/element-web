@@ -51,7 +51,8 @@ export default abstract class Exporter {
         if (
             exportOptions.maxSize < 1 * 1024 * 1024 || // Less than 1 MB
             exportOptions.maxSize > 8000 * 1024 * 1024 || // More than 8 GB
-            exportOptions.numberOfMessages > 10 ** 8
+            (!!exportOptions.numberOfMessages && exportOptions.numberOfMessages > 10 ** 8) ||
+            (exportType === ExportType.LastNMessages && !exportOptions.numberOfMessages)
         ) {
             throw new Error("Invalid export options");
         }
@@ -123,10 +124,11 @@ export default abstract class Exporter {
     }
 
     protected setEventMetadata(event: MatrixEvent): MatrixEvent {
-        const roomState = this.client.getRoom(this.room.roomId).currentState;
-        event.sender = roomState.getSentinelMember(event.getSender());
+        const roomState = this.client.getRoom(this.room.roomId)?.currentState;
+        const sender = event.getSender();
+        event.sender = (!!sender && roomState?.getSentinelMember(sender)) || null;
         if (event.getType() === "m.room.member") {
-            event.target = roomState.getSentinelMember(event.getStateKey());
+            event.target = roomState?.getSentinelMember(event.getStateKey()!) ?? null;
         }
         return event;
     }
@@ -135,6 +137,8 @@ export default abstract class Exporter {
         let limit: number;
         switch (this.exportType) {
             case ExportType.LastNMessages:
+                // validated in constructor that numberOfMessages is defined
+                // when export type is LastNMessages
                 limit = this.exportOptions.numberOfMessages!;
                 break;
             case ExportType.Timeline:
@@ -221,8 +225,14 @@ export default abstract class Exporter {
         return events;
     }
 
-    protected async getMediaBlob(event: MatrixEvent): Promise<Blob | undefined> {
-        let blob: Blob | undefined;
+    /**
+     * Decrypts if necessary, and fetches media from a matrix event
+     * @param event - matrix event with media event content
+     * @resolves when media has been fetched
+     * @throws if media was unable to be fetched
+     */
+    protected async getMediaBlob(event: MatrixEvent): Promise<Blob> {
+        let blob: Blob | undefined = undefined;
         try {
             const isEncrypted = event.isEncrypted();
             const content = event.getContent<IMediaEventContent>();
@@ -231,11 +241,17 @@ export default abstract class Exporter {
                 blob = await decryptFile(content.file);
             } else {
                 const media = mediaFromContent(content);
+                if (!media.srcHttp) {
+                    throw new Error("Cannot fetch without srcHttp");
+                }
                 const image = await fetch(media.srcHttp);
                 blob = await image.blob();
             }
         } catch (err) {
             logger.log("Error decrypting media");
+        }
+        if (!blob) {
+            throw new Error("Unable to fetch file");
         }
         return blob;
     }
