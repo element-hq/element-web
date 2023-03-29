@@ -3751,5 +3751,14 @@
     "Show avatars in user, room and event mentions": "Mostra gli avatar nelle citazioni di utenti, stanze ed eventi",
     "Message from %(user)s": "Messaggio da %(user)s",
     "Message in %(room)s": "Messaggio in %(room)s",
-    "Enable intentional mentions": "Attiva citazioni intenzionali"
+    "Enable intentional mentions": "Attiva citazioni intenzionali",
+    "Error details": "Dettagli errore",
+    "Unable to find event at that date": "Impossibile trovare l'evento in quella data",
+    "Please submit <debugLogsLink>debug logs</debugLogsLink> to help us track down the problem.": "Ti preghiamo di inviare <debugLogsLink>i log di debug</debugLogsLink> per aiutarci ad individuare il problema.",
+    "unavailable": "non disponibile",
+    "unknown status code": "codice di stato sconosciuto",
+    "Server returned %(statusCode)s with error code %(errorCode)s": "Il server ha risposto %(statusCode)s con codice errore %(errorCode)s",
+    "We were unable to find an event looking forwards from %(dateString)s. Try choosing an earlier date.": "Non siamo riusciti a trovare un evento successivo al %(dateString)s. Prova con una data precedente.",
+    "A network error occurred while trying to find and jump to the given date. Your homeserver might be down or there was just a temporary problem with your internet connection. Please try again. If this continues, please contact your homeserver administrator.": "Si è verificato un errore di rete tentando di trovare e saltare alla data scelta. Il tuo homeserver potrebbe essere irraggiungibile o c'è stato un problema temporaneo con la tua connessione. Riprova. Se persiste, contatta l'amministratore del tuo homeserver.",
+    "Poll history": "Cronologia sondaggi"
 }
