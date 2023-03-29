@@ -43,7 +43,9 @@ const AvatarSetting: React.FC<IProps> = ({ avatarUrl, avatarAltText, avatarName,
             element="div"
             onClick={uploadAvatar ?? null}
             className="mx_AvatarSetting_avatarPlaceholder"
-            aria-labelledby={a11yId.current}
+            aria-labelledby={uploadAvatar ? a11yId.current : undefined}
+            // Inhibit tab stop as we have explicit upload/remove buttons
+            tabIndex={-1}
             {...hoveringProps}
         />
     );
@@ -53,14 +55,15 @@ const AvatarSetting: React.FC<IProps> = ({ avatarUrl, avatarAltText, avatarName,
                 element="img"
                 src={avatarUrl}
                 alt={avatarAltText}
-                aria-label={avatarAltText}
                 onClick={uploadAvatar ?? null}
+                // Inhibit tab stop as we have explicit upload/remove buttons
+                tabIndex={-1}
                 {...hoveringProps}
             />
         );
     }
 
-    let uploadAvatarBtn;
+    let uploadAvatarBtn: JSX.Element | undefined;
     if (uploadAvatar) {
         // insert an empty div to be the host for a css mask containing the upload.svg
         uploadAvatarBtn = (
@@ -73,7 +76,7 @@ const AvatarSetting: React.FC<IProps> = ({ avatarUrl, avatarAltText, avatarName,
         );
     }
 
-    let removeAvatarBtn;
+    let removeAvatarBtn: JSX.Element | undefined;
     if (avatarUrl && removeAvatar) {
         removeAvatarBtn = (
             <AccessibleButton onClick={removeAvatar} kind="link_sm">
@@ -87,11 +90,11 @@ const AvatarSetting: React.FC<IProps> = ({ avatarUrl, avatarAltText, avatarName,
         mx_AvatarSetting_avatar_hovering: isHovering && uploadAvatar,
     });
     return (
-        <div className={avatarClasses}>
+        <div className={avatarClasses} role="group" aria-label={avatarAltText}>
             {avatarElement}
             <div className="mx_AvatarSetting_hover" aria-hidden="true">
                 <div className="mx_AvatarSetting_hoverBg" />
-                <span id={a11yId.current}>{_t("Upload")}</span>
+                {uploadAvatar && <span id={a11yId.current}>{_t("Upload")}</span>}
             </div>
             {uploadAvatarBtn}
             {removeAvatarBtn}
