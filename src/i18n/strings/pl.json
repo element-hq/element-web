@@ -26,5 +26,7 @@
     "Your Element is misconfigured": "Twój Element jest nieprawidłowo skonfigurowany",
     "Powered by Matrix": "Zasilane przez Matrix",
     "Use %(brand)s on mobile": "Użyj %(brand)s w telefonie",
-    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Zdecentralizowany, szyfrowany czat i współpraca oparte na $matrixLogo"
+    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Zdecentralizowany, szyfrowany czat i współpraca oparte na $matrixLogo",
+    "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s: %(browserName)s na %(osName)s",
+    "%(brand)s Desktop: %(platformName)s": "Komputer %(brand)s: %(platformName)s"
 }

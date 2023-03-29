@@ -1,7 +1,7 @@
 {
     "Dismiss": "關閉",
     "Unknown device": "未知裝置",
-    "Welcome to Element": "歡迎來到 Element",
+    "Welcome to Element": "歡迎使用 Element",
     "Sign In": "登入",
     "Create Account": "建立帳號",
     "Explore rooms": "探索聊天室",
@@ -20,13 +20,13 @@
     "Failed to start": "啟動失敗",
     "Download Completed": "下載完成",
     "Open": "開啟",
-    "Your Element is misconfigured": "您的 Element 配置錯誤",
-    "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "您的 Element 的配置中包含無效 JSON，請更正錯誤並重新加載網頁。",
+    "Your Element is misconfigured": "您的 Element 設定錯誤",
+    "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "您的 Element 設定中包含無效 JSON，請修正後重新載入網頁。",
     "Your browser can't run %(brand)s": "您的瀏覽器無法執行 %(brand)s",
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s 使用了您目前瀏覽器不支援的進階功能。",
-    "Powered by Matrix": "由 Matrix 驅動",
+    "Powered by Matrix": "Powered by Matrix",
     "Use %(brand)s on mobile": "在行動裝置上使用 %(brand)s",
-    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "去中心化、加密的聊天與協作，由 $matrixLogo 驅動",
-    "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s：%(browserName)s 位於 %(osName)s",
-    "%(brand)s Desktop: %(platformName)s": "%(brand)s 桌面：%(platformName)s"
+    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "由 $matrixLogo 驅動的去中心化、加密的聊天與協作工具",
+    "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s：%(osName)s 的 %(browserName)s",
+    "%(brand)s Desktop: %(platformName)s": "%(brand)s 桌面版：%(platformName)s"
 }
