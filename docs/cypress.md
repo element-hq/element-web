@@ -154,6 +154,14 @@ API before logging the user in. You can make use of `cy.getBot(homeserver)` and 
 We should probably end up with convenience APIs that wrap the homeserver creation, logging in and room
 creation that can be called to set up tests.
 
+### Try to write tests from the users's perspective
+
+Like for instance a user will not look for a button by querying a CSS selector. Instead you should work
+with roles / labels etc.. You can make use of `cy.findBy…` queries provided by
+[Cypress Testing Library](https://github.com/testing-library/cypress-testing-library) and some convencience
+commands, such as `findButton(name)` or `findTextbox(name)`.
+See [`/cypress/support/find.ts`](../cypress/support/find.ts) for a complete list.
+
 ### Using matrix-js-sdk
 
 Due to the way we run the Cypress tests in CI, at this time you can only use the matrix-js-sdk module

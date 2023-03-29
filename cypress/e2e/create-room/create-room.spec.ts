@@ -20,8 +20,8 @@ import { HomeserverInstance } from "../../plugins/utils/homeserver";
 import Chainable = Cypress.Chainable;
 
 function openCreateRoomDialog(): Chainable<JQuery<HTMLElement>> {
-    cy.get('[aria-label="Add room"]').click();
-    cy.get('.mx_ContextualMenu [aria-label="New room"]').click();
+    cy.findButton("Add room").click();
+    cy.findMenuitem("New room").click();
     return cy.get(".mx_CreateRoomDialog");
 }
 
@@ -46,20 +46,23 @@ describe("Create Room", () => {
 
         openCreateRoomDialog().within(() => {
             // Fill name & topic
-            cy.get('[label="Name"]').type(name);
-            cy.get('[label="Topic (optional)"]').type(topic);
+            cy.findTextbox("Name").type(name);
+            cy.findTextbox("Topic (optional)").type(topic);
             // Change room to public
-            cy.get('[aria-label="Room visibility"]').click();
-            cy.get("#mx_JoinRuleDropdown__public").click();
+            cy.findButton("Room visibility").click();
+            cy.findOption("Public room").click();
             // Fill room address
-            cy.get('[label="Room address"]').type("test-room-1");
+            cy.findTextbox("Room address").type("test-room-1");
             // Submit
-            cy.get(".mx_Dialog_primary").click();
+            cy.findButton("Create room").click();
         });
 
         cy.url().should("contain", "/#/room/#test-room-1:localhost");
-        cy.contains(".mx_RoomHeader_nametext", name);
-        cy.contains(".mx_RoomHeader_topic", topic);
+
+        cy.get(".mx_RoomHeader").within(() => {
+            cy.findByText(name);
+            cy.findByText(topic);
+        });
     });
 
     it("should create a room with a long room name, which is displayed with ellipsis", () => {
