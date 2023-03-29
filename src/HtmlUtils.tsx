@@ -17,7 +17,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactElement, ReactNode } from "react";
+import React, { LegacyRef, ReactElement, ReactNode } from "react";
 import sanitizeHtml from "sanitize-html";
 import cheerio from "cheerio";
 import classNames from "classnames";
@@ -93,8 +93,8 @@ const MEDIA_API_MXC_REGEX = /\/_matrix\/media\/r0\/(?:download|thumbnail)\/(.+?)
  * positives, but useful for fast-path testing strings to see if they
  * need emojification.
  */
-function mightContainEmoji(str: string): boolean {
-    return SURROGATE_PAIR_PATTERN.test(str) || SYMBOL_PATTERN.test(str);
+function mightContainEmoji(str?: string): boolean {
+    return !!str && (SURROGATE_PAIR_PATTERN.test(str) || SYMBOL_PATTERN.test(str));
 }
 
 /**
@@ -463,7 +463,7 @@ const emojiToJsxSpan = (emoji: string, key: number): JSX.Element => (
  * @returns if isHtmlMessage is true, returns an array of strings, otherwise return an array of React Elements for emojis
  * and plain text for everything else
  */
-function formatEmojis(message: string, isHtmlMessage: boolean): (JSX.Element | string)[] {
+function formatEmojis(message: string | undefined, isHtmlMessage: boolean): (JSX.Element | string)[] {
     const emojiToSpan = isHtmlMessage ? emojiToHtmlSpan : emojiToJsxSpan;
     const result: (JSX.Element | string)[] = [];
     let text = "";
@@ -641,9 +641,9 @@ export function bodyToHtml(content: IContent, highlights: Optional<string[]>, op
  * @return The HTML-ified node.
  */
 export function topicToHtml(
-    topic: string,
+    topic?: string,
     htmlTopic?: string,
-    ref?: React.Ref<HTMLSpanElement>,
+    ref?: LegacyRef<HTMLSpanElement>,
     allowExtendedHtml = false,
 ): ReactNode {
     if (!SettingsStore.getValue("feature_html_topic")) {

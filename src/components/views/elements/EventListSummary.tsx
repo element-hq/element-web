@@ -78,7 +78,9 @@ enum TransitionType {
 
 const SEP = ",";
 
-export default class EventListSummary extends React.Component<IProps> {
+export default class EventListSummary extends React.Component<
+    IProps & Required<Pick<IProps, "summaryLength" | "threshold" | "avatarsMaxLength" | "layout">>
+> {
     public static contextType = RoomContext;
     public context!: React.ContextType<typeof RoomContext>;
 
@@ -508,12 +510,12 @@ export default class EventListSummary extends React.Component<IProps> {
             const type = e.getType();
 
             let userKey = e.getSender()!;
-            if (type === EventType.RoomThirdPartyInvite) {
+            if (e.isState() && type === EventType.RoomThirdPartyInvite) {
                 userKey = e.getContent().display_name;
-            } else if (type === EventType.RoomMember) {
-                userKey = e.getStateKey();
-            } else if (e.isRedacted()) {
-                userKey = e.getUnsigned()?.redacted_because?.sender;
+            } else if (e.isState() && type === EventType.RoomMember) {
+                userKey = e.getStateKey()!;
+            } else if (e.isRedacted() && e.getUnsigned()?.redacted_because) {
+                userKey = e.getUnsigned().redacted_because!.sender;
             }
 
             // Initialise a user's events

@@ -14,12 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { ReactElement } from "react";
 
 import { COUNTRIES, getEmojiFlag, PhoneNumberCountryDefinition } from "../../../phonenumber";
 import SdkConfig from "../../../SdkConfig";
 import { _t } from "../../../languageHandler";
 import Dropdown from "../elements/Dropdown";
+import { NonEmptyArray } from "../../../@types/common";
 
 const COUNTRIES_BY_ISO2: Record<string, PhoneNumberCountryDefinition> = {};
 for (const c of COUNTRIES) {
@@ -131,7 +132,7 @@ export default class CountryDropdown extends React.Component<IProps, IState> {
                     {_t(country.name)} (+{country.prefix})
                 </div>
             );
-        });
+        }) as NonEmptyArray<ReactElement & { key: string }>;
 
         // default value here too, otherwise we need to handle null / undefined
         // values between mounting and the initial value propagating

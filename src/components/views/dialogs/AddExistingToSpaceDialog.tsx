@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactNode, useContext, useMemo, useRef, useState } from "react";
+import React, { ReactElement, ReactNode, useContext, useMemo, useRef, useState } from "react";
 import classNames from "classnames";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { sleep } from "matrix-js-sdk/src/utils";
@@ -41,6 +41,7 @@ import QueryMatcher from "../../../autocomplete/QueryMatcher";
 import LazyRenderList from "../elements/LazyRenderList";
 import { useSettingValue } from "../../../hooks/useSettings";
 import { filterBoolean } from "../../../utils/arrays";
+import { NonEmptyArray } from "../../../@types/common";
 
 // These values match CSS
 const ROW_HEIGHT = 32 + 12;
@@ -415,17 +416,19 @@ export const SubspaceSelector: React.FC<ISubspaceSelectorProps> = ({ title, spac
                 value={value.roomId}
                 label={_t("Space selection")}
             >
-                {options.map((space) => {
-                    const classes = classNames({
-                        mx_SubspaceSelector_dropdownOptionActive: space === value,
-                    });
-                    return (
-                        <div key={space.roomId} className={classes}>
-                            <RoomAvatar room={space} width={24} height={24} />
-                            {space.name || getDisplayAliasForRoom(space) || space.roomId}
-                        </div>
-                    );
-                })}
+                {
+                    options.map((space) => {
+                        const classes = classNames({
+                            mx_SubspaceSelector_dropdownOptionActive: space === value,
+                        });
+                        return (
+                            <div key={space.roomId} className={classes}>
+                                <RoomAvatar room={space} width={24} height={24} />
+                                {space.name || getDisplayAliasForRoom(space) || space.roomId}
+                            </div>
+                        );
+                    }) as NonEmptyArray<ReactElement & { key: string }>
+                }
             </Dropdown>
         );
     } else {

@@ -14,11 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { ReactElement } from "react";
 import classNames from "classnames";
 
 import { Icon as CheckmarkIcon } from "../../../../res/img/element-icons/roomlist/checkmark.svg";
 import Dropdown, { DropdownProps } from "./Dropdown";
+import { NonEmptyArray } from "../../../@types/common";
 
 export type FilterDropdownOption<FilterKeysType extends string> = {
     id: FilterKeysType;
@@ -63,13 +64,15 @@ export const FilterDropdown = <FilterKeysType extends string = string>({
             className={classNames("mx_FilterDropdown", className)}
             getShortOption={getSelectedFilterOptionComponent<FilterKeysType>(options, selectedLabel)}
         >
-            {options.map(({ id, label, description }) => (
-                <div className="mx_FilterDropdown_option" data-testid={`filter-option-${id}`} key={id}>
-                    {id === value && <CheckmarkIcon className="mx_FilterDropdown_optionSelectedIcon" />}
-                    <span className="mx_FilterDropdown_optionLabel">{label}</span>
-                    {!!description && <span className="mx_FilterDropdown_optionDescription">{description}</span>}
-                </div>
-            ))}
+            {
+                options.map(({ id, label, description }) => (
+                    <div className="mx_FilterDropdown_option" data-testid={`filter-option-${id}`} key={id}>
+                        {id === value && <CheckmarkIcon className="mx_FilterDropdown_optionSelectedIcon" />}
+                        <span className="mx_FilterDropdown_optionLabel">{label}</span>
+                        {!!description && <span className="mx_FilterDropdown_optionDescription">{description}</span>}
+                    </div>
+                )) as NonEmptyArray<ReactElement & { key: string }>
+            }
         </Dropdown>
     );
 };

@@ -586,7 +586,7 @@ export default class AppTile extends React.Component<IProps, IState> {
                     <AppWarning errorMsg={_t("Error loading Widget")} />
                 </div>
             );
-        } else if (!this.state.hasPermissionToLoad) {
+        } else if (!this.state.hasPermissionToLoad && this.props.room) {
             // only possible for room widgets, can assert this.props.room here
             const isEncrypted = this.context.isRoomEncrypted(this.props.room.roomId);
             appTileBody = (
@@ -689,11 +689,9 @@ export default class AppTile extends React.Component<IProps, IState> {
 
         const layoutButtons: ReactNode[] = [];
         if (this.props.showLayoutButtons) {
-            const isMaximised = WidgetLayoutStore.instance.isInContainer(
-                this.props.room,
-                this.props.app,
-                Container.Center,
-            );
+            const isMaximised =
+                this.props.room &&
+                WidgetLayoutStore.instance.isInContainer(this.props.room, this.props.app, Container.Center);
             const maximisedClasses = classNames({
                 mx_AppTileMenuBar_iconButton: true,
                 mx_AppTileMenuBar_iconButton_collapse: isMaximised,

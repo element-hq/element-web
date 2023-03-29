@@ -378,6 +378,7 @@ export default class InteractiveTooltip extends React.Component<IProps, IState> 
     private onMouseMove = (ev: MouseEvent): void => {
         const { clientX: x, clientY: y } = ev;
         const { contentRect } = this.state;
+        if (!contentRect) return;
         const targetRect = this.target.getBoundingClientRect();
 
         let direction: Direction;

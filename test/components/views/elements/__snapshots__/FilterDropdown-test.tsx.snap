@@ -7,8 +7,8 @@ exports[`<FilterDropdown /> renders dropdown options in menu 1`] = `
   role="listbox"
 >
   <div
-    aria-selected="false"
-    class="mx_Dropdown_option"
+    aria-selected="true"
+    class="mx_Dropdown_option mx_Dropdown_option_highlight"
     id="test__one"
     role="option"
   >

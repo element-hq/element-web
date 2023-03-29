@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { ReactElement } from "react";
 
 import Dropdown from "../../views/elements/Dropdown";
 import PlatformPeg from "../../../PlatformPeg";
@@ -22,6 +22,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { _t } from "../../../languageHandler";
 import Spinner from "./Spinner";
 import * as languageHandler from "../../../languageHandler";
+import { NonEmptyArray } from "../../../@types/common";
 
 type Languages = Awaited<ReturnType<typeof languageHandler.getAllLanguagesFromJson>>;
 function languageMatchesSearchQuery(query: string, language: Languages[0]): boolean {
@@ -106,7 +107,7 @@ export default class SpellCheckLanguagesDropdown extends React.Component<
 
         const options = displayedLanguages.map((language) => {
             return <div key={language.value}>{language.label}</div>;
-        });
+        }) as NonEmptyArray<ReactElement & { key: string }>;
 
         // default value here too, otherwise we need to handle null / undefined;
         // values between mounting and the initial value propagating

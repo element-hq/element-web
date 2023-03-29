@@ -96,17 +96,24 @@ export default class ImageView extends React.Component<IProps, IState> {
 
         const { thumbnailInfo } = this.props;
 
+        let translationX = 0;
+        let translationY = 0;
+        if (thumbnailInfo) {
+            translationX = thumbnailInfo.positionX + thumbnailInfo.width / 2 - UIStore.instance.windowWidth / 2;
+            translationY =
+                thumbnailInfo.positionY +
+                thumbnailInfo.height / 2 -
+                UIStore.instance.windowHeight / 2 -
+                getPanelHeight() / 2;
+        }
+
         this.state = {
             zoom: 0, // We default to 0 and override this in imageLoaded once we have naturalSize
             minZoom: MAX_SCALE,
             maxZoom: MAX_SCALE,
             rotation: 0,
-            translationX: thumbnailInfo?.positionX + thumbnailInfo?.width / 2 - UIStore.instance.windowWidth / 2 ?? 0,
-            translationY:
-                thumbnailInfo?.positionY +
-                    thumbnailInfo?.height / 2 -
-                    UIStore.instance.windowHeight / 2 -
-                    getPanelHeight() / 2 ?? 0,
+            translationX,
+            translationY,
             moving: false,
             contextMenuDisplayed: false,
         };
@@ -143,6 +150,7 @@ export default class ImageView extends React.Component<IProps, IState> {
     }
 
     private imageLoaded = (): void => {
+        if (!this.image.current) return;
         // First, we calculate the zoom, so that the image has the same size as
         // the thumbnail
         const { thumbnailInfo } = this.props;
@@ -226,22 +234,23 @@ export default class ImageView extends React.Component<IProps, IState> {
                 translationX: 0,
                 translationY: 0,
             });
-        } else if (typeof anchorX !== "number" && typeof anchorY !== "number") {
+        } else if (typeof anchorX !== "number" || typeof anchorY !== "number") {
             // Zoom relative to the center of the view
             this.setState({
                 zoom: newZoom,
                 translationX: (this.state.translationX * newZoom) / oldZoom,
                 translationY: (this.state.translationY * newZoom) / oldZoom,
             });
-        } else {
+        } else if (this.image.current) {
             // Zoom relative to the given point on the image.
             // First we need to figure out the offset of the anchor point
             // relative to the center of the image, accounting for rotation.
-            let offsetX: number | undefined;
-            let offsetY: number | undefined;
+            let offsetX: number;
+            let offsetY: number;
             // The modulo operator can return negative values for some
             // rotations, so we have to do some extra work to normalize it
-            switch (((this.state.rotation % 360) + 360) % 360) {
+            const rotation = (((this.state.rotation % 360) + 360) % 360) as 0 | 90 | 180 | 270;
+            switch (rotation) {
                 case 0:
                     offsetX = this.image.current.clientWidth / 2 - anchorX;
                     offsetY = this.image.current.clientHeight / 2 - anchorY;
@@ -384,7 +393,7 @@ export default class ImageView extends React.Component<IProps, IState> {
     private onEndMoving = (): void => {
         // Zoom out if we haven't moved much
         if (
-            this.state.moving === true &&
+            this.state.moving &&
             Math.abs(this.state.translationX - this.previousX) < ZOOM_DISTANCE &&
             Math.abs(this.state.translationY - this.previousY) < ZOOM_DISTANCE
         ) {
@@ -397,7 +406,7 @@ export default class ImageView extends React.Component<IProps, IState> {
 
     private renderContextMenu(): JSX.Element {
         let contextMenu: JSX.Element | undefined;
-        if (this.state.contextMenuDisplayed) {
+        if (this.state.contextMenuDisplayed && this.props.mxEvent) {
             contextMenu = (
                 <MessageContextMenu
                     {...aboveLeftOf(this.contextMenuButton.current.getBoundingClientRect())}
@@ -445,7 +454,7 @@ export default class ImageView extends React.Component<IProps, IState> {
             const showTwelveHour = SettingsStore.getValue("showTwelveHourTimestamps");
             let permalink = "#";
             if (this.props.permalinkCreator) {
-                permalink = this.props.permalinkCreator.forEvent(mxEvent.getId());
+                permalink = this.props.permalinkCreator.forEvent(mxEvent.getId()!);
             }
 
             const senderName = mxEvent.sender?.name ?? mxEvent.getSender();

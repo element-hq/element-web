@@ -14,11 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { ReactElement } from "react";
 
 import { formatDuration } from "../../../DateUtils";
 import { _t } from "../../../languageHandler";
 import Dropdown from "../elements/Dropdown";
+import { NonEmptyArray } from "../../../@types/common";
 
 const DURATION_MS = {
     fifteenMins: 900000,
@@ -68,11 +69,13 @@ const LiveDurationDropdown: React.FC<Props> = ({ timeout, onChange }) => {
             onOptionChange={onOptionChange}
             className="mx_LiveDurationDropdown"
         >
-            {options.map(({ key, label }) => (
-                <div data-test-id={`live-duration-option-${key}`} key={key}>
-                    {label}
-                </div>
-            ))}
+            {
+                options.map(({ key, label }) => (
+                    <div data-test-id={`live-duration-option-${key}`} key={key}>
+                        {label}
+                    </div>
+                )) as NonEmptyArray<ReactElement & { key: string }>
+            }
         </Dropdown>
     );
 };

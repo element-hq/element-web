@@ -118,7 +118,10 @@ describe("EventListSummary", function () {
         ...mockClientMethodsUser(),
     });
 
-    const defaultProps: ComponentProps<typeof EventListSummary> = {
+    const defaultProps: Omit<
+        ComponentProps<typeof EventListSummary>,
+        "summaryLength" | "threshold" | "avatarsMaxLength"
+    > = {
         layout: Layout.Bubble,
         events: [],
         children: [],

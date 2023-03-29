@@ -38,8 +38,6 @@ export interface IValidateOpts {
 interface IProps {
     // The field's ID, which binds the input and label together. Immutable.
     id?: string;
-    // id of a <datalist> element for suggestions
-    list?: string;
     // The field's label string.
     label?: string;
     // The field's placeholder string. Defaults to the label.
@@ -119,7 +117,7 @@ interface IState {
 }
 
 export default class Field extends React.PureComponent<PropShapes, IState> {
-    private id: string;
+    private readonly id: string;
     private inputRef: RefObject<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>;
 
     public static readonly defaultProps = {
@@ -243,7 +241,6 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
             tooltipContent,
             forceValidity,
             tooltipClassName,
-            list,
             validateOnBlur,
             validateOnChange,
             validateOnFocus,
@@ -262,7 +259,11 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
         inputProps.onBlur = this.onBlur;
 
         // Appease typescript's inference
-        const inputProps_ = { ...inputProps, ref: this.inputRef, list };
+        const inputProps_: React.HTMLAttributes<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement> &
+            React.ClassAttributes<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement> = {
+            ...inputProps,
+            ref: this.inputRef,
+        };
 
         const fieldInput = React.createElement(this.props.element, inputProps_, children);
 
@@ -287,7 +288,7 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
         });
 
         // Handle displaying feedback on validity
-        let fieldTooltip;
+        let fieldTooltip: JSX.Element | undefined;
         if (tooltipContent || this.state.feedback) {
             let role: React.AriaRole;
             if (tooltipContent) {

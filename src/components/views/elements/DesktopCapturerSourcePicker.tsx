@@ -123,7 +123,7 @@ export default class DesktopCapturerSourcePicker extends React.Component<PickerI
     };
 
     private onShare = (): void => {
-        this.props.onFinished(this.state.selectedSource.id);
+        this.props.onFinished(this.state.selectedSource?.id);
     };
 
     private onTabChange = (): void => {

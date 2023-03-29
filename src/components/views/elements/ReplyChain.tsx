@@ -31,7 +31,7 @@ import { Action } from "../../../dispatcher/actions";
 import Spinner from "./Spinner";
 import ReplyTile from "../rooms/ReplyTile";
 import { Pill, PillType } from "./Pill";
-import AccessibleButton, { ButtonEvent } from "./AccessibleButton";
+import AccessibleButton from "./AccessibleButton";
 import { getParentEventId, shouldDisplayReply } from "../../../utils/Reply";
 import RoomContext from "../../../contexts/RoomContext";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -45,7 +45,7 @@ const SHOW_EXPAND_QUOTE_PIXELS = 60;
 
 interface IProps {
     // the latest event in this chain of replies
-    parentEv?: MatrixEvent;
+    parentEv: MatrixEvent;
     // called when the ReplyChain contents has changed, including EventTiles thereof
     onHeightChanged: () => void;
     permalinkCreator?: RoomPermalinkCreator;
@@ -91,7 +91,7 @@ export default class ReplyChain extends React.Component<IProps, IState> {
             err: false,
         };
 
-        this.room = this.matrixClient.getRoom(this.props.parentEv.getRoomId());
+        this.room = this.matrixClient.getRoom(this.props.parentEv.getRoomId())!;
     }
 
     private get matrixClient(): MatrixClient {
@@ -155,7 +155,7 @@ export default class ReplyChain extends React.Component<IProps, IState> {
         }
     }
 
-    private async getEvent(eventId: string): Promise<MatrixEvent | null> {
+    private async getEvent(eventId?: string): Promise<MatrixEvent | null> {
         if (!eventId) return null;
         const event = this.room.findEventById(eventId);
         if (event) return event;
@@ -180,7 +180,8 @@ export default class ReplyChain extends React.Component<IProps, IState> {
         this.initialize();
     };
 
-    private onQuoteClick = async (event: ButtonEvent): Promise<void> => {
+    private onQuoteClick = async (): Promise<void> => {
+        if (!this.state.loadedEv) return;
         const events = [this.state.loadedEv, ...this.state.events];
 
         let loadedEv: MatrixEvent | null = null;
