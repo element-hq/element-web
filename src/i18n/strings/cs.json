@@ -3759,5 +3759,6 @@
     "unknown status code": "neznámý kód stavu",
     "Server returned %(statusCode)s with error code %(errorCode)s": "Server vrátil %(statusCode)s s kódem chyby %(errorCode)s",
     "We were unable to find an event looking forwards from %(dateString)s. Try choosing an earlier date.": "Nepodařilo se nám najít událost od data %(dateString)s. Zkuste zvolit dřívější datum.",
-    "A network error occurred while trying to find and jump to the given date. Your homeserver might be down or there was just a temporary problem with your internet connection. Please try again. If this continues, please contact your homeserver administrator.": "Při pokusu o vyhledání a přechod na zadané datum došlo k chybě sítě. Váš domovský server může být nefunkční nebo došlo jen k dočasnému problému s internetovým připojením. Zkuste to prosím znovu. Pokud tento problém přetrvává, obraťte se na správce domovského serveru."
+    "A network error occurred while trying to find and jump to the given date. Your homeserver might be down or there was just a temporary problem with your internet connection. Please try again. If this continues, please contact your homeserver administrator.": "Při pokusu o vyhledání a přechod na zadané datum došlo k chybě sítě. Váš domovský server může být nefunkční nebo došlo jen k dočasnému problému s internetovým připojením. Zkuste to prosím znovu. Pokud tento problém přetrvává, obraťte se na správce domovského serveru.",
+    "Poll history": "Historie hlasování"
 }
