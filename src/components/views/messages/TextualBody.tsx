@@ -34,7 +34,6 @@ import { isPermalinkHost, tryTransformPermalinkToLocalHref } from "../../../util
 import { copyPlaintext } from "../../../utils/strings";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import UIStore from "../../../stores/UIStore";
-import { ComposerInsertPayload } from "../../../dispatcher/payloads/ComposerInsertPayload";
 import { Action } from "../../../dispatcher/actions";
 import GenericTextContextMenu from "../context_menus/GenericTextContextMenu";
 import Spoiler from "../elements/Spoiler";
@@ -109,7 +108,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
                 for (let i = 0; i < pres.length; i++) {
                     // If there already is a div wrapping the codeblock we want to skip this.
                     // This happens after the codeblock was edited.
-                    if (pres[i].parentElement.className == "mx_EventTile_pre_container") continue;
+                    if (pres[i].parentElement?.className == "mx_EventTile_pre_container") continue;
                     // Add code element if it's missing since we depend on it
                     if (pres[i].getElementsByTagName("code").length == 0) {
                         this.addCodeElement(pres[i]);
@@ -189,8 +188,8 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         if (expansionButtonExists.length > 0) button.className += "mx_EventTile_buttonBottom";
 
         button.onclick = async (): Promise<void> => {
-            const copyCode = button.parentElement.getElementsByTagName("code")[0];
-            const successful = await copyPlaintext(copyCode.textContent);
+            const copyCode = button.parentElement?.getElementsByTagName("code")[0];
+            const successful = copyCode?.textContent ? await copyPlaintext(copyCode.textContent) : false;
 
             const buttonRect = button.getBoundingClientRect();
             const { close } = ContextMenu.createMenu(GenericTextContextMenu, {
@@ -209,7 +208,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         div.className = "mx_EventTile_pre_container";
 
         // Insert containing div in place of <pre> block
-        pre.parentNode.replaceChild(div, pre);
+        pre.parentNode?.replaceChild(div, pre);
         // Append <pre> block and copy button to container
         div.appendChild(pre);
 
@@ -238,7 +237,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
     }
 
     private highlightCode(code: HTMLElement): void {
-        if (code.textContent.length > MAX_HIGHLIGHT_LENGTH) {
+        if (code.textContent && code.textContent.length > MAX_HIGHLIGHT_LENGTH) {
             console.log(
                 "Code block is bigger than highlight limit (" +
                     code.textContent.length +
@@ -265,7 +264,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
             // We don't use highlightElement here because we can't force language detection
             // off. It should use the one we've found in the CSS class but we'd rather pass
             // it in explicitly to make sure.
-            code.innerHTML = highlight.highlight(code.textContent, { language: advertisedLang }).value;
+            code.innerHTML = highlight.highlight(code.textContent ?? "", { language: advertisedLang }).value;
         } else if (
             SettingsStore.getValue("enableSyntaxHighlightLanguageDetection") &&
             code.parentElement instanceof HTMLPreElement
@@ -277,7 +276,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
             // work on the DOM with highlightElement because that also adds CSS
             // classes to the pre/code element that we don't want (the CSS
             // conflicts with our own).
-            code.innerHTML = highlight.highlightAuto(code.textContent).value;
+            code.innerHTML = highlight.highlightAuto(code.textContent ?? "").value;
         }
     }
 
@@ -317,7 +316,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
     private calculateUrlPreview(): void {
         //console.info("calculateUrlPreview: ShowUrlPreview for %s is %s", this.props.mxEvent.getId(), this.props.showUrlPreview);
 
-        if (this.props.showUrlPreview) {
+        if (this.props.showUrlPreview && this.contentRef.current) {
             // pass only the first child which is the event tile otherwise this recurses on edited events
             let links = this.findLinks([this.contentRef.current]);
             if (links.length) {
@@ -347,7 +346,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
                 const spoiler = <Spoiler reason={reason} contentHtml={node.outerHTML} />;
 
                 ReactDOM.render(spoiler, spoilerContainer);
-                node.parentNode.replaceChild(spoilerContainer, node);
+                node.parentNode?.replaceChild(spoilerContainer, node);
 
                 node = spoilerContainer;
             }
@@ -395,12 +394,12 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         }
 
         const url = node.getAttribute("href");
-        const host = url.match(/^https?:\/\/(.*?)(\/|$)/)[1];
+        const host = url?.match(/^https?:\/\/(.*?)(\/|$)/)?.[1];
 
         // never preview permalinks (if anything we should give a smart
         // preview of the room/user they point to: nobody needs to be reminded
         // what the matrix.to site looks like).
-        if (isPermalinkHost(host)) return false;
+        if (!host || isPermalinkHost(host)) return false;
 
         if (node.textContent?.toLowerCase().trim().startsWith(host.toLowerCase())) {
             // it's a "foo.pl" style link
@@ -422,7 +421,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
 
     private onEmoteSenderClick = (): void => {
         const mxEvent = this.props.mxEvent;
-        dis.dispatch<ComposerInsertPayload>({
+        dis.dispatch({
             action: Action.ComposerInsert,
             userId: mxEvent.getSender(),
             timelineRenderingType: this.context.timelineRenderingType,
@@ -482,10 +481,10 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
 
         // Go fetch a scalar token
         const integrationManager = managers.getPrimaryManager();
-        const scalarClient = integrationManager.getScalarClient();
-        scalarClient.connect().then(() => {
+        const scalarClient = integrationManager?.getScalarClient();
+        scalarClient?.connect().then(() => {
             const completeUrl = scalarClient.getStarterLink(starterLink);
-            const integrationsUrl = integrationManager.uiUrl;
+            const integrationsUrl = integrationManager!.uiUrl;
             Modal.createDialog(QuestionDialog, {
                 title: _t("Add an Integration"),
                 description: (
@@ -508,7 +507,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
                     const left = (window.screen.width - width) / 2;
                     const top = (window.screen.height - height) / 2;
                     const features = `height=${height}, width=${width}, top=${top}, left=${left},`;
-                    const wnd = window.open(completeUrl, "_blank", features);
+                    const wnd = window.open(completeUrl, "_blank", features)!;
                     wnd.opener = null;
                 },
             });

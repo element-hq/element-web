@@ -185,9 +185,9 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
             const allowRender = localStorage.getItem(key) === "true";
 
             if (!allowRender) {
-                const userDomain = this.props.mxEvent.getSender().split(":").slice(1).join(":");
-                const userBanned = Mjolnir.sharedInstance().isUserBanned(this.props.mxEvent.getSender());
-                const serverBanned = Mjolnir.sharedInstance().isServerBanned(userDomain);
+                const userDomain = this.props.mxEvent.getSender()?.split(":").slice(1).join(":");
+                const userBanned = Mjolnir.sharedInstance().isUserBanned(this.props.mxEvent.getSender()!);
+                const serverBanned = userDomain && Mjolnir.sharedInstance().isServerBanned(userDomain);
 
                 if (userBanned || serverBanned) {
                     BodyType = MjolnirBody;

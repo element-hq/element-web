@@ -78,7 +78,7 @@ cacheDownloadIcon();
  * @param {HTMLElement} element The element to get the current style of.
  * @return {string} The CSS style encoded as a string.
  */
-export function computedStyle(element: HTMLElement): string {
+export function computedStyle(element: HTMLElement | null): string {
     if (!element) {
         return "";
     }
@@ -142,6 +142,7 @@ export default class MFileBody extends React.Component<IProps, IState> {
     }
 
     private downloadFile(fileName: string, text: string): void {
+        if (!this.state.decryptedBlob) return;
         this.fileDownloader.download({
             blob: this.state.decryptedBlob,
             name: fileName,

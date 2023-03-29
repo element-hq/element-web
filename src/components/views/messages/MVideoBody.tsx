@@ -111,7 +111,7 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
         canvas.height = height;
 
         const pixels = decode(info[BLURHASH_FIELD], width, height);
-        const ctx = canvas.getContext("2d");
+        const ctx = canvas.getContext("2d")!;
         const imgData = ctx.createImageData(width, height);
         imgData.data.set(pixels);
         ctx.putImageData(imgData, 0, 0);
@@ -128,7 +128,7 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
             image.onload = () => {
                 this.setState({ posterLoading: false });
             };
-            image.src = media.thumbnailHttp;
+            image.src = media.thumbnailHttp!;
         }
     }
 

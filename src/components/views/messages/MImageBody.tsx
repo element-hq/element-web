@@ -104,9 +104,10 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
 
             const content = this.props.mxEvent.getContent<IMediaEventContent>();
             const httpUrl = this.state.contentUrl;
+            if (!httpUrl) return;
             const params: Omit<ComponentProps<typeof ImageView>, "onFinished"> = {
                 src: httpUrl,
-                name: content.body?.length > 0 ? content.body : _t("Attachment"),
+                name: content.body && content.body.length > 0 ? content.body : _t("Attachment"),
                 mxEvent: this.props.mxEvent,
                 permalinkCreator: this.props.permalinkCreator,
             };
@@ -135,7 +136,12 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
     protected onImageEnter = (e: React.MouseEvent<HTMLImageElement>): void => {
         this.setState({ hover: true });
 
-        if (!this.state.showImage || !this.state.isAnimated || SettingsStore.getValue("autoplayGifs")) {
+        if (
+            !this.state.contentUrl ||
+            !this.state.showImage ||
+            !this.state.isAnimated ||
+            SettingsStore.getValue("autoplayGifs")
+        ) {
             return;
         }
         const imgElement = e.currentTarget;
@@ -145,11 +151,12 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
     protected onImageLeave = (e: React.MouseEvent<HTMLImageElement>): void => {
         this.setState({ hover: false });
 
-        if (!this.state.showImage || !this.state.isAnimated || SettingsStore.getValue("autoplayGifs")) {
+        const url = this.state.thumbUrl ?? this.state.contentUrl;
+        if (!url || !this.state.showImage || !this.state.isAnimated || SettingsStore.getValue("autoplayGifs")) {
             return;
         }
         const imgElement = e.currentTarget;
-        imgElement.src = this.state.thumbUrl ?? this.state.contentUrl;
+        imgElement.src = url;
     };
 
     private clearError = (): void => {
@@ -285,7 +292,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
                     img.onerror = reject;
                 });
                 img.crossOrigin = "Anonymous"; // CORS allow canvas access
-                img.src = contentUrl;
+                img.src = contentUrl ?? "";
 
                 try {
                     await loadPromise;
@@ -379,7 +386,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
 
     protected messageContent(
         contentUrl: string,
-        thumbUrl: string,
+        thumbUrl: string | null,
         content: IMediaEventContent,
         forcedHeight?: number,
     ): JSX.Element {
@@ -579,7 +586,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         }
 
         let contentUrl = this.state.contentUrl;
-        let thumbUrl: string | undefined;
+        let thumbUrl: string | null;
         if (this.props.forExport) {
             contentUrl = this.props.mxEvent.getContent().url ?? this.props.mxEvent.getContent().file?.url;
             thumbUrl = contentUrl;
@@ -589,7 +596,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
             thumbUrl = this.state.thumbUrl ?? this.state.contentUrl;
         }
 
-        const thumbnail = this.messageContent(contentUrl, thumbUrl, content);
+        const thumbnail = contentUrl ? this.messageContent(contentUrl, thumbUrl, content) : undefined;
         const fileBody = this.getFileBody();
 
         return (

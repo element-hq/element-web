@@ -22,7 +22,6 @@ import { _t } from "../../../languageHandler";
 import { formatCommaSeparatedList } from "../../../utils/FormattingUtils";
 import Tooltip from "../elements/Tooltip";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-
 interface IProps {
     // The event we're displaying reactions for
     mxEvent: MatrixEvent;
@@ -45,8 +44,8 @@ export default class ReactionsRowButtonTooltip extends React.PureComponent<IProp
         if (room) {
             const senders: string[] = [];
             for (const reactionEvent of reactionEvents) {
-                const member = room.getMember(reactionEvent.getSender());
-                const name = member ? member.name : reactionEvent.getSender();
+                const member = room.getMember(reactionEvent.getSender()!);
+                const name = member?.name ?? reactionEvent.getSender()!;
                 senders.push(name);
             }
             const shortName = unicodeToShortcode(content);

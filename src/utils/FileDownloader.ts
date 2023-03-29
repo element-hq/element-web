@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-export type getIframeFn = () => HTMLIFrameElement; // eslint-disable-line @typescript-eslint/naming-convention
+export type GetIframeFn = () => HTMLIFrameElement | null;
 
 export const DEFAULT_STYLES = {
     imgSrc: "",
@@ -75,7 +75,7 @@ export class FileDownloader {
      * @param iframeFn Function to get a pre-configured iframe. Set to null to have the downloader
      * use a generic, hidden, iframe.
      */
-    public constructor(private iframeFn?: getIframeFn) {}
+    public constructor(private iframeFn?: GetIframeFn) {}
 
     private get iframe(): HTMLIFrameElement {
         const iframe = this.iframeFn?.();

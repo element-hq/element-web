@@ -24,7 +24,6 @@ import dis from "../../../dispatcher/dispatcher";
 import ReactionsRowButtonTooltip from "./ReactionsRowButtonTooltip";
 import AccessibleButton from "../elements/AccessibleButton";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-
 interface IProps {
     // The event we're displaying reactions for
     mxEvent: MatrixEvent;
@@ -57,9 +56,9 @@ export default class ReactionsRowButton extends React.PureComponent<IProps, ISta
     public onClick = (): void => {
         const { mxEvent, myReactionEvent, content } = this.props;
         if (myReactionEvent) {
-            this.context.redactEvent(mxEvent.getRoomId(), myReactionEvent.getId());
+            this.context.redactEvent(mxEvent.getRoomId()!, myReactionEvent.getId());
         } else {
-            this.context.sendEvent(mxEvent.getRoomId(), "m.reaction", {
+            this.context.sendEvent(mxEvent.getRoomId()!, "m.reaction", {
                 "m.relates_to": {
                     rel_type: "m.annotation",
                     event_id: mxEvent.getId(),
@@ -110,8 +109,8 @@ export default class ReactionsRowButton extends React.PureComponent<IProps, ISta
         if (room) {
             const senders: string[] = [];
             for (const reactionEvent of reactionEvents) {
-                const member = room.getMember(reactionEvent.getSender());
-                senders.push(member?.name || reactionEvent.getSender());
+                const member = room.getMember(reactionEvent.getSender()!);
+                senders.push(member?.name || reactionEvent.getSender()!);
             }
 
             const reactors = formatCommaSeparatedList(senders, 6);

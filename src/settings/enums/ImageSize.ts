@@ -35,7 +35,7 @@ export enum ImageSize {
  * @param {number} maxHeight Overrides the default height limit
  * @returns {Dimensions} The suggested maximum dimensions for the image
  */
-export function suggestedSize(size: ImageSize, contentSize: Dimensions, maxHeight?: number): Dimensions {
+export function suggestedSize(size: ImageSize, contentSize: Dimensions, maxHeight?: number): Required<Dimensions> {
     const aspectRatio = contentSize.w! / contentSize.h!;
     const portrait = aspectRatio < 1;
 

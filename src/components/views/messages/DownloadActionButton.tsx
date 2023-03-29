@@ -63,17 +63,17 @@ export default class DownloadActionButton extends React.PureComponent<IProps, IS
 
         if (this.state.blob) {
             // Cheat and trigger a download, again.
-            return this.doDownload();
+            return this.doDownload(this.state.blob);
         }
 
         const blob = await this.props.mediaEventHelperGet().sourceBlob.value;
         this.setState({ blob });
-        await this.doDownload();
+        await this.doDownload(blob);
     };
 
-    private async doDownload(): Promise<void> {
+    private async doDownload(blob: Blob): Promise<void> {
         await this.downloader.download({
-            blob: this.state.blob,
+            blob,
             name: this.props.mediaEventHelperGet().fileName,
         });
         this.setState({ loading: false });

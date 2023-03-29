@@ -76,7 +76,7 @@ export default class MAudioBody extends React.PureComponent<IBodyProps, IState> 
         this.setState({ playback });
 
         if (isVoiceMessage(this.props.mxEvent)) {
-            PlaybackQueue.forRoom(this.props.mxEvent.getRoomId()).unsortedEnqueue(this.props.mxEvent, playback);
+            PlaybackQueue.forRoom(this.props.mxEvent.getRoomId()!).unsortedEnqueue(this.props.mxEvent, playback);
         }
 
         // Note: the components later on will handle preparing the Playback class for us.

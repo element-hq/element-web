@@ -26,7 +26,6 @@ import AccessibleButton from "../elements/AccessibleButton";
 import { mediaFromMxc } from "../../../customisations/Media";
 import RoomAvatar from "../avatars/RoomAvatar";
 import ImageView from "../elements/ImageView";
-
 interface IProps {
     /* the MatrixEvent to show */
     mxEvent: MatrixEvent;
@@ -37,6 +36,7 @@ export default class RoomAvatarEvent extends React.Component<IProps> {
         const cli = MatrixClientPeg.get();
         const ev = this.props.mxEvent;
         const httpUrl = mediaFromMxc(ev.getContent().url).srcHttp;
+        if (!httpUrl) return;
 
         const room = cli.getRoom(this.props.mxEvent.getRoomId());
         const text = _t("%(senderDisplayName)s changed the avatar for %(roomName)s", {
@@ -48,7 +48,7 @@ export default class RoomAvatarEvent extends React.Component<IProps> {
             src: httpUrl,
             name: text,
         };
-        Modal.createDialog(ImageView, params, "mx_Dialog_lightbox", null, true);
+        Modal.createDialog(ImageView, params, "mx_Dialog_lightbox", undefined, true);
     };
 
     public render(): React.ReactNode {
