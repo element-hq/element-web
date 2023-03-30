@@ -37,5 +37,5 @@ export function shouldPrefixMessagesIn(roomId: string, tagId?: TagID): boolean {
 }
 
 export function getSenderName(event: MatrixEvent): string {
-    return event.sender ? event.sender.name : event.getSender();
+    return event.sender ? event.sender.name : event.getSender() || "";
 }

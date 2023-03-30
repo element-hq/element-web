@@ -25,9 +25,9 @@ import { OrderingAlgorithm } from "./OrderingAlgorithm";
 import { NotificationColor } from "../../../notifications/NotificationColor";
 import { RoomNotificationStateStore } from "../../../notifications/RoomNotificationStateStore";
 
-type CategorizedRoomMap = Partial<{
+type CategorizedRoomMap = {
     [category in NotificationColor]: Room[];
-}>;
+};
 
 type CategoryIndex = Partial<{
     [category in NotificationColor]: number; // integer
@@ -84,7 +84,7 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
         };
         for (const room of rooms) {
             const category = this.getRoomCategory(room);
-            map[category].push(room);
+            map[category]?.push(room);
         }
         return map;
     }
@@ -126,11 +126,21 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
         }
     }
 
+    private getCategoryIndex(category: NotificationColor): number {
+        const categoryIndex = this.indices[category];
+
+        if (categoryIndex === undefined) {
+            throw new Error(`Index of category ${category} not found`);
+        }
+
+        return categoryIndex;
+    }
+
     private handleSplice(room: Room, cause: RoomUpdateCause): boolean {
         if (cause === RoomUpdateCause.NewRoom) {
             const category = this.getRoomCategory(room);
             this.alterCategoryPositionBy(category, 1, this.indices);
-            this.cachedOrderedRooms.splice(this.indices[category], 0, room); // splice in the new room (pre-adjusted)
+            this.cachedOrderedRooms.splice(this.getCategoryIndex(category), 0, room); // splice in the new room (pre-adjusted)
             this.sortCategory(category);
         } else if (cause === RoomUpdateCause.RoomRemoved) {
             const roomIdx = this.getRoomIndex(room);
@@ -160,7 +170,7 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
 
         const category = this.getRoomCategory(room);
         if (this.sortingAlgorithm === SortAlgorithm.Manual) {
-            return; // Nothing to do here.
+            return false; // Nothing to do here.
         }
 
         const roomIdx = this.getRoomIndex(room);
@@ -175,7 +185,7 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
             // Move the room and update the indices
             this.moveRoomIndexes(1, oldCategory, category, this.indices);
             this.cachedOrderedRooms.splice(roomIdx, 1); // splice out the old index (fixed position)
-            this.cachedOrderedRooms.splice(this.indices[category], 0, room); // splice in the new room (pre-adjusted)
+            this.cachedOrderedRooms.splice(this.getCategoryIndex(category), 0, room); // splice in the new room (pre-adjusted)
             // Note: if moveRoomIndexes() is called after the splice then the insert operation
             // will happen in the wrong place. Because we would have already adjusted the index
             // for the category, we don't need to determine how the room is moving in the list.
@@ -200,8 +210,8 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
         const nextCategoryStartIdx =
             category === CATEGORY_ORDER[CATEGORY_ORDER.length - 1]
                 ? Number.MAX_SAFE_INTEGER
-                : this.indices[CATEGORY_ORDER[CATEGORY_ORDER.indexOf(category) + 1]];
-        const startIdx = this.indices[category];
+                : this.getCategoryIndex(CATEGORY_ORDER[CATEGORY_ORDER.indexOf(category) + 1]);
+        const startIdx = this.getCategoryIndex(category);
         const numSort = nextCategoryStartIdx - startIdx; // splice() returns up to the max, so MAX_SAFE_INT is fine
         const unsortedSlice = this.cachedOrderedRooms.splice(startIdx, numSort);
         const sorted = sortRoomsWithAlgorithm(unsortedSlice, this.tagId, this.sortingAlgorithm);
@@ -215,6 +225,9 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
             const isLast = i === CATEGORY_ORDER.length - 1;
             const startIdx = indices[category];
             const endIdx = isLast ? Number.MAX_SAFE_INTEGER : indices[CATEGORY_ORDER[i + 1]];
+
+            if (startIdx === undefined || endIdx === undefined) continue;
+
             if (index >= startIdx && index < endIdx) {
                 return category;
             }
@@ -250,24 +263,37 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
         // index for the categories will be way off.
 
         const nextOrderIndex = CATEGORY_ORDER.indexOf(category) + 1;
+
         if (n > 0) {
             for (let i = nextOrderIndex; i < CATEGORY_ORDER.length; i++) {
                 const nextCategory = CATEGORY_ORDER[i];
-                indices[nextCategory] += Math.abs(n);
+
+                if (indices[nextCategory] === undefined) {
+                    throw new Error(`Index of category ${category} not found`);
+                }
+
+                indices[nextCategory]! += Math.abs(n);
             }
         } else if (n < 0) {
             for (let i = nextOrderIndex; i < CATEGORY_ORDER.length; i++) {
                 const nextCategory = CATEGORY_ORDER[i];
-                indices[nextCategory] -= Math.abs(n);
+
+                if (indices[nextCategory] === undefined) {
+                    throw new Error(`Index of category ${category} not found`);
+                }
+
+                indices[nextCategory]! -= Math.abs(n);
             }
         }
 
         // Do a quick check to see if we've completely broken the index
         for (let i = 1; i <= CATEGORY_ORDER.length; i++) {
             const lastCat = CATEGORY_ORDER[i - 1];
+            const lastCatIndex = indices[lastCat];
             const thisCat = CATEGORY_ORDER[i];
+            const thisCatIndex = indices[thisCat];
 
-            if (indices[lastCat] > indices[thisCat]) {
+            if (lastCatIndex === undefined || thisCatIndex === undefined || lastCatIndex > thisCatIndex) {
                 // "should never happen" disclaimer goes here
                 logger.warn(
                     `!! Room list index corruption: ${lastCat} (i:${indices[lastCat]}) is greater ` +

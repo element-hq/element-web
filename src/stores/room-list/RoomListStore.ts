@@ -244,7 +244,10 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> implements 
                 logger.warn(`Queuing failed room update for retry as a result.`);
                 window.setTimeout(async (): Promise<void> => {
                     const updatedRoom = this.matrixClient.getRoom(roomId);
-                    await tryUpdate(updatedRoom);
+
+                    if (updatedRoom) {
+                        await tryUpdate(updatedRoom);
+                    }
                 }, 100); // 100ms should be enough for the room to show up
                 return;
             } else {

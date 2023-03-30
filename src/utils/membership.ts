@@ -44,9 +44,9 @@ export enum EffectiveMembership {
     Leave = "LEAVE",
 }
 
-export type MembershipSplit = Partial<{
+export type MembershipSplit = {
     [state in EffectiveMembership]: Room[];
-}>;
+};
 
 export function splitRoomsByMembership(rooms: Room[]): MembershipSplit {
     const split: MembershipSplit = {

@@ -72,7 +72,9 @@ export class MessageEventPreview implements IPreview {
             return _t("* %(senderName)s %(emote)s", { senderName: getSenderName(event), emote: body });
         }
 
-        if (isThread || isSelf(event) || !shouldPrefixMessagesIn(event.getRoomId(), tagId)) {
+        const roomId = event.getRoomId();
+
+        if (isThread || isSelf(event) || (roomId && !shouldPrefixMessagesIn(roomId, tagId))) {
             return body;
         } else {
             return _t("%(senderName)s: %(message)s", { senderName: getSenderName(event), message: body });

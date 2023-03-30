@@ -492,6 +492,7 @@ export class Algorithm extends EventEmitter {
 
         // Split out the easy rooms first (leave and invite)
         const memberships = splitRoomsByMembership(rooms);
+
         for (const room of memberships[EffectiveMembership.Invite]) {
             newTags[DefaultTagID.Invite].push(room);
         }
