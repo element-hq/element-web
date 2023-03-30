@@ -123,9 +123,17 @@ export default class SearchBar extends React.Component<IProps, IState> {
                             placeholder={_t("Search…")}
                             onKeyDown={this.onSearchChange}
                         />
-                        <AccessibleButton className={searchButtonClasses} onClick={this.onSearch} />
+                        <AccessibleButton
+                            className={searchButtonClasses}
+                            onClick={this.onSearch}
+                            aria-label={_t("Search")}
+                        />
                     </div>
-                    <AccessibleButton className="mx_SearchBar_cancel" onClick={this.props.onCancelClick} />
+                    <AccessibleButton
+                        className="mx_SearchBar_cancel"
+                        onClick={this.props.onCancelClick}
+                        aria-label={_t("Cancel")}
+                    />
                 </div>
                 <SearchWarning isRoomEncrypted={this.props.isRoomEncrypted} kind={WarningKind.Search} />
             </>
