@@ -387,7 +387,7 @@ Note: We use PostCSS + some plugins to process our styles. It looks like SCSS, b
 4. Inside a function, there is no need to comment every line, but consider:
    * before a particular multiline section of code within the function, give an overview of what it does,
      to make it easier for a reader to follow the flow through the function as a whole.
-   * if it is anything less than obvious, explain *why* we are doing a particular operation, with articular emphasis
+   * if it is anything less than obvious, explain *why* we are doing a particular operation, with particular emphasis
      on how this function interacts with other parts of the codebase.
 
 5. When making changes to existing code, authors are expected to read existing comments and make any necessary changes
