@@ -112,10 +112,15 @@ Unless otherwise specified, the following applies to all code:
     }
     ```
 
-13. Explicitly cast to a boolean.
+13. Explicitly cast to a boolean, rather than relying on implicit truthiness of non-boolean values:
 
     ```typescript
-    !!stringVar || Boolean(stringVar);
+    const isRealUser = !!userId && ...;
+    // ... or ...
+    const isRealUser = Boolean(userId) && ...;
+
+    // but *not*:
+    const isRealUser = userId && ...;   // invalid implicit cast
     ```
 
 14. Use `switch` statements when checking against more than a few enum-like values.
