@@ -59,20 +59,21 @@ Unless otherwise specified, the following applies to all code:
 6. Lines are trimmed of all excess whitespace, including blank lines.
 7. Long lines are broken up for readability.
 
-## TypeScript / JavaScript {#typescript-javascript}
+## TypeScript / JavaScript
 
 1. Write TypeScript. Turn JavaScript into TypeScript when working in the area.
-2. Use named exports.
-3. Use semicolons for block/line termination.
+2. Use [TSDoc](https://tsdoc.org/) to document your code. See [Comments](#comments) below.
+3. Use named exports.
+4. Use semicolons for block/line termination.
     1. Except when defining interfaces, classes, and non-arrow functions specifically.
-4. When a statement's body is a single line, it must be written without curly braces, so long as the body is placed on
+5. When a statement's body is a single line, it must be written without curly braces, so long as the body is placed on
    the same line as the statement.
 
     ```typescript
     if (x) doThing();
     ```
 
-5. Blocks for `if`, `for`, `switch` and so on must have a space surrounding the condition, but not
+6. Blocks for `if`, `for`, `switch` and so on must have a space surrounding the condition, but not
    within the condition.
 
     ```typescript
@@ -81,17 +82,17 @@ Unless otherwise specified, the following applies to all code:
     }
     ```
 
-6. lowerCamelCase is used for function and variable naming.
-7. UpperCamelCase is used for general naming.
-8. Interface names should not be marked with an uppercase `I`.
-9. One variable declaration per line.
-10. If a variable is not receiving a value on declaration, its type must be defined.
+7. lowerCamelCase is used for function and variable naming.
+8. UpperCamelCase is used for general naming.
+9. Interface names should not be marked with an uppercase `I`.
+10. One variable declaration per line.
+11. If a variable is not receiving a value on declaration, its type must be defined.
 
     ```typescript
     let errorMessage: Optional<string>;
     ```
 
-11. Objects can use shorthand declarations, including mixing of types.
+12. Objects can use shorthand declarations, including mixing of types.
 
     ```typescript
     {
@@ -102,7 +103,7 @@ Unless otherwise specified, the following applies to all code:
     { room, prop: this.prop }
     ```
 
-12. Object keys should always be non-strings when possible.
+13. Object keys should always be non-strings when possible.
 
     ```typescript
     {
@@ -112,23 +113,28 @@ Unless otherwise specified, the following applies to all code:
     }
     ```
 
-13. Explicitly cast to a boolean.
+14. Explicitly cast to a boolean, rather than relying on implicit truthiness of non-boolean values:
 
     ```typescript
-    !!stringVar || Boolean(stringVar);
+    const isRealUser = !!userId && ...;
+    // ... or ...
+    const isRealUser = Boolean(userId) && ...;
+
+    // but *not*:
+    const isRealUser = userId && ...;   // invalid implicit cast
     ```
 
-14. Use `switch` statements when checking against more than a few enum-like values.
-15. Use `const` for constants, `let` for mutability.
-16. Describe types exhaustively (ensure noImplictAny would pass).
+15. Use `switch` statements when checking against more than a few enum-like values.
+16. Use `const` for constants, `let` for mutability.
+17. Describe types exhaustively (ensure noImplictAny would pass).
     1. Notable exceptions are arrow functions used as parameters, when a void return type is
        obvious, and when declaring and assigning a variable in the same line.
-17. Declare member visibility (public/private/protected).
-18. Private members are private and not prefixed unless required for naming conflicts.
+18. Declare member visibility (public/private/protected).
+19. Private members are private and not prefixed unless required for naming conflicts.
     1. Convention is to use an underscore or the word "internal" to denote conflicted member names.
     2. "Conflicted" typically refers to a getter which wants the same name as the underlying variable.
-19. Prefer readonly members over getters backed by a variable, unless an internal setter is required.
-20. Prefer Interfaces for object definitions, and types for parameter-value-only declarations.
+20. Prefer readonly members over getters backed by a variable, unless an internal setter is required.
+21. Prefer Interfaces for object definitions, and types for parameter-value-only declarations.
 
     1. Note that an explicit type is optional if not expected to be used outside of the function call,
        unlike in this example:
@@ -145,9 +151,9 @@ Unless otherwise specified, the following applies to all code:
         }
         ```
 
-21. Variables/properties which are `public static` should also be `readonly` when possible.
-22. Interface and type properties are terminated with semicolons, not commas.
-23. Prefer arrow formatting when declaring functions for interfaces/types:
+22. Variables/properties which are `public static` should also be `readonly` when possible.
+23. Interface and type properties are terminated with semicolons, not commas.
+24. Prefer arrow formatting when declaring functions for interfaces/types:
 
     ```typescript
     interface Test {
@@ -155,13 +161,13 @@ Unless otherwise specified, the following applies to all code:
     }
     ```
 
-24. Prefer a type definition over an inline type. For example, define an interface.
-25. Always prefer to add types or declare a type over the use of `any`. Prefer inferred types
+25. Prefer a type definition over an inline type. For example, define an interface.
+26. Always prefer to add types or declare a type over the use of `any`. Prefer inferred types
     when they are not `any`.
     1. When using `any`, a comment explaining why must be present.
-26. `import` should be used instead of `require`, as `require` does not have types.
-27. Export only what can be reused.
-28. Prefer a type like `Optional<X>` (`type Optional<T> = T | null | undefined`) instead
+27. `import` should be used instead of `require`, as `require` does not have types.
+28. Export only what can be reused.
+29. Prefer a type like `Optional<X>` (`type Optional<T> = T | null | undefined`) instead
     of truly optional parameters.
 
     1. A notable exception is when the likelihood of a bug is minimal, such as when a function
@@ -179,12 +185,12 @@ Unless otherwise specified, the following applies to all code:
         }
         ```
 
-29. There should be approximately one interface, class, or enum per file unless the file is named
+30. There should be approximately one interface, class, or enum per file unless the file is named
     "types.ts", "global.d.ts", or ends with "-types.ts".
     1. The file name should match the interface, class, or enum name.
-30. Bulk functions can be declared in a single file, though named as "foo-utils.ts" or "utils/foo.ts".
-31. Imports are grouped by external module imports first, then by internal imports.
-32. File ordering is not strict, but should generally follow this sequence:
+31. Bulk functions can be declared in a single file, though named as "foo-utils.ts" or "utils/foo.ts".
+32. Imports are grouped by external module imports first, then by internal imports.
+33. File ordering is not strict, but should generally follow this sequence:
     1. Licence header
     2. Imports
     3. Constants
@@ -199,16 +205,16 @@ Unless otherwise specified, the following applies to all code:
         5. Protected and abstract functions
         6. Public/private functions
         7. Public/protected/private static functions
-33. Variable names should be noticeably unique from their types. For example, "str: string" instead
+34. Variable names should be noticeably unique from their types. For example, "str: string" instead
     of "string: string".
-34. Use double quotes to enclose strings. You may use single quotes if the string contains double quotes.
+35. Use double quotes to enclose strings. You may use single quotes if the string contains double quotes.
 
     ```typescript
     const example1 = "simple string";
     const example2 = 'string containing "double quotes"';
     ```
 
-35. Prefer async-await to promise-chaining
+36. Prefer async-await to promise-chaining
 
     ```typescript
     async function () {
@@ -255,7 +261,7 @@ Inheriting all the rules of TypeScript, the following additionally apply:
     if at all possible.
 11. A component should only use CSS class names in line with the component name.
 
-    1. When knowingly using a class name from another component, document it.
+    1. When knowingly using a class name from another component, document it with a [comment](#comments).
 
 12. Curly braces within JSX should be padded with a space, however properties on those components should not.
     See above code example.
@@ -304,7 +310,7 @@ Note: We use PostCSS + some plugins to process our styles. It looks like SCSS, b
 
 7. Non-shared variables should use $lowerCamelCase. Shared variables use $dashed-naming.
 8. Overrides to Z indexes, adjustments of dimensions/padding with pixels, and so on should all be
-   documented for what the values mean:
+   [documented](#comments) for what the values mean:
 
     ```scss
     .mx_MyFoo {
@@ -314,7 +320,7 @@ Note: We use PostCSS + some plugins to process our styles. It looks like SCSS, b
     }
     ```
 
-9. Avoid the use of `!important`. If necessary, add a comment.
+9. Avoid the use of `!important`. If `!important` is necessary, add a [comment](#comments) explaining why.
 
 ## Tests
 
@@ -358,3 +364,38 @@ Note: We use PostCSS + some plugins to process our styles. It looks like SCSS, b
         });
     });
     ```
+
+## Comments
+
+1. As a general principle: be liberal with comments. This applies to all files: stylesheets as well as
+   JavaScript/TypeScript.
+
+    Good comments not only help future readers understand and maintain the code; they can also encourage good design
+    by clearly setting out how different parts of the codebase interact where that would otherwise be implicit and
+    subject to interpretation.
+
+2. Aim to document all types, methods, class properties, functions, etc, with [TSDoc](https://tsdoc.org/) doc comments.
+   This is _especially_ important for public interfaces in `matrix-js-sdk`, but is good practice in general.
+
+    Even very simple interfaces can often benefit from a doc-comment, both as a matter of consistency, and because simple
+    interfaces have a habit of becoming more complex over time.
+
+3. React components should be documented in the same way as other classes or functions. The documentation should give
+   a brief description of how the component should be used, and, especially for more complex components, each of its
+   properties should be clearly documented.
+
+4. Inside a function, there is no need to comment every line, but consider:
+
+    - before a particular multiline section of code within the function, give an overview of what it does,
+      to make it easier for a reader to follow the flow through the function as a whole.
+    - if it is anything less than obvious, explain _why_ we are doing a particular operation, with particular emphasis
+      on how this function interacts with other parts of the codebase.
+
+5. When making changes to existing code, authors are expected to read existing comments and make any necessary changes
+   to ensure they remain accurate.
+
+6. Reviewers are encouraged to consider whether more comments would be useful, and to ask the author to add them.
+
+    It is natural for an author to feel that the code they have just written is "obvious" and that comments would be
+    redundant, whereas in reality it would take some time for reader unfamiliar with the code to understand it. A
+    reviewer is well-placed to make a more objective judgement.
