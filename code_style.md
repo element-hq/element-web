@@ -62,6 +62,7 @@ Unless otherwise specified, the following applies to all code:
 ## TypeScript / JavaScript
 
 1. Write TypeScript. Turn JavaScript into TypeScript when working in the area.
+2. Use [TSDoc](https://tsdoc.org/) to document your code. See [Comments](#comments) below.
 2. Use named exports.
 3. Use semicolons for block/line termination.
     1. Except when defining interfaces, classes, and non-arrow functions specifically.
@@ -260,7 +261,7 @@ Inheriting all the rules of TypeScript, the following additionally apply:
     if at all possible.
 11. A component should only use CSS class names in line with the component name.
 
-    1. When knowingly using a class name from another component, document it.
+    1. When knowingly using a class name from another component, document it with a [comment](#comments).
 
 12. Curly braces within JSX should be padded with a space, however properties on those components should not.
     See above code example.
@@ -309,7 +310,7 @@ Note: We use PostCSS + some plugins to process our styles. It looks like SCSS, b
 
 7. Non-shared variables should use $lowerCamelCase. Shared variables use $dashed-naming.
 8. Overrides to Z indexes, adjustments of dimensions/padding with pixels, and so on should all be
-   documented for what the values mean:
+   [documented](#comments) for what the values mean:
 
     ```scss
     .mx_MyFoo {
@@ -319,7 +320,7 @@ Note: We use PostCSS + some plugins to process our styles. It looks like SCSS, b
     }
     ```
 
-9. Avoid the use of `!important`. If necessary, add a comment.
+9. Avoid the use of `!important`. If `!important` is necessary, add a [comment](#comments) explaining why.
 
 ## Tests
 
@@ -363,3 +364,37 @@ Note: We use PostCSS + some plugins to process our styles. It looks like SCSS, b
         });
     });
     ```
+
+## Comments
+
+1. As a general principle: be liberal with comments. This applies to all files: stylesheets as well as
+   JavaScript/TypeScript.
+
+   Good comments not only help future readers understand and maintain the code; they can also encourage good design
+   by clearly setting out how different parts of the codebase interact where that would otherwise be implicit and
+   subject to interpretation.
+
+2. Aim to document all types, methods, class properties, functions, etc, with [TSDoc](https://tsdoc.org/) doc comments.
+   This is *especially* important for public interfaces in `matrix-js-sdk`, but is good practice in general.
+
+   Even very simple interfaces can often benefit from a doc-comment, both as a matter of consistency, and because simple
+   interfaces have a habit of becoming more complex over time.
+
+3. React components should be documented in the same way as other classes or functions. The documentation should give
+   a brief description of how the component should be used, and, especially for more complex components, each of its
+   properties should be clearly documented.
+
+4. Inside a function, there is no need to comment every line, but consider:
+   * before a particular multiline section of code within the function, give an overview of what it does,
+     to make it easier for a reader to follow the flow through the function as a whole.
+   * if it is anything less than obvious, explain *why* we are doing a particular operation, with articular emphasis
+     on how this function interacts with other parts of the codebase.
+
+5. When making changes to existing code, authors are expected to read existing comments and make any necessary changes
+   to ensure they remain accurate.
+
+6. Reviewers are encouraged to consider whether more comments would be useful, and to ask the author to add them.
+
+   It is natural for an author to feel that the code they have just written is "obvious" and that comments would be
+   redundant, whereas in reality it would take some time for reader unfamiliar with the code to understand it. A
+   reviewer is well-placed to make a more objective judgement.
