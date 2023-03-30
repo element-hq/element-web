@@ -362,7 +362,7 @@ export const showRoom = (cli: MatrixClient, hierarchy: RoomHierarchy, roomId: st
     // Don't let the user view a room they won't be able to either peek or join:
     // fail earlier so they don't have to click back to the directory.
     if (cli.isGuest()) {
-        if (!room.world_readable && !room.guest_can_join) {
+        if (!room?.world_readable && !room?.guest_can_join) {
             defaultDispatcher.dispatch({ action: "require_registration" });
             return;
         }
@@ -374,12 +374,12 @@ export const showRoom = (cli: MatrixClient, hierarchy: RoomHierarchy, roomId: st
         action: Action.ViewRoom,
         should_peek: true,
         room_alias: roomAlias,
-        room_id: room.room_id,
+        room_id: roomId,
         via_servers: Array.from(hierarchy.viaMap.get(roomId) || []),
         oob_data: {
-            avatarUrl: room.avatar_url,
+            avatarUrl: room?.avatar_url,
             // XXX: This logic is duplicated from the JS SDK which would normally decide what the name is.
-            name: room.name || roomAlias || _t("Unnamed room"),
+            name: room?.name || roomAlias || _t("Unnamed room"),
             roomType,
         } as IOOBData,
         metricsTrigger: "RoomDirectory",
@@ -560,7 +560,7 @@ export const useRoomHierarchy = (
         const hierarchy = new RoomHierarchy(space, INITIAL_PAGE_SIZE);
         hierarchy.load().then(() => {
             if (space !== hierarchy.root) return; // discard stale results
-            setRooms(hierarchy.rooms);
+            setRooms(hierarchy.rooms ?? []);
         }, setError);
         setHierarchy(hierarchy);
     }, [space]);
@@ -577,7 +577,7 @@ export const useRoomHierarchy = (
         async (pageSize?: number): Promise<void> => {
             if (!hierarchy || hierarchy.loading || !hierarchy.canLoadMore || hierarchy.noSupport || error) return;
             await hierarchy.load(pageSize).catch(setError);
-            setRooms(hierarchy.rooms);
+            setRooms(hierarchy.rooms ?? []);
         },
         [error, hierarchy],
     );
@@ -638,7 +638,7 @@ const ManageButtons: React.FC<IManageButtonsProps> = ({ hierarchy, selected, set
     const [saving, setSaving] = useState(false);
 
     const selectedRelations = Array.from(selected.keys()).flatMap((parentId) => {
-        return [...selected.get(parentId).values()].map((childId) => [parentId, childId]);
+        return [...selected.get(parentId)!.values()].map((childId) => [parentId, childId]);
     });
 
     const selectionAllSuggested = selectedRelations.every(([parentId, childId]) => {
@@ -814,12 +814,13 @@ const SpaceHierarchy: React.FC<IProps> = ({ space, initialText = "", showRoom, a
                         space?.getMyMembership() === "join" &&
                         space.currentState.maySendStateEvent(EventType.SpaceChild, cli.getSafeUserId());
 
+                    const root = hierarchy.roomMap.get(space.roomId);
                     let results: JSX.Element | undefined;
-                    if (filteredRoomSet.size) {
+                    if (filteredRoomSet.size && root) {
                         results = (
                             <>
                                 <HierarchyLevel
-                                    root={hierarchy.roomMap.get(space.roomId)}
+                                    root={root}
                                     roomSet={filteredRoomSet}
                                     hierarchy={hierarchy}
                                     parents={new Set()}
