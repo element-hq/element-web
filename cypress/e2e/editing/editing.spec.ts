@@ -19,6 +19,7 @@ limitations under the License.
 import type { EventType, MsgType } from "matrix-js-sdk/src/@types/event";
 import type { ISendEventResponse } from "matrix-js-sdk/src/@types/requests";
 import type { IContent } from "matrix-js-sdk/src/models/event";
+import { SettingLevel } from "../../../src/settings/SettingLevel";
 import { HomeserverInstance } from "../../plugins/utils/homeserver";
 import Chainable = Cypress.Chainable;
 
@@ -41,12 +42,46 @@ function mkPadding(n: number): IContent {
 
 describe("Editing", () => {
     let homeserver: HomeserverInstance;
+    let roomId: string;
+
+    // Edit "Message"
+    const editLastMessage = (edit: string) => {
+        cy.get(".mx_EventTile_last").realHover();
+        cy.get(".mx_EventTile_last .mx_MessageActionBar_optionsButton", { timeout: 1000 })
+            .should("exist")
+            .realHover()
+            .get('.mx_EventTile_last [aria-label="Edit"]')
+            .click({ force: false });
+        cy.get(".mx_BasicMessageComposer_input").type(`{selectAll}{del}${edit}{enter}`);
+    };
+
+    const clickEditedMessage = (edited: string) => {
+        // Assert that the message was edited
+        cy.contains(".mx_EventTile", edited)
+            .should("exist")
+            .within(() => {
+                // Click to display the message edit history dialog
+                cy.contains(".mx_EventTile_edited", "(edited)").click();
+            });
+    };
+
+    const clickButtonViewSource = () => {
+        // Assert that "View Source" button is rendered and click it
+        cy.get(".mx_EventTile .mx_EventTile_line")
+            .realHover()
+            .contains(".mx_AccessibleButton", "View Source")
+            .should("exist")
+            .click();
+    };
 
     beforeEach(() => {
         cy.startHomeserver("default").then((data) => {
             homeserver = data;
             cy.initTestUser(homeserver, "Edith").then(() => {
-                cy.injectAxe();
+                cy.createRoom({ name: "Test room" }).then((_room1Id) => {
+                    roomId = _room1Id;
+                }),
+                    cy.injectAxe();
             });
         });
     });
@@ -55,13 +90,197 @@ describe("Editing", () => {
         cy.stopHomeserver(homeserver);
     });
 
-    it("should close the composer when clicking save after making a change and undoing it", () => {
-        cy.createRoom({ name: "Test room" }).as("roomId");
+    it("should render and interact with the message edit history dialog", () => {
+        // Click the "Remove" button on the message edit history dialog
+        const clickButtonRemove = () => {
+            cy.get(".mx_EventTile_line").realHover().contains(".mx_AccessibleButton", "Remove").click({ force: false });
+        };
 
-        cy.get<string>("@roomId").then((roomId) => {
-            sendEvent(roomId);
-            cy.visit("/#/room/" + roomId);
+        cy.visit("/#/room/" + roomId);
+
+        // Send "Message"
+        sendEvent(roomId);
+
+        cy.get(".mx_RoomView_MessageList").within(() => {
+            // Edit "Message" to "Massage"
+            editLastMessage("Massage");
+
+            // Assert that the edit label is visible
+            cy.get(".mx_EventTile_edited").should("be.visible");
+
+            clickEditedMessage("Massage");
         });
+
+        cy.get(".mx_Dialog").within(() => {
+            // Assert that the message edit history dialog is rendered
+            cy.get(".mx_MessageEditHistoryDialog").within(() => {
+                // Assert CSS styles which are difficult or cannot be detected with snapshots are applied as expected
+                cy.get("li").should("have.css", "clear", "both");
+                cy.get(".mx_EventTile .mx_MessageTimestamp")
+                    .should("have.css", "position", "absolute")
+                    .should("have.css", "inset-inline-start", "0px")
+                    .should("have.css", "text-align", "center");
+                // Assert that monospace characters can fill the content line as expected
+                cy.get(".mx_EventTile .mx_EventTile_content").should("have.css", "margin-inline-end", "0px");
+
+                // Assert that zero block start padding is applied to mx_EventTile as expected
+                // See: .mx_EventTile on _EventTile.pcss
+                cy.get(".mx_EventTile").should("have.css", "padding-block-start", "0px");
+
+                // Assert that the date separator is rendered at the top
+                cy.get("li:nth-child(1) .mx_DateSeparator").within(() => {
+                    cy.get("h2").should("have.text", "Today");
+                });
+
+                // Assert that the edited message is rendered under the date separator
+                cy.get("li:nth-child(2) .mx_EventTile").within(() => {
+                    // Assert that the edited message body consists of both deleted character and inserted character
+                    // Above the first "e" of "Message" was replaced with "a"
+                    cy.get(".mx_EventTile_content .mx_EventTile_body").should("have.text", "Meassage");
+
+                    cy.get(".mx_EventTile_content .mx_EventTile_body").within(() => {
+                        cy.get(".mx_EditHistoryMessage_deletion").should("have.text", "e");
+                        cy.get(".mx_EditHistoryMessage_insertion").should("have.text", "a");
+                    });
+                });
+
+                // Assert that the original message is rendered at the bottom
+                cy.get("li:nth-child(3) .mx_EventTile").within(() => {
+                    cy.get(".mx_EventTile_content .mx_EventTile_body").should("have.text", "Message");
+                });
+            });
+        });
+
+        // Exclude timestamps from a snapshot
+        const percyCSS = ".mx_MessageTimestamp { visibility: hidden !important; }";
+
+        // Take a snapshot of the dialog
+        cy.get(".mx_Dialog_wrapper").percySnapshotElement("Message edit history dialog", { percyCSS });
+
+        cy.get(".mx_Dialog").within(() => {
+            cy.get(".mx_MessageEditHistoryDialog li:nth-child(2) .mx_EventTile").within(() => {
+                cy.get(".mx_EventTile_content .mx_EventTile_body").should("have.text", "Meassage");
+
+                // Click the "Remove" button again
+                clickButtonRemove();
+            });
+
+            // Do nothing and close the dialog to confirm that the message edit history dialog is rendered
+            cy.get(".mx_TextInputDialog").closeDialog();
+
+            // Assert that the message edit history dialog is rendered again after it was closed
+            cy.get(".mx_MessageEditHistoryDialog li:nth-child(2) .mx_EventTile").within(() => {
+                cy.get(".mx_EventTile_content .mx_EventTile_body").should("have.text", "Meassage");
+
+                // Click the "Remove" button again
+                clickButtonRemove();
+            });
+
+            // This time remove the message really
+            cy.get(".mx_TextInputDialog").within(() => {
+                cy.get(".mx_TextInputDialog_input").type("This is a test."); // Reason
+                cy.contains("[data-testid='dialog-primary-button']", "Remove").click();
+            });
+
+            // Assert that the message edit history dialog is rendered again
+            cy.get(".mx_MessageEditHistoryDialog").within(() => {
+                // Assert that the date is rendered
+                cy.get("li:nth-child(1) .mx_DateSeparator").within(() => {
+                    cy.get("h2").should("have.text", "Today");
+                });
+
+                // Assert that the original message is rendered under the date on the dialog
+                cy.get("li:nth-child(2) .mx_EventTile").within(() => {
+                    cy.get(".mx_EventTile_content .mx_EventTile_body").should("have.text", "Message");
+                });
+
+                // Assert that the edited message is gone
+                cy.contains(".mx_EventTile_content .mx_EventTile_body", "Meassage").should("not.exist");
+
+                cy.closeDialog();
+            });
+        });
+
+        // Assert that the main timeline is rendered
+        cy.get(".mx_RoomView_MessageList").within(() => {
+            cy.get(".mx_EventTile_last").within(() => {
+                // Assert that the placeholder is rendered
+                cy.contains(".mx_RedactedBody", "Message deleted");
+            });
+        });
+    });
+
+    it("should render 'View Source' button in developer mode on the message edit history dialog", () => {
+        cy.visit("/#/room/" + roomId);
+
+        // Send "Message"
+        sendEvent(roomId);
+
+        cy.get(".mx_RoomView_MessageList").within(() => {
+            // Edit "Message" to "Massage"
+            editLastMessage("Massage");
+
+            // Assert that the edit label is visible
+            cy.get(".mx_EventTile_edited").should("be.visible");
+
+            clickEditedMessage("Massage");
+        });
+
+        cy.get(".mx_Dialog").within(() => {
+            // Assert that the original message is rendered
+            cy.get(".mx_MessageEditHistoryDialog li:nth-child(3)").within(() => {
+                // Assert that "View Source" is not rendered
+                cy.get(".mx_EventTile .mx_EventTile_line")
+                    .realHover()
+                    .contains(".mx_AccessibleButton", "View Source")
+                    .should("not.exist");
+            });
+
+            cy.closeDialog();
+        });
+
+        // Enable developer mode
+        cy.setSettingValue("developerMode", null, SettingLevel.ACCOUNT, true);
+
+        cy.get(".mx_RoomView_MessageList").within(() => {
+            clickEditedMessage("Massage");
+        });
+
+        cy.get(".mx_Dialog").within(() => {
+            // Assert that the edited message is rendered
+            cy.get(".mx_MessageEditHistoryDialog li:nth-child(2)").within(() => {
+                // Assert that "Remove" button for the original message is rendered
+                cy.get(".mx_EventTile .mx_EventTile_line")
+                    .realHover()
+                    .contains(".mx_AccessibleButton", "Remove")
+                    .should("exist");
+
+                clickButtonViewSource();
+            });
+
+            // Assert that view source dialog is rendered and close the dialog
+            cy.get(".mx_ViewSource").closeDialog();
+
+            // Assert that the original message is rendered
+            cy.get(".mx_MessageEditHistoryDialog li:nth-child(3)").within(() => {
+                // Assert that "Remove" button for the original message does not exist
+                cy.get(".mx_EventTile .mx_EventTile_line")
+                    .realHover()
+                    .contains(".mx_AccessibleButton", "Remove")
+                    .should("not.exist");
+
+                clickButtonViewSource();
+            });
+
+            // Assert that view source dialog is rendered and close the dialog
+            cy.get(".mx_ViewSource").closeDialog();
+        });
+    });
+
+    it("should close the composer when clicking save after making a change and undoing it", () => {
+        cy.visit("/#/room/" + roomId);
+
+        sendEvent(roomId);
 
         // Edit message
         cy.contains(".mx_RoomView_body .mx_EventTile .mx_EventTile_line", "Message").within(() => {
