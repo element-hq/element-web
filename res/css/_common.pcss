@@ -43,6 +43,8 @@ $timeline-image-border-radius: 8px;
     --transition-short: 0.1s;
     --transition-standard: 0.3s;
     --MessageTimestamp-width: $MessageTimestamp_width;
+    --buttons-dialog-gap-row: $spacing-8;
+    --buttons-dialog-gap-column: $spacing-8;
 }
 
 @media only percy {
@@ -525,8 +527,8 @@ legend {
     margin-inline-start: auto;
 
     /* default gap among elements */
-    column-gap: $spacing-8; /* See margin-right below inside the button style */
-    row-gap: 5px; /* See margin-bottom below inside the button style */
+    column-gap: var(--buttons-dialog-gap-column);
+    row-gap: var(--buttons-dialog-gap-row);
 
     button {
         margin: 0 !important; /* override the margin settings */
@@ -548,7 +550,7 @@ legend {
 .mx_Dialog_buttons input[type="submit"] {
     @mixin mx_DialogButton;
     margin-left: 0px;
-    margin-right: 8px;
+    margin-right: var(--buttons-dialog-gap-column);
     margin-bottom: 5px;
 
     /* flip colours for the secondary ones */

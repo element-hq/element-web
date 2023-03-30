@@ -15,46 +15,73 @@ limitations under the License.
 */
 
 .mx_DecryptionFailureBar {
+    --gap-row: $spacing-8;
+    --gap-column: $spacing-12;
+    --gap: var(--gap-row) var(--gap-column);
+    --size-icon: 24px;
+
     background-color: $system;
     padding: $spacing-12;
-    margin-left: $spacing-16;
-    margin-right: $spacing-16;
+    margin-inline: $spacing-16;
     border-radius: 4px;
-    display: flex;
-    align-items: flex-start;
-    gap: $spacing-12;
-}
 
-.mx_DecryptionFailureBar_icon {
-    width: 24px;
-    height: 24px;
-    mask-image: url("$(res)/img/e2e/decryption-failure.svg");
-    background-color: $e2e-warning-color;
-    mask-repeat: no-repeat;
-    mask-position: center;
-    mask-size: contain;
-}
+    &.mx_DecryptionFailureBar--withEnd {
+        display: flex;
+        flex-flow: wrap;
+        align-items: flex-start;
+        justify-content: space-between;
+        row-gap: calc(var(--gap-row) + $spacing-4); /* Increase spacing between the message and the buttons */
 
-.mx_DecryptionFailureBar_icon,
-.mx_DecryptionFailureBar .mx_Spinner {
-    flex-shrink: 0;
-    flex-grow: 0;
-}
+        .mx_DecryptionFailureBar_end {
+            display: flex;
+            flex-wrap: wrap; /* Let the buttons wrapped on a narrow column */
+            gap: var(--buttons-dialog-gap-row) var(--buttons-dialog-gap-column);
+            margin-inline-start: calc(var(--size-icon) + var(--gap-column)); /* Align the button(s) and the message */
+        }
+    }
 
-.mx_DecryptionFailureBar_message {
-    flex-grow: 1;
-}
+    .mx_DecryptionFailureBar_start {
+        display: grid;
+        gap: var(--gap);
+        grid-template-areas:
+            "status headline"
+            ".      message";
+        grid-template-columns: var(--size-icon) auto;
 
-.mx_DecryptionFailureBar_message_headline {
-    font-weight: $font-semi-bold;
-    font-size: $font-16px;
-    margin-bottom: $spacing-4;
-}
+        .mx_DecryptionFailureBar_start_status {
+            grid-area: status;
 
-.mx_DecryptionFailureBar_message_body {
-    color: $secondary-content;
-}
+            display: flex;
+            align-items: center;
+            gap: var(--gap);
 
-.mx_DecryptionFailureBar_button {
-    flex-shrink: 0;
+            .mx_Spinner {
+                height: unset; /* Unset height: 100% */
+            }
+
+            .mx_DecryptionFailureBar_start_status_icon {
+                min-width: var(--size-icon);
+                height: var(--size-icon);
+                mask-image: url("$(res)/img/e2e/decryption-failure.svg");
+                background-color: $e2e-warning-color;
+                mask-repeat: no-repeat;
+                mask-position: center;
+                mask-size: contain;
+            }
+        }
+
+        .mx_DecryptionFailureBar_start_headline {
+            grid-area: headline;
+
+            font-weight: $font-semi-bold;
+            font-size: $font-16px;
+            align-self: center;
+        }
+
+        .mx_DecryptionFailureBar_start_message {
+            grid-area: message;
+
+            color: $secondary-content;
+        }
+    }
 }
