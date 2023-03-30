@@ -660,7 +660,6 @@
     "Show avatar changes": "아바타 변경 사항 보이기",
     "Show display name changes": "표시 이름 변경 사항 보이기",
     "Show read receipts sent by other users": "다른 사용자가 읽은 기록 보이기",
-    "Show avatars in user and room mentions": "사용자와 방 언급에서 아바타 보이기",
     "Enable big emoji in chat": "대화에서 큰 이모지 켜기",
     "Send typing notifications": "입력 알림 보내기",
     "Prompt before sending invites to potentially invalid matrix IDs": "잠재적으로 올바르지 않은 Matrix ID로 초대를 보내기 전에 확인",
