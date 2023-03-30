@@ -59,7 +59,7 @@ Unless otherwise specified, the following applies to all code:
 6. Lines are trimmed of all excess whitespace, including blank lines.
 7. Long lines are broken up for readability.
 
-## TypeScript / JavaScript {#typescript-javascript}
+## TypeScript / JavaScript
 
 1. Write TypeScript. Turn JavaScript into TypeScript when working in the area.
 2. Use named exports.
