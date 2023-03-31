@@ -69,7 +69,7 @@ export function useInitialContent(editorStateTransfer: EditorStateTransfer): str
     const mxClient = useMatrixClientContext();
 
     return useMemo<string | undefined>(() => {
-        if (editorStateTransfer && roomContext.room) {
+        if (editorStateTransfer && roomContext.room && mxClient) {
             return parseEditorStateTransfer(editorStateTransfer, roomContext.room, mxClient);
         }
     }, [editorStateTransfer, roomContext, mxClient]);

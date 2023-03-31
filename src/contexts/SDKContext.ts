@@ -38,7 +38,7 @@ import {
     VoiceBroadcastRecordingsStore,
 } from "../voice-broadcast";
 
-export const SDKContext = createContext<SdkContextClass>(undefined);
+export const SDKContext = createContext<SdkContextClass | undefined>(undefined);
 SDKContext.displayName = "SDKContext";
 
 /**

@@ -25,7 +25,7 @@ import React, {
 } from "react";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 
-const MatrixClientContext = createContext<MatrixClient>(undefined);
+const MatrixClientContext = createContext<MatrixClient | undefined>(undefined);
 MatrixClientContext.displayName = "MatrixClientContext";
 export default MatrixClientContext;
 
@@ -33,7 +33,7 @@ export interface MatrixClientProps {
     mxClient: MatrixClient;
 }
 
-export function useMatrixClientContext(): MatrixClient {
+export function useMatrixClientContext(): MatrixClient | undefined {
     return useContext(MatrixClientContext);
 }
 
