@@ -398,16 +398,21 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
 export async function canEncryptToAllUsers(client: MatrixClient, userIds: string[]): Promise<boolean> {
     try {
         const usersDeviceMap = await client.downloadKeys(userIds);
-        // { "@user:host": { "DEVICE": {...}, ... }, ... }
-        return Object.values(usersDeviceMap).every(
-            (userDevices) =>
-                // { "DEVICE": {...}, ... }
-                Object.keys(userDevices).length > 0,
-        );
+
+        // There are no devices at all.
+        if (usersDeviceMap.size === 0) return false;
+
+        for (const devices of usersDeviceMap.values()) {
+            if (devices.size === 0) {
+                return false;
+            }
+        }
     } catch (e) {
         logger.error("Error determining if it's possible to encrypt to all users: ", e);
         return false; // assume not
     }
+
+    return true;
 }
 
 // Similar to ensureDMExists but also adds creation content
