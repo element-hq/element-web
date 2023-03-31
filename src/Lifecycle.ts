@@ -200,7 +200,7 @@ export function attemptTokenLogin(
     }
 
     const homeserver = localStorage.getItem(SSO_HOMESERVER_URL_KEY);
-    const identityServer = localStorage.getItem(SSO_ID_SERVER_URL_KEY);
+    const identityServer = localStorage.getItem(SSO_ID_SERVER_URL_KEY) ?? undefined;
     if (!homeserver) {
         logger.warn("Cannot log in with token: can't determine HS URL to use");
         Modal.createDialog(ErrorDialog, {

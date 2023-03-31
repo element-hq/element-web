@@ -164,7 +164,7 @@ export default class Login {
  */
 export async function sendLoginRequest(
     hsUrl: string,
-    isUrl: string,
+    isUrl: string | undefined,
     loginType: string,
     loginParams: ILoginParams,
 ): Promise<IMatrixClientCreds> {
@@ -177,11 +177,11 @@ export async function sendLoginRequest(
 
     const wellknown = data.well_known;
     if (wellknown) {
-        if (wellknown["m.homeserver"] && wellknown["m.homeserver"]["base_url"]) {
+        if (wellknown["m.homeserver"]?.["base_url"]) {
             hsUrl = wellknown["m.homeserver"]["base_url"];
             logger.log(`Overrode homeserver setting with ${hsUrl} from login response`);
         }
-        if (wellknown["m.identity_server"] && wellknown["m.identity_server"]["base_url"]) {
+        if (wellknown["m.identity_server"]?.["base_url"]) {
             // TODO: should we prompt here?
             isUrl = wellknown["m.identity_server"]["base_url"];
             logger.log(`Overrode IS setting with ${isUrl} from login response`);

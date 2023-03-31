@@ -29,7 +29,7 @@ export function AuthHeaderDisplay({ title, icon, serverPicker, children }: Props
     if (!context) {
         return <></>;
     }
-    const current = context.state.length ? context.state[0] : null;
+    const current = context.state[0] ?? null;
     return (
         <Fragment>
             {current?.icon ?? icon}

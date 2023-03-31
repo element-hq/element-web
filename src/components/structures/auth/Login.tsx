@@ -90,7 +90,7 @@ interface IState {
 
     // used for preserving form values when changing homeserver
     username: string;
-    phoneCountry?: string;
+    phoneCountry: string;
     phoneNumber: string;
 
     // We perform liveliness checks later, but for now suppress the errors.
@@ -126,6 +126,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
             canTryLogin: true,
 
             username: props.defaultUsername ? props.defaultUsername : "",
+            phoneCountry: "",
             phoneNumber: "",
 
             serverIsAlive: true,
@@ -217,7 +218,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
                 let errorText: ReactNode;
 
                 // Some error strings only apply for logging in
-                const usingEmail = username?.indexOf("@") > 0;
+                const usingEmail = username && username.indexOf("@") > 0;
                 if (error.httpStatus === 400 && usingEmail) {
                     errorText = _t("This homeserver does not support login using email address.");
                 } else if (error.errcode === "M_RESOURCE_LIMIT_EXCEEDED") {
