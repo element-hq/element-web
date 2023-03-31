@@ -187,6 +187,11 @@ declare global {
     }
 
     interface Error {
+        // Standard
+        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/cause
+        cause?: unknown;
+
+        // Non-standard
         // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/fileName
         fileName?: string;
         // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/lineNumber
@@ -194,6 +199,22 @@ declare global {
         // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/columnNumber
         columnNumber?: number;
     }
+
+    // We can remove these pieces if we ever update to `target: "es2022"` in our
+    // TypeScript config which supports the new `cause` property, see
+    // https://github.com/vector-im/element-web/issues/24913
+    interface ErrorOptions {
+        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/cause
+        cause?: unknown;
+    }
+
+    interface ErrorConstructor {
+        new (message?: string, options?: ErrorOptions): Error;
+        (message?: string, options?: ErrorOptions): Error;
+    }
+
+    // eslint-disable-next-line no-var
+    var Error: ErrorConstructor;
 
     // https://github.com/microsoft/TypeScript/issues/28308#issuecomment-650802278
     interface AudioWorkletProcessor {

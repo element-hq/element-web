@@ -46,21 +46,49 @@ counterpart.setSeparator("|");
 const FALLBACK_LOCALE = "en";
 counterpart.setFallbackLocale(FALLBACK_LOCALE);
 
-export interface ITranslatableError extends Error {
-    translatedMessage: string;
+interface ErrorOptions {
+    // Because we're mixing the subsitution variables and `cause` into the same object
+    // below, we want them to always explicitly say whether there is an underlying error
+    // or not to avoid typos of "cause" slipping through unnoticed.
+    cause: unknown | undefined;
 }
 
 /**
- * Helper function to create an error which has an English message
- * with a translatedMessage property for use by the consumer.
- * @param {string} message Message to translate.
- * @param {object} variables Variable substitutions, e.g { foo: 'bar' }
- * @returns {Error} The constructed error.
+ * Used to rethrow an error with a user-friendly translatable message while maintaining
+ * access to that original underlying error. Downstream consumers can display the
+ * `translatedMessage` property in the UI and inspect the underlying error with the
+ * `cause` property.
+ *
+ * The error message will display as English in the console and logs so Element
+ * developers can easily understand the error and find the source in the code. It also
+ * helps tools like Sentry deduplicate the error, or just generally searching in
+ * rageshakes to find all instances regardless of the users locale.
+ *
+ * @param message - The untranslated error message text, e.g "Something went wrong with %(foo)s".
+ * @param substitutionVariablesAndCause - Variable substitutions for the translation and
+ * original cause of the error. If there is no cause, just pass `undefined`, e.g { foo:
+ * 'bar', cause: err || undefined }
  */
-export function newTranslatableError(message: string, variables?: IVariables): ITranslatableError {
-    const error = new Error(message) as ITranslatableError;
-    error.translatedMessage = _t(message, variables);
-    return error;
+export class UserFriendlyError extends Error {
+    public readonly translatedMessage: string;
+
+    public constructor(message: string, substitutionVariablesAndCause?: IVariables & ErrorOptions) {
+        const errorOptions = {
+            cause: substitutionVariablesAndCause?.cause,
+        };
+        // Prevent "Could not find /%\(cause\)s/g in x" logs to the console by removing
+        // it from the list
+        const substitutionVariables = { ...substitutionVariablesAndCause };
+        delete substitutionVariables["cause"];
+
+        // Create the error with the English version of the message that we want to show
+        // up in the logs
+        const englishTranslatedMessage = _t(message, { ...substitutionVariables, locale: "en" });
+        super(englishTranslatedMessage, errorOptions);
+
+        // Also provide a translated version of the error in the users locale to display
+        this.translatedMessage = _t(message, substitutionVariables);
+    }
 }
 
 export function getUserLanguage(): string {
@@ -373,12 +401,18 @@ export function replaceByRegexes(text: string, mapping: IVariables | Tags): stri
             }
         }
         if (!matchFoundSomewhere) {
-            // The current regexp did not match anything in the input
-            // Missing matches is entirely possible because you might choose to show some variables only in the case
-            // of e.g. plurals. It's still a bit suspicious, and could be due to an error, so log it.
-            // However, not showing count is so common that it's not worth logging. And other commonly unused variables
-            // here, if there are any.
-            if (regexpString !== "%\\(count\\)s") {
+            if (
+                // The current regexp did not match anything in the input. Missing
+                // matches is entirely possible because you might choose to show some
+                // variables only in the case of e.g. plurals. It's still a bit
+                // suspicious, and could be due to an error, so log it. However, not
+                // showing count is so common that it's not worth logging. And other
+                // commonly unused variables here, if there are any.
+                regexpString !== "%\\(count\\)s" &&
+                // Ignore the `locale` option which can be used to override the locale
+                // in counterpart
+                regexpString !== "%\\(locale\\)s"
+            ) {
                 logger.log(`Could not find ${regexp} in ${text}`);
             }
         }
@@ -652,7 +686,11 @@ function doRegisterTranslations(customTranslations: ICustomTranslations): void {
  * This function should be called *after* registering other translations data to
  * ensure it overrides strings properly.
  */
-export async function registerCustomTranslations(): Promise<void> {
+export async function registerCustomTranslations({
+    testOnlyIgnoreCustomTranslationsCache = false,
+}: {
+    testOnlyIgnoreCustomTranslationsCache?: boolean;
+} = {}): Promise<void> {
     const moduleTranslations = ModuleRunner.instance.allTranslations;
     doRegisterTranslations(moduleTranslations);
 
@@ -661,7 +699,7 @@ export async function registerCustomTranslations(): Promise<void> {
 
     try {
         let json: Optional<ICustomTranslations>;
-        if (Date.now() >= cachedCustomTranslationsExpire) {
+        if (testOnlyIgnoreCustomTranslationsCache || Date.now() >= cachedCustomTranslationsExpire) {
             json = CustomTranslationOptions.lookupFn
                 ? CustomTranslationOptions.lookupFn(lookupUrl)
                 : ((await (await fetch(lookupUrl)).json()) as ICustomTranslations);
