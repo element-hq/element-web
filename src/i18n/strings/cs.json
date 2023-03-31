@@ -185,7 +185,7 @@
     "This phone number is already in use": "Toto telefonní číslo je již používáno",
     "This room is not accessible by remote Matrix servers": "Tato místnost není přístupná vzdáleným Matrix serverům",
     "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.": "Pokusili jste se načíst bod v časové ose místnosti, ale pro zobrazení zpráv z daného časového úseku nemáte oprávnění.",
-    "Tried to load a specific point in this room's timeline, but was unable to find it.": "Pokusili jste se načíst bod v časové ose místnosti, ale nepodařilo se ho najít.",
+    "Tried to load a specific point in this room's timeline, but was unable to find it.": "Pokusili jste se načíst bod na časové ose místnosti, ale nepodařilo se ho najít.",
     "Unable to add email address": "Nepodařilo se přidat e-mailovou adresu",
     "Unable to create widget.": "Nepodařilo se vytvořit widget.",
     "Unable to remove contact information": "Nepodařilo se smazat kontaktní údaje",
@@ -364,7 +364,7 @@
     "Connectivity to the server has been lost.": "Spojení se serverem bylo přerušeno.",
     "Sent messages will be stored until your connection has returned.": "Odeslané zprávy zůstanou uložené, dokud se spojení znovu neobnoví.",
     "Room": "Místnost",
-    "Failed to load timeline position": "Bod v časové ose se nepodařilo načíst",
+    "Failed to load timeline position": "Nepodařilo se načíst pozici na časové ose",
     "Analytics": "Analytické údaje",
     "Labs": "Experimentální funkce",
     "Reject all %(invitedRooms)s invites": "Odmítnutí všech %(invitedRooms)s pozvání",
@@ -3761,5 +3761,8 @@
     "We were unable to find an event looking forwards from %(dateString)s. Try choosing an earlier date.": "Nepodařilo se nám najít událost od data %(dateString)s. Zkuste zvolit dřívější datum.",
     "A network error occurred while trying to find and jump to the given date. Your homeserver might be down or there was just a temporary problem with your internet connection. Please try again. If this continues, please contact your homeserver administrator.": "Při pokusu o vyhledání a přechod na zadané datum došlo k chybě sítě. Váš domovský server může být nefunkční nebo došlo jen k dočasnému problému s internetovým připojením. Zkuste to prosím znovu. Pokud tento problém přetrvává, obraťte se na správce domovského serveru.",
     "Poll history": "Historie hlasování",
-    "User (%(user)s) did not end up as invited to %(roomId)s but no error was given from the inviter utility": "Uživatel (%(user)s) nebyl pozván do %(roomId)s, ale nástroj pro pozvání nezaznamenal žádnou chybu"
+    "User (%(user)s) did not end up as invited to %(roomId)s but no error was given from the inviter utility": "Uživatel (%(user)s) nebyl pozván do %(roomId)s, ale nástroj pro pozvání nezaznamenal žádnou chybu",
+    "Reload": "Znovu načíst",
+    "This may be caused by having the app open in multiple tabs or due to clearing browser data.": "To může být způsobeno otevřením aplikace na více kartách nebo vymazáním dat prohlížeče.",
+    "Database unexpectedly closed": "Databáze byla neočekávaně uzavřena"
 }
