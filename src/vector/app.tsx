@@ -23,7 +23,7 @@ import "matrix-js-sdk/src/browser-index";
 
 import React, { ReactElement } from "react";
 import PlatformPeg from "matrix-react-sdk/src/PlatformPeg";
-import { _td, newTranslatableError } from "matrix-react-sdk/src/languageHandler";
+import { UserFriendlyError } from "matrix-react-sdk/src/languageHandler";
 import AutoDiscoveryUtils from "matrix-react-sdk/src/utils/AutoDiscoveryUtils";
 import { AutoDiscovery } from "matrix-js-sdk/src/autodiscovery";
 import * as Lifecycle from "matrix-react-sdk/src/Lifecycle";
@@ -168,16 +168,14 @@ async function verifyServerConfig(): Promise<IConfigOptions> {
         const incompatibleOptions = [wkConfig, serverName, hsUrl].filter((i) => !!i);
         if (incompatibleOptions.length > 1) {
             // noinspection ExceptionCaughtLocallyJS
-            throw newTranslatableError(
-                _td(
-                    "Invalid configuration: can only specify one of default_server_config, default_server_name, " +
-                        "or default_hs_url.",
-                ),
+            throw new UserFriendlyError(
+                "Invalid configuration: can only specify one of default_server_config, default_server_name, " +
+                    "or default_hs_url.",
             );
         }
         if (incompatibleOptions.length < 1) {
             // noinspection ExceptionCaughtLocallyJS
-            throw newTranslatableError(_td("Invalid configuration: no default server specified."));
+            throw new UserFriendlyError("Invalid configuration: no default server specified.");
         }
 
         if (hsUrl) {
