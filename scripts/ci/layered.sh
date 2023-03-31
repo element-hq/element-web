@@ -18,7 +18,7 @@ scripts/fetchdep.sh matrix-org matrix-js-sdk
 pushd matrix-js-sdk
 [ -n "$JS_SDK_GITHUB_BASE_REF" ] && git fetch --depth 1 origin $JS_SDK_GITHUB_BASE_REF && git checkout $JS_SDK_GITHUB_BASE_REF
 yarn link
-yarn install --pure-lockfile
+yarn install --frozen-lockfile
 popd
 
 # Also set up matrix-analytics-events so we get the latest from
@@ -26,7 +26,7 @@ popd
 scripts/fetchdep.sh matrix-org matrix-analytics-events main
 pushd matrix-analytics-events
 yarn link
-yarn install --pure-lockfile
+yarn install --frozen-lockfile
 yarn build:ts
 popd
 
@@ -34,13 +34,13 @@ popd
 yarn link matrix-js-sdk
 yarn link @matrix-org/analytics-events
 yarn link
-yarn install --pure-lockfile
+yarn install --frozen-lockfile
 
 # Finally, set up element-web
 scripts/fetchdep.sh vector-im element-web
 pushd element-web
 yarn link matrix-js-sdk
 yarn link matrix-react-sdk
-yarn install --pure-lockfile
+yarn install --frozen-lockfile
 yarn build:res
 popd
