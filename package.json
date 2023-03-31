@@ -26,6 +26,9 @@
         "contribute.json"
     ],
     "style": "bundle.css",
+    "matrix_i18n_extra_translation_funcs": [
+        "UserFriendlyError"
+    ],
     "scripts": {
         "i18n": "matrix-gen-i18n",
         "prunei18n": "matrix-prune-i18n",
@@ -141,7 +144,7 @@
         "json-loader": "^0.5.7",
         "loader-utils": "^3.0.0",
         "matrix-mock-request": "^2.5.0",
-        "matrix-web-i18n": "^1.3.0",
+        "matrix-web-i18n": "^1.4.0",
         "mini-css-extract-plugin": "^1",
         "minimist": "^1.2.6",
         "mkdirp": "^2.0.0",
