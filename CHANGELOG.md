@@ -1,3 +1,9 @@
+Changes in [1.11.27](https://github.com/vector-im/element-web/releases/tag/v1.11.27) (2023-03-31)
+=================================================================================================
+
+## 🐛 Bug Fixes
+ * Fix detection of encryption for all users in a room ([\#10487](https://github.com/matrix-org/matrix-react-sdk/pull/10487)). Fixes #24995.
+
 Changes in [1.11.26](https://github.com/vector-im/element-web/releases/tag/v1.11.26) (2023-03-28)
 =================================================================================================
 
