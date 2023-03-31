@@ -1,5 +1,5 @@
 /*
-Copyright 2021 The Matrix.org Foundation C.I.C.
+Copyright 2021 - 2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -32,10 +32,11 @@ import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
 import { RoomHierarchy } from "matrix-js-sdk/src/room-hierarchy";
 import { EventType, RoomType } from "matrix-js-sdk/src/@types/event";
 import { IHierarchyRelation, IHierarchyRoom } from "matrix-js-sdk/src/@types/spaces";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, MatrixError } from "matrix-js-sdk/src/matrix";
 import classNames from "classnames";
 import { sortBy, uniqBy } from "lodash";
 import { GuestAccess, HistoryVisibility } from "matrix-js-sdk/src/@types/partials";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { _t } from "../../languageHandler";
@@ -398,8 +399,19 @@ export const joinRoom = async (cli: MatrixClient, hierarchy: RoomHierarchy, room
         await cli.joinRoom(roomId, {
             viaServers: Array.from(hierarchy.viaMap.get(roomId) || []),
         });
-    } catch (err) {
-        SdkContextClass.instance.roomViewStore.showJoinRoomError(err, roomId);
+    } catch (err: unknown) {
+        if (err instanceof MatrixError) {
+            SdkContextClass.instance.roomViewStore.showJoinRoomError(err, roomId);
+        } else {
+            logger.warn("Got a non-MatrixError while joining room", err);
+            SdkContextClass.instance.roomViewStore.showJoinRoomError(
+                new MatrixError({
+                    error: _t("Unknown error"),
+                }),
+                roomId,
+            );
+        }
+
         return;
     }
 
