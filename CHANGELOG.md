@@ -1,9 +1,15 @@
-Changes in [3.69.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.69.0) (2023-03-28)
+Changes in [3.69.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.69.1) (2023-03-31)
 =====================================================================================================
 
 ## 🐛 Bug Fixes
- * Changes for matrix-js-sdk v24.0.0
- * Changes for matrix-react-sdk v3.69.0
+ * Fix detection of encryption for all users in a room ([\#10487](https://github.com/matrix-org/matrix-react-sdk/pull/10487)). Fixes vector-im/element-web#24995.
+
+Changes in [3.69.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.69.0) (2023-03-28)
+=====================================================================================================
+
+## 🔒 Security
+ * Fixes for [CVE-2023-28427](https://cve.mitre.org/cgi-bin/cvekey.cgi?keyword=CVE-2023-28427) / GHSA-mwq8-fjpf-c2gr
+ * Fixes for [CVE-2023-28103](https://cve.mitre.org/cgi-bin/cvekey.cgi?keyword=CVE-2023-28103) / GHSA-6g43-88cp-w5gv
 
 Changes in [3.68.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.68.0) (2023-03-15)
 =====================================================================================================
