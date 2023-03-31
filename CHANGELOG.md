@@ -1,3 +1,9 @@
+Changes in [3.69.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.69.1) (2023-03-31)
+=====================================================================================================
+
+## 🐛 Bug Fixes
+ * Fix detection of encryption for all users in a room ([\#10487](https://github.com/matrix-org/matrix-react-sdk/pull/10487)). Fixes vector-im/element-web#24995.
+
 Changes in [3.69.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.69.0) (2023-03-28)
 =====================================================================================================
 
