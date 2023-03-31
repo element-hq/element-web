@@ -3761,5 +3761,8 @@
     "We were unable to find an event looking forwards from %(dateString)s. Try choosing an earlier date.": "Alates %(dateString)s ei leidnud me sündmusi ega teateid. Palun proovi valida varasem kuupäev.",
     "A network error occurred while trying to find and jump to the given date. Your homeserver might be down or there was just a temporary problem with your internet connection. Please try again. If this continues, please contact your homeserver administrator.": "Valitud kuupäeva vaate otsimisel ja avamisel tekkis võrguühenduse viga. Kas näiteks sinu koduserver hetkel ei tööta või on ajutisi katkestusi sinu internetiühenduses. Palun proovi mõne aja pärast uuesti. Kui viga kordub veel hiljemgi, siis palun suhtle oma koduserveri haldajaga.",
     "Poll history": "Küsitluste ajalugu",
-    "User (%(user)s) did not end up as invited to %(roomId)s but no error was given from the inviter utility": "Kasutaja %(user)s siiski ei saanud kutset %(roomId)s jututuppa, kuid kutse saatja liides ei kuvanud ka viga"
+    "User (%(user)s) did not end up as invited to %(roomId)s but no error was given from the inviter utility": "Kasutaja %(user)s siiski ei saanud kutset %(roomId)s jututuppa, kuid kutse saatja liides ei kuvanud ka viga",
+    "Reload": "Laadi uuesti",
+    "This may be caused by having the app open in multiple tabs or due to clearing browser data.": "See võib olla seotud asjaoluga, et rakendus on avatud mitmes brauseriaknas korraga või brauseri andmete kustutamise tõttu.",
+    "Database unexpectedly closed": "Andmebaasiühendus sulgus ootamatult"
 }
