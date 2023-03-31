@@ -2823,7 +2823,7 @@
     "You cannot place calls in this browser.": "Vous ne pouvez pas passer d’appels dans ce navigateur.",
     "Calls are unsupported": "Les appels ne sont pas pris en charge",
     "Recent searches": "Recherches récentes",
-    "To search messages, look for this icon at the top of a room <icon/>": "Pour chercher des messages, repérez cette icône en d’un salon <icon/>",
+    "To search messages, look for this icon at the top of a room <icon/>": "Pour chercher des messages, repérez cette icône en haut à droite d'un salon <icon/>",
     "Other searches": "Autres recherches",
     "Public rooms": "Salons public",
     "Use \"%(query)s\" to search": "Utilisez « %(query)s » pour rechercher",
