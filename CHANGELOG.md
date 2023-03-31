@@ -1,3 +1,9 @@
+Changes in [1.11.28](https://github.com/vector-im/element-web/releases/tag/v1.11.28) (2023-03-31)
+=================================================================================================
+
+## 🐛 Bug Fixes
+ * (No changes, version bumped to sync with element-desktop.)
+
 Changes in [1.11.27](https://github.com/vector-im/element-web/releases/tag/v1.11.27) (2023-03-31)
 =================================================================================================
 
