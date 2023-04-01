@@ -3760,5 +3760,9 @@
     "Server returned %(statusCode)s with error code %(errorCode)s": "Le serveur a renvoyé %(statusCode)s avec le code d’erreur %(errorCode)s",
     "We were unable to find an event looking forwards from %(dateString)s. Try choosing an earlier date.": "Nous n’avons pas pu trouver d’événement à partir du %(dateString)s. Essayez avec une date antérieure.",
     "A network error occurred while trying to find and jump to the given date. Your homeserver might be down or there was just a temporary problem with your internet connection. Please try again. If this continues, please contact your homeserver administrator.": "Une erreur réseau s’est produite en tentant de chercher et d’aller à la date choisie. Votre serveur d’accueil est peut-être hors-ligne, ou bien c’est un problème temporaire avec connexion Internet. Veuillez réessayer. Si cela persiste, veuillez contacter l’administrateur de votre serveur d’accueil.",
-    "Poll history": "Historique des sondages"
+    "Poll history": "Historique des sondages",
+    "User (%(user)s) did not end up as invited to %(roomId)s but no error was given from the inviter utility": "L’utilisateur (%(user)s) n’a finalement pas été invité dans %(roomId)s mais aucune erreur n’a été fournie par la routine d’invitation",
+    "Reload": "Recharger",
+    "This may be caused by having the app open in multiple tabs or due to clearing browser data.": "Cela peut être causé par l’application ouverte dans plusieurs onglets, ou après un nettoyage des données du navigateur.",
+    "Database unexpectedly closed": "La base de données s’est fermée de manière inattendue"
 }
