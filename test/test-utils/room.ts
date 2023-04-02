@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { MockedObject } from "jest-mock";
-import { MatrixClient, MatrixEvent, EventType, Room } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, MatrixEvent, EventType, Room, EventTimeline } from "matrix-js-sdk/src/matrix";
 
 import { IRoomState } from "../../src/components/structures/RoomView";
 import { TimelineRenderingType } from "../../src/contexts/RoomContext";
@@ -91,3 +91,12 @@ export function getRoomContext(room: Room, override: Partial<IRoomState>): IRoom
         ...override,
     };
 }
+
+export const setupRoomWithEventsTimeline = (room: Room, events: MatrixEvent[] = []): void => {
+    const timelineSet = room.getUnfilteredTimelineSet();
+    const getTimelineForEventSpy = jest.spyOn(timelineSet, "getTimelineForEvent");
+    const eventTimeline = {
+        getEvents: jest.fn().mockReturnValue(events),
+    } as unknown as EventTimeline;
+    getTimelineForEventSpy.mockReturnValue(eventTimeline);
+};

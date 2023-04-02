@@ -70,7 +70,7 @@ function getTextReplyFallback(mxEvent: MatrixEvent): string {
 }
 
 // exported for tests
-export function createEditContent(model: EditorModel, editedEvent: MatrixEvent): IContent {
+export function createEditContent(model: EditorModel, editedEvent: MatrixEvent, replyToEvent?: MatrixEvent): IContent {
     const isEmote = containsEmote(model);
     if (isEmote) {
         model = stripEmoteCommand(model);
@@ -108,11 +108,7 @@ export function createEditContent(model: EditorModel, editedEvent: MatrixEvent):
     }
 
     // Build the mentions properties for both the content and new_content.
-    //
-    // TODO If this is a reply we need to include all the users from it.
-    if (SettingsStore.getValue("feature_intentional_mentions")) {
-        attachMentions(editedEvent.sender!.userId, contentBody, model, undefined, editedEvent.getContent());
-    }
+    attachMentions(editedEvent.sender!.userId, contentBody, model, replyToEvent, editedEvent.getContent());
     attachRelation(contentBody, { rel_type: "m.replace", event_id: editedEvent.getId() });
 
     return contentBody;
@@ -132,6 +128,7 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
 
     private readonly editorRef = createRef<BasicMessageComposer>();
     private readonly dispatcherRef: string;
+    private readonly replyToEvent?: MatrixEvent;
     private model: EditorModel;
 
     public constructor(props: IEditMessageComposerProps, context: React.ContextType<typeof RoomContext>) {
@@ -141,7 +138,9 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
         const isRestored = this.createEditorModel();
         const ev = this.props.editState.getEvent();
 
-        const editContent = createEditContent(this.model, ev);
+        this.replyToEvent = ev.replyEventId ? this.context.room?.findEventById(ev.replyEventId) : undefined;
+
+        const editContent = createEditContent(this.model, ev, this.replyToEvent);
         this.state = {
             saveDisabled: !isRestored || !this.isContentModified(editContent["m.new_content"]),
         };
@@ -310,7 +309,7 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
             const position = this.model.positionForOffset(caret.offset, caret.atNodeEnd);
             this.editorRef.current.replaceEmoticon(position, REGEX_EMOTICON);
         }
-        const editContent = createEditContent(this.model, editedEvent);
+        const editContent = createEditContent(this.model, editedEvent, this.replyToEvent);
         const newContent = editContent["m.new_content"];
 
         let shouldSend = true;
