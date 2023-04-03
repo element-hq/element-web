@@ -232,7 +232,7 @@ jobs:
             - tests
         environment: Kiwi
         runs-on: ubuntu-latest
-        if: ${{ needs.prepare.outputs.kiwi_enable }}
+        if: ${{ needs.prepare.outputs.kiwi_enable == '1' }}
         steps:
             - name: Download all zip files
               uses: actions/download-artifact@v3
