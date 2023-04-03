@@ -47,7 +47,6 @@ import { MapperOpts } from "matrix-js-sdk/src/event-mapper";
 
 import type { GroupCall } from "matrix-js-sdk/src/webrtc/groupCall";
 import { MatrixClientPeg as peg } from "../../src/MatrixClientPeg";
-import { makeType } from "../../src/utils/TypeUtils";
 import { ValidatedServerConfig } from "../../src/utils/ValidatedServerConfig";
 import { EnhancedMap } from "../../src/utils/maps";
 import { AsyncStoreWithClient } from "../../src/stores/AsyncStoreWithClient";
@@ -591,13 +590,13 @@ export function mkStubRoom(
     } as unknown as Room;
 }
 
-export function mkServerConfig(hsUrl: string, isUrl: string) {
-    return makeType(ValidatedServerConfig, {
+export function mkServerConfig(hsUrl: string, isUrl: string): ValidatedServerConfig {
+    return {
         hsUrl,
         hsName: "TEST_ENVIRONMENT",
         hsNameIsDifferent: false, // yes, we lie
         isUrl,
-    });
+    } as ValidatedServerConfig;
 }
 
 // These methods make some use of some private methods on the AsyncStoreWithClient to simplify getting into a consistent

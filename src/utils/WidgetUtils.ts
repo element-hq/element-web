@@ -119,6 +119,7 @@ export default class WidgetUtils {
                 if (
                     testUrl.protocol === scalarUrl.protocol &&
                     testUrl.host === scalarUrl.host &&
+                    scalarUrl.pathname &&
                     testUrl.pathname?.startsWith(scalarUrl.pathname)
                 ) {
                     return true;

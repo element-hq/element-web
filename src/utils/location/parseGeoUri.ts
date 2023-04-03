@@ -28,16 +28,23 @@ export const parseGeoUri = (uri: string): GeolocationCoordinates | undefined => 
     if (!m) return;
     const parts = m[1].split(";");
     const coords = parts[0].split(",");
-    let uncertainty: number | null;
+    let uncertainty: number | null | undefined = undefined;
     for (const param of parts.slice(1)) {
         const m = param.match(/u=(.*)/);
         if (m) uncertainty = parse(m[1]);
     }
+    const latitude = parse(coords[0]);
+    const longitude = parse(coords[1]);
+
+    if (latitude === null || longitude === null) {
+        return;
+    }
+
     return {
-        latitude: parse(coords[0]),
-        longitude: parse(coords[1]),
+        latitude: latitude!,
+        longitude: longitude!,
         altitude: parse(coords[2]),
-        accuracy: uncertainty,
+        accuracy: uncertainty!,
         altitudeAccuracy: null,
         heading: null,
         speed: null,

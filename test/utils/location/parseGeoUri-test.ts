@@ -21,6 +21,14 @@ describe("parseGeoUri", () => {
         expect(parseGeoUri("")).toBeFalsy();
     });
 
+    it("returns undefined if latitude is not a number", () => {
+        expect(parseGeoUri("geo:ABCD,16.3695,183")).toBeUndefined();
+    });
+
+    it("returns undefined if longitude is not a number", () => {
+        expect(parseGeoUri("geo:48.2010,EFGH,183")).toBeUndefined();
+    });
+
     // We use some examples from the spec, but don't check semantics
     // like two textually-different URIs being equal, since we are
     // just a humble parser.

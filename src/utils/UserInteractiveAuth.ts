@@ -24,7 +24,7 @@ type FunctionWithUIA<R, A> = (auth?: IAuthData, ...args: A[]) => Promise<UIAResp
 
 export function wrapRequestWithDialog<R, A = any>(
     requestFunction: FunctionWithUIA<R, A>,
-    opts: Omit<InteractiveAuthDialogProps, "makeRequest" | "onFinished">,
+    opts: Omit<InteractiveAuthDialogProps<R>, "makeRequest" | "onFinished">,
 ): (...args: A[]) => Promise<R> {
     return async function (...args): Promise<R> {
         return new Promise((resolve, reject) => {

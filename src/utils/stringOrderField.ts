@@ -120,7 +120,7 @@ export const reorderLexicographically = (
         // verify the right move would be sufficient
         if (
             rightBoundIdx === newOrder.length - 1 &&
-            (newOrder[rightBoundIdx] ? stringToBase(newOrder[rightBoundIdx].order) : BigInt(Number.MAX_VALUE)) -
+            (newOrder[rightBoundIdx]?.order ? stringToBase(newOrder[rightBoundIdx].order!) : BigInt(Number.MAX_VALUE)) -
                 prevBase <=
                 rightBoundIdx - toIndex
         ) {

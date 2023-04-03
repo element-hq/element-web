@@ -20,7 +20,6 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { IClientWellKnown } from "matrix-js-sdk/src/matrix";
 
 import { _t, UserFriendlyError } from "../languageHandler";
-import { makeType } from "./TypeUtils";
 import SdkConfig from "../SdkConfig";
 import { ValidatedServerConfig } from "./ValidatedServerConfig";
 
@@ -43,7 +42,7 @@ export default class AutoDiscoveryUtils {
      * @param {string | Error} error The error to check
      * @returns {boolean} True if the error is a liveliness error.
      */
-    public static isLivelinessError(error: string | Error): boolean {
+    public static isLivelinessError(error?: string | Error | null): boolean {
         if (!error) return false;
         return !!LIVELINESS_DISCOVERY_ERRORS.find((e) =>
             typeof error === "string" ? e === error : e === error.message,
@@ -197,7 +196,7 @@ export default class AutoDiscoveryUtils {
     ): ValidatedServerConfig {
         if (!discoveryResult || !discoveryResult["m.homeserver"]) {
             // This shouldn't happen without major misconfiguration, so we'll log a bit of information
-            // in the log so we can find this bit of codee but otherwise tell teh user "it broke".
+            // in the log so we can find this bit of code but otherwise tell the user "it broke".
             logger.error("Ended up in a state of not knowing which homeserver to connect to.");
             throw new UserFriendlyError("Unexpected error resolving homeserver configuration");
         }
@@ -216,7 +215,7 @@ export default class AutoDiscoveryUtils {
         // of Element.
         let preferredIdentityUrl = defaultConfig && defaultConfig["isUrl"];
         if (isResult && isResult.state === AutoDiscovery.SUCCESS) {
-            preferredIdentityUrl = isResult["base_url"];
+            preferredIdentityUrl = isResult["base_url"] ?? undefined;
         } else if (isResult && isResult.state !== AutoDiscovery.PROMPT) {
             logger.error("Error determining preferred identity server URL:", isResult);
             if (isResult.state === AutoDiscovery.FAIL_ERROR) {
@@ -244,6 +243,12 @@ export default class AutoDiscoveryUtils {
         }
 
         const preferredHomeserverUrl = hsResult["base_url"];
+
+        if (!preferredHomeserverUrl) {
+            logger.error("No homeserver URL configured");
+            throw new UserFriendlyError("Unexpected error resolving homeserver configuration");
+        }
+
         let preferredHomeserverName = serverName ? serverName : hsResult["server_name"];
 
         const url = new URL(preferredHomeserverUrl);
@@ -255,7 +260,7 @@ export default class AutoDiscoveryUtils {
             throw new UserFriendlyError("Unexpected error resolving homeserver configuration");
         }
 
-        return makeType(ValidatedServerConfig, {
+        return {
             hsUrl: preferredHomeserverUrl,
             hsName: preferredHomeserverName,
             hsNameIsDifferent: url.hostname !== preferredHomeserverName,
@@ -263,6 +268,6 @@ export default class AutoDiscoveryUtils {
             isDefault: false,
             warning: hsResult.error,
             isNameResolvable: !isSynthetic,
-        });
+        } as ValidatedServerConfig;
     }
 }

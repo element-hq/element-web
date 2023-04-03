@@ -102,7 +102,10 @@ export class MediaEventHelper implements IDestroyable {
             }
         }
 
-        return fetch(this.media.thumbnailHttp).then((r) => r.blob());
+        const thumbnailHttp = this.media.thumbnailHttp;
+        if (!thumbnailHttp) return Promise.resolve(null);
+
+        return fetch(thumbnailHttp).then((r) => r.blob());
     };
 
     public static isEligible(event: MatrixEvent): boolean {

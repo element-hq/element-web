@@ -61,6 +61,12 @@ export async function leaveRoomBehaviour(roomId: string, retry = true, spinner =
     }
 
     const room = cli.getRoom(roomId);
+
+    // should not encounter this
+    if (!room) {
+        throw new Error(`Expected to find room for id ${roomId}`);
+    }
+
     // await any queued messages being sent so that they do not fail
     await Promise.all(
         room

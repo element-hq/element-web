@@ -16,7 +16,7 @@ limitations under the License.
 
 import { mocked, Mocked } from "jest-mock";
 import { logger } from "matrix-js-sdk/src/logger";
-import { ClientEvent, EventType, IContent, MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { ClientEvent, EventType, IContent, MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 
 import DMRoomMap from "../../src/utils/DMRoomMap";
 import { mkEvent, stubClient } from "../test-utils";
@@ -135,6 +135,58 @@ describe("DMRoomMap", () => {
 
         it("getRoomIds should only return the valid items", () => {
             expect(dmRoomMap.getRoomIds()).toEqual(new Set([roomId1, roomId2, roomId4]));
+        });
+    });
+
+    describe("getUniqueRoomsWithIndividuals()", () => {
+        const bigRoom = {
+            roomId: "!bigRoom:server.org",
+            getInvitedAndJoinedMemberCount: jest.fn().mockReturnValue(5000),
+        } as unknown as Room;
+        const dmWithBob = {
+            roomId: "!dmWithBob:server.org",
+            getInvitedAndJoinedMemberCount: jest.fn().mockReturnValue(2),
+        } as unknown as Room;
+        const dmWithCharlie = {
+            roomId: "!dmWithCharlie:server.org",
+            getInvitedAndJoinedMemberCount: jest.fn().mockReturnValue(2),
+        } as unknown as Room;
+        const smallRoom = {
+            roomId: "!smallRoom:server.org",
+            getInvitedAndJoinedMemberCount: jest.fn().mockReturnValue(3),
+        } as unknown as Room;
+
+        const mDirectContent = {
+            "@bob:server.org": [bigRoom.roomId, dmWithBob.roomId, smallRoom.roomId],
+            "@charlie:server.org": [dmWithCharlie.roomId, smallRoom.roomId],
+        };
+
+        beforeEach(() => {
+            client.getAccountData.mockReturnValue(mkMDirectEvent(mDirectContent));
+            client.getRoom.mockImplementation((roomId: string) =>
+                [bigRoom, smallRoom, dmWithCharlie, dmWithBob].find((room) => room.roomId === roomId),
+            );
+        });
+
+        it("returns an empty object when room map has not been populated", () => {
+            const instance = new DMRoomMap(client);
+            expect(instance.getUniqueRoomsWithIndividuals()).toEqual({});
+        });
+
+        it("returns map of users to rooms with 2 members", () => {
+            const dmRoomMap = new DMRoomMap(client);
+            dmRoomMap.start();
+            expect(dmRoomMap.getUniqueRoomsWithIndividuals()).toEqual({
+                "@bob:server.org": dmWithBob,
+                "@charlie:server.org": dmWithCharlie,
+            });
+        });
+
+        it("excludes rooms that are not found by matrixClient", () => {
+            client.getRoom.mockReset().mockReturnValue(undefined);
+            const dmRoomMap = new DMRoomMap(client);
+            dmRoomMap.start();
+            expect(dmRoomMap.getUniqueRoomsWithIndividuals()).toEqual({});
         });
     });
 });

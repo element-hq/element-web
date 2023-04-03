@@ -65,6 +65,9 @@ export const lookupThreePids = async (
     if (threePids.length === 0) return [];
 
     const token = await client.identityServer.getAccessToken();
+
+    if (!token) return [];
+
     const lookedUp = await client.bulkLookupThreePids(
         threePids.map((t) => [t.isEmail ? "email" : "msisdn", t.userId]),
         token,

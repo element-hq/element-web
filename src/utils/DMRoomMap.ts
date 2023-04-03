@@ -103,8 +103,6 @@ export default class DMRoomMap {
     }
 
     private onAccountData = (ev: MatrixEvent): void => {
-        console.log("onAccountData");
-
         if (ev.getType() == EventType.Direct) {
             this.setMDirectFromContent(ev.getContent());
             this.userToRooms = null;
@@ -207,13 +205,16 @@ export default class DMRoomMap {
 
     public getUniqueRoomsWithIndividuals(): { [userId: string]: Room } {
         if (!this.roomToUser) return {}; // No rooms means no map.
-        return Object.keys(this.roomToUser)
-            .map((r) => ({ userId: this.getUserIdForRoomId(r), room: this.matrixClient.getRoom(r) }))
-            .filter((r) => r.userId && r.room?.getInvitedAndJoinedMemberCount() === 2)
-            .reduce((obj, r) => {
-                obj[r.userId] = r.room;
-                return obj;
-            }, {} as Record<string, Room>);
+        // map roomToUser to valid rooms with two participants
+        return Object.keys(this.roomToUser).reduce((acc, roomId: string) => {
+            const userId = this.getUserIdForRoomId(roomId);
+            const room = this.matrixClient.getRoom(roomId);
+            const hasTwoMembers = room?.getInvitedAndJoinedMemberCount() === 2;
+            if (userId && room && hasTwoMembers) {
+                acc[userId] = room;
+            }
+            return acc;
+        }, {} as Record<string, Room>);
     }
 
     /**
@@ -236,9 +237,7 @@ export default class DMRoomMap {
                 // to avoid multiple devices fighting to correct
                 // the account data, only try to send the corrected
                 // version once.
-                logger.warn(
-                    `Invalid m.direct account data detected ` + `(self-chats that shouldn't be), patching it up.`,
-                );
+                logger.warn(`Invalid m.direct account data detected (self-chats that shouldn't be), patching it up.`);
                 if (neededPatching && !this.hasSentOutPatchDirectAccountDataPatch) {
                     this.hasSentOutPatchDirectAccountDataPatch = true;
                     this.matrixClient.setAccountData(EventType.Direct, userToRooms);
