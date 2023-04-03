@@ -3703,5 +3703,10 @@
     "Connecting to integration manager…": "Kontaktar integrationshanteraren …",
     "Saving…": "Sparar …",
     "Creating…": "Skapar …",
-    "Starting export process…": "Startar exportprocessen …"
+    "Starting export process…": "Startar exportprocessen …",
+    "User (%(user)s) did not end up as invited to %(roomId)s but no error was given from the inviter utility": "Användaren (%(user)s) blev inte inbjuden till %(roomId)s, men inget fel gavs av inbjudningsverktyget",
+    "Use your account to continue.": "Använd ditt konto för att fortsätta.",
+    "Reload": "Ladda om",
+    "This may be caused by having the app open in multiple tabs or due to clearing browser data.": "Det här kan orsakas av att ha appen öppen i flera flikar eller av rensning av webbläsardata.",
+    "Database unexpectedly closed": "Databasen stängdes oväntat"
 }
