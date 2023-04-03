@@ -91,10 +91,13 @@ describe("FilePanel", () => {
                 cy.contains(".mx_EventTile_last[data-layout='group'] .mx_MFileBody", ".json").should("exist");
             });
 
+            // Assert that the file panel is opened inside mx_RightPanel and visible
+            cy.get(".mx_RightPanel .mx_FilePanel").should("be.visible");
+
             cy.get(".mx_FilePanel").within(() => {
                 cy.get(".mx_RoomView_MessageList").within(() => {
                     // Assert that data-layout attribute is not applied to file tiles on the panel
-                    cy.get(".mx_EventTile[data-layout='group']").should("not.exist");
+                    cy.get(".mx_EventTile[data-layout]").should("not.exist");
 
                     // Assert that all of the file tiles are rendered
                     cy.get(".mx_EventTile").should("have.length", 3);
@@ -132,13 +135,42 @@ describe("FilePanel", () => {
                         cy.contains(".mx_MFileBody_info_filename", "matrix-org");
                     });
                 });
+            });
 
-                // Exclude timestamps and read markers from snapshot
-                // FIXME: hide mx_SeekBar because flaky - see https://github.com/vector-im/element-web/issues/24897
-                //   Remove this once https://github.com/vector-im/element-web/issues/24898 is fixed.
-                const percyCSS =
-                    ".mx_MessageTimestamp, .mx_RoomView_myReadMarker, .mx_SeekBar { visibility: hidden !important; }";
-                cy.get(".mx_RoomView_MessageList").percySnapshotElement("File tiles on FilePanel", { percyCSS });
+            // Make the viewport tall enough to display all of the file tiles on FilePanel
+            cy.viewport(660, 1000);
+
+            cy.get(".mx_FilePanel").within(() => {
+                // In case the panel is scrollable on the resized viewport
+                cy.get(".mx_ScrollPanel").scrollTo("bottom", { ensureScrollable: false });
+
+                // Assert that the value for flexbox is applied
+                cy.get(".mx_ScrollPanel .mx_RoomView_MessageList").should("have.css", "justify-content", "flex-end");
+
+                // Assert that all of the file tiles are visible before taking a snapshot
+                cy.get(".mx_RoomView_MessageList").within(() => {
+                    cy.get(".mx_MImageBody").should("be.visible"); // top
+                    cy.get(".mx_MAudioBody").should("be.visible"); // middle
+                    cy.get(".mx_EventTile_last").within(() => {
+                        // bottom
+                        cy.get(".mx_EventTile_senderDetails").within(() => {
+                            cy.get(".mx_DisambiguatedProfile").should("be.visible");
+                            cy.get(".mx_MessageTimestamp").should("be.visible");
+                        });
+                    });
+                });
+            });
+
+            // Exclude timestamps and read markers from snapshot
+            // FIXME: hide mx_SeekBar because flaky - see https://github.com/vector-im/element-web/issues/24897
+            //   Remove this once https://github.com/vector-im/element-web/issues/24898 is fixed.
+            const percyCSS =
+                ".mx_MessageTimestamp, .mx_RoomView_myReadMarker, .mx_SeekBar { visibility: hidden !important; }";
+
+            // Take a snapshot of file tiles list on FilePanel
+            cy.get(".mx_FilePanel .mx_RoomView_MessageList").percySnapshotElement("File tiles list on FilePanel", {
+                percyCSS,
+                widths: [250], // magic number, should be around the default width
             });
         });
 
