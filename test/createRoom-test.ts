@@ -161,10 +161,16 @@ describe("canEncryptToAllUsers", () => {
         client = mocked(stubClient());
     });
 
-    it("should return false if download keys does not return any user", async () => {
+    it("should return true if userIds is empty", async () => {
+        client.downloadKeys.mockResolvedValue(new Map());
+        const result = await canEncryptToAllUsers(client, []);
+        expect(result).toBe(true);
+    });
+
+    it("should return true if download keys does not return any user", async () => {
         client.downloadKeys.mockResolvedValue(new Map());
         const result = await canEncryptToAllUsers(client, [user1Id, user2Id]);
-        expect(result).toBe(false);
+        expect(result).toBe(true);
     });
 
     it("should return false if none of the users has a device", async () => {
