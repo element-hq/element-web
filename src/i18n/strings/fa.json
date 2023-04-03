@@ -1828,7 +1828,6 @@
     "This event could not be displayed": "امکان نمایش این رخداد وجود ندارد",
     "Edit message": "ویرایش پیام",
     "Send as message": "ارسال به عنوان پیام",
-    "Show avatars in user and room mentions": "نمایش نمایه‌ها هنگام اشاره‌کردن به فرد یا اتاق",
     "Jump to the bottom of the timeline when you send a message": "زمانی که پیام ارسال می‌کنید، به صورت خودکار به آخرین پیام پرش کن",
     "Show line numbers in code blocks": "شماره‌ی خط‌ها را در بلاک‌های کد نمایش بده",
     "Expand code blocks by default": "بلاک‌های کد را به صورت پیش‌فرض کامل نشان بده",
