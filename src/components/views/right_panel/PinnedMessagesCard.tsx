@@ -106,7 +106,7 @@ const PinnedMessagesCard: React.FC<IProps> = ({ room, onClose, permalinkCreator 
         const newlyRead = pinnedEventIds.filter((id) => !readPinnedEvents.has(id));
         if (newlyRead.length > 0) {
             // clear out any read pinned events which no longer are pinned
-            cli.setRoomAccountData(room.roomId, ReadPinsEventId, {
+            cli?.setRoomAccountData(room.roomId, ReadPinsEventId, {
                 event_ids: pinnedEventIds,
             });
         }

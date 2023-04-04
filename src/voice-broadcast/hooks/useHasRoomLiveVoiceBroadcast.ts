@@ -26,7 +26,7 @@ export const useHasRoomLiveVoiceBroadcast = (room: Room): boolean => {
     const [hasLiveVoiceBroadcast, setHasLiveVoiceBroadcast] = useState(false);
 
     const update = useMemo(() => {
-        return sdkContext.client
+        return sdkContext?.client
             ? () => {
                   hasRoomLiveVoiceBroadcast(sdkContext.client!, room).then(
                       ({ hasBroadcast }) => {

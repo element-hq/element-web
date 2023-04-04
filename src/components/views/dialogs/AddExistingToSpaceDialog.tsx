@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactElement, ReactNode, useContext, useMemo, useRef, useState } from "react";
+import React, { ReactElement, ReactNode, RefObject, useContext, useMemo, useRef, useState } from "react";
 import classNames from "classnames";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { sleep } from "matrix-js-sdk/src/utils";
@@ -140,11 +140,12 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
     const cli = useContext(MatrixClientContext);
     const msc3946ProcessDynamicPredecessor = useSettingValue<boolean>("feature_dynamic_room_predecessors");
     const visibleRooms = useMemo(
-        () => cli.getVisibleRooms(msc3946ProcessDynamicPredecessor).filter((r) => r.getMyMembership() === "join"),
+        () =>
+            cli?.getVisibleRooms(msc3946ProcessDynamicPredecessor).filter((r) => r.getMyMembership() === "join") ?? [],
         [cli, msc3946ProcessDynamicPredecessor],
     );
 
-    const scrollRef = useRef<AutoHideScrollbar<"div">>();
+    const scrollRef = useRef() as RefObject<AutoHideScrollbar<"div">>;
     const [scrollState, setScrollState] = useState<IScrollState>({
         // these are estimates which update as soon as it mounts
         scrollTop: 0,
@@ -212,7 +213,7 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
 
                     throw e;
                 });
-                setProgress((i) => i + 1);
+                setProgress((i) => (i ?? 0) + 1);
             } catch (e) {
                 logger.error("Failed to add rooms to space", e);
                 error = e;
@@ -305,13 +306,15 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
 
     const onScroll = (): void => {
         const body = scrollRef.current?.containerRef.current;
+        if (!body) return;
         setScrollState({
             scrollTop: body.scrollTop,
             height: body.clientHeight,
         });
     };
 
-    const wrappedRef = (body: HTMLDivElement): void => {
+    const wrappedRef = (body: HTMLDivElement | null): void => {
+        if (!body) return;
         setScrollState({
             scrollTop: body.scrollTop,
             height: body.clientHeight,

@@ -185,7 +185,7 @@ describe("StopGapWidgetDriver", () => {
             const aliceMobile = new DeviceInfo("aliceMobile");
             const bobDesktop = new DeviceInfo("bobDesktop");
 
-            mocked(client.crypto.deviceList).downloadKeys.mockResolvedValue(
+            mocked(client.crypto!.deviceList).downloadKeys.mockResolvedValue(
                 new Map([
                     [
                         "@alice:example.org",

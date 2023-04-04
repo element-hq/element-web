@@ -475,8 +475,8 @@ function isHostnameIpAddress(hostname: string): boolean {
     return isIp(hostname);
 }
 
-export const calculateRoomVia = (room: Room): string[] | undefined => {
+export const calculateRoomVia = (room: Room): string[] => {
     const permalinkCreator = new RoomPermalinkCreator(room);
     permalinkCreator.load();
-    return permalinkCreator.serverCandidates;
+    return permalinkCreator.serverCandidates ?? [];
 };

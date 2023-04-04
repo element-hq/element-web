@@ -365,7 +365,7 @@ describe("LegacyCallHandler", () => {
         fakeCall!.getRemoteAssertedIdentity = jest.fn().mockReturnValue({
             id: NATIVE_BOB,
         });
-        fakeCall!.emit(CallEvent.AssertedIdentityChanged, fakeCall);
+        fakeCall!.emit(CallEvent.AssertedIdentityChanged, fakeCall!);
 
         // Now set the config option
         SdkConfig.add({
@@ -378,7 +378,7 @@ describe("LegacyCallHandler", () => {
         fakeCall!.getRemoteAssertedIdentity = jest.fn().mockReturnValue({
             id: NATIVE_CHARLIE,
         });
-        fakeCall!.emit(CallEvent.AssertedIdentityChanged, fakeCall);
+        fakeCall!.emit(CallEvent.AssertedIdentityChanged, fakeCall!);
 
         await roomChangePromise;
         callHandler.removeAllListeners();
@@ -624,7 +624,7 @@ describe("LegacyCallHandler without third party protocols", () => {
 
             // call added to call map
             expect(callHandler.getCallForRoom(roomId)).toEqual(call);
-            call.emit(CallEvent.State, CallState.Ringing, CallState.Connected, fakeCall);
+            call.emit(CallEvent.State, CallState.Ringing, CallState.Connected, fakeCall!);
 
             // ringer audio element started
             expect(mockAudioElement.play).toHaveBeenCalled();
@@ -641,7 +641,7 @@ describe("LegacyCallHandler without third party protocols", () => {
 
             // call added to call map
             expect(callHandler.getCallForRoom(roomId)).toEqual(call);
-            call.emit(CallEvent.State, CallState.Ringing, CallState.Connected, fakeCall);
+            call.emit(CallEvent.State, CallState.Ringing, CallState.Connected, fakeCall!);
 
             // ringer audio element started
             expect(mockAudioElement.play).not.toHaveBeenCalled();

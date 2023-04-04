@@ -57,7 +57,7 @@ export interface IRightPanelCard {
 }
 
 export interface IRightPanelCardStored {
-    phase: RightPanelPhases;
+    phase: RightPanelPhases | null;
     state?: IRightPanelCardStateStored;
 }
 

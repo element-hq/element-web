@@ -32,12 +32,12 @@ import InteractiveAuthDialog from "../InteractiveAuthDialog";
 interface IProps {
     accountPassword?: string;
     tokenLogin?: boolean;
-    onFinished?: (success?: boolean) => void;
+    onFinished: (success?: boolean) => void;
 }
 
 interface IState {
     error: Error | null;
-    canUploadKeysWithPasswordOnly?: boolean;
+    canUploadKeysWithPasswordOnly: boolean | null;
     accountPassword: string;
 }
 
@@ -73,7 +73,7 @@ export default class CreateCrossSigningDialog extends React.PureComponent<IProps
 
     private async queryKeyUploadAuth(): Promise<void> {
         try {
-            await MatrixClientPeg.get().uploadDeviceSigningKeys(null, {} as CrossSigningKeys);
+            await MatrixClientPeg.get().uploadDeviceSigningKeys(undefined, {} as CrossSigningKeys);
             // We should never get here: the server should always require
             // UI auth to upload device signing keys. If we do, we upload
             // no keys which would be a no-op.

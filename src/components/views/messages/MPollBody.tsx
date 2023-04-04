@@ -236,7 +236,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
      * @returns userId -> UserVote
      */
     private collectUserVotes(): Map<string, UserVote> {
-        if (!this.state.voteRelations) {
+        if (!this.state.voteRelations || !this.context) {
             return new Map<string, UserVote>();
         }
         return collectUserVotes(allVotes(this.state.voteRelations), this.context.getUserId(), this.state.selected);

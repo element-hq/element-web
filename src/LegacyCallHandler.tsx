@@ -905,7 +905,7 @@ export default class LegacyCallHandler extends EventEmitter {
 
         const timeUntilTurnCresExpire = MatrixClientPeg.get().getTurnServersExpiry() - Date.now();
         logger.log("Current turn creds expire in " + timeUntilTurnCresExpire + " ms");
-        const call = MatrixClientPeg.get().createCall(mappedRoomId);
+        const call = MatrixClientPeg.get().createCall(mappedRoomId)!;
 
         try {
             this.addCallForRoom(roomId, call);

@@ -163,8 +163,9 @@ describe("DMRoomMap", () => {
 
         beforeEach(() => {
             client.getAccountData.mockReturnValue(mkMDirectEvent(mDirectContent));
-            client.getRoom.mockImplementation((roomId: string) =>
-                [bigRoom, smallRoom, dmWithCharlie, dmWithBob].find((room) => room.roomId === roomId),
+            client.getRoom.mockImplementation(
+                (roomId: string) =>
+                    [bigRoom, smallRoom, dmWithCharlie, dmWithBob].find((room) => room.roomId === roomId) ?? null,
             );
         });
 
@@ -183,7 +184,7 @@ describe("DMRoomMap", () => {
         });
 
         it("excludes rooms that are not found by matrixClient", () => {
-            client.getRoom.mockReset().mockReturnValue(undefined);
+            client.getRoom.mockReset().mockReturnValue(null);
             const dmRoomMap = new DMRoomMap(client);
             dmRoomMap.start();
             expect(dmRoomMap.getUniqueRoomsWithIndividuals()).toEqual({});

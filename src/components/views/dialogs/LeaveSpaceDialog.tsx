@@ -23,6 +23,7 @@ import DialogButtons from "../elements/DialogButtons";
 import BaseDialog from "../dialogs/BaseDialog";
 import SpaceStore from "../../../stores/spaces/SpaceStore";
 import SpaceChildrenPicker from "../spaces/SpaceChildrenPicker";
+import { filterBoolean } from "../../../utils/arrays";
 
 interface IProps {
     space: Room;
@@ -30,8 +31,8 @@ interface IProps {
 }
 
 const isOnlyAdmin = (room: Room): boolean => {
-    const userId = room.client.getUserId();
-    if (room.getMember(userId).powerLevelNorm !== 100) {
+    const userId = room.client.getSafeUserId();
+    if (room.getMember(userId)?.powerLevelNorm !== 100) {
         return false; // user is not an admin
     }
     return room.getJoinedMembers().every((member) => {
@@ -51,9 +52,7 @@ const LeaveSpaceDialog: React.FC<IProps> = ({ space, onFinished }) => {
             },
             false,
         );
-        return Array.from(roomSet)
-            .map((roomId) => space.client.getRoom(roomId))
-            .filter(Boolean);
+        return filterBoolean(Array.from(roomSet).map((roomId) => space.client.getRoom(roomId)));
     }, [space]);
     const [roomsToLeave, setRoomsToLeave] = useState<Room[]>([]);
     const selectedRooms = useMemo(() => new Set(roomsToLeave), [roomsToLeave]);

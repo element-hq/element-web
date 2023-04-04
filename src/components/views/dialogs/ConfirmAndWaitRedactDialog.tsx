@@ -29,7 +29,7 @@ interface IProps {
 
 interface IState {
     isRedacting: boolean;
-    redactionErrorCode: string | number;
+    redactionErrorCode: string | number | null;
 }
 
 /*
