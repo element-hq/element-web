@@ -202,7 +202,7 @@ describe("Sliding Sync", () => {
 
         // disable notifs in this room (TODO: CS API call?)
         cy.contains(".mx_RoomTile", "Test Room").find(".mx_RoomTile_notificationsButton").click({ force: true });
-        cy.contains("Off").click();
+        cy.contains("Mute room").click();
 
         // create a new room so we know when the message has been received as it'll re-shuffle the room list
         cy.createRoom({
