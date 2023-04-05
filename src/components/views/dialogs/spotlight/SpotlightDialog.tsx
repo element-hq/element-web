@@ -54,7 +54,6 @@ import { useUserDirectory } from "../../../../hooks/useUserDirectory";
 import { getKeyBindingsManager } from "../../../../KeyBindingsManager";
 import { _t } from "../../../../languageHandler";
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
-import Modal from "../../../../Modal";
 import { PosthogAnalytics } from "../../../../PosthogAnalytics";
 import { getCachedRoomIDForAlias } from "../../../../RoomAliasCache";
 import { showStartChatInviteDialog } from "../../../../RoomInvite";
@@ -81,14 +80,12 @@ import LabelledCheckbox from "../../elements/LabelledCheckbox";
 import Spinner from "../../elements/Spinner";
 import NotificationBadge from "../../rooms/NotificationBadge";
 import BaseDialog from "../BaseDialog";
-import FeedbackDialog from "../FeedbackDialog";
 import { Option } from "./Option";
 import { PublicRoomResultDetails } from "./PublicRoomResultDetails";
 import { RoomResultContextMenus } from "./RoomResultContextMenus";
 import { RoomContextDetails } from "../../rooms/RoomContextDetails";
 import { TooltipOption } from "./TooltipOption";
 import { isLocalRoom } from "../../../../utils/localRoom/isLocalRoom";
-import { shouldShowFeedback } from "../../../../utils/Feedback";
 import RoomAvatar from "../../avatars/RoomAvatar";
 import { useFeatureEnabled } from "../../../../hooks/useSettings";
 import { filterBoolean } from "../../../../utils/arrays";
@@ -1157,14 +1154,6 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
         }
     };
 
-    const openFeedback = shouldShowFeedback()
-        ? () => {
-              Modal.createDialog(FeedbackDialog, {
-                  feature: "spotlight",
-              });
-          }
-        : null;
-
     const activeDescendant = rovingContext.state.activeRef?.current?.id;
 
     return (
@@ -1241,26 +1230,6 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                     aria-describedby="mx_SpotlightDialog_keyboardPrompt"
                 >
                     {content}
-                </div>
-
-                <div className="mx_SpotlightDialog_footer">
-                    {openFeedback &&
-                        _t(
-                            "Results not as expected? Please <a>give feedback</a>.",
-                            {},
-                            {
-                                a: (sub) => (
-                                    <AccessibleButton kind="link_inline" onClick={openFeedback}>
-                                        {sub}
-                                    </AccessibleButton>
-                                ),
-                            },
-                        )}
-                    {openFeedback && (
-                        <AccessibleButton kind="primary_outline" onClick={openFeedback}>
-                            {_t("Feedback")}
-                        </AccessibleButton>
-                    )}
                 </div>
             </BaseDialog>
         </>

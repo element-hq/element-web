@@ -71,7 +71,6 @@ import RoomTopic from "../views/elements/RoomTopic";
 import withValidation from "../views/elements/Validation";
 import RoomInfoLine from "../views/rooms/RoomInfoLine";
 import RoomPreviewCard from "../views/rooms/RoomPreviewCard";
-import { SpaceFeedbackPrompt } from "../views/spaces/SpaceCreateMenu";
 import SpacePublicShare from "../views/spaces/SpacePublicShare";
 import { ChevronFace, ContextMenuButton, useContextMenu } from "./ContextMenu";
 import MainSplit from "./MainSplit";
@@ -269,7 +268,6 @@ const SpaceLanding: React.FC<{ space: Room }> = ({ space }) => {
         <div className="mx_SpaceRoomView_landing">
             <div className="mx_SpaceRoomView_landing_header">
                 <RoomAvatar room={space} height={80} width={80} viewAvatarOnClick={true} />
-                <SpaceFeedbackPrompt />
             </div>
             <div className="mx_SpaceRoomView_landing_name">
                 <RoomName room={space}>

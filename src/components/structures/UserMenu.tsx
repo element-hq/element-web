@@ -51,6 +51,7 @@ import { ViewHomePagePayload } from "../../dispatcher/payloads/ViewHomePagePaylo
 import { Icon as LiveIcon } from "../../../res/img/compound/live-8px.svg";
 import { VoiceBroadcastRecording, VoiceBroadcastRecordingsStoreEvent } from "../../voice-broadcast";
 import { SDKContext } from "../../contexts/SDKContext";
+import { shouldShowFeedback } from "../../utils/Feedback";
 
 interface IProps {
     isPanelCollapsed: boolean;
@@ -333,7 +334,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         }
 
         let feedbackButton: JSX.Element | undefined;
-        if (SettingsStore.getValue(UIFeature.Feedback)) {
+        if (shouldShowFeedback()) {
             feedbackButton = (
                 <IconizedContextMenuOption
                     iconClassName="mx_UserMenu_iconMessage"

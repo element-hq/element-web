@@ -26,7 +26,6 @@ import { LocalRoom, LOCAL_ROOM_ID_PREFIX } from "../../../../src/models/LocalRoo
 import { DirectoryMember, startDmOnFirstMessage } from "../../../../src/utils/direct-messages";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import { flushPromisesWithFakeTimers, mkRoom, stubClient } from "../../../test-utils";
-import { shouldShowFeedback } from "../../../../src/utils/Feedback";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../../../src/settings/SettingLevel";
 import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
@@ -385,28 +384,6 @@ describe("Spotlight Dialog", () => {
                 via_servers: ["example.tld"],
             }),
         );
-    });
-
-    describe("Feedback prompt", () => {
-        it("should show feedback prompt if feedback is enabled", async () => {
-            mocked(shouldShowFeedback).mockReturnValue(true);
-
-            render(<SpotlightDialog initialText="test23" onFinished={() => null} />);
-            jest.advanceTimersByTime(200);
-            await flushPromisesWithFakeTimers();
-
-            expect(screen.getByText("give feedback")).toBeInTheDocument();
-        });
-
-        it("should hide feedback prompt if feedback is disabled", async () => {
-            mocked(shouldShowFeedback).mockReturnValue(false);
-
-            render(<SpotlightDialog initialText="test23" onFinished={() => null} />);
-            jest.advanceTimersByTime(200);
-            await flushPromisesWithFakeTimers();
-
-            expect(screen.queryByText("give feedback")).not.toBeInTheDocument();
-        });
     });
 
     describe("nsfw public rooms filter", () => {

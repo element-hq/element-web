@@ -14,14 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
-import { screen, render } from "@testing-library/react";
-
-import {
-    getUserOnboardingCounters,
-    UserOnboardingList,
-} from "../../../../src/components/views/user-onboarding/UserOnboardingList";
-import SdkConfig from "../../../../src/SdkConfig";
+import { getUserOnboardingCounters } from "../../../../src/components/views/user-onboarding/UserOnboardingList";
 
 const tasks = [
     {
@@ -59,30 +52,5 @@ describe("getUserOnboardingCounters()", () => {
     ])("should calculate counters correctly", ({ tasks, expectation }) => {
         const result = getUserOnboardingCounters(tasks);
         expect(result).toStrictEqual(expectation);
-    });
-});
-
-describe("UserOnboardingList", () => {
-    // This configuration affects rendering of the feedback and needs to be set.
-    beforeAll(() => {
-        SdkConfig.put({
-            bug_report_endpoint_url: "https://bug_report_endpoint_url.com",
-        });
-    });
-
-    it("should not display feedback when there are waiting tasks", async () => {
-        render(<UserOnboardingList tasks={tasks} />);
-
-        expect(await screen.findByText("Only 1 step to go")).toBeVisible();
-        expect(await screen.queryByTestId("user-onboarding-feedback")).toBeNull();
-        expect(await screen.findAllByTestId("user-onboarding-task")).toHaveLength(2);
-    });
-
-    it("should display feedback when all tasks are completed", async () => {
-        render(<UserOnboardingList tasks={tasks.map((task) => ({ ...task, completed: true }))} />);
-
-        expect(await screen.findByText("You did it!")).toBeVisible();
-        expect(await screen.findByTestId("user-onboarding-feedback")).toBeInTheDocument();
-        expect(await screen.queryAllByTestId("user-onboarding-task")).toHaveLength(2);
     });
 });

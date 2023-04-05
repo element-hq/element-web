@@ -41,14 +41,9 @@ import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
 import Field from "../elements/Field";
 import withValidation from "../elements/Validation";
 import RoomAliasField from "../elements/RoomAliasField";
-import Modal from "../../../Modal";
-import GenericFeatureFeedbackDialog from "../dialogs/GenericFeatureFeedbackDialog";
-import SettingsStore from "../../../settings/SettingsStore";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import { shouldShowFeedback } from "../../../utils/Feedback";
-
 export const createSpace = async (
     name: string,
     isPublic: boolean,
@@ -116,40 +111,6 @@ const nameToLocalpart = (name: string): string => {
         .toLowerCase()
         .replace(/\s+/g, "-")
         .replace(/[^a-z0-9_-]+/gi, "");
-};
-
-// XXX: Temporary for the Spaces release only
-export const SpaceFeedbackPrompt: React.FC<{
-    onClick?(): void;
-}> = ({ onClick }) => {
-    if (!shouldShowFeedback()) return null;
-
-    return (
-        <div className="mx_SpaceFeedbackPrompt">
-            <span className="mx_SpaceFeedbackPrompt_text">{_t("Spaces are a new feature.")}</span>
-            <AccessibleButton
-                kind="link_inline"
-                onClick={() => {
-                    if (onClick) onClick();
-                    Modal.createDialog(GenericFeatureFeedbackDialog, {
-                        title: _t("Spaces feedback"),
-                        subheading: _t(
-                            "Thank you for trying Spaces. " + "Your feedback will help inform the next versions.",
-                        ),
-                        rageshakeLabel: "spaces-feedback",
-                        rageshakeData: Object.fromEntries(
-                            ["Spaces.allRoomsInHome", "Spaces.enabledMetaSpaces"].map((k) => [
-                                k,
-                                SettingsStore.getValue(k),
-                            ]),
-                        ),
-                    });
-                }}
-            >
-                {_t("Give feedback.")}
-            </AccessibleButton>
-        </div>
-    );
 };
 
 type BProps = Omit<ComponentProps<typeof SpaceBasicSettings>, "nameDisabled" | "topicDisabled" | "avatarDisabled">;
@@ -316,8 +277,6 @@ const SpaceCreateMenu: React.FC<{
                 />
 
                 <p>{_t("To join a space you'll need an invite.")}</p>
-
-                <SpaceFeedbackPrompt onClick={onFinished} />
             </React.Fragment>
         );
     } else {
