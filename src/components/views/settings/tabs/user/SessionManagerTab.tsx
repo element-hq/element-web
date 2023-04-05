@@ -129,8 +129,8 @@ const SessionManagerTab: React.FC = () => {
     const scrollIntoViewTimeoutRef = useRef<number>();
 
     const matrixClient = useContext(MatrixClientContext);
-    const userId = matrixClient.getUserId();
-    const currentUserMember = (userId && matrixClient.getUser(userId)) || undefined;
+    const userId = matrixClient?.getUserId();
+    const currentUserMember = (userId && matrixClient?.getUser(userId)) || undefined;
     const clientVersions = useAsyncMemo(() => matrixClient.getVersions(), [matrixClient]);
 
     const onDeviceExpandToggle = (deviceId: ExtendedDevice["device_id"]): void => {

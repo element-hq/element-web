@@ -332,7 +332,7 @@ class MatrixClientPegClass implements IMatrixClientPeg {
 
             homeserverUrl: this.matrixClient.baseUrl,
             identityServerUrl: this.matrixClient.idBaseUrl,
-            userId: this.matrixClient.credentials.userId,
+            userId: this.matrixClient.getSafeUserId(),
             deviceId: this.matrixClient.getDeviceId() ?? undefined,
             accessToken: this.matrixClient.getAccessToken(),
             guest: this.matrixClient.isGuest(),
@@ -340,7 +340,7 @@ class MatrixClientPegClass implements IMatrixClientPeg {
     }
 
     public getHomeserverName(): string {
-        const matches = /^@[^:]+:(.+)$/.exec(this.matrixClient.credentials.userId);
+        const matches = /^@[^:]+:(.+)$/.exec(this.matrixClient.getSafeUserId());
         if (matches === null || matches.length < 1) {
             throw new Error("Failed to derive homeserver name from user ID!");
         }

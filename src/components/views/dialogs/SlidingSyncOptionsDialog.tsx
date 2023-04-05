@@ -124,7 +124,7 @@ export const SlidingSyncOptionsDialog: React.FC<{ onFinished(enabled: boolean): 
             value={currentProxy}
             button={_t("Enable")}
             validator={validProxy}
-            onFinished={(enable: boolean, proxyUrl: string) => {
+            onFinished={(enable, proxyUrl) => {
                 if (enable) {
                     SettingsStore.setValue("feature_sliding_sync_proxy_url", null, SettingLevel.DEVICE, proxyUrl);
                     onFinished(true);

@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import * as React from "react";
+import React, { ReactNode } from "react";
 
 import BaseDialog from "./BaseDialog";
 import { _t } from "../../../languageHandler";
@@ -46,7 +46,7 @@ export default class ServerOfflineDialog extends React.PureComponent<IProps> {
         this.forceUpdate(); // no state to worry about
     };
 
-    private renderTimeline(): React.ReactElement[] {
+    private renderTimeline(): ReactNode[] {
         return EchoStore.instance.contexts.map((c, i) => {
             if (!c.firstFailedTime) return null; // not useful
             if (!(c instanceof RoomEchoContext))

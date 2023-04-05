@@ -89,6 +89,7 @@ export const RoomGeneralContextMenu: React.FC<RoomGeneralContextMenuProps> = ({
     };
 
     const onTagRoom = (ev: ButtonEvent, tagId: TagID): void => {
+        if (!cli) return;
         if (tagId === DefaultTagID.Favourite || tagId === DefaultTagID.LowPriority) {
             const inverseTag = tagId === DefaultTagID.Favourite ? DefaultTagID.LowPriority : DefaultTagID.Favourite;
             const isApplied = RoomListStore.instance.getTagsForRoom(room).includes(tagId);

@@ -30,7 +30,6 @@ import { ClientEvent } from "matrix-js-sdk/src/client";
 import { Thread, ThreadEvent } from "matrix-js-sdk/src/models/thread";
 import { ReceiptType } from "matrix-js-sdk/src/@types/read_receipts";
 import { MatrixError } from "matrix-js-sdk/src/http-api";
-import { ReadReceipt } from "matrix-js-sdk/src/models/read-receipt";
 import { Relations } from "matrix-js-sdk/src/models/relations";
 
 import SettingsStore from "../../settings/SettingsStore";
@@ -515,23 +514,22 @@ class TimelinePanel extends React.Component<IProps, IState> {
 
         if (count > 0) {
             debuglog("Unpaginating", count, "in direction", dir);
-            this.timelineWindow.unpaginate(count, backwards);
+            this.timelineWindow?.unpaginate(count, backwards);
 
             const { events, liveEvents, firstVisibleEventIndex } = this.getEvents();
             this.buildLegacyCallEventGroupers(events);
-            const newState: Partial<IState> = {
+            this.setState({
                 events,
                 liveEvents,
                 firstVisibleEventIndex,
-            };
+            });
 
             // We can now paginate in the unpaginated direction
             if (backwards) {
-                newState.canBackPaginate = true;
+                this.setState({ canBackPaginate: true });
             } else {
-                newState.canForwardPaginate = true;
+                this.setState({ canForwardPaginate: true });
             }
-            this.setState<null>(newState);
         }
     };
 
@@ -636,6 +634,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
     private doManageReadMarkers = debounce(
         () => {
             const rmPosition = this.getReadMarkerPosition();
+            if (rmPosition === null) return;
             // we hide the read marker when it first comes onto the screen, but if
             // it goes back off the top of the screen (presumably because the user
             // clicks on the 'jump to bottom' button), we need to re-enable it.
@@ -1125,7 +1124,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
             return;
         }
         const lastDisplayedEvent = this.state.events[lastDisplayedIndex];
-        this.setReadMarker(lastDisplayedEvent.getId(), lastDisplayedEvent.getTs());
+        this.setReadMarker(lastDisplayedEvent.getId()!, lastDisplayedEvent.getTs());
 
         // the read-marker should become invisible, so that if the user scrolls
         // down, they don't see it.
@@ -1141,7 +1140,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
 
     // advance the read marker past any events we sent ourselves.
     private advanceReadMarkerPastMyEvents(): void {
-        if (!this.props.manageReadMarkers) return;
+        if (!this.props.manageReadMarkers || !this.timelineWindow) return;
 
         // we call `timelineWindow.getEvents()` rather than using
         // `this.state.liveEvents`, because React batches the update to the
@@ -1171,7 +1170,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         i--;
 
         const ev = events[i];
-        this.setReadMarker(ev.getId(), ev.getTs());
+        this.setReadMarker(ev.getId()!, ev.getTs());
     }
 
     /* jump down to the bottom of this room, where new events are arriving
@@ -1280,6 +1279,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
     public getReadMarkerPosition = (): number | null => {
         if (!this.props.manageReadMarkers) return null;
         if (!this.messagePanel.current) return null;
+        if (!this.props.timelineSet.room) return null;
 
         const ret = this.messagePanel.current.getReadMarkerPosition();
         if (ret !== null) {
@@ -1629,7 +1629,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
             return 0;
         }
 
-        const userId = cli.credentials.userId;
+        const userId = cli.getSafeUserId();
 
         // get the user's membership at the last event by getting the timeline
         // that the event belongs to, and traversing the timeline looking for
@@ -1648,7 +1648,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
                 continue;
             }
 
-            userMembership = timeline.getState(EventTimeline.FORWARDS).getMember(userId)?.membership ?? "leave";
+            userMembership = timeline.getState(EventTimeline.FORWARDS)?.getMember(userId)?.membership ?? "leave";
             const timelineEvents = timeline.getEvents();
             for (let j = timelineEvents.length - 1; j >= 0; j--) {
                 const event = timelineEvents[j];
@@ -1769,7 +1769,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         for (let i = this.state.liveEvents.length - 1; i >= 0; --i) {
             const ev = this.state.liveEvents[i];
 
-            const node = messagePanel.getNodeForEventId(ev.getId());
+            const node = messagePanel.getNodeForEventId(ev.getId()!);
             const isInView = isNodeInView(node);
 
             // when we've reached the first visible event, and the previous
@@ -1829,8 +1829,8 @@ class TimelinePanel extends React.Component<IProps, IState> {
         }
 
         const myUserId = client.getSafeUserId();
-        const receiptStore: ReadReceipt<any, any> = this.props.timelineSet.thread ?? this.props.timelineSet.room;
-        return receiptStore?.getEventReadUpTo(myUserId, ignoreSynthesized);
+        const receiptStore = this.props.timelineSet.thread ?? this.props.timelineSet.room;
+        return receiptStore?.getEventReadUpTo(myUserId, ignoreSynthesized) ?? null;
     }
 
     private setReadMarker(eventId: string | null, eventTs: number, inhibitSetState = false): void {
@@ -1924,7 +1924,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         // If the state is PREPARED or CATCHUP, we're still waiting for the js-sdk to sync with
         // the HS and fetch the latest events, so we are effectively forward paginating.
         const forwardPaginating =
-            this.state.forwardPaginating || ["PREPARED", "CATCHUP"].includes(this.state.clientSyncState);
+            this.state.forwardPaginating || ["PREPARED", "CATCHUP"].includes(this.state.clientSyncState!);
         const events = this.state.firstVisibleEventIndex
             ? this.state.events.slice(this.state.firstVisibleEventIndex)
             : this.state.events;
@@ -1985,7 +1985,7 @@ function serializeEventIdsFromTimelineSets(timelineSets: EventTimelineSet[]): { 
             // Add a special label when it is the live timeline so we can tell
             // it apart from the others
             const isLiveTimeline = timeline === liveTimeline;
-            timelineMap[isLiveTimeline ? "liveTimeline" : `${index}`] = timeline.getEvents().map((ev) => ev.getId());
+            timelineMap[isLiveTimeline ? "liveTimeline" : `${index}`] = timeline.getEvents().map((ev) => ev.getId()!);
         });
 
         return timelineMap;

@@ -64,7 +64,7 @@ type OverflowMenuCloser = () => void;
 export const OverflowMenuContext = createContext<OverflowMenuCloser | null>(null);
 
 const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
-    const matrixClient: MatrixClient = useContext(MatrixClientContext);
+    const matrixClient = useContext(MatrixClientContext);
     const { room, roomId, narrow } = useContext(RoomContext);
 
     const isWysiwygLabEnabled = useSettingValue<boolean>("feature_wysiwyg_composer");
@@ -183,7 +183,7 @@ const UploadButtonContextProvider: React.FC<IUploadButtonProps> = ({ roomId, rel
     const uploadInput = useRef<HTMLInputElement>();
 
     const onUploadClick = (): void => {
-        if (cli.isGuest()) {
+        if (cli?.isGuest()) {
             dis.dispatch({ action: "require_registration" });
             return;
         }

@@ -20,6 +20,7 @@ import { EventType, RelationType } from "matrix-js-sdk/src/@types/event";
 import { defer } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
 import { MatrixClient } from "matrix-js-sdk/src/client";
+import { MatrixError } from "matrix-js-sdk/src/http-api";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { _t } from "../../../languageHandler";
@@ -37,12 +38,10 @@ interface IProps {
 }
 
 interface IState {
-    originalEvent: MatrixEvent;
-    error: {
-        errcode: string;
-    };
+    originalEvent: MatrixEvent | null;
+    error: MatrixError | null;
     events: MatrixEvent[];
-    nextBatch: string;
+    nextBatch: string | null;
     isLoading: boolean;
     isTwelveHour: boolean;
 }
@@ -65,9 +64,9 @@ export default class MessageEditHistoryDialog extends React.PureComponent<IProps
             // bail out on backwards as we only paginate in one direction
             return false;
         }
-        const opts = { from: this.state.nextBatch };
-        const roomId = this.props.mxEvent.getRoomId();
-        const eventId = this.props.mxEvent.getId();
+        const opts = { from: this.state.nextBatch ?? undefined };
+        const roomId = this.props.mxEvent.getRoomId()!;
+        const eventId = this.props.mxEvent.getId()!;
         const client = MatrixClientPeg.get();
 
         const { resolve, reject, promise } = defer<boolean>();
@@ -80,7 +79,7 @@ export default class MessageEditHistoryDialog extends React.PureComponent<IProps
             if (error.errcode) {
                 logger.error("fetching /relations failed with error", error);
             }
-            this.setState({ error }, () => reject(error));
+            this.setState({ error: error as MatrixError }, () => reject(error));
             return promise;
         }
 
@@ -88,9 +87,9 @@ export default class MessageEditHistoryDialog extends React.PureComponent<IProps
         this.locallyRedactEventsIfNeeded(newEvents);
         this.setState(
             {
-                originalEvent: this.state.originalEvent || result.originalEvent,
+                originalEvent: this.state.originalEvent ?? result.originalEvent ?? null,
                 events: this.state.events.concat(newEvents),
-                nextBatch: result.nextBatch,
+                nextBatch: result.nextBatch ?? null,
                 isLoading: false,
             },
             () => {
@@ -105,6 +104,7 @@ export default class MessageEditHistoryDialog extends React.PureComponent<IProps
         const roomId = this.props.mxEvent.getRoomId();
         const client = MatrixClientPeg.get();
         const room = client.getRoom(roomId);
+        if (!room) return;
         const pendingEvents = room.getPendingEvents();
         for (const e of newEvents) {
             const pendingRedaction = pendingEvents.find((pe) => {
@@ -133,7 +133,7 @@ export default class MessageEditHistoryDialog extends React.PureComponent<IProps
             if (!lastEvent || wantsDateSeparator(lastEvent.getDate() || undefined, e.getDate() || undefined)) {
                 nodes.push(
                     <li key={e.getTs() + "~"}>
-                        <DateSeparator roomId={e.getRoomId()} ts={e.getTs()} />
+                        <DateSeparator roomId={e.getRoomId()!} ts={e.getTs()} />
                     </li>,
                 );
             }
@@ -141,7 +141,7 @@ export default class MessageEditHistoryDialog extends React.PureComponent<IProps
             nodes.push(
                 <EditHistoryMessage
                     key={e.getId()}
-                    previousEdit={!isBaseEvent ? allEvents[i + 1] : null}
+                    previousEdit={!isBaseEvent ? allEvents[i + 1] : undefined}
                     isBaseEvent={isBaseEvent}
                     mxEvent={e}
                     isTwelveHour={this.state.isTwelveHour}

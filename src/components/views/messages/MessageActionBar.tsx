@@ -259,7 +259,7 @@ interface IFavouriteButtonProp {
 const FavouriteButton: React.FC<IFavouriteButtonProp> = ({ mxEvent }) => {
     const { isFavourite, toggleFavourite } = useFavouriteMessages();
 
-    const eventId = mxEvent.getId();
+    const eventId = mxEvent.getId()!;
     const classes = classNames("mx_MessageActionBar_iconButton mx_MessageActionBar_favouriteButton", {
         mx_MessageActionBar_favouriteButton_fillstar: isFavourite(eventId),
     });

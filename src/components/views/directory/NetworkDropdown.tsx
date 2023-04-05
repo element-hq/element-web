@@ -148,7 +148,7 @@ export const NetworkDropdown: React.FC<IProps> = ({ protocols, config, setConfig
     const { allServers, homeServer, userDefinedServers, setUserDefinedServers } = useServers();
 
     const options: GenericDropdownMenuItem<IPublicRoomDirectoryConfig | null>[] = allServers.map((roomServer) => ({
-        key: { roomServer, instanceId: null },
+        key: { roomServer, instanceId: undefined },
         label: roomServer,
         description: roomServer === homeServer ? _t("Your server") : null,
         options: [

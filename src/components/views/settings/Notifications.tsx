@@ -439,9 +439,11 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
                     append: true,
                 });
             } else {
-                const pusher = this.state.pushers.find((p) => p.kind === "email" && p.pushkey === email);
-                pusher.kind = null; // flag for delete
-                await MatrixClientPeg.get().setPusher(pusher);
+                const pusher = this.state.pushers?.find((p) => p.kind === "email" && p.pushkey === email);
+                if (pusher) {
+                    pusher.kind = null; // flag for delete
+                    await MatrixClientPeg.get().setPusher(pusher);
+                }
             }
 
             await this.refreshFromServer();

@@ -59,7 +59,7 @@ export default function EditWysiwygComposer({
     const { editMessage, endEditing, onChange, isSaveDisabled } = useEditing(editorStateTransfer, initialContent);
 
     if (!isReady) {
-        return null;
+        return <></>;
     }
 
     return (

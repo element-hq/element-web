@@ -102,7 +102,7 @@ const Tile: React.FC<ITileProps> = ({
 }) => {
     const cli = useContext(MatrixClientContext);
     const [joinedRoom, setJoinedRoom] = useState<Room | undefined>(() => {
-        const cliRoom = cli.getRoom(room.room_id);
+        const cliRoom = cli?.getRoom(room.room_id);
         return cliRoom?.getMyMembership() === "join" ? cliRoom : undefined;
     });
     const joinedRoomName = useTypedEventEmitterState(joinedRoom, RoomEvent.Name, (room) => room?.name);

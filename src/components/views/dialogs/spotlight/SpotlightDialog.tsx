@@ -35,7 +35,6 @@ import React, {
 import sanitizeHtml from "sanitize-html";
 
 import { KeyBindingAction } from "../../../../accessibility/KeyboardShortcuts";
-import { Ref } from "../../../../accessibility/roving/types";
 import {
     findSiblingElement,
     RovingTabIndexContext,
@@ -104,8 +103,8 @@ interface IProps {
     onFinished(): void;
 }
 
-function refIsForRecentlyViewed(ref: RefObject<HTMLElement>): boolean {
-    return ref.current?.id?.startsWith("mx_SpotlightDialog_button_recentlyViewed_") === true;
+function refIsForRecentlyViewed(ref?: RefObject<HTMLElement>): boolean {
+    return ref?.current?.id?.startsWith("mx_SpotlightDialog_button_recentlyViewed_") === true;
 }
 
 function getRoomTypes(showRooms: boolean, showSpaces: boolean): Set<RoomType | null> {
@@ -366,7 +365,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
         return [
             ...SpaceStore.instance.enabledMetaSpaces.map((spaceKey) => ({
                 section: Section.Spaces,
-                filter: [],
+                filter: [] as Filter[],
                 avatar: (
                     <div
                         className={classNames(
@@ -456,6 +455,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
 
                     return memberComparator(a.member, b.member);
                 }
+                return 0;
             });
         }
 
@@ -474,17 +474,16 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
     };
     useEffect(() => {
         setImmediate(() => {
-            let ref: Ref | undefined;
-            if (rovingContext.state.refs) {
-                ref = rovingContext.state.refs[0];
+            const ref = rovingContext.state.refs[0];
+            if (ref) {
+                rovingContext.dispatch({
+                    type: Type.SetFocus,
+                    payload: { ref },
+                });
+                ref.current?.scrollIntoView?.({
+                    block: "nearest",
+                });
             }
-            rovingContext.dispatch({
-                type: Type.SetFocus,
-                payload: { ref },
-            });
-            ref?.current?.scrollIntoView?.({
-                block: "nearest",
-            });
         });
         // we intentionally ignore changes to the rovingContext for the purpose of this hook
         // we only want to reset the focus whenever the results or filters change
@@ -635,7 +634,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                             roomId: publicRoom.room_id,
                             autoJoin: !result.publicRoom.world_readable && !cli.isGuest(),
                             shouldPeek: result.publicRoom.world_readable || cli.isGuest(),
-                            viaServers: [config.roomServer],
+                            viaServers: config ? [config.roomServer] : undefined,
                         },
                         true,
                         ev.type !== "click",

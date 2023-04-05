@@ -26,7 +26,8 @@ import ErrorDialog from "./ErrorDialog";
 import TextInputDialog from "./TextInputDialog";
 
 interface IProps {
-    onFinished: (success: boolean) => void;
+    onFinished(success?: false, reason?: void): void;
+    onFinished(success: true, reason?: string): void;
 }
 
 /*
@@ -67,7 +68,7 @@ export function createRedactEventDialog({
     Modal.createDialog(
         ConfirmRedactDialog,
         {
-            onFinished: async (proceed: boolean, reason?: string): Promise<void> => {
+            onFinished: async (proceed, reason): Promise<void> => {
                 if (!proceed) return;
 
                 const cli = MatrixClientPeg.get();
