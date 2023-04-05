@@ -4,7 +4,7 @@
 name: Element Web - Build
 on:
     schedule:
-        - cron: "17 4 * * *" # every day at 04:17 UTC
+        - cron: "17 4 * * 1-5" # every weekday at 04:17 UTC
     pull_request: {}
     push:
         branches: [develop, master]
