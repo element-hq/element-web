@@ -38,7 +38,12 @@ interface IError {
     errcode: string;
 }
 
-const UNKNOWN_PROFILE_ERRORS = ["M_NOT_FOUND", "M_USER_NOT_FOUND", "M_PROFILE_UNDISCLOSED", "M_PROFILE_NOT_FOUND"];
+export const UNKNOWN_PROFILE_ERRORS = [
+    "M_NOT_FOUND",
+    "M_USER_NOT_FOUND",
+    "M_PROFILE_UNDISCLOSED",
+    "M_PROFILE_NOT_FOUND",
+];
 
 export type CompletionStates = Record<string, InviteState>;
 

@@ -22,14 +22,21 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import BaseDialog from "./BaseDialog";
 
+export interface UnknownProfile {
+    userId: string;
+    errorText: string;
+}
+
+export type UnknownProfiles = UnknownProfile[];
+
 export interface AskInviteAnywayDialogProps {
-    unknownProfileUsers: Array<{
-        userId: string;
-        errorText: string;
-    }>;
+    unknownProfileUsers: UnknownProfiles;
     onInviteAnyways: () => void;
     onGiveUp: () => void;
     onFinished: (success: boolean) => void;
+    description?: string;
+    inviteNeverWarnLabel?: string;
+    inviteLabel?: string;
 }
 
 export default function AskInviteAnywayDialog({
@@ -37,6 +44,9 @@ export default function AskInviteAnywayDialog({
     onGiveUp,
     onInviteAnyways,
     unknownProfileUsers,
+    description: descriptionProp,
+    inviteNeverWarnLabel,
+    inviteLabel,
 }: AskInviteAnywayDialogProps): JSX.Element {
     const onInviteClicked = useCallback((): void => {
         onInviteAnyways();
@@ -60,6 +70,10 @@ export default function AskInviteAnywayDialog({
         </li>
     ));
 
+    const description =
+        descriptionProp ??
+        _t("Unable to find profiles for the Matrix IDs listed below - would you like to invite them anyway?");
+
     return (
         <BaseDialog
             className="mx_RetryInvitesDialog"
@@ -68,20 +82,17 @@ export default function AskInviteAnywayDialog({
             contentId="mx_Dialog_content"
         >
             <div id="mx_Dialog_content">
-                <p>
-                    {_t(
-                        "Unable to find profiles for the Matrix IDs listed below - " +
-                            "would you like to invite them anyway?",
-                    )}
-                </p>
+                <p>{description}</p>
                 <ul>{errorList}</ul>
             </div>
 
             <div className="mx_Dialog_buttons">
                 <button onClick={onGiveUpClicked}>{_t("Close")}</button>
-                <button onClick={onInviteNeverWarnClicked}>{_t("Invite anyway and never warn me again")}</button>
+                <button onClick={onInviteNeverWarnClicked}>
+                    {inviteNeverWarnLabel ?? _t("Invite anyway and never warn me again")}
+                </button>
                 <button onClick={onInviteClicked} autoFocus={true}>
-                    {_t("Invite anyway")}
+                    {inviteLabel ?? _t("Invite anyway")}
                 </button>
             </div>
         </BaseDialog>

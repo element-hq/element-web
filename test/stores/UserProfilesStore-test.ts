@@ -15,13 +15,25 @@ limitations under the License.
 */
 
 import { mocked, Mocked } from "jest-mock";
-import { IMatrixProfile, MatrixClient, MatrixEvent, Room, RoomMemberEvent } from "matrix-js-sdk/src/matrix";
+import {
+    IMatrixProfile,
+    MatrixClient,
+    MatrixError,
+    MatrixEvent,
+    Room,
+    RoomMemberEvent,
+} from "matrix-js-sdk/src/matrix";
 
 import { UserProfilesStore } from "../../src/stores/UserProfilesStore";
 import { filterConsole, mkRoomMember, mkRoomMemberJoinEvent, stubClient } from "../test-utils";
 
 describe("UserProfilesStore", () => {
     const userIdDoesNotExist = "@unknown:example.com";
+    const userDoesNotExistError = new MatrixError({
+        errcode: "M_NOT_FOUND",
+        error: "Profile not found",
+    });
+
     const user1Id = "@user1:example.com";
     const user1Profile: IMatrixProfile = { displayname: "User 1", avatar_url: undefined };
     const user2Id = "@user2:example.com";
@@ -50,7 +62,7 @@ describe("UserProfilesStore", () => {
             if (userId === user1Id) return user1Profile;
             if (userId === user2Id) return user2Profile;
 
-            throw new Error("User not found");
+            throw userDoesNotExistError;
         });
     });
 
@@ -65,10 +77,69 @@ describe("UserProfilesStore", () => {
             expect(userProfilesStore.getProfile(user1Id)).toBe(user1Profile);
         });
 
-        it("for an user that does not exist should return null and cache it", async () => {
-            const profile = await userProfilesStore.fetchProfile(userIdDoesNotExist);
-            expect(profile).toBeNull();
-            expect(userProfilesStore.getProfile(userIdDoesNotExist)).toBeNull();
+        it("when shouldThrow = true and there is an error it should raise an error", async () => {
+            await expect(userProfilesStore.fetchProfile(userIdDoesNotExist, { shouldThrow: true })).rejects.toThrow(
+                userDoesNotExistError.message,
+            );
+        });
+
+        describe("when fetching a profile that does not exist", () => {
+            let profile: IMatrixProfile | null | undefined;
+
+            beforeEach(async () => {
+                profile = await userProfilesStore.fetchProfile(userIdDoesNotExist);
+            });
+
+            it("should return null", () => {
+                expect(profile).toBeNull();
+            });
+
+            it("should cache the error and result", () => {
+                expect(userProfilesStore.getProfile(userIdDoesNotExist)).toBeNull();
+                expect(userProfilesStore.getProfileLookupError(userIdDoesNotExist)).toBe(userDoesNotExistError);
+            });
+
+            describe("when the profile does not exist and fetching it again", () => {
+                beforeEach(async () => {
+                    mockClient.getProfileInfo.mockResolvedValue(user1Profile);
+                    profile = await userProfilesStore.fetchProfile(userIdDoesNotExist);
+                });
+
+                it("should return the profile", () => {
+                    expect(profile).toBe(user1Profile);
+                });
+
+                it("should clear the error", () => {
+                    expect(userProfilesStore.getProfileLookupError(userIdDoesNotExist)).toBeUndefined();
+                });
+            });
+        });
+    });
+
+    describe("getOrFetchProfile", () => {
+        it("should return a profile from the API and cache it", async () => {
+            const profile = await userProfilesStore.getOrFetchProfile(user1Id);
+            expect(profile).toBe(user1Profile);
+            // same method again
+            expect(await userProfilesStore.getOrFetchProfile(user1Id)).toBe(user1Profile);
+            // assert that the profile is cached
+            expect(userProfilesStore.getProfile(user1Id)).toBe(user1Profile);
+        });
+    });
+
+    describe("getProfileLookupError", () => {
+        it("should return undefined if a profile was not fetched", () => {
+            expect(userProfilesStore.getProfileLookupError(user1Id)).toBeUndefined();
+        });
+
+        it("should return undefined if a profile was successfully fetched", async () => {
+            await userProfilesStore.fetchProfile(user1Id);
+            expect(userProfilesStore.getProfileLookupError(user1Id)).toBeUndefined();
+        });
+
+        it("should return the error if there was one", async () => {
+            await userProfilesStore.fetchProfile(userIdDoesNotExist);
+            expect(userProfilesStore.getProfileLookupError(userIdDoesNotExist)).toBe(userDoesNotExistError);
         });
     });
 
@@ -119,6 +190,20 @@ describe("UserProfilesStore", () => {
                 expect(userProfilesStore.getProfile(user1Id)).toBe(user1Profile);
                 expect(userProfilesStore.getOnlyKnownProfile(user2Id)).toBe(user2Profile);
             });
+        });
+    });
+
+    describe("flush", () => {
+        it("should clear profiles, known profiles and errors", async () => {
+            await userProfilesStore.fetchOnlyKnownProfile(user1Id);
+            await userProfilesStore.fetchProfile(user1Id);
+            await userProfilesStore.fetchProfile(userIdDoesNotExist);
+
+            userProfilesStore.flush();
+
+            expect(userProfilesStore.getProfile(user1Id)).toBeUndefined();
+            expect(userProfilesStore.getOnlyKnownProfile(user1Id)).toBeUndefined();
+            expect(userProfilesStore.getProfileLookupError(userIdDoesNotExist)).toBeUndefined();
         });
     });
 });

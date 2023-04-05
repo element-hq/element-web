@@ -1,5 +1,5 @@
 /*
-Copyright 2019 - 2022 The Matrix.org Foundation C.I.C.
+Copyright 2019 - 2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { logger } from "matrix-js-sdk/src/logger";
+import { MatrixError } from "matrix-js-sdk/src/matrix";
 
 import { Icon as InfoIcon } from "../../../../res/img/element-icons/info.svg";
 import { Icon as EmailPillAvatarIcon } from "../../../../res/img/icon-email-pill-avatar.svg";
@@ -75,9 +76,37 @@ import Modal from "../../../Modal";
 import dis from "../../../dispatcher/dispatcher";
 import { privateShouldBeEncrypted } from "../../../utils/rooms";
 import { NonEmptyArray } from "../../../@types/common";
+import { UNKNOWN_PROFILE_ERRORS } from "../../../utils/MultiInviter";
+import AskInviteAnywayDialog, { UnknownProfiles } from "./AskInviteAnywayDialog";
+import { SdkContextClass } from "../../../contexts/SDKContext";
+import { UserProfilesStore } from "../../../stores/UserProfilesStore";
 
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
 /* eslint-disable camelcase */
+
+const extractTargetUnknownProfiles = async (
+    targets: Member[],
+    profilesStores: UserProfilesStore,
+): Promise<UnknownProfiles> => {
+    const directoryMembers = targets.filter((t): t is DirectoryMember => t instanceof DirectoryMember);
+    await Promise.all(directoryMembers.map((t) => profilesStores.getOrFetchProfile(t.userId)));
+    return directoryMembers.reduce<UnknownProfiles>((unknownProfiles: UnknownProfiles, target: DirectoryMember) => {
+        const lookupError = profilesStores.getProfileLookupError(target.userId);
+
+        if (
+            lookupError instanceof MatrixError &&
+            lookupError.errcode &&
+            UNKNOWN_PROFILE_ERRORS.includes(lookupError.errcode)
+        ) {
+            unknownProfiles.push({
+                userId: target.userId,
+                errorText: lookupError.data.error || "",
+            });
+        }
+
+        return unknownProfiles;
+    }, []);
+};
 
 interface Result {
     userId: string;
@@ -331,6 +360,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
     private numberEntryFieldRef: React.RefObject<Field> = createRef();
     private unmounted = false;
     private encryptionByDefault = false;
+    private profilesStore: UserProfilesStore;
 
     public constructor(props: Props) {
         super(props);
@@ -340,6 +370,8 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         } else if (props.kind === InviteKind.CallTransfer && !props.call) {
             throw new Error("When using InviteKind.CallTransfer a call is required for an InviteDialog");
         }
+
+        this.profilesStore = SdkContextClass.instance.userProfilesStore;
 
         const alreadyInvited = new Set([MatrixClientPeg.get().getUserId()!]);
         const welcomeUserId = SdkConfig.get("welcome_user_id");
@@ -504,10 +536,28 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
         return newTargets;
     }
 
+    /**
+     * Check if there are unknown profiles if promptBeforeInviteUnknownUsers setting is enabled.
+     * If so show the "invite anyway?" dialog. Otherwise directly create the DM local room.
+     */
+    private checkProfileAndStartDm = async (): Promise<void> => {
+        this.setBusy(true);
+        const targets = this.convertFilter();
+
+        if (SettingsStore.getValue("promptBeforeInviteUnknownUsers")) {
+            const unknownProfileUsers = await extractTargetUnknownProfiles(targets, this.profilesStore);
+
+            if (unknownProfileUsers.length) {
+                this.showAskInviteAnywayDialog(unknownProfileUsers);
+                return;
+            }
+        }
+
+        await this.startDm();
+    };
+
     private startDm = async (): Promise<void> => {
-        this.setState({
-            busy: true,
-        });
+        this.setBusy(true);
 
         try {
             const cli = MatrixClientPeg.get();
@@ -522,6 +572,27 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             });
         }
     };
+
+    private setBusy(busy: boolean): void {
+        this.setState({
+            busy,
+        });
+    }
+
+    private showAskInviteAnywayDialog(unknownProfileUsers: { userId: string; errorText: string }[]): void {
+        Modal.createDialog(AskInviteAnywayDialog, {
+            unknownProfileUsers,
+            onInviteAnyways: () => this.startDm(),
+            onGiveUp: () => {
+                this.setBusy(false);
+            },
+            description: _t(
+                "Unable to find profiles for the Matrix IDs listed below - would you like to start a DM anyway?",
+            ),
+            inviteNeverWarnLabel: _t("Start DM anyway and never warn me again"),
+            inviteLabel: _t("Start DM anyway"),
+        });
+    }
 
     private inviteUsers = async (): Promise<void> => {
         if (this.props.kind !== InviteKind.Invite) return;
@@ -639,7 +710,8 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                 // if there's no matches (and the input looks like a mxid).
                 if (term[0] === "@" && term.indexOf(":") > 1) {
                     try {
-                        const profile = await MatrixClientPeg.get().getProfileInfo(term);
+                        const profile = await this.profilesStore.getOrFetchProfile(term, { shouldThrow: true });
+
                         if (profile) {
                             // If we have a profile, we have enough information to assume that
                             // the mxid can be invited - add it to the list. We stick it at the
@@ -651,8 +723,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                             });
                         }
                     } catch (e) {
-                        logger.warn("Non-fatal error trying to make an invite for a user ID");
-                        logger.warn(e);
+                        logger.warn("Non-fatal error trying to make an invite for a user ID", e);
 
                         // Reuse logic from Permalinks as a basic MXID validity check
                         const serverName = getServerName(term);
@@ -716,7 +787,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
                 // the email anyways, and so we don't cause things to jump around. In
                 // theory, the user would see the user pop up and think "ah yes, that
                 // person!"
-                const profile = await MatrixClientPeg.get().getProfileInfo(lookup.mxid);
+                const profile = await this.profilesStore.getOrFetchProfile(lookup.mxid);
                 if (term !== this.state.filterText || !profile) return; // abandon hope
                 this.setState({
                     threepidResultsMixin: [
@@ -861,7 +932,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             }
 
             try {
-                const profile = await MatrixClientPeg.get().getProfileInfo(address);
+                const profile = await this.profilesStore.getOrFetchProfile(address);
                 toAdd.push(
                     new DirectoryMember({
                         user_id: address,
@@ -1252,7 +1323,7 @@ export default class InviteDialog extends React.PureComponent<Props, IInviteDial
             }
 
             buttonText = _t("Go");
-            goButtonFn = this.startDm;
+            goButtonFn = this.checkProfileAndStartDm;
             extraSection = (
                 <div className="mx_InviteDialog_section_hidden_suggestions_disclaimer">
                     <span>{_t("Some suggestions may be hidden for privacy.")}</span>
