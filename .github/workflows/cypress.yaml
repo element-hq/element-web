@@ -6,7 +6,7 @@ on:
         types:
             - completed
 concurrency:
-    group: ${{ github.workflow }}-${{ github.event.workflow_run.head_branch || github.ref }}
+    group: ${{ github.workflow }}-${{ github.event.workflow_run.head_branch || github.run_id }}
     cancel-in-progress: ${{ github.event.workflow_run.event == 'pull_request' }}
 jobs:
     prepare:
@@ -33,7 +33,7 @@ jobs:
               with:
                   authToken: ${{ secrets.GITHUB_TOKEN }}
                   state: pending
-                  context: ${{ github.workflow }} / cypress (${{ github.event.workflow_run.event }} => ${{ github.event_name }})
+                  context: ${{ github.workflow }} / cypress
                   sha: ${{ github.event.workflow_run.head_sha }}
                   target_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
@@ -221,7 +221,7 @@ jobs:
               with:
                   authToken: ${{ secrets.GITHUB_TOKEN }}
                   state: ${{ needs.tests.result == 'success' && 'success' || 'failure' }}
-                  context: ${{ github.workflow }} / cypress (${{ github.event.workflow_run.event }} => ${{ github.event_name }})
+                  context: ${{ github.workflow }} / cypress
                   sha: ${{ github.event.workflow_run.head_sha }}
                   target_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
