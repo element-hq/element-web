@@ -42,31 +42,31 @@ describe("Composer", () => {
 
         it("sends a message when you click send or press Enter", () => {
             // Type a message
-            cy.get("div[contenteditable=true]").type("my message 0");
+            cy.findTextbox("Send a message…").type("my message 0");
             // It has not been sent yet
             cy.contains(".mx_EventTile_body", "my message 0").should("not.exist");
 
             // Click send
-            cy.get('div[aria-label="Send message"]').click();
+            cy.findButton("Send message").click();
             // It has been sent
             cy.contains(".mx_EventTile_body", "my message 0");
 
             // Type another and press Enter afterwards
-            cy.get("div[contenteditable=true]").type("my message 1{enter}");
+            cy.findTextbox("Send a message…").type("my message 1{enter}");
             // It was sent
             cy.contains(".mx_EventTile_body", "my message 1");
         });
 
         it("can write formatted text", () => {
-            cy.get("div[contenteditable=true]").type("my bold{ctrl+b} message");
-            cy.get('div[aria-label="Send message"]').click();
+            cy.findTextbox("Send a message…").type("my bold{ctrl+b} message");
+            cy.findButton("Send message").click();
             // Note: both "bold" and "message" are bold, which is probably surprising
             cy.contains(".mx_EventTile_body strong", "bold message");
         });
 
         it("should allow user to input emoji via graphical picker", () => {
             cy.getComposer(false).within(() => {
-                cy.get('[aria-label="Emoji"]').click();
+                cy.findButton("Emoji").click();
             });
 
             cy.get('[data-testid="mx_EmojiPicker"]').within(() => {
@@ -74,7 +74,7 @@ describe("Composer", () => {
             });
 
             cy.get(".mx_ContextualMenu_background").click(); // Close emoji picker
-            cy.get("div[contenteditable=true]").type("{enter}"); // Send message
+            cy.findTextbox("Send a message…").type("{enter}"); // Send message
 
             cy.contains(".mx_EventTile_body", "😇");
         });
@@ -86,12 +86,12 @@ describe("Composer", () => {
 
             it("only sends when you press Ctrl+Enter", () => {
                 // Type a message and press Enter
-                cy.get("div[contenteditable=true]").type("my message 3{enter}");
+                cy.findTextbox("Send a message…").type("my message 3{enter}");
                 // It has not been sent yet
                 cy.contains(".mx_EventTile_body", "my message 3").should("not.exist");
 
                 // Press Ctrl+Enter
-                cy.get("div[contenteditable=true]").type("{ctrl+enter}");
+                cy.findTextbox("Send a message…").type("{ctrl+enter}");
                 // It was sent
                 cy.contains(".mx_EventTile_body", "my message 3");
             });
@@ -114,7 +114,7 @@ describe("Composer", () => {
             cy.contains(".mx_EventTile_body", "my message 0").should("not.exist");
 
             // Click send
-            cy.get('div[aria-label="Send message"]').click();
+            cy.findButton("Send message").click();
             // It has been sent
             cy.contains(".mx_EventTile_body", "my message 0");
 
@@ -143,7 +143,7 @@ describe("Composer", () => {
 
         it("can write formatted text", () => {
             cy.get("div[contenteditable=true]").type("my {ctrl+b}bold{ctrl+b} message");
-            cy.get('div[aria-label="Send message"]').click();
+            cy.findButton("Send message").click();
             cy.contains(".mx_EventTile_body strong", "bold");
         });
 
@@ -172,13 +172,13 @@ describe("Composer", () => {
                 cy.get("div[contenteditable=true]").type("my message 0{selectAll}");
 
                 // Open link modal
-                cy.get('button[aria-label="Link"]').click();
+                cy.findButton("Link").click();
                 // Fill the link field
-                cy.get('input[label="Link"]').type("https://matrix.org/");
+                cy.findTextbox("Link").type("https://matrix.org/");
                 // Click on save
-                cy.get('button[type="submit"]').click();
+                cy.findButton("Save").click();
                 // Send the message
-                cy.get('div[aria-label="Send message"]').click();
+                cy.findButton("Send message").click();
 
                 // It was sent
                 cy.contains(".mx_EventTile_body a", "my message 0");
