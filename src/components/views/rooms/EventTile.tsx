@@ -653,15 +653,26 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
         return true;
     }
 
+    /**
+     * Determine whether an event should be highlighted
+     * For edited events, if a previous version of the event was highlighted
+     * the event should remain highlighted as the user may have been notified
+     * (Clearer explanation of why an event is highlighted is planned -
+     * https://github.com/vector-im/element-web/issues/24927)
+     * @returns boolean
+     */
     private shouldHighlight(): boolean {
         if (this.props.forExport) return false;
         if (this.context.timelineRenderingType === TimelineRenderingType.Notification) return false;
         if (this.context.timelineRenderingType === TimelineRenderingType.ThreadsList) return false;
 
-        const actions = MatrixClientPeg.get().getPushActionsForEvent(
-            this.props.mxEvent.replacingEvent() || this.props.mxEvent,
-        );
-        if (!actions || !actions.tweaks) {
+        const cli = MatrixClientPeg.get();
+        const actions = cli.getPushActionsForEvent(this.props.mxEvent.replacingEvent() || this.props.mxEvent);
+        // get the actions for the previous version of the event too if it is an edit
+        const previousActions = this.props.mxEvent.replacingEvent()
+            ? cli.getPushActionsForEvent(this.props.mxEvent)
+            : undefined;
+        if (!actions?.tweaks && !previousActions?.tweaks) {
             return false;
         }
 
@@ -670,13 +681,13 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
             return false;
         }
 
-        return actions.tweaks.highlight;
+        return !!(actions?.tweaks.highlight || previousActions?.tweaks.highlight);
     }
 
     private onSenderProfileClick = (): void => {
         dis.dispatch<ComposerInsertPayload>({
             action: Action.ComposerInsert,
-            userId: this.props.mxEvent.getSender(),
+            userId: this.props.mxEvent.getSender()!,
             timelineRenderingType: this.context.timelineRenderingType,
         });
     };
