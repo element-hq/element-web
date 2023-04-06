@@ -106,19 +106,11 @@ limitations under the License.
         in the current composer, there don't appear to be any styles associated with those classes
         in this repo */
         a[data-mention-type] {
-            /* these entries duplicate mx_Pill from _Pill.pcss */
+            /* combine mx_Pill from _Pill.pcss */
             padding: $font-1px 0.4em;
             line-height: $font-17px;
             border-radius: $font-16px;
-            vertical-align: text-top;
-            /* TODO turning this on hides the cursor from the composer for some 
-            reason, so comment out for now and assess if it's needed when we add
-            the Avatars 
-            display: inline-flex; 
-            align-items: center; not required with the above turned off 
-            
-            Potential fix is using display: inline, width: fit-content
-            */
+            display: inline;
             box-sizing: border-box;
             max-width: 100%;
             overflow: hidden;
@@ -126,12 +118,40 @@ limitations under the License.
             color: $accent-fg-color;
             background-color: $pill-bg-color;
 
-            /* combining the overrides from _BasicMessageComposer.pcss */
+            /* ...with the overrides from _BasicMessageComposer.pcss */
             user-select: all;
             position: relative;
             cursor: unset; /* We don't want indicate clickability */
             text-overflow: ellipsis;
             white-space: nowrap;
+
+            /* avatar pseudo element */
+            &::before {
+                /* After consolidation, all of the styling from _Pill.scss was being overridden,
+                so take what is in _BasicMessageComposer.pcss as the starting point */
+                display: inline-block;
+                content: var(--avatar-letter);
+                background: var(--avatar-background), $background;
+
+                width: $font-16px;
+                min-width: $font-16px; /* ensure the avatar is not compressed */
+                height: $font-16px;
+                line-height: $font-16px;
+                text-align: center;
+
+                /* Get the positioning of the avatar just right for consistency with timeline */
+                margin-inline-start: -0.4rem;
+                margin-inline-end: 0.24rem;
+                vertical-align: 0.12rem;
+
+                background-repeat: no-repeat;
+                background-size: $font-16px;
+                border-radius: $font-16px;
+
+                color: $avatar-initial-color;
+                font-weight: normal;
+                font-size: $font-10-4px;
+            }
         }
     }
 
