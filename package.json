@@ -65,7 +65,7 @@
     },
     "resolutions": {
         "@types/react-dom": "17.0.19",
-        "@types/react": "17.0.53"
+        "@types/react": "17.0.55"
     },
     "dependencies": {
         "@matrix-org/olm": "https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.12.tgz",
@@ -107,7 +107,7 @@
         "@types/jsrsasign": "^10.5.4",
         "@types/modernizr": "^3.5.3",
         "@types/node": "^16",
-        "@types/react": "17.0.53",
+        "@types/react": "17.0.55",
         "@types/react-dom": "17.0.19",
         "@types/sanitize-html": "^2.3.1",
         "@types/ua-parser-js": "^0.7.36",
