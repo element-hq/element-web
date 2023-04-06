@@ -201,7 +201,7 @@ export default abstract class Exporter {
                 );
             }
 
-            prevToken = res.end;
+            prevToken = res.end ?? null;
         }
         // Reverse the events so that we preserve the order
         for (let i = 0; i < Math.floor(events.length / 2); i++) {

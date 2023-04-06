@@ -15,8 +15,6 @@ limitations under the License.
 */
 
 import "matrix-js-sdk/src/@types/global"; // load matrix-js-sdk's type extensions first
-// Load types for the WG CSS Font Loading APIs https://github.com/Microsoft/TypeScript/issues/13569
-import "@types/css-font-loading-module";
 import "@types/modernizr";
 
 import ContentMessages from "../ContentMessages";

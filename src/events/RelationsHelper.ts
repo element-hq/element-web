@@ -121,7 +121,7 @@ export class RelationsHelper extends TypedEventEmitter<RelationsHelperEvent, Eve
                     limit: 50,
                 },
             );
-            nextBatch = response?.nextBatch;
+            nextBatch = response?.nextBatch ?? undefined;
             response?.events.forEach((e) => this.emit(RelationsHelperEvent.Add, e));
         } while (nextBatch);
     }
