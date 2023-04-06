@@ -152,7 +152,7 @@ export default class Favicon {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.context.drawImage(this.baseImage, 0, 0, this.canvas.width, this.canvas.height);
         this.context.beginPath();
-        const fontSize = Math.floor(opt.h * (opt.n > 99 ? 0.85 : 1)) + "px";
+        const fontSize = Math.floor(opt.h * (typeof opt.n === "number" && opt.n > 99 ? 0.85 : 1)) + "px";
         this.context.font = `${params.fontWeight} ${fontSize} ${params.fontFamily}`;
         this.context.textAlign = "center";
 
