@@ -1,5 +1,5 @@
 /*
-Copyright 2022 The Matrix.org Foundation C.I.C.
+Copyright 2022 - 2023 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -376,7 +376,8 @@ describe("Spotlight Dialog", () => {
         expect(options.length).toBe(1);
         expect(options[0].innerHTML).toContain(testPublicRoom.name);
 
-        fireEvent.click(options[0]!);
+        fireEvent.click(options[0].querySelector("[role='button']")!);
+        expect(defaultDispatcher.dispatch).toHaveBeenCalledTimes(1);
         expect(defaultDispatcher.dispatch).toHaveBeenCalledWith(
             expect.objectContaining({
                 action: "view_room",
