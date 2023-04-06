@@ -2210,9 +2210,9 @@
     "@babel/types" "^7.3.0"
 
 "@types/commonmark@^0.27.4":
-  version "0.27.5"
-  resolved "https://registry.yarnpkg.com/@types/commonmark/-/commonmark-0.27.5.tgz#008f2e8fb845c906146aa97510d66953d916aed2"
-  integrity sha512-vIqgmHyLsc8Or3EWLz6QkhI8/v61FNeH0yxRupA7VqSbA2eFMoHHJAhZSHudplAV89wqg1CKSmShE016ziRXuw==
+  version "0.27.6"
+  resolved "https://registry.yarnpkg.com/@types/commonmark/-/commonmark-0.27.6.tgz#9836539fc11d3f37d48e54fc5c07f9856d0a1c40"
+  integrity sha512-t3S2hOtSSuBp1H5PTFmekGFu9U9LBzGvHy93zHwusvj4RIGUrBQ4zHvw49CkJtAl6fZvsadKhYbv8WTxJLbBmw==
 
 "@types/counterpart@^0.18.1":
   version "0.18.1"
@@ -2336,9 +2336,9 @@
   integrity sha512-hz+S3nV6Mym5xPbT9fnO8dDhBFQguMYpY0Ipxv06JMi1ORgnEM4M1ymWDUhUNer3ElLmT583opRo4RzxKmh9jw==
 
 "@types/lodash@^4.14.168":
-  version "4.14.191"
-  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.191.tgz#09511e7f7cba275acd8b419ddac8da9a6a79e2fa"
-  integrity sha512-BdZ5BCCvho3EIXw6wUCXHe7rS53AIDPLE+JzwgT+OsJk53oBfbSmZZ7CX4VaRoN78N+TJpFi9QPlfIVNmJYWxQ==
+  version "4.14.192"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.192.tgz#5790406361a2852d332d41635d927f1600811285"
+  integrity sha512-km+Vyn3BYm5ytMO13k9KTp27O75rbQ0NFw+U//g+PX7VZyjCioXaRFisqSIJRECljcTv73G3i6BpglNGHgUQ5A==
 
 "@types/mapbox__point-geometry@*", "@types/mapbox__point-geometry@^0.1.2":
   version "0.1.2"
@@ -2365,17 +2365,17 @@
   integrity sha512-jhMOZSS0UGYTS9pqvt6q3wtT3uvOSve5piTEmTMx3zzTuBLvSIMxSIBIc3d5lajVD5h4xc41AMZD2M5orN3PxA==
 
 "@types/node-fetch@^2.6.2":
-  version "2.6.2"
-  resolved "https://registry.yarnpkg.com/@types/node-fetch/-/node-fetch-2.6.2.tgz#d1a9c5fd049d9415dce61571557104dec3ec81da"
-  integrity sha512-DHqhlq5jeESLy19TYhLakJ07kNumXWjcDdxXsLUMJZ6ue8VZJj4kLPQVE/2mdHh3xZziNF1xppu5lwmS53HR+A==
+  version "2.6.3"
+  resolved "https://registry.yarnpkg.com/@types/node-fetch/-/node-fetch-2.6.3.tgz#175d977f5e24d93ad0f57602693c435c57ad7e80"
+  integrity sha512-ETTL1mOEdq/sxUtgtOhKjyB2Irra4cjxksvcMUR5Zr4n+PxVhsCD9WS46oPbHL3et9Zde7CNRr+WUNlcHvsX+w==
   dependencies:
     "@types/node" "*"
     form-data "^3.0.0"
 
 "@types/node@*":
-  version "18.15.3"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.15.3.tgz#f0b991c32cfc6a4e7f3399d6cb4b8cf9a0315014"
-  integrity sha512-p6ua9zBxz5otCmbpb5D3U4B5Nanw6Pk3PPyX05xnxbB/fRv71N7CPmORg7uAD5P70T0xmx1pzAx/FUfa5X+3cw==
+  version "18.15.11"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.15.11.tgz#b3b790f09cb1696cffcec605de025b088fa4225f"
+  integrity sha512-E5Kwq2n4SbMzQOn6wnmBjuK9ouqlURrcZDVfbo9ftDDTFt3nk7ZKK4GMOzoYgnpQJKcxwQw+lGaBvvlMo0qN/Q==
 
 "@types/node@^14.14.31":
   version "14.18.38"
@@ -2383,9 +2383,9 @@
   integrity sha512-zMRIidN2Huikv/+/U7gRPFYsXDR/7IGqFZzTLnCEj5+gkrQjsowfamaxEnyvArct5hxGA3bTxMXlYhH78V6Cew==
 
 "@types/node@^16":
-  version "16.18.14"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.18.14.tgz#5465ce598486a703caddbefe8603f8a2cffa3461"
-  integrity sha512-wvzClDGQXOCVNU4APPopC2KtMYukaF1MN/W3xAmslx22Z4/IF1/izDMekuyoUlwfnDHYCIZGaj7jMwnJKBTxKw==
+  version "16.18.23"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.18.23.tgz#b6e934fe427eb7081d0015aad070acb3373c3c90"
+  integrity sha512-XAMpaw1s1+6zM+jn2tmw8MyaRDIJfXxqmIQIS0HfoGYPuf7dUWeiUKopwq13KFX9lEp1+THGtlaaYx39Nxr58g==
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.1"
@@ -2474,10 +2474,10 @@
   resolved "https://registry.yarnpkg.com/@types/retry/-/retry-0.12.0.tgz#2b35eccfcee7d38cd72ad99232fbd58bffb3c84d"
   integrity sha512-wWKOClTTiizcZhXnPY4wikVAwmdYHp8q6DmC+EJUzAMsycb7HB32Kh9RN4+0gExjmPmZSAQjgURXIGATPegAvA==
 
-"@types/sanitize-html@2.8.1":
-  version "2.8.1"
-  resolved "https://registry.yarnpkg.com/@types/sanitize-html/-/sanitize-html-2.8.1.tgz#0ed8022777b571e9221557ceb187482641675627"
-  integrity sha512-Q6kMAbBBaXA5IagoipeSr4Y/zuGyh4BZ5lewgb3cYe3OYqy0k/d67iMsC4O895eks676bVAe9G+0y1i0k2ZlnA==
+"@types/sanitize-html@2.9.0":
+  version "2.9.0"
+  resolved "https://registry.yarnpkg.com/@types/sanitize-html/-/sanitize-html-2.9.0.tgz#5b609f7592de22ef80a0930c39670329753dca1b"
+  integrity sha512-4fP/kEcKNj2u39IzrxWYuf/FnCCwwQCpif6wwY6ROUS1EPRIfWJjGkY3HIowY1EX/VbX5e86yq8AAE7UPMgATg==
   dependencies:
     htmlparser2 "^8.0.0"
 
