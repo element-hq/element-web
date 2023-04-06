@@ -630,9 +630,18 @@ describe("loading:", function () {
                 device_id: "DEVICE_ID",
                 access_token: "access_token",
             });
-        fireEvent.change(matrixChat.container.querySelector("#mx_LoginForm_username")!, { target: { value: "user" } });
-        fireEvent.change(matrixChat.container.querySelector("#mx_LoginForm_password")!, { target: { value: "pass" } });
-        fireEvent.click(screen.getByText("Sign in", { selector: ".mx_Login_submit" }));
+        const username = matrixChat.container.querySelector("#mx_LoginForm_username");
+        if (username) {
+            fireEvent.change(username, { target: { value: "user" } });
+        }
+        const password = matrixChat.container.querySelector("#mx_LoginForm_password");
+        if (password) {
+            fireEvent.change(password, { target: { value: "pass" } });
+        }
+        const signin = screen.getByText("Sign in", { selector: ".mx_Login_submit" });
+        if (signin) {
+            fireEvent.click(signin);
+        }
 
         return httpBackend
             .flush()
