@@ -15,6 +15,9 @@ on:
                 type: string
                 required: false
                 description: "The matrix-js-sdk SHA to use"
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
+    cancel-in-progress: true
 env:
     # These must be set for fetchdep.sh to get the right branch
     REPOSITORY: ${{ github.repository }}
