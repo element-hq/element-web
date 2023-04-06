@@ -1,6 +1,8 @@
 name: Static Analysis
 on:
     pull_request: {}
+    merge_group:
+        types: [checks_requested]
     push:
         branches: [develop, master]
     repository_dispatch:
