@@ -42,13 +42,13 @@ describe("loading:", function () {
     let httpBackend;
 
     // an Object simulating the window.location
-    let windowLocation;
+    let windowLocation: Location | undefined;
 
     // the mounted MatrixChat
-    let matrixChat: RenderResult;
+    let matrixChat: RenderResult | undefined;
 
     // a promise which resolves when the MatrixChat calls onTokenLoginCompleted
-    let tokenLoginCompletePromise;
+    let tokenLoginCompletePromise: Promise<void> | undefined;
 
     beforeEach(function () {
         httpBackend = new MockHttpBackend();
@@ -59,8 +59,8 @@ describe("loading:", function () {
         // debugging (but slow things down)
         // document.body.appendChild(parentDiv);
 
-        windowLocation = null;
-        matrixChat = null;
+        windowLocation = undefined;
+        matrixChat = undefined;
     });
 
     afterEach(async function () {
@@ -91,7 +91,7 @@ describe("loading:", function () {
             toString: function (): string {
                 return this.search + this.hash;
             },
-        };
+        } as Location;
 
         function onNewScreen(screen): void {
             console.log(Date.now() + " newscreen " + screen);
