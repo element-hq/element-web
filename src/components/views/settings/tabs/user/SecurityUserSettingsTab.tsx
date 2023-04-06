@@ -82,6 +82,8 @@ interface IState {
     invitedRoomIds: Set<string>;
     showLoginWithQR: Mode | null;
     versions?: IServerVersions;
+    // we can't use the capabilities type from the js-sdk because it isn't exported
+    capabilities?: Record<string, any>;
 }
 
 export default class SecurityUserSettingsTab extends React.Component<IProps, IState> {
@@ -116,6 +118,9 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
         MatrixClientPeg.get()
             .getVersions()
             .then((versions) => this.setState({ versions }));
+        MatrixClientPeg.get()
+            .getCapabilities()
+            .then((capabilities) => this.setState({ capabilities }));
     }
 
     public componentWillUnmount(): void {
@@ -393,7 +398,11 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
                     </span>
                     <DevicesPanel />
                 </div>
-                <LoginWithQRSection onShowQr={this.onShowQRClicked} versions={this.state.versions} />
+                <LoginWithQRSection
+                    onShowQr={this.onShowQRClicked}
+                    versions={this.state.versions}
+                    capabilities={this.state.capabilities}
+                />
             </>
         );
 

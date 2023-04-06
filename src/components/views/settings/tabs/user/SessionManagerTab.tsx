@@ -132,6 +132,7 @@ const SessionManagerTab: React.FC = () => {
     const userId = matrixClient?.getUserId();
     const currentUserMember = (userId && matrixClient?.getUser(userId)) || undefined;
     const clientVersions = useAsyncMemo(() => matrixClient.getVersions(), [matrixClient]);
+    const capabilities = useAsyncMemo(async () => matrixClient?.getCapabilities(), [matrixClient]);
 
     const onDeviceExpandToggle = (deviceId: ExtendedDevice["device_id"]): void => {
         if (expandedDeviceIds.includes(deviceId)) {
@@ -279,7 +280,7 @@ const SessionManagerTab: React.FC = () => {
                     />
                 </SettingsSubsection>
             )}
-            <LoginWithQRSection onShowQr={onShowQrClicked} versions={clientVersions} />
+            <LoginWithQRSection onShowQr={onShowQrClicked} versions={clientVersions} capabilities={capabilities} />
         </SettingsTab>
     );
 };

@@ -16,7 +16,7 @@ limitations under the License.
 
 import { render } from "@testing-library/react";
 import { mocked } from "jest-mock";
-import { IServerVersions, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { IServerVersions, MatrixClient, UNSTABLE_MSC3882_CAPABILITY } from "matrix-js-sdk/src/matrix";
 import React from "react";
 
 import LoginWithQRSection from "../../../../../src/components/views/settings/devices/LoginWithQRSection";
@@ -69,6 +69,23 @@ describe("<LoginWithQRSection />", () => {
             const { container } = render(getComponent({ versions: makeVersions({ "org.matrix.msc3882": true }) }));
             expect(container).toMatchSnapshot();
         });
+
+        it("only MSC3882 r1 enabled", async () => {
+            const { container } = render(
+                getComponent({ capabilities: { [UNSTABLE_MSC3882_CAPABILITY.name]: { enabled: true } } }),
+            );
+            expect(container).toMatchSnapshot();
+        });
+
+        it("MSC3886 + MSC3882 r1 disabled", async () => {
+            const { container } = render(
+                getComponent({
+                    versions: makeVersions({ "org.matrix.msc3886": true }),
+                    capabilities: { [UNSTABLE_MSC3882_CAPABILITY.name]: { enabled: false } },
+                }),
+            );
+            expect(container).toMatchSnapshot();
+        });
     });
 
     describe("should render panel", () => {
@@ -79,6 +96,20 @@ describe("<LoginWithQRSection />", () => {
                         "org.matrix.msc3882": true,
                         "org.matrix.msc3886": true,
                     }),
+                }),
+            );
+            expect(container).toMatchSnapshot();
+        });
+
+        it("MSC3882 r1 + MSC3886", async () => {
+            const { container } = render(
+                getComponent({
+                    versions: makeVersions({
+                        "org.matrix.msc3886": true,
+                    }),
+                    capabilities: {
+                        [UNSTABLE_MSC3882_CAPABILITY.name]: { enabled: true },
+                    },
                 }),
             );
             expect(container).toMatchSnapshot();

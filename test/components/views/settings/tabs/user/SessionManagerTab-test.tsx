@@ -29,6 +29,7 @@ import {
     PUSHER_DEVICE_ID,
     PUSHER_ENABLED,
     IAuthData,
+    UNSTABLE_MSC3882_CAPABILITY,
 } from "matrix-js-sdk/src/matrix";
 
 import { clearAllModals } from "../../../../../test-utils";
@@ -97,6 +98,7 @@ describe("<SessionManagerTab />", () => {
         setPusher: jest.fn(),
         setLocalNotificationSettings: jest.fn(),
         getVersions: jest.fn().mockResolvedValue({}),
+        getCapabilities: jest.fn().mockResolvedValue({}),
     });
 
     const defaultProps = {};
@@ -1375,8 +1377,12 @@ describe("<SessionManagerTab />", () => {
             mockClient.getVersions.mockResolvedValue({
                 versions: [],
                 unstable_features: {
-                    "org.matrix.msc3882": true,
                     "org.matrix.msc3886": true,
+                },
+            });
+            mockClient.getCapabilities.mockResolvedValue({
+                [UNSTABLE_MSC3882_CAPABILITY.name]: {
+                    enabled: true,
                 },
             });
         });
