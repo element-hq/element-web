@@ -252,7 +252,7 @@ export class SlidingRoomListStoreClass extends AsyncStoreWithClient<IState> impl
         // now set the rooms
         const rooms: Room[] = [];
         orderedRoomIds.forEach((roomId) => {
-            const room = this.matrixClient.getRoom(roomId);
+            const room = this.matrixClient?.getRoom(roomId);
             if (!room) {
                 return;
             }

@@ -42,6 +42,7 @@ describe("<RoomLiveShareWarning />", () => {
     const mockClient = getMockClientWithEventEmitter({
         getVisibleRooms: jest.fn().mockReturnValue([]),
         getUserId: jest.fn().mockReturnValue(aliceId),
+        getSafeUserId: jest.fn().mockReturnValue(aliceId),
         unstable_setLiveBeacon: jest.fn().mockResolvedValue({ event_id: "1" }),
         sendEvent: jest.fn(),
         isGuest: jest.fn().mockReturnValue(false),

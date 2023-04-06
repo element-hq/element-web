@@ -119,6 +119,7 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<IState> {
      * @internal public for test
      */
     public emitUpdateIfStateChanged = (state: SyncState, forceEmit: boolean): void => {
+        if (!this.matrixClient) return;
         // Only count visible rooms to not torment the user with notification counts in rooms they can't see.
         // This will include highlights from the previous version of the room internally
         const msc3946ProcessDynamicPredecessor = SettingsStore.getValue("feature_dynamic_room_predecessors");
@@ -149,7 +150,7 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<IState> {
     };
 
     protected async onReady(): Promise<void> {
-        this.matrixClient.on(ClientEvent.Sync, this.onSync);
+        this.matrixClient?.on(ClientEvent.Sync, this.onSync);
     }
 
     protected async onNotReady(): Promise<any> {

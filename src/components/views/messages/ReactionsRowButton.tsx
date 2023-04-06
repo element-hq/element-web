@@ -56,7 +56,7 @@ export default class ReactionsRowButton extends React.PureComponent<IProps, ISta
     public onClick = (): void => {
         const { mxEvent, myReactionEvent, content } = this.props;
         if (myReactionEvent) {
-            this.context.redactEvent(mxEvent.getRoomId()!, myReactionEvent.getId());
+            this.context.redactEvent(mxEvent.getRoomId()!, myReactionEvent.getId()!);
         } else {
             this.context.sendEvent(mxEvent.getRoomId()!, "m.reaction", {
                 "m.relates_to": {

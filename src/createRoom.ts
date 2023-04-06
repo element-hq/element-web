@@ -320,7 +320,7 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
                 return SpaceStore.instance.addRoomToSpace(
                     opts.parentSpace,
                     roomId,
-                    [client.getDomain()],
+                    [client.getDomain()!],
                     opts.suggested,
                 );
             }

@@ -47,6 +47,7 @@ export class RoomEchoChamber extends GenericEchoChamber<RoomEchoContext, CachedR
     }
 
     private onAccountData = (event: MatrixEvent): void => {
+        if (!this.matrixClient) return;
         if (event.getType() === EventType.PushRules) {
             const currentVolume = this.properties.get(CachedRoomKey.NotificationVolume);
             const newVolume = getRoomNotifsState(this.matrixClient, this.context.room.roomId);

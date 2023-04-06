@@ -53,6 +53,7 @@ export class CallStore extends AsyncStoreWithClient<{}> {
     }
 
     protected async onReady(): Promise<any> {
+        if (!this.matrixClient) return;
         // We assume that the calls present in a room are a function of room
         // widgets and group calls, so we initialize the room map here and then
         // update it whenever those change
@@ -90,9 +91,11 @@ export class CallStore extends AsyncStoreWithClient<{}> {
         this.calls.clear();
         this._activeCalls.clear();
 
-        this.matrixClient.off(GroupCallEventHandlerEvent.Incoming, this.onGroupCall);
-        this.matrixClient.off(GroupCallEventHandlerEvent.Outgoing, this.onGroupCall);
-        this.matrixClient.off(GroupCallEventHandlerEvent.Ended, this.onGroupCall);
+        if (this.matrixClient) {
+            this.matrixClient.off(GroupCallEventHandlerEvent.Incoming, this.onGroupCall);
+            this.matrixClient.off(GroupCallEventHandlerEvent.Outgoing, this.onGroupCall);
+            this.matrixClient.off(GroupCallEventHandlerEvent.Ended, this.onGroupCall);
+        }
         WidgetStore.instance.off(UPDATE_EVENT, this.onWidgets);
     }
 
@@ -174,6 +177,7 @@ export class CallStore extends AsyncStoreWithClient<{}> {
     }
 
     private onWidgets = (roomId: string | null): void => {
+        if (!this.matrixClient) return;
         if (roomId === null) {
             // This store happened to start before the widget store was done
             // loading all rooms, so we need to initialize each room again

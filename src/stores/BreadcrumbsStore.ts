@@ -21,7 +21,7 @@ import { ClientEvent } from "matrix-js-sdk/src/client";
 import SettingsStore from "../settings/SettingsStore";
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
 import defaultDispatcher from "../dispatcher/dispatcher";
-import { arrayHasDiff } from "../utils/arrays";
+import { arrayHasDiff, filterBoolean } from "../utils/arrays";
 import { SettingLevel } from "../settings/SettingLevel";
 import { Action } from "../dispatcher/actions";
 import { SettingUpdatedPayload } from "../dispatcher/payloads/SettingUpdatedPayload";
@@ -75,7 +75,7 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
     public get meetsRoomRequirement(): boolean {
         if (SettingsStore.getValue("feature_breadcrumbs_v2")) return true;
         const msc3946ProcessDynamicPredecessor = SettingsStore.getValue("feature_dynamic_room_predecessors");
-        return this.matrixClient?.getVisibleRooms(msc3946ProcessDynamicPredecessor).length >= 20;
+        return !!this.matrixClient && this.matrixClient.getVisibleRooms(msc3946ProcessDynamicPredecessor).length >= 20;
     }
 
     protected async onAction(payload: SettingUpdatedPayload | ViewRoomPayload | JoinRoomPayload): Promise<void> {
@@ -107,13 +107,17 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
         await this.updateRooms();
         await this.updateState({ enabled: SettingsStore.getValue("breadcrumbs", null) });
 
-        this.matrixClient.on(RoomEvent.MyMembership, this.onMyMembership);
-        this.matrixClient.on(ClientEvent.Room, this.onRoom);
+        if (this.matrixClient) {
+            this.matrixClient.on(RoomEvent.MyMembership, this.onMyMembership);
+            this.matrixClient.on(ClientEvent.Room, this.onRoom);
+        }
     }
 
     protected async onNotReady(): Promise<void> {
-        this.matrixClient.removeListener(RoomEvent.MyMembership, this.onMyMembership);
-        this.matrixClient.removeListener(ClientEvent.Room, this.onRoom);
+        if (this.matrixClient) {
+            this.matrixClient.removeListener(RoomEvent.MyMembership, this.onMyMembership);
+            this.matrixClient.removeListener(ClientEvent.Room, this.onRoom);
+        }
     }
 
     private onMyMembership = async (room: Room): Promise<void> => {
@@ -137,7 +141,7 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
         let roomIds = SettingsStore.getValue<string[]>("breadcrumb_rooms");
         if (!roomIds || roomIds.length === 0) roomIds = [];
 
-        const rooms = roomIds.map((r) => this.matrixClient.getRoom(r)).filter((r) => !!r);
+        const rooms = filterBoolean(roomIds.map((r) => this.matrixClient?.getRoom(r)));
         const currentRooms = this.state.rooms || [];
         if (!arrayHasDiff(rooms, currentRooms)) return; // no change (probably echo)
         await this.updateState({ rooms });
@@ -150,8 +154,8 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
 
         // If the room is upgraded, use that room instead. We'll also splice out
         // any children of the room.
-        const history = this.matrixClient.getRoomUpgradeHistory(room.roomId, false, msc3946ProcessDynamicPredecessor);
-        if (history.length > 1) {
+        const history = this.matrixClient?.getRoomUpgradeHistory(room.roomId, false, msc3946ProcessDynamicPredecessor);
+        if (history && history.length > 1) {
             room = history[history.length - 1]; // Last room is most recent in history
 
             // Take out any room that isn't the most recent room

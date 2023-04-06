@@ -77,7 +77,8 @@ export class SpaceNotificationState extends NotificationState {
         this._count = 0;
         this._color = NotificationColor.None;
         for (const [roomId, state] of Object.entries(this.states)) {
-            const roomTags = RoomListStore.instance.getTagsForRoom(this.rooms.find((r) => r.roomId === roomId));
+            const room = this.rooms.find((r) => r.roomId === roomId);
+            const roomTags = room ? RoomListStore.instance.getTagsForRoom(room) : [];
 
             // We ignore unreads in LowPriority rooms, see https://github.com/vector-im/element-web/issues/16836
             if (roomTags.includes(DefaultTagID.LowPriority) && state.color === NotificationColor.Bold) continue;

@@ -27,7 +27,6 @@ import defaultDispatcher from "../dispatcher/dispatcher";
 import WidgetEchoStore from "../stores/WidgetEchoStore";
 import ActiveWidgetStore from "../stores/ActiveWidgetStore";
 import WidgetUtils from "../utils/WidgetUtils";
-import { WidgetType } from "../widgets/WidgetType";
 import { UPDATE_EVENT } from "./AsyncStore";
 
 interface IState {}
@@ -74,6 +73,7 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
     }
 
     protected async onReady(): Promise<any> {
+        if (!this.matrixClient) return;
         this.matrixClient.on(ClientEvent.Room, this.onRoom);
         this.matrixClient.on(RoomStateEvent.Events, this.onRoomStateEvents);
         this.matrixClient.getRooms().forEach((room: Room) => {
@@ -83,8 +83,10 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
     }
 
     protected async onNotReady(): Promise<any> {
-        this.matrixClient.off(ClientEvent.Room, this.onRoom);
-        this.matrixClient.off(RoomStateEvent.Events, this.onRoomStateEvents);
+        if (this.matrixClient) {
+            this.matrixClient.off(ClientEvent.Room, this.onRoom);
+            this.matrixClient.off(RoomStateEvent.Events, this.onRoomStateEvents);
+        }
         this.widgetMap = new Map();
         this.roomMap = new Map();
         await this.reset({});
@@ -95,9 +97,9 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
         return;
     }
 
-    private onWidgetEchoStoreUpdate = (roomId: string, widgetId: string): void => {
+    private onWidgetEchoStoreUpdate = (roomId: string): void => {
         this.initRoom(roomId);
-        this.loadRoomWidgets(this.matrixClient.getRoom(roomId));
+        this.loadRoomWidgets(this.matrixClient?.getRoom(roomId) ?? null);
         this.emit(UPDATE_EVENT, roomId);
     };
 
@@ -174,7 +176,7 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
         if (ev.getType() !== "im.vector.modular.widgets") return; // TODO: Support m.widget too
         const roomId = ev.getRoomId()!;
         this.initRoom(roomId);
-        this.loadRoomWidgets(this.matrixClient.getRoom(roomId));
+        this.loadRoomWidgets(this.matrixClient?.getRoom(roomId) ?? null);
         this.emit(UPDATE_EVENT, roomId);
     };
 
@@ -206,24 +208,6 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
         if (roomApps) {
             roomApps.widgets = roomApps.widgets.filter((app) => !(app.id === widgetId && app.roomId === roomId));
         }
-    }
-
-    public doesRoomHaveConference(room: Room): boolean {
-        const roomInfo = this.getRoom(room.roomId);
-        if (!roomInfo) return false;
-
-        const currentWidgets = roomInfo.widgets.filter((w) => WidgetType.JITSI.matches(w.type));
-        const hasPendingWidgets = WidgetEchoStore.roomHasPendingWidgetsOfType(room.roomId, [], WidgetType.JITSI);
-        return currentWidgets.length > 0 || hasPendingWidgets;
-    }
-
-    public isJoinedToConferenceIn(room: Room): boolean {
-        const roomInfo = this.getRoom(room.roomId);
-        if (!roomInfo) return false;
-
-        // A persistent conference widget indicates that we're participating
-        const widgets = roomInfo.widgets.filter((w) => WidgetType.JITSI.matches(w.type));
-        return widgets.some((w) => ActiveWidgetStore.instance.getWidgetPersistence(w.id, room.roomId));
     }
 }
 

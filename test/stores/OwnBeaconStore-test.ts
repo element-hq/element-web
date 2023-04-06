@@ -59,6 +59,7 @@ describe("OwnBeaconStore", () => {
     const bobId = "@bob:server.org";
     const mockClient = getMockClientWithEventEmitter({
         getUserId: jest.fn().mockReturnValue(aliceId),
+        getSafeUserId: jest.fn().mockReturnValue(aliceId),
         getVisibleRooms: jest.fn().mockReturnValue([]),
         unstable_setLiveBeacon: jest.fn().mockResolvedValue({ event_id: "1" }),
         sendEvent: jest.fn().mockResolvedValue({ event_id: "1" }),

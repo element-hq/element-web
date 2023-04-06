@@ -42,7 +42,7 @@ describe("NotificatinSettingsTab", () => {
         const room = mkStubRoom(roomId, "test room", cli);
         roomProps = EchoChamber.forRoom(room);
 
-        NotificationSettingsTab.contextType = React.createContext<MatrixClient | undefined>(cli);
+        NotificationSettingsTab.contextType = React.createContext<MatrixClient>(cli);
     });
 
     it("should prevent »Settings« link click from bubbling up to radio buttons", async () => {

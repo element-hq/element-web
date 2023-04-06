@@ -112,7 +112,8 @@ export class OwnProfileStore extends AsyncStoreWithClient<IState> {
     }
 
     protected async onReady(): Promise<void> {
-        const myUserId = this.matrixClient.getUserId()!;
+        if (!this.matrixClient) return;
+        const myUserId = this.matrixClient.getSafeUserId();
         this.monitoredUser = this.matrixClient.getUser(myUserId);
         if (this.monitoredUser) {
             this.monitoredUser.on(UserEvent.DisplayName, this.onProfileUpdate);
@@ -132,9 +133,10 @@ export class OwnProfileStore extends AsyncStoreWithClient<IState> {
 
     private onProfileUpdate = throttle(
         async (): Promise<void> => {
+            if (!this.matrixClient) return;
             // We specifically do not use the User object we stored for profile info as it
             // could easily be wrong (such as per-room instead of global profile).
-            const profileInfo = await this.matrixClient.getProfileInfo(this.matrixClient.getUserId()!);
+            const profileInfo = await this.matrixClient.getProfileInfo(this.matrixClient.getSafeUserId());
             if (profileInfo.displayname) {
                 window.localStorage.setItem(KEY_DISPLAY_NAME, profileInfo.displayname);
             } else {

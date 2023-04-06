@@ -130,7 +130,7 @@ export async function loadSession(opts: ILoadSessionOpts = {}): Promise<boolean>
             enableGuest = false;
         }
 
-        if (enableGuest && fragmentQueryParams.guest_user_id && fragmentQueryParams.guest_access_token) {
+        if (enableGuest && guestHsUrl && fragmentQueryParams.guest_user_id && fragmentQueryParams.guest_access_token) {
             logger.log("Using guest access credentials");
             return doSetLoggedIn(
                 {
@@ -150,7 +150,7 @@ export async function loadSession(opts: ILoadSessionOpts = {}): Promise<boolean>
             return true;
         }
 
-        if (enableGuest) {
+        if (enableGuest && guestHsUrl) {
             return registerAsGuest(guestHsUrl, guestIsUrl, defaultDeviceDisplayName);
         }
 
@@ -174,7 +174,7 @@ export async function loadSession(opts: ILoadSessionOpts = {}): Promise<boolean>
  *     session is for a guest user, if an owner exists. If there is no stored session,
  *     return [null, null].
  */
-export async function getStoredSessionOwner(): Promise<[string, boolean]> {
+export async function getStoredSessionOwner(): Promise<[string, boolean] | [null, null]> {
     const { hsUrl, userId, hasAccessToken, isGuest } = await getStoredSessionVars();
     return hsUrl && userId && hasAccessToken ? [userId, isGuest] : [null, null];
 }
@@ -259,7 +259,7 @@ export function attemptTokenLogin(
         });
 }
 
-export function handleInvalidStoreError(e: InvalidStoreError): Promise<void> {
+export function handleInvalidStoreError(e: InvalidStoreError): Promise<void> | void {
     if (e.reason === InvalidStoreError.TOGGLED_LAZY_LOADING) {
         return Promise.resolve()
             .then(() => {
@@ -292,7 +292,7 @@ export function handleInvalidStoreError(e: InvalidStoreError): Promise<void> {
     }
 }
 
-function registerAsGuest(hsUrl: string, isUrl: string, defaultDeviceDisplayName: string): Promise<boolean> {
+function registerAsGuest(hsUrl: string, isUrl?: string, defaultDeviceDisplayName?: string): Promise<boolean> {
     logger.log(`Doing guest login on ${hsUrl}`);
 
     // create a temporary MatrixClient to do the login
@@ -346,14 +346,14 @@ export interface IStoredSession {
 export async function getStoredSessionVars(): Promise<IStoredSession> {
     const hsUrl = localStorage.getItem(HOMESERVER_URL_KEY);
     const isUrl = localStorage.getItem(ID_SERVER_URL_KEY);
-    let accessToken;
+    let accessToken: string | undefined;
     try {
         accessToken = await StorageManager.idbLoad("account", "mx_access_token");
     } catch (e) {
         logger.error("StorageManager.idbLoad failed for account:mx_access_token", e);
     }
     if (!accessToken) {
-        accessToken = localStorage.getItem("mx_access_token");
+        accessToken = localStorage.getItem("mx_access_token") ?? undefined;
         if (accessToken) {
             try {
                 // try to migrate access token to IndexedDB if we can
@@ -370,7 +370,7 @@ export async function getStoredSessionVars(): Promise<IStoredSession> {
     const userId = localStorage.getItem("mx_user_id");
     const deviceId = localStorage.getItem("mx_device_id");
 
-    let isGuest;
+    let isGuest: boolean;
     if (localStorage.getItem("mx_is_guest") !== null) {
         isGuest = localStorage.getItem("mx_is_guest") === "true";
     } else {
@@ -447,7 +447,7 @@ export async function restoreFromLocalStorage(opts?: { ignoreGuest?: boolean }):
         }
 
         let decryptedAccessToken = accessToken;
-        const pickleKey = await PlatformPeg.get().getPickleKey(userId, deviceId);
+        const pickleKey = await PlatformPeg.get()?.getPickleKey(userId, deviceId);
         if (pickleKey) {
             logger.log("Got pickle key");
             if (typeof accessToken !== "string") {
@@ -471,7 +471,7 @@ export async function restoreFromLocalStorage(opts?: { ignoreGuest?: boolean }):
                 homeserverUrl: hsUrl,
                 identityServerUrl: isUrl,
                 guest: isGuest,
-                pickleKey: pickleKey,
+                pickleKey: pickleKey ?? undefined,
                 freshLogin: freshLogin,
             },
             false,
@@ -561,7 +561,8 @@ export async function hydrateSession(credentials: IMatrixClientCreds): Promise<M
 
     if (!credentials.pickleKey) {
         logger.info("Lifecycle#hydrateSession: Pickle key not provided - trying to get one");
-        credentials.pickleKey = await PlatformPeg.get().getPickleKey(credentials.userId, credentials.deviceId);
+        credentials.pickleKey =
+            (await PlatformPeg.get()?.getPickleKey(credentials.userId, credentials.deviceId)) ?? undefined;
     }
 
     return doSetLoggedIn(credentials, overwrite);
@@ -646,12 +647,10 @@ async function doSetLoggedIn(credentials: IMatrixClientCreds, clearStorageEnable
     return client;
 }
 
-function showStorageEvictedDialog(): Promise<boolean> {
-    return new Promise((resolve) => {
-        Modal.createDialog(StorageEvictedDialog, {
-            onFinished: resolve,
-        });
-    });
+async function showStorageEvictedDialog(): Promise<boolean> {
+    const { finished } = Modal.createDialog(StorageEvictedDialog);
+    const [ok] = await finished;
+    return !!ok;
 }
 
 // Note: Babel 6 requires the `transform-builtin-extend` plugin for this to satisfy
@@ -675,7 +674,7 @@ async function persistCredentials(credentials: IMatrixClientCreds): Promise<void
     }
 
     if (credentials.pickleKey) {
-        let encryptedAccessToken: IEncryptedPayload;
+        let encryptedAccessToken: IEncryptedPayload | undefined;
         try {
             // try to encrypt the access token using the pickle key
             const encrKey = await pickleKeyToAesKey(credentials.pickleKey);
@@ -741,7 +740,7 @@ export function logout(): void {
 
     _isLoggingOut = true;
     const client = MatrixClientPeg.get();
-    PlatformPeg.get().destroyPickleKey(client.getUserId(), client.getDeviceId());
+    PlatformPeg.get()?.destroyPickleKey(client.getSafeUserId(), client.getDeviceId());
     client.logout(true).then(onLoggedOut, (err) => {
         // Just throwing an error here is going to be very unhelpful
         // if you're trying to log out because your server's down and
@@ -870,7 +869,7 @@ export async function onLoggedOut(): Promise<void> {
         logger.log("Redirecting to external provider to finish logout");
         // XXX: Defer this so that it doesn't race with MatrixChat unmounting the world by going to /#/login
         window.setTimeout(() => {
-            window.location.href = SdkConfig.get().logout_redirect_url;
+            window.location.href = SdkConfig.get().logout_redirect_url!;
         }, 100);
     }
     // Do this last to prevent racing `stopMatrixClient` and `on_logged_out` with MatrixChat handling Session.logged_out
