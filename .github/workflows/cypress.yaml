@@ -39,7 +39,7 @@ jobs:
 
             - id: prdetails
               if: github.event.workflow_run.event == 'pull_request' || github.event.workflow_run.event == 'merge_group'
-              uses: matrix-org/pr-details-action@v1.2
+              uses: matrix-org/pr-details-action@v1.3
               with:
                   owner: ${{ github.event.workflow_run.head_repository.owner.login }}
                   branch: ${{ github.event.workflow_run.head_branch }}
@@ -125,7 +125,7 @@ jobs:
                   path: webapp
 
             - name: Run Cypress tests
-              uses: cypress-io/github-action@v5.5.0
+              uses: cypress-io/github-action@v5.6.1
               with:
                   # The built-in Electron runner seems to grind to a halt trying
                   # to run the tests, so use chrome.
