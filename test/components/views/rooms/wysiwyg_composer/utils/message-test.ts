@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { EventStatus } from "matrix-js-sdk/src/matrix";
+import { EventStatus, IEventRelation } from "matrix-js-sdk/src/matrix";
 
 import { IRoomState } from "../../../../../../src/components/structures/RoomView";
 import { editMessage, sendMessage } from "../../../../../../src/components/views/rooms/wysiwyg_composer/utils/message";
@@ -25,6 +25,11 @@ import { SettingLevel } from "../../../../../../src/settings/SettingLevel";
 import { RoomPermalinkCreator } from "../../../../../../src/utils/permalinks/Permalinks";
 import EditorStateTransfer from "../../../../../../src/utils/EditorStateTransfer";
 import * as ConfirmRedactDialog from "../../../../../../src/components/views/dialogs/ConfirmRedactDialog";
+import * as SlashCommands from "../../../../../../src/SlashCommands";
+import * as Commands from "../../../../../../src/editor/commands";
+import * as Reply from "../../../../../../src/utils/Reply";
+import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";
+import { Action } from "../../../../../../src/dispatcher/actions";
 
 describe("message", () => {
     const permalinkCreator = {
@@ -47,6 +52,9 @@ describe("message", () => {
     });
 
     const mockClient = createTestClient();
+    mockClient.setDisplayName = jest.fn().mockResolvedValue({});
+    mockClient.setRoomName = jest.fn().mockResolvedValue({});
+
     const mockRoom = mkStubRoom("myfakeroom", "myfakeroom", mockClient) as any;
     mockRoom.findEventById = jest.fn((eventId) => {
         return eventId === mockEvent.getId() ? mockEvent : null;
@@ -56,8 +64,13 @@ describe("message", () => {
 
     const spyDispatcher = jest.spyOn(defaultDispatcher, "dispatch");
 
-    afterEach(() => {
-        jest.resetAllMocks();
+    beforeEach(() => {
+        jest.spyOn(MatrixClientPeg, "get").mockReturnValue(mockClient);
+        jest.clearAllMocks();
+    });
+
+    afterAll(() => {
+        jest.restoreAllMocks();
     });
 
     describe("sendMessage", () => {
@@ -225,6 +238,153 @@ describe("message", () => {
 
             // Then
             expect(spyDispatcher).toHaveBeenCalledWith({ action: "effects.confetti" });
+        });
+
+        describe("slash commands", () => {
+            const getCommandSpy = jest.spyOn(SlashCommands, "getCommand");
+
+            it("calls getCommand for a message starting with a valid command", async () => {
+                // When
+                const validCommand = "/spoiler";
+                await sendMessage(validCommand, true, {
+                    roomContext: defaultRoomContext,
+                    mxClient: mockClient,
+                    permalinkCreator,
+                });
+
+                // Then
+                expect(getCommandSpy).toHaveBeenCalledWith(validCommand);
+            });
+
+            it("does not call getCommand for valid command with invalid prefix", async () => {
+                // When
+                const invalidPrefixCommand = "//spoiler";
+                await sendMessage(invalidPrefixCommand, true, {
+                    roomContext: defaultRoomContext,
+                    mxClient: mockClient,
+                    permalinkCreator,
+                });
+
+                // Then
+                expect(getCommandSpy).toHaveBeenCalledTimes(0);
+            });
+
+            it("returns undefined when the command is not successful", async () => {
+                // When
+                const validCommand = "/spoiler";
+                jest.spyOn(Commands, "runSlashCommand").mockResolvedValueOnce([{ content: "mock content" }, false]);
+
+                const result = await sendMessage(validCommand, true, {
+                    roomContext: defaultRoomContext,
+                    mxClient: mockClient,
+                    permalinkCreator,
+                });
+
+                // Then
+                expect(result).toBeUndefined();
+            });
+
+            // /spoiler is a .messages category command, /fireworks is an .effect category command
+            const messagesAndEffectCategoryTestCases = ["/spoiler text", "/fireworks"];
+            it.each(messagesAndEffectCategoryTestCases)(
+                "does not add relations for a .messages or .effects category command if there is no relation to add",
+                async (inputText) => {
+                    await sendMessage(inputText, true, {
+                        roomContext: defaultRoomContext,
+                        mxClient: mockClient,
+                        permalinkCreator,
+                    });
+                    expect(mockClient.sendMessage).toHaveBeenCalledWith(
+                        "myfakeroom",
+                        null,
+                        expect.not.objectContaining({ "m.relates_to": expect.any }),
+                    );
+                },
+            );
+
+            it.each(messagesAndEffectCategoryTestCases)(
+                "adds relations for a .messages or .effects category command if there is a relation",
+                async (inputText) => {
+                    const mockRelation: IEventRelation = {
+                        rel_type: "mock relation type",
+                    };
+                    await sendMessage(inputText, true, {
+                        roomContext: defaultRoomContext,
+                        mxClient: mockClient,
+                        permalinkCreator,
+                        relation: mockRelation,
+                    });
+
+                    expect(mockClient.sendMessage).toHaveBeenCalledWith(
+                        "myfakeroom",
+                        null,
+                        expect.objectContaining({ "m.relates_to": expect.objectContaining(mockRelation) }),
+                    );
+                },
+            );
+
+            it("calls addReplyToMessageContent when there is an event to reply to", async () => {
+                const addReplySpy = jest.spyOn(Reply, "addReplyToMessageContent");
+                await sendMessage("input", true, {
+                    roomContext: defaultRoomContext,
+                    mxClient: mockClient,
+                    permalinkCreator,
+                    replyToEvent: mockEvent,
+                });
+
+                expect(addReplySpy).toHaveBeenCalledTimes(1);
+            });
+
+            // these test cases are .action and .admin categories
+            const otherCategoryTestCases = ["/nick new_nickname", "/roomname new_room_name"];
+            it.each(otherCategoryTestCases)(
+                "returns undefined when the command category is not .messages or .effects",
+                async (input) => {
+                    const result = await sendMessage(input, true, {
+                        roomContext: defaultRoomContext,
+                        mxClient: mockClient,
+                        permalinkCreator,
+                        replyToEvent: mockEvent,
+                    });
+
+                    expect(result).toBeUndefined();
+                },
+            );
+
+            it("if user enters invalid command and then sends it anyway", async () => {
+                // mock out returning a true value for `shouldSendAnyway` to avoid rendering the modal
+                jest.spyOn(Commands, "shouldSendAnyway").mockResolvedValueOnce(true);
+                const invalidCommandInput = "/badCommand";
+
+                await sendMessage(invalidCommandInput, true, {
+                    roomContext: defaultRoomContext,
+                    mxClient: mockClient,
+                    permalinkCreator,
+                });
+
+                // we expect the message to have been sent
+                // and a composer focus action to have been dispatched
+                expect(mockClient.sendMessage).toHaveBeenCalledWith(
+                    "myfakeroom",
+                    null,
+                    expect.objectContaining({ body: invalidCommandInput }),
+                );
+                expect(spyDispatcher).toHaveBeenCalledWith(expect.objectContaining({ action: Action.FocusAComposer }));
+            });
+
+            it("if user enters invalid command and then does not send, return undefined", async () => {
+                // mock out returning a false value for `shouldSendAnyway` to avoid rendering the modal
+                jest.spyOn(Commands, "shouldSendAnyway").mockResolvedValueOnce(false);
+                const invalidCommandInput = "/badCommand";
+
+                const result = await sendMessage(invalidCommandInput, true, {
+                    roomContext: defaultRoomContext,
+                    mxClient: mockClient,
+                    permalinkCreator,
+                });
+
+                expect(result).toBeUndefined();
+            });
         });
     });
 

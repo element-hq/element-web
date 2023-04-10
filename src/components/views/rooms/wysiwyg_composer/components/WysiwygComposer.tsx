@@ -91,7 +91,7 @@ export const WysiwygComposer = memo(function WysiwygComposer({
             }
         }
 
-        const mentions = ref.current?.querySelectorAll("a[data-mention-type]");
+        const mentions: NodeList | undefined = ref.current?.querySelectorAll("a[data-mention-type]");
         if (mentions) {
             mentions.forEach((mention) => mention.addEventListener("click", handleClick));
         }
@@ -108,7 +108,12 @@ export const WysiwygComposer = memo(function WysiwygComposer({
             onFocus={onFocus}
             onBlur={onFocus}
         >
-            <WysiwygAutocomplete ref={autocompleteRef} suggestion={suggestion} handleMention={wysiwyg.mention} />
+            <WysiwygAutocomplete
+                ref={autocompleteRef}
+                suggestion={suggestion}
+                handleMention={wysiwyg.mention}
+                handleCommand={wysiwyg.command}
+            />
             <FormattingButtons composer={wysiwyg} actionStates={actionStates} />
             <Editor
                 ref={ref}

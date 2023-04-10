@@ -29,9 +29,8 @@ import * as Avatar from "../../../../../Avatar";
  * with @ for a user query, # for a room or space query
  */
 export function buildQuery(suggestion: MappedSuggestion | null): string {
-    if (!suggestion || !suggestion.keyChar || suggestion.type === "command") {
+    if (!suggestion || !suggestion.keyChar) {
         // if we have an empty key character, we do not build a query
-        // TODO implement the command functionality
         return "";
     }
 

@@ -46,6 +46,7 @@ export function useWysiwygSendActionHandler(
 
             switch (payload.action) {
                 case "reply_to_event":
+                case Action.FocusAComposer:
                 case Action.FocusSendMessageComposer:
                     focusComposer(composerElement, context, roomContext, timeoutId);
                     break;

@@ -69,8 +69,9 @@ describe("WysiwygAutocomplete", () => {
         },
     ]);
     const mockHandleMention = jest.fn();
+    const mockHandleCommand = jest.fn();
 
-    const renderComponent = (props = {}) => {
+    const renderComponent = (props: Partial<React.ComponentProps<typeof WysiwygAutocomplete>> = {}) => {
         const mockClient = stubClient();
         const mockRoom = mkStubRoom("test_room", "test_room", mockClient);
         const mockRoomContext = getRoomContext(mockRoom, {});
@@ -82,6 +83,7 @@ describe("WysiwygAutocomplete", () => {
                         ref={autocompleteRef}
                         suggestion={null}
                         handleMention={mockHandleMention}
+                        handleCommand={mockHandleCommand}
                         {...props}
                     />
                 </RoomContext.Provider>
@@ -90,7 +92,14 @@ describe("WysiwygAutocomplete", () => {
     };
 
     it("does not show the autocomplete when room is undefined", () => {
-        render(<WysiwygAutocomplete ref={autocompleteRef} suggestion={null} handleMention={mockHandleMention} />);
+        render(
+            <WysiwygAutocomplete
+                ref={autocompleteRef}
+                suggestion={null}
+                handleMention={mockHandleMention}
+                handleCommand={mockHandleCommand}
+            />,
+        );
         expect(screen.queryByTestId("autocomplete-wrapper")).not.toBeInTheDocument();
     });
 

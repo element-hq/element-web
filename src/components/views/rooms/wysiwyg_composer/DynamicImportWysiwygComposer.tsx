@@ -28,7 +28,7 @@ export const dynamicImportSendMessage = async (
     message: string,
     isHTML: boolean,
     params: SendMessageParams,
-): Promise<ISendEventResponse> => {
+): Promise<ISendEventResponse | undefined> => {
     const { sendMessage } = await import("./utils/message");
 
     return sendMessage(message, isHTML, params);

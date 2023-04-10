@@ -35,6 +35,12 @@ interface WysiwygAutocompleteProps {
      * a mention in the autocomplete list or pressing enter on a selected item
      */
     handleMention: FormattingFunctions["mention"];
+
+    /**
+     * This handler will be called with the display text for a command on clicking
+     * a command in the autocomplete list or pressing enter on a selected item
+     */
+    handleCommand: FormattingFunctions["command"];
 }
 
 /**
@@ -45,13 +51,23 @@ interface WysiwygAutocompleteProps {
  * @param props.ref - the ref will be attached to the rendered `<Autocomplete />` component
  */
 const WysiwygAutocomplete = forwardRef(
-    ({ suggestion, handleMention }: WysiwygAutocompleteProps, ref: ForwardedRef<Autocomplete>): JSX.Element | null => {
+    (
+        { suggestion, handleMention, handleCommand }: WysiwygAutocompleteProps,
+        ref: ForwardedRef<Autocomplete>,
+    ): JSX.Element | null => {
         const { room } = useRoomContext();
         const client = useMatrixClientContext();
 
         function handleConfirm(completion: ICompletion): void {
             // TODO handle all of the completion types
             // Using this to pick out the ones we can handle during implementation
+            if (completion.type === "command") {
+                // TODO determine if utils in SlashCommands.tsx are required
+
+                // trim the completion as some include trailing spaces, but we always insert a
+                // trailing space in the rust model anyway
+                handleCommand(completion.completion.trim());
+            }
             if (client && room && completion.href && (completion.type === "room" || completion.type === "user")) {
                 handleMention(
                     completion.href,
@@ -61,6 +77,8 @@ const WysiwygAutocomplete = forwardRef(
             }
         }
 
+        // TODO - determine if we show all of the /command suggestions, there are some options in the
+        // list which don't seem to make sense in this context, specifically /html and /plain
         return room ? (
             <div className="mx_WysiwygComposer_AutoCompleteWrapper" data-testid="autocomplete-wrapper">
                 <Autocomplete
