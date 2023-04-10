@@ -58,7 +58,7 @@ describe("Consent", () => {
                 cy.visit(url);
 
                 cy.get('[type="submit"]').click();
-                cy.contains("p", "Danke schon");
+                cy.contains("p", "Danke schoen");
             });
         });
 
