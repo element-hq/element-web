@@ -37,7 +37,7 @@ describe("Audio player", () => {
 
         cy.get(".mx_Dialog").within(() => {
             // Find and click primary "Upload" button
-            cy.get("[data-testid='dialog-primary-button']").findButton("Upload").click();
+            cy.findByRole("button", { name: "Upload" }).click();
         });
 
         // Wait until the file is sent
@@ -65,7 +65,7 @@ describe("Audio player", () => {
             );
 
             // Assert that the play button can be found and is visible
-            cy.findButton("Play").should("be.visible");
+            cy.findByRole("button", { name: "Play" }).should("be.visible");
 
             if (monospace) {
                 // Assert that the monospace timer is visible
@@ -148,10 +148,9 @@ describe("Audio player", () => {
         cy.createRoom({ name: "Test Room" }).viewRoomByName("Test Room");
 
         // Wait until configuration is finished
-        cy.contains(
-            ".mx_RoomView_body .mx_GenericEventListSummary[data-layout='group'] .mx_GenericEventListSummary_summary",
-            "created and configured the room.",
-        ).should("exist");
+        cy.get(".mx_GenericEventListSummary[data-layout='group'] .mx_GenericEventListSummary_summary").within(() => {
+            cy.findByText(TEST_USER + " created and configured the room.").should("exist");
+        });
     });
 
     afterEach(() => {
@@ -178,20 +177,8 @@ describe("Audio player", () => {
         // Enable high contrast manually
         cy.openUserSettings("Appearance")
             .get(".mx_ThemeChoicePanel")
-            .within(() => {
-                cy.get("[data-testid='theme-choice-panel-selectors']").within(() => {
-                    // Enable light theme
-                    cy.get(".mx_ThemeSelector_light").click();
-
-                    // Assert that the radio button for light theme was checked
-                    cy.get(".mx_StyledRadioButton_checked input[value='light']").should("exist");
-                });
-
-                cy.get("[data-testid='theme-choice-panel-highcontrast']").within(() => {
-                    // Click the checkbox
-                    cy.get("label .mx_Checkbox_background").click();
-                });
-            });
+            .findByLabelText("Use high contrast")
+            .click({ force: true }); // force click because the size of the checkbox is zero
 
         cy.closeDialog();
 
@@ -218,16 +205,16 @@ describe("Audio player", () => {
             cy.contains(".mx_AudioPlayer_seek [role='timer']", "00:00").should("exist");
 
             // Find and click "Play" button
-            cy.findButton("Play").click();
+            cy.findByRole("button", { name: "Play" }).click();
 
             // Assert that "Pause" button can be found
-            cy.findButton("Pause").should("exist");
+            cy.findByRole("button", { name: "Pause" }).should("exist");
 
             // Assert that the timer is reset when the audio file finished playing
             cy.contains(".mx_AudioPlayer_seek [role='timer']", "00:00").should("exist");
 
             // Assert that "Play" button can be found
-            cy.findButton("Play").should("exist");
+            cy.findByRole("button", { name: "Play" }).should("exist");
         });
     });
 
@@ -235,7 +222,7 @@ describe("Audio player", () => {
         uploadFile("cypress/fixtures/1sec.ogg");
 
         // Find and click "Download" button on MessageActionBar
-        cy.get(".mx_EventTile_last").realHover().findButton("Download").click();
+        cy.get(".mx_EventTile_last").realHover().findByRole("button", { name: "Download" }).click();
 
         // Assert that the file was downloaded
         cy.readFile("cypress/downloads/1sec.ogg").should("exist");
@@ -248,7 +235,7 @@ describe("Audio player", () => {
         cy.get(".mx_EventTile_last .mx_AudioPlayer_container").should("exist");
 
         // Find and click "Reply" button on MessageActionBar
-        cy.get(".mx_EventTile_last").realHover().findButton("Reply").click();
+        cy.get(".mx_EventTile_last").realHover().findByRole("button", { name: "Reply" }).click();
 
         // Reply to the player with another audio file
         uploadFile("cypress/fixtures/1sec.ogg");
@@ -276,7 +263,7 @@ describe("Audio player", () => {
 
         // Find and click "Reply" button
         const clickButtonReply = () => {
-            cy.get(".mx_EventTile_last").realHover().findButton("Reply").click();
+            cy.get(".mx_EventTile_last").realHover().findByRole("button", { name: "Reply" }).click();
         };
 
         uploadFile("cypress/fixtures/upload-first.ogg");
@@ -305,7 +292,9 @@ describe("Audio player", () => {
             cy.get(".mx_ReplyChain").should("have.length", 2);
 
             // Assert that one line contains the user name
-            cy.contains(".mx_ReplyChain .mx_ReplyTile_sender", TEST_USER);
+            cy.get(".mx_ReplyChain .mx_ReplyTile_sender").within(() => {
+                cy.findByText(TEST_USER);
+            });
 
             // Assert that the other line contains the file button
             cy.get(".mx_ReplyChain .mx_MFileBody").should("exist");
@@ -315,7 +304,7 @@ describe("Audio player", () => {
 
             cy.get("blockquote.mx_ReplyChain:first-of-type").within(() => {
                 // Assert that "In reply to" has disappeared
-                cy.contains("In reply to").should("not.exist");
+                cy.findByText("In reply to").should("not.exist");
 
                 // Assert that audio file on the first row is rendered as file button
                 cy.get(".mx_MFileBody_info[role='button']").within(() => {
@@ -338,7 +327,7 @@ describe("Audio player", () => {
             cy.get(".mx_EventTile_last .mx_AudioPlayer_container").should("exist");
 
             // Find and click "Reply in thread" button
-            cy.get(".mx_EventTile_last").realHover().findButton("Reply in thread").click();
+            cy.get(".mx_EventTile_last").realHover().findByRole("button", { name: "Reply in thread" }).click();
         });
 
         // On a thread
@@ -351,20 +340,20 @@ describe("Audio player", () => {
                         cy.contains(".mx_AudioPlayer_seek [role='timer']", "00:00").should("exist");
 
                         // Find and click "Play" button
-                        cy.findButton("Play").click();
+                        cy.findByRole("button", { name: "Play" }).click();
 
                         // Assert that "Pause" button can be found
-                        cy.findButton("Pause").should("exist");
+                        cy.findByRole("button", { name: "Pause" }).should("exist");
 
                         // Assert that the timer is reset when the audio file finished playing
                         cy.contains(".mx_AudioPlayer_seek [role='timer']", "00:00").should("exist");
 
                         // Assert that "Play" button can be found
-                        cy.findButton("Play").should("exist");
+                        cy.findByRole("button", { name: "Play" }).should("exist");
                     });
                 })
                 .realHover()
-                .findButton("Reply")
+                .findByRole("button", { name: "Reply" })
                 .click(); // Find and click "Reply" button
 
             cy.get(".mx_MessageComposer--compact").within(() => {
@@ -375,9 +364,9 @@ describe("Audio player", () => {
                 });
 
                 // Select :smile: emoji and send it
-                cy.get("[data-testid='basicmessagecomposer']").type(":smile:");
+                cy.findByTestId("basicmessagecomposer").type(":smile:");
                 cy.get(".mx_Autocomplete_Completion[aria-selected='true']").click();
-                cy.get("[data-testid='basicmessagecomposer']").type("{enter}");
+                cy.findByTestId("basicmessagecomposer").type("{enter}");
             });
 
             cy.get(".mx_EventTile_last").within(() => {
