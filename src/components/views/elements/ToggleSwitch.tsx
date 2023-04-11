@@ -35,6 +35,9 @@ interface IProps {
 
     // Called when the checked state changes. First argument will be the new state.
     onChange(checked: boolean): void;
+
+    // id to bind with other elements
+    id?: string;
 }
 
 // Controlled Toggle Switch element, written with Accessibility in mind

@@ -70,13 +70,14 @@ export default class SetIntegrationManager extends React.Component<IProps, IStat
         }
 
         return (
-            <div className="mx_SetIntegrationManager">
+            <label className="mx_SetIntegrationManager" htmlFor="toggle_integration">
                 <div className="mx_SettingsFlag">
                     <div className="mx_SetIntegrationManager_heading_manager">
                         <span className="mx_SettingsTab_heading">{_t("Manage integrations")}</span>
                         <span className="mx_SettingsTab_subheading">{managerName}</span>
                     </div>
                     <ToggleSwitch
+                        id="toggle_integration"
                         checked={this.state.provisioningEnabled}
                         disabled={false}
                         onChange={this.onProvisioningToggled}
@@ -89,7 +90,7 @@ export default class SetIntegrationManager extends React.Component<IProps, IStat
                             "send room invites, and set power levels on your behalf.",
                     )}
                 </div>
-            </div>
+            </label>
         );
     }
 }
