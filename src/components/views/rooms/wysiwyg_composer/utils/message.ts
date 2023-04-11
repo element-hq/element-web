@@ -31,7 +31,7 @@ import dis from "../../../../../dispatcher/dispatcher";
 import { createRedactEventDialog } from "../../../dialogs/ConfirmRedactDialog";
 import { endEditing, cancelPreviousPendingEdit } from "./editing";
 import EditorStateTransfer from "../../../../../utils/EditorStateTransfer";
-import { createMessageContent } from "./createMessageContent";
+import { createMessageContent, EMOTE_PREFIX } from "./createMessageContent";
 import { isContentModified } from "./isContentModified";
 import { CommandCategories, getCommand } from "../../../../../SlashCommands";
 import { runSlashCommand, shouldSendAnyway } from "../../../../../editor/commands";
@@ -78,11 +78,11 @@ export async function sendMessage(
 
     let content: IContent | null = null;
 
-    // Functionality here approximates what can be found in SendMessageComposer.sendMessage()
-    if (message.startsWith("/") && !message.startsWith("//")) {
+    // Slash command handling here approximates what can be found in SendMessageComposer.sendMessage()
+    // but note that the /me and // special cases are handled by the call to createMessageContent
+    if (message.startsWith("/") && !message.startsWith("//") && !message.startsWith(EMOTE_PREFIX)) {
         const { cmd, args } = getCommand(message);
         if (cmd) {
-            // TODO handle /me special case separately, see end of SlashCommands.Commands
             const threadId = relation?.rel_type === THREAD_RELATION_TYPE.name ? relation?.event_id : null;
             let commandSuccessful: boolean;
             [content, commandSuccessful] = await runSlashCommand(cmd, args, roomId, threadId ?? null);

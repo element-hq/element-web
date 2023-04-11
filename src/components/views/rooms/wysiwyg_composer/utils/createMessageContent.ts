@@ -21,6 +21,8 @@ import SettingsStore from "../../../../../settings/SettingsStore";
 import { RoomPermalinkCreator } from "../../../../../utils/permalinks/Permalinks";
 import { addReplyToMessageContent } from "../../../../../utils/Reply";
 
+export const EMOTE_PREFIX = "/me ";
+
 // Merges favouring the given relation
 function attachRelation(content: IContent, relation?: IEventRelation): void {
     if (relation) {
@@ -61,6 +63,8 @@ interface CreateMessageContentParams {
     editedEvent?: MatrixEvent;
 }
 
+const isMatrixEvent = (e: MatrixEvent | undefined): e is MatrixEvent => e instanceof MatrixEvent;
+
 export async function createMessageContent(
     message: string,
     isHTML: boolean,
@@ -72,22 +76,22 @@ export async function createMessageContent(
         editedEvent,
     }: CreateMessageContentParams,
 ): Promise<IContent> {
-    // TODO emote ?
-
-    const isEditing = Boolean(editedEvent);
-    const isReply = isEditing ? Boolean(editedEvent?.replyEventId) : Boolean(replyToEvent);
+    const isEditing = isMatrixEvent(editedEvent);
+    const isReply = isEditing ? Boolean(editedEvent.replyEventId) : isMatrixEvent(replyToEvent);
     const isReplyAndEditing = isEditing && isReply;
 
-    /*const isEmote = containsEmote(model);
+    const isEmote = message.startsWith(EMOTE_PREFIX);
     if (isEmote) {
-        model = stripEmoteCommand(model);
+        // if we are dealing with an emote we want to remove the prefix so that `/me` does not
+        // appear after the `* <userName>` text in the timeline
+        message = message.slice(EMOTE_PREFIX.length);
     }
-    if (startsWith(model, "//")) {
-        model = stripPrefix(model, "/");
+    if (message.startsWith("//")) {
+        // if user wants to enter a single slash at the start of a message, this
+        // is how they have to do it (due to it clashing with commands), so here we
+        // remove the first character to make sure //word displays as /word
+        message = message.slice(1);
     }
-    model = unescapeMessage(model);*/
-
-    // const body = textSerialize(model);
 
     // if we're editing rich text, the message content is pure html
     // BUT if we're not, the message content will be plain text
@@ -96,8 +100,7 @@ export async function createMessageContent(
     const formattedBodyPrefix = (isReplyAndEditing && getHtmlReplyFallback(editedEvent)) || "";
 
     const content: IContent = {
-        // TODO emote
-        msgtype: MsgType.Text,
+        msgtype: isEmote ? MsgType.Emote : MsgType.Text,
         body: isEditing ? `${bodyPrefix} * ${body}` : body,
     };
 

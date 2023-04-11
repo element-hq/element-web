@@ -13,10 +13,14 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+import { MsgType } from "matrix-js-sdk/src/matrix";
 
 import { mkEvent } from "../../../../../test-utils";
 import { RoomPermalinkCreator } from "../../../../../../src/utils/permalinks/Permalinks";
-import { createMessageContent } from "../../../../../../src/components/views/rooms/wysiwyg_composer/utils/createMessageContent";
+import {
+    createMessageContent,
+    EMOTE_PREFIX,
+} from "../../../../../../src/components/views/rooms/wysiwyg_composer/utils/createMessageContent";
 
 describe("createMessageContent", () => {
     const permalinkCreator = {
@@ -129,5 +133,25 @@ describe("createMessageContent", () => {
                 rel_type: "m.replace",
             },
         });
+    });
+
+    it("Should strip the /me prefix from a message", async () => {
+        const textBody = "some body text";
+        const content = await createMessageContent(EMOTE_PREFIX + textBody, true, { permalinkCreator });
+
+        expect(content).toMatchObject({ body: textBody, formatted_body: textBody });
+    });
+
+    it("Should strip single / from message prefixed with //", async () => {
+        const content = await createMessageContent("//twoSlashes", true, { permalinkCreator });
+
+        expect(content).toMatchObject({ body: "/twoSlashes", formatted_body: "/twoSlashes" });
+    });
+
+    it("Should set the content type to MsgType.Emote when /me prefix is used", async () => {
+        const textBody = "some body text";
+        const content = await createMessageContent(EMOTE_PREFIX + textBody, true, { permalinkCreator });
+
+        expect(content).toMatchObject({ msgtype: MsgType.Emote });
     });
 });
