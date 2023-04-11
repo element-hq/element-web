@@ -46,8 +46,8 @@ describe("Editing", () => {
 
     // Edit "Message"
     const editLastMessage = (edit: string) => {
-        cy.get(".mx_EventTile_last").realHover().findButton("Edit").click();
-        cy.get(".mx_BasicMessageComposer_input").type(`{selectAll}{del}${edit}{enter}`);
+        cy.get(".mx_EventTile_last").realHover().findByRole("button", { name: "Edit" }).click();
+        cy.findByRole("textbox", { name: "Edit message" }).type(`{selectAll}{del}${edit}{enter}`);
     };
 
     const clickEditedMessage = (edited: string) => {
@@ -62,7 +62,7 @@ describe("Editing", () => {
 
     const clickButtonViewSource = () => {
         // Assert that "View Source" button is rendered and click it
-        cy.get(".mx_EventTile .mx_EventTile_line").realHover().findButton("View Source").click();
+        cy.get(".mx_EventTile .mx_EventTile_line").realHover().findByRole("button", { name: "View Source" }).click();
     };
 
     beforeEach(() => {
@@ -84,7 +84,7 @@ describe("Editing", () => {
     it("should render and interact with the message edit history dialog", () => {
         // Click the "Remove" button on the message edit history dialog
         const clickButtonRemove = () => {
-            cy.get(".mx_EventTile_line").realHover().findButton("Remove").click();
+            cy.get(".mx_EventTile_line").realHover().findByRole("button", { name: "Remove" }).click();
         };
 
         cy.visit("/#/room/" + roomId);
@@ -120,7 +120,9 @@ describe("Editing", () => {
 
                 // Assert that the date separator is rendered at the top
                 cy.get("li:nth-child(1) .mx_DateSeparator").within(() => {
-                    cy.get("h2").should("have.text", "Today");
+                    cy.get("h2").within(() => {
+                        cy.findByText("Today");
+                    });
                 });
 
                 // Assert that the edited message is rendered under the date separator
@@ -130,14 +132,20 @@ describe("Editing", () => {
                     cy.get(".mx_EventTile_content .mx_EventTile_body").should("have.text", "Meassage");
 
                     cy.get(".mx_EventTile_content .mx_EventTile_body").within(() => {
-                        cy.get(".mx_EditHistoryMessage_deletion").should("have.text", "e");
-                        cy.get(".mx_EditHistoryMessage_insertion").should("have.text", "a");
+                        cy.get(".mx_EditHistoryMessage_deletion").within(() => {
+                            cy.findByText("e");
+                        });
+                        cy.get(".mx_EditHistoryMessage_insertion").within(() => {
+                            cy.findByText("a");
+                        });
                     });
                 });
 
                 // Assert that the original message is rendered at the bottom
                 cy.get("li:nth-child(3) .mx_EventTile").within(() => {
-                    cy.get(".mx_EventTile_content .mx_EventTile_body").should("have.text", "Message");
+                    cy.get(".mx_EventTile_content .mx_EventTile_body").within(() => {
+                        cy.findByText("Message");
+                    });
                 });
             });
         });
@@ -169,20 +177,24 @@ describe("Editing", () => {
 
             // This time remove the message really
             cy.get(".mx_TextInputDialog").within(() => {
-                cy.get(".mx_TextInputDialog_input").type("This is a test."); // Reason
-                cy.contains("[data-testid='dialog-primary-button']", "Remove").click();
+                cy.findByRole("textbox", { name: "Reason (optional)" }).type("This is a test."); // Reason
+                cy.findByRole("button", { name: "Remove" }).click();
             });
 
             // Assert that the message edit history dialog is rendered again
             cy.get(".mx_MessageEditHistoryDialog").within(() => {
                 // Assert that the date is rendered
                 cy.get("li:nth-child(1) .mx_DateSeparator").within(() => {
-                    cy.get("h2").should("have.text", "Today");
+                    cy.get("h2").within(() => {
+                        cy.findByText("Today");
+                    });
                 });
 
                 // Assert that the original message is rendered under the date on the dialog
                 cy.get("li:nth-child(2) .mx_EventTile").within(() => {
-                    cy.get(".mx_EventTile_content .mx_EventTile_body").should("have.text", "Message");
+                    cy.get(".mx_EventTile_content .mx_EventTile_body").within(() => {
+                        cy.findByText("Message");
+                    });
                 });
 
                 // Assert that the edited message is gone
@@ -194,9 +206,9 @@ describe("Editing", () => {
 
         // Assert that the main timeline is rendered
         cy.get(".mx_RoomView_MessageList").within(() => {
-            cy.get(".mx_EventTile_last").within(() => {
+            cy.get(".mx_EventTile_last .mx_RedactedBody").within(() => {
                 // Assert that the placeholder is rendered
-                cy.contains(".mx_RedactedBody", "Message deleted");
+                cy.findByText("Message deleted");
             });
         });
     });
@@ -223,7 +235,7 @@ describe("Editing", () => {
                 // Assert that "View Source" is not rendered
                 cy.get(".mx_EventTile .mx_EventTile_line")
                     .realHover()
-                    .contains(".mx_AccessibleButton", "View Source")
+                    .findByRole("button", { name: "View Source" })
                     .should("not.exist");
             });
 
@@ -241,7 +253,7 @@ describe("Editing", () => {
             // Assert that the edited message is rendered
             cy.get(".mx_MessageEditHistoryDialog li:nth-child(2)").within(() => {
                 // Assert that "Remove" button for the original message is rendered
-                cy.get(".mx_EventTile .mx_EventTile_line").realHover().findButton("Remove");
+                cy.get(".mx_EventTile .mx_EventTile_line").realHover().findByRole("button", { name: "Remove" });
 
                 clickButtonViewSource();
             });
@@ -254,7 +266,7 @@ describe("Editing", () => {
                 // Assert that "Remove" button for the original message does not exist
                 cy.get(".mx_EventTile .mx_EventTile_line")
                     .realHover()
-                    .contains(".mx_AccessibleButton", "Remove")
+                    .findByRole("button", { name: "Remove" })
                     .should("not.exist");
 
                 clickButtonViewSource();
@@ -271,16 +283,20 @@ describe("Editing", () => {
         sendEvent(roomId);
 
         // Edit message
-        cy.contains(".mx_RoomView_body .mx_EventTile", "Message").within(() => {
-            cy.get(".mx_EventTile_line").realHover().findButton("Edit").click().checkA11y();
-            cy.get(".mx_EventTile_line .mx_BasicMessageComposer_input")
+        cy.get(".mx_RoomView_body .mx_EventTile").within(() => {
+            cy.findByText("Message");
+            cy.get(".mx_EventTile_line").realHover().findByRole("button", { name: "Edit" }).click().checkA11y();
+            cy.get(".mx_EventTile_line")
+                .findByRole("textbox", { name: "Edit message" })
                 .type("Foo{backspace}{backspace}{backspace}{enter}")
                 .checkA11y();
         });
-        cy.contains(".mx_RoomView_body .mx_EventTile[data-scroll-tokens]", "Message");
+        cy.get(".mx_RoomView_body .mx_EventTile[data-scroll-tokens]").within(() => {
+            cy.findByText("Message");
+        });
 
         // Assert that the edit composer has gone away
-        cy.get(".mx_EditMessageComposer").should("not.exist");
+        cy.findByRole("textbox", { name: "Edit message" }).should("not.exist");
     });
 
     it("should correctly display events which are edited, where we lack the edit event", () => {
