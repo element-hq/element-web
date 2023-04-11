@@ -67,7 +67,7 @@ const checkTimelineNarrow = (button = true) => {
     cy.get(".mx_RoomView_body .mx_EventTile.mx_EventTile_last").should("be.visible");
 
     // Ensure the indicator does not overflow the timeline
-    cy.get("[data-testid='decryption-failure-bar-indicator']").should("be.visible");
+    cy.findByTestId("decryption-failure-bar-indicator").should("be.visible");
 
     if (button) {
         // Ensure the button does not overflow the timeline
@@ -151,11 +151,11 @@ describe("Decryption Failure Bar", () => {
 
                     cy.get(".mx_DecryptionFailureBar_end").within(() => {
                         cy.findByText("Resend key requests").should("not.exist");
-                        cy.findButton("Verify").click();
+                        cy.findByRole("button", { name: "Verify" }).click();
                     });
 
                     const verificationRequestPromise = waitForVerificationRequest(otherDevice);
-                    cy.findButton("Verify with another device").click();
+                    cy.findByRole("button", { name: "Verify with another device" }).click();
                     cy.findByText("To proceed, please accept the verification request on your other device.").should(
                         "be.visible",
                     );
@@ -170,9 +170,9 @@ describe("Decryption Failure Bar", () => {
                         });
                     });
                 });
-            cy.findButton("They match").click();
+            cy.findByRole("button", { name: "They match" }).click();
             cy.get(".mx_VerificationPanel_verified_section .mx_E2EIcon_verified").should("exist");
-            cy.findButton("Got it").click();
+            cy.findByRole("button", { name: "Got it" }).click();
 
             cy.get(".mx_DecryptionFailureBar_start_headline").within(() => {
                 cy.findByText("Open another device to load encrypted messages").should("be.visible");
@@ -188,11 +188,11 @@ describe("Decryption Failure Bar", () => {
             );
 
             cy.intercept("/_matrix/client/r0/sendToDevice/m.room_key_request/*").as("keyRequest");
-            cy.findButton("Resend key requests").click();
+            cy.findByRole("button", { name: "Resend key requests" }).click();
             cy.wait("@keyRequest");
             cy.get(".mx_DecryptionFailureBar_end").within(() => {
                 cy.findByText("Resend key requests").should("not.exist");
-                cy.findButton("View your device list").should("be.visible");
+                cy.findByRole("button", { name: "View your device list" }).should("be.visible");
             });
 
             checkTimelineNarrow();
@@ -227,16 +227,17 @@ describe("Decryption Failure Bar", () => {
                 widths: [320, 640],
             });
 
-            cy.findButton("Reset").click();
+            cy.findByRole("button", { name: "Reset" }).click();
 
             // Set up key backup
             cy.get(".mx_Dialog").within(() => {
-                cy.findButton("Continue").click();
+                cy.findByRole("button", { name: "Continue" }).click();
                 cy.get(".mx_CreateSecretStorageDialog_recoveryKey code").invoke("text").as("securityKey");
                 // Clicking download instead of Copy because of https://github.com/cypress-io/cypress/issues/2851
-                cy.findButton("Download").click();
-                cy.contains(".mx_Dialog_primary:not([disabled])", "Continue").click();
-                cy.findButton("Done").click();
+                cy.findByRole("button", { name: "Download" }).click();
+                cy.get(".mx_Dialog_primary:not([disabled])").should("have.length", 3);
+                cy.findByRole("button", { name: "Continue" }).click();
+                cy.findByRole("button", { name: "Done" }).click();
             });
 
             cy.get(".mx_DecryptionFailureBar_start_headline").within(() => {
@@ -273,7 +274,7 @@ describe("Decryption Failure Bar", () => {
 
         cy.wait(5000);
         cy.get(".mx_DecryptionFailureBar .mx_Spinner").should("not.exist");
-        cy.get("[data-testid='decryption-failure-bar-icon']").should("be.visible");
+        cy.findByTestId("decryption-failure-bar-icon").should("be.visible");
 
         cy.get(".mx_RoomView_messagePanel").scrollTo("top");
         cy.get(".mx_DecryptionFailureBar").should("not.exist");
