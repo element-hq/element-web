@@ -19,6 +19,7 @@ import {
     IMSC3882GetLoginTokenCapability,
     IServerVersions,
     UNSTABLE_MSC3882_CAPABILITY,
+    Capabilities,
 } from "matrix-js-sdk/src/matrix";
 
 import { _t } from "../../../../languageHandler";
@@ -28,8 +29,7 @@ import SettingsSubsection from "../shared/SettingsSubsection";
 interface IProps {
     onShowQr: () => void;
     versions?: IServerVersions;
-    // we can't use the capabilities type from the js-sdk because it isn't exported
-    capabilities?: Record<string, any>;
+    capabilities?: Capabilities;
 }
 
 export default class LoginWithQRSection extends React.Component<IProps> {
