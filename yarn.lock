@@ -1526,7 +1526,6 @@
 
 "@matrix-org/olm@https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.12.tgz":
   version "3.2.12"
-  uid "0bce3c86f9d36a4984d3c3e07df1c3fb4c679bd9"
   resolved "https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.12.tgz#0bce3c86f9d36a4984d3c3e07df1c3fb4c679bd9"
 
 "@matrix-org/react-sdk-module-api@^0.0.4":
@@ -8092,6 +8091,23 @@ matrix-js-sdk@24.1.0:
   integrity sha512-xEx2ZoNsS56dwgqLJ3rIv2SUpFxdQLrLKmJCpMatMUKCAg+NGuZfpQ3QXblIbGaqFNQZCH7fC7S48AeTMZp1Jw==
   dependencies:
     "@babel/runtime" "^7.12.5"
+    "@matrix-org/matrix-sdk-crypto-js" "^0.1.0-alpha.5"
+    another-json "^0.2.0"
+    bs58 "^5.0.0"
+    content-type "^1.0.4"
+    loglevel "^1.7.1"
+    matrix-events-sdk "0.0.1"
+    matrix-widget-api "^1.3.1"
+    p-retry "4"
+    sdp-transform "^2.14.1"
+    unhomoglyph "^1.0.6"
+    uuid "9"
+
+"matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
+  version "24.1.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/70e34ffb76634cf3d8ad1cc73d87f89723ec76c0"
+  dependencies:
+    "@babel/runtime" "^7.12.5"
     "@matrix-org/matrix-sdk-crypto-js" "^0.1.0-alpha.6"
     another-json "^0.2.0"
     bs58 "^5.0.0"
@@ -8111,10 +8127,9 @@ matrix-mock-request@^2.5.0:
   dependencies:
     expect "^28.1.0"
 
-matrix-react-sdk@3.70.0:
+"matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
   version "3.70.0"
-  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.70.0.tgz#0937895b4f69ec13f728535c532c89de78bdfd18"
-  integrity sha512-t0mfemzanPW1fSxBoUrq/+zzO3DyClOeLfG/w///JFZBHqA6DV7Y2zQOkWMZkKnWL2eSizkqy4KpNnaU1Zbhqg==
+  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/8a150252bf44df84cd9d1b69f45dbdefde6848a2"
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/analytics-events" "^0.5.0"
@@ -8153,7 +8168,7 @@ matrix-react-sdk@3.70.0:
     maplibre-gl "^2.0.0"
     matrix-encrypt-attachment "^1.0.3"
     matrix-events-sdk "0.0.1"
-    matrix-js-sdk "24.1.0"
+    matrix-js-sdk "github:matrix-org/matrix-js-sdk#develop"
     matrix-widget-api "^1.3.1"
     minimist "^1.2.5"
     opus-recorder "^8.0.3"
