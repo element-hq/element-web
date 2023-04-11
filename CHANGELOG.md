@@ -1,5 +1,5 @@
-Changes in [1.11.29-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.11.29-rc.1) (2023-04-04)
-===========================================================================================================
+Changes in [1.11.29](https://github.com/vector-im/element-web/releases/tag/v1.11.29) (2023-04-11)
+=================================================================================================
 
 ## ✨ Features
  * Allow desktop app to expose recent rooms in UI integrations ([\#16940](https://github.com/vector-im/element-web/pull/16940)).
