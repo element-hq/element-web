@@ -1,5 +1,5 @@
-Changes in [3.70.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.70.0-rc.1) (2023-04-04)
-===============================================================================================================
+Changes in [3.70.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.70.0) (2023-04-11)
+=====================================================================================================
 
 ## ✨ Features
  * Style mentions as pills in rich text editor ([\#10448](https://github.com/matrix-org/matrix-react-sdk/pull/10448)). Contributed by @alunturner.
