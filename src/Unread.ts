@@ -19,6 +19,7 @@ import { Thread } from "matrix-js-sdk/src/models/thread";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { M_BEACON } from "matrix-js-sdk/src/@types/beacon";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import shouldHideEvent from "./shouldHideEvent";
@@ -115,9 +116,14 @@ export function doesRoomOrThreadHaveUnreadMessages(roomOrThread: Room | Thread):
             return true;
         }
     }
+
     // If we got here, we didn't find a message that counted but didn't find
     // the user's read receipt either, so we guess and say that the room is
     // unread on the theory that false positives are better than false
     // negatives here.
+    logger.warn("Falling back to unread room because of no read receipt or counting message found", {
+        roomOrThreadId: roomOrThread.roomId,
+        readUpToId,
+    });
     return true;
 }

@@ -17,6 +17,7 @@ limitations under the License.
 import { mocked } from "jest-mock";
 import { MatrixEvent, EventType, MsgType, Room } from "matrix-js-sdk/src/matrix";
 import { ReceiptType } from "matrix-js-sdk/src/@types/read_receipts";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import { haveRendererForEvent } from "../src/events/EventTileFactory";
 import { makeBeaconEvent, mkEvent, stubClient } from "./test-utils";
@@ -128,193 +129,222 @@ describe("Unread", () => {
         });
 
         beforeEach(() => {
-            // Create a room and initial event in it.
             room = new Room(roomId, client, myId);
-            event = mkEvent({
+            jest.spyOn(logger, "warn");
+        });
+
+        describe("when there is an initial event in the room", () => {
+            beforeEach(() => {
+                event = mkEvent({
+                    event: true,
+                    type: "m.room.message",
+                    user: aliceId,
+                    room: roomId,
+                    content: {},
+                });
+                room.addLiveEvents([event]);
+
+                // Don't care about the code path of hidden events.
+                mocked(haveRendererForEvent).mockClear().mockReturnValue(true);
+            });
+
+            it("returns true for a room with no receipts", () => {
+                expect(doesRoomHaveUnreadMessages(room)).toBe(true);
+            });
+
+            it("returns false for a room when the latest event was sent by the current user", () => {
+                event = mkEvent({
+                    event: true,
+                    type: "m.room.message",
+                    user: myId,
+                    room: roomId,
+                    content: {},
+                });
+                // Only for timeline events.
+                room.addLiveEvents([event]);
+
+                expect(doesRoomHaveUnreadMessages(room)).toBe(false);
+            });
+
+            it("returns false for a room when the read receipt is at the latest event", () => {
+                const receipt = new MatrixEvent({
+                    type: "m.receipt",
+                    room_id: "!foo:bar",
+                    content: {
+                        [event.getId()!]: {
+                            [ReceiptType.Read]: {
+                                [myId]: { ts: 1 },
+                            },
+                        },
+                    },
+                });
+                room.addReceipt(receipt);
+
+                expect(doesRoomHaveUnreadMessages(room)).toBe(false);
+            });
+
+            it("returns true for a room when the read receipt is earlier than the latest event", () => {
+                const receipt = new MatrixEvent({
+                    type: "m.receipt",
+                    room_id: "!foo:bar",
+                    content: {
+                        [event.getId()!]: {
+                            [ReceiptType.Read]: {
+                                [myId]: { ts: 1 },
+                            },
+                        },
+                    },
+                });
+                room.addReceipt(receipt);
+
+                const event2 = mkEvent({
+                    event: true,
+                    type: "m.room.message",
+                    user: aliceId,
+                    room: roomId,
+                    content: {},
+                });
+                // Only for timeline events.
+                room.addLiveEvents([event2]);
+
+                expect(doesRoomHaveUnreadMessages(room)).toBe(true);
+            });
+
+            it("returns true for a room with an unread message in a thread", () => {
+                // Mark the main timeline as read.
+                const receipt = new MatrixEvent({
+                    type: "m.receipt",
+                    room_id: "!foo:bar",
+                    content: {
+                        [event.getId()!]: {
+                            [ReceiptType.Read]: {
+                                [myId]: { ts: 1 },
+                            },
+                        },
+                    },
+                });
+                room.addReceipt(receipt);
+
+                // Create a thread as a different user.
+                mkThread({ room, client, authorId: myId, participantUserIds: [aliceId] });
+
+                expect(doesRoomHaveUnreadMessages(room)).toBe(true);
+            });
+
+            it("returns false for a room when the latest thread event was sent by the current user", () => {
+                // Mark the main timeline as read.
+                const receipt = new MatrixEvent({
+                    type: "m.receipt",
+                    room_id: "!foo:bar",
+                    content: {
+                        [event.getId()!]: {
+                            [ReceiptType.Read]: {
+                                [myId]: { ts: 1 },
+                            },
+                        },
+                    },
+                });
+                room.addReceipt(receipt);
+
+                // Create a thread as the current user.
+                mkThread({ room, client, authorId: myId, participantUserIds: [myId] });
+
+                expect(doesRoomHaveUnreadMessages(room)).toBe(false);
+            });
+
+            it("returns false for a room with read thread messages", () => {
+                // Mark the main timeline as read.
+                let receipt = new MatrixEvent({
+                    type: "m.receipt",
+                    room_id: "!foo:bar",
+                    content: {
+                        [event.getId()!]: {
+                            [ReceiptType.Read]: {
+                                [myId]: { ts: 1 },
+                            },
+                        },
+                    },
+                });
+                room.addReceipt(receipt);
+
+                // Create threads.
+                const { rootEvent, events } = mkThread({ room, client, authorId: myId, participantUserIds: [aliceId] });
+
+                // Mark the thread as read.
+                receipt = new MatrixEvent({
+                    type: "m.receipt",
+                    room_id: "!foo:bar",
+                    content: {
+                        [events[events.length - 1].getId()!]: {
+                            [ReceiptType.Read]: {
+                                [myId]: { ts: 1, thread_id: rootEvent.getId()! },
+                            },
+                        },
+                    },
+                });
+                room.addReceipt(receipt);
+
+                expect(doesRoomHaveUnreadMessages(room)).toBe(false);
+            });
+
+            it("returns true for a room when read receipt is not on the latest thread messages", () => {
+                // Mark the main timeline as read.
+                let receipt = new MatrixEvent({
+                    type: "m.receipt",
+                    room_id: "!foo:bar",
+                    content: {
+                        [event.getId()!]: {
+                            [ReceiptType.Read]: {
+                                [myId]: { ts: 1 },
+                            },
+                        },
+                    },
+                });
+                room.addReceipt(receipt);
+
+                // Create threads.
+                const { rootEvent, events } = mkThread({ room, client, authorId: myId, participantUserIds: [aliceId] });
+
+                // Mark the thread as read.
+                receipt = new MatrixEvent({
+                    type: "m.receipt",
+                    room_id: "!foo:bar",
+                    content: {
+                        [events[0].getId()!]: {
+                            [ReceiptType.Read]: {
+                                [myId]: { ts: 1, threadId: rootEvent.getId()! },
+                            },
+                        },
+                    },
+                });
+                room.addReceipt(receipt);
+
+                expect(doesRoomHaveUnreadMessages(room)).toBe(true);
+            });
+        });
+
+        it("returns true for a room that only contains a hidden event", () => {
+            const redactedEvent = mkEvent({
                 event: true,
                 type: "m.room.message",
                 user: aliceId,
                 room: roomId,
                 content: {},
             });
-            room.addLiveEvents([event]);
-
-            // Don't care about the code path of hidden events.
-            mocked(haveRendererForEvent).mockClear().mockReturnValue(true);
-        });
-
-        it("returns true for a room with no receipts", () => {
-            expect(doesRoomHaveUnreadMessages(room)).toBe(true);
-        });
-
-        it("returns false for a room when the latest event was sent by the current user", () => {
-            event = mkEvent({
-                event: true,
-                type: "m.room.message",
-                user: myId,
-                room: roomId,
-                content: {},
-            });
+            console.log("Event Id", redactedEvent.getId());
+            redactedEvent.makeRedacted(redactedEvent);
+            console.log("Event Id", redactedEvent.getId());
             // Only for timeline events.
-            room.addLiveEvents([event]);
-
-            expect(doesRoomHaveUnreadMessages(room)).toBe(false);
-        });
-
-        it("returns false for a room when the read receipt is at the latest event", () => {
-            const receipt = new MatrixEvent({
-                type: "m.receipt",
-                room_id: "!foo:bar",
-                content: {
-                    [event.getId()!]: {
-                        [ReceiptType.Read]: {
-                            [myId]: { ts: 1 },
-                        },
-                    },
-                },
-            });
-            room.addReceipt(receipt);
-
-            expect(doesRoomHaveUnreadMessages(room)).toBe(false);
-        });
-
-        it("returns true for a room when the read receipt is earlier than the latest event", () => {
-            const receipt = new MatrixEvent({
-                type: "m.receipt",
-                room_id: "!foo:bar",
-                content: {
-                    [event.getId()!]: {
-                        [ReceiptType.Read]: {
-                            [myId]: { ts: 1 },
-                        },
-                    },
-                },
-            });
-            room.addReceipt(receipt);
-
-            const event2 = mkEvent({
-                event: true,
-                type: "m.room.message",
-                user: aliceId,
-                room: roomId,
-                content: {},
-            });
-            // Only for timeline events.
-            room.addLiveEvents([event2]);
+            room.addLiveEvents([redactedEvent]);
 
             expect(doesRoomHaveUnreadMessages(room)).toBe(true);
-        });
-
-        it("returns true for a room with an unread message in a thread", () => {
-            // Mark the main timeline as read.
-            const receipt = new MatrixEvent({
-                type: "m.receipt",
-                room_id: "!foo:bar",
-                content: {
-                    [event.getId()!]: {
-                        [ReceiptType.Read]: {
-                            [myId]: { ts: 1 },
-                        },
-                    },
+            expect(logger.warn).toHaveBeenCalledWith(
+                "Falling back to unread room because of no read receipt or counting message found",
+                {
+                    roomOrThreadId: room.roomId,
+                    readUpToId: null,
                 },
-            });
-            room.addReceipt(receipt);
-
-            // Create a thread as a different user.
-            mkThread({ room, client, authorId: myId, participantUserIds: [aliceId] });
-
-            expect(doesRoomHaveUnreadMessages(room)).toBe(true);
-        });
-
-        it("returns false for a room when the latest thread event was sent by the current user", () => {
-            // Mark the main timeline as read.
-            const receipt = new MatrixEvent({
-                type: "m.receipt",
-                room_id: "!foo:bar",
-                content: {
-                    [event.getId()!]: {
-                        [ReceiptType.Read]: {
-                            [myId]: { ts: 1 },
-                        },
-                    },
-                },
-            });
-            room.addReceipt(receipt);
-
-            // Create a thread as the current user.
-            mkThread({ room, client, authorId: myId, participantUserIds: [myId] });
-
-            expect(doesRoomHaveUnreadMessages(room)).toBe(false);
-        });
-
-        it("returns false for a room with read thread messages", () => {
-            // Mark the main timeline as read.
-            let receipt = new MatrixEvent({
-                type: "m.receipt",
-                room_id: "!foo:bar",
-                content: {
-                    [event.getId()!]: {
-                        [ReceiptType.Read]: {
-                            [myId]: { ts: 1 },
-                        },
-                    },
-                },
-            });
-            room.addReceipt(receipt);
-
-            // Create threads.
-            const { rootEvent, events } = mkThread({ room, client, authorId: myId, participantUserIds: [aliceId] });
-
-            // Mark the thread as read.
-            receipt = new MatrixEvent({
-                type: "m.receipt",
-                room_id: "!foo:bar",
-                content: {
-                    [events[events.length - 1].getId()!]: {
-                        [ReceiptType.Read]: {
-                            [myId]: { ts: 1, thread_id: rootEvent.getId()! },
-                        },
-                    },
-                },
-            });
-            room.addReceipt(receipt);
-
-            expect(doesRoomHaveUnreadMessages(room)).toBe(false);
-        });
-
-        it("returns true for a room when read receipt is not on the latest thread messages", () => {
-            // Mark the main timeline as read.
-            let receipt = new MatrixEvent({
-                type: "m.receipt",
-                room_id: "!foo:bar",
-                content: {
-                    [event.getId()!]: {
-                        [ReceiptType.Read]: {
-                            [myId]: { ts: 1 },
-                        },
-                    },
-                },
-            });
-            room.addReceipt(receipt);
-
-            // Create threads.
-            const { rootEvent, events } = mkThread({ room, client, authorId: myId, participantUserIds: [aliceId] });
-
-            // Mark the thread as read.
-            receipt = new MatrixEvent({
-                type: "m.receipt",
-                room_id: "!foo:bar",
-                content: {
-                    [events[0].getId()!]: {
-                        [ReceiptType.Read]: {
-                            [myId]: { ts: 1, threadId: rootEvent.getId()! },
-                        },
-                    },
-                },
-            });
-            room.addReceipt(receipt);
-
-            expect(doesRoomHaveUnreadMessages(room)).toBe(true);
+            );
         });
     });
 });
