@@ -20,8 +20,8 @@ import { HomeserverInstance } from "../../plugins/utils/homeserver";
 import Chainable = Cypress.Chainable;
 
 function openCreateRoomDialog(): Chainable<JQuery<HTMLElement>> {
-    cy.findButton("Add room").click();
-    cy.findMenuitem("New room").click();
+    cy.findByRole("button", { name: "Add room" }).click();
+    cy.findByRole("menuitem", { name: "New room" }).click();
     return cy.get(".mx_CreateRoomDialog");
 }
 
@@ -46,15 +46,15 @@ describe("Create Room", () => {
 
         openCreateRoomDialog().within(() => {
             // Fill name & topic
-            cy.findTextbox("Name").type(name);
-            cy.findTextbox("Topic (optional)").type(topic);
+            cy.findByRole("textbox", { name: "Name" }).type(name);
+            cy.findByRole("textbox", { name: "Topic (optional)" }).type(topic);
             // Change room to public
-            cy.findButton("Room visibility").click();
-            cy.findOption("Public room").click();
+            cy.findByRole("button", { name: "Room visibility" }).click();
+            cy.findByRole("option", { name: "Public room" }).click();
             // Fill room address
-            cy.findTextbox("Room address").type("test-room-1");
+            cy.findByRole("textbox", { name: "Room address" }).type("test-room-1");
             // Submit
-            cy.findButton("Create room").click();
+            cy.findByRole("button", { name: "Create room" }).click();
         });
 
         cy.url().should("contain", "/#/room/#test-room-1:localhost");
