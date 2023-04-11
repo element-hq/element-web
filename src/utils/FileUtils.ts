@@ -69,7 +69,26 @@ export function presentableTextForFile(
         // it since it is "ugly", users generally aren't aware what it
         // means and the type of the attachment can usually be inferred
         // from the file extension.
-        text += " (" + <string>filesize(content.info.size) + ")";
+        text += " (" + <string>fileSize(content.info.size, { base: 2, standard: "jedec" }) + ")";
     }
     return text;
+}
+
+/**
+ * wrapper function to set default values for filesize function
+ *
+ * @param size size of file
+ * @param options options to customize the response type or size type conversion e.g. 12kB, 12KB
+ * @returns {string | number | any[] | {
+ *  value: any;
+ *  symbol: any;
+ *  exponent: number;
+ *  unit: string;}} formatted file size with unit e.g. 12kB, 12KB
+ */
+export function fileSize(
+    size: Parameters<typeof filesize>[0],
+    options?: Parameters<typeof filesize>[1],
+): ReturnType<typeof filesize> {
+    const defaultOption: Parameters<typeof filesize>[1] = { base: 2, standard: "jedec", ...options };
+    return filesize(size, defaultOption);
 }

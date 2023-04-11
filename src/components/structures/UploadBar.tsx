@@ -16,7 +16,6 @@ limitations under the License.
 
 import React from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
-import { filesize } from "filesize";
 import { IEventRelation } from "matrix-js-sdk/src/matrix";
 import { Optional } from "matrix-events-sdk";
 
@@ -29,6 +28,7 @@ import AccessibleButton, { ButtonEvent } from "../views/elements/AccessibleButto
 import { RoomUpload } from "../../models/RoomUpload";
 import { ActionPayload } from "../../dispatcher/payloads";
 import { UploadPayload } from "../../dispatcher/payloads/UploadPayload";
+import { fileSize } from "../../utils/FileUtils";
 
 interface IProps {
     room: Room;
@@ -114,7 +114,7 @@ export default class UploadBar extends React.PureComponent<IProps, IState> {
             count: this.state.countFiles - 1,
         });
 
-        const uploadSize = filesize(this.state.currentTotal!);
+        const uploadSize = fileSize(this.state.currentTotal!);
         return (
             <div className="mx_UploadBar">
                 <div className="mx_UploadBar_filename">

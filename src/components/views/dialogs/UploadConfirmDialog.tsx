@@ -16,13 +16,13 @@ limitations under the License.
 */
 
 import React from "react";
-import { filesize } from "filesize";
 
 import { Icon as FileIcon } from "../../../../res/img/feather-customised/files.svg";
 import { _t } from "../../../languageHandler";
 import { getBlobSafeMimeType } from "../../../utils/blobs";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
+import { fileSize } from "../../../utils/FileUtils";
 
 interface IProps {
     file: File;
@@ -116,7 +116,7 @@ export default class UploadConfirmDialog extends React.Component<IProps> {
                             {preview && <div>{preview}</div>}
                             <div id={fileId}>
                                 {placeholder}
-                                {this.props.file.name} ({filesize(this.props.file.size)})
+                                {this.props.file.name} ({fileSize(this.props.file.size)})
                             </div>
                         </div>
                     </div>

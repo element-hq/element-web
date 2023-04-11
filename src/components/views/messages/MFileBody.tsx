@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import React, { AllHTMLAttributes, createRef } from "react";
-import { filesize } from "filesize";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../languageHandler";
@@ -23,7 +22,7 @@ import Modal from "../../../Modal";
 import AccessibleButton from "../elements/AccessibleButton";
 import { mediaFromContent } from "../../../customisations/Media";
 import ErrorDialog from "../dialogs/ErrorDialog";
-import { presentableTextForFile } from "../../../utils/FileUtils";
+import { fileSize, presentableTextForFile } from "../../../utils/FileUtils";
 import { IMediaEventContent } from "../../../customisations/models/IMediaEventContent";
 import { IBodyProps } from "./IBodyProps";
 import { FileDownloader } from "../../../utils/FileDownloader";
@@ -198,7 +197,7 @@ export default class MFileBody extends React.Component<IProps, IState> {
     public render(): React.ReactNode {
         const isEncrypted = this.props.mediaEventHelper?.media.isEncrypted;
         const contentUrl = this.getContentUrl();
-        const fileSize = this.content.info ? this.content.info.size : null;
+        const contentFileSize = this.content.info ? this.content.info.size : null;
         const fileType = this.content.info ? this.content.info.mimetype : "application/octet-stream";
 
         let placeholder: React.ReactNode = null;
@@ -310,7 +309,7 @@ export default class MFileBody extends React.Component<IProps, IState> {
             // we won't try and convert it. Likewise, if the file size is unknown then we'll assume
             // it is too big. There is the risk of the reported file size and the actual file size
             // being different, however the user shouldn't normally run into this problem.
-            const fileTooBig = typeof fileSize === "number" ? fileSize > 524288000 : true;
+            const fileTooBig = typeof contentFileSize === "number" ? contentFileSize > 524288000 : true;
 
             if (["application/pdf"].includes(fileType) && !fileTooBig) {
                 // We want to force a download on this type, so use an onClick handler.
@@ -351,7 +350,7 @@ export default class MFileBody extends React.Component<IProps, IState> {
                             </a>
                             {this.context.timelineRenderingType === TimelineRenderingType.File && (
                                 <div className="mx_MImageBody_size">
-                                    {this.content.info?.size ? filesize(this.content.info.size) : ""}
+                                    {this.content.info?.size ? fileSize(this.content.info.size) : ""}
                                 </div>
                             )}
                         </div>
