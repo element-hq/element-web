@@ -114,6 +114,10 @@ export default class Resizer<C extends IConfig = IConfig> {
     }
 
     private onMouseDown = (event: MouseEvent): void => {
+        const LEFT_MOUSE_BUTTON = 0;
+        if (event.button !== LEFT_MOUSE_BUTTON) {
+            return;
+        }
         // use closest in case the resize handle contains
         // child dom nodes that can be the target
         const resizeHandle = event.target && (<HTMLDivElement>event.target).closest(`.${this.classNames.handle}`);
