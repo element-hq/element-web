@@ -18,7 +18,7 @@ jobs:
         environment: develop
         env:
             R2_BUCKET: "element-web-develop"
-            R2_URL: ${{ secrets.CF_R2_S3_API }}
+            R2_URL: ${{ vars.CF_R2_S3_API }}
             R2_PUBLIC_URL: "https://element-web-develop.element.io"
         steps:
             - uses: actions/checkout@v3
