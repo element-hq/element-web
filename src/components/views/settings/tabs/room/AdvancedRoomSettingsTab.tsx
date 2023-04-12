@@ -42,8 +42,16 @@ interface IRecommendedVersion {
 interface IState {
     // This is eventually set to the value of room.getRecommendedVersion()
     upgradeRecommendation?: IRecommendedVersion;
+
+    /** The room ID of this room's predecessor, if it exists. */
     oldRoomId?: string;
+
+    /** The ID of tombstone event in this room's predecessor, if it exists. */
     oldEventId?: string;
+
+    /** The via servers to use to find this room's predecessor, if it exists. */
+    oldViaServers?: string[];
+
     upgraded?: boolean;
 }
 
@@ -65,6 +73,7 @@ export default class AdvancedRoomSettingsTab extends React.Component<IProps, ISt
             if (predecessor) {
                 additionalStateChanges.oldRoomId = predecessor.roomId;
                 additionalStateChanges.oldEventId = predecessor.eventId;
+                additionalStateChanges.oldViaServers = predecessor.viaServers;
             }
 
             this.setState({
@@ -88,6 +97,7 @@ export default class AdvancedRoomSettingsTab extends React.Component<IProps, ISt
             action: Action.ViewRoom,
             room_id: this.state.oldRoomId,
             event_id: this.state.oldEventId,
+            via_servers: this.state.oldViaServers,
             metricsTrigger: "WebPredecessorSettings",
             metricsViaKeyboard: e.type !== "click",
         });

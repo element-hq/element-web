@@ -47,7 +47,7 @@ describe("AdvancedRoomSettingsTab", () => {
         mocked(dis.dispatch).mockReset();
         mocked(room.findPredecessor).mockImplementation((msc3946: boolean) =>
             msc3946
-                ? { roomId: "old_room_id_via_predecessor" }
+                ? { roomId: "old_room_id_via_predecessor", viaServers: ["one.example.com", "two.example.com"] }
                 : { roomId: "old_room_id", eventId: "tombstone_event_id" },
         );
     });
@@ -138,6 +138,7 @@ describe("AdvancedRoomSettingsTab", () => {
                 action: Action.ViewRoom,
                 event_id: undefined,
                 room_id: "old_room_id_via_predecessor",
+                via_servers: ["one.example.com", "two.example.com"],
                 metricsTrigger: "WebPredecessorSettings",
                 metricsViaKeyboard: false,
             });

@@ -41,4 +41,20 @@ describe("MatrixToPermalinkConstructor", () => {
             );
         });
     });
+
+    describe("forRoom", () => {
+        it("constructs a link given a room ID and via servers", () => {
+            expect(peramlinkConstructor.forRoom("!myroom:example.com", ["one.example.com", "two.example.com"])).toEqual(
+                "https://matrix.to/#/!myroom:example.com?via=one.example.com&via=two.example.com",
+            );
+        });
+    });
+
+    describe("forEvent", () => {
+        it("constructs a link given an event ID, room ID and via servers", () => {
+            expect(
+                peramlinkConstructor.forEvent("!myroom:example.com", "$event4", ["one.example.com", "two.example.com"]),
+            ).toEqual("https://matrix.to/#/!myroom:example.com/$event4?via=one.example.com&via=two.example.com");
+        });
+    });
 });

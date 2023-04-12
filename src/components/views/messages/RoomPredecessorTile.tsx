@@ -18,6 +18,7 @@ limitations under the License.
 import React, { useCallback, useContext } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { Room } from "matrix-js-sdk/src/matrix";
 
 import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
@@ -29,6 +30,7 @@ import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import RoomContext from "../../../contexts/RoomContext";
 import { useRoomState } from "../../../hooks/useRoomState";
 import SettingsStore from "../../../settings/SettingsStore";
+import MatrixToPermalinkConstructor from "../../../utils/permalinks/MatrixToPermalinkConstructor";
 
 interface IProps {
     /** The m.room.create MatrixEvent that this tile represents */
@@ -86,18 +88,56 @@ export const RoomPredecessorTile: React.FC<IProps> = ({ mxEvent, timestamp }) =>
     }
 
     const prevRoom = MatrixClientPeg.get().getRoom(predecessor.roomId);
-    if (!prevRoom) {
+
+    // We need either the previous room, or some servers to find it with.
+    // Otherwise, we must bail out here
+    if (!prevRoom && !predecessor.viaServers) {
         logger.warn(`Failed to find predecessor room with id ${predecessor.roomId}`);
-        return <></>;
+
+        const guessedLink = guessLinkForRoomId(predecessor.roomId);
+
+        return (
+            <EventTileBubble
+                className="mx_CreateEvent"
+                title={_t("This room is a continuation of another conversation.")}
+                timestamp={timestamp}
+            >
+                <div className="mx_EventTile_body">
+                    <span className="mx_EventTile_tileError">
+                        {!!guessedLink ? (
+                            <>
+                                {_t(
+                                    "Can't find the old version of this room (room ID: %(roomId)s), and we have not been " +
+                                        "provided with 'via_servers' to look for it. It's possible that guessing the " +
+                                        "server from the room ID will work. If you want to try, click this link:",
+                                    {
+                                        roomId: predecessor.roomId,
+                                    },
+                                )}
+                                <a href={guessedLink}>{guessedLink}</a>
+                            </>
+                        ) : (
+                            _t(
+                                "Can't find the old version of this room (room ID: %(roomId)s), and we have not been " +
+                                    "provided with 'via_servers' to look for it.",
+                                {
+                                    roomId: predecessor.roomId,
+                                },
+                            )
+                        )}
+                    </span>
+                </div>
+            </EventTileBubble>
+        );
     }
-    const permalinkCreator = new RoomPermalinkCreator(prevRoom, predecessor.roomId);
-    permalinkCreator.load();
-    let predecessorPermalink: string;
-    if (predecessor.eventId) {
-        predecessorPermalink = permalinkCreator.forEvent(predecessor.eventId);
-    } else {
-        predecessorPermalink = permalinkCreator.forRoom();
-    }
+    // Otherwise, we expect to be able to find this room either because it is
+    // already loaded, or because we have via_servers that we can use.
+    // So we go ahead with rendering the tile.
+
+    const predecessorPermalink = prevRoom
+        ? createLinkWithRoom(prevRoom, predecessor.roomId, predecessor.eventId)
+        : createLinkWithoutRoom(predecessor.roomId, predecessor.viaServers, predecessor.eventId);
+
     const link = (
         <a href={predecessorPermalink} onClick={onLinkClicked}>
             {_t("Click here to see older messages.")}
@@ -112,4 +152,59 @@ export const RoomPredecessorTile: React.FC<IProps> = ({ mxEvent, timestamp }) =>
             timestamp={timestamp}
         />
     );
+
+    function createLinkWithRoom(room: Room, roomId: string, eventId?: string): string {
+        const permalinkCreator = new RoomPermalinkCreator(room, roomId);
+        permalinkCreator.load();
+        if (eventId) {
+            return permalinkCreator.forEvent(eventId);
+        } else {
+            return permalinkCreator.forRoom();
+        }
+    }
+
+    function createLinkWithoutRoom(roomId: string, viaServers: string[], eventId?: string): string {
+        const matrixToPermalinkConstructor = new MatrixToPermalinkConstructor();
+        if (eventId) {
+            return matrixToPermalinkConstructor.forEvent(roomId, eventId, viaServers);
+        } else {
+            return matrixToPermalinkConstructor.forRoom(roomId, viaServers);
+        }
+    }
+
+    /**
+     * Guess the permalink for a room based on its room ID.
+     *
+     * The spec says that Room IDs are opaque [1] so this can only ever be a
+     * guess. There is no guarantee that this room exists on this server.
+     *
+     * [1] https://spec.matrix.org/v1.5/appendices/#room-ids-and-event-ids
+     */
+    function guessLinkForRoomId(roomId: string): string | null {
+        const serverName = guessServerNameFromRoomId(roomId);
+        if (serverName) {
+            return new MatrixToPermalinkConstructor().forRoom(roomId, [serverName]);
+        } else {
+            return null;
+        }
+    }
 };
+
+/**
+ * @internal Public for test only
+ *
+ * Guess the server name for a room based on its room ID.
+ *
+ * The spec says that Room IDs are opaque [1] so this can only ever be a
+ * guess. There is no guarantee that this room exists on this server.
+ *
+ * [1] https://spec.matrix.org/v1.5/appendices/#room-ids-and-event-ids
+ */
+export function guessServerNameFromRoomId(roomId: string): string | null {
+    const m = roomId.match(/^[^:]*:(.*)/);
+    if (m) {
+        return m[1];
+    } else {
+        return null;
+    }
+}
