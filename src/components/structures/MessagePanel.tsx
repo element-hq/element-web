@@ -885,10 +885,10 @@ export default class MessagePanel extends React.Component<IProps, IState> {
             // Record these receipts along with their last shown event ID for
             // each associated user ID.
             for (const receipt of newReceipts) {
-                receiptsByUserId[receipt.userId] = {
+                receiptsByUserId.set(receipt.userId, {
                     lastShownEventId,
                     receipt,
-                };
+                });
             }
         }
 
