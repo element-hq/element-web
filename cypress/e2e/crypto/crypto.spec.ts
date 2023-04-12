@@ -46,21 +46,33 @@ const openRoomInfo = () => {
 };
 
 const checkDMRoom = () => {
-    cy.contains(".mx_TextualEvent", "Alice invited Bob").should("exist");
-    cy.contains(".mx_RoomView_body .mx_cryptoEvent", "Encryption enabled").should("exist");
+    cy.get(".mx_RoomView_body").within(() => {
+        cy.findByText("Alice created this DM.").should("exist");
+        cy.findByText("Alice invited Bob", { timeout: 1000 }).should("exist");
+
+        cy.get(".mx_cryptoEvent").within(() => {
+            cy.findByText("Encryption enabled").should("exist");
+        });
+    });
 };
 
 const startDMWithBob = function (this: CryptoTestContext) {
-    cy.get('.mx_RoomList [aria-label="Start chat"]').click();
-    cy.get('[data-testid="invite-dialog-input"]').type(this.bob.getUserId());
-    cy.contains(".mx_InviteDialog_tile_nameStack_name", "Bob").click();
-    cy.contains(".mx_InviteDialog_userTile_pill .mx_InviteDialog_userTile_name", "Bob").should("exist");
-    cy.get(".mx_InviteDialog_goButton").click();
+    cy.get(".mx_RoomList").within(() => {
+        cy.findByRole("button", { name: "Start chat" }).click();
+    });
+    cy.findByTestId("invite-dialog-input").type(this.bob.getUserId());
+    cy.get(".mx_InviteDialog_tile_nameStack_name").within(() => {
+        cy.findByText("Bob").click();
+    });
+    cy.get(".mx_InviteDialog_userTile_pill .mx_InviteDialog_userTile_name").within(() => {
+        cy.findByText("Bob").should("exist");
+    });
+    cy.findByRole("button", { name: "Go" }).click();
 };
 
 const testMessages = function (this: CryptoTestContext) {
     // check the invite message
-    cy.contains(".mx_EventTile_body", "Hey!")
+    cy.findByText("Hey!")
         .closest(".mx_EventTile")
         .within(() => {
             cy.get(".mx_EventTile_e2eIcon_warning").should("not.exist");
@@ -70,9 +82,7 @@ const testMessages = function (this: CryptoTestContext) {
     cy.get<Room>("@bobsRoom").then((room) => {
         this.bob.sendTextMessage(room.roomId, "Hoo!");
     });
-    cy.contains(".mx_EventTile_body", "Hoo!")
-        .closest(".mx_EventTile")
-        .should("not.have.descendants", ".mx_EventTile_e2eIcon_warning");
+    cy.findByText("Hoo!").closest(".mx_EventTile").should("not.have.descendants", ".mx_EventTile_e2eIcon_warning");
 };
 
 const bobJoin = function (this: CryptoTestContext) {
@@ -93,7 +103,7 @@ const bobJoin = function (this: CryptoTestContext) {
             cy.botJoinRoomByName(this.bob, "Alice").as("bobsRoom");
         });
 
-    cy.contains(".mx_TextualEvent", "Bob joined the room").should("exist");
+    cy.findByText("Bob joined the room").should("exist");
 };
 
 /** configure the given MatrixClient to auto-accept any invites */
@@ -128,17 +138,17 @@ const verify = function (this: CryptoTestContext) {
     const bobsVerificationRequestPromise = waitForVerificationRequest(this.bob);
 
     openRoomInfo().within(() => {
-        cy.get(".mx_RoomSummaryCard_icon_people").click();
-        cy.contains(".mx_EntityTile_name", "Bob").click();
-        cy.contains(".mx_UserInfo_verifyButton", "Verify").click();
-        cy.contains(".mx_AccessibleButton", "Start Verification").click();
+        cy.findByRole("button", { name: /People \d/ }).click(); // \d is the number of the room members
+        cy.findByText("Bob").click();
+        cy.findByRole("button", { name: "Verify" }).click();
+        cy.findByRole("button", { name: "Start Verification" }).click();
         cy.wrap(bobsVerificationRequestPromise)
             .then((verificationRequest: VerificationRequest) => {
                 verificationRequest.accept();
                 return verificationRequest;
             })
             .as("bobsVerificationRequest");
-        cy.contains(".mx_AccessibleButton", "Verify by emoji").click();
+        cy.findByRole("button", { name: "Verify by emoji" }).click();
         cy.get<VerificationRequest>("@bobsVerificationRequest").then((request: VerificationRequest) => {
             return handleVerificationRequest(request).then((emojis: EmojiMapping[]) => {
                 cy.get(".mx_VerificationShowSas_emojiSas_block").then((emojiBlocks) => {
@@ -148,9 +158,9 @@ const verify = function (this: CryptoTestContext) {
                 });
             });
         });
-        cy.contains(".mx_AccessibleButton", "They match").click();
-        cy.contains("You've successfully verified Bob!").should("exist");
-        cy.contains(".mx_AccessibleButton", "Got it").click();
+        cy.findByRole("button", { name: "They match" }).click();
+        cy.findByText("You've successfully verified Bob!").should("exist");
+        cy.findByRole("button", { name: "Got it" }).click();
     });
 };
 
@@ -174,19 +184,23 @@ describe("Cryptography", function () {
 
     it("setting up secure key backup should work", () => {
         cy.openUserSettings("Security & Privacy");
-        cy.contains(".mx_AccessibleButton", "Set up Secure Backup").click();
+        cy.findByRole("button", { name: "Set up Secure Backup" }).click();
         cy.get(".mx_Dialog").within(() => {
-            cy.contains(".mx_Dialog_primary", "Continue").click();
+            cy.findByRole("button", { name: "Continue" }).click();
             cy.get(".mx_CreateSecretStorageDialog_recoveryKey code").invoke("text").as("securityKey");
             // Clicking download instead of Copy because of https://github.com/cypress-io/cypress/issues/2851
-            cy.contains(".mx_AccessibleButton", "Download").click();
+            cy.findByRole("button", { name: "Download" }).click();
             cy.contains(".mx_Dialog_primary:not([disabled])", "Continue").click();
-            cy.contains(".mx_Dialog_title", "Setting up keys").should("exist");
-            cy.contains(".mx_Dialog_title", "Setting up keys").should("not.exist");
+            cy.get(".mx_InteractiveAuthDialog").within(() => {
+                cy.get(".mx_Dialog_title").within(() => {
+                    cy.findByText("Setting up keys").should("exist");
+                    cy.findByText("Setting up keys").should("not.exist");
+                });
+            });
 
-            cy.contains("Secure Backup successful").should("exist");
-            cy.contains("Done").click();
-            cy.contains("Secure Backup successful").should("not.exist");
+            cy.findByText("Secure Backup successful").should("exist");
+            cy.findByRole("button", { name: "Done" }).click();
+            cy.findByText("Secure Backup successful").should("not.exist");
         });
         return;
     });
@@ -195,7 +209,7 @@ describe("Cryptography", function () {
         cy.bootstrapCrossSigning(aliceCredentials);
         startDMWithBob.call(this);
         // send first message
-        cy.get(".mx_BasicMessageComposer_input").click().should("have.focus").type("Hey!{enter}");
+        cy.findByRole("textbox", { name: "Send a message…" }).type("Hey!{enter}");
         checkDMRoom();
         bobJoin.call(this);
         testMessages.call(this);
@@ -214,7 +228,7 @@ describe("Cryptography", function () {
             cy.visit(`/#/room/${roomId}`);
             // wait for Bob to join the room, otherwise our attempt to open his user details may race
             // with his join.
-            cy.contains(".mx_TextualEvent", "Bob joined the room").should("exist");
+            cy.findByText("Bob joined the room").should("exist");
         });
 
         verify.call(this);
@@ -242,7 +256,7 @@ describe("Cryptography", function () {
 
                 // wait for Bob to join the room, otherwise our attempt to open his user details may race
                 // with his join.
-                cy.contains(".mx_TextualEvent", "Bob joined the room").should("exist");
+                cy.findByText("Bob joined the room").should("exist");
             });
 
         verify.call(this);
@@ -252,7 +266,10 @@ describe("Cryptography", function () {
             cy.wrap(this.bob.sendTextMessage(roomId, "Hoo!")).as("testEvent");
 
             // the message should appear, decrypted, with no warning
-            cy.contains(".mx_EventTile_body", "Hoo!")
+            cy.get(".mx_EventTile_last .mx_EventTile_body")
+                .within(() => {
+                    cy.findByText("Hoo!");
+                })
                 .closest(".mx_EventTile")
                 .should("have.class", "mx_EventTile_verified")
                 .should("not.have.descendants", ".mx_EventTile_e2eIcon_warning");
@@ -294,7 +311,10 @@ describe("Cryptography", function () {
                 });
             });
 
-            cy.contains(".mx_EventTile_body", "Hee!")
+            cy.get(".mx_EventTile_last .mx_EventTile_body")
+                .within(() => {
+                    cy.findByText("Hee!");
+                })
                 .closest(".mx_EventTile")
                 .should("have.class", "mx_EventTile_verified")
                 .should("not.have.descendants", ".mx_EventTile_e2eIcon_warning");
