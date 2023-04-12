@@ -212,43 +212,9 @@
         "stylelint": "^15.0.0",
         "stylelint-config-standard": "^32.0.0",
         "stylelint-scss": "^4.2.0",
+        "ts-node": "^10.9.1",
         "typescript": "5.0.3",
         "walk": "^2.3.14"
-    },
-    "jest": {
-        "testEnvironment": "jsdom",
-        "testMatch": [
-            "<rootDir>/test/**/*-test.[jt]s?(x)"
-        ],
-        "globalSetup": "<rootDir>/test/globalSetup.js",
-        "setupFiles": [
-            "jest-canvas-mock"
-        ],
-        "setupFilesAfterEnv": [
-            "<rootDir>/test/setupTests.js"
-        ],
-        "moduleNameMapper": {
-            "\\.(gif|png|ttf|woff2)$": "<rootDir>/__mocks__/imageMock.js",
-            "\\.svg$": "<rootDir>/__mocks__/svg.js",
-            "\\$webapp/i18n/languages.json": "<rootDir>/__mocks__/languages.json",
-            "decoderWorker\\.min\\.js": "<rootDir>/__mocks__/empty.js",
-            "decoderWorker\\.min\\.wasm": "<rootDir>/__mocks__/empty.js",
-            "waveWorker\\.min\\.js": "<rootDir>/__mocks__/empty.js",
-            "workers/(.+)\\.worker\\.ts": "<rootDir>/__mocks__/workerMock.js",
-            "^!!raw-loader!.*": "jest-raw-loader",
-            "RecorderWorklet": "<rootDir>/__mocks__/empty.js"
-        },
-        "transformIgnorePatterns": [
-            "/node_modules/(?!matrix-js-sdk).+$"
-        ],
-        "collectCoverageFrom": [
-            "<rootDir>/src/**/*.{js,ts,tsx}"
-        ],
-        "coverageReporters": [
-            "text-summary",
-            "lcov"
-        ],
-        "testResultsProcessor": "@casualbot/jest-sonar-reporter"
     },
     "@casualbot/jest-sonar-reporter": {
         "outputDirectory": "coverage",

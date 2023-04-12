@@ -55,18 +55,11 @@ jobs:
               id: cpu-cores
               uses: SimenB/github-actions-cpu-cores@410541432439795d30db6501fb1d8178eb41e502 # v1
 
-            - name: Load metrics reporter
-              id: metrics
-              if: github.ref == 'refs/heads/develop'
-              run: |
-                  echo "extra-reporter='--reporters=<rootDir>/test/slowReporter.js'" >> $GITHUB_OUTPUT
-
             - name: Run tests
               run: |
                   yarn test \
                       --coverage=${{ env.ENABLE_COVERAGE }} \
                       --ci \
-                      --reporters github-actions ${{ steps.metrics.outputs.extra-reporter }} \
                       --max-workers ${{ steps.cpu-cores.outputs.count }} \
                       --cacheDirectory /tmp/jest_cache
 
