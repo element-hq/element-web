@@ -15,10 +15,11 @@ limitations under the License.
 */
 
 import React from "react";
-import { render } from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 
 import * as TestUtils from "../../../test-utils";
 import FontScalingPanel from "../../../../src/components/views/settings/FontScalingPanel";
+import SettingsStore from "../../../../src/settings/SettingsStore";
 
 // Fake random strings to give a predictable snapshot
 jest.mock("matrix-js-sdk/src/randomstring", () => {
@@ -32,5 +33,20 @@ describe("FontScalingPanel", () => {
         TestUtils.stubClient();
         const { asFragment } = render(<FontScalingPanel />);
         expect(asFragment()).toMatchSnapshot();
+    });
+
+    it("should clamp custom font size when disabling it", async () => {
+        jest.spyOn(SettingsStore, "setValue").mockResolvedValue(undefined);
+        TestUtils.stubClient();
+        const { container, getByText } = render(<FontScalingPanel />);
+        fireEvent.click(getByText("Use custom size"));
+        await waitFor(() => {
+            expect(container.querySelector("input[checked]")).toBeDefined();
+        });
+        fireEvent.change(container.querySelector("#font_size_field")!, { target: { value: "20" } });
+        fireEvent.click(getByText("Use custom size"));
+        await waitFor(() => {
+            expect(container.querySelector("#font_size_field")).toHaveValue(18);
+        });
     });
 });

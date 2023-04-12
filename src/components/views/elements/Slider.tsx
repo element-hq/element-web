@@ -15,137 +15,71 @@ limitations under the License.
 */
 
 import * as React from "react";
+import { ChangeEvent } from "react";
 
 interface IProps {
     // A callback for the selected value
-    onSelectionChange: (value: number) => void;
+    onChange: (value: number) => void;
 
     // The current value of the slider
     value: number;
 
-    // The range and values of the slider
-    // Currently only supports an ascending, constant interval range
-    values: number[];
+    // The min and max of the slider
+    min: number;
+    max: number;
+    // The step size of the slider, can be a number or "any"
+    step: number | "any";
 
-    // A function for formatting the the values
+    // A function for formatting the values
     displayFunc: (value: number) => string;
 
     // Whether the slider is disabled
     disabled: boolean;
 }
 
+const THUMB_SIZE = 2.4; // em
+
 export default class Slider extends React.Component<IProps> {
-    // offset is a terrible inverse approximation.
-    // if the values represents some function f(x) = y where x is the
-    // index of the array and y = values[x] then offset(f, y) = x
-    // s.t f(x) = y.
-    // it assumes a monotonic function and interpolates linearly between
-    // y values.
-    // Offset is used for finding the location of a value on a
-    // non linear slider.
-    private offset(values: number[], value: number): number {
-        // the index of the first number greater than value.
-        const closest = values.reduce((prev, curr) => {
-            return value > curr ? prev + 1 : prev;
-        }, 0);
-
-        // Off the left
-        if (closest === 0) {
-            return 0;
-        }
-
-        // Off the right
-        if (closest === values.length) {
-            return 100;
-        }
-
-        // Now
-        const closestLessValue = values[closest - 1];
-        const closestGreaterValue = values[closest];
-
-        const intervalWidth = 1 / (values.length - 1);
-
-        const linearInterpolation = (value - closestLessValue) / (closestGreaterValue - closestLessValue);
-
-        return 100 * (closest - 1 + linearInterpolation) * intervalWidth;
+    private get position(): number {
+        const { min, max, value } = this.props;
+        return Number(((value - min) * 100) / (max - min));
     }
 
-    public render(): React.ReactNode {
-        const dots = this.props.values.map((v) => (
-            <Dot
-                active={v <= this.props.value}
-                label={this.props.displayFunc(v)}
-                onClick={this.props.disabled ? () => {} : () => this.props.onSelectionChange(v)}
-                key={v}
-                disabled={this.props.disabled}
-            />
-        ));
+    private onChange = (ev: ChangeEvent<HTMLInputElement>): void => {
+        this.props.onChange(parseInt(ev.target.value, 10));
+    };
 
+    public render(): React.ReactNode {
         let selection: JSX.Element | undefined;
 
         if (!this.props.disabled) {
-            const offset = this.offset(this.props.values, this.props.value);
+            const position = this.position;
             selection = (
-                <div className="mx_Slider_selection">
-                    <div className="mx_Slider_selectionDot" style={{ left: "calc(-1.195em + " + offset + "%)" }}>
-                        <div className="mx_Slider_selectionText">{this.props.value}</div>
-                    </div>
-                    <hr style={{ width: offset + "%" }} />
-                </div>
+                <output
+                    className="mx_Slider_selection"
+                    style={{
+                        left: `calc(2px + ${position}% + ${THUMB_SIZE / 2}em - ${(position / 100) * THUMB_SIZE}em)`,
+                    }}
+                >
+                    <span className="mx_Slider_selection_label">{this.props.value}</span>
+                </output>
             );
         }
 
         return (
             <div className="mx_Slider">
-                <div>
-                    <div className="mx_Slider_bar">
-                        <hr onClick={this.props.disabled ? () => {} : this.onClick.bind(this)} />
-                        {selection}
-                    </div>
-                    <div className="mx_Slider_dotContainer">{dots}</div>
-                </div>
+                <input
+                    type="range"
+                    min={this.props.min}
+                    max={this.props.max}
+                    value={this.props.value}
+                    onChange={this.onChange}
+                    disabled={this.props.disabled}
+                    step={this.props.step}
+                    autoComplete="off"
+                />
+                {selection}
             </div>
-        );
-    }
-
-    public onClick(event: React.MouseEvent): void {
-        const width = (event.target as HTMLElement).clientWidth;
-        // nativeEvent is safe to use because https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/offsetX
-        // is supported by all modern browsers
-        const relativeClick = event.nativeEvent.offsetX / width;
-        const nearestValue = this.props.values[Math.round(relativeClick * (this.props.values.length - 1))];
-        this.props.onSelectionChange(nearestValue);
-    }
-}
-
-interface IDotProps {
-    // Callback for behavior onclick
-    onClick: () => void;
-
-    // Whether the dot should appear active
-    active: boolean;
-
-    // The label on the dot
-    label: string;
-
-    // Whether the slider is disabled
-    disabled: boolean;
-}
-
-class Dot extends React.PureComponent<IDotProps> {
-    public render(): React.ReactNode {
-        let className = "mx_Slider_dot";
-        if (!this.props.disabled && this.props.active) {
-            className += " mx_Slider_dotActive";
-        }
-
-        return (
-            <span onClick={this.props.onClick} className="mx_Slider_dotValue">
-                <div className={className} />
-                <div className="mx_Slider_labelContainer">
-                    <div className="mx_Slider_label">{this.props.label}</div>
-                </div>
-            </span>
         );
     }
 }
