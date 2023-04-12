@@ -23,11 +23,13 @@ describe("User Menu", () => {
     let homeserver: HomeserverInstance;
     let user: UserCredentials;
 
+    const USER_NAME = "Jeff";
+
     beforeEach(() => {
         cy.startHomeserver("default").then((data) => {
             homeserver = data;
 
-            cy.initTestUser(homeserver, "Jeff").then((credentials) => {
+            cy.initTestUser(homeserver, USER_NAME).then((credentials) => {
                 user = credentials;
             });
         });
@@ -38,10 +40,16 @@ describe("User Menu", () => {
     });
 
     it("should contain our name & userId", () => {
-        cy.get('[aria-label="User menu"]').click();
+        cy.findByRole("button", { name: "User menu" }).click();
+
         cy.get(".mx_UserMenu_contextMenu").within(() => {
-            cy.get(".mx_UserMenu_contextMenu_displayName").should("contain", "Jeff");
-            cy.get(".mx_UserMenu_contextMenu_userId").should("contain", user.userId);
+            cy.get(".mx_UserMenu_contextMenu_displayName").within(() => {
+                cy.findByText(USER_NAME).should("exist");
+            });
+
+            cy.get(".mx_UserMenu_contextMenu_userId").within(() => {
+                cy.findByText(user.userId).should("exist");
+            });
         });
     });
 });
