@@ -68,7 +68,7 @@ jobs:
                     github.event.workflow_run.event == 'merge_queue' &&
                     contains(fromJSON(steps.prdetails.outputs.data).labels.*.name, 'X-Needs-Percy')
                   )
-              run: echo "::set-output name=value::1"
+              run: echo "value=1" >> $GITHUB_OUTPUT
 
             # Only export to kiwi when it is demanded or on develop
             - name: Disable Kiwi if not needed
@@ -76,11 +76,11 @@ jobs:
               if: |
                   github.event.workflow_run.event == 'pull_request' &&
                   !contains(fromJSON(steps.prdetails.outputs.data).labels.*.name, 'X-Send-Kiwi')
-              run: echo "::set-output name=value::0"
+              run: echo "value=0" >> $GITHUB_OUTPUT
 
             - name: Generate unique ID 💎
               id: uuid
-              run: echo "::set-output name=value::sha-$GITHUB_SHA-time-$(date +"%s")"
+              run: echo "value=sha-$GITHUB_SHA-time-$(date +"%s")" >> $GITHUB_OUTPUT
 
     tests:
         name: "Run Tests"
@@ -184,7 +184,7 @@ jobs:
 
             - name: Upload reports
               if: always()
-              uses: actions/upload-artifact@v2
+              uses: actions/upload-artifact@v3
               with:
                   name: cypress-junit
                   path: cypress/results
