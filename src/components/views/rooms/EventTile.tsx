@@ -1090,7 +1090,7 @@ export class UnwrappedEventTile extends React.Component<EventTileProps, IState> 
 
         const timestamp = showTimestamp && ts ? messageTimestamp : null;
 
-        let reactionsRow;
+        let reactionsRow: JSX.Element | undefined;
         if (!isRedacted) {
             reactionsRow = (
                 <ReactionsRow

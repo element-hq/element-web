@@ -30,7 +30,7 @@ interface IProps {
 export default class MessageTimestamp extends React.Component<IProps> {
     public render(): React.ReactNode {
         const date = new Date(this.props.ts);
-        let timestamp;
+        let timestamp: string;
         if (this.props.showRelative) {
             timestamp = formatRelativeTime(date, this.props.showTwelveHour);
         } else if (this.props.showFullDate) {
@@ -46,6 +46,7 @@ export default class MessageTimestamp extends React.Component<IProps> {
                 className="mx_MessageTimestamp"
                 title={formatFullDate(date, this.props.showTwelveHour)}
                 aria-hidden={true}
+                aria-live="off"
             >
                 {timestamp}
             </span>
