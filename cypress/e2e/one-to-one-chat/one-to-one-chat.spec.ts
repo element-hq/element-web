@@ -45,17 +45,23 @@ describe("1:1 chat room", () => {
 
     it("should open new 1:1 chat room after leaving the old one", () => {
         // leave 1:1 chat room
-        cy.contains(".mx_RoomHeader_nametext", username).click();
-        cy.contains('[role="menuitem"]', "Leave").click();
-        cy.get('[data-testid="dialog-primary-button"]').click();
+        cy.get(".mx_RoomHeader_nametext").within(() => {
+            cy.findByText(username).click();
+        });
+        cy.findByRole("menuitem", { name: "Leave" }).click();
+        cy.findByRole("button", { name: "Leave" }).click();
 
         // wait till the room was left
-        cy.get('[role="group"][aria-label="Historical"]').within(() => {
-            cy.contains(".mx_RoomTile", username);
+        cy.findByRole("group", { name: "Historical" }).within(() => {
+            cy.get(".mx_RoomTile").within(() => {
+                cy.findByText(username);
+            });
         });
 
         // open new 1:1 chat room
         cy.visit(`/#/user/${user2.userId}?action=chat`);
-        cy.contains(".mx_RoomHeader_nametext", username);
+        cy.get(".mx_RoomHeader_nametext").within(() => {
+            cy.findByText(username);
+        });
     });
 });
