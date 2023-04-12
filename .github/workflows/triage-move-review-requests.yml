@@ -43,11 +43,11 @@ jobs:
 
                   # If either a reviewer matches a team member, or a team matches our team, say "true"
                   if [ $(join /tmp/team_members.txt /tmp/reviewers.txt | wc -l) != 0 ]; then
-                    echo "::set-output name=match::true"
+                    echo "match=true" >> $GITHUB_OUTPUT
                   elif [ $(join /tmp/team.txt /tmp/team_reviewers.txt | wc -l) != 0 ]; then
-                    echo "::set-output name=match::true"
+                    echo "match=true" >> $GITHUB_OUTPUT
                   else
-                    echo "::set-output name=match::false"
+                    echo "match=false" >> $GITHUB_OUTPUT
                   fi
               env:
                   TEAM: "design"
@@ -110,11 +110,11 @@ jobs:
 
                   # If either a reviewer matches a team member, or a team matches our team, say "true"
                   if [ $(join /tmp/team_members.txt /tmp/reviewers.txt | wc -l) != 0 ]; then
-                    echo "::set-output name=match::true"
+                    echo "match=true" >> $GITHUB_OUTPUT
                   elif [ $(join /tmp/team.txt /tmp/team_reviewers.txt | wc -l) != 0 ]; then
-                    echo "::set-output name=match::true"
+                    echo "match=true" >> $GITHUB_OUTPUT
                   else
-                    echo "::set-output name=match::false"
+                    echo "match=false" >> $GITHUB_OUTPUT
                   fi
               env:
                   TEAM: "product"
