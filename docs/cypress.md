@@ -158,9 +158,7 @@ creation that can be called to set up tests.
 
 Like for instance a user will not look for a button by querying a CSS selector. Instead you should work
 with roles / labels etc.. You can make use of `cy.findBy…` queries provided by
-[Cypress Testing Library](https://github.com/testing-library/cypress-testing-library) and some convencience
-commands, such as `findButton(name)` or `findTextbox(name)`.
-See [`/cypress/support/find.ts`](../cypress/support/find.ts) for a complete list.
+[Cypress Testing Library](https://github.com/testing-library/cypress-testing-library).
 
 ### Using matrix-js-sdk
 
