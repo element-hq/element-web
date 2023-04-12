@@ -535,6 +535,27 @@ legend {
     }
 }
 
+@define-mixin mx_DialogButton {
+    /* align images in buttons (eg spinners) */
+    vertical-align: middle;
+    border: 0px;
+    border-radius: 8px;
+    font-family: $font-family;
+    font-size: $font-14px;
+    color: $button-fg-color;
+    background-color: $accent;
+    width: auto;
+    padding: 7px;
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+    cursor: pointer;
+    display: inline-block;
+
+    &:not(.focus-visible) {
+        outline: none;
+    }
+}
+
 /* XXX: Our button style are a mess: buttons that happen to appear in dialogs get special styles applied
  * to them that no button anywhere else in the app gets by default. In practice, buttons in other places
  * in the app look the same by being AccessibleButtons, or possibly by having explict button classes.
@@ -563,13 +584,6 @@ legend {
 
 .mx_Dialog button:not(.mx_Dialog_nonDialogButton):not([class|="maplibregl"]):not(.mx_AccessibleButton):last-child {
     margin-right: 0px;
-}
-
-.mx_Dialog button:not(.mx_Dialog_nonDialogButton):not([class|="maplibregl"]):not(.mx_AccessibleButton):hover,
-.mx_Dialog input[type="submit"]:hover,
-.mx_Dialog_buttons button:not(.mx_Dialog_nonDialogButton):not(.mx_AccessibleButton):hover,
-.mx_Dialog_buttons input[type="submit"]:hover {
-    @mixin mx_DialogButton_hover;
 }
 
 .mx_Dialog button:not(.mx_Dialog_nonDialogButton):not([class|="maplibregl"]):not(.mx_AccessibleButton):focus,
@@ -643,10 +657,6 @@ legend {
     margin: auto;
 }
 
-.mx_GeneralButton:hover {
-    @mixin mx_DialogButton_hover;
-}
-
 .mx_linkButton {
     cursor: pointer;
     color: $accent;
@@ -666,12 +676,14 @@ legend {
     background-color: $background;
 }
 
-.mx_textButton {
-    @mixin mx_DialogButton_small;
+@define-mixin mx_DialogButton_small {
+    @mixin mx_DialogButton;
+    font-size: $font-15px;
+    padding: 0px 1.5em 0px 1.5em;
 }
 
-.mx_textButton:hover {
-    @mixin mx_DialogButton_hover;
+.mx_textButton {
+    @mixin mx_DialogButton_small;
 }
 
 .mx_button_row {
@@ -873,4 +885,9 @@ legend {
             background-color: $hover-color;
         }
     }
+}
+
+@define-mixin mx_Dialog_link {
+    color: $accent;
+    text-decoration: none;
 }

@@ -238,44 +238,6 @@ $selected-color: $room-highlight-color;
 }
 /* ******************** */
 
-/* Mixins */
-/* ******************** */
-@define-mixin mx_DialogButton {
-    /* align images in buttons (eg spinners) */
-    vertical-align: middle;
-    border: 0px;
-    border-radius: 8px;
-    font-family: $font-family;
-    font-size: $font-14px;
-    color: $button-fg-color;
-    background-color: $accent;
-    width: auto;
-    padding: 7px;
-    padding-left: 1.5em;
-    padding-right: 1.5em;
-    cursor: pointer;
-    display: inline-block;
-    outline: none;
-}
-
-@define-mixin mx_DialogButton_danger {
-    background-color: $accent;
-}
-
-@define-mixin mx_DialogButton_secondary {
-    /* flip colours for the secondary ones */
-    font-weight: 600;
-    border: 1px solid $accent !important;
-    color: $accent;
-    background-color: $button-secondary-bg-color;
-}
-
-@define-mixin mx_Dialog_link {
-    color: $accent;
-    text-decoration: none;
-}
-/* ******************** */
-
 body {
     color-scheme: dark;
 }

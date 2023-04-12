@@ -34,23 +34,6 @@ $appearance-tab-border-color: $input-darker-bg-color;
 $eventbubble-reply-color: $quaternary-content;
 $roomtopic-color: $secondary-content;
 
-@define-mixin mx_DialogButton_danger {
-    background-color: $accent;
-}
-
-@define-mixin mx_DialogButton_secondary {
-    /* flip colours for the secondary ones */
-    font-weight: 600;
-    border: 1px solid $accent !important;
-    color: $accent;
-    background-color: $button-secondary-bg-color;
-}
-
-@define-mixin mx_Dialog_link {
-    color: $accent;
-    text-decoration: none;
-}
-
 /* Draw an outline on buttons with focus */
 .mx_AccessibleButton:focus {
     outline: 2px solid $accent;

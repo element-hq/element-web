@@ -18,15 +18,18 @@ limitations under the License.
     margin-top: 15px;
 
     .mx_CreateRoomDialog_details_summary {
-        outline: none;
         list-style: none;
-        font-weight: 600;
+        font-weight: $font-semi-bold;
         cursor: pointer;
         color: $accent;
 
         /* list-style doesn't do it for webkit */
         &::-webkit-details-marker {
             display: none;
+        }
+
+        &:not(.focus-visible) {
+            outline: none;
         }
     }
 
