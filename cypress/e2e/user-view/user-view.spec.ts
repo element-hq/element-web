@@ -40,8 +40,10 @@ describe("UserView", () => {
             cy.visit(`/#/user/${bot.getUserId()}`);
         });
 
-        cy.get("#mx_RightPanel .mx_UserInfo_profile h2").should("contain", "Usman");
-        cy.get(".mx_RightPanel .mx_Spinner").should("not.exist"); // wait for spinners to finish
+        cy.get(".mx_RightPanel .mx_UserInfo_profile h2").within(() => {
+            cy.findByText("Usman").should("exist");
+        });
+
         cy.get(".mx_RightPanel").percySnapshotElement("User View", {
             // Hide the MXID field as it'll vary on each test
             percyCSS: ".mx_UserInfo_profile_mxid { visibility: hidden !important; }",
