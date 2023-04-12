@@ -446,7 +446,9 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
                 class="mx_BasicMessageComposer"
               >
                 <div
+                  aria-label="Formatting"
                   class="mx_MessageComposerFormatBar"
+                  role="toolbar"
                 >
                   <button
                     aria-label="Bold"
@@ -459,35 +461,35 @@ exports[`RoomView for a local room in state NEW should match the snapshot 1`] = 
                     aria-label="Italics"
                     class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconItalic"
                     role="button"
-                    tabindex="0"
+                    tabindex="-1"
                     type="button"
                   />
                   <button
                     aria-label="Strikethrough"
                     class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconStrikethrough"
                     role="button"
-                    tabindex="0"
+                    tabindex="-1"
                     type="button"
                   />
                   <button
                     aria-label="Code block"
                     class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconCode"
                     role="button"
-                    tabindex="0"
+                    tabindex="-1"
                     type="button"
                   />
                   <button
                     aria-label="Quote"
                     class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconQuote"
                     role="button"
-                    tabindex="0"
+                    tabindex="-1"
                     type="button"
                   />
                   <button
                     aria-label="Insert link"
                     class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconInsertLink"
                     role="button"
-                    tabindex="0"
+                    tabindex="-1"
                     type="button"
                   />
                 </div>
@@ -706,7 +708,9 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
                 class="mx_BasicMessageComposer"
               >
                 <div
+                  aria-label="Formatting"
                   class="mx_MessageComposerFormatBar"
+                  role="toolbar"
                 >
                   <button
                     aria-label="Bold"
@@ -719,35 +723,35 @@ exports[`RoomView for a local room in state NEW that is encrypted should match t
                     aria-label="Italics"
                     class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconItalic"
                     role="button"
-                    tabindex="0"
+                    tabindex="-1"
                     type="button"
                   />
                   <button
                     aria-label="Strikethrough"
                     class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconStrikethrough"
                     role="button"
-                    tabindex="0"
+                    tabindex="-1"
                     type="button"
                   />
                   <button
                     aria-label="Code block"
                     class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconCode"
                     role="button"
-                    tabindex="0"
+                    tabindex="-1"
                     type="button"
                   />
                   <button
                     aria-label="Quote"
                     class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconQuote"
                     role="button"
-                    tabindex="0"
+                    tabindex="-1"
                     type="button"
                   />
                   <button
                     aria-label="Insert link"
                     class="mx_AccessibleButton mx_MessageComposerFormatBar_button mx_MessageComposerFormatBar_buttonIconInsertLink"
                     role="button"
-                    tabindex="0"
+                    tabindex="-1"
                     type="button"
                   />
                 </div>
