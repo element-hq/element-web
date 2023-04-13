@@ -59,15 +59,13 @@ const INTEGRATION_MANAGER_HTML = `
 `;
 
 function openIntegrationManager() {
-    cy.get(".mx_RightPanel_roomSummaryButton").click();
-    cy.get(".mx_RoomSummaryCard_appsGroup").within(() => {
-        cy.contains("Add widgets, bridges & bots").click();
-    });
+    cy.findByRole("tab", { name: "Room info" }).click();
+    cy.findByRole("button", { name: "Add widgets, bridges & bots" }).click();
 }
 
 function sendActionFromIntegrationManager(integrationManagerUrl: string) {
     cy.accessIframe(`iframe[src*="${integrationManagerUrl}"]`).within(() => {
-        cy.get("#send-action").should("exist").click();
+        cy.findByRole("button", { name: "Press to send action" }).should("exist").click();
     });
 }
 
@@ -134,7 +132,9 @@ describe("Integration Manager: Get OpenID Token", () => {
             sendActionFromIntegrationManager(integrationManagerUrl);
 
             cy.accessIframe(`iframe[src*="${integrationManagerUrl}"]`).within(() => {
-                cy.get("#message-response").should("include.text", "access_token");
+                cy.get("#message-response").within(() => {
+                    cy.findByText(/access_token/);
+                });
             });
         });
     });
