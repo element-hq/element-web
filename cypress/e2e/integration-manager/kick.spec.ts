@@ -62,15 +62,13 @@ const INTEGRATION_MANAGER_HTML = `
 `;
 
 function openIntegrationManager() {
-    cy.get(".mx_RightPanel_roomSummaryButton").click();
-    cy.get(".mx_RoomSummaryCard_appsGroup").within(() => {
-        cy.contains("Add widgets, bridges & bots").click();
-    });
+    cy.findByRole("tab", { name: "Room info" }).click();
+    cy.findByRole("button", { name: "Add widgets, bridges & bots" }).click();
 }
 
 function closeIntegrationManager(integrationManagerUrl: string) {
     cy.accessIframe(`iframe[src*="${integrationManagerUrl}"]`).within(() => {
-        cy.get("#close").should("exist").click();
+        cy.findByRole("button", { name: "Press to close" }).should("exist").click();
     });
 }
 
@@ -78,7 +76,7 @@ function sendActionFromIntegrationManager(integrationManagerUrl: string, targetR
     cy.accessIframe(`iframe[src*="${integrationManagerUrl}"]`).within(() => {
         cy.get("#target-room-id").should("exist").type(targetRoomId);
         cy.get("#target-user-id").should("exist").type(targetUserId);
-        cy.get("#send-action").should("exist").click();
+        cy.findByRole("button", { name: "Press to send action" }).should("exist").click();
     });
 }
 
@@ -105,7 +103,7 @@ function expectKickedMessage(shouldExist: boolean) {
     clickUntilGone(".mx_GenericEventListSummary_toggle[aria-expanded=false]");
 
     // Check for the event message (or lack thereof)
-    cy.contains(".mx_EventTile_line", `${USER_DISPLAY_NAME} removed ${BOT_DISPLAY_NAME}: ${KICK_REASON}`).should(
+    cy.findByText(`${USER_DISPLAY_NAME} removed ${BOT_DISPLAY_NAME}: ${KICK_REASON}`).should(
         shouldExist ? "exist" : "not.exist",
     );
 }
@@ -173,7 +171,7 @@ describe("Integration Manager: Kick", () => {
                 const targetUserId = targetUser.getUserId();
                 cy.viewRoomByName(ROOM_NAME);
                 cy.inviteUser(roomId, targetUserId);
-                cy.contains(`${BOT_DISPLAY_NAME} joined the room`).should("exist");
+                cy.findByText(`${BOT_DISPLAY_NAME} joined the room`).should("exist");
 
                 openIntegrationManager();
                 sendActionFromIntegrationManager(integrationManagerUrl, roomId, targetUserId);
@@ -189,7 +187,7 @@ describe("Integration Manager: Kick", () => {
                 const targetUserId = targetUser.getUserId();
                 cy.viewRoomByName(ROOM_NAME);
                 cy.inviteUser(roomId, targetUserId);
-                cy.contains(`${BOT_DISPLAY_NAME} joined the room`).should("exist");
+                cy.findByText(`${BOT_DISPLAY_NAME} joined the room`).should("exist");
                 cy.getClient()
                     .then(async (client) => {
                         await client.sendStateEvent(roomId, "m.room.power_levels", {
@@ -215,7 +213,7 @@ describe("Integration Manager: Kick", () => {
                 const targetUserId = targetUser.getUserId();
                 cy.viewRoomByName(ROOM_NAME);
                 cy.inviteUser(roomId, targetUserId);
-                cy.contains(`${BOT_DISPLAY_NAME} joined the room`)
+                cy.findByText(`${BOT_DISPLAY_NAME} joined the room`)
                     .should("exist")
                     .then(async () => {
                         await targetUser.leave(roomId);
@@ -236,7 +234,7 @@ describe("Integration Manager: Kick", () => {
                 const targetUserId = targetUser.getUserId();
                 cy.viewRoomByName(ROOM_NAME);
                 cy.inviteUser(roomId, targetUserId);
-                cy.contains(`${BOT_DISPLAY_NAME} joined the room`).should("exist");
+                cy.findByText(`${BOT_DISPLAY_NAME} joined the room`).should("exist");
                 cy.getClient()
                     .then(async (client) => {
                         await client.ban(roomId, targetUserId);
