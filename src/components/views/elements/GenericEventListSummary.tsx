@@ -38,7 +38,7 @@ interface IProps {
     // The text to show as the summary of this event list
     "summaryText"?: ReactNode;
     // An array of EventTiles to render when expanded
-    "children": ReactNode[];
+    "children": ReactNode[] | null;
     // Called when the event list expansion is toggled
     onToggle?(): void;
     // The layout currently used

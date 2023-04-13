@@ -869,7 +869,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         const receiptsByEvent: Map<string, IReadReceiptProps[]> = new Map();
         const receiptsByUserId: Map<string, IReadReceiptForUser> = new Map();
 
-        let lastShownEventId: string;
+        let lastShownEventId: string | undefined;
         for (const event of this.props.events) {
             if (this.shouldShowEvent(event)) {
                 lastShownEventId = event.getId();
@@ -1018,11 +1018,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         let ircResizer: JSX.Element | undefined;
         if (this.props.layout == Layout.IRC) {
             ircResizer = (
-                <IRCTimelineProfileResizer
-                    minWidth={20}
-                    maxWidth={600}
-                    roomId={this.props.room ? this.props.room.roomId : null}
-                />
+                <IRCTimelineProfileResizer minWidth={20} maxWidth={600} roomId={this.props.room?.roomId ?? null} />
             );
         }
 
@@ -1206,7 +1202,7 @@ class CreationGrouper extends BaseGrouper {
         let summaryText: string;
         const roomId = ev.getRoomId();
         const creator = ev.sender?.name ?? ev.getSender();
-        if (DMRoomMap.shared().getUserIdForRoomId(roomId)) {
+        if (roomId && DMRoomMap.shared().getUserIdForRoomId(roomId)) {
             summaryText = _t("%(creator)s created this DM.", { creator });
         } else {
             summaryText = _t("%(creator)s created and configured the room.", { creator });

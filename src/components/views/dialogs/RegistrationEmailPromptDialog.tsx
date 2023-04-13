@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import * as React from "react";
-import { SyntheticEvent, useRef, useState } from "react";
+import { RefObject, SyntheticEvent, useRef, useState } from "react";
 
 import { _t, _td } from "../../../languageHandler";
 import Field from "../elements/Field";
@@ -30,7 +30,7 @@ interface IProps {
 
 const RegistrationEmailPromptDialog: React.FC<IProps> = ({ onFinished }) => {
     const [email, setEmail] = useState("");
-    const fieldRef = useRef<Field>();
+    const fieldRef = useRef() as RefObject<Field>;
 
     const onSubmit = async (e: SyntheticEvent): Promise<void> => {
         e.preventDefault();

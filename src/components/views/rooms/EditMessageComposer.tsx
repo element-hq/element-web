@@ -238,9 +238,11 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
 
     private get events(): MatrixEvent[] {
         const liveTimelineEvents = this.context.liveTimeline?.getEvents();
-        const pendingEvents = this.getRoom()?.getPendingEvents();
+        const room = this.getRoom();
+        if (!liveTimelineEvents || !room) return [];
+        const pendingEvents = room.getPendingEvents();
         const isInThread = Boolean(this.props.editState.getEvent().getThread());
-        return liveTimelineEvents?.concat(isInThread ? [] : pendingEvents) ?? [];
+        return liveTimelineEvents.concat(isInThread ? [] : pendingEvents);
     }
 
     private cancelEdit = (): void => {

@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useRef } from "react";
+import React, { RefObject, useRef } from "react";
 
 import { BreadcrumbsStore } from "../../../stores/BreadcrumbsStore";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
@@ -30,7 +30,7 @@ import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import RoomAvatar from "../avatars/RoomAvatar";
 
 const RecentlyViewedButton: React.FC = () => {
-    const tooltipRef = useRef<InteractiveTooltip>();
+    const tooltipRef = useRef() as RefObject<InteractiveTooltip>;
     const crumbs = useEventEmitterState(BreadcrumbsStore.instance, UPDATE_EVENT, () => BreadcrumbsStore.instance.rooms);
 
     const content = (

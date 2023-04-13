@@ -28,9 +28,16 @@ limitations under the License.
  * consume in the timeline, when performing scroll offset calculations
  * (e.g. scroll locking)
  */
+export function thumbHeight(fullWidth: number, fullHeight: number, thumbWidth: number, thumbHeight: number): number;
 export function thumbHeight(
-    fullWidth: number,
-    fullHeight: number,
+    fullWidth: number | undefined,
+    fullHeight: number | undefined,
+    thumbWidth: number,
+    thumbHeight: number,
+): null;
+export function thumbHeight(
+    fullWidth: number | undefined,
+    fullHeight: number | undefined,
     thumbWidth: number,
     thumbHeight: number,
 ): number | null {

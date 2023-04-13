@@ -288,8 +288,8 @@ interface IDirectoryOpts {
 }
 
 const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = null, onFinished }) => {
-    const inputRef = useRef<HTMLInputElement>();
-    const scrollContainerRef = useRef<HTMLDivElement>();
+    const inputRef = useRef() as RefObject<HTMLInputElement>;
+    const scrollContainerRef = useRef() as RefObject<HTMLDivElement>;
     const cli = MatrixClientPeg.get();
     const rovingContext = useContext(RovingTabIndexContext);
     const [query, _setQuery] = useState(initialText);

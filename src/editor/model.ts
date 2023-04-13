@@ -44,7 +44,7 @@ import { Caret } from "./caret";
  * @return the caret position
  */
 
-type TransformCallback = (caretPosition: DocumentPosition, inputType: string, diff: IDiff) => number | void;
+type TransformCallback = (caretPosition: DocumentPosition, inputType: string | undefined, diff: IDiff) => number | void;
 type UpdateCallback = (caret?: Caret, inputType?: string, diff?: IDiff) => void;
 type ManualTransformCallback = () => Caret;
 
@@ -151,7 +151,7 @@ export default class EditorModel {
         return this._parts.map((p) => p.serialize());
     }
 
-    private diff(newValue: string, inputType: string, caret: DocumentOffset): IDiff {
+    private diff(newValue: string, inputType: string | undefined, caret: DocumentOffset): IDiff {
         const previousValue = this.parts.reduce((text, p) => text + p.text, "");
         // can't use caret position with drag and drop
         if (inputType === "deleteByDrag") {
@@ -196,7 +196,7 @@ export default class EditorModel {
         return newTextLength;
     }
 
-    public update(newValue: string, inputType: string, caret: DocumentOffset): Promise<void> {
+    public update(newValue: string, inputType: string | undefined, caret: DocumentOffset): Promise<void> {
         const diff = this.diff(newValue, inputType, caret);
         const position = this.positionForOffset(diff.at || 0, caret.atNodeEnd);
         let removedOffsetDecrease = 0;
@@ -220,7 +220,7 @@ export default class EditorModel {
         return acPromise;
     }
 
-    private getTransformAddedLen(newPosition: DocumentPosition, inputType: string, diff: IDiff): number {
+    private getTransformAddedLen(newPosition: DocumentPosition, inputType: string | undefined, diff: IDiff): number {
         const result = this.transformCallback?.(newPosition, inputType, diff);
         return Number.isFinite(result) ? (result as number) : 0;
     }
@@ -360,7 +360,7 @@ export default class EditorModel {
      * @return {Number} how far from position (in characters) the insertion ended.
      * This can be more than the length of `str` when crossing non-editable parts, which are skipped.
      */
-    private addText(pos: IPosition, str: string, inputType: string): number {
+    private addText(pos: IPosition, str: string, inputType: string | undefined): number {
         let { index } = pos;
         const { offset } = pos;
         let addLen = str.length;

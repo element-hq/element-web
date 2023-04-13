@@ -1597,6 +1597,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     };
 
     private injectSticker(url: string, info: object, text: string, threadId: string | null): void {
+        if (!this.context.client) return;
         if (this.context.client.isGuest()) {
             dis.dispatch({ action: "require_registration" });
             return;

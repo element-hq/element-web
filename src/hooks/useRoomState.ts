@@ -28,8 +28,8 @@ const defaultMapper: Mapper<RoomState> = (roomState: RoomState) => roomState;
 export const useRoomState = <T extends any = RoomState>(
     room?: Room,
     mapper: Mapper<T> = defaultMapper as Mapper<T>,
-): T | undefined => {
-    const [value, setValue] = useState<T | undefined>(room ? mapper(room.currentState) : undefined);
+): T => {
+    const [value, setValue] = useState<T>(room ? mapper(room.currentState) : (undefined as T));
 
     const update = useCallback(() => {
         if (!room) return;
@@ -40,8 +40,8 @@ export const useRoomState = <T extends any = RoomState>(
     useEffect(() => {
         update();
         return () => {
-            setValue(undefined);
+            setValue(room ? mapper(room.currentState) : (undefined as T));
         };
-    }, [update]);
+    }, [room, mapper, update]);
     return value;
 };

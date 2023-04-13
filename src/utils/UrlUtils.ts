@@ -22,7 +22,7 @@ import url from "url";
  * @param {string} u The url to be abbreviated
  * @returns {string} The abbreviated url
  */
-export function abbreviateUrl(u: string): string {
+export function abbreviateUrl(u?: string): string {
     if (!u) return "";
 
     const parsedUrl = url.parse(u);

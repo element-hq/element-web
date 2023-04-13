@@ -26,6 +26,7 @@ import AccessibleButton from "../elements/AccessibleButton";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import StyledCheckbox from "../elements/StyledCheckbox";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import { filterBoolean } from "../../../utils/arrays";
 
 interface IProps {
     room: Room;
@@ -65,7 +66,7 @@ const Entry: React.FC<{
                 )}
             </div>
             <StyledCheckbox
-                onChange={onChange ? (e) => onChange(e.target.checked) : null}
+                onChange={onChange ? (e) => onChange(e.target.checked) : undefined}
                 checked={checked}
                 disabled={!onChange}
             />
@@ -80,7 +81,7 @@ const addAllParents = (set: Set<Room>, room: Room): void => {
     );
 
     parents.forEach((parent) => {
-        if (set.has(parent)) return;
+        if (!parent || set.has(parent)) return;
         set.add(parent);
         addAllParents(set, parent);
     });
@@ -97,8 +98,8 @@ const ManageRestrictedJoinRuleDialog: React.FC<IProps> = ({ room, selected = [],
         addAllParents(parents, room);
         return [
             Array.from(parents),
-            selected
-                .map((roomId) => {
+            filterBoolean(
+                selected.map((roomId) => {
                     const room = cli.getRoom(roomId);
                     if (!room) {
                         return { roomId, name: roomId } as Room;
@@ -106,8 +107,8 @@ const ManageRestrictedJoinRuleDialog: React.FC<IProps> = ({ room, selected = [],
                     if (room.getMyMembership() !== "join" || !room.isSpaceRoom()) {
                         return room;
                     }
-                })
-                .filter(Boolean),
+                }),
+            ),
         ];
     }, [cli, selected, room]);
 

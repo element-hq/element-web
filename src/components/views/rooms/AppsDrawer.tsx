@@ -45,7 +45,11 @@ interface IProps {
 }
 
 interface IState {
-    apps: Partial<{ [id in Container]: IApp[] }>;
+    apps: {
+        [Container.Top]: IApp[];
+        [Container.Center]: IApp[];
+        [Container.Right]?: IApp[];
+    };
     resizingVertical: boolean; // true when changing the height of the apps drawer
     resizingHorizontal: boolean; // true when changing the distribution of the width between widgets
     resizing: boolean;
@@ -203,12 +207,10 @@ export default class AppsDrawer extends React.Component<IProps, IState> {
         }
     };
 
-    private getApps = (): Partial<{ [id in Container]: IApp[] }> => {
-        const appsDict: Partial<{ [id in Container]: IApp[] }> = {};
-        appsDict[Container.Top] = WidgetLayoutStore.instance.getContainerWidgets(this.props.room, Container.Top);
-        appsDict[Container.Center] = WidgetLayoutStore.instance.getContainerWidgets(this.props.room, Container.Center);
-        return appsDict;
-    };
+    private getApps = (): IState["apps"] => ({
+        [Container.Top]: WidgetLayoutStore.instance.getContainerWidgets(this.props.room, Container.Top),
+        [Container.Center]: WidgetLayoutStore.instance.getContainerWidgets(this.props.room, Container.Center),
+    });
     private topApps = (): IApp[] => this.state.apps[Container.Top];
     private centerApps = (): IApp[] => this.state.apps[Container.Center];
 
@@ -348,7 +350,7 @@ const PersistentVResizer: React.FC<IPersistentResizerProps> = ({
                 resizeNotifier.notifyTimelineHeightChanged();
             }}
             onResizeStop={(e, dir, ref, d) => {
-                let newHeight = defaultHeight + d.height;
+                let newHeight = defaultHeight! + d.height;
                 newHeight = percentageOf(newHeight, minHeight, maxHeight) * 100;
 
                 WidgetLayoutStore.instance.setContainerHeight(room, Container.Top, newHeight);

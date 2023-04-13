@@ -276,7 +276,8 @@ export class MessageComposer extends React.Component<IProps, IState> {
             if (createEvent?.getId()) createEventId = createEvent.getId();
         }
 
-        const viaServers = [this.context.tombstone.getSender().split(":").slice(1).join(":")];
+        const sender = this.context.tombstone?.getSender();
+        const viaServers = sender ? [sender.split(":").slice(1).join(":")] : undefined;
 
         dis.dispatch<ViewRoomPayload>({
             action: Action.ViewRoom,

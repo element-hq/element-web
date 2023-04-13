@@ -65,8 +65,8 @@ interface IBasePart {
     serialize(): SerializedPart;
     remove(offset: number, len: number): string | undefined;
     split(offset: number): IBasePart;
-    validateAndInsert(offset: number, str: string, inputType: string): boolean;
-    appendUntilRejected(str: string, inputType: string): string | undefined;
+    validateAndInsert(offset: number, str: string, inputType: string | undefined): boolean;
+    appendUntilRejected(str: string, inputType: string | undefined): string | undefined;
     updateDOMNode(node: Node): void;
     canUpdateDOMNode(node: Node): boolean;
     toDOMNode(): Node;

@@ -53,7 +53,7 @@ const ConfirmSpaceUserActionDialog: React.FC<IProps> = ({
     const [roomsToLeave, setRoomsToLeave] = useState<Room[]>([]);
     const selectedRooms = useMemo(() => new Set(roomsToLeave), [roomsToLeave]);
 
-    let warning: JSX.Element;
+    let warning: JSX.Element | undefined;
     if (warningMessage) {
         warning = <div className="mx_ConfirmSpaceUserActionDialog_warning">{warningMessage}</div>;
     }

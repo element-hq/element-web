@@ -15,8 +15,8 @@ limitations under the License.
 */
 
 export interface ScrollState {
-    focussedEvent: string;
-    pixelOffset: number;
+    focussedEvent?: string;
+    pixelOffset?: number;
 }
 
 /**

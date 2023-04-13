@@ -17,6 +17,7 @@ limitations under the License.
 import React, { useCallback, useMemo, useState } from "react";
 import { JoinRule } from "matrix-js-sdk/src/@types/partials";
 import { EventType } from "matrix-js-sdk/src/@types/event";
+import { RoomState } from "matrix-js-sdk/src/models/room-state";
 
 import { _t } from "../../../../../languageHandler";
 import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
@@ -33,15 +34,15 @@ interface ElementCallSwitchProps {
 
 const ElementCallSwitch: React.FC<ElementCallSwitchProps> = ({ roomId }) => {
     const room = useMemo(() => MatrixClientPeg.get().getRoom(roomId), [roomId]);
-    const isPublic = useMemo(() => room.getJoinRule() === JoinRule.Public, [room]);
+    const isPublic = useMemo(() => room?.getJoinRule() === JoinRule.Public, [room]);
     const [content, events, maySend] = useRoomState(
-        room,
-        useCallback((state) => {
+        room ?? undefined,
+        useCallback((state: RoomState) => {
             const content = state?.getStateEvents(EventType.RoomPowerLevels, "")?.getContent();
             return [
                 content ?? {},
                 content?.["events"] ?? {},
-                state?.maySendStateEvent(EventType.RoomPowerLevels, MatrixClientPeg.get().getUserId()),
+                state?.maySendStateEvent(EventType.RoomPowerLevels, MatrixClientPeg.get().getSafeUserId()),
             ];
         }, []),
     );

@@ -189,7 +189,7 @@ export default class ScrollPanel extends React.Component<IProps> {
     // Is that next fill request scheduled because of a props update?
     private pendingFillDueToPropsUpdate: boolean;
     private scrollState: IScrollState;
-    private preventShrinkingState: IPreventShrinkingState;
+    private preventShrinkingState: IPreventShrinkingState | null;
     private unfillDebouncer: number | null;
     private bottomGrowth: number;
     private minListHeight: number;
@@ -676,7 +676,7 @@ export default class ScrollPanel extends React.Component<IProps> {
             debuglog("unable to save scroll state: found no children in the viewport");
             return;
         }
-        const scrollToken = node!.dataset.scrollTokens.split(",")[0];
+        const scrollToken = node!.dataset.scrollTokens?.split(",")[0];
         debuglog("saving anchored scroll state to message", scrollToken);
         const bottomOffset = this.topFromBottom(node);
         this.scrollState = {

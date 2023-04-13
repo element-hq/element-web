@@ -28,7 +28,7 @@ export interface ICallback {
 }
 
 export type UpdateCallback = (data: ICallback) => void;
-export type GetAutocompleterComponent = () => Autocomplete;
+export type GetAutocompleterComponent = () => Autocomplete | null;
 export type UpdateQuery = (test: string) => Promise<void>;
 
 export default class AutocompleteWrapperModel {
@@ -42,7 +42,7 @@ export default class AutocompleteWrapperModel {
     ) {}
 
     public onEscape(e: KeyboardEvent): void {
-        this.getAutocompleterComponent().onEscape(e);
+        this.getAutocompleterComponent()?.onEscape(e);
     }
 
     public close(): void {
@@ -50,16 +50,16 @@ export default class AutocompleteWrapperModel {
     }
 
     public hasSelection(): boolean {
-        return this.getAutocompleterComponent().hasSelection();
+        return !!this.getAutocompleterComponent()?.hasSelection();
     }
 
     public hasCompletions(): boolean {
         const ac = this.getAutocompleterComponent();
-        return ac && ac.countCompletions() > 0;
+        return !!ac && ac.countCompletions() > 0;
     }
 
     public confirmCompletion(): void {
-        this.getAutocompleterComponent().onConfirmCompletion();
+        this.getAutocompleterComponent()?.onConfirmCompletion();
         this.updateCallback({ close: true });
     }
 
@@ -68,18 +68,18 @@ export default class AutocompleteWrapperModel {
      */
     public async startSelection(): Promise<void> {
         const acComponent = this.getAutocompleterComponent();
-        if (acComponent.countCompletions() === 0) {
+        if (acComponent && acComponent.countCompletions() === 0) {
             // Force completions to show for the text currently entered
             await acComponent.forceComplete();
         }
     }
 
     public selectPreviousSelection(): void {
-        this.getAutocompleterComponent().moveSelection(-1);
+        this.getAutocompleterComponent()?.moveSelection(-1);
     }
 
     public selectNextSelection(): void {
-        this.getAutocompleterComponent().moveSelection(+1);
+        this.getAutocompleterComponent()?.moveSelection(+1);
     }
 
     public onPartUpdate(part: Part, pos: DocumentPosition): Promise<void> {

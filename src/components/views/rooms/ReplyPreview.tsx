@@ -33,7 +33,7 @@ function cancelQuoting(context: TimelineRenderingType): void {
 }
 
 interface IProps {
-    permalinkCreator: RoomPermalinkCreator;
+    permalinkCreator?: RoomPermalinkCreator;
     replyToEvent?: MatrixEvent;
 }
 

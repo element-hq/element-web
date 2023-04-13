@@ -177,9 +177,9 @@ export default class LegacyCallEventGrouper extends EventEmitter {
     }
 
     private setState = (): void => {
-        if (CONNECTING_STATES.includes(this.call?.state)) {
+        if (this.call && CONNECTING_STATES.includes(this.call.state)) {
             this.state = CallState.Connecting;
-        } else if (SUPPORTED_STATES.includes(this.call?.state)) {
+        } else if (this.call && SUPPORTED_STATES.includes(this.call.state)) {
             this.state = this.call.state;
         } else {
             if (this.callWasMissed) this.state = CustomCallState.Missed;

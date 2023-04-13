@@ -50,7 +50,7 @@ const debuglog = (...args: any[]): void => {
 
 interface IProps {
     serverConfig: ValidatedServerConfig;
-    defaultDeviceDisplayName: string;
+    defaultDeviceDisplayName?: string;
     email?: string;
     brand?: string;
     clientSecret?: string;

@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ChangeEvent, useRef, useState } from "react";
+import React, { ChangeEvent, RefObject, useRef, useState } from "react";
 
 import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
@@ -38,7 +38,7 @@ export const SpaceAvatar: React.FC<Pick<IProps, "avatarUrl" | "avatarDisabled" |
     avatarDisabled = false,
     setAvatar,
 }) => {
-    const avatarUploadRef = useRef<HTMLInputElement>();
+    const avatarUploadRef = useRef() as RefObject<HTMLInputElement>;
     const [avatar, setAvatarDataUrl] = useState(avatarUrl); // avatar data url cache
 
     let avatarSection;

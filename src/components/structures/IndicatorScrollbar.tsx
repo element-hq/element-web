@@ -19,7 +19,8 @@ import React, { createRef } from "react";
 import AutoHideScrollbar, { IProps as AutoHideScrollbarProps } from "./AutoHideScrollbar";
 import UIStore, { UI_EVENTS } from "../../stores/UIStore";
 
-export type IProps<T extends keyof JSX.IntrinsicElements> = Omit<AutoHideScrollbarProps<T>, "onWheel"> & {
+export type IProps<T extends keyof JSX.IntrinsicElements> = Omit<AutoHideScrollbarProps<T>, "onWheel" | "element"> & {
+    element?: T;
     // If true, the scrollbar will append mx_IndicatorScrollbar_leftOverflowIndicator
     // and mx_IndicatorScrollbar_rightOverflowIndicator elements to the list for positioning
     // by the parent element.
