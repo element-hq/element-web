@@ -386,20 +386,20 @@ export class TermsAuthEntry extends React.Component<ITermsAuthEntryProps, ITerms
 
         let submitButton: JSX.Element | undefined;
         if (this.props.showContinue !== false) {
-            // XXX: button classes
             submitButton = (
-                <button
-                    className="mx_InteractiveAuthEntryComponents_termsSubmit mx_GeneralButton"
+                <AccessibleButton
+                    kind="primary"
+                    className="mx_InteractiveAuthEntryComponents_termsSubmit"
                     onClick={this.trySubmit}
                     disabled={!allChecked}
                 >
                     {_t("Accept")}
-                </button>
+                </AccessibleButton>
             );
         }
 
         return (
-            <div>
+            <div className="mx_InteractiveAuthEntryComponents">
                 <p>{_t("Please review and accept the policies of this homeserver:")}</p>
                 {checkboxes}
                 {errorSection}
