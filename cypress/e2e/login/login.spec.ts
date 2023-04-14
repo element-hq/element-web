@@ -44,20 +44,20 @@ describe("Login", () => {
         it("logs in with an existing account and lands on the home screen", () => {
             cy.injectAxe();
 
-            cy.get("#mx_LoginForm_username", { timeout: 15000 }).should("be.visible");
+            cy.findByRole("textbox", { name: "Username", timeout: 15000 }).should("be.visible");
             // Disabled because flaky - see https://github.com/vector-im/element-web/issues/24688
             //cy.percySnapshot("Login");
             cy.checkA11y();
 
-            cy.get(".mx_ServerPicker_change").click();
-            cy.get(".mx_ServerPickerDialog_otherHomeserver").type(homeserver.baseUrl);
-            cy.get(".mx_ServerPickerDialog_continue").click();
+            cy.findByRole("button", { name: "Edit" }).click();
+            cy.findByRole("textbox", { name: "Other homeserver" }).type(homeserver.baseUrl);
+            cy.findByRole("button", { name: "Continue" }).click();
             // wait for the dialog to go away
             cy.get(".mx_ServerPickerDialog").should("not.exist");
 
-            cy.get("#mx_LoginForm_username").type(username);
-            cy.get("#mx_LoginForm_password").type(password);
-            cy.get(".mx_Login_submit").click();
+            cy.findByRole("textbox", { name: "Username" }).type(username);
+            cy.findByPlaceholderText("Password").type(password);
+            cy.findByRole("button", { name: "Sign in" }).click();
 
             cy.url().should("contain", "/#/home", { timeout: 30000 });
         });
@@ -72,13 +72,13 @@ describe("Login", () => {
         });
 
         it("should go to login page on logout", () => {
-            cy.get('[aria-label="User menu"]').click();
+            cy.findByRole("button", { name: "User menu" }).click();
 
             // give a change for the outstanding requests queue to settle before logging out
             cy.wait(2000);
 
             cy.get(".mx_UserMenu_contextMenu").within(() => {
-                cy.get(".mx_UserMenu_iconSignOut").click();
+                cy.findByRole("menuitem", { name: "Sign out" }).click();
             });
 
             cy.url().should("contain", "/#/login");
@@ -94,13 +94,13 @@ describe("Login", () => {
                 logout_redirect_url: "/decoder-ring/",
             });
 
-            cy.get('[aria-label="User menu"]').click();
+            cy.findByRole("button", { name: "User menu" }).click();
 
             // give a change for the outstanding requests queue to settle before logging out
             cy.wait(2000);
 
             cy.get(".mx_UserMenu_contextMenu").within(() => {
-                cy.get(".mx_UserMenu_iconSignOut").click();
+                cy.findByRole("menuitem", { name: "Sign out" }).click();
             });
 
             cy.url().should("contains", "decoder-ring");
