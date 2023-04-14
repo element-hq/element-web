@@ -18,12 +18,13 @@ limitations under the License.
 import React from "react";
 import { IThreepid } from "matrix-js-sdk/src/@types/threepids";
 import { logger } from "matrix-js-sdk/src/logger";
+import { MatrixError } from "matrix-js-sdk/src/matrix";
 
-import { _t } from "../../../../languageHandler";
+import { _t, UserFriendlyError } from "../../../../languageHandler";
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import Modal from "../../../../Modal";
 import AddThreepid, { Binding } from "../../../../AddThreepid";
-import ErrorDialog from "../../dialogs/ErrorDialog";
+import ErrorDialog, { extractErrorMessageFromError } from "../../dialogs/ErrorDialog";
 import Field from "../../elements/Field";
 import AccessibleButton from "../../elements/AccessibleButton";
 
@@ -99,7 +100,7 @@ export class PhoneNumber extends React.Component<IPhoneNumberProps, IPhoneNumber
             }
             this.setState({ bound: bind });
         } catch (err) {
-            logger.error(`Unable to ${label} phone number ${address} ${err}`);
+            logger.error(`changeBinding: Unable to ${label} phone number ${address}`, err);
             this.setState({
                 verifying: false,
                 continueDisabled: false,
@@ -107,7 +108,7 @@ export class PhoneNumber extends React.Component<IPhoneNumberProps, IPhoneNumber
             });
             Modal.createDialog(ErrorDialog, {
                 title: errorTitle,
-                description: err && err.message ? err.message : _t("Operation failed"),
+                description: extractErrorMessageFromError(err, _t("Operation failed")),
             });
         }
     }
@@ -140,7 +141,7 @@ export class PhoneNumber extends React.Component<IPhoneNumberProps, IPhoneNumber
                 bound: bind,
             });
         } catch (err) {
-            logger.error(`Unable to ${label} phone number ${address} ${err}`);
+            logger.error(`changeBindingTangledAddBind: Unable to ${label} phone number ${address}`, err);
             this.setState({
                 verifying: false,
                 continueDisabled: false,
@@ -148,7 +149,7 @@ export class PhoneNumber extends React.Component<IPhoneNumberProps, IPhoneNumber
             });
             Modal.createDialog(ErrorDialog, {
                 title: errorTitle,
-                description: err && err.message ? err.message : _t("Operation failed"),
+                description: extractErrorMessageFromError(err, _t("Operation failed")),
             });
         }
     }
@@ -195,12 +196,18 @@ export class PhoneNumber extends React.Component<IPhoneNumberProps, IPhoneNumber
                 verificationCode: "",
             });
         } catch (err) {
+            logger.error("Unable to verify phone number:", err);
+
+            let underlyingError = err;
+            if (err instanceof UserFriendlyError) {
+                underlyingError = err.cause;
+            }
+
             this.setState({ continueDisabled: false });
-            if (err.errcode !== "M_THREEPID_AUTH_FAILED") {
-                logger.error("Unable to verify phone number: " + err);
+            if (underlyingError instanceof MatrixError && underlyingError.errcode !== "M_THREEPID_AUTH_FAILED") {
                 Modal.createDialog(ErrorDialog, {
                     title: _t("Unable to verify phone number."),
-                    description: err && err.message ? err.message : _t("Operation failed"),
+                    description: extractErrorMessageFromError(err, _t("Operation failed")),
                 });
             } else {
                 this.setState({ verifyError: _t("Incorrect verification code") });

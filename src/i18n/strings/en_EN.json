@@ -1,6 +1,8 @@
 {
+    "Identity server not set": "Identity server not set",
     "This email address is already in use": "This email address is already in use",
     "This phone number is already in use": "This phone number is already in use",
+    "No identity access token found": "No identity access token found",
     "Use Single Sign On to continue": "Use Single Sign On to continue",
     "Confirm adding this email address by using Single Sign On to prove your identity.": "Confirm adding this email address by using Single Sign On to prove your identity.",
     "Single Sign On": "Single Sign On",
@@ -9,6 +11,7 @@
     "Confirm": "Confirm",
     "Add Email Address": "Add Email Address",
     "Failed to verify email address: make sure you clicked the link in the email": "Failed to verify email address: make sure you clicked the link in the email",
+    "The add / bind with MSISDN flow is misconfigured": "The add / bind with MSISDN flow is misconfigured",
     "Confirm adding this phone number by using Single Sign On to prove your identity.": "Confirm adding this phone number by using Single Sign On to prove your identity.",
     "Confirm adding phone number": "Confirm adding phone number",
     "Click the button below to confirm adding this phone number.": "Click the button below to confirm adding this phone number.",

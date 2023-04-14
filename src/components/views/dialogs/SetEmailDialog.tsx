@@ -17,13 +17,14 @@ limitations under the License.
 
 import React from "react";
 import { logger } from "matrix-js-sdk/src/logger";
+import { MatrixError } from "matrix-js-sdk/src/matrix";
 
 import * as Email from "../../../email";
 import AddThreepid from "../../../AddThreepid";
-import { _t } from "../../../languageHandler";
+import { _t, UserFriendlyError } from "../../../languageHandler";
 import Modal from "../../../Modal";
 import Spinner from "../elements/Spinner";
-import ErrorDialog from "./ErrorDialog";
+import ErrorDialog, { extractErrorMessageFromError } from "./ErrorDialog";
 import QuestionDialog from "./QuestionDialog";
 import BaseDialog from "./BaseDialog";
 import EditableText from "../elements/EditableText";
@@ -88,7 +89,7 @@ export default class SetEmailDialog extends React.Component<IProps, IState> {
                 logger.error("Unable to add email address " + emailAddress + " " + err);
                 Modal.createDialog(ErrorDialog, {
                     title: _t("Unable to add email address"),
-                    description: err && err.message ? err.message : _t("Operation failed"),
+                    description: extractErrorMessageFromError(err, _t("Operation failed")),
                 });
             },
         );
@@ -114,7 +115,13 @@ export default class SetEmailDialog extends React.Component<IProps, IState> {
             },
             (err) => {
                 this.setState({ emailBusy: false });
-                if (err.errcode == "M_THREEPID_AUTH_FAILED") {
+
+                let underlyingError = err;
+                if (err instanceof UserFriendlyError) {
+                    underlyingError = err.cause;
+                }
+
+                if (underlyingError instanceof MatrixError && underlyingError.errcode === "M_THREEPID_AUTH_FAILED") {
                     const message =
                         _t("Unable to verify email address.") +
                         " " +
@@ -131,7 +138,7 @@ export default class SetEmailDialog extends React.Component<IProps, IState> {
                     logger.error("Unable to verify email address: " + err);
                     Modal.createDialog(ErrorDialog, {
                         title: _t("Unable to verify email address."),
-                        description: err && err.message ? err.message : _t("Operation failed"),
+                        description: extractErrorMessageFromError(err, _t("Operation failed")),
                     });
                 }
             },

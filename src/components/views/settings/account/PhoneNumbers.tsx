@@ -19,14 +19,14 @@ import React from "react";
 import { IThreepid, ThreepidMedium } from "matrix-js-sdk/src/@types/threepids";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { _t } from "../../../../languageHandler";
+import { _t, UserFriendlyError } from "../../../../languageHandler";
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import Field from "../../elements/Field";
 import AccessibleButton from "../../elements/AccessibleButton";
 import AddThreepid from "../../../../AddThreepid";
 import CountryDropdown from "../../auth/CountryDropdown";
 import Modal from "../../../../Modal";
-import ErrorDialog from "../../dialogs/ErrorDialog";
+import ErrorDialog, { extractErrorMessageFromError } from "../../dialogs/ErrorDialog";
 import { PhoneNumberCountryDefinition } from "../../../../phonenumber";
 
 /*
@@ -81,7 +81,7 @@ export class ExistingPhoneNumber extends React.Component<IExistingPhoneNumberPro
                 logger.error("Unable to remove contact information: " + err);
                 Modal.createDialog(ErrorDialog, {
                     title: _t("Unable to remove contact information"),
-                    description: err && err.message ? err.message : _t("Operation failed"),
+                    description: extractErrorMessageFromError(err, _t("Operation failed")),
                 });
             });
     };
@@ -192,7 +192,7 @@ export default class PhoneNumbers extends React.Component<IProps, IState> {
                 this.setState({ verifying: false, continueDisabled: false, addTask: null });
                 Modal.createDialog(ErrorDialog, {
                     title: _t("Error"),
-                    description: err && err.message ? err.message : _t("Operation failed"),
+                    description: extractErrorMessageFromError(err, _t("Operation failed")),
                 });
             });
     };
@@ -224,12 +224,18 @@ export default class PhoneNumbers extends React.Component<IProps, IState> {
                 });
             })
             .catch((err) => {
+                logger.error("Unable to verify phone number: " + err);
                 this.setState({ continueDisabled: false });
-                if (err.errcode !== "M_THREEPID_AUTH_FAILED") {
-                    logger.error("Unable to verify phone number: " + err);
+
+                let underlyingError = err;
+                if (err instanceof UserFriendlyError) {
+                    underlyingError = err.cause;
+                }
+
+                if (underlyingError.errcode !== "M_THREEPID_AUTH_FAILED") {
                     Modal.createDialog(ErrorDialog, {
                         title: _t("Unable to verify phone number."),
-                        description: err && err.message ? err.message : _t("Operation failed"),
+                        description: extractErrorMessageFromError(err, _t("Operation failed")),
                     });
                 } else {
                     this.setState({ verifyError: _t("Incorrect verification code") });
