@@ -80,7 +80,7 @@ describe("DeviceListener", () => {
             getUserId: jest.fn().mockReturnValue(userId),
             getKeyBackupVersion: jest.fn().mockResolvedValue(undefined),
             getRooms: jest.fn().mockReturnValue([]),
-            doesServerSupportUnstableFeature: jest.fn().mockResolvedValue(true),
+            isVersionSupported: jest.fn().mockResolvedValue(true),
             isCrossSigningReady: jest.fn().mockResolvedValue(true),
             isSecretStorageReady: jest.fn().mockResolvedValue(true),
             isCryptoEnabled: jest.fn().mockReturnValue(true),
@@ -234,9 +234,10 @@ describe("DeviceListener", () => {
 
     describe("recheck", () => {
         it("does nothing when cross signing feature is not supported", async () => {
-            mockClient!.doesServerSupportUnstableFeature.mockResolvedValue(false);
+            mockClient!.isVersionSupported.mockResolvedValue(false);
             await createAndStart();
 
+            expect(mockClient!.isVersionSupported).toHaveBeenCalledWith("v1.1");
             expect(mockClient!.isCrossSigningReady).not.toHaveBeenCalled();
         });
         it("does nothing when crypto is not enabled", async () => {

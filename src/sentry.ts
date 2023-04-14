@@ -132,9 +132,6 @@ async function getCryptoContext(client: MatrixClient): Promise<CryptoContext> {
     return {
         device_keys: keys.join(", "),
         cross_signing_ready: String(await client.isCrossSigningReady()),
-        cross_signing_supported_by_hs: String(
-            await client.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing"),
-        ),
         cross_signing_key: crossSigning.getId()!,
         cross_signing_privkey_in_secret_storage: String(!!(await crossSigning.isStoredInSecretStorage(secretStorage))),
         cross_signing_master_privkey_cached: String(!!(pkCache && (await pkCache.getCrossSigningKeyCache?.("master")))),

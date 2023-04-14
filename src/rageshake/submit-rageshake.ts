@@ -95,10 +95,6 @@ async function collectBugReport(opts: IOpts = {}, gzipLogs = true): Promise<Form
             const secretStorage = client.crypto.secretStorage;
 
             body.append("cross_signing_ready", String(await client.isCrossSigningReady()));
-            body.append(
-                "cross_signing_supported_by_hs",
-                String(await client.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing")),
-            );
             body.append("cross_signing_key", crossSigning.getId() ?? "n/a");
             body.append(
                 "cross_signing_privkey_in_secret_storage",

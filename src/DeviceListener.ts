@@ -251,7 +251,8 @@ export default class DeviceListener {
         if (!this.running) return; // we have been stopped
         const cli = MatrixClientPeg.get();
 
-        if (!(await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing"))) return;
+        // cross-signing support was added to Matrix in MSC1756, which landed in spec v1.1
+        if (!(await cli.isVersionSupported("v1.1"))) return;
 
         if (!cli.isCryptoEnabled()) return;
         // don't recheck until the initial sync is complete: lots of account data events will fire
