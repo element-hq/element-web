@@ -26,7 +26,7 @@ import PluginConfigOptions = Cypress.PluginConfigOptions;
 
 // A cypress plugin to run docker commands
 
-export function dockerRun(opts: {
+export async function dockerRun(opts: {
     image: string;
     containerName: string;
     params?: string[];
@@ -38,6 +38,11 @@ export function dockerRun(opts: {
     if (params?.includes("-v") && userInfo.uid >= 0) {
         // On *nix we run the docker container as our uid:gid otherwise cleaning it up its media_store can be difficult
         params.push("-u", `${userInfo.uid}:${userInfo.gid}`);
+
+        if (await isPodman()) {
+            // keep the user ID if the docker command is actually podman
+            params.push("--userns=keep-id");
+        }
     }
 
     const args = [
@@ -126,6 +131,19 @@ export function dockerIp(args: { containerId: string }): Promise<string> {
                 else resolve(stdout.trim());
             },
         );
+    });
+}
+
+/**
+ * Detects whether the docker command is actually podman.
+ * To do this, it looks for "podman" in the output of "docker --help".
+ */
+export function isPodman(): Promise<boolean> {
+    return new Promise<boolean>((resolve, reject) => {
+        childProcess.execFile("docker", ["--help"], (err, stdout) => {
+            if (err) reject(err);
+            else resolve(stdout.toLowerCase().includes("podman"));
+        });
     });
 }
 
