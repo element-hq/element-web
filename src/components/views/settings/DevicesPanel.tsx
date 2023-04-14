@@ -120,7 +120,7 @@ export default class DevicesPanel extends React.Component<IProps, IState> {
     }
 
     private isDeviceVerified(device: IMyDevice): boolean | null {
-        return isDeviceVerified(device, this.context);
+        return isDeviceVerified(this.context, device.device_id);
     }
 
     private onDeviceSelectionToggled = (device: IMyDevice): void => {

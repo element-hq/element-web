@@ -48,7 +48,7 @@ export const showToast = async (deviceId: string): Promise<void> => {
     const device = await cli.getDevice(deviceId);
     const extendedDevice = {
         ...device,
-        isVerified: isDeviceVerified(device, cli),
+        isVerified: isDeviceVerified(cli, deviceId),
         deviceType: DeviceType.Unknown,
     };
 

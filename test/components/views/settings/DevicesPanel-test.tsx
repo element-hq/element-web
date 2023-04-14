@@ -15,10 +15,10 @@ limitations under the License.
 */
 import React from "react";
 import { act, fireEvent, render } from "@testing-library/react";
-import { CrossSigningInfo } from "matrix-js-sdk/src/crypto/CrossSigning";
 import { DeviceInfo } from "matrix-js-sdk/src/crypto/deviceinfo";
 import { sleep } from "matrix-js-sdk/src/utils";
 import { PUSHER_DEVICE_ID, PUSHER_ENABLED } from "matrix-js-sdk/src/@types/event";
+import { DeviceTrustLevel } from "matrix-js-sdk/src/crypto/CrossSigning";
 
 import DevicesPanel from "../../../../src/components/views/settings/DevicesPanel";
 import { flushPromises, getMockClientWithEventEmitter, mkPusher, mockClientMethodsUser } from "../../../test-utils";
@@ -34,7 +34,7 @@ describe("<DevicesPanel />", () => {
         getDevices: jest.fn(),
         getDeviceId: jest.fn().mockReturnValue(device1.device_id),
         deleteMultipleDevices: jest.fn(),
-        getStoredCrossSigningForUser: jest.fn().mockReturnValue(new CrossSigningInfo(userId, {}, {})),
+        checkDeviceTrust: jest.fn().mockReturnValue(new DeviceTrustLevel(false, false, false, false)),
         getStoredDevice: jest.fn().mockReturnValue(new DeviceInfo("id")),
         generateClientSecret: jest.fn(),
         getPushers: jest.fn(),
