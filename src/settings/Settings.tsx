@@ -683,7 +683,7 @@ export const SETTINGS: { [setting: string]: ISetting } = {
         displayName: _td("Enable Markdown"),
         description: () =>
             _t(
-                "Start messages with <code>/plain</code> to send without markdown and <code>/md</code> to send with.",
+                "Start messages with <code>/plain</code> to send without markdown.",
                 {},
                 { code: (sub) => <code>{sub}</code> },
             ),
