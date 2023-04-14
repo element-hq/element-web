@@ -74,7 +74,7 @@ export function getRoomFromCompletion(completion: ICompletion, client: MatrixCli
  * @returns the text to display in the mention
  */
 export function getMentionDisplayText(completion: ICompletion, client: MatrixClient): string {
-    if (completion.type === "user") {
+    if (completion.type === "user" || completion.type === "at-room") {
         return completion.completion;
     } else if (completion.type === "room") {
         // try and get the room and use it's name, if not available, fall back to
@@ -132,7 +132,8 @@ export function getMentionAttributes(completion: ICompletion, client: MatrixClie
             "data-mention-type": completion.type,
             "style": `--avatar-background: url(${avatarUrl}); --avatar-letter: '${initialLetter}'`,
         };
+    } else if (completion.type === "at-room") {
+        return { "data-mention-type": completion.type };
     }
-
     return {};
 }
