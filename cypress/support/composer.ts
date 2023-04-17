@@ -39,7 +39,7 @@ Cypress.Commands.add("getComposer", (isRightPanel?: boolean): Chainable<JQuery> 
 
 Cypress.Commands.add("openMessageComposerOptions", (isRightPanel?: boolean): Chainable<JQuery> => {
     cy.getComposer(isRightPanel).within(() => {
-        cy.get('[aria-label="More options"]').click();
+        cy.findByRole("button", { name: "More options" }).click();
     });
     return cy.get(".mx_MessageComposer_Menu");
 });
