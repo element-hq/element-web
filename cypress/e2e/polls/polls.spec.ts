@@ -36,19 +36,21 @@ describe("Polls", () => {
             throw new Error("Poll must have at least two options");
         }
         cy.get(".mx_PollCreateDialog").within((pollCreateDialog) => {
-            cy.get("#poll-topic-input").type(title);
+            cy.findByRole("textbox", { name: "Question or topic" }).type(title);
 
             options.forEach((option, index) => {
                 const optionId = `#pollcreate_option_${index}`;
 
                 // click 'add option' button if needed
                 if (pollCreateDialog.find(optionId).length === 0) {
-                    cy.get(".mx_PollCreateDialog_addOption").scrollIntoView().click();
+                    cy.findByRole("button", { name: "Add option" }).scrollIntoView().click();
                 }
                 cy.get(optionId).scrollIntoView().type(option);
             });
         });
-        cy.get('.mx_Dialog button[type="submit"]').click();
+        cy.get(".mx_Dialog").within(() => {
+            cy.findByRole("button", { name: "Create Poll" }).click();
+        });
     };
 
     const getPollTile = (pollId: string): Chainable<JQuery> => {
@@ -67,7 +69,7 @@ describe("Polls", () => {
 
     const botVoteForOption = (bot: MatrixClient, roomId: string, pollId: string, optionText: string): void => {
         getPollOption(pollId, optionText).within((ref) => {
-            cy.get('input[type="radio"]')
+            cy.findByRole("radio")
                 .invoke("attr", "value")
                 .then((optionId) => {
                     // We can't use the js-sdk types for this stuff directly, so manually construct the event.
@@ -111,11 +113,11 @@ describe("Polls", () => {
             cy.inviteUser(roomId, bot.getUserId());
             cy.visit("/#/room/" + roomId);
             // wait until Bob joined
-            cy.contains(".mx_TextualEvent", "BotBob joined the room").should("exist");
+            cy.findByText("BotBob joined the room").should("exist");
         });
 
         cy.openMessageComposerOptions().within(() => {
-            cy.get('[aria-label="Poll"]').click();
+            cy.findByRole("menuitem", { name: "Poll" }).click();
         });
 
         // Disabled because flaky - see https://github.com/vector-im/element-web/issues/24688
@@ -142,7 +144,9 @@ describe("Polls", () => {
             botVoteForOption(bot, roomId, pollId, pollParams.options[2]);
 
             // no votes shown until I vote, check bots vote has arrived
-            cy.get(".mx_MPollBody_totalVotes").should("contain", "1 vote cast");
+            cy.get(".mx_MPollBody_totalVotes").within(() => {
+                cy.findByText("1 vote cast. Vote to see the results");
+            });
 
             // vote 'Maybe'
             getPollOption(pollId, pollParams.options[2]).click("topLeft");
@@ -183,7 +187,7 @@ describe("Polls", () => {
         });
 
         cy.openMessageComposerOptions().within(() => {
-            cy.get('[aria-label="Poll"]').click();
+            cy.findByRole("menuitem", { name: "Poll" }).click();
         });
 
         const pollParams = {
@@ -203,9 +207,7 @@ describe("Polls", () => {
             getPollTile(pollId).rightclick();
 
             // Select edit item
-            cy.get(".mx_ContextualMenu").within(() => {
-                cy.get('[aria-label="Edit"]').click();
-            });
+            cy.findByRole("menuitem", { name: "Edit" }).click();
 
             // Expect poll editing dialog
             cy.get(".mx_PollCreateDialog");
@@ -226,7 +228,7 @@ describe("Polls", () => {
         });
 
         cy.openMessageComposerOptions().within(() => {
-            cy.get('[aria-label="Poll"]').click();
+            cy.findByRole("menuitem", { name: "Poll" }).click();
         });
 
         const pollParams = {
@@ -252,9 +254,7 @@ describe("Polls", () => {
             getPollTile(pollId).rightclick();
 
             // Select edit item
-            cy.get(".mx_ContextualMenu").within(() => {
-                cy.get('[aria-label="Edit"]').click();
-            });
+            cy.findByRole("menuitem", { name: "Edit" }).click();
 
             // Expect error dialog
             cy.get(".mx_ErrorDialog");
@@ -278,11 +278,11 @@ describe("Polls", () => {
             cy.inviteUser(roomId, botCharlie.getUserId());
             cy.visit("/#/room/" + roomId);
             // wait until the bots joined
-            cy.contains(".mx_TextualEvent", "and one other were invited and joined").should("exist");
+            cy.findByText("BotBob and one other were invited and joined", { timeout: 10000 }).should("exist");
         });
 
         cy.openMessageComposerOptions().within(() => {
-            cy.get('[aria-label="Poll"]').click();
+            cy.findByRole("menuitem", { name: "Poll" }).click();
         });
 
         const pollParams = {
@@ -304,7 +304,7 @@ describe("Polls", () => {
             });
 
             // open the thread summary
-            cy.get(".mx_RoomView_body .mx_ThreadSummary").click();
+            cy.findByRole("button", { name: "Open thread" }).click();
 
             // Bob votes 'Maybe' in the poll
             botVoteForOption(botBob, roomId, pollId, pollParams.options[2]);
@@ -312,9 +312,13 @@ describe("Polls", () => {
             botVoteForOption(botCharlie, roomId, pollId, pollParams.options[1]);
 
             // no votes shown until I vote, check votes have arrived in main tl
-            cy.get(".mx_RoomView_body .mx_MPollBody_totalVotes").should("contain", "2 votes cast");
+            cy.get(".mx_RoomView_body .mx_MPollBody_totalVotes").within(() => {
+                cy.findByText("2 votes cast. Vote to see the results").should("exist");
+            });
             // and thread view
-            cy.get(".mx_ThreadView .mx_MPollBody_totalVotes").should("contain", "2 votes cast");
+            cy.get(".mx_ThreadView .mx_MPollBody_totalVotes").within(() => {
+                cy.findByText("2 votes cast. Vote to see the results").should("exist");
+            });
 
             // Take snapshots of poll on ThreadView
             cy.setSettingValue("layout", null, SettingLevel.DEVICE, Layout.Bubble);
