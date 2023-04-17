@@ -23,11 +23,11 @@ describe("Location sharing", () => {
     let homeserver: HomeserverInstance;
 
     const selectLocationShareTypeOption = (shareType: string): Chainable<JQuery> => {
-        return cy.get(`[data-testid="share-location-option-${shareType}"]`);
+        return cy.findByTestId(`share-location-option-${shareType}`);
     };
 
     const submitShareLocation = (): void => {
-        cy.get('[data-testid="location-picker-submit-button"]').click();
+        cy.findByRole("button", { name: "Share location" }).click();
     };
 
     beforeEach(() => {
@@ -53,7 +53,7 @@ describe("Location sharing", () => {
         });
 
         cy.openMessageComposerOptions().within(() => {
-            cy.get('[aria-label="Location"]').click();
+            cy.findByRole("menuitem", { name: "Location" }).click();
         });
 
         selectLocationShareTypeOption("Pin").click();
@@ -67,7 +67,7 @@ describe("Location sharing", () => {
         // clicking location tile opens maximised map
         cy.get(".mx_LocationViewDialog_wrapper").should("exist");
 
-        cy.get('[aria-label="Close dialog"]').click();
+        cy.closeDialog();
 
         cy.get(".mx_Marker").should("exist");
     });
