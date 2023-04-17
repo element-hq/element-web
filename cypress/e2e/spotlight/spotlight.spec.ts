@@ -100,7 +100,7 @@ Cypress.Commands.add(
 Cypress.Commands.add(
     "spotlightSearch",
     (options?: Partial<Loggable & Timeoutable & Withinable & Shadow>): Chainable<JQuery<HTMLElement>> => {
-        return cy.get(".mx_SpotlightDialog_searchBox input", options);
+        return cy.get(".mx_SpotlightDialog_searchBox", options).findByRole("textbox", { name: "Search" });
     },
 );
 
@@ -129,10 +129,10 @@ Cypress.Commands.add("startDM", (name: string) => {
         cy.spotlightResults().eq(0).click();
     });
     // send first message to start DM
-    cy.get(".mx_BasicMessageComposer_input").should("have.focus").type("Hey!{enter}");
+    cy.findByRole("textbox", { name: "Send a message…" }).should("have.focus").type("Hey!{enter}");
     // The DM room is created at this point, this can take a little bit of time
-    cy.contains(".mx_EventTile_body", "Hey!", { timeout: 30000 });
-    cy.contains(".mx_RoomSublist[aria-label=People]", name);
+    cy.get(".mx_EventTile_body", { timeout: 30000 }).findByText("Hey!");
+    cy.findByRole("group", { name: "People" }).findByText(name);
 });
 
 describe("Spotlight", () => {
@@ -290,7 +290,7 @@ describe("Spotlight", () => {
                 cy.url().should("contain", room3Id);
             })
             .then(() => {
-                cy.get(".mx_RoomPreviewBar_actions .mx_AccessibleButton").click();
+                cy.findByRole("button", { name: "Join the discussion" }).click();
                 cy.roomHeaderName().should("contain", room3Name);
             });
     });
@@ -365,11 +365,11 @@ describe("Spotlight", () => {
 
         // Send first message to actually start DM
         cy.roomHeaderName().should("contain", bot2Name);
-        cy.get(".mx_BasicMessageComposer_input").click().should("have.focus").type("Hey!{enter}");
+        cy.findByRole("textbox", { name: "Send a message…" }).type("Hey!{enter}");
 
         // Assert DM exists by checking for the first message and the room being in the room list
         cy.contains(".mx_EventTile_body", "Hey!", { timeout: 30000 });
-        cy.get(".mx_RoomSublist[aria-label=People]").should("contain", bot2Name);
+        cy.findByRole("group", { name: "People" }).should("contain", bot2Name);
 
         // Invite BotBob into existing DM with ByteBot
         cy.getDmRooms(bot2.getUserId())
@@ -378,7 +378,7 @@ describe("Spotlight", () => {
             .then((groupDm) => {
                 cy.inviteUser(groupDm.roomId, bot1.getUserId());
                 cy.roomHeaderName().should(($element) => expect($element.get(0).innerText).contains(groupDm.name));
-                cy.get(".mx_RoomSublist[aria-label=People]").should(($element) =>
+                cy.findByRole("group", { name: "People" }).should(($element) =>
                     expect($element.get(0).innerText).contains(groupDm.name),
                 );
 
@@ -440,7 +440,7 @@ describe("Spotlight", () => {
                 cy.get(".mx_SpotlightDialog_startGroupChat").click();
             })
             .then(() => {
-                cy.get("[role=dialog]").should("contain", "Direct Messages");
+                cy.findByRole("dialog").should("contain", "Direct Messages");
             });
     });
 
