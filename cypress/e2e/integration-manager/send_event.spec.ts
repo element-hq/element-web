@@ -67,9 +67,9 @@ const INTEGRATION_MANAGER_HTML = `
 `;
 
 function openIntegrationManager() {
-    cy.get(".mx_RightPanel_roomSummaryButton").click();
+    cy.findByRole("tab", { name: "Room info" }).click();
     cy.get(".mx_RoomSummaryCard_appsGroup").within(() => {
-        cy.contains("Add widgets, bridges & bots").click();
+        cy.findByRole("button", { name: "Add widgets, bridges & bots" }).click();
     });
 }
 
