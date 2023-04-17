@@ -28,7 +28,11 @@ const ALLOWED_HTML_TAGS = ["sub", "sup", "del", "u"];
 const TEXT_NODES = ["text", "softbreak", "linebreak", "paragraph", "document"];
 
 function isAllowedHtmlTag(node: commonmark.Node): boolean {
-    if (node.literal != null && node.literal.match('^<((div|span) data-mx-maths="[^"]*"|/(div|span))>$') != null) {
+    if (!node.literal) {
+        return false;
+    }
+
+    if (node.literal.match('^<((div|span) data-mx-maths="[^"]*"|/(div|span))>$') != null) {
         return true;
     }
 
@@ -57,9 +61,9 @@ function isMultiLine(node: commonmark.Node): boolean {
 }
 
 function getTextUntilEndOrLinebreak(node: commonmark.Node): string {
-    let currentNode = node;
+    let currentNode: commonmark.Node | null = node;
     let text = "";
-    while (currentNode !== null && currentNode.type !== "softbreak" && currentNode.type !== "linebreak") {
+    while (currentNode && currentNode.type !== "softbreak" && currentNode.type !== "linebreak") {
         const { literal, type } = currentNode;
         if (type === "text" && literal) {
             let n = 0;
@@ -95,7 +99,7 @@ const innerNodeLiteral = (node: commonmark.Node): string => {
     let literal = "";
 
     const walker = node.walker();
-    let step: commonmark.NodeWalkingStep;
+    let step: commonmark.NodeWalkingStep | null;
 
     while ((step = walker.next())) {
         const currentNode = step.node;
@@ -166,7 +170,7 @@ export default class Markdown {
                 }
 
                 // Break up text nodes on spaces, so that we don't shoot past them without resetting
-                if (node.type === "text") {
+                if (node.type === "text" && node.literal) {
                     const [thisPart, ...nextParts] = node.literal.split(/( )/);
                     node.literal = thisPart;
                     text += thisPart;
@@ -184,11 +188,11 @@ export default class Markdown {
                 }
 
                 // We should not do this if previous node was not a textnode, as we can't combine it then.
-                if ((node.type === "emph" || node.type === "strong") && previousNode.type === "text") {
+                if ((node.type === "emph" || node.type === "strong") && previousNode?.type === "text") {
                     if (event.entering) {
                         const foundLinks = linkify.find(text);
                         for (const { value } of foundLinks) {
-                            if (node.firstChild.literal) {
+                            if (node?.firstChild?.literal) {
                                 /**
                                  * NOTE: This technically should unlink the emph node and create LINK nodes instead, adding all the next elements as siblings
                                  * but this solution seems to work well and is hopefully slightly easier to understand too
@@ -205,10 +209,12 @@ export default class Markdown {
                                     previousNode.insertAfter(emphasisTextNode);
                                     node.firstChild.literal = "";
                                     event = node.walker().next();
-                                    // Remove `em` opening and closing nodes
-                                    node.unlink();
-                                    previousNode.insertAfter(event.node);
-                                    shouldUnlinkFormattingNode = true;
+                                    if (event) {
+                                        // Remove `em` opening and closing nodes
+                                        node.unlink();
+                                        previousNode.insertAfter(event.node);
+                                        shouldUnlinkFormattingNode = true;
+                                    }
                                 } else {
                                     logger.error(
                                         "Markdown links escaping found too many links for following text: ",
@@ -237,7 +243,7 @@ export default class Markdown {
     public isPlainText(): boolean {
         const walker = this.parsed.walker();
 
-        let ev: commonmark.NodeWalkingStep;
+        let ev: commonmark.NodeWalkingStep | null;
         while ((ev = walker.next())) {
             const node = ev.node;
             if (TEXT_NODES.indexOf(node.type) > -1) {
@@ -294,7 +300,7 @@ export default class Markdown {
 
         renderer.link = function (node, entering) {
             const attrs = this.attrs(node);
-            if (entering) {
+            if (entering && node.destination) {
                 attrs.push(["href", this.esc(node.destination)]);
                 if (node.title) {
                     attrs.push(["title", this.esc(node.title)]);
@@ -312,10 +318,12 @@ export default class Markdown {
         };
 
         renderer.html_inline = function (node: commonmark.Node) {
-            if (isAllowedHtmlTag(node)) {
-                this.lit(node.literal);
-            } else {
-                this.lit(escape(node.literal));
+            if (node.literal) {
+                if (isAllowedHtmlTag(node)) {
+                    this.lit(node.literal);
+                } else {
+                    this.lit(escape(node.literal));
+                }
             }
         };
 
@@ -358,7 +366,7 @@ export default class Markdown {
         };
 
         renderer.html_block = function (node: commonmark.Node) {
-            this.lit(node.literal);
+            if (node.literal) this.lit(node.literal);
             if (isMultiLine(node) && node.next) this.lit("\n\n");
         };
 
