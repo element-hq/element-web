@@ -24,7 +24,7 @@ const NAME = "Alice";
 
 const viewRoomSummaryByName = (name: string): Chainable<JQuery<HTMLElement>> => {
     cy.viewRoomByName(name);
-    cy.get(".mx_RightPanel_roomSummaryButton").click();
+    cy.findByRole("tab", { name: "Room info" }).click();
     return checkRoomSummaryCard(name);
 };
 
@@ -38,8 +38,7 @@ const uploadFile = (file: string) => {
     cy.get(".mx_MessageComposer_actions input[type='file']").selectFile(file, { force: true });
 
     cy.get(".mx_Dialog").within(() => {
-        // Click "Upload" button
-        cy.get("[data-testid='dialog-primary-button']").should("have.text", "Upload").click();
+        cy.findByRole("button", { name: "Upload" }).click();
     });
 
     // Wait until the file is sent
@@ -106,8 +105,7 @@ describe("FilePanel", () => {
                     cy.get(".mx_MFileBody_download").should("have.length", 3);
 
                     // Assert that the sender of the files is rendered on all of the tiles
-                    cy.get(".mx_EventTile_senderDetails .mx_DisambiguatedProfile_displayName").should("have.length", 3);
-                    cy.contains(".mx_EventTile_senderDetails .mx_DisambiguatedProfile_displayName", NAME);
+                    cy.findAllByText(NAME).should("have.length", 3);
 
                     // Detect the image file
                     cy.get(".mx_EventTile_mediaLine.mx_EventTile_image").within(() => {
@@ -123,16 +121,17 @@ describe("FilePanel", () => {
                         // Assert that the audio player is rendered
                         cy.get(".mx_AudioPlayer_container").within(() => {
                             // Assert that the play button is rendered
-                            cy.get("[data-testid='play-pause-button']").should("exist");
+                            cy.findByRole("button", { name: "Play" }).should("exist");
                         });
                     });
 
                     // Detect the JSON file
                     // Assert that the tile is rendered as a button
                     cy.get(".mx_EventTile_mediaLine .mx_MFileBody .mx_MFileBody_info[role='button']").within(() => {
-                        // Assert that the file name is rendered inside the button
-                        // File name: matrix-org-client-versions.json
-                        cy.contains(".mx_MFileBody_info_filename", "matrix-org");
+                        // Assert that the file name is rendered inside the button with ellipsis
+                        cy.get(".mx_MFileBody_info_filename").within(() => {
+                            cy.findByText(/matrix.*?\.json/);
+                        });
                     });
                 });
             });
@@ -186,7 +185,9 @@ describe("FilePanel", () => {
                         cy.get(".mx_AudioPlayer_container").within(() => {
                             // Assert that the audio file information is rendered
                             cy.get(".mx_AudioPlayer_mediaInfo").within(() => {
-                                cy.get(".mx_AudioPlayer_mediaName").should("have.text", "1sec.ogg");
+                                cy.get(".mx_AudioPlayer_mediaName").within(() => {
+                                    cy.findByText("1sec.ogg");
+                                });
                                 cy.contains(".mx_AudioPlayer_byline", "00:01").should("exist");
                                 cy.contains(".mx_AudioPlayer_byline", "(3.56 KB)").should("exist"); // actual size
                             });
@@ -195,16 +196,16 @@ describe("FilePanel", () => {
                             cy.contains(".mx_AudioPlayer_seek [role='timer']", "00:00").should("exist");
 
                             // Click the play button
-                            cy.get("[data-testid='play-pause-button'][aria-label='Play']").click();
+                            cy.findByRole("button", { name: "Play" }).click();
 
                             // Assert that the pause button is rendered
-                            cy.get("[data-testid='play-pause-button'][aria-label='Pause']").should("exist");
+                            cy.findByRole("button", { name: "Pause" }).should("exist");
 
                             // Assert that the timer is reset when the audio file finished playing
                             cy.contains(".mx_AudioPlayer_seek [role='timer']", "00:00").should("exist");
 
                             // Assert that the play button is rendered
-                            cy.get("[data-testid='play-pause-button'][aria-label='Play']").should("exist");
+                            cy.findByRole("button", { name: "Play" }).should("exist");
                         });
                     });
                 });
