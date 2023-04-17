@@ -25,5 +25,8 @@
     "Your Element is misconfigured": "Element er feilkonfigurert",
     "Failed to start": "Klarte ikkje å starta",
     "Open": "Opna",
-    "Download Completed": "Nedlasting Fullført"
+    "Download Completed": "Nedlasting Fullført",
+    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Desentralisertd kryptert chatt &amp; samarbeid som vert drive av $matrixLogo",
+    "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s: %(browserName)s på %(osName)s",
+    "%(brand)s Desktop: %(platformName)s": "%(brand)s Skrivebord: %(platformName)s"
 }
