@@ -90,6 +90,7 @@ const EffectsOverlay: FunctionComponent<IProps> = ({ roomWidth }) => {
                 top: 0,
                 right: 0,
             }}
+            aria-hidden={true}
         />
     );
 };

@@ -42,7 +42,6 @@ exports[`MessagePanel should handle lots of membership events quickly 1`] = `
             aria-label="Thu, Jan 1 1970"
             class="mx_DateSeparator"
             role="separator"
-            tabindex="-1"
           >
             <hr
               role="none"

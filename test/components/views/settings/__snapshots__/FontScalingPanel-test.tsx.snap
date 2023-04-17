@@ -37,6 +37,7 @@ exports[`FontScalingPanel renders the font scaling UI 1`] = `
         class="mx_Slider"
       >
         <input
+          aria-label="Font size"
           autocomplete="off"
           max="18"
           min="13"

@@ -284,6 +284,7 @@ export default class NotificationsSettingsTab extends React.Component<IProps, IS
                                     onClick={chromeFileInputFix}
                                     onChange={this.onSoundUploadChanged}
                                     accept="audio/*"
+                                    aria-label={_t("Upload custom sound")}
                                 />
                             </form>
 

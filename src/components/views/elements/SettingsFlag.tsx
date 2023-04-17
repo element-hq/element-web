@@ -62,7 +62,7 @@ export default class SettingsFlag extends React.Component<IProps, IState> {
     }
 
     private getSettingValue(): boolean {
-        return SettingsStore.getValueAt(
+        return !!SettingsStore.getValueAt(
             this.props.level,
             this.props.name,
             this.props.roomId ?? null,

@@ -540,8 +540,9 @@ export default class ImageView extends React.Component<IProps, IState> {
             <FocusLock
                 returnFocus={true}
                 lockProps={{
-                    onKeyDown: this.onKeyDown,
-                    role: "dialog",
+                    "onKeyDown": this.onKeyDown,
+                    "role": "dialog",
+                    "aria-label": _t("Image view"),
                 }}
                 className="mx_ImageView"
                 ref={this.focusLock}

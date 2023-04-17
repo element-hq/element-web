@@ -35,10 +35,11 @@ const SelectableDeviceTile: React.FC<Props> = ({ children, device, isSelected, o
                 className="mx_SelectableDeviceTile_checkbox"
                 id={`device-tile-checkbox-${device.device_id}`}
                 data-testid={`device-tile-checkbox-${device.device_id}`}
-            />
-            <DeviceTile device={device} onClick={onClick} isSelected={isSelected}>
-                {children}
-            </DeviceTile>
+            >
+                <DeviceTile device={device} onClick={onClick} isSelected={isSelected}>
+                    {children}
+                </DeviceTile>
+            </StyledCheckbox>
         </div>
     );
 };

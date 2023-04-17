@@ -35,6 +35,8 @@ interface IProps {
 
     // Whether the slider is disabled
     disabled: boolean;
+
+    label: string;
 }
 
 const THUMB_SIZE = 2.4; // em
@@ -77,6 +79,7 @@ export default class Slider extends React.Component<IProps> {
                     disabled={this.props.disabled}
                     step={this.props.step}
                     autoComplete="off"
+                    aria-label={this.props.label}
                 />
                 {selection}
             </div>

@@ -6,7 +6,6 @@ exports[`DateSeparator renders the date separator correctly 1`] = `
     aria-label="Today"
     class="mx_DateSeparator"
     role="separator"
-    tabindex="-1"
   >
     <hr
       role="none"
@@ -34,7 +33,6 @@ exports[`DateSeparator when feature_jump_to_date is enabled renders the date sep
     aria-label="Fri, Dec 17 2021"
     class="mx_DateSeparator"
     role="separator"
-    tabindex="-1"
   >
     <hr
       role="none"

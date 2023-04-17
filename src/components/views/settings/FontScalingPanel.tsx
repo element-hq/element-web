@@ -128,6 +128,7 @@ export default class FontScalingPanel extends React.Component<IProps, IState> {
                         onChange={this.onFontSizeChanged}
                         displayFunc={(_) => ""}
                         disabled={this.state.useCustomFontSize}
+                        label={_t("Font size")}
                     />
                     <div className="mx_FontScalingPanel_fontSlider_largeText">Aa</div>
                 </div>
