@@ -42,6 +42,7 @@ const CompatibilityView: React.FC<IProps> = ({ onAccept }) => {
                 <a
                     href={iosCustomUrl || "https://apps.apple.com/app/vector/id1083446067"}
                     target="_blank"
+                    rel="noreferrer noopener"
                     className="mx_ClearDecoration"
                 >
                     <img height="48" src="themes/element/img/download/apple.svg" alt="Apple App Store" />
@@ -63,6 +64,7 @@ const CompatibilityView: React.FC<IProps> = ({ onAccept }) => {
             <a
                 href={andCustomUrl || "https://play.google.com/store/apps/details?id=im.vector.app"}
                 target="_blank"
+                rel="noreferrer noopener"
                 className="mx_ClearDecoration"
                 key="android"
             >
@@ -76,6 +78,7 @@ const CompatibilityView: React.FC<IProps> = ({ onAccept }) => {
             <a
                 href={fdroidCustomUrl || "https://f-droid.org/repository/browse/?fdid=im.vector.app"}
                 target="_blank"
+                rel="noreferrer noopener"
                 className="mx_ClearDecoration"
                 key="fdroid"
             >
